@@ -10,17 +10,18 @@
 ## The algorithm
 
     the frame: the cluster's hull offset 100 ft (at most 4 points a house, each moved on its normal, 2 a point)
-    the frame's ring, 100 ft deep outside the hull, added to lane ground in 6 ft cells: each decided from the free-ground
-        raster dilated by the 8 ft widest margin: each boundary segment in the 32 ft cells the ring meets marks the 6 ft cells within
-        8 ft of it, once, with its margin class (3 ft off the field and the crop, 7 ft off a fence, 8 ft off the toe and marsh), and a ring cell then reads its 32 ft cell's state and its own mark,
-        and only a cell within 8 ft of the hull against the parts of the 2 by 2 cells of 64 ft it straddles; then the
-        homesteads' flood extended over the ring on its bucket queue, so the spine and the joins descend it there too
+    the frame's ring, 100 ft deep outside the hull, read only along a kept leg that leaves the hull (a bund leg, the spine's
+        reach to the connector): each such leg's 6 ft cells decided from the free-ground raster dilated by the 8 ft widest
+        margin along it - each boundary segment in the 32 ft cells the leg's band meets marks the 6 ft cells within 8 ft of it,
+        once, with its margin class (3 ft off the field and the crop, 7 ft off a fence, 8 ft off the toe and marsh), and a leg
+        cell then reads its 32 ft cell's state and its own mark; the legs are straight, so the ring needs no flood
     the spine: traced along the cluster's long axis on lane ground's flood, end to end - each step the neighbor of least
         flood value read from its 8 (8), the step taken (1), the cell marked a way's (1), its 25 ft join band marked (10)
-    the back lanes: a line across the frame every 100 ft along the long axis; each walked over lane ground's cells, its free
+    the back lanes: a line across the cluster every 100 ft along the long axis, each clipped first to the span of the houses
+        it serves (the houses sorted along the axis once); each walked over lane ground's cells within its span, its free
         stretches the runs (a homestead it crosses splits it); each run's two ends reached to the network along the flood
         within the pitch, traced as the spine is
-    each lane, before it is filed: trimmed back to the last house it serves (its end legs walked); each run's end, as it is
+    each lane, before it is filed: its end legs checked against the last house it serves (the clip made the span); each run's end, as it is
         reached, against the ends and junctions in its 3 by 3 cells of a 25 ft endpoint index (closed or met at one node), and
         an end within the frame's 100 ft of the field given its one leg on to the bund, tested against the outline index's
         cells; the lane pulled taut by a funnel over its lane-ground cells, and its vertices' angles tested for a hairpin and,
@@ -41,31 +42,32 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 1 | the web, one network | always 1 |
-| slack | per item | 2 | what varies around the typical case (S8): the spread around the mean, a door path traced where a household's way misses its door | a sprawling cluster |
-| the frame (hull points moved) | over the run | 144 at 20, 224 at 40, 344 at 80 | the hull's points, the fringe houses' corners - the cluster's perimeter over the 204 ft pitch, 4 corners each - each moved on its normal, 2 | the typical cluster |
-| the frame's ring (lane ground cells written) | over the run | 58,854 at 20, 88,004 at 40, 132,500 at 80 | the ring's 6 ft cells (11,068 at 20, 16,462 at 40, 24,712 at 80), each its 32 ft cell's state and its mark (2); the raster cells it meets, 4.6 across for each 32 ft of the mid-ring perimeter at the mean (575 at 20, 856 at 40, 1,284 at 80), each its boundary's length in the cell, about 9 cells of 6 ft plus one a segment end at the mean 2.5, marking 4 across (46); the cells within 8 ft of the hull, 2.33 across for each 6 ft of it (1,426 at 20, 2,181 at 40, 3,335 at 80), each in its about 1.8 cells of 64 ft with the mean 3 parts and the cell (7.2) | the typical cluster |
-| the ring's flood (lane ground cells examined) | over the run | 132,816 at 20, 197,544 at 40, 296,544 at 80 | the homesteads' flood extended over the ring, 12 a cell: popped (1), 8 neighbors read (8), pushed twice (2), its bucket scanned (1) | the typical cluster |
-| the back lanes (lane ground cells examined) | over the run | 2,240 at 20, 4,620 at 40, 9,604 at 80 | 14 at 20, 20 at 40, 28 at 80 lines, the frame's long side over 100 ft plus 1, each the frame's short side over 6 ft plus 1 cells, each read (1) | the typical cluster |
-| the spine (lane ground cells examined) | over the run | 4,300 at 20, 6,100 at 40, 8,820 at 80 | an 8-neighbor descent along the long axis, the frame's long side over 6 ft (215 at 20, 305 at 40, 441 at 80 cells), each traced: 8 neighbors read, the step, its way mark, its join band of 10 (20) | the typical cluster |
-| the joins (lane ground cells examined) | over the run | 7,600 at 20, 13,400 at 40, 24,400 at 80 | the runs, the lines plus the mean 1.17 a house (a homestead's mean 117 ft extent over the 100 ft pitch; 38 at 20, 67 at 40, 122 at 80), each of their two ends reached along the flood a quarter pitch at the mean, 25 ft over 6 ft, 5 cells, each traced (20) | the typical cluster |
-| the laying (parts index cells written) | over the run | 1,118 at 20, 2,134 at 40, 4,164 at 80 | the lanes' length - the back lanes, the spine, 25 ft at each run end's join and the bund legs at the 0.18 of ends near the field, 100 ft each - 17,853 at 20, 35,150 at 40, 70,506 at 80 ft, in 203 at 20, 367 at 40, 679 at 80 legs (3 a household's way, a run's stretch and its 2 joins and its 0.36 bund legs, the spine's bends); its corridor at a random angle, 2 x (the length x (4/pi) over 64 ft, plus 1 a leg) | the typical cluster |
-| the door paths (lane ground cells examined) | over the run | 100 at 20, 200 at 40, 400 at 80 | each household's own way, laid by the homesteads, tested first at its door (5); the scan outward from the door, stopping at the first mark, only where it fails, inside the slack | the typical cluster |
-| the trims (legs walked) | over the run | 203 at 20, 367 at 40, 679 at 80 | each leg walked at most once from a lane's end, before it is filed | the typical cluster |
-| the bund (outline index cells examined) | over the run | 206 at 20, 362 at 40, 659 at 80 | the run ends near the field, 0.18 of them (measured), one leg of at most 100 ft in at most 5 cells, each with the mean 2 outline segments and the cell (15) | the typical cluster |
-| the knots (endpoint index cells examined) | over the run | 1,444 at 20, 2,546 at 40, 4,636 at 80 | each run's two ends: its 3 by 3 cells of 25 ft, each read with the mean 1.1 ends (measured) and the cell (19) | the typical cluster |
-| the taut pull (lane ground cells examined) | over the run | 5,952 at 20, 11,718 at 40, 23,502 at 80 | a funnel over each lane's cells before it is filed, the lanes' length over 6 ft, each cell's two sides tested once (2) | the typical cluster |
-| the kinks (legs tested) | over the run | 273 at 20, 492 at 40, 910 at 80 | each vertex's angle (1), and the zigzag's look at the 0.17 of vertices that turn past 50 degrees (measured), 2 each (1.34) | the typical cluster |
+| slack | per item | 2 | what varies around the typical case (S8): the spread around the mean, a door path traced where a household's way misses its door; applied to the whole count | a sprawling cluster |
+| the frame (hull points moved) | over the run | 152 at 20, 208 at 40, 296 at 80 | the hull's points, the fringe houses' corners - the cluster's perimeter (2 x (750 + 1,085) ft at 20, its extent's sides) over the pitch the area per house gives, the square root of the extent's area over the households (202 ft at 20, 219 ft at 40, 238 ft at 80), 4 corners each - each moved on its normal, 2 (ask:444-T09-rescore-batch-2) | the typical cluster |
+| the frame's ring (lane ground cells written) | over the run | 5,446 at 20, 9,725 at 40, 17,505 at 80 | the ring read only along the kept legs that leave the hull, the contract trimming each lane back to the last house it serves before it is filed (ask:444-T09-rescore-batch-2): the bund legs (0.36 a run) and the spine's one reach to the connector (14 at 20, 25 at 40, 45 at 80), each straight, at most 100 ft, so no flood: its about 22 path cells of 6 ft, each its 32 ft cell's state and its mark (2), and the about 7.5 raster cells of 32 ft its 8 ft band meets, each its boundary's length in the cell, about 9 cells of 6 ft plus one a segment end at the mean 2.5, marking 4 across (46) | the typical cluster |
+| the back lanes (lane ground cells examined) | over the run | 1,369 at 20, 3,215 at 40, 7,552 at 80 | 12 at 20, 18 at 40, 26 at 80 lines, the cluster's long side over 100 ft plus 1, each clipped first to the span of the houses it serves (the sort row) and walked only within it: their length inside the hull, the extent's area over the 100 ft pitch (8,138 at 20, 19,178 at 40, 45,153 at 80 ft), over 6 ft, each cell read (1), and each line's start (1) | the typical cluster |
+| the clip (houses sorted, spans read) | over the run | 172 at 20, 370 at 40, 800 at 80 | the houses sorted along the long axis once, log2 of the households rounded up each, and each run's span read from the houses its line crosses, the mean 1.17 a house (2 a run: its two ends) | the typical cluster |
+| the spine (lane ground cells examined) | over the run | 3,620 at 20, 5,440 at 40, 8,140 at 80 | an 8-neighbor descent along the cluster's long axis within the hull, the long side over 6 ft (181 at 20, 272 at 40, 407 at 80 cells), each traced: 8 neighbors read, the step, its way mark, its join band of 10 (20) | the typical cluster |
+| the joins (lane ground cells examined) | over the run | 7,200 at 20, 13,000 at 40, 24,000 at 80 | the runs, the lines plus the mean 1.17 a house (a homestead's mean 117 ft extent over the 100 ft pitch; 36 at 20, 65 at 40, 120 at 80), each of their two ends reached along the flood a quarter pitch at the mean, 25 ft over 6 ft, 5 cells, each traced (20) | the typical cluster |
+| the laying (parts index cells written) | over the run | 763 at 20, 1,535 at 40, 3,174 at 80 | the lanes' length as trimmed - the back lanes inside the hull, the spine, 25 ft at each run end's join and the bund legs at the 0.18 of ends near the field, 100 ft each - 12,323 at 20, 26,456 at 40, 57,995 at 80 ft, in 136 at 20, 241 at 40, 433 at 80 legs (a run's stretch and its 2 joins, its 0.36 bund legs, the spine's bends; the web files no household's way); its corridor at a random angle, 2 x (the length x (4/pi) over 64 ft, plus 1 a leg) | the typical cluster |
+| the door paths (lane ground cells examined) | over the run | 100 at 20, 200 at 40, 400 at 80 | each household's own way, laid by the homesteads, tested first at its door: the door's lane-ground cell and its 4 edge neighbors, each read for a way's mark (5); the scan outward from the door, stopping at the first mark, only where it fails, inside the slack | the typical cluster |
+| the trims (legs walked) | over the run | 136 at 20, 241 at 40, 433 at 80 | each leg walked at most once from a lane's end, before it is filed | the typical cluster |
+| the bund (outline index cells examined) | over the run | 195 at 20, 351 at 40, 648 at 80 | the run ends near the field, 0.18 of them (measured), one leg of at most 100 ft in at most 5 cells, each with the mean 2 outline segments and the cell (15) | the typical cluster |
+| the knots (endpoint index cells examined) | over the run | 1,368 at 20, 2,470 at 40, 4,560 at 80 | each run's two ends: its 3 by 3 cells of 25 ft, each read with the mean 1.1 ends (measured) and the cell (19) | the typical cluster |
+| the taut pull (lane ground cells examined) | over the run | 4,108 at 20, 8,820 at 40, 19,332 at 80 | a funnel over each lane's cells before it is filed, the trimmed lanes' length over 6 ft, each cell's two sides tested once (2) | the typical cluster |
+| the kinks (legs tested) | over the run | 183 at 20, 323 at 40, 581 at 80 | each vertex's angle (1), and the zigzag's look at the 0.17 of vertices that turn past 50 degrees (measured), 2 each (1.34) | the typical cluster |
 
-So: 1 x 2, plus each row.
+So: (1 + each row) x 2, the slack a factor on the whole count.
 
 ## Totals
 
-- at 20: 1 x 2 + 144 + 58854 + 132816 + 2240 + 4300 + 7600 + 1118 + 100 + 203 + 206 + 1444 + 5952 + 273 = 215252
-- at 40: 1 x 2 + 224 + 88004 + 197544 + 4620 + 6100 + 13400 + 2134 + 200 + 367 + 362 + 2546 + 11718 + 492 = 327713
-- at 80: 1 x 2 + 344 + 132500 + 296544 + 9604 + 8820 + 24400 + 4164 + 400 + 679 + 659 + 4636 + 23502 + 910 = 507164
+- at 20: (1 + 152 + 5446 + 1369 + 172 + 3620 + 7200 + 763 + 100 + 136 + 195 + 1368 + 4108 + 183) x 2 = 49626
+- at 40: (1 + 208 + 9725 + 3215 + 370 + 5440 + 13000 + 1535 + 200 + 241 + 351 + 2470 + 8820 + 323) x 2 = 91798
+- at 80: (1 + 296 + 17505 + 7552 + 800 + 8140 + 24000 + 3174 + 400 + 433 + 648 + 4560 + 19332 + 581) x 2 = 174844
 
 ## Earlier findings
 
+- verdict-5, finding 1: fixed - the contract's trim taken first: each back line and the spine clipped to the span of the houses it serves before the ring is walked, the ring read only along the kept legs that leave the hull (the bund legs and the connector reach), no flood over it; the laying and the taut pull on the trimmed lengths; no household's way in the legs; the pitch from the area per house (219 ft at 40); the door test's 5 reads named; the slack a factor on the whole count (ask:444-T09-rescore-batch-2)
 - verdict-4, finding 1: fixed - the bund's, the kinks' and the knots' shares measured on the reference manifests (0.18, 0.17, 1.1); the laying, taut pull, trims and kinks on the re-scored length and legs (no door path, the bund legs at 0.18); the joins at a quarter pitch; the runs at the mean 1.17 a house; the door test on the household's own way first; the ring's marking, the near-hull straddle and the bands at their means; the spine an 8-neighbor descent; the frame on the fringe houses
 - verdict-1, finding 1: fixed - a ring cell is decided from its 32 ft raster cell and its at most 20 segments (21; the raster's cells are 32 ft, 1 ft a pixel is the map's scale), and only a cell within 8 ft of the hull against the 2 by 2 cells of 64 ft it straddles (28)
 - verdict-1, finding 2: fixed - the door path's 62 cells is the homesteads' figure for a household's way, cited in the Bounds
@@ -88,7 +90,7 @@ So: 1 x 2, plus each row.
 - verdict-3, finding 3: fixed - a traced cell is marked a way's (1) apart from its 25 ft join band, and the door tests read the way's mark
 - verdict-3, finding 4: fixed - the bund's 5 cells
 - verdict-3, finding 5: fixed - the ring's raster cells are 5 across for each 32 ft of the mid-ring perimeter; the cells near the hull 3 across for each 6 ft of it; the door's 12 ft band 3 across for each 6 ft of the perimeter and its corners, 404
-- reason above the reference: the web is one network laid over the whole cluster's gaps, its frame's ring and its back lanes, so its items row is 1; at 40 it is about 8,193 a household
+- reason above the reference: the web is one network laid over the whole cluster's gaps, its frame's ring and its back lanes, so its items row is 1; at 40 it is about 2,295 a household
 - FR-014 re-score: each factor at the typical case (rubric S8): the ring's boundary marks and its parts at the mean densities of `items.md`, the flood at the homesteads' typical 12 a cell, no door path where a household's own way passes its door, the bund legs only at the run ends near the field; slack 2 (ask:444-budget-standard; the accept was ask:444-T04-web-round-4)
 
 ## Cheaper algorithms considered

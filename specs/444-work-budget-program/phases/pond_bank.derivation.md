@@ -10,9 +10,9 @@
 ## The algorithm
 
     roll the bank's form; if bare, record it and return
-    for each seat round the ring, at the pitch: jitter it within the play; look once at the 4 standing grid cells its crown reaches
+    for each seat round the ring, at the pitch: jitter it within the play; look once at the standing grid cells its crown's box meets (about 2.25)
         (the trunk is the crown's center, so the same look serves both), testing every footprint and lane in them; test the
-        trunk against the outline segments in its 38.6 ft cell, and the brook's segments in its cell and in any neighbor within the brook's half-width, and the pond exactly; seat it if free
+        trunk against the crop by a parity ray along its row through the outline's 38.6 ft cells to the box's nearer edge, and the brook's segments in its cell and in any neighbor within the brook's half-width, and the pond exactly; seat it if free
     record the trees and their kinds
 
 ## Indexes
@@ -26,29 +26,30 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 33 at 20, 43 at 40, 56 at 80 | the ring's seats (the Bounds) | a planted bank at 80 households |
-| the standing grid's look (cells examined) | per item | 4 | the crown's reach, 12 ft, in 24 ft cells meets at most 4; the trunk is its center, so one look serves both | always 4 |
+| the standing grid's look (cells examined) | per item | 3 | the cells the crown's 24 ft box meets, floor((x - r) / c) to floor((x + r) / c) each way: a 12 ft reach in 24 ft cells spans 2 cells on an axis half the time, so 1.5 x 1.5 = 2.25, rounded up; the trunk is its center, so one look serves both | always 4 |
 | the footprints | per item | 0 | the mean footprints in the seat's 4 cells round the pond, 0 (measured); the 4 cells' reads are the standing grid's look | the typical bank |
 | the lanes | per item | 1 | the trunk's own 24 ft cell, the mean under 1 lane segment a cell (the 64 ft cell's mean 2) | the typical bank |
-| the crop (outline index cells examined) | per item | 1 | the trunk's cell examined; the mean outline segments a seat's cell round the pond, 0 (measured) | the typical bank |
+| the crop (outline index cells examined) | per item | 12 at 20, 15 at 40, 19 at 80 | the field's outline index marks no uncrossed cell inside or outside (the field's derivation builds no such marking), so the crop test is a parity ray (ask:444-T09-rescore-batch-2): the trunk's own cell (1), then along its row to the outline box's nearer edge, a quarter of the crop's width on the mean - the crop about 1,127 ft across at 20 (the square root of its 1,269,264 sq ft, x1.41 a doubling: 1,594 at 40, 2,254 at 80) - in 38.6 ft cells (8 at 20, 11 at 40, 15 at 80), each read (1), and the about 1 outline crossing it meets at the mean 2.1 segments a crossed cell, rounded up (3) | the typical bank |
 | the brook (brook cells examined) | per item | 2 | about 1.4 cells examined (a seat near its cell's edge one time in three), each with the mean 0.15 brook segments a seat's cell round the pond, rounded up | the typical bank |
 | the pond | per item | 1 | one exact distance from the ellipse | always 1 |
 | the jitter | per item | 1 | one draw within the play | always 1 |
 | the kind | per item | 1 | the next of mulberry and cudrania | always 1 |
-| slack | per item | 2 | what varies around the typical case (S8): a seat at a junction or a cell's corner | a crowded bank |
+| slack | per item | 2 | what varies around the typical case (S8): a seat at a junction, the spread around the crop's ray | a crowded bank |
 | the roll | once | 1 | the bank's form | always 1 |
 
-So: seats x (4 + 0 + 1 + 1 + 2 + 1 + 1 + 1) x 2 + the roll.
+So: seats x (3 + 0 + 1 + the crop + 2 + 1 + 1 + 1) x 2 + the roll.
 
 ## Totals
 
-- at 20: 33 x (4 + 0 + 1 + 1 + 2 + 1 + 1 + 1) x 2 + 1 = 727
-- at 40: 43 x (4 + 0 + 1 + 1 + 2 + 1 + 1 + 1) x 2 + 1 = 947
-- at 80: 56 x (4 + 0 + 1 + 1 + 2 + 1 + 1 + 1) x 2 + 1 = 1233
+- at 20: 33 x (3 + 0 + 1 + 12 + 2 + 1 + 1 + 1) x 2 + 1 = 1387
+- at 40: 43 x (3 + 0 + 1 + 15 + 2 + 1 + 1 + 1) x 2 + 1 = 2065
+- at 80: 56 x (3 + 0 + 1 + 19 + 2 + 1 + 1 + 1) x 2 + 1 = 3137
 
 - FR-014 re-score: each factor at the typical case (rubric S8), the mean densities of `items.md` in place of the densest cells; slack 2 (ask:444-budget-standard)
 
 ## Earlier findings
 
+- verdict-6, finding 1: fixed - the outline index marks no uncrossed cell, so the crop test is a parity ray along the trunk's row to the outline box's nearer edge, counted (11, 14 and 18); the look at the cells the crown's box meets, 3; the corner paid once, in the look, not the slack (ask:444-T09-rescore-batch-2)
 - verdict-5, finding 1: fixed - the brook's and the outline's segments measured per seat round the pond, empty cells counted (0.15 and 0); the footprints likewise (0); the brook's cells at the 1.4 a seat's edge share gives
 - verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
 - verdict-1, finding 2: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014

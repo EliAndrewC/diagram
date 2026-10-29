@@ -15,9 +15,9 @@
     for each house: the clump grid's sites within its 90 ft reach (a disk of the 15.556 ft grid, at most 133 sites at any offset), each
         site once over the run (a site two houses reach is taken by the first)
         each site, until its farm's share fills (the walk then ends): its farm's share (1); within 90 ft of its
-            house by construction (no lookup); on its house's own bank - the segment from the site to its house walked
-            through the water index's cells, no water segment crossing it; its clump's box against the registry's things in its
-            cells (S4); admitted: the clump drawn and filed, its crowns written, the farm's share counted down
+            house by construction (no lookup); its clump's box against the registry's things in its cells,
+            the water courses among them (S4); for a clear box, on its house's own bank - the segment from the site to its house
+            walked through the water index's cells, no water segment crossing it; admitted: the clump drawn and filed, its crowns written, the farm's share counted down
 
 ## Indexes
 
@@ -30,24 +30,25 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 462 at 20, 957 at 40, 1,980 at 80 | the clumps drawn (223 and 462 at 10 and 20, x2.07) | 80 households |
-| the sites tried | per item | 2.13 | 1 / p, p = 0.47 the measured share of a reach's sites a clump's box finds clear (S8); a farm's walk ends once its share fills | the typical cluster |
-| the site test (water index and registry cells examined) | per item | 20 | its farm's share (1); its bank, the typical 60 ft segment to its house in about 2.2 cells of 64 ft at a random angle, with the mean 4 water segments in the one it crosses (6.2); its clump's 22 ft box in about 1.8 cells (1 + 22/64 squared) with the mean 5.5 things near the houses and the cell (11.7); 19.9, rounded up | the typical cluster |
+| the sites tried | per item | 2.13 | 1 / (p (1 - q)), p = 0.47 the measured share of a reach's sites a clump's box finds clear, q = 0.001 the measured share of those whose segment to their house crosses a water course (1 of 947 at 20, 0 of 501 at 10; the reference manifests' grid sites within 90 ft of a house), so 1 / (0.47 x 0.999) = 2.13 (S8; ask:444-T09-rescore-batch-2); a farm's walk ends once its share fills | the typical cluster |
+| the site test (water index and registry cells examined) | per item | 16 | the box first, the bank only for a clear box (q = 0.001 is far under the 0.28 at which the bank first would be cheaper): its farm's share (1); its clump's 22 ft box in about 1.8 cells (1 + 22/64 squared) with the mean 5.5 things near the houses and the cell (11.7), the registry filing the water courses as stroked footprints, so the box sees the water (p counts it); for the 0.47 whose box is clear, its bank, the typical 60 ft segment to its house in about 2.2 cells of 64 ft at a random angle, with the mean 4 water segments in the one it crosses (0.47 x 6.2, 2.9); 15.6, rounded up | the typical cluster |
 | slack | per item | 2 | what varies around the typical case (S8): the spread around the mean sites tried | a crowded farm |
-| the shares (house index cells examined) | once | 1,322 at 20, 2,784 at 40, 5,834 at 80 | each farm's share set (1), and the belt's ring walked, each point its area term (2) and its farm, the nearest house in its 3 by 3 cells of 90 ft (12) | 80 households |
+| the shares (house index cells examined) | once | 1,229 at 20, 2,588 at 40, 5,423 at 80 | each farm's share set (1), and the belt's ring walked, each point its area term (2) and its farm, the nearest house in its 3 by 3 cells of 90 ft with the mean 1.8 houses there at 20 (20 / (750 x 1,085) x 9 x 90 squared) (11) | 80 households |
 | the clumps (registry cells written) | over the run | 462 x 2.8 at 20, 957 x 2.8 at 40, 1,980 x 2.8 at 80 | each clump recorded (1) and filed in its about 1.8 cells (1.8) | 80 households |
 | the house index (cells written) | once | 20 at 20, 40 at 40, 80 at 80 | each house filed once in its 90 ft cell | 80 households |
 | the crowns (written) | over the run | 624 at 20, 1,317 at 40, 2,779 at 80 | each crown written once | 80 households |
 
-So: the clumps x 2.13 x 20 x 2, plus the shares, the clumps x 2.8, the house index and the crowns.
+So: the clumps x 2.13 x 16 x 2, plus the shares, the clumps x 2.8, the house index and the crowns.
 
 ## Totals
 
-- at 20: 462 x 2.13 x 20 x 2 + 1322 + 462 x 2.8 + 20 + 624 = 42622
-- at 40: 957 x 2.13 x 20 x 2 + 2784 + 957 x 2.8 + 40 + 1317 = 88357
-- at 80: 1980 x 2.13 x 20 x 2 + 5834 + 1980 x 2.8 + 80 + 2779 = 182933
+- at 20: 462 x 2.13 x 16 x 2 + 1229 + 462 x 2.8 + 20 + 624 = 34657
+- at 40: 957 x 2.13 x 16 x 2 + 2588 + 957 x 2.8 + 40 + 1317 = 71854
+- at 80: 1980 x 2.13 x 16 x 2 + 5423 + 1980 x 2.8 + 80 + 2779 = 148783
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - q measured, 0.001 (1 of 947 clear sites at 20 across water from its house), so the sites tried are 1 / (p (1 - q)) = 2.13; the box test before the bank walk (15.6 a site, 16); the registry files the water courses, so the box sees them; the nearest-house lookup at the mean 1.8 houses, 11 (ask:444-T09-rescore-batch-2)
 - verdict-3, finding 1: fixed - the sites tried a clump are 1/p, p = 0.47 measured on the reference geometry; the items are the clumps, the candidates the sites tried (S7's form); a farm's walk ends when its share fills; the registry and the bank at their mean cells; every belt point within 90 ft of a house
 - verdict-1, finding 1: fixed - the bank test walks the site's segment to its house through the water index's cells, no water segment crossing it, its own count (130)
 - verdict-1, finding 2: fixed - no raster is built; the bank is read from the water index, and the 1 ft a pixel is the map's scale only
