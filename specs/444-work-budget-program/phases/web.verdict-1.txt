@@ -1,0 +1,24 @@
+UNDERIVED - the frame's ring rests on an unexplained per-cell "(9)" (111,753 of 168,149 operations at 20 households, two thirds of the budget), and the door path's 62 cells (372 ft) has no stated reason anywhere in the bundle.
+
+All the arithmetic in the table reproduces from the Bounds (ring, back lanes, spine, joins, laying, door paths, bund, knots, taut pull, kinks). The problems are in the reasons and in how some figures were read. This is round 1 and the bundle has no earlier verdicts to close.
+
+**1. Is each factor derived?** No. Four factors lack a reason:
+- **Ring "(9)":** "decided from the free-ground raster and the parts index (9)" does not say what the 9 is made of. The raster is 1 ft a pixel and the gaps are 3-8 ft. A 6 ft cell's decision is therefore either a lookup in a precomputed distance field, which the derivation should say, or a pixel scan far larger than 9. The parts check also falls short. A test reaching 7-8 ft from a cell near a 64 ft boundary can touch up to 4 parts cells × 7 parts = 28, not about 7.
+- **Door path, 62 cells / 372 ft (the door-paths and laying rows):** this is not built from anything given (the 184 ft homestead, the 100 ft pitch, the 60 ft arrival test). If it is the homesteads' own figure for a way, the derivation must cite it.
+- **Ways index, 21 legs a cell:** the only reason given is "the ceiling taken" of 3 at 10 and 21 at 20. The contract's rule is "past 20 at each figure's measured rate a doubling", which makes that a ×7 rate, so 21 is no ceiling at 40 or 80 (S1). The 8 legs a household is only partly derived: 3 legs for a household's way, plus 5 for the lanes with no reason.
+- **Smaller gaps:** the bund leg's "at most 100 ft" has no reason. "Traced (1)" for a step along the flood also needs one, since choosing the next cell reads its neighbors. Neither the spine's root 2 nor the band's 10 cells (the 25 ft band at 6 ft) is explained.
+
+**2. Is there a standard, cheaper algorithm?**
+- **Order of laying:** the algorithm files each lane's corridor in the parts index at "lay". After that it trims the ends back and pulls each lane taut and clears its kinks ("settle"). That is placing and then repairing (S4), and any re-filing of the corridor is uncounted. Where each run ends is known from the walk, so trimming and the taut pull can happen before the lane is filed. The derivation should be in that order, or say why it cannot be.
+- **The ring:** placed parts lie inside the hull, and the ring lies outside the gap bands. Only ring cells within 8 ft of the hull need the parts index; the rest need the raster alone. This is likely LOOSE once the 9 is broken down.
+
+**3. Is any factor padded?** Nothing that changes the result. Two small overstatements:
+- The ring's area is taken as the frame's perimeter × 100 ft. For a convex offset the true area is about π·100² = 31,416 sq ft less, or about 7,850 operations.
+- The spine's length is counted at root 2 in the laying row and then gets the cell-crossing root 2 again.
+
+**4. Is each figure read at its source's size and unit?** No, two are misread:
+- **Knots:** the Indexes section says "densest 4 ends a cell", but the row charges 9 + 4 = 13 per end. That reads a per-cell figure as covering the whole 3 by 3 block, which is the T07 pattern. Read the way the door-paths row reads 9 × 21, it is 9 × (4 + 1) = 45 per end, or 4,860 at 20.
+- **Joins:** the reason says "each end reached", but 10,098 = 54 × 17 × 11 counts one end per run. The bund and knots rows count two. Either say why one end is enough or double it (20,196 at 20).
+- **Door-path window:** the 3 by 3 cells of 64 ft cover the 60 ft test around the house. They do not cover the 12 ft test against built ground spread over a homestead up to 184 ft across.
+
+Bundle read: `/tmp/l7r-check/work-budget-budget-web/MANIFEST.md`, `/tmp/l7r-check/work-budget-budget-web/rubric.md`, `/tmp/l7r-check/work-budget-budget-web/contract.md`, `/tmp/l7r-check/work-budget-budget-web/derivation.md`.
