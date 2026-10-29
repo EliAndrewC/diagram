@@ -32,7 +32,7 @@ band - are extended from 10 and 20 by each item's own scaling, stated in the der
 | lanes | 12 | 23 | web |
 | bridges | 6 | 9 | crossings |
 | washing_places | 1 | 3 | washing |
-| tree_crowns | 1,167 | 2,151 | hinterland, woodland, windbreak, pond_bank |
+| tree_crowns (crowns: a flat list of x, y, r, three numbers a crown) | 389 | 717 | hinterland, woodland, windbreak, pond_bank |
 | scrub_pines | 252 | 591 | hinterland |
 | bamboo_stands | 3 | 6 | bamboo |
 | commons | 5 | 5 | woodland |
@@ -41,5 +41,7 @@ band - are extended from 10 and 20 by each item's own scaling, stated in the der
 | kosatsuba | 1 | 1 | notice |
 | labels | 1 | 1 | labels |
 | way_out_track, way_out_gate | 2 points each | 2 points each | track |
+
+**Corrected 2026-10-28** (again, the same day): `tree_crowns` first counted the list's numbers (1,167 and 2,151), not its crowns; recounted as triples. No budget pinned before the correction read the row (pond_bank's items are its own trees).
 
 **Corrected 2026-10-28**: the brook's and the ditches' rows first counted each record's dict keys (`poly`, `role`, ...), not its points; recounted from their `poly` lists the same day. The field and sink derivations written before the correction rest on the wrong figures and are being rewritten.
