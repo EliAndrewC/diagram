@@ -134,8 +134,10 @@ None.
 
 The 13 stages pinned on an accept re-scored to rubric S8 - each factor at the mean the reference rolls' output shows, times slack at
 most 2, their algorithms and indexes kept - judged once each in MODE BUDGET, and put to the round arbiter as one batch (`make
-arbiter-bundle BATCH=1`); a SOUND-pinned stage re-scored only where `make budget-set`'s gate fires on its pin, a stage today's run
-counts nothing for answered with its reason; each lowered with `LOWER=1`.
+arbiter-bundle BATCH=1`); a SOUND-pinned stage re-scored and re-judged only where `make budget-set`'s gate fires on its pin - a stage
+today's run counts nothing for included, re-scored like any other, its named reason covering only why its re-scored pin stands
+above today's zero (for uncounted work, naming that work); each lowered with `LOWER=1`. The 13 are the stages `dev/work-budget.json`
+records `pinned_on: accept` (read 2026-10-28).
 
 ### T09 Approach (checklist part A)
 

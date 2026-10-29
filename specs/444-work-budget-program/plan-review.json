@@ -138,6 +138,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
    "declared": "spec-fidelity"
+  },
+  "### T09 - the budgets re-scored to the typical case (FR-014)": {
+   "sha256": "4172efccf3f275a95eef600f7394a100b83c81dbcae70f37749114bfe4ec0513",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T09 Approach (checklist part A)": {
+   "sha256": "c26dbf96423f32fc57633789283d138e2ed296e696f58ded89a9385695ae222b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1120,6 +1132,82 @@
      "why": "The record FR-002 names; a target on paper is not a rebuild, so no performance checklist applies."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T09 - the budgets re-scored to the typical case (FR-014)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-a",
+     "summary": "The accept-pinned stages are re-scored to rubric S8 (each factor at the mean the reference rolls' output shows, slack at most 2), their algorithms and indexes kept.",
+     "class": "within",
+     "why": "FR-014 verbatim: 're-scored to it - their algorithms and indexes stand, their factors change'; serves the GM's 2026-10-28 'REDUCE the number of operations'."
+    },
+    {
+     "id": "T09-b",
+     "summary": "Each accept-pinned re-score judged once in MODE BUDGET, then all put to the round arbiter as one batch (make arbiter-bundle BATCH=1).",
+     "class": "within",
+     "why": "The arbiter batch is FR-014's and discharges the ruling FR-013 re-owes; the added MODE BUDGET pass is the design's step 3 ('MODE BUDGET on each') and adds review, it does not narrow anything."
+    },
+    {
+     "id": "T09-c",
+     "summary": "A SOUND-pinned stage is re-scored and re-judged only where make budget-set's gate fires on its pin.",
+     "class": "within",
+     "why": "FR-014 settles this in the same words; the gate fires on any pin above today's count at 40, so no SOUND pin above today's count escapes re-scoring."
+    },
+    {
+     "id": "T09-d",
+     "summary": "A stage today's run counts nothing for is included and re-scored like any other; its named reason covers only why its pin stands above today's zero, naming the uncounted work.",
+     "class": "within",
+     "why": "Exempts nothing: such a stage always fires FR-014's gate and is re-scored; the plan limits the gate's named-reason escape to the one fact it must explain (S5's uncounted work), which tightens rather than widens it."
+    },
+    {
+     "id": "T09-e",
+     "summary": "Each re-scored pin lowered with LOWER=1.",
+     "class": "within",
+     "why": "FR-014: 'each is lowered with LOWER=1 (no GM words: a lowering asks nothing of him)'; raising still needs the GM's words (design section 5.4)."
+    },
+    {
+     "id": "T09-f",
+     "summary": "The 13 are the stages dev/work-budget.json records pinned_on: accept (read 2026-10-28).",
+     "class": "within",
+     "why": "The enumeration carries its search space (the guard file's pinned_on field, dated read); every accept pin is a superset of FR-014's 'pinned on an accept before FR-014', so nothing it names is dropped."
+    },
+    {
+     "id": "T09-g",
+     "summary": "Mean densities read from the reference rolls' manifests (phases/items.md), never the counters or the code.",
+     "class": "within",
+     "why": "FR-014: 'read from the reference rolls' manifests and never from the counters or the code'; keeps the design's rule that today's waste cannot anchor the target."
+    },
+    {
+     "id": "T09-h",
+     "summary": "Order: after amendment 2, before T06 (the target) is put to the GM again.",
+     "class": "within",
+     "why": "FR-014: 'The new target then goes to the GM under FR-002'."
+    },
+    {
+     "id": "T09-i",
+     "summary": "Exits: green when every stage is pinned at or under today's count at 40 or carries its named reason; red records what failed and sets the task down, a claim it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green is FR-014's gate restated; red sets down this paper task on recorded failure, not a phase for small gain (FR-006), and changes no budget - raising one still needs the GM's words and the target still goes to him."
+    },
+    {
+     "id": "T09-j",
+     "summary": "Done, measured: make budget-set prints the program per household at or under the design's few thousand, or names why.",
+     "class": "within",
+     "why": "FR-014 asks only that the program per household be printed against the design's few thousand; 'at or under, or names why' asks more of it, and the figure goes to the GM with the target under FR-002."
+    },
+    {
+     "id": "T09-k",
+     "summary": "Budget of the task (one landing, one MODE BUDGET pass per re-scored stage, one arbiter batch); not performance work (paper budgets).",
+     "class": "within",
+     "why": "Matches FR-014's single batch and once-each MODE BUDGET; no scope added or removed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1474,6 +1562,69 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "30b8eaa1a9a062a05e473e24686898b22f9d8a5874e6bfd17ab63e4896ce409a",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T09-accept-rescore",
+     "summary": "The 13 accept-pinned stages are re-scored to rubric S8 (each factor at the mean the reference rolls' output shows, slack at most 2), their algorithms and indexes kept.",
+     "class": "within",
+     "why": "FR-014 verbatim: 'The stages pinned on an accept before FR-014 are re-scored to it - their algorithms and indexes stand, their factors change'; serves the GM's 2026-10-28 'I thought the idea was to REDUCE the number of operations'."
+    },
+    {
+     "id": "T09-mode-budget-then-batch",
+     "summary": "Each re-scored accept-pinned stage is judged once in MODE BUDGET, then all go to the round arbiter as one batch (make arbiter-bundle BATCH=1).",
+     "class": "within",
+     "why": "The batch is FR-014's own route, discharging FR-013's re-owed ruling. The MODE BUDGET pass adds scrutiny the design already gives every derivation (step 3, 'MODE BUDGET on each'). It narrows nothing and adds no behavior."
+    },
+    {
+     "id": "T09-sound-gate",
+     "summary": "A SOUND-pinned stage is re-scored only where make budget-set's gate fires on its pin.",
+     "class": "within",
+     "why": "FR-014: 'a SOUND-pinned stage is re-scored and re-judged once in MODE BUDGET only where make budget-set's gate fires on its pin'."
+    },
+    {
+     "id": "T09-zero-count",
+     "summary": "A stage that today's run counts nothing for is 'answered with its reason'. As drafted, this sits parallel to 're-scored only where the gate fires', so it reads as an alternative treatment: a reason instead of a re-score.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "For a stage counted at zero, the gate fires on any positive pin, and FR-014 then says the stage 'is re-scored and re-judged once in MODE BUDGET'. Re-scoring is not physically impossible here: FR-014's factors come from the reference rolls' manifests, 'never from the counters or the code', so a stage whose counters read zero can still be scored at its mean densities. FR-014's 'unless a reason is named' is the gate's override for a pin above today's count. It is not an exemption from re-scoring, and the GM's words imply no such exemption. Purpose test: the GM objected to a target HIGHER than today's work. A SOUND pin scored at worst case that stands on a reason is exactly that, and it survives this clause. Class check: 'counts nothing' covers two unlike cases under one treatment. (a) A stage whose work is uncounted: an S5 finding, where today's count is unknown rather than zero. (b) A stage that places nothing on the reference rolls at 40: its typical-case factors are near zero, so a re-score lowers it. Neither case justifies skipping the re-score. Fix: say such a stage is re-scored and re-judged like any stage whose pin the gate fires on, and that the named reason covers only why its re-scored pin exceeds today's zero (in case (a), naming the uncounted work)."
+    },
+    {
+     "id": "T09-lower",
+     "summary": "Each re-scored budget is lowered with LOWER=1.",
+     "class": "within",
+     "why": "FR-014: 'each is lowered with LOWER=1 (no GM words: a lowering asks nothing of him)'."
+    },
+    {
+     "id": "T09-densities-from-manifests",
+     "summary": "Approach 4: each stage's mean densities are read from the reference rolls' manifests (phases/items.md), never from the counters or the code.",
+     "class": "within",
+     "why": "FR-014: 'read from the reference rolls' manifests and never from the counters or the code'."
+    },
+    {
+     "id": "T09-order",
+     "summary": "Approach 5: after amendment 2, before T06 is put to the GM again.",
+     "class": "within",
+     "why": "FR-014: 'The new target then goes to the GM under FR-002'."
+    },
+    {
+     "id": "T09-exits",
+     "summary": "Green: every stage pinned at or under today's count at 40, or with its named reason. Red: the failure recorded, the task set down, and any claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit mirrors FR-014's gate ('refuses a pin above the stage's counted operations at 40 ... unless a reason is named'). The red exit is a failure path ruled as process. It changes no budget and does not take the target from the GM, who still approves it under FR-002."
+    },
+    {
+     "id": "T09-done",
+     "summary": "Approach 9: make budget-set prints the program per household, at or under the design's few thousand or naming why.",
+     "class": "within",
+     "why": "FR-014: budget-set 'prints the program per household against the design's few thousand'. Aiming at or under it, and naming why when over, narrows nothing, and the target still goes to the GM."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
