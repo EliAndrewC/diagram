@@ -317,7 +317,9 @@ def belongs(p: dict[str, str], num: str, questions: set[str], repo: Path, transc
         return True
     # A CLAIMS ROUND'S PASS IS THE ACTIVE FEATURE'S (feature 405 T39, D13): its bundle is the clone's own (`make claims-bundle`,
     # `make claims-triage`) and its prompt names no feature - T14's landing refused once on three impl-drift passes for that
-    if re.search(r"l7r-check/claims-(?:owed|triage)\b", subject) and _active_feature(repo) == num:
+    # A WORK-BUDGET PASS IS THE ACTIVE FEATURE'S TOO (feature 444 FR-015): its bundle (`make work-budget-bundle`) is the clone's own
+    # and its prompt names only the bundle - nine greenfield passes stayed owed under a WRITE naming the feature
+    if re.search(r"l7r-check/(?:claims-(?:owed|triage)|work-budget-(?:budget|audit|table)-)", subject) and _active_feature(repo) == num:
         return True
     key = re.search(r"/key-([\w-]+?)(?:-whole)?/", subject)
     return bool(key) and any(key.group(1) in f.read_text(encoding="utf-8") for q in questions for f in repo.glob(f"research/questions/{q}-*.html"))

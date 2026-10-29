@@ -279,5 +279,7 @@ def test_a_write_naming_a_feature_writes_only_the_passes_traced_to_it(tmp_path: 
     triage = _pass(subject="Triage the claims in the bundle at /tmp/l7r-check/claims-triage/MANIFEST.md")
     assert lo.belongs(drift, "395", set(), repo, tmp_path / "proj") and lo.belongs(triage, "395", set(), repo, tmp_path / "proj")
     assert not lo.belongs(drift, "396", set(), repo, tmp_path / "proj"), "never another feature's"
+    budget = _pass(subject="Read /tmp/l7r-check/work-budget-budget-sink_greenfield/MANIFEST.md and judge it.")  # feature 444 FR-015
+    assert lo.belongs(budget, "395", set(), repo, tmp_path / "proj") and not lo.belongs(budget, "396", set(), repo, tmp_path / "proj")
     (repo / ".specify/feature.json").write_text("not json")
     assert not lo.belongs(drift, "395", set(), repo, tmp_path / "proj")
