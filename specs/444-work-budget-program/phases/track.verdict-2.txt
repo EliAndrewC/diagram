@@ -1,0 +1,24 @@
+UNDERIVED - the leg count and margin in the corridor and squaring rows (derivation.md lines 41-42): the reason given for "at most half the vertices plus 2 legs" is the shorter arc, which is shorter by length and puts no limit on how many vertices it holds; the splice row (line 40) itself allows every vertex to be spliced; and each leg's margin is counted as 17 ft per vertex, but line 40's own bound (256 = 222 + 2 x 17) puts 17 ft at each end of each leg.
+
+**1. Is each factor derived?** Two factors are not.
+- **Leg count and margin (lines 41-42).** The shorter arc is at most half the perimeter, but one side of a field can hold nearly all its points. So "half the vertices" has no reason behind it, and it contradicts line 40's "every outline vertex spliced once". The correct form is:
+  - legs at most the spliced vertices, plus one per entering and leaving pair, plus 1;
+  - lane length at most the ray, plus the arc, plus 34 ft a leg.
+  - The number of pairs needs its own stated bound: a straight ray crosses each outline edge at most once, so at most half the vertices in pairs. Line 18's "each entering and leaving pair" also needs the total arc length bounded across all pairs, not only per pair.
+  - At 20, with one pair, that gives about 860 corridor cells (not 566) and about 13,020 for the squaring (not 9,282).
+  - Separately, 105/2 + 2 = 54.5 is written as 54, where every other figure is rounded up.
+- **What the flood yields (lines 16-17).** After the dry exit's flood, the crossings, splice, corridor and squaring rows all take "the chosen ray". The derivation never says what the flood produces: a dry exit cell and then a straight leg, or the cell path itself. If the lane can be a cell path, those rows have no length to rest on. One sentence fixes it.
+
+**2. Is there a standard, cheaper algorithm?** None missed. An angular sweep would touch every segment on the canvas, which is about as much work as the 41 rays. A breadth-first queue suits the flood's equal steps. The indexes are read from the homesteads, not rebuilt (lines 60-66).
+
+**3. Is any factor padded?** No.
+- The bearings reproduce exactly: 41 x (155 x 21 + 79 x 8 + 1) = 159,408, and likewise 231,158 and 336,897.
+- So do the flood (9 per raster cell), the crossings (79/114/166 x 13) and the splice (505 a vertex = 1 + 117 + 315 + 72).
+- The cell counts follow from the stated grid-walk bound (length x root 2 over the side, plus 3).
+- The corridor and squaring figures are too small, not too large (question 1).
+
+**4. Is each figure read at its source's size and unit?** Yes. The 3,369 / 4,953 / 7,281 ft figures are the diagonal itself (the 2,274 by 2,486 ft canvas gives 3,369), and the 64 ft drawn past the edge is added to it, as the 155 cells require. The 222 ft longest edge, held at 40 and 80, is the contract's own "222 taken"; its measured rate falls (222 to 183 ft). The 17 ft margin is `SPUR_SETBACK`.
+
+**Earlier findings (track.verdict-1.txt):** findings 1, 3, 4 and 5 are closed. Finding 2 is closed in form, since the arc, margin and width are now in the corridor. Its leg count and per-vertex margin are this round's finding, carried on from it.
+
+Files read: /tmp/l7r-check/work-budget-budget-track/MANIFEST.md, /tmp/l7r-check/work-budget-budget-track/rubric.md, /tmp/l7r-check/work-budget-budget-track/contract.md, /tmp/l7r-check/work-budget-budget-track/derivation.md, /tmp/l7r-check/work-budget-budget-track/track.verdict-1.txt

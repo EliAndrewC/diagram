@@ -13,7 +13,8 @@
     for each of the 41 bearings, in the contract's order, until one is clean: walk the ray from the gate past the canvas edge
         through the raster's 32 ft cells (a blocked cell refuses it; an undecided cell's segments tested) and the parts index's
         64 ft cells (the steadings), keeping the least-bad dry one (a comparison a ray)
-    none clean and none dry: the dry exit's flood over the raster from the gate to the canvas edge
+    none clean and none dry: the dry exit's flood over the raster from the gate to the canvas edge, which yields a dry exit
+        cell; the track is then the straight leg from the gate through that cell and on past the edge, the chosen ray
     the chosen ray's crossings with the field's outline, from the outline index's cells along it; each entering and leaving
         pair spliced with the outline's shorter arc, each vertex stepped the 17 ft margin clear (1) and its new leg tested against
         the outline index, the raster and the parts index in the cells it crosses (the arc must keep off wet ground and the
@@ -38,16 +39,16 @@
 | the dry exit's flood (raster cells examined) | over the run | 49,689 at 20, 107,334 at 40, 231,831 at 80 | each raster cell popped once and its 8 neighbors read, on a breadth-first queue (the steps are equal) | no bearing dry |
 | the crossings (outline index cells examined) | over the run | 1,027 at 20, 1,482 at 40, 2,158 at 80 | the chosen ray's 79 at 20, 114 at 40, 166 at 80 cells of 64 ft, each with its at most 12 outline segments (13) | the longest ray |
 | the splice (outline, raster and parts index cells examined) | over the run | 39,390 at 20, 45,450 at 40, 53,025 at 80 | at most every outline vertex spliced once, 505 each: stepped (1), and its new leg - an outline edge, at most 222 ft, with the 17 ft margin at each end, 256 ft - walked through at most 9 outline cells with 12 segments each (117), 15 raster cells with 20 segments each (315) and 9 parts cells with 7 parts each (72); a walk through a grid crosses at most one cell more than the grid lines it crosses each way, so the cells are the length at root 2 over the side, plus 3 | the ray across the whole field |
-| the corridor (parts index cells written) | over the run | 566 at 20, 740 at 40, 988 at 80 | the lane - the ray, plus the shorter arc, at most half the perimeter, plus the 17 ft margin at each spliced vertex, 7,196 at 20, 10,325 at 40, 14,985 at 80 ft, in at most half the vertices plus 2 legs (41 at 20, 47 at 40, 54 at 80) - its 20 ft corridor in at most 2 cells across each cell along it: 2 x (the length at root 2 over 64 ft, plus 3 a leg) | the lane round the whole field |
-| the squaring (raster cells examined) | over the run | 9,282 at 20, 12,558 at 40, 17,325 at 80 | the lane's raster cells, its length at root 2 over 32 ft plus 3 a leg, each with its at most 20 segments tested for a water crossing (21) | the lane round the whole field |
+| the corridor (parts index cells written) | over the run | 1,254 at 20, 1,576 at 40, 2,036 at 80 | the lane - the ray, plus the arcs, disjoint pieces of the outline so at most its perimeter in all, plus the 17 ft margin at each end of each leg, 34 ft a leg - 12,319 at 20, 17,196 at 40, 24,462 at 80 ft, in at most the spliced vertices plus one leg a pair plus 1 (118 at 20, 136 at 40, 159 at 80: a straight ray crosses each outline edge at most once, so at most half the vertices, rounded up, in pairs, 39 at 20, 45 at 40, 53 at 80); its 20 ft corridor in at most 2 cells across each cell along it: 2 x (the length at root 2 over 64 ft, plus 3 a leg) | the lane round the whole field |
+| the squaring (raster cells examined) | over the run | 18,879 at 20, 24,528 at 40, 32,739 at 80 | the lane's raster cells, its length at root 2 over 32 ft plus 3 a leg, each with its at most 20 segments tested for a water crossing (21) | the lane round the whole field |
 
 So: 1 x 1 x 1, plus the bearings, the flood, the crossings, the splice, the corridor and the squaring.
 
 ## Totals
 
-- at 20: 1 x 1 x 1 + 159408 + 49689 + 1027 + 39390 + 566 + 9282 = 259363
-- at 40: 1 x 1 x 1 + 231158 + 107334 + 1482 + 45450 + 740 + 12558 = 398723
-- at 80: 1 x 1 x 1 + 336897 + 231831 + 2158 + 53025 + 988 + 17325 = 642225
+- at 20: 1 x 1 x 1 + 159408 + 49689 + 1027 + 39390 + 1254 + 18879 = 269648
+- at 40: 1 x 1 x 1 + 231158 + 107334 + 1482 + 45450 + 1576 + 24528 = 411529
+- at 80: 1 x 1 x 1 + 336897 + 231831 + 2158 + 53025 + 2036 + 32739 = 658687
 
 ## Earlier findings
 
@@ -56,6 +57,8 @@ So: 1 x 1 x 1, plus the bearings, the flood, the crossings, the splice, the corr
 - verdict-1, finding 3: fixed - the plus 3 is stated: a grid walk crosses one cell more than the grid lines it crosses each way
 - verdict-1, finding 4: fixed - each spliced leg is tested against the raster and the parts index as well as the outline index, counted in the splice
 - verdict-1, finding 5: fixed - squaring at the water is this stage's (`square_run` on the connector as laid), its own row
+- verdict-2, finding 1: fixed - the legs are the spliced vertices plus one a pair plus 1, the pairs at most half the vertices (a straight ray crosses each edge once), the arcs at most the perimeter in all, and the margin 17 ft at each end of each leg
+- verdict-2, finding 2: fixed - the dry exit's flood yields a dry exit cell, and the track is the straight leg through it, the chosen ray
 
 ## Cheaper algorithms considered
 
