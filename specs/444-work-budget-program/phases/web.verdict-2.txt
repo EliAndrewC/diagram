@@ -1,0 +1,47 @@
+UNDERIVED - the ways index's "densest 48 legs a cell" (which drives the door-paths row) rests on a 20 ft lane spacing found nowhere in the contract, and the spine and joins read flood values in the ring's cells that no step computes or counts.
+
+All twelve rows reproduce from the Bounds at 20, 40 and 80: frame, ring, back lanes, spine, joins, laying, door paths, trims, bund, knots, taut pull and kinks. The findings are in the reasons and the order of steps, not the sums.
+
+**Earlier findings (verdict-1).**
+- **Closed:**
+  - **2:** the 62 cells now come from the Bounds: 4 x 184 / 2 / 6, rounded up to 62.
+  - **4:** the bund leg's 100 ft, the 8 neighbors a step reads, the spine without a second root 2, and the band's 2 x 25 / 6 + 1 = 10.
+  - **6:** the ring's area, perimeter x 100 + pi x 100^2.
+  - **7:** the knots, 9 x (4 + 1).
+  - **8:** the joins count both ends.
+  - **9:** the door-path window, 208 ft giving 5 by 5.
+- **Partly closed:**
+  - **1:** the 28 for cells near the hull is right, but the 21 is a new finding (question 4).
+  - **5:** trimming and the taut pull now come before filing, but `settle` now comes after (question 2).
+- **Not closed:**
+  - **3:** see question 1.
+
+**1. Is each factor derived?** No.
+- **Ways index, 48 legs a cell** (derivation.md line 33; it is the 25 x 49 = 1,225 of the door-paths row, line 49).
+  - The source is missing: "the 20 ft threading gap" is in neither the contract's Keeps nor its Bounds.
+  - The geometry does not hold either. Lanes 20 ft apart bounds parallel lanes only, but the back lanes cross the spine and door paths meet lanes at junctions, where lanes are 0 ft apart.
+  - "64 / 6 + 1 = 12 legs of one lane" assumes a lane crosses the cell along an axis. A diagonal crossing is 90.5 ft, about 16 cells.
+  - The index also holds the households' laid ways (`access_corridors`), and no stated spacing bounds them.
+- **The ring's flood.**
+  - Lines 13-15 add the ring to lane ground as cell states only.
+  - The spine (line 16, priced at the frame's long side plus short side) and the joins from run ends at the frame's edge (lines 18-20) descend "lane ground's flood" through the ring.
+  - Line 82 says the flood is "read, not rebuilt".
+  - No row computes flood values for the ring's 11,068 / 16,462 / 24,712 cells. At about 9 operations a cell (8 neighbors and a write) that is about 100k at 20 households, the size of the door-paths row.
+
+**2. Is there a standard, cheaper algorithm?** The indexes, sweep and incremental filing are all used. But the order still repairs after placing (S4):
+- **Settle after filing.** Line 23 files each lane in the parts and ways indexes. Line 27's `settle` then meets ends within 25 ft at one node, which moves the ends of lanes already filed. The re-filing is not counted.
+- **Bund legs after filing.** Line 26 adds the bund leg to a run after it is filed. That leg is in neither the laying row's legs (3 a run) nor its length.
+- **The fix.** The endpoint index and the outline test can be asked as each run's end is reached, before filing. The derivation should move them there or say why it cannot.
+
+**3. Is any factor padded?** Only slightly.
+- The bund row rounds 100 root 2 / 64 = 2.21 up to 3 and then adds 3, giving 6 cells. The laying row's own bound, L root 2 / 64 + 3, gives 5. That is about 1,400 operations at 20 households.
+- Filing each leg in the ways index is not counted. The laying row counts only parts-index cells, so this is an omission, not padding.
+
+**4. Is each figure read at its source's size and unit?** No, for the ring's 21.
+- The contract's "at most 20 site-boundary segments in a 32 ft cell" is per raster cell.
+- A 6 ft cell tested at the 8 ft widest margin can straddle 2 by 2 raster cells of 32 ft. That is the same straddle the derivation already applies to the parts at line 15.
+- A raster cell marked decided-free can also lie within 8 ft of the toe in its neighbor.
+- Read at its size, the figure is 4 x 20 + 1 = 81 a cell. Otherwise the derivation must state a raster dilated by the margins and count building it.
+- The laying row's "20 ft corridor" is also not in the contract. That one is harmless, since any width under 64 ft gives the same 2 cells across.
+
+Bundle read: /tmp/l7r-check/work-budget-budget-web/MANIFEST.md, /tmp/l7r-check/work-budget-budget-web/rubric.md, /tmp/l7r-check/work-budget-budget-web/contract.md, /tmp/l7r-check/work-budget-budget-web/derivation.md, /tmp/l7r-check/work-budget-budget-web/web.verdict-1.txt

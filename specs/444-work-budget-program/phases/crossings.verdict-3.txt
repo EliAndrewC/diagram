@@ -1,0 +1,34 @@
+UNDERIVED - the sluice gates' snap factor (27): "snapped onto a watercourse within 20 ft from its water index cell" reads one 64 ft cell for a 20 ft radius that reaches into up to 2 by 2 cells, so the figure does not cover the rule it counts.
+
+**Earlier findings.** All of verdict-2's findings are closed.
+- Its blocking "one cut a way's leg" is gone: the ways' dike test is struck, and the cuts are read from the dike's own record (2 a channel: 26, 34 and 44).
+- The gate's 20 ft span is now in the Bounds.
+- The sorted insert is replaced: each deck is appended to its ditch and marks the at most 3 spots within the spacing, so each spot reads one flag.
+- The toe collector is placed among the waters, and the caps have their own row.
+- The rebuild note (accept a crossing only in the cell its point falls in) is now in the algorithm.
+- I rechecked every row and the three totals: 27,700, 49,357 and 90,482. They reproduce, and the exponent from 20 to 80 is about 0.85.
+
+**Q1 - Is each factor derived?**
+- **Sluice gates row (this blocks).** "Within 20 ft" is a radius. About a cut within 20 ft of a cell edge it reaches the next cell, and near a corner it reaches 2 by 2 cells. One cell cannot show that no watercourse is within 20 ft. That case has to be searched, because the arbiter's (d) counts every cut "on a course or not". Either fix closes it:
+  - Read the 2 by 2 cells about the cut: 4 x (1 + 26) = 108, so 113 a gate. The row becomes 2,938, 3,842 and 4,972, and the total at 80 becomes 94,046.
+  - Or state from the contract that every recorded cut lies on its channel ("where water passes it"). The snap distance is then 0 and the course is in the cut's own cell.
+- **Items on a polder (also not derived).** The decks are "the comb's measured" (6 and 9, on the comb-field reference). But the totals add those comb decks to the polder-only rows (the gates and the caps), and on a polder a crossing of the toe collector is a deck too. The Bounds give no crossing count for a polder. So on a polder the items factor, and the ditch-decks row that scales with it, has no reason. Give a polder figure, or show that the comb's count is the ceiling.
+- **Cap size.** The caps row uses "its plank's 2 by 2 cells", but the Bounds give the size of a deck, a plank and a gate, not a cap. This is the same gap verdict-1 finding 3 and verdict-2 finding 2 closed for the others. Separately, the Earlier findings line "a toe collector's cap is a deck, among the items" (verdict-1, finding 2) contradicts the later line "their own row" (verdict-2, finding 4). The count follows "their own row", so the earlier line is stale.
+
+**Q2 - Is there a standard, cheaper algorithm?**
+- If the dike's cut record names the channel it passes, the gate needs no water index read: 5 a gate, 220 at 80 against 1,408. The derivation should use that or say why the record cannot carry it.
+- Nothing else is missed. The grid, the append-and-flag and the water index built once all hold.
+
+**Q3 - Is any factor padded?**
+- Nothing. As verdicts 1 and 2 held, the ways' walk worst case (26 water segments in every cell) is not counted as a finding, because the Bounds still give no limit on how many ways share a cell.
+
+**Q4 - Is each figure read at its source's size and unit?**
+- The snap's "within 20 ft" is a radius (40 ft across) but is counted as one cell. The gate's "20 ft in span" correctly gives 4 cells for filing.
+- Every other figure is read at the size and unit its Bound states: the ways' 8 segments a household, the lengths, the 26 and 29 cell densities, the 300 ft spacing as floor plus 1 a ditch, the caps at 5 plus the laterals, and the 2 cuts a channel.
+
+Files:
+- /tmp/l7r-check/work-budget-budget-crossings/derivation.md
+- /tmp/l7r-check/work-budget-budget-crossings/contract.md
+- /tmp/l7r-check/work-budget-budget-crossings/rubric.md
+- /tmp/l7r-check/work-budget-budget-crossings/crossings.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-crossings/crossings.verdict-2.txt
