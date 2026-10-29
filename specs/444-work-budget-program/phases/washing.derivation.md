@@ -32,21 +32,21 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 20 at 20, 40 at 40, 80 at 80 | the households, each seated on its water | 80 households |
-| the nearest water (water index cells examined, a household) | per item | 58 at 20, 60 at 40, 62 at 80 | its 3 by 3 cells of 120 ft (9), their water segments (48 at 20, 50 at 40, 52 at 80), and its projection on the nearest (1) | the densest block |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| the nearest water (water index cells examined, a household) | per item | 22 | its 3 by 3 cells of 120 ft (9), the about 3 of them a water crosses each with the mean 4 segments (12, `items.md`), and its projection (1) | the typical household |
+| slack | per item | 2 | what varies around the typical case (S8): a crowded bank, a footing shifted far | a crowded bank |
 | the order | over the run | 100 at 20, 240 at 40, 560 at 80 | the households sorted along their waters, log2 of the households rounded up each | 80 households |
-| the footing seats (registry cells examined, a footing) | over the run | 546 at 20, 744 at 40, 1014 at 80 | at most one footing a household, on either form; its strip, 70 by 6 ft at any angle, in at most 3 by 2 cells of 64 ft, each read with its things (29 at 20, 40 at 40, 55 at 80) and the cell; each thing projected (1) and its interval's two ends marked in the 9 slots (1 a mark, 2); the slots set (9) and walked (9) | every shift refused but the last |
-| the drawing (registry cells written) | over the run | 100 at 20, 200 at 40, 400 at 80 | each footing recorded (1) and filed in at most 4 cells (4) | a footing a household |
-| the water index (cells written) | once | 1,950 at 20, 2,666 at 40, 3,650 at 80 | each segment walked through the cells it crosses: the waters' length at its diagonal over 120 ft, plus 3 a segment | 80 households |
+| the footing seats (registry cells examined, a footing) | over the run | 96 a footing | one footing for every 4 households of a bank (`HOUSEHOLDS_PER_WASHING`) plus one a bank's remainder, about the households over 4 plus 6 (11 at 20, 16 at 40, 26 at 80); each its strip's 6 cells read with the mean 4 things and the cell (30), each thing projected and marked (2 x 6 x 4, 48), the 9 slots set and walked (18) | the typical bank |
+| the drawing (registry cells written) | over the run | 11 x 5 at 20, 16 x 5 at 40, 26 x 5 at 80 | each footing recorded (1) and filed in at most 4 cells (4) | the typical bank |
+| the water index (cells written) | once | 1,950 at 20, 2,666 at 40, 3,650 at 80 | each segment walked through the cells it crosses: the waters' length at root 2 over 120 ft, plus 3 a segment | 80 households |
 | the form | once | 1 | the roll | always 1 |
 
-So: households x the nearest water x 1, plus the order, the households x the footing seats, the drawing, the water index and the form.
+So: (households x 22 + the order + the footings x (96 + 5)) x 2, plus the water index and the form.
 
 ## Totals
 
-- at 20: 20 x 58 x 1 + 100 + 20 x 546 + 100 + 1950 + 1 = 14231
-- at 40: 40 x 60 x 1 + 240 + 40 x 744 + 200 + 2666 + 1 = 35267
-- at 80: 80 x 62 x 1 + 560 + 80 x 1014 + 400 + 3650 + 1 = 90691
+- at 20: (20 x 22 + 100 + 11 x 96 + 11 x 5) x 2 + 1950 + 1 = 5253
+- at 40: (40 x 22 + 240 + 16 x 96 + 16 x 5) x 2 + 2666 + 1 = 8139
+- at 80: (80 x 22 + 560 + 26 x 96 + 26 x 5) x 2 + 3650 + 1 = 13543
 
 ## Growth
 
@@ -61,6 +61,8 @@ From 20 to 80 households the stage grows at an exponent above 1.15 for one state
 - verdict-2, finding 1: fixed - the growth past 1.15 is stated: the per-footing neighbor factor is the measured registry density, rising at its measured rate, with no geometric ceiling; the Growth section says so
 - verdict-2, finding 2: fixed - the 9 shifts are one sweep of the footing's strip, its at most 6 cells read once and each thing projected as one interval in a 9-slot array
 - verdict-2, finding 3: fixed - the footing row's figure is per footing, and the totals multiply it by the households
+
+- FR-014 re-score: each factor at the typical case (rubric S8): one footing for every 4 households of a bank, not one a household; the mean densities of `items.md`; slack 2 (ask:444-budget-standard; the accept was ask:444-T03-washing-round-3)
 
 ## Cheaper algorithms considered
 

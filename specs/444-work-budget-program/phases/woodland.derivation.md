@@ -30,20 +30,20 @@
 |---|---|---|---|---|
 | items | per item | 4 | the parcels, at most 4 on the sheet | every parcel on the sheet |
 | the ring | per item | 24 | its 12 points, each bent to the ground (1) and written (1) | always 24 |
-| the sweep | per item | 161 | the 12 edges sorted (48, 12 x log2 of 12 rounded up), and each crossed with only the rows it spans, at most the perimeter over 8 ft plus one a edge (113) | the longest ring |
-| the seats (marsh raster and index cells examined) | per item | 14841 | at most 873 seats, each inside its row's span (1), dry - its marsh sample and a crossed cell's 13 segments (14) - off the pond (1), and its crown written and filed (1) | the largest parcel, every seat admitted |
-| the gather (registry cells examined) | per item | 900 at 20, 1,230 at 40, 1,680 at 80 | the parcel's 5 by 6 cells, each with its things and the cell | the densest cells |
-| the cuts (lattice rows cut) | per item | 8,700 at 20, 12,000 at 40, 16,500 at 80 | each gathered thing kept and cut from the at most 10 rows it spans, at most every thing of the 30 cells | every thing reaching the ring |
+| the sweep | per item | 161 | the 12 edges sorted (48) and each crossed with only the rows it spans (113) | the longest ring |
+| the seats (marsh raster and index cells read) | per item | 4365 | at most 873 seats, each inside its row's span (1), dry - its 25 ft marsh sample, a scanned parcel on dry ground crossing a marsh cell rarely (2) - off the pond (1), and its crown written and filed (1) | the largest parcel |
+| the gather (registry cells examined) | per item | 150 | the parcel's 5 by 6 cells, each with the mean 4 things near a wood (`items.md`) and the cell | the typical parcel |
+| the cuts (lattice rows cut) | per item | 1200 | each gathered thing reaching the ring cut from the at most 10 rows it spans, at most the 30 cells' mean 4 | the typical parcel |
 | the filing (registry cells written) | per item | 31 | recorded (1), its at most 5 by 6 cells (30) | the largest parcel |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| slack | per item | 2 | what varies around the typical case (S8): a parcel near the marsh or the houses | a crowded parcel |
 
-So: 4 x (24 + 161 + 14841 + the gather + the cuts + 31) x 1. The woods off the sheet record their bearing and count once and draw nothing, the cheaper of the two exclusive cases.
+So: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2.
 
 ## Totals
 
-- at 20: 4 x (24 + 161 + 14841 + 900 + 8700 + 31) x 1 = 98628
-- at 40: 4 x (24 + 161 + 14841 + 1230 + 12000 + 31) x 1 = 113148
-- at 80: 4 x (24 + 161 + 14841 + 1680 + 16500 + 31) x 1 = 132948
+- at 20: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
+- at 40: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
+- at 80: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
 
 ## Earlier findings
 
@@ -62,6 +62,9 @@ So: 4 x (24 + 161 + 14841 + the gather + the cuts + 31) x 1. The woods off the s
 - verdict-3, finding 5: fixed - the active-edge sweep, each edge crossed only with its rows
 - verdict-3, finding 6: fixed - the seats are a lattice-point ceiling, area over 64 plus perimeter over 8 plus 1, every seat tested counted
 - verdict-3, finding 7: fixed - the registry's things grow at their measured rate; the marsh is the hinterland's, read
+
+- reason above the reference: a parcel is a whole wood of up to 771 crowns, each seated, so its cost per thing placed is the parcel's - about 15 a crown
+- FR-014 re-score: each factor at the typical case (rubric S8): the mean densities of `items.md` (4 things a cell near a wood, a scanned parcel rarely crossing the marsh); slack 2 (ask:444-budget-standard; the accept was ask:444-T05-woodland-round-4)
 
 ## Cheaper algorithms considered
 
