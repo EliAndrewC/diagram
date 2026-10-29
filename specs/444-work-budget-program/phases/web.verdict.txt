@@ -1,27 +1,36 @@
-UNDERIVED - the ring's flood, "26 a cell": the row names four parts but gives figures for only three (popped 1 + 8 neighbors read + at most 8 pushes = 17), leaving "the buckets scanned" at an unstated 9, and the 26 is in neither the contract's Bounds nor any derivation in the bundle. That row is 287,768 of the 728,358 operations at 20 households (40%).
+UNDERIVED - four figures name no source or reason: the bund row's "about one in four" run ends near the field, the kinks row's "about one vertex in five", the knots' "mean 1 end a cell" and the bund's "mean 2 outline segments" (the FR-014 line cites `items.md` only for the ring's 2.5 segments and 3 parts). Below them, several factors are LOOSE.
 
-**Earlier findings.** Verdict-2's findings 1, 3, 5 and 7 are closed. Findings 2 and 6 are closed in form: the flood over the ring is now a row, and the raster is dilated once. The new problems inside them are below. Finding 4 (the bund, disputed) is not closed, but it is small: see question 3.
+**Earlier findings.** All of verdict-3's findings are closed in form:
+- The flood's figure is now built from its parts (1 + 8 + 2 + 1 = 12, cited to the homesteads).
+- The dilation marks each cell with its margin class.
+- A traced cell's way mark is separate from its join band.
+- The bund leg meets 5 cells.
+- The ring, near-hull and door bands use the cells-across figures.
+
+Verdict-1 and verdict-2 were confirmed closed in earlier rounds, and nothing here reopens them.
 
 **1. Is each factor derived?** No.
-- **The 26.** It is held to verdict-1's standard for the 62: a figure taken from the homesteads must be cited at its source with its arithmetic, as the 62 now is in the Bounds.
-- **The bucket scans may not belong per cell.** On a bucket queue, the empty buckets scanned over a whole run are bounded by the flood's largest value divided by the bucket width. That is one term for the run, not 9 per cell popped. Derive the 9 or move it to a run-level term.
-- **The mark at "the 8 ft widest margin"** (line 14). The contract keeps a lane 3 ft off the field and the crop. The derivation should say whether the mark is set per margin. The count stands as a ceiling either way.
+- **Four bare figures.** The four in the first line carry no source and no arithmetic. That fails the standard verdict-1 set for the 62 and verdict-3 set for the 26. Cite each to a measurement, or derive it from the geometry (for example, which share of the frame's perimeter lies within 100 ft of the field).
+- **Rows not re-scored.** The laying, taut pull, trims and kinks rows still use the old worst-case length and leg count. The length reproduces exactly as spine + back lanes + both ends of every run joined at 100 ft + **a bund leg at every run end** + **a 372 ft door path at every household**. At 20 that is 2,235 + 13,300 + 10,800 + 10,800 + 7,440 = 44,575 ft. The legs reproduce the same way: 3 x 54 + **108** + **60** + 1 + 14 = 345.
+  - This contradicts the derivation's own re-score: 0.5 bund legs a run, and no door path in the typical case.
+  - Re-scored, the length is 29,035 / 55,766 / 109,063 ft and the legs 204 / 371 / 687 at 20 / 40 / 80.
+  - The rows become: laying 2,507 / 4,691 / 8,942; taut pull 9,678 / 18,589 / 36,354; trims 204 / 371 / 687. That is about 14,000 less at 40.
+- **Joins at the farthest reach.** The joins' 17 cells are "within the pitch", which is the farthest an end can reach, not the typical reach (S8). An end between two lanes a pitch apart lies on average a quarter pitch (25 ft) from the nearer one. Derive the mean reach; at half the pitch the row already halves (68,000 to about 34,000 at 40).
+- **Runs at a ceiling.** The run count uses "at most 2 back lanes" a homestead. The mean is the mean extent over 100 ft, which is at most 1.84.
 
-**2. Is there a standard, cheaper algorithm?** Nothing missed among the new rows. The single dilation is cheaper than verdict-2's 81 tests per cell. The bucket-queue flood, and reading lane-ground marks instead of a ways index, are both standard.
-- **An ambiguity to resolve.** Line 19 marks a 25 ft band per traced step. Line 82 says "the way marks are the trace's own band marks". If the band is what gets marked as a way, the 12 ft and 60 ft door tests actually test about 37 ft and 85 ft, not the contract's distances. The derivation should say which cells carry a way's mark.
+**2. Is there a standard, cheaper algorithm?** Yes, for the door tests.
+- Reading all 719 cells per household is the last-candidate case. The row's own reason says the household's way passes its door.
+- Test that way first: it is laid by the homesteads and already on lane ground, so this is a few operations a household. Fall back to the scan, ordered outward from the door and stopping at the first mark, only when it fails.
+- That takes the row from 28,800 to about 100 at 40.
 
-**3. Is any factor padded?**
-- **The bund's 6 cells** (verdict-2 finding 4, still open). A segment meets at most 1 + ceil(|dx|/64) + ceil(|dy|/64) cells. For a 100 ft leg the worst orientation (dx = dy = 70.7) gives 5, so 5 is the ceiling. "L root 2 / 64 + 3" is a looser formula that rounds up to 6. The difference is about 1,400 operations at 20 (0.2%).
-- **The 561 door-test cells.** These are two overlapping regions summed, and the derivation says so; that is an acknowledged ceiling, not padding.
+**3. Is any factor padded?** Yes, five.
+- **Kinks.** The row charges 3 a leg, but its stated reason (1 a vertex, plus 2 for one vertex in five) supports 1 + 0.2 x 2 = 1.4. That gives 286 / 519 / 962.
+- **Ring marking.** Each of the 2.5 segments in a cell is walked through 9 cells of 6 ft. But 9 is one full crossing of a 32 ft cell, and the segments in a cell share that crossing. The walk is the boundary's length in the cell, about 9 cells plus about one per segment end, so about (9 + 2.5) x 4 = 46 a raster cell, not 90. That is about 41,000 less at 40.
+- **Near-hull straddle.** "The 2 by 2 cells of 64 ft it straddles" is the worst straddle for a 22 ft test region. The mean is (1 + 22/64)^2, about 1.8 cells, so 7.2 a cell rather than 16.
+- **Band widths.** The 3-across and 5-across figures were verdict-3's ceilings under slack 1. Under S8 they are the means, 8/6 + 1 = 2.33 and 116/32 + 1 = 4.6.
+- **Spine.** Long plus short side is a 4-connected corner-to-corner path. An 8-neighbor descent along the long axis is about the long side over 6 ft: 305 cells at 40, not 535.
+- Frame (minor): "4 points a house" is a maximum; only the outer houses' corners are on the hull.
 
-**4. Is each figure read at its source's size and unit?** No. Three figures divide a region's area by a cell's area. For a region thin relative to its cells, that is a lower bound on the cells it meets, not the worst-case ceiling that slack 1 rests on. These make the budget too tight, not loose:
-- **The ring's 390 raster cells of 32 ft** (390 at 20, 579 at 40, 869 at 80).
-  - Across the ring's 100 ft depth, plus the 8 ft reach on each side, a misaligned grid meets ceil(116/32) + 1 = 5 cells, not 3.1.
-  - Segments in the raster cells just inside the hull and just past the frame's edge can mark ring cells, but they are never walked.
-  - Corrected: about 5 cells per 32 ft of the mid-ring perimeter, which is the hull's perimeter + 2 x pi x 50. That gives about 623 at 20, 926 at 40 and 1,390 at 80.
-  - At 720 a cell, that adds about 168k operations at 20.
-- **The 816 cells within 8 ft of the hull** (816, 1,248, 1,908). An 8 ft band meets ceil(8/6) + 1 = 3 cells of 6 ft across for each 6 ft of hull. That gives about 1,835 at 20, 2,806 at 40 and 4,291 at 80.
-- **The door tests' 246 cells.** A 12 ft band meets 3 cells of 6 ft across for each 6 ft of the 736 ft perimeter. The figure also leaves out the four 12 ft corners, 3 by 3 cells each. Corrected: about 404 cells, against the 246 counted.
-- **The 11,068 ring cells of 6 ft** are close enough (about 8% under).
+**4. Is each figure read at its source's size and unit?** Every figure that is cited is read at the source's size, and the frame, ring, back-lane and bund-cell arithmetic reproduces at 20, 40 and 80. The fault is the inconsistency under question 1: the length and leg figures were carried over from the worst-case rows unchanged.
 
-Bundle read: /tmp/l7r-check/work-budget-budget-web/MANIFEST.md, /tmp/l7r-check/work-budget-budget-web/rubric.md, /tmp/l7r-check/work-budget-budget-web/contract.md, /tmp/l7r-check/work-budget-budget-web/derivation.md, /tmp/l7r-check/work-budget-budget-web/web.verdict-1.txt, /tmp/l7r-check/work-budget-budget-web/web.verdict-2.txt
+Bundle read: /tmp/l7r-check/work-budget-budget-web/MANIFEST.md, /tmp/l7r-check/work-budget-budget-web/rubric.md, /tmp/l7r-check/work-budget-budget-web/contract.md, /tmp/l7r-check/work-budget-budget-web/derivation.md, /tmp/l7r-check/work-budget-budget-web/web.verdict-1.txt, /tmp/l7r-check/work-budget-budget-web/web.verdict-2.txt, /tmp/l7r-check/work-budget-budget-web/web.verdict-3.txt

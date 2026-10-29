@@ -1,0 +1,14 @@
+SOUND - On the reference valley comb the stage does one archetype comparison and returns, so the budget is 1 x 1 x 1 = 1 operation at 20, 40 and 80 households, with every factor an exact count.
+
+1. **Is each factor derived?** Yes. Items is 1, and the contract's Writes gives the reason: a valley comb has no grow-out ponds, so the stage places nothing. The archetype test is one comparison. Slack is 1 because the one test never varies on the reference, which is within S7's limit of 2. No factor is a worst case, so S8 holds. The cost is 1 operation per stage, far below the rubric's 4,000 per thing placed.
+2. **Is there a standard, cheaper algorithm?** No. The derivation says why each of the five candidates (sweep, spatial index, priority queue, incremental update, memoizing) does not apply. Nothing is cheaper than one comparison.
+3. **Is any factor padded?** No. Each value equals what its reason supports, and slack is 1, not 2.
+4. **Is each figure read at its source's size and unit?** Yes. The only figure used is the archetype `valley_paddy`, read as the contract's Reads states it (`meta.field_archetype` in the reference manifests). The Bounds densities are not used, which is correct since the stage examines no neighbors.
+
+**Earlier findings:** You said the earlier verdicts would be in the bundle, but there is no `pond_stock.verdict-<N>.txt` in `/tmp/l7r-check/work-budget-budget-pond_stock/`. The derivation has no `## Earlier findings` section either, so there was nothing for me to confirm closed. If verdicts were meant to be included, they are missing from the bundle. That does not affect this result, because the derivation stands on its own.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-pond_stock/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-pond_stock/rubric.md
+- /tmp/l7r-check/work-budget-budget-pond_stock/contract.md
+- /tmp/l7r-check/work-budget-budget-pond_stock/derivation.md

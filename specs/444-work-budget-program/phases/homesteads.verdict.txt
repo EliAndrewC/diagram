@@ -1,25 +1,26 @@
-UNDERIVED - the join test, "traced back... to a laid way within 25 ft" (derivation.md line 32): no row counts deciding at each trace cell whether a laid way lies within 25 ft, and the trace row (line 55) charges only 1 a cell.
+LOOSE - lane ground, 453 cells a homestead (derivation.md line 56), on which the flood (line 57) is also charged: that figure is the full ring of an isolated homestead. On the brick lattice at pitch 204 ft, the 20 ft gap between two neighbors is one strip, and both neighbors' rings cover the same raster cells. An interior homestead's share is (204² − 184²)/36 = 216 cells, plus the cluster's exposed rim (perimeter × 20 ft / 36). For a compact cluster at 40 that is about 280 cells a homestead, so lane ground is about 89,600 (not 144,960) and the flood about 134,400 (not 217,440).
 
-**Earlier findings.** Judged on the text, findings 1-10 of verdict-1 and 1-7 of verdict-2 are all closed. The taut pull, the hull and gate, Dial's flood at 26 a cell, the 200 parts query, the 32 opening strip, the 453 band cells and the 8-cell pinch each have a row, and each recomputes from its stated reason.
+**Earlier findings.** On the text, all findings in verdicts 1-3 are closed: the lattice offsets, the join-mark row, the binary-search gate and the hull row. I checked the 6 and 12 offsets and both are correct. Some lines in the Earlier findings section are stale. Verdict-2 findings 3-4 and verdict-3 findings 4-6 cite 8 pushes, 200, 20 segments, 831 and 144. The FR-014 re-score changed those to 2, 100, 2.5, 263 and 54. The re-score note (line 100) explains the change, but the lines should be updated.
 
-**1. Is each factor derived?** No. Two factors block:
-- **Join test (line 32 and line 55):** a 25 ft radius on a 6 ft grid is about 9 by 9 cells per trace step if it is queried. If it is marked instead, each way written as it is laid costs about 9 cells per 6 ft of way. Neither appears.
-- **First shell of seats (lines 17-18 and line 48):** the stated reason is "six equal homesteads touch one, the hexagonal packing", at 184 + 20 = 204 ft center to center. Every other row reads the envelope as a 184 ft square: the 7 by 7 cells, the 4 x 184 perimeter, the 224² - 184² band and the hull's 4 corners. For such a square, the seat at 60° sits at (102, 176.7). Since 176.7 < 184, the two envelopes overlap, so the offerer's own gap rule refuses four of the six seats.
-  - The counts 6 and 12 can still hold under an offset (brick) lattice: seats at (±204, 0) and (±102, ±204), which gives 6 touching and 12 in the second ring.
-  - But the pseudocode the rebuild will follow names the wrong positions. The derivation must state the envelope's shape and the seats' offsets.
-  - If the envelope is meant to be a 184 ft disc instead, the derivation must show that parts measured to a 184 ft bounding extent fit inside it. They may need up to 184 x √2 = 260 ft.
-- **Gate (line 59):** the "8" has no reason. A scan of the hull's edges is up to 4n; a binary search is ⌈log2 320⌉ = 9 at 80. The gap is small but it is a gap.
+**1. Is each factor derived?** Every factor has a reason. Under S8, though, several rows are still taken at their worst case, and each is a LOOSE finding:
+- **Lane ground** (line 56): the unshared ring (the first line). The trace row (line 58) already treats a gap as "shared by two"; lane ground does not.
+- **Seats offered** (line 51): 6 a house contradicts the derivation's own rule that a seat is "offered once over the run" (lines 21-22). Every house sits on another house's offer, so all houses lie on one lattice and neighbors' offers coincide. The seats popped are the n admitted plus the refused frontier: about 1.7 a house for a compact cluster at 40, at most about 3 for a chain. That puts the seat test at 40 at about 17,900-31,560, not 63,120. The heap row shrinks with it.
+- **Parts laid** (line 49): the worst-case column itself says "the most parts". It uses 13 parts (the maximum), each in 2 by 2 cells (the worst alignment), and then multiplies by slack 2 on top of both maxima.
+- **Boundary** (line 55): "at its diagonal, plus 3 a segment" is the worst angle. A segment at a random angle crosses about 1.27 L/32 + 1 cells, which gives about 3,530 at 20, not 6,832.
+- **Trace, taut pull, join mark** (lines 58-60): all are "every gap walked". The ways form a tree over the doors at about one pitch a house, 204/6 = 34 cells, not 62. The join mark also charges 10 cells a step, but in a 20 ft gap only about 4 cells across are lane ground.
+- **Pinch** (line 62): "every household pinched". Only the few households no way reaches are pinched.
+- **Lane ground's boundary charge**: the 2.5 segments are charged to every cell, though the row's own reason says "where its cell is crossed".
+- **Slack**: the slack row's reasons (second-shell seats, denser cells) belong to factors the slack does not multiply. The summary applies ×2 only to the 65 parts term.
+- The 12,321 a house at 40 is above 4,000, and the stated reason (the ways) is named.
 
-**2. Is there a standard, cheaper algorithm?** Nothing is missed beyond the join test. Once it has a row, it should say which it uses: an incremental mark of the 25 ft band as each way is laid, or a query per step. The mark costs less, because a way's cells are walked once.
+**2. Is there a standard, cheaper algorithm?** One is partly missed. Every lane-ground cell lies outside every envelope by construction, and every part lies inside its envelope. So the per-cell parts test (4 of the 8 per cell, line 56) decides nothing the envelope geometry has not already decided, and an O(1) test of whether a cell is in an envelope can replace it. The raster, the parts index, the heap, the bucket-queue flood and the incremental join mark are all sound.
 
-**3. Is any factor padded?** None. Slack is 1. "Every band unshared" is a legitimate worst-case ceiling, though the trace row counts a gap as shared by two.
+**3. Is any factor padded?** Yes, against its own stated reason:
+- Seats: the 6 ignores the line 21-22 dedup.
+- Lane ground: the 453 ignores the gap-sharing that line 58 applies.
+- Lane ground's boundary charge goes to every cell, not just crossed ones.
+- The join mark's 10 cells a step exceeds the gap's width.
 
-**4. Is each figure read at its source's size and unit?**
-- The Bounds' "extent, 184 ft" is read as a square's side in six rows and as a disc's diameter in the packing (see question 1).
-- **Lane ground (line 53)**, two charges fall short of their own reasons:
-  - "Read from the 32 ft raster (1)": the band lies outside the envelope, and the seat test refuses undecided cells only in the envelope's interior. So a band cell can sit in an undecided 32 ft cell, and deciding it means testing up to 20 segments, not 1.
-  - "Its 64 ft cell (8)": 64 is not a multiple of 6, so a 6 ft cell can straddle up to 2 by 2 cells of 64 ft, which is up to 32, not 8.
-- **Stale text, line 61:** it still says "seats offered x 743"; the Totals use 831.
-- **Admission at 80 (line 57):** 10,968, against the 137.2 a household implied by the figures at 20 and 40 (10,976). This is rounding and immaterial.
+**4. Is each figure read at its source's size and unit?** Mostly. The Bounds figures are read as stated: 184 ft as a square's side, 63 ft against the 64 ft cells, and the canvas, segment and length rates. The totals at 20, 40 and 80 recompute exactly (247,800, 492,847, 983,097), and the exponent from 20 to 80 is 0.99. The means (2.5 segments, 3 parts, 2 pushes) are cited to `items.md`, which is not in the bundle, so I could not check them. The first two are output densities and plausible. "2 pushes a flood cell" cannot be read off any output; it stands only on its geometric reason ("first and one later neighbor").
 
-Files read, all in /tmp/l7r-check/work-budget-budget-homesteads/: MANIFEST.md, rubric.md, contract.md, derivation.md, homesteads.verdict-1.txt and homesteads.verdict-2.txt.
+Files read, all in /tmp/l7r-check/work-budget-budget-homesteads/: MANIFEST.md, rubric.md, contract.md, derivation.md, homesteads.verdict-1.txt, homesteads.verdict-2.txt and homesteads.verdict-3.txt.

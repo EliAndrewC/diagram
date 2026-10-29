@@ -1,0 +1,21 @@
+SOUND - On the reference valley comb the stage places nothing and does one archetype comparison, so its budget is 1 basic operation at every size: each factor is exact and derived from the contract, and no cheaper algorithm exists.
+
+**Earlier verdicts.** The bundle has no `waterward.verdict-<N>.txt` file, and `derivation.md` has no `## Earlier findings` section. That contradicts the task message, which says the earlier verdicts are in the bundle. There was nothing to confirm closed, so this verdict rests on the derivation as it stands. If earlier verdicts exist, they were left out of this bundle.
+
+1. **Is each factor derived?** Yes, all three.
+   - Items is 1, the whole stage. The contract's Writes line says the reference roll gets nothing because a valley comb has no polder dike.
+   - The archetype test is 1 comparison of the plan's `meta.field_archetype`.
+   - Slack is 1, which is within the limit of 2. Nothing can vary, because the Bounds hold the budget to the reference archetype at every size.
+   - No factor is taken at its worst case, and the cost is far below the 4,000 reference.
+
+2. **Is there a cheaper standard algorithm?** No. One comparison is the minimum the stage needs to decide it has nothing to do. No index, sweep or memo could lower it, and the "Cheaper algorithms considered" list rightly says there is no scan.
+
+3. **Is any factor padded?** No. Every factor is 1, which matches its reason exactly.
+
+4. **Is each figure read at its source's size and unit?** Yes. The only figure used is the archetype (`valley_paddy`), read as the contract states it. The density figures in Bounds are copied from `items.md` but no factor uses them, and none could be misread.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-waterward/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-waterward/rubric.md
+- /tmp/l7r-check/work-budget-budget-waterward/contract.md
+- /tmp/l7r-check/work-budget-budget-waterward/derivation.md

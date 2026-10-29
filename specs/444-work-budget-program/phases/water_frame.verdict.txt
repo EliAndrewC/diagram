@@ -1,3 +1,13 @@
-SOUND - every factor of the 40 operations per roll is a count the contract fixes (36 fields, 3 flags, 1 archetype test, 0 pins on the reference spec), no standard algorithm would lower any of them, and no factor is larger than its reason supports.
+SOUND - Every factor is an exact count of the contract's own fields (36 meta fields, 0 pins on the reference spec, 3 flags plus 1 archetype test, slack 1), so the stage costs 40 operations flat, and both earlier verdicts are closed in substance.
 
-(Round 3, 2026-10-28, under the round arbiter's continue on ask:444-T02-water-round-3. Its caveat: the pins factor is 0 only for the reference spec; a spec that pins knobs adds one write per pin.)
+1. **Is each factor derived?** Yes. Items = 1, because the stage places nothing and writes one record. The 36 field writes come from the contract's Writes line. Pins = 0, because the contract's Bounds say "the reference spec pins none", and that spec is the roll the budget is held on. The 4 is the contract's three settlement flags (Writes) plus its one archetype test (Reads: the polder case, where the brook's fields are written empty). Slack = 1 is right because nothing varies. Each factor is exact, so the typical case and the worst case are the same (S8). At 40 operations the cost is far under 4,000.
+2. **Is there a standard, cheaper algorithm?** No. There is no scan, no geometry and no ranking, and the derivation's "Cheaper algorithms considered" section correctly finds nothing to apply. Each value is written once.
+3. **Is any factor padded?** No. Verdict-1's padded slack of 2, which was really four operations of work, is now a factor plus a slack of 1. Verdict-1's pins figure of "at most 10" is now 0, with the contract's reason.
+4. **Is each figure read at its source's size and unit?** Yes. 36 fields, 3 flags, 1 test and 0 pins match `contract.md` exactly. The density figures in the Bounds are not used, which is correct for a stage with nothing geometric.
+
+**Earlier findings:** the derivation's "Earlier findings" entries are the same line repeated three times and do not say what changed. I confirmed each fix by reading the derivation and contract themselves:
+- verdict-1, pins: now 0, with the contract's reason.
+- verdict-1, slack: now 1.
+- verdict-2, flags and archetype test: the contract's Writes and Reads now name them.
+
+Files read, all in `/tmp/l7r-check/work-budget-budget-water_frame/`: `MANIFEST.md`, `rubric.md`, `contract.md`, `derivation.md`, `water_frame.verdict-1.txt` and `water_frame.verdict-2.txt`.

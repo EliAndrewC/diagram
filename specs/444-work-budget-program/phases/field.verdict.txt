@@ -1,0 +1,25 @@
+LOOSE - the cut and the selection (derivation.md lines 39-40) are taken at their worst case, "a row of one plot", and the segment-cell rows (lines 44, 48-51) are taken "at their worst" (a segment's length along the cell diagonal, plus 3 cells a segment): at the typical case the cut is about 1.1 and the selection about 0.35 a plot, and each segment-cell row is about (4/pi)L/64 + 1 a segment, roughly half, because S8 counts the mean and the FR-014 re-score changed only the outline-density factor.
+
+**1. Is each factor derived?** Every factor has a stated reason, but line 122's claim that "every other factor is an exact count" does not hold.
+- **The cut and the selection (lines 39-40).** The table's own "worst case" column says these are a row of one plot. The Bounds get "at most 15 across" as strip width over plot width (380 / 26). The same method at the mean gives 272 ft over the rolled mean width, about 31 ft (1,488 / 48), so about 9 plots a row.
+  - The cut is then (k+1)/k, about 1.1 a plot, not 2.
+  - The selection's 3 tests are shared by the row's plots ("a row's tests shared by its plots"), so about 0.35 a plot, not 3.
+- **Slack (line 43).** Its reason, "every factor is a bound at its worst case", is the reason S8 rules out, and it is no longer true for the two re-scored rows. The value 1 is within limit; the reason should say slack covers the spread around the mean. This alone does not block.
+
+**2. Is there a standard, cheaper algorithm?** None is missed. The derivation already uses a sweep down each strip, a 64 ft outline index, incremental ditch pointers and the ring walk, and memoizes the crossings and the vertices' strips.
+
+**3. Is any factor padded?**
+- **Segment-cell rows.** The ditches (line 48), the corridors (49), the brook (50), the outline index (51) and the ring walk's "3 a segment" (44) all count cells at a segment's length along the 64 ft cell diagonal, plus 3 a segment. A segment at random orientation crosses on average (4/pi)L/64 cell lines, plus its start cell (+1).
+  - At 20 households: ditch entries 237 rather than 491, brook 382 rather than 871, outline index 175 rather than 342, corridors about 289 rather than 776.
+  - At 80: ditches about 1,870 rather than 3,648, brook about 1,700 rather than 3,567.
+- **Ring walk entries (line 44).** These are bounded at "the worst a" (36 by 41.3 ft) and at the worst orientation (0.0558 a ft). At the record's typical 31 by 48 ft plot, averaged over orientation, it is (2/pi)(1/a + 2/b), about 0.047 a ft. That gives about 373 entries at 20 rather than 571, so the ring walk is about 2,750 rather than 4,140 and the clipped records about 824 rather than 1,220.
+- **The outline's vertices (line 46).** Each vertex is charged log2 of all 78 vertices (7) for a sort done within each strip. A strip holds about 78 / 11, roughly 7 vertices, so log2 is about 3: about 390 at 20 rather than 702, and about 525 at 80 rather than 945.
+- **Overall.** With these, the total at 20 is about 17,150 rather than 24,544, before slack.
+
+**4. Is each figure read at its source's size and unit?**
+- **The "mean 2 outline segments a crossed cell" (lines 48, 50).** It is cited to `items.md`, but the contract's Bounds give only the ceiling (10) and the measured 4 at 20. By the derivation's own figures, about 2 is the mean over cells the outline occupies (175 entries over about 97 cells). Lines 48 and 50 charge it to every cell a ditch or the brook enters, and most of those hold no outline segment; the brook runs outside the outline. The derivation should name which cells the mean is taken over and give its source in the Bounds.
+- **Other figures.** The rest are read as the Bounds state them: the 853 / 1,807 / 3,715 plots, the 78 outline segments, 120 ditch segments, 236 brook segments and the 65 crossings.
+
+**Earlier findings:** verdicts 1-14 each have an answer in Earlier findings and are closed. Verdict-5 finding 4 is marked "disputed": its +1 a segment is the start cell, which is the typical cost under S8, so it is closed in the author's favor. Its +3 replacement (verdict-11 finding 1) is now the padding named above.
+
+Files: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md
