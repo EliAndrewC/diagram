@@ -309,3 +309,13 @@ raises above the old pins (water_frame 40 to 69, burial 3 to 77, bamboo 252 to 2
 Asked whether to start step 4, the stage rebuilds, beginning with water_frame and field:
 
 "yes please do step 4 and then we can stop and assess how things are going"
+
+## The GM on growth and the capital-scale goal, 2026-10-29
+
+"Basically, my fundamental concern is that I want something that when We get to the point where we are creating scripted capital city maps with thousands of buildings. That they are able to be generated in a reasonable amount of time, which, to put an absolute upper bound on that, let us say a single-digit number of seconds, because anything more than that will make development iteration prohibitive. To be honest, it is my hope that we can get sub-second generation time even for larger maps in our Rust implementation, but I am not setting that as a hard project requirement, though I think that might be worth recording as a project goal, with the understanding that we have not taken the measurements needed to determine whether or not that is feasible."
+
+"So for example, if we allow polynomial growth but with a high exponent like n cubed on an n which grows considerably with map size, or something, then that is really going to not work in the long run."
+
+Recorded as he set them: a hard bound - a scripted capital map with thousands of buildings generates in a single-digit number of
+seconds; a goal, not a requirement and not yet measured for feasibility - sub-second generation for larger maps in the Rust
+implementation.
