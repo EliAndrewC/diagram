@@ -1,0 +1,3 @@
+LOOSE - the seats row's caption term: charged on every seat tried rather than once a clear seat, and its mean rank of the first clean box rests on an unstated even spread over the 8 ranks; at most 3.4 boxes x 13.5 = 46 a clear seat by the contract's 0.66, about 62 for the row against 157.
+
+(Also: the pseudocode searches each gap's verge inside the bound loop while the count charges one gap's; whether the lattice already carries each lot's occupancy; the spans and gaps listed for 20, 40 and 80 though the Bounds say measured at 10 and 20.)

@@ -1,0 +1,3 @@
+LOOSE - the placard walk's per-cell lots' lattice read: charged on every cell of 5 rows across the whole view, but lots stand only inside the lots' lattice span, one of the extents the view already reads; its column interval taken once bounds the read to 5 x the span's width in cells.
+
+(Also: the stopping test, four adjacent columns each holding a run of three, a per-cell comparison not counted - 4 a cell, not 3; the last row charged in full though the first fit stops at its column; the obstacles the contract names - building, field, water, grove - against the marks rastered - field, water, marsh, belt - groves untested.)
