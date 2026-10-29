@@ -5,7 +5,7 @@
 - Reads: the coppice parcels the hinterland scanned (`open_ground_patches`: each a seat on ground nothing else wanted, clear of every clump of the grove, `woodland_clear_of_grove`); the registry and its keep-outs, the standing crowns among them; the hinterland's marsh raster on its 25 ft bare samples and its 64 ft marsh index; the pond; the `woodland` knob (on the sheet, or off it with its bearing, `meta.woodland_offsheet`).
 - Writes: each worked wood (`commons`, role `woodland`): an irregular ring inside its parcel's reach, never a rectangle (T36), its line bent to the ground (a GUESS), stocked with coppice crowns; or, where the woods lie off the sheet, only their bearing and count in `meta.woodland_offsheet`, once.
 - Keeps: coppice on the scanned parcels, each stocked as a worked wood (0077); the worked coppice only (0077); its crowns on a regular square lattice at the stocking spacing, 8 ft (`COMMONS_SPACING_FT`, 0080: 1,700 stems a hectare), a crown 4 to 4.5 ft in radius (`COMMONS_CROWN_R_FT`, a GUESS), deterministic, no draw made (`woodland_room`): each lattice seat inside the ring, on dry ground (off every marsh), clear of every keep-out the commons' crowns are thrown against at the largest crown's radius, off the pond, and under no crown already standing; every rule asked of a seat before its crown is drawn (S4).
-- Bounds (measured 2026-10-28 on the pool's scripted hamlets that draw a wood on the sheet - Inashiro at 15 households, one parcel; Kashikawa at 20, three - the reference roll draws its 4 parcels off the sheet): at most 4 parcels (the knob's count, the same at 10 and 20); each a ring of 12 points, at most 49,338 sq ft, its bounding box at most 247.2 by 258.8 ft and its perimeter at most 806.8 ft (measured), so in at most 5 by 6 cells of 64 ft; its lattice seats inside the ring at any alignment at most its area over 64 sq ft, plus its perimeter over 8 ft, plus 1: 873; a wood's own seats 8 ft apart, more than any crown's 4.5 ft radius, so none of its own crowns stands over another of its seats; at most 21 and 29 things in a 64 ft cell (x1.38: 29 at 20, 40 at 40, 55 at 80, the hinterland's rate); a thing at most 63 ft across, so it spans at most (63 + 9) / 8 + 1 = 10 lattice rows; at most 13 marsh segments in a 64 ft cell (the hinterland's measured); the parcels' size set by the ground the scan finds, not by the households. The typical densities (rubric S8; `items.md`, measured 2026-10-28 on the same reference manifests at 10 and 20, each the mean over the cells occupied or crossed): things of every kind 3.4 and 3.3 an occupied 64 ft cell (4.5 and 5.5 within 3 cells of a house); homestead parts 2.8 and 2.6 an occupied 64 ft cell; water segments 4.1 and 3.7, ways' legs 1.3 and 1.9, the field's outline segments 2.1 and 1.8, and marsh segments 4.4 and 3.8 a crossed 64 ft cell; site-boundary segments 2.6 and 2.4 a crossed 32 ft cell; each held flat past 20, a mean over occupied cells not rising with the households as the densest cell does.
+- Bounds (measured 2026-10-28 on the pool's scripted hamlets that draw a wood on the sheet - Inashiro at 15 households, one parcel; Kashikawa at 20, three - the reference roll draws its 4 parcels off the sheet): at most 4 parcels (the knob's count, the same at 10 and 20); each a ring of 12 points, at most 49,338 sq ft, its bounding box at most 247.2 by 258.8 ft and its perimeter at most 806.8 ft (measured), so in at most 5 by 6 cells of 64 ft; its lattice seats inside the ring at any alignment at most its area over 64 sq ft, plus its perimeter over 8 ft, plus 1: 873; a wood's own seats 8 ft apart, more than any crown's 4.5 ft radius, so none of its own crowns stands over another of its seats; at most 21 and 29 things in a 64 ft cell (x1.38: 29 at 20, 40 at 40, 55 at 80, the hinterland's rate); a thing at most 63 ft across, so it spans at most (63 + 9) / 8 + 1 = 10 lattice rows; at most 13 marsh segments in a 64 ft cell (the hinterland's measured); the parcels' size set by the ground the scan finds, not by the households. The typical densities (rubric S8; `items.md`, measured 2026-10-28 on the same reference manifests at 10 and 20, each the mean over the cells occupied or crossed): things of every kind 3.4 and 3.3 an occupied 64 ft cell (4.5 and 5.5 within 3 cells of a house); homestead parts 2.8 and 2.6 an occupied 64 ft cell; water segments 4.1 and 3.7, ways' legs 1.3 and 1.9, the field's outline segments 2.1 and 1.8, and marsh segments 4.4 and 3.8 a crossed 64 ft cell; site-boundary segments 2.6 and 2.4 a crossed 32 ft cell; each held flat past 20, a mean over occupied cells not rising with the households as the densest cell does. The typical parcel (FR-014, measured 2026-10-28 on the pool's woods): 2 on the sheet (1 on Inashiro, 3 on Kashikawa), of a mean 38,848 sq ft (34,941, 49,338, 40,642, 30,472) and a mean perimeter about 715 ft, so 607 lattice seats (its area over 64, the mean over alignments); the marsh's crossed 64 ft cells about 15 percent of the view (13,382 ft of edge over 64 ft, about 209 cells of 4,096 sq ft, in 5.65M sq ft); the things a ring's 9 ft band meets, its 715 ft x 9 ft at the mean 3.3 things a 64 ft cell, about 6, each spanning about 3.5 lattice rows (a mean thing about 20 ft across).
 
 ## The algorithm
 
@@ -28,25 +28,26 @@
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 4 | the parcels, at most 4 on the sheet | every parcel on the sheet |
+| items | per item | 2 | the parcels on the sheet, the mean of the pool's woods (1 and 3) | the typical wood |
 | the ring | per item | 24 | its 12 points, each bent to the ground (1) and written (1) | always 24 |
-| the sweep | per item | 161 | the 12 edges sorted (48) and each crossed with only the rows it spans (113) | the longest ring |
-| the seats (marsh raster and index cells read) | per item | 4365 | at most 873 seats, each inside its row's span (1), dry - its 25 ft marsh sample, a scanned parcel on dry ground crossing a marsh cell rarely (2) - off the pond (1), and its crown written and filed (1) | the largest parcel |
-| the gather (registry cells examined) | per item | 150 | the parcel's 5 by 6 cells, each with the mean 4 things near a wood (`items.md`) and the cell | the typical parcel |
-| the cuts (lattice rows cut) | per item | 1200 | each gathered thing reaching the ring cut from the at most 10 rows it spans, at most the 30 cells' mean 4 | the typical parcel |
-| the filing (registry cells written) | per item | 31 | recorded (1), its at most 5 by 6 cells (30) | the largest parcel |
-| slack | per item | 2 | what varies around the typical case (S8): a parcel near the marsh or the houses | a crowded parcel |
+| the sweep | per item | 150 | the 12 edges sorted (48) and each crossed with the rows it spans, the mean perimeter over 8 ft plus 12 | the typical parcel |
+| the seats (marsh raster and index cells read) | per item | 3642 | the mean parcel's 607 seats, each inside its row's span (1), dry - its 25 ft marsh sample (1) and, at the 15 percent of seats in a marsh-crossed cell, its 13 segments (2) - off the pond (1), and its crown written and filed (1) | the typical parcel |
+| the gather (registry cells examined) | per item | 150 | the parcel's 5 by 6 cells, each with the mean 3.3 things and the cell | the typical parcel |
+| the cuts (lattice rows cut) | per item | 21 | the about 6 things the ring's band meets, each cut from its about 3.5 rows | the typical parcel |
+| the filing (registry cells written) | per item | 31 | recorded (1), its at most 5 by 6 cells (30) | the typical parcel |
+| slack | per item | 2 | what varies around the typical case (S8): the spread around the mean parcel and its seats | a larger parcel |
 
-So: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2.
+So: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2, the same at every size.
 
 ## Totals
 
-- at 20: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
-- at 40: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
-- at 80: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2 = 47448
+- at 20: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
+- at 40: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
+- at 80: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - every factor at its mean: 2 parcels, the mean parcel's 607 seats, the marsh's crossed share measured, the cuts at the things a ring's band meets, the registry at the mean 3.3 (flat, as measured falling from 3.4 to 3.3); the slack on means
 - verdict-1, finding 1: fixed - the bearing is recorded once, and only for the woods off the sheet, the exclusive case
 - verdict-1, finding 2: fixed - the crowns by a scanline sweep of the lattice rows against the ring's edges
 - verdict-1, finding 3: fixed - the ring's bend to the ground is counted, 1 a point
@@ -63,7 +64,7 @@ So: 4 x (24 + 161 + 4365 + 150 + 1200 + 31) x 2.
 - verdict-3, finding 6: fixed - the seats are a lattice-point ceiling, area over 64 plus perimeter over 8 plus 1, every seat tested counted
 - verdict-3, finding 7: fixed - the registry's things grow at their measured rate; the marsh is the hinterland's, read
 
-- reason above the reference: a parcel is a whole wood of up to 771 crowns, each seated, so its cost per thing placed is the parcel's - about 15 a crown
+- reason above the reference: a parcel is a whole wood of about 607 crowns, each seated, so its cost per thing placed is the parcel's - about 6 a crown
 - FR-014 re-score: each factor at the typical case (rubric S8): the mean densities of `items.md` (4 things a cell near a wood, a scanned parcel rarely crossing the marsh); slack 2 (ask:444-budget-standard; the accept was ask:444-T05-woodland-round-4)
 
 ## Cheaper algorithms considered
