@@ -33,8 +33,9 @@
 - [x] T09 The budgets re-scored to the typical case - the 13 accept-pinned in one arbiter batch, a SOUND one where the gate fires, each lowered (FR-014; research: rendering)
       research: rendering
       verify: DONE. landed: every budget re-scored to the typical case (FR-014) and pinned, the program 1,409,176 operations at 40 from 15.3M
-- [ ] T10 Today's code's names refused by the budget bundle: a derivation naming a module, function, method, class or module- or class-level name defined under `l7r/` (other than a knob's name or form, a stage's name or a manifest key) refused, naming each; the `- pruning:` line asked above the reference (FR-015, FR-016, SC-010)
+- [x] T10 Today's code's names refused by the budget bundle: a derivation naming a module, function, method, class or module- or class-level name defined under `l7r/` (other than a knob's name or form, a stage's name or a manifest key) refused, naming each; the `- pruning:` line asked above the reference (FR-015, FR-016, SC-010)
       research: rendering
+      verify: DONE. landed: the budget bundle refuses a derivation naming any module, function, method, class or module- or class-level name of today's code (a knob's name or form, a stage's name and a manifest key pass), and asks a pruning line above the reference; each red with its condition deleted
 - [ ] T11 The water family re-derived greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank - each contract from the research and the reference manifests, judged with rubric S9, pinned (FR-015, FR-016)
       research: rendering
 - [ ] T12 The homesteads family re-derived greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)

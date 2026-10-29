@@ -95,24 +95,7 @@ T10 the bundle's refusal of today's names, T11-T14 the four families re-derived 
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T10 - today's code's names refused by the budget bundle (FR-015, SC-010)
-
-### T10 Approach (checklist part A)
-
-1. **The goal, in the world.** A derivation cannot carry today's implementation's choices in by name.
-2. **The constraints.** FR-015; SC-010.
-3. **Where each comes from.** G: the GM, 2026-10-29 ("the ENTIRE point of what we're doing is to do a greenfield implementation"; "sounds good, please proceed with that"), `request.md`'s last section.
-4. **Do they describe the world here?** The names defined under `l7r/` (modules, functions, methods, classes, module- and class-level names) read by `ast`; the knobs' names and forms, the stages' names and the pool's manifests' keys passed; the `- pruning:` screen above the reference (FR-016) beside it.
-5. **The order.** First of amendment 3; before any greenfield derivation is bundled.
-6. **The exits.** Green: the test red with its condition deleted, the tooling landed with `make land-tooling`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One tooling landing.
-9. **Done, measured.** `make work-budget-bundle MODE=budget` refuses a derivation naming one, naming each; a test pins it.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - paper budgets.
-
+<!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
 ### T11 - the water family greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank (FR-015, FR-016)
 
 ### T11 Approach (checklist part A)
