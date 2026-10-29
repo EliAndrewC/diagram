@@ -124,6 +124,16 @@ def test_a_change_needs_words_and_a_budget_and_is_logged_with_the_words(root: pa
     rows = [json.loads(ln) for ln in (root / bc.LOG).read_text().splitlines()]
     assert [r["words"] for r in rows] == ["raise it to fifty", "and the exponent too"]
     assert rows[1]["from"] == {"per_thing": 50, "exponent": 1.1} and rows[1]["to"] == {"per_thing": 55, "exponent": 1.2}
+    # a raise re-points the stage at the derivation it comes from (feature 444 FR-015), only at a SOUND verdict, naming both
+    (root / "g.md").write_text("the greenfield derivation\n")
+    (root / "g.verdict.txt").write_text("SOUND - x\n")
+    (root / "g.loose.txt").write_text("LOOSE - x\n")
+    assert "names both" in bc.change_budget(root, "web", 60, None, "raise it", None, "g.md", "")
+    assert "no SOUND verdict" in bc.change_budget(root, "web", 60, None, "raise it", None, "g.md", "g.loose.txt")
+    assert "no derivation at" in bc.change_budget(root, "web", 60, None, "raise it", None, "nope.md", "g.verdict.txt")
+    assert bc.change_budget(root, "web", 60, None, "raise it", None, "g.md", "g.verdict.txt") == ""
+    st = bc.load(root)["stages"]["web"]
+    assert st["derivation"] == "g.md" and st["verdict"] == "g.verdict.txt" and "pinned_on" not in st and st["per_thing"] == 60
 
 
 def test_the_programs_budget_needs_words_and_is_logged(root: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
