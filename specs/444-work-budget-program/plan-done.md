@@ -296,3 +296,23 @@ set it with `make budget-program`.
 
 **Performance work?** no - the target, on paper.
 
+<!-- plan-archive: archived 2026-10-29 -->
+### T15 - phase: water_frame, through the checklist (FR-003, FR-004, FR-005; step 4)
+
+Occasions: none - the plan's rolls and the meta it writes are unchanged, so no map moves; no glyph, form or placement rule.
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** The water frame rebuilt to its greenfield derivation - the plan's rolls counted where they happen, in the first stage, so the roll's count holds the work the plan does, and whatever of the old stage the derivation does not carry deleted.
+2. **The constraints.** FR-003, FR-004, FR-005; rubric S5; the greenfield derivation `phases/water_frame_greenfield.derivation.md` and its budget, 69, set with the GM's words.
+3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4 (`request.md`, section 6).
+4. **Do they describe the world here?** The plan's rolls (`plan_site`), today outside any stage's counted window; the stage's meta writes.
+5. **The order.** First of step 4; before `field`.
+6. **The exits.** Green: the stage counts its rolls at most its budget at 40 and 80, the cohort unmoved, `phases/water_frame.md`'s eight boxes ticked. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
+7. **The search smell.** none
+8. **The budget.** One landing; one MODE AUDIT pass.
+9. **Done, measured.** `make work-budget`: water_frame's counted operations at 40 and 80 against 69, its exponent 0.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+
