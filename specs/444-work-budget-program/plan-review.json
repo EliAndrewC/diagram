@@ -95,13 +95,13 @@
    "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
    "sha256": "e2b656d46060497070fca1a56e44735feaf6e4af7fb78e40eeed85732c7af82a",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "6c68ec01b9e999a408481757ce13a4ba8a8fdb745713f0f45adff9825463cda1",
@@ -1080,6 +1080,46 @@
      "why": "Step 3 of the approved design is paper derivation only; no engine code changes in this task."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T06 - the program's target to the GM (D5)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-content",
+     "summary": "What goes to the GM: the sum of the stage budgets at 40 households and the whole roll's exponent, beside today's figures, with D5 (and so its naming of each arbiter-accepted stage with its rounds and spread) as the governing constraint.",
+     "class": "within",
+     "why": "Request step 3 ('their sum, which is the program's target. The GM approves the target') and FR-002/D5 say exactly this. The block's summary line does not repeat D5's arbiter-accept disclosure, but it names D5 as its constraint and drops nothing from it; the GM's 444#0 answer ('the program target says which verdicts are arbiter accepts, with the rounds and the spread') stays carried by D5."
+    },
+    {
+     "id": "T06-route",
+     "summary": "The draft goes through escalation-check to the GM; only his words set the target, recorded by make budget-program in dev/work-budget-changes.jsonl.",
+     "class": "within",
+     "why": "FR-002 and D5 verbatim; section 5 item 4 of the approved design (budgets change only with the GM's words)."
+    },
+    {
+     "id": "T06-order",
+     "summary": "After T02-T05 pin every stage's budget, today's record read only after them; before any phase task is filed.",
+     "class": "within",
+     "why": "D5 ('the counts are read only now, after every budget is pinned'; 'No phase task is filed before') and request step 3 preceding step 4, and section 4's rule that today's numbers must not anchor the target."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Green exit is the GM's words recorded; red exit records what failed and sets the task down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The red exit gives the arbiter no power to set or approve the target - it only halts the task, and with D5 no phase can be filed without the GM's words, so the gate the GM asked for holds either way. The arbiter ruling on whether the task can proceed is process, which section 5 item 4 permits."
+    },
+    {
+     "id": "T06-done",
+     "summary": "Done measured as dev/work-budget.json's program row set and its words in dev/work-budget-changes.jsonl; one landing, one escalation-check; not performance work.",
+     "class": "within",
+     "why": "The record FR-002 names; a target on paper is not a rebuild, so no performance checklist applies."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1393,6 +1433,44 @@
      "summary": "Performance work: no (paper budgets); constant-moving and fitting-into-room checks n/a",
      "class": "within",
      "why": "Step 3 of the approved design is paper derivation only; no engine code changes in this task."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "ed41aa6b23d53894d2fc681bce5f85fba8a342283b4213a7b0f381ff04f721d3",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T06-content",
+     "summary": "What goes to the GM: the sum of the stage budgets at 40 households and the whole roll's exponent, beside today's figures, with D5 (and so its naming of each arbiter-accepted stage with its rounds and spread) as the governing constraint.",
+     "class": "within",
+     "why": "Request step 3 ('their sum, which is the program's target. The GM approves the target') and FR-002/D5 say exactly this. The block's summary line does not repeat D5's arbiter-accept disclosure, but it names D5 as its constraint and drops nothing from it; the GM's 444#0 answer ('the program target says which verdicts are arbiter accepts, with the rounds and the spread') stays carried by D5."
+    },
+    {
+     "id": "T06-route",
+     "summary": "The draft goes through escalation-check to the GM; only his words set the target, recorded by make budget-program in dev/work-budget-changes.jsonl.",
+     "class": "within",
+     "why": "FR-002 and D5 verbatim; section 5 item 4 of the approved design (budgets change only with the GM's words)."
+    },
+    {
+     "id": "T06-order",
+     "summary": "After T02-T05 pin every stage's budget, today's record read only after them; before any phase task is filed.",
+     "class": "within",
+     "why": "D5 ('the counts are read only now, after every budget is pinned'; 'No phase task is filed before') and request step 3 preceding step 4, and section 4's rule that today's numbers must not anchor the target."
+    },
+    {
+     "id": "T06-exits",
+     "summary": "Green exit is the GM's words recorded; red exit records what failed and sets the task down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The red exit gives the arbiter no power to set or approve the target - it only halts the task, and with D5 no phase can be filed without the GM's words, so the gate the GM asked for holds either way. The arbiter ruling on whether the task can proceed is process, which section 5 item 4 permits."
+    },
+    {
+     "id": "T06-done",
+     "summary": "Done measured as dev/work-budget.json's program row set and its words in dev/work-budget-changes.jsonl; one landing, one escalation-check; not performance work.",
+     "class": "within",
+     "why": "The record FR-002 names; a target on paper is not a rebuild, so no performance checklist applies."
     }
    ],
    "verdict": "CLEAR"
