@@ -1,0 +1,18 @@
+SOUND - each stand costs 4 polygon points + 7 marks x 2 + 5 filings = 23 operations, every term read from the contract's Bounds; nothing is searched, checked or repaired, and 138 / 276 / 552 grows linearly with the stands (6 / 12 / 24).
+
+**1. Is each factor derived?** Yes, with one term read narrowly.
+- **Items:** one stand per scanned seat, 6 / 12 / 24. That is the Bounds' 3 at 10 and 6 at 20, doubling past 20.
+- **Polygon:** 4, the Bounds' 4 points.
+- **Filing:** 5, which is 1 record plus at most 4 cells. 4 is a stand under 64 ft straddling a cell corner.
+- **Slack:** 1, which is fine because each factor is already its worst case.
+- **Marks:** 14, which is 7 marks x (jitter 1 + strokes 1). The Bounds give a mark count but no stroke count per mark, so I read "its strokes written (1)" as each mark written once as one record. If the rebuild writes each stroke separately, the factor becomes 7 x (1 + s). That would be an under-count against the pinned budget, not padding. The rebuild should keep a mark as one write, or state s now.
+
+**2. Is there a standard, cheaper algorithm?** None missed. No stand depends on another, nothing is ranked, and the seats come from the hinterland's scan. The registry filing is what the contract requires.
+- **Marks:** the count has no containment test per mark. That holds only if the jitter is bounded so a mark cannot leave its grid site inside the 16 by 22 ft rectangle. A jitter that can escape and be redrawn is an S4 repair, whose budget is zero.
+
+**3. Is any factor padded?** No. Each figure equals its own stated ceiling: 4 points, 7 marks, 2 by 2 cells.
+
+**4. Is each figure read at its source's size and unit?** Yes. 4 is read as points, 7 as marks rather than points, 64 ft as a full cell side, and the item counts at their stated sizes.
+- **Needs fixing, not blocking:** the Indexes line "densest one stand a cell's share" doesn't follow from its own reason. A 64 ft cell holds several 16 by 22 ft stands. No factor depends on cell density, since stands are only filed, never queried, so it doesn't block. It should be corrected before later stages rely on it.
+
+This is round 1, so there were no earlier verdicts to close. The bundle is in /tmp/l7r-check/work-budget-budget-bamboo/ (MANIFEST.md, rubric.md, contract.md, derivation.md).

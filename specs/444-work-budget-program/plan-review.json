@@ -1028,6 +1028,58 @@
      "why": "Ordering and effort bookkeeping inside D3 (plain Agent calls, at most three in one message) and D4 (each family lands its derivations, verdicts and budgets together); step 3 of the request is on paper."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T05 - the hinterland and frame family's budgets (D1, D3, D4)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-scope",
+     "summary": "The task covers the seven hinterland-and-frame stages (hinterland, woodland, windbreak, bamboo, frame, notice, labels), D4's census of STAGES",
+     "class": "within",
+     "why": "D4 settles the family and its seven members; the request's step 3 asks every stage's budget derived on paper, and this family is one quarter of D4's 23, none dropped."
+    },
+    {
+     "id": "T05-contract-sources",
+     "summary": "Each derivation reads the stage's contract from D1's five sources (docstring, plan fields read, manifest keys and registries written, claims-report rows, cohort_audit rules)",
+     "class": "within",
+     "why": "Restates D1 and the checklist's box 1 (request section 3: manifest in and out, governing claims, cohort properties); the constraint line binds D1, which keeps loops and today's counts out of the writing (request section 4)."
+    },
+    {
+     "id": "T05-green-exit",
+     "summary": "Done when seven verdicts are each SOUND or a round-arbiter accept (FR-013) and seven budgets are pinned, measured as seven budgeted rows",
+     "class": "within",
+     "why": "D3 and FR-013 as the GM answered 444#0 ('letting the arbiters acceptance pin it'); no stage is excused from a verdict and the accept route is the one the GM approved, not a widening of it."
+    },
+    {
+     "id": "T05-red-exit",
+     "summary": "On failure, record what failed and set the task down; a claim that a budget cannot be derived is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Setting down a task is not closing the program (request 5.1, FR-009 and SC-001 still owe every stage's verdict), and it is not a set-down for small gain (FR-006 concerns rebuilds). An 'it cannot be done' claim goes to an independent ruling rather than the session's own say-so, which is the enforced process the GM asked for on 2026-10-28, and the arbiter rules on process, not on accepting a phase over budget (request 5.4)."
+    },
+    {
+     "id": "T05-order",
+     "summary": "Runs after T01",
+     "class": "within",
+     "why": "The paper budgets need T01's tooling; pipeline order (request step 6) governs rebuilds, not the step-3 derivations, so no requested ordering is changed."
+    },
+    {
+     "id": "T05-budget",
+     "summary": "One landing; seven dispatches, more where a verdict asks a correction",
+     "class": "within",
+     "why": "D3: one dispatch per derivation, re-dispatched on LOOSE or UNDERIVED, the third round owing the arbiter; D4: one task per family landing its derivations, verdicts and budgets together."
+    },
+    {
+     "id": "T05-not-performance",
+     "summary": "Performance work: no (paper budgets); constant-moving and fitting-into-room checks n/a",
+     "class": "within",
+     "why": "Step 3 of the approved design is paper derivation only; no engine code changes in this task."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1291,6 +1343,56 @@
      "summary": "Runs after T01; one landing, three dispatches plus re-dispatches on correction; paper budgets, not performance work.",
      "class": "within",
      "why": "Ordering and effort bookkeeping inside D3 (plain Agent calls, at most three in one message) and D4 (each family lands its derivations, verdicts and budgets together); step 3 of the request is on paper."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T05": {
+   "section_sha256": "b31af1435da0ca7234937e633476f9f6f960837795dca2fc2de2b4755f82203a",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T05-scope",
+     "summary": "The task covers the seven hinterland-and-frame stages (hinterland, woodland, windbreak, bamboo, frame, notice, labels), D4's census of STAGES",
+     "class": "within",
+     "why": "D4 settles the family and its seven members; the request's step 3 asks every stage's budget derived on paper, and this family is one quarter of D4's 23, none dropped."
+    },
+    {
+     "id": "T05-contract-sources",
+     "summary": "Each derivation reads the stage's contract from D1's five sources (docstring, plan fields read, manifest keys and registries written, claims-report rows, cohort_audit rules)",
+     "class": "within",
+     "why": "Restates D1 and the checklist's box 1 (request section 3: manifest in and out, governing claims, cohort properties); the constraint line binds D1, which keeps loops and today's counts out of the writing (request section 4)."
+    },
+    {
+     "id": "T05-green-exit",
+     "summary": "Done when seven verdicts are each SOUND or a round-arbiter accept (FR-013) and seven budgets are pinned, measured as seven budgeted rows",
+     "class": "within",
+     "why": "D3 and FR-013 as the GM answered 444#0 ('letting the arbiters acceptance pin it'); no stage is excused from a verdict and the accept route is the one the GM approved, not a widening of it."
+    },
+    {
+     "id": "T05-red-exit",
+     "summary": "On failure, record what failed and set the task down; a claim that a budget cannot be derived is ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Setting down a task is not closing the program (request 5.1, FR-009 and SC-001 still owe every stage's verdict), and it is not a set-down for small gain (FR-006 concerns rebuilds). An 'it cannot be done' claim goes to an independent ruling rather than the session's own say-so, which is the enforced process the GM asked for on 2026-10-28, and the arbiter rules on process, not on accepting a phase over budget (request 5.4)."
+    },
+    {
+     "id": "T05-order",
+     "summary": "Runs after T01",
+     "class": "within",
+     "why": "The paper budgets need T01's tooling; pipeline order (request step 6) governs rebuilds, not the step-3 derivations, so no requested ordering is changed."
+    },
+    {
+     "id": "T05-budget",
+     "summary": "One landing; seven dispatches, more where a verdict asks a correction",
+     "class": "within",
+     "why": "D3: one dispatch per derivation, re-dispatched on LOOSE or UNDERIVED, the third round owing the arbiter; D4: one task per family landing its derivations, verdicts and budgets together."
+    },
+    {
+     "id": "T05-not-performance",
+     "summary": "Performance work: no (paper budgets); constant-moving and fitting-into-room checks n/a",
+     "class": "within",
+     "why": "Step 3 of the approved design is paper derivation only; no engine code changes in this task."
     }
    ],
    "verdict": "CLEAR"

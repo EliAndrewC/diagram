@@ -1,0 +1,20 @@
+SOUND - one caption whose seat is already proved, written in 6 operations that are each named, with slack 1 and no search in the stage. The contract's Bounds back the count of one and say it stays constant with the households.
+
+1. **Is each factor derived?** Yes.
+   - **Items = 1:** this comes from the contract's Bounds. The queue was measured at 1 caption (the notice board's) at 10 and 20 households, and the Bounds give the reason it stays constant: a hamlet labels its board and nothing else, and the title belongs to the frame.
+   - **Caption write = 6:** the six writes are named one by one, and they are exactly what the contract's "Writes" line lists: words, box, angle, lines, leader, plus the one record.
+   - **Slack = 1:** this is within S7's limit of 2.
+   - **Candidates and checks:** there are none. The contract's "Keeps" line says a caption whose seat its feature already proved is drawn as proved, and `place_kosatsuba` (`board_caption_seat`) proves that seat.
+2. **Is there a cheaper standard algorithm?** No. Nothing is searched, so a sweep, an index or a priority queue has no factor to lower. The one memo that applies is already used: the proved seat is read, not sought again. The derivation's "Cheaper algorithms considered" list covers each option with a reason.
+3. **Is any factor padded?** No. The leader is counted at 1 even though it is only written when the seat is off the preferred offset. That is a worst-case ceiling, not padding. Every other factor is exactly 1.
+4. **Is each figure read at its source's size and unit?** Yes. "1 caption at 10 and 20" is used as a count of captions, as the source states it. Carrying it to 40 and 80 rests on the contract's own reason that the count is constant, not on fitting a trend. The total of 6 is flat, so the exponent is 0 and S6 holds.
+
+One limit on scope: the budget doesn't cover the path where the one placer has to seat a caption with no proved seat. The contract's Bounds say the hamlet's queue never holds such a caption. If one ever appears, this budget would need to be derived again rather than stretched to cover it.
+
+There are no earlier verdict files in the bundle, so this is round 1 and there were no earlier findings to confirm closed.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-labels/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-labels/rubric.md
+- /tmp/l7r-check/work-budget-budget-labels/contract.md
+- /tmp/l7r-check/work-budget-budget-labels/derivation.md

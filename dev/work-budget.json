@@ -168,7 +168,14 @@
    "status": "unbudgeted"
   },
   "bamboo": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 23.0,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/bamboo.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/bamboo.verdict.txt",
+   "items_at_20": 6,
+   "items_at_40": 12,
+   "items_at_80": 24
   },
   "crossings": {
    "status": "budgeted",
@@ -219,7 +226,14 @@
    "status": "unbudgeted"
   },
   "labels": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 6.0,
+   "exponent": 0.0,
+   "derivation": "specs/444-work-budget-program/phases/labels.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/labels.verdict.txt",
+   "items_at_20": 1,
+   "items_at_40": 1,
+   "items_at_80": 1
   }
  }
 }
