@@ -51,6 +51,8 @@ def test_an_approach_block_without_the_red_exit_is_refused() -> None:
     assert plan_lint.missing_red_exit(_approach("T01")) == ""
     assert plan_lint.missing_red_exit(_approach("T01", item6="Green: landed.")) == "T01"
     assert "make arbiter-ask" in plan_lint.refusal(REPO / "specs" / "nonexistent", _approach("T01", item6="Green: landed."))
+    # a 444 phase's red exit is FR-006's: rebuilt again, or the budget raised with the GM's words (spec-fidelity, 2026-10-29)
+    assert plan_lint.missing_red_exit(_approach("T01", item6="Green: landed. Red: rebuilt again, or raised with the GM's words (`make budget-change`).")) == ""
 
 
 def _spec(tmp_path: Path, plan: str, tasks: str) -> Path:

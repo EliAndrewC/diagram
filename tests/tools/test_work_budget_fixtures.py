@@ -140,6 +140,14 @@ def test_an_audit_bundle_holds_the_code_counts_chains_and_budget(tmp_path: Path)
     assert wbb.audit_bundle(REPO, "no_such_stage", tmp_path / "o2")[0] == 2
 
 
+def test_an_audit_bundle_holds_every_module_its_counters_name(tmp_path: Path) -> None:
+    """Feature 444 T15's MODE AUDIT: the water frame's whole count sat in `plan.py`'s `_roll`, outside the stage's module, and the
+    audit could not read it - every module defining a counted function rides in the bundle."""
+    found = {p.name for p in wbb.counted_files(REPO, [{"ops": {"candidate@_roll": 23, "candidate@Standing.conflicts": 1}}])}
+    assert {"plan.py", "registry.py"} <= found, found
+    assert wbb.counted_files(REPO, [{"ops": {}}]) == []
+
+
 def test_an_audit_bundle_takes_a_budget_file_in_place_of_the_tables(tmp_path: Path) -> None:
     rc, _m = wbb.audit_bundle(REPO, "homesteads", tmp_path / "out", "tests/fixtures/work-budget/funnel/budget.json")
     assert rc == 0 and '"status": "fixture"' in (tmp_path / "out" / "budget.json").read_text()

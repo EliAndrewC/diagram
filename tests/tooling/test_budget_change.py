@@ -193,3 +193,30 @@ def test_an_arbiter_accept_pins_a_first_budget_bound_to_its_derivation(root: pat
     bad = web_stale()
     assert len(bad) == 1 and "changed since the arbiter's accept pinned it (ask:444-T05-r9)" in bad[0] and "make arbiter-ask" in bad[0]
     assert bad[0] in wb.held(bc.load(root), {"stages": {}}), "the push's ratchet refuses it too"
+
+
+def test_a_rebuilt_phase_is_accepted_only_within_its_budget_on_its_audits_within(root: pathlib.Path) -> None:
+    """Feature 444 FR-005, checklist boxes 6-8: `budget-accept` records a stage accepted - its MODE AUDIT WITHIN, its counted
+    operations at 40 and 80 in the newest run at most its budget - and the figures the push's ratchet then holds; over its budget it
+    is refused with FR-006's two ways on, never accepted."""
+    bc.set_budget(root, "web", 10, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40})
+    (root / "a.txt").write_text("WITHIN - x\n")
+    (root / "o.txt").write_text("OVER - x\n")
+    assert "not WITHIN" in bc.accept_stage(root, "web", "o.txt")
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+
+    def run(name: str, per: dict[str, dict[str, float]]) -> None:
+        (runs / name).write_text(json.dumps({"summary": {"stages": {"web": {"per": per}}}}))
+
+    run("1.json", {"40": {"ops": 150}})
+    assert "no roll at 80" in bc.accept_stage(root, "web", "a.txt")
+    run("2.json", {"40": {"ops": 150}, "80": {"ops": 500}})
+    why = bc.accept_stage(root, "web", "a.txt")
+    assert "over its budget 400" in why and "make budget-change" in why
+    run("3.json", {"40": {"ops": 150}, "80": {"ops": 380}})
+    assert bc.main(["--root", str(root), "accept", "web", "a.txt"]) == 0
+    st = bc.load(root)["stages"]["web"]
+    assert st["status"] == "accepted" and st["accepted"] == {"40": 150.0, "80": 380.0}
+    assert json.loads((root / bc.LOG).read_text().splitlines()[-1])["what"] == "accepted"
+    assert "no stage `nope`" in bc.accept_stage(root, "nope", "a.txt")

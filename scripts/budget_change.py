@@ -16,6 +16,7 @@ these targets needs `GUARD_EDIT_OK`.
     budget_change.py set PHASE PER_THING EXPONENT DERIVATION VERDICT [--reason WHY] [--lower]
     budget_change.py change PHASE TO [--exponent E] --words WORDS
     budget_change.py program OPS_AT_40 EXPONENT --words WORDS
+    budget_change.py accept PHASE AUDIT       (a rebuilt phase's MODE AUDIT WITHIN and its counts at 40 and 80 within budget)
 """
 
 from __future__ import annotations
@@ -231,6 +232,40 @@ def change_budget(
     return ""
 
 
+HELD = (40, 80)  # the sizes an accepted stage is held to (feature 443 T04; the push's ratchet, `work_budget.held`)
+
+
+def accept_stage(root: Path, phase: str, audit: str) -> str:
+    """A rebuilt phase accepted (feature 444 FR-005, checklist boxes 6-8): its MODE AUDIT verdict WITHIN, and its counted operations at
+    40 and 80 households in the newest `make work-budget` run at most its budget, recorded as `accepted` - the figures the push's
+    ratchet then holds it to. '' when done, else why not."""
+    table = load(root)
+    st = _stage(table, phase)
+    if isinstance(st, str):
+        return st
+    if st.get("status") not in ("budgeted", "accepted"):
+        return f"`{phase}` has no budget to be accepted against"
+    if verdict_of(root / audit) != "WITHIN":
+        return f"{audit} reads {verdict_of(root / audit) or 'nothing'}, not WITHIN - a phase is accepted on its MODE AUDIT's WITHIN (`make work-budget-bundle MODE=audit PHASE={phase}`)"
+    runs = sorted((root / RUNS).glob("*.json"))
+    try:
+        per = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]["stages"][phase]["per"]
+    except (IndexError, KeyError, TypeError, ValueError, OSError):
+        return f"no `make work-budget` run counts `{phase}` - run `make work-budget` (all of 10,20,40,80) first"
+    got: dict[str, float] = {}
+    for h in HELD:
+        row = per.get(str(h))
+        if not row:
+            return f"the newest run has no roll at {h} households for `{phase}` - run `make work-budget` at every size"
+        if float(row["ops"]) > budget_at(st, h):
+            return f"`{phase}`: {float(row['ops']):,.0f} counted operations at {h} households, over its budget {budget_at(st, h):,.0f} - rebuild it again, or raise the budget with the GM's words (`make budget-change`, FR-006)"
+        got[str(h)] = float(row["ops"])
+    st.update(status="accepted", accepted=got, audit=audit)
+    save(root, table)
+    log(root, {"what": "accepted", "phase": phase, "accepted": got, "audit": audit, "run": runs[-1].name})
+    return ""
+
+
 def set_program(root: Path, ops_at_40: int, exponent: float, words: str) -> str:
     """The whole roll's budget (444 FR-002), set with the GM's words and logged: '' when done, else why not."""
     if not words.strip():
@@ -269,6 +304,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("ops_at_40", type=int)
     p.add_argument("exponent", type=float)
     p.add_argument("--words", default="")
+    a = sub.add_parser("accept")
+    a.add_argument("phase")
+    a.add_argument("audit")
     args = ap.parse_args(argv)
     root = Path(args.root)
     if args.cmd == "set":
@@ -281,6 +319,9 @@ def main(argv: list[str] | None = None) -> int:
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
         why = change_budget(root, args.phase, args.to, args.exponent, args.words, items, args.derivation, args.verdict)
         done = f"`{args.phase}` changed to {args.to} per thing, logged in {LOG} with the GM's words"
+    elif args.cmd == "accept":
+        why = accept_stage(root, args.phase, args.audit)
+        done = f"`{args.phase}` accepted at its counted operations at 40 and 80 households, logged in {LOG}"
     else:
         why = set_program(root, args.ops_at_40, args.exponent, args.words)
         done = f"the program's budget set to {args.ops_at_40} operations at 40 households, exponent {args.exponent}, logged in {LOG}"

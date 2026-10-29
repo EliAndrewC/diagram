@@ -368,6 +368,19 @@ def stage_files(root: Path, phase: str) -> list[Path]:
     return sorted(home.glob("*.py")) if home != root / HAMLET else found
 
 
+def counted_files(root: Path, counts: list[dict]) -> list[Path]:
+    """The modules under `l7r/` defining each function the stage's counters name (`<kind>@<function>`, a method's class dropped)
+    - THE WORK IS AUDITED WHERE IT IS COUNTED (feature 444 T15's MODE AUDIT: the water frame's whole count sat in `plan.py`'s
+    `_roll`, outside the stage's own module, so the audit could not see whether `plan_site` left a loop uncounted)."""
+    names = {k.split("@", 1)[1].rsplit(".", 1)[-1] for r in counts for k in (r.get("ops") or {}) if "@" in k}
+    found: list[Path] = []
+    for p in sorted((root / "l7r").rglob("*.py")):
+        text = p.read_text(encoding="utf-8")
+        if any(re.search(rf"^\s*def {re.escape(n)}\(", text, re.M) for n in names):
+            found.append(p)
+    return found
+
+
 def fanout_section(root: Path, phase: str) -> str:
     """The stage's section of the newest kept `make perf-fanout` report, or why there is none."""
     reports = sorted((root / FANOUT).glob("*-fanout-*.txt"))
@@ -388,6 +401,7 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     run = json.loads(runs[-1].read_text(encoding="utf-8"))
     counts = [{"seed": r["seed"], "households": r["households"], **r["stages"][phase]} for r in run["rows"] if phase in r["stages"]]
     table = json.loads((root / TABLE).read_text(encoding="utf-8"))
+    files = files + [p for p in counted_files(root, counts) if p not in files]
     out.mkdir(parents=True, exist_ok=True)
     (out / "code").mkdir(exist_ok=True)
     for p in files:
@@ -400,8 +414,8 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE AUDIT - {phase}\n\n"
         "MODE AUDIT: judge the landed code against its counters. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S7;\n"
-        f"- `code/` - the stage's modules: {', '.join(p.name for p in files)};\n"
+        "- `rubric.md` - the standards S1-S9;\n"
+        f"- `code/` - the stage's modules and every module defining a function its counters name: {', '.join(p.name for p in files)};\n"
         "- `counts.json` - the newest run's counted operations for the stage at each size, by kind and by function;\n"
         "- `chains.txt` - the callers above each counted function;\n"
         "- `budget.json` - the stage's pinned budget.\n\n"
