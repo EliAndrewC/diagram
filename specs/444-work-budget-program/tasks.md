@@ -13,8 +13,9 @@
 - [x] T02 The water family's budgets - water_frame, field, sink, waterward, pond_stock, pond_bank - each derived in the template, judged SOUND by the work-budget agent or accepted by the round arbiter (FR-013), and pinned (D1, D3, D4; FR-001)
       research: rendering
       verify: DONE. landed: landed: the water family's six budgets pinned - water_frame (40), waterward (1), pond_stock (1), pond_bank (155 a seat) and sink (37.5 a segment gathered) on SOUND verdicts, field (35,440 at 20, 56,558 at 40, 94,717 at 80) on the round arbiter's accept (FR-013: 14 rounds, spread 32,280-38,506 at 20); each derivation passing the pre-dispatch checks
-- [ ] T03 The homesteads family's budgets - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (D1, D3, D4; FR-001)
+- [x] T03 The homesteads family's budgets - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (D1, D3, D4; FR-001)
       research: rendering
+      verify: DONE. landed: the homesteads family's seven budgets pinned: seat and burial on SOUND; homesteads, appurtenances, sties, washing and lane_wells on the round arbiter's accepts (FR-013)
 - [ ] T04 The ways family's budgets - track, web, crossings (D1, D3, D4; FR-001)
       research: rendering
 - [ ] T05 The hinterland and frame family's budgets - hinterland, woodland, windbreak, bamboo, frame, notice, labels (D1, D3, D4; FR-001)

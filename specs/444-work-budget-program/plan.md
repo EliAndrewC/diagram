@@ -91,26 +91,7 @@ T01 D2's tooling; T02-T05 the four families' derivations, verdicts and budgets (
 
 <!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
-### T03 - the homesteads family's budgets (D1, D3, D4)
-
-seat, homesteads, appurtenances, burial, lane_wells, sties, washing (seven, of D4's census of `STAGES`): each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
-
-### T03 Approach (checklist part A)
-
-1. **The goal, in the world.** Each homesteads-family stage has a budget an independent judge found derived.
-2. **The constraints.** FR-001; the rubric; the template; D1, D3.
-3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3).
-4. **Do they describe the world here?** Each stage's contract, read when its derivation is written from D1's five sources: its docstring, the `plan` fields it reads, the manifest keys and registries it writes (`dev/placement.md`'s `STAGES` table and draw order), its claims (`make claims-report`) and the cohort's checks of what it places (`cohort_audit`'s rules).
-5. **The order.** After T01.
-6. **The exits.** Green: seven verdicts, each SOUND or an arbiter accept (FR-013), and seven budgets pinned. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing; seven dispatches, more where a verdict asks a correction.
-9. **Done, measured.** Seven `budgeted` rows.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - paper budgets.
-
+<!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 ### T04 - the ways family's budgets (D1, D3, D4)
 
 track, web, crossings (three, of D4's census of `STAGES`): each derived, judged SOUND, or accepted by the round arbiter (FR-013), and pinned.
