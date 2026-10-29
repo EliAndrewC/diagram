@@ -124,12 +124,12 @@ Occasions: none - the plan's rolls and the meta it writes are unchanged, so no m
 
 ### T15 Approach (checklist part A)
 
-1. **The goal, in the world.** The plan's rolls are counted where they happen, in the first stage, so the roll's count holds the work the plan does.
+1. **The goal, in the world.** The water frame rebuilt to its greenfield derivation - the plan's rolls counted where they happen, in the first stage, so the roll's count holds the work the plan does, and whatever of the old stage the derivation does not carry deleted.
 2. **The constraints.** FR-003, FR-004, FR-005; rubric S5; the greenfield derivation `phases/water_frame_greenfield.derivation.md` and its budget, 69, set with the GM's words.
 3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4 (`request.md`, section 6).
 4. **Do they describe the world here?** The plan's rolls (`plan_site`), today outside any stage's counted window; the stage's meta writes.
 5. **The order.** First of step 4; before `field`.
-6. **The exits.** Green: the stage counts its rolls at most its budget at 40 and 80, the cohort unmoved, `phases/water_frame.md`'s eight boxes ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: the stage counts its rolls at most its budget at 40 and 80, the cohort unmoved, `phases/water_frame.md`'s eight boxes ticked. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
 7. **The search smell.** none
 8. **The budget.** One landing; one MODE AUDIT pass.
 9. **Done, measured.** `make work-budget`: water_frame's counted operations at 40 and 80 against 69, its exponent 0.
@@ -146,9 +146,9 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 1. **The goal, in the world.** The comb field rebuilt to its greenfield derivation: the brook and its intake, the fan's outline, the comb's ditches and basins cut once with every rule asked before a basin is written, no repair pass.
 2. **The constraints.** FR-003 to FR-006; rubric S1-S9; `phases/field_greenfield.derivation.md` and its budget, 23,988 at 40, exponent 0.79; the research its contract cites (0005, 0017, 0053, 0054, 0059); the manifest keys today's stage writes (FR-004).
 3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4.
-4. **Do they describe the world here?** The comb archetypes of the reference spec; a polder keeps today's code until its own derivation (the reference rolls draw none).
+4. **Do they describe the world here?** Every form the stage writes: the comb archetypes the reference spec rolls, and the polders, which get their own greenfield derivation and MODE BUDGET verdict before the rebuild, and a seed that draws one for the audit.
 5. **The order.** After `water_frame`; the last of step 4, then the assessment with the GM.
-6. **The exits.** Green: counted operations at most the budget at 40 and 80, `make cohort-landing` with no regressed seed and the fresh block's rate no worse, the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, the old comb code deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: counted operations at most the budget at 40 and 80, `make cohort-landing` with no regressed seed and the fresh block's rate no worse, the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, all of the old field code - comb and polder - deleted. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
 7. **The search smell.** none
 8. **The budget.** Several landings behind one task is not allowed - one landing; `make cohort` after each increment; one MODE AUDIT pass a round.
 9. **Done, measured.** `make work-budget`: field's counted operations at 40 and 80 against 23,988 and 42,070.

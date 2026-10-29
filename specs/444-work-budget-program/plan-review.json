@@ -213,31 +213,31 @@
   },
   "### T15 - phase: water_frame, through the checklist (FR-003, FR-004, FR-005; step 4)": {
    "sha256": "9b1fa270ee9381dbe3e84a2b0a4b121b5622b00a6c45aceff4d7afb4302ba5c6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
   "### T15 Approach (checklist part A)": {
-   "sha256": "7c14073a3b7fd7d1c3b950cc8d40ab27fad549dfeb17e0baaa1caa817079c56c",
-   "verdict": "BLOCKED",
+   "sha256": "126ae363137d9699e100fa0c981fe54a0f52b8653d4cdfa85d0e0e5649ec335f",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
   "### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)": {
    "sha256": "1cd9968a4274771789f7d8c8f068a8cfdd79c6f244b241bdd06ebfefa247c842",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
   "### T16 Approach (checklist part A)": {
-   "sha256": "ee242753178d7b978b57b01641a8e721168ea627caee0ed3705ad66b80d06f8d",
-   "verdict": "BLOCKED",
+   "sha256": "36c742cbeda19e0959ba3d38b9fa73f4dc15db655f5e9ed82c003c170069ec06",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
   "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "d8ed4e8a8d03447310b5cf0fe9c3df273ea0352a1083cc6d7afa904a6afa66d9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   }
@@ -1512,6 +1512,79 @@
      "summary": "Today's measurement (2026-10-28 file), removes the repair passes rather than moving them, held to the pinned budget and exponent, perf-ab recorded and not gated, the maps' moves held to the research by the cohort, claims round and settlement-review.",
      "class": "within",
      "why": "Request box 4 (perf-fanout), box 6 (perf-ab as a record, not a gate), S4 and S6."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-29",
+   "blocks": [
+    "### T15 - phase: water_frame, through the checklist (FR-003, FR-004, FR-005; step 4)",
+    "### T15 Approach (checklist part A)",
+    "### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T15-occasions",
+     "summary": "water_frame's rebuild owes no map review: the plan's rolls and the meta it writes are unchanged, so no map moves",
+     "class": "within",
+     "why": "FR-004 has the rebuild read and write the same manifest keys; the reviews owed follow from docs/reviews.md occasions (design section 3 box 6), and the green exit's 'cohort unmoved' holds the claim that no map moves."
+    },
+    {
+     "id": "T15-goal",
+     "summary": "water_frame rebuilt to its greenfield derivation, the plan's rolls counted in the first stage, whatever of the old stage the derivation does not carry deleted",
+     "class": "within",
+     "why": "FR-003 (phase 1 is water_frame), FR-005 (old implementation deleted in the same landing, no fallback), rubric S5 (count the work where it happens), FR-015 (greenfield). The deletion is of code, not of manifest keys, which FR-004 still fixes."
+    },
+    {
+     "id": "T15-exits",
+     "summary": "Green: counted ops at most 69 at 40 and 80, cohort unmoved, eight boxes ticked. Red, over budget: rebuilt again or budget raised with the GM's words via make budget-change; never set down, never an arbiter accept; a stop to assess goes to the GM",
+     "class": "within",
+     "why": "Restates FR-006 and design section 5 items 1 and 4. The earlier red exit (set down, arbiter-ask on 'cannot be done') contradicted FR-006 and is gone. The stop to assess is the GM's own 'then we can stop and assess how things are going'. 'Cohort unmoved' is at least as strict as box 6's no regressed seed; box 6's remaining items ride in 'eight boxes ticked'."
+    },
+    {
+     "id": "T15-budget-and-done",
+     "summary": "one landing, one MODE AUDIT pass; done measured by make work-budget against 69 and exponent 0",
+     "class": "within",
+     "why": "Design section 3 boxes 6-7 and FR-005; 69 is the pin the GM approved on 2026-10-29 (water_frame 40 to 69)."
+    },
+    {
+     "id": "T16-occasions",
+     "summary": "settlement-review on the pool hamlets the rebuilt field moves; glyph-check only if a glyph is redrawn",
+     "class": "within",
+     "why": "Design section 3 box 6 names settlement-review when a map's form changes; glyph-check is conditioned on its own occasion."
+    },
+    {
+     "id": "T16-goal",
+     "summary": "comb field rebuilt to its greenfield derivation: brook, intake, fan outline, ditches and basins cut once with every rule asked before a basin is written, no repair pass",
+     "class": "within",
+     "why": "FR-003 (phase 2 is field), FR-004 and rubric S4 (ask before placing, no repair pass), FR-015."
+    },
+    {
+     "id": "T16-polders",
+     "summary": "every form the stage writes is in scope: the comb archetypes and the polders; polders get their own greenfield derivation and MODE BUDGET verdict before the rebuild, and a seed that draws one is audited; all old field code, comb and polder, is deleted",
+     "class": "within",
+     "why": "Reverses the earlier narrowing ('a polder keeps today's code'), which contradicted FR-005's no-fallback deletion. A polder derivation with a MODE BUDGET verdict is checklist boxes 2-3 applied to a form the stage writes (FR-013, FR-015); auditing a seed that draws one is enforcement of MODE AUDIT on the code that lands. It does not move the field's pinned budget: the green exit stays 23,988 at 40, and any raise still needs make budget-change with the GM's words (FR-006)."
+    },
+    {
+     "id": "T16-exits",
+     "summary": "Green: counted ops at most the budget at 40 and 80, cohort-landing with no regressed seed and fresh block rate no worse, claims round IN-STEP, reviews owed, MODE AUDIT WITHIN, eight boxes ticked, all old field code deleted. Red, over budget: rebuilt again or budget raised with the GM's words; never set down, never an arbiter accept; a stop to assess goes to the GM",
+     "class": "within",
+     "why": "Green is design section 3 box 6 plus FR-005; red restates FR-006. The earlier set-down and arbiter-ask route is removed."
+    },
+    {
+     "id": "T16-budget-and-constants",
+     "summary": "one landing behind the task, make cohort after each increment, one MODE AUDIT pass a round; the research page each figure cites read before a constant moves; done measured against 23,988 at 40 and 42,070 at 80",
+     "class": "within",
+     "why": "FR-005 (one landing with the deletion), design section 3 box 7, Principle XII's research reading; the figures are the pinned budget from the approved target."
+    },
+    {
+     "id": "T16-perf-checklist",
+     "summary": "performance prompts: today's field cost (about 1.3M calls, 48,335-66,214 counted ops, measured 2026-10-28 by make work-budget with its record file), work removed rather than moved (no carve, settle or weld pass), expected saving to the pinned budget, growth held to the pinned exponent, before/after by make work-budget and make perf-ab, comb maps move and are held to the research by cohort, claims round and settlement-review",
+     "class": "within",
+     "why": "Text identical to what was last judged; it is design section 3 box 4 (today's measurement, perf-fanout), box 5 (no repair passes), box 6 (perf-ab recorded, not a gate) and S6. Its figures carry a one-shot label (date and method)."
     }
    ]
   }
