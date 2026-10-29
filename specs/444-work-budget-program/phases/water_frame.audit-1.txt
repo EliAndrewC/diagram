@@ -1,0 +1,3 @@
+WITHIN - water_frame counts 23 operations at 20 and 40 households against a budget of 69, growth is flat and nothing is placed; but the bundle has no count at 80, and it does not hold the plan code whose rolls make up all of that count.
+
+(Also: the budget's "exact count" of 69 against today's 23 - the derivation counts the plan's writes and the meta's, which the counters do not; chains.txt from an older run, naming no callers above `_roll`.)
