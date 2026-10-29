@@ -158,7 +158,7 @@
    "declared": "spec-fidelity"
   },
   "### T10 Approach (checklist part A)": {
-   "sha256": "fce52b2a6c9126dd81320af5ea07bcc8eec778e288a473595f2131499cb89e84",
+   "sha256": "65ad7a202673a9d9b0255c71627cc01e45b3052ae33a332f615ed6bf9fe32755",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
@@ -170,7 +170,7 @@
    "declared": "spec-fidelity"
   },
   "### T11 Approach (checklist part A)": {
-   "sha256": "46bb2436f718cb6e26915b02f7d6d08875dab281df15c4b37b0ec50df1d83992",
+   "sha256": "053b7a612171a293466bcc4d14e851fb4d094b620e3fec2f6241feb024950d6d",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
@@ -182,7 +182,7 @@
    "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "6d8067f7d608cacd6760fbd913bd33446afceb61c5f9f380db6eab33a78dddb0",
+   "sha256": "4313aecfd7fc6b79f95b790cc9c001036a2d55b2acbd7615211807b4cc27ef30",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
@@ -194,7 +194,7 @@
    "declared": "spec-fidelity"
   },
   "### T13 Approach (checklist part A)": {
-   "sha256": "454bfefc518d6420c40c515d6ff12005e2b808b84b673776d2821d30ff83b01a",
+   "sha256": "543f2e8745b1f346fa04ff07c9ee6212d7215e71ab55d0bfbbf9276a88634413",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
@@ -206,7 +206,7 @@
    "declared": "spec-fidelity"
   },
   "### T14 Approach (checklist part A)": {
-   "sha256": "7a26c23aaa24c811f92b9bd8ad4eee61f10cff1ad524880f5391432b9106ff56",
+   "sha256": "964e704b567d60f42732a282625b9cac9d5caea5252e695503b7161183d32257",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
@@ -1333,6 +1333,61 @@
      "summary": "Budget: one landing per family; one MODE BUDGET pass per stage per round, with the round cap's arbiter rulings",
      "class": "within",
      "why": "D4 (one task per family landing together) and D3/FR-013 (round cap, arbiter)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-29",
+   "blocks": [
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T12 Approach (checklist part A)",
+    "### T13 Approach (checklist part A)",
+    "### T14 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-refused-names",
+     "summary": "The screen refuses names defined under l7r/ read by ast: modules, functions, methods, classes, module- and class-level names (widened from functions, classes, module constants).",
+     "class": "within",
+     "why": "FR-015 names exactly this set (module, function, method, class, module- or class-level name, a local variable not one); SC-010 tests it; the GM's 2026-10-29 approval was of 'a check refusing any name defined in today's code'. The widening closes a gap rather than narrowing."
+    },
+    {
+     "id": "T10-passed-names",
+     "summary": "The screen passes the knobs' names and forms, the stages' names and the pool's manifests' keys.",
+     "class": "within",
+     "why": "FR-015's own exceptions (a knob's name or form, a stage's name, a manifest key), matching the GM's 'apart from knob names and the map's own keys'; a stage's name is the budget unit FR-015 keeps, so it cannot be refused."
+    },
+    {
+     "id": "T10-pruning-screen",
+     "summary": "The '- pruning:' screen above the reference's 4,000 a thing sits beside the name screen in the same tooling landing.",
+     "class": "within",
+     "why": "FR-016 requires the bundle screen to ask the pruning line above 4,000 a thing; SC-010 tests it together with the name screen. Enforces what was asked."
+    },
+    {
+     "id": "T10-order-exits",
+     "summary": "First of amendment 3, before any greenfield derivation is bundled; one tooling landing; red exits through make arbiter-ask.",
+     "class": "within",
+     "why": "The screen must exist before the derivations it screens; unchanged from the CLEAR text."
+    },
+    {
+     "id": "T11-T14-higher-pin",
+     "summary": "A greenfield budget higher than the standing pin leaves the standing pin in place, is named, and is pinned only with the GM's words (make budget-change).",
+     "class": "within",
+     "why": "Verbatim FR-015: 'a higher one leaves the standing pin in place, is named in the target, and is pinned only with the GM's words (make budget-change)'. Consistent with the GM's 2026-10-28 'Why would we be targeting something HIGHER?'."
+    },
+    {
+     "id": "T11-T14-source",
+     "summary": "Each contract from research/questions pages and knobs' forms, densities from the reference manifests, no l7r/ file read while writing.",
+     "class": "within",
+     "why": "FR-015 and the GM's 'looking at the reference maps but not the original code ... seems fine and even good'; unchanged from the CLEAR text."
+    },
+    {
+     "id": "T11-T14-pinning",
+     "summary": "Pinned on SOUND or the round arbiter's accept (FR-013), families in STAGES order after T10, T06 after all four.",
+     "class": "within",
+     "why": "FR-013 and FR-015 (pins on SOUND or the arbiter's accept); the target to the GM under FR-002 follows all stages; unchanged from the CLEAR text."
     }
    ]
   }
