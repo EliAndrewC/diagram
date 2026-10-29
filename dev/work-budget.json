@@ -165,7 +165,18 @@
    "status": "unbudgeted"
   },
   "windbreak": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/windbreak.derivation.md",
+   "verdict": "ask:444-T05-windbreak-round-3",
+   "items_at_20": 602776,
+   "items_at_40": 1205926,
+   "items_at_80": 2412593,
+   "pinned_on": "accept",
+   "derivation_sha": "37ffc8022386eeadf3c981a145a4a11860cca3cabd619edf1d4315adbbfa25ec",
+   "rounds": 2,
+   "spread": "560,720-662,234 at 20"
   },
   "bamboo": {
    "status": "budgeted",
@@ -230,7 +241,18 @@
    "items_at_80": 35370
   },
   "notice": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.99,
+   "derivation": "specs/444-work-budget-program/phases/notice.derivation.md",
+   "verdict": "ask:444-T05-notice-round-3",
+   "items_at_20": 3053468,
+   "items_at_40": 6073408,
+   "items_at_80": 12132218,
+   "pinned_on": "accept",
+   "derivation_sha": "3a984ce541c1f08d1d83b0f9783efc954af5e0fe0fb84172b22eaf2e7423d949",
+   "rounds": 2,
+   "spread": "2,428,205-3,169,773 at 20"
   },
   "labels": {
    "status": "budgeted",
