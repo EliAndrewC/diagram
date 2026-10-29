@@ -162,7 +162,18 @@
    "status": "unbudgeted"
   },
   "woodland": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.22,
+   "derivation": "specs/444-work-budget-program/phases/woodland.derivation.md",
+   "verdict": "ask:444-T05-woodland-round-4",
+   "items_at_20": 98628,
+   "items_at_40": 113148,
+   "items_at_80": 132948,
+   "pinned_on": "accept",
+   "derivation_sha": "9ed7b5b0ccba73031da514a3b10d8eef8301c2d01c08adc2cec77ddfe0aa2554",
+   "rounds": 3,
+   "spread": "17,204-478,313 at 20"
   },
   "windbreak": {
    "status": "budgeted",

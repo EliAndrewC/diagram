@@ -58,19 +58,19 @@
 | the thicket (thicket raster cells written and read) | over the run | 26,432 at 20, 34,968 at 40, 46,608 at 80 | the thicket's reach, 220 ft (`THICKET_REACH_FT`), rasterized once at the 14 ft sample pitch, pi x 220 squared over 196, 776 cells, each decided against its 64 ft cell's things and the cell, and summed (a summed-area table, 1 a cell); then the 16 ft lattice's 594 seats in the reach, each its 84 by 58 ft stand's box read from the table (4) | 80 households |
 | the belt (registry cells examined) | over the run | 9,680 at 20, 18,480 at 40, 36,450 at 80 | the belt's crowns, 84 on 81 clumps and 76 on 76, 1.04 a clump, the clumps carried at the near face's rate (x1.41: 76 at 20, 107 at 40, 155 at 80, so 80 at 20, 112 at 40, 162 at 80 crowns), each filtered against the structures in its 2 by 2 cells with their things and the cell, and written (1) | 80 households |
 | the view | over the run | 1,636 at 20, 2,958 at 40, 5,351 at 80 | each hard feature's box read once for the content's frame (1), and its 4 sides | 80 households |
-| the holes (bare samples cells written and read) | over the run | 120,212 at 20, 253,980 at 40, 535,428 at 80 | the covering things painted once onto the 25 ft samples - each small thing's cells, edge cells included, about 18,000 at 20 (x1.9, as the features), and the large polygons by one scanline pass, 2 a sample - then each sample one read (1); grouped into connected blocks by one breadth-first pass (5 a sample); the blocks counting-sorted by size (2 a sample: a size is a whole number at most the samples); each sample clothed once (1) | 80 households |
+| the holes (bare samples cells written and read) | over the run | 112,162 at 20, 238,685 at 40, 506,368 at 80 | the covering things painted once onto the 25 ft samples - the crowns, the scrub, the built parts and the way and water segments, 1,046 and 1,990 at 10 and 20 (x1.9: 1,990 at 20, 3,781 at 40, 7,184 at 80), each at most 5 cells of 25 ft, edge cells included (4.99 and 4.88 measured, the ceiling taken) (9,950 at 20, 18,905 at 40, 35,920 at 80), and the large polygons by one scanline pass, 2 a sample - then each sample one read (1); grouped into connected blocks by one breadth-first pass (5 a sample); the blocks counting-sorted by size (2 a sample: a size is a whole number at most the samples); each sample clothed once (1) | 80 households |
 
 So: 1 x 1, plus each step's row.
 
 ## Totals
 
-- at 20: 1 x 1 + 86040 + 796 + 1636 + 970 + 246924 + 7821 + 85347 + 7830 + 1751 + 10364 + 86913 + 4800 + 63360 + 26432 + 9680 + 1636 + 120212 = 762513
-- at 40: 1 x 1 + 216480 + 1228 + 2958 + 1068 + 609552 + 13035 + 178542 + 18018 + 2002 + 21426 + 181818 + 13120 + 173184 + 34968 + 18480 + 2958 + 253980 = 1742818
-- at 80: 1 x 1 + 543872 + 1980 + 5351 + 1174 + 1560068 + 22854 + 372344 + 40992 + 2300 + 44720 + 379176 + 35840 + 473088 + 46608 + 36450 + 5351 + 535428 = 4107597
+- at 20: 1 x 1 + 86040 + 796 + 1636 + 970 + 246924 + 7821 + 85347 + 7830 + 1751 + 10364 + 86913 + 4800 + 63360 + 26432 + 9680 + 1636 + 112162 = 754463
+- at 40: 1 x 1 + 216480 + 1228 + 2958 + 1068 + 609552 + 13035 + 178542 + 18018 + 2002 + 21426 + 181818 + 13120 + 173184 + 34968 + 18480 + 2958 + 238685 = 1727523
+- at 80: 1 x 1 + 543872 + 1980 + 5351 + 1174 + 1560068 + 22854 + 372344 + 40992 + 2300 + 44720 + 379176 + 35840 + 473088 + 46608 + 36450 + 5351 + 506368 = 4078537
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 1.21, past 1.15, for a stated reason: ground cover fills the view, and the view's area grows x2.16 a doubling (the hamlet spreads as it grows, measured 2,625,246 and 5,653,164 sq ft at 10 and 20), so the scrub's throws, the bare samples and the coppice's lattice grow with the view, not the households; and the rows that test a probe against the registry carry its things a cell at their measured rate (21 and 29 at 10 and 20), with no geometric ceiling - crowns, parts and way segments differ in size - and no finer index lowering the densest cell's count below what a probe of its size meets. The holes, the largest row by the view, read a painted raster instead, so the density no longer reaches them. The audit at 40 and 80 measures both.
+From 20 to 80 households the stage grows at an exponent of about 1.22, past 1.15, for a stated reason: ground cover fills the view, and the view's area grows x2.16 a doubling (the hamlet spreads as it grows, measured 2,625,246 and 5,653,164 sq ft at 10 and 20), so the scrub's throws, the bare samples and the coppice's lattice grow with the view, not the households; and the rows that test a probe against the registry carry its things a cell at their measured rate (21 and 29 at 10 and 20), with no geometric ceiling - crowns, parts and way segments differ in size - and no finer index lowering the densest cell's count below what a probe of its size meets. The holes, the largest row by the view, read a painted raster instead, so the density no longer reaches them. The audit at 40 and 80 measures both.
 
 
 ## Earlier findings
@@ -94,6 +94,7 @@ From 20 to 80 households the stage grows at an exponent of about 1.21, past 1.15
 - verdict-2, finding 6: fixed - the belt's crowns are 1.04 a clump, the measured
 - verdict-2, finding 7: fixed - the near face's samples past the cluster's ends scan every house, their own term
 - verdict-2, finding 8: fixed - the marsh index's figure recomputed from the measured edge
+- the arbiter's continue (ask:444-T05-hinterland-round-3): fixed - the holes' painted cells derived: the covering things, measured 1,046 and 1,990 (x1.9), at most 5 cells of 25 ft each (4.99 and 4.88 measured)
 
 ## Cheaper algorithms considered
 
