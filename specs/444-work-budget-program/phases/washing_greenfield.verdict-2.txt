@@ -1,0 +1,3 @@
+UNDERIVED - the water's reach row: "the about 3 crossed cells of a near household's reach" still has no source, and the 85% of households with no water in reach are charged no segments, though the cells they read reach about 210 ft from the house and hold segments to test.
+
+(Also: a count of segments kept on coarser cells, read before the 64 ft cells, would cut most empty reaches to a few reads - use it or say why not (S9); the second pruning line, on a group's mean, is left from the earlier version.)

@@ -1,0 +1,3 @@
+UNDERIVED - the water's reach row: "the about 4 of them a water crosses" has no source; the Bounds give 3.7 segments a crossed cell but not how many of a reach's cells a water crosses.
+
+(Also: the cuts row's log2 rounded up is 2, 3 and 4 for 3, 6 and 12 groups, not 1, 2 and 3, and halving at the median makes only a power of two of groups; the slack's share of steps along the bank unmeasured, one typical step already using it up; read the cells nearest first and stop once the best bank distance beats the next ring's nearest point (a priority queue), measuring the typical distance to water; the 5 by 5 cells a product of maxima - a 120 ft disk overlaps about 19.5 cells of 64 ft on average.)

@@ -1,0 +1,3 @@
+LOOSE - the start (households read, 2 a lot): rank the lattice's rows by their far corner's projection on the bearing, an upper bound each gives by its position, walk them from the bearing's far side and stop when the best exact value beats the next row's bound - a handful of lots on the cluster's facing edge, not every seated lot.
+
+(Also: the "first 2 cells" for the 7 ft off the homesteads tied to no geometry; the writes count "the 5 points and the gate" as 5; the spur filed in 2 cells but read in about 3; the spur's 7 ft from every garden charged nowhere.)
