@@ -69,6 +69,9 @@ budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND 
 budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$(WORDS)"
 
+budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict WITHIN and its counted operations at 40 and 80 households in the newest work-budget run at most its budget, recorded as the figures the push's ratchet holds (feature 444 FR-005)   PHASE=<stage> AUDIT=<MODE AUDIT verdict file>
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" accept "$(PHASE)" "$(AUDIT)"
+
 budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 

@@ -122,13 +122,16 @@ _APPROACH_HEAD = re.compile(r"^### (T\d+[a-z]?) Approach\b.*$", re.M)
 
 
 def missing_red_exit(section: str) -> str:
-    """The task whose approach block's item 6 routes no red result through `make arbiter-ask` (D35's wording), or ''."""
+    """The task whose approach block's item 6 routes no red result through `make arbiter-ask` (D35's wording), or ''. A feature-444
+    phase's red exit is FR-006's instead - rebuilt again, or the budget raised with the GM's words through `make budget-change` -
+    because a phase over its budget is never set down nor accepted by the arbiter (spec-fidelity's ruling on 444 T15 and T16,
+    2026-10-29), so that exit passes too."""
     for m in _APPROACH_HEAD.finditer(section):
         rest = section[m.end() :]
         nxt = re.search(r"^#{2,3} ", rest, re.M)
         block = rest[: nxt.start()] if nxt else rest
         item6 = re.search(r"^6\.\s.*?(?=^\d+\.\s|\Z)", block, re.M | re.S)
-        if not item6 or "make arbiter-ask" not in item6.group(0):
+        if not item6 or not ("make arbiter-ask" in item6.group(0) or "make budget-change" in item6.group(0)):
             return m.group(1)
     return ""
 
