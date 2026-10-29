@@ -148,6 +148,9 @@ pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
 pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
+# The semantic index's model runtime (feature 447): fastembed and ONNX Runtime. The model itself (BGE-M3's 8-bit build) is
+# fetched once into the mirror's .specify/model-cache/ on the host disk, so a new container reuses it.
+pip install --quiet --break-system-packages -r "$SKILL/requirements-semantic.txt"
 # The headless browser the interactive-map test drives (feature 134): Playwright's own Chromium,
 # fetched into ~/.cache/ms-playwright. Idempotent; the test skips with a reason when it is absent.
 python3 -m playwright install --with-deps chromium >/dev/null

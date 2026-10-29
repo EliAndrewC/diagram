@@ -1,0 +1,4 @@
+# The semantic index of the record and the archive (feature 447): the model's runtime, installed in every container.
+# Re-lock: pip-compile -c requirements.txt --output-file=requirements-semantic.txt requirements-semantic.in
+# (the -c keeps a dependency it shares with the runtime lock - numpy - at the runtime's version, as requirements-dev.in says)
+fastembed

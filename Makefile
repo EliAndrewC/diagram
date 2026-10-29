@@ -986,6 +986,13 @@ archive-sources: ## [project] archive every cited URL with no copy yet (resumabl
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
 
+semantic-index: ## [project] build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores)   [SHARD=<s>] [LIMIT=<n>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" build $(foreach s,$(SHARD),--shard "$(s)") $(if $(LIMIT),--limit "$(LIMIT)",)
+
+semantic-find: ## [project] the passages of the record and the archive nearest a question by meaning, in any language - each with its file, place and opening words; beside archive-find, never in its place (feature 447)   Q="<question>" [K=<n>]
+	@if [ -z "$(Q)" ]; then printf 'make semantic-find: Q="<question>" is required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" find "$(Q)" $(if $(K),--k "$(K)",)
+
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b" (every term required; one term per call to try alternatives)
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)

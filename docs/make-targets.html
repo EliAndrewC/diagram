@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 211 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 213 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -231,6 +231,8 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make review-paired-gate</td><td class=a>&ndash;</td><td>the settlement-review&#x27;s paired gate - green, running or red (exit 1 on red)</td></tr>
 <tr><td class=n>make review-verdict</td><td class=a><div class=ad><span class=an>UNIT=&lt;unit&gt;</span><span class=aw>the owed unit reviewed (its prompt&#x27;s UNIT: line; MAP= is the same field)</span></div><div class=ad><span class=an>VERDICT=&lt;v&gt;</span><span class=aw>PASS, NEEDS-WORK or NOT-REVIEWABLE</span></div><div class=ad><span class=an>FINDINGS=&lt;file&gt;</span><span class=aw>a JSON list of {&quot;id&quot;, &quot;severity&quot;, &quot;what&quot;}; ids default to F1, F2, ...</span></div></td><td>a review check&#x27;s LAST act - write the unit&#x27;s verdict record</td></tr>
 <tr><td class=n>make section-sha<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>F T</td><td>the digest of one task&#x27;s plan section, which a decision preflight records</td></tr>
+<tr><td class=n>make semantic-find</td><td class=a>K Q</td><td>the passages of the record and the archive nearest a question by meaning, in any language - each with its file, place and opening words; beside archive-find, never in its place (feature 447)</td></tr>
+<tr><td class=n>make semantic-index</td><td class=a>LIMIT SHARD</td><td>build or update the semantic index of the record and the archive - only new or changed passages embedded, its shards committed to the archive and pushed (feature 447; BGE-M3, run locally, half the cores)   [SHARD=&lt;s&gt;] [LIMIT=&lt;n&gt;]</td></tr>
 <tr><td class=n>make set-down</td><td class=a>F SET_DOWN_OK WHY</td><td>set a feature&#x27;s work down, so a turn may end with tasks open (feature 385 T70); refused while an open task&#x27;s part B has no arbiter ruling since (405), or while the 7-day usage is under the weekly soft cap (a goal&#x27;s, where one is still armed) unless the arbiter ruled a set-down ask (GM 2026-10-23, 10-24): F=385 WHY=&quot;awaiting the GM on the cohort trend&quot; [SET_DOWN_OK=&quot;&lt;reason&gt;&quot;]</td></tr>
 <tr><td class=n>make size-table</td><td class=a><div class=ad><span class=an>PLAN=&lt;svg&gt;</span><span class=aw>the plan&#x27;s SVG, relative to the skill directory or absolute</span></div></td><td>every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit</td></tr>
 <tr><td class=n>make source-outcome</td><td class=a>OUTCOME QUESTION SOUGHT URL</td><td>record what came of reading a source page on the host-wide sources-consulted ledger and the attempts log - every page a research pass reads (features 288, 312)</td></tr>
