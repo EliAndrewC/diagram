@@ -86,6 +86,17 @@ standards" (`request.md`).
   stage pinned on an accept, with its rounds and its totals' spread; and the rebuilt phase is held to the budget as any other (FR-005,
   FR-006) and audited (MODE AUDIT). This amends 443 FR-005's SOUND-only rule for this program's budgets; `make budget-set` takes the
   accept by its trigger (`ARBITER=ask:<id>`), refusing one the arbiter's log does not hold as an accept naming the stage.
+- **FR-014**: A budget counts the typical case, not the worst (the GM 2026-10-28, on a target of 15.3M at 40 households, above
+  what the roll counts today: "I thought the idea was to REDUCE the number of operations. Why would we be targeting something
+  HIGHER?"; the round arbiter's ruling ask:444-budget-standard). Each factor is the mean the stage's output shows (things per
+  area, parts per index cell, the candidates the contract's search order reaches), read from the reference rolls' manifests and
+  never from the counters or the code, times a slack of at most 2 (rubric S8); a factor at its worst case, and a cost per thing
+  placed above the reference's 4,000 with no named reason, are findings. `make budget-set` refuses a pin above the stage's
+  counted operations at 40 in the newest `make work-budget` run unless a reason is named, and prints the program per household
+  against the design's few thousand. The budgets pinned before FR-014 are re-scored to it - their algorithms and indexes stand,
+  their factors change - each re-scored stage re-judged once in MODE BUDGET, the stages pinned on an accept put to the round
+  arbiter as one batch, and lowered with `LOWER=1` (no GM words: a lowering asks nothing of him); the new target then goes to the
+  GM under FR-002.
 - **FR-012**: Any Rust spike or phase keeps the counters of 443 FR-001 as a macro behind the Cargo feature `counters`:
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
@@ -97,6 +108,9 @@ standards" (`request.md`).
 - **SC-008** (FR-013): a test refuses `make budget-set ARBITER=ask:<id>` when the arbiter's log holds no accept naming the stage and
   passes one that does; a test flags an accept-pinned budget whose derivation changed after its pin as owing the arbiter's ruling;
   each goes red with its condition deleted.
+- **SC-009** (FR-014): a test refuses `make budget-set` above the stage's count today at 40 without a reason and prints the program
+  per household at every pin, each going red with its condition deleted; and the target the GM approves is below today's counted
+  operations at 40 at every stage, or names the stage's reason.
 - **SC-002** (FR-003 to FR-006): each phase's checklist is ticked whole and its accepted figure at most its budget; the
   landing's size delta shows the old implementation removed, with no branch or flag left that selects it (`make
   dead-closure` checks for leftovers).
@@ -137,3 +151,5 @@ standards" (`request.md`).
   SC-008 for its two guards.
 - 2026-10-28, amendment 1's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all four items of round 1 resolved, no new
   contradiction; FR-013 matches the GM's "letting the arbiters acceptance pin it".
+- 2026-10-28, amendment 2 (the GM's question on the step-3 target, the round arbiter's ruling ask:444-budget-standard): FR-014 - a
+  budget counts the typical case times slack at most 2, the budgets pinned before it re-scored and lowered; SC-009 tests it.
