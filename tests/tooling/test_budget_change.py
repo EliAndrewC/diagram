@@ -34,6 +34,10 @@ bc = _load()
 def root(tmp_path: pathlib.Path) -> pathlib.Path:
     (tmp_path / "dev").mkdir()
     shutil.copy(REPO / bc.TABLE, tmp_path / bc.TABLE)
+    # The real table's stages, every one reset: the tests set budgets of their own on a table whose stages are the engine's.
+    table = bc.load(tmp_path)
+    table["stages"] = {k: {"status": "unbudgeted"} for k in table["stages"]}
+    bc.save(tmp_path, table)
     (tmp_path / "d.md").write_text("the derivation\n")
     for word in ("SOUND", "LOOSE", "UNDERIVED"):
         (tmp_path / f"{word}.txt").write_text(f"{word} - the reason\n\nthe body\n")
@@ -75,6 +79,37 @@ def test_a_sound_verdict_sets_a_first_budget_and_a_second_set_is_refused(root: p
     assert "no derivation at x.md" in bc.set_budget(root, "track", 1, 1, "x.md", "SOUND.txt")
     assert "no stage `nope`" in bc.set_budget(root, "nope", 1, 1, "d.md", "SOUND.txt")
     assert "reads nothing" in bc.set_budget(root, "track", 1, 1, "d.md", "missing.txt")
+
+
+def _run(root: pathlib.Path, stage: str, ops_at_40: float) -> None:
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+    (runs / "20261028T000000Z-x.json").write_text(json.dumps({"summary": {"stages": {stage: {"per": {"40": {"ops": ops_at_40}}}}}}))
+
+
+def test_a_pin_above_todays_count_needs_a_reason_and_every_pin_prints_the_program_per_house(root: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """ask:444-budget-standard (the GM 2026-10-28: "I thought the idea was to REDUCE the number of operations. Why would we be
+    targeting something HIGHER?"): a budget at 40 above what the stage counts today is refused without a reason, and every pin
+    prints the program's sum per household against the design's few thousand."""
+    _run(root, "web", 500)
+    items = ["--items-at-20", "10", "--items-at-40", "20", "--items-at-80", "40"]
+    assert "above what the stage counts today, 500" in bc.set_budget(root, "web", 40, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}), "800 > 500"
+    assert bc.load(root)["stages"]["web"]["status"] == "unbudgeted"
+    assert bc.main(["--root", str(root), "set", "web", "40", "1.0", "d.md", "SOUND.txt", *items, "--reason", "the web is laid twice today"]) == 0
+    assert bc.load(root)["stages"]["web"]["reason"] == "the web is laid twice today"
+    assert "a household against the design's few thousand" in capsys.readouterr().out, "the program per house, at every pin"
+    assert bc.set_budget(root, "track", 10, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}) == "", "no run counts track: no refusal"
+
+
+def test_a_budget_is_lowered_without_words_and_never_raised(root: pathlib.Path) -> None:
+    """A lowering re-pins (no GM words: it asks nothing of him); a raise through it is refused, and the lowering is logged."""
+    assert bc.set_budget(root, "web", 40, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}) == ""
+    assert "no budget to lower" in bc.set_budget(root, "track", 1, 1.0, "d.md", "SOUND.txt", {20: 1, 40: 1, 80: 1}, lower=True)
+    assert "would rise at 80 households" in bc.set_budget(root, "web", 30, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 60}, lower=True)
+    assert bc.set_budget(root, "web", 30, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}, lower=True) == ""
+    assert bc.load(root)["stages"]["web"]["per_thing"] == 30
+    row = json.loads((root / bc.LOG).read_text().splitlines()[-1])
+    assert row["what"] == "lowered" and row["to"]["80"] == 1200
 
 
 def test_a_change_needs_words_and_a_budget_and_is_logged_with_the_words(root: pathlib.Path) -> None:

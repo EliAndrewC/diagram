@@ -32,7 +32,9 @@ Ask four questions, in order:
 
 1. **Is each factor derived?** Every factor of the count - things placed, candidates per thing, checks per candidate, the work of
    each check, the slack - names its reason from the geometry or the contract (S1-S3, S7). A tuned retry count, a "safety
-   margin", or a figure stated with no reason is not derived. Slack is at most 2.
+   margin", or a figure stated with no reason is not derived. Slack is at most 2. Each factor is the TYPICAL case (S8): the
+   mean the stage's output shows, never the densest cell, the last candidate or a product of maxima - a factor taken at its
+   worst case is itself a finding (LOOSE), and so is a cost per thing placed above 4,000 with no named reason.
 2. **Is there a standard, cheaper algorithm?** A sweep, a grid or other spatial index, a priority queue, an incremental update,
    memoizing a value that does not change during a scan. If one would lower a factor, the derivation should use it or say why
    it cannot.
