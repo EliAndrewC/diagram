@@ -24,6 +24,13 @@ Python calls and seconds are recorded beside them, and neither is the budget.
   needs a stated reason, such as a bounded n.
 - **S7 Show the arithmetic.** A budget is items x candidates x checks x slack, slack at most 2. Each factor names its reason
   (S1-S3).
+- **S8 Count the typical case, not the worst.** A budget is what the stage should do on the rolls it is held to: each factor
+  at the mean the stage's output shows (things per area, parts per index cell, the candidates the contract's search order
+  reaches), never at the densest cell or the last candidate, and never a product of maxima. Slack (at most 2) covers what
+  varies around that mean. A cost per thing placed above the reference's 4,000 needs a named reason. WHY (the GM 2026-10-28,
+  on a target of 15.3M at 40 households, above what the roll counts today: "I thought the idea was to REDUCE the number of
+  operations. Why would we be targeting something HIGHER?"; ask:444-budget-standard): every factor taken at its worst at once
+  compounds, and a budget the stage already meets is no target.
 
 ## The reference: a homestead (S7 worked out)
 
@@ -34,7 +41,7 @@ homesteads phase derives each from the stage's contract; what this section fixes
 |---|---|---|
 | items | the houses the stage places: one per household | 1 per household |
 | candidates per house (S2) | the seats within the house's reach at the rule's spacing: about (reach / spacing)^2 sites of a grid over the reach, the ones the reach's shape keeps | about 20 |
-| neighbors per candidate (S1) | what one index cell and its ring hold at the stage's densest: the placed parts a cell the size of the largest clearance can contain | about 10 |
+| neighbors per candidate (S1) | what one index cell and its ring hold at the mean density the stage's output shows (S8): the placed parts a cell the size of the largest clearance holds | about 10 |
 | checks per neighbor | the parts of a homestead the program lays (house, yard, kura, sheds, fixtures), each tested once | about 10 |
 | slack | at most 2 (S7) | 1-2 |
 

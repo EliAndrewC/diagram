@@ -13,7 +13,7 @@ LOOSE or UNDERIVED refuses); every later change, and the program's whole-roll bu
 cannot do), and is logged with them in `dev/work-budget-changes.jsonl`. The table is a guard file: an edit other than through
 these targets needs `GUARD_EDIT_OK`.
 
-    budget_change.py set PHASE PER_THING EXPONENT DERIVATION VERDICT
+    budget_change.py set PHASE PER_THING EXPONENT DERIVATION VERDICT [--reason WHY] [--lower]
     budget_change.py change PHASE TO [--exponent E] --words WORDS
     budget_change.py program OPS_AT_40 EXPONENT --words WORDS
 """
@@ -85,17 +85,62 @@ def derivation_sha(root: Path, derivation: str) -> str:
     return hashlib.sha256((root / derivation).read_bytes()).hexdigest()
 
 
+RUNS = "dev/work-budget"  # `make work-budget`'s runs, `<stamp>-<code id>.json`, the newest last by name
+REFERENCE_PER_HOUSE = 4000  # request.md: "a sensible design needs a few thousand basic operations per house" (2,000-4,000, a GUESS)
+
+
+def today_at_40(root: Path, phase: str) -> float | None:
+    """The stage's counted operations at 40 households in the newest `make work-budget` run, or None when no run counts it."""
+    runs = sorted((root / RUNS).glob("*.json"))
+    try:
+        per = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]["stages"][phase]["per"]["40"]
+        return float(per["ops"])
+    except (IndexError, KeyError, TypeError, ValueError, OSError):
+        return None
+
+
+def budget_at(st: dict[str, Any], h: int) -> float:
+    return float(st["per_thing"]) * float(st[f"items_at_{h}"])
+
+
+def per_house(root: Path) -> str:
+    """The program's sum at 40 households per household, against the design's reference - printed at every pin (ask:444-budget-standard)."""
+    stages = load(root)["stages"].values()
+    total = sum(budget_at(st, 40) for st in stages if st.get("status") != "unbudgeted")
+    open_ = sum(1 for st in stages if st.get("status") == "unbudgeted")
+    return (
+        f"the program at 40 households: {total:,.0f} operations, {total / 40:,.0f} a household against the design's few thousand"
+        f" ({REFERENCE_PER_HOUSE:,} at most, request.md){f'; {open_} stage(s) not yet budgeted' if open_ else ''}"
+    )
+
+
 def set_budget(
-    root: Path, phase: str, per_thing: float, exponent: float, derivation: str, verdict: str, items: dict[int, int] | None = None, arbiter: str = "", spread: str = ""
+    root: Path,
+    phase: str,
+    per_thing: float,
+    exponent: float,
+    derivation: str,
+    verdict: str,
+    items: dict[int, int] | None = None,
+    arbiter: str = "",
+    spread: str = "",
+    reason: str = "",
+    lower: bool = False,
 ) -> str:
     """A first budget, from a SOUND verdict or the round arbiter's accept of the derivation (feature 444 FR-013, the GM 2026-10-28):
-    '' when set, else why not."""
+    '' when set, else why not. `lower` re-pins a budgeted stage at no more than its standing budget at any size (no GM words: a
+    lowering asks nothing of him, ask:444-budget-standard). A pin above the stage's counted operations at 40 in the newest `make
+    work-budget` run is refused unless `reason` names why: a budget the stage already meets is no target (the GM 2026-10-28: "I
+    thought the idea was to REDUCE the number of operations"); the count is read here, outside the bundle, so it anchors no
+    derivation."""
     table = load(root)
     st = _stage(table, phase)
     if isinstance(st, str):
         return st
-    if st["status"] != "unbudgeted":
-        return f"`{phase}` is {st['status']} already - a change needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\""
+    if st["status"] != "unbudgeted" and not lower:
+        return f"`{phase}` is {st['status']} already - a change needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\"; a lowering re-pins with LOWER=1"
+    if lower and st["status"] == "unbudgeted":
+        return f"`{phase}` has no budget to lower - a first one is set without LOWER"
     if not (root / derivation).is_file():
         return f"no derivation at {derivation}"
     if arbiter:
@@ -110,6 +155,19 @@ def set_budget(
         return f"the verdict at {verdict} reads {got or 'nothing'}, not SOUND - a first budget is set only from a SOUND MODE BUDGET verdict (`make work-budget-bundle MODE=budget PHASE={phase} DERIVATION={derivation}`)"
     if missing := [h for h in ITEM_SIZES if (items or {}).get(h) is None]:
         return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= (feature 444 D2)"
+    new = {h: per_thing * (items or {})[h] for h in ITEM_SIZES}
+    if lower and (raised := [h for h in ITEM_SIZES if new[h] > budget_at(st, h)]):
+        return (
+            f"`{phase}` would rise at {', '.join(str(h) for h in raised)} households ({', '.join(f'{new[h]:,.0f} against {budget_at(st, h):,.0f}' for h in raised)})"
+            f" - a raise needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\""
+        )
+    today = today_at_40(root, phase)
+    if today is not None and new[40] > today and not reason.strip():
+        return (
+            f"`{phase}`'s budget at 40 households, {new[40]:,.0f}, is above what the stage counts today, {today:,.0f} (the newest `make work-budget`"
+            f" run) - a budget the stage already meets is no target (ask:444-budget-standard). Re-derive at the typical case, or name why:"
+            f" REASON=\"<why this stage needs more than it does today>\""
+        )
     table["stages"][phase] = {
         "status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": arbiter or verdict,
         **{f"items_at_{h}": (items or {})[h] for h in ITEM_SIZES},
@@ -123,8 +181,11 @@ def set_budget(
             if arbiter
             else {}
         ),
+        **({"reason": reason.strip()} if reason.strip() else {}),
     }
     save(root, table)
+    if lower:
+        log(root, {"what": "lowered", "phase": phase, "from": {h: budget_at(st, h) for h in ITEM_SIZES}, "to": new, "verdict": arbiter or verdict})
     return ""
 
 
@@ -170,6 +231,8 @@ def main(argv: list[str] | None = None) -> int:
         s.add_argument(a)
     s.add_argument("--arbiter", default="", help="the round arbiter's accept of the derivation, by its trigger (feature 444 FR-013)")
     s.add_argument("--spread", default="", help="with --arbiter: the totals' spread across the rounds, `<low>-<high> at <households>`")
+    s.add_argument("--reason", default="", help="why a budget above the stage's count today at 40 is the target (ask:444-budget-standard)")
+    s.add_argument("--lower", action="store_true", help="re-pin a budgeted stage at no more than its standing budget at any size")
     for h in ITEM_SIZES:
         s.add_argument(f"--items-at-{h}", type=int)
     c = sub.add_parser("change")
@@ -187,8 +250,10 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(args.root)
     if args.cmd == "set":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
-        why = set_budget(root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread)
-        done = f"`{args.phase}` budgeted at {args.per_thing} per thing, exponent {args.exponent}"
+        why = set_budget(
+            root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread, args.reason, args.lower
+        )
+        done = f"`{args.phase}` {'lowered to' if args.lower else 'budgeted at'} {args.per_thing} per thing, exponent {args.exponent}\nbudget-set: {per_house(root)}" if not why else ""
     elif args.cmd == "change":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
         why = change_budget(root, args.phase, args.to, args.exponent, args.words, items)
