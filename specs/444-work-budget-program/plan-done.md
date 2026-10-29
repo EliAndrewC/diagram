@@ -153,3 +153,29 @@ hinterland, woodland, windbreak, bamboo, frame, notice, labels (seven, of D4's c
 
 **Performance work?** no - paper budgets.
 
+<!-- plan-archive: archived 2026-10-28 -->
+### T09 - the budgets re-scored to the typical case (FR-014)
+
+The 13 stages pinned on an accept re-scored to rubric S8 - each factor at the mean the reference rolls' output shows, times slack at
+most 2, their algorithms and indexes kept - judged once each in MODE BUDGET, and put to the round arbiter as one batch (`make
+arbiter-bundle BATCH=1`); a SOUND-pinned stage re-scored and re-judged only where `make budget-set`'s gate fires on its pin - a stage
+today's run counts nothing for included, re-scored like any other, its named reason covering only why its re-scored pin stands
+above today's zero (for uncounted work, naming that work); each lowered with `LOWER=1`. The 13 are the stages `dev/work-budget.json`
+records `pinned_on: accept` (read 2026-10-28).
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** Every stage's budget is what the stage should do on the rolls it is held to, so the target is lower than today.
+2. **The constraints.** FR-014; rubric S8; the round arbiter's ruling ask:444-budget-standard; FR-013 for the accept-pinned.
+3. **Where each comes from.** G: the GM, 2026-10-28 ("I thought the idea was to REDUCE the number of operations"), `request.md`'s last section.
+4. **Do they describe the world here?** Each stage's mean densities read from the reference rolls' manifests (`phases/items.md`), never the counters or the code.
+5. **The order.** After amendment 2; before T06 is put to the GM again.
+6. **The exits.** Green: every stage pinned at or under today's count at 40, or with its named reason. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; one MODE BUDGET pass a re-scored stage; one arbiter batch.
+9. **Done, measured.** `make budget-set` prints the program per household at or under the design's few thousand, or names why.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no - paper budgets.
+
