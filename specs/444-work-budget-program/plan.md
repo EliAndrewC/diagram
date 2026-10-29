@@ -146,9 +146,9 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 1. **The goal, in the world.** The comb field rebuilt to its greenfield derivation: the brook and its intake, the fan's outline, the comb's ditches and basins cut once with every rule asked before a basin is written, no repair pass.
 2. **The constraints.** FR-003 to FR-006; rubric S1-S9; `phases/field_greenfield.derivation.md` and its budget, 23,988 at 40, exponent 0.79; the research its contract cites (0005, 0017, 0053, 0054, 0059); the manifest keys today's stage writes (FR-004).
 3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4.
-4. **Do they describe the world here?** The comb field, the form the reference spec rolls - the polder, never dealt at random (0019), is a phase of its own after step 5's language decision (`phase: field_polder`, the round arbiter's ruling ask:444-T16-polder-budget), reached through the plan's declared archetype, never a flag or a fallback from the comb.
+4. **Do they describe the world here?** Every form the stage writes: the comb archetypes the reference spec rolls, and the polders, which get their own greenfield derivation and MODE BUDGET verdict before the rebuild, and a seed that draws one for the audit.
 5. **The order.** After `water_frame`; the last of step 4, then the assessment with the GM.
-6. **The exits.** Green: counted operations at most the budget at 40 and 80, `make cohort-landing` with no regressed seed and the fresh block's rate no worse, the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, the old comb code deleted whole (the old polder engine and what it alone reaches stand until `field_polder` deletes them; if the two share helpers so the comb cannot be deleted clean, the polder is done inside this task, ask:444-T16-polder-budget). Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
+6. **The exits.** Green: counted operations at most the budget at 40 and 80, `make cohort-landing` with no regressed seed and the fresh block's rate no worse, the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, all of the old field code - comb and polder - deleted. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
 7. **The search smell.** none
 8. **The budget.** Several landings behind one task is not allowed - one landing; `make cohort` after each increment; one MODE AUDIT pass a round.
 9. **Done, measured.** `make work-budget`: field's counted operations at 40 and 80 against 23,988 and 42,070.
@@ -166,22 +166,4 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 5. **What did the before and after show, and under what conditions?** Recorded at box 6: `make work-budget` and `make perf-ab` against main.
 6. **Did any map move, and does it still keep the research?** Yes - every comb map's basins and ditches move; the cohort, the claims round and settlement-review hold them to the research.
 
-
-### T17 - phase: field_polder, the polder field, after the language decision (ask:444-T16-polder-budget)
-
-Occasions: settlement-review on the pool's polder hamlets the rebuild moves; glyph-check only if a glyph is redrawn.
-
-### T17 Approach (checklist part A)
-
-1. **The goal, in the world.** The polder field - its ring dike, its sluices, its ring canal, its surveyed grid or dike-pond mosaic - rebuilt to a greenfield derivation of its own, its budget held at the push like any stage's.
-2. **The constraints.** FR-003 to FR-006, FR-015, FR-016; the round arbiter's ruling ask:444-T16-polder-budget (route (c) with (a)'s held row); 0019.
-3. **Where each comes from.** A: the round arbiter, ask:444-T16-polder-budget; G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going").
-4. **Do they describe the world here?** The pool's polder hamlets (Kuwabata among them); a `field_polder` reference spec added to `make work-budget`, scaled to the sizes the reference is rolled at.
-5. **The order.** After step 5's language decision, before `sink` in `STAGES` order, written in the language it picks.
-6. **The exits.** Green: its derivation SOUND or accepted, its row pinned (FR-013), its counted operations within it at 40 and 80, the cohort, the claims round and settlement-review, MODE AUDIT WITHIN, the old polder code deleted in its landing. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006).
-7. **The search smell.** none
-8. **The budget.** One landing; one MODE BUDGET pass a round; one MODE AUDIT pass a round.
-9. **Done, measured.** `make work-budget`'s `field_polder` row within its budget at 40 and 80.
-10. **Before moving a constant.** The research page each figure cites, read before it moves.
-11. **Before fitting things into room.** n/a
 

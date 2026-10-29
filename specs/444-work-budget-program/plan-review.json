@@ -1587,6 +1587,103 @@
      "why": "Text identical to what was last judged; it is design section 3 box 4 (today's measurement, perf-fanout), box 5 (no repair passes), box 6 (perf-ab recorded, not a gate) and S6. Its figures carry a one-shot label (date and method)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-29",
+   "blocks": [
+    "### T16 Approach (checklist part A)",
+    "### T17 - phase: field_polder, the polder field, after the language decision (ask:444-T16-polder-budget)",
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T16-4 / T17-5: polder moved out of step 4",
+     "summary": "T16 (phase: field) narrowed to the comb; the polder half of the field stage becomes T17, after step 5's language decision, written in the language it picks.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM approved step 4 as 'Phase 1, water_frame, and phase 2, field, through the checklist', with 'the language checkpoint after phase 2', and on 2026-10-29 said 'yes please do step 4 and then we can stop and assess'. The field stage writes comb and polder. Not physically impossible: the arbiter's own ask names route (a), a polder derivation, reference spec and held row inside T16, as feasible. Not implied by the GM's words. No purpose of the request is defeated by doing it. The grounds given are cost: a 1,700-line Python rewrite that step 5 may throw away. But the approved design already accepted that cost for all of phase 2 by putting it in Python before the language decision. 'Harder or more costly to implement' is excluded as a ground."
+    },
+    {
+     "id": "T16-6: old polder engine stands past field's acceptance",
+     "summary": "T16's exit deletes only the old comb code; the old polder engine and what it alone reaches stand until field_polder deletes them.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 and design 5.5 carry two clauses: the old implementation deleted in the same landing, AND no fallback path, no flag. The 'reached through the declared archetype, not a flag or fallback' argument answers only the second. The purpose of the first, 'a phase is done when the old code is gone', is that no part of a converted stage keeps running unconverted and unheld. Here old field-stage code runs polder maps, held by no budget row, from T16's landing until a T17 that comes after step 5 and possibly after FR-011's Rust tooling. That is the 'unwatched cost this program exists to close' that the arbiter's own ruling gives for rejecting route (b)."
+    },
+    {
+     "id": "T16-6 conditional: shared helpers pull the polder back into T16",
+     "summary": "If the comb and polder code share helpers so the comb cannot be deleted clean, the polder is done inside T16.",
+     "class": "within",
+     "why": "This branch restores what was asked (the field stage whole in step 4), so it narrows nothing. Noted for the record: the task's scope hangs on a fact (shared helpers) that the block does not measure, and a census of the shared imports would settle it before the task starts rather than at landing."
+    },
+    {
+     "id": "T16-6: step-4 assessment without the split disclosed",
+     "summary": "T16's exit says only 'a stop to assess goes to the GM'. It omits the arbiter's condition that the step-4 assessment state that the polder phase was split out and is still owed, and that its budget lies outside the approved 57,235.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked to 'stop and assess how things are going' after step 4. An assessment that does not say part of step 4 was deferred, with its budget outside the target he approved ('Yes I approve of that for now'), narrows what he is assessing without telling him. The ruling the block cites made this disclosure a condition of the split, and the block drops it. This needs fixing whatever is ruled on the split itself."
+    },
+    {
+     "id": "T17-1/2/4/6/9: field_polder held row",
+     "summary": "The polder gets its own greenfield derivation, MODE BUDGET verdict, a field_polder row measured on a polder reference spec (Kuwabata) added to make work-budget, pinned under FR-013, ratchet-held, old polder code deleted in its landing.",
+     "class": "within",
+     "why": "This holds the polder to a derived budget and deletes its old code. It serves the GM's 'rigorous standards ... algorithmically sensible number of computations', the ratchet (5.3) and FR-015's greenfield re-derivation. It enforces what was asked, so it is not unrequested scope. Naming note: FR-015 keeps 'the 23 budget units' as the record's stage names, and FR-003 names phases for their stage, while field_polder is not a STAGES entry (the arbiter wrote 'phase: field, polder'). Reconcile the label when the split is re-decided. T17-4's 'scaled to the sizes the reference is rolled at' should name them; the design rolls 10/20/40/80."
+    },
+    {
+     "id": "T17 heading: Occasions",
+     "summary": "settlement-review on the pool's polder hamlets the rebuild moves; glyph-check only if a glyph is redrawn.",
+     "class": "within",
+     "why": "Checklist box 6: 'the reviews its occasions owe (docs/reviews.md), such as settlement-review when a map's form changes'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-29",
+   "blocks": [
+    "### T16 Approach (checklist part A)",
+    "(removed) ### T17 - phase: field_polder, the polder field, after the language decision (ask:444-T16-polder-budget)",
+    "(removed) ### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-4 scope",
+     "summary": "T16 rebuilds every form the field stage writes: the comb archetypes the reference spec rolls AND the polders, inside this one task.",
+     "class": "within",
+     "why": "The request's step 4 is 'phase 2, field, through the checklist' and the GM's 2026-10-29 go-ahead is 'do step 4'. The field stage writes polders as well as combs, and FR-003/FR-005 make the phase one task whose old implementation is deleted whole in its landing. Putting the polder inside T16 is the plain reading; it reverses the deferral last ruled NOT LEGITIMATE."
+    },
+    {
+     "id": "T16-4 polder derivation",
+     "summary": "The polder gets its own greenfield derivation and MODE BUDGET verdict before the rebuild, and a seed that draws a polder is used for MODE AUDIT.",
+     "class": "within",
+     "why": "Checklist boxes 2, 3 and 7 and FR-015 (every stage re-derived greenfield) applied to a form the reference roll does not draw; FR-013 governs how a first budget is pinned. It adds holding work to the budget, not a carve-out from it."
+    },
+    {
+     "id": "T16-6 exits",
+     "summary": "Green exit requires the field's counted operations within budget at 40 and 80, cohort-landing, claims IN-STEP, owed reviews, MODE AUDIT WITHIN, eight boxes ticked, and ALL old field code - comb and polder - deleted; red exit is rebuild or a GM-worded raise, never set down or arbiter-accepted; the stop to assess goes to the GM.",
+     "class": "within",
+     "why": "Section 3 boxes 5-8, section 5 items 4-5, FR-005, FR-006, and the GM's 'then we can stop and assess how things are going'. The earlier exception letting the old polder engine stand is gone."
+    },
+    {
+     "id": "T16-8 one landing",
+     "summary": "One landing, make cohort after each increment, one MODE AUDIT pass a round.",
+     "class": "within",
+     "why": "Process economy inside the checklist; narrows nothing the GM asked."
+    },
+    {
+     "id": "T16-9 done measured",
+     "summary": "make work-budget: field at 40 and 80 against 23,988 and 42,070.",
+     "class": "within",
+     "why": "Section 1 and checklist box 6 measured against the GM-approved T06 target's field row."
+    },
+    {
+     "id": "T17 removed (both blocks)",
+     "summary": "The separate field_polder phase after the language decision is withdrawn.",
+     "class": "within",
+     "why": "Removing the task that deferred part of phase 2 past step 5 brings back into step 4 what the GM asked for there. Removing a narrowing narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
