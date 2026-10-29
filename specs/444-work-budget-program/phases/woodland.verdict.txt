@@ -1,36 +1,9 @@
-UNDERIVED - the gather's and the cuts' "mean 4 things a cell near a wood": its only source, `items.md`, is not in the bundle or the contract's Bounds, and it is held at 4 at 40 and 80 households although the derivation's own Indexes line says the registry grows 29, 40, 55 (x1.38 a doubling), with no reason given for the exception.
+LOOSE - the seats row's marsh term (derivation.md line 34): it charges each marsh-crossed seat 13 segments, which the contract gives only as the most a 64 ft cell holds; at the contract's typical 3.8 to 4.4 segments a crossed cell, the term is 0.15 x 3.8, about 0.6 a seat instead of 2, so the seats come to about 607 x 4.6, roughly 2,800 rather than 3,642, and the total about 12,700 rather than 16,072.
 
-**1. Is each factor derived?** Not all.
-- **The blocker: the mean 4 things a cell (derivation.md lines 35-36).** It sets both the gather (30 x (4 + 1) = 150) and the cuts (30 x 4 x 10 = 1200). It cites `items.md`, which is not in the bundle. The contract's Bounds (contract.md line 6) give only the densest 21 and 29 things a cell and the x1.38 rate. The Totals (lines 44-46) are 47,448 at every size. Earlier findings line 64 says verdict-3 finding 7 is closed ("the registry's things grow at their measured rate"), but the count does not apply that rate. That finding stays open.
-- **Smaller: "dry (2)" (line 34).** It rests on "crossing a marsh cell rarely", which is a word, not a rate. The 2 implies about 1 seat in 13 reads a crossed cell's 13 segments. That rate is not stated.
-- **Derived:** the ring 24; the sweep 48 + 113 (806.8 / 8 + 12); the 5 by 6 cells; the 873 ceiling's arithmetic (49,338 / 64 + 806.8 / 8 + 1); and the totals' arithmetic (5,931 x 4 x 2 = 47,448).
+**1. Is each factor derived?** Yes; every factor has a stated reason, but one is still taken at its maximum. Verdict-4's blocker is closed: the typical densities (3.4 and 3.3 things in an occupied cell, "held flat past 20") are in the contract's Bounds. Verdict-4's "dry (2)" finding is half closed: the rate at which seats fall in a marsh-crossed cell is stated (13,382 / 64 is about 209 cells; 209 x 4,096 / 5.65M is about 15 percent), but the segments per cell stayed at the densest 13 while the contract gives the typical 4.4 and 3.8 a crossed cell (S8); this blocks. Verdict-4's other worst-case findings are closed: items 2, the seats 607 (38,848 / 64), the cuts about 21 and 6, slack 2 on means. The ring is 24 and the sweep about 150; totals 2 x 4,018 x 2 = 16,072. Verdicts 1 to 3 closed.
 
-**S8: worst-case factors (LOOSE findings once the blocker is fixed).**
-- **The seats, 4,365.** The table's own worst-case column says "the largest parcel", and 873 is the lattice-point count at the worst alignment. Across alignments the mean count of lattice seats is exactly the area over 64; the perimeter-over-8-plus-1 term is the alignment's maximum. So the factor is at most 771 x 5 even at the largest parcel, and lower at the mean parcel's area, which the contract does not yet give.
-- **The cuts, 1,200.** This multiplies two maxima. It charges every gathered thing as reaching the ring dilated by 4.5 ft, though the parcels lie "on ground nothing else wanted" (contract line 3). It also gives each thing the largest thing's 10-row span (63 ft across). A tighter count is the things that actually straddle the dilated ring, times the mean thing's row span.
-- **Items, 4.** This is the knob's maximum. The measured rolls that draw a wood on the sheet draw 1 and 3 parcels.
-- **Slack, 2.** It is stacked on factors that are still at their maxima: the seats, the sweep (806.8 ft, "the longest ring"), the filing ("the largest parcel") and items. Verdict-3 accepted slack 1 because every factor was at its ceiling. S8 allows slack only for "what varies around that mean", and warns that worst cases taken together compound. This re-score doubled the slack and left the dominant factor at its ceiling, so the target went up, not down.
+**2. Is there a standard, cheaper algorithm?** None missed: an active-edge sweep of the lattice rows; the registry gathered once per parcel and its things cut from the rows they span; the marsh read from the hinterland's raster and index; no crown index, correctly, since a wood's seats are 8 ft apart, wider than any 4.5 ft crown.
 
-**2. Is there a standard, cheaper algorithm?** None missed.
-- The active-edge sweep is used.
-- The registry is gathered once per parcel and its things cut from the rows they span; this replaces the old 120 a seat.
-- There is no crown index, correctly: a wood's own seats are 8 ft apart, wider than its 4.5 ft crowns.
-- The marsh is read from the hinterland's raster.
-- Verdict-1 findings 1-4, verdict-2 findings 1-4 and verdict-3 findings 1-6 are closed as the Earlier findings state.
+**3. Is any factor padded?** The gather (line 35) gives 30 cells x (3.3 + 1) = 129 but states 150, the old 30 x (4 + 1). The gather and the filing (lines 35 and 37) both use 5 by 6 cells, the largest parcel's bounding box (247.2 by 258.8 ft) at its worst alignment, yet labeled "the typical parcel"; the derivation should measure the mean parcel's cell span or say why the maximum stands.
 
-**3. Is any factor padded?** None beyond its own stated reason.
-- Each figure is true to its reason. The excess is the worst-case choice under S8 above, not padding.
-- At about 15 operations a crown, the named reason (a whole wood of up to 771 crowns) covers the cost above 4,000 per parcel.
-
-**4. Is each figure read at its source's size and unit?** Mostly.
-- The 806.8 ft perimeter, the 247.2 by 258.8 ft box, the 49,338 sq ft area, the 64 ft and 25 ft cells and the 13 segments a cell are each used as the contract states them.
-- The exception is the mean 4. Its household count is not stated, and it is carried to 40 and 80 against the contract's rate, as under question 1.
-
-Files read:
-- /tmp/l7r-check/work-budget-budget-woodland/MANIFEST.md
-- /tmp/l7r-check/work-budget-budget-woodland/rubric.md
-- /tmp/l7r-check/work-budget-budget-woodland/contract.md
-- /tmp/l7r-check/work-budget-budget-woodland/derivation.md
-- /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-1.txt
-- /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-2.txt
-- /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-3.txt
+**4. Is each figure read at its source's size and unit?** Mostly: 607 = 38,848 / 64; the 715 ft mean perimeter; the 64 ft and 25 ft cells; the 9 ft band; the 15 percent share. The marsh edge (13,382 ft) and the view (5.65M sq ft) carry no household count; the share holds only if both were measured at the same size, which the derivation assumes without saying.

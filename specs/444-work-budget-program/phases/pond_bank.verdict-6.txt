@@ -1,0 +1,11 @@
+UNDERIVED - the crop (outline index cells examined, 1): reading one 38.6 ft cell that holds 0 outline segments can only tell whether the trunk is inside the crop if the field's index marks each cell the outline does not cross as inside or outside. Neither the contract nor the derivation says it does. This is verdict-4 finding 3, still open since verdict-5.
+
+**1. Is each factor derived?** Items derived: the ring is the radii plus 50 ft (reeds 44 + crown 6), perimeter about 1008, 1300 and 1704 ft, floor(perimeter / 30) gives 33, 43 and 56, radii read as radii. Brook (2) derived: 1 - (31.6/38.6)^2 = 0.33; (1 + 7/38.6)^2 = 1.40 cells plus 1.4 x 0.15 segments, about 1.6, rounded up to 2. Pond, jitter, kind, roll, slack derived; slack 2. Arithmetic holds: 11 a seat, 22 with slack, totals 727, 947 and 1233. Crop UNDERIVED: one cell read with no segments settles nothing unless the cell carries an inside/outside flag; without one the real test is a point-in-polygon pass over the outline, which breaks S3. Standing grid's look (4) taken at its worst case: 4 is the most cells a 12 ft crown meets in 24 ft cells; the mean is 1.5 x 1.5 = 2.25 (3 in whole figures) - LOOSE under S8.
+
+**2. Is there a standard, cheaper algorithm?** Reading only the cells the crown's bounding box meets, floor((x-r)/c) to floor((x+r)/c), brings the look to a mean of 2.25. Everything else is already the cheap choice.
+
+**3. Is any factor padded?** The look's corner is paid twice (the look takes the corner case, and the slack row also names "a cell's corner"). Lanes (1), minor: rests on a mean over cells a lane crosses (contract 1.3 and 1.9), not measured seat by seat round the pond like the others; it errs high. Pond, minor: "one exact distance from the ellipse" is iterative; a parametric test against the fringe ellipse is one operation, and the figure stays 1 either way.
+
+**4. Is each figure read at its source's size and unit?** Yes. This closes verdict-5's finding on means taken only over occupied cells, and its doubt about scaling footprints by area.
+
+**Earlier findings:** all 18 lines are the same boilerplate ("carried ... its notes stand"), checked against the body instead. Closed in the body: verdict-1 through verdict-3, verdict-4 findings 1, 2 and 4, verdict-5 finding 1. Still open: verdict-4 finding 3 (the crop's inside/outside test).
