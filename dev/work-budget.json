@@ -159,16 +159,16 @@
   "hinterland": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 1.01,
-   "derivation": "specs/444-work-budget-program/phases/hinterland.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 393166,
-   "items_at_40": 784872,
-   "items_at_80": 1584946,
+   "exponent": 0.97,
+   "derivation": "specs/444-work-budget-program/phases/hinterland_greenfield.derivation.md",
+   "verdict": "ask:444-T14-hinterland_greenfield-round-3",
+   "items_at_20": 10029,
+   "items_at_40": 19058,
+   "items_at_80": 38239,
    "pinned_on": "accept",
-   "derivation_sha": "3bff7e76db46fcd647b1d970c856ee97f2707180303aa38d09f0f8abc1d3dd5f",
-   "rounds": 5,
-   "spread": "393,166-458,278 at 20"
+   "derivation_sha": "87086195885eba2fc7363750f4b4a32c8e9b1f6fd28b2918564cdf05817a5792",
+   "rounds": 2,
+   "spread": "10029-14668 at 20"
   },
   "woodland": {
    "status": "budgeted",

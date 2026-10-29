@@ -1,0 +1,3 @@
+UNDERIVED - the exact counts' gap factor ("about 3" gaps at 17 reads, 51): nothing in the Bounds says how many gaps have a window bound above the best exact count, and the reason given (the middle gaps' windows tie) is where the stop fires latest; the gaps examined can grow with the map.
+
+(Also: read each exact count from the summed occupancy already built - a 250 ft disc is a union of at most three rectangles of lots, 12 reads - folding the bound and the count into one; the bounds row's reading every cell and gap needs its S9 reason; the water term charges every probe cell as uncrossed; the pruning line ties the caption search back into the gap loop.)

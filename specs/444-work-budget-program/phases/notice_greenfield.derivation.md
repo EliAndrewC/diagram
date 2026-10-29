@@ -9,11 +9,10 @@
 
 ## The algorithm
 
-    the siting read (1); on `center`: the lots' occupancy summed over the lattice's span once (2 a cell), so a gap's 5 by 5
-        window count - an upper bound on the buildings within 250 ft of any seat on it - is 4 reads; each lane gap's bound taken
-        (4) and the gaps bucketed by it (1)
-    in bound order: each gap's exact count, the lots within 250 ft of its middle from the lattice (17), until the best exact count
-        reaches the next gap's bound; then on the leading gap only, its verge's seats from the middle out at 12 ft, 6 ft off the
+    the siting read (1); on `center`: the lots' occupancy summed over the lattice's span once (2 a cell); each lane gap's exact
+        count - the lots whose middles lie within 250 ft of the gap's middle, on the lattice a union of at most three rectangles of
+        lots - read from the sums (12) and the best kept (1)
+    then on the best gap only, its verge's seats from the middle out at 12 ft, 6 ft off the
         tread, until one is clear and its caption fits - each seat's probe asked of the registry and the water index's cells it
         overlaps, the view and the placard, and a clear seat's caption boxes in rank order, ring by ring, until the first clean
         one; a clear seat whose caption fits at no ring in reach is passed on (the next gap is taken only if no seat on this one fits)
@@ -31,25 +30,24 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 1 | the board, once a map | always 1 |
-| the bounds (the lots' lattice cells examined) | per item | 213 at 20, 436 at 40, 819 at 80 | the occupancy summed over the span's 54, 108 and 192 cells (2 each), each lane gap's window read (4) and bucketed (1): 108 + 21 x 5 = 213, 216 + 44 x 5 = 436, 384 + 87 x 5 = 819 | a cluster of many short rows |
-| the exact counts | per item | 51 | the gaps taken in bound order until the best exact count reaches the next bound, about 3 on a lattice where the middle gaps' windows tie (17 each) | a long, even cluster |
+| the counts (the lots' lattice cells examined) | per item | 381 at 20, 788 at 40, 1515 at 80 | the occupancy summed over the span's 54, 108 and 192 cells (2 each), and each of the 21, 44 and 87 lane gaps' exact count from the sums (12) and its comparison with the best (1): 108 + 21 x 13, 216 + 44 x 13, 384 + 87 x 13 | a cluster of many short rows |
 | the seats (registry and water index cells examined) | per item | 368 | the probes: 1 / 0.78 = 1.3 seats tried a clear seat (S8, 1/p), each its probe in 1.37 cells at the mean 5.5 things and the cell (8.9), the water in the same cells (1.4), the view and the placard (2): 12.3, over 1.08 clear seats (1 / 0.93), 17.3; the caption: 15.9 boxes at a clear seat that finds one and 0.08 x 128 = 10 at the ones passed on, 26 boxes, each in 2.07 cells at 6.5 (13.5): 351 | a lane lined with yards |
 | the writes | per item | 3.4 | the board written (1) and filed in 1.37 cells (1.4), its caption's seat (1) | always 3.4 |
 | slack | per item | 1 | the bounds and the seats' share are measured | not applicable |
 
-So: 1 x (the bounds + 51 + 368 + 3.4 + 1) x 1, the siting read the last 1.
+So: 1 x (the counts + 368 + 3.4 + 1) x 1, the siting read the last 1.
 
-- pruning: the gaps are taken in order of an upper bound read from the lattice's summed occupancy, and the search stops once the best exact count with a fitting caption reaches the next gap's bound (rubric S9)
+- pruning: every lane gap's exact count is read once from the summed occupancy (12 reads); the lattice holds each lot seated or not and no count, so the busiest gap is a maximum over every gap and every cell is read once to sum them - a bound from the sums costs the same reads as the exact count it would skip; the seats are searched on the best gap alone
 
 ## Totals
 
-- at 20: 1 x (213 + 51 + 368 + 3.4 + 1) x 1 = 636.4
-- at 40: 1 x (436 + 51 + 368 + 3.4 + 1) x 1 = 859.4
-- at 80: 1 x (819 + 51 + 368 + 3.4 + 1) x 1 = 1242.4
+- at 20: 1 x (381 + 368 + 3.4 + 1) x 1 = 753.4
+- at 40: 1 x (788 + 368 + 3.4 + 1) x 1 = 1160.4
+- at 80: 1 x (1515 + 368 + 3.4 + 1) x 1 = 1887.4
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.48: the bounds over the lattice's span and its gaps.
+From 20 to 80 households the stage grows at an exponent of about 0.67: the counts over the lattice's span and its gaps.
 
 ## Earlier findings
 
@@ -57,11 +55,16 @@ From 20 to 80 households the stage grows at an exponent of about 0.48: the bound
 - verdict-1, finding 2: fixed - the exact counts first, the seats searched on the leading gap only
 - verdict-1, finding 3: fixed - the lattice holds each lot seated or not, no count, so the occupancy is summed here
 - verdict-1, finding 4: fixed - the spans and gaps measured on the 20-household manifest with the lots grown on to 40 and 80
+- verdict-2, finding 1: fixed - every gap's exact count read once from the summed occupancy, the best kept; no bound, no count of gaps examined to source
+- verdict-2, finding 2: fixed - the exact count a union of at most three rectangles of lots, 12 reads
+- verdict-2, finding 3: fixed - the pruning line gives the reason every cell and gap is read: the lattice holds no counts, and a bound costs the count's own reads
+- verdict-2, finding 4: disputed - the probe's 1.37 cells lie on a lane's verge inside the cluster, where the lots' boxes were clear of every water when seated, so its cells are uncrossed
+- verdict-2, finding 5: fixed - the seats searched on the best gap alone, the pruning line no longer tying the caption into a gap loop
 
 ## Cheaper algorithms considered
 
 - sweep: used - a gap's verge walked out from its middle at 12 ft
 - grid or spatial index: used - the lots' lattice for the counts, the registry and the water index for each seat
-- priority queue: used - the gaps bucketed by their bound and taken in order
+- priority queue: not used - each gap's exact count is as cheap as a bound, so the best is kept in one pass
 - incremental update: used - the occupancy summed once, each window four reads
 - memoizing what a scan does not change: used - the summed occupancy read by every gap's window
