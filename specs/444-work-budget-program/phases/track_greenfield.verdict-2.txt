@@ -1,0 +1,1 @@
+SOUND - every factor is a measured length or lattice span from the reference rolls, read at its stated size, with slack 1; no selection row to prune, and the cheaper algorithms used or shown not to lower a factor; about 157 operations a map at 20.

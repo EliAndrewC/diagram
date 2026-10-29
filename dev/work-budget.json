@@ -73,17 +73,13 @@
   "track": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.54,
-   "derivation": "specs/444-work-budget-program/phases/track.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 1440,
-   "items_at_40": 2090,
-   "items_at_80": 3028,
-   "pinned_on": "accept",
-   "derivation_sha": "76443a07c2ce306da1dba414d494b2c9977a06463e4007c3059ab53d5df63882",
-   "rounds": 4,
-   "spread": "1,440-2,422 at 20",
-   "reason": "track's count today, 69 at 40, covers only the few operations its counters reach; the budget counts every cell its rays, corridor and squaring read, the work its rebuild's counters must cover (S5) and MODE AUDIT holds"
+   "exponent": 0.52,
+   "derivation": "specs/444-work-budget-program/phases/track_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-2.txt",
+   "items_at_20": 157,
+   "items_at_40": 223,
+   "items_at_80": 321,
+   "reason": "today's counters cover almost nothing of the stage; one track and its spur"
   },
   "appurtenances": {
    "status": "budgeted",
