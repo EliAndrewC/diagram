@@ -243,17 +243,17 @@
   "frame": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.5,
-   "derivation": "specs/444-work-budget-program/phases/frame.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 5202,
-   "items_at_40": 7826,
-   "items_at_80": 12242,
+   "exponent": 0.52,
+   "derivation": "specs/444-work-budget-program/phases/frame_greenfield.derivation.md",
+   "verdict": "ask:444-T14-frame_greenfield-round-3",
+   "items_at_20": 445,
+   "items_at_40": 637,
+   "items_at_80": 925,
    "pinned_on": "accept",
-   "derivation_sha": "7168abd56b7b66a6a51eabb51e228a8d9f263dbf1f73c55381a71886f0981aa8",
-   "rounds": 3,
-   "spread": "5,202-14,669 at 20",
-   "reason": "frame's count today, 8 at 40, counts its few counted sites alone; the view's features are read in uncounted code"
+   "derivation_sha": "adb7f6187e3fc65da533221ac936a9506a504791f837cc8f49e5c89df3199b5a",
+   "rounds": 2,
+   "spread": "445-579 at 20",
+   "reason": "today's counters cover almost nothing of the frame - its view and its title placard's search go uncounted - so its count of 8 is no measure of its work"
   },
   "notice": {
    "status": "budgeted",
