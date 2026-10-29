@@ -23,22 +23,25 @@
 | items | per item | 6 at 20, 12 at 40, 24 at 80 | the stands, one a seat | 80 households |
 | the polygon | per item | 4 | its 4 points written | always 4 |
 | the marks | per item | 14 | at most 7 marks, each its jitter drawn (1) and its strokes written (1) | 7 marks |
-| the filing (registry cells written) | per item | 5 | recorded (1) and filed in at most 4 cells (4) | always 5 |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| the filing (registry cells written) | per item | 3 | recorded (1) and filed in the cells a 16 by 22 ft stand covers at a typical spot on the 64 ft grid, (1 + 16/64)(1 + 22/64) = 1.68, rounded up 2 | the typical stand |
+| slack | per item | 1 | what varies around the typical case (S8): the spread around the mean: a stand straddling a corner files in 4 cells, 23 against 21 | a corner stand |
 
 So: the stands x (4 + 14 + 5) x 1.
 
 ## Totals
 
-- at 20: 6 x (4 + 14 + 5) x 1 = 138
-- at 40: 12 x (4 + 14 + 5) x 1 = 276
-- at 80: 24 x (4 + 14 + 5) x 1 = 552
+- at 20: 6 x (4 + 14 + 3) x 1 = 126
+- at 40: 12 x (4 + 14 + 3) x 1 = 252
+- at 80: 24 x (4 + 14 + 3) x 1 = 504
 
 - FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
 
 ## Earlier findings
 
+- verdict-2, finding 1: fixed - the filing at the typical 1.68 cells a stand, 3 with its record (the batch's accept, ask:444-T09-rescore-batch)
 - verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+
+- the batch's accept (ask:444-T09-rescore-batch): the filing at its typical 1.68 cells, as verdict-2 named
 
 ## Cheaper algorithms considered
 

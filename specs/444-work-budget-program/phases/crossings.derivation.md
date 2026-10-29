@@ -33,10 +33,10 @@
 | items | per item | 9 at 20, 14 at 40, 21 at 80 | the decks, one a crossing of a way and a water: the comb's measured. A polder's other waters are the same channels and ditches a comb has; its toe collector's crossings are the caps, which `polder_crossing_caps` places by the seat's side, their own row, so no crossing of the collector is decked twice | 80 households |
 | the deck (registry cells written) | per item | 5 | recorded (1) and filed in at most 4 cells, a deck 10 by 4 ft (4) | always 5 |
 | slack | per item | 2 | what varies around the typical case (S8): a way along a ditch, a crowded bank | a way along the water |
-| the water index (cells written) | once | 2,149 at 20, 2,976 at 40, 4,132 at 80 | each water segment walked through the cells it crosses: the waters' length at root 2 over 64 ft, plus 3 a segment (a grid walk crosses one cell more than the grid lines it crosses each way) | 80 households |
-| the ways' walk (water index cells examined) | over the run | 3,390 at 20, 6,675 at 40, 13,160 at 80 | the ways' cells, their length at root 2 over 64 ft plus 3 a segment (678 at 20, 1,335 at 40, 2,632 at 80), each read (1) with the mean 4 water segments a crossed cell (`items.md`), the cell crossed taken whole (4) | the typical way |
-| the sluice gates (water index and registry cells) | over the run | 2,938 at 20, 3,842 at 40, 4,972 at 80 | the dike's recorded cuts (26 at 20, 34 at 40, 44 at 80), each snapped onto a watercourse within 20 ft (a radius, which reaches into at most 2 by 2 cells of 64 ft about the cut, each read with its at most 26 segments, 4 x 27, 108), recorded (1) and filed in at most 4 cells, a gate 20 ft in span (4) | a polder |
-| the caps (registry cells examined) | over the run | 2,268 at 20, 2,772 at 40, 3,402 at 80 | the polder's caps (18 at 20, 22 at 40, 27 at 80), each its seat on its collector (1), its plank's - a cap is a plank, no wider than its collector, under 64 ft - 2 by 2 cells with their 29 things and the cell (120), recorded and filed (5) | a polder |
+| the water index (cells written) | once | 1,001 at 20, 1,436 at 40, 2,070 at 80 | each segment walked through the cells it crosses at a random angle: the waters' length x (4/pi) over 64 ft, plus 1 a segment (it visits one more cell than the grid lines it crosses) | 80 households |
+| the ways' walk (water index cells examined) | over the run | 1,790 at 20, 3,475 at 40, 6,760 at 80 | the ways' cells at a random angle, their length x (4/pi) over 64 ft plus 1 a segment (358 at 20, 695 at 40, 1,352 at 80), each read (1) with the mean 4 water segments a crossed cell (4) | the typical way |
+| the sluice gates (water index and registry cells) | over the run | 650 at 20, 850 at 40, 1,100 at 80 | the dike's recorded cuts (26 at 20, 34 at 40, 44 at 80), each snapped onto a watercourse from the 4 cells its 20 ft radius reaches, each with the mean 4 water segments and the cell (20), recorded and filed (5) | a polder |
+| the caps (registry cells examined) | over the run | 468 at 20, 572 at 40, 702 at 80 | the polder's caps (18 at 20, 22 at 40, 27 at 80), each its seat (1), its plank's 2 by 2 cells with the mean 4 things and the cell (20), recorded and filed (5) | a polder |
 | the ditch decks (spots marked) | over the run | 36 at 20, 56 at 40, 84 at 80 | each deck appended to its ditch (1) and the at most 3 spots within the spacing of it marked (3) | every deck on a ditch |
 | the plank spots (registry cells examined) | over the run | 704 at 20, 1,100 at 40, 1,782 at 80 | the spots, floor of each ditch's length over 300 ft plus 1 (32 at 20, 50 at 40, 81 at 80); each its point (1), its flag (1), and its plank's 2 by 2 cells with the mean 4 things and the cell (20) | the typical ditch |
 | the planks laid (registry cells written) | over the run | 160 at 20, 250 at 40, 405 at 80 | each plank recorded (1) and filed in at most 4 cells (4) | every spot planked |
@@ -45,12 +45,13 @@ So: the decks x 5 x 2, plus the water index, the ways' walk, the sluice gates, t
 
 ## Totals
 
-- at 20: 9 x 5 x 2 + 2149 + 3390 + 2938 + 2268 + 36 + 704 + 160 = 11735
-- at 40: 14 x 5 x 2 + 2976 + 6675 + 3842 + 2772 + 56 + 1100 + 250 = 17811
-- at 80: 21 x 5 x 2 + 4132 + 13160 + 4972 + 3402 + 84 + 1782 + 405 = 28147
+- at 20: 9 x 5 x 2 + 1001 + 1790 + 650 + 468 + 36 + 704 + 160 = 4899
+- at 40: 14 x 5 x 2 + 1436 + 3475 + 850 + 572 + 56 + 1100 + 250 = 7879
+- at 80: 21 x 5 x 2 + 2070 + 6760 + 1100 + 702 + 84 + 1782 + 405 = 13113
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - the gates and caps at the mean 4 a cell; the grid walks at (4/pi) L/64 + 1 a segment (the batch's accept, ask:444-T09-rescore-batch); the comb and polder rows both held, the reference rolls a valley comb, so the polder rows are a known looseness for the audit
 - verdict-1, finding 1: fixed - the decks within a plank's spacing are read from a flag each deck marks on its ditch's spots as it is laid; no registry reach
 - verdict-1, finding 2: fixed - the sluice gates are a row, each recorded and filed; the toe collector's caps are their own row (verdict-2, finding 4)
 - verdict-1, finding 3: fixed - a deck is 10 by 4 ft and a plank no wider than its ditch, each under 64 ft, in the Bounds

@@ -1,0 +1,8 @@
+{"date": "2026-10-28", "what": "lowered", "phase": "water_frame", "from": {"20": 40.0, "40": 40.0, "80": 40.0}, "to": {"20": 40.0, "40": 40.0, "80": 40.0}, "verdict": "specs/444-work-budget-program/phases/water_frame.verdict.txt"}
+{"date": "2026-10-28", "what": "lowered", "phase": "waterward", "from": {"20": 1.0, "40": 1.0, "80": 1.0}, "to": {"20": 1.0, "40": 1.0, "80": 1.0}, "verdict": "specs/444-work-budget-program/phases/waterward.verdict.txt"}
+{"date": "2026-10-28", "what": "lowered", "phase": "pond_stock", "from": {"20": 1.0, "40": 1.0, "80": 1.0}, "to": {"20": 1.0, "40": 1.0, "80": 1.0}, "verdict": "specs/444-work-budget-program/phases/pond_stock.verdict.txt"}
+{"date": "2026-10-28", "what": "lowered", "phase": "burial", "from": {"20": 3.0, "40": 3.0, "80": 3.0}, "to": {"20": 3.0, "40": 3.0, "80": 3.0}, "verdict": "specs/444-work-budget-program/phases/burial.verdict.txt"}
+{"date": "2026-10-28", "what": "lowered", "phase": "bamboo", "from": {"20": 138.0, "40": 276.0, "80": 552.0}, "to": {"20": 126.0, "40": 252.0, "80": 504.0}, "verdict": "ask:444-T09-rescore-batch"}
+{"date": "2026-10-28", "what": "lowered", "phase": "labels", "from": {"20": 6.0, "40": 6.0, "80": 6.0}, "to": {"20": 6.0, "40": 6.0, "80": 6.0}, "verdict": "ask:444-T09-rescore-batch"}
+{"date": "2026-10-28", "what": "lowered", "phase": "frame", "from": {"20": 11624.0, "40": 19864.0, "80": 35370.0}, "to": {"20": 5202.0, "40": 7826.0, "80": 12242.0}, "verdict": "ask:444-T09-rescore-batch"}
+{"date": "2026-10-28", "what": "lowered", "phase": "crossings", "from": {"20": 29806.0, "40": 52111.0, "80": 94046.0}, "to": {"20": 4899.0, "40": 7879.0, "80": 13113.0}, "verdict": "ask:444-T09-rescore-batch"}

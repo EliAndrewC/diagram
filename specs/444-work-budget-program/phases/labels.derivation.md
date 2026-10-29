@@ -22,22 +22,25 @@ No index is read or built: the board's caption seat was proved against the finis
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 1 | the captions, the board's alone | always 1 |
-| the caption (written) | per item | 6 | its words (1), box (1), angle (1), lines (1), leader (1), recorded (1) | always 6 |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
+| the caption (written) | per item | 5 | its words (1), box (1), angle (1), lines (1), recorded (1); the reference manifest's caption carries no leader (its record holds the box, the board's box and the angle), so a leader is written only off the preferred offset, inside the slack | the typical board |
+| slack | per item | 1.2 | what varies around the typical case (S8): the spread around the mean - a caption off its preferred offset writes its leader, one write more of the 5, so at most 1.2 | a caption off its offset |
 
 So: 1 x 6 x 1.
 
 ## Totals
 
-- at 20: 1 x 6 x 1 = 6
-- at 40: 1 x 6 x 1 = 6
-- at 80: 1 x 6 x 1 = 6
+- at 20: 1 x 5 x 1.2 = 6
+- at 40: 1 x 5 x 1.2 = 6
+- at 80: 1 x 5 x 1.2 = 6
 
 - FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
 
 ## Earlier findings
 
+- verdict-2, finding 1: fixed - the leader read from the reference manifest's caption, which carries none, so 5; the slack covers a caption off its preferred offset
 - verdict-1, finding 1: fixed - carried from the verdict as it stood (its notes stand); the derivation re-scored to the typical case under FR-014
+
+- the batch's accept (ask:444-T09-rescore-batch): the leader read from the reference manifest's caption, which carries none
 
 ## Cheaper algorithms considered
 

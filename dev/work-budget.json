@@ -12,7 +12,8 @@
    "verdict": "specs/444-work-budget-program/phases/water_frame.verdict.txt",
    "items_at_20": 1,
    "items_at_40": 1,
-   "items_at_80": 1
+   "items_at_80": 1,
+   "reason": "the stage's work is uncounted today (no counted site); its budget is its exact count"
   },
   "field": {
    "status": "budgeted",
@@ -56,7 +57,8 @@
    "verdict": "specs/444-work-budget-program/phases/waterward.verdict.txt",
    "items_at_20": 1,
    "items_at_40": 1,
-   "items_at_80": 1
+   "items_at_80": 1,
+   "reason": "the stage's one test is uncounted today; a valley hamlet draws no fringe"
   },
   "homesteads": {
    "status": "budgeted",
@@ -108,7 +110,8 @@
    "verdict": "specs/444-work-budget-program/phases/pond_stock.verdict.txt",
    "items_at_20": 1,
    "items_at_40": 1,
-   "items_at_80": 1
+   "items_at_80": 1,
+   "reason": "the stage's one test is uncounted today; a plain paddy hamlet keeps no pond sties"
   },
   "burial": {
    "status": "budgeted",
@@ -118,7 +121,8 @@
    "verdict": "specs/444-work-budget-program/phases/burial.verdict.txt",
    "items_at_20": 1,
    "items_at_40": 1,
-   "items_at_80": 1
+   "items_at_80": 1,
+   "reason": "the stage's record is uncounted today; its budget is its exact count"
   },
   "web": {
    "status": "budgeted",
@@ -202,27 +206,32 @@
   },
   "bamboo": {
    "status": "budgeted",
-   "per_thing": 23.0,
+   "per_thing": 21.0,
    "exponent": 1.0,
    "derivation": "specs/444-work-budget-program/phases/bamboo.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/bamboo.verdict.txt",
+   "verdict": "ask:444-T09-rescore-batch",
    "items_at_20": 6,
    "items_at_40": 12,
-   "items_at_80": 24
+   "items_at_80": 24,
+   "pinned_on": "accept",
+   "derivation_sha": "a50c925c4a2ca1530f0d47da339d2ff507af9ed7d32f1d6948c52110231253de",
+   "rounds": 2,
+   "spread": "126-138 at 20",
+   "reason": "bamboo's count today, 86 at 40, records the stands' few counted sites alone; its budget is its stands' exact count"
   },
   "crossings": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.82,
+   "exponent": 0.7,
    "derivation": "specs/444-work-budget-program/phases/crossings.derivation.md",
-   "verdict": "ask:444-T04-crossings-round-4",
-   "items_at_20": 29806,
-   "items_at_40": 52111,
-   "items_at_80": 94046,
+   "verdict": "ask:444-T09-rescore-batch",
+   "items_at_20": 4899,
+   "items_at_40": 7879,
+   "items_at_80": 13113,
    "pinned_on": "accept",
-   "derivation_sha": "530275640af24bc0ae7639c4ee4745e0dad551fa1732c4a33f00e8d128263bd1",
-   "rounds": 3,
-   "spread": "27,700-34,306 at 20"
+   "derivation_sha": "a7fe899628b8a57b2e5c39d7e667ee720f274255dda62b442c3c9c9eda844a24",
+   "rounds": 4,
+   "spread": "4,899-34,306 at 20"
   },
   "sties": {
    "status": "budgeted",
@@ -255,12 +264,17 @@
   "frame": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.8,
+   "exponent": 0.5,
    "derivation": "specs/444-work-budget-program/phases/frame.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/frame.verdict.txt",
-   "items_at_20": 11624,
-   "items_at_40": 19864,
-   "items_at_80": 35370
+   "verdict": "ask:444-T09-rescore-batch",
+   "items_at_20": 5202,
+   "items_at_40": 7826,
+   "items_at_80": 12242,
+   "pinned_on": "accept",
+   "derivation_sha": "7168abd56b7b66a6a51eabb51e228a8d9f263dbf1f73c55381a71886f0981aa8",
+   "rounds": 3,
+   "spread": "5,202-14,669 at 20",
+   "reason": "frame's count today, 8 at 40, counts its few counted sites alone; the view's features are read in uncounted code"
   },
   "notice": {
    "status": "budgeted",
@@ -281,10 +295,15 @@
    "per_thing": 6.0,
    "exponent": 0.0,
    "derivation": "specs/444-work-budget-program/phases/labels.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/labels.verdict.txt",
+   "verdict": "ask:444-T09-rescore-batch",
    "items_at_20": 1,
    "items_at_40": 1,
-   "items_at_80": 1
+   "items_at_80": 1,
+   "pinned_on": "accept",
+   "derivation_sha": "1859336a03dc658352cbec6ebc4a9a617a9586cfa79df54a193a0593435f0fae",
+   "rounds": 2,
+   "spread": "6-6 at 20",
+   "reason": "the board's caption is written in the label phase, uncounted today"
   }
  }
 }
