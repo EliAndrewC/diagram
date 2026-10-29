@@ -245,16 +245,16 @@
   "washing": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 1.01,
-   "derivation": "specs/444-work-budget-program/phases/washing.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 2463,
-   "items_at_40": 4937,
-   "items_at_80": 10053,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/washing_greenfield.derivation.md",
+   "verdict": "ask:444-T12-washing_greenfield-round-3",
+   "items_at_20": 598,
+   "items_at_40": 1194,
+   "items_at_80": 2386,
    "pinned_on": "accept",
-   "derivation_sha": "4eb7fbfeaf56c4024effc887ef16b9bfc58cf14c90f4a6cf62e56ae6dffac108",
-   "rounds": 4,
-   "spread": "2,167-2,463 at 20"
+   "derivation_sha": "0e680e931129401f72a241a8093bb58e0dde30348751f98434a644c4ff8aa52a",
+   "rounds": 2,
+   "spread": "238-598 at 20"
   },
   "frame": {
    "status": "budgeted",
