@@ -25,3 +25,4 @@
 {"date": "2026-10-29", "what": "lowered", "phase": "seat", "from": {"20": 2126.0, "40": 2586.0, "80": 3234.0}, "to": {"20": 167.0, "40": 191.0, "80": 221.0}, "verdict": "specs/444-work-budget-program/phases/seat_greenfield.verdict-1.txt"}
 {"date": "2026-10-29", "what": "lowered", "phase": "pond_bank", "from": {"20": 1387.0, "40": 2065.0, "80": 3137.0}, "to": {"20": 99.0, "40": 142.0, "80": 201.0}, "verdict": "specs/444-work-budget-program/phases/pond_bank_greenfield.verdict-2.txt"}
 {"date": "2026-10-29", "what": "lowered", "phase": "field", "from": {"20": 16535.0, "40": 29232.0, "80": 53204.0}, "to": {"20": 14045.0, "40": 23988.0, "80": 42070.0}, "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt"}
+{"date": "2026-10-29", "what": "lowered", "phase": "homesteads", "from": {"20": 129792.0, "40": 243411.0, "80": 463026.0}, "to": {"20": 2059.0, "40": 4118.0, "80": 8236.0}, "verdict": "ask:444-T12-homesteads_greenfield-round-4"}

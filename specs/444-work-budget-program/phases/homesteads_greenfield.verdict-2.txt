@@ -1,0 +1,3 @@
+UNDERIVED - the lot's search (18 a house): the clear-lot test reads boundary segments only, so a lot lying wholly inside the field reads as clear, and how such a lot is refused, and its cost, has no figure; the 1.18 lots tried a house was measured in a ring round the cluster's centroid, while the algorithm rings out from the anchor on the field's margin.
+
+(Also: a part's mean registry overlap nearer 1.67 cells than 1.5, the house alone 2.5; a clear lot's border cells near a ditch or the brook read water segments not charged; the slack's 5% rounded up from about 1.4%.)

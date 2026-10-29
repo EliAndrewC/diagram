@@ -59,16 +59,16 @@
   "homesteads": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.92,
-   "derivation": "specs/444-work-budget-program/phases/homesteads.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 129792,
-   "items_at_40": 243411,
-   "items_at_80": 463026,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/homesteads_greenfield.derivation.md",
+   "verdict": "ask:444-T12-homesteads_greenfield-round-4",
+   "items_at_20": 2059,
+   "items_at_40": 4118,
+   "items_at_80": 8236,
    "pinned_on": "accept",
-   "derivation_sha": "ea751dd8ed644b45f0e320647e9ea8c8b3a26581c009541ecc18db3685afe395",
-   "rounds": 4,
-   "spread": "129,792-1,055,880 at 20"
+   "derivation_sha": "e0b8617d102605d9aaf261d8541cec9bd5da3b3476462904aa7434645e6e0416",
+   "rounds": 3,
+   "spread": "1967-2059 at 20"
   },
   "track": {
    "status": "budgeted",
