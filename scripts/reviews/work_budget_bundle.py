@@ -121,6 +121,30 @@ def total_problems(text: str) -> list[str]:
     return out
 
 
+REFERENCE_PER_THING = 4000  # the rubric's reference, a few thousand basic operations a house (request.md; a GUESS)
+_REASON = re.compile(r"^-\s*reason above the reference:\s*\S", re.M | re.I)
+
+
+def reference_problems(text: str) -> list[str]:
+    """THE REFERENCE ASKS A REASON (feature 444 FR-014, rubric S8; the GM 2026-10-28: "I thought the idea was to REDUCE the number of
+    operations. Why would we be targeting something HIGHER?"): a derivation whose total at 40 over its items at 40 passes the
+    reference's 4,000 a thing names why, `- reason above the reference: <why>`; under it, nothing is asked. It refuses nothing a
+    reason answers - the band is a GUESS worked for the homesteads."""
+    items = row_values(text).get("items", {}).get(40, "")
+    sec = TOTALS.search(text)
+    total = next((m.group(3) for m in _TOTAL.finditer(sec.group(1)) if int(m.group(1)) == 40), "") if sec else ""
+    try:
+        per = float(total.replace(",", "")) / float(items.replace(",", ""))
+    except (ValueError, ZeroDivisionError):
+        return []
+    if per > REFERENCE_PER_THING and not _REASON.search(text):
+        return [
+            f"the cost per thing at 40, {per:,.0f} ({total} over {items} items), passes the reference's {REFERENCE_PER_THING:,} (rubric S8) - count the"
+            " typical case, or name why: `- reason above the reference: <why>`"
+        ]
+    return []
+
+
 INDEXES = re.compile(r"^## Indexes\b(.*?)(?=^## |\Z)", re.M | re.S)
 _INDEX = re.compile(r"^-\s*([^:\n]+):\s*(.*)$", re.M)
 _CELL_FT = re.compile(r"\bcells?\s+(?:of\s+)?[\d,.]+\s*ft\b", re.I)
@@ -193,7 +217,7 @@ def form_problems(text: str) -> list[str]:
     alts = ALTERNATIVES.search(text)
     said = {m.group(1).strip().lower(): m.group(2).strip() for m in re.finditer(r"^-\s*([^:\n]+):[ \t]*(.*)$", alts.group(1) if alts else "", re.M)}
     out += [f"`## Cheaper algorithms considered`: a line for `{a}` - used, or why not" for a in STANDARD if not said.get(a)]
-    return out + cells_problems(text) + index_problems(text) + total_problems(text)
+    return out + cells_problems(text) + index_problems(text) + total_problems(text) + reference_problems(text)
 
 
 def refusals(text: str) -> list[str]:
