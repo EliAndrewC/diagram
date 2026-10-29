@@ -1,0 +1,3 @@
+LOOSE - the verge seats x the seats tried (12.4 of registry work x 13 seats, 161 of each well's 261): the registry does not change during the walk, so read each cell the walked stretch touches once and mark each thing in it as a blocked stretch of the verge - about 38 a well rather than 161, a well near 137 rather than 261.
+
+(Also: what happens to a household beyond 760 ft is unsaid; it writes nothing and repairs nothing, so the count is unchanged.)
