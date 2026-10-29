@@ -1,0 +1,24 @@
+UNDERIVED - the plank step's deck read: "unless a deck stands within the spacing" (300 ft on a comb, 320 ft on a polder) is counted as a read of "its 2 by 2 cells (8)" of 64 ft, which reach at most 128 ft, so the figure 8 cannot answer the rule it claims to count and has no breakdown of its own.
+
+This is round 1. The bundle holds no earlier `crossings.verdict-<N>.txt` files, so there are no earlier findings to confirm closed. I checked every row's arithmetic and the three totals, and they reproduce (for example 678 x 27 = 18,306, 81 x 233 = 18,873, and 128,795 at 80).
+
+**Q1 - Is each factor derived?**
+- **The deck read (8) in the plank-spots row: not derived (this blocks).** The rule needs a 300/320 ft reach, but a 2x2 block of 64 ft cells covers 128 ft. The row also never says how much of the 8 is cells read and how much is decks read.
+- **Gates and caps: no factor at all.** The items row counts only the decks (9/14/21). On a polder the contract also writes a sluice gate at every cut of the dike (`dike_gates`) and a cap at every crossing of the toe collector. Each is recorded and filed, about 5 operations like a deck. The dike row counts cells examined, not gates written. The contract gives no figure for the number of cuts, so the derivation has to supply one with its reason.
+- **Small wording gap.** "Each its box's at most 2 by 2 cells" (the plank's box) and "filed in at most 4 cells" (decks and planks) both assume a box under 64 ft on a side. Neither row says so.
+- **Holds.** Slack 1. The water index and the ways' walk (length x √2 / 64 plus 3 a segment) are sound ceilings.
+
+**Q2 - Is there a standard, cheaper algorithm?**
+- **Decks along a ditch.** The ditches are waters, so every deck on a ditch is laid during the water walk. Each deck could be filed on its ditch by its distance along the ditch as it is laid (the incremental update the derivation already claims). Each spot then compares its own distance along the ditch with that ditch's few decks (21 decks across 22 ditches at 80). That takes about 2 operations per spot and needs no registry read, instead of a registry reach of about 11x11 cells.
+- **The dike walk repeats the ways' walk.** It walks the same 678/1,335/2,632 cells a second time. Reading the outline index on the same cell visit saves 1 read per cell. Also, the contract's Reads lists the perimeter dike as a watercourse. If the waters' segment figures (574/770/1,031) already include the dike, the separate walk counts it twice (34,216 at 80). The derivation should say which it is.
+
+**Q3 - Is any factor padded?**
+- **LOOSE: the registry's density in the plank-spots row (29/40/55 a cell, "at its measured rate").** S1 requires a per-cell bound that does not grow with the number of households. The derivation already refused to extrapolate a rate for the ways' segments, and it took the water density flat at 26. A flat ceiling of 29 (or a geometric capacity of a 64 ft cell) gives 1 + 8 + 120 = 129 a spot, so 81 x 129 = 10,449 at 80 against 18,873.
+- **The ways' walk.** The worst case, "every way through the densest water" (26 in each of 2,632 cells), cannot all happen at once if the cells are distinct: the water index holds only 4,132 entries at 80. A tighter figure needs a stated bound on how many ways share one cell, which the Bounds do not give, so I am not counting this as a finding.
+
+**Q4 - Is each figure read at its source's size and unit?**
+- **The deck read again.** The 300/320 ft spacing is counted as a 128 ft reach, the same kind of size error as feature 444 T07.
+- **The spot count's wording.** The spots are described as "rounded up plus one a ditch", but the figures (32/50/81) are the total length / 300 + ditches, rounded up once over all ditches. That figure is a correct bound for floor(L/300) + 1 spots per ditch, but rounding up per ditch would give up to 43/65/102. The wording should match the figure, so the rebuild does not round up per ditch.
+- **Holds.** The ways' length and segments, the waters' length and segments, the 26 and 12 cell densities, the ditches and the bridges are all read at the sizes and units the Bounds state.
+
+Files: /tmp/l7r-check/work-budget-budget-crossings/derivation.md, /tmp/l7r-check/work-budget-budget-crossings/contract.md, /tmp/l7r-check/work-budget-budget-crossings/rubric.md

@@ -73,7 +73,18 @@
    "spread": "264,471-1,055,880 at 20"
   },
   "track": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.64,
+   "derivation": "specs/444-work-budget-program/phases/track.derivation.md",
+   "verdict": "ask:444-T04-track-round-3",
+   "items_at_20": 269648,
+   "items_at_40": 411529,
+   "items_at_80": 658687,
+   "pinned_on": "accept",
+   "derivation_sha": "da363ce6866fd032d4a72a8b5fd399efcf92b3536e661806c0b3be93aeace661",
+   "rounds": 2,
+   "spread": "214,338-269,648 at 20"
   },
   "appurtenances": {
    "status": "budgeted",
