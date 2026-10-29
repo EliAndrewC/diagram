@@ -128,8 +128,13 @@ def test_an_arbiter_accept_pins_a_first_budget_bound_to_its_derivation(root: pat
     import importlib  # noqa: PLC0415
 
     wb = importlib.import_module("l7r.diagram.tools.work_budget")
-    assert wb.stale_pins(bc.load(root), str(root)) == [], "the derivation as pinned"
+
+    # Only web's own pin is judged: the fixture copies the real table, whose accept-pinned stages' derivations it does not hold.
+    def web_stale() -> list[str]:
+        return [b for b in wb.stale_pins(bc.load(root), str(root)) if b.startswith("web")]
+
+    assert web_stale() == [], "the derivation as pinned"
     (feat / "phases" / "web.derivation.md").write_text("the derivation, one figure changed\n")
-    bad = wb.stale_pins(bc.load(root), str(root))
+    bad = web_stale()
     assert len(bad) == 1 and "changed since the arbiter's accept pinned it (ask:444-T05-r9)" in bad[0] and "make arbiter-ask" in bad[0]
     assert bad[0] in wb.held(bc.load(root), {"stages": {}}), "the push's ratchet refuses it too"

@@ -7,7 +7,7 @@ rounds 9 to 14 on its own judgment - 33 minutes of dispatches and edits - with n
 MODE BUDGET verdicts, `specs/<feature>/phases/<stage>.verdict-<N>.txt`.
 
 THE RULE, at a `work-budget` dispatch on `/tmp/l7r-check/work-budget-budget-<stage>/`: refused when the newest arbiter ruling naming
-the stage is an ACCEPT given after its last verdict (the derivation stands; an edit to a Total or a Bounds figure re-owes a ruling
+the stage in its trigger is an ACCEPT given after its last verdict (the derivation stands; an edit to a Total or a Bounds figure re-owes a ruling
 through `make arbiter-ask`, never a fresh dispatch), or when the stage has `ROUND_CAP` verdicts or more and no arbiter CONTINUE naming
 it was given after its last verdict. The escape is the arbiter's own, `ARBITER_OK` with a reason in the prompt.
 """
@@ -37,11 +37,11 @@ def refusal(feature_dir: Path | None, rulings: dict[str, dict], prompt: str) -> 
     stage = m.group(1)
     verdicts = sorted((feature_dir / "phases").glob(f"{stage}.verdict-*.txt"))
     last = max((p.stat().st_mtime for p in verdicts), default=0.0)
+    # The stage is read from the ruling's TRIGGER alone (`ask:<feature>-<task>-<stage>-round-<N>`), never its free text: a stage
+    # named by an ordinary word ("track") is in many rulings' prose, and the spec's accept (ask:444-spec-round-3) closed track's
+    # first round before it ran (2026-10-28).
     named = re.compile(rf"(?<![a-z_]){re.escape(stage)}(?![a-z_])")
-    about = sorted(
-        ((_utc(str(r.get("utc", ""))), t, r) for t, r in rulings.items() if named.search(t) or named.search(str(r.get("what", "")))),
-        key=lambda x: x[0],
-    )
+    about = sorted(((_utc(str(r.get("utc", ""))), t, r) for t, r in rulings.items() if named.search(t)), key=lambda x: x[0])
     since = [x for x in about if x[0] > last]
     if since and since[-1][2].get("ruling") == "accept":
         return (
