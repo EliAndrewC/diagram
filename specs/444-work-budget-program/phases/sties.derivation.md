@@ -27,23 +27,22 @@
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 20 at 20, 40 at 40, 80 at 80 | the households tried, each at most once: a passed sty goes to the next household, never back | every household tried |
-| the strips' cells (registry cells examined) | per item | 3240 | 108 cells: each wall's strip, its length and the box's 15 ft overhang at each end by the box's 15 ft depth, at most 93 by 15 ft for the longest wall, 63 ft; raked with its house at any angle its bounding square is at most 93 / root 2 + 15 / root 2, 77 ft, a side, in at most 3 by 3 cells; 12 walls x 9; each cell read with its at most 29 things, 30 | the longest walls raked at 45 degrees, the densest cells |
-| the intervals (things projected) | per item | 9396 | each of the at most 108 x 29 things in the strips projected (1) and its interval's two ends marked (2) | the densest cells |
-| the grove band (intervals marked) | per item | 24 | the farm's band projected on each of the 12 walls, at most two intervals each, from `grove_rules.fixture_on_band`, not the registry; the band need not be convex | every wall meets the band |
-| the difference array (places set) | per item | 99 | the household's places cleared before marking | always 99 |
-| the prefix sum (places walked) | per item | 99 | one pass over the household's at most 99 places: each wall's length over 4 ft rounded down, plus 1, summed over 12 walls and 350 ft, 87 + 12 | every place blocked |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the drawing (registry cells written) | over the run | 75 at 20, 165 at 40, 345 at 80 | each sty recorded (1) and filed in at most 4 cells (4) | the share's count drawn |
+| items | per item | 15 at 20, 33 at 40, 69 at 80 | the households that keep a sty, the share's count (7 of 10 and 15 of 20 measured; a passed sty goes to the next that keeps none, within the slack) | 80 households |
+| the strips' cells (registry cells examined) | per item | 90 | the typical household's sty finds its place on its first wall or two (S8: the places the search order reaches): 2 walls' strips, each in at most 3 by 3 cells, read with the mean 4 things a cell near the houses and the cell (5) | the typical farmstead |
+| the intervals (things projected) | per item | 216 | each of those 2 x 9 cells' mean 4 things projected (1) and its interval's two ends marked (2) | the typical farmstead |
+| the places (places set and walked) | per item | 16 | the 2 walls' at most 8 places each, set and walked | the typical farmstead |
+| the grove band and the rake (intervals marked) | per item | 20 | the farm's band projected on the 2 walls (4) and the rake's 2 walls turned (16) | always 20 |
+| slack | per item | 2 | what varies around the typical case (S8): a third wall reached, a sty passed on | a crowded farmstead |
+| the drawing (registry cells written) | over the run | 15 x 5 at 20, 33 x 5 at 40, 69 x 5 at 80 | each sty recorded (1) and filed in at most 4 cells (4) | the share's count drawn |
 | the count | once | 1 | the share of the households, rounded | always 1 |
 
-So: households x (3240 + 9396 + 24 + 99 + 99) x 1, plus the drawing and the count.
+So: the sty households x (342) x 2, plus the drawing and the count.
 
 ## Totals
 
-- at 20: 20 x (3240 + 9396 + 24 + 99 + 99) x 1 + 75 + 1 = 257236
-- at 40: 40 x (3240 + 9396 + 24 + 99 + 99) x 1 + 165 + 1 = 514486
-- at 80: 80 x (3240 + 9396 + 24 + 99 + 99) x 1 + 345 + 1 = 1028986
+- at 20: 15 x (90 + 216 + 16 + 20) x 2 + 15 x 5 + 1 = 10336
+- at 40: 33 x (90 + 216 + 16 + 20) x 2 + 33 x 5 + 1 = 22738
+- at 80: 69 x (90 + 216 + 16 + 20) x 2 + 69 x 5 + 1 = 47542
 
 ## Earlier findings
 
@@ -53,6 +52,8 @@ So: households x (3240 + 9396 + 24 + 99 + 99) x 1, plus the drawing and the coun
 - verdict-2, finding 1: fixed - each strip carries the box's 15 ft overhang, and a raked wall's strip is bounded by its square, 3 by 3 cells a wall, 108
 - verdict-2, finding 2: fixed - the grove band is projected on each wall apart from the registry, at most two intervals a wall
 - verdict-2, finding 3: fixed - 99 places, both ends of each wall, and the difference array's setup is a row
+- FR-014 re-score: each factor at the typical case (rubric S8): the households that keep a sty, each finding its place on its first wall or two, at the mean 4 things a cell near the houses (`items.md`); slack 2 (ask:444-budget-standard; the accept was ask:444-T03-sties-round-3)
+- reason above today's count: none owed at 20 and 40 if under it; today's 1,054 at 40 is a lower bound (the strips' cell reads are not counted sites)
 
 ## Cheaper algorithms considered
 
