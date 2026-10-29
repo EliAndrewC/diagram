@@ -319,3 +319,11 @@ Asked whether to start step 4, the stage rebuilds, beginning with water_frame an
 Recorded as he set them: a hard bound - a scripted capital map with thousands of buildings generates in a single-digit number of
 seconds; a goal, not a requirement and not yet measured for feasibility - sub-second generation for larger maps in the Rust
 implementation.
+
+## The GM on Rust first and the field's size, 2026-10-29 (amendment 4)
+
+Asked whether the field's clean rebuild should be written directly in Rust, as the step-5 trial version, instead of in Python first:
+
+"Yeah, I want to modify the plan so that we don't end up doing any Python rewrites. I think those are just going to slow us down."
+
+"And yeah, go ahead and do a research pass if needed on what is the maximum size of a single rice paddy field for these kinds of settlements. we can cap out at something approximating whatever that size is, and then larger settlements just have multiple fields."

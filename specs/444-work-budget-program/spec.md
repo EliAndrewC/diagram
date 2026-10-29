@@ -120,6 +120,20 @@ standards" (`request.md`).
   of a set growing with the map names why no bound prunes it (`- pruning:`); work only a knob's branch needs is charged at that
   branch's share. The bundle screen asks the `- pruning:` line of a derivation above the reference's 4,000 a thing, and the
   work-budget agent judges it.
+- **FR-017**: No phase is rebuilt in Python (the GM 2026-10-29, amendment 4: "I want to modify the plan so that we don't end up
+  doing any Python rewrites. I think those are just going to slow us down"). The language decision is his, Rust, recorded in
+  `research/language.md` in his words in place of FR-008's measured comparison, so FR-010's shape, FR-011's tooling proven before
+  the first Rust phase and FR-012's counters apply to every phase from `field` on; the design's step 5 measurement is not run. A
+  phase already accepted in Python whose rebuild was only its counters (`water_frame`, T15) stands, its algorithm unchanged, until
+  its port to Rust - a phase task of its own, filed with FR-011's tooling and landed before the feature closes, held to the same
+  budget - so SC-007's one extension module holds at the close.
+- **FR-018**: A single paddy field is capped near the largest single field the research finds for a settlement of this kind, and a
+  settlement whose farmland passes that cap draws more than one field (the GM 2026-10-29: "we can cap out at something approximating
+  whatever that size is, and then larger settlements just have multiple fields"); the cap and its source are the field phase's
+  contract, from a research pass that searches the record and the archive first (constitution XII). The field's greenfield
+  derivation, already SOUND and pinned, is re-derived under the cap and owes a new MODE BUDGET verdict before the field phase
+  lands; a figure above its standing pin keeps that pin and is pinned only with the GM's words (`make budget-change`, FR-006,
+  FR-015).
 - **FR-012**: Any Rust spike or phase keeps the counters of 443 FR-001 as a macro behind the Cargo feature `counters`:
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
@@ -139,12 +153,14 @@ standards" (`request.md`).
   defined under `l7r/` and passes a knob's name and form, a stage's name and a manifest key, and refuses one above the reference with no `- pruning:` line, each going red with its
   condition deleted; every stage has a greenfield derivation with a SOUND verdict or the arbiter's accept, given with S9 in the
   rubric, and a budget pinned from it; the target the GM approves is the sum of those.
+- **SC-011** (FR-018): the field phase's contract names the single-field cap and cites its research source; a test rolls a
+  settlement whose farmland passes the cap and finds it draws more than one field, each at most the cap.
 - **SC-002** (FR-003 to FR-006): each phase's checklist is ticked whole and its accepted figure at most its budget; the
   landing's size delta shows the old implementation removed, with no branch or flag left that selects it (`make
   dead-closure` checks for leftovers).
 - **SC-003** (FR-007): `make work-budget-bundle MODE=table` writes the whole-table bundle, and each phase landing has its
   whole-table audit in the ledger.
-- **SC-004** (FR-008): `research/language.md` records the decision with its measurement.
+- **SC-004** (FR-008, FR-017): `research/language.md` records the decision - the GM's choice of Rust in his words, amendment 4.
 - **SC-005** (FR-009): the closing `make work-budget` shows the whole roll at most the program's budget.
 - **SC-006** (FR-011, FR-012): `dev/rust-tooling.md` marks every ported row proven before the first Rust phase's landing,
   and a test refuses that landing with one unproven; the counters-on and counters-off manifests match.
@@ -191,3 +207,9 @@ standards" (`request.md`).
 - 2026-10-29, amendment 3's review (spec-fidelity, MODE 3): CHANGES REQUIRED, 2 items - a higher greenfield budget leaves the
   standing pin for the GM's words; the name check widened to modules, methods and module- or class-level names.
 - 2026-10-29, amendment 3's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - both resolved, no new contradiction.
+- 2026-10-29, amendment 4 (the GM on Rust first and the field's size, `request.md`): FR-017 - no phase rebuilt in Python, Rust his
+  decision, step 5's measurement not run; FR-018 - a single field capped near the researched largest, a larger settlement drawing
+  several; SC-004 reads it.
+- 2026-10-29, amendment 4's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - SC-011 for FR-018; water_frame's
+  Rust port scheduled before the close, so SC-007 holds; the field's derivation re-derived under the cap, a new verdict owed.
+- 2026-10-29, amendment 4's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.
