@@ -96,24 +96,7 @@ T10 the bundle's refusal of today's names, T11-T14 the four families re-derived 
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 <!-- plan-archive: T10 to T10 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
-### T11 - the water family greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank (FR-015, FR-016)
-
-### T11 Approach (checklist part A)
-
-1. **The goal, in the world.** Each stage's budget is what a fresh design of it should cost, unencumbered by today's implementation.
-2. **The constraints.** FR-015, FR-016, FR-014, FR-013; rubric S1-S9.
-3. **Where each comes from.** G: the GM, 2026-10-29 ("the ENTIRE point of what we're doing is to do a greenfield implementation"; "sounds good, please proceed with that"), `request.md`'s last section.
-4. **Do they describe the world here?** Each contract from the stage's research pages under `research/questions/` and the knobs' forms, its densities from the reference manifests (`phases/items.md`); no file under `l7r/` read while a derivation is written.
-5. **The order.** After T10; the families in `STAGES` order; T06 after all four.
-6. **The exits.** Green: each stage's `phases/<stage>.greenfield.md` judged SOUND, or the round arbiter's accept (FR-013), and pinned, a higher one left standing for the GM's words. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing; one MODE BUDGET pass a stage a round, the round cap's arbiter rulings.
-9. **Done, measured.** `dev/work-budget.json` holds each stage's budget pinned from its greenfield derivation, a higher one left standing and named for the GM's words (`make budget-change`).
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - paper budgets.
-
+<!-- plan-archive: T11 to T11 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
 ### T12 - the homesteads family greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)
 
 ### T12 Approach (checklist part A)

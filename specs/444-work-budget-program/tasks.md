@@ -36,8 +36,9 @@
 - [x] T10 Today's code's names refused by the budget bundle: a derivation naming a module, function, method, class or module- or class-level name defined under `l7r/` (other than a knob's name or form, a stage's name or a manifest key) refused, naming each; the `- pruning:` line asked above the reference (FR-015, FR-016, SC-010)
       research: rendering
       verify: DONE. landed: the budget bundle refuses a derivation naming any module, function, method, class or module- or class-level name of today's code (a knob's name or form, a stage's name and a manifest key pass), and asks a pruning line above the reference; each red with its condition deleted
-- [ ] T11 The water family re-derived greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank - each contract from the research and the reference manifests, judged with rubric S9, pinned (FR-015, FR-016)
+- [x] T11 The water family re-derived greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank - each contract from the research and the reference manifests, judged with rubric S9, pinned (FR-015, FR-016)
       research: rendering
+      verify: DONE. landed: the water family re-derived greenfield: field 23,988 at 40 (from 29,232), sink 149 (from 3,638), pond_bank 142 (from 2,065), waterward and pond_stock 1, each pinned on its SOUND with LOWER=1; water_frame SOUND at 69 against its pin of 40, left standing for the GM's words (FR-015)
 - [ ] T12 The homesteads family re-derived greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)
       research: rendering
 - [ ] T13 The ways family re-derived greenfield - track, web, crossings (FR-015, FR-016)
