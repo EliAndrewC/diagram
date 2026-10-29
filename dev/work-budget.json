@@ -18,16 +18,16 @@
   "field": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.71,
+   "exponent": 0.85,
    "derivation": "specs/444-work-budget-program/phases/field.derivation.md",
-   "verdict": "ask:444-T02-field-round-15",
-   "items_at_20": 35440,
-   "items_at_40": 56558,
-   "items_at_80": 94717,
+   "verdict": "ask:444-T09-rescore-batch",
+   "items_at_20": 16535,
+   "items_at_40": 29232,
+   "items_at_80": 53204,
    "pinned_on": "accept",
-   "derivation_sha": "c0ebd80592d8e081037231ef6a045dbff1352e0369340552732b377bc21ec24c",
-   "rounds": 14,
-   "spread": "32,280-38,506 at 20"
+   "derivation_sha": "c5b28ed9c20967c47e5eeb328db7a8c1b2424582db8dd4218fe54f129387f3a2",
+   "rounds": 15,
+   "spread": "16,535-38,506 at 20"
   },
   "sink": {
    "status": "budgeted",
@@ -63,16 +63,16 @@
   "homesteads": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 1.0,
+   "exponent": 0.92,
    "derivation": "specs/444-work-budget-program/phases/homesteads.derivation.md",
-   "verdict": "ask:444-T03-homesteads-round-4",
-   "items_at_20": 1055880,
-   "items_at_40": 2109967,
-   "items_at_80": 4219257,
+   "verdict": "ask:444-T09-rescore-batch",
+   "items_at_20": 129792,
+   "items_at_40": 243411,
+   "items_at_80": 463026,
    "pinned_on": "accept",
-   "derivation_sha": "09385b8337b128bef858bfc2d5f272469d575e1aa0afa5333692fddf213bc91d",
-   "rounds": 3,
-   "spread": "264,471-1,055,880 at 20"
+   "derivation_sha": "ea751dd8ed644b45f0e320647e9ea8c8b3a26581c009541ecc18db3685afe395",
+   "rounds": 4,
+   "spread": "129,792-1,055,880 at 20"
   },
   "track": {
    "status": "budgeted",

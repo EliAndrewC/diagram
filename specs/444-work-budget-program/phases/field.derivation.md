@@ -36,31 +36,32 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 853 at 20, 1,807 at 40, 3,715 at 80 | the comb's plots - every plot made is recorded; none is made outside the outline | 80 households |
-| the cut (S1) | per item | 2 | a row of k plots across (1 to 15, the Bounds) costs its one cross line met against its two ditches' current segments, 2, and k - 1 dividers placed within its span: (k + 1) / k a plot, at most 2 | a row of one plot; a pointer's step counted below |
-| the selection | per item | 3 | the row against each of the strip's two ditches' crossings, and against the strip's next filed vertex - at most 3 a plot, a row's tests shared by its plots | a row of one plot |
+| the cut (S1) | per item | 1.1 | a row of the typical 9 plots across (272 ft over the rolled mean width of about 31 ft) costs its cross line and 8 dividers, (k + 1) / k, about 1.1 a plot | the typical row |
+| the selection | per item | 0.35 | the row's 3 tests shared by its typical 9 plots, about 0.35 a plot | the typical row |
 | the class | per item | 1 | one comparison of the plot's fall against the head's | always 1 |
 | the record | per item | 8 | the plot's 4 corners and 4 bund edges, written once after the ring walk (a clipped plot's extra points in the clipped records) | always 8 |
-| slack | per item | 1 | every factor is a bound at its worst case: each crossing-rule row pays 3 a segment, its start cell and the 2 more it can touch at a corner | not applicable |
-| the ring walk | over the run | 4,140 at 20, 5,654 at 40, 7,888 at 80 | at each row piece the ring enters, 3 side tests to find its exit and a 4-step search for where it meets the row (its at most 15 plots across, log2 rounded up) - the row's dividers placed after, so none need line up from row to row; one look-up at each ditch crossing; the entries at their worst over the plots the contract allows, L x sqrt(1/a^2 + 4/b^2) at the worst a, 36 by 41.3 ft (0.0558 a ft), plus 3 a segment plus one at each ditch crossing: 571 at 20, 782 at 40, 1,094 at 80; the ditch crossings, measured: 65 at 20, 90 at 40, 125 at 80; plus one a vertex | every entry at its worst |
-| the clipped records | over the run | 1,220 at 20, 1,654 at 40, 2,293 at 80 | each crossing recorded in the 2 plots it divides - the crossings as many as the entries, 571 at 20, 782 at 40, 1,094 at 80 - and each vertex once | every crossing a corner of two plots |
-| the outline's vertices | over the run | 702 at 20, 810 at 40, 945 at 80 | 2 each, the vertex's side of each of the two ditches it falls between, then each strip's vertices sorted down the fall (log2 of the vertices, rounded up, each) - the ring re-enters a strip, so its order is not the fall's | every point |
+| slack | per item | 1 | what varies around the typical case (S8): the spread around the mean | not applicable |
+| the ring walk | over the run | 2,750 at 20, 3,756 at 40, 5,240 at 80 | at the typical 31 by 48 ft plot, averaged over orientation, (2/pi)(1/a + 2/b), about 0.047 entries a ft (rubric S8, the batch's accept) | every entry at its worst |
+| the clipped records | over the run | 824 at 20, 1,118 at 40, 1,549 at 80 | each crossing recorded in the 2 plots it divides, the crossings at the typical 0.047 a ft (rubric S8, the batch's accept) | every crossing a corner of two plots |
+| the outline's vertices | over the run | 390 at 20, 450 at 40, 525 at 80 | 2 each, then each strip's about 7 vertices sorted down the fall, log2 of 7 rounded up, 3 (rubric S8, the batch's accept) | every point |
 | the pointers' steps | over the run | 240 at 20, 364 at 40, 554 at 80 | one more test each time a strip's pointer steps: once a ditch segment for each of the 2 strips an inner ditch borders | every segment a bend |
-| the ditches (outline index cells examined) | over the run | 1,473 at 20, 2,310 at 40, 3,648 at 80 | 3 a segment-cell entry - the cell examined, and the mean 2 outline segments a crossed cell tested (`items.md`, rubric S8); the entries at their worst, their length at its diagonal over 64 ft plus 3 a segment (its start cell and up to 2 more at a corner): 491 at 20, 770 at 40, 1,216 at 80 | 80 households |
-| the corridors (corridor index cells written) | over the run | 776 at 20, 1,166 at 40, 1,760 at 80 | the ditches' length outside the crop at its diagonal over 64 ft, plus 3 a ditch segment (its worst: a start cell and 2 more at a corner), x 2 cells across | 80 households |
-| the brook (outline index cells examined) | over the run | 2,613 at 20, 3,042 at 40, 3,567 at 80 | 3 a segment-cell entry - the cell examined, and the mean 2 outline segments a crossed cell tested (`items.md`, rubric S8); the entries at their worst, its length at its diagonal over 64 ft plus 3 a segment: 871 at 20, 1,014 at 40, 1,189 at 80 | 80 households |
-| the outline index (cells written) | once | 342 at 20, 437 at 40, 574 at 80 | the closed outline's perimeter at its diagonal over 64 ft, plus 3 a segment at its worst | 80 households |
+| the ditches (outline index cells examined) | over the run | 711 at 20, 1,116 at 40, 1,761 at 80 | 3 a segment-cell entry, the entries at a random angle, (4/pi) L/64 + 1 a segment (rubric S8, the batch's accept) | 80 households |
+| the corridors (corridor index cells written) | over the run | 289 at 20, 435 at 40, 656 at 80 | the ditches' length outside the crop at a random angle, (4/pi) L/64, plus 1 a segment (rubric S8, the batch's accept) | 80 households |
+| the brook (outline index cells examined) | over the run | 1,146 at 20, 1,335 at 40, 1,565 at 80 | 3 a segment-cell entry, the entries at a random angle, (4/pi) L/64 + 1 a segment (rubric S8, the batch's accept) | 80 households |
+| the outline index (cells written) | once | 175 at 20, 224 at 40, 294 at 80 | the closed outline's perimeter at a random angle, (4/pi) P/64, plus 1 a segment (rubric S8, the batch's accept) | 80 households |
 | the writes | once | 1,096 at 20, 1,551 at 40, 2,238 at 80 | each line written by its points: the dry hem's points (409 at 20, 631 at 40, 974 at 80), the ditches' points (their segments plus one a record: 132 at 20, 198 at 40, 298 at 80), the drawn channels' points (231 at 20, 358 at 40, 555 at 80), the brook's points (237 at 20, 265 at 40, 297 at 80), the outline's points, the weir's 4 points, the field pond's 4 values and the intake's 1 | 80 households |
 
-So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes once.
+So: plots x (1.1 + 0.35 + 1 + 8) x 1, plus the run's terms, the index and the writes once.
 
 ## Totals
 
-- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 4140 + 1220 + 702 + 240 + 1473 + 776 + 2613 + 342 + 1096 = 24544
-- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 5654 + 1654 + 810 + 364 + 2310 + 1166 + 3042 + 437 + 1551 = 42286
-- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 7888 + 2293 + 945 + 554 + 3648 + 1760 + 3567 + 574 + 2238 = 75477
+- at 20: 853 x (1.1 + 0.35 + 1 + 8) x 1 + 2750 + 824 + 390 + 240 + 711 + 289 + 1146 + 175 + 1096 = 16535
+- at 40: 1807 x (1.1 + 0.35 + 1 + 8) x 1 + 3756 + 1118 + 450 + 364 + 1116 + 435 + 1335 + 224 + 1551 = 29232
+- at 80: 3715 x (1.1 + 0.35 + 1 + 8) x 1 + 5240 + 1549 + 525 + 554 + 1761 + 656 + 1565 + 294 + 2238 = 53204
 
 ## Earlier findings
 
+- verdict-15, finding 1: fixed - the cut at 1.1 and the selection at 0.35 a plot; the segment-cell rows at (4/pi) L/64 + 1; the ring walk at 0.047 a ft; the vertices at log2 of a strip's 7 (the batch's accept, ask:444-T09-rescore-batch); the outline-cell share stays as it reads, a known looseness for the audit
 - verdict-1, finding 1: fixed - no texture factor: the comb draws no furrows (`draw_comb_field`: hem, paddies, bunds, channels)
 - verdict-1, finding 2: fixed - the ditches' segments measured from their `poly` lists: 79 and 120 at 10 and 20 (`phases/items.md`)
 - verdict-1, finding 3: fixed - the brook is counted once, by the cells it enters
