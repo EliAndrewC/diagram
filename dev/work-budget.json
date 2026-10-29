@@ -18,16 +18,12 @@
   "field": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.85,
-   "derivation": "specs/444-work-budget-program/phases/field.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 16535,
-   "items_at_40": 29232,
-   "items_at_80": 53204,
-   "pinned_on": "accept",
-   "derivation_sha": "c5b28ed9c20967c47e5eeb328db7a8c1b2424582db8dd4218fe54f129387f3a2",
-   "rounds": 15,
-   "spread": "16,535-38,506 at 20"
+   "exponent": 0.79,
+   "derivation": "specs/444-work-budget-program/phases/field_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt",
+   "items_at_20": 14045,
+   "items_at_40": 23988,
+   "items_at_80": 42070
   },
   "sink": {
    "status": "budgeted",
