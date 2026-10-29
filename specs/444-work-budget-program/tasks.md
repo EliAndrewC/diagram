@@ -22,8 +22,9 @@
 - [x] T05 The hinterland and frame family's budgets - hinterland, woodland, windbreak, bamboo, frame, notice, labels (D1, D3, D4; FR-001)
       research: rendering
       verify: DONE. landed: the hinterland and frame family's seven budgets pinned: labels, bamboo and frame on SOUND; notice, windbreak, woodland and hinterland on the round arbiter's accepts (FR-013)
-- [ ] T06 The program's target - the sum at 40 households and the whole roll's exponent - to the GM through escalation-check, his words set by `make budget-program`: the CHECKPOINT before any phase (D5; FR-002)
+- [x] T06 The program's target - the sum at 40 households and the whole roll's exponent - to the GM through escalation-check, his words set by `make budget-program`: the CHECKPOINT before any phase (D5; FR-002)
       research: rendering
+      verify: DONE. landed: the program's target set with the GM's words (make budget-program): 57,235 operations at 40 households, exponent 0.87, about 1,431 a household; water_frame, burial and bamboo raised to their greenfield SOUND figures on the same words
 - [x] T07 A derivation's arithmetic and its index cells checked before any dispatch: a ## Totals section evaluated by make work-budget-bundle MODE=budget (a missing size or a value off its expression refused), and an indexed derivation refused without a cells-examined row (the GM's rule on repeated errors, 2026-10-28)
       research: rendering
       verify: DONE. landed: landed: the Totals section evaluated exactly, every count row's figure a term of its size's total (each row its own, the arbiter's note), a row with no figure refused, an indexed derivation without a cells row refused; the agent's fourth question; the fixtures and the water family's six derivations passing; each refusal red with its condition deleted

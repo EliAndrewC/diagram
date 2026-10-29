@@ -100,27 +100,7 @@ T10 the bundle's refusal of today's names, T11-T14 the four families re-derived 
 <!-- plan-archive: T12 to T12 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
 <!-- plan-archive: T13 to T13 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
 <!-- plan-archive: T14 to T14 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
-### T06 - the program's target to the GM (D5)
-
-The sum at 40 households and the whole roll's exponent, beside today's figures, through `escalation-check` to the GM; his words
-set it with `make budget-program`.
-
-### T06 Approach (checklist part A)
-
-1. **The goal, in the world.** The GM approves, in his own words, what the whole roll should cost before any phase is rebuilt.
-2. **The constraints.** FR-002; D5.
-3. **Where each comes from.** G: the design the GM approved, 2026-10-28 (`request.md`, step 3: "The GM approves the target").
-4. **Do they describe the world here?** The budgets T02-T05 pin, one per stage of `STAGES`, and today's record, read after them.
-5. **The order.** After T02-T05; before any phase task is filed.
-6. **The exits.** Green: the GM's words recorded by `make budget-program`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing; one escalation-check.
-9. **Done, measured.** `dev/work-budget.json`'s program row set, its words in `dev/work-budget-changes.jsonl`.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-**Performance work?** no - the target, on paper.
-
+<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
 ## Project Structure
 
 - Step 3: `specs/444-work-budget-program/phases/<stage>.derivation.md` and `<stage>.verdict.txt` for each of the 23 stages;
