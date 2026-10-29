@@ -45,9 +45,9 @@
 | the clipped records | over the run | 1,220 at 20, 1,654 at 40, 2,293 at 80 | each crossing recorded in the 2 plots it divides - the crossings as many as the entries, 571 at 20, 782 at 40, 1,094 at 80 - and each vertex once | every crossing a corner of two plots |
 | the outline's vertices | over the run | 702 at 20, 810 at 40, 945 at 80 | 2 each, the vertex's side of each of the two ditches it falls between, then each strip's vertices sorted down the fall (log2 of the vertices, rounded up, each) - the ring re-enters a strip, so its order is not the fall's | every point |
 | the pointers' steps | over the run | 240 at 20, 364 at 40, 554 at 80 | one more test each time a strip's pointer steps: once a ditch segment for each of the 2 strips an inner ditch borders | every segment a bend |
-| the ditches (outline index cells examined) | over the run | 5,401 at 20, 8,470 at 40, 13,376 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested; the entries at their worst, their length at its diagonal over 64 ft plus 3 a segment (its start cell and up to 2 more at a corner): 491 at 20, 770 at 40, 1,216 at 80 | 80 households |
+| the ditches (outline index cells examined) | over the run | 1,473 at 20, 2,310 at 40, 3,648 at 80 | 3 a segment-cell entry - the cell examined, and the mean 2 outline segments a crossed cell tested (`items.md`, rubric S8); the entries at their worst, their length at its diagonal over 64 ft plus 3 a segment (its start cell and up to 2 more at a corner): 491 at 20, 770 at 40, 1,216 at 80 | 80 households |
 | the corridors (corridor index cells written) | over the run | 776 at 20, 1,166 at 40, 1,760 at 80 | the ditches' length outside the crop at its diagonal over 64 ft, plus 3 a ditch segment (its worst: a start cell and 2 more at a corner), x 2 cells across | 80 households |
-| the brook (outline index cells examined) | over the run | 9,581 at 20, 11,154 at 40, 13,079 at 80 | 11 a segment-cell entry - the cell examined, at most 10 outline segments tested; the entries at their worst, its length at its diagonal over 64 ft plus 3 a segment: 871 at 20, 1,014 at 40, 1,189 at 80 | 80 households |
+| the brook (outline index cells examined) | over the run | 2,613 at 20, 3,042 at 40, 3,567 at 80 | 3 a segment-cell entry - the cell examined, and the mean 2 outline segments a crossed cell tested (`items.md`, rubric S8); the entries at their worst, its length at its diagonal over 64 ft plus 3 a segment: 871 at 20, 1,014 at 40, 1,189 at 80 | 80 households |
 | the outline index (cells written) | once | 342 at 20, 437 at 40, 574 at 80 | the closed outline's perimeter at its diagonal over 64 ft, plus 3 a segment at its worst | 80 households |
 | the writes | once | 1,096 at 20, 1,551 at 40, 2,238 at 80 | each line written by its points: the dry hem's points (409 at 20, 631 at 40, 974 at 80), the ditches' points (their segments plus one a record: 132 at 20, 198 at 40, 298 at 80), the drawn channels' points (231 at 20, 358 at 40, 555 at 80), the brook's points (237 at 20, 265 at 40, 297 at 80), the outline's points, the weir's 4 points, the field pond's 4 values and the intake's 1 | 80 households |
 
@@ -55,9 +55,9 @@ So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes 
 
 ## Totals
 
-- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 4140 + 1220 + 702 + 240 + 5401 + 776 + 9581 + 342 + 1096 = 35440
-- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 5654 + 1654 + 810 + 364 + 8470 + 1166 + 11154 + 437 + 1551 = 56558
-- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 7888 + 2293 + 945 + 554 + 13376 + 1760 + 13079 + 574 + 2238 = 94717
+- at 20: 853 x (2 + 3 + 1 + 8) x 1 + 4140 + 1220 + 702 + 240 + 1473 + 776 + 2613 + 342 + 1096 = 24544
+- at 40: 1807 x (2 + 3 + 1 + 8) x 1 + 5654 + 1654 + 810 + 364 + 2310 + 1166 + 3042 + 437 + 1551 = 42286
+- at 80: 3715 x (2 + 3 + 1 + 8) x 1 + 7888 + 2293 + 945 + 554 + 3648 + 1760 + 3567 + 574 + 2238 = 75477
 
 ## Earlier findings
 
@@ -118,6 +118,8 @@ So: plots x (2 + 3 + 1 + 8) x 1, plus the run's terms, the index and the writes 
 - verdict-14, finding 3: fixed - rows are divided only within their span inside the outline, after the ring walk marks it, so no plot is made outside and none dropped (S4)
 - verdict-14, finding 4: fixed - each strip's vertices are sorted down the fall, counted in the vertices row
 - verdict-14, finding 5: fixed - the note for verdict-12 finding 1 says 1 to 15 plots across
+
+- FR-014 re-score: the ditches' and the brook's segment-cell entries at the mean 2 outline segments a crossed cell (`items.md`, rubric S8) in place of the densest 10; every other factor is an exact count of the plots and their records (ask:444-budget-standard; the accept was ask:444-T02-field-round-15)
 
 ## Cheaper algorithms considered
 
