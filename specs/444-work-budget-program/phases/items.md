@@ -45,3 +45,19 @@ band - are extended from 10 and 20 by each item's own scaling, stated in the der
 **Corrected 2026-10-28** (again, the same day): `tree_crowns` first counted the list's numbers (1,167 and 2,151), not its crowns; recounted as triples. No budget pinned before the correction read the row (pond_bank's items are its own trees).
 
 **Corrected 2026-10-28**: the brook's and the ditches' rows first counted each record's dict keys (`poly`, `role`, ...), not its points; recounted from their `poly` lists the same day. The field and sink derivations written before the correction rest on the wrong figures and are being rewritten.
+
+## The typical densities (feature 444 FR-014, rubric S8)
+
+Measured 2026-10-28 on the same reference manifests at 10 and 20 households, each the MEAN over the cells the things occupy (or
+cross), beside the densest cell the budgets before FR-014 used. Output only: the manifests' own geometry, no counter and no code.
+
+| density | mean at 10 | mean at 20 | densest (before FR-014) |
+|---|---|---|---|
+| things of every kind in an occupied 64 ft cell (crowns, scrub, parts, fixtures, ways' legs) | 3.4 | 3.31 | 29 |
+| the same, over the cells within 3 cells of a house, empty cells counted | 4.5 | 5.46 | 29 |
+| homestead parts in an occupied 64 ft cell | 2.8 | 2.64 | 7 |
+| water segments in a crossed 64 ft cell (brook, channels, ditches) | 4.05 | 3.71 | 26 |
+| ways' legs in a crossed 64 ft cell | 1.31 | 1.94 | 21 |
+| the field's outline segments in a crossed 64 ft cell | 2.12 | 1.81 | 12 |
+| site-boundary segments in a crossed 32 ft cell | 2.6 | 2.44 | 20 |
+| marsh segments in a crossed 64 ft cell | 4.36 | 3.81 | 13 |
