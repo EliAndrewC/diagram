@@ -11,16 +11,18 @@
 
     draw each laid part: its record written and filed in the parts index's cells (nothing is sought)
     while a well is owed (the count, then the reach, then the ten), on the cluster form:
+        the heap seeded once: each household's distance to open water from the water index, heapified
         the worst-served household: the top of a max-heap of each household's distance to its nearest well
         its nearest homestead edge, from the parts' 3 by 3 cells of 64 ft; the sites along that homestead's envelope grown by a well's radius, one a well's diameter apart, walked outward nearest first
         each site: clear of the registry's things in its 2 by 2 cells (S4), a dwelling's wall within 80 ft, the households it would
-            serve under the ten from its 9 cells of 760 ft, its walk, and the wells this stage drew; the first admitted is the well
+            serve under the ten and the five-houses rung (190, 300, 520, then 760 ft) from its 9 cells of 760 ft, its walk, and the wells this stage drew; the first admitted is the well
         draw it; re-key the households it takes
 
 ## Indexes
 
 - house index: cells of 760 ft, the widest reach, so the households a well would serve lie in its 3 by 3 cells; densest the about 10 a well serves at the typical (`WELL_SERVES_MAX`), from a smallest side of 760 ft
-- registry: cells of 64 ft; densest the mean 4 things a cell near the houses (`items.md`'s typical densities), from a smallest side of 64 ft against a well's 19.4 ft clearance, in at most 2 by 2 cells
+- water index: cells of 120 ft over the open water's segments, built once, so a household's nearest water lies in its 3 by 3 cells (washing's figure); densest the about 5.6 segments a crossed 120 ft cell (the 3.7 a crossed 64 ft cell scaled to the longer chord), from a smallest side of 120 ft
+- registry: cells of 64 ft; the mean 5.5 things a cell within 3 cells of a house, where every site lies (`items.md`'s typical densities), from a smallest side of 64 ft against a well's 19.4 ft clearance, in at most 2 by 2 cells
 - parts index: cells of 64 ft (the homesteads'); densest the mean 3 parts an occupied cell (`items.md`), from a smallest side of 64 ft
 
 ## The count, factor by factor
@@ -30,28 +32,31 @@
 | items | per item | 84 at 20, 173 at 40, 354 at 80 | each part the lots laid, drawn (byres, shared sheds, fixtures but the sties, retirement houses; 41 and 84 at 10 and 20, x2.05), nothing sought | 80 households |
 | the drawing (registry cells written) | per item | 5 | the record written (1) and filed in at most 4 cells of 64 ft (4) | always 5 |
 | slack | per item | 1 | what varies around the typical case (S8): the spread around the mean pops, inside the first well's whole pool | not applicable |
-| the first well (house index, parts index and registry cells examined) | over the run | 55,080 at 20, 138,720 at 40, 372,096 at 80 | its pool, the 34 envelope sites a house of the houses whose sites lie within 760 ft (within 908 ft of the household, at most 76), capped by the households (680 at 20, 1,360 at 40, 2,584 at 80), every site popped (the ten admits none), each 80 at 20, 101 at 40, 143 at 80: its clearance in the 2.6 cells a 38.8 ft box covers with the mean 4 things and the cell (13), a dwelling's wall within 80 ft from the 3 by 3 cells of 64 ft with the mean 3 parts and the cell (36), the households it would serve read from its 9 cells of 760 ft, every household below about 150 (9 + n), its walk (1), the wells drawn (half, rounded up); and the fallback's comparison, 1 a site | the typical cluster |
-| the later wells (house index, parts index and registry cells examined) | over the run | 200 at 20, 727 at 40, 2,295 at 80 | the wells past the first (1 at 20, 3 at 40, 7 at 80), each the worst-served household's nearest homestead edge from the parts' 3 by 3 cells with the mean 3 parts and the cell (36) and 2.04 sites popped (1 / p), each at the first well's per-site cost | the typical cluster |
-| the service (households re-keyed) | over the run | 238 at 20, 556 at 40, 1,272 at 80 | each well, its 9 cells (9) and the about 10 households it takes, each re-keyed with a push and the stale entry's pop, 1 + 2 x log2 of the households rounded up | the typical cluster |
+| the first well (house index, parts index and registry cells examined) | over the run | 249 at 20, 330 at 40, 493 at 80 | searched like the later wells (ask:444-T09-rescore-batch-2): with no well drawn and more than 10 households, every site serves all n (the contract's all-n service), so the ten test's answer is known before any site is read and the seat is the walk's - the worst-served household's nearest homestead edge from the parts' 3 by 3 cells with the mean 3 parts and the cell (36) and 2.04 sites popped (1 / p, p = 0.49 measured), each 104 at 20, 144 at 40, 224 at 80: its clearance in the 2.6 cells a 38.8 ft box covers with the mean 5.5 things within 3 cells of a house and the cell (2.6 x 6.5, 17), a dwelling's wall within 80 ft from the 3 by 3 cells of 64 ft with the mean 3 parts and the cell (36), the households read from its 9 cells of 760 ft, every household below about 150 (9 + n), each placed in its reach band for the five-houses rung - the houses within 190, 300, 520 and 760 ft - and the ten (1 each, n), its walk (1), no wells drawn yet (0); and the fallback's comparison (1) | the typical cluster |
+| the later wells (house index, parts index and registry cells examined) | over the run | 251 at 20, 1,002 at 40, 3,508 at 80 | the wells past the first (1 at 20, 3 at 40, 7 at 80), each the worst-served household's nearest homestead edge (36) and 2.04 sites popped (1 / p), each at the first well's per-site cost plus the wells drawn (half, rounded up) | the typical cluster |
+| the service (households re-keyed) | over the run | 348 at 20, 946 at 40, 2,322 at 80 | the first well re-keys every household (every site serves them all), its 9 cells (9) and n households; each later well its 9 cells and the about 10 households it takes; each re-keyed with a push and the stale entry's pop, 1 + 2 x log2 of the households rounded up | the typical cluster |
 | the worst-served query (heap top read) | over the run | 2 at 20, 4 at 40, 8 at 80 | each well, the max-heap's top, 1 | every well owed |
+| the heap's seed (water index cells examined, heap built) | over the run | 580 at 20, 1,160 at 40, 2,320 at 80 | each household's distance to open water from the water index's 3 by 3 cells of 120 ft, the about 3 a water crosses each with about 5.6 segments, and its projection (27, washing's figure on the same segments), and the max-heap built bottom-up over the households (2 a household) | the typical cluster |
+| the water index (cells written) | once | 780 at 20, 1,090 at 40, 1,530 at 80 | the open water's segments (574 at 20, 770 at 40, 1,032 at 80) each walked through the 120 ft cells it crosses at a random angle: its length x (4/pi) over 120 ft, plus 1 a segment (washing's figure) | 80 households |
 | the house index (cells written) | once | 20 at 20, 40 at 40, 80 at 80 | each house filed once in its 760 ft cell | 80 households |
 | the wells drawn (registry cells written) | over the run | 2 x 5 at 20, 4 x 5 at 40, 8 x 5 at 80 | each well recorded (1) and filed in at most 4 cells (4) | every well owed |
 
-So: the items x 5 x 1, plus the first well, the later wells, the service, the worst-served query and the wells drawn and the house index.
+So: the items x 5 x 1, plus the first well, the later wells, the service, the worst-served query, the heap's seed, the water index and the wells drawn and the house index.
 
 ## Totals
 
-- at 20: 84 x 5 x 1 + 55080 + 200 + 238 + 2 + 20 + 2 x 5 = 55970
-- at 40: 173 x 5 x 1 + 138720 + 727 + 556 + 4 + 40 + 4 x 5 = 140932
-- at 80: 354 x 5 x 1 + 372096 + 2295 + 1272 + 8 + 80 + 8 x 5 = 377561
+- at 20: 84 x 5 x 1 + 249 + 251 + 348 + 2 + 580 + 780 + 20 + 2 x 5 = 2660
+- at 40: 173 x 5 x 1 + 330 + 1002 + 946 + 4 + 1160 + 1090 + 40 + 4 x 5 = 5457
+- at 80: 354 x 5 x 1 + 493 + 3508 + 2322 + 8 + 2320 + 1530 + 80 + 8 x 5 = 12071
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 1.38, past 1.15, for a bounded n: a well's households are read from its 3 by 3 cells of 760 ft, which hold every household until the density passes the household count (about 150 households), so each site popped reads n; past 150 it reads a bounded block and the stage grows with the wells, linear.
+From 20 to 80 households the stage grows at an exponent of about 1.09, within 1.15: the parts and the households grow linearly, and each site popped reads the households in its 760 ft cells, n below about 150, a few sites a well.
 
 
 ## Earlier findings
 
+- verdict-5, finding 1: fixed - the heap's seed counted, each household's distance to open water through the 120 ft water index (27) and a bottom-up heapify, with the index's build; the five-houses rung counted, each household read placed in its reach band (n a site); the first well searched like the later ones (36 + 2.04 pops), the all-n service settling the ten; no wells drawn at the first; the first well re-keys n; the clearance at the near-house 5.5, 17; the 2.9e-5 density's pool gone with the pool (ask:444-T09-rescore-batch-2)
 - verdict-4, finding 1: fixed - the households a site would serve read 9 + n from its 760 ft cells; the first well costs its whole pool (the ten admits none); the later wells 1/p pops, p = 0.49 measured on the reference geometry; the wall test and the find at their 3 by 3 cells; the five-nearest key dropped (the forms' order is the search's, no rung key)
 - verdict-1, finding 1: fixed - the sites are one a well's diameter along each homestead's envelope, from the seat rule (off the homestead, within 80 ft of its wall), not 8 a house
 - verdict-1, finding 2: fixed - the track's segments are filed in the parts index (1 a cell, measured) and counted in each site's clearance; the engine's verdict is that clearance
@@ -70,10 +75,10 @@ From 20 to 80 households the stage grows at an exponent of about 1.38, past 1.15
 - verdict-2, finding 6: fixed - 34 sites a house, on the envelope grown by the well's radius
 - verdict-2, finding 7: fixed - a part's longest side (63 ft) and the verge (7 ft) are in the Bounds, and the clearance lies in 2 by 2 cells
 
-- verdict-3, finding 1: fixed - the pool is the sites within 760 ft of the household, those of the houses within 908 ft (a site at most 148 ft from its house's center), found from a site index of 760 ft cells, each scanned site's distance tested
+- verdict-3, finding 1: fixed - the pool is the sites within 760 ft of the household, those of the houses within 908 ft (a site at most 148 ft from its house's center), found from a site index of 760 ft cells, each scanned site's distance tested; since corrected by ask:444-T09-rescore-batch-2: no site index is built, the first well searched like the later ones
 - verdict-3, finding 2: fixed - the heap's seed, each household's distance to open water, and the wells drawn are rows of their own; the heap's push and pop is stated as 2 x log2 of the pool
 - verdict-3, finding 3: disputed - memoizing each site's households within 760 ft breaks even at 20 and 40 by the verdict's own figures, and the ten's nearest has no distance limit, so a site's memo would miss a dry household beyond it; the 9-cell scan stays
-- FR-014 re-score: each factor at the typical case (rubric S8): a well's sites are asked nearest the worst-served household first and the nearest is admitted within a few pops, so no site index is built and no pool scanned; each popped site at the mean densities of `items.md`; slack 2 (ask:444-budget-standard; the accept was ask:444-T03-appurtenances-round-4)
+- FR-014 re-score: each factor at the typical case (rubric S8): a well's sites are asked nearest the worst-served household first and the nearest is admitted within a few pops, so no site index is built and no pool scanned; each popped site at the mean densities of `items.md`; slack 2 (ask:444-budget-standard; the accept was ask:444-T03-appurtenances-round-4); since corrected by ask:444-T09-rescore-batch-2: slack 1, the first well searched like the later ones
 
 ## Cheaper algorithms considered
 

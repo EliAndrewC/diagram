@@ -31,22 +31,23 @@
 | items | per item | 2 | the parcels on the sheet, the mean of the pool's woods (1 and 3) | the typical wood |
 | the ring | per item | 24 | its 12 points, each bent to the ground (1) and written (1) | always 24 |
 | the sweep | per item | 150 | the 12 edges sorted (48) and each crossed with the rows it spans, the mean perimeter over 8 ft plus 12 | the typical parcel |
-| the seats (marsh raster and index cells read) | per item | 3642 | the mean parcel's 607 seats, each inside its row's span (1), dry - its 25 ft marsh sample (1) and, at the 15 percent of seats in a marsh-crossed cell, its 13 segments (2) - off the pond (1), and its crown written and filed (1) | the typical parcel |
-| the gather (registry cells examined) | per item | 150 | the parcel's 5 by 6 cells, each with the mean 3.3 things and the cell | the typical parcel |
+| the seats (marsh raster and index cells read) | per item | 2774 | the mean parcel's 607 seats, each inside its row's span (1), dry - its 25 ft marsh sample (1) and, at the 15 percent of seats in a marsh-crossed cell, that cell's typical 3.8 segments (0.57, the contract's mean a crossed cell, not the 13 most a cell holds; ask:444-T09-rescore-batch-2) - off the pond (1), and its crown written and filed (1) | the typical parcel |
+| the gather (registry cells examined) | per item | 129 | the parcel's 5 by 6 cells, each with the mean 3.3 things and the cell: 30 x (3.3 + 1) = 129 | the typical parcel |
 | the cuts (lattice rows cut) | per item | 21 | the about 6 things the ring's band meets, each cut from its about 3.5 rows | the typical parcel |
 | the filing (registry cells written) | per item | 31 | recorded (1), its at most 5 by 6 cells (30) | the typical parcel |
 | slack | per item | 2 | what varies around the typical case (S8): the spread around the mean parcel and its seats | a larger parcel |
 
-So: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2, the same at every size.
+So: 2 x (24 + 150 + 2774 + 129 + 21 + 31) x 2, the same at every size.
 
 ## Totals
 
-- at 20: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
-- at 40: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
-- at 80: 2 x (24 + 150 + 3642 + 150 + 21 + 31) x 2 = 16072
+- at 20: 2 x (24 + 150 + 2774 + 129 + 21 + 31) x 2 = 12516
+- at 40: 2 x (24 + 150 + 2774 + 129 + 21 + 31) x 2 = 12516
+- at 80: 2 x (24 + 150 + 2774 + 129 + 21 + 31) x 2 = 12516
 
 ## Earlier findings
 
+- verdict-5, finding 1: fixed - the marsh-crossed seats at the typical 3.8 segments a crossed cell, not the most 13; the gather 30 x (3.3 + 1) = 129 (ask:444-T09-rescore-batch-2)
 - verdict-4, finding 1: fixed - every factor at its mean: 2 parcels, the mean parcel's 607 seats, the marsh's crossed share measured, the cuts at the things a ring's band meets, the registry at the mean 3.3 (flat, as measured falling from 3.4 to 3.3); the slack on means
 - verdict-1, finding 1: fixed - the bearing is recorded once, and only for the woods off the sheet, the exclusive case
 - verdict-1, finding 2: fixed - the crowns by a scanline sweep of the lattice rows against the ring's edges

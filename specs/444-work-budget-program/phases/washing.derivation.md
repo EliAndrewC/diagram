@@ -32,21 +32,21 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 20 at 20, 40 at 40, 80 at 80 | the households, each seated on its water | 80 households |
-| the nearest water (water index cells examined, a household) | per item | 22 | its 3 by 3 cells of 120 ft (9), the about 3 a water crosses each with the mean 4 segments (12), and its projection (1) | the typical household |
+| the nearest water (water index cells examined, a household) | per item | 27 | its 3 by 3 cells of 120 ft (9), the about 3 a water crosses each with about 5.6 segments (17: the contract's 3.7 a crossed 64 ft cell scaled to a 120 ft cell's longer mean chord, about 94 ft against 50 ft, 3.7 x 3.8 / 2.5), and its projection (1) | the typical household |
 | slack | per item | 2 | what varies around the typical case (S8): the spread around the mean footings and their shifts | a crowded bank |
 | the order | over the run | 100 at 20, 240 at 40, 560 at 80 | the households sorted along their waters, log2 of the households rounded up each | 80 households |
-| the footing seats (registry cells examined, a footing) | over the run | 48 a footing | the footings drawn, measured (3 at 20, 9 at 40, 23 at 80); each its strip, 70 by 6 ft at a random angle, in about 2.6 cells read with the mean 3.3 things and the cell (12), each thing projected and marked (2 x 2.6 x 3.3, 18), the 9 slots set and walked (18) | the typical bank |
+| the footing seats (registry cells examined, a footing) | over the run | 64 a footing | the footings drawn, measured (3 at 20, 9 at 40, 23 at 80); each its strip, 70 by 6 ft at a random angle, in about 2.6 cells read with the mean 5.5 things within 3 cells of a house (the strip lies within the 120 ft reach of its house) and the cell (2.6 x 6.5, 17), each thing projected and marked (2 x 2.6 x 5.5, 29), the 9 slots set and walked (18) | the typical bank |
 | the drawing (registry cells written) | over the run | 3 x 3 at 20, 9 x 3 at 40, 23 x 3 at 80 | each footing recorded (1) and filed in its about 1.2 cells (2) | the typical bank |
 | the water index (cells written) | once | 780 at 20, 1,090 at 40, 1,530 at 80 | each segment walked through the cells it crosses at a random angle: its length x (4/pi) over 120 ft, plus 1 a segment | 80 households |
 | the form | once | 1 | the roll | always 1 |
 
-So: (households x 22 + the order + the footings x (48 + 3)) x 2, plus the water index and the form.
+So: (households x 27 + the order + the footings x (64 + 3)) x 2, plus the water index and the form.
 
 ## Totals
 
-- at 20: (20 x 22 + 100 + 3 x 48 + 3 x 3) x 2 + 780 + 1 = 2167
-- at 40: (40 x 22 + 240 + 9 x 48 + 9 x 3) x 2 + 1090 + 1 = 4249
-- at 80: (80 x 22 + 560 + 23 x 48 + 23 x 3) x 2 + 1530 + 1 = 8517
+- at 20: (20 x 27 + 100 + 3 x (64 + 3)) x 2 + 780 + 1 = 2463
+- at 40: (40 x 27 + 240 + 9 x (64 + 3)) x 2 + 1090 + 1 = 4937
+- at 80: (80 x 27 + 560 + 23 x (64 + 3)) x 2 + 1530 + 1 = 10053
 
 ## Growth
 
@@ -55,6 +55,7 @@ From 20 to 80 households the stage grows at an exponent within 1.15: the househo
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - the footing seats at the near-house 5.5 things a cell, 64 a footing; the nearest water at about 5.6 segments a crossed 120 ft cell, 27 (ask:444-T09-rescore-batch-2)
 - verdict-3, finding 1: fixed - the footings at the measured count drawn on the shared form (the reference's), grown at its rate and capped by the banks; the strip and the water index at their mean cells; the registry at the mean 3.3 (flat, measured falling); the each-house form not rolled on the reference; the Growth section restated
 - verdict-1, finding 1: fixed - the water index walks each segment through the cells it crosses, the waters' length at its diagonal over 120 ft plus 3 a segment, from the measured length; no longest-segment figure
 - verdict-1, finding 2: fixed - a shift is an offset along the found segment's direction, 1, labeled a GUESS for "moved along the bank"

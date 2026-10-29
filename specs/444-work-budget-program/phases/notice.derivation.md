@@ -17,13 +17,13 @@
         every way out is read in one lookup
     in score order until one is kept - the busiest clear seat, so the first few: its 7 by 3 ft probe against the registry's
         things and the waters in its cells; the view and the placard; the caption's 256 candidates in reach, each box against the
-        registry's things in the at most 3 by 2 cells of 64 ft it covers; an `entrance` board, its leg among the cut points (1)
+        registry's things in the about 2 cells of 64 ft it covers, in rank order until the first clean box; an `entrance` board, its leg among the cut points (1)
     draw the board on the first kept seat, with its caption's proved seat; recorded and filed
 
 ## Indexes
 
 - house index: cells of 260 ft (the score's reach), so a leg's dwellings within reach lie in its 3 by 3 cells; densest the houses' density x 9 x 260 squared, 18, from a smallest side of 260 ft
-- registry: cells of 64 ft; densest the mean 4 things a cell near the ways (`items.md`'s typical densities: 3.3 an occupied cell, 5.5 about the houses), from a smallest side of 64 ft against the probe and a caption box, each in at most 3 by 2 cells
+- registry: cells of 64 ft; the mean 5.5 things a cell within 3 cells of a house, where the busiest seats lie (`items.md`'s typical densities: 3.3 an occupied cell), from a smallest side of 64 ft against the probe and a caption box, each in at most 3 by 2 cells
 - water index: cells of 64 ft; densest the mean 4 water segments a crossed cell (`items.md`), from a smallest side of 64 ft
 
 ## The count, factor by factor
@@ -31,23 +31,24 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 1 | the board | always 1 |
-| the board (registry cells written) | per item | 5 | recorded (1) and filed in the cells a 16 by 6 ft board covers, at most 4 (4) | always 5 |
-| slack | per item | 2 | what varies around the typical case (S8): the spread around the mean seats tested | a crowded center |
+| the board (registry cells written) | per item | 3 | recorded (1) and filed in the cells a 16 by 6 ft board covers, typically (1 + 16/64)(1 + 6/64), about 1.4 (2) | always 5 |
+| slack | per item | 2 | what varies around the typical case (S8): the spread around the mean seats tested, on the seats tested alone (the board's writes are exact) | a crowded center |
 | the score (house index cells examined) | over the run | 6,287 at 20, 12,424 at 40, 24,566 at 80 | the sliding window: each of the ways' legs (160 at 20, 320 at 40, 640 at 80) admitting and releasing the mean 15 houses within 260 ft (30), and each seat (1,487 at 20, 2,824 at 40, 5,366 at 80) reading its window (1) | the typical cluster |
 | the sort (counting) | once | 1,506 at 20, 2,843 at 40, 5,385 at 80 | each seat into its score's bucket (1), and the 19 buckets read | 80 households |
 | the ways out (graph nodes and legs) | once | 680 at 20, 1,360 at 40, 2,720 at 80 | one depth-first pass over the ways' graph, its legs and nodes, each entered and left once (2) | an `entrance` board |
-| the seats tested (registry and water index cells examined) | over the run | 1397 x 2 | in score order until one is kept: a seat is kept with p = 0.78 x 0.66 = 0.51, so 1 / 0.51 = 1.96 seats tested (S8, 1/p); each tested seat: its probe in the 1.2 cells a 7 by 3 ft box covers with the mean 4 things and the cell (6); clear (0.78): its waters likewise (6), the view and the placard (2), the entrance lookup (1), and its caption - clean (0.66) at its first clean ranked box, about 4 boxes a 2 cells with the mean 4 things and the cell (40), or not, all 256 in reach (2,560) - so 912 a clear seat and 713 a seat tested | the typical center |
+| the seats tested (registry and water index cells examined) | over the run | 127 x 2 | in score order until one is kept: a clear seat's caption is clean at some ring within reach, so a seat is kept with p about 0.78, the clear share, and 1 / 0.78 = 1.3 seats tested (S8, 1/p); each tested seat: its probe in the 1.2 cells a 7 by 3 ft box covers with the mean 5.5 things within 3 cells of a house (the busiest seats by dwellings within 260 ft) and the cell (8); clear (0.78): its waters likewise (6), the view and the placard (2), the entrance lookup (1), and its caption, ranked until its first clean box, about 1 / 0.66 rings, so about 8 boxes (4 + 8 x 0.34 / 0.66), each in 2 cells with the mean 5.5 things and the cell (104) - so 121 a clear seat and 97 a seat tested, 1.3 x 97 = 127 (ask:444-T09-rescore-batch-2) | the typical center |
 
-So: 1 x 5 x 2, plus the score, the sort, the ways out, plus the seats tested x 2.
+So: 1 x the board's 3, plus the score, the sort, the ways out, plus the seats tested x 2.
 
 ## Totals
 
-- at 20: 1 x 5 x 2 + 6287 + 1506 + 680 + 1397 x 2 = 11277
-- at 40: 1 x 5 x 2 + 12424 + 2843 + 1360 + 1397 x 2 = 19431
-- at 80: 1 x 5 x 2 + 24566 + 5385 + 2720 + 1397 x 2 = 35475
+- at 20: 1 x 3 + 6287 + 1506 + 680 + 127 x 2 = 8730
+- at 40: 1 x 3 + 12424 + 2843 + 1360 + 127 x 2 = 16884
+- at 80: 1 x 3 + 24566 + 5385 + 2720 + 127 x 2 = 32928
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - the seats tested charged to the first clean caption box, about 8 boxes, p about 0.78, 1.3 seats tested; the registry at the near-house 5.5; the board at about 1.4 cells; no slack on the board's writes (ask:444-T09-rescore-batch-2)
 - verdict-3, finding 1: fixed - the seats tested are 1/p, p the measured share a seat is kept (0.78 x 0.66), about 1.96; the caption's candidates are the ranked search's to its first clean box, or all 256 where none is clean; the probe and the caption box at their mean cells; the score at the mean 15 houses; the slack on the seats tested
 - verdict-1, finding 1: fixed - an `entrance` board's rule is read from the ways out's cut points, found once by a depth-first pass over the ways' graph, its own row, and a seat's lookup (1) is in its count; the ways' graph is in the Reads
 - verdict-1, finding 2: fixed - the mask's marks count each small feature's cells edge-inclusive, and the large polygons by one scanline pass, so the mask is a ceiling

@@ -35,21 +35,22 @@
 | items | per item | 1 | the connector, one leg | always 1 |
 | the ideal bearing | per item | 1 | the field's fall against the gate | always 1 |
 | slack | per item | 2 | what varies around the typical case (S8): the spread around the bearings tried and the crossings met, on the whole count | a ray across the field |
-| the bearings (raster and parts index cells examined) | over the run | 894 at 20, 1,299 at 40, 1,884 at 80 | the ideal bearing and one either side, 3: the search sweeps alternate sides outward from the ideal, and the reference rolls' connector is one straight leg at 10 and 20, so a clean bearing lies at the ideal or beside it; each ray's 155 at 20, 225 at 40, 328 at 80 raster cells read (1), the crossings it meets (25 at 20, 37 at 40, 53 at 80, 0.0072 a ft of its length) each a crossed cell's mean 2.5 segments, the 79 at 20, 114 at 40, 166 at 80 parts index cells it passes each read (1, the parts a ray meets typically none), and its comparison (1) | the typical exit |
+| the bearings (raster and parts index cells examined) | over the run | 596 at 20, 866 at 40, 1,256 at 80 | 2 rays, the mean over the search order's three positions (the ideal and one either side), the search stopping at the first clean bearing (S8; ask:444-T09-rescore-batch-2): the search sweeps alternate sides outward from the ideal, and the reference rolls' connector is one straight leg at 10 and 20, so a clean bearing lies at the ideal or beside it; each ray's 155 at 20, 225 at 40, 328 at 80 raster cells read (1), the crossings it meets (25 at 20, 37 at 40, 53 at 80, 0.0072 a ft of its length) each a crossed cell's mean 2.5 segments, recorded as it walks, the 79 at 20, 114 at 40, 166 at 80 parts index cells it passes each read (1, the parts a ray meets typically none), and its comparison (1) | the typical exit |
 | the crossings (outline index cells examined) | over the run | 4 | the chosen ray clipped to the field outline's bounding box first (4): the ideal bearing points away from the field, so it typically misses the box and walks no outline cell | the typical exit |
 | the corridor (parts index cells written) | over the run | 94 at 20, 137 at 40, 200 at 80 | the one straight leg's 20 ft band at the diagonal's angle in 64 ft cells, about L w / s squared + (L + w)(cos + sin) / s + 1 | the typical exit |
-| the squaring (raster cells examined) | over the run | 218 at 20, 318 at 40, 461 at 80 | the leg's raster cells (1), and its crossings at the mean 2.5 segments | the typical exit |
+| the squaring (raster cells examined) | over the run | 25 at 20, 37 at 40, 53 at 80 | the crossings the chosen ray's walk recorded, each squared once (1): the raster does not change between that walk and the squaring, so no cell is walked again | the typical exit |
 
 So: (1 x 1 + the bearings + the crossings + the corridor + the squaring) x 2. The dry exit's flood and the splice round the field run only where no near bearing is clean.
 
 ## Totals
 
-- at 20: (1 x 1 + 894 + 4 + 94 + 218) x 2 = 2422
-- at 40: (1 x 1 + 1299 + 4 + 137 + 318) x 2 = 3518
-- at 80: (1 x 1 + 1884 + 4 + 200 + 461) x 2 = 5100
+- at 20: (1 x 1 + 596 + 4 + 94 + 25) x 2 = 1440
+- at 40: (1 x 1 + 866 + 4 + 137 + 37) x 2 = 2090
+- at 80: (1 x 1 + 1256 + 4 + 200 + 53) x 2 = 3028
 
 ## Earlier findings
 
+- verdict-4, finding 1: fixed - 2 bearings, the mean over the three positions, the search stopping at the first clean one; the squaring reads the crossings the bearing walk recorded (ask:444-T09-rescore-batch-2)
 - verdict-3, finding 1: fixed - the crossings a ray meets measured by Buffon's rule on the reference manifests, 0.0072 a ft, growing with the ray; the 3 bearings reasoned (the ideal and one either side); the slack on the whole count; the outline walk clipped to its box; the corridor at its typical cells; the parts at 1 a cell; no count of today's code
 - verdict-1, finding 1: fixed - the splice's leg is an outline edge, at most 222 ft (measured), with the 17 ft margin (`SPUR_SETBACK`) at each end, 256 ft, its cells counted from that
 - verdict-1, finding 2: fixed - the corridor is the lane as spliced, the ray plus the shorter arc and its margins, 20 ft wide in at most 2 cells across
@@ -66,4 +67,4 @@ So: (1 x 1 + the bearings + the crossings + the corridor + the squaring) x 2. Th
 - grid or spatial index: used - the homesteads' raster and parts index and the field's outline index, read, not built
 - priority queue: not used - the dry exit's steps are equal, so a breadth-first queue stands in for one
 - incremental update: not used - one lane is drawn, once
-- memoizing what a scan does not change: used - the raster and the indexes built by earlier stages are read, not rebuilt
+- memoizing what a scan does not change: used - the chosen ray's crossings, recorded by its walk and read by the squaring; the raster and the indexes built by earlier stages are read, not rebuilt
