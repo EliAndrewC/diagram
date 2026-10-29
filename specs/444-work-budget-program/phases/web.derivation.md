@@ -11,7 +11,8 @@
 
     the frame: the cluster's hull offset 100 ft (at most 4 points a house, each moved on its normal, 2 a point)
     the frame's ring, 100 ft deep outside the hull, added to lane ground in 6 ft cells: each decided from the free-ground
-        raster (the 2 by 2 cells of 32 ft a 6 ft cell tested at the 8 ft widest margin straddles, each read with its segments),
+        raster dilated by the 8 ft widest margin: each boundary segment in the ring's 32 ft cells marks the 6 ft cells within
+        8 ft of it, once, and a ring cell then reads its 32 ft cell's state and its own mark,
         and only a cell within 8 ft of the hull against the parts of the 2 by 2 cells of 64 ft it straddles; then the
         homesteads' flood extended over the ring on its bucket queue, so the spine and the joins descend it there too
     the spine: traced along the cluster's long axis on lane ground's flood, end to end - each step the neighbor of least
@@ -42,13 +43,13 @@
 | items | per item | 1 | the web, one network | always 1 |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
 | the frame (hull points moved) | over the run | 160 at 20, 320 at 40, 640 at 80 | the hull's at most 4 points a house, each moved on its normal, 2 | 80 households |
-| the frame's ring (lane ground cells written) | over the run | 919,356 at 20, 1,368,366 at 40, 2,055,096 at 80 | the ring outside the hull, the hull's perimeter, at most the cluster's 2 x (width + length), by 100 ft plus pi x 100 squared, over 36 sq ft (11,068 at 20, 16,462 at 40, 24,712 at 80 cells), each decided from the at most 2 by 2 cells of 32 ft it straddles at the 8 ft margin, each read with its at most 20 segments (4 x 20 + 1, 81); the cells within 8 ft of the hull (816 at 20, 1,248 at 40, 1,908 at 80) also against the 2 by 2 cells of 64 ft with their 7 parts (28) | 80 households |
+| the frame's ring (lane ground cells written) | over the run | 325,784 at 20, 484,748 at 40, 728,528 at 80 | the ring outside the hull, the hull's perimeter, at most the cluster's 2 x (width + length), by 100 ft plus pi x 100 squared (11,068 at 20, 16,462 at 40, 24,712 at 80 cells of 6 ft, 390 at 20, 579 at 40, 869 at 80 raster cells of 32 ft); the dilation, once: each raster cell's at most 20 segments, each piece within it at most 32 x root 2 ft, walked through at most 32 x root 2 / 6 + 1 rounded up, 9, cells of 6 ft, each marking the 8 ft band across it, 2 x 8 / 6 + 1 rounded up, 4 cells (720 a raster cell); then each 6 ft cell its 32 ft cell's state and its mark (2); the cells within 8 ft of the hull (816 at 20, 1,248 at 40, 1,908 at 80) also against the 2 by 2 cells of 64 ft with their 7 parts (28) | 80 households, every ring raster cell at the densest |
 | the ring's flood (lane ground cells examined) | over the run | 287,768 at 20, 428,012 at 40, 642,512 at 80 | the homesteads' flood extended over the ring's cells, 26 a cell on its bucket queue (the homesteads' figure: popped, 8 neighbors read, at most 8 pushes, the buckets scanned) | 80 households |
 | the back lanes (lane ground cells examined) | over the run | 2,240 at 20, 4,620 at 40, 9,604 at 80 | 14 at 20, 20 at 40, 28 at 80 lines, the frame's long side over 100 ft plus 1, each the frame's short side over 6 ft plus 1 cells, each read (1) | 80 households |
 | the spine (lane ground cells examined) | over the run | 7,087 at 20, 10,165 at 40, 14,858 at 80 | at most the frame's long side plus its short side (the flood's walk bends round the plots, at most one side's width aside) over 6 ft (373 at 20, 535 at 40, 782 at 80 cells), each traced: its 8 neighbors read, the step, its 25 ft band marked, 2 x 25 / 6 + 1 rounded up, 10 (19) | 80 households |
 | the joins (lane ground cells examined) | over the run | 34,884 at 20, 64,600 at 40, 121,448 at 80 | the runs, the lines plus 2 a house (54 at 20, 100 at 40, 188 at 80), each of their two ends reached along the flood within the pitch, 100 ft over 6 ft, 17 cells, each traced (19) | every run joined at both ends |
 | the laying (parts index cells written) | over the run | 4,040 at 20, 7,632 at 40, 14,636 at 80 | the lanes' length - the back lanes, the spine, at each run's end 100 ft of join and 100 ft of bund leg, and 372 ft a household's door path - 44,575 at 20, 85,646 at 40, 167,023 at 80 ft, in at most 345 at 20, 641 at 40, 1,209 at 80 legs (3 a household's way; 5 a run: its stretch, its two joins and its two bund legs; and the spine's at most one bend a line plus 1), its corridor (the lane and its 7 ft clearance a side, under 64 ft) in at most 2 cells across: 2 x (the length at root 2 over 64 ft, plus 3 a leg) | every lane at its longest |
-| the door paths (lane ground cells examined) | over the run | 34,800 at 20, 69,600 at 40, 139,200 at 80 | each household: the lane-ground cells within 12 ft of its built ground, its 4 x 184 ft perimeter by 12 ft over 36 sq ft, 246, and within 60 ft of its house, pi x 60 squared over 36 sq ft, 315, each read for a way's mark (561); its door path traced, at most 62 cells (the homesteads' figure for a way), each traced (19); and the decision (1) | every household needing one |
+| the door paths (lane ground cells examined) | over the run | 34,800 at 20, 69,600 at 40, 139,200 at 80 | each household: the lane-ground cells within 12 ft of its built ground, its 4 x 184 ft perimeter by 12 ft over 36 sq ft, 246, and within 60 ft of its house, pi x 60 squared over 36 sq ft, 315, each read for a way's mark, the two regions summed as a ceiling though they overlap (561); its door path traced, at most 62 cells (the homesteads' figure for a way), each traced (19); and the decision (1) | every household needing one |
 | the trims (legs walked) | over the run | 345 at 20, 641 at 40, 1,209 at 80 | each leg walked at most once from a lane's end, before it is filed | every lane trimmed |
 | the bund (outline index cells examined) | over the run | 8,424 at 20, 15,600 at 40, 29,328 at 80 | each run's two ends, as reached, one leg of at most 100 ft (an end within the frame's 100 ft of the field): 100 x root 2 / 64 + 3, 5.2, rounded up to 6 cells, each with its 12 segments (13) | every end near the field |
 | the knots (endpoint index cells examined) | over the run | 4,860 at 20, 9,000 at 40, 16,920 at 80 | each run's two ends, as reached and before the lane is filed: its 3 by 3 cells of 25 ft, each read with its at most 4 ends, 9 x (4 + 1) | every end near another |
@@ -59,9 +60,9 @@ So: 1 x 1, plus the frame, the ring, the ring's flood, the back lanes, the spine
 
 ## Totals
 
-- at 20: 1 x 1 + 160 + 919356 + 287768 + 2240 + 7087 + 34884 + 4040 + 34800 + 345 + 8424 + 4860 + 14860 + 3105 = 1321930
-- at 40: 1 x 1 + 320 + 1368366 + 428012 + 4620 + 10165 + 64600 + 7632 + 69600 + 641 + 15600 + 9000 + 28550 + 5769 = 2012876
-- at 80: 1 x 1 + 640 + 2055096 + 642512 + 9604 + 14858 + 121448 + 14636 + 139200 + 1209 + 29328 + 16920 + 55676 + 10881 = 3112009
+- at 20: 1 x 1 + 160 + 325784 + 287768 + 2240 + 7087 + 34884 + 4040 + 34800 + 345 + 8424 + 4860 + 14860 + 3105 = 728358
+- at 40: 1 x 1 + 320 + 484748 + 428012 + 4620 + 10165 + 64600 + 7632 + 69600 + 641 + 15600 + 9000 + 28550 + 5769 = 1129258
+- at 80: 1 x 1 + 640 + 728528 + 642512 + 9604 + 14858 + 121448 + 14636 + 139200 + 1209 + 29328 + 16920 + 55676 + 10881 = 1785441
 
 ## Earlier findings
 
@@ -79,7 +80,7 @@ So: 1 x 1, plus the frame, the ring, the ring's flood, the back lanes, the spine
 - verdict-2, finding 3: fixed - the knots and the bund leg are asked at each run's end as it is reached, before the lane is filed, and the bund legs are in the laying's legs and length (S4)
 - verdict-2, finding 4: disputed - the bund's cells are 100 x root 2 / 64 + 3 = 5.2, rounded up to 6, the laying row's own rule; 5 would round down
 - verdict-2, finding 5: fixed - with no ways index there is no leg filing to count; the way marks are the trace's own band marks
-- verdict-2, finding 6: fixed - a ring cell reads the 2 by 2 cells of 32 ft it straddles at the 8 ft margin, 81
+- verdict-2, finding 6: fixed - the ring's raster is dilated by the 8 ft margin once (each segment marking the 6 ft cells within 8 ft of it, 720 a raster cell at the densest), and a ring cell reads its 32 ft cell's state and its mark (2), verdict-2's own alternative
 - verdict-2, finding 7: fixed - the corridor is the lane and its 7 ft clearance a side (`LANE_CLEARANCE`), under 64 ft
 
 ## Cheaper algorithms considered
@@ -88,4 +89,4 @@ So: 1 x 1, plus the frame, the ring, the ring's flood, the back lanes, the spine
 - grid or spatial index: used - lane ground and its flood (the homesteads'), the parts, outline and endpoint indexes
 - priority queue: not used - the flood is the homesteads' (on its bucket queue); the web only traces along it
 - incremental update: used - each lane's cells are marked on lane ground as a way's as it is laid, for the households' tests
-- memoizing what a scan does not change: used - lane ground and its flood are read, not rebuilt; only the frame's ring is added, and only its cells near the hull read the parts
+- memoizing what a scan does not change: used - lane ground and its flood are read, not rebuilt; only the frame's ring is added, its raster dilated once, and only its cells near the hull read the parts

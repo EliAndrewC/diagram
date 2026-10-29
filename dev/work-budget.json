@@ -160,7 +160,18 @@
    "status": "unbudgeted"
   },
   "crossings": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.82,
+   "derivation": "specs/444-work-budget-program/phases/crossings.derivation.md",
+   "verdict": "ask:444-T04-crossings-round-4",
+   "items_at_20": 29806,
+   "items_at_40": 52111,
+   "items_at_80": 94046,
+   "pinned_on": "accept",
+   "derivation_sha": "530275640af24bc0ae7639c4ee4745e0dad551fa1732c4a33f00e8d128263bd1",
+   "rounds": 3,
+   "spread": "27,700-34,306 at 20"
   },
   "sties": {
    "status": "budgeted",
