@@ -36,6 +36,19 @@ the experiment's result for its own sake.
   CLAUDE.md, "Research").
 - Its tooling held to the project's rules: 100% coverage, a test companion, a make target, house style.
 
+## Resuming
+
+The build is long (about 120,700 passages; 110-160 a minute measured on 2026-10-29, so 12-18 hours) and is safe to interrupt:
+
+- Each shard is written to the archive's working copy (`.specify/source-archive/semantic-index/bge-m3-int8/<shard>.npz`, on
+  the host's disk) as soon as it is done; a rerun of `make semantic-index` skips every shard whose passages are unchanged, so an
+  interruption loses only the shard in progress. The commit and push to the archive's repository come at the end of a build.
+- The model is BGE-M3's 8-bit build (`Xenova/bge-m3`, `onnx/model_int8.onnx`), cached in `.specify/model-cache/`; the
+  docstring of `scripts/record/semantic_index.py` says why not the full one.
+- To resume: `make semantic-index` (it picks up where it stopped). Then run the comparison, `trial.py` beside this spec - its 17
+  questions (ten English, seven answered by Japanese sources), each with the archive capture known to answer it - as
+  `python3 specs/447-semantic-index/trial.py <out.json>`, and record it under "The evidence".
+
 ## The measurement
 
 1. The cost: the time to build the index over the whole corpus on this machine, its size on disk, and the time an update and a
