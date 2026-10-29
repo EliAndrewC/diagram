@@ -198,7 +198,19 @@ def test_a_cost_per_thing_above_the_reference_needs_a_named_reason() -> None:
     t = re.sub(r"(?m)^- at 40: .*$", "- at 40: 40 x 5000 = 200000", text)
     why = wbb.reference_problems(t)
     assert why and "passes the reference's 4,000" in why[0] and "reason above the reference" in why[0]
-    assert wbb.reference_problems(t + "\n- reason above the reference: each disc is tested against every other\n") == []
+    reasoned = t + "\n- reason above the reference: each disc is tested against every other\n"
+    assert [w for w in wbb.reference_problems(reasoned) if "reason above the reference" in w] == []
+    assert wbb.reference_problems(reasoned + "- pruning: every disc can win, so none applies\n") == []
+
+
+def test_a_cost_per_thing_above_the_reference_names_its_pruning() -> None:
+    """Rubric S9 (the GM 2026-10-29: "Why do we think it should take 8,730-11,277 operations to place a single notice board?!"): a
+    derivation above the reference names the bound that stops its search before the whole set, or why none can - the notice board's
+    reason, that it is one thing, passed the screen alone while 97% of its count scored every seat to try 1.3."""
+    text = (FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")
+    t = re.sub(r"(?m)^- at 40: .*$", "- at 40: 40 x 5000 = 200000", text) + "\n- reason above the reference: the board is one thing a roll\n"
+    why = wbb.reference_problems(t)
+    assert len(why) == 1 and "rubric S9" in why[0] and "`- pruning:" in why[0], why
 
 
 def test_the_arithmetic_reader_takes_numbers_and_the_four_operators_alone() -> None:
