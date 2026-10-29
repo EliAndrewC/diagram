@@ -1,0 +1,45 @@
+UNDERIVED - the scrub's checks per throw (derivation.md line 49) have no term for the contract's "pine stopping ... at the marsh (0077)", and the marsh index that would serve that check (lines 37, 53) is built but read by no row.
+
+**1. Is each factor derived?** No, one factor is not.
+- **The scrub's checks per throw (line 49).** The row charges the registry (120, 164, 224) and the water (108), and nothing for the marsh. If the marsh sits in the registry as a thing, a charge of 1 per thing cannot pay for a test against a ring of up to 485 points. If the test goes through the marsh index, the row needs a term: up to 4 cells x (1 + 13 segments in a crossed cell) = 56 a throw, about 60,600 at 20.
+- **The marsh index (line 53).** It is charged as written, but no row reads it:
+  - line 51 reads the marsh from the region's raster;
+  - line 55 reads it from the 25 ft marsh raster;
+  - line 61 reads the samples' marsh state, which line 54 builds.
+
+  Either the scrub reads it, uncounted, or the row has no purpose.
+- **Arithmetic.** Every other row and all three totals reproduce: 754,463, 1,727,523 and 4,078,537, an exponent of 1.22.
+
+**2. Is there a standard, cheaper algorithm?** Yes, an index of only the kinds a rule asks for (LOOSE-grade). The Growth section's answer does not close S1.
+- **S1 has no exemption.** "A stated reason" is S6's allowance, not S1's.
+- **"No geometric ceiling" is contradicted by the Bounds.** They hold structures flat: houses at most 2.9e-5 a sq ft, 3 in 3 by 3 cells of 90 ft, a homestead at most 184 ft.
+- **"No finer index lowers it" rests on sizes the bundle never states.** No probe size is given anywhere. It also misses the alternative that matters, an index per kind; "Cheaper algorithms considered" never mentions one.
+- **Where it bites.** Three rows name the one kind they ask for, yet charge the registry's whole growing cell:
+  - line 45 (the sun keep-outs);
+  - line 57 (its homestead's sides);
+  - line 59 (the structures).
+
+  An index of those kinds bounds each row by the houses' density, which stays flat from 20 to 80. That removes the growth of 29, 40 and 55 from these rows.
+
+**3. Is any factor padded?** No. Verdict-2's two padded rows now reproduce at their derived figures: the marsh raster at 10,364, 21,426 and 44,720, and the belt at 1.04 crowns a clump.
+
+**4. Is each figure read at its source's size and unit?** Two figures are in doubt. Neither blocks.
+- **The holes' painted cells (line 61) are closed in form.** The arbiter asked about these. The row is now count x cells per thing, from figures at 10 and 20 and a rate. Two problems remain:
+  - The figures 1,046 and 1,990 things, and 4.99 and 4.88 cells, are called "measured" but are not in the contract's Bounds. Verdict-2 finding 1 set that standard, and the author met it for every other input, so the Bounds must carry these too.
+  - "Each at most 5" reads a mean as a maximum for each thing (4.99 is not a whole number). The total still holds as count x mean.
+- **The marsh's segments (lines 48 and 53).** These take the longest ring's points (485) as all the rings' segments, while the edge (13,382 ft) is the rings' combined length. The derivation should state the total points of all the rings.
+
+**Earlier findings.**
+- All eight of verdict-2's findings are closed, and each reproduces at the line it cites:
+  - 1: the inputs are in the Bounds, and the field's cells are counted each way: 528, 1,085 and 2,491.
+  - 2: the 13 segments a cell.
+  - 3: the holes paint once.
+  - 4: the counting sort.
+  - 5: the scanline.
+  - 6: 1.04 crowns a clump.
+  - 7: 9 x the households.
+  - 8: 2,300 at 80.
+- Verdict-1's findings stay closed.
+- Verdict-2's S1 point is not closed (question 2).
+
+Files: /tmp/l7r-check/work-budget-budget-hinterland/derivation.md, /tmp/l7r-check/work-budget-budget-hinterland/contract.md
