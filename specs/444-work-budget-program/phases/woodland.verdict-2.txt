@@ -1,0 +1,22 @@
+UNDERIVED - the crowns factor's edge retest (127 sites x 12 edges = 1524): the count of sites "within a jitter of the edge" depends on how far the jitter reaches, and neither the contract nor the derivation states it; and the bounding-box perimeter it is divided from is a ceiling only for a convex ring, which the contract does not say this ring is.
+
+**1. Is each factor derived?** Most of them are:
+- Items (4, the knob's count, the same at 10 and 20), the ring (12 points x 2), the filing (1 + 5 x 6 cells) and slack (1) are derived. The 5 by 6 is right: ceil(247.2/64)+1 = 5 and ceil(258.8/64)+1 = 6.
+- The 771 sites inside are measured, and the sweep's 408 has its reason.
+- The retest's 127 is not derived. It is `perimeter / 8 ft` (derivation.md line 29), and 8 ft is the grid spacing, not the jitter. The jitter's reach in feet is not in the bundle (a search for "jitter" finds only lines 14, 15 and 29). How many sites lie within a jitter of the edge depends on that reach: about P/16 (63) at plus or minus 4 ft, about P/8 at 8 ft, more beyond it. The derivation has to state the jitter's reach and derive the band's site count from it.
+- Earlier findings 1-4 are closed as written: the bearing is now a once row, the sweep is used, the bend is counted, and the bounding box is measured.
+
+**2. Is there a standard, cheaper algorithm?** Yes, inside the sweep itself, so this is LOOSE once the factor above is fixed.
+- A site near the edge can only cross an edge that is active in its row or the next row, and the sweep's active-edge list already holds those edges. For a simple 12-gon that is about 2-4 edges, not 12, so the retest is about 127 x 4, roughly 500, not 1524.
+- Round 1's "about 100 x 12, roughly 3,900 at worst" was a rough upper figure to show the sweep beats 10,794. It was not a bound to hold the derivation to.
+
+**3. Is any factor padded?** Two small ones, neither deciding the verdict:
+- 34 grid rows: a 258.8 ft span on an 8 ft grid holds at most floor(258.8/8)+1 = 33 rows at any alignment, so 34 is one row (12 operations) over its own reason.
+- The Totals add the on-sheet woods (4 x 4300) and the off-sheet bearing (4). The contract's "or" makes those two cases exclusive, so the worst case is the larger of the two, not their sum: 4 operations over.
+
+**4. Is each figure read at its source's size and unit?** The areas, the 771 and 545 crown counts, the bounding box and the 64 ft cells are each read as their source states them. The retest term is not:
+- It swaps the measured bounding box's perimeter, 2 x (247.2 + 258.8) = 1012 ft, in for the ring's own perimeter.
+- That is a ceiling only for a convex ring. The contract calls the ring "irregular" and "bent to the ground", and never says it is convex.
+- The fix: measure the 12-point rings' perimeters, as the bounding box was measured, or derive convexity from the contract.
+
+Files read: /tmp/l7r-check/work-budget-budget-woodland/MANIFEST.md, /tmp/l7r-check/work-budget-budget-woodland/rubric.md, /tmp/l7r-check/work-budget-budget-woodland/contract.md, /tmp/l7r-check/work-budget-budget-woodland/derivation.md, /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-1.txt

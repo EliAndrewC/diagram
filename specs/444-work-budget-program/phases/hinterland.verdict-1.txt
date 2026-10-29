@@ -1,0 +1,22 @@
+UNDERIVED - the coppice parcels (derivation.md line 52) have no candidates factor: the reason allows 4 parcels x 4 shrink rungs, which is 16 trials, but the figure counts only 4, and nothing bounds how many ranked seats get tried and dropped before 4 are taken (S2).
+
+**1. Is each factor derived?** No. Four factors lack a reason, and the growth fails S6 with none given.
+- Line 52, the parcels: 48,544 = 4 x (4 + 25 x 485 + 4 + 3) = 4 x 12,136, so it counts 4 trials, not the 16 its reason states. The same holds at 40 (4 x 13,361 = 53,444). A seat that fails the wet, apart or row test is dropped and the next ranked seat is tried, and the derivation gives no bound on how many seats that is.
+- Line 49, the open region: "about 2,000 cells at 20" for rasterizing the keep-outs is a bare number. Nothing from the geometry or the Bounds supports it, or its growth "with the view's side".
+- Line 44, the planted trees: "their 7 parts" a 64 ft cell is not in the Bounds, where the registry's densest cell holds 29, 40 and 55. It is also held flat while every other use of the registry grows.
+- Line 48, the scrub: the "40 ft pad each side" has no reason.
+- S6: the totals go from 1,366,901 at 20 to 8,063,721 at 80. That is x5.9 over two doublings, an exponent of about 1.28, past the 1.15 limit, and no reason is stated. The causes are the registry's neighbor bound growing x1.38 a doubling (line 31, carried into lines 48, 53, 54, 56 and 58), which S1 says must not grow with households, and the view's area growing x2.16 a doubling.
+
+**2. Is there a standard, cheaper algorithm?** Yes, three (LOOSE-grade).
+- Line 50, the open seats: each one is tested against the whole marsh ring (485, 534, 587 edges). But line 49 already rasterizes the marsh into the open region on the same 90 ft lattice. One raster read per seat would do: 783 x (108 + 1) = 85,347 at 20 instead of 464,319.
+- Line 52, the parcels: the 25 wet samples x the ring's edges could likewise read a marsh raster built once at the sample pitch.
+- Line 55, the thicket: each seat reads 35 raster cells (7 by 5). A summed-area table over the 776-cell raster needs 4 reads per seat: 776 + 594 x 4 = 3,152, against 20,790.
+
+**3. Is any factor padded?** Yes, one (LOOSE-grade).
+- Line 56, the belt's clumps: they are "carried at the near face's rate (x2.1)", but the near face's own samples go 44, 62, 90 (x1.41, then x1.45) and the cluster's length grows x1.5. The measured clumps also fell, 81 to 76 from 10 to 20. At the near face's actual rate the figures are 76, 107 and 155, not 76, 160 and 336.
+
+**4. Is each figure read at its source's size and unit?** Two figures are in doubt.
+- Line 54, the bamboo strips: "at most 0.55 a household (6 of 11 at 20)". If 11 is the number of farms at 20 households, the rate is per farm: 6 strips at 20, while the derivation's 0.55 x 20 households gives 11. The bundle can't settle which reading is meant; the derivation should state its source.
+- Line 56, the belt: the count is per clump, but the algorithm filters each clump's crowns. Crowns per clump is not stated, and the Bounds give crowns only as a total (717 at 20).
+
+This is round 1, so there were no earlier verdicts to confirm closed. The bundle is in /tmp/l7r-check/work-budget-budget-hinterland/; the derivation is /tmp/l7r-check/work-budget-budget-hinterland/derivation.md.

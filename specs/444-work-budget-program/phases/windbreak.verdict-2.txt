@@ -1,0 +1,35 @@
+UNDERIVED - the sites factor (106 per house) and the slack of 1 that rests on it: π·90²/15.556² is the average number of grid sites in a 90 ft disk, not the most it can hold, and at a half-pitch offset the disk holds 112.
+
+**1. Is each factor derived?** No, two are not.
+- **The sites factor is below its own worst case.** Derivation line 14 says "106 sites at most", line 32 gets 106 as "π x 90 squared over 15.556 squared, rounded up", and line 34 sets slack 1 because "every factor is a ceiling".
+  - The copse grid is fixed over the footprint, so a house can sit anywhere relative to it. In pitch units r² = 8100/241.99 = 33.47.
+  - Take a house at offset (0.5, 0.5) of a pitch. The columns |x| = 0.5, 1.5, 2.5, 3.5, 4.5, 5.5 hold 12, 12, 10, 10, 8 and 4 sites for each sign of x, so 112 sites in all, more than 106.
+  - The stated reason does not give the figure, so the slack's reason fails with it. Any of these would be derived:
+    - the exact maximum over offsets;
+    - the dilated-disk bound π(90 + 15.556/√2)²/15.556², rounded up to 133;
+    - the bounding square, 12 x 12 = 144;
+    - or keep 106 and take slack 2, with this as its stated reason.
+- **The groves' hold is not counted.** Line 12 takes each share "less what the belt and the groves already hold". The shares row (line 35) counts only the belt's ring, at 2 a point. The groves have no row, and the contract's Bounds give no figure for them. "Its area apportioned" also names no way a ring point is matched to a farm: 2 a point covers an area term, not a farm lookup.
+- **The other factors are derived:**
+  - the share test, 1;
+  - the registry, 2 x 2 cells of 29 things plus the cells, 120, from a 22 ft box in 64 ft cells;
+  - the clumps x 5, the house index and the crowns.
+
+**2. Is there a standard, cheaper algorithm?** None missed. The candidates now come from each house's reach (S2), the share test runs first, and the house, water and registry indexes are each built once. Nothing better stands out for the bank or registry tests at these bounds.
+
+**3. Is any factor padded?** Yes, two parts of the site test (these would make it LOOSE, behind the UNDERIVED).
+- **The bank test, 130 to 104.** A segment of at most 90 ft crosses at most 1 + ceil(dx/64) + ceil(dy/64) cells. Both ceilings reach 2 only if dx and dy are both over 64, so dx + dy over 128. But dx + dy ≤ 90√2 = 127.3. So the segment touches at most 4 cells, 4 x 26 = 104, not the 5 that "root 2 over 64 plus 3" gives.
+- **The house-index lookup, 12 to 0, unless something uses it.** Each site comes from its own house's 90 ft disk, so "within 90 ft of a house" already holds. The algorithm names nothing that uses the 3 by 3 lookup: a site goes to "the first" house, not the nearest. Either name what uses it or drop it.
+
+**4. Is each figure read at its source's size and unit?** Yes.
+- The 11 ft radius gives the 22 ft box, and the 90 ft reach is used as a radius.
+- The house density: 2.9e-5 x 9 x 90² = 2.1, so 3, which matches the contract's "3 houses in 3 by 3 cells".
+- The belt's ring is read in points, at 2 ops each; 26 water segments and 29 things per 64 ft cell are used as stated.
+- The clump, crown and ring figures at 20, 40 and 80 households match the Bounds.
+- The totals add up: 560,720, 1,121,694 and 2,243,901. The growth exponent is about 1.00, so S6 holds.
+
+**Earlier findings (verdict-1):**
+- **Closed:** F1 (the bank test now walks the water index, 130), F2 (no raster is built), F4 (the sites come from each house's reach, share test first), F5 (houses are the items, sites their candidates) and F6 (the exact pitch).
+- **Not closed:** F3. The belt's share now has a row, but the groves' hold has none, and their size is still unbounded.
+
+Bundle: /tmp/l7r-check/work-budget-budget-windbreak/ (derivation.md lines 12, 14, 32, 33, 34, 35; contract.md line 6; windbreak.verdict-1.txt).

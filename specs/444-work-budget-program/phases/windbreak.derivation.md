@@ -9,18 +9,19 @@
 
 ## The algorithm
 
-    each farm's share: its rolled homestead wood, less what the belt and the groves already hold for it (the belt's ring walked
-        once, its area apportioned)
-    for each house: the clump grid's sites within its 90 ft reach (a disk of the 15.556 ft grid, 106 sites at most), each
+    each farm's share: its rolled homestead wood, less what the belt already holds for it: the belt's ring walked once, each
+        point's farm its nearest house from the 90 ft house index, its area apportioned (the fengshui groves are none on a
+        hamlet: `groves` is empty on the reference at 10 and 20)
+    for each house: the clump grid's sites within its 90 ft reach (a disk of the 15.556 ft grid, at most 133 sites at any offset), each
         site once over the run (a site two houses reach is taken by the first)
-        each site: its farm's share not yet filled (1, first, so a filled farm's sites cost one test); its houses within 90 ft
-            from its 3 by 3 cells of a 90 ft house index; on its house's own bank - the segment from the site to its house walked
+        each site: its farm's share not yet filled (1, first, so a filled farm's sites cost one test); within 90 ft of its
+            house by construction (no lookup); on its house's own bank - the segment from the site to its house walked
             through the water index's cells, no water segment crossing it; its clump's box against the registry's things in its
             cells (S4); admitted: the clump drawn and filed, its crowns written, the farm's share counted down
 
 ## Indexes
 
-- house index: cells of 90 ft (the copse's reach), so a site's houses within reach lie in its 3 by 3 cells; densest the houses' density x 9 x 90 squared, 3, from a smallest side of 90 ft
+- house index: cells of 90 ft (the copse's reach), so a belt point's nearest house lies in its 3 by 3 cells; densest the houses' density x 9 x 90 squared, 3, from a smallest side of 90 ft
 - registry: cells of 64 ft; densest 29 things a cell (measured at 10 and 20, the ceiling taken), from a smallest side of 64 ft against a clump's 22 ft box, in at most 2 by 2 cells
 - water index: cells of 64 ft; densest 26 water segments a cell (measured at 10 and 20, the ceiling taken), from a smallest side of 64 ft against a site's segment to its house, at most 90 ft
 
@@ -29,21 +30,21 @@
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
 | items | per item | 20 at 20, 40 at 40, 80 at 80 | the houses, each offering the sites in its reach | 80 households |
-| the sites | per item | 106 | the 15.556 ft grid's sites within 90 ft, pi x 90 squared over 15.556 squared, rounded up | every site free |
-| the site test (house index, water index and registry cells examined) | per item | 263 | its farm's share (1), its 9 cells of 90 ft and their at most 3 houses (12), its bank: the segment to its house, at most 90 ft, at root 2 over 64 ft plus 3 cells, each with its 26 water segments (130), its clump's 2 by 2 cells of 64 ft with their 29 things and the cell (120) | every site tested |
+| the sites | per item | 133 | the 15.556 ft grid's sites within 90 ft at any offset of the house against the grid: every such site's cell lies within 90 + 15.556 / root 2 ft of the house, so at most pi x (90 + 11) squared over 15.556 squared, rounded up | a house at the worst offset |
+| the site test (water index and registry cells examined) | per item | 225 | its farm's share (1); its bank: the segment to its house, at most 90 ft, so its run and rise sum to at most 127.3 ft and it meets at most 1 + 2 + 1 = 4 cells of 64 ft, each with its 26 water segments (104); its clump's 2 by 2 cells of 64 ft with their 29 things and the cell (120) | every site tested |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the shares | once | 206 at 20, 432 at 40, 902 at 80 | each farm's share set (1), and the belt's ring walked for its area (2 a point) | 80 households |
+| the shares (house index cells examined) | once | 1,322 at 20, 2,784 at 40, 5,834 at 80 | each farm's share set (1), and the belt's ring walked, each point its area term (2) and its farm, the nearest house in its 3 by 3 cells of 90 ft and their 3 houses (12) | 80 households |
 | the clumps (registry cells written) | over the run | 462 x 5 at 20, 957 x 5 at 40, 1,980 x 5 at 80 | each clump drawn, recorded (1) and filed in at most 4 cells (4) | 80 households |
 | the house index (cells written) | once | 20 at 20, 40 at 40, 80 at 80 | each house filed once in its 90 ft cell | 80 households |
 | the crowns (written) | over the run | 624 at 20, 1,317 at 40, 2,779 at 80 | each crown written once | 80 households |
 
-So: the houses x 106 x 263 x 1, plus the shares, the clumps x 5, the house index and the crowns.
+So: the houses x 133 x 225 x 1, plus the shares, the clumps x 5, the house index and the crowns.
 
 ## Totals
 
-- at 20: 20 x 106 x 263 x 1 + 206 + 462 x 5 + 20 + 624 = 560720
-- at 40: 40 x 106 x 263 x 1 + 432 + 957 x 5 + 40 + 1317 = 1121694
-- at 80: 80 x 106 x 263 x 1 + 902 + 1980 x 5 + 80 + 2779 = 2243901
+- at 20: 20 x 133 x 225 x 1 + 1322 + 462 x 5 + 20 + 624 = 602776
+- at 40: 40 x 133 x 225 x 1 + 2784 + 957 x 5 + 40 + 1317 = 1205926
+- at 80: 80 x 133 x 225 x 1 + 5834 + 1980 x 5 + 80 + 2779 = 2412593
 
 ## Earlier findings
 
@@ -53,6 +54,10 @@ So: the houses x 106 x 263 x 1, plus the shares, the clumps x 5, the house index
 - verdict-1, finding 4: fixed - the candidates are the sites within each house's 90 ft reach, 106 a house, each once; the share check runs first
 - verdict-1, finding 5: fixed - the items are the houses and the sites their candidates, the rubric's form; the clumps are written over the run
 - verdict-1, finding 6: fixed - the grid's pitch is 11 x root 2, 15.556 ft
+- verdict-2, finding 1: fixed - the sites are the grid's at the worst offset, every site's cell within 90 + 11 ft of the house, at most 133
+- verdict-2, finding 2: fixed - the belt's ring apportioned to farms point by point by the nearest house (12 a point); the fengshui groves are none on a hamlet, measured empty at 10 and 20
+- verdict-2, finding 3: fixed - the bank's segment meets at most 4 cells (its run and rise sum under 128 ft), 104
+- verdict-2, finding 4: fixed - the house-index lookup per site is dropped: each site comes from its own house's reach
 
 ## Cheaper algorithms considered
 

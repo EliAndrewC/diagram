@@ -1,15 +1,22 @@
-UNDERIVED - the filing row's bearing record (4): no reason is given for the figure, and the algorithm writes a bearing only for woods off the sheet, once, not for each wood it draws.
+UNDERIVED - the crowns factor's edge retest (127 sites x 12 edges = 1524): the count of sites "within a jitter of the edge" depends on how far the jitter reaches, and neither the contract nor the derivation states it; and the bounding-box perimeter it is divided from is a ceiling only for a convex ring, which the contract does not say this ring is.
 
-**1. Is each factor derived?** Items (4, the knob's count), the ring (12 points written) and slack (1, every factor at its ceiling) are derived. The filing row is not. Of its 30, "its bearing record (4)" (derivation.md line 28) has no reason. The algorithm (lines 12-15) and the contract record a bearing and count only "where the woods lie off the sheet ... nothing drawn", so a wood on the sheet writes no bearing. Even the off-sheet case is one record for all the woods, not 4 for each. Also uncounted: the contract's "ring's line bent to the ground (a GUESS)" has no cost in the ring's factor. It doesn't decide the verdict.
+**1. Is each factor derived?** Most of them are:
+- Items (4, the knob's count, the same at 10 and 20), the ring (12 points x 2), the filing (1 + 5 x 6 cells) and slack (1) are derived. The 5 by 6 is right: ceil(247.2/64)+1 = 5 and ceil(258.8/64)+1 = 6.
+- The 771 sites inside are measured, and the sweep's 408 has its reason.
+- The retest's 127 is not derived. It is `perimeter / 8 ft` (derivation.md line 29), and 8 ft is the grid spacing, not the jitter. The jitter's reach in feet is not in the bundle (a search for "jitter" finds only lines 14, 15 and 29). How many sites lie within a jitter of the edge depends on that reach: about P/16 (63) at plus or minus 4 ft, about P/8 at 8 ft, more beyond it. The derivation has to state the jitter's reach and derive the band's site count from it.
+- Earlier findings 1-4 are closed as written: the bearing is now a once row, the sweep is used, the bend is counted, and the bounding box is measured.
 
-**2. Is there a standard, cheaper algorithm?** Yes, and the crowns factor should use it (LOOSE). Testing each crown against all 12 edges (10,794 per parcel) is what a scanline sweep replaces: cross each 8 ft grid row with the 12 edges once (about 33 rows x 12, roughly 400), then a site in a row's span is inside after one compare.
-- Per parcel: about 771 x 3 (compare, jitter, write) + 400, roughly 2,700.
-- If every boundary site (about 100) is retested against all 12 edges to keep its jitter inside: roughly 3,900 at worst, against 10,794.
+**2. Is there a standard, cheaper algorithm?** Yes, inside the sweep itself, so this is LOOSE once the factor above is fixed.
+- A site near the edge can only cross an edge that is active in its row or the next row, and the sweep's active-edge list already holds those edges. For a simple 12-gon that is about 2-4 edges, not 12, so the retest is about 127 x 4, roughly 500, not 1524.
+- Round 1's "about 100 x 12, roughly 3,900 at worst" was a rough upper figure to show the sweep beats 10,794. It was not a bound to hold the derivation to.
 
-The derivation's "sweep: not used - each parcel's crowns are a grid inside it, laid once" does not hold: a grid laid once is the textbook case for a sweep.
+**3. Is any factor padded?** Two small ones, neither deciding the verdict:
+- 34 grid rows: a 258.8 ft span on an 8 ft grid holds at most floor(258.8/8)+1 = 33 rows at any alignment, so 34 is one row (12 operations) over its own reason.
+- The Totals add the on-sheet woods (4 x 4300) and the off-sheet bearing (4). The contract's "or" makes those two cases exclusive, so the worst case is the larger of the two, not their sum: 4 operations over.
 
-**3. Is any factor padded?** The bearing record (4) is the one figure larger than its reason supports; for a wood on the sheet that reason supports 0. The crowns factor also undercounts: it charges only the 771 crowns kept, not the grid sites tested and rejected outside the ring. The sweep closes that too, because it makes only the sites inside a row's span.
+**4. Is each figure read at its source's size and unit?** The areas, the 771 and 545 crown counts, the bounding box and the 64 ft cells are each read as their source states them. The retest term is not:
+- It swaps the measured bounding box's perimeter, 2 x (247.2 + 258.8) = 1012 ft, in for the ring's own perimeter.
+- That is a ceiling only for a convex ring. The contract calls the ring "irregular" and "bent to the ground", and never says it is convex.
+- The fix: measure the 12-point rings' perimeters, as the bounding box was measured, or derive convexity from the contract.
 
-**4. Is each figure read at its source's size and unit?** The crown figures check out: 49,338 / 64 = 771 and 34,941 / 64 = 546. The contract's "222 ft square at most" does not. 222^2 = 49,284 sq ft, less than the 49,338 sq ft ring it is said to hold, so 222 ft is the square root of the area, not a measured extent. An irregular 12-point ring of that area is wider (a regular 12-gon of it spans about 256 ft from vertex to vertex). So "5 by 5 cells of 64 ft" may really be 6 by 6 (36, not 25), and the row count is about 33, not 28. The ring's bounding extent needs measuring again, and the filing and sweep figures need restating from it.
-
-Files read: /tmp/l7r-check/work-budget-budget-woodland/MANIFEST.md, /tmp/l7r-check/work-budget-budget-woodland/rubric.md, /tmp/l7r-check/work-budget-budget-woodland/contract.md, /tmp/l7r-check/work-budget-budget-woodland/derivation.md. This is round 1; the bundle has no earlier verdict files.
+Files read: /tmp/l7r-check/work-budget-budget-woodland/MANIFEST.md, /tmp/l7r-check/work-budget-budget-woodland/rubric.md, /tmp/l7r-check/work-budget-budget-woodland/contract.md, /tmp/l7r-check/work-budget-budget-woodland/derivation.md, /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-1.txt

@@ -1,26 +1,35 @@
-UNDERIVED - the entrance check: derivation.md line 17-18 charges "the way out's passing (1, read from the access tree)", but the contract doesn't read an access tree, the derivation doesn't build or index one, and that 1 isn't in the per-seat count.
+UNDERIVED - the obstacle mask's corridor: a summed-area table can only answer a box in 4 reads on a rectangular domain (the 64 ft tiles the corridor touches, carrying the prefix sums along their edges, or the view). The derivation charges only the exact corridor's 2 x 130 x L / 16 cells, zeroed and summed, and has no row for the work of finding those cells.
 
-There are no earlier verdicts in the bundle (round 1), so there were no earlier findings to close. Files: `/tmp/l7r-check/work-budget-budget-notice/derivation.md`, `/tmp/l7r-check/work-budget-budget-notice/contract.md`, `/tmp/l7r-check/work-budget-budget-notice/rubric.md`.
+**Earlier findings (verdict-1).**
+- Findings 1, 2, 4, 5 and 6 are closed.
+  - 1: the ways out are found once by a depth-first pass. That pass has its own row, 680 / 1,360 / 2,720, which is legs plus nodes, each entered and left. The per-seat lookup (1) is now in the 1,284, and the ways' graph is in the Reads.
+  - 2: the 77,000 marks include the edge cells, and the large polygons are filled by one scanline pass.
+  - 4: the seats are sorted by a counting sort, at seats + 19 buckets.
+  - 5: the footprints are stated once.
+  - 6: the 60 ft band is cited from `place_kosatsuba`.
+- Finding 3 is only half closed. The derivation took the corridor's area from the Bounds but not a way to build a summed-area table over it. That is the block below.
 
-**1. Is each factor derived?** No, for two factors.
-- **The entrance check (blocking).** The rule is "an `entrance` board only where every way out passes it." That is a property of the whole ways network.
-  - The per-seat sum is 27 + 120 + 108 + 2 + 1,025 = 1,282, plus the sort's 11, 12 or 13. That gives the table's 1,293, 1,294 and 1,295 exactly, so the entrance's 1 is not in it.
-  - The "decision (1)" inside the 1,025 belongs to the caption.
-  - "access tree" appears only at derivation.md:18. It is not in the Reads, the algorithm or the Indexes.
-  - Checked per seat, the rule is a graph traversal over the ways, which makes it seats x ways (all-pairs, S3). Built once, for example as cut points of the ways graph from the exits, it is a linear pass whose cost has to be counted. The derivation names neither.
-- **The slack's reason.** Slack 1 rests on "every factor is a ceiling at its worst case." The mask's marked cells (the footprints' area over 16 sq ft) are a floor on the cells touched, not a ceiling:
-  - a 14 ft way spans 4 to 5 cells of 4 ft across, not 3.5;
-  - a fixture under 16 sq ft still marks at least one cell.
+**1. Is each factor derived?** No. The mask row (516,706 / 977,272 / 1,852,282) fails.
+- **Box queries.** The 4-read query needs the sum of everything below and to the left of each box corner. Over a non-rectangular corridor, that sum cannot be computed from the corridor's own cells. Each way of building it costs more than the row charges:
+  - **Whole 64 ft tiles.** The corridor is 260 ft wide, so whole tiles hold more cells than 2rL/16. The prefix lines along the tile edges also have to be carried across, and neither cost is stated.
+  - **Prefix sums along each row of the corridor.** A box then costs 2 reads per row it covers: 6 for the one-line caption and 10 for the two-line. The derivation charges 4, inside the seats term, which is about 79% of the total.
+  - **The view's rectangle.** That is verdict-1's LOOSE again.
+- **Finding the corridor's cells.** No row counts the work of stamping or tiling the 130 ft reach along the ways' legs.
+- **Slack.** Slack 1 rests on "every factor is a ceiling at its worst case", and this row is not yet a ceiling.
+- Every other row reproduces:
+  - per seat: 27 + 1 + 120 + 108 + 2 + 1,025 + 1 = 1,284;
+  - seats: 1,487 / 2,824 / 5,366;
+  - corridor cells: 144,902 / 275,324 / 523,104.
 
-  Either count the cells along each footprint's edge or give the mask its own slack, at most 2.
+**2. Is there a standard, cheaper algorithm?** Nothing further is missed. The house index, the registry and water indexes, the counting sort, the memoized mask and the depth-first pass for the ways out are all present. I checked one alternative: working out once, for every cell, whether a caption box anchored there is clear (2 layouts x corridor cells x 4), so each candidate costs 1 read instead of 4. It breaks even with 256 x 4 per seat at 20, 40 and 80.
 
-**2. Is there a standard, cheaper algorithm?** Yes.
-- **The mask (LOOSE).** It is sized to the whole view, but caption boxes only land within reach of the verge seats. That reach is about 130 ft from a way's centerline: a 7 ft half-width, the 6 ft board, 8 em (64 ft) and the caption's up to 52.8 ft. So the corridor is at most 2 x 130 x 8,917, about 2.3M sq ft at 20, against the view's 5.65M. Building the mask and its summed-area table over only the 64 ft tiles the corridor touches would cut that factor to under half. The factor is about 40% of the total, and "Cheaper algorithms considered" doesn't mention restricting it.
-- **The sort (minor).** The score is a whole number of at most 18, so a counting sort can replace the per-seat log2 of the seats. The saving is under 1%.
+**3. Is any factor padded?** No. Testing every seat is a fair worst case. The 27, 120 and 108 match their index ceilings. The node bound for the ways out (legs plus lane ends) is a little generous, but too small to matter.
 
-**3. Is any factor padded?** Nothing is padded beyond its stated reason. Charging every seat ("every seat tested, the last kept") is a fair worst case, and the score (27), probe (120) and water (108) terms each match their stated index ceilings. The view-wide mask is the over-size, covered under 2.
+**4. Is each figure read at its source's size and unit?** Mostly. Three corrections, none of which blocks:
+- **Corridor area.** 2 x 130 x L is the strip area the contract gives, but it is not shown to be "at most". The reach around each lane end adds about 26,500 sq ft (half a 130 ft disc), and overlaps at junctions subtract an unknown amount. This is for the contract to correct.
+- **Large polygons' crossings.** The 5,000 crossings are the contract's figure at 20, with no stated rate. The derivation holds them flat at 40 and 80. That is under 0.3% of the total.
+- **Probe size.** The probe is stated at 7 by 3 ft, but the contract's board is 16 by 6 ft. Both fit in 2 by 2 cells of 64 ft, so the count does not change.
 
-**4. Is each figure read at its source's size and unit?** Yes. The view's 4 ft cells, the seats (2 x the ways' length over 12 ft), the 18 houses, the 256 candidates (16 x 8 x 2) and the totals all reproduce at 20, 40 and 80.
-- **A contract correction (not blocking).** The Bounds give two footprint figures at 20: 8,270,531 and, in the x1.98 series, 8,646,896. The derivation uses the larger, which is under 1% of the total; the contract should state one.
-- **An unsourced constraint.** "inside the view's 60 ft siting band" (derivation.md:14) has no source in the contract. It doesn't change the count, since every seat is charged.
-- **Growth.** The totals grow at an exponent of about 0.98 from 20 to 80 households, inside S6.
+Growth: the totals' exponent from 20 to 80 households is about 0.93, inside S6.
+
+Files: `/tmp/l7r-check/work-budget-budget-notice/derivation.md`, `/tmp/l7r-check/work-budget-budget-notice/contract.md`, `/tmp/l7r-check/work-budget-budget-notice/notice.verdict-1.txt`, `/tmp/l7r-check/work-budget-budget-notice/rubric.md`.

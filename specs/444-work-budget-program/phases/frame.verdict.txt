@@ -1,25 +1,40 @@
-UNDERIVED - the neighbors per 64 ft cell (29) has no reason to stay at 29 at 40 and 80: it rose from 21 at 10 households to 29 at 20, and the band's depth (193 ft, 5 cells) is borrowed from the title's band with no reason linking the two.
+SOUND - every factor is a ceiling taken from the contract's Bounds at its measured rate, slack is 1, the standard cheaper algorithms are all used or ruled out with a reason, and all five findings from verdict-1 are closed.
 
-This is round 1, so the bundle holds no earlier verdicts and there are no earlier findings to confirm closed.
+**Earlier findings (frame.verdict-1.txt).** All five are closed.
+- F1: things per cell now grow at their measured rate. Each cell costs 30, 41 and 56 (its things plus the cell), in both the title row (20 cells: 600, 820, 1,120) and the band row.
+- F2: the contract's Bounds now gives the band depth a reason of its own: "the view otherwise stops at the strip and passes it only where the title's band grew it" (`to_the_strips`).
+- F3: the sort is replaced by one clipping walk, 4 x (662 + 4) = 2,664.
+- F4: the drift reads only the hard features: 1,632, 2,954 and 5,347, plus 4.
+- F5: the contract names the strip as a marsh record, bounded by 662 points.
 
-**1. Is each factor derived?** No.
-- **The 29 per cell** (Indexes, derivation.md line 23). It is the larger of two measurements, "21 and 29, the ceiling taken", and it grew by about 1.38 times in one doubling. The contract's own rule is to scale every figure past 20 at its measured rate, and the derivation does that for the crowns, the features, the view's side and the ring. It holds this one flat, giving no clearance or footprint reason that would cap what a 64 ft cell can hold (S1). Either that cap is derived, or the figure scales to about 40 at 40 and 55 at 80. The figure feeds both the title row (line 34) and the band row (line 35). It also breaks the claim that slack is 1 because "every factor is a ceiling".
-- **The band's depth** (algorithm lines 17-18, row 35). The derivation says "at most the title's band deep", but `TITLE_BAND_ALLOWANCE` is a figure for the title: the placard's height plus 34 ft. Nothing in the contract limits the gap between a reed strip and the view's edge to it, and a water-facing flank can be any side of the view. If the view was decided as the content plus this allowance on every side, the derivation must say so.
-- The other factors are derived: the crop (4), the canopy (each crown written once) and the title's cell counts. The placard covers at most 5 by 4 cells (floor(252/64)+2 and floor(159/64)+2), and the band at most 40, 59 and 85 by 5 cells.
+**1. Is each factor derived?** Yes.
+- The crop is 4 and the canopy is one write per crown.
+- The title's placard covers at most 5 by 4 cells (floor(252/64)+2 and floor(159/64)+2).
+- The band covers 40, 59 and 85 cells along the view's long side, by 5 cells for 193 ft. That gives 200, 295 and 425 cells, times 30, 41 and 56.
+- The union is 4 x (662 + 4).
+- Slack is 1, because each factor is already its worst case.
+- One residual, not blocking: S1 says a neighbor bound should not grow, but the per-cell count does (x1.38 per doubling). The contract says why ("no geometric ceiling, a crown and a part differing in size"), and S6 still holds.
 
-**2. Is there a standard, cheaper algorithm?** Yes, for the union (row 36).
-- The band is a four-corner rectangle and the strip's ring is already in order. Clipping the ring against the rectangle in one walk, each edge tested against its 4 sides, costs about 4 x (points + 4): 1,956, 2,152 and 2,364 at 20, 40 and 80. The sort the derivation counts costs 4,401, 5,380 and 5,910.
-- Reading the reserved pocket instead of rerunning the scan is a valid reason not to sweep for the title.
+**2. Is there a standard, cheaper algorithm?** None is missed.
+- The title reads the pocket the hinterland already reserved instead of scanning again, and the registry's 64 ft cells serve both the title and the band.
+- The union is one clipping walk around a ring that is already in order.
+- Keeping the content's frame up to date as features are added would only move the 1-per-feature cost into earlier stages.
 
-**3. Is any factor padded?** Likely, the drift (row 33).
-- It uses "the features on the map", a count that includes crowns and scrub. The contract reads "every hard feature", and it separates cover from features: the title sits "over nothing but cover, never a feature".
-- If crowns are cover, the factor is padded by at least the crown count (717, 1,320 and 2,428), leaving at most about 2,227, 4,270 and 8,190 with the 4 view comparisons. Otherwise the derivation should state that crowns count as hard features.
+**3. Is any factor padded?** Nothing exceeds its stated reason. One thing to watch in the audit:
+- The band row uses the densest cell in the hamlet (29, 40, 55). By the contract's own reason, though, the band lies past the strip, where the title's band grew the view. That is past the content's frame, so few hard features can be in it.
+- The contract gives no density for cover out there, so I cannot derive a tighter figure from the bundle. The audit should expect counts well under 6,000, 12,095 and 23,800.
+- The title's 600-1,120 re-checks a pocket that is already held clear. S4 ("every rule asked before the title is drawn") justifies the re-check.
 
-**4. Is each figure read at its source's size and unit?** Two are not, and one needs checking.
-- The 29 is a figure at 20 households, used at 40 and 80.
-- The 193 ft is the title's band, used as the gap to a flank's edge.
-- Row 36 takes "the marsh's longest ring" (485, 534 and 587 points) for the reed strip's ring. The derivation should confirm the contract treats these as the same ring.
+**4. Is each figure read at its source's size and unit?** Yes.
+- The view's long side, the 193 ft band and the 252 by 159 ft placard are used as lengths, and the 662 as a point count.
+- Each growing figure is used at its own size: at 20 as measured, at 40 and 80 at its measured rate.
+- The contract's Reads says "reed strips" (plural), but its Writes says one strip on one water-facing flank. Only the title's band takes the view past a strip, so one band and one union, as counted, is the right scope.
 
-The arithmetic itself checks out: the title is 603, the band 6,000, 8,850 and 12,750, and the totals 14,669, 21,747 and 32,313. Growth from 20 to 80 households is about n^0.57, well under the 1.15 limit.
+**Arithmetic.** The totals are 11,624, 19,864 and 35,370, and they check out. Growth from 20 to 80 households is about n^0.80, under the 1.15 limit.
 
-Files read: /tmp/l7r-check/work-budget-budget-frame/MANIFEST.md, /tmp/l7r-check/work-budget-budget-frame/rubric.md, /tmp/l7r-check/work-budget-budget-frame/contract.md, /tmp/l7r-check/work-budget-budget-frame/derivation.md
+Files read:
+- /tmp/l7r-check/work-budget-budget-frame/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-frame/rubric.md
+- /tmp/l7r-check/work-budget-budget-frame/contract.md
+- /tmp/l7r-check/work-budget-budget-frame/derivation.md
+- /tmp/l7r-check/work-budget-budget-frame/frame.verdict-1.txt

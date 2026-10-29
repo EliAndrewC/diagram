@@ -1,0 +1,40 @@
+SOUND - every factor is a ceiling taken from the contract's Bounds at its measured rate, slack is 1, the standard cheaper algorithms are all used or ruled out with a reason, and all five findings from verdict-1 are closed.
+
+**Earlier findings (frame.verdict-1.txt).** All five are closed.
+- F1: things per cell now grow at their measured rate. Each cell costs 30, 41 and 56 (its things plus the cell), in both the title row (20 cells: 600, 820, 1,120) and the band row.
+- F2: the contract's Bounds now gives the band depth a reason of its own: "the view otherwise stops at the strip and passes it only where the title's band grew it" (`to_the_strips`).
+- F3: the sort is replaced by one clipping walk, 4 x (662 + 4) = 2,664.
+- F4: the drift reads only the hard features: 1,632, 2,954 and 5,347, plus 4.
+- F5: the contract names the strip as a marsh record, bounded by 662 points.
+
+**1. Is each factor derived?** Yes.
+- The crop is 4 and the canopy is one write per crown.
+- The title's placard covers at most 5 by 4 cells (floor(252/64)+2 and floor(159/64)+2).
+- The band covers 40, 59 and 85 cells along the view's long side, by 5 cells for 193 ft. That gives 200, 295 and 425 cells, times 30, 41 and 56.
+- The union is 4 x (662 + 4).
+- Slack is 1, because each factor is already its worst case.
+- One residual, not blocking: S1 says a neighbor bound should not grow, but the per-cell count does (x1.38 per doubling). The contract says why ("no geometric ceiling, a crown and a part differing in size"), and S6 still holds.
+
+**2. Is there a standard, cheaper algorithm?** None is missed.
+- The title reads the pocket the hinterland already reserved instead of scanning again, and the registry's 64 ft cells serve both the title and the band.
+- The union is one clipping walk around a ring that is already in order.
+- Keeping the content's frame up to date as features are added would only move the 1-per-feature cost into earlier stages.
+
+**3. Is any factor padded?** Nothing exceeds its stated reason. One thing to watch in the audit:
+- The band row uses the densest cell in the hamlet (29, 40, 55). By the contract's own reason, though, the band lies past the strip, where the title's band grew the view. That is past the content's frame, so few hard features can be in it.
+- The contract gives no density for cover out there, so I cannot derive a tighter figure from the bundle. The audit should expect counts well under 6,000, 12,095 and 23,800.
+- The title's 600-1,120 re-checks a pocket that is already held clear. S4 ("every rule asked before the title is drawn") justifies the re-check.
+
+**4. Is each figure read at its source's size and unit?** Yes.
+- The view's long side, the 193 ft band and the 252 by 159 ft placard are used as lengths, and the 662 as a point count.
+- Each growing figure is used at its own size: at 20 as measured, at 40 and 80 at its measured rate.
+- The contract's Reads says "reed strips" (plural), but its Writes says one strip on one water-facing flank. Only the title's band takes the view past a strip, so one band and one union, as counted, is the right scope.
+
+**Arithmetic.** The totals are 11,624, 19,864 and 35,370, and they check out. Growth from 20 to 80 households is about n^0.80, under the 1.15 limit.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-frame/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-frame/rubric.md
+- /tmp/l7r-check/work-budget-budget-frame/contract.md
+- /tmp/l7r-check/work-budget-budget-frame/derivation.md
+- /tmp/l7r-check/work-budget-budget-frame/frame.verdict-1.txt

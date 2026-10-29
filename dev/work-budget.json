@@ -220,7 +220,14 @@
    "spread": "14,231-25,271 at 20"
   },
   "frame": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.8,
+   "derivation": "specs/444-work-budget-program/phases/frame.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/frame.verdict.txt",
+   "items_at_20": 11624,
+   "items_at_40": 19864,
+   "items_at_80": 35370
   },
   "notice": {
    "status": "unbudgeted"
