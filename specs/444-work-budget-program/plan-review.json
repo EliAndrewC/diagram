@@ -988,6 +988,46 @@
      "why": "The request's step 3 is a paper derivation ('Derive every stage's budget on paper'). No engine code changes here, so those checklist items do not apply."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-28",
+   "blocks": [
+    "### T04 - the ways family's budgets (D1, D3, D4)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-scope",
+     "summary": "The task covers the ways family: track, web, crossings (three stages).",
+     "class": "within",
+     "why": "D4 settles the families and names exactly these three for ways, from its measured census of STAGES; request step 3 asks every stage derived, and D4's one-task-per-family split covers all 23 across T03-T06 without dropping any."
+    },
+    {
+     "id": "T04-exit-green",
+     "summary": "Each stage is done on a SOUND verdict or a round-arbiter accept, then pinned; three budgeted rows.",
+     "class": "within",
+     "why": "D3 and FR-013 settle this exactly; FR-013 carries the GM's own words of 2026-10-28 ('letting the arbiters acceptance pin it'). No looser exit (LOOSE/UNDERIVED pinned) is admitted."
+    },
+    {
+     "id": "T04-contract-sources",
+     "summary": "Each derivation is written from the stage's contract: docstring, plan fields read, manifest keys/registries written (STAGES table, draw order), claims-report rows, cohort_audit rules.",
+     "class": "within",
+     "why": "Reproduces D1's five sources word for word, and the constraints line keeps D1's 'from its contract alone' rule, which carries the request's 'before anyone looks at the current code'."
+    },
+    {
+     "id": "T04-exit-red",
+     "summary": "On failure, what failed is recorded and the task set down; a claim that a budget cannot be derived goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A process exit for a failed derivation, routed to the round arbiter as D3's tripwire already requires; it does not set down a phase for small gain (FR-006), does not let the arbiter accept a phase over budget (request 5.4), and leaves the stage owed, so it narrows nothing."
+    },
+    {
+     "id": "T04-order-budget",
+     "summary": "Runs after T01; one landing, three dispatches plus re-dispatches on correction; paper budgets, not performance work.",
+     "class": "within",
+     "why": "Ordering and effort bookkeeping inside D3 (plain Agent calls, at most three in one message) and D4 (each family lands its derivations, verdicts and budgets together); step 3 of the request is on paper."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1213,6 +1253,44 @@
      "summary": "The task is not performance work (paper budgets only); the constant-move and fit-into-room checks are n/a.",
      "class": "within",
      "why": "The request's step 3 is a paper derivation ('Derive every stage's budget on paper'). No engine code changes here, so those checklist items do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T04": {
+   "section_sha256": "42c2a2e2d3402666d41132bb27a1de540d85c68a378b6487c485e5c0adadbe44",
+   "reviewed": "2026-10-28",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-scope",
+     "summary": "The task covers the ways family: track, web, crossings (three stages).",
+     "class": "within",
+     "why": "D4 settles the families and names exactly these three for ways, from its measured census of STAGES; request step 3 asks every stage derived, and D4's one-task-per-family split covers all 23 across T03-T06 without dropping any."
+    },
+    {
+     "id": "T04-exit-green",
+     "summary": "Each stage is done on a SOUND verdict or a round-arbiter accept, then pinned; three budgeted rows.",
+     "class": "within",
+     "why": "D3 and FR-013 settle this exactly; FR-013 carries the GM's own words of 2026-10-28 ('letting the arbiters acceptance pin it'). No looser exit (LOOSE/UNDERIVED pinned) is admitted."
+    },
+    {
+     "id": "T04-contract-sources",
+     "summary": "Each derivation is written from the stage's contract: docstring, plan fields read, manifest keys/registries written (STAGES table, draw order), claims-report rows, cohort_audit rules.",
+     "class": "within",
+     "why": "Reproduces D1's five sources word for word, and the constraints line keeps D1's 'from its contract alone' rule, which carries the request's 'before anyone looks at the current code'."
+    },
+    {
+     "id": "T04-exit-red",
+     "summary": "On failure, what failed is recorded and the task set down; a claim that a budget cannot be derived goes to make arbiter-ask.",
+     "class": "within",
+     "why": "A process exit for a failed derivation, routed to the round arbiter as D3's tripwire already requires; it does not set down a phase for small gain (FR-006), does not let the arbiter accept a phase over budget (request 5.4), and leaves the stage owed, so it narrows nothing."
+    },
+    {
+     "id": "T04-order-budget",
+     "summary": "Runs after T01; one landing, three dispatches plus re-dispatches on correction; paper budgets, not performance work.",
+     "class": "within",
+     "why": "Ordering and effort bookkeeping inside D3 (plain Agent calls, at most three in one message) and D4 (each family lands its derivations, verdicts and budgets together); step 3 of the request is on paper."
     }
    ],
    "verdict": "CLEAR"

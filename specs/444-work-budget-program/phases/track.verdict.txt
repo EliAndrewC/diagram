@@ -1,0 +1,22 @@
+UNDERIVED - the splice's leg length: the bound "under 64 ft between two outline points" (derivation.md line 38) has no source in the contract's Bounds, and the margin each vertex is stepped by is never quantified, so the "2 by 2 cells" per new leg rests on nothing.
+
+**1. Is each factor derived?** No.
+- **Splice (line 38).** The Bounds (contract.md line 6) give the outline's point count (67 and 78) and its density (12 segments in a 64 ft cell). Neither limits how long one edge can be. Each new leg is an outline edge plus the margin step, and the margin has no figure in the bundle. So the leg length, and with it the cells crossed and the 52 per vertex, has no source.
+- **Corridor (line 39).** The reason "at most the ray's" fails in the case lines 17-19 describe. Once an arc is spliced in, the lane is the ray minus the chord plus the arc, which is longer than the ray. The corridor is also a no-build strip with a width, so it fills more cells than the centerline does.
+- **Minor.** The "plus 3" cells per ray (line 35) gives no reason. It matches the standard grid-walk bound: one cell, plus the grid lines crossed in x, plus those crossed in y. The derivation should say so.
+
+**2. Is there a cheaper standard algorithm?** I found none it missed. An angular sweep from the gate would touch every segment in the canvas, which costs more than 41 rays. A breadth-first queue is right for the flood's equal steps. The indexes are read from the homesteads, not rebuilt. Finding the least-bad dry bearing needs each ray walked in full, so the full-length worst case stands.
+
+**3. Is any factor padded?** No. The bearings come to 41 x (155 x 21 + 79 x 8 + 1) = 159,408 at 20. The flood is 9 per raster cell (49,689), the crossings 79 x 13, and the splice 78 x 53. All of them reproduce at 40 and 80 too. Each uses a cell's densest count as its ceiling, which is the form the rubric uses for a homestead.
+
+**4. Is each figure read at its source's size and unit?** Yes, wherever the Bounds give one.
+- The diagonal plus 64 ft (3,369 / 4,953 / 7,281) is used as a length, times root 2 over the cell side.
+- The raster counts (5,521 / 11,926 / 25,759) are used as cells.
+- The per-cell ceilings are 20 for 32 ft cells and 7 and 12 for 64 ft cells.
+- The outline counts (78 / 90 / 105) are used as vertices.
+
+The leg length is the one figure with no source to read it from. Two gaps against the contract's Keeps (line 5) remain. The spliced legs are tested only against the outline index, not the raster or the parts index. Either the derivation says why the arc cannot meet wet ground or a steading, or those tests are work the splice must count. And "square at the water as laid" has no step in the algorithm: the derivation should say whether that work belongs to this stage.
+
+**Earlier findings:** none. This is round 1 and the bundle holds no `track.verdict-<N>.txt`.
+
+Files read: /tmp/l7r-check/work-budget-budget-track/MANIFEST.md, /tmp/l7r-check/work-budget-budget-track/rubric.md, /tmp/l7r-check/work-budget-budget-track/contract.md, /tmp/l7r-check/work-budget-budget-track/derivation.md
