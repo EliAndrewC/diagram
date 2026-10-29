@@ -121,7 +121,18 @@
    "items_at_80": 1
   },
   "web": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.64,
+   "derivation": "specs/444-work-budget-program/phases/web.derivation.md",
+   "verdict": "ask:444-T04-web-round-4",
+   "items_at_20": 931323,
+   "items_at_40": 1435793,
+   "items_at_80": 2250827,
+   "pinned_on": "accept",
+   "derivation_sha": "2473c07144b8b3e18cd7859f55028b490525e08fe793d05437af8c81272ea927",
+   "rounds": 3,
+   "spread": "168,149-1,321,930 at 20"
   },
   "lane_wells": {
    "status": "budgeted",
