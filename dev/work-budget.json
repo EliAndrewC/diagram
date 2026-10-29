@@ -159,7 +159,18 @@
    "items_at_80": 56
   },
   "hinterland": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 1.15,
+   "derivation": "specs/444-work-budget-program/phases/hinterland.derivation.md",
+   "verdict": "ask:444-T05-hinterland-round-4",
+   "items_at_20": 698511,
+   "items_at_40": 1524603,
+   "items_at_80": 3438897,
+   "pinned_on": "accept",
+   "derivation_sha": "f0bab2f227c5370db668a8f834bcc9b17c3eef69e4c1496b46afb3bfe43a4f63",
+   "rounds": 3,
+   "spread": "698,511-1,366,901 at 20"
   },
   "woodland": {
    "status": "budgeted",
