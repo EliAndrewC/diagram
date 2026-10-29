@@ -174,15 +174,11 @@
    "status": "budgeted",
    "per_thing": 1.0,
    "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/woodland.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 12516,
-   "items_at_40": 12516,
-   "items_at_80": 12516,
-   "pinned_on": "accept",
-   "derivation_sha": "3085ee9fd342471a092d5c7ee203856e449c032df421a129dc3348c73c477382",
-   "rounds": 5,
-   "spread": "12,516-16,072 at 20"
+   "derivation": "specs/444-work-budget-program/phases/woodland_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/woodland_greenfield.verdict-1.txt",
+   "items_at_20": 5,
+   "items_at_40": 5,
+   "items_at_80": 5
   },
   "windbreak": {
    "status": "budgeted",

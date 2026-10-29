@@ -33,3 +33,4 @@
 {"date": "2026-10-29", "what": "lowered", "phase": "track", "from": {"20": 1440.0, "40": 2090.0, "80": 3028.0}, "to": {"20": 157.0, "40": 223.0, "80": 321.0}, "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-2.txt"}
 {"date": "2026-10-29", "what": "lowered", "phase": "crossings", "from": {"20": 4899.0, "40": 7879.0, "80": 13113.0}, "to": {"20": 355.0, "40": 442.0, "80": 549.0}, "verdict": "specs/444-work-budget-program/phases/crossings_greenfield.verdict-2.txt"}
 {"date": "2026-10-29", "what": "lowered", "phase": "web", "from": {"20": 49626.0, "40": 91798.0, "80": 174844.0}, "to": {"20": 611.0, "40": 1160.0, "80": 2175.0}, "verdict": "ask:444-T13-web_greenfield-round-3"}
+{"date": "2026-10-29", "what": "lowered", "phase": "woodland", "from": {"20": 12516.0, "40": 12516.0, "80": 12516.0}, "to": {"20": 5.0, "40": 5.0, "80": 5.0}, "verdict": "specs/444-work-budget-program/phases/woodland_greenfield.verdict-1.txt"}

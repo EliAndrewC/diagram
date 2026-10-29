@@ -23,7 +23,7 @@
         (162 by 29 ft, north of its own house and so of its own yard and beds), and in its south strip (162 by 29 ft, which lies
         50 ft and more south of its own yard - the yard ends 83 ft below the lot's north edge, the strip starts at 133 - and north
         of the next lot's yard): every crown keeps the sun by the lattice's geometry, so none is tested; each written (1) and filed
-        (1.4), its slot taken (1)
+        (1.4), its slot taken (1); the north strip's west 22 ft left free for the household's bamboo stand, laid by `bamboo`
     the belt: its near face along the windward lots' outer edges, found by walking the lattice's line facing the wind (as the
         track's start, about 2 lines of R + 1 cells), set 21 ft past the lots' edges so 50 ft past every square and its yard and
         beds; its polygon's vertices written (1 each); its crowns on a jittered grid inside it, each written and filed (2.4)
