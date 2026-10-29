@@ -277,3 +277,7 @@ also does three pieces of bookkeeping, which the session will carry out:
 Option one, as put to him after escalation-check: the round arbiter's acceptance pins a stage's first budget; the pin is bound to the
 derivation as it reads (a later change to its figures re-owes a ruling); the program target says which verdicts are arbiter accepts,
 with the rounds and the spread; the rebuilt code is still held to the budget at acceptance (FR-006) and audited (MODE AUDIT).
+
+## The GM on the step-3 target, 2026-10-28 (amendment 2, FR-014)
+
+"I feel like I'm missing something.  I thought the idea was to REDUCE the number of operations.  Why would we be targeting something HIGHER?"

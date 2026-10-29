@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import math
+import re
 from pathlib import Path
 
 import pytest
@@ -105,7 +106,11 @@ def test_the_water_familys_derivations_pass_the_form_checks() -> None:
     done = [p for p in sorted(phases.glob("*.derivation.md")) if (phases / p.name.replace(".derivation.md", ".verdict.txt")).is_file()]
     assert done, "a derivation judged SOUND (its verdict.txt)"
     for p in done:
-        assert wbb.form_problems(p.read_text(encoding="utf-8")) == [], p.name
+        # ...THE REFERENCE SCREEN (S8, feature 444 FR-014) IS LEFT OUT HERE: the budgets pinned before it are re-scored under FR-014,
+        # an accept-pinned derivation bound to its text until then; the screen's own test is
+        # test_a_cost_per_thing_above_the_reference_needs_a_named_reason
+        text = p.read_text(encoding="utf-8")
+        assert [f for f in wbb.form_problems(text) if f not in wbb.reference_problems(text)] == [], p.name
 
 
 def test_the_template_and_both_fixtures_hold_every_field() -> None:
@@ -183,6 +188,17 @@ def test_a_derivations_totals_are_evaluated_and_its_index_cells_counted(tmp_path
     (tmp_path / "d.md").write_text(edit((FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")))
     rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.md"), tmp_path / "out")
     assert rc == 1 and why in msg, msg
+
+
+def test_a_cost_per_thing_above_the_reference_needs_a_named_reason() -> None:
+    """Feature 444 FR-014, SC-009 (rubric S8; the GM 2026-10-28: "I thought the idea was to REDUCE the number of operations. Why
+    would we be targeting something HIGHER?"): a derivation whose total at 40 over its items at 40 passes 4,000 names why."""
+    text = (FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")
+    assert wbb.reference_problems(text) == [], "the fixture is under the reference"
+    t = re.sub(r"(?m)^- at 40: .*$", "- at 40: 40 x 5000 = 200000", text)
+    why = wbb.reference_problems(t)
+    assert why and "passes the reference's 4,000" in why[0] and "reason above the reference" in why[0]
+    assert wbb.reference_problems(t + "\n- reason above the reference: each disc is tested against every other\n") == []
 
 
 def test_the_arithmetic_reader_takes_numbers_and_the_four_operators_alone() -> None:

@@ -91,12 +91,14 @@ standards" (`request.md`).
   HIGHER?"; the round arbiter's ruling ask:444-budget-standard). Each factor is the mean the stage's output shows (things per
   area, parts per index cell, the candidates the contract's search order reaches), read from the reference rolls' manifests and
   never from the counters or the code, times a slack of at most 2 (rubric S8); a factor at its worst case, and a cost per thing
-  placed above the reference's 4,000 with no named reason, are findings. `make budget-set` refuses a pin above the stage's
+  placed above the reference's 4,000 with no named reason, are findings - flagged by the bundle screen (`make work-budget-bundle`
+  asks the reason of a derivation whose total at 40 over its items at 40 passes 4,000) and found by the work-budget agent. `make budget-set` refuses a pin above the stage's
   counted operations at 40 in the newest `make work-budget` run unless a reason is named, and prints the program per household
-  against the design's few thousand. The budgets pinned before FR-014 are re-scored to it - their algorithms and indexes stand,
-  their factors change - each re-scored stage re-judged once in MODE BUDGET, the stages pinned on an accept put to the round
-  arbiter as one batch, and lowered with `LOWER=1` (no GM words: a lowering asks nothing of him); the new target then goes to the
-  GM under FR-002.
+  against the design's few thousand. The stages pinned on an accept before FR-014 are re-scored to it - their algorithms and
+  indexes stand, their factors change - and put to the round arbiter as one batch (`make arbiter-bundle BATCH=1`), which
+  discharges the ruling FR-013 re-owes; a SOUND-pinned stage is re-scored and re-judged once in MODE BUDGET only where `make
+  budget-set`'s gate fires on its pin; each is lowered with `LOWER=1` (no GM words: a lowering asks nothing of him). The new
+  target then goes to the GM under FR-002 with the program's operations per household beside the design's few thousand.
 - **FR-012**: Any Rust spike or phase keeps the counters of 443 FR-001 as a macro behind the Cargo feature `counters`:
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
@@ -110,7 +112,8 @@ standards" (`request.md`).
   each goes red with its condition deleted.
 - **SC-009** (FR-014): a test refuses `make budget-set` above the stage's count today at 40 without a reason and prints the program
   per household at every pin, each going red with its condition deleted; and the target the GM approves is below today's counted
-  operations at 40 at every stage, or names the stage's reason.
+  operations at 40 at every stage, or names the stage's reason, and carries the program's operations per household beside the
+  design's few thousand; a test refuses a derivation's bundle whose cost per thing at 40 passes 4,000 with no named reason.
 - **SC-002** (FR-003 to FR-006): each phase's checklist is ticked whole and its accepted figure at most its budget; the
   landing's size delta shows the old implementation removed, with no branch or flag left that selects it (`make
   dead-closure` checks for leftovers).

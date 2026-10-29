@@ -52,6 +52,8 @@ So: 1 x 4 x 1, plus the canopy, the drift, the title, the waterward band and the
 - verdict-1, finding 4: fixed - the drift reads the hard features only; the crowns and the scrub are cover
 - verdict-1, finding 5: fixed - the strip's ring is a marsh record's, bounded by the pool's longest marsh ring, 662, no pool map carrying a strip
 
+- reason above the reference: the frame is one thing a roll, so its cost per thing is the whole stage - each hard feature's box read once for the view and the title's pocket tested - not a cost per house or per part placed
+
 ## Cheaper algorithms considered
 
 - sweep: not used - the title takes the reserved pocket; no window is scanned
