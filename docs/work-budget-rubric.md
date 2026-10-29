@@ -31,6 +31,16 @@ Python calls and seconds are recorded beside them, and neither is the budget.
   on a target of 15.3M at 40 households, above what the roll counts today: "I thought the idea was to REDUCE the number of
   operations. Why would we be targeting something HIGHER?"; ask:444-budget-standard): every factor taken at its worst at once
   compounds, and a budget the stage already meets is no target.
+- **S9 Touch only what can win.** A stage that picks one thing, or a few, from a set - the busiest seat, the nearest site, the
+  best-scored candidate - does work in proportion to the candidates that could win, not to the set they are drawn from: a bound
+  read once from an index (a cell's count, an upper bound on any score inside it, its distance) ranks the cells, and the search
+  stops when the best exact score found beats the next cell's bound (branch and bound: exact, not a heuristic). A row that
+  scores, sorts or paints every member of a set that grows with the map names why no bound prunes it, in the derivation's
+  `- pruning:` line. Work only a knob's branch needs (an `entrance` board's ways out) is charged at that branch's share, never on
+  every roll. WHY (the GM 2026-10-29, on the notice board: "Why do we think it should take 8,730-11,277 operations to place a
+  single notice board?!"): its derivation scored every verge seat on every way and sorted them all to test about 1.3 seats - 97%
+  of its count was the search for the winner - and four rounds passed it, because the cheaper-algorithm question asked for data
+  structures, never whether the set needed visiting, and a reason that the stage is one thing satisfied the reference's screen.
 
 ## The reference: a homestead (S7 worked out)
 
