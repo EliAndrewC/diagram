@@ -1,0 +1,32 @@
+UNDERIVED - the well search's "households it would serve (19)" factor: its stated reason, "about the 10 a well serves, from its 9 cells of 760 ft", gives the number of households a well takes (`WELL_SERVES_MAX`), but what the search costs is the number of households it reads from those cells, and the derivation's own Growth section says that is every household from 20 to 80 households, so the factor is 9 + n (29, 49, 89), not 19.
+
+**Earlier findings.** Most are closed or no longer apply. Two did not stay closed:
+- **Closed by removal.** Verdict-1 findings 1, 5 and 6 (the pool's heap, the pool's scan, the 908 ft pool) no longer apply, because the re-score builds no pool.
+- **Closed.** Verdict-1 finding 4 (the heap's top, 1 a well) and verdict-2 finding 1 (each site is asked against the wells drawn so far, half the wells rounded up, which covers the mean) both hold.
+- **Not closed: verdict-2 finding 3.** The row now charges only the 20 wall tests. Finding the five nearest houses is costed nowhere: neither the "4 cells + houses within 210 ft" that the Earlier findings list claims, nor any site index (the re-score says none is built). "Memoized once over the run" has no row that pays for it.
+- **Partly closed: verdict-2 finding 2.** The service row still sizes the heap at log2 of the households, not households plus the stale entries. This is minor (7 against 8 at 80).
+
+**1. Is each factor derived?**
+- **The blocking factor.** The well search's households-it-would-serve factor (above). Its 10 is a cap on what a well takes, not the typical number the 9 cells of 760 ft hold. The Growth section says outright that "every site's neighborhood reads every household" below 151 households.
+- **The tell.** The totals as written grow at an exponent of 1.06 (1,536 to 6,704). The Growth section's bounded-n argument for growing faster than linear only matches the totals once that factor is 9 + n. Then the well search is 1,456, 3,752 and 10,864, the totals are 1,736, 4,392 and 12,304, and the exponent is about 1.41.
+- **Also underived: the 10 sites popped per well.** "The nearest admitted within a few pops" gives no figure. Nothing from the geometry or the contract's search order shows how often a verge site fails its clearance, the 80 ft wall or the ten (S2, S8).
+
+**2. Is there a standard, cheaper algorithm?**
+- The service row re-reads the admitted well's 9 cells (9), but the site's check has just found the households it takes. That set can be kept, not read again.
+- Getting the households-examined factor anywhere near 10 needs a finer house index than 760 ft cells, or a stated nearest-first query. The derivation has neither.
+
+**3. Is any factor padded?** No. Slack is 2, and the cost per well (about 840 as written, about 1,540 corrected) is far under 4,000. One small under-count: the ways read charges 18 (the 2 legs in each of 9 cells), but the cells themselves are not counted. Counted the way the clearance row counts them (each cell plus its things) it is 9 x 3 = 27.
+
+**4. Is each figure read at its source's size and unit?**
+- The 19.4 ft clearance is read as a radius in 2 by 2 cells of 64 ft, and 760 ft as a radius. The wells (2, 4, 8) and log2 of the households rounded up (5, 6, 7) are right.
+- **Misread:** `WELL_SERVES_MAX` (at most 10 households a well) is used as the count the 760 ft cells return.
+- **Unsourced:** the "mean 4 things a cell" and "mean 2 legs a crossed cell" are credited to `items.md`, which is not in the bundle. The contract's Bounds give only maxima (21, 29, 40, 55 things a cell), so I cannot check either figure against its source.
+- **Stale text:** the "Cheaper algorithms considered" section still names a site index and a pool heap built bottom-up, which the re-score removed.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-lane_wells/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/rubric.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/contract.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/derivation.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/lane_wells.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-lane_wells/lane_wells.verdict-2.txt

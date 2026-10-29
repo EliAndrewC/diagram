@@ -46,7 +46,6 @@ So: seats x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + the roll.
 - at 80: 56 x (4 + 4 + 1 + 3 + 5 + 1 + 1 + 1) x 2 + 1 = 2241
 
 - FR-014 re-score: each factor at the typical case (rubric S8), the mean densities of `items.md` in place of the densest cells; slack 2 (ask:444-budget-standard)
-- reason above today's count: today's run counts none of this stage at 40 (the reference's bank is bare, or its seats are not counted sites); its budget is the planted bank's
 
 ## Earlier findings
 

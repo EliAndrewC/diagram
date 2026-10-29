@@ -5,7 +5,7 @@
 - Reads: the plan `plan_site` resolved before the first stage - the drainage bearing, the fall, the wind, the settlement form and its knobs, and the field archetype (a polder has no brook, so the brook's two fields are written empty there) - and the spec's pinned knobs (`plan.spec.pins`).
 - Writes: nothing drawn; the manifest's `meta` record of the rolled plan (36 named fields: the bearing, the fall, the form, the grove, the row, the well siting, the water, the yards, the weather, the sitings), one pinned knob per pin, and three flags on the settlement that later stages read rather than the manifest (work yards, house racks, nucleated).
 - Keeps: every later stage reads these values (the claims "fall and drainage declared first", 0054; "manifest record", NONE); no cohort property reads this stage beyond the fields' presence. The cohort's checks read none of its fields directly.
-- Bounds: the same 36 fields at every size; the pins are the spec's own, and the reference spec pins none.
+- Bounds: the same 36 fields at every size; the pins are the spec's own, and the reference spec pins none. The typical densities (rubric S8; `items.md`, measured 2026-10-28 on the same reference manifests at 10 and 20, each the mean over the cells occupied or crossed): things of every kind 3.4 and 3.3 an occupied 64 ft cell (4.5 and 5.5 within 3 cells of a house); homestead parts 2.8 and 2.6 an occupied 64 ft cell; water segments 4.1 and 3.7, ways' legs 1.3 and 1.9, the field's outline segments 2.1 and 1.8, and marsh segments 4.4 and 3.8 a crossed 64 ft cell; site-boundary segments 2.6 and 2.4 a crossed 32 ft cell.
 
 ## The algorithm
 
@@ -31,7 +31,6 @@ So: 1 x (36 + 0 + 4) x 1 = 40 basic operations, flat in households.
 - at 80: 1 x (36 + 0 + 4) x 1 = 40
 
 - FR-014 re-score: every factor is an exact count, no density or candidate taken at its worst, so the typical case is the derivation as it reads (rubric S8; ask:444-budget-standard)
-- reason above today's count: today's 0 at 40 counts nothing of the stage (no counted site); its budget is its derivation's exact count
 
 ## Earlier findings
 

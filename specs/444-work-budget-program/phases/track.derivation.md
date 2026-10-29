@@ -58,7 +58,6 @@ So: 1 x 1 x 2, plus the bearings, the crossings, the corridor and the squaring. 
 - verdict-2, finding 1: fixed - the legs are the spliced vertices plus one a pair plus 1, the pairs at most half the vertices (a straight ray crosses each edge once), the arcs at most the perimeter in all, and the margin 17 ft at each end of each leg
 - verdict-2, finding 2: fixed - the dry exit's flood yields a dry exit cell, and the track is the straight leg through it, the chosen ray
 - FR-014 re-score: each factor at the typical case (rubric S8): the reference rolls' connector is one straight leg, so the first bearings near the ideal are clean and neither the dry exit's flood nor a splice round the field runs; the mean densities of `items.md`; slack 2 (ask:444-budget-standard; the accept was ask:444-T04-track-round-3)
-- reason above today's count: today's 69 at 40 counts the bearings' sites alone (a lower bound: the rays' cell walks are not counted sites)
 
 ## Cheaper algorithms considered
 

@@ -53,7 +53,6 @@ So: the sty households x (342) x 2, plus the drawing and the count.
 - verdict-2, finding 2: fixed - the grove band is projected on each wall apart from the registry, at most two intervals a wall
 - verdict-2, finding 3: fixed - 99 places, both ends of each wall, and the difference array's setup is a row
 - FR-014 re-score: each factor at the typical case (rubric S8): the households that keep a sty, each finding its place on its first wall or two, at the mean 4 things a cell near the houses (`items.md`); slack 2 (ask:444-budget-standard; the accept was ask:444-T03-sties-round-3)
-- reason above today's count: none owed at 20 and 40 if under it; today's 1,054 at 40 is a lower bound (the strips' cell reads are not counted sites)
 
 ## Cheaper algorithms considered
 

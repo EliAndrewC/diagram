@@ -1,23 +1,30 @@
-UNDERIVED - the crown index's density of "1 crown a cell (no crown under another)", which sets the crowns factor's 18 a seat: "no crown under another" only keeps crown centres a crown radius apart (4 to 4.5 ft), not the 8 ft lattice spacing, and an 8 ft cell holds at least five such centres.
+UNDERIVED - the gather's and the cuts' "mean 4 things a cell near a wood": its only source, `items.md`, is not in the bundle or the contract's Bounds, and it is held at 4 at 40 and 80 households although the derivation's own Indexes line says the registry grows 29, 40, 55 (x1.38 a doubling), with no reason given for the exception.
 
-**1. Is each factor derived?** No. Three gaps:
-- **The crown index's 1 a cell (derivation.md line 25), which blocks.** "No crown under another" keeps centres more than 4 to 4.5 ft apart (contract line 5). An 8 ft cell holds the four corners plus the centre, 5.66 ft from each, so five already fit, and the known packing fits six. One a cell holds only for crowns on a single shared lattice. The contract lays each wood's lattice "inside the ring" and reads "the crowns already standing" with no spacing stated. So the 18 = 9 x (1 + 1) is an undercount; at five a cell it is at least 9 x 6 = 54.
-- **The marsh index's 12 segments a crossed cell (line 24).** The figure is the field's outline's measured ceiling, a shape not in the bundle. "The marsh's rings no denser" is asserted, not reasoned. The contract gives only 485 points and about 5,300 ft of edge, and no density per cell.
-- **The marsh index's once cost of 1573.** The walk is derived: a segment touches at most (|dx| + |dy|)/64 + 3 cells, so 5,300 x root 2 / 64 + 3 x 485 = 1,573. But the index's states are "inside, outside or crossed", and nothing is charged for deciding whether an uncrossed cell is inside or outside. That takes a parity fill over the marsh's extent, or a lazy classification of the 120 at most cells the 4 parcels touch. The term is missing, not padded.
+**1. Is each factor derived?** Not all.
+- **The blocker: the mean 4 things a cell (derivation.md lines 35-36).** It sets both the gather (30 x (4 + 1) = 150) and the cuts (30 x 4 x 10 = 1200). It cites `items.md`, which is not in the bundle. The contract's Bounds (contract.md line 6) give only the densest 21 and 29 things a cell and the x1.38 rate. The Totals (lines 44-46) are 47,448 at every size. Earlier findings line 64 says verdict-3 finding 7 is closed ("the registry's things grow at their measured rate"), but the count does not apply that rate. That finding stays open.
+- **Smaller: "dry (2)" (line 34).** It rests on "crossing a marsh cell rarely", which is a word, not a rate. The 2 implies about 1 seat in 13 reads a crossed cell's 13 segments. That rate is not stated.
+- **Derived:** the ring 24; the sweep 48 + 113 (806.8 / 8 + 12); the 5 by 6 cells; the 873 ceiling's arithmetic (49,338 / 64 + 806.8 / 8 + 1); and the totals' arithmetic (5,931 x 4 x 2 = 47,448).
 
-The rest are derived: items 4, the ring 24, the filing 31, slack 1, the keep-outs' 2 by 2 cells at a 9 ft crown, and the 33 rows. Verdict-1 findings 1-4 and verdict-2 findings 1-4 are closed as the derivation's Earlier findings state.
+**S8: worst-case factors (LOOSE findings once the blocker is fixed).**
+- **The seats, 4,365.** The table's own worst-case column says "the largest parcel", and 873 is the lattice-point count at the worst alignment. Across alignments the mean count of lattice seats is exactly the area over 64; the perimeter-over-8-plus-1 term is the alignment's maximum. So the factor is at most 771 x 5 even at the largest parcel, and lower at the mean parcel's area, which the contract does not yet give.
+- **The cuts, 1,200.** This multiplies two maxima. It charges every gathered thing as reaching the ring dilated by 4.5 ft, though the parcels lie "on ground nothing else wanted" (contract line 3). It also gives each thing the largest thing's 10-row span (63 ft across). A tighter count is the things that actually straddle the dilated ring, times the mean thing's row span.
+- **Items, 4.** This is the knob's maximum. The measured rolls that draw a wood on the sheet draw 1 and 3 parcels.
+- **Slack, 2.** It is stacked on factors that are still at their maxima: the seats, the sweep (806.8 ft, "the longest ring"), the filing ("the largest parcel") and items. Verdict-3 accepted slack 1 because every factor was at its ceiling. S8 allows slack only for "what varies around that mean", and warns that worst cases taken together compound. This re-score doubled the slack and left the dominant factor at its ceiling, so the target went up, not down.
 
-**2. Is there a standard, cheaper algorithm?** Yes, three. These are the LOOSE findings for once the above is fixed:
-- **The keep-out term of 120 a seat (line 15).** The registry does not change during a parcel's scan, because the wood is filed only after its crowns (line 18). So gather the keep-outs once a parcel from its 5 by 6 cells: 30 x (29 + 1) = 900. Keep only those that reach the ring dilated by 4.5 ft. On a parcel the scan found "on ground nothing else wanted" (contract line 3), none are kept and the seat's term is 0, not 120. Any keep-out that is kept is cut from the rows it spans in the sweep. That takes 771 x 120 = 92,520 down to about 900 a parcel. The memoizing line (line 63) covers only the marsh.
-- **The crown index term of 18 a seat.** A wood's own seats are 8 ft apart, more than any crown radius, so none of its own crowns can stand over another of its seats. Filing them "for the next seat's test" (line 62) therefore buys nothing within a wood. Only the crowns standing before the scan matter, and they do not change during it, so the same once-a-parcel gather applies.
-- **The sweep's 396.** An active-edge sweep crosses each edge only with the rows it spans: at most the sum of (|dy| / 8 + 1) over the 12 edges, which is at most 806.8 / 8 + 12, about 113, plus 12 to sort the edges by start row. That replaces 33 x 12 = 396.
+**2. Is there a standard, cheaper algorithm?** None missed.
+- The active-edge sweep is used.
+- The registry is gathered once per parcel and its things cut from the rows they span; this replaces the old 120 a seat.
+- There is no crown index, correctly: a wood's own seats are 8 ft apart, wider than its 4.5 ft crowns.
+- The marsh is read from the hinterland's raster.
+- Verdict-1 findings 1-4, verdict-2 findings 1-4 and verdict-3 findings 1-6 are closed as the Earlier findings state.
 
-**3. Is any factor padded?** Nothing beyond what question 2 cuts. The 396 and the 120 are each true to their own stated reason; both are larger only than a cheaper algorithm needs.
+**3. Is any factor padded?** None beyond its own stated reason.
+- Each figure is true to its reason. The excess is the worst-case choice under S8 above, not padding.
+- At about 15 operations a crown, the named reason (a whole wood of up to 771 crowns) covers the cost above 4,000 per parcel.
 
-**4. Is each figure read at its source's size and unit?** Not all:
-- **The 771.** The contract quotes 771 as a ceiling, "at most its area over 64 sq ft". But 49,338 / 64 = 770.9, so the measured 771 is already over that rule. The number of lattice seats inside an irregular ring shifts with the lattice's alignment by roughly perimeter over spacing, about 100 here. Also, 771 counts crowns drawn, while the 153 is charged per seat tested, and seats rejected as wet or in a keep-out are tested too. The seat count needs either a lattice-point ceiling (about A/64 + P/8 + 1, roughly 873 at any alignment) or a measurement of seats tested.
-- **Figures carried to 40 and 80.** The marsh's 485 points (at 20) and the 29 things a cell (at 10 and 20) are used unchanged at 40 and 80. The Totals' identical figure at every size rests on that, and the bundle does not show it.
-- **What checks out.** The 33 rows (floor(258.8 / 8) + 1), the 5 by 6 cells, the 2 by 2 keep-out cells and the 1573 walk are each read at their source's size.
+**4. Is each figure read at its source's size and unit?** Mostly.
+- The 806.8 ft perimeter, the 247.2 by 258.8 ft box, the 49,338 sq ft area, the 64 ft and 25 ft cells and the 13 segments a cell are each used as the contract states them.
+- The exception is the mean 4. Its household count is not stated, and it is carried to 40 and 80 against the contract's rate, as under question 1.
 
 Files read:
 - /tmp/l7r-check/work-budget-budget-woodland/MANIFEST.md
@@ -26,3 +33,4 @@ Files read:
 - /tmp/l7r-check/work-budget-budget-woodland/derivation.md
 - /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-1.txt
 - /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-2.txt
+- /tmp/l7r-check/work-budget-budget-woodland/woodland.verdict-3.txt

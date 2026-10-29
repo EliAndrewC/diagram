@@ -56,7 +56,6 @@ So: 1 x 4 x 1, plus the canopy, the drift, the title, the waterward band and the
 - reason above the reference: the frame is one thing a roll, so its cost per thing is the whole stage - each hard feature's box read once for the view and the title's pocket tested - not a cost per house or per part placed
 
 - FR-014 re-score: the registry's things a cell at the mean 4 of `items.md` in place of the densest 29, 40 and 55; every other factor an exact count (ask:444-budget-standard)
-- reason above today's count: today's 8 at 40 counts the frame's few counted sites alone, a lower bound
 
 ## Cheaper algorithms considered
 

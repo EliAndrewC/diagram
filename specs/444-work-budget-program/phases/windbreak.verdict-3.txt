@@ -1,0 +1,28 @@
+UNDERIVED - the items factor, "about twice the clumps drawn" (a site "admitted about one time in two"), gives no reason from the geometry or the contract for the one in two, and the mean densities in the site test (4 water segments, 5.5 things a cell) appear nowhere in the contract's Bounds.
+
+**1. Is each factor derived?** No.
+- **Items (derivation.md line 32).** 924, 1,914 and 3,960 are 2 x the clumps. The 2 depends on how much of a house's 90 ft reach is lost to the homestead's parts, the water and the neighbours' sites. The contract gives none of these, so the 1/2 is a figure stated with no reason. It may well be the measured mean, but it needs its source: the reach's free fraction, or a measured sites-tested-per-clump figure in the Bounds.
+- **The site test's means (line 33).** "The mean 4 water segments" and "the mean 5.5 things a cell near the houses" are not in contract.md line 6, which gives only the ceilings (26 and 29). The re-score note (line 60) cites "the mean densities of `items.md`", but the bundle doesn't carry them, so I can't check them (see also Q4).
+- **The other factors are derived.** The share test (1), the shares row (20 x 1 + 93 x 14 = 1,322, and so on at 40 and 80), the house index, the crowns and slack 2 each have a reason. Slack 2 is "a crowded farm testing more of its reach", which is S8's own use.
+
+**2. Is there a standard, cheaper algorithm?** One small thing is missed.
+- **Stop each house's walk once its share fills.** The algorithm (line 17) still walks a filled farm's sites at "one test" each. That is about 105 - 46, or roughly 59 sites a house (about 1,200 at 20 households), and no row counts it. Ending the walk when the share fills makes it 1 a house. Otherwise it needs its own row.
+- **Nothing else is missed.** The index choices still stand, as in verdict-2.
+
+**3. Is any factor padded?** Yes, at S8. This is LOOSE, behind the UNDERIVED.
+- **The registry.** Line 33 charges a clump's 22 ft box 2 by 2 cells, which is its worst placement. The typical box in 64 ft cells overlaps (1 + 22/64)^2 = 1.81 cells. That makes the registry 1.81 x (1 + 5.5) = about 12, not 26. The same applies to filing a clump (line 36): 2.8, not 5.
+- **The bank.** It charges "at most 4 cells", the worst case. A typical site-to-house segment is 2/3 x 90 = 60 ft long. At random orientation it crosses 1 + 60 x (4/π) / 64 = 2.2 cells, so the bank is about 6.2, not 8.
+- **Tighter site test: about 19, not 35.** At 40 households that brings the total from about 143k to about 77k, if the means stand.
+
+**4. Is each figure read at its source's size and unit?** As far as the bundle shows, yes; the means can't be checked.
+- **Checked against the Bounds.** The 90 ft reach is a radius, the 11 ft clump radius gives the 22 ft box, the 15.556 ft pitch is exact, the ring is counted in points, and the clumps and crowns at 20, 40 and 80 match. The totals add up (68,956, 142,906, 295,793), with an exponent from 20 to 80 of about 1.05. The cost per clump is about 150, far under 4,000.
+- **Not checked.** The 4 and 5.5 have no source in the bundle.
+- **An unstated premise (line 24).** "A belt point's nearest house lies in its 3 by 3 cells" holds only if every `belt_near_vertices` point is within 90 ft of a house. The contract doesn't say so.
+
+**Earlier findings.**
+- **Closed:** verdict-1 F1, F2, F4 and F6, and verdict-2 F3 and F4.
+- **Verdict-2 F1 (the 133 sites):** moot, since 133 is no longer a factor.
+- **Verdict-2 F2 / verdict-1 F3 (the groves):** closed by a stated reason ("none on a hamlet", measured empty at 10 and 20). That measurement belongs in the contract's Bounds.
+- **Verdict-1 F5 (the form):** reopened. Line 54 says the items are the houses and the sites their candidates, but the re-scored table (line 32) makes the sites tested the items and has no candidates factor. The arithmetic is the same; the S7 form is not.
+
+Files: /tmp/l7r-check/work-budget-budget-windbreak/derivation.md (lines 17, 24, 32, 33, 36, 54, 60), /tmp/l7r-check/work-budget-budget-windbreak/contract.md (line 6), /tmp/l7r-check/work-budget-budget-windbreak/windbreak.verdict-1.txt, /tmp/l7r-check/work-budget-budget-windbreak/windbreak.verdict-2.txt.

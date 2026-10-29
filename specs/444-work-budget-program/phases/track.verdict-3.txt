@@ -1,0 +1,27 @@
+UNDERIVED - the boundary crossings per ray, "about 20 boundary segments a ray crosses at the mean 2.5 a crossed cell (50)" in the bearings and squaring rows (derivation.md lines 38 and 41): neither 20 crossings per ray nor 2.5 segments per crossed cell is in the contract's Bounds, and the only 20 there is a 32 ft cell's densest segment count, not a count per ray.
+
+**1. Is each factor derived?** No.
+- **Crossings per ray (lines 38, 41).** contract.md line 6 says "at most 20 site-boundary segments in a 32 ft cell". That is a ceiling for one cell. The derivation uses it as the number of crossings along a whole ray and multiplies it by a mean of 2.5 that has no source in the bundle. It also keeps the result at a flat 50 at 20, 40 and 80, while the ray it lies on grows from 155 to 328 cells. The S8 means the re-score cites ("the mean densities of `items.md`", line 60) are not in the Bounds, which give only ceilings. The same applies to "the mean 2 outline segments a crossed cell" (line 39).
+- **Slack (lines 37, 43).** The slack of 2 multiplies only 1 x 1, so it covers 2 operations. Line 43 says the flood and the splice sit "inside the slack", which is false as written: the flood alone is about 9 operations per raster cell over 5,521 cells. S7's form puts the slack on the product. Line 37's reason, "a bearing or two more", is also already counted in the 3 bearings on line 38.
+- **The 3 bearings (line 38).** "One straight leg at 10 and 20" shows that no splice ran. It does not show which bearing came up clean. The 3 is reasonable as "the ideal or one either side", but the derivation should say that this is its reason.
+
+**2. Is there a standard, cheaper algorithm?** One was missed. The crossings row walks the outline index along all 79, 114 or 166 cells of the ray. The ideal bearing points away from the field, so clipping the ray to the outline's bounding box first would cost a few operations. In the typical case that leaves zero cells to walk, instead of 237, 342 or 498.
+
+**3. Is any factor padded?**
+- **Corridor (line 40).** "At most 2 cells across" is the maximum, not the typical case. A 20 ft band 3,433 ft long at the diagonal's angle, in 64 ft cells, touches about L·w/s² + (L+w)(|cos|+|sin|)/s + 1. That is about 94 cells at 20, 137 at 40 and 200 at 80, not 158, 228 and 332.
+- **Parts index (line 38).** The stated reason, "typically none beside the cell", supports 1 operation per cell, not the (2) written.
+
+**4. Is each figure read at its source's size and unit?**
+- **The 20 is not.** It is a per-cell ceiling read as a per-ray count, the same kind of error as 444 T07.
+- **The rest are.** The ray cells (diagonal + 64 ft, x √2 / side, + 3: 155/225/328 and 79/114/166) reproduce, and √2 suits a ray near the diagonal (the 3,333 ft connector at 20).
+- **A count of today's code is in the bundle.** Line 61 ("today's 69 at 40") is a count of today's code, which MODE BUDGET excludes. I did not use it.
+
+**Earlier findings:** Verdict-1's findings 3 and 5 and verdict-2's finding 2 are closed (lines 16-17 and 41). Verdict-1's findings 1, 2 and 4 and verdict-2's finding 1 concerned the splice. The S8 re-score moves the splice out of the typical case, so they are closed by removal. The pseudocode (lines 18-21) still states the splice's tests.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-track/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-track/rubric.md
+- /tmp/l7r-check/work-budget-budget-track/contract.md
+- /tmp/l7r-check/work-budget-budget-track/derivation.md
+- /tmp/l7r-check/work-budget-budget-track/track.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-track/track.verdict-2.txt
