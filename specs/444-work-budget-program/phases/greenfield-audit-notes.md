@@ -12,3 +12,6 @@ re-owes a ruling (FR-013) or a verdict.
 - **sink** (verdict-2): the Keep "smaller where a stream tops it up" has no step - one read and a smaller share.
 - **water_frame** (verdict-1): SOUND at 69 against its standing pin of 40 - left for the GM's words.
 - **burial** (verdict-1): SOUND at 77 against its standing pin of 3 - left for the GM's words.
+- **web** (ask:444-T13-web_greenfield-round-3): the door stands 81 ft from the lot's side edges but the across leg is charged at about 40 ft - about 0.6 cells a household, the budget perhaps 2% low.
+- **track** (verdict-2): the start's line walk must rank lines by their far corner's projection on the bearing (a diagonal bearing), the 7 ft by construction resting on the start being the farthest corner.
+- **washing** (ask:444-T12-washing_greenfield-round-3): the near households' ring-by-ring stop reads fewer than the 19.3 cells charged - a slight overcount.

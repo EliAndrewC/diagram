@@ -120,16 +120,16 @@
   "web": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.91,
-   "derivation": "specs/444-work-budget-program/phases/web.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 49626,
-   "items_at_40": 91798,
-   "items_at_80": 174844,
+   "exponent": 0.9,
+   "derivation": "specs/444-work-budget-program/phases/web_greenfield.derivation.md",
+   "verdict": "ask:444-T13-web_greenfield-round-3",
+   "items_at_20": 611,
+   "items_at_40": 1160,
+   "items_at_80": 2175,
    "pinned_on": "accept",
-   "derivation_sha": "5702fa39ac731902ac884cac3583c52471137738261fb9b8339955f197c0e5b5",
-   "rounds": 5,
-   "spread": "49,626-215,252 at 20"
+   "derivation_sha": "b9e0973139947a1eb6510b4a7826865a7601f91fc0edccccd88a83d2f507d198",
+   "rounds": 2,
+   "spread": "564-624 at 20"
   },
   "lane_wells": {
    "status": "budgeted",
