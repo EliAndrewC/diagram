@@ -1,18 +1,18 @@
 {
  "program": {
-  "ops_at_40": null,
-  "exponent": null
+  "ops_at_40": 57235,
+  "exponent": 0.87
  },
  "stages": {
   "water_frame": {
    "status": "budgeted",
-   "per_thing": 40.0,
+   "per_thing": 1.0,
    "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/water_frame.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/water_frame.verdict.txt",
-   "items_at_20": 1,
-   "items_at_40": 1,
-   "items_at_80": 1,
+   "derivation": "specs/444-work-budget-program/phases/water_frame_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/water_frame_greenfield.verdict-1.txt",
+   "items_at_20": 69,
+   "items_at_40": 69,
+   "items_at_80": 69,
    "reason": "the stage's work is uncounted today (no counted site); its budget is its exact count"
   },
   "field": {
@@ -108,13 +108,13 @@
   },
   "burial": {
    "status": "budgeted",
-   "per_thing": 3.0,
-   "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/burial.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/burial.verdict.txt",
-   "items_at_20": 1,
-   "items_at_40": 1,
-   "items_at_80": 1,
+   "per_thing": 1.0,
+   "exponent": 0.9,
+   "derivation": "specs/444-work-budget-program/phases/burial_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/burial_greenfield.verdict-1.txt",
+   "items_at_20": 42,
+   "items_at_40": 77,
+   "items_at_80": 147,
    "reason": "the stage's record is uncounted today; its budget is its exact count"
   },
   "web": {
@@ -192,17 +192,13 @@
   },
   "bamboo": {
    "status": "budgeted",
-   "per_thing": 21.0,
+   "per_thing": 1.0,
    "exponent": 1.0,
-   "derivation": "specs/444-work-budget-program/phases/bamboo.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch",
-   "items_at_20": 6,
-   "items_at_40": 12,
-   "items_at_80": 24,
-   "pinned_on": "accept",
-   "derivation_sha": "a50c925c4a2ca1530f0d47da339d2ff507af9ed7d32f1d6948c52110231253de",
-   "rounds": 2,
-   "spread": "126-138 at 20",
+   "derivation": "specs/444-work-budget-program/phases/bamboo_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/bamboo_greenfield.verdict-1.txt",
+   "items_at_20": 144,
+   "items_at_40": 288,
+   "items_at_80": 576,
    "reason": "bamboo's count today, 86 at 40, records the stands' few counted sites alone; its budget is its stands' exact count"
   },
   "crossings": {

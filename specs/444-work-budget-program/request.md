@@ -296,3 +296,10 @@ only what can win); the 1.41M target withdrawn until then. His answer:
 
 "sounds good, please proceed with that"
 
+
+## The GM approves the greenfield target, 2026-10-29 (T06, FR-002)
+
+Put to him after escalation-check: 57,235 operations at 40 households, exponent 0.87, about 1,431 a household, including three
+raises above the old pins (water_frame 40 to 69, burial 3 to 77, bamboo 252 to 288), and the 162 ft lot lattice that shapes the maps.
+
+"Yes I approve of that for now.  I feel like we can probably do even better, but if we hit those targets then I expect it will be acceptable."
