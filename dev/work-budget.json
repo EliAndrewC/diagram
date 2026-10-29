@@ -5,7 +5,7 @@
  },
  "stages": {
   "water_frame": {
-   "status": "budgeted",
+   "status": "accepted",
    "per_thing": 1.0,
    "exponent": 0.0,
    "derivation": "specs/444-work-budget-program/phases/water_frame_greenfield.derivation.md",
@@ -13,7 +13,12 @@
    "items_at_20": 69,
    "items_at_40": 69,
    "items_at_80": 69,
-   "reason": "the stage's work is uncounted today (no counted site); its budget is its exact count"
+   "reason": "the stage's work is uncounted today (no counted site); its budget is its exact count",
+   "accepted": {
+    "40": 23.0,
+    "80": 23.0
+   },
+   "audit": "specs/444-work-budget-program/phases/water_frame.audit-2.txt"
   },
   "field": {
    "status": "budgeted",

@@ -1,0 +1,3 @@
+WITHIN - water_frame does 23 counted operations at every size from 10 to 80 households, against a pinned budget of 69 and exponent 0.0, and nothing on its path places, repairs, or loops over a set that grows with the map.
+
+(Also: the pin is three times the stage's work, re-pinnable lower; the fall test is counted but never reached on the reference, whose fall is pinned - at most 8 more where it is rolled; chains.txt a stale excerpt naming no callers.)
