@@ -1,0 +1,40 @@
+LOOSE - the union (ring points): 2,664 uses 662, the longest marsh ring in the whole pool (Kashikawa), at every size. The typical ring is the reference's 485 at 20, grown at its measured rate (x1.17 a doubling) to 568 at 40 and capped at 662 at 80. That gives 4 x (points + 4) = 1,956, 2,288 and 2,664.
+
+**Earlier findings.** Verdict-1's F2 to F5 are still closed: the band depth cites `to_the_strips`, the union is one clipping walk, the drift reads hard features only, and the strip is bounded as a marsh record. The note for verdict-1 F1 is now out of date. It still says "29, 40 and 55, in the title and the band", but both rows now use a flat mean of 4. That flat 4 does close verdict-2's leftover S1 point, since the per-cell bound no longer grows. The note should be rewritten to say so.
+
+**1. Is each factor derived?** Yes.
+- Each factor names a reason: the crop (4), the canopy (one write per crown), the drift (hard features plus 4) and the cell grid.
+- The mean of 4 things a cell is cited to `items.md`, which is not in the bundle. It is consistent with the contract. About 2,349 crowns and hard features at 20, in a view whose long side is 2,486 ft, give 4 or fewer a cell for any short side of about 970 ft or more. Things grow x1.82 a doubling while the view's area grows about x2.16, so holding the mean flat does not understate it.
+- The slack row's reason, "every factor is a ceiling at its worst case", contradicts S8 and the FR-014 note. The value of 1 is fine; the reason needs restating.
+
+**2. Is there a standard, cheaper algorithm?** None is missed.
+- The pocket is memoized from the hinterland's scan, not scanned again.
+- The registry's 64 ft cells serve both the title and the band.
+- The union is a single walk clipping the ring against a rectangle.
+- Keeping the content's frame up to date as features are added would only move the 1-per-feature cost into earlier stages.
+
+**3. Is any factor padded?** Yes. The FR-014 note says "every other factor an exact count", but four factors are still maxima:
+- **The union** (row 37): 662 is the pool's maximum, not the reference's ring (414 and 485). This is the headline finding.
+- **The waterward band** (row 36):
+  - It is a product of maxima. The depth is the band's ceiling ("at most that deep", 193 ft). The cells along each side are the worst grid alignment: 5 rows and ceil(side/64)+1 columns.
+  - At random alignment a span of L covers L/64 + 1 cells on average. That is 4.02 rows by 39.8, 58.1 and 84.9 columns, which gives 800, 1,167 and 1,706 in place of 1,000, 1,475 and 2,125.
+  - That still assumes the full 193 ft depth and the long side. The contract gives no typical depth or flank side, so this is an upper figure.
+- **The title** (row 35): 5 by 4 cells is the worst alignment. The mean is 4.94 x 3.48 = 17.2 cells, so 89 rather than 103. This is minor.
+
+**4. Is each figure read at its source's size and unit?** The 662 is not.
+- The contract states it as a ceiling over the pool, "at most the pool's longest marsh ring". It gives 414 and 485 as the reference's own rings, at 10 and 20 households. The derivation uses the ceiling where S8 asks for the reference figure.
+- The others are used as stated: the view's long side, 193 ft and 252 by 159 ft are lengths; the crown and hard-feature counts are at their sizes, grown at their measured rates.
+
+**Arithmetic.**
+- The stated totals check out: 6,124, 8,524 and 12,675, an exponent of about n^0.52.
+- With only the union fixed: 5,416, 8,148 and 12,675.
+- With the band and title also at the mean alignment: about 5,202, 7,826 and 12,242.
+- Every version is well under the 1.15 limit.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-frame/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-frame/rubric.md
+- /tmp/l7r-check/work-budget-budget-frame/contract.md
+- /tmp/l7r-check/work-budget-budget-frame/derivation.md
+- /tmp/l7r-check/work-budget-budget-frame/frame.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-frame/frame.verdict-2.txt

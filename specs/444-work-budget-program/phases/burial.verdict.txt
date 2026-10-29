@@ -1,3 +1,17 @@
-SOUND - burial writes the same single manifest record at every size, and each factor (1 item x (2 knob tests + 1 write) x slack 1 = 3, flat) comes straight from the contract.
+SOUND - one record, written once: an exact count of 3 operations (a pin test, an attested-value check, one write), flat in households, with nothing placed, searched or scanned.
 
-(A note for the rebuild: the attested values kept in a set, so the membership test is one operation.)
+1. **Is each factor derived?** Yes. Items = 1, because the contract's Bounds say "the same one record at every size". The knob costs 2: the pin test, then one membership check against the attested values. An unpinned roll costs about the same (the test, then the default). The write is 1, the single `meta.hamlet_burial` record. Slack is 1 because no density or candidate count varies. Every factor is an exact typical-case count, so the FR-014 re-score holds (S8). The cost of 3 per item is far below the 4,000 that would need a named reason.
+
+2. **Is there a standard, cheaper algorithm?** No. Nothing is placed, ranked or scanned, so a sweep, a spatial index, a priority queue, an incremental update or memoizing would lower nothing. The derivation's "Cheaper algorithms considered" section says each of these correctly.
+
+3. **Is any factor padded?** No. Each factor equals what its stated reason supports, and slack is 1, not the allowed 2.
+
+4. **Is each figure read at its source's size and unit?** Yes. The one figure taken from a source is "one record" from Bounds, used as 1. The density figures in Bounds are copied in but never used, which is right, since nothing is placed.
+
+**Earlier verdicts:** You said the earlier verdicts are in the bundle and that the derivation's Earlier findings answer them. Neither is there. The bundle holds only `MANIFEST.md`, `rubric.md`, `contract.md` and `derivation.md`: no `burial.verdict-<N>.txt`, and no `## Earlier findings` section in the derivation. The MANIFEST says "any" verdict files, so they are optional and this does not block. But there was nothing to confirm as closed. If earlier verdicts for burial exist, they were left out of the bundle and should be checked before `make budget-set`.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-burial/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-burial/rubric.md
+- /tmp/l7r-check/work-budget-budget-burial/contract.md
+- /tmp/l7r-check/work-budget-budget-burial/derivation.md

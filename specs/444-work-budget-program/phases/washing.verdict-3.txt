@@ -1,0 +1,26 @@
+UNDERIVED - the footings, "the households over 4 plus 6" (11 at 20, 16 at 40, 26 at 80): the "plus 6" (a constant count of banks, a full extra footing for each) has no source in the contract, and the contract's measured output is 1 and 3 washing places at 10 and 20 households, not 11.
+
+**Q1, is each factor derived?**
+- The footings (derivation.md line 38) are not derived. The count assumes every household is within 120 ft of a water and that there are 6 banks at every size. Neither has a reason, and the Bounds give no count of banks. "Plus one a bank's remainder" is also the ceiling, since ceil(k/4) is at most k/4 + 3/4 and typically about k/4 + 3/8. S8 asks for the mean the stage's output shows: 3 placed at 20. If groups with no seat explain the gap, the derivation must say so with a measured `washing_no_seat` figure.
+- The registry's "mean 4 things" a 64 ft cell (line 38) has no source in the bundle. The contract's Bounds state only the maxima (21, 29, 40, 55). The water row's "mean 4 segments" cites `items.md`, and it checks out against the Bounds: 19,311 ft / 574 segments is about 34 ft a segment, against a mean chord of about 94 ft in a 120 ft cell, so about 3.8 segments a cell. The registry's 4 has nothing to check it against.
+- The each-house form (pseudocode line 23) has no row in the count. That form places up to one footing a household with 5 shifts each. The derivation does not say that the rolls it is held to are all shared-form.
+- The Growth section (line 53) contradicts the count. It says the exponent is above 1.15 because the registry density rises to 40 and 55. But the count holds the density flat at 4, and the totals give log4(13,543 / 5,253), about 0.68. That leaves verdict-2's finding 1 answered by text that no longer describes the count. Verdict-2's findings 2 and 3, and all four from verdict-1, are closed.
+
+**Q2, is there a standard, cheaper algorithm?** None missed. The derivation uses the water index and the registry index, one sort along each bank, the 9 shifts as one interval sweep of the strip, each footing filed as it is drawn, and each household's water found once. A priority queue does not apply.
+
+**Q3, is any factor padded?** Two factors are taken at their worst case (LOOSE under S8, secondary to the finding above):
+- **The water index (line 40).** It uses "√2·L/120 + 3 a segment", the worst angle and the worst crossing. The mean over angles is segments + L·(4/π)/120: about 780 at 20, 1,090 at 40 and 1,530 at 80, against 1,950, 2,666 and 3,650.
+- **The strip's cells (line 38).** It reads "at most 6 cells". A 70 by 6 ft strip at a random angle touches about 2.6 cells of 64 ft on average (mean Minkowski area, about 10,700 / 4,096). At 3 cells a footing costs about 15 + 24 + 18 = 57, against 96.
+- The slack of 2 and the sort, which comes to 100, 240 and 560 operations at 20, 40 and 80 households (n x ceil(log2 n)), are within reason. The drawing's "at most 4 cells" is a ceiling too, but it is small.
+
+**Q4, is each figure read at its source's size and unit?** The water figures are read as stated: 574, 770 and 1,032 segments, and 19,311, 30,126 and 46,996 ft. The arithmetic of all three totals checks out (5,253, 8,139, 13,543). Two problems:
+- The contract's rule "past 20 at each figure's measured rate a doubling" is not applied to the two means. Both are held flat at 4 at 40 and 80, while their maxima grow x1.38 (registry) and x1.04 (water).
+- The washing-places measurement (1 and 3) is not used where it bears on the footings.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-washing/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-washing/rubric.md
+- /tmp/l7r-check/work-budget-budget-washing/contract.md
+- /tmp/l7r-check/work-budget-budget-washing/derivation.md
+- /tmp/l7r-check/work-budget-budget-washing/washing.verdict-1.txt
+- /tmp/l7r-check/work-budget-budget-washing/washing.verdict-2.txt
