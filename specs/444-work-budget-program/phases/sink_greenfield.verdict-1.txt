@@ -1,0 +1,3 @@
+LOOSE - the seat's test charges the per-crossed-cell mean of 6.5 (3.7 water segments, 1.8 outline segments and the cell) on every cell under the pond's box; typically each cell is read alone, and segments only in the cells a segment crosses - the field's outline along the box's side facing the field (5, 7, 9 cells at 1.8) and the drain's last segment (about 7) - so about 36 / 53 / 83 at 20 / 40 / 80, totals about 101 / 149 / 235.
+
+(Also: 19 x 6.5 is 123.5, not 125.)

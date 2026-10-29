@@ -1,0 +1,3 @@
+UNDERIVED - cells examined per crown: 1 taken because a 12 ft crown sits "inside one cell", but a 12 ft box on 64 ft cells touches (1 + 12/64)^2 = 1.41 cells on average, and the derivation never says how the registry files a thing (in every cell it overlaps, or in one cell read with its ring).
+
+(Also: 47 x 7 = 329, half 164.5, rounded up 165, not 162; the memoizing line's reason is wrong - about half of consecutive trees at 30 ft share a 64 ft cell.)

@@ -31,34 +31,34 @@
   },
   "sink": {
    "status": "budgeted",
-   "per_thing": 37.5,
-   "exponent": 0.16,
-   "derivation": "specs/444-work-budget-program/phases/sink.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/sink.verdict.txt",
-   "items_at_20": 87,
-   "items_at_40": 97,
-   "items_at_80": 108
+   "per_thing": 1.0,
+   "exponent": 0.61,
+   "derivation": "specs/444-work-budget-program/phases/sink_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/sink_greenfield.verdict-2.txt",
+   "items_at_20": 101,
+   "items_at_40": 149,
+   "items_at_80": 235
   },
   "seat": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.3,
-   "derivation": "specs/444-work-budget-program/phases/seat.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/seat.verdict.txt",
-   "items_at_20": 2126,
-   "items_at_40": 2586,
-   "items_at_80": 3234
+   "exponent": 0.2,
+   "derivation": "specs/444-work-budget-program/phases/seat_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/seat_greenfield.verdict-1.txt",
+   "items_at_20": 167,
+   "items_at_40": 191,
+   "items_at_80": 221
   },
   "waterward": {
    "status": "budgeted",
    "per_thing": 1.0,
    "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/waterward.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/waterward.verdict.txt",
+   "derivation": "specs/444-work-budget-program/phases/waterward_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/waterward_greenfield.verdict-1.txt",
    "items_at_20": 1,
    "items_at_40": 1,
    "items_at_80": 1,
-   "reason": "the stage's one test is uncounted today; a valley hamlet draws no fringe"
+   "reason": "today's counters count nothing for the stage; its budget is its one test of the plan's form"
   },
   "homesteads": {
    "status": "budgeted",
@@ -107,12 +107,12 @@
    "status": "budgeted",
    "per_thing": 1.0,
    "exponent": 0.0,
-   "derivation": "specs/444-work-budget-program/phases/pond_stock.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/pond_stock.verdict.txt",
+   "derivation": "specs/444-work-budget-program/phases/pond_stock_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/pond_stock_greenfield.verdict-1.txt",
    "items_at_20": 1,
    "items_at_40": 1,
    "items_at_80": 1,
-   "reason": "the stage's one test is uncounted today; a plain paddy hamlet keeps no pond sties"
+   "reason": "today's counters count nothing for the stage; its budget is its one test of the plan's form"
   },
   "burial": {
    "status": "budgeted",
@@ -156,17 +156,13 @@
   "pond_bank": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.59,
-   "derivation": "specs/444-work-budget-program/phases/pond_bank.derivation.md",
-   "verdict": "ask:444-T09-rescore-batch-2",
-   "items_at_20": 1387,
-   "items_at_40": 2065,
-   "items_at_80": 3137,
-   "pinned_on": "accept",
-   "derivation_sha": "9cfc5b7d03b063e5a63f581ed5cf52ca274016d642faa2fb1c8f2b52202bedbe",
-   "rounds": 6,
-   "spread": "727-1,387 at 20",
-   "reason": "pond_bank's count today, 0 at 40, has no counter in the stage; the budget counts every seat's look, crop ray and brook test, the work its rebuild's counters must cover (S5) and MODE AUDIT holds"
+   "exponent": 0.51,
+   "derivation": "specs/444-work-budget-program/phases/pond_bank_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/pond_bank_greenfield.verdict-2.txt",
+   "items_at_20": 99,
+   "items_at_40": 142,
+   "items_at_80": 201,
+   "reason": "today's counters cover almost nothing of the stage; its bank is bare on the reference rolls and the planted branch is charged at its half share"
   },
   "hinterland": {
    "status": "budgeted",
