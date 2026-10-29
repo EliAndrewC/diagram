@@ -156,3 +156,7 @@ standards" (`request.md`).
   contradiction; FR-013 matches the GM's "letting the arbiters acceptance pin it".
 - 2026-10-28, amendment 2 (the GM's question on the step-3 target, the round arbiter's ruling ask:444-budget-standard): FR-014 - a
   budget counts the typical case times slack at most 2, the budgets pinned before it re-scored and lowered; SC-009 tests it.
+- 2026-10-28, amendment 2's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - the re-scoring narrowed to the round
+  arbiter's ruling (the accept-pinned stages in one batch, a SOUND one only where the gate fires); the per-household figure in the
+  target the GM sees; the 4,000 screen named in the bundle screen and the agent.
+- 2026-10-28, amendment 2's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.

@@ -30,6 +30,8 @@
 - [x] T08 An arbiter accept pins a first budget: make budget-set ARBITER=ask:<id> (refused without an accept naming the stage), bound to its derivation (a changed derivation flagged as owing the arbiter's ruling) - FR-013, SC-008
       research: rendering
       verify: DONE. landed: landed: make budget-set ARBITER=ask:<id> SPREAD= pins a first budget on the round arbiter's accept naming the stage (FR-013), recording its derivation's sha256, rounds and spread; a changed accept-pinned derivation refused by make work-budget and the push's ratchet; each red with its condition deleted
+- [ ] T09 The budgets re-scored to the typical case - the 13 accept-pinned in one arbiter batch, a SOUND one where the gate fires, each lowered (FR-014; research: rendering)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
