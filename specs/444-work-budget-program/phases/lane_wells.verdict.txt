@@ -1,0 +1,33 @@
+LOOSE - the well search's heap term: building the pool's heap bottom-up costs 2 + log2(pool) per popped site, not 2 x log2(pool), because the whole pool is known before the first pop.
+
+**1. Is each factor derived?** Yes, every factor has a reason, and every row and total recomputes as written (291,056 / 1,207,762 / 4,202,500). No earlier verdicts are in the bundle (round 1). Three gaps to fix in round 2:
+- "34 a house" has a construction but no arithmetic. The figure holds: a square of the 184 ft extent grown by the 12.4 ft radius on each side has a perimeter of 4 x 208.8 = 835 ft, and 835 / 25 = 33.4, rounded up to 34. The row should show this.
+- The lane form's "nearest wall (80 ft)" check is in the algorithm, but no row costs it. A distance to a wall is a separate operation from the distance to a house's center used for the rungs.
+- The exponent is about 1.93, against S6's 1.15. The derivation does state a reason: below 151 households, a point's 3 by 3 cells of 760 ft hold every household. So the reason is on record.
+
+**2. Is there a standard, cheaper algorithm?** Yes, in the well search row. The derivation charges each popped site "the heap's push and pop, 2 x log2 of the pool". But the pool is complete when each well's search begins: form and rung are memoized, and the walk is one counted distance. So the heap can be built bottom-up (Floyd's method) at no more than 2 operations per element, and each pop costs log2(pool).
+- Cost per popped site: 45 / 66 / 106 instead of 54 / 76 / 116.
+- Well search: 101,340 / 614,328 / 2,448,176 instead of 121,608 / 707,408 / 2,679,136.
+- Totals: 270,788 / 1,114,682 / 3,971,540 at 20 / 40 / 80 households.
+
+The index choices hold. A cell finer than 760 ft does not lower the worst-case houses read at this density.
+
+**3. Is any factor padded?** The worst-served query row charges each well "the worst-served household's 9 cells of 760 ft and their houses". Nothing in the algorithm uses those houses: the household is the max-heap's top, and its sites come from the site index, already costed in the pool. That row should be the heap read alone, not 9 plus the houses (712 at 80). It is small and does not set the verdict by itself.
+
+**4. Is each figure read at its source's size and unit?** Two under-counts. They do not block this verdict, but round 2 must fix them or the budget cannot be met honestly:
+- **The pool is counted at the disc's size but read from the cells.** The pool is figured as the sites within 760 ft (1,126 / 2,327 / 2,887), but the algorithm fetches them from the household's 3 by 3 cells. At these sizes those cells hold every site (the site index row's own 1,126 / 2,327 / 4,818). So each well tests every site against the disc before pushing it, and that test is costed nowhere. At 80 that is 4,818 tests per well, 8 x 4,818 = 38,544 over the run.
+- **Some cluster sites are missed.** "34 a house within 760 ft" measures from the house's center. A house centered up to about 865 ft away (760 plus half of 208.8) can still have envelope sites inside the disc.
+
+Everything else is read at its source's size and unit:
+- the 25 ft diameter for spacing and the 12.4 ft radius for growing the envelope;
+- 760 ft as a radius;
+- 29 / 40 / 55 things a 64 ft cell at 20 / 40 / 80;
+- the lanes' length at each size, times 2 for the two verges;
+- the lanes' density, 7.47e-3 ft a sq ft;
+- the 19.4 ft clearance fitting in 2 by 2 cells of 64 ft.
+
+Files read:
+- /tmp/l7r-check/work-budget-budget-lane_wells/MANIFEST.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/rubric.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/contract.md
+- /tmp/l7r-check/work-budget-budget-lane_wells/derivation.md

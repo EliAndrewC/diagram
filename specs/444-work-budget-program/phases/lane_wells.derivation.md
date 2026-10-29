@@ -37,30 +37,40 @@
 | items | per item | 2 at 20, 4 at 40, 8 at 80 | the wells drawn here, at most all that are owed | 80 households |
 | the drawing (registry cells written) | per item | 5 | the record written (1) and filed in at most 4 cells of 64 ft (4) | always 5 |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the sites (registry and house index cells examined) | over the run | 167,774 at 20, 495,651 at 40, 1,508,034 at 80 | the lane sites, 2 x the lanes' length over 25 ft (446 at 20, 967 at 40, 2,098 at 80), and 34 cluster sites a house (680 at 20, 1,360 at 40, 2,720 at 80); each once, its 2 by 2 cells of 64 ft with their things and the cell (120 at 20, 164 at 40, 224 at 80), its 9 cells of 760 ft (9) and their houses (20 at 20, 40 at 40, 80 at 80) for the five nearest | every site examined |
-| the well search (house index cells examined) | over the run | 121,608 at 20, 707,408 at 40, 2,679,136 at 80 | 2 at 20, 4 at 40, 8 at 80 wells, each at most its pool of sites within 760 ft of the worst-served household (1,126 at 20, 2,327 at 40, 2,887 at 80: the lane sites, 2 x the lanes' density x pi x 760 squared over 25 ft, capped by the lane sites, 446 at 20, 967 at 40, 1,085 at 80, and 34 a house within 760 ft) each popped once - its walk (1), its rung read (1), its 9 cells (9) and their households under the ten (20 at 20, 40 at 40, 80 at 80), the last resort's comparison (1), the heap's push and pop, 2 x log2 of the pool rounded up | every site examined for every well, every form and rung reached |
-| the worst-served query (house index cells examined) | over the run | 58 at 20, 196 at 40, 712 at 80 | each well, the worst-served household's 9 cells of 760 ft and their houses | every well owed |
+| the sites (registry and house index cells examined) | over the run | 190,294 at 20, 542,191 at 40, 1,604,394 at 80 | the lane sites, 2 x the lanes' length over 25 ft (446 at 20, 967 at 40, 2,098 at 80), and 34 cluster sites a house - the 184 ft square grown by the 12.4 ft radius each side, 4 x 208.8 = 835 ft, over 25 ft, 33.4 rounded up - (680 at 20, 1,360 at 40, 2,720 at 80); each once: its 2 by 2 cells of 64 ft with their things and the cell (120 at 20, 164 at 40, 224 at 80), its 9 cells of 760 ft (9) and their houses (20 at 20, 40 at 40, 80 at 80) for the five nearest, and the 4 walls of each of those five houses for the nearest wall within 80 ft (20) | every site examined |
+| the well search (house index cells examined) | over the run | 101,340 at 20, 614,328 at 40, 3,111,312 at 80 | 2 at 20, 4 at 40, 8 at 80 wells, each at most its pool, the sites within 760 ft of the worst-served household (1,126 at 20, 2,327 at 40, 3,669 at 80: the lane sites, 2 x the lanes' density x pi x 760 squared over 25 ft, capped by the lane sites, 446 at 20, 967 at 40, 1,085 at 80, and 34 a house of the houses within 908 ft, a site lying up to 148 ft from its house's center, 20 at 20, 40 at 40, 76 at 80), each popped once - its walk (1), its rung read (1), its 9 cells (9) and their households under the ten (20 at 20, 40 at 40, 80 at 80), the last resort's comparison (1), the heap built bottom-up once the pool is known (2 an element) and its pop, log2 of the pool rounded up | every site examined for every well, every form and rung reached |
+| the worst-served query (heap top read) | over the run | 2 at 20, 4 at 40, 8 at 80 | each well, the max-heap's top, 1 | every well owed |
+| the pool's scan (site index cells examined) | over the run | 2,270 at 20, 9,344 at 40, 38,616 at 80 | each well, the worst-served household's 9 cells of 760 ft (9) and every site in them, each tested against the 760 ft disc (1); at these sizes the cells hold every site (1,126 at 20, 2,327 at 40, 4,818 at 80) | every well owed |
 | the service (households re-keyed) | over the run | 458 at 20, 2,116 at 40, 9,672 at 80 | each well, its 9 cells (9) and the households in them, at most every household, each re-keyed with a push, 1 + 2 x log2 of the households rounded up | every well owed |
 | the dry households (heap top compared) | over the run | 2 at 20, 4 at 40, 8 at 80 | one comparison a well, the max-heap's top against 760 ft | every well owed |
 | the site index (site index cells written) | once | 1,126 at 20, 2,327 at 40, 4,818 at 80 | each site filed once in its 760 ft cell | 80 households |
 | the house index (cells written) | once | 20 at 20, 40 at 40, 80 at 80 | each house filed once | 80 households |
 
-So: the wells x 5 x 1, plus the sites, the well search, the worst-served query, the service, the dry households, the site index and the house index.
+So: the wells x 5 x 1, plus the sites, the pool's scan, the well search, the worst-served query, the service, the dry households, the house index and the site index.
 
 ## Totals
 
-- at 20: 2 x 5 x 1 + 167774 + 121608 + 58 + 458 + 2 + 20 + 1126 = 291056
-- at 40: 4 x 5 x 1 + 495651 + 707408 + 196 + 2116 + 4 + 40 + 2327 = 1207762
-- at 80: 8 x 5 x 1 + 1508034 + 2679136 + 712 + 9672 + 8 + 80 + 4818 = 4202500
+- at 20: 2 x 5 x 1 + 190294 + 2270 + 101340 + 2 + 458 + 2 + 20 + 1126 = 295522
+- at 40: 4 x 5 x 1 + 542191 + 9344 + 614328 + 4 + 2116 + 4 + 40 + 2327 = 1170374
+- at 80: 8 x 5 x 1 + 1604394 + 38616 + 3111312 + 8 + 9672 + 8 + 80 + 4818 = 4768948
 
 ## Growth
 
 From 20 to 80 households the stage grows faster than the households, for a bounded n: the 760 ft reach's 3 by 3 cells hold every household until the density bound passes the household count (151 houses, so past 150 households), so in the program's 20 to 80 every site's neighborhood reads every household, while the wells grow one for every ten; past 150 each well's search is constant and the stage grows with the sites and the wells, linear.
 
+## Earlier findings
+
+- verdict-1, finding 1: fixed - each well's pool heap is built bottom-up, 2 an element, and popped at log2 of the pool
+- verdict-1, finding 2: fixed - the 34 cluster sites a house carry their arithmetic, 835 ft over 25 ft
+- verdict-1, finding 3: fixed - the nearest wall within 80 ft is the 4 walls of each of the five nearest houses, 20 a site, in the sites row
+- verdict-1, finding 4: fixed - the worst-served query is the heap's top, 1 a well
+- verdict-1, finding 5: fixed - each well's scan of its 3 by 3 cells' sites against the disc is a row of its own
+- verdict-1, finding 6: fixed - the cluster sites in the pool are those of the houses within 908 ft (a site up to 148 ft from its house's center)
+
 ## Cheaper algorithms considered
 
 - sweep: not used - the wells are seated one at a time, each for the worst-served household as it stands
 - grid or spatial index: used - the registry for a site's clearance, the house index and the site index for its neighborhood
-- priority queue: used - the worst-served household (a max-heap) and the sites by (form, rung, walk)
+- priority queue: used - the worst-served household (a max-heap) and each well's pool by (form, rung, walk), built bottom-up once the pool is known
 - incremental update: used - each well re-keys only the households in its cells
 - memoizing what a scan does not change: used - a site's clearance and its five nearest houses, once over the run

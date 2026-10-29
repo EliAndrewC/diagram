@@ -76,7 +76,18 @@
    "status": "unbudgeted"
   },
   "appurtenances": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 2.23,
+   "derivation": "specs/444-work-budget-program/phases/appurtenances.derivation.md",
+   "verdict": "ask:444-T03-appurtenances-round-4",
+   "items_at_20": 129568,
+   "items_at_40": 559241,
+   "items_at_80": 2857434,
+   "pinned_on": "accept",
+   "derivation_sha": "f058622422268d1567d85a6c67135edaa13e8e8131c6296933f70b44e695139c",
+   "rounds": 3,
+   "spread": "40,436-129,568 at 20"
   },
   "pond_stock": {
    "status": "budgeted",
@@ -130,10 +141,32 @@
    "status": "unbudgeted"
   },
   "sties": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 1.0,
+   "derivation": "specs/444-work-budget-program/phases/sties.derivation.md",
+   "verdict": "ask:444-T03-sties-round-3",
+   "items_at_20": 257236,
+   "items_at_40": 514486,
+   "items_at_80": 1028986,
+   "pinned_on": "accept",
+   "derivation_sha": "eebd0809d08419274ef520476742074712c5ac7bcddf67c168a1921f149cefb4",
+   "rounds": 2,
+   "spread": "137,556-257,236 at 20"
   },
   "washing": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 1.34,
+   "derivation": "specs/444-work-budget-program/phases/washing.derivation.md",
+   "verdict": "ask:444-T03-washing-round-3",
+   "items_at_20": 14231,
+   "items_at_40": 35267,
+   "items_at_80": 90691,
+   "pinned_on": "accept",
+   "derivation_sha": "8830ee0afbe97012fa79c7de3b0840885cd96b4e27b3f608aa75c5d69e85b625",
+   "rounds": 2,
+   "spread": "14,231-25,271 at 20"
   },
   "frame": {
    "status": "unbudgeted"
