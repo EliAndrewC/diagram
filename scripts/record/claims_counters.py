@@ -72,7 +72,16 @@ def find(tree: ast.Module, qualname: str) -> ast.AST | None:
 
 def _blocks(node: ast.AST) -> list[ast.stmt]:
     cid = _codeid()
-    return [s for sub in ast.walk(node) for f in ("body", "orelse", "finalbody") for s in getattr(sub, f, None) or [] if isinstance(s, ast.stmt) and cid.is_counter_block(s)]
+    # a `body` that is one expression (an `x if c else y`, a lambda) holds no statements: only lists are walked (feature 444 T15's
+    # `dict(OPS) if __debug__ else {}` crashed `make claims-triage` here)
+    return [
+        s
+        for sub in ast.walk(node)
+        for f in ("body", "orelse", "finalbody")
+        if isinstance(stmts := getattr(sub, f, None), list)
+        for s in stmts
+        if isinstance(s, ast.stmt) and cid.is_counter_block(s)
+    ]
 
 
 def _drop_added(node: ast.AST, kept: Counter[str]) -> None:

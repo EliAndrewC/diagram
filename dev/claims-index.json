@@ -20059,13 +20059,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan#spec and plan plumbing": {
-  "code": "b3f89e3e962a3b6d",
-  "core": "1f32cad14dbe2150",
+  "code": "1cca396dd0c64683",
+  "core": "fd5453b4de199fd2",
   "date": "2026-10-13",
   "note": "fields only; plan_site sets every knob",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan.fall#spec and plan plumbing": {
@@ -20129,11 +20130,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::_roll#spec and plan plumbing": {
-  "code": "a37f515edd67aba3",
-  "core": "0e8940b9469bd665",
+  "code": "5612b71a96b3abba",
+  "core": "a9afc2327d4d4e9f",
   "date": "2026-10-03",
   "note": "positional draw",
+  "pages": {},
   "research": "",
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::band_extent#band area": {
@@ -20205,8 +20208,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind": {
-  "code": "9bcb590a9378c594",
-  "core": "ba35a313a4b8fa74",
+  "code": "95f8ac3555e7a055",
+  "core": "1dd36fe92e6d96f4",
   "date": "2026-10-13",
   "note": "the docstring says \"a rolled fall is rolled over the falls this admits, so the seat's back to the wind holds by construction\". That makes the high windward margin every map's case, where the page calls it \"one case among several\". Either some settlements' rolls should admit falls that do not back the wind, or the drawing page should record always-windward as this project's deviation",
   "pages": {
@@ -20216,18 +20219,19 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
   ],
+  "triaged": "2026-10-29",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#high side and windward side as one": {
-  "code": "2336e70b72a5831d",
-  "core": "ba35a313a4b8fa74",
+  "code": "abaaa4fb12e55efd",
+  "core": "1dd36fe92e6d96f4",
   "date": "2026-10-03",
   "note": "0031: \"the high margin on the windward side is one case among several\"; the predicate (and plan_site's roll over it) makes it the only case for every rolled fall - roll it or record a deviation",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-29",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::offtakes_for#delivery ditches by size": {
@@ -20254,18 +20258,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#canvas": {
-  "code": "75ddaa983ffa17e3",
-  "core": "9d99e0dd729583c3",
+  "code": "8586d297444ce3d3",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "sizing, cropped later",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#dike-pond knobs only on a dike-pond": {
-  "code": "dd6621c32aeb8ca5",
-  "core": "9d99e0dd729583c3",
+  "code": "ea67d4279c1a4bf1",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "a rice polder keeps the grid",
   "pages": {
@@ -20277,11 +20282,12 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#flood-prone ground": {
-  "code": "f3bcccb2aa22af0e",
-  "core": "9d99e0dd729583c3",
+  "code": "7fe3b6eb404a28bd",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "reclaimed low ground behind dikes, or houses on a dike",
   "pages": {
@@ -20291,11 +20297,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:1e95485641126947"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#grove sides refused outside two to four": {
-  "code": "6cf89b3870b72551",
-  "core": "9d99e0dd729583c3",
+  "code": "d650b8b63020043c",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "two, three or four sides",
   "pages": {
@@ -20305,11 +20312,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#harvest weather default": {
-  "code": "adb5948671fffc73",
-  "core": "9d99e0dd729583c3",
+  "code": "eeca270d66e12159",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "settled unless declared",
   "pages": {
@@ -20319,23 +20327,25 @@
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#its search steps and tolerances": {
   "body": "5ccd9191f3f8d17e",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 50 (canvas rounded to 50)",
-  "code": "688aff1b7054e811",
-  "core": "9d99e0dd729583c3",
+  "code": "a1c2bbcb0fd9ae35",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-25",
   "note": "canvas rounding",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
-  "code": "8569b28d5a76625c",
-  "core": "9d99e0dd729583c3",
+  "code": "a1cbc2a3e730840c",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "a hamlet rolls each part from a table of its own",
   "pages": {
@@ -20345,11 +20355,12 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
-  "code": "0d3ec19b3b059638",
-  "core": "9d99e0dd729583c3",
+  "code": "6f58276df954529c",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "1.3 acres falls in the 1 to 2.5 acre band",
   "pages": {
@@ -20359,11 +20370,12 @@
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
-  "code": "967a63ccc81dc960",
-  "core": "9d99e0dd729583c3",
+  "code": "e30421b7a1f36076",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "a tilted paddy grid is not drawn, a recorded deviation",
   "pages": {
@@ -20373,11 +20385,12 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder on the survey grid": {
-  "code": "f42c22c983947dda",
-  "core": "9d99e0dd729583c3",
+  "code": "742a363496e5c45e",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "a surveyed grid",
   "pages": {
@@ -20387,11 +20400,12 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#regional wind": {
-  "code": "8ecd8cbb0bde2bc6",
-  "core": "9d99e0dd729583c3",
+  "code": "503566ffc3fd81f7",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "northwest unless declared",
   "pages": {
@@ -20401,11 +20415,12 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
-  "code": "b96ad7833bdfdd2f",
-  "core": "9d99e0dd729583c3",
+  "code": "fd6f0b01419f121a",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "the settlement has its back to the wind",
   "pages": {
@@ -20415,11 +20430,12 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#row on the edge on flood ground": {
-  "code": "586b7c7460be4e23",
-  "core": "9d99e0dd729583c3",
+  "code": "faedd089dc928a39",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "the row runs along the dike on flood-prone ground",
   "pages": {
@@ -20429,11 +20445,12 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:4f7d33405340d1f8"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
-  "code": "5d130921e03983fe",
-  "core": "9d99e0dd729583c3",
+  "code": "3428a1b62333c126",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "the code sets water_flow = down_deg when it is not declared, but §268 says \"Deriving the flow from the slope ... is wrong\" and the two differ by design; record it on the 0054 drawing page as a hamlet's deviation, or roll a bearing",
   "pages": {
@@ -20443,11 +20460,12 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
   ],
+  "triaged": "2026-10-29",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#woodland patches": {
-  "code": "46937e63e00bd16c",
-  "core": "9d99e0dd729583c3",
+  "code": "c6654d4893a852f6",
+  "core": "a74b8dabbfb62a61",
   "date": "2026-10-13",
   "note": "\"a few patches\", 2-4 rolled",
   "pages": {
@@ -20457,6 +20475,7 @@
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::seat_room#spec and plan plumbing": {
@@ -24969,8 +24988,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#compact bundle for the clustered form only": {
-  "code": "670d741469b05883",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "9b3616184e543f2c",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "each non-clustered farm takes its own grove",
   "pages": {
@@ -24980,11 +24999,12 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#fall and drainage declared first": {
-  "code": "76252907bb5579f9",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "9b4b7ee98776004a",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "both declared, separately",
   "pages": {
@@ -24994,11 +25014,12 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#field footbridges on every hamlet": {
-  "code": "0f3f1eee56340c01",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "45e041d04120b0ce",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "a crossing where a bund path meets a ditch",
   "pages": {
@@ -25009,12 +25030,12 @@
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:63e1ecf1ce361c85",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#house racks": {
-  "code": "e3bf115dc5fa790b",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "16be36ed4b73124b",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "a rack by every house where the weather is changeable",
   "pages": {
@@ -25025,21 +25046,23 @@
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:9f40d3caab4e03ed"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#manifest record": {
-  "code": "aebc64dbe55ca588",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "e053c71190bca928",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "a manifest write",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#no work yards where no grain grows": {
-  "code": "84a066a6f79ed9fa",
-  "core": "3cdf6ba2ea4e6650",
+  "code": "2129752dde397b84",
+  "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "a yard on every grain farm; the exception is the GM's ruling as named",
   "pages": {
@@ -25049,6 +25072,7 @@
   "rests": [
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
+  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/arcs.py::arc_at#arc-length plumbing": {

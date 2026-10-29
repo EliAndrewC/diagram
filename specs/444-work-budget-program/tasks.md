@@ -55,6 +55,8 @@
 - [ ] T16 phase: field - the comb field rebuilt to its greenfield derivation, through the checklist (FR-003-FR-006)
       research: rendering
       phase: field
+- [ ] T17 phase: field_polder - the polder field rebuilt to its own greenfield derivation and held row, after the language decision (ask:444-T16-polder-budget)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

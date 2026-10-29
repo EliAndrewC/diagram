@@ -910,6 +910,7 @@ def test_a_claim_whose_unit_only_gained_a_counter_block_is_cleared_without_a_tri
         (COUNTED, COUNTED.replace("    if __debug__:", "    y = x\n    if __debug__:"), None, "a code line added above a counter"),
         (MOD.replace("x * SHARE", "x * SHARE * 3"), COUNTED.replace("x * SHARE", "x * SHARE * 3"), MOD, "the recorded version is not the base's"),
         (MOD, COUNTED.replace("+= 1", "+= SHARE"), None, "a counter reading an in-scope constant"),
+        (MOD, COUNTED.replace("    if __debug__:", "    y = 1 if __debug__ else 2\n    if __debug__:"), None, "an expression holding no statements, beside a counter"),
     ],
 )
 def test_a_claim_changed_otherwise_than_by_an_added_counter_is_owed_as_before(tmp_path: pathlib.Path, base: str, now: str, recorded: str | None, why: str) -> None:
