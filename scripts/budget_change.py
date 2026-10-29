@@ -196,8 +196,12 @@ def set_budget(
     return ""
 
 
-def change_budget(root: Path, phase: str, to: float, exponent: float | None, words: str, items: dict[int, int] | None = None) -> str:
-    """A budgeted stage's figure changed with the GM's words, and logged: '' when done, else why not."""
+def change_budget(
+    root: Path, phase: str, to: float, exponent: float | None, words: str, items: dict[int, int] | None = None, derivation: str = "", verdict: str = ""
+) -> str:
+    """A budgeted stage's figure changed with the GM's words, and logged: '' when done, else why not. With `derivation` and `verdict`,
+    the stage is re-pointed at the derivation the raise comes from (feature 444 FR-015: a greenfield figure above its standing pin,
+    raised on the GM's words, stands on its own derivation and SOUND verdict, no longer the one it replaces)."""
     if not words.strip():
         return "no WORDS - a budget changes only with the GM's own words"
     table = load(root)
@@ -206,12 +210,22 @@ def change_budget(root: Path, phase: str, to: float, exponent: float | None, wor
         return st
     if st["status"] == "unbudgeted":
         return f"`{phase}` has no budget yet - a first one is set from a SOUND verdict: make budget-set PHASE={phase} PER_THING= EXPONENT= DERIVATION= VERDICT="
+    if bool(derivation) != bool(verdict):
+        return "re-pointing a stage names both its DERIVATION= and its VERDICT="
+    if derivation and not (root / derivation).is_file():
+        return f"no derivation at {derivation}"
+    if verdict and verdict_of(root / verdict) != SOUND:
+        return f"{verdict} is no SOUND verdict - a stage is re-pointed only at a derivation its verdict judged SOUND"
     before = {"per_thing": st["per_thing"], "exponent": st["exponent"]}
     st["per_thing"] = to
     if exponent is not None:
         st["exponent"] = exponent
     for h, n in (items or {}).items():
         st[f"items_at_{h}"] = n
+    if derivation:
+        st.update(derivation=derivation, verdict=verdict)
+        for k in ("pinned_on", "derivation_sha", "rounds", "spread"):
+            st.pop(k, None)
     save(root, table)
     log(root, {"what": "stage", "phase": phase, "from": before, "to": {"per_thing": st["per_thing"], "exponent": st["exponent"]}, "words": words})
     return ""
@@ -247,6 +261,8 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("to", type=float)
     c.add_argument("--exponent", type=float)
     c.add_argument("--words", default="")
+    c.add_argument("--derivation", default="", help="re-point the stage at the derivation the raise comes from (444 FR-015)")
+    c.add_argument("--verdict", default="", help="with --derivation: its SOUND verdict")
     for h in ITEM_SIZES:
         c.add_argument(f"--items-at-{h}", type=int)
     p = sub.add_parser("program")
@@ -263,7 +279,7 @@ def main(argv: list[str] | None = None) -> int:
         done = f"`{args.phase}` {'lowered to' if args.lower else 'budgeted at'} {args.per_thing} per thing, exponent {args.exponent}\nbudget-set: {per_house(root)}" if not why else ""
     elif args.cmd == "change":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
-        why = change_budget(root, args.phase, args.to, args.exponent, args.words, items)
+        why = change_budget(root, args.phase, args.to, args.exponent, args.words, items, args.derivation, args.verdict)
         done = f"`{args.phase}` changed to {args.to} per thing, logged in {LOG} with the GM's words"
     else:
         why = set_program(root, args.ops_at_40, args.exponent, args.words)
