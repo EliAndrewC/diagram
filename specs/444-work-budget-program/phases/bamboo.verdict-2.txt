@@ -1,0 +1,22 @@
+LOOSE - the filing factor (registry cells written): it should be 1 + (1 + 16/64)(1 + 22/64) = 1 + 1.68, about 3, not 5. A 16 by 22 ft stand at a typical spot on the 64 ft grid lies in about 1.68 cells, and 4 cells happens only when it straddles a corner. With that, a stand costs 4 + 14 + 3 = 21 operations, so the totals are 126 / 252 / 504.
+
+**1. Is each factor derived?** Each factor gives a reason, but the filing factor is taken at its worst case.
+- **Filing, derivation.md line 26:** "filed in at most 4 cells (4)" is the corner-straddle case. The contract measures every stand at 16 by 22 ft, and S8 says to use that typical size, not the "under 64 ft" ceiling. At that size a stand lies in about 1.68 cells on average.
+- **Slack, line 27:** its reason is "every factor is a ceiling at its worst case". That contradicts line 37, which says no factor is at its worst, and line 26 shows line 27 is the true one. Under S8, slack is what covers the 4-cell case; the factor should not carry it.
+- **Other factors:** these stand as written.
+  - Items (6 / 12 / 24) are the measured counts from the Bounds.
+  - The polygon is always 4 points.
+  - The marks factor says "at most 7", but the contract fixes 7 marks on every stand. So the typical and the maximum are the same here, and this is not a second worst case.
+
+**2. Is there a standard, cheaper algorithm?** None missed. The stand seats come from the hinterland's scan and are only read here. No stand depends on another, nothing is ranked, and filing in the registry is what the contract requires.
+
+**3. Is any factor padded?** Yes, the filing factor. Its value of 5 is 1.9 times what its own geometry gives for a typical stand (2.7). Slack 1 can stay: even at 2 the budget would only be 42 per stand. The corner case (23 per stand) is about 1.1 times the typical budget, well within slack.
+
+**4. Is each figure read at its source's size and unit?** Yes. 4 is read as points, 7 as marks, 64 ft as a full cell side, and 16 by 22 ft as the reference stand. The item counts are used at their stated sizes.
+
+**Earlier findings (verdict-1): not closed, but none blocks.** Line 41 says "fixed - carried from the verdict as it stood", which answers nothing. Checking verdict-1's three notes against the text:
+- **Index density, line 17:** it still reads "densest one stand a cell's share". A 64 ft cell holds several 16 by 22 ft stands, so the line still needs correcting.
+- **Strokes per mark, line 25:** still written as "strokes written (1)". The derivation should either state that a mark is one write, or give the stroke count per mark.
+- **Jitter, lines 12-13:** there is still no statement that the jitter keeps each mark inside its grid site. Without it, a mark that escapes and is redrawn would be an S4 repair, whose budget is zero.
+
+Files: /tmp/l7r-check/work-budget-budget-bamboo/derivation.md, /tmp/l7r-check/work-budget-budget-bamboo/contract.md, /tmp/l7r-check/work-budget-budget-bamboo/bamboo.verdict-1.txt

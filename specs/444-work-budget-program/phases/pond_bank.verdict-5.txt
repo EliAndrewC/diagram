@@ -1,0 +1,27 @@
+UNDERIVED - the brook's "mean 4 brook segments" a cell (and the crop's "mean 2 outline segments a crossed cell"): no measurement or geometry is named for either. The Bounds give only maxima (12 and 11), and `items.md` is cited only for the footprints and lanes means.
+
+**1. Is each factor derived?** Mostly yes, but two are not.
+- **Sound factors:**
+  - Items: 33/43/56 seats. I checked these against the ring's perimeter from the radii plus 50 ft: floor(1008/30), floor(1300/30), floor(1704/30).
+  - The 4-cell look, the pond, the jitter, the kind and the roll are all derived.
+  - Slack is 2.
+  - The arithmetic holds: 20 x 2 x seats + 1 = 1321/1721/2241.
+- **Brook (5):** "its mean 4 brook segments" has no source. The reason "a seat near a cell's edge rare" is contradicted by the bundle's own figures. A 3.5 ft half-width in a 38.6 ft cell puts 1 - (31.6/38.6)^2 = 0.33 of seats near an edge. That is one seat in three, so the mean is about 1.4 cells examined, not 1.
+- **Crop (3):** "mean 2 outline segments a crossed cell" has no source either.
+- **Both rows misuse a conditional mean.** Each takes the mean of a cell that holds the brook or the outline and applies it to every seat. S8 wants the mean per seat round the ring, which counts the seats whose cell holds none. The re-derivation should give that fraction from the reference manifests.
+
+**2. Is there a cheaper standard algorithm?** No. The ring is a single sweep. Every look goes through an index (the 24 ft standing grid and the 38.6 ft field cells). The pitch rules out crown-to-crown tests. Not re-filing the brook by its half-width is justified (lines 71-77). The x4 is the real cost of looking at the 2x2 block of cells around the seat.
+
+**3. Is any factor padded?** No other factor is padded; the lanes x4 from verdict-4 is gone (lanes = 1 cell). Whether the brook's 5 is too high or too low cannot be judged until its mean is derived. The edge-cell share pushes it up; seats whose cell holds no brook would pull it down.
+
+**4. Is each figure read at its source's size and unit?** The radii are read as radii and the seats are 33/43/56. One figure is doubtful: the footprints row turns the 64 ft cell's mean into a 24 ft cell's mean by dividing by area ("over its 7 cells"). That only works for point counts. Things filed in every cell they touch scale less than area, so the count would come out low. The bundle does not say how `items.md` counts, so the next version should state it.
+
+**Earlier findings:** All 18 lines are the same boilerplate ("carried ... its notes stand"). So I checked each against the body instead.
+- **Closed:**
+  - verdict-1: cell sizes, the figure for the cells examined, the sum, the play (6 ft), the ring closing, crowns in the grid.
+  - verdict-2: the 38.6 ft cell and the measured maxima, the radii at 40 and 80, one look (4, not 8).
+  - verdict-3: the footprints bound from the smallest side (18.75, rounded to 19), lanes at a junction (8), floor(perimeter/30), the brook's neighbor cells.
+  - verdict-4: lanes x1, `overlap/` cited, re-filing answered.
+- **Still open:** verdict-4's note that the crop's one-cell test assumes the field's index says inside or outside. The contract says only "the fan's outline in the field's index". If a cell the outline does not cross carries no inside/outside flag, the crop factor's form is wrong, not just its size.
+
+Files: /tmp/l7r-check/work-budget-budget-pond_bank/derivation.md, /tmp/l7r-check/work-budget-budget-pond_bank/contract.md, /tmp/l7r-check/work-budget-budget-pond_bank/pond_bank.verdict-4.txt

@@ -1,0 +1,22 @@
+UNDERIVED - walls reached (2 a household): the pseudocode (derivation.md lines 14-18) marks every wall's strip, then takes one prefix sum over the household's places, so as written it reads all of a farmstead's walls (12 taken). The count (line 31) charges 2, saying "the typical household's sty finds its place on its first wall or two", but it gives no measurement or geometry for that, and the contract's Bounds have none.
+
+**Earlier findings.** Four are closed: v1-1 (the per-wall sweep), v1-2 (12 walls), v2-1 (the 15 ft overhang and the raked strip's 3 by 3 square) and v2-2 (the grove band projected apart from the registry). v1-3 (29 a cell) is replaced by the move to a mean, and 29 stays for the audit to check at 40 and 80. v2-3 is only partly carried: the 99 places and the setup row for the difference array dropped out of the re-score (see question 3).
+
+**1. Is each factor derived?** No: walls reached is not.
+- The count assumes the search stops at the first wall that has an admitted place, but the algorithm stated has no such stop.
+- Nothing in the bundle shows how often a first wall is blocked.
+- Against its own pseudocode the figure is too low, which would bring a false OVER at audit.
+- Fix: give each wall its own difference array and prefix sum, and stop at the first wall with an unblocked place. Then derive the mean walls reached, from a measurement carried in the contract's Bounds or from a geometric reason.
+
+The other factors are derived: items (15/33/69, the share's count), slack 2 (a third wall reached, a sty passed on), the drawing (1 + 4 cells) and the count (1). The arithmetic checks: 10,336, 22,738 and 47,542.
+
+**2. Is there a standard, cheaper algorithm?** None is missed. The sweep, the 64 ft grid, the incremental filing and the per-household memo are all used, and a priority queue is rightly not.
+
+**3. Is any factor padded?** Yes, two, and one figure errs low.
+- **Strips' cells (line 31), 3 by 3 = 9 per wall: LOOSE.** That is verdict-2's ceiling for the 63 ft wall at the worst grid offset, though its column says "the typical farmstead". The mean wall is about 350/12, or 29 ft. Its strip, about 44 by 15 ft at a random offset, touches about (1+44/64)(1+15/64), or about 2 cells, and about 3 if raked. A tighter bound is 3 cells a wall: the strips' cells become 2 x 3 x 5 = 30, and the intervals 2 x 3 x 4 x 3 = 72 (from 90 and 216).
+- **Rake, 16 (line 34): padded.** That is 8 operations a wall turned, with no arithmetic. The derivation counts projecting a thing as 1, so turning a wall is 1 or 2 in the same unit.
+- **Places, 16 "set and walked" (line 33): errs low.** 16 places, each set and walked, is 32 operations, not 16.
+
+**4. Is each figure read at its source's size and unit?** The contract's figures are: 15/33/69 sties, 12 walls, 63 ft and 350 ft of wall, and 29 a cell left for the audit. The derivation uses each as the contract states it. The "mean 4 things a cell near the houses" is cited to `items.md`, which is not in the bundle, and the contract's Bounds give only the maxima (21 and 29). The contract should carry that mean, measured over the cells about the houses and not the whole hamlet.
+
+Bundle read: /tmp/l7r-check/work-budget-budget-sties/MANIFEST.md, /tmp/l7r-check/work-budget-budget-sties/rubric.md, /tmp/l7r-check/work-budget-budget-sties/contract.md, /tmp/l7r-check/work-budget-budget-sties/derivation.md, /tmp/l7r-check/work-budget-budget-sties/sties.verdict-1.txt, /tmp/l7r-check/work-budget-budget-sties/sties.verdict-2.txt

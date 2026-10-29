@@ -1,20 +1,21 @@
-SOUND - one caption whose seat is already proved, written in 6 operations that are each named, with slack 1 and no search in the stage. The contract's Bounds back the count of one and say it stays constant with the households.
+LOOSE - the caption write (leader term): it should be 5 at the typical case, plus the share of rolls where the board's caption sits off its preferred offset, because the contract writes a leader only then; the slack row's stated reason is still "worst case".
 
-1. **Is each factor derived?** Yes.
-   - **Items = 1:** this comes from the contract's Bounds. The queue was measured at 1 caption (the notice board's) at 10 and 20 households, and the Bounds give the reason it stays constant: a hamlet labels its board and nothing else, and the title belongs to the frame.
-   - **Caption write = 6:** the six writes are named one by one, and they are exactly what the contract's "Writes" line lists: words, box, angle, lines, leader, plus the one record.
-   - **Slack = 1:** this is within S7's limit of 2.
-   - **Candidates and checks:** there are none. The contract's "Keeps" line says a caption whose seat its feature already proved is drawn as proved, and `place_kosatsuba` (`board_caption_seat`) proves that seat.
-2. **Is there a cheaper standard algorithm?** No. Nothing is searched, so a sweep, an index or a priority queue has no factor to lower. The one memo that applies is already used: the proved seat is read, not sought again. The derivation's "Cheaper algorithms considered" list covers each option with a reason.
-3. **Is any factor padded?** No. The leader is counted at 1 even though it is only written when the seat is off the preferred offset. That is a worst-case ceiling, not padding. Every other factor is exactly 1.
-4. **Is each figure read at its source's size and unit?** Yes. "1 caption at 10 and 20" is used as a count of captions, as the source states it. Carrying it to 40 and 80 rests on the contract's own reason that the count is constant, not on fitting a trend. The total of 6 is flat, so the exponent is 0 and S6 holds.
+1. **Is each factor derived?** Items = 1 is derived: the contract's Bounds measured it at 10 and 20 households and give the reason it stays constant. Five of the six caption writes (words, box, angle, lines, record) are exact. Two lines of `derivation.md` do not meet S8:
+   - **Line 25, leader (1).** The contract's Writes line makes the leader conditional ("a leader where it is not at the preferred offset"). Verdict-1 line 9 already called this term "a worst-case ceiling". S8 wants the mean the stage's output shows. The derivation needs to say which case holds. If the board's caption is always off its preferred offset, 6 is exact and should say so. If not, the factor is 5, and slack covers the roll that draws a leader.
+   - **Line 26, slack reason.** It reads "every factor is a ceiling at its worst case". That is the S8 violation in the author's own words, and it contradicts the FR-014 re-score note on line 36, which says no factor is taken at its worst.
+2. **Is there a cheaper standard algorithm?** No. Nothing is searched, and the proved seat is read rather than sought again. The "Cheaper algorithms considered" list covers each option with a reason.
+3. **Is any factor padded?** Only the leader term, and only if the derivation cannot show the board's seat is typically off its preferred offset. Every other factor is exact.
+4. **Is each figure read at its source's size and unit?** Yes. "1 caption at 10 and 20" is used as a count of captions. It is carried to 40 and 80 on the Bounds' own reason that the count is constant, not on a fitted trend. The total is flat, so the exponent is 0 and S6 holds.
 
-One limit on scope: the budget doesn't cover the path where the one placer has to seat a caption with no proved seat. The contract's Bounds say the hamlet's queue never holds such a caption. If one ever appears, this budget would need to be derived again rather than stretched to cover it.
+**Earlier findings.** The entry "verdict-1, finding 1: fixed" answers a finding that verdict-1 never made. Verdict-1 was SOUND, with only a scope note (its line 12), so there is no earlier finding to confirm closed. That scope note still stands: a caption with no proved seat, placed by the one placer, is outside this budget and would need its own derivation.
 
-There are no earlier verdict files in the bundle, so this is round 1 and there were no earlier findings to confirm closed.
+**The fix.** Edit row 25 to the typical leader value, with its reason from the board's seat. Drop "worst case" from the slack reason on row 26.
+
+The size of the gap (6 against at most 5 plus a fraction) changes nothing in the totals. The verdict is LOOSE because S8 makes any factor taken at its worst a finding, and the FR-014 re-score was meant to remove exactly that.
 
 Files read:
 - /tmp/l7r-check/work-budget-budget-labels/MANIFEST.md
 - /tmp/l7r-check/work-budget-budget-labels/rubric.md
 - /tmp/l7r-check/work-budget-budget-labels/contract.md
 - /tmp/l7r-check/work-budget-budget-labels/derivation.md
+- /tmp/l7r-check/work-budget-budget-labels/labels.verdict-1.txt
