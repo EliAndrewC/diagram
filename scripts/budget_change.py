@@ -25,6 +25,7 @@ import argparse
 import datetime
 import hashlib
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -134,6 +135,7 @@ def set_budget(
     spread: str = "",
     reason: str = "",
     lower: bool = False,
+    growth_reason: str = "",
 ) -> str:
     """A first budget, from a SOUND verdict or the round arbiter's accept of the derivation (feature 444 FR-013, the GM 2026-10-28):
     '' when set, else why not. `lower` re-pins a budgeted stage at no more than its standing budget at any size (no GM words: a
@@ -169,6 +171,14 @@ def set_budget(
             f"`{phase}` would rise at {', '.join(str(h) for h in raised)} households ({', '.join(f'{new[h]:,.0f} against {budget_at(st, h):,.0f}' for h in raised)})"
             f" - a raise needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\""
         )
+    # THE GROWTH CAP, HELD BY THE TOOL (the GM 2026-10-29: "if we allow polynomial growth but with a high exponent like n cubed on an
+    # n which grows considerably with map size ... that is really going to not work in the long run"): S6's 1.15 was the work-budget
+    # agent's judgment alone; a pin growing past it from 20 to 80 households names its reason, such as a bounded n
+    if (g := growth(new[20], new[80])) > GROWTH_CAP and not growth_reason.strip():
+        return (
+            f"`{phase}`'s budget grows at an exponent of {g:.2f} from 20 to 80 households, past rubric S6's {GROWTH_CAP} (n log n at most) -"
+            " re-derive it, or name why its n is bounded: GROWTH_REASON=\"<why>\""
+        )
     today = today_at_40(root, phase)
     if today is not None and new[40] > today and not reason.strip():
         return (
@@ -190,6 +200,7 @@ def set_budget(
             else {}
         ),
         **({"reason": reason.strip()} if reason.strip() else {}),
+        **({"growth_reason": growth_reason.strip()} if growth_reason.strip() else {}),
     }
     save(root, table)
     if lower:
@@ -232,6 +243,15 @@ def change_budget(
     return ""
 
 
+GROWTH_CAP = 1.15  # rubric S6: a stage's exponent from 20 to 80 households, which allows n log n and no n squared
+GROWTH_SLACK = 0.05  # an accepted stage's measured exponent may sit this far above its budget's: seed noise between two sizes
+
+
+def growth(at20: float, at80: float) -> float:
+    """The exponent from 20 to 80 households of a figure at each (rubric S6); 0 where either is 0."""
+    return math.log(at80 / at20) / math.log(4) if at20 > 0 and at80 > 0 else 0.0
+
+
 HELD = (40, 80)  # the sizes an accepted stage is held to (feature 443 T04; the push's ratchet, `work_budget.held`)
 
 
@@ -260,6 +280,12 @@ def accept_stage(root: Path, phase: str, audit: str) -> str:
         if float(row["ops"]) > budget_at(st, h):
             return f"`{phase}`: {float(row['ops']):,.0f} counted operations at {h} households, over its budget {budget_at(st, h):,.0f} - rebuild it again, or raise the budget with the GM's words (`make budget-change`, FR-006)"
         got[str(h)] = float(row["ops"])
+    at20 = float((per.get("20") or {}).get("ops", 0))
+    if (g := growth(at20, got["80"])) > growth(budget_at(st, 20), budget_at(st, 80)) + GROWTH_SLACK:
+        return (
+            f"`{phase}` grows at an exponent of {g:.2f} from 20 to 80 households, past its budget's"
+            f" {growth(budget_at(st, 20), budget_at(st, 80)):.2f} (rubric S6, FR-005) - rebuild it again, or raise the budget with the GM's words"
+        )
     st.update(status="accepted", accepted=got, audit=audit)
     save(root, table)
     log(root, {"what": "accepted", "phase": phase, "accepted": got, "audit": audit, "run": runs[-1].name})
@@ -289,6 +315,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--spread", default="", help="with --arbiter: the totals' spread across the rounds, `<low>-<high> at <households>`")
     s.add_argument("--reason", default="", help="why a budget above the stage's count today at 40 is the target (ask:444-budget-standard)")
     s.add_argument("--lower", action="store_true", help="re-pin a budgeted stage at no more than its standing budget at any size")
+    s.add_argument("--growth-reason", default="", help="why a budget growing past rubric S6's 1.15 from 20 to 80 households has a bounded n")
     for h in ITEM_SIZES:
         s.add_argument(f"--items-at-{h}", type=int)
     c = sub.add_parser("change")
@@ -312,7 +339,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "set":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
         why = set_budget(
-            root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread, args.reason, args.lower
+            root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread, args.reason, args.lower,
+            args.growth_reason,
         )
         done = f"`{args.phase}` {'lowered to' if args.lower else 'budgeted at'} {args.per_thing} per thing, exponent {args.exponent}\nbudget-set: {per_house(root)}" if not why else ""
     elif args.cmd == "change":
