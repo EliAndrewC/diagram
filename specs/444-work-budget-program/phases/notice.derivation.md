@@ -9,25 +9,22 @@
 
 ## The algorithm
 
-    the obstacle mask in 4 ft cells (the caption's ring step) over the view, a rectangle, so its prefix sums (a summed-area
-        table) answer any box in 4 reads: each small feature's cells marked, edge cells included; the large polygons filled
-        by one scanline pass over the view; then the prefix sums
+    the seats: along both verges of every way, 12 ft apart, inside the view's 60 ft siting band and off the placard
+    each seat's score, the dwellings within 260 ft, by a sliding window along each way: a house enters and leaves each leg's
+        window once (from the house index's 3 by 3 cells of 260 ft about the leg), and each seat reads the window (1)
+    the seats counting-sorted by score (the score a whole number of at most 18)
     the ways out, once: the cut points and bridges of the ways' graph from its exits (one depth-first pass), so a seat on
         every way out is read in one lookup
-    the seats: along both verges of every way, 12 ft apart, inside the view's 60 ft siting band and off the placard
-    each seat's score, the dwellings within 260 ft, from its 3 by 3 cells of a 260 ft house index; the seats sorted by score
-        (a counting sort: the score a whole number of at most 18)
-    in that order until one is kept: its 7 by 3 ft probe against the registry's things in its cells, and against the waters in
-        its cells; the caption's 256 candidates in reach, each box tested on the mask (4); an `entrance` board, its leg among the
-        ways out's cut points (1)
+    in score order until one is kept - the busiest clear seat, so the first few: its 7 by 3 ft probe against the registry's
+        things and the waters in its cells; the view and the placard; the caption's 256 candidates in reach, each box against the
+        registry's things in the at most 3 by 2 cells of 64 ft it covers; an `entrance` board, its leg among the cut points (1)
     draw the board on the first kept seat, with its caption's proved seat; recorded and filed
 
 ## Indexes
 
-- obstacle mask: cells of 4 ft (the caption's ring step, half an em at an 8 ft font), over the view's rectangle; densest 1 a cell (each cell's prefix sum), from a smallest side of 4 ft
-- house index: cells of 260 ft (the score's reach), so a seat's dwellings lie in its 3 by 3 cells; densest the houses' density x 9 x 260 squared, 18, never more than the households, from a smallest side of 260 ft
-- registry: cells of 64 ft; densest 29 things a cell (measured at 10 and 20, the ceiling taken), from a smallest side of 64 ft against the 7 by 3 ft probe, in at most 2 by 2 cells
-- water index: cells of 64 ft; densest 26 water segments a cell (measured at 10 and 20, the ceiling taken), from a smallest side of 64 ft
+- house index: cells of 260 ft (the score's reach), so a leg's dwellings within reach lie in its 3 by 3 cells; densest the houses' density x 9 x 260 squared, 18, from a smallest side of 260 ft
+- registry: cells of 64 ft; densest the mean 4 things a cell near the ways (`items.md`'s typical densities: 3.3 an occupied cell, 5.5 about the houses), from a smallest side of 64 ft against the probe and a caption box, each in at most 3 by 2 cells
+- water index: cells of 64 ft; densest the mean 4 water segments a crossed cell (`items.md`), from a smallest side of 64 ft
 
 ## The count, factor by factor
 
@@ -35,19 +32,19 @@
 |---|---|---|---|---|
 | items | per item | 1 | the board | always 1 |
 | the board (registry cells written) | per item | 5 | recorded (1) and filed in at most 4 cells (4) | always 5 |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the obstacle mask (mask cells written) | once | 1,141,969 at 20, 2,443,184 at 40, 5,234,164 at 80 | the view's 4 ft cells (353,323 at 20, 763,178 at 40, 1,648,463 at 80), each zeroed and summed (2); the large polygons' scanline pass over them, each cell once, and their rings' crossings (358,323 at 20, 770,528 at 40, 1,659,268 at 80); the small features' marks, edge cells included (77,000 at 20, 146,300 at 40, 277,970 at 80) | 80 households |
-| the ways out (graph nodes and legs) | once | 680 at 20, 1,360 at 40, 2,720 at 80 | one depth-first pass over the ways' graph, its legs (160 at 20, 320 at 40, 640 at 80) and nodes (at most the legs and one a lane end, the households), each entered and left once (2) | an `entrance` board |
+| slack | per item | 2 | what varies around the typical case (S8): a busy junction whose first seats fail their caption | a crowded center |
+| the score (house index cells examined) | over the run | 7,247 at 20, 14,344 at 40, 28,406 at 80 | the sliding window: each of the ways' legs (160 at 20, 320 at 40, 640 at 80, 8 a household) admitting and releasing its at most 18 houses in reach (36), and each seat (1,487 at 20, 2,824 at 40, 5,366 at 80, 2 x the ways' length over 12 ft) reading its window (1) | 80 households |
 | the sort (counting) | once | 1,506 at 20, 2,843 at 40, 5,385 at 80 | each seat into its score's bucket (1), and the 19 buckets read | 80 households |
-| the seats (house index, registry, water index and mask cells examined) | over the run | 1,487 x 1,284 at 20, 2,824 x 1,284 at 40, 5,366 x 1,284 at 80 | the seats, 2 x the ways' length over 12 ft (1,487 at 20, 2,824 at 40, 5,366 at 80); each: its score's 9 cells and their at most 18 houses (27 at 20, 27 at 40, 27 at 80), its bucket read (1), its probe's 2 by 2 cells of 64 ft with their 29 things and the cell (120) and their 26 water segments and the cell (108), the view and the placard (2), the caption's 256 candidates, each 4 mask reads, and the decision (1,025), and the entrance's cut-point lookup (1) | every seat tested, the last kept |
+| the ways out (graph nodes and legs) | once | 680 at 20, 1,360 at 40, 2,720 at 80 | one depth-first pass over the ways' graph, its legs and nodes, each entered and left once (2) | an `entrance` board |
+| the seats tested (registry and water index cells examined) | over the run | 10 x 7724 | the busiest clear seat, so at most the first 10 in score order are tested (S8: the candidates the search order reaches; the slack covers a center whose first seats fail): each its probe's 2 by 2 cells with the mean 4 things and the cell (20) and with the mean 4 water segments and the cell (20), the view and the placard (2), the caption's 256 candidates each in at most 3 by 2 cells of 64 ft with the mean 4 things and the cell (30), and the entrance lookup (1) | the typical center |
 
-So: 1 x 5 x 1, plus the mask, the ways out, the sort, plus the seats x their test.
+So: 1 x 5 x 2, plus the score, the sort, the ways out and the seats tested.
 
 ## Totals
 
-- at 20: 1 x 5 x 1 + 1141969 + 680 + 1506 + 1487 x 1284 = 3053468
-- at 40: 1 x 5 x 1 + 2443184 + 1360 + 2843 + 2824 x 1284 = 6073408
-- at 80: 1 x 5 x 1 + 5234164 + 2720 + 5385 + 5366 x 1284 = 12132218
+- at 20: 1 x 5 x 2 + 7247 + 1506 + 680 + 10 x 7724 = 86683
+- at 40: 1 x 5 x 2 + 14344 + 2843 + 1360 + 10 x 7724 = 95797
+- at 80: 1 x 5 x 2 + 28406 + 5385 + 2720 + 10 x 7724 = 113761
 
 ## Earlier findings
 
@@ -60,11 +57,13 @@ So: 1 x 5 x 1, plus the mask, the ways out, the sort, plus the seats x their tes
 - verdict-2, finding 1: fixed - the mask is over the view's rectangle, so its summed-area table answers a box in 4 reads; no corridor is stamped
 - verdict-2, finding 2: fixed - the large polygons' crossings grow with the view's side, x1.47
 - verdict-2, finding 3: fixed - the probe is 0190's 7 by 3 ft face, the search's; the board drawn is 16 by 6 ft, each in at most 2 by 2 cells
+- FR-014 re-score: each factor at the typical case (rubric S8): the board is the busiest clear seat, so the first few seats in score order are tested, not every seat; with so few tested the view's obstacle mask costs more than it saves and is dropped, each caption box asked of the registry's cells at the mean densities of `items.md`; the score by a sliding window along each way; slack 2 (ask:444-budget-standard; the accept was ask:444-T05-notice-round-3)
+- reason above the reference: the board is one thing a roll, sited against the whole ways network - the score's window over every way and the first seats' caption tests - so its cost per thing is the whole stage, not a cost per house
 
 ## Cheaper algorithms considered
 
-- sweep: not used - the seats are taken by score, not in space
+- sweep: used - the score by a sliding window along each way, each house entering and leaving a leg's window once
 - grid or spatial index: used - the house index for the score, the registry and the water index for the probe, the mask for the caption
 - priority queue: not used - the seats are counting-sorted once by score; every seat may be asked
 - incremental update: not used - one board is placed
-- memoizing what a scan does not change: used - the obstacle mask is built once over the view's rectangle and its summed-area table answers every caption box in 4 reads
+- memoizing what a scan does not change: not used - the view's obstacle mask would cost more than the few seats tested; each caption box reads the registry's cells

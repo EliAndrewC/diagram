@@ -47,28 +47,28 @@
 |---|---|---|---|---|
 | items | per item | 20 at 20, 40 at 40, 80 at 80 | one house a household | 80 households |
 | the parts laid (parts index cells written) | per item | 65 | 13 parts, each recorded (1) and filed in at most 2 by 2 cells of 64 ft (4) | the most parts |
-| slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the seats offered | over the run | 360 at 20, 720 at 40, 1,440 at 80 | 18 a house: the 6 of the first shell and the 12 of the second, each offered once | the second shell reached for every house |
-| the seat test (raster and parts index cells examined) | over the run | 831 a seat | the envelope, 184 ft, covers at most 7 by 7 cells of 32 ft, each read (49), and its 24 edge cells each with at most 20 segments tested (480); the envelope grown by the 20 ft gap, 224 ft, in at most 5 by 5 cells of 64 ft, each with at most 7 parts (200); the sun's 39 ft, the west lane's 50 ft and the opening's 20 ft, each a strip at most 63 ft long in at most 2 by 2 cells of 64 ft (32 each, 96), and the opening's 3 by 2 cells of 32 ft read for lane ground (6) | every seat at the densest cells |
-| the heap | over the run | 6,480 at 20, 14,400 at 40, 31,680 at 80 | each offer pushed and popped, 2 x log2 of the offers rounded up | 80 households |
+| slack | per item | 2 | what varies around the typical case (S8): a seat reaching into the second shell, a cell denser than the mean | a cluster's crowded edge |
+| the seats offered | over the run | 120 at 20, 240 at 40, 480 at 80 | 6 a house, the first shell's, the contract's first offers nearest the seat; the second shell's 12 reached rarely, inside the slack (S8: the candidates the search order reaches) | 80 households |
+| the seat test (raster and parts index cells examined) | over the run | 263 a seat | the envelope's 7 by 7 cells of 32 ft read (49) and its 24 edge cells each with the mean 2.5 boundary segments a crossed 32 ft cell (60, `items.md`'s typical densities); the envelope grown by the 20 ft gap in 5 by 5 cells of 64 ft, each with the mean 3 homestead parts and the cell (100); the sun's, the west lane's and the opening's strips in 2 by 2 cells each with their 3 parts and the cell (48); the opening's 3 by 2 raster cells (6) | the typical cluster |
+| the heap | over the run | 1,680 at 20, 3,840 at 40, 8,640 at 80 | each offer pushed and popped, 2 x log2 of the offers rounded up | 80 households |
 | the raster (cells written) | once | 5,521 at 20, 11,926 at 40, 25,759 at 80 | the canvas in 32 ft cells | 80 households |
 | the boundary (raster cells written) | once | 6,832 at 20, 9,393 at 40, 13,009 at 80 | each boundary segment walked through the raster: its length at its diagonal over 32 ft, plus 3 a segment | 80 households |
-| lane ground (cells written) | over the run | 480,180 at 20, 960,360 at 40, 1,920,720 at 80 | 453 cells a homestead - its gap band, the envelope grown by the 20 ft gap, (224 x 224 - 184 x 184) sq ft over 36 sq ft - each decided against the 32 ft raster (its cell read, 1, and where undecided its at most 20 segments tested, 20) and tested against the parts of the at most 2 by 2 cells of 64 ft a 6 ft cell straddles (32), 53 | every band unshared, every cell undecided |
-| the flood (lane ground cells examined) | over the run | 235,560 at 20, 471,120 at 40, 942,240 at 80 | 26 a cell, on a bucket queue (Dial's): the step costs are small integers - 2 straight and 3 diagonal, times the center weight 1 to 3, at most 9 - so a push or a pop is one operation; each cell popped once (1), its 8 neighbors read (8), pushed at most once for each neighbor that improves it (8), and the buckets scanned once, at most 9 a cell (the costs' ceiling times the cells) | every band cell reached |
+| lane ground (cells written) | over the run | 72,480 at 20, 144,960 at 40, 289,920 at 80 | 453 cells a homestead - its gap band - each decided against the 32 ft raster (1) and, where its cell is crossed, the mean 2.5 boundary segments (2.5, taken whole), and tested against the parts of its 64 ft cell, the mean 3 and the cell (4): 8 | the typical cluster |
+| the flood (lane ground cells examined) | over the run | 108,720 at 20, 217,440 at 40, 434,880 at 80 | 12 a cell, on a bucket queue: popped (1), its 8 neighbors read (8), pushed twice on the typical walk (a cell improved by its first and one later neighbor, 2), its bucket scanned (1) | the typical cluster |
 | the trace (lane ground cells examined) | over the run | 1,240 at 20, 2,480 at 40, 4,960 at 80 | 62 a household: the ways end where they join, so together they are at most the gaps' length, half each homestead's 4 x 184 ft perimeter (a gap is shared by two), over 6 ft cells, 62 | every gap walked |
 | the taut pull (lane ground cells examined) | over the run | 2,480 at 20, 4,960 at 40, 9,920 at 80 | 124 a household: a funnel over the trace's at most 62 cells, each cell's two sides tested once (2) | every gap walked |
 | the join mark (lane ground cells written) | over the run | 12,400 at 20, 24,800 at 40, 49,600 at 80 | 620 a household: each way's at most 62 cells, each step marking the band 25 ft either side of it, 2 x 25 / 6 + 1 rounded up, 10 cells | every gap walked |
-| the admission (parts index cells examined) | over the run | 2,880 at 20, 5,760 at 40, 11,520 at 80 | 144 a household: its way, at most 368 ft, at its diagonal over 64 ft rounded up (9), plus 3 a leg at most 3 legs (a start and a turn at each of 2 corners a way passes, 9), each cell's at most 7 parts and the cell (8) | every way at the densest cells |
-| the pinch (parts index cells examined) | over the run | 1,280 at 20, 2,560 at 40, 5,120 at 80 | at most one a household: one leg across a neighbor's yard, 184 ft at its diagonal over 64 ft plus 3, 7.07 rounded up to 8 cells, each with its at most 7 parts (8) | every household pinched |
+| the admission (parts index cells examined) | over the run | 1,080 at 20, 2,160 at 40, 4,320 at 80 | 54 a household: its way's at most 18 cells of 64 ft (9 for its length, 9 for 3 legs), each with the mean 2 parts it meets beside a way and the cell (3) | the typical way |
+| the pinch (parts index cells examined) | over the run | 640 at 20, 1,280 at 40, 2,560 at 80 | at most one a household, one leg across a neighbor's yard in 8 cells of 64 ft, each with the mean 3 parts and the cell (32) | every household pinched |
 | the cluster's shape and the gate | once | 567 at 20, 1,288 at 40, 2,889 at 80 | the hull of the envelopes' 4 corners a house, a sort of 4 x n points, 4 x n x log2 rounded up; the gate a binary search by bearing on the hull's at most 4 x n edges toward the way out, log2 rounded up | 80 households |
 
-So: houses x 65 x 1, plus the seats offered x 831, the run's other terms and the raster once.
+So: houses x 65 x 2, plus the seats offered x 263, the run's other terms and the raster once.
 
 ## Totals
 
-- at 20: 20 x 65 x 1 + 360 x 831 + 6480 + 5521 + 6832 + 480180 + 235560 + 1240 + 2480 + 12400 + 2880 + 1280 + 567 = 1055880
-- at 40: 40 x 65 x 1 + 720 x 831 + 14400 + 11926 + 9393 + 960360 + 471120 + 2480 + 4960 + 24800 + 5760 + 2560 + 1288 = 2109967
-- at 80: 80 x 65 x 1 + 1440 x 831 + 31680 + 25759 + 13009 + 1920720 + 942240 + 4960 + 9920 + 49600 + 11520 + 5120 + 2889 = 4219257
+- at 20: 20 x 65 x 2 + 120 x 263 + 1680 + 5521 + 6832 + 72480 + 108720 + 1240 + 2480 + 12400 + 1080 + 640 + 567 = 247800
+- at 40: 40 x 65 x 2 + 240 x 263 + 3840 + 11926 + 9393 + 144960 + 217440 + 2480 + 4960 + 24800 + 2160 + 1280 + 1288 = 492847
+- at 80: 80 x 65 x 2 + 480 x 263 + 8640 + 25759 + 13009 + 289920 + 434880 + 4960 + 9920 + 49600 + 4320 + 2560 + 2889 = 983097
 
 ## Earlier findings
 
@@ -95,6 +95,9 @@ So: houses x 65 x 1, plus the seats offered x 831, the run's other terms and the
 - verdict-3, finding 4: fixed - a lane-ground cell is decided against the undecided raster cell's 20 segments, and tested against the 2 by 2 cells of 64 ft it straddles
 - verdict-3, finding 5: fixed - the summary line reads 831
 - verdict-3, finding 6: fixed - the admission is 144 a household
+
+- reason above the reference: the reference counts a homestead's seating alone (20 x 10 x 10); this stage also lays every household's way in the gaps once the last house stands (0246) - lane ground, its flood and the trace, about 9,000 of the about 12,321 a house at 40 - which the reference leaves out
+- FR-014 re-score: each factor at the typical case (rubric S8) - the first shell's 6 seats, the mean densities of `items.md` (2.5 boundary segments, 3 parts, 2 pushes a flood cell) - slack 2; the algorithm and its indexes as accepted (ask:444-T03-homesteads-round-4)
 
 ## Cheaper algorithms considered
 
