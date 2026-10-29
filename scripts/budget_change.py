@@ -65,11 +65,18 @@ def _stage(table: dict[str, Any], phase: str) -> dict[str, Any] | str:
 ITEM_SIZES = (20, 40, 80)  # feature 444 D2: a budget is per_thing x the derivation's own items at each size
 
 
+def _stem(derivation: str) -> str:
+    """The name a derivation's rounds run under: its file's name before `.derivation.md` (`web`, `web_greenfield`)."""
+    return Path(derivation).name.removesuffix(".derivation.md")
+
+
 def accepted_by(root: Path, derivation: str, phase: str, trigger: str) -> bool:
     """Does the round arbiter's log of the derivation's feature (`specs/<feature>/arbiter.jsonl`, beside its `phases/`) hold an ACCEPT
-    at `trigger` naming `phase` - in its trigger or its instruction (feature 444 FR-013)?"""
+    at `trigger` naming `phase` - in its trigger or its instruction (feature 444 FR-013)? A greenfield derivation's rounds run under
+    its own name (`<stage>_greenfield`, feature 444 FR-015), so an accept naming that names the stage too."""
     log = (root / derivation).parents[1] / "arbiter.jsonl"
-    named = re.compile(rf"(?<![a-z_]){re.escape(phase)}(?![a-z_])")
+    names = "|".join(re.escape(n) for n in {phase} | ({_stem(derivation)} & {f"{phase}_greenfield"}))  # its own greenfield name alone
+    named = re.compile(rf"(?<![a-z_])(?:{names})(?![a-z_])")
     for line in log.read_text(encoding="utf-8").splitlines() if log.is_file() else []:
         try:
             r = json.loads(line)
@@ -175,7 +182,7 @@ def set_budget(
             {
                 "pinned_on": "accept",
                 "derivation_sha": derivation_sha(root, derivation),
-                "rounds": len(list((root / derivation).parent.glob(f"{phase}.verdict-*.txt"))),  # its recorded work-budget verdicts
+                "rounds": len(list((root / derivation).parent.glob(f"{_stem(derivation)}.verdict-*.txt"))),  # its recorded work-budget verdicts
                 "spread": spread.strip(),
             }
             if arbiter

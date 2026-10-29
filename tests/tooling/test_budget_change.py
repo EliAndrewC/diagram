@@ -160,6 +160,16 @@ def test_an_arbiter_accept_pins_a_first_budget_bound_to_its_derivation(root: pat
     assert row["pinned_on"] == "accept" and row["verdict"] == "ask:444-T05-r9" and row["derivation_sha"] == bc.derivation_sha(root, d)
     assert row["rounds"] == 3 and row["spread"] == "32,280-38,506 at 20", "the rounds and the spread, for the program target"
 
+    # a greenfield derivation's rounds run under its own name (feature 444 FR-015): an accept naming it names the stage
+    (feat / "phases" / "web_greenfield.derivation.md").write_text("the greenfield derivation\n")
+    g = "specs/444-x/phases/web_greenfield.derivation.md"
+    (feat / "phases" / "web_greenfield.verdict-1.txt").write_text("UNDERIVED - y\n")
+    log.write_text(json.dumps({"trigger": "ask:444-T13-web_greenfield-round-3", "ruling": "accept", "what": "pin it"}) + "\n")
+    assert bc.accepted_by(root, g, "web", "ask:444-T13-web_greenfield-round-3")
+    assert not bc.accepted_by(root, g, "track", "ask:444-T13-web_greenfield-round-3"), "never another stage's"
+    assert not bc.accepted_by(root, d, "track", "ask:444-T13-web_greenfield-round-3")
+    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "web stands as it reads"}) + "\n")
+
     import importlib  # noqa: PLC0415
 
     wb = importlib.import_module("l7r.diagram.tools.work_budget")
