@@ -1,0 +1,25 @@
+UNDERIVED - the neighbors per 64 ft cell (29) has no reason to stay at 29 at 40 and 80: it rose from 21 at 10 households to 29 at 20, and the band's depth (193 ft, 5 cells) is borrowed from the title's band with no reason linking the two.
+
+This is round 1, so the bundle holds no earlier verdicts and there are no earlier findings to confirm closed.
+
+**1. Is each factor derived?** No.
+- **The 29 per cell** (Indexes, derivation.md line 23). It is the larger of two measurements, "21 and 29, the ceiling taken", and it grew by about 1.38 times in one doubling. The contract's own rule is to scale every figure past 20 at its measured rate, and the derivation does that for the crowns, the features, the view's side and the ring. It holds this one flat, giving no clearance or footprint reason that would cap what a 64 ft cell can hold (S1). Either that cap is derived, or the figure scales to about 40 at 40 and 55 at 80. The figure feeds both the title row (line 34) and the band row (line 35). It also breaks the claim that slack is 1 because "every factor is a ceiling".
+- **The band's depth** (algorithm lines 17-18, row 35). The derivation says "at most the title's band deep", but `TITLE_BAND_ALLOWANCE` is a figure for the title: the placard's height plus 34 ft. Nothing in the contract limits the gap between a reed strip and the view's edge to it, and a water-facing flank can be any side of the view. If the view was decided as the content plus this allowance on every side, the derivation must say so.
+- The other factors are derived: the crop (4), the canopy (each crown written once) and the title's cell counts. The placard covers at most 5 by 4 cells (floor(252/64)+2 and floor(159/64)+2), and the band at most 40, 59 and 85 by 5 cells.
+
+**2. Is there a standard, cheaper algorithm?** Yes, for the union (row 36).
+- The band is a four-corner rectangle and the strip's ring is already in order. Clipping the ring against the rectangle in one walk, each edge tested against its 4 sides, costs about 4 x (points + 4): 1,956, 2,152 and 2,364 at 20, 40 and 80. The sort the derivation counts costs 4,401, 5,380 and 5,910.
+- Reading the reserved pocket instead of rerunning the scan is a valid reason not to sweep for the title.
+
+**3. Is any factor padded?** Likely, the drift (row 33).
+- It uses "the features on the map", a count that includes crowns and scrub. The contract reads "every hard feature", and it separates cover from features: the title sits "over nothing but cover, never a feature".
+- If crowns are cover, the factor is padded by at least the crown count (717, 1,320 and 2,428), leaving at most about 2,227, 4,270 and 8,190 with the 4 view comparisons. Otherwise the derivation should state that crowns count as hard features.
+
+**4. Is each figure read at its source's size and unit?** Two are not, and one needs checking.
+- The 29 is a figure at 20 households, used at 40 and 80.
+- The 193 ft is the title's band, used as the gap to a flank's edge.
+- Row 36 takes "the marsh's longest ring" (485, 534 and 587 points) for the reed strip's ring. The derivation should confirm the contract treats these as the same ring.
+
+The arithmetic itself checks out: the title is 603, the band 6,000, 8,850 and 12,750, and the totals 14,669, 21,747 and 32,313. Growth from 20 to 80 households is about n^0.57, well under the 1.15 limit.
+
+Files read: /tmp/l7r-check/work-budget-budget-frame/MANIFEST.md, /tmp/l7r-check/work-budget-budget-frame/rubric.md, /tmp/l7r-check/work-budget-budget-frame/contract.md, /tmp/l7r-check/work-budget-budget-frame/derivation.md
