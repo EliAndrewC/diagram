@@ -1,0 +1,23 @@
+UNDERIVED - the bank check, `its bank (1)` in the site test, names no way for a site to learn which bank of a water course it is on, and the contract gives no bound on the water courses.
+
+**1. Is each factor derived?** No, one is not.
+- **The bank check has no reason.** The site test charges 1 operation for the bank (derivation.md line 27, algorithm line 13). Nothing says how it is done: no index, no side stored per cell, no raster. The contract's Bounds give no size for the water courses, so testing a point against a course's side has no stated constant.
+- **An unused Bounds figure suggests a raster.** Bounds lists "1 ft a pixel at the hamlet scale" and the derivation never uses it. If the bank is read off a 1 ft raster, building that raster is not counted. At 80 households it is about 1,849 x 2,442, or 4.5M pixel writes, which is more than the whole 2.98M total.
+- **The farms' starting shares are not counted.** The contract says the copse is "filled to what the belt and groves leave" and that there is "no copse without a belt or a reserved seat". Setting each farm's share does work that no row counts, and the belt and groves have no stated bound.
+- **The other factors are derived.** The house index (9 cells plus at most 3 houses, from density 2.9e-5 x 9 x 90²), the registry (2 x 2 cells of 30 each, from a 22 ft box in 64 ft cells), the clumps x 5, the crowns, and a slack of 1 each have a stated reason.
+
+**2. Is there a standard, cheaper algorithm?** Yes, and the derivation does not use it.
+- **Take candidates from the houses' reach.** The sweep tries every site of the grown box (22,139 at 80). Only sites within 90 ft of a house can pass, and there are at most n x π·90²/15.556² ≈ n x 105 of them (about 8,400 at 80). Listing candidates from each house's reach disk, which is S2's own form, cuts the candidates by about 2.6x.
+- **Run the cheap checks first.** The 1-operation share check comes after the 120-operation registry check. Checking the share first skips registry checks for farms already filled.
+
+**3. Is any factor padded?** Yes, the site test is.
+- **The registry check is charged where it cannot run.** The full 134 is charged to every site ("every site tested"). By the derivation's own order, the 120-operation registry check only runs for a site that has a house within reach, and the density bound rules out every site having one.
+- **A tighter bound.** Sites x 12, plus min(sites, n x 105) x 122, comes to about 1.29M at 80 households, against 2.97M.
+- **This makes the derivation LOOSE as well, behind the UNDERIVED.** A related point of form: the rubric wants items to be the things placed (clumps: 462, 957, 1,980), with candidates per item as the S2 factor. Counting sites as items hides about 11 candidates per clump, and that figure creeps up because the extent grows about x2.1-2.17 per doubling while the clumps grow x2.07. The exponent from 20 to 80 is about 1.085, under 1.15, so this is not an S6 finding.
+
+**4. Is each figure read at its source's size and unit?** Yes.
+- The 22 ft box comes from the 11 ft radius, and the +180 from a 90 ft reach on each side.
+- The site counts come out right only with the exact pitch 11√2 = 15.556 ft, not the rounded 15.6 ft. For example, at 40: 88 x 117 = 10,296.
+- The clump, crown and house counts at each size match the contract, and the three totals add up.
+
+There are no earlier verdicts, so there were no earlier findings to close. The bundle is in /tmp/l7r-check/work-budget-budget-windbreak/: MANIFEST.md, rubric.md, contract.md and derivation.md.
