@@ -99,6 +99,27 @@ standards" (`request.md`).
   discharges the ruling FR-013 re-owes; a SOUND-pinned stage is re-scored and re-judged once in MODE BUDGET only where `make
   budget-set`'s gate fires on its pin; each is lowered with `LOWER=1` (no GM words: a lowering asks nothing of him). The new
   target then goes to the GM under FR-002 with the program's operations per household beside the design's few thousand.
+- **FR-015**: Every stage is re-derived GREENFIELD (the GM 2026-10-29: "the ENTIRE point of what we're doing is to do a greenfield
+  implementation unencumbered by the bad implementation chopices of our previous implementation ... if you're looking at the
+  reference maps but not the original code, then that's one thing - that seems fine and even good"; his answer: "sounds good,
+  please proceed with that"). A stage's contract - what it reads, writes and keeps - is written from the research record (its
+  questions and drawing pages under `research/questions/`, the knobs' forms) and the reference rolls' manifests, never from today's
+  code; its algorithm is designed from that contract. `make work-budget-bundle MODE=budget` refuses a derivation naming any module,
+  function, method, class or module- or class-level name defined under `l7r/` (a local variable is not one), other than a knob's
+  name or form, a stage's name and a manifest key, naming each; a figure the research
+  fixes for a rendering choice is cited to its page, and a figure only today's code holds is a knob the derivation names as one,
+  never a constant it inherits. The 23 budget units stay the record's stage names (the counters' keys); a derivation that finds two
+  stages cheaper laid as one says so, and the merge goes to the round arbiter. The derivations are new files
+  (`phases/<stage>.greenfield.md`), so the pins they replace stand until each new one is pinned - on SOUND or the arbiter's accept
+  (FR-013), with `LOWER=1` where it is lower; a higher one leaves the standing pin in place, is named in the target, and is
+  pinned only with the GM's words (`make budget-change`). The target of T09 is withdrawn: the new target
+  goes to the GM under FR-002.
+- **FR-016**: A stage touches only what can win (rubric S9; the GM 2026-10-29: "Why do we think it should take 8,730-11,277
+  operations to place a single notice board?!"): a search that keeps one or a few of a set does work in proportion to the
+  candidates that could win, by a bound read from an index (branch and bound), and a row that scores, sorts or paints every member
+  of a set growing with the map names why no bound prunes it (`- pruning:`); work only a knob's branch needs is charged at that
+  branch's share. The bundle screen asks the `- pruning:` line of a derivation above the reference's 4,000 a thing, and the
+  work-budget agent judges it.
 - **FR-012**: Any Rust spike or phase keeps the counters of 443 FR-001 as a macro behind the Cargo feature `counters`:
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
@@ -114,6 +135,10 @@ standards" (`request.md`).
   per household at every pin, each going red with its condition deleted; and the target the GM approves is below today's counted
   operations at 40 at every stage, or names the stage's reason, and carries the program's operations per household beside the
   design's few thousand; a test refuses a derivation's bundle whose cost per thing at 40 passes 4,000 with no named reason.
+- **SC-010** (FR-015, FR-016): a test refuses a derivation's bundle naming a function, a module, a method or a module-level name
+  defined under `l7r/` and passes a knob's name and form, a stage's name and a manifest key, and refuses one above the reference with no `- pruning:` line, each going red with its
+  condition deleted; every stage has a greenfield derivation with a SOUND verdict or the arbiter's accept, given with S9 in the
+  rubric, and a budget pinned from it; the target the GM approves is the sum of those.
 - **SC-002** (FR-003 to FR-006): each phase's checklist is ticked whole and its accepted figure at most its budget; the
   landing's size delta shows the old implementation removed, with no branch or flag left that selects it (`make
   dead-closure` checks for leftovers).
@@ -160,3 +185,9 @@ standards" (`request.md`).
   arbiter's ruling (the accept-pinned stages in one batch, a SOUND one only where the gate fires); the per-household figure in the
   target the GM sees; the 4,000 screen named in the bundle screen and the agent.
 - 2026-10-28, amendment 2's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.
+- 2026-10-29, amendment 3 (the GM on the budgets' source, `request.md`): FR-015 - every stage re-derived greenfield, its contract from
+  the research and the reference manifests, today's code's names refused by the bundle; FR-016 - rubric S9, touch only what can win;
+  SC-010 tests both; T09's target withdrawn.
+- 2026-10-29, amendment 3's review (spec-fidelity, MODE 3): CHANGES REQUIRED, 2 items - a higher greenfield budget leaves the
+  standing pin for the GM's words; the name check widened to modules, methods and module- or class-level names.
+- 2026-10-29, amendment 3's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - both resolved, no new contradiction.

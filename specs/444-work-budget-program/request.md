@@ -281,3 +281,18 @@ with the rounds and the spread; the rebuilt code is still held to the budget at 
 ## The GM on the step-3 target, 2026-10-28 (amendment 2, FR-014)
 
 "I feel like I'm missing something.  I thought the idea was to REDUCE the number of operations.  Why would we be targeting something HIGHER?"
+
+## The GM on the budgets' source, 2026-10-29 (amendment 3, FR-015 and FR-016)
+
+"Frankly a lot of these numbers still look really high.  Why do we think it should take 8,730-11,277 operations to place a single notice board?!"
+
+"I'm concerned that the ENTIRE point of what we're doing is to do a greenfield implementation unencumbered by the bad implementation chopices of our previous implementation, but then it sounds like your estimates are based on looking at the existing implementation to figure out how many operations each stage should take.  Is that what's happening?!  I mean, if you're looking at the reference maps but not the original code, then that's one thing - that seems fine and even good.  But is that what you're doing or are you using the exsiting algorithms as a reference?"
+
+Put to him after escalation-check: the figures came from the reference maps, but the stage descriptions were written by reading
+today's code (about 110 of its names across 20 of the 23 derivations), and the notice board's search followed today's; every
+budget to be redone clean - each stage's description written from the research and what the map must show, a check refusing any
+name defined in today's code apart from knob names and the map's own keys, each stage re-derived and judged with rubric S9 (touch
+only what can win); the 1.41M target withdrawn until then. His answer:
+
+"sounds good, please proceed with that"
+

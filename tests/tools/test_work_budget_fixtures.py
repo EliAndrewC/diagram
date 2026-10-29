@@ -258,3 +258,23 @@ def test_every_earlier_finding_is_answered_before_the_bundle_builds(tmp_path: Pa
     rc, manifest = wbb.budget_bundle(REPO, "x", str(d), tmp_path / "out")
     assert rc == 0 and (tmp_path / "out" / "x.verdict-1.txt").is_file(), "the earlier verdict travels in the bundle"
     assert wbb.findings_of("") == []
+
+
+def test_a_derivation_naming_todays_code_is_refused(tmp_path: Path) -> None:
+    """Feature 444 FR-015, SC-010 (the GM 2026-10-29: "the ENTIRE point of what we're doing is to do a greenfield implementation
+    unencumbered by the bad implementation chopices of our previous implementation"): a derivation naming a module, function,
+    method, class or module- or class-level name defined under `l7r/` is refused before any dispatch, each named; a knob's name and form, a stage's name and a
+    manifest key pass."""
+    text = (FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")
+    assert wbb.code_name_problems(REPO, text) == [], "the fixture names none of today's code"
+    passes = text + "\n- the `kosatsuba_seat` knob's `entrance` form, the `hinterland` stage, the manifest's `houses`\n"
+    assert wbb.code_name_problems(REPO, passes) == []
+    named = text + "\n- seated as `place_kosatsuba` does, 12 ft apart (BOARD_ALONG_STEP_PX)\n"
+    why = wbb.code_name_problems(REPO, named)
+    assert why and "BOARD_ALONG_STEP_PX" in why[0] and "place_kosatsuba" in why[0] and "FR-015" in why[0], why
+    for name in ("`gap_ways.lay_the_ways`", "`overlap/`"):  # a module and a method, named alone or dotted
+        why = wbb.code_name_problems(REPO, text + f"\n- as {name} lays them\n")
+        assert why and name.strip("`").split(".")[0].rstrip("/") in why[0], (name, why)
+    (tmp_path / "d.derivation.md").write_text(named, encoding="utf-8")
+    rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.derivation.md"), tmp_path / "out")
+    assert rc == 1 and "place_kosatsuba" in msg, msg

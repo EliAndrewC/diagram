@@ -231,6 +231,69 @@ def form_problems(text: str) -> list[str]:
     return out + cells_problems(text) + index_problems(text) + total_problems(text) + reference_problems(text)
 
 
+_IDENT = re.compile(r"`([A-Za-z_][\w./]*)`|\b([A-Za-z]\w*_\w*|[A-Z][a-z0-9]+[A-Z]\w*)\b")  # a backticked dotted name or path splits
+_KNOB = re.compile(r"Knob\(\s*\"([a-z0-9_]+)\"\s*,\s*\[([^\]]*)\]")
+
+
+def _code_names(root: Path) -> tuple[set[str], set[str]]:
+    """Today's names - every module and package, function, method, class, and module- or class-level name defined under `l7r/`
+    (a local variable is not one) - and the names a derivation may still use:
+    each knob's name and forms, each stage's name, and each key of the pool's hamlet manifests (their nested records' keys too)."""
+    defined: set[str] = set()
+    allowed: set[str] = set()
+    for f in (root / "l7r").rglob("*.py"):
+        src = f.read_text(encoding="utf-8")
+        defined |= {f.stem, f.parent.name} - {"__init__"}
+        allowed |= {n for m in _KNOB.finditer(src) for n in (m.group(1), *re.findall(r"\"([a-z0-9_]+)\"", m.group(2)))}
+        try:
+            tree = ast.parse(src)
+        except SyntaxError:
+            continue
+        scopes = [tree.body] + [c.body for c in ast.walk(tree) if isinstance(c, ast.ClassDef)]  # module- and class-level names
+        for n in ast.walk(tree):
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                defined.add(n.name)
+        for body in scopes:
+            for n in body:
+                targets = n.targets if isinstance(n, ast.Assign) else [n.target] if isinstance(n, ast.AnnAssign) else []
+                defined |= {x.id for x in targets if isinstance(x, ast.Name) and len(x.id) > 2}
+
+    def keys(v: object) -> None:
+        if isinstance(v, dict):
+            allowed.update(k for k in v if isinstance(k, str))
+            for w in v.values():
+                keys(w)
+        elif isinstance(v, list):
+            for w in v[:50]:
+                keys(w)
+
+    budgets = root / "dev" / "work-budget.json"  # the budget units' names, the stages, stay a derivation's to use
+    allowed |= set(json.loads(budgets.read_text(encoding="utf-8")).get("stages", {})) if budgets.is_file() else set()
+    for f in (root / "pool" / "hamlets").glob("*/*.json"):
+        try:
+            keys(json.loads(f.read_text(encoding="utf-8")))
+        except ValueError:
+            continue
+    return defined, allowed
+
+
+def code_name_problems(root: Path, text: str) -> list[str]:
+    """GREENFIELD (feature 444 FR-015; the GM 2026-10-29: "the ENTIRE point of what we're doing is to do a greenfield implementation
+    unencumbered by the bad implementation chopices of our previous implementation"): a derivation names no module, function,
+    method, class or module- or class-level name of today's code - 110 of them had carried today's design into 20 of the 23 derivations - other than a knob's name
+    or form and a manifest key. A figure only today's code holds is a knob the derivation names as one, in its own words."""
+    defined, allowed = _code_names(root)
+    refs = [a or b for a, b in _IDENT.findall(text)]  # a document beside the derivation (`placer.py.txt`) is not a name of the code
+    names = {w for r in refs if not re.search(r"\.(txt|md|json|html)$", r) for w in re.split(r"[./]", r) if w}
+    found = sorted(names & defined - allowed)
+    if not found:
+        return []
+    return [
+        f"today's code's names ({len(found)}): {', '.join(found[:12])}{' ...' if len(found) > 12 else ''} - write the contract from the research"
+        " and the reference manifests in your own words, a figure only the code holds as a knob you name (FR-015)"
+    ]
+
+
 def refusals(text: str) -> list[str]:
     """Why a derivation may not go to MODE BUDGET: each forbidden thing it holds, with its first match."""
     return [f"{why}: `{m.group(0).strip()[:60]}`" for pat, why in FORBIDDEN if (m := pat.search(text))]
@@ -269,7 +332,7 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     if not src.is_file():
         return 2, f"work-budget-bundle: no derivation at {derivation}"
     text = src.read_text(encoding="utf-8")
-    if bad := refusals(text):
+    if bad := refusals(text) + code_name_problems(root, text):
         return 1, "work-budget-bundle: REFUSED - a MODE BUDGET bundle holds no code and no counts of today's code:\n" + "\n".join(f"  {b}" for b in bad)
     contract = CONTRACT.search(text)
     if contract is None:

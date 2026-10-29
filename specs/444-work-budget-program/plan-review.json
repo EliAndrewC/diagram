@@ -38,10 +38,10 @@
    "declared": "spec-fidelity"
   },
   "## Task approaches": {
-   "sha256": "88b8e3c844dd7f807461674c1112769475adbb980f6bf0e123f202c6886fb995",
+   "sha256": "4f1276bf785b1c0bc7c515b9093f20ae575ed7ca434e51bc7d64fc137f7fd018",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "round-arbiter"
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
   },
   "### T02 - the water family's budgets (D1, D3, D4)": {
    "sha256": "2894fa1b17d4da7cc08668cc9e0b88126b74adf9d7488231ac020146a9399207",
@@ -149,6 +149,66 @@
    "sha256": "c26dbf96423f32fc57633789283d138e2ed296e696f58ded89a9385695ae222b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-28",
+   "declared": "spec-fidelity"
+  },
+  "### T10 - today's code's names refused by the budget bundle (FR-015, SC-010)": {
+   "sha256": "53a04195c622de64f2c3c8eba376df80b59768c7a58cb22afad8f5ee7d20ecb8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T10 Approach (checklist part A)": {
+   "sha256": "fce52b2a6c9126dd81320af5ea07bcc8eec778e288a473595f2131499cb89e84",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T11 - the water family greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank (FR-015, FR-016)": {
+   "sha256": "2dba64a6e0d724f96588a86f07517ba8729a530a2edf7723338f21fc7cf4d9d7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T11 Approach (checklist part A)": {
+   "sha256": "46bb2436f718cb6e26915b02f7d6d08875dab281df15c4b37b0ec50df1d83992",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T12 - the homesteads family greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)": {
+   "sha256": "10df047c6670dcacaa5dbb3b16c1b6441504e525cba32eb4bf871a4fbcbd450b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T12 Approach (checklist part A)": {
+   "sha256": "6d8067f7d608cacd6760fbd913bd33446afceb61c5f9f380db6eab33a78dddb0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T13 - the ways family greenfield - track, web, crossings (FR-015, FR-016)": {
+   "sha256": "4277df1046fee517784a9c5739d2cfc3215dcb6864a85a44fea9e3fe15855b70",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T13 Approach (checklist part A)": {
+   "sha256": "454bfefc518d6420c40c515d6ff12005e2b808b84b673776d2821d30ff83b01a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T14 - the hinterland and frame family greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)": {
+   "sha256": "90047902dda855d39be458d2bbaa038211e3747f198ea263fd20e7b6ffdf9c25",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T14 Approach (checklist part A)": {
+   "sha256": "7a26c23aaa24c811f92b9bd8ad4eee61f10cff1ad524880f5391432b9106ff56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   }
  },
@@ -1206,6 +1266,73 @@
      "summary": "Budget of the task (one landing, one MODE BUDGET pass per re-scored stage, one arbiter batch); not performance work (paper budgets).",
      "class": "within",
      "why": "Matches FR-014's single batch and once-each MODE BUDGET; no scope added or removed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-29",
+   "blocks": [
+    "## Task approaches",
+    "### T10 - today's code's names refused by the budget bundle (FR-015, SC-010)",
+    "### T10 Approach (checklist part A)",
+    "### T11 - the water family greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank (FR-015, FR-016)",
+    "### T11 Approach (checklist part A)",
+    "### T12 - the homesteads family greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)",
+    "### T12 Approach (checklist part A)",
+    "### T13 - the ways family greenfield - track, web, crossings (FR-015, FR-016)",
+    "### T13 Approach (checklist part A)",
+    "### T14 - the hinterland and frame family greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)",
+    "### T14 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TA-1",
+     "summary": "Task approaches: amendment 3's T10 (name refusal) and T11-T14 (four families greenfield) inserted before T06",
+     "class": "within",
+     "why": "FR-015 withdraws T09's target and requires every stage re-derived greenfield; FR-002's target needs every pin first, so T06 after T11-T14 is what was asked. The plan-archive lines are FR-044's generated lines and owe no review."
+    },
+    {
+     "id": "T10-1",
+     "summary": "The refusal reads the names defined under l7r/ with ast, passing knob names and the reference manifests' keys",
+     "class": "within",
+     "why": "Implements FR-015/SC-010 and the GM-approved 'a check refusing any name defined in today's code apart from knob names and the map's own keys'. The categories (functions, classes, module constants) are FR-015's own wording, spec-settled, not a plan decision."
+    },
+    {
+     "id": "T10-2",
+     "summary": "T10 first of amendment 3, before any greenfield derivation is bundled; one tooling landing via make land-tooling; test red with its condition deleted",
+     "class": "within",
+     "why": "The check must exist before the derivations it screens (the GM 2026-10-28: before the place where it would matter); the red-with-condition-deleted test is SC-010's."
+    },
+    {
+     "id": "T11-14-1",
+     "summary": "Contract source: the stage's research pages under research/questions/ and the knobs' forms; no file under l7r/ read while a derivation is written",
+     "class": "within",
+     "why": "Operationalizes FR-015's 'written from the research record ... never from today's code' and the GM's 'reference maps but not the original code'; l7r/ is today's code."
+    },
+    {
+     "id": "T11-14-2",
+     "summary": "Densities read from the reference manifests as tabulated in phases/items.md",
+     "class": "within",
+     "why": "FR-014/FR-015 require factors from the reference rolls' manifests; the block names the manifests as the source and items.md as their tabulation. Premise not visible in the bundle: items.md must be a transcript of manifest counts, not of the earlier code-read derivations' choice of what an item is - otherwise today's framing re-enters. Within on its face; provenance to be confirmed before T11 bundles."
+    },
+    {
+     "id": "T11-14-3",
+     "summary": "Families in STAGES order, after T10; T06 after all four",
+     "class": "within",
+     "why": "Request section 6 (pipeline order), D4's four families, FR-002's target after every pin."
+    },
+    {
+     "id": "T11-14-4",
+     "summary": "Green exit: each stage's phases/<stage>.greenfield.md SOUND or the round arbiter's accept, and pinned; red exit: failure recorded, task set down, a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Green is FR-015 with FR-013. Red is an escalation path, not a carve-out: SC-010 still requires every stage's greenfield verdict and T06 waits on all four, so no stage reaches the target on its old code-read pin."
+    },
+    {
+     "id": "T11-14-5",
+     "summary": "Budget: one landing per family; one MODE BUDGET pass per stage per round, with the round cap's arbiter rulings",
+     "class": "within",
+     "why": "D4 (one task per family landing together) and D3/FR-013 (round cap, arbiter)."
     }
    ]
   }

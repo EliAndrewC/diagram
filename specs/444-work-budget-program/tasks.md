@@ -33,6 +33,16 @@
 - [x] T09 The budgets re-scored to the typical case - the 13 accept-pinned in one arbiter batch, a SOUND one where the gate fires, each lowered (FR-014; research: rendering)
       research: rendering
       verify: DONE. landed: every budget re-scored to the typical case (FR-014) and pinned, the program 1,409,176 operations at 40 from 15.3M
+- [ ] T10 Today's code's names refused by the budget bundle: a derivation naming a module, function, method, class or module- or class-level name defined under `l7r/` (other than a knob's name or form, a stage's name or a manifest key) refused, naming each; the `- pruning:` line asked above the reference (FR-015, FR-016, SC-010)
+      research: rendering
+- [ ] T11 The water family re-derived greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank - each contract from the research and the reference manifests, judged with rubric S9, pinned (FR-015, FR-016)
+      research: rendering
+- [ ] T12 The homesteads family re-derived greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)
+      research: rendering
+- [ ] T13 The ways family re-derived greenfield - track, web, crossings (FR-015, FR-016)
+      research: rendering
+- [ ] T14 The hinterland and frame family re-derived greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
