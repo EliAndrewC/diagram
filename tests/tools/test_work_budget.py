@@ -47,6 +47,17 @@ def test_a_stage_missing_at_a_size_is_left_out_of_it() -> None:
     assert 40 not in out["stages"]["homesteads"]["per"] and 40 in out["stages"]["field"]["per"]
 
 
+def test_a_refused_roll_counts_the_stages_it_finished() -> None:
+    """Feature 444 T15: the field refuses three of four reference seeds at 80; a stage before the refusing one finished whole, so
+    it is counted there, while the refusing stage and the roll's own figure count the finished rolls alone."""
+    ok = _row(4, 80, 1.0)
+    refused = {**_row(25, 80, 3.0), "refused": "HomesteadsRefused: x", "refused_at": "homesteads"}
+    out = wb.summarize([ok, refused], {})
+    assert out["stages"]["field"]["per"][80]["ops"] == (100 + 300) / 2, "finished before the refusal: both rolls"
+    assert out["stages"]["homesteads"]["per"][80]["ops"] == 50, "the refusing stage: the finished roll alone"
+    assert out["stages"]["roll"]["per"][80]["ops"] == wb.summarize([ok], {})["stages"]["roll"]["per"][80]["ops"], "the roll: finished rolls alone"
+
+
 def test_the_record_lists_every_stage_and_the_roll(tmp_path: Path) -> None:
     rows = [_row(s, h, h / 20) for s in (4,) for h in (10, 20, 40, 80)]
     table = {"program": {"ops_at_40": 1000}, "stages": {"homesteads": {"per_thing": 10, "items_at_20": 20, "items_at_40": 40, "items_at_80": 80}}}

@@ -57,6 +57,7 @@ def roll(seed: int, households: int) -> dict[str, Any]:
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     stages: dict[str, dict[str, Any]] = {}
     refused: str | None = None
+    refused_at: str | None = None
     work_counts.reset()
     with roll_scope(plan.spec):
         for st in STAGES:
@@ -67,13 +68,13 @@ def roll(seed: int, households: int) -> dict[str, Any]:
                     st(s, plan)
                 s.standing.resync()
             except (ValueError, RuntimeError) as e:  # the generator's refusals, as the snapshot reads them
-                refused = f"{type(e).__name__}: {str(e)[:120]}"
+                refused, refused_at = f"{type(e).__name__}: {str(e)[:120]}", name
             ops = {k: n - before.get(k, 0) for k, n in work_counts.OPS.items() if n != before.get(k, 0)}
             placed = sum(max(0, n - had.get(k, 0)) for k, n in placed_counts(s.M).items())
             stages[name] = {"ops": ops, "placed": placed, "seconds": round(time.time() - t0, 3)}
             if refused:
                 break
-    return {"seed": seed, "households": households, "stages": stages, "refused": refused}
+    return {"seed": seed, "households": households, "stages": stages, "refused": refused, "refused_at": refused_at}
 
 
 def total(ops: dict[str, int]) -> int:
@@ -152,7 +153,10 @@ def _figure(r: dict[str, Any], name: str, key: str) -> float:
 
 def summarize(rows: list[dict[str, Any]], table: dict[str, Any]) -> dict[str, Any]:
     """Per stage and for the roll: at each size the mean over the seeds that reached it of the operations, things placed, calls and
-    seconds, the operations per thing placed, the exponent over `FIT`, and the budget and its ratio where one is set."""
+    seconds, the operations per thing placed, the exponent over `FIT`, and the budget and its ratio where one is set. A stage is
+    counted over every roll it FINISHED - a refused roll's stages before the one that refused it are whole (feature 444 T15: the
+    field refuses three of four reference seeds at 80, and dropping those rolls left every stage with no count at 80 to be accepted
+    or held at); the roll's own figure is the finished rolls' alone."""
     order: list[str] = []
     for r in rows:
         order += [k for k in r["stages"] if k not in order]
@@ -161,7 +165,7 @@ def summarize(rows: list[dict[str, Any]], table: dict[str, Any]) -> dict[str, An
     for name in [*order, "roll"]:
         per: dict[int, dict[str, float]] = {}
         for h in sizes:
-            got = [r for r in rows if r["households"] == h and (name == "roll" or name in r["stages"])]
+            got = [r for r in rows if r["households"] == h and (not r.get("refused") if name == "roll" else name in r["stages"] and (not r.get("refused") or r.get("refused_at") not in (None, name)))]
             if not got:
                 continue
             per[h] = {k: sum(_figure(r, name, k) for r in got) / len(got) for k in ("ops", "placed", "calls", "seconds")}
@@ -176,6 +180,7 @@ def summarize(rows: list[dict[str, Any]], table: dict[str, Any]) -> dict[str, An
             "budget_at_40": budget or None,
             "ratio": (at40.get("ops", 0) / budget) if budget else None,
         }
+    out["sizes"] = [h for h in sizes if any(h in st["per"] for st in out["stages"].values())]  # a size no stage finished at shows none
     return out
 
 
@@ -238,11 +243,10 @@ def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tu
                 if name in r["stages"]:
                     r["stages"][name]["calls"] = n
             rows.append(r)
-    ok = [r for r in rows if not r["refused"]]
     table = budgets()
     if bad := missing_items(table) + stale_pins(table):  # feature 444 D2 and FR-013: a budget without its items, or a changed accept-pinned one
         raise SystemExit("work-budget: REFUSED - " + "; ".join(bad))
-    summary = summarize(ok, table)
+    summary = summarize(rows, table)
     meta = {
         "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "commit": _commit(),
