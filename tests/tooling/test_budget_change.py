@@ -220,3 +220,23 @@ def test_a_rebuilt_phase_is_accepted_only_within_its_budget_on_its_audits_within
     assert st["status"] == "accepted" and st["accepted"] == {"40": 150.0, "80": 380.0}
     assert json.loads((root / bc.LOG).read_text().splitlines()[-1])["what"] == "accepted"
     assert "no stage `nope`" in bc.accept_stage(root, "nope", "a.txt")
+
+
+def test_the_growth_cap_is_held_by_the_tool(root: pathlib.Path) -> None:
+    """Rubric S6, the GM 2026-10-29 ("if we allow polynomial growth but with a high exponent like n cubed ... that is really going to
+    not work"): a pin growing past 1.15 from 20 to 80 names its reason, and an accepted phase grows no faster than its budget."""
+    (root / "d.md").write_text("x\n")
+    (root / "SOUND.txt").write_text("SOUND - x\n")
+    steep = {20: 10, 40: 40, 80: 160}  # an exponent of 2.0
+    why = bc.set_budget(root, "web", 1, 2.0, "d.md", "SOUND.txt", steep)
+    assert "exponent of 2.00" in why and "GROWTH_REASON" in why
+    assert bc.set_budget(root, "web", 1, 2.0, "d.md", "SOUND.txt", steep, growth_reason="the gaps are bounded by the lattice") == ""
+    assert bc.load(root)["stages"]["sties"]["status"] == "unbudgeted"
+    assert bc.set_budget(root, "sties", 10, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}) == ""
+    (root / "a.txt").write_text("WITHIN - x\n")
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+    (runs / "1.json").write_text(json.dumps({"summary": {"stages": {"sties": {"per": {"20": {"ops": 20}, "40": {"ops": 100}, "80": {"ops": 390}}}}}}))
+    why = bc.accept_stage(root, "sties", "a.txt")
+    assert "exponent of 2.14" in why and "past its budget's 1.00" in why
+    assert bc.growth(0, 5) == 0.0
