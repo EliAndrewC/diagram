@@ -113,7 +113,18 @@
    "status": "unbudgeted"
   },
   "lane_wells": {
-   "status": "unbudgeted"
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 2.0,
+   "derivation": "specs/444-work-budget-program/phases/lane_wells.derivation.md",
+   "verdict": "ask:444-T03-lane_wells-round-3",
+   "items_at_20": 294418,
+   "items_at_40": 1179501,
+   "items_at_80": 4833916,
+   "pinned_on": "accept",
+   "derivation_sha": "45e8837d409dc1db74624061b781cd262d563e4986528127b70029ccce17035f",
+   "rounds": 2,
+   "spread": "291,056-295,522 at 20"
   },
   "pond_bank": {
    "status": "budgeted",
