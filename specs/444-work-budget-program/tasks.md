@@ -45,8 +45,9 @@
 - [x] T13 The ways family re-derived greenfield - track, web, crossings (FR-015, FR-016)
       research: rendering
       verify: DONE. landed: the ways family re-derived greenfield: web 1,160 at 40 (from 91,798) on the round arbiter's accept, track 223 (from 2,090) and crossings 442 (from 7,879) on SOUND, each LOWER=1 (FR-015)
-- [ ] T14 The hinterland and frame family re-derived greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)
+- [x] T14 The hinterland and frame family re-derived greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)
       research: rendering
+      verify: DONE. landed: the hinterland and frame family re-derived greenfield: hinterland 19,058 at 40 (from 784,872), notice 1,160 (from 16,884), frame 637 (from 7,826) on the round arbiter's accepts; windbreak 3,183 (from 71,854), woodland 5 (from 12,516), labels 6 on SOUND, each LOWER=1; bamboo SOUND at 288 against its pin of 252, left standing for the GM's words (FR-015)
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
