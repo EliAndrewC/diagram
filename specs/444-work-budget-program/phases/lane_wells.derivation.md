@@ -37,22 +37,23 @@
 | items | per item | 2 at 20, 4 at 40, 8 at 80 | the wells drawn here, at most all that are owed | 80 households |
 | the drawing (registry cells written) | per item | 5 | the record written (1) and filed in at most 4 cells of 64 ft (4) | always 5 |
 | slack | per item | 1 | every factor is a ceiling at its worst case | not applicable |
-| the sites (registry and house index cells examined) | over the run | 190,294 at 20, 542,191 at 40, 1,604,394 at 80 | the lane sites, 2 x the lanes' length over 25 ft (446 at 20, 967 at 40, 2,098 at 80), and 34 cluster sites a house - the 184 ft square grown by the 12.4 ft radius each side, 4 x 208.8 = 835 ft, over 25 ft, 33.4 rounded up - (680 at 20, 1,360 at 40, 2,720 at 80); each once: its 2 by 2 cells of 64 ft with their things and the cell (120 at 20, 164 at 40, 224 at 80), its 9 cells of 760 ft (9) and their houses (20 at 20, 40 at 40, 80 at 80) for the five nearest, and the 4 walls of each of those five houses for the nearest wall within 80 ft (20) | every site examined |
+| the sites (registry and house index cells examined) | over the run | 188,064 at 20, 537,356 at 40, 1,566,630 at 80 | each site once, its 2 by 2 cells of 64 ft with their things and the cell (120 at 20, 164 at 40, 224 at 80) and the 4 walls of each house it reads for the nearest wall within 80 ft (20); a lane site, 2 x the lanes' length over 25 ft (446 at 20, 967 at 40, 2,098 at 80), serves the lane form alone, so it reads only its 2 by 2 cells of 760 ft (4) and their houses within 80 + 130 ft, at most 67 (20 at 20, 40 at 40, 67 at 80); a cluster site, 34 a house - the 184 ft square grown by the 12.4 ft radius each side, 4 x 208.8 = 835 ft, over 25 ft, 33.4 rounded up - (680 at 20, 1,360 at 40, 2,720 at 80), its 9 cells of 760 ft (9) and their houses (20 at 20, 40 at 40, 80 at 80) for the five nearest and its rungs | every site examined |
 | the well search (house index cells examined) | over the run | 101,340 at 20, 614,328 at 40, 3,111,312 at 80 | 2 at 20, 4 at 40, 8 at 80 wells, each at most its pool, the sites within 760 ft of the worst-served household (1,126 at 20, 2,327 at 40, 3,669 at 80: the lane sites, 2 x the lanes' density x pi x 760 squared over 25 ft, capped by the lane sites, 446 at 20, 967 at 40, 1,085 at 80, and 34 a house of the houses within 908 ft, a site lying up to 148 ft from its house's center, 20 at 20, 40 at 40, 76 at 80), each popped once - its walk (1), its rung read (1), its 9 cells (9) and their households under the ten (20 at 20, 40 at 40, 80 at 80), the last resort's comparison (1), the heap built bottom-up once the pool is known (2 an element) and its pop, log2 of the pool rounded up | every site examined for every well, every form and rung reached |
 | the worst-served query (heap top read) | over the run | 2 at 20, 4 at 40, 8 at 80 | each well, the max-heap's top, 1 | every well owed |
 | the pool's scan (site index cells examined) | over the run | 2,270 at 20, 9,344 at 40, 38,616 at 80 | each well, the worst-served household's 9 cells of 760 ft (9) and every site in them, each tested against the 760 ft disc (1); at these sizes the cells hold every site (1,126 at 20, 2,327 at 40, 4,818 at 80) | every well owed |
-| the service (households re-keyed) | over the run | 458 at 20, 2,116 at 40, 9,672 at 80 | each well, its 9 cells (9) and the households in them, at most every household, each re-keyed with a push, 1 + 2 x log2 of the households rounded up | every well owed |
+| the wells drawn here (distances) | over the run | 1,126 at 20, 13,962 at 40, 102,732 at 80 | each popped site tested against each well this stage has drawn before it (S4: the clearance is memoized against what stood, not against these), one distance each: the pool x (0 + 1 + ... + the wells less one), 1,126 x 1 at 20, 2,327 x 6 at 40, 3,669 x 28 at 80 | every site popped for every well |
+| the service (households re-keyed) | over the run | 458 at 20, 2,116 at 40, 9,672 at 80 | each well, its 9 cells (9) and the households in them, at most every household, each re-keyed: its push and the stale entry's later pop, 1 + 2 x log2 of the households rounded up (the heap holds at most the households and one stale entry for each re-key, under twice the households, so its log2 is at most one more, inside the slack's ceiling) | every well owed |
 | the dry households (heap top compared) | over the run | 2 at 20, 4 at 40, 8 at 80 | one comparison a well, the max-heap's top against 760 ft | every well owed |
 | the site index (site index cells written) | once | 1,126 at 20, 2,327 at 40, 4,818 at 80 | each site filed once in its 760 ft cell | 80 households |
 | the house index (cells written) | once | 20 at 20, 40 at 40, 80 at 80 | each house filed once | 80 households |
 
-So: the wells x 5 x 1, plus the sites, the pool's scan, the well search, the worst-served query, the service, the dry households, the house index and the site index.
+So: the wells x 5 x 1, plus the sites, the pool's scan, the well search, the wells drawn here, the worst-served query, the service, the dry households, the house index and the site index.
 
 ## Totals
 
-- at 20: 2 x 5 x 1 + 190294 + 2270 + 101340 + 2 + 458 + 2 + 20 + 1126 = 295522
-- at 40: 4 x 5 x 1 + 542191 + 9344 + 614328 + 4 + 2116 + 4 + 40 + 2327 = 1170374
-- at 80: 8 x 5 x 1 + 1604394 + 38616 + 3111312 + 8 + 9672 + 8 + 80 + 4818 = 4768948
+- at 20: 2 x 5 x 1 + 188064 + 2270 + 101340 + 1126 + 2 + 458 + 2 + 20 + 1126 = 294418
+- at 40: 4 x 5 x 1 + 537356 + 9344 + 614328 + 13962 + 4 + 2116 + 4 + 40 + 2327 = 1179501
+- at 80: 8 x 5 x 1 + 1566630 + 38616 + 3111312 + 102732 + 8 + 9672 + 8 + 80 + 4818 = 4833916
 
 ## Growth
 
@@ -66,6 +67,9 @@ From 20 to 80 households the stage grows faster than the households, for a bound
 - verdict-1, finding 4: fixed - the worst-served query is the heap's top, 1 a well
 - verdict-1, finding 5: fixed - each well's scan of its 3 by 3 cells' sites against the disc is a row of its own
 - verdict-1, finding 6: fixed - the cluster sites in the pool are those of the houses within 908 ft (a site up to 148 ft from its house's center)
+- verdict-2, finding 1: fixed - each popped site is tested against the wells this stage drew before it, one distance each, its own row (S4)
+- verdict-2, finding 2: fixed - the service row states what its 2 pays for, the push and the stale entry's pop, and the heap's size under lazy invalidation
+- verdict-2, finding 3: fixed - a lane site reads only its 2 by 2 cells of 760 ft and the houses within 210 ft, for the wall within 80 ft
 
 ## Cheaper algorithms considered
 
