@@ -1,0 +1,9 @@
+{
+ "why": "The meta keys and engine flags stage_water_frame writes today (l7r/diagram/hamletgen/water/skeleton.py), recorded from one logged make phase-read on 2026-10-30 per the round arbiter's ruling on ask:444-T19-output-keys: T19's port writes the same set (FR-004); the values may move (D7). Its algorithm and random calls were not carried over.",
+ "meta": ["generated_by", "name", "scale", "ftpx", "toscale", "households", "water_flow", "down_deg", "windward", "wind_source", "settlement_form", "settlement_form_asked", "nucleated", "grove_sides", "grove_flank", "flood_ground", "row_line", "row_sides", "row_water", "row_shelter", "well_siting", "farm_water", "field_footbridges", "water_kind", "intake", "brook_side", "work_yards", "manure_form", "harvest_weather", "kosatsuba_siting", "copse_siting"],
+ "meta_none_when": {"well_siting": "the settlement form is not nucleated", "intake": "a polder archetype (no brook)", "brook_side": "a polder archetype (no brook)"},
+ "engine_flags": ["_work_yards", "_house_racks", "_nucleated"],
+ "pins": "each of the spec's pins applied through Settlement.pin_knob",
+ "plan_fields_read": ["spec.name", "spec.households", "spec.windward", "spec.pins", "ftpx", "water_flow", "down_deg", "windward", "settlement_form", "grove_sides", "grove_flank", "flood_ground", "row_line", "row_sides", "row_water", "row_shelter", "well_siting", "farm_water", "field_archetype", "intake", "brook_side", "manure_form", "harvest_weather", "kosatsuba_siting", "copse_siting", "counted"],
+ "where_the_rolls_are": "plan_site (l7r/diagram/hamletgen/plan.py), run before the first stage: the stage writes what the plan rolled, and counts the plan's rolls (plan.counted)"
+}
