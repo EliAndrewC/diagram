@@ -181,3 +181,7 @@ As feature 437 reported it: `make feature-report F=447`.
   held, the language list open; applied in `c73f9840d`.
 - 2026-10-30, amendment 3 round 2 (spec-fidelity-verify): FAITHFUL - its four small notes (an FR id in a comment, Q_KO in the
   contract and the usage line, Shiroyone's second copy) applied.
+- 2026-10-30, amendment 4 round 1 (spec-fidelity): CHANGES REQUIRED - the suggestions recorded verbatim, two passages and two
+  measures a source, the number and unit forms tested on the four cases, the contract lines named, SC-A4 in seen/opened/reported;
+  applied in `cd2edf99c`.
+- 2026-10-30, amendment 4 round 2 (spec-fidelity-verify): FAITHFUL - its two wording notes on the contract applied.

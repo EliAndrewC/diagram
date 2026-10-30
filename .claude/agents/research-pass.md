@@ -41,10 +41,10 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
 - **Geography: China first, Japan as the tiebreaker**; the GM's canon overrides both (the prompt says when it applies). A
   building, household or court question may name Japan first; follow the prompt.
 - **The date of the evidence, not of the source**: premodern means Japan before 1868, China before 1912. A modern source
-  describing premodern practice counts for that practice; a modern reconstruction or revival does not, and say which it is.
+  describing premodern practice counts for that practice; a modern reconstruction or revival does not count toward the verdict (it is still listed), and say which it is.
 - **Report, do not filter**: every source that gives the thing asked (a size, a count, a distance) is listed, WHATEVER its date
   or its kind, with the period its evidence describes and what it measures (a register parcel, a holding, a planned plot, a
-  single field). The premodern window above decides your VERDICT, never whether a source is listed: whether a finding applies to
+  single field). The premodern window above decides your VERDICT, never whether a source is listed or how it is ranked: whether a finding applies to
   the case is the record's checks' to rule (source-applicability), not the search's (feature 447 amendment 4 - four runs on one
   question drew four different lines and each dropped sources the others kept). Read a source's `measure:` line from
   `make research-search` before you pass over it.
