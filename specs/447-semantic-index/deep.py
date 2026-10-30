@@ -1,6 +1,6 @@
 """Feature 447: each case's rank in the first 200, the Japanese cases also asked in Japanese, and a search's time split."""
 import json, pathlib, sys, time
-sys.path.insert(0, "/diagram/.clones/diagram-backlog/scripts/record")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "scripts" / "record"))
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import semantic_index as si
 from trial import CASES, ARCHIVE, ROOT

@@ -7,11 +7,11 @@ import subprocess
 import sys
 import time
 
-sys.path.insert(0, "/diagram/.clones/diagram-backlog/scripts/record")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "scripts" / "record"))
 import semantic_index as si  # noqa: E402
 
 ARCHIVE = pathlib.Path("/diagram/.specify/source-archive")
-ROOT = pathlib.Path("/diagram/.clones/diagram-backlog")
+ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 # (question, terms a session would try first, the known answering file's capture folder, the record page it answered, language)
 CASES = [
