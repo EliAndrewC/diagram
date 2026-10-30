@@ -151,6 +151,22 @@ pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
 # The semantic index's model runtime (feature 447): fastembed and ONNX Runtime. The model itself (BGE-M3's 8-bit build) is
 # fetched once into the mirror's .specify/model-cache/ on the host disk, so a new container reuses it.
 pip install --quiet --break-system-packages -r "$SKILL/requirements-semantic.txt"
+# The Rust toolchain for the rebuilt phases (feature 444 FR-010, FR-011: one PyO3 extension module built by maturin, its
+# tooling proven on a Rust fixture before the first Rust phase lands). rustup into ~/.cargo, the toolchain pinned (the crate's
+# rust-toolchain.toml names the same), clippy and rustfmt for lint and format, llvm-tools for cargo-llvm-cov's coverage floor
+# (its release binary, not a compile: a `cargo install` of it builds for minutes); maturin from pip, pinned.
+RUST_TOOLCHAIN=1.87.0
+if ! command -v rustup >/dev/null 2>&1; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y -q --profile minimal --default-toolchain "$RUST_TOOLCHAIN"
+fi
+# `rustup component add`, not `toolchain install -q`: that one refuses -q (2026-10-30) and left clippy uninstalled
+"$HOME/.cargo/bin/rustup" toolchain install "$RUST_TOOLCHAIN" --profile minimal >/dev/null 2>&1
+"$HOME/.cargo/bin/rustup" component add --toolchain "$RUST_TOOLCHAIN" clippy rustfmt llvm-tools-preview >/dev/null 2>&1
+if [ ! -x "$HOME/.cargo/bin/cargo-llvm-cov" ]; then
+    curl -sSfL https://github.com/taiki-e/cargo-llvm-cov/releases/download/v0.6.16/cargo-llvm-cov-x86_64-unknown-linux-gnu.tar.gz \
+        | tar xz -C "$HOME/.cargo/bin"
+fi
+pip install --quiet --break-system-packages maturin==1.8.3
 # The headless browser the interactive-map test drives (feature 134): Playwright's own Chromium,
 # fetched into ~/.cache/ms-playwright. Idempotent; the test skips with a reason when it is absent.
 python3 -m playwright install --with-deps chromium >/dev/null
