@@ -28,9 +28,12 @@ what the agent reported, against SC-A3's list:
 | Konosu 1902 `c3/c36ae8c62a1c` | both missed | no | no |
 | Fei Xiaotong 1936 `67/675c43301bf7` | new: in neither arm | yes | yes |
 
-Surfaced (printed or found): 10 of the 12 premodern-question sources; reported: 8 of 12, and one new (Fei, Kaixiangong, "few
-belts are above six mow ... most of them are not more than one or two mow"). Three the command printed were never opened
-(Huizhou, Yayoi, Hattori); about 159 found sources were never printed (three calls under the key).
+Printed by the command: 6 of the 12 (Shizuoka, Huizhou, Yayoi, King, Taipingqiao, Hattori); with the agent's own greps and record
+0005, 10 of 12 surfaced; reported: 7 of 12 - the same count as arm T - plus one new source neither arm found (Fei, Kaixiangong,
+"few belts are above six mow ... most of them are not more than one or two mow"). Three the command printed were never opened
+(Huizhou, Yayoi, Hattori); Ofuro and Konosu were neither printed nor found. The agent's report says the key "still holds about
+159 sources that were never printed" (three calls under the key); this record does not hold that count otherwise.
 
-**SC-A3: partly met.** The command surfaced more of the list than either arm, but the agent read only part of what it printed,
+**SC-A3: partly met.** The search surfaced more of the list than either arm, but the agent read only part of what it printed - the
+contract already said to read what the command names -
 and its tokens and time (63,827, 223 s) were above both arms' (51,261 and 59,011; 127 s and 201 s).

@@ -25,7 +25,11 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
   the meaning search and the text search over the record and the archive in one call, each source printed once with its best
   passage and what found it (feature 447 amendment 3 - each search found sources the other missed). Give every term set in each
   language you will search (romanized, kanji / hanzi, English); run it again under the same KEY with new wordings, and it
-  prints only sources not yet shown. Read the archived texts it names; `make archive-find URL=` / `KEY=` still answers "is this
+  prints only sources not yet shown. Before you stop or go to the web, OPEN every source it printed whose passage bears on the
+  question (a passage in another language is read, not skipped), and call it again with the same arguments - the next batch - until
+  a batch adds nothing that bears on it: the command finds more than one call prints, and a source it printed but you never opened
+  is a source missed (feature 447's validation, 2026-10-30: three printed sources on the question were never opened). Read the
+  archived texts it names; `make archive-find URL=` / `KEY=` still answers "is this
   page archived?". Every page the project has cited is archived; a page found there is not fetched again.
 - **Every page you read goes on the sources-consulted ledger**: fetch a web page with `make source-pages OUT=/tmp/l7r-pass/<slug>
   URL=<url> QUESTION=<NNNN or none> SOUGHT="<what you look for in it>"` (it prints the page's earlier reads and attempts first,
