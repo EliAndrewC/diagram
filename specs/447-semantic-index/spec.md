@@ -83,7 +83,7 @@ As feature 437 reported it: `make feature-report F=447`.
 
 - 2026-10-30, round 1 (spec-fidelity, MODE 2, `make trial-review F=447`): CHANGES REQUIRED - the verdict "set down" is the
   branch of the rule the measurement took and keeping the index until the GM chooses is LEGITIMATE; three figures fixed (four,
-  not five, ranked first or second; 275 MiB; the build's measured rate in "Resuming") and the one-shot timings labeled, in
+  not five, ranked first or second; the size in MiB; the build's measured rate in "Resuming") and the one-shot timings labeled, in
   `b8c0be19c`.
 - 2026-10-30, round 2 (spec-fidelity, MODE 3 on `b8c0be19c`): FAITHFUL - each fix re-derived from the JSON and the time output.
   Owed: the GM's choice, put as an offer through escalation-check: the tooling and the index removed per the rule (restorable from
