@@ -1,0 +1,170 @@
+[
+ {
+  "truth": "2b/2b106432097b",
+  "q_lang": "en",
+  "passage_rank": 7,
+  "file_rank": 6,
+  "page_rank": 1
+ },
+ {
+  "truth": "5c/5c56a8ffcc30",
+  "q_lang": "en",
+  "passage_rank": 10,
+  "file_rank": 7,
+  "page_rank": 1
+ },
+ {
+  "truth": "7e/7ea522445c8c",
+  "q_lang": "en",
+  "passage_rank": 1,
+  "file_rank": 1,
+  "page_rank": 4
+ },
+ {
+  "truth": "6e/6e2b3e8f080c",
+  "q_lang": "en",
+  "passage_rank": 2,
+  "file_rank": 2,
+  "page_rank": 3
+ },
+ {
+  "truth": "1d/1d6eded5f7e6",
+  "q_lang": "en",
+  "passage_rank": 6,
+  "file_rank": 5,
+  "page_rank": 1
+ },
+ {
+  "truth": "fd/fd80f6d7ed33",
+  "q_lang": "en",
+  "passage_rank": 1,
+  "file_rank": 1,
+  "page_rank": 8
+ },
+ {
+  "truth": "71/71b5f74369cc",
+  "q_lang": "en",
+  "passage_rank": 2,
+  "file_rank": 2,
+  "page_rank": 6
+ },
+ {
+  "truth": "1e/1e4316f6bb18",
+  "q_lang": "en",
+  "passage_rank": 5,
+  "file_rank": 4,
+  "page_rank": 1
+ },
+ {
+  "truth": "42/4288c884928c",
+  "q_lang": "en",
+  "passage_rank": 24,
+  "file_rank": 10,
+  "page_rank": 3
+ },
+ {
+  "truth": "f4/f4eeeca27b8b",
+  "q_lang": "en",
+  "passage_rank": 11,
+  "file_rank": 9,
+  "page_rank": 1
+ },
+ {
+  "truth": "67/67dc5aaf3516",
+  "q_lang": "en",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 13
+ },
+ {
+  "truth": "67/67dc5aaf3516",
+  "q_lang": "ja",
+  "passage_rank": 1,
+  "file_rank": 1,
+  "page_rank": 31
+ },
+ {
+  "truth": "05/052e5a087064",
+  "q_lang": "en",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 1
+ },
+ {
+  "truth": "05/052e5a087064",
+  "q_lang": "ja",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 5
+ },
+ {
+  "truth": "3e/3e64bd55f251",
+  "q_lang": "en",
+  "passage_rank": 58,
+  "file_rank": 37,
+  "page_rank": 1
+ },
+ {
+  "truth": "3e/3e64bd55f251",
+  "q_lang": "ja",
+  "passage_rank": 1,
+  "file_rank": 1,
+  "page_rank": 183
+ },
+ {
+  "truth": "4a/4a0919d8aa81",
+  "q_lang": "en",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 5
+ },
+ {
+  "truth": "4a/4a0919d8aa81",
+  "q_lang": "ja",
+  "passage_rank": 15,
+  "file_rank": 9,
+  "page_rank": 177
+ },
+ {
+  "truth": "b5/b597771536b4",
+  "q_lang": "en",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 1
+ },
+ {
+  "truth": "b5/b597771536b4",
+  "q_lang": "ja",
+  "passage_rank": 2,
+  "file_rank": 2,
+  "page_rank": 5
+ },
+ {
+  "truth": "f4/f4285e6ee539",
+  "q_lang": "en",
+  "passage_rank": 41,
+  "file_rank": 23,
+  "page_rank": 1
+ },
+ {
+  "truth": "f4/f4285e6ee539",
+  "q_lang": "ja",
+  "passage_rank": 1,
+  "file_rank": 1,
+  "page_rank": 8
+ },
+ {
+  "truth": "3c/3c4a00e776c7",
+  "q_lang": "en",
+  "passage_rank": null,
+  "file_rank": null,
+  "page_rank": 10
+ },
+ {
+  "truth": "3c/3c4a00e776c7",
+  "q_lang": "ja",
+  "passage_rank": 8,
+  "file_rank": 5,
+  "page_rank": 46
+ }
+]

@@ -1,0 +1,189 @@
+[
+ {
+  "question": "How big and how deep were the fish ponds of a dike-pond district?",
+  "lang": "en",
+  "terms": "fish pond|depth",
+  "truth": "2b/2b106432097b",
+  "semantic_rank": 7,
+  "record_page_rank": 1,
+  "text_hits": 12,
+  "text_holds_truth": true,
+  "seconds": 1.21
+ },
+ {
+  "question": "How wide was the moat around a Chinese walled county town?",
+  "lang": "en",
+  "terms": "moat|width",
+  "truth": "5c/5c56a8ffcc30",
+  "semantic_rank": 10,
+  "record_page_rank": 1,
+  "text_hits": 44,
+  "text_holds_truth": true,
+  "seconds": 1.09
+ },
+ {
+  "question": "How much more water does a hard-working horse need?",
+  "lang": "en",
+  "terms": "horse|water",
+  "truth": "7e/7ea522445c8c",
+  "semantic_rank": 1,
+  "record_page_rank": 4,
+  "text_hits": 106,
+  "text_holds_truth": true,
+  "seconds": 1.45
+ },
+ {
+  "question": "How were Japanese earthen compound walls built?",
+  "lang": "en",
+  "terms": "earthen wall",
+  "truth": "6e/6e2b3e8f080c",
+  "semantic_rank": 2,
+  "record_page_rank": 3,
+  "text_hits": 17,
+  "text_holds_truth": true,
+  "seconds": 0.73
+ },
+ {
+  "question": "Why would a ditch be dug across a slope rather than down it?",
+  "lang": "en",
+  "terms": "ditch|slope",
+  "truth": "1d/1d6eded5f7e6",
+  "semantic_rank": 6,
+  "record_page_rank": 1,
+  "text_hits": 34,
+  "text_holds_truth": true,
+  "seconds": 1.07
+ },
+ {
+  "question": "Were there narrow alleys running between the main lanes of old Beijing?",
+  "lang": "en",
+  "terms": "alley|Beijing",
+  "truth": "fd/fd80f6d7ed33",
+  "semantic_rank": 1,
+  "record_page_rank": 8,
+  "text_hits": 27,
+  "text_holds_truth": true,
+  "seconds": 0.92
+ },
+ {
+  "question": "How were the bridges along a canal towpath built?",
+  "lang": "en",
+  "terms": "towpath|bridge",
+  "truth": "71/71b5f74369cc",
+  "semantic_rank": 2,
+  "record_page_rank": 6,
+  "text_hits": 3,
+  "text_holds_truth": true,
+  "seconds": 1.04
+ },
+ {
+  "question": "Which torii is the first one on a shrine's approach?",
+  "lang": "en",
+  "terms": "torii|first",
+  "truth": "1e/1e4316f6bb18",
+  "semantic_rank": 5,
+  "record_page_rank": 1,
+  "text_hits": 15,
+  "text_holds_truth": true,
+  "seconds": 1.19
+ },
+ {
+  "question": "How much labor did making ramie cloth take?",
+  "lang": "en",
+  "terms": "ramie|labour",
+  "truth": "42/4288c884928c",
+  "semantic_rank": null,
+  "record_page_rank": 3,
+  "text_hits": 5,
+  "text_holds_truth": true,
+  "seconds": 0.97
+ },
+ {
+  "question": "Did Chinese farm households keep pigs beneath the privy?",
+  "lang": "en",
+  "terms": "pig|toilet",
+  "truth": "f4/f4eeeca27b8b",
+  "semantic_rank": null,
+  "record_page_rank": 1,
+  "text_hits": 15,
+  "text_holds_truth": true,
+  "seconds": 0.96
+ },
+ {
+  "question": "How wide was the alley between the back-row tenements in Edo?",
+  "lang": "ja",
+  "terms": "alley|tenement",
+  "truth": "67/67dc5aaf3516",
+  "semantic_rank": null,
+  "record_page_rank": null,
+  "text_hits": 6,
+  "text_holds_truth": false,
+  "seconds": 0.85
+ },
+ {
+  "question": "How was the size of a farmhouse's threshing yard reckoned?",
+  "lang": "ja",
+  "terms": "threshing yard|mat",
+  "truth": "05/052e5a087064",
+  "semantic_rank": null,
+  "record_page_rank": 1,
+  "text_hits": 0,
+  "text_holds_truth": false,
+  "seconds": 0.77
+ },
+ {
+  "question": "How many public bathhouses did Edo have in the early nineteenth century?",
+  "lang": "ja",
+  "terms": "bathhouse|Edo",
+  "truth": "3e/3e64bd55f251",
+  "semantic_rank": null,
+  "record_page_rank": 1,
+  "text_hits": 5,
+  "text_holds_truth": false,
+  "seconds": 1.23
+ },
+ {
+  "question": "How many cedar trees stood in a Tonami farmstead grove?",
+  "lang": "ja",
+  "terms": "cedar|Tonami",
+  "truth": "4a/4a0919d8aa81",
+  "semantic_rank": null,
+  "record_page_rank": 5,
+  "text_hits": 5,
+  "text_holds_truth": false,
+  "seconds": 0.83
+ },
+ {
+  "question": "How long were the climbing kilns at Arita?",
+  "lang": "ja",
+  "terms": "climbing kiln|Arita",
+  "truth": "b5/b597771536b4",
+  "semantic_rank": null,
+  "record_page_rank": 1,
+  "text_hits": 2,
+  "text_holds_truth": false,
+  "seconds": 0.93
+ },
+ {
+  "question": "How long before the rice harvest was the paddy's water let off?",
+  "lang": "ja",
+  "terms": "drain|harvest",
+  "truth": "f4/f4285e6ee539",
+  "semantic_rank": null,
+  "record_page_rank": 1,
+  "text_hits": 78,
+  "text_holds_truth": false,
+  "seconds": 1.25
+ },
+ {
+  "question": "How large was the main house of a samurai residence in Matsue?",
+  "lang": "ja",
+  "terms": "Matsue|samurai",
+  "truth": "3c/3c4a00e776c7",
+  "semantic_rank": null,
+  "record_page_rank": 10,
+  "text_hits": 3,
+  "text_holds_truth": false,
+  "seconds": 0.96
+ }
+]
