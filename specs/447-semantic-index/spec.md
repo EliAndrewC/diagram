@@ -4,10 +4,8 @@
 
 **Created**: 2026-10-29
 
-**Status**: Done - set down by its rule (`research/t01-evidence.md`, section 4): it found what today's search missed on one of 17
-questions, an English question found none of seven Japanese answers in its first ten, and a search from the command line took
-3.5 s; an update took 3 s. The tooling and the index stay in place until the GM chooses: removed per the rule, or kept under an
-amended rule.
+**Status**: Running - amendment 1 (the GM, 2026-10-30): the first rule's verdict, set down, stands as measured; a third
+measurement on a real research question, by tokens and time, before the GM decides.
 
 **Affects**: tooling
 
@@ -61,6 +59,22 @@ The build is long (about 120,700 passages; the full build took 8 h 42 min, about
 2. The comparison: a handful of past research questions whose answers the record already holds (the passages that answered them
    known), each asked through the index and through today's text search; for each, which of the known passages each finds in its
    first results, and what it finds that the other does not.
+
+## Amendment 1 - a real research question, by tokens and time (the GM, 2026-10-30, `request.md`)
+
+The GM: token use counts above wall-clock time, and a question is asked in every language the corpus holds, whichever search is
+used. The corpus (one-shot count 2026-10-30, by script of each archived text's first 20,000 characters): 3,629 texts - 2,346
+Japanese, 608 Chinese, 673 English or other Latin-script, 2 Korean.
+
+3. **The research question** of feature 444 FR-018 - how large a single paddy plot was, typically and at its largest, in a
+   premodern farming village of China and of Japan - searched by two `research-pass` agents with the same brief, the same
+   languages (English, Japanese, Chinese) and the same stopping rule, confined to the record and the archive (no web, so the one
+   difference is the search): arm T with today's search (`make archive-find`, Grep, Read), arm S with the same plus
+   `make semantic-find`. Measured: each arm's tokens and wall time (the agent's own usage), its searches by kind, and its findings;
+   a third agent, blind to which arm is which, judges the two reports' findings against the archive.
+
+**The rule for amendment 1**: none set by the trial - the GM decides, on the measurement: keep the index (the tooling, the index
+and a way to ask in every corpus language), or remove it per the first rule.
 
 ## The rule
 
