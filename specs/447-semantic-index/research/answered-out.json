@@ -1,0 +1,632 @@
+[
+ {
+  "page": "0009",
+  "question": "What stage should the rice fields be at on my map, and should it show the different crops and the midsummer draining or just one snapshot?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "rice",
+     "draining"
+    ],
+    "pages": 16,
+    "found": true
+   },
+   {
+    "terms": [
+     "paddy",
+     "midsummer"
+    ],
+    "pages": 3,
+    "found": true
+   },
+   {
+    "terms": [
+     "rice",
+     "crop"
+    ],
+    "pages": 59,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.26
+ },
+ {
+  "page": "0018",
+  "question": "In a delta village that farms fish, what share of the ground is open water and what share is raised bank, and what grows on the banks?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "fish",
+     "dike"
+    ],
+    "pages": 16,
+    "found": true
+   },
+   {
+    "terms": [
+     "fishpond",
+     "embankment"
+    ],
+    "pages": 4,
+    "found": true
+   },
+   {
+    "terms": [
+     "delta",
+     "fish"
+    ],
+    "pages": 15,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.02
+ },
+ {
+  "page": "0043",
+  "question": "Where did a farm keep its winter fuel supply, and what fraction of households had a separate building just for it?",
+  "semantic_page_rank": 3,
+  "text_tries": [
+   {
+    "terms": [
+     "firewood",
+     "shed"
+    ],
+    "pages": 28,
+    "found": true
+   },
+   {
+    "terms": [
+     "fuel",
+     "storage"
+    ],
+    "pages": 8,
+    "found": true
+   },
+   {
+    "terms": [
+     "firewood"
+    ],
+    "pages": 41,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.35
+ },
+ {
+  "page": "0048",
+  "question": "How big a shelter would a farmer build for his plow animal, and roughly what share of the village even owned one?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "ox",
+     "shed"
+    ],
+    "pages": 88,
+    "found": true
+   },
+   {
+    "terms": [
+     "draft animal",
+     "stable"
+    ],
+    "pages": 5,
+    "found": true
+   },
+   {
+    "terms": [
+     "cattle",
+     "barn"
+    ],
+    "pages": 5,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.31
+ },
+ {
+  "page": "0065",
+  "question": "Where would villagers do their laundry and rinse their vegetables, and how did a town set that up along its water?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "laundry",
+     "wash"
+    ],
+    "pages": 4,
+    "found": false
+   },
+   {
+    "terms": [
+     "washing",
+     "steps"
+    ],
+    "pages": 2,
+    "found": true
+   },
+   {
+    "terms": [
+     "laundry"
+    ],
+    "pages": 6,
+    "found": false
+   }
+  ],
+  "text_found_on_try": 2,
+  "seconds": 0.98
+ },
+ {
+  "page": "0068",
+  "question": "How wide should a farm irrigation channel be compared to a river or a castle moat, and what do I do when the narrowest ones are too thin to see on the map?",
+  "semantic_page_rank": 6,
+  "text_tries": [
+   {
+    "terms": [
+     "irrigation",
+     "channel",
+     "width"
+    ],
+    "pages": 27,
+    "found": true
+   },
+   {
+    "terms": [
+     "canal",
+     "moat"
+    ],
+    "pages": 25,
+    "found": true
+   },
+   {
+    "terms": [
+     "irrigation",
+     "ditch"
+    ],
+    "pages": 33,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.02
+ },
+ {
+  "page": "0086",
+  "question": "If a big river on the highway has no bridge, how do travelers get across, and why would a ruler leave it unbridged?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "ferry",
+     "bridge"
+    ],
+    "pages": 5,
+    "found": true
+   },
+   {
+    "terms": [
+     "unbridged",
+     "river"
+    ],
+    "pages": 3,
+    "found": true
+   },
+   {
+    "terms": [
+     "ferry",
+     "ford"
+    ],
+    "pages": 3,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.07
+ },
+ {
+  "page": "0100",
+  "question": "What did people do to stop timber buildings burning down, and how would an office keep its records safe from a blaze?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "fire",
+     "archive"
+    ],
+    "pages": 55,
+    "found": true
+   },
+   {
+    "terms": [
+     "fireproof",
+     "records"
+    ],
+    "pages": 3,
+    "found": true
+   },
+   {
+    "terms": [
+     "fire",
+     "tile"
+    ],
+    "pages": 43,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.17
+ },
+ {
+  "page": "0124",
+  "question": "Do the farmers who work the land around a market town live inside it, or out among their plots?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "market town",
+     "farmers"
+    ],
+    "pages": 6,
+    "found": false
+   },
+   {
+    "terms": [
+     "rural",
+     "residence",
+     "plots"
+    ],
+    "pages": 12,
+    "found": false
+   },
+   {
+    "terms": [
+     "farmers",
+     "live"
+    ],
+    "pages": 71,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 3,
+  "seconds": 1.11
+ },
+ {
+  "page": "0134",
+  "question": "How many houses does a county seat have, and how long a stretch of road would they line, and how long around could its enclosure be?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "county seat",
+     "households"
+    ],
+    "pages": 29,
+    "found": true
+   },
+   {
+    "terms": [
+     "county",
+     "wall",
+     "li"
+    ],
+    "pages": 110,
+    "found": true
+   },
+   {
+    "terms": [
+     "xian",
+     "houses"
+    ],
+    "pages": 69,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.01
+ },
+ {
+  "page": "0153",
+  "question": "What does a wealthy family's house in a northern Chinese city look like, with its yards and the buildings around them, and how deep could it run?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "courtyard",
+     "siheyuan"
+    ],
+    "pages": 15,
+    "found": true
+   },
+   {
+    "terms": [
+     "courtyard",
+     "northern",
+     "house"
+    ],
+    "pages": 12,
+    "found": true
+   },
+   {
+    "terms": [
+     "courtyard",
+     "depth"
+    ],
+    "pages": 23,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.29
+ },
+ {
+  "page": "0181",
+  "question": "How much circumference of rampart does a city of a few thousand need, and do many residents live out past the gates?",
+  "semantic_page_rank": 4,
+  "text_tries": [
+   {
+    "terms": [
+     "wall",
+     "circumference"
+    ],
+    "pages": 6,
+    "found": false
+   },
+   {
+    "terms": [
+     "suburb",
+     "gates"
+    ],
+    "pages": 18,
+    "found": true
+   },
+   {
+    "terms": [
+     "rampart",
+     "li"
+    ],
+    "pages": 33,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 2,
+  "seconds": 1.33
+ },
+ {
+  "page": "0198",
+  "question": "Where would a town turn raw pig iron from the mountain furnaces into workable bar, and what would that workshop look like?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "pig iron",
+     "bar"
+    ],
+    "pages": 1,
+    "found": true
+   },
+   {
+    "terms": [
+     "refining",
+     "forge"
+    ],
+    "pages": 4,
+    "found": true
+   },
+   {
+    "terms": [
+     "iron",
+     "finery"
+    ],
+    "pages": 2,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.35
+ },
+ {
+  "page": "0207",
+  "question": "Where would a village make its rice wine, and how big was the building?",
+  "semantic_page_rank": 2,
+  "text_tries": [
+   {
+    "terms": [
+     "sake",
+     "brewing"
+    ],
+    "pages": 5,
+    "found": true
+   },
+   {
+    "terms": [
+     "rice wine",
+     "brewery"
+    ],
+    "pages": 0,
+    "found": false
+   },
+   {
+    "terms": [
+     "sake"
+    ],
+    "pages": 34,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.25
+ },
+ {
+  "page": "0215",
+  "question": "Does every village have its own guardian god, and how much land would its sacred grove and grounds take up?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "shrine",
+     "grove"
+    ],
+    "pages": 16,
+    "found": true
+   },
+   {
+    "terms": [
+     "tutelary",
+     "god"
+    ],
+    "pages": 10,
+    "found": true
+   },
+   {
+    "terms": [
+     "ujigami",
+     "chinju"
+    ],
+    "pages": 4,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.26
+ },
+ {
+  "page": "0216",
+  "question": "Would a town or a big city have its own principal holy site, where would it stand, and how large would it be?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "shrine",
+     "town",
+     "principal"
+    ],
+    "pages": 13,
+    "found": true
+   },
+   {
+    "terms": [
+     "city god",
+     "temple"
+    ],
+    "pages": 9,
+    "found": true
+   },
+   {
+    "terms": [
+     "ichinomiya",
+     "shrine"
+    ],
+    "pages": 1,
+    "found": false
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.08
+ },
+ {
+  "page": "0236",
+  "question": "Where does a village put its graves: in the temple yard, out in the fields, or beside the family house?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "graves",
+     "village"
+    ],
+    "pages": 23,
+    "found": true
+   },
+   {
+    "terms": [
+     "burial",
+     "cemetery"
+    ],
+    "pages": 4,
+    "found": false
+   },
+   {
+    "terms": [
+     "tomb",
+     "temple"
+    ],
+    "pages": 5,
+    "found": true
+   }
+  ],
+  "text_found_on_try": 1,
+  "seconds": 1.0
+ },
+ {
+  "page": "0281",
+  "question": "How far could a merchant haul cheap bulky cargo like timber or charcoal before the cost of carrying ate up the value?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "transport",
+     "cost",
+     "timber"
+    ],
+    "pages": 10,
+    "found": false
+   },
+   {
+    "terms": [
+     "overland",
+     "charcoal"
+    ],
+    "pages": 2,
+    "found": true
+   },
+   {
+    "terms": [
+     "freight",
+     "bulk"
+    ],
+    "pages": 2,
+    "found": false
+   }
+  ],
+  "text_found_on_try": 2,
+  "seconds": 1.24
+ },
+ {
+  "page": "0306",
+  "question": "How much money did the village metalworker who makes sickles and hoes take home, and how many people worked in his shop?",
+  "semantic_page_rank": 1,
+  "text_tries": [
+   {
+    "terms": [
+     "blacksmith",
+     "sickle"
+    ],
+    "pages": 0,
+    "found": false
+   },
+   {
+    "terms": [
+     "smith",
+     "wage"
+    ],
+    "pages": 11,
+    "found": true
+   },
+   {
+    "terms": [
+     "metalworker",
+     "income"
+    ],
+    "pages": 0,
+    "found": false
+   }
+  ],
+  "text_found_on_try": 2,
+  "seconds": 1.45
+ }
+]
