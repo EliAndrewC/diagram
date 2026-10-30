@@ -125,16 +125,25 @@ wordings) and 10 were seen and dropped - the passage the search printed was not 
 line on "premodern". The GM chose the two fixes for the dropped half; the third (wordings) is left until a general solution is in
 hand.
 
-- **FR-A4-1, the passages that answer.** `make research-search` prints, for each source, up to three passages: its nearest by
-  meaning, the text around its term-set hits, and the passage of its text where a number with a unit of measure stands nearest the
-  question's terms (a unit list in both scripts' forms: tan, se, bu, tsubo, cho, mu, qing, qiu, m², hectare, acre, foot, ken and
-  their kanji / hanzi) - so a source whose size sits away from its best-matching passage shows the size.
-- **FR-A4-2, the searcher reports, the checks rule.** The `research-pass` contract reports every source that gives the thing
-  asked, with the period its evidence describes and what it measures (a register parcel, a holding, a planned plot, a single
-  field), whatever its date: the premodern window decides the verdict, never whether a source is listed; whether a finding applies
-  is the record's checks' to rule (CLAUDE.md, "Research").
-- **SC-A4.** The validation of SC-A3 is run once more under the same brief and a fresh key; its sources are reported against the
-  same list, beside the earlier runs, as `research/t04-validation.md` does.
+- **FR-A4-1, the passages that answer** (the first suggestion, `research/t05-why.md`, "What this points to"). `make
+  research-search` prints, for each source, its two best passages by meaning, the text around its term-set hit, and up to two
+  passages where a number with a unit of measure stands nearest the question's terms, those that the others do not already show.
+  NUMBERS: digits, kanji and hanzi numerals including the formal (大写) forms, English number words ("twenty", "half an").
+  UNITS, the forms the archive's cases use: 反 段 畝 歩 步 坪 町 亩 頃 顷 坵 丘 分 厘 毫 間 尺 丈 ㎡ m² 平方メートル 平方米, hectare, acre,
+  foot, yard, square feet/yards/meters, mow, mu, tan, se, bu, tsubo, cho, ken, qing, qiu. The check is a test of the four cases
+  that motivated it, their answering sentences verbatim beside a distractor each page holds: Hattori ("10㎡ほど ... 180㎡"),
+  Ofuro ("1区画3-5㎡"), the Huizhou parcel ("额田柒分壹厘伍毫") and Bray ("a field twenty yards square"); it fails if the answer
+  is not among the measures printed.
+- **FR-A4-2, the searcher reports, the checks rule** (the second suggestion). The `research-pass` contract lists every source
+  that gives the thing asked (a size, a count, a distance), whatever its date or kind, with the period its evidence describes and
+  what it measures (a register parcel, a holding, a planned plot, a single field). The premodern window sets only the verdict
+  word; it never removes or downgrades a listed source - whether a finding applies is the record's checks' to rule (CLAUDE.md,
+  "Research"). The lines that change: a new rule "Report, do not filter" beside "The date of the evidence"; "Do not pad" (a
+  source outside the period is still listed); and reply item 1 ("For each source that gives the thing asked").
+- **SC-A4.** The validation of SC-A3 is run once more under the same brief and a fresh key, and reported in `t05-why.md`'s terms -
+  for each target source, SEEN, OPENED and REPORTED - so the seen-then-dropped count, the half these fixes address, stands apart
+  from the never-seen half they leave. A source reported off the list (Buck, Bray, the modern 3-tan standard `71/71ad2d8933fa`)
+  is not a fault: under FR-A4-2 it is what the pass should list.
 
 ## The rule
 

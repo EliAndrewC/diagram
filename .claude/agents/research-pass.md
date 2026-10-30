@@ -58,7 +58,7 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
 
 Compact, and only what bears on the question:
 
-1. For each source that bears on it: a public URL (or the archived copy's name), the period its evidence describes, and the
+1. For each source that gives the thing asked, whatever its date (above): a public URL (or the archived copy's name), the period its evidence describes, and the
    VERBATIM passage with its marked translation.
 2. One paragraph, your reading, opening with one verdict word: **ATTESTED** (what is shown, where, when), **ATTESTED ONLY FOR**
    <the narrower case> (say which), **NOT ATTESTED** (the evidence points the other way - give those passages), or **SILENT**

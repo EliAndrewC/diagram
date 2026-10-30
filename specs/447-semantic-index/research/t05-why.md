@@ -34,3 +34,12 @@ Thirteen losses before the source was seen, ten after: the two halves weigh abou
 Each run wrote its own wordings and terms, and a source turns up only for the words that reach it: T, with text search alone and
 its own terms, never met Hattori, Ofuro, Konosu or Bray; Konosu was seen once in four runs, Ofuro once. Which sources a run meets
 depends on the words its agent happens to choose.
+
+## What this points to (as put to the GM, 2026-10-30, verbatim)
+
+**What this points to fixing,** none of which is "run two agents":
+- **Show the passage that holds the answer.** For each source, print its two or three best passages, plus any passage where a number with a unit (tan, se, mu, m²) sits near the question's terms. That attacks the largest group of drops directly.
+- **Don't let the agent decide scope.** The brief would say to report every size found, with its date and what it measures, and leave out nothing for being too early or too late. That matches your rule that whether a finding applies is for the record's checks to decide, not the searcher. It removes the scope drops entirely.
+- **Make discovery less dependent on one agent's wording.** For example, the brief or the tool could require a few standard wordings per language (the measure units, "plot", "parcel", "field"). Of the three, this is the least certain fix.
+
+The GM chose the first two and left the third (`request.md`, amendment 4).

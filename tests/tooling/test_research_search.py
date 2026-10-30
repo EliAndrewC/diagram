@@ -107,14 +107,46 @@ def test_main_asks_for_something_says_when_there_is_no_index_and_prints_the_merg
     assert "1 more not printed" in capsys.readouterr().out
 
 
-def test_a_source_shows_the_measure_nearest_the_terms_when_its_best_passage_holds_none() -> None:
-    body = "a field of 3 se lay idle. " + "the floor of the paddy was uneven and cracked. " * 20 + "the largest plot was one tan of paddy, the smallest 10 ㎡ of paddy."
-    s, e = rs.measure_passage(body, ["paddy", "plot", "largest"]) or (0, 0)
-    assert "one tan" not in body[s:e] or "largest" in body[s:e], "the measure among the terms, not the first one"
-    assert "10 ㎡" in body[s:e] or "tan" in body[s:e]
-    assert rs.measure_passage("no numbers here", ["paddy"]) is None
-    assert rs.MEASURE.search("一反八畝一歩") and rs.MEASURE.search("1.4亩") and rs.MEASURE.search("twenty yards square") and rs.MEASURE.search("half an acre")
-    assert rs.MEASURE.search("31 by 40 feet") and rs.MEASURE.search("0.39 hectares")
+# THE CASES THE MEASURE PASSAGE EXISTS FOR (feature 447 amendment 4, `specs/447-semantic-index/research/t05-why.md`): each run was
+# shown a passage without the size and passed over the source. Their answering sentences, verbatim from the archive, each set among
+# a distractor the real page also holds - the test fails if the answer is not among the measures printed.
+CASES = [
+    (
+        "Hattori 97/97f6d769ce72",
+        "おおよそ約2万㎡の広さに及びます。" + "水田跡の周辺。" * 30 + "畦によって区切られた水田の広さは、小さいもので10㎡ほど、大きいもので180㎡程度で、全体に小さな区画の水田でした。",
+        ["水田"],
+        "10㎡ほど",
+    ),
+    ("Ofuro 10/100916836bb9", "国土づくりの歴史 大きな第一歩であった。" + "水田の誕生。" * 30 + "御布呂遺跡から発見された古墳期の水田(左〕は、1区画3-5㎡で、インドネシアの", ["水田", "区画"], "3-5㎡"),
+    (
+        "Huizhou 04/04c46c135344",
+        "其名下佃种的土地总计5号，共2.872亩。" + "鱼鳞图册的记载。" * 30 + "鳞册开载项守之等额田柒分壹厘伍毫，四户分庄共少柒丝肆忽。共积壹百陆拾步壹分陆厘",
+        ["田", "亩"],
+        "柒分壹厘伍毫",
+    ),
+    (
+        "Bray 3c/3cf980c9fd08",
+        "rice was domesticated 10,000 years ago in marshy areas. "
+        + "the water supply was regulated. " * 30
+        + "paddies were usually small by Western standards: a field twenty yards square would be considered large",
+        ["field", "paddy"],
+        "twenty yards",
+    ),
+]
+
+
+@pytest.mark.parametrize(("name", "body", "terms", "answer"), CASES, ids=[c[0] for c in CASES])
+def test_the_measures_printed_hold_the_answer_the_runs_passed_over(name: str, body: str, terms: list[str], answer: str) -> None:
+    spans = rs.measure_passages(body, terms)
+    assert len(spans) <= rs.PASSAGES and any(answer in body[s:e] for s, e in spans), f"{name}: {[body[s:e] for s, e in spans]}"
+
+
+def test_measures_do_not_overlap_and_a_text_without_one_has_none() -> None:
+    body = "3 se and 4 se of paddy. " + "x" * 600 + " 5 tan of paddy plot."
+    spans = rs.measure_passages(body, ["paddy", "plot"])
+    assert len(spans) == 2 and spans[0][1] <= spans[1][0] or spans[1][1] <= spans[0][0]
+    assert rs.measure_passages("no numbers here", ["paddy"]) == []
+    assert rs.MEASURE.search("31 by 40 feet") and rs.MEASURE.search("0.39 hectares") and rs.MEASURE.search("half an acre")
 
 
 def test_render_adds_the_measure_line_only_when_the_shown_passages_lack_it(tmp_path: pathlib.Path) -> None:
@@ -123,8 +155,8 @@ def test_render_adds_the_measure_line_only_when_the_shown_passages_lack_it(tmp_p
     (root / si.QUESTIONS).mkdir(parents=True)
     body = "the paddy floor was cracked and uneven. " * 30 + "each plot of paddy measured 18 m2 at most."
     (archive / "ab" / "x1" / "t" / "text.txt").write_text(body)
-    row = {"source": "ab/x1", "by": {"index"}, "passages": {"index": (1, "ab/x1/t/text.txt", 0, 900)}}
+    row = {"source": "ab/x1", "by": {"index"}, "passages": {"index": [("ab/x1/t/text.txt", 0, 900)]}}
     lines = rs.render(archive, root, [row], ["plot", "paddy"])
     assert any(line.lstrip().startswith("measure:") and "18 m2" in line for line in lines)
-    near = {"source": "ab/x1", "by": {"index"}, "passages": {"index": (1, "ab/x1/t/text.txt", len(body) - 100, len(body))}}
+    near = {"source": "ab/x1", "by": {"index"}, "passages": {"index": [("ab/x1/t/text.txt", len(body) - 100, len(body))]}}
     assert not any("measure:" in line for line in rs.render(archive, root, [near], ["plot"])), "already shown, not repeated"

@@ -42,6 +42,7 @@ CHUNK = 20000  # passages scored at once, so the whole index is never held at fu
 SEEN_DIR = "search-seen"
 SEEN_DAYS = 1  # how long a key remembers what it printed: one question's session of searching, then forgotten
 SNIPPET = 240
+PASSAGES = 2  # passages a source shows by meaning, and measures it shows: one passage was the wrong one in ten drops (t05-why.md)
 
 Hit = tuple[str, str, int, int]  # (source, path, start, end)
 
@@ -68,7 +69,8 @@ def load_index(out_dir: pathlib.Path) -> tuple[np.ndarray, list[str], np.ndarray
 
 
 def meaning(index: tuple[np.ndarray, list[str], np.ndarray], questions: Sequence[str], embed: si.Embed, per: int = PER_QUESTION) -> list[list[Hit]]:
-    """For each question, its nearest sources (their nearest passage each), nearest first."""
+    """For each question, its nearest sources, nearest first, each with up to PASSAGES of its nearest passages (a source's second
+    passage listed after its first, the source's rank its first's)."""
     vecs, paths, spans = index
     if not questions or not paths:
         return [[] for _ in questions]
@@ -76,16 +78,14 @@ def meaning(index: tuple[np.ndarray, list[str], np.ndarray], questions: Sequence
     sims = np.concatenate([vecs[i : i + CHUNK].astype(np.float32) @ q.T for i in range(0, len(paths), CHUNK)])
     out = []
     for j in range(len(questions)):
-        hits: list[Hit] = []
-        seen: set[str] = set()
-        for i in np.argsort(-sims[:, j]):
+        by_src: dict[str, list[Hit]] = {}
+        for i in np.argsort(-sims[:, j])[: per * 20]:
             src = source_of(paths[i])
-            if src not in seen:
-                seen.add(src)
-                hits.append((src, paths[i], int(spans[i][0]), int(spans[i][1])))
-                if len(hits) >= per:
-                    break
-        out.append(hits)
+            if src in by_src or len(by_src) < per:
+                got = by_src.setdefault(src, [])
+                if len(got) < PASSAGES:
+                    got.append((src, paths[i], int(spans[i][0]), int(spans[i][1])))
+        out.append([h for hits in by_src.values() for h in hits])
     return out
 
 
@@ -144,23 +144,28 @@ def fuse(meaning_lists: Sequence[Sequence[Hit]], text_lists: Sequence[Sequence[H
     rows: dict[str, dict[str, Any]] = {}
     for kind, lists in (("index", meaning_lists), ("text", text_lists)):
         for hits in lists:
-            for rank, (src, rel, s, e) in enumerate(hits, 1):
+            ranked: list[str] = []
+            for src, rel, s, e in hits:
                 row = rows.setdefault(src, {"source": src, "score": 0.0, "by": set(), "passages": {}})
-                row["score"] += 1.0 / (FUSE + rank)
+                if src not in ranked:
+                    ranked.append(src)
+                    row["score"] += 1.0 / (FUSE + len(ranked))
                 row["by"].add(kind)
-                if kind not in row["passages"] or rank < row["passages"][kind][0]:
-                    row["passages"][kind] = (rank, rel, s, e)
+                kept = row["passages"].setdefault(kind, [])
+                if len(kept) < (PASSAGES if kind == "index" else 1) and (rel, s, e) not in kept:
+                    kept.append((rel, s, e))
     return sorted(rows.values(), key=lambda r: (-r["score"], r["source"]))
 
 
 # A NUMBER WITH A UNIT OF MEASURE (feature 447 amendment 4): the field-size runs dropped sources whose printed passage was the
 # nearest by meaning but held no size - Hattori's sizes, Bray's "twenty yards square" and Huizhou's 0.715-mu parcel stood elsewhere
 # in their files (`specs/447-semantic-index/research/t05-why.md`) - so each source also shows the passage where a measure stands
-# nearest the question's terms. Units in both scripts' forms; a false hit (歩 as "step", 分 as "part") costs one line, a miss a source.
+# nearest the question's terms. Number and unit forms are those the archive's cases use (t05-why.md: Hattori and Ofuro write ㎡, Bray
+# "twenty yards square", the Huizhou register formal numerals with 分 厘 毫 步); a false hit (歩 "step", 分 "part") costs a line, a miss a source.
 _WORDS = "one two three four five six seven eight nine ten eleven twelve fifteen twenty thirty forty fifty sixty hundred half quarter".split()
-_NUM = r"(?:\d[\d,.]*|[〇一二三四五六七八九十百千万壱弐参拾廿]+|\b(?:" + "|".join(_WORDS) + r")\b(?: an?)?)"  # Bray: "twenty yards square"
+_NUM = r"(?:\d[\d,.]*|[〇一二三四五六七八九十百千万壱弐参拾廿壹贰貳叁參肆伍陆陸柒捌玖佰仟两兩]+|\b(?:" + "|".join(_WORDS) + r")\b(?: an?)?)"  # Bray: "twenty yards square"
 _UNIT = (
-    r"(?:反|段|畝|畆|歩|坪|町|亩|顷|頃|坵|丘|間|尺|丈|㎡|m2|m²|平方メートル|平方米|ヘクタール|公顷|"
+    r"(?:反|段|畝|畆|歩|步|坪|町|亩|顷|頃|坵|丘|分|厘|毫|間|尺|丈|㎡|m2|m²|平方メートル|平方米|ヘクタール|公顷|"
     r"hectares?\b|ha\b|acres?\b|square (?:feet|foot|yards?|met(?:er|re)s?)\b|feet\b|foot\b|ft\b|yards?\b|mows?\b|mu\b|"
     r"tan\b|se\b|bu\b|tsubo\b|ch[oō]\b|ken\b|qing\b|qiu\b)"
 )
@@ -170,9 +175,9 @@ CLOSE, NEAR = 60, 300  # characters either side of a measure in which the questi
 # its plots' "10㎡ほど ... 180㎡"; on the Ofuro page a menu's "第一歩" won over "1区画3-5㎡")
 
 
-def measure_passage(body: str, terms: Sequence[str]) -> tuple[int, int] | None:
-    """The (start, end) of the passage around the best measure - the most of `terms` within CLOSE of it, then within NEAR, then the
-    most other measures within CLOSE (a run of sizes), the earliest on a tie - or None when the text holds no measure."""
+def measure_passages(body: str, terms: Sequence[str], n: int = PASSAGES) -> list[tuple[int, int]]:
+    """The (start, end) of the passages around the `n` best measures that do not overlap - best by the most of `terms` within
+    CLOSE, then within NEAR, then the most other measures within CLOSE (a run of sizes), the earliest on a tie."""
     low = body.lower()
     found = [m.start() for m in MEASURE.finditer(body)]
 
@@ -180,15 +185,16 @@ def measure_passage(body: str, terms: Sequence[str]) -> tuple[int, int] | None:
         window = low[max(0, at - span) : at + span]
         return sum(1 for t in terms if t.lower() in window)
 
-    best: tuple[tuple[int, int, int], int] | None = None
-    for at in found:
-        score = (count(at, CLOSE), count(at, NEAR), sum(1 for o in found if o != at and abs(o - at) <= CLOSE))
-        if best is None or score > best[0]:
-            best = (score, at)
-    if best is None:
-        return None
-    start = max(0, best[1] - SNIPPET // 2)
-    return start, min(len(body), start + SNIPPET)
+    scored = sorted(((count(at, CLOSE), count(at, NEAR), sum(1 for o in found if o != at and abs(o - at) <= CLOSE)), -at) for at in found)
+    out: list[tuple[int, int]] = []
+    for _score, neg in reversed(scored):
+        start = max(0, -neg - SNIPPET // 2)
+        span = (start, min(len(body), start + SNIPPET))
+        if not any(s < span[1] and span[0] < e for s, e in out):
+            out.append(span)
+            if len(out) >= n:
+                break
+    return out
 
 
 def seen_path(home: pathlib.Path, key: str) -> pathlib.Path:
@@ -216,7 +222,8 @@ def search(
 
 
 def render(archive_dir: pathlib.Path, root: pathlib.Path, rows: Sequence[dict[str, Any]], terms: Sequence[str] = ()) -> list[str]:
-    """Each source with up to three passages: its nearest by meaning, its text-search hit, and its measure nearest the terms."""
+    """Each source with its passages: up to PASSAGES nearest by meaning, its text-search hit, and up to PASSAGES measures nearest the
+    terms that those do not already show."""
     lines = []
     for n, r in enumerate(rows, 1):
         if n == 1 or r["source"].startswith("record ") != rows[n - 2]["source"].startswith("record "):
@@ -224,14 +231,13 @@ def render(archive_dir: pathlib.Path, root: pathlib.Path, rows: Sequence[dict[st
         lines.append(f"{n:2d}. {r['source']}  [{'+'.join(sorted(r['by']))}]")
         shown: list[tuple[str, int, int]] = []
         for kind in ("index", "text"):
-            if kind in r["passages"]:
-                _rank, rel, s, e = r["passages"][kind]
+            for rel, s, e in r["passages"].get(kind, []):
                 shown.append((rel, s, min(e, s + SNIPPET)))  # what the line shows, not the whole passage
                 lines.append(f"    {'meaning' if kind == 'index' else 'text'}: {rel} [{s}:{e}] {_snippet(archive_dir, root, rel, s, e)}")
         rel = shown[0][0]
-        span = measure_passage(_text_of(archive_dir, root, rel), terms)
-        if span and not any(r2 == rel and s < span[1] and span[0] < e for r2, s, e in shown):
-            lines.append(f"    measure: {rel} [{span[0]}:{span[1]}] {_snippet(archive_dir, root, rel, *span)}")
+        for span in measure_passages(_text_of(archive_dir, root, rel), terms):
+            if not any(r2 == rel and s < span[1] and span[0] < e for r2, s, e in shown):
+                lines.append(f"    measure: {rel} [{span[0]}:{span[1]}] {_snippet(archive_dir, root, rel, *span)}")
     return lines
 
 
