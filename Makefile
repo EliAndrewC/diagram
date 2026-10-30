@@ -993,6 +993,9 @@ semantic-find: ## [project] the passages of the record and the archive nearest a
 	@if [ -z "$(Q)" ]; then printf 'make semantic-find: Q="<question>" is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/semantic_index.py" find "$(Q)" $(if $(K),--k "$(K)",)
 
+research-search: ## [project] THE local search before the web: the meaning search (a question per language) and the text search (term sets, every term required) over the record and the archive in one call, merged by source, each printed once with its best passage and what found it; under KEY= a later call prints only sources not yet shown (feature 447 amendment 3)   Q="<english>" [Q_JA="<日本語>"] [Q_ZH="<中文>"] [TERMS="a|b;c|d"] [KEY=<question key>] [LIMIT=<archive sources, 15>] [RECORD_LIMIT=<pages, 5>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/research_search.py" $(if $(Q),--q "$(Q)",) $(if $(Q_JA),--q "$(Q_JA)",) $(if $(Q_ZH),--q "$(Q_ZH)",) $(if $(TERMS),--terms "$(TERMS)",) $(if $(KEY),--key "$(KEY)",) $(if $(LIMIT),--limit "$(LIMIT)",) $(if $(RECORD_LIMIT),--record-limit "$(RECORD_LIMIT)",)
+
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b" (every term required; one term per call to try alternatives)
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)

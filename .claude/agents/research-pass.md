@@ -20,9 +20,13 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
 
 ## The rules of a pass
 
-- **The archive first, then the web.** In the clone the prompt names (else `/diagram`), run `make archive-find TERMS="a|b|c"`
-  with the question's terms in every language you will search (romanized, kanji / hanzi, English); read any archived text it
-  names. Every page the project has cited is archived; a page found there is not fetched again.
+- **The archive first, then the web.** In the clone the prompt names (else `/diagram`), run `make research-search
+  Q="<the question in English>" Q_JA="<in Japanese>" Q_ZH="<in Chinese>" TERMS="a|b;c|d" KEY=<a short key for the question>`:
+  the meaning search and the text search over the record and the archive in one call, each source printed once with its best
+  passage and what found it (feature 447 amendment 3 - each search found sources the other missed). Give every term set in each
+  language you will search (romanized, kanji / hanzi, English); run it again under the same KEY with new wordings, and it
+  prints only sources not yet shown. Read the archived texts it names; `make archive-find URL=` / `KEY=` still answers "is this
+  page archived?". Every page the project has cited is archived; a page found there is not fetched again.
 - **Every page you read goes on the sources-consulted ledger**: fetch a web page with `make source-pages OUT=/tmp/l7r-pass/<slug>
   URL=<url> QUESTION=<NNNN or none> SOUGHT="<what you look for in it>"` (it prints the page's earlier reads and attempts first,
   and refuses a page already judged for the same question unless `REREAD="<what changed>"`), then read the saved page from the
