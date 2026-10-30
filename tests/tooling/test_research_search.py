@@ -66,6 +66,11 @@ def test_under_a_key_a_later_call_prints_only_new_sources(tmp_path: pathlib.Path
     assert held == 0 and rs.seen_path(home, "field size").name == "field-size.json"
     again, found, held = rs.search(archive, root, home, [], [["paddy"]], Fake(), key="field size", limit=2)
     assert held == 3 and len(again) == 1 and not {r["source"] for r in first} & {r["source"] for r in again} and found == 4
+    import os  # noqa: PLC0415
+
+    os.utime(rs.seen_path(home, "field size"), (0, 0))
+    stale, _f, held = rs.search(archive, root, home, [], [["paddy"]], Fake(), key="field size", limit=2)
+    assert held == 0 and len(stale) == 3, "a key's memory is forgotten after a day"
     lines = rs.render(archive, root, first)
     assert lines[0].startswith("-- the record's pages") and lines[2].startswith("-- the archive's sources")
 
@@ -96,3 +101,7 @@ def test_main_asks_for_something_says_when_there_is_no_index_and_prints_the_merg
     assert rs.main(["--terms", "intake"], store=store) == 0, "a term search loads no model"
     out = capsys.readouterr().out
     assert "1 of 1 source(s), 0 already shown under key 'k'" in out and "ab/x  [index+text]" in out and "the paddy field" in out
+    (store.dir / "ab" / "y").mkdir(parents=True)
+    (store.dir / "ab" / "y" / "text.txt").write_text("another intake")
+    assert rs.main(["--terms", "intake", "--limit", "1"], store=store) == 0
+    assert "1 more not printed" in capsys.readouterr().out

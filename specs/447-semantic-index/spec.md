@@ -93,25 +93,32 @@ sources the other missed (`research/t02-judge.md`). The goal is to find everythi
 for finding things that are relevant rather than doing something which is cheaper because it misses actual matches"; the web's
 cost is not measured ("an unalloyed good for us to find things locally before searching the web").
 
-- **FR-A3-1, one command, both searches.** `make research-search` takes a question in each language the session gives
-  (English, Japanese, Chinese; the local model does not translate) and term sets (each set every term required, as `make
-  archive-find`), runs the meaning search for each question and the text search for each term set over the record and the
-  archive, and merges the hits by SOURCE (an archive capture, or a record page): each source printed once, ranked, with its best
-  passage and what found it (index, text, or both).
-- **FR-A3-2, nothing evaluated twice.** Given a key for the question, the command remembers the sources it has printed for that
-  key, and a later search under the same key prints only new ones (with a count of those already shown).
-- **FR-A3-3, its output bounded.** At most a set number of sources a call (a default and a knob), each with one passage, so a
-  broad term set no longer prints a hundred files' download histories.
-- **FR-A3-4, the research pass uses it.** The `research-pass` contract's "archive first" step runs the combined command before
+- **FR-A3-1, one command, both searches.** `make research-search` takes the question in each corpus language the session gives -
+  the list is open: English, Japanese, Chinese, Korean (the corpus holds two Korean texts) - and term sets (each set every term
+  required, as `make archive-find`), runs the meaning search for each question and the text search for each term set over the
+  record and the archive, and merges the hits by SOURCE (an archive capture, or a record page): each source printed once, ranked,
+  with its best passage and what found it (index, text, or both). This is the GM's "we don't need to reevaluate sources that
+  we've already turned up as hits with the first approach".
+- **FR-A3-2, paging, never hiding.** One call prints a bounded number of sources (a default and a knob), the record's pages and
+  the archive's sources apart; the cap limits what one call PRINTS, never what the search finds: the output counts every source
+  found and the ones not printed, and a call under a KEY prints the next batch - the sources already printed for that key are
+  held in `<archive home>/search-seen/<key>.json`, kept a day and then forgotten, so a question's later wordings and its next
+  pages show only sources not yet read.
+- **FR-A3-3, the research pass uses it.** The `research-pass` contract's "archive first" step runs the combined command before
   any web search.
 - **SC-A3, the end-to-end validation.** A `research-pass` agent answers feature 444's field-size question with the combined
-  command (archive and record only, the same brief as arms S and T). It succeeds when it surfaces the sources the blind judge
-  rated SOME or HIGH from both arms (Shicang 1898, the Shizuoka replanning 1872, the Huizhou 1581 parcel, Shiroyone, the Yayoi small
-  plots, and the shared ones) and at least the ones the judge found both arms missed (Hattori `97/97f6d769ce72`, Ofuro
-  `10/100916836bb9`, Konosu 1902 `c3/c36ae8c62a1c`), at a token count no higher than the arms' (51,261 and 59,011) beyond their
-  run-to-run spread. Its result is reported to the GM.
+  command (archive and record only, the same brief as arms S and T). Success is decided on the SOURCES it surfaces: those the
+  blind judge rated SOME or HIGH from either arm - Shicang 1898 `83/831d8174fa8b`, the Shizuoka replanning 1872 `e5/e542a5322e62`,
+  the Huizhou 1581 parcel `04/04c46c135344`, Shiroyone `f4/f457740405c1`, the Yayoi small plots `d1/d1f4b30193e3` - those both arms
+  found - Iwamuro 1602 `75/7588a47ce738`, Kami-Baba 1684 `27/27341e70863d`, King `e8/e81890ad0ea3`, Taipingqiao 1897
+  `29/29423acf58a9` - and those the judge found both arms missed that bear on the premodern question - Hattori `97/97f6d769ce72`,
+  Ofuro `10/100916836bb9`, Konosu 1902 `c3/c36ae8c62a1c` (the judge's fourth, a modern 3-tan standard `71/71ad2d8933fa`, is left
+  out: it is not premodern). Its tokens and wall time are measured and reported beside the arms' (51,261 and 59,011 tokens,
+  `research/t02-arm-s.md`, `research/t02-arm-t.md`), not held to them. Its result is reported to the GM.
 
 ## The rule
+
+(The first trial's rule; amendment 1 handed the decision to the GM, and amendment 3 records it: the index is kept.)
 
 - The index is kept where it finds passages today's search missed on at least a fair share of the questions, at a cost that keeps
   an update to seconds and a search under a second. Otherwise the trial is set down, its evidence recorded, the tooling not kept.

@@ -22,6 +22,7 @@ import pathlib
 import re
 import subprocess
 import sys
+import time
 from collections.abc import Sequence
 from typing import Any
 
@@ -39,6 +40,7 @@ PER_QUESTION = 30  # sources each meaning search contributes to the fusion
 FUSE = 60  # the reciprocal-rank constant: rank 1 scores 1/61, rank 30 scores 1/90
 CHUNK = 20000  # passages scored at once, so the whole index is never held at full precision (about 490 MB)
 SEEN_DIR = "search-seen"
+SEEN_DAYS = 1  # how long a key remembers what it printed: one question's session of searching, then forgotten
 SNIPPET = 240
 
 Hit = tuple[str, str, int, int]  # (source, path, start, end)
@@ -166,7 +168,7 @@ def search(
     rows = fuse(meaning(index, questions, embed), text(archive_dir, root, term_sets))
     shown: set[str] = set()
     path = seen_path(home, key) if key else None
-    if path and path.is_file():
+    if path and path.is_file() and time.time() - path.stat().st_mtime < SEEN_DAYS * 86400:
         shown = set(json.loads(path.read_text(encoding="utf-8")))
     fresh = [r for r in rows if r["source"] not in shown]
     out = [r for r in fresh if r["source"].startswith("record ")][:record_limit] + [r for r in fresh if not r["source"].startswith("record ")][:limit]
@@ -214,6 +216,7 @@ def main(argv: list[str] | None = None, embed: si.Embed | None = None, store: An
     print(
         f"research-search: {len(questions)} question(s), {len(term_sets)} term set(s) - {len(rows)} of {found} source(s)"
         + (f", {held} already shown under key {args.key!r}" if args.key else "")
+        + (f"; {found - held - len(rows)} more not printed - call again under KEY= for the next" if found - held > len(rows) else "")
     )
     print("\n".join(render(store.dir, root, rows)))
     return 0
