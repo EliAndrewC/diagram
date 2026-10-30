@@ -1,0 +1,20 @@
+# THE RUST TOOLING FIXTURE (feature 444 T17, FR-011): a stand-in for the rebuilt phases' extension module - one PyO3 module,
+# never imported by the engine - against which every Rust row of `dev/rust-tooling.md` is shown to fire.
+[package]
+name = "l7r_fixture"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "l7r_fixture"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.26", features = ["extension-module"] }
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"

@@ -85,7 +85,8 @@ GUIDANCE = f"""
   `hamletgen/ways/` with sub-modules of about {MAX_LINES * 2 // 3} lines each (2/3 of the bar, a guideline,
   not a check), its `__init__.py` re-exporting every name importers used, so no importer changes -
   carrying a CLAUDE.md that indexes them with a "look here when" line each, so a future session
-  loads only the part it needs.
+  loads only the part it needs. A `.rs` file splits the same way: `ways.rs` becomes `ways/` with a `mod.rs`
+  (or `ways.rs` beside the folder) declaring its sub-modules and `pub use`-ing what callers named.
 
   Read, in this order:
     - .specify/memory/constitution.md, Principle X clause 13 (the rule and both carve-outs)
@@ -122,7 +123,8 @@ def justification(path: Path) -> str | None:
 
 
 def scan(root: str = ".") -> list[Path]:
-    """Every candidate `.py` under root - tracked files when this is a git tree, else a walk.
+    """Every candidate `.py` and `.rs` under root - tracked files when this is a git tree, else a walk (the `.rs`: feature 444
+    T17, `dev/rust-tooling.md` "file cap" - the rebuilt phases are held to the same bar).
 
     Asking git is what honors "any path already ignored by git" without a per-file call: one
     `ls-files` names exactly the tracked set. The walk is the fallback the selftest runs on, since
@@ -137,12 +139,12 @@ def scan(root: str = ".") -> list[Path]:
             # and a file DELETED but not yet committed is still --cached while gone from disk -
             # hence the is_file() filter, without which the first run inside this very feature's
             # clone died on its own half-finished split.
-            ["git", "-C", str(base), "ls-files", "-z", "--cached", "--others", "--exclude-standard", "*.py"],
+            ["git", "-C", str(base), "ls-files", "-z", "--cached", "--others", "--exclude-standard", "*.py", "*.rs"],
             capture_output=True, text=True, check=True, timeout=30,
         ).stdout
         paths = [base / p for p in out.split("\0") if p]
     except (subprocess.SubprocessError, OSError):
-        paths = sorted(base.rglob("*.py"))
+        paths = sorted([*base.rglob("*.py"), *base.rglob("*.rs")])
     seen = set()
     return sorted(
         p for p in paths

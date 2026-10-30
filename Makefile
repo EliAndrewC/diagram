@@ -1242,6 +1242,8 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/gates/check-duplicate-defs.py .
 	python3 scripts/gates/check-file-scale.py --selftest
 	python3 scripts/gates/check-file-scale.py .
+	python3 scripts/gates/rust_checks.py lint
+	python3 scripts/gates/rust_checks.py format --check
 	python3 scripts/gates/spec-lint.py --selftest
 	python3 scripts/gates/spec-lint.py --delta .
 	python3 scripts/hooks/lib/hm_conflict.py --selftest
@@ -1251,8 +1253,9 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/gates/check-stale-dirs.py .
 	bash scripts/reviews/layout_carry.sh --selftest
 
-format:          ## [static] ruff format over the tree
+format:          ## [static] ruff format over the tree, and rustfmt over the Rust phases' crates (feature 444 T17)
 	python3 -m ruff format .
+	python3 scripts/gates/rust_checks.py format
 
 typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (feature 142)
 	$(TYPECHECK)

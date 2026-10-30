@@ -125,6 +125,10 @@
       "kind": "check",
       "what": "scripts/land.py - make land / make land-batch: refuses a landing with every cheap refusal named together, else runs what it owes, pushes and ticks; each run recorded passed or refused"
     },
+    "rust_checks": {
+      "kind": "check",
+      "what": "scripts/gates/rust_checks.py - the Rust phases' clippy (all, pedantic, the function cap, reasons on every exception) and rustfmt, in make static and make format (feature 444 T17, FR-011); no crate under rust/ is no work; each run recorded passed or refused"
+    },
     "phase_sources": {
       "kind": "check",
       "what": "scripts/gates/phase_sources.py - make phase-read: one of a started phase task's held old-code files let through the phase-source guard for ten minutes, the reason logged (feature 444, the GM 2026-10-30); each run recorded passed or refused"
