@@ -22,6 +22,8 @@ def test_the_bundle_holds_the_brief_the_request_the_research_and_the_instruction
     (d / "spec.md").write_text("# Trial: x\n\n**Form**: trial\n\n**Status**: Done - stopped at the measurement\n", encoding="utf-8")
     (d / "request.md").write_text("> words\n", encoding="utf-8")
     (d / "research" / "ceilings.md").write_text("2.7%\n\n```\nlattice_search 3 self 0.171 cum 0.428\n```\n", encoding="utf-8")
+    (d / "research" / "out.json").write_text("[1]\n", encoding="utf-8")
+    (d / "research" / "scratch.txt").write_text("x\n", encoding="utf-8")
     monkeypatch.setattr(tr, "ROOT", tmp_path)
     monkeypatch.setattr(tr, "CHECK_DIR", tmp_path / "check")
     assert tr.main(["441"]) == 0
@@ -30,6 +32,7 @@ def test_the_bundle_holds_the_brief_the_request_the_research_and_the_instruction
     assert (out / "spec.md").is_file() and (out / "research" / "ceilings.md").is_file() and "`research/ceilings.md`" in manifest
     assert "CHECK each figure against the output recorded beside it" in manifest and "re-run a command only where" in capsys.readouterr().out
     assert "cum 0.428" in (out / "research" / "ceilings.md").read_text(encoding="utf-8"), "the recorded output rides in the bundle"
+    assert "`research/out.json`" in manifest and not (out / "research" / "scratch.txt").exists(), "a JSON output rides too, nothing else"
     assert tr.main(["441"]) == 0, "a second bundle replaces the first"
     (d / "spec.md").write_text("# Trial: x\n\n**Form**: trial\n\n**Status**: Done - promoted: the spike lands\n", encoding="utf-8")
     assert tr.main(["441"]) == 0

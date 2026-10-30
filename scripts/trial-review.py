@@ -36,7 +36,9 @@ def bundle(feature: pathlib.Path, out: pathlib.Path, stopped: bool = True) -> pa
     for name in names:
         if (feature / name).is_file():
             shutil.copy(feature / name, out / name)
-    research = sorted((feature / "research").glob("*.md")) if (feature / "research").is_dir() else []
+    # A RECORDED OUTPUT RIDES WITH ITS NOTES: trial 447's tables came from JSON its scripts wrote beside them, and a bundle of the
+    # Markdown alone left its reviewer re-running an hour's measurement to check them
+    research = sorted(f for f in (feature / "research").glob("*") if f.suffix in (".md", ".json")) if (feature / "research").is_dir() else []
     for f in research:
         shutil.copy(f, out / "research" / f.name)
     files = [n for n in names if (out / n).is_file()] + [f"research/{f.name}" for f in research]
