@@ -62,3 +62,19 @@
   Bray         seen=1 opened=1 reported=1
   Fei          seen=1 opened=1 reported=1
   Buck         seen=1 opened=1 reported=1
+== V3: 34 tool calls
+  Shicang      seen=1 opened=1 reported=1
+  Shizuoka     seen=1 opened=1 reported=1
+  Huizhou      seen=0 opened=0 reported=0
+  Shiroyone    seen=1 opened=0 reported=1
+  Yayoi        seen=1 opened=0 reported=1
+  Iwamuro      seen=1 opened=1 reported=1
+  KamiBaba     seen=1 opened=1 reported=1
+  King         seen=1 opened=1 reported=1
+  Taipingqiao  seen=1 opened=1 reported=1
+  Hattori      seen=1 opened=1 reported=1
+  Ofuro        seen=0 opened=0 reported=0
+  Konosu       seen=0 opened=0 reported=0
+  Bray         seen=1 opened=1 reported=1
+  Fei          seen=1 opened=0 reported=0
+  Buck         seen=1 opened=1 reported=1

@@ -1,7 +1,7 @@
 """Feature 447: for each run and each target source - seen in a tool's output, opened by a tool call, reported."""
 import json, sys
 T = "/tmp/claude-1000/-diagram/7667114a-3a71-4876-aaeb-b37262936c6f/tasks/"
-RUNS = {"S": "a1acd46d95a34f348", "T": "a76e8af174d2a4065", "V1": "a043df3105b2fe3a4", "V2": "a073c73200730b06e"}
+RUNS = {"S": "a1acd46d95a34f348", "T": "a76e8af174d2a4065", "V1": "a043df3105b2fe3a4", "V2": "a073c73200730b06e", "V3": "afe46ceb808aa8a5f"}
 SRC = {"Shicang": ["831d8174fa8b"], "Shizuoka": ["e542a5322e62"], "Huizhou": ["04c46c135344"], "Shiroyone": ["f457740405c1", "5649138bf1c5", "a25ab90b505a"],
        "Yayoi": ["d1f4b30193e3"], "Iwamuro": ["7588a47ce738"], "KamiBaba": ["27341e70863d"], "King": ["e81890ad0ea3"], "Taipingqiao": ["29423acf58a9"],
        "Hattori": ["97f6d769ce72"], "Ofuro": ["100916836bb9"], "Konosu": ["c36ae8c62a1c"], "Bray": ["3cf980c9fd08"], "Fei": ["675c43301bf7", "857b0fd46d16"], "Buck": ["b647a7ae9f1a"]}
