@@ -299,7 +299,7 @@ def content_id(data: bytes, name: str, root: Path | None = None) -> str:
     raw = git_blob_id(
         data
     )  # the cache is keyed by GIT's own blob id, so `ls-tree`/`hash-object` answer a hit without reading the file (T27)
-    if not name.endswith(".py"):
+    if not name.endswith((".py", ".rs")):  # `.rs`: its comment-free tokens (feature 444 T17)
         return raw
     table = _cache_table(root)
     if raw in table:

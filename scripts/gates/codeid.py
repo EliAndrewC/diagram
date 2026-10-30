@@ -52,9 +52,92 @@ def strip_docstrings(tree: ast.AST, keep_module_docstring: bool = False) -> ast.
     return tree
 
 
+def rust_tokens(data: bytes) -> bytes:
+    """What runs, for a `.rs` file: its tokens with every comment dropped - line, block (nested) and doc comments alike, so a
+    `///` claim or `Steps:` edit is wording, as a docstring is - and whitespace between tokens collapsed; string, raw-string,
+    byte-string and char literals kept whole, a lifetime (`'a`) a token (feature 444 T17, `dev/rust-tooling.md` "the docstring-
+    blind code id"). A file that is not UTF-8 is its bytes verbatim."""
+    try:
+        s = data.decode("utf-8")
+    except UnicodeDecodeError:
+        return data
+    out: list[str] = []
+    cur: list[str] = []
+    i, n = 0, len(s)
+
+    def flush() -> None:
+        if cur:
+            out.append("".join(cur))
+            cur.clear()
+
+    while i < n:
+        c = s[i]
+        if s.startswith("//", i):
+            flush()
+            j = s.find("\n", i)
+            i = n if j < 0 else j
+        elif s.startswith("/*", i):
+            flush()
+            depth, i = 1, i + 2
+            while i < n and depth:
+                if s.startswith("/*", i):
+                    depth, i = depth + 1, i + 2
+                elif s.startswith("*/", i):
+                    depth, i = depth - 1, i + 2
+                else:
+                    i += 1
+        elif c in "rb" and (m := _RAW.match(s, i)):
+            flush()
+            end = s.find('"' + m.group(1), m.end())
+            end = n if end < 0 else end + 1 + len(m.group(1))
+            out.append(s[i:end])
+            i = end
+        elif c == '"' or (c == "b" and s.startswith('b"', i)):
+            flush()
+            j = i + (2 if c == "b" else 1)
+            while j < n and s[j] != '"':
+                j += 2 if s[j] == "\\" else 1
+            out.append(s[i : j + 1])
+            i = j + 1
+        elif c == "'":
+            flush()
+            if i + 1 < n and s[i + 1] == "\\":
+                j = s.find("'", i + 2)
+            elif i + 2 < n and s[i + 2] == "'":
+                j = i + 2
+            else:  # a lifetime or a label: `'a`
+                j = i
+                while j + 1 < n and (s[j + 1].isalnum() or s[j + 1] == "_"):
+                    j += 1
+                out.append(s[i : j + 1])
+                i = j + 1
+                continue
+            j = n - 1 if j < 0 else j
+            out.append(s[i : j + 1])
+            i = j + 1
+        elif c.isspace():
+            flush()
+            i += 1
+        elif c.isalnum() or c == "_":
+            cur.append(c)
+            i += 1
+        else:
+            flush()
+            out.append(c)
+            i += 1
+    flush()
+    return "\x00".join(out).encode()
+
+
+_RAW = re.compile(r'b?r(#*)"')
+
+
 def semantic_bytes(data: bytes, name: str, keep_module_docstring: bool = False) -> bytes:
     """What runs, for a `.py` file: its docstring-free AST dumped without attributes (its own module docstring kept with
-    `keep_module_docstring`); any other file, or one that does not parse, its bytes verbatim."""
+    `keep_module_docstring`); for a `.rs` file, its comment-free tokens (`rust_tokens`); any other file, or one that does not
+    parse, its bytes verbatim."""
+    if name.endswith(".rs"):
+        return rust_tokens(data)
     if not name.endswith(".py"):
         return data
     try:

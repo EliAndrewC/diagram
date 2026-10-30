@@ -124,6 +124,15 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
             if name.endswith(".py") and not is_asset and "interactive" not in dirs:
                 data = codeid.semantic_bytes(data, name)
             parts.append(rel.encode() + b"\0" + _sha256(data).encode())
+    # ...AND THE RUST PHASES (feature 444 T17): `gencache.rust_sources`, the same list the generation key walks, a `.rs` by its
+    # comment-free tokens (`codeid.rust_tokens`), a manifest by its bytes
+    from l7r.diagram.pipeline.gencache import rust_sources  # noqa: PLC0415 - gencache imports this module's siblings
+
+    for path in rust_sources(skill_dir):
+        with open(path, "rb") as fh:
+            data = fh.read()
+        rel = os.path.relpath(path, skill_dir)
+        parts.append(rel.encode() + b"\0" + _sha256(codeid.semantic_bytes(data, path)).encode())
     return _sha256(b"\n".join(parts))
 
 

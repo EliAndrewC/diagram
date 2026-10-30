@@ -361,6 +361,14 @@ def test_engine_files_ignores_dotfiles(tmp_path, monkeypatch):
     (tmp_path / "l7r" / ".transient-driver.py").write_text("B = 2\n")
     monkeypatch.setattr(gencache, "HERE", str(tmp_path))
     assert [os.path.basename(f) for f in gencache.engine_files()] == ["real.py"]
+    # the Rust phases are engine input (feature 444 T17), their build output and dot-dirs not
+    (tmp_path / "rust" / "phases" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "phases" / "src" / "field.rs").write_text("pub fn f() {}\n")
+    (tmp_path / "rust" / "phases" / "Cargo.toml").write_text("[package]\n")
+    (tmp_path / "rust" / "phases" / "notes.txt").write_text("notes\n")
+    (tmp_path / "rust" / "phases" / "target" / "debug").mkdir(parents=True)
+    (tmp_path / "rust" / "phases" / "target" / "debug" / "built.rs").write_text("// generated\n")
+    assert sorted(os.path.basename(f) for f in gencache.engine_files()) == ["Cargo.toml", "field.rs", "real.py"]
 
 
 def test_engine_files_prunes_the_tests_tree(tmp_path, monkeypatch):

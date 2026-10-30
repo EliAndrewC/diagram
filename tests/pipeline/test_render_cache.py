@@ -106,6 +106,19 @@ def test_engine_fingerprint_covers_and_skips(repo):
     with open(os.path.join(skill, "l7r", "engine_pkg", "core.py"), "w") as fh:
         fh.write("PKG = 2\n")
     assert rc.engine_fingerprint(skill) != fp_pkg_before
+    # a Rust phase (feature 444 T17): a comment edit does not move it, a code edit does
+    os.makedirs(os.path.join(skill, "rust", "phases", "src"), exist_ok=True)
+    rs = os.path.join(skill, "rust", "phases", "src", "field.rs")
+    with open(rs, "w") as fh:
+        fh.write("pub fn f() -> u8 {\n    1\n}\n")
+    fp_rs = rc.engine_fingerprint(skill)
+    assert fp_rs != fp_pkg_before
+    with open(rs, "w") as fh:
+        fh.write("/// documented\npub fn f() -> u8 {\n    1 // one\n}\n")
+    assert rc.engine_fingerprint(skill) == fp_rs
+    with open(rs, "w") as fh:
+        fh.write("pub fn f() -> u8 {\n    2\n}\n")
+    assert rc.engine_fingerprint(skill) != fp_rs
     # ...but editing a skipped file (test_/non-.py/the module itself/test packages/pool+wip) does not
     with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
         fh.write("# engine v2\n")

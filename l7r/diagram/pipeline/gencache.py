@@ -163,6 +163,22 @@ def engine_files() -> list[str]:
         # engine modules - so a parallel sweep poisoned every other map's key and nothing ever hit
         # (feature 026's first warm-gate measurement, 2026-08-16, came out SLOWER than cold).
         out.extend(os.path.join(dirpath, f) for f in filenames if f.endswith(".py") and not f.startswith(("test_", ".")) and f not in _NOT_ENGINE)
+    out.extend(rust_sources(HERE))
+    return sorted(out)
+
+
+RUST_SOURCES = (".rs", "Cargo.toml", "Cargo.lock")
+
+
+def rust_sources(root: str) -> list[str]:
+    """THE RUST PHASES ARE ENGINE INPUT TOO (feature 444 T17, `dev/rust-tooling.md` "the docstring-blind code id"): every `.rs`,
+    `Cargo.toml` and `Cargo.lock` under `rust/`, `target/` and dot-dirs pruned. The extension a roll imports is built from them,
+    so a change to one re-keys every map; such a file does not parse as Python, so `split_sources` hashes it whole (the
+    conservative direction). `render_cache.engine_fingerprint` walks the same list - the two walks stay in step."""
+    out: list[str] = []
+    for dirpath, dirnames, filenames in os.walk(os.path.join(root, "rust")):
+        dirnames[:] = sorted(d for d in dirnames if d != "target" and not d.startswith("."))
+        out.extend(os.path.join(dirpath, f) for f in filenames if f.endswith(RUST_SOURCES))
     return sorted(out)
 
 
