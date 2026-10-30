@@ -68,7 +68,7 @@
 - [ ] T19 phase: water_frame - its Rust port, written from its derivation (FR-010, FR-017)
       research: rendering
       phase: water_frame
-      owes (the round arbiter, ask:444-T17-rows-need-a-phase): the four tooling rows T17 left to the first phase - the cache audit, the overlap census's replacement (the Rust counters), the change-selected tests' Python half, dead closure's public half - each proven on the port and named in dev/rust-tooling.md's "Proven" table before the tick
+      owes (the round arbiter, ask:444-T17-rows-need-a-phase; the plan review of 2026-10-30): the two tooling rows T17 left to the first phase - `cache audit` and `the overlap census` (dev/rust-tooling.md) - each proven on the port and named in its "Proven" table before the tick
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

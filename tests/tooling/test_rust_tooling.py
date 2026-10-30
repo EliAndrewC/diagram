@@ -124,3 +124,31 @@ def test_a_private_item_nothing_calls_is_refused(crate: pathlib.Path) -> None:
     """Row "dead closure": the compiler's dead-code lint, refused under `-D warnings`, for private items."""
     r = rc.run("lint", _with(crate, "\nfn never_called() -> u8 {\n    1\n}\n") / "Cargo.toml", check=False)
     assert r.returncode != 0 and "never_called" in r.stderr and "dead_code" in r.stderr
+
+
+def test_a_public_function_nothing_calls_is_refused_and_one_python_calls_is_kept(crate: pathlib.Path) -> None:
+    """Row "dead closure", its public half: rustc's `dead_code` sees private items only; `rust_checks.py dead` sees a `pub fn`
+    nothing in Rust or Python calls - the fixture's `stage_total` is kept, called by its Python driver."""
+    assert rc.dead_public(crate.parent / "noroot", crate / "Cargo.toml") == []
+    broken = _with(crate, "\n/// Nothing calls it.\n#[must_use]\npub fn orphan() -> u8 {\n    1\n}\n")
+    assert rc.dead_public(crate.parent / "noroot", broken / "Cargo.toml") == ["orphan"]
+    (broken / "tests" / "py_driver.py").write_text((broken / "tests" / "py_driver.py").read_text() + "assert not hasattr(l7r_fixture, 'orphan')\n")
+    assert rc.dead_public(crate.parent / "noroot", broken / "Cargo.toml") == [], "Python naming it counts as a call"
+
+
+def test_a_rust_change_selects_every_python_test_that_imports_the_extension(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Row "the change-selected tests", its Python half: testmon selects by Python lines, so a `.rs` change selects the Python
+    callers of the extension by their imports - the crate's driver and any test under `tests/` importing it."""
+    root = tmp_path / "repo"
+    (root / "tests" / "phases").mkdir(parents=True)
+    (root / "tests" / "phases" / "test_calls.py").write_text("import l7r_fixture\n")
+    (root / "tests" / "phases" / "test_other.py").write_text("import json\n")
+    got = rc.python_callers(root, crate / "Cargo.toml")
+    assert got == [crate / "tests" / "py_driver.py", root / "tests" / "phases" / "test_calls.py"]
+    assert rc.lib_name(crate / "Cargo.toml") == "l7r_fixture"
+
+
+def test_the_dead_and_callers_commands_run_on_the_named_crate(capsys: pytest.CaptureFixture[str]) -> None:
+    assert rc.main(["dead", "--crate", "tests/fixtures/rust/fixture"]) == 0
+    assert rc.main(["callers", "--crate", "tests/fixtures/rust/fixture"]) == 0, "the driver runs against the built extension"
+    assert "callers clean on 1 crate(s)" in capsys.readouterr().out

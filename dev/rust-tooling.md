@@ -64,18 +64,19 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | the docstring-blind code id | `codeid.rust_tokens`: a `.rs` file's tokens with every comment and doc comment dropped, in `semantic_bytes`, `gate-stamp.py content_id` and the render fingerprint; `gencache.rust_sources` puts `rust/**/*.rs` and the Cargo manifests in the generation key (`engine_files`) and the render fingerprint alike; `.rs` an engine path (row above) | `tests/tooling/test_codeid_rust.py` (wording keeps the id, code moves it, the stamp reads tokens); `test_engine_files_prunes_the_tests_tree`, `test_engine_fingerprint_covers_and_skips` (the Rust cases) |
 | research claims | `tools/claims_rust.py` reads each `.rs` item's `///` `Research:` section (else the `//!` module doc's, inherited) into the same `claims.Unit`s, its core the item's comment-free tokens; `claims.all_units` yields them in the scope, so the index, gate, bundles, triage and reports downstream are unchanged. A DEVIATION from the row's "the `syn` parser": a Python brace scan gives the span and doc the units need and stays in the indexing process | `tests/tools/test_claims_rust.py` (units, spans and kinds; own and inherited claims; a doc edit keeps the core, code moves it; the index reads them) |
 | the placement-stages page | a `Steps:` name `rust/<crate>/src/<file>.rs::<item>` resolves through `claims_rust.resolve` to a `RustItem` whose `__doc__` is the item's doc comment; `research_of` reads its unit's claims; the stages stay Python | `test_a_rust_step_on_the_placement_page_shows_its_doc_and_its_claims` |
-| dead closure (its private half) | rustc's `dead_code` lint, an error under `rust_checks.py lint`'s `-D warnings` | `test_a_private_item_nothing_calls_is_refused` |
+| dead closure | private items: rustc's `dead_code`, an error under `rust_checks.py lint`'s `-D warnings`; public: `rust_checks.py dead` in `make static`, a `pub fn` nothing in Rust or Python calls refused | `test_a_private_item_nothing_calls_is_refused`, `test_a_public_function_nothing_calls_is_refused_and_one_python_calls_is_kept` |
+| the change-selected tests | the Rust half: cargo rebuilds and re-tests the changed crate (`make rust-test`, `make static`'s coverage run); the Python half: `rust_checks.py callers` in `make quick` runs every test importing the extension, which testmon cannot select for a `.rs` change | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test`, `test_a_rust_change_selects_every_python_test_that_imports_the_extension`, `test_the_dead_and_callers_commands_run_on_the_named_crate` |
 | the pytest suite | a test of a stage's own source moves with the stage into its `#[cfg(test)]` module, run by `make rust-test`; the Python tests of the parts that stay Python unchanged | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 
 ### Not yet proven (2026-10-30), and what each waits for
 
-- **the cache audit** (mutate a `.rs` literal, rebuild, compare sweeps): it audits MAPS, so it needs a Rust phase that draws one - first possible on T19's `water_frame` port.
-- **the overlap census, replaced by the work-budget counters inside Rust**: needs the counting interface the Rust phases report their operations through - designed with T19, the first phase whose MODE AUDIT reads `.rs`.
-- **the change-selected tests' Python half**: testmon selects by Python lines, so a `.rs` change selects none of the Python tests that call the extension; the fix (a Rust change selects every test importing the extension) needs that extension to exist - T19.
-- **dead closure's public half** (`dead_closure.py` over `pub` items nothing calls): needs the real crate's public surface - T19.
+- **cache audit** (mutate a `.rs` literal, rebuild, compare sweeps): it audits MAPS, and a crate the engine never imports changes no
+  sweep - first possible on T19's `water_frame` port.
+- **the overlap census** (its replacement, the work-budget counters counted inside Rust): needs the counting interface the Rust
+  phases report their operations through, designed with T19, the first phase whose MODE AUDIT reads `.rs`.
 
-**Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30,
-`specs/444-work-budget-program/arbiter.jsonl`, Route A): these four need a phase's map, counters or public surface, so T19's
-`water_frame` port owes them before its tick, each proven as the rest were; `check-rust-tooling.py` refuses any tree holding a
-Rust phase while one is unproven (`test_a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.
-
+**Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30, Route A),
+narrowed by the plan review of 2026-10-30: dead closure's public half and the change-selected tests' Python half fire on the
+fixture and are proven above; these two need a phase's maps or counters, so T19's port owes them before its tick, each proven as the
+rest were. `check-rust-tooling.py` refuses any tree holding a Rust phase while one is unproven
+(`test_a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.

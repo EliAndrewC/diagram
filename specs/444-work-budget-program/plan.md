@@ -156,7 +156,7 @@ Occasions: none (tooling: no map moves).
 
 ### T17 Approach (checklist part A)
 
-(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A: T17 ticks with every row the fixture can prove; the four that need a real phase are T19's, and the refusal of a Rust phase while any row is unproven lands with T17.)
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A, narrowed by the plan review of 2026-10-30: T17 ticks with every row the fixture can fire; `cache audit` and `the overlap census`, which need a phase's maps or counters, are T19's, and the refusal of a Rust phase while any row is unproven lands with T17.)
 
 1. **The goal, in the world.** A Rust fixture crate - one PyO3 extension module built by maturin, a thin Python function calling it,
    a `///` doc comment carrying a `Research:` claim and a `Steps:` list - against which every row of `dev/rust-tooling.md` marked one
@@ -176,7 +176,8 @@ Occasions: none (tooling: no map moves).
 8. **The budget.** Rows land in groups as they are proven (the lint and format group; the caps; coverage; the code id and the
    claims reader; the guards); one landing a group.
 9. **Done, measured.** Every row of `dev/rust-tooling.md` marked one for one, partial, rewritten or replaced (step 1's four kinds) marked
-   proven, with its firing case.
+   proven in its "Proven on the fixture" table with its firing case, but `cache audit` and `the overlap census`, which the arbiter's
+   ruling gives T19 (they fire only on a phase's maps or counters).
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 
@@ -216,7 +217,7 @@ Occasions: none unless a map moves (its rolls are the same derivation: none shou
 
 ### T19 Approach (checklist part A)
 
-(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A: T19 also proves the four tooling rows T17 could not prove on the fixture - the cache audit, the overlap census's replacement, the change-selected tests' Python half, dead closure's public half - before its tick; `check-rust-tooling.py` refuses the port's landing until they are.)
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A, narrowed by the plan review of 2026-10-30: T19 also proves the two tooling rows the fixture cannot fire - `cache audit` (it audits maps, and the fixture draws none) and `the overlap census` (its replacement, the counters inside Rust, designed with this port) - before its tick; `check-rust-tooling.py` refuses the port's landing until they are.)
 
 1. **The goal, in the world.** `water_frame` in the extension module, written from `phases/water_frame_greenfield.derivation.md`
    (its derivation came out the same as today's code: rolls and writes, no search), the stage a thin Python function calling it.
@@ -227,10 +228,11 @@ Occasions: none unless a map moves (its rolls are the same derivation: none shou
 4. **Do they describe the world here?** One stage, one derivation; the manifest keys it writes are today's.
 5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
 6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
-   WITHIN on the `.rs` modules, `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
+   WITHIN on the `.rs` modules, `cache audit` and `the overlap census` proven on the port (each check refusing a copy of the port
+   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
 7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** `make work-budget`: water_frame's count at every size against its pinned budget; `make perf-ab` beside it, recorded.
+9. **Done, measured.** `make work-budget`: water_frame's count at every size against its pinned budget; `cache audit` and `the overlap census` in the "Proven" table with their firing cases; `make perf-ab` beside it, recorded.
 10. **Before moving a constant.** The research page each rolled knob cites (0054), read before it moves.
 11. **Before fitting things into room.** n/a
 

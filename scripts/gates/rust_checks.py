@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import os
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -90,6 +91,71 @@ def uncovered(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib
     return out
 
 
+_PUB_FN = re.compile(r"^\s*pub(?:\([^)]*\))?\s+(?:const\s+)?fn\s+([A-Za-z_][A-Za-z0-9_]*)", re.M)
+_PY_FN = re.compile(r"#\[pyfunction\][^{]*?fn\s+([A-Za-z_][A-Za-z0-9_]*)", re.S)
+
+
+def lib_name(manifest: pathlib.Path) -> str:
+    """The module Python imports: the crate's `[lib] name`, else its package name."""
+    text = manifest.read_text(encoding="utf-8")
+    lib = re.search(r"^\[lib\][^\[]*?^name\s*=\s*\"([^\"]+)\"", text, re.M | re.S)
+    pkg = re.search(r"^name\s*=\s*\"([^\"]+)\"", text, re.M)
+    return (lib or pkg).group(1).replace("-", "_") if (lib or pkg) else manifest.parent.name
+
+
+def python_callers(root: pathlib.Path, manifest: pathlib.Path) -> list[pathlib.Path]:
+    """THE CHANGE-SELECTED TESTS' PYTHON HALF (`dev/rust-tooling.md` "the change-selected tests"): every Python test - the
+    crate's own driver, and every file under `tests/` - that imports the extension; testmon selects by Python lines, so a `.rs`
+    change selects none of them unless they are named here."""
+    name = lib_name(manifest)
+    imports = re.compile(rf"^\s*(?:import|from)\s+(?:[\w.]+\.)?{re.escape(name)}\b", re.M)
+    found = [manifest.parent / "tests" / "py_driver.py"]
+    found += sorted(p for p in (root / "tests").rglob("*.py") if imports.search(p.read_text(encoding="utf-8", errors="replace"))) if (root / "tests").is_dir() else []
+    return [p for p in found if p.is_file()]
+
+
+def dead_public(root: pathlib.Path, manifest: pathlib.Path) -> list[str]:
+    """DEAD CLOSURE'S PUBLIC HALF (`dev/rust-tooling.md` "dead closure"): each `pub fn` of the crate that nothing calls - no other
+    use of its name in the crate's Rust, and none in Python (the engine under `l7r/`, the tests, the crate's driver), a
+    `#[pyfunction]` counting as called where Python names it. rustc's `dead_code` sees only private items."""
+    src = sorted((manifest.parent / "src").rglob("*.rs"))
+    rust = "\n".join(p.read_text(encoding="utf-8") for p in src)
+    py = "\n".join(
+        p.read_text(encoding="utf-8", errors="replace")
+        for base in (root / "l7r", root / "tests", manifest.parent / "tests")
+        if base.is_dir()
+        for p in base.rglob("*.py")
+    )
+    out = []
+    for name in sorted(set(_PUB_FN.findall(rust)) | set(_PY_FN.findall(rust))):
+        uses = len(re.findall(rf"\b{re.escape(name)}\b", rust)) - 1  # its own definition
+        if uses <= 0 and not re.search(rf"\b{re.escape(name)}\b", py):
+            out.append(name)
+    return out
+
+
+def _listing(cmd: str, manifest: pathlib.Path) -> subprocess.CompletedProcess[str]:
+    """`dead`: refuse a crate with a `pub fn` nothing calls. `callers`: run the Python tests that import the crate's extension
+    (`make quick` asks it, so a `.rs` change re-runs its Python callers as testmon cannot)."""
+    if cmd == "dead":
+        dead = dead_public(ROOT, manifest)
+        why = "".join(f"  pub fn {n}: nothing in Rust or Python calls it - delete it, or call it\n" for n in dead)
+        return subprocess.CompletedProcess([], 1 if dead else 0, "", why)
+    tests = [str(p) for p in python_callers(ROOT, manifest)]
+    if not tests:
+        return subprocess.CompletedProcess([], 0, "", "")
+    work = TARGET.parent / f"l7r-callers-{manifest.parent.name}"
+    env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
+    built = _env_run(["maturin", "build", "--quiet", "-o", str(work / "dist"), "-m", str(manifest)], env)
+    wheels = sorted((work / "dist").glob("*.whl"))
+    if built.returncode != 0 or not wheels:
+        return built
+    _env_run([sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "--target", str(work / "site"), str(wheels[-1])], dict(os.environ))
+    env = {**env, "PYTHONPATH": f"{work / 'site'}{os.pathsep}{ROOT}"}
+    runs = [_env_run([sys.executable, t], env) if t.endswith("py_driver.py") else _env_run([sys.executable, "-m", "pytest", "-q", "--no-cov", "-p", "no:cacheprovider", t], env) for t in tests]
+    return next((r for r in runs if r.returncode != 0), runs[-1])
+
+
 def _exe() -> pathlib.Path | str:
     return CARGO if CARGO.is_file() else "cargo"
 
@@ -108,7 +174,7 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test", "cover"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "cover", "dead", "callers"])
     ap.add_argument("--driver", default="", help="cover: the Python driver (default: the crate's tests/py_driver.py)")
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
@@ -119,7 +185,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     bad = 0
     for m in found:
-        if args.cmd == "cover":
+        if args.cmd in ("dead", "callers"):
+            r = _listing(args.cmd, m)
+        elif args.cmd == "cover":
             work = TARGET.parent / f"l7r-cover-{m.parent.name}"
             r = cover(m, pathlib.Path(args.driver) if args.driver else m.parent / "tests" / "py_driver.py", work)
         else:

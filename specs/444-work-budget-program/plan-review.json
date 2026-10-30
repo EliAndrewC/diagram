@@ -248,8 +248,8 @@
    "declared": "spec-fidelity"
   },
   "### T17 Approach (checklist part A)": {
-   "sha256": "271e695f3c0f09d9ccef13db10461f6cdcae11ac34432174f53a7038a1dd6746",
-   "verdict": "CLEAR",
+   "sha256": "bbdd48eabd606c5e15259259a2ed7f0ae2aa5d0d51ab5ea3357e8ad6b04fa65f",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
@@ -272,8 +272,8 @@
    "declared": "spec-fidelity"
   },
   "### T19 Approach (checklist part A)": {
-   "sha256": "30e3c236f176c5ba8b076e850cefc09674a51d9b63887dd0213dbe2d419ab51a",
-   "verdict": "CLEAR",
+   "sha256": "c80e94f333aac449bf7ce9b34fbbad76beb4e35f51ebfb8d1a09444874a9c5d4",
+   "verdict": "BLOCKED",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
@@ -1840,6 +1840,69 @@
      "summary": "Fixture crate under tests/fixtures/rust/, first of the Rust work, rows landing in groups, unprovable rows to the round arbiter - text identical to the block judged CLEAR.",
      "class": "within",
      "why": "Unchanged from the earlier CLEAR text (diffed against earlier.md); serves FR-010, FR-011, FR-017 and the GM's 2026-10-30 'please complete those tooling fixes that are the prerequisites'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T17 Approach (checklist part A)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T17-ticks-without-four",
+     "summary": "T17 ticks once every row the fixture can prove is proven. Four rows that 'need a real phase' are not proven on the fixture and move to T19.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-011 ('proves each fires on a Rust fixture') and the GM's 2026-10-30 'complete those tooling fixes that are the prerequisites. For us starting'. The deferral itself is ruled LEGITIMATE only as far as each row below is ruled LEGITIMATE: the cache-audit and roll-audit rows, which cannot fire on a fixture the engine never imports (T17 step 4). The GM's own design puts the gate at landing ('The first Rust phase cannot land until every ... row has been proven to fire', section 7; FR-011 clause 2), and T19's refusal keeps that gate whole. The per-row decisions below carry the two rows that do not qualify. Note, not a ruling: T17 step 9 still says 'Every row ... marked proven', which contradicts the new note. Rewrite it to name the rows T17 proves and the rows deferred to T19."
+    },
+    {
+     "id": "T19-row-cache-audit",
+     "summary": "The cache-audit row (mutate a literal in .rs, rebuild, compare sweeps) is proven on the water_frame port rather than on the fixture.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The mechanism needs a roll: a sweep is a set of rolled maps, and the cache's engine hash covers 'the built extension added to gencache.engine_files()' (design table). Mutating a literal in a crate the engine never imports cannot change a sweep, so the check cannot fire on this fixture. That is physical impossibility, not awkwardness, and the proof still comes before the first Rust phase lands."
+    },
+    {
+     "id": "T19-row-roll-audit-replacement",
+     "summary": "The 'overlap census's replacement' is proven on the port. The name is not in the design table; it is taken to be make roll-audit -> per-test coverage profiles (lines only one rolling test reaches).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On the reading stated in the summary, the check measures which Rust lines rolling tests reach. Only a stage puts Rust lines under a roll, and the fixture is never imported by the engine, so the check cannot fire on the fixture. Impossible on a fixture, and the gate stays at landing. If 'overlap census' is not roll-audit, this ruling does not cover it: the block must name the dev/rust-tooling.md row by its key."
+    },
+    {
+     "id": "T19-row-change-selected-python-half",
+     "summary": "The Python half of quick's change-selected tests (pytest's selection still covers the Python callers) is proven on the port rather than on the fixture.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "No impossibility is shown, and the fixture's own stated shape argues against one: T17 step 1 gives it 'a thin Python function calling it'. That is a Python caller of a Rust extension, which is exactly what this half selects tests for. Selection is a static or fingerprint mechanism that does not need a roll, and like every other guard it can be proven by running it on a fixture tree in a test. Without a measured blocker the deferral rests on convenience, and the presumption holds. Fix: return this half to T17 and prove it on the fixture, or record in the ask the measured reason it cannot fire there and re-dispatch."
+    },
+    {
+     "id": "T19-row-dead-closure-public-half",
+     "summary": "dead-closure's public half (the script, for items the compiler's dead-code lint does not cover) is proven on the port rather than on the fixture.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "No impossibility is shown. The public half judges whether exported items are reached from Python. The fixture has a thin Python caller (T17 step 1), so it can carry one exported item that is called and one that is not, giving a refused case and a kept case, run on a fixture tree as other guards are proven. 'Need a real phase' was stretched over this row and the cache audit alike. They are unlike: the cache audit needs a roll, and this check does not. Fix: return this half to T17, or record the measured reason (for example, the script cannot be rooted anywhere but the engine's STAGES and cannot be made to) and re-dispatch."
+    },
+    {
+     "id": "T19-proof-standard",
+     "summary": "The proof of the deferred rows on the port is recorded through dev/rust-tooling.md's 'marked proven, with its firing case', which check-rust-tooling.py reads.",
+     "class": "within",
+     "why": "FR-011's 'proves each fires' and the design's 'same prove it fires rule every guard meets today' carry over through the shared marking: T17 step 9 requires each row marked proven WITH its firing case. Note, not a ruling: T19's Green exit (step 6) and Done (step 9) do not name the deferred rows or their firing cases. They should, so that 'proven on the port' cannot shrink to 'ran green on the port'."
+    },
+    {
+     "id": "T17-refusal-lands-with-T17",
+     "summary": "The refusal of any Rust phase's landing while a row is unproven lands with T17.",
+     "class": "within",
+     "why": "This is FR-011 clause 2 verbatim: 'the landing of a Rust phase is refused until every such row is marked proven'."
+    },
+    {
+     "id": "T19-landing-refused-until-proven",
+     "summary": "check-rust-tooling.py refuses the water_frame port's landing until the deferred rows are proven.",
+     "class": "within",
+     "why": "This enforces FR-011 clause 2 and the design's 'The first Rust phase cannot land until every ... row has been proven to fire'. It serves the request."
     }
    ]
   }
