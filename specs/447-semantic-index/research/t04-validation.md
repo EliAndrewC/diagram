@@ -37,3 +37,33 @@ Printed by the command: 6 of the 12 (Shizuoka, Huizhou, Yayoi, King, Taipingqiao
 **SC-A3: partly met.** The search surfaced more of the list than either arm, but the agent read only part of what it printed - the
 contract already said to read what the command names -
 and its tokens and time (63,827, 223 s) were above both arms' (51,261 and 59,011; 127 s and 201 s).
+
+## Rerun 2, under the stricter contract (open every printed source that bears on the question; page until a batch adds nothing)
+
+Run 2026-10-30, the same brief under KEY=field-size-validation-2. Its usage, from its completion notice:
+
+```
+<usage><subagent_tokens>73674</subagent_tokens><tool_uses>25</tool_uses><duration_ms>155911</duration_ms></usage>
+research-search 4 (in 4 Bash calls, one shared with an `ls`). ... about 11 grep and lookup and about 8 reading. Total 23 tool calls, no web.
+```
+
+Printed by the command (62 sources, from `search-seen/field-size-validation-2.json`): Shizuoka, Yayoi, King, Taipingqiao, Hattori,
+Ofuro, and Bray - 6 of the 12 plus Bray. Reported: Iwamuro, Kami-Baba, King, Shiroyone (a third copy, `a2/a25ab90b505a`),
+Yayoi, Taipingqiao - 6 of the 12 - plus two neither arm reported: Bray, Education About Asia (`3c/3cf980c9fd08`), "a field twenty
+yards square would be considered large", and Kato 1999 read in the archive itself (`b6/b604c94241e7`) rather than through record
+0005; and Buck and Fei again. Printed but not reported: Shizuoka (ruled Meiji last run), Hattori, Ofuro. Not surfaced: Shicang,
+Huizhou, Konosu. It paged until a batch added nothing ("8 more not printed").
+
+## The two validation runs together
+
+| | arm S | arm T | validation 1 | validation 2 |
+|---|---|---|---|---|
+| tokens | 51,261 | 59,011 | 63,827 | 73,674 |
+| seconds | 127 | 201 | 223 | 156 |
+| of the 12, reported | 6 | 7 | 7 | 6 |
+| sources outside the 12 that bear on it, reported | Buck | Wanchun | Fei | Bray, Kato (archive), Fei, Buck |
+
+Across the four runs, each reported a different six or seven of the twelve, and each found something the others did not (Bray
+in no other run). What a run reports varies more from run to run than with the search it was given; the combined search
+printed, across its two runs, 9 of the 12 (all but Shicang, Iwamuro/Kami-Baba aside, which the agents found by their own greps,
+Konosu never). **SC-A3 not met** as written: no run surfaced and reported all twelve.
