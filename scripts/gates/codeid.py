@@ -35,7 +35,7 @@ _FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
 #: THE ENGINE PATHS of a landing - a delta with one owes the landing cohort (`l7r.diagram.ci.delta.is_engine`'s list, feature 132
 #: FR-008). One definition, read by `scripts/land.py` and by the cohort's counter-only test (`cohort_known.counter_only`, feature
 #: 446), so the two can never disagree about what a counter-only delta may leave unchecked
-ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json)$")
+ENGINE = re.compile(r"^(l7r/.*\.py|pool/.*\.gen\.py|pool/.*\.json|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")  # rust/: 444 T17
 
 
 def strip_docstrings(tree: ast.AST, keep_module_docstring: bool = False) -> ast.AST:

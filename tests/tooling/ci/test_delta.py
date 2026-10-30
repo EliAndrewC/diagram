@@ -16,6 +16,10 @@ ENGINE = [
     S + "l7r/diagram/settlement/houses.py",
     S + "pool/hamlets/inashiro/inashiro.gen.py",
     S + "pool/hamlets/inashiro/inashiro.json",
+    # the Rust phases (feature 444 T17)
+    "rust/phases/src/field.rs",
+    "rust/phases/Cargo.toml",
+    "rust/phases/Cargo.lock",
 ]
 NOT_ENGINE = [
     # l7r/diagram/ci/ (feature 132 FR-025, the GM: "isn't it actually test code?"): tooling, DIRECT
@@ -49,6 +53,8 @@ NOT_ENGINE = [
     "specs/130-codebuild-merge-gate/tasks.md",
     "scripts/sync-with-main.sh",
     "buildspec/merge.yml",
+    "rust/phases/README.md",  # beside the crate, not its source or manifest
+    "tests/fixtures/rust/fixture/src/lib.rs",  # the tooling fixture: never imported by the engine
     ".specify/memory/constitution.md",
 ]
 
@@ -69,7 +75,7 @@ def test_route_and_reason() -> None:
     d = Delta("b", ("docs/x.md",), ())
     assert d.route == "DIRECT" and "none of them diagram engine code" in d.reason
     g = Delta("b", tuple(ENGINE), tuple(ENGINE))
-    assert g.route == "GATED" and "3 engine path" in g.reason
+    assert g.route == "GATED" and f"{len(ENGINE)} engine path" in g.reason
 
 
 def test_delta_is_our_commits_only(repo: Path) -> None:

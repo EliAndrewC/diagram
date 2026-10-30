@@ -34,6 +34,9 @@ _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # So an asset-only delta routes DIRECT; `scripts/gates/gate-stamp.py` `AREAS["page"]` is the one
     # definition of a page asset, and `tests/tooling/test_measured_surface.py` reads it.
     ("l7r/", (".py",)),
+    # THE RUST PHASES ARE ENGINE (feature 444 T17, `dev/rust-tooling.md` "the engine-freeze guard" and "the docstring-blind
+    # code id"): the rebuilt phases' source and its build manifests route GATED like the Python they replace
+    ("rust/", (".rs", "Cargo.toml", "Cargo.lock")),
     # tests/ is NOT engine content (GM 2026-08-25, feature 132 FR-024, asked and answered: *"if the only
     # thing that changed were tests AND the previous test run was green then we skipped the lengthy AWS
     # tests"* - "Yes, locally AND on AWS"). A tests-only delta is DIRECT, outside the engine key, and
