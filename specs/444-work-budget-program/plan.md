@@ -119,7 +119,7 @@ None.
 <!-- plan-archive: T09 to T09 moved to plan-done.md, 2026-10-28 (feature 375 FR-044) -->
 
 <!-- plan-archive: T15 to T15 moved to plan-done.md, 2026-10-29 (feature 375 FR-044) -->
-### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)
+### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)
 
 Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map's form changes - its comb's basins, ditches and brook redrawn); glyph-check only if a glyph is redrawn.
 
@@ -148,4 +148,97 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 5. **What did the before and after show, and under what conditions?** Recorded at box 6: `make work-budget` and `make perf-ab` against main.
 6. **Did any map move, and does it still keep the research?** Yes - every comb map's basins and ditches move; the cohort, the claims round and settlement-review hold them to the research.
 
+
+
+### T17 - FR-011's Rust tooling proven on a Rust fixture (amendment 4; before the first Rust phase lands)
+
+Occasions: none (tooling: no map moves).
+
+### T17 Approach (checklist part A)
+
+1. **The goal, in the world.** A Rust fixture crate - one PyO3 extension module built by maturin, a thin Python function calling it,
+   a `///` doc comment carrying a `Research:` claim and a `Steps:` list - against which every row of `dev/rust-tooling.md` marked one
+   for one, partial, rewritten or replaced is shown to FIRE: each check refuses a fixture written to break it, and passes the fixture
+   written to keep it.
+2. **The constraints.** FR-010 (the module's shape), FR-011 and FR-017 (proven before the first Rust phase); `dev/rust-tooling.md`'s
+   rows and keys; the toolchain pinned in `scripts/container/setup-dev-env.sh` (1.87.0, clippy, rustfmt, llvm-tools, cargo-llvm-cov,
+   maturin 1.8.3).
+3. **Where each comes from.** G: the GM, 2026-10-29 ("I want to modify the plan so that we don't end up doing any Python rewrites")
+   and 2026-10-30 ("please complete those tooling fixes that are the prerequisites"); the design's section 7.
+4. **Do they describe the world here?** The fixture is a stand-in, not a phase: it lives under `tests/fixtures/rust/` and is never
+   imported by the engine.
+5. **The order.** First of the Rust work: before the `water_frame` port and the field rebuild.
+6. **The exits.** Green: every proven row's check named with the fixture case that fires it (a table beside `dev/rust-tooling.md`'s),
+   `make hooks-test` and `make done` green. A row that cannot be proven goes to the round arbiter with what blocked it. Red: a row whose check cannot be made to fire on the fixture goes to the round arbiter (`make arbiter-ask`) with what blocked it.
+7. **The search smell.** none
+8. **The budget.** Rows land in groups as they are proven (the lint and format group; the caps; coverage; the code id and the
+   claims reader; the guards); one landing a group.
+9. **Done, measured.** Every non-`unchanged` row of `dev/rust-tooling.md` marked proven, with its firing case.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no
+
+
+### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict
+
+Occasions: none (a derivation and its verdict; no map moves until the field rebuild).
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** The largest single paddy field the research finds for a settlement of this kind, as the field
+   phase's contract (its cap and source), and `phases/field_greenfield.derivation.md` re-derived under it: a settlement whose
+   farmland passes the cap draws more than one field.
+2. **The constraints.** FR-018, FR-015, FR-016 (rubric S9); the research pass searches the record and the archive first
+   (`make research-search`, feature 447); the findings of feature 447's field-size runs (`specs/447-semantic-index/research/t02-*`,
+   `t04-validation.md`, `t06-validation-3.md`) as leads, each source written up and checked as the record's rules require.
+3. **Where each comes from.** G: the GM, 2026-10-29 ("we can cap out at something approximating whatever that size is, and then
+   larger settlements just have multiple fields").
+4. **Do they describe the world here?** The cap is for the settlement kind the field draws: a hamlet's or village's comb field.
+5. **The order.** Before the field rebuild; after or beside the tooling proof (no engine code).
+6. **The exits.** Green: the cap and its source in the record, the derivation's MODE BUDGET SOUND; a figure above the standing pin
+   (23,988 at 40) keeps that pin and is pinned only with the GM's words (`make budget-change`). Red: a derivation judged LOOSE or UNDERIVED twice, or a cap the research cannot settle, goes to the round arbiter (`make arbiter-ask`) with the verdicts.
+7. **The search smell.** none
+8. **The budget.** The research page through `make page-session`; one MODE BUDGET round a draft.
+9. **Done, measured.** The verdict's figure at 40 and its exponent, beside the standing pin.
+10. **Before moving a constant.** The research page the cap cites, read before it moves.
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no
+
+
+### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)
+
+Occasions: none unless a map moves (its rolls are the same derivation: none should).
+
+### T19 Approach (checklist part A)
+
+1. **The goal, in the world.** `water_frame` in the extension module, written from `phases/water_frame_greenfield.derivation.md`
+   (its derivation came out the same as today's code: rolls and writes, no search), the stage a thin Python function calling it.
+2. **The constraints.** FR-010, FR-017; the derivation's Contract and its budget, 69 at every size; the phase-source guard holds its
+   old code while this task runs.
+3. **Where each comes from.** G: the GM, 2026-10-29 (FR-017: water_frame's Rust port a task of its own, landed before the feature
+   closes).
+4. **Do they describe the world here?** One stage, one derivation; the manifest keys it writes are today's.
+5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
+6. **The exits.** Green: counted operations within 69 at 10 to 80, MODE AUDIT WITHIN on the `.rs` modules, `make cohort-landing`
+   with no regressed seed, the Rust coverage floor 100%. Red: a count over 69, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `make work-budget`: water_frame's count at every size against 69; `make perf-ab` beside it, recorded.
+10. **Before moving a constant.** The research page each rolled knob cites (0054), read before it moves.
+11. **Before fitting things into room.** n/a
+
+**Performance work?** yes - docs/performance-checklist.md's questions follow.
+
+### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
+   the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 

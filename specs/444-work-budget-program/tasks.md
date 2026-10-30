@@ -53,9 +53,21 @@
       research: rendering
       phase: water_frame
       verify: DONE. landed: water_frame accepted: the plan's rolls counted where they happen and counted as the stage's own work (S5), 23 at 10-80 against 69, MODE AUDIT WITHIN; the work-budget run counts a stage over every roll it finished
-- [ ] T16 phase: field - the comb field rebuilt to its greenfield derivation, through the checklist (FR-003-FR-006)
+- [ ] T16 phase: field - the comb field rebuilt in Rust to its greenfield derivation under the single-field cap, through the checklist (FR-003-FR-006, FR-017, FR-018)
       research: rendering
       phase: field
+- [ ] T17 FR-011's Rust tooling proven on a Rust fixture, every one-for-one, partial or rewritten row firing (FR-011, FR-017)
+      research: rendering
+- [ ] T18 the field re-derived under the single-field cap, its MODE BUDGET verdict (FR-018)
+      research: physical
+      - [ ] research pass
+      - [ ] source-reader confirmed
+      - [ ] recorded and cited
+      - [ ] quote-check confirmed
+      - [ ] source-applicability confirmed
+- [ ] T19 phase: water_frame - its Rust port, written from its derivation (FR-010, FR-017)
+      research: rendering
+      phase: water_frame
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
