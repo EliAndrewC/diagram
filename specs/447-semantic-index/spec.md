@@ -11,6 +11,8 @@ measurement on a real research question, by tokens and time, before the GM decid
 
 **Approved**: the GM, 2026-10-29, "Either way, go ahead and file the feature"
 
+**Approved**: the GM, 2026-10-30, "Perhaps we could use that as a reference and count time and tokens?  Dispatcvhing to subagents to ensure it's a good and fair comparison?"
+
 **Input**: `request.md` (the GM's words, verbatim).
 
 ## The question
