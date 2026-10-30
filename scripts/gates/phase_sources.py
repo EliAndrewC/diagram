@@ -49,7 +49,9 @@ def sources(root: pathlib.Path, phase: str, extra: list[str]) -> list[str]:
     """The stage's old modules, relative to `root`."""
     import work_budget_bundle as wb  # noqa: PLC0415
 
-    files = list(wb.stage_files(root, phase))
+    # THE OLD CODE IS THE PYTHON: `stage_files` also names a Rust phase's `.rs` source (the audit bundle reads it), which is the
+    # very code the task writes and must stay readable
+    files = [p for p in wb.stage_files(root, phase) if p.suffix == ".py"]
     runs = sorted((root / wb.RUNS).glob("*.json"))
     if runs:
         run = json.loads(runs[-1].read_text(encoding="utf-8"))

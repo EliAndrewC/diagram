@@ -38,6 +38,8 @@ def _repo(tmp: pathlib.Path) -> pathlib.Path:
 
 def test_a_phase_task_holds_its_stage_its_counted_modules_and_its_old_code_globs(tmp_path: pathlib.Path) -> None:
     root = _repo(tmp_path)
+    (root / "rust" / "phases" / "src").mkdir(parents=True)
+    (root / "rust" / "phases" / "src" / "field.rs").write_text("pub fn stage_field() {}\n")  # the new code: never held
     block = "- [ ] T16 phase: field\n      phase: field\n      old-code: l7r/diagram/settlement/*.py\n"
     line = ps.record(root, "444-x", "T16", block)
     state = json.loads((root / ".git" / ps.STATE).read_text())

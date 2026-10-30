@@ -35,6 +35,7 @@ TABLE = "dev/work-budget.json"
 RUNS = "dev/work-budget"
 FANOUT = "dev/perf-log"
 HAMLET = "l7r/diagram/hamletgen"
+RUST = "rust"  # the rebuilt phases' crates (feature 444 FR-010)
 
 #: what a MODE BUDGET derivation may not hold, each with why (D10)
 FORBIDDEN = (
@@ -359,13 +360,20 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
 
 
 def stage_files(root: Path, phase: str) -> list[Path]:
-    """The file defining `stage_<phase>` under the hamlet package, and, when that file is in a subpackage, its siblings."""
+    """The file defining `stage_<phase>` under the hamlet package, and, when that file is in a subpackage, its siblings; and a
+    Rust phase's source beside it (feature 444 T17, `dev/rust-tooling.md` "the work-budget audit bundle"): the `.rs` file under
+    `rust/` defining `fn stage_<phase>`, with its siblings when it sits in a module directory of its own."""
     pat = re.compile(rf"^def stage_{re.escape(phase)}\(", re.M)
     found = [p for p in sorted((root / HAMLET).rglob("*.py")) if pat.search(p.read_text(encoding="utf-8"))]
     if not found:
         return []
     home = found[0].parent
-    return sorted(home.glob("*.py")) if home != root / HAMLET else found
+    files = sorted(home.glob("*.py")) if home != root / HAMLET else found
+    rs = re.compile(rf"^\s*(?:pub(?:\(crate\))?\s+)?fn\s+stage_{re.escape(phase)}\b", re.M)
+    rust = [p for p in sorted((root / RUST).rglob("*.rs")) if rs.search(p.read_text(encoding="utf-8"))] if (root / RUST).is_dir() else []
+    if rust:
+        files += sorted(rust[0].parent.glob("*.rs")) if rust[0].parent.name != "src" else rust[:1]
+    return files
 
 
 def counted_files(root: Path, counts: list[dict]) -> list[Path]:
