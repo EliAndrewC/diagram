@@ -118,3 +118,9 @@ def test_uncovered_names_the_lines_of_each_file_no_test_reaches(crate: pathlib.P
     lib = str(broken / "src" / "lib.rs")
     assert list(got) == [lib] and got[lib], "the new function's lines, in lib.rs"
     assert rc.uncovered(tmp_path / "none" / "Cargo.toml", None, tmp_path / "u3") == {str(tmp_path / "none"): [0]}, "a run that fails"
+
+
+def test_a_private_item_nothing_calls_is_refused(crate: pathlib.Path) -> None:
+    """Row "dead closure": the compiler's dead-code lint, refused under `-D warnings`, for private items."""
+    r = rc.run("lint", _with(crate, "\nfn never_called() -> u8 {\n    1\n}\n") / "Cargo.toml", check=False)
+    assert r.returncode != 0 and "never_called" in r.stderr and "dead_code" in r.stderr
