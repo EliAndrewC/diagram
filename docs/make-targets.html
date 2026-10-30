@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 213 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 214 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -224,6 +224,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make replay-owing</td><td class=a>OUT REVS</td><td>replay recorded commits through the old owing and the new: modal-depiction units and impl-drift claims owed, per commit and in total (feature 375 SC-001)</td></tr>
 <tr><td class=n>make research-claim</td><td class=a>FEATURE Q RELEASE STATUS WHY</td><td>claim research questions for this clone, refused when another session holds one; STATUS=done releases (feature 376)</td></tr>
 <tr><td class=n>make research-claims</td><td class=a>Q</td><td>the live claims on research questions, and nothing else of the sheet (feature 376)</td></tr>
+<tr><td class=n>make research-search</td><td class=a>KEY LIMIT Q Q_JA Q_KO Q_ZH RECORD_LIMIT TERMS</td><td>THE local search before the web: the meaning search (a question per language) and the text search (term sets, every term required) over the record and the archive in one call, merged by source, each printed once with its best passage and what found it; a call prints a batch and counts the rest, and under KEY= the next call prints the next batch, never one already shown (feature 447 amendment 3)</td></tr>
 <tr><td class=n>make reserve</td><td class=a>KEY KEY_CAP_OK KIND</td><td>reserve the next glossary, registry-entry or question number under a host-wide lock and write the file&#x27;s stub - prints its path; fill it in (feature 265 FR-010: parallel queues never collide; feature 274: a write session&#x27;s 11th registry key is refused; feature 303: a question&#x27;s stub carries a tags marker to fill)</td></tr>
 <tr><td class=n>make review-accept</td><td class=a><div class=ad><span class=an>MAP=&lt;map&gt;</span><span class=aw>the pool map whose last settlement-review verdict raised the finding</span></div><div class=ad><span class=an>FINDING=&lt;id&gt;</span><span class=aw>the finding&#x27;s id, as that verdict record names it</span></div><div class=ad><span class=an>REASON=&quot;...&quot;</span><span class=aw>why it is left; at least two words and eight characters</span></div></td><td>record a review finding as deliberately LEFT, with a reason - logged like an escape</td></tr>
 <tr><td class=n>make review-census</td><td class=a>&ndash;</td><td>is each review check pulling its weight? the ledger&#x27;s totals by check (feature 294)</td></tr>
