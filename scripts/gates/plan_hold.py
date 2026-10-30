@@ -26,15 +26,17 @@ from typing import Any
 _HOLD = re.compile(r"ON HOLD\b.*?\buntil feature (\d{3,})", re.S)
 #: the status PARAGRAPH, not its first line: 384's wraps, and its hold is on the second (a test pins it)
 _STATUS = re.compile(r"^\*\*Status\*\*:\s*(.*?)(?:\n\s*\n|\Z)", re.M | re.S)
-_ENGINE = re.compile(r"(?<![\w/.-])(?:l7r|pool)/")
+_ENGINE = re.compile(r"(?<![\w/.-])(?:l7r|pool|rust)/")  # `rust/`: the rebuilt phases' crates (feature 444 T17)
 _OUTSIDE = re.compile(r"(?<![\w/.-])(?:scripts|tests|research|docs|specs|dev|\.claude)/|\bMakefile\b")
 _WORD = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 _ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _engine_modules(root: pathlib.Path = _ROOT) -> frozenset[str]:
-    """Every engine module's name: `l7r/**/*.py` and `pool/**/*.py` stems (`fixture_seats`), packages included, `__init__` not."""
+    """Every engine module's name: `l7r/**/*.py` and `pool/**/*.py` stems (`fixture_seats`), packages included, `__init__` not;
+    and the Rust phases' `rust/**/*.rs` stems, `lib` and `mod` not (feature 444 T17, `dev/rust-tooling.md`)."""
     names = {p.stem.removesuffix(".gen") for top in ("l7r", "pool") for p in (root / top).rglob("*.py") if p.stem != "__init__"}
+    names |= {p.stem for p in (root / "rust").rglob("*.rs") if p.stem not in ("lib", "mod", "main")}
     names |= {p.name for p in (root / "l7r").rglob("*") if p.is_dir() and (p / "__init__.py").is_file()}
     return frozenset(n for n in names if len(n) > 3)
 

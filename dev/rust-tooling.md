@@ -54,4 +54,6 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | format | `rust_checks.py format` in `make format` (`--check` refuses) | `test_format_passes_the_fixture_and_refuses_what_rustfmt_would_change` |
 | function cap | clippy `too_many_lines` at the root `clippy.toml`'s 100; `allow_attributes_without_reason` denied | `test_the_function_cap_refuses_a_function_past_a_hundred_lines`, `test_an_exception_with_no_reason_is_refused` |
 | file cap | `check-file-scale.py` scanning `.rs` | `test_the_file_cap_reads_rust_files` |
+| the make-only guard | `hm_make.py` refuses a bare `cargo` (build, test, run, clippy, check, fmt, llvm-cov); `make rust-test` runs `cargo test` | `tests/hooks/test-make-only-hooks.sh` ("a bare cargo test", "a bare cargo clippy, by path"); `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
+| a wording-only change, a held feature's paths | `wording.py` counts any `.rs` change as what runs; `plan_hold.py` counts `rust/` paths and `.rs` stems as engine | `tests/tooling/test_wording_rust.py`; `test_a_task_whose_plan_section_names_an_engine_path_is_an_engine_task` (red without the change) |
 

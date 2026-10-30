@@ -55,6 +55,7 @@ def test_an_engine_task_of_a_held_feature_is_refused_naming_the_feature_it_waits
 def test_a_task_whose_plan_section_names_an_engine_path_is_an_engine_task(specs):
     d = _feature(specs, "405-engine-findings", HELD, TASKS)
     assert "no escape" in plan_hold.refusal(d, "T107", "### T107 Decisions\n- D1 edits pool/hamlets/inashiro.gen.py", "x y")
+    assert "no escape" in plan_hold.refusal(d, "T107", "### T107 Decisions\n- D1 edits scripts/gates/x.py and rust/phases/src/field.rs", "x y"), "a Rust phase is engine (444 T17)"
 
 
 def test_a_non_engine_task_of_a_held_feature_starts_only_with_hold_ok(specs):

@@ -105,6 +105,9 @@ case "$VERDICT" in
     # GUARD_EDIT_OK: feature 385 T61 (plan D80) - make keeps the last of two assignments of one variable and says nothing
     V=${VERDICT#make-dup-var:}; VERDICT=make-dup-var
     block "this make call sets $V twice, and make silently keeps only the last value." "one call with $V=\"<a> <b>\" (a quoted list), or one make call per value" ;;
+  bare-cargo)
+    # GUARD_EDIT_OK: feature 444 T17 - a bare cargo is a bare pytest's Rust form: the Rust phases go through make
+    block "cargo run outside make. The Rust phases are linted, formatted and tested through make, so the gate's lints and its shared target directory are the ones used." "make static (clippy, rustfmt --check) | make format (rustfmt) | make rust-test (cargo test)" ;;
   foreign-makefile)
     block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from the repository root)" ;;
   engine-entry-point)
