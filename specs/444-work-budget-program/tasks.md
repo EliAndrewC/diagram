@@ -52,6 +52,7 @@
 - [x] T15 phase: water_frame - the plan's rolls counted where they happen, through the checklist (FR-003-FR-005)
       research: rendering
       phase: water_frame
+      resume (the round arbiter's ruling on ask:set-down-444-t19-build, 2026-10-30): started, its build not begun. Its inputs: decisions D6-D9 (plan.md, T19 Decisions, CLEAR twice), the rulings on ask:444-T19-output-keys and ask:444-T19-plan-site (arbiter.jsonl), phases/water_frame.keys.json (the 31 meta keys, 3 flags and pins FR-004 compares), phases/water_frame.plan_site.md (the SitePlan's fields and plan_site's rolls), phases/water_frame_greenfield.derivation.md. First step: settle which of plan_site's 30 rolls are the derivation's 20 knobs, against its Bounds line (plan_site.md's last bullet); then the crate, D8's build, D9's counters, and cache audit and the overlap census proven on the port before the tick. After T19: T18's research pass, then T16.
       verify: DONE. landed: water_frame accepted: the plan's rolls counted where they happen and counted as the stage's own work (S5), 23 at 10-80 against 69, MODE AUDIT WITHIN; the work-budget run counts a stage over every roll it finished
 - [ ] T16 phase: field - the comb field rebuilt in Rust to its greenfield derivation under the single-field cap, through the checklist (FR-003-FR-006, FR-017, FR-018)
       research: rendering
