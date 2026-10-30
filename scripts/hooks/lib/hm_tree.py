@@ -208,6 +208,30 @@ def _words(seg: str) -> list[str]:
     return toks
 
 
+# `git branch` LISTS unless it is told to change a ref: any flag once counted as a write, and refused feature 447's
+# `git -C <archive> branch -r --contains <sha>`; a name with no listing flag creates a branch
+_BRANCH_WRITE_FLAGS = frozenset(
+    "-d -D -m -M -c -C -f -u --delete --move --copy --force --set-upstream-to --unset-upstream --edit-description --track".split()
+)
+_BRANCH_LIST_FLAGS = frozenset("-l --list -r --remotes -a --all --contains --no-contains --merged --no-merged --points-at --show-current".split())
+_BRANCH_VALUE_FLAGS = frozenset("--contains --no-contains --merged --no-merged --points-at --sort --format --column".split())
+
+
+def _branch_writes(args: list[str]) -> bool:
+    flags = {a.split("=", 1)[0] for a in args if a.startswith("-")}
+    if flags & _BRANCH_WRITE_FLAGS or any(a.startswith("--set-upstream-to=") for a in args):
+        return True
+    names, skip = [], False
+    for a in args:
+        if skip:
+            skip = False
+        elif a.startswith("-"):
+            skip = a in _BRANCH_VALUE_FLAGS
+        else:
+            names.append(a)
+    return bool(names) and not flags & _BRANCH_LIST_FLAGS
+
+
 def _git_write(toks: list[str], env: dict[str, str], home: str, eff: str | None) -> tuple[str | None, str] | None:
     """(target, 'named'|'shell') when a git invocation writes, else None."""
     i, c_path = 1, None
@@ -225,7 +249,7 @@ def _git_write(toks: list[str], env: dict[str, str], home: str, eff: str | None)
     if i >= len(toks):
         return None
     sub = toks[i]
-    writes = sub in _GIT_WRITES or (sub == "branch" and any(t.startswith("-") for t in toks[i + 1 :]))
+    writes = sub in _GIT_WRITES or (sub == "branch" and _branch_writes(toks[i + 1 :]))
     if not writes:
         return None
     if c_path is None:
