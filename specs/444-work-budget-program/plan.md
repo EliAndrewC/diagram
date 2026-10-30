@@ -180,7 +180,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 ### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)
 
-Occasions: none unless a map moves (its rolls are the same derivation: none should).
+Occasions: settlement-review on each pool hamlet the port moves (D7: every plan rolls anew, so the layouts downstream move).
 
 ### T19 Approach (checklist part A)
 
@@ -204,6 +204,33 @@ Occasions: none unless a map moves (its rolls are the same derivation: none shou
 11. **Before fitting things into room.** n/a
 
 **Performance work?** yes - docs/performance-checklist.md's questions follow.
+
+### T19 Decisions
+
+**D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
+in `STAGES`. It gathers the derivation's Reads into one record - the map's seed, the spec's name, households and scale, and for
+each of the 20 knobs the forms its own table allows for the settlement form and the spec's pin if any - and calls
+`l7r_phases.water_frame(record)`. Rust rolls the three bearings (the drainage bearing drawn within 90 degrees of the fall, so the
+bound holds by construction) and each knob's form, and returns them with its counted operations. Python writes them where the
+manifest keys are today (FR-004: the keys unchanged). The knob tables stay Python data: they are the research's tables, and one
+copy of each is the rule.
+
+**D7 - The rolls: a seeded SplitMix64 in Rust** (FR-017): seeded from the map's seed and the stage's name, no crate dependency,
+the same draws on every platform. The port cannot reproduce today's draws without reading today's Python's random calls, which
+the phase-source guard holds (the GM, 2026-10-30), so every map's plan rolls once anew - its fall, drainage bearing, wind and knob
+forms - and the layouts downstream move. The GM's ruling of 2026-10-18 lets maps change ("so long as the changes don't violate our
+research findings"): `make cohort-landing` and the claims round hold them to the research, and each pool hamlet that moves owes
+its settlement-review (docs/reviews.md: a map's form changes) - this task's Occasions line is corrected to say so.
+
+**D8 - The build: maturin into a repository-local folder, keyed to the Rust sources** (FR-010): `rust/phases/` is the crate
+(`l7r_phases`); `make rust-build` builds it with maturin into `.rust-ext/` (gitignored) when its sources' code id moved, and every
+target that rolls a map or runs the tests depends on it; `l7r/diagram/hamletgen` puts `.rust-ext/` on the import path. The
+generation key already holds the Rust sources (T17, `gencache.rust_sources`), so a Rust change re-keys every map.
+
+**D9 - The counts: Rust counts as Python does, and hands them back** (FR-003; `dev/rust-tooling.md` "the overlap census"): the
+crate keeps an operation counter keyed `<kind>@<function>` as the Python counters are, returns it with the stage's result, and the
+thin function adds it to the roll's counts, so `make work-budget` and MODE AUDIT read a Rust stage as they read a Python one -
+the replacement for the overlap census, proven on this port by a copy that does work it does not count.
 
 ### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
