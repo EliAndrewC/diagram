@@ -34,7 +34,7 @@ decision).
 | dead closure | `make dead-closure` | the compiler's dead-code lint, refused, for private items; the script for the rest | partial | `scripts/measure/dead_closure.py` |
 | the overlap census | per-call comparison counts of each check, from the engine's Python | the work-budget counters, which count inside Rust | replaced | `l7r/diagram/tools/overlap_census.py` |
 | the work-budget audit bundle | the stage's modules copied for MODE AUDIT | the stage's `.rs` modules beside its thin Python function | one for one | `scripts/reviews/work_budget_bundle.py` |
-| the make-only guard | the hook refuses a bare interpreter; `_invocation.py` refuses in-process use | the hook also refuses a bare `cargo`; the extension refuses use outside make | one for one | `scripts/hooks/lib/hm_make.py` `scripts/hooks/pair-hooks.sh` |
+| the make-only guard | the hook refuses a bare interpreter; `_invocation.py` refuses in-process use | the hook also refuses a bare `cargo`; the extension refuses use outside make | one for one | `scripts/hooks/lib/hm_make.py` `scripts/hooks/pair-hooks.sh` `make rust-test` |
 | the engine-freeze guard | an engine `.py` edit while a map review runs | `.rs` an engine path | one for one | `scripts/hooks/lib/hm_engine_freeze.py` |
 | a wording-only change, a held feature's paths | `wording.py` and `plan_hold.py` read which paths are code | `.rs` code | one for one | `scripts/gates/wording.py` `scripts/gates/plan_hold.py` |
 | the interactive classes and their modal checks | the class docstrings read by `inspect`; entry and modal owed, bundles, conditions | unchanged: the interactive page stays Python | unchanged | `l7r/diagram/interactive/classes/_base.py` `l7r/diagram/interactive/conditions.py` `scripts/record/entry_owed.py` `scripts/record/modal_bundle.py` `scripts/record/modal_owed.py` |
@@ -56,4 +56,5 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | file cap | `check-file-scale.py` scanning `.rs` | `test_the_file_cap_reads_rust_files` |
 | the make-only guard | `hm_make.py` refuses a bare `cargo` (build, test, run, clippy, check, fmt, llvm-cov); `make rust-test` runs `cargo test` | `tests/hooks/test-make-only-hooks.sh` ("a bare cargo test", "a bare cargo clippy, by path"); `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 | a wording-only change, a held feature's paths | `wording.py` counts any `.rs` change as what runs; `plan_hold.py` counts `rust/` paths and `.rs` stems as engine | `tests/tooling/test_wording_rust.py`; `test_a_task_whose_plan_section_names_an_engine_path_is_an_engine_task` (red without the change) |
+| this inventory's check | `check-rust-tooling.py` also lists a reader of `.rs` files and a Makefile recipe running cargo, clippy, rustfmt, llvm-cov or `rust_checks.py` | `test_a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it` (the `.rs` cases), `test_a_make_recipe_running_the_rust_tools_needs_its_row` |
 

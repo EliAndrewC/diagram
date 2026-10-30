@@ -52,11 +52,13 @@ def test_the_real_tree_has_a_row_for_every_reader_and_finds_the_file_cap() -> No
         ("scripts/g.py", "ok = [p for p in names if p.endswith('.py')]\n"),
         ("scripts/h.py", "ok = p.suffix == \".py\"\n"),
         ("scripts/i.sh", "find . -name '*.py'\n"),
+        ("scripts/j.py", "for p in Path('.').rglob(\"*.rs\"):\n    pass\n"),  # a reader of the Rust phases (444 T17)
+        ("scripts/k.py", "ok = p.suffix == '.rs'\n"),
     ],
 )
 def test_a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it(tmp_path: Path, name: str, text: str) -> None:
     root = _repo(tmp_path, {name: text})
-    assert crt.problems(root) == [f"{name}: reads Python's syntax tree or .py files, and no row of dev/rust-tooling.md names it"]
+    assert crt.problems(root) == [f"{name}: reads Python's syntax tree, or .py or .rs files, and no row of dev/rust-tooling.md names it"]
     (root / "dev" / "rust-tooling.md").write_text(ROW + f"| x | y | z | unchanged | `{name.rsplit('/', 1)[0]}/*` |\n")
     assert crt.problems(root) == [], "a glob key names it"
 
@@ -68,7 +70,7 @@ def test_a_dotted_compile_and_a_mention_in_specs_are_not_readers(tmp_path: Path)
 
 def test_a_make_recipe_running_a_python_only_tool_needs_its_row(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = _repo(tmp_path, {"Makefile": "lint:   ## lint\n\truff check .\nother:\n\techo hi\nX := 1\n"})
-    assert crt.problems(root) == ["make lint: its recipe runs a Python-only tool, and no row of dev/rust-tooling.md names it"]
+    assert crt.problems(root) == ["make lint: its recipe runs a Python-only or Rust tool, and no row of dev/rust-tooling.md names it"]
     assert crt.main(["--root", str(root)]) == 1 and "add a row to dev/rust-tooling.md" in capsys.readouterr().err
     (root / "dev" / "rust-tooling.md").write_text(ROW + "| lint | ruff | clippy | one for one | `make lint` |\n")
     assert crt.problems(root) == []
@@ -78,3 +80,12 @@ def test_no_inventory_names_nothing(tmp_path: Path) -> None:
     root = _repo(tmp_path, {"scripts/a.py": "import ast\n"})
     (root / "dev" / "rust-tooling.md").unlink()
     assert len(crt.problems(root)) == 1
+
+
+def test_a_make_recipe_running_the_rust_tools_needs_its_row(tmp_path: Path) -> None:
+    """444 T17: a target running cargo or the Rust checks is inventoried like one running ruff."""
+    root = _repo(tmp_path, {"Makefile": "rust-test:   ## tests\n\tpython3 scripts/gates/rust_checks.py test\nbuild:\n\tcargo build\n"})
+    assert crt.problems(root) == [
+        "make build: its recipe runs a Python-only or Rust tool, and no row of dev/rust-tooling.md names it",
+        "make rust-test: its recipe runs a Python-only or Rust tool, and no row of dev/rust-tooling.md names it",
+    ]

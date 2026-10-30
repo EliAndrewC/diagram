@@ -27,7 +27,10 @@ INVENTORY = "dev/rust-tooling.md"
 SKIP = ("specs/", "research/", "dev/", "pool/", "legacy-hand-authored-pool/")
 SYNTAX = re.compile(r"^\s*(?:import\s+(?:ast|tokenize|inspect|symtable)\b|from\s+(?:ast|tokenize|inspect|symtable)\s+import\b)", re.M)
 PY_FILES = re.compile(r"""["']\*\.py["']|endswith\(\s*["']\.py["']|suffix\s*==\s*["']\.py["']|-name\s+['"]\*\.py['"]|(?<![.\w])compile\(""")
-TOOLS = re.compile(r"\b(?:ruff|pyrefly|pytest|coverage|testmon|vulture)\b|[\"']\*\.py[\"']|-name\s+['\"]\*\.py['\"]")
+# ...AND A READER OF THE RUST PHASES' SOURCE (feature 444 T17, the row "this inventory's check"): a tool reading `.rs` files is as
+# much a part of the Rust tooling as one reading `.py`, and goes unlisted the same silent way
+RS_FILES = re.compile(r"""["']\*\.rs["']|endswith\(\s*["']\.rs["']|suffix\s*==\s*["']\.rs["']|-name\s+['"]\*\.rs['"]""")
+TOOLS = re.compile(r"\b(?:ruff|pyrefly|pytest|coverage|testmon|vulture|rust_checks|cargo|clippy|rustfmt|llvm-cov)\b|[\"']\*\.py[\"']|-name\s+['\"]\*\.py['\"]")
 _TARGET = re.compile(r"^([a-z][\w-]*)\s*:(?!=)")
 _KEY = re.compile(r"`([^`]+)`")
 
@@ -42,7 +45,7 @@ def readers(root: Path, files: list[str]) -> list[str]:
             text = (root / f).read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             continue
-        if SYNTAX.search(text) or PY_FILES.search(text):
+        if SYNTAX.search(text) or PY_FILES.search(text) or RS_FILES.search(text):
             out.append(f)
     return out
 
@@ -74,10 +77,10 @@ def problems(root: Path) -> list[str]:
     have = keys((root / INVENTORY).read_text(encoding="utf-8")) if (root / INVENTORY).is_file() else []
     paths = [k for k in have if not k.startswith("make ")]
     targets = {k.removeprefix("make ").strip() for k in have if k.startswith("make ")}
-    out = [f"{f}: reads Python's syntax tree or .py files, and no row of {INVENTORY} names it" for f in readers(root, files) if not any(fnmatch.fnmatch(f, k) for k in paths)]
+    out = [f"{f}: reads Python's syntax tree, or .py or .rs files, and no row of {INVENTORY} names it" for f in readers(root, files) if not any(fnmatch.fnmatch(f, k) for k in paths)]
     mk = root / "Makefile"
     if mk.is_file():
-        out += [f"make {t}: its recipe runs a Python-only tool, and no row of {INVENTORY} names it" for t in tool_targets(mk.read_text(encoding="utf-8")) if t not in targets]
+        out += [f"make {t}: its recipe runs a Python-only or Rust tool, and no row of {INVENTORY} names it" for t in tool_targets(mk.read_text(encoding="utf-8")) if t not in targets]
     return out
 
 
