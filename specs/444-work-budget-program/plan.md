@@ -161,8 +161,8 @@ Occasions: none (tooling: no map moves).
    for one, partial, rewritten or replaced is shown to FIRE: each check refuses a fixture written to break it, and passes the fixture
    written to keep it.
 2. **The constraints.** FR-010 (the module's shape), FR-011 and FR-017 (proven before the first Rust phase); `dev/rust-tooling.md`'s
-   rows and keys; the toolchain pinned in `scripts/container/setup-dev-env.sh` (1.87.0, clippy, rustfmt, llvm-tools, cargo-llvm-cov,
-   maturin 1.8.3).
+   rows and keys; the toolchain pinned in `scripts/container/setup-dev-env.sh` (its pinned versions: clippy, rustfmt, llvm-tools,
+   cargo-llvm-cov, maturin).
 3. **Where each comes from.** G: the GM, 2026-10-29 ("I want to modify the plan so that we don't end up doing any Python rewrites")
    and 2026-10-30 ("please complete those tooling fixes that are the prerequisites"); the design's section 7.
 4. **Do they describe the world here?** The fixture is a stand-in, not a phase: it lives under `tests/fixtures/rust/` and is never
@@ -197,7 +197,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 4. **Do they describe the world here?** The cap is for the settlement kind the field draws: a hamlet's or village's comb field.
 5. **The order.** Before the field rebuild; after or beside the tooling proof (no engine code).
 6. **The exits.** Green: the cap and its source in the record, the derivation's MODE BUDGET SOUND; a figure above the standing pin
-   (23,988 at 40) keeps that pin and is pinned only with the GM's words (`make budget-change`). Red: a derivation judged LOOSE or UNDERIVED twice, or a cap the research cannot settle, goes to the round arbiter (`make arbiter-ask`) with the verdicts.
+   (`dev/work-budget.json`) keeps that pin and is pinned only with the GM's words (`make budget-change`). Red: a derivation judged LOOSE or UNDERIVED twice, or a cap the research cannot settle, goes to the round arbiter (`make arbiter-ask`) with the verdicts.
 7. **The search smell.** none
 8. **The budget.** The research page through `make page-session`; one MODE BUDGET round a draft.
 9. **Done, measured.** The verdict's figure at 40 and its exponent, beside the standing pin.
@@ -215,17 +215,17 @@ Occasions: none unless a map moves (its rolls are the same derivation: none shou
 
 1. **The goal, in the world.** `water_frame` in the extension module, written from `phases/water_frame_greenfield.derivation.md`
    (its derivation came out the same as today's code: rolls and writes, no search), the stage a thin Python function calling it.
-2. **The constraints.** FR-010, FR-017; the derivation's Contract and its budget, 69 at every size; the phase-source guard holds its
+2. **The constraints.** FR-010, FR-017; the derivation's Contract and its pinned budget (`dev/work-budget.json`); the phase-source guard holds its
    old code while this task runs.
 3. **Where each comes from.** G: the GM, 2026-10-29 (FR-017: water_frame's Rust port a task of its own, landed before the feature
    closes).
 4. **Do they describe the world here?** One stage, one derivation; the manifest keys it writes are today's.
 5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
-6. **The exits.** Green: counted operations within 69 at 10 to 80, MODE AUDIT WITHIN on the `.rs` modules, `make cohort-landing`
-   with no regressed seed, the Rust coverage floor 100%. Red: a count over 69, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
+6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
+   WITHIN on the `.rs` modules, `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
 7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** `make work-budget`: water_frame's count at every size against 69; `make perf-ab` beside it, recorded.
+9. **Done, measured.** `make work-budget`: water_frame's count at every size against its pinned budget; `make perf-ab` beside it, recorded.
 10. **Before moving a constant.** The research page each rolled knob cites (0054), read before it moves.
 11. **Before fitting things into room.** n/a
 
