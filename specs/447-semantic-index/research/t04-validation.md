@@ -65,5 +65,5 @@ Huizhou, Konosu. It paged until a batch added nothing ("8 more not printed").
 
 Across the four runs, each reported a different six or seven of the twelve, and each found something the others did not (Bray
 in no other run). What a run reports varies more from run to run than with the search it was given; the combined search
-printed, across its two runs, 9 of the 12 (all but Shicang, Iwamuro/Kami-Baba aside, which the agents found by their own greps,
-Konosu never). **SC-A3 not met** as written: no run surfaced and reported all twelve.
+printed, across its two runs, 7 of the 12 (Shizuoka, Huizhou, Yayoi, King, Taipingqiao, Hattori, Ofuro); Shiroyone, Iwamuro and
+Kami-Baba the agents reached through record 0005 and their own greps, Shicang through a grep, Konosu never. **SC-A3 not met** as written: no run surfaced and reported all twelve.
