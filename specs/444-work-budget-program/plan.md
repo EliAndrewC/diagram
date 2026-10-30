@@ -150,7 +150,40 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 
 
 
-<!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-10-30 (feature 375 FR-044) -->
+### T17 - FR-011's Rust tooling proven on a Rust fixture (amendment 4; before the first Rust phase lands)
+
+Occasions: none (tooling: no map moves).
+
+### T17 Approach (checklist part A)
+
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A, narrowed by the plan review of 2026-10-30: T17 ticks with every row the fixture can fire; `cache audit` and `the overlap census`, which need a phase's maps or counters, are T19's, and the refusal of a Rust phase while any row is unproven lands with T17.)
+
+1. **The goal, in the world.** A Rust fixture crate - one PyO3 extension module built by maturin, a thin Python function calling it,
+   a `///` doc comment carrying a `Research:` claim and a `Steps:` list - against which every row of `dev/rust-tooling.md` marked one
+   for one, partial, rewritten or replaced is shown to FIRE: each check refuses a fixture written to break it, and passes the fixture
+   written to keep it.
+2. **The constraints.** FR-010 (the module's shape), FR-011 and FR-017 (proven before the first Rust phase); `dev/rust-tooling.md`'s
+   rows and keys; the toolchain pinned in `scripts/container/setup-dev-env.sh` (its pinned versions: clippy, rustfmt, llvm-tools,
+   cargo-llvm-cov, maturin).
+3. **Where each comes from.** G: the GM, 2026-10-29 ("I want to modify the plan so that we don't end up doing any Python rewrites")
+   and 2026-10-30 ("please complete those tooling fixes that are the prerequisites"); the design's section 7.
+4. **Do they describe the world here?** The fixture is a stand-in, not a phase: it lives under `tests/fixtures/rust/` and is never
+   imported by the engine.
+5. **The order.** First of the Rust work: before the `water_frame` port and the field rebuild.
+6. **The exits.** Green: every proven row's check named with the fixture case that fires it (a table beside `dev/rust-tooling.md`'s),
+   `make hooks-test` and `make done` green. A row that cannot be proven goes to the round arbiter with what blocked it. Red: a row whose check cannot be made to fire on the fixture goes to the round arbiter (`make arbiter-ask`) with what blocked it.
+7. **The search smell.** none
+8. **The budget.** Rows land in groups as they are proven (the lint and format group; the caps; coverage; the code id and the
+   claims reader; the guards); one landing a group.
+9. **Done, measured.** Every row of `dev/rust-tooling.md` marked one for one, partial, rewritten or replaced (step 1's four kinds) marked
+   proven in its "Proven on the fixture" table with its firing case, but `cache audit` and `the overlap census`, which the arbiter's
+   ruling gives T19 (they fire only on a phase's maps or counters).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+
+**Performance work?** no
+
+
 ### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict
 
 Occasions: none (a derivation and its verdict; no map moves until the field rebuild).
