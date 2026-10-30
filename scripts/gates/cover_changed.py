@@ -61,6 +61,35 @@ def changed_modules(root: Path, merge: str) -> list[str]:
     return sorted({p for p in names if ENGINE_PY.match(p) and (root / p).is_file()})
 
 
+def changed_rust(root: Path, merge: str) -> dict[Path, list[str]]:
+    """The Rust phases' `.rs` files that differ from `merge` (the working tree included), by the crate (its `Cargo.toml`) holding
+    each - feature 444 T17, `dev/rust-tooling.md` "changed modules' coverage"."""
+    names = git(root, "diff", "--name-only", merge, "--", "rust/").split() + git(root, "ls-files", "--others", "--exclude-standard", "--", "rust/").split()
+    out: dict[Path, list[str]] = {}
+    for p in sorted({n for n in names if n.endswith(".rs") and (root / n).is_file()}):
+        d = (root / p).parent
+        while d != root and not (d / "Cargo.toml").is_file():
+            d = d.parent
+        if (d / "Cargo.toml").is_file():
+            out.setdefault(d / "Cargo.toml", []).append(p)
+    return out
+
+
+def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[int]]:
+    """Each changed `.rs` file's lines neither its crate's tests nor its Python driver reach (`rust_checks.uncovered`)."""
+    if str(Path(__file__).resolve().parent) not in sys.path:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))  # loaded by path (the tests), its sibling still importable
+    import rust_checks  # noqa: PLC0415
+
+    out: dict[str, list[int]] = {}
+    for manifest, files in crates.items():
+        got = rust_checks.uncovered(manifest, manifest.parent / "tests" / "py_driver.py", rust_checks.TARGET.parent / f"l7r-cover-{manifest.parent.name}")
+        for f in files:
+            if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
+                out[f] = lines
+    return out
+
+
 def mirrored(root: Path, path: str) -> str:
     """The test directory that mirrors an engine module: `l7r/diagram/<pkg>/<mod>.py` -> `tests/<pkg>/`, climbing to the nearest
     one that exists; `tests` at worst; a package `MIRRORS` names, its own."""
@@ -237,9 +266,11 @@ def main(argv: list[str]) -> int:
     root = Path(git(Path.cwd(), "rev-parse", "--show-toplevel").strip() or ".")
     merge = git(root, "merge-base", base_ref, "HEAD").strip() or base_ref
     modules = changed_modules(root, merge)
-    if not modules:
+    crates = changed_rust(root, merge)
+    if not modules and not crates:
         return 0
-    missing = uncovered(root, modules, baseline(root))
+    missing = uncovered(root, modules, baseline(root)) if modules else {}
+    missing |= rust_uncovered(root, crates)
     for path, lines in missing.items():
         print(f"cover-changed: {path} - lines the floor's tests do not reach: {', '.join(map(str, lines))}")
     if missing:

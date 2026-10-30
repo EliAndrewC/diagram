@@ -108,3 +108,13 @@ def test_coverage_counts_the_lines_python_reaches_and_refuses_an_untested_line(c
     assert r.returncode != 0, "its own tests alone leave the #[pyfunction] and the module uncovered"
     broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
     assert rc.cover(broken / "Cargo.toml", broken / "tests" / "py_driver.py", tmp_path / "w3").returncode != 0, "an untested line fails"
+
+
+def test_uncovered_names_the_lines_of_each_file_no_test_reaches(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Row "changed modules' coverage": llvm-cov per `.rs` file, for `make cover-changed`."""
+    assert rc.uncovered(crate / "Cargo.toml", crate / "tests" / "py_driver.py", tmp_path / "u1") == {}
+    broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
+    got = rc.uncovered(broken / "Cargo.toml", broken / "tests" / "py_driver.py", tmp_path / "u2")
+    lib = str(broken / "src" / "lib.rs")
+    assert list(got) == [lib] and got[lib], "the new function's lines, in lib.rs"
+    assert rc.uncovered(tmp_path / "none" / "Cargo.toml", None, tmp_path / "u3") == {str(tmp_path / "none"): [0]}, "a run that fails"

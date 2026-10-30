@@ -48,7 +48,9 @@ def cargo(args: list[str], manifest: pathlib.Path, after: list[str] | None = Non
     return subprocess.run(cmd, capture_output=True, text=True, env=env, check=False)
 
 
-def cover(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Path) -> subprocess.CompletedProcess[str]:
+def cover(
+    manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Path, report: list[str] | None = None
+) -> subprocess.CompletedProcess[str]:
     """Instrument, run the crate's tests and its Python driver, and report at the 100% floor (measured on the fixture 2026-10-30:
     its own tests reach 40% of its lines, its Python driver the rest)."""
     base = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(work / "target")}
@@ -68,7 +70,24 @@ def cover(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Pat
     failed = next((s for s in steps if s.returncode != 0), None)
     if failed is not None:
         return failed
-    return _env_run([str(_exe()), "llvm-cov", "report", "--fail-under-lines", "100", "--manifest-path", str(manifest)], env)
+    return _env_run([str(_exe()), "llvm-cov", "report", *(report or ["--fail-under-lines", "100"]), "--manifest-path", str(manifest)], env)
+
+
+def uncovered(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Path) -> dict[str, list[int]]:
+    """Each source file of the crate with the lines neither its tests nor its Python driver reach (`make cover-changed`'s Rust
+    form, `dev/rust-tooling.md` "changed modules' coverage"), read from llvm-cov's LCOV report."""
+    lcov = work / "lcov.info"
+    r = cover(manifest, driver, work, ["--lcov", "--output-path", str(lcov)])
+    if r.returncode != 0 or not lcov.is_file():
+        return {str(manifest.parent): [0]}  # the run itself failed: the crate, not a line, is uncovered
+    out: dict[str, list[int]] = {}
+    path = ""
+    for line in lcov.read_text(encoding="utf-8").splitlines():
+        if line.startswith("SF:"):
+            path = line[3:]
+        elif line.startswith("DA:") and line[3:].split(",")[1] == "0":
+            out.setdefault(path, []).append(int(line[3:].split(",")[0]))
+    return out
 
 
 def _exe() -> pathlib.Path | str:

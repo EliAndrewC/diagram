@@ -119,3 +119,24 @@ def test_the_tooling_tests_are_counted_exactly_when_the_floor_counts_them(tmp_pa
     monkeypatch.setattr(cc, "tooling_unchanged", lambda root: False)
     monkeypatch.setattr(incremental, "plan", lambda root: incremental.Plan("full", "x"))
     assert cc.floor_markers(tmp_path, base) == cc.WITH_TOOLING, "tooling changed: the full gate runs them"
+
+
+def test_a_changed_rust_file_is_grouped_by_its_crate_and_its_unreached_lines_named(repo: tuple[Path, str], monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """444 T17, `dev/rust-tooling.md` "changed modules' coverage": a changed `.rs` file's lines no test or Python driver reaches."""
+    root, base = repo
+    src = root / "rust" / "phases" / "src"
+    src.mkdir(parents=True)
+    (root / "rust" / "phases" / "Cargo.toml").write_text("[package]\nname = \"p\"\n")
+    (src / "field.rs").write_text("pub fn f() {}\n")
+    (root / "rust" / "loose.rs").write_text("// no crate holds it\n")
+    crates = cc.changed_rust(root, base)
+    assert crates == {root / "rust" / "phases" / "Cargo.toml": ["rust/phases/src/field.rs"]}
+    sys.path.insert(0, str(SCRIPT.parent))
+    import rust_checks  # noqa: PLC0415
+
+    monkeypatch.setattr(rust_checks, "uncovered", lambda m, d, w: {str(src / "field.rs"): [3, 4]})
+    assert cc.rust_uncovered(root, crates) == {"rust/phases/src/field.rs": [3, 4]}
+    monkeypatch.setattr(rust_checks, "uncovered", lambda m, d, w: {str(m.parent): [0]})
+    assert cc.rust_uncovered(root, crates) == {"rust/phases/src/field.rs": [0]}, "a crate whose run failed names every changed file"
+    monkeypatch.chdir(root)
+    assert cc.main(["--base", base]) == 1 and "rust/phases/src/field.rs" in capsys.readouterr().out
