@@ -327,3 +327,11 @@ Asked whether the field's clean rebuild should be written directly in Rust, as t
 "Yeah, I want to modify the plan so that we don't end up doing any Python rewrites. I think those are just going to slow us down."
 
 "And yeah, go ahead and do a research pass if needed on what is the maximum size of a single rice paddy field for these kinds of settlements. we can cap out at something approximating whatever that size is, and then larger settlements just have multiple fields."
+
+## 2026-10-30, the Rust work's prerequisites and the phase-source guard
+
+"Wait, are we building Rust code into Python modules? Is that how our design goes? I do remember we said that we would be integrating the two tools since we're converting stage by stage, but then is the idea to eventually get rid of that and then go Rust only once we've gotten to the point where we've converted everything?
+
+Hold on, though. When you say the same algorithm in Python and in Rust, that is not what we are trying to do. I cannot emphasize enough that a big part of the goal for the rewrite is that we are not trying to re-implement the same algorithms, because the old algorithms were computationally inefficient and resulted in orders of magnitude more operations being performed than needed to be performed. My biggest fear with this, and the reason why I am going so slowly and enforcing hard gates, is that I suspect that if I asked you to do the rewrite in Rust, even with this project guideline, then you would just end up re-implementing the same bad algorithms. And you saying that we will be implementing the same algorithm in Python and in Rust makes me concerned that we are already going down that path."
+
+"Yes, okay, we should definitely add a guard for that, So I'm glad to hear that there's a way to do that. Please do indeed do that. After that, please complete those tooling fixes that are the prerequisites. For us starting. Thanks."
