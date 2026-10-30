@@ -4,14 +4,16 @@
 
 **Created**: 2026-10-29
 
-**Status**: Running - amendment 1 (the GM, 2026-10-30): the first rule's verdict, set down, stands as measured; a third
-measurement on a real research question, by tokens and time, before the GM decides.
+**Status**: Running - amendment 3 (the GM, 2026-10-30): the index KEPT, and a combined search built on it; its end-to-end
+validation on the field-size question closes the feature.
 
 **Affects**: tooling
 
 **Approved**: the GM, 2026-10-29, "Either way, go ahead and file the feature"
 
 **Approved**: the GM, 2026-10-30, "Perhaps we could use that as a reference and count time and tokens?  Dispatcvhing to subagents to ensure it's a good and fair comparison?"
+
+**Approved**: the GM, 2026-10-30, "I also agree with keeping the index and building the combined command. And then we can go ahead and run that test as essentially an end-to-end validation of the new combined system. So yes, I approve, and please proceed."
 
 **Input**: `request.md` (the GM's words, verbatim).
 
@@ -83,6 +85,31 @@ and a way to ask in every corpus language), or remove it per the first rule.
 4. Nineteen record pages drawn at random, a question for each in the GM's own words, asked of the index and of a text search of the
    record whose terms were chosen blind to the pages: the index's rank of the page against the text search's try and hit count
    (`research/t03-answered.md`). The GM decides on amendments 1 and 2 together.
+
+## Amendment 3 - the index kept, and one combined search (the GM, 2026-10-30, `request.md`)
+
+The decision amendments 1 and 2 left with the GM: **the index is kept**, and the two searches are combined, because each found
+sources the other missed (`research/t02-judge.md`). The goal is to find everything relevant locally before the web - "optimizing
+for finding things that are relevant rather than doing something which is cheaper because it misses actual matches"; the web's
+cost is not measured ("an unalloyed good for us to find things locally before searching the web").
+
+- **FR-A3-1, one command, both searches.** `make research-search` takes a question in each language the session gives
+  (English, Japanese, Chinese; the local model does not translate) and term sets (each set every term required, as `make
+  archive-find`), runs the meaning search for each question and the text search for each term set over the record and the
+  archive, and merges the hits by SOURCE (an archive capture, or a record page): each source printed once, ranked, with its best
+  passage and what found it (index, text, or both).
+- **FR-A3-2, nothing evaluated twice.** Given a key for the question, the command remembers the sources it has printed for that
+  key, and a later search under the same key prints only new ones (with a count of those already shown).
+- **FR-A3-3, its output bounded.** At most a set number of sources a call (a default and a knob), each with one passage, so a
+  broad term set no longer prints a hundred files' download histories.
+- **FR-A3-4, the research pass uses it.** The `research-pass` contract's "archive first" step runs the combined command before
+  any web search.
+- **SC-A3, the end-to-end validation.** A `research-pass` agent answers feature 444's field-size question with the combined
+  command (archive and record only, the same brief as arms S and T). It succeeds when it surfaces the sources the blind judge
+  rated SOME or HIGH from both arms (Shicang 1898, the Shizuoka replanning 1872, the Huizhou 1581 parcel, Shiroyone, the Yayoi small
+  plots, and the shared ones) and at least the ones the judge found both arms missed (Hattori `97/97f6d769ce72`, Ofuro
+  `10/100916836bb9`, Konosu 1902 `c3/c36ae8c62a1c`), at a token count no higher than the arms' (51,261 and 59,011) beyond their
+  run-to-run spread. Its result is reported to the GM.
 
 ## The rule
 
