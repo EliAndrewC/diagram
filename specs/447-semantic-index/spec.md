@@ -78,6 +78,12 @@ Japanese, 608 Chinese, 673 English or other Latin-script, 2 Korean.
 **The rule for amendment 1**: none set by the trial - the GM decides, on the measurement: keep the index (the tooling, the index
 and a way to ask in every corpus language), or remove it per the first rule.
 
+## Amendment 2 - "have we already answered this?" (the GM, 2026-10-30, `request.md`)
+
+4. Nineteen record pages drawn at random, a question for each in the GM's own words, asked of the index and of a text search of the
+   record whose terms were chosen blind to the pages: the index's rank of the page against the text search's try and hit count
+   (`research/t03-answered.md`). The GM decides on amendments 1 and 2 together.
+
 ## The rule
 
 - The index is kept where it finds passages today's search missed on at least a fair share of the questions, at a cost that keeps

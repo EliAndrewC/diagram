@@ -19,3 +19,7 @@ Either way, go ahead and file the feature"
 "Bwefore we delete the index, there's another thing which we should consider, which is token usage.  If it ends up being more token efficient to use this index, then that's better even if the index is slower in terms of wall clock time.  And it sounds like tthne index might genuinely be better in some ways, so even if our initial trial we designed for the feature wasn't passed, we might srill wantr it, and I want to think more about the ways in which it's better worse before we make a final decision"
 
 "Okay, but w.r.t. the English to Japanese then surely we can have our search provide both, right?  Or in general we translate our query into every language in our corpus and then use the index on all of them, since I think we have Chinese and Korean text as well.  Surely we'd need to do that no matter what approach we use, right?  My recollection is that our previous feature's next task was a research question. Perhaps we could use that as a reference and count time and tokens?  Dispatcvhing to subagents to ensure it's a good and fair comparison?"
+
+## 2026-10-30, amendment 2
+
+"I thought that asking have we already answered this was part of what we were testing. So we should probably test that out before we get rid of the index. Even if we are keeping the index in our Git history. Can you go ahead and do a quick test for that now, before we rfmove it and move on?"
