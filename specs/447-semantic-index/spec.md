@@ -4,8 +4,8 @@
 
 **Created**: 2026-10-29
 
-**Status**: Running - amendment 3 (the GM, 2026-10-30): the index KEPT, and a combined search built on it; its end-to-end
-validation on the field-size question closes the feature.
+**Status**: Running - amendment 4 (the GM, 2026-10-30): the two fixes the analysis of the runs points to (`research/t05-why.md`),
+then the validation run once more.
 
 **Affects**: tooling
 
@@ -14,6 +14,8 @@ validation on the field-size question closes the feature.
 **Approved**: the GM, 2026-10-30, "Perhaps we could use that as a reference and count time and tokens?  Dispatcvhing to subagents to ensure it's a good and fair comparison?"
 
 **Approved**: the GM, 2026-10-30, "I also agree with keeping the index and building the combined command. And then we can go ahead and run that test as essentially an end-to-end validation of the new combined system. So yes, I approve, and please proceed."
+
+**Approved**: the GM, 2026-10-30, "Okay, so at the very least, the first two things that you suggest sound good to implement, so why don't you go ahead and do that."
 
 **Input**: `request.md` (the GM's words, verbatim).
 
@@ -115,6 +117,24 @@ cost is not measured ("an unalloyed good for us to find things locally before se
   Ofuro `10/100916836bb9`, Konosu 1902 `c3/c36ae8c62a1c` (the judge's fourth, a modern 3-tan standard `71/71ad2d8933fa`, is left
   out: it is not premodern). Its tokens and wall time are measured and reported beside the arms' (51,261 and 59,011 tokens,
   `research/t02-arm-s.md`, `research/t02-arm-t.md`), not held to them. Its result is reported to the GM.
+
+## Amendment 4 - the passage that answers, and no scope drawn by the searcher (the GM, 2026-10-30, `request.md`)
+
+The analysis of the four runs (`research/t05-why.md`): of 23 losses of a target source, 13 were never seen (each run's own
+wordings) and 10 were seen and dropped - the passage the search printed was not the one that answers, or the run drew its own
+line on "premodern". The GM chose the two fixes for the dropped half; the third (wordings) is left until a general solution is in
+hand.
+
+- **FR-A4-1, the passages that answer.** `make research-search` prints, for each source, up to three passages: its nearest by
+  meaning, the text around its term-set hits, and the passage of its text where a number with a unit of measure stands nearest the
+  question's terms (a unit list in both scripts' forms: tan, se, bu, tsubo, cho, mu, qing, qiu, m², hectare, acre, foot, ken and
+  their kanji / hanzi) - so a source whose size sits away from its best-matching passage shows the size.
+- **FR-A4-2, the searcher reports, the checks rule.** The `research-pass` contract reports every source that gives the thing
+  asked, with the period its evidence describes and what it measures (a register parcel, a holding, a planned plot, a single
+  field), whatever its date: the premodern window decides the verdict, never whether a source is listed; whether a finding applies
+  is the record's checks' to rule (CLAUDE.md, "Research").
+- **SC-A4.** The validation of SC-A3 is run once more under the same brief and a fresh key; its sources are reported against the
+  same list, beside the earlier runs, as `research/t04-validation.md` does.
 
 ## The rule
 
