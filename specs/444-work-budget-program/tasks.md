@@ -56,8 +56,9 @@
 - [ ] T16 phase: field - the comb field rebuilt in Rust to its greenfield derivation under the single-field cap, through the checklist (FR-003-FR-006, FR-017, FR-018)
       research: rendering
       phase: field
-- [ ] T17 FR-011's Rust tooling proven on a Rust fixture, every one-for-one, partial or rewritten row firing (FR-011, FR-017)
+- [x] T17 FR-011's Rust tooling proven on a Rust fixture, every one-for-one, partial or rewritten row firing (FR-011, FR-017)
       research: rendering
+      verify: DONE. landed: the Rust tooling proven on the fixture crate: 18 rows proven, cache audit and the overlap census owed by T19 (the round arbiter's Route A, narrowed by the plan review); a Rust phase's landing refused while any row is unproven
 - [ ] T18 the field re-derived under the single-field cap, its MODE BUDGET verdict (FR-018)
       research: physical
       - [ ] research pass
