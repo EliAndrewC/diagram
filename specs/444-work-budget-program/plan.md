@@ -196,7 +196,8 @@ Occasions: settlement-review on each pool hamlet the port moves (D7: every plan 
 5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
 6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
    WITHIN on the `.rs` modules, `cache audit` and `the overlap census` proven on the port (each check refusing a copy of the port
-   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement.
+   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
+   a route, never an acceptance: a phase over its budget is rebuilt or its budget changed with the GM's words (FR-006).
 7. **The search smell.** none
 8. **The budget.** One landing.
 9. **Done, measured.** `make work-budget`: water_frame's count at every size against its pinned budget; `cache audit` and `the overlap census` in the "Proven" table with their firing cases; `make perf-ab` beside it, recorded.
@@ -227,8 +228,8 @@ its settlement-review (docs/reviews.md: a map's form changes) - this task's Occa
 target that rolls a map or runs the tests depends on it; `l7r/diagram/hamletgen` puts `.rust-ext/` on the import path. The
 generation key already holds the Rust sources (T17, `gencache.rust_sources`), so a Rust change re-keys every map.
 
-**D9 - The counts: Rust counts as Python does, and hands them back** (FR-003; `dev/rust-tooling.md` "the overlap census"): the
-crate keeps an operation counter keyed `<kind>@<function>` as the Python counters are, returns it with the stage's result, and the
+**D9 - The counts: Rust counts as Python does, and hands them back** (FR-003, FR-012; `dev/rust-tooling.md` "the overlap
+census"): behind the crate's Cargo feature `counters` (FR-012: compiled out of the deployed build), the crate keeps an operation counter keyed `<kind>@<function>` as the Python counters are, returns it with the stage's result, and the
 thin function adds it to the roll's counts, so `make work-budget` and MODE AUDIT read a Rust stage as they read a Python one -
 the replacement for the overlap census, proven on this port by a copy that does work it does not count.
 

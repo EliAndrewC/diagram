@@ -266,7 +266,7 @@
    "declared": "spec-fidelity"
   },
   "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)": {
-   "sha256": "9ca79a289cffee37214fbd382f68685fd3b0acac225732c0c56c0e6fd6928083",
+   "sha256": "bd5ec1b0aec7991384c7af880ae3138903ff593d54fc078215173b5d1a8b1e91",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
@@ -279,6 +279,12 @@
   },
   "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "fda28c18756a40335df4315fb4c265665f7b21224c29eef891a52fe7d2420eea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Decisions": {
+   "sha256": "9dc4897b048eb217ca47f13adda353746d8c4a29d166a1c778c0d737ef047f2c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
@@ -1971,6 +1977,72 @@
      "why": "Implements FR-017 (water_frame's port a task of its own, same budget), FR-010, and the GM's 2026-10-30 guard; nothing narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions",
+    "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Approach-note (arbiter Route A)",
+     "summary": "T19 itself proves the two tooling rows the T17 fixture cannot fire - cache audit and the overlap census - on broken copies of the port, and check-rust-tooling.py refuses the port's landing until both are in the Proven table.",
+     "class": "within",
+     "why": "The request (section 7) and FR-011 require every one-for-one, partial and rewritten row proven to fire on a Rust fixture before the first Rust phase lands. water_frame is the first Rust landing (step 5 of the approach), and the landing is refused until both rows are proven on a Rust copy written to break them, so the before-the-first-landing order the GM set holds; only the task carrying the proof moves, which the GM's 2026-10-28 words allow ('as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to'). Proving the overlap census's replacement goes beyond what the rows require."
+    },
+    {
+     "id": "Approach-1 (goal: the derivation as written)",
+     "summary": "water_frame is ported from its greenfield derivation, which came out as rolls and writes with no search, the same shape as today's code; the stage becomes a thin Python function.",
+     "class": "within",
+     "why": "FR-015 asks for a greenfield derivation, and FR-017 names water_frame in particular as the phase accepted in Python with 'its algorithm unchanged, until its port to Rust'. The GM's 2026-10-30 worry was a port that carries over a wasteful search; this stage has no search to carry over, and its budget is the derivation's own. The thin Python function is FR-010's shape."
+    },
+    {
+     "id": "Approach-2/5 (constraints and order)",
+     "summary": "The phase-source guard holds the old code during the task; T19 comes after the tooling proof and before the field rebuild.",
+     "class": "within",
+     "why": "The guard is the one the GM asked for on 2026-10-30. FR-003 puts water_frame first, then field, in STAGES order, and FR-011 puts the tooling proof before the first Rust phase."
+    },
+    {
+     "id": "Approach-6/9 (exits)",
+     "summary": "Green: counts within the pinned budget at every size, MODE AUDIT WITHIN, both tooling rows proven, cohort-landing with no regressed seed, the Rust coverage floor whole, perf-ab recorded. Red: over budget or MODE AUDIT not WITHIN goes to the round arbiter with the measurement.",
+     "class": "within",
+     "why": "This is checklist part A's exit statement. It does not take the place of the checklist's acceptance boxes, which FR-005 and SC-002 require ticked whole and make land enforces (request section 3, step 6). Of the step-6 items it does not list, the claims round is named in D7 and settlement-review in the Occasions line, so none is waived. The red route is within ONLY because the round arbiter cannot accept a phase over budget (request 5.4), only the GM's words raise a budget, and a phase is judged against its budget, never set down (5.1, FR-006). Sending it to the arbiter routes the measurement and leaves the task open until the count meets its budget. The block does not cite FR-006, and should."
+    },
+    {
+     "id": "D6 (Python gathers, Rust rolls, Python writes)",
+     "summary": "stage_water_frame stays in STAGES as a thin function that gathers the derivation's Reads and each knob's allowed forms into one record and calls l7r_phases.water_frame. Rust rolls the bearings and forms and returns counts; Python writes today's manifest keys. The knob tables stay Python data.",
+     "class": "within",
+     "why": "FR-010 / request section 7: Rust holds the rebuilt phase, while the driver, STAGES and the manifest stay Python. FR-004: the same keys are read and written. Keeping the research tables as one Python copy keeps the claims and tunables readers (section 7's table) working on them. The drainage bound holds by construction, so it is asked before placing (S4). Whether the gathering step does uncounted work is MODE AUDIT's question (S5), not a narrowing."
+    },
+    {
+     "id": "D7 (seeded SplitMix64; every map's plan rolls anew)",
+     "summary": "Rust rolls with its own seeded SplitMix64, so the draws differ from today's and every map's fall, bearings, wind and knob forms move, along with the layouts downstream. cohort-landing, the claims round and settlement-review on each moved pool hamlet hold them to the research.",
+     "class": "within",
+     "why": "Nothing in the request or spec asks for today's draws to be reproduced. Section 3, step 5, asks for the same input and output, and FR-004 defines that as manifest keys. The request expects a rebuild to change maps: step 6 owes 'settlement-review when a map's form changes', and the guard on maps is cohort-landing with no regressed seed. The identical-manifest rule in section 1 compares counters on against counters off, not old code against new. The Occasions line takes on the review owed for each moved hamlet."
+    },
+    {
+     "id": "D8 (maturin build into .rust-ext/, keyed to Rust sources)",
+     "summary": "rust/phases/ is the crate l7r_phases. make rust-build builds it with maturin into a gitignored .rust-ext/ when its code id moves, and the targets that roll or test depend on it. The generation key already holds the Rust sources (T17).",
+     "class": "within",
+     "why": "FR-010: one PyO3 extension built by maturin. The build goes through make, which the make-only row of section 7 asks for. Keying the cache on the Rust sources was T17's decision, already landed; this block restates it and does not change it."
+    },
+    {
+     "id": "D9 (Rust counts keyed as Python's, returned and merged)",
+     "summary": "The crate keeps a <kind>@<function> counter, returns it with the stage's result, and the thin function adds it to the roll's counts, so make work-budget and MODE AUDIT read a Rust stage as they read a Python one. This replaces the overlap census and is proven by a copy that does uncounted work.",
+     "class": "within",
+     "why": "Request section 1: 'A Rust port must keep the same counters, so its numbers stay comparable'. Section 7's perf-profile row is 'replaced' by the work-budget counters, and proving it fires is the request's prove-it-fires rule. D9 does not say whether the counter exists in a counters-off build, so it is within ONLY as a counter under FR-012's Cargo feature 'counters'. A counter, or a returned count, that the deployed build cannot compile out would contradict the GM's 2026-10-28 request and would be NOT LEGITIMATE. The block should cite FR-012."
+    },
+    {
+     "id": "Approach-10 / Performance checklist",
+     "summary": "Read the research page 0054 before moving a rolled knob; the performance checklist's prompts follow, unanswered.",
+     "class": "within",
+     "why": "Research before constants is the project's existing rule. The performance checklist is a set of prompts, never a gate, and it decides nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2388,6 +2460,68 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T19": {
+   "section_sha256": "a76137b5ede7de334ebfc1843ec39623f7f559930e6440c558f77229b444a50b",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Approach-note (arbiter Route A)",
+     "summary": "T19 itself proves the two tooling rows the T17 fixture cannot fire - cache audit and the overlap census - on broken copies of the port, and check-rust-tooling.py refuses the port's landing until both are in the Proven table.",
+     "class": "within",
+     "why": "The request (section 7) and FR-011 require every one-for-one, partial and rewritten row proven to fire on a Rust fixture before the first Rust phase lands. water_frame is the first Rust landing (step 5 of the approach), and the landing is refused until both rows are proven on a Rust copy written to break them, so the before-the-first-landing order the GM set holds; only the task carrying the proof moves, which the GM's 2026-10-28 words allow ('as long as it happens before the place where it would actually matter, then I don't care which feature it belongs to'). Proving the overlap census's replacement goes beyond what the rows require."
+    },
+    {
+     "id": "Approach-1 (goal: the derivation as written)",
+     "summary": "water_frame is ported from its greenfield derivation, which came out as rolls and writes with no search, the same shape as today's code; the stage becomes a thin Python function.",
+     "class": "within",
+     "why": "FR-015 asks for a greenfield derivation, and FR-017 names water_frame in particular as the phase accepted in Python with 'its algorithm unchanged, until its port to Rust'. The GM's 2026-10-30 worry was a port that carries over a wasteful search; this stage has no search to carry over, and its budget is the derivation's own. The thin Python function is FR-010's shape."
+    },
+    {
+     "id": "Approach-2/5 (constraints and order)",
+     "summary": "The phase-source guard holds the old code during the task; T19 comes after the tooling proof and before the field rebuild.",
+     "class": "within",
+     "why": "The guard is the one the GM asked for on 2026-10-30. FR-003 puts water_frame first, then field, in STAGES order, and FR-011 puts the tooling proof before the first Rust phase."
+    },
+    {
+     "id": "Approach-6/9 (exits)",
+     "summary": "Green: counts within the pinned budget at every size, MODE AUDIT WITHIN, both tooling rows proven, cohort-landing with no regressed seed, the Rust coverage floor whole, perf-ab recorded. Red: over budget or MODE AUDIT not WITHIN goes to the round arbiter with the measurement.",
+     "class": "within",
+     "why": "This is checklist part A's exit statement. It does not take the place of the checklist's acceptance boxes, which FR-005 and SC-002 require ticked whole and make land enforces (request section 3, step 6). Of the step-6 items it does not list, the claims round is named in D7 and settlement-review in the Occasions line, so none is waived. The red route is within ONLY because the round arbiter cannot accept a phase over budget (request 5.4), only the GM's words raise a budget, and a phase is judged against its budget, never set down (5.1, FR-006). Sending it to the arbiter routes the measurement and leaves the task open until the count meets its budget. The block does not cite FR-006, and should."
+    },
+    {
+     "id": "D6 (Python gathers, Rust rolls, Python writes)",
+     "summary": "stage_water_frame stays in STAGES as a thin function that gathers the derivation's Reads and each knob's allowed forms into one record and calls l7r_phases.water_frame. Rust rolls the bearings and forms and returns counts; Python writes today's manifest keys. The knob tables stay Python data.",
+     "class": "within",
+     "why": "FR-010 / request section 7: Rust holds the rebuilt phase, while the driver, STAGES and the manifest stay Python. FR-004: the same keys are read and written. Keeping the research tables as one Python copy keeps the claims and tunables readers (section 7's table) working on them. The drainage bound holds by construction, so it is asked before placing (S4). Whether the gathering step does uncounted work is MODE AUDIT's question (S5), not a narrowing."
+    },
+    {
+     "id": "D7 (seeded SplitMix64; every map's plan rolls anew)",
+     "summary": "Rust rolls with its own seeded SplitMix64, so the draws differ from today's and every map's fall, bearings, wind and knob forms move, along with the layouts downstream. cohort-landing, the claims round and settlement-review on each moved pool hamlet hold them to the research.",
+     "class": "within",
+     "why": "Nothing in the request or spec asks for today's draws to be reproduced. Section 3, step 5, asks for the same input and output, and FR-004 defines that as manifest keys. The request expects a rebuild to change maps: step 6 owes 'settlement-review when a map's form changes', and the guard on maps is cohort-landing with no regressed seed. The identical-manifest rule in section 1 compares counters on against counters off, not old code against new. The Occasions line takes on the review owed for each moved hamlet."
+    },
+    {
+     "id": "D8 (maturin build into .rust-ext/, keyed to Rust sources)",
+     "summary": "rust/phases/ is the crate l7r_phases. make rust-build builds it with maturin into a gitignored .rust-ext/ when its code id moves, and the targets that roll or test depend on it. The generation key already holds the Rust sources (T17).",
+     "class": "within",
+     "why": "FR-010: one PyO3 extension built by maturin. The build goes through make, which the make-only row of section 7 asks for. Keying the cache on the Rust sources was T17's decision, already landed; this block restates it and does not change it."
+    },
+    {
+     "id": "D9 (Rust counts keyed as Python's, returned and merged)",
+     "summary": "The crate keeps a <kind>@<function> counter, returns it with the stage's result, and the thin function adds it to the roll's counts, so make work-budget and MODE AUDIT read a Rust stage as they read a Python one. This replaces the overlap census and is proven by a copy that does uncounted work.",
+     "class": "within",
+     "why": "Request section 1: 'A Rust port must keep the same counters, so its numbers stay comparable'. Section 7's perf-profile row is 'replaced' by the work-budget counters, and proving it fires is the request's prove-it-fires rule. D9 does not say whether the counter exists in a counters-off build, so it is within ONLY as a counter under FR-012's Cargo feature 'counters'. A counter, or a returned count, that the deployed build cannot compile out would contradict the GM's 2026-10-28 request and would be NOT LEGITIMATE. The block should cite FR-012."
+    },
+    {
+     "id": "Approach-10 / Performance checklist",
+     "summary": "Read the research page 0054 before moving a rolled knob; the performance checklist's prompts follow, unanswered.",
+     "class": "within",
+     "why": "Research before constants is the project's existing rule. The performance checklist is a set of prompts, never a gate, and it decides nothing."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
