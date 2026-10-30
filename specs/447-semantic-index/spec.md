@@ -41,7 +41,7 @@ the experiment's result for its own sake.
 
 ## Resuming
 
-The build is long (about 120,700 passages; 110-160 a minute measured on 2026-10-29, so 12-18 hours) and is safe to interrupt:
+The build is long (about 120,700 passages; the full build took 8 h 42 min, about 231 passages a minute) and is safe to interrupt:
 
 - Each shard is written to the archive's working copy (`.specify/source-archive/semantic-index/bge-m3-int8/<shard>.npz`, on
   the host's disk) as soon as it is done; a rerun of `make semantic-index` skips every shard whose passages are unchanged, so an
@@ -70,7 +70,7 @@ The build is long (about 120,700 passages; 110-160 a minute measured on 2026-10-
 
 ## The evidence
 
-`research/t01-evidence.md`: the build's cost (8 h 42 min, 276 MB, 120,669 passages), an update's and a search's time, and the 17
+`research/t01-evidence.md`: the build's cost (8 h 42 min, 275 MiB, 120,669 passages), an update's and a search's time, and the 17
 questions through both searches - asked in English, deeper (the first 200), and the seven Japanese-answered ones in Japanese, with
 today's search in Japanese beside them. The outputs are `research/trial-out.json` and `research/deep-out.json`, from `trial.py`,
 `deep.py` and `warm.py` beside this spec.

@@ -17,10 +17,10 @@ semantic-index: committed and pushed
 ```
 
 120,669 passages (the archive's texts and the record's pages, 900 characters at most), so about 231 a minute over the whole run
-(the 15-minute readings' running averages since the start went from 110 to 232 a minute, the machine shared with other containers). Committed to the archive as
+(the 15-minute readings of `si-progress.py` reported to the GM in the session, not kept: their running averages since the start went from 110 to 232 a minute, the machine shared with other containers). Committed to the archive as
 `d8881575 the semantic index (Xenova/bge-m3-int8): 261 shard(s) - 00, 01, 02, 03, 04, 05, 06, 07 ...`.
 
-**The size on disk** - `du -sb .specify/source-archive/semantic-index/bge-m3-int8`: 288,338,260 bytes (276 MB) in 261 shards, the
+**The size on disk** - `du -sb .specify/source-archive/semantic-index/bge-m3-int8`: 288,338,260 bytes (275 MiB) in 261 shards, the
 largest `gm-copies.npz` at 27 MB (under GitHub's 100 MB file limit).
 
 **An update** - `time make semantic-index` with nothing changed, then `time make semantic-index SHARD=record-04`:
@@ -45,7 +45,7 @@ new capture of 50 passages about 15 seconds.
 real	0m3.515s
 ```
 
-In-process (`deep.py`, the model loaded once): embedding a question 0.012 s; loading all 261 shards 0.62 s; a whole `find` 0.73 to
+In-process (`deep.py`, the model loaded once; its two timings printed once on 2026-10-30 and not kept in `deep-out.json`): embedding a question 0.012 s; loading all 261 shards 0.62 s; a whole `find` 0.73 to
 1.45 s (`trial.py`'s `seconds`, below), because `find` reloads every shard on each question. So a command-line search is about 3.5
 s, nearly all of it loading the model and the shards. With both already loaded (`warm.py` beside the spec, every shard stacked into
 one matrix):
@@ -118,7 +118,7 @@ f4/f4285e6ee539 落水 稲刈 hits=0 holds=no
 ## 3. What it shows
 
 - **English question, English source** (1-10): today's search held every answer, among 3 to 106 unranked folders (median 16). The
-  index put the answering capture in its first ten on 8 of 10, first or second on 5, and the record page that answered it in its
+  index put the answering capture in its first ten on 8 of 10, first or second on 4, and the record page that answered it in its
   first ten on all 10. It found nothing today's search missed; it RANKED what today's search found.
 - **English question, Japanese source** (11-17): today's search in English found none of the seven, as it cannot. Neither did the
   index: none in its first ten, two in its first 200 (ranks 41 and 58). An English question is matched by English passages first,
@@ -140,4 +140,4 @@ f4/f4285e6ee539 落水 稲刈 hits=0 holds=no
   tool does today.
 
 Not part of the rule, recorded for the GM: on the ten English questions the index RANKED what today's search found - the answer
-first or second of ten on five, where the text search returned 3 to 106 folders unranked.
+first or second of ten on four, where the text search returned 3 to 106 folders unranked.
