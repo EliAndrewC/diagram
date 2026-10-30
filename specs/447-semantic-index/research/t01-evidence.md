@@ -141,3 +141,33 @@ f4/f4285e6ee539 落水 稲刈 hits=0 holds=no
 
 Not part of the rule, recorded for the GM: on the ten English questions the index RANKED what today's search found - the answer
 first or second of ten on four, where the text search returned 3 to 106 folders unranked.
+
+## 5. What each search hands a session to read (asked by the GM 2026-10-30: token use)
+
+One-shot, 2026-10-30: each of the 17 questions through `make archive-find TERMS="<the trial's English terms>"` and `make
+semantic-find Q="<the question>" K=10`, the characters each printed (a token is about four English characters, about one
+Japanese one). `archive-find` names files and their download history, no passage; `semantic-find` prints ten passages' opening
+words. "answer in it" is whether the answering capture is among the ten.
+
+```
+2b/2b106432097b en archive-find    9946 chars,  12 files | semantic-find   3506 chars, answer in it: True
+5c/5c56a8ffcc30 en archive-find   39691 chars,  44 files | semantic-find   3609 chars, answer in it: True
+7e/7ea522445c8c en archive-find  113039 chars, 106 files | semantic-find   3199 chars, answer in it: True
+6e/6e2b3e8f080c en archive-find   21712 chars,  17 files | semantic-find   3190 chars, answer in it: True
+1d/1d6eded5f7e6 en archive-find   54213 chars,  34 files | semantic-find   3383 chars, answer in it: True
+fd/fd80f6d7ed33 en archive-find   20445 chars,  26 files | semantic-find   3190 chars, answer in it: True
+71/71b5f74369cc en archive-find     947 chars,   3 files | semantic-find   3148 chars, answer in it: True
+1e/1e4316f6bb18 en archive-find   13522 chars,  15 files | semantic-find   3370 chars, answer in it: True
+42/4288c884928c en archive-find    9896 chars,   5 files | semantic-find   3416 chars, answer in it: False
+f4/f4eeeca27b8b en archive-find   30400 chars,  15 files | semantic-find   3249 chars, answer in it: False
+67/67dc5aaf3516 ja archive-find   13212 chars,   6 files | semantic-find   3649 chars, answer in it: False
+05/052e5a087064 ja archive-find     187 chars,   1 files | semantic-find   3204 chars, answer in it: False
+3e/3e64bd55f251 ja archive-find    5508 chars,   5 files | semantic-find   3457 chars, answer in it: False
+4a/4a0919d8aa81 ja archive-find    2964 chars,   4 files | semantic-find   3429 chars, answer in it: False
+b5/b597771536b4 ja archive-find     628 chars,   2 files | semantic-find   3252 chars, answer in it: False
+f4/f4285e6ee539 ja archive-find   99533 chars,  78 files | semantic-find   3424 chars, answer in it: False
+3c/3c4a00e776c7 ja archive-find     773 chars,   2 files | semantic-find   3489 chars, answer in it: False
+```
+
+The text search printed 187 to 113,039 characters (median 13,212) before a session opens any file; the index printed 3,148 to
+3,649 every time, the passage text included. What a session then reads to reach the answer is not measured here.

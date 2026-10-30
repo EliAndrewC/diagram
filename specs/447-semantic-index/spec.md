@@ -88,3 +88,6 @@ As feature 437 reported it: `make feature-report F=447`.
 - 2026-10-30, round 2 (spec-fidelity, MODE 3 on `b8c0be19c`): FAITHFUL - each fix re-derived from the JSON and the time output.
   Owed: the GM's choice, put as an offer through escalation-check: the tooling and the index removed per the rule (restorable from
   the archive's history, commit `d8881575`), unless he keeps them for their ranking.
+- 2026-10-30, the GM, before any removal: "Before we delete the index, there's another thing which we should consider, which is
+  token usage ... I want to think more about the ways in which it's better [or] worse before we make a final decision." Removal
+  held; the output sizes of both searches recorded (`research/t01-evidence.md`, section 5).
