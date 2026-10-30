@@ -89,3 +89,29 @@ def test_a_make_recipe_running_the_rust_tools_needs_its_row(tmp_path: Path) -> N
         "make build: its recipe runs a Python-only or Rust tool, and no row of dev/rust-tooling.md names it",
         "make rust-test: its recipe runs a Python-only or Rust tool, and no row of dev/rust-tooling.md names it",
     ]
+
+
+INVENTORY = """| check | today (Python) | in the Rust phases | fate | keys |
+|---|---|---|---|---|
+| lint | ruff | clippy | one for one | `make lint` |
+| dead closure | the script | the lint | partial | `scripts/dead.py` |
+| types | pyrefly | the compiler | dropped, replaced by the compiler | `make static` |
+
+| row | the check | the test that fires it |
+|---|---|---|
+| lint | clippy | `test_lint` |
+| dead closure (its private half) | rustc | `test_dead` |
+"""
+
+
+def test_a_rust_phase_cannot_land_while_a_row_is_unproven(tmp_path: Path) -> None:
+    """444 T17, the round arbiter's ruling on ask:444-T17-rows-need-a-phase: the refusal that makes Route A a deferral."""
+    assert crt.unproven(INVENTORY) == ["dead closure"], "a half proves part of a row; a dropped row owes nothing"
+    root = _repo(tmp_path, {"dev/rust-tooling.md": INVENTORY})
+    assert crt.problems(root) == [], "no Rust phase in the tree: nothing owed yet"
+    root = _repo(tmp_path / "with", {"dev/rust-tooling.md": INVENTORY, "rust/phases/src/frame.rs": "pub fn f() {}\n"})
+    assert crt.problems(root) == [
+        'a Rust phase is in the tree, and the row `dead closure` of dev/rust-tooling.md is not proven - prove it on the phase (its check refuses a copy written to break it), then name it in the "Proven on the fixture" table'
+    ]
+    (root / "dev" / "rust-tooling.md").write_text(INVENTORY + "| dead closure | rustc and the script | `test_dead_pub` |\n")
+    assert crt.problems(root) == []

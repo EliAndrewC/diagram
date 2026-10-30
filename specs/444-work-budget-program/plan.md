@@ -156,6 +156,8 @@ Occasions: none (tooling: no map moves).
 
 ### T17 Approach (checklist part A)
 
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A: T17 ticks with every row the fixture can prove; the four that need a real phase are T19's, and the refusal of a Rust phase while any row is unproven lands with T17.)
+
 1. **The goal, in the world.** A Rust fixture crate - one PyO3 extension module built by maturin, a thin Python function calling it,
    a `///` doc comment carrying a `Research:` claim and a `Steps:` list - against which every row of `dev/rust-tooling.md` marked one
    for one, partial, rewritten or replaced is shown to FIRE: each check refuses a fixture written to break it, and passes the fixture
@@ -213,6 +215,8 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 Occasions: none unless a map moves (its rolls are the same derivation: none should).
 
 ### T19 Approach (checklist part A)
+
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A: T19 also proves the four tooling rows T17 could not prove on the fixture - the cache audit, the overlap census's replacement, the change-selected tests' Python half, dead closure's public half - before its tick; `check-rust-tooling.py` refuses the port's landing until they are.)
 
 1. **The goal, in the world.** `water_frame` in the extension module, written from `phases/water_frame_greenfield.derivation.md`
    (its derivation came out the same as today's code: rolls and writes, no search), the stage a thin Python function calling it.

@@ -28,7 +28,7 @@ decision).
 | changed modules' coverage | `make cover-changed` | llvm-cov per changed `.rs` file | one for one | `scripts/gates/cover_changed.py` |
 | the change-selected tests | `quick`'s testmon selection, the gate's incremental plan and its preflight | cargo rebuilds and re-tests the changed crate; pytest's selection covers the Python callers | partial | `make quick` `make test-file` `make page-check` `make spec-harness` `l7r/diagram/ci/incremental.py` `l7r/diagram/ci/gate_config.py` `scripts/gates/preflight.py` |
 | the docstring-blind code id | `codeid`, `gate-stamp`, the cache's engine hash, the delta's engine test, the land route | a hash of the Rust token stream without comments; the built extension added to `gencache.engine_files()`; `.rs` an engine path | rewritten | `scripts/gates/codeid.py` `scripts/gates/gate-stamp.py` `l7r/diagram/pipeline/gencache.py` `l7r/diagram/pipeline/rollcache.py` `l7r/diagram/pipeline/render_cache.py` `l7r/diagram/ci/delta.py` `l7r/diagram/ci/state.py` `scripts/land.py` |
-| research claims | `Research:` in docstrings, the claims index, gate, bundles, triage, carry, stale figures, `make tunables`, `make open-questions` | the same section in `///` doc comments; a new reader (the `syn` parser) writes the same index | rewritten reader; the process unchanged | `l7r/diagram/tools/claims.py` `scripts/record/claims*.py` `scripts/record/tunables.py` `scripts/record/open_questions.py` `scripts/record/record_cache.py` |
+| research claims | `Research:` in docstrings, the claims index, gate, bundles, triage, carry, stale figures, `make tunables`, `make open-questions` | the same section in `///` doc comments; a new reader (the `syn` parser) writes the same index | rewritten reader; the process unchanged | `l7r/diagram/tools/claims.py` `l7r/diagram/tools/claims_rust.py` `scripts/record/claims*.py` `scripts/record/tunables.py` `scripts/record/open_questions.py` `scripts/record/record_cache.py` |
 | the placement-stages page | `STAGES` and `Steps:` docstrings | unchanged for the stages (the thin Python functions stay); a Rust step read through the doc-comment reader | partial: the steps' reader is new | `l7r/diagram/tools/placement_stages.py` |
 | cache audit | mutate a literal, compare sweeps | the same audit, mutating `.rs` and rebuilding | one for one, slower | `l7r/diagram/tools/cache_audit.py` |
 | dead closure | `make dead-closure` | the compiler's dead-code lint, refused, for private items; the script for the rest | partial | `scripts/measure/dead_closure.py` |
@@ -65,6 +65,7 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | research claims | `tools/claims_rust.py` reads each `.rs` item's `///` `Research:` section (else the `//!` module doc's, inherited) into the same `claims.Unit`s, its core the item's comment-free tokens; `claims.all_units` yields them in the scope, so the index, gate, bundles, triage and reports downstream are unchanged. A DEVIATION from the row's "the `syn` parser": a Python brace scan gives the span and doc the units need and stays in the indexing process | `tests/tools/test_claims_rust.py` (units, spans and kinds; own and inherited claims; a doc edit keeps the core, code moves it; the index reads them) |
 | the placement-stages page | a `Steps:` name `rust/<crate>/src/<file>.rs::<item>` resolves through `claims_rust.resolve` to a `RustItem` whose `__doc__` is the item's doc comment; `research_of` reads its unit's claims; the stages stay Python | `test_a_rust_step_on_the_placement_page_shows_its_doc_and_its_claims` |
 | dead closure (its private half) | rustc's `dead_code` lint, an error under `rust_checks.py lint`'s `-D warnings` | `test_a_private_item_nothing_calls_is_refused` |
+| the pytest suite | a test of a stage's own source moves with the stage into its `#[cfg(test)]` module, run by `make rust-test`; the Python tests of the parts that stay Python unchanged | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 
 ### Not yet proven (2026-10-30), and what each waits for
 
@@ -72,8 +73,9 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 - **the overlap census, replaced by the work-budget counters inside Rust**: needs the counting interface the Rust phases report their operations through - designed with T19, the first phase whose MODE AUDIT reads `.rs`.
 - **the change-selected tests' Python half**: testmon selects by Python lines, so a `.rs` change selects none of the Python tests that call the extension; the fix (a Rust change selects every test importing the extension) needs that extension to exist - T19.
 - **dead closure's public half** (`dead_closure.py` over `pub` items nothing calls): needs the real crate's public surface - T19.
-- **the pytest suite's partial row** holds by the fixture's own `#[cfg(test)]` tests (`make rust-test`); nothing further to prove until a stage's source test moves.
 
-These four wait on the first Rust phase while FR-011 says every row is proven before it lands - a process question for the round
-arbiter (`make arbiter-ask SUBJECT=444-T17-rows-need-a-phase`): prove them on T19's port as it lands, or build a stand-in phase first.
+**Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30,
+`specs/444-work-budget-program/arbiter.jsonl`, Route A): these four need a phase's map, counters or public surface, so T19's
+`water_frame` port owes them before its tick, each proven as the rest were; `check-rust-tooling.py` refuses any tree holding a
+Rust phase while one is unproven (`test_a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.
 

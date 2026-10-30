@@ -72,12 +72,44 @@ def keys(inventory: str) -> list[str]:
     return out
 
 
+#: THE FATES A ROW IS PROVEN FOR before a Rust phase lands (feature 444 FR-011, T17's step 1); "dropped" and "unchanged" owe none
+PROVEN_FATES = ("one for one", "partial", "rewritten", "replaced")
+
+
+def unproven(inventory: str) -> list[str]:
+    """The inventory's rows of a PROVEN_FATES fate that the "Proven on the fixture" table does not name exactly - a name with a
+    qualifier (`dead closure (its private half)`) proves part of a row, not the row."""
+    rows: list[str] = []
+    proven: set[str] = set()
+    table = ""
+    for line in inventory.splitlines():
+        if line.startswith("| check |"):
+            table = "inventory"
+        elif line.startswith("| row |"):
+            table = "proven"
+        elif line.startswith("| ") and not line.startswith("|---"):
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if table == "inventory" and len(cells) >= 5 and cells[3].startswith(PROVEN_FATES):
+                rows.append(cells[0])
+            elif table == "proven":
+                proven.add(cells[0])
+    return [r for r in rows if r not in proven]
+
+
 def problems(root: Path) -> list[str]:
     files = subprocess.run(["git", "-C", str(root), "ls-files"], capture_output=True, text=True, check=True).stdout.split()
     have = keys((root / INVENTORY).read_text(encoding="utf-8")) if (root / INVENTORY).is_file() else []
     paths = [k for k in have if not k.startswith("make ")]
     targets = {k.removeprefix("make ").strip() for k in have if k.startswith("make ")}
     out = [f"{f}: reads Python's syntax tree, or .py or .rs files, and no row of {INVENTORY} names it" for f in readers(root, files) if not any(fnmatch.fnmatch(f, k) for k in paths)]
+    # ...AND NO RUST PHASE LANDS WITH A ROW UNPROVEN (feature 444 FR-011, the round arbiter's ruling on
+    # ask:444-T17-rows-need-a-phase: Route A defers four rows to T19's port only because this refuses its landing until they
+    # are marked proven - without it the deferral would be a waiver)
+    if any(f.startswith("rust/") and f.endswith(".rs") for f in files) and (root / INVENTORY).is_file():
+        out += [
+            f"a Rust phase is in the tree, and the row `{r}` of {INVENTORY} is not proven - prove it on the phase (its check refuses a copy written to break it), then name it in the \"Proven on the fixture\" table"
+            for r in unproven((root / INVENTORY).read_text(encoding="utf-8"))
+        ]
     mk = root / "Makefile"
     if mk.is_file():
         out += [f"make {t}: its recipe runs a Python-only or Rust tool, and no row of {INVENTORY} names it" for t in tool_targets(mk.read_text(encoding="utf-8")) if t not in targets]
