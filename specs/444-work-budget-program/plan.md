@@ -219,7 +219,7 @@ copy of each is the rule.
 the same draws on every platform. The port cannot reproduce today's draws without reading today's Python's random calls, which
 the phase-source guard holds (the GM, 2026-10-30), so every map's plan rolls once anew - its fall, drainage bearing, wind and knob
 forms - and the layouts downstream move. The GM's ruling of 2026-10-18 lets maps change
-where they keep the research (the root CLAUDE.md, "Speed work may ALWAYS change maps"): `make cohort-landing` and the claims round hold them to the research, and each pool hamlet that moves owes
+where they keep the research (the root CLAUDE.md, its speed-work rule under Verification and iteration): `make cohort-landing` and the claims round hold them to the research, and each pool hamlet that moves owes
 its settlement-review (docs/reviews.md: a map's form changes) - this task's Occasions line is corrected to say so.
 
 **D8 - The build: maturin into a repository-local folder, keyed to the Rust sources** (FR-010): `rust/phases/` is the crate
