@@ -130,7 +130,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Static checks</h2>
 <p class=sec>What the gate runs before it spends anything on a map roll.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make format</td><td class=a>&ndash;</td><td>ruff format over the tree</td></tr>
+<tr><td class=n>make format</td><td class=a>&ndash;</td><td>ruff format over the tree, and rustfmt over the Rust phases&#x27; crates (feature 444 T17)</td></tr>
 <tr><td class=n>make guard<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>refuse to run in main&#x27;s tree - main is the integration point, never a workspace</td></tr>
 <tr><td class=n>make static</td><td class=a>&ndash;</td><td>the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)</td></tr>
 <tr><td class=n>make typecheck</td><td class=a>&ndash;</td><td>pyrefly over the engine, one-shot, no daemon (feature 142)</td></tr>

@@ -164,3 +164,5 @@ dev/perf-raw/
 # (scripts/reviews/layout_carry.sh) empties and removes it after the merge. The bracket kept the literal old path from the
 # old-layout check (retired by feature 383).
 /.claude/skills/diagra[m]/
+# cargo's build output, should a crate be built without rust_checks.py's shared target directory (feature 444 T17)
+target/

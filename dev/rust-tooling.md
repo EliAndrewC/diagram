@@ -42,3 +42,16 @@ decision).
 | the tool yield | `make tool-yield` reads the tools' own files | unchanged: the tools stay Python | unchanged | `scripts/measure/tool_yield.py` |
 | this inventory's check | `make rust-tooling` reads the tree for Python readers | the same check, its patterns extended to readers of `.rs` (`syn`, `*.rs`) | one for one | `scripts/gates/check-rust-tooling.py` |
 | the pytest suite | tests that read source (`ast`, `inspect`) or glob `*.py`: the surface guards, the namespace portion, the hooks' and tools' tests | unchanged for the Python they read; a test of a stage's own source moves with the stage to its Rust tests (`#[cfg(test)]` in their own file) | partial | `tests/**` `make hooks-test` |
+
+## Proven on the fixture (feature 444 T17)
+
+Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy written to break it and passes the fixture - in
+`tests/tooling/test_rust_tooling.py`. A row not listed here is not yet proven, and FR-011 holds the first Rust phase until all are.
+
+| row | the check | the test that fires it |
+|---|---|---|
+| lint | `scripts/gates/rust_checks.py lint` in `make static`: clippy, the crate's `[lints.clippy]` denying all and pedantic | `test_lint_passes_the_fixture_and_refuses_a_pedantic_breach` |
+| format | `rust_checks.py format` in `make format` (`--check` refuses) | `test_format_passes_the_fixture_and_refuses_what_rustfmt_would_change` |
+| function cap | clippy `too_many_lines` at the root `clippy.toml`'s 100; `allow_attributes_without_reason` denied | `test_the_function_cap_refuses_a_function_past_a_hundred_lines`, `test_an_exception_with_no_reason_is_refused` |
+| file cap | `check-file-scale.py` scanning `.rs` | `test_the_file_cap_reads_rust_files` |
+
