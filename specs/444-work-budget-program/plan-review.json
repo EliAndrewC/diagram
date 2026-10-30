@@ -248,8 +248,8 @@
    "declared": "spec-fidelity"
   },
   "### T17 Approach (checklist part A)": {
-   "sha256": "bbdd48eabd606c5e15259259a2ed7f0ae2aa5d0d51ab5ea3357e8ad6b04fa65f",
-   "verdict": "BLOCKED",
+   "sha256": "94dda5eea565b1e5ec5970ddd6b55e67315ad534af364669323d1258e5383ca4",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
@@ -272,8 +272,8 @@
    "declared": "spec-fidelity"
   },
   "### T19 Approach (checklist part A)": {
-   "sha256": "c80e94f333aac449bf7ce9b34fbbad76beb4e35f51ebfb8d1a09444874a9c5d4",
-   "verdict": "BLOCKED",
+   "sha256": "f906fa86d93a673f05902df631ca7fcab47f524c918dcbbd84072ef1985df192",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
@@ -1903,6 +1903,72 @@
      "summary": "check-rust-tooling.py refuses the water_frame port's landing until the deferred rows are proven.",
      "class": "within",
      "why": "This enforces FR-011 clause 2 and the design's 'The first Rust phase cannot land until every ... row has been proven to fire'. It serves the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T17 Approach (checklist part A)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17-scope-replaced",
+     "summary": "T17 proves rows marked one for one, partial, rewritten AND replaced on the fixture (step 1, step 9).",
+     "class": "within",
+     "why": "Wider than FR-011 and section 7 (which name one for one, partial, rewritten); adding 'replaced' narrows nothing."
+    },
+    {
+     "id": "T17-groups",
+     "summary": "Rows land in groups as proven (lint/format, caps, coverage, code id and claims reader, guards), one landing a group.",
+     "class": "within",
+     "why": "Ordering and batching of the same work; every row is still proven before a Rust phase lands."
+    },
+    {
+     "id": "T17-refusal-lands",
+     "summary": "The refusal of a Rust phase's landing while any row is unproven lands with T17.",
+     "class": "within",
+     "why": "This is FR-011's second clause and section 7's 'The first Rust phase cannot land until...', implemented before any phase."
+    },
+    {
+     "id": "T17-exit-arbiter",
+     "summary": "A row that cannot be made to fire on the fixture goes to the round arbiter with what blocked it.",
+     "class": "within",
+     "why": "An escalation exit; it does not waive the landing refusal, which stays mechanical (check-rust-tooling.py)."
+    },
+    {
+     "id": "T17-T19-cache-audit",
+     "summary": "cache audit (a 'one for one, slower' row) is not proven on the T17 fixture; it is proven in T19 on a copy of the water_frame port written to break it, before T19's landing, which check-rust-tooling.py refuses until then.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Section 7 and FR-011 require the row proven on a Rust fixture before the first Rust phase lands. The audit mutates a literal in engine code and compares map sweeps; the T17 fixture is, by the same design (step 4), never imported by the engine and draws no map, so the audit has nothing to compare on it - making it fire there would need the fixture to be a phase. The rule's purpose - no Rust phase lands with a safeguard unproven - is kept whole: the port's landing is mechanically refused until the audit refuses a broken copy of the port, which is itself a Rust fixture, and nothing before T19 puts Rust into a map for the audit to guard."
+    },
+    {
+     "id": "T17-T19-overlap-census",
+     "summary": "the overlap census (replaced by the counters inside Rust, designed with this port) is proven in T19 on a broken copy of the port, before T19's landing, refused until then.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "As the block describes it the row is 'replaced', a kind section 7's fixture rule does not name, so moving it is narrowing only of the plan's own wider step 1; taken at its strictest it still keeps the landing rule's purpose: the census reads a phase's counted operations, the fixture runs none of the engine's work, and the port cannot land until the replacement refuses a copy written to break it."
+    },
+    {
+     "id": "T17-restored-rows",
+     "summary": "dead closure's public half and the change-selected tests' Python half, deferred last round, are back in T17 and proven on the fixture.",
+     "class": "within",
+     "why": "Restores the GM's rule for those rows; the prior NOT LEGITIMATE findings are answered (T17 step 9 excepts only cache audit and the overlap census, T19 names only those two)."
+    },
+    {
+     "id": "T19-proof-exit",
+     "summary": "T19's green exit and done line require cache audit and the overlap census in the Proven table with firing cases - each check refusing a broken copy of the port, not merely run green.",
+     "class": "within",
+     "why": "The 'prove it fires' standard of section 7, applied to the two moved rows."
+    },
+    {
+     "id": "T19-order-guard-perf",
+     "summary": "T19 after the tooling proof and before the field rebuild; the phase-source guard holds its old code; budget at every size, MODE AUDIT WITHIN, cohort-landing, Rust coverage floor, perf-ab recorded; red exits to the arbiter with the measurement.",
+     "class": "within",
+     "why": "Implements FR-017 (water_frame's port a task of its own, same budget), FR-010, and the GM's 2026-10-30 guard; nothing narrowed."
     }
    ]
   }
