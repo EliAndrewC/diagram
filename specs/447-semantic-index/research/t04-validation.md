@@ -67,3 +67,7 @@ Across the four runs, each reported a different six or seven of the twelve, and 
 in no other run). What a run reports varies more from run to run than with the search it was given; the combined search
 printed, across its two runs, 7 of the 12 (Shizuoka, Huizhou, Yayoi, King, Taipingqiao, Hattori, Ofuro); Shiroyone, Iwamuro and
 Kami-Baba the agents reached through record 0005 and their own greps, Shicang through a grep, Konosu never. **SC-A3 not met** as written: no run surfaced and reported all twelve.
+
+Hattori and Ofuro in rerun 2: printed (each id appears in the run's command output) but never opened - no tool call of the run
+names either file (its transcript's tool inputs searched for `97f6d769ce72` and `100916836bb9`, 2026-10-30). The contract said to
+open every printed source that bears on the question; the agent judged them from their printed passages and passed over them.
