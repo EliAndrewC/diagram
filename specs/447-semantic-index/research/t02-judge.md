@@ -31,3 +31,12 @@ missed: Hattori (`97/97f6d769ce72`, Yayoi plots of 10-180 m²), Ofuro (`10/10091
 
 One run of each arm on one question: the 13% in tokens is inside what two runs of one brief can differ by, so it is a reading,
 not a result.
+
+## A correction on reading (2026-10-30, after the GM asked what exactly went wrong)
+
+- Arm S did not misread Buck: its own report says, beside the figure, "Its 'plot' is a holding that can hold several bunded fields,
+  and the figures cover dry farms in North China too" (arm S's finding 9, in the session). The judge marked the figure misleading
+  as a headline; the arm had stated its limit.
+- Each arm found sources the other did not: arm S Buck, Shizuoka 1872 and the Huizhou 1581 parcel (unopened); arm T Shicang 1898
+  and Wanchun. Neither report was put through the record's checks (quote-check, source-reader, source-applicability), which run
+  when a pass's findings are written into a page; the judge graded the raw passes.
