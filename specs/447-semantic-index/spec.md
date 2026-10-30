@@ -80,3 +80,9 @@ today's search in Japanese beside them. The outputs are `research/trial-out.json
 As feature 437 reported it: `make feature-report F=447`.
 
 ## Review history
+
+- 2026-10-30, round 1 (spec-fidelity, MODE 2, `make trial-review F=447`): CHANGES REQUIRED - the verdict "set down" is the
+  branch of the rule the measurement took and keeping the index until the GM chooses is LEGITIMATE; three figures fixed (four,
+  not five, ranked first or second; 275 MiB; the build's measured rate in "Resuming") and the one-shot timings labeled, in
+  `b8c0be19c`. Owed: round 2 (spec-fidelity-verify) on that diff, then the push, then the GM's choice (escalation-check on the
+  draft was dispatched 2026-10-30). Stopped here at the weekly usage soft cap.
