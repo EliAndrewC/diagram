@@ -10,6 +10,10 @@ first Rust phase lands, `make static` and `make format` run these over nothing a
              reason (`allow_attributes_without_reason`) - the Rust forms of ruff, PLR0915 and the suppression that says why
     format   `cargo fmt`, or with --check the refusal of a file rustfmt would change (ruff format's Rust form)
     test     `cargo test` (`make rust-test`), the crate's own `#[cfg(test)]` tests
+    cover    100% of the crate's lines (`cargo llvm-cov --fail-under-lines 100`), counting BOTH its own tests and the lines Python
+             reaches through the extension: the crate's tests run instrumented, the module is built instrumented (maturin), the
+             crate's Python driver imports it, and one report reads both profiles. The driver is the crate's `tests/py_driver.py`
+             (`--driver` for another) - the module's Python callers, so a `#[pyfunction]` only Python calls is not uncovered
 
 The build goes to one target directory outside the tree (`~/.cache/l7r-cargo-target`), so a check never writes `target/` into a
 checkout and every clone shares the compiled dependencies.
@@ -44,6 +48,37 @@ def cargo(args: list[str], manifest: pathlib.Path, after: list[str] | None = Non
     return subprocess.run(cmd, capture_output=True, text=True, env=env, check=False)
 
 
+def cover(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Path) -> subprocess.CompletedProcess[str]:
+    """Instrument, run the crate's tests and its Python driver, and report at the 100% floor (measured on the fixture 2026-10-30:
+    its own tests reach 40% of its lines, its Python driver the rest)."""
+    base = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(work / "target")}
+    shown = _env_run([str(_exe()), "llvm-cov", "show-env", "--manifest-path", str(manifest)], base)
+    env = dict(base)
+    for line in shown.stdout.splitlines():
+        if "=" in line:
+            k, v = line.split("=", 1)
+            env[k.removeprefix("export ")] = v.strip().strip("'\"")
+    steps = [_env_run([str(_exe()), "llvm-cov", "clean", "--workspace", "--manifest-path", str(manifest)], env), _env_run([str(_exe()), "test", "--quiet", "--manifest-path", str(manifest)], env)]
+    if driver is not None and driver.is_file():
+        steps.append(_env_run(["maturin", "build", "--quiet", "-o", str(work / "dist"), "-m", str(manifest)], env))
+        wheels = sorted((work / "dist").glob("*.whl"))
+        if wheels:
+            steps.append(_env_run([sys.executable, "-m", "pip", "install", "--quiet", "--target", str(work / "site"), str(wheels[-1])], env))
+            steps.append(_env_run([sys.executable, str(driver)], {**env, "PYTHONPATH": str(work / "site")}))
+    failed = next((s for s in steps if s.returncode != 0), None)
+    if failed is not None:
+        return failed
+    return _env_run([str(_exe()), "llvm-cov", "report", "--fail-under-lines", "100", "--manifest-path", str(manifest)], env)
+
+
+def _exe() -> pathlib.Path | str:
+    return CARGO if CARGO.is_file() else "cargo"
+
+
+def _env_run(cmd: list[str], env: dict[str, str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(cmd, capture_output=True, text=True, env=env, check=False)
+
+
 def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedProcess[str]:
     if cmd == "lint":
         return cargo(["clippy", "--quiet", "--all-targets"], manifest, ["-D", "warnings"])
@@ -54,7 +89,8 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "cover"])
+    ap.add_argument("--driver", default="", help="cover: the Python driver (default: the crate's tests/py_driver.py)")
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
     args = ap.parse_args(argv)
@@ -64,12 +100,16 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     bad = 0
     for m in found:
-        r = run(args.cmd, m, args.check)
+        if args.cmd == "cover":
+            work = TARGET.parent / f"l7r-cover-{m.parent.name}"
+            r = cover(m, pathlib.Path(args.driver) if args.driver else m.parent / "tests" / "py_driver.py", work)
+        else:
+            r = run(args.cmd, m, args.check)
         if r.returncode != 0:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)
     if bad:
-        fix = {"lint": "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)", "format": "run `make format`", "test": "fix the failing test cargo names"}[args.cmd]
+        fix = {"lint": "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)", "format": "run `make format`", "test": "fix the failing test cargo names", "cover": "test the lines llvm-cov names, from the crate's tests or its Python driver"}[args.cmd]
         print(f"rust-checks: {bad} crate(s) failed {args.cmd} - {fix}", file=sys.stderr)
         return 1
     print(f"rust-checks: {args.cmd} clean on {len(found)} crate(s)")

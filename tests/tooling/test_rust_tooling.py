@@ -97,3 +97,14 @@ def test_rust_test_passes_the_fixture_and_refuses_a_failing_test(crate: pathlib.
     assert rc.run("test", crate / "Cargo.toml", check=False).returncode == 0
     broken = _with(crate, "\n#[cfg(test)]\nmod failing {\n    #[test]\n    fn fails() {\n        assert_eq!(1, 2);\n    }\n}\n")
     assert rc.run("test", broken / "Cargo.toml", check=False).returncode != 0
+
+
+def test_coverage_counts_the_lines_python_reaches_and_refuses_an_untested_line(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Row "coverage and its floors": `cargo llvm-cov --fail-under-lines 100`, plus the Rust lines pytest reaches through the
+    extension - the fixture's own tests reach 40% of its lines, its Python driver the rest (measured 2026-10-30)."""
+    m = crate / "Cargo.toml"
+    assert rc.cover(m, crate / "tests" / "py_driver.py", tmp_path / "w1").returncode == 0, "its tests and its Python caller: every line"
+    r = rc.cover(m, None, tmp_path / "w2")
+    assert r.returncode != 0, "its own tests alone leave the #[pyfunction] and the module uncovered"
+    broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
+    assert rc.cover(broken / "Cargo.toml", broken / "tests" / "py_driver.py", tmp_path / "w3").returncode != 0, "an untested line fails"
