@@ -79,7 +79,14 @@ def stage_doc(stage: Any) -> tuple[str, list[str], list[str]]:
 
 def resolve_step(path: str) -> Any:
     """The object a `Steps:` name points at: the longest importable prefix is the module, the rest an attribute
-    chain (`l7r.diagram.settlement.Settlement.try_place` is the module, the class and the method)."""
+    chain (`l7r.diagram.settlement.Settlement.try_place` is the module, the class and the method); a Rust step,
+    `rust/<crate>/src/<file>.rs::<item>`, its item from the doc-comment reader (feature 444 T17)."""
+    if ".rs::" in path:
+        from pathlib import Path  # noqa: PLC0415 - as `_verdicts` imports it, at use
+
+        from l7r.diagram.tools import claims_rust  # noqa: PLC0415
+
+        return claims_rust.resolve(Path(REPO), path)
     parts = path.split(".")
     for cut in range(len(parts), 0, -1):
         try:
@@ -123,10 +130,13 @@ def research_of(obj: Any) -> list[dict[str, Any]]:
     """What the page shows of a stage's or a step's claims: per claim its label, account, backing, the questions it cites
     (`{"text", "site"}`, `site` relative to the record's site) and its verdict (`unchecked` where the index holds none)."""
     obj = inspect.unwrap(obj)
-    found, _errors = _claims.claims_of(inspect.getdoc(obj))
-    if not found:
-        found, _errors = _claims.claims_of(inspect.getdoc(sys.modules[obj.__module__]))
-    rel = os.path.relpath(inspect.getsourcefile(obj) or "", REPO).replace(os.sep, "/")
+    if hasattr(obj, "unit"):  # a Rust step (`claims_rust.RustItem`): its unit's claims, own or inherited, and its file
+        found, rel = obj.unit.claims, obj.unit.path
+    else:
+        found, _errors = _claims.claims_of(inspect.getdoc(obj))
+        if not found:
+            found, _errors = _claims.claims_of(inspect.getdoc(sys.modules[obj.__module__]))
+        rel = os.path.relpath(inspect.getsourcefile(obj) or "", REPO).replace(os.sep, "/")
     out: list[dict[str, Any]] = []
     for c in found:
         qs = [{"text": q["text"], "site": q["url"].removeprefix(_sources.SITE_PAGES)} for p in c.pointers for q in _sources.research_questions(p)]

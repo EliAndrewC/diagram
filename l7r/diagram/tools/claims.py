@@ -650,6 +650,10 @@ def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = Fals
         errors, units = _units_of(src, facts, rel, mod, p.name == "__init__.py", constants, every_module_unit, "scope", memo)
         for unit in units:
             yield unit, errors
+    # ...AND THE RUST PHASES (feature 444 T17): every unit of every `.rs` under `rust/`, from its doc comments - in the scope
+    from l7r.diagram.tools.claims_rust import all_rust_units  # noqa: PLC0415 - it imports this module
+
+    yield from all_rust_units(skill, repo_prefix)
     yield from claimed_outside(skill, set(mods), repo_prefix, memo)
     for doc, tops in PROCEDURES.items():
         if not (skill / doc).is_file():  # a tree read at an older commit (the push's base) may predate a document
