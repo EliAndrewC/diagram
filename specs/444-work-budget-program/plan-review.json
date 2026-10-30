@@ -248,7 +248,7 @@
    "declared": "spec-fidelity"
   },
   "### T17 Approach (checklist part A)": {
-   "sha256": "2ee7d76a56eb4f54913f5275756664022ba967f9f124e0ae240db0e025bd293a",
+   "sha256": "271e695f3c0f09d9ccef13db10461f6cdcae11ac34432174f53a7038a1dd6746",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
@@ -1819,6 +1819,27 @@
      "summary": "Performance work: yes; docs/performance-checklist.md's six prompts appended as unfilled placeholders.",
      "class": "within",
      "why": "No decision: prompts only, marked never a gate; the phase is still judged against its counted-operations budget (FR-005/FR-006), with time recorded as the design says."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T17 step 9 (done, measured)",
+     "summary": "Done is every row of dev/rust-tooling.md marked one for one, partial, rewritten or replaced (step 1's four kinds) marked proven with its firing case; replaces 'every non-unchanged row'.",
+     "class": "within",
+     "why": "FR-011 and the request's table section ('every \"one for one\", \"partial\" and \"rewritten\" row has been proven to fire on a Rust fixture') require three kinds; the step names all three plus 'replaced', a superset, and now matches step 1's own list word for word. The only rows the old wording reached that a strict reading of the new one might not are the 'dropped, replaced by the compiler' rows (pyrefly, duplicate definitions), which neither FR-011 nor the request asks to be proven, so no requested row is lost."
+    },
+    {
+     "id": "T17 steps 1-8, 10-11 (unchanged)",
+     "summary": "Fixture crate under tests/fixtures/rust/, first of the Rust work, rows landing in groups, unprovable rows to the round arbiter - text identical to the block judged CLEAR.",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR text (diffed against earlier.md); serves FR-010, FR-011, FR-017 and the GM's 2026-10-30 'please complete those tooling fixes that are the prerequisites'."
     }
    ]
   }
