@@ -139,19 +139,56 @@ def text(archive_dir: pathlib.Path, root: pathlib.Path, term_sets: Sequence[Sequ
 
 
 def fuse(meaning_lists: Sequence[Sequence[Hit]], text_lists: Sequence[Sequence[Hit]]) -> list[dict[str, Any]]:
-    """The sources of every list, ranked by reciprocal-rank fusion; each keeps its best passage (its best meaning rank, else its
-    best text rank) and which searches found it."""
+    """The sources of every list, ranked by reciprocal-rank fusion; each keeps its best passage of each search (`index`, `text`)
+    and which searches found it."""
     rows: dict[str, dict[str, Any]] = {}
     for kind, lists in (("index", meaning_lists), ("text", text_lists)):
         for hits in lists:
             for rank, (src, rel, s, e) in enumerate(hits, 1):
-                row = rows.setdefault(src, {"source": src, "score": 0.0, "by": set(), "best": None})
+                row = rows.setdefault(src, {"source": src, "score": 0.0, "by": set(), "passages": {}})
                 row["score"] += 1.0 / (FUSE + rank)
                 row["by"].add(kind)
-                key = (kind != "index", rank)
-                if row["best"] is None or key < row["best"][0]:
-                    row["best"] = (key, rel, s, e)
+                if kind not in row["passages"] or rank < row["passages"][kind][0]:
+                    row["passages"][kind] = (rank, rel, s, e)
     return sorted(rows.values(), key=lambda r: (-r["score"], r["source"]))
+
+
+# A NUMBER WITH A UNIT OF MEASURE (feature 447 amendment 4): the field-size runs dropped sources whose printed passage was the
+# nearest by meaning but held no size - Hattori's sizes, Bray's "twenty yards square" and Huizhou's 0.715-mu parcel stood elsewhere
+# in their files (`specs/447-semantic-index/research/t05-why.md`) - so each source also shows the passage where a measure stands
+# nearest the question's terms. Units in both scripts' forms; a false hit (歩 as "step", 分 as "part") costs one line, a miss a source.
+_WORDS = "one two three four five six seven eight nine ten eleven twelve fifteen twenty thirty forty fifty sixty hundred half quarter".split()
+_NUM = r"(?:\d[\d,.]*|[〇一二三四五六七八九十百千万壱弐参拾廿]+|\b(?:" + "|".join(_WORDS) + r")\b(?: an?)?)"  # Bray: "twenty yards square"
+_UNIT = (
+    r"(?:反|段|畝|畆|歩|坪|町|亩|顷|頃|坵|丘|間|尺|丈|㎡|m2|m²|平方メートル|平方米|ヘクタール|公顷|"
+    r"hectares?\b|ha\b|acres?\b|square (?:feet|foot|yards?|met(?:er|re)s?)\b|feet\b|foot\b|ft\b|yards?\b|mows?\b|mu\b|"
+    r"tan\b|se\b|bu\b|tsubo\b|ch[oō]\b|ken\b|qing\b|qiu\b)"
+)
+MEASURE = re.compile(_NUM + r"\s*" + _UNIT, re.IGNORECASE)
+CLOSE, NEAR = 60, 300  # characters either side of a measure in which the question's terms are counted, first close then near
+# (measured 2026-10-30: with only the 300-character count every measure on Hattori's page tied, and its site area "2万㎡" won over
+# its plots' "10㎡ほど ... 180㎡"; on the Ofuro page a menu's "第一歩" won over "1区画3-5㎡")
+
+
+def measure_passage(body: str, terms: Sequence[str]) -> tuple[int, int] | None:
+    """The (start, end) of the passage around the best measure - the most of `terms` within CLOSE of it, then within NEAR, then the
+    most other measures within CLOSE (a run of sizes), the earliest on a tie - or None when the text holds no measure."""
+    low = body.lower()
+    found = [m.start() for m in MEASURE.finditer(body)]
+
+    def count(at: int, span: int) -> int:
+        window = low[max(0, at - span) : at + span]
+        return sum(1 for t in terms if t.lower() in window)
+
+    best: tuple[tuple[int, int, int], int] | None = None
+    for at in found:
+        score = (count(at, CLOSE), count(at, NEAR), sum(1 for o in found if o != at and abs(o - at) <= CLOSE))
+        if best is None or score > best[0]:
+            best = (score, at)
+    if best is None:
+        return None
+    start = max(0, best[1] - SNIPPET // 2)
+    return start, min(len(body), start + SNIPPET)
 
 
 def seen_path(home: pathlib.Path, key: str) -> pathlib.Path:
@@ -178,15 +215,28 @@ def search(
     return out, len(rows), len(rows) - len(fresh)
 
 
-def render(archive_dir: pathlib.Path, root: pathlib.Path, rows: Sequence[dict[str, Any]]) -> list[str]:
+def render(archive_dir: pathlib.Path, root: pathlib.Path, rows: Sequence[dict[str, Any]], terms: Sequence[str] = ()) -> list[str]:
+    """Each source with up to three passages: its nearest by meaning, its text-search hit, and its measure nearest the terms."""
     lines = []
     for n, r in enumerate(rows, 1):
         if n == 1 or r["source"].startswith("record ") != rows[n - 2]["source"].startswith("record "):
             lines.append("-- the record's pages (already answered?) --" if r["source"].startswith("record ") else "-- the archive's sources --")
-        _key, rel, s, e = r["best"]
-        snippet = re.sub(r"\s+", " ", _text_of(archive_dir, root, rel)[s:e])[:SNIPPET]
-        lines.append(f"{n:2d}. {r['source']}  [{'+'.join(sorted(r['by']))}]  {rel} [{s}:{e}]\n    {snippet}")
+        lines.append(f"{n:2d}. {r['source']}  [{'+'.join(sorted(r['by']))}]")
+        shown: list[tuple[str, int, int]] = []
+        for kind in ("index", "text"):
+            if kind in r["passages"]:
+                _rank, rel, s, e = r["passages"][kind]
+                shown.append((rel, s, min(e, s + SNIPPET)))  # what the line shows, not the whole passage
+                lines.append(f"    {'meaning' if kind == 'index' else 'text'}: {rel} [{s}:{e}] {_snippet(archive_dir, root, rel, s, e)}")
+        rel = shown[0][0]
+        span = measure_passage(_text_of(archive_dir, root, rel), terms)
+        if span and not any(r2 == rel and s < span[1] and span[0] < e for r2, s, e in shown):
+            lines.append(f"    measure: {rel} [{span[0]}:{span[1]}] {_snippet(archive_dir, root, rel, *span)}")
     return lines
+
+
+def _snippet(archive_dir: pathlib.Path, root: pathlib.Path, rel: str, s: int, e: int) -> str:
+    return re.sub(r"\s+", " ", _text_of(archive_dir, root, rel)[s:e])[:SNIPPET]
 
 
 def main(argv: list[str] | None = None, embed: si.Embed | None = None, store: Any = None) -> int:  # noqa: ANN401 - an `archive.Archive`
@@ -218,7 +268,8 @@ def main(argv: list[str] | None = None, embed: si.Embed | None = None, store: An
         + (f", {held} already shown under key {args.key!r}" if args.key else "")
         + (f"; {found - held - len(rows)} more not printed - call again under KEY= for the next" if found - held > len(rows) else "")
     )
-    print("\n".join(render(store.dir, root, rows)))
+    terms = [w for s in term_sets for w in s] + [w for q in questions for w in re.findall(r"[A-Za-z]{4,}", q)]
+    print("\n".join(render(store.dir, root, rows, terms)))
     return 0
 
 

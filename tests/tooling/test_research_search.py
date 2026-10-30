@@ -72,7 +72,7 @@ def test_under_a_key_a_later_call_prints_only_new_sources(tmp_path: pathlib.Path
     stale, _f, held = rs.search(archive, root, home, [], [["paddy"]], Fake(), key="field size", limit=2)
     assert held == 0 and len(stale) == 3, "a key's memory is forgotten after a day"
     lines = rs.render(archive, root, first)
-    assert lines[0].startswith("-- the record's pages") and lines[2].startswith("-- the archive's sources")
+    assert lines[0].startswith("-- the record's pages") and "-- the archive's sources --" in lines[3:]
 
 
 def test_a_term_search_needs_no_index_and_a_question_with_no_index_finds_nothing(tmp_path: pathlib.Path) -> None:
@@ -105,3 +105,26 @@ def test_main_asks_for_something_says_when_there_is_no_index_and_prints_the_merg
     (store.dir / "ab" / "y" / "text.txt").write_text("another intake")
     assert rs.main(["--terms", "intake", "--limit", "1"], store=store) == 0
     assert "1 more not printed" in capsys.readouterr().out
+
+
+def test_a_source_shows_the_measure_nearest_the_terms_when_its_best_passage_holds_none() -> None:
+    body = "a field of 3 se lay idle. " + "the floor of the paddy was uneven and cracked. " * 20 + "the largest plot was one tan of paddy, the smallest 10 ㎡ of paddy."
+    s, e = rs.measure_passage(body, ["paddy", "plot", "largest"]) or (0, 0)
+    assert "one tan" not in body[s:e] or "largest" in body[s:e], "the measure among the terms, not the first one"
+    assert "10 ㎡" in body[s:e] or "tan" in body[s:e]
+    assert rs.measure_passage("no numbers here", ["paddy"]) is None
+    assert rs.MEASURE.search("一反八畝一歩") and rs.MEASURE.search("1.4亩") and rs.MEASURE.search("twenty yards square") and rs.MEASURE.search("half an acre")
+    assert rs.MEASURE.search("31 by 40 feet") and rs.MEASURE.search("0.39 hectares")
+
+
+def test_render_adds_the_measure_line_only_when_the_shown_passages_lack_it(tmp_path: pathlib.Path) -> None:
+    archive, root = tmp_path / "archive", tmp_path / "repo"
+    (archive / "ab" / "x1" / "t").mkdir(parents=True)
+    (root / si.QUESTIONS).mkdir(parents=True)
+    body = "the paddy floor was cracked and uneven. " * 30 + "each plot of paddy measured 18 m2 at most."
+    (archive / "ab" / "x1" / "t" / "text.txt").write_text(body)
+    row = {"source": "ab/x1", "by": {"index"}, "passages": {"index": (1, "ab/x1/t/text.txt", 0, 900)}}
+    lines = rs.render(archive, root, [row], ["plot", "paddy"])
+    assert any(line.lstrip().startswith("measure:") and "18 m2" in line for line in lines)
+    near = {"source": "ab/x1", "by": {"index"}, "passages": {"index": (1, "ab/x1/t/text.txt", len(body) - 100, len(body))}}
+    assert not any("measure:" in line for line in rs.render(archive, root, [near], ["plot"])), "already shown, not repeated"

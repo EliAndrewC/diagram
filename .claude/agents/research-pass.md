@@ -42,6 +42,12 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
   building, household or court question may name Japan first; follow the prompt.
 - **The date of the evidence, not of the source**: premodern means Japan before 1868, China before 1912. A modern source
   describing premodern practice counts for that practice; a modern reconstruction or revival does not, and say which it is.
+- **Report, do not filter**: every source that gives the thing asked (a size, a count, a distance) is listed, WHATEVER its date
+  or its kind, with the period its evidence describes and what it measures (a register parcel, a holding, a planned plot, a
+  single field). The premodern window above decides your VERDICT, never whether a source is listed: whether a finding applies to
+  the case is the record's checks' to rule (source-applicability), not the search's (feature 447 amendment 4 - four runs on one
+  question drew four different lines and each dropped sources the others kept). Read a source's `measure:` line from
+  `make research-search` before you pass over it.
 - **Verbatim, in its language, translated and marked.** Quote the passage exactly as the page has it - original characters and
   spelling - then your English translation, marked "(translation)". A source you could not read is not reported as evidence;
   name it under SILENT with what blocked it.
@@ -59,4 +65,4 @@ Compact, and only what bears on the question:
    (nothing found: list what you searched - the archive terms, the queries, the pages read and why each did not bear).
 3. Leads you did not follow, one line each, if any.
 
-Do not pad: a source that does not bear on the question is not listed.
+Do not pad: a source that does not bear on the thing asked is not listed; a source outside the period still is (above).
