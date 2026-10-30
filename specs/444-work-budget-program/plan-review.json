@@ -223,12 +223,6 @@
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
-  "### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)": {
-   "sha256": "1cd9968a4274771789f7d8c8f068a8cfdd79c6f244b241bdd06ebfefa247c842",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
   "### T16 Approach (checklist part A)": {
    "sha256": "36c742cbeda19e0959ba3d38b9fa73f4dc15db655f5e9ed82c003c170069ec06",
    "verdict": "CLEAR",
@@ -239,6 +233,54 @@
    "sha256": "d8ed4e8a8d03447310b5cf0fe9c3df273ea0352a1083cc6d7afa904a6afa66d9",
    "verdict": "CLEAR",
    "reviewed": "2026-10-29",
+   "declared": "spec-fidelity"
+  },
+  "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)": {
+   "sha256": "87abdb3e00c0edf431bced6cfba53f4ea8aeda0681f58ba5830036ccd028547b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T17 - FR-011's Rust tooling proven on a Rust fixture (amendment 4; before the first Rust phase lands)": {
+   "sha256": "cac4ca326c169a6cdbd796d09b65476f053e6d046fc91d4a39aff06e36a917bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T17 Approach (checklist part A)": {
+   "sha256": "2ee7d76a56eb4f54913f5275756664022ba967f9f124e0ae240db0e025bd293a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict": {
+   "sha256": "5637cccf7a92e7f672e35bf8e553b03e53089c57bbd7cff2868e07b7296f1054",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Approach (checklist part A)": {
+   "sha256": "44cfebf61d897632ff430c23b19dcd32381bed0e20c96da8bf402dd23579b056",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)": {
+   "sha256": "9ca79a289cffee37214fbd382f68685fd3b0acac225732c0c56c0e6fd6928083",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Approach (checklist part A)": {
+   "sha256": "30e3c236f176c5ba8b076e850cefc09674a51d9b63887dd0213dbe2d419ab51a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fda28c18756a40335df4315fb4c265665f7b21224c29eef891a52fe7d2420eea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   }
  },
@@ -1682,6 +1724,101 @@
      "summary": "The separate field_polder phase after the language decision is withdrawn.",
      "class": "within",
      "why": "Removing the task that deferred part of phase 2 past step 5 brings back into step 4 what the GM asked for there. Removing a narrowing narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)",
+    "### T17 - FR-011's Rust tooling proven on a Rust fixture (amendment 4; before the first Rust phase lands)",
+    "### T17 Approach (checklist part A)",
+    "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict",
+    "### T18 Approach (checklist part A)",
+    "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)",
+    "### T19 Approach (checklist part A)",
+    "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "(removed) ### T16 - phase: field, through the checklist (FR-003 to FR-006; step 4)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-rename",
+     "summary": "The field phase task retitled 'in Rust under the single-field cap', citing FR-017 and FR-018; occasions line unchanged.",
+     "class": "within",
+     "why": "FR-017 (GM 2026-10-29, no Python rewrites; Rust applies to every phase from field on) and FR-018 (the single-field cap, re-derived before the field phase lands) both require exactly this; the occasions line is carried verbatim from the CLEAR-judged block."
+    },
+    {
+     "id": "T16-removed",
+     "summary": "The old T16 heading ('phase: field, through the checklist') removed.",
+     "class": "within",
+     "why": "Not a deletion of work: its whole text (the field phase, FR-003 to FR-006, step 4, the same occasions) survives in the renamed T16, which only adds FR-017/FR-018."
+    },
+    {
+     "id": "T17-fixture",
+     "summary": "A Rust fixture crate (one PyO3 module, a thin Python caller, a /// doc comment with Research: and Steps:) under tests/fixtures/rust/, never imported by the engine; each check refuses a fixture written to break it and passes one written to keep it.",
+     "class": "within",
+     "why": "FR-011 and design section 7 ('proven to fire on a Rust fixture, the same prove-it-fires rule every guard meets today'); FR-010's shape for the fixture."
+    },
+    {
+     "id": "T17-rows",
+     "summary": "Rows proven: one for one, partial, rewritten, replaced (step 1); done when every non-unchanged row is marked proven (step 9).",
+     "class": "within",
+     "why": "A superset of FR-011's 'one for one, partial or rewritten' rows; nothing FR-011 requires is left out, so nothing is narrowed. (Steps 1 and 9 name different supersets - an internal inconsistency, not a fidelity finding.)"
+    },
+    {
+     "id": "T17-order",
+     "summary": "First of the Rust work, before the water_frame port and the field rebuild; rows land in groups, one landing a group.",
+     "class": "within",
+     "why": "FR-011 and FR-017: tooling proven before the first Rust phase lands; the GM 2026-10-30 'please complete those tooling fixes that are the prerequisites'. Grouping is delivery, not scope."
+    },
+    {
+     "id": "T17-red-exit",
+     "summary": "A row whose check cannot be made to fire goes to the round arbiter with what blocked it.",
+     "class": "within",
+     "why": "An escalation route, not a waiver: step 9 still requires every row marked proven, and FR-011 refuses a Rust phase's landing until then. The arbiter rules on process and cannot mark a row proven; on that reading only is this within."
+    },
+    {
+     "id": "T18-cap-referent",
+     "summary": "The cap is for the settlement kind the field draws: a hamlet's or village's comb field.",
+     "class": "within",
+     "why": "Identifies which settlement FR-018's 'a settlement of this kind' (the GM's 'these kinds of settlements') means; it is not an exemption, because step 1 of the same block applies 'more than one field' to any settlement whose farmland passes the cap, with no size carve-out - larger settlements still draw multiple fields as the GM said."
+    },
+    {
+     "id": "T18-research",
+     "summary": "Research pass searches the record and archive first (make research-search); feature 447's field-size runs used as leads, each source written up and checked; the page through make page-session.",
+     "class": "within",
+     "why": "FR-018 ('a research pass that searches the record and the archive first', constitution XII); the GM 'do a research pass if needed'. Leads checked as sources, not adopted as findings."
+    },
+    {
+     "id": "T18-exits",
+     "summary": "Green: cap and source in the record, MODE BUDGET SOUND; a figure above the standing pin keeps that pin and is pinned only with the GM's words. Red: LOOSE/UNDERIVED twice or an unsettled cap goes to the arbiter. Done: figure at 40 and exponent beside the pin. Before the field rebuild.",
+     "class": "within",
+     "why": "Restates FR-018 (new MODE BUDGET verdict before the field phase lands; above the pin only with make budget-change) and FR-013/FR-015 (arbiter accept may pin; a higher figure still needs the GM's words). The arbiter route on an unsettled cap is process; it cannot raise a pin."
+    },
+    {
+     "id": "T19-source",
+     "summary": "water_frame written in the extension module from phases/water_frame_greenfield.derivation.md, the phase-source guard holding the old code; parenthetical notes the derivation came out the same as today's code (rolls and writes, no search).",
+     "class": "within",
+     "why": "The port's named SOURCE is the greenfield derivation (FR-015), with the old code held by the guard the GM asked for on 2026-10-30. The parenthetical is a report of T15's derivation outcome (FR-017 records water_frame's rebuild as only its counters), not the port's input; weighed against the GM's 10-30 objection to 'the same algorithm in Python and in Rust', it does not make today's code the source."
+    },
+    {
+     "id": "T19-order",
+     "summary": "After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.",
+     "class": "within",
+     "why": "FR-011 (no Rust phase before every row proven), FR-003 (STAGES order, water_frame then field), FR-017 (the port its own phase task, landed before the feature closes)."
+    },
+    {
+     "id": "T19-exits",
+     "summary": "Green: counted operations within the pinned budget at every size, MODE AUDIT WITHIN, cohort-landing with no regressed seed, Rust coverage floor whole; perf-ab recorded. Red: over budget or AUDIT not WITHIN goes to the arbiter with the measurement.",
+     "class": "within",
+     "why": "FR-017 'held to the same budget', checklist boxes 6-7; 'every size' is wider than '40 and 80'. The red route is within only on FR-006's terms: the arbiter may rule on process and may not accept a phase over its budget; the outcomes remain rebuild again or make budget-change with the GM's words. The remaining acceptance items (exponent, claims round, occasions, old code deleted per FR-005) are carried by the phase checklist T19 runs under (FR-003), not dropped by this part-A list."
+    },
+    {
+     "id": "T19-perf-checklist",
+     "summary": "Performance work: yes; docs/performance-checklist.md's six prompts appended as unfilled placeholders.",
+     "class": "within",
+     "why": "No decision: prompts only, marked never a gate; the phase is still judged against its counted-operations budget (FR-005/FR-006), with time recorded as the design says."
     }
    ]
   }

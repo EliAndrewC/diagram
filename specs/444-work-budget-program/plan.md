@@ -173,7 +173,8 @@ Occasions: none (tooling: no map moves).
 7. **The search smell.** none
 8. **The budget.** Rows land in groups as they are proven (the lint and format group; the caps; coverage; the code id and the
    claims reader; the guards); one landing a group.
-9. **Done, measured.** Every non-`unchanged` row of `dev/rust-tooling.md` marked proven, with its firing case.
+9. **Done, measured.** Every row of `dev/rust-tooling.md` marked one for one, partial, rewritten or replaced (step 1's four kinds) marked
+   proven, with its firing case.
 10. **Before moving a constant.** n/a
 11. **Before fitting things into room.** n/a
 
