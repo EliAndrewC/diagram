@@ -187,3 +187,6 @@ As feature 437 reported it: `make feature-report F=447`.
   measures a source, the number and unit forms tested on the four cases, the contract lines named, SC-A4 in seen/opened/reported;
   applied in `cd2edf99c`.
 - 2026-10-30, amendment 4 round 2 (spec-fidelity-verify): FAITHFUL - its two wording notes on the contract applied.
+- 2026-10-30, the closing review (spec-fidelity, MODE 2, `make trial-review F=447`): CHANGES REQUIRED - Fei a drop under
+  FR-A4-2 (Status and t06 limited to the twelve), the finding counts given their method, the agent's own call count labeled, the
+  contract's "best passage" brought up to date; applied in `541db3d6f` and the commit after it.

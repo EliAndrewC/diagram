@@ -3,7 +3,8 @@
 Method, one-shot 2026-10-30: `analysis/why.py` reads each run's transcript (arm S, arm T, validations 1 and 2) and, for each of the
 twelve target sources and three others, marks SEEN (its id in any tool's output), OPENED (its id in a tool call's input) and
 REPORTED (its id in the final report); `analysis/why2.py` prints what a run was shown for the sources it dropped. The table is
-`t05-why-table.txt`. (OPENED undercounts: a grep over the whole archive reads a file without naming it.)
+`t05-why-table.txt` - the lasting copy: the script reads the runs' transcripts through this session's `/tmp` links,
+so it does not re-run later. (OPENED undercounts: a grep over the whole archive reads a file without naming it.)
 
 ## Where the twelve were lost
 
