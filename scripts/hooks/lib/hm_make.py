@@ -157,6 +157,10 @@ def classify(cmd: str) -> str:
         return "engine-entry-point"
     if at(rf"(?:{_PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"):
         return "bare-pytest"
+    # A BARE CARGO is a bare pytest's Rust form (feature 444 T17, `dev/rust-tooling.md` "the make-only guard"): the Rust phases
+    # are linted, formatted and tested through make (`rust_checks.py`), so their target directory and lints are the gate's
+    if at(r"(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"):
+        return "bare-cargo"
     if v := doubled_var(cmd):
         return f"make-dup-var:{v}"
     # AN OVERRIDE COUNTS WHEREVER IT SITS ON THE COMMAND. `REF_WHY=x make done` puts it in front;

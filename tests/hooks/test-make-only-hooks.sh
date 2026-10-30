@@ -51,6 +51,10 @@ check "tier 1: regen by script path"           blocked "python3 l7r/diagram/pipe
 check "tier 1: bare pytest"                    blocked "python3 -m pytest -n auto"
 check "tier 1: bare pytest, plain name"        blocked "pytest tests/hamletgen -q -m \"not slow\""   # GUARD_EDIT_OK: feature 212 - a bare directory now REWRITES (section 4); a marker filter still refuses
 check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytest; pytest.main()'"
+check "tier 1: a bare cargo test (feature 444)" blocked "cargo test --manifest-path rust/phases/Cargo.toml"   # GUARD_EDIT_OK: feature 444 T17 - the bare-cargo rule's cases
+check "tier 1: a bare cargo clippy, by path"   blocked "~/.cargo/bin/cargo clippy --all-targets"
+check "make rust-test is the compliant form"   ok "make rust-test"
+check "a word cargo in prose is a mention"     ok "git commit -m 'cargo test now goes through make'"
 check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
 check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
 check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"

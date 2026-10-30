@@ -9,6 +9,7 @@ first Rust phase lands, `make static` and `make format` run these over nothing a
              (`too_many_lines` at the root `clippy.toml`'s 100, the Python cap's figure) and an `#[allow]` or `#[expect]` with no
              reason (`allow_attributes_without_reason`) - the Rust forms of ruff, PLR0915 and the suppression that says why
     format   `cargo fmt`, or with --check the refusal of a file rustfmt would change (ruff format's Rust form)
+    test     `cargo test` (`make rust-test`), the crate's own `#[cfg(test)]` tests
 
 The build goes to one target directory outside the tree (`~/.cache/l7r-cargo-target`), so a check never writes `target/` into a
 checkout and every clone shares the compiled dependencies.
@@ -46,12 +47,14 @@ def cargo(args: list[str], manifest: pathlib.Path, after: list[str] | None = Non
 def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedProcess[str]:
     if cmd == "lint":
         return cargo(["clippy", "--quiet", "--all-targets"], manifest, ["-D", "warnings"])
+    if cmd == "test":
+        return cargo(["test", "--quiet"], manifest)
     return cargo(["fmt", *(["--check"] if check else [])], manifest)
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format"])
+    ap.add_argument("cmd", choices=["lint", "format", "test"])
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
     args = ap.parse_args(argv)
@@ -66,7 +69,7 @@ def main(argv: list[str] | None = None) -> int:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)
     if bad:
-        fix = "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)" if args.cmd == "lint" else "run `make format`"
+        fix = {"lint": "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)", "format": "run `make format`", "test": "fix the failing test cargo names"}[args.cmd]
         print(f"rust-checks: {bad} crate(s) failed {args.cmd} - {fix}", file=sys.stderr)
         return 1
     print(f"rust-checks: {args.cmd} clean on {len(found)} crate(s)")

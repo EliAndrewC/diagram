@@ -1253,6 +1253,9 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/gates/check-stale-dirs.py .
 	bash scripts/reviews/layout_carry.sh --selftest
 
+rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17)   [CRATE=tests/fixtures/rust/fixture]
+	python3 scripts/gates/rust_checks.py test $(if $(CRATE),--crate "$(CRATE)",)
+
 format:          ## [static] ruff format over the tree, and rustfmt over the Rust phases' crates (feature 444 T17)
 	python3 -m ruff format .
 	python3 scripts/gates/rust_checks.py format
