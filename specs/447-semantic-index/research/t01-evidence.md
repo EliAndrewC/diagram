@@ -17,7 +17,7 @@ semantic-index: committed and pushed
 ```
 
 120,669 passages (the archive's texts and the record's pages, 900 characters at most), so about 231 a minute over the whole run
-(110 to 230 a minute in the 15-minute readings, the machine shared with other containers). Committed to the archive as
+(the 15-minute readings' running averages since the start went from 110 to 232 a minute, the machine shared with other containers). Committed to the archive as
 `d8881575 the semantic index (Xenova/bge-m3-int8): 261 shard(s) - 00, 01, 02, 03, 04, 05, 06, 07 ...`.
 
 **The size on disk** - `du -sb .specify/source-archive/semantic-index/bge-m3-int8`: 288,338,260 bytes (276 MB) in 261 shards, the
@@ -47,7 +47,18 @@ real	0m3.515s
 
 In-process (`deep.py`, the model loaded once): embedding a question 0.012 s; loading all 261 shards 0.62 s; a whole `find` 0.73 to
 1.45 s (`trial.py`'s `seconds`, below), because `find` reloads every shard on each question. So a command-line search is about 3.5
-s, nearly all of it loading the model and the shards; a session that kept both loaded would answer in well under a second.
+s, nearly all of it loading the model and the shards. With both already loaded (`warm.py` beside the spec, every shard stacked into
+one matrix):
+
+```
+load and stack 2.5 (120669, 1024)
+warm search 0.024
+warm search 0.099
+warm search 0.059
+```
+
+So a search kept loaded (a long-running helper, which does not exist) would take under a tenth of a second. The rule is judged on
+the command a session runs today: `make semantic-find`, 3.5 s.
 
 ## 2. The comparison
 
@@ -117,8 +128,16 @@ f4/f4285e6ee539 落水 稲刈 hits=0 holds=no
   in Japanese held 6 of 7, among 5 to 32 folders. The one it missed (16, 落水 and 稲刈: the source has 落水 five times but says 収穫
   and 刈り取り for the harvest, never 稲刈) the index ranked first.
 
-So by the trial's rule: on a fair share of the questions, did the index find passages today's search missed? Asked in the same
-language as today's search, ONE of 17 (16, in Japanese). The cross-language reach the trial was built to test - an English
-question finding a Japanese passage - was not there in this corpus. Its real gain is ranking: the answer first or second of ten
-where the text search returns dozens unranked. An update is seconds (passes the rule); a search is about 3.5 s from the command
-line (fails "under a second"), about a second in-process.
+## 4. The rule, applied
+
+**Not met: the trial is set down by its rule.** Its three tests:
+
+- Finds passages today's search missed on a fair share of the questions - NO: one of 17 (16), and that one a term-choice miss
+  that a second try with the source's own words (収穫, 刈り取り) would have caught. The cross-language reach the trial was built to
+  test - an English question finding a Japanese passage - was not there: none of seven in the first ten.
+- An update in seconds - YES: 3 s with nothing changed, about a quarter of a second for each passage changed.
+- A search under a second - NO from the command line (`make semantic-find`, 3.5 s); yes only kept loaded (0.02 to 0.1 s), which no
+  tool does today.
+
+Not part of the rule, recorded for the GM: on the ten English questions the index RANKED what today's search found - the answer
+first or second of ten on five, where the text search returned 3 to 106 folders unranked.

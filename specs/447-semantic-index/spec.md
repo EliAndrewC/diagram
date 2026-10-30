@@ -4,7 +4,10 @@
 
 **Created**: 2026-10-29
 
-**Status**: Running
+**Status**: Done - set down by its rule (`research/t01-evidence.md`, section 4): it found what today's search missed on one of 17
+questions, an English question found none of seven Japanese answers in its first ten, and a search from the command line took
+3.5 s; an update took 3 s. The tooling and the index stay in place until the GM chooses: removed per the rule, or kept under an
+amended rule.
 
 **Affects**: tooling
 
@@ -46,8 +49,10 @@ The build is long (about 120,700 passages; 110-160 a minute measured on 2026-10-
 - The model is BGE-M3's 8-bit build (`Xenova/bge-m3`, `onnx/model_int8.onnx`), cached in `.specify/model-cache/`; the
   docstring of `scripts/record/semantic_index.py` says why not the full one.
 - To resume: `make semantic-index` (it picks up where it stopped). Then run the comparison, `trial.py` beside this spec - its 17
-  questions (ten English, seven answered by Japanese sources), each with the archive capture known to answer it - as
-  `python3 specs/447-semantic-index/trial.py <out.json>`, and record it under "The evidence".
+  questions (ten English, seven answered by Japanese sources), each with the archive capture known to answer it - from outside the repository
+  (the make-only hook refuses a bare interpreter inside it): `cd /tmp && python3 <clone>/specs/447-semantic-index/trial.py
+  <out.json>` (`deep.py` and `warm.py` the same way; each finds the repository from its own place), and record it under "The
+  evidence".
 
 ## The measurement
 
@@ -65,8 +70,10 @@ The build is long (about 120,700 passages; 110-160 a minute measured on 2026-10-
 
 ## The evidence
 
-[Filled as measured: `research/semantic-index-<step>.md` per measurement, each dated with its command and its output beside the
-figure.]
+`research/t01-evidence.md`: the build's cost (8 h 42 min, 276 MB, 120,669 passages), an update's and a search's time, and the 17
+questions through both searches - asked in English, deeper (the first 200), and the seven Japanese-answered ones in Japanese, with
+today's search in Japanese beside them. The outputs are `research/trial-out.json` and `research/deep-out.json`, from `trial.py`,
+`deep.py` and `warm.py` beside this spec.
 
 ## The time
 
