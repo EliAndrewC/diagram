@@ -5,7 +5,8 @@
 **Created**: 2026-10-29
 
 **Status**: Done - the index kept and the combined search built (amendments 3 and 4); validation 3 (`research/t06-validation-3.md`):
-no source seen and then dropped (1 to 3 a run before), 9 of the 12 reported (6 or 7 before), three never seen - the half left
+none of the twelve seen and then dropped (1 to 3 a run before); one source off the list, Fei (holdings, printed with its
+measure), seen and not reported, 9 of the 12 reported (6 or 7 before), three never seen - the half left
 open by the GM (wordings) - at 125,788 tokens.
 
 **Affects**: tooling
