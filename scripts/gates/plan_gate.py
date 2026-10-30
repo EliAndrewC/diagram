@@ -635,6 +635,14 @@ def task_start(feature: str, task: str) -> int:
     with pathlib.Path(common, "task-starts.jsonl").open("a", encoding="utf-8") as fh:
         fh.write(json.dumps({"feature": d.name, "task": task, "utc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
     print(f"task-start: {d.name} {task} is the active task - its checks need its decisions ruled first (make decide)")
+    # ...AND A PHASE TASK'S OLD CODE HELD (feature 444, the GM 2026-10-30): its stage is rebuilt from its derivation, never read
+    # from today's Python - `phase_sources.py`, read by `phase-source-hooks.sh`; any other task clears the hold
+    import phase_sources  # noqa: PLC0415
+
+    tasks = (d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else ""
+    m = re.search(rf"^- \[[ x]\] {re.escape(task)}\b.*?(?=^- \[|\Z)", tasks, re.M | re.S)
+    if line := phase_sources.record(d.parent.parent, d.name, task, m.group(0) if m else ""):
+        print(line)
     return 0
 
 

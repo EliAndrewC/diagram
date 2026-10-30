@@ -417,6 +417,15 @@
         ]
       },
       {
+        "matcher": "Bash|Read|Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/phase-source-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/phase-source-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 444 - a NEW guard, the GM 2026-10-30: a stage being rebuilt is written from its derivation, never read from its old code"
+          }
+        ]
+      },
+      {
         "matcher": "Write|Bash",
         "hooks": [
           {
