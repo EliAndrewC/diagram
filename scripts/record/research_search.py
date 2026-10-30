@@ -33,7 +33,7 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 import semantic_index as si  # noqa: E402
 
-LIMIT = 15  # archive sources a call prints: a knob, so a broad term set no longer prints a hundred files' download histories (FR-A3-3)
+LIMIT = 15  # archive sources a call prints: a knob, so a broad term set no longer prints a hundred files' download histories (FR-A3-2)
 RECORD_LIMIT = 5  # record pages a call prints, apart: the record's pages, in English and in its own words, outrank every archive
 # source on the meaning search (measured on the field-size question 2026-10-30: the first eight were all record pages)
 PER_QUESTION = 30  # sources each meaning search contributes to the fusion
@@ -201,7 +201,7 @@ def main(argv: list[str] | None = None, embed: si.Embed | None = None, store: An
     term_sets = [[t for t in s.split("|") if t.strip()] for arg in args.terms for s in arg.split(";")]
     term_sets = [s for s in term_sets if s]
     if not questions and not term_sets:
-        print("make research-search: Q=, Q_JA=, Q_ZH= or TERMS= is required", file=sys.stderr)
+        print("make research-search: Q=, Q_JA=, Q_ZH=, Q_KO= or TERMS= is required", file=sys.stderr)
         return 2
     import archive as ar  # noqa: PLC0415 - the archive's working copy
 

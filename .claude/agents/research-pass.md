@@ -21,7 +21,7 @@ READ ONLY: never edit, commit or push anything in any repository. The session th
 ## The rules of a pass
 
 - **The archive first, then the web.** In the clone the prompt names (else `/diagram`), run `make research-search
-  Q="<the question in English>" Q_JA="<in Japanese>" Q_ZH="<in Chinese>" TERMS="a|b;c|d" KEY=<a short key for the question>`:
+  Q="<the question in English>" Q_JA="<in Japanese>" Q_ZH="<in Chinese>" [Q_KO="<in Korean>"] TERMS="a|b;c|d" KEY=<a short key for the question>`:
   the meaning search and the text search over the record and the archive in one call, each source printed once with its best
   passage and what found it (feature 447 amendment 3 - each search found sources the other missed). Give every term set in each
   language you will search (romanized, kanji / hanzi, English); run it again under the same KEY with new wordings, and it

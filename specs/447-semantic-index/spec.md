@@ -94,7 +94,7 @@ for finding things that are relevant rather than doing something which is cheape
 cost is not measured ("an unalloyed good for us to find things locally before searching the web").
 
 - **FR-A3-1, one command, both searches.** `make research-search` takes the question in each corpus language the session gives -
-  the list is open: English, Japanese, Chinese, Korean (the corpus holds two Korean texts) - and term sets (each set every term
+  the list is open: English, Japanese, Chinese, Korean (the corpus holds two Korean texts, amendment 1's count) - and term sets (each set every term
   required, as `make archive-find`), runs the meaning search for each question and the text search for each term set over the
   record and the archive, and merges the hits by SOURCE (an archive capture, or a record page): each source printed once, ranked,
   with its best passage and what found it (index, text, or both). This is the GM's "we don't need to reevaluate sources that
@@ -109,7 +109,7 @@ cost is not measured ("an unalloyed good for us to find things locally before se
 - **SC-A3, the end-to-end validation.** A `research-pass` agent answers feature 444's field-size question with the combined
   command (archive and record only, the same brief as arms S and T). Success is decided on the SOURCES it surfaces: those the
   blind judge rated SOME or HIGH from either arm - Shicang 1898 `83/831d8174fa8b`, the Shizuoka replanning 1872 `e5/e542a5322e62`,
-  the Huizhou 1581 parcel `04/04c46c135344`, Shiroyone `f4/f457740405c1`, the Yayoi small plots `d1/d1f4b30193e3` - those both arms
+  the Huizhou 1581 parcel `04/04c46c135344`, Shiroyone `f4/f457740405c1` (or its other copy `56/5649138bf1c5`), the Yayoi small plots `d1/d1f4b30193e3` - those both arms
   found - Iwamuro 1602 `75/7588a47ce738`, Kami-Baba 1684 `27/27341e70863d`, King `e8/e81890ad0ea3`, Taipingqiao 1897
   `29/29423acf58a9` - and those the judge found both arms missed that bear on the premodern question - Hattori `97/97f6d769ce72`,
   Ofuro `10/100916836bb9`, Konosu 1902 `c3/c36ae8c62a1c` (the judge's fourth, a modern 3-tan standard `71/71ad2d8933fa`, is left
@@ -147,3 +147,8 @@ As feature 437 reported it: `make feature-report F=447`.
 - 2026-10-30, the GM, before any removal: "Before we delete the index, there's another thing which we should consider, which is
   token usage ... I want to think more about the ways in which it's better [or] worse before we make a final decision." Removal
   held; the output sizes of both searches recorded (`research/t01-evidence.md`, section 5).
+- 2026-10-30, amendment 3 round 1 (spec-fidelity, routed to MODE 3): CHANGES REQUIRED - the cap pages and never hides, the key's
+  memory serves paging with its store and a day's life, SC-A3 decided on sources with its files named and tokens reported, not
+  held, the language list open; applied in `c73f9840d`.
+- 2026-10-30, amendment 3 round 2 (spec-fidelity-verify): FAITHFUL - its four small notes (an FR id in a comment, Q_KO in the
+  contract and the usage line, Shiroyone's second copy) applied.
