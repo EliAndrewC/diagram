@@ -719,7 +719,33 @@ def long_runs(root: Path) -> int:
             print("land: the landing cohort refused - nothing landed (above)", file=sys.stderr)
             return 1
         commit_regenerated(root, "cohort")
+    if why := budget_run(root):
+        print(why, file=sys.stderr)
+        return 1
     return 0
+
+
+MISSING_RUN = "no work-budget run at the pushed engine"  # `work_budget.review`'s refusal for a run never made
+
+
+def budget_run(root: Path) -> str:
+    """THE WORK-BUDGET RUN THE PUSH WILL ASK FOR, MADE HERE (feature 444 T20, D1): on an engine delta the push's
+    `make work-budget-review` refuses a push with no run at its engine, and T17's and T19's landings each lost a gate to it.
+    Asked first, as the push asks it; where its one refusal is that missing run, `make work-budget` is run and committed. Any
+    other refusal - an accepted stage over its figure - stops the landing as before: only the GM's words raise a figure."""
+    if not engine_delta(root):
+        return ""
+    rc, out = run(root, ["make", "--no-print-directory", "work-budget-review", "ROUTE=GATED"])
+    if not rc:
+        return ""
+    if MISSING_RUN not in out:
+        return "land: the work-budget review refuses this engine - nothing landed:\n" + out.strip()
+    print("land: no work-budget run at this engine - make work-budget", flush=True)
+    if make(root, "work-budget"):
+        return "land: make work-budget failed - nothing landed (above)"
+    run(root, ["git", "add", "--", "dev/work-budget.md", "dev/work-budget"])
+    run(root, ["git", "commit", "-q", "-m", "the work-budget run at the landing's engine (make land)"])
+    return ""
 
 
 def landing_pids(root: Path, proc: Path = Path("/proc")) -> list[int]:

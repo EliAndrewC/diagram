@@ -563,3 +563,30 @@ def test_a_clear_task_section_records_its_blocks_reviewed(tmp_path: pathlib.Path
     recorded = json.loads((d / "plan-review.json").read_text())["blocks"]
     assert set(recorded) == {k for k, _b, _a in gate.blocks(grown) if "T05" in k}, "the section's blocks, and no other"
     assert all(v["verdict"] == "CLEAR" for v in recorded.values())
+
+
+def test_decide_asks_the_approach_checklist_before_the_review_it_owes(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 444 T20 (D3): T19's section was reviewed CLEAR, then the tick refused it for its Approach's stamp, and the restamp
+    owed the review again. `make decide` asks the checklist first, so no round is spent on a section the tick would refuse."""
+    root = tmp_path / "clone"
+    _git_init(root)
+    feature(root, plan=PLAN_TASKS, name="375-x")
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(gate._approach_gate(), "refusal", lambda _d, _root, task: f"{task}'s part A is stamped before its Decisions")
+    assert gate.main(["decide", "375", "T05"]) == 2
+    out = capsys.readouterr()
+    assert "decide: refused - T05's part A is stamped before its Decisions" in out.err and "MODE 4" not in out.out
+
+
+def test_a_re_dated_heading_with_its_text_unchanged_is_the_same_block() -> None:
+    """Feature 444 T20 (D4): T19's `### T19 Approach (checklist part A)` restamped `### T19 Approach (<UTC>)`, its text below
+    unchanged, owed a review of its "removal". The same heading stem with the same text below it is the recorded block, moved;
+    a changed text is owed as before."""
+    old = "### T9 Approach (checklist part A)\n\n1. **The goal.** the bath\n"
+    review = {"blocks": {"### T9 Approach (checklist part A)": {"sha256": gate.block_digest(old), "verdict": "CLEAR", "text": old}}}
+    moved = "# Plan\n\n### T9 Approach (2026-10-31T04:00Z)\n\n1. **The goal.** the bath\n"
+    assert not [k for k in gate.block_status(review, moved, set())[0] if "T9" in k], "neither the old key's removal nor the re-dated block is owed"
+    changed = moved.replace("the bath", "the wells")
+    assert {gate.REMOVED + "### T9 Approach (checklist part A)", "### T9 Approach (2026-10-31T04:00Z)"} <= set(gate.block_status(review, changed, set())[0])
+    other = moved.replace("### T9 Approach", "### T9 Decisions")
+    assert gate.REMOVED + "### T9 Approach (checklist part A)" in gate.block_status(review, other, set())[0], "another heading: owed"

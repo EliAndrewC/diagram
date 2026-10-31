@@ -678,6 +678,11 @@ def main(argv: list[str]) -> int:
             if why := plan_lint.refusal(d, section):
                 print(f"decide: refused - {why}", file=sys.stderr)
                 return 2
+            # ...AND THE APPROACH CHECKLIST FIRST (feature 444 T20, D3): T19's section was reviewed CLEAR, then the tick refused it for
+            # its Approach's stamp, and the restamp owed the review again - a refusal the checklist could have given before the round
+            if why := _approach_gate().refusal(d, d.parents[1], argv[2]):
+                print(f"decide: refused - {why}", file=sys.stderr)
+                return 2
         print(digest(section.encode()) if argv[0] == "section-sha" else decide_prompt(d, argv[2]))
         if argv[0] == "decide" and (hint := triage_hint(d.parents[1])):
             print(hint, file=sys.stderr)

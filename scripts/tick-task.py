@@ -225,19 +225,25 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True, boxe
     # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
     # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
     permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
-    if not permitted:
-        return message, ""
     import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
     import wording  # noqa: PLC0415 - feature 385 T118 (D138): a wording-only task's commits checked against its declaration
 
     plan = d / "plan.md"
     section = _plan_gate.task_sections(plan.read_text(encoding="utf-8")).get(task) if plan.is_file() else None
-    why = (boxes_refusal((d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else "", task, boxes)
-           or waits_or_marks(root, d) or _arbiter().fix_hold(d) or checkpoint_hold(root)  # 379: an open tooling fix; 383: the hour
-           or approach_gate.refusal(d, root, task) or wording.refusal(root, d, task, section))
-    if not why and landed:
-        why = landed_refusal(root, d.name, task, note)
-    return (f"tick: refused - {why}" if why else ""), message
+    # EVERY REFUSAL, TOGETHER (feature 444 T20, D2): these were an `or`-chain, so a landing saw only the first - T19 took four
+    # landing rounds, one refusal each (part A's stamp, the plan review, part B's items 8-9, the plan gate); each is asked now
+    whys = [] if permitted else [message.strip()]
+    whys += [w for w in (
+        boxes_refusal((d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else "", task, boxes),
+        waits_or_marks(root, d), _arbiter().fix_hold(d), checkpoint_hold(root),  # 379: an open tooling fix; 383: the hour
+        approach_gate.refusal(d, root, task), wording.refusal(root, d, task, section),
+    ) if w]
+    if not whys and landed:
+        whys = [w for w in (landed_refusal(root, d.name, task, note),) if w]
+    if not whys:
+        return "", message
+    why = whys[0] if len(whys) == 1 else "".join(f"\n  ({i}) {w}" for i, w in enumerate(whys, 1))
+    return f"tick: refused - {why}", "" if not permitted else message
 
 
 def main(argv: list[str]) -> int:

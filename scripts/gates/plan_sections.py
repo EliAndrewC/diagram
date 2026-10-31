@@ -409,6 +409,29 @@ def lands_open_appended(earlier: str, body: str) -> str:
     return body[: now.start()] + was.group(0) + body[now.end() :]
 
 
+def _stem(key: str) -> str:
+    """A block's heading without its closing parenthetical - `### T19 Approach (2026-10-31T04:00Z)` and `### T19 Approach
+    (checklist part A)` alike `### T19 Approach` - and without a repeat's `#2` (feature 444 T20, D4)."""
+    return re.sub(r"\s*\([^()]*\)\s*$", "", re.sub(r"#\d+$", "", key)).strip()
+
+
+def _below_heading(text: str) -> str:
+    """A block's text below its heading line, archive lines aside (feature 444 T20, D4)."""
+    return ARCHIVE_LINE.sub("", text.split("\n", 1)[1] if "\n" in text else "").strip()
+
+
+def _moved_from(have: dict, key: str, body: str, history: History | None) -> dict:
+    """The recorded entry `key`'s block was moved from - a recorded heading of the same stem, gone from plan.md, with the same
+    text below its heading line - marked `moved`, or {} (feature 444 T20, D4: a re-dated block keeps its verdict)."""
+    for k, e in have.items():
+        if k == key or not isinstance(e, dict) or _stem(k) != _stem(key):
+            continue
+        earlier = e.get("text") or (history.block(k, str(e.get("sha256"))) if history and e.get("sha256") else None)
+        if earlier is not None and _below_heading(earlier) == _below_heading(body):
+            return {**e, "moved": True}
+    return {}
+
+
 def block_status(review: dict, plan_text: str, ruled: set[str], history: History | None = None, done: str = "") -> tuple[list[str], list[str]]:
     """(the blocks owed a review, the blocks BLOCKED): every block outside a task section with its own current verdict, judged
     against the record's verdict at its digest, a typo-scale change (FR-005(b)) from its text at that digest aside. A recorded
@@ -429,8 +452,8 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
             continue
         if decides_nothing(key, body, plan_text, done):  # T75: its items are make tick's to check
             continue
-        entry = have.get(key) or {}
-        if entry.get("sha256") != block_digest(body):
+        entry = have.get(key) or _moved_from(have, key, body, history) or {}
+        if entry.get("sha256") != block_digest(body) and not entry.get("moved"):
             earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
             was, now_ = ARCHIVE_LINE.sub("", earlier or ""), ARCHIVE_LINE.sub("", lands_open_appended(earlier or "", body))
             own = _TASK_ID.match(_HEAD.sub(r"\2", key).strip())  # a ticked task's blocks are judged here: the repoint rule too
@@ -447,8 +470,15 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
     # block edited by a typo after its review (T47 renumbered T49) reached plan-done.md at another digest, and the tick that
     # archived it was refused for two "(removed)" blocks. Its text there, typo-scale against the reviewed text, owes nothing.
     done_text = {k: b for k, b, _a in blocks(done)} if done else {}
+    # A RE-DATED HEADING IS THE SAME BLOCK (feature 444 T20, D4): T19's `### T19 Approach (checklist part A)` restamped
+    # `### T19 Approach (<UTC>)`, its text below unchanged, owed a review of its "removal" - a live block of the same heading
+    # stem (its closing parenthetical dropped) and the same text below its heading line is the recorded one, moved
+    live = {(_stem(k), _below_heading(b)) for k, b, _a in blocks(plan_text)}
     for key, entry in have.items():
         if key in now or key == "preamble" or not isinstance(entry, dict) or entry.get("sha256") in archived:
+            continue
+        earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)
+        if earlier is not None and (_stem(key), _below_heading(earlier)) in live:
             continue
         if key in done_text:
             earlier = entry.get("text") or (history.block(key, str(entry.get("sha256"))) if history and entry.get("sha256") else None)

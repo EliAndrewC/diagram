@@ -324,6 +324,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
+  },
+  "### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: \"Please fix the tooling gaps by implementing T20.\")": {
+   "sha256": "c55d1cf4eadac4c6ae15cd415724c3b520ac9cd75f507e5c7519db11d2edb003",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Approach (2026-10-31T11:08:39Z)": {
+   "sha256": "3f78edfdfe95bf21197e6db695ce83bca880a2729c06c41419e835ebf71d9d35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T20 Decisions": {
+   "sha256": "7b13ba73cd1a8248def405d29e95949c8f1687928ef7b72acd99467d2915da9c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2398,6 +2416,41 @@
      "why": "The text is byte-identical to the text that received CLEAR (the diff against earlier.md shows only the appended 04:09Z block). It carries FR-010, FR-012, FR-017, FR-004 and FR-006 as written, with no narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: \"Please fix the tooling gaps by implementing T20.\")",
+    "### T20 Approach (2026-10-31T11:08:39Z)",
+    "### T20 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "make land runs make work-budget and commits dev/work-budget.md and dev/work-budget/ when the work-budget review's only refusal is a missing run at the pushed engine",
+     "class": "within",
+     "why": "One of the four gaps the GM told the session to fix ('Please fix the tooling gaps by implementing T20', 2026-10-31). The review still runs against the run land makes, and any other refusal (an accepted stage over its figure) still stops the landing unchanged, with only the GM's words raising a figure - so FR-005, FR-006 and design section 5.4 are untouched. Producing the standing record at an engine landing serves design section 5.2."
+    },
+    {
+     "id": "D2",
+     "summary": "tick-task asks every check (plan gate, boxes, waits, arbiter hold, checkpoint, approach checklist, wording) and lists every refusal together; a tick still refuses if any one refuses",
+     "class": "within",
+     "why": "Changes only how refusals are reported, not what is refused: no check is dropped or relaxed. A named T20 gap."
+    },
+    {
+     "id": "D3",
+     "summary": "make decide refuses with the approach checklist's refusal before printing the review it owes",
+     "class": "within",
+     "why": "Moves an existing refusal earlier; nothing the tick requires changes, and no review is skipped that would otherwise be owed for a section that can be ticked. A named T20 gap."
+    },
+    {
+     "id": "D4",
+     "summary": "a recorded block no longer in plan.md is not owed as (removed) where a live block has the same heading once a closing parenthetical is dropped and the same text below its heading line; a changed body is owed as before",
+     "class": "within",
+     "why": "A named T20 gap, and it narrows neither the GM's request nor spec 444. It relaxes a feature 375 plan-gate obligation only where the text below the heading is identical, so no decision can vanish or change under it and FR-043 (a changed decision is reviewed) holds: a changed body is owed as before. The dropped parenthetical can carry a stamp or the GM's approval quote (this section's own heading does); that is acceptable for a decision review because an approval line is not a decision."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2844,6 +2897,38 @@
      "summary": "Unchanged since its CLEAR verdict: D6 (Python gathers, Rust rolls, Python writes), D7 (knob_rng reproduced), D8 (the maturin build into .rust-ext/), D9 (Rust counters behind the Cargo feature counters, returned to work-budget), the Approach exits (the budget at every size, MODE AUDIT WITHIN, cache audit and the overlap census proven, cohort-landing with no regressed seed, the coverage floor; red goes to the arbiter as a route only).",
      "class": "within",
      "why": "The text is byte-identical to the text that received CLEAR (the diff against earlier.md shows only the appended 04:09Z block). It carries FR-010, FR-012, FR-017, FR-004 and FR-006 as written, with no narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T20": {
+   "section_sha256": "1b3cb10b9dd860e13f743ce65acdf9c76de2d6abe477e7ce5601d6d6e9f97183",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "make land runs make work-budget and commits dev/work-budget.md and dev/work-budget/ when the work-budget review's only refusal is a missing run at the pushed engine",
+     "class": "within",
+     "why": "One of the four gaps the GM told the session to fix ('Please fix the tooling gaps by implementing T20', 2026-10-31). The review still runs against the run land makes, and any other refusal (an accepted stage over its figure) still stops the landing unchanged, with only the GM's words raising a figure - so FR-005, FR-006 and design section 5.4 are untouched. Producing the standing record at an engine landing serves design section 5.2."
+    },
+    {
+     "id": "D2",
+     "summary": "tick-task asks every check (plan gate, boxes, waits, arbiter hold, checkpoint, approach checklist, wording) and lists every refusal together; a tick still refuses if any one refuses",
+     "class": "within",
+     "why": "Changes only how refusals are reported, not what is refused: no check is dropped or relaxed. A named T20 gap."
+    },
+    {
+     "id": "D3",
+     "summary": "make decide refuses with the approach checklist's refusal before printing the review it owes",
+     "class": "within",
+     "why": "Moves an existing refusal earlier; nothing the tick requires changes, and no review is skipped that would otherwise be owed for a section that can be ticked. A named T20 gap."
+    },
+    {
+     "id": "D4",
+     "summary": "a recorded block no longer in plan.md is not owed as (removed) where a live block has the same heading once a closing parenthetical is dropped and the same text below its heading line; a changed body is owed as before",
+     "class": "within",
+     "why": "A named T20 gap, and it narrows neither the GM's request nor spec 444. It relaxes a feature 375 plan-gate obligation only where the text below the heading is identical, so no decision can vanish or change under it and FR-043 (a changed decision is reviewed) holds: a changed body is owed as before. The dropped parenthetical can carry a stamp or the GM's approval quote (this section's own heading does); that is acceptable for a decision review because an approval line is not a decision."
     }
    ],
    "verdict": "CLEAR"
