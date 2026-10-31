@@ -200,12 +200,9 @@ def rust_sites(source: str) -> list[tuple[int, int, int | None, str]]:
         if code.lstrip().startswith("#"):
             continue
         for m in _RUST_NUM.finditer(code):
-            # a piece of a hex constant (`0x0100_0000_01b3`) or a leading zero is no decimal literal (measured 2026-10-30: the
-            # first `--rust` run took `0100` for one and crashed on parsing it)
-            i = m.start(1)
-            while i > 0 and (code[i - 1].isalnum() or code[i - 1] == "_"):
-                i -= 1
-            if m.group(1).startswith("0") or code[i : i + 2].lower() == "0x":
+            # a leading zero is no decimal literal (measured 2026-10-30: the first `--rust` run took `0100` for one and crashed on
+            # parsing it); a piece of a hex constant never matches - `_RUST_NUM`'s lookbehind refuses a digit after `x` or `_`
+            if m.group(1).startswith("0"):
                 continue
             if 1 < float(m.group(1)) < 10000:
                 sites.append((lineno, m.start(1), m.end(1), m.group(1)))
