@@ -1,0 +1,185 @@
+{
+ "polder_grid@10": {
+  "failed": "field",
+  "keys": {}
+ },
+ "polder_grid@20": {
+  "failed": null,
+  "keys": {
+   "channels": {
+    "records": 2,
+    "points": 6
+   },
+   "comb_floors": {
+    "records": 1,
+    "points": 52
+   },
+   "dikes": {
+    "records": 1,
+    "points": 3570
+   },
+   "drawn_channels": {
+    "records": 8,
+    "points": 332
+   },
+   "field_ditches": {
+    "records": 7,
+    "points": 89
+   },
+   "field_ponds": {
+    "records": 1,
+    "points": 0
+   },
+   "fields": {
+    "records": 1,
+    "points": 2906
+   },
+   "flooded_plots": {
+    "records": 9,
+    "points": 9
+   },
+   "marshes": {
+    "records": 1,
+    "points": 83
+   },
+   "planted_trees": {
+    "records": 1,
+    "points": 0
+   },
+   "pond": {
+    "records": 4,
+    "points": 0
+   },
+   "pond_layer": {
+    "records": 1,
+    "points": 0
+   },
+   "wet_plots": {
+    "records": 9,
+    "points": 9
+   }
+  }
+ },
+ "mulberry_dike_fishpond@10": {
+  "failed": null,
+  "keys": {
+   "channels": {
+    "records": 2,
+    "points": 6
+   },
+   "comb_floors": {
+    "records": 1,
+    "points": 52
+   },
+   "dikeponds": {
+    "records": 19,
+    "points": 4854
+   },
+   "dikes": {
+    "records": 1,
+    "points": 3062
+   },
+   "drawn_channels": {
+    "records": 8,
+    "points": 371
+   },
+   "field_ditches": {
+    "records": 7,
+    "points": 86
+   },
+   "fields": {
+    "records": 1,
+    "points": 972
+   },
+   "flooded_plots": {
+    "records": 6,
+    "points": 6
+   },
+   "land_use": {
+    "records": 1,
+    "points": 21
+   },
+   "marshes": {
+    "records": 1,
+    "points": 83
+   },
+   "planted_trees": {
+    "records": 1,
+    "points": 0
+   },
+   "pond": {
+    "records": 4,
+    "points": 0
+   },
+   "pond_layer": {
+    "records": 1,
+    "points": 0
+   },
+   "wet_plots": {
+    "records": 6,
+    "points": 6
+   }
+  }
+ },
+ "mulberry_dike_fishpond@20": {
+  "failed": null,
+  "keys": {
+   "channels": {
+    "records": 2,
+    "points": 6
+   },
+   "comb_floors": {
+    "records": 1,
+    "points": 52
+   },
+   "dikeponds": {
+    "records": 38,
+    "points": 9736
+   },
+   "dikes": {
+    "records": 1,
+    "points": 3068
+   },
+   "drawn_channels": {
+    "records": 10,
+    "points": 457
+   },
+   "field_ditches": {
+    "records": 9,
+    "points": 118
+   },
+   "fields": {
+    "records": 1,
+    "points": 1827
+   },
+   "flooded_plots": {
+    "records": 9,
+    "points": 9
+   },
+   "land_use": {
+    "records": 1,
+    "points": 42
+   },
+   "marshes": {
+    "records": 1,
+    "points": 83
+   },
+   "planted_trees": {
+    "records": 1,
+    "points": 0
+   },
+   "pond": {
+    "records": 4,
+    "points": 0
+   },
+   "pond_layer": {
+    "records": 1,
+    "points": 0
+   },
+   "wet_plots": {
+    "records": 9,
+    "points": 9
+   }
+  }
+ }
+}
