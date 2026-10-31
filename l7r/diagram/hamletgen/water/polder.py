@@ -8,6 +8,7 @@ Research: polder geometry - NONE: grid search, flank letters, binning and inters
 
 from __future__ import annotations
 
+from l7r.diagram import work_counts
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -200,6 +201,9 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # BOTH polder archetypes come through here (feature 150): the fabric table sets the module and
     # the parcel mix, the knob sets the arrangement, and the dike-pond's overlay is applied once the
     # grid is drawn - see `POLDER_ARCHETYPES` in consts.py for why the dike-pond is a polder.
+    if __debug__:  # the plan's rolls this stage reads, charged to it (feature 444 T19, ask:444-T19-outside-charges)
+        for _k, _n in plan.counted_for.get("field", {}).items():
+            work_counts.OPS[_k] += _n
     fabric = POLDER_FABRIC[plan.field_archetype]
     mosaic = POND_LAYOUT_MOSAIC if plan.pond_layout == "mosaic" else 0.0
     net = fit_polder(plan, plan.spec.seed, fabric=fabric, mosaic=mosaic)

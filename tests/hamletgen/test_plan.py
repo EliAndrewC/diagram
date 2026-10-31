@@ -347,3 +347,16 @@ def test_an_unknown_farm_water_is_refused() -> None:
 
     with pytest.raises(ValueError, match="farm_water"):
         hg.HamletSpec(name="X", seed=1, households=12, farm_water="cistern")
+
+
+def test_the_rust_falls_that_back_the_wind_are_the_rule_s_on_every_quarter() -> None:
+    """444 T19, the round arbiter's ruling on ask:444-T19-outside-charges: Rust's table of the falls that back each wind quarter
+    (on the compass and on a polder's cardinal grid) admits exactly the falls `fall_backs_the_wind` admits - the port's landing
+    proof that the fall still backs the wind on every rolled seed."""
+    from l7r.diagram.hamletgen import plan as P  # noqa: PLC0415
+    from l7r.diagram.hamletgen.consts import CARDINAL_BEARINGS, FALL_BEARINGS, WIND_VECTORS  # noqa: PLC0415
+    from l7r.diagram.hamletgen.phases_ext import phases  # noqa: PLC0415
+
+    for w in WIND_VECTORS:
+        for cardinal, table in ((False, FALL_BEARINGS), (True, CARDINAL_BEARINGS)):
+            assert phases().admitted_falls(w, cardinal) == [f for f in table if P.fall_backs_the_wind(f, w)], (w, cardinal)

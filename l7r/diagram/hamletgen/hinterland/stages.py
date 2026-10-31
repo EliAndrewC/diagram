@@ -5,6 +5,7 @@ Research: stage plumbing - NONE: ordering, records and canopy measures
 
 from __future__ import annotations
 
+from l7r.diagram import work_counts
 import math
 from collections.abc import Sequence
 from typing import Any, cast
@@ -223,6 +224,9 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
 
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out
     # of them; the scan needs the marsh drawn and nothing this stage adds. Drawn here, over open ground.
+    if __debug__:  # the plan's rolls this stage reads, charged to it (feature 444 T19, ask:444-T19-outside-charges)
+        for _k, _n in plan.counted_for.get("woodland", {}).items():
+            work_counts.OPS[_k] += _n
     for patch in plan.woodland_polys:
         stock_woodland(s, patch)
 

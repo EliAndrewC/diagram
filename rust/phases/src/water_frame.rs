@@ -68,6 +68,45 @@ impl Counts {
     }
 }
 
+/// The bearing of a wind quarter, in compass degrees (north 0, clockwise).
+fn quarter_deg(windward: &str) -> f64 {
+    match windward {
+        "NE" => 45.0,
+        "E" => 90.0,
+        "SE" => 135.0,
+        "S" => 180.0,
+        "SW" => 225.0,
+        "W" => 270.0,
+        "NW" => 315.0,
+        _ => 0.0,
+    }
+}
+
+/// THE FALLS THAT BACK THE WIND (feature 444 T19; the round arbiter's ruling on ask:444-T19-outside-charges): the bearings - the
+/// eight compass points, or the four cardinals a polder's survey grid is laid to - from the wind's own quarter clockwise round to
+/// its opposite, both ends in, so the settlement's high side is its windward side and its back is to the wind. A table read once,
+/// in place of a test of each fall (measured 2026-10-30: the same admitted set as `plan.fall_backs_the_wind` on every quarter).
+///
+/// Research:
+///     high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin, the wind read before the fall
+#[must_use]
+pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
+    let w = quarter_deg(windward);
+    let (n, step) = if cardinal { (4, 90.0) } else { (8, 45.0) };
+    (0..n)
+        .map(|i| f64::from(i) * step)
+        .filter(|f| (f - w).rem_euclid(360.0) <= 180.0 + 1e-9)
+        .collect()
+}
+
+/// The admitted falls, for Python's test against the rule it replaces.
+#[pyfunction]
+#[expect(clippy::needless_pass_by_value, reason = "PyO3 hands a String")]
+#[must_use]
+pub fn admitted_falls(windward: String, cardinal: bool) -> Vec<f64> {
+    admitted(&windward, cardinal)
+}
+
 /// Whether a knob on `branch` applies to a map of settlement form `form`: the derivation's knob row - `all`, the nucleated
 /// form's own, every form but nucleated (the farm's grove), the dispersed farm's, a row's, or `off` (Python found its branch
 /// absent: no brook, a fixed row on flood ground).
@@ -89,17 +128,20 @@ fn applies(branch: &str, form: &str) -> bool {
 #[must_use]
 pub fn roll(
     seed: u64,
-    n_falls: u32,
+    falls: &[f64],
     fall_pinned: bool,
     forms: &[String],
     knobs: &[KnobIn],
-) -> (Option<u32>, Vec<Option<u32>>, HashMap<String, u64>) {
+) -> (Option<f64>, Vec<Option<u32>>, HashMap<String, u64>) {
     let mut counts = Counts::default();
     counts.add("write@water_frame_identity", 3);
-    let fall = if fall_pinned {
+    let fall = if fall_pinned || falls.is_empty() {
         None
     } else {
-        Some(SplitMix::for_knob(seed, "down_deg").below(n_falls))
+        let n = u32::try_from(falls.len()).unwrap_or(u32::MAX);
+        falls
+            .get(SplitMix::for_knob(seed, "down_deg").below(n) as usize)
+            .copied()
     };
     counts.add("candidate@water_frame_bearing", 6);
     let mut form = String::new();
@@ -140,12 +182,19 @@ pub fn roll(
 #[must_use]
 pub fn water_frame(
     seed: u64,
-    n_falls: u32,
+    windward: String,
+    cardinal: bool,
     fall_pinned: bool,
     forms: Vec<String>,
     knobs: Vec<KnobIn>,
-) -> (Option<u32>, Vec<Option<u32>>, HashMap<String, u64>) {
-    roll(seed, n_falls, fall_pinned, &forms, &knobs)
+) -> (Option<f64>, Vec<Option<u32>>, HashMap<String, u64>) {
+    roll(
+        seed,
+        &admitted(&windward, cardinal),
+        fall_pinned,
+        &forms,
+        &knobs,
+    )
 }
 
 #[cfg(test)]
@@ -154,6 +203,23 @@ mod tests {
 
     fn knob(name: &str, n: u32, branch: &str) -> (String, u32, bool, String) {
         (name.to_owned(), n, false, branch.to_owned())
+    }
+
+    #[test]
+    fn the_falls_that_back_the_wind_run_clockwise_from_its_quarter_to_its_opposite() {
+        assert_eq!(
+            super::admitted("N", false),
+            vec![0.0, 45.0, 90.0, 135.0, 180.0]
+        );
+        assert_eq!(
+            super::admitted("SW", false),
+            vec![0.0, 45.0, 225.0, 270.0, 315.0]
+        );
+        assert_eq!(super::admitted("NE", true), vec![90.0, 180.0]);
+        assert!(
+            roll(1, &[], false, &[], &[]).0.is_none(),
+            "no admitted fall: none rolled"
+        );
     }
 
     #[test]
@@ -188,14 +254,14 @@ mod tests {
             knob("row_line", 2, "linear"),
             knob("copse", 1, "all"),
         ];
-        let (fall, got, _counts) = roll(3, 8, false, &forms, &knobs);
-        assert!(fall.is_some_and(|f| f < 8));
+        let (fall, got, _counts) = roll(3, &super::admitted("NW", false), false, &forms, &knobs);
+        assert!(fall.is_some_and(|f| [0.0, 45.0, 90.0, 135.0, 315.0].contains(&f)));
         assert_eq!(got[0], Some(0), "one form: taken");
         assert!(got[1].is_some(), "on its branch: rolled");
         assert_eq!(got[2], None, "off its branch: written alone");
         assert_eq!(got[3], Some(0));
         let pinned = vec![("settlement_form".to_owned(), 3, true, "all".to_owned())];
-        let (fall, got, _counts) = roll(3, 8, true, &forms, &pinned);
+        let (fall, got, _counts) = roll(3, &[0.0], true, &forms, &pinned);
         assert_eq!(
             (fall, got),
             (None, vec![None]),
@@ -213,7 +279,7 @@ mod tests {
             knob("row_line", 2, "linear"),
             knob("one", 1, "all"),
         ];
-        let (_f, got, counts) = roll(1, 8, false, &forms, &knobs);
+        let (_f, got, counts) = roll(1, &[0.0, 90.0], false, &forms, &knobs);
         let on = if got[0] == Some(0) { (3, 1) } else { (1, 3) };
         let total: u64 = counts.values().sum();
         assert_eq!(

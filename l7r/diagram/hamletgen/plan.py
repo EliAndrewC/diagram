@@ -262,6 +262,9 @@ class SitePlan:
     # THE PLAN'S OWN COUNTED WORK (feature 444 T15, rubric S5): `plan_site` runs before the roll's counters open, so the rolls
     # it counts are kept here and `stage_water_frame`, the stage that writes the plan, counts them as its own
     counted: dict[str, int] = field(default_factory=dict, compare=False, repr=False)
+    # THE PLAN'S ROLLS OUTSIDE water_frame, by the stage that reads them (feature 444 T19, the round arbiter's ruling on
+    # ask:444-T19-outside-charges): `stage_field` / `stage_polder` add the field's, `stage_woodland` the woodland's
+    counted_for: dict[str, dict[str, int]] = field(default_factory=dict, compare=False, repr=False)
 
     envelope: Poly = field(default_factory=list)
     sink_pond: tuple[float, float, float, float] | None = None
@@ -495,7 +498,7 @@ _KNOBS: tuple[tuple[str, str], ...] = (
 )
 
 
-def _rust_rolls(spec: HamletSpec, archetype: str, falls: tuple[float, ...]) -> dict[str, Any]:
+def _rust_rolls(spec: HamletSpec, archetype: str, windward: str) -> dict[str, Any]:
     """The fall and water_frame's 21 knobs, rolled by `l7r_phases.water_frame` (feature 444 T19, D6): each knob's table, pin and
     branch gathered here, its value read back from the index Rust drew; a pin stands as written, a knob off its branch takes its
     table's first form (a fixed row on flood ground, "edge"). The counts Rust kept are the plan's own (D9).
@@ -531,13 +534,17 @@ def _rust_rolls(spec: HamletSpec, archetype: str, falls: tuple[float, ...]) -> d
     }
     branch = {k: ("all" if brook else "off") if b == "brook" else ("off" if k == "row_line" and _flood_known else b) for k, b in _KNOBS}
     pinned = {k: getattr(spec, k, None) is not None and getattr(spec, k, None) != "" for k, _b in _KNOBS}
-    pinned["settlement_form"] = False  # a pinned form stands as its table's one entry, so Rust reads the form it is
+    pinned["settlement_form"] = bool(spec.settlement_form)  # a pinned form stands as its table's one entry, read and charged as a pin (3)
     knobs = [(k, len(tables[k]), pinned[k], branch[k]) for k, _b in _KNOBS]
-    fall, picks, counts = phases().water_frame(spec.seed & 0xFFFF_FFFF_FFFF_FFFF, len(falls), spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs)
+    # the fall from the falls that back the wind, read from Rust's table (`admitted`: the cardinals on a polder's survey grid), in
+    # place of a test of each fall (the ruling on ask:444-T19-outside-charges)
+    fall, picks, counts = phases().water_frame(
+        spec.seed & 0xFFFF_FFFF_FFFF_FFFF, windward, archetype in POLDER_ARCHETYPES, spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs
+    )
     if __debug__:
         for key, n in counts.items():
             work_counts.OPS[key] += n
-    out: dict[str, Any] = {"down_deg": falls[fall] if fall is not None else spec.down_deg}
+    out: dict[str, Any] = {"down_deg": float(fall) if fall is not None else spec.down_deg}
     for (k, _b), pick in zip(_KNOBS, picks, strict=True):
         if pinned[k]:
             out[k] = getattr(spec, k)
@@ -577,7 +584,6 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # A GM who pins `down_deg` is still honored - the pin is a fact about that place.
     _before: dict[str, int] = dict(work_counts.OPS) if __debug__ else {}  # the plan's own count starts here (feature 444 T15)
     _archetype = spec.field_archetype or str(_roll(spec.seed, "field_archetype", ROLLED_ARCHETYPES))
-    _falls = CARDINAL_BEARINGS if _archetype in POLDER_ARCHETYPES else FALL_BEARINGS
     # A dike-pond rolls its arrangement; a rice polder IS the surveyed grid (`POND_LAYOUTS`), and
     # pinning it there rather than rolling keeps every polder_grid map exactly as it was.
     _pond_layout = (spec.pond_layout or str(_roll(spec.seed, "pond_layout", POND_LAYOUTS))) if _archetype == "mulberry_dike_fishpond" else "grid"
@@ -592,8 +598,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # knobs from the seed (its own SplitMix64, so every plan rolled anew once) and counts its work, and the SitePlan below is filled
     # from the result. The rolls outside water_frame's derivation (the field's archetype and fan, the polder's forms, the woods)
     # stay here, rolled and counted as before.
-    _admitted = tuple(f for f in _falls if fall_backs_the_wind(f, windward))
-    _rolled = _rust_rolls(spec, _archetype, _admitted)
+    _rolled = _rust_rolls(spec, _archetype, windward)
     down_deg = spec.down_deg if spec.down_deg is not None else float(_rolled["down_deg"])
     # A hamlet is ONE comb draining down ONE valley, so its drainage bearing IS its fall unless the
     # GM declares otherwise. Recording both separately keeps the map honest about which fact is
@@ -668,4 +673,13 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     )
     if __debug__:  # the rolls this plan counted, for `stage_water_frame` to count as its own
         plan.counted = {k: n - _before.get(k, 0) for k, n in work_counts.OPS.items() if n != _before.get(k, 0)}
+        # ...BUT THE ROLLS OTHER STAGES READ ARE THEIRS (ask:444-T19-outside-charges): the field's archetype, fan and head race, the
+        # dike-pond's forms, and the woods' count leave water_frame's count for their own stages'
+        _dike = _archetype == "mulberry_dike_fishpond"
+        _field = (not spec.field_archetype) + (_dike and not spec.pond_layout) + (_dike and not spec.dike_crop) + (_dike and not spec.leftover) + _dike + 2
+        _wood = int(spec.woodland_patches is None)
+        plan.counted["candidate@_roll"] = plan.counted.get("candidate@_roll", 0) - _field - _wood
+        if plan.counted["candidate@_roll"] <= 0:
+            del plan.counted["candidate@_roll"]
+        plan.counted_for = {"field": {"candidate@_roll": int(_field)}, "woodland": {"candidate@_roll": _wood}}
     return plan

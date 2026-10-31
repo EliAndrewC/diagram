@@ -173,11 +173,23 @@ def stamp(manifest: pathlib.Path) -> str:
 def build(manifest: pathlib.Path, ext: pathlib.Path) -> subprocess.CompletedProcess[str]:
     """THE BUILD (feature 444 D8): the crate built by maturin with its `counters` feature and installed into `ext`, only when its
     source id moved since the last build there (`<lib>.stamp`)."""
+    import fcntl  # noqa: PLC0415
+
     name = lib_name(manifest)
     mark = ext / f"{name}.stamp"
     now = stamp(manifest)
-    if mark.is_file() and mark.read_text(encoding="utf-8").strip() == now:
-        return subprocess.CompletedProcess([], 0, f"{name}: built\n", "")
+    ext.mkdir(parents=True, exist_ok=True)
+    # ONE BUILD AT A TIME, the stamp read again under the lock (measured 2026-10-30: the test workers each found the stamp stale and
+    # ran `pip install --target` into `.rust-ext/` at once, and the installs tore each other's files)
+    with (ext / f".{name}.lock").open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        if mark.is_file() and mark.read_text(encoding="utf-8").strip() == now:
+            return subprocess.CompletedProcess([], 0, f"{name}: built\n", "")
+        return _build_locked(manifest, ext, name, mark, now)
+
+
+def _build_locked(manifest: pathlib.Path, ext: pathlib.Path, name: str, mark: pathlib.Path, now: str) -> subprocess.CompletedProcess[str]:
+    """`build`'s work, the lock held."""
     env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
     dist = TARGET.parent / f"l7r-dist-{name}"
     built = _env_run(["maturin", "build", "--release", "--quiet", "--features", "counters", "-o", str(dist), "-m", str(manifest)], env)

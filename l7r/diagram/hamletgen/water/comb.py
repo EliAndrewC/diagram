@@ -6,6 +6,7 @@ See `CLAUDE.md` in this directory.
 
 from __future__ import annotations
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement import Settlement, point_in_poly
 from l7r.diagram.sitegen.geom import net_acres
 
@@ -42,6 +43,9 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         brook fed past the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook drawn from off the map to the tap and on past the fan
         ditch corridors - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every ditch stretch outside the crop a 30 px no-build corridor
     """
+    if __debug__:  # the plan's rolls this stage reads, charged to it (feature 444 T19, ask:444-T19-outside-charges)
+        for _k, _n in plan.counted_for.get("field", {}).items():
+            work_counts.OPS[_k] += _n
     if plan.field_archetype in POLDER_ARCHETYPES:
         stage_polder(s, plan)
         return
