@@ -149,7 +149,9 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
   `too_many_lines`). Rust returns the records; Python writes the same manifest keys with the same record shapes (`field.keys.json`,
   42 keys over the three archetypes) and the same plan fields (`acres`, `envelope`, `net`, and on a comb `brook`), registers each
   footprint with the standing registry (strict, as every hamlet placer does), and files the returned segments in the settlement's
-  water index for the stages after.
+  water index for the stages after. The 6-number `fields[].plots` stays among the 42 keys: no free reader reads it (the free
+  readers - `ways/geom.py`, `ways/bund.py`, the hinterland, the lane law - read `outline` and `plot_rings`), and the drawing reads
+  the plot rings (D12), so Python writes it from the returned rings, a shape kept, not a reader served.
 - **D2 - the single-field cap** (FR-018, SC-011): rolled in Rust by `pyrand::knob_rng(seed, "field_cap")`, uniform between 45 and 60
   ha (research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html#how-our-maps-size-a-settlements-farmland:
   "the cap rolled per settlement between about 45 and 60 ha", a knob), written to the meta and listed in
@@ -193,10 +195,21 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
   DRIFTED finding is set right in the Rust (the dike's mulberry row, 0027, drawn with its willow row - today's map draws the willow
   alone, `phases/polder.dike.json`), a MISLABELED one claimed correctly. The landing is refused while one is open (FR-021).
 - **D10 - deletion** (FR-005): the field's own Python - `hamletgen/water/` (comb, fit, polder, brook, brook_course, brook_rules),
-  `settlement/fields/` (comb, comb_record, features) and `waterfields/` (carve, frame, ring_rules, trunks, seams) - deleted in the
+  `settlement/fields/`'s placement (every PLACEMENT function of D12's table and the placement half of each MIXED method; the
+  five DRAWING functions stay, and the MIXED ink moves to `settlement/fields/ink.py`) and `waterfields/` (carve, frame, ring_rules, trunks, seams) - deleted in the
   landing where nothing outside the field path imports it, found by `git grep -l` of each module's name (file names only, no held
   line read) and `make dead-closure`; a shared module (the overlap registry, the geometry indexes, the caches, the web's parts) stays.
   `water/skeleton.py` is water_frame's and stays. The list of what is deleted and what replaced is written in the landing's note.
+- **D12 - the ink** (the round arbiter, ask:444-T16-ink-split; the classification `phases/field.md`, "Who draws the field"):
+  the field's SVG stays Python's and reads only the records Rust returns (`net`'s plot rings with their fill and `low`, its
+  channels, envelope, floor, dry plots, beans and bead ponds; the source; the feature records). The five DRAWING functions -
+  `CombMixin.comb_base_fill`, `_comb_draw_beads`, `CombRecordMixin._draw_furrows`, `FieldFeaturesMixin.pond`,
+  `_field_feature_ink` - are kept as they are. The eleven MIXED methods (`bund_junctions`, `draw_comb_field`, `_comb_draw_hem`,
+  `_comb_draw_paddies`, `settle_beads`, `_comb_draw_source`, `_comb_draw_ditches`, `_plot_pond`, `_plot_rock`,
+  `_plot_corner_grave`, `_plot_grave_island`) lose their placement half to Rust (the bund fillet's corners, the hem's and the
+  beads' drowning tests, the rest roll, the ditch corridors, the features' seats and the grave's carving), and their ink is
+  written NEW in `settlement/fields/ink.py` from the Rust records - the classes and paint the table lists, never lifted from the
+  old bodies. A glyph whose mark changes owes glyph-check (the Occasions line). Every PLACEMENT function goes to Rust.
 - **D11 - the order**: the comb first, `make rust-gate` as each increment's check (it judges `field` the moment `field.rs` holds
   `stage_field`), `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` for the reference; then the polder; then `make work-budget`
   against 23,988 and 42,070 (exponent 0.79) and `field.polder`'s 4,651 and 6,584 (exponent 0.50), MODE AUDIT, the claims round

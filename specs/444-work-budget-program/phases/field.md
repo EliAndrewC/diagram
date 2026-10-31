@@ -42,10 +42,30 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (1) settle the two plot forms from the readers OUTSIDE the held set - which reader reads the manifest's 6-number
-`fields[].plots`, and whether the held `settlement/fields/` files are the stage's placement or the drawing - before the Rust writes
-either form; (2) then the comb, per "The comb's design, next" below. clippy's dead-code lint is EXPECTED to refuse
-`rust/phases/src/comb/` until `fn stage_field` calls into it. T16 stays open (the round arbiter, ask:set-down-444-t16-session).
+**Resume here:** the comb, per "The comb's design, next" below, after D12 (the ink) passes `make decide`'s plan review. The
+plot forms are settled (D1, D12): the drawing reads the returned plot rings; the 6-number key is written from them. clippy's
+dead-code lint is EXPECTED to refuse `rust/phases/src/comb/` until `fn stage_field` calls into it. T16 stays open (the round
+arbiter, ask:set-down-444-t16-session).
+
+**Who draws the field** (2026-10-31, the round arbiter's ruling on ask:444-T16-ink-split; a dispatched reader's table of the
+three held files, classification only, no body carried here):
+
+- DRAWING (kept): `CombMixin.comb_base_fill` (class `paddy`), `_comb_draw_beads` (`bund beans`),
+  `CombRecordMixin._draw_furrows` (the crop's class), `FieldFeaturesMixin.pond` (`pond`, `irrigation ditch`),
+  `_field_feature_ink`.
+- MIXED (placement to Rust, ink written new from the records): `bund_junctions` (`bund`), `draw_comb_field` (the orchestrator;
+  `pond_fringe`), `_comb_draw_hem` (the crop's class), `_comb_draw_paddies` (`paddy`, `wet paddy`, `bund`), `settle_beads`
+  (`bund beans`), `_comb_draw_source` (the stream, the pond), `_comb_draw_ditches` (`field_channel` by `ditch_style`),
+  `_plot_pond` (`field pond`), `_plot_rock` (`field rock`), `_plot_corner_grave` and `_plot_grave_island` (`field grave`).
+- PLACEMENT (to Rust): `WetLines`, `hem_on_water`, `channel_end_on_stream`, `feed_stub`, `bead_drowned`, `recorded_water`,
+  `_coarse_grain_top_up`, `_comb_drop_drowned_beads`, the three `_comb_record_*`, `grave_form`, `turning_corners`,
+  `corner_seat`, `carve_around_grave`, `stone_steps`, `stone_dx`, `_mound_meets_pond`, `_paddy_features`,
+  `_plot_center_span`, `_pond_fit`, `_grave_context`, `_rounded_pond`.
+
+The records the ink reads: `net` - `plots[]` (`poly`, `fill`, `low`, `rest`), `channels[]` (`role`, `pts`, `w`, `w_tail`, `seg`),
+`envelope`, `floor` (polder), `dry_plots[]` (`poly`, `fill`, `crop`, `furrow`, `theta`, `tract`), `dry_reserve`, `bund_beans`,
+`bund_bean_runs`, `bead_ponds`, `brook`, `grave_discs`; the source (`kind`, `pond`, `stream`, `feeder`, `to`); the feature records
+(`field_ponds`, `field_rocks`, `field_graves`).
 
 
 **The gap between the comb derivation and the stage's output** (`field.keys.json` against the derivation's Writes): besides the
