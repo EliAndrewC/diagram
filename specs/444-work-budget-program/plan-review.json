@@ -2934,52 +2934,89 @@
    "verdict": "CLEAR"
   },
   "T21": {
-   "section_sha256": "f6bedec91e292880878ef40fb40d64aeb308e5bbd68da4c8bfeaeb291aab2b2b",
+   "section_sha256": "75b3c01117b42607749399ce17a94f35f76bc130f295b59c7634ada451dd725e",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1a",
-     "summary": "A stage is Rust when rust/phases/src/<stage>.rs exists (derived); off_the_front refuses a Rust stage not at the front of STAGES; roll_through runs the Rust stages on driver.fresh_settlement (split out of build, unchanged) and stops where they end, returning a trace of each stage's pickled input and the parts it wrote.",
+     "id": "A-order",
+     "summary": "Approach 5: T21 after amendment 5, before T18 and T16, so the field port is the first judged by the gate.",
      "class": "within",
-     "why": "FR-019 clause by clause: derived from rust/phases/src, refused when not the front, rolled through the Rust stages only and stopped there. Splitting fresh_settlement out of build changes nothing it does. The 5,838-byte figure carries a one-shot label."
+     "why": "Ordering only; it makes the next Rust port subject to the gate the GM asked for and narrows nothing."
     },
     {
-     "id": "D1b",
-     "summary": "Checks are judged once, on the map as the whole Rust prefix leaves it, and a failing check is charged to the stage that last wrote a part it read, with that stage's input as the fixture.",
+     "id": "A-test-scope",
+     "summary": "Approach 4: the gate is tested on water_frame (the only Rust stage today) and on stub stages.",
+     "class": "within",
+     "why": "Stubs exercise multi-stage behavior FR-019/FR-020 require but water_frame alone cannot show; this is enforcement of the request, not added scope."
+    },
+    {
+     "id": "D1-derive-front",
+     "summary": "A stage is Rust when rust/phases/src/<stage>.rs exists (derived); off_the_front names one not at the front of STAGES and the gate refuses.",
+     "class": "within",
+     "why": "FR-019 verbatim (derived, refused when not the front); the GM approved 'the Rust stages always the front of the pipeline'."
+    },
+    {
+     "id": "D1-roll-and-freeze",
+     "summary": "roll_through runs only the Rust stages on driver.fresh_settlement (split out of build, unchanged), stops where they end, and records each stage's pickled input and the parts it wrote.",
+     "class": "within",
+     "why": "FR-019 'rolled through the Rust stages only and stops there'; FR-020 freezes 'that stage's INPUT'. The split of fresh_settlement is a refactor with no behavior change. The 5,838-byte figure carries a one-shot label (2026-10-31, a throwaway test)."
+    },
+    {
+     "id": "D1-judge-at-each-completion",
+     "summary": "Checks are judged on the map after EACH Rust stage, by the checks the stages up to i own; a failure is charged to the FIRST stage at whose completion it fails, with that stage's input; a raise is charged to the raising stage; a check reading two stages' parts is the later one's, so its fixture may hold the earlier stage's output.",
+     "class": "within",
+     "why": "This is the GM's rule word for word: 'no Rust stage ever ends with any failing checks at the point where that stage has completed'. Charging the first failing completion means a later stage cannot hide an earlier stage's failure, which the GM's 'ever' requires. The earlier last-writer charge has been replaced. The fixture holding earlier output is what FR-020 defines as the input ('the map and the plan as the stages before it left them')."
+    },
+    {
+     "id": "D2a-held-inputs",
+     "summary": "A check counts when every read is a part the Rust stages own OR a part the fresh settlement already holds with content.",
+     "class": "within",
+     "why": "This widens FR-019's literal 'every read ... of something the Rust stages wrote' back to the GM's own words ('any failing checks at the point where that stage has completed'). Without it almost no check would be asked, because checks read inputs next to Rust output, and the gate would not do what it is for."
+    },
+    {
+     "id": "D2b-ownership-from-trace",
+     "summary": "Ownership is a part written by a Rust stage on any seed of the run, derived from the trace and never a hand table; a stage that wrote nothing on one seed is still judged on that empty output; checks reading a part only a later stage writes are not asked; one list, cohort_audit.POST_CHECKS.",
+     "class": "within",
+     "why": "FR-019: 'derived from what each check reads, never a hand table' and 'a check that reads what only a later stage writes is that stage's, and is not asked'. Judging empty output serves 'all seeds pass for all Rust stages'. Using one list keeps the checks unchanged."
+    },
+    {
+     "id": "D2-reads-nothing",
+     "summary": "A check that recorded no read of the map is not asked at the gate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-019's literal 'every read is Rust-written' holds vacuously for a check with no reads, so excluding such checks narrows the literal text. A check whose result truly depends on no part of the map is one a Rust stage physically cannot fail or fix, and asking it would make the gate do what the GM ruled against ('a mistake to keep trying to tweak the Rust implementation'). CONDITION for the implementer: FR-020 names a stage's input as 'the map AND THE PLAN', and water_frame rolls the plan (T19). Reads are recorded only as top-level map parts and meta.<key>. If the plan can be reached other than through a recorded part, a plan-reading check would show empty reads and go unasked, and this exclusion would then drop Rust output. Pin where the plan sits, with a test that a plan-reading check records a read."
+    },
+    {
+     "id": "D3-fresh-start",
+     "summary": "The gate's 48-seed fresh block starts at cohort_gate.py fresh-seed's start, 'a hash of the engine key, so it rotates with the engine (feature 386 D3)'.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "The GM's rule is per stage: 'no Rust stage ever ends with any failing checks at the point where that stage has completed', and the proposal he accepted says 'the checks judged where a Rust stage completes'. Judging only at the end of the prefix gives the same answer only when no later Rust stage rewrites a part an earlier one wrote, or a held part a check read. The plan neither states nor enforces that condition. Where it fails, stage A can end with a failing check that stage B then overwrites, and the gate never sees A's failure. That is exactly the case the GM's sentence forbids. FR-019's 'stops there' carries the same narrowing, and a narrowing the spec already carries does not pass for that reason (MODE 4). Applying the rule literally is not impossible: the trace already holds every stage's input, so the map as each stage left it is the next stage's frozen input (or the end state, for the last stage). Nothing in the request implies end-only judging, and it serves no purpose of the request. The fix: judge each check at the completion of every Rust stage whose state lets it be asked (every read held or written by the stages so far), and charge a failure to the stage at whose completion it first fails, with that stage's input. Alternatively, state in the plan, with a test, that no Rust stage writes a part an earlier Rust stage or the fresh settlement wrote, so that the end and each stage's completion are the same point. Aside, not a ruling: the reason D1 gives ('a later stage's fixture never holds an earlier stage's defect') is too strong. A check that reads A's part and B's part is B's to fail and freezes A's output into B's fixture. That is consistent with FR-020 (the frozen input must pass), but the sentence should not claim more than that."
+     "why": "The GM's purpose for amendment 5 is to end overfitting on reference seeds ('stop having reference seeds'; approved: 'a fresh block each landing'). FR-020 carries it as 'a start that rotates with the engine'. The only mechanism the bundle gives for this start is the cited feature 386 D3, which hashes '<l7r tree id> <pool tree id> <git diff HEAD -- l7r pool>' and names neither rust/ nor the Rust build. The block calls this 'the engine key' without showing that the key covers rust/**. If it does not, every landing that changes only a Rust stage, which is exactly the case amendment 5 is about, rolls the same 48 seeds: a fixed reference block under another name. That keeps the overfitting the GM asked to end and defeats FR-020's 'no fixed reference block'. Nothing measured in the block settles this, and the reviewer will not fill in the premise. TO CLEAR: state the key the start is hashed from and show, with the command, that it covers rust/** (or extend the start's hash to cover it). Add a test under SC-013 ('the gate's seeds hold no fixed block') that a rust/**-only change moves the start, not only that the start is hashed."
     },
     {
-     "id": "D2",
-     "summary": "A check counts at the gate when it read something and every read is a part the Rust stages own (written by a Rust stage on any seed of the run; D2b) or a part the fresh settlement already holds with content (D2a); a check reading a part only a later stage writes is not asked; ownership is derived from the run's trace; one list, cohort_audit.POST_CHECKS, shared with roll_how.",
+     "id": "D3-rest",
+     "summary": "Six pinned row variants on the next fresh seeds, plus the failing list's seeds; an unrollable plan fails the first Rust stage; each run recorded in dev/rust-gate/<utc>.json with its engine key; exit 1 on any failing seed or replay.",
      "class": "within",
-     "why": "D2b replaces the earlier 'changed from the fresh settlement, empty read as absent', which let a Rust stage that wrote nothing escape its own checks. Now a stage is judged on its empty output, which serves the GM's 'no Rust stage ever ends with any failing checks'. D2a widens the checks asked to include those that also read inputs present before the Rust stages. That moves toward the GM's 'any failing checks' at completion and away from nothing he asked, and a held part that is empty, and later filled by a Python stage, still leaves its check to that stage. The assignment is derived, never a hand table (FR-019). Gap to name, not a ruling: a check whose reads are all held parts has no last writer under D1, so 'the Rust stage it failed in' (FR-020) is undefined for it. Charging it to the first Rust stage, as D3 does for a plan that cannot be rolled, would close the gap."
+     "why": "FR-020 seed set verbatim. Charging an unrollable plan to water_frame follows from water_frame rolling the plan. The record and exit code enforce FR-019."
     },
     {
-     "id": "D3",
-     "summary": "Gate seeds: a fresh block of 48 from cohort_gate.py fresh-seed's start, the six pinned row variants on the next fresh seeds, and the failing list; an unrollable plan fails the first Rust stage; each run recorded in dev/rust-gate/<utc>.json with its engine key; exit 1 on any failing seed or replay.",
+     "id": "D4-failing-list",
+     "summary": "A failing seed is added with its stage, first FAIL line and frozen input; every run rolls it and replays the fixture into its stage and the Rust stages after; it leaves only when both pass; a fixture that no longer loads is a failure and is never dropped silently.",
      "class": "within",
-     "why": "FR-020: no fixed block, a fresh 48, the six pins on fresh seeds, and the failing list. This is within on the premise that fresh-seed's start is the per-engine rotating start FR-020 requires. The plan should say so in so many words, because the bundle does not show it."
+     "why": "FR-020 and the GM's 'always checked until the first time they pass'. Replaying through the later Rust stages adds checking toward 'all seeds pass for all Rust stages' and is not a carve-out. Never dropping silently enforces 'leaves only when BOTH pass'."
     },
     {
-     "id": "D4",
-     "summary": "A failing seed is added with its stage, first FAIL line and frozen input; every run rolls the seed and replays the fixture into its stage and the Rust stages after; the entry leaves only when both pass, with its fixture; a fixture that no longer loads is a failure, never dropped.",
+     "id": "D5-landing-held",
+     "summary": "Every engine landing is refused without a rust-gate record at its engine with no failing seed; a rust/** landing reads its whole-pipeline cohort as notes and refuses nothing; any other landing keeps feature 386's cohort.",
      "class": "within",
-     "why": "FR-020 and SC-013 clause by clause. Treating an unloadable fixture as a failure enforces the 'leaves only when BOTH pass' rule rather than narrowing it. Replaying through the later Rust stages too follows from charging a failure to a stage whose checks may be judged after the stages that follow it. Only the Rust roll adds entries, so Python stages never add to the list."
+     "why": "FR-019 sentence by sentence; the GM's 'we don't care at all about the Python stages which come after'."
     },
     {
-     "id": "D5",
-     "summary": "Every engine landing is refused without a rust-gate record at its engine with no failing seed; a landing changing rust/** reads its whole-pipeline cohort's regressions as notes and refuses nothing; any other landing keeps feature 386's cohort.",
+     "id": "D6-land-commits-record",
+     "summary": "On an engine delta make land runs make rust-gate and commits dev/rust-gate/ (record, list, fixtures) before it stops on a failing seed.",
      "class": "within",
-     "why": "FR-019 word for word: every engine landing requires the gate; a Rust-stage landing is judged by it alone, with its cohort reported as a rate; a landing that changes no Rust stage keeps 386's cohort. This serves the GM's 'we don't care at all about the Python stages which come after'."
-    },
-    {
-     "id": "D6",
-     "summary": "On an engine delta, make land runs make rust-gate and commits dev/rust-gate/ (record, failing list, fixtures) before it stops on a failing seed.",
-     "class": "within",
-     "why": "Committing the list before stopping is what makes the GM's 'automatically add it to a list of seeds which are always checked until the first time they pass' hold. If the list were lost with a stopped landing, the next run would not check the seed. This enforces the request and adds no reach beyond the engine landings FR-019 already governs."
+     "why": "Makes the GM's 'automatically add it to a list' survive a landing that stops. It enforces FR-020 and adds no new scope."
     }
    ],
    "verdict": "BLOCKED"

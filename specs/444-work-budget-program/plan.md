@@ -231,10 +231,12 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   the Rust stages OWN - written by a Rust stage on any seed of the run, so a stage that wrote nothing on one seed is still judged
   on that empty output (D2b) - or a part the fresh settlement already HOLDS with content, an input it may read beside the Rust
   output (D2a); a check that reads a part only a later stage writes is that stage's and is not asked. Ownership is derived from the
-  run's trace, never a hand table. The checks are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up
+  run's trace, never a hand table. A check is handed the map alone, and the plan reaches the map only as its `meta`, whose reads are
+  recorded - so no check reads the plan unseen (pinned by `test_a_check_reaches_the_plan_only_through_the_recorded_meta`). The checks are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up
   by its name when asked.
 - **D3 - the gate** (`tools/rust_gate.py`, `make rust-gate`): the fresh block of 48 from `cohort_gate.py fresh-seed`'s start - a hash of
-  the engine key, so it rotates with the engine (feature 386 D3) - the
+  `ci.delta.engine_key_worktree`, which walks every engine path, `rust/**`'s `.rs` and Cargo files among them (`is_engine`, T17):
+  a Rust-only change moves the start, pinned by `test_a_rust_only_change_moves_the_fresh_start` (the plan review, round 3) - the
   six pinned row variants on the next fresh seeds, and the failing list's seeds; a plan that cannot be rolled fails the first Rust
   stage (water_frame rolls the plan, T19). Each run is recorded in `dev/rust-gate/<utc>.json` with the engine key it rolled
   (`ci.delta.engine_key_worktree`); exit 1 on any failing seed or replay.

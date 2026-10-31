@@ -213,3 +213,15 @@ def test_a_landing_that_touches_rust_is_a_rust_landing(tmp_path: pathlib.Path) -
     _git(root, "add", "-A")
     _git(root, "commit", "-qm", "rust")
     assert cg.rust_landing(root)
+
+
+def test_a_rust_only_change_moves_the_fresh_start(tmp_path: pathlib.Path) -> None:
+    """Feature 444 amendment 5 (FR-020, SC-013; the plan review of T21, round 3): the Rust gate's fresh block starts at
+    `fresh_seed`, a hash of the engine key - which covers `rust/**` (`ci.delta.is_engine`) - so a landing that changes only a Rust
+    stage rolls a new block, never a fixed one under another name."""
+    root, _base, _head = _repo(tmp_path)
+    (root / "rust/phases/src").mkdir(parents=True)
+    (root / "rust/phases/src/water_frame.rs").write_text("fn f() -> u8 { 1 }\n")
+    one = cg.fresh_seed(root)
+    (root / "rust/phases/src/water_frame.rs").write_text("fn f() -> u8 { 2 }\n")
+    assert cg.fresh_seed(root) != one

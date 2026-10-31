@@ -144,3 +144,16 @@ def test_a_stage_that_ends_failing_is_charged_though_a_later_stage_rewrites_the_
     owned = [set().union(*(w for _n, _f, w in r["trace"][: i + 1])) for i in range(3)]
     lines, stage, frozen = rg.verdict(r, owned)
     assert lines == ["FAIL mark_good -> 1, e.g. ['bad mark']"] and stage == "a" and frozen == r["trace"][1][1]
+
+
+def test_a_check_reaches_the_plan_only_through_the_recorded_meta() -> None:
+    """The plan review of T21, round 3 (D2's condition): a check is handed the map alone, and the plan reaches the map only as
+    its `meta` - whose reads are recorded - so no check reads the plan unseen and goes unasked."""
+    import inspect  # noqa: PLC0415
+
+    assert all(len(inspect.signature(check).parameters) == 1 for _name, check in rg.POST_CHECKS), "each check takes the map alone"
+    r = rg.roll(10000, 12, {}, rp.rust_stages())
+    assert not any(type(v).__name__ == "SitePlan" for v in r["manifest"].values()), "no plan object stands in the map"
+    seen: set[str] = set()
+    rp.Reads(r["manifest"], seen)["meta"].get("settlement_form")
+    assert "meta.settlement_form" in seen
