@@ -67,6 +67,9 @@ previously coming to me"*), so two more kinds of trigger reach you:
   a stuck choice of route: `continue` means go on as the question proposes (for a regression: fix it); `accept` means it
   stands (a waiver); `process-fault` means the process is wrong, its `tooling_fix` named. A question about WHAT the GM wants
   built is not yours: say so in `why` and rule `continue`, with `what` naming it as the GM's question.
+  A STOP asked for because a session is long or its context near its limit is never legitimate (the GM, 2026-10-31: "Please
+  don't stop at session boundaries; automatic context compaction shulod let you keep going"): compaction carries the work, so rule
+  that the session goes on with the open task, never a set-down for it.
   A question that ends "(REVIEW=spec: ...)" or "(REVIEW=plan: ...)" asks about that review: your `accept` or `process-fault`
   stands as its verdict on the spec or plan as it reads now, as on a review's round (feature 409).
 - a CALL-COUNT INCREASE (`ask:<NNN>-calls-<commit>`, from `make arbiter-ask` as the push's refusal names it; feature 427 T03):
