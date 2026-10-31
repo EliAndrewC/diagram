@@ -182,7 +182,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 Occasions: settlement-review on each pool hamlet the port moves - none, measured 2026-10-31 (`make map` on each: D7 reproduces today's draws, so every layout and render is main's).
 
-### T19 Approach (checklist part A)
+### T19 Approach (2026-10-31T04:00:49Z)
 
 (The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A, narrowed by the plan review of 2026-10-30: T19 also proves the two tooling rows the fixture cannot fire - `cache audit` (it audits maps, and the fixture draws none) and `the overlap census` (its replacement, the counters inside Rust, designed with this port) - before its tick; `check-rust-tooling.py` refuses the port's landing until they are.)
 
@@ -371,8 +371,7 @@ re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-
 6. **The one-sentence test.** "The re-rolled port's landing seeds fail in later stages the fresh block also shows; each is filed as
    an open row against its stage."
 7. **Done:** the seven seeds and the Kashikawa and Sawada pins filed as open rows
-   (`specs/328-match-the-research/audit/found-444-t19.jsonl`, the SiteRefused row naming widening `SEATING_GROUND_FT` first); of the
-   pool only Mizuguchi's manifest moved on the fixed port, so it alone owes its settlement-review before `make land F=444 T=T19`.
+   (`specs/328-match-the-research/audit/found-444-t19.jsonl`, the SiteRefused row naming widening `SEATING_GROUND_FT` first). (Struck 2026-10-31: the Mizuguchi review this sentence owed is not owed - D7 reproduces today's draws and no pool map moves; the Occasions line.)
 
    **On spec-fidelity's MODE 4 review of T19 (2026-10-31, BLOCKED, 7 decisions):** (5) the landing reads FR-005 by User Story 2's
    own words, Approach item 6 and D7 amended above. The Kashikawa and Sawada pins: both are pool hamlets whose re-rolled plans
