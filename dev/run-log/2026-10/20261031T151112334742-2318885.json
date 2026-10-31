@@ -1,0 +1,49 @@
+{
+  "utc": "2026-10-31T15:11:12Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 462,
+  "result": "green",
+  "commit": "b63fd5df8",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 10597,
+  "host": {
+    "load": [
+      1.88,
+      6.42
+    ],
+    "mem_avail_mb": [
+      8380,
+      9121
+    ],
+    "cpu_temp_c": [
+      84.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 3.5,
+      "io": 0.7,
+      "io_full": 0.6,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 26241,
+      "package": 16829
+    }
+  },
+  "phases": {
+    "preflight": 20.0,
+    "static": 28.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 0.0,
+    "counters-inert": 15.0,
+    "pytest": 402.0,
+    "floors": 10.0,
+    "test-full": 416.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/rolls.py",
+  "collected": 10597
+}
