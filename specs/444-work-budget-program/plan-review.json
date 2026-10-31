@@ -308,13 +308,19 @@
    "declared": "spec-fidelity"
   },
   "### T19 part B (2026-10-31T03:22Z)": {
-   "sha256": "6f3b7144b06239afe2b9b2d201aaf43fd1fc4dd8cbe3eab3c917a03be7669e92",
+   "sha256": "e66ff5215822f5c678f116da04d0007082e8dcc46e6fe26c1958aed380a7f057",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T19 Approach (2026-10-31T04:00:49Z)": {
    "sha256": "aa981b6e40b72a20206f08c84204fbf2538c33522c3d138380bc88be9fb419fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T04:09Z)": {
+   "sha256": "d55b3be8fca9bb6b00aa4f9affef55f52b58ff2220656662b778bb93735fb7f1",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
@@ -2350,6 +2356,48 @@
      "why": "Removing plan prose withdraws nothing the GM asked for or the spec requires. Every obligation the earlier block carried is still held outside it: the water_frame Rust port as its own task, landed before the feature closes (FR-017, the GM 2026-10-29 amendment 4, 'we don't end up doing any Python rewrites'); acceptance only at or under budget with the old code deleted (FR-005, FR-006), MODE AUDIT and the cohort-landing check (request section 3 items 6-7); the Rust tooling rows proven on a Rust fixture before the first Rust phase lands (FR-011, request section 7, 'prove it fires'), and check-rust-tooling.py refuses the port's landing until cache audit and the overlap census are proven, which is a guard rather than plan text. The bundle shows only the deletion. It does not show T19 the task being withdrawn or its exits changed. A withdrawal of the water_frame port, or a landing of it without those exits, would contradict FR-017 and the GM's step-4 instruction, and this verdict does not clear either."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)",
+    "### T19 Approach (2026-10-31T04:00:49Z)",
+    "### T19 Decisions",
+    "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T19 part B (2026-10-31T02:51Z)",
+    "### T19 part B (2026-10-31T03:05Z)",
+    "### T19 part B (2026-10-31T03:10Z)",
+    "### T19 part B (2026-10-31T03:14Z)",
+    "### T19 part B (2026-10-31T03:22Z)",
+    "### T19 part B (2026-10-31T04:09Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "partB-0409-item5-7",
+     "summary": "Outcome recorded: the change is the two branch fixes (cluster_shape, well_siting on every form) and D7's reproduced knob_rng draws; the open rows withdrawn and the Kashikawa/Sawada pins removed.",
+     "class": "within",
+     "why": "Restates decisions already in the section and judged CLEAR when last read (D7, the 03:05Z/03:10Z fixes, the second review's answers (1) and (2)); it adds no new choice. Withdrawing the rows and removing the pins returns the landing to the GM's literal rule, 'make cohort-landing shows no regressed seed' (design section 3 box 6), now measured 54 of 54 (dev/cohort-log/20261031T034931Z), and to FR-004's unchanged keys."
+    },
+    {
+     "id": "partB-0409-item8",
+     "summary": "Admits that the route that settled it (reproducing knob_rng) was neither measured nor offered before the arbiter was asked, and records that a later port measures the reproduction route first.",
+     "class": "within",
+     "why": "A process record, not a scope change. The note serves the GM's standing rules (no regressed seed; a figure is measured, never assumed) and his 2026-10-28 demand that 'careful' become a procedure. It does not tell a later port to reuse an old phase algorithm: knob_rng is the shared generator, not ported phase code (D7), so it does not run against the GM's 2026-10-30 rule that the rewrite must not re-implement the old algorithms. It binds nothing outside FR-017's port."
+    },
+    {
+     "id": "partB-0409-item9",
+     "summary": "Says each arbiter ruling's named step was taken, and the cohort-45 accept was acted on only until spec-fidelity blocked the landing it named; the D7 route went back through that review.",
+     "class": "within",
+     "why": "Retrospective and accurate against the section: the landing does not rest on the arbiter's cohort-45 accept, which would have let a phase land with regressed seeds. It rests on 54 of 54 under the GM's literal rule, consistent with FR-006 (the arbiter may rule on process, never accept a phase short of the acceptance rule)."
+    },
+    {
+     "id": "standing-D6-D9-and-Approach",
+     "summary": "Unchanged since its CLEAR verdict: D6 (Python gathers, Rust rolls, Python writes), D7 (knob_rng reproduced), D8 (the maturin build into .rust-ext/), D9 (Rust counters behind the Cargo feature counters, returned to work-budget), the Approach exits (the budget at every size, MODE AUDIT WITHIN, cache audit and the overlap census proven, cohort-landing with no regressed seed, the coverage floor; red goes to the arbiter as a route only).",
+     "class": "within",
+     "why": "The text is byte-identical to the text that received CLEAR (the diff against earlier.md shows only the appended 04:09Z block). It carries FR-010, FR-012, FR-017, FR-004 and FR-006 as written, with no narrowing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2769,81 +2817,33 @@
    "verdict": "BLOCKED"
   },
   "T19": {
-   "section_sha256": "0566a1fc05647b7c2346b0e82d30916f74ee64243ef47a7bf624ddf4eb4095c9",
+   "section_sha256": "ab2af853c822fdea778a11145eb887dfa40fd2331c61e6f9ba7fc760f1332b68",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "Occasions / 03:22Z strike",
-     "summary": "No settlement-review is owed for T19: the struck 03:22Z sentence (Mizuguchi alone owed a review) was measured on the first, re-rolling D7; on the amended D7 every pool hamlet regenerates as main's map (make map on each, 2026-10-31).",
+     "id": "partB-0409-item5-7",
+     "summary": "Outcome recorded: the change is the two branch fixes (cluster_shape, well_siting on every form) and D7's reproduced knob_rng draws; the open rows withdrawn and the Kashikawa/Sawada pins removed.",
      "class": "within",
-     "why": "The request's acceptance box 6 owes 'the reviews its occasions owe (docs/reviews.md), such as settlement-review when a map's form changes'. The occasion is a moved map; the premise that none moves carries a dated measurement and method, and the earlier Mizuguchi finding was made on the replaced D7. Applying the occasion rule to a measured fact narrows nothing; the strike also removes the earlier block's contradiction with its own Occasions line."
+     "why": "Restates decisions already in the section and judged CLEAR when last read (D7, the 03:05Z/03:10Z fixes, the second review's answers (1) and (2)); it adds no new choice. Withdrawing the rows and removing the pins returns the landing to the GM's literal rule, 'make cohort-landing shows no regressed seed' (design section 3 box 6), now measured 54 of 54 (dev/cohort-log/20261031T034931Z), and to FR-004's unchanged keys."
     },
     {
-     "id": "Approach preface (Route A)",
-     "summary": "T19 proves the two tooling rows the fixture cannot fire (cache audit, the overlap census) on the port, each check refusing a copy written to break it, and check-rust-tooling refuses the landing until they are.",
+     "id": "partB-0409-item8",
+     "summary": "Admits that the route that settled it (reproducing knob_rng) was neither measured nor offered before the arbiter was asked, and records that a later port measures the reproduction route first.",
      "class": "within",
-     "why": "Request section 7: the first Rust phase cannot land until every one-for-one, partial and rewritten row has been proven to fire; FR-011. The landing stays refused until proven, so the rule's purpose holds."
+     "why": "A process record, not a scope change. The note serves the GM's standing rules (no regressed seed; a figure is measured, never assumed) and his 2026-10-28 demand that 'careful' become a procedure. It does not tell a later port to reuse an old phase algorithm: knob_rng is the shared generator, not ported phase code (D7), so it does not run against the GM's 2026-10-30 rule that the rewrite must not re-implement the old algorithms. It binds nothing outside FR-017's port."
     },
     {
-     "id": "Approach 5 (order)",
-     "summary": "The water_frame port lands after the tooling proof and before the field rebuild.",
+     "id": "partB-0409-item9",
+     "summary": "Says each arbiter ruling's named step was taken, and the cohort-45 accept was acted on only until spec-fidelity blocked the landing it named; the D7 route went back through that review.",
      "class": "within",
-     "why": "FR-003 (STAGES order, water_frame first), FR-011 (tooling before the first Rust phase), FR-017 (the port a task of its own)."
+     "why": "Retrospective and accurate against the section: the landing does not rest on the arbiter's cohort-45 accept, which would have let a phase land with regressed seeds. It rests on 54 of 54 under the GM's literal rule, consistent with FR-006 (the arbiter may rule on process, never accept a phase short of the acceptance rule)."
     },
     {
-     "id": "Approach 6 (exits)",
-     "summary": "Green: within the pinned budget at every size, MODE AUDIT WITHIN, the two rows proven, make cohort-landing with no regressed seed as the GM wrote it, Rust coverage whole. Red goes to the round arbiter as a route, never an acceptance.",
+     "id": "standing-D6-D9-and-Approach",
+     "summary": "Unchanged since its CLEAR verdict: D6 (Python gathers, Rust rolls, Python writes), D7 (knob_rng reproduced), D8 (the maturin build into .rust-ext/), D9 (Rust counters behind the Cargo feature counters, returned to work-budget), the Approach exits (the budget at every size, MODE AUDIT WITHIN, cache audit and the overlap census proven, cohort-landing with no regressed seed, the coverage floor; red goes to the arbiter as a route only).",
      "class": "within",
-     "why": "Request section 3 box 6 and section 5 item 4; FR-005, FR-006. The cohort exit is the GM's words unaltered."
-    },
-    {
-     "id": "D6",
-     "summary": "Python gathers the derivation's reads (seed, spec, households, scale, each knob's allowed forms and pins) into one record, Rust rolls the bearings and knob forms and counts, Python writes the same manifest keys; the knob tables stay Python data.",
-     "class": "within",
-     "why": "FR-010 (stage a thin Python function calling the extension; the manifest stays Python), FR-004 (same keys). The tables are research data, not the ported algorithm."
-    },
-    {
-     "id": "D7",
-     "summary": "Rust reproduces knob_rng's public draws (SHA-256 seed into MT19937, randrange) so every seed keeps its map; off-branch knob meta is written as the table's first form, a value no stage reads.",
-     "class": "within",
-     "why": "Restores the literal cohort rule ('make cohort-landing shows no regressed seed'). knob_rng is the shared generator, not the inefficient placement algorithm the GM's 2026-10-30 words forbid copying, and the derivation is rolls and writes. FR-004 binds the keys, which are unchanged; the 03:05Z and 03:10Z traces and the cohort census find no off-branch knob read."
-    },
-    {
-     "id": "D8",
-     "summary": "maturin builds rust/phases into a gitignored .rust-ext/, rebuilt when its sources' code id moves; the generation key holds the Rust sources.",
-     "class": "within",
-     "why": "FR-010 (PyO3, built by maturin); request section 7 (the code id and the cache's engine hash rewritten for Rust)."
-    },
-    {
-     "id": "D9",
-     "summary": "Behind the Cargo feature counters, the crate counts operations keyed <kind>@<function>, returns them with the result, and the thin function adds them to the roll's counts; this replaces the overlap census, proven by a copy doing uncounted work.",
-     "class": "within",
-     "why": "FR-012 and request section 1 (counters as a macro behind a Cargo feature, compiled out of the deployed build, comparable to Python's)."
-    },
-    {
-     "id": "Part B 03:05Z / 03:10Z fixes",
-     "summary": "cluster_shape and well_siting roll on every form, since stages read them on every form; tests red on the unfixed branch; the derivation's per-form note corrected, the reference total unchanged.",
-     "class": "within",
-     "why": "Correcting the port's own defect so it writes what later stages read; no later stage is changed (FR-004, S4)."
-    },
-    {
-     "id": "Part B 03:05Z item 3",
-     "summary": "The old plan_site read under the phase-source escape is recorded as against the guard's purpose (ruled NOT LEGITIMATE earlier); both fixes rest on the readers' trace alone.",
-     "class": "within",
-     "why": "A record of a past breach, not a carve-out: nothing in the plan relies on the old-code read, which keeps the GM's 2026-10-30 rule and its guard intact."
-    },
-    {
-     "id": "Part B (7), budget pin",
-     "summary": "water_frame's budget is SOUND-pinned, so FR-013's re-owed ruling for accept-pinned budgets does not apply; the per-form note changed, the budgeted totals (56 at 20, 40 and 80) did not.",
-     "class": "within",
-     "why": "FR-013 binds 'an accept-pinned budget' alone; no budgeted figure moved, so FR-006's budget rule is untouched."
-    },
-    {
-     "id": "Part B 2nd review (2), withdrawals",
-     "summary": "The Kashikawa and Sawada pins are removed and the open rows filed for the re-rolled port's seeds are withdrawn, since on the amended D7 no seed fails (cohort-landing 54 of 54) and no map is pinned.",
-     "class": "within",
-     "why": "Removes a workaround instead of adding one; the cohort rule is met as written."
+     "why": "The text is byte-identical to the text that received CLEAR (the diff against earlier.md shows only the appended 04:09Z block). It carries FR-010, FR-012, FR-017, FR-004 and FR-006 as written, with no narrowing."
     }
    ],
    "verdict": "CLEAR"
