@@ -186,7 +186,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   1991 gazetteer's unstated mu - are whether a finding applies to a case, the record's to rule and never the GM's (the root
   CLAUDE.md, Research): the knob's band holds either reading, so neither moves the cap.
 - **D2 - the derivation's figures stand** (`phases/field_greenfield.derivation.md`, its Bounds): at 20, 40 and 80 households the
-  farmland is about 11, 21 and 42 ha, under the cap's 45 ha floor, so each draws one field and no total changes; the cap binds only
+  farmland - 1.3 acres a household, 0017's `GROSS_ACRES_PER_HOUSEHOLD` - is about 11, 21 and 42 ha, under the cap's 45 ha floor (0017's knob), so each draws one field and no total changes; the cap binds only
   past about 85 households, where each field's work is the derivation's at its own size. Owed: the MODE BUDGET verdict on the
   re-derived text (FR-018), and the pin kept as it stands unless that verdict moves a figure.
 
