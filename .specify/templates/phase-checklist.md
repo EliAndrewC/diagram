@@ -16,8 +16,9 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
   `make perf-fanout`.
 - [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path.
-- [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; `make
-  cohort-landing` with no regressed seed and the fresh block's pass rate no worse; the phase's claims round IN-STEP; the reviews
+- [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; every seed of
+  the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
+  rate, refusing nothing); the phase's claims round IN-STEP; the reviews
   its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
 - [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
 - [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.

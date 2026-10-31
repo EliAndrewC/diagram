@@ -149,13 +149,13 @@ standards" (`request.md`).
   (`rust/**`) is judged by it alone: its whole-pipeline cohort is rolled as a rate and refuses nothing, and a Python stage that
   fails on the Rust output is that stage's defect, never a reason to change the Rust stage. Matching Python's draws is not
   required; a port may roll with its own generator, its moved pool hamlets owing their settlement-reviews. A landing that
-  changes no Rust stage keeps feature 386's landing cohort as it stands.
+  changes no Rust stage keeps feature 386's landing cohort as it stands. A Rust phase's checklist (`.specify/templates/
+  phase-checklist.md`) reads its acceptance box by this gate in place of "no regressed seed".
 - **FR-020**: The Rust gate's seeds (amendment 5): no fixed reference block - a FRESH block of 48 seeds from a start that rotates
   with the engine, the six pinned row variants (901-906's pins) each on a fresh seed, and the FAILING LIST. A seed that fails the
-  gate goes on the list with the Rust stage it failed in, and is rolled by every gate run until it first passes, then leaves the
-  list. Beside it, the failing stage's INPUT - the map and the plan as the stages before it left them - is frozen as a fixture
-  and replayed into that stage by every gate run until it passes, so a failure cannot leave the list only because a change
-  upstream turned its seed into another map. The list and its fixtures are the Rust stages' alone; Python stages never add to it.
+  gate goes on the list with the Rust stage it failed in and that stage's INPUT - the map and the plan as the stages before it
+  left them - frozen as a fixture. Every gate run rolls the seed and replays the fixture into its stage; the entry leaves the list
+  only when BOTH pass, so a failure cannot leave the list only because a change upstream turned its seed into another map. The list and its fixtures are the Rust stages' alone; Python stages never add to it.
 
 ## Success Criteria *(mandatory)*
 
@@ -191,13 +191,14 @@ standards" (`request.md`).
   test finds an engine landing refused when the gate has a failing seed, and a Rust-stage landing not refused by its whole-pipeline
   cohort.
 - **SC-013** (FR-020): a test finds a failing seed added to the list with its stage and frozen input, rolled and replayed by the
-  next run, and removed on its first pass; and the gate's seeds hold no fixed block.
+  next run, kept while its seed passes and its fixture still fails, and removed only when its seed and its frozen input both pass;
+  and the gate's seeds hold no fixed block.
 
 ## Edge Cases
 
 - A stage whose derivation shows the current output itself is wasteful (it places what a later stage drops): the derivation
   says so, and the fix goes to the stage that owes it, not into a looser budget.
-- A rebuild that moves maps: allowed for speed work (the GM, 2026-10-18), held to the research claims and the cohort.
+- A rebuild that moves maps: allowed for speed work (the GM, 2026-10-18), held to the research claims and the Rust stage gate (FR-019).
 
 ## Assumptions
 
