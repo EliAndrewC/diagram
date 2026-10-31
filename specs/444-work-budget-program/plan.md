@@ -180,7 +180,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 ### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)
 
-Occasions: settlement-review on each pool hamlet the port moves (D7: every plan rolls anew, so the layouts downstream move).
+Occasions: settlement-review on each pool hamlet the port moves - none, measured 2026-10-31 (`make map` on each: D7 reproduces today's draws, so every layout and render is main's).
 
 ### T19 Approach (checklist part A)
 
@@ -196,7 +196,7 @@ Occasions: settlement-review on each pool hamlet the port moves (D7: every plan 
 5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
 6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
    WITHIN on the `.rs` modules, `cache audit` and `the overlap census` proven on the port (each check refusing a copy of the port
-   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` rolled and its pinned seeds' failures filed as open rows against their stages, the gate read on the fresh block - its pass rate no worse than main's on the same seeds, every refusal a class main's block shows (FR-005 by User Story 2: "Its gate is that the fresh block's pass rate is no worse", and "not all seeds pass: that is 417's goal, not this program's"; amended 2026-10-31 on the round arbiter's rulings ask:444-T19-cohort-regression and ask:444-T19-cohort-45, since under D7 a pinned seed names a new map), the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
+   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed (as the GM wrote it: D7 reproduces today's draws, so a pinned seed names the same map), the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
    a route, never an acceptance: a phase over its budget is rebuilt or its budget changed with the GM's words (FR-006).
 7. **The search smell.** none
 8. **The budget.** One landing.
@@ -280,12 +280,17 @@ bound holds by construction) and each knob's form, and returns them with its cou
 manifest keys are today (FR-004: the keys unchanged). The knob tables stay Python data: they are the research's tables, and one
 copy of each is the rule.
 
-**D7 - The rolls: a seeded SplitMix64 in Rust** (FR-017): seeded from the map's seed and the stage's name, no crate dependency,
-the same draws on every platform. The port cannot reproduce today's draws without reading today's Python's random calls, which
-the phase-source guard holds (the GM, 2026-10-30), so every map's plan rolls once anew - its fall, drainage bearing, wind and knob
-forms - and the layouts downstream move. The GM's ruling of 2026-10-18 lets maps change
-where they keep the research (the root CLAUDE.md, its speed-work rule under Verification and iteration): the fresh block's pass rate against main's, refusal class by class (ask:444-T19-cohort-45), and the claims round hold them to the research, and each pool hamlet that moves owes
-its settlement-review (docs/reviews.md: a map's form changes) - this task's Occasions line is corrected to say so.
+**D7 - The rolls: `knob_rng`'s own draws, reproduced in Rust** (FR-017; amended 2026-10-31 on spec-fidelity's second MODE 4 review,
+which found the first D7's premise - that today's draws could not be reproduced without reading the guarded plan code - unmeasured):
+`settlement/_knobs.py`'s `knob_rng(seed, knob)` is the shared generator every stage calls, not the ported code, and public algorithm
+end to end - SHA-256 of `"{seed}\0{knob}"`, its first 8 bytes seeding Python's `random.Random` (MT19937, `init_by_array`), drawn by
+`randrange` (CPython's `_randbelow_with_getrandbits`). `rust/phases/src/pyrand.rs` reproduces it with no crate dependency, so the
+port rolls the plan Python rolled and every seed keeps its map: the GM's landing rule, "`make cohort-landing` shows no regressed
+seed", holds as written. Proven by `test_the_rust_draws_are_knob_rng_s` (the knobs and the fall on 32 seeds, one past 2^32) and
+measured 2026-10-31 (`make map` on each pool hamlet): every layout and render is main's. What still differs is the meta of a knob
+off its derivation branch - written as its table's first form, where Python rolled a value no stage reads - which the title card
+hides behind each choice's own form (`interactive/choices.py` `applies`). The first D7 (a seeded SplitMix64, every plan rolled
+anew) was replaced because it broke the literal rule; do not restore it.
 
 **D8 - The build: maturin into a repository-local folder, keyed to the Rust sources** (FR-010): `rust/phases/` is the crate
 (`l7r_phases`); `make rust-build` builds it with maturin into `.rust-ext/` (gitignored) when its sources' code id moved, and every
@@ -378,3 +383,9 @@ re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-
    `phases/water_frame_greenfield.verdict-2.txt`), and FR-013's re-owed ruling binds "an accept-pinned budget" alone; the edit
    changed no budgeted figure - the totals at 20, 40 and 80 stay 56 - only the per-form note beside the knobs row (linear 55, then
    59), so no ruling is re-owed and the pin stands.
+
+   **On spec-fidelity's second MODE 4 review (2026-10-31, BLOCKED, 9 decisions):** (1) the cohort exit - the first D7's premise
+   that today's draws could not be reproduced was unmeasured; measured, it was false: D7 amended to reproduce `knob_rng`, Approach
+   item 6 back to the GM's words, and `make cohort-landing` on it passes 54 of 54, no regressed seed
+   (dev/cohort-log/20261031T034931Z). (2) the Kashikawa and Sawada pins - removed; both regenerate as main's maps. The open rows
+   filed at 03:22Z for the re-rolled port's seeds and pins (`found-444-t19.jsonl`) are withdrawn: no seed fails and no map is pinned.
