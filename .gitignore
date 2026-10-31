@@ -166,3 +166,5 @@ dev/perf-raw/
 /.claude/skills/diagra[m]/
 # cargo's build output, should a crate be built without rust_checks.py's shared target directory (feature 444 T17)
 target/
+# the built Rust phases (feature 444 D8), rebuilt from rust/ by rust_checks.py build
+.rust-ext/

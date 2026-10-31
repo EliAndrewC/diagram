@@ -156,6 +156,40 @@ def _listing(cmd: str, manifest: pathlib.Path) -> subprocess.CompletedProcess[st
     return next((r for r in runs if r.returncode != 0), runs[-1])
 
 
+EXT = ".rust-ext"  # the built extensions, gitignored: `l7r/diagram/hamletgen/phases_ext.py` puts it on the import path (D8)
+
+
+def stamp(manifest: pathlib.Path) -> str:
+    """The crate's source id: every `.rs` and Cargo file under it, `target/` aside - what a build of it is keyed to."""
+    import hashlib  # noqa: PLC0415
+
+    h = hashlib.sha256()
+    for p in sorted(manifest.parent.rglob("*")):
+        if p.is_file() and "target" not in p.relative_to(manifest.parent).parts and (p.suffix == ".rs" or p.name.startswith("Cargo.")):
+            h.update(str(p.relative_to(manifest.parent)).encode() + b"\0" + p.read_bytes())
+    return h.hexdigest()[:16]
+
+
+def build(manifest: pathlib.Path, ext: pathlib.Path) -> subprocess.CompletedProcess[str]:
+    """THE BUILD (feature 444 D8): the crate built by maturin with its `counters` feature and installed into `ext`, only when its
+    source id moved since the last build there (`<lib>.stamp`)."""
+    name = lib_name(manifest)
+    mark = ext / f"{name}.stamp"
+    now = stamp(manifest)
+    if mark.is_file() and mark.read_text(encoding="utf-8").strip() == now:
+        return subprocess.CompletedProcess([], 0, f"{name}: built\n", "")
+    env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
+    dist = TARGET.parent / f"l7r-dist-{name}"
+    built = _env_run(["maturin", "build", "--release", "--quiet", "--features", "counters", "-o", str(dist), "-m", str(manifest)], env)
+    wheels = sorted(dist.glob(f"{name}-*.whl"), key=lambda w: w.stat().st_mtime)
+    if built.returncode != 0 or not wheels:
+        return built
+    put = _env_run([sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "--no-deps", "--target", str(ext), str(wheels[-1])], dict(os.environ))
+    if put.returncode == 0:
+        mark.write_text(now + "\n", encoding="utf-8")
+    return put
+
+
 def _exe() -> pathlib.Path | str:
     return CARGO if CARGO.is_file() else "cargo"
 
@@ -166,15 +200,15 @@ def _env_run(cmd: list[str], env: dict[str, str]) -> subprocess.CompletedProcess
 
 def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedProcess[str]:
     if cmd == "lint":
-        return cargo(["clippy", "--quiet", "--all-targets"], manifest, ["-D", "warnings"])
+        return cargo(["clippy", "--quiet", "--all-targets", "--all-features"], manifest, ["-D", "warnings"])
     if cmd == "test":
-        return cargo(["test", "--quiet"], manifest)
+        return cargo(["test", "--quiet", "--all-features"], manifest)
     return cargo(["fmt", *(["--check"] if check else [])], manifest)
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test", "cover", "dead", "callers"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "cover", "dead", "callers", "build"])
     ap.add_argument("--driver", default="", help="cover: the Python driver (default: the crate's tests/py_driver.py)")
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
@@ -185,7 +219,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     bad = 0
     for m in found:
-        if args.cmd in ("dead", "callers"):
+        if args.cmd == "build":
+            r = build(m, ROOT / EXT)
+        elif args.cmd in ("dead", "callers"):
             r = _listing(args.cmd, m)
         elif args.cmd == "cover":
             work = TARGET.parent / f"l7r-cover-{m.parent.name}"

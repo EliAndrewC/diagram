@@ -1,0 +1,23 @@
+# The rebuilt phases' extension module (feature 444 FR-010): one PyO3 module Python imports, each stage a thin Python function
+# calling into it. Built by `rust_checks.py build` into `.rust-ext/` (D8); its counters behind the `counters` feature (D9, FR-012).
+[package]
+name = "l7r_phases"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "l7r_phases"
+crate-type = ["cdylib", "rlib"]
+
+[features]
+counters = []
+
+[dependencies]
+pyo3 = { version = "0.26", features = ["extension-module"] }
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"

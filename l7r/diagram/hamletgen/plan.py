@@ -467,6 +467,87 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     return _fall_into_wind(down_deg, windward) <= 1e-9
 
 
+#: water_frame's 21 knobs in the order they roll (the settlement form first: the rest's branches read it), each with its table and
+#: the branch it rolls on (`rust/phases/src/water_frame.rs` `applies`; the derivation's knob row): elsewhere it is written alone, as
+#: its table's first form - a row's fields outside a row, a farm's grove outside the dispersed and row forms
+_KNOBS: tuple[tuple[str, str], ...] = (
+    ("settlement_form", "all"),
+    ("cluster_shape", "nucleated"),
+    ("water_sink", "all"),
+    ("lane_skeleton", "all"),
+    ("lane_web", "all"),
+    ("bamboo", "all"),
+    ("grove_sides", "not_nucleated"),
+    ("grove_flank", "not_nucleated"),
+    ("row_line", "linear"),
+    ("row_sides", "linear"),
+    ("row_water", "linear"),
+    ("row_shelter", "linear"),
+    ("well_siting", "nucleated"),
+    ("farm_water", "dispersed"),
+    ("manure_form", "all"),
+    ("copse_siting", "all"),
+    ("kosatsuba_siting", "all"),
+    ("plot_size", "all"),
+    ("grain_drift", "all"),
+    ("intake", "brook"),
+    ("brook_side", "brook"),
+)
+
+
+def _rust_rolls(spec: HamletSpec, archetype: str, falls: tuple[float, ...]) -> dict[str, Any]:
+    """The fall and water_frame's 21 knobs, rolled by `l7r_phases.water_frame` (feature 444 T19, D6): each knob's table, pin and
+    branch gathered here, its value read back from the index Rust drew; a pin stands as written, a knob off its branch takes its
+    table's first form (a fixed row on flood ground, "edge"). The counts Rust kept are the plan's own (D9).
+
+    Research:
+        the plan's rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet from the seed, only where the map's form uses it"""
+    from l7r.diagram.hamletgen.phases_ext import phases  # noqa: PLC0415 - built on first use (D8)
+
+    _flood_known = spec.flood_ground if spec.flood_ground is not None else (archetype in POLDER_ARCHETYPES or spec.settlement_form == "dike_top")
+    brook = archetype not in POLDER_ARCHETYPES
+    tables: dict[str, Sequence[Any]] = {
+        "settlement_form": (spec.settlement_form,) if spec.settlement_form else SETTLEMENT_FORMS,
+        "cluster_shape": CLUSTER_SHAPES,
+        "water_sink": SINKS,
+        "lane_skeleton": LANE_SKELETONS,
+        "lane_web": LANE_WEBS,
+        "bamboo": BAMBOO_FORMS,
+        "grove_sides": GROVE_SIDES_FLOOD if _flood_known else GROVE_SIDES,
+        "grove_flank": GROVE_FLANKS,
+        "row_line": ROW_LINES,
+        "row_sides": ROW_SIDES,
+        "row_water": ROW_WATERS,
+        "row_shelter": ROW_SHELTERS,
+        "well_siting": WELL_SITINGS,
+        "farm_water": FARM_WATERS,
+        "manure_form": MANURE_FORMS,
+        "copse_siting": COPSE_SITINGS,
+        "kosatsuba_siting": KOSATSUBA_SITINGS,
+        "plot_size": PLOT_SIZES,
+        "grain_drift": GRAIN_DRIFTS,
+        "intake": INTAKE_FORMS,
+        "brook_side": BROOK_FLANKS,
+    }
+    branch = {k: ("all" if brook else "off") if b == "brook" else ("off" if k == "row_line" and _flood_known else b) for k, b in _KNOBS}
+    pinned = {k: getattr(spec, k, None) is not None and getattr(spec, k, None) != "" for k, _b in _KNOBS}
+    pinned["settlement_form"] = False  # a pinned form stands as its table's one entry, so Rust reads the form it is
+    knobs = [(k, len(tables[k]), pinned[k], branch[k]) for k, _b in _KNOBS]
+    fall, picks, counts = phases().water_frame(spec.seed & 0xFFFF_FFFF_FFFF_FFFF, len(falls), spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs)
+    if __debug__:
+        for key, n in counts.items():
+            work_counts.OPS[key] += n
+    out: dict[str, Any] = {"down_deg": falls[fall] if fall is not None else spec.down_deg}
+    for (k, _b), pick in zip(_KNOBS, picks, strict=True):
+        if pinned[k]:
+            out[k] = getattr(spec, k)
+        elif pick is not None:
+            out[k] = tables[k][pick]
+        else:
+            out[k] = "edge" if k == "row_line" and _flood_known else tables[k][0]
+    return out
+
+
 def plan_site(spec: HamletSpec) -> SitePlan:
     """Turn a spec into a fully-resolved plan. PURE - no drawing, no engine, no RNG stream.
 
@@ -506,13 +587,20 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # falls that leave a wind-facing margin above the drain on any field (`fall_backs_the_wind`) - the knob narrowed where
     # it cannot be honored. A DECLARED fall is the GM's fact about the place and is taken as written: its site is refused
     # only where `seat_cluster` finds no margin whose back it can turn to the wind (`SeatRefused`), never for its bearing.
-    down_deg = spec.down_deg if spec.down_deg is not None else float(_roll(spec.seed, "down_deg", tuple(f for f in _falls if fall_backs_the_wind(f, windward))))
+    # THE PLAN'S ROLLS ARE THE RUST WATER FRAME'S (feature 444 T19, D6-D7; the round arbiter's rulings on ask:444-T19-plan-site and
+    # ask:444-T19-which-knobs): Python gathers each knob's table, pin and branch, `l7r_phases.water_frame` rolls the fall and the 21
+    # knobs from the seed (its own SplitMix64, so every plan rolled anew once) and counts its work, and the SitePlan below is filled
+    # from the result. The rolls outside water_frame's derivation (the field's archetype and fan, the polder's forms, the woods)
+    # stay here, rolled and counted as before.
+    _admitted = tuple(f for f in _falls if fall_backs_the_wind(f, windward))
+    _rolled = _rust_rolls(spec, _archetype, _admitted)
+    down_deg = spec.down_deg if spec.down_deg is not None else float(_rolled["down_deg"])
     # A hamlet is ONE comb draining down ONE valley, so its drainage bearing IS its fall unless the
     # GM declares otherwise. Recording both separately keeps the map honest about which fact is
     # which (skill SKILL.md: "these are not the same fact and must not be derived from each other")
     # and leaves the door open for a spec that sets a channel running across the fall.
     water_flow = spec.water_flow if spec.water_flow is not None else down_deg
-    _form = spec.settlement_form or str(_roll(spec.seed, "settlement_form", SETTLEMENT_FORMS))
+    _form = str(_rolled["settlement_form"])
     # FLOOD-PRONE GROUND (feature 291): the farms stand on reclaimed low ground behind dikes, or on a dike - the ground
     # the Izumo ring guarded against floods. This project's decision (research/contents.json#homesteads, the grove's shape); a
     # spec pins it either way.
@@ -521,7 +609,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         raise ValueError(f"grove_sides={spec.grove_sides!r}: a farmstead grove takes 2, 3 or 4 sides")
     target_acres = spec.households * GROSS_ACRES_PER_HOUSEHOLD
     a, b = offtakes_for(spec.households)
-    _cluster_shape = spec.cluster_shape or str(_roll(spec.seed, "cluster_shape", CLUSTER_SHAPES))
+    _cluster_shape = str(_rolled["cluster_shape"])
     # THE CANVAS HOLDS THE FIELD AND, ON EVERY SIDE, THE SEAT WITH ITS BELT (feature 287, homes H31): the field's own
     # square from the acreage, grown by `seat_room` all round, so the margin facing the wind always has the room
     # `seat_cluster` asks of it - the seat is never cramped against the canvas edge.
@@ -539,37 +627,37 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         down_deg=down_deg,
         water_flow=water_flow,
         windward=windward,
-        water_sink=spec.water_sink or str(_roll(spec.seed, "water_sink", SINKS)),
+        water_sink=str(_rolled["water_sink"]),
         cluster_shape=_cluster_shape,
-        lane_skeleton=spec.lane_skeleton or str(_roll(spec.seed, "lane_skeleton", LANE_SKELETONS)),
-        lane_web=spec.lane_web or str(_roll(spec.seed, "lane_web", LANE_WEBS)),
-        bamboo=spec.bamboo or str(_roll(spec.seed, "bamboo", BAMBOO_FORMS)),
+        lane_skeleton=str(_rolled["lane_skeleton"]),
+        lane_web=str(_rolled["lane_web"]),
+        bamboo=str(_rolled["bamboo"]),
         fixtures_min={k: int(v) for k, v in (spec.fixtures_min or {}).items()},
         settlement_form=_form,
-        grove_sides=spec.grove_sides or int(_roll(spec.seed, "grove_sides", GROVE_SIDES_FLOOD if _flood else GROVE_SIDES)),
+        grove_sides=int(_rolled["grove_sides"]),
         flood_ground=_flood,
-        grove_flank=int(_roll(spec.seed, "grove_flank", GROVE_FLANKS)),
-        row_line=spec.row_line or ("edge" if _flood else str(_roll(spec.seed, "row_line", ROW_LINES))),
-        row_sides=spec.row_sides or str(_roll(spec.seed, "row_sides", ROW_SIDES)),
-        row_water=spec.row_water or str(_roll(spec.seed, "row_water", ROW_WATERS)),
-        row_shelter=spec.row_shelter or str(_roll(spec.seed, "row_shelter", ROW_SHELTERS)),
-        well_siting=spec.well_siting or str(_roll(spec.seed, "well_siting", WELL_SITINGS)),
-        farm_water=spec.farm_water or str(_roll(spec.seed, "farm_water", FARM_WATERS)),
+        grove_flank=int(_rolled["grove_flank"]),
+        row_line=str(_rolled["row_line"]),
+        row_sides=str(_rolled["row_sides"]),
+        row_water=str(_rolled["row_water"]),
+        row_shelter=str(_rolled["row_shelter"]),
+        well_siting=str(_rolled["well_siting"]),
+        farm_water=str(_rolled["farm_water"]),
         field_archetype=_archetype,
         pond_layout=_pond_layout,
-        manure_form=spec.manure_form or str(_roll(spec.seed, "manure_form", MANURE_FORMS)),
+        manure_form=str(_rolled["manure_form"]),
         harvest_weather=spec.harvest_weather or DEFAULT_HARVEST_WEATHER,  # declared, never rolled (`HARVEST_WEATHERS`)
-        copse_siting=spec.copse_siting or str(_roll(spec.seed, "copse_siting", COPSE_SITINGS)),
-        kosatsuba_siting=spec.kosatsuba_siting or str(_roll(spec.seed, "kosatsuba_siting", KOSATSUBA_SITINGS)),
+        copse_siting=str(_rolled["copse_siting"]),
+        kosatsuba_siting=str(_rolled["kosatsuba_siting"]),
         dike_crop=(spec.dike_crop or str(_roll(spec.seed, "dike_crop", DIKE_CROPS))) if _archetype == "mulberry_dike_fishpond" else "mulberry",
         leftover=(spec.leftover or str(_roll(spec.seed, "leftover", LEFTOVER_FORMS))) if _archetype == "mulberry_dike_fishpond" else "rice",
         fry_form=str(_roll(spec.seed, "fry_form", FRY_FORMS)) if _archetype == "mulberry_dike_fishpond" else "none",
-        plot_size=spec.plot_size or str(_roll(spec.seed, "plot_size", PLOT_SIZES)),
-        grain_drift=spec.grain_drift if spec.grain_drift is not None else int(_roll(spec.seed, "grain_drift", GRAIN_DRIFTS)),
+        plot_size=str(_rolled["plot_size"]),
+        grain_drift=int(_rolled["grain_drift"]),
         woodland_patches=spec.woodland_patches if spec.woodland_patches is not None else int(_roll(spec.seed, "woodland_patches", (2, 3, 3, 4))),
         fan_aspect=float(_roll(spec.seed, "fan_aspect", FAN_ASPECTS)),
-        intake=spec.intake or str(_roll(spec.seed, "intake", INTAKE_FORMS)),
-        brook_side=spec.brook_side if spec.brook_side is not None else int(_roll(spec.seed, "brook_side", BROOK_FLANKS)),
+        intake=str(_rolled["intake"]),
+        brook_side=int(_rolled["brook_side"]),
         head_lead=float(_roll(spec.seed, "head_lead", HEAD_RACE_LEAD)),
         target_acres=target_acres,
         W=W,
