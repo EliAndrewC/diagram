@@ -162,13 +162,9 @@ def form_problems(skill: Path, cl: Any = None) -> list[str]:
     return cl.coverage(pairs_of(skill), {q.name for q in (skill / QUESTIONS).glob("*.html")})
 
 
-def pairs_of(skill: Path) -> list[Any]:
-    """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
-    engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
-    project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
-    delta (specs/375-enforced-wave-process/research.md R1); a key over the sources is read in a fraction of that. Only the
-    newest key's file is kept."""
-    cl = engine(Path(__file__).resolve().parents[2])
+def parse_key(skill: Path, cl: Any) -> Any:
+    """The kept parse's key: the readers' code, every engine module, every procedure document and every Rust phase source under
+    `skill` - an edit to any of them moves it."""
     h = hashlib.sha256(rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)).encode())
     for p in sorted((skill / "l7r" / "diagram").rglob("*.py")):
         if "__pycache__" not in p.parts:
@@ -176,6 +172,22 @@ def pairs_of(skill: Path) -> list[Any]:
     for doc in cl.PROCEDURES:
         if (skill / doc).is_file():
             h.update(doc.encode() + b"\0" + (skill / doc).read_bytes() + b"\0")
+    # THE RUST PHASES' CLAIMS ARE IN SCOPE TOO (feature 444, `claims_rust.all_rust_units`), so their sources key the parse: keyed on
+    # the Python alone, an edited `.rs` claim was read from the stale parse (found 2026-10-31, T16's label fixes unread)
+    for p in sorted((skill / "rust").rglob("*.rs")) if (skill / "rust").is_dir() else []:
+        if "target" not in p.relative_to(skill / "rust").parts:
+            h.update(p.relative_to(skill).as_posix().encode() + b"\0" + p.read_bytes() + b"\0")
+    return h
+
+
+def pairs_of(skill: Path) -> list[Any]:
+    """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
+    engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
+    project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
+    delta (specs/375-enforced-wave-process/research.md R1); a key over the sources is read in a fraction of that. Only the
+    newest key's file is kept."""
+    cl = engine(Path(__file__).resolve().parents[2])
+    h = parse_key(skill, cl)
     common = rc.common_dir(skill)
     cache = rc.ParseCache(common / rc.CACHE_DIR / f"claims-{h.hexdigest()[:16]}.pickle" if common is not None else None)
     # UNDER IT, EACH MODULE KEPT BY WHAT IT READS (feature 375 amendment 8, FR-035, plan D48): the key above moves with any

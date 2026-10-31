@@ -918,3 +918,20 @@ def test_a_claim_changed_otherwise_than_by_an_added_counter_is_owed_as_before(tm
     root, row = _counter_case(tmp_path, base, now, recorded)
     assert "cleared" not in row, why
     assert (FAR, cx.CODE_TRIAGE) in cx.owed(cx.current(root), cx.load_index(root / cx.INDEX)), why
+
+
+def test_the_kept_parse_is_keyed_on_the_rust_phases_too(tmp_path: pathlib.Path) -> None:
+    """An edited `.rs` claim moves the kept parse's key, as an edited Python one does (found 2026-10-31, feature 444 T16: keyed on
+    the Python alone, a Rust claim's fix was read from the stale parse); a file under `target/` does not."""
+    skill = _tree(tmp_path)
+    (skill / "rust" / "phases" / "src").mkdir(parents=True)
+    rs = skill / "rust" / "phases" / "src" / "a.rs"
+    rs.write_text("/// Research:\n///     a - GUESS: the record silent\npub const A: u32 = 1;\n")
+    cl = cx.engine(skill)
+    before = cx.parse_key(skill, cl).hexdigest()
+    rs.write_text("/// Research:\n///     a - GUESS: the record silent, 0014 says so\npub const A: u32 = 1;\n")
+    assert cx.parse_key(skill, cl).hexdigest() != before, "a Rust claim's edit moves the key"
+    moved = cx.parse_key(skill, cl).hexdigest()
+    (skill / "rust" / "phases" / "target").mkdir()
+    (skill / "rust" / "phases" / "target" / "b.rs").write_text("// built\n")
+    assert cx.parse_key(skill, cl).hexdigest() == moved, "a build's target is not a source"
