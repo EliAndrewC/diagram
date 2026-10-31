@@ -127,7 +127,9 @@ three held files, classification only, no body carried here):
   `pond_fringe`), `_comb_draw_hem` (the crop's class), `_comb_draw_paddies` (`paddy`, `wet paddy`, `bund`), `settle_beads`
   (`bund beans`), `_comb_draw_source` (the stream, the pond), `_comb_draw_ditches` (`field_channel` by `ditch_style`),
   `_plot_pond` (`field pond`), `_plot_rock` (`field rock`), `_plot_corner_grave` and `_plot_grave_island` (`field grave`).
-- PLACEMENT (to Rust): `WetLines`, `hem_on_water`, `channel_end_on_stream`, `feed_stub`, `bead_drowned`, `recorded_water`,
+- CHECK HELPERS (moved unchanged into `hamletgen/water/brook_rules.py` beside `reserved_box`, their one live caller, the round
+  arbiter's ruling on ask:444-T16-brook-predicates; first classified PLACEMENT for the deleted comb): `WetLines`, `hem_on_water`.
+- PLACEMENT (to Rust): `channel_end_on_stream`, `feed_stub`, `bead_drowned`, `recorded_water`,
   `_coarse_grain_top_up`, `_comb_drop_drowned_beads`, the three `_comb_record_*`, `grave_form`, `turning_corners`,
   `corner_seat`, `carve_around_grave`, `stone_steps`, `stone_dx`, `_mound_meets_pond`, `_paddy_features`,
   `_plot_center_span`, `_pond_fit`, `_grave_context`, `_rounded_pond`.

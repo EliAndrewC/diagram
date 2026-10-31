@@ -14,10 +14,9 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.pondstock import _bank_seats, reserve_sty_seat, seat_faults, stage_pond_stock, sty_in_reach, sty_on_near_half
-from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices, round_the_brooks
+from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES
-from l7r.diagram.settlement.fields.comb import channel_end_on_stream
 from l7r.diagram.settlement.land.dikes import breaches_any_dike, course_breaches
 
 from ._builders import a_plan
@@ -102,31 +101,6 @@ def _bent() -> list[tuple[float, float]]:
     t = math.radians(100.0)
     b = (300.0 + 300.0 * math.cos(t), 300.0 * math.sin(t))
     return [(0.0, 0.0), (300.0, 0.0), b, (b[0] + 200.0, b[1] + 100.0)]
-
-
-def test_every_confluence_stays_on_the_rounded_brook_and_the_corner_is_still_rounded() -> None:
-    """L16's rounding half: a drain joining exactly on the 100 degree corner, a second joining mid-segment 5 px inside the
-    corner's cut-back, and an intake mid-segment - after `round_the_brooks`, `channel_end_on_stream` holds for all three,
-    the mid-segment confluence is a held vertex of the drawn course, and the corner is filleted."""
-    s = Settlement(W=1200, H=1200, seed=1)
-    s.meta(name="Rb", scale="hamlet", ftpx=1, down_deg=90)
-    s.stream(_bent(), frm={"kind": "offmap"}, width=9)
-    tangent = (300.0 - 2.5 * 9.0, 0.0)
-    mid_join = (tangent[0] + 5.0, 0.0)
-    s.M["channels"] += [
-        {"poly": [[300.0, -80.0], [300.0, 0.0]], "frm": {"kind": "drain"}, "to": {"kind": "stream"}, "w": 2.5},
-        {"poly": [[282.0, -90.0], list(mid_join)], "frm": {"kind": "drain"}, "to": {"kind": "stream"}, "w": 2.5},
-        {"poly": [[100.0, 0.0], [100.0, -120.0]], "frm": {"kind": "stream"}, "to": {"kind": "field"}, "w": 2.5},
-    ]
-    round_the_brooks(s)
-    drawn = [(float(p[0]), float(p[1])) for p in s.M["streams"][0]["poly"]]
-    for c in s.M["channels"][-3:]:
-        end = c["poly"][-1] if c["to"]["kind"] == "stream" else c["poly"][0]
-        assert channel_end_on_stream(end, drawn, 9.0), c
-    assert mid_join in drawn, "the mid-segment confluence is held where it joins"
-    assert (300.0, 0.0) not in drawn, "the corner is rounded, not held mitred"
-    round_the_brooks(s)
-    assert [(float(p[0]), float(p[1])) for p in s.M["streams"][0]["poly"]] == drawn, "a second pass draws the same course"
 
 
 def test_join_vertices_inserts_an_end_on_a_segment_and_leaves_one_off_the_course() -> None:

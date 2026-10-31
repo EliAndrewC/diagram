@@ -8,8 +8,8 @@ import math
 import random
 
 from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
+from l7r.diagram.hamletgen.water.brook_rules import WetLines, hem_on_water
 from l7r.diagram.settlement._geom import point_quad_dist, quad_hits_seg, seg_dist, segments_cross
-from l7r.diagram.settlement.fields.comb import WetLines, hem_on_water
 from l7r.diagram.settlement.homestead_parts.stands import BankNear
 from l7r.diagram.waterfields.hem import BoxedRings, overlaps_any
 

@@ -520,7 +520,7 @@ def test_hem_on_water_sees_a_stream_and_a_pond_separately():
     was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a
     stream authored earlier (Ubame's). The two arms are different geometry: a stroked watercourse with
     a half-width, and the pond's ellipse."""
-    from l7r.diagram.settlement.fields.comb import hem_on_water
+    from l7r.diagram.hamletgen.water.brook_rules import hem_on_water
 
     plot = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
     assert hem_on_water(plot, [([(0.0, 120.0), (500.0, 120.0)], 4.5)], None), "the stream runs under it"

@@ -11,6 +11,7 @@ needs no import and the partition can be re-cut later without touching core.py.
 Research: package composition - NONE: the field mixins composed
 """
 
+from . import grain  # noqa: F401 - registers the field's knobs (winter_crop, town_nearness, fan_middle) at import; the old comb module imported it
 from .drawing import FieldDrawingMixin
 from .features import FieldFeaturesMixin
 from .landuse import LandUseMixin

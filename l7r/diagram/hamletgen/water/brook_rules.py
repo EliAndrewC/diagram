@@ -10,8 +10,10 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
+from typing import Any
 
 from l7r.diagram.settlement import point_in_poly
+from l7r.diagram.settlement._geom import point_quad_dist, quad_hits_seg, seg_reach_index
 
 from ..consts import BROOK_FRAME_MARGIN, BROOK_SKIRT, BROOK_WANDER_STEP, Poly, Pt
 from ..plan import SitePlan
@@ -250,7 +252,6 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
         its figures against the drawn brook - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (brook width in the keep-off band, where the unit's own BROOK_DRAWN_W is 7) - a departure the code keeps until feature 417 T34
         its bund margin - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (the hem-drop band's 3 ft beyond the brook's half width)
     """
-    from l7r.diagram.settlement.fields.comb import WetLines, hem_on_water  # noqa: PLC0415 - the settlement package imports late here
 
     net = plan.net or {}
     paddies = [list(p["poly"]) for p in net.get("plots") or []] or [list(plan.envelope)]
@@ -311,3 +312,47 @@ def without_straight_joins(fin: Sequence[Pt], joins: Sequence[Pt], tol: float, d
                 continue
         out.append(p)
     return [*out, fin[-1]] if len(fin) >= 2 else list(fin)
+
+
+# THE BROOK'S VIEW'S TWO HELPERS, moved unchanged from settlement/fields/comb.py with the comb's old placement deleted (feature
+# 444 T16, the round arbiter's ruling on ask:444-T16-brook-predicates): `reserved_box` is their one live caller.
+
+
+class WetLines:
+    """The `(polyline, half-width)` pairs `hem_on_water` asks, each segment filed once by its box widened by its half-width
+    (`seg_reach_index`), so a plot asks only the segments whose widened box meets its own box (feature 287 perf: the
+    coarse-grain top-up asks the whole wild middle, 558 plots on the reference seed 4, and each walked every ditch segment
+    on the map - 35,000 `quad_hits_seg`). EXACT: a stroke that meets a plot has a point within its half-width of the
+    plot, so its widened box meets the plot's box; a segment it skips could not have hit, and `any` does not care about
+    order."""
+
+    __slots__ = ("grid",)
+
+    def __init__(self, wet: Sequence[tuple[Any, float]]) -> None:
+        self.grid = seg_reach_index([([(float(q[0]), float(q[1])) for q in pl], float(hw)) for pl, hw in wet], 0.0)
+
+    def hit(self, poly: Poly) -> bool:
+        x0, y0 = min(q[0] for q in poly), min(q[1] for q in poly)
+        x1, y1 = max(q[0] for q in poly), max(q[1] for q in poly)
+        for a, b, hw, bx0, by0, bx1, by1 in self.grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
+            if bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1:
+                continue
+            if quad_hits_seg(poly, a, b, hw):
+                return True
+        return False
+
+
+def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: Any) -> bool:
+    """Does this dry-hem plot lie across a watercourse or over the pond?
+
+    LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
+    hem yields to standing water because the comb builder lays the fan from pure geometry and `draw_comb_field`
+    used to render it blind - it was the ONLY placer that consulted nothing, so a hem plot could be drawn
+    straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
+    different geometry and want asking separately, which through the method meant building a whole comb net.
+
+    Research: hem off water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot across a watercourse or over the pond is not a field
+    """
+    if (wet if isinstance(wet, WetLines) else WetLines(wet)).hit(poly):  # a caller asking many plots hands the index in
+        return True
+    return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))

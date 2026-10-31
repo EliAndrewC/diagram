@@ -118,140 +118,6 @@ def test_a_rolled_field_pond_is_always_drawn() -> None:
         assert bool(w.M.get("field_graves")) == bool(s.M.get("field_graves")), "the grave's roll sits on the same stream"
 
 
-def test_every_ditched_comb_draws_its_floor_under_its_plots_and_names_its_water() -> None:
-    """W30 and W37, by construction: `draw_comb_field` lays the fan's floor before any plot is drawn, and records a field
-    ditch naming the field, so every paddy shows where its water comes from."""
-    net = _comb()
-    net["brook"] = []
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Fl", scale="hamlet", ftpx=1, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    assert "f1" in s.M["comb_floors"]
-    floor = next(i for i, e in enumerate(s.out) if "padbase" in e and "<polygon" in e)
-    first_plot = next(i for i, e in enumerate(s.out) if e.startswith("<polygon") and "stroke-linejoin" in e and "stroke=\"#" in e and i != floor)
-    assert floor < first_plot, "the floor is drawn under the plots"
-    assert any(d.get("field") == "f1" for d in s.M["field_ditches"])
-
-
-def test_the_bead_drop_leaves_no_bead_on_water_on_a_mound_or_alone() -> None:
-    """W33 and W34 at the draw: a bead under a recorded ditch's stroke, or on a grave's mound, or on a stretch of bund no
-    ring now has, is dropped - and a run left with one bead loses it (`bead_runs`, the one place the rule lives)."""
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Bd", scale="hamlet", ftpx=1, down_deg=90)
-    s.M["field_ditches"] = [{"poly": [[100.0, 0.0], [100.0, 200.0]], "w": 3.0, "w_tail": 5.0}]
-    ring = [(0.0, 0.0), (200.0, 0.0), (200.0, 100.0), (0.0, 100.0)]
-    net = {
-        "plots": [{"poly": ring}],
-        "bund_bean_runs": [[(90.0, 0.0), (99.5, 0.0), (109.0, 0.0)], [(150.0, 0.0), (160.0, 0.0), (170.0, 0.0)], [(20.0, 40.0), (30.0, 40.0)]],
-        "grave_discs": [(160.0, 5.0, 8.0)],
-    }
-    s._comb_drop_drowned_beads(net, {"kind": "stream"})
-    assert net["bund_bean_runs"] == [], "a middle bead in the ditch leaves two singles; the mound takes one; the third run is on no bund"
-    assert net["bund_beans"] == []
-
-
-def test_an_intake_declares_a_stream_only_where_its_mouth_reaches_one() -> None:
-    """L16 at the intake: a feed whose sluice stands within the anchor band of a stream is snapped onto its bed and declares
-    it (`channel_end_on_stream`); one with no stream within reach is sourced from the sluice and declares no stream -
-    never a mouth in the grass recorded as joining the brook."""
-    from l7r.diagram.settlement.fields.comb import channel_end_on_stream
-
-    far = _comb()
-    far["brook"] = []
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
-    s.M["streams"].append({"poly": [[1300.0, 0.0], [1300.0, 1400.0]]})  # 600 ft off: out of reach
-    s.draw_comb_field(far, "f1", {"kind": "stream"})
-    feed = s.M["channels"][-1]
-    assert feed["frm"] == {"kind": "sluice"} and not channel_end_on_stream(feed["poly"][0], s.M["streams"][0]["poly"], 7.0)
-    near = _comb()
-    near["brook"] = []
-    sx, sy = near["channels"][0]["pts"][0]
-    t = Settlement(W=1400, H=1400, seed=5)
-    t.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
-    t.M["streams"].append({"poly": [[sx - 400.0, sy - 20.0], [sx + 400.0, sy - 20.0]]})  # 20 ft off: inside the anchor band
-    t.draw_comb_field(near, "f1", {"kind": "stream"})
-    feed = t.M["channels"][-1]
-    assert feed["frm"] == {"kind": "stream"} and channel_end_on_stream(feed["poly"][0], t.M["streams"][0]["poly"], 7.0)
-    assert channel_end_on_stream((0.0, 3.4), [(-10.0, 0.0), (10.0, 0.0)], 7.0) and not channel_end_on_stream((0.0, 3.6), [(-10.0, 0.0), (10.0, 0.0)], 7.0)  # inside the drawn width (0054), feature 328
-
-
-def test_a_bead_water_recorded_later_lies_over_is_dropped_from_the_ink_and_the_record() -> None:
-    """W33, the later-water half: the field drops its drowned beads over the water recorded when it is drawn, and a later
-    stage (the sink's drain run) can record more; `settle_beads` - run after the last water writer - drops every bead that
-    water now covers, from the ink slot and the field record together, judged by the one predicate `bead_drowned`."""
-    from l7r.diagram.settlement.fields.comb import bead_drowned, recorded_water
-
-    net = _comb()
-    net["brook"] = []
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Bd", scale="hamlet", ftpx=1, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    rec = s.M["fields"][-1]
-    beads = [tuple(b) for b in rec["bund_beans"]]
-    assert beads and s.settle_beads() == 0, "nothing new: nothing moves"
-    bx, by = beads[len(beads) // 2]
-    s.M["channels"].append({"poly": [[bx - 40.0, by], [bx + 40.0, by]], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 6.0})
-    assert s.settle_beads() > 0
-    water = recorded_water(s.M)
-    assert rec["bund_beans"] and not [b for b in rec["bund_beans"] if bead_drowned((b[0], b[1]), water, [])]
-    ink = next(e for e in s.out if 'r="1.4"' in e and "circle" in e)
-    assert ink.count("<circle") == len(rec["bund_beans"]), "the dots and the manifest agree"
-
-
-def test_the_drain_outfall_run_is_drawn_over_every_plot() -> None:
-    """W38 at the comb: every channel the comb draws - the net and the drain's run off the field alike - goes to the LATE
-    water block, which is spliced after the last plot, so no plot is painted over a channel."""
-    net = _comb()
-    end = next(c for c in net["channels"] if c["role"] == "drain")["pts"][-1]
-    net["brook"] = [tuple(end), (end[0], end[1] + 40.0)]  # the collector's run on off the field
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Lt", scale="hamlet", ftpx=1, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    assert s.M["drawn_channels"] and all(r["late"] for r in s.M["drawn_channels"])
-    plots = [i for i, e in enumerate(s.out) if e.startswith("<polygon") and "stroke-linejoin" in e]
-    assert plots and s._late_water_idx is not None and s._late_water_idx > max(plots)
-    assert not any(w == 33.0 for _, w in s.corridors), "a hamlet keeps its houses off the drain by the below-the-drain rule"
-
-
-def test_the_outfall_run_keeps_33_ft_clear_on_a_town_or_city_only() -> None:
-    """Feature 328 (0058's drawing page): the outfall corridor, 33 ft no-build either side of the run, on a town or city map,
-    in feet at the map's own scale; a hamlet or village relies on the below-the-drain rule (the test above)."""
-    net = _comb()
-    end = next(c for c in net["channels"] if c["role"] == "drain")["pts"][-1]
-    net["brook"] = [tuple(end), (end[0], end[1] + 40.0)]
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Ct", scale="city", ftpx=2, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    assert s.corridors[-1][1] == s.px(33.0) == 16.5
-
-
-def test_finish_settles_every_bead_the_last_water_drowned_and_a_reroll_copy_keeps_its_slots(tmp_path) -> None:
-    """W33, the ordering half: `finish` settles the beads first, after every water writer - so a drain recorded across a
-    bund after the field (the sink's run) leaves no emitted bead within half its stroke, in the SVG and the manifest alike.
-    The slots ride on the settlement, so a re-roll's deep copy settles its own."""
-    import re
-
-    from l7r.diagram.settlement.fields.comb import bead_drowned, recorded_water
-
-    net = _comb()
-    net["brook"] = []
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Bf", scale="hamlet", ftpx=1, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    bx, by = s.M["fields"][-1]["bund_beans"][len(s.M["fields"][-1]["bund_beans"]) // 2]
-    s = copy.deepcopy(s)
-    s.M["channels"].append({"poly": [[bx - 40.0, by], [bx + 40.0, by]], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 6.0})
-    s.M["pond"] = [bx + 200.0, by + 200.0, 30.0, 20.0]
-    s.finish(str(tmp_path / "b"), render=False)
-    svg = (tmp_path / "b.svg").read_text()
-    water = recorded_water(s.M)
-    ponds = [(bx + 200.0, by + 200.0, 30.0, 20.0)]
-    drawn = [(float(x), float(y)) for x, y in re.findall(r'<circle cx="([-\d.]+)" cy="([-\d.]+)" r="1.4"', svg)]
-    assert drawn and not [q for q in drawn if bead_drowned(q, water, ponds)]
-    assert not [b for b in s.M["fields"][-1]["bund_beans"] if bead_drowned((b[0], b[1]), water, ponds)]
-
-
 def test_a_plot_drawn_after_the_water_is_painted_under_every_channel(tmp_path) -> None:
     """W38: a settlement that draws a channel and THEN a plot - the stage order that buried a village's ditches - emits the
     plot before the channel, because every plot goes through the paddy layer (`add_paddy`) and `finish` lifts one drawn
@@ -267,41 +133,6 @@ def test_a_plot_drawn_after_the_water_is_painted_under_every_channel(tmp_path) -
     assert svg.index('<polygon points="0,0') < svg.index('stroke="#6C9CBE"')
 
 
-def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_climbing_feed_refused() -> None:
-    """W10 at the hairline feed (`_comb_source_channel`), on the violating cases: a fan whose own fall leaves the race
-    running only 20 ft down it, with a stream 25 ft DOWN the fall of the sluice - snapping the feed onto
-    that stream would leave it climbing (the snap is not taken; the feed keeps the sluice), and a fall across which the race
-    runs a little uphill (the feed is refused by name, never recorded as water running uphill). `runs_downhill` is the one rule."""
-    import math
-
-    import pytest
-
-    from l7r.diagram.settlement.fields.comb import runs_downhill
-
-    base = _comb()
-    (sx, sy), fork = base["channels"][0]["pts"][0], base["channels"][0]["pts"][-1]
-    th = math.atan2(fork[1] - sy, fork[0] - sx)
-    run = math.hypot(fork[0] - sx, fork[1] - sy)
-    phi = th + math.acos(20.0 / run)  # the fall the race descends only 20 ft along (feature 328: any net descent runs downhill)
-    f = (math.cos(phi), math.sin(phi))
-    net = _comb()
-    net["brook"], net["down_deg"] = [], math.degrees(phi)
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
-    q = (sx + f[0] * 25.0, sy + f[1] * 25.0)  # the nearest point of the stream to the sluice, 25 ft down the fall
-    s.M["streams"].append({"poly": [[q[0] - f[1] * 300.0, q[1] + f[0] * 300.0], [q[0] + f[1] * 300.0, q[1] - f[0] * 300.0]]})
-    assert not runs_downhill([q, fork], f), "the case: the snapped feed would climb 5 ft"
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    feed = s.M["channels"][-1]
-    assert feed["poly"][0] == [round(sx, 1), round(sy, 1)] and runs_downhill(feed["poly"], f)
-    across = _comb()
-    across["brook"], across["down_deg"] = [], math.degrees(th) + 95.0  # the race a little uphill of level
-    t = Settlement(W=1400, H=1400, seed=5)
-    t.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
-    with pytest.raises(ValueError, match="runs level or uphill"):
-        t.draw_comb_field(across, "f1", {"kind": "stream"})
-
-
 def _turn_deg(a: tuple[float, float], b: tuple[float, float], c: tuple[float, float]) -> float:
     h0, h1 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
     return abs(math.degrees((h1 - h0 + math.pi) % (2 * math.pi) - math.pi))
@@ -312,7 +143,7 @@ def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_le
     then 520 down the fall - runs downhill even where the drain exits straight UP the fall (the worst case); and the
     violating case, a lead long enough to take back more than the reach gives, is not drawn - the run goes straight down
     the fall from the drain's end. `runs_downhill` is the one rule."""
-    from l7r.diagram.settlement.fields.comb import outfall_run, runs_downhill
+    from l7r.diagram.settlement.fields.outfall import outfall_run, runs_downhill
 
     fall = (0.0, 1.0)
     for b1 in [(100.0, 150.0), (150.0, 100.0), (100.0, 50.0), (50.0, 100.0), (150.0, 140.0)]:
@@ -340,15 +171,3 @@ def test_every_grave_stone_stands_on_its_mound_and_steps_back_from_the_last() ->
         assert ups == sorted(ups) and len(set(ups)) == 3, f"each stone steps back from the last: {ups}"
     assert stone_steps(3, 30.0, 20.0) == [3.0, 6.5, 10.0], "a large mound keeps the stagger"
     assert stone_steps(2, 0.0, 6.0) == [0.0, 0.0], "a mound with no width has no room"
-
-
-def test_the_feed_is_recorded_at_the_width_of_the_channel_it_traces() -> None:
-    """0068 (feature 328 wave 41, impl-drift): the feed's record traces a drawn channel - the comb's head race, or the polder's
-    main canal from the reservoir's rim - so it carries that channel's drawn width (both were recorded at the head race's 6.0)."""
-    net = _comb()
-    net["brook"] = []
-    net["channels"][0]["w"] = 8.5
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    assert s.M["channels"][-1]["w"] == 8.5
