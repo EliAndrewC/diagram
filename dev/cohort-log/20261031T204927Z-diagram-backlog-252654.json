@@ -1,0 +1,58 @@
+{
+ "utc": "20261031T204927Z",
+ "clone": "diagram-backlog",
+ "feature": "",
+ "commit": "6670b0b9b",
+ "first_seed": 4,
+ "households": 40,
+ "count": 4,
+ "served": 0,
+ "block": [
+  4,
+  4,
+  40,
+  null
+ ],
+ "seeds": [
+  {
+   "seed": 4,
+   "households": 40,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "linear"
+  },
+  {
+   "seed": 5,
+   "households": 40,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed"
+  },
+  {
+   "seed": 6,
+   "households": 40,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "dispersed"
+  },
+  {
+   "seed": 7,
+   "households": 40,
+   "pins": {},
+   "how": "rolled",
+   "verdict": "pass",
+   "failures": [],
+   "counts": {},
+   "form": "nucleated"
+  }
+ ]
+}
