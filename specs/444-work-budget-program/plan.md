@@ -227,9 +227,17 @@ What the build changed, each recorded at its point of change and in `phases/fiel
    settlement-review), the dry hem on the canal's offset curves, the brook from off the canvas to off it, meandering, off the
    screen's axes - each held to the brook rules the sink asks (`brook_violations`, measured 119 of 120 seeds clean; seed 37 at 15
    households owed).
-3. **The polder's seam.** The Rust places the block, its lattice, parcels, ring canal, ditches, sluices and wild pond; the thin
-   stage hands them to the free helpers the old stage called (`perimeter_dike`, `marsh`, `resting_plots`, `outfall_run`,
-   `apply_land_use`), traced at runtime, not read.
+3. **The polder's seam** (the plan review of 2026-10-31T22:2xZ, BLOCKED: a helper the field calls is the field's work). Every
+   PLACEMENT the polder makes goes to Rust, `rust/phases/src/field/`: the block, lattice, parcels, ring canal, ditches, sluices and
+   wild pond (built); the DIKE - its band 14-40 ft across, varying, its outer face curved with the water's edge, its crest, its
+   gaps at the sluices, its willow row three quarters out at 8.5 ft and its mulberry row a quarter out at 4.4 ft, cut at the gaps
+   (0027; `perimeter_dike`'s placement); the OUTFALL's course from the tail's sluice down the fall off the map, turning at most 55
+   degrees a turn (0060; `outfall_run`'s); the RESTING plots' pick (0013; `resting_plots`'s); and the DIKE-POND's conversion - which
+   parcels are ponds, rice or fry ponds, each pond's bank and water rounded from its parcel at the village's split, and the bank's
+   crop rows (0018, 0020, 0023, 0026; `apply_land_use`'s). Python draws their records (`settlement/fields/ink.py`), as it draws
+   the comb's. `marsh` stays Python because it DECIDES NOTHING: it fills, with its reed tile, exactly the polygon the Rust hands it
+   (`pond_fringe_ring` round the Rust's wild pond), as `rest_basin` and `comb_base_fill` paint a ring they are given. The free
+   helpers stay for the other tiers that call them; the field calls none of their placement.
 4. **The deletion.** By name, `make dead-closure` against the clone's base; two pure moves on the round arbiter's rulings
    (ask:444-T16-move-drawing, ask:444-T16-brook-predicates); the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
 5. **The order, unchanged.** After `water_frame`; the last of step 4.
