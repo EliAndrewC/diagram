@@ -278,3 +278,26 @@ def test_gens_takes_the_LIVE_scripted_maps_and_the_subset_unless_all_is_asked(mo
     assert [os.path.basename(g) for g in subset] == ["sawada.gen.py", "inashiro.gen.py"]
     assert seen["kinds"] == {"scripted"} and seen["trees"] == (cache_audit.poolmaps.LIVE_TREE,)
     assert len(cache_audit.gens(True)) == 3, "--all takes the whole live scripted pool"
+
+
+def test_rust_sites_take_the_code_s_decimal_literals_never_a_test_s_comment_s_or_attribute_s() -> None:
+    """444 T19, `dev/rust-tooling.md` "cache audit": the Rust phases' literals a mutation could move a map with."""
+    from l7r.diagram.tools import cache_audit  # noqa: PLC0415
+
+    src = """/// A doc comment's 45 is no site.
+#[expect(clippy::x, reason = "a 90 in an attribute")]
+fn f() -> f64 {
+    let w = 45.0; // a trailing 135 comment
+    let n = 1 + 3 + 20000 + 0x9e37 + 0x0100_0000_01b3 + 07;
+    w * 2.5
+}
+
+#[cfg(test)]
+mod tests {
+    fn t() { let _ = 77.0; }
+}
+"""
+    got = [s[3] for s in cache_audit.rust_sites(src)]
+    assert got == ["45.0", "3", "2.5"], "1 and 20,000 out of range, 0x9e37 not decimal, the test's 77.0, comments and attributes skipped"
+    line, col, end, text = cache_audit.rust_sites(src)[0]
+    assert cache_audit.mutate(src, (line, col, end, text)).splitlines()[line - 1].strip().startswith("let w = 45.5;")

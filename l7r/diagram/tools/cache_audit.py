@@ -66,6 +66,7 @@ import json
 import os
 import pathlib
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -184,6 +185,33 @@ def numeric_sites(source: str, executed: set[int]) -> list[tuple[int, int, int |
     return sorted(sites)
 
 
+RUST_SRC = os.path.join("rust", "phases", "src")  # the rebuilt phases (feature 444 T19): `--rust` mutates their literals
+_RUST_NUM = re.compile(r"(?<![\w.])(\d+\.\d+|\d+)(?![\w.])")
+
+
+def rust_sites(source: str) -> list[tuple[int, int, int | None, str]]:
+    """(lineno, col, end_col, text) for each decimal literal of a `.rs` file's code a map could move with (feature 444 T19,
+    `dev/rust-tooling.md` "cache audit"): before its `#[cfg(test)]` module, outside comments and attributes, between 1 and
+    10,000 as `numeric_sites` keeps. Coverage cannot see which Rust lines a map runs, so a literal no map reaches is caught as the
+    Python ones are, by moving nothing (a vacuous trial, not counted)."""
+    sites = []
+    for lineno, line in enumerate(source.split("#[cfg(test)]", 1)[0].splitlines(), 1):
+        code = line.split("//", 1)[0]
+        if code.lstrip().startswith("#"):
+            continue
+        for m in _RUST_NUM.finditer(code):
+            # a piece of a hex constant (`0x0100_0000_01b3`) or a leading zero is no decimal literal (measured 2026-10-30: the
+            # first `--rust` run took `0100` for one and crashed on parsing it)
+            i = m.start(1)
+            while i > 0 and (code[i - 1].isalnum() or code[i - 1] == "_"):
+                i -= 1
+            if m.group(1).startswith("0") or code[i : i + 2].lower() == "0x":
+                continue
+            if 1 < float(m.group(1)) < 10000:
+                sites.append((lineno, m.start(1), m.end(1), m.group(1)))
+    return sites
+
+
 def mutate(source: str, site: tuple[int, int, int | None, str]) -> str:
     lineno, col, end_col, text = site
     lines = source.splitlines(keepends=True)
@@ -218,17 +246,18 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--trials", type=int, default=3)
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--rust", action="store_true", help="mutate the Rust phases' literals (rust/phases/src), not the Python engine's")
     args = ap.parse_args(argv)
 
     paths = gens(args.all)
     print(f"auditing {len(paths)} maps against {args.trials} mutation(s) of {ENGINE}/")
     print("measuring which engine lines these maps execute...")
-    executed = executed_lines(paths)
+    executed = {str(p.relative_to(HERE)): set() for p in sorted(pathlib.Path(HERE, RUST_SRC).glob("*.rs"))} if args.rust else executed_lines(paths)
     sites: list[tuple[str, int, int, int, str]] = []
     originals: dict[str, str] = {}
     for rel in sorted(executed):
         src = pathlib.Path(os.path.join(HERE, rel)).read_text()
-        found = numeric_sites(src, executed[rel])
+        found = rust_sites(src) if args.rust else numeric_sites(src, executed[rel])
         if found:
             originals[rel] = src
             sites += [(rel, *s) for s in found]
@@ -260,7 +289,8 @@ def main(argv: list[str]) -> int:
             where = f"{os.path.relpath(rel, ENGINE)}:{site[0]}"
             path.write_text(mutate(originals[rel], site))
             try:
-                ast.parse(path.read_text())
+                if not rel.endswith(".rs"):  # a Rust mutation that does not compile fails its sweep, and is skipped there
+                    ast.parse(path.read_text())
             except SyntaxError:
                 path.write_text(originals[rel])
                 skipped += 1
