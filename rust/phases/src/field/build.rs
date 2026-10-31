@@ -1,0 +1,380 @@
+//! The comb stage end to end (feature 444 T16): the stage's own knobs rolled, the fields counted under the cap, and each field
+//! built - fan, brook and weir, lattice held to its rules, channels, the water index, the plots drawn apart, beans, the dry hem,
+//! the pocket pond and the grave - with the derivation's counts (D6).
+//!
+//! Research:
+//!     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the fan of paddies, its basins and bunds
+
+use std::collections::HashMap;
+
+use super::beans::bean_runs;
+use super::brook::{brook, file as file_brook, weir, Brook, BrookIn};
+use super::channels::{channels, Channel};
+use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD};
+use super::fan::{fan, Fan, Pt};
+use super::features::{grave, pocket_pond, Grave, Pond};
+use super::index::Index;
+use super::lattice::{basins, Basin, ROW_FT};
+use super::rules::{held, FieldRefused};
+use super::states::{states, State};
+use super::{cap_sq_ft, fields_for, paddy_sq_ft};
+use crate::counts::Counts;
+use crate::pyrand::roll;
+
+/// Square feet in an acre.
+const SQ_FT_PER_ACRE: f64 = 43_560.0;
+
+/// One knob the stage rolls itself (D3): its name, its typing-filtered forms, their weights (empty for an even roll) and the
+/// spec's pin, if any.
+pub type KnobIn = (String, Vec<String>, Vec<f64>, Option<String>);
+
+/// What the stage reads (T16 D1): the seed, the households, the fall, the fan's aspect, where the first field's middle sits, the
+/// brook's flank and figures, the delivery ditches' fractions, the weir's figures by form, the basin's cell, and the knobs.
+#[derive(Debug, Clone)]
+pub struct FieldIn {
+    pub seed: i64,
+    pub households: u32,
+    pub down_deg: f64,
+    pub aspect: f64,
+    pub center: Pt,
+    pub brook_side: f64,
+    pub brook: BrookIn,
+    pub offtakes: (Vec<f64>, Vec<f64>),
+    pub weir: (f64, f64, HashMap<String, f64>),
+    pub cell: f64,
+    pub knobs: Vec<KnobIn>,
+}
+
+/// One field built.
+#[derive(Debug, Clone)]
+pub struct Field {
+    pub fan: Fan,
+    pub brook: Brook,
+    pub weir: Option<([Pt; 4], f64, String)>,
+    pub basins: Vec<Basin>,
+    pub states: Vec<State>,
+    pub channels: Vec<Channel>,
+    pub beans: Vec<Vec<Pt>>,
+    pub dry: Vec<DryPlot>,
+    pub pond: Option<(usize, Pond)>,
+    pub grave: Option<Grave>,
+    pub segments: Vec<(Pt, Pt, f64)>,
+}
+
+/// The stage's output: the knobs as rolled, the fields, the coarse grain's acres (drawn, needed, the room) and the counts.
+#[derive(Debug, Clone)]
+pub struct FieldOut {
+    pub knobs: HashMap<String, String>,
+    pub fields: Vec<Field>,
+    pub grain: (f64, f64, f64),
+    pub counts: HashMap<String, u64>,
+}
+
+/// The stage's knobs: each pinned form taken, else rolled from its table as `Knob.roll` draws it.
+///
+/// Research:
+///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, never chosen
+fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, String> {
+    knobs
+        .iter()
+        .filter(|(_, forms, _, pin)| pin.is_some() || !forms.is_empty())
+        .map(|(name, forms, weights, pin)| {
+            counts.add("candidate@_roll", 1);
+            let v = pin.clone().unwrap_or_else(|| {
+                let n = u32::try_from(forms.len()).unwrap_or(u32::MAX);
+                forms[roll(seed, name, n, weights) as usize].clone()
+            });
+            (name.clone(), v)
+        })
+        .collect()
+}
+
+/// The stage: the knobs, then each field of the settlement's paddy under the cap.
+///
+/// # Errors
+/// `FieldRefused` when a basin or a grave breaks a rule where it is decided (D7).
+pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
+    let mut counts = Counts::default();
+    let knobs = rolled(inp.seed, &inp.knobs, &mut counts);
+    let is = |k: &str, v: &str| knobs.get(k).is_some_and(|x| x == v);
+    let paddy = paddy_sq_ft(inp.households);
+    let n = fields_for(paddy, cap_sq_ft(inp.seed));
+    counts.add("write@area", 2);
+    let mut fields = Vec::new();
+    let need = f64::from(inp.households) * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE;
+    let (mut drawn, mut room, mut drained) = (0.0, 0.0, 0.0);
+    for k in 0..n {
+        let tag = format!("f{k}");
+        let area = paddy / f64::from(n);
+        let first = fan(area, inp.aspect, inp.down_deg, inp.center);
+        // the next field beside the last, across the fall, past its brook's skirt
+        let step = (first.half_head + first.half_foot)
+            + 2.0 * (inp.brook.skirt + inp.brook.wander)
+            + inp.brook.w;
+        #[expect(clippy::cast_precision_loss, reason = "a settlement's few fields")]
+        let off = step * k as f64;
+        let center = (
+            inp.center.0 + first.across.0 * off,
+            inp.center.1 + first.across.1 * off,
+        );
+        let f = fan(area, inp.aspect, inp.down_deg, center);
+        let field = one(inp, &f, &tag, &knobs, &mut counts)?;
+        drained += field
+            .basins
+            .iter()
+            .zip(&field.states)
+            .filter(|(_, s)| **s != State::Wet)
+            .map(|(b, _)| super::geom::signed_area(&b.ring).abs())
+            .sum::<f64>();
+        fields.push(field);
+    }
+    // the coarse grain: a drained winter paddy grows its barley acre for acre; what is left goes to the dry hem of the first field
+    let dry_need = if is("winter_crop", "barley") {
+        (need - drained).max(0.0)
+    } else {
+        need
+    };
+    if let Some(f) = fields.first_mut() {
+        // a wild middle keeps the hem to the toe, climbing up the far flank from the foot only as far as the grain asks; a
+        // cleared one hems the whole canal, the upper edge too
+        let far = -inp.brook_side;
+        let line: Vec<Pt> = if is("fan_middle", "wild") {
+            vec![f.fan.at(f.fan.length, far), f.fan.at(0.0, far)]
+        } else {
+            vec![
+                f.fan.at(f.fan.length, far),
+                f.fan.at(0.0, far),
+                f.fan.at(0.0, -far),
+            ]
+        };
+        let out = (f.fan.across.0 * far, f.fan.across.1 * far);
+        let mut ix = Index::default();
+        for (a, b, _) in &f.segments {
+            ix.file(*a, *b);
+        }
+        let (dry, r) = hem(
+            &line,
+            out,
+            dry_need,
+            &f.fan.ring,
+            &mut ix,
+            inp.brook.skirt,
+            inp.seed,
+            "f0",
+        );
+        counts.add("write@dry_plot", 4 * dry.len() as u64);
+        drawn = dry.len() as f64 * super::dry::PLOT_FT.0 * super::dry::PLOT_FT.1;
+        room = r;
+        f.dry = dry;
+    }
+    Ok(FieldOut {
+        knobs,
+        fields,
+        grain: (
+            drawn / SQ_FT_PER_ACRE,
+            dry_need / SQ_FT_PER_ACRE,
+            room / SQ_FT_PER_ACRE,
+        ),
+        counts: counts.0,
+    })
+}
+
+/// One field on its fan.
+fn one(
+    inp: &FieldIn,
+    f: &Fan,
+    tag: &str,
+    knobs: &HashMap<String, String>,
+    counts: &mut Counts,
+) -> Result<Field, FieldRefused> {
+    let br = brook(f, inp.brook_side, inp.brook, inp.seed);
+    counts.add("write@brook", 2 * br.pts.len() as u64);
+    let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
+        let form = knobs.get("weir_form").cloned().unwrap_or_default();
+        let thick = inp.weir.2.get(&form).copied().unwrap_or(1.5);
+        let (ring, deg) = weir(&br, f, inp.brook_side, inp.weir.0, inp.weir.1, thick);
+        (ring, deg, form)
+    });
+    counts.add("write@intake", 10);
+    let bs = basins(f, inp.seed);
+    // the comb's angles tested once a row, at its two outermost basins, the sharpest (D7)
+    let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
+    for row in 0..rows {
+        let ends = [
+            bs.iter().find(|b| b.row == row),
+            bs.iter().rev().find(|b| b.row == row),
+        ];
+        for b in ends.into_iter().flatten() {
+            held(&b.ring, inp.cell)?;
+        }
+    }
+    counts.add("write@basin", 5 * bs.len() as u64);
+    let chans = channels(
+        f,
+        br.intake,
+        (&inp.offtakes.0, &inp.offtakes.1),
+        ROW_FT,
+        inp.brook_side,
+        inp.seed,
+    );
+    let mut ix = Index::default();
+    let mut segments = Vec::new();
+    let mut widths = Vec::new();
+    for c in &chans {
+        for w in c.pts.windows(2) {
+            ix.file(w[0], w[1]);
+            widths.push(c.w.max(c.w_tail));
+            segments.push((w[0], w[1], c.w.max(c.w_tail)));
+        }
+    }
+    for id in file_brook(&br, &mut ix) {
+        let (a, b) = ix.segs[id];
+        widths.push(inp.brook.w);
+        segments.push((a, b, inp.brook.w));
+    }
+    counts.add("write@ditch", segments.len() as u64);
+    counts.add("write@water_index", ix.touched);
+    let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
+    let st = states(&bs, inp.seed, tag, unsettled);
+    counts.add(
+        "write@drawn_apart",
+        2 * st.iter().filter(|s| **s != State::Green).count() as u64,
+    );
+    let beans = bean_runs(&bs, inp.seed, tag, &mut ix, &widths);
+    counts.add(
+        "write@bean",
+        2 * beans.iter().map(Vec::len).sum::<usize>() as u64,
+    );
+    let pond = pocket_pond(&bs, inp.seed, tag);
+    let form =
+        knobs.get("grave_form").map_or(
+            "island",
+            |v| if v == "corner" { "corner" } else { "island" },
+        );
+    let gr = grave(&bs, inp.seed, tag, form, pond.map(|(i, _)| i), inp.cell)?;
+    counts.add("write@feature", 6);
+    Ok(Field {
+        fan: f.clone(),
+        brook: br,
+        weir,
+        basins: bs,
+        states: st,
+        channels: chans,
+        beans,
+        dry: Vec::new(),
+        pond,
+        grave: gr,
+        segments,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+
+    use super::{build, FieldIn};
+    use crate::field::brook::BrookIn;
+    use crate::field::states::State;
+
+    fn inp(households: u32, seed: i64) -> FieldIn {
+        FieldIn {
+            seed,
+            households,
+            down_deg: 90.0,
+            aspect: 1.0,
+            center: (3200.0, 3200.0),
+            brook_side: 1.0,
+            brook: BrookIn {
+                lead: 105.0,
+                offtake_deg: 35.0,
+                tap_run: 70.0,
+                slew: 22.0,
+                skirt: 34.0,
+                wander: 10.0,
+                station: 35.0,
+                reach: 400.0,
+                w: 7.0,
+            },
+            offtakes: (vec![0.30, 0.62, 0.93], vec![0.55]),
+            weir: (7.0, 30.0, HashMap::from([("fence".to_owned(), 1.5)])),
+            cell: 1488.0,
+            knobs: vec![
+                (
+                    "intake".to_owned(),
+                    vec!["weir".to_owned(), "open".to_owned()],
+                    vec![],
+                    Some("weir".to_owned()),
+                ),
+                (
+                    "weir_form".to_owned(),
+                    vec!["fence".to_owned()],
+                    vec![],
+                    None,
+                ),
+                (
+                    "paddy_rest".to_owned(),
+                    vec!["settled".to_owned(), "unsettled".to_owned()],
+                    vec![0.8, 0.2],
+                    None,
+                ),
+                (
+                    "winter_crop".to_owned(),
+                    vec!["barley".to_owned(), "none".to_owned()],
+                    vec![0.5, 0.5],
+                    Some("none".to_owned()),
+                ),
+                (
+                    "fan_middle".to_owned(),
+                    vec!["wild".to_owned(), "cleared".to_owned()],
+                    vec![0.75, 0.25],
+                    None,
+                ),
+                (
+                    "grave_form".to_owned(),
+                    vec!["island".to_owned(), "corner".to_owned()],
+                    vec![],
+                    None,
+                ),
+                ("unused".to_owned(), vec![], vec![], None),
+            ],
+        }
+    }
+
+    #[test]
+    fn a_hamlet_s_comb_end_to_end() {
+        let out = build(&inp(20, 4)).unwrap();
+        assert_eq!(out.fields.len(), 1);
+        let f = &out.fields[0];
+        assert!(f.basins.len() > 400);
+        assert_eq!(f.states.len(), f.basins.len());
+        assert!(f.states.contains(&State::Wet));
+        assert!(f.weir.is_some(), "the pinned weir");
+        assert!(!f.beans.is_empty() && !f.dry.is_empty());
+        let (drawn, need, room) = out.grain;
+        assert!(drawn >= need && room >= drawn, "{:?}", out.grain);
+        let (dx, dy) = f.fan.down;
+        let toe_first = f
+            .dry
+            .first()
+            .map(|d| (d.poly[0].0 - f.fan.fork.0) * dx + (d.poly[0].1 - f.fan.fork.1) * dy);
+        assert!(
+            toe_first.unwrap() > f.fan.length * 0.66,
+            "a wild hem starts at the toe"
+        );
+        assert_eq!(out.knobs["winter_crop"], "none");
+        assert!(!out.knobs.contains_key("unused"));
+        assert!(!f.segments.is_empty());
+        let past_cap = build(&inp(220, 4)).unwrap();
+        assert!(past_cap.fields.len() >= 3, "several fields past the cap");
+        let mut barley = inp(20, 5);
+        barley.knobs[3].3 = Some("barley".to_owned());
+        let b = build(&barley).unwrap();
+        assert!(
+            b.grain.1 < 1e-9 && b.fields[0].dry.is_empty(),
+            "a drained winter paddy grows the grain"
+        );
+        let mut open = inp(20, 4);
+        open.knobs[0].3 = Some("open".to_owned());
+        assert!(build(&open).unwrap().fields[0].weir.is_none());
+    }
+}
