@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-31T04:36:08Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 425,
+  "result": "failed: test-full",
+  "commit": "5ead33d0a",
+  "first_failure_s": 321.6,
+  "last_failure_s": 325.3,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/tooling/test_measured_surface.py::test_ci_is_hashed_now_and_the_other_two_populations_are_untouched",
+    "tests/tooling/test_lint_scope.py::test_a_root_run_reaches_only_the_trees_the_package_owns"
+  ],
+  "host": {
+    "load": [
+      2.45,
+      6.44
+    ],
+    "mem_avail_mb": [
+      8686,
+      8990
+    ],
+    "cpu_temp_c": [
+      98.0,
+      75.0
+    ],
+    "stall_s": {
+      "cpu": 2.8,
+      "io": 0.8,
+      "io_full": 0.7,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 52978,
+      "package": 22915
+    }
+  },
+  "phases": {
+    "preflight": 18.0,
+    "static": 23.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 52.0,
+    "counters-inert": 14.0,
+    "pytest": 327.0,
+    "test-full": 334.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/Cargo.toml",
+  "selected": 10357,
+  "collected": 10357
+}
