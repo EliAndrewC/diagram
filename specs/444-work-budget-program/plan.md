@@ -215,6 +215,26 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
   against 23,988 and 42,070 (exponent 0.79) and `field.polder`'s 4,651 and 6,584 (exponent 0.50), MODE AUDIT, the claims round
   (FR-021), the settlement-reviews of the moved pool hamlets - one landing.
 
+### T16 Approach (2026-10-31T23:40Z)
+
+Restated after D12 and the build (the Decisions re-decided at 19:37Z): the goal, constraints and exits of the first Approach stand.
+What the build changed, each recorded at its point of change and in `phases/field.md`:
+
+1. **The fork.** The division point is the brook-side head corner, not the head's middle, so the brook keeps its skirt with a head
+   race of `head_lead` (0068's "along the upper edge" and "along the far edge"); canal A runs along the upper edge and down the far
+   flank, canal B down the brook's flank.
+2. **The comb drawn organic.** Waved flanks and bowed row lines (`fan.rs` `WAVES`, `lattice.rs` `BOW`, GUESS figures for the
+   settlement-review), the dry hem on the canal's offset curves, the brook from off the canvas to off it, meandering, off the
+   screen's axes - each held to the brook rules the sink asks (`brook_violations`, measured 119 of 120 seeds clean; seed 37 at 15
+   households owed).
+3. **The polder's seam.** The Rust places the block, its lattice, parcels, ring canal, ditches, sluices and wild pond; the thin
+   stage hands them to the free helpers the old stage called (`perimeter_dike`, `marsh`, `resting_plots`, `outfall_run`,
+   `apply_land_use`), traced at runtime, not read.
+4. **The deletion.** By name, `make dead-closure` against the clone's base; two pure moves on the round arbiter's rulings
+   (ask:444-T16-move-drawing, ask:444-T16-brook-predicates); the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
+5. **The exits, unchanged.** `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
+   (FR-021), MODE AUDIT, the occasions' reviews, one landing.
+
 ### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.
