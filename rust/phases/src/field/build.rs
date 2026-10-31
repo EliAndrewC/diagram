@@ -146,15 +146,20 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     let (drawn, room) = {
         let f = &mut fields[0];
         let far = -inp.brook_side;
-        let line: Vec<Pt> = if is("fan_middle", "wild") {
-            vec![f.fan.at(f.fan.length, far), f.fan.at(0.0, far)]
-        } else {
-            vec![
-                f.fan.at(f.fan.length, far),
-                f.fan.at(0.0, far),
-                f.fan.at(0.0, -far),
-            ]
-        };
+        // the flank's drawn course from the foot up, every edge step; a cleared middle carries on across the head
+        let steps = 24_u32;
+        let mut line: Vec<Pt> = (0..=steps)
+            .map(|k| {
+                f.fan
+                    .at(f.fan.length * (1.0 - f64::from(k) / f64::from(steps)), far)
+            })
+            .collect();
+        if !is("fan_middle", "wild") {
+            line.extend((1..=steps).map(|k| {
+                f.fan
+                    .at(0.0, far - 2.0 * far * f64::from(k) / f64::from(steps))
+            }));
+        }
         let out = (f.fan.across.0 * far, f.fan.across.1 * far);
         let mut ix = Index::default();
         for (a, b, _) in &f.segments {

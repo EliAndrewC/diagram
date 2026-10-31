@@ -1,0 +1,235 @@
+"""STAGE 2 - the field, its comb in Rust (feature 444 T16 D1): a thin Python function that gathers the plan's fields, rolls the
+stage's own knobs through Rust from their tables (D3), calls `l7r_phases.stage_field`, and writes what it returns - the
+manifest's keys with their record shapes (`specs/444-work-budget-program/phases/field.keys.json`), the plan's `acres`,
+`envelope`, `net` and `brook`, and the engine's no-build registries (`phases/field.state.json`) - then draws it
+(`settlement/fields/ink.py`, D12). The polder forms take the old Python until their port (D11: the comb first).
+
+Research:
+    the field's seam - NONE: the stage's plumbing; each rule's claim is at the Rust that decides it (`rust/phases/src/field/`)
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+from l7r.diagram.settlement._knobs import KNOBS
+from l7r.diagram.settlement.fields import ink
+from l7r.diagram.waterfields.palette import _RICE_GREEN, FLOODED, RIPE_GOLD
+
+from .consts import POLDER_ARCHETYPES, SQ_FT_PER_ACRE
+from .consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, BROOK_WANDER_STEP, OFFTAKE_DEG, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT
+from .phases_ext import phases
+
+if TYPE_CHECKING:
+    from l7r.diagram.settlement import Settlement
+
+    from .plan import SitePlan
+
+BROOK_W = 7.0
+"""Research: the feed brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor"""
+BROOK_STATION = 35.0
+"""Research: the brook's station spacing - CONVENTION: one station every 35 ft, enough that a bend led in over two reads round"""
+BROOK_REACH = 1200.0
+"""Research: how far the brook runs past the fan - CONVENTION: past the sheet's crop on every side the stages reach"""
+DITCH_BANK_FT = 4.0
+"""Research: a field ditch's no-build bank - GUESS: the record gives a ditch's width, not the ground kept off it; 4 ft past its
+half-width, as a farm's own channel keeps (`homesteads/farm_water.py`)"""
+CELL_SHARE = 31.0
+"""Research: a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft"""
+ROW_FT = {"small_irregular": 34.0, "large_block": 70.0}
+"""Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 48 ft, the plan's small (34) and large block (70) departures - the cell's row; Rust maps the same (`lattice::row_ft_for`)"""
+STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form")
+"""Research: the stage's own knobs, in the order each typing rule reads the last - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the nearness of a town sets the winter crop's odds"""
+FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": FLOODED, "gold": RIPE_GOLD, "rest": _RICE_GREEN}
+"""Research: the plots' paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green; research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in sixteen flooded, one in twenty gold"""
+
+
+def _knob_tables(s: Settlement, plan: SitePlan) -> list[tuple[str, list[str], list[float], str | None]]:
+    """Each of the stage's knobs drawn in Rust from its table against the running context (`roll_knob`), recorded on the
+    settlement as `resolve` records it, and handed to the stage as a pin so the stage reads the value drawn."""
+    ext = phases()
+    out = []
+    for name in STAGE_KNOBS:
+        knob = KNOBS.get(name)
+        if knob is None:
+            continue
+        pin = s.knob_pins.get(name, plan.spec.pins.get(name))
+        if pin is None:
+            ctx = s.knob_context()
+            forms = knob.allowed(ctx)
+            weights = knob.weights_for(ctx)
+            w = [weights.get(v, 0.0) for v in forms] if weights is not None else []
+            pin = forms[ext.roll_knob(s.seed, name, len(forms), w)]
+        s._resolved_knobs[name] = pin
+        out.append((name, [str(pin)], [], str(pin)))
+    out.append(("intake", [plan.intake], [], plan.intake))
+    return out
+
+
+def _bbox(pts: list[tuple[float, float]]) -> list[float]:
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return [round(min(xs), 1), round(min(ys), 1), round(max(xs), 1), round(max(ys), 1)]
+
+
+def _center(ring: list[tuple[float, float]]) -> tuple[float, float]:
+    return (sum(p[0] for p in ring) / len(ring), sum(p[1] for p in ring) / len(ring))
+
+
+def stage_field(s: Settlement, plan: SitePlan) -> None:
+    """The field: a comb through Rust, a polder through the old Python until its port.
+
+    Research:
+        the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the fan of paddies, its basins and bunds"""
+    if plan.field_archetype in POLDER_ARCHETYPES:
+        from .water import stage_field as polder_stage  # the polder's port is T16's next increment (D11)
+
+        polder_stage(s, plan)
+        return
+    ftpx = plan.ftpx
+    knobs = _knob_tables(s, plan)
+    brook = (plan.head_lead * ftpx, OFFTAKE_DEG, BROOK_TAP_RUN, BROOK_SLEW, BROOK_SKIRT, BROOK_WANDER, BROOK_STATION, BROOK_REACH, BROOK_W)
+    _ = BROOK_WANDER_STEP  # the plan's walk step: the Rust walk steps a slew a station (brook.rs)
+    row = ROW_FT.get(plan.plot_size, 48.0)
+    out = phases().stage_field(
+        plan.spec.seed,
+        plan.spec.households,
+        float(plan.down_deg),
+        float(plan.fan_aspect),
+        (plan.W * ftpx / 2.0, plan.H * ftpx / 2.0),
+        float(plan.brook_side),
+        brook,
+        (list(plan.offtakes_a), list(plan.offtakes_b)),
+        (WEIR_HALF_FT, WEIR_SKEW_DEG, dict(WEIR_THICK_FT)),
+        plan.plot_size,
+        row * CELL_SHARE,
+        knobs,
+    )
+    for k, n in out["counts"].items():
+        if __debug__:
+            from l7r.diagram import work_counts
+
+            work_counts.OPS[k] += n
+    rolled = out["knobs"]
+    drawn, need, room = out["grain"]
+    s.meta(
+        field_archetype=plan.field_archetype,
+        winter_crop=rolled.get("winter_crop"),
+        town_nearness=rolled.get("town_nearness"),
+        fan_middle=rolled.get("fan_middle"),
+        paddy_rest=rolled.get("paddy_rest"),
+        plot_regularity=rolled.get("plot_regularity"),
+        weir_form=rolled.get("weir_form") if plan.intake == "weir" else None,
+        grave_form=None,
+        dry_furrows_vary=True,
+        water_source="head_center",
+        water_source_position="head_center",
+        plot_size=plan.plot_size,
+        grain_drift=plan.grain_drift,
+        coarse_grain_dry_acres=round(drawn, 2),
+        coarse_grain_dry_need_acres=round(need, 2),
+        coarse_grain_room_acres=round(room, 2),
+    )
+    acres = 0.0
+    for k, f in enumerate(out["fields"]):
+        acres += _write_field(s, plan, f, f"{plan.spec.name.lower()}-paddies" + (f"-{k + 1}" if k else ""), rolled)
+    plan.acres = acres
+
+
+def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, rolled: dict[str, str]) -> float:
+    """One field's records, registries and ink; returns its paddy acres."""
+    M = s.M
+    cell = ROW_FT.get(plan.plot_size, 48.0) * CELL_SHARE
+    graves = f["grave"]
+    host = graves[2] if graves else None
+    plots: list[dict[str, Any]] = []
+    for i, p in enumerate(f["plots"]):
+        rings = graves[3] if i == host else [p["ring"]]
+        for ring in rings:
+            plots.append({"poly": ring, "fill": FILL[p["state"]], "low": p["state"] == "wet", "rest": p["state"] == "rest", "state": p["state"], "drain_side": p["drain_side"]})
+    rings = [p["poly"] for p in plots]
+    plot_recs = []
+    for p in plots:
+        b = _bbox(p["poly"])
+        c = _center(p["poly"])
+        plot_recs.append([round(b[2] - b[0], 1), round(b[3] - b[1], 1), round(c[0], 1), round(c[1], 1), len(p["poly"]), 0])
+    beans = [pt for run in f["beans"] for pt in run]
+    hem = [p["drain_side"] for p in plots if p["drain_side"]]
+    chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
+    dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
+    ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
+    grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1]}] if graves else []
+    if graves:
+        s.meta(grave_form=graves[1])
+    outline = f["ring"]
+    M["fields"].append(
+        {
+            "name": name,
+            "kind": "paddy",
+            "outline": outline,
+            "bbox": _bbox(outline + [f["fork"]]),
+            "vis_bbox": _bbox(outline + [pt for c in chans for pt in c["pts"]]),
+            "plots": plot_recs,
+            "drain_hem": hem,
+            "plot_rings": rings,
+            "bund_beans": beans,
+            "cell": cell,
+            "down_deg": plan.down_deg,
+            "fork": f["fork"],
+        }
+    )
+    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans[1:])
+    M.setdefault("channels", []).append({"poly": chans[0]["pts"], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": name}, "w": chans[0]["w"], "field": name})
+    if f["weir"]:
+        ring, deg, form = f["weir"]
+        M.setdefault("weirs", []).append({"x": f["intake"][0], "y": f["intake"][1], "len": 2 * WEIR_HALF_FT, "w": WEIR_THICK_FT.get(form, 1.5), "deg": round(deg, 1), "form": form, "poly": ring})
+    M.setdefault("dry_plots", []).extend({k: d[k] for k in ("poly", "crop", "theta", "tract")} for d in dry)
+    M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
+    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["fill"] == FLOODED)
+    if ponds:
+        M.setdefault("field_ponds", []).extend(ponds)
+    if grave_recs:
+        M.setdefault("field_graves", []).extend({"x": g["x"], "y": g["y"]} for g in grave_recs)
+    net: dict[str, Any] = {
+        "down_deg": plan.down_deg,
+        "fork": f["fork"],
+        "cell": cell,
+        "supply_banks": True,
+        "channels": chans,
+        "plots": plots,
+        "threads": [],
+        "drain": next((c["pts"] for c in chans if c["role"] == "drain"), []),
+        "brook": [],
+        "envelope": outline,
+        "dry_plots": dry,
+        "dry_acres": sum(_area(d["poly"]) for d in dry) / SQ_FT_PER_ACRE,
+        "dry_reserve": [],
+        "bund_bean_runs": f["beans"],
+        "bund_beans": beans,
+        "furrows_vary": True,
+        "fan_middle": rolled.get("fan_middle"),
+        "grave_discs": [(g["x"], g["y"], 6.5) for g in grave_recs],
+        "bead_ponds": [(p["x"], p["y"], p["rx"], p["ry"]) for p in ponds],
+        "grave_records": grave_recs,
+        "pocket_ponds": ponds,
+    }
+    acres = sum(_area(r) for r in rings if r) / SQ_FT_PER_ACRE
+    net["acres"] = acres
+    plan.net = net
+    plan.envelope = outline
+    plan.brook = f["brook"]
+    # the no-build registries the stages after read (`phases/field.state.json`)
+    s.field_polys.append(outline)
+    for d in dry:
+        s.dry_polys.append(d["poly"])
+        s.block_polys.append(d["poly"])
+    for c in chans:
+        s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
+    s.stream(f["brook"], frm={"kind": "offmap"}, to={"kind": "offmap"}, width=BROOK_W)
+    if f["weir"]:
+        ink.weir(s, M["weirs"][-1])
+    ink.draw(s, net, name, plan.field_archetype)
+    return acres
+
+
+def _area(ring: list[tuple[float, float]]) -> float:
+    return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(ring, ring[1:] + ring[:1], strict=True))) / 2.0

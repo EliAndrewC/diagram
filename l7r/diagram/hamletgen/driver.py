@@ -31,6 +31,7 @@ from l7r.diagram.sitegen.jobs import default_jobs as default_jobs  # noqa: PLC04
 
 from .burial import stage_burial
 from .consts import DIKE_CROPS, FIELD_ARCHETYPES, LEFTOVER_FORMS, REF_HOUSEHOLDS
+from .field_stage import stage_field
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
@@ -41,7 +42,7 @@ from .pondbank import stage_pond_bank
 from .pondstock import stage_pond_stock
 from .sink import stage_sink
 from .washing import stage_washing
-from .water import stage_field, stage_water_frame, stage_waterward
+from .water import stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
 from .ways.last_resort import WebRefused
 

@@ -75,7 +75,6 @@ pub struct DryPlot {
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 #[expect(
     clippy::too_many_arguments,
-    clippy::many_single_char_names,
     reason = "the hem's line, side, need, field, water, clearance, seed and tag"
 )]
 #[must_use]
@@ -104,19 +103,7 @@ pub fn hem(
     if segs.is_empty() {
         return (Vec::new(), 0.0);
     }
-    // the point `d` feet along the line, and the line's heading there (past the end, the last segment's end)
-    let along_at = |d: f64| -> (Pt, Pt) {
-        let mut left = d;
-        let mut k = 0;
-        while k + 1 < segs.len() && left > dist(segs[k].0, segs[k].1) {
-            left -= dist(segs[k].0, segs[k].1);
-            k += 1;
-        }
-        let (a, b) = segs[k];
-        let u = unit(a, b);
-        let t = left.min(dist(a, b));
-        ((a.0 + u.0 * t, a.1 + u.1 * t), u)
-    };
+    let along_at = |d: f64| along(&segs, d);
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
     let mut last_turn: Option<f64> = None;
     let mut tract = 0;
@@ -144,19 +131,31 @@ pub fn hem(
                     break;
                 }
                 let ((p0, u), (p1, _)) = (along_at(d0), along_at(d0 + PLOT_FT.0));
+                // square to the canal where it runs: its own normal, turned to the upslope side
+                let n = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
+                    (-u.1, u.0)
+                } else {
+                    (u.1, -u.0)
+                };
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + f64::from(j) * PLOT_FT.1,
                         depth + f64::from(j + 1) * PLOT_FT.1,
                     );
                     let poly = vec![
-                        (p0.0 + out.0 * o0, p0.1 + out.1 * o0),
-                        (p1.0 + out.0 * o0, p1.1 + out.1 * o0),
-                        (p1.0 + out.0 * o1, p1.1 + out.1 * o1),
-                        (p0.0 + out.0 * o1, p0.1 + out.1 * o1),
+                        (p0.0 + n.0 * o0, p0.1 + n.1 * o0),
+                        (p1.0 + n.0 * o0, p1.1 + n.1 * o0),
+                        (p1.0 + n.0 * o1, p1.1 + n.1 * o1),
+                        (p0.0 + n.0 * o1, p0.1 + n.1 * o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
-                    if got >= need || poly.iter().any(|p| inside(*p, field) || wet(*p, ix, clear)) {
+                    // a plot onto the rice is dropped: its middle or its outer corners in the field (its inner edge may lie on the canal's bank)
+                    let middle = (
+                        f64::midpoint(poly[0].0, poly[2].0),
+                        f64::midpoint(poly[0].1, poly[2].1),
+                    );
+                    let onto = [middle, poly[2], poly[3]].iter().any(|p| inside(*p, field));
+                    if got >= need || onto || poly.iter().any(|p| wet(*p, ix, clear)) {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -185,6 +184,24 @@ pub fn hem(
         }
     }
     (plots, room)
+}
+
+/// The point `d` feet along the segments, and their heading there (past the end, the last segment's end).
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn along(segs: &[(Pt, Pt)], d: f64) -> (Pt, Pt) {
+    let mut left = d;
+    let mut k = 0;
+    while k + 1 < segs.len() && left > dist(segs[k].0, segs[k].1) {
+        left -= dist(segs[k].0, segs[k].1);
+        k += 1;
+    }
+    let (a, b) = segs[k];
+    let u = unit(a, b);
+    let t = left.min(dist(a, b));
+    ((a.0 + u.0 * t, a.1 + u.1 * t), u)
 }
 
 /// Whether `p` lies within `clear` feet of the water filed in `ix`.
@@ -258,6 +275,18 @@ mod tests {
             "f0",
         );
         assert!(dot.is_empty());
+        // the other side of the canal: the normal turned to it
+        let (east, _) = hem(
+            &line,
+            (1.0, 0.0),
+            need,
+            &[],
+            &mut Index::default(),
+            4.0,
+            4,
+            "f0",
+        );
+        assert!(east.iter().all(|p| p.poly.iter().all(|c| c.0 >= -1e-9)));
         assert!(short.is_empty());
     }
 }
