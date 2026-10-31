@@ -386,6 +386,14 @@ def counted_files(root: Path, counts: list[dict]) -> list[Path]:
         text = p.read_text(encoding="utf-8")
         if any(re.search(rf"^\s*def {re.escape(n)}\(", text, re.M) for n in names):
             found.append(p)
+    # ...AND IN THE RUST PHASES (feature 444 T19): a counter a Rust function keeps names it as a Python one does, and its `.rs`
+    # file rides in the bundle beside the Python
+    for p in sorted((root / RUST).rglob("*.rs")) if (root / RUST).is_dir() else []:
+        if "target" in p.parts:
+            continue
+        text = p.read_text(encoding="utf-8")
+        if any(re.search(rf"^\s*(?:pub(?:\(crate\))?\s+)?fn {re.escape(n)}\b", text, re.M) for n in names):
+            found.append(p)
     return found
 
 
