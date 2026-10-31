@@ -157,6 +157,13 @@ standards" (`request.md`).
   left them - frozen as a fixture. Every gate run rolls the seed and replays the fixture into its stage; the entry leaves the list
   only when BOTH pass, so a failure cannot leave the list only because a change upstream turned its seed into another map. The list and its fixtures are the Rust stages' alone; Python stages never add to it.
 
+- **FR-021**: A Rust stage lands with no open claim (amendment 6, the GM 2026-10-31: "we should require that every Rust stage end
+  its initial implementation with zero open claims"). A phase task's landing is refused while any research claim in a file its
+  delta changes - its Rust under `rust/` and the Python under `l7r/` it edits - is owed a check or stands open in
+  `make claims-report` (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, or an UNCLAIMED decision). The claims switch's `report`
+  (feature 445) stands for every other landing. water_frame, the Rust stage landed before this rule, is held to it by a task of its
+  own: its open findings closed.
+
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
@@ -193,6 +200,10 @@ standards" (`request.md`).
 - **SC-013** (FR-020): a test finds a failing seed added to the list with its stage and frozen input, rolled and replayed by the
   next run, kept while its seed passes and its fixture still fails, and removed only when its seed and its frozen input both pass;
   and the gate's seeds hold no fixed block.
+
+- **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding in a file its delta changes, and
+  not refused once the finding is closed; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in the
+  Python water_frame's port changed.
 
 ## Edge Cases
 
@@ -248,3 +259,6 @@ standards" (`request.md`).
   seed and its frozen input both passing) and SC-013 with it; the phase checklist's acceptance box read by the gate; the moved-maps
   edge case.
 - 2026-10-31, amendment 5's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.
+
+- 2026-10-31, amendment 6 (the GM on open claims, `request.md`): FR-021 - a phase task's landing refused while a claim in a file its
+  delta changes is owed or open; water_frame's open findings closed by a task; SC-014 tests it.
