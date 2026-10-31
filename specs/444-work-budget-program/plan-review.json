@@ -43,66 +43,6 @@
    "reviewed": "2026-10-29",
    "declared": "spec-fidelity"
   },
-  "### T02 - the water family's budgets (D1, D3, D4)": {
-   "sha256": "2894fa1b17d4da7cc08668cc9e0b88126b74adf9d7488231ac020146a9399207",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T02 Approach (checklist part A)": {
-   "sha256": "51c1a9d9b986ccf34856af2df708df78cc3f847a99b56162ebded405623485bb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T03 - the homesteads family's budgets (D1, D3, D4)": {
-   "sha256": "2aa59062b94838f5c485c71ae81283541ea46a5875fd8b9328267eee410a64cd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T03 Approach (checklist part A)": {
-   "sha256": "68fbe68556e49ee86d5ccabd9ea911ad895d5f48704daf141100f2d36c02c535",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T04 - the ways family's budgets (D1, D3, D4)": {
-   "sha256": "e925c6505fcb81adc057ccdd2d8c8e0dc9c5c226f482b1e9c965405d620f77e6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T04 Approach (checklist part A)": {
-   "sha256": "34e8fb4d2ea92e43cdb2c616c40fad0d699686afa316d472745df81ef4566607",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T05 - the hinterland and frame family's budgets (D1, D3, D4)": {
-   "sha256": "0cdf30aa16f24d8a5c805e435a14a3a90c1d03ea09d9d6ce63caf30783f2b8fb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T05 Approach (checklist part A)": {
-   "sha256": "fddb52e5f221d4ffd07534067487fff39cd3299eac02956e5f1577012e992e9e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T06 - the program's target to the GM (D5)": {
-   "sha256": "a2b6b1390900884b665b24d543e127eab66a4ebb668c2350af1265ddc534c551",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T06 Approach (checklist part A)": {
-   "sha256": "e2b656d46060497070fca1a56e44735feaf6e4af7fb78e40eeed85732c7af82a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
   "## Project Structure": {
    "sha256": "6c68ec01b9e999a408481757ce13a4ba8a8fdb745713f0f45adff9825463cda1",
    "verdict": "CLEAR",
@@ -110,145 +50,25 @@
    "declared": "round-arbiter"
   },
   "## Complexity Tracking": {
-   "sha256": "4e0d718ded310667080e5928ed1d5dfae001108a490216b8aa2d9716c7ae39f1",
+   "sha256": "df563a8b2ec6a7a01f3b3d077dca0fcfb6d99f93aae2ffb9659ec83cb00deee1",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
+   "reviewed": "2026-10-31",
    "declared": "round-arbiter"
   },
-  "### T07 - a derivation's arithmetic and its index cells checked before any dispatch (the GM 2026-10-28)": {
-   "sha256": "721be817d006ab7dbbe2b8d8978efde5cb4ce71ba426103788faeeb300a02a5a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T07 Approach (checklist part A)": {
-   "sha256": "b0ea1a963e2ebc0bdafc0d387fcdbc69e89896952e52643f0d3928a59cb8c297",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T08 - an arbiter accept pins a first budget (FR-013, SC-008)": {
-   "sha256": "879bc79eb52ec3611a4868eb479a13685d85137a19096801580dd6fe2e28c4f5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T08 Approach (checklist part A)": {
-   "sha256": "c935fbfd76be982873244b73be8eb3c99196ba75ef19f48c78944905e75d6c8e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T09 - the budgets re-scored to the typical case (FR-014)": {
-   "sha256": "4172efccf3f275a95eef600f7394a100b83c81dbcae70f37749114bfe4ec0513",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T09 Approach (checklist part A)": {
-   "sha256": "c26dbf96423f32fc57633789283d138e2ed296e696f58ded89a9385695ae222b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-28",
-   "declared": "spec-fidelity"
-  },
-  "### T10 - today's code's names refused by the budget bundle (FR-015, SC-010)": {
-   "sha256": "53a04195c622de64f2c3c8eba376df80b59768c7a58cb22afad8f5ee7d20ecb8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T10 Approach (checklist part A)": {
-   "sha256": "65ad7a202673a9d9b0255c71627cc01e45b3052ae33a332f615ed6bf9fe32755",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T11 - the water family greenfield - water_frame, field, sink, waterward, pond_stock, pond_bank (FR-015, FR-016)": {
-   "sha256": "2dba64a6e0d724f96588a86f07517ba8729a530a2edf7723338f21fc7cf4d9d7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T11 Approach (checklist part A)": {
-   "sha256": "053b7a612171a293466bcc4d14e851fb4d094b620e3fec2f6241feb024950d6d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T12 - the homesteads family greenfield - seat, homesteads, appurtenances, burial, lane_wells, sties, washing (FR-015, FR-016)": {
-   "sha256": "10df047c6670dcacaa5dbb3b16c1b6441504e525cba32eb4bf871a4fbcbd450b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T12 Approach (checklist part A)": {
-   "sha256": "4313aecfd7fc6b79f95b790cc9c001036a2d55b2acbd7615211807b4cc27ef30",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T13 - the ways family greenfield - track, web, crossings (FR-015, FR-016)": {
-   "sha256": "4277df1046fee517784a9c5739d2cfc3215dcb6864a85a44fea9e3fe15855b70",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T13 Approach (checklist part A)": {
-   "sha256": "543f2e8745b1f346fa04ff07c9ee6212d7215e71ab55d0bfbbf9276a88634413",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T14 - the hinterland and frame family greenfield - hinterland, woodland, windbreak, bamboo, frame, notice, labels (FR-015, FR-016)": {
-   "sha256": "90047902dda855d39be458d2bbaa038211e3747f198ea263fd20e7b6ffdf9c25",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T14 Approach (checklist part A)": {
-   "sha256": "964e704b567d60f42732a282625b9cac9d5caea5252e695503b7161183d32257",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T15 - phase: water_frame, through the checklist (FR-003, FR-004, FR-005; step 4)": {
-   "sha256": "9b1fa270ee9381dbe3e84a2b0a4b121b5622b00a6c45aceff4d7afb4302ba5c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
-  "### T15 Approach (checklist part A)": {
-   "sha256": "126ae363137d9699e100fa0c981fe54a0f52b8653d4cdfa85d0e0e5649ec335f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
-  },
   "### T16 Approach (checklist part A)": {
-   "sha256": "36c742cbeda19e0959ba3d38b9fa73f4dc15db655f5e9ed82c003c170069ec06",
+   "sha256": "51d25f117a3a67f5b5bab0febf0bd1072ef09816f090364092006cc383fee2a7",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-31",
+   "declared": "round-arbiter"
   },
   "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "d8ed4e8a8d03447310b5cf0fe9c3df273ea0352a1083cc6d7afa904a6afa66d9",
+   "sha256": "fa0157e9c6af167e04cd6731f0c9658602940a0b8806d8b6a04782d405399565",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-29",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-10-31",
+   "declared": "round-arbiter"
   },
   "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)": {
    "sha256": "87abdb3e00c0edf431bced6cfba53f4ea8aeda0681f58ba5830036ccd028547b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
-   "declared": "spec-fidelity"
-  },
-  "### T17 - FR-011's Rust tooling proven on a Rust fixture (amendment 4; before the first Rust phase lands)": {
-   "sha256": "cac4ca326c169a6cdbd796d09b65476f053e6d046fc91d4a39aff06e36a917bd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
-   "declared": "spec-fidelity"
-  },
-  "### T17 Approach (checklist part A)": {
-   "sha256": "94dda5eea565b1e5ec5970ddd6b55e67315ad534af364669323d1258e5383ca4",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
@@ -260,88 +80,28 @@
    "declared": "spec-fidelity"
   },
   "### T18 Approach (checklist part A)": {
-   "sha256": "44cfebf61d897632ff430c23b19dcd32381bed0e20c96da8bf402dd23579b056",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
-   "declared": "spec-fidelity"
-  },
-  "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)": {
-   "sha256": "d380b1b1784b5d8bc26b9593c9d0ebef616ae830206c114b32aa5bf4fdbd5b18",
+   "sha256": "e69be6a58b566ad02fa37a1120cb19f6639c43712421427f4f90055f9bc46404",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "e189ba2d6a045fd7d38adc7ae734ac1caf121b2869919cb59dac416951517fdd",
+  "### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: \"Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.\")": {
+   "sha256": "68595cc20e15a90da26f86ff7c1d81add37c77cd772f5befde41c9bfe58c5fd7",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T19 Decisions": {
-   "sha256": "3822703a2dc0e66bcd2c8d935e48fe6b665c7e9e3025bfb3c824c522b6d4d351",
+  "### T21 Approach (2026-10-31T13:52Z)": {
+   "sha256": "271c06104bdae7065ade7aadfb4ee56f33f092d4329029026bd2e62a5f1c1a11",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T19 part B (2026-10-31T02:51Z)": {
-   "sha256": "cabe7c65d0d384383379d50669789001aa54bc036af7f133d9220adb127c9d86",
+  "### T21 Decisions": {
+   "sha256": "aabe75dc9f3f3327e0f6a67f373ae17dbccd3ca1415e7e7cfb7b0558c3d1587c",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-31T03:05Z)": {
-   "sha256": "81ccc4a606e9d9deb0dbd2b69ab01a272b905d9265df7c582df3d77528a27cdb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-31T03:10Z)": {
-   "sha256": "f035c9b937e89744476a1482c487019ef121c5de257a28c63951fca7d95a5185",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-31T03:14Z)": {
-   "sha256": "a68501cf73c66bed76e177bfbbe95bf08d0782fa2fa84f2f057a528b96129693",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-31T03:22Z)": {
-   "sha256": "e66ff5215822f5c678f116da04d0007082e8dcc46e6fe26c1958aed380a7f057",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 Approach (2026-10-31T04:00:49Z)": {
-   "sha256": "aa981b6e40b72a20206f08c84204fbf2538c33522c3d138380bc88be9fb419fc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T19 part B (2026-10-31T04:09Z)": {
-   "sha256": "d55b3be8fca9bb6b00aa4f9affef55f52b58ff2220656662b778bb93735fb7f1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: \"Please fix the tooling gaps by implementing T20.\")": {
-   "sha256": "c55d1cf4eadac4c6ae15cd415724c3b520ac9cd75f507e5c7519db11d2edb003",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T20 Approach (2026-10-31T11:08:39Z)": {
-   "sha256": "3f78edfdfe95bf21197e6db695ce83bca880a2729c06c41419e835ebf71d9d35",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T20 Decisions": {
-   "sha256": "7b13ba73cd1a8248def405d29e95949c8f1687928ef7b72acd99467d2915da9c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -2449,6 +2209,27 @@
      "summary": "a recorded block no longer in plan.md is not owed as (removed) where a live block has the same heading once a closing parenthetical is dropped and the same text below its heading line; a changed body is owed as before",
      "class": "within",
      "why": "A named T20 gap, and it narrows neither the GM's request nor spec 444. It relaxes a feature 375 plan-gate obligation only where the text below the heading is identical, so no decision can vanish or change under it and FR-043 (a changed decision is reviewed) holds: a changed body is owed as before. The dropped parenthetical can carry a stamp or the GM's approval quote (this section's own heading does); that is acceptable for a decision review because an approval line is not a decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T16 Approach (checklist part A)",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T18 Approach (checklist part A)",
+    "### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: \"Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.\")",
+    "### T21 Approach (2026-10-31T13:52Z)",
+    "### T21 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:444-T21-plan-accept",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
