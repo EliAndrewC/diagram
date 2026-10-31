@@ -11,12 +11,11 @@ needs no import and the partition can be re-cut later without touching core.py.
 Research: package composition - NONE: the field mixins composed
 """
 
-from .comb import CombMixin
-from .comb_record import CombRecordMixin
+from .drawing import FieldDrawingMixin
 from .features import FieldFeaturesMixin
 from .landuse import LandUseMixin
 from .paddy import PaddyMixin
 
 
-class FieldsMixin(PaddyMixin, CombMixin, CombRecordMixin, LandUseMixin, FieldFeaturesMixin):
+class FieldsMixin(PaddyMixin, FieldDrawingMixin, LandUseMixin, FieldFeaturesMixin):
     """The composed field surface. No members of its own by design - see the module docstring."""

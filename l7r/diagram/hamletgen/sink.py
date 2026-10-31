@@ -13,8 +13,8 @@ from typing import Any
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_closest
-from l7r.diagram.settlement.fields.comb import DOWNHILL_FRACTION as DOWNHILL_FRACTION
-from l7r.diagram.settlement.fields.comb import runs_downhill  # the channel rule, one predicate for every channel writer (water:W10)
+from l7r.diagram.settlement.fields.outfall import DOWNHILL_FRACTION as DOWNHILL_FRACTION
+from l7r.diagram.settlement.fields.outfall import runs_downhill  # the channel rule, one predicate for every channel writer (water:W10)
 from l7r.diagram.settlement.land.dikes import breaches_any_dike
 from l7r.diagram.settlement.land.wet import pond_fringe_ring
 from l7r.diagram.settlement.water_ways.water import DRAIN_HUE, DRAINAGE_DITCH

@@ -11,9 +11,8 @@ import pytest
 
 from l7r.diagram.pipeline import rollcache
 from l7r.diagram.settlement import Settlement, _centroid
-from l7r.diagram.waterfields import hem_on_paddy
 from tests._scope import full_or
-from tests.settlement._builders import _inwall_settlement, _village
+from tests.settlement._builders import _village
 
 
 def _comb(*args, **kw):
@@ -114,54 +113,6 @@ def test_water_field_skips_a_lateral_column_too_short_for_a_ditch():
     s.water_field((150, 150, 400, 320), "P", "f", (150, 150), (400, 320), amp=10, plot=100)
     assert any(fd["name"] == "f" for fd in s.M["fields"])
     assert any(d["role"] == "main" for d in s.M["field_ditches"])  # the main/drain still run
-
-
-def test_bund_junctions_pile_earth_only_where_bunds_actually_cross():
-    # GM 2026-07-25: on a SHARED-BARRIER field the bund is the line, so the hand-piled-earth rule is
-    # additive - material goes into the crossings, which rounds the basin corners without touching a
-    # carve that has to tessellate. A junction is found from the drawn geometry (>=3 coincident plot
-    # corners), which makes the pass self-selecting: separate, inset parcels share no corner, so the
-    # polder archetype - which expresses the same rule subtractively - gets nothing drawn on it.
-    s = Settlement(400, 400)
-    s.meta(name="j", scale="hamlet", ftpx=1)
-    grid_plots = [
-        {"poly": [(100.0 + 40 * c, 100.0 + 40 * r), (140.0 + 40 * c, 100.0 + 40 * r), (140.0 + 40 * c, 140.0 + 40 * r), (100.0 + 40 * c, 140.0 + 40 * r)]} for r in range(3) for c in range(3)
-    ]
-    before = len(s.out)
-    s.bund_junctions(grid_plots, "j-paddies")
-    drawn = "".join(s.out[before:])
-    # A 3x3 block of touching cells has exactly 4 interior 4-way crossings, and each crossing is piled
-    # as a SEPARATE fillet per quadrant (never one disc centered on the node - a repeated stamp reads
-    # more machine-made than the sharp cross it replaces), with about a quarter of quadrants left bare.
-    # So: more than one mark per crossing, fewer than all 16, and none at all on the edge/T corners.
-    import re as _re
-
-    marks = _re.findall(r'points="([^"]+)"', drawn)
-    assert 4 < len(marks) <= 16, len(marks)
-    assert 'fill="#6E4520"' in drawn
-    for pts in marks:
-        vs = [tuple(float(q) for q in v.split(",")) for v in pts.split(" ")]
-        # every mark is a fillet AT one of the four interior crossings (140/180 x 140/180)
-        assert any(max(abs(v[0] - jx) for v in vs) < 9 and max(abs(v[1] - jy) for v in vs) < 9 for jx in (140.0, 180.0) for jy in (140.0, 180.0)), pts
-        span = max(max(v[i] for v in vs) - min(v[i] for v in vs) for i in (0, 1))
-        assert 0.5 <= span <= 3.0, span  # 405 T126: each leg 2-3 ft, so two opposite fillets make 0284's 4-6 ft node
-    # the quadrants really do differ: the marks are not all the same size (that was the stamped look)
-    areas = sorted(max(max(float(v.split(",")[i]) for v in pts.split(" ")) - min(float(v.split(",")[i]) for v in pts.split(" ")) for i in (0, 1)) for pts in marks)
-    assert areas[-1] > areas[0] * 1.2, areas  # 405 T126: legs 0.8-1.2x keep the node at 4-6 ft, so the spread is narrower than 1.5x
-    # deterministic: the same field redraws identically (a salted str hash() would break this)
-    s2 = Settlement(400, 400)
-    s2.meta(name="j", scale="hamlet", ftpx=1)
-    b2 = len(s2.out)
-    s2.bund_junctions(grid_plots, "j-paddies")
-    assert "".join(s2.out[b2:]) == drawn
-    # SEPARATED parcels (the polder carve: every parcel inset off its neighbors) share no corner at all
-    inset_plots = [
-        {"poly": [(p["poly"][0][0] + 2, p["poly"][0][1] + 2), (p["poly"][0][0] + 38, p["poly"][0][1] + 2), (p["poly"][0][0] + 38, p["poly"][0][1] + 38), (p["poly"][0][0] + 2, p["poly"][0][1] + 38)]}
-        for p in grid_plots
-    ]
-    b3 = len(s.out)
-    s.bund_junctions(inset_plots, "j-polder")
-    assert len(s.out) == b3  # nothing drawn - no crossing exists to pile
 
 
 def test_land_use_overlay_draws_and_records_each_kind():
@@ -317,51 +268,6 @@ def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_
     assert min(math.dist((corner["x"], corner["y"]), v) for v in square) < math.dist((corner["x"], corner["y"]), (30.0, 15.0)), "nearer a corner than the middle"
 
 
-def test_an_unsettled_comb_rests_whole_dry_basins_and_a_dike_pond_rests_none():
-    # 269 B01 on the comb path: the resting plots are drawn in place of paddy, never low or blue, and marked on the net;
-    # a dike-pond block rolls the knob and rests nothing, its open water being the fabric.
-    from l7r.diagram.waterfields import FLOODED
-
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Rs", scale="hamlet", ftpx=1, down_deg=90)
-    s.pin_knob("paddy_rest", "unsettled")
-    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net["brook"] = []
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    rested = [p for p in net["plots"] if p.get("rest")]
-    assert rested and len(rested) == len(s.M["fallow_patches"]) == s.M["meta"]["paddy_rested"]
-    assert not any(p.get("low") or p["fill"] == FLOODED for p in rested)
-    d = Settlement(W=1400, H=1400, seed=5)
-    d.meta(name="Dp", scale="hamlet", ftpx=1, down_deg=90, field_archetype="mulberry_dike_fishpond")
-    d.pin_knob("paddy_rest", "unsettled")
-    net2 = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net2["brook"] = []
-    d.draw_comb_field(net2, "f1", {"kind": "stream"})
-    assert d.M["meta"]["paddy_rest"] == "unsettled" and not d.M["fallow_patches"]
-
-
-def test_draw_comb_field_existing_stream_and_cascade_sources():
-    # source={"kind":"stream"} WITHOUT a polyline = an existing on-map stream already runs at the
-    # sluice (the town pattern: a comb tapping the map's stream via a weir) - nothing extra is
-    # drawn, but the hairline topology channel is still recorded. source={"kind":"cascade"} skips
-    # the hairline too: the caller records its own connector channel (the field-to-field cascade,
-    # e.g. Hirameki's e1 -> e2), whose to={"kind":"field"} anchor replaces it.
-
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Cs", scale="town", ftpx=1, down_deg=90)
-    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net["brook"] = []
-    n_streams = len(s.M["streams"])
-    s.draw_comb_field(net, "f1", {"kind": "stream"})  # no polyline -> no stream drawn
-    assert len(s.M["streams"]) == n_streams
-    assert s.M["channels"][-1]["to"] == {"kind": "field", "name": "f1"}  # hairline still recorded
-    n_chan = len(s.M["channels"])
-    net2 = _comb(1400, 1400, (700, 200), full_or(2, 6), down_deg=90, field_fall=400)
-    net2["brook"] = []
-    s.draw_comb_field(net2, "f2", {"kind": "cascade"})  # cascade: the caller wires the source
-    assert len(s.M["channels"]) == n_chan  # no hairline appended
-
-
 def test_pond_fill_relocates_to_the_late_block_when_a_late_channel_joins():
     """The Tango in-wall tank (GM 2026-07-23): a comb head-race joins the pond from the LATE
     block, which draws after the whole shared water block - so an early fill can never cover the
@@ -383,36 +289,6 @@ def test_pond_fill_relocates_to_the_late_block_when_a_late_channel_joins():
     fill = svg.index('<ellipse cx="500" cy="250" rx="100" ry="70" fill="#9CB4C8"/>')
     assert fill > svg.index('stroke="#6C9CBE"')  # fill drawn AFTER the late bed (covers the cap)
     assert svg.index('stroke="#5C7488"') < svg.index('stroke="#6C9CBE"')  # rim edge stays early, below the bed
-
-
-def test_draw_comb_field_drops_hem_plots_on_a_prior_fan():
-    # multi-fan maps place each fan blind to the others: a hem plot landing on a PREVIOUSLY
-    # recorded fan's rice is dropped via the shared hem_on_paddy predicate (the Tango fe2-into-fe1
-    # incident; gated by dry_plots_clear_of_paddies). The prior fan here is a synthetic field
-    # record blanketing the second comb's hem band, so every hem plot must go.
-
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Cp", scale="town", ftpx=1, down_deg=90)
-    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net["brook"] = []
-    on_rice = [p for p in net["dry_plots"]]
-    assert on_rice, "the comb must produce a hem for the drop to be observable"
-    blanket = [[0, 0], [1400, 0], [1400, 1400], [0, 1400]]  # covers everything - every hem plot overlaps it
-    assert all(hem_on_paddy(p["poly"], blanket) for p in on_rice)
-    s.M["fields"].append({"name": "prior", "kind": "paddy", "outline": blanket, "bbox": [0, 0, 1400, 1400]})
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    assert s.M["dry_plots"] == []  # every hem plot dropped; the paddies themselves still drew
-    assert any(fl["name"] == "f1" for fl in s.M["fields"])
-
-
-def test_draw_comb_field_trims_an_inwall_drain_through_the_helper():
-
-    s = _inwall_settlement()
-    net = _comb(1000, 1000, (500, 200), full_or(2, 5), down_deg=90, field_fall=300)
-    net["brook"] = []
-    s.draw_comb_field(net, "f1", {"kind": "stream"}, inwall_drain_moat_bias=(0, 0))
-    assert any((c.get("frm") or {}).get("kind") == "drain" and (c.get("to") or {}).get("kind") == "moat" and c.get("drawn") is False for c in s.M["channels"])
-    assert s.M["sluice_gates"]
 
 
 def test_comb_base_fill_noops_on_an_empty_net():
@@ -509,67 +385,6 @@ def test_mulberry_rows_skips_a_parcel_too_small_to_plant():
     assert len(s.out) == before
 
 
-def test_a_comb_hem_is_registered_as_CROPLAND_not_only_as_no_build_ground():
-    """THE RATCHET for the 2026-08-11 engine fix (see `draw_comb_field`).
-
-    The engine keeps two registries for cropland and they are read by different things:
-    `block_polys` stops a FARMSTEAD, `dry_polys` stops a TREE, a lane, a threshing yard and the
-    ground-cover scatters. `draw_comb_field` used to append to the first only, so a map built
-    through it had hem plots that a house respected and a grove did not - invisible for as long as
-    the clusters happened to sit away from the hem, and three simultaneous gate failures the moment
-    one did not. Every hand-authored comb gen carries its own `s.dry_polys.append(...)` to
-    compensate; this holds the line for the ones that do not."""
-
-    # A SMALLER CANVAS AND A SHORTER FALL (feature 158): the question is whether every DRAWN hem plot
-    # is also registered as cropland, which one hem answers as well as forty. The guard on the next
-    # line is what makes the shrink safe - if the fixture stops drawing a hem it says so instead of
-    # passing vacuously.
-    s = Settlement(1200, 1200, seed=5)
-    s.meta(name="Hem", scale="hamlet", ftpx=1, toscale=True, households=12, down_deg=90, water_flow=90)
-    net = _comb(1200, 1200, (600.0, 320.0), full_or(2, 5), down_deg=90, field_fall=520)
-    s.draw_comb_field(net, "hem-paddies", {"kind": "stream", "stream": [(600.0, -40.0), (600.0, 320.0)]})
-    assert s.M["dry_plots"], "the fixture must actually draw a dry hem, or it proves nothing"
-    assert len(s.dry_polys) == len(s.M["dry_plots"]), "every DRAWN hem plot is registered as cropland"
-    assert all(any(abs(v[0] - p[0]) < 0.05 and abs(v[1] - p[1]) < 0.05 for p in poly) for rec, poly in zip(s.M["dry_plots"], s.dry_polys, strict=True) for v in [rec["poly"][0]]), (
-        "the registered polygon is the one that was drawn, not a re-derivation of it"
-    )
-
-
-def test_draw_comb_field_records_rings_and_beads():
-    # the field record carries every plot ring IN DRAW ORDER plus the azemame bead points - the
-    # recording bund_beans_on_bunds reads (pdims compacts a plot to extents-and-a-centroid, which
-    # cannot express "this plot paints over that one's bund"). Recording is unconditional at this
-    # one draw site, which is what lets the check skip legacy manifests without going silently
-    # toothless on regenerated ones (GM 2026-08-15).
-
-    s = Settlement(W=1400, H=1400, seed=5)
-    s.meta(name="Rb", scale="town", ftpx=1, down_deg=90)
-    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net["brook"] = []
-    s.draw_comb_field(net, "f1", {"kind": "stream"})
-    fld = s.M["fields"][-1]
-    assert len(fld["plot_rings"]) == len(net["plots"])
-    assert fld["plot_rings"][0] == [[round(x, 1), round(y, 1)] for x, y in net["plots"][0]["poly"]]
-    assert fld["bund_beans"] == [[round(x, 1), round(y, 1)] for x, y in net["bund_beans"]]
-
-
-def test_draw_comb_field_drops_beads_in_pond_water():
-    # the draw-site half of the water-honesty rule: beads inside the source pond's ellipse or a
-    # pocket pond's are dropped BEFORE the bead line draws and records, so dots and manifest agree
-
-    s = Settlement(W=1400, H=1400, seed=7)
-    s.meta(name="Pw", scale="town", ftpx=1, down_deg=90)
-    net = _comb(1400, 1400, (700, 200), full_or(1, 5), down_deg=90, field_fall=400)
-    net["brook"] = []
-    # ...AND PER RUN (feature 247): a run's drowned head leaves a part of two, kept; a drowned MIDDLE
-    # splits a run into two singles, both dropped; the flat list is the kept runs flattened.
-    net["bund_bean_runs"] = [[(700.0, 60.0), (500.0, 180.0), (520.0, 180.0)], [(100.0, 100.0), (300.0, 300.0), (120.0, 100.0)]]
-    s.M["field_ponds"] = [{"x": 300.0, "y": 300.0, "rx": 20.0, "ry": 15.0}]
-    s.draw_comb_field(net, "f1", {"kind": "pond", "pond": (700, 60, 60, 40)})
-    assert s.M["fields"][-1]["bund_beans"] == [[500.0, 180.0], [520.0, 180.0]]
-    assert net["bund_bean_runs"] == [[(500.0, 180.0), (520.0, 180.0)]] and net["bund_beans"] == [(500.0, 180.0), (520.0, 180.0)]
-
-
 # --- feature 112: the composed FieldsMixin surface -----------------------------------------------
 # settlement/fields.py became a package of four sub-mixins composed in fields/__init__.py. The
 # guard below is the whole safety property of that split: core.py imports ONE name and the class
@@ -583,9 +398,7 @@ _FIELDS_SURFACE = frozenset(
     {
         # public entry points, called from pool gens, hamletgen, other engine modules and checks
         "apply_land_use",
-        "bund_junctions",
         "comb_base_fill",
-        "draw_comb_field",
         "fallow_field",
         "pond",
         "water_field",
@@ -610,13 +423,12 @@ _FIELDS_SURFACE = frozenset(
 
 
 def _fields_submixins():
-    from l7r.diagram.settlement.fields.comb import CombMixin
-    from l7r.diagram.settlement.fields.comb_record import CombRecordMixin
+    from l7r.diagram.settlement.fields.drawing import FieldDrawingMixin
     from l7r.diagram.settlement.fields.features import FieldFeaturesMixin
     from l7r.diagram.settlement.fields.landuse import LandUseMixin
     from l7r.diagram.settlement.fields.paddy import PaddyMixin
 
-    return [PaddyMixin, CombMixin, CombRecordMixin, LandUseMixin, FieldFeaturesMixin]
+    return [PaddyMixin, FieldDrawingMixin, LandUseMixin, FieldFeaturesMixin]
 
 
 def _own_callables(cls):
@@ -626,6 +438,8 @@ def _own_callables(cls):
 def test_no_pre_split_fields_member_was_lost_in_the_move():
     # SUBSET, not equality, and the reason is worth stating. Stage 2 of feature 112 decomposed the
     # three oversized methods into named private helpers, so the composed class legitimately holds
+    # `bund_junctions` and `draw_comb_field` left the set with the comb's old placement (feature 444 T16: the field's placement
+    # is Rust's, its five drawing functions moved to `drawing.py`) - not lost in a move, deleted with the code they were.
     # MORE than the pre-split 24, and will hold more again the next time a method is split. What
     # must never happen is a pre-split member going MISSING: an addition is visible in review,
     # while a subtraction is silent until whichever generator calls it happens to run. The
@@ -726,27 +540,6 @@ def test_comb_base_fill_can_floor_the_whole_envelope():
     }
     s.comb_base_fill(net, "p", full_envelope=True)
     assert any("310.0,90.0" in frag for frag in s.out), "the envelope itself is the floor"
-
-
-def test_the_dry_hem_stops_at_the_bank_of_a_watercourse_that_was_there_first():
-    """the comb builder lays the fan from pure geometry, so a hem plot can be drafted straight across a
-    stream authored earlier (Ubame's). The draw yields: the crop stops at the bank rather than being
-    inked over the water."""
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    s.M["streams"] = [{"poly": [[0, 120], [500, 120]], "w": 9}]
-    wet = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
-    dry = [(600.0, 600.0), (640.0, 600.0), (640.0, 640.0), (600.0, 640.0)]
-    net = {
-        "dry_plots": [
-            {"poly": wet, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
-            {"poly": dry, "fill": "#DCCFA6", "furrow": 6.0, "theta": 0.0, "crop": "soy"},
-        ]
-    }
-    s._comb_draw_hem(net)
-    ink = "".join(s.out)
-    assert "600.0,600.0" in ink, "the dry plot is drawn"
-    assert "100.0,100.0" not in ink, "the one over the stream is not"
 
 
 # ---- feature 174: the overlay plot picker, tested DIRECTLY -----------------------------------------

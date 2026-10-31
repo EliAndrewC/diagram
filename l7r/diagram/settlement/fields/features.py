@@ -10,7 +10,6 @@ import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.work_counts import OPS
 
 from .._geom import (
@@ -217,61 +216,12 @@ POND_REED_INK = "#7FA040"
 
 
 class FieldFeaturesMixin:
-    def pond(self: Settlement, cx: float, cy: float, rx: float, ry: float, stream_curve: Any = None) -> None:  # type: ignore[misc]
-        """A pond / irrigation reservoir. Routed through the WATER block (not drawn inline) so a stream or
-        channel MEETING it JOINS at the rim instead of the rim cutting across its mouth: the RIM is an EDGE
-        below every water bed (a feeder's bed covers it at the junction -> a clean gap), the FILL joins the
-        shared bed group as the TOPMOST bed (`pond_fill=True`) - so it paints OVER any feeder's inside-the-rim
-        overshoot (an irrigation channel's round end-cap bulging past the rim, whichever order it was drawn),
-        while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen.
-
-        ASKED BEFORE ANYTHING IS DRAWN (feature 287, water W53): its placer has walked its alternatives (the sink's pond
-        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here.
-
-        Research:
-            pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
-            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
-            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (inner sheen inset)
-        """
-        refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
-        if stream_curve:
-            # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
-            # NOT the heftier natural-stream weight (see the water-width ladder in research/contents.json#water).
-            self._water(
-                f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="{self.px(3.0):.1f}"/>', {}, cls="irrigation ditch"
-            )  # no record behind it: the feed INTO a reservoir is supply (spec 230 FR-001, the third clause)
-        self._water(
-            f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#9CB4C8"/>',  # FILL -> shared bed group (topmost bed)
-            self.M.setdefault("pond_layer", {"late": False}),  # flush records the fill's bedz/sheenz here, and flips
-            # `late` if it relocates the fill to the late block. bedz values are offsets within their OWN splice
-            # block, so cross-block draw order is carried by the (late, bedz) PAIR - the late block always renders
-            # after the whole shared block (pond_fill_covers_channel_mouths compares the pairs lexicographically)
-            sheen=f'<ellipse cx="{cx}" cy="{cy}" rx="{rx - 12}" ry="{ry - 10}" fill="none" stroke="#B6CAD8" stroke-width="1"/>',  # inner highlight
-            edge=f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="none" stroke="#5C7488" stroke-width="2.4"/>',  # RIM -> edge layer, below beds
-            pond_fill=True,
-            cls="pond",
-        )
-        self._pond_entry: dict[str, Any] | None = self.water[-1]  # so flush can relocate the fill+sheen into the late block (see finish)
-        self.M["pond"] = [cx, cy, rx, ry]
-        self.ellipses.append((cx, cy, rx, ry))
-
     # ---- feature 012: deliberate non-rice features the paddy tiles around --------------------------------
     # Placed automatically from the field geometry per the ARCHETYPE MATRIX (specs/012-.../research.md). Only
     # the genuinely NEW in-field glyphs live here - a low-pocket POND, a bedrock ROCK outcrop, and (a disclosed
     # CALIBRATED LIBERTY the GM approved) a rare in-field GRAVE island. The matrix's MARGIN graves + feng-shui
     # knolls are already the village burial ground + back-grove (the research warns a standalone knoll usually
     # IS the back-grove), so they are not redrawn here. Seeded from self.seed so it never ripples other RNG.
-    _PADDY_POND_KINDS = ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley")
-    _PADDY_GRAVE_KINDS = ("valley_paddy", "contour_terraces", "ribbon_valley")
-
-    def _field_feature_ink(self: Settlement, ink: list[tuple[str, str]] | None, svg: str, cls: str) -> None:  # type: ignore[misc]
-        """Emit one in-field feature's ink now, or hold it in `ink` for the caller to emit later: `draw_comb_field` seats
-        the features BEFORE the paddies are drawn (a grave carves the rings the paddies are drawn from, water W28) and
-        draws their ink after the paddies, where it always was."""
-        if ink is None:
-            self.add(svg, cls=cls)
-        else:
-            ink.append((svg, cls))
 
     def _paddy_features(self: Settlement, net: dict[str, Any], ink: list[tuple[str, str]] | None = None) -> None:  # type: ignore[misc]
         """
