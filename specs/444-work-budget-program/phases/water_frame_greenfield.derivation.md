@@ -10,7 +10,7 @@
 ## The algorithm
 
     the identity fields copied from the spec into the plan (1 each)
-    the land's fall rolled from the seed; the drainage bearing rolled from the range within 90 degrees of it, so the bound holds by construction; the wind's quarter rolled
+    the land's fall rolled from the seed; the drainage bearing rolled from the range within 90 degrees of it, so the bound holds by construction; the wind's quarter taken, the spec's declared one or the regional default
     for each knob that applies on this map's branch: its allowed forms read (1), one rolled from the seed or the spec's pin taken (1), written (1); a knob with one form left read and written (2); a knob outside its branch written alone (1)
 
 ## The count, factor by factor
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | items | per item | 1 | the plan, once a map | always 1 |
 | the identity fields | per item | 3 | name, households and scale, each copied once (1) | always 3 |
-| the bearings | per item | 6 | the fall, the drainage bearing and the wind, each rolled and written (2); the bearing's bound against the fall folded into its roll, a range drawn within it | always 6 |
+| the bearings | per item | 6 | the fall and the drainage bearing each rolled and written (2), the wind taken and written (2); the bearing's bound against the fall folded into its roll, a range drawn within it | always 6 |
 | the knobs | per item | 47 | on the reference (nucleated, brook-fed, not on flood ground): 12 that apply - settlement_form, cluster_shape, water_sink, lane_skeleton, lane_web, bamboo, well_siting (nucleated), manure_form, plot_size, grain_drift, intake and brook_side (a brook) - read, rolled, written (3 each, 36); copse_siting and kosatsuba_siting, one form left each, read and written (2 each, 4); 7 outside the branch written alone (1 each, 7): grove_sides, grove_flank and farm_water (the dispersed farm's), row_line, row_sides, row_water and row_shelter (a row's) | a linear row on dry ground: 55 - its four row fields and the two grove fields rolled (18, against the reference's 6 writes), well_siting and cluster_shape written alone (-4); not growing with the households |
 | slack | per item | 1 | no factor varies: each is a count of the plan's own fields | not applicable |
 
@@ -45,4 +45,4 @@ Flat: the plan's fields are the same at every size, an exponent of 0.
 
 ## Earlier findings
 
-- verdict-1, finding 1: fixed - the knob set it judged (the 20 knob-registry names among the reference `meta`) was the wrong set: most of them are rolled and charged by other stages. The round arbiter's ruling on ask:444-T19-which-knobs (2026-10-30) names water_frame's knobs as the 21 plan fields the plan rolls inside the Contract, each charged only for the steps it takes on the reference branch; the bound folded into the drainage roll, as the pseudocode now says (no separate test).
+- verdict-1, finding 1: fixed - the pseudocode's separate bound test is gone, the bound folded into the drainage roll. Separately, not verdict-1's: the knob set it judged (the 20 knob-registry names among the reference `meta`) was the wrong set: most of them are rolled and charged by other stages. The round arbiter's ruling on ask:444-T19-which-knobs (2026-10-30) names water_frame's knobs as the 21 plan fields the plan rolls inside the Contract, each charged only for the steps it takes on the reference branch; the bound folded into the drainage roll.
