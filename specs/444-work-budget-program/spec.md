@@ -36,8 +36,8 @@ standards" (`request.md`).
    `phases/<stage>.md`) is ticked in order: contract, minimal algorithm, budget reviewed, today's measurement, the rebuild
    behind the manifest seam with the old code deleted, acceptance, the MODE AUDIT review, the standing record.
 2. **Given** acceptance, **Then** the phase's counted operations are at most its budget at 40 and 80 households and its
-   exponent at most the budget's; `make cohort-landing` shows no regressed seed and the fresh block's pass rate is no worse
-   (not every seed passing: that is feature 417's goal); its claims round is IN-STEP; the reviews its occasions owe have run;
+   exponent at most the budget's; every seed of the Rust stage gate passes where each Rust stage completes (FR-019, amendment 5:
+   the Python stages after it report a rate and refuse nothing - not every seed passing them is feature 417's goal); its claims round is IN-STEP; the reviews its occasions owe have run;
    its time is recorded by `make perf-ab`.
 
 ### User Story 3 - The language decided on measurement (Priority: P2)
@@ -138,6 +138,25 @@ standards" (`request.md`).
   development and the gate build with it on, the deployed build without it, so the compiler removes them. Before a Rust phase
   lands, a seed rolled with the feature on and off writes identical manifests, as 443 FR-004 holds for Python.
 
+- **FR-019**: The Rust stage gate (amendment 5, the GM 2026-10-31: "no Rust stage ever ends with any failing checks at the point
+  where that stage has completed ... all seeds pass for all Rust stages, but we don't care at all about the Python stages which
+  come after"). The stages are ported in `STAGES` order, so the Rust stages are always the front of the pipeline; a stage is Rust
+  when `rust/phases/src/<stage>.rs` holds it, derived, and a test refuses a Rust stage that is not part of that front. Every seed
+  is rolled through the Rust stages only and stops there; it fails when a Rust stage raises, or when a check of the finished-map
+  checks fails whose every read of the map is of something the Rust stages wrote - a check that reads what only a later stage
+  writes is that stage's, and is not asked (the check-to-stage assignment derived from what each check reads, never a hand
+  table). Every engine landing requires the gate on its engine with no failing seed. A landing that changes a Rust stage
+  (`rust/**`) is judged by it alone: its whole-pipeline cohort is rolled as a rate and refuses nothing, and a Python stage that
+  fails on the Rust output is that stage's defect, never a reason to change the Rust stage. Matching Python's draws is not
+  required; a port may roll with its own generator, its moved pool hamlets owing their settlement-reviews. A landing that
+  changes no Rust stage keeps feature 386's landing cohort as it stands.
+- **FR-020**: The Rust gate's seeds (amendment 5): no fixed reference block - a FRESH block of 48 seeds from a start that rotates
+  with the engine, the six pinned row variants (901-906's pins) each on a fresh seed, and the FAILING LIST. A seed that fails the
+  gate goes on the list with the Rust stage it failed in, and is rolled by every gate run until it first passes, then leaves the
+  list. Beside it, the failing stage's INPUT - the map and the plan as the stages before it left them - is frozen as a fixture
+  and replayed into that stage by every gate run until it passes, so a failure cannot leave the list only because a change
+  upstream turned its seed into another map. The list and its fixtures are the Rust stages' alone; Python stages never add to it.
+
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
@@ -166,6 +185,13 @@ standards" (`request.md`).
   and a test refuses that landing with one unproven; the counters-on and counters-off manifests match.
 - **SC-007** (FR-010): the rebuilt phases build as one extension module; a test finds every `STAGES` entry a Python function
   with its docstring, and no `.rs` file outside the test files holding a `#[cfg(test)] mod tests`.
+
+- **SC-012** (FR-019): a test finds the Rust stages derived from `rust/phases/src/` and refused when not the front of `STAGES`; a
+  test finds a check reading only Rust-written parts of the map asked at the gate and one reading a later stage's not asked; a
+  test finds an engine landing refused when the gate has a failing seed, and a Rust-stage landing not refused by its whole-pipeline
+  cohort.
+- **SC-013** (FR-020): a test finds a failing seed added to the list with its stage and frozen input, rolled and replayed by the
+  next run, and removed on its first pass; and the gate's seeds hold no fixed block.
 
 ## Edge Cases
 
@@ -213,3 +239,7 @@ standards" (`request.md`).
 - 2026-10-29, amendment 4's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - SC-011 for FR-018; water_frame's
   Rust port scheduled before the close, so SC-007 holds; the field's derivation re-derived under the cap, a new verdict owed.
 - 2026-10-29, amendment 4's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.
+- 2026-10-31, amendment 5 (the GM on the landing rule, `request.md`): User Story 2's acceptance reads the Rust stage gate in place
+  of "no regressed seed"; FR-019 - every seed passes where each Rust stage completes, the checks asked by what they read, the
+  Python stages after a rate; FR-020 - a fresh block, the pinned variants on fresh seeds, the failing list and its frozen inputs;
+  SC-012 and SC-013 test them.

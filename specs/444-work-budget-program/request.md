@@ -341,3 +341,15 @@ Hold on, though. When you say the same algorithm in Python and in Rust, that is 
 Told that T19 had landed and that the tooling gaps its landing exposed were filed as T20:
 
 "Please fix the tooling gaps by implementing T20."
+
+## 2026-10-31, amendment 5 - the Rust stage gate and the failing-seed list
+
+Told that T19 met "no regressed seed" by reproducing Python's draws:
+
+"Okay, so "no regressed seed" might not be QUITE the correct rule per se.  The goal is that all seeds work by the time we're done with our Rust port.  However, we are allowing the maps to move since the Rust port will use new algorithms for efficiency, and I could see a situation where a Phase 2 Rust placement triggers a bug in a later Phase 4 Python placement.  In this case it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step.  So I think the rule should actually be changed to be "no Rust stage ever ends with any failing checks at the point where that stage has completed".  In other words, all seeds pass for all Rust stages, but we don't care at all about the Python stages which come after."
+
+"And then to be honest, it sounds like part of our problems stemmed from overfitting on our reference seeds, so I wonder if we should just stop having reference seeds.  That seems dangerous for different reasons though, since we might fail a seed and then not actually fix the bug because the failing seed simply doesn't come up for a while.  So maybe we'd do something like: if a seed fails, we automatically add it to a list of seeds which are always checked until the first time they pass, and any seed on that list which passes is then removed from the list, or something like that.  But again, this would ONLY be for Rust stages, NOT for Python stages, since we expect a lot of failing seeds for out Python stages while we are in the process of porting to Rust."
+
+Told the session's proposals (the Rust stages always the front of the pipeline, the checks judged where a Rust stage completes; matching Python's draws no longer required; a fresh block each landing, the six pinned row variants with fresh seeds, the failing-seed list, and a failing Rust stage's input frozen and replayed until it passes):
+
+"Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.  Thank you."
