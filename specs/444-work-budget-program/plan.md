@@ -155,7 +155,7 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 
 Occasions: none (a derivation and its verdict; no map moves until the field rebuild).
 
-### T18 Approach (checklist part A)
+### T18 Approach (2026-10-31T16:27Z)
 
 1. **The goal, in the world.** The largest single paddy field the research finds for a settlement of this kind, as the field
    phase's contract (its cap and source), and `phases/field_greenfield.derivation.md` re-derived under it: a settlement whose
@@ -176,6 +176,19 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 11. **Before fitting things into room.** n/a
 
 **Performance work?** no
+
+### T18 Decisions
+
+- **D1 - the cap is the record's knob** (`research/questions/0017-...drawing.html#how-our-maps-size-a-settlements-farmland`, written
+  by T18's page sessions): one field at most a cap rolled per settlement between about 45 and 60 ha (accurate at its top: Fei's
+  largest polder; a knob within the attested band, the record's label); a settlement past it draws several fields. The two
+  questions session C's handoff left "for the GM" - whether Yang's undivided 1,000-mu pond (about 61 ha) is one tract, and the
+  1991 gazetteer's unstated mu - are whether a finding applies to a case, the record's to rule and never the GM's (the root
+  CLAUDE.md, Research): the knob's band holds either reading, so neither moves the cap.
+- **D2 - the derivation's figures stand** (`phases/field_greenfield.derivation.md`, its Bounds): at 20, 40 and 80 households the
+  farmland is about 11, 21 and 42 ha, under the cap's 45 ha floor, so each draws one field and no total changes; the cap binds only
+  past about 85 households, where each field's work is the derivation's at its own size. Owed: the MODE BUDGET verdict on the
+  re-derived text (FR-018), and the pin kept as it stands unless that verdict moves a figure.
 
 
 <!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->

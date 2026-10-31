@@ -7,6 +7,14 @@
 - Keeps: a basin about 1,500 sq ft on a hamlet map, its cell 1,488 sq ft, about 48 ft across its canal (0005: "about 48 ft across its canal and 26 to 36 ft along it"); no basin tapering to a point sharper than 25 degrees, none smaller than a quarter of its cell, none an arrowhead, a refused point cut off into a headland along the drain before it is taken into the basin beside it (0005); the farmland a household works (0017); a fan of paddies narrowing toward its drain, its bunds converging (0005); a ditch's branch leaving its parent leaning downstream, its sweeps about two and a half channel widths (0054); the water's direction within a right angle of the fall (0054).
 - Bounds (measured 2026-10-29 on the reference manifests at 10 and 20 households): plots 376 and 853, their rings 1,959 and 4,209 corners (4.9 a plot at 20); plots with more than 4 corners, the ones the outline cuts, 163 and 265; the outline 67 and 78 points, 3,146 and 4,874 ft round; ditch segments 78 and 120; the brook 212 and 237 points; the beans 372 and 827; the plots drawn apart 71 and 129, the dry ones 13 and 26 polygons of 4 corners; the channels' drawing records 149 and 231 points; the drain's hem 36 and 61 points; one weir, one pocket pond. Past 20: the field's area grows with the households (0017: the land a household works), so the plots and the beans double a doubling (1,706 and 3,412 plots, 1,654 and 3,308 beans), the outline's length and the ditches with the field's side and the comb's rows as measured from 10 to 20 (x1.55: 411 and 637 cut plots, 185 and 285 segments), the outline's points x1.16 (90, 105), the brook with the view's side (x1.12: 265, 297), the drawing records x1.55 (358, 555), the hem x1.7 (104, 177), the plots drawn apart x1.8 (232, 418); the typical densities (`items.md`, rubric S8): water segments 3.7 and the field's outline segments 1.8 a crossed 64 ft cell.
 
+- The single-field cap (FR-018, re-derived 2026-10-31, T18): one field is at most the cap, a settlement past it drawing several -
+  research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html#how-large-one-tract-of-paddy-grew (one tract
+  watered from one intake ran about 1 to 45 ha, the largest found Fei's polder of about 60 ha) and its drawing page
+  (#how-our-maps-size-a-settlements-farmland: the cap a knob rolled per settlement between about 45 and 60 ha). At the derivation's
+  sizes the farmland is `GROSS_ACRES_PER_HOUSEHOLD` (1.3 acres, 0017) times the households: 26, 52 and 104 acres at 20, 40 and 80 -
+  about 11, 21 and 42 ha, each under the cap's 45 ha floor. So each size draws ONE field, and no figure below changes; the cap
+  binds only past about 85 households (45 ha / 1.3 acres), where the field count grows with the farmland and each field's work
+  is this derivation's at its own size.
 ## The algorithm
 
     the field's area from the households and the land each works (2)
