@@ -20,3 +20,14 @@ and where the counts are charged - not its algorithm, which the derivation fixes
   (the fan's geometry, the field's), dike_crop, leftover and fry_form (the polder's). Which of the rest are the derivation's 20 knobs
   is settled against its Bounds line (the knob names among the reference manifests' `meta` fields at 10 and 20 households) before the
   call is written.
+
+## The derivation's 20 knobs against plan_site's rolls (measured 2026-10-30, one-shot: the knob registry's names, `Knob("<name>"` under `l7r/diagram`, and plan_site's `_roll` names, each against `pool/hamlets/inashiro/inashiro.json`'s `meta`, Inashiro being the reference spec at 15 households)
+
+- plan_site rolls 30 fields; 27 are `meta` keys; less the fall (a bearing) and the five the ruling sets outside (field_archetype,
+  pond_layout, dike_crop, leftover, fry_form), 21: settlement_form, cluster_shape, water_sink, lane_skeleton, lane_web, bamboo,
+  grove_sides, grove_flank, row_line, row_sides, row_water, row_shelter, well_siting, farm_water, manure_form, copse_siting,
+  kosatsuba_siting, plot_size, grain_drift, intake, brook_side.
+- The registry's knob names in that `meta`: 19 - bamboo, byre_form, cluster_shape, family_form, fan_middle, field_archetype,
+  footbridge_form, grain_drift, kosatsuba_seat, lane_skeleton, lane_web, paddy_rest, plot_regularity, plot_size, settlement_form,
+  town_nearness, weir_form, windbreak_belt, winter_crop (the derivation's 20 at 10 and 20 households is this list's reading).
+- Only 8 are in both: bamboo, cluster_shape, grain_drift, lane_skeleton, lane_web, plot_size, settlement_form, field_archetype.
