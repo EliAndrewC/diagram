@@ -496,6 +496,7 @@ _KNOBS: tuple[tuple[str, str], ...] = (
     ("intake", "brook"),
     ("brook_side", "brook"),
 )
+"""Research: a knob rolled only where the map's form uses it - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet; cluster_shape and well_siting on every form, since every map's band and its grove-less houses' wells read them"""
 
 
 def _rust_rolls(spec: HamletSpec, archetype: str, windward: str) -> dict[str, Any]:

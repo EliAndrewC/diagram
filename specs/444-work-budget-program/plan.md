@@ -214,7 +214,7 @@ The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-la
 1. **What exactly is refusing?** Not water_frame: its own checks hold (56 counted, MODE AUDIT WITHIN, FR-004, FR-012). Later stages
    refuse, each with a kind main's cohort knows - seed 3 and 36 `SiteRefused` (the seating), 20 and 21 `lane_knots 1`, 904
    `lane_knots 2`, 37 `OverlapRefused`, 903 `WebRefused`. Seeds 3 and 903 are named by an open found row,
-   `l7r/diagram/hamletgen/ways/web.py::stage_web` (E3, a footpath to every farmhouse 7 ft off a plot): that row is read before any
+   `l7r/diagram/hamletgen/ways/web.py::stage_web` (E3, a footpath to every farmhouse 7 ft off a plot - 0246's fence gap, CONVENTION): that row is read before any
    probe. The geometry of each refusal is NOT yet dumped - item 7.
 2. **A3 again.** The rules refusing are the later stages' own (R: research-backed), unchanged by the port.
 3. **A4 again.** Not yet looked at on the map, seed by seed - item 7.
@@ -229,14 +229,14 @@ The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-la
    later stage, with its fix, before any route is put to the round arbiter.
 
    **Item 7, begun (2026-10-31T03Z).** The open found row for seeds 3 and 903 (`specs/328-match-the-research/claims-followup.md`,
-   E3, DRIFTED) is a known defect of the web: footpaths held 7 ft off a garden fence (0246) leave farmhouses off the network -
+   E3, DRIFTED) is a known defect of the web: footpaths held 7 ft off a garden fence (0246's fence gap, CONVENTION) leave farmhouses off the network -
    "WebRefused at (3024, 3004) and (3265, 2589)" on Kashikawa, "re-route or re-seat so the gap holds". Seed 903's `WebRefused` is that
    row's kind; seed 3 refuses earlier, in the seating (`SiteRefused`), so the row does not explain it alone. The five others are
    not yet dumped.
 
    **Item 7, each seed rolled alone on the port (`make cohort N=1 SEED=<s> FRESH=0`, 2026-10-31T03Z):** seed 3 and 36 `SiteRefused`
    - "seated 19 of 20 households on margin 1", one house short of the band; 20, 21 and 904 `lane_knots` - 1, 1 and 2 knots, two
-   lanes within the 25 ft join reach left unjoined (15.2, 18.9 and 20.6 ft); 37 `OverlapRefused` - "lanes would be recorded on a
+   lanes within the 25 ft join reach (`LANE_JOIN_FT`, a knob) left unjoined (15.2, 18.9 and 20.6 ft, measured 2026-10-31 (`make cohort N=1 SEED=<s> FRESH=0`, the knot verdicts)); 37 `OverlapRefused` - "lanes would be recorded on a
    gardens at (1545, 2814)"; 903 `WebRefused` - "lanes 1, 2 (skeleton: dangling_ends) still break a rule of the lane law", the E3
    row's kind. All seven refuse in the seating, the lane knots or the web - none in water_frame - each a class main's own fresh-seed
    cohort fails on (46 of 54). The lanes and the seat band at each place are not yet dumped.
