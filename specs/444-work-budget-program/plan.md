@@ -232,9 +232,10 @@ What the build changed, each recorded at its point of change and in `phases/fiel
    `apply_land_use`), traced at runtime, not read.
 4. **The deletion.** By name, `make dead-closure` against the clone's base; two pure moves on the round arbiter's rulings
    (ask:444-T16-move-drawing, ask:444-T16-brook-predicates); the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
-5. **The exits, unchanged.** `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
-   (FR-021), MODE AUDIT, the occasions' reviews, one landing.
-
+5. **The order, unchanged.** After `water_frame`; the last of step 4.
+6. **The exits.** Green: `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
+   (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing. Red: what failed recorded and the task set down, a claim that
+   it cannot be done ruled through `make arbiter-ask`.
 ### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.
