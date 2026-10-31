@@ -47,6 +47,9 @@ def _grows_on_this_ground(form: str, context: Mapping[str, Any]) -> bool:
 TOWN_NEARNESS = register_knob(Knob("town_nearness", ["near", "far"], default="far"))
 """Research: a town's nearness - GUESS: near or far, even odds; no hamlet spec records the distance to its market town"""
 
+FAN_MIDDLE = register_knob(Knob("fan_middle", ["wild", "cleared"], default="wild", weights={"wild": 0.75, "cleared": 0.25}))
+"""Research: the fan's middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each map decides at random whether an alluvial fan's dry middle is left wild, on three maps in four, a GUESS (moved here from the field's old `water/fit.py` by feature 444 T16, the field's own Python deleted)"""
+
 TOWN_FAR_FACTOR = 0.5
 """Research: a far town's weight on the winter barley - GUESS: half a near town's, the manure a second crop needed being
 dearer to bring (0009: how drainage and a town's nearness weigh against each other is a GUESS)"""
