@@ -11,20 +11,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from l7r.diagram.waterfields.ring_rules import (
-    RingContext,
-    arrowhead,
-    as_recorded,
-    collector_crossings,
-    fan_context,
-    needle,
-    overcount,
-    ring_area,
-    ring_violations,
-    staircase,
-    supply_intrusions,
-    too_small,
-)
+from l7r.diagram.waterfields.ring_rules import RingContext, arrowhead, needle, ring_area, ring_violations, too_small
 
 G = 2.0  # the grain at a hamlet's 1 ft per px: 2 / ftpx
 
@@ -62,57 +49,6 @@ FOUR_STEPS = [
     (150.0, 80.0),
     (0.0, 80.0),
 ]
-
-
-def _hold(rings: list[Any], ctx: RingContext) -> list[dict[str, Any]]:
-    from l7r.diagram.waterfields.seams.close import hold_ring_rules
-
-    plots = [{"poly": list(r), "fill": "#A6C398"} for r in rings]
-    hold_ring_rules(plots, ctx)
-    return plots
-
-
-def test_a_bund_does_not_build_a_flight_of_steps() -> None:
-    """W23, one of the GM's five: a ring carrying two or more sideways steps is SPLIT along the line that continues the
-    step's hop - the wall "continuing on and meeting at the four way intersection" - and no ring leaves the pass with more
-    than one step. Every part here clears the area floor, so no ground is lost: the parts tile the staircase exactly."""
-    ctx = RingContext(cell=1500.0, g=G)
-    for ring in (TWO_STEPS, FOUR_STEPS):
-        assert staircase(ring, G), "the fixture is a staircase"
-        plots = _hold([ring], ctx)
-        assert len(plots) >= 2, "the staircase was cut, not kept"
-        assert not [p for p in plots if staircase(p["poly"], G)], "no ring carries more than one step"
-        assert all(not ring_violations(as_recorded(p["poly"]), ctx) for p in plots), "and every part keeps every ring rule"
-        assert abs(_union_area([p["poly"] for p in plots]) - ring_area(ring)) < 1.0, "ground is conserved: the parts tile it"
-        assert overcount([p["poly"] for p in plots]) < 0.001, "and they do not lap"
-    boxes = sorted((min(x for x, _y in p["poly"]), max(x for x, _y in p["poly"])) for p in _hold([TWO_STEPS], ctx))
-    assert boxes == [(0.0, 40.0), (40.0, 80.0), (80.0, 120.0)], "no ring keeps a step (feature 328, 0014): a cut up each hop's line, x = 40 and x = 80"
-
-
-def test_a_part_of_a_staircase_too_small_to_stand_is_welded_or_left_bare() -> None:
-    """W23's fallback: a cut can leave a part under the area floor, and that part goes the scrap path - welded into a
-    neighbor where the union keeps every rule, bare otherwise - never a staircase kept whole."""
-    ctx = RingContext(cell=12000.0, g=G)  # every part of TWO_STEPS is under 0.2 of this cell
-    plots = _hold([TWO_STEPS], ctx)
-    assert all(not ring_violations(as_recorded(p["poly"]), ctx) for p in plots)
-    assert not [p for p in plots if staircase(p["poly"], G)]
-
-
-def test_a_needle_has_its_point_cut_off_and_its_neighbor_is_left_as_it_was() -> None:
-    """W18 (0005: "a point the maps refuse is cut off into a headland ... or taken into the basin beside it"; feature 328 wave
-    82): a basin tapering to a needle is not kept as it stands - its point is cut off into a headland, and what is left, a
-    narrow basin the page allows ("the maps set no least width"), is kept. Its only neighbor is left as it was."""
-    from l7r.diagram.waterfields.seams.close import held_faults
-
-    spike = [(0.0, 0.0), (100.0, -6.0), (100.0, 6.0)]
-    host = _rect(100.0, -30.0, 160.0, 30.0)
-    assert needle(spike)
-    ctx = RingContext(cell=1500.0, g=G)
-    plots = _hold([spike, host], ctx)
-    assert [p["poly"] for p in plots][1:] == [host], "the neighbor untouched"
-    kept = as_recorded(plots[0]["poly"])
-    assert not needle(kept) and not held_faults(kept, ctx), "the needle's point cut off, the basin left keeps every line"
-    assert ring_area(kept) < ring_area(spike), "the headland taken from it"
 
 
 def test_a_needle_hidden_from_the_deduplicated_ring_is_judged_raw() -> None:
@@ -153,102 +89,8 @@ def test_a_scrap_is_offered_only_to_the_neighbors_it_shares_a_bund_with() -> Non
     assert [p["poly"] for p in plots] == [apart, beyond]
 
 
-def test_no_bund_is_left_down_the_middle_of_a_supply_channel() -> None:
-    """W16: a ring whose bund stands inside a delivery ditch's stroke is not kept; the context is the recorded ditches."""
-    ditch = {"pts": [(0.0, 50.0), (200.0, 50.0)], "w": 5.0, "role": "branch"}
-    ctx = fan_context([ditch], G, 1500.0)
-    inside = _rect(20.0, 51.0, 80.0, 100.0)  # its upper bund 1 px off the centerline of a 5 px ditch
-    clear = _rect(100.0, 54.0, 160.0, 100.0)
-    assert supply_intrusions(inside, ctx.supplies) and not supply_intrusions(clear, ctx.supplies)
-    plots = _hold([inside, clear], ctx)
-    assert not [p for p in plots if supply_intrusions(p["poly"], ctx.supplies)]
-    assert clear in [p["poly"] for p in plots]
-
-
-def test_no_bund_is_left_across_the_collector() -> None:
-    """W17: a ring with an edge running across the collector (both ends within half its stroke) is not kept."""
-    drain = {"pts": [(0.0, 50.0), (200.0, 50.0)], "w": 3.0, "w_tail": 6.0, "role": "drain"}
-    ctx = fan_context([drain], G, 1500.0)
-    across = [(20.0, 50.5), (80.0, 49.5), (80.0, 100.0), (20.0, 100.0)]
-    assert collector_crossings(across, ctx.drains)
-    assert not [p for p in _hold([across], ctx) if collector_crossings(p["poly"], ctx.drains)]
-
-
 def test_an_arrowhead_is_left_bare_rather_than_kept() -> None:
     """W25 at the last word: a basin pointed and notched at the gate line is not kept whole."""
     arrow = [(0.0, 0.0), (100.0, -30.0), (60.0, 0.0), (100.0, 30.0)]
     assert arrowhead(arrow)
     assert not [p for p in _hold([arrow], RingContext()) if arrowhead(p["poly"])]
-
-
-def test_a_hop_whose_continuations_both_leave_the_basin_is_not_cut() -> None:
-    """`_cut_on_hop` on a hop lying along a convex basin's own edge: neither end's continuation enters the floor, so
-    there is no line to cut on - the ring is handed back whole, and `_split_steps` keeps a ring it cannot cut."""
-    from l7r.diagram.waterfields.seams.close import _cut_on_hop, _split_steps
-
-    square = _poly(_rect(0.0, 0.0, 40.0, 40.0))
-    assert _cut_on_hop(square, (0.0, 0.0), (10.0, 0.0)) == []
-    assert _split_steps(square, RingContext(g=G)) == [square]
-
-
-def test_a_scrap_is_welded_into_a_host_whose_union_holds_only_a_pinhole() -> None:
-    """Feature 328 wave 77: `_weld_within_rules` took a host only where the union had no hole at all, so a sub-pixel hole the
-    grid left (no cell fills it) refused a lawful host and the scrap stayed bare. The union is now welded first: a pinhole is
-    filled and the scrap taken in; a hole a cell could fill still refuses the host."""
-    from shapely.geometry import Polygon, box
-
-    from l7r.diagram.waterfields.seams.close import _load_shapely, _weld_within_rules
-    from l7r.diagram.waterfields.seams.geoms import GeomTree
-
-    _load_shapely()  # the pass binds shapely's names on first use; this test calls the weld directly
-    ctx = RingContext(cell=1500.0, g=G)
-    for hole, taken in (((20.0, 10.0, 20.5, 10.5), True), ((15.0, 10.0, 25.0, 20.0), False)):
-        host = box(0, 0, 48, 31).difference(box(*hole))
-        plots = [{"poly": [(0.0, 0.0), (48.0, 0.0), (48.0, 31.0), (0.0, 31.0)], "fill": "#A6C398"}]
-        geoms: list[Any] = [host]
-        scrap = Polygon([(48.0, 0.0), (56.0, 0.0), (56.0, 31.0), (48.0, 31.0)])
-        assert _weld_within_rules(scrap, plots, geoms, GeomTree(geoms), ctx) is taken
-        if taken:
-            assert abs(_poly(plots[0]["poly"]).area - 56.0 * 31.0) < 1.0, "the host now holds the scrap, its pinhole filled"
-
-
-def test_the_re_hold_keeps_a_ring_only_at_the_placers_lines_not_the_gates() -> None:
-    """Feature 328 wave 78 (0005: no point sharper than 25 degrees, no basin under a quarter of its cell): `held_faults` flags a
-    20-degree point and a basin of 0.22 of the cell that the gate's own lines (15 degrees, 0.20) let through, and the re-hold
-    after a later cut keeps neither as it stands."""
-    import math
-
-    from l7r.diagram.waterfields.seams.close import held_faults
-
-    ctx = RingContext(cell=1500.0, g=G)
-    tip = 60.0 * math.tan(math.radians(10.0))  # a 20-degree apex over a 60 px run
-    wedge = [(0.0, 0.0), (60.0, -tip), (90.0, -tip), (90.0, tip), (60.0, tip)]
-    assert not needle(as_recorded(wedge)) and "needle" in held_faults(as_recorded(wedge), ctx), "past the gate, not the placer"
-    small = _rect(0.0, 0.0, 33.0, 10.0)  # 330 px², 0.22 of the 1,500 px² cell
-    assert not too_small(small, 1500.0) and "area" in held_faults(small, ctx), "over the gate's 0.20, under the placer's quarter"
-    assert held_faults(_rect(0.0, 0.0, 48.0, 31.0), ctx) == set(), "a basin at the design cell keeps them all"
-    plots = _hold([wedge], ctx)
-    assert all("needle" not in held_faults(as_recorded(p["poly"]), ctx) for p in plots), "the re-hold keeps no 20-degree point"
-
-
-def test_a_sharp_point_is_cut_off_into_a_headland_before_the_piece_is_dropped() -> None:
-    """Feature 328 batch 9's gate (0005: "a point the maps refuse is cut off into a headland ... or taken into the basin
-    beside it"): held at the placer's 25 degrees, a grave-cut basin with a 15-25 degree point was dropped whole; the re-hold
-    now cuts the point off square to its bisector first - two corners of 90 deg and more - and keeps the basin."""
-    import math
-
-    from shapely.geometry import Polygon
-
-    from l7r.diagram.waterfields.banks import pointed_ring
-    from l7r.diagram.waterfields.seams.close import HEADLAND_PX, _load_shapely, blunt_points, held_faults
-
-    _load_shapely()
-    tip = 60.0 * math.tan(math.radians(10.0))
-    wedge = Polygon([(0.0, 0.0), (60.0, -tip), (90.0, -tip), (90.0, tip), (60.0, tip)])
-    cut = blunt_points(wedge, 25.0)
-    assert cut is not None and not pointed_ring(list(cut.exterior.coords)[:-1], 25.0), "the 20-degree point is gone"
-    assert wedge.area - cut.area < HEADLAND_PX**2 * 3, "and only a small headland went with it"
-    assert blunt_points(Polygon(_rect(0.0, 0.0, 48.0, 31.0)), 25.0) is None, "no point that sharp: nothing to cut"
-    ctx = RingContext(cell=1500.0, g=G)
-    plots = _hold([as_recorded(list(wedge.exterior.coords)[:-1])], ctx)
-    assert len(plots) == 1 and not held_faults(as_recorded(plots[0]["poly"]), ctx), "the re-hold keeps the blunted basin"

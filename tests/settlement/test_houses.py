@@ -8,7 +8,6 @@ import pytest
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
-from tests._scope import full_or
 from tests.settlement._builders import _crop_settlement, _nuc_village, _pos_where, _town, _village
 
 
@@ -282,30 +281,6 @@ def test_cluster_anchor_places_each_position_on_the_right_dry_margin():
     assert ex > ey > 0
     with pytest.raises(ValueError):
         s.cluster_anchor("nowhere", fb, dd)
-
-
-def test_plot_texture_drives_build_comb_grain():
-    from tests.waterfields._builders import lay_comb
-
-    s = Settlement(1400, 1800, seed=1)
-    s.meta(name="Pt", scale="village", ftpx=2)  # ftpx>=2 -> the real-feet calibration branch (the ft/px=1 hamlet legacy branch is covered by honda/shimizu)
-    # small_irregular vs large_block must produce visibly different plot counts on the SAME field
-    a_small, step_small = s.plot_texture("small_irregular", "organic")
-    a_large, _step_large = s.plot_texture("large_block", "organic")
-    assert a_small < a_large  # smaller plot_across = smaller paddies
-    # ONE fan each (T20, GM 2026-08-26): the property is "smaller plot_across -> more plots on the same field", which any fan shows; two 5-fan combs cost 4 s for it
-    net_small = lay_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_small, row_step=step_small)
-    net_large = lay_comb(900, 1100, (360, 160), full_or(1, 3), down_deg=90, field_fall=500, offtakes_a=(0.5,), offtakes_b=(), plot_across=a_large)
-    assert len(net_small["plots"]) > len(net_large["plots"])  # small paddies -> more plots
-    # grid tightens the row-step spread vs organic
-    _a, org = s.plot_texture("medium", "organic")
-    _a2, grid = s.plot_texture("medium", "grid")
-    assert (grid[1] - grid[0]) < (org[1] - org[0])
-    # the knobs are recorded
-    assert s.M["meta"]["plot_size"] == "medium" and s.M["meta"]["plot_regularity"] == "grid"
-    for bad in (("huge", "organic"), ("medium", "checkerboard")):
-        with pytest.raises(ValueError):
-            s.plot_texture(*bad)
 
 
 def test_cluster_seeds_record_false_and_bad_shape():

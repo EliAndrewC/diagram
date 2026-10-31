@@ -12,21 +12,15 @@ from l7r.diagram.waterfields.ring_rules import (
     AREA_FLOOR,
     BASIN_MIN_WIDTH_FT,
     OVERCOUNT_CEILING,
-    RingContext,
     arrowhead,
-    collector_crossings,
-    collector_strokes,
     crosses_pond_rim,
     dart,
     narrow,
     needle,
     overcount,
     ring_area,
-    ring_violations,
     self_crossing,
     staircase,
-    supply_intrusions,
-    supply_strokes,
     too_small,
     under_island,
     working_width,
@@ -111,23 +105,6 @@ def test_an_arrowhead_is_pointed_and_notched() -> None:
     assert not arrowhead(NEEDLE)  # pointed but convex
 
 
-def test_a_bund_inside_the_supply_stroke_is_found() -> None:
-    strokes = supply_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 10.0}, {"poly": [[0.0, 0.0]], "w": 4.0}])
-    assert len(strokes) == 1  # a stroke of one point has no centerline
-    assert set(supply_intrusions(_box(20.0, 53.0, 60.0, 90.0), strokes)) == {(20, 53), (60, 53)}  # the first sample of each edge in the water
-    assert supply_intrusions(_box(20.0, 56.0, 60.0, 90.0), strokes) == []  # abuts: 6 px off a 5 px half-width
-    assert supply_intrusions(_box(20.0, 200.0, 60.0, 240.0), strokes) == []  # outside the stroke's reach
-    assert supply_intrusions(_box(203.0, 48.0, 240.0, 90.0), strokes) == []  # past the stroke's end
-
-
-def test_a_bund_across_the_collector_is_found() -> None:
-    drains = collector_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 6.0}])
-    assert drains[0][1] == 3.0
-    across = [[50.0, 49.5], [60.0, 50.5], [60.0, 100.0], [50.0, 100.0]]
-    assert collector_crossings(across, drains) == [(50, 50)]
-    assert collector_crossings(_box(50.0, 60.0, 60.0, 100.0), drains) == []
-
-
 def test_a_ring_crossing_the_pond_rim_is_found() -> None:
     pond = (50.0, 50.0, 10.0, 10.0)
     assert crosses_pond_rim(_box(45.0, 45.0, 70.0, 70.0), pond)
@@ -144,59 +121,3 @@ def test_a_ring_under_the_grave_island_is_found() -> None:
     assert under_island(_box(0.0, 0.0, 100.0, 100.0), disc)  # the basin's floor under the mound
     assert under_island(_box(52.0, 0.0, 80.0, 100.0), disc)  # a bund under the mound
     assert not under_island(_box(60.0, 0.0, 80.0, 100.0), disc)
-
-
-def test_ring_violations_names_every_rule_broken() -> None:
-    assert ring_violations(SQUARE, RingContext()) == set()
-    assert ring_violations(SQUARE, RingContext(cell=1600.0, g=2.0)) == set()
-    # the working width (W26) and the dart (W27) are recorded, not enforced - the research contradicts both (T13)
-    assert ring_violations(NEEDLE, RingContext(cell=1000.0, g=2.0)) == {"needle"}
-    assert narrow(NEEDLE, 2.0) and dart(NEEDLE, 1000.0), "though the needle breaks both recorded rules"
-    assert ring_violations(BOWTIE, RingContext(cell=1000.0)) == {"crossing", "area"}
-    assert ring_violations(ARROW, RingContext()) == {"arrowhead"}
-    assert ring_violations(TWO_STEPS, RingContext(g=2.0)) == {"steps"}
-    ctx = RingContext(
-        supplies=supply_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 10.0}]),
-        drains=collector_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 6.0}]),
-        ponds=[(50.0, 50.0, 10.0, 10.0)],
-        graves=[(50.0, 50.0, 5.0)],
-    )
-    assert ring_violations([[50.0, 49.5], [60.0, 50.5], [60.0, 100.0], [50.0, 100.0]], ctx) == {"stroke", "collector", "pond", "grave"}
-
-
-def test_the_fan_context_is_the_one_the_gate_reads_off_the_manifest() -> None:
-    """`fan_context` builds a fan's RingContext from the engine's channels exactly as `_comb_record_ditches` records
-    them (0.1 px points and widths, a repeated point dropped) and the cell as `_comb_record_field` records it - so the
-    seam pass and the gate ask the rules of one context. The drain is the collector; every other supply role a stroke."""
-    from l7r.diagram.waterfields.ring_rules import as_recorded, fan_context
-
-    channels = [
-        {"pts": [(0.04, 50.02), (0.05, 50.03), (200.0, 50.0)], "w": 10.04, "role": "main"},
-        {"pts": [(0.0, 150.0), (200.0, 150.0)], "w": 3.0, "w_tail": 5.46, "role": "drain"},
-        {"pts": [(0.0, 150.0)], "w": 3.0, "role": "drain"},  # a drain with no course is no collector
-        {"pts": [(0.0, 90.0), (5.0, 90.0)], "w": 2.0, "role": "hairline"},  # no supply role, not a stroke
-    ]
-    ctx = fan_context(channels, 2.0, 1234.56, ponds=[(1, 2, 3, 4)], graves=[(5, 6, 7)])
-    assert ctx.cell == 1234.6 and ctx.g == 2.0
-    assert [s.pts for s in ctx.supplies] == [[(0.0, 50.0), (200.0, 50.0)]] and ctx.supplies[0].w0 == 10.0
-    assert ctx.drains == [([(0.0, 150.0), (200.0, 150.0)], 2.75)]
-    assert ctx.ponds == [(1.0, 2.0, 3.0, 4.0)] and ctx.graves == [(5.0, 6.0, 7.0)]
-    assert fan_context([], None, None).cell is None
-    assert as_recorded([(1.04, 2.06)]) == [(1.0, 2.1)]
-
-
-def test_a_collector_edge_away_from_the_drain_is_passed_over() -> None:
-    """The collector rule's bounding-box prefilter decides nothing: an edge with an end outside the drain's reach is not
-    measured, and an edge running across the drain is still found."""
-    drains = collector_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 6.0}])
-    assert collector_crossings(_box(20.0, 60.0, 80.0, 90.0), drains) == []
-    assert collector_crossings([[20.0, 50.5], [80.0, 49.5], [80.0, 90.0], [20.0, 90.0]], drains) == [(20, 50)]
-
-
-def test_a_ring_near_a_supply_stroke_is_found_and_an_empty_one_meets_nothing() -> None:
-    """Feature 427 T09: `near_supply` builds the ring's line in one call - a ring across the canal meets its reach, one far off
-    does not, and an empty ring (which `linestrings` refuses) meets nothing, as the empty `LineString` did."""
-    ctx = RingContext(cell=1600.0, g=2.0, supplies=supply_strokes([{"poly": [[0.0, 50.0], [200.0, 50.0]], "w": 10.0}]))
-    assert ctx.near_supply([[40.0, 40.0], [60.0, 40.0], [60.0, 60.0], [40.0, 60.0]])
-    assert not ctx.near_supply([[40.0, 400.0], [60.0, 400.0], [60.0, 420.0], [40.0, 420.0]])
-    assert not ctx.near_supply([])

@@ -68,7 +68,6 @@ from ._knobs import LANE_SKELETONS as LANE_SKELETONS
 from ._knobs import LANE_WEBS as LANE_WEBS
 from ._knobs import Knob as Knob
 from ._knobs import _centroid as _centroid
-from ._knobs import _sharp_corners as _sharp_corners
 from ._knobs import bridge_carried_ways as bridge_carried_ways
 from ._knobs import bridge_crossed_waters as bridge_crossed_waters
 from ._knobs import crop_boxes as crop_boxes

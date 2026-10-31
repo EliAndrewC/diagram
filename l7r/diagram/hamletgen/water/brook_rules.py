@@ -217,18 +217,6 @@ def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
     return all(b >= a - slack for a, b in zip(us, us[1:], strict=False))
 
 
-def bar_on_race(bar: Sequence[Pt], race: Sequence[Pt], race_w: float) -> float:
-    """The area of the weir's bar lying on the head race's stroke, sq px - 0 where the bar keys into the bank clear of
-    the mouth (water:W09; `specs/357-owed-conversion-knob-candidates/` "The weir's root lands on the head race's mouth": 17% of the bar lay on it).
-    Research: weir root clear of the race - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar keys into the bank below the mouth, none of it on the race
-    """
-    from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use (plan: numpy/shapely lazily)
-
-    if len(race) < 2 or len(bar) < 3:
-        return 0.0
-    return float(Polygon(bar).intersection(LineString(race).buffer(race_w / 2.0, cap_style="flat")).area)
-
-
 def to_edge(p: Pt, d: Pt, W: float, H: float) -> float:
     """How far from `p` along the unit bearing `d` the (0, 0, W, H) canvas ends (0 where `p` is already past it)."""
     spans = [((W if d[0] > 0 else 0.0) - p[0]) / d[0]] if abs(d[0]) > 1e-9 else []

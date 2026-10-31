@@ -43,7 +43,6 @@ from .banks import (
     is_chevron,
     jog_vertices,
     pointed_ring,
-    polyline_cum,
 )
 from .frame import BANK_MARGIN, Poly, Pt, _pip, _poly_area
 
@@ -163,33 +162,6 @@ def _shapely() -> Any:
     return _SHAPELY
 
 
-def simple_outline(ring: Sequence[Sequence[float]]) -> Poly:
-    """`ring` as a SIMPLE polygon - itself when it already is one, else the outline of the largest part of it.
-
-    A FAN'S ENVELOPE MUST BE A POLYGON WITH GROUND IN IT (feature 287, the cohort seed 27 crash). The floor trim clamps a
-    run of vertices onto the flat-extended collector line, and where an unclipped outer thread runs on past the drain's
-    head the clamp deposits a fold - six points 1-3 px apart, back and forth along the line (measured on seed 27 at
-    (798-800, 1976-1978)) - that `dedup_ring`'s 1 px merge cannot reach. The ring then crosses itself, and `buffer(0)` of
-    that ring came back EMPTY, so the seam pass and the carve's acreage estimate were handed a field with no ground and
-    raised on its NaN bounds. `make_valid` keeps the fan's ground (823,065 sq px there, against the ring's own 823,065)
-    and the fold, which is no ground at all, is dropped. A ring that is already simple is returned untouched."""
-    Polygon, _union = _shapely()
-    pts = _pts(ring)
-    if len(pts) < 3 or Polygon(pts).is_valid:
-        return pts
-    import shapely
-
-    stack, parts = [shapely.make_valid(Polygon(pts))], []
-    while stack:  # make_valid nests: a collection of a MultiPolygon and the fold's lines, on seed 27
-        g = stack.pop()
-        if hasattr(g, "geoms"):
-            stack += list(g.geoms)
-        elif g.geom_type == "Polygon" and g.area > 0.0:
-            parts.append(g)
-    best = max(parts, key=lambda g: g.area) if parts else Polygon(pts).convex_hull
-    return [(float(x), float(y)) for x, y in list(best.exterior.coords)[:-1]] if best.geom_type == "Polygon" else pts
-
-
 def needle(ring: Sequence[Sequence[float]]) -> bool:
     """W18/W20 - the basin tapers to a point: an interior angle under `NEEDLE_DEG` on the ring as recorded.
 
@@ -291,23 +263,6 @@ class SupplyStroke:
     index: StrokeIndex
 
 
-def supply_strokes(ditches: Sequence[dict[str, Any]]) -> list[SupplyStroke]:
-    """The supply strokes of a fan from its recorded ditches (`poly`, `w`, `w_tail`); a stroke of under two points
-    has no centerline and is skipped."""
-    out = []
-    for fd in ditches:
-        pts = [(float(p[0]), float(p[1])) for p in (fd.get("poly") or [])]
-        if len(pts) < 2:
-            continue
-        w0 = float(fd.get("w", 2.0))
-        w1 = float(fd.get("w_tail", w0))
-        reach = max(w0, w1) / 2 + BANK_MARGIN + 1.0
-        box = (min(p[0] for p in pts) - reach, max(p[0] for p in pts) + reach, min(p[1] for p in pts) - reach, max(p[1] for p in pts) + reach)
-        cum = polyline_cum(pts)
-        out.append(SupplyStroke(pts, w0, w1, cum, box, StrokeIndex(pts, w0, w1, cum, reach)))
-    return out
-
-
 def supply_intrusions(ring: Sequence[Sequence[float]], strokes: Sequence[SupplyStroke]) -> list[tuple[int, int]]:
     """W16 - the points where the ring's bund stands inside a supply stroke: per stroke and edge, the first 3 px
     sample closer to the centerline than the stroke's local half-width plus `BANK_MARGIN` (less the rounding slack),
@@ -371,11 +326,6 @@ def drain_index(drains: Sequence[tuple[Poly, float]]) -> list[tuple[float, float
         segs = [(a, b, min(a[0], b[0]) - reach, max(a[0], b[0]) + reach, min(a[1], b[1]) - reach, max(a[1], b[1]) + reach) for a, b in zip(pts, pts[1:], strict=False)]
         out.append((half, reach, min(xs) - reach, max(xs) + reach, min(ys) - reach, max(ys) + reach, segs))
     return out
-
-
-def collector_strokes(drains: Sequence[dict[str, Any]]) -> list[tuple[Poly, float]]:
-    """Each recorded collector as (centerline, half its widest width)."""
-    return [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0))) / 2.0) for d in drains]
 
 
 def collector_crossings(ring: Sequence[Sequence[float]], drains: Sequence[tuple[Poly, float]], index: Any = None) -> list[tuple[int, int]]:
@@ -463,44 +413,6 @@ class RingContext:
             shapely.prepare(self._supply_reach)
         pts = [(float(p[0]), float(p[1])) for p in ring]
         return bool(self._supply_reach.intersects(LineString([*pts, *pts[:1]])))
-
-
-def fan_context(
-    channels: Sequence[dict[str, Any]],
-    g: float | None,
-    cell: float | None,
-    ponds: Sequence[Sequence[float]] = (),
-    graves: Sequence[Sequence[float]] = (),
-) -> RingContext:
-    """The context a fan's rings are judged in, built from the ENGINE's channels (`pts`, `w`, `w_tail`, `role`) exactly
-    as `_comb_record_ditches` will record them - points and widths rounded to 0.1 px, a point repeating its predecessor
-    dropped - and the design cell as `_comb_record_field` records it. So the placer's context and the gate's (which
-    reads the recorded `field_ditches` and `cell`) are one: supply strokes are every channel but the drain, and the
-    collector is the drain.
-
-    Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (duplicate-point tolerance)
-    """
-
-    def recorded(c: dict[str, Any]) -> dict[str, Any]:
-        pts = [q for i, q in enumerate(c["pts"]) if i == 0 or math.dist(q, c["pts"][i - 1]) > 0.05]
-        return {"poly": [(round(float(x), 1), round(float(y), 1)) for x, y in pts], "w": round(float(c["w"]), 1), "w_tail": round(float(c["w_tail"] if "w_tail" in c else c["w"]), 1)}
-
-    supplies = [recorded(c) for c in channels if c.get("role") in ("main", "branch")]
-    drains = [recorded(c) for c in channels if c.get("role") == "drain" and len(c.get("pts") or ()) >= 2]
-    return RingContext(
-        cell=round(float(cell), 1) if cell else None,
-        g=g,
-        supplies=supply_strokes(supplies),
-        drains=collector_strokes(drains),
-        ponds=[(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in ponds],
-        graves=[(float(d[0]), float(d[1]), float(d[2])) for d in graves],
-    )
-
-
-def as_recorded(ring: Sequence[Sequence[float]]) -> Poly:
-    """`ring` as the manifest records it (`plot_rings`): every vertex rounded to 0.1 px, nothing else changed."""
-    return [(round(float(p[0]), 1), round(float(p[1]), 1)) for p in ring]
 
 
 def ring_violations(ring: Sequence[Sequence[float]], ctx: RingContext) -> set[str]:

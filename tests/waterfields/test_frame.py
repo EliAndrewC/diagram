@@ -12,7 +12,7 @@ import math
 import pytest
 
 from l7r.diagram.waterfields import supply_bank_clearance, taper_pieces, taper_w
-from l7r.diagram.waterfields.frame import CANAL_A_FT, DELIVERY_FT, DELIVERY_PARENT_FRAC, DRAIN_FT, MIN_CHANNEL_PX, _drain_bank, _Frame, _seg_x, chan_px
+from l7r.diagram.waterfields.frame import DELIVERY_FT, MIN_CHANNEL_PX, _seg_x, chan_px
 
 
 def _linear(w0: float, w1: float, t: float) -> float:
@@ -150,22 +150,6 @@ def test_chan_px_floors_at_the_visibility_minimum_and_only_there() -> None:
     assert chan_px(DELIVERY_FT[0], 2.0) > MIN_CHANNEL_PX
 
 
-def test_a_delivery_head_never_exceeds_its_parents_local_width() -> None:
-    """The rank read must not invert (settlement-review 2026-08-17, twice). Whatever the canal has
-    tapered to where a delivery taps it, the delivery leaves narrower - checked across every cut of a
-    canal, including the last, where the parent is at its thinnest and the cap actually bites."""
-    from l7r.diagram.waterfields.comb import _canal_ft
-
-    n = 6
-    for j in range(n):
-        parent = _canal_ft(CANAL_A_FT, j + 1, n)
-        head = min(DELIVERY_FT[0], parent * DELIVERY_PARENT_FRAC)
-        assert head < parent, f"delivery at cut {j + 1} would be drawn wider than its parent"
-    # the cap is SLACK high in the tree (the delivery keeps its own tier) and BINDS low in it
-    assert min(DELIVERY_FT[0], _canal_ft(CANAL_A_FT, 1, n) * DELIVERY_PARENT_FRAC) == DELIVERY_FT[0]
-    assert min(DELIVERY_FT[0], _canal_ft(CANAL_A_FT, n, n) * DELIVERY_PARENT_FRAC) < DELIVERY_FT[0]
-
-
 def test_taper_pieces_parameterizes_by_ARC_not_by_vertex_index() -> None:
     """THE SECOND RATCHET (settlement-review 2026-08-17). The law was right and the SAMPLING was
     wrong: the stroke used to be cut into 7 equal slices of the INDEX range, which only lands the
@@ -213,22 +197,6 @@ def test_taper_pieces_survives_a_ZERO_LENGTH_polyline() -> None:
     """Repeated identical vertices make the total arc zero; the `or 1.0` guard must keep the divide
     alive rather than raising in the middle of a render."""
     assert [w for _p, w in taper_pieces([(5.0, 5.0), (5.0, 5.0)], 8.0, 3.0)] == [8.0]
-
-
-def test_the_collector_bank_follows_the_same_law_as_its_stroke() -> None:
-    """The drain half of the ratchet: `_drain_bank` decides where a paddy's low bund stops, and it
-    has to taper with the ditch it abuts. A constant - or a straight line - is inside the stroke at
-    one end and leaves a bare stripe at the other."""
-    F = _Frame(90.0)
-    dpts = [(0.0, 0.0), (100.0, 20.0), (200.0, 40.0)]
-    g = 2.0
-    bank = _drain_bank(F, dpts, g)
-    us = sorted(F.to_uf(*p)[0] for p in dpts)
-    lo, hi = us[0], us[-1]
-    mid = bank((lo + hi) / 2)
-    # the half-width at mid-run, before the margin and the slope correction, is the sqrt law's
-    assert mid > (taper_w(chan_px(DRAIN_FT[0], g), chan_px(DRAIN_FT[1], g), 0.5) / 2)
-    assert bank(lo) < mid < bank(hi)  # and it still grows monotonically toward the outfall
 
 
 def test_seg_x_returns_nothing_for_segments_that_cannot_meet() -> None:

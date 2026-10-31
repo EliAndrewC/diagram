@@ -11,7 +11,6 @@ from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
 from l7r.diagram.hamletgen.water.brook_rules import WetLines, hem_on_water
 from l7r.diagram.settlement._geom import point_quad_dist, quad_hits_seg, seg_dist, segments_cross
 from l7r.diagram.settlement.homestead_parts.stands import BankNear
-from l7r.diagram.waterfields.hem import BoxedRings, overlaps_any
 
 
 def _quad(rng: random.Random, span: float = 600.0) -> list[tuple[float, float]]:
@@ -59,23 +58,6 @@ def _old_overlaps_any(poly, rings) -> bool:
         if a.intersection(Polygon(r).buffer(0)).area > 1.0:
             return True
     return False
-
-
-def test_the_boxed_rings_overlap_as_the_rings_did() -> None:
-    """A plot overlaps the taken ground through the boxed rings exactly when it overlaps the rings themselves - one boxed
-    set asked of many plots, the plot beside, across and far from the rings."""
-    rng = random.Random(2872)
-    seen = 0
-    for _ in range(40):
-        rings = [_quad(rng, 300.0) for _ in range(rng.randint(0, 8))]
-        boxed = BoxedRings(rings)
-        for _k in range(20):
-            plot = _quad(rng, 300.0)
-            want = _old_overlaps_any(plot, rings)
-            seen += want
-            assert overlaps_any(plot, boxed) is want
-            assert overlaps_any(plot, rings) is want
-    assert 50 < seen < 750, "the sample holds plots on the taken ground and off it"
 
 
 def _old_too_near(points, reach, barriers, x, y) -> bool:

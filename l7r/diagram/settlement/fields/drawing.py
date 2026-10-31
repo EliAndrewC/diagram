@@ -21,9 +21,6 @@ if TYPE_CHECKING:
 
 
 class FieldDrawingMixin:
-    _PADDY_POND_KINDS = ("valley_paddy", "contour_terraces", "polder_grid", "ribbon_valley")
-    _PADDY_GRAVE_KINDS = ("valley_paddy", "contour_terraces", "ribbon_valley")
-
     def comb_base_fill(self: Settlement, net: dict[str, Any], name: str, color: str = "", full_envelope: bool = False) -> None:  # type: ignore[misc]
         """Draw a FIELD FLOOR under a comb net's plots and record it (M['comb_floors'][name]),
         so the parchment BACKGROUND never shows through as bare 'white' at the canal junctions the

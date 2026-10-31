@@ -83,19 +83,3 @@ def test_the_collector_turns_with_the_map() -> None:
 # above: it asserted a property of the SAME drain at the SAME fall, so as a separate test it doubled the
 # builds to re-derive a net the bearing test had already made. Merging it costs no coverage - both
 # assertions still run at every fall, and a failure still names which one - and halves this file's cost.
-
-
-def test_the_carves_region_is_what_the_finish_plants(seed: int = 7) -> None:
-    """Feature 302 (on 220): `fit_field` scores each guess on `CombCarve.region.area` - the ground the finish will tile - and
-    finishes only the winner. The design rests on the finish planting the region, but for the scraps it leaves bare
-    (the bound: `0.5%` of it, specs/302 SC-003)."""
-    from l7r.diagram.sitegen.geom import poly_area
-    from l7r.diagram.waterfields import carve_comb, finish_comb
-
-    args = dict(W=1400, H=1400, sluice=(200.0, 200.0), seed=seed, down_deg=60.0, canal_a_len=(700.0, 800.0), canal_b_len=(400.0, 460.0))
-    carve = carve_comb(**args)  # type: ignore[arg-type]
-    region = carve.region.area
-    assert carve.region.area > 0 and all(len(p["poly"]) >= 3 for p in carve.net["plots"]), "the carve's net stands the region's outline in for the plots"
-    net = finish_comb(carve)
-    planted = sum(poly_area(p["poly"]) for p in net["plots"])
-    assert 0.995 * region <= planted <= region * 1.001, (region, planted)

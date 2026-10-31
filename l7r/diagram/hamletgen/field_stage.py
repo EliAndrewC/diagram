@@ -47,7 +47,7 @@ def _knob_tables(s: Settlement, plan: SitePlan) -> list[tuple[str, list[str], li
     """Each of the stage's knobs drawn in Rust from its table against the running context (`roll_knob`), recorded on the
     settlement as `resolve` records it, and handed to the stage as a pin so the stage reads the value drawn."""
     ext = phases()
-    out = []
+    out: list[tuple[str, list[str], list[float], str | None]] = []
     for name in STAGE_KNOBS:
         knob = KNOBS.get(name)
         if knob is None:

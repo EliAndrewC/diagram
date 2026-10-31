@@ -44,7 +44,7 @@ import random
 from typing import Any
 
 from .carve import _bnd, _root_f
-from .frame import Poly, Pt, _Frame, _Thread
+from .frame import Pt, _Frame, _Thread
 
 MIN_ROW = 0.45
 """A row is cut only where its sector is wider than this many plot widths (or, in a sector narrower than a plot, this share of its
@@ -90,30 +90,6 @@ Research: largest basin - research/questions/0005-rice-paddies-and-their-plots-s
 
 OUTER_REACH = 14
 """The outer strip's lattice reaches this many plot widths past its thread - more than any strip a pool or cohort fan carries."""
-
-
-def planted_region(F: _Frame, envelope: Poly, channels: list[dict[str, Any]], a_pts: Poly, dpts: Poly, g: float, bank: Any) -> Any:
-    """The ground a fan plants: its envelope less its water and its banks (`seams.pockets._water`) and less the ground it cannot
-    command - below the collector's bank, above the supply canal (`_outside_command`). Its area IS the fan's planted acreage.
-
-    Research:
-        planted ground - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the envelope within the command area
-        water and banks left out - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: no paddy on a course or its bank
-    """
-    from shapely.geometry import Polygon
-
-    from .seams.pockets import _outside_command, _water
-
-    field = Polygon(envelope).buffer(0)
-    return field.difference(_water(channels, g)).difference(_outside_command(F, a_pts, dpts, field, g, bank))
-
-
-def region_rings(region: Any) -> list[Poly]:
-    """The region's outer rings - what stands for the plots' extent where the fit's legality reads it before any plot is cut.
-    Its POLYGONS only: the difference that makes it can leave a sliver LINE where the water's edge runs along the envelope's
-    (feature 304's scaling leg, seed 7 at 40 households: `'LineString' object has no attribute 'exterior'`), and a line
-    plants nothing."""
-    return [list(p.exterior.coords)[:-1] for p in getattr(region, "geoms", [region]) if p.geom_type == "Polygon" and not p.is_empty]
 
 
 def _extend(pts: list[Pt], by: float) -> list[Pt]:

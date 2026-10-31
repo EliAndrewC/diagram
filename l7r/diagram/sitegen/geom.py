@@ -9,13 +9,12 @@ Research: geometry - NONE: polygon measures and predicates
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping, Sequence
-from typing import Any
+from collections.abc import Sequence
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, segments_cross
 from l7r.diagram.work_counts import OPS
 
-from .types import SQ_FT_PER_ACRE, Poly, Pt
+from .types import Poly, Pt
 
 # ---- geometry helpers ---------------------------------------------------------------------------
 
@@ -24,16 +23,6 @@ def poly_area(poly: Sequence[Pt]) -> float:
     """Absolute area of a closed polygon (the shoelace formula)."""
     n = len(poly)
     return abs(sum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n))) / 2.0
-
-
-def net_acres(net: Mapping[str, Any], ftpx: float) -> float:
-    """The DRAWN paddy acreage of a comb net - the sum of the plot polygons actually carved.
-
-    Deliberately measured from the plots and not from the comb net's own `acres` (which assumes the
-    village grain of 1 px = 2 ft and so over-reports 4x on a 1 ft/px hamlet) and not from the field
-    envelope (which bows outside the plots and would count the bunds, the canals and the gaps as
-    rice). The plots are what a farmer plants, so the plots are what gets counted."""
-    return sum(poly_area(p["poly"]) for p in net["plots"]) * ftpx * ftpx / SQ_FT_PER_ACRE
 
 
 def centroid(poly: Sequence[Pt]) -> Pt:

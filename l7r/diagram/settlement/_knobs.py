@@ -26,7 +26,6 @@ Research:
 """
 
 import hashlib
-import math
 import random
 from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
@@ -210,42 +209,10 @@ def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     return req is None or terrain == req
 
 
-def _toward(frm: Pt, to: Pt, dist: float) -> Pt:
-    """A point `dist` along the way from `frm` to `to`, never past 45% of the run - so a fillet leg
-    piled onto a short plot edge still leaves that edge with a middle.
-    Research: geometry - NONE
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.45 (leg cap ("geometry - NONE"))
-    """
-    vx, vy = to[0] - frm[0], to[1] - frm[1]
-    ln = math.hypot(vx, vy) or 1.0
-    dd = min(dist, ln * 0.45)
-    return (frm[0] + vx / ln * dd, frm[1] + vy / ln * dd)
-
-
 def _centroid(poly: Sequence[Pt]) -> list[float]:
     """Rounded centroid of a plot polygon - the identity a land-use record and a wet-plot record share.
     Research: geometry - NONE"""
     return [round(sum(p[0] for p in poly) / len(poly), 1), round(sum(p[1] for p in poly) / len(poly), 1)]
-
-
-def _sharp_corners(poly: Sequence[Pt]) -> int:
-    """How many vertices of a closed outline turn through more than 60 degrees - i.e. how many corners
-    are still essentially square. A ruled quad scores 4. Counting them, rather than taking the SHARPEST
-    turn, is what survives the rule getting more honest: once corner reach is drawn from a wide spread
-    some corners legitimately stay near-square (the one behind a neighbor's bund never gets walked),
-    so a max is a statistic about the single least-rounded corner on the parcel and says nothing about
-    the parcel. The count does: it separates 'a few corners never rounded' from 'nothing rounded'.
-    Research: geometry - NONE: a corner turning more than 60 degrees counts as square"""
-    n = len(poly)
-    hard = 0
-    for i in range(n):
-        ax, ay = poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]
-        bx, by = poly[(i + 1) % n][0] - poly[i][0], poly[(i + 1) % n][1] - poly[i][1]
-        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
-        if la < 1e-9 or lb < 1e-9:
-            continue  # a duplicate vertex turns through no angle at all
-        hard += math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) > 60.0
-    return hard
 
 
 def _land_use_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
@@ -513,17 +480,6 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 
 """Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
 """Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 4 ft"""
-
-
-#: The scales that draw as a WALLED URBAN RING at the city grain. A domain capital is a bigger
-#: city, not a different kind of thing: it wants the same execution-ground sizing, the same
-#: in-wall grove suppression, the same street widths and the same walled-ring paddy handling. So
-#: the tier predicates are WIDENED rather than forked (feature 019) - the opposite of what
-#: citybudget does for the BUDGET, and for the opposite reason: there a shared path risked
-#: repricing shipped cities, here the shared behavior is simply the correct behavior and
-#: duplicating it would fork the drawing vocabulary.
-CITY_TIER_SCALES = ("city", "capital")
-"""Research: a capital draws as a bigger city - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html"""
 
 
 # NO DRAWN FLOOR FOR THE BOUNDARY STONE (feature 328 wave 7): it was drawn at a 7 px floor, about 21 ft at the city grain,

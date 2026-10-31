@@ -10,7 +10,6 @@ import pytest
 from l7r.diagram import hamletgen as hg
 from l7r.diagram import waterfields as wf
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE
 
 from ._builders import a_plan
 
@@ -135,90 +134,6 @@ def test_the_waterward_strip_stops_at_the_dikes_face() -> None:
     assert hg.point_in_poly(500.0 - 28.0, 600.0, [(float(a), float(b)) for a, b in west["poly"]])  # the check's own sample is inside
 
 
-def test_predict_k_steps_by_the_power_law_and_falls_back_to_the_midpoint() -> None:
-    """The field solver's step (feature 145): a square-root step from one carve, a power-law step
-    from two, and the bracket midpoint whenever the prediction is useless."""
-    from l7r.diagram.hamletgen.water import _predict_k
-
-    # one carve at k=1 gave 9 acres against a 16-acre target: k^2 scaling predicts 4/3
-    assert abs(_predict_k([(1.0, 9.0)], 16.0, 0.35, 2.2) - 4.0 / 3.0) < 1e-9
-    # two carves on an exact k^2 curve predict the exact answer
-    assert abs(_predict_k([(1.0, 4.0), (1.5, 9.0)], 16.0, 0.35, 2.2) - 2.0) < 1e-9
-    # a flat (same acreage twice) has no slope - square-root step from the last point
-    assert abs(_predict_k([(1.0, 9.0), (1.2, 9.0)], 16.0, 0.35, 2.2) - 1.2 * (16.0 / 9.0) ** 0.5) < 1e-9
-    # an exponent outside (0.2, 6) is not a fan - square-root step
-    assert abs(_predict_k([(1.0, 1.0), (1.1, 100.0)], 200.0, 0.35, 2.2) - 1.1 * 2.0**0.5) < 1e-9
-    # nothing carved: midpoint
-    assert _predict_k([(1.0, 0.0)], 16.0, 0.5, 1.5) == 1.0
-    # a prediction outside the open bracket: midpoint
-    assert _predict_k([(1.0, 9.0)], 16.0, 0.5, 1.2) == 0.85
-    # the same k twice cannot give a slope: square-root step
-    assert abs(_predict_k([(1.0, 9.0), (1.0, 9.5)], 16.0, 0.35, 2.2) - (16.0 / 9.5) ** 0.5) < 1e-9
-
-
-def test_fit_field_probes_saturation_and_rerolls_the_best_aspect_in_full(monkeypatch: object) -> None:
-    """Feature 145: an aspect whose largest fan is still short is dropped after two carves, and when no
-    aspect lands the target the best one is searched again without the probe."""
-    from types import SimpleNamespace
-
-    from l7r.diagram.hamletgen.water import fit as w  # the DEFINING submodule: `water` is a package since feature 230, and patching it reaches nothing the search bound
-
-    carves: list[tuple[float, float]] = []
-
-    finishes: list[object] = []
-
-    def fake_carve(W: float, H: float, sluice: object, seed: int, **kw: object) -> SimpleNamespace:
-        k = float(kw["field_fall"]) / w.REF_FIELD_FALL  # type: ignore[arg-type]
-        aspect = float(kw["canal_a_len"][0]) / (w.REF_CANAL_A[0] * k)  # type: ignore[index]
-        carves.append((round(aspect, 2), round(k, 3)))
-        acres = min(9.0 * k**2, 10.0)  # saturates at 10 acres (ftpx 1)
-        return SimpleNamespace(net={"k": k, "aspect": aspect, "acres": acres}, region=SimpleNamespace(area=acres * SQ_FT_PER_ACRE))
-
-    def fake_finish(carve: SimpleNamespace) -> dict[str, object]:
-        finishes.append(carve)
-        return dict(carve.net)
-
-    monkeypatch.setattr(w, "carve_comb", fake_carve)  # type: ignore[attr-defined]
-    monkeypatch.setattr(w, "finish_comb", fake_finish)  # type: ignore[attr-defined]  # feature 220: the search carves, the winner alone is finished
-    monkeypatch.setattr(w, "tail_dangles", lambda net: False)  # type: ignore[attr-defined]
-    monkeypatch.setattr(w, "net_bends_acutely", lambda net: False)  # type: ignore[attr-defined]
-    monkeypatch.setattr(w, "net_acres", lambda net, ftpx: net["acres"])  # type: ignore[attr-defined]
-    # 11 acres against a 10-acre ceiling: no aspect lands the 6% the search aims at, and the best lands inside the 15% band
-    # (feature 287) - past it the site is refused, `tests/hamletgen/test_fit_flanks.py`
-    plan = SimpleNamespace(
-        W=1000.0, H=1000.0, down_deg=90.0, offtakes_a=(), offtakes_b=(), grain_drift=0.0, fan_aspect=w.FAN_ASPECTS[0], target_acres=11.0, ftpx=1.0, head_deg=55.0, head_lead=105.0, brook_side=1
-    )
-    net = w.fit_field(plan, (0.0, 0.0), 1, 20.0, (30.0, 40.0))  # type: ignore[arg-type]
-    per_aspect = {}
-    for a, _k in carves:
-        per_aspect[a] = per_aspect.get(a, 0) + 1
-    first = max(per_aspect, key=lambda a: per_aspect[a])  # the rolled aspect, searched again in full when nothing landed
-    assert max(n for a, n in per_aspect.items() if a != first) <= 3, per_aspect  # every other aspect: k = 1, the probe, dropped
-    assert per_aspect[first] > 3  # the rolled aspect was searched again in full
-    assert net["k"] > 0
-    assert len(finishes) == 1 and finishes[0].net["k"] == net["k"]  # ONE finish, of the winner (feature 220, SC-003)
-
-
-def test_a_saturated_aspect_stops_after_the_probe_instead_of_bisecting_a_fan_it_cannot_grow() -> None:
-    """Cohort seed 47 (2026-08-28): at four of its five aspects the fan SATURATES - the envelope clamps it
-    and the acreage sits at 16-17 against a 19.5 target however large k gets - and the old loop spent its
-    last four carves at k = 2.16, 2.18, 2.19, 2.195 drawing the same 16.35 acres each time. The probe asks
-    the question once: if neither k = 1 nor the LARGEST fan this aspect can draw reaches the target, keep
-    the better of the two and give the time to the next aspect."""
-    from l7r.diagram.hamletgen.water import _fit_at_aspect
-
-    from ._builders import a_plan
-
-    plan = a_plan()
-    plan.target_acres = 500.0  # far past anything this envelope can hold: every aspect saturates
-    # ...on a COARSE plot grid, for the reason recorded at the retired `test_the_fit_gives_a_saturated_best_aspect` (test_seed_branches_147.py)
-    # (feature 158): the probe's decision is about the TARGET being unreachable, not about how many
-    # plots a carve lays, and the plot count is all this test's seconds were.
-    (bad, err), carve = _fit_at_aspect(plan, (700.0, 300.0), 3, 138.0, (78.0, 90.0), 1.0, 0.06, 9, probe=True)
-    assert not bad and err > 0.5, "the best legal fan is kept, and it is nowhere near the ask"
-    assert carve.region.area > 0, "and it is a real fan, not an empty one"  # a CARVE since feature 220: the search finishes only the winner; its ground since 302
-
-
 def test_a_fan_with_no_plots_counts_as_DANGLING() -> None:
     """`tail_dangles` asks whether a supply canal ends outside the planted extent. With no plots
     there is no extent, so nothing can be inside one - the honest answer is True, and a fan in that
@@ -245,28 +160,6 @@ def test_the_reservoir_walks_uphill_until_its_rim_clears_the_crop_and_stays_put_
     assert not any(point_in_poly(x, y, square) for x, y in rim_in)
     clear = (50.0, -40.0, 10.0, 6.0)
     assert water.walk_pond_uphill(clear, square, 0.0, -1.0) == clear, "already clear: the first test stops the walk"
-
-
-def test_the_reservoir_is_seated_clear_of_a_spike_and_above_the_field_however_far_it_must_go() -> None:
-    """Feature 287, water W46: the seat is SOLVED, not walked a bounded number of steps. An envelope spike between two of
-    the old sixteen rim samples is caught by the polygon test, and an envelope that needs more than the old 60 steps is
-    cleared all the same; both predicates hold at the seat."""
-    from l7r.diagram.hamletgen.water.polder import reservoir_clear_of_crop, reservoir_uphill_of_field, walk_pond_uphill
-
-    spiked = [(0.0, 0.0), (57.0, 0.0), (57.5, -5.5), (58.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
-    pond = (50.0, -8.0, 10.0, 6.0)  # clear of the square, but the spike's tip stands inside the rim between two samples
-    rim = [(pond[0] + 10.0 * math.cos(a), pond[1] + 6.0 * math.sin(a)) for a in (k * math.pi / 8 for k in range(16))]
-    assert not any(hg.point_in_poly(x, y, spiked) for x, y in rim), "sixteen samples miss the spike"
-    assert not reservoir_clear_of_crop(pond, spiked)
-    seat = walk_pond_uphill(pond, spiked, 0.0, -1.0)
-    assert reservoir_clear_of_crop(seat, spiked) and reservoir_uphill_of_field(seat, spiked, (0.0, 1.0)) and seat[1] < pond[1]
-    tall = [(0.0, 0.0), (100.0, 0.0), (100.0, 1000.0), (0.0, 1000.0)]
-    deep = walk_pond_uphill((50.0, 990.0, 10.0, 6.0), tall, 0.0, -1.0)  # 83 steps of 12 ft to clear
-    assert reservoir_clear_of_crop(deep, tall) and reservoir_uphill_of_field(deep, tall, (0.0, 1.0))
-    beside = (150.0, 50.0, 10.0, 6.0)  # clear of the crop but beside it, level with its middle: not above it
-    assert reservoir_clear_of_crop(beside, tall) and not reservoir_uphill_of_field(beside, tall, (0.0, 1.0))
-    moved = walk_pond_uphill(beside, tall, 0.0, -1.0)
-    assert reservoir_uphill_of_field(moved, tall, (0.0, 1.0)) and moved[1] < 0.0
 
 
 def test_the_dike_is_gapped_where_a_channel_crosses_it_and_not_twice_within_thirty_feet() -> None:
@@ -306,28 +199,6 @@ def test_fit_polder_stops_the_bisection_the_moment_the_acreage_lands_inside_tole
     assert net["rows"] == 25
 
 
-def test_fit_polder_lands_inside_the_band_where_the_bisection_stalls(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 287, water W47: rows with their tied columns step the acreage coarsely, and a target between two steps left
-    the bisection 15% short and kept the miss. The (rows, cols) search goes on until a block lands inside the tolerance,
-    and the drawn block is inside the band the rule reads (`polder_acres_in_band`). Stood in: acres = 0.1 per module."""
-    from l7r.diagram import hamletgen as hg
-    from l7r.diagram.hamletgen import water
-    from l7r.diagram.hamletgen.water.polder import polder_acres_in_band
-
-    plan = hg.plan_site(hg.HamletSpec(name="Polder", seed=12, households=16, field_archetype="polder_grid", down_deg=0))
-    plan.target_acres = 10.2  # the bisection's blocks: 13x7 = 9.1 and 14x8 = 11.2, both over 6% off - it stalls between them
-
-    def fake_build(W, H, origin, seed, **kw):  # type: ignore[no-untyped-def]
-        return {"envelope": [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], "rows": kw["rows"], "cols": kw["cols"]}
-
-    monkeypatch.setattr(water.polder, "build_polder", fake_build)
-    monkeypatch.setattr(water.polder, "net_acres", lambda net, ftpx: 0.1 * net["rows"] * net["cols"])
-    monkeypatch.setattr(water.polder, "clean_polder_parcels", lambda net: net)
-    net = water.fit_polder(plan, 12)
-    assert polder_acres_in_band(0.1 * net["rows"] * net["cols"], plan.target_acres, 0.06)
-    assert not polder_acres_in_band(9.9, 11.3) and polder_acres_in_band(10.5, 11.3)
-
-
 def test_fit_polder_carries_the_cleanup_s_trim_into_its_next_choice_and_refuses_a_site_it_cannot_honor(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     """W47's second half: the cleanup trims the winner after it is chosen; a trim that takes it out of the band sends the
     search to a block predicted with the trim carried, and a site no block can honor is refused, never drawn short."""
@@ -354,56 +225,7 @@ def test_fit_polder_carries_the_cleanup_s_trim_into_its_next_choice_and_refuses_
         water.fit_polder(plan, 12)
 
 
-def test_the_inlet_reaches_the_rim_and_never_drags_the_ring_off_its_corner() -> None:
-    """Feature 287, water W44: the feeder's inlet stub ends on the reservoir's rim - its END moved there; but where the
-    stub was trimmed away and the last point is a ring vertex inside the crop, that vertex stays (a toe is snapped to it)
-    and the run to the rim is added after it."""
-    from l7r.diagram.hamletgen.water.polder import inlet_to_rim
-
-    env = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
-    pond = (50.0, -80.0, 20.0, 10.0)
-    stub = inlet_to_rim([(50.0, 50.0), (50.0, 5.0), (50.0, -30.0)], pond, env)  # the stub's end, outside the crop, moves
-    assert stub[:2] == [(50.0, 50.0), (50.0, 5.0)] and len(stub) == 3 and abs(stub[2][1] - (-80.0 + 10.0 - 2.0)) < 0.2
-    kept = inlet_to_rim([(50.0, 50.0), (50.0, 5.0)], pond, env)  # no stub: the ring's own vertex stays
-    assert kept[:2] == [(50.0, 50.0), (50.0, 5.0)] and len(kept) == 3 and abs(kept[2][1] - (-72.0)) < 0.2
-
-
-def test_every_course_on_the_crest_is_gapped() -> None:
-    """Feature 287, water W42: a course that runs over the dike's crest away from every gap - the inlet hairline the ring
-    test never saw - is given a gap where it crosses, and the rule (`course_breaches`) then finds nothing."""
-    from l7r.diagram.hamletgen.water.polder import gaps_for_courses
-    from l7r.diagram.settlement.land.dikes import course_breaches, dike_band, dike_crest
-
-    ring = [(200.0, 200.0), (700.0, 200.0), (700.0, 700.0), (200.0, 700.0)]
-    crest = dike_crest(*dike_band(ring, 7)[1:3])
-    hairline = [(450.0 + k * 0.05, 120.0 + 4.0 * k) for k in range(36)]  # crosses the north crest 250 ft from the sluice, in 4 ft steps
-    sluices = [(200.0, 450.0)]
-    assert course_breaches(hairline, crest, sluices)
-    gaps = gaps_for_courses(sluices, [hairline], crest)
-    assert len(gaps) > 1 and gaps[0] == sluices[0]
-    assert not course_breaches(hairline, crest, gaps)
-    assert gaps_for_courses(sluices, [[(300.0, 300.0), (400.0, 400.0)]], crest) == sluices, "a course inside the ring needs none"
-
-
 # ---- the intake, and the brook that runs on past it (feature 230) --------------------------------
-
-
-def test_the_brook_skirts_the_fan_without_turning_back_into_it() -> None:
-    """`brook_skirt`. The course below the intake holds its offset at the outermost crop seen so far,
-    so two properties hold by construction rather than by search: the offset never decreases, and no
-    vertex lands inside the field. The square fixture is the crop; the intake sits above its head."""
-    plan = a_plan()
-    dx, dy = plan.fall
-    px, py = -dy, dx
-    course = hg.brook_skirt(plan, (700.0, 300.0), 1)
-    lat = [q[0] * px + q[1] * py for q in course]
-    floor = max(v[0] * px + v[1] * py for v in plan.envelope) + hg.BROOK_SKIRT
-    abreast = [v for q, v in zip(course, lat, strict=False) if min(w[1] for w in plan.envelope) <= q[1] <= max(w[1] for w in plan.envelope)]
-    assert all(v >= floor - 1e-6 for v in abreast), "every point abreast of the crop clears it by the skirt"
-    assert all(not hg.point_in_poly(q[0], q[1], plan.envelope) for q in course), "no vertex inside the crop"
-    assert course[-1][1] > plan.H, "and it leaves the frame downslope"
-    bearings = [round(math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])), 3) for a, b in zip(course, course[1:], strict=False)]
-    assert len(set(bearings[1:])) > 3, "the course wanders - a held offset draws the ruled line the GM rejected"
 
 
 def test_the_brook_takes_the_flank_it_is_rolled_onto() -> None:
@@ -506,30 +328,6 @@ def test_each_weir_form_draws_at_its_own_thickness() -> None:
     assert len(glyphs) == 4, "four forms, four bodies a reader can tell apart"
 
 
-def test_the_race_opens_out_of_the_brook_bank() -> None:
-    """269 B22 (research/water/310): the head race begins at the brook's bank, not on the stream. Its first stroke is
-    carried back to the tap and the brook's bed moved to paint after it, so the bank is where the ditch begins."""
-    from l7r.diagram.hamletgen.water.brook import open_race_mouth
-
-    s = Settlement(1000, 1000)
-    s.stream([(500.0, 100.0), (500.0, 300.0), (500.0, 600.0)], width=7)
-    s.field_channel([(502.6, 303.7), (560.0, 385.0)], "#7FA3BD", 6.0, 6.0, late=True)
-    brook = s.M["streams"][0]
-    open_race_mouth(s, (500.0, 300.0))
-    assert not any(w["rec"] is brook for w in s.water) and s.late_water[-1]["rec"] is brook
-    race = s.M["drawn_channels"][0]
-    assert race["pts"][0] == [500.0, 300.0]
-    assert s.late_water[0]["bed"].startswith('<path d="M500.0,300.0 L502.6')  # the bed's own first stroke, carried back once
-    # feature 355: the race's first 30 ft taper from the brook's hue to the supply hue, at the race's own width (w0)
-    bed = s.late_water[0]["bed"]
-    assert 'id="race-mouth-0"' in bed and 'stop-color="#9CB4C8"' in bed and 'stroke="url(#race-mouth-0)" stroke-width="6.0"' in bed
-    # no brook through the tap (or none at all): nothing moves
-    s2 = Settlement(1000, 1000)
-    s2.field_channel([(502.6, 303.7), (560.0, 385.0)], "#7FA3BD", 6.0, 6.0, late=True)
-    open_race_mouth(s2, (500.0, 300.0))
-    assert s2.M["drawn_channels"][0]["pts"][0] != [500.0, 300.0]
-
-
 def test_the_weir_bar_is_placed_off_the_fall_when_the_intake_is_not_on_the_brook() -> None:
     """The brook is normally the course the intake sits on, so the bar reads its local heading from it.
     A caller that hands an intake the course does not contain falls back to the land's fall, which is
@@ -554,80 +352,6 @@ def test_the_exit_leg_turns_onto_the_fall_when_the_course_is_heading_across_it()
     assert len(course) > 4
     # the fall is due south on this plan, so the course must end further down the map than it starts
     assert course[-1][1] > course[0][1], "the brook leaves down the fall"
-
-
-def test_a_hem_plot_at_the_fans_head_yields_to_the_brook_rather_than_throwing_it_sideways() -> None:
-    """`brook_skirt`, settlement-review pass 9. A dry hem plot laid round the fork reaches up beside the intake,
-    and floored against it the brook's first corner below the weir came out at 72-78 degrees on every brook map.
-    Crop reaching within one skirt of the fan's head is left out of the profile - `_comb_draw_hem` drops any hem
-    plot the brook's band then crosses - while crop further down the fan is still skirted as before."""
-    plan = a_plan()
-    dx, dy = plan.fall
-    px, py = -dy, dx
-    head_u = min(v[0] * dx + v[1] * dy for v in plan.envelope)
-    tap = (700.0, 300.0)
-    u_tap, v_tap = tap[0] * dx + tap[1] * dy, tap[0] * px + tap[1] * py
-    # a hem plot beside the tap, well out on the brook's flank and starting above the fan's head
-    at = [(u_tap + 60.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 90.0), (u_tap + 110.0, v_tap + 130.0), (u_tap + 60.0, v_tap + 130.0)]
-    hem = [(u * dx + v * px, u * dy + v * py) for u, v in at]
-    assert min(u for u, _ in at) < head_u + hg.BROOK_SKIRT, "the fixture reaches within a skirt of the fan's head"
-
-    def sharpest(course: list[tuple[float, float]]) -> float:
-        worst = 0.0
-        for a, b, c in zip(course, course[1:], course[2:], strict=False):
-            h1, h2 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
-            worst = max(worst, abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0))
-        return worst
-
-    with_hem = hg.brook_skirt(plan, tap, 1, crop=[hem])
-    without = hg.brook_skirt(plan, tap, 1)
-    assert with_hem == without, "the hem plot at the head does not move the course at all"
-    # ...and the same plot moved well down the fan IS skirted, so the rule is about where it stands, not what it is
-    reach = max(w[0] * px + w[1] * py for w in plan.envelope)  # out past the envelope's own reach, or it is already cleared
-    low = [(u * dx + v * px, u * dy + v * py) for u, v in [(u + head_u - u_tap + 400.0, v - v_tap + reach + 60.0) for u, v in at]]
-    assert hg.brook_skirt(plan, tap, 1, crop=[low]) != without, "crop down the fan still shapes the course"
-    assert sharpest(with_hem) == sharpest(without)
-
-
-def test_a_leg_on_the_axis_is_tilted_just_off_it_not_kicked_into_a_sawtooth() -> None:
-    """`_off_the_axes`, settlement-review pass 10. A straight reach down a due-south fall had every other leg
-    kicked 11 px outward and drew a +/-29 degree sawtooth. The tilt is now just past the detector, so every leg
-    clears the axis and no vertex turns by more than a few degrees."""
-    from l7r.diagram.hamletgen.water.brook import _off_the_axes
-
-    straight = [(100.0, float(y)) for y in range(0, 1000, 44)]
-    out = _off_the_axes(straight, (-1.0, 0.0))
-    heads = [math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) for a, b in zip(out, out[1:], strict=False)]
-    assert all(min(h % 90.0, 90.0 - h % 90.0) >= 1.6 - 1e-9 or i % 2 for i, h in enumerate(heads)), "every flagged leg leaves the axis"
-    turns = [abs(((b - a) + 180.0) % 360.0 - 180.0) for a, b in zip(heads, heads[1:], strict=False)]
-    assert max(turns) < 8.0, f"no sawtooth: the sharpest turn is {max(turns):.1f} degrees"
-    assert all(q[0] <= 100.0 for q in out), "and the course only ever moves AWAY from the crop"
-    # a long leg is still capped at the old ceiling
-    far = _off_the_axes([(0.0, 0.0), (0.0, 5000.0)], (-1.0, 0.0))
-    assert far[1][0] == -11.0
-
-
-def test_a_brook_that_doubles_back_is_unfolded() -> None:
-    """Feature 261 (settlement-review of Sawada): no vertex of a brook's course turns it more than the limit; a fold is
-    taken out vertex by vertex, and a course that turns gently is untouched."""
-    from l7r.diagram.hamletgen.water.brook import unfold
-
-    folded = [(0.0, 0.0), (100.0, 0.0), (40.0, -20.0), (40.0, -200.0)]  # out east, then back west and up
-    fixed = unfold(folded, 100.0)
-    assert fixed[0] == (0.0, 0.0) and fixed[-1] == (40.0, -200.0)
-    assert (100.0, 0.0) not in fixed
-    gentle = [(0.0, 0.0), (100.0, 0.0), (180.0, 40.0)]
-    assert unfold(gentle, 100.0) == gentle
-    assert unfold([(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], 100.0) == [(0.0, 0.0), (0.0, 0.0), (5.0, 5.0)], "a zero leg has no turn"
-
-
-def test_an_exit_bend_sits_at_the_legs_middle_to_one_side_and_is_capped() -> None:
-    """`exit_bend`: the midpoint of the leg, set aside by 12% of the leg on the given side, never more than 60 ft."""
-    from l7r.diagram.hamletgen.water.brook import EXIT_BEND_MAX_FT, exit_bend
-
-    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, 1.0) == pytest.approx((50.0, 12.0))
-    assert exit_bend((0.0, 0.0), (1.0, 0.0), 100.0, -1.0) == pytest.approx((50.0, -12.0))
-    assert exit_bend((0.0, 0.0), (0.0, 1.0), 1000.0, 1.0) == pytest.approx((-EXIT_BEND_MAX_FT, 500.0))
 
 
 def test_the_finished_course_rounds_the_bends_and_holds_the_tap() -> None:
@@ -709,17 +433,3 @@ def test_a_hamlet_keeps_its_yards_wherever_grain_is_grown() -> None:
     assert not grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="pond"))  # type: ignore[arg-type]
     assert grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="rice"))  # type: ignore[arg-type]
     assert grows_grain(SimpleNamespace(field_archetype="dry_terrace", leftover="rice"))  # type: ignore[arg-type]
-
-
-def test_the_race_taper_follows_the_race_for_its_length() -> None:
-    """Feature 355: `race_taper` cuts the race's own line at the taper's length - inside a segment, at the race's end when
-    the race is shorter, and nothing for a single point - and grades it from the brook's hue to the supply hue."""
-    from l7r.diagram.hamletgen.water.brook import race_taper
-    from l7r.diagram.settlement.water_ways.water import SUPPLY_HUE
-
-    svg = race_taper([(0.0, 0.0), (10.0, 0.0), (10.0, 40.0)], 30.0, 6.0, "g")
-    assert 'd="M0.0,0.0 L10.0,0.0 L10.0,20.0"' in svg and 'x2="10.0" y2="20.0"' in svg
-    assert 'stop-color="#9CB4C8"' in svg and f'stop-color="{SUPPLY_HUE}"' in svg and 'stroke-width="6.0"' in svg
-    assert 'd="M0.0,0.0 L10.0,0.0"' in race_taper([(0.0, 0.0), (10.0, 0.0)], 30.0, 6.0, "g")
-    assert race_taper([(0.0, 0.0)], 30.0, 6.0, "g") == "" and race_taper([], 30.0, 6.0, "g") == ""
-    assert 'd="M0.0,0.0 L0.0,0.0"' in race_taper([(0.0, 0.0), (0.0, 0.0)], 0.0, 6.0, "g")

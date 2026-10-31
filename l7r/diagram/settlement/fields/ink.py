@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Split
 from l7r.diagram.settlement.water_ways.water import ditch_style
-from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, BEAN_GREEN, FLOODED, RIPE_GOLD, aze_w
+from l7r.diagram.waterfields.palette import AZE, BEAN_GREEN, FLOODED, aze_w
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -36,8 +36,6 @@ POND_WATER, POND_RIM, POND_SHEEN, REED = "#9CB4C8", "#5C7488", "#B6CAD8", "#7FA0
 """Research: the pocket pond's ink - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an earthen bank round its edge, the wet ground where the reeds stand, open water in the middle"""
 MOUND, MOUND_EDGE, STONE, STONE_EDGE = "#CFC6B4", "#8C8470", "#9AA1A4", "#5A584F"
 """Research: the grave's ink - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot, or a corner grave against the bunds"""
-STATE_FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": FLOODED, "gold": RIPE_GOLD}
-"""Research: the plots' paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green where other plots are green; research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in sixteen still flooded, one in twenty gold"""
 
 
 def _pts(ring: Sequence[Pt]) -> str:
