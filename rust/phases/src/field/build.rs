@@ -171,7 +171,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             dry_need,
             &f.fan.ring,
             &mut ix,
-            super::dry::BANK_FT + super::channels::SUPPLY_W.0 / 2.0,
+            super::channels::SUPPLY_W.0 / 2.0 + 1.0,
             inp.seed,
             "f0",
         );

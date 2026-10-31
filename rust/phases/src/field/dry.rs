@@ -159,7 +159,11 @@ pub fn hem(
                         f64::midpoint(poly[0].1, poly[2].1),
                     );
                     let onto = [middle, poly[2], poly[3]].iter().any(|p| inside(*p, field));
-                    if got >= need || onto || poly.iter().any(|p| wet(*p, ix, clear)) {
+                    // nor onto a plot an earlier tract laid
+                    let laps = plots.iter().any(|q: &DryPlot| {
+                        inside(middle, &q.poly) || poly.iter().any(|c| inside(*c, &q.poly))
+                    });
+                    if got >= need || onto || laps || poly.iter().any(|p| wet(*p, ix, clear)) {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
