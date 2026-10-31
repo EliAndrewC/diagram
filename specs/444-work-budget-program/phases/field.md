@@ -63,7 +63,28 @@ lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - it
 deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
 (c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
 keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
-(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. THE BROOK'S RULES (2026-10-31): the sink asks `brook_violations` (`hamletgen/water/brook_rules.py` and `brook.py`, the
+(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. THE POLDER'S SEAM (2026-10-31, traced at runtime on seed 4 at 15 households, no held code read): the old stage calls, outside the
+field's own files, `settlement/land/dikes.py` (`perimeter_dike`, `dike_band`, `dike_crest`, `course_breaches`), `land/wet.py`
+(`marsh`, `pond_fringe_ring`), `fields/landuse.py` `apply_land_use` (the dike-pond's overlay), `fields/paddy.py` `resting_plots`,
+`fields/outfall.py` (`outfall_run`, `runs_downhill`), `water_ways` (`field_channel`, `ditch_style`) and `core` (`add_paddy`, `_water`,
+`meta`). Those stay Python and the thin stage calls them as the old one did; the Rust polder is the field's own placement: the
+block and its lattice of modules and parcels, the ring canal and the field ditches, the feeding pond, and the plots drawn apart.
+
+THE POLDER'S RULES, from the record (2026-10-31, a dispatched reader of 0018-0027 and 0066's drawing pages, no code read; each
+re-cited at its Rust): a rice polder on a surveyed grid of modules about 190 ft a side (0022), never a grid of uniform rectangles -
+inside a module two or three oblong strips, a few merged along the fall; each row and column line its own gentle bow, each
+crossing nudged a few feet, the dike and ring canal at the edge staying put (0022); a field ditch one way between columns in an
+8 ft corridor, a 3 ft walking bund the other way and between strips (0022); a rectangular polder is modern - the outer face curved
+with the water's edge (0027, GUESS); the dike 14-40 ft across, varying, never ruled (0027); two sluices, an inlet at the head and
+an outfall at the tail (0019, GUESS); a ring canal at the dike's inside foot, long nearly straight reaches that waver, rounded
+corners (0019, CONVENTION); willow 8.5 ft apart three quarters out, mulberry 4.4 ft a quarter out, rows cut at channels (0027); a
+reed fringe on every flank but the landward one (0019); the wild pond to the head's side (0019); the dike-pond's modules 160 ft,
+most merged in pairs, a pond's parcel about 160 by 320 ft with 22 ft gaps both ways, every pond four-sided, the mosaic (two in
+three) bending the lattice by a drift that fades to nothing at the edge, else a chessboard (0019, 0022); the water-to-dike split
+one of five at even odds (0018); the dike crop mulberry 1/2, fruit 1/3, tea 1/6 (0026); the leftover every parcel a pond or one in
+ten in rice, even odds (0020). SILENT: wet, flooded or resting plots, rocks and graves on a polder.
+
+THE BROOK'S RULES (2026-10-31): the sink asks `brook_violations` (`hamletgen/water/brook_rules.py` and `brook.py`, the
 field's own, imported by the sink, so they STAY at the deletion) of the field's brook. Measured by calling them on the Rust brook
 (a throwaway test, no rule read; their figures read at runtime: axis 1.6 degrees, level 150 ft within 80 ft of the frame at 4 ft,
 ruled 3.1 ft of the chord with the share waiting for 300 ft): every brook first broke `ruled`, `source` and `mouth`, some `axis` and
