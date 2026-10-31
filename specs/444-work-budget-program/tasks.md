@@ -4,6 +4,14 @@
 
 - none: step 3 (T01-T06) is tooling and paper budgets - no map feature, glyph or placement rule; each phase task, filed after the
   GM's checkpoint, declares its own
+- placement-changed: inashiro paddy - T16 rebuilt the comb field's placement in Rust (the fan, its basins and bunds, the channels,
+  the brook and its weir, the dry hem, the pocket pond and the grave), the old Python deleted
+- placement-changed: kuwabata dike-pond - T16 rebuilt the polder's block, lattice, parcels, ring canal and wild pond in Rust
+- glyph-redrawn: inashiro paddy - the field's ink written new from the Rust records (`settlement/fields/ink.py`: the plots by state,
+  the dry plots, the ditches, the pocket pond, the grave, the weir; D12)
+- new-form: inashiro - the comb field redrawn on its rebuilt geometry (waved flanks, bowed rows, the fork at the brook-side head
+  corner, the dry hem on the canal's offset curves); kashikawa, mizuguchi and sawada the same comb
+- new-form: kuwabata - the dike-pond block rebuilt in Rust
 
 ## Tasks
 
