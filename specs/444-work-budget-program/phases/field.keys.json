@@ -1,0 +1,406 @@
+{
+ "measured": "2026-10-31, one-shot: a throwaway test ran STAGES[:2] (water_frame, field) through rust_prefix.roll_through on seed 4 at 15 households for each archetype, reading the field stage's trace (what it wrote) and each record's field names - no held code read",
+ "forms": {
+  "comb": {
+   "wrote": {
+    "channels": {
+     "n": 1,
+     "fields": [
+      "field",
+      "frm",
+      "poly",
+      "to",
+      "w"
+     ]
+    },
+    "comb_floors": "dict",
+    "drawn_channels": {
+     "n": 11,
+     "fields": [
+      "late",
+      "pts",
+      "w0",
+      "w1"
+     ]
+    },
+    "dry_plots": {
+     "n": 80,
+     "fields": [
+      "crop",
+      "poly",
+      "theta",
+      "tract"
+     ]
+    },
+    "field_ditches": {
+     "n": 11,
+     "fields": [
+      "field",
+      "poly",
+      "role",
+      "w",
+      "w_tail"
+     ]
+    },
+    "field_graves": {
+     "n": 1,
+     "fields": [
+      "x",
+      "y"
+     ]
+    },
+    "field_ponds": {
+     "n": 1,
+     "fields": [
+      "rx",
+      "ry",
+      "x",
+      "y"
+     ]
+    },
+    "fields": {
+     "n": 1,
+     "fields": [
+      "bbox",
+      "bund_beans",
+      "cell",
+      "down_deg",
+      "drain_hem",
+      "fork",
+      "kind",
+      "name",
+      "outline",
+      "plot_rings",
+      "plots",
+      "vis_bbox"
+     ]
+    },
+    "flooded_plots": {
+     "n": 11,
+     "fields": "list"
+    },
+    "meta.coarse_grain_dry_acres": "float",
+    "meta.coarse_grain_dry_need_acres": "float",
+    "meta.coarse_grain_room_acres": "float",
+    "meta.dry_furrows_vary": "bool",
+    "meta.fan_middle": "str",
+    "meta.field_archetype": "str",
+    "meta.grain_drift": "int",
+    "meta.grave_form": "str",
+    "meta.paddy_rest": "str",
+    "meta.plot_regularity": "str",
+    "meta.plot_size": "str",
+    "meta.town_nearness": "str",
+    "meta.water_source": "str",
+    "meta.water_source_position": "str",
+    "meta.weir_form": "str",
+    "meta.winter_crop": "str",
+    "streams": {
+     "n": 1,
+     "fields": [
+      "flow",
+      "flow_deg",
+      "frm",
+      "poly",
+      "to",
+      "w"
+     ]
+    },
+    "weirs": {
+     "n": 1,
+     "fields": [
+      "deg",
+      "form",
+      "len",
+      "poly",
+      "w",
+      "x",
+      "y"
+     ]
+    },
+    "wet_plots": {
+     "n": 72,
+     "fields": "list"
+    }
+   }
+  },
+  "polder_grid": {
+   "wrote": {
+    "channels": {
+     "n": 2,
+     "fields": [
+      "frm",
+      "poly",
+      "to",
+      "w"
+     ]
+    },
+    "comb_floors": "dict",
+    "dikes": {
+     "n": 1,
+     "fields": [
+      "crest",
+      "gaps",
+      "keepout",
+      "keepout_chords",
+      "label",
+      "outline",
+      "w_max",
+      "w_min"
+     ]
+    },
+    "drawn_channels": {
+     "n": 8,
+     "fields": [
+      "late",
+      "pts",
+      "w0",
+      "w1"
+     ]
+    },
+    "field_ditches": {
+     "n": 7,
+     "fields": [
+      "field",
+      "poly",
+      "role",
+      "seg",
+      "w",
+      "w_tail"
+     ]
+    },
+    "field_ponds": {
+     "n": 1,
+     "fields": [
+      "rx",
+      "ry",
+      "x",
+      "y"
+     ]
+    },
+    "fields": {
+     "n": 1,
+     "fields": [
+      "bbox",
+      "bund_beans",
+      "drain_hem",
+      "kind",
+      "name",
+      "outline",
+      "plot_rings",
+      "plots",
+      "vis_bbox"
+     ]
+    },
+    "flooded_plots": {
+     "n": 8,
+     "fields": "list"
+    },
+    "marshes": {
+     "n": 1,
+     "fields": [
+      "h",
+      "poly",
+      "role",
+      "rot",
+      "seq",
+      "w",
+      "x",
+      "y"
+     ]
+    },
+    "meta.dry_furrows_vary": "bool",
+    "meta.field_archetype": "str",
+    "meta.paddy_rest": "str",
+    "meta.pond_layout": "str",
+    "meta.water_source": "str",
+    "meta.water_source_position": "str",
+    "planted_trees": {
+     "n": 1,
+     "fields": [
+      "kind",
+      "trees"
+     ]
+    },
+    "pond": {
+     "n": 4,
+     "fields": "float"
+    },
+    "pond_layer": "dict",
+    "wet_plots": {
+     "n": 8,
+     "fields": "list"
+    }
+   }
+  },
+  "dikepond": {
+   "wrote": {
+    "channels": {
+     "n": 2,
+     "fields": [
+      "frm",
+      "poly",
+      "to",
+      "w"
+     ]
+    },
+    "comb_floors": "dict",
+    "dikeponds": {
+     "n": 30,
+     "fields": [
+      "bank",
+      "kind",
+      "parcel",
+      "water"
+     ]
+    },
+    "dikes": {
+     "n": 1,
+     "fields": [
+      "crest",
+      "gaps",
+      "keepout",
+      "keepout_chords",
+      "label",
+      "outline",
+      "w_max",
+      "w_min"
+     ]
+    },
+    "drawn_channels": {
+     "n": 9,
+     "fields": [
+      "late",
+      "pts",
+      "w0",
+      "w1"
+     ]
+    },
+    "field_ditches": {
+     "n": 8,
+     "fields": [
+      "field",
+      "poly",
+      "role",
+      "seg",
+      "w",
+      "w_tail"
+     ]
+    },
+    "fields": {
+     "n": 1,
+     "fields": [
+      "bbox",
+      "bund_beans",
+      "drain_hem",
+      "kind",
+      "name",
+      "outline",
+      "plot_rings",
+      "plots",
+      "vis_bbox"
+     ]
+    },
+    "flooded_plots": {
+     "n": 9,
+     "fields": "list"
+    },
+    "land_use": {
+     "n": 1,
+     "fields": [
+      "count",
+      "eligible",
+      "leftover_plots",
+      "overlay",
+      "plots"
+     ]
+    },
+    "marshes": {
+     "n": 1,
+     "fields": [
+      "h",
+      "poly",
+      "role",
+      "rot",
+      "seq",
+      "w",
+      "x",
+      "y"
+     ]
+    },
+    "meta.dike_crop": "str",
+    "meta.dikepond_inset": "float",
+    "meta.dikepond_split": "float",
+    "meta.dry_furrows_vary": "bool",
+    "meta.field_archetype": "str",
+    "meta.fry_form": "str",
+    "meta.land_use_overlay": "str",
+    "meta.leftover": "str",
+    "meta.paddy_rest": "str",
+    "meta.pond_layout": "str",
+    "meta.water_source": "str",
+    "meta.water_source_position": "str",
+    "planted_trees": {
+     "n": 1,
+     "fields": [
+      "kind",
+      "trees"
+     ]
+    },
+    "pond": {
+     "n": 4,
+     "fields": "float"
+    },
+    "pond_layer": "dict",
+    "wet_plots": {
+     "n": 9,
+     "fields": "list"
+    }
+   }
+  }
+ },
+ "all_keys": [
+  "channels",
+  "comb_floors",
+  "dikeponds",
+  "dikes",
+  "drawn_channels",
+  "dry_plots",
+  "field_ditches",
+  "field_graves",
+  "field_ponds",
+  "fields",
+  "flooded_plots",
+  "land_use",
+  "marshes",
+  "meta.coarse_grain_dry_acres",
+  "meta.coarse_grain_dry_need_acres",
+  "meta.coarse_grain_room_acres",
+  "meta.dike_crop",
+  "meta.dikepond_inset",
+  "meta.dikepond_split",
+  "meta.dry_furrows_vary",
+  "meta.fan_middle",
+  "meta.field_archetype",
+  "meta.fry_form",
+  "meta.grain_drift",
+  "meta.grave_form",
+  "meta.land_use_overlay",
+  "meta.leftover",
+  "meta.paddy_rest",
+  "meta.plot_regularity",
+  "meta.plot_size",
+  "meta.pond_layout",
+  "meta.town_nearness",
+  "meta.water_source",
+  "meta.water_source_position",
+  "meta.weir_form",
+  "meta.winter_crop",
+  "planted_trees",
+  "pond",
+  "pond_layer",
+  "streams",
+  "weirs",
+  "wet_plots"
+ ]
+}
