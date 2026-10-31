@@ -94,3 +94,5 @@ mod tests {
         assert_eq!(fields_for(1.0, 0.0), 1);
     }
 }
+
+pub mod fan;
