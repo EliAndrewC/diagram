@@ -418,7 +418,10 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     monkeypatch.setattr(lb, "start_cover", lambda root: None)
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
-    monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (state["cohort"], ""))
+    # the work-budget review answered clean: `budget_run` (444 T20, D1) has its own tests, tests/tooling/test_land_budget.py
+    monkeypatch.setattr(
+        lb, "run", lambda root, cmd, env=None, quiet=True: (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (0, "") if "work-budget-review" in cmd else (state["cohort"], "")
+    )
     beside: list[str] = []
     stopped: list[object] = []
 
