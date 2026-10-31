@@ -96,4 +96,5 @@ mod tests {
 }
 
 pub mod fan;
+pub mod channels;
 pub mod lattice;
