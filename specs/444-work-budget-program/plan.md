@@ -139,6 +139,62 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 
 **Performance work?** yes - docs/performance-checklist.md's questions follow.
 
+### T16 Decisions
+
+- **D1 - the seam** (FR-004, FR-010): `stage_field(s, plan)` stays a thin Python function. It gathers the plan's fields the stage
+  reads (`phases/field.keys.json` and the derivations' Reads), the households and the canvas, and calls `l7r_phases.stage_field`
+  (`rust/phases/src/field.rs`, `fn stage_field`, its submodules under `rust/phases/src/field/` held under clippy's
+  `too_many_lines`). Rust returns the records; Python writes the same manifest keys with the same record shapes (`field.keys.json`,
+  42 keys over the three archetypes) and the same plan fields (`acres`, `envelope`, `net`, and on a comb `brook`), registers each
+  footprint with the standing registry (strict, as every hamlet placer does), and files the returned segments in the settlement's
+  water index for the stages after.
+- **D2 - the single-field cap** (FR-018, SC-011): rolled in Rust by `pyrand::knob_rng(seed, "field_cap")`, uniform between 45 and 60
+  ha (research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html#how-our-maps-size-a-settlements-farmland:
+  "the cap rolled per settlement between about 45 and 60 ha", a knob), written to the meta and listed in
+  `l7r/diagram/interactive/assets/choices.json`'s `not_choices` as a degree, not a form. A settlement whose paddy passes the cap
+  draws ceil(paddy / cap) fields, each a comb of its own intake (0017: "a settlement with more farmland had several tracts"); not
+  one of water_frame's knobs, so water_frame's accepted pin does not move. SC-011's test rolls a settlement past the cap
+  (`beyond_the_band()`, about 100 households) and finds several fields, each at most the cap.
+- **D3 - the stage's own rolls and the gap's homes**: the knobs the stage rolls itself (`winter_crop`, `town_nearness`,
+  `grave_form`, `fan_middle`, `paddy_rest`, `plot_regularity`, `weir_form`, `dry_furrows_vary`, `water_source` and its position;
+  on a dike-pond `dike_crop`, `fry_form`, `leftover`, `land_use_overlay`, `dikepond_inset`, `dikepond_split`), the field's graves and
+  the coarse-grain dry acres are counted as the stage's work OUTSIDE its derivations, charged to the stage as water_frame's outside
+  rolls were (the round arbiter's ruling on ask:444-T19-outside-charges): each knob rolled in Rust from its table (passed from
+  Python, as water_frame's are) by `knob_rng`, its count a key of its own, so MODE AUDIT reads them and neither pin moves.
+- **D4 - the draws**: `pyrand::knob_rng` for every knob; each positional jitter seeded by the map's seed and the feature's own key
+  (positional, so a change upstream re-rolls only what moved). Matching today's draws is not required (amendment 5); the pool
+  hamlets the rebuild moves owe their settlement-reviews (the Occasions line).
+- **D5 - the water index**: Rust's own index of 64 ft cells for the stage's placements (the derivations' Indexes, their cell size a CONVENTION of the
+  index), each segment filed
+  in the cells it crosses; the segments returned, and Python files them in the settlement's index for the stages after.
+- **D6 - the counters** (FR-012, D9 of T19): one key a derivation row, `<kind>@<row>` (`write@basin`, `candidate@outline_cell`,
+  `write@dike_tree` ...) and one a D3 roll, behind the `counters` feature; a seed rolled with the feature on and off writes identical
+  manifests, recorded as `phases/field.fr012.md`.
+- **D7 - every rule refused where it is decided**: each Keeps rule of both derivations - the basin's shape, its quarter-cell floor, its 25 degree
+  headland and the arrowhead (research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html); the four-sided pond
+  (research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html); the dike's band of 14-40 ft
+  (research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html) - is held by the Rust that places the thing,
+  a breach refused by name (`FieldRefused`, the rule in its message), and unit-tested in the crate and its Python driver. The Rust
+  stage gate asks few finished-map checks of the field (most read lanes and houses), so the field's rules are held where decided.
+- **D8 - the polder** (`phases/polder_greenfield.derivation.md`, pinned `field.polder`): both archetypes in Rust. The acreage rule is
+  the derivation's - whole modules at or above the households' paddy (the 190 ft module of
+  research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html, the paddy of
+  research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html) - in place of today's
+  band, so the 10-household polder grid that refuses on every seed today (`phases/polder.sizes.json`) lands a grid.
+- **D9 - the 29 open claim findings** (FR-021): the field's 17 own files carry 493 claims, 21 DRIFTED and 8 MISLABELED
+  (`phases/field.claims.json`, read from the claims index). Each rule the Rust makes again is claimed again in its doc comments; a
+  DRIFTED finding is set right in the Rust (the dike's mulberry row, 0027, drawn with its willow row - today's map draws the willow
+  alone, `phases/polder.dike.json`), a MISLABELED one claimed correctly. The landing is refused while one is open (FR-021).
+- **D10 - deletion** (FR-005): the field's own Python - `hamletgen/water/` (comb, fit, polder, brook, brook_course, brook_rules),
+  `settlement/fields/` (comb, comb_record, features) and `waterfields/` (carve, frame, ring_rules, trunks, seams) - deleted in the
+  landing where nothing outside the field path imports it, found by `git grep -l` of each module's name (file names only, no held
+  line read) and `make dead-closure`; a shared module (the overlap registry, the geometry indexes, the caches, the web's parts) stays.
+  `water/skeleton.py` is water_frame's and stays. The list of what is deleted and what replaced is written in the landing's note.
+- **D11 - the order**: the comb first, `make rust-gate` as each increment's check (it judges `field` the moment `field.rs` holds
+  `stage_field`), `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` for the reference; then the polder; then `make work-budget`
+  against 23,988 and 42,070 (exponent 0.79) and `field.polder`'s 4,651 and 6,584 (exponent 0.50), MODE AUDIT, the claims round
+  (FR-021), the settlement-reviews of the moved pool hamlets - one landing.
+
 ### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.
