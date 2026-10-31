@@ -70,6 +70,25 @@ field's own files, `settlement/land/dikes.py` (`perimeter_dike`, `dike_band`, `d
 `meta`). Those stay Python and the thin stage calls them as the old one did; the Rust polder is the field's own placement: the
 block and its lattice of modules and parcels, the ring canal and the field ditches, the feeding pond, and the plots drawn apart.
 
+THE POLDER'S DESIGN, next (2026-10-31): `rust/phases/src/field/polder.rs`, entered from `build.rs` on the two polder archetypes;
+the thin stage then calls the free helpers as the old stage did. Rust places: (1) the block - the households' paddy in whole
+modules at or above it (D8; 190 ft on the rice polder, 160 ft on the dike-pond), rows and columns from the shape nearest the square
+root of the modules times the site's aspect and its neighbor, the better kept (the derivation's 4 ops); (2) the lattice - each
+column line a corridor of 8 ft (a field ditch) and each row line 3 ft (a walking bund), every line bowed gently and each crossing
+nudged a few feet on the rice polder (0022), on a dike-pond mosaic (two in three, the `pond_layout` knob) a smooth drift fading to
+nothing at the block's edge, the chessboard straight (0019); (3) the plots - on the rice polder each module split into 2 or 3
+oblong strips across the fall by 3 ft bunds, a few merged with the next down the fall; on the dike-pond most modules merged in
+pairs into parcels of about 160 by 320 ft, every one four-sided (0019, 0022); (4) the ring canal at the block's edge, inside the
+dike's inner face, its corners rounded; (5) one field ditch a column corridor, from the ring canal at the head to the ring canal
+at the tail; (6) two sluice gaps on the inner envelope, the inlet at the head's high corner and the outfall at the tail (0019);
+(7) the feeding wild pond outside the head's high corner (`water_source_position` corner_high; radii 82 and 54 ft as Kuwabata,
+a GUESS to cite), its feeder channel to the inlet; (8) every low plot (the tail's row) wet (0007: "A polder or terraced field tints
+every low plot"). Python then: `perimeter_dike(inner_env, seed, gaps=sluices)` (the dike and its two rows of trees), `marsh` with
+`pond_fringe_ring` round the wild pond, `outfall_run` from the outfall sluice down the fall off the map, `field_channel` for each
+ditch and the ring canal, `apply_land_use` on the dike-pond (its overlay, crop, leftover and fry knobs rolled as D3), the meta
+(`pond_layout`, `water_source` reservoir, `water_source_position` corner_high, `paddy_rest`, `dry_furrows_vary` false), the
+records (`fields`, `field_ditches` with their `seg` roles, `channels`, `pond`, `pond_layer`, `wet_plots`, `flooded_plots`).
+
 THE POLDER'S RULES, from the record (2026-10-31, a dispatched reader of 0018-0027 and 0066's drawing pages, no code read; each
 re-cited at its Rust): a rice polder on a surveyed grid of modules about 190 ft a side (0022), never a grid of uniform rectangles -
 inside a module two or three oblong strips, a few merged along the fall; each row and column line its own gentle bow, each
