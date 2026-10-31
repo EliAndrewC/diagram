@@ -473,7 +473,8 @@ def block_status(review: dict, plan_text: str, ruled: set[str], history: History
     # A RE-DATED HEADING IS THE SAME BLOCK (feature 444 T20, D4): T19's `### T19 Approach (checklist part A)` restamped
     # `### T19 Approach (<UTC>)`, its text below unchanged, owed a review of its "removal" - a live block of the same heading
     # stem (its closing parenthetical dropped) and the same text below its heading line is the recorded one, moved
-    live = {(_stem(k), _below_heading(b)) for k, b, _a in blocks(plan_text)}
+    live = {(_stem(k), _below_heading(b)) for k, b, _a in [*blocks(plan_text), *(blocks(done) if done else [])]}  # the archive too:
+    # a ticked task's section moves to plan-done.md at the tick, its re-dated heading with it (feature 444 T18's landing)
     for key, entry in have.items():
         if key in now or key == "preamble" or not isinstance(entry, dict) or entry.get("sha256") in archived:
             continue

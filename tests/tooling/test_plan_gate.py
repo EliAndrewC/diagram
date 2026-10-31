@@ -590,3 +590,15 @@ def test_a_re_dated_heading_with_its_text_unchanged_is_the_same_block() -> None:
     assert {gate.REMOVED + "### T9 Approach (checklist part A)", "### T9 Approach (2026-10-31T04:00Z)"} <= set(gate.block_status(review, changed, set())[0])
     other = moved.replace("### T9 Approach", "### T9 Decisions")
     assert gate.REMOVED + "### T9 Approach (checklist part A)" in gate.block_status(review, other, set())[0], "another heading: owed"
+
+
+def test_a_re_dated_heading_archived_at_the_tick_is_the_same_block() -> None:
+    """Feature 444 T18's landing: the tick archived T18's section to plan-done.md, its Approach heading re-dated after its review,
+    and the push owed a review of its "removal" - the re-dated-heading rule (T20, D4) read only the live plan. It reads the
+    archive too."""
+    old = "### T9 Approach (checklist part A)\n\n1. **The goal.** the bath\n"
+    review = {"blocks": {"### T9 Approach (checklist part A)": {"sha256": gate.block_digest(old), "verdict": "CLEAR", "text": old}}}
+    done = "<!-- plan-archive: archived 2026-10-31 -->\n### T9 Approach (2026-10-31T04:00Z)\n\n1. **The goal.** the bath\n"
+    owed = gate.block_status(review, "# Plan\n", set(), None, done)[0]
+    assert gate.REMOVED + "### T9 Approach (checklist part A)" not in owed
+    assert gate.REMOVED + "### T9 Approach (checklist part A)" in gate.block_status(review, "# Plan\n", set(), None, done.replace("bath", "wells"))[0]
