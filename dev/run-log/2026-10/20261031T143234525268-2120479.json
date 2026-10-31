@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-31T14:32:34Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 399,
+  "result": "failed: hooks-test test-full",
+  "commit": "a732f11f9",
+  "first_failure_s": 94.7,
+  "last_failure_s": 191.9,
+  "failed_tests": 2,
+  "failed_names": [
+    "tests/hamletgen/test_surface.py::test_census_matches_pin",
+    "tests/tooling/test_check_rust_tooling.py::test_the_real_tree_has_a_row_for_every_reader_and_finds_the_file_cap"
+  ],
+  "host": {
+    "load": [
+      3.06,
+      7.21
+    ],
+    "mem_avail_mb": [
+      7824,
+      9074
+    ],
+    "cpu_temp_c": [
+      77.0,
+      96.0
+    ],
+    "stall_s": {
+      "cpu": 4.0,
+      "io": 2.9,
+      "io_full": 2.3,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 14728,
+      "package": 9810
+    }
+  },
+  "phases": {
+    "preflight": 27.0,
+    "static": 39.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 1.0,
+    "hooks-test": 53.0,
+    "counters-inert": 16.0,
+    "pytest": 278.0,
+    "test-full": 288.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "4 engine file(s) and 8 test module(s) changed, 5 scripts/ file(s) (250 module(s) that read scripts/)",
+  "selected": 1724,
+  "collected": 1807
+}
