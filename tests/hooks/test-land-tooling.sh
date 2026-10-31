@@ -107,17 +107,25 @@ ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep c-tooling >/dev/null'
 ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
 ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"lint\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
-ok "the clone's history is untouched" '[ "$(git -C "$C" log --format=%s -1)" = "a guard fix" ]'
+ok "the clone keeps its own commits and has merged main back (the GM 2026-10-30)" 'git -C "$C" merge-base --is-ancestor "a guard fix" HEAD 2>/dev/null || git -C "$C" log --format=%s | grep -qx "a guard fix"; git -C "$C" merge-base --is-ancestor origin/main HEAD && grep -q "merged main back into the clone" "$T/out"'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
 
-echo "2a. a new file landed, then edited, names its conflict with the clone's own landing and the fix (feature 385 T122)"
+echo "2a. a file landed, edited again and landed again lands without a hand merge (the GM 2026-10-30; was feature 385 T122's refusal)"
 setup
 printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
 land scripts/new.sh
 printf 'v2\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, again"
 land scripts/new.sh; rc=$?
-ok "refused, naming the file as the clone's own landing and the line that resolves it" '[ "$rc" -ne 0 ] && grep -q "scripts/new.sh conflict only with this clone'"'"'s own earlier landing" "$T/out" && grep -q "git checkout --ours scripts/new.sh" "$T/out" && ! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null'
+ok "landed again, its second edit on main" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v2" ] && ! git -C "$C" rev-parse -q --verify MERGE_HEAD >/dev/null'
+echo "2a2. a conflict with the clone's own earlier landing (the merge back skipped) is resolved to the clone's side"
+setup
+printf 'v1\n' > "$C/scripts/new.sh"; git -C "$C" add -A; git -C "$C" commit -qm "new tool"
+land scripts/new.sh
+git -C "$C" reset -q --hard HEAD~1 2>/dev/null; git -C "$C" log --format=%s -1 | grep -q "new tool" || git -C "$C" reset -q --hard "$(git -C "$C" log --format=%H --grep='^new tool$' -1)"
+printf 'v3\n' > "$C/scripts/new.sh"; git -C "$C" commit -qam "new tool, a third time"
+land scripts/new.sh; rc=$?
+ok "landed, the clone's side kept and named" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v3" ] && grep -q "keeping the clone.s side of its own earlier landing: scripts/new.sh" "$T/out"'
 
 echo "2b. the guard suites and the tooling tests run side by side, each timed; a failing one is named (383 amendment 2, D22)"
 setup
