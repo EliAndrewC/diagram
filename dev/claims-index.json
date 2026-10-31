@@ -12665,20 +12665,20 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_woodland#coppice on the scanned parcels": {
-  "code": "f9d777e6be0bdcbd",
-  "core": "f67149ace600c0d8",
+  "code": "d59af42cedec0328",
+  "core": "b0fdd12456d63765",
   "date": "2026-10-03",
   "note": "stocked as a worked wood",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "9a49b636ae91f6f2"
   },
   "research": "a763e17a58c10593",
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_woodland#woodland forms": {
-  "code": "d3d194ed5ddc9649",
-  "core": "f67149ace600c0d8",
+  "code": "cb50318b3e2c67a3",
+  "core": "b0fdd12456d63765",
   "date": "2026-10-05",
   "note": "the page records why the strip woods (a whole-settlement form) and abandoned brushy coppice are not drawn",
   "pages": {
@@ -12690,7 +12690,7 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:da8f9983e5c8dd25"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stock_woodland#under-stocked parcel regraded": {
@@ -20059,14 +20059,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan#spec and plan plumbing": {
-  "code": "1cca396dd0c64683",
-  "core": "fd5453b4de199fd2",
+  "code": "5e63b78ecc4a978b",
+  "core": "9e435055a8a232ee",
   "date": "2026-10-13",
   "note": "fields only; plan_site sets every knob",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan.fall#spec and plan plumbing": {
@@ -20258,19 +20258,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#canvas": {
-  "code": "8586d297444ce3d3",
-  "core": "a74b8dabbfb62a61",
+  "code": "3dc2fd08f9611ace",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "sizing, cropped later",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#dike-pond knobs only on a dike-pond": {
-  "code": "ea67d4279c1a4bf1",
-  "core": "a74b8dabbfb62a61",
+  "code": "e706af5c0f068ad9",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "a rice polder keeps the grid",
   "pages": {
@@ -20282,12 +20282,12 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#flood-prone ground": {
-  "code": "7fe3b6eb404a28bd",
-  "core": "a74b8dabbfb62a61",
+  "code": "4c3e377a4f952e4a",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "reclaimed low ground behind dikes, or houses on a dike",
   "pages": {
@@ -20297,12 +20297,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:1e95485641126947"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#grove sides refused outside two to four": {
-  "code": "d650b8b63020043c",
-  "core": "a74b8dabbfb62a61",
+  "code": "8a8ec2a24a6bdf24",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "two, three or four sides",
   "pages": {
@@ -20312,12 +20312,12 @@
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:872aa364f298b45c"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#harvest weather default": {
-  "code": "eeca270d66e12159",
-  "core": "a74b8dabbfb62a61",
+  "code": "dbe88dc28253d5ad",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "settled unless declared",
   "pages": {
@@ -20327,20 +20327,20 @@
   "rests": [
    "0016-rice-drying-racks-hasa-hasagi.drawing.html:cd323d78a44a7ec9"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#its search steps and tolerances": {
   "body": "5ccd9191f3f8d17e",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 50 (canvas rounded to 50)",
-  "code": "a1c2bbcb0fd9ae35",
-  "core": "a74b8dabbfb62a61",
+  "code": "ad80ad055ed893ae",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-25",
   "note": "canvas rounding",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
@@ -20355,12 +20355,13 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
-  "code": "6f58276df954529c",
-  "core": "a74b8dabbfb62a61",
+  "code": "89ff2f7757d99b79",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "1.3 acres falls in the 1 to 2.5 acre band",
   "pages": {
@@ -20370,7 +20371,7 @@
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
@@ -20385,12 +20386,13 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder on the survey grid": {
-  "code": "742a363496e5c45e",
-  "core": "a74b8dabbfb62a61",
+  "code": "a7f23aea04714093",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "a surveyed grid",
   "pages": {
@@ -20400,12 +20402,12 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#regional wind": {
-  "code": "503566ffc3fd81f7",
-  "core": "a74b8dabbfb62a61",
+  "code": "12ceb8a8769d99ae",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "northwest unless declared",
   "pages": {
@@ -20415,7 +20417,7 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
@@ -20430,6 +20432,7 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
@@ -20445,12 +20448,13 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:4f7d33405340d1f8"
   ],
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
-  "code": "3428a1b62333c126",
-  "core": "a74b8dabbfb62a61",
+  "code": "a86d7279b054997d",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "the code sets water_flow = down_deg when it is not declared, but §268 says \"Deriving the flow from the slope ... is wrong\" and the two differ by design; record it on the 0054 drawing page as a hamlet's deviation, or roll a bearing",
   "pages": {
@@ -20460,12 +20464,12 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#woodland patches": {
-  "code": "c6654d4893a852f6",
-  "core": "a74b8dabbfb62a61",
+  "code": "4774a26ee0c66af7",
+  "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "\"a few patches\", 2-4 rolled",
   "pages": {
@@ -20475,7 +20479,7 @@
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::seat_room#spec and plan plumbing": {
@@ -23968,8 +23972,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/comb.py::stage_field#brook fed past the intake": {
-  "code": "c0bb78691ba66377",
-  "core": "7411e9b009df8418",
+  "code": "c8f06a08fafd9b9e",
+  "core": "327997130dad58b9",
   "date": "2026-10-05",
   "note": "brook drawn in from off the map, tapped and running on past the fan",
   "pages": {
@@ -23981,12 +23985,12 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/comb.py::stage_field#comb grown round the water": {
-  "code": "2d72104fdf382b89",
-  "core": "7411e9b009df8418",
+  "code": "f9626033b4afbfb2",
+  "core": "327997130dad58b9",
   "date": "2026-10-05",
   "note": "comb laid first and fed at the high head",
   "pages": {
@@ -23998,18 +24002,20 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad"
   ],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/comb.py::stage_field#ditch corridors": {
   "body": "46360b56e561160b",
   "claim": "ditch corridors - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every ditch stretch outside the crop a 30 px no-build corridor",
-  "code": "e093cf4545e7ed36",
-  "core": "7411e9b009df8418",
+  "code": "10ca051d68df25e8",
+  "core": "327997130dad58b9",
   "date": "2026-10-25",
   "note": "the cited pages are silent on keeping buildings off ditches",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::FAN_MIDDLE#fan middle forms": {
@@ -24756,18 +24762,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#dike uncaptioned": {
-  "code": "6a7c672be326bf5e",
-  "core": "888d13aa4c38e315",
+  "code": "34735797e058b044",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-07",
   "note": "the dike's caption is a drawing choice only",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion": {
-  "code": "309ea2f8b27b7ff6",
-  "core": "888d13aa4c38e315",
+  "code": "82cb66b9adb33485",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-08",
   "note": "fraction is 1.0 for a pond leftover, otherwise DIKEPOND_CONVERSION 0.9; the two forms come from the upstream plan.leftover roll; one parcel in ten is the degree the page attests",
   "pages": {
@@ -24778,22 +24785,24 @@
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
   ],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#ditch corridors": {
   "body": "42ec2f3c0f6ca164",
   "claim": "ditch corridors - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every ditch segment not wholly in the crop a 30 px no-build corridor",
-  "code": "63085404b734a754",
-  "core": "888d13aa4c38e315",
+  "code": "f22859289ab04070",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-25",
   "note": "no page gives a no-build distance from a polder's ditches",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#header reservoir": {
-  "code": "4a851d5d846195e1",
-  "core": "888d13aa4c38e315",
+  "code": "03a39e7a754941fa",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-07",
   "note": "the feeding water stands outside the dike at the polder's head, which is its high end, and a reservoir sits above what it waters; the code walks the pond uphill from the ring's head until it clears the crop",
   "pages": {
@@ -24807,35 +24816,37 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:55b93ffd30b041ac"
   ],
-  "triaged": "2026-10-12",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#its reservoir seat": {
   "body": "42ec2f3c0f6ca164",
   "claim": "its reservoir seat - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 30 (first seat 30 px uphill beyond the semi-axis from the ring's head)",
-  "code": "10d5e66f2dd3f748",
-  "core": "888d13aa4c38e315",
+  "code": "d27129f9bbd7a18b",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-25",
   "note": "0019 places the feeding pond to the northwest and gives no distance",
   "pages": {},
   "research": "",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#its salts, guards and sentinels": {
   "body": "42ec2f3c0f6ca164",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 109 (seed mask (0x6D))",
-  "code": "fc6d9e43ea094a7a",
-  "core": "888d13aa4c38e315",
+  "code": "08c7d31fcf66c25c",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-25",
   "note": "seed mask",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#perimeter dike gapped at crossings": {
-  "code": "66d5618fc5cdb55f",
-  "core": "888d13aa4c38e315",
+  "code": "d095a110f299d4fa",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-07",
   "note": "\"Where a channel crosses the dike, the band is cut\", and water runs through a gap, not over the dike's top",
   "pages": {
@@ -24845,12 +24856,12 @@
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
   ],
-  "triaged": "2026-10-18",
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric": {
-  "code": "97a8221b514cd677",
-  "core": "888d13aa4c38e315",
+  "code": "5afe3127951c87bd",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-08",
   "note": "rice polder: 190 ft module, mostly split, a few merged, gaps 1.5/4.0 a side (3 ft bund, 8 ft corridor); dike-pond: 160 ft module, 0.6 merged in pairs, gaps 11/11 (22 ft both ways)",
   "pages": {
@@ -24866,11 +24877,12 @@
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#pond layout": {
-  "code": "cafdcc4e075ae427",
-  "core": "888d13aa4c38e315",
+  "code": "5d4f1f058e8d00f2",
+  "core": "c6c583b85b8e4951",
   "date": "2026-10-12",
   "note": "mosaic at 0.5, chessboard and rice polder at 0.0 (the grid)",
   "pages": {
@@ -24884,6 +24896,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
   ],
+  "triaged": "2026-10-30",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
