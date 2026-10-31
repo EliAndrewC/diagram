@@ -53,9 +53,17 @@ design, next": the fork is the brook-side head corner, not the head's middle, so
 (`dry.rs`), the pond and the grave (`features.rs`), the stage end to end (`build.rs`) and its door `stage_field` (`py.rs`,
 registered in `lib.rs`, driven by `rust/phases/tests/py_driver.py`); `make static` clean at the 100% floor. The engine state the old
 stage leaves beyond the manifest is measured in `phases/field.state.json` (the ink layers, `corridors`, `field_polys`, `block_polys`,
-`dry_polys`, `_bead_slots`, `_paddy_z`, the water blocks, `_resolved_knobs`). NEXT: the thin Python `stage_field` (comb through Rust,
-the polder still the old Python until its port) writing the 42 keys, the plan's `acres`, `envelope`, `net` (its 20 entries, of which
-the free readers use `plots`, `dry_plots`, `channels`) and `brook`, and the registries; then `settlement/fields/ink.py`. OPEN: the outline is the straight-edged
+`dry_polys`, `_bead_slots`, `_paddy_z`, the water blocks, `_resolved_knobs`). DONE 2026-10-31 evening: the thin `hamletgen/field_stage.py` (comb through Rust; a polder through the old
+`water.stage_field` until its port) writes the keys, `net`, the plan's fields and the registries, its knobs rolled by `roll_knob`;
+`settlement/fields/ink.py` draws from the records (D12); the driver imports the new stage. The comb drawn organic (waved flanks,
+bowed row lines, canals following the flank, offtakes held to their lean, the dry hem on the canal's offset curves). Inashiro rolls
+(4-7 s); `make rust-gate` GREEN on 57 seeds (`dev/rust-gate/20261031T204546Z.json`); the cohort 12/16, its three failures later
+Python stages (T16 part B). NEXT, in order: (a) tests for `field_stage.py` and `ink.py` to the 100% floor (`make cover-changed`
+lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - its placement half into Rust or ink.py before the
+deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
+(c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
+keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
+(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. OPEN: the outline is the straight-edged
 fan today (no basin is cut); whether its edge should waver over the ground is for the settlement-review of the moved maps. clippy's
 dead-code lint refuses `comb/` until `fn stage_field` calls into it. T16 stays open (ask:set-down-444-t16-session).
 
