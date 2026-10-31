@@ -8349,9 +8349,10 @@
   "date": "2026-10-03",
   "note": "1.3 ac inside the page's 1 to 2.5 acre band",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::HOMESTEAD_GROUND_FT#ground per homestead": {
@@ -8779,21 +8780,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_fields.py::FIELD_ARCHETYPES#field forms drawn": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c7afa5dae85661f2",
   "core": "5f10b1edca08dcfe",
   "date": "2026-10-12",
   "note": "valley fan, polder and dike-pond block, the forms the pages attest",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
-  "research": "2244e5ab860ccc7e",
+  "research": "3440f4c9f1ae1ce7",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf",
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e"
   ],
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_fields.py::FIELD_ARCHETYPES#no jori grid rolled": {
@@ -20491,18 +20494,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "89ff2f7757d99b79",
   "core": "d6cf20ad0486beed",
   "date": "2026-10-13",
   "note": "1.3 acres falls in the 1 to 2.5 acre band",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57"
   ],
-  "triaged": "2026-10-30",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
@@ -24365,9 +24369,10 @@
   "date": "2026-10-03",
   "note": "matches 0017",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::FLANK_MIN_EXTENT_FT#judged flank": {
@@ -24561,20 +24566,29 @@
   "date": "2026-10-03",
   "note": "matches 0017",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::fit_field#fan acreage": {
+  "body": "55c65e81b1769f06",
+  "claim": "fan acreage - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: the fan solved to the households' acreage, refused outside FIELD_ACRE_BAND",
   "code": "e62c18152b89f358",
   "core": "b33ca067286b5f9b",
-  "date": "2026-10-03",
-  "note": "matches 0017",
+  "date": "2026-10-31",
+  "note": "the fan is searched to `plan.target_acres` and `FieldRefused` is raised when no finished net passes `fan_admissible`, which is the stated rule. The page sizes a hamlet's field by its households at 1 to 2.5 acres each, a shared field of about 7 to 20 acres. A 15% band around a target inside that range stays inside what the page attests.",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "rests": [
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:5fee94012929bfb6",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:7dca4c2800e4b3ca",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:b53810ad8bfaff92"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/fit.py::fit_field#its search steps and tolerances": {
@@ -24709,9 +24723,10 @@
   "date": "2026-10-03",
   "note": "about the 0.8-1.0 tan per head spread of 0017 (which states no 12% itself)",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::_compass#polder geometry": {
@@ -24940,15 +24955,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::fit_polder#polder acreage": {
+  "body": "85b7f69a5ce0d069",
+  "claim": "polder acreage - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: the grid of modules solved to the households' acreage, refused outside POLDER_ACRE_BAND",
   "code": "29bb6ce40efef59e",
   "core": "1e7139cf089e0ff8",
-  "date": "2026-10-03",
-  "note": "solved to the household target that 0017 sizes",
+  "date": "2026-10-31",
+  "note": "the grid is solved to the acreage set by the household count, as the page sizes paddy \"by the mouths it feeds\"; the 12% band is a calibrated choice inside the attested 0.8-1.0 tan an inhabitant (about ±11% around its middle) and well inside 1-2.5 acres a household",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
-  "triaged": "2026-10-28",
+  "research": "bbd39e07c08e5116",
+  "rests": [
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:12a27385c9b000e9",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:9347ee2726e82d57",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:e683f56e64a0ff19"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::gaps_for_courses#gap at every crossing": {
@@ -25004,9 +25025,10 @@
   "date": "2026-10-03",
   "note": "the band predicate",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
-  "research": "fa526bd6ae6238be",
+  "research": "bbd39e07c08e5116",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives": {
@@ -63495,17 +63517,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.plot_texture#paddy plot size and regularity": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "68bbcf1474ed9949",
   "core": "1cfe85aff69cb3c4",
   "date": "2026-10-05",
   "note": "sizes bracket the norm, the grid only evens the rows, no jori squares",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd",
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
-  "research": "6552aac19d729168",
+  "research": "d1350bc16d4ca5b6",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:218358b82a0824e2",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:79b169263a5fb7c3",
@@ -63513,7 +63536,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.try_place#placement, index and corridor plumbing": {
