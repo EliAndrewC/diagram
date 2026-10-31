@@ -37,6 +37,38 @@ pub struct Fan {
     pub fork: Pt,
     pub foot: Pt,
     pub ring: Vec<Pt>,
+    /// The unit vector down the fall, and the one across it to the fan's right looking downhill.
+    pub down: Pt,
+    pub across: Pt,
+    /// The fan's length down the fall, and its half-breadths at the head and the foot (feet).
+    pub length: f64,
+    pub half_head: f64,
+    pub half_foot: f64,
+}
+
+impl Fan {
+    /// The point `u` feet down the fall from the fork and `s` of the half-breadth there across it (s in [-1, 1]).
+    ///
+    /// Research:
+    ///     the fan's coordinates - NONE: geometry; the half-breadth narrows evenly from head to foot (`TAPER`)
+    #[must_use]
+    pub fn at(&self, u: f64, s: f64) -> Pt {
+        let h = self.half_at(u);
+        (
+            self.fork.0 + self.down.0 * u + self.across.0 * s * h,
+            self.fork.1 + self.down.1 * u + self.across.1 * s * h,
+        )
+    }
+
+    /// The half-breadth `u` feet down the fall.
+    ///
+    /// Research:
+    ///     the fan narrows toward its drain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: its bunds converging
+    #[must_use]
+    pub fn half_at(&self, u: f64) -> f64 {
+        let t = if self.length > 0.0 { u / self.length } else { 0.0 };
+        self.half_head + (self.half_foot - self.half_head) * t
+    }
 }
 
 /// The fan of `area` square feet, its length `aspect` times its mean breadth, falling along `down_deg`, its middle at `centre`.
@@ -77,7 +109,16 @@ pub fn fan(area: f64, aspect: f64, down_deg: f64, center: Pt) -> Fan {
             ring.push((a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t));
         }
     }
-    Fan { fork, foot, ring }
+    Fan {
+        fork,
+        foot,
+        ring,
+        down: (dx, dy),
+        across: (ax, ay),
+        length,
+        half_head: head,
+        half_foot: tail,
+    }
 }
 
 /// A closed ring's area by the shoelace formula (square feet).

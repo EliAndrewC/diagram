@@ -96,3 +96,4 @@ mod tests {
 }
 
 pub mod fan;
+pub mod lattice;
