@@ -22,5 +22,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(field::py::roll_knob, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::stage_polder, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::settle_runs, m)?)?;
+    m.add_function(wrap_pyfunction!(field::py::rounded_pond, m)?)?;
     Ok(())
 }

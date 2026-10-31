@@ -162,6 +162,18 @@ pub fn settle_runs(
     super::beans::settle(&runs, &segs, &ponds)
 }
 
+/// A dike-pond's pond or bank rounded from its parcel (`ponds::rounded`): the path and its samples, `draw` a draw from the caller's
+/// own stream.
+#[pyfunction]
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "PyO3 hands a Vec from a Python list"
+)]
+#[must_use]
+pub fn rounded_pond(ring: Vec<Pt>, inset: f64, reach: f64, draw: u32) -> (String, Vec<Pt>) {
+    super::ponds::rounded(&ring, inset, reach, draw)
+}
+
 /// One of the stage's knobs drawn from its table (D3): Python builds the typing-filtered forms and their weights against the running
 /// context, Rust draws the form's index as `Knob.roll` does.
 #[pyfunction]

@@ -66,3 +66,7 @@ for dike, layout in ((False, "mosaic"), (True, "mosaic"), (True, "chessboard")):
 # finish's bead settling: a run through a ditch is dropped, a dry one stands
 assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [((4.0, -5.0), (4.0, 5.0), 9.0)], []) == []
 assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [], []) == [[(0.0, 0.0), (8.0, 0.0)]]
+
+# a dike-pond's pond rounded from its parcel
+d, pts = l7r_phases.rounded_pond([(0.0, 0.0), (200.0, 0.0), (200.0, 100.0), (0.0, 100.0)], 16.0, 16.0, 7)
+assert d.startswith("M") and len(pts) == 13
