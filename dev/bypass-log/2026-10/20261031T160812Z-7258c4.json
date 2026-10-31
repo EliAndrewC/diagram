@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-31T16:08:12Z",
+  "target": "record-checked",
+  "commit": "23cf6a781",
+  "why": "source-applicability on source-applicability:yang-2007-tangyan: after round 1's EDITs, one hand fix: the house style's American spelling neighbouring to neighboring; nothing else moved"
+}

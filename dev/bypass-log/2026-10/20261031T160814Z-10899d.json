@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-31T16:08:14Z",
+  "target": "record-checked",
+  "commit": "23cf6a781",
+  "why": "source-applicability on source-applicability:shaanxi-tongzhi-40: the only other change is source-reader's Used-for EDIT (the pond is in Xixiang county, not Qianyang), which is the fix round 1's applicability check itself asked for (drop 'or pond' for Qianyang)"
+}
