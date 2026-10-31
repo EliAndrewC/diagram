@@ -202,6 +202,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.pipeline.render_cache": ("render-sync", "expensive"),
     "l7r.diagram.pipeline.pool_index": ("pool-index", "expensive"),
     "l7r.diagram.tools.cohort_audit": ("cohort", "expensive"),
+    "l7r.diagram.tools.rust_gate": ("rust-gate", "expensive"),  # feature 444 T21: every seed through the Rust stages alone, judged
     "l7r.diagram.tools.mapcheck": ("maps", "expensive"),  # feature: `tripwire` retired 2026-09-05 - it was `maps` with a false help line
     "l7r.diagram.tools.perf_snapshot": ("perf", "expensive"),
     "l7r.diagram.tools.overlap_census": ("census", "expensive"),  # feature 306: comparisons per call of every check the pool's rolls run
