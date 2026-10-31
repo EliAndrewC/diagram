@@ -501,6 +501,8 @@ def test_the_key_survives_a_change_of_ROOT_but_not_a_change_of_SOURCE(monkeypatc
     # No __pycache__: the key never reads it (engine_files prunes it), and copying it raced a worker writing a .pyc
     # (shutil.Error on a vanished `.pyc.<n>` temp file, land-tooling 2026-10-12).
     shutil.copytree(os.path.join(gencache.HERE, "l7r"), other / "l7r", ignore=shutil.ignore_patterns("__pycache__"))
+    if os.path.isdir(os.path.join(gencache.HERE, "rust")):  # the Rust phases are engine input too (`gencache.rust_sources`, 444 T19)
+        shutil.copytree(os.path.join(gencache.HERE, "rust"), other / "rust", ignore=shutil.ignore_patterns("target", ".*"))
     monkeypatch.setattr(gencache, "HERE", str(other))
     monkeypatch.setattr(gencache, "engine_files", lambda: [str(other / rel) for rel in _REAL_ENGINE_RELS])
     assert gencache.key_for(b"subject", deps) == here_key, "the same sources under another root must key the same"

@@ -181,9 +181,12 @@ def test_a_nucleated_or_unrolled_map_owes_no_grove_sides() -> None:
 
 
 def test_the_roll_keeps_the_rulings_weights_on_either_ground() -> None:
-    """SC-003: over 1,000 seeds each table's counts sit within three standard errors of its weights."""
+    """SC-003: over 1,000 seeds each table's counts sit within three standard errors of its weights - on the forms that draw a
+    grove (the row and the scattered farm): since 444 T19 a nucleated map, which draws none, writes the table's first form."""
     for flood, table in ((False, GROVE_SIDES), (True, GROVE_SIDES_FLOOD)):
-        counts = collections.Counter(hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15, flood_ground=flood)).grove_sides for s in range(1, 1001))
+        counts = collections.Counter(
+            hg.plan_site(hg.HamletSpec(name="X", seed=s, households=15, flood_ground=flood, settlement_form="dispersed" if s % 2 else "linear")).grove_sides for s in range(1, 1001)
+        )
         for k in (2, 3, 4):
             p = table.count(k) / len(table)
             se = (p * (1 - p) / 1000) ** 0.5

@@ -146,7 +146,7 @@ def _listing(cmd: str, manifest: pathlib.Path) -> subprocess.CompletedProcess[st
         return subprocess.CompletedProcess([], 0, "", "")
     work = TARGET.parent / f"l7r-callers-{manifest.parent.name}"
     env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
-    built = _env_run(["maturin", "build", "--quiet", "-o", str(work / "dist"), "-m", str(manifest)], env)
+    built = _env_run(["maturin", "build", "--quiet", "--all-features", "-o", str(work / "dist"), "-m", str(manifest)], env)  # as cover builds: the driver reads the counters
     wheels = sorted((work / "dist").glob("*.whl"))
     if built.returncode != 0 or not wheels:
         return built
@@ -244,7 +244,7 @@ def main(argv: list[str] | None = None) -> int:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)
     if bad:
-        fix = {"lint": "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)", "format": "run `make format`", "test": "fix the failing test cargo names", "cover": "test the lines llvm-cov names, from the crate's tests or its Python driver"}[args.cmd]
+        fix = {"lint": "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)", "format": "run `make format`", "test": "fix the failing test cargo names", "cover": "test the lines llvm-cov names, from the crate's tests or its Python driver", "dead": "delete the pub fn it names, or call it", "callers": "fix the Python caller that failed (its traceback is above)", "build": "fix what maturin names"}[args.cmd]
         print(f"rust-checks: {bad} crate(s) failed {args.cmd} - {fix}", file=sys.stderr)
         return 1
     print(f"rust-checks: {args.cmd} clean on {len(found)} crate(s)")

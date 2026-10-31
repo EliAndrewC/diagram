@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import functools
 import importlib
+import importlib.util
 import os
 import pathlib
 import subprocess
@@ -26,11 +27,10 @@ CRATE = ROOT / "rust" / "phases" / "Cargo.toml"
 
 def _stale(root: pathlib.Path = ROOT) -> bool:
     """Has the crate's source id moved since `.rust-ext/` was built (or was it never built)?"""
-    sys.path.insert(0, str(root / "scripts" / "gates"))
-    try:
-        import rust_checks  # noqa: PLC0415 - the one definition of the build's key
-    finally:
-        sys.path.pop(0)
+    spec = importlib.util.spec_from_file_location("rust_checks", root / "scripts" / "gates" / "rust_checks.py")  # the one definition of the build's key
+    assert spec and spec.loader
+    rust_checks = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rust_checks)
     mark = root / ".rust-ext" / "l7r_phases.stamp"
     return not mark.is_file() or mark.read_text(encoding="utf-8").strip() != rust_checks.stamp(root / "rust" / "phases" / "Cargo.toml")
 
