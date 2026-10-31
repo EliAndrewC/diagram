@@ -23,7 +23,7 @@ pub const PLOT_FT: (f64, f64) = (91.4, 71.5);
 /// The bare bank between the canal and the first strip (feet).
 ///
 /// Research:
-///     the bank - GUESS: the record silent on its width; 0006 keeps the plots to the dry side behind a bare bank, not how wide; 6 ft
+///     the bank - GUESS: the record silent on its width, 0006 keeps the plots to the dry side behind a bare bank, not how wide; 6 ft
 pub const BANK_FT: f64 = 6.0;
 /// A tract's strips out from the canal.
 ///
@@ -33,7 +33,7 @@ pub const TRACT_STRIPS: (u32, u32) = (2, 4);
 /// A tract's plots along the canal.
 ///
 /// Research:
-///     a tract's length - GUESS: the record silent on it; 0006 gives a tract's strips, not its length; 3 to 5 plots
+///     a tract's length - GUESS: the record silent on it, 0006 gives a tract's strips, not its length; 3 to 5 plots
 pub const TRACT_PLOTS: (u32, u32) = (3, 5);
 /// The most a tract's rows turn off the canal's line or its square, and a plot's own turn within its tract (degrees).
 ///

@@ -126,6 +126,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
+  },
+  "### T16 Approach (2026-10-31T22:16Z)": {
+   "sha256": "8f8a802d4d31c5edc7e7d13d32b273b629764e26788ead30f33221a75eacd60f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T16 part B (2026-10-31T20:43Z)": {
+   "sha256": "485113f27babe8390a9a22a055b326d0927f14d18726cd1ec97243c74d2d13ac",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T22 (<why: the finding or measurement that files it>)": {
+   "sha256": "787ce4d6c9eb1a544db3bb0f147bf28bb758980c220519e1800ed6eede46521b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T22 Approach (checklist part A)": {
+   "sha256": "5b01b1aef9d7d57e0d4ceb7d9220e17db2a5ccf212f4535470351f8528ab0502",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2603,6 +2627,114 @@
      "summary": "The budget re-derived under the cap (T18 verdict-3 SOUND, no figure changed); a higher figure keeps the old pin unless the GM's words raise it.",
      "class": "within",
      "why": "This is FR-018 word for word. Unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T16 Approach (2026-10-31T22:16Z)",
+    "### T16 part B (2026-10-31T20:43Z)",
+    "### T22 (<why: the finding or measurement that files it>)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T16-Approach-1 fork",
+     "summary": "The division point moves to the brook-side head corner with a head race of head_lead; canal A along the upper edge and far flank, canal B down the brook's flank.",
+     "class": "within",
+     "why": "Field geometry inside the field's own rebuild, cited to page 0068. Nothing the GM asked or the spec settled is narrowed."
+    },
+    {
+     "id": "T16-Approach-2 organic comb",
+     "summary": "Waved flanks and bowed rows (fan.rs WAVES, lattice.rs BOW as GUESS figures for the settlement-review), dry hem on the canal's offset curves, a meandering brook held to brook_violations.",
+     "class": "within",
+     "why": "Form choices inside the rebuild, routed to the settlement-review the occasions owe (request section 3 item 6; D12's occasions line)."
+    },
+    {
+     "id": "T16-Approach-2 seed 37 owed",
+     "summary": "brook_violations measured 119 of 120 seeds clean, seed 37 at 15 households recorded as 'owed'; the green exit names only make rust-gate green on 54 seeds.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A known failure of a Rust stage's own check sits outside every exit as written. FR-019 (the GM: 'no Rust stage ever ends with any failing checks at the point where that stage has completed ... all seeds pass for all Rust stages') and FR-020's failing list exist for exactly this case; the GM's own reason for the list: 'we might fail a seed and then not actually fix the bug because the failing seed simply doesn't come up for a while'. Seed 37 at 15 households is in none of the gate's seed sets (fresh block, pinned variants on fresh seeds, failing list) unless it is put on the list, so 'rust-gate green' can pass with it still failing. Not physically impossible, not implied by the GM's words, does not serve the purpose. Remedy: the green exit names seed 37 at 15 households - fixed, or entered on the failing list with its frozen input per FR-020 - before landing."
+    },
+    {
+     "id": "T16-Approach-3 polder seam: perimeter_dike",
+     "summary": "The thin Python stage hands the Rust-placed polder to the old free helper perimeter_dike.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D12: 'Every PLACEMENT function goes to Rust.' Request section 7: 'Each stage stays a thin Python function ... and calls into Rust'; sections 3.5 and 5.5: the old implementation deleted in the same landing, no fallback path; FR-017: no phase rebuilt in Python. Placing a dike is placement, and keeping the old Python for it leaves part of the field stage on the old algorithm, the outcome the GM named as his biggest fear (2026-10-30). The block gives no reason it stays ('traced at runtime, not read' is how the helpers were found, not why they remain). Not impossible in Rust, not implied by the GM, does not serve the purpose. Remedy: port it, or show in the block what it writes and why that is not the field's placement."
+    },
+    {
+     "id": "T16-Approach-3 polder seam: marsh",
+     "summary": "The thin Python stage hands the polder to the old free helper marsh.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Same grounds as perimeter_dike, judged separately: placing a marsh is placement (D12, request sections 3.5, 5.5 and 7, FR-017). No reason given in the block. Being shared with other stages would not make the field's call into it not the field's work."
+    },
+    {
+     "id": "T16-Approach-3 polder seam: resting_plots",
+     "summary": "The thin Python stage hands the polder to the old free helper resting_plots.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Same grounds, judged separately: choosing which plots rest is a placement decision on the field's parcels (D12 'Every PLACEMENT function goes to Rust'; request sections 3.5, 5.5, 7; FR-017). No reason given."
+    },
+    {
+     "id": "T16-Approach-3 polder seam: outfall_run",
+     "summary": "The thin Python stage hands the polder to the old free helper outfall_run.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Same grounds, judged separately: routing the outfall is placement of the field's water (D12; request sections 3.5, 5.5, 7; FR-017). No reason given."
+    },
+    {
+     "id": "T16-Approach-3 polder seam: apply_land_use",
+     "summary": "The thin Python stage hands the polder to the old free helper apply_land_use.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Judged separately: this one may be a manifest write rather than placement, and if the block showed that (what it writes, and that it decides nothing about where anything goes) it could stand as within. The block says nothing of what it writes, and an exception is presumed wrong until shown; as written it is old Python left inside the field stage against D12 and request sections 3.5, 5.5 and 7."
+    },
+    {
+     "id": "T16-Approach-4 deletion",
+     "summary": "Deletion by name via make dead-closure against the clone's base; two pure moves on the round arbiter's rulings (ask:444-T16-move-drawing, ask:444-T16-brook-predicates); the old engine's tests deleted; the tests' lay_comb over the Rust comb.",
+     "class": "within",
+     "why": "Carries request sections 3.5 and 5.5 (old code deleted in the landing). The two moves rest on arbiter rulings not in this bundle; D12 already keeps the drawing functions in Python, and brook predicates are checks, not placement, so neither narrows what was asked on their face."
+    },
+    {
+     "id": "T16-Approach-5 order",
+     "summary": "After water_frame; the last of step 4.",
+     "class": "within",
+     "why": "Pipeline order as request section 6 and FR-019's front-of-pipeline rule."
+    },
+    {
+     "id": "T16-Approach-6 exits",
+     "summary": "Green: make rust-gate green, FR-012 measured, claims round to zero open (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing; red: recorded and set down, a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The first Approach's exits stand alongside; the restated ones carry FR-012, FR-019, FR-021 and the MODE AUDIT budget check. The red exit is the template's standing line, not this block's decision. (Seed 37's absence from the exits is ruled separately above.)"
+    },
+    {
+     "id": "T16-partB-1 cohort failures left to Python stages",
+     "summary": "Cohort seeds 9 (SeatRefused), 903 (row_rules), 905 (SiteRefused) failing in later Python stages are not tuned for in the Rust field.",
+     "class": "within",
+     "why": "FR-019 in the GM's words: 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step ... we don't care at all about the Python stages which come after'; the cohort refuses nothing for a Rust landing. The decision stands on the gate as judge (57 seeds, 0 failing, dev/rust-gate/20261031T204546Z.json), not on the block's line 'No check of the field's own failed on those seeds', which is asserted rather than shown measured on those three seeds; if row_rules were a field-owned check, the gate's derived assignment would ask it on the pinned row variants."
+    },
+    {
+     "id": "T16-partB-2 dry hem fixed in Rust",
+     "summary": "The dry plot's water test made exact (a segment crossing it) in the Rust that places the hem, after rust-gate failures at the field.",
+     "class": "within",
+     "why": "A Rust stage fixing its own gate failure, FR-019 as intended; changing the rule's test, not tuning around it."
+    },
+    {
+     "id": "T16-partB-3 no arbiter ruling",
+     "summary": "No ruling asked; nothing here is a process stop.",
+     "class": "within",
+     "why": "Nothing narrowed."
+    },
+    {
+     "id": "T22 and T22 Approach (templates)",
+     "summary": "Both blocks are unfilled templates and decide nothing.",
+     "class": "within",
+     "why": "No decision to judge; when T22 is filled its blocks' digests change and owe their own review."
     }
    ]
   }
