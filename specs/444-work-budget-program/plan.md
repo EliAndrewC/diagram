@@ -388,3 +388,26 @@ re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-
    item 6 back to the GM's words, and `make cohort-landing` on it passes 54 of 54, no regressed seed
    (dev/cohort-log/20261031T034931Z). (2) the Kashikawa and Sawada pins - removed; both regenerate as main's maps. The open rows
    filed at 03:22Z for the re-rolled port's seeds and pins (`found-444-t19.jsonl`) are withdrawn: no seed fails and no map is pinned.
+
+### T19 part B (2026-10-31T04:09Z)
+
+The trigger: every cohort this task rolled that refused a seed (dev/cohort-log/20261031T025046Z, 030442Z, 031013Z, 031422Z and
+032224Z), each answered at its own part B above in items 1-7; this block answers items 8 and 9 for all of them, and the outcome.
+
+1. **What exactly is refusing?** Nothing now: `make cohort-landing` on the reproduced draws passes 54 of 54
+   (dev/cohort-log/20261031T034931Z).
+2. **A3 again.** The rules are unchanged.
+3. **A4 again.** Read at each block above; the last read found no knob read off its branch.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Changing: two branches (`cluster_shape`, `well_siting`) and D7's draws.
+6. **The one-sentence test.** "The port now draws Python's own rolls, so every seed keeps its map."
+7. **Done:** D7 amended; the open rows withdrawn; the pins removed.
+8. **Every route measured before the arbiter was asked?** At ask:444-T19-cohort-regression and ask:444-T19-cohort-45 the routes
+   put were measured on the cohort and against the found rows (`cohort_known` named seed 903's E3 row), but not every route: the
+   route that settled it - reproducing `knob_rng` so no seed re-rolls - was not measured or offered until spec-fidelity's second
+   MODE 4 review called D7's premise unmeasured. The research did not decide it; a measurement did (the draws compared with
+   `knob_rng` in `test_the_rust_draws_are_knob_rng_s`). Recorded so a later port measures the reproduction route first.
+9. **After a ruling, the step it named?** Yes for each: the cohort-regression ruling's step (the fair comparison) was taken
+   first and its branch 3 (a fault in the rolls) followed, which found the two branch faults; the cohort-45 ruling's accept was
+   acted on until spec-fidelity's review blocked the landing it named, and the route taken then (D7 reproduced) went back
+   through that review (CLEAR) rather than past it.
