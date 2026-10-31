@@ -101,3 +101,26 @@ homesteads, the hinterland - read freely where not held) and from the samples, n
 with the comb (D11): the area and the cap (D2), the brook and its intake, the outline, the comb's ditches and basins with their
 rules held where decided (D7), the plots drawn apart, the beans, the hem and the pocket pond, the water index (D5) - `make
 rust-gate` judging each increment once `rust/phases/src/field.rs` holds `fn stage_field`. Then the polder (D8). One landing.
+
+**The Rust so far** (`rust/phases/src/comb/`, local to the clone, wired at the switch): `mod.rs` - the paddy (1.3 acres a
+household, 0017), the single-field cap (uniform 45-60 ha from `knob_rng(seed, "field_cap")`) and the field count past it (D2);
+`fan.rs` - the fan's envelope: its area the paddy, its length `fan_aspect` times its mean breadth, falling along `down_deg`, the
+head (1 + 1/3) and the foot (1 - 1/3) of the mean breadth (the taper a labeled GUESS), its edge cut a point every 64 ft (a
+CONVENTION). Both tested (`make rust-test`); clippy's dead-code lint refuses them until `stage_field` calls in.
+
+**The comb's design, next** (the derivation's algorithm, made concrete; each figure's page named): on the fan's axes - u down the
+fall from the fork (0) to the foot (L), s across it in [-1, 1] scaled by the half-breadth at u - the ROWS are lines across the fall
+48 ft apart (a basin "about 48 ft across its canal", 0005), turned by the plan's `grain_drift` degrees; the CUTS are lines of fixed s
+(so the bunds converge toward the drain, 0005), spaced at the head about 31 ft (the middle of "26 to 36 ft along it", 0005), each
+crossing moved by positional jitter; an interior basin is the quadrilateral of four crossings (5 ops); an edge basin is clipped
+against the envelope (its new corners only angle-tested), a corner under 25 degrees cut into a headland, a basin under a quarter of
+the 1,488 sq ft cell joined to the neighbor it shares most bund with (0014), the arrowhead refused (0005). The CHANNELS (0053):
+the head race from the intake to the fork, forking into two supply canals down the flanks; the drain down the low middle to the
+foot's outfall; branches leaving the supply canals at the plan's `offtakes_a` and `offtakes_b` fractions, leaning downstream (0054),
+each tapering from head to tail (0053), every turn on a sweep of about 2.5 channel widths (0054), no channel crossing another.
+
+**Open before the records are written:** the field writes TWO plot forms - `net["plots"]` (dicts with a `poly`, read by
+`sitegen/geom.py`'s area and `settlement/fields/landuse.py`) and the manifest's `fields[].plots` (6 numbers: width, height, center
+x, center y and two more); which reader reads the 6-number form, and whether the held `settlement/fields/` files are the stage's
+placement or the drawing (a renderer is not the stage's algorithm, and D10 deletes only the field's own placement code), is
+settled from the readers outside the held set before the Rust writes either form.
