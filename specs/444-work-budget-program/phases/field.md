@@ -42,19 +42,15 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (2026-10-31, late) the plan's polder seam re-decided and CLEAR: every polder placement in Rust. BUILT:
-`field/dike.rs` (band 14-40 ft, outer face, crest, gaps, willow and mulberry rows). NEXT, in order: (1) in `polder.rs` the
-outfall's course (from the tail's sluice down the fall off the canvas, 0060) and the resting pick (0013, unsettled 2-4 plots, no
-two sharing a bund, likelier down the slope); (2) `field/landuse.rs`, the dike-pond's conversion (0018-0026: every parcel a pond
-or one in ten rice by the `leftover` knob, fry ponds by `fry_form`, each pond's bank and water rounded from its parcel at the
-split's inset, the bank's crop - mulberry rows one a 5.5 ft of bank with bushes 4.4 ft apart, fruit a line 18 ft apart, tea two
-3 ft hedges broken every 7.5 ft); (3) `stage_polder`'s door returns them; (4) `field_stage._polder` writes `dikes`,
-`planted_trees`, `dikeponds`, `land_use`, the outfall channel, the meta (`dike_crop`, `dikepond_inset`, `dikepond_split`,
-`fry_form`, `land_use_overlay`, `leftover`), and draws them in `ink.py` (the band `perimeter dike` in the shared dike's earth
-colors, its crowns; the ponds, banks and crops) - calling NONE of `perimeter_dike`, `resting_plots`, `outfall_run`,
-`apply_land_use`; `marsh` only to fill the wild pond's fringe ring; (5) Kuwabata rolls, `make rust-gate`, `make quick`; then the
-claims round (255 owed + 4 triaged), MODE AUDIT (confirm no helper placement called), glyph-check and settlement-reviews, `make
-land`. The old resume list's other items stand.
+**Resume here:** (2026-10-31, night) the polder's seam closed: every polder placement in Rust (`dike.rs`, `polder.rs`'s
+outfall and resting pick, `landuse.rs`'s conversion), written and drawn by `field_stage._polder` and `ink.py`; the shared helpers
+the field was the last caller of deleted (`apply_land_use` and its steps, `outfall_run`, `resting_plots`), `perimeter_dike` kept for
+the tier that still calls it. Seed 37's level run FIXED (the one meander). The plan's T16 blocks CLEAR. The claims fix landed alone
+(the parse keyed on the Rust sources; `claims_cli.py` split at the bar). `make quick` and `make rust-gate` green. IN FLIGHT: the
+claims round - an impl-drift `check-wave` over 26 files' bundles (`/tmp/l7r-check/claims-<file slug>/`), each reply to record with
+`make claims-checked`; then FR-021's 55 open findings (`make land`'s refusal lists them, most in `consts.py`, `consts_water.py`,
+`driver.py`). NEXT after it: MODE AUDIT (confirm no shared helper's placement called), `make work-budget`, glyph-check and
+settlement-reviews (`make verify` writes their prompts once the gate is green), the checklist's boxes ticked, `make land`.
 
 THE POLDER'S DESIGN, next (2026-10-31): `rust/phases/src/field/polder.rs`, entered from `build.rs` on the two polder archetypes;
 the thin stage then calls the free helpers as the old stage did. Rust places: (1) the block - the households' paddy in whole
