@@ -102,6 +102,7 @@ mod tests {
 pub mod beans;
 pub mod brook;
 pub mod channels;
+pub mod dry;
 pub mod fan;
 pub mod geom;
 pub mod index;
