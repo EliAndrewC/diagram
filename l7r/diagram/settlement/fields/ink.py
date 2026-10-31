@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Split
 from l7r.diagram.settlement.water_ways.water import ditch_style
-from l7r.diagram.waterfields.palette import AZE, BEAN_GREEN, FLOODED, aze_w
+from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, BEAN_GREEN, FLOODED, aze_w
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -140,3 +140,41 @@ def rounded_pond(poly: Sequence[Pt], inset: float, reach: float, rng: Any) -> tu
 
     d, pts = phases().rounded_pond([(float(x), float(y)) for x, y in poly], float(inset), float(reach), rng.getrandbits(32))
     return d, [(float(x), float(y)) for x, y in pts]
+
+
+DIKE_EARTH, DIKE_EDGE = "#B79B68", "#9C8150"
+"""Research: the dike's band - CONVENTION: the shared dike drawing's earth and its edge"""
+CROWN_FILL = {"willow": "#6E8B4A", "mulberry": "#87A45C", "fruit": "#7C9A54", "tea": "#5E7C40"}
+"""Research: the crowns' greens - CONVENTION: the shared dike drawing's willow and mulberry, the banks' fruit and tea"""
+BANK_FILL, POND_WATER_FRY = "#A9AE7C", "#A7B3AE"
+"""Research: a pond's bank and a nursery's water - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: its fry ponds drawn in grayer, muddier water than the clear ponds; the bank's earth a CONVENTION"""
+
+
+def dike(s: Settlement, dk: dict[str, Any]) -> None:
+    """The polder's dike as the Rust placed it: the band between its faces, its two rows of crowns, and a gate at each sluice."""
+    outer, inner = _pts(dk["outer"]), _pts(dk["inner"])
+    s.add(f'<path d="M {outer} Z M {inner} Z" fill="{DIKE_EARTH}" fill-rule="evenodd" stroke="{DIKE_EDGE}" stroke-width="1.0"/>', cls="perimeter dike")
+    for kind, crowns in dk["trees"]:
+        dots = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}"/>' for x, y, r in crowns)
+        s.add(f'<g fill="{CROWN_FILL.get(kind, "#6E8B4A")}" opacity="0.92">{dots}</g>', cls="perimeter dike")
+    for x, y in dk["gaps"]:
+        s.add(f'<rect x="{x - 4:.1f}" y="{y - 4:.1f}" width="8" height="8" fill="#8C7A5A" stroke="#5A4A32" stroke-width="0.8"/>', cls="sluice gate")
+
+
+def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) -> None:
+    """The dike-pond block as the Rust converted it: each pond's bank and water (a nursery's grayer), each rice parcel, and the
+    banks' crop."""
+    for kind, parcel, bank, water in parcels:
+        if kind == "rice":
+            s.add_paddy(f'<polygon points="{_pts(parcel)}" fill="{_RICE_GREEN}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))
+            continue
+        cls = "fry pond" if kind == "fry" else "fish pond"
+        s.add_paddy(f'<path d="{bank[0]}" fill="{BANK_FILL}" stroke="{AZE}" stroke-width="{bund:.2f}"/>', cls=cls)
+        s.add(f'<path d="{water[0]}" fill="{POND_WATER_FRY if kind == "fry" else POND_WATER}" stroke="{POND_RIM}" stroke-width="1.0"/>', cls=cls)
+    crop, crowns, hedges = crops
+    cls = f"{crop} dike" if crop in ("mulberry", "fruit", "tea") else "mulberry dike"
+    if crowns:
+        dots = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}"/>' for x, y, r in crowns)
+        s.add(f'<g fill="{CROWN_FILL.get(crop, "#87A45C")}" opacity="0.9">{dots}</g>', cls=cls)
+    for h in hedges:
+        s.add(f'<polyline points="{_pts(h)}" fill="none" stroke="{CROWN_FILL["tea"]}" stroke-width="3" stroke-linecap="butt"/>', cls=cls)

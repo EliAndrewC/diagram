@@ -253,37 +253,58 @@ POND_FRINGE_FT = 40.0
 """Research: the wild pond's reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin, the comb source pond's 40"""
 
 
+def _roll(s: Settlement, plan: SitePlan, name: str) -> Any:
+    """One registered knob drawn in Rust from its table (`roll_knob`) against the running context - the spec's pin taken - and
+    recorded as `resolve` records it."""
+    knob = KNOBS[name]
+    pin = s.knob_pins.get(name, plan.spec.pins.get(name))
+    if pin is None:
+        ctx = s.knob_context()
+        forms = knob.allowed(ctx)
+        weights = knob.weights_for(ctx)
+        w = [weights.get(v, 0.0) for v in forms] if weights is not None else []
+        pin = forms[phases().roll_knob(s.seed, name, len(forms), w)]
+    s._resolved_knobs[name] = pin
+    return pin
+
+
 def _polder(s: Settlement, plan: SitePlan) -> None:
-    """The polder: its placement from Rust (`stage_polder`, D8), then the free helpers the old stage called - the wild pond and
-    its fringe, the perimeter dike and its trees gapped at the sluices, the resting plots, the ditches, the outfall run, and on a
-    dike-pond the land-use overlay that makes its ponds (`phases/field.md`, "The polder's seam").
+    """The polder: every placement from Rust (`stage_polder`, D8; the plan's seam, re-decided after its review) - the block, the
+    dike and its trees, the outfall, the resting plots and on a dike-pond its conversion - written and drawn here; `marsh` only
+    fills the fringe ring round the Rust's wild pond.
 
     Research:
         the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: from outside in, the wild water, the dike, the ring canal, the field ditches and the paddies"""
-    from l7r.diagram.settlement.fields.outfall import outfall_run
     from l7r.diagram.settlement.land.wet import pond_fringe_ring
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
     ftpx = plan.ftpx
     dikepond = plan.field_archetype == "mulberry_dike_fishpond"
     name = f"{plan.spec.name.lower()}-polder"
-    out = phases().stage_polder(plan.spec.seed, plan.spec.households, dikepond, plan.pond_layout, float(plan.down_deg), (plan.W * ftpx / 2.0, plan.H * ftpx / 2.0), float(plan.fan_aspect))
+    rest_form = _roll(s, plan, "paddy_rest")
+    split = float(_roll(s, plan, "dikepond_split")) if dikepond else 0.5
+    out = phases().stage_polder(
+        plan.spec.seed,
+        plan.spec.households,
+        dikepond,
+        plan.pond_layout,
+        float(plan.down_deg),
+        (plan.W * ftpx / 2.0, plan.H * ftpx / 2.0),
+        float(plan.fan_aspect),
+        (plan.W * ftpx, plan.H * ftpx),
+        rest_form == "unsettled",
+        (split, plan.leftover, plan.fry_form, plan.dike_crop),
+    )
     if __debug__:
         from l7r.diagram import work_counts
 
         for k, n in out["counts"].items():
             work_counts.OPS[k] += n
-    s.meta(field_archetype=plan.field_archetype, pond_layout=plan.pond_layout, water_source="reservoir", water_source_position="corner_high", dry_furrows_vary=False)
+    s.meta(field_archetype=plan.field_archetype, pond_layout=plan.pond_layout, water_source="reservoir", water_source_position="corner_high", dry_furrows_vary=False, paddy_rest=rest_form)
     px, py, rx, ry = out["pond"]
     s.pond(px, py, rx, ry)
     s.marsh(pond_fringe_ring(px, py, rx, ry, POND_FRINGE_FT), role="pond_fringe")
-    rows = max(p["row"] for p in out["plots"]) + 1
-    cands = [(p["ring"], (p["row"] + 0.5) / rows) for p in out["plots"]]
-    rest = s.resting_plots(name, cands)
-    plots = [
-        {"poly": p["ring"], "fill": FLOODED if p["low"] else _RICE_GREEN, "low": p["low"], "rest": i in rest, "state": "wet" if p["low"] else "green", "drain_side": None}
-        for i, p in enumerate(out["plots"])
-    ]
+    plots = [{"poly": p["ring"], "fill": FLOODED if p["low"] else _RICE_GREEN, "low": p["low"], "rest": p["rest"], "state": "wet" if p["low"] else "green", "drain_side": None} for p in out["plots"]]
     chans = [{"role": r, "seg": seg, "pts": pts, "w": w, "w_tail": wt} for r, seg, pts, w, wt in out["ditches"]]
     outline = out["outline"]
     net: dict[str, Any] = {
@@ -323,10 +344,29 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": 1.5, "field": name})
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
-    s.perimeter_dike(out["inner_env"], seed=plan.spec.seed, gaps=[tuple(g) for g in out["sluices"]])
+    dk = out["dike"]
+    band = dk["outer"] + list(reversed(dk["inner"]))
+    M.setdefault("dikes", []).append(
+        {
+            "outline": band,
+            "crest": dk["crest"],
+            "gaps": dk["gaps"],
+            "keepout": dk["outer"],
+            "keepout_chords": len(dk["gaps"]),
+            "label": "",
+            "w_min": round(dk["widths"][0], 1),
+            "w_max": round(dk["widths"][1], 1),
+        }
+    )
+    M.setdefault("planted_trees", []).extend({"kind": kind, "trees": [list(c) for c in crowns]} for kind, crowns in dk["trees"])
     s.comb_base_fill(net, name)
+    ink.dike(s, dk)
+    if dikepond:
+        _dikeponds(s, plan, out, split)
     bund = aze_w(ftpx)
     for p in plots:
+        if dikepond:
+            continue  # every parcel of a dike-pond block is a pond's, its bank or its rice drawn by `_dikeponds`
         if p["rest"]:
             s.rest_basin(p["poly"], bund, name)
         else:
@@ -339,18 +379,34 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         s.field_channel(c["pts"], col, c["w"], c["w_tail"], late=True, cls=cls)
         s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
     s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], 1.5, 1.5, late=True)
-    tail = out["sluices"][1]
-    inner = next(c["pts"] for c in chans if c["seg"] == "drain")
-    mid = ((inner[0][0] + inner[-1][0]) / 2.0, (inner[0][1] + inner[-1][1]) / 2.0)
-    run = outfall_run(mid, tail, plan.fall)
+    run = out["outfall"]
     M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 5.5})
-    s.field_channel(run, *ditch_style("drain", plan.field_archetype)[:1], 5.5, 5.5, late=True, cls=ditch_style("drain", plan.field_archetype)[1])
-    if dikepond:
-        from l7r.diagram.settlement._knobs import knob_rng
-
-        s.apply_land_use(net, "mulberry_fishpond", knob_rng(plan.spec.seed, "land_use"), fraction=1.0, eligible="all", dike_crop=plan.dike_crop, leftover=plan.leftover, fry_form=plan.fry_form)
+    col, cls = ditch_style("drain", plan.field_archetype)
+    s.field_channel(run, col, 5.5, 5.5, late=True, cls=cls)
     s.field_polys.append(outline)
     plan.net = net
     plan.envelope = outline
     plan.acres = sum(_area(r) for r in rings) / SQ_FT_PER_ACRE
     net["acres"] = plan.acres
+
+
+def _dikeponds(s: Settlement, plan: SitePlan, out: dict[str, Any], split: float) -> None:
+    """The dike-pond block's conversion as the Rust placed it: its records (`dikeponds`, `land_use`, the meta and the inset the pig
+    sties read), and its ink."""
+    M = s.M
+    ponds = []
+    for kind, parcel, bank, water in out["dikeponds"]:
+        ponds.append({"kind": kind, "parcel": parcel, "water": water[1] if water else [], "bank": bank[1] if bank else []})
+    M.setdefault("dikeponds", []).extend(p for p in ponds if p["kind"] != "rice")
+    M.setdefault("land_use", []).append(
+        {
+            "overlay": "mulberry_fishpond",
+            "count": sum(1 for p in ponds if p["kind"] != "rice"),
+            "eligible": "all",
+            "plots": [list(_center(p["parcel"])) for p in ponds if p["kind"] != "rice"],
+            "leftover_plots": [list(_center(p["parcel"])) for p in ponds if p["kind"] == "rice"],
+        }
+    )
+    s.dikepond_inset = float(out["inset"])
+    s.meta(dike_crop=plan.dike_crop, dikepond_inset=round(float(out["inset"]), 1), dikepond_split=split, fry_form=plan.fry_form, land_use_overlay="mulberry_fishpond", leftover=plan.leftover)
+    ink.dikeponds(s, out["dikeponds"], out["crops"], aze_w(plan.ftpx))
