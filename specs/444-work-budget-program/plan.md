@@ -251,3 +251,22 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   and commits `dev/rust-gate/` - the record, the failing list and its fixtures - BEFORE it stops on a failing seed, so the list
   outlives a landing that goes no further.
 
+### T21 part B (2026-10-31T14:46Z)
+
+The trigger: two red gates in a row on T21's landing (14:32Z, 14:42Z), the tripwire ruled `continue` by the round arbiter
+(red-gate@2026-10-31T14:42:03Z).
+
+1. **What exactly is refusing?** First gate: `hooks-test` rust-tooling (`cohort_gate.py` reads `.rs` files and no row of
+   `dev/rust-tooling.md` named it) and `test_census_matches_pin` (`rust_gate.py` reached `STAGES` through the package surface).
+   Second gate: test-full's roll census (the gate's unit tests rolled real water_frame seeds in the test worker).
+2. **A3 again.** The project's own rules, unchanged: every reader of `.rs` has its row; the package surface is pinned; the gate
+   rolls no map of its own (constitution VI).
+3. **A4 again.** Each refusal read in the gate's log.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: each fixed where it failed, decided nothing new.
+6. **The one-sentence test.** "T21's landing found three tooling misses of its own, each fixed."
+7. **Done:** the row and its proof added; `STAGES` read from `hamletgen.driver`; the gate's tests on a stand-in water_frame,
+   rostered as `InProcess` stubs in `tests/rolls.py`.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire, with each fix and its passing
+   tests in hand.
+9. **After a ruling, the step it named?** Yes: `make done` once more, through `make land F=444 T=T21`.
