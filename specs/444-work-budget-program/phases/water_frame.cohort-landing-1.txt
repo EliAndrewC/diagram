@@ -1,0 +1,68 @@
+[1mreference settlement (Inashiro, seed 4): CLEAN[0m [HIT - served from the roll cache: nothing the roll executes changed]
+checking the reference settlement first (60 s) - the cohort is minutes, every unchanged seed served from the roll cache
+
+[1mreference settlement clean[0m - running the cohort
+
+cohort: rolled 54, served 0
+
+Audit-03 households=20 form=dispersed REFUSED
+    FAIL refused:SiteRefused -> Audit-03 (seed 3): seated 19 of 20 households on margin 1; no house is taken back
+
+--- Audit-20  seed=20 households=18 form=linear sides=2 fall=45 sink=pond shape=elongated lanes=T row=street/one/shared
+    FAIL lane_knots -> 1 knot(s), e.g. [(4, (1988.1251834935274, 2024.2972658437036), 7, (1997.6723609631697, 2036.1335999079206), 15.2)]
+
+--- Audit-21  seed=21 households=14 form=nucleated sides=2 fall=0 sink=pond shape=round lanes=T wells=lane/lane
+    FAIL lane_knots -> 1 knot(s), e.g. [(11, (2887.2, 1810.9), 16, (2906.0, 1812.8), 18.9)]
+
+Audit-36 households=20 form=dispersed REFUSED
+    FAIL refused:SiteRefused -> Audit-36 (seed 36): seated 19 of 20 households on margin 1; no house is taken back
+
+Audit-37 households=16 form=linear REFUSED
+    FAIL refused:OverlapRefused -> lanes would be recorded on a gardens at (1545, 2814), which the overlap matrix forbids
+
+Audit-903 households=17 form=linear REFUSED
+    FAIL refused:WebRefused -> the web's last resort cannot mend it without dropping a tree lane: lanes 1 (skeleton: dangling_ends), 2 (skeleton: dangling_ends) still break a rule of the lane law; the web still breaks dangling_ends ([(1, 0), (2, 0)]) (lane skeleton cross) (the manifest at the refusal: /tmp/l7r-refused/Audit-903-1
+
+--- Audit-904  seed=904 households=13 form=linear sides=4 fall=45 sink=pond shape=round lanes=Y row=edge/both/own
+    FAIL lane_knots -> 2 knot(s), e.g. [(4, (2632.6267255192893, 2511.2928283449332), 9, (2622.397044709372, 2493.425829427731), 20.6), (4, (2632.6267255192893, 2511.2928283449332), 18, (2622.397044709372, 2493.425829427731), 20.6)]
+
+forms rolled: dispersed 20, linear 17, nucleated 17
+grove sides among the farms that carry a grove: 2 sides 20, 3 sides 10, 4 sides 3
+row villages: 15; knob values never rolled: none
+knob values rolled but never drawn: none
+
+47/54 passed the whole gate
+residue by check:
+    3  lane_knots
+    2  refused:SiteRefused
+    1  refused:OverlapRefused
+    1  refused:WebRefused
+cohort: rolled over an uncommitted engine diff (510a34fbe1bda492) - recorded so, never read as ('l7r', 'pool') at its commit
+record committed (fail): dev/cohort-log/20261031T025046Z-diagram-backlog-597101.json
+cohort: seed 3 is named by an open found row - l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot (E3); go to that row before probing
+cohort: seed 903 is named by an open found row - l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot (E3); go to that row before probing
+cohort: seed 3 NEWLY FAILING (refused:SiteRefused)
+cohort: seed 20 NEWLY FAILING (lane_knots 1)
+cohort: seed 21 NEWLY FAILING (lane_knots 1)
+cohort: seed 36 NEWLY FAILING (refused:SiteRefused)
+cohort: seed 37 NEWLY FAILING (refused:OverlapRefused)
+cohort: seed 903 NEWLY FAILING (refused:WebRefused)
+cohort: seed 904 NEWLY FAILING (lane_knots 2)
+approach owed: cohort@20261031T025046Z: seed(s) 3, 20, 21, 36, 37, 903, 904 newly failing - T19 owes the checklist's part B - when the work resists, answered before the next attempt: add `### T19 part B (2026-10-31T02:51Z)` to specs/444-work-budget-program/plan.md, every item of part B numbered; `make tick` refuses T19 until it is there
+## The room table (405 T113) - a fit failure: weigh more room within these ceilings before packing (B6)
+
+A room probe grows the BAND with the gap: a knob marked DOES NOT GROW, widened alone, deals the same seats into the same band - packing, not room.
+
+| knob | value | label | measures | research ceiling | the seating band |
+|---|---|---|---|---|---|
+| `HOMESTEAD_GROUND_FT` (l7r/diagram/hamletgen/consts.py) | 104 ft square (about 305 tsubo) | UNRESEARCHED (cohort-measured) | the ground one homestead takes - house, yard and row; the cluster band's area (households x its square) and the canvas's room | attested house lot 90-180 tsubo typical, 300-480 rare (1698 Hyakken register, max 480 tsubo = about 130 ft square); already above the typical lot | GROWS - it is the band's and the canvas's size |
+| `SEATING_GROUND_FT` (l7r/diagram/hamletgen/consts.py) | 162 ft square (about 735 tsubo with the wood floor) | GUESS | the band the seating spreads its offers over - the mean envelope plus the least wood floor | unresearched as a whole (a house lot holds no wood floor); above every lot found - research question owed | GROWS - the seating band (lattice and seat bound) only; the canvas and the margin keep HOMESTEAD_GROUND_FT's |
+| `grow_gap` (l7r/diagram/hamletgen/homesteads/growth.py) | MIN_WEB_GAP + TIGHT_GAP_PX (18 + 2 ft) | 0246 (the lane's room) + GUESS (the 2 ft parting) | the room left between two neighbors' footprints in the grown cluster | unresearched - no source measures the distance between neighbors in a clustered village (spacing-research.md: SILENT) - research question owed | DOES NOT GROW - widen SEATING_GROUND_FT with it, or the probe measures packing |
+| `MIN_WEB_GAP` (l7r/diagram/hamletgen/consts.py) | 18 ft (2 x WEB_FABRIC_GAP + 4 ft tread) | derived from 0246's fence gap and 0081's tread | the least gap a lane threads between two steadings | follows WEB_FABRIC_GAP | DOES NOT GROW - widen SEATING_GROUND_FT with it, or the probe measures packing |
+| `WEB_FABRIC_GAP` (l7r/diagram/hamletgen/consts.py) | 7 ft (a lane's line to another household's garden fence) | map drawing convention (0246: not a measured figure) | how near a lane runs to a garden fence; a knot's gather may take 3 ft (WEB_CROP_GAP, D83) | a convention, not a measurement: refine it where it collides with an R rule (A6(a)) rather than buying room for it | DOES NOT GROW |
+
+make[1]: *** [Makefile:230: cohort] Error 1
+make: [Makefile:237: cohort-landing] Error 2 (ignored)
+cohort-gate: REFUSED no landing cohort (48 seeds from seed 1 and the pinned rows) was rolled on the engine being landed - run: make cohort-landing; the tree has uncommitted pool maps (pool/hamlets/kashikawa/kashikawa.json, pool/hamlets/kuwabata/kuwabata.json, pool/hamlets/mizuguchi/mizuguchi.json, pool/hamlets/sawada/sawada.json) - the gate regenerated what the change moved: read each diff, commit it, then land again
+make: *** [Makefile:238: cohort-landing] Error 1
+cohort-landing exit 2
