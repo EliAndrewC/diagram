@@ -695,6 +695,8 @@ def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str,
 def main(argv: Sequence[str] | None = None) -> int:
     import claims_cli as cli  # noqa: PLC0415 - the handlers import this module back
 
+    cli.cx = sys.modules[__name__]  # the handlers read THIS module - the one a test loaded and patched, not another copy
+
     args = cli._parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
     if args.cmd == "gate":
