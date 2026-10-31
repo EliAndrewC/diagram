@@ -192,7 +192,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 |---|---|---|---|---|
 | D1-D6 | each test red without its part | n/a (no map moves: the gate judges, it places nothing) | none | n/a |
 
-### T21 Approach (2026-10-31T13:52:13Z)
+### T21 Approach (2026-10-31T13:52Z)
 
 1. **The goal, in the world.** No Rust stage ever ends with a failing check, on any seed; a seed that fails one is checked until
    it and the input its stage failed on both pass; the Python stages after the Rust ones refuse no Rust landing.
