@@ -475,7 +475,7 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
 #: its table's first form - a row's fields outside a row, a farm's grove outside the dispersed and row forms
 _KNOBS: tuple[tuple[str, str], ...] = (
     ("settlement_form", "all"),
-    ("cluster_shape", "nucleated"),
+    ("cluster_shape", "all"),  # every form: `band_extent` sizes every map's margin band and canvas by it, a row's and a farm's too
     ("water_sink", "all"),
     ("lane_skeleton", "all"),
     ("lane_web", "all"),
