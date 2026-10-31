@@ -68,11 +68,11 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | the change-selected tests | the Rust half: cargo rebuilds and re-tests the changed crate (`make rust-test`, `make static`'s coverage run); the Python half: `rust_checks.py callers` in `make quick` runs every test importing the extension, which testmon cannot select for a `.rs` change | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test`, `test_a_rust_change_selects_every_python_test_that_imports_the_extension`, `test_the_dead_and_callers_commands_run_on_the_named_crate` |
 | the pytest suite | a test of a stage's own source moves with the stage into its `#[cfg(test)]` module, run by `make rust-test`; the Python tests of the parts that stay Python unchanged | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 | the overlap census | replaced by the work-budget counters counted inside Rust (`rust/phases` behind its `counters` feature, D9): the port's own test holds its count to the derivation's, and `make work-budget` reads the counts it hands back | `test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count` (T19's port) |
+| cache audit | `make cache-audit ARGS="--rust"`: a `.rs` literal of `rust/phases/src` mutated, the extension rebuilt from its stamp, the pool swept cached and fresh | measured 2026-10-31 on T19's port, one trial each: with the real key `[OK ] water_frame.rs:38 ... moved 4 of 4 artifacts`; with `gencache.rust_sources` made to return nothing (the copy written to break it, restored after) `[STALE] water_frame.rs:38 ... moved 0 of 4 artifacts`, `CACHE SERVED STALE ARTIFACTS: ['inashiro.json', 'inashiro.svg']` |
 
 ### Not yet proven (2026-10-30), and what each waits for
 
-- **cache audit** (mutate a `.rs` literal, rebuild, compare sweeps): it audits MAPS, and a crate the engine never imports changes no
-  sweep - first possible on T19's `water_frame` port.
+- (none: the two rows the fixture could not fire were proven on T19's port, above)
 
 **Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30, Route A),
 narrowed by the plan review of 2026-10-30: dead closure's public half and the change-selected tests' Python half fire on the
