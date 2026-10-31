@@ -362,13 +362,15 @@ def test_the_rust_falls_that_back_the_wind_are_the_rule_s_on_every_quarter() -> 
             assert phases().admitted_falls(w, cardinal) == [f for f in table if P.fall_backs_the_wind(f, w)], (w, cardinal)
 
 
-def test_the_cluster_shape_rolls_on_every_form_since_every_band_is_sized_by_it() -> None:
-    """444 T19 (2026-10-31): `band_extent` sizes every map's margin band and canvas by `cluster_shape` - a row's and a farm's as
-    well as a cluster's - so the port rolls it on every form. Rolled on the nucleated branch alone, every linear and dispersed map
-    took the table's first form ("round", the stubbiest band) and the port's fresh block fell two seats below main's."""
+def test_the_knobs_every_form_reads_roll_on_every_form() -> None:
+    """444 T19 (2026-10-31): `band_extent` sizes every map's margin band and canvas by `cluster_shape`, and `place_wells` seats the
+    communal wells of every house without a grove by `well_siting` - a row's and a farm's as well as a cluster's - so the port
+    rolls both on every form. Rolled on the nucleated branch alone, every linear and dispersed map took each table's first form
+    ("round", the stubbiest band) and the port's fresh block fell below main's."""
     from l7r.diagram import hamletgen as hg  # noqa: PLC0415
-    from l7r.diagram.hamletgen.consts import CLUSTER_SHAPES  # noqa: PLC0415
+    from l7r.diagram.hamletgen.consts import CLUSTER_SHAPES, WELL_SITINGS  # noqa: PLC0415
 
     for form in ("linear", "dispersed"):
-        got = {hg.plan_site(hg.HamletSpec(name="X", seed=s, households=12, settlement_form=form)).cluster_shape for s in range(1, 41)}
-        assert got == set(CLUSTER_SHAPES), (form, got)
+        plans = [hg.plan_site(hg.HamletSpec(name="X", seed=s, households=12, settlement_form=form)) for s in range(1, 41)]
+        assert {p.cluster_shape for p in plans} == set(CLUSTER_SHAPES), form
+        assert {p.well_siting for p in plans} == set(WELL_SITINGS), form

@@ -486,7 +486,7 @@ _KNOBS: tuple[tuple[str, str], ...] = (
     ("row_sides", "linear"),
     ("row_water", "linear"),
     ("row_shelter", "linear"),
-    ("well_siting", "nucleated"),
+    ("well_siting", "all"),  # every form: `place_wells` seats the communal wells for every house without a grove, a row's or a farm's too
     ("farm_water", "dispersed"),
     ("manure_form", "all"),
     ("copse_siting", "all"),

@@ -241,6 +241,33 @@ The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-la
    row's kind. All seven refuse in the seating, the lane knots or the web - none in water_frame - each a class main's own fresh-seed
    cohort fails on (46 of 54). The lanes and the seat band at each place are not yet dumped.
 
+### T19 part B (2026-10-31T03:05Z)
+
+The trigger: the round arbiter's fair comparison (ruling on ask:444-T19-cohort-regression), the port rolled on main's own fresh block
+(`make cohort N=48 SEED=355289 FRESH=0`, dev/cohort-log/20261031T030442Z): 44 of 54 pass against main's 46 of 54 at 81a8dbc39
+(dev/cohort-log/20261030T233704Z); 7 of main's failures pass, 9 seeds newly fail (355298, 355302, 355305, 355306, 355327, 355329,
+355334, 903, 904), and seed 355306 refuses `SiteRefused`, a class main's block never shows - the ruling's branch 3, a fault in the
+port's rolls.
+
+1. **What exactly is refusing?** Later stages, as before - `lane_knots` 4, `WebRefused` 4, `row_rules` 1, `SiteRefused` 1 (355306, a
+   linear map of 19 households). The forms rolled match main's (nucleated 28 / linear 15 / dispersed 11 against 27 / 13 / 14), so the
+   settlement form's odds are not the fault; every dispersed map passes on both.
+2. **A3 again.** The refusing rules are the later stages' own, unchanged by the port.
+3. **A4 again.** Read in the port's caller, against the old `plan_site` (81a8dbc39): the old code rolled every knob on every form;
+   the port rolls a knob only on its derivation branch, else writes its table's first form. A branch is right only where no stage
+   reads the knob off it.
+4. **Moving something placed earlier to suit something later?** No: the fix is in water_frame's own rolls.
+5. **Tuning or changing?** Changing: a wrong branch, not a value.
+6. **The one-sentence test.** "Every row and farm hamlet was seated in the stubbiest band, because the port held the cluster's shape
+   at round outside a cluster" - a defect the GM would recognize as one.
+7. **Found:** `cluster_shape` was on the nucleated branch, but `seat_cluster` (`ways/track.py`, every form) and `seat_room` size
+   every map's margin band and canvas through `band_extent(households, cluster_shape)`; on the port every linear and dispersed map
+   took "round" (aspect 2.2, against elongated's 5.0). The grove knobs are read only by the row seating (`homesteads/rows.py`), the
+   row and farm-water knobs only behind their form, `well_siting` only by the nucleated wells: those branches stand. Fixed
+   (`_KNOBS`: `cluster_shape` on `all`), with `test_the_cluster_shape_rolls_on_every_form_since_every_band_is_sized_by_it`
+   red on the unfixed branch (`('linear', {'round'})`); the derivation's per-form note corrected (linear 57; the reference's 56
+   unchanged). Next: the same block re-rolled on the fix, and the ruling's branch read again.
+
 ### T19 Decisions
 
 **D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
@@ -279,3 +306,25 @@ the replacement for the overlap census, proven on this port by a copy that does 
    the host's load - evidence, not a pass>
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
+
+### T19 part B (2026-10-31T03:10Z)
+
+The trigger: the same block re-rolled on the `cluster_shape` fix (dev/cohort-log/20261031T031013Z): 45 of 54 against main's 46; the
+SiteRefused gone, every refusal a class main's block shows (`lane_knots` 4, `WebRefused` 4, `row_rules` 1); 8 seeds still newly
+failing (355298, 355302, 355305, 355327, 355329, 355334, 903, 904), 7 of main's failures passing.
+
+1. **What exactly is refusing?** The later stages' rules only, each a kind main's block shows; still one seat under the ruling's 46.
+2. **A3 again.** Unchanged rules.
+3. **A4 again.** The audit of 03:05Z item 7 carried to every off-branch knob: `well_siting` is the second of the same fault -
+   `place_wells` (`homesteads/stages.py`, every form) seats the communal wells of every house without a grove, and both its first
+   seating and the reach loop (`wells.py`) read `plan.well_siting`; the old `plan_site` rolled it on every form, the port held it at
+   "lane" outside a cluster. The rest hold: the row knobs are read in `rows.py` and behind the linear form in `wells.py`, `farm_water`
+   behind the dispersed form, the grove knobs by the row seating alone.
+4. **Moving something placed earlier to suit something later?** No: water_frame's own branch.
+5. **Tuning or changing?** Changing a wrong branch.
+6. **The one-sentence test.** "The row and farm hamlets' shared wells were always sited by the lane, because the port held the
+   siting at its first form outside a cluster."
+7. **Fixed** (`_KNOBS`: `well_siting` on `all`), the test widened to
+   `test_the_knobs_every_form_reads_roll_on_every_form`, red on the unfixed branch (`AssertionError: linear`); the derivation's
+   per-form note now linear 59 (the reference's 56 unchanged). Next: the block re-rolled on both fixes and the ruling's branch read
+   from that run.
