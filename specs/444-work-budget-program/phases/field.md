@@ -49,9 +49,13 @@ down the brook's flank, in legs tapering between offtakes; branches across to th
 knob), `brook.rs` (through the intake, the tap's stride, out past the flank by its skirt held square to the leaning flank; the
 weir), `geom.rs`, `index.rs` (the 64 ft water index), `counts.rs` (shared with water_frame). Design change from "The comb's
 design, next": the fork is the brook-side head corner, not the head's middle, so the brook keeps its skirt with a head race of
-`head_lead` (0068's "along the upper edge" and "along the far edge"). NEXT: the basin rules held (25 degrees, a quarter cell, the
-arrowhead - `FieldRefused`), the beans, the wet/dry/flooded plots, the hem, the pocket pond, the D3 rolls; then `fn stage_field`
-(a pyfunction) and the thin Python writing the 42 keys; then `settlement/fields/ink.py`. OPEN: the outline is the straight-edged
+`head_lead` (0068's "along the upper edge" and "along the far edge"). DONE since: the basin rules (`rules.rs`), the plots drawn apart (`states.rs`), the beans (`beans.rs`), the dry hem
+(`dry.rs`), the pond and the grave (`features.rs`), the stage end to end (`build.rs`) and its door `stage_field` (`py.rs`,
+registered in `lib.rs`, driven by `rust/phases/tests/py_driver.py`); `make static` clean at the 100% floor. The engine state the old
+stage leaves beyond the manifest is measured in `phases/field.state.json` (the ink layers, `corridors`, `field_polys`, `block_polys`,
+`dry_polys`, `_bead_slots`, `_paddy_z`, the water blocks, `_resolved_knobs`). NEXT: the thin Python `stage_field` (comb through Rust,
+the polder still the old Python until its port) writing the 42 keys, the plan's `acres`, `envelope`, `net` (its 20 entries, of which
+the free readers use `plots`, `dry_plots`, `channels`) and `brook`, and the registries; then `settlement/fields/ink.py`. OPEN: the outline is the straight-edged
 fan today (no basin is cut); whether its edge should waver over the ground is for the settlement-review of the moved maps. clippy's
 dead-code lint refuses `comb/` until `fn stage_field` calls into it. T16 stays open (ask:set-down-444-t16-session).
 

@@ -1,0 +1,395 @@
+{
+ "why": "The engine state the old field stage writes beyond the manifest, by attribute and shape before and after it, measured 2026-10-31 by a throwaway test on seed 4 at 15 households in each archetype (no held code read): what the thin Python and settlement/fields/ink.py must leave on the Settlement for the stages after (D1, D12).",
+ "by_archetype": {
+  "valley_paddy": {
+   "_resolved_knobs": [
+    {
+     "dict": 0
+    },
+    {
+     "dict": 5
+    }
+   ],
+   "out": [
+    {
+     "list": 17
+    },
+    {
+     "list": 960
+    }
+   ],
+   "out_cls": [
+    {
+     "list": 17
+    },
+    {
+     "list": 960
+    }
+   ],
+   "_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "_late_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "late_water": [
+    {
+     "list": 0
+    },
+    {
+     "list": 153
+    }
+   ],
+   "_paddy_z": [
+    {
+     "list": 0
+    },
+    {
+     "list": 700
+    }
+   ],
+   "_bead_slots": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "corridors": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 23
+    }
+   ],
+   "field_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 1
+    }
+   ],
+   "block_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 80
+    }
+   ],
+   "dry_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 80
+    }
+   ],
+   "_clip": [
+    "int",
+    "int"
+   ],
+   "M": [
+    {
+     "dict": 60
+    },
+    {
+     "dict": 67
+    }
+   ]
+  },
+  "polder_grid": {
+   "_resolved_knobs": [
+    {
+     "dict": 0
+    },
+    {
+     "dict": 1
+    }
+   ],
+   "out": [
+    {
+     "list": 17
+    },
+    {
+     "list": 274
+    }
+   ],
+   "out_cls": [
+    {
+     "list": 17
+    },
+    {
+     "list": 274
+    }
+   ],
+   "_covers": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "water": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "_late_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "late_water": [
+    {
+     "list": 0
+    },
+    {
+     "list": 205
+    }
+   ],
+   "_pond_entry": [
+    "NoneType",
+    {
+     "dict": 7
+    }
+   ],
+   "_paddy_z": [
+    {
+     "list": 0
+    },
+    {
+     "list": 42
+    }
+   ],
+   "_bead_slots": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "corridors": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 5
+    }
+   ],
+   "field_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 1
+    }
+   ],
+   "ellipses": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "block_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 2
+    }
+   ],
+   "wet_polys": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "_cover_n": [
+    "int",
+    "int"
+   ],
+   "_clip": [
+    "int",
+    "int"
+   ],
+   "M": [
+    {
+     "dict": 60
+    },
+    {
+     "dict": 68
+    }
+   ],
+   "_planted_runs": [
+    null,
+    {
+     "list": 1
+    }
+   ]
+  },
+  "mulberry_dike_fishpond": {
+   "_resolved_knobs": [
+    {
+     "dict": 0
+    },
+    {
+     "dict": 2
+    }
+   ],
+   "out": [
+    {
+     "list": 17
+    },
+    {
+     "list": 463
+    }
+   ],
+   "out_cls": [
+    {
+     "list": 17
+    },
+    {
+     "list": 463
+    }
+   ],
+   "_covers": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "water": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "_late_water_idx": [
+    "NoneType",
+    "int"
+   ],
+   "late_water": [
+    {
+     "list": 0
+    },
+    {
+     "list": 276
+    }
+   ],
+   "_pond_entry": [
+    "NoneType",
+    {
+     "dict": 7
+    }
+   ],
+   "_paddy_z": [
+    {
+     "list": 0
+    },
+    {
+     "list": 34
+    }
+   ],
+   "_bead_slots": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "corridors": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 5
+    }
+   ],
+   "field_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 1
+    }
+   ],
+   "ellipses": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "block_polys": [
+    {
+     "Indexed": 0
+    },
+    {
+     "Indexed": 2
+    }
+   ],
+   "wet_polys": [
+    {
+     "list": 0
+    },
+    {
+     "list": 1
+    }
+   ],
+   "_cover_n": [
+    "int",
+    "int"
+   ],
+   "_clip": [
+    "int",
+    "int"
+   ],
+   "M": [
+    {
+     "dict": 60
+    },
+    {
+     "dict": 69
+    }
+   ],
+   "dikepond_inset": [
+    null,
+    "float"
+   ],
+   "_planted_runs": [
+    null,
+    {
+     "list": 1
+    }
+   ]
+  }
+ }
+}
