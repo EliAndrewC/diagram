@@ -234,6 +234,13 @@ The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-la
    row's kind; seed 3 refuses earlier, in the seating (`SiteRefused`), so the row does not explain it alone. The five others are
    not yet dumped.
 
+   **Item 7, each seed rolled alone on the port (`make cohort N=1 SEED=<s> FRESH=0`, 2026-10-31T03Z):** seed 3 and 36 `SiteRefused`
+   - "seated 19 of 20 households on margin 1", one house short of the band; 20, 21 and 904 `lane_knots` - 1, 1 and 2 knots, two
+   lanes within the 25 ft join reach left unjoined (15.2, 18.9 and 20.6 ft); 37 `OverlapRefused` - "lanes would be recorded on a
+   gardens at (1545, 2814)"; 903 `WebRefused` - "lanes 1, 2 (skeleton: dangling_ends) still break a rule of the lane law", the E3
+   row's kind. All seven refuse in the seating, the lane knots or the web - none in water_frame - each a class main's own fresh-seed
+   cohort fails on (46 of 54). The lanes and the seat band at each place are not yet dumped.
+
 ### T19 Decisions
 
 **D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
