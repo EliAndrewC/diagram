@@ -59,6 +59,21 @@ TEMPLATE = ".specify/templates/derivation.md"
 
 TOTALS = re.compile(r"^## Totals\b(.*?)(?=^## |\Z)", re.M | re.S)
 TOTAL_SIZES = (20, 40, 80)
+#: the sizes a derivation's totals may be given at: the standard three, or - for a stage whose form exists only over a BOUNDED n
+#: (rubric S6), stated in its Contract's Bounds as `a bounded n: households 10-20` - those of these within it, at least two (the
+#: round arbiter's ruling on ask:444-polder-sizes: a polder exists at 10-20 households alone, 0019)
+ANY_SIZES = (10, 20, 40, 80)
+_BOUNDED = re.compile(r"bounded n[^.;\n]*?households\s+(\d+)\s*(?:-|to)\s*(\d+)", re.I)
+
+
+def sizes(text: str) -> tuple[int, ...]:
+    """The household sizes this derivation's totals are owed at: its bounded n's, else the standard three."""
+    m = _BOUNDED.search(text)
+    if not m:
+        return TOTAL_SIZES
+    lo, hi = int(m.group(1)), int(m.group(2))
+    within = tuple(h for h in ANY_SIZES if lo <= h <= hi)
+    return within if len(within) >= 2 else TOTAL_SIZES
 _TOTAL = re.compile(r"^-\s*at\s+(\d+)\s*:\s*(.+?)\s*=\s*([\d,]+(?:\.\d+)?)\s*$", re.M)
 _EXPR = re.compile(r"^[\d\s.,+\-*/x()]+$")
 _AT = re.compile(r"([\d,]+(?:\.\d+)?)\s+at\s+(\d+)")
@@ -76,7 +91,7 @@ def row_values(text: str) -> dict[str, dict[int, str]]:
             continue
         pairs = {int(sz): n for n, sz in _AT.findall(cells[2])}
         one = _NUM.match(cells[2])
-        out[cells[0]] = {h: pairs.get(h, one.group(1) if one and not pairs else "") for h in TOTAL_SIZES}
+        out[cells[0]] = {h: pairs.get(h, one.group(1) if one and not pairs else "") for h in sizes(text)}
     return out
 
 
@@ -98,11 +113,11 @@ def total_problems(text: str) -> list[str]:
     size (a total leaving out a term refused); a row with no figure at a size is refused too, so nothing escapes the expression."""
     sec = TOTALS.search(text)
     if sec is None:
-        return [f"a `## Totals` section: one line per size, `- at <{'|'.join(str(h) for h in TOTAL_SIZES)}>: <expression> = <value>`"]
+        return [f"a `## Totals` section: one line per size, `- at <{'|'.join(str(h) for h in sizes(text))}>: <expression> = <value>`"]
     found = {int(m.group(1)): (m.group(2), m.group(3)) for m in _TOTAL.finditer(sec.group(1))}
-    out = [f"`## Totals`: a line for {h} households" for h in TOTAL_SIZES if h not in found]
+    out = [f"`## Totals`: a line for {h} households" for h in sizes(text) if h not in found]
     rows = row_values(text)
-    for h, (expr, value) in sorted(found.items()):
+    for h, (expr, value) in sorted((h, v) for h, v in found.items() if h in sizes(text)):  # a size past a bounded n is owed nothing
         if not _EXPR.match(expr):
             out.append(f"`## Totals` at {h}: `{expr}` is not arithmetic on the table's figures (digits, + - x / and brackets)")
             continue
@@ -114,7 +129,7 @@ def total_problems(text: str) -> list[str]:
         tokens = Counter(t.replace(",", "") for t in re.findall(r"[\d,]+(?:\.\d+)?", expr))
         for name, at in rows.items():
             if not at[h]:
-                out.append(f"`{name}`: no figure at {h} households - write its value as `N at 20, N at 40, N at 80`, or one number for every size")
+                out.append(f"`{name}`: no figure at {h} households - write its value as `N at <size>` for each of {', '.join(str(s) for s in sizes(text))}, or one number for every size")
             elif tokens[at[h].replace(",", "")] > 0:
                 tokens[at[h].replace(",", "")] -= 1
             else:

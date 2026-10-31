@@ -286,3 +286,15 @@ def test_a_derivation_naming_todays_code_is_refused(tmp_path: Path) -> None:
     (tmp_path / "d.derivation.md").write_text(named, encoding="utf-8")
     rc, msg = wbb.budget_bundle(REPO, "x", str(tmp_path / "d.derivation.md"), tmp_path / "out")
     assert rc == 1 and "place_kosatsuba" in msg, msg
+
+
+def test_a_bounded_n_sets_the_sizes_the_totals_are_owed_at() -> None:
+    """The round arbiter's ruling on ask:444-polder-sizes (route a): a polder exists at 10-20 households alone (0019), so a
+    derivation stating `a bounded n: households 10-20` in its Bounds owes its totals at 10 and 20; any other owes 20, 40 and 80."""
+    text = (FIX / "grid-placer" / "derivation.md").read_text(encoding="utf-8")
+    assert wbb.sizes(text) == (20, 40, 80)
+    bounded = text.replace("- Bounds:", "- Bounds: a bounded n: households 10-20;", 1)
+    assert wbb.sizes(bounded) == (10, 20)
+    assert "`## Totals`: a line for 10 households" in wbb.total_problems(bounded), "owed at 10, not at 40 or 80"
+    assert not any("for 40 households" in p or "for 80 households" in p for p in wbb.total_problems(bounded))
+    assert wbb.sizes(text.replace("- Bounds:", "- Bounds: a bounded n: households 30-35;", 1)) == (20, 40, 80), "one size in range: the standard three"

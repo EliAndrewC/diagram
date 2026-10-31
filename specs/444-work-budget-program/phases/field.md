@@ -65,3 +65,13 @@ Keeps rule, which held files are deleted and which replaced - `git grep -l` and 
 Rust (`fn stage_field`, submodules under `rust/phases/src/field/`), `make rust-gate` as the increment check, `make work-budget`,
 MODE AUDIT, the settlement-reviews of the moved pool hamlets, one landing. The old field code stays unread (the phase-source guard;
 T19's plan review ruled a read of the old code NOT LEGITIMATE).
+
+**The polder's budget, ruled** (the round arbiter, ask:444-polder-sizes, route a): the polder gets its own greenfield derivation,
+its Bounds stating `a bounded n: households 10-20` (0019's GUESS), its totals at 10 and 20, the exponent fitted from 10 to 20, every
+row written per module, per foot of dike or per pond; then its own MODE BUDGET round. The comb's pin and the field's acceptance at
+40 and 80 stand. Room first for the 10-household grid's refusal: the 190 ft module stays (0022); the 12% band (a GUESS) is what may
+move - a 4x4 grid gives 13.3 acres, within 2% of 13.0, so first see whether the band or the grid search's shape rules refuse it;
+the derivation writes its own acreage rule (whole modules at or above the households' paddy). Tooling: `make work-budget-bundle`
+takes the bounded n (landed, `sizes` in `scripts/reviews/work_budget_bundle.py`); OWED at the pin (box 3): `make budget-set` and
+`make work-budget` taking it too, and how a form of the field stage carries a pin of its own (`dev/work-budget.json` holds one
+entry a stage).
