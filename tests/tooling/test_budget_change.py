@@ -50,7 +50,8 @@ def test_the_table_holds_every_stage_of_the_pipeline_unbudgeted() -> None:
     stages = next(n.value for n in tree.body if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", "") == "STAGES")
     names = [e.id.removeprefix("stage_") for e in stages.elts]  # type: ignore[attr-defined]
     table = json.loads((REPO / bc.TABLE).read_text(encoding="utf-8"))
-    assert list(table["stages"]) == names
+    assert [k for k in table["stages"] if "." not in k] == names
+    assert all(k.split(".")[0] in names for k in table["stages"]), "a form (`<stage>.<form>`) belongs to a stage of the pipeline"
     assert set(table["program"]) == {"ops_at_40", "exponent"}
 
 
@@ -253,7 +254,9 @@ def test_a_form_of_a_stage_is_budgeted_at_its_bounded_n(root: pathlib.Path) -> N
     assert bc.set_budget(root, "field.polder", 245, 0.5, "p.md", "SOUND.txt", {10: 19, 20: 38}) == ""
     st = bc.load(root)["stages"]["field.polder"]
     assert st["sizes"] == [10, 20] and st["items_at_10"] == 19 and "items_at_40" not in st
-    assert bc.per_house(root) == before, "a form at a bounded n holds no figure at 40"
+    after = bc.per_house(root)
+    # the sum at 40 unmoved; the count of stages not yet budgeted rightly one fewer
+    assert after.split(";")[0] == before.split(";")[0], f"a form at a bounded n holds no figure at 40: {before!r} -> {after!r}"
     assert bc.growth(100, 141, 2) == pytest.approx(0.496, abs=0.01)
     # the table's item check reading a form's own sizes is `tests/tools/test_work_budget.py`'s (it lands with the engine)
 
