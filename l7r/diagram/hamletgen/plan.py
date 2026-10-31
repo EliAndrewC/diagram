@@ -538,7 +538,7 @@ def _rust_rolls(spec: HamletSpec, archetype: str, windward: str) -> dict[str, An
     knobs = [(k, len(tables[k]), pinned[k], branch[k]) for k, _b in _KNOBS]
     # the fall from the falls that back the wind, read from Rust's table (`admitted`: the cardinals on a polder's survey grid), in
     # place of a test of each fall (the ruling on ask:444-T19-outside-charges)
-    fall, picks, counts = phases().water_frame(
+    fall, picks, counts = phases().stage_water_frame(
         spec.seed & 0xFFFF_FFFF_FFFF_FFFF, windward, archetype in POLDER_ARCHETYPES, spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs
     )
     if __debug__:

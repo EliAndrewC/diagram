@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import functools
 import importlib
+import os
 import pathlib
 import subprocess
 import sys
@@ -36,7 +37,12 @@ def _stale(root: pathlib.Path = ROOT) -> bool:
 
 @functools.cache
 def phases(root: pathlib.Path = ROOT) -> ModuleType:
-    """`l7r_phases`, built first if its sources moved. A failed build is loud: no stage falls back to an older module."""
+    """`l7r_phases`, built first if its sources moved. A failed build is loud: no stage falls back to an older module.
+    `L7R_RUST_EXT` names another built folder instead, never rebuilt here - FR-012's roll with the `counters` feature off."""
+    other = os.environ.get("L7R_RUST_EXT")
+    if other:
+        sys.path.insert(0, other)
+        return importlib.import_module("l7r_phases")
     if _stale(root):
         r = subprocess.run([sys.executable, str(root / "scripts" / "gates" / "rust_checks.py"), "build"], capture_output=True, text=True, cwd=root, check=False)
         if r.returncode != 0:

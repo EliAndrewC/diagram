@@ -164,8 +164,8 @@ def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count
     shutil.copytree(port, copy, ignore=shutil.ignore_patterns("target"))
     src = copy / "src" / "water_frame.rs"
     text = src.read_text()
-    assert 'counts.add("candidate@water_frame_knob", 3);' in text
-    src.write_text(text.replace('counts.add("candidate@water_frame_knob", 3);', "", 1))
+    assert 'counts.add("candidate@roll", 3);' in text
+    src.write_text(text.replace('counts.add("candidate@roll", 3);', "", 1))
     toml = copy / "Cargo.toml"
     toml.write_text(toml.read_text().replace('name = "l7r_phases"\nversion', 'name = "l7r_phases_uncounted"\nversion', 1))
     assert rc.run("test", toml, check=False).returncode != 0, "a roll it does not count fails the port's own test"

@@ -13,7 +13,7 @@ use pyo3::prelude::*;
 /// When a function cannot be added to the module.
 #[pymodule]
 fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(water_frame::water_frame, m)?)?;
+    m.add_function(wrap_pyfunction!(water_frame::stage_water_frame, m)?)?;
     m.add_function(wrap_pyfunction!(water_frame::admitted_falls, m)?)?;
     Ok(())
 }

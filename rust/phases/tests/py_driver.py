@@ -12,7 +12,7 @@ knobs = [
     ("intake", 2, False, "off"),
 ]
 for seed in range(12):
-    fall, picks, counts = l7r_phases.water_frame(seed, "NW", seed % 2 == 0, seed % 5 == 0, ["nucleated", "linear", "dispersed"], knobs)
+    fall, picks, counts = l7r_phases.stage_water_frame(seed, "NW", seed % 2 == 0, seed % 5 == 0, ["nucleated", "linear", "dispersed"], knobs)
     assert fall is None or fall in (0.0, 45.0, 90.0, 135.0, 315.0), fall
     assert len(picks) == len(knobs) and picks[4] is None and picks[5] is None
     assert sum(counts.values()) >= 9

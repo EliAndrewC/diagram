@@ -45,7 +45,8 @@ impl SplitMix {
     }
 }
 
-/// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs (D9), compiled out of a build
+/// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll` for a draw here,
+/// `write@_rust_rolls` for a field Python writes back (D9) - compiled out of a build
 /// without the `counters` feature (FR-012).
 ///
 /// Research:
@@ -134,7 +135,7 @@ pub fn roll(
     knobs: &[KnobIn],
 ) -> (Option<f64>, Vec<Option<u32>>, HashMap<String, u64>) {
     let mut counts = Counts::default();
-    counts.add("write@water_frame_identity", 3);
+    counts.add("write@_rust_rolls", 3);
     let fall = if fall_pinned || falls.is_empty() {
         None
     } else {
@@ -143,19 +144,19 @@ pub fn roll(
             .get(SplitMix::for_knob(seed, "down_deg").below(n) as usize)
             .copied()
     };
-    counts.add("candidate@water_frame_bearing", 6);
+    counts.add("candidate@roll", 6);
     let mut form = String::new();
     let mut out = Vec::with_capacity(knobs.len());
     for (i, (name, n, pinned, branch)) in knobs.iter().enumerate() {
         let on = i == 0 || applies(branch, &form);
         let chosen = if !on {
-            counts.add("write@water_frame_knob", 1);
+            counts.add("write@_rust_rolls", 1);
             None
         } else if *n <= 1 && !*pinned {
-            counts.add("write@water_frame_knob", 2);
+            counts.add("write@_rust_rolls", 2);
             Some(0)
         } else {
-            counts.add("candidate@water_frame_knob", 3);
+            counts.add("candidate@roll", 3);
             if *pinned {
                 None
             } else {
@@ -180,7 +181,7 @@ pub fn roll(
     reason = "PyO3 hands Vecs from Python lists"
 )]
 #[must_use]
-pub fn water_frame(
+pub fn stage_water_frame(
     seed: u64,
     windward: String,
     cardinal: bool,
