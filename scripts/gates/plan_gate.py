@@ -517,6 +517,8 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
     for sec in secs:
         text = text.replace(sec, marker, 1)
         moved_ids += _TASK_ID.findall(sec.splitlines()[0])
+    if marker not in text:
+        return []  # nothing it named stands in plan.md: no pass makes progress
     runs = re.split(f"((?:{re.escape(marker)})+)", text)
     pos, out = 0, []
     for part in runs:
@@ -532,7 +534,9 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
     head = "" if done.is_file() else f"# {spec_dir.name} - the plan's finished sections (feature 375 FR-044; no review reads this file)\n\n"
     with done.open("a", encoding="utf-8") as fh:
         fh.write(head + f"<!-- plan-archive: archived {when} -->\n" + "".join(secs))  # an ARCHIVE_LINE: out of every digest
-    return moved_ids
+    # ...AND AGAIN, UNTIL NOTHING IS LEFT (feature 444 T20's landing): `archivable` names one section per task, so a task whose
+    # blocks stand in two places (T20's heading, then its Approach and Decisions after T19's archive line) left the rest behind
+    return moved_ids + archive(spec_dir, today)
 
 
 # ---- the push (FR-007) ---------------------------------------------------------------------------------

@@ -294,3 +294,16 @@ def test_earlier_text_ruled_blocked_is_shown_as_blocked(tmp_path: pathlib.Path, 
     assert text.startswith("# Each changed block's text when last judged, with that verdict")
     assert '<!-- block "T05" verdict BLOCKED -->\nthen' in text and '"T06" verdict no verdict recorded' in text
     assert "CLEAR" not in text and "and the verdict it got" in m.read_text()
+
+
+def test_a_task_whose_blocks_stand_in_two_places_is_archived_whole(tmp_path: pathlib.Path) -> None:
+    """Feature 444 T20's landing: `archivable` names one section per task, so T20's heading moved and its Approach and Decisions,
+    standing after another task's archive line, stayed in plan.md. The archive runs again until nothing is left."""
+    d = feature(tmp_path)
+    split = PLAN + "\n### T01 Decisions\n\n**D4 - the sty's door.** It faces south (FR-001).\n"
+    (d / "plan.md").write_text(split)
+    gate.record(d, {"plan_sha256": hashlib.sha256(split.encode()).hexdigest(), "decisions": [WITHIN]}, "spec-fidelity")
+    assert gate.archive(d, today="2026-10-31") == ["T01", "T01"]
+    plan = (d / "plan.md").read_text()
+    assert "the sty stands" not in plan.lower() and "the sty's door" not in plan and "Wave 2 (T02)" in plan, "both T01 blocks moved, T02 stays"
+    assert gate.archive(d) == [], "nothing left: no pass moves anything"
