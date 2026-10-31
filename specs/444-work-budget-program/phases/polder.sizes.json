@@ -1,0 +1,116 @@
+{
+ "polder_grid@10#4": {
+  "failed": "field",
+  "err": "ValueError: no polder grid of 190 px modules lands 13.0 acres within 12%",
+  "trees_on_dikes": 0,
+  "ponds": 0,
+  "plots": 0,
+  "acres": 0.0
+ },
+ "polder_grid@10#5": {
+  "failed": "field",
+  "err": "ValueError: no polder grid of 190 px modules lands 13.0 acres within 12%",
+  "trees_on_dikes": 0,
+  "ponds": 0,
+  "plots": 0,
+  "acres": 0.0
+ },
+ "polder_grid@10#6": {
+  "failed": "field",
+  "err": "ValueError: no polder grid of 190 px modules lands 13.0 acres within 12%",
+  "trees_on_dikes": 0,
+  "ponds": 0,
+  "plots": 0,
+  "acres": 0.0
+ },
+ "polder_grid@20#4": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 530,
+  "ponds": 0,
+  "plots": 48,
+  "acres": 24.370961662075167
+ },
+ "polder_grid@20#5": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 515,
+  "ponds": 0,
+  "plots": 49,
+  "acres": 25.851428259871373
+ },
+ "polder_grid@20#6": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 528,
+  "ponds": 0,
+  "plots": 65,
+  "acres": 25.186289830120405
+ },
+ "polder_grid@40#4": {
+  "plan_err": "ValueError"
+ },
+ "polder_grid@40#5": {
+  "plan_err": "ValueError"
+ },
+ "polder_grid@40#6": {
+  "plan_err": "ValueError"
+ },
+ "mulberry_dike_fishpond@10#4": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 424,
+  "ponds": 19,
+  "plots": 21,
+  "acres": 13.59828650137746
+ },
+ "mulberry_dike_fishpond@10#5": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 423,
+  "ponds": 21,
+  "plots": 21,
+  "acres": 13.260431473829138
+ },
+ "mulberry_dike_fishpond@10#6": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 419,
+  "ponds": 20,
+  "plots": 22,
+  "acres": 13.351126721763237
+ },
+ "mulberry_dike_fishpond@20#4": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 567,
+  "ponds": 38,
+  "plots": 42,
+  "acres": 25.91858046372809
+ },
+ "mulberry_dike_fishpond@20#5": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 534,
+  "ponds": 37,
+  "plots": 37,
+  "acres": 26.09698438934836
+ },
+ "mulberry_dike_fishpond@20#6": {
+  "failed": null,
+  "err": null,
+  "trees_on_dikes": 563,
+  "ponds": 37,
+  "plots": 41,
+  "acres": 25.802265840220283
+ },
+ "mulberry_dike_fishpond@40#4": {
+  "plan_err": "ValueError"
+ },
+ "mulberry_dike_fishpond@40#5": {
+  "plan_err": "ValueError"
+ },
+ "mulberry_dike_fishpond@40#6": {
+  "plan_err": "ValueError"
+ }
+}

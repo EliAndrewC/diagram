@@ -45,8 +45,17 @@ writes knobs it rolls itself (`meta.winter_crop`, `town_nearness`, `grave_form`,
 `land_use`). Each needs a home before the rebuild: in the comb's derivation (a re-derivation and a MODE BUDGET round), in the
 polder's, or counted as rolls outside the derivation, as water_frame's were (ask:444-T19-outside-charges).
 
-**A polder defect today:** the 10-household polder grid on seed 4 refuses inside today's field stage (`polder.bounds.json`,
-`polder_grid@10`: `failed: field`). Under amendment 5 the Rust field must pass every seed of the gate.
+**The polder at its sizes today** (measured 2026-10-31, a throwaway test on seeds 4-6 at 10, 20 and 40 households,
+`phases/polder.sizes.json`):
+- a 10-household POLDER GRID refuses on every seed, in the field stage: "no polder grid of 190 px modules lands 13.0 acres within
+  12%" - the 190 ft module (0022) too coarse to land a small polder's acreage within the band; the dike-pond's 160 ft paired
+  module lands it (19-21 ponds). Under amendment 5 the Rust field must pass every seed: a fit to solve, room first (the root
+  CLAUDE.md, "Room before packing") - the band or the module count is a knob to move, never a target to defend.
+- NO POLDER EXISTS at 40 households: `plan_site` refuses both archetypes there (0019's GUESS, ten to twenty households a small
+  polder). The derivation template asks totals at 20, 40 and 80 - a ruling is owed on how the polder is budgeted: at its own
+  sizes (10 and 20), or at 40 and 80 as several polders under the single-field cap. A process question: the round arbiter's.
+- at 20 households: a polder grid 48-65 plots, 515-530 trees on its dike; a dike-pond 37-38 ponds, 534-567 trees; at 10, a
+  dike-pond 19-21 ponds, 419-424 trees.
 
 **The order owed** (the advisor's review, 2026-10-31): the contract's plan fields and claims (box 1); the polder's greenfield
 derivation and its MODE BUDGET (boxes 2-3, its own round subject, not field's); the gap's homes; `### T16 Decisions` (the
