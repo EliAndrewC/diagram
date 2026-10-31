@@ -39,7 +39,6 @@ exists at the head. A finding at both ends is pre-existing whatever changed; a p
 
 from __future__ import annotations
 
-import argparse
 import ast
 import datetime
 import hashlib
@@ -162,13 +161,9 @@ def form_problems(skill: Path, cl: Any = None) -> list[str]:
     return cl.coverage(pairs_of(skill), {q.name for q in (skill / QUESTIONS).glob("*.html")})
 
 
-def pairs_of(skill: Path) -> list[Any]:
-    """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
-    engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
-    project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
-    delta (specs/375-enforced-wave-process/research.md R1); a key over the sources is read in a fraction of that. Only the
-    newest key's file is kept."""
-    cl = engine(Path(__file__).resolve().parents[2])
+def parse_key(skill: Path, cl: Any) -> Any:
+    """The kept parse's key: the readers' code, every engine module, every procedure document and every Rust phase source under
+    `skill` - an edit to any of them moves it."""
     h = hashlib.sha256(rc.code_sha_of(Path(__file__).resolve().parents[2], Path(__file__)).encode())
     for p in sorted((skill / "l7r" / "diagram").rglob("*.py")):
         if "__pycache__" not in p.parts:
@@ -176,6 +171,22 @@ def pairs_of(skill: Path) -> list[Any]:
     for doc in cl.PROCEDURES:
         if (skill / doc).is_file():
             h.update(doc.encode() + b"\0" + (skill / doc).read_bytes() + b"\0")
+    # THE RUST PHASES' CLAIMS ARE IN SCOPE TOO (feature 444, `claims_rust.all_rust_units`), so their sources key the parse: keyed on
+    # the Python alone, an edited `.rs` claim was read from the stale parse (found 2026-10-31, T16's label fixes unread)
+    for p in sorted((skill / "rust").rglob("*.rs")) if (skill / "rust").is_dir() else []:
+        if "target" not in p.relative_to(skill / "rust").parts:
+            h.update(p.relative_to(skill).as_posix().encode() + b"\0" + p.read_bytes() + b"\0")
+    return h
+
+
+def pairs_of(skill: Path) -> list[Any]:
+    """Every unit in scope at the tree under `skill`, kept by what it is read from (feature 375 amendment 3, plan D29): every
+    engine module and procedure document under `skill`, and the readers' own code - `scripts/record/claims.py` and every
+    project module it imports, transitively (the engine's reader among them). Re-parsing the engine was 7.29 s a call on 374's
+    delta (specs/375-enforced-wave-process/research.md R1); a key over the sources is read in a fraction of that. Only the
+    newest key's file is kept."""
+    cl = engine(Path(__file__).resolve().parents[2])
+    h = parse_key(skill, cl)
     common = rc.common_dir(skill)
     cache = rc.ParseCache(common / rc.CACHE_DIR / f"claims-{h.hexdigest()[:16]}.pickle" if common is not None else None)
     # UNDER IT, EACH MODULE KEPT BY WHAT IT READS (feature 375 amendment 8, FR-035, plan D48): the key above moves with any
@@ -619,8 +630,7 @@ def inherited_none(cur: Mapping[str, Row], due: Sequence[tuple[str, str]]) -> li
     `_walk_in` inherited `lane sweep plumbing - NONE`, and its first impl-drift round spent itself saying it decides where a lane
     end stops. A notice, not a refusal: a new helper may truly be plumbing."""
     return [
-        f"claims-owed: {cur[k].uid} is new and carries only its module's NONE - if it decides anything about the place, "
-        "give it its own `Research:` line before the check"
+        f"claims-owed: {cur[k].uid} is new and carries only its module's NONE - if it decides anything about the place, give it its own `Research:` line before the check"
         for k, why in due
         if why == "new" and k in cur and cur[k].unit.inherited and cur[k].claim is not None and cur[k].claim.backing == "NONE"
     ]
@@ -662,85 +672,23 @@ def delta_form_problems(root: Path, base: str = "origin/main") -> list[str]:
     return [f"{x} - the claims grammar: {cl.GRAMMAR}" for x in form_problems(root, cl) if x.split(":", 1)[0] in changed]
 
 
-def _parser() -> argparse.ArgumentParser:
-    """The command line (lifted out of `main` by feature 370, the 100-statement cap)."""
-    ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("owed")
-    b = sub.add_parser("bundle")
-    b.add_argument("--owed", action="store_true")
-    b.add_argument("--module", default="")
-    b.add_argument("--units", default="")
-    b.add_argument("--out", default="")
-    b.add_argument("--reason", default="")
-    b.add_argument("--with", dest="context", default="", help="path::qualname,... shown as context, not judged")
-    b.add_argument("--pages", default="", help="question files (NNNN-<id>[.drawing].html,...) added to the bundle")
-    r = sub.add_parser("record")
-    r.add_argument("--bundle", required=True)
-    r.add_argument("--reply", required=True)
-    sub.add_parser("triage-owed")
-    tr = sub.add_parser("triage")
-    tr.add_argument("--out", default="")
-    td = sub.add_parser("triaged")
-    td.add_argument("--bundle", required=True)
-    td.add_argument("--reply", required=True)
-    sub.add_parser("backfill")
-    sub.add_parser("backfill-sections")
-    sub.add_parser("rekey")
-    sub.add_parser("refingerprint")
-    rp = sub.add_parser("report")
-    rp.add_argument("--all", action="store_true", help="list the DEFERRED findings too")
-    sub.add_parser("gate")
-    sub.add_parser("known")
-    cc = sub.add_parser("carry")
-    cc.add_argument("--feature", required=True)
-    cc.add_argument("--task", default="")
-    cc.add_argument("--keys", default="", help="findings a round-arbiter ruling carried, ';'-separated (with --ruling)")
-    cc.add_argument("--ruling", default="", help="the arbiter.jsonl trigger that carried --keys")
-    ac = sub.add_parser("accept")
-    ac.add_argument("--keys", required=True, help="the claims a round-arbiter accept stands for, ';'-separated (a claim's label may hold a comma)")
-    ac.add_argument("--trigger", required=True, help="the arbiter.jsonl trigger whose accept this records")
-    cv = sub.add_parser("coverage")
-    cv.add_argument("--path", default="", help="only units whose file path contains this")
-    ap.add_argument("--root", default=".")
-    return ap
-
-
-def _carry_cmd(root: Path, args: argparse.Namespace) -> int:
-    """`make claims-carry`: file the carried findings as an open task of the feature (folded out of `main` at the cap, 405 T58)."""
-    try:
-        if bool(args.keys) != bool(args.ruling):
-            raise ValueError("KEYS= and RULING= go together: the findings a round-arbiter ruling carried, and that ruling's trigger")
-        keys = (
-            [k.strip() for k in args.keys.split(";") if k.strip()] if args.keys else [k for k, _ln in claims_carry.classified(sys.modules[__name__], root)[3] if k not in claims_carry.filed(root)]
-        )
-        print(claims_carry.carry(root, args.feature, args.task, keys, ruling=args.ruling))
-    except ValueError as e:
-        print(f"claims-carry: {e}", file=sys.stderr)
-        return 2
-    return 0
-
-
-#: a triage bundle of this many claims or fewer is not triaged: impl-drift reads them directly (feature 430 T06, D6; proposal 6,
-#: approved by the GM 2026-10-26: "skip claims-triage for bundles of a few claims"). CONVENTION - "a few" is the spec's knob,
-#: set at 3: a triage round and an impl-drift round cost about the same on so few, and the triage would only route them on
 TRIAGE_SKIP_MAX = 3
-#: where each skipped triage is recorded (feature 430 D6)
+
 SKIPS = "dev/claims-triage-skips.jsonl"
 
 
-def _small_triage(root: Path, keys: list[str], out: str) -> int:
-    """A triage too small to be worth one (`TRIAGE_SKIP_MAX`): the impl-drift bundle of the same claims, and the skip on the ledger."""
-    why = f"a claims triage of {len(keys)} claim(s), at most {TRIAGE_SKIP_MAX}, goes straight to impl-drift (feature 430 D6)"
-    rc = main(["--root", str(root), "bundle", "--units", ",".join(keys), "--reason", why, *(["--out", out] if out else [])])
-    if rc == 0:
-        # ...RECORDED IN ITS OWN FILE, not as a row of the review ledger's measured table: a skip has no check, class or cost of
-        # its own, and the ledger's guard (`ledger-hooks.sh`) refused the first form's row at the next commit (2026-10-26)
-        row = {"date": datetime.date.today().isoformat(), "claims": len(keys), "keys": keys, "why": why}
-        with (root / SKIPS).open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
-        print(f"claims-triage: {why} - dispatch `impl-drift` on the MANIFEST above, then `make claims-checked BUNDLE=<dir> REPLY=<file>`; the skip is in {SKIPS}")
-    return rc
+class _Here:
+    """A module's names read live from its globals: `claims_cli`'s handlers reach the copy of this module that called them
+    (a suite may load it twice, under one name, and patch the copy it imported)."""
+
+    def __init__(self, names: dict[str, Any]) -> None:
+        self._names = names
+
+    def __getattr__(self, name: str) -> Any:  # noqa: ANN401 - a module's names are of any type
+        try:
+            return self._names[name]
+        except KeyError as e:
+            raise AttributeError(name) from e
 
 
 def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str, str]], new: Mapping[str, tuple[str, str]]) -> int:
@@ -758,103 +706,12 @@ def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str,
     return n
 
 
-def _refingerprint_cmd(root: Path, index: dict[str, dict[str, Any]]) -> int:
-    """`make claims-refingerprint`: every claim's fingerprint read with and without the star re-exports, its row carried."""
-    cl = engine(Path(__file__).resolve().parents[2])
-
-    def codes(stars: bool) -> dict[str, tuple[str, str]]:
-        cl.STAR_REEXPORTS = stars
-        try:
-            return {u.key(c): (u.code(c), u.core) for u, _e in cl.all_units(root) for c in u.claims}
-        finally:
-            cl.STAR_REEXPORTS = True
-
-    n = refingerprint(index, codes(False), codes(True))
-    if n:
-        save_index(root / INDEX, index)
-    print(f"claims-refingerprint: {n} claim row(s) carried to the fingerprint the star re-exports give, their code otherwise unchanged")
-    return 0
-
-
-def _rekey_cmd(root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]]) -> int:
-    """`make claims-rekey` (405 T58): each moved claim's row carried to its new key."""
-    n = rekey(cur, index)
-    if n:
-        save_index(root / INDEX, index)
-    print(f"claims-rekey: {n} claim row(s) carried to the file their unit moved to")
-    return 0
-
-
-def _triage_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
-    """`claims-triage`: clear the claims a page move alone owes (feature 432), then triage the rest of what a triage owes."""
-    due = owed(cur, index, qdir, store)
-    # ...a page moved and no block the claim rests on did: cleared, not triaged (feature 432, FR-005 a). A row with no `rests`
-    # may rest on any block of the page, so it keeps the triage (the plan review's note on D7)
-    pages = [k for k, why in due if why == "triage" and (index.get(k) or {}).get("rests")]
-    if pages:
-        index, snaps = claims_triage.clear_page_moves(cur, index, pages, qdir, datetime.date.today().isoformat())
-        save_index(root / INDEX, live_rows(cur, index))
-        save_store(root / STORE, {**store, **snaps})
-        print(f"claims-triage: {len(pages)} claim(s) cleared without a triage - a page each cites moved and no block it rests on did (feature 432, FR-005 a)")
-    keys = [k for k, why in due if why in TRIAGED and k not in pages]
-    if not keys:
-        print("claims-triage: no claim is owed a triage")
-        return 0
-    if len(keys) <= TRIAGE_SKIP_MAX:
-        return _small_triage(root, keys, args.out)
-    tout = Path(args.out) if args.out else DEFAULT_OUT / "claims-triage"
-    manifest = triage_bundle(cur, index, store, keys, qdir, tout)
-    data = json.loads((tout / "triage.json").read_text(encoding="utf-8"))
-    if set(data["forced"]) >= set(keys):
-        # ...EVERY CLAIM OWED IN FULL, NOTHING TO TRIAGE (feature 417 T54, 2026-10-27): a code move left no diff to show, and the
-        # triage agent dispatched on the empty bundle could only say so, its reply then refused as empty - recorded here instead
-        new, msgs = record_triage(index, data["units"], "", datetime.date.today().isoformat(), data["forced"])
-        save_index(root / INDEX, live_rows(cur, new))
-        save_store(root / STORE, {**store, **data["snapshots"]})
-        keep_texts(qdir, data["units"])
-        print(
-            f"claims-triage: all {len(keys)} claim(s) are owed in full (no diff or removed block to show) - no triage to dispatch; "
-            "they go straight to impl-drift: `make claims-bundle OWED=1`, then `make claims-checked BUNDLE=<dir> REPLY=<file>`"
-        )
-        return 0
-    print(manifest)
-    claims_flight.mark(root, tout)  # in flight until `claims-triaged` records its reply (feature 426 D1)
-    print(
-        f"claims-triage: {len(keys)} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`"
-    )
-    return 0
-
-
-def _triaged_cmd(args: argparse.Namespace, root: Path, cur: dict[str, Row], index: dict[str, dict[str, Any]], qdir: Path, store: dict[str, Any]) -> int:
-    """`claims-triaged`: record a triage reply - the claims it names go on to impl-drift, the rest are cleared."""
-    data = json.loads((Path(args.bundle) / "triage.json").read_text(encoding="utf-8"))
-    if not (reply := claims_triage.read_reply(args.reply, "claims-triaged", "nothing cleared")).strip():  # feature 385 T92
-        return 2
-    new, msgs = record_triage(
-        index,
-        data["units"],
-        reply,
-        datetime.date.today().isoformat(),
-        data.get("forced", []),
-    )
-    save_index(root / INDEX, live_rows(cur, new))
-    save_store(root / STORE, {**store, **data["snapshots"]})
-    keep_texts(qdir, data["units"])
-    for m in msgs:
-        print(f"claims-triaged: {m}")
-    named = sum(1 for m in msgs if m.startswith("touched") and " - a removed block the history no longer shows" not in m)
-    forced = sum(1 for m in msgs if m.startswith("touched")) - named
-    print(
-        f"claims-triaged: {named + forced} of {len(data['units'])} sent on to impl-drift ({named} named by the reply"
-        + (f", {forced} owed in full: a removed block's words could not be shown" if forced else "")
-        + "); the rest cleared"
-    )
-    claims_flight.clear(root, Path(args.bundle))  # its reply is recorded (feature 426 D1)
-    return 0
-
-
 def main(argv: Sequence[str] | None = None) -> int:
-    args = _parser().parse_args(argv)
+    import claims_cli as cli  # noqa: PLC0415 - the handlers import this module back
+
+    cli.cx = _Here(globals())  # the handlers read THIS module's names - the copy a test loaded and patched, whatever sys.modules holds
+
+    args = cli._parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
     if args.cmd == "gate":
         refuse, warn = gate(root)
@@ -864,7 +721,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-gate: REFUSED {x}")
         return 1 if refuse else 0
     if args.cmd == "carry":
-        return _carry_cmd(root, args)
+        return cli._carry_cmd(root, args)
     if args.cmd == "known":  # feature 430 T06 (D6): each known drift recorded for the GM, in its task's feature
         written = claims_carry.record_known(sys.modules[__name__], root)
         print("\n".join(f"claims-known: recorded {w}" for w in written) or "claims-known: no known drift is unrecorded")
@@ -881,9 +738,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     index = claims_counters.clear(sys.modules[__name__], root, cur, load_index(root / INDEX), args.cmd)  # feature 446, FR-003
     qdir, store = root / QUESTIONS, load_store(root / STORE)
     if args.cmd == "refingerprint":  # 417 T54: a change to how the fingerprint reads owes nothing
-        return _refingerprint_cmd(root, index)
+        return cli._refingerprint_cmd(root, index)
     if args.cmd == "rekey":  # 405 T58: a file split at the bar keeps its claims' rows
-        return _rekey_cmd(root, cur, index)
+        return cli._rekey_cmd(root, cur, index)
     if args.cmd == "accept":  # the round arbiter's accept on claims (the GM 2026-10-24)
         import claims_accept  # noqa: PLC0415 - the module beside this one
 
@@ -927,9 +784,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(sum(1 for _k, why in owed(cur, index, qdir, store) if why in TRIAGED))
         return 0
     if args.cmd == "triage":
-        return _triage_cmd(args, root, cur, index, qdir, store)
+        return cli._triage_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "triaged":
-        return _triaged_cmd(args, root, cur, index, qdir, store)
+        return cli._triaged_cmd(args, root, cur, index, qdir, store)
     if args.cmd == "report":
         pager.page(report(cur, index, qdir, store, load_deferred(root / DEFERRED), show_deferred=args.all))
         return 0
