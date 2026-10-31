@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-31T16:12:55Z",
+  "target": "record-checked",
+  "commit": "0ec6f7649",
+  "why": "source-applicability on source-applicability:yang-2007-tangyan: moved only by source-reader round 2's own EDITs on the registry (the 50-mu rule's source; 'the largest it has' narrowed to what note 9 says), each a source-reader finding against the paper"
+}

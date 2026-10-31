@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-31T16:12:56Z",
+  "target": "record-checked",
+  "commit": "0ec6f7649",
+  "why": "source-applicability on source-applicability:nerima-kushi-meisaicho: moved only by a hand fix of source-reader round 2's finding: 'word for word' became 'differing only in the spelling of the place and the district', which is what the reader found"
+}
