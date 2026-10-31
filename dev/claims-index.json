@@ -24141,6 +24141,18 @@
   "triaged": "2026-10-25",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/water/brook_rules.py::hem_on_water#hem off water": {
+  "code": "49831b2fb5a14160",
+  "core": "dd44ab103f717db8",
+  "date": "2026-10-03",
+  "note": "as cited",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "triaged": "2026-10-11",
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/water/brook_rules.py::level_runs_along_frame#level run along the frame": {
   "code": "6dcee796fee83529",
   "core": "ade5a938ae64e251",
@@ -24729,14 +24741,6 @@
   "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/polder.py::_compass#polder geometry": {
-  "code": "bb2963c9921d67cd",
-  "core": "469c678b515750a0",
-  "date": "2026-10-03",
-  "note": "vector to letter",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/polder.py::_nearest_pair#block aspect band": {
   "body": "2edb87dcbf273172",
   "claim": "block aspect band - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); cols 0.45-0.65 of rows, nearest 0.55 on a tie",
@@ -24856,29 +24860,6 @@
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
   "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::dike_face#its search steps and tolerances": {
-  "body": "1d62d5e44c1b7ff3",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 32 (how many bins sample the dike's outer face)",
-  "code": "f55cdcace6e88df3",
-  "core": "8f7a50b19aad468f",
-  "date": "2026-10-25",
-  "note": "sampling bins",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face": {
-  "body": "1d62d5e44c1b7ff3",
-  "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch",
-  "code": "da53718860633e0e",
-  "core": "8f7a50b19aad468f",
-  "date": "2026-10-25",
-  "note": "fringe and outer face attested, where the reeds stop is not",
-  "pages": {},
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::dike_gaps_at_channels#gap at every crossing": {
@@ -25029,43 +25010,6 @@
   },
   "research": "bbd39e07c08e5116",
   "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives": {
-  "body": "d4c16808e20b628a",
-  "claim": "crossings where the village lives - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each",
-  "code": "f7c5ea047cec766e",
-  "core": "00e326596b5ddad8",
-  "date": "2026-10-25",
-  "note": "at a flank seat the far toe and the feeder are capped at 0 (`\"feeder\": 0, \"w_toe\": 0`). The page has a crossing \"wherever both ends reach useful ground\"; no page records the per-side cap as ours. Record a DEVIATION or fix in T34",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
-  },
-  "research": "1dd5fd71121f4a06",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#no plank on the drain": {
-  "code": "b5d0569494394e5a",
-  "core": "00e326596b5ddad8",
-  "date": "2026-10-03",
-  "note": "0084: drainage ditches at a field's foot carry none; drain 0 in every branch",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
-  },
-  "research": "1dd5fd71121f4a06",
-  "triaged": "2026-10-22",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::polder_flanks#polder geometry": {
-  "code": "c75a791ff7b7676d",
-  "core": "f686aa5e912cafbc",
-  "date": "2026-10-03",
-  "note": "flank naming",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::reservoir_clear_of_crop#its search steps and tolerances": {
@@ -25253,37 +25197,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/polder.py::stage_waterward#its reed strip's run": {
-  "body": "d34dd6da9d713afa",
-  "claim": "its reed strip's run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 30 (how far the reed strip runs past the dike's ends, across the other axis); 20 (the same, at the other end)",
-  "code": "8f22362fdfd120aa",
-  "core": "463d9569ca8bd154",
-  "date": "2026-10-25",
-  "note": "0019 gives a reed fringe on the flank but no overrun past the dike's ends",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::stage_waterward#reed fringe on the waterward flanks": {
-  "code": "00ab2f3095e88d31",
-  "core": "463d9569ca8bd154",
-  "date": "2026-10-03",
-  "note": "0019 drawing",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::stage_waterward#strip depth": {
-  "code": "039e3414c02552af",
-  "core": "463d9569ca8bd154",
-  "date": "2026-10-03",
-  "note": "extent past the frame only",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/polder.py::walk_pond_uphill#its search steps and tolerances": {
   "body": "7b9951629f5490a8",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 12 (step size of the uphill walk that seats the reservoir)",
@@ -25313,18 +25226,6 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:47356b5374b6ea19"
   ],
   "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/polder.py::waterward_flanks#waterward flanks": {
-  "code": "40f289c388241d5e",
-  "core": "b4d7a45fc20551fc",
-  "date": "2026-10-03",
-  "note": "matches the pool layout 0019 drawing describes",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::grows_grain#grain to thresh": {
@@ -25429,6 +25330,117 @@
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
   ],
   "triaged": "2026-10-29",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::_compass#polder geometry": {
+  "code": "bb2963c9921d67cd",
+  "core": "469c678b515750a0",
+  "date": "2026-10-03",
+  "note": "vector to letter",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::dike_face#its search steps and tolerances": {
+  "body": "1d62d5e44c1b7ff3",
+  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 32 (how many bins sample the dike's outer face)",
+  "code": "f55cdcace6e88df3",
+  "core": "8f7a50b19aad468f",
+  "date": "2026-10-25",
+  "note": "sampling bins",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::dike_face#strip at the dike's outer face": {
+  "body": "1d62d5e44c1b7ff3",
+  "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch",
+  "code": "da53718860633e0e",
+  "core": "8f7a50b19aad468f",
+  "date": "2026-10-25",
+  "note": "fringe and outer face attested, where the reeds stop is not",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#crossings where the village lives": {
+  "body": "d4c16808e20b628a",
+  "claim": "crossings where the village lives - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each",
+  "code": "f7c5ea047cec766e",
+  "core": "00e326596b5ddad8",
+  "date": "2026-10-25",
+  "note": "at a flank seat the far toe and the feeder are capped at 0 (`\"feeder\": 0, \"w_toe\": 0`). The page has a crossing \"wherever both ends reach useful ground\"; no page records the per-side cap as ours. Record a DEVIATION or fix in T34",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#no plank on the drain": {
+  "code": "b5d0569494394e5a",
+  "core": "00e326596b5ddad8",
+  "date": "2026-10-03",
+  "note": "0084: drainage ditches at a field's foot carry none; drain 0 in every branch",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
+  },
+  "research": "1dd5fd71121f4a06",
+  "triaged": "2026-10-22",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::polder_flanks#polder geometry": {
+  "code": "c75a791ff7b7676d",
+  "core": "f686aa5e912cafbc",
+  "date": "2026-10-03",
+  "note": "flank naming",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::stage_waterward#its reed strip's run": {
+  "body": "d34dd6da9d713afa",
+  "claim": "its reed strip's run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 30 (how far the reed strip runs past the dike's ends, across the other axis); 20 (the same, at the other end)",
+  "code": "8f22362fdfd120aa",
+  "core": "463d9569ca8bd154",
+  "date": "2026-10-25",
+  "note": "0019 gives a reed fringe on the flank but no overrun past the dike's ends",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::stage_waterward#reed fringe on the waterward flanks": {
+  "code": "00ab2f3095e88d31",
+  "core": "463d9569ca8bd154",
+  "date": "2026-10-03",
+  "note": "0019 drawing",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "triaged": "2026-10-12",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::stage_waterward#strip depth": {
+  "code": "039e3414c02552af",
+  "core": "463d9569ca8bd154",
+  "date": "2026-10-03",
+  "note": "extent past the frame only",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::waterward_flanks#waterward flanks": {
+  "code": "40f289c388241d5e",
+  "core": "b4d7a45fc20551fc",
+  "date": "2026-10-03",
+  "note": "matches the pool layout 0019 drawing describes",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/arcs.py::arc_at#arc-length plumbing": {
@@ -53567,18 +53579,6 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::hem_on_water#hem off water": {
-  "code": "49831b2fb5a14160",
-  "core": "dd44ab103f717db8",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
