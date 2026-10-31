@@ -656,6 +656,11 @@ def long_runs(root: Path) -> int:
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
     owed hooks-test alone, which a `make done` would not have stamped."""
     stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
+    # THE RUST STAGE GATE'S RECORD FIRST (feature 444 T21's landing): the landing cohort's own check asks for it, so made after the
+    # cohort it refused a cohort that had passed 54 of 54 - it rolls in seconds and nothing the gate does moves the engine it keys
+    if why := rust_gate_run(root):
+        print(why, file=sys.stderr)
+        return 1
     rc, out = run(root, stamp)
     names = delta_names(root)
     machinery = gate_machinery_delta(root, names)
@@ -719,7 +724,7 @@ def long_runs(root: Path) -> int:
             print("land: the landing cohort refused - nothing landed (above)", file=sys.stderr)
             return 1
         commit_regenerated(root, "cohort")
-    if why := rust_gate_run(root) or budget_run(root):
+    if why := budget_run(root):
         print(why, file=sys.stderr)
         return 1
     return 0

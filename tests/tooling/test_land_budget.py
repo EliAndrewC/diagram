@@ -66,3 +66,14 @@ def test_the_rust_stage_gate_record_is_made_where_owed_and_a_failing_seed_stops_
     land = _land()
     monkeypatch.setattr(land, "engine_delta", lambda _root: False)
     assert land.rust_gate_run(tmp_path) == ""
+
+
+def test_the_rust_gate_record_is_made_before_the_gate_and_the_cohort(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 444 T21's landing: the landing cohort's own check asks for the Rust stage gate's record, so made after the cohort it
+    refused a cohort that had passed 54 of 54. `long_runs` makes it first; a refusal there stops before any gate or cohort runs."""
+    land = _land()
+    ran: list[list[str]] = []
+    monkeypatch.setattr(land, "rust_gate_run", lambda _root: "land: the Rust stage gate has a failing seed")
+    monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True: ran.append(cmd) or (0, ""))  # noqa: ARG005
+    monkeypatch.setattr(land, "start_cohort", lambda _root: (_ for _ in ()).throw(AssertionError("no cohort before the record")))
+    assert land.long_runs(tmp_path) == 1 and ran == [], "nothing - not the gate stamp, not the cohort - ran before it"
