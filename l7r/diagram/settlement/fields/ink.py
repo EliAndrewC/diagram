@@ -133,3 +133,12 @@ def settle(s: Settlement) -> None:
         rec["bund_beans"] = [[x, y] for r in kept for x, y in r]
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for r in kept for x, y in r)
         s.out[z] = f'<g opacity="0.85">{beads}</g>'
+
+
+def rounded_pond(poly: Sequence[Pt], inset: float, reach: float, rng: Any) -> tuple[str, list[Pt]]:
+    """A dike-pond's pond or bank rounded from its parcel, placed in Rust (`ponds::rounded`, T16 D8): the SVG path and its
+    samples; one draw from the caller's stream gives the corners their own cut."""
+    from l7r.diagram.hamletgen.phases_ext import phases
+
+    d, pts = phases().rounded_pond([(float(x), float(y)) for x, y in poly], float(inset), float(reach), rng.getrandbits(32))
+    return d, [(float(x), float(y)) for x, y in pts]

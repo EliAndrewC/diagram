@@ -20,6 +20,15 @@ from .._geom import (
 )
 from .._knobs import Knob, _centroid, register_knob
 
+
+def _rounded_pond(poly: Sequence[Any], inset: float, reach: float, rng: random.Random) -> tuple[str, list[tuple[float, float]]]:
+    """A dike-pond's pond or bank rounded from its parcel - placed in Rust (`fields/ink.py` `rounded_pond`, feature 444 T16 D8).
+    Research: pond shape - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: ponds of uneven shape"""
+    from .ink import rounded_pond  # noqa: PLC0415 - ink reaches the water helpers, which import the settlement package
+
+    return rounded_pond(poly, inset, reach, rng)
+
+
 if TYPE_CHECKING:
     from ..core import Settlement
 
@@ -399,7 +408,7 @@ class LandUseMixin:
                     self.add(
                         f'<polygon points="{pts}" fill="#A6C398" stroke="#A6C398" stroke-width="3" stroke-linejoin="round"/>', cls="paddy"
                     )  # a leftover parcel is standing rice (feature 150: every dike-pond ink is ruled on)
-                    fd, fpoly = self._rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
+                    fd, fpoly = _rounded_pond(p["poly"], inset=2.5, reach=12.0, rng=rng)
                     self.add(f'<path d="{fd}" fill="{lfill}"/>', cls="paddy")
                     fpts = " ".join(f"{x:.1f},{y:.1f}" for x, y in fpoly)
                     with self.feature("paddy"):  # a repainted leftover is paddy ground (feature 150: every dike-pond ink is ruled on)
@@ -484,8 +493,8 @@ class LandUseMixin:
             if pen > 0.0:
                 _s2 = max(0.7, 1.0 - (pen + 1.0) / max(1.0, _dm))
                 qpoly = [(cx + (qx - cx) * _s2, cy + (qy - cy) * _s2) for qx, qy in qpoly]
-            bd, bpoly = self._rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
-            wd, wpoly = self._rounded_pond(qpoly, inset=getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET), reach=16.0, rng=rng)
+            bd, bpoly = _rounded_pond(qpoly, inset=0.0, reach=8.0, rng=rng)
+            wd, wpoly = _rounded_pond(qpoly, inset=getattr(self, "dikepond_inset", DIKEPOND_WATER_INSET), reach=16.0, rng=rng)
             # THE BANK IS A RING, NOT A DISK UNDER THE POND (feature 228, GM 2026-09-12, on Kuwabata's page: hovering
             # the mulberry dike "lights up not only the Mulberry Dyke itself, but the fish ponds Inside each Mulberry
             # dike ... basically the same behavior that we give to the perimeter dyke"). One path, the bank outline

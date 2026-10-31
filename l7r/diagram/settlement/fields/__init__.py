@@ -13,10 +13,9 @@ Research: package composition - NONE: the field mixins composed
 
 from . import grain  # noqa: F401 - registers the field's knobs (winter_crop, town_nearness, fan_middle) at import; the old comb module imported it
 from .drawing import FieldDrawingMixin
-from .features import FieldFeaturesMixin
 from .landuse import LandUseMixin
 from .paddy import PaddyMixin
 
 
-class FieldsMixin(PaddyMixin, FieldDrawingMixin, LandUseMixin, FieldFeaturesMixin):
+class FieldsMixin(PaddyMixin, FieldDrawingMixin, LandUseMixin):
     """The composed field surface. No members of its own by design - see the module docstring."""
