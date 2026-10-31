@@ -9,6 +9,7 @@ import pickle
 
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen import rust_prefix as rp
+from l7r.diagram.hamletgen.driver import STAGES
 
 
 def test_the_rust_stages_are_derived_from_the_crate_and_held_to_the_front(tmp_path: pathlib.Path) -> None:
@@ -17,8 +18,8 @@ def test_the_rust_stages_are_derived_from_the_crate_and_held_to_the_front(tmp_pa
     (tmp_path / "pyrand.rs").write_text("")  # a helper module, no stage
     got = rp.rust_stages(src=tmp_path)
     assert [rp.stage_name(st) for st in got] == ["field"]
-    assert rp.off_the_front(hg.STAGES, got) == ["field"], "field without water_frame before it: not the front"
-    assert rp.off_the_front(hg.STAGES, list(hg.STAGES[:2])) == []
+    assert rp.off_the_front(STAGES, got) == ["field"], "field without water_frame before it: not the front"
+    assert rp.off_the_front(STAGES, list(STAGES[:2])) == []
 
 
 def _plan(seed: int = 5) -> object:
@@ -35,7 +36,7 @@ def test_a_roll_stops_where_the_rust_stages_end_and_a_failing_stage_leaves_its_i
         raise ValueError("no seat")
 
     boom.__name__ = "stage_boom"
-    s, failed, err, trace = rp.roll_through(_plan(), [hg.STAGES[0], boom])
+    s, failed, err, trace = rp.roll_through(_plan(), [STAGES[0], boom])
     assert failed == "boom" and isinstance(err, ValueError) and trace[-1][0] == "boom" and trace[-1][2] == set()
     s2, plan2 = pickle.loads(trace[-1][1])  # noqa: S301 - the module's own fixture
     assert s2.M["meta"].get("settlement_form") == s.M["meta"].get("settlement_form"), "the state boom started from: water_frame's"

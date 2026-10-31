@@ -42,6 +42,7 @@ decision).
 | the tool yield | `make tool-yield` reads the tools' own files | unchanged: the tools stay Python | unchanged | `scripts/measure/tool_yield.py` |
 | this inventory's check | `make rust-tooling` reads the tree for Python readers | the same check, its patterns extended to readers of `.rs` (`syn`, `*.rs`) | one for one | `scripts/gates/check-rust-tooling.py` |
 | the pytest suite | tests that read source (`ast`, `inspect`) or glob `*.py`: the surface guards, the namespace portion, the hooks' and tools' tests | unchanged for the Python they read; a test of a stage's own source moves with the stage to its Rust tests (`#[cfg(test)]` in their own file) | partial | `tests/**` `make hooks-test` |
+| the Rust stage gate's landing record | none: feature 386's landing cohort judged the whole pipeline | `cohort_gate.py` `rust_refusal` reads `rust/phases/src/*.rs` to see whether a Rust stage exists and asks for a clean `make rust-gate` record on the engine, `rust_landing` reads a `rust/` delta as a Rust-stage landing; `tools/rust_gate.py` rolls the Rust stages alone (feature 444 amendment 5, FR-019) | rewritten | `scripts/gates/cohort_gate.py` `make rust-gate` |
 
 ## Proven on the fixture (feature 444 T17)
 
@@ -69,6 +70,7 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | the pytest suite | a test of a stage's own source moves with the stage into its `#[cfg(test)]` module, run by `make rust-test`; the Python tests of the parts that stay Python unchanged | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 | the overlap census | replaced by the work-budget counters counted inside Rust (`rust/phases` behind its `counters` feature, D9): the port's own test holds its count to the derivation's, and `make work-budget` reads the counts it hands back | `test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count` (T19's port) |
 | cache audit | `make cache-audit ARGS="--rust"`: a `.rs` literal of `rust/phases/src` mutated, the extension rebuilt from its stamp, the pool swept cached and fresh | measured 2026-10-31 on T19's port, one trial each: with the real key `[OK ] water_frame.rs:38 ... moved 4 of 4 artifacts`; with `gencache.rust_sources` made to return nothing (the copy written to break it, restored after) `[STALE] water_frame.rs:38 ... moved 0 of 4 artifacts`, `CACHE SERVED STALE ARTIFACTS: ['inashiro.json', 'inashiro.svg']` |
+| the Rust stage gate's landing record | `cohort_gate.py rust_refusal` refuses an engine landing with no clean `make rust-gate` record on its engine once a Rust stage is in the tree, `rust_landing` reads a `rust/` delta's cohort as a rate; the gate's fresh start moves on a Rust-only change | `test_the_rust_stage_gate_holds_every_engine_landing_and_a_rust_landing_reads_the_cohort_as_a_rate`; `test_a_rust_only_change_moves_the_fresh_start`; `tests/tools/test_rust_gate.py` |
 
 ### Not yet proven (2026-10-30), and what each waits for
 

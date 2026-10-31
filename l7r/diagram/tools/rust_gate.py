@@ -28,7 +28,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.driver import fresh_settlement
+from l7r.diagram.hamletgen.driver import STAGES, fresh_settlement
 from l7r.diagram.hamletgen.rust_prefix import Reads, held, off_the_front, owned_reads, roll_through, rust_stages, stage_name
 from l7r.diagram.tools.cohort_audit import PINNED_ROWS, POST_CHECKS, fail_line
 
@@ -189,7 +189,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--start", type=int, required=True, help="the fresh block's first seed (cohort_gate.py fresh-seed)")
     args = ap.parse_args(argv)
-    off = off_the_front(hg.STAGES, rust_stages())
+    off = off_the_front(STAGES, rust_stages())
     if off:
         print(f"rust-gate: REFUSED - Rust stage(s) {', '.join(off)} are not the front of STAGES: port the stages in STAGES order (FR-019)", file=sys.stderr)
         return 1
