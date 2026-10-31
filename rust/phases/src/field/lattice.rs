@@ -27,13 +27,36 @@ pub struct Basin {
     pub row: usize,
     pub col: usize,
     pub ring: Vec<Pt>,
+    /// Whether the basin's right side (its `ring[1]` to `ring[2]`) lies on the drain, and whether its left side (`ring[3]` to
+    /// `ring[0]`) does.
+    pub on_drain_right: bool,
+    pub on_drain_left: bool,
 }
 
-/// The cut positions across one row, as fractions s in [-1, 1]: lengths rolled in `ALONG_FT` from the row's own stream (positional,
-/// so a change to one row re-rolls only it), as many as the row's mean breadth holds at the band's middle, then scaled to fill it.
+impl Basin {
+    /// The basin's side on the drain, from its top to its foot, if it has one: the drain's hem.
+    ///
+    /// Research:
+    ///     the hem along the drain - GUESS: the record is silent on a drawn hem; the basins' sides on the drain, the bund it runs in
+    #[must_use]
+    pub fn drain_side(&self) -> Option<[Pt; 2]> {
+        if self.on_drain_right {
+            Some([self.ring[1], self.ring[2]])
+        } else if self.on_drain_left {
+            Some([self.ring[0], self.ring[3]])
+        } else {
+            None
+        }
+    }
+}
+
+/// The cut positions across one row, as fractions s in [-1, 1], with a cut at 0 where the drain runs down the fan's middle: each
+/// half's lengths rolled in `ALONG_FT` from the row's own stream (positional, so a change to one row re-rolls only it), as many as
+/// the half's breadth holds at the band's middle, then scaled to fill it.
 ///
 /// Research:
 ///     the basin's length - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 26 to 36 ft along it, a knob rolled each basin
+///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
 #[must_use]
 pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
     let middle = f64::from(ALONG_FT.0 + ALONG_FT.1) / 2.0;
@@ -42,21 +65,23 @@ pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
         clippy::cast_sign_loss,
         reason = "a small positive count of basins"
     )]
-    let n = ((breadth / middle).round() as usize).max(1);
+    let n = ((breadth / 2.0 / middle).round() as usize).max(1);
     let mut rng = knob_rng(seed, &format!("comb_row:{row}"));
     let span = ALONG_FT.1 - ALONG_FT.0 + 1;
-    let lengths: Vec<f64> = (0..n)
-        .map(|_| f64::from(ALONG_FT.0 + rng.randbelow(span)))
-        .collect();
-    let total: f64 = lengths.iter().sum();
-    let mut s = -1.0;
-    let mut out = vec![s];
-    for l in &lengths {
-        s += 2.0 * l / total;
-        out.push(s);
-    }
-    if let Some(last) = out.last_mut() {
-        *last = 1.0;
+    let mut out = vec![-1.0];
+    for from in [-1.0, 0.0] {
+        let lengths: Vec<f64> = (0..n)
+            .map(|_| f64::from(ALONG_FT.0 + rng.randbelow(span)))
+            .collect();
+        let total: f64 = lengths.iter().sum();
+        let mut s = from;
+        for l in &lengths {
+            s += l / total;
+            out.push(s);
+        }
+        if let Some(last) = out.last_mut() {
+            *last = from + 1.0;
+        }
     }
     out
 }
@@ -89,7 +114,13 @@ pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
                 fan.at(u1, pair[1]),
                 fan.at(u1, pair[0]),
             ];
-            out.push(Basin { row, col, ring });
+            out.push(Basin {
+                row,
+                col,
+                ring,
+                on_drain_right: pair[1].abs() < 1e-12,
+                on_drain_left: pair[0].abs() < 1e-12,
+            });
         }
     }
     out
@@ -114,6 +145,9 @@ mod tests {
             "about 1,500 sq ft: {mean}"
         );
         assert!(b.iter().all(|x| x.ring.len() == 4));
+        let hem: Vec<_> = b.iter().filter_map(super::Basin::drain_side).collect();
+        let rows = b.iter().map(|x| x.row).max().unwrap() + 1;
+        assert_eq!(hem.len(), 2 * rows, "both sides of the drain, every row");
         assert_eq!(b, basins(&f, 4), "the seed fixes the comb");
         assert_ne!(b, basins(&f, 5));
     }
@@ -121,6 +155,7 @@ mod tests {
     #[test]
     fn a_row_cuts_at_the_researched_lengths_and_converges() {
         let s = cuts(9, 3, 900.0);
+        assert!(s.iter().any(|x| x.abs() < 1e-12), "a cut on the drain");
         assert!((s[0] + 1.0).abs() < 1e-12);
         assert!((s.last().unwrap() - 1.0).abs() < 1e-12);
         for w in s.windows(2) {

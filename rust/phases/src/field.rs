@@ -99,6 +99,7 @@ mod tests {
     }
 }
 
+pub mod beans;
 pub mod brook;
 pub mod channels;
 pub mod fan;
