@@ -196,7 +196,7 @@ Occasions: settlement-review on each pool hamlet the port moves (D7: every plan 
 5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
 6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
    WITHIN on the `.rs` modules, `cache audit` and `the overlap census` proven on the port (each check refusing a copy of the port
-   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed, the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
+   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` rolled and its pinned seeds' failures filed as open rows against their stages, the gate read on the fresh block - its pass rate no worse than main's on the same seeds, every refusal a class main's block shows (FR-005 by User Story 2: "Its gate is that the fresh block's pass rate is no worse", and "not all seeds pass: that is 417's goal, not this program's"; amended 2026-10-31 on the round arbiter's rulings ask:444-T19-cohort-regression and ask:444-T19-cohort-45, since under D7 a pinned seed names a new map), the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
    a route, never an acceptance: a phase over its budget is rebuilt or its budget changed with the GM's words (FR-006).
 7. **The search smell.** none
 8. **The budget.** One landing.
@@ -253,9 +253,11 @@ port's rolls.
    linear map of 19 households). The forms rolled match main's (nucleated 28 / linear 15 / dispersed 11 against 27 / 13 / 14), so the
    settlement form's odds are not the fault; every dispersed map passes on both.
 2. **A3 again.** The refusing rules are the later stages' own, unchanged by the port.
-3. **A4 again.** Read in the port's caller, against the old `plan_site` (81a8dbc39): the old code rolled every knob on every form;
-   the port rolls a knob only on its derivation branch, else writes its table's first form. A branch is right only where no stage
-   reads the knob off it.
+3. **A4 again.** Read in the port's caller and the later stages' readers: the port rolls a knob only on its derivation branch, else
+   writes its table's first form. A branch is right only where no stage reads the knob off it. (The old `plan_site` was also read at
+   81a8dbc39 under the phase-source escape during this diagnosis, against the guard's purpose - the GM's 2026-10-30 rule that the
+   rewrite not copy the old algorithms; spec-fidelity's MODE 4 review of T19 found it NOT LEGITIMATE. Both fixes rest on the readers'
+   trace below alone, which finds them without it.)
 4. **Moving something placed earlier to suit something later?** No: the fix is in water_frame's own rolls.
 5. **Tuning or changing?** Changing: a wrong branch, not a value.
 6. **The one-sentence test.** "Every row and farm hamlet was seated in the stubbiest band, because the port held the cluster's shape
@@ -282,7 +284,7 @@ copy of each is the rule.
 the same draws on every platform. The port cannot reproduce today's draws without reading today's Python's random calls, which
 the phase-source guard holds (the GM, 2026-10-30), so every map's plan rolls once anew - its fall, drainage bearing, wind and knob
 forms - and the layouts downstream move. The GM's ruling of 2026-10-18 lets maps change
-where they keep the research (the root CLAUDE.md, its speed-work rule under Verification and iteration): `make cohort-landing` and the claims round hold them to the research, and each pool hamlet that moves owes
+where they keep the research (the root CLAUDE.md, its speed-work rule under Verification and iteration): the fresh block's pass rate against main's, refusal class by class (ask:444-T19-cohort-45), and the claims round hold them to the research, and each pool hamlet that moves owes
 its settlement-review (docs/reviews.md: a map's form changes) - this task's Occasions line is corrected to say so.
 
 **D8 - The build: maturin into a repository-local folder, keyed to the Rust sources** (FR-010): `rust/phases/` is the crate
@@ -317,7 +319,7 @@ failing (355298, 355302, 355305, 355327, 355329, 355334, 903, 904), 7 of main's 
 2. **A3 again.** Unchanged rules.
 3. **A4 again.** The audit of 03:05Z item 7 carried to every off-branch knob: `well_siting` is the second of the same fault -
    `place_wells` (`homesteads/stages.py`, every form) seats the communal wells of every house without a grove, and both its first
-   seating and the reach loop (`wells.py`) read `plan.well_siting`; the old `plan_site` rolled it on every form, the port held it at
+   seating and the reach loop (`wells.py`) read `plan.well_siting` on every form, and the port held it at
    "lane" outside a cluster. The rest hold: the row knobs are read in `rows.py` and behind the linear form in `wells.py`, `farm_water`
    behind the dispersed form, the grove knobs by the row seating alone.
 4. **Moving something placed earlier to suit something later?** No: water_frame's own branch.
@@ -366,3 +368,13 @@ re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-
 7. **Done:** the seven seeds and the Kashikawa and Sawada pins filed as open rows
    (`specs/328-match-the-research/audit/found-444-t19.jsonl`, the SiteRefused row naming widening `SEATING_GROUND_FT` first); of the
    pool only Mizuguchi's manifest moved on the fixed port, so it alone owes its settlement-review before `make land F=444 T=T19`.
+
+   **On spec-fidelity's MODE 4 review of T19 (2026-10-31, BLOCKED, 7 decisions):** (5) the landing reads FR-005 by User Story 2's
+   own words, Approach item 6 and D7 amended above. The Kashikawa and Sawada pins: both are pool hamlets whose re-rolled plans
+   refused on the port (SiteRefused on Kashikawa, SinkRefused on Sawada); their `.gen.py` now pin their shipped plans, so as shipped
+   they do not newly fail - each regenerates unchanged against HEAD (observed 2026-10-31, method: `make map`, "this map's manifest
+   is unchanged against HEAD") - and their open rows are to unpin them, not a failing map. (6) the old-code read is recorded at
+   03:05Z item 3; both fixes rest on the readers' trace. (7) water_frame's pin is SOUND-pinned (`dev/work-budget.json`: its verdict
+   `phases/water_frame_greenfield.verdict-2.txt`), and FR-013's re-owed ruling binds "an accept-pinned budget" alone; the edit
+   changed no budgeted figure - the totals at 20, 40 and 80 stay 56 - only the per-form note beside the knobs row (linear 55, then
+   59), so no ruling is re-owed and the pin stands.

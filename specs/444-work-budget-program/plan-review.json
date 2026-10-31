@@ -2528,66 +2528,57 @@
    "verdict": "BLOCKED"
   },
   "T19": {
-   "section_sha256": "e128fd6222568605feed9b68720c5eda5312eb66b863a45ed8f0c37769c6e369",
+   "section_sha256": "5b2d06eddc8c5709d56ea77ef751762bd2e12945c1037f0d006176350e874575",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "Occasions",
-     "summary": "settlement-review on each pool hamlet the port moves",
+     "id": "B-0251Z",
+     "summary": "On a 47/54 cohort-landing, diagnose seed by seed (dump each refusal, read the open E3 row) before any fix or arbiter route; main's fresh cohort recorded as a number beside the diagnosis, not as an explanation.",
      "class": "within",
-     "why": "Adds review obligations; narrows nothing the GM asked."
+     "why": "Diagnosis only; nothing the request asked for is narrowed. Request s3 box 6 makes cohort-landing an acceptance condition, and this measures against it."
     },
     {
-     "id": "Approach-arbiter-RouteA",
-     "summary": "T19 also proves cache audit and the overlap census on the port before its tick; check-rust-tooling.py refuses the landing until they are",
+     "id": "B-0305Z-fix",
+     "summary": "cluster_shape rolled on every settlement form (_KNOBS 'all'), with a test red on the unfixed branch; derivation's per-form note corrected.",
      "class": "within",
-     "why": "Serves FR-011/FR-017 (the tooling proven, the port filed with FR-011's tooling); adds proof, removes none."
+     "why": "The fix rests on the readers' trace (seat_cluster and seat_room size every map's band through band_extent(households, cluster_shape)), i.e. on the phase's Contract (request s3 box 1, FR-004: same keys read and written). The test only fails when the knob is not rolled where it is read: enforcement, within. The method used to find it is ruled separately (B-old-code-read)."
     },
     {
-     "id": "Exits",
-     "summary": "Green: within pinned budget at every size, MODE AUDIT WITHIN, the two rows proven by firing copies, cohort-landing no regression, Rust coverage floor whole. Red: to the round arbiter with the measurement, a route never an acceptance; over-budget phase rebuilt or its budget changed with the GM's words (FR-006)",
+     "id": "B-0310Z-fix",
+     "summary": "well_siting rolled on every form, test widened to every knob read on every form.",
      "class": "within",
-     "why": "Changed this round: the red exit now states FR-006's limit on the arbiter, matching request item 4 (the arbiter may rule on process but may not accept a phase over budget). Holds the request's bar."
+     "why": "Same ground as B-0305Z-fix: place_wells (every form) and wells.py read plan.well_siting; the widened test is enforcement of the Contract."
     },
     {
-     "id": "Order",
-     "summary": "After the tooling proof, before the field rebuild",
+     "id": "B-0314Z",
+     "summary": "Put the one-seat shortfall (45/54 vs 46/54, no new refusal class) to the round arbiter as a process question rather than accept or tune.",
      "class": "within",
-     "why": "FR-011 tooling before the first Rust phase; FR-017 port landed before the feature closes."
+     "why": "A process question to the arbiter, not an acceptance of a budget (FR-006 untouched); the request's acceptance bar is not lowered by asking."
     },
     {
-     "id": "D6",
-     "summary": "Python gathers, Rust rolls, Python writes; knob tables stay Python data; manifest keys unchanged",
-     "class": "within",
-     "why": "FR-010's shape (a thin Python stage calling the extension), FR-004 keys unchanged."
+     "id": "B-0322Z-land",
+     "summary": "Land T19 under the arbiter's branch 2 with seven pinned cohort-landing seeds newly failing (20, 21, 36, 37, 48, 903, 904; 47/54 vs main 54/54), the fresh block 41/48 vs main 40/48, the seeds filed as open rows.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Request s3 box 6 is conjunctive: 'no regressed seed, AND the fresh block's pass rate is no worse'. This drops the first prong. It is legitimate on the GM's own words, not on the arbiter's: the same box says '(not all seeds pass: that is 417's goal, not this program's)', and the approved 417 bullet says 'Its gate is that the fresh block's pass rate is no worse'. Under D7 (CLEAR: every plan rolls anew, its draws unreproducible without reading the guarded code) a pinned seed no longer names the same map, so 'no regressed seed' has no fixed object and literally means 'every map of a new draw passes', which is the 417 goal the GM excluded. The fresh prong is read on the 48 fresh seeds (41/48 vs 40/48, ask:444-T19-cohort-45), not on the 54-seed total of 03:14Z (45/54 vs 46/54), which counts pinned seeds; every refusal is a class main's block shows. Classes checked separately: pool hamlets - only Mizuguchi's manifest moved, and it owes its settlement-review before land (request s3 box 6, reviews owed); the Kashikawa and Sawada pins are named as E3-class rows (WebRefused at Kashikawa is the E3 row's own text), so on the bundle they are pre-existing, not a pool map regressing; if either is a pool hamlet that now fails, that is a different class and this ruling does not cover it. CONDITIONS the section must still meet: (1) Approach item 6's green exit still reads 'make cohort-landing with no regressed seed' and D7 still justifies the re-roll by 'make cohort-landing ... hold them to the research'; both lines must be amended to the fresh-block prong with this ruling cited, or the section contradicts itself; (2) FR-005 ('accepted only as User Story 2 states') is uncited though this block changes the acceptance test; it should be named."
     },
     {
-     "id": "D7",
-     "summary": "Seeded SplitMix64 in Rust; every map's plan rolls once anew, held to the research by cohort-landing, claims round and settlement-review",
-     "class": "within",
-     "why": "The GM's 2026-10-30 words rule out reproducing the same algorithm or reading the held Python; maps may move where they keep the research, and that is checked."
+     "id": "B-old-code-read",
+     "summary": "03:05Z item 3 (and 03:10Z item 3 by extension): the knob-branch fault was diagnosed by reading the port 'against the old plan_site (81a8dbc39)', i.e. water_frame's old implementation, at a commit hash, while this task runs.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Approach item 2 says 'the phase-source guard holds its old code while this task runs', and D7 says the old draws cannot be reproduced 'without reading today's Python's random calls, which the phase-source guard holds (the GM, 2026-10-30)': the guard holds the old phase source against reading during the port. The GM asked for it (2026-10-30: 'we should definitely add a guard for that') because 'I suspect that ... you would just end up re-implementing the same bad algorithms'. Reading the old plan_site through an older commit is an exception the spec never grants, carved by method. It is not necessary: the block's own 03:10Z work finds the same class of fault from the later stages' readers alone (place_wells, wells.py, rows.py, band_extent), which is contract evidence, not old code. Presumed not legitimate; none of the three grounds holds. Remedy: rest both fixes on the readers' trace alone and drop the old-code comparison from the section (record that it was read and that nothing of its algorithm was carried); or show, with the guard's text, that it does not reach the code read here."
     },
     {
-     "id": "D8",
-     "summary": "maturin build into gitignored .rust-ext/, rebuilt when the sources' code id moves; generation key holds the Rust sources",
-     "class": "within",
-     "why": "FR-010 (PyO3, built by maturin); build mechanics only, narrows nothing."
-    },
-    {
-     "id": "D9",
-     "summary": "Rust counter keyed <kind>@<function> behind the Cargo feature counters (FR-012, compiled out of the deployed build), handed back and added to the roll's counts; replaces the overlap census, proven by a copy that does uncounted work",
-     "class": "within",
-     "why": "Changed this round: now cites FR-012 and puts the counter behind the counters feature, as the GM asked on 2026-10-28. FR-003/FR-012 carried."
-    },
-    {
-     "id": "Done-measured",
-     "summary": "make work-budget per size against the pin; the two rows in the Proven table with firing cases; perf-ab recorded beside",
-     "class": "within",
-     "why": "Measures what FR-006/FR-017 require; time recorded beside counts, not as the target, as the request says."
+     "id": "B-derivation-figures",
+     "summary": "03:05Z and 03:10Z: water_frame's derivation per-form figure edited after its budget was pinned (linear 56 -> 57 -> 59; the reference's 56 unchanged), with no word on the pin's ruling.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's answer to 444#0 accepted option one as put to him: 'the pin is bound to the derivation as it reads (a later change to its figures re-owes a ruling)' (FR-013, uncited by the block). The block changes the derivation's figures twice and treats the pin as standing, on the unstated premise that the pin is unaffected; nobody states whether water_frame's pin was a SOUND verdict or an arbiter ACCEPT. Silently keeping a pin across a figure change is the exception the GM's words close. Remedy: name the pin's kind and FR-013; if the pin is an arbiter ACCEPT (or FR-013 binds SOUND pins the same way), re-owe the ruling on the edited derivation before the tick; if neither, say so with FR-013's text and this decision becomes within. The count staying under the pinned 69 does not answer it: the binding is to the derivation as it reads, not to the margin."
     }
    ],
-   "verdict": "CLEAR"
+   "verdict": "BLOCKED"
   }
  }
 }
