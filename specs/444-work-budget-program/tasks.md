@@ -60,13 +60,14 @@
 - [x] T17 FR-011's Rust tooling proven on a Rust fixture, every one-for-one, partial or rewritten row firing (FR-011, FR-017)
       research: rendering
       verify: DONE. landed: the Rust tooling proven on the fixture crate: 18 rows proven, cache audit and the overlap census owed by T19 (the round arbiter's Route A, narrowed by the plan review); a Rust phase's landing refused while any row is unproven
-- [ ] T18 the field re-derived under the single-field cap, its MODE BUDGET verdict (FR-018)
+- [x] T18 the field re-derived under the single-field cap, its MODE BUDGET verdict (FR-018)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: the single-field cap researched (research-pass ATTESTED: one tract from one intake about 1-45 ha, the largest Fei's polder of about 60 ha) and recorded in 0017 (#how-large-one-tract-of-paddy-grew) and its drawing page (the cap a knob of 45-60 ha, several fields past it) by two page sessions, the record's checks run and applied; the field's greenfield derivation re-derived under it - one field at 20/40/80 households (11/21/42 ha), no figure changed - MODE BUDGET verdict-3 SOUND, the standing pin (23,988 at 40, exponent 0.79) unchanged; the claims round on 0017's change: fit_field and fit_polder IN-STEP
 - [x] T19 phase: water_frame - its Rust port, written from its derivation (FR-010, FR-017)
       research: rendering
       phase: water_frame
