@@ -125,32 +125,25 @@ pub fn hem(
                 }
             }
             last_turn = Some(turn);
-            let (start, end) = (along_at(d).0, along_at(d + f64::from(n) * PLOT_FT.0).0);
-            let u = unit(start, end);
-            let n_out = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
-                (-u.1, u.0)
-            } else {
-                (u.1, -u.0)
-            };
+            // the tract's heading, for its furrows: its stretch of the canal's
+            let u = unit(along_at(d).0, along_at(d + f64::from(n) * PLOT_FT.0).0);
             for k in 0..n {
                 let d0 = d + f64::from(k) * PLOT_FT.0;
                 if d0 + PLOT_FT.0 > len {
                     break;
                 }
-                // the tract's plots laid along its stretch of the canal, square to that stretch: one heading a tract, so its
-                // strips stay together however the canal bends
-                let (p0, _) = along_at(d0);
-                let p1 = (p0.0 + u.0 * PLOT_FT.0, p0.1 + u.1 * PLOT_FT.0);
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + f64::from(j) * PLOT_FT.1,
                         depth + f64::from(j + 1) * PLOT_FT.1,
                     );
+                    // the canal's own course pushed out along its smoothed normal: neighbors share their sides and the bands
+                    // nest, so the hem follows the canal as a hem does
                     let poly = vec![
-                        (p0.0 + n_out.0 * o0, p0.1 + n_out.1 * o0),
-                        (p1.0 + n_out.0 * o0, p1.1 + n_out.1 * o0),
-                        (p1.0 + n_out.0 * o1, p1.1 + n_out.1 * o1),
-                        (p0.0 + n_out.0 * o1, p0.1 + n_out.1 * o1),
+                        offset(&segs, out, d0, o0),
+                        offset(&segs, out, d0 + PLOT_FT.0, o0),
+                        offset(&segs, out, d0 + PLOT_FT.0, o1),
+                        offset(&segs, out, d0, o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
                     if got >= need || refused(&poly, field, &plots, ix, clear) {
@@ -182,6 +175,26 @@ pub fn hem(
         }
     }
     (plots, room)
+}
+
+/// The point `d` feet along the segments pushed `o` feet out along their normal there, the normal smoothed over a plot's length
+/// either way and turned to `out`'s side.
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn offset(segs: &[(Pt, Pt)], out: Pt, d: f64, o: f64) -> Pt {
+    let (p, _) = along(segs, d);
+    let u = unit(
+        along(segs, (d - PLOT_FT.0).max(0.0)).0,
+        along(segs, d + PLOT_FT.0).0,
+    );
+    let n = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
+        (-u.1, u.0)
+    } else {
+        (u.1, -u.0)
+    };
+    (p.0 + n.0 * o, p.1 + n.1 * o)
 }
 
 /// The point `d` feet along the segments, and their heading there (past the end, the last segment's end).
