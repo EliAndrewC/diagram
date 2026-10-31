@@ -67,7 +67,11 @@ impl Fan {
     ///     the fan narrows toward its drain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: its bunds converging
     #[must_use]
     pub fn half_at(&self, u: f64) -> f64 {
-        let t = if self.length > 0.0 { u / self.length } else { 0.0 };
+        let t = if self.length > 0.0 {
+            u / self.length
+        } else {
+            0.0
+        };
         self.half_head + (self.half_foot - self.half_head) * t
     }
 }
@@ -161,7 +165,7 @@ mod tests {
         assert!(head_w > 0.0 && TAPER > 0.0);
         let n = f.ring.len();
         assert!(n > 40, "an edge point each cell: {n}");
-        assert_eq!(heading(0.0).0.round(), 1.0, "0 is east, +x");
-        assert_eq!(heading(90.0).1.round(), 1.0, "90 is south, +y");
+        assert!((heading(0.0).0 - 1.0).abs() < 1e-12, "0 is east, +x");
+        assert!((heading(90.0).1 - 1.0).abs() < 1e-12, "90 is south, +y");
     }
 }

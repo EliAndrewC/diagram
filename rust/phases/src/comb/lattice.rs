@@ -97,7 +97,7 @@ pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
 
 #[cfg(test)]
 mod tests {
-    use super::{basins, cuts, ALONG_FT, ROW_FT};
+    use super::{basins, cuts, ALONG_FT};
     use crate::comb::fan::{fan, ring_area};
 
     #[test]
@@ -107,6 +107,7 @@ mod tests {
         let b = basins(&f, 4);
         let total: f64 = b.iter().map(|x| ring_area(&x.ring)).sum();
         assert!((total / area - 1.0).abs() < 1e-6, "the basins tile the fan");
+        #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let mean = total / b.len() as f64;
         assert!(
             (1_200.0..1_800.0).contains(&mean),
@@ -120,8 +121,8 @@ mod tests {
     #[test]
     fn a_row_cuts_at_the_researched_lengths_and_converges() {
         let s = cuts(9, 3, 900.0);
-        assert_eq!(s[0], -1.0);
-        assert_eq!(*s.last().unwrap(), 1.0);
+        assert!((s[0] + 1.0).abs() < 1e-12);
+        assert!((s.last().unwrap() - 1.0).abs() < 1e-12);
         for w in s.windows(2) {
             let ft = (w[1] - w[0]) / 2.0 * 900.0;
             assert!(
@@ -135,6 +136,5 @@ mod tests {
         let last_row = b.iter().map(|x| x.row).max().unwrap();
         let last = b.iter().filter(|x| x.row == last_row).count();
         assert!(last < first, "fewer basins a row toward the drain");
-        assert!(ROW_FT > 0.0);
     }
 }

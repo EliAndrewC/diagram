@@ -76,7 +76,11 @@ mod tests {
             let ha = cap_sq_ft(seed) / SQ_FT_PER_HA;
             assert!((CAP_HA.0..=CAP_HA.1).contains(&ha), "{ha}");
         }
-        assert_eq!(cap_sq_ft(7), cap_sq_ft(7), "the seed fixes the cap");
+        assert_eq!(
+            cap_sq_ft(7).to_bits(),
+            cap_sq_ft(7).to_bits(),
+            "the seed fixes the cap"
+        );
     }
 
     #[test]
@@ -95,6 +99,8 @@ mod tests {
     }
 }
 
-pub mod fan;
 pub mod channels;
+pub mod fan;
+pub mod geom;
+pub mod index;
 pub mod lattice;

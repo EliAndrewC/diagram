@@ -8,6 +8,7 @@
 //!     the sweeps - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every turn on a sweep of about 2.5 channel widths
 
 use super::fan::{Fan, Pt};
+use super::geom::{dist, unit};
 use crate::pyrand::knob_rng;
 
 /// One channel: its role (`main` for the head race and each leg of a supply canal, `branch` for a delivery ditch, `drain`; the
@@ -71,6 +72,10 @@ pub fn tail_runs_on(seed: i64) -> bool {
 ///
 /// Research:
 ///     sweeps - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every ditch turns on a sweep, never a sharp corner
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 #[must_use]
 pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
     if pts.len() < 3 {
@@ -97,23 +102,11 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
             let m = (1.0 - t) * (1.0 - t);
             let n = 2.0 * (1.0 - t) * t;
             let q = t * t;
-            out.push((
-                m * p0.0 + n * b.0 + q * p1.0,
-                m * p0.1 + n * b.1 + q * p1.1,
-            ));
+            out.push((m * p0.0 + n * b.0 + q * p1.0, m * p0.1 + n * b.1 + q * p1.1));
         }
     }
     out.push(pts[pts.len() - 1]);
     out
-}
-
-fn dist(a: Pt, b: Pt) -> f64 {
-    ((b.0 - a.0).powi(2) + (b.1 - a.1).powi(2)).sqrt()
-}
-
-fn unit(from: Pt, to: Pt) -> Pt {
-    let d = dist(from, to).max(1e-12);
-    ((to.0 - from.0) / d, (to.1 - from.1) / d)
 }
 
 /// The comb's channels on `fan`, its head race from `intake`; `offtakes` are the delivery ditches' fractions down each flank
@@ -126,7 +119,13 @@ fn unit(from: Pt, to: Pt) -> Pt {
 ///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
 #[must_use]
-pub fn channels(fan: &Fan, intake: Pt, offtakes: (&[f64], &[f64]), row_ft: f64, seed: i64) -> Vec<Channel> {
+pub fn channels(
+    fan: &Fan,
+    intake: Pt,
+    offtakes: (&[f64], &[f64]),
+    row_ft: f64,
+    seed: i64,
+) -> Vec<Channel> {
     let mut out = vec![Channel {
         role: "main",
         pts: vec![intake, fan.fork],
@@ -139,15 +138,19 @@ pub fn channels(fan: &Fan, intake: Pt, offtakes: (&[f64], &[f64]), row_ft: f64, 
         u.min(fan.length)
     };
     for (side, (fracs, w)) in [(offtakes.0, SUPPLY_W.0), (offtakes.1, SUPPLY_W.1)]
-    .into_iter()
-    .enumerate()
+        .into_iter()
+        .enumerate()
     {
         let s = if side == 0 { -1.0 } else { 1.0 };
         let last = fracs.iter().copied().fold(0.0, f64::max);
         let end = if runs_on { fan.length } else { on_row(last) };
         // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
         // a leg from `w` to the thread (the manifest's `main` pieces, each with its own taper)
-        let mut stops: Vec<f64> = fracs.iter().map(|&f| on_row(f)).filter(|&u| u > 0.0 && u < end).collect();
+        let mut stops: Vec<f64> = fracs
+            .iter()
+            .map(|&f| on_row(f))
+            .filter(|&u| u > 0.0 && u < end)
+            .collect();
         stops.sort_by(f64::total_cmp);
         stops.dedup();
         stops.push(end);
@@ -189,8 +192,9 @@ pub fn channels(fan: &Fan, intake: Pt, offtakes: (&[f64], &[f64]), row_ft: f64, 
 
 #[cfg(test)]
 mod tests {
-    use super::{channels, dist, swept, tail_runs_on, unit, SWEEP_WIDTHS};
+    use super::{channels, swept, tail_runs_on, SWEEP_WIDTHS};
     use crate::comb::fan::fan;
+    use crate::comb::geom::{dist, unit};
 
     #[test]
     fn the_comb_has_its_head_race_canals_ditches_and_drain() {
@@ -221,7 +225,10 @@ mod tests {
             assert!(down.0 * out.0 + down.1 * out.1 > 0.0, "leaning downstream");
         }
         let both: Vec<_> = (0..16).map(tail_runs_on).collect();
-        assert!(both.contains(&true) && both.contains(&false), "both tails attested and rolled");
+        assert!(
+            both.contains(&true) && both.contains(&false),
+            "both tails attested and rolled"
+        );
         let short = channels(&f, intake, (&[0.5], &[]), 48.0, 4);
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
     }
@@ -231,7 +238,9 @@ mod tests {
         let pts = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)];
         let s = swept(&pts, 4.0);
         assert!(s.len() > 3);
-        assert!(s.iter().all(|p| dist(*p, (100.0, 0.0)) > SWEEP_WIDTHS * 4.0 * 0.2));
+        assert!(s
+            .iter()
+            .all(|p| dist(*p, (100.0, 0.0)) > SWEEP_WIDTHS * 4.0 * 0.2));
         let line = [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)];
         assert_eq!(swept(&line, 4.0).len(), 3);
         assert_eq!(swept(&pts[..2], 4.0).len(), 2);
