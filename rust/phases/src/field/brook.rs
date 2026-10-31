@@ -142,9 +142,9 @@ pub fn clearance(p: Pt, r: f64, ix: &mut Index) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::{brook, clearance, file, weir, BrookIn};
-    use crate::comb::fan::fan;
-    use crate::comb::geom::{dist, signed_area};
-    use crate::comb::index::Index;
+    use crate::field::fan::fan;
+    use crate::field::geom::{dist, signed_area};
+    use crate::field::index::Index;
 
     const B: BrookIn = BrookIn {
         lead: 105.0,

@@ -98,7 +98,7 @@ pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
 #[cfg(test)]
 mod tests {
     use super::{basins, cuts, ALONG_FT};
-    use crate::comb::fan::{fan, ring_area};
+    use crate::field::fan::{fan, ring_area};
 
     #[test]
     fn the_basins_fill_the_fan_at_the_researched_size() {

@@ -140,7 +140,7 @@ pub fn ray_exit(from: Pt, dir: Pt, ring: &[Pt]) -> Option<Pt> {
     best.map(|(_, p)| p)
 }
 
-/// The angle at corner `i` of a ring, in degrees (0 to 180).
+/// The interior angle at corner `i` of a ring, in degrees (0 to 360: over 180 at a reflex corner).
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -150,12 +150,46 @@ pub fn corner_deg(ring: &[Pt], i: usize) -> f64 {
     let n = ring.len();
     let (a, b, c) = (ring[(i + n - 1) % n], ring[i], ring[(i + 1) % n]);
     let (u, v) = (unit(b, a), unit(b, c));
-    (u.0 * v.0 + u.1 * v.1).clamp(-1.0, 1.0).acos().to_degrees()
+    let open = (u.0 * v.0 + u.1 * v.1).clamp(-1.0, 1.0).acos().to_degrees();
+    let z = (b.0 - a.0) * (c.1 - b.1) - (b.1 - a.1) * (c.0 - b.0);
+    if z * signed_area(ring).signum() < 0.0 {
+        360.0 - open
+    } else {
+        open
+    }
+}
+
+/// A ring's convex hull (Andrew's monotone chain), its corners in turn.
+#[must_use]
+pub fn hull(ring: &[Pt]) -> Vec<Pt> {
+    let mut pts = ring.to_vec();
+    pts.sort_by(|a, b| a.0.total_cmp(&b.0).then(a.1.total_cmp(&b.1)));
+    let turn = |o: Pt, a: Pt, b: Pt| (a.0 - o.0) * (b.1 - o.1) - (a.1 - o.1) * (b.0 - o.0);
+    let mut lower: Vec<Pt> = Vec::new();
+    for &p in &pts {
+        while lower.len() >= 2 && turn(lower[lower.len() - 2], lower[lower.len() - 1], p) <= 0.0 {
+            lower.pop();
+        }
+        lower.push(p);
+    }
+    let mut upper: Vec<Pt> = Vec::new();
+    for &p in pts.iter().rev() {
+        while upper.len() >= 2 && turn(upper[upper.len() - 2], upper[upper.len() - 1], p) <= 0.0 {
+            upper.pop();
+        }
+        upper.push(p);
+    }
+    lower.pop();
+    upper.pop();
+    lower.extend(upper);
+    lower
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{clip, corner_deg, cross, dist, inside, ray_exit, seg_dist, signed_area, unit};
+    use super::{
+        clip, corner_deg, cross, dist, hull, inside, ray_exit, seg_dist, signed_area, unit,
+    };
 
     #[test]
     fn the_plane_geometry() {
@@ -183,6 +217,12 @@ mod tests {
         assert!(dist(hit, (10.0, 5.0)) < 1e-9);
         assert!(ray_exit((50.0, 5.0), (1.0, 0.0), &sq).is_none());
         assert!((corner_deg(&sq, 0) - 90.0).abs() < 1e-9);
+        let notched = [(100.0, 0.0), (0.0, 27.0), (30.0, 0.0), (0.0, -27.0)];
+        assert!(
+            corner_deg(&notched, 2) > 180.0,
+            "a reflex corner reads over 180"
+        );
+        assert_eq!(hull(&notched).len(), 3, "the notch is inside the hull");
         let q = cross((0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0));
         assert!(
             dist(q, (1.0, 0.0)) < 1e-12,

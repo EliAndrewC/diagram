@@ -42,7 +42,7 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** D12 CLEAR (2026-10-31). Built and unit-tested in `rust/phases/src/comb/`: `mod.rs` (the area, the cap,
+**Resume here:** D12 CLEAR (2026-10-31). Built and unit-tested in `rust/phases/src/field.rs` and `field/` (moved from `comb/` to D1's layout): `mod.rs` (the area, the cap,
 the field count), `fan.rs` (the envelope; the maps' angles, clockwise from east), `lattice.rs` (rows of 48 ft, basins rolled
 26-36 ft along from `comb_row:<n>`), `channels.rs` (the head race, canal A along the upper edge and down the far flank, canal B
 down the brook's flank, in legs tapering between offtakes; branches across to the drain; the drain; swept turns; the `canal_tail`
@@ -54,6 +54,18 @@ arrowhead - `FieldRefused`), the beans, the wet/dry/flooded plots, the hem, the 
 (a pyfunction) and the thin Python writing the 42 keys; then `settlement/fields/ink.py`. OPEN: the outline is the straight-edged
 fan today (no basin is cut); whether its edge should waver over the ground is for the settlement-review of the moved maps. clippy's
 dead-code lint refuses `comb/` until `fn stage_field` calls into it. T16 stays open (ask:set-down-444-t16-session).
+
+**The plots' rules, from the record** (2026-10-31, a dispatched reader of 0005-0014's drawing pages, no code read; each rule
+re-cited at its Rust): wet - each plot of the lowest row (its foot on the drain) at 45%, a point-tapered plot stays green (0007);
+flooded - about one rice plot in sixteen, one in twenty gold (0009); rest - `paddy_rest` settled 4 in 5, unsettled rests 2-4 whole
+plots a field, no two sharing a bund, likelier down the slope (0013, GUESSes); dry hem - small plots just upslope of the supply canal,
+square to it, tracts of 2-4 strips, rows along the contour or down to the outfall turned up to 17 degrees, a plot turning 3 degrees
+either way, tracts at least 20 degrees apart, crops barley, millet, buckwheat, soy at random (0006); coarse grain - 0.85 acre a
+household; a drained winter paddy grows its barley on the paddy; a bare one clears the wild middle from the toe until the need is
+met (0011); `fan_middle` wild 3 in 4, the toe two-thirds down from the head (0006); beans - a bead about 3 ft, a single row, a
+stretch shows at least two (0014; which bunds SILENT); pond - one low plot, a little over half the time where it has low plots, on a
+valley-floor comb none (0008's table, to re-read); grave - about three maps in ten, island or corner (0008); arrowhead - a point under
+40 degrees AND solidity under 0.90 (0005); a basin under a quarter cell joins the neighbor it shares most bund with (0005, 0014).
 
 **Who draws the field** (2026-10-31, the round arbiter's ruling on ask:444-T16-ink-split; a dispatched reader's table of the
 three held files, classification only, no body carried here):

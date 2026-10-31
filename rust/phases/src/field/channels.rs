@@ -210,8 +210,8 @@ pub fn channels(
 #[cfg(test)]
 mod tests {
     use super::{channels, swept, tail_runs_on, SWEEP_WIDTHS};
-    use crate::comb::fan::fan;
-    use crate::comb::geom::{dist, unit};
+    use crate::field::fan::fan;
+    use crate::field::geom::{dist, unit};
 
     #[test]
     fn the_comb_has_its_head_race_canals_ditches_and_drain() {
