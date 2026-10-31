@@ -109,8 +109,18 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
     out
 }
 
-/// The comb's channels on `fan`, its head race from `intake`; `offtakes` are the delivery ditches' fractions down each flank
-/// (canal A on the fan's left looking downhill, B on its right), from the plan's `offtakes_a` and `offtakes_b`. A delivery ditch
+/// The division point, where the head race forks into the two supply canals: the head corner on the brook's flank (`brook_side`
+/// +1 the fan's right looking downhill, -1 its left), so the race is short and the brook keeps outside the crop beside it.
+///
+/// Research:
+///     the fork - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race splits into a supply canal along the upper edge and one along the far edge
+#[must_use]
+pub fn division(fan: &Fan, brook_side: f64) -> Pt {
+    fan.at(0.0, brook_side)
+}
+
+/// The comb's channels on `fan`, its head race from `intake` to the `division`; `offtakes` are the delivery ditches' fractions down each flank
+/// (canal A along the upper edge and down the far flank, B down the brook's flank), from the plan's `offtakes_a` and `offtakes_b`. A delivery ditch
 /// leaves its canal along the bund of the row its fraction falls on and runs across the fall to the drain; the fan's taper turns
 /// the flank inward, so the ditch leaves its canal leaning downstream.
 ///
@@ -124,11 +134,13 @@ pub fn channels(
     intake: Pt,
     offtakes: (&[f64], &[f64]),
     row_ft: f64,
+    brook_side: f64,
     seed: i64,
 ) -> Vec<Channel> {
+    let fork = division(fan, brook_side);
     let mut out = vec![Channel {
         role: "main",
-        pts: vec![intake, fan.fork],
+        pts: vec![intake, fork],
         w: HEAD_W,
         w_tail: HEAD_W,
     }];
@@ -141,7 +153,8 @@ pub fn channels(
         .into_iter()
         .enumerate()
     {
-        let s = if side == 0 { -1.0 } else { 1.0 };
+        // canal A on the far flank, along the upper edge first; canal B down the brook's flank from the fork
+        let s = if side == 0 { -brook_side } else { brook_side };
         let last = fracs.iter().copied().fold(0.0, f64::max);
         let end = if runs_on { fan.length } else { on_row(last) };
         // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
@@ -154,8 +167,12 @@ pub fn channels(
         stops.sort_by(f64::total_cmp);
         stops.dedup();
         stops.push(end);
-        let corner = swept(&[fan.fork, fan.at(0.0, s), fan.at(stops[0], s)], w);
-        let mut legs: Vec<Vec<Pt>> = vec![corner];
+        let first = if side == 0 {
+            swept(&[fork, fan.at(0.0, s), fan.at(stops[0], s)], w)
+        } else {
+            vec![fork, fan.at(stops[0], s)]
+        };
+        let mut legs: Vec<Vec<Pt>> = vec![first];
         for pair in stops.windows(2) {
             legs.push(vec![fan.at(pair[0], s), fan.at(pair[1], s)]);
         }
@@ -200,7 +217,7 @@ mod tests {
     fn the_comb_has_its_head_race_canals_ditches_and_drain() {
         let f = fan(26.0 * 43_560.0, 1.0, 315.0, (3200.0, 3200.0));
         let intake = (f.fork.0 - 200.0, f.fork.1);
-        let c = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 4);
+        let c = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 1.0, 4);
         let roles: Vec<_> = c.iter().map(|x| x.role).collect();
         assert_eq!(roles.iter().filter(|r| **r == "branch").count(), 4);
         assert_eq!(roles[0], "main");
@@ -229,7 +246,7 @@ mod tests {
             both.contains(&true) && both.contains(&false),
             "both tails attested and rolled"
         );
-        let short = channels(&f, intake, (&[0.5], &[]), 48.0, 4);
+        let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, 4);
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
     }
 

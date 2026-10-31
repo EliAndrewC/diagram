@@ -1,0 +1,197 @@
+//! The brook that feeds the comb (feature 444 T16): down the valley through its intake, on along the fall for its tap's stride,
+//! then bending out to run past the fan's flank outside the crop, wandering a little, and on to the frame. Its figures are the
+//! plan's (`consts_water.py`, passed in); the course is rebuilt from them, the old field code unread.
+//!
+//! Research:
+//!     the intake on the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the head race leaves the brook at its intake
+//!     the brook bends - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a step over 22 ft led in over two
+
+use super::fan::{Fan, Pt};
+use super::geom::seg_dist;
+use super::index::Index;
+use crate::pyrand::knob_rng;
+
+/// The brook's figures, every one the plan's (`consts_water.py`): the head race's length (the plan's rolled `head_lead`), the angle
+/// it leaves the brook at, the tap's straight stride, the most the course moves across in one station, its skirt outside the crop
+/// and its wander past the skirt, the station spacing, how far past the fan it runs each way, and its width.
+#[derive(Debug, Clone, Copy)]
+pub struct BrookIn {
+    pub lead: f64,
+    pub offtake_deg: f64,
+    pub tap_run: f64,
+    pub slew: f64,
+    pub skirt: f64,
+    pub wander: f64,
+    pub station: f64,
+    pub reach: f64,
+    pub w: f64,
+}
+
+/// The brook: its stations from upstream to down, and the intake on it.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Brook {
+    pub pts: Vec<Pt>,
+    pub intake: Pt,
+}
+
+/// A point `u` feet down the fall from the fan's head middle and `x` feet across it (toward the fan's right looking downhill).
+fn local(fan: &Fan, u: f64, x: f64) -> Pt {
+    (
+        fan.fork.0 + fan.down.0 * u + fan.across.0 * x,
+        fan.fork.1 + fan.down.1 * u + fan.across.1 * x,
+    )
+}
+
+/// The brook past the fan on its `side` (+1 the fan's right, -1 its left). The head race leaves the division point's intake turned
+/// `offtake_deg` off the fall away from the brook's flank, so the intake lies `lead` up that line from the fork; the brook comes
+/// down the fall to it, runs on `tap_run`, then each `station` moves across at most `slew` toward its line - the flank, plus the
+/// skirt, plus a wander rolled in [0, `wander`] from the seed's `brook_walk` stream - and runs on `reach` past the fan's foot.
+///
+/// Research:
+///     the race turns away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves; the race's turn away from the brook is ours
+///     straight at the tap - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 70 ft down the fall
+///     outside the crop - GUESS: the plan's `BROOK_SKIRT` and `BROOK_WANDER`, the record silent; the walk's step a station's slew
+#[must_use]
+pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
+    let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
+    let corner_x = side * fan.half_head;
+    let (u_i, x_i) = (-b.lead * cos, corner_x + side * b.lead * sin);
+    let intake = local(fan, u_i, x_i);
+    let mut pts = vec![local(fan, u_i - b.reach, x_i), intake];
+    let mut rng = knob_rng(seed, "brook_walk");
+    let (mut u, mut x, mut stray) = (u_i + b.tap_run, x_i, b.wander / 2.0);
+    pts.push(local(fan, u, x));
+    let end = fan.length + b.reach;
+    // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
+    let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
+    let secant = lean.hypot(1.0);
+    while u < end {
+        u = (u + b.station).min(end);
+        let flank = fan.half_at(u.clamp(0.0, fan.length));
+        // a wander of at most a slew a station, held in [0, wander]
+        let step = f64::from(rng.randbelow(21)) / 10.0 - 1.0;
+        stray = (stray + step * b.slew / 2.0).clamp(0.0, b.wander);
+        let want = side * (flank + (b.skirt + stray) * secant);
+        // the course keeps outside its line: it may move out at once, in by at most a slew
+        x = if (want - x) * side > 0.0 {
+            want
+        } else {
+            x + (want - x).clamp(-b.slew, b.slew)
+        };
+        pts.push(local(fan, u, x));
+    }
+    Brook { pts, intake }
+}
+
+/// The weir at a `weir` intake: a bar across the brook, `half` feet either side of the intake, running diagonally upstream
+/// `skew_deg` from square as it crosses away from the field, `thick` feet through (its form's). Returns the bar's four corners and
+/// its bearing on the maps' angles.
+///
+/// Research:
+///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the whole brook, 7 ft half-length, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form
+#[must_use]
+pub fn weir(
+    brook: &Brook,
+    fan: &Fan,
+    side: f64,
+    half: f64,
+    skew_deg: f64,
+    thick: f64,
+) -> ([Pt; 4], f64) {
+    let c = brook.intake;
+    let next = brook
+        .pts
+        .iter()
+        .position(|p| *p == c)
+        .map_or(c, |i| brook.pts[(i + 1).min(brook.pts.len() - 1)]);
+    let t = super::geom::unit(c, next);
+    let away = (fan.across.0 * side, fan.across.1 * side);
+    let (sin, cos) = skew_deg.to_radians().sin_cos();
+    let bar = (away.0 * cos - t.0 * sin, away.1 * cos - t.1 * sin);
+    let (a, b) = (
+        (c.0 - bar.0 * half, c.1 - bar.1 * half),
+        (c.0 + bar.0 * half, c.1 + bar.1 * half),
+    );
+    let n = (-bar.1 * thick / 2.0, bar.0 * thick / 2.0);
+    let ring = [
+        (a.0 - n.0, a.1 - n.1),
+        (b.0 - n.0, b.1 - n.1),
+        (b.0 + n.0, b.1 + n.1),
+        (a.0 + n.0, a.1 + n.1),
+    ];
+    (ring, bar.1.atan2(bar.0).to_degrees().rem_euclid(360.0))
+}
+
+/// The brook's segments filed in the water index (D5).
+pub fn file(brook: &Brook, ix: &mut Index) -> Vec<usize> {
+    brook.pts.windows(2).map(|p| ix.file(p[0], p[1])).collect()
+}
+
+/// The least distance from `p` to the brook's filed segments near it, asked of the index within `r` (infinite if none lies near).
+#[must_use]
+pub fn clearance(p: Pt, r: f64, ix: &mut Index) -> f64 {
+    let near = ix.near((p.0 - r, p.1 - r), (p.0 + r, p.1 + r));
+    near.iter()
+        .map(|&i| {
+            let (a, b) = ix.segs[i];
+            seg_dist(p, a, b)
+        })
+        .fold(f64::INFINITY, f64::min)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{brook, clearance, file, weir, BrookIn};
+    use crate::comb::fan::fan;
+    use crate::comb::geom::{dist, signed_area};
+    use crate::comb::index::Index;
+
+    const B: BrookIn = BrookIn {
+        lead: 105.0,
+        offtake_deg: 35.0,
+        tap_run: 70.0,
+        slew: 22.0,
+        skirt: 34.0,
+        wander: 10.0,
+        station: 35.0,
+        reach: 400.0,
+        w: 7.0,
+    };
+
+    #[test]
+    fn the_brook_keeps_outside_the_crop_and_bends_gently() {
+        for (side, seed) in [(1.0, 4), (-1.0, 9)] {
+            let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
+            let br = brook(&f, side, B, seed);
+            let mut ix = Index::default();
+            let ids = file(&br, &mut ix);
+            assert_eq!(ids.len(), br.pts.len() - 1);
+            for p in &f.ring {
+                assert!(
+                    clearance(*p, B.skirt * 2.0, &mut ix) >= B.skirt - 1e-6,
+                    "outside the crop by its skirt"
+                );
+            }
+            for w in br.pts.windows(2).skip(2) {
+                let across = (w[1].0 - w[0].0).abs();
+                assert!(across <= B.slew + B.skirt + B.wander, "{across}");
+            }
+            assert!(br.pts.len() > 30);
+            assert!(B.w > 0.0);
+        }
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0));
+        let br = brook(&f, 1.0, B, 4);
+        let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
+        assert!(
+            (signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6,
+            "14 ft by 1.5"
+        );
+        assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);
+        // the brook runs south; the bar runs 30 degrees off square, its far end (away from the field) upstream
+        let far = ((ring[1].0 + ring[2].0) / 2.0, (ring[1].1 + ring[2].1) / 2.0);
+        assert!(far.1 < br.intake.1, "the far end upstream");
+        assert!((0.0..360.0).contains(&deg));
+        let mut ix = Index::default();
+        assert!(clearance((0.0, 0.0), 10.0, &mut ix).is_infinite());
+    }
+}

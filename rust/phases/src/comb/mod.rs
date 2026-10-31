@@ -99,6 +99,7 @@ mod tests {
     }
 }
 
+pub mod brook;
 pub mod channels;
 pub mod fan;
 pub mod geom;
