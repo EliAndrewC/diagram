@@ -230,25 +230,43 @@ fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: 
     let laps = plots
         .iter()
         .any(|q| inside(middle, &q.poly) || poly.iter().any(|c| inside(*c, &q.poly)));
-    let edge = (0..=6).map(|k| {
-        let f = f64::from(k) / 6.0;
-        (
-            poly[0].0 + (poly[1].0 - poly[0].0) * f,
-            poly[0].1 + (poly[1].1 - poly[0].1) * f,
-        )
-    });
-    onto || laps || edge.chain([poly[2], poly[3]]).any(|p| wet(p, ix, clear))
+    onto || laps || wet(poly, ix, clear)
 }
 
-/// Whether `p` lies within `clear` feet of the water filed in `ix`, past each segment's own half-width.
-fn wet(p: Pt, ix: &mut Index, clear: f64) -> bool {
+/// Whether the plot `poly` meets the water filed in `ix`: a segment near it crossing its sides, ending inside it, or within `clear`
+/// feet past its own half-width of a side.
+fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
     let reach = clear + ix.widths.iter().copied().fold(0.0, f64::max) / 2.0;
-    ix.near((p.0 - reach, p.1 - reach), (p.0 + reach, p.1 + reach))
+    let (lo, hi) = poly.iter().fold(
+        (
+            (f64::INFINITY, f64::INFINITY),
+            (f64::NEG_INFINITY, f64::NEG_INFINITY),
+        ),
+        |(l, h), p| ((l.0.min(p.0), l.1.min(p.1)), (h.0.max(p.0), h.1.max(p.1))),
+    );
+    ix.near((lo.0 - reach, lo.1 - reach), (hi.0 + reach, hi.1 + reach))
         .into_iter()
         .any(|i| {
             let (a, b) = ix.segs[i];
-            seg_dist(p, a, b) < clear + ix.widths[i] / 2.0
+            let near = clear + ix.widths[i] / 2.0;
+            inside(a, poly)
+                || inside(b, poly)
+                || (0..poly.len())
+                    .any(|k| seg_seg_dist(a, b, poly[k], poly[(k + 1) % poly.len()]) < near)
         })
+}
+
+/// The least distance between two segments: zero where they cross.
+fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
+    let side = |p: Pt, q: Pt, r: Pt| (q.0 - p.0) * (r.1 - p.1) - (q.1 - p.1) * (r.0 - p.0);
+    let (d1, d2, d3, d4) = (side(c, d, a), side(c, d, b), side(a, b, c), side(a, b, d));
+    if d1 * d2 < 0.0 && d3 * d4 < 0.0 {
+        return 0.0;
+    }
+    seg_dist(a, c, d)
+        .min(seg_dist(b, c, d))
+        .min(seg_dist(c, a, b))
+        .min(seg_dist(d, a, b))
 }
 
 #[cfg(test)]
@@ -278,6 +296,13 @@ mod tests {
         // none where the water is
         let mut wet = Index::default();
         wet.file((-200.0, 0.0), (-200.0, 1200.0));
+        // a brook through a plot's middle, its ends outside it, refuses it
+        let mut through = Index::default();
+        through.file_w((-50.0, -100.0), (-50.0, 2000.0), 7.0);
+        let (crossed, _) = hem(&line, (-1.0, 0.0), need, &field, &mut through, 1.0, 4, "f0");
+        assert!(crossed
+            .iter()
+            .all(|p| p.poly.iter().all(|c| c.0 > -46.0) || p.poly.iter().all(|c| c.0 < -54.0)));
         let (dry, _) = hem(&line, (-1.0, 0.0), need, &field, &mut wet, 5000.0, 4, "f0");
         assert!(dry.is_empty());
         let (none, _) = hem(
