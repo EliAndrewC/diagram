@@ -72,6 +72,8 @@
       phase: water_frame
       owes (the round arbiter, ask:444-T17-rows-need-a-phase; the plan review of 2026-10-30): the two tooling rows T17 left to the first phase - `cache audit` and `the overlap census` (dev/rust-tooling.md) - each proven on the port and named in its "Proven" table before the tick
       verify: DONE. landed: water_frame ported to Rust (rust/phases/src/water_frame.rs, pyrand.rs): the plan's fall and 21 knobs rolled in Rust with knob_rng's own draws reproduced (SHA-256, MT19937, randrange), so every seed keeps its plan; cohort-landing 54 of 54, no regressed seed; the pool hamlets regenerate with main's layouts and renders (meta differs only for knobs off their form's branch, hidden by the title card); water_frame counted 56 against its budget of 56, MODE AUDIT WITHIN; impl-drift recorded on 38 claims, none owed; the gate stamp now hashes the Rust sources; the old Python rolls deleted in this landing (FR-005)
+- [ ] T20 Tooling from T19's landing: make land runs make work-budget at the engine it pushes before the push (refused twice, T17 and T19, each costing a gate); the tick reports every refusal together instead of the first of an or-chain (T19 took four landing rounds, one refusal each: part A's stamp, the plan review, part B's items 8-9, the plan gate); make decide refuses a section whose Approach is stamped before its Decisions, before dispatching the review it owes; the plan gate reads a restamped heading with an unchanged body as the same block, not a removal
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
