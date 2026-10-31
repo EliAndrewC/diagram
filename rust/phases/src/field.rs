@@ -104,6 +104,7 @@ pub mod brook;
 pub mod channels;
 pub mod dry;
 pub mod fan;
+pub mod features;
 pub mod geom;
 pub mod index;
 pub mod lattice;
