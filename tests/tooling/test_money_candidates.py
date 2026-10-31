@@ -130,3 +130,11 @@ def test_all_lists_the_passed_over_tagged_and_stem_and_context_narrow_and_explai
     assert "0001-x | 1 bu | 1840 [passed over]" in out and "[[20 mon]]" in out
     mc.main(["--stem", "0002"], str(root))
     assert "0 amount(s) owed" in capsys.readouterr().out
+
+
+def test_a_bu_that_ends_a_land_measure_is_an_area_not_a_coin(tmp_path: pathlib.Path) -> None:
+    """Feature 444 T18's landing: 0017's registers give paddy as cho-tan-se-bu ("2 cho 4 tan 15 bu"), and the scanner took each
+    last bu (歩, an area) for the coin. Right after a cho, tan or se figure a bu is the area's last unit; alone it is the coin."""
+    mc = _mod()
+    page = "<p>In 1750 the paddy was 7 cho 4 tan 2 se 22 bu and 2 cho 4 tan 15 bu; a mat cost 2 bu.</p>"
+    assert [a.text for a in mc.amounts(str(_repo(tmp_path, page)))] == ["2 bu"]
