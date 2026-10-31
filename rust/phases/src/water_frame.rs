@@ -45,7 +45,7 @@ impl SplitMix {
     }
 }
 
-/// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll` for a draw here,
+/// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll_plan` for a draw here,
 /// `write@_rust_rolls` for a field Python writes back (D9) - compiled out of a build
 /// without the `counters` feature (FR-012).
 ///
@@ -127,7 +127,7 @@ fn applies(branch: &str, form: &str) -> bool {
 /// written (3); a knob with one form left read and written (2); a knob off its branch written alone (1). Returns the fall's
 /// index (`None` where pinned), each knob's index (`None` where pinned or off its branch), and the counts.
 #[must_use]
-pub fn roll(
+pub fn roll_plan(
     seed: u64,
     falls: &[f64],
     fall_pinned: bool,
@@ -144,7 +144,7 @@ pub fn roll(
             .get(SplitMix::for_knob(seed, "down_deg").below(n) as usize)
             .copied()
     };
-    counts.add("candidate@roll", 6);
+    counts.add("candidate@roll_plan", 6);
     let mut form = String::new();
     let mut out = Vec::with_capacity(knobs.len());
     for (i, (name, n, pinned, branch)) in knobs.iter().enumerate() {
@@ -156,7 +156,7 @@ pub fn roll(
             counts.add("write@_rust_rolls", 2);
             Some(0)
         } else {
-            counts.add("candidate@roll", 3);
+            counts.add("candidate@roll_plan", 3);
             if *pinned {
                 None
             } else {
@@ -189,7 +189,7 @@ pub fn stage_water_frame(
     forms: Vec<String>,
     knobs: Vec<KnobIn>,
 ) -> (Option<f64>, Vec<Option<u32>>, HashMap<String, u64>) {
-    roll(
+    roll_plan(
         seed,
         &admitted(&windward, cardinal),
         fall_pinned,
@@ -200,7 +200,7 @@ pub fn stage_water_frame(
 
 #[cfg(test)]
 mod tests {
-    use super::{applies, roll, SplitMix};
+    use super::{applies, roll_plan, SplitMix};
 
     fn knob(name: &str, n: u32, branch: &str) -> (String, u32, bool, String) {
         (name.to_owned(), n, false, branch.to_owned())
@@ -217,7 +217,7 @@ mod tests {
             vec![0.0, 45.0, 225.0, 270.0, 315.0]
         );
         assert_eq!(super::admitted("NE", true), vec![90.0, 180.0]);
-        assert!(roll(1, &[], false, &[], &[]).0.is_none());
+        assert!(roll_plan(1, &[], false, &[], &[]).0.is_none());
     }
 
     #[test]
@@ -252,14 +252,15 @@ mod tests {
             knob("row_line", 2, "linear"),
             knob("copse", 1, "all"),
         ];
-        let (fall, got, _counts) = roll(3, &super::admitted("NW", false), false, &forms, &knobs);
+        let (fall, got, _counts) =
+            roll_plan(3, &super::admitted("NW", false), false, &forms, &knobs);
         assert!(fall.is_some_and(|f| [0.0, 45.0, 90.0, 135.0, 315.0].contains(&f)));
         assert_eq!(got[0], Some(0), "one form: taken");
         assert!(got[1].is_some(), "on its branch: rolled");
         assert_eq!(got[2], None, "off its branch: written alone");
         assert_eq!(got[3], Some(0));
         let pinned = vec![("settlement_form".to_owned(), 3, true, "all".to_owned())];
-        let (fall, got, _counts) = roll(3, &[0.0], true, &forms, &pinned);
+        let (fall, got, _counts) = roll_plan(3, &[0.0], true, &forms, &pinned);
         assert_eq!((fall, got), (None, vec![None])); // a pin is taken, never drawn
     }
 
@@ -273,7 +274,7 @@ mod tests {
             knob("row_line", 2, "linear"),
             knob("one", 1, "all"),
         ];
-        let (_f, got, counts) = roll(1, &[0.0, 90.0], false, &forms, &knobs);
+        let (_f, got, counts) = roll_plan(1, &[0.0, 90.0], false, &forms, &knobs);
         let on = if got[0] == Some(0) { (3, 1) } else { (1, 3) };
         let total: u64 = counts.values().sum();
         assert_eq!(total, 3 + 6 + 3 + on.0 + on.1 + 2); // identity, bearings, the form, its two branch knobs, a one-form knob

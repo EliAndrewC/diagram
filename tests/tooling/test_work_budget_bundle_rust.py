@@ -38,10 +38,10 @@ def test_a_rust_phase_s_source_rides_beside_its_thin_python_function(tmp_path: P
 def test_a_counter_a_rust_function_keeps_brings_its_rs_file_into_the_audit(tmp_path: Path) -> None:
     src = tmp_path / "rust" / "phases" / "src"
     src.mkdir(parents=True)
-    (src / "water_frame.rs").write_text("pub fn roll() {}\n")
+    (src / "water_frame.rs").write_text("pub fn roll_plan() {}\n")
     (tmp_path / "rust" / "phases" / "target").mkdir()
-    (tmp_path / "rust" / "phases" / "target" / "roll.rs").write_text("pub fn roll() {}\n")
+    (tmp_path / "rust" / "phases" / "target" / "roll.rs").write_text("pub fn roll_plan() {}\n")
     (tmp_path / "l7r").mkdir()
     (tmp_path / "l7r" / "plan.py").write_text("def _rust_rolls():\n    pass\n")
-    got = wbb.counted_files(tmp_path, [{"ops": {"candidate@roll": 6, "write@_rust_rolls": 13}}])
+    got = wbb.counted_files(tmp_path, [{"ops": {"candidate@roll_plan": 6, "write@_rust_rolls": 13}}])
     assert [p.relative_to(tmp_path).as_posix() for p in got] == ["l7r/plan.py", "rust/phases/src/water_frame.rs"]
