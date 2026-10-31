@@ -98,6 +98,7 @@ pub mod fan;
 pub mod features;
 pub mod geom;
 pub mod index;
+pub mod landuse;
 pub mod lattice;
 pub mod polder;
 pub mod ponds;

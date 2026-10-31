@@ -44,6 +44,9 @@ pub const ROWS: [(&str, f64, f64); 2] = [("willow", 0.75, 8.5), ("mulberry", 0.2
 ///     the crowns - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the trees spaced so their crowns read as a run of touching trees; willow 3.5-5.5 ft and mulberry 2.2-3.6 ft, a CONVENTION of the drawing
 pub const CROWN_FT: [(f64, f64); 2] = [(3.5, 5.5), (2.2, 3.6)];
 
+/// A tree's crown: its middle and its radius (feet).
+pub type Crown = (f64, f64, f64);
+
 /// The dike built: its inner and outer faces, its crest, the gaps' middles, its trees by row (x, y, radius) and its breadths.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Dike {
@@ -51,12 +54,16 @@ pub struct Dike {
     pub outer: Vec<Pt>,
     pub crest: Vec<Pt>,
     pub gaps: Vec<Pt>,
-    pub trees: Vec<(&'static str, Vec<(f64, f64, f64)>)>,
+    pub trees: Vec<(&'static str, Vec<Crown>)>,
     pub widths: (f64, f64),
 }
 
 /// The closed ring `ring` walked every `STATION_FT`: each station's point, its outward normal (the ring turning clockwise on the
 /// map's axes, outward is the left of travel) and its distance along.
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 fn stations(ring: &[Pt]) -> Vec<(Pt, Pt, f64)> {
     let n = ring.len();
     let mut out = Vec::new();
@@ -100,18 +107,22 @@ fn stations(ring: &[Pt]) -> Vec<(Pt, Pt, f64)> {
 /// Research:
 ///     a dike round the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices
 ///     the rows cut at the gaps - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, and the rows stop with it
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 #[must_use]
 pub fn dike(inner: &[Pt], sluices: &[Pt], seed: i64) -> Dike {
     // the stations' outward normal reads a clockwise ring (a positive signed area on the map's y-down axes): turn it if not
-    let mut ring = inner.to_vec();
-    if super::geom::signed_area(&ring) < 0.0 {
-        ring.reverse();
+    let mut face = inner.to_vec();
+    if super::geom::signed_area(&face) < 0.0 {
+        face.reverse();
     }
-    let st = stations(&ring);
-    let mut rng = knob_rng(seed, "dike");
+    let st = stations(&face);
+    let mut rolls = knob_rng(seed, "dike");
     let ph = (
-        f64::from(rng.randbelow(360)).to_radians(),
-        f64::from(rng.randbelow(360)).to_radians(),
+        f64::from(rolls.randbelow(360)).to_radians(),
+        f64::from(rolls.randbelow(360)).to_radians(),
     );
     let total = st.last().map_or(1.0, |s| s.2 + STATION_FT);
     let width = |along: f64| {
@@ -154,7 +165,7 @@ pub fn dike(inner: &[Pt], sluices: &[Pt], seed: i64) -> Dike {
                         reason = "a crown's size in tenths of a foot"
                     )]
                     let span = ((hi - lo) * 10.0) as u32 + 1;
-                    row.push((p.0, p.1, lo + f64::from(rng.randbelow(span)) / 10.0));
+                    row.push((p.0, p.1, lo + f64::from(rolls.randbelow(span)) / 10.0));
                 }
                 next += step;
             }
@@ -187,20 +198,14 @@ mod tests {
                 && d.widths.1 <= BAND_FT.1 + 1e-9
                 && d.widths.1 - d.widths.0 > 8.0
         );
-        assert!(
-            signed_area(&d.outer).abs() > signed_area(&inner).abs(),
-            "the outer face outside the inner"
-        );
+        assert!(signed_area(&d.outer).abs() > signed_area(&inner).abs());
         assert!(d.outer.iter().all(|p| !inside(*p, &inner)));
         let (willow, mulberry) = (&d.trees[0].1, &d.trees[1].1);
         assert!(mulberry.len() > willow.len(), "the mulberry closer set");
-        assert!(
-            willow
-                .iter()
-                .chain(mulberry)
-                .all(|t| dist((t.0, t.1), sluices[0]) >= GAP_HALF_FT - 1e-9),
-            "no tree in the gap"
-        );
+        assert!(willow
+            .iter()
+            .chain(mulberry)
+            .all(|t| dist((t.0, t.1), sluices[0]) >= GAP_HALF_FT - 1e-9));
         assert_eq!(d.crest.len(), d.outer.len());
         assert_eq!(d, dike(&inner, &sluices, 4));
         assert_ne!(d.outer, dike(&inner, &sluices, 5).outer);

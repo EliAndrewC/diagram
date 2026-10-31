@@ -348,9 +348,78 @@ fn ditches(frame: &Frame, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64
     out
 }
 
+/// How far past the canvas the outfall runs, so its end is off the map (feet).
+///
+/// Research:
+///     the outfall off the map - research/questions/0060-field-drains-akusuiro.drawing.html: then straight down the fall off the map
+pub const OUTFALL_PAST_FT: f64 = 20.0;
+
+/// The drain's outfall from the tail's sluice: on along the drain's exit, which from the tail's middle is the fall itself, so
+/// straight down it until off the `canvas` - no turn to hold to the 55 degrees.
+///
+/// Research:
+///     the outfall's course - research/questions/0060-field-drains-akusuiro.drawing.html: on along the drain's exit, curving onto the fall at most 55 degrees a turn, then straight down the fall off the map
+#[must_use]
+pub fn outfall(sluice: Pt, down_deg: f64, canvas: Pt) -> Vec<Pt> {
+    let (dx, dy) = heading(down_deg);
+    // the distance along the fall to leave the canvas's box, and a little more
+    let to_edge = |p: f64, d: f64, hi: f64| {
+        if d > 1e-9 {
+            (hi - p) / d
+        } else if d < -1e-9 {
+            -p / d
+        } else {
+            f64::INFINITY
+        }
+    };
+    let run = to_edge(sluice.0, dx, canvas.0)
+        .min(to_edge(sluice.1, dy, canvas.1))
+        .max(0.0)
+        + OUTFALL_PAST_FT;
+    vec![sluice, (sluice.0 + dx * run, sluice.1 + dy * run)]
+}
+
+/// The polder's resting plots on an `unsettled` paddy: 2 to 4 rolled from the seed's `polder_rest` stream, a plot's weight its
+/// row from the head (the far end of the water's run likeliest), none sharing a bund with another (the same column, the same or
+/// the next row). Returns the plots' indices.
+///
+/// Research:
+///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots, no two sharing a bund, likelier down the slope, GUESSes
+#[must_use]
+pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
+    if !unsettled || plots.is_empty() {
+        return Vec::new();
+    }
+    let mut rng = knob_rng(seed, "polder_rest");
+    let want = super::states::REST_PLOTS.0
+        + rng.randbelow(super::states::REST_PLOTS.1 - super::states::REST_PLOTS.0 + 1);
+    let weight: u32 = plots
+        .iter()
+        .map(|p| u32::try_from(p.row + 1).unwrap_or(u32::MAX))
+        .sum();
+    let mut chosen: Vec<usize> = Vec::new();
+    for _ in 0..want * 8 {
+        if chosen.len() >= want as usize {
+            break;
+        }
+        let mut pick = rng.randbelow(weight.max(1));
+        let mut i = 0;
+        while i + 1 < plots.len() && pick >= u32::try_from(plots[i].row + 1).unwrap_or(u32::MAX) {
+            pick -= u32::try_from(plots[i].row + 1).unwrap_or(u32::MAX);
+            i += 1;
+        }
+        let shares =
+            |j: usize| plots[i].col == plots[j].col && plots[i].row.abs_diff(plots[j].row) <= 1;
+        if !chosen.contains(&i) && !chosen.iter().any(|&j| shares(j)) {
+            chosen.push(i);
+        }
+    }
+    chosen
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{polder, shape, MODULE_FT};
+    use super::{outfall, polder, rest, shape, MODULE_FT};
     use crate::field::geom::{inside, signed_area};
 
     #[test]
@@ -392,6 +461,32 @@ mod tests {
             } else {
                 assert!(p.plots.len() > p.shape.0 * p.shape.1);
             }
+        }
+        let p = polder(paddy, false, "mosaic", 90.0, (3200.0, 3200.0), 1.0, 4);
+        assert!(rest(&p.plots, 4, false).is_empty() && rest(&[], 4, true).is_empty());
+        for seed in 0..10 {
+            let r = rest(&p.plots, seed, true);
+            assert!((1..=4).contains(&r.len()));
+            for (k, &i) in r.iter().enumerate() {
+                for &j in &r[k + 1..] {
+                    assert!(
+                        p.plots[i].col != p.plots[j].col
+                            || p.plots[i].row.abs_diff(p.plots[j].row) > 1
+                    );
+                }
+            }
+        }
+        // the outfall runs down the fall off the canvas, whichever way the fall
+        for (deg, canvas) in [
+            (90.0, (6400.0, 6400.0)),
+            (0.0, (6400.0, 6400.0)),
+            (180.0, (6400.0, 6400.0)),
+            (270.0, (6400.0, 6400.0)),
+            (45.0, (6400.0, 6400.0)),
+        ] {
+            let run = outfall((3200.0, 3300.0), deg, canvas);
+            let end = run[1];
+            assert!(end.0 < 0.0 || end.1 < 0.0 || end.0 > canvas.0 || end.1 > canvas.1);
         }
         let flat = polder(paddy, true, "chessboard", 90.0, (0.0, 0.0), 1.0, 4);
         let warped = polder(paddy, true, "mosaic", 90.0, (0.0, 0.0), 1.0, 4);

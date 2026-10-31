@@ -87,12 +87,13 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
     Ok(d)
 }
 
-/// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block, its records out for the thin Python to hand
-/// the free helpers (`perimeter_dike`, `marsh`, `apply_land_use`).
+/// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block - its block, dike, outfall, resting plots and,
+/// on a dike-pond, its conversion - the records out for the thin Python to write and draw.
 #[pyfunction]
 #[expect(
     clippy::too_many_arguments,
-    reason = "the polder's inputs, each a plan field Python gathered (D1)"
+    clippy::needless_pass_by_value,
+    reason = "the polder's inputs, each a plan field Python gathered (D1); PyO3 hands owned strings in the tuple"
 )]
 pub fn stage_polder<'py>(
     py: Python<'py>,
@@ -103,6 +104,9 @@ pub fn stage_polder<'py>(
     down_deg: f64,
     center: Pt,
     aspect: f64,
+    canvas: Pt,
+    unsettled: bool,
+    pond: (f64, String, String, String),
 ) -> PyResult<Bound<'py, PyDict>> {
     let p = super::polder::polder(
         super::paddy_sq_ft(households),
@@ -113,6 +117,9 @@ pub fn stage_polder<'py>(
         aspect,
         seed,
     );
+    let dike = super::dike::dike(&p.inner_env, &p.sluices, seed);
+    let run = super::polder::outfall(p.sluices[1], down_deg, canvas);
+    let resting = super::polder::rest(&p.plots, seed, unsettled && !dikepond);
     let mut counts = crate::counts::Counts::default();
     counts.add("candidate@polder_shape", 4);
     counts.add("write@polder_plot", 5 * p.plots.len() as u64);
@@ -121,16 +128,23 @@ pub fn stage_polder<'py>(
         2 * p.ditches.iter().map(|d| d.pts.len() as u64).sum::<u64>(),
     );
     counts.add("write@polder_pond", 6);
+    counts.add("write@dike_crest", 2 * dike.crest.len() as u64);
+    counts.add("write@dike_face", 2 * dike.outer.len() as u64);
+    counts.add(
+        "write@dike_tree",
+        2 * dike.trees.iter().map(|(_, r)| r.len() as u64).sum::<u64>(),
+    );
     let d = PyDict::new(py);
     d.set_item("outline", pts(&p.outline))?;
     d.set_item("inner_env", pts(&p.inner_env))?;
     let plots = PyList::empty(py);
-    for x in &p.plots {
+    for (i, x) in p.plots.iter().enumerate() {
         let q = PyDict::new(py);
         q.set_item("ring", pts(&x.ring))?;
         q.set_item("row", x.row)?;
         q.set_item("col", x.col)?;
         q.set_item("low", x.low)?;
+        q.set_item("rest", resting.contains(&i))?;
         plots.append(q)?;
     }
     d.set_item("plots", plots)?;
@@ -143,6 +157,40 @@ pub fn stage_polder<'py>(
     d.set_item("pond", (p.pond.0 .0, p.pond.0 .1, p.pond.1, p.pond.2))?;
     d.set_item("feeder", pts(&p.feeder))?;
     d.set_item("shape", p.shape)?;
+    d.set_item("outfall", run)?;
+    let dk = PyDict::new(py);
+    dk.set_item("inner", pts(&dike.inner))?;
+    dk.set_item("outer", pts(&dike.outer))?;
+    dk.set_item("crest", pts(&dike.crest))?;
+    dk.set_item("gaps", pts(&dike.gaps))?;
+    dk.set_item("widths", dike.widths)?;
+    dk.set_item("trees", dike.trees.clone())?;
+    d.set_item("dike", dk)?;
+    if dikepond {
+        let (share, leftover, fry, crop) = &pond;
+        let rings: Vec<Vec<Pt>> = p.plots.iter().map(|x| x.ring.clone()).collect();
+        let at = super::landuse::inset(&rings, *share);
+        let (parcels, crops) = super::landuse::convert(&rings, seed, at, leftover, fry, crop);
+        counts.add("write@dikepond", 13 * parcels.len() as u64);
+        counts.add(
+            "write@bank_crop",
+            2 * (crops.crowns.len() + crops.hedges.len()) as u64,
+        );
+        let conv = PyList::empty(py);
+        for x in &parcels {
+            conv.append((x.kind, pts(&x.ring), x.bank.clone(), x.water.clone()))?;
+        }
+        d.set_item("dikeponds", conv)?;
+        d.set_item("inset", at)?;
+        d.set_item(
+            "crops",
+            (
+                crops.crop.clone(),
+                crops.crowns.clone(),
+                crops.hedges.clone(),
+            ),
+        )?;
+    }
     d.set_item("counts", counts.0)?;
     Ok(d)
 }
