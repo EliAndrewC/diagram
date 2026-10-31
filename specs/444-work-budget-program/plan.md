@@ -228,6 +228,12 @@ The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-la
    stands near them, the seat band for the two SiteRefused), the open found row read for 3 and 903; then each named as a defect of a
    later stage, with its fix, before any route is put to the round arbiter.
 
+   **Item 7, begun (2026-10-31T03Z).** The open found row for seeds 3 and 903 (`specs/328-match-the-research/claims-followup.md`,
+   E3, DRIFTED) is a known defect of the web: footpaths held 7 ft off a garden fence (0246) leave farmhouses off the network -
+   "WebRefused at (3024, 3004) and (3265, 2589)" on Kashikawa, "re-route or re-seat so the gap holds". Seed 903's `WebRefused` is that
+   row's kind; seed 3 refuses earlier, in the seating (`SiteRefused`), so the row does not explain it alone. The five others are
+   not yet dumped.
+
 ### T19 Decisions
 
 **D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
