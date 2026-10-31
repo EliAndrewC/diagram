@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-31T14:42:02Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 394,
+  "result": "failed: test-full",
+  "commit": "72c181a5a",
+  "first_failure_s": 394.2,
+  "last_failure_s": 394.2,
+  "host": {
+    "load": [
+      2.85,
+      6.19
+    ],
+    "mem_avail_mb": [
+      8676,
+      8056
+    ],
+    "cpu_temp_c": [
+      97.0,
+      77.0
+    ],
+    "stall_s": {
+      "cpu": 4.0,
+      "io": 1.1,
+      "io_full": 0.8,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 31741,
+      "package": 17773
+    }
+  },
+  "phases": {
+    "preflight": 20.0,
+    "static": 30.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 1.0,
+    "hooks-test": 5.0,
+    "counters-inert": 15.0,
+    "pytest": 323.0,
+    "floors": 10.0,
+    "test-full": 341.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "4 engine file(s) and 8 test module(s) changed, 5 scripts/ file(s) (250 module(s) that read scripts/)",
+  "selected": 1724,
+  "collected": 1807
+}
