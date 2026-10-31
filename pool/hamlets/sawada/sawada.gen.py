@@ -42,5 +42,7 @@ from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 # THE HARVEST WEATHER IS CHANGEABLE HERE (feature 282): Sawada is the pool's exhibit of racks gathered by the houses, the
 # form the record names for a coast of changeable autumn weather (research homesteads 505); the weather is a fact of the
 # country, declared, and every other pool map takes the regional settled default.
-report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys", pins={"paddy_rest": "unsettled"}, harvest_weather="changeable"), out_base=os.path.join(HERE, "sawada"))
+# THE EXHIBIT'S PLAN PINNED (feature 444 T19): the Rust water frame rolls every plan anew (D7), and this map's spec, unpinned, rolled
+# a plan its form cannot hold; the values pinned are the ones it shipped with (its manifest at the port's base), so it keeps its form.
+report = generate(HamletSpec(name="Sawada", seed=24, households=19, down_deg=225, water_sink="offmap", intake="open", lane_web="alleys", pins={"paddy_rest": "unsettled"}, harvest_weather="changeable", settlement_form="nucleated", cluster_shape="crescent", lane_skeleton="Y", bamboo="homestead", well_siting="lane", manure_form="heap", plot_size="large_block", grain_drift=0, brook_side=1), out_base=os.path.join(HERE, "sawada"))
 print(report.line())

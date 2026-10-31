@@ -39,5 +39,7 @@ SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))  # <tree>/<tier>
 sys.path.insert(0, SKILL)
 from l7r.diagram.hamletgen import HamletSpec, generate  # noqa: E402
 
-report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both", byre_form="yard_shed"), out_base=os.path.join(HERE, "kashikawa"))
+# THE EXHIBIT'S PLAN PINNED (feature 444 T19): the Rust water frame rolls every plan anew (D7), and this map's spec, unpinned, rolled
+# a plan its form cannot hold; the values pinned are the ones it shipped with (its manifest at the port's base), so it keeps its form.
+report = generate(HamletSpec(name="Kashikawa", seed=3, households=20, down_deg=315, water_sink="offmap", brook_side=-1, bamboo="both", byre_form="yard_shed", settlement_form="linear", cluster_shape="elongated", lane_skeleton="T", lane_web="back_lane", grove_sides=3, row_line="street", row_sides="both", row_water="shared", row_shelter="sheltered", manure_form="pit", plot_size="medium", grain_drift=4, intake="weir"), out_base=os.path.join(HERE, "kashikawa"))
 print(report.line())
