@@ -76,7 +76,7 @@ def _dump(v: Any) -> str:
     return json.dumps(v if v not in ([], {}, "", None) else None, sort_keys=True, default=str)
 
 
-class Reads(dict):
+class Reads(dict[str, Any]):
     """A manifest that records which of its parts a check reads (`meta.<key>` for the meta's)."""
 
     def __init__(self, data: dict[str, Any], seen: set[str] | None = None, prefix: str = "") -> None:
