@@ -585,3 +585,18 @@ The trigger: every cohort this task rolled that refused a seed (dev/cohort-log/2
    first and its branch 3 (a fault in the rolls) followed, which found the two branch faults; the cohort-45 ruling's accept was
    acted on until spec-fidelity's review blocked the landing it named, and the route taken then (D7 reproduced) went back
    through that review (CLEAR) rather than past it.
+<!-- plan-archive: archived 2026-10-31 -->
+### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: "Please fix the tooling gaps by implementing T20.")
+
+- **Approach**: four fixes to the landing's tooling, each measured on T19's own landing (2026-10-31, `dev/review-ledger.md` and
+  the landing logs): the push refused twice for a work-budget run `make land` could have made (T17, T19); four landing rounds each
+  showed one tick refusal of several; a plan review was spent on a section the tick then refused for its Approach's stamp; and a
+  re-dated heading with an unchanged body owed a review of its "removal".
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| D1 land's budget run | its test, red without it | n/a (tooling) | none | n/a |
+| D2 every tick refusal | its test, red without it | n/a | none | n/a |
+| D3 decide's Approach check | its test, red without it | n/a | none | n/a |
+| D4 a re-dated heading | its test, red without it | n/a | none | n/a |
+

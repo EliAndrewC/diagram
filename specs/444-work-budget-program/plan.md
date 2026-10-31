@@ -180,20 +180,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 <!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 
-### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: "Please fix the tooling gaps by implementing T20.")
-
-- **Approach**: four fixes to the landing's tooling, each measured on T19's own landing (2026-10-31, `dev/review-ledger.md` and
-  the landing logs): the push refused twice for a work-budget run `make land` could have made (T17, T19); four landing rounds each
-  showed one tick refusal of several; a plan review was spent on a section the tick then refused for its Approach's stamp; and a
-  re-dated heading with an unchanged body owed a review of its "removal".
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| D1 land's budget run | its test, red without it | n/a (tooling) | none | n/a |
-| D2 every tick refusal | its test, red without it | n/a | none | n/a |
-| D3 decide's Approach check | its test, red without it | n/a | none | n/a |
-| D4 a re-dated heading | its test, red without it | n/a | none | n/a |
-
+<!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 ### T20 Approach (2026-10-31T11:08:39Z)
 
 1. **The goal, in the world.** A landing that refuses says everything it will refuse at once, and does for itself what it can:
