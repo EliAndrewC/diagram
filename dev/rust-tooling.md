@@ -67,13 +67,12 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | dead closure | private items: rustc's `dead_code`, an error under `rust_checks.py lint`'s `-D warnings`; public: `rust_checks.py dead` in `make static`, a `pub fn` nothing in Rust or Python calls refused | `test_a_private_item_nothing_calls_is_refused`, `test_a_public_function_nothing_calls_is_refused_and_one_python_calls_is_kept` |
 | the change-selected tests | the Rust half: cargo rebuilds and re-tests the changed crate (`make rust-test`, `make static`'s coverage run); the Python half: `rust_checks.py callers` in `make quick` runs every test importing the extension, which testmon cannot select for a `.rs` change | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test`, `test_a_rust_change_selects_every_python_test_that_imports_the_extension`, `test_the_dead_and_callers_commands_run_on_the_named_crate` |
 | the pytest suite | a test of a stage's own source moves with the stage into its `#[cfg(test)]` module, run by `make rust-test`; the Python tests of the parts that stay Python unchanged | `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
+| the overlap census | replaced by the work-budget counters counted inside Rust (`rust/phases` behind its `counters` feature, D9): the port's own test holds its count to the derivation's, and `make work-budget` reads the counts it hands back | `test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count` (T19's port) |
 
 ### Not yet proven (2026-10-30), and what each waits for
 
 - **cache audit** (mutate a `.rs` literal, rebuild, compare sweeps): it audits MAPS, and a crate the engine never imports changes no
   sweep - first possible on T19's `water_frame` port.
-- **the overlap census** (its replacement, the work-budget counters counted inside Rust): needs the counting interface the Rust
-  phases report their operations through, designed with T19, the first phase whose MODE AUDIT reads `.rs`.
 
 **Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30, Route A),
 narrowed by the plan review of 2026-10-30: dead closure's public half and the change-selected tests' Python half fire on the

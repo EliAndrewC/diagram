@@ -61,12 +61,12 @@ def cover(
         if "=" in line:
             k, v = line.split("=", 1)
             env[k.removeprefix("export ")] = v.strip().strip("'\"")
-    steps = [_env_run([str(_exe()), "llvm-cov", "clean", "--workspace", "--manifest-path", str(manifest)], env), _env_run([str(_exe()), "test", "--quiet", "--manifest-path", str(manifest)], env)]
+    steps = [_env_run([str(_exe()), "llvm-cov", "clean", "--workspace", "--manifest-path", str(manifest)], env), _env_run([str(_exe()), "test", "--quiet", "--all-features", "--manifest-path", str(manifest)], env)]
     if driver is not None and driver.is_file():
-        steps.append(_env_run(["maturin", "build", "--quiet", "-o", str(work / "dist"), "-m", str(manifest)], env))
+        steps.append(_env_run(["maturin", "build", "--quiet", "--all-features", "-o", str(work / "dist"), "-m", str(manifest)], env))
         wheels = sorted((work / "dist").glob("*.whl"))
         if wheels:
-            steps.append(_env_run([sys.executable, "-m", "pip", "install", "--quiet", "--target", str(work / "site"), str(wheels[-1])], env))
+            steps.append(_env_run([sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "--target", str(work / "site"), str(wheels[-1])], env))
             steps.append(_env_run([sys.executable, str(driver)], {**env, "PYTHONPATH": str(work / "site")}))
     failed = next((s for s in steps if s.returncode != 0), None)
     if failed is not None:

@@ -216,10 +216,7 @@ mod tests {
             vec![0.0, 45.0, 225.0, 270.0, 315.0]
         );
         assert_eq!(super::admitted("NE", true), vec![90.0, 180.0]);
-        assert!(
-            roll(1, &[], false, &[], &[]).0.is_none(),
-            "no admitted fall: none rolled"
-        );
+        assert!(roll(1, &[], false, &[], &[]).0.is_none());
     }
 
     #[test]
@@ -262,11 +259,7 @@ mod tests {
         assert_eq!(got[3], Some(0));
         let pinned = vec![("settlement_form".to_owned(), 3, true, "all".to_owned())];
         let (fall, got, _counts) = roll(3, &[0.0], true, &forms, &pinned);
-        assert_eq!(
-            (fall, got),
-            (None, vec![None]),
-            "a pin is taken, never drawn"
-        );
+        assert_eq!((fall, got), (None, vec![None])); // a pin is taken, never drawn
     }
 
     #[cfg(feature = "counters")]
@@ -282,10 +275,6 @@ mod tests {
         let (_f, got, counts) = roll(1, &[0.0, 90.0], false, &forms, &knobs);
         let on = if got[0] == Some(0) { (3, 1) } else { (1, 3) };
         let total: u64 = counts.values().sum();
-        assert_eq!(
-            total,
-            3 + 6 + 3 + on.0 + on.1 + 2,
-            "identity, bearings, the form, its two branch knobs, a one-form knob"
-        );
+        assert_eq!(total, 3 + 6 + 3 + on.0 + on.1 + 2); // identity, bearings, the form, its two branch knobs, a one-form knob
     }
 }

@@ -152,3 +152,20 @@ def test_the_dead_and_callers_commands_run_on_the_named_crate(capsys: pytest.Cap
     assert rc.main(["dead", "--crate", "tests/fixtures/rust/fixture"]) == 0
     assert rc.main(["callers", "--crate", "tests/fixtures/rust/fixture"]) == 0, "the driver runs against the built extension"
     assert "callers clean on 1 crate(s)" in capsys.readouterr().out
+
+
+def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count(tmp_path: pathlib.Path) -> None:
+    """Row "the overlap census", replaced by the work-budget counters counted inside Rust (feature 444 T19, D9; the round
+    arbiter's Route A on ask:444-T17-rows-need-a-phase): the water frame's own test holds its count to the derivation's, so a copy
+    of the port that rolls a knob without counting it fails `make rust-test`."""
+    port = REPO / "rust" / "phases"
+    assert rc.run("test", port / "Cargo.toml", check=False).returncode == 0
+    copy = tmp_path / "phases"
+    shutil.copytree(port, copy, ignore=shutil.ignore_patterns("target"))
+    src = copy / "src" / "water_frame.rs"
+    text = src.read_text()
+    assert 'counts.add("candidate@water_frame_knob", 3);' in text
+    src.write_text(text.replace('counts.add("candidate@water_frame_knob", 3);', "", 1))
+    toml = copy / "Cargo.toml"
+    toml.write_text(toml.read_text().replace('name = "l7r_phases"\nversion', 'name = "l7r_phases_uncounted"\nversion', 1))
+    assert rc.run("test", toml, check=False).returncode != 0, "a roll it does not count fails the port's own test"
