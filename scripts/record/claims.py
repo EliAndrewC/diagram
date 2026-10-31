@@ -677,6 +677,20 @@ TRIAGE_SKIP_MAX = 3
 SKIPS = "dev/claims-triage-skips.jsonl"
 
 
+class _Here:
+    """A module's names read live from its globals: `claims_cli`'s handlers reach the copy of this module that called them
+    (a suite may load it twice, under one name, and patch the copy it imported)."""
+
+    def __init__(self, names: dict[str, Any]) -> None:
+        self._names = names
+
+    def __getattr__(self, name: str) -> Any:  # noqa: ANN401 - a module's names are of any type
+        try:
+            return self._names[name]
+        except KeyError as e:
+            raise AttributeError(name) from e
+
+
 def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str, str]], new: Mapping[str, tuple[str, str]]) -> int:
     """Carry each row whose stored code is its claim's code under the OLD fingerprint to the NEW one (key -> (code, core) under
     each), in place: a change to how the fingerprint is read owes nothing whose code did not otherwise change (feature 417 T54:
@@ -695,7 +709,7 @@ def refingerprint(index: dict[str, dict[str, Any]], old: Mapping[str, tuple[str,
 def main(argv: Sequence[str] | None = None) -> int:
     import claims_cli as cli  # noqa: PLC0415 - the handlers import this module back
 
-    cli.cx = sys.modules[__name__]  # the handlers read THIS module - the one a test loaded and patched, not another copy
+    cli.cx = _Here(globals())  # the handlers read THIS module's names - the copy a test loaded and patched, whatever sys.modules holds
 
     args = cli._parser().parse_args(argv)
     root = Path((_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root).strip())
