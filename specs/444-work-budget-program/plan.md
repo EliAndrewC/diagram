@@ -126,9 +126,11 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 ### T16 Approach (checklist part A)
 
 1. **The goal, in the world.** The comb field rebuilt to its greenfield derivation: the brook and its intake, the fan's outline, the comb's ditches and basins cut once with every rule asked before a basin is written, no repair pass.
-2. **The constraints.** FR-003 to FR-006; rubric S1-S9; `phases/field_greenfield.derivation.md` and its budget, 23,988 at 40, exponent 0.79; the research its contract cites (0005, 0017, 0053, 0054, 0059); the manifest keys today's stage writes (FR-004).
+2. **The constraints.** FR-003 to FR-006; rubric S1-S9; `phases/field_greenfield.derivation.md` and its budget, 23,988 at 40, exponent 0.79 - re-derived
+   under the single-field cap by T18 (FR-018: `phases/field_greenfield.verdict-3.txt` SOUND, one field at 20, 40 and 80 households, no
+   figure changed, the pin kept; a higher figure would keep the old pin unless the GM's words raise it); the research its contract cites (0005, 0017, 0053, 0054, 0059); the manifest keys today's stage writes (FR-004).
 3. **Where each comes from.** G: the GM, 2026-10-29 ("yes please do step 4 and then we can stop and assess how things are going"); the design's step 4.
-4. **Do they describe the world here?** Every form the stage writes: the comb archetypes the reference spec rolls, and the polders, which get their own greenfield derivation and MODE BUDGET verdict before the rebuild, and a seed that draws one for the audit.
+4. **Do they describe the world here?** Every form the stage writes: the comb archetypes the reference spec rolls (their derivation re-derived under the cap, T18's verdict-3 SOUND), and the polders, which get their own greenfield derivation and MODE BUDGET verdict before the rebuild (`phases/polder_greenfield.derivation.md`, accept-pinned as `field.polder`, ask:444-polder-round-3), and a seed that draws one for the audit.
 5. **The order.** After `water_frame`; the last of step 4, then the assessment with the GM.
 6. **The exits.** Green: counted operations at most the budget at 40 and 80, every seed of the Rust stage gate passing where the Rust stages complete (`make rust-gate`, FR-019, amendment 5), the claims round IN-STEP, the reviews owed, MODE AUDIT WITHIN, `phases/field.md`'s eight boxes ticked, all of the old field code - comb and polder - deleted. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`, FR-006) - never set down, never an arbiter's accept; a stop to assess goes to the GM, as he asked ("then we can stop and assess how things are going").
 7. **The search smell.** none
@@ -153,8 +155,13 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
   "the cap rolled per settlement between about 45 and 60 ha", a knob), written to the meta and listed in
   `l7r/diagram/interactive/assets/choices.json`'s `not_choices` as a degree, not a form. A settlement whose paddy passes the cap
   draws ceil(paddy / cap) fields, each a comb of its own intake (0017: "a settlement with more farmland had several tracts"); not
-  one of water_frame's knobs, so water_frame's accepted pin does not move. SC-011's test rolls a settlement past the cap
-  (`beyond_the_band()`, about 100 households) and finds several fields, each at most the cap.
+  one of water_frame's knobs, so water_frame's accepted pin does not move. The cap holds for EVERY rice paddy field the stage draws,
+  the polder's too (a diked rice paddy, the GM's "maximum size of a single rice paddy field" with no exception): a polder settlement
+  past the cap draws several polders, each at most the cap. Within the polder's bounded n (10-20 households, 0019's GUESS) its paddy
+  is at most about 10.5 ha (20 households at 1.3 acres, 0017's drawing page), under the cap's 45 ha floor, so the branch fires only
+  if that range moves; it is unit-tested in the crate all the same. The dike-pond block's fish ponds are not a rice paddy and take
+  no cap. SC-011's test rolls a comb settlement past the cap (`beyond_the_band()`, about 100 households) and finds several fields,
+  each at most the cap.
 - **D3 - the stage's own rolls and the gap's homes**: the knobs the stage rolls itself (`winter_crop`, `town_nearness`,
   `grave_form`, `fan_middle`, `paddy_rest`, `plot_regularity`, `weir_form`, `dry_furrows_vary`, `water_source` and its position;
   on a dike-pond `dike_crop`, `fry_form`, `leftover`, `land_use_overlay`, `dikepond_inset`, `dikepond_split`), the field's graves and

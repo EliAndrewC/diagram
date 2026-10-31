@@ -2994,6 +2994,124 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T16": {
+   "section_sha256": "6cd040ef29be75799ae2521e57ed40add38f931f3526b7041867a80d7a72cee9",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "Occasions",
+     "summary": "settlement-review on the pool hamlets the rebuilt field moves; glyph-check only if a glyph is redrawn",
+     "class": "within",
+     "why": "The reviews a map's form change owes (design section 3 box 6; FR-019's moved pool hamlets owing their settlement-reviews)."
+    },
+    {
+     "id": "Approach-6 exits",
+     "summary": "Green: budget at 40 and 80, make rust-gate, IN-STEP, reviews, MODE AUDIT WITHIN, eight boxes, all old field code deleted; Red: rebuilt again or budget-change, never set down, never an arbiter accept; a stop to assess goes to the GM",
+     "class": "within",
+     "why": "Restates FR-004 to FR-006, FR-019 and FR-021 and the GM's 'do step 4 and then we can stop and assess'. Its omission of FR-018's re-derivation is ruled separately (FR018-rederivation)."
+    },
+    {
+     "id": "Approach-8 one landing",
+     "summary": "one landing for the task, make cohort after each increment, one MODE AUDIT pass a round",
+     "class": "within",
+     "why": "Process inside FR-005's single-landing deletion; narrows nothing asked."
+    },
+    {
+     "id": "D1",
+     "summary": "stage_field stays a thin Python function calling l7r_phases.stage_field; same manifest keys, record shapes and plan fields; strict registry; segments filed in the settlement's water index",
+     "class": "within",
+     "why": "FR-010's shape and FR-004's same keys in, same keys out."
+    },
+    {
+     "id": "D2",
+     "summary": "single-field cap rolled per settlement uniform 45-60 ha from research 0017 by knob_rng(seed, field_cap); past the cap ceil(paddy/cap) fields, each a comb of its own intake; listed as a degree not a form; SC-011 test via beyond_the_band()",
+     "class": "within",
+     "why": "FR-018 and SC-011: a cap approximating the research's largest single field, with larger settlements drawing several fields; the band and its source are the research's (0017), the GM's 'something approximating whatever that size is'. Its reach over the non-comb archetypes is ruled separately (cap-reach-polder, cap-reach-dikepond)."
+    },
+    {
+     "id": "cap-reach-polder",
+     "summary": "(unlabeled, found in D2 with D8) the cap is realized only as 'fields, each a comb of its own intake'; D8 sizes the polder as whole modules at or above the households' paddy with no cap, so a polder settlement past the cap draws one polder of any size",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked for a cap on 'a single rice paddy field for these kinds of settlements ... larger settlements just have multiple fields' and FR-018 is archetype-neutral; a polder (weitian) is a diked rice paddy, so leaving it uncapped narrows the request. No rule makes capping it impossible, nothing in the GM's words excludes it, and the plan argues no exclusion - silence is the failure this review exists to catch. Fix: D2 or D8 states what the cap does on a polder (a settlement past the cap draws several polders, each at most the cap), and SC-011's test rolls a polder settlement past the cap as well as a comb; or, if research 0017 or 0019/0022 shows a polder is not a single field in the cap's sense, D8 says so with that page's words and the exclusion goes through a MODE 1 check."
+    },
+    {
+     "id": "cap-reach-dikepond",
+     "summary": "(unlabeled) the dike-pond archetype carries no field cap",
+     "class": "within",
+     "why": "A dike-pond (fish ponds with mulberry dikes) is not a rice paddy field on the plain reading of 'a single rice paddy field', so FR-018's cap does not reach it."
+    },
+    {
+     "id": "FR018-rederivation",
+     "summary": "(unlabeled) the comb's budget is taken as the standing 23,988 at 40 / 0.79 and the exits list no MODE BUDGET verdict on a derivation re-derived under the cap; only the polders are given a new derivation and verdict before the rebuild (Approach item 4)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-018: 'The field's greenfield derivation ... is re-derived under the cap and owes a new MODE BUDGET verdict before the field phase lands; a figure above its standing pin keeps that pin.' Nothing in the section says the 23,988 pin already is the under-cap re-derivation, and the landing's exits omit the obligation, so the phase could land on a derivation never re-judged under the cap the GM asked for. Fix: state in Approach items 2/4 and the Green exits that field_greenfield.derivation.md is re-derived under the cap with a new MODE BUDGET verdict before the landing (or cite where that verdict already stands), with FR-018's rule that a higher figure keeps the standing pin unless the GM's words raise it."
+    },
+    {
+     "id": "D3",
+     "summary": "the stage's own knob rolls, graves and coarse-grain dry acres counted outside the derivations, charged to the stage, each knob rolled in Rust by knob_rng from a table passed from Python, its count a key of its own; neither pin moves",
+     "class": "within",
+     "why": "Within on the reading the text gives: 'charged to the stage' means these counts are added to the stage's count compared against its pin, not reported beside it, so the budget comparison is not narrowed; the arbiter's ruling (ask:444-T19-outside-charges) is on process, which FR-006 allows."
+    },
+    {
+     "id": "D4",
+     "summary": "knob_rng for every knob; positional jitter seeded by seed and the feature's key; today's draws not matched; moved pool hamlets owe settlement-reviews",
+     "class": "within",
+     "why": "FR-019: matching Python's draws is not required, the moved hamlets owing their reviews."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust's own 64 ft cell water index for the stage; segments returned and filed by Python in the settlement's index",
+     "class": "within",
+     "why": "An indexed-neighbor implementation of the derivations' Indexes (rubric S1); the cell size a convention, not a scope change."
+    },
+    {
+     "id": "D6",
+     "summary": "one counter key per derivation row and per D3 roll behind the counters feature; feature on/off identical manifests recorded in phases/field.fr012.md",
+     "class": "within",
+     "why": "FR-012 as written; the record is enforcement of the request."
+    },
+    {
+     "id": "D7",
+     "summary": "every Keeps rule of both derivations held by the Rust that places the thing, refused by name (FieldRefused), unit-tested",
+     "class": "within",
+     "why": "FR-004 / rubric S4, every rule asked before placing; the tests enforce what was asked."
+    },
+    {
+     "id": "D8",
+     "summary": "polder and dike-pond in Rust; polder acreage from the derivation (whole 190 ft modules at or above the paddy) in place of today's band",
+     "class": "within",
+     "why": "FR-015's greenfield derivation and FR-017's no Python rewrite; maps may move (FR-019). Its silence on the cap is ruled under cap-reach-polder."
+    },
+    {
+     "id": "D9",
+     "summary": "the 29 open claim findings in the field's 17 files set right or relabeled; each rule re-claimed in Rust doc comments; landing refused while one is open",
+     "class": "within",
+     "why": "FR-021 as written; the general refusal still covers every file the delta changes."
+    },
+    {
+     "id": "D10",
+     "summary": "the field's Python (hamletgen/water/, settlement/fields/, waterfields/) deleted in the landing, found by git grep -l and make dead-closure; shared modules and water/skeleton.py stay; the list in the landing note",
+     "class": "within",
+     "why": "FR-005. Read with the Green exit 'all of the old field code - comb and polder - deleted' and Approach item 8's one landing, 'the landing where nothing outside the field path imports it' describes the state the landing reaches (imports rewired, then deleted), not a condition under which a listed module survives; read as such a condition it would be a fallback path FR-005 forbids. The modules kept are shared infrastructure or water_frame's, not the field's implementation."
+    },
+    {
+     "id": "D11",
+     "summary": "comb first with make rust-gate each increment, then the polder, then work-budget against both pins, MODE AUDIT, claims round, settlement-reviews - one landing",
+     "class": "within",
+     "why": "Order inside FR-005, FR-019 and FR-021; narrows nothing."
+    },
+    {
+     "id": "Performance checklist",
+     "summary": "the checklist's prompts, never a gate; time recorded by perf-ab and work-budget",
+     "class": "within",
+     "why": "The design's 'make perf-ab time recorded, as a record and not a gate'; the budget, not time, gates."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
