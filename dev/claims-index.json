@@ -19952,12 +19952,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/phases_ext.py::_stale#the extension's loading": {
-  "body": "b9416d543e86c0fa",
+  "body": "8a5d94db049d4179",
   "claim": "the extension's loading - NONE: build machinery, no claim about a map",
-  "code": "7fe74c81ee1efbfd",
-  "core": "3f29255c0e7919d9",
-  "date": "2026-10-30",
-  "note": "stamp comparison for rebuilding, decides nothing about the map",
+  "code": "279410b50509884e",
+  "core": "9aa792fab05ccc6d",
+  "date": "2026-10-31",
+  "note": "build plumbing: compares the .rust-ext stamp with the crate's source id; makes no physical or rendering decision",
   "pages": {},
   "research": "",
   "rests": [],
