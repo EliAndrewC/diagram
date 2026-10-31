@@ -76,7 +76,7 @@
   "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict": {
    "sha256": "5637cccf7a92e7f672e35bf8e553b03e53089c57bbd7cff2868e07b7296f1054",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
+   "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T18 Approach (checklist part A)": {
@@ -102,6 +102,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "round-arbiter"
+  },
+  "### T18 Approach (2026-10-31T16:27Z)": {
+   "sha256": "5b1f75ef7fc2065af0ca6a7b0fd0c4e5ad0a23f0c4e6fc5a6bf1c520466019bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T18 Decisions": {
+   "sha256": "c377081693ed8716f149e1937ff211f8a7abb1ca7ca7f3c979ded3464350dd11",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2232,6 +2244,59 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict",
+    "### T18 Approach (2026-10-31T16:27Z)",
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-cap",
+     "summary": "One field at most a cap rolled per settlement between about 45 and 60 ha (top = Fei's largest polder, the record's knob label); a settlement past it draws several fields.",
+     "class": "within",
+     "why": "The GM (2026-10-29): 'cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'; FR-018: 'capped near the largest single field the research finds'. The band's top is the largest attested field and its floor is three quarters of it, a value chosen by the research pass he asked for, in the record's knob form (FR-015). It does not withhold the cap or the multiple-field rule from any settlement; it sets the cap's value, which the request left to the research."
+    },
+    {
+     "id": "D1-applicability",
+     "summary": "The two questions session C's handoff left 'for the GM' (whether Yang's 1,000-mu pond is one tract; the 1991 gazetteer's unstated mu) are ruled the record's, not put to the GM, because the band holds either reading.",
+     "class": "within",
+     "why": "The GM delegated the size question to 'a research pass'; applying a finding to a case is that pass's work, and neither reading moves the cap (a 61 ha tract is still approximately the band's 60 ha top). Nothing the GM asked to decide is taken from him."
+    },
+    {
+     "id": "D2-figures-stand",
+     "summary": "At 20/40/80 households the farmland (1.3 acres a household, 0017's knob) is about 11/21/42 ha, under the 45 ha floor, so each draws one field and no total changes; the cap binds past about 85 households. The MODE BUDGET verdict on the re-derived text is still owed, and the pin is kept unless that verdict moves a figure.",
+     "class": "within",
+     "why": "Arithmetic checked: 1.3 acres = 0.526 ha; x20/40/80 = 10.5/21.0/42.1 ha; 45/0.526 = 85.5 households. FR-018's two duties - re-derive under the cap, and a new MODE BUDGET verdict before the field phase lands - are both kept as owed, and the pin rule matches FR-018/FR-015 (a higher figure keeps the standing pin, pinned only with the GM's words)."
+    },
+    {
+     "id": "A4-settlement-kind",
+     "summary": "The cap is for the settlement kind the field draws: a hamlet's or village's comb field.",
+     "class": "within",
+     "why": "The GM asked for the maximum single paddy 'for these kinds of settlements'; FR-018 says 'for a settlement of this kind'."
+    },
+    {
+     "id": "A5-order",
+     "summary": "Before the field rebuild; after or beside the tooling proof; no engine code, no map moves.",
+     "class": "within",
+     "why": "FR-018 owes the verdict 'before the field phase lands'; a paper derivation moves no map."
+    },
+    {
+     "id": "A6-exits",
+     "summary": "Green: cap and source in the record, MODE BUDGET SOUND, a higher figure keeps the pin and needs make budget-change. Red: LOOSE/UNDERIVED twice, or a cap the research cannot settle, goes to the round arbiter with the verdicts.",
+     "class": "within",
+     "why": "The green exit restates FR-018. The red exit sends a stalled derivation to the arbiter as FR-013 provides; the arbiter may not accept a phase over budget, and FR-018 keeps any higher pin behind the GM's words, so no budget authority moves away from him."
+    },
+    {
+     "id": "A2-A8-research-method",
+     "summary": "The research pass searches the record and archive first (make research-search), uses feature 447's field-size runs as leads with each source written up and checked, through make page-session; one MODE BUDGET round a draft.",
+     "class": "within",
+     "why": "FR-018: 'from a research pass that searches the record and the archive first (constitution XII)'. Method, not scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2801,6 +2866,56 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T18": {
+   "section_sha256": "712d07e3740e71cd6126ef83e8d5f9ca3d653897fb7d5c6a0ed904f0faa12bdb",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-cap",
+     "summary": "One field at most a cap rolled per settlement between about 45 and 60 ha (top = Fei's largest polder, the record's knob label); a settlement past it draws several fields.",
+     "class": "within",
+     "why": "The GM (2026-10-29): 'cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'; FR-018: 'capped near the largest single field the research finds'. The band's top is the largest attested field and its floor is three quarters of it, a value chosen by the research pass he asked for, in the record's knob form (FR-015). It does not withhold the cap or the multiple-field rule from any settlement; it sets the cap's value, which the request left to the research."
+    },
+    {
+     "id": "D1-applicability",
+     "summary": "The two questions session C's handoff left 'for the GM' (whether Yang's 1,000-mu pond is one tract; the 1991 gazetteer's unstated mu) are ruled the record's, not put to the GM, because the band holds either reading.",
+     "class": "within",
+     "why": "The GM delegated the size question to 'a research pass'; applying a finding to a case is that pass's work, and neither reading moves the cap (a 61 ha tract is still approximately the band's 60 ha top). Nothing the GM asked to decide is taken from him."
+    },
+    {
+     "id": "D2-figures-stand",
+     "summary": "At 20/40/80 households the farmland (1.3 acres a household, 0017's knob) is about 11/21/42 ha, under the 45 ha floor, so each draws one field and no total changes; the cap binds past about 85 households. The MODE BUDGET verdict on the re-derived text is still owed, and the pin is kept unless that verdict moves a figure.",
+     "class": "within",
+     "why": "Arithmetic checked: 1.3 acres = 0.526 ha; x20/40/80 = 10.5/21.0/42.1 ha; 45/0.526 = 85.5 households. FR-018's two duties - re-derive under the cap, and a new MODE BUDGET verdict before the field phase lands - are both kept as owed, and the pin rule matches FR-018/FR-015 (a higher figure keeps the standing pin, pinned only with the GM's words)."
+    },
+    {
+     "id": "A4-settlement-kind",
+     "summary": "The cap is for the settlement kind the field draws: a hamlet's or village's comb field.",
+     "class": "within",
+     "why": "The GM asked for the maximum single paddy 'for these kinds of settlements'; FR-018 says 'for a settlement of this kind'."
+    },
+    {
+     "id": "A5-order",
+     "summary": "Before the field rebuild; after or beside the tooling proof; no engine code, no map moves.",
+     "class": "within",
+     "why": "FR-018 owes the verdict 'before the field phase lands'; a paper derivation moves no map."
+    },
+    {
+     "id": "A6-exits",
+     "summary": "Green: cap and source in the record, MODE BUDGET SOUND, a higher figure keeps the pin and needs make budget-change. Red: LOOSE/UNDERIVED twice, or a cap the research cannot settle, goes to the round arbiter with the verdicts.",
+     "class": "within",
+     "why": "The green exit restates FR-018. The red exit sends a stalled derivation to the arbiter as FR-013 provides; the arbiter may not accept a phase over budget, and FR-018 keeps any higher pin behind the GM's words, so no budget authority moves away from him."
+    },
+    {
+     "id": "A2-A8-research-method",
+     "summary": "The research pass searches the record and archive first (make research-search), uses feature 447's field-size runs as leads with each source written up and checked, through make page-session; one MODE BUDGET round a draft.",
+     "class": "within",
+     "why": "FR-018: 'from a research pass that searches the record and the archive first (constitution XII)'. Method, not scope."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
