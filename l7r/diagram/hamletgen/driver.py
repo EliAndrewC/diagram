@@ -263,6 +263,17 @@ def roll_scope(spec: HamletSpec | None = None) -> Iterator[None]:
 def build(plan: SitePlan) -> Settlement:
     """Run every stage, in order, against a fresh `Settlement` - once: a map is never rolled again with ground forbidden
     (feature 287, FR-002; the reach that re-roll bought is the web's to draw, `ways/settle/`)."""
+    s = fresh_settlement(plan)
+    try:
+        _run_stages(s, plan)
+    except WebRefused as e:
+        raise WebRefused(f"{e} (the manifest at the refusal: {keep_refused(s.M, plan.spec.name)})") from e
+    return s
+
+
+def fresh_settlement(plan: SitePlan) -> Settlement:
+    """The `Settlement` the stages are run against: the plan's canvas and seed, the overlap matrix held at record time, the
+    spec's pins on the engine's catalog - `build`'s, and the Rust stage gate's (`hamletgen/rust_prefix.py`)."""
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     # EVERY FOOTPRINT HELD TO THE OVERLAP MATRIX AT RECORD TIME (feature 287 M8): every hamlet placer asks the registry of what
     # stands before it chooses (`Settlement.admits`), so a record it forbids is an engine defect, raised by name
@@ -273,10 +284,6 @@ def build(plan: SitePlan) -> Settlement:
     # 269 E4, whose knobs (`paddy_rest`, `fan_middle`) have no field of their own on the spec.
     for knob, value in plan.spec.pins.items():
         s.pin_knob(knob, value)
-    try:
-        _run_stages(s, plan)
-    except WebRefused as e:
-        raise WebRefused(f"{e} (the manifest at the refusal: {keep_refused(s.M, plan.spec.name)})") from e
     return s
 
 

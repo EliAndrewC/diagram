@@ -217,14 +217,18 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 - **D1 - the Rust stages and a roll through them** (`hamletgen/rust_prefix.py`): a stage is Rust when `rust/phases/src/<stage>.rs`
   exists, derived; `off_the_front` names one that is not the front of `STAGES`, and the gate refuses then. `roll_through` runs the
-  Rust stages on `driver.fresh_settlement` (split out of `build`, unchanged in what it does), stopping where they end; the state
-  each stage starts from is pickled as it runs, and the failing stage's - or, when none raised, the last stage's - is returned as
-  the frozen input (measured 2026-10-31, a throwaway test: 5,838 bytes after water_frame, the field stage running on the restored
-  copy).
-- **D2 - the checks asked by what they read** (`rust_prefix.Reads`, `written`): a check's reads are recorded on the map (top-level
-  parts and `meta.<key>`); the parts the Rust stages wrote are those changed from the fresh settlement's map, an empty part
-  read as an absent one; a check counts at the gate only when it read something and everything it read was written. The checks
-  are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up by its name when asked.
+  Rust stages on `driver.fresh_settlement` (split out of `build`, unchanged in what it does), stopping where they end, and returns
+  a trace: each stage's input pickled as it started (its frozen input; measured 2026-10-31, a throwaway test: 5,838 bytes after
+  water_frame, the field stage running on the restored copy) and the parts of the map it wrote. A stage that raises is charged
+  the failure with its own input; a check that fails is charged to the stage that last wrote a part it read, with that stage's
+  input - so a later stage's fixture never holds an earlier stage's defect (the plan review's note on D1).
+- **D2 - the checks asked by what they read** (`rust_prefix.Reads`, `held`; `rust_gate.judge`): a check's reads are recorded on the
+  map (top-level parts and `meta.<key>`). A check counts at the gate when it read something and everything it read is either a part
+  the Rust stages OWN - written by a Rust stage on any seed of the run, so a stage that wrote nothing on one seed is still judged
+  on that empty output (D2b) - or a part the fresh settlement already HOLDS with content, an input it may read beside the Rust
+  output (D2a); a check that reads a part only a later stage writes is that stage's and is not asked. Ownership is derived from the
+  run's trace, never a hand table. The checks are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up
+  by its name when asked.
 - **D3 - the gate** (`tools/rust_gate.py`, `make rust-gate`): the fresh block of 48 from `cohort_gate.py fresh-seed`'s start, the
   six pinned row variants on the next fresh seeds, and the failing list's seeds; a plan that cannot be rolled fails the first Rust
   stage (water_frame rolls the plan, T19). Each run is recorded in `dev/rust-gate/<utc>.json` with the engine key it rolled
@@ -237,5 +241,6 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   its engine with no failing seed; a landing that changes `rust/**` (against `origin/main`) reads its landing cohort's regressed
   seeds as notes, a rate - refusing nothing; any other landing keeps feature 386's cohort as it stands.
 - **D6 - `make land` makes the record** (`scripts/land.py`): on an engine delta, where the record is owed, land runs `make rust-gate`
-  and commits `dev/rust-gate/`; a failing seed stops the landing.
+  and commits `dev/rust-gate/` - the record, the failing list and its fixtures - BEFORE it stops on a failing seed, so the list
+  outlives a landing that goes no further.
 

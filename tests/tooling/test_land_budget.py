@@ -49,3 +49,20 @@ def test_nothing_is_run_without_an_engine_delta_or_with_a_run_in_hand(tmp_path: 
     assert land.budget_run(tmp_path) == "" and ["make", "work-budget"] not in calls
     land, calls = _wired(monkeypatch, (1, f"REFUSED - {_land().MISSING_RUN}"), made=2)
     assert "make work-budget failed" in land.budget_run(tmp_path)
+
+
+def test_the_rust_stage_gate_record_is_made_where_owed_and_a_failing_seed_stops_the_landing(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 444 amendment 5 (D6): an engine landing owes a `make rust-gate` record on its engine; land rolls it, commits it,
+    and stops on a failing seed."""
+    for owed, made, want in ((1, 0, ""), (0, 0, ""), (0, 2, "has a failing seed")):
+        land = _land()
+        calls: list[list[str]] = []
+        monkeypatch.setattr(land, "engine_delta", lambda _root: True)
+        monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True, owed=owed, calls=calls: (calls.append(cmd), (owed, ""))[1] if "rust-owed" in cmd else (0, ""))  # noqa: ARG005
+        monkeypatch.setattr(land, "make", lambda _root, target, made=made, calls=calls: calls.append(["make", target]) or made)
+        got = land.rust_gate_run(tmp_path)
+        assert (want in got) if want else got == ""
+        assert (["make", "rust-gate"] in calls) == (owed == 0)
+    land = _land()
+    monkeypatch.setattr(land, "engine_delta", lambda _root: False)
+    assert land.rust_gate_run(tmp_path) == ""

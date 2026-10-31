@@ -719,10 +719,23 @@ def long_runs(root: Path) -> int:
             print("land: the landing cohort refused - nothing landed (above)", file=sys.stderr)
             return 1
         commit_regenerated(root, "cohort")
-    if why := budget_run(root):
+    if why := rust_gate_run(root) or budget_run(root):
         print(why, file=sys.stderr)
         return 1
     return 0
+
+
+def rust_gate_run(root: Path) -> str:
+    """THE RUST STAGE GATE'S RECORD, MADE HERE (feature 444 amendment 5, D6): the push refuses an engine landing with no
+    `make rust-gate` record on its engine with no failing seed (`cohort_gate.py rust-owed`); where it is owed, land rolls it and
+    commits `dev/rust-gate/`. A failing seed stops the landing: no Rust stage may end with a failing check (FR-019)."""
+    if not engine_delta(root) or run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "rust-owed"])[0]:
+        return ""
+    print("land: no Rust stage gate record on this engine - make rust-gate", flush=True)
+    failed = make(root, "rust-gate")
+    run(root, ["git", "add", "--", "dev/rust-gate"])
+    run(root, ["git", "commit", "-q", "-m", "the Rust stage gate's record at the landing's engine (make land)"])
+    return "land: the Rust stage gate has a failing seed - nothing landed (above); no Rust stage may end with a failing check" if failed else ""
 
 
 MISSING_RUN = "no work-budget run at the pushed engine"  # `work_budget.review`'s refusal for a run never made

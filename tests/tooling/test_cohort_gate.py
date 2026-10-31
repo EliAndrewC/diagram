@@ -173,3 +173,43 @@ def test_counter_only_asks_the_delta_against_the_merge_base(monkeypatch: pytest.
     monkeypatch.setattr(cg, "git", lambda root, *a: subprocess.CompletedProcess(a, 0, stdout="", stderr=""))
     assert cg.main(["counter-only"]) == 1, "no merge base: not counter-only"
     assert cg.main(["sideways"]) == 2 and "counter-only" in capsys.readouterr().err
+
+
+def test_the_rust_stage_gate_holds_every_engine_landing_and_a_rust_landing_reads_the_cohort_as_a_rate(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 amendment 5 (FR-019, SC-012): with a Rust stage in the tree, every engine landing needs a `make rust-gate`
+    record on its engine with no failing seed; a landing that changes `rust/` reads its cohort's regressed seeds as notes."""
+    root, _base, _head = _repo(tmp_path)
+    monkeypatch.setattr(cg, "_cohort_check", lambda _root: (["seed 7 NEWLY FAILING (lane_knots 1)"], ["rate"]))
+    monkeypatch.setattr(cg.cohort_known, "engine_key", lambda _root, _ref: "K1")
+    assert cg.rust_refusal(root) == "", "no Rust stage in the tree: nothing owed"
+    (root / "rust/phases/src").mkdir(parents=True)
+    (root / "rust/phases/src/water_frame.rs").write_text("fn f() {}\n")
+    assert cg.rust_refusal(root).startswith("no Rust stage gate record") and cg.main(["rust-owed"]) in (0, 1)
+    log = root / "dev/rust-gate"
+    log.mkdir(parents=True)
+    (log / "failing.json").write_text("[]\n")
+    (log / "20261031T000000Z.json").write_text(json.dumps({"engine": "K0", "failing": 0}))
+    (log / "20261031T000001Z.json").write_text("not json")
+    assert cg.rust_refusal(root).startswith("no Rust stage gate record"), "a record on another engine counts for nothing"
+    (log / "20261031T000002Z.json").write_text(json.dumps({"engine": "K1", "failing": 2}))
+    assert "2 failing seed(s)" in cg.rust_refusal(root)
+    (log / "20261031T000003Z.json").write_text(json.dumps({"engine": "K1", "failing": 0}))
+    assert cg.rust_refusal(root) == ""
+    monkeypatch.setattr(cg, "rust_landing", lambda _root: False)
+    assert cg.check(root) == (["seed 7 NEWLY FAILING (lane_knots 1)"], ["rate"]), "no Rust stage changed: feature 386's cohort as it stands"
+    monkeypatch.setattr(cg, "rust_landing", lambda _root: True)
+    refusals, notes = cg.check(root)
+    assert refusals == [] and "(a Rust-stage landing, a rate - FR-019) seed 7 NEWLY FAILING (lane_knots 1)" in notes
+    (log / "20261031T000004Z.json").write_text(json.dumps({"engine": "K1", "failing": 1}))
+    assert cg.check(root)[0][0].startswith("the Rust stage gate has 1 failing"), "the Rust gate's own refusal stands"
+
+
+def test_a_landing_that_touches_rust_is_a_rust_landing(tmp_path: pathlib.Path) -> None:
+    root, _base, _head = _repo(tmp_path)
+    _git(root, "update-ref", "refs/remotes/origin/main", "main")
+    assert not cg.rust_landing(root)
+    (root / "rust").mkdir()
+    (root / "rust/x.rs").write_text("fn f() {}\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "rust")
+    assert cg.rust_landing(root)

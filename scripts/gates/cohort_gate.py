@@ -4,6 +4,7 @@
     python3 scripts/gates/cohort_gate.py check          would the gated push take this engine? exit 0 yes, 1 no
     python3 scripts/gates/cohort_gate.py needs-baseline exit 0 when main's engine has no 48-seed record to be the baseline
     python3 scripts/gates/cohort_gate.py counter-only   exit 0 when the delta only adds counter blocks (feature 446)
+    python3 scripts/gates/cohort_gate.py rust-owed      exit 0 when the Rust stage gate's record on this engine is owed (444 FR-019)
 
 WHY. The cohort is the hamlet generator's strongest test bed and nothing asked for one: sessions rolled it by hand, nearly always
 at the ten-seed default. About 30 ten-seed cohorts passed on 2026-10-12/13 and the next 48-seed run failed on seeds 17, 21, 40
@@ -108,8 +109,56 @@ def standing(root: pathlib.Path, landing: dict[str, Any], recs: list[dict[str, A
 REFUSING = (" NEWLY FAILING", " WORSENED", " NO BASELINE")
 
 
+RUST_LOG = pathlib.Path("dev/rust-gate")
+RUST_COMMAND = "make rust-gate"
+
+
+def rust_refusal(root: pathlib.Path) -> str:
+    """Why the push refuses this engine under the Rust stage gate (feature 444 amendment 5, FR-019), or '': it needs a `make
+    rust-gate` record rolled on exactly this engine, with no failing seed."""
+    if not any((root / "rust" / "phases" / "src").glob("*.rs")):
+        return ""  # no Rust stage: nothing for the gate to judge
+    key = cohort_known.engine_key(root, None)
+    recs = []
+    for p in sorted((root / RUST_LOG).glob("*.json")) if (root / RUST_LOG).is_dir() else []:
+        if p.name == "failing.json":
+            continue
+        try:
+            rec = json.loads(p.read_text(encoding="utf-8"))
+        except ValueError:
+            continue
+        if str(rec.get("engine")) == key:
+            recs.append(rec)
+    if not recs:
+        return f"no Rust stage gate record on the engine being landed - run: {RUST_COMMAND}"
+    failing = int(recs[-1].get("failing") or 0)
+    if failing:
+        return f"the Rust stage gate has {failing} failing seed(s) on this engine - no Rust stage may end with a failing check (FR-019): fix the Rust stage, then {RUST_COMMAND}"
+    return ""
+
+
+def rust_landing(root: pathlib.Path) -> bool:
+    """Does the landing change a Rust stage - anything under `rust/` against `origin/main`, committed or not?"""
+    base = git(root, "merge-base", "HEAD", "origin/main").stdout.strip() or "origin/main"
+    changed = git(root, "diff", "--name-only", base, "--", "rust").stdout.split()
+    return bool(changed)
+
+
 def check(root: pathlib.Path) -> tuple[list[str], list[str]]:
-    """(refusals, notes): what the gated push refuses and what it prints."""
+    """(refusals, notes): what the gated push refuses and what it prints. A landing that changes a Rust stage is judged by the
+    Rust stage gate alone (FR-019): its landing cohort's regressed seeds are notes, a rate - a Python stage that fails on the
+    Rust output is that stage's defect, never a reason to change the Rust stage."""
+    refusals, notes = _cohort_check(root)
+    if why := rust_refusal(root):
+        refusals.append(why)
+    if rust_landing(root):
+        notes += [f"(a Rust-stage landing, a rate - FR-019) {r}" for r in refusals if not r.startswith(("no Rust stage gate", "the Rust stage gate"))]
+        refusals = [r for r in refusals if r.startswith(("no Rust stage gate", "the Rust stage gate"))]
+    return refusals, notes
+
+
+def _cohort_check(root: pathlib.Path) -> tuple[list[str], list[str]]:
+    """Feature 386's landing cohort: (refusals, notes)."""
     recs = records(root)
     landing = pick(root, recs)
     if landing is None:
@@ -147,8 +196,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if base and cohort_known.counter_only(root, base, "HEAD") else 1
     if what == "needs-baseline":
         return 0 if needs_baseline(root) else 1
+    if what == "rust-owed":  # `make land` asks it: exit 0 when the Rust stage gate's record on this engine is owed (feature 444 D6)
+        return 0 if rust_refusal(root) else 1
     if what != "check":
-        print(f"cohort_gate: unknown command {what!r} (fresh-seed | check | needs-baseline | counter-only)", file=sys.stderr)
+        print(f"cohort_gate: unknown command {what!r} (fresh-seed | check | needs-baseline | counter-only | rust-owed)", file=sys.stderr)
         return 2
     refusals, notes = check(root)
     for line in notes:

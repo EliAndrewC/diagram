@@ -72,6 +72,57 @@ PINNED_ROWS: tuple[dict[str, str], ...] = (
 PINNED_FIRST_SEED = 901
 
 
+# THE CHECKS OF A FINISHED MAP, ONE LIST (feature 444 amendment 5, FR-019): the cohort asks them of every finished roll, and the
+# Rust stage gate (`tools/rust_gate.py`) asks them where the Rust stages complete - each check only where every part of the map
+# it reads was written by a Rust stage - so the two read one list and cannot drift apart. Each is looked up by its name when
+# asked, so a test that replaces a check by name replaces it here too.
+#   the matrix over every cohort roll (feature 291): `features_do_not_overlap` was a seed test over the pool's rolls only, so a
+#     cohort seed whose grove lay on a lane or a crown on a byre read as a pass here
+#   the knot rule the pool holds (feature 328 wave 93): only the pool's seed test asked it, so lane ends knotted on three pool
+#     maps read 54/54 here
+#   the grove's own rules (feature 291, `grove_rules`), the row village's and the grove farm's (amendment 3, `row_rules.py`),
+#     the track's end (feature 417 D27, 0081) and the shade (the GM 2026-10-02, features 310 and 315)
+POST_CHECKS: tuple[tuple[str, Any], ...] = (
+    ("farmstead_across_brook", lambda M: parts_across_brook(M)),
+    ("features_do_not_overlap", lambda M: matrix_violations(M)),
+    ("lane_knots", lambda M: lane_knots(M.get("lanes") or [], M)),
+    ("grove_sides_missing", lambda M: grove_sides_missing(M)),
+    ("groves_off_windward", lambda M: groves_off_windward(M)),
+    ("gardens_east_shaded", lambda M: gardens_east_shaded(M)),
+    ("groves_crossed_by_lanes", lambda M: groves_crossed_by_lanes(M)),
+    ("track_ends_off_the_web", lambda M: track_ends_off_the_web(M)),
+    ("fixtures_on_groves", lambda M: fixtures_on_groves(M)),
+    ("row_rules", lambda M: row_rules(M)),
+    ("water_rules", lambda M: water_rules(M)),
+    ("bamboo_mismatch", lambda M: bamboo_mismatch(M)),
+    ("trees_shading_plots", lambda M: trees_shading_plots(M, CANOPY_SHADE_FT)),
+    ("bamboo_shading_plots", lambda M: bamboo_shading_plots(M, BAMBOO_SHADE_FT)),
+)
+
+
+def fail_line(name: str, found: Any) -> str:
+    """The gate's FAIL line for a check that found something - its count, and its first findings where it lists them."""
+    if name == "farmstead_across_brook":
+        return f"FAIL {name} -> {found} farmstead part(s) stand across the brook from their house"
+    if name == "features_do_not_overlap":
+        return f"FAIL {name} -> {len(found)} forbidden overlap(s), e.g. {found[:3]}"
+    if name == "lane_knots":
+        return f"FAIL {name} -> {len(found)} knot(s), e.g. {found[:2]}"
+    return f"FAIL {name} -> {len(found)}, e.g. {found[:2]}"
+
+
+def manifest_failures(manifest: dict, checks: Sequence[tuple[str, Any]] = POST_CHECKS) -> list[tuple[str, Any, str]]:
+    """(name, what it found, its FAIL line) for each check of `checks` that finds something on `manifest`; none on an empty map."""
+    if not manifest:
+        return []
+    out = []
+    for name, check in checks:
+        found = check(manifest)
+        if found:
+            out.append((name, found, fail_line(name, found)))
+    return out
+
+
 def refused_verdict(hspec: Any, refused: BaseException) -> tuple[str, list[str], list[str]]:
     """The verdict of a roll that raised (`roll_one`): its header - the form its plan rolled - and the refusal by name."""
     form = hg.plan_site(hspec).settlement_form
@@ -137,45 +188,10 @@ def roll_how(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[t
     if _placed is not None and int(_placed) < households:
         report.fail_lines.append(f"FAIL households_seated -> {int(_placed)} of {households} declared households seated")
         report.failures.append("households_seated")
-    _across = parts_across_brook(getattr(report, "manifest", None) or {})
-    if _across:
-        report.fail_lines.append(f"FAIL farmstead_across_brook -> {_across} farmstead part(s) stand across the brook from their house")
-        report.failures.append("farmstead_across_brook")
-    # THE MATRIX OVER EVERY COHORT ROLL (feature 291). `features_do_not_overlap` was a seed test over the POOL's rolls
-    # only (tests/gate/test_no_feature_overlaps.py), so a cohort seed whose grove lay on a lane or a crown on a byre read
-    # as a pass here - the 24/24 feature 291 first measured with the dispersed and linear forms back in the roll, while
-    # feature 126 had measured exactly those overlaps on the same forms.
-    _mx = matrix_violations(getattr(report, "manifest", None) or {}) if getattr(report, "manifest", None) else []
-    if _mx:
-        report.fail_lines.append(f"FAIL features_do_not_overlap -> {len(_mx)} forbidden overlap(s), e.g. {_mx[:3]}")
-        report.failures.append("features_do_not_overlap")
-    # ...AND THE GROVE'S OWN RULES (feature 291, `grove_rules`): every rolled side planted at every farm, the deep stand on
-    # the windward faces, no garden's morning sun cut off - the three feature 126 measured that the matrix cannot see - no
-    # lane across a band, and no fixture standing inside one (the matrix abstains on VEGETATION).
     _M = getattr(report, "manifest", None) or {}
-    # ...AND THE KNOT RULE THE POOL HOLDS (feature 328 wave 93, `ways.knots.lane_knots`): only the pool's seed test asked it, so
-    # a change that left lane ends knotted on three pool maps read 54/54 here
-    _knots = lane_knots(_M.get("lanes") or [], _M)
-    if _knots:
-        report.fail_lines.append(f"FAIL lane_knots -> {len(_knots)} knot(s), e.g. {_knots[:2]}")
-        report.failures.append("lane_knots")
-    # ...AND THE ROW VILLAGE'S AND THE GROVE FARM'S (feature 291 amendment 3, `homesteads/row_rules.py`).
-    for name, found in (
-        ("grove_sides_missing", grove_sides_missing(_M)),
-        ("groves_off_windward", groves_off_windward(_M)),
-        ("gardens_east_shaded", gardens_east_shaded(_M)),
-        ("groves_crossed_by_lanes", groves_crossed_by_lanes(_M)),
-        ("track_ends_off_the_web", track_ends_off_the_web(_M)),  # feature 417 D27: 0081, never stops in open country
-        ("fixtures_on_groves", fixtures_on_groves(_M)),
-        ("row_rules", row_rules(_M)),
-        ("water_rules", water_rules(_M)),
-        ("bamboo_mismatch", bamboo_mismatch(_M)),
-        ("trees_shading_plots", trees_shading_plots(_M, CANOPY_SHADE_FT)),  # GM 2026-10-02, feature 310
-        ("bamboo_shading_plots", bamboo_shading_plots(_M, BAMBOO_SHADE_FT)),  # GM 2026-10-02, feature 315
-    ):
-        if found:
-            report.fail_lines.append(f"FAIL {name} -> {len(found)}, e.g. {found[:2]}")
-            report.failures.append(name)
+    for name, _found, line in manifest_failures(_M):
+        report.fail_lines.append(line)
+        report.failures.append(name)
     plan = report.plan
     header = f"--- Audit-{seed:02d}  seed={seed} households={households} form={getattr(plan, 'settlement_form', '?')} sides={getattr(plan, 'grove_sides', '?')} fall={int(plan.down_deg)} sink={plan.water_sink} shape={plan.cluster_shape} lanes={plan.lane_skeleton}"
     if getattr(plan, "settlement_form", None) == "linear":

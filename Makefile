@@ -240,6 +240,9 @@ cohort-landing: ## [maps] the landing cohort a gated push requires: main's basel
 	-@$(MAKE) --no-print-directory cohort N=48 FRESH=0
 	@python3 scripts/gates/cohort_gate.py check
 
+rust-gate:      ## [maps] the Rust stage gate (feature 444 FR-019, FR-020): every seed rolled through the Rust stages alone and judged where they complete - a fresh block, the pinned row variants on fresh seeds, the failing list and its frozen inputs; exit 1 on a failing seed
+	$(RUN).tools.rust_gate --start $$(python3 scripts/gates/cohort_gate.py fresh-seed)
+
 hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 hamlet:         ## [maps] generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
 ##  ARGS=<cli args>  passed to the hamletgen CLI - e.g. `"--name Foo --seed 4 --households 15"`

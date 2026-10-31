@@ -2932,6 +2932,64 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T21": {
+   "section_sha256": "f0845c7848022767df59f8892b3f53c250dc14fd8960d5cf20fe915e9f617dc6",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Rust stages derived from rust/phases/src/<stage>.rs; off_the_front refused by the gate; roll_through runs the Rust stages on driver.fresh_settlement and freezes the failing stage's input, or the last Rust stage's input when no stage raised (a check failure)",
+     "class": "within",
+     "why": "FR-019 settles the derivation and the front rule; FR-020 settles freezing the failing stage's input. Which stage a CHECK failure belongs to is left open by the spec, and the last stage's input is exact today (water_frame is the only Rust stage). Note: with several Rust stages this is stricter, not narrower - a defect in an earlier stage frozen into a later stage's input leaves a fixture that cannot pass after the fix, so the entry could never leave the list."
+    },
+    {
+     "id": "D2a",
+     "summary": "a check counts at the gate only when everything it read was 'written', written meaning changed from the fresh settlement's map",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's rule is 'no Rust stage ever ends with any failing checks at the point where that stage has completed ... we don't care at all about the Python stages which come after'. The one class it excludes is checks that depend on a later stage, and FR-019's own clause says so ('a check that reads what only a later stage writes is that stage's'). D2 drops a larger class: every check that reads anything the Rust stages did not change. That includes a fresh-settlement input (whatever fresh_settlement puts on the map, and the meta.<key> reads D2 itself records) read together with Rust output. Such a check can be judged in full when the Rust stages complete. Separating the two classes is not impossible: the fresh map is already in hand, so 'present on the fresh map' can be told from 'absent after the Rust stages'. The GM's words do not imply the exclusion, it does not serve the rule's purpose, and the block gives no reason and no measurement that no finished-map check reads an unchanged fresh part. Fix: count a check when nothing it read is absent after the Rust stages (each read is either Rust-written or held by the fresh settlement), or record the measured census showing which of the 14 checks read unchanged fresh parts, with that set empty."
+    },
+    {
+     "id": "D2b",
+     "summary": "an empty part is read as an absent one when deciding what the Rust stages wrote",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This turns off any check on a Rust stage's OWN output when that output is empty. An empty output is the most basic way a stage can fail, so the gate would pass a Rust stage that wrote nothing where it owed something, which goes against 'no Rust stage ever ends with any failing checks'. If the motive is empty placeholders that the Rust stages create for later Python stages, the block does not say so and does not tell that case apart from the stage's own empty output. Fix: count an empty part as written when a Rust stage owns it, and treat it as absent only when the part is a later stage's, with the distinction derived rather than hand-listed; or state and measure why the case cannot arise."
+    },
+    {
+     "id": "D2c",
+     "summary": "the checks are one list, cohort_audit.POST_CHECKS, read by both roll_how and the gate, each looked up by name; reads recorded on the map",
+     "class": "within",
+     "why": "FR-019: the finished-map checks, with the check-to-stage assignment derived from what each check reads and never a hand table. One shared list keeps the cohort and the gate asking the same checks."
+    },
+    {
+     "id": "D3",
+     "summary": "the gate: a fresh block of 48 from cohort_gate.py fresh-seed's start, the six pinned row variants on the next fresh seeds, and the failing list; a plan that cannot be rolled fails the first Rust stage; each run recorded with its engine key; exit 1 on any failure",
+     "class": "within",
+     "why": "FR-020 word for word: a fresh block of 48 from a start that rotates with the engine, the six pins each on a fresh seed, the failing list, and no fixed block. Charging a plan failure to water_frame follows from water_frame rolling the plan."
+    },
+    {
+     "id": "D4",
+     "summary": "failing list with stage, first FAIL line and frozen input; every run rolls the seed and replays the fixture into its stage and the Rust stages after; an entry leaves only when both pass; a fixture that no longer loads is a failure",
+     "class": "within",
+     "why": "FR-020 and the GM's 'automatically add it ... always checked until the first time they pass', with the both-pass refinement he approved. Replaying through the Rust stages after the frozen one is needed so the checks are judged where the Rust stages end. Counting an unloadable fixture as a failure is stricter, not narrower."
+    },
+    {
+     "id": "D5",
+     "summary": "every engine landing refused without a rust-gate record at its engine with no failing seed; a rust/** landing reads its whole-pipeline cohort's regressed seeds as notes, refusing nothing; any other landing keeps feature 386's cohort",
+     "class": "within",
+     "why": "FR-019's landing clauses as written: 'Every engine landing requires the gate', 'judged by it alone ... refuses nothing', 'keeps feature 386's landing cohort as it stands'."
+    },
+    {
+     "id": "D6",
+     "summary": "make land runs make rust-gate on an engine delta and commits dev/rust-gate/; a failing seed stops the landing",
+     "class": "within",
+     "why": "This only enforces FR-019's 'every engine landing requires the gate'. Note: the block does not say whether a new failing.json entry and its fixture are committed before the landing stops. If they live only in a working tree that the abandoned landing leaves behind, the GM's 'always checked' depends on that clone surviving."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
