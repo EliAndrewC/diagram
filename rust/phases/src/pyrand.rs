@@ -227,6 +227,35 @@ impl PyRandom {
             }
         }
     }
+
+    /// `random()`: `CPython`'s 53-bit float in [0, 1), two draws shifted 5 and 6.
+    pub fn random(&mut self) -> f64 {
+        let a = f64::from(self.genrand_u32() >> 5);
+        let b = f64::from(self.genrand_u32() >> 6);
+        (a * 67_108_864.0 + b) / 9_007_199_254_740_992.0
+    }
+}
+
+/// A knob's roll as `Knob.roll` draws it from its typing-filtered pool: `randrange(len)` when `weights` is empty, else the first
+/// form whose running weight passes `random()` times the pool's total (the last on float dust). Returns the form's index.
+///
+/// Research:
+///     knob rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, never chosen
+#[must_use]
+pub fn roll(seed: i64, knob: &str, n: u32, weights: &[f64]) -> u32 {
+    let mut rng = knob_rng(seed, knob);
+    if weights.is_empty() {
+        return rng.randbelow(n);
+    }
+    let mut u = rng.random() * weights.iter().sum::<f64>();
+    for (i, w) in weights.iter().enumerate() {
+        u -= w;
+        if u < 0.0 {
+            #[expect(clippy::cast_possible_truncation, reason = "a knob's handful of forms")]
+            return i as u32;
+        }
+    }
+    n - 1
 }
 
 /// `knob_rng(seed, knob)`: the stream of `knob` under the map's `seed`.
@@ -242,7 +271,7 @@ pub fn knob_rng(seed: i64, knob: &str) -> PyRandom {
 mod tests {
     use std::fmt::Write;
 
-    use super::{knob_rng, sha256, PyRandom};
+    use super::{knob_rng, roll, sha256, PyRandom};
 
     #[test]
     fn sha256_is_fips_180_4_s() {
@@ -264,5 +293,14 @@ mod tests {
         assert_eq!(got, vec![1, 0, 4, 3, 3, 2, 1, 8, 1, 9]);
         assert!(knob_rng(1, "x").randbelow(7) < 7);
         assert_eq!(PyRandom::new(1 << 40).randbelow(1), 0);
+        // random.Random(42).random() in CPython 3.12
+        assert_eq!(
+            PyRandom::new(42).random().to_bits(),
+            0.639_426_798_457_883_7_f64.to_bits()
+        );
+        assert!(roll(3, "paddy_rest", 2, &[0.8, 0.2]) < 2);
+        assert_eq!(roll(3, "x", 2, &[1.0, 0.0]), 0);
+        assert_eq!(roll(3, "x", 2, &[0.0, 0.0]), 1, "float dust takes the last");
+        assert!(roll(3, "x", 5, &[]) < 5);
     }
 }
