@@ -42,19 +42,19 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (2026-10-31 night) T16's port is BUILT and the old field DELETED: the comb and the polder place in Rust
-(`field.rs`, `field/`; doors `stage_field`, `stage_polder`, `roll_knob`, `settle_runs`, `rounded_pond`), the thin
-`hamletgen/field_stage.py` (its `comb_net` shared with the tests' `lay_comb`) and `settlement/fields/ink.py` write the records and
-the ink; the five DRAWING functions moved to `settlement/fields/drawing.py` (ask:444-T16-move-drawing), the brook's two check helpers
-to `brook_rules.py` (ask:444-T16-brook-predicates); `hamletgen/water/` keeps `brook.py`, `brook_course.py`, `brook_rules.py` (the
-sink's), `skeleton.py` (water_frame's) and `waterward.py` (the waterward stage, renamed from `polder.py`); `waterfields/` keeps what
-`make dead-closure` (BASE the clone's merge-base) found live. `make quick` green, `make rust-gate` green on 54 seeds, FR-012
-measured. NEXT, in order: (a) `make cover-changed` - the Python lines the floor leaves unrun (`field_stage.py`, `ink.py`,
-`grain.py` and the rest), unit tests or COVER_OK for roll-only lines; (b) MODE AUDIT of the counters against both derivations,
-`make work-budget`; (c) the claims round to zero open (FR-021: `make claims-owed`, impl-drift on the new code's claims); (d) the
-owed: the seed-37 level run, the sink's scaling-leg refusal; (e) glyph-check on the field's redrawn marks (`ink.py`: the plots, the
-dry hem, the ditches, the pocket pond, the grave, the weir), settlement-reviews of the moved pool hamlets (`make maps-moved`);
-(f) one `make land F=444 T=T16`, its note listing what moved and what was deleted. T16 stays open.
+**Resume here:** (2026-10-31, late) the plan's polder seam re-decided and CLEAR: every polder placement in Rust. BUILT:
+`field/dike.rs` (band 14-40 ft, outer face, crest, gaps, willow and mulberry rows). NEXT, in order: (1) in `polder.rs` the
+outfall's course (from the tail's sluice down the fall off the canvas, 0060) and the resting pick (0013, unsettled 2-4 plots, no
+two sharing a bund, likelier down the slope); (2) `field/landuse.rs`, the dike-pond's conversion (0018-0026: every parcel a pond
+or one in ten rice by the `leftover` knob, fry ponds by `fry_form`, each pond's bank and water rounded from its parcel at the
+split's inset, the bank's crop - mulberry rows one a 5.5 ft of bank with bushes 4.4 ft apart, fruit a line 18 ft apart, tea two
+3 ft hedges broken every 7.5 ft); (3) `stage_polder`'s door returns them; (4) `field_stage._polder` writes `dikes`,
+`planted_trees`, `dikeponds`, `land_use`, the outfall channel, the meta (`dike_crop`, `dikepond_inset`, `dikepond_split`,
+`fry_form`, `land_use_overlay`, `leftover`), and draws them in `ink.py` (the band `perimeter dike` in the shared dike's earth
+colors, its crowns; the ponds, banks and crops) - calling NONE of `perimeter_dike`, `resting_plots`, `outfall_run`,
+`apply_land_use`; `marsh` only to fill the wild pond's fringe ring; (5) Kuwabata rolls, `make rust-gate`, `make quick`; then the
+claims round (255 owed + 4 triaged), MODE AUDIT (confirm no helper placement called), glyph-check and settlement-reviews, `make
+land`. The old resume list's other items stand.
 
 THE POLDER'S DESIGN, next (2026-10-31): `rust/phases/src/field/polder.rs`, entered from `build.rs` on the two polder archetypes;
 the thin stage then calls the free helpers as the old stage did. Rust places: (1) the block - the households' paddy in whole

@@ -128,26 +128,26 @@
    "declared": "spec-fidelity"
   },
   "### T16 Approach (2026-10-31T22:16Z)": {
-   "sha256": "8f8a802d4d31c5edc7e7d13d32b273b629764e26788ead30f33221a75eacd60f",
-   "verdict": "BLOCKED",
+   "sha256": "5adede3562d163334183bed4d859187c0f4f3fa840efbf9a2d027f1586d51745",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T16 part B (2026-10-31T20:43Z)": {
    "sha256": "485113f27babe8390a9a22a055b326d0927f14d18726cd1ec97243c74d2d13ac",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T22 (<why: the finding or measurement that files it>)": {
    "sha256": "787ce4d6c9eb1a544db3bb0f147bf28bb758980c220519e1800ed6eede46521b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T22 Approach (checklist part A)": {
    "sha256": "5b01b1aef9d7d57e0d4ceb7d9220e17db2a5ccf212f4535470351f8528ab0502",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   }
@@ -2735,6 +2735,84 @@
      "summary": "Both blocks are unfilled templates and decide nothing.",
      "class": "within",
      "why": "No decision to judge; when T22 is filled its blocks' digests change and owe their own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T16 Approach (2026-10-31T22:16Z)",
+    "### T16 part B (2026-10-31T20:43Z)",
+    "### T22 (<why: the finding or measurement that files it>)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-A1 fork",
+     "summary": "Canal division at the brook-side head corner (head race of head_lead); canal A along the upper edge and far flank, canal B down the brook's flank.",
+     "class": "within",
+     "why": "A design choice inside the field's rebuild, sourced to research 0068; narrows nothing the request or spec asks."
+    },
+    {
+     "id": "T16-A2 organic comb",
+     "summary": "Waved flanks, bowed rows, dry hem on the canal offsets, meandering brook held to brook_violations; seed 37 at 15 households owed.",
+     "class": "within",
+     "why": "Form choices inside the rebuild, GUESS figures sent to settlement-review as the occasions require. Seed 37 is recorded as OWED, not excused: item 6's green exit still requires make rust-gate with no failing seed (FR-019), so nothing is carved out."
+    },
+    {
+     "id": "T16-A3 polder placement to Rust",
+     "summary": "Every placement the polder makes - block, lattice, parcels, ring canal, ditches, sluices, wild pond, dike (band, crest, gaps, willow and mulberry rows), outfall course, resting-plot pick, dike-pond conversion - goes to rust/phases/src/field/; Python draws the records in settlement/fields/ink.py.",
+     "class": "within",
+     "why": "This is D12's last sentence ('Every PLACEMENT function goes to Rust') and its ink rule (Python draws from the Rust records, new in ink.py) applied to the polder. It answers the earlier BLOCK (the thin stage handing the Rust's output to the old Python placement helpers), which was a narrowing of D12, FR-005 and FR-017; the new text removes that narrowing."
+    },
+    {
+     "id": "T16-A3 marsh stays Python",
+     "summary": "marsh stays Python because it fills, with its reed tile, exactly the polygon the Rust hands it (pond_fringe_ring round the Rust's wild pond), as rest_basin and comb_base_fill paint a ring they are given.",
+     "class": "within",
+     "why": "Read as a carve-out and checked as one: D12 itself keeps drawing in Python and moves placement to Rust. A function that decides no position and only paints a polygon it is given is drawing under D12, of the same kind as comb_base_fill, which D12 keeps by name. The polygon (the fringe ring) and the wild pond are the Rust's. Holds only while marsh places nothing: if it chooses where reeds go or how far the fringe reaches, that is placement and goes to Rust; MODE AUDIT and the settlement-review see it."
+    },
+    {
+     "id": "T16-A3 free helpers kept for other callers",
+     "summary": "perimeter_dike, outfall_run, resting_plots, apply_land_use etc. stay in Python for the other tiers that call them; the field calls none of their placement.",
+     "class": "within",
+     "why": "FR-005 deletes the field's old implementation with no fallback; a shared helper that other callers still use is not that implementation, and the block states the field calls none of it, so no Python placement path stays in the field. The premise is asserted, not measured in the bundle: if any field call path (any tier of the field stage) still reaches one of these helpers' placement, that is the narrowing the earlier verdict blocked, and the landing does not meet FR-005/FR-017."
+    },
+    {
+     "id": "T16-A4 deletion",
+     "summary": "Deletion by name via make dead-closure against the clone's base; two pure moves on arbiter rulings; old engine tests deleted; tests' lay_comb over the Rust comb.",
+     "class": "within",
+     "why": "FR-005's same-landing deletion; the moves stand on rulings already given."
+    },
+    {
+     "id": "T16-A5 order",
+     "summary": "Field stays after water_frame, the last of step 4.",
+     "class": "within",
+     "why": "The request's step 4 and section 6 order; FR-019's front-of-pipeline rule."
+    },
+    {
+     "id": "T16-A6 exits",
+     "summary": "Green: rust-gate green, FR-012 measured, zero open claims (FR-021), MODE AUDIT WITHIN, occasions' reviews, one landing. Red: recorded, set down, arbiter-ask.",
+     "class": "within",
+     "why": "Each green condition is a spec requirement (FR-019, FR-012, FR-021) or the request's checklist (section 3 items 6-7); MODE AUDIT carries the budget check. Nothing in it relaxes an acceptance condition."
+    },
+    {
+     "id": "T16-B cohort failures not the port's",
+     "summary": "Seeds 9, 903, 905 newly failing in later Python stages (seating, site boundary, row rules) are left to those stages' own ports; the Rust is not tuned to them.",
+     "class": "within",
+     "why": "FR-019 and the GM's amendment 5 verbatim: 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step'. The premise is measured: no field check failed on those seeds, and rust-gate at 20:45Z had 57 seeds, 0 failing (dev/rust-gate/20261031T204546Z.json)."
+    },
+    {
+     "id": "T16-B hem test fixed in Rust",
+     "summary": "The Rust gate's dry-plot-on-brook failure fixed in the Rust that places the dry hem, the water test made exact.",
+     "class": "within",
+     "why": "FR-019 requires every seed to pass the Rust stage's own checks; the fix is in the stage that decides, not in a later one."
+    },
+    {
+     "id": "T22 template blocks",
+     "summary": "T22's heading and Approach are unfilled template placeholders.",
+     "class": "within",
+     "why": "Placeholders decide nothing, so there is nothing to classify or rule on. Whatever T22 is filed to do is owed its own review when the text is written."
     }
    ]
   }

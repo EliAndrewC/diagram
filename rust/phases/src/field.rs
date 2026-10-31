@@ -92,6 +92,7 @@ pub mod beans;
 pub mod brook;
 pub mod build;
 pub mod channels;
+pub mod dike;
 pub mod dry;
 pub mod fan;
 pub mod features;
