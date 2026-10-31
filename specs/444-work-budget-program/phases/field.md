@@ -42,33 +42,20 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** D12 CLEAR (2026-10-31). Built and unit-tested in `rust/phases/src/field.rs` and `field/` (moved from `comb/` to D1's layout): `mod.rs` (the area, the cap,
-the field count), `fan.rs` (the envelope; the maps' angles, clockwise from east), `lattice.rs` (rows of 48 ft, basins rolled
-26-36 ft along from `comb_row:<n>`), `channels.rs` (the head race, canal A along the upper edge and down the far flank, canal B
-down the brook's flank, in legs tapering between offtakes; branches across to the drain; the drain; swept turns; the `canal_tail`
-knob), `brook.rs` (through the intake, the tap's stride, out past the flank by its skirt held square to the leaning flank; the
-weir), `geom.rs`, `index.rs` (the 64 ft water index), `counts.rs` (shared with water_frame). Design change from "The comb's
-design, next": the fork is the brook-side head corner, not the head's middle, so the brook keeps its skirt with a head race of
-`head_lead` (0068's "along the upper edge" and "along the far edge"). DONE since: the basin rules (`rules.rs`), the plots drawn apart (`states.rs`), the beans (`beans.rs`), the dry hem
-(`dry.rs`), the pond and the grave (`features.rs`), the stage end to end (`build.rs`) and its door `stage_field` (`py.rs`,
-registered in `lib.rs`, driven by `rust/phases/tests/py_driver.py`); `make static` clean at the 100% floor. The engine state the old
-stage leaves beyond the manifest is measured in `phases/field.state.json` (the ink layers, `corridors`, `field_polys`, `block_polys`,
-`dry_polys`, `_bead_slots`, `_paddy_z`, the water blocks, `_resolved_knobs`). DONE 2026-10-31 evening: the thin `hamletgen/field_stage.py` (comb through Rust; a polder through the old
-`water.stage_field` until its port) writes the keys, `net`, the plan's fields and the registries, its knobs rolled by `roll_knob`;
-`settlement/fields/ink.py` draws from the records (D12); the driver imports the new stage. The comb drawn organic (waved flanks,
-bowed row lines, canals following the flank, offtakes held to their lean, the dry hem on the canal's offset curves). Inashiro rolls
-(4-7 s); `make rust-gate` GREEN on 57 seeds (`dev/rust-gate/20261031T204546Z.json`); the cohort 12/16, its three failures later
-Python stages (T16 part B). NEXT, in order: (a) tests for `field_stage.py` and `ink.py` to the 100% floor (`make cover-changed`
-lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - its placement half into Rust or ink.py before the
-deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
-(c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
-keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
-(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. THE POLDER'S SEAM (2026-10-31, traced at runtime on seed 4 at 15 households, no held code read): the old stage calls, outside the
-field's own files, `settlement/land/dikes.py` (`perimeter_dike`, `dike_band`, `dike_crest`, `course_breaches`), `land/wet.py`
-(`marsh`, `pond_fringe_ring`), `fields/landuse.py` `apply_land_use` (the dike-pond's overlay), `fields/paddy.py` `resting_plots`,
-`fields/outfall.py` (`outfall_run`, `runs_downhill`), `water_ways` (`field_channel`, `ditch_style`) and `core` (`add_paddy`, `_water`,
-`meta`). Those stay Python and the thin stage calls them as the old one did; the Rust polder is the field's own placement: the
-block and its lattice of modules and parcels, the ring canal and the field ditches, the feeding pond, and the plots drawn apart.
+**Resume here:** (2026-10-31 late) the comb and the polder both run through Rust (`field.rs`, `field/`; doors `stage_field`,
+`stage_polder`, `roll_knob`, `settle_runs`), the thin `hamletgen/field_stage.py` and `settlement/fields/ink.py` (D12) writing the
+records and the ink; `make rust-gate` green on 54 seeds; FR-012 measured (`phases/field.fr012.md`). The five DRAWING functions moved
+unchanged into `settlement/fields/drawing.py` (ask:444-T16-move-drawing); `comb_record.py` deleted; `CombMixin` gone from `comb.py`.
+NEXT, in order: (1) ASK the arbiter: `comb.py`'s module-level `WetLines` and `hem_on_water` are read by the shared brook rules'
+`reserved_box` (the view the level rule judges) - move them by a ruled read like the five, or port `reserved_box`'s need to Rust;
+(2) port `_rounded_pond` (PLACEMENT, called by `fields/landuse.py` for the dike-pond's ponds) to Rust, its contract measured, then
+delete `features.py`'s rest; (3) the rest of D10: `hamletgen/water/` comb, fit, polder, brook_course (check `brook.py`'s callers -
+the sink reads `brook_violations`, `course_corner`, `finished_course`, `round_the_brooks`, so `brook.py`, `brook_course.py`,
+`brook_rules.py` stay, their dead placement deleted by name via `make dead-closure`) and `waterfields/` (carve, frame, ring_rules,
+trunks, seams; `palette` stays), the tests of the deleted code with them; (4) the Python tests to the floor (`make cover-changed`);
+(5) MODE AUDIT of the counters against both derivations, `make work-budget`; (6) the claims round to zero open (FR-021); (7) the
+owed: the seed-37 level run, the sink's scaling-leg refusal; (8) glyph-check on the redrawn field marks (the comb's new ink:
+`ink.py`), settlement-reviews of the moved pool hamlets; (9) one `make land F=444 T=T16`. T16 stays open.
 
 THE POLDER'S DESIGN, next (2026-10-31): `rust/phases/src/field/polder.rs`, entered from `build.rs` on the two polder archetypes;
 the thin stage then calls the free helpers as the old stage did. Rust places: (1) the block - the households' paddy in whole
