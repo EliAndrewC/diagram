@@ -1,0 +1,128 @@
+{
+ "polder_grid@20": {
+  "ftpx": 1.0,
+  "fields_bbox": [
+   2314.6,
+   2017.6,
+   4076.1,
+   2842.2
+  ],
+  "plots": 48,
+  "dike_crest_len_px": 4992,
+  "dike_outline_pts": 3360,
+  "dike_crest_pts": 168,
+  "dike_gaps": 2,
+  "w_min": 11.6,
+  "w_max": 43.0,
+  "trees_by_kind": {
+   "list": 530
+  },
+  "planted_records_kinds": {
+   "willow": 1
+  },
+  "first_tree": [
+   [
+    2341.0,
+    2799.1,
+    4.4
+   ],
+   [
+    2341.4,
+    2789.6,
+    5.2
+   ]
+  ],
+  "pond_keys": null,
+  "bank_pts": []
+ },
+ "mulberry_dike_fishpond@10": {
+  "ftpx": 1.0,
+  "fields_bbox": [
+   1659.4,
+   1330.2,
+   2982.8,
+   2023.7
+  ],
+  "plots": 21,
+  "dike_crest_len_px": 3885,
+  "dike_outline_pts": 2880,
+  "dike_crest_pts": 144,
+  "dike_gaps": 2,
+  "w_min": 12.7,
+  "w_max": 43.0,
+  "trees_by_kind": {
+   "list": 424
+  },
+  "planted_records_kinds": {
+   "willow": 1
+  },
+  "first_tree": [
+   [
+    1677.3,
+    1970.7,
+    5.4
+   ],
+   [
+    1674.5,
+    1961.5,
+    3.6
+   ]
+  ],
+  "pond_keys": [
+   "bank",
+   "kind",
+   "parcel",
+   "water"
+  ],
+  "bank_pts": [
+   94,
+   151,
+   100
+  ]
+ },
+ "mulberry_dike_fishpond@20": {
+  "ftpx": 1.0,
+  "fields_bbox": [
+   2362.5,
+   1705.1,
+   4026.6,
+   2748.1
+  ],
+  "plots": 42,
+  "dike_crest_len_px": 5165,
+  "dike_outline_pts": 2880,
+  "dike_crest_pts": 144,
+  "dike_gaps": 2,
+  "w_min": 12.7,
+  "w_max": 43.0,
+  "trees_by_kind": {
+   "list": 567
+  },
+  "planted_records_kinds": {
+   "willow": 1
+  },
+  "first_tree": [
+   [
+    2399.1,
+    2692.8,
+    4.1
+   ],
+   [
+    2398.5,
+    2685.9,
+    4.6
+   ]
+  ],
+  "pond_keys": [
+   "bank",
+   "kind",
+   "parcel",
+   "water"
+  ],
+  "bank_pts": [
+   106,
+   82,
+   94
+  ]
+ }
+}
