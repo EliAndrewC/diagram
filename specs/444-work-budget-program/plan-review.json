@@ -266,25 +266,55 @@
    "declared": "spec-fidelity"
   },
   "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)": {
-   "sha256": "bd5ec1b0aec7991384c7af880ae3138903ff593d54fc078215173b5d1a8b1e91",
+   "sha256": "d380b1b1784b5d8bc26b9593c9d0ebef616ae830206c114b32aa5bf4fdbd5b18",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
   "### T19 Approach (checklist part A)": {
-   "sha256": "3186ac96358d42cf6d12a96a1d9d7c33873c6413a8abad073338ec349edabac1",
+   "sha256": "ba8cb5ed433e1e60dbf12281d196f913c0137261456d7c3e31ed8591b5b4e7cd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
   "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "fda28c18756a40335df4315fb4c265665f7b21224c29eef891a52fe7d2420eea",
+   "sha256": "e189ba2d6a045fd7d38adc7ae734ac1caf121b2869919cb59dac416951517fdd",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
   },
   "### T19 Decisions": {
-   "sha256": "5682f6519f85cc177402f2eeab8a24ec0844d5faffc6be94023f425f3d13132b",
+   "sha256": "3822703a2dc0e66bcd2c8d935e48fe6b665c7e9e3025bfb3c824c522b6d4d351",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T02:51Z)": {
+   "sha256": "cabe7c65d0d384383379d50669789001aa54bc036af7f133d9220adb127c9d86",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T03:05Z)": {
+   "sha256": "81ccc4a606e9d9deb0dbd2b69ab01a272b905d9265df7c582df3d77528a27cdb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T03:10Z)": {
+   "sha256": "f035c9b937e89744476a1482c487019ef121c5de257a28c63951fca7d95a5185",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T03:14Z)": {
+   "sha256": "a68501cf73c66bed76e177bfbbe95bf08d0782fa2fa84f2f057a528b96129693",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-30",
+   "declared": "spec-fidelity"
+  },
+  "### T19 part B (2026-10-31T03:22Z)": {
+   "sha256": "99a1b476b508366c662543c355ea4879b58c19bb8c5399b4640458e90268340b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity"
@@ -2109,6 +2139,113 @@
      "why": "Measures what FR-006/FR-017 require; time recorded beside counts, not as the target, as the request says."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-30",
+   "blocks": [
+    "### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)",
+    "### T19 Approach (checklist part A)",
+    "### T19 Decisions",
+    "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T19 part B (2026-10-31T02:51Z)",
+    "### T19 part B (2026-10-31T03:05Z)",
+    "### T19 part B (2026-10-31T03:10Z)",
+    "### T19 part B (2026-10-31T03:14Z)",
+    "### T19 part B (2026-10-31T03:22Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Occasions",
+     "summary": "No pool hamlet owes settlement-review: measured 2026-10-31 by make map on each, every layout and render is main's under the amended D7.",
+     "class": "within",
+     "why": "The GM's occasion is a settlement-review 'when a map's form changes' (request section 3, box 6). A measured no-change owes none. Note: 03:22Z item 7 still says Mizuguchi alone owes its settlement-review. The final paragraph withdraws the pins and the open rows but not that sentence. Occasions is the later, measured statement, so this stale text does not narrow anything, but it should be retracted."
+    },
+    {
+     "id": "Approach preamble",
+     "summary": "T19 also proves cache audit and the overlap census on the port, and check-rust-tooling.py refuses the landing until both are proven.",
+     "class": "within",
+     "why": "FR-011 and the request's section 7: every one-for-one, partial and rewritten row is proven to fire before the first Rust phase lands. This adds proof and narrows nothing."
+    },
+    {
+     "id": "Approach item 2",
+     "summary": "The phase-source guard holds the old code while T19 runs.",
+     "class": "within",
+     "why": "The GM, 2026-10-30, asked for the guard."
+    },
+    {
+     "id": "Approach item 5",
+     "summary": "Order: after the tooling proof, before the field rebuild.",
+     "class": "within",
+     "why": "FR-003 (STAGES order, water_frame first), FR-011 (tooling before the first Rust phase), FR-017 (the port is a task of its own)."
+    },
+    {
+     "id": "Approach item 6",
+     "summary": "Exits: budget at every size, MODE AUDIT WITHIN, both tooling rows proven, make cohort-landing with no regressed seed 'as the GM wrote it', the Rust coverage floor. Red goes to the round arbiter as a route, never an acceptance.",
+     "class": "within",
+     "why": "The amended item puts back the GM's literal box-6 words, 'make cohort-landing shows no regressed seed'. The earlier reading of FR-005 by User Story 2, ruled against on the last review, is gone. The red route follows FR-006: the arbiter may not accept a phase over its budget."
+    },
+    {
+     "id": "Approach item 9",
+     "summary": "Done when make work-budget shows the count against the pinned budget, both tooling rows are in the Proven table, and make perf-ab is recorded.",
+     "class": "within",
+     "why": "Request box 6: perf-ab time 'recorded, as a record and not a gate'. Box 8: the standing record."
+    },
+    {
+     "id": "D6",
+     "summary": "Boundary: a thin Python stage gathers the inputs, Rust rolls the bearings and knob forms and returns its counts, Python writes the same manifest keys. The knob tables stay Python data.",
+     "class": "within",
+     "why": "FR-010 and the request's section 7 shape: each stage a thin Python function, the manifest kept in Python. FR-004: the same keys. The tables are research data, not a fallback path for the old implementation."
+    },
+    {
+     "id": "D7a",
+     "summary": "The rolls reproduce knob_rng's draws in Rust (SHA-256 of seed and knob, MT19937, randrange) in pyrand.rs, so every seed keeps its map.",
+     "class": "within",
+     "why": "FR-017 keeps water_frame 'its algorithm unchanged, until its port', and the derivation is rolls and writes, no search. The GM's literal landing rule ('no regressed seed') now holds, measured 54 of 54 (dev/cohort-log/20261031T034931Z). The SplitMix64 replacement is withdrawn. This classing takes the plan's own word that settlement/_knobs.py is the shared generator and not code under the phase-source guard. The bundle gives no way to check that. If knob_rng were guarded code, reading it would repeat the plan_site finding that was ruled NOT LEGITIMATE."
+    },
+    {
+     "id": "D7b",
+     "summary": "A knob off its derivation's branch is written as its table's first form, so its manifest value differs from the one Python rolled. No stage reads that value.",
+     "class": "within",
+     "why": "Taken against request section 3 step 5 ('writes the same output') and FR-004 (the same keys): the keys are unchanged and only values nothing reads differ. The seam exists so each later stage's input stays fixed and the port can go one phase at a time. The block shows that purpose holds: the readers were traced knob by knob (03:05Z and 03:10Z item 7), cluster_shape and well_siting were fixed onto every form, the cohort census finds every value rolled and drawn, test_the_knobs_every_form_reads_roll_on_every_form covers it, and the title card hides an off-form choice through interactive/choices.py applies. A byte-identical manifest would only be required under a 'same algorithm' reading, and the GM ruled that reading out on 2026-10-30."
+    },
+    {
+     "id": "D8",
+     "summary": "maturin builds into a gitignored .rust-ext/ keyed to the Rust sources' code id, and the generation key holds the Rust sources.",
+     "class": "within",
+     "why": "FR-010 (PyO3, built by maturin). The request's section 7 code-id row: a Rust change re-keys every map."
+    },
+    {
+     "id": "D9",
+     "summary": "Counters behind the Cargo feature 'counters', keyed as the Python ones are and handed back to the thin function. This replaces the overlap census and is proven by a copy that does uncounted work.",
+     "class": "within",
+     "why": "FR-012 and the GM 2026-10-28 (compiled out of the deployed build). Request section 1: a Rust port keeps the same counters. Section 7: prove it fires."
+    },
+    {
+     "id": "Part B 03:05Z item 3",
+     "summary": "The old plan_site read under the phase-source escape is recorded as a past violation, already ruled NOT LEGITIMATE. Both branch fixes rest on the readers' trace alone.",
+     "class": "within",
+     "why": "The plan now relies on nothing from the guarded read. It records the violation and puts each fix on evidence gathered without it."
+    },
+    {
+     "id": "Part B 03:05Z and 03:10Z fixes",
+     "summary": "cluster_shape and well_siting roll on every form, and the derivation's per-form note is corrected (linear 59). The totals at 20, 40 and 80 are unchanged.",
+     "class": "within",
+     "why": "These fix the port's own rolls, not a later stage, so nothing placed earlier moves to suit something later. The budget is SOUND-pinned, and FR-013's re-owed ruling binds accept-pinned budgets only. No budgeted figure moved."
+    },
+    {
+     "id": "Part B 03:14Z item 7",
+     "summary": "A process question went to the round arbiter.",
+     "class": "within",
+     "why": "FR-006: the arbiter may rule on process. It accepts no phase over budget."
+    },
+    {
+     "id": "Part B final paragraph",
+     "summary": "The Kashikawa and Sawada pins are removed, and the open rows filed for the re-rolled port's seeds and pins are withdrawn: no seed fails and no map is pinned.",
+     "class": "within",
+     "why": "This puts the block back on the GM's literal landing rule. A pin that hid a regression is gone, not added."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2528,68 +2665,102 @@
    "verdict": "BLOCKED"
   },
   "T19": {
-   "section_sha256": "013bf2a7c325423332e0de8244d4bd479ea063349fbfc8150b82632e2c44feb7",
+   "section_sha256": "f38ad049e8c20576d6461a7ed5962c991def0b2b079fa3ae8ad9f2b6d9786ddb",
    "reviewed": "2026-10-30",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "Approach item 6 (cohort exit), with D7's cohort sentence and 03:22Z item 5",
-     "summary": "The approved exit '`make cohort-landing` shows no regressed seed' is replaced by: cohort-landing rolled and its pinned seeds' failures filed as open rows, the gate read on the fresh block (pass rate no worse than main's, every refusal a class main's block shows). The port then lands with seven pinned seeds (20, 21, 36, 37, 48, 903, 904) newly failing.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "request.md box 6 says 'All of these are needed' and then, as one sentence: '`make cohort-landing` shows no regressed seed, and the fresh block's pass rate is no worse (not all seeds pass: that is 417's goal, not this program's)'. The parenthetical belongs to the conjunct it follows: seeds that already fail may keep failing. It does not license a seed that passed on main to fail on the port. The plan quotes that parenthetical and the 417 bullet's 'Its gate is that the fresh block's pass rate is no worse', and drops the first conjunct of the very sentence it quotes. So the GM's words elsewhere do not imply the exception. Impossibility: the only argument is D7's premise that 'the port cannot reproduce today's draws without reading today's Python's random calls'. The block asserts that premise and does not measure it. The impossibility comes from the session's own choice of a new generator (SplitMix64), not from anything the GM said. A black-box reproduction of the old draws, checked against the old outputs, is not ruled out anywhere. If the 2026-10-30 guard really cannot be squared with box 6 for a re-rolling port, that conflict belongs to the GM as a for_gm question, and rewriting the exit does not settle it. The arbiter rulings cited (ask:444-T19-cohort-regression, ask:444-T19-cohort-45) are not in this bundle and are not the GM's words. The arbiter may rule on process, but an acceptance criterion of the approved design is not process. The pattern also weighs: 03:22Z had already landed on 'branch 2 - land, the seeds filed' while the exit still read 'no regressed seed', and after the prior BLOCKED review the exit was amended to match what had been done. The replacement measure (fresh rate plus refusal class plus per-seed diagnosis) may be a better test, but 'better' does not make an exception legitimate. To clear: either the pinned seeds stop regressing, or the plan carries the GM's own words waiving 'no regressed seed' for a port that re-rolls."
-    },
-    {
-     "id": "Kashikawa and Sawada .gen.py pins (03:22Z item 7 and the reply to the prior review's item 5)",
-     "summary": "Two pool hamlets whose plans, re-rolled on the port, refuse (SiteRefused on Kashikawa, SinkRefused on Sawada) have their .gen.py pinned to their shipped plans, so they regenerate unchanged and are counted as not newly failing. Open rows are filed to unpin them.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "This carves out of D7's 'every map's plan rolls anew' exactly the two maps on which the port's rolls fail, and removes them from the regression check that box 6 asks for. The purpose of the cohort gate is to catch the rebuild breaking maps. Pinning the maps where it broke them defeats that purpose: they read as 'unchanged against HEAD' only because the port's output is overridden there. The plan's own fault test (ruling branch 3: a refusal class main's block never shows is a fault in the port's rolls) is read on the fresh block only. SinkRefused appears in none of the plan's lists of main's refusal classes (lane_knots, WebRefused, row_rules, OverlapRefused, SiteRefused). Nothing in the bundle establishes that it is a class main shows, so an unmeasured premise decides whether this pin hides a port fault. To clear: the two hamlets must count as regressed seeds under box 6 (not as passes), and Sawada's SinkRefused must be shown to be a class main's block shows, or diagnosed as a fault in the port."
-    },
-    {
-     "id": "D7 (SplitMix64; every plan re-rolls)",
-     "summary": "The port draws its rolls from a seeded SplitMix64 in Rust, so every map's fall, drainage bearing, wind and knob forms re-roll, and the layouts downstream move. Each pool hamlet that moves owes its settlement-review.",
+     "id": "Occasions",
+     "summary": "No pool hamlet owes settlement-review: measured 2026-10-31 by make map on each, every layout and render is main's under the amended D7.",
      "class": "within",
-     "why": "The approved design expects maps to change under a rebuild: box 6 lists 'settlement-review when a map's form changes', and FR-004 reads 'the same output' as the same manifest keys, which D6 keeps. The choice of generator is an implementation choice inside FR-010 and FR-017. Two points are recorded: (a) the 2026-10-18 speed-work ruling D7 cites is not in request.md, and (b) D7's premise that the old draws cannot be reproduced without reading old code is asserted, not measured. That premise carries no weight here, but it is the whole defense of the cohort-exit narrowing above and fails there."
+     "why": "The GM's occasion is a settlement-review 'when a map's form changes' (request section 3, box 6). A measured no-change owes none. Note: 03:22Z item 7 still says Mizuguchi alone owes its settlement-review. The final paragraph withdraws the pins and the open rows but not that sentence. Occasions is the later, measured statement, so this stale text does not narrow anything, but it should be retracted."
     },
     {
-     "id": "03:05Z item 3 / 03:10Z item 3 (the branch fixes kept after the old plan_site read)",
-     "summary": "The read of the old plan_site under the phase-source escape is recorded as against the guard's purpose (already ruled NOT LEGITIMATE by the prior review). The cluster_shape and well_siting fixes (rolled on every form) are kept on the strength of a trace of their readers alone.",
+     "id": "Approach preamble",
+     "summary": "T19 also proves cache audit and the overlap census on the port, and check-rust-tooling.py refuses the landing until both are proven.",
      "class": "within",
-     "why": "The trace that is recorded (03:05Z item 7: seat_cluster and seat_room size every map's band through band_extent(households, cluster_shape); 03:10Z item 3: place_wells and wells.py read plan.well_siting on every form) is consumer-side code, not the guarded water_frame source. It gives each fix on its own: a knob that later stages read on every form has to be rolled on every form. The phrase 'the old plan_site rolled it on every form' has been removed from 03:10Z. The 2026-10-30 guard is there to stop old inefficient algorithms being copied. Which forms a knob is rolled on is a contract fact fixed by its readers, not an algorithm. The read itself is not re-ruled here."
+     "why": "FR-011 and the request's section 7: every one-for-one, partial and rewritten row is proven to fire before the first Rust phase lands. This adds proof and narrows nothing."
     },
     {
-     "id": "Reply to the prior review's item 7 (SOUND pin, no FR-013 ruling re-owed)",
-     "summary": "The derivation's per-form note changed (linear 55, then 57, then 59; the reference stays 56). water_frame's budget is SOUND-pinned, so FR-013's rule that a changed figure re-owes the arbiter's ruling is held not to apply.",
+     "id": "Approach item 2",
+     "summary": "The phase-source guard holds the old code while T19 runs.",
      "class": "within",
-     "why": "FR-013's re-owe clause binds 'an accept-pinned budget' and nothing else. The plan reads it by its words, and no budgeted total changed. The SOUND status rests on the plan's own citation (dev/work-budget.json, phases/water_frame_greenfield.verdict-2.txt), which this bundle does not carry, so it is recorded as asserted rather than checked here."
+     "why": "The GM, 2026-10-30, asked for the guard."
     },
     {
-     "id": "D6 (Python gathers, Rust rolls, Python writes; knob tables stay Python data)",
-     "summary": "stage_water_frame stays a thin Python function in STAGES. It passes one record to l7r_phases.water_frame, Rust rolls and counts, and Python writes the manifest keys unchanged.",
+     "id": "Approach item 5",
+     "summary": "Order: after the tooling proof, before the field rebuild.",
      "class": "within",
-     "why": "FR-010: each stage is a thin Python function calling into the one extension module, and the driver, STAGES and the manifest stay Python. FR-004: the same keys. Keeping the research's tables as one Python copy is a data-placement choice inside that shape."
+     "why": "FR-003 (STAGES order, water_frame first), FR-011 (tooling before the first Rust phase), FR-017 (the port is a task of its own)."
     },
     {
-     "id": "D8 (maturin build into .rust-ext/, keyed to the Rust sources)",
-     "summary": "make rust-build builds the l7r_phases crate with maturin into a gitignored folder whenever its code id moves. Map-rolling and test targets depend on it, and the generation key holds the Rust sources.",
+     "id": "Approach item 6",
+     "summary": "Exits: budget at every size, MODE AUDIT WITHIN, both tooling rows proven, make cohort-landing with no regressed seed 'as the GM wrote it', the Rust coverage floor. Red goes to the round arbiter as a route, never an acceptance.",
      "class": "within",
-     "why": "FR-010 (PyO3, built by maturin), and design section 7's 'the built extension added to gencache.engine_files()'."
+     "why": "The amended item puts back the GM's literal box-6 words, 'make cohort-landing shows no regressed seed'. The earlier reading of FR-005 by User Story 2, ruled against on the last review, is gone. The red route follows FR-006: the arbiter may not accept a phase over its budget."
     },
     {
-     "id": "D9 (Rust counters behind Cargo feature `counters`, handed back to Python; the overlap census's replacement)",
-     "summary": "The crate counts operations keyed <kind>@<function> behind the `counters` feature and returns them with the result. make work-budget and MODE AUDIT then read a Rust stage as they read a Python one, and this is proven by a copy of the port that does work it does not count.",
+     "id": "Approach item 9",
+     "summary": "Done when make work-budget shows the count against the pinned budget, both tooling rows are in the Proven table, and make perf-ab is recorded.",
      "class": "within",
-     "why": "FR-012 (counters as a macro behind the Cargo feature `counters`, compiled out of the deployed build), FR-003, and design section 1 ('A Rust port must keep the same counters')."
+     "why": "Request box 6: perf-ab time 'recorded, as a record and not a gate'. Box 8: the standing record."
     },
     {
-     "id": "Approach preamble and items 5 and 6 (the tooling rows proven on this port; order before field)",
-     "summary": "T19 proves cache audit and the overlap census on the port before its tick, and check-rust-tooling.py refuses the landing until they are. water_frame lands before the field rebuild.",
+     "id": "D6",
+     "summary": "Boundary: a thin Python stage gathers the inputs, Rust rolls the bearings and knob forms and returns its counts, Python writes the same manifest keys. The knob tables stay Python data.",
      "class": "within",
-     "why": "FR-011 and design section 7: every one-for-one, partial and rewritten row proven to fire before the first Rust phase lands. FR-003 and design step 6: STAGES order, with water_frame first."
+     "why": "FR-010 and the request's section 7 shape: each stage a thin Python function, the manifest kept in Python. FR-004: the same keys. The tables are research data, not a fallback path for the old implementation."
+    },
+    {
+     "id": "D7a",
+     "summary": "The rolls reproduce knob_rng's draws in Rust (SHA-256 of seed and knob, MT19937, randrange) in pyrand.rs, so every seed keeps its map.",
+     "class": "within",
+     "why": "FR-017 keeps water_frame 'its algorithm unchanged, until its port', and the derivation is rolls and writes, no search. The GM's literal landing rule ('no regressed seed') now holds, measured 54 of 54 (dev/cohort-log/20261031T034931Z). The SplitMix64 replacement is withdrawn. This classing takes the plan's own word that settlement/_knobs.py is the shared generator and not code under the phase-source guard. The bundle gives no way to check that. If knob_rng were guarded code, reading it would repeat the plan_site finding that was ruled NOT LEGITIMATE."
+    },
+    {
+     "id": "D7b",
+     "summary": "A knob off its derivation's branch is written as its table's first form, so its manifest value differs from the one Python rolled. No stage reads that value.",
+     "class": "within",
+     "why": "Taken against request section 3 step 5 ('writes the same output') and FR-004 (the same keys): the keys are unchanged and only values nothing reads differ. The seam exists so each later stage's input stays fixed and the port can go one phase at a time. The block shows that purpose holds: the readers were traced knob by knob (03:05Z and 03:10Z item 7), cluster_shape and well_siting were fixed onto every form, the cohort census finds every value rolled and drawn, test_the_knobs_every_form_reads_roll_on_every_form covers it, and the title card hides an off-form choice through interactive/choices.py applies. A byte-identical manifest would only be required under a 'same algorithm' reading, and the GM ruled that reading out on 2026-10-30."
+    },
+    {
+     "id": "D8",
+     "summary": "maturin builds into a gitignored .rust-ext/ keyed to the Rust sources' code id, and the generation key holds the Rust sources.",
+     "class": "within",
+     "why": "FR-010 (PyO3, built by maturin). The request's section 7 code-id row: a Rust change re-keys every map."
+    },
+    {
+     "id": "D9",
+     "summary": "Counters behind the Cargo feature 'counters', keyed as the Python ones are and handed back to the thin function. This replaces the overlap census and is proven by a copy that does uncounted work.",
+     "class": "within",
+     "why": "FR-012 and the GM 2026-10-28 (compiled out of the deployed build). Request section 1: a Rust port keeps the same counters. Section 7: prove it fires."
+    },
+    {
+     "id": "Part B 03:05Z item 3",
+     "summary": "The old plan_site read under the phase-source escape is recorded as a past violation, already ruled NOT LEGITIMATE. Both branch fixes rest on the readers' trace alone.",
+     "class": "within",
+     "why": "The plan now relies on nothing from the guarded read. It records the violation and puts each fix on evidence gathered without it."
+    },
+    {
+     "id": "Part B 03:05Z and 03:10Z fixes",
+     "summary": "cluster_shape and well_siting roll on every form, and the derivation's per-form note is corrected (linear 59). The totals at 20, 40 and 80 are unchanged.",
+     "class": "within",
+     "why": "These fix the port's own rolls, not a later stage, so nothing placed earlier moves to suit something later. The budget is SOUND-pinned, and FR-013's re-owed ruling binds accept-pinned budgets only. No budgeted figure moved."
+    },
+    {
+     "id": "Part B 03:14Z item 7",
+     "summary": "A process question went to the round arbiter.",
+     "class": "within",
+     "why": "FR-006: the arbiter may rule on process. It accepts no phase over budget."
+    },
+    {
+     "id": "Part B final paragraph",
+     "summary": "The Kashikawa and Sawada pins are removed, and the open rows filed for the re-rolled port's seeds and pins are withdrawn: no seed fails and no map is pinned.",
+     "class": "within",
+     "why": "This puts the block back on the GM's literal landing rule. A pin that hid a regression is gone, not added."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
