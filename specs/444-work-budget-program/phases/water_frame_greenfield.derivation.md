@@ -42,3 +42,7 @@ Flat: the plan's fields are the same at every size, an exponent of 0.
 - priority queue: not used - nothing is ranked
 - incremental update: not used - each field is written once
 - memoizing what a scan does not change: not used - there is no scan
+
+## Earlier findings
+
+- verdict-1, finding 1: fixed - the knob set it judged (the 20 knob-registry names among the reference `meta`) was the wrong set: most of them are rolled and charged by other stages. The round arbiter's ruling on ask:444-T19-which-knobs (2026-10-30) names water_frame's knobs as the 21 plan fields the plan rolls inside the Contract, each charged only for the steps it takes on the reference branch; the bound folded into the drainage roll, as the pseudocode now says (no separate test).
