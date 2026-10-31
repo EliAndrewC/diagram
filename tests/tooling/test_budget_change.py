@@ -255,10 +255,7 @@ def test_a_form_of_a_stage_is_budgeted_at_its_bounded_n(root: pathlib.Path) -> N
     assert st["sizes"] == [10, 20] and st["items_at_10"] == 19 and "items_at_40" not in st
     assert bc.per_house(root) == before, "a form at a bounded n holds no figure at 40"
     assert bc.growth(100, 141, 2) == pytest.approx(0.496, abs=0.01)
-    from l7r.diagram.tools import work_budget  # noqa: PLC0415
-
-    assert work_budget.missing_items(bc.load(root)) == [], "its own sizes recorded"
-    assert work_budget.missing_items({"stages": {"field.polder": {"status": "budgeted", "sizes": [10, 20], "items_at_10": 1}}})[0].startswith("field.polder: budgeted with no items at 20")
+    # the table's item check reading a form's own sizes is `tests/tools/test_work_budget.py`'s (it lands with the engine)
 
 
 def test_an_accept_naming_a_form_pins_it(root: pathlib.Path) -> None:

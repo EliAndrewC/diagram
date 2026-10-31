@@ -213,3 +213,14 @@ def test_an_accept_pinned_budget_whose_derivation_changed_is_refused(tmp_path: P
     assert "changed since the arbiter's accept pinned it (ask:x)" in wb.stale_pins(table, str(tmp_path))[0]
     (tmp_path / "d.md").unlink()
     assert len(wb.stale_pins(table, str(tmp_path))) == 1, "a derivation gone is a change too"
+
+
+def test_a_form_at_its_bounded_n_is_checked_at_its_own_sizes() -> None:
+    """The round arbiter's ruling on ask:444-polder-sizes: `field.polder`, pinned at 10 and 20 households, owes items at its own
+    sizes, not at 20/40/80."""
+    from l7r.diagram.tools import work_budget
+
+    held = {"stages": {"field.polder": {"status": "budgeted", "sizes": [10, 20], "items_at_10": 19, "items_at_20": 38}}}
+    assert work_budget.missing_items(held) == []
+    short = {"stages": {"field.polder": {"status": "budgeted", "sizes": [10, 20], "items_at_10": 1}}}
+    assert work_budget.missing_items(short)[0].startswith("field.polder: budgeted with no items at 20")
