@@ -114,6 +114,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
+  },
+  "### T18 Approach (re-answered 2026-10-31T16:53Z)": {
+   "sha256": "15886353b0b6afca383627aecbf2eb03cc6268873ad1710c4e7ebd516fbc3b00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2316,6 +2322,57 @@
      "summary": "The greenfield derivation's figures stand: at 20, 40 and 80 households farmland is about 11, 21 and 42 ha, under the cap's 45 ha floor, so one field each and no total changes; the cap binds only past about 85 households. Still owes the MODE BUDGET verdict on the re-derived text and keeps the pin unless that verdict moves a figure.",
      "class": "within",
      "why": "FR-018 requires the derivation re-derived under the cap and a new MODE BUDGET verdict before the field phase lands, and a figure above the pin pinned only with the GM's words; D2 keeps the owed verdict and the standing pin, so it narrows nothing. Unchanged since its CLEAR."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T18 Approach (re-answered 2026-10-31T16:53Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T18-1 cap as a knob",
+     "summary": "The single-field cap is recorded from research 0017 (#how-large-one-tract-of-paddy-grew and its drawing page) as a knob of 45-60 ha, and a settlement whose farmland passes it draws more than one field.",
+     "class": "within",
+     "why": "The GM 2026-10-29: 'do a research pass ... on what is the maximum size of a single rice paddy field ... cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'. A research-sourced cap held as a knob over the researched range is 'something approximating' that size; FR-018 carries it."
+    },
+    {
+     "id": "T18-2 scope of the cap",
+     "summary": "Item 4: the cap is for a hamlet's or village's comb field.",
+     "class": "within",
+     "why": "It names the field the research sizes - one paddy field of 'these kinds of settlements' (the GM's words). It does not exempt a larger settlement from the cap; read as an exemption it would contradict 'larger settlements just have multiple fields', and the block does not say that. Larger settlements are still covered by item 1 (more than one field once farmland passes the cap)."
+    },
+    {
+     "id": "T18-3 sources and leads",
+     "summary": "The record and the archive searched first; feature 447's field-size runs used as leads only.",
+     "class": "within",
+     "why": "FR-018 requires the record and archive first (constitution XII); treating another feature's runs as leads rather than sources does not alter what the GM asked for."
+    },
+    {
+     "id": "T18-4 order and no engine code",
+     "summary": "T18 runs before the field rebuild (T16) and writes no engine code; it delivers the cap, its source and the re-derived budget.",
+     "class": "within",
+     "why": "FR-018: the cap is the field phase's contract and the re-derivation owes its MODE BUDGET verdict before the field phase lands. Doing it ahead of the rebuild is what that ordering requires; the cap is still built in the rebuild under FR-018/SC-011."
+    },
+    {
+     "id": "T18-5 green exit, standing pin kept",
+     "summary": "Green: the cap and its source recorded, the re-derivation's MODE BUDGET SOUND (verdict-3), the standing pin kept, verdict-3's figures (14,045 / 23,988 / 42,070 at 20 / 40 / 80 households, exponent 0.79) shown beside it.",
+     "class": "within",
+     "why": "FR-018: 'a figure above its standing pin keeps that pin and is pinned only with the GM's words'. Keeping the pin raises nothing without the GM's words (request section 5 item 4, 'Budgets change only with the GM's words'). It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T18-6 red exit to the arbiter",
+     "summary": "Red: the failure recorded and the task set down; a claim it cannot be done (derivation LOOSE or UNDERIVED twice, or a cap the research cannot settle) ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sending a question to the round arbiter is the project's standing process (feature 379; request section 5 item 4 lets the arbiter rule on process). It does not loosen the cap or the budget, and the arbiter may not accept a phase over budget."
+    },
+    {
+     "id": "T18-7 budget and constant guard",
+     "summary": "Two research page sessions and one MODE BUDGET round as the task's budget; 0017 read before the cap constant moves.",
+     "class": "within",
+     "why": "Bookkeeping that keeps the cap tied to its research source; it serves FR-018's 'the cap and its source are the field phase's contract'."
     }
    ]
   }
