@@ -63,7 +63,12 @@ lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - it
 deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
 (c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
 keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
-(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. OPEN: the flanks' waves and the
+(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. MEASURED 2026-10-31: Inashiro's stage profile (`make map PROFILE=1`) no longer lists the field among its seven slowest
+stages, so it runs under 0.07 s with its Python door and ink; the 444 start record (`dev/perf-log/20261031T173305Z-444-start-*`) had
+it at 0.38-0.52 s a reference seed and up to 2.67 s on a scaling leg. `make perf SCALING=1` refused on one scaling leg in the sink
+(`SinkRefused`: the drain's constructed route meets the brook where the brook as drawn breaks its rules) - the field's brook judged
+by a later stage, so OWED before the end pair: find the leg, and fix the brook in Rust if a brook rule is what it breaks. The
+cohorts at 20 and 40 households pass 3 of 4 each (the fourth a cohort-wide knob-coverage residue). OPEN: the flanks' waves and the
 bunds' bow are GUESS figures (`fan.rs` `WAVES`, `lattice.rs` `BOW`) for the settlement-review to judge. T16 stays open (ask:set-down-444-t16-session).
 
 **The plots' rules, from the record** (2026-10-31, a dispatched reader of 0005-0014's drawing pages, no code read; each rule
