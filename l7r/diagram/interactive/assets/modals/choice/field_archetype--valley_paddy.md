@@ -9,7 +9,7 @@ smaller canals. Canals ran along the high ground, since water waters only what l
 along the lowest line: when the Minuma reservoir was reclaimed in 1728, its supply canals were set along the edges and its
 drain down the middle. In the old form the water went on from one paddy to the next rather than down a ditch to each.
 
-A paddy parcel in the land surveys of the 1600s ran from about a tenth of an acre to under half an acre. In the Edo period
+A paddy parcel in the land surveys of the 1600s ran from about a tenth of an acre to under half an acre. The paddy one pond or canal watered ran from an acre or two to about 110 acres (45 ha): one Edo-period village's 17 acres or so of paddy hung on a single small reservoir and the rain, and a village with more paddy than one source could water worked several such tracts. In the Edo period
 a village needed, by one reckoning, a little under a quarter acre of paddy for each inhabitant, and in the early 1900s a farm family worked
 about 2.5 acres in all.
 

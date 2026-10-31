@@ -10,7 +10,7 @@ waterlily floated on its open water. The embankment above was kept free of them:
 cattle, and planted with a few mulberry trees to shade them. When a pond was drained, its rich mud went onto the
 vegetable fields and its fish were eaten.
 
-A small pond might water about 25 acres (10 ha) of paddy; the largest in Japan watered some 11,000 acres. The largest ponds covered several hectares (a hectare is about 2.5 acres); the smallest, about 33 ft on a side, were
+A pond watered from about 2 acres (1 ha) to about 110 acres (45 ha) of paddy, a small one about 25 acres (10 ha): in China one county's old ponds watered some 30 to 110 acres each, and one Edo-period village's 17 acres or so of paddy drew on a reservoir of under an acre that ran dry in a drought. The greatest pond in Japan, far beyond any village's, watered some 11,000 acres. The largest ponds covered several hectares (a hectare is about 2.5 acres); the smallest, about 33 ft on a side, were
 kept by one owner; a larger pond could serve several villages, which took its water in turns when it ran low. The manual had the farmer give two or three parts in every ten of his land to the pond, so that it was a quarter to over two-fifths the size of the field it watered.
 
 Guesses:

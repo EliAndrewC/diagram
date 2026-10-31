@@ -1,5 +1,5 @@
 About: A rice paddy (suiden) was a level basin of ground walled by a low bank of its own mud, the bund, so that the rice
-stood in water at an even depth. It was a farming village's chief land: its rice fed the households and paid the lord's
+stood in water at an even depth. A village's paddy had to feed its households and pay the lord's
 tax. By one reckoning, a little under a quarter acre of it fed each inhabitant, with millet, barley and other coarse
 grain making up the rest. A household's paddy lay scattered over many plots.
 
