@@ -18,6 +18,8 @@ pub const CELL_FT: f64 = 64.0;
 #[derive(Debug, Default)]
 pub struct Index {
     pub segs: Vec<(Pt, Pt)>,
+    /// Each segment's width (feet): zero unless filed with `file_w`.
+    pub widths: Vec<f64>,
     cells: HashMap<(i64, i64), Vec<usize>>,
     /// The cells examined and written, for the counters (D6).
     pub touched: u64,
@@ -34,8 +36,14 @@ fn cell_of(v: f64) -> i64 {
 impl Index {
     /// File a segment in every cell it crosses (Amanatides-Woo traversal); returns its id.
     pub fn file(&mut self, a: Pt, b: Pt) -> usize {
+        self.file_w(a, b, 0.0)
+    }
+
+    /// File a segment `w` feet wide.
+    pub fn file_w(&mut self, a: Pt, b: Pt, w: f64) -> usize {
         let id = self.segs.len();
         self.segs.push((a, b));
+        self.widths.push(w);
         let (mut cx, mut cy) = (cell_of(a.0), cell_of(a.1));
         let (ex, ey) = (cell_of(b.0), cell_of(b.1));
         let (dx, dy) = (b.0 - a.0, b.1 - a.1);

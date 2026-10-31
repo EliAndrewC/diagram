@@ -162,8 +162,8 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         }
         let out = (f.fan.across.0 * far, f.fan.across.1 * far);
         let mut ix = Index::default();
-        for (a, b, _) in &f.segments {
-            ix.file(*a, *b);
+        for (a, b, w) in &f.segments {
+            ix.file_w(*a, *b, *w);
         }
         let (dry, r) = hem(
             &line,
@@ -171,7 +171,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             dry_need,
             &f.fan.ring,
             &mut ix,
-            super::channels::SUPPLY_W.0 / 2.0 + 1.0,
+            1.0,
             inp.seed,
             "f0",
         );

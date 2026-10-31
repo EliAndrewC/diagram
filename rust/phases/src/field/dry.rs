@@ -240,13 +240,14 @@ fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: 
     onto || laps || edge.chain([poly[2], poly[3]]).any(|p| wet(p, ix, clear))
 }
 
-/// Whether `p` lies within `clear` feet of the water filed in `ix`.
+/// Whether `p` lies within `clear` feet of the water filed in `ix`, past each segment's own half-width.
 fn wet(p: Pt, ix: &mut Index, clear: f64) -> bool {
-    ix.near((p.0 - clear, p.1 - clear), (p.0 + clear, p.1 + clear))
+    let reach = clear + ix.widths.iter().copied().fold(0.0, f64::max) / 2.0;
+    ix.near((p.0 - reach, p.1 - reach), (p.0 + reach, p.1 + reach))
         .into_iter()
         .any(|i| {
             let (a, b) = ix.segs[i];
-            seg_dist(p, a, b) < clear
+            seg_dist(p, a, b) < clear + ix.widths[i] / 2.0
         })
 }
 
