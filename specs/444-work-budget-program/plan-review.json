@@ -110,7 +110,7 @@
    "declared": "spec-fidelity"
   },
   "### T18 Decisions": {
-   "sha256": "c377081693ed8716f149e1937ff211f8a7abb1ca7ca7f3c979ded3464350dd11",
+   "sha256": "f3484823a18103e1e603b39947eae799b4039bb79f16b60e4d35972594418d02",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
@@ -2295,6 +2295,27 @@
      "summary": "The research pass searches the record and archive first (make research-search), uses feature 447's field-size runs as leads with each source written up and checked, through make page-session; one MODE BUDGET round a draft.",
      "class": "within",
      "why": "FR-018: 'from a research pass that searches the record and the archive first (constitution XII)'. Method, not scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T18 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T18 D1",
+     "summary": "Single-field cap is the 0017 record's knob, rolled per settlement between about 45 and 60 ha; a settlement past it draws several fields; the two questions session C left 'for the GM' (Yang's 1,000-mu pond as one tract, the 1991 gazetteer's unstated mu) are the record's to rule and do not move the cap because the band holds either reading. Only change since CLEAR: the pointer to research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html is written out in full instead of abbreviated.",
+     "class": "within",
+     "why": "Carries the GM's 2026-10-29 words verbatim in effect ('cap out at something approximating whatever that size is, and then larger settlements just have multiple fields') and FR-018's cap-from-research; the GM asked for the research pass to set the size, so applying the record's findings is that pass, not a carve-out. The pointer expansion names the same page and anchor and changes no decision."
+    },
+    {
+     "id": "T18 D2",
+     "summary": "The greenfield derivation's figures stand: at 20, 40 and 80 households farmland is about 11, 21 and 42 ha, under the cap's 45 ha floor, so one field each and no total changes; the cap binds only past about 85 households. Still owes the MODE BUDGET verdict on the re-derived text and keeps the pin unless that verdict moves a figure.",
+     "class": "within",
+     "why": "FR-018 requires the derivation re-derived under the cap and a new MODE BUDGET verdict before the field phase lands, and a figure above the pin pinned only with the GM's words; D2 keeps the owed verdict and the standing pin, so it narrows nothing. Unchanged since its CLEAR."
     }
    ]
   }

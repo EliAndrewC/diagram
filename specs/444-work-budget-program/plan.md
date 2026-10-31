@@ -196,6 +196,26 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 
+### T18 Approach (re-answered 2026-10-31T16:53Z)
+
+1. **The goal, in the world.** The largest single paddy field the research finds for a settlement of this kind, as the field
+   phase's contract, and the field's greenfield derivation re-derived under it: a settlement whose farmland passes the cap draws
+   more than one field. Now recorded: 0017's `#how-large-one-tract-of-paddy-grew` and its drawing page (the cap a knob of 45-60 ha).
+2. **The constraints.** FR-018, FR-015, FR-016; the record and the archive searched first; feature 447's field-size runs as leads.
+3. **Where each comes from.** G: the GM, 2026-10-29 ("we can cap out at something approximating whatever that size is, and then
+   larger settlements just have multiple fields"). R: 0017. O: the derivation's totals, unchanged.
+4. **Do they describe the world here?** The cap is for a hamlet's or village's comb field.
+5. **The order.** Before the field rebuild (T16); no engine code.
+6. **The exits.** Green: the cap and its source in the record (done), the derivation's MODE BUDGET SOUND (verdict-3), the standing
+   pin kept. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask` (a
+   derivation judged LOOSE or UNDERIVED twice, or a cap the research cannot settle).
+7. **The search smell.** None.
+8. **The budget.** The research page through two page sessions (done); one MODE BUDGET round (done, SOUND).
+9. **Done, measured.** Verdict-3's figures - 14,045, 23,988 and 42,070 at 20, 40 and 80 households, the exponent 0.79 - beside
+   the standing pin.
+10. **Before moving a constant.** 0017, read before the cap moves.
+11. **Before fitting things into room.** n/a.
+
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
 - **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the
