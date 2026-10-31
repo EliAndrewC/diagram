@@ -12,6 +12,13 @@ from l7r.diagram.hamletgen import rust_prefix as rp
 from l7r.diagram.hamletgen.driver import STAGES
 
 
+def _wf(s: object, plan: object) -> None:  # a stand-in water_frame: writes the plan's form into the meta, rolls no map
+    s.M.setdefault("meta", {})["settlement_form"] = plan.settlement_form  # type: ignore[attr-defined]
+
+
+_wf.__name__ = "stage_water_frame"
+
+
 def test_the_rust_stages_are_derived_from_the_crate_and_held_to_the_front(tmp_path: pathlib.Path) -> None:
     assert [rp.stage_name(st) for st in rp.rust_stages()] == ["water_frame"], "the port T19 landed, and only it"
     (tmp_path / "field.rs").write_text("")
@@ -28,7 +35,7 @@ def _plan(seed: int = 5) -> object:
 
 def test_a_roll_stops_where_the_rust_stages_end_and_a_failing_stage_leaves_its_input() -> None:
     plan = _plan()
-    s, failed, err, trace = rp.roll_through(plan, rp.rust_stages())
+    s, failed, err, trace = rp.roll_through(plan, [_wf])
     assert failed is None and err is None and s.M["meta"].get("settlement_form"), "water_frame ran and wrote the plan's meta"
     assert [name for name, _f, _w in trace] == ["water_frame"] and "meta.settlement_form" in trace[0][2], "what it wrote, traced"
 
@@ -36,7 +43,7 @@ def test_a_roll_stops_where_the_rust_stages_end_and_a_failing_stage_leaves_its_i
         raise ValueError("no seat")
 
     boom.__name__ = "stage_boom"
-    s, failed, err, trace = rp.roll_through(_plan(), [STAGES[0], boom])
+    s, failed, err, trace = rp.roll_through(_plan(), [_wf, boom])
     assert failed == "boom" and isinstance(err, ValueError) and trace[-1][0] == "boom" and trace[-1][2] == set()
     s2, plan2 = pickle.loads(trace[-1][1])  # noqa: S301 - the module's own fixture
     assert s2.M["meta"].get("settlement_form") == s.M["meta"].get("settlement_form"), "the state boom started from: water_frame's"

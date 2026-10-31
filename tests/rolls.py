@@ -160,6 +160,9 @@ IN_PROCESS: tuple[InProcess, ...] = (
     InProcess("tests/tools/test_placement_stages.py", "stand-in stages; rolls no map (milliseconds)", stub=True),
     InProcess("tests/hamletgen/test_driver.py", "stand-in stages: the stage-profile and roll-scope tests roll no map (milliseconds)", stub=True),
     InProcess("tests/gate/hamletgen/test_driver.py", "stand-in stages: the re-roll loop's decisions (feature 215) roll no map; the ratchet reads the pool's maps", stub=True),
+    # GUARD_EDIT_OK: feature 444 T21 - the Rust stage gate's unit tests run a stand-in water_frame through roll_scope and roll no map
+    InProcess("tests/tools/test_rust_gate.py", "stand-in Rust stages: the gate's seeds, its reads and its failing list, not a map (feature 444 T21)", stub=True),
+    InProcess("tests/hamletgen/test_rust_prefix.py", "stand-in Rust stages: the roll through the Rust stages and its trace, not a map (feature 444 T21)", stub=True),
 )
 
 
