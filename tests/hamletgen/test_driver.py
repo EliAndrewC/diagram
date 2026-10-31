@@ -451,3 +451,13 @@ def test_the_profiled_stage_loop_prints_where_the_time_went(monkeypatch, capsys)
     driver._run_stages(s, types.SimpleNamespace(spec=types.SimpleNamespace(name="Stub", seed=3)))  # type: ignore[arg-type]
     err = capsys.readouterr().err
     assert "stage profile" in err and "Stub seed 3" in err and "slowest stage_slow" in err and "stage_fast" not in err.split("slowest")[1].split("\n", 1)[1]
+
+
+def test_build_runs_the_stages_on_the_fresh_settlement_and_returns_it(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 444 T21: `build`'s settlement is `fresh_settlement`'s - the one the Rust stage gate rolls through its stages too."""
+    from l7r.diagram.hamletgen import driver
+
+    ran: list[Any] = []
+    monkeypatch.setattr(driver, "_run_stages", lambda s, plan: ran.append(s))
+    s = driver.build(a_plan())
+    assert ran == [s] and s.standing.strict
