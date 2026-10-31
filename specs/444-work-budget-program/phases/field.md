@@ -42,10 +42,18 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** the comb, per "The comb's design, next" below, after D12 (the ink) passes `make decide`'s plan review. The
-plot forms are settled (D1, D12): the drawing reads the returned plot rings; the 6-number key is written from them. clippy's
-dead-code lint is EXPECTED to refuse `rust/phases/src/comb/` until `fn stage_field` calls into it. T16 stays open (the round
-arbiter, ask:set-down-444-t16-session).
+**Resume here:** D12 CLEAR (2026-10-31). Built and unit-tested in `rust/phases/src/comb/`: `mod.rs` (the area, the cap,
+the field count), `fan.rs` (the envelope; the maps' angles, clockwise from east), `lattice.rs` (rows of 48 ft, basins rolled
+26-36 ft along from `comb_row:<n>`), `channels.rs` (the head race, canal A along the upper edge and down the far flank, canal B
+down the brook's flank, in legs tapering between offtakes; branches across to the drain; the drain; swept turns; the `canal_tail`
+knob), `brook.rs` (through the intake, the tap's stride, out past the flank by its skirt held square to the leaning flank; the
+weir), `geom.rs`, `index.rs` (the 64 ft water index), `counts.rs` (shared with water_frame). Design change from "The comb's
+design, next": the fork is the brook-side head corner, not the head's middle, so the brook keeps its skirt with a head race of
+`head_lead` (0068's "along the upper edge" and "along the far edge"). NEXT: the basin rules held (25 degrees, a quarter cell, the
+arrowhead - `FieldRefused`), the beans, the wet/dry/flooded plots, the hem, the pocket pond, the D3 rolls; then `fn stage_field`
+(a pyfunction) and the thin Python writing the 42 keys; then `settlement/fields/ink.py`. OPEN: the outline is the straight-edged
+fan today (no basin is cut); whether its edge should waver over the ground is for the settlement-review of the moved maps. clippy's
+dead-code lint refuses `comb/` until `fn stage_field` calls into it. T16 stays open (ask:set-down-444-t16-session).
 
 **Who draws the field** (2026-10-31, the round arbiter's ruling on ask:444-T16-ink-split; a dispatched reader's table of the
 three held files, classification only, no body carried here):
