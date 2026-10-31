@@ -50030,8 +50030,8 @@
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": {
   "body": "6ae4a633a7367778",
   "claim": "a threshing yard at every farmstead - threshing-and-drying-yards-at-farmhouses-niwa.drawing: on unless the generator declares no grain grown",
-  "code": "797981a8dfc7a70c",
-  "core": "0df6a286838a5089",
+  "code": "50b9686400205962",
+  "core": "7cc7f64065cad209",
   "date": "2026-10-18",
   "note": "`_work_yards = True` unless the generator declares no grain; a dry-field farm keeps its yard, as the page says. Whether the south-China shared floor is rolled is decided outside this unit.",
   "pages": {
@@ -50049,8 +50049,8 @@
  "l7r/diagram/settlement/core.py::Settlement.__init__#its drawn sizes": {
   "body": "1887467c5398e13e",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1820 (default sheet size); 1180 (default sheet size)",
-  "code": "6b9e4c0f1e15b9da",
-  "core": "0df6a286838a5089",
+  "code": "9c8a49cd6f6d76a6",
+  "core": "7cc7f64065cad209",
   "date": "2026-10-25",
   "note": "default sheet size",
   "pages": {},
@@ -50062,8 +50062,8 @@
  "l7r/diagram/settlement/core.py::Settlement.__init__#its salts, guards and sentinels": {
   "body": "1887467c5398e13e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 23 (default seed)",
-  "code": "8c92825824e57684",
-  "core": "0df6a286838a5089",
+  "code": "5cedde58b21dabbc",
+  "core": "7cc7f64065cad209",
   "date": "2026-10-25",
   "note": "default seed",
   "pages": {},
@@ -50075,8 +50075,8 @@
  "l7r/diagram/settlement/core.py::Settlement.__init__#no house racks by default": {
   "body": "6ae4a633a7367778",
   "claim": "no house racks by default - rice-drying-racks-hasa-hasagi.drawing: settled harvest weather where none is stated, so no rack by each house's yard",
-  "code": "7b29789db9cb1534",
-  "core": "0df6a286838a5089",
+  "code": "cecd8fd858285826",
+  "core": "7cc7f64065cad209",
   "date": "2026-10-18",
   "note": "`_house_racks = False` matches \"a settlement whose description gives no harvest weather is drawn with settled weather\" and no rack at the house.",
   "pages": {
@@ -50101,14 +50101,15 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-10-31",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#swept ground kept clear of scatter": {
   "body": "6ae4a633a7367778",
   "claim": "swept ground kept clear of scatter - ground-swept-clear-around-shrines-and-graves.drawing: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392",
-  "code": "d9e8dd85548cb57c",
-  "core": "0df6a286838a5089",
+  "code": "4f742644384070a5",
+  "core": "7cc7f64065cad209",
   "date": "2026-10-18",
   "note": "`clearings` stays empty, matching \"Our maps claim no swept ground\" beyond the ground the shrine or grave plot itself takes up.",
   "pages": {
@@ -50911,8 +50912,8 @@
  "l7r/diagram/settlement/fields/__init__.py::FieldsMixin#package composition": {
   "body": "a920239b5b174f48",
   "claim": "package composition - NONE: the field mixins composed",
-  "code": "ce714a5bbf18524f",
-  "core": "6f00abb7c8972aa3",
+  "code": "2e9aa991abb89901",
+  "core": "fa61b67473bed5ff",
   "date": "2026-10-28",
   "note": "mixin composition only",
   "pages": {},
@@ -51153,604 +51154,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::DIKE_CROP_CLASS#dike crops": {
-  "code": "6b1bf06da7cac4bf",
-  "core": "23cf906bff7b5c03",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
-  "section": "23cf906bff7b5c03",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::FRY_VILLAGE_SHARE#fry share": {
-  "code": "3e1ee3f2997da8a0",
-  "core": "1f4a8b3283286856",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
-  },
-  "research": "7c54d1e1ec4abfaa",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::FRY_WATER#fry water": {
-  "code": "0414a554a142a9ff",
-  "core": "fd71daf8341246ef",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
-  },
-  "research": "7c54d1e1ec4abfaa",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin#plumbing": {
-  "code": "bdcd2df41a318d9f",
-  "core": "45d47d15b58c96af",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#bank as a ring": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "bank as a ring - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the band between bank and water lit as the dike",
-  "code": "240a31127926b5df",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-18",
-  "note": "even-odd bank-minus-water path, a map drawing convention",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
-  },
-  "research": "dede4a3ae0c4c6d4",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#fry pond turbid": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "fry pond turbid - fish-fry-and-nursery-ponds-yumiao.drawing: FRY_WATER for a fry pond",
-  "code": "6e05963153103425",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-18",
-  "note": "FRY_WATER gray-turbid for fry ponds",
-  "pages": {
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
-  },
-  "research": "7c54d1e1ec4abfaa",
-  "rests": [
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:a55235764553bafc"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its drawn sizes": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (least bloom radius); 14 (bloom scatter)",
-  "code": "237b28d3c833bf0c",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-25",
-  "note": "the bloom glyph's size and scatter",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its figures against 0018": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "its figures against 0018 - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: 1 (a dike-pond unit dug back until its bank clears the canal by 1 ft, where a canal may graze a parcel's edge and the bank stays on the true parcel line) - a departure the code keeps until feature 417 T34",
-  "code": "996bb8599ce8d928",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-25",
-  "note": "the pond unit is dug back until its bank clears the canal by 1, where the page lets a canal \"graze a parcel's edge\" and keeps the bank \"on the true parcel line\"; the claim names this and T34 is filed",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
-  },
-  "research": "dede4a3ae0c4c6d4",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its salts, guards and sentinels": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.7 (dig-back scale floor)",
-  "code": "36b075349adb6071",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-25",
-  "note": "a floor on how far the dig-back shrinks",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#its unstated figures": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 8 (bank corner fillet reach); 16 (water corner fillet reach)",
-  "code": "99a6865c6e20975a",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-25",
-  "note": "0018 says nothing of corner fillets",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#lotus field": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "lotus field - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: a teal plot with three blooms",
-  "code": "790c485c96ecbf04",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-18",
-  "note": "teal plot on low ground, blooms a drawing mark",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:978ac8b95aac5453"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_draw_plot#pond unit": {
-  "body": "5adee3f35aae8a9b",
-  "claim": "pond unit - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: bank at the parcel line, water inset the map's own (`dikepond_inset`), dug back off a canal",
-  "code": "cdcf0172ba2837df",
-  "core": "815337b3d0ae5d87",
-  "date": "2026-10-18",
-  "note": "the page says \"the bank stays on the true parcel line\" and that a canal \"may graze the edge of a bank, on purpose\", but the code shrinks the whole unit (`_s2 = max(0.7, 1.0 - (pen + 1.0) / _dm)`) whenever any canal sample falls inside the parcel; the page does not record this dig-back, so either record it on the page or drop it",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
-  },
-  "research": "dede4a3ae0c4c6d4",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e8fdf34d7bd0e81d"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#its drawn sizes": {
-  "body": "7701bcc3b8cf3132",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 4.5 (shoot pitch, dry leftover)",
-  "code": "75b1e3bac6e10152",
-  "core": "39ddc1842498c5aa",
-  "date": "2026-10-25",
-  "note": "0005 records the 4.5 ft shoot pitch as a drawing sample",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#its figures from 0014": {
-  "body": "7701bcc3b8cf3132",
-  "claim": "its figures from 0014 - bunds-between-the-paddies-aze.drawing: 2.5 (water set in from the bund, inside the walking bund's 2-5 ft)",
-  "code": "17d5ae62181e3316",
-  "core": "39ddc1842498c5aa",
-  "date": "2026-10-25",
-  "note": "inside the walking bund's 2-5 ft",
-  "pages": {
-   "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
-  },
-  "research": "1a1b231001c7410e",
-  "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:3ba164484a3a465a",
-   "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#its salts, guards and sentinels": {
-  "body": "7701bcc3b8cf3132",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 7 (seed multiplier); 13 (seed multiplier)",
-  "code": "40c1d2a527a4e478",
-  "core": "39ddc1842498c5aa",
-  "date": "2026-10-25",
-  "note": "seed multipliers",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#its unstated figures": {
-  "body": "7701bcc3b8cf3132",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 12 (leftover waterline fillet reach)",
-  "code": "82e2c055b3ba7592",
-  "core": "39ddc1842498c5aa",
-  "date": "2026-10-25",
-  "note": "nothing cited gives a size for the fillet",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": {
-  "code": "0d32eeca259f2805",
-  "core": "39ddc1842498c5aa",
-  "date": "2026-10-07",
-  "note": "in a wholesale dike-pond block, the unconverted parcels are painted as standing rice",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
-  ],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#its unstated figures": {
-  "body": "34f4724c547f7bdc",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 6 (first tea row's set-in from the plot edge)",
-  "code": "0b02f9ae183f97fe",
-  "core": "ee64473e404bda6f",
-  "date": "2026-10-25",
-  "note": "0020 gives no set-in for the first row",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row direction": {
-  "body": "34f4724c547f7bdc",
-  "claim": "tea row direction - dry-fields-and-their-crops-hatake.drawing: rows on dry plots are set tract by tract, along the contour or down the fall - tea rows are drawn screen-horizontal, a departure the code keeps until feature 417 T34; screen-horizontal whatever the canal or the slope",
-  "code": "2274d303df86ee1c",
-  "core": "ee64473e404bda6f",
-  "date": "2026-10-25",
-  "note": "rows are fixed screen-horizontal (`min(ys) + 6 + i * 8`), where the page sets dry-plot rows \"tract by tract\", along the contour or down to the outfall, turned up to 17 degrees, with plots square to the canal - follow the tract's direction or record a DEVIATION",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea row spacing": {
-  "body": "34f4724c547f7bdc",
-  "claim": "tea row spacing - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows: Fortune saw tea bushes planted in rows about four feet apart - the rows are drawn 8 ft apart, a departure the code keeps until feature 417 T34; rows 8 px apart, a 2.4 px stroke",
-  "code": "412796962f214428",
-  "core": "ee64473e404bda6f",
-  "date": "2026-10-25",
-  "note": "`min(ys) + 6 + i * 8` draws rows 8 ft apart against Fortune's \"rows about four feet apart\". The drawing page records no such departure, so the claim's \"departure the code keeps\" is not a recorded DEVIATION. Draw rows 4 ft apart (in ft, not px) or record the DEVIATION on 0020's drawing page",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html": "8075cafe02516d96"
-  },
-  "research": "1dd5a52fe9f4744a",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:183180c6101c4152"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea rows": {
-  "code": "2276c1ac82dc99c7",
-  "core": "ee64473e404bda6f",
-  "date": "2026-10-05",
-  "note": "siting matches, but tea is only ever the garden-row form where the page records two forms and says \"the tea a village carries would be rolled between them\" (bund tea a known gap); roll bund tea or claim DEVIATION",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:0c621ce4bd3af9f1",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a8ef330cfff73cf4",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:e79bf3720dcb6e48"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#bank mottle": {
-  "body": "577fe014560f0802",
-  "claim": "bank mottle - CONVENTION: earth patches every 30 px",
-  "code": "e2da62501f3bfdf6",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-18",
-  "note": "the mottled earth bank is how the page shows the bank, so CONVENTION is the right label",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#fruit trees": {
-  "body": "577fe014560f0802",
-  "claim": "fruit trees - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: one line along the bank at 18 ft, crowns r 4-5 px",
-  "code": "c4f6d1f473d31faa",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-18",
-  "note": "one line at the band's centerline at an 18 ft step, crowns r 4-5 px (8-10 ft across)",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
-  "rests": [
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:4bba012c10bd394d",
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:60aee2690bd65df2"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#its drawn sizes": {
-  "body": "577fe014560f0802",
-  "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 8 (mottle rx max); 6 (mottle ry max)",
-  "code": "a2655f82949c4848",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-25",
-  "note": "the earth-mottle patches",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#its figures guessed on 0026": {
-  "body": "577fe014560f0802",
-  "claim": "its figures guessed on 0026 - GUESS mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: 0.32 (inner tea hedge's place across the band); 0.7 (outer tea hedge's place across the band); 2.5 (tea hedge walk step)",
-  "code": "a80e92413282986b",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-25",
-  "note": "0026 records the two hedges and their 7.5 ft breaks as a guess; 2.5 x 3 = 7.5",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
-  "rests": [
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#its salts, guards and sentinels": {
-  "body": "577fe014560f0802",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.4 (scale floor); 1e+09 (sentinel); 20 (channel-index bbox pad)",
-  "code": "78d5cd705b846ba4",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-25",
-  "note": "a scale floor, a sentinel and an index pad",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#its search steps and tolerances": {
-  "body": "577fe014560f0802",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 1.3 (mulberry crown jitter)",
-  "code": "4b7baad012bac39d",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-25",
-  "note": "nothing cited gives a jitter for the crowns",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#mulberry bushes": {
-  "body": "577fe014560f0802",
-  "claim": "mulberry bushes - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: crowns r 2.2-3.6 px at a 4.4 px pitch, none centered within 3.5 px of a canal",
-  "code": "976433ac6242291c",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-18",
-  "note": "`rng.uniform(2.2, 3.6)` draws crowns 4.4 to 7.2 ft across, but the page says \"4.4 to 7 ft across\"; the code should use r 3.5 or the page should say 7.2 ft. The 4.4 ft pitch, the rows per 5.5 ft and centers kept off the canal all match",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
-  "rests": [
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:d1469e6daa9c666b"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea and fruit off the canal": {
-  "body": "577fe014560f0802",
-  "claim": "tea and fruit off the canal - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); tea hedges kept 3.0 px and fruit trees 5.5 px off a canal centerline",
-  "code": "6c5ae7f65b1b0153",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-25",
-  "note": "0018's canal rule covers only the mulberry bush's center, and 0026 gives no canal clearance for tea or fruit",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._mulberry_rows#tea hedges": {
-  "body": "577fe014560f0802",
-  "claim": "tea hedges - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two hedges 2.8 px wide, three steps drawn and two left open",
-  "code": "83c9d53e3838c376",
-  "core": "5f0c1e578f694bb4",
-  "date": "2026-10-18",
-  "note": "two hedges about 3 ft wide, drawn in 7.5 ft runs with breaks, recorded on the page as a GUESS",
-  "pages": {
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "5204a1fdda1ca89b",
-  "rests": [
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#dike-pond patches": {
-  "code": "a84e852fa266f8ca",
-  "core": "9d11cb8a023bfb8e",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#its figures guessed on 0005": {
-  "body": "3e86e0315f68eb64",
-  "claim": "its figures guessed on 0005 - GUESS rice-paddies-and-their-plots-suiden.drawing: 9 (one seed plot per nine converted)",
-  "code": "4af4dca854d59042",
-  "core": "9d11cb8a023bfb8e",
-  "date": "2026-10-25",
-  "note": "0005 records \"about nine plots\" a household as a guess, so one seed per household's nine plots",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
-  },
-  "research": "69aa78ae06a3c11d",
-  "rests": [
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw": {
-  "code": "0a961d3b94ccba0e",
-  "core": "9d11cb8a023bfb8e",
-  "date": "2026-10-03",
-  "note": "an even rng.sample over the low plots, but 0020 says \"Converted plots are set in patches rather than scattered evenly\" for cash crops in general (it notes that on the strip the two look alike); cluster lotus too, or have the page record lotus as the exception",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._rows_cut_to_plot#plumbing": {
-  "code": "bbba41b712e04d11",
-  "core": "cd51f041251c7ecb",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#converted share": {
-  "body": "cbf07a080223db6d",
-  "claim": "converted share - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: `fraction` of the eligible plots, at least two",
-  "code": "8fb40d7be17b40ff",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "fraction applied to the eligible set, not the whole field",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a7c70511a8272fd4"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#eligible ground": {
-  "body": "cbf07a080223db6d",
-  "claim": "eligible ground - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: the low plots, or every plot on a wholesale dike-pond block",
-  "code": "abe36986e0b35bb7",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "low plots (two lowest rows), or all plots on the wholesale archetype",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:12305d78f508ec8e",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:c328ac52a81da7bd"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#its converted share": {
-  "body": "cbf07a080223db6d",
-  "claim": "its converted share - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: 0.55 (converted share of eligible plots, a share well short of everything)",
-  "code": "676cc3633a0b8084",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-25",
-  "note": "0.55 of the eligible plots is a fixed degree inside \"a share well short of everything\"",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:a7c70511a8272fd4"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#no rape": {
-  "body": "cbf07a080223db6d",
-  "claim": "no rape - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: never drawn beside the rice",
-  "code": "06c4f0c69aa07544",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "rape refused",
-  "pages": {
-   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
-  },
-  "research": "7b19741c5250f0fe",
-  "rests": [
-   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:94818b7ca01289f3"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#overlay colors": {
-  "body": "cbf07a080223db6d",
-  "claim": "overlay colors - CONVENTION: pond and lotus teals",
-  "code": "cd64abaa5517d342",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "fill colors only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#patches for dike-ponds": {
-  "body": "cbf07a080223db6d",
-  "claim": "patches for dike-ponds - cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing: clustered on a partial dike-pond overlay",
-  "code": "964bd9483ebfe16b",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "clustered on a partial dike-pond overlay, unclustered on the wholesale block",
-  "pages": {
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
-  },
-  "research": "909bb100e23424ac",
-  "rests": [
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:4af6b4bf821b4dab",
-   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:ac2f9b58c769b1bc"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::LandUseMixin.apply_land_use#the village's split and its inset": {
-  "body": "cbf07a080223db6d",
-  "claim": "the village's split and its inset - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the split rolled per village (`dikepond_split`) and the one inset every reader takes derived from it (`dikepond_inset`)",
-  "code": "c28295f20019f5ff",
-  "core": "dbb7ab6fe10fdace",
-  "date": "2026-10-18",
-  "note": "the split is rolled per village and one inset is taken from the median-area parcel and used by every reader",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
-  },
-  "research": "dede4a3ae0c4c6d4",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:21db06d77d82879b",
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::MULBERRY_ROW_FT#mulberry row spacing": {
-  "code": "38705aaaf5f2662e",
-  "core": "cc497174078a09b4",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b",
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
-  },
-  "research": "4a7d44325865b97a",
-  "triaged": "2026-10-18",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/landuse.py::dikepond_inset#one inset per map, on its median parcel": {
   "body": "587282778c1d7db6",
   "claim": "one inset per map, on its median parcel - GUESS: the share holds on the median parcel; a smaller parcel runs a little drier and a larger a little wetter",
@@ -51779,70 +51182,12 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/landuse.py::fry_pond_ids#fry ponds": {
-  "code": "02e6aa7b0614f323",
-  "core": "1aa25e5691827977",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
-  },
-  "research": "7c54d1e1ec4abfaa",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/landuse.py::line_cuts#plumbing": {
   "code": "b8a95735385fa1a1",
   "core": "eee8851c148eedb6",
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::mulberry_row_ts#its unstated figures": {
-  "body": "6445f8df219b7df2",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N7, 2026-10-25) - 0.08 (rows held off the water and bank edges); 0.84 (span of the band the rows fill)",
-  "code": "b06c91786fc3ac01",
-  "core": "c9b2d99af46492fa",
-  "date": "2026-10-25",
-  "note": "0018 gives the rows' pitch but no edge margins",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::mulberry_row_ts#rows across the bank": {
-  "body": "6445f8df219b7df2",
-  "claim": "rows across the bank - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: one per MULBERRY_ROW_FT, at least two",
-  "code": "baa6c27ea68e707e",
-  "core": "c9b2d99af46492fa",
-  "date": "2026-10-18",
-  "note": "one row per 5.5 ft of the bank's width",
-  "pages": {
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
-  },
-  "research": "dede4a3ae0c4c6d4",
-  "rests": [
-   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:0c906f5e26dcec83"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/landuse.py::row_cuts#plumbing": {
-  "code": "b4b1fd676e309339",
-  "core": "b66b3a054b8aae35",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::CURVE_LEG_PX#the fallback's curve": {
-  "code": "6ad72d0fb0e7785a",
-  "core": "e3bbe3a7edb35017",
-  "date": "2026-10-08",
-  "note": "the length of a polyline leg in px; 0060 rules only the turn angle",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/outfall.py::DOWNHILL_FRACTION#downhill share": {
@@ -51857,59 +51202,6 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::_curved_run#curving out of the collector": {
-  "code": "86a5e0a8af334acc",
-  "core": "2cb711891bf760ce",
-  "date": "2026-10-08",
-  "note": "every turn is held to 55 degrees or less",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::outfall_run#drain outfall": {
-  "code": "9af85a7992ace673",
-  "core": "e7616f5ce5a6ddac",
-  "date": "2026-10-08",
-  "note": "runs on along the exit, curves at 55 degrees or less, then runs down the fall off the map",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::outfall_run#its salts, guards and sentinels": {
-  "body": "ebe092da05e737cf",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 520 (reach that carries the run off the sheet)",
-  "code": "b567344435f578ea",
-  "core": "e7616f5ce5a6ddac",
-  "date": "2026-10-25",
-  "note": "a reach that carries the run off the sheet",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::outfall_run#its search steps and tolerances": {
-  "body": "ebe092da05e737cf",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N7, 2026-10-25) - 70 (straight lead before the curve)",
-  "code": "1c1b56695e8a84f5",
-  "core": "e7616f5ce5a6ddac",
-  "date": "2026-10-25",
-  "note": "0060 has a \"first stretch\" but gives it no length",
-  "pages": {},
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/outfall.py::runs_downhill#water runs downhill": {
@@ -52229,17 +51521,6 @@
   "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.resting_plots#rest form applied": {
-  "code": "93bad02bda6ce739",
-  "core": "34400702971ec557",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canal widths": {
   "code": "64e053b5c12d6ba0",
   "core": "12626ecf93a3a92b",
@@ -52489,39 +51770,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/paddy.py::REST_APART_SIDES#rest scattered": {
-  "code": "eabe1b61ce005bc9",
-  "core": "7a33414bed51de7b",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::REST_COUNT#rest count": {
-  "code": "25f38d65d88fffe8",
-  "core": "b61ec44eea3ffd72",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::REST_FAR_POWER#rest at the far end": {
-  "code": "46cab7bacd7caeb7",
-  "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/paddy.py::_UF_RT#plumbing": {
   "code": "3a69e389f6505287",
   "core": "983699d2823703f8",
@@ -52533,14 +51781,6 @@
  "l7r/diagram/settlement/fields/paddy.py::_ring_area#plumbing": {
   "code": "6c1cdcf03308cfa6",
   "core": "c261a459ff2d14d1",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::_ring_center#plumbing": {
-  "code": "6464987930473f9b",
-  "core": "b6f7b4687d35a4f7",
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
@@ -52580,44 +51820,6 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::rest_plots#its figures guessed on 0013": {
-  "body": "40fec1869b7c38c8",
-  "claim": "its figures guessed on 0013 - GUESS paddies-left-to-rest-kataarashi.drawing: 0.05 (least weight at the near end)",
-  "code": "f974af1d5e9b0070",
-  "core": "78fa86d32c6ff8e8",
-  "date": "2026-10-25",
-  "note": "a floor weight inside the far-end weighting 0013 records as a guess",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
-  "rests": [
-   "0013-paddies-left-to-rest-kataarashi.drawing.html:11a8f6722d007fca"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::rest_plots#rest basin floor": {
-  "body": "40fec1869b7c38c8",
-  "claim": "rest basin floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no basin smaller than the median candidate rests",
-  "code": "a9d05d385fb7556c",
-  "core": "78fa86d32c6ff8e8",
-  "date": "2026-10-25",
-  "note": "median-area floor; the page asks only for whole plots and gives no floor",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/paddy.py::rest_plots#rest weighting and spacing": {
-  "code": "3308006d8312417e",
-  "core": "78fa86d32c6ff8e8",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
-  "pages": {
-   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
-  },
-  "research": "a9a8377184fbd08b",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::rest_record#plumbing": {

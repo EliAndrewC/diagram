@@ -68,6 +68,7 @@ class Settlement(
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
             swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
+            a dike-pond bank's inset by default - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the bank of the water-heavy split, `DIKEPOND_WATER_INSET`, until the field stage sets the village's own from its parcels
             registries and record streams - NONE
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1820 (default sheet size); 1180 (default sheet size)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 23 (default seed)
