@@ -146,21 +146,34 @@ trap 'cleanup; lt_record' EXIT
 # landings were refused here because the ledger and the make-targets page moved on main, and each landed unchanged after a
 # `sync-in`. So on a failed apply the clone merges origin/main (a merge commit, never a rebase), the patch is taken again from
 # the new merge base, and it is applied once more; only a merge that conflicts, or a second failed apply, refuses.
+# MAIN MERGED INTO THE CLONE, A CONFLICT WITH ITS OWN LANDING RESOLVED (the GM, 2026-10-30: "just implement those effects rather
+# than filing it for later"). Feature 444 T17 landed tooling five times mid-task, and each later landing of a file edited again
+# conflicted with the clone's own earlier landing of it: main's copy and the clone's had diverged from their base, though only this
+# clone had touched the file. A conflicted file whose LAST commit on main is this clone's own landing ("Tooling from <clone>,") was
+# changed by no other session since, so the clone's side is the whole truth and is kept; a conflict in any other file refuses, as
+# before - another session's change is never overwritten. Returns 1 on such a conflict, the merge aborted.
+merge_main() {
+  git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1 && return 0
+  local own="" other="" f
+  for f in $(git -C "$ROOT" diff --name-only --diff-filter=U); do
+    case "$(git -C "$ROOT" log -1 --format=%s origin/main -- "$f")" in "Tooling from $(basename "$ROOT"),"*) own="$own $f" ;; *) other="$other $f" ;; esac
+  done
+  if [ -n "$other" ] || [ -z "$own" ]; then
+    git -C "$ROOT" merge --abort 2>/dev/null
+    return 1
+  fi
+  # shellcheck disable=SC2086 - the list is paths git named, one word each
+  git -C "$ROOT" checkout --ours -- $own && git -C "$ROOT" add -- $own && git -C "$ROOT" commit -q --no-edit >/dev/null || { git -C "$ROOT" merge --abort 2>/dev/null; return 1; }
+  printf 'land-tooling: merged origin/main, keeping the clone'"'"'s side of its own earlier landing:%s\n' "$own" >&2
+}
+
 if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
   # GUARD_EDIT_OK: feature 385 T30 - never merged under a running gate (the round arbiter on red-gate@2026-10-18T12:36:36Z)
   if [ -f "$ROOT/scripts/gates/gate_lock.py" ] && python3 "$ROOT/scripts/gates/gate_lock.py" held "$(git -C "$ROOT" rev-parse --absolute-git-dir)"; then
     die "FILES do not apply onto the latest main, and a gate is running in this clone - nothing is merged under it; run this again when it ends"
   fi
-  if ! git -C "$ROOT" merge -q --no-edit origin/main >/dev/null 2>&1; then
-    # GUARD_EDIT_OK: feature 385 T122 (D144; the round arbiter's change-route on hour:385-approach-checklist@35) - a conflict with
-    # this clone's OWN earlier landing (a file new here, landed, then edited again) is named with its one-line fix, never resolved
-    own=""
-    for f in $(git -C "$ROOT" diff --name-only --diff-filter=U); do
-      case "$(git -C "$ROOT" log -1 --format=%s origin/main -- "$f")" in "Tooling from $(basename "$ROOT"),"*) own="$own $f" ;; esac
-    done
-    git -C "$ROOT" merge --abort 2>/dev/null
-    [ -z "$own" ] || die "FILES do not apply cleanly onto the latest main:$own conflict only with this clone's own earlier landing (main's last commit to them is it; for a file that was not new, git log origin/main --$own first, so no other session's change is lost) - run scripts/sync-with-main.sh sync-in, then git checkout --ours$own && git add$own && git commit --no-edit, then land again"
-    die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
+  if ! merge_main; then
+    die "FILES do not apply cleanly onto the latest main, and merging main into the clone conflicts with another session's change - run scripts/sync-with-main.sh sync-in, resolve the conflict, commit, then run this again"
   fi
   printf 'land-tooling: main had moved under FILES - merged origin/main into the clone and took the patch again\n' >&2
   python3 "$(dirname "${BASH_SOURCE[0]}")/hooks/lib/usage_log.py" record --tool land-tooling-merge --kind step --outcome changed 2>/dev/null || true  # feature 406 T03 (D162)
@@ -242,4 +255,11 @@ step push; steps_done "push-exit-$rc"
 if [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ]; then tail -6 "$log"; else tail -25 "$log" >&2; fi
 [ "$rc" -eq 0 ] || [ "$rc" -eq 3 ] || die "the push failed (exit $rc; log: $log) - nothing landed"
 LT_OUTCOME="landed"
-printf 'land-tooling: landed %s on main. The clone keeps its own commits; its next sync-in merges them cleanly.\n' "$*"
+# ...AND MAIN MERGED BACK AT ONCE (the GM, 2026-10-30): the landing is fresh, so main's copy of each landed file and the clone's are
+# the same change and merge cleanly now - a later edit then builds on main's copy and never conflicts with it
+git -C "$ROOT" fetch -q origin main 2>/dev/null
+if merge_main; then
+  printf 'land-tooling: landed %s on main, and merged main back into the clone.\n' "$*"
+else
+  printf 'land-tooling: landed %s on main. Merging main back conflicts with another session'"'"'s change - run scripts/sync-with-main.sh sync-in.\n' "$*"
+fi
