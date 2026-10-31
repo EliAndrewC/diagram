@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-LINTED = ("l7r/", "tests/")
+LINTED = ("l7r/", "tests/", "rust/")  # rust/: the Rust phases' Python driver, adopted with the crate (feature 444 T19)
 
 
 def _ruff(*args: str, cwd: Path) -> subprocess.CompletedProcess[str]:

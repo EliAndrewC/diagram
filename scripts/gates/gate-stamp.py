@@ -51,7 +51,9 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # and container trees - are excluded by name in `_DECLARED_EXCLUDE` below, so the area hashes exactly what it did.
     "diagram": (
         "",
-        ("*.py",),
+        # the Rust phases are engine too (feature 444 T19): every `.rs` and Cargo file under `rust/`, `content_id` hashing a `.rs`
+        # by its comment-free tokens - without them a Rust-only change read "already verified" and owed no gate
+        ("*.py", "rust/*.rs", "rust/*Cargo.toml", "rust/*Cargo.lock"),
     ),  # the webapp area lives in gm-assistant since feature 131
     # the guards and tooling under scripts/ and their companion suites in tests/hooks/ (the 2026-10-08 move split one
     # flat scripts/ into both; the area still hashes every one of them)

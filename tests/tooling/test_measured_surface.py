@@ -76,9 +76,13 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     tracked = subprocess.run(["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, capture_output=True, text=True, check=True).stdout.split("\0")
     excluded = ("l7r/", "tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/")
     owed = {str(REPO / t) for t in tracked if t and not t.startswith(excluded)}
-    outside = {f for f in files if "/l7r/" not in f and "/tests/" not in f}
+    # by prefix, as the stamp's own exclusion is: a `tests/` directory inside another tree (the Rust crate's Python driver,
+    # `rust/phases/tests/py_driver.py`) is that tree's, not the test tree
+    outside = {f for f in files if not f.startswith((str(REPO / "l7r") + "/", str(REPO / "tests") + "/"))}
     assert owed and owed <= outside, f"the add-only rule: these must not be dropped: {sorted(owed - outside)[:5]}"
-    assert sum("/tests/" in f for f in files) == 0, "FR-024 is untouched - a tests-only change still owes no gate"
+    assert not any(f.startswith(str(REPO / "tests") + "/") for f in files), "FR-024 is untouched - a tests-only change still owes no gate"
+    rust = subprocess.run(["git", "ls-files", "-z", "--", "rust/*.rs", "rust/*Cargo.toml"], cwd=REPO, capture_output=True, text=True, check=True).stdout.split("\0")
+    assert {str(REPO / r) for r in rust if r} <= set(files), "the Rust phases' sources open the gate (444 T19): a Rust-only change is engine"
 
 
 def test_the_PAID_route_is_untouched_so_a_ci_change_still_dispatches_nothing() -> None:
