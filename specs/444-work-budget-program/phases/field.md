@@ -42,20 +42,19 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (2026-10-31 late) the comb and the polder both run through Rust (`field.rs`, `field/`; doors `stage_field`,
-`stage_polder`, `roll_knob`, `settle_runs`), the thin `hamletgen/field_stage.py` and `settlement/fields/ink.py` (D12) writing the
-records and the ink; `make rust-gate` green on 54 seeds; FR-012 measured (`phases/field.fr012.md`). The five DRAWING functions moved
-unchanged into `settlement/fields/drawing.py` (ask:444-T16-move-drawing); `comb_record.py` deleted; `CombMixin` gone from `comb.py`.
-NEXT, in order: (1) ASK the arbiter: `comb.py`'s module-level `WetLines` and `hem_on_water` are read by the shared brook rules'
-`reserved_box` (the view the level rule judges) - move them by a ruled read like the five, or port `reserved_box`'s need to Rust;
-(2) port `_rounded_pond` (PLACEMENT, called by `fields/landuse.py` for the dike-pond's ponds) to Rust, its contract measured, then
-delete `features.py`'s rest; (3) the rest of D10: `hamletgen/water/` comb, fit, polder, brook_course (check `brook.py`'s callers -
-the sink reads `brook_violations`, `course_corner`, `finished_course`, `round_the_brooks`, so `brook.py`, `brook_course.py`,
-`brook_rules.py` stay, their dead placement deleted by name via `make dead-closure`) and `waterfields/` (carve, frame, ring_rules,
-trunks, seams; `palette` stays), the tests of the deleted code with them; (4) the Python tests to the floor (`make cover-changed`);
-(5) MODE AUDIT of the counters against both derivations, `make work-budget`; (6) the claims round to zero open (FR-021); (7) the
-owed: the seed-37 level run, the sink's scaling-leg refusal; (8) glyph-check on the redrawn field marks (the comb's new ink:
-`ink.py`), settlement-reviews of the moved pool hamlets; (9) one `make land F=444 T=T16`. T16 stays open.
+**Resume here:** (2026-10-31 night) T16's port is BUILT and the old field DELETED: the comb and the polder place in Rust
+(`field.rs`, `field/`; doors `stage_field`, `stage_polder`, `roll_knob`, `settle_runs`, `rounded_pond`), the thin
+`hamletgen/field_stage.py` (its `comb_net` shared with the tests' `lay_comb`) and `settlement/fields/ink.py` write the records and
+the ink; the five DRAWING functions moved to `settlement/fields/drawing.py` (ask:444-T16-move-drawing), the brook's two check helpers
+to `brook_rules.py` (ask:444-T16-brook-predicates); `hamletgen/water/` keeps `brook.py`, `brook_course.py`, `brook_rules.py` (the
+sink's), `skeleton.py` (water_frame's) and `waterward.py` (the waterward stage, renamed from `polder.py`); `waterfields/` keeps what
+`make dead-closure` (BASE the clone's merge-base) found live. `make quick` green, `make rust-gate` green on 54 seeds, FR-012
+measured. NEXT, in order: (a) `make cover-changed` - the Python lines the floor leaves unrun (`field_stage.py`, `ink.py`,
+`grain.py` and the rest), unit tests or COVER_OK for roll-only lines; (b) MODE AUDIT of the counters against both derivations,
+`make work-budget`; (c) the claims round to zero open (FR-021: `make claims-owed`, impl-drift on the new code's claims); (d) the
+owed: the seed-37 level run, the sink's scaling-leg refusal; (e) glyph-check on the field's redrawn marks (`ink.py`: the plots, the
+dry hem, the ditches, the pocket pond, the grave, the weir), settlement-reviews of the moved pool hamlets (`make maps-moved`);
+(f) one `make land F=444 T=T16`, its note listing what moved and what was deleted. T16 stays open.
 
 THE POLDER'S DESIGN, next (2026-10-31): `rust/phases/src/field/polder.rs`, entered from `build.rs` on the two polder archetypes;
 the thin stage then calls the free helpers as the old stage did. Rust places: (1) the block - the households' paddy in whole
