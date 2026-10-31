@@ -21,14 +21,12 @@ from l7r.diagram.settlement._knobs import KNOBS
 from .consts import (
     BAMBOO_FORMS,
     BROOK_FLANKS,
-    CARDINAL_BEARINGS,
     CLUSTER_BAND_ASPECT,
     CLUSTER_SHAPES,
     COPSE_SITINGS,
     DEFAULT_HARVEST_WEATHER,
     DEFAULT_WINDWARD,
     DIKE_CROPS,
-    FALL_BEARINGS,
     FAN_ASPECTS,
     FARM_WATERS,
     FIELD_ARCHETYPES,
@@ -539,9 +537,7 @@ def _rust_rolls(spec: HamletSpec, archetype: str, windward: str) -> dict[str, An
     knobs = [(k, len(tables[k]), pinned[k], branch[k]) for k, _b in _KNOBS]
     # the fall from the falls that back the wind, read from Rust's table (`admitted`: the cardinals on a polder's survey grid), in
     # place of a test of each fall (the ruling on ask:444-T19-outside-charges)
-    fall, picks, counts = phases().stage_water_frame(
-        spec.seed & 0xFFFF_FFFF_FFFF_FFFF, windward, archetype in POLDER_ARCHETYPES, spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs
-    )
+    fall, picks, counts = phases().stage_water_frame(spec.seed, windward, archetype in POLDER_ARCHETYPES, spec.down_deg is not None, [str(f) for f in tables["settlement_form"]], knobs)
     if __debug__:
         for key, n in counts.items():
             work_counts.OPS[key] += n
@@ -596,7 +592,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
     # only where `seat_cluster` finds no margin whose back it can turn to the wind (`SeatRefused`), never for its bearing.
     # THE PLAN'S ROLLS ARE THE RUST WATER FRAME'S (feature 444 T19, D6-D7; the round arbiter's rulings on ask:444-T19-plan-site and
     # ask:444-T19-which-knobs): Python gathers each knob's table, pin and branch, `l7r_phases.water_frame` rolls the fall and the 21
-    # knobs from the seed (its own SplitMix64, so every plan rolled anew once) and counts its work, and the SitePlan below is filled
+    # knobs from the seed (`knob_rng`'s own draws, reproduced in `pyrand.rs`, so every seed keeps its plan) and counts its work, and the SitePlan below is filled
     # from the result. The rolls outside water_frame's derivation (the field's archetype and fan, the polder's forms, the woods)
     # stay here, rolled and counted as before.
     _rolled = _rust_rolls(spec, _archetype, windward)

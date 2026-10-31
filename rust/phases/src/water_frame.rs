@@ -9,41 +9,11 @@ use std::collections::HashMap;
 
 use pyo3::prelude::*;
 
+use crate::pyrand::knob_rng;
+
 /// One knob of the plan as Python gathered it: its name, how many forms its table holds, whether the spec pins it, and the
 /// branch it applies on.
 type KnobIn = (String, u32, bool, String);
-
-/// A seeded `SplitMix64` (D7): the same draws on every platform, no dependency, one stream per knob name so adding a knob
-/// re-rolls no other.
-///
-/// Research:
-///     the rolls' generator - NONE: a deterministic generator, the plan's draws its own (D7)
-struct SplitMix(u64);
-
-impl SplitMix {
-    /// The stream of `knob` under the map's `seed`: the seed mixed with the name's FNV-1a hash.
-    fn for_knob(seed: u64, knob: &str) -> Self {
-        let mut h: u64 = 0xcbf2_9ce4_8422_2325;
-        for b in knob.bytes() {
-            h ^= u64::from(b);
-            h = h.wrapping_mul(0x0100_0000_01b3);
-        }
-        Self(seed ^ h)
-    }
-
-    fn next(&mut self) -> u64 {
-        self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
-        let mut z = self.0;
-        z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
-        z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
-        z ^ (z >> 31)
-    }
-
-    /// An index below `n`, by the high bits (Lemire's multiply), so every form of a table is as likely as its repeats make it.
-    fn below(&mut self, n: u32) -> u32 {
-        u32::try_from((u128::from(self.next()) * u128::from(n)) >> 64).unwrap_or(0)
-    }
-}
 
 /// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll_plan` for a draw here,
 /// `write@_rust_rolls` for a field Python writes back (D9) - compiled out of a build
@@ -128,7 +98,7 @@ fn applies(branch: &str, form: &str) -> bool {
 /// index (`None` where pinned), each knob's index (`None` where pinned or off its branch), and the counts.
 #[must_use]
 pub fn roll_plan(
-    seed: u64,
+    seed: i64,
     falls: &[f64],
     fall_pinned: bool,
     forms: &[String],
@@ -141,7 +111,7 @@ pub fn roll_plan(
     } else {
         let n = u32::try_from(falls.len()).unwrap_or(u32::MAX);
         falls
-            .get(SplitMix::for_knob(seed, "down_deg").below(n) as usize)
+            .get(knob_rng(seed, "down_deg").randbelow(n) as usize)
             .copied()
     };
     counts.add("candidate@roll_plan", 6);
@@ -160,7 +130,7 @@ pub fn roll_plan(
             if *pinned {
                 None
             } else {
-                Some(SplitMix::for_knob(seed, name).below(*n))
+                Some(knob_rng(seed, name).randbelow(*n))
             }
         };
         if i == 0 {
@@ -182,7 +152,7 @@ pub fn roll_plan(
 )]
 #[must_use]
 pub fn stage_water_frame(
-    seed: u64,
+    seed: i64,
     windward: String,
     cardinal: bool,
     fall_pinned: bool,
@@ -200,7 +170,7 @@ pub fn stage_water_frame(
 
 #[cfg(test)]
 mod tests {
-    use super::{applies, roll_plan, SplitMix};
+    use super::{applies, knob_rng, roll_plan};
 
     fn knob(name: &str, n: u32, branch: &str) -> (String, u32, bool, String) {
         (name.to_owned(), n, false, branch.to_owned())
@@ -223,11 +193,11 @@ mod tests {
     #[test]
     fn a_draw_is_the_same_each_time_and_differs_by_knob() {
         assert_eq!(
-            SplitMix::for_knob(7, "bamboo").below(4),
-            SplitMix::for_knob(7, "bamboo").below(4)
+            knob_rng(7, "bamboo").randbelow(4),
+            knob_rng(7, "bamboo").randbelow(4)
         );
         let spread: std::collections::HashSet<u32> = (0..64)
-            .map(|s| SplitMix::for_knob(s, "bamboo").below(4))
+            .map(|s| knob_rng(s, "bamboo").randbelow(4))
             .collect();
         assert_eq!(spread.len(), 4, "every form drawn across seeds");
     }

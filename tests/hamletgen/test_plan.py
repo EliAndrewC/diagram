@@ -374,3 +374,21 @@ def test_the_knobs_every_form_reads_roll_on_every_form() -> None:
         plans = [hg.plan_site(hg.HamletSpec(name="X", seed=s, households=12, settlement_form=form)) for s in range(1, 41)]
         assert {p.cluster_shape for p in plans} == set(CLUSTER_SHAPES), form
         assert {p.well_siting for p in plans} == set(WELL_SITINGS), form
+
+
+def test_the_rust_draws_are_knob_rng_s() -> None:
+    """444 T19, D7 amended 2026-10-31: Rust's draw of each knob is `knob_rng(seed, knob).randrange(n)`'s own, so the port rolls the
+    plan Python rolled and every seed keeps its map - checked on rolled knobs and on the fall across seeds, a seed past 2**32 too."""
+    from l7r.diagram import hamletgen as hg  # noqa: PLC0415
+    from l7r.diagram.hamletgen import plan as P  # noqa: PLC0415
+    from l7r.diagram.hamletgen.consts import CARDINAL_BEARINGS, CLUSTER_SHAPES, FALL_BEARINGS, LANE_SKELETONS, PLOT_SIZES  # noqa: PLC0415
+    from l7r.diagram.settlement._knobs import knob_rng  # noqa: PLC0415
+
+    for seed in (*range(1, 31), 355289, 2**33 + 7):
+        spec = hg.HamletSpec(name="X", seed=seed, households=12)
+        plan = hg.plan_site(spec)
+        for knob, table in (("cluster_shape", CLUSTER_SHAPES), ("lane_skeleton", LANE_SKELETONS), ("plot_size", PLOT_SIZES)):
+            assert getattr(plan, knob) == table[knob_rng(seed, knob).randrange(len(table))], (seed, knob)
+        bearings = CARDINAL_BEARINGS if plan.field_archetype in P.POLDER_ARCHETYPES else FALL_BEARINGS
+        falls = [f for f in bearings if P.fall_backs_the_wind(f, plan.windward)]
+        assert plan.down_deg == falls[knob_rng(seed, "down_deg").randrange(len(falls))], seed

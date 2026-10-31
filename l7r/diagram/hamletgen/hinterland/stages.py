@@ -5,11 +5,11 @@ Research: stage plumbing - NONE: ordering, records and canopy measures
 
 from __future__ import annotations
 
-from l7r.diagram import work_counts
 import math
 from collections.abc import Sequence
 from typing import Any, cast
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea
 from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit

@@ -8,11 +8,11 @@ Research: polder geometry - NONE: grid search, flank letters, binning and inters
 
 from __future__ import annotations
 
-from l7r.diagram import work_counts
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement import PointGrid, Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
 from l7r.diagram.sitegen.geom import net_acres, poly_area
