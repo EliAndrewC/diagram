@@ -93,7 +93,7 @@ mod tests {
 
     #[test]
     fn beans_in_runs_of_two_or_more_and_none_in_the_water() {
-        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let mut ix = Index::default();
         let runs = bean_runs(&b, 4, "f0", &mut ix, &[]);

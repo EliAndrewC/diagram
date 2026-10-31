@@ -99,33 +99,77 @@ pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
     out
 }
 
-/// The comb's basins: the fan's length cut into rows of about `row_ft` (`ROW_FT` on the plan's medium plot size), each row cut across by `cuts` at fixed s, so the bunds of a
-/// row converge with the fan; a row's cuts are its own, meeting the next row's bund in a T as a fan's paddies do.
+/// How far an interior row line bows off straight, as a share of the row's spacing (a GUESS: the record draws the comb's bunds as
+/// a patchwork, never the grid of rectangles; so no bund runs ruled across the fan).
+///
+/// Research:
+///     the bund's bow - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a patchwork of small, irregular paddies, never the tidy grid of rectangles; the bow's size a GUESS, up to 15% of a row
+pub const BOW: f64 = 0.15;
+
+/// The comb's row lines: how many rows, their spacing down the fall, and each interior line's bow (its amplitude in feet and its
+/// phase), rolled from the line's own stream.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Lines {
+    pub rows: usize,
+    pub step: f64,
+    bows: Vec<(f64, f64)>,
+}
+
+impl Lines {
+    /// The fan's rows at about `row_ft`, each interior line bowed from `comb_bow:<line>`; the head's and the foot's lines straight.
+    #[must_use]
+    pub fn new(fan: &Fan, seed: i64, row_ft: f64) -> Self {
+        #[expect(
+            clippy::cast_possible_truncation,
+            clippy::cast_sign_loss,
+            reason = "a small positive count of rows"
+        )]
+        let rows = ((fan.length / row_ft).round() as usize).max(1);
+        #[expect(clippy::cast_precision_loss, reason = "a small row count")]
+        let step = fan.length / rows as f64;
+        let bows = (0..=rows)
+            .map(|r| {
+                if r == 0 || r == rows {
+                    return (0.0, 0.0);
+                }
+                let mut rng = knob_rng(seed, &format!("comb_bow:{r}"));
+                let amp = f64::from(rng.randbelow(101)) / 100.0 * BOW * step;
+                (amp, f64::from(rng.randbelow(360)).to_radians())
+            })
+            .collect();
+        Self { rows, step, bows }
+    }
+
+    /// Line `r`'s distance down the fall at `s` across it: its place, bowed by one wave across the fan's breadth.
+    #[must_use]
+    pub fn u(&self, r: usize, s: f64) -> f64 {
+        let (amp, ph) = self.bows[r.min(self.rows)];
+        #[expect(clippy::cast_precision_loss, reason = "a small row count")]
+        let base = r as f64 * self.step;
+        base + amp * (std::f64::consts::PI * (s + 1.0) + ph).sin()
+    }
+}
+
+/// The comb's basins on its `Lines`: each row cut across by `cuts` at fixed s, so the bunds of a row converge with the fan; a
+/// row's cuts are its own, meeting the next row's bund in a T as a fan's paddies do.
 ///
 /// Research:
 ///     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain
 #[must_use]
 pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
-    #[expect(
-        clippy::cast_possible_truncation,
-        clippy::cast_sign_loss,
-        reason = "a small positive count of rows"
-    )]
-    let rows = ((fan.length / row_ft).round() as usize).max(1);
-    #[expect(clippy::cast_precision_loss, reason = "a small row count")]
-    let step = fan.length / rows as f64;
+    let lines = Lines::new(fan, seed, row_ft);
     let mut out = Vec::new();
-    for row in 0..rows {
+    for row in 0..lines.rows {
         #[expect(clippy::cast_precision_loss, reason = "a small row count")]
-        let (u0, u1) = (row as f64 * step, (row + 1) as f64 * step);
+        let (u0, u1) = (row as f64 * lines.step, (row + 1) as f64 * lines.step);
         let breadth = fan.half_at(u0) + fan.half_at(u1);
         let s = cuts(seed, row, breadth);
         for (col, pair) in s.windows(2).enumerate() {
             let ring = vec![
-                fan.at(u0, pair[0]),
-                fan.at(u0, pair[1]),
-                fan.at(u1, pair[1]),
-                fan.at(u1, pair[0]),
+                fan.at(lines.u(row, pair[0]), pair[0]),
+                fan.at(lines.u(row, pair[1]), pair[1]),
+                fan.at(lines.u(row + 1, pair[1]), pair[1]),
+                fan.at(lines.u(row + 1, pair[0]), pair[0]),
             ];
             out.push(Basin {
                 row,
@@ -148,10 +192,11 @@ mod tests {
     #[test]
     fn the_basins_fill_the_fan_at_the_researched_size() {
         let area = 26.0 * 43_560.0;
-        let f = fan(area, 1.0, 315.0, (3200.0, 3200.0));
+        let f = fan(area, 1.0, 315.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let total: f64 = b.iter().map(|x| signed_area(&x.ring).abs()).sum();
-        assert!((total / area - 1.0).abs() < 1e-6, "the basins tile the fan");
+        // the basins tile the fan
+        assert!((total - signed_area(&f.ring).abs()).abs() / area < 0.02);
         #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let mean = total / b.len() as f64;
         assert!((1_200.0..1_800.0).contains(&mean));
@@ -177,7 +222,7 @@ mod tests {
             let ft = (w[1] - w[0]) / 2.0 * 900.0;
             assert!((f64::from(ALONG_FT.0) * 0.9..=f64::from(ALONG_FT.1) * 1.1).contains(&ft));
         }
-        let f = fan(26.0 * 43_560.0, 1.0, 0.0, (0.0, 0.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 0.0, (0.0, 0.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let first = b.iter().filter(|x| x.row == 0).count();
         let last_row = b.iter().map(|x| x.row).max().unwrap();

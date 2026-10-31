@@ -120,7 +120,7 @@ mod tests {
 
     #[test]
     fn the_plots_drawn_apart() {
-        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
         let s = states(&b, 4, "f0", false);

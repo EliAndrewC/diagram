@@ -108,7 +108,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     for k in 0..n {
         let tag = format!("f{k}");
         let area = paddy / f64::from(n);
-        let first = fan(area, inp.aspect, inp.down_deg, inp.center);
+        let first = fan(area, inp.aspect, inp.down_deg, inp.center, inp.seed);
         // the next field beside the last, across the fall, past its brook's skirt
         let step = (first.half_head + first.half_foot)
             + 2.0 * (inp.brook.skirt + inp.brook.wander)
@@ -118,7 +118,13 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             inp.center.0 + first.across.0 * off,
             inp.center.1 + first.across.1 * off,
         );
-        let f = fan(area, inp.aspect, inp.down_deg, center);
+        let f = fan(
+            area,
+            inp.aspect,
+            inp.down_deg,
+            center,
+            inp.seed + i64::from(k),
+        );
         let field = one(inp, &f, &tag, &knobs, &mut counts)?;
         drained += field
             .basins

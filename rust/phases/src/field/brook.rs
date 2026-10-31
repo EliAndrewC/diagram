@@ -54,7 +54,7 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 #[must_use]
 pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
     let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
-    let corner_x = side * fan.half_head;
+    let corner_x = side * fan.half_side(0.0, side);
     let (u_i, x_i) = (-b.lead * cos, corner_x + side * b.lead * sin);
     let intake = local(fan, u_i, x_i);
     let mut pts = vec![local(fan, u_i - b.reach, x_i), intake];
@@ -67,7 +67,11 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
     let secant = lean.hypot(1.0);
     while u < end {
         u = (u + b.station).min(end);
-        let flank = fan.half_at(u.clamp(0.0, fan.length));
+        // the flank as drawn, its waves applied, at its widest within half a station either way
+        let at = |v: f64| fan.half_side(v.clamp(0.0, fan.length), side);
+        let flank = at(u)
+            .max(at(u - b.station / 2.0))
+            .max(at(u + b.station / 2.0));
         // a wander of at most a slew a station, held in [0, wander]
         let step = f64::from(rng.randbelow(21)) / 10.0 - 1.0;
         stray = (stray + step * b.slew / 2.0).clamp(0.0, b.wander);
@@ -165,7 +169,7 @@ mod tests {
     #[test]
     fn the_brook_keeps_outside_the_crop_and_bends_gently() {
         for (side, seed) in [(1.0, 4), (-1.0, 9)] {
-            let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
+            let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
             let br = brook(&f, side, B, seed);
             let mut ix = Index::default();
             let ids = file(&br, &mut ix);
@@ -179,7 +183,7 @@ mod tests {
             }
             assert!(br.pts.len() > 30);
         }
-        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0), 4);
         let br = brook(&f, 1.0, B, 4);
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
         assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);

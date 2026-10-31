@@ -7,8 +7,10 @@
 //!     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: head race 6.0, supply 4.5 and 4.0 to 1.5, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft
 //!     the sweeps - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every turn on a sweep of about 2.5 channel widths
 
+use super::fan::EDGE_STEP_FT;
 use super::fan::{Fan, Pt};
 use super::geom::{dist, unit};
+use super::lattice::Lines;
 use crate::pyrand::knob_rng;
 
 /// One channel: its role (`main` for the head race and each leg of a supply canal, `branch` for a delivery ditch, `drain`; the
@@ -109,6 +111,38 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
     out
 }
 
+/// Each offtake's row line: the one its fraction of the fan's length falls on, or the nearest where the flank leans in, so the
+/// ditch leaves its canal leaning downstream (D7: the rule held where it is decided); a fraction with no such line within three
+/// rows draws no ditch.
+///
+/// Research:
+///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream
+fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> {
+    let mut lines_at: Vec<usize> = Vec::new();
+    for &f in fracs {
+        #[expect(
+            clippy::cast_possible_truncation,
+            clippy::cast_sign_loss,
+            reason = "a row index"
+        )]
+        let r0 = ((f.clamp(0.0, 1.0) * fan.length / lines.step).round() as usize)
+            .clamp(1, lines.rows.max(2) - 1);
+        let leans = |r: usize| {
+            let j = fan.at(lines.u(r, s), s);
+            let up = fan.at((lines.u(r, s) - lines.step).max(0.0), s);
+            let inward = fan.at(lines.u(r, s * 0.8), s * 0.8);
+            let (d, o) = (unit(up, j), unit(j, inward));
+            d.0 * o.0 + d.1 * o.1 > 0.0
+        };
+        let pick = [0_i64, 1, -1, 2, -2, 3, -3]
+            .iter()
+            .filter_map(|d| usize::try_from(i64::try_from(r0).unwrap_or(0) + d).ok())
+            .find(|&r| r >= 1 && r < lines.rows && leans(r));
+        lines_at.extend(pick);
+    }
+    lines_at
+}
+
 /// The division point, where the head race forks into the two supply canals: the head corner on the brook's flank (`brook_side`
 /// +1 the fan's right looking downhill, -1 its left), so the race is short and the brook keeps outside the crop beside it.
 ///
@@ -145,9 +179,18 @@ pub fn channels(
         w_tail: HEAD_W,
     }];
     let runs_on = tail_runs_on(seed);
-    let on_row = |f: f64| {
-        let u = (f.clamp(0.0, 1.0) * fan.length / row_ft).round() * row_ft;
-        u.min(fan.length)
+    let lines = Lines::new(fan, seed, row_ft);
+    // the flank's course from `u0` to `u1` as drawn: a point every `EDGE_STEP_FT`
+    let flank = |u0: f64, u1: f64, s: f64| -> Vec<Pt> {
+        #[expect(
+            clippy::cast_possible_truncation,
+            clippy::cast_sign_loss,
+            reason = "a small positive count of steps"
+        )]
+        let n = (((u1 - u0) / EDGE_STEP_FT).ceil() as usize).max(1);
+        #[expect(clippy::cast_precision_loss, reason = "a small step count")]
+        let at = |k: usize| u0 + (u1 - u0) * k as f64 / n as f64;
+        (0..=n).map(|k| fan.at(at(k), s)).collect()
     };
     for (side, (fracs, w)) in [(offtakes.0, SUPPLY_W.0), (offtakes.1, SUPPLY_W.1)]
         .into_iter()
@@ -155,26 +198,34 @@ pub fn channels(
     {
         // canal A on the far flank, along the upper edge first; canal B down the brook's flank from the fork
         let s = if side == 0 { -brook_side } else { brook_side };
-        let last = fracs.iter().copied().fold(0.0, f64::max);
-        let end = if runs_on { fan.length } else { on_row(last) };
+        let mut lines_at = offtake_lines(fan, &lines, fracs, s);
+        lines_at.sort_unstable();
+        lines_at.dedup();
+        let end = if runs_on || lines_at.is_empty() {
+            fan.length
+        } else {
+            lines.u(*lines_at.last().unwrap_or(&0), s)
+        };
         // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
         // a leg from `w` to the thread (the manifest's `main` pieces, each with its own taper)
-        let mut stops: Vec<f64> = fracs
+        let mut stops: Vec<f64> = lines_at
             .iter()
-            .map(|&f| on_row(f))
-            .filter(|&u| u > 0.0 && u < end)
+            .map(|&r| lines.u(r, s))
+            .filter(|&u| u < end)
             .collect();
-        stops.sort_by(f64::total_cmp);
-        stops.dedup();
         stops.push(end);
-        let first = if side == 0 {
-            swept(&[fork, fan.at(0.0, s), fan.at(stops[0], s)], w)
+        let mut legs: Vec<Vec<Pt>> = Vec::new();
+        let mut down = flank(0.0, stops[0], s);
+        if side == 0 {
+            let mut head = swept(&[fork, fan.at(0.0, s), down[1]], w);
+            head.extend(down.drain(2..));
+            legs.push(head);
         } else {
-            vec![fork, fan.at(stops[0], s)]
-        };
-        let mut legs: Vec<Vec<Pt>> = vec![first];
+            down[0] = fork;
+            legs.push(down);
+        }
         for pair in stops.windows(2) {
-            legs.push(vec![fan.at(pair[0], s), fan.at(pair[1], s)]);
+            legs.push(flank(pair[0], pair[1], s));
         }
         #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
         let n = legs.len() as f64;
@@ -188,11 +239,15 @@ pub fn channels(
                 w_tail: w + (THREAD_W - w) * b,
             });
         }
-        for &f in fracs {
-            let u = on_row(f);
+        for &r in &lines_at {
+            // along its row's bund, bowed as the bund is, from the flank to the drain
+            let pts = (0..=5).map(|k| {
+                let q = s * (1.0 - f64::from(k) / 5.0);
+                fan.at(lines.u(r, q), q)
+            });
             out.push(Channel {
                 role: "branch",
-                pts: vec![fan.at(u, s), fan.at(u, 0.0)],
+                pts: pts.collect(),
                 w: DELIVERY_W.0,
                 w_tail: DELIVERY_W.1,
             });
@@ -215,7 +270,7 @@ mod tests {
 
     #[test]
     fn the_comb_has_its_head_race_canals_ditches_and_drain() {
-        let f = fan(26.0 * 43_560.0, 1.0, 315.0, (3200.0, 3200.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 315.0, (3200.0, 3200.0), 4);
         let intake = (f.fork.0 - 200.0, f.fork.1);
         let c = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 1.0, 4);
         let roles: Vec<_> = c.iter().map(|x| x.role).collect();

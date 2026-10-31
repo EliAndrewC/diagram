@@ -170,7 +170,7 @@ mod tests {
 
     #[test]
     fn the_pond_sits_in_a_low_plot_and_the_grave_keeps_the_rules() {
-        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
         let ponds: Vec<_> = (0..40).filter_map(|s| pocket_pond(&b, s, "f0")).collect();
