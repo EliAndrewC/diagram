@@ -179,7 +179,7 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 ### T18 Decisions
 
-- **D1 - the cap is the record's knob** (`research/questions/0017-...drawing.html#how-our-maps-size-a-settlements-farmland`, written
+- **D1 - the cap is the record's knob** (`research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html#how-our-maps-size-a-settlements-farmland`, written
   by T18's page sessions): one field at most a cap rolled per settlement between about 45 and 60 ha (accurate at its top: Fei's
   largest polder; a knob within the attested band, the record's label); a settlement past it draws several fields. The two
   questions session C's handoff left "for the GM" - whether Yang's undivided 1,000-mu pond (about 61 ha) is one tract, and the
