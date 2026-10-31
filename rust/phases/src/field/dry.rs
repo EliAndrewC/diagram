@@ -125,28 +125,32 @@ pub fn hem(
                 }
             }
             last_turn = Some(turn);
+            let (start, end) = (along_at(d).0, along_at(d + f64::from(n) * PLOT_FT.0).0);
+            let u = unit(start, end);
+            let n_out = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
+                (-u.1, u.0)
+            } else {
+                (u.1, -u.0)
+            };
             for k in 0..n {
                 let d0 = d + f64::from(k) * PLOT_FT.0;
                 if d0 + PLOT_FT.0 > len {
                     break;
                 }
-                let ((p0, u), (p1, _)) = (along_at(d0), along_at(d0 + PLOT_FT.0));
-                // square to the canal where it runs: its own normal, turned to the upslope side
-                let n = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
-                    (-u.1, u.0)
-                } else {
-                    (u.1, -u.0)
-                };
+                // the tract's plots laid along its stretch of the canal, square to that stretch: one heading a tract, so its
+                // strips stay together however the canal bends
+                let (p0, _) = along_at(d0);
+                let p1 = (p0.0 + u.0 * PLOT_FT.0, p0.1 + u.1 * PLOT_FT.0);
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + f64::from(j) * PLOT_FT.1,
                         depth + f64::from(j + 1) * PLOT_FT.1,
                     );
                     let poly = vec![
-                        (p0.0 + n.0 * o0, p0.1 + n.1 * o0),
-                        (p1.0 + n.0 * o0, p1.1 + n.1 * o0),
-                        (p1.0 + n.0 * o1, p1.1 + n.1 * o1),
-                        (p0.0 + n.0 * o1, p0.1 + n.1 * o1),
+                        (p0.0 + n_out.0 * o0, p0.1 + n_out.1 * o0),
+                        (p1.0 + n_out.0 * o0, p1.1 + n_out.1 * o0),
+                        (p1.0 + n_out.0 * o1, p1.1 + n_out.1 * o1),
+                        (p0.0 + n_out.0 * o1, p0.1 + n_out.1 * o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
                     // a plot onto the rice is dropped: its middle or its outer corners in the field (its inner edge may lie on the canal's bank)
