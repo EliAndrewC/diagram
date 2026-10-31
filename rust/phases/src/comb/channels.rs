@@ -10,7 +10,8 @@
 use super::fan::{Fan, Pt};
 use crate::pyrand::knob_rng;
 
-/// One channel: its role, its course from head to tail, and its width at each end (feet).
+/// One channel: its role (`main` for the head race and each leg of a supply canal, `branch` for a delivery ditch, `drain`; the
+/// manifest's `field_ditches` roles), its course from head to tail, and its width at each end (feet).
 #[derive(Debug, Clone, PartialEq)]
 pub struct Channel {
     pub role: &'static str,
@@ -127,7 +128,7 @@ fn unit(from: Pt, to: Pt) -> Pt {
 #[must_use]
 pub fn channels(fan: &Fan, intake: Pt, offtakes: (&[f64], &[f64]), row_ft: f64, seed: i64) -> Vec<Channel> {
     let mut out = vec![Channel {
-        role: "head",
+        role: "main",
         pts: vec![intake, fan.fork],
         w: HEAD_W,
         w_tail: HEAD_W,
@@ -137,27 +138,40 @@ pub fn channels(fan: &Fan, intake: Pt, offtakes: (&[f64], &[f64]), row_ft: f64, 
         let u = (f.clamp(0.0, 1.0) * fan.length / row_ft).round() * row_ft;
         u.min(fan.length)
     };
-    for (side, (role, fracs, w)) in [
-        ("supply_a", offtakes.0, SUPPLY_W.0),
-        ("supply_b", offtakes.1, SUPPLY_W.1),
-    ]
+    for (side, (fracs, w)) in [(offtakes.0, SUPPLY_W.0), (offtakes.1, SUPPLY_W.1)]
     .into_iter()
     .enumerate()
     {
         let s = if side == 0 { -1.0 } else { 1.0 };
         let last = fracs.iter().copied().fold(0.0, f64::max);
         let end = if runs_on { fan.length } else { on_row(last) };
-        let course = vec![fan.fork, fan.at(0.0, s), fan.at(end, s)];
-        out.push(Channel {
-            role,
-            pts: swept(&course, w),
-            w,
-            w_tail: THREAD_W,
-        });
+        // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
+        // a leg from `w` to the thread (the manifest's `main` pieces, each with its own taper)
+        let mut stops: Vec<f64> = fracs.iter().map(|&f| on_row(f)).filter(|&u| u > 0.0 && u < end).collect();
+        stops.sort_by(f64::total_cmp);
+        stops.dedup();
+        stops.push(end);
+        let corner = swept(&[fan.fork, fan.at(0.0, s), fan.at(stops[0], s)], w);
+        let mut legs: Vec<Vec<Pt>> = vec![corner];
+        for pair in stops.windows(2) {
+            legs.push(vec![fan.at(pair[0], s), fan.at(pair[1], s)]);
+        }
+        #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
+        let n = legs.len() as f64;
+        for (i, pts) in legs.into_iter().enumerate() {
+            #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
+            let (a, b) = (i as f64 / n, (i + 1) as f64 / n);
+            out.push(Channel {
+                role: "main",
+                pts,
+                w: w + (THREAD_W - w) * a,
+                w_tail: w + (THREAD_W - w) * b,
+            });
+        }
         for &f in fracs {
             let u = on_row(f);
             out.push(Channel {
-                role: "delivery",
+                role: "branch",
                 pts: vec![fan.at(u, s), fan.at(u, 0.0)],
                 w: DELIVERY_W.0,
                 w_tail: DELIVERY_W.1,
@@ -184,16 +198,23 @@ mod tests {
         let intake = (f.fork.0 - 200.0, f.fork.1);
         let c = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 4);
         let roles: Vec<_> = c.iter().map(|x| x.role).collect();
-        assert_eq!(roles.iter().filter(|r| **r == "delivery").count(), 4);
-        assert_eq!(roles[0], "head");
+        assert_eq!(roles.iter().filter(|r| **r == "branch").count(), 4);
+        assert_eq!(roles[0], "main");
         assert_eq!(*roles.last().unwrap(), "drain");
         assert!(c.iter().all(|x| x.w >= x.w_tail || x.role == "drain"));
-        for d in c.iter().filter(|x| x.role == "delivery") {
+        let mains: Vec<_> = c.iter().filter(|x| x.role == "main").skip(1).collect();
+        for pair in mains.windows(2) {
+            if (pair[0].w_tail - pair[1].w).abs() < 1e-9 {
+                assert!(pair[1].w_tail < pair[0].w, "the canal tapers leg by leg");
+            }
+        }
+        for d in c.iter().filter(|x| x.role == "branch") {
             // the ditch leaves its flank leaning downstream: under a right angle to the canal's downstream run
             let parent = c
                 .iter()
-                .find(|x| x.role.starts_with("supply") && x.pts.iter().any(|p| dist(*p, d.pts[0]) < 60.0))
-                .unwrap_or(&c[1]);
+                .filter(|x| x.role == "main")
+                .find(|x| x.pts.iter().any(|p| dist(*p, d.pts[0]) < 1e-6))
+                .unwrap();
             let n = parent.pts.len();
             let down = unit(parent.pts[n - 2], parent.pts[n - 1]);
             let out = unit(d.pts[0], d.pts[1]);
@@ -202,7 +223,7 @@ mod tests {
         let both: Vec<_> = (0..16).map(tail_runs_on).collect();
         assert!(both.contains(&true) && both.contains(&false), "both tails attested and rolled");
         let short = channels(&f, intake, (&[0.5], &[]), 48.0, 4);
-        assert_eq!(short.len(), 5);
+        assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
     }
 
     #[test]
