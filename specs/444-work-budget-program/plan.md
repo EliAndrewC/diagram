@@ -228,6 +228,26 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 
 <!-- plan-archive: T17 to T17 moved to plan-done.md, 2026-10-30 (feature 375 FR-044) -->
 <!-- plan-archive: T18 to T18 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
+### T16 part B (2026-10-31T20:43Z)
+
+The trigger: `make cohort` at 20:42Z on the comb in Rust - seeds 9 (`SeatRefused`), 903 (`row_rules`) and 905 (`SiteRefused`)
+newly failing, 12 of 16 passing.
+
+1. **What exactly is refusing?** Three Python stages after the field - the seating, the site boundary, the row rules - on a field
+   the rebuild moved. No check of the field's own failed on those seeds.
+2. **A3 again.** Amendment 5 (FR-019, FR-020; the GM 2026-10-31: "no Rust stage ever ends with any failing checks at the point
+   where that stage has completed"): a Python stage after the Rust prefix that fails on a moved map is not the port's to tune.
+3. **A4 again.** The Rust stage gate is the port's check: `make rust-gate` at 20:43Z failed one seed at the field (a dry plot on
+   the brook), at 20:44Z four, each read in its record; fixed in the Rust that places the dry hem; at 20:45Z 57 seeds through
+   water_frame and the field, the failing list and 3 frozen inputs among them, 0 failing (`dev/rust-gate/20261031T204546Z.json`).
+4. **Moving something placed earlier to suit something later?** No: the field is not being bent to the seating.
+5. **Tuning or changing?** Changing: the dry plot's water test made exact (a segment crossing it), the rule held where decided.
+6. **The one-sentence test.** "The comb in Rust passes every check of its own on 57 seeds; the three cohort failures are later
+   Python stages on a moved map, which amendment 5 leaves to their own ports."
+7. **Done:** the hem's test fixed; the rest of T16 continues (the Python driver's tests, the polder, the deletion, the counts).
+8. **Every route measured before the arbiter was asked?** No ruling asked: nothing here is a process stop.
+9. **After a ruling, the step it named?** Not applicable.
+
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
 - **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the
