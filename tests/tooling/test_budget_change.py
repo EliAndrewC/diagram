@@ -240,3 +240,34 @@ def test_the_growth_cap_is_held_by_the_tool(root: pathlib.Path) -> None:
     why = bc.accept_stage(root, "sties", "a.txt")
     assert "exponent of 2.14" in why and "past its budget's 1.00" in why
     assert bc.growth(0, 5) == 0.0
+
+
+def test_a_form_of_a_stage_is_budgeted_at_its_bounded_n(root: pathlib.Path) -> None:
+    """The round arbiter's ruling on ask:444-polder-sizes (route a): the polder - a form of the field stage, drawn at 10-20
+    households alone (0019) - is pinned as `field.polder` at 10 and 20, from a derivation stating its bounded n; it stays out of the
+    program's sum at 40, and the table's item check reads its own sizes."""
+    (root / "p.md").write_text("- Bounds: a bounded n: households 10-20 (0019)\n")
+    assert "no items at 20 households" in bc.set_budget(root, "field.polder", 245, 0.5, "p.md", "SOUND.txt", {10: 19})
+    assert "no stage `nope.polder`" in bc.set_budget(root, "nope.polder", 1, 1, "p.md", "SOUND.txt", {10: 1, 20: 2})
+    before = bc.per_house(root)
+    assert bc.set_budget(root, "field.polder", 245, 0.5, "p.md", "SOUND.txt", {10: 19, 20: 38}) == ""
+    st = bc.load(root)["stages"]["field.polder"]
+    assert st["sizes"] == [10, 20] and st["items_at_10"] == 19 and "items_at_40" not in st
+    assert bc.per_house(root) == before, "a form at a bounded n holds no figure at 40"
+    assert bc.growth(100, 141, 2) == pytest.approx(0.496, abs=0.01)
+    from l7r.diagram.tools import work_budget  # noqa: PLC0415
+
+    assert work_budget.missing_items(bc.load(root)) == [], "its own sizes recorded"
+    assert work_budget.missing_items({"stages": {"field.polder": {"status": "budgeted", "sizes": [10, 20], "items_at_10": 1}}})[0].startswith("field.polder: budgeted with no items at 20")
+
+
+def test_an_accept_naming_a_form_pins_it(root: pathlib.Path) -> None:
+    """An arbiter's accept of the polder's derivation names it `polder` (ask:444-polder-round-3): the form `field.polder` answers to
+    its own name, and to its greenfield derivation's."""
+    spec = root / "specs" / "444-x"
+    (spec / "phases").mkdir(parents=True)
+    (spec / "phases" / "polder_greenfield.derivation.md").write_text("- Bounds: a bounded n: households 10-20\n")
+    (spec / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:444-polder-round-3", "ruling": "accept", "what": "the polder stands"}) + "\n")
+    d = "specs/444-x/phases/polder_greenfield.derivation.md"
+    assert bc.accepted_by(root, d, "field.polder", "ask:444-polder-round-3")
+    assert not bc.accepted_by(root, d, "field.dikepond", "ask:444-polder-round-3"), "another form's name is not this accept's"

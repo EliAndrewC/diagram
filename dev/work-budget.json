@@ -280,6 +280,23 @@
    "items_at_40": 6,
    "items_at_80": 6,
    "reason": "the stage writes one caption from a proved seat; its budget is that caption's six operations"
+  },
+  "field.polder": {
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.5,
+   "derivation": "specs/444-work-budget-program/phases/polder_greenfield.derivation.md",
+   "verdict": "ask:444-polder-round-3",
+   "items_at_10": 4651,
+   "items_at_20": 6584,
+   "sizes": [
+    10,
+    20
+   ],
+   "pinned_on": "accept",
+   "derivation_sha": "229d4d7d3c2599e83c4f6ec9ac653aefc78033ba7eea5edb9f2649142a42a161",
+   "rounds": 2,
+   "spread": "4609-4804 at 10"
   }
  }
 }

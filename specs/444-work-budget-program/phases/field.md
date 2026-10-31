@@ -17,7 +17,9 @@ phase's working record: what is measured, what is owed, and where to resume.
   `polder.bounds.json`; and the GAP between the comb derivation's Contract and what the stage writes (below).
 - [ ] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
-  The comb: pinned (23,988 at 40, exponent 0.79). The polder: owed.
+  The comb: pinned (23,988 at 40, exponent 0.79). The polder: pinned as `field.polder` (`dev/work-budget.json`), 4,651 at 10 and
+  6,584 at 20 households, exponent 0.50, on the round arbiter's accept after two rounds (ask:444-polder-round-3; verdict-1 UNDERIVED,
+  verdict-2 LOOSE, every finding closed); `phases/polder_greenfield.derivation.md`.
 - [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
   The before, on main's engine: `make perf LABEL=444-start SCALING=1` (`dev/perf-log/20261031T173305Z-444-start-diagram-backlog.json`):
@@ -75,3 +77,14 @@ the derivation writes its own acreage rule (whole modules at or above the househ
 takes the bounded n (landed, `sizes` in `scripts/reviews/work_budget_bundle.py`); OWED at the pin (box 3): `make budget-set` and
 `make work-budget` taking it too, and how a form of the field stage carries a pin of its own (`dev/work-budget.json` holds one
 entry a stage).
+
+**The polder pinned, and its tooling** (2026-10-31): `make budget-set` takes a form of a stage (`<stage>.<form>`) at its
+derivation's bounded n, its growth across that range, out of the program's sum at 40; `work_budget.missing_items` reads a form's
+own `sizes`; `accepted_by` matches a form by its own name. These change `l7r/diagram/tools/work_budget.py` (engine), so they land
+WITH T16, not alone: a `field.polder` entry on main without the reader would refuse every push. The residue the arbiter left
+standing: the derivation's Writes line gives 0022's 160 by 320 ft parcel while its index row counts about one 160 ft module a pond -
+do not edit it before the landing (the accept is bound to the text as pinned, FR-013); the rebuild's measurement settles it.
+
+**Next:** box 1's owed parts (the plan fields the stage writes; the claims governing each key); the gap's homes (the stage's own
+knob rolls, the graves, the coarse-grain acres - a re-derivation of the comb, or outside rolls); then `### T16 Decisions` and
+`make decide`.

@@ -137,11 +137,11 @@ def stale_pins(table: dict[str, Any], root: str = SKILL) -> list[str]:
 def missing_items(table: dict[str, Any]) -> list[str]:
     """Each budgeted or accepted stage that records no items at one of `ITEM_SIZES` - refused, never read the old way (the
     placed-things product, retired by feature 444 D2)."""
-    return [
-        f"{name}: budgeted with no items at {', '.join(str(h) for h in ITEM_SIZES if b.get(f'items_at_{h}') is None)} households - "
+    return [  # a form budgeted at a bounded n records its own `sizes` (ask:444-polder-sizes)
+        f"{name}: budgeted with no items at {', '.join(str(h) for h in b.get('sizes') or ITEM_SIZES if b.get(f'items_at_{h}') is None)} households - "
         f"set them: make budget-change PHASE={name} TO={b.get('per_thing')} ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= WORDS=\"<the GM's words>\""
         for name, b in (table.get("stages") or {}).items()
-        if b.get("status") in ("budgeted", "accepted") and any(b.get(f"items_at_{h}") is None for h in ITEM_SIZES)
+        if b.get("status") in ("budgeted", "accepted") and any(b.get(f"items_at_{h}") is None for h in b.get("sizes") or ITEM_SIZES)
     ]
 
 
