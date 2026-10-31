@@ -7,8 +7,12 @@ phase's working record: what is measured, what is owed, and where to resume.
   claims index); the cohort properties it must keep.
   Measured so far (2026-10-31): the keys the stage writes, on all three archetypes - `phases/field.keys.json` (42 keys: 28 on a
   comb, 19 on a polder grid, 26 on a dike-pond); the polder's record and point counts at 10 and 20 households -
-  `phases/polder.bounds.json`. Owed: the plan fields the stage writes for later stages (e.g. the brook, read by the seating), and
-  the claims that govern each key.
+  `phases/polder.bounds.json`. The plan fields the stage writes for later stages: `acres`, `envelope`, `net` (a dict of the irrigation network - the
+  fork, channels, plots, threads, drain, dry plots and reserve, the bund beans, the graves' discs, the pocket pond; on a dike-pond the
+  sluice, the dike's sluices and the floor) and, on a comb, `brook` (`field.keys.json` `plan_fields`). The claims that govern it:
+  `phases/field.claims.json` - 493 research claims in the field's 17 own files (464 IN-STEP, 21 DRIFTED, 8 MISLABELED, read from
+  the claims index, the code unread). Each is a decision the Rust makes again and claims again in its doc comments; the 29 open
+  findings cannot be carried: under FR-021 the Rust lands with each set right.
 - [ ] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
   before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
   scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/<stage>.derivation.md`.

@@ -402,5 +402,210 @@
   "streams",
   "weirs",
   "wet_plots"
- ]
+ ],
+ "plan_fields": {
+  "measured": "2026-10-31, one-shot: the plan's fields before and after the field stage on seed 4 at 15 households",
+  "by_form": {
+   "valley_paddy": {
+    "net": {
+     "type": "dict",
+     "len": 20
+    },
+    "envelope": {
+     "type": "list",
+     "len": 69
+    },
+    "brook": {
+     "type": "list",
+     "len": 71
+    },
+    "acres": {
+     "type": "float",
+     "len": null
+    }
+   },
+   "polder_grid": {
+    "net": {
+     "type": "dict",
+     "len": 17
+    },
+    "envelope": {
+     "type": "list",
+     "len": 49
+    },
+    "acres": {
+     "type": "float",
+     "len": null
+    }
+   },
+   "mulberry_dike_fishpond": {
+    "net": {
+     "type": "dict",
+     "len": 17
+    },
+    "envelope": {
+     "type": "list",
+     "len": 49
+    },
+    "acres": {
+     "type": "float",
+     "len": null
+    }
+   }
+  },
+  "net_entries": {
+   "valley_paddy": {
+    "down_deg": [
+     "float",
+     315.0
+    ],
+    "fork": [
+     "tuple",
+     2
+    ],
+    "cell": [
+     "float",
+     1488.0
+    ],
+    "supply_banks": [
+     "bool",
+     true
+    ],
+    "channels": [
+     "list",
+     11
+    ],
+    "plots": [
+     "list",
+     619
+    ],
+    "threads": [
+     "list",
+     7
+    ],
+    "drain": [
+     "list",
+     9
+    ],
+    "brook": [
+     "list",
+     0
+    ],
+    "envelope": [
+     "list",
+     69
+    ],
+    "acres": [
+     "float",
+     77.93875665748415
+    ],
+    "dry_plots": [
+     "list",
+     3
+    ],
+    "dry_acres": [
+     "float",
+     0.4866046831955923
+    ],
+    "dry_reserve": [
+     "list",
+     347
+    ],
+    "bund_bean_runs": [
+     "list",
+     234
+    ],
+    "bund_beans": [
+     "list",
+     630
+    ],
+    "furrows_vary": [
+     "bool",
+     true
+    ],
+    "fan_middle": [
+     "str",
+     "wild"
+    ],
+    "grave_discs": [
+     "list",
+     1
+    ],
+    "bead_ponds": [
+     "list",
+     1
+    ]
+   },
+   "mulberry_dike_fishpond": {
+    "channels": [
+     "list",
+     8
+    ],
+    "plots": [
+     "list",
+     33
+    ],
+    "threads": [
+     "list",
+     0
+    ],
+    "drain": [
+     "list",
+     13
+    ],
+    "brook": [
+     "list",
+     2
+    ],
+    "envelope": [
+     "list",
+     49
+    ],
+    "acres": [
+     "float",
+     19.051962695133163
+    ],
+    "ftpx": [
+     "float",
+     1.0
+    ],
+    "dry_plots": [
+     "list",
+     0
+    ],
+    "dry_acres": [
+     "float",
+     0.0
+    ],
+    "bund_beans": [
+     "list",
+     0
+    ],
+    "bund_bean_runs": [
+     "list",
+     0
+    ],
+    "furrows_vary": [
+     "bool",
+     false
+    ],
+    "sluice": [
+     "tuple",
+     2
+    ],
+    "dike_sluices": [
+     "list",
+     2
+    ],
+    "floor": [
+     "list",
+     52
+    ],
+    "bead_ponds": [
+     "list",
+     1
+    ]
+   }
+  }
+ }
 }
