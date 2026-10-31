@@ -57,7 +57,7 @@ pub fn bean_runs(
         }
         let n = RUN_BEADS.0 + rng.randbelow(RUN_BEADS.1 - RUN_BEADS.0 + 1);
         let (top, foot) = (b.ring[1], b.ring[2]);
-        let mid = ((top.0 + foot.0) / 2.0, (top.1 + foot.1) / 2.0);
+        let mid = (f64::midpoint(top.0, foot.0), f64::midpoint(top.1, foot.1));
         let along = unit(top, foot);
         let run: Vec<Pt> = (0..n)
             .map(|k| {
@@ -101,6 +101,7 @@ mod tests {
         assert!(runs
             .iter()
             .all(|r| (RUN_BEADS.0 as usize..=RUN_BEADS.1 as usize).contains(&r.len())));
+        #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let share = runs.len() as f64 / b.len() as f64;
         assert!((0.15..0.5).contains(&share), "{share}");
         // a ditch along every bund drowns every bead

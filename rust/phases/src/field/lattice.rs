@@ -129,21 +129,19 @@ pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
 #[cfg(test)]
 mod tests {
     use super::{basins, cuts, ALONG_FT};
-    use crate::field::fan::{fan, ring_area};
+    use crate::field::fan::fan;
+    use crate::field::geom::signed_area;
 
     #[test]
     fn the_basins_fill_the_fan_at_the_researched_size() {
         let area = 26.0 * 43_560.0;
         let f = fan(area, 1.0, 315.0, (3200.0, 3200.0));
         let b = basins(&f, 4);
-        let total: f64 = b.iter().map(|x| ring_area(&x.ring)).sum();
+        let total: f64 = b.iter().map(|x| signed_area(&x.ring).abs()).sum();
         assert!((total / area - 1.0).abs() < 1e-6, "the basins tile the fan");
         #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let mean = total / b.len() as f64;
-        assert!(
-            (1_200.0..1_800.0).contains(&mean),
-            "about 1,500 sq ft: {mean}"
-        );
+        assert!((1_200.0..1_800.0).contains(&mean));
         assert!(b.iter().all(|x| x.ring.len() == 4));
         let hem: Vec<_> = b.iter().filter_map(super::Basin::drain_side).collect();
         let rows = b.iter().map(|x| x.row).max().unwrap() + 1;
@@ -160,10 +158,7 @@ mod tests {
         assert!((s.last().unwrap() - 1.0).abs() < 1e-12);
         for w in s.windows(2) {
             let ft = (w[1] - w[0]) / 2.0 * 900.0;
-            assert!(
-                (f64::from(ALONG_FT.0) * 0.9..=f64::from(ALONG_FT.1) * 1.1).contains(&ft),
-                "{ft}"
-            );
+            assert!((f64::from(ALONG_FT.0) * 0.9..=f64::from(ALONG_FT.1) * 1.1).contains(&ft));
         }
         let f = fan(26.0 * 43_560.0, 1.0, 0.0, (0.0, 0.0));
         let b = basins(&f, 4);

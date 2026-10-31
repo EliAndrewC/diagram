@@ -8,7 +8,7 @@
 use std::collections::HashMap;
 
 use super::beans::bean_runs;
-use super::brook::{brook, file as file_brook, weir, Brook, BrookIn};
+use super::brook::{brook, clearance, file as file_brook, weir, Brook, BrookIn};
 use super::channels::{channels, Channel};
 use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD};
 use super::fan::{fan, Fan, Pt};
@@ -102,7 +102,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     counts.add("write@area", 2);
     let mut fields = Vec::new();
     let need = f64::from(inp.households) * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE;
-    let (mut drawn, mut room, mut drained) = (0.0, 0.0, 0.0);
+    let mut drained = 0.0;
     for k in 0..n {
         let tag = format!("f{k}");
         let area = paddy / f64::from(n);
@@ -111,8 +111,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         let step = (first.half_head + first.half_foot)
             + 2.0 * (inp.brook.skirt + inp.brook.wander)
             + inp.brook.w;
-        #[expect(clippy::cast_precision_loss, reason = "a settlement's few fields")]
-        let off = step * k as f64;
+        let off = step * f64::from(k);
         let center = (
             inp.center.0 + first.across.0 * off,
             inp.center.1 + first.across.1 * off,
@@ -134,9 +133,10 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     } else {
         need
     };
-    if let Some(f) = fields.first_mut() {
-        // a wild middle keeps the hem to the toe, climbing up the far flank from the foot only as far as the grain asks; a
-        // cleared one hems the whole canal, the upper edge too
+    // a wild middle keeps the hem to the toe, climbing up the far flank from the foot only as far as the grain asks; a cleared
+    // one hems the whole canal, the upper edge too (fields_for draws at least one field)
+    let (drawn, room) = {
+        let f = &mut fields[0];
         let far = -inp.brook_side;
         let line: Vec<Pt> = if is("fan_middle", "wild") {
             vec![f.fan.at(f.fan.length, far), f.fan.at(0.0, far)]
@@ -163,10 +163,11 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             "f0",
         );
         counts.add("write@dry_plot", 4 * dry.len() as u64);
-        drawn = dry.len() as f64 * super::dry::PLOT_FT.0 * super::dry::PLOT_FT.1;
-        room = r;
+        #[expect(clippy::cast_precision_loss, reason = "a hamlet's hundred dry plots")]
+        let plots = dry.len() as f64;
         f.dry = dry;
-    }
+        (plots * super::dry::PLOT_FT.0 * super::dry::PLOT_FT.1, r)
+    };
     Ok(FieldOut {
         knobs,
         fields,
@@ -232,8 +233,21 @@ fn one(
         widths.push(inp.brook.w);
         segments.push((a, b, inp.brook.w));
     }
+    // the outline placed point by point, each point asked of the brook in its cells: the field keeps outside the brook's skirt
+    let mut brook_ix = Index::default();
+    file_brook(&br, &mut brook_ix);
+    for p in &f.ring {
+        let d = clearance(*p, 2.0 * inp.brook.skirt, &mut brook_ix);
+        if d < inp.brook.skirt - 1e-6 {
+            return Err(FieldRefused {
+                rule: "the brook's skirt",
+                detail: format!("an outline point {d:.1} ft from the brook"),
+            });
+        }
+    }
+    counts.add("candidate@outline", 2 * f.ring.len() as u64);
     counts.add("write@ditch", segments.len() as u64);
-    counts.add("write@water_index", ix.touched);
+    counts.add("write@water_index", ix.touched + brook_ix.touched);
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
     let st = states(&bs, inp.seed, tag, unsettled);
     counts.add(
@@ -357,10 +371,7 @@ mod tests {
             .dry
             .first()
             .map(|d| (d.poly[0].0 - f.fan.fork.0) * dx + (d.poly[0].1 - f.fan.fork.1) * dy);
-        assert!(
-            toe_first.unwrap() > f.fan.length * 0.66,
-            "a wild hem starts at the toe"
-        );
+        assert!(toe_first.unwrap() > f.fan.length * 0.66);
         assert_eq!(out.knobs["winter_crop"], "none");
         assert!(!out.knobs.contains_key("unused"));
         assert!(!f.segments.is_empty());
@@ -369,12 +380,14 @@ mod tests {
         let mut barley = inp(20, 5);
         barley.knobs[3].3 = Some("barley".to_owned());
         let b = build(&barley).unwrap();
-        assert!(
-            b.grain.1 < 1e-9 && b.fields[0].dry.is_empty(),
-            "a drained winter paddy grows the grain"
-        );
+        assert!(b.grain.1 < 1e-9 && b.fields[0].dry.is_empty());
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());
+        // a race leaving along the fall from the corner itself runs the brook down the outline: refused by name
+        let mut hug = inp(20, 4);
+        hug.brook.offtake_deg = 0.0;
+        hug.brook.tap_run = 600.0;
+        assert_eq!(build(&hug).unwrap_err().rule, "the brook's skirt");
     }
 }

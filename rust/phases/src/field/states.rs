@@ -125,16 +125,9 @@ mod tests {
         let last = b.iter().map(|x| x.row).max().unwrap();
         let s = states(&b, 4, "f0", false);
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();
-        assert!(
-            !wet.is_empty() && wet.iter().all(|&i| b[i].row == last),
-            "wet only on the lowest row"
-        );
+        assert!(!wet.is_empty() && wet.iter().all(|&i| b[i].row == last));
         let flooded = s.iter().filter(|x| **x == State::Flooded).count();
-        assert!(
-            (b.len() / 40..b.len() / 8).contains(&flooded),
-            "about one in sixteen: {flooded} of {}",
-            b.len()
-        );
+        assert!((b.len() / 40..b.len() / 8).contains(&flooded));
         assert!(s.contains(&State::Gold));
         assert!(!s.contains(&State::Rest), "a settled field rests none");
         assert_eq!(s, states(&b, 4, "f0", false), "positional");

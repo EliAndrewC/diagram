@@ -67,11 +67,7 @@ impl Fan {
     ///     the fan narrows toward its drain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: its bunds converging
     #[must_use]
     pub fn half_at(&self, u: f64) -> f64 {
-        let t = if self.length > 0.0 {
-            u / self.length
-        } else {
-            0.0
-        };
+        let t = u / self.length.max(f64::MIN_POSITIVE);
         self.half_head + (self.half_foot - self.half_head) * t
     }
 }
@@ -126,40 +122,19 @@ pub fn fan(area: f64, aspect: f64, down_deg: f64, center: Pt) -> Fan {
     }
 }
 
-/// A closed ring's area by the shoelace formula (square feet).
-///
-/// Research:
-///     area - NONE: geometry
-#[must_use]
-pub fn ring_area(ring: &[Pt]) -> f64 {
-    let n = ring.len();
-    let twice: f64 = (0..n)
-        .map(|i| {
-            let (a, b) = (ring[i], ring[(i + 1) % n]);
-            a.0 * b.1 - b.0 * a.1
-        })
-        .sum();
-    twice.abs() / 2.0
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{fan, heading, ring_area, TAPER};
+    use super::{fan, heading, TAPER};
+    use crate::field::geom::signed_area;
 
     #[test]
     fn the_fan_holds_its_area_falls_its_way_and_narrows_toward_its_drain() {
         let area = 26.0 * 43_560.0;
         let f = fan(area, 1.0, 315.0, (3200.0, 3200.0));
-        assert!(
-            (ring_area(&f.ring) / area - 1.0).abs() < 1e-6,
-            "the paddy's area"
-        );
+        assert!((signed_area(&f.ring).abs() / area - 1.0).abs() < 1e-6);
         let (dx, dy) = heading(315.0);
         let down = (f.foot.0 - f.fork.0, f.foot.1 - f.fork.1);
-        assert!(
-            down.0 * dx + down.1 * dy > 0.0,
-            "the foot lies downhill of the fork"
-        );
+        assert!(down.0 * dx + down.1 * dy > 0.0);
         let head_w =
             ((f.ring[0].0 - f.fork.0).powi(2) + (f.ring[0].1 - f.fork.1).powi(2)).sqrt() * 2.0;
         assert!(head_w > 0.0 && TAPER > 0.0);

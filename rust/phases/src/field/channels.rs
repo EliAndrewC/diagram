@@ -242,10 +242,7 @@ mod tests {
             assert!(down.0 * out.0 + down.1 * out.1 > 0.0, "leaning downstream");
         }
         let both: Vec<_> = (0..16).map(tail_runs_on).collect();
-        assert!(
-            both.contains(&true) && both.contains(&false),
-            "both tails attested and rolled"
-        );
+        assert!(both.contains(&true) && both.contains(&false));
         let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, 4);
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
     }

@@ -152,7 +152,7 @@ pub fn grave(
 }
 
 fn mid(a: Pt, b: Pt) -> Pt {
-    ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0)
+    (f64::midpoint(a.0, b.0), f64::midpoint(a.1, b.1))
 }
 
 fn toward(a: Pt, b: Pt, d: f64) -> Pt {
@@ -174,11 +174,7 @@ mod tests {
         let b = basins(&f, 4);
         let last = b.iter().map(|x| x.row).max().unwrap();
         let ponds: Vec<_> = (0..40).filter_map(|s| pocket_pond(&b, s, "f0")).collect();
-        assert!(
-            (10..35).contains(&ponds.len()),
-            "a little over half: {}",
-            ponds.len()
-        );
+        assert!((10..35).contains(&ponds.len()));
         for (i, p) in &ponds {
             assert_eq!(b[*i].row, last);
             assert!(
@@ -195,9 +191,9 @@ mod tests {
                     assert!(g.rings.iter().all(|r| held(r, 1488.0).is_ok()));
                     if form == "island" {
                         seen.0 += 1;
-                        assert!((parts - whole).abs() < 1e-6)
+                        assert!((parts - whole).abs() < 1e-6);
                     } else {
-                        seen.1 += 1
+                        seen.1 += 1;
                     }
                 }
             }
@@ -209,9 +205,9 @@ mod tests {
             .is_none());
         let tiny: Vec<_> = b.iter().take(1).cloned().collect();
         let refused = (0..40).find_map(|s| grave(&tiny, s, "f0", "island", Some(0), 1488.0).err());
-        assert!(
-            refused.is_some(),
-            "a grave with no host it may take is refused"
-        );
+        assert!(refused.is_some());
+        // a cell so large no half of a split plot holds a quarter of it: every host tried refuses
+        let big = (0..40).find_map(|s| grave(&b, s, "f0", "island", None, 1e5).err());
+        assert!(big.is_some_and(|e| e.rule == "the grave's host"));
     }
 }

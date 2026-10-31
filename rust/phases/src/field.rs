@@ -68,29 +68,18 @@ mod tests {
 
     #[test]
     fn the_paddy_and_the_cap() {
-        assert!(
-            (paddy_sq_ft(20) / 43_560.0 - 26.0).abs() < 1e-9,
-            "20 households farm 26 acres"
-        );
+        assert!((paddy_sq_ft(20) / 43_560.0 - 26.0).abs() < 1e-9);
         for seed in 0..64 {
             let ha = cap_sq_ft(seed) / SQ_FT_PER_HA;
             assert!((CAP_HA.0..=CAP_HA.1).contains(&ha), "{ha}");
         }
-        assert_eq!(
-            cap_sq_ft(7).to_bits(),
-            cap_sq_ft(7).to_bits(),
-            "the seed fixes the cap"
-        );
+        assert_eq!(cap_sq_ft(7).to_bits(), cap_sq_ft(7).to_bits());
     }
 
     #[test]
     fn one_field_until_the_cap_then_several_each_at_most_it() {
         let cap = 45.0 * SQ_FT_PER_HA;
-        assert_eq!(
-            fields_for(paddy_sq_ft(80), cap),
-            1,
-            "80 households, 42 ha, under the floor"
-        );
+        assert_eq!(fields_for(paddy_sq_ft(80), cap), 1);
         let big = paddy_sq_ft(200); // about 105 ha
         let n = fields_for(big, cap);
         assert_eq!(n, 3);
@@ -109,5 +98,6 @@ pub mod features;
 pub mod geom;
 pub mod index;
 pub mod lattice;
+pub mod py;
 pub mod rules;
 pub mod states;

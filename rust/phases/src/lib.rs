@@ -18,5 +18,6 @@ use pyo3::prelude::*;
 fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(water_frame::stage_water_frame, m)?)?;
     m.add_function(wrap_pyfunction!(water_frame::admitted_falls, m)?)?;
+    m.add_function(wrap_pyfunction!(field::py::stage_field, m)?)?;
     Ok(())
 }

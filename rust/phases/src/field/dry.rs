@@ -73,6 +73,11 @@ pub struct DryPlot {
 ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots square to the canal and laid end to end along its curving line
 ///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
+#[expect(
+    clippy::too_many_arguments,
+    clippy::many_single_char_names,
+    reason = "the hem's line, side, need, field, water, clearance, seed and tag"
+)]
 #[must_use]
 pub fn hem(
     line: &[Pt],
@@ -95,18 +100,22 @@ pub fn hem(
             .collect()
     };
     let len: f64 = line.windows(2).map(|w| dist(w[0], w[1])).sum();
+    let segs: Vec<(Pt, Pt)> = line.windows(2).map(|w| (w[0], w[1])).collect();
+    if segs.is_empty() {
+        return (Vec::new(), 0.0);
+    }
+    // the point `d` feet along the line, and the line's heading there (past the end, the last segment's end)
     let along_at = |d: f64| -> (Pt, Pt) {
         let mut left = d;
-        for w in line.windows(2) {
-            let l = dist(w[0], w[1]);
-            if left <= l || std::ptr::eq(w, line.windows(2).last().unwrap_or(w)) {
-                let u = unit(w[0], w[1]);
-                let t = left.min(l);
-                return ((w[0].0 + u.0 * t, w[0].1 + u.1 * t), u);
-            }
-            left -= l;
+        let mut k = 0;
+        while k + 1 < segs.len() && left > dist(segs[k].0, segs[k].1) {
+            left -= dist(segs[k].0, segs[k].1);
+            k += 1;
         }
-        (line[0], (1.0, 0.0))
+        let (a, b) = segs[k];
+        let u = unit(a, b);
+        let t = left.min(dist(a, b));
+        ((a.0 + u.0 * t, a.1 + u.1 * t), u)
     };
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
     let mut last_turn: Option<f64> = None;
@@ -201,18 +210,13 @@ mod tests {
         let need = 15.0 * GRAIN_ACRES_PER_HOUSEHOLD * 43_560.0;
         let mut ix = Index::default();
         let (plots, room) = hem(&line, (-1.0, 0.0), need, &field, &mut ix, 4.0, 4, "f0");
+        #[expect(clippy::cast_precision_loss, reason = "a hundred plots")]
         let got = plots.len() as f64 * PLOT_FT.0 * PLOT_FT.1;
-        assert!(
-            got >= need && got < need + 2.0 * PLOT_FT.0 * PLOT_FT.1 * 4.0,
-            "{got} for {need}"
-        );
+        assert!(got >= need && got < need + 2.0 * PLOT_FT.0 * PLOT_FT.1 * 4.0);
         assert!(room >= got);
-        assert!(
-            plots
-                .iter()
-                .all(|p| p.poly.iter().all(|c| !inside(*c, &field) && c.0 < 0.0)),
-            "upslope, outside the rice"
-        );
+        assert!(plots
+            .iter()
+            .all(|p| p.poly.iter().all(|c| !inside(*c, &field) && c.0 < 0.0)));
         let mut tracts: Vec<_> = plots.iter().map(|p| p.tract).collect();
         tracts.dedup();
         assert!(tracts.len() > 2);
@@ -243,6 +247,17 @@ mod tests {
             4,
             "f0",
         );
+        let (dot, _) = hem(
+            &[(0.0, 0.0)],
+            (-1.0, 0.0),
+            need,
+            &field,
+            &mut Index::default(),
+            4.0,
+            4,
+            "f0",
+        );
+        assert!(dot.is_empty());
         assert!(short.is_empty());
     }
 }

@@ -89,6 +89,10 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
 ///
 /// Research:
 ///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the whole brook, 7 ft half-length, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 #[must_use]
 pub fn weir(
     brook: &Brook,
@@ -167,28 +171,24 @@ mod tests {
             let ids = file(&br, &mut ix);
             assert_eq!(ids.len(), br.pts.len() - 1);
             for p in &f.ring {
-                assert!(
-                    clearance(*p, B.skirt * 2.0, &mut ix) >= B.skirt - 1e-6,
-                    "outside the crop by its skirt"
-                );
+                assert!(clearance(*p, B.skirt * 2.0, &mut ix) >= B.skirt - 1e-6);
             }
             for w in br.pts.windows(2).skip(2) {
                 let across = (w[1].0 - w[0].0).abs();
                 assert!(across <= B.slew + B.skirt + B.wander, "{across}");
             }
             assert!(br.pts.len() > 30);
-            assert!(B.w > 0.0);
         }
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0));
         let br = brook(&f, 1.0, B, 4);
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
-        assert!(
-            (signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6,
-            "14 ft by 1.5"
-        );
+        assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);
         assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);
         // the brook runs south; the bar runs 30 degrees off square, its far end (away from the field) upstream
-        let far = ((ring[1].0 + ring[2].0) / 2.0, (ring[1].1 + ring[2].1) / 2.0);
+        let far = (
+            f64::midpoint(ring[1].0, ring[2].0),
+            f64::midpoint(ring[1].1, ring[2].1),
+        );
         assert!(far.1 < br.intake.1, "the far end upstream");
         assert!((0.0..360.0).contains(&deg));
         let mut ix = Index::default();

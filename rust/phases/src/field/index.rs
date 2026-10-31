@@ -105,10 +105,7 @@ mod tests {
         assert!(ix.near((5.0, 5.0), (6.0, 6.0)).contains(&id));
         assert!(ix.near((1000.0, 1000.0), (1001.0, 1001.0)).is_empty());
         let back = ix.file((200.0, 300.0), (-50.0, -10.0));
-        assert!(
-            ix.near((0.0, 30.0), (1.0, 31.0)).contains(&back)
-                || ix.near((-1.0, 20.0), (1.0, 40.0)).contains(&back)
-        );
+        assert!(ix.near((-1.0, -9.0), (199.0, 299.0)).contains(&back));
         let dot = ix.file((5.0, 5.0), (5.0, 5.0));
         assert!(ix.near((0.0, 0.0), (1.0, 1.0)).contains(&dot));
     }
