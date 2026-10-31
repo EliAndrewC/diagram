@@ -178,4 +178,236 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 **Performance work?** no
 
 
-<!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
+### T19 - phase: water_frame, its Rust port (FR-017; after the tooling proof)
+
+Occasions: settlement-review on each pool hamlet the port moves - none, measured 2026-10-31 (`make map` on each: D7 reproduces today's draws, so every layout and render is main's).
+
+### T19 Approach (2026-10-31T04:00:49Z)
+
+(The round arbiter, 2026-10-30, ask:444-T17-rows-need-a-phase, Route A, narrowed by the plan review of 2026-10-30: T19 also proves the two tooling rows the fixture cannot fire - `cache audit` (it audits maps, and the fixture draws none) and `the overlap census` (its replacement, the counters inside Rust, designed with this port) - before its tick; `check-rust-tooling.py` refuses the port's landing until they are.)
+
+1. **The goal, in the world.** `water_frame` in the extension module, written from `phases/water_frame_greenfield.derivation.md`
+   (its derivation came out the same as today's code: rolls and writes, no search), the stage a thin Python function calling it.
+2. **The constraints.** FR-010, FR-017; the derivation's Contract and its pinned budget (`dev/work-budget.json`); the phase-source guard holds its
+   old code while this task runs.
+3. **Where each comes from.** G: the GM, 2026-10-29 (FR-017: water_frame's Rust port a task of its own, landed before the feature
+   closes).
+4. **Do they describe the world here?** One stage, one derivation; the manifest keys it writes are today's.
+5. **The order.** After the tooling proof; before the field rebuild, so the first Rust landing is the smallest.
+6. **The exits.** Green: counted operations within the pinned budget (`dev/work-budget.json`) at every size `make work-budget` rolls, MODE AUDIT
+   WITHIN on the `.rs` modules, `cache audit` and `the overlap census` proven on the port (each check refusing a copy of the port
+   written to break it, named in `dev/rust-tooling.md`'s "Proven" table - not merely run green), `make cohort-landing` with no regressed seed (as the GM wrote it: D7 reproduces today's draws, so a pinned seed names the same map), the Rust coverage floor whole. Red: a count over its budget, or MODE AUDIT not WITHIN, goes to the round arbiter (`make arbiter-ask`) with the measurement -
+   a route, never an acceptance: a phase over its budget is rebuilt or its budget changed with the GM's words (FR-006).
+7. **The search smell.** none
+8. **The budget.** One landing.
+9. **Done, measured.** `make work-budget`: water_frame's count at every size against its pinned budget; `cache audit` and `the overlap census` in the "Proven" table with their firing cases; `make perf-ab` beside it, recorded.
+10. **Before moving a constant.** The research page each rolled knob cites (0054), read before it moves.
+11. **Before fitting things into room.** n/a
+
+**Performance work?** yes - docs/performance-checklist.md's questions follow.
+
+### T19 part B (2026-10-31T02:51Z)
+
+The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-landing-1.txt`, dev/cohort-log/20261031T025046Z): 47 of
+54 pass the whole gate, against main's 54 of 54 on the same seeds; seeds 3, 20, 21, 36, 37, 903 and 904 newly failing.
+
+1. **What exactly is refusing?** Not water_frame: its own checks hold (56 counted, MODE AUDIT WITHIN, FR-004, FR-012). Later stages
+   refuse, each with a kind main's cohort knows - seed 3 and 36 `SiteRefused` (the seating), 20 and 21 `lane_knots 1`, 904
+   `lane_knots 2`, 37 `OverlapRefused`, 903 `WebRefused`. Seeds 3 and 903 are named by an open found row,
+   `l7r/diagram/hamletgen/ways/web.py::stage_web` (E3, a footpath to every farmhouse 7 ft off a plot - 0246's fence gap, CONVENTION): that row is read before any
+   probe. The geometry of each refusal is NOT yet dumped - item 7.
+2. **A3 again.** The rules refusing are the later stages' own (R: research-backed), unchanged by the port.
+3. **A4 again.** Not yet looked at on the map, seed by seed - item 7.
+4. **Moving something placed earlier to suit something later?** Not proposed: no fix is drafted.
+5. **Tuning or changing?** Neither yet.
+6. **The one-sentence test.** "The port re-rolls every plan; seven seeds now refuse in later stages" - the GM would ask whether the
+   later stages fail on new rolls generally. Measured: main's own fresh-seed cohort (dev/cohort-log/20261030T233704Z, seeds from
+   355289, commit 81a8dbc39) passes 46 of 54, on the same refusal kinds. Recorded as a number beside the diagnosis owed, not as an
+   explanation (constitution XIII: a rotated residue is no defense).
+7. **The next step is a measurement:** each of the seven seeds rolled on the port and dumped where it refuses (the lanes and what
+   stands near them, the seat band for the two SiteRefused), the open found row read for 3 and 903; then each named as a defect of a
+   later stage, with its fix, before any route is put to the round arbiter.
+
+   **Item 7, begun (2026-10-31T03Z).** The open found row for seeds 3 and 903 (`specs/328-match-the-research/claims-followup.md`,
+   E3, DRIFTED) is a known defect of the web: footpaths held 7 ft off a garden fence (0246's fence gap, CONVENTION) leave farmhouses off the network -
+   "WebRefused at (3024, 3004) and (3265, 2589)" on Kashikawa, "re-route or re-seat so the gap holds". Seed 903's `WebRefused` is that
+   row's kind; seed 3 refuses earlier, in the seating (`SiteRefused`), so the row does not explain it alone. The five others are
+   not yet dumped.
+
+   **Item 7, each seed rolled alone on the port (`make cohort N=1 SEED=<s> FRESH=0`, 2026-10-31T03Z):** seed 3 and 36 `SiteRefused`
+   - "seated 19 of 20 households on margin 1", one house short of the band; 20, 21 and 904 `lane_knots` - 1, 1 and 2 knots, two
+   lanes within the 25 ft join reach (`LANE_JOIN_FT`, a knob) left unjoined (15.2, 18.9 and 20.6 ft, measured 2026-10-31 (`make cohort N=1 SEED=<s> FRESH=0`, the knot verdicts)); 37 `OverlapRefused` - "lanes would be recorded on a
+   gardens at (1545, 2814)"; 903 `WebRefused` - "lanes 1, 2 (skeleton: dangling_ends) still break a rule of the lane law", the E3
+   row's kind. All seven refuse in the seating, the lane knots or the web - none in water_frame - each a class main's own fresh-seed
+   cohort fails on (46 of 54). The lanes and the seat band at each place are not yet dumped.
+
+### T19 part B (2026-10-31T03:05Z)
+
+The trigger: the round arbiter's fair comparison (ruling on ask:444-T19-cohort-regression), the port rolled on main's own fresh block
+(`make cohort N=48 SEED=355289 FRESH=0`, dev/cohort-log/20261031T030442Z): 44 of 54 pass against main's 46 of 54 at 81a8dbc39
+(dev/cohort-log/20261030T233704Z); 7 of main's failures pass, 9 seeds newly fail (355298, 355302, 355305, 355306, 355327, 355329,
+355334, 903, 904), and seed 355306 refuses `SiteRefused`, a class main's block never shows - the ruling's branch 3, a fault in the
+port's rolls.
+
+1. **What exactly is refusing?** Later stages, as before - `lane_knots` 4, `WebRefused` 4, `row_rules` 1, `SiteRefused` 1 (355306, a
+   linear map of 19 households). The forms rolled match main's (nucleated 28 / linear 15 / dispersed 11 against 27 / 13 / 14), so the
+   settlement form's odds are not the fault; every dispersed map passes on both.
+2. **A3 again.** The refusing rules are the later stages' own, unchanged by the port.
+3. **A4 again.** Read in the port's caller and the later stages' readers: the port rolls a knob only on its derivation branch, else
+   writes its table's first form. A branch is right only where no stage reads the knob off it. (The old `plan_site` was also read at
+   81a8dbc39 under the phase-source escape during this diagnosis, against the guard's purpose - the GM's 2026-10-30 rule that the
+   rewrite not copy the old algorithms; spec-fidelity's MODE 4 review of T19 found it NOT LEGITIMATE. Both fixes rest on the readers'
+   trace below alone, which finds them without it.)
+4. **Moving something placed earlier to suit something later?** No: the fix is in water_frame's own rolls.
+5. **Tuning or changing?** Changing: a wrong branch, not a value.
+6. **The one-sentence test.** "Every row and farm hamlet was seated in the stubbiest band, because the port held the cluster's shape
+   at round outside a cluster" - a defect the GM would recognize as one.
+7. **Found:** `cluster_shape` was on the nucleated branch, but `seat_cluster` (`ways/track.py`, every form) and `seat_room` size
+   every map's margin band and canvas through `band_extent(households, cluster_shape)`; on the port every linear and dispersed map
+   took "round" (aspect 2.2, against elongated's 5.0). The grove knobs are read only by the row seating (`homesteads/rows.py`), the
+   row and farm-water knobs only behind their form, `well_siting` only by the nucleated wells: those branches stand. Fixed
+   (`_KNOBS`: `cluster_shape` on `all`), with `test_the_cluster_shape_rolls_on_every_form_since_every_band_is_sized_by_it`
+   red on the unfixed branch (`('linear', {'round'})`); the derivation's per-form note corrected (linear 57; the reference's 56
+   unchanged). Next: the same block re-rolled on the fix, and the ruling's branch read again.
+
+### T19 Decisions
+
+**D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
+in `STAGES`. It gathers the derivation's Reads into one record - the map's seed, the spec's name, households and scale, and for
+each of the 20 knobs the forms its own table allows for the settlement form and the spec's pin if any - and calls
+`l7r_phases.water_frame(record)`. Rust rolls the three bearings (the drainage bearing drawn within 90 degrees of the fall, so the
+bound holds by construction) and each knob's form, and returns them with its counted operations. Python writes them where the
+manifest keys are today (FR-004: the keys unchanged). The knob tables stay Python data: they are the research's tables, and one
+copy of each is the rule.
+
+**D7 - The rolls: `knob_rng`'s own draws, reproduced in Rust** (FR-017; amended 2026-10-31 on spec-fidelity's second MODE 4 review,
+which found the first D7's premise - that today's draws could not be reproduced without reading the guarded plan code - unmeasured):
+`settlement/_knobs.py`'s `knob_rng(seed, knob)` is the shared generator every stage calls, not the ported code, and public algorithm
+end to end - SHA-256 of `"{seed}\0{knob}"`, its first 8 bytes seeding Python's `random.Random` (MT19937, `init_by_array`), drawn by
+`randrange` (CPython's `_randbelow_with_getrandbits`). `rust/phases/src/pyrand.rs` reproduces it with no crate dependency, so the
+port rolls the plan Python rolled and every seed keeps its map: the GM's landing rule, "`make cohort-landing` shows no regressed
+seed", holds as written. Proven by `test_the_rust_draws_are_knob_rng_s` (the knobs and the fall on 32 seeds, one past 2^32) and
+measured 2026-10-31 (`make map` on each pool hamlet): every layout and render is main's. What still differs is the meta of a knob
+off its derivation branch - written as its table's first form, where Python rolled a value no stage reads - which the title card
+hides behind each choice's own form (`interactive/choices.py` `applies`). The first D7 (a seeded SplitMix64, every plan rolled
+anew) was replaced because it broke the literal rule; do not restore it.
+
+**D8 - The build: maturin into a repository-local folder, keyed to the Rust sources** (FR-010): `rust/phases/` is the crate
+(`l7r_phases`); `make rust-build` builds it with maturin into `.rust-ext/` (gitignored) when its sources' code id moved, and every
+target that rolls a map or runs the tests depends on it; `l7r/diagram/hamletgen` puts `.rust-ext/` on the import path. The
+generation key already holds the Rust sources (T17, `gencache.rust_sources`), so a Rust change re-keys every map.
+
+**D9 - The counts: Rust counts as Python does, and hands them back** (FR-003, FR-012; `dev/rust-tooling.md` "the overlap
+census"): behind the crate's Cargo feature `counters` (FR-012: compiled out of the deployed build), the crate keeps an operation counter keyed `<kind>@<function>` as the Python counters are, returns it with the stage's result, and the
+thin function adds it to the roll's counts, so `make work-budget` and MODE AUDIT read a Rust stage as they read a Python one -
+the replacement for the overlap census, proven on this port by a copy that does work it does not count.
+
+### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
+2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
+   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
+3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
+4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
+5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
+   the host's load - evidence, not a pass>
+6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+
+
+### T19 part B (2026-10-31T03:10Z)
+
+The trigger: the same block re-rolled on the `cluster_shape` fix (dev/cohort-log/20261031T031013Z): 45 of 54 against main's 46; the
+SiteRefused gone, every refusal a class main's block shows (`lane_knots` 4, `WebRefused` 4, `row_rules` 1); 8 seeds still newly
+failing (355298, 355302, 355305, 355327, 355329, 355334, 903, 904), 7 of main's failures passing.
+
+1. **What exactly is refusing?** The later stages' rules only, each a kind main's block shows; still one seat under the ruling's 46.
+2. **A3 again.** Unchanged rules.
+3. **A4 again.** The audit of 03:05Z item 7 carried to every off-branch knob: `well_siting` is the second of the same fault -
+   `place_wells` (`homesteads/stages.py`, every form) seats the communal wells of every house without a grove, and both its first
+   seating and the reach loop (`wells.py`) read `plan.well_siting` on every form, and the port held it at
+   "lane" outside a cluster. The rest hold: the row knobs are read in `rows.py` and behind the linear form in `wells.py`, `farm_water`
+   behind the dispersed form, the grove knobs by the row seating alone.
+4. **Moving something placed earlier to suit something later?** No: water_frame's own branch.
+5. **Tuning or changing?** Changing a wrong branch.
+6. **The one-sentence test.** "The row and farm hamlets' shared wells were always sited by the lane, because the port held the
+   siting at its first form outside a cluster."
+7. **Fixed** (`_KNOBS`: `well_siting` on `all`), the test widened to
+   `test_the_knobs_every_form_reads_roll_on_every_form`, red on the unfixed branch (`AssertionError: linear`); the derivation's
+   per-form note now linear 59 (the reference's 56 unchanged). Next: the block re-rolled on both fixes and the ruling's branch read
+   from that run.
+
+### T19 part B (2026-10-31T03:14Z)
+
+The trigger: the block re-rolled on both branch fixes (dev/cohort-log/20261031T031422Z): 45 of 54 again, against main's 46; the
+same eight seeds newly failing, the same seven of main's passing; every refusal a class main's block shows (`lane_knots` 4,
+`WebRefused` 4, `row_rules` 1); the cohort's own census: "knob values never rolled: none", "knob values rolled but never drawn: none".
+
+1. **What exactly is refusing?** The later stages, on kinds main's block shows: four knot passes, four webs (903 named by the open
+   found row E3), one row rule.
+2. **A3 again.** Unchanged rules.
+3. **A4 again.** Every knob the port writes alone off its branch has now been traced to its readers (03:05Z and 03:10Z items 7);
+   none remains read off its branch, and the census finds every value rolled and drawn. The settlement forms' odds match main's
+   block (nucleated 28 / linear 15 / dispersed 11 against 27 / 13 / 14); the falls are tested equal to `fall_backs_the_wind` on
+   every quarter.
+4. **Moving something placed earlier to suit something later?** No fix is proposed.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "On main's own block the re-rolled port passes 45 where main passed 46, on the same kinds of failure,
+   eight seeds failing and seven healed" - the GM would ask whether one seat of 54 is the port or the dice.
+7. **The next step:** a PROCESS question, to the round arbiter (`ask:444-T19-cohort-45`): whether a one-seat shortfall with no new
+   class, after the port's rolls are audited knob by knob, is branch 3's fault still to find or within the block's own spread.
+
+### T19 part B (2026-10-31T03:22Z)
+
+The trigger: `make cohort-landing` on both branch fixes (dev/cohort-log/20261031T032224Z): 47 of 54, seeds 20, 21, 36, 37, 48, 903
+and 904 newly failing against main's 54 of 54 on these pinned seeds - the comparison the round arbiter ruled unfair for a port that
+re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-T19-cohort-45: fresh 41/48 against main's 40/48).
+
+1. **What exactly is refusing?** `lane_knots` (20, 21, 904), `OverlapRefused` (37 on a garden, 48 on a threshing yard), `SiteRefused`
+   (36, 19 of 20 on margin 1), `WebRefused` (903, dangling ends); seed 3, failing before the `cluster_shape` fix, passes.
+2. **A3 again.** The later stages' own rules, unchanged.
+3. **A4 again.** Read: each refusal a stage's known kind; 903 the E3 web row's.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: the ruling's branch 2 - land, the seeds filed.
+6. **The one-sentence test.** "The re-rolled port's landing seeds fail in later stages the fresh block also shows; each is filed as
+   an open row against its stage."
+7. **Done:** the seven seeds and the Kashikawa and Sawada pins filed as open rows
+   (`specs/328-match-the-research/audit/found-444-t19.jsonl`, the SiteRefused row naming widening `SEATING_GROUND_FT` first). (Struck 2026-10-31: the Mizuguchi review this sentence owed is not owed - D7 reproduces today's draws and no pool map moves; the Occasions line.)
+
+   **On spec-fidelity's MODE 4 review of T19 (2026-10-31, BLOCKED, 7 decisions):** (5) the landing reads FR-005 by User Story 2's
+   own words, Approach item 6 and D7 amended above. The Kashikawa and Sawada pins: both are pool hamlets whose re-rolled plans
+   refused on the port (SiteRefused on Kashikawa, SinkRefused on Sawada); their `.gen.py` now pin their shipped plans, so as shipped
+   they do not newly fail - each regenerates unchanged against HEAD (observed 2026-10-31, method: `make map`, "this map's manifest
+   is unchanged against HEAD") - and their open rows are to unpin them, not a failing map. (6) the old-code read is recorded at
+   03:05Z item 3; both fixes rest on the readers' trace. (7) water_frame's pin is SOUND-pinned (`dev/work-budget.json`: its verdict
+   `phases/water_frame_greenfield.verdict-2.txt`), and FR-013's re-owed ruling binds "an accept-pinned budget" alone; the edit
+   changed no budgeted figure - the totals at 20, 40 and 80 stay 56 - only the per-form note beside the knobs row (linear 55, then
+   59), so no ruling is re-owed and the pin stands.
+
+   **On spec-fidelity's second MODE 4 review (2026-10-31, BLOCKED, 9 decisions):** (1) the cohort exit - the first D7's premise
+   that today's draws could not be reproduced was unmeasured; measured, it was false: D7 amended to reproduce `knob_rng`, Approach
+   item 6 back to the GM's words, and `make cohort-landing` on it passes 54 of 54, no regressed seed
+   (dev/cohort-log/20261031T034931Z). (2) the Kashikawa and Sawada pins - removed; both regenerate as main's maps. The open rows
+   filed at 03:22Z for the re-rolled port's seeds and pins (`found-444-t19.jsonl`) are withdrawn: no seed fails and no map is pinned.
+
+### T19 part B (2026-10-31T04:09Z)
+
+The trigger: every cohort this task rolled that refused a seed (dev/cohort-log/20261031T025046Z, 030442Z, 031013Z, 031422Z and
+032224Z), each answered at its own part B above in items 1-7; this block answers items 8 and 9 for all of them, and the outcome.
+
+1. **What exactly is refusing?** Nothing now: `make cohort-landing` on the reproduced draws passes 54 of 54
+   (dev/cohort-log/20261031T034931Z).
+2. **A3 again.** The rules are unchanged.
+3. **A4 again.** Read at each block above; the last read found no knob read off its branch.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Changing: two branches (`cluster_shape`, `well_siting`) and D7's draws.
+6. **The one-sentence test.** "The port now draws Python's own rolls, so every seed keeps its map."
+7. **Done:** D7 amended; the open rows withdrawn; the pins removed.
+8. **Every route measured before the arbiter was asked?** At ask:444-T19-cohort-regression and ask:444-T19-cohort-45 the routes
+   put were measured on the cohort and against the found rows (`cohort_known` named seed 903's E3 row), but not every route: the
+   route that settled it - reproducing `knob_rng` so no seed re-rolls - was not measured or offered until spec-fidelity's second
+   MODE 4 review called D7's premise unmeasured. The research did not decide it; a measurement did (the draws compared with
+   `knob_rng` in `test_the_rust_draws_are_knob_rng_s`). Recorded so a later port measures the reproduction route first.
+9. **After a ruling, the step it named?** Yes for each: the cohort-regression ruling's step (the fair comparison) was taken
+   first and its branch 3 (a fault in the rolls) followed, which found the two branch faults; the cohort-45 ruling's accept was
+   acted on until spec-fidelity's review blocked the landing it named, and the route taken then (D7 reproduced) went back
+   through that review (CLEAR) rather than past it.

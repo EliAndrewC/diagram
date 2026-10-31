@@ -67,11 +67,10 @@
       - [ ] recorded and cited
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
-- [x] T19 phase: water_frame - its Rust port, written from its derivation (FR-010, FR-017)
+- [ ] T19 phase: water_frame - its Rust port, written from its derivation (FR-010, FR-017)
       research: rendering
       phase: water_frame
       owes (the round arbiter, ask:444-T17-rows-need-a-phase; the plan review of 2026-10-30): the two tooling rows T17 left to the first phase - `cache audit` and `the overlap census` (dev/rust-tooling.md) - each proven on the port and named in its "Proven" table before the tick
-      verify: DONE. landed: water_frame ported to Rust (rust/phases/src/water_frame.rs, pyrand.rs): the plan's fall and 21 knobs rolled in Rust with knob_rng's own draws reproduced (SHA-256, MT19937, randrange), so every seed keeps its plan; cohort-landing 54 of 54, no regressed seed; the pool hamlets regenerate with main's layouts and renders (meta differs only for knobs off their form's branch, hidden by the title card); water_frame counted 56 against its budget of 56, MODE AUDIT WITHIN; impl-drift recorded on 38 claims, none owed; the gate stamp now hashes the Rust sources; the old Python rolls deleted in this landing (FR-005)
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
