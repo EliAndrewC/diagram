@@ -22,3 +22,4 @@
 {"date": "2026-10-31", "claims": 1, "keys": ["l7r/diagram/hamletgen/phases_ext.py::_stale#the extension's loading"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-10-31", "claims": 1, "keys": ["l7r/diagram/hamletgen/driver.py::build#driving the roll"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-10-31", "claims": 1, "keys": ["l7r/diagram/hamletgen/driver.py::build#driving the roll"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-10-31", "claims": 1, "keys": ["l7r/diagram/_invocation.py::OPERATIONS#invocation guard"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}

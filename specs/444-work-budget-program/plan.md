@@ -270,3 +270,19 @@ The trigger: two red gates in a row on T21's landing (14:32Z, 14:42Z), the tripw
 8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire, with each fix and its passing
    tests in hand.
 9. **After a ruling, the step it named?** Yes: `make done` once more, through `make land F=444 T=T21`.
+
+### T21 part B (2026-10-31T15:00Z)
+
+The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round arbiter (red-gate@2026-10-31T14:56:27Z).
+
+1. **What exactly is refusing?** One test: `tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row` -
+   `l7r.diagram.tools.rust_gate` runs as `python3 -m` with no row in `_invocation.OPERATIONS`. The three earlier fixes held.
+2. **A3 again.** The registry's rule, unchanged: every runnable tool names its make target.
+3. **A4 again.** Read in the gate's log.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: the row added (`rust-gate`, expensive), its claim re-checked IN-STEP.
+6. **The one-sentence test.** "The gate's new tool needed its row in the operations registry."
+7. **Done:** the row added, the registry test passing.
+8. **Every route measured before the arbiter was asked?** The tripwire asked, with the fix and its passing test in hand.
+9. **After a ruling, the step it named?** Yes: `make done` once more; one more fresh red is a process fault (how much new code
+   lands before a single `make done`), per the ruling.
