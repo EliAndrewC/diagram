@@ -154,8 +154,8 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
     REGION, the keep-out is the guarantee - the two halves of one rule.
 
     Steps:
-        l7r.diagram.hamletgen.water.polder.waterward_flanks
-        l7r.diagram.hamletgen.water.polder.dike_face
+        l7r.diagram.hamletgen.water.waterward.waterward_flanks
+        l7r.diagram.hamletgen.water.waterward.dike_face
         l7r.diagram.settlement.Settlement.marsh
         l7r.diagram.hamletgen.pondstock.reserve_sty_seat
 

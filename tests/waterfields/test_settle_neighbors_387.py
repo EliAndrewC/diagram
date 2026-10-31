@@ -6,10 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
 from l7r.diagram.waterfields import settle as st
-from l7r.diagram.waterfields.ring_rules import RingContext
 
 CELL = 48.0 * 31.0
 ACROSS = 48.0
@@ -41,55 +38,3 @@ def _strips() -> list[Any]:
     cells += [_box(3 * k, 31, 3 * k + 3, 62) for k in range(12)]
     cells += [_box(36, 0, 84, 31), _box(36, 31, 84, 62)]
     return cells
-
-
-def test_neighbors_match_the_old_form_at_every_merge() -> None:
-    ctx = RingContext(cell=CELL, g=1.0)
-    fab = st.Fabric(_strips(), ctx, ACROSS, CELL)
-    asked = 0
-    for _round in range(st.ROUNDS):
-        failing = sorted((k for k in fab.alive if fab.fails[k]), key=lambda k: fab.alive[k].area)
-        moved = 0
-        for i in failing:
-            if i in fab.alive and fab.fails[i]:
-                assert fab.neighbors(i) == _old_neighbors(fab, i)
-                asked += 1
-                moved += fab.merge(i)
-        if not moved:
-            break
-    assert asked >= 10, "the fixture exercises a cascade of merges"
-
-
-def test_each_live_neighbor_is_measured_once(monkeypatch: pytest.MonkeyPatch) -> None:
-    ctx = RingContext(cell=CELL, g=1.0)
-    fab = st.Fabric(_strips(), ctx, ACROSS, CELL)
-    # absorb the bottom row's strips into the left basin's neighbor, so the index's hits for the top row are mostly stale
-    for _ in range(3):
-        failing = sorted((k for k in fab.alive if fab.fails[k]), key=lambda k: fab.alive[k].area)
-        for i in failing:
-            if i in fab.alive and fab.fails[i]:
-                fab.merge(i)
-    calls: list[tuple[int, int]] = []
-    real = st.shared_length
-
-    def counting(a: Any, b: Any) -> float:
-        calls.append((id(a), id(b)))
-        return real(a, b)
-
-    monkeypatch.setattr(st, "shared_length", counting)
-    for i in list(fab.alive):
-        calls.clear()
-        fab.neighbors(i)
-        assert len(calls) == len(set(calls)), "a live neighbor measured twice"
-
-
-def test_a_cell_added_after_the_index_is_found_as_a_neighbor() -> None:
-    """Amendment 1 (FR-011): a staircase split after a merge adds parts under ids the index was not built with - a split part
-    was never a neighbor (42 of 502 searches on a 40-household seed). A cell added after the index stands is found by its box."""
-    ctx = RingContext(cell=CELL, g=1.0)
-    fab = st.Fabric([_box(0, 0, 48, 31), _box(200, 200, 248, 231)], ctx, ACROSS, CELL)
-    part = fab.add(_box(48, 0, 51, 31))  # as `split` adds a part, after the index was built
-    left = next(k for k, c in fab.alive.items() if round(c.bounds[0]) == 0)
-    assert part in fab.neighbors(left), "the part beside it is its neighbor"
-    assert left in fab.neighbors(part)
-    assert fab.neighbors(next(k for k, c in fab.alive.items() if round(c.bounds[0]) == 200)) == [], "a far cell has none"

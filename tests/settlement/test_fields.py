@@ -372,15 +372,6 @@ def test_every_fields_member_resolves_on_settlement_itself():
     assert not unreachable, f"not resolvable on Settlement: {unreachable}"
 
 
-def test_feature_012_archetype_constants_survived_the_split():
-    # the three class-level tuples gating the in-field pond / rock / grave island. They are class
-    # ATTRIBUTES, not methods, so the surface test above cannot see them - and a transformer that
-    # slices a class body by its function definitions is exactly what would drop them.
-    for name in ("_PADDY_POND_KINDS", "_PADDY_GRAVE_KINDS"):
-        assert isinstance(getattr(Settlement, name), tuple), name
-    assert "valley_paddy" in Settlement._PADDY_POND_KINDS
-
-
 def test_hem_on_water_sees_a_stream_and_a_pond_separately():
     """the comb builder lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
     was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a

@@ -7,12 +7,9 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._knobs import KNOBS
 from l7r.diagram.settlement.fields.grain import COARSE_GRAIN_ACRES_PER_HOUSEHOLD, dry_need_acres, poly_area, top_up
-from l7r.diagram.waterfields import FLOODED
 
 
 def _sq(x: float, y: float, side: float = 200.0) -> list[tuple[float, float]]:
@@ -66,41 +63,6 @@ def _drawn(s: Settlement) -> set[tuple[float, float]]:
     return {(p["poly"][0][0], p["poly"][0][1]) for p in s.M["dry_plots"]}
 
 
-def test_a_single_cropped_wild_fan_tops_its_dry_band_up_to_the_need_off_the_brook() -> None:
-    s = _hamlet(2, "none")  # need 1.7 acres = 74,052 sq ft; the toe holds 40,000
-    net, source = _net("#7FA35A")
-    s._comb_draw_hem(net, source)
-    assert _drawn(s) == {(1000.0, 1000.0), (400.0, 100.0)}, "the brook plot is skipped, and one reserve plot meets the need"
-    meta = s.M["meta"]
-    assert meta["winter_crop"] == "none"
-    assert meta["coarse_grain_dry_acres"] >= meta["coarse_grain_dry_need_acres"] == round(2 * COARSE_GRAIN_ACRES_PER_HOUSEHOLD, 2)
-
-
-def test_a_double_cropped_wild_fan_grows_its_grain_on_the_drained_paddy_and_draws_only_the_toe() -> None:
-    s = _hamlet(2, "barley")
-    net, source = _net("#7FA35A")
-    s._comb_draw_hem(net, source)
-    assert _drawn(s) == {(1000.0, 1000.0)}
-    assert s.M["meta"]["coarse_grain_dry_need_acres"] == 0.0
-
-
-def test_a_wet_paddy_carries_no_winter_barley_so_the_band_is_topped_up_all_the_same() -> None:
-    s = _hamlet(2, "barley")
-    net, source = _net(FLOODED)
-    s._comb_draw_hem(net, source)
-    assert (400.0, 100.0) in _drawn(s), "the blue plot is shitsuden, too wet for barley"
-
-
-def test_a_green_plot_of_the_drain_side_row_carries_no_winter_barley_either() -> None:
-    """Feature 328 (0007: the lowest row's green plots are as wet as its blue ones): a plot of the drain-side row counts as
-    wet whatever its tint, so the band is topped up as for a blue one."""
-    s = _hamlet(2, "barley")
-    net, source = _net("#7FA35A")
-    net["plots"][0]["low"] = True
-    s._comb_draw_hem(net, source)
-    assert (400.0, 100.0) in _drawn(s), "the low row's green plot is not drained"
-
-
 def test_the_winter_crop_s_odds_follow_the_drainage_and_the_town() -> None:
     """Feature 328 (0009: "A settlement's drainage and the nearness of a town ... set the odds"): barley weighs the drained
     share of the paddy, halved where the town is far; a context without the site's figures keeps even odds."""
@@ -123,30 +85,6 @@ def test_the_knob_offers_only_the_forms_this_ground_can_feed() -> None:
     assert knob.allowed({**ctx, "grain_drained_acres": 1.0}) == [], "neither form: the roll is a loud error, never a short band"
     assert knob.allowed({**ctx, "grain_room_acres": 9.0}) == ["barley", "none"]
     assert knob.allowed({}) == ["barley", "none"], "a context without the site's figures offers both"
-
-
-def test_a_hamlet_whose_ground_cannot_feed_it_unwatered_rolls_the_winter_crop() -> None:
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, generated_by="hamletgen", households=10, fan_middle="wild")
-    net, source = _net("#7FA35A")
-    net["plots"] = [{"poly": _sq(1300.0, 1300.0, 700.0), "fill": "#7FA35A"}]  # 11.2 acres drained: covers 8.5
-    s._comb_draw_hem(net, source)
-    assert s.M["meta"]["winter_crop"] == "barley" and s.M["meta"]["coarse_grain_dry_need_acres"] == 0.0
-
-
-def test_pinning_a_form_the_ground_cannot_feed_is_refused_loudly() -> None:
-    s = _hamlet(10, "none")
-    net, source = _net("#7FA35A")
-    with pytest.raises(ValueError, match="typing rule"):
-        s._comb_draw_hem(net, source)
-
-
-def test_a_map_the_generator_did_not_make_is_not_topped_up() -> None:
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True)
-    net, source = _net("#7FA35A")
-    s._comb_draw_hem(net, source)
-    assert _drawn(s) == {(1000.0, 1000.0)} and "winter_crop" not in s.M["meta"]
 
 
 def test_poly_area_is_the_shoelace() -> None:

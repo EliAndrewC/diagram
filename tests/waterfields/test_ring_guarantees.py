@@ -11,8 +11,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from l7r.diagram.waterfields.ring_rules import RingContext, arrowhead, needle, ring_area, ring_violations, too_small
-
 G = 2.0  # the grain at a hamlet's 1 ft per px: 2 / ftpx
 
 
@@ -49,48 +47,3 @@ FOUR_STEPS = [
     (150.0, 80.0),
     (0.0, 80.0),
 ]
-
-
-def test_a_needle_hidden_from_the_deduplicated_ring_is_judged_raw() -> None:
-    """W18: the dedup blind spot - a 0.4 px collapsed edge hiding a raw apex under 15 deg. The rule reads the ring as
-    recorded, raw, and so does the pass: the plot goes."""
-    hidden = [(0.0, 0.0), (60.0, 0.0), (60.0, 40.0), (0.0, 40.0), (0.0, 0.4), (40.0, 5.0)]
-    assert needle(hidden)
-    plots = _hold([hidden], RingContext(cell=1500.0, g=G))
-    assert all(not needle(p["poly"]) for p in plots)
-
-
-def test_a_scrap_under_the_area_floor_is_welded_into_its_neighbor() -> None:
-    """W21: a basin under 0.20 of the design cell is taken into the basin it shares the most bund with, when the union
-    keeps every rule - here a 10 x 40 strip beside a 40 x 40 basin, which comes out a 50 x 40 basin."""
-    small, big = _rect(40.0, 0.0, 50.0, 40.0), _rect(0.0, 0.0, 40.0, 40.0)
-    ctx = RingContext(cell=2500.0, g=G)
-    assert too_small(small, 2500.0)
-    plots = _hold([small, big], ctx)
-    assert len(plots) == 1 and abs(ring_area(plots[0]["poly"]) - 2000.0) < 2.0, "welded in, ground kept"
-    assert not ring_violations(plots[0]["poly"], ctx)
-
-
-def test_a_weld_that_would_leave_a_flight_of_steps_is_refused() -> None:
-    """W21 with W23: an L-shaped weld - a small square on one end of a basin's wall - reads to the rule as two steps
-    (the run, the hop and the run resumed, twice), so the scrap stays bare rather than make the host a staircase."""
-    small, big = _rect(40.0, 0.0, 50.0, 10.0), _rect(0.0, 0.0, 40.0, 40.0)
-    plots = _hold([small, big], RingContext(cell=1600.0, g=G))
-    assert [p["poly"] for p in plots] == [big]
-
-
-def test_a_scrap_is_offered_only_to_the_neighbors_it_shares_a_bund_with() -> None:
-    """The weld's candidates: a near basin that shares no bund is passed over (the ranking stops there), and one within
-    reach whose union with the grown scrap is still two pieces is refused, so the scrap stays bare."""
-    small = _rect(40.0, 0.0, 50.0, 10.0)
-    apart = _rect(50.3, 0.0, 90.0, 40.0)  # 0.3 px off: within the weld's 0.4 px reach, beyond its 0.02 px growth
-    beyond = _rect(0.0, 10.8, 39.5, 50.0)  # its box is within a px of the scrap's, but no bund is shared
-    plots = _hold([small, apart, beyond], RingContext(cell=1600.0, g=G))
-    assert [p["poly"] for p in plots] == [apart, beyond]
-
-
-def test_an_arrowhead_is_left_bare_rather_than_kept() -> None:
-    """W25 at the last word: a basin pointed and notched at the gate line is not kept whole."""
-    arrow = [(0.0, 0.0), (100.0, -30.0), (60.0, 0.0), (100.0, 30.0)]
-    assert arrowhead(arrow)
-    assert not [p for p in _hold([arrow], RingContext()) if arrowhead(p["poly"])]

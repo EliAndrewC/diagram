@@ -105,24 +105,6 @@ def _net(channels: list[dict[str, Any]], dry: list[list[tuple[float, float]]]) -
     return {"channels": channels, "dry_plots": plots, "plots": []}
 
 
-def test_the_ditch_net_is_the_skeleton_and_a_hem_plot_one_of_its_ditches_crosses_is_refused() -> None:
-    """The ditch net is recorded before the hem; a hem plot one of the field's own ditches crosses is not drawn, and a ditch
-    the matrix forbids on what stood before the field is refused by name, never recorded."""
-    s = _hamlet()
-    ditch = {"pts": [(200.0, 0.0), (200.0, 400.0)], "role": "lateral", "w": 1.5}
-    across = [(180.0, 100.0), (220.0, 100.0), (220.0, 140.0), (180.0, 140.0)]
-    clear = [(300.0, 100.0), (340.0, 100.0), (340.0, 140.0), (300.0, 140.0)]
-    net = _net([ditch], [across, clear])
-    s._comb_record_ditches(net, "f")
-    s._comb_draw_hem(net, None, "f")
-    assert [p["poly"][0] for p in s.M["dry_plots"]] == [[300.0, 100.0]], "the plot across the ditch is refused, the clear one drawn"
-    t = _hamlet()
-    t.M["dry_plots"].append({"poly": _square(180.0, 100.0, 220.0, 140.0)})
-    with pytest.raises(OverlapRefused):
-        t._comb_record_ditches(_net([ditch], []), "f")
-    assert not t.M["field_ditches"]
-
-
 def test_only_a_basin_the_registry_admits_rests() -> None:
     """A resting basin is recorded as ground, so a basin a stranger's water already crosses is not offered to the rest pick: it
     stays a rice plot. With every candidate refused but one, only that one can rest."""

@@ -201,13 +201,6 @@ def test_a_nonsense_pond_layout_is_refused() -> None:
         hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")
 
 
-def test_the_polder_fabric_table_covers_every_polder_archetype() -> None:
-    """A polder archetype without a fabric row would KeyError in `stage_polder`."""
-    assert set(hg.POLDER_ARCHETYPES) == set(hg.POLDER_FABRIC)
-    assert set(hg.POLDER_ARCHETYPES) <= set(hg.FIELD_ARCHETYPES)
-    assert "mulberry_dike_fishpond" not in hg.ROLLED_ARCHETYPES  # opt-in until a cohort is green
-
-
 def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> None:
     """Fall S, village seated E: the west flank and the south foot face the water - the
     hand-authored Kuwabata's `["W", "S"]`, derived. The head (N, the reservoir) is never a flank."""

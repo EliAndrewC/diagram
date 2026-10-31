@@ -101,3 +101,20 @@ def _apart(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], gap: floa
     xa, ya = [p[0] for p in a], [p[1] for p in a]
     xb, yb = [p[0] for p in b], [p[1] for p in b]
     return min(xa) - max(xb) > gap or min(xb) - max(xa) > gap or min(ya) - max(yb) > gap or min(yb) - max(ya) > gap
+
+
+def twins(courses: Sequence[Sequence[Sequence[float]]], ftpx: float) -> list[tuple[int, int, float]]:
+    """(i, j, ft) for every pair of courses that run side by side longer than `TWIN_RUN_FT`, either way round. A pair whose
+    boxes stand further apart than `TWIN_HI_FT` is not measured.
+
+    Research: twin pairs - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: every pair running side by side longer than the twin run
+    """
+    out = []
+    for i in range(len(courses)):
+        for j in range(i + 1, len(courses)):
+            if len(courses[i]) < 2 or len(courses[j]) < 2 or _apart(courses[i], courses[j], TWIN_HI_FT / ftpx):
+                continue
+            run = max(twin_run_ft(courses[i], courses[j], ftpx), twin_run_ft(courses[j], courses[i], ftpx))
+            if run > TWIN_RUN_FT:
+                out.append((i, j, run))
+    return out

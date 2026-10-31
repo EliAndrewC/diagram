@@ -115,23 +115,6 @@ def test_the_parcel_pass_stands_aside_where_there_is_nothing_to_do() -> None:
     assert tiny["poly"] == small_before
 
 
-def test_clean_polder_parcels_cleans_a_block_and_re_measures_it() -> None:
-    """`fit_polder` bisects with up to 45 candidate blocks and draws one, so the parcel/channel cleanup
-    is skipped during the search (`clean_parcels=False`) and run once on the winner - which is what this
-    entry point is for. It re-measures the acreage, because the cut is real ground."""
-    from l7r.diagram.waterfields import clean_polder_parcels
-
-    net = {
-        "plots": [_parcel(100.0, 100.0, 400.0, 700.0)],
-        "channels": [{"pts": [(140.0, 60.0), (143.0, 740.0)], "w": 4.0, "w_tail": 3.0}],
-        "acres": 99.0,
-    }
-    out = clean_polder_parcels(net)
-    assert out is net
-    assert min(q[0] for q in net["plots"][0]["poly"]) >= 140.0  # type: ignore[index, union-attr]
-    assert 0.0 < float(net["acres"]) < 99.0  # type: ignore[arg-type]
-
-
 # ---- feature 287: the polder's placer guarantees (water W19, W44, W45) ----------------------------
 
 

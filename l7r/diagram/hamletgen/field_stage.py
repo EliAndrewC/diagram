@@ -75,7 +75,13 @@ def _center(ring: list[tuple[float, float]]) -> tuple[float, float]:
 
 
 def stage_field(s: Settlement, plan: SitePlan) -> None:
-    """The field: a comb through Rust, a polder through the old Python until its port.
+    """The field: a comb or a polder, placed in Rust (`rust/phases/src/field/`), written and drawn here (D1, D12).
+
+    Steps:
+        l7r.diagram.hamletgen.field_stage._knob_tables
+        l7r.diagram.hamletgen.field_stage._write_field
+        l7r.diagram.hamletgen.field_stage._polder
+        l7r.diagram.settlement.fields.ink.draw
 
     Research:
         the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the fan of paddies, its basins and bunds"""
@@ -133,10 +139,10 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     plan.acres = acres
 
 
-def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, rolled: dict[str, str]) -> float:
-    """One field's records, registries and ink; returns its paddy acres."""
-    M = s.M
-    cell = ROW_FT.get(plan.plot_size, 48.0) * CELL_SHARE
+def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_middle: str | None) -> dict[str, Any]:
+    """The `net` of one comb the Rust stage returned: its plots (a grave's host replaced by the rings it leaves), channels, dry
+    plots, pocket ponds and graves, in the shapes the free readers and the ink read (`plan.net`; the test fixtures build theirs
+    with it too)."""
     graves = f["grave"]
     host = graves[2] if graves else None
     plots: list[dict[str, Any]] = []
@@ -144,21 +150,54 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
         rings = graves[3] if i == host else [p["ring"]]
         for ring in rings:
             plots.append({"poly": ring, "fill": FILL[p["state"]], "low": p["state"] == "wet", "rest": p["state"] == "rest", "state": p["state"], "drain_side": p["drain_side"]})
+    chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
+    dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
+    ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
+    grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1]}] if graves else []
+    beans = [pt for run in f["beans"] for pt in run]
+    outline = f["ring"]
+    net: dict[str, Any] = {
+        "down_deg": down_deg,
+        "fork": f["fork"],
+        "cell": cell,
+        "supply_banks": True,
+        "channels": chans,
+        "plots": plots,
+        "threads": [],
+        "drain": next((c["pts"] for c in chans if c["role"] == "drain"), []),
+        "brook": [],
+        "envelope": outline,
+        "dry_plots": dry,
+        "dry_acres": sum(_area(d["poly"]) for d in dry) / SQ_FT_PER_ACRE,
+        "dry_reserve": [],
+        "bund_bean_runs": f["beans"],
+        "bund_beans": beans,
+        "furrows_vary": True,
+        "fan_middle": fan_middle,
+        "grave_discs": [(g["x"], g["y"], 6.5) for g in grave_recs],
+        "bead_ponds": [(p["x"], p["y"], p["rx"], p["ry"]) for p in ponds],
+        "grave_records": grave_recs,
+        "pocket_ponds": ponds,
+    }
+    return net
+
+
+def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, rolled: dict[str, str]) -> float:
+    """One field's records, registries and ink; returns its paddy acres."""
+    M = s.M
+    cell = ROW_FT.get(plan.plot_size, 48.0) * CELL_SHARE
+    net = comb_net(f, name, cell, plan.down_deg, rolled.get("fan_middle"))
+    plots, chans, dry, ponds, grave_recs = net["plots"], net["channels"], net["dry_plots"], net["pocket_ponds"], net["grave_records"]
+    beans, outline = net["bund_beans"], net["envelope"]
     rings = [p["poly"] for p in plots]
     plot_recs = []
     for p in plots:
         b = _bbox(p["poly"])
         c = _center(p["poly"])
         plot_recs.append([round(b[2] - b[0], 1), round(b[3] - b[1], 1), round(c[0], 1), round(c[1], 1), len(p["poly"]), 0])
-    beans = [pt for run in f["beans"] for pt in run]
     hem = [p["drain_side"] for p in plots if p["drain_side"]]
-    chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
-    dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
-    ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
-    grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1]}] if graves else []
-    if graves:
-        s.meta(grave_form=graves[1])
-    outline = f["ring"]
+    if grave_recs:
+        s.meta(grave_form=grave_recs[0]["form"])
     M["fields"].append(
         {
             "name": name,
@@ -187,29 +226,6 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
         M.setdefault("field_ponds", []).extend(ponds)
     if grave_recs:
         M.setdefault("field_graves", []).extend({"x": g["x"], "y": g["y"]} for g in grave_recs)
-    net: dict[str, Any] = {
-        "down_deg": plan.down_deg,
-        "fork": f["fork"],
-        "cell": cell,
-        "supply_banks": True,
-        "channels": chans,
-        "plots": plots,
-        "threads": [],
-        "drain": next((c["pts"] for c in chans if c["role"] == "drain"), []),
-        "brook": [],
-        "envelope": outline,
-        "dry_plots": dry,
-        "dry_acres": sum(_area(d["poly"]) for d in dry) / SQ_FT_PER_ACRE,
-        "dry_reserve": [],
-        "bund_bean_runs": f["beans"],
-        "bund_beans": beans,
-        "furrows_vary": True,
-        "fan_middle": rolled.get("fan_middle"),
-        "grave_discs": [(g["x"], g["y"], 6.5) for g in grave_recs],
-        "bead_ponds": [(p["x"], p["y"], p["rx"], p["ry"]) for p in ponds],
-        "grave_records": grave_recs,
-        "pocket_ponds": ponds,
-    }
     acres = sum(_area(r) for r in rings if r) / SQ_FT_PER_ACRE
     net["acres"] = acres
     plan.net = net

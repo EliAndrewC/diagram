@@ -434,6 +434,7 @@
  "not_choices": {
   "down_deg": "the slope's direction - geometry of the site, not a form",
   "water_flow": "the water's direction - geometry",
+  "land_use": "the dike-pond overlay's own stream - the ponds' rounding and the parcels it picks, a draw, not a form (feature 444 T16)",
   "fan_aspect": "the alluvial fan's proportions - a degree along a continuum",
   "head_lead": "how far the head race leads - a degree",
   "brook_side": "which bank of the brook - geometry",

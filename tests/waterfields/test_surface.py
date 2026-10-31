@@ -63,22 +63,15 @@ CONSUMED_PUBLIC = [
     "BANK_MARGIN",
     "BEAN_GREEN",
     "BUND",
-    "CombCarve",  # feature 220: the fit search keeps the best CARVE and finishes it once",
     "DRAIN_FT",
     "DRY_CROPS",
     "FLOODED",
-    "MIN_BEADS_PER_RUN",
     "PADDY_CELL_ACRES",
     "aze_w",
-    "bead_runs",
     "build_polder",
-    "carve_comb",
     "chan_px",
-    "clean_polder_parcels",  # feature 150 T55: hamletgen.fit_polder cleans the WINNING block, not the 45 candidates its bisection tries",
     "dedup_ring",
     "drain_bank_clearance",
-    "finish_comb",
-    "floor_overhang",
     "hem_on_paddy",
     "jog_vertices",
     "paddy_grain",
@@ -92,13 +85,11 @@ CONSUMED_PUBLIC = [
 ]
 
 # The underscore names with external consumers, and the submodule that owns each
-# (settlement/fields/: _RICE_GREEN; tests/hamletgen/: _Frame, _miter_normals;
-# tests/settlement/test_core.py: _bund_beans, _seg_d).
+# (settlement/fields/: _RICE_GREEN; tests/hamletgen/: _Frame;
+# tests/settlement/test_core.py: _seg_d).
 ALIASED_UNDERSCORE = {
     "_Frame": "l7r.diagram.waterfields.frame",
     "_RICE_GREEN": "l7r.diagram.waterfields.palette",
-    "_bund_beans": "l7r.diagram.waterfields.carve",
-    "_miter_normals": "l7r.diagram.waterfields.frame",
     "_seg_d": "l7r.diagram.waterfields.frame",
 }
 

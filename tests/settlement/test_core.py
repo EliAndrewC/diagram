@@ -9,7 +9,6 @@ import pytest
 
 from l7r.diagram.settlement import Settlement, surface_water_dist, village_population
 from l7r.diagram.waterfields import dedup_ring, pointed_ring, polyline_cum, supply_bank_clearance
-from tests._scope import full_or
 from tests.settlement._builders import _cap020, _crop_settlement, _max_turn_deg, _town, crop
 
 
@@ -194,49 +193,6 @@ def test_commons_and_marsh_skip_the_pond_and_watercourses():
         s.M["streams"] = [{"poly": [[80, 500], [520, 500]], "w": 10}]
         getattr(s, method)([(40, 40), (560, 40), (560, 560), (40, 560)])
         assert s.M["commons"] if method == "commons" else s.M["marshes"]
-
-
-def test_build_comb_supply_banks_hems_bunds_onto_the_channel_banks():
-    # GM 2026-08-15 (Inashiro): a bund bordering the irrigated channel is the channel's BANK - it
-    # runs parallel to and along the water's edge, never down the middle of the water.
-    # supply_banks=True holds every carved corner off every supply stroke by its local half-width
-    # + BANK_MARGIN*grain, perpendicular to the stroke; the default (False) keeps the legacy carve
-    # so the hand-authored pool re-runs byte-identical.
-    from l7r.diagram.waterfields import BANK_MARGIN
-    from tests.waterfields._builders import lay_comb
-
-    def buried_corners(net, line_off):
-        n = 0
-        for c in net["channels"]:
-            if c.get("role") == "drain":
-                continue
-            pts = [(float(p[0]), float(p[1])) for p in c["pts"]]
-            if len(pts) < 2:
-                continue
-            cum = polyline_cum(pts)
-            w0, w1 = float(c["w"]), float(c.get("w_tail", c["w"]))
-            # a corner farther from the stroke's bbox than the widest possible bank could reach cannot be buried (T20: 61k clearance calls -> a few thousand)
-            reach = max(w0, w1) / 2 + BANK_MARGIN + 2.0
-            bx0, by0 = min(p[0] for p in pts) - reach, min(p[1] for p in pts) - reach
-            bx1, by1 = max(p[0] for p in pts) + reach, max(p[1] for p in pts) + reach
-            for pl in net["plots"]:
-                for q in pl["poly"]:
-                    if not (bx0 <= q[0] <= bx1 and by0 <= q[1] <= by1):
-                        continue
-                    gap, halfw, past, _foot, _nrm = supply_bank_clearance(q, pts, w0, w1, cum)
-                    if not past and gap < halfw + line_off:
-                        n += 1
-        return n
-
-    kw = dict(down_deg=90, field_fall=1260, offtakes_a=(0.32, 0.7), offtakes_b=(0.5,))
-    net = lay_comb(1300, 1700, (520, 220), full_or(2, 5), supply_banks=True, **kw)  # a 3-fan comb (T19: the 5-fan one cost 2.3 s and proved the same clearance)
-    assert any(c.get("role") != "drain" for c in net["channels"])  # the comb drew supply strokes
-    assert buried_corners(net, BANK_MARGIN - 0.15) == 0  # every corner clear of every bank (the gate's own line)
-    # ... and since feature 302 the fix IS the default: the plots tile a region cut from the envelope less every stroke and its
-    # bank (`partition.planted_region`), so the same comb without the flag buries no corner either. (This half used to assert
-    # the legacy carve laid sector bunds on the thread centerlines, inside the drawn water - and said that the day it went
-    # green the fix had become the default. The flag stays: it still decides whether the stroke rule judges the bunds.)
-    assert buried_corners(lay_comb(1300, 1700, (520, 220), full_or(2, 5), **kw), BANK_MARGIN - 0.15) == 0
 
 
 def test_paddy_grain_hits_the_real_feet_target():

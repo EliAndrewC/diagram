@@ -81,26 +81,3 @@ def test_a_tameike_or_its_run_the_registry_refuses_sends_the_drain_off_the_frame
     s = _strict(plan)
     real(s, plan)
     assert reentered == ["offmap"] and not s.M.get("pond"), "no pond, and the stage re-enters as an off-map sink"
-
-
-def test_the_weir_walks_past_a_seat_on_dry_ground_and_is_refused_by_name_where_its_leg_holds_none() -> None:
-    """A bar is mounted on water alone. Its first seat below the mouth is put under a dry plot: the bar steps on down the brook
-    to the first seat the registry admits. With the whole leg under dry crop no seat is left, and the weir is refused."""
-
-    def intake(plots: list[list[list[float]]]) -> Settlement:
-        plan = a_plan()
-        plan.intake = "weir"
-        plan.brook = [(700.0, 100.0), (700.0, 300.0), (700.0, 600.0)]
-        s = _strict(plan)
-        for p in plots:
-            s.M["dry_plots"].append({"poly": p})
-        hg.draw_intake(s, plan, (700.0, 300.0))
-        return s
-
-    first = intake([]).M["weirs"][0]
-    xs, ys = [q[0] for q in first["poly"]], [q[1] for q in first["poly"]]
-    s = intake([_square(max(xs) - 2.0, min(ys) - 4.0, max(xs) + 20.0, max(ys) + 4.0)])
-    moved = s.M["weirs"][0]
-    assert moved["y"] > first["y"] and s.admits("weirs", moved, ignore=moved), "stepped down past the dry plot"
-    with pytest.raises(OverlapRefused):
-        intake([_square(600.0, 300.0, 800.0, 700.0)])
