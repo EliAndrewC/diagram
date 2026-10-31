@@ -146,7 +146,7 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
 3. **What do you expect it to save, and why?** The counted operations from today's (item 1) to at most the pinned budget at 40 (`dev/work-budget.json`), and the calls with them, the repair passes gone.
 4. **How does the work grow with the settlement?** The rebuild is held to the budget's exponent, the pinned one in `dev/work-budget.json`.
 5. **What did the before and after show, and under what conditions?** Recorded at box 6: `make work-budget` and `make perf-ab` against main.
-6. **Did any map move, and does it still keep the research?** Yes - every comb map's basins and ditches move; the cohort, the claims round and settlement-review hold them to the research.
+6. **Did any map move, and does it still keep the research?** Yes - every comb map's basins and ditches move; the Rust stage gate (FR-019), the claims round and settlement-review hold them to the research.
 
 
 
@@ -182,3 +182,60 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 <!-- plan-archive: T20 to T20 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
+
+### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
+
+- **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the
+  failing list with its frozen inputs, and the landing held to it - each pinned by a test (SC-012, SC-013).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| D1-D6 | each test red without its part | n/a (no map moves: the gate judges, it places nothing) | none | n/a |
+
+### T21 Approach (2026-10-31T13:52:13Z)
+
+1. **The goal, in the world.** No Rust stage ever ends with a failing check, on any seed; a seed that fails one is checked until
+   it and the input its stage failed on both pass; the Python stages after the Rust ones refuse no Rust landing.
+2. **The constraints.** FR-019, FR-020, SC-012, SC-013; feature 386's landing cohort unchanged for a landing that changes no Rust
+   stage; the engine's checks unchanged in what they find (one list, read by both the cohort and the gate).
+3. **Where each comes from.** G: the GM's words above and in `request.md` (amendment 5). O: the checks as `cohort_audit.roll_how`
+   asks them (read 2026-10-31: refusals raised by name in the stages, and 14 finished-map checks).
+4. **Do they describe the world here?** The Rust stages today are water_frame alone; the gate is tested on it and on stub stages.
+5. **The order.** After amendment 5 (FAITHFUL); before T18 and T16, so the field port is the first judged by it.
+6. **The exits.** Green: every test red without its part and green with it, `make rust-gate` passing on main's engine, `make done`
+   and `make hooks-test` green, landed by `make land F=444 T=T21`. Red: what failed recorded and the task set down, a claim that
+   it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests, and `make rust-gate`'s record on the landed engine with no failing seed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+**Performance work?** no.
+
+### T21 Decisions
+
+- **D1 - the Rust stages and a roll through them** (`hamletgen/rust_prefix.py`): a stage is Rust when `rust/phases/src/<stage>.rs`
+  exists, derived; `off_the_front` names one that is not the front of `STAGES`, and the gate refuses then. `roll_through` runs the
+  Rust stages on `driver.fresh_settlement` (split out of `build`, unchanged in what it does), stopping where they end; the state
+  each stage starts from is pickled as it runs, and the failing stage's - or, when none raised, the last stage's - is returned as
+  the frozen input (measured 2026-10-31, a throwaway test: 5,838 bytes after water_frame, the field stage running on the restored
+  copy).
+- **D2 - the checks asked by what they read** (`rust_prefix.Reads`, `written`): a check's reads are recorded on the map (top-level
+  parts and `meta.<key>`); the parts the Rust stages wrote are those changed from the fresh settlement's map, an empty part
+  read as an absent one; a check counts at the gate only when it read something and everything it read was written. The checks
+  are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up by its name when asked.
+- **D3 - the gate** (`tools/rust_gate.py`, `make rust-gate`): the fresh block of 48 from `cohort_gate.py fresh-seed`'s start, the
+  six pinned row variants on the next fresh seeds, and the failing list's seeds; a plan that cannot be rolled fails the first Rust
+  stage (water_frame rolls the plan, T19). Each run is recorded in `dev/rust-gate/<utc>.json` with the engine key it rolled
+  (`ci.delta.engine_key_worktree`); exit 1 on any failing seed or replay.
+- **D4 - the failing list and its frozen inputs** (`dev/rust-gate/failing.json`, `dev/rust-gate/frozen/`): a failing seed is added
+  with its stage, its first FAIL line and its frozen input; every run rolls it and replays the fixture into its stage and the Rust
+  stages after; the entry leaves only when both pass, and its fixture with it. A fixture that no longer loads is a failure, never
+  dropped silently.
+- **D5 - the landing held to it** (`scripts/gates/cohort_gate.py`): every engine landing is refused without a `rust-gate` record at
+  its engine with no failing seed; a landing that changes `rust/**` (against `origin/main`) reads its landing cohort's regressed
+  seeds as notes, a rate - refusing nothing; any other landing keeps feature 386's cohort as it stands.
+- **D6 - `make land` makes the record** (`scripts/land.py`): on an engine delta, where the record is owed, land runs `make rust-gate`
+  and commits `dev/rust-gate/`; a failing seed stops the landing.
+

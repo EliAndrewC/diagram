@@ -244,3 +244,7 @@ standards" (`request.md`).
   of "no regressed seed"; FR-019 - every seed passes where each Rust stage completes, the checks asked by what they read, the
   Python stages after a rate; FR-020 - a fresh block, the pinned variants on fresh seeds, the failing list and its frozen inputs;
   SC-012 and SC-013 test them.
+- 2026-10-31, amendment 5's review (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - FR-020's one closing condition (the
+  seed and its frozen input both passing) and SC-013 with it; the phase checklist's acceptance box read by the gate; the moved-maps
+  edge case.
+- 2026-10-31, amendment 5's review, round 2 (spec-fidelity-verify, MODE 3): FAITHFUL - all three resolved, no new contradiction.

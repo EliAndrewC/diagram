@@ -75,6 +75,8 @@
 - [x] T20 Tooling from T19's landing: make land runs make work-budget at the engine it pushes before the push (refused twice, T17 and T19, each costing a gate); the tick reports every refusal together instead of the first of an or-chain (T19 took four landing rounds, one refusal each: part A's stamp, the plan review, part B's items 8-9, the plan gate); make decide refuses a section whose Approach is stamped before its Decisions, before dispatching the review it owes; the plan gate reads a restamped heading with an unchanged body as the same block, not a removal
       research: rendering
       verify: DONE. landed: the four tooling gaps T19's landing found, each pinned by a test red without its fix: land.py makes and commits a missing work-budget run before the push (tests/tooling/test_land_budget.py); the tick lists every refusal together (test_tick_task.py); make decide asks the approach checklist first (test_plan_gate.py); a re-dated heading with its text unchanged is the same block, neither its removal nor the new key owed (test_plan_gate.py)
+- [ ] T21 The Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020): make rust-gate, the checks asked by what they read, the landing held to it
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
