@@ -56,21 +56,21 @@
    "declared": "round-arbiter"
   },
   "### T16 Approach (checklist part A)": {
-   "sha256": "51d25f117a3a67f5b5bab0febf0bd1072ef09816f090364092006cc383fee2a7",
+   "sha256": "5e56250d4da119db96ba9ea102ad706ee9066513284a626cb2432c705f6936d3",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "fa0157e9c6af167e04cd6731f0c9658602940a0b8806d8b6a04782d405399565",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)": {
    "sha256": "87abdb3e00c0edf431bced6cfba53f4ea8aeda0681f58ba5830036ccd028547b",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
+   "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
   "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict": {
@@ -117,6 +117,12 @@
   },
   "### T18 Approach (re-answered 2026-10-31T16:53Z)": {
    "sha256": "15886353b0b6afca383627aecbf2eb03cc6268873ad1710c4e7ebd516fbc3b00",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
+  },
+  "### T16 Decisions": {
+   "sha256": "e2bb32e1f2749716101d4d48d0e3075bcdb6c9dbaba71528f1a66236c5acb98b",
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
@@ -2375,6 +2381,127 @@
      "why": "Bookkeeping that keeps the cap tied to its research source; it serves FR-018's 'the cap and its source are the field phase's contract'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "A2-cap-rederivation",
+     "summary": "Approach item 2: the comb budget (23,988 at 40, exponent 0.79) re-derived under the single-field cap by T18, verdict-3 SOUND, one field at 20/40/80 households, no figure changed, the pin kept; a higher figure would keep the old pin unless the GM's words raise it.",
+     "class": "within",
+     "why": "FR-018 verbatim: the derivation re-derived under the cap, a new MODE BUDGET verdict before the field lands, a higher figure pinned only with the GM's words. Carries the GM's 2026-10-29 amendment 4 cap and the design's section 5.4 (budgets change only with his words)."
+    },
+    {
+     "id": "A4-polder-derivation-accept-pin",
+     "summary": "Approach item 4: the polders get their own greenfield derivation, accept-pinned as field.polder on the round arbiter's accept (ask:444-polder-round-3), and a seed drawing one for the audit.",
+     "class": "within",
+     "why": "An arbiter accept pinning a stage's FIRST budget is the GM's own option one (444#0, 2026-10-28: 'letting the arbiters acceptance pin it'), FR-013. The rebuilt polder is still held to the pin at acceptance (D11, FR-006); nothing over budget is accepted by an arbiter."
+    },
+    {
+     "id": "A6-exits",
+     "summary": "Exits: green on budget at 40 and 80, rust-gate passing, claims IN-STEP, reviews, MODE AUDIT WITHIN, eight boxes, all old field code deleted; red is rebuild or a GM-worded raise, never set down or arbiter-accepted; the stop to assess goes to the GM.",
+     "class": "within",
+     "why": "The design's checklist box 6 as amended by FR-019 (amendment 5), FR-005, FR-006 and the GM's 'do step 4 and then we can stop and assess'."
+    },
+    {
+     "id": "A8-one-landing",
+     "summary": "One landing for the task, make cohort after each increment, one MODE AUDIT pass a round.",
+     "class": "within",
+     "why": "Process inside FR-005 (old code deleted in the same landing) and the checklist's audit box; narrows nothing the GM asked."
+    },
+    {
+     "id": "D1-seam",
+     "summary": "stage_field stays a thin Python function calling l7r_phases.stage_field in Rust; Python writes the same manifest keys, record shapes and plan fields, registers footprints strictly, files segments in the water index.",
+     "class": "within",
+     "why": "FR-010 / design section 7 (thin Python stage calling into one extension module) and FR-004 (same keys read and written)."
+    },
+    {
+     "id": "D2-cap-roll",
+     "summary": "The single-field cap rolled per settlement by knob_rng, uniform 45-60 ha from research 0017, written to the meta and listed as a degree in not_choices; a settlement past it draws ceil(paddy/cap) fields, each a comb of its own intake; not a water_frame knob.",
+     "class": "within",
+     "why": "The GM 2026-10-29: 'cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'; FR-018 and SC-011. The band is cited to the research pass the GM asked for."
+    },
+    {
+     "id": "D2-cap-on-polders",
+     "summary": "The cap holds for every rice paddy field the stage draws, the polder's included: a polder settlement past the cap draws several polders, each at most the cap; within the polder's bounded n the branch does not fire today (20 households x 1.3 acres = about 10.5 ha, under 45 ha) but is unit-tested.",
+     "class": "within",
+     "why": "This is the GM's rule applied without exception ('maximum size of a single rice paddy field ... larger settlements just have multiple fields'); it removes the comb-only scope the earlier text carried. The arithmetic checks: 20 x 1.3 acres = 26 acres = 10.52 ha. Stating that a branch does not fire under today's range is a measurement of reach, not a carve-out: the rule is implemented and tested."
+    },
+    {
+     "id": "D2-fish-ponds-uncapped",
+     "summary": "The dike-pond block's fish ponds are not a rice paddy and take no cap.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: what he asked to cap is 'a single rice paddy field' (amendment 4), and FR-018 says 'a single paddy field'. A fish pond is a different class of thing, so leaving it uncapped does not gut the rule's purpose (larger settlements draw several fields rather than one oversized one). The ruling covers the fish ponds ONLY: any rice paddy a dike-pond settlement draws stays under D2's 'EVERY rice paddy field the stage draws'."
+    },
+    {
+     "id": "D3-outside-rolls",
+     "summary": "The stage's own knob rolls, its graves and coarse-grain dry acres counted as the stage's work outside its derivations, charged to the stage as water_frame's were (arbiter ruling ask:444-T19-outside-charges), each a counter key MODE AUDIT reads; neither pin moves.",
+     "class": "within",
+     "why": "The work is counted and charged to the stage, not exempted from it (design section 4 MODE AUDIT, S5 count the work where it happens). The arbiter's ruling is on process, which the design and FR-006 allow; no phase over budget is accepted by it."
+    },
+    {
+     "id": "D4-draws",
+     "summary": "knob_rng for every knob, positional jitter keyed by seed and feature key; matching today's draws not required; moved pool hamlets owe settlement-reviews.",
+     "class": "within",
+     "why": "FR-019 / the GM's amendment 5 ('we are allowing the maps to move since the Rust port will use new algorithms')."
+    },
+    {
+     "id": "D5-water-index",
+     "summary": "Rust's own 64 ft cell index for the stage's placements, segments filed in the cells they cross and returned for Python's settlement index.",
+     "class": "within",
+     "why": "Implementation of S1 (indexed neighbors) and the derivation's indexes; the cell size is stated as the index's convention. Narrows nothing asked."
+    },
+    {
+     "id": "D6-counters",
+     "summary": "One counter key per derivation row and per D3 roll behind the counters Cargo feature; a seed rolled feature on and off writes identical manifests, recorded.",
+     "class": "within",
+     "why": "FR-012 and the GM's 2026-10-28 question on compiling the counters out; design section 1."
+    },
+    {
+     "id": "D7-rules-refused-where-decided",
+     "summary": "Each Keeps rule of both derivations (basin shape, quarter-cell floor, 25 degree headland, arrowhead, four-sided pond, 14-40 ft dike band) held by the Rust that places the thing, a breach refused by name, unit-tested.",
+     "class": "within",
+     "why": "S4 ask before placing and FR-004. The note that the Rust gate asks few finished-map checks of the field explains why rules are held at the placer; it adds enforcement, it does not narrow the gate."
+    },
+    {
+     "id": "D8-polder-acreage",
+     "summary": "Both archetypes in Rust; the polder's acreage from its greenfield derivation (whole 190 ft modules at or above the households' paddy) in place of today's band.",
+     "class": "within",
+     "why": "FR-015 greenfield (the GM 2026-10-29) and FR-017 no Python rewrite; replacing today's band is the point of the rewrite, not an exception."
+    },
+    {
+     "id": "D9-claims",
+     "summary": "The field's 29 open findings (21 DRIFTED, 8 MISLABELED) closed in the Rust's doc-comment claims; the landing refused while one is open.",
+     "class": "within",
+     "why": "FR-021 / amendment 6, the GM 2026-10-31: 'every Rust stage end its initial implementation with zero open claims'."
+    },
+    {
+     "id": "D10-deletion",
+     "summary": "The field's own Python (hamletgen/water comb, fit, polder, brook*, settlement/fields, waterfields) deleted in the landing, found by git grep -l per module name and make dead-closure; shared modules and water_frame's skeleton.py stay; the list written in the landing note.",
+     "class": "within",
+     "why": "FR-005 and design 5.5 ('a phase is done when the old code is gone'). What stays is not the field's implementation (shared infrastructure, another stage's file), so it is not a fallback path. The enumeration names its search space (git grep -l of each module name, plus dead-closure)."
+    },
+    {
+     "id": "D11-order",
+     "summary": "Comb first with rust-gate per increment and the reference map, then the polder, then work-budget against the comb's 23,988/42,070 and field.polder's 4,651/6,584, MODE AUDIT, claims round, settlement-reviews - one landing.",
+     "class": "within",
+     "why": "Ordering inside the checklist (design section 3) and FR-019/FR-021; both archetypes are held to their pins."
+    },
+    {
+     "id": "perf-checklist",
+     "summary": "The performance checklist's prompts: today's 48,335-66,214 counted operations, removal of repair passes, expected savings to the pin, growth held to the pinned exponent, perf-ab recorded, maps move and are held by gate, claims and settlement-review.",
+     "class": "within",
+     "why": "Prompts, never a gate; restates the design's measure and acceptance. Decides nothing the spec left open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2996,122 +3123,121 @@
    "verdict": "CLEAR"
   },
   "T16": {
-   "section_sha256": "6cd040ef29be75799ae2521e57ed40add38f931f3526b7041867a80d7a72cee9",
+   "section_sha256": "9b703f8bf605285b701ab8b05dabd58d4a2b88f511b7d61ae6801e731a7707bf",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "Occasions",
-     "summary": "settlement-review on the pool hamlets the rebuilt field moves; glyph-check only if a glyph is redrawn",
+     "id": "A2-cap-rederivation",
+     "summary": "Approach item 2: the comb budget (23,988 at 40, exponent 0.79) re-derived under the single-field cap by T18, verdict-3 SOUND, one field at 20/40/80 households, no figure changed, the pin kept; a higher figure would keep the old pin unless the GM's words raise it.",
      "class": "within",
-     "why": "The reviews a map's form change owes (design section 3 box 6; FR-019's moved pool hamlets owing their settlement-reviews)."
+     "why": "FR-018 verbatim: the derivation re-derived under the cap, a new MODE BUDGET verdict before the field lands, a higher figure pinned only with the GM's words. Carries the GM's 2026-10-29 amendment 4 cap and the design's section 5.4 (budgets change only with his words)."
     },
     {
-     "id": "Approach-6 exits",
-     "summary": "Green: budget at 40 and 80, make rust-gate, IN-STEP, reviews, MODE AUDIT WITHIN, eight boxes, all old field code deleted; Red: rebuilt again or budget-change, never set down, never an arbiter accept; a stop to assess goes to the GM",
+     "id": "A4-polder-derivation-accept-pin",
+     "summary": "Approach item 4: the polders get their own greenfield derivation, accept-pinned as field.polder on the round arbiter's accept (ask:444-polder-round-3), and a seed drawing one for the audit.",
      "class": "within",
-     "why": "Restates FR-004 to FR-006, FR-019 and FR-021 and the GM's 'do step 4 and then we can stop and assess'. Its omission of FR-018's re-derivation is ruled separately (FR018-rederivation)."
+     "why": "An arbiter accept pinning a stage's FIRST budget is the GM's own option one (444#0, 2026-10-28: 'letting the arbiters acceptance pin it'), FR-013. The rebuilt polder is still held to the pin at acceptance (D11, FR-006); nothing over budget is accepted by an arbiter."
     },
     {
-     "id": "Approach-8 one landing",
-     "summary": "one landing for the task, make cohort after each increment, one MODE AUDIT pass a round",
+     "id": "A6-exits",
+     "summary": "Exits: green on budget at 40 and 80, rust-gate passing, claims IN-STEP, reviews, MODE AUDIT WITHIN, eight boxes, all old field code deleted; red is rebuild or a GM-worded raise, never set down or arbiter-accepted; the stop to assess goes to the GM.",
      "class": "within",
-     "why": "Process inside FR-005's single-landing deletion; narrows nothing asked."
+     "why": "The design's checklist box 6 as amended by FR-019 (amendment 5), FR-005, FR-006 and the GM's 'do step 4 and then we can stop and assess'."
     },
     {
-     "id": "D1",
-     "summary": "stage_field stays a thin Python function calling l7r_phases.stage_field; same manifest keys, record shapes and plan fields; strict registry; segments filed in the settlement's water index",
+     "id": "A8-one-landing",
+     "summary": "One landing for the task, make cohort after each increment, one MODE AUDIT pass a round.",
      "class": "within",
-     "why": "FR-010's shape and FR-004's same keys in, same keys out."
+     "why": "Process inside FR-005 (old code deleted in the same landing) and the checklist's audit box; narrows nothing the GM asked."
     },
     {
-     "id": "D2",
-     "summary": "single-field cap rolled per settlement uniform 45-60 ha from research 0017 by knob_rng(seed, field_cap); past the cap ceil(paddy/cap) fields, each a comb of its own intake; listed as a degree not a form; SC-011 test via beyond_the_band()",
+     "id": "D1-seam",
+     "summary": "stage_field stays a thin Python function calling l7r_phases.stage_field in Rust; Python writes the same manifest keys, record shapes and plan fields, registers footprints strictly, files segments in the water index.",
      "class": "within",
-     "why": "FR-018 and SC-011: a cap approximating the research's largest single field, with larger settlements drawing several fields; the band and its source are the research's (0017), the GM's 'something approximating whatever that size is'. Its reach over the non-comb archetypes is ruled separately (cap-reach-polder, cap-reach-dikepond)."
+     "why": "FR-010 / design section 7 (thin Python stage calling into one extension module) and FR-004 (same keys read and written)."
     },
     {
-     "id": "cap-reach-polder",
-     "summary": "(unlabeled, found in D2 with D8) the cap is realized only as 'fields, each a comb of its own intake'; D8 sizes the polder as whole modules at or above the households' paddy with no cap, so a polder settlement past the cap draws one polder of any size",
+     "id": "D2-cap-roll",
+     "summary": "The single-field cap rolled per settlement by knob_rng, uniform 45-60 ha from research 0017, written to the meta and listed as a degree in not_choices; a settlement past it draws ceil(paddy/cap) fields, each a comb of its own intake; not a water_frame knob.",
+     "class": "within",
+     "why": "The GM 2026-10-29: 'cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'; FR-018 and SC-011. The band is cited to the research pass the GM asked for."
+    },
+    {
+     "id": "D2-cap-on-polders",
+     "summary": "The cap holds for every rice paddy field the stage draws, the polder's included: a polder settlement past the cap draws several polders, each at most the cap; within the polder's bounded n the branch does not fire today (20 households x 1.3 acres = about 10.5 ha, under 45 ha) but is unit-tested.",
+     "class": "within",
+     "why": "This is the GM's rule applied without exception ('maximum size of a single rice paddy field ... larger settlements just have multiple fields'); it removes the comb-only scope the earlier text carried. The arithmetic checks: 20 x 1.3 acres = 26 acres = 10.52 ha. Stating that a branch does not fire under today's range is a measurement of reach, not a carve-out: the rule is implemented and tested."
+    },
+    {
+     "id": "D2-fish-ponds-uncapped",
+     "summary": "The dike-pond block's fish ponds are not a rice paddy and take no cap.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM asked for a cap on 'a single rice paddy field for these kinds of settlements ... larger settlements just have multiple fields' and FR-018 is archetype-neutral; a polder (weitian) is a diked rice paddy, so leaving it uncapped narrows the request. No rule makes capping it impossible, nothing in the GM's words excludes it, and the plan argues no exclusion - silence is the failure this review exists to catch. Fix: D2 or D8 states what the cap does on a polder (a settlement past the cap draws several polders, each at most the cap), and SC-011's test rolls a polder settlement past the cap as well as a comb; or, if research 0017 or 0019/0022 shows a polder is not a single field in the cap's sense, D8 says so with that page's words and the exclusion goes through a MODE 1 check."
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words: what he asked to cap is 'a single rice paddy field' (amendment 4), and FR-018 says 'a single paddy field'. A fish pond is a different class of thing, so leaving it uncapped does not gut the rule's purpose (larger settlements draw several fields rather than one oversized one). The ruling covers the fish ponds ONLY: any rice paddy a dike-pond settlement draws stays under D2's 'EVERY rice paddy field the stage draws'."
     },
     {
-     "id": "cap-reach-dikepond",
-     "summary": "(unlabeled) the dike-pond archetype carries no field cap",
+     "id": "D3-outside-rolls",
+     "summary": "The stage's own knob rolls, its graves and coarse-grain dry acres counted as the stage's work outside its derivations, charged to the stage as water_frame's were (arbiter ruling ask:444-T19-outside-charges), each a counter key MODE AUDIT reads; neither pin moves.",
      "class": "within",
-     "why": "A dike-pond (fish ponds with mulberry dikes) is not a rice paddy field on the plain reading of 'a single rice paddy field', so FR-018's cap does not reach it."
+     "why": "The work is counted and charged to the stage, not exempted from it (design section 4 MODE AUDIT, S5 count the work where it happens). The arbiter's ruling is on process, which the design and FR-006 allow; no phase over budget is accepted by it."
     },
     {
-     "id": "FR018-rederivation",
-     "summary": "(unlabeled) the comb's budget is taken as the standing 23,988 at 40 / 0.79 and the exits list no MODE BUDGET verdict on a derivation re-derived under the cap; only the polders are given a new derivation and verdict before the rebuild (Approach item 4)",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-018: 'The field's greenfield derivation ... is re-derived under the cap and owes a new MODE BUDGET verdict before the field phase lands; a figure above its standing pin keeps that pin.' Nothing in the section says the 23,988 pin already is the under-cap re-derivation, and the landing's exits omit the obligation, so the phase could land on a derivation never re-judged under the cap the GM asked for. Fix: state in Approach items 2/4 and the Green exits that field_greenfield.derivation.md is re-derived under the cap with a new MODE BUDGET verdict before the landing (or cite where that verdict already stands), with FR-018's rule that a higher figure keeps the standing pin unless the GM's words raise it."
-    },
-    {
-     "id": "D3",
-     "summary": "the stage's own knob rolls, graves and coarse-grain dry acres counted outside the derivations, charged to the stage, each knob rolled in Rust by knob_rng from a table passed from Python, its count a key of its own; neither pin moves",
+     "id": "D4-draws",
+     "summary": "knob_rng for every knob, positional jitter keyed by seed and feature key; matching today's draws not required; moved pool hamlets owe settlement-reviews.",
      "class": "within",
-     "why": "Within on the reading the text gives: 'charged to the stage' means these counts are added to the stage's count compared against its pin, not reported beside it, so the budget comparison is not narrowed; the arbiter's ruling (ask:444-T19-outside-charges) is on process, which FR-006 allows."
+     "why": "FR-019 / the GM's amendment 5 ('we are allowing the maps to move since the Rust port will use new algorithms')."
     },
     {
-     "id": "D4",
-     "summary": "knob_rng for every knob; positional jitter seeded by seed and the feature's key; today's draws not matched; moved pool hamlets owe settlement-reviews",
+     "id": "D5-water-index",
+     "summary": "Rust's own 64 ft cell index for the stage's placements, segments filed in the cells they cross and returned for Python's settlement index.",
      "class": "within",
-     "why": "FR-019: matching Python's draws is not required, the moved hamlets owing their reviews."
+     "why": "Implementation of S1 (indexed neighbors) and the derivation's indexes; the cell size is stated as the index's convention. Narrows nothing asked."
     },
     {
-     "id": "D5",
-     "summary": "Rust's own 64 ft cell water index for the stage; segments returned and filed by Python in the settlement's index",
+     "id": "D6-counters",
+     "summary": "One counter key per derivation row and per D3 roll behind the counters Cargo feature; a seed rolled feature on and off writes identical manifests, recorded.",
      "class": "within",
-     "why": "An indexed-neighbor implementation of the derivations' Indexes (rubric S1); the cell size a convention, not a scope change."
+     "why": "FR-012 and the GM's 2026-10-28 question on compiling the counters out; design section 1."
     },
     {
-     "id": "D6",
-     "summary": "one counter key per derivation row and per D3 roll behind the counters feature; feature on/off identical manifests recorded in phases/field.fr012.md",
+     "id": "D7-rules-refused-where-decided",
+     "summary": "Each Keeps rule of both derivations (basin shape, quarter-cell floor, 25 degree headland, arrowhead, four-sided pond, 14-40 ft dike band) held by the Rust that places the thing, a breach refused by name, unit-tested.",
      "class": "within",
-     "why": "FR-012 as written; the record is enforcement of the request."
+     "why": "S4 ask before placing and FR-004. The note that the Rust gate asks few finished-map checks of the field explains why rules are held at the placer; it adds enforcement, it does not narrow the gate."
     },
     {
-     "id": "D7",
-     "summary": "every Keeps rule of both derivations held by the Rust that places the thing, refused by name (FieldRefused), unit-tested",
+     "id": "D8-polder-acreage",
+     "summary": "Both archetypes in Rust; the polder's acreage from its greenfield derivation (whole 190 ft modules at or above the households' paddy) in place of today's band.",
      "class": "within",
-     "why": "FR-004 / rubric S4, every rule asked before placing; the tests enforce what was asked."
+     "why": "FR-015 greenfield (the GM 2026-10-29) and FR-017 no Python rewrite; replacing today's band is the point of the rewrite, not an exception."
     },
     {
-     "id": "D8",
-     "summary": "polder and dike-pond in Rust; polder acreage from the derivation (whole 190 ft modules at or above the paddy) in place of today's band",
+     "id": "D9-claims",
+     "summary": "The field's 29 open findings (21 DRIFTED, 8 MISLABELED) closed in the Rust's doc-comment claims; the landing refused while one is open.",
      "class": "within",
-     "why": "FR-015's greenfield derivation and FR-017's no Python rewrite; maps may move (FR-019). Its silence on the cap is ruled under cap-reach-polder."
+     "why": "FR-021 / amendment 6, the GM 2026-10-31: 'every Rust stage end its initial implementation with zero open claims'."
     },
     {
-     "id": "D9",
-     "summary": "the 29 open claim findings in the field's 17 files set right or relabeled; each rule re-claimed in Rust doc comments; landing refused while one is open",
+     "id": "D10-deletion",
+     "summary": "The field's own Python (hamletgen/water comb, fit, polder, brook*, settlement/fields, waterfields) deleted in the landing, found by git grep -l per module name and make dead-closure; shared modules and water_frame's skeleton.py stay; the list written in the landing note.",
      "class": "within",
-     "why": "FR-021 as written; the general refusal still covers every file the delta changes."
+     "why": "FR-005 and design 5.5 ('a phase is done when the old code is gone'). What stays is not the field's implementation (shared infrastructure, another stage's file), so it is not a fallback path. The enumeration names its search space (git grep -l of each module name, plus dead-closure)."
     },
     {
-     "id": "D10",
-     "summary": "the field's Python (hamletgen/water/, settlement/fields/, waterfields/) deleted in the landing, found by git grep -l and make dead-closure; shared modules and water/skeleton.py stay; the list in the landing note",
+     "id": "D11-order",
+     "summary": "Comb first with rust-gate per increment and the reference map, then the polder, then work-budget against the comb's 23,988/42,070 and field.polder's 4,651/6,584, MODE AUDIT, claims round, settlement-reviews - one landing.",
      "class": "within",
-     "why": "FR-005. Read with the Green exit 'all of the old field code - comb and polder - deleted' and Approach item 8's one landing, 'the landing where nothing outside the field path imports it' describes the state the landing reaches (imports rewired, then deleted), not a condition under which a listed module survives; read as such a condition it would be a fallback path FR-005 forbids. The modules kept are shared infrastructure or water_frame's, not the field's implementation."
+     "why": "Ordering inside the checklist (design section 3) and FR-019/FR-021; both archetypes are held to their pins."
     },
     {
-     "id": "D11",
-     "summary": "comb first with make rust-gate each increment, then the polder, then work-budget against both pins, MODE AUDIT, claims round, settlement-reviews - one landing",
+     "id": "perf-checklist",
+     "summary": "The performance checklist's prompts: today's 48,335-66,214 counted operations, removal of repair passes, expected savings to the pin, growth held to the pinned exponent, perf-ab recorded, maps move and are held by gate, claims and settlement-review.",
      "class": "within",
-     "why": "Order inside FR-005, FR-019 and FR-021; narrows nothing."
-    },
-    {
-     "id": "Performance checklist",
-     "summary": "the checklist's prompts, never a gate; time recorded by perf-ab and work-budget",
-     "class": "within",
-     "why": "The design's 'make perf-ab time recorded, as a record and not a gate'; the budget, not time, gates."
+     "why": "Prompts, never a gate; restates the design's measure and acceptance. Decides nothing the spec left open."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

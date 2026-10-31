@@ -92,3 +92,12 @@ do not edit it before the landing (the accept is bound to the text as pinned, FR
 **Next:** box 1's owed parts (the plan fields the stage writes; the claims governing each key); the gap's homes (the stage's own
 knob rolls, the graves, the coarse-grain acres - a re-derivation of the comb, or outside rolls); then `### T16 Decisions` and
 `make decide`.
+
+**Where it stands (2026-10-31, late):** T16's Decisions CLEAR (plan review round 2, 18 decisions; one narrowing LEGITIMATE: the
+dike-pond's fish ponds take no cap). One sample of every record the stage writes, on a comb and a dike-pond:
+`phases/field.samples.json` (the basins' 6-number records, the fork, the hem's polylines, the channels in the manifest - `frm`/`to` -
+and again in the plan's `net` - `pts`). NEXT: the Rust. Each record's MEANING is read from the stages that READ it (sink, cluster,
+homesteads, the hinterland - read freely where not held) and from the samples, never from the field's own old code (held). Start
+with the comb (D11): the area and the cap (D2), the brook and its intake, the outline, the comb's ditches and basins with their
+rules held where decided (D7), the plots drawn apart, the beans, the hem and the pocket pond, the water index (D5) - `make
+rust-gate` judging each increment once `rust/phases/src/field.rs` holds `fn stage_field`. Then the polder (D8). One landing.
