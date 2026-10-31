@@ -71,7 +71,7 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 /// The brook past the fan on its `side` (+1 the fan's right, -1 its left). The head race leaves the division point's intake turned
 /// `offtake_deg` off the fall away from the brook's flank, so the intake lies `lead` up that line from the fork; the brook comes
 /// down the fall to it, runs on `tap_run`, then each `station` moves across at most `slew` toward its line - the flank, plus the
-/// skirt, plus a wander rolled in [0, `wander`] from the seed's `brook_walk` stream - and runs on past the fan's foot, off the `canvas` both ways, meandering.
+/// skirt - and runs on past the fan's foot, off the `canvas` both ways, meandering outward by the wider of `wander` and `MEANDER_FT`.
 ///
 /// Research:
 ///     the race turns away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves; the race's turn away from the brook is ours
@@ -99,9 +99,11 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64, canvas: Pt) -> Brook {
     let jitter = f64::from(walk.randbelow(61)).to_radians() - std::f64::consts::FRAC_PI_6;
     let phase = -u_i / MEANDER_WAVE_FT * std::f64::consts::TAU + jitter;
     // the meander held to the outward side, so the skirt is kept; a wave of `MEANDER_WAVE_FT` down the fall
+    // its swing the plan's wander or the meander's, whichever is wider: the one wave carries the course's whole stray, so no
+    // second walk can cancel it into a level run
+    let swing = MEANDER_FT.max(b.wander);
     let meander = |u: f64| {
-        side * MEANDER_FT * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin())
-            / 2.0
+        side * swing * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin()) / 2.0
     };
     // upstream: from off the map down the fall to the intake, the meander fading to nothing at the intake
     let mut up = Vec::new();
@@ -118,8 +120,7 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64, canvas: Pt) -> Brook {
     up.reverse();
     let mut pts = up;
     pts.push(intake);
-    let mut rng = knob_rng(seed, "brook_walk");
-    let (mut u, mut x, mut stray) = (u_i + b.tap_run, x_i, b.wander / 2.0);
+    let (mut u, mut x) = (u_i + b.tap_run, x_i);
     pts.push(local(fan, u, x));
     // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
     let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
@@ -131,10 +132,7 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64, canvas: Pt) -> Brook {
         let flank = at(u)
             .max(at(u - b.station / 2.0))
             .max(at(u + b.station / 2.0));
-        // a wander of at most a slew a station, held in [0, wander]
-        let step = f64::from(rng.randbelow(21)) / 10.0 - 1.0;
-        stray = (stray + step * b.slew / 2.0).clamp(0.0, b.wander);
-        let want = side * (flank + (b.skirt + stray) * secant);
+        let want = side * (flank + b.skirt * secant);
         // the course keeps outside its line: it may move out at once, in by at most a slew
         x = if (want - x) * side > 0.0 {
             want

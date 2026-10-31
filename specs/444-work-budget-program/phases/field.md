@@ -95,8 +95,9 @@ field's own, imported by the sink, so they STAY at the deletion) of the field's 
 ruled 3.1 ft of the chord with the share waiting for 300 ft): every brook first broke `ruled`, `source` and `mouth`, some `axis` and
 `level`. Fixed in `brook.rs`: stations every 20 ft from off the canvas to off it, a meander of 12 ft on a 140 ft wave held outward
 (at its steepest at the intake), the fade above the intake 25 ft, an off-axis backstop; 119 of 120 seeds (10, 15, 20 households x
-seeds 1-40) now keep every rule. OWED: seed 37 at 15 households still trips `level` in a view the probe could not rebuild - before
-the landing, find that view (the claims round will ask the claim "no level run") or the arbiter's ruling. MEASURED 2026-10-31: Inashiro's stage profile (`make map PROFILE=1`) no longer lists the field among its seven slowest
+seeds 1-40) now keep every rule. FIXED 2026-10-31: seed 37 at 15 households tripped `level` on its lower course, the stray walk cancelling part of the
+meander; the walk dropped, the one meander carrying the course's wander (the wider of the plan's 10 ft and 12 ft) - every seed of 1-60
+at 10, 15 and 20 households now keeps every rule. MEASURED 2026-10-31: Inashiro's stage profile (`make map PROFILE=1`) no longer lists the field among its seven slowest
 stages, so it runs under 0.07 s with its Python door and ink; the 444 start record (`dev/perf-log/20261031T173305Z-444-start-*`) had
 it at 0.38-0.52 s a reference seed and up to 2.67 s on a scaling leg. `make perf SCALING=1` refused on one scaling leg in the sink
 (`SinkRefused`: the drain's constructed route meets the brook where the brook as drawn breaks its rules) - the field's brook judged
