@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-31T14:56:27Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 401,
+  "result": "failed: test-full",
+  "commit": "8c249f01e",
+  "first_failure_s": 167.7,
+  "last_failure_s": 167.7,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row"
+  ],
+  "host": {
+    "load": [
+      1.98,
+      7.45
+    ],
+    "mem_avail_mb": [
+      8688,
+      8587
+    ],
+    "cpu_temp_c": [
+      75.0,
+      83.0
+    ],
+    "stall_s": {
+      "cpu": 2.2,
+      "io": 0.6,
+      "io_full": 0.5,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 14435,
+      "package": 8619
+    }
+  },
+  "phases": {
+    "preflight": 16.0,
+    "static": 25.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "counters-inert": 9.0,
+    "pytest": 359.0,
+    "test-full": 365.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/rolls.py",
+  "selected": 10571,
+  "collected": 10571
+}
