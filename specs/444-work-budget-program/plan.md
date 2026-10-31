@@ -229,10 +229,10 @@ What the build changed, each recorded at its point of change and in `phases/fiel
    households owed).
 3. **The polder's seam** (the plan review of 2026-10-31T22:2xZ, BLOCKED: a helper the field calls is the field's work). Every
    PLACEMENT the polder makes goes to Rust, `rust/phases/src/field/`: the block, lattice, parcels, ring canal, ditches, sluices and
-   wild pond (built); the DIKE - its band 14-40 ft across, varying, its outer face curved with the water's edge, its crest, its
-   gaps at the sluices, its willow row three quarters out at 8.5 ft and its mulberry row a quarter out at 4.4 ft, cut at the gaps
-   (0027; `perimeter_dike`'s placement); the OUTFALL's course from the tail's sluice down the fall off the map, turning at most 55
-   degrees a turn (0060; `outfall_run`'s); the RESTING plots' pick (0013; `resting_plots`'s); and the DIKE-POND's conversion - which
+   wild pond (built); the DIKE - its band 14-40 ft across (0027), varying, its outer face curved with the water's edge, its crest, its
+   gaps at the sluices, its willow row three quarters out at 8.5 ft (0027) and its mulberry row a quarter out at 4.4 ft (0027), cut
+   at the gaps (`perimeter_dike`'s placement); the OUTFALL's course from the tail's sluice down the fall off the map, turning at most 55
+   degrees a turn (0060) (`outfall_run`'s); the RESTING plots' pick (0013; `resting_plots`'s); and the DIKE-POND's conversion - which
    parcels are ponds, rice or fry ponds, each pond's bank and water rounded from its parcel at the village's split, and the bank's
    crop rows (0018, 0020, 0023, 0026; `apply_land_use`'s). Python draws their records (`settlement/fields/ink.py`), as it draws
    the comb's. `marsh` stays Python because it DECIDES NOTHING: it fills, with its reed tile, exactly the polygon the Rust hands it
