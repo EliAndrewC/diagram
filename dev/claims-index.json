@@ -19915,6 +19915,66 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/phases_ext.py::CRATE#the extension's loading": {
+  "body": "f3018a6d641a3c93",
+  "claim": "the extension's loading - NONE: build machinery, no claim about a map",
+  "code": "212e65c821b08cac",
+  "core": "ed1eb2d902849bcd",
+  "date": "2026-10-30",
+  "note": "path to the crate manifest, just build plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/phases_ext.py::EXT#the extension's loading": {
+  "body": "058e371ae76deb57",
+  "claim": "the extension's loading - NONE: build machinery, no claim about a map",
+  "code": "59d3bff629335777",
+  "core": "e3a6aaf88772c7e0",
+  "date": "2026-10-30",
+  "note": "path to the build-output folder, just build plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/phases_ext.py::ROOT#the extension's loading": {
+  "body": "0c4f1c96dfda0bb8",
+  "claim": "the extension's loading - NONE: build machinery, no claim about a map",
+  "code": "353b396c23933a21",
+  "core": "21957fc1bc7c9791",
+  "date": "2026-10-30",
+  "note": "finds the repository root, just plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/phases_ext.py::_stale#the extension's loading": {
+  "body": "b9416d543e86c0fa",
+  "claim": "the extension's loading - NONE: build machinery, no claim about a map",
+  "code": "7fe74c81ee1efbfd",
+  "core": "3f29255c0e7919d9",
+  "date": "2026-10-30",
+  "note": "stamp comparison for rebuilding, decides nothing about the map",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/phases_ext.py::phases#the extension's loading": {
+  "body": "a58a938973819f7d",
+  "claim": "the extension's loading - NONE: build machinery, no claim about a map",
+  "code": "eb578e52ac76edad",
+  "core": "a8a0b28ed50504a7",
+  "date": "2026-10-30",
+  "note": "builds and imports the module, with an env override and a loud failure; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/plan.py::BELT_REACH#belt's far row": {
   "code": "2794990e81bf392a",
   "core": "d63438701c9afe57",
@@ -20121,6 +20181,28 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/plan.py::_KNOBS#a knob rolled only where the map's form uses it": {
+  "body": "f377c4f90239d22e",
+  "claim": "a knob rolled only where the map's form uses it - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet; cluster_shape and well_siting on every form, since every map's band and its grove-less houses' wells read them",
+  "code": "991f614fb3eea986",
+  "core": "f326dc2b675070b5",
+  "date": "2026-10-30",
+  "note": "the branches for grove, row, farm-water and brook knobs match the page. But lane_skeleton and lane_web are rolled on \"all\" forms, and the page says \"A scattered settlement draws no lanes among its farms\". Need to see whether a dispersed (or row) map reads them: if it does, that contradicts §5; if it doesn't, the claim's \"only where the map's form uses it\" is false and their branch should exclude dispersed",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
  "l7r/diagram/hamletgen/plan.py::_fall_into_wind#spec and plan plumbing": {
   "code": "e9a9067feca46033",
   "core": "069b0df8d781cfb1",
@@ -20138,6 +20220,39 @@
   "research": "",
   "triaged": "2026-10-29",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/plan.py::_rust_rolls#grove sides drawn from the flood table (GROVE_SIDES_FLOOD) on flood ground. Here flood ground is judged from the spec and archetype only, while plan_site's flood_ground also counts a rolled \"dike_top\" form, so a dike_top hamlet whose form was rolled would get the non-flood table": {
+  "code": "b4621d46eb8b4ad0",
+  "core": "b4621d46eb8b4ad0",
+  "date": "2026-10-30",
+  "note": "grove sides drawn from the flood table (GROVE_SIDES_FLOOD) on flood ground. Here flood ground is judged from the spec and archetype only, while plan_site's flood_ground also counts a rolled \"dike_top\" form, so a dike_top hamlet whose form was rolled would get the non-flood table",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/plan.py::_rust_rolls#the plan's rolls": {
+  "body": "e3292b9049f66f0a",
+  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
+  "code": "11800b7658b2982e",
+  "core": "b4621d46eb8b4ad0",
+  "date": "2026-10-30",
+  "note": "each knob is rolled per seed, a pin is honored, and a knob off its branch takes its table's first form",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/plan.py::_rust_rolls#the row fixed to the dry edge on flood ground (row_line \"edge\"). This decision now lives here, and only plan_site's 0033 claim covers it": {
+  "code": "b4621d46eb8b4ad0",
+  "core": "b4621d46eb8b4ad0",
+  "date": "2026-10-30",
+  "note": "the row fixed to the dry edge on flood ground (row_line \"edge\"). This decision now lives here, and only plan_site's 0033 claim covers it",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/plan.py::band_extent#band area": {
   "body": "c031603666a17caf",
@@ -20344,19 +20459,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
-  "code": "a1cbc2a3e730840c",
-  "core": "a74b8dabbfb62a61",
-  "date": "2026-10-13",
-  "note": "a hamlet rolls each part from a table of its own",
+  "body": "1be71875d60cc4a1",
+  "claim": "knob rolls - clustered-and-scattered-villages-shuson-sanson.drawing: cluster_shape, lane_skeleton, plot_size and grain_drift rolled per hamlet; each table's own claim in consts",
+  "code": "9f7904b1f55d26f4",
+  "core": "d6cf20ad0486beed",
+  "date": "2026-10-30",
+  "note": "cluster shape (no split), lane skeleton, plot size and a grain drift of up to 8 degrees are each rolled per hamlet",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
@@ -20375,10 +20494,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
-  "code": "e30421b7a1f36076",
-  "core": "a74b8dabbfb62a61",
-  "date": "2026-10-13",
-  "note": "a tilted paddy grid is not drawn, a recorded deviation",
+  "body": "1be71875d60cc4a1",
+  "claim": "polder grid's orientation - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: falls from the four cardinals only, the dike-pond mosaic too, never tilted",
+  "code": "20e4b4390721da10",
+  "core": "d6cf20ad0486beed",
+  "date": "2026-10-30",
+  "note": "the polder flag sends Rust to the cardinal falls, and the page records \"a tilted paddy grid is not drawn, a deviation\"",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -20386,8 +20507,6 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder on the survey grid": {
@@ -20421,26 +20540,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
-  "code": "fd6f0b01419f121a",
-  "core": "a74b8dabbfb62a61",
-  "date": "2026-10-13",
-  "note": "the settlement has its back to the wind",
+  "body": "1be71875d60cc4a1",
+  "claim": "rolled fall backs the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: only falls leaving a windward margin, the settlement laid out with its back to the wind",
+  "code": "c51f511590793682",
+  "core": "d6cf20ad0486beed",
+  "date": "2026-10-30",
+  "note": "a rolled fall comes from the falls that back the declared or default wind, and a declared fall is taken as written",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
   "research": "5892781a1ab23bcb",
   "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#row on the edge on flood ground": {
-  "code": "faedd089dc928a39",
-  "core": "a74b8dabbfb62a61",
-  "date": "2026-10-13",
-  "note": "the row runs along the dike on flood-prone ground",
+  "body": "1be71875d60cc4a1",
+  "claim": "row on the edge on flood ground - row-villages-resson.drawing",
+  "code": "2570ca5c4d265ffd",
+  "core": "d6cf20ad0486beed",
+  "date": "2026-10-30",
+  "note": "on flood ground row_line is taken off its branch and written \"edge\"",
   "pages": {
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
@@ -20448,9 +20570,16 @@
   "rests": [
    "0033-row-villages-resson.drawing.html:4f7d33405340d1f8"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-29",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/plan.py::plan_site#the fan's aspect (FAN_ASPECTS) and the head race's lead (HEAD_RACE_LEAD) rolled per hamlet": {
+  "code": "d6cf20ad0486beed",
+  "core": "d6cf20ad0486beed",
+  "date": "2026-10-30",
+  "note": "the fan's aspect (FAN_ASPECTS) and the head race's lead (HEAD_RACE_LEAD) rolled per hamlet",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
   "code": "a86d7279b054997d",
@@ -24900,15 +25029,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
-  "body": "42ec2f3c0f6ca164",
-  "claim": "reservoir size - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a fixed 82 x 54 ft ellipse whatever the acreage; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)",
-  "code": "bbcf8106558c90f6",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-25",
-  "note": "the account misstates the figure: prx, pry = 82.0, 54.0 are semi-axes in px, so the ellipse is 164 x 108 px, and it is fixed in px so it does not scale with ftpx; the wild-water reading of the source is defensible",
+  "body": "375ad9dcb34bd45a",
+  "claim": "reservoir size - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); an ellipse of semi-axes 82 by 54 px (164 by 108 px across), fixed in px whatever the acreage or the scale; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)",
+  "code": "4a1dd0dac2ae2c66",
+  "core": "c6c583b85b8e4951",
+  "date": "2026-10-30",
+  "note": "prx, pry = 82.0, 54.0 is fixed in px as the claim says; the cited pages put the pond above its fields and attest parent-child pond systems, but none sizes a polder's header reservoir",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/polder.py::stage_waterward#its reed strip's run": {
   "body": "d34dd6da9d713afa",
@@ -83046,5 +83175,367 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/lib.rs::l7r_phases#phases module": {
+  "body": "be4d7b6e0be329ad",
+  "claim": "phases module - NONE: the extension's own machinery; each phase carries its own claims",
+  "code": "545acdc10439c5dc",
+  "core": "0950e19c51ba3aab",
+  "date": "2026-10-30",
+  "note": "pymodule registration of two phase functions only; no physical or rendering decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::K#the draws": {
+  "body": "5e854bd076c93cb5",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "f47d9ff7592cd908",
+  "core": "1f88b22d412553a6",
+  "date": "2026-10-30",
+  "note": "SHA-256 round constants; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::PyRandom#the draws": {
+  "body": "60601c1e44fcdd17",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "d119af4b85508bda",
+  "core": "199a19dc63d8403b",
+  "date": "2026-10-30",
+  "note": "MT19937 state; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::PyRandom.genrand_u32#the draws": {
+  "body": "70bd33ca08e9f8bc",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "9cbece7a32461ff2",
+  "core": "7f982262f5652c2c",
+  "date": "2026-10-30",
+  "note": "MT19937 twist and temper; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::PyRandom.init_genrand#the draws": {
+  "body": "211d1d589cb102c9",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "b45836d9044a2755",
+  "core": "43a1bf5222d7f6a9",
+  "date": "2026-10-30",
+  "note": "MT19937 seed init; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::PyRandom.new#the draws": {
+  "body": "599a813a75644659",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "6758a5517eda0b1d",
+  "core": "37218206766474ac",
+  "date": "2026-10-30",
+  "note": "CPython init_by_array seeding; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::PyRandom.randbelow#the draws": {
+  "body": "7bc66e23ee2159d6",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "a449e14e6fccecfa",
+  "core": "7ba38ffba7967146",
+  "date": "2026-10-30",
+  "note": "CPython _randbelow rejection sampling; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::knob_rng#the draws": {
+  "body": "84c5d2aa89d5cc64",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "8519c22ebda7c9d9",
+  "core": "27f22d21efbaac88",
+  "date": "2026-10-30",
+  "note": "per-knob seed from SHA-256 of seed and knob name; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/pyrand.rs::sha256#the draws": {
+  "body": "0ea6b53366bd0819",
+  "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
+  "code": "7ddba9cbd861913c",
+  "core": "2d5f12b0473be3c8",
+  "date": "2026-10-30",
+  "note": "hash; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::Counts#the counts": {
+  "body": "5a67559bd0424e10",
+  "claim": "the counts - NONE: the work-budget's own bookkeeping",
+  "code": "ad9eb93e46cf121c",
+  "core": "58b736415105e807",
+  "date": "2026-10-30",
+  "note": "bookkeeping only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::Counts.add#fall and drainage declared first": {
+  "body": "5c2b6d363f92ac18",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "0cd1a0674922ba92",
+  "core": "986b177ca9618cf0",
+  "date": "2026-10-30",
+  "note": "counter increment that decides nothing about the fall; should be NONE (work-budget bookkeeping)",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::Counts.add#knobs rolled from the seed": {
+  "body": "5c2b6d363f92ac18",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "cd526e8e517d40af",
+  "core": "986b177ca9618cf0",
+  "date": "2026-10-30",
+  "note": "counter increment that rolls no knob; should be NONE",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::KnobIn#fall and drainage declared first": {
+  "body": "17c7a2b8f940943d",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "febaa5e569b96ad0",
+  "core": "b585f57b8dc13a6a",
+  "date": "2026-10-30",
+  "note": "type alias for the knob tuple, no decision; should be NONE",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::KnobIn#knobs rolled from the seed": {
+  "body": "17c7a2b8f940943d",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "812da3609bc399d4",
+  "core": "b585f57b8dc13a6a",
+  "date": "2026-10-30",
+  "note": "type alias, decides nothing; should be NONE",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
+  "body": "030b28237589aaa4",
+  "claim": "high side and windward side as one - clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, the wind read before the fall",
+  "code": "ebfb08371297e549",
+  "core": "3c5d7747422d0f57",
+  "date": "2026-10-30",
+  "note": "`(f - w).rem_euclid(360.0) <= 180.0 + 1e-9`, with windward measured from north (quarter_deg) and falls from east, lets in only falls that leave the windward side high or level, on every hamlet. The page says \"the high margin on the windward side is one case among several; how common it was is a GUESS\", and it records no hamlet rule tying the fall to the wind. The inclusive bound also admits a fall square across the wind, where the windward side is not high at all. Either roll windward-high as one case among others, or have the drawing page record the tie as this project's choice",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "rust/phases/src/water_frame.rs::admitted#land fall quantized to 8 directions at 45 degrees (4 at 90 when cardinal)": {
+  "code": "3c5d7747422d0f57",
+  "core": "3c5d7747422d0f57",
+  "date": "2026-10-30",
+  "note": "land fall quantized to 8 directions at 45 degrees (4 at 90 when cardinal)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/water_frame.rs::admitted_falls#fall and drainage declared first": {
+  "body": "13d6a9edb3a63450",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "b3f2db919e67e532",
+  "core": "7f372e3303264b45",
+  "date": "2026-10-30",
+  "note": "exposes the admitted fall set to the stage",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::admitted_falls#knobs rolled from the seed": {
+  "body": "13d6a9edb3a63450",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "29bd3ddd27adb3c3",
+  "core": "7f372e3303264b45",
+  "date": "2026-10-30",
+  "note": "PyO3 wrapper over admitted that rolls no knob; drop this claim (NONE)",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::applies#fall and drainage declared first": {
+  "body": "375651cb16611043",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "46cd27697ed3349d",
+  "core": "5996953ad12b8a39",
+  "date": "2026-10-30",
+  "note": "form-gating of knobs, nothing about the fall or drainage; the pointer belongs elsewhere, so drop it here",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::applies#knobs rolled from the seed": {
+  "body": "375651cb16611043",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "3feaa759d6299c1e",
+  "core": "5996953ad12b8a39",
+  "date": "2026-10-30",
+  "note": "the form decides which knobs apply, matching \"the form decides which other rules apply\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::quarter_deg#fall and drainage declared first": {
+  "body": "45329681f6bc8efa",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "ce82c92298d5392d",
+  "core": "8e8369ef9f0c786b",
+  "date": "2026-10-30",
+  "note": "lookup from compass name to degrees (clockwise from north, \"N\" and unknown names go to 0), plumbing; should be NONE. Note that it is not the map frame (\"angles turn clockwise from east\"); admitted's filter relies on that 90-degree offset",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::quarter_deg#knobs rolled from the seed": {
+  "body": "45329681f6bc8efa",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "350bd49d728ecfbf",
+  "core": "8e8369ef9f0c786b",
+  "date": "2026-10-30",
+  "note": "name-to-angle lookup that rolls no knob; should be NONE",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/water_frame.rs::roll_plan#fall and drainage declared first": {
+  "body": "6c6a04429783f7fd",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "30ef5146d4e9c378",
+  "core": "e5cf8474848affce",
+  "date": "2026-10-30",
+  "note": "down_deg is rolled from the seed among the admitted falls before any knob",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
+  "body": "6c6a04429783f7fd",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "a528c046ed32d6c4",
+  "core": "e5cf8474848affce",
+  "date": "2026-10-30",
+  "note": "`knob_rng(seed, name).randbelow(*n)` is uniform. If knob 0 is the settlement form with n=3, the result is 1/3 each, against \"Half our settlements are drawn clustered, three in ten scattered and two in ten as rows\". To judge I need the form knob's n and the `forms` list (weighted or not). Also, when knob 0 is pinned, the gating form falls back to `forms.first()` rather than the pinned form, so later knobs may be gated by the wrong form unless the caller handles it",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "rust/phases/src/water_frame.rs::stage_water_frame#fall and drainage declared first": {
+  "body": "dd7905be48febfad",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
+  "code": "60778baf24f16a4c",
+  "core": "c1c72051bf03c46e",
+  "date": "2026-10-30",
+  "note": "admits the falls, then rolls the fall first through roll_plan",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::stage_water_frame#knobs rolled from the seed": {
+  "body": "dd7905be48febfad",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "code": "bfaf71d1a294a603",
+  "core": "c1c72051bf03c46e",
+  "date": "2026-10-30",
+  "note": "delegates to roll_plan, so the same need applies: the form knob's n and weighting, and how a pinned form gates later knobs",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
+  ],
+  "verdict": "CANNOT-TELL"
  }
 }
