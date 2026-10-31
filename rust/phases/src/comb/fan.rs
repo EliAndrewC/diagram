@@ -21,14 +21,15 @@ pub const TAPER: f64 = 1.0 / 3.0;
 ///     the edge's point spacing - CONVENTION: one point a 64 ft index cell
 pub const EDGE_STEP_FT: f64 = 64.0;
 
-/// The unit vector a compass bearing points along, on the map's axes (north 0, clockwise; y grows southward).
+/// The unit vector a bearing points along, on the map's axes: the maps' angles turn clockwise from east (0 east, 90 south; y grows
+/// southward).
 ///
 /// Research:
-///     bearings - NONE: compass arithmetic
+///     bearings - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the maps' angles turn clockwise from east, so 90 is south
 #[must_use]
 pub fn heading(deg: f64) -> Pt {
     let r = deg.to_radians();
-    (r.sin(), -r.cos())
+    (r.cos(), r.sin())
 }
 
 /// The fan: its fork (the head's middle), its foot (the drain's outfall) and its envelope, a closed ring of points.
@@ -160,7 +161,7 @@ mod tests {
         assert!(head_w > 0.0 && TAPER > 0.0);
         let n = f.ring.len();
         assert!(n > 40, "an edge point each cell: {n}");
-        assert_eq!(heading(90.0).0.round(), 1.0, "east is +x");
-        assert_eq!(heading(180.0).1.round(), 1.0, "south is +y");
+        assert_eq!(heading(0.0).0.round(), 1.0, "0 is east, +x");
+        assert_eq!(heading(90.0).1.round(), 1.0, "90 is south, +y");
     }
 }
