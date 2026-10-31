@@ -20,5 +20,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(water_frame::admitted_falls, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::stage_field, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::roll_knob, m)?)?;
+    m.add_function(wrap_pyfunction!(field::py::stage_polder, m)?)?;
     Ok(())
 }

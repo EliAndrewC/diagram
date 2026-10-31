@@ -56,3 +56,9 @@ for seed in range(20):
     assert l7r_phases.roll_knob(seed, "paddy_rest", 2, [0.8, 0.2]) == want
     rng = random.Random(int.from_bytes(hashlib.sha256(f"{seed}\x00weir_form".encode()).digest()[:8], "big"))
     assert l7r_phases.roll_knob(seed, "weir_form", 4, []) == rng.randrange(4)
+
+# the polder (feature 444 T16 D8): a rice polder and a dike-pond block, as the thin `stage_field` calls it
+for dike, layout in ((False, "mosaic"), (True, "mosaic"), (True, "chessboard")):
+    p = l7r_phases.stage_polder(4, 15, dike, layout, 90.0, (3200.0, 3200.0), 1.0)
+    assert p["plots"] and all(len(x["ring"]) == 4 for x in p["plots"]) and len(p["sluices"]) == 2
+    assert p["ditches"][0][1] == "feeder" and len(p["pond"]) == 4 and p["counts"]["candidate@polder_shape"] == 4

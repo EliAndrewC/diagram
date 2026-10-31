@@ -87,6 +87,66 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
     Ok(d)
 }
 
+/// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block, its records out for the thin Python to hand
+/// the free helpers (`perimeter_dike`, `marsh`, `apply_land_use`).
+#[pyfunction]
+#[expect(
+    clippy::too_many_arguments,
+    reason = "the polder's inputs, each a plan field Python gathered (D1)"
+)]
+pub fn stage_polder<'py>(
+    py: Python<'py>,
+    seed: i64,
+    households: u32,
+    dikepond: bool,
+    layout: &str,
+    down_deg: f64,
+    center: Pt,
+    aspect: f64,
+) -> PyResult<Bound<'py, PyDict>> {
+    let p = super::polder::polder(
+        super::paddy_sq_ft(households),
+        dikepond,
+        layout,
+        down_deg,
+        center,
+        aspect,
+        seed,
+    );
+    let mut counts = crate::counts::Counts::default();
+    counts.add("candidate@polder_shape", 4);
+    counts.add("write@polder_plot", 5 * p.plots.len() as u64);
+    counts.add(
+        "write@polder_ditch",
+        2 * p.ditches.iter().map(|d| d.pts.len() as u64).sum::<u64>(),
+    );
+    counts.add("write@polder_pond", 6);
+    let d = PyDict::new(py);
+    d.set_item("outline", pts(&p.outline))?;
+    d.set_item("inner_env", pts(&p.inner_env))?;
+    let plots = PyList::empty(py);
+    for x in &p.plots {
+        let q = PyDict::new(py);
+        q.set_item("ring", pts(&x.ring))?;
+        q.set_item("row", x.row)?;
+        q.set_item("col", x.col)?;
+        q.set_item("low", x.low)?;
+        plots.append(q)?;
+    }
+    d.set_item("plots", plots)?;
+    let ditches = PyList::empty(py);
+    for x in &p.ditches {
+        ditches.append((x.role, x.seg, pts(&x.pts), x.w, x.w_tail))?;
+    }
+    d.set_item("ditches", ditches)?;
+    d.set_item("sluices", p.sluices.to_vec())?;
+    d.set_item("pond", (p.pond.0 .0, p.pond.0 .1, p.pond.1, p.pond.2))?;
+    d.set_item("feeder", pts(&p.feeder))?;
+    d.set_item("shape", p.shape)?;
+    d.set_item("counts", counts.0)?;
+    Ok(d)
+}
+
 /// One of the stage's knobs drawn from its table (D3): Python builds the typing-filtered forms and their weights against the running
 /// context, Rust draws the form's index as `Knob.roll` does.
 #[pyfunction]

@@ -98,6 +98,7 @@ pub mod features;
 pub mod geom;
 pub mod index;
 pub mod lattice;
+pub mod polder;
 pub mod py;
 pub mod rules;
 pub mod states;
