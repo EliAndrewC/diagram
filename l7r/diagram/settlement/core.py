@@ -16,6 +16,7 @@ from .castle_civic import CastleCivicMixin
 from .city import CityMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
+from .fields.landuse import DIKEPOND_WATER_INSET
 from .finish import FinishMixin
 from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
@@ -174,6 +175,7 @@ class Settlement(
         #                           into a continuous confluence instead of stacking opacity (a dark seam).
         self._paddy_z: list[int] = []  # the PADDY layer (feature 287, water W38): every plot's slot, lifted under the water block at finish
         self._bead_slots: list[Any] = []  # each field's azemame ink slot, its runs, its record and its ponds (`settle_beads`, water W33)
+        self.dikepond_inset: float = DIKEPOND_WATER_INSET  # the dike-pond block's bank inset: the field stage sets it from its Rust conversion, the pig sties read it (feature 444 T16)
         self.bscale = 1.0  # urban-building footprint scale (a large town packs at a finer grain)
         self.ftpx = 1.0  # declared REAL scale, feet per pixel - set via meta(ftpx=...); the
         #                           glyph library is calibrated at town scale (1 ft/px), so 1.0 = identity

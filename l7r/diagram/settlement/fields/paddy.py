@@ -26,7 +26,7 @@ from .._geom import (
     smooth_closed,
     smooth_points,
 )
-from .._knobs import Knob, knob_rng, register_knob
+from .._knobs import Knob, register_knob
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -86,59 +86,12 @@ Research:
     rest forms - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: settled or unsettled, rolled per settlement
     rest weights - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: four settled to one unsettled
 """
-# HOW MANY REST, AND HOW FAR APART - liberties the record leaves the map, kept within it:
-#   REST_COUNT        "a few plots of a hamlet's paddy", per field; the estate of 1102, with nearly a third resting, is the
-#                     record's upper bound, not a hamlet's norm. 2-4 is a GUESS.
-#   REST_APART_SIDES  scattered, not side by side: two resting plots stand at least this many plot sides apart,
-#                     center to center, so no two share a bund - a map drawing convention for "scattered".
-#   REST_FAR_POWER    they favor the far end of the water's run (the record's reading of "short water", a GUESS): a
-#                     plot's chance grows as the square of how far down the fall it lies.
-REST_COUNT = (2, 4)
-"""Research: rest count - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: two to four plots a field"""
-REST_APART_SIDES = 3.0
-"""Research: rest scattered - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: three mean plot sides apart, center to center"""
-REST_FAR_POWER = 2.0
-"""Research: rest at the far end - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: chance as the square of the fall position"""
 REST_GRASS, REST_TUFT = "#C8CF92", "#8FA05E"  # the pasture's grass and tuft inks (`pasture`): a resting plot is grazed
 
 
 def _ring_area(poly: Sequence[Pt]) -> float:
     n = len(poly)
     return abs(sum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n))) / 2
-
-
-def _ring_center(poly: Sequence[Pt]) -> Pt:
-    return (sum(p[0] for p in poly) / len(poly), sum(p[1] for p in poly) / len(poly))
-
-
-def rest_plots(cands: Sequence[tuple[Sequence[Pt], float]], rng: random.Random, count: int) -> list[int]:
-    """Which of `cands` - `(ring, fall position)` pairs, the plots that may rest - rest this year: `count` of them at most,
-    whole basins no smaller than the median candidate (a scrap of fabric is not a holding), drawn with a chance that grows
-    toward the far end of the fall (`REST_FAR_POWER`) and kept `REST_APART_SIDES` mean plot sides apart. Indices into
-    `cands`, ascending.
-
-    Research:
-        rest weighting and spacing - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: favoring the far end of the fall, kept apart
-        rest basin floor - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); no basin smaller than the median candidate rests
-        its figures guessed on 0013 - GUESS research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: 0.05 (least weight at the near end)
-    """
-    if not cands:
-        return []
-    areas = [_ring_area(r) for r, _f in cands]
-    floor = sorted(areas)[len(areas) // 2]
-    pool = [i for i, a in enumerate(areas) if a >= floor]
-    side = (sum(areas[i] for i in pool) / len(pool)) ** 0.5
-    fs = [f for _r, f in cands]
-    f0 = min(fs[i] for i in pool)  # the fall is measured over the plots that may rest, so a stray scrap cannot stretch it
-    span = (max(fs[i] for i in pool) - f0) or 1.0
-    cents = [_ring_center(r) for r, _f in cands]
-    chosen: list[int] = []
-    while pool and len(chosen) < count:
-        pick = rng.choices(pool, weights=[0.05 + ((fs[i] - f0) / span) ** REST_FAR_POWER for i in pool])[0]
-        pool.remove(pick)
-        if all(math.dist(cents[pick], cents[c]) >= REST_APART_SIDES * side for c in chosen):
-            chosen.append(pick)
-    return sorted(chosen)
 
 
 def rest_record(poly: Sequence[Pt], field: str = "") -> dict[str, Any]:
@@ -244,23 +197,6 @@ class PaddyMixin:
             s += spacing
         g.append('</g>')
         self.add(''.join(g))
-
-    def resting_plots(self: Settlement, field: str, cands: Sequence[tuple[Sequence[Pt], float]]) -> set[int]:  # type: ignore[misc]
-        """Which of a field's candidate plots rest this year (`PADDY_REST`): none on a settled paddy, `rest_plots`' pick on
-        an unsettled one, from the field's own substream so one field's pick never moves another's. The form goes in
-        `meta.paddy_rest`.
-
-        Research: rest form applied - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: none on a settled paddy, REST_COUNT basins on an unsettled one"""
-        form = self.resolve("paddy_rest")
-        self.M["meta"]["paddy_rest"] = form
-        if form == "settled":
-            return set()
-        # ...ONLY A BASIN THE REGISTRY ADMITS RESTS (feature 287, water W53): a resting basin is recorded as ground, so one
-        # water not its own field's already crosses - a brook, another field's ditch - is not offered; it stays a rice plot.
-        # The field's own ditches and feed are the matrix's to allow (`_MATRIX_SAME_PARENT_OK`).
-        ok = [i for i, (poly, _f) in enumerate(cands) if self.admits("fallow_patches", rest_record(poly, field))]
-        rng = knob_rng(self.seed, f"paddy_rest:{field}")
-        return {ok[k] for k in rest_plots([cands[i] for i in ok], rng, rng.randint(*REST_COUNT))}
 
     def rest_basin(self: Settlement, poly: Sequence[Pt], bund: float, field: str = "") -> None:  # type: ignore[misc]
         """A resting paddy plot: the whole basin inside its own bunds, grass where the rice would be, a few tufts of the

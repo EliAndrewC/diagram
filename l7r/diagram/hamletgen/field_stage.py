@@ -407,6 +407,6 @@ def _dikeponds(s: Settlement, plan: SitePlan, out: dict[str, Any], split: float)
             "leftover_plots": [list(_center(p["parcel"])) for p in ponds if p["kind"] == "rice"],
         }
     )
-    s.dikepond_inset = float(out["inset"])
+    s.dikepond_inset = float(out["inset"])  # read by the pig sties (`pondstock`) through getattr with its default, as the old overlay left it
     s.meta(dike_crop=plan.dike_crop, dikepond_inset=round(float(out["inset"]), 1), dikepond_split=split, fry_form=plan.fry_form, land_use_overlay="mulberry_fishpond", leftover=plan.leftover)
     ink.dikeponds(s, out["dikeponds"], out["crops"], aze_w(plan.ftpx))

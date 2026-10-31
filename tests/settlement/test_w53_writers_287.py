@@ -105,21 +105,6 @@ def _net(channels: list[dict[str, Any]], dry: list[list[tuple[float, float]]]) -
     return {"channels": channels, "dry_plots": plots, "plots": []}
 
 
-def test_only_a_basin_the_registry_admits_rests() -> None:
-    """A resting basin is recorded as ground, so a basin a stranger's water already crosses is not offered to the rest pick: it
-    stays a rice plot. With every candidate refused but one, only that one can rest."""
-    s = _hamlet()
-    s.pin_knob("paddy_rest", "unsettled")
-    cands = [([(x, 100.0), (x + 60.0, 100.0), (x + 60.0, 160.0), (x, 160.0)], float(x)) for x in (0.0, 200.0, 400.0, 600.0, 800.0)]
-    s.stream([(0.0, 130.0), (700.0, 130.0)], width=7)  # across the first four
-    assert s.resting_plots("f", cands) <= {4}
-    free = _hamlet()
-    free.pin_knob("paddy_rest", "unsettled")
-    assert len(free.resting_plots("f", cands)) >= 2, "with nothing across them, the pick is unconstrained"
-    s.rest_basin(cands[4][0], 1.0, "f")
-    assert s.M["fallow_patches"][-1]["field"] == "f"
-
-
 def test_a_notice_board_seat_on_ground_the_matrix_forbids_is_not_offered() -> None:
     """The board's seat asks the registry as `kosatsuba` records it, turned: every verge but one window lies on a dry crop,
     so the board stands in the window - and with the window closed there is no seat, and no board on the crop."""

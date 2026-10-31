@@ -133,15 +133,6 @@ def settle(s: Settlement) -> None:
         s.out[z] = f'<g opacity="0.85">{beads}</g>'
 
 
-def rounded_pond(poly: Sequence[Pt], inset: float, reach: float, rng: Any) -> tuple[str, list[Pt]]:
-    """A dike-pond's pond or bank rounded from its parcel, placed in Rust (`ponds::rounded`, T16 D8): the SVG path and its
-    samples; one draw from the caller's stream gives the corners their own cut."""
-    from l7r.diagram.hamletgen.phases_ext import phases
-
-    d, pts = phases().rounded_pond([(float(x), float(y)) for x, y in poly], float(inset), float(reach), rng.getrandbits(32))
-    return d, [(float(x), float(y)) for x, y in pts]
-
-
 DIKE_EARTH, DIKE_EDGE = "#B79B68", "#9C8150"
 """Research: the dike's band - CONVENTION: the shared dike drawing's earth and its edge"""
 CROWN_FILL = {"willow": "#6E8B4A", "mulberry": "#87A45C", "fruit": "#7C9A54", "tea": "#5E7C40"}

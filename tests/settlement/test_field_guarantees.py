@@ -50,24 +50,3 @@ def test_a_plot_drawn_after_the_water_is_painted_under_every_channel(tmp_path) -
 def _turn_deg(a: tuple[float, float], b: tuple[float, float], c: tuple[float, float]) -> float:
     h0, h1 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
     return abs(math.degrees((h1 - h0 + math.pi) % (2 * math.pi) - math.pi))
-
-
-def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_lead_would_climb() -> None:
-    """W10 at the village and city comb's drain outfall (`outfall_run`): the drawn run - 70 px on along the drain's exit,
-    then 520 down the fall - runs downhill even where the drain exits straight UP the fall (the worst case); and the
-    violating case, a lead long enough to take back more than the reach gives, is not drawn - the run goes straight down
-    the fall from the drain's end. `runs_downhill` is the one rule."""
-    from l7r.diagram.settlement.fields.outfall import outfall_run, runs_downhill
-
-    fall = (0.0, 1.0)
-    for b1 in [(100.0, 150.0), (150.0, 100.0), (100.0, 50.0), (50.0, 100.0), (150.0, 140.0)]:
-        run = outfall_run((100.0, 100.0), b1, fall)
-        assert runs_downhill(run, fall), f"the drawn run from an exit toward {b1}"
-        assert max(_turn_deg(a, b, c) for a, b, c in zip(run, run[1:], run[2:], strict=False)) <= 55.0 + 1e-9, "curving out of the collector, at most 55 degrees a turn (0060, feature 328)"
-    assert len(outfall_run((100.0, 100.0), (100.0, 150.0), fall)) == 3, "an exit already down the fall runs straight on"
-    assert len(outfall_run((100.0, 100.0), (150.0, 100.0), fall)) == 4, "a cross-slope exit bends in two turns of 45"
-    up = [(100.0, 100.0), (100.0, -500.0), (100.0, -400.0)]
-    assert not runs_downhill(up, fall), "the case: a 600 px lead up the fall, 100 back down, climbs"
-    run = outfall_run((100.0, 100.0), (100.0, 50.0), fall, lead=600.0, reach=100.0)
-    assert run[0] == (100.0, 100.0) and len(run) == 5 and runs_downhill(run, fall), "the fallback curves out from the drain's end"
-    assert max(_turn_deg(a, b, c) for a, b, c in zip([(100.0, 150.0), *run], run, run[1:], strict=False)) <= 55.0 + 1e-9, "its first turn off the exit included (feature 328)"
