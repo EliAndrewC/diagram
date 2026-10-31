@@ -63,9 +63,8 @@ lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - it
 deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
 (c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
 keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
-(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. OPEN: the outline is the straight-edged
-fan today (no basin is cut); whether its edge should waver over the ground is for the settlement-review of the moved maps. clippy's
-dead-code lint refuses `comb/` until `fn stage_field` calls into it. T16 stays open (ask:set-down-444-t16-session).
+(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. OPEN: the flanks' waves and the
+bunds' bow are GUESS figures (`fan.rs` `WAVES`, `lattice.rs` `BOW`) for the settlement-review to judge. T16 stays open (ask:set-down-444-t16-session).
 
 **The plots' rules, from the record** (2026-10-31, a dispatched reader of 0005-0014's drawing pages, no code read; each rule
 re-cited at its Rust): wet - each plot of the lowest row (its foot on the drain) at 45%, a point-tapered plot stays green (0007);
