@@ -45,3 +45,4 @@
 {"date": "2026-10-29", "what": "program", "from": {"ops_at_40": null, "exponent": null}, "to": {"ops_at_40": 57235, "exponent": 0.87}, "words": "Yes I approve of that for now.  I feel like we can probably do even better, but if we hit those targets then I expect it will be acceptable."}
 {"date": "2026-10-29", "what": "accepted", "phase": "water_frame", "accepted": {"40": 23.0, "80": 23.0}, "audit": "specs/444-work-budget-program/phases/water_frame.audit-2.txt", "run": "20261029T132038Z-ac70759198ab.json"}
 {"date": "2026-10-30", "what": "lowered", "phase": "water_frame", "from": {"20": 69.0, "40": 69.0, "80": 69.0}, "to": {"20": 56.0, "40": 56.0, "80": 56.0}, "verdict": "specs/444-work-budget-program/phases/water_frame_greenfield.verdict-2.txt"}
+{"date": "2026-10-30", "what": "accepted", "phase": "water_frame", "accepted": {"40": 56.0, "80": 56.0}, "audit": "specs/444-work-budget-program/phases/water_frame.audit-3.txt", "run": "20261031T020030Z-62048f9942fe.json"}

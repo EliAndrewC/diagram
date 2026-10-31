@@ -5,7 +5,7 @@
  },
  "stages": {
   "water_frame": {
-   "status": "budgeted",
+   "status": "accepted",
    "per_thing": 56.0,
    "exponent": 0.0,
    "derivation": "specs/444-work-budget-program/phases/water_frame_greenfield.derivation.md",
@@ -13,7 +13,12 @@
    "items_at_20": 1,
    "items_at_40": 1,
    "items_at_80": 1,
-   "reason": "the derivation counts each read, roll and write of the plan's 21 knobs, 3 bearings and 3 identity fields; today's 23 at 40 charges only the plan's random draws (plan.counted) - the Rust port counts every step the derivation names, so 56 is the derivation's whole work, lowered from the standing 69"
+   "reason": "the derivation counts each read, roll and write of the plan's 21 knobs, 3 bearings and 3 identity fields; today's 23 at 40 charges only the plan's random draws (plan.counted) - the Rust port counts every step the derivation names, so 56 is the derivation's whole work, lowered from the standing 69",
+   "accepted": {
+    "40": 56.0,
+    "80": 56.0
+   },
+   "audit": "specs/444-work-budget-program/phases/water_frame.audit-3.txt"
   },
   "field": {
    "status": "budgeted",

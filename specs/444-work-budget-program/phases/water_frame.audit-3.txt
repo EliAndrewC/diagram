@@ -1,0 +1,3 @@
+WITHIN - the counted work is 56 operations per plan at every size (42 `candidate@roll_plan` + 14 `write@_rust_rolls`), exactly the pinned 56, with exponent 0.0 against the budget's 0.0, no inner loop that grows with households, and nothing placed.
+
+(Not blocking: the 56 is the reference's branch - nucleated, brook-fed, every seed of the run rolling it; a linear roll counts 64, a dispersed 58, a nucleated polder 52 (the derivation's worst-case column). The write counter is charged in Rust for writes made in `s.meta`. The bundle's chains.txt is a stale perf-fanout line from before the port.)
