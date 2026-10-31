@@ -11,9 +11,9 @@
   research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html#how-large-one-tract-of-paddy-grew (one tract
   watered from one intake ran about 1 to 45 ha, the largest found Fei's polder of about 60 ha) and its drawing page
   (#how-our-maps-size-a-settlements-farmland: the cap a knob rolled per settlement between about 45 and 60 ha). At the derivation's
-  sizes the farmland is `GROSS_ACRES_PER_HOUSEHOLD` (1.3 acres, 0017) times the households: 26, 52 and 104 acres at 20, 40 and 80 -
+  sizes the farmland is 1.3 acres gross a household (0017's drawing page) times the households: 26, 52 and 104 acres at 20, 40 and 80 -
   about 11, 21 and 42 ha, each under the cap's 45 ha floor. So each size draws ONE field, and no figure below changes; the cap
-  binds only past about 85 households (45 ha / 1.3 acres), where the field count grows with the farmland and each field's work
+  binds only past about 85 households (45 ha at 1.3 acres a household), where the field count grows with the farmland and each field's work
   is this derivation's at its own size.
 ## The algorithm
 
@@ -59,7 +59,7 @@ So: the basins x (5 x 1), plus the area, the brook, the intake, the outline, the
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.73: the basins and the beans with the field's area, the cut basins, the outline and the ditches with its side.
+From 20 to 80 households the stage grows at an exponent of about 0.79 (from the totals, ln(42,070 / 14,045) / ln 4): the basins and the beans with the field's area, the cut basins, the outline and the ditches with its side.
 
 ## Earlier findings
 
@@ -71,6 +71,7 @@ From 20 to 80 households the stage grows at an exponent of about 0.73: the basin
 - verdict-1, finding 6: fixed - the outline's brook segments in the about 2 cells it shares with the brook at the intake
 - verdict-1, finding 7: fixed - an interior basin's 4 corners and its record, 5
 - verdict-1, finding 8: fixed - the dry plots x1.8 a doubling
+- verdict-2, finding 1: fixed - the growth exponent read from the totals, 0.79 (ln(42,070 / 14,045) / ln 4), not 0.73
 
 ## Cheaper algorithms considered
 
