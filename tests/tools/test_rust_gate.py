@@ -35,7 +35,7 @@ def test_a_check_is_asked_where_all_it_reads_is_rust_owned_or_held_by_the_fresh_
 
 def test_the_real_rust_stage_passes_a_seed() -> None:
     r = rg.roll(10000, 12, {}, rp.rust_stages())
-    owned = set().union(*(w for _n, _f, w in r["trace"]))
+    owned = [set().union(*(w for _n, _f, w in r["trace"]))]
     assert rg.verdict(r, owned) == ([], None, None)
 
 
@@ -78,7 +78,7 @@ def test_a_failing_seed_joins_the_list_with_its_frozen_input_and_leaves_only_whe
 def test_a_fixture_that_no_longer_loads_is_a_failure_never_dropped(tmp_path: pathlib.Path) -> None:
     bad = tmp_path / "x.pkl"
     bad.write_bytes(b"not a pickle")
-    assert rg.replay(str(bad), "water_frame", rp.rust_stages(), set())[0].startswith("FAIL frozen_input_unloadable")
+    assert rg.replay(str(bad), "water_frame", rp.rust_stages(), [set()])[0].startswith("FAIL frozen_input_unloadable")
     assert rg.load_failing(str(tmp_path / "absent.json")) == []
 
 
@@ -110,20 +110,37 @@ def test_each_way_a_seed_fails_and_a_replay_that_loads(tmp_path: pathlib.Path, m
 
     boom.__name__ = "stage_boom"
     wf = rp.rust_stages()[0]
-    lines, stage, frozen = rg.verdict(rg.roll(10000, 12, {}, [wf, boom]), set())
+    lines, stage, frozen = rg.verdict(rg.roll(10000, 12, {}, [wf, boom]), [set(), set()])
     assert lines[0].startswith("FAIL refused:ValueError") and stage == "boom" and frozen is not None
     path = tmp_path / "f.pkl"
     path.write_bytes(frozen)
-    assert rg.replay(str(path), "boom", [wf, boom], set())[0].startswith("FAIL refused:ValueError"), "replayed from boom on"
+    assert rg.replay(str(path), "boom", [wf, boom], [set(), set()])[0].startswith("FAIL refused:ValueError"), "replayed from boom on"
     s, plan = pickle.loads(frozen)  # noqa: S301 - the module's own fixture
     path.write_bytes(pickle.dumps((s, plan)))
-    assert rg.replay(str(path), "nowhere", [wf], set()) == [], "a stage it does not name: every Rust stage, passing"
+    assert rg.replay(str(path), "nowhere", [wf], [set()]) == [], "a stage it does not name: every Rust stage, passing"
     r = rg.roll(10000, 12, {}, [wf])
-    monkeypatch.setattr(rg, "judge", lambda _b, _m, _o: [("FAIL lane_knots -> 1", {"meta.settlement_form"}), ("FAIL x -> 1", {"lanes"})])
-    lines, stage, frozen = rg.verdict(r, set())
-    assert lines == ["FAIL lane_knots -> 1", "FAIL x -> 1"] and stage == "water_frame" and frozen == r["trace"][0][1], "water_frame wrote it"
-    monkeypatch.setattr(rg, "judge", lambda _b, _m, _o: [("FAIL x -> 1", {"lanes"})])
-    assert rg.verdict(r, set())[1] == "water_frame", "nothing it read traced to a stage: the last Rust stage's"
+    monkeypatch.setattr(rg, "judge", lambda _b, _m, _o: [("FAIL lane_knots -> 1", {"meta.settlement_form"})])
+    lines, stage, frozen = rg.verdict(r, [set()])
+    assert lines == ["FAIL lane_knots -> 1"] and stage == "water_frame" and frozen == r["trace"][0][1]
     monkeypatch.setattr(rg.hg, "plan_site", lambda _spec: (_ for _ in ()).throw(RuntimeError("no fall")))
-    lines, stage, frozen = rg.verdict(rg.roll(10000, 12, {"row_line": "edge"}, [wf]), set())
+    lines, stage, frozen = rg.verdict(rg.roll(10000, 12, {"row_line": "edge"}, [wf]), [set()])
     assert lines[0].startswith("FAIL refused:RuntimeError") and stage == "water_frame" and frozen is None
+
+
+def test_a_stage_that_ends_failing_is_charged_though_a_later_stage_rewrites_the_part(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The plan review of T21, round 2 (D1b): the checks are judged where EACH Rust stage completes. Stage A ends with a part a
+    check refuses, stage B rewrites it: judged once at the end the gate would never see A's failure; it charges A, with A's input."""
+
+    def a(s: Any, _plan: Any) -> None:
+        s.M["meta"]["mark"] = "bad"
+
+    def b(s: Any, _plan: Any) -> None:
+        s.M["meta"]["mark"] = "good"
+
+    a.__name__, b.__name__ = "stage_a", "stage_b"
+    monkeypatch.setattr(rg, "POST_CHECKS", (("mark_good", lambda M: ["bad mark"] if M.get("meta").get("mark") == "bad" else []),))
+    wf = rp.rust_stages()[0]
+    r = rg.roll(10000, 12, {}, [wf, a, b])
+    owned = [set().union(*(w for _n, _f, w in r["trace"][: i + 1])) for i in range(3)]
+    lines, stage, frozen = rg.verdict(r, owned)
+    assert lines == ["FAIL mark_good -> 1, e.g. ['bad mark']"] and stage == "a" and frozen == r["trace"][1][1]

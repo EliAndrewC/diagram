@@ -92,21 +92,23 @@ def _rolled(plan: Any, stages: Sequence[Any], start: tuple[Any, Any] | None) -> 
     return {"lines": [], "stage": None, "frozen": None, "trace": trace, "before": before, "manifest": s.M}
 
 
-def verdict(r: Rolled, owned: set[str]) -> tuple[list[str], str | None, bytes | None]:
-    """A rolled seed judged: (its FAIL lines, the stage they are charged to, that stage's frozen input). A check's failure is
-    the stage's that last wrote any part it read - its input frozen, so a later stage's fixture never holds an earlier stage's
-    defect (the plan review of T21, D1)."""
+def verdict(r: Rolled, owned: Sequence[set[str]]) -> tuple[list[str], str | None, bytes | None]:
+    """A rolled seed judged where EACH Rust stage completes (the GM: "no Rust stage ever ends with any failing checks at the point
+    where that stage has completed"): (its FAIL lines, the stage charged, that stage's frozen input). After stage i the map is
+    the next stage's frozen input (or the final map), judged by the checks the stages up to i own (`owned[i]`); the first stage
+    whose completion fails is charged, with its own input - so a later stage that rewrites a part cannot hide an earlier failure."""
     if r["lines"]:
         return r["lines"], r["stage"], r["frozen"]
-    failed = judge(r["before"], r["manifest"], owned)
-    if not failed:
-        return [], None, None
-    reads = set().union(*(rd for _line, rd in failed))
-    blamed = next((e for e in reversed(r["trace"]) if e[2] & reads), r["trace"][-1])
-    return [line for line, _rd in failed], blamed[0], blamed[1]
+    trace = r["trace"]
+    for i, (name, frozen, _wrote) in enumerate(trace):
+        after = pickle.loads(trace[i + 1][1])[0].M if i + 1 < len(trace) else r["manifest"]  # noqa: S301 - the gate's own state
+        failed = judge(r["before"], after, owned[i] if i < len(owned) else set())
+        if failed:
+            return [line for line, _reads in failed], name, frozen
+    return [], None, None
 
 
-def replay(path: str, stage: str, stages: Sequence[Any], owned: set[str]) -> list[str]:
+def replay(path: str, stage: str, stages: Sequence[Any], owned: Sequence[set[str]]) -> list[str]:
     """A frozen input replayed into `stage` and the Rust stages after it: its FAIL lines (none: it passes). A fixture that no
     longer loads - the engine's classes changed under it - is reported as a failure, never dropped silently."""
     try:
@@ -116,7 +118,7 @@ def replay(path: str, stage: str, stages: Sequence[Any], owned: set[str]) -> lis
         return [f"FAIL frozen_input_unloadable -> {path}: {type(e).__name__} {str(e)[:200]} - read it, then remove its entry by hand"]
     names = [stage_name(st) for st in stages]
     rest = stages[names.index(stage) :] if stage in names else stages
-    return verdict(_rolled(plan, rest, (s, plan)), owned)[0]
+    return verdict(_rolled(plan, rest, (s, plan)), owned[len(stages) - len(rest) :])[0]
 
 
 def load_failing(path: str = FAILING) -> list[dict[str, Any]]:
@@ -135,7 +137,8 @@ def run(start: int, stages: Sequence[Any] | None = None, failing_path: str = FAI
     specs = gate_specs(start) + [(e["seed"], e["households"], dict(e.get("pins") or {})) for e in listed]
     rows, kept, by_seed = [], [], {}
     rolled = {key: roll(key[0], key[1], json.loads(key[2]), stages) for key in dict.fromkeys((sd, hh, json.dumps(p, sort_keys=True)) for sd, hh, p in specs)}
-    owned = set().union(*(e[2] for r in rolled.values() for e in r["trace"]))  # the parts the Rust stages wrote, on any seed
+    # what the Rust stages up to each one OWN - the parts any of them wrote, on any seed: owned[i] judges the map after stage i
+    owned = [set().union(*(e[2] for r in rolled.values() for e in r["trace"][: i + 1])) for i in range(len(stages))]
     for (seed, n, pins), r in rolled.items():
         lines, stage, frozen = verdict(r, owned)
         rows.append({"seed": seed, "households": n, "pins": json.loads(pins), "verdict": "fail" if lines else "pass", "stage": stage, "failures": lines})

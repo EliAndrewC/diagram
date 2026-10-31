@@ -219,9 +219,13 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   exists, derived; `off_the_front` names one that is not the front of `STAGES`, and the gate refuses then. `roll_through` runs the
   Rust stages on `driver.fresh_settlement` (split out of `build`, unchanged in what it does), stopping where they end, and returns
   a trace: each stage's input pickled as it started (its frozen input; measured 2026-10-31, a throwaway test: 5,838 bytes after
-  water_frame, the field stage running on the restored copy) and the parts of the map it wrote. A stage that raises is charged
-  the failure with its own input; a check that fails is charged to the stage that last wrote a part it read, with that stage's
-  input - so a later stage's fixture never holds an earlier stage's defect (the plan review's note on D1).
+  water_frame, the field stage running on the restored copy) and the parts of the map it wrote. The checks are judged where EACH
+  Rust stage completes (the GM: "at the point where that stage has completed"; the plan review of T21, round 2): the map after
+  stage i - the next stage's frozen input, or the final map - by the checks the stages up to i own (D2). A stage that raises is
+  charged with its own input; a failing check is charged to the FIRST stage at whose completion it fails, with that stage's input,
+  so a later stage that rewrites a part cannot hide an earlier stage's failure. A check that reads only parts the fresh settlement
+  held fails, if at all, at the first stage's completion and is that stage's. A check reading two stages' parts is the later one's
+  to fail where both have written, so its fixture may hold the earlier stage's output - as FR-020 has it.
 - **D2 - the checks asked by what they read** (`rust_prefix.Reads`, `held`; `rust_gate.judge`): a check's reads are recorded on the
   map (top-level parts and `meta.<key>`). A check counts at the gate when it read something and everything it read is either a part
   the Rust stages OWN - written by a Rust stage on any seed of the run, so a stage that wrote nothing on one seed is still judged
@@ -229,7 +233,8 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
   output (D2a); a check that reads a part only a later stage writes is that stage's and is not asked. Ownership is derived from the
   run's trace, never a hand table. The checks are one list, `cohort_audit.POST_CHECKS`, which `roll_how` reads too, each looked up
   by its name when asked.
-- **D3 - the gate** (`tools/rust_gate.py`, `make rust-gate`): the fresh block of 48 from `cohort_gate.py fresh-seed`'s start, the
+- **D3 - the gate** (`tools/rust_gate.py`, `make rust-gate`): the fresh block of 48 from `cohort_gate.py fresh-seed`'s start - a hash of
+  the engine key, so it rotates with the engine (feature 386 D3) - the
   six pinned row variants on the next fresh seeds, and the failing list's seeds; a plan that cannot be rolled fails the first Rust
   stage (water_frame rolls the plan, T19). Each run is recorded in `dev/rust-gate/<utc>.json` with the engine key it rolled
   (`ci.delta.engine_key_worktree`); exit 1 on any failing seed or replay.
