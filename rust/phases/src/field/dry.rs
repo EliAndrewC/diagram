@@ -153,17 +153,7 @@ pub fn hem(
                         (p0.0 + n_out.0 * o1, p0.1 + n_out.1 * o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
-                    // a plot onto the rice is dropped: its middle or its outer corners in the field (its inner edge may lie on the canal's bank)
-                    let middle = (
-                        f64::midpoint(poly[0].0, poly[2].0),
-                        f64::midpoint(poly[0].1, poly[2].1),
-                    );
-                    let onto = [middle, poly[2], poly[3]].iter().any(|p| inside(*p, field));
-                    // nor onto a plot an earlier tract laid
-                    let laps = plots.iter().any(|q: &DryPlot| {
-                        inside(middle, &q.poly) || poly.iter().any(|c| inside(*c, &q.poly))
-                    });
-                    if got >= need || onto || laps || poly.iter().any(|p| wet(*p, ix, clear)) {
+                    if got >= need || refused(&poly, field, &plots, ix, clear) {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -210,6 +200,31 @@ fn along(segs: &[(Pt, Pt)], d: f64) -> (Pt, Pt) {
     let u = unit(a, b);
     let t = left.min(dist(a, b));
     ((a.0 + u.0 * t, a.1 + u.1 * t), u)
+}
+
+/// Whether a dry plot is refused: onto the rice (its middle or its outer corners in the field - its inner edge may lie on the
+/// canal's bank), onto a plot an earlier tract laid, or in the water along its inner edge, where a bend of the canal may meet it,
+/// or at its outer corners.
+///
+/// Research:
+///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
+fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: f64) -> bool {
+    let middle = (
+        f64::midpoint(poly[0].0, poly[2].0),
+        f64::midpoint(poly[0].1, poly[2].1),
+    );
+    let onto = [middle, poly[2], poly[3]].iter().any(|p| inside(*p, field));
+    let laps = plots
+        .iter()
+        .any(|q| inside(middle, &q.poly) || poly.iter().any(|c| inside(*c, &q.poly)));
+    let edge = (0..=6).map(|k| {
+        let f = f64::from(k) / 6.0;
+        (
+            poly[0].0 + (poly[1].0 - poly[0].0) * f,
+            poly[0].1 + (poly[1].1 - poly[0].1) * f,
+        )
+    });
+    onto || laps || edge.chain([poly[2], poly[3]]).any(|p| wet(p, ix, clear))
 }
 
 /// Whether `p` lies within `clear` feet of the water filed in `ix`.
