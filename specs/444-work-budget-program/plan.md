@@ -328,3 +328,41 @@ failing (355298, 355302, 355305, 355327, 355329, 355334, 903, 904), 7 of main's 
    `test_the_knobs_every_form_reads_roll_on_every_form`, red on the unfixed branch (`AssertionError: linear`); the derivation's
    per-form note now linear 59 (the reference's 56 unchanged). Next: the block re-rolled on both fixes and the ruling's branch read
    from that run.
+
+### T19 part B (2026-10-31T03:14Z)
+
+The trigger: the block re-rolled on both branch fixes (dev/cohort-log/20261031T031422Z): 45 of 54 again, against main's 46; the
+same eight seeds newly failing, the same seven of main's passing; every refusal a class main's block shows (`lane_knots` 4,
+`WebRefused` 4, `row_rules` 1); the cohort's own census: "knob values never rolled: none", "knob values rolled but never drawn: none".
+
+1. **What exactly is refusing?** The later stages, on kinds main's block shows: four knot passes, four webs (903 named by the open
+   found row E3), one row rule.
+2. **A3 again.** Unchanged rules.
+3. **A4 again.** Every knob the port writes alone off its branch has now been traced to its readers (03:05Z and 03:10Z items 7);
+   none remains read off its branch, and the census finds every value rolled and drawn. The settlement forms' odds match main's
+   block (nucleated 28 / linear 15 / dispersed 11 against 27 / 13 / 14); the falls are tested equal to `fall_backs_the_wind` on
+   every quarter.
+4. **Moving something placed earlier to suit something later?** No fix is proposed.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "On main's own block the re-rolled port passes 45 where main passed 46, on the same kinds of failure,
+   eight seeds failing and seven healed" - the GM would ask whether one seat of 54 is the port or the dice.
+7. **The next step:** a PROCESS question, to the round arbiter (`ask:444-T19-cohort-45`): whether a one-seat shortfall with no new
+   class, after the port's rolls are audited knob by knob, is branch 3's fault still to find or within the block's own spread.
+
+### T19 part B (2026-10-31T03:22Z)
+
+The trigger: `make cohort-landing` on both branch fixes (dev/cohort-log/20261031T032224Z): 47 of 54, seeds 20, 21, 36, 37, 48, 903
+and 904 newly failing against main's 54 of 54 on these pinned seeds - the comparison the round arbiter ruled unfair for a port that
+re-rolls (ask:444-T19-cohort-regression), and accepted on the fair one (ask:444-T19-cohort-45: fresh 41/48 against main's 40/48).
+
+1. **What exactly is refusing?** `lane_knots` (20, 21, 904), `OverlapRefused` (37 on a garden, 48 on a threshing yard), `SiteRefused`
+   (36, 19 of 20 on margin 1), `WebRefused` (903, dangling ends); seed 3, failing before the `cluster_shape` fix, passes.
+2. **A3 again.** The later stages' own rules, unchanged.
+3. **A4 again.** Read: each refusal a stage's known kind; 903 the E3 web row's.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: the ruling's branch 2 - land, the seeds filed.
+6. **The one-sentence test.** "The re-rolled port's landing seeds fail in later stages the fresh block also shows; each is filed as
+   an open row against its stage."
+7. **Done:** the seven seeds and the Kashikawa and Sawada pins filed as open rows
+   (`specs/328-match-the-research/audit/found-444-t19.jsonl`, the SiteRefused row naming widening `SEATING_GROUND_FT` first); of the
+   pool only Mizuguchi's manifest moved on the fixed port, so it alone owes its settlement-review before `make land F=444 T=T19`.
