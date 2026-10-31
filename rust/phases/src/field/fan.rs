@@ -13,7 +13,7 @@ pub type Pt = (f64, f64);
 /// toward its drain, not by how much - a knob's middle, held here until the knob is rolled).
 ///
 /// Research:
-///     the fan's taper - GUESS: 0005 says a fan narrows toward its drain, not how much; a fifth either way of its mean breadth
+///     the fan's taper - GUESS: the record silent on how much; 0005 says a fan narrows toward its drain, not how much; a fifth either way of its mean breadth
 pub const TAPER: f64 = 0.2;
 
 /// How far a flank wanders off its line, as a share of the half-breadth, in each of its two waves (a GUESS: the record gives no

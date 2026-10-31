@@ -12,7 +12,7 @@ use crate::pyrand::knob_rng;
 /// Of this many bunds between a row's basins, `BUND_SHARE.0` carry a run of beans.
 ///
 /// Research:
-///     which bunds - GUESS: 0014 says some bunds carry a row and not how many; three in eight, near the density today's maps draw
+///     which bunds - GUESS: the record silent on how many; 0014 says some bunds carry a row and not how many; three in eight, near the density today's maps draw
 pub const BUND_SHARE: (u32, u32) = (3, 8);
 /// The beads a run holds, at least two.
 ///
@@ -22,7 +22,7 @@ pub const RUN_BEADS: (u32, u32) = (2, 4);
 /// The spacing of a run's beads (feet).
 ///
 /// Research:
-///     the beads' spacing - GUESS: 0014 gives a bead about 3 ft across in a single row, not their spacing; 8 ft, so each reads apart
+///     the beads' spacing - GUESS: the record silent on it; 0014 gives a bead about 3 ft across in a single row, not their spacing; 8 ft, so each reads apart
 pub const BEAD_STEP_FT: f64 = 8.0;
 /// A bead's radius (feet).
 ///

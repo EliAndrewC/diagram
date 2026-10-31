@@ -18,7 +18,7 @@ pub const POND_PCT: u32 = 55;
 /// The pond's radii as shares of its plot's shorter side.
 ///
 /// Research:
-///     the pond's size - GUESS: 0008 sinks it wholly in one plot, never across a bund, and gives no size; 0.4 and 0.28 of the plot's shorter side
+///     the pond's size - GUESS: the record silent on its size; 0008 sinks it wholly in one plot, never across a bund, and gives no size; 0.4 and 0.28 of the plot's shorter side
 pub const POND_SHARE: (f64, f64) = (0.4, 0.28);
 /// The share of maps that draw a grave in the fields, in tenths.
 ///
