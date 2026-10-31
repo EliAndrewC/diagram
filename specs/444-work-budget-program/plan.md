@@ -215,7 +215,7 @@ Occasions: settlement-review on the pool hamlets the rebuilt field moves (a map'
   against 23,988 and 42,070 (exponent 0.79) and `field.polder`'s 4,651 and 6,584 (exponent 0.50), MODE AUDIT, the claims round
   (FR-021), the settlement-reviews of the moved pool hamlets - one landing.
 
-### T16 Approach (2026-10-31T23:40Z)
+### T16 Approach (2026-10-31T22:16Z)
 
 Restated after D12 and the build (the Decisions re-decided at 19:37Z): the goal, constraints and exits of the first Approach stand.
 What the build changed, each recorded at its point of change and in `phases/field.md`:
