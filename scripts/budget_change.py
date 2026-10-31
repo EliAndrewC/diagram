@@ -60,8 +60,21 @@ def log(root: Path, row: dict[str, Any]) -> None:
 
 
 def _stage(table: dict[str, Any], phase: str) -> dict[str, Any] | str:
+    """A stage's entry - or a FORM of one, `<stage>.<form>` (`field.polder`), budgeted at its own bounded n (the round arbiter's
+    ruling on ask:444-polder-sizes), unbudgeted until its first pin."""
     st = table["stages"].get(phase)
+    if st is None and "." in phase and phase.split(".", 1)[0] in table["stages"]:
+        return {"status": "unbudgeted"}
     return st if st is not None else f"no stage `{phase}` in {TABLE} - the stages are: {', '.join(table['stages'])}"
+
+
+def sizes_of(root: Path, derivation: str) -> tuple[int, ...]:
+    """The sizes a derivation's budget is set at: its bounded n's (`work_budget_bundle.sizes`, the one reading), else 20, 40, 80."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "reviews"))
+    import work_budget_bundle  # noqa: PLC0415
+
+    path = root / derivation
+    return work_budget_bundle.sizes(path.read_text(encoding="utf-8")) if path.is_file() else ITEM_SIZES
 
 
 ITEM_SIZES = (20, 40, 80)  # feature 444 D2: a budget is per_thing x the derivation's own items at each size
@@ -77,7 +90,8 @@ def accepted_by(root: Path, derivation: str, phase: str, trigger: str) -> bool:
     at `trigger` naming `phase` - in its trigger or its instruction (feature 444 FR-013)? A greenfield derivation's rounds run under
     its own name (`<stage>_greenfield`, feature 444 FR-015), so an accept naming that names the stage too."""
     log = (root / derivation).parents[1] / "arbiter.jsonl"
-    names = "|".join(re.escape(n) for n in {phase} | ({_stem(derivation)} & {f"{phase}_greenfield"}))  # its own greenfield name alone
+    own = {phase, phase.split(".", 1)[1]} if "." in phase else {phase}  # a form (`field.polder`) answers to its own name (`polder`) too
+    names = "|".join(re.escape(n) for n in own | ({_stem(derivation)} & {f"{n}_greenfield" for n in own}))  # its own greenfield name alone
     named = re.compile(rf"(?<![a-z_])(?:{names})(?![a-z_])")
     for line in log.read_text(encoding="utf-8").splitlines() if log.is_file() else []:
         try:
@@ -115,7 +129,7 @@ def budget_at(st: dict[str, Any], h: int) -> float:
 def per_house(root: Path) -> str:
     """The program's sum at 40 households per household, against the design's reference - printed at every pin (ask:444-budget-standard)."""
     stages = load(root)["stages"].values()
-    total = sum(budget_at(st, 40) for st in stages if st.get("status") != "unbudgeted")
+    total = sum(budget_at(st, 40) for st in stages if st.get("status") != "unbudgeted" and st.get("items_at_40") is not None)  # a form at a bounded n holds no 40
     open_ = sum(1 for st in stages if st.get("status") == "unbudgeted")
     return (
         f"the program at 40 households: {total:,.0f} operations, {total / 40:,.0f} a household against the design's few thousand"
@@ -163,10 +177,11 @@ def set_budget(
         got = verdict_of(root / verdict)
     if got != SOUND:
         return f"the verdict at {verdict} reads {got or 'nothing'}, not SOUND - a first budget is set only from a SOUND MODE BUDGET verdict (`make work-budget-bundle MODE=budget PHASE={phase} DERIVATION={derivation}`)"
-    if missing := [h for h in ITEM_SIZES if (items or {}).get(h) is None]:
-        return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80= (feature 444 D2)"
-    new = {h: per_thing * (items or {})[h] for h in ITEM_SIZES}
-    if lower and (raised := [h for h in ITEM_SIZES if new[h] > budget_at(st, h)]):
+    sz = sizes_of(root, derivation)
+    if missing := [h for h in sz if (items or {}).get(h) is None]:
+        return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: {' '.join(f'ITEMS_AT_{h}=' for h in sz)} (feature 444 D2)"
+    new = {h: per_thing * (items or {})[h] for h in sz}
+    if lower and (raised := [h for h in sz if new[h] > budget_at(st, h)]):
         return (
             f"`{phase}` would rise at {', '.join(str(h) for h in raised)} households ({', '.join(f'{new[h]:,.0f} against {budget_at(st, h):,.0f}' for h in raised)})"
             f" - a raise needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\""
@@ -174,12 +189,12 @@ def set_budget(
     # THE GROWTH CAP, HELD BY THE TOOL (the GM 2026-10-29: "if we allow polynomial growth but with a high exponent like n cubed on an
     # n which grows considerably with map size ... that is really going to not work in the long run"): S6's 1.15 was the work-budget
     # agent's judgment alone; a pin growing past it from 20 to 80 households names its reason, such as a bounded n
-    if (g := growth(new[20], new[80])) > GROWTH_CAP and not growth_reason.strip():
+    if (g := growth(new[sz[0]], new[sz[-1]], sz[-1] / sz[0])) > GROWTH_CAP and not growth_reason.strip():
         return (
             f"`{phase}`'s budget grows at an exponent of {g:.2f} from 20 to 80 households, past rubric S6's {GROWTH_CAP} (n log n at most) -"
             " re-derive it, or name why its n is bounded: GROWTH_REASON=\"<why>\""
         )
-    today = today_at_40(root, phase)
+    today = today_at_40(root, phase) if 40 in sz else None
     if today is not None and new[40] > today and not reason.strip():
         return (
             f"`{phase}`'s budget at 40 households, {new[40]:,.0f}, is above what the stage counts today, {today:,.0f} (the newest `make work-budget`"
@@ -188,7 +203,8 @@ def set_budget(
         )
     table["stages"][phase] = {
         "status": "budgeted", "per_thing": per_thing, "exponent": exponent, "derivation": derivation, "verdict": arbiter or verdict,
-        **{f"items_at_{h}": (items or {})[h] for h in ITEM_SIZES},
+        **{f"items_at_{h}": (items or {})[h] for h in sz},
+        **({"sizes": list(sz)} if sz != ITEM_SIZES else {}),
         **(
             {
                 "pinned_on": "accept",
@@ -247,9 +263,10 @@ GROWTH_CAP = 1.15  # rubric S6: a stage's exponent from 20 to 80 households, whi
 GROWTH_SLACK = 0.05  # an accepted stage's measured exponent may sit this far above its budget's: seed noise between two sizes
 
 
-def growth(at20: float, at80: float) -> float:
-    """The exponent from 20 to 80 households of a figure at each (rubric S6); 0 where either is 0."""
-    return math.log(at80 / at20) / math.log(4) if at20 > 0 and at80 > 0 else 0.0
+def growth(at20: float, at80: float, ratio: float = 4) -> float:
+    """The exponent from 20 to 80 households of a figure at each (rubric S6) - or across a bounded n's sizes, `ratio` apart; 0 where
+    either is 0."""
+    return math.log(at80 / at20) / math.log(ratio) if at20 > 0 and at80 > 0 else 0.0
 
 
 HELD = (40, 80)  # the sizes an accepted stage is held to (feature 443 T04; the push's ratchet, `work_budget.held`)
@@ -316,7 +333,7 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--reason", default="", help="why a budget above the stage's count today at 40 is the target (ask:444-budget-standard)")
     s.add_argument("--lower", action="store_true", help="re-pin a budgeted stage at no more than its standing budget at any size")
     s.add_argument("--growth-reason", default="", help="why a budget growing past rubric S6's 1.15 from 20 to 80 households has a bounded n")
-    for h in ITEM_SIZES:
+    for h in (10, *ITEM_SIZES):  # 10: a form at a bounded n (ask:444-polder-sizes)
         s.add_argument(f"--items-at-{h}", type=int)
     c = sub.add_parser("change")
     c.add_argument("phase")
@@ -337,7 +354,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = Path(args.root)
     if args.cmd == "set":
-        items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
+        items = {h: getattr(args, f"items_at_{h}") for h in (10, *ITEM_SIZES) if getattr(args, f"items_at_{h}") is not None}
         why = set_budget(
             root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread, args.reason, args.lower,
             args.growth_reason,
