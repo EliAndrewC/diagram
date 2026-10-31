@@ -145,8 +145,6 @@ the head race from the intake to the fork, forking into two supply canals down t
 foot's outfall; branches leaving the supply canals at the plan's `offtakes_a` and `offtakes_b` fractions, leaning downstream (0054),
 each tapering from head to tail (0053), every turn on a sweep of about 2.5 channel widths (0054), no channel crossing another.
 
-**Open before the records are written:** the field writes TWO plot forms - `net["plots"]` (dicts with a `poly`, read by
-`sitegen/geom.py`'s area and `settlement/fields/landuse.py`) and the manifest's `fields[].plots` (6 numbers: width, height, center
-x, center y and two more); which reader reads the 6-number form, and whether the held `settlement/fields/` files are the stage's
-placement or the drawing (a renderer is not the stage's algorithm, and D10 deletes only the field's own placement code), is
-settled from the readers outside the held set before the Rust writes either form.
+**The two plot forms, settled** (D1, D12): `net["plots"]` (dicts with a `poly`, read by `sitegen/geom.py`'s area,
+`settlement/fields/landuse.py` and the ink) is what Rust returns; the manifest's 6-number `fields[].plots` has no free reader and
+is written by the thin Python from the returned rings, keeping the shape.
