@@ -44,3 +44,15 @@ except ValueError as e:
     assert "the field refused" in str(e), e
 else:
     raise AssertionError("a cell no basin can fill a quarter of is refused")
+
+# a knob drawn as `Knob.roll` draws it: randrange on an even table, the running weight past random() on a weighted one
+import hashlib  # noqa: E402
+import random  # noqa: E402
+
+for seed in range(20):
+    rng = random.Random(int.from_bytes(hashlib.sha256(f"{seed}\x00paddy_rest".encode()).digest()[:8], "big"))
+    u = rng.random() * 1.0
+    want = 0 if u - 0.8 < 0 else 1
+    assert l7r_phases.roll_knob(seed, "paddy_rest", 2, [0.8, 0.2]) == want
+    rng = random.Random(int.from_bytes(hashlib.sha256(f"{seed}\x00weir_form".encode()).digest()[:8], "big"))
+    assert l7r_phases.roll_knob(seed, "weir_form", 4, []) == rng.randrange(4)

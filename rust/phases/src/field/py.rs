@@ -87,6 +87,18 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
     Ok(d)
 }
 
+/// One of the stage's knobs drawn from its table (D3): Python builds the typing-filtered forms and their weights against the running
+/// context, Rust draws the form's index as `Knob.roll` does.
+#[pyfunction]
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "PyO3 hands a Vec from a Python list"
+)]
+#[must_use]
+pub fn roll_knob(seed: i64, name: &str, n: u32, weights: Vec<f64>) -> u32 {
+    crate::pyrand::roll(seed, name, n, &weights)
+}
+
 /// The comb stage (T16): Python's gathered inputs in, the records out.
 ///
 /// # Errors
