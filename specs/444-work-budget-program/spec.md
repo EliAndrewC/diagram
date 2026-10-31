@@ -202,8 +202,8 @@ standards" (`request.md`).
   and the gate's seeds hold no fixed block.
 
 - **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding in a file its delta changes, and
-  not refused once the finding is closed; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in the
-  Python water_frame's port changed.
+  not refused once the finding is closed; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
+  Python file water_frame's port (T19) changed.
 
 ## Edge Cases
 

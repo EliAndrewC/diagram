@@ -162,6 +162,26 @@ def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
     return ""
 
 
+_FINDING = re.compile(r"^\s+([A-Z][A-Z-]+)\s+(\S[^:]*?)::")
+
+
+def open_claims_refusal(root: Path, d: Path, text: str, task: str) -> str:
+    """A RUST STAGE LANDS WITH NO OPEN CLAIM (feature 444 amendment 5's FR-021, the GM 2026-10-31: "every Rust stage end its
+    initial implementation with zero open claims"): a phase task's landing is refused while `make claims-report` lists an open
+    finding - its one selection, `claims.open_findings` - in a file the delta changes under `rust/` or `l7r/`. '' otherwise."""
+    if not d.name.startswith("444-") or not _PHASE.search(_task_block(text, task)):
+        return ""
+    changed = {n for n in delta_names(root) if n.startswith(("rust/", "l7r/"))}
+    if not changed:
+        return ""
+    out = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "report"])[1]
+    open_ = [ln.strip() for ln in out.splitlines() if (m := _FINDING.match(ln)) and m.group(2) in changed]
+    if not open_:
+        return ""
+    shown = "; ".join(ln[:140] for ln in open_[:5]) + (f" and {len(open_) - 5} more" if len(open_) > 5 else "")
+    return f"{task} is a Rust stage's landing with {len(open_)} open claim finding(s) in the files it changes - close each (fix the code or the claim, then re-check it) before it lands (FR-021): {shown}"
+
+
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:
     """Pass 1: every refusal the landing would meet that costs seconds to ask, all of them - but the claims gate's, which goes to
     `deferred` when given (405 T50, D23: the claims round runs beside the gate, and the landing waits for it before the push)."""
@@ -177,8 +197,9 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
         why, _msg = tt.refusal(root, d, task, note, landed=False, boxes=_boxes())
         if why:
             by_why.setdefault(why, []).append(task)
-        if why := phase_refusal(root, d, text, task):
-            by_why.setdefault(why, []).append(task)
+        for why in (phase_refusal(root, d, text, task), open_claims_refusal(root, d, text, task)):  # each said, as T20 D2 has it
+            if why:
+                by_why.setdefault(why, []).append(task)
     stops = [f"{', '.join(ts)}: {why}" for why, ts in by_why.items()]
     write_ledger(root, d)
     # ...and the make-targets page, regenerated where the Makefile moved (feature 405 T46, D19): the push's `make-docs` check

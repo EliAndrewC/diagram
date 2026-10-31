@@ -77,3 +77,23 @@ def test_the_rust_gate_record_is_made_before_the_gate_and_the_cohort(tmp_path: p
     monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True: ran.append(cmd) or (0, ""))  # noqa: ARG005
     monkeypatch.setattr(land, "start_cohort", lambda _root: (_ for _ in ()).throw(AssertionError("no cohort before the record")))
     assert land.long_runs(tmp_path) == 1 and ran == [], "nothing - not the gate stamp, not the cohort - ran before it"
+
+
+def test_a_rust_stage_lands_with_no_open_claim_in_the_files_it_changes(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 444 FR-021 (amendment 6, SC-014): a phase task's landing is refused while `make claims-report` lists an open finding
+    in a file its delta changes under rust/ or l7r/; a finding in a file it leaves alone, or none, refuses nothing."""
+    land = _land()
+    d = tmp_path / "specs" / "444-work-budget-program"
+    d.mkdir(parents=True)
+    text = "- [ ] T16 phase: field - the comb field\n      phase: field\n- [ ] T09 a tooling task\n"
+    report = "claims: ...\n  MISLABELED     rust/phases/src/field.rs::Basin#the plots - a counter, no decision\n  DRIFTED        l7r/other.py::f#x - y\n"
+    monkeypatch.setattr(land, "delta_names", lambda _root: ["rust/phases/src/field.rs", "specs/444-work-budget-program/plan.md"])
+    monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True: (0, report))  # noqa: ARG005
+    why = land.open_claims_refusal(tmp_path, d, text, "T16")
+    assert "1 open claim finding(s)" in why and "rust/phases/src/field.rs::Basin" in why and "l7r/other.py" not in why
+    assert land.open_claims_refusal(tmp_path, d, text, "T09") == "", "not a phase task: the claims switch's report stands"
+    monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True: (0, "claims: no finding\n"))  # noqa: ARG005
+    assert land.open_claims_refusal(tmp_path, d, text, "T16") == ""
+    monkeypatch.setattr(land, "delta_names", lambda _root: ["specs/x.md"])
+    assert land.open_claims_refusal(tmp_path, d, text, "T16") == "", "no rust/ or l7r/ file changed"
+    assert land.open_claims_refusal(tmp_path, tmp_path / "specs" / "443-x", text, "T16") == "", "only feature 444's phases"

@@ -79,6 +79,8 @@
 - [x] T21 The Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020): make rust-gate, the checks asked by what they read, the landing held to it
       research: rendering
       verify: DONE. landed: amendment 5's Rust stage gate, each part pinned by a test: make rust-gate rolls a fresh block of 48 (the start a hash of the engine key, which covers rust/**), the six pinned row variants on fresh seeds and the failing list through the Rust stages alone, judging the checks where each Rust stage completes by what they read (Rust-owned across the run, or held by the fresh map); a failing seed joins the list with its stage's frozen input until both pass; every engine landing needs a clean record on its engine, and a Rust-stage landing reads its cohort as a rate; make land makes the record first, where owed. make rust-gate: 54 seeds through water_frame, 0 failing; impl-drift on 18 claims, all IN-STEP
+- [ ] T22 water_frame's open claims closed (FR-021, amendment 6): the 15 open findings on its port - water_frame.rs's 8 MISLABELED, its DRIFTED fall-backs-the-wind and UNCLAIMED fall quantization, roll_plan's and stage_water_frame's CANNOT-TELL, _KNOBS's CANNOT-TELL and _rust_rolls's two UNCLAIMED decisions - each fixed in the code or its claim and re-checked IN-STEP
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
