@@ -200,7 +200,14 @@ pub fn polder(
         down: (dx, dy),
         across,
     };
-    let form = if dikepond { layout } else { "polder" };
+    // the dike-pond's mosaic drifts; its grid (the chessboard) stands straight; the rice polder bows and nudges
+    let form = if !dikepond {
+        "polder"
+    } else if layout == "mosaic" {
+        "mosaic"
+    } else {
+        "chessboard"
+    };
     let put = |u: f64, x: f64| {
         let (du, dxx) = warp(seed, form, u, x, size, module);
         frame.at(u + du, x + dxx)

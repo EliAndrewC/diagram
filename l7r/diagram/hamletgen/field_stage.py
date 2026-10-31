@@ -12,9 +12,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.interactive.tags import Split
 from l7r.diagram.settlement._knobs import KNOBS
 from l7r.diagram.settlement.fields import ink
-from l7r.diagram.waterfields.palette import _RICE_GREEN, FLOODED, RIPE_GOLD
+from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, FLOODED, RIPE_GOLD, aze_w
 
 from .consts import POLDER_ARCHETYPES, SQ_FT_PER_ACRE
 from .consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, BROOK_WANDER_STEP, OFFTAKE_DEG, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT
@@ -79,9 +80,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     Research:
         the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the fan of paddies, its basins and bunds"""
     if plan.field_archetype in POLDER_ARCHETYPES:
-        from .water import stage_field as polder_stage  # the polder's port is T16's next increment (D11)
-
-        polder_stage(s, plan)
+        _polder(s, plan)
         return
     ftpx = plan.ftpx
     knobs = _knob_tables(s, plan)
@@ -232,3 +231,110 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
 
 def _area(ring: list[tuple[float, float]]) -> float:
     return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(ring, ring[1:] + ring[:1], strict=True))) / 2.0
+
+
+POND_FRINGE_FT = 40.0
+"""Research: the wild pond's reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin, the comb source pond's 40"""
+
+
+def _polder(s: Settlement, plan: SitePlan) -> None:
+    """The polder: its placement from Rust (`stage_polder`, D8), then the free helpers the old stage called - the wild pond and
+    its fringe, the perimeter dike and its trees gapped at the sluices, the resting plots, the ditches, the outfall run, and on a
+    dike-pond the land-use overlay that makes its ponds (`phases/field.md`, "The polder's seam").
+
+    Research:
+        the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: from outside in, the wild water, the dike, the ring canal, the field ditches and the paddies"""
+    from l7r.diagram.settlement.fields.outfall import outfall_run
+    from l7r.diagram.settlement.land.wet import pond_fringe_ring
+    from l7r.diagram.settlement.water_ways.water import ditch_style
+
+    ftpx = plan.ftpx
+    dikepond = plan.field_archetype == "mulberry_dike_fishpond"
+    name = f"{plan.spec.name.lower()}-polder"
+    out = phases().stage_polder(plan.spec.seed, plan.spec.households, dikepond, plan.pond_layout, float(plan.down_deg), (plan.W * ftpx / 2.0, plan.H * ftpx / 2.0), float(plan.fan_aspect))
+    if __debug__:
+        from l7r.diagram import work_counts
+
+        for k, n in out["counts"].items():
+            work_counts.OPS[k] += n
+    s.meta(field_archetype=plan.field_archetype, pond_layout=plan.pond_layout, water_source="reservoir", water_source_position="corner_high", dry_furrows_vary=False)
+    px, py, rx, ry = out["pond"]
+    s.pond(px, py, rx, ry)
+    s.marsh(pond_fringe_ring(px, py, rx, ry, POND_FRINGE_FT), role="pond_fringe")
+    rows = max(p["row"] for p in out["plots"]) + 1
+    cands = [(p["ring"], (p["row"] + 0.5) / rows) for p in out["plots"]]
+    rest = s.resting_plots(name, cands)
+    plots = [
+        {"poly": p["ring"], "fill": FLOODED if p["low"] else _RICE_GREEN, "low": p["low"], "rest": i in rest, "state": "wet" if p["low"] else "green", "drain_side": None}
+        for i, p in enumerate(out["plots"])
+    ]
+    chans = [{"role": r, "seg": seg, "pts": pts, "w": w, "w_tail": wt} for r, seg, pts, w, wt in out["ditches"]]
+    outline = out["outline"]
+    net: dict[str, Any] = {
+        "plots": plots,
+        "channels": chans,
+        "envelope": outline,
+        "floor": outline,
+        "dry_plots": [],
+        "dry_acres": 0.0,
+        "bund_beans": [],
+        "bund_bean_runs": [],
+        "furrows_vary": False,
+        "bead_ponds": [],
+        "brook": [],
+        "drain": next(c["pts"] for c in chans if c["seg"] == "drain"),
+        "sluice": tuple(out["sluices"][0]),
+        "dike_sluices": [tuple(g) for g in out["sluices"]],
+        "ftpx": ftpx,
+        "threads": [],
+    }
+    rings = [p["poly"] for p in plots]
+    M = s.M
+    M["fields"].append(
+        {
+            "name": name,
+            "kind": "paddy",
+            "outline": outline,
+            "bbox": _bbox(out["inner_env"]),
+            "vis_bbox": _bbox(outline),
+            "plots": [[*(lambda b: [round(b[2] - b[0], 1), round(b[3] - b[1], 1)])(_bbox(r)), *(round(v, 1) for v in _center(r)), len(r), p["col"]] for r, p in zip(rings, out["plots"], strict=True)],
+            "drain_hem": [],
+            "plot_rings": rings,
+            "bund_beans": [],
+        }
+    )
+    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans)
+    M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": 1.5, "field": name})
+    M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
+    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
+    s.perimeter_dike(out["inner_env"], seed=plan.spec.seed, gaps=[tuple(g) for g in out["sluices"]])
+    s.comb_base_fill(net, name)
+    bund = aze_w(ftpx)
+    for p in plots:
+        if p["rest"]:
+            s.rest_basin(p["poly"], bund, name)
+        else:
+            s.add_paddy(
+                f'<polygon points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in p["poly"])}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>',
+                cls=Split("wet paddy" if p["low"] else "paddy", "bund"),
+            )
+    for c in chans:
+        col, cls = ditch_style(c["role"], plan.field_archetype)
+        s.field_channel(c["pts"], col, c["w"], c["w_tail"], late=True, cls=cls)
+        s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
+    s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], 1.5, 1.5, late=True)
+    tail = out["sluices"][1]
+    inner = next(c["pts"] for c in chans if c["seg"] == "drain")
+    mid = ((inner[0][0] + inner[-1][0]) / 2.0, (inner[0][1] + inner[-1][1]) / 2.0)
+    run = outfall_run(mid, tail, plan.fall)
+    M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 5.5})
+    s.field_channel(run, *ditch_style("drain", plan.field_archetype)[:1], 5.5, 5.5, late=True, cls=ditch_style("drain", plan.field_archetype)[1])
+    if dikepond:
+        from l7r.diagram.settlement._knobs import knob_rng
+
+        s.apply_land_use(net, "mulberry_fishpond", knob_rng(plan.spec.seed, "land_use"), fraction=1.0, eligible="all", dike_crop=plan.dike_crop, leftover=plan.leftover, fry_form=plan.fry_form)
+    s.field_polys.append(outline)
+    plan.net = net
+    plan.envelope = outline
+    plan.acres = sum(_area(r) for r in rings) / SQ_FT_PER_ACRE
+    net["acres"] = plan.acres
