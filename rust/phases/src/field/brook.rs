@@ -11,9 +11,36 @@ use super::geom::seg_dist;
 use super::index::Index;
 use crate::pyrand::knob_rng;
 
+/// How far past the canvas each end of the brook runs, so both ends lie off the map (feet).
+///
+/// Research:
+///     off-map ends - CONVENTION: the brook's rules ask both ends off the map; one station past the edge
+pub const OFF_MAP_FT: f64 = 20.0;
+/// The meander's swing and its wave down the fall (feet).
+///
+/// Research:
+///     the meander - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a natural stream rarely runs straight more than about ten times its own width; the swing (12 ft, past twice the rules' 4 ft level tolerance) and the wave (140 ft, two of those runs) a GUESS
+pub const MEANDER_FT: f64 = 12.0;
+pub const MEANDER_WAVE_FT: f64 = 140.0;
+/// How far above the intake the meander grows from nothing to its full swing, so the race leaves a brook running down the fall.
+///
+/// Research:
+///     straight at the tap - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook runs on along the fall at the tap; the fade a GUESS, 25 ft, so the tap's stride and the fade stay under the rules' 150 ft level run
+pub const MEANDER_FADE_FT: f64 = 25.0;
+/// The least lean a brook segment keeps off the screen's axes (degrees): past the brook rules' 1.6.
+///
+/// Research:
+///     no screen axis - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a brook along an axis reads as a mistake; the rules' 1.6 degrees and a margin, 2
+pub const AXIS_OFF_DEG: f64 = 2.0;
+/// A bound on the stations either way (a guard: a canvas is a few thousand feet across).
+///
+/// Research:
+///     the bound - NONE: a guard
+const MAX_STATIONS: usize = 1000;
+
 /// The brook's figures, every one the plan's (`consts_water.py`): the head race's length (the plan's rolled `head_lead`), the angle
 /// it leaves the brook at, the tap's straight stride, the most the course moves across in one station, its skirt outside the crop
-/// and its wander past the skirt, the station spacing, how far past the fan it runs each way, and its width.
+/// and its wander past the skirt, the station spacing, and its width.
 #[derive(Debug, Clone, Copy)]
 pub struct BrookIn {
     pub lead: f64,
@@ -23,7 +50,6 @@ pub struct BrookIn {
     pub skirt: f64,
     pub wander: f64,
     pub station: f64,
-    pub reach: f64,
     pub w: f64,
 }
 
@@ -45,29 +71,62 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 /// The brook past the fan on its `side` (+1 the fan's right, -1 its left). The head race leaves the division point's intake turned
 /// `offtake_deg` off the fall away from the brook's flank, so the intake lies `lead` up that line from the fork; the brook comes
 /// down the fall to it, runs on `tap_run`, then each `station` moves across at most `slew` toward its line - the flank, plus the
-/// skirt, plus a wander rolled in [0, `wander`] from the seed's `brook_walk` stream - and runs on `reach` past the fan's foot.
+/// skirt, plus a wander rolled in [0, `wander`] from the seed's `brook_walk` stream - and runs on past the fan's foot, off the `canvas` both ways, meandering.
 ///
 /// Research:
 ///     the race turns away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves; the race's turn away from the brook is ours
 ///     straight at the tap - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 70 ft down the fall
 ///     outside the crop - GUESS: the plan's `BROOK_SKIRT` and `BROOK_WANDER`, the record silent; the walk's step a station's slew
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 #[must_use]
-pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
+pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64, canvas: Pt) -> Brook {
     let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
     let corner_x = side * fan.half_side(0.0, side);
     let (u_i, x_i) = (-b.lead * cos, corner_x + side * b.lead * sin);
     let intake = local(fan, u_i, x_i);
-    let mut pts = vec![local(fan, u_i - b.reach, x_i), intake];
+    let off = |p: Pt| {
+        p.0 < -OFF_MAP_FT
+            || p.1 < -OFF_MAP_FT
+            || p.0 > canvas.0 + OFF_MAP_FT
+            || p.1 > canvas.1 + OFF_MAP_FT
+    };
+    let mut walk = knob_rng(seed, "brook_meander");
+    // the wave at its steepest at the intake, give or take a seeded 30 degrees: the stretch above the tap's straight stride always
+    // swings, so the stride never joins a level run (the brook rules' 150 ft)
+    let jitter = f64::from(walk.randbelow(61)).to_radians() - std::f64::consts::FRAC_PI_6;
+    let phase = -u_i / MEANDER_WAVE_FT * std::f64::consts::TAU + jitter;
+    // the meander held to the outward side, so the skirt is kept; a wave of `MEANDER_WAVE_FT` down the fall
+    let meander = |u: f64| {
+        side * MEANDER_FT * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin())
+            / 2.0
+    };
+    // upstream: from off the map down the fall to the intake, the meander fading to nothing at the intake
+    let mut up = Vec::new();
+    let mut v = u_i;
+    while up.len() < MAX_STATIONS {
+        v -= b.station;
+        let fade = ((u_i - v) / MEANDER_FADE_FT).min(1.0);
+        let p = local(fan, v, x_i + meander(v) * fade);
+        up.push(p);
+        if off(p) {
+            break;
+        }
+    }
+    up.reverse();
+    let mut pts = up;
+    pts.push(intake);
     let mut rng = knob_rng(seed, "brook_walk");
     let (mut u, mut x, mut stray) = (u_i + b.tap_run, x_i, b.wander / 2.0);
     pts.push(local(fan, u, x));
-    let end = fan.length + b.reach;
     // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
     let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
     let secant = lean.hypot(1.0);
-    while u < end {
-        u = (u + b.station).min(end);
-        // the flank as drawn, its waves applied, at its widest within half a station either way
+    for _ in 0..MAX_STATIONS {
+        u += b.station;
+        // the flank as drawn, its waves applied, at its widest within half a station either way (past the foot, the foot's)
         let at = |v: f64| fan.half_side(v.clamp(0.0, fan.length), side);
         let flank = at(u)
             .max(at(u - b.station / 2.0))
@@ -82,9 +141,51 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, seed: i64) -> Brook {
         } else {
             x + (want - x).clamp(-b.slew, b.slew)
         };
-        pts.push(local(fan, u, x));
+        let p = local(fan, u, x + meander(u));
+        pts.push(p);
+        if u > fan.length && off(p) {
+            break;
+        }
     }
+    off_the_axes(&mut pts, intake, (fan.across.0 * side, fan.across.1 * side));
     Brook { pts, intake }
+}
+
+/// The brook kept off the screen's axes: a segment within `AXIS_OFF_DEG` of the map's x or y axis has its downstream end moved
+/// outward (`out`) until it leans that far off - its upstream end where the downstream end is the intake, which stays put.
+///
+/// Research:
+///     no screen axis - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a brook drawn exactly along an axis reads as a mistake (the GM, 2026-08-26: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"); the brook rules refuse a segment within 1.6 degrees of one
+fn off_the_axes(pts: &mut [Pt], intake: Pt, out: Pt) {
+    // a move can bring a neighbor onto an axis: passes until none moves, a bounded number
+    for _ in 0..8 {
+        if !off_the_axes_once(pts, intake, out) {
+            return;
+        }
+    }
+}
+
+/// One pass of `off_the_axes`; whether it moved a point.
+fn off_the_axes_once(pts: &mut [Pt], intake: Pt, out: Pt) -> bool {
+    let mut moved_any = false;
+    for k in 0..pts.len().saturating_sub(1) {
+        let (a, b) = (pts[k], pts[k + 1]);
+        let deg = (b.1 - a.1).atan2(b.0 - a.0).to_degrees().rem_euclid(90.0);
+        let near = deg.min(90.0 - deg);
+        if near >= AXIS_OFF_DEG {
+            continue;
+        }
+        let len = super::geom::dist(a, b);
+        let push = len * (AXIS_OFF_DEG + 0.5).to_radians().tan();
+        let moved = if b == intake { k } else { k + 1 };
+        let sign = if b == intake { -1.0 } else { 1.0 };
+        pts[moved] = (
+            pts[moved].0 + out.0 * push * sign,
+            pts[moved].1 + out.1 * push * sign,
+        );
+        moved_any = true;
+    }
+    moved_any
 }
 
 /// The weir at a `weir` intake: a bar across the brook, `half` feet either side of the intake, running diagonally upstream
@@ -113,9 +214,15 @@ pub fn weir(
         .position(|p| *p == c)
         .map_or(c, |i| brook.pts[(i + 1).min(brook.pts.len() - 1)]);
     let t = super::geom::unit(c, next);
-    let away = (fan.across.0 * side, fan.across.1 * side);
+    // square to the brook where it runs, turned to the side away from the field
+    let side_of = (fan.across.0 * side, fan.across.1 * side);
+    let square = if -t.1 * side_of.0 + t.0 * side_of.1 >= 0.0 {
+        (-t.1, t.0)
+    } else {
+        (t.1, -t.0)
+    };
     let (sin, cos) = skew_deg.to_radians().sin_cos();
-    let bar = (away.0 * cos - t.0 * sin, away.1 * cos - t.1 * sin);
+    let bar = (square.0 * cos - t.0 * sin, square.1 * cos - t.1 * sin);
     let (a, b) = (
         (c.0 - bar.0 * half, c.1 - bar.1 * half),
         (c.0 + bar.0 * half, c.1 + bar.1 * half),
@@ -162,7 +269,6 @@ mod tests {
         skirt: 34.0,
         wander: 10.0,
         station: 35.0,
-        reach: 400.0,
         w: 7.0,
     };
 
@@ -170,7 +276,7 @@ mod tests {
     fn the_brook_keeps_outside_the_crop_and_bends_gently() {
         for (side, seed) in [(1.0, 4), (-1.0, 9)] {
             let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
-            let br = brook(&f, side, B, seed);
+            let br = brook(&f, side, B, seed, (6400.0, 6400.0));
             let mut ix = Index::default();
             let ids = file(&br, &mut ix);
             assert_eq!(ids.len(), br.pts.len() - 1);
@@ -184,7 +290,7 @@ mod tests {
             assert!(br.pts.len() > 30);
         }
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0), 4);
-        let br = brook(&f, 1.0, B, 4);
+        let br = brook(&f, 1.0, B, 4, (6400.0, 6400.0));
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
         assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);
         assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);

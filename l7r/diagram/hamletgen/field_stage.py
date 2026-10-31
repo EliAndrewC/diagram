@@ -27,10 +27,8 @@ if TYPE_CHECKING:
 
 BROOK_W = 7.0
 """Research: the feed brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor"""
-BROOK_STATION = 35.0
-"""Research: the brook's station spacing - CONVENTION: one station every 35 ft, enough that a bend led in over two reads round"""
-BROOK_REACH = 1200.0
-"""Research: how far the brook runs past the fan - CONVENTION: past the sheet's crop on every side the stages reach"""
+BROOK_STATION = 20.0
+"""Research: the brook's station spacing - CONVENTION: one station every 20 ft, enough that a bend led in over two reads round"""
 DITCH_BANK_FT = 4.0
 """Research: a field ditch's no-build bank - GUESS: the record gives a ditch's width, not the ground kept off it; 4 ft past its
 half-width, as a farm's own channel keeps (`homesteads/farm_water.py`)"""
@@ -87,7 +85,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         return
     ftpx = plan.ftpx
     knobs = _knob_tables(s, plan)
-    brook = (plan.head_lead * ftpx, OFFTAKE_DEG, BROOK_TAP_RUN, BROOK_SLEW, BROOK_SKIRT, BROOK_WANDER, BROOK_STATION, BROOK_REACH, BROOK_W)
+    brook = (plan.head_lead * ftpx, OFFTAKE_DEG, BROOK_TAP_RUN, BROOK_SLEW, BROOK_SKIRT, BROOK_WANDER, BROOK_STATION, BROOK_W)
     _ = BROOK_WANDER_STEP  # the plan's walk step: the Rust walk steps a slew a station (brook.rs)
     row = ROW_FT.get(plan.plot_size, 48.0)
     out = phases().stage_field(
@@ -96,6 +94,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         float(plan.down_deg),
         float(plan.fan_aspect),
         (plan.W * ftpx / 2.0, plan.H * ftpx / 2.0),
+        (plan.W * ftpx, plan.H * ftpx),
         float(plan.brook_side),
         brook,
         (list(plan.offtakes_a), list(plan.offtakes_b)),

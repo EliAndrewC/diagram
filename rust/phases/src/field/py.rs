@@ -15,8 +15,8 @@ use super::build::{build, Field, FieldIn, KnobIn};
 use super::fan::Pt;
 use super::states::State;
 
-/// The brook's figures as Python passes them: lead, offtake angle, tap run, slew, skirt, wander, station, reach, width.
-type BrookTuple = (f64, f64, f64, f64, f64, f64, f64, f64, f64);
+/// The brook's figures as Python passes them: lead, offtake angle, tap run, slew, skirt, wander, station, width.
+type BrookTuple = (f64, f64, f64, f64, f64, f64, f64, f64);
 
 fn pts(v: &[Pt]) -> Vec<(f64, f64)> {
     v.to_vec()
@@ -115,6 +115,7 @@ pub fn stage_field<'py>(
     down_deg: f64,
     aspect: f64,
     center: Pt,
+    canvas: Pt,
     brook_side: f64,
     brook: BrookTuple,
     offtakes: (Vec<f64>, Vec<f64>),
@@ -123,13 +124,14 @@ pub fn stage_field<'py>(
     cell: f64,
     knobs: Vec<KnobIn>,
 ) -> PyResult<Bound<'py, PyDict>> {
-    let (lead, offtake_deg, tap_run, slew, skirt, wander, station, reach, w) = brook;
+    let (lead, offtake_deg, tap_run, slew, skirt, wander, station, w) = brook;
     let inp = FieldIn {
         seed,
         households,
         down_deg,
         aspect,
         center,
+        canvas,
         brook_side,
         brook: BrookIn {
             lead,
@@ -139,7 +141,6 @@ pub fn stage_field<'py>(
             skirt,
             wander,
             station,
-            reach,
             w,
         },
         offtakes,

@@ -63,7 +63,14 @@ lists them); (b) `settle_beads` (MIXED, held) still runs from a later stage - it
 deletion; the knobs registered in held modules (`fan_middle` in `water/fit.py`, `weir_form` in `water/brook.py`) move to a kept one;
 (c) the polder in Rust (`polder_greenfield.derivation.md`, D8); (d) the deletion (D10), `make dead-closure`; (e) the counters'
 keys against the derivation (MODE AUDIT), FR-012's on/off roll, `make work-budget`; (f) the claims round to zero open (FR-021);
-(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. MEASURED 2026-10-31: Inashiro's stage profile (`make map PROFILE=1`) no longer lists the field among its seven slowest
+(g) glyph-check on the redrawn field marks, settlement-reviews of the moved pool hamlets; (h) one `make land`. THE BROOK'S RULES (2026-10-31): the sink asks `brook_violations` (`hamletgen/water/brook_rules.py` and `brook.py`, the
+field's own, imported by the sink, so they STAY at the deletion) of the field's brook. Measured by calling them on the Rust brook
+(a throwaway test, no rule read; their figures read at runtime: axis 1.6 degrees, level 150 ft within 80 ft of the frame at 4 ft,
+ruled 3.1 ft of the chord with the share waiting for 300 ft): every brook first broke `ruled`, `source` and `mouth`, some `axis` and
+`level`. Fixed in `brook.rs`: stations every 20 ft from off the canvas to off it, a meander of 12 ft on a 140 ft wave held outward
+(at its steepest at the intake), the fade above the intake 25 ft, an off-axis backstop; 119 of 120 seeds (10, 15, 20 households x
+seeds 1-40) now keep every rule. OWED: seed 37 at 15 households still trips `level` in a view the probe could not rebuild - before
+the landing, find that view (the claims round will ask the claim "no level run") or the arbiter's ruling. MEASURED 2026-10-31: Inashiro's stage profile (`make map PROFILE=1`) no longer lists the field among its seven slowest
 stages, so it runs under 0.07 s with its Python door and ink; the 444 start record (`dev/perf-log/20261031T173305Z-444-start-*`) had
 it at 0.38-0.52 s a reference seed and up to 2.67 s on a scaling leg. `make perf SCALING=1` refused on one scaling leg in the sink
 (`SinkRefused`: the drain's constructed route meets the brook where the brook as drawn breaks its rules) - the field's brook judged

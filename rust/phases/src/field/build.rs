@@ -38,6 +38,8 @@ pub struct FieldIn {
     pub down_deg: f64,
     pub aspect: f64,
     pub center: Pt,
+    /// The canvas's size (feet): the brook runs off it both ways.
+    pub canvas: Pt,
     pub brook_side: f64,
     pub brook: BrookIn,
     pub offtakes: (Vec<f64>, Vec<f64>),
@@ -201,7 +203,7 @@ fn one(
     knobs: &HashMap<String, String>,
     counts: &mut Counts,
 ) -> Result<Field, FieldRefused> {
-    let br = brook(f, inp.brook_side, inp.brook, inp.seed);
+    let br = brook(f, inp.brook_side, inp.brook, inp.seed, inp.canvas);
     counts.add("write@brook", 2 * br.pts.len() as u64);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
@@ -311,6 +313,7 @@ mod tests {
             down_deg: 90.0,
             aspect: 1.0,
             center: (3200.0, 3200.0),
+            canvas: (6400.0, 6400.0),
             brook_side: 1.0,
             brook: BrookIn {
                 lead: 105.0,
@@ -320,7 +323,6 @@ mod tests {
                 skirt: 34.0,
                 wander: 10.0,
                 station: 35.0,
-                reach: 400.0,
                 w: 7.0,
             },
             offtakes: (vec![0.30, 0.62, 0.93], vec![0.55]),
