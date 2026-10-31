@@ -180,26 +180,54 @@ Occasions: none (a derivation and its verdict; no map moves until the field rebu
 
 <!-- plan-archive: T19 to T19 moved to plan-done.md, 2026-10-31 (feature 375 FR-044) -->
 
-### T20 (<why: the finding or measurement that files it>)
+### T20 - the tooling gaps T19's landing found (the GM 2026-10-31: "Please fix the tooling gaps by implementing T20.")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: four fixes to the landing's tooling, each measured on T19's own landing (2026-10-31, `dev/review-ledger.md` and
+  the landing logs): the push refused twice for a work-budget run `make land` could have made (T17, T19); four landing rounds each
+  showed one tick refusal of several; a plan review was spent on a section the tick then refused for its Approach's stamp; and a
+  re-dated heading with an unchanged body owed a review of its "removal".
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| D1 land's budget run | its test, red without it | n/a (tooling) | none | n/a |
+| D2 every tick refusal | its test, red without it | n/a | none | n/a |
+| D3 decide's Approach check | its test, red without it | n/a | none | n/a |
+| D4 a re-dated heading | its test, red without it | n/a | none | n/a |
 
-### T20 Approach (checklist part A)
+### T20 Approach (2026-10-31T11:08:39Z)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A landing that refuses says everything it will refuse at once, and does for itself what it can:
+   no gate or review spent on a refusal the tooling could have answered first.
+2. **The constraints.** FR-005 and FR-006 untouched (the budget review still refuses an accepted stage over its figure; only a
+   MISSING run is made); the plan gate's FR-043 (a changed decision is reviewed) and feature 385's checklist rules unchanged in
+   what they require - only when and how together they say it.
+3. **Where each comes from.** G: the GM's words above. O: T19's landing, 2026-10-31 (the refusals in its land logs).
+4. **Do they describe the world here?** Each fix is pinned by a test of the situation T19 met.
+5. **The order.** D1-D4 independent; landed together.
+6. **The exits.** Green: each test red without its fix and green with it, `make done` and `make hooks-test` green, landed by
+   `make land F=444 T=T20`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The four tests, and the landing itself.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
+
+### T20 Decisions
+
+- **D1 - `make land` makes a missing work-budget run itself** (`scripts/land.py`, after the landing cohort): where the delta
+  carries engine code and `make work-budget-review ROUTE=GATED` refuses for "no work-budget run at the pushed engine" alone, land
+  runs `make work-budget` and commits `dev/work-budget.md` and `dev/work-budget/` before the push. Any other refusal of the review
+  (an accepted stage over its figure) still stops the landing, unchanged: only the GM's words raise a figure.
+- **D2 - the tick reports every refusal together** (`scripts/tick-task.py`): the checks that were an `or`-chain - the plan gate,
+  the boxes, the waits, the arbiter's hold, the checkpoint, the approach checklist, the wording - are each asked and every
+  refusal is listed, numbered, in one message; a tick still refuses if any one refuses.
+- **D3 - `make decide` asks the approach checklist first** (`scripts/gates/plan_gate.py` `decide_prompt`): where
+  `approach_gate.refusal` names the task, decide refuses with that refusal before printing the review it owes, so a section is
+  never reviewed only to be refused at the tick for its checklist and edited (and reviewed) again.
+- **D4 - a re-dated heading is the same block** (`scripts/gates/plan_sections.py` `block_status`): a recorded block plan.md no
+  longer has is not owed as `(removed)` where a live block has the same heading once a closing parenthetical (a stamp, "checklist
+  part A") is dropped and the same text below its heading line. A changed body is owed as before.
 

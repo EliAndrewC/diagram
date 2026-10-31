@@ -335,3 +335,9 @@ Asked whether the field's clean rebuild should be written directly in Rust, as t
 Hold on, though. When you say the same algorithm in Python and in Rust, that is not what we are trying to do. I cannot emphasize enough that a big part of the goal for the rewrite is that we are not trying to re-implement the same algorithms, because the old algorithms were computationally inefficient and resulted in orders of magnitude more operations being performed than needed to be performed. My biggest fear with this, and the reason why I am going so slowly and enforcing hard gates, is that I suspect that if I asked you to do the rewrite in Rust, even with this project guideline, then you would just end up re-implementing the same bad algorithms. And you saying that we will be implementing the same algorithm in Python and in Rust makes me concerned that we are already going down that path."
 
 "Yes, okay, we should definitely add a guard for that, So I'm glad to hear that there's a way to do that. Please do indeed do that. After that, please complete those tooling fixes that are the prerequisites. For us starting. Thanks."
+
+## 2026-10-31, T20 - the tooling gaps T19's landing found
+
+Told that T19 had landed and that the tooling gaps its landing exposed were filed as T20:
+
+"Please fix the tooling gaps by implementing T20."
