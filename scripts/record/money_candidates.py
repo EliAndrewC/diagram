@@ -52,6 +52,8 @@ _NUMBER = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?"
 _DOLLAR = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?"
 _YEAR = re.compile(r"(?<!\d)(1[0-9]{3})(?!\d)")
 _NOTE_MARK = re.compile(r'data-note="([^"]+)"')
+#: "bu" ends a land measure as often as it names a coin: right after a cho, tan or se figure it is the area's last unit (歩)
+_AREA_BEFORE = re.compile(r"\d\s+(?:cho|chō|tan|se)\s+$")
 _ROW = re.compile(r"^-\s*(?P<stem>[^|]+?)\s*\|\s*(?P<amount>[^|]+?)\s*\|\s*(?P<reason>.+?)\s*$")
 
 
@@ -134,6 +136,8 @@ def amounts(root: str = ".") -> list[Amount]:
             years = tuple(int(y) for y in _YEAR.findall(plain)) or (cited.get(note.group(1), ()) if note else ()) or page_years
             for m in amount_re.finditer(plain):
                 found = m.group(0)
+                if found.endswith(" bu") and _AREA_BEFORE.search(plain[max(0, m.start() - 16) : m.start()]):
+                    continue  # an area's last unit (cho-tan-se-bu, 歩), not a coin: "2 cho 4 tan 15 bu" (feature 444 T18's landing)
                 if marked[found] > 0:
                     marked[found] -= 1
                     continue
