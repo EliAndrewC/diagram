@@ -14,7 +14,7 @@ use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD};
 use super::fan::{fan, Fan, Pt};
 use super::features::{grave, pocket_pond, Grave, Pond};
 use super::index::Index;
-use super::lattice::{basins, Basin, ROW_FT};
+use super::lattice::{basins, Basin};
 use super::rules::{held, FieldRefused};
 use super::states::{states, State};
 use super::{cap_sq_ft, fields_for, paddy_sq_ft};
@@ -29,7 +29,8 @@ const SQ_FT_PER_ACRE: f64 = 43_560.0;
 pub type KnobIn = (String, Vec<String>, Vec<f64>, Option<String>);
 
 /// What the stage reads (T16 D1): the seed, the households, the fall, the fan's aspect, where the first field's middle sits, the
-/// brook's flank and figures, the delivery ditches' fractions, the weir's figures by form, the basin's cell, and the knobs.
+/// brook's flank and figures, the delivery ditches' fractions, the weir's figures by form, the rows' spacing and the basin's cell,
+/// and the knobs.
 #[derive(Debug, Clone)]
 pub struct FieldIn {
     pub seed: i64,
@@ -41,6 +42,7 @@ pub struct FieldIn {
     pub brook: BrookIn,
     pub offtakes: (Vec<f64>, Vec<f64>),
     pub weir: (f64, f64, HashMap<String, f64>),
+    pub row_ft: f64,
     pub cell: f64,
     pub knobs: Vec<KnobIn>,
 }
@@ -197,7 +199,7 @@ fn one(
         (ring, deg, form)
     });
     counts.add("write@intake", 10);
-    let bs = basins(f, inp.seed);
+    let bs = basins(f, inp.seed, inp.row_ft);
     // the comb's angles tested once a row, at its two outermost basins, the sharpest (D7)
     let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
     for row in 0..rows {
@@ -214,7 +216,7 @@ fn one(
         f,
         br.intake,
         (&inp.offtakes.0, &inp.offtakes.1),
-        ROW_FT,
+        inp.row_ft,
         inp.brook_side,
         inp.seed,
     );
@@ -288,6 +290,7 @@ mod tests {
 
     use super::{build, FieldIn};
     use crate::field::brook::BrookIn;
+    use crate::field::lattice::ROW_FT;
     use crate::field::states::State;
 
     fn inp(households: u32, seed: i64) -> FieldIn {
@@ -311,6 +314,7 @@ mod tests {
             },
             offtakes: (vec![0.30, 0.62, 0.93], vec![0.55]),
             weir: (7.0, 30.0, HashMap::from([("fence".to_owned(), 1.5)])),
+            row_ft: ROW_FT,
             cell: 1488.0,
             knobs: vec![
                 (

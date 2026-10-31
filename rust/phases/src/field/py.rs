@@ -108,8 +108,8 @@ pub fn roll_knob(seed: i64, name: &str, n: u32, weights: Vec<f64>) -> u32 {
     clippy::too_many_arguments,
     reason = "the stage's inputs, each a plan field Python gathered (D1)"
 )]
-pub fn stage_field(
-    py: Python<'_>,
+pub fn stage_field<'py>(
+    py: Python<'py>,
     seed: i64,
     households: u32,
     down_deg: f64,
@@ -119,9 +119,10 @@ pub fn stage_field(
     brook: BrookTuple,
     offtakes: (Vec<f64>, Vec<f64>),
     weir: (f64, f64, HashMap<String, f64>),
+    plot_size: &str,
     cell: f64,
     knobs: Vec<KnobIn>,
-) -> PyResult<Bound<'_, PyDict>> {
+) -> PyResult<Bound<'py, PyDict>> {
     let (lead, offtake_deg, tap_run, slew, skirt, wander, station, reach, w) = brook;
     let inp = FieldIn {
         seed,
@@ -143,6 +144,7 @@ pub fn stage_field(
         },
         offtakes,
         weir,
+        row_ft: super::lattice::row_ft_for(plot_size),
         cell,
         knobs,
     };

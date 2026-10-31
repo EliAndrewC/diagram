@@ -116,12 +116,12 @@ pub fn states(basins: &[Basin], seed: i64, tag: &str, unsettled: bool) -> Vec<St
 mod tests {
     use super::{states, State, REST_PLOTS};
     use crate::field::fan::fan;
-    use crate::field::lattice::basins;
+    use crate::field::lattice::{basins, ROW_FT};
 
     #[test]
     fn the_plots_drawn_apart() {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0));
-        let b = basins(&f, 4);
+        let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
         let s = states(&b, 4, "f0", false);
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();

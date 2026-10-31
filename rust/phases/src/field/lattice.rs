@@ -15,6 +15,19 @@ use crate::pyrand::knob_rng;
 ///     the row spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal
 pub const ROW_FT: f64 = 48.0;
 
+/// The rows' spacing by the plan's `plot_size`: the small irregular plots' 34 ft, the page's medium 48, the large block's 70.
+///
+/// Research:
+///     paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal; the small (34 ft across) and the large block (70 ft) the plan's departures, kept until feature 417 T34
+#[must_use]
+pub fn row_ft_for(plot_size: &str) -> f64 {
+    match plot_size {
+        "small_irregular" => 34.0,
+        "large_block" => 70.0,
+        _ => ROW_FT,
+    }
+}
+
 /// A basin's length along its canal, the band each one is rolled from (feet).
 ///
 /// Research:
@@ -86,19 +99,19 @@ pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
     out
 }
 
-/// The comb's basins: the fan's length cut into rows of about `ROW_FT`, each row cut across by `cuts` at fixed s, so the bunds of a
+/// The comb's basins: the fan's length cut into rows of about `row_ft` (`ROW_FT` on the plan's medium plot size), each row cut across by `cuts` at fixed s, so the bunds of a
 /// row converge with the fan; a row's cuts are its own, meeting the next row's bund in a T as a fan's paddies do.
 ///
 /// Research:
 ///     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain
 #[must_use]
-pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
+pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
     #[expect(
         clippy::cast_possible_truncation,
         clippy::cast_sign_loss,
         reason = "a small positive count of rows"
     )]
-    let rows = ((fan.length / ROW_FT).round() as usize).max(1);
+    let rows = ((fan.length / row_ft).round() as usize).max(1);
     #[expect(clippy::cast_precision_loss, reason = "a small row count")]
     let step = fan.length / rows as f64;
     let mut out = Vec::new();
@@ -128,7 +141,7 @@ pub fn basins(fan: &Fan, seed: i64) -> Vec<Basin> {
 
 #[cfg(test)]
 mod tests {
-    use super::{basins, cuts, ALONG_FT};
+    use super::{basins, cuts, row_ft_for, ALONG_FT, ROW_FT};
     use crate::field::fan::fan;
     use crate::field::geom::signed_area;
 
@@ -136,7 +149,7 @@ mod tests {
     fn the_basins_fill_the_fan_at_the_researched_size() {
         let area = 26.0 * 43_560.0;
         let f = fan(area, 1.0, 315.0, (3200.0, 3200.0));
-        let b = basins(&f, 4);
+        let b = basins(&f, 4, ROW_FT);
         let total: f64 = b.iter().map(|x| signed_area(&x.ring).abs()).sum();
         assert!((total / area - 1.0).abs() < 1e-6, "the basins tile the fan");
         #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
@@ -146,12 +159,16 @@ mod tests {
         let hem: Vec<_> = b.iter().filter_map(super::Basin::drain_side).collect();
         let rows = b.iter().map(|x| x.row).max().unwrap() + 1;
         assert_eq!(hem.len(), 2 * rows, "both sides of the drain, every row");
-        assert_eq!(b, basins(&f, 4), "the seed fixes the comb");
-        assert_ne!(b, basins(&f, 5));
+        assert_eq!(b, basins(&f, 4, ROW_FT), "the seed fixes the comb");
+        assert_ne!(b, basins(&f, 5, ROW_FT));
     }
 
     #[test]
     fn a_row_cuts_at_the_researched_lengths_and_converges() {
+        assert!(
+            (row_ft_for("large_block") - 70.0).abs() < 1e-9
+                && row_ft_for("small_irregular") < row_ft_for("medium")
+        );
         let s = cuts(9, 3, 900.0);
         assert!(s.iter().any(|x| x.abs() < 1e-12), "a cut on the drain");
         assert!((s[0] + 1.0).abs() < 1e-12);
@@ -161,7 +178,7 @@ mod tests {
             assert!((f64::from(ALONG_FT.0) * 0.9..=f64::from(ALONG_FT.1) * 1.1).contains(&ft));
         }
         let f = fan(26.0 * 43_560.0, 1.0, 0.0, (0.0, 0.0));
-        let b = basins(&f, 4);
+        let b = basins(&f, 4, ROW_FT);
         let first = b.iter().filter(|x| x.row == 0).count();
         let last_row = b.iter().map(|x| x.row).max().unwrap();
         let last = b.iter().filter(|x| x.row == last_row).count();
