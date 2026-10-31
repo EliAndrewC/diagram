@@ -271,12 +271,6 @@
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
   },
-  "### T19 Approach (checklist part A)": {
-   "sha256": "ba8cb5ed433e1e60dbf12281d196f913c0137261456d7c3e31ed8591b5b4e7cd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-30",
-   "declared": "spec-fidelity"
-  },
   "### T19 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "e189ba2d6a045fd7d38adc7ae734ac1caf121b2869919cb59dac416951517fdd",
    "verdict": "CLEAR",
@@ -2339,6 +2333,21 @@
      "summary": "The Kashikawa and Sawada pins are removed and the open rows filed for the re-rolled port's seeds are withdrawn, since on the amended D7 no seed fails (cohort-landing 54 of 54) and no map is pinned.",
      "class": "within",
      "why": "Removes a workaround instead of adding one; the cohort rule is met as written."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "(removed) ### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-approach-removed",
+     "summary": "The plan's T19 Approach (checklist part A) for water_frame's Rust port is deleted from plan.md; no replacement block is offered.",
+     "class": "within",
+     "why": "Removing plan prose withdraws nothing the GM asked for or the spec requires. Every obligation the earlier block carried is still held outside it: the water_frame Rust port as its own task, landed before the feature closes (FR-017, the GM 2026-10-29 amendment 4, 'we don't end up doing any Python rewrites'); acceptance only at or under budget with the old code deleted (FR-005, FR-006), MODE AUDIT and the cohort-landing check (request section 3 items 6-7); the Rust tooling rows proven on a Rust fixture before the first Rust phase lands (FR-011, request section 7, 'prove it fires'), and check-rust-tooling.py refuses the port's landing until cache audit and the overlap census are proven, which is a guard rather than plan text. The bundle shows only the deletion. It does not show T19 the task being withdrawn or its exits changed. A withdrawal of the water_frame port, or a landing of it without those exits, would contradict FR-017 and the GM's step-4 instruction, and this verdict does not clear either."
     }
    ]
   }
