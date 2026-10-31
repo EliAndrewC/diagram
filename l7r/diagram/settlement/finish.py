@@ -461,7 +461,9 @@ class FinishMixin:
         """Research:
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2600 (PNG width)
         """
-        self.settle_beads()
+        from l7r.diagram.settlement.fields import ink
+
+        ink.settle(self)  # the comb's beads over the final water, their drowned test in Rust (feature 444 T16 D12)
         # BACKSTOP for the deferred canopy: crop_to_view / crop_city normally flush it, but a map
         # that frames to the bare canvas never calls either (Hoshizora), and a queued stand that is
         # never flushed is a wood with no trees. Idempotent, so the usual crop-time flush still wins.

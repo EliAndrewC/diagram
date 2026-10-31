@@ -62,3 +62,7 @@ for dike, layout in ((False, "mosaic"), (True, "mosaic"), (True, "chessboard")):
     p = l7r_phases.stage_polder(4, 15, dike, layout, 90.0, (3200.0, 3200.0), 1.0)
     assert p["plots"] and all(len(x["ring"]) == 4 for x in p["plots"]) and len(p["sluices"]) == 2
     assert p["ditches"][0][1] == "feeder" and len(p["pond"]) == 4 and p["counts"]["candidate@polder_shape"] == 4
+
+# finish's bead settling: a run through a ditch is dropped, a dry one stands
+assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [((4.0, -5.0), (4.0, 5.0), 9.0)], []) == []
+assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [], []) == [[(0.0, 0.0), (8.0, 0.0)]]

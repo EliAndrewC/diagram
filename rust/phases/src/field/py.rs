@@ -147,6 +147,21 @@ pub fn stage_polder<'py>(
     Ok(d)
 }
 
+/// The bean runs that survive the map's final water (finish's settling): `runs` against `segs` (a, b, width) and `ponds`.
+#[pyfunction]
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "PyO3 hands Vecs from Python lists"
+)]
+#[must_use]
+pub fn settle_runs(
+    runs: Vec<Vec<Pt>>,
+    segs: Vec<(Pt, Pt, f64)>,
+    ponds: Vec<(f64, f64, f64, f64)>,
+) -> Vec<Vec<Pt>> {
+    super::beans::settle(&runs, &segs, &ponds)
+}
+
 /// One of the stage's knobs drawn from its table (D3): Python builds the typing-filtered forms and their weights against the running
 /// context, Rust draws the form's index as `Knob.roll` does.
 #[pyfunction]

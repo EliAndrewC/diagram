@@ -73,6 +73,39 @@ pub fn bean_runs(
     runs
 }
 
+/// The runs that survive the map's final water (finish's settling, feature 287 W33): each bead within a bead's radius past a
+/// segment's half-width of `segs`, or inside one of `ponds` (x, y, rx, ry) grown by a bead's radius, drowned and dropped; a run
+/// left with fewer than two dropped whole.
+///
+/// Research:
+///     a run shows at least two - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries them shows at least two beads
+#[must_use]
+pub fn settle(
+    runs: &[Vec<Pt>],
+    segs: &[(Pt, Pt, f64)],
+    ponds: &[(f64, f64, f64, f64)],
+) -> Vec<Vec<Pt>> {
+    let mut ix = Index::default();
+    for (a, b, w) in segs {
+        ix.file_w(*a, *b, *w);
+    }
+    let widths = ix.widths.clone();
+    let in_pond = |p: Pt| {
+        ponds.iter().any(|(x, y, rx, ry)| {
+            ((p.0 - x) / (rx + BEAD_R_FT)).powi(2) + ((p.1 - y) / (ry + BEAD_R_FT)).powi(2) <= 1.0
+        })
+    };
+    runs.iter()
+        .map(|r| {
+            r.iter()
+                .copied()
+                .filter(|p| !in_pond(*p) && !drowned(*p, &mut ix, &widths))
+                .collect::<Vec<_>>()
+        })
+        .filter(|r| r.len() >= RUN_BEADS.0 as usize)
+        .collect()
+}
+
 /// Whether a bead at `p` lies in the water filed in `ix`.
 fn drowned(p: Pt, ix: &mut Index, widths: &[f64]) -> bool {
     let reach = BEAD_R_FT + widths.iter().copied().fold(0.0, f64::max) / 2.0;
@@ -86,7 +119,7 @@ fn drowned(p: Pt, ix: &mut Index, widths: &[f64]) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{bean_runs, RUN_BEADS};
+    use super::{bean_runs, settle, RUN_BEADS};
     use crate::field::fan::fan;
     use crate::field::index::Index;
     use crate::field::lattice::{basins, ROW_FT};
@@ -112,5 +145,16 @@ mod tests {
             widths.push(2.5);
         }
         assert!(bean_runs(&b, 4, "f0", &mut wet, &widths).is_empty());
+        // finish's settling: a ditch through a run drowns it, a pond on a bead drowns that bead, a dry run stands
+        let run = vec![(0.0, 0.0), (8.0, 0.0), (16.0, 0.0)];
+        let kept = settle(&[run.clone()], &[], &[(16.0, 0.0, 3.0, 3.0)]);
+        assert_eq!(kept, vec![vec![(0.0, 0.0), (8.0, 0.0)]]);
+        assert!(settle(
+            &[run.clone()],
+            &[((8.0, -10.0), (8.0, 10.0), 2.5)],
+            &[(0.0, 0.0, 1.0, 1.0)]
+        )
+        .is_empty());
+        assert_eq!(settle(&[run.clone()], &[], &[]), vec![run]);
     }
 }

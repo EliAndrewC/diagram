@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Split
 from l7r.diagram.settlement.water_ways.water import ditch_style
-from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, FLOODED, RIPE_GOLD, aze_w
+from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, BEAN_GREEN, FLOODED, RIPE_GOLD, aze_w
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -110,3 +110,26 @@ def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
         pocket_pond(s, pond)
     for g in net.get("grave_records", []):
         grave(s, g)
+
+
+def settle(s: Settlement) -> None:
+    """The beans settled after the last water (feature 287 W33, at `finish`): each field's bead slot rewritten from the runs that
+    survive the map's final water - its ditches, channels and streams, the pond and the field ponds - in Rust (`settle_runs`),
+    its record's `bund_beans` with it."""
+    from l7r.diagram.hamletgen.phases_ext import phases
+
+    if not s._bead_slots:
+        return
+    segs: list[tuple[tuple[float, float], tuple[float, float], float]] = []
+    for key in ("field_ditches", "channels", "streams"):
+        for rec in s.M.get(key) or []:
+            pts = rec.get("poly") or []
+            w = float(max(rec.get("w") or 1.5, rec.get("w_tail") or 0.0))
+            segs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), w) for a, b in zip(pts, pts[1:], strict=False)]
+    ponds = [tuple(float(v) for v in s.M["pond"][:4])] if s.M.get("pond") else []
+    ponds += [(float(p["x"]), float(p["y"]), float(p["rx"]), float(p["ry"])) for p in s.M.get("field_ponds") or []]
+    for z, runs, rec, own in s._bead_slots:
+        kept = phases().settle_runs([[(float(x), float(y)) for x, y in r] for r in runs], segs, ponds + [tuple(float(v) for v in p) for p in own])
+        rec["bund_beans"] = [[x, y] for r in kept for x, y in r]
+        beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for r in kept for x, y in r)
+        s.out[z] = f'<g opacity="0.85">{beads}</g>'
