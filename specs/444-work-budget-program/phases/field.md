@@ -40,7 +40,13 @@ phase's working record: what is measured, what is owed, and where to resume.
 - [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
 - [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
 
-## Working record (resume here)
+## Working record
+
+**Resume here:** (1) settle the two plot forms from the readers OUTSIDE the held set - which reader reads the manifest's 6-number
+`fields[].plots`, and whether the held `settlement/fields/` files are the stage's placement or the drawing - before the Rust writes
+either form; (2) then the comb, per "The comb's design, next" below. clippy's dead-code lint is EXPECTED to refuse
+`rust/phases/src/comb/` until `fn stage_field` calls into it. T16 stays open (the round arbiter, ask:set-down-444-t16-session).
+
 
 **The gap between the comb derivation and the stage's output** (`field.keys.json` against the derivation's Writes): besides the
 brook, intake and weir, outline, basins, ditches, beans, wet/dry/flooded plots, hem, pocket pond and channel records, the stage
@@ -89,7 +95,7 @@ WITH T16, not alone: a `field.polder` entry on main without the reader would ref
 standing: the derivation's Writes line gives 0022's 160 by 320 ft parcel while its index row counts about one 160 ft module a pond -
 do not edit it before the landing (the accept is bound to the text as pinned, FR-013); the rebuild's measurement settles it.
 
-**Next:** box 1's owed parts (the plan fields the stage writes; the claims governing each key); the gap's homes (the stage's own
+**Next (superseded by "Where it stands" below - the Decisions are CLEAR):** box 1's owed parts (the plan fields the stage writes; the claims governing each key); the gap's homes (the stage's own
 knob rolls, the graves, the coarse-grain acres - a re-derivation of the comb, or outside rolls); then `### T16 Decisions` and
 `make decide`.
 
