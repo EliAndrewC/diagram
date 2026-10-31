@@ -206,6 +206,28 @@ Occasions: settlement-review on each pool hamlet the port moves (D7: every plan 
 
 **Performance work?** yes - docs/performance-checklist.md's questions follow.
 
+### T19 part B (2026-10-31T02:51Z)
+
+The trigger: `make cohort-landing` under the port (`phases/water_frame.cohort-landing-1.txt`, dev/cohort-log/20261031T025046Z): 47 of
+54 pass the whole gate, against main's 54 of 54 on the same seeds; seeds 3, 20, 21, 36, 37, 903 and 904 newly failing.
+
+1. **What exactly is refusing?** Not water_frame: its own checks hold (56 counted, MODE AUDIT WITHIN, FR-004, FR-012). Later stages
+   refuse, each with a kind main's cohort knows - seed 3 and 36 `SiteRefused` (the seating), 20 and 21 `lane_knots 1`, 904
+   `lane_knots 2`, 37 `OverlapRefused`, 903 `WebRefused`. Seeds 3 and 903 are named by an open found row,
+   `l7r/diagram/hamletgen/ways/web.py::stage_web` (E3, a footpath to every farmhouse 7 ft off a plot): that row is read before any
+   probe. The geometry of each refusal is NOT yet dumped - item 7.
+2. **A3 again.** The rules refusing are the later stages' own (R: research-backed), unchanged by the port.
+3. **A4 again.** Not yet looked at on the map, seed by seed - item 7.
+4. **Moving something placed earlier to suit something later?** Not proposed: no fix is drafted.
+5. **Tuning or changing?** Neither yet.
+6. **The one-sentence test.** "The port re-rolls every plan; seven seeds now refuse in later stages" - the GM would ask whether the
+   later stages fail on new rolls generally. Measured: main's own fresh-seed cohort (dev/cohort-log/20261030T233704Z, seeds from
+   355289, commit 81a8dbc39) passes 46 of 54, on the same refusal kinds. Recorded as a number beside the diagnosis owed, not as an
+   explanation (constitution XIII: a rotated residue is no defense).
+7. **The next step is a measurement:** each of the seven seeds rolled on the port and dumped where it refuses (the lanes and what
+   stands near them, the seat band for the two SiteRefused), the open found row read for 3 and 903; then each named as a defect of a
+   later stage, with its fix, before any route is put to the round arbiter.
+
 ### T19 Decisions
 
 **D6 - The boundary: Python gathers, Rust rolls, Python writes** (FR-010, FR-004): `stage_water_frame` stays a thin Python function
