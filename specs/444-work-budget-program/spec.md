@@ -162,9 +162,12 @@ standards" (`request.md`).
   or stands open in `make claims-report` (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, or an UNCLAIMED decision) in the
   stage's own code: its Rust under `rust/` that the delta changes, and the Python under `l7r/` the delta adds or changes - its
   seam, its `STAGES` entry and any caller it edits - a unit (a function, a method, a module's constants) counting where the delta
-  adds or changes a line of it. Lines the delta deletes take their claims with them. A finding in a file the delta touches only to
-  delete code, at a unit it did not change, belongs to the open-claims feature (the GM 2026-10-27, `request.md`: the claims still
-  open in the Python code base are that feature's) and is filed as its row in the same landing. The ground is amendment 6's words
+  adds or changes a line of it; and at any Python unit the stage's seam or its Rust reads at run time (a constant, a knob or a
+  helper it imports or is passed), whether or not the delta changes a line of it: these are the claims that govern the stage
+  (`request.md` section 3 step 1). Lines the delta deletes take their claims with them. A finding at any other unit - of a file the
+  delta touches only to delete code, or an unchanged unit of a file it edits - belongs to the open-claims feature (the GM
+  2026-10-27, `request.md`: the claims still open in the Python code base are that feature's) and is filed as its row in the same
+  landing. The ground is amendment 6's words
   and the GM's 2026-10-27 words; the old code a phase leaves dead is still deleted in that phase's own landing (FR-005). The claims
   switch's `report` (feature 445) stands for every other landing. water_frame, the Rust stage landed before this rule, is held to it by a task of its
   own: its open findings closed.
@@ -207,8 +210,8 @@ standards" (`request.md`).
   and the gate's seeds hold no fixed block.
 
 - **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding at a unit its delta adds or
-  changes, not refused once the finding is closed, and not refused by a finding at a unit of a file the delta touches only to
-  delete other code; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
+  changes or at an unchanged Python unit the stage's seam reads, not refused once the finding is closed, and not refused by a
+  finding at a unit of a file the delta touches only to delete other code; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
   Python file water_frame's port (T19) changed.
 
 ## Edge Cases
