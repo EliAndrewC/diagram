@@ -31,6 +31,11 @@ phase's working record: what is measured, what is owed, and where to resume.
   (15-26% of the roll), its Python calls 0.29-0.48M, 0.56-1.03M and 1.0-1.3M (one 40-household seed 2.67 s, 2.35M calls);
   `make work-budget`'s field row (2026-10-31, `dev/work-budget/20261031T045730Z-67f90c16d2de.json`): 57,792 counted at 40 against
   the budget's 23,988 (2.4x). Owed: `make perf-fanout`'s hot chains.
+  The rebuilt field (2026-11-01, after the MODE AUDIT's UNCOUNTED - every counter in its loop - and the hem bounded,
+  ask:444-T16-hem-budget): 15,513, 27,682 and 51,910 counted at 20, 40 and 80, exponent 0.87; the re-derived budget
+  (`phases/field_greenfield.derivation.md`, verdicts 4-6) 15,196, 27,238 and 49,631, exponent 0.85, above the standing pin's
+  23,988 at 40 - a raise owed the GM's words (`make budget-change`; the for_gm the hem-budget ruling queued). The before and after
+  split at the hem: `phases/field.hem-budget.md`.
 - [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path.
 - [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; every seed of
