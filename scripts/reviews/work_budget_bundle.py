@@ -411,11 +411,88 @@ def counted_files(root: Path, counts: list[dict]) -> list[Path]:
             found.append(p)
     # ...AND WHEREVER A KEY IS COUNTED BY ITS OWN NAME (the round arbiter's tooling fix on ask:444-T16-field-audit-5): a key that
     # names no function - `write@field_ink`, counted in the ink's `draw` - brought no module, and the audit could not see its loops
-    keys = {k for r in counts for k in (r.get("ops") or {}) if "@" in k}
-    for p in sorted((root / "l7r").rglob("*.py")):
-        if p not in found and any(f'"{k}"' in p.read_text(encoding="utf-8") for k in keys):
-            found.append(p)
+    found += [p for p in keyed_files(root, counts) if p not in found]
     return found
+
+
+def keyed_files(root: Path, counts: list[dict]) -> list[Path]:
+    """The modules under `l7r/` that count one of the stage's keys by its own name (`"write@field_ink"` in the source)."""
+    keys = {k for r in counts for k in (r.get("ops") or {}) if "@" in k}
+    return [p for p in sorted((root / "l7r").rglob("*.py")) if any(f'"{k}"' in p.read_text(encoding="utf-8") for k in keys)]
+
+
+def _defined(tree: ast.Module) -> set[str]:
+    """Every function and class a module defines, at its top level or as a method."""
+    return {n.name for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+
+
+def _module_file(root: Path, dotted: str) -> Path | None:
+    p = root / Path(*dotted.split("."))
+    return p.with_suffix(".py") if p.with_suffix(".py").is_file() else p / "__init__.py" if (p / "__init__.py").is_file() else None
+
+
+def _imports(root: Path, path: Path, tree: ast.Module) -> tuple[dict[str, tuple[str, str]], dict[str, str]]:
+    """A module's imports from `l7r`: each name brought in by `from M import n as b` (b -> (M, n)), each `import M as m` (m -> M)."""
+    pkg = path.relative_to(root).with_suffix("").parts[:-1] if path.name != "__init__.py" else path.relative_to(root).parts[:-1]
+    names: dict[str, tuple[str, str]] = {}
+    mods: dict[str, str] = {}
+    for n in ast.walk(tree):
+        if isinstance(n, ast.ImportFrom):
+            base = ".".join(pkg[: len(pkg) - n.level + 1]) if n.level else ""
+            mod = ".".join(x for x in (base, n.module or "") if x)
+            for a in n.names:
+                if (mod + "." + a.name).startswith("l7r.") and _module_file(root, mod + "." + a.name):
+                    mods[a.asname or a.name] = mod + "." + a.name  # a module imported by name (`from . import water`)
+                elif mod.startswith("l7r."):
+                    names[a.asname or a.name] = (mod, a.name)
+        elif isinstance(n, ast.Import):
+            for a in n.names:
+                if a.name.startswith("l7r."):
+                    mods[a.asname or a.name] = a.name
+    return names, mods
+
+
+def _definer(root: Path, mod: str, name: str) -> Path | None:
+    """The file defining `name` imported from `mod`: the module itself, or, for a package re-exporting it, the submodule that does."""
+    f = _module_file(root, mod)
+    if f is None:
+        return None
+    here = [f] + (sorted(q for q in f.parent.rglob("*.py") if q != f) if f.name == "__init__.py" else [])
+    return next((q for q in here if name in _defined(ast.parse(q.read_text(encoding="utf-8")))), None)
+
+
+def called_files(root: Path, seeds: list[Path]) -> tuple[list[Path], list[str]]:
+    """The modules defining what the stage's own code CALLS - a function imported from `l7r`, a module's function called through
+    it, a Settlement method called on `self` or `s` that the calling file does not define - and each called name whose definition
+    cannot be found (the round arbiter's tooling fix on ask:444-T16-field-audit-6: audits 4 and 5 both found called code missing
+    from their bundles - `field_channel`, `rest_basin` - and the gap cost a superseded GM question)."""
+    mixins = {
+        q: _defined(ast.parse(q.read_text(encoding="utf-8")))
+        for q in sorted((root / "l7r" / "diagram" / "settlement").rglob("*.py"))
+    } if (root / "l7r" / "diagram" / "settlement").is_dir() else {}
+    found: list[Path] = []
+    missing: list[str] = []
+    for p in seeds:
+        tree = ast.parse(p.read_text(encoding="utf-8"))
+        own, (names, mods) = _defined(tree), _imports(root, p, tree)
+        for c in (n.func for n in ast.walk(tree) if isinstance(n, ast.Call)):
+            hit: list[Path | None] = []
+            if isinstance(c, ast.Name) and c.id in names:
+                mod, name = names[c.id]
+                hit = [_definer(root, mod, name)]
+                what = f"{name} (from {mod}, called in {p.relative_to(root)})"
+            elif isinstance(c, ast.Attribute) and isinstance(c.value, ast.Name) and c.value.id in mods:
+                hit = [_definer(root, mods[c.value.id], c.attr)]
+                what = f"{mods[c.value.id]}.{c.attr} (called in {p.relative_to(root)})"
+            elif isinstance(c, ast.Attribute) and isinstance(c.value, ast.Name) and c.value.id in ("self", "s") and c.attr not in own:
+                hit = [q for q, d in mixins.items() if c.attr in d]  # none is no refusal: a dict's or a list's own method
+                what = ""
+            for q in hit:
+                if q is None:
+                    missing.append(what)
+                elif q not in found and q not in seeds:
+                    found.append(q)
+    return found, sorted(set(missing))
 
 
 def newest_source(root: Path) -> float:
@@ -450,7 +527,12 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     run = json.loads(runs[-1].read_text(encoding="utf-8"))
     counts = [{"seed": r["seed"], "households": r["households"], **r["stages"][phase]} for r in run["rows"] if phase in r["stages"]]
     table = json.loads((root / TABLE).read_text(encoding="utf-8"))
+    seeds = [p for p in files if p.suffix == ".py"] + [p for p in keyed_files(root, counts) if p not in files]
     files = files + [p for p in counted_files(root, counts) if p not in files]
+    called, missing = called_files(root, seeds)
+    if missing:
+        return 2, "work-budget-bundle: the stage's code calls what no module under l7r/ defines - the audit could not read it:\n  " + "\n  ".join(missing)
+    files = files + [p for p in called if p not in files]
     chains = fanout_section(root, phase)
     if chains.startswith("STALE: "):
         return 2, f"work-budget-bundle: {chains.removeprefix('STALE: ').strip()}"
