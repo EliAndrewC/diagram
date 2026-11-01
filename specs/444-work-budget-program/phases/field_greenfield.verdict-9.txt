@@ -1,0 +1,35 @@
+UNDERIVED - the hem's tract turns (derivation.md line 74, "4 a tract"): "its rolled turn and on the mean one more before one stands 20 degrees from both" is a retry by rejection sampling. Its mean of 2 tries depends on the range the turn is rolled from, and no range or measurement appears on the page, in the contract, the Bounds or the Keeps.
+
+1. **Is each factor derived?** No. The one blocker:
+   - Line 74 now states a count of turns tried, which verdict-8 asked for, but not why that count holds. A mean of 2 tries means a turn passes half the time, and no source on the page supports that.
+   - This is the same shape as verdict-4's lead (the pond's "about 3 typical" shrinks). That set the precedent that a small figure with no reason still blocks, and S2 rules out a tuned retry count. Here it is 20, 40 and 76 operations.
+   - A derived form: roll the turn once from the allowed range less the two 40-degree windows around the neighbours' turns. That is 2 neighbour reads and 1 roll, 3 a tract. Or name the turn knob's range and derive the odds from it.
+   - Otherwise the arithmetic holds. The totals re-add to 35,430, 64,043 and 118,038. The exponent is ln(118,038 / 35,430) / ln 4 = 0.87. A basin costs about 47 operations against the 4,000 limit, and slack is 1.
+
+2. **Is there a cheaper standard algorithm?**
+   - The cheaper form for the turns is in finding 1: construction in place of search, which the page already uses for the hem's plots and the comb.
+   - S9 holds. No row scores, sorts or paints a growing set to keep a few of its members. Every knob's branch is charged at its share: the hem and its bands at even odds, the seasonal rolls at one in two, the pond at 0.55, the grave at 0.3.
+
+3. **Is any factor padded?** Yes, in the registry's pieces (line 73). Fix it in the same round.
+   - The reason now given for the question's own bins is that a record's pieces meet each other before any is filed. That holds for the brook and a ditch, which have many pieces each.
+   - A hem plot is one ring, and row 67 treats each plot as its own record: the about 2 plots "recorded before it" are counted in the standing cells. A one-piece record meets nothing in bins of its own.
+   - So a hem plot costs 4 + 6.8 x 2 = 17.6, not 31.2. The row becomes about 6,549, 9,598 and 14,399, not 7,324, 11,148 and 17,486.
+
+4. **Is each figure read at its source's size and unit?** Mostly. These go on to the phase's MODE AUDIT, as before:
+   - Row 73 bins 322, 447 and 630 brook stations, but the Bounds give the registry's brook record 430 pieces at 20. This is an under-count.
+   - "A ditch segment of about 120 ft" (lines 69 and 73) still has no source.
+   - A small slip, not blocking: row 67 uses rounded figures where the Bounds give measured totals. At 40 it gives 4,251 where 3,564 + 114 x 6 = 4,248, and at 80 6,224 where 4,865 + 1,362 = 6,227.
+
+**Earlier findings:**
+- Verdict-8 finding 1 is closed on the brook and the ditches:
+  - The question's own bins now carry the stated S4 reason (a record asked whole before any of it is filed), and the hem plot's ring is no longer charged twice.
+  - The offtakes are sourced to the plan's delivery-ditch count knob (4 at 20, 5 at 40 and 80), at 1.04 rows each as measured over 60 fans.
+  - Line 22 now reads "about 2" brook segments.
+- The hem plot's share of the bins is the new padding in Q3.
+- Verdicts 1 to 7 stay closed.
+- Notes for the MODE AUDIT still stand (S4):
+  - the rows' angle breach "refusing the field";
+  - the beans' finish;
+  - line 127's claim that no hem plot is ever refused. Either the hem's lap and outline tests cannot fail, or the tries they refuse go uncharged.
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-8.txt

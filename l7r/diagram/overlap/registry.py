@@ -299,16 +299,17 @@ class Standing:
         # asked once (feature 444 T16's audit: the brook's 448 pieces at 40 households were 100,000 own pairs a call, 200,474 of
         # the field stage's 218,329 counted operations, the pieces' boxes missing in all but a few hundred)
         own_bins: dict[tuple[int, int], list[int]] = {}
-        for i, cells in enumerate(cells_of):
+        several = len(own) > 1  # a record of one piece meets nothing of its own: no bins of its own (MODE BUDGET, 444 T16)
+        for i, cells in enumerate(cells_of if several else []):
             if __debug__:
                 OPS["write@Standing.bins"] += len(cells)
             for cell in cells:
                 own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
             b, cells = boxes[i], cells_of[i]
-            if __debug__:  # each cell read (feature 444 T16's third audit); the later pieces it hands back are the pairs below
+            if __debug__ and several:  # each cell read (feature 444 T16's third audit); the later pieces it hands back, the pairs below
                 OPS["index_cell@Standing.conflicts"] += len(cells)
-            near = sorted({j for cell in cells for j in own_bins.get(cell, ()) if j > i})
+            near = sorted({j for cell in cells for j in own_bins.get(cell, ()) if j > i}) if several else []
             for j in near:  # the record's own pieces against each other: the same rule as any pair
                 if __debug__:
                     OPS["index_examined@Standing.conflicts"] += 1

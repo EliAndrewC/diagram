@@ -234,38 +234,52 @@ fn apart(rolled: (bool, f64), near: &[f64], tests: &mut u64) -> (bool, f64) {
             })
             .fold(f64::INFINITY, f64::min)
     };
-    let most = i32::try_from(TURN_DEG.0).unwrap_or(17);
-    #[expect(
-        clippy::cast_possible_truncation,
-        reason = "the rolled turn is a whole degree within the turn's bound"
-    )]
-    let at = rolled.1 as i32;
-    // nearest the roll first, the rolled side before the other, the smaller turn first at an equal distance: the order a sort
-    // by that cost gave, laid down in that order instead of sorted (the audit, T16)
-    let options: Vec<(bool, f64)> = [rolled.0, !rolled.0]
-        .iter()
-        .flat_map(|&down| {
-            (0..=2 * most).flat_map(move |k| {
-                let pair = if k == 0 {
-                    vec![at]
-                } else {
-                    vec![at - k, at + k]
-                };
-                pair.into_iter()
-                    .filter(move |t| (-most..=most).contains(t))
-                    .map(move |t| (down, f64::from(t)))
-            })
-        })
-        .collect();
-    let dir = |o: &(bool, f64)| o.1 + if o.0 { 90.0 } else { 0.0 };
-    let mut best = (rolled, f64::NEG_INFINITY);
-    for o in &options {
-        let g = gap(dir(o));
-        if g >= TRACT_APART_DEG {
-            return *o;
+    let most = f64::from(TURN_DEG.0);
+    let sides = [rolled.0, !rolled.0];
+    // CONSTRUCTED, NOT SEARCHED (the round arbiter on ask:444-T16-field-budget-cheaper; MODE BUDGET's ninth verdict): on a side,
+    // the turns that stand apart are the range less each neighbor's window `TRACT_APART_DEG` either side of it, so the nearest to
+    // the roll is the roll itself or a window's edge - those few asked, not every turn in cost order (about 38 tests a tract
+    // where the neighbors share the roll's side, the record's measure of the scan; about 4 now)
+    for down in sides {
+        let base = if down { 90.0 } else { 0.0 };
+        let mut cands = vec![rolled.1];
+        for b in near {
+            let c = (b - base + 90.0).rem_euclid(180.0) - 90.0;
+            cands.extend(
+                [c - TRACT_APART_DEG, c + TRACT_APART_DEG]
+                    .into_iter()
+                    .filter(|e| (-most..=most).contains(e)),
+            );
         }
-        if g > best.1 {
-            best = (*o, g);
+        let best = cands
+            .into_iter()
+            .filter(|t| gap(t + base) >= TRACT_APART_DEG)
+            .min_by(|a, b| {
+                ((a - rolled.1).abs(), *a)
+                    .partial_cmp(&((b - rolled.1).abs(), *b))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            });
+        if let Some(t) = best {
+            return (down, t);
+        }
+    }
+    // ...else the one farthest from them all: on each side the range's ends and the turns midway between neighbors' windows
+    let mut best = (rolled, f64::NEG_INFINITY);
+    for down in sides {
+        let base = if down { 90.0 } else { 0.0 };
+        let mut cs: Vec<f64> = near
+            .iter()
+            .map(|b| (b - base + 90.0).rem_euclid(180.0) - 90.0)
+            .collect();
+        cs.sort_by(f64::total_cmp);
+        let mids = cs.windows(2).map(|w| ((w[0] + w[1]) / 2.0).floor());
+        for t in [-most, most].into_iter().chain(mids) {
+            if (-most..=most).contains(&t) {
+                let g = gap(t + base);
+                if g > best.1 {
+                    best = ((down, t), g);
+                }
+            }
         }
     }
     best.0
