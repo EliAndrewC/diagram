@@ -31,6 +31,13 @@ def _verdict(name: str) -> str:
     return (FIX / name / "verdict.txt").read_text(encoding="utf-8").split()[0].strip("*:`").upper()
 
 
+@pytest.fixture(autouse=True)
+def _fresh_chains(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The bundle refuses a call-chain report older than the engine; these tests build from the repository's own, whatever its
+    age, so the engine is read as never newer."""
+    monkeypatch.setattr(wbb, "newest_source", lambda _root: 0.0)
+
+
 def test_the_funnel_is_ruled_loose_or_over_and_the_grid_placer_sound_or_within() -> None:
     """The funnel's ruling is its MODE AUDIT one - today's homesteads code and counters against the rubric's reference budget
     (`funnel/budget.json`): OVER is an audit verdict, and the MODE 1 ruling of 2026-10-28 held the design's literal set. Its MODE
