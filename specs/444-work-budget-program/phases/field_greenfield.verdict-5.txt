@@ -1,0 +1,29 @@
+LOOSE - the overlap registry's cells per water piece: the row charges 2 cells x 3.7 = 7.4 for every piece, but the derivation's own water-index row gives 1.4 cells for a 20 ft brook station (322 of the 376 pieces at 20) and 3.4 for a ditch segment, so the row is 2,689 / 3,880 / 5,695 at 20 / 40 / 80, not 3,124 / 4,510 / 6,653.
+
+1. Is each factor derived? Every row names a reason, so nothing is UNDERIVED. The totals re-add to 16,567, 29,476 and 53,532, and the exponent is ln(53,532 / 16,567) / ln 4 = 0.85. A basin costs about 19 operations in total, far under 4,000. One small padding: the intake (line 50) lists 1 + 4 + 3 + 1 = 9 but charges 10.
+
+2. Is there a cheaper standard algorithm? No row picks a winner from a growing set, so no `- pruning:` line is needed. But two rows charge a knob's branch on every roll (S9):
+- The outline's bands (line 60) charge their build (136, 192, 270) in full. The bands serve only the hem's inside tests (line 100), and the hem is laid at even odds, so the build belongs at the hem's share: 68, 96, 135.
+- The grave (line 61) is "on some maps" in the contract, but the row says "always 33", with the grave's 13 inside it. The derivation never states the grave's share; it should, and charge the grave at it.
+
+3. Is any factor padded? Yes, the lead finding (line 62). The row's "2 cells" a water piece is more than its own source supports: line 64 derives 1.4 cells a brook station and 3.4 a ditch segment. At those figures:
+- a brook station is 1.4 x 3.7 = 5.2;
+- a ditch segment is 3.4 x 3.7 = 12.6;
+- the hem plots stay at 6.
+It is tighter still if you note that 3.7 a crossed cell counts the piece itself, and that line 29 asks each piece only against what already stands.
+
+4. Is each figure read at its source's size and unit? Probably not, for the outline point's box (Bounds, and line 64). It is stated as "the brook's skirt 34 ft, an outline point's box 136 ft a side", and nothing derives 136 from 34. A point tested against a 34 ft skirt on each side has a box 68 ft a side. That box covers (1 + 68/64)^2 = 4.25 cells, not 9.8. 136 is four times the skirt, the radius-read-as-diameter pattern from feature 444 T07. The tighter bound is 289 / 408 / 574 cells read instead of 666 / 941 / 1,323, and the "about 3 brook segments handed back" shrinks with it. If something makes the box 136, the derivation should say what.
+
+Earlier findings. I confirm these closed: verdict-1's eight findings; verdict-2's exponent; verdict-3's cap; verdict-4's findings 1, 2 and 3, and its note on verdict-1 finding 2 (the cut-off branch is gone, and the Keeps state the refusal).
+
+Verdict-4 finding 4 is not closed as written. The derivation says "the outline's segments not filed in the water index", yet:
+- algorithm line 32 still files "every ditch, brook and outline segment";
+- the Indexes line for the water index (line 36) still gives "1.8 outline segments a crossed cell";
+- the Indexes line for the registry (line 39) gives a hem plot's cells as "about 2 plots and 2.4 water segments", while the registry row charges "about 4 laid plots and 2 water segments (6)". Those are two different figures for the same cells.
+
+For the phase's MODE AUDIT (not blocking):
+- Rows' angles (line 53): the row charges the test at 8 a row, while the derivation says the lattice gives no basin under 25 degrees. Either the test cannot fail, or "a breach refusing the field" is an uncharged drop (S4).
+- Bands: "about 4 edges a band" looks like an under-count. 136 edge-band entries over roughly 17 bands at 20 is about 8 a band.
+- Beans: "the finish settling every bead on the final water" may be a placed-then-moved step pushed to a later stage (S4).
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-4.txt

@@ -287,7 +287,9 @@ fn water(
         ix.file_w(*a, *b, *w);
     }
     for p in &f.ring {
-        let d = clearance(*p, 2.0 * inp.brook.skirt, &mut ix);
+        // asked within the skirt itself: a segment nearer than the skirt crosses the box the skirt draws round the point, so the
+        // twice-the-skirt box this asked before read four times the cells for the same answer (the MODE BUDGET, T16)
+        let d = clearance(*p, inp.brook.skirt, &mut ix);
         if d < inp.brook.skirt - 1e-6 {
             return Err(FieldRefused {
                 rule: "the brook's skirt",
@@ -329,7 +331,7 @@ fn one(
         let (ring, deg) = weir(&br, f, inp.brook_side, inp.weir.0, inp.weir.1, thick);
         (ring, deg, form)
     });
-    counts.add("write@intake", 10);
+    counts.add("write@intake", 9);
     let mut work = 0;
     let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work);
     counts.add("write@basin", work);
