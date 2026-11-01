@@ -72595,15 +72595,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_stream#a channel mouth is trimmed to 2 px inside the stream bank (hw - 2, plus the cap radius) so it covers the bank stroke; a drawing convention that no claim names": {
-  "code": "677ff9d20a0cd36f",
-  "core": "677ff9d20a0cd36f",
-  "date": "2026-11-01",
-  "note": "a channel mouth is trimmed to 2 px inside the stream bank (hw - 2, plus the cap radius) so it covers the bank stroke; a drawing convention that no claim names",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_stream#its salts, guards and sentinels": {
   "body": "df97aa0117b3839a",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten)",
@@ -72611,6 +72602,18 @@
   "core": "677ff9d20a0cd36f",
   "date": "2026-11-01",
   "note": "1e9 is a nearest-distance sentinel; 4.5 is read only when best is None, and snap_front returns before using it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_stream#the mouth inside the bank": {
+  "body": "df97aa0117b3839a",
+  "claim": "the mouth inside the bank - CONVENTION: a mouth trimmed 2 px inside the bed's edge, less its cap, so its bed covers the bank stroke",
+  "code": "4fe151fdf646270d",
+  "core": "677ff9d20a0cd36f",
+  "date": "2026-11-01",
+  "note": "drawing-only trim: the end is set at `hw - 2 + capr` from the centerline foot (2 px inside the bank, pulled back by the cap radius) and is skipped when `d >= hw - 2`; it is purely how the joint is shown, so CONVENTION is the right class",
   "pages": {},
   "research": "",
   "rests": [],
