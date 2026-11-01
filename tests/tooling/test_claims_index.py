@@ -941,8 +941,8 @@ def test_a_rust_unit_is_bundled_with_rust_context() -> None:
     """Feature 444 T16's claims round: a `WITH=` unit in a `.rs` file was parsed as Python, and every Rust bundle carrying one
     refused. A Rust item is read by the Rust reader's item scan, and its fence says rust."""
     root = pathlib.Path(__file__).resolve().parents[2]
-    src = cx.context_source(root, "rust/phases/src/field/dike.rs::BAND_FT")
-    assert src.startswith("pub const BAND_FT") and src.rstrip().endswith(";")
-    assert "fn stations" in cx.context_source(root, "rust/phases/src/field/dike.rs::stations")
+    src = cx.context_source(root, "rust/phases/src/water_frame.rs::KnobIn")
+    assert src.startswith("type KnobIn") and src.rstrip().endswith(";")
+    assert "fn quarter_deg" in cx.context_source(root, "rust/phases/src/water_frame.rs::quarter_deg")
     with pytest.raises(ValueError, match="no `nothing`"):
-        cx.context_source(root, "rust/phases/src/field/dike.rs::nothing")
+        cx.context_source(root, "rust/phases/src/water_frame.rs::nothing")
