@@ -80389,24 +80389,24 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::Canal.frame#plots squared to the canal's local line (normal to its tangent, taken over a chord of PLOT_FT.0 either side), not to the paddy's slope": {
-  "code": "68a40227397f8d9d",
-  "core": "68a40227397f8d9d",
-  "date": "2026-11-01",
-  "note": "plots squared to the canal's local line (normal to its tangent, taken over a chord of PLOT_FT.0 either side), not to the paddy's slope",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/field/dry.rs::Canal.frame#the frame": {
+ "rust/phases/src/field/dry.rs::Canal.frame#square to the canal": {
   "body": "e94674345a2c177a",
-  "claim": "the frame - NONE: geometry of the canal's course",
-  "code": "e85e775a40bfa4b9",
+  "claim": "square to the canal - dry-fields-and-their-crops-hatake.drawing: each plot a rectangle square to the canal where it stands, the project's choice - the normal to the course's local line, taken over a plot's length either way, not to the paddy's slope",
+  "code": "d2b43bbfdf9c8820",
   "core": "68a40227397f8d9d",
   "date": "2026-11-01",
-  "note": "the frame's second vector, (-u.1*side, u.0*side), is perpendicular to the canal's local tangent. That is the placement rule \"each is a rectangle square to the canal where it stands\", and the page records it as this project's choice (\"That a plot is squared to the canal, not the rice, is this project's choice\"). Label it research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html rather than NONE",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "normal to the chord along(d-PLOT_FT.0)..along(d+PLOT_FT.0) squares the plot to the canal's local line where it stands, which the drawing page records as the project's choice over squaring to the paddy's slope; the either-way span is a calibration of \"where it stands\"",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+  },
+  "research": "ae8a1665f83d153e",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::Canal.len#the canal's measure": {
   "body": "1acb2f48b67ee7f5",
