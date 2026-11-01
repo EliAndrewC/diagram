@@ -6,10 +6,13 @@ Research: mouths drawn as joins - research/questions/0054-which-way-water-flows-
 import math
 from typing import TYPE_CHECKING, Any, cast
 
+from l7r.diagram.work_counts import OPS
+
 from .._geom import (
     Pt,
     fillet_polyline,
 )
+from .._geom.indexes import PointGrid
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -160,6 +163,31 @@ class WaterClipMixin:
         out = snap_front(out[::-1])[::-1]
         return out
 
+    def _stream_beds(self: Settlement, streams: Any) -> PointGrid:  # type: ignore[misc]
+        """Every stream's bed segments in a grid, each in its box widened by the widest bed's half-width, built once and kept while
+        the streams are the same records with the same courses - held, never their addresses, and a course replaced or grown
+        (`rerecord`'s new `poly`) builds it again.
+
+        Research:
+            the bed index - NONE: an index over the streams' own segments; it decides nothing
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (stream fallback)
+        """
+        key = [(st, st["poly"], len(st["poly"]), st.get("w", 9)) for st in streams]
+        kept = getattr(self, "_stream_beds_kept", None)
+        if kept is not None and len(kept[0]) == len(key) and all(a[0] is b[0] and a[1] is b[1] and a[2:] == b[2:] for a, b in zip(kept[0], key, strict=True)):
+            return cast(PointGrid, kept[1])
+        reach = max(w for *_s, w in key) / 2
+        grid = PointGrid()
+        for _st, sp, n, w in key:
+            OPS["write@stream_beds"] += max(n - 1, 0)
+            grid.extend(
+                (sp[i][0], sp[i][1], sp[i + 1][0], sp[i + 1][1], w / 2)
+                + (min(sp[i][0], sp[i + 1][0]) - reach, min(sp[i][1], sp[i + 1][1]) - reach, max(sp[i][0], sp[i + 1][0]) + reach, max(sp[i][1], sp[i + 1][1]) + reach)
+                for i in range(n - 1)
+            )
+        self._stream_beds_kept = (key, grid)
+        return grid
+
     def _clip_to_stream(self: Settlement, pts: Any, capr: float = 0.0) -> Any:  # type: ignore[misc]
         """Snap a channel endpoint that reaches INTO a stream bed onto the bed's edge (~2px inside
         the bank, so the mouth covers the bank stroke) - the same clean CONFLUENCE `_clip_to_pond`
@@ -183,22 +211,23 @@ class WaterClipMixin:
         if not streams or len(pts) < 2:
             return pts
 
+        grid = self._stream_beds(streams)
+
         def foot(q: Pt) -> tuple[Any, float, float]:
+            # THE NEAREST BED SEGMENT, ASKED OF THE INDEX (the work-budget audit at feature 444 T16's landing: every channel end
+            # measured every segment of every stream). Each segment is filed in its box widened by the widest bed's half-width,
+            # so a segment within that half-width of `q` is in `q`'s cell; one farther cannot put `q` inside any bed, and an
+            # empty answer reads as the scan's "clear of the bed" (`d >= hw - 2`) did.
             best: Any = None
             bd, bhw = 1e9, 4.5
-            for st in streams:
-                sp = st["poly"]
-                hw = st.get("w", 9) / 2
-                for i in range(len(sp) - 1):
-                    ax, ay = sp[i]
-                    bx, by = sp[i + 1]
-                    vx, vy = bx - ax, by - ay
-                    ll = vx * vx + vy * vy or 1.0
-                    t = max(0.0, min(1.0, ((q[0] - ax) * vx + (q[1] - ay) * vy) / ll))
-                    fx, fy = ax + vx * t, ay + vy * t
-                    d = math.hypot(q[0] - fx, q[1] - fy)
-                    if d < bd:
-                        bd, best, bhw = d, (fx, fy), hw
+            for ax, ay, bx, by, hw, *_box in grid.near(q[0], q[1]):
+                vx, vy = bx - ax, by - ay
+                ll = vx * vx + vy * vy or 1.0
+                t = max(0.0, min(1.0, ((q[0] - ax) * vx + (q[1] - ay) * vy) / ll))
+                fx, fy = ax + vx * t, ay + vy * t
+                d = math.hypot(q[0] - fx, q[1] - fy)
+                if d < bd:
+                    bd, best, bhw = d, (fx, fy), hw
             return best, bd, bhw
 
         def snap_front(seq: Any) -> list[Any]:
@@ -263,7 +292,11 @@ class WaterClipMixin:
         # fillet_polyline for the why and the ~2.5-widths radius). Applied AFTER the mouth clips so a
         # snapped pond/moat/stream junction keeps its exact endpoint, and the DRAWN geometry recorded
         # below is the filleted line, which is what the mouth-cover and join checks measure.
+        n_in = len(pts)
         pts = fillet_polyline(pts, 2.5 * max(w0, w1))
+        if __debug__:  # the run walked by the stream clip's copies and reversals (4 a point), the fillet (its run in and out), the
+            # rounded record and the ink - a single path, or a piece a segment with its arc walk (3 a point) (444 T16's sixth audit)
+            OPS["write@field_channel"] += 5 * n_in + len(pts) * (2 + (1 if abs(w1 - w0) < 0.2 else 3))
         rec: dict[str, Any] = {"pts": [[round(x, 1), round(y, 1)] for x, y in pts], "late": late, "w0": round(w0, 2), "w1": round(w1, 2)}
         self.M.setdefault("drawn_channels", []).append(rec)  # ONE rec per call: flush writes bedz per piece, so the last (topmost) piece's z sticks
         if abs(w1 - w0) < 0.2:

@@ -10,12 +10,11 @@ Research:
 from __future__ import annotations
 
 import math
+from bisect import bisect_right
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
 from l7r.diagram.work_counts import OPS
-
-from .landuse import line_cuts
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -44,6 +43,8 @@ class FieldDrawingMixin:
             return
         env = net["envelope"]
         epts = " ".join(f"{x:.1f},{y:.1f}" for x, y in env)
+        if __debug__:  # the floor's ring written into its ink and rounded into its record (444 T16's sixth audit)
+            OPS["write@comb_base_fill"] += 2 * len(net.get("floor") or env)
         col = color or _RICE_GREEN
         # a POLDER supplies an explicit `floor` = the ring-canal INTERIOR (the outermost irrigated channels),
         # so the green greenery is bounded exactly by the ring rather than by the dike-boundary envelope
@@ -88,31 +89,59 @@ class FieldDrawingMixin:
             furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows
             furrow spacing - GUESS: 5 px between rows
             furrow ink - CONVENTION: 0.8 stroke at 0.8 opacity"""
-        xs = [p[0] for p in poly]
-        ys = [p[1] for p in poly]
-        cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
-        diag = math.hypot(max(xs) - min(xs), max(ys) - min(ys))
+        n = len(poly)
+        x0 = y0 = math.inf
+        x1 = y1 = -math.inf
+        sx = sy = 0.0
+        for px_, py_ in ((p[0], p[1]) for p in poly):  # the corners walked once, for the plot's middle and its reach
+            sx, sy = sx + px_, sy + py_
+            x0, x1, y0, y1 = min(x0, px_), max(x1, px_), min(y0, py_), max(y1, py_)
+        cx, cy = sx / n, sy / n
+        diag = math.hypot(x1 - x0, y1 - y0)
         dx, dy = math.cos(theta), math.sin(theta)
         nx, ny = -dy, dx
         # THE ROWS ARE CUT TO THE PLOT AT WRITE TIME (feature 225 FR-004): each row is a line at `theta` and the plot a
-        # convex quadrilateral, so the row's ends are its two crossings of the plot's edges (`line_cuts`) and the
-        # `<clipPath>` the rows sat in - a layer per plot in resvg, 29 on Inashiro, a quarter tile 0.74 -> 0.44 s
-        # without them (specs/225 research R1) - is not needed; a plot a row meets other than twice keeps the clip.
-        rows: list[tuple[float, float, float, float]] = []
+        # convex quadrilateral, so the row's ends are its two crossings of the plot's edges and the `<clipPath>` the rows sat
+        # in - a layer per plot in resvg, 29 on Inashiro, a quarter tile 0.74 -> 0.44 s without them (specs/225 research
+        # R1) - is not needed; a plot a row meets other than twice keeps the clip.
+        # THE ROWS SWEEP THE PLOT (the work-budget audit at feature 444 T16's landing: every row was cut against every edge,
+        # `line_cuts`'s test). A corner's side of the row at offset `ts` is `base + ts` (the row's normal is the unit
+        # perpendicular of its direction), so an edge is crossed by exactly the rows whose offset lies in (its corners'
+        # `-base`s] - the half-open rule `line_cuts` keeps - and those rows are found by bisecting the offsets, not by asking
+        # every row; each row then computes only the crossings it has.
+        offs: list[float] = []
         ts = -diag / 2
-        clip = False
-        if __debug__:  # the plot's corners walked for its middle and its reach (444 T16's audit)
-            OPS["pt_test@furrows"] += 4 * len(poly)
         while ts <= diag / 2:
-            mx, my = cx + nx * ts, cy + ny * ts
-            if __debug__:  # each row cut against every edge of the plot, and written
-                OPS["pt_test@furrows"] += len(poly) + 1
-            cut = line_cuts(poly, mx, my, dx, dy)
-            if cut is None:
-                clip = True
-                break
-            rows += [(mx + dx * t0, my + dy * t0, mx + dx * t1, my + dy * t1) for t0, t1 in cut]
+            offs.append(ts)
             ts += 5
+        base = [(p[0] - cx) * dy - (p[1] - cy) * dx for p in poly]
+        crossing: list[list[int]] = [[] for _ in offs]
+        for i in range(n):
+            a, b = -base[i], -base[(i + 1) % n]
+            for k in range(bisect_right(offs, min(a, b)), bisect_right(offs, max(a, b))):
+                crossing[k].append(i)
+        if __debug__:  # the corners walked for the middle, their sides and each edge's rows, then each row's crossings and its write
+            OPS["pt_test@furrows"] += 3 * n + sum(len(c) + 1 for c in crossing)
+        rows: list[tuple[float, float, float, float]] = []
+        clip = False
+        for ts, edges in zip(offs, crossing, strict=True):
+            if not edges:
+                continue  # the row misses the plot
+            if len(edges) != 2:
+                if __debug__:  # every row then written whole under the clip
+                    OPS["pt_test@furrows"] += len(offs)
+                clip = True  # a concave plot keeps its clip
+                break
+            mx, my = cx + nx * ts, cy + ny * ts
+            cut: list[float] = []
+            for i in edges:
+                (ax, ay), (bx, by) = (poly[i][0], poly[i][1]), (poly[(i + 1) % n][0], poly[(i + 1) % n][1])
+                s1, s2 = (ax - mx) * dy - (ay - my) * dx, (bx - mx) * dy - (by - my) * dx
+                f = s1 / (s1 - s2)
+                ex, ey = ax + (bx - ax) * f, ay + (by - ay) * f
+                cut.append((ex - mx) * dx + (ey - my) * dy)
+            t0, t1 = min(cut), max(cut)
+            rows.append((mx + dx * t0, my + dy * t0, mx + dx * t1, my + dy * t1))
         if clip:
             cid = self._cid("dry")
             pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in poly)

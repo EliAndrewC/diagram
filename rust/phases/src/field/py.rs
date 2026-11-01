@@ -373,19 +373,21 @@ pub fn stage_field<'py>(
     for f in &out.fields {
         fields.append(field_dict(py, f)?)?;
     }
-    // what crosses to Python, written a value at a time (the fifth audit at T16's landing): each plot's ring, figures and six
-    // fields, each channel's and bean's and dry plot's points
+    // what crosses to Python, written a value at a time (the fifth and sixth audits at T16's landing): the fan's ring and the
+    // brook's course, each plot's ring and its nine values, each channel's and bean's points, each dry plot's seven values
     let exported: u64 = out
         .fields
         .iter()
         .map(|f| {
-            f.basins
-                .iter()
-                .map(|b| b.ring.len() as u64 + 7)
-                .sum::<u64>()
+            f.fan.ring.len() as u64
+                + f.brook.pts.len() as u64
+                + f.basins
+                    .iter()
+                    .map(|b| b.ring.len() as u64 + 9)
+                    .sum::<u64>()
                 + f.channels.iter().map(|c| c.pts.len() as u64).sum::<u64>()
                 + f.beans.iter().map(|r| r.len() as u64).sum::<u64>()
-                + 4 * f.dry.len() as u64
+                + 7 * f.dry.len() as u64
         })
         .sum();
     *out.counts.entry("write@py_export".to_owned()).or_insert(0) += exported;
