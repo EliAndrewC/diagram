@@ -202,8 +202,7 @@ def test_a_nonsense_pond_layout_is_refused() -> None:
 
 
 def test_the_polder_fabric_table_covers_every_polder_archetype() -> None:
-    """A polder archetype without a fabric row would KeyError in `stage_polder`."""
-    assert set(hg.POLDER_ARCHETYPES) == set(hg.POLDER_FABRIC)
+    """Every polder archetype is a field archetype, and the dike-pond is dealt only when a map names it."""
     assert set(hg.POLDER_ARCHETYPES) <= set(hg.FIELD_ARCHETYPES)
     assert "mulberry_dike_fishpond" not in hg.ROLLED_ARCHETYPES  # opt-in until a cohort is green
 

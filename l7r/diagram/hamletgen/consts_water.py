@@ -93,11 +93,6 @@ BROOK_TAP_RUN = 70.0
 """Research:
     how far it runs straight - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on the length; 70 px down the fall
 """
-# THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
-# intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
-# closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
-WEIR_HALF_FT = 7.0
-"""Research: weir across the whole brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 7 ft half-length"""
 # WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
 # village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
 # are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:

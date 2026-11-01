@@ -28,7 +28,6 @@ from .consts_fields import KOSATSUBA_SITINGS as KOSATSUBA_SITINGS
 from .consts_fields import LEFTOVER_FORMS as LEFTOVER_FORMS
 from .consts_fields import MANURE_FORMS as MANURE_FORMS
 from .consts_fields import POLDER_ARCHETYPES as POLDER_ARCHETYPES
-from .consts_fields import POLDER_FABRIC as POLDER_FABRIC
 from .consts_fields import POND_BANK_CROWN_FT as POND_BANK_CROWN_FT
 from .consts_fields import POND_BANK_FT as POND_BANK_FT
 from .consts_fields import POND_BANK_PITCH_FT as POND_BANK_PITCH_FT
@@ -57,7 +56,6 @@ from .consts_water import OFFTAKE_DEG as OFFTAKE_DEG
 from .consts_water import OFFTAKE_LADDER as OFFTAKE_LADDER
 from .consts_water import POND_SETBACK_LIMIT as POND_SETBACK_LIMIT
 from .consts_water import SINKS as SINKS
-from .consts_water import WEIR_HALF_FT as WEIR_HALF_FT
 from .consts_water import WEIR_SKEW_DEG as WEIR_SKEW_DEG
 from .consts_water import WEIR_THICK_FT as WEIR_THICK_FT
 from .consts_ways import DOOR_FIXTURE_CLEAR_FT as DOOR_FIXTURE_CLEAR_FT

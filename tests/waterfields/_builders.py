@@ -5,8 +5,14 @@ The old arguments are taken and the ones the rebuilt comb has no use for are ign
 
 from typing import Any
 
-from l7r.diagram.hamletgen.consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, OFFTAKE_DEG, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT
-from l7r.diagram.hamletgen.field_stage import BROOK_STATION, BROOK_W, CELL_SHARE, comb_net
+from l7r.diagram.hamletgen.consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, OFFTAKE_DEG, WEIR_SKEW_DEG, WEIR_THICK_FT
+from l7r.diagram.hamletgen.field_stage import (
+    BROOK_STATION,
+    BROOK_W,
+    CELL_SHARE,
+    WEIR_HALF,  # the stage's own half-length, as it passes it
+    comb_net,
+)
 from l7r.diagram.hamletgen.phases_ext import phases
 
 
@@ -23,7 +29,7 @@ def lay_comb(W: float = 1400, H: float = 1400, *_args: Any, seed: int = 4, down_
         1.0,
         brook,
         ([0.30, 0.62, 0.93], [0.55]),
-        (WEIR_HALF_FT, WEIR_SKEW_DEG, dict(WEIR_THICK_FT)),
+        (WEIR_HALF, WEIR_SKEW_DEG, dict(WEIR_THICK_FT)),
         "medium",
         48.0 * CELL_SHARE,
         knobs,
