@@ -366,6 +366,32 @@ The trigger: the cohort at 2026-10-31T21:02Z - seeds 7, 9, 902 and 905 newly fai
 9. **After a ruling, the step it named?** The ruling on `ask:444-T16-fr021-scope` named route (a), taken: the incidental touches
    reverted, T23 filed, the findings in the port's files closed.
 
+### T16 part B (2026-11-01T06:23Z)
+
+The trigger: the cohort at 2026-11-01T06:22Z (`dev/cohort-log/20261101T062233Z-diagram-backlog-2743472.json`) - seeds 3, 4 and 9
+newly failing at the seating ("no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge")
+and 905 at the site, after the hem was bounded (ask:444-T16-hem-budget, route b).
+
+1. **What exactly is refusing?** The seating (`cluster.seat_cluster`), a Python stage after the field: with the hem's side fixed
+   once for the canal's course, every plot along a cleared head stands upslope of it, where before about half flipped onto the
+   rice and were refused, leaving the head's margin bare by accident. `make rust-gate` passes the same field on 54 seeds
+   (`dev/rust-gate/20261101T061056Z.json`, 0 failing).
+2. **A3 again.** Amendment 5 (FR-019, FR-020; the GM 2026-10-31: "no Rust stage ever ends with any failing checks at the point
+   where that stage has completed"): a later Python stage's failure on a moved map is its own port's, not the field's to tune.
+3. **A4 again.** The rule that refuses is the seating's room beside the hem; the hem stands where research/questions/0006 puts
+   it ("a hem of small rectangular plots just upslope of the supply canal that runs along the paddy's high edge"), the whole
+   canal on a cleared middle.
+4. **Moving something placed earlier to suit something later?** No: the hem is not bent to the seating; its accidental gaps
+   are gone.
+5. **Tuning or changing?** Neither for these seeds: the change was the hem's bound (the arbiter's ruling), not a seat.
+6. **The one-sentence test.** "The field in Rust passes every check of its own; the hem now stands wholly where 0006 puts it,
+   and the seating that needed its accidental gaps is the seating port's to meet (amendment 5)."
+7. **The next step is a measurement.** The field's MODE BUDGET on the re-derived budget, then the stage gate on a fresh block;
+   the seating's margin beside a full hem is noted for its port (`make speckit-todo`'s seat stage) and for the GM's review.
+8. **Every route measured before the arbiter was asked?** No new ruling asked: nothing here is a process stop.
+9. **After a ruling, the step it named?** The ruling on `ask:444-T16-hem-budget` named route (b): the hem re-derived and bounded,
+   now before MODE BUDGET.
+
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
 - **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the
