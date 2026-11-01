@@ -233,6 +233,9 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)
 ///     the grave's form - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none
 ///     the water filed - NONE: each ditch's segments at the wider of its two ends, the brook at its width, so every test of the water asks its widest
+///     the intake's place and siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake at the left, the center or the right of the fan's head, and (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html) in a straight reach or on the outside of a bend - the `intake_place` and `intake_siting` knobs, read here for the brook
+///     the grave off the pond's plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave beside a pocket pond; never in the pond's plot
+///     the hem later - NONE: each field built without its dry plots; `build` hems the first one once every field stands
 fn one(
     inp: &FieldIn,
     f: &Fan,

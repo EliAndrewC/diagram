@@ -505,6 +505,7 @@ class BridgesMixin:
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
             polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, and drainage ditches carry none - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`) caps the supply ditches' counts it names (the drain is never a supply ditch, so carries none either way)
             the caps by side - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; at most three on the village's own supply ditch (a toe, or the feeder at the head), two a toe at the foot, the rest by their length
+            no plank onto a fallow patch - NONE: the overlap matrix's refusal (`admits`), the rule its own
             a join rules a seat out - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
@@ -592,8 +593,8 @@ class BridgesMixin:
             _lw = [taper_w(w, w_tail, k2 / 40.0) for k2 in range(41)]
             n = max(1, round(total * sum(1 for v in _lw if worth_planking(v, v, self.ftpx)) / len(_lw) / spacing))
             # SIDE-AWARE crossings (research 2026-07-22): on a polder the ring-canal `seg` tag caps crossings
-            # per side - they cluster on the SETTLEMENT toe, one on each interior column ditch, the feeder and the far
-            # toe, NONE on the drain (people cross to the fields where they live, then walk the bund network). `seg_caps` maps seg -> max planks (0 = none); an untagged ditch uses the spacing.
+            # per side - at most three on the SETTLEMENT toe (two a toe at the foot), the rest by their length, NONE on the drain
+            # (people cross to the fields where they live, then walk the bund network). `seg_caps` maps seg -> max planks (0 = none); an untagged ditch uses the spacing.
             if seg_caps is not None and d.get("seg") in seg_caps:
                 cap = seg_caps[d["seg"]]
                 if cap <= 0:

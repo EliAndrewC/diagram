@@ -98,7 +98,7 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 ///     the meander outward - GUESS: the record silent on a brook's swing; held to the side away from the fan so the skirt is kept, its swing the wider of the plan's wander and `MEANDER_FT`, so one wave carries the course's whole stray
 ///     the intake's siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: an offtake in a straight reach, or else on the outside of a bend, a mouth on the concave side - the `intake_siting` knob: at a bend's apex on the fields' side, or where the wave crosses its line on a straight reach
 ///     the middle intake raised - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork - for a middle intake the race as long as the swing out past the head's corner asks, the plan's `lead` where that is longer
-///     the shoulder intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the head race leaves the intake at an acute angle pointing downstream and runs to the fork - the intake `lead` up the race from the head's corner, turned `offtake_deg` off the fall
+///     the shoulder intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the head race leaves the intake at an acute angle pointing downstream and runs to the fork - the intake `lead` up the race from the head's corner, turned `offtake_deg` off the fall - off the brook's own line, which on a straight reach leans out by the wave's slope
 ///     above the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a hamlet's brook comes down off the high ground - from off the map straight down the fall along the intake's line, meandering
 #[expect(
     clippy::many_single_char_names,
@@ -107,7 +107,13 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 #[must_use]
 pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) -> Brook {
     let (center, straight) = place;
-    let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
+    let swing_deg = (MEANDER_FT.max(b.wander) / 2.0 * std::f64::consts::TAU / MEANDER_WAVE_FT)
+        .atan()
+        .to_degrees();
+    // the race's angle is read off the brook's line: on a straight reach the brook leans out by the wave's slope there
+    let (sin, cos) = (b.offtake_deg - if place.1 { swing_deg } else { 0.0 })
+        .to_radians()
+        .sin_cos();
     // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
     let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
     let secant = lean.hypot(1.0);

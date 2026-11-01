@@ -167,7 +167,7 @@ STAGES = (
 """The order a hamlet is built in.
 
 Research:
-    water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
+    water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: lay a settlement's water network out first and cut the paddies between its lines, the drain along its field's low line - the water frame, then the field with its own drain, then the sink the drain runs to
     homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - research/questions/0196-communal-wells-ido.drawing.html: the lanes are drawn after the farmsteads, so a lane-side well is seated once the lanes stand; a well dug where the track already runs
     lane-side wells after the web - research/questions/0196-communal-wells-ido.drawing.html: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)

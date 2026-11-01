@@ -287,7 +287,7 @@ impl Warp {
 ///
 /// Research:
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
-///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted
+///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted; the dike-pond's chessboard the one exception, attested on its own (the next claim)
 ///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic - drawn straight, the `pond_layout` knob's other form
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided
@@ -296,7 +296,8 @@ impl Warp {
 ///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank
 ///     the pond's reeds - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)
 ///     the module by form - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a rice polder's module about 190 ft with its 8 ft ditch corridors and 3 ft bunds, a dike-pond block's about 160 ft with gaps of about 22 ft both ways
-///     the ring canal and the wild pond - NONE: `RING_FT` and `POND_FT`, claimed at the constants
+///     the ring canal's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side - `RING_FT` out from the plots, inside the dike's inner face
+///     the wild pond's size - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on its size and distance (`POND_FT`)
 ///     the inlet's side - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent beyond its pool's one polder (the wild pond to its northwest); the inlet, the pond and the outfall on one side of the fall
 #[must_use]
 pub fn polder(
@@ -601,6 +602,7 @@ pub fn outfall(sluice: Pt, down_deg: f64, canvas: Pt) -> Vec<Pt> {
 ///
 /// Research:
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`states::REST_PLOTS`), no two sharing a bund, likelier down the slope
+///     never a low plot - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder tints every low plot, the tint marking the ground, not the season - so a wet low plot is never drawn resting
 #[must_use]
 pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
     if !unsettled || plots.is_empty() {
@@ -629,7 +631,8 @@ pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
             let o = &plots[j];
             a.col == o.col && a.row <= o.row + o.span && o.row <= a.row + a.span
         };
-        if !chosen.contains(&i) && !chosen.iter().any(|&j| shares(j)) {
+        // ...never a low plot: its wet tint marks the ground, not the season (0007)
+        if !a.low && !chosen.contains(&i) && !chosen.iter().any(|&j| shares(j)) {
             chosen.push(i);
         }
     }
