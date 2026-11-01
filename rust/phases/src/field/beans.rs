@@ -37,6 +37,8 @@ pub const BEAD_R_FT: f64 = 1.5;
 ///
 /// Research:
 ///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund
+///     which bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on which bunds carry them; the bund between two neighbors in a row, never a row's foot, the fan's outer bund or the bund the drain runs in
+///     the run on its bund - NONE: its beads about the bund's middle, none past a bead's radius of either end
 #[must_use]
 pub fn bean_runs(
     basins: &[Basin],
@@ -59,11 +61,11 @@ pub fn bean_runs(
         let (top, foot) = (b.ring[1], b.ring[2]);
         let mid = (f64::midpoint(top.0, foot.0), f64::midpoint(top.1, foot.1));
         let along = unit(top, foot);
+        let reach = super::geom::dist(top, foot) / 2.0 - BEAD_R_FT;
         let run: Vec<Pt> = (0..n)
-            .map(|k| {
-                let off = (f64::from(k) - f64::from(n - 1) / 2.0) * BEAD_STEP_FT;
-                (mid.0 + along.0 * off, mid.1 + along.1 * off)
-            })
+            .map(|k| (f64::from(k) - f64::from(n - 1) / 2.0) * BEAD_STEP_FT)
+            .filter(|off| off.abs() <= reach)
+            .map(|off| (mid.0 + along.0 * off, mid.1 + along.1 * off))
             .filter(|p| !drowned(*p, ix, widths))
             .collect();
         if run.len() >= RUN_BEADS.0 as usize {
@@ -79,6 +81,7 @@ pub fn bean_runs(
 ///
 /// Research:
 ///     a run shows at least two - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries them shows at least two beads
+///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund - none inside a pond grown by a bead's radius, none within a bead's radius past a line's half-width
 #[must_use]
 pub fn settle(
     runs: &[Vec<Pt>],
@@ -107,6 +110,9 @@ pub fn settle(
 }
 
 /// Whether a bead at `p` lies in the water filed in `ix`.
+///
+/// Research:
+///     the test - NONE: geometry against the filed water
 fn drowned(p: Pt, ix: &mut Index, widths: &[f64]) -> bool {
     let reach = BEAD_R_FT + widths.iter().copied().fold(0.0, f64::max) / 2.0;
     ix.near((p.0 - reach, p.1 - reach), (p.0 + reach, p.1 + reach))

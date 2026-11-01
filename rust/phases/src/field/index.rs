@@ -2,7 +2,7 @@
 //! cells it overlaps. Written from the derivation's Indexes.
 //!
 //! Research:
-//!     the water index - CONVENTION: cells of 64 ft, the derivations' Indexes; each segment filed in every cell it crosses
+//!     the water index - NONE: plumbing, cells of 64 ft (the derivations' Indexes), each segment filed in every cell it crosses
 
 use std::collections::HashMap;
 
@@ -11,7 +11,7 @@ use super::fan::Pt;
 /// The index's cell (feet).
 ///
 /// Research:
-///     the index's cell - CONVENTION: 64 ft, the derivations' Indexes
+///     the index's cell - NONE: plumbing, a lookup grid's 64 ft, the derivations' Indexes
 pub const CELL_FT: f64 = 64.0;
 
 /// The segments filed, and the cells each lies in.

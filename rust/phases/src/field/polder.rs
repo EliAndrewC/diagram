@@ -169,7 +169,13 @@ impl Warp {
     ///
     /// Research:
     ///     the rolls - NONE: each line's bow and each crossing's nudge drawn within `BOW_NUDGE_FT`, either way
-    fn new(seed: i64, form: &'static str, size: Pt, lattice: (f64, Pt), grid: (usize, usize)) -> Self {
+    fn new(
+        seed: i64,
+        form: &'static str,
+        size: Pt,
+        lattice: (f64, Pt),
+        grid: (usize, usize),
+    ) -> Self {
         let (module, pitch) = lattice;
         let mut rng = knob_rng(seed, "polder_warp");
         let ph = (
@@ -214,6 +220,10 @@ impl Warp {
     /// Research:
     ///     the deformation - NONE: each line's bow along it (a single arch, nothing at its ends), interpolated between lines, and
     ///     the crossings' nudges interpolated between crossings, so both sides of one bund move together
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "the plane geometry's own names"
+    )]
     fn at(&self, u: f64, x: f64) -> Pt {
         let (length, breadth) = self.size;
         let pi = std::f64::consts::PI;
@@ -245,7 +255,12 @@ impl Warp {
         let (bow_u, ku, fu) = lerp(&self.rows, tu);
         let (bow_x, kx, fx) = lerp(&self.cols, tx);
         let node = |k: usize, j: usize| self.nodes[k][j];
-        let (a, b, c, d) = (node(ku, kx), node(ku, kx + 1), node(ku + 1, kx), node(ku + 1, kx + 1));
+        let (a, b, c, d) = (
+            node(ku, kx),
+            node(ku, kx + 1),
+            node(ku + 1, kx),
+            node(ku + 1, kx + 1),
+        );
         let mix = |p: f64, q: f64, r: f64, s: f64| {
             (p * (1.0 - fx) + q * fx) * (1.0 - fu) + (r * (1.0 - fx) + s * fx) * fu
         };
@@ -424,7 +439,12 @@ fn plots(
 ///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 4.5 to 1.5 across the head, delivery 2.5 to 1.2 down each column, drain 1.2 to 5.5 ft across the tail to the outfall's corner
 ///     the flanks - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral, its 1.5 ft tail held down each flank of the ring
 ///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it
-fn ditches(put: &dyn Fn(f64, f64) -> Pt, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64)) -> Vec<Ditch> {
+fn ditches(
+    put: &dyn Fn(f64, f64) -> Pt,
+    canal: &[Pt],
+    size: (f64, f64),
+    cols: (usize, f64, f64),
+) -> Vec<Ditch> {
     let (n, module, gap) = cols;
     let mut out = vec![
         Ditch {
@@ -461,13 +481,20 @@ fn ditches(put: &dyn Fn(f64, f64) -> Pt, canal: &[Pt], size: (f64, f64), cols: (
         clippy::cast_sign_loss,
         reason = "a small positive count of stations"
     )]
-    let steps = ((size.0 + 2.0 * RING_FT.0) / (module / 4.0)).ceil().max(1.0) as usize;
+    let steps = ((size.0 + 2.0 * RING_FT.0) / (module / 4.0))
+        .ceil()
+        .max(1.0) as usize;
     for c in 1..n {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let x = c as f64 * (module + gap) - gap / 2.0;
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let pts = (0..=steps)
-            .map(|k| put(-RING_FT.0 + (size.0 + 2.0 * RING_FT.0) * k as f64 / steps as f64, x))
+            .map(|k| {
+                put(
+                    -RING_FT.0 + (size.0 + 2.0 * RING_FT.0) * k as f64 / steps as f64,
+                    x,
+                )
+            })
             .collect();
         out.push(Ditch {
             role: "lateral",

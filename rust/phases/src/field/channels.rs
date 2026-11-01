@@ -15,6 +15,9 @@ use crate::pyrand::knob_rng;
 
 /// One channel: its role (`main` for the head race and each leg of a supply canal, `branch` for a delivery ditch, `drain`; the
 /// manifest's `field_ditches` roles), its course from head to tail, and its width at each end (feet).
+///
+/// Research:
+///     a channel's record - NONE: the record's type, holding what `channels` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Channel {
     pub role: &'static str,
@@ -43,6 +46,11 @@ pub const THREAD_W: f64 = 1.5;
 /// Research:
 ///     delivery ditch - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 -> 1.2
 pub const DELIVERY_W: (f64, f64) = (2.5, 1.2);
+/// A delivery ditch's head at most this share of its canal's width where it leaves it.
+///
+/// Research:
+///     the delivery's cap - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a delivery ditch's head is capped at 0.8 of its canal's local width where it leaves it
+pub const DELIVERY_CAP: f64 = 0.8;
 /// The drain's width at its head and at its outfall (feet).
 ///
 /// Research:
@@ -148,6 +156,7 @@ fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> 
 ///
 /// Research:
 ///     the fork - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race splits into a supply canal along the upper edge and one along the far edge
+///     the fork's place - GUESS: the record silent on where on the fan's head the race divides; at its corner on the brook's side, where the race arrives
 #[must_use]
 pub fn division(fan: &Fan, brook_side: f64) -> Pt {
     fan.at(0.0, brook_side)
@@ -162,6 +171,7 @@ pub fn division(fan: &Fan, brook_side: f64) -> Pt {
 ///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals at right angles, one drain gathering the water along the lowest line
 ///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
+///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`)
 #[must_use]
 pub fn channels(
     fan: &Fan,
@@ -239,17 +249,21 @@ pub fn channels(
                 w_tail: w + (THREAD_W - w) * b,
             });
         }
-        for &r in &lines_at {
+        for (j, &r) in lines_at.iter().enumerate() {
             // along its row's bund, bowed as the bund is, from the flank to the drain
             let pts = (0..=5).map(|k| {
                 let q = s * (1.0 - f64::from(k) / 5.0);
                 fan.at(lines.u(r, q), q)
             });
+            // the canal's width where it leaves it: the junction ends the canal's leg `j`
+            #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
+            let local = w + (THREAD_W - w) * ((j + 1) as f64 / n).min(1.0);
+            let head = DELIVERY_W.0.min(DELIVERY_CAP * local);
             out.push(Channel {
                 role: "branch",
                 pts: pts.collect(),
-                w: DELIVERY_W.0,
-                w_tail: DELIVERY_W.1,
+                w: head,
+                w_tail: DELIVERY_W.1.min(head),
             });
         }
     }

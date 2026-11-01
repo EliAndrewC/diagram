@@ -31,8 +31,16 @@ pub const GOLD_IN: u32 = 20;
 /// Research:
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: two to four whole plots in each field, a GUESS
 pub const REST_PLOTS: (u32, u32) = (2, 4);
+/// Of this many maps, one draws the seasonal plots (the flooded and the gold) at all.
+///
+/// Research:
+///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: on some maps about one rice plot in sixteen is drawn still flooded and one in twenty gold - the maps that do rolled at even odds, a GUESS of "some"
+pub const SEASONAL_IN: u32 = 2;
 
 /// What a basin is drawn as.
+///
+/// Research:
+///     a basin's state - NONE: the record's type, holding what `states` decides
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum State {
     Green,
@@ -43,6 +51,9 @@ pub enum State {
 }
 
 /// A draw in [0, n) for one plot, keyed by the map's seed, the field's tag, the draw's name and the plot's place.
+///
+/// Research:
+///     the draw - NONE: a seeded draw, positional; what it decides is `states`'s
 fn plot_draw(seed: i64, tag: &str, what: &str, b: &Basin, n: u32) -> u32 {
     knob_rng(seed, &format!("{tag}:{what}:{}:{}", b.row, b.col)).randbelow(n)
 }
@@ -55,18 +66,23 @@ fn plot_draw(seed: i64, tag: &str, what: &str, b: &Basin, n: u32) -> u32 {
 ///     a pointed plot stays green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: leaves green any plot of that row that tapers to a point
 ///     resting down the slope - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a plot's chance of resting grows the farther down the field's slope it lies, a GUESS
 ///     no two share a bund - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: no two share a bund, a drawing convention
+///     a resting plot from the green - NONE: a plot already drawn wet, flooded or gold is not taken, so each plot wears one state
+///     one state a plot - NONE: wet first, then flooded, then gold, each plot drawn as one
+///     the comb's wet row - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a comb field gives each plot of its lowest row a 45% chance of the tint; a polder tints every low plot, at its own stage (`field_stage._polder`)
+///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the flooded and the gold drawn on some maps (`SEASONAL_IN`), not every map
 #[must_use]
 pub fn states(basins: &[Basin], seed: i64, tag: &str, unsettled: bool) -> Vec<State> {
     let last = basins.iter().map(|b| b.row).max().unwrap_or(0);
+    let seasonal = knob_rng(seed, &format!("{tag}:seasonal")).randbelow(SEASONAL_IN) == 0;
     let mut out: Vec<State> = basins
         .iter()
         .map(|b| {
             let pointed = (0..b.ring.len()).any(|i| corner_deg(&b.ring, i) < ARROW_POINT_DEG);
             if b.row == last && !pointed && plot_draw(seed, tag, "wet", b, 100) < WET_PCT {
                 State::Wet
-            } else if plot_draw(seed, tag, "flooded", b, FLOODED_IN) == 0 {
+            } else if seasonal && plot_draw(seed, tag, "flooded", b, FLOODED_IN) == 0 {
                 State::Flooded
-            } else if plot_draw(seed, tag, "gold", b, GOLD_IN) == 0 {
+            } else if seasonal && plot_draw(seed, tag, "gold", b, GOLD_IN) == 0 {
                 State::Gold
             } else {
                 State::Green
@@ -126,9 +142,15 @@ mod tests {
         let s = states(&b, 4, "f0", false);
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();
         assert!(!wet.is_empty() && wet.iter().all(|&i| b[i].row == last));
-        let flooded = s.iter().filter(|x| **x == State::Flooded).count();
+        // the flooded and the gold on some maps, not every one
+        let maps: Vec<_> = (0..16).map(|seed| states(&b, seed, "f0", false)).collect();
+        let seasonal = |m: &Vec<State>| m.contains(&State::Flooded) || m.contains(&State::Gold);
+        let some = maps.iter().filter(|m| seasonal(m)).count();
+        assert!(some > 0 && some < maps.len(), "{some} of {}", maps.len());
+        let with = maps.iter().find(|m| m.contains(&State::Flooded)).unwrap();
+        let flooded = with.iter().filter(|x| **x == State::Flooded).count();
         assert!((b.len() / 40..b.len() / 8).contains(&flooded));
-        assert!(s.contains(&State::Gold));
+        assert!(maps.iter().any(|m| m.contains(&State::Gold)));
         assert!(!s.contains(&State::Rest), "a settled field rests none");
         assert_eq!(s, states(&b, 4, "f0", false), "positional");
         for seed in 0..12 {

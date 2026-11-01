@@ -4,12 +4,18 @@
 //!
 //! Research:
 //!     ponds ringed by banks - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: ponds of uneven shape, each ringed by a bank of its own mud planted with rows of low mulberry bushes
-//!     one inset a village - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village, measured on its parcel of median area
+//!     one inset a village - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village, measured on its parcel of median area - the fry ponds' banks the same
 
 use super::fan::Pt;
 use super::geom::{dist, signed_area, unit};
-use super::ponds::rounded;
+use super::ponds::{pushed_in, rounded};
 use crate::pyrand::knob_rng;
+
+/// A pond's bank or water: its SVG path and the points that sample it.
+///
+/// Research:
+///     a path - NONE: the record's type
+type Path = (String, Vec<Pt>);
 
 /// Of this many parcels, one is left in standing rice where the `leftover` form is rice.
 ///
@@ -21,12 +27,11 @@ pub const RICE_IN: u32 = 10;
 /// Research:
 ///     the fry ponds - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: the smallest ponds are given to fry until they hold up to seven-tenths of its pond water
 pub const FRY_SHARE: f64 = 0.7;
-/// A bank's reach (the corner's rounding) and a pond's (feet); a nursery pond's water stands nearer its bank (feet).
+/// A bank's reach (the corner's rounding) and a pond's (feet).
 ///
 /// Research:
-///     the rounding - CONVENTION: a dug pond rounded at its corners, the bank's 8 ft and the water's 16 ft; a nursery pond's water 2.5 ft in at 12 ft
+///     the rounding - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html silent on a pond's corners; the bank's cut back 8 ft and the water's 16 ft
 pub const REACH_FT: (f64, f64) = (8.0, 16.0);
-pub const FRY_FT: (f64, f64) = (2.5, 12.0);
 /// The mulberry on a bank: a row a this many feet of the bank's width, its bushes this far apart (feet), each crown's radius.
 ///
 /// Research:
@@ -40,11 +45,14 @@ pub const FRUIT_FT: (f64, (f64, f64)) = (18.0, (4.0, 5.0));
 /// The tea on a bank: two hedges, each this wide, broken every this many feet by a gap this long (feet).
 ///
 /// Research:
-///     tea on the bank - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide and broken every 7.5 ft, a GUESS; the gap 1.5 ft a CONVENTION
+///     tea on the bank - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide and broken every 7.5 ft, a GUESS - the breaks 1.5 ft long, a GUESS too
 pub const TEA_FT: (f64, f64, f64) = (3.0, 7.5, 1.5);
 
 /// One converted parcel: its kind (`pond`, `fry` or `rice`), its parcel, and for a pond its bank and water (the SVG path and its
 /// samples).
+///
+/// Research:
+///     a parcel's record - NONE: the record's type, holding what `convert` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Parcel {
     pub kind: &'static str,
@@ -54,6 +62,9 @@ pub struct Parcel {
 }
 
 /// What the banks grow: bushes and trees as (x, y, radius), hedges as runs of points, and the crop's name.
+///
+/// Research:
+///     the crops' record - NONE: the record's type, holding what `grow` decides
 #[derive(Debug, Clone, PartialEq, Default)]
 pub struct Crops {
     pub crop: String,
@@ -61,30 +72,19 @@ pub struct Crops {
     pub hedges: Vec<Vec<Pt>>,
 }
 
-/// The ring shrunk about its middle so each side comes `by` feet in, in proportion to its length against the mean side.
+/// The ring pushed in `by` feet on every side (`ponds::pushed_in`), the line a row of the bank's crop runs on; the ring itself
+/// where the bank holds no such line.
+///
+/// Research:
+///     the row's line - NONE: geometry
 fn shrunk(ring: &[Pt], by: f64) -> Vec<Pt> {
-    #[expect(clippy::cast_precision_loss, reason = "a parcel's few corners")]
-    let count = ring.len() as f64;
-    let middle = (
-        ring.iter().map(|p| p.0).sum::<f64>() / count,
-        ring.iter().map(|p| p.1).sum::<f64>() / count,
-    );
-    let mean = (0..ring.len())
-        .map(|i| dist(ring[i], ring[(i + 1) % ring.len()]))
-        .sum::<f64>()
-        / count;
-    let s = (1.0 - 2.0 * by / mean.max(1.0)).max(0.05);
-    ring.iter()
-        .map(|p| {
-            (
-                middle.0 + (p.0 - middle.0) * s,
-                middle.1 + (p.1 - middle.1) * s,
-            )
-        })
-        .collect()
+    pushed_in(ring, by).unwrap_or_else(|| ring.to_vec())
 }
 
 /// Points along a closed ring every `step` feet.
+///
+/// Research:
+///     the stations - NONE: geometry
 fn along(ring: &[Pt], step: f64) -> Vec<Pt> {
     let mut out = Vec::new();
     let mut next = 0.0;
@@ -102,34 +102,34 @@ fn along(ring: &[Pt], step: f64) -> Vec<Pt> {
     out
 }
 
-/// The village's inset: the median parcel's apothem (twice its area over its perimeter) times one less the square root of the
-/// water's `share`, so a median parcel's water is that share of it.
+/// The village's inset: the bank's width at which the parcel of median area, pushed in that far on every side, keeps the water's
+/// `share` of itself - for a four-sided parcel of area A and perimeter P its water is A - P d + 4 d^2, solved for d.
 ///
 /// Research:
 ///     the inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village, measured on its parcel of median area; a drier split draws a wider bank
 #[must_use]
 pub fn inset(parcels: &[Vec<Pt>], share: f64) -> f64 {
-    let mut ap: Vec<f64> = parcels
-        .iter()
-        .map(|r| {
-            2.0 * signed_area(r).abs()
-                / (0..r.len())
-                    .map(|i| dist(r[i], r[(i + 1) % r.len()]))
-                    .sum::<f64>()
-                    .max(1.0)
-        })
-        .collect();
-    ap.sort_by(f64::total_cmp);
-    ap.get(ap.len() / 2).copied().unwrap_or(0.0) * (1.0 - share.clamp(0.0, 1.0).sqrt())
+    let mut by_area: Vec<&Vec<Pt>> = parcels.iter().collect();
+    by_area.sort_by(|a, b| signed_area(a).abs().total_cmp(&signed_area(b).abs()));
+    let Some(median) = by_area.get(by_area.len() / 2) else {
+        return 0.0;
+    };
+    let area = signed_area(median).abs();
+    let perimeter: f64 = (0..median.len())
+        .map(|i| dist(median[i], median[(i + 1) % median.len()]))
+        .sum();
+    let dry = 1.0 - share.clamp(0.0, 1.0);
+    (perimeter - (perimeter * perimeter - 16.0 * area * dry).max(0.0).sqrt()) / 8.0
 }
 
 /// The block's `parcels` converted: each rolled from its own stream - rice at one in `RICE_IN` where `leftover` is rice, else a
-/// pond, a fry village's smallest ponds its nursery up to `FRY_SHARE` of the ponds - each pond's bank and water rounded at `inset` (a nursery pond's water
-/// nearer its bank), and the `crop` its banks grow. Returns the parcels and the crops.
+/// pond, each pond's bank and water rounded at `inset` and its bank planted with the `crop`; a fry village's smallest ponds its
+/// nursery while their water stays within `FRY_SHARE` of the ponds'. Returns the parcels and the crops.
 ///
 /// Research:
 ///     the leftover form - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice
-///     the crop on the banks - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: one crop a hamlet, mulberry, fruit or tea
+///     the crop on the banks - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: every dike of a dike-pond hamlet is planted, and all of them with one crop - mulberry, fruit or tea, the nursery's banks too
+///     the fry ponds - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: the smallest ponds are given to fry until they hold up to seven-tenths of its pond water - taken smallest first by their water's area while the water they hold stays within `FRY_SHARE` of every pond's
 #[must_use]
 pub fn convert(
     parcels: &[Vec<Pt>],
@@ -144,58 +144,69 @@ pub fn convert(
             leftover == "rice" && knob_rng(seed, &format!("dikepond:{i}")).randbelow(RICE_IN) == 0
         })
         .collect();
-    // a fry village's nursery: its smallest ponds, taken while their water stays within `FRY_SHARE` of the ponds' whole
-    let mut nursery = vec![false; parcels.len()];
-    if fry == "fry_village" {
-        let area = |i: usize| signed_area(&parcels[i]).abs();
-        let total: f64 = (0..parcels.len()).filter(|&i| !rice[i]).map(area).sum();
-        let mut order: Vec<usize> = (0..parcels.len()).filter(|&i| !rice[i]).collect();
-        order.sort_by(|&a, &b| area(a).total_cmp(&area(b)).then(a.cmp(&b)));
-        let mut held = 0.0;
-        for i in order {
-            if held + area(i) > FRY_SHARE * total {
-                break;
-            }
-            held += area(i);
-            nursery[i] = true;
-        }
-    }
-    let mut out = Vec::new();
     let mut crops = Crops {
         crop: crop.to_owned(),
         ..Crops::default()
     };
+    // each pond's bank and water, and its bank's crop, from its own stream
+    let mut built: Vec<Option<(Path, Path)>> = Vec::new();
     for (i, ring) in parcels.iter().enumerate() {
         if rice[i] {
-            out.push(Parcel {
-                kind: "rice",
-                ring: ring.clone(),
-                bank: None,
-                water: None,
-            });
+            built.push(None);
             continue;
         }
         let mut rng = knob_rng(seed, &format!("dikepond_shape:{i}"));
         let bank = rounded(ring, 0.0, REACH_FT.0, rng.randbelow(u32::MAX));
-        let water = if nursery[i] {
-            rounded(ring, FRY_FT.0, FRY_FT.1, rng.randbelow(u32::MAX))
-        } else {
-            rounded(ring, inset_ft, REACH_FT.1, rng.randbelow(u32::MAX))
-        };
-        if !nursery[i] {
-            grow(ring, inset_ft, crop, &mut rng, &mut crops);
+        let water = rounded(ring, inset_ft, REACH_FT.1, rng.randbelow(u32::MAX));
+        grow(ring, inset_ft, crop, &mut rng, &mut crops);
+        built.push(Some((bank, water)));
+    }
+    // a fry village's nursery: its smallest ponds, taken while their water stays within `FRY_SHARE` of the ponds' whole
+    let wet = |i: usize| {
+        built[i]
+            .as_ref()
+            .map_or(0.0, |(_, w)| signed_area(&w.1).abs())
+    };
+    let mut nursery = vec![false; parcels.len()];
+    if fry == "fry_village" {
+        let total: f64 = (0..parcels.len()).map(wet).sum();
+        let mut order: Vec<usize> = (0..parcels.len()).filter(|&i| !rice[i]).collect();
+        order.sort_by(|&a, &b| wet(a).total_cmp(&wet(b)).then(a.cmp(&b)));
+        let mut held = 0.0;
+        for i in order {
+            if held + wet(i) > FRY_SHARE * total {
+                break;
+            }
+            held += wet(i);
+            nursery[i] = true;
         }
+    }
+    let mut out = Vec::new();
+    for (i, (ring, made)) in parcels.iter().zip(built).enumerate() {
+        let (kind, bank, water) = match made {
+            None => ("rice", None, None),
+            Some((bank, water)) => (
+                if nursery[i] { "fry" } else { "pond" },
+                Some(bank),
+                Some(water),
+            ),
+        };
         out.push(Parcel {
-            kind: if nursery[i] { "fry" } else { "pond" },
+            kind,
             ring: ring.clone(),
-            bank: Some(bank),
-            water: Some(water),
+            bank,
+            water,
         });
     }
     (out, crops)
 }
 
 /// The crop on one pond's bank, `width` feet between the parcel's edge and the water.
+///
+/// Research:
+///     mulberry rows - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one row to every 5.5 ft of the bank's width, set evenly across it
+///     the fruit's line - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: a single line of trees - on the bank's middle
+///     tea's two hedges - GUESS: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html silent on where across the bank the two hedges stand; at a third and two thirds of its width
 fn grow(
     ring: &[Pt],
     width: f64,
@@ -301,5 +312,8 @@ mod tests {
         assert!((20..160).contains(&rice.len()));
         let (_, tea) = convert(&parcels[..1], 4, at, "pond", "none", "tea");
         assert!(tea.hedges.len() > 10 && tea.crowns.is_empty() && TEA_FT.0 > 0.0);
+        // a bank wider than its parcel: the fruit's line on the parcel's own edge, the pond the least one
+        let (small, fruit) = convert(&parcels[..1], 4, 200.0, "pond", "none", "fruit");
+        assert!(small[0].water.is_some() && !fruit.crowns.is_empty());
     }
 }

@@ -2,19 +2,25 @@
 //! `specs/444-work-budget-program/phases/field_greenfield.derivation.md` and T16's Decisions alone; the old field code unread.
 //!
 //! Research:
-//!     the field's area - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household
+//!     the field's area - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: roughly a quarter of an acre of paddy for each inhabitant, at a household of about five - 1.3 acres a household, gross
 
 use crate::pyrand::knob_rng;
 
 /// Square feet in an acre.
+///
+/// Research:
+///     the acre - NONE: a unit
 const SQ_FT_PER_ACRE: f64 = 43_560.0;
 /// Square feet in a hectare (10,000 m2 at 0.3048 m a foot).
+///
+/// Research:
+///     the hectare - NONE: a unit
 const SQ_FT_PER_HA: f64 = 107_639.104;
 
 /// The paddy a household works, gross (acres).
 ///
 /// Research:
-///     paddy per household - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross
+///     paddy per household - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: roughly a quarter of an acre of paddy for each inhabitant, at a household of about five 1.25 acres - 1.3 acres the fan's whole area, its canals, ditches and bunds counted, so the basins it holds come to about the quarter acre
 pub const ACRES_PER_HOUSEHOLD: f64 = 1.3;
 
 /// The single-field cap's band (hectares), rolled per settlement.
@@ -26,7 +32,7 @@ pub const CAP_HA: (f64, f64) = (45.0, 60.0);
 /// The settlement's paddy in square feet: its households times what each works.
 ///
 /// Research:
-///     the field's area - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household
+///     the field's area - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: roughly a quarter of an acre of paddy for each inhabitant - `ACRES_PER_HOUSEHOLD` a household, gross
 #[must_use]
 pub fn paddy_sq_ft(households: u32) -> f64 {
     f64::from(households) * ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE

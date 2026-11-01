@@ -22,6 +22,9 @@ pub const MIN_CORNER_DEG: f64 = 25.0;
 pub const MIN_CELL_SHARE: f64 = 0.25;
 
 /// A rule of the field broken where it was decided, named in its message.
+///
+/// Research:
+///     a refusal - NONE: the error's record
 #[derive(Debug, Clone, PartialEq)]
 pub struct FieldRefused {
     pub rule: &'static str,
@@ -29,6 +32,10 @@ pub struct FieldRefused {
 }
 
 impl fmt::Display for FieldRefused {
+    /// The refusal as its message.
+    ///
+    /// Research:
+    ///     the message - NONE: formatting
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "the field refused, {}: {}", self.rule, self.detail)
     }

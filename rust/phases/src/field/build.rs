@@ -22,15 +22,29 @@ use crate::counts::Counts;
 use crate::pyrand::roll;
 
 /// Square feet in an acre.
+///
+/// Research:
+///     the acre - NONE: a unit
 const SQ_FT_PER_ACRE: f64 = 43_560.0;
+/// A weir's thickness where its form is missing from the plan's table (feet): the thinnest form's, the fence's.
+///
+/// Research:
+///     the fallback - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: four forms 1.5 to 5 ft thick; the fence's 1.5
+const WEIR_THIN_FT: f64 = 1.5;
 
 /// One knob the stage rolls itself (D3): its name, its typing-filtered forms, their weights (empty for an even roll) and the
 /// spec's pin, if any.
+///
+/// Research:
+///     a knob's record - NONE: the plan's knob as Python gathered it
 pub type KnobIn = (String, Vec<String>, Vec<f64>, Option<String>);
 
 /// What the stage reads (T16 D1): the seed, the households, the fall, the fan's aspect, where the first field's middle sits, the
 /// brook's flank and figures, the delivery ditches' fractions, the weir's figures by form, the rows' spacing and the basin's cell,
 /// and the knobs.
+///
+/// Research:
+///     the stage's inputs - NONE: the plan's figures carried in; each is claimed where the plan sets it
 #[derive(Debug, Clone)]
 pub struct FieldIn {
     pub seed: i64,
@@ -50,6 +64,9 @@ pub struct FieldIn {
 }
 
 /// One field built.
+///
+/// Research:
+///     a field's record - NONE: the record's type, holding what `one` decides
 #[derive(Debug, Clone)]
 pub struct Field {
     pub fan: Fan,
@@ -66,6 +83,9 @@ pub struct Field {
 }
 
 /// The stage's output: the knobs as rolled, the fields, the coarse grain's acres (drawn, needed, the room) and the counts.
+///
+/// Research:
+///     the stage's record - NONE: the record's type, holding what `build` decides
 #[derive(Debug, Clone)]
 pub struct FieldOut {
     pub knobs: HashMap<String, String>,
@@ -94,6 +114,14 @@ fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, S
 }
 
 /// The stage: the knobs, then each field of the settlement's paddy under the cap.
+///
+/// Research:
+///     the fields under the cap - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)
+///     fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander
+///     the grain owed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`)
+///     barley on the drained paddy - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares
+///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild the dry plots climb from the toe into the middle; on a fan whose middle is cleared, the hem runs along the whole canal - the first field's far flank up from its foot, and across its head where cleared
+///     the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook
 ///
 /// # Errors
 /// `FieldRefused` when a basin or a grave breaks a rule where it is decided (D7).
@@ -196,6 +224,14 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
 }
 
 /// One field on its fan.
+///
+/// Research:
+///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft
+///     the basins' rules where decided - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no basin sharper than 25 degrees, none under a quarter of its cell, none an arrowhead - asked of each row's two outermost basins, where the fan's taper makes them sharpest (D7)
+///     the field off the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the fan of paddies is cut away from the brook, leaving the stream its margin - an outline point within the brook's skirt refuses the field
+///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)
+///     the grave's form - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none
+///     the water filed - NONE: each ditch's segments at the wider of its two ends, the brook at its width, so every test of the water asks its widest
 fn one(
     inp: &FieldIn,
     f: &Fan,
@@ -207,7 +243,7 @@ fn one(
     counts.add("write@brook", 2 * br.pts.len() as u64);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
-        let thick = inp.weir.2.get(&form).copied().unwrap_or(1.5);
+        let thick = inp.weir.2.get(&form).copied().unwrap_or(WEIR_THIN_FT);
         let (ring, deg) = weir(&br, f, inp.brook_side, inp.weir.0, inp.weir.1, thick);
         (ring, deg, form)
     });

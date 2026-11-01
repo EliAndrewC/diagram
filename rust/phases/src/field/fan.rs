@@ -7,6 +7,9 @@
 use crate::pyrand::knob_rng;
 
 /// A point on the map, in feet (x east, y south: the map's own axes).
+///
+/// Research:
+///     a point - NONE: a point in feet
 pub type Pt = (f64, f64);
 
 /// How much wider the fan is at its head than on the mean, and narrower at its foot (a GUESS: the record says the fan narrows
@@ -116,6 +119,9 @@ pub fn fan(area: f64, aspect: f64, down_deg: f64, center: Pt, seed: i64) -> Fan 
 }
 
 /// The fan traced at `area` before the waves' rescale.
+///
+/// Research:
+///     the flanks' waves - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on how a fan's flanks bulge; each flank's waves at phases rolled per settlement from the seed's `fan_wave` stream
 fn traced(area: f64, aspect: f64, down_deg: f64, center: Pt, seed: i64) -> Fan {
     let mean = (area / aspect.max(0.1)).sqrt();
     let length = area / mean;

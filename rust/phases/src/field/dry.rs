@@ -43,13 +43,13 @@ pub const TURN_DEG: (u32, u32) = (17, 3);
 /// The least angle between two tracts' rows (degrees).
 ///
 /// Research:
-///     tracts apart - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: tracts are set apart by at least 20 degrees, by a drawing convention
+///     tracts apart - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: tracts are set apart by at least 20 degrees, by a drawing convention - their rows' directions, the right angle between contour and down counted, against the tract beside each along its band and those directly downslope; where the turns allowed leave no such direction, the one farthest from them all (the page: two rows within about 6 degrees read as one)
 pub const TRACT_APART_DEG: f64 = 20.0;
-/// The bands of tracts the hem may climb to (a bound on the room: past it the need is left unmet and the meta says so).
+/// A bound on the bands the hem climbs: the climb itself ends where the grain is held or a whole band finds no ground.
 ///
 /// Research:
-///     the room - GUESS: the record sets no limit; eight bands of tracts, about a quarter mile of dry ground
-pub const MAX_BANDS: u32 = 8;
+///     the bound - NONE: a guard far past any canvas (64 bands, over two miles); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
+pub const MAX_BANDS: u32 = 64;
 /// The dry crops (0006's four), each map drawing its own mix.
 ///
 /// Research:
@@ -57,6 +57,9 @@ pub const MAX_BANDS: u32 = 8;
 pub const CROPS: [&str; 4] = ["barley", "millet", "buckwheat", "soy"];
 
 /// One dry plot: its four corners, its crop, its furrows' bearing (radians on the maps' axes) and its tract.
+///
+/// Research:
+///     a dry plot's record - NONE: the record's type, holding what `hem` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct DryPlot {
     pub poly: Vec<Pt>,
@@ -71,7 +74,8 @@ pub struct DryPlot {
 ///
 /// Research:
 ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots square to the canal and laid end to end along its curving line
-///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart
+///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES)
+///     the climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the dry plots climb out as far from the canal as the ground runs, until they hold the grain the hamlet needs
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 #[expect(
     clippy::too_many_arguments,
@@ -105,26 +109,35 @@ pub fn hem(
     }
     let along_at = |d: f64| along(&segs, d);
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
-    let mut last_turn: Option<f64> = None;
     let mut tract = 0;
+    // each band's tracts: their stretch along the canal and their rows' direction (degrees), the band below's kept for the next
+    let mut below: Vec<(f64, f64, f64)> = Vec::new();
     for _band in 0..MAX_BANDS {
         let strips = TRACT_STRIPS.0 + rng.randbelow(TRACT_STRIPS.1 - TRACT_STRIPS.0 + 1);
         let mut d = 0.0;
+        let mut band: Vec<(f64, f64, f64)> = Vec::new();
+        let placed_before = plots.len();
         while d + PLOT_FT.0 <= len {
             let n = TRACT_PLOTS.0 + rng.randbelow(TRACT_PLOTS.1 - TRACT_PLOTS.0 + 1);
-            // the tract's rows: on the contour or down to the outfall, turned up to 17 degrees, at least 20 from the last tract's
-            let down = rng.randbelow(2) == 1;
-            let mut turn = f64::from(rng.randbelow(2 * TURN_DEG.0 + 1)) - f64::from(TURN_DEG.0);
-            if let Some(prev) = last_turn {
-                if (turn - prev).abs() < TRACT_APART_DEG {
-                    turn = if prev >= 0.0 {
-                        prev - TRACT_APART_DEG
-                    } else {
-                        prev + TRACT_APART_DEG
-                    };
-                }
-            }
-            last_turn = Some(turn);
+            // the tract's rows: on the contour or down to the outfall, turned up to 17 degrees, at least 20 from its neighbors'
+            let rolled = (
+                rng.randbelow(2) == 1,
+                f64::from(rng.randbelow(2 * TURN_DEG.0 + 1)) - f64::from(TURN_DEG.0),
+            );
+            let span = (d, d + f64::from(n) * PLOT_FT.0);
+            let near: Vec<f64> = band
+                .last()
+                .map(|t| t.2)
+                .into_iter()
+                .chain(
+                    below
+                        .iter()
+                        .filter(|t| t.0 < span.1 && span.0 < t.1)
+                        .map(|t| t.2),
+                )
+                .collect();
+            let (down, turn) = apart(rolled, &near);
+            band.push((span.0, span.1, turn + if down { 90.0 } else { 0.0 }));
             // the tract's heading, for its furrows: its stretch of the canal's
             let u = unit(along_at(d).0, along_at(d + f64::from(n) * PLOT_FT.0).0);
             for k in 0..n {
@@ -170,15 +183,61 @@ pub fn hem(
             d += f64::from(n) * PLOT_FT.0;
         }
         depth += f64::from(strips) * PLOT_FT.1;
-        if got >= need {
+        below = band;
+        // the grain held, or a whole band without ground: the climb ends
+        if got >= need || plots.len() == placed_before {
             break;
         }
     }
     (plots, room)
 }
 
+/// The rows' direction for a tract rolled `rolled` (down to the outfall, and its turn in degrees) whose neighbors' rows run `near`
+/// (degrees, the right angle counted): the rolled one if it stands `TRACT_APART_DEG` from each, else the nearest to it that does
+/// (keeping the rolled side first), else the one farthest from them all.
+///
+/// Research:
+///     tracts apart - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: tracts are set apart by at least 20 degrees, turned up to about 17 degrees, the two directions a right angle apart
+fn apart(rolled: (bool, f64), near: &[f64]) -> (bool, f64) {
+    let gap = |a: f64| {
+        near.iter()
+            .map(|b| {
+                let s = (a - b).rem_euclid(180.0);
+                s.min(180.0 - s)
+            })
+            .fold(f64::INFINITY, f64::min)
+    };
+    let most = i32::try_from(TURN_DEG.0).unwrap_or(17);
+    let mut options: Vec<(bool, f64)> = [rolled.0, !rolled.0]
+        .iter()
+        .flat_map(|&down| (-most..=most).map(move |t| (down, f64::from(t))))
+        .collect();
+    options.sort_by(|a, b| {
+        let cost = |o: &(bool, f64)| (u8::from(o.0 != rolled.0), (o.1 - rolled.1).abs());
+        cost(a)
+            .partial_cmp(&cost(b))
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
+    let dir = |o: &(bool, f64)| o.1 + if o.0 { 90.0 } else { 0.0 };
+    options
+        .iter()
+        .find(|o| gap(dir(o)) >= TRACT_APART_DEG)
+        .or_else(|| {
+            options.iter().max_by(|a, b| {
+                gap(dir(a))
+                    .partial_cmp(&gap(dir(b)))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+        })
+        .copied()
+        .unwrap_or(rolled)
+}
+
 /// The point `d` feet along the segments pushed `o` feet out along their normal there, the normal smoothed over a plot's length
 /// either way and turned to `out`'s side.
+///
+/// Research:
+///     the offset - NONE: geometry, the canal's course pushed out
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -198,6 +257,9 @@ fn offset(segs: &[(Pt, Pt)], out: Pt, d: f64, o: f64) -> Pt {
 }
 
 /// The point `d` feet along the segments, and their heading there (past the end, the last segment's end).
+///
+/// Research:
+///     the point along - NONE: geometry
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -235,6 +297,9 @@ fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: 
 
 /// Whether the plot `poly` meets the water filed in `ix`: a segment near it crossing its sides, ending inside it, or within `clear`
 /// feet past its own half-width of a side.
+///
+/// Research:
+///     the water test - NONE: geometry against the filed water; what it keeps a plot off is `hem`'s and `refused`'s
 fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
     let reach = clear + ix.widths.iter().copied().fold(0.0, f64::max) / 2.0;
     let (lo, hi) = poly.iter().fold(
@@ -257,6 +322,9 @@ fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
 }
 
 /// The least distance between two segments: zero where they cross.
+///
+/// Research:
+///     the distance - NONE: geometry
 fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
     let side = |p: Pt, q: Pt, r: Pt| (q.0 - p.0) * (r.1 - p.1) - (q.1 - p.1) * (r.0 - p.0);
     let (d1, d2, d3, d4) = (side(c, d, a), side(c, d, b), side(a, b, c), side(a, b, d));

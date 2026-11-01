@@ -89,6 +89,10 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
 
 /// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block - its block, dike, outfall, resting plots and,
 /// on a dike-pond, its conversion - the records out for the thin Python to write and draw.
+///
+/// Research:
+///     the polder's seam - NONE: the records out; each placement is claimed at the Rust that makes it
+///     no resting plot on a dike-pond block - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested
 #[pyfunction]
 #[expect(
     clippy::too_many_arguments,
