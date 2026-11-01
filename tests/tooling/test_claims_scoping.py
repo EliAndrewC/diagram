@@ -439,6 +439,27 @@ def test_a_code_change_owes_a_triage_of_its_hunks_and_clears_the_claims_it_does_
     assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == [FAR]
 
 
+def test_a_code_triage_diffs_against_the_version_its_claims_were_checked_at(tmp_path: pathlib.Path) -> None:
+    """The round arbiter on ask:444-T16-claims-after-counters (2026-11-01): diffed against origin/main, a unit in a file new to the
+    delta showed every line added - its claim's own line among them - so each claim was owed in full (47 of a 56-claim triage sent
+    on blind). The triage diffs against the newest commit of the claims index recording the claim at its last-checked code."""
+    root = _repo(tmp_path)
+    skill, index, store = _checked(root)
+    (root / "dev").mkdir(exist_ok=True)
+    (root / cx.claims_triage.INDEX).write_text(json.dumps(index))
+    _commit(root, "as checked")
+    empty = (cx.claims_triage._git(root, "hash-object", "-t", "tree", "/dev/null") or "").strip()
+    bare = (cx.claims_triage._git(root, "commit-tree", empty, "-m", "main before the file") or "").strip()
+    cx.claims_triage._git(root, "update-ref", "refs/remotes/origin/main", bare)  # rows.py is new to the delta
+    (skill / "l7r/diagram/hamletgen/rows.py").write_text(MOD.replace("x * SHARE", "x * SHARE * 2"))
+    cur = cx.current(skill)
+    manifest = cx.triage_bundle(cur, index, store, [FAR], skill / QDIR, tmp_path / "t").read_text()
+    assert "+    return x * SHARE * 2" in manifest and "+    Research: dry share" not in manifest, "only the change since the check"
+    assert json.loads((tmp_path / "t" / "triage.json").read_text())["forced"] == []
+    # ...and with no index commit recording it, origin/main as before: the whole new file, the claim owed in full
+    assert cx.claims_triage.checked_at(root, FAR, "no such code", {}) == "origin/main"
+
+
 def test_a_triage_whose_every_claim_is_owed_in_full_dispatches_no_triage(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 417 T54 (2026-10-27): after `law.py` became a package, 18 claims were owed a triage whose bundle showed nothing - a
     code move leaves no diff - so each was owed in full; the triage agent dispatched on the empty bundle could only say so, and
