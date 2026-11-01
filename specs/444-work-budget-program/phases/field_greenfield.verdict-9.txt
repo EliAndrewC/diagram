@@ -3,7 +3,7 @@ UNDERIVED - the hem's tract turns (derivation.md line 74, "4 a tract"): "its rol
 1. **Is each factor derived?** No. The one blocker:
    - Line 74 now states a count of turns tried, which verdict-8 asked for, but not why that count holds. A mean of 2 tries means a turn passes half the time, and no source on the page supports that.
    - This is the same shape as verdict-4's lead (the pond's "about 3 typical" shrinks). That set the precedent that a small figure with no reason still blocks, and S2 rules out a tuned retry count. Here it is 20, 40 and 76 operations.
-   - A derived form: roll the turn once from the allowed range less the two 40-degree windows around the neighbours' turns. That is 2 neighbour reads and 1 roll, 3 a tract. Or name the turn knob's range and derive the odds from it.
+   - A derived form: roll the turn once from the allowed range less the two 40-degree windows around the neighbors' turns. That is 2 neighbor reads and 1 roll, 3 a tract. Or name the turn knob's range and derive the odds from it.
    - Otherwise the arithmetic holds. The totals re-add to 35,430, 64,043 and 118,038. The exponent is ln(118,038 / 35,430) / ln 4 = 0.87. A basin costs about 47 operations against the 4,000 limit, and slack is 1.
 
 2. **Is there a cheaper standard algorithm?**
