@@ -490,7 +490,7 @@ class BridgesMixin:
 
         Research:
             two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner past the water onto dry ground, tested on the merged deck's own corners
-            the merged deck's width - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on two ways crossing one water a few feet apart; one deck as wide as both ways together, where the page's deck is as wide as the one way it carries
+            the merged deck's width - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on two ways crossing one water a few feet apart; one deck widened evenly about its own unmoved center until it takes the second way's width at the crossing (so about the ways' offset wider than both ways together), where the page's deck is as wide as the one way it carries
         """
         c, a = (float(deck["x"]), float(deck["y"])), math.radians(float(deck["rot"]))
         along = abs((p[0] - c[0]) * math.cos(a) + (p[1] - c[1]) * math.sin(a))

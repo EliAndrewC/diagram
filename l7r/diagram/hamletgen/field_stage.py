@@ -361,7 +361,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         no dry plots inside a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies, its dry landward shore beyond
         no beans on a polder's bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a polder's bunds; the polder drawn without the comb's bean runs
         a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot - the Rust's roll (`stage_polder`'s `pocket_pond`), recorded and drawn here as the comb's is
-        its water source - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head, by the inlet - recorded as a reservoir at the high corner"""
+        its water source - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head, by the inlet - recorded at the high corner under `reservoir`, the manifest's one name for a pond a field draws its water from, which its readers take for any feeding pond"""
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
     ftpx = plan.ftpx

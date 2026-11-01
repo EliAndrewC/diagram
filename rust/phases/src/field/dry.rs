@@ -224,6 +224,7 @@ pub fn hem(
 ///
 /// Research:
 ///     tracts apart - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: tracts are set apart by at least 20 degrees, turned up to about 17 degrees, the two directions a right angle apart
+///     where none stands apart - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on a tract whose neighbors leave no turn 20 degrees from them on either side; the turn farthest from them all, of the range's ends and the turns midway between them, though under 20 degrees
 fn apart(rolled: (bool, f64), near: &[f64], tests: &mut u64) -> (bool, f64) {
     let mut gap = |a: f64| {
         *tests += near.len() as u64;
@@ -373,6 +374,9 @@ impl Canal {
     /// A plot's seat between the frames `a` and `b` (`frame` at its two ends along the course), `o.0` to `o.1` feet out: the
     /// canal's own course pushed out along its smoothed normal, so neighbors share their sides and the bands nest and the hem
     /// follows the canal as a hem does - four offsets, counted in `work` with the hem's tests.
+    ///
+    /// Research:
+    ///     the seat - NONE: geometry of the canal's course; the plot's size and where the hem stands are `PLOT_FT`'s and `hem`'s
     fn seat(a: (Pt, Pt), b: (Pt, Pt), (o0, o1): (f64, f64), work: &mut u64) -> Vec<Pt> {
         *work += 4;
         let at = |f: (Pt, Pt), o: f64| (f.0 .0 + f.1 .0 * o, f.0 .1 + f.1 .1 * o);
@@ -381,6 +385,9 @@ impl Canal {
 
     /// A column's two frames at `d` and a plot's length past it, the first the last column's second where there is one (`frames`
     /// keeps it); none found once the grain is held (`held`), the column then building no seat.
+    ///
+    /// Research:
+    ///     the column's frames - NONE: plumbing of the canal's course; the need is `hem`'s caller's
     fn column(
         &self,
         d: f64,
@@ -399,6 +406,9 @@ impl Canal {
 
     /// The point `d` feet along the course and its normal to the hem's side, smoothed over a plot's length either way: three
     /// lookups, counted in `work`; a column of seats shares its two frames, the next column the second.
+    ///
+    /// Research:
+    ///     the frame - NONE: geometry of the canal's course
     fn frame(&self, d: f64, work: &mut u64) -> (Pt, Pt) {
         *work += 3;
         let (p, _) = self.along(d);

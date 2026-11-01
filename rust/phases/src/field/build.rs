@@ -93,6 +93,9 @@ pub struct Field {
 }
 
 /// A ring's box (x0, y0, x1, y1), middle (the mean of its points) and area (square feet).
+///
+/// Research:
+///     the plot's figures - NONE: geometry of the ring, the record's type
 pub type RingStats = ([f64; 4], Pt, f64);
 
 /// A ring's `RingStats` in one walk, each figure as the record has always taken it: the box's least and most, the points' mean,
@@ -473,6 +476,7 @@ fn one(
 ///
 /// Research:
 ///     the drained plots - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, so only the drained plots count
+///     no barley on a resting plot - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a resting plot is grazed among the cropped ones that year, not cropped, so it grows no winter barley - its area taken out with the wet plots'
 fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
     // only the low row is ever wet (`states`), and the rested plots are named: the field's area less theirs
     counts.add(
