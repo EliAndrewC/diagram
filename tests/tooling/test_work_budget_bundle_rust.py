@@ -64,3 +64,28 @@ def test_a_key_counted_by_its_own_name_brings_its_module_and_a_stale_chain_repor
     assert wbb.fanout_section(tmp_path, "field").startswith("STALE: ") and "make perf-fanout STAGES=field" in wbb.fanout_section(tmp_path, "field")
     os.utime(log / "x-fanout-y.txt", None)
     assert wbb.fanout_section(tmp_path, "field").endswith("field: 1 calls\n  a\n")
+
+
+def test_what_the_stage_s_code_calls_rides_in_the_audit_and_a_call_no_module_defines_is_named(tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on ask:444-T16-field-audit-6: audits 4 and 5 found `field_channel` and `rest_basin`, which
+    the stage calls, missing from their bundles."""
+    pkg = tmp_path / "l7r" / "diagram"
+    (pkg / "settlement" / "fields").mkdir(parents=True)
+    (pkg / "settlement" / "__init__.py").write_text("from .fields.paddy import rest_basin\n")
+    (pkg / "settlement" / "fields" / "__init__.py").write_text("")
+    (pkg / "settlement" / "fields" / "paddy.py").write_text("def rest_basin(s):\n    pass\n")
+    (pkg / "settlement" / "clipping.py").write_text("class C:\n    def field_channel(self):\n        pass\n")
+    (pkg / "helpers.py").write_text("def helper():\n    pass\n")
+    stage = pkg / "stage.py"
+    stage.write_text(
+        "from l7r.diagram.settlement import rest_basin\nfrom l7r.diagram import helpers\n\ndef stage_field(s):\n    rest_basin(s)\n    helpers.helper()\n    s.field_channel()\n    s.items.append(1)\n"
+    )
+    got, missing = wbb.called_files(tmp_path, [stage])
+    assert sorted(p.relative_to(tmp_path).as_posix() for p in got) == [
+        "l7r/diagram/helpers.py",
+        "l7r/diagram/settlement/clipping.py",
+        "l7r/diagram/settlement/fields/paddy.py",
+    ]
+    assert missing == []
+    stage.write_text("from l7r.diagram.helpers import gone\n\ndef stage_field(s):\n    gone()\n")
+    assert wbb.called_files(tmp_path, [stage])[1] == ["gone (from l7r.diagram.helpers, called in l7r/diagram/stage.py)"]
