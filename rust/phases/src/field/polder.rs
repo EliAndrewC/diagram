@@ -57,6 +57,12 @@ pub const RING_FT: (f64, f64) = (6.0, 12.0);
 /// Research:
 ///     the wild pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands to its northwest, at the head; its size SILENT, Kuwabata's 82 and 54 ft and 140 ft out, a GUESS
 pub const POND_FT: (f64, f64, f64) = (82.0, 54.0, 140.0);
+/// How far the wild pond's reed fringe stands out past its water (feet), and the points its ring is drawn with.
+///
+/// Research:
+///     the reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: every reservoir pond has a fringe of reeds standing on wet ground at its shore
+///     the fringe's width - GUESS: research/questions/0061-reservoir-ponds-tameike.drawing.html silent on how wide the fringe stands; 40 ft, the comb's old source pond's, on a ring of 16 points
+pub const FRINGE_FT: (f64, usize) = (40.0, 16);
 
 /// One polder plot: its first row and column of modules, the rows it spans, its ring, and whether it lies on the block's low row.
 ///
@@ -96,6 +102,7 @@ pub struct Polder {
     pub ditches: Vec<Ditch>,
     pub sluices: [Pt; 2],
     pub pond: (Pt, f64, f64),
+    pub fringe: Vec<Pt>,
     pub feeder: Vec<Pt>,
     pub shape: (usize, usize),
 }
@@ -370,9 +377,29 @@ pub fn polder(
         ditches,
         sluices: [inlet, outfall],
         pond: (pond_at, POND_FT.0, POND_FT.1),
+        fringe: fringe(pond_at, (POND_FT.0, POND_FT.1)),
         feeder,
         shape: (rows, cols),
     }
+}
+
+/// The reed fringe's ring round a pond at `at` of radii `r`: the ellipse `FRINGE_FT.0` past its water, at `FRINGE_FT.1` points.
+///
+/// Research:
+///     the fringe's ring - NONE: geometry; its width is `FRINGE_FT`'s
+fn fringe(at: Pt, r: (f64, f64)) -> Vec<Pt> {
+    #[expect(clippy::cast_precision_loss, reason = "a ring's sixteen points")]
+    let n = FRINGE_FT.1 as f64;
+    (0..FRINGE_FT.1)
+        .map(|k| {
+            #[expect(clippy::cast_precision_loss, reason = "a ring's sixteen points")]
+            let a = k as f64 / n * std::f64::consts::TAU;
+            (
+                at.0 + (r.0 + FRINGE_FT.0) * a.cos(),
+                at.1 + (r.1 + FRINGE_FT.0) * a.sin(),
+            )
+        })
+        .collect()
 }
 
 /// The block's plots: on the rice polder most modules split into 2 or 3 strips across their breadth by walking bunds (one in
@@ -625,6 +652,12 @@ mod tests {
                 .iter()
                 .all(|x| inside(center(&x.ring), &p.inner_env)));
             assert!(!inside(p.pond.0, &p.inner_env));
+            assert!(
+                p.fringe.len() == 16
+                    && p.fringe
+                        .iter()
+                        .all(|q| (q.0 - p.pond.0 .0).abs() <= 82.0 + 40.0 + 1e-9)
+            );
             assert!(p.ditches.len() >= 4 && p.feeder.len() == 3);
             if dikepond {
                 let paired = p

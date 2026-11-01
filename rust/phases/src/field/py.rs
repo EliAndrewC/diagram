@@ -157,6 +157,7 @@ pub fn stage_polder<'py>(
         ditches.append((x.role, x.seg, pts(&x.pts), x.w, x.w_tail))?;
     }
     d.set_item("ditches", ditches)?;
+    d.set_item("fringe", p.fringe.clone())?;
     d.set_item("sluices", p.sluices.to_vec())?;
     d.set_item("pond", (p.pond.0 .0, p.pond.0 .1, p.pond.1, p.pond.2))?;
     d.set_item("feeder", pts(&p.feeder))?;

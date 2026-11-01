@@ -270,12 +270,6 @@ def _area(ring: list[tuple[float, float]]) -> float:
     return abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(ring, ring[1:] + ring[:1], strict=True))) / 2.0
 
 
-POND_FRINGE_FT = 40.0
-"""Research:
-    the wild pond's reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds standing on wet ground at its shore
-    the fringe's width - GUESS: research/questions/0061-reservoir-ponds-tameike.drawing.html silent on how wide the fringe stands; 40 ft, the comb's old source pond's"""
-
-
 def _roll(s: Settlement, plan: SitePlan, name: str) -> Any:
     """One registered knob drawn in Rust from its table (`roll_knob`) against the running context - the spec's pin taken - and
     recorded as `resolve` records it."""
@@ -294,11 +288,10 @@ def _roll(s: Settlement, plan: SitePlan, name: str) -> Any:
 def _polder(s: Settlement, plan: SitePlan) -> None:
     """The polder: every placement from Rust (`stage_polder`, D8; the plan's seam, re-decided after its review) - the block, the
     dike and its trees, the outfall, the resting plots and on a dike-pond its conversion - written and drawn here; `marsh` only
-    fills the fringe ring round the Rust's wild pond.
+    fills the fringe ring the Rust returns round its wild pond.
 
     Research:
-        the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FRINGE_FT`, `POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)"""
-    from l7r.diagram.settlement.land.wet import pond_fringe_ring
+        the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)"""
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
     ftpx = plan.ftpx
@@ -326,7 +319,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     s.meta(field_archetype=plan.field_archetype, pond_layout=plan.pond_layout, water_source="reservoir", water_source_position="corner_high", dry_furrows_vary=False, paddy_rest=rest_form)
     px, py, rx, ry = out["pond"]
     s.pond(px, py, rx, ry)
-    s.marsh(pond_fringe_ring(px, py, rx, ry, POND_FRINGE_FT), role="pond_fringe")
+    s.marsh([tuple(q) for q in out["fringe"]], role="pond_fringe")
     plots = [{"poly": p["ring"], "fill": FLOODED if p["low"] else _RICE_GREEN, "low": p["low"], "rest": p["rest"], "state": "wet" if p["low"] else "green", "drain_side": None} for p in out["plots"]]
     chans = [{"role": r, "seg": seg, "pts": pts, "w": w, "w_tail": wt} for r, seg, pts, w, wt in out["ditches"]]
     outline = out["outline"]

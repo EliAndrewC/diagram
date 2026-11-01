@@ -226,7 +226,7 @@ What the build changed, each recorded at its point of change and in `phases/fiel
 2. **The comb drawn organic.** Waved flanks and bowed row lines (`fan.rs` `WAVES`, `lattice.rs` `BOW`, GUESS figures for the
    settlement-review), the dry hem on the canal's offset curves, the brook from off the canvas to off it, meandering, off the
    screen's axes - each held to the brook rules the sink asks (`brook_violations`, measured 119 of 120 seeds clean; seed 37 at 15
-   households owed).
+   households owed, since fixed: one meander carries the wander, and 180 seeds keep every brook rule).
 3. **The polder's seam** (the plan review of 2026-10-31T22:2xZ, BLOCKED: a helper the field calls is the field's work). Every
    PLACEMENT the polder makes goes to Rust, `rust/phases/src/field/`: the block, lattice, parcels, ring canal, ditches, sluices and
    wild pond (built); the DIKE - its band 14-40 ft across (research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html), varying, its outer face curved with the water's edge, its crest, its
@@ -236,14 +236,49 @@ What the build changed, each recorded at its point of change and in `phases/fiel
    parcels are ponds, rice or fry ponds, each pond's bank and water rounded from its parcel at the village's split, and the bank's
    crop rows (0018, 0020, 0023, 0026; `apply_land_use`'s). Python draws their records (`settlement/fields/ink.py`), as it draws
    the comb's. `marsh` stays Python because it DECIDES NOTHING: it fills, with its reed tile, exactly the polygon the Rust hands it
-   (`pond_fringe_ring` round the Rust's wild pond), as `rest_basin` and `comb_base_fill` paint a ring they are given. The free
+   (the fringe's ring, placed by the Rust - `polder.rs` `FRINGE_FT` - since the plan review of 2026-11-01), as `rest_basin` and `comb_base_fill` paint a ring they are given. The free
    helpers stay for the other tiers that call them; the field calls none of their placement.
 4. **The deletion.** By name, `make dead-closure` against the clone's base; two pure moves on the round arbiter's rulings
-   (ask:444-T16-move-drawing, ask:444-T16-brook-predicates); the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
+   (ask:444-T16-move-drawing, ask:444-T16-brook-predicates) - drawing code (`settlement/fields/drawing.py`, D12's drawing functions) and check-side predicates (`brook_rules.WetLines`, `hem_on_water`), neither placing anything; the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
 5. **The order, unchanged.** After `water_frame`; the last of step 4.
-6. **The exits.** Green: `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
-   (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing. Red: what failed recorded and the task set down, a claim that
-   it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green, adding to the first Approach's Green (the budget met at 40 and 80 households, the old code deleted): `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
+   (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
+### T16 Approach (2026-11-01T00:39Z)
+
+The claims round's fixes (FR-021, the round arbiter's route (a) on `ask:444-T16-fr021-scope`), answered against the checklist's
+part A after the Decisions of 19:37Z and the first wave's verdicts:
+
+1. **The goal, in the world.** The comb and the polder the reader sees are the ones the record describes, line by line: a brook
+   narrower than the race it feeds and never ruled straight past ten widths, a polder whose lines each bow on their own, ponds
+   ringed by one bank's width, graves the paddy is carved round - every placement's claim true of its code.
+2. **The constraints.** Each open finding in a file T16's delta changes (`make claims-report`, FR-021); the brook rules
+   (`brook_violations`), the basin rules (`rules::held`), `make rust-gate`'s fresh block, `make quick`, `make static`'s line floor (every line covered).
+3. **Where each comes from.** R, each at its page: ten widths (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html);
+   the creek's width, the delivery's cap and the pond feeder (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html);
+   one inset a village (research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html); the halves short of the mound
+   (research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html); tracts apart and rows a right angle apart
+   (research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html); the climb (research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html);
+   a crossing wherever both ends reach useful ground (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html); on some maps
+   (research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html). O: every GUESS the round
+   labeled - the meander's wave, the grave's notch, the outfall's first leg, `WHOLE_IN`, `SEASONAL_IN`.
+4. **Whether each holds here.** The ten-widths rule describes a natural brook on open ground, which is the hamlet's brook; the tap's
+   straight stride had no page behind it (0059 says only that the brook runs on), so it meanders like the rest.
+5. **The order.** The brook, then the fan cut away from it; the lattice, then the features carved from its plots; the parcels, then
+   the ponds pushed in from them. No later placement moves an earlier one.
+6. **The exits.** (a) the O meander wavelength moved (`MEANDER_WAVE_FT`, a GUESS) to meet R's ten widths; (c) the share-of-view rule replaced by a
+   length, which dissolves the view-dependence; (e) conform for the inset, the cap and the notch. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
+7. **The search smell.** None added: every fix is a construction (a true inward offset, a fitted half-row, a tract's direction
+   chosen from the allowed set, the trough at the intake); the one search left is `apart`'s scan of 70 candidate directions.
+8. **The budget.** About three hours for the round's fixes and one wave (a GUESS, the round's own estimate); twice that is part B's trigger.
+9. **Done, measured.** `make claims-report` lists no finding in a delta file; baseline: the first wave's 202 open findings at HEAD
+   of 2026-10-31. One goal: the claims closed; the stale record sentences are found rows (0031, 0059, 0068, 0069).
+10. **Before moving a constant.** `BROOK_DRAWN_W` (to the creek's width at research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html): read by `reserved_box`, `CROSSING_END_TOL`, `sink.drawn_brook`,
+    `brook_course.drawn_course` and `field_stage.BROOK_W` (the drawn stroke and the brook's skirt spacing) - each measures the drawn
+    brook, so each follows. `RULED_SHARE`/`RULED_MIN_LEN_FT`: the marsh's edges (`land/outline.py`, `tools/marsh_edges.py`) keep them.
+11. **Before fitting things into room.** The basins (`ALONG_FT`, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html): a half-row of breadth h
+    holds from h over the band's top to h over its foot of them, rounded inward; where that range is empty the count nearest h over the
+    band's middle is taken, a GUESS recorded at `cuts`.
+
 ### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.
@@ -276,6 +311,26 @@ newly failing, 12 of 16 passing.
 7. **Done:** the hem's test fixed; the rest of T16 continues (the Python driver's tests, the polder, the deletion, the counts).
 8. **Every route measured before the arbiter was asked?** No ruling asked: nothing here is a process stop.
 9. **After a ruling, the step it named?** Not applicable.
+
+### T16 part B (2026-11-01T00:41Z)
+
+The trigger: the cohort at 2026-10-31T21:02Z - seeds 7, 9, 902 and 905 newly failing on the polder's seam's build.
+
+1. **What exactly is refusing?** The same three Python stages after the field as at 20:42Z (the seating, the site boundary, the row
+   rules) on maps the rebuilt field moved; no check of the field's own, and `make rust-gate` passes the same seeds through the
+   Rust prefix (`dev/rust-gate/20261101T002811Z.json`, 54 seeds, 0 failing).
+2. **A3 again.** Amendment 5 (FR-019, FR-020; the GM 2026-10-31: "no Rust stage ever ends with any failing checks at the point
+   where that stage has completed"): a later Python stage's failure on a moved map is its own port's, not the field's to tune.
+3. **A4 again.** The rule that refuses describes the later stage's room on the new field, not the field; the field's own rules
+   hold at the places those seeds draw (the stage gate's record).
+4. **Moving something placed earlier to suit something later?** No: the field is not being bent to the seating.
+5. **Tuning or changing?** Neither on the field for these seeds: the claims round changes the field to its research, not to them.
+6. **The one-sentence test.** "The field in Rust passes every check of its own; the cohort's failures are later Python stages on a
+   moved map, which amendment 5 leaves to their ports (part B of the plan)."
+7. **The next step is a measurement.** The claims wave's verdicts on the round's fixes, then the stage gate again on a fresh block.
+8. **Every route measured before the arbiter was asked?** No ruling asked here: nothing is a process stop.
+9. **After a ruling, the step it named?** The ruling on `ask:444-T16-fr021-scope` named route (a), taken: the incidental touches
+   reverted, T23 filed, the findings in the port's files closed.
 
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
