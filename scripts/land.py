@@ -162,24 +162,40 @@ def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
     return ""
 
 
-_FINDING = re.compile(r"^\s+([A-Z][A-Z-]+)\s+(\S[^:]*?)::")
+def _claims_scope():  # noqa: ANN202 - the module
+    sys.path.insert(0, str(HERE / "record"))
+    import claims_scope  # noqa: PLC0415 - the moved scripts it imports
+
+    return claims_scope
 
 
-def open_claims_refusal(root: Path, d: Path, text: str, task: str) -> str:
-    """A RUST STAGE LANDS WITH NO OPEN CLAIM (feature 444 amendment 5's FR-021, the GM 2026-10-31: "every Rust stage end its
+def open_claims_refusal(root: Path, d: Path, text: str, task: str, file_left: bool = False) -> str:
+    """A RUST STAGE LANDS WITH NO OPEN CLAIM (feature 444 FR-021, amendment 6, the GM 2026-10-31: "every Rust stage end its
     initial implementation with zero open claims"): a phase task's landing is refused while `make claims-report` lists an open
-    finding - its one selection, `claims.open_findings` - in a file the delta changes under `rust/` or `l7r/`. '' otherwise."""
-    if not d.name.startswith("444-") or not _PHASE.search(_task_block(text, task)):
+    finding in the stage's own code - its Rust the delta changes, a Python unit the delta adds or changes, a Python unit its seam
+    reads at run time (`claims_scope`, FR-021 as amended 2026-11-01). The other findings in the files it changes go to the
+    open-claims feature as its rows (`file_left`, at the landing itself). '' otherwise."""
+    if not d.name.startswith("444-") or not (m := _PHASE.search(_task_block(text, task))):
         return ""
-    changed = {n for n in delta_names(root) if n.startswith(("rust/", "l7r/"))}
+    changed = [n for n in delta_names(root) if n.startswith(("rust/", "l7r/"))]
     if not changed:
         return ""
+    scope = _claims_scope()
+    seam = [p for p in _stage_seam(root, m.group(1))]
     out = run(root, [sys.executable, str(HERE / "record" / "claims.py"), "--root", str(root), "report"])[1]
-    open_ = [ln.strip() for ln in out.splitlines() if (m := _FINDING.match(ln)) and m.group(2) in changed]
-    if not open_:
+    own, left = scope.split(root, out, changed, seam, lambda path: scope.git_diff(root, path))
+    if file_left and left:
+        print(f"land: {scope.file_left(root, task, left)} claims finding(s) outside the stage's own code filed to {scope.CLAIMS_FEATURE_DIR} (FR-021)", flush=True)
+    if not own:
         return ""
-    shown = "; ".join(ln[:140] for ln in open_[:5]) + (f" and {len(open_) - 5} more" if len(open_) > 5 else "")
-    return f"{task} is a Rust stage's landing with {len(open_)} open claim finding(s) in the files it changes - close each (fix the code or the claim, then re-check it) before it lands (FR-021): {shown}"
+    shown = "; ".join(ln[:140] for ln in own[:5]) + (f" and {len(own) - 5} more" if len(own) > 5 else "")
+    return f"{task} is a Rust stage's landing with {len(own)} open claim finding(s) in its own code - close each (fix the code or the claim, then re-check it) before it lands (FR-021): {shown}"
+
+
+def _stage_seam(root: Path, phase: str) -> list[Path]:
+    """The Python file that defines `stage_<phase>` - the seam whose imports the Rust stage runs on."""
+    pat = re.compile(rf"^def stage_{re.escape(phase)}\(", re.M)
+    return [p for p in sorted((root / "l7r").rglob("*.py")) if pat.search(p.read_text(encoding="utf-8"))]
 
 
 def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: list[str] | None = None) -> list[str]:

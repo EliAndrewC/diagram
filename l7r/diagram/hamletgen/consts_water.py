@@ -99,7 +99,7 @@ BROOK_FAN_TRIM = 0.72
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
 BROOK_TAP_RUN = 70.0
 """Research:
-    how far it runs straight - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on the length; 70 px down the fall (how the brook keeps the intake's line is the Rust's claim, `brook.rs` "the tap's stride")
+    how far it runs straight - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on the length; 70 px down the fall
 """
 # THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
 # intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
