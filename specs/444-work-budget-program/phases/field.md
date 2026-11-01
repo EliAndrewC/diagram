@@ -43,6 +43,20 @@ phase's working record: what is measured, what is owed, and where to resume.
   rate, refusing nothing); the phase's claims round IN-STEP; the reviews
   its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
 - [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
+  Closed by the round arbiter's accept on ask:444-T16-field-after-audit-6, bound to run `20261101T224654Z-799b3654eff8` at commit
+  `b0b720c7d`: audit 6 (`phases/field.audit-6.txt`, UNCOUNTED, final for this box) went the FR-006 route, rebuilt cheaper - 112,814
+  at 40 and 200,310 at 80 against 118,739 and 218,411, exponent 0.80 against 0.86. Each of audit 6's items and the key that now
+  covers it in that run (means at 40 households):
+  1. the foot in `_clip_to_stream` - asked of `_stream_beds`' grid: `index_query@PointGrid.near` 28, `index_examined@PointGrid.near`
+     46 (was about 11,600 distances), the grid's build `write@stream_beds` 449;
+  2. the copy to Python, the fan's ring and the brook's course included, nine values a basin and seven a dry plot - `write@py_export`
+     22,046;
+  3. the stream's flow and corridor copies - `write@stream` 1,800 (4 a point over 448);
+  4. `field_channel`'s stream clip, fillet, rounded record and pieces - `write@field_channel` 1,012;
+  5. `comb_base_fill`'s ring joined and rounded - `write@comb_base_fill` 193;
+  6. the furrow corners - walked once (was eight passes), in `pt_test@furrows` 12,254 (was 26,003: the rows now swept, each cut
+     against only the edges it crosses);
+  7. the furrow clip fallback - every row written under the clip, in `pt_test@furrows` at the row that finds the plot concave.
 - [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
 
 ## Working record

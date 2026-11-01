@@ -169,10 +169,9 @@ class WaterClipMixin:
         (`rerecord`'s new `poly`) builds it again.
 
         Research:
-            the bed index - NONE: an index over the streams' own segments; it decides nothing
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 9 (stream fallback)
+            the bed index - NONE: an index over the streams' own segments at their own widths (`stream` records every one's `w`); it decides nothing
         """
-        key = [(st, st["poly"], len(st["poly"]), st.get("w", 9)) for st in streams]
+        key = [(st, st["poly"], len(st["poly"]), st["w"]) for st in streams]
         kept = getattr(self, "_stream_beds_kept", None)
         if kept is not None and len(kept[0]) == len(key) and all(a[0] is b[0] and a[1] is b[1] and a[2:] == b[2:] for a, b in zip(kept[0], key, strict=True)):
             return cast(PointGrid, kept[1])
@@ -205,7 +204,7 @@ class WaterClipMixin:
         got the argument, and the caller passed it to those two and not to this one.
 
         Research:
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten); 9 (stream fallback)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten)
         """
         streams = self.M.get("streams", [])
         if not streams or len(pts) < 2:

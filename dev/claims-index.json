@@ -52425,8 +52425,8 @@
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._draw_furrows#furrow ink": {
   "body": "e61452cd45c3e796",
   "claim": "furrow ink - CONVENTION: 0.8 stroke at 0.8 opacity",
-  "code": "1ca265f6a23a5549",
-  "core": "6a9769d7bdd15d21",
+  "code": "defcc7348d51000e",
+  "core": "c965244698ccd543",
   "date": "2026-10-31",
   "note": "stroke width and opacity only; the color is passed in",
   "pages": {},
@@ -52438,8 +52438,8 @@
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._draw_furrows#furrow spacing": {
   "body": "e61452cd45c3e796",
   "claim": "furrow spacing - GUESS: 5 px between rows",
-  "code": "a072e2a08920f8f6",
-  "core": "6a9769d7bdd15d21",
+  "code": "4c2be846a16e7d37",
+  "core": "c965244698ccd543",
   "date": "2026-10-31",
   "note": "the page records the furrows' spacing as a GUESS; ts += 5",
   "pages": {},
@@ -52462,6 +52462,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -52480,8 +52481,8 @@
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin.comb_base_fill#field floor": {
   "body": "15bc135bc110095d",
   "claim": "field floor - CONVENTION: a paddy-green or soil-tan wash under the plots so no parchment shows",
-  "code": "fe7c2430c1c0d25d",
-  "core": "45bb21f26246f300",
+  "code": "9f5154383816f991",
+  "core": "82a02ee57b786233",
   "date": "2026-10-31",
   "note": "a wash under the plots in the color it is passed, defaulting to rice green; how the map is shown",
   "pages": {},
@@ -72606,6 +72607,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._pond_anchored#mouths drawn as joins": {
@@ -72620,9 +72622,21 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._stream_beds#the bed index": {
+  "body": "4f1671a46a73f560",
+  "claim": "the bed index - NONE: an index over the streams' own segments; it decides nothing",
+  "code": "eb1c164756648bb1",
+  "core": "04e045314c26741d",
+  "date": "2026-11-01",
+  "note": "the segment grid, its cache key and the boxes widened by `reach` are only index plumbing; every half-width comes from the stream's own `w`",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#bends swept": {
-  "code": "93eebc2a9cf250e2",
-  "core": "fbafd6ee081bc3a6",
+  "code": "63fe2ec6fe359be2",
+  "core": "166dc9ecc1b7c945",
   "date": "2026-10-03",
   "note": "fillet at 2.5 x max width",
   "pages": {
@@ -72633,28 +72647,31 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#ditch class": {
-  "code": "d930ebdab54ae7db",
-  "core": "fbafd6ee081bc3a6",
+  "code": "a56822341bb838d3",
+  "core": "166dc9ecc1b7c945",
   "date": "2026-10-03",
   "note": "passed through",
+  "pages": {},
   "research": "",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#its salts, guards and sentinels": {
   "body": "ecec4ea66a094d1f",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (taper tolerance)",
-  "code": "83bc0835da16796d",
-  "core": "fbafd6ee081bc3a6",
+  "code": "c451b9cedb0b4794",
+  "core": "166dc9ecc1b7c945",
   "date": "2026-10-25",
   "note": "threshold for drawing one stroke instead of tapered pieces",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#mouths drawn as joins": {
-  "code": "4d8008ad9c126c4e",
-  "core": "fbafd6ee081bc3a6",
+  "code": "ee2d0c298c3ac132",
+  "core": "166dc9ecc1b7c945",
   "date": "2026-10-03",
   "note": "all four clips applied",
   "pages": {
@@ -72665,8 +72682,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#taper along the run": {
-  "code": "b2002a8406bd8322",
-  "core": "fbafd6ee081bc3a6",
+  "code": "5eec25a118868f53",
+  "core": "166dc9ecc1b7c945",
   "date": "2026-10-03",
   "note": "taper_pieces uses the square-root law",
   "pages": {
@@ -73246,8 +73263,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#bed and sheen": {
-  "code": "5badafbe2bc6761a",
-  "core": "cfe3c123e3b4f5e1",
+  "code": "231a57c57c7d6628",
+  "core": "5f9d09c473e7d4e1",
   "date": "2026-10-07",
   "note": "ink only",
   "pages": {},
@@ -73260,8 +73277,8 @@
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#every course declares its flow": {
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "76e528cc76d09299",
-  "core": "cfe3c123e3b4f5e1",
+  "code": "5fc1caddcb7613d6",
+  "core": "5f9d09c473e7d4e1",
   "date": "2026-10-07",
   "note": "upstream-first, flow_deg recorded",
   "pages": {
@@ -73279,8 +73296,8 @@
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#houses kept off the stream": {
   "body": "5cfff42c7d82c6c4",
   "claim": "houses kept off the stream - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a no-build corridor of max(30, half-width + 20) px",
-  "code": "7bb5a0313f65027f",
-  "core": "cfe3c123e3b4f5e1",
+  "code": "7bdee858f7577137",
+  "core": "5f9d09c473e7d4e1",
   "date": "2026-10-25",
   "note": "`max(30, width / 2 + 20)` as claimed; the record is silent",
   "pages": {},
@@ -73292,8 +73309,8 @@
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#its drawn sizes": {
   "body": "5cfff42c7d82c6c4",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.35 (sheen stroke)",
-  "code": "badd5fd071e9efde",
-  "core": "cfe3c123e3b4f5e1",
+  "code": "0667be3203f86f0d",
+  "core": "5f9d09c473e7d4e1",
   "date": "2026-10-25",
   "note": "sheen stroke",
   "pages": {},
@@ -73305,8 +73322,8 @@
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": {
   "body": "0648b56c1fd32982",
   "claim": "stream width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths: the page's GUESS of about 1.6 m (~5.25 ft) for a village brook, drawn 5.25 ft at the map's scale by default",
-  "code": "f10d8bed0eaad623",
-  "core": "cfe3c123e3b4f5e1",
+  "code": "eb4bb748c4773dee",
+  "core": "5f9d09c473e7d4e1",
   "date": "2026-11-01",
   "note": "default self.px(5.25) is the page's own recorded figure for a village brook, \"about 1.6 m (~5.25 ft)\", and the claim states it is the page's GUESS; a single fixed degree is allowed",
   "pages": {
@@ -83239,8 +83256,8 @@
  "rust/phases/src/field/py.rs::stage_field#the seam": {
   "body": "378c58422f217775",
   "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
-  "code": "c71f1c9f4bc2e8f6",
-  "core": "7f5f54c73e5c5823",
+  "code": "199f8fefc40b2153",
+  "core": "b4e9432eade34325",
   "date": "2026-11-01",
   "note": "unpacks the inputs, calls build and returns a dict",
   "pages": {},
