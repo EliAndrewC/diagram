@@ -158,10 +158,15 @@ standards" (`request.md`).
   only when BOTH pass, so a failure cannot leave the list only because a change upstream turned its seed into another map. The list and its fixtures are the Rust stages' alone; Python stages never add to it.
 
 - **FR-021**: A Rust stage lands with no open claim (amendment 6, the GM 2026-10-31: "we should require that every Rust stage end
-  its initial implementation with zero open claims"). A phase task's landing is refused while any research claim in a file its
-  delta changes - its Rust under `rust/` and the Python under `l7r/` it edits - is owed a check or stands open in
-  `make claims-report` (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, or an UNCLAIMED decision). The claims switch's `report`
-  (feature 445) stands for every other landing. water_frame, the Rust stage landed before this rule, is held to it by a task of its
+  its initial implementation with zero open claims"). A phase task's landing is refused while a research claim is owed a check
+  or stands open in `make claims-report` (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, or an UNCLAIMED decision) in the
+  stage's own code: its Rust under `rust/` that the delta changes, and the Python under `l7r/` the delta adds or changes - its
+  seam, its `STAGES` entry and any caller it edits - a unit (a function, a method, a module's constants) counting where the delta
+  adds or changes a line of it. Lines the delta deletes take their claims with them. A finding in a file the delta touches only to
+  delete code, at a unit it did not change, belongs to the open-claims feature (the GM 2026-10-27, `request.md`: the claims still
+  open in the Python code base are that feature's) and is filed as its row in the same landing. The ground is amendment 6's words
+  and the GM's 2026-10-27 words; the old code a phase leaves dead is still deleted in that phase's own landing (FR-005). The claims
+  switch's `report` (feature 445) stands for every other landing. water_frame, the Rust stage landed before this rule, is held to it by a task of its
   own: its open findings closed.
 
 ## Success Criteria *(mandatory)*
@@ -201,8 +206,9 @@ standards" (`request.md`).
   next run, kept while its seed passes and its fixture still fails, and removed only when its seed and its frozen input both pass;
   and the gate's seeds hold no fixed block.
 
-- **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding in a file its delta changes, and
-  not refused once the finding is closed; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
+- **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding at a unit its delta adds or
+  changes, not refused once the finding is closed, and not refused by a finding at a unit of a file the delta touches only to
+  delete other code; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
   Python file water_frame's port (T19) changed.
 
 ## Edge Cases
@@ -262,3 +268,6 @@ standards" (`request.md`).
 
 - 2026-10-31, amendment 6 (the GM on open claims, `request.md`): FR-021 - a phase task's landing refused while a claim in a file its
   delta changes is owed or open; water_frame's open findings closed by a task; SC-014 tests it.
+- 2026-11-01, FR-021 narrowed to the stage's own code (the round arbiter on ask:444-T16-fr021-scope-2, after spec-fidelity
+  BLOCKED T23's separate deletion landing against FR-005): a unit the delta adds or changes, not every old finding in a file it
+  touches only to delete dead code; those findings filed to the open-claims feature. T23 folded into T16.
