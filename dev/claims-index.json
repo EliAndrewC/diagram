@@ -9161,13 +9161,24 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts_water.py::BROOK_TAP_RUN#brook straight at the tap": {
+ "l7r/diagram/hamletgen/consts_water.py::BROOK_TAP_RUN#how far it runs straight": {
   "body": "aab25fe013a52337",
-  "claim": "brook straight at the tap - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: 70 ft down the fall",
-  "code": "306ef93aeb04e35d",
+  "claim": "how far it runs straight - GUESS: where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing silent on the length; 70 px down the fall",
+  "code": "edf3be0e39e53ec6",
   "core": "f54aea27cc963be5",
   "date": "2026-11-01",
-  "note": "the drawing page has the brook heading down the slope at the tap, with the race's angle taken off that heading (\"the turn carries the brook straight down the slope\"; \"the head race's angle is read off that lean\"), but it gives no length for how far the brook runs straight past the intake, and nowhere records \"70 ft\". The claim treats the figure as if the page set it. It should say UNRESEARCHED, or GUESS once the drawing page records the 70 ft as a guess. The comment's unit is also px while the claim says ft",
+  "note": "the page gives no length for the brook's straight stride past the intake, so 70 px is a guess the record does not answer",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/consts_water.py::BROOK_TAP_RUN#the brook heading down the fall at the tap": {
+  "body": "aab25fe013a52337",
+  "claim": "the brook heading down the fall at the tap - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the turn carries the brook straight down the slope, the head race's angle read off that lean",
+  "code": "b4f633cfb716836c",
+  "core": "f54aea27cc963be5",
+  "date": "2026-11-01",
+  "note": "the claim joins two different sitings from §6: the bend's \"turn carries the brook straight down the slope\" and the straight reach's \"leaning a little away from the fields ... angle is read off that lean\". I need the code that reads BROOK_TAP_RUN to see two things: whether the run down the fall is also applied on the straight-reach siting, where the page has the brook leaning away rather than heading down the fall; and whether on the bend siting a 70 px straight run before the turn still leaves the intake \"at its apex\"",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
@@ -9176,7 +9187,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_WANDER#brook's stray": {
   "body": "49576d6fcf95bda8",

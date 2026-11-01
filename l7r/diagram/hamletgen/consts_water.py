@@ -98,7 +98,9 @@ BROOK_FAN_TRIM = 0.72
 # that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
 BROOK_TAP_RUN = 70.0
-"""Research: brook straight at the tap - UNRESEARCHED: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html sets the brook heading straight down the slope at the tap but gives no length; 70 px down the fall, a value of ours"""
+"""Research:
+    how far it runs straight - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on the length; 70 px down the fall (how the brook keeps the intake's line is the Rust's claim, `brook.rs` "the tap's stride")
+"""
 # THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
 # intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
 # closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
@@ -107,7 +109,7 @@ WEIR_HALF_FT = 7.0
 # WHAT THE WEIR IS BUILT OF, AND SO HOW THICK IT IS DRAWN, in feet, by form (269 B22; research/water/300, "What was a
 # village weir built of, and how thick was it?"). The weir on small water was built of what lay to hand, and four forms
 # are read, so the form is a knob (`WEIR_FORM`, water/brook.py) rolled per weir hamlet, each at its own thickness:
-# - `fence`, stakes with reed woven between them (the grass weir): a fence is as thick as its row of stakes; 1.5 ft is
+# - `fence`, stakes with brushwood or bamboo woven between them (0059): a fence is as thick as its row of stakes; 1.5 ft is
 #   WIDER than that so it can be seen at all - a MAP DRAWING CONVENTION;
 # - `gabion`, a course of stone-filled baskets: one basket "about 40-60 cm in diameter", read as about 2 ft - the
 #   basket's read size; the gabion course as a BROOK weir at all is a GUESS (the source gives gabions on rivers);
