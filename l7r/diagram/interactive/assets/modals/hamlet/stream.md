@@ -17,13 +17,13 @@ and the finest ditch, the one that watered a single paddy, probably about a foot
 
 Guesses:
 - Its width, about 5.25 ft (1.6 m): no account, from before modern times or after, gives the width of a village's brook, so
-  it is drawn narrower than the 6.0 ft head race it feeds, about three and a half times the 1.5 ft at which the finest ditches are drawn.
+  it is drawn narrower than the 6.0 ft irrigation ditch it feeds, about three and a half times the 1.5 ft at which the finest ditches are drawn.
 
 Depiction: The map draws the brook coming down off the high ground, passing the head of the paddies on one side and
 running on down that flank, to leave the map or to take in the fields' drain; the irrigation ditch leaves it at the
 intake, leaning downstream. Every watercourse runs one way, downhill, though the map marks no heights. The brook's
 width shows its rank among the waters - brook, canal, ditch - rather than the water it carries, so where it meets the
-head race the two widths are not matched. Where a way crosses the brook it crosses squarely, on a timber deck as wide
+irrigation ditch the two widths are not matched. Where a way crosses the brook it crosses squarely, on a timber deck as wide
 as the way.
 Scrub and grass are drawn right to the brook's edge, with no bare strip along it, as a natural stream's
 banks were grown to the water.
