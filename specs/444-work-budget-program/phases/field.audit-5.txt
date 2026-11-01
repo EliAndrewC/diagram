@@ -1,0 +1,29 @@
+UNCOUNTED - lattice.rs `fit()` (lines 126-156, called by `cuts` ← `basins_counted` ← `build::one` ← `build` ← `stage_field`): every pass reads each length of the half-row in the sum (128), the band test (133-139) and the update (146-148), and a closing sum ends it. The only counter above it is one read a cut (`*work += s.len()`, line 252), so the passes beyond that are counted nowhere.
+
+**1. Counters against budget.** At 40 households: 69,671 against 71,243 (ratio 0.978). At 80: 121,893 against 131,046. The exponent is 0.78, against the budget's 0.86. All three hold as counted, but with only 1,572 operations of room at 40, and the next question shows that room is smaller than what goes uncounted. chains.txt holds no call chains. It is a perf-log fanout summary (165,347 calls at 40, against counts.json's 29,864), so I traced the chains from the code.
+
+**2. Does a counter cover every inner loop (S5)?** The loops the fourth round named:
+- **Counted per element:** `traced()` (as `3 × ring` in `laid_fan`; the first trace's ring can differ from the second's by a point or two), the own-pieces read, resync's compare, `Bands::new` and the tract-below scan. `pt_test@Standing.extents` equals `pt_test@Standing.resync` in every roll.
+- **Still uncounted: the rest-of-band loop** (dry.rs 168-184). Once `got >= need`, every remaining column and strip still runs: `column()` returns early and `room +=` runs, with no counter. A closed-form room would remove the loop.
+- **Minor:** in `rerecord`, a polygon-only record's extent copy is not counted; only its compare is.
+
+**Do the cuts change what the stage outputs?**
+- **Fan laid once:** same arguments, so the same fan.
+- **Own pieces read only against earlier ones:** pairs reach `pair_forbidden` in the same order. Only the order of `out` changes, so `admits` gives the same answer. Only a strict refusal's `bad[0]` message could name a different pair, and no roll was refused.
+- **Extents kept from the question and from resync's compare:** correct for this stage. `s.stream` asks with `rec`, then appends the same object, with nothing filed between.
+- **Segments export dropped:** `_segments` is unused, it is not in `field_dict`, and nothing in field_stage.py reads it.
+- **A risk outside this stage:** the `_asked` cache keys on `id(o)` without holding `o`. A caller that asks with a temporary dict (`forbidden_segment`, a placer's candidate) can then record a different dict at the recycled address with `_changes` unchanged. That files the wrong extents until resync, and resync would then log a `moved@`. Holding `o` and checking `is` fixes it.
+
+**Modules the fourth round could not see:**
+- **ink.py:** `write@field_ink` matches exactly (8,713 = 6,024 plot points + 908 dry-plot points + 1,781 beans, 40 households, seed 4). `write@drawing_records` equals the channel points. But `draw` calls `comb_base_fill`, `_draw_furrows` (once per dry plot), `_comb_draw_beads`, `field_channel` and `rest_basin`. None of them is defined in the bundle, and counts.json has no counter for any of them, so their loops' coverage cannot be confirmed from here.
+- **water.py `stream`:** `write@stream = 2 × len(poly)` covers the record and the `dd` path. The `_flow_record` point list (line 101) and the corridor copy (line 155) are two more per-point loops with no counter, about 900 reads at 40 households.
+
+**3. Is anything placed and then repaired (S4)?** No. There are no `dropped@` or `moved@` counts, and `candidate@Standing.conflicts` equals `placed@Standing.record`, so each record is asked once. The fan's second trace is a measurement before anything is placed, not a repair. The hem refuses a seat before laying a plot.
+
+**4. Is the growth linear (S6)?** Yes: 0.78, under both 1.15 and the budget's 0.86.
+
+**The ruling on `fit()`'s passes beyond `s.len()`.** Its loop runs up to n+1 passes over the half-row's lengths. Even when no length clamps (one full pass, then a second pass whose sum returns), it makes about 4n reads per half-row against the n counted, so at least 3 uncounted reads per basin. With 1,443 basins on average at 40 households (`write@plot_record` / 4 across the four seeds), even 2 per basin is about 2,900 against 1,572 of room. That is my estimate from the code, not a measurement. A `*work +=` per length read inside `fit` would settle it, or a one-pass water-fill could replace the loop. Counted, it would likely put the stage over at 40 households.
+
+**Not ruled (outside this round):** py.rs `field_dict` copies every basin's ring and fields to Python with no counter.
+
+Files: /tmp/l7r-check/work-budget-audit-field/code/lattice.rs, /tmp/l7r-check/work-budget-audit-field/code/dry.rs, /tmp/l7r-check/work-budget-audit-field/code/registry.py, /tmp/l7r-check/work-budget-audit-field/code/ink.py, /tmp/l7r-check/work-budget-audit-field/code/water.py, /tmp/l7r-check/work-budget-audit-field/code/build.rs, /tmp/l7r-check/work-budget-audit-field/chains.txt
