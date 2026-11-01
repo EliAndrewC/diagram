@@ -359,3 +359,15 @@ Told the session's proposals (the Rust stages always the front of the pipeline, 
 Told that water_frame's port landed with its claims findings reported but open (the claims switch at `report`):
 
 "actually yeah: we should require that every Rust stage end its initial implementation with zero open claims"
+
+## 2026-11-01, T16 - the field's budget (444#4, 444#6)
+
+Told that the field's re-derived budget sat above the standing pin (444#4):
+
+"You have my yes on 444#4 this is acceptable to me, thanks."
+
+"Sorry, to be clear, if we're only trying to save like 8400 operations Then I accept this is good enough as well."
+
+Told that, with every loop the audits named counted, the field measured 1.88 times its derivation, and offered (a) 1.9 times the derivation or (b) the furrows' spacing widened first (444#6):
+
+"I go with option (a) - this is well within what we should consider acceptable, even if our original estimate was a bit off because of failing to count/consider/calculate everything."
