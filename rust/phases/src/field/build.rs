@@ -391,30 +391,7 @@ fn one(
     let mut ends = Vec::new();
     let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work, &mut ends);
     counts.add("write@basin", work);
-    let stats: Vec<RingStats> = bs.iter().map(|b| ring_stats(&b.ring)).collect();
-    // the field's area and its plots' box, read off each plot's figures once (the ink's floor takes the box: 444 T16's audit)
-    counts.add("candidate@plots_box", stats.len() as u64);
-    let area: f64 = stats.iter().map(|x| x.2).sum();
-    let plots_box = stats.iter().fold(
-        [
-            f64::INFINITY,
-            f64::INFINITY,
-            f64::NEG_INFINITY,
-            f64::NEG_INFINITY,
-        ],
-        |b, x| {
-            [
-                b[0].min(x.0[0]),
-                b[1].min(x.0[1]),
-                b[2].max(x.0[2]),
-                b[3].max(x.0[3]),
-            ]
-        },
-    );
-    counts.add(
-        "write@plot_record",
-        bs.iter().map(|b| b.ring.len() as u64).sum(),
-    );
+    let (stats, area, plots_box) = plot_figures(&bs, counts);
     rows_held(&bs, &ends, inp.cell, counts)?;
     let (chans, probes) = channels(
         f,
@@ -488,6 +465,39 @@ fn one(
         low,
         rested,
     })
+}
+
+/// Each basin's `RingStats`, the field's area and its plots' box (x0, y0, x1, y1): each ring walked once, then its figures read
+/// once for the area and the box, both counted.
+///
+/// Research:
+///     the plots' figures - NONE: geometry of the rings; what they record is the field record's
+fn plot_figures(bs: &[Basin], counts: &mut Counts) -> (Vec<RingStats>, f64, [f64; 4]) {
+    let stats: Vec<RingStats> = bs.iter().map(|b| ring_stats(&b.ring)).collect();
+    // the field's area and its plots' box, read off each plot's figures once (the ink's floor takes the box: 444 T16's audit)
+    counts.add("candidate@plots_box", stats.len() as u64);
+    let area: f64 = stats.iter().map(|x| x.2).sum();
+    let plots_box = stats.iter().fold(
+        [
+            f64::INFINITY,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NEG_INFINITY,
+        ],
+        |b, x| {
+            [
+                b[0].min(x.0[0]),
+                b[1].min(x.0[1]),
+                b[2].max(x.0[2]),
+                b[3].max(x.0[3]),
+            ]
+        },
+    );
+    counts.add(
+        "write@plot_record",
+        bs.iter().map(|b| b.ring.len() as u64).sum(),
+    );
+    (stats, area, plots_box)
 }
 
 /// A field's fan of `area` square feet at `center`, rolled from `seed`: its two traces and its area's walk counted.
