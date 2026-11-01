@@ -387,8 +387,9 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
 
 class BridgesMixin:
     def bridge(self: Settlement, x: float, y: float, rot: float, span: float, deck_w: float, form: str = "plank") -> int:  # type: ignore[misc]
-        """A timber BRIDGE carrying a road (or town street) over a watercourse - a stream, an
-        irrigation channel, or the city moat at a gate. Centered on the crossing (x, y); the deck
+        """A timber BRIDGE carrying a way over a watercourse - a brook, a channel or a field ditch. Only the hamlet calls it
+        since feature 392 retired the frozen hand-era maps' code (their town streets and the city moat at a gate were decked
+        here); a town's own road bridges are feature 381's. Centered on the crossing (x, y); the deck
         runs along `rot` (the road's bearing, degrees) for `span` px (long enough to reach both
         banks) and is `deck_w` wide (the carried road's width). Drawn on the TOP layer so it sits
         ABOVE the water and the roadbed. Records M['bridges']. `form` is the deck's glyph (`deck_glyph`): a carried
@@ -423,7 +424,8 @@ class BridgesMixin:
         way. Call AFTER all ways (road, ring road, streets, lanes) AND all water (streams, channels,
         the cargo canal, the moat) are placed - a watercourse added later would leave an unbridged
         crossing (which the `roads_bridge_water` check then flags). Returns the number of bridges
-        drawn. Historically a walled city's approach road crossed the moat on a bridge at each gate,
+        drawn. Only the hamlet calls it since feature 392; the city and town cases below are the frozen hand-era maps'
+        history. Historically a walled city's approach road crossed the moat on a bridge at each gate,
         and a country road crossed a stream on a timber bridge.
 
         SOLVE THE CROSSING, NEVER EYEBALL IT (GM 2026-07-27, Minami's cargo-basin bridge). A deck
@@ -441,6 +443,7 @@ class BridgesMixin:
             every crossing bridged - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: each carried way over each crossed water
             deck along the way - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
             one deck per crossing place - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a covered crossing skipped, a near one merged
+            the merge radius - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on two ways crossing one water a few feet apart; a crossing within half its own deck's span of a standing carried deck, in any direction, counted the same crossing place and merged into it
             unseated crossing - NONE: raised as an engine defect
         """
         wet = flooded_ground(self.M)
@@ -467,7 +470,7 @@ class BridgesMixin:
             # is widened as well as lengthened (the fifth claims check: lengthening alone never reached a way 12 ft beside it)
             near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
             if near:
-                self._reseat_to_cover(near[0], p, _span, rw)
+                self._reseat_to_cover(near[0], p, _span, rw, wet)
                 continue
             # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
             # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
@@ -477,19 +480,25 @@ class BridgesMixin:
             n += 1
         return n
 
-    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt, own: float, own_w: float) -> None:  # type: ignore[misc]
+    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt, own: float, own_w: float, wet: Any = ()) -> None:  # type: ignore[misc]
         """Lengthen a standing deck along its own bearing until it reaches past `p` - a second crossing close enough that its
         own deck (`own` long, `own_w` wide) would stand on this one (feature 287, ways W02) - by that deck's own half-span,
         so the merged deck clears the second water and lands as its own would, and widen it across its bearing to take that
         way's own width at `p` (a deck covers only its own rectangle, `deck_covers`); and redraw it, record and ink together.
+        The merged deck's four corners are tested again, on dry ground (`_lands_dry`) and admitted where it stands
+        (`deck_admitted`): a merge that fails either raises `UndeckableCrossing`, an engine defect, as an unseated crossing does.
 
-        Research: two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner past the water onto dry ground
+        Research:
+            two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner past the water onto dry ground, tested on the merged deck's own corners
+            the merged deck's width - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on two ways crossing one water a few feet apart; one deck as wide as both ways together, where the page's deck is as wide as the one way it carries
         """
         c, a = (float(deck["x"]), float(deck["y"])), math.radians(float(deck["rot"]))
         along = abs((p[0] - c[0]) * math.cos(a) + (p[1] - c[1]) * math.sin(a))
         across = abs(-(p[0] - c[0]) * math.sin(a) + (p[1] - c[1]) * math.cos(a))
-        deck["span"] = round(max(float(deck["span"]), 2.0 * along + own), 1)
-        deck["w"] = round(max(float(deck["w"]), 2.0 * across + own_w), 1)
+        span, w = round(max(float(deck["span"]), 2.0 * along + own), 1), round(max(float(deck["w"]), 2.0 * across + own_w), 1)
+        if not _lands_dry(c, float(deck["rot"]), span, w, wet) or not deck_admitted(self.M, c, float(deck["rot"]), span, w):
+            raise UndeckableCrossing(f"the deck merged to reach ({p[0]:.0f}, {p[1]:.0f}) lands in the rice or on what stands there")
+        deck["span"], deck["w"] = span, w
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float | None = None, seg_caps: Any = None) -> int:  # type: ignore[misc]

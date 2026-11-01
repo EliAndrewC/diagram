@@ -122,7 +122,7 @@ fn rolled(seed: i64, knobs: &[KnobIn], counts: &mut Counts) -> HashMap<String, S
 ///     fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander
 ///     the grain owed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`)
 ///     barley on the drained paddy - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares
-///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild the dry plots climb from the toe into the middle until they hold the grain, the only other bound `MAX_BANDS`, a guard far past any canvas (dry.rs); on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared
+///     the hem's line - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where the middle is left wild the dry plots climb from the toe into the middle, as far as `hem_bounds` lets them; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared
 ///     the brook's flank unhemmed - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's
 ///     the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook
 ///
@@ -201,13 +201,11 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             &line,
             out,
             f.fan.down,
-            // a wild middle's hem climbs until the grain is held; a cleared one is the one band along the whole canal, whatever
-            // the grain asks (0011: its cleared ground drawn only as the hem along the whole canal, the barley on the paddy)
-            if is("fan_middle", "wild") {
-                (dry_need, MAX_BANDS)
-            } else {
-                (f64::INFINITY, 1)
-            },
+            hem_bounds(
+                is("fan_middle", "wild"),
+                is("winter_crop", "barley"),
+                dry_need,
+            ),
             &f.fan.ring,
             ix,
             1.0,
@@ -406,14 +404,37 @@ fn one(
     })
 }
 
+/// The hem's bounds, (the grain it holds, the bands it may climb): a wild middle's hem climbs until the grain is held where the
+/// paddy lies bare over the winter, and stays on the toe, one band, where it carries barley; a cleared middle's is the one band
+/// along the whole canal, whatever the grain asks.
+///
+/// Research:
+///     the hem's climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where a hamlet's paddy lies bare over the winter its dry fields climb from the toe into the wild middle until they hold the grain; where it carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the toe one band, the climb bounded only by `MAX_BANDS`, a guard far past any canvas
+fn hem_bounds(wild: bool, barley: bool, need: f64) -> (f64, u32) {
+    match (wild, barley) {
+        (true, false) => (need, MAX_BANDS),
+        (true, true) => (need, 1),
+        (false, _) => (f64::INFINITY, 1),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
-    use super::{build, FieldIn};
+    use super::{build, hem_bounds, FieldIn};
     use crate::field::brook::BrookIn;
+    use crate::field::dry::MAX_BANDS;
     use crate::field::lattice::ROW_FT;
     use crate::field::states::State;
+
+    #[test]
+    fn a_barley_hamlets_hem_stays_on_the_toe() {
+        assert_eq!(hem_bounds(true, false, 9.0), (9.0, MAX_BANDS));
+        assert_eq!(hem_bounds(true, true, 9.0), (9.0, 1));
+        assert_eq!(hem_bounds(false, false, 9.0), (f64::INFINITY, 1));
+        assert_eq!(hem_bounds(false, true, 9.0), (f64::INFINITY, 1));
+    }
 
     fn inp(households: u32, seed: i64) -> FieldIn {
         FieldIn {

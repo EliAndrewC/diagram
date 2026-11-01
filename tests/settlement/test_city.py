@@ -450,6 +450,14 @@ def test_a_merged_deck_is_redrawn_to_reach_both_crossings() -> None:
     # ...and a crossing 2 ft across its bearing widens it to take that way's own 6 ft there, 2 x 2 + 6
     s._reseat_to_cover(deck, (502.0, 300.0), 30.0, 6.0)
     assert deck["w"] == 10.0 and deck["span"] == 70.0
+    # ...and a merge whose corners would stand in the rice is an engine defect, raised, the deck left as it stood
+    import pytest
+
+    from l7r.diagram.settlement.city.bridges import UndeckableCrossing
+
+    with pytest.raises(UndeckableCrossing):
+        s._reseat_to_cover(deck, (500.0, 400.0), 30.0, 6.0, [[(480.0, 400.0), (520.0, 400.0), (520.0, 440.0), (480.0, 440.0)]])
+    assert deck["span"] == 70.0
 
 
 def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:

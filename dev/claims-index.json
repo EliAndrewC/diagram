@@ -10700,11 +10700,11 @@
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#every low plot tinted": {
   "body": "6211feea487f3582",
-  "claim": "every low plot tinted - wet-paddies-that-never-drain-shitsuden.drawing: a polder or terraced field tints every low plot - each low plot in the wet tint; none rests (`polder::rest` never picks a low plot), so none is drawn untinted through `rest_basin`",
-  "code": "ea882df34e76313d",
+  "claim": "every low plot tinted - wet-paddies-that-never-drain-shitsuden.drawing: a polder or terraced field tints every low plot - each low plot in the wet tint (`states::polder_states` returns `wet` for every low plot before any other roll, so its `FILL` is the wet one); none rests (`polder::rest` never picks a low plot), so none is drawn untinted through `rest_basin`",
+  "code": "f4c2cf5006dc6f64",
   "core": "3a090f88af1c4e8e",
   "date": "2026-11-01",
-  "note": "the fill comes from `FILL[p[\"state\"]]`, not from `p[\"low\"]` (unlike `comb_net`, where low means state == \"wet\"), so a low plot that the Rust gives state \"flooded\" or \"gold\" would not take the wet tint the page requires on every low plot; I need `states::polder_states` to see whether every low plot gets state \"wet\"",
+  "note": "polder_states returns Wet for every low plot before the rest or seasonal rolls, so FILL[\"wet\"] (FLOODED) is the fill add_paddy draws and wet_plots records every low plot; this matches the page's \"a polder or terraced field tints every low plot\"",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
@@ -10713,7 +10713,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
   "body": "6211feea487f3582",
@@ -50121,12 +50121,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._reseat_to_cover#two crossings, one deck": {
-  "body": "2d07f0d5743496d8",
+  "body": "babf3a44fb6be872",
   "claim": "two crossings, one deck - plank-bridges-over-farm-ditches-itabashi.drawing: lengthened to reach both - road-bridges-over-rivers-and-canals-hashi.drawing: every corner past the water onto dry ground",
-  "code": "293fc29a006f35da",
-  "core": "26e09e46a9b72c86",
+  "code": "53b612f549345067",
+  "core": "b9384d8b0a251ec0",
   "date": "2026-11-01",
-  "note": "`deck[\"span\"] = max(span, 2.0 * along + own)` grows the deck both ways from its old center and measures only `along`, the offset along the deck's bearing. So a second crossing off the deck's axis by more than half its width is still not under the deck. The grown deck is also never re-seated or re-tested (no seat_deck, _lands_dry or deck_admitted), so the claim's \"every corner past the water onto dry ground\" is never checked on the merged deck. Re-seat and re-test the merged deck, or narrow the claim",
+  "note": "the claim says the merged deck has every corner past the water onto dry ground, but the code never tests that. `deck[\"span\"] = max(span, 2*along + own)` adds the second deck's half-span along the STANDING deck's bearing, yet `own` was solved for the second way's own bearing and water, and nothing re-runs `seat_deck` or `_lands_dry` on the merged corners. The page says \"the test is made on the deck's four real corners\" and \"every corner ... stands on dry ground\". Separately, `deck[\"w\"] = max(w, 2*across + own_w)` makes the deck wider than the way, against \"one timber deck as wide as the way\" and \"Each deck is as wide as the way it carries\". Either re-seat and re-test the merged deck, or reword the claim to what the code does.",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50134,7 +50134,6 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
-  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._widen_for_confluence#its salts, guards and sentinels": {
@@ -50169,18 +50168,17 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#carried deck always planked": {
   "body": "b6f2f50dec413bd1",
-  "claim": "carried deck always planked - DEVIATION road-bridges-over-rivers-and-canals-hashi.drawing: a town's road bridges take one of two forms, rolled per settlement - every carried deck is drawn planked (0084's one timber deck as wide as the way, a hamlet's form) until the town tier rolls the form (feature 381's carried item, road-bridge forms)",
-  "code": "edda838adf91526a",
+  "claim": "carried deck always planked - plank-bridges-over-farm-ditches-itabashi.drawing: a hamlet's way crosses on one timber deck as wide as the way - the hamlet the one tier that calls `bridges()` (`hamletgen/frame.py`, `ways/checks.py`); a town's road bridges, one of two forms rolled per settlement (0087), are feature 381's carried item (road-bridge forms), to be rolled here when a town first calls it",
+  "code": "4622d15d17ae151c",
   "core": "21dad52d07f216da",
   "date": "2026-11-01",
-  "note": "this DEVIATION is not recorded on 0087's drawing page, which says \"Each town uses one form for all its road bridges, chosen at random\" (earth-decked timber or stone arch) and records no interim planked deck. Only 0084 §13 makes \"always planked\" the hamlet convention. Record the departure on 0087's drawing page, or restate it as a filed departure naming its open task (feature 381 Tnn)",
+  "note": "every carried deck is fixed at `form=\"plank\"`, which is right for a hamlet (\"always planked whatever form the settlement's ditch crossings take\"). But the claim says the hamlet is the only tier that calls bridges(), and the bundle contradicts that. This is the city mixin, and its own docstrings name town callers: \"the city moat at a gate\", Minami's ring road over the cargo canal, scanned \"now\". A town's road bridges \"take one of two forms, a knob chosen at random for each settlement\". So either show the code has no town caller, or restate the claim as a known departure the code keeps until feature 381 Tnn.",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "771cf8c216d2c2bb",
+  "research": "1dd5fd71121f4a06",
   "rests": [
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:4cf713416d6978b3"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
   "verdict": "DRIFTED"
  },
@@ -50242,12 +50240,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#every crossing bridged": {
-  "body": "054543c748c653c7",
+  "body": "7667cac8f9ac5898",
   "claim": "every crossing bridged - road-bridges-over-rivers-and-canals-hashi.drawing: each carried way over each crossed water",
-  "code": "90c74e601e536a8d",
-  "core": "d227e7b92a71a33e",
+  "code": "d70a6b13bb745f41",
+  "core": "a718c78ad8909f88",
   "date": "2026-11-01",
-  "note": "every crossing is decked or raised as a defect",
+  "note": "each crossing is covered, merged, decked, or raised; none is left to run through the water.",
   "pages": {
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
@@ -50256,17 +50254,23 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:5fb0771021ca6c69"
   ],
-  "triage": "touched",
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#one deck per crossing place": {
-  "body": "c2cd19daeca401b6",
-  "claim": "one deck per crossing place - plank-bridges-over-farm-ditches-itabashi.drawing: a covered crossing skipped, a near one merged",
-  "code": "575e3afdff27d0af",
-  "core": "d227e7b92a71a33e",
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#merge radius: a crossing within half the new deck's span (any direction) of a standing carried deck counts as the same crossing place and is merged into it. §13 says only \"at one point\" and §19 \"one bridge to each\", so the radius is unresearched.": {
+  "code": "a718c78ad8909f88",
+  "core": "a718c78ad8909f88",
   "date": "2026-11-01",
-  "note": "a covered crossing is skipped and a near one is merged, never two decks at one point",
+  "note": "merge radius: a crossing within half the new deck's span (any direction) of a standing carried deck counts as the same crossing place and is merged into it. §13 says only \"at one point\" and §19 \"one bridge to each\", so the radius is unresearched.",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#one deck per crossing place": {
+  "body": "7667cac8f9ac5898",
+  "claim": "one deck per crossing place - plank-bridges-over-farm-ditches-itabashi.drawing: a covered crossing skipped, a near one merged",
+  "code": "ede86c8c9777450b",
+  "core": "a718c78ad8909f88",
+  "date": "2026-11-01",
+  "note": "a covered crossing is skipped and a near one is merged; no second deck is drawn at one point.",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50274,7 +50278,6 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#unseated crossing": {
@@ -50962,12 +50965,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_covers#a deck covers its own reach": {
-  "body": "ff29bea1130fc0d5",
-  "claim": "a deck covers its own reach - plank-bridges-over-farm-ditches-itabashi.drawing: one deck per crossing place - a standing deck stands for a crossing it reaches, half its span from its center",
-  "code": "86d99f2de01ba77f",
-  "core": "58510811e34c9e8c",
+  "body": "dc10985867aae1ee",
+  "claim": "a deck covers its own reach - plank-bridges-over-farm-ditches-itabashi.drawing: one deck per crossing place - a standing deck stands for a crossing it reaches, within half its span along its bearing and half its width across it",
+  "code": "75113c2713328faf",
+  "core": "2e1c9af183a1213c",
   "date": "2026-11-01",
-  "note": "`math.hypot(...) <= span / 2` is a circle, not the deck's reach along its bearing and within its width. A crossing 12 ft along the brook from a 30 ft deck (radius 15) still counts as covered, the very case the bridges() comment says was left unbridged. That leaves a way running through the water beside the deck, against \"never two decks at one point\" read as one deck carrying each crossing. Test along the deck's axis within half its span and across it within half its width",
+  "note": "the test is half the span along the bearing and half the width across it, as the claim states.",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50975,7 +50978,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#its drawn sizes": {
   "body": "123cec8456b1fc7e",
@@ -79133,14 +79136,6 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/build.rs::build#MAX_BANDS caps how far out from the canal a wild-middle hem climbs (the page has it go \"out as far from the canal as the ground runs\")": {
-  "code": "7e8bb943834e3564",
-  "core": "7e8bb943834e3564",
-  "date": "2026-11-01",
-  "note": "MAX_BANDS caps how far out from the canal a wild-middle hem climbs (the page has it go \"out as far from the canal as the ground runs\")",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
   "body": "f909c8207de70cfb",
   "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
@@ -79204,7 +79199,7 @@
   "code": "c6f2e79f0da61d16",
   "core": "7e8bb943834e3564",
   "date": "2026-11-01",
-  "note": "need = households x GRAIN_ACRES_PER_HOUSEHOLD x acre is the right form, but the bundle does not show the constant's value; I need GRAIN_ACRES_PER_HOUSEHOLD inline to check it against \"About 0.85 acre a household\"",
+  "note": "need = households x 0.85 acre, the page's \"About 0.85 acre a household\"",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
@@ -79212,7 +79207,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
   "body": "f909c8207de70cfb",
@@ -79228,21 +79223,23 @@
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
   "body": "f909c8207de70cfb",
-  "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild the dry plots climb from the toe into the middle; on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared",
-  "code": "d89d5945c586a61e",
+  "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild the dry plots climb from the toe into the middle until they hold the grain, the only other bound `MAX_BANDS`, a guard far past any canvas (dry.rs); on a fan whose middle is cleared, the cleared ground is drawn only as the hem along the whole canal, one band of its tracts whatever the grain asks - canal A's, the first field's far flank up from its foot, and across its head where cleared",
+  "code": "df3248fc9805e692",
   "core": "7e8bb943834e3564",
   "date": "2026-11-01",
-  "note": "wild middle: the hem climbs from the foot up to MAX_BANDS bands until dry_need is held, starting from the toe (§28, §29); cleared middle: one band along the canal and across the head whatever the grain asks (§31)",
+  "note": "wild middle gets `(dry_need, MAX_BANDS)` whatever the winter crop, so with winter_crop barley and drained < need the hem climbs into the middle; the page climbs only \"where a hamlet's paddy lies bare over the winter\", and with barley \"its dry fields stay on the toe\". Fix the code (wild+barley stays on the toe) or the claim and page; the cleared branch (one band, line across the head) matches §31",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/build.rs::one#resting plots": {
   "body": "7bc38938f8e3a057",
@@ -79597,63 +79594,65 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#a delivery's course": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "a delivery's course - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is",
-  "code": "4165381bd4565f3e",
-  "core": "506bb8e9d015d634",
+  "code": "7abc519b130cab13",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "runs along its row's bund from the flank (q=s) to the middle line (q=0), down the slope",
+  "note": "each delivery follows lines.u(r, q) from the flank s to q=0, where the drain runs; along its row's bund, nearly square to the canal",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
   "research": "714621da4d4f5268",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e551e0e1e0a35b13"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's end": {
-  "body": "d104ff743c4c3e12",
-  "claim": "the canal's end - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way",
-  "code": "f1e26b541e996dd8",
-  "core": "506bb8e9d015d634",
+  "body": "2c615b6d30395123",
+  "claim": "the canal's end - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - at the thread from its last offtake either way",
+  "code": "84eeaa7809ba129d",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "both endings drawn, canal A rolls between them, and both taper to THREAD_W",
+  "note": "canal A rolls tail_runs_on per seed between the two attested endings, running on to fan.length flat at the thread or stopping at lines.u(last); canal B always stops short, as §10 and 0059's margin rule have it",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
   "research": "714621da4d4f5268",
   "rests": [
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's steps": {
-  "body": "d104ff743c4c3e12",
-  "claim": "the canal's steps - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a canal narrows in equal steps from its head to 1.5 ft - an equal step a leg from its head's width to the thread",
-  "code": "acf875a100d254d4",
-  "core": "506bb8e9d015d634",
+  "body": "2c615b6d30395123",
+  "claim": "the canal's steps - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a canal narrows in equal steps from its head to 1.5 ft at its last offtake - an equal step a leg from its head's width to the thread there, the leg a canal runs on past it to the crop's edge flat at the thread",
+  "code": "0c53d8a3c6dc14f9",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "the page says \"A canal narrows in equal steps from its head to 1.5 ft at its last offtake\", but when canal A runs on (`runs_on`, `end = fan.length`) the code adds a leg from the last offtake to the crop's edge, so the canal is only at 1.5 ft at the edge and is still w+(1.5-w)*k/(k+1) at its last offtake (4.5 ft with 2 offtakes gives 3.5 at the first, so the cap does not bite there, against \"at every offtake of a canal with only one or two\"). Either the code reaches 1.5 ft at the last offtake and runs flat to the edge (as §12 \"ends at that width\" reads), or the page limits \"at its last offtake\" to the canal that stops there and the claim says so",
+  "note": "n = the offtake count, so the legs step down evenly to THREAD_W at the last offtake and the leg that runs on stays flat; this reproduces Inashiro's 4.5/3.5/2.5/1.5",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
   "research": "65ae107a7028a36f",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals taper": {
-  "body": "d104ff743c4c3e12",
-  "claim": "the canals taper - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: every drawn canal tapers from its head toward its tail",
-  "code": "94db2db05b886150",
-  "core": "506bb8e9d015d634",
+  "body": "2c615b6d30395123",
+  "claim": "the canals taper - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: every drawn canal tapers from its head toward its tail - never widening, at the thread from its last offtake on",
+  "code": "c6c9d92ddbd3df87",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "every canal leg tapers from w toward THREAD_W",
+  "note": "a = i/n and b = (i+1)/n are capped at 1, so the width never grows and holds at the thread from the last offtake on",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
@@ -79661,16 +79660,15 @@
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the canals' courses - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from a corner fork, or swept along the head to its own corner from a middle one",
-  "code": "467b3208e121117f",
-  "core": "506bb8e9d015d634",
+  "code": "f31b8c142212af4b",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "supply canals along the high margins, one down each flank; head sweep from the far corner or from a middle fork",
+  "note": "side 0 (-brook_side) is swept along the head to its corner and then down; side 1 runs down the brook's flank from the fork, or is swept to its own corner when center is true; supply on the high margins",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
@@ -79680,64 +79678,62 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the comb - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply canals along the high margins, delivery ditches leaving them nearly at right angles, one drain gathering the water along the lowest line - each delivery along its row's bund, leaning downstream as the bund does (which-way-water-flows-and-how-channels-bend-and-join.drawing: a delivery ditch in the comb follows its row's bund; `offtake_lines`)",
-  "code": "74395c7a6012d0dc",
-  "core": "506bb8e9d015d634",
+  "code": "2b8b390cfb18183b",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "supply canals on the margins, deliveries along the bunds nearly square, one drain down the middle line",
+  "note": "two supply canals on the margins, deliveries leaving along their rows' bunds, and one drain down the middle line from fan.at(0,0) to the foot",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
   "research": "714621da4d4f5268",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e551e0e1e0a35b13"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
-  "body": "d104ff743c4c3e12",
-  "claim": "the delivery's head - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), biting wherever the canal is under about 3.1 ft - low in the net, and at every offtake of a canal with only one or two - its tail no wider than its head; where a canal stops at its last offtake, narrowed to 1.5 ft, that last delivery leaves at 1.2 ft and runs flat",
-  "code": "fcfd21229808489e",
-  "core": "506bb8e9d015d634",
+  "body": "2c615b6d30395123",
+  "claim": "the delivery's head - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), biting wherever the canal is under about 3.1 ft - low in the net, and at every offtake of a canal with only one or two - its tail no wider than its head; at the canal's last offtake, narrowed to 1.5 ft, that last delivery leaves at 1.2 ft and runs flat",
+  "code": "27e1d80bf723a818",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "min(2.5, 0.8*local), where local is the tail of the leg the junction ends; the tail is min(1.2, head); the last delivery at a 1.5 ft canal is a flat 1.2",
+  "note": "the head is min(2.5, 0.8 * local), with local taken at the tail of the leg the junction ends; the tail is min(1.2, head), so the last delivery leaves at 1.2 and runs flat",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
   "research": "65ae107a7028a36f",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:2529c3b2fdacdb66",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:73d0646a39f8d7dd"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the first canal with no offtake": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the first canal with no offtake - GUESS: irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing silent on a first canal its fractions leave no offtake; canal A runs on to the crop's edge",
-  "code": "f145f1c096111dbf",
-  "core": "506bb8e9d015d634",
+  "code": "c92e32651ef09978",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "the pages are silent; running on to the crop edge fits the rule \"never ... cut off in the middle of an edge\"",
+  "note": "canal A with no offtake runs to fan.length and narrows over its one leg; nothing cited covers this case",
   "pages": {},
   "research": "",
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the head race - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race 6.0 ft, the whole fan's above the fork - at that width throughout",
-  "code": "d3130cd585036c38",
-  "core": "506bb8e9d015d634",
+  "code": "01e59277c2334c94",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "6.0 at head and tail, intake to fork",
+  "note": "HEAD_W for both w and w_tail, 6.0 ft throughout",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
@@ -79747,54 +79743,33 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race's course": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the head race's course - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the race runs from the intake down to the fork at the head of the fan - one straight run",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "17353edcaaf6803a",
-  "core": "506bb8e9d015d634",
+  "code": "0d03604fed8a6cf3",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "intake to fork, one segment; \"the shape is derived\"",
+  "note": "pts [intake, fork], from the intake down to the fork; the page derives the shape from the two points",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
   "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
-  "triage": "touched",
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the second canal partway": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the second canal partway - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: the second canal feeds at least one delivery ditch, so it is drawn partway down its edge - stopping at its last offtake's junction, the first canal taking either ending",
-  "code": "2d91f889955d483b",
-  "core": "506bb8e9d015d634",
+  "code": "05eaadaed655af1b",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "B always stops at its last offtake; A rolls between the two endings",
-  "pages": {
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
-  },
-  "research": "714621da4d4f5268",
-  "rests": [
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
-  ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/channels.rs::channels#the second canal with none": {
-  "body": "d104ff743c4c3e12",
-  "claim": "the second canal with none - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: the second canal is drawn partway down its edge - half way, where its fractions leave it no offtake",
-  "code": "24b5aeaf7c97303e",
-  "core": "506bb8e9d015d634",
-  "date": "2026-11-01",
-  "note": "length/2 falls inside the reach rule (at least 80 ft or 30%) and tapers to a thread",
+  "note": "side 1 with an offtake always ends at lines.u(last), while canal A rolls either ending",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
   },
@@ -79804,16 +79779,33 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
-  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/channels.rs::channels#the second canal with none": {
+  "body": "2c615b6d30395123",
+  "claim": "the second canal with none - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: the second canal is drawn partway down its edge - half way, where its fractions leave it no offtake",
+  "code": "01fbcdfb3fccb645",
+  "core": "a7ad5c0e286eb4f9",
+  "date": "2026-11-01",
+  "note": "canal B with no offtake ends at fan.length / 2, partway and narrowed to the thread; this is a calibrated choice above §11's floor of 80 ft or 30%",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "4f97258a4c0b1ef8"
+  },
+  "research": "714621da4d4f5268",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ada331da1c1d1012",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the widths by role": {
-  "body": "d104ff743c4c3e12",
+  "body": "2c615b6d30395123",
   "claim": "the widths by role - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race 6.0, supply 4.5 to 1.5 along the upper edge and 4.0 to 1.5 along the other, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft - canal A the upper edge's, along the head and down the far flank, canal B the other edge's, down the brook's flank (`HEAD_W`, `SUPPLY_W`, `DELIVERY_W`, `DRAIN_W`)",
-  "code": "5704830fb05a14dc",
-  "core": "506bb8e9d015d634",
+  "code": "ad6e07467ea01593",
+  "core": "a7ad5c0e286eb4f9",
   "date": "2026-11-01",
-  "note": "6.0, 4.5/4.0 -> 1.5, 2.5 -> 1.2, 1.2 -> 5.5, as tabled; B at 4.0 stopping at its one offtake matches the Inashiro measurement",
+  "note": "SUPPLY_W.0 4.5 goes to canal A (along the head), .1 4.0 to canal B; HEAD_W 6.0, DELIVERY_W 2.5 to 1.2 and DRAIN_W 1.2 to 5.5 match the table",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
@@ -79831,7 +79823,6 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::division#the fork": {
