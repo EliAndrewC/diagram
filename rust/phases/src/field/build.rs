@@ -87,6 +87,8 @@ pub struct Field {
     /// The field's plots' area (square feet), summed as their `stats` were read; the low row's plots (the last the lattice laid)
     /// and the resting plots (`states`), so the drained plots' area is the field's less theirs, with no walk of the basins.
     pub area: f64,
+    /// The plots' box (x0, y0, x1, y1), the ink's floor's clip.
+    pub plots_box: [f64; 4],
     pub low: std::ops::Range<usize>,
     pub rested: Vec<usize>,
 }
@@ -390,7 +392,25 @@ fn one(
     let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work, &mut ends);
     counts.add("write@basin", work);
     let stats: Vec<RingStats> = bs.iter().map(|b| ring_stats(&b.ring)).collect();
+    // the field's area and its plots' box, read off each plot's figures once (the ink's floor takes the box: 444 T16's audit)
+    counts.add("candidate@plots_box", stats.len() as u64);
     let area: f64 = stats.iter().map(|x| x.2).sum();
+    let plots_box = stats.iter().fold(
+        [
+            f64::INFINITY,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NEG_INFINITY,
+        ],
+        |b, x| {
+            [
+                b[0].min(x.0[0]),
+                b[1].min(x.0[1]),
+                b[2].max(x.0[2]),
+                b[3].max(x.0[3]),
+            ]
+        },
+    );
     counts.add(
         "write@plot_record",
         bs.iter().map(|b| b.ring.len() as u64).sum(),
@@ -464,6 +484,7 @@ fn one(
         water: ix,
         stats,
         area,
+        plots_box,
         low,
         rested,
     })

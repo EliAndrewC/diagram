@@ -61,6 +61,7 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
         plots.append(p)?;
     }
     d.set_item("plots", plots)?;
+    d.set_item("plots_box", f.plots_box)?;
     let chans = PyList::empty(py);
     for c in &f.channels {
         chans.append((c.role, pts(&c.pts), c.w, c.w_tail))?;
@@ -365,13 +366,29 @@ pub fn stage_field<'py>(
         cell,
         knobs,
     };
-    let out = build(&inp).map_err(|e| PyValueError::new_err(e.to_string()))?;
+    let mut out = build(&inp).map_err(|e| PyValueError::new_err(e.to_string()))?;
     let d = PyDict::new(py);
     d.set_item("knobs", out.knobs)?;
     let fields = PyList::empty(py);
     for f in &out.fields {
         fields.append(field_dict(py, f)?)?;
     }
+    // what crosses to Python, written a value at a time (the fifth audit at T16's landing): each plot's ring, figures and six
+    // fields, each channel's and bean's and dry plot's points
+    let exported: u64 = out
+        .fields
+        .iter()
+        .map(|f| {
+            f.basins
+                .iter()
+                .map(|b| b.ring.len() as u64 + 7)
+                .sum::<u64>()
+                + f.channels.iter().map(|c| c.pts.len() as u64).sum::<u64>()
+                + f.beans.iter().map(|r| r.len() as u64).sum::<u64>()
+                + 4 * f.dry.len() as u64
+        })
+        .sum();
+    *out.counts.entry("write@py_export".to_owned()).or_insert(0) += exported;
     d.set_item("fields", fields)?;
     d.set_item("grain", out.grain)?;
     d.set_item("counts", out.counts)?;

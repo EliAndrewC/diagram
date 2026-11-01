@@ -234,6 +234,7 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
         "bead_ponds": [(p["x"], p["y"], p["rx"], p["ry"]) for p in ponds],
         "grave_records": grave_recs,
         "pocket_ponds": ponds,
+        "plots_box": f.get("plots_box"),
     }
     return net
 

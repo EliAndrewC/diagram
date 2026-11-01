@@ -13,6 +13,7 @@ import math
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
+from l7r.diagram.work_counts import OPS
 
 from .landuse import line_cuts
 
@@ -35,8 +36,11 @@ class FieldDrawingMixin:
         Research: field floor - CONVENTION: a paddy-green or soil-tan wash under the plots so no parchment shows"""
         from l7r.diagram.waterfields import _RICE_GREEN
 
-        pv = [v for p in net["plots"] for v in p["poly"]]
-        if not pv:
+        box = net.get("plots_box")  # the plots' box as their maker read it (the Rust field, 444 T16): no walk of their corners
+        pv = [] if box else [v for p in net["plots"] for v in p["poly"]]
+        if __debug__ and not box:  # the corners flattened and walked four times for the box (444 T16's audit)
+            OPS["pt_test@comb_base_fill"] += 5 * len(pv)
+        if not (box or pv):
             return
         env = net["envelope"]
         epts = " ".join(f"{x:.1f},{y:.1f}" for x, y in env)
@@ -55,8 +59,11 @@ class FieldDrawingMixin:
             self.add_paddy(f'<polygon points="{epts}" fill="{col}" stroke="none"/>', cls="paddy")
         else:
             cid = self._cid("padbase")
-            px0, px1 = min(v[0] for v in pv), max(v[0] for v in pv)
-            py0, py1 = min(v[1] for v in pv), max(v[1] for v in pv)
+            if box:
+                px0, py0, px1, py1 = box
+            else:
+                px0, px1 = min(v[0] for v in pv), max(v[0] for v in pv)
+                py0, py1 = min(v[1] for v in pv), max(v[1] for v in pv)
             self.add(f'<clipPath id="{cid}"><rect x="{px0:.1f}" y="{py0:.1f}" width="{px1 - px0:.1f}" height="{py1 - py0:.1f}"/></clipPath>')
             self.add_paddy(f'<polygon points="{epts}" fill="{col}" clip-path="url(#{cid})"/>', cls="paddy")  # the field floor reads as paddy (feature 134)
         self.M.setdefault("comb_floors", {})[name] = [[round(x, 1), round(y, 1)] for x, y in env]
@@ -94,8 +101,12 @@ class FieldDrawingMixin:
         rows: list[tuple[float, float, float, float]] = []
         ts = -diag / 2
         clip = False
+        if __debug__:  # the plot's corners walked for its middle and its reach (444 T16's audit)
+            OPS["pt_test@furrows"] += 4 * len(poly)
         while ts <= diag / 2:
             mx, my = cx + nx * ts, cy + ny * ts
+            if __debug__:  # each row cut against every edge of the plot, and written
+                OPS["pt_test@furrows"] += len(poly) + 1
             cut = line_cuts(poly, mx, my, dx, dy)
             if cut is None:
                 clip = True
