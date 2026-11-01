@@ -163,6 +163,24 @@ def test_the_bundle_holds_each_unit_its_claims_and_the_cited_pages(tmp_path: pat
     assert len(json.loads((tmp_path / "b" / "units.json").read_text())) == 1
 
 
+def test_an_owed_only_bundle_shows_the_units_other_claims_as_context(tmp_path: pathlib.Path) -> None:
+    """ask:444-T16-claims-round3: a bundle of one reworded claim hid its unit's other claims, and the agents called the decisions
+    those cover UNCLAIMED. Each unit now lists its other claims, judged already, beside the KEYs it owes."""
+    two = MOD.replace("    Research: dry share - {Q}\n".replace("{Q}", Q), f"    Research:\n        dry share - {Q}\n        far side - GUESS: the record silent on the side\n")
+    assert two != MOD
+    skill = _tree(tmp_path, two)
+    cur = cx.current(skill)
+    by_unit: dict[str, list[str]] = {}
+    for k in sorted(cur):
+        by_unit.setdefault(cur[k].uid, []).append(k)
+    uid, ks = next((u, ks) for u, ks in by_unit.items() if len(ks) > 1)
+    manifest = cx.bundle(tmp_path, cur, ks[:1], tmp_path / "b").read_text()
+    assert f"- ALSO CLAIMED (checked already; context, no verdict owed): `{cur[ks[1]].claim.line}`" in manifest, uid
+    assert f"- KEY `{ks[1]}`" not in manifest
+    full = cx.bundle(tmp_path, cur, ks, tmp_path / "b").read_text()
+    assert "ALSO CLAIMED" not in full.split(f"## UNIT {uid}")[1].split("## UNIT")[0], "a claim owed is not repeated as context"
+
+
 def test_a_bundle_carries_the_context_and_the_pages_a_re_check_asks_for(tmp_path: pathlib.Path) -> None:
     """Feature 374: a CANNOT-TELL verdict asked for a helper's body or a page no claim cites; WITH= and PAGES= add them."""
     skill = _tree(tmp_path)
