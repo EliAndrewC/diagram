@@ -142,10 +142,32 @@ def section_words(root: Path, path: str, title: str, digests: set[str], depth: i
 _HUNK = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@", re.M)
 
 
-def code_hunks(root: Path, path: str, lo: int, hi: int) -> list[str]:
-    """The hunks of `git diff origin/main -- path` whose new lines overlap [lo, hi] - what a code triage reads (feature 385
-    T116, D133). None to show (no diff, or the change landed before the claim's check) leaves the claim owed in full."""
-    diff = _git(root, "diff", "-U3", "origin/main", "--", path) or ""
+INDEX = "dev/claims-index.json"
+
+
+def checked_at(root: Path, key: str, code: str, memo: dict[str, Any], depth: int = 60) -> str:
+    """The newest commit of the claims index that records `key` checked at the code fingerprint `code` - the version of the
+    code its last verdict read - or `origin/main` where none of the last `depth` does. WHY (the round arbiter on
+    ask:444-T16-claims-after-counters, 2026-11-01): diffed against origin/main, a unit in a file NEW to the delta shows every
+    line added, its claims' own lines among them, so each was owed in full - 47 of a 56-claim triage sent on blind."""
+    if "log" not in memo:
+        memo["log"] = (_git(root, "log", f"-n{depth}", "--format=%H", "--", INDEX) or "").split()
+    for sha in memo["log"]:
+        if sha not in memo:
+            try:
+                memo[sha] = json.loads(_git(root, "show", f"{sha}:{INDEX}") or "{}")
+            except json.JSONDecodeError:
+                memo[sha] = {}
+        if (memo[sha].get(key) or {}).get("code") == code:
+            return sha
+    return "origin/main"
+
+
+def code_hunks(root: Path, path: str, lo: int, hi: int, base: str = "origin/main") -> list[str]:
+    """The hunks of `git diff base -- path` whose new lines overlap [lo, hi] - what a code triage reads (feature 385 T116, D133),
+    `base` the version the claims were checked at (`checked_at`). None to show (no diff, or the change landed before the claim's
+    check against origin/main) leaves the claim owed in full."""
+    diff = _git(root, "diff", "-U3", base, "--", path) or ""
     starts = [m.start() for m in _HUNK.finditer(diff)]
     out = []
     for a, b in zip(starts, [*starts[1:], len(diff)][: len(starts)], strict=True):
@@ -183,11 +205,13 @@ def triage_bundle(
     sections: dict[str, tuple[list[str], list[str], list[str]]] = {}  # "path::title" -> (fresh, gone, keys) - feature 375 FR-002
     codes: dict[str, tuple[list[str], list[str]]] = {}  # "path::qualname" -> (hunks, keys) - feature 385 T116, D133
     root = qdir.parents[1]
+    seen: dict[str, Any] = {}  # the claims index at each recent commit (`checked_at`)
     for key in keys:
         unit = cur[key].unit
         if index[key].get("code") != cur[key].code:
             if cur[key].uid not in codes:
-                codes[cur[key].uid] = (code_hunks(root, unit.path, unit.lineno, unit.end_lineno), [])
+                base = checked_at(root, key, str(index[key].get("code")), seen)
+                codes[cur[key].uid] = (code_hunks(root, unit.path, unit.lineno, unit.end_lineno, base), [])
             codes[cur[key].uid][1].append(key)
             line = cur[key].claim.line.strip()
             added = (x[1:].strip() for h in codes[cur[key].uid][0] for x in h.split("\n") if x.startswith("+"))
