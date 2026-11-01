@@ -299,8 +299,8 @@ The claims round's second wave (78 findings open in the port's files) answered, 
 5. **The order.** Unchanged: the brook and its intake, then the fan's channels from the fork they set.
 6. **The exits.** (b) a principled form: the middle intake built rather than dropped, its race the length its geometry needs;
    (e) conform for the floor, the caps and the sweeps. Red, over its budget: rebuilt again, or the budget raised with the GM's
-   words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes
-   refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to
+   words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in the stage's own code (its
+   Rust, the Python units the delta adds or changes, the Python its seam reads at run time) refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to
    `make arbiter-ask`, and a stop to assess goes to the GM.
 7. **The search smell.** None added: the middle intake is placed by construction.
 8. **The budget.** About two hours for the second round's fixes and its wave (a GUESS, the round's own estimate).
