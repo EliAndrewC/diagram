@@ -935,3 +935,14 @@ def test_the_kept_parse_is_keyed_on_the_rust_phases_too(tmp_path: pathlib.Path) 
     (skill / "rust" / "phases" / "target").mkdir()
     (skill / "rust" / "phases" / "target" / "b.rs").write_text("// built\n")
     assert cx.parse_key(skill, cl).hexdigest() == moved, "a build's target is not a source"
+
+
+def test_a_rust_unit_is_bundled_with_rust_context() -> None:
+    """Feature 444 T16's claims round: a `WITH=` unit in a `.rs` file was parsed as Python, and every Rust bundle carrying one
+    refused. A Rust item is read by the Rust reader's item scan, and its fence says rust."""
+    root = pathlib.Path(__file__).resolve().parents[2]
+    src = cx.context_source(root, "rust/phases/src/field/dike.rs::BAND_FT")
+    assert src.startswith("pub const BAND_FT") and src.rstrip().endswith(";")
+    assert "fn stations" in cx.context_source(root, "rust/phases/src/field/dike.rs::stations")
+    with pytest.raises(ValueError, match="no `nothing`"):
+        cx.context_source(root, "rust/phases/src/field/dike.rs::nothing")

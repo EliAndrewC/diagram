@@ -279,6 +279,40 @@ part A after the Decisions of 19:37Z and the first wave's verdicts:
     holds from h over the band's top to h over its foot of them, rounded inward; where that range is empty the count nearest h over the
     band's middle is taken, a GUESS recorded at `cuts`.
 
+### T16 Approach (2026-11-01T01:55Z)
+
+The claims round's second wave (78 findings open in the port's files) answered, the part A items restated where they moved:
+
+1. **The goal, in the world.** As at 00:39Z, and the intake where 0059 puts it: at a shoulder of the fan's head or straight into
+   its middle (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html,
+   "at its left, its center or its right"), which main's comb rolled (`HEAD_OFFSETS`) and the Rust port had dropped.
+2. **The constraints.** As at 00:39Z; and the fork, which the 22:16Z item 1 put at the brook-side head corner, now moves with the
+   form: at that corner for a shoulder intake, at the head's middle for a middle one (`channels::division`).
+3. **Where each comes from.** R: the three places (0059's drawing page); the 8-acre floor of an enclosed field
+   (research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html); a delivery capped at 0.8 of its
+   canal, the polder's columns too, and a pond feeder at twice the floor
+   (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html); the sweep's limits
+   (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html). O, each a GUESS where it stands: the
+   1:2:1 odds (the page's own guess), the brook's swing from a middle intake (`CENTER_SWING_DEG`), the weir's key into the banks.
+4. **Whether each holds here.** A middle intake needs a race long enough for the brook to swing out past the head's corner by its
+   skirt, so the intake sits that far up the fall (`brook.rs`, the skirt over the swing's cosine).
+5. **The order.** Unchanged: the brook and its intake, then the fan's channels from the fork they set.
+6. **The exits.** (b) a principled form: the middle intake built rather than dropped, its race the length its geometry needs;
+   (e) conform for the floor, the caps and the sweeps. Red, over its budget: rebuilt again, or the budget raised with the GM's
+   words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes
+   refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to
+   `make arbiter-ask`, and a stop to assess goes to the GM.
+7. **The search smell.** None added: the middle intake is placed by construction.
+8. **The budget.** About two hours for the second round's fixes and its wave (a GUESS, the round's own estimate).
+9. **Done, measured.** `make claims-report` lists no finding in a delta file; baseline the second wave's 78. One goal: the claims
+   closed. The overlap registry's own-pieces pass indexed on the way (the field's counted work, the work-budget audit's question):
+   the brook's own pieces examined 200,474 pairs at 40 households and 3,294 after (measured 2026-11-01 (a scratch roll of seed 4's
+   water frame and field, the counter per key)), `overlap/registry.py`.
+10. **Before moving a constant.** `intake_place` is new; `WEIR_HALF_FT`'s use in the stage replaced by `WEIR_HALF`, derived from the
+    drawn brook (the old half-length, `WEIR_HALF_FT`, spanned the brook twice over).
+11. **Before fitting things into room.** The middle intake: the brook at the head's line stands past the corner by the skirt
+    over the swing's cosine plus a station, so the race is that distance up the fall at the swing's slope.
+
 ### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** The field stage made about 1.3M Python calls at 40 households and counted 48,335 to 66,214 operations over the four seeds, measured 2026-10-28 (`make work-budget`, `dev/work-budget/20261028T152105Z-45aa176ec9b8.json`), its counted work led by segment crossings, the standing registry's conflicts and segment distances; box 4 adds `make perf-profile` and `make perf-fanout`.

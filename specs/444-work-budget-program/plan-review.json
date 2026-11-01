@@ -162,6 +162,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity"
+  },
+  "### T16 Approach (2026-11-01T01:55Z)": {
+   "sha256": "9abfea2d8268adbcff65a841075734e88212aa572d38a3bfe2462b9fef67a57c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-10-31",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -2997,6 +3003,71 @@
      "why": "Same as the 20:43Z part B: FR-019 and FR-020, and the field is not bent to later stages."
     }
    ]
+  },
+  {
+   "reviewed": "2026-10-31",
+   "blocks": [
+    "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)",
+    "### T16 Approach (2026-10-31T22:16Z)",
+    "### T16 Approach (2026-11-01T00:39Z)",
+    "### T16 Approach (2026-11-01T01:55Z)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T16 part B (2026-10-31T20:43Z)",
+    "### T16 part B (2026-11-01T00:41Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "A0155-1 middle intake",
+     "summary": "The intake restored to 0059's three places (a shoulder of the fan's head or its middle, 'at its left, its center or its right'), which the Rust port had dropped.",
+     "class": "within",
+     "why": "Widens the port back to the form the research names; it serves FR-021 (an open claim closed by fixing the code) and FR-004 (the stage writes what its contract says). Nothing the GM asked for is cut."
+    },
+    {
+     "id": "A0155-2 fork moves with the form",
+     "summary": "The canal division sits at the brook-side head corner for a shoulder intake and at the head's middle for a middle intake (channels::division), amending the 22:16Z item 1.",
+     "class": "within",
+     "why": "A geometric consequence of the restored middle intake, placed by construction before anything is written (S4, FR-004). It narrows no clause of the request or the spec."
+    },
+    {
+     "id": "A0155-3 conform to the research figures",
+     "summary": "Conform to 0017's 8-acre floor of an enclosed field, 0068's 0.8 delivery cap (the polder's columns included) and pond feeder at twice the floor, and 0054's sweep limits.",
+     "class": "within",
+     "why": "This is FR-021's closing of open claims in the delta's files ('until the claim or the code is fixed'). It brings the code to the research and exempts no case."
+    },
+    {
+     "id": "A0155-4 labeled GUESSes",
+     "summary": "The 1:2:1 odds of the three intake places (the page's own guess), CENTER_SWING_DEG and the weir's key into the banks are labeled GUESS where they stand.",
+     "class": "within",
+     "why": "Labeling a figure that has no source is how a claim is made correctly rather than left UNCLAIMED (FR-021). No requirement is relaxed."
+    },
+    {
+     "id": "A0155-5 middle intake's race derived",
+     "summary": "A middle intake sits up the fall by the skirt over the swing's cosine plus a station, so the brook clears the head's corner. It is placed by construction, with no added search.",
+     "class": "within",
+     "why": "A construction rather than a search or repair pass (S2, S4, FR-004). The search-smell answer stays 'none added'."
+    },
+    {
+     "id": "A0155-6 overlap registry's own-pieces pass indexed",
+     "summary": "overlap/registry.py's own-pieces pass is indexed as part of the field's counted work. Measured on 2026-11-01 by a scratch roll of seed 4: 200,474 pairs became 3,294.",
+     "class": "within",
+     "why": "It serves the budget the GM asked the field to meet (rubric S1/S3; FR-005's acceptance at most the budget; FR-006). The file then falls under FR-021's delta rule, and item 9's done condition covers it ('no finding in a delta file'). It is a change to a shared module, not its deletion, so D10's rule that shared modules stay is kept. The figure carries a one-shot label."
+    },
+    {
+     "id": "A0155-7 WEIR_HALF derived from the drawn brook",
+     "summary": "WEIR_HALF_FT's use in the stage is replaced by WEIR_HALF, derived from the drawn brook's width, because the old half-length spanned the brook twice over.",
+     "class": "within",
+     "why": "A constant brought into line with the geometry it measures, as item 10 of the checklist requires. No scope is cut."
+    },
+    {
+     "id": "A0155-8 budget and done",
+     "summary": "About two hours for the wave (a GUESS). Done is when make claims-report lists no finding in a delta file, with the 78 open findings as the baseline. The Red exits are restated unchanged.",
+     "class": "within",
+     "why": "Restates FR-021 and FR-006 as written. The Red exits keep 'never set down, never an arbiter's accept' and send a stop to assess to the GM."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3618,163 +3689,57 @@
    "verdict": "CLEAR"
   },
   "T16": {
-   "section_sha256": "5cc4b9f056fd5ad01d1822de1add5f41e9d5e823da9ba6e1ad72e3977d44c67b",
+   "section_sha256": "5f15c4317eff2d8d3057638375b5b49be5549d7bc8940e46cd4e3639b87ce65d",
    "reviewed": "2026-10-31",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "Approach-A",
-     "summary": "First Approach: rebuild the comb field greenfield in Rust under the single-field cap, budget 23,988 at 40 / 42,070 at 80 (exp 0.79) re-derived under the cap by T18 and kept; polder gets its own derivation pinned field.polder by arbiter accept; exits require budget at 40 and 80, rust-gate on every seed, claims round, reviews, MODE AUDIT, old comb and polder code deleted; over budget means rebuild or GM's words, never an arbiter accept; one landing.",
+     "id": "A0155-1 middle intake",
+     "summary": "The intake restored to 0059's three places (a shoulder of the fan's head or its middle, 'at its left, its center or its right'), which the Rust port had dropped.",
      "class": "within",
-     "why": "Restates FR-003 to FR-006, FR-017 to FR-019 and the GM's step-4 words. An arbiter accept pinning a FIRST budget (field.polder) is the GM's own 444#0 answer (FR-013), and FR-006's ban on accepting over budget is kept."
+     "why": "Widens the port back to the form the research names; it serves FR-021 (an open claim closed by fixing the code) and FR-004 (the stage writes what its contract says). Nothing the GM asked for is cut."
     },
     {
-     "id": "field.polder-second-pin",
-     "summary": "The field stage carries two pins, the comb's 23,988/42,070 (exp 0.79) and field.polder's 4,651/6,584 (exp 0.50), the latter pinned on the round arbiter's accept (ask:444-polder-round-3); D11 measures against each.",
+     "id": "A0155-2 fork moves with the form",
+     "summary": "The canal division sits at the brook-side head corner for a shoulder intake and at the head's middle for a middle intake (channels::division), amending the 22:16Z item 1.",
      "class": "within",
-     "why": "FR-018 speaks of one field derivation, so the spec does not settle a second pin. Read plainly, a roll is a comb settlement or a polder settlement, and the stage's count is compared with the pin for the archetype it draws. The polder pin is a first budget, which FR-013 lets an arbiter accept pin (the GM's 444#0 answer), and FR-006 still holds the rebuilt code to it. This stays within only while the polder pin raises neither the comb's pin nor the program target the GM approved (FR-002, 57,235 at 40). If field.polder were added to the program total, or used to excuse a comb roll over 23,988, that would raise a budget, and FR-006 requires the GM's words for that (make budget-change)."
+     "why": "A geometric consequence of the restored middle intake, placed by construction before anything is written (S4, FR-004). It narrows no clause of the request or the spec."
     },
     {
-     "id": "D1",
-     "summary": "stage_field stays a thin Python function calling l7r_phases.stage_field; Python writes the same 42 manifest keys and plan fields from the returned records, registers footprints, files segments in the water index; the 6-number fields[].plots kept as a shape.",
+     "id": "A0155-3 conform to the research figures",
+     "summary": "Conform to 0017's 8-acre floor of an enclosed field, 0068's 0.8 delivery cap (the polder's columns included) and pond feeder at twice the floor, and 0054's sweep limits.",
      "class": "within",
-     "why": "FR-010's shape (thin Python function calling the one extension module) and FR-004's same keys in, same keys out. Keeping a key nobody reads is keeping the output the same, not a carve-out."
+     "why": "This is FR-021's closing of open claims in the delta's files ('until the claim or the code is fixed'). It brings the code to the research and exempts no case."
     },
     {
-     "id": "D2",
-     "summary": "Single-field cap rolled per settlement 45-60 ha (research 0017), a knob; a settlement past it draws ceil(paddy/cap) fields; the cap applies to polders too; SC-011 test at about 100 households.",
+     "id": "A0155-4 labeled GUESSes",
+     "summary": "The 1:2:1 odds of the three intake places (the page's own guess), CENTER_SWING_DEG and the weir's key into the banks are labeled GUESS where they stand.",
      "class": "within",
-     "why": "FR-018 and SC-011 as written, the cap and its research source named, from the GM's 'cap out at something approximating whatever that size is, and then larger settlements just have multiple fields'. Extending it to polders follows his 'single rice paddy field' with no exception."
+     "why": "Labeling a figure that has no source is how a claim is made correctly rather than left UNCLAIMED (FR-021). No requirement is relaxed."
     },
     {
-     "id": "D2-fishponds",
-     "summary": "The dike-pond block's fish ponds are not a rice paddy and take no cap.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Already implied by the GM's own words: he capped 'a single rice paddy field'. A fish pond is a different class of thing, not a paddy field with a carve-out. The rice inside a dike-pond block stays under the polder's cap (D2), so nothing the GM capped escapes it."
-    },
-    {
-     "id": "D3",
-     "summary": "The stage's own knob rolls, the graves and the coarse-grain dry acres are counted as stage work outside the derivations, charged to the stage under keys of their own that MODE AUDIT reads; neither pin moves.",
+     "id": "A0155-5 middle intake's race derived",
+     "summary": "A middle intake sits up the fall by the skirt over the swing's cosine plus a station, so the brook clears the head's corner. It is placed by construction, with no added search.",
      "class": "within",
-     "why": "Charging extra work to the stage against pins that do not move makes the budget harder to meet, not easier. This reading is the only one that keeps it within: the outside keys are part of 'field's counted operations' compared with 23,988 and 42,070 (Approach item 9). Leaving them out of that comparison would put work outside the budget, and FR-006 forbids that."
+     "why": "A construction rather than a search or repair pass (S2, S4, FR-004). The search-smell answer stays 'none added'."
     },
     {
-     "id": "D4",
-     "summary": "knob_rng for every knob, positional jitter keyed per feature; matching today's draws not required; moved pool hamlets owe settlement-review.",
+     "id": "A0155-6 overlap registry's own-pieces pass indexed",
+     "summary": "overlap/registry.py's own-pieces pass is indexed as part of the field's counted work. Measured on 2026-11-01 by a scratch roll of seed 4: 200,474 pairs became 3,294.",
      "class": "within",
-     "why": "FR-019 says this outright, from amendment 5 and the GM's agreement to the session's proposals."
+     "why": "It serves the budget the GM asked the field to meet (rubric S1/S3; FR-005's acceptance at most the budget; FR-006). The file then falls under FR-021's delta rule, and item 9's done condition covers it ('no finding in a delta file'). It is a change to a shared module, not its deletion, so D10's rule that shared modules stay is kept. The figure carries a one-shot label."
     },
     {
-     "id": "D5",
-     "summary": "Rust's own 64 ft cell water index; segments returned and filed by Python for later stages.",
+     "id": "A0155-7 WEIR_HALF derived from the drawn brook",
+     "summary": "WEIR_HALF_FT's use in the stage is replaced by WEIR_HALF, derived from the drawn brook's width, because the old half-length spanned the brook twice over.",
      "class": "within",
-     "why": "Implementation detail of the derivation's index (S1); writes what later stages read, FR-004."
+     "why": "A constant brought into line with the geometry it measures, as item 10 of the checklist requires. No scope is cut."
     },
     {
-     "id": "D6",
-     "summary": "Counters one key per derivation row and per D3 roll behind the counters feature; on/off manifests identical, recorded in phases/field.fr012.md.",
+     "id": "A0155-8 budget and done",
+     "summary": "About two hours for the wave (a GUESS). Done is when make claims-report lists no finding in a delta file, with the 78 open findings as the baseline. The Red exits are restated unchanged.",
      "class": "within",
-     "why": "FR-012 and the GM's 2026-10-28 compiler-flag question."
-    },
-    {
-     "id": "D7",
-     "summary": "Every Keeps rule of both derivations refused in the Rust that places the thing (FieldRefused), unit-tested.",
-     "class": "within",
-     "why": "S4 / FR-004, ask before placing. It adds no carve-out to the gate's checks."
-    },
-    {
-     "id": "D8",
-     "summary": "Polder in Rust; acreage rule is whole 190 ft modules at or above the households' paddy, replacing today's band.",
-     "class": "within",
-     "why": "Greenfield re-derivation (FR-015) of the polder's own derivation. It replaces today's rule rather than keeping it."
-    },
-    {
-     "id": "D9",
-     "summary": "The 29 open claim findings closed: DRIFTED set right in the Rust (mulberry row drawn with the willow), MISLABELED claimed correctly; landing refused while one is open.",
-     "class": "within",
-     "why": "FR-021 and the GM's amendment 6, 'zero open claims'."
-    },
-    {
-     "id": "D10",
-     "summary": "Field's own Python placement deleted in the landing (hamletgen/water/, settlement/fields/ placement, waterfields/); drawing functions stay; shared infrastructure modules and water_frame's skeleton.py stay; found by git grep -l of module names and make dead-closure.",
-     "class": "within",
-     "why": "FR-005's deletion of the old implementation. What stays is rendering, which design section 7 keeps in Python, along with shared infrastructure and another stage's code, so none of it is the field's old implementation. The census names its search space."
-    },
-    {
-     "id": "D10/A22:16Z-3-free-helpers",
-     "summary": "Free placement helpers stay for the other tiers that call them; the field calls none of their placement.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The GM's rule ('a phase is done when the old code is gone. No fallback path, no flag') exists so that the field's old algorithm cannot keep running for the field. When the field stage reaches none of these helpers there is no fallback path, and the purpose holds. Code that other callers run is not the field's implementation. Its port belongs to those callers' own phases, in STAGES order (FR-003). The ruling holds only while 'the other tiers' are callers outside the field stage. If any tier's run of the field stage itself still reached these helpers, the helpers would be the field's old implementation, and keeping them would be NOT LEGITIMATE. This is the line the earlier BLOCKED review drew ('a helper the field calls is the field's work')."
-    },
-    {
-     "id": "D12",
-     "summary": "The field's SVG stays Python reading only Rust's records; five DRAWING functions kept; eleven MIXED methods lose placement to Rust, their ink written new in settlement/fields/ink.py from the records; glyph-check if a mark changes.",
-     "class": "within",
-     "why": "Design section 7 keeps rendering in Python. Every PLACEMENT goes to Rust, and new ink is written from records rather than lifted from the old bodies, which keeps the GM's 2026-10-30 'not the same algorithms'."
-    },
-    {
-     "id": "D11",
-     "summary": "Order: comb first with rust-gate per increment, then polder, then work-budget against both pins, MODE AUDIT, claims round, settlement-reviews - one landing.",
-     "class": "within",
-     "why": "Sequencing inside one task, which the spec leaves open. It drops no exit."
-    },
-    {
-     "id": "A22:16Z-1-2",
-     "summary": "Fork at the brook-side head corner (0068); comb drawn organic with waved flanks and bowed rows (GUESS figures for settlement-review), meandering brook held to brook_violations.",
-     "class": "within",
-     "why": "Design choices of the greenfield form, each tied to research or to the review that judges it. None narrows a requirement."
-    },
-    {
-     "id": "A22:16Z-3-polder-seam",
-     "summary": "Every polder PLACEMENT (block, lattice, parcels, ring canal, ditches, sluices, wild pond, dike, outfall, resting plots, dike-pond conversion) goes to Rust; Python draws the records; marsh stays Python as a pure fill of a Rust-placed ring.",
-     "class": "within",
-     "why": "This answers the earlier BLOCKED review. Placement is all Rust, and marsh is rendering (section 7) and decides nothing."
-    },
-    {
-     "id": "A22:16Z-4-moves",
-     "summary": "Two pure moves instead of deletion on arbiter rulings: drawing code to settlement/fields/drawing.py, and check-side predicates brook_rules.WetLines and hem_on_water; old engine tests deleted, lay_comb over the Rust comb.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Implied by the GM's approved design, section 7: rendering, the tools and the pytest suite stay Python, and FR-019's finished-map checks read the map in Python. Judged one at a time: the drawing code is rendering, and the two predicates are check-side readers that place nothing. Neither is a placement algorithm the field could fall back to, so FR-005's purpose (no fallback path) holds. The arbiter's process rulings are not what makes this legitimate; the GM's own design does."
-    },
-    {
-     "id": "A22:16Z-6-exits",
-     "summary": "Exits add rust-gate green, FR-012, claims to zero, MODE AUDIT WITHIN, reviews, one landing; red stays rebuild or GM's words; only process stops to the arbiter; a stop to assess goes to the GM.",
-     "class": "within",
-     "why": "FR-006, FR-012, FR-019, FR-021 and the GM's 'then we can stop and assess'."
-    },
-    {
-     "id": "A00:39Z-claims-fixes",
-     "summary": "Claims round fixes: meander wavelength (GUESS) moved to meet 0054's ten widths; the share-of-view rule replaced by a length; conform for the inset, cap and notch; the tap's straight stride meanders; RULED_SHARE/RULED_MIN_LEN_FT kept for the marsh's edges (land/outline.py, tools/marsh_edges.py); GUESS fallback for empty basin ranges.",
-     "class": "within",
-     "why": "Each fix moves code to its research (FR-021). The marsh-edge constants kept belong to another stage's files, not the field's, so no field claim is excepted."
-    },
-    {
-     "id": "A00:39Z/PartB-00:41Z-9-route-a",
-     "summary": "On ask:444-T16-fr021-scope route (a): incidental touches to files outside the port reverted, T23 filed for their findings, findings in the port's files closed.",
-     "class": "narrowing",
-     "why": "A narrowing in form: it shrinks the delta FR-021 bites on. It is legitimate on the GM's own words, 'every Rust stage end its initial implementation with zero open claims'. The claims owed are the stage's, and every finding in the port's own files is closed. The reverted touches were not the port, and their findings go to T23 rather than vanishing. The rule's purpose, a Rust stage with zero open claims, is met. This would be NOT LEGITIMATE if a reverted touch had been part of the port's implementation, because then the stage would land with its own claims unexamined.",
-     "ruling": "LEGITIMATE"
-    },
-    {
-     "id": "Perf-checklist",
-     "summary": "Performance checklist answers: where time goes, removes work, expected savings to the pinned budget, growth held to the pinned exponent, perf-ab recorded, maps move and are held by gate, claims and settlement-review.",
-     "class": "within",
-     "why": "Prompts from the design's checklist box 6. perf-ab is kept as a record, not a gate, as the design says."
-    },
-    {
-     "id": "PartB-20:43Z",
-     "summary": "Cohort failures on seeds 9, 903, 905 are later Python stages on a moved map, left to their own ports; the field's own dry-hem defect found by rust-gate fixed in the Rust; 57 seeds 0 failing.",
-     "class": "within",
-     "why": "FR-019 and the GM's amendment 5: 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step'. The field's own failure was fixed, not excepted."
-    },
-    {
-     "id": "PartB-00:41Z",
-     "summary": "Cohort failures on seeds 7, 9, 902, 905 again later Python stages; rust-gate 54 seeds 0 failing; next step the claims wave's verdicts then the gate on a fresh block.",
-     "class": "within",
-     "why": "Same as the 20:43Z part B: FR-019 and FR-020, and the field is not bent to later stages."
+     "why": "Restates FR-021 and FR-006 as written. The Red exits keep 'never set down, never an arbiter's accept' and send a stop to assess to the GM."
     }
    ],
    "verdict": "CLEAR"
