@@ -489,7 +489,7 @@ class BridgesMixin:
         walking the paddy bunds - NOT carried by any lane (people reach them along the earthen bunds, so no
         path leads to them). Any ditch stretch longer than `min_len` gets a plank about MIDWAY; a long stretch
         gets one roughly every `spacing` px, evenly spaced along it. Each plank crosses PERPENDICULAR to the
-        ditch, spanning its local width plus a short abutment. Call AFTER the field ditches are recorded. Bridges
+        ditch, spanning its head width plus a short abutment. Call AFTER the field ditches are recorded. Bridges
         draw on the TOP layer (over the water). Records via `bridge()` into M['bridges'] (tagged 'foot'); returns
         the count. DECK WIDTH: an itabashi footplank is a single-file crossing (~3-4 ft), drawn 4 ft at the map's scale
         (`plank_w` defaults to `px(4)`; feature 328 wave 5 - it was a fixed 2 px, 2 ft on a hamlet) and NARROWER than a cart
@@ -510,7 +510,7 @@ class BridgesMixin:
             only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking judges the ditch by its widest point, and the seats whose water earns a board are tried first (`seat_order`)
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
-            short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
+            short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the ditch's head width plus `PLANK_ABUTMENT`, 5.5 ft, one length for every seat on the ditch (a seat over wider water, a join, is refused rather than lengthened), so a 2.5 ft ditch takes an 8 ft deck
             polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, and drainage ditches carry none - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`) caps the supply ditches' counts it names (the drain is never a supply ditch, so carries none either way)
             the caps by side - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; at most three on the village's own supply ditch (a toe, or the feeder at the head), two a toe at the foot, the rest by their length
             a ditch with no tail width - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on a ditch record with no tail width; taken as untapered, its `w` all along
@@ -521,7 +521,7 @@ class BridgesMixin:
             off groves - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
             assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`, in pixels at the map's scale as the records are: the hamlet's field stage converts each ditch's feet to them - `hamletgen/field_stage.py`'s comb and `_polder`, through `px`)
-            assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
+            assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook about 5.25 ft wide where a record has none (`DEFAULT_W`)
             assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width the same real size on every map - a record's width and the default alike in pixels at the map's scale, converted to feet once (`worth_planking`), the default 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel; the hamlet's field stage converts its channels' feet (`POND_FEEDER_FT`, `OUTFALL_FT`, the comb's head channel) through `px` as it records them
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
@@ -570,7 +570,7 @@ class BridgesMixin:
         dry_grid, ground_grid, house_grid = (boxed_grid(boxed_polys(q, 1.0)) for q in (dry_quads, ground_quads, houses))
         # in pixels at the map's scale, as the records hold theirs (`worth_planking` converts once): a brook 7 ft (0035), a field
         # ditch 2.5 ft at its head (0084), a channel 2.5 ft (0031)
-        DEFAULT_W = {"streams": self.px(7.0), "channels": self.px(2.5), "field_ditches": self.px(2.5)}
+        DEFAULT_W = {"streams": self.px(5.25), "channels": self.px(2.5), "field_ditches": self.px(2.5)}
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
         # junction where the water is the main's width, not the branch's. Listing only streams and
@@ -611,7 +611,7 @@ class BridgesMixin:
                 if cap <= 0:
                     continue
                 n = min(n, cap)
-            span = w + self.px(PLANK_ABUTMENT)  # provisional; re-sized at each seat from the LOCAL width below
+            span = w + self.px(PLANK_ABUTMENT)  # one length at every seat, from the HEAD width: a seat over wider water is refused below
             for k in range(n):
                 base = (k + 0.5) / n * total  # midway for n=1, evenly spaced otherwise
                 # SLIDE along the ditch to a spot that (a) misses every home and (b) lands on

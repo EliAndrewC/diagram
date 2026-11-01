@@ -122,12 +122,12 @@ class WaterBodiesMixin:
 
         Research:
             every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
-            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default
+            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 1.6 m (~5.25 ft) for a village brook, drawn 5.25 ft at the map's scale by default
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
             houses kept off the stream - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a no-build corridor of max(30, half-width + 20) px
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.35 (sheen stroke)
         """
-        width = self.px(7.0) if width is None else width  # a village brook about 7 ft wide (0068), at the map's scale
+        width = self.px(5.25) if width is None else width  # a village brook about 5.25 ft wide (0068), at the map's scale
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}

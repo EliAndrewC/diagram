@@ -22,6 +22,7 @@ from l7r.diagram.work_counts import OPS
 from .consts import POND_BANK_CROWN_FT, POND_BANK_FT, POND_BANK_PITCH_FT, POND_BANKS, Pt
 from .plan import SitePlan, _roll
 from .sink import SINK_FRINGE
+from .water.brook_rules import BROOK_DRAWN_W
 
 TREE_TONES = {"mulberry": ("#6E8B4A", "#4F6E33"), "cudrania": ("#4F6E33", "#3C5526")}
 """A bank tree's crown fill and its rim: the cudrania a shade darker than the mulberry.
@@ -86,7 +87,7 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: no canopy over a yard's or bed's sun ground; the bank mulberry is the manual's shade tree for cattle (0061), a canopy tree, not 0038's field mulberry trained as low bushes, which the rule exempts
         no trunk in the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: the reeds stand at the shore, the bank beyond them
         no trunk on a way, crop or water - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tree left out where its trunk would stand on a lane, the crop or the water - off every tread, paddy, dry plot and marsh, and a stream's half-width and a foot
-        its figures against 0059 - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 9 (fallback stream width when a record has no `w`, where the page's brook is 7 ft) - a departure the code keeps until feature 417 T34
+        its figures against 0059 - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream whose record has no `w` taken at the drawn brook's width, `BROOK_DRAWN_W` (the page's brook about 5.25 ft)
     """
     if not (r <= x <= s.W - r and r <= y <= s.H - r):
         return False
@@ -103,7 +104,7 @@ def seat_free(s: Settlement, x: float, y: float, r: float) -> bool:
         return False
     for st in M.get("streams") or []:
         pts = [(float(a), float(b)) for a, b in st.get("poly") or []]
-        if any(seg_dist(x, y, p, q) < float(st.get("w", 9.0)) / 2 + 1.0 for p, q in zip(pts, pts[1:], strict=False)):
+        if any(seg_dist(x, y, p, q) < float(st.get("w", BROOK_DRAWN_W)) / 2 + 1.0 for p, q in zip(pts, pts[1:], strict=False)):
             return False
     return True
 

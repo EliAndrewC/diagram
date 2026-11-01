@@ -16,6 +16,7 @@ from l7r.diagram.settlement import Settlement, seg_closest
 
 from .consts import Poly, Pt
 from .plan import SitePlan, _roll
+from .water.brook_rules import BROOK_DRAWN_W
 
 WASHING_FORMS = ("shared", "each_house")
 """The two forms 0065 records, rolled per settlement at even odds.
@@ -75,11 +76,11 @@ def passing_courses(M: Mapping[str, Any]) -> list[tuple[list[Pt], float]]:
     stream or ditch that passes the houses, the shared footing "on the channel or stream bank".
 
     Research: a stream, a ditch or a channel - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: where a stream or ditch passes the houses, a shared one on the channel or stream bank
-        its figures against 0059 - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 9 (fallback stream width, halved, where the page's brook is 7 ft) - a departure the code keeps until feature 417 T34
+        its figures against 0059 - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream whose record has no `w` taken at the drawn brook's width, `BROOK_DRAWN_W` (the page's brook about 5.25 ft), halved
         its figures from 0068 - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6 (fallback channel width); 1.5 (fallback field-ditch width)
         its figures from 0031 - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 2.5 (fallback farm-channel width)
     """
-    out = [([(float(a), float(b)) for a, b in st["poly"]], float(st.get("w", 9.0)) / 2.0) for st in M.get("streams") or [] if len(st.get("poly") or []) >= 2]
+    out = [([(float(a), float(b)) for a, b in st["poly"]], float(st.get("w", BROOK_DRAWN_W)) / 2.0) for st in M.get("streams") or [] if len(st.get("poly") or []) >= 2]
     out += [([(float(a), float(b)) for a, b in c["poly"]], float(c.get("w", 6.0)) / 2.0) for c in M.get("channels") or [] if len(c.get("poly") or []) >= 2]
     out += [([(float(a), float(b)) for a, b in d["poly"]], float(d.get("w", 1.5)) / 2.0) for d in M.get("field_ditches") or [] if len(d.get("poly") or []) >= 2]
     out += [
