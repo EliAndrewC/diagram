@@ -579,6 +579,11 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
   derivation's next re-derivation, price the dry hem, the hem's laid plots, the outline by bands and the hem's registry share
   on `fan_middle`'s odds, and name the cleared-middle band in the contract's Writes. Not before: the arbiter forbade editing
   the derivation now (FR-013).
+- **Two more rows** (the GM, 2026-11-01, on 444#6: "I go with option (a) - this is well within what we should consider
+  acceptable, even if our original estimate was a bit off because of failing to count/consider/calculate everything."): the
+  budget stands at 1.9 per thing of the derivation (118,739 at 40, 218,411 at 80; the whole roll 139,987 at 40). The same
+  re-derivation prices the dry plots' furrow rows (`pt_test@furrows`, about 23,600 at 40, rows 5 ft apart, a GUESS) and the copy
+  of every plot to the Python stages (`write@py_export`, about 18,200 at 40; it goes as those stages port to Rust).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|

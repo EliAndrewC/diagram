@@ -1,6 +1,6 @@
 {
  "program": {
-  "ops_at_40": 92491,
+  "ops_at_40": 139987,
   "exponent": 0.87
  },
  "stages": {
@@ -22,7 +22,7 @@
   },
   "field": {
    "status": "budgeted",
-   "per_thing": 1.14,
+   "per_thing": 1.9,
    "exponent": 0.86,
    "derivation": "specs/444-work-budget-program/phases/field_greenfield.derivation.md",
    "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt",
