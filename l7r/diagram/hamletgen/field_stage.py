@@ -99,6 +99,22 @@ def _center(ring: list[tuple[float, float]]) -> tuple[float, float]:
     return (sum(p[0] for p in ring) / len(ring), sum(p[1] for p in ring) / len(ring))
 
 
+def _ring_stats(ring: list[tuple[float, float]]) -> tuple[list[float], tuple[float, float], float]:
+    """A plot's box, middle and area in ONE walk of its ring (the work-budget audit at T16's landing: the writer walked each
+    ring three times), each as `_bbox`, `_center` and `_area` give it."""
+    x0 = y0 = math.inf
+    x1 = y1 = -math.inf
+    sx = sy = cross = 0.0
+    n = len(ring)
+    for i, (x, y) in enumerate(ring):
+        x0, y0, x1, y1 = min(x0, x), min(y0, y), max(x1, x), max(y1, y)
+        sx += x
+        sy += y
+        nx, ny = ring[(i + 1) % n]
+        cross += x * ny - nx * y
+    return [round(x0, 1), round(y0, 1), round(x1, 1), round(y1, 1)], (sx / n, sy / n), abs(cross) / 2.0
+
+
 def _water_source(place: str | None, brook_side: int) -> str:
     """Where the water comes in, in the names the manifest has always used: the head's middle, or the shoulder the brook comes
     down past (the brook's flank, +1 the fan's right looking downhill).
@@ -231,18 +247,19 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     plots, chans, dry, ponds, grave_recs = net["plots"], net["channels"], net["dry_plots"], net["pocket_ponds"], net["grave_records"]
     beans, outline = net["bund_beans"], net["envelope"]
     rings = [p["poly"] for p in plots]
-    plot_recs, centers = [], []
+    plot_recs, centers, acres = [], [], 0.0
     for p in plots:
-        b = _bbox(p["poly"])
-        c = _center(p["poly"])
+        b, c, a = _ring_stats(p["poly"])
         centers.append(c)
+        acres += a
         plot_recs.append([round(b[2] - b[0], 1), round(b[3] - b[1], 1), round(c[0], 1), round(c[1], 1), len(p["poly"]), 0])
+    acres /= SQ_FT_PER_ACRE
     # the writer's own walks of the rings, counted where they happen (S5; the work-budget audit at T16's landing): each plot's
-    # box, middle and area, a dry plot's area, and the record built for each plot, dry plot and channel in `comb_net`
+    # ring once (`_ring_stats`), a dry plot's for its area, and the record built for each plot, dry plot and channel in `comb_net`
     if __debug__:
         from l7r.diagram import work_counts
 
-        work_counts.OPS["pt_test@write_field"] += sum(3 * len(r) for r in rings) + sum(len(d["poly"]) for d in dry)
+        work_counts.OPS["pt_test@write_field"] += sum(len(r) for r in rings) + sum(len(d["poly"]) for d in dry)
         work_counts.OPS["write@comb_net"] += len(plots) + len(dry) + len(chans)
     hem = [p["drain_side"] for p in plots if p["drain_side"]]
     if grave_recs:
@@ -278,7 +295,6 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
         M.setdefault("field_ponds", []).extend(ponds)
     if grave_recs:
         M.setdefault("field_graves", []).extend({"x": g["x"], "y": g["y"]} for g in grave_recs)
-    acres = sum(_area(r) for r in rings if r) / SQ_FT_PER_ACRE
     net["acres"] = acres
     plan.net = net
     plan.envelope = outline
