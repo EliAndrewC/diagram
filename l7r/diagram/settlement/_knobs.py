@@ -26,7 +26,6 @@ Research:
 """
 
 import hashlib
-import math
 import random
 from collections.abc import Callable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
@@ -214,26 +213,6 @@ def _centroid(poly: Sequence[Pt]) -> list[float]:
     """Rounded centroid of a plot polygon - the identity a land-use record and a wet-plot record share.
     Research: geometry - NONE"""
     return [round(sum(p[0] for p in poly) / len(poly), 1), round(sum(p[1] for p in poly) / len(poly), 1)]
-
-
-def _sharp_corners(poly: Sequence[Pt]) -> int:
-    """How many vertices of a closed outline turn through more than 60 degrees - i.e. how many corners
-    are still essentially square. A ruled quad scores 4. Counting them, rather than taking the SHARPEST
-    turn, is what survives the rule getting more honest: once corner reach is drawn from a wide spread
-    some corners legitimately stay near-square (the one behind a neighbor's bund never gets walked),
-    so a max is a statistic about the single least-rounded corner on the parcel and says nothing about
-    the parcel. The count does: it separates 'a few corners never rounded' from 'nothing rounded'.
-    Research: geometry - NONE: a corner turning more than 60 degrees counts as square"""
-    n = len(poly)
-    hard = 0
-    for i in range(n):
-        ax, ay = poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]
-        bx, by = poly[(i + 1) % n][0] - poly[i][0], poly[(i + 1) % n][1] - poly[i][1]
-        la, lb = math.hypot(ax, ay), math.hypot(bx, by)
-        if la < 1e-9 or lb < 1e-9:
-            continue  # a duplicate vertex turns through no angle at all
-        hard += math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb))))) > 60.0
-    return hard
 
 
 def _land_use_ok(v: Any, ctx: Mapping[str, Any]) -> bool:

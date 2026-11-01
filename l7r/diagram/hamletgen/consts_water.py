@@ -86,14 +86,6 @@ BROOK_FRAME_MARGIN = 44.0
 # corner to get round a barley plot.
 BROOK_SLEW = 22.0
 """Research: brook bends, never corners - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a step over 22 ft led in over two"""
-# HOW MUCH SHORTER the fan's supply canal is on the brook's flank. The field is cut AROUND the stream, not the
-# stream around the field - and a comb built symmetrically about its own intake cannot leave room for the water
-# it is fed by: the fan's edge diverges from the tap at 42 and 58 degrees, so a brook keeping outside it has to
-# diverge faster still, which is not a course a stream takes. Trimming the canal on the brook's side leaves the
-# margin the brook runs in; the acreage solve makes it up on the other flank and down the fall, so the field is
-# the size the households need either way. The figure is a drawing judgment, not a researched one.
-BROOK_FAN_TRIM = 0.72
-"""Research: fan cut back from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: brook-side canal at 0.72"""
 # THE TAP'S OWN FIRST STRIDE, px: the brook runs on along the fall before it bends away to its flank, so
 # that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.

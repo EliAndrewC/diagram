@@ -12,7 +12,7 @@ import math
 import pytest
 
 from l7r.diagram.waterfields import supply_bank_clearance, taper_pieces, taper_w
-from l7r.diagram.waterfields.frame import DELIVERY_FT, DRAIN_FT, MIN_CHANNEL_PX, _drain_bank, _Frame, _seg_x, chan_px
+from l7r.diagram.waterfields.frame import DELIVERY_FT, MIN_CHANNEL_PX, _seg_x, chan_px
 
 
 def _linear(w0: float, w1: float, t: float) -> float:
@@ -197,22 +197,6 @@ def test_taper_pieces_survives_a_ZERO_LENGTH_polyline() -> None:
     """Repeated identical vertices make the total arc zero; the `or 1.0` guard must keep the divide
     alive rather than raising in the middle of a render."""
     assert [w for _p, w in taper_pieces([(5.0, 5.0), (5.0, 5.0)], 8.0, 3.0)] == [8.0]
-
-
-def test_the_collector_bank_follows_the_same_law_as_its_stroke() -> None:
-    """The drain half of the ratchet: `_drain_bank` decides where a paddy's low bund stops, and it
-    has to taper with the ditch it abuts. A constant - or a straight line - is inside the stroke at
-    one end and leaves a bare stripe at the other."""
-    F = _Frame(90.0)
-    dpts = [(0.0, 0.0), (100.0, 20.0), (200.0, 40.0)]
-    g = 2.0
-    bank = _drain_bank(F, dpts, g)
-    us = sorted(F.to_uf(*p)[0] for p in dpts)
-    lo, hi = us[0], us[-1]
-    mid = bank((lo + hi) / 2)
-    # the half-width at mid-run, before the margin and the slope correction, is the sqrt law's
-    assert mid > (taper_w(chan_px(DRAIN_FT[0], g), chan_px(DRAIN_FT[1], g), 0.5) / 2)
-    assert bank(lo) < mid < bank(hi)  # and it still grows monotonically toward the outfall
 
 
 def test_seg_x_returns_nothing_for_segments_that_cannot_meet() -> None:

@@ -105,7 +105,6 @@ CONSUMED_PUBLIC = [
     "connector_track",
     "BROOK_JOIN_DESCENT",
     "BROOK_SLEW",
-    "BROOK_FAN_TRIM",
     "BROOK_FRAME_MARGIN",
     "BROOK_SKIRT",
     "BROOK_WANDER_STEP",

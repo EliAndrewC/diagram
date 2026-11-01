@@ -70,10 +70,8 @@ CONSUMED_PUBLIC = [
     "aze_w",
     "build_polder",
     "chan_px",
-    "clean_polder_parcels",  # feature 150 T55: hamletgen.fit_polder cleans the WINNING block, not the 45 candidates its bisection tries",
     "dedup_ring",
     "drain_bank_clearance",
-    "floor_overhang",
     "hem_on_paddy",
     "jog_vertices",
     "paddy_grain",
@@ -87,12 +85,11 @@ CONSUMED_PUBLIC = [
 ]
 
 # The underscore names with external consumers, and the submodule that owns each
-# (settlement/fields/: _RICE_GREEN; tests/hamletgen/: _Frame, _miter_normals;
+# (settlement/fields/: _RICE_GREEN; tests/hamletgen/: _Frame;
 # tests/settlement/test_core.py: _seg_d).
 ALIASED_UNDERSCORE = {
     "_Frame": "l7r.diagram.waterfields.frame",
     "_RICE_GREEN": "l7r.diagram.waterfields.palette",
-    "_miter_normals": "l7r.diagram.waterfields.frame",
     "_seg_d": "l7r.diagram.waterfields.frame",
 }
 

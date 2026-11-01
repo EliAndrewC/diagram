@@ -5,7 +5,7 @@ Research: frame geometry - NONE: the contour/fall frame, point and segment predi
 
 import math
 import random
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 
 from l7r.diagram.work_counts import OPS
 
@@ -54,19 +54,6 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 MIN_CHANNEL_PX = 1.5
 """Research: visibility floor - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: no stroke drawn under 1.5 px, 1.5 ft on a hamlet map"""
 
-# THE CANAL BERM: bare ground between a supply canal's BANK and the dry-crop hem above it, in feet.
-# Measured from the bank, never from the centerline - the hem's stand-off used to be a flat `8 * g`
-# from the canal's CENTERLINE, which is a pinned number wearing a derived one's clothes: it did not
-# move when the net went to true size, so the water inside it shrank threefold while the bare stripe
-# GREW (12.3 -> 14.8 px median on Inashiro, identical before and after - settlement-review
-# 2026-08-17). A berm defined by its relationship to a bank has to be derived from that bank.
-#
-# 5.0 ft is the spoil bank plus standing room: GB50288 puts a lateral/farm canal's embankment TOP at
-# not less than 1 m, and a canal wants a walkable side for the annual dredging that keeps it flowing.
-# The old effective figure was ~10 ft of bare ground, which was never chosen - it is what 16 ft from
-# the centerline left once a 12.4 px canal was subtracted, i.e. an artifact of the inflation.
-CANAL_BERM_FT = 5.0
-"""Research: bank beside a supply canal - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5 ft of bare earth past the stroke's edge"""
 
 # A FARMER STEPS OVER A DITCH THIS NARROW RATHER THAN DECKING IT (settlement-review 2026-08-17).
 # The footplank rule used to be about LENGTH only - any ditch over ~140 px got a plank about midway -
@@ -301,55 +288,6 @@ def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     return None
 
 
-def _drain_bank(F: _Frame, dpts: Poly, g: float) -> Callable[[float], float]:
-    """Return `bank(u)`: how far ABOVE the collector's centerline, IN FALL, a paddy bund must stop.
-
-    A paddy's low bund IS the collector's top-of-bank - the two touch - so the drawn bund line
-    belongs at the EDGE of the ditch's stroke, never on its centerline. Until 2026-08-08 the carve
-    held off by a flat `2 * g` everywhere, which is INSIDE the stroke over most of the collector's
-    run (it widens `chan_px(DRAIN_FT[0], g)` -> `chan_px(DRAIN_FT[1], g)` downstream, so the half-width alone
-    reaches `3 * g`): the field's bottom bunds were drawn under the blue ditch with the paddy fill
-    poking out the far side. That is half of the GM's "the earthen bunds overlap with the drainage
-    ditch" on Hoshizora - the other half was the HEM PASS laying its quads on the contour, fixed
-    there.
-
-    Two conversions, both cheap and both wrong to skip:
-
-      - the ditch TAPERS, so the clearance has to taper with it. A constant is either inside the
-        stroke at the outfall or a visible bare stripe at the head, and which one you get depends
-        on the map's grain, which is the worst way for a number to be wrong.
-      - fall is not perpendicular distance. The collector is fitted as `f = a + b*u`, i.e. it runs
-        at atan(b) to the contour, so holding off by `c` perpendicular costs `c * hypot(1, b)` of
-        FALL. The fit clamps `b` to <= 0.35, so this is <= 6% - small, but free to be exact.
-
-    The extra `0.75 * g` is half the drawn bund stroke (`aze_w`, ~1.5 real ft), so the bund and the
-    ditch ABUT at the bank rather than overlapping by half a line width.
-
-    Research: bunds clear a widening drain - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half the drain's local width plus half a bund, converted to fall on the local segment
-    """
-    uf = [F.to_uf(*p) for p in dpts]
-    us = [q[0] for q in uf]
-    u_lo, u_hi = min(us), max(us)
-    span = (u_hi - u_lo) or 1.0
-    # The fall->perpendicular conversion is taken from the LOCAL segment, not from a head-to-outfall
-    # fit: the collector wanders, and the gate measures a bund against the segment it actually
-    # stands on (`drain_bank_clearance`). A global slope disagrees with that by a few percent, which
-    # is a fraction of a pixel - and a fraction of a pixel is exactly enough to make a bund the
-    # engine laid ON the bank read as a bund inside the ditch.
-    segs = []
-    for i in range(len(uf) - 1):
-        du = uf[i + 1][0] - uf[i][0]
-        segs.append((min(uf[i][0], uf[i + 1][0]), max(uf[i][0], uf[i + 1][0]), math.hypot(1.0, abs((uf[i + 1][1] - uf[i][1]) / du) if du else 0.0)))
-
-    def bank(u: float) -> float:
-        t = max(0.0, min(1.0, (u - u_lo) / span))
-        half = taper_w(chan_px(DRAIN_FT[0], g), chan_px(DRAIN_FT[1], g), t) / 2
-        slope = next((s for lo, hi, s in segs if lo <= u <= hi), segs[0][2] if u <= u_lo else segs[-1][2])
-        return (half + BANK_MARGIN * g) * slope
-
-    return bank
-
-
 BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap
 """Research: bund and ditch abut - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half a bund's width past the stroke's edge"""
 
@@ -400,51 +338,3 @@ def _signed_area(poly: Poly) -> float:
 
 def _poly_area(poly: Poly) -> float:
     return abs(_signed_area(poly))
-
-
-def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
-    """Per-BOUNDARY upslope offset normals for hem columns tiled along the boundary points `bpts`:
-    each interior boundary gets the mitred average of its two chords' upslope normals, scaled by
-    1/cos(half-bend) - the stroked-polyline miter join, so the offset band keeps its true upslope
-    depth at the seam (capped at 2x for a degenerate hairpin; a 180-degree fold, where no shared
-    offset direction exists, falls back to the outgoing chord's normal). The two end boundaries
-    take their single chord's normal unscaled.
-
-    WHY (GM 2026-08-16, Inashiro): _dry_fields used to offset each column along its OWN chord's
-    normal, so both quads at a shared boundary point pushed that point in slightly different
-    directions wherever the canal bent - a wedge of bare ground on a convex bend, a lap on a
-    concave one, ~bend-angle x depth px wide at the ragged edge (the worst Inashiro pair lapped
-    245 sq ft; 7 pairs overlapped outright, and every scripted hamlet had some). Offsetting each
-    boundary point along ONE shared vector makes every seam a single straight line both quads lie
-    on - gated by dry_plot_seams_shared.
-
-    Research: dry plots abut along the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one shared offset per boundary, so neighbors share each seam, nothing sheared or stepped
-    """
-    # A BOUNDARY WITH NO CHORD HAS NO NORMAL (feature 146, and this raised rather than returning).
-    # `bpts` comes from the hem's column boundaries, and a fan whose hem is one boundary wide - measured
-    # on a down_deg=210 fan sluiced at the west edge, where the dry band is clipped to a single column -
-    # produced an empty `cn` and then `cn[0]` IndexError'd. The caller loops `range(len(bounds) - 1)`, so
-    # with one boundary it tiles nothing and never indexes this list; an empty answer is the honest one.
-    if len(bpts) < 2:
-        return []
-    cn: list[Pt] = []
-    for i in range(len(bpts) - 1):
-        tx, ty = bpts[i + 1][0] - bpts[i][0], bpts[i + 1][1] - bpts[i][1]
-        tl = math.hypot(tx, ty) or 1.0
-        nx, ny = -ty / tl, tx / tl  # unit normal to this chord
-        mx, my = (bpts[i][0] + bpts[i + 1][0]) / 2, (bpts[i][1] + bpts[i + 1][1]) / 2
-        if F.to_uf(mx + nx, my + ny)[1] > F.to_uf(mx, my)[1]:  # point it UPSLOPE (decreasing fall)
-            nx, ny = -nx, -ny
-        cn.append((nx, ny))
-    out: list[Pt] = [cn[0]]
-    for k in range(1, len(cn)):
-        sx, sy = cn[k - 1][0] + cn[k][0], cn[k - 1][1] + cn[k][1]
-        sl = math.hypot(sx, sy)
-        if sl < 1e-9:  # 180-degree fold: opposite chord normals cancel
-            out.append(cn[k])
-            continue
-        ux, uy = sx / sl, sy / sl
-        scale = 1.0 / max(0.5, ux * cn[k][0] + uy * cn[k][1])  # 1/cos(half-bend), miter-limited at 2x
-        out.append((ux * scale, uy * scale))
-    out.append(cn[-1])
-    return out

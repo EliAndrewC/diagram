@@ -34,7 +34,6 @@ from .banks import *
 from .carve import *
 from .frame import *
 from .frame import _Frame as _Frame
-from .frame import _miter_normals as _miter_normals
 from .frame import _seg_d as _seg_d
 from .furrows import *
 from .palette import *

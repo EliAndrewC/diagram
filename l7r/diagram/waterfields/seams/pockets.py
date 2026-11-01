@@ -5,7 +5,6 @@ Research: pocket plumbing - NONE: lazy shapely binding, polygon parts and record
 
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
@@ -16,7 +15,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 from ..banks import (
     polyline_cum,
 )
-from ..frame import BANK_MARGIN, Poly, _Frame, f_at_u_of, taper_w
+from ..frame import BANK_MARGIN, Poly, _Frame, taper_w
 
 _SHAPELY_LOADED = False
 
@@ -130,74 +129,3 @@ def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
     pts = [F.to_xy(u, f) for u, f in zip(us, fs, strict=True)]
     pts += [F.to_xy(us[-1], f_far), F.to_xy(us[0], f_far)]
     return Polygon(pts).buffer(0)
-
-
-def _outside_command(F: _Frame, a_pts: Poly, dpts: Poly, field: Polygon, g: float, bank: Callable[[float], float]) -> BaseGeometry:
-    """Ground the fan cannot command: below the collector, or upslope of the supply canal.
-
-    The collector is extended LEVEL beyond both drawn ends (the same clamp `_fill_wedges` used and
-    `floor_overhang` states): the command area's low boundary conceptually continues past the
-    drawn water, so a low-u fork wedge still counts as commanded while the floating-diamond ground
-    past the outfall does not. Where the canal does not reach a given u there is nothing upslope to
-    exclude, so that sample falls back to a bound outside the fan entirely.
-
-    A FIX THAT FAILED (feature 328 wave 74, 2026-10-09): 0055 and 0068 stand the paddies a supply canal's local half-width
-    plus a 5.0 ft berm back from it, measured at right angles. The high bound at the canal's centerline with every `main`
-    piece's bank cut by `_water(..., CANAL_BERM_FT * g / 2)` did exactly that - canal A's bare bank median 5.04 ft (it was
-    3.9, from 2.86 at the wide head to 5.8), canal B's 5.02 (it was a bund's 1.52) - but the narrower planted ground re-fitted
-    the fan, Mizuguchi -8.5% and Sawada +8.6% of their paddy, and the cohort went 48/54 -> 46/54 (seeds 04 and 901 the web
-    refused, 19 farms without their channel, 42 a farm off its street; 22 and 906 newly passing); canal A's berm alone went to
-    42/54 with a GEOS side-location conflict on seed 19. Reverted; the row is E3 (a change that ripples into placement), its
-    work the layouts that broke (m:wave74-supply-berm-reverted; the patch and its tests, `supply_canals` and `polygonal`, are
-    in the measurement's source).
-
-    Research:
-        command area - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no paddy below the collector's bank or upslope of the supply canal, a canal watering only the ground below it
-        set-back from the canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the planted ground starts 4 grain (8 ft) down the fall from the canal's centerline
-        collector extended level - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); past its drawn ends the command area's low edge runs on at the end's fall
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 64 (least sample count); 6 (sampling step)
-    """
-    _load_shapely()
-    x0, y0, x1, y1 = field.bounds
-    corners = [F.to_uf(x0, y0), F.to_uf(x1, y0), F.to_uf(x1, y1), F.to_uf(x0, y1)]
-    ulo, uhi = min(u for u, _ in corners), max(u for u, _ in corners)
-    flo, fhi = min(f for _, f in corners), max(f for _, f in corners)
-    span = (uhi - ulo) + (fhi - flo) + 1.0
-    # SAMPLE THE CURVES FINELY. The band is a polygon through sampled points, so between samples
-    # its edge is a CHORD - and a chord across a bend in a wandering collector cuts inside the
-    # curve, admitting ground the fan may not plant. A fixed 64 samples is ~23 px apart on a hamlet
-    # fan, which was enough to put a new basin's bund in the collector on 4 of 24 cohort seeds. One
-    # sample every 6 px is finer than the drain's own jitter, and the whole band costs one polyline
-    # scan per sample.
-    _n_u = max(64, int((uhi - ulo) / 6.0))
-    us = [ulo + (uhi - ulo) * k / _n_u for k in range(_n_u + 1)]
-    dus = [F.to_uf(*p)[0] for p in dpts]
-    du_lo, du_hi = min(dus), max(dus)
-
-    # the collector and the canal in the frame once, read at every station (feature 427 T09)
-    _d_uf = [F.to_uf(*p) for p in dpts]
-    _d_us, _d_fs = [q[0] for q in _d_uf], [q[1] for q in _d_uf]
-    _a_uf = [F.to_uf(*p) for p in a_pts]
-    _a_us, _a_fs = [q[0] for q in _a_uf], [q[1] for q in _a_uf]
-
-    def drain_f(u: float) -> float:
-        fd = f_at_u_of(_d_us, _d_fs, u)
-        if fd is not None:
-            return fd
-        end = dpts[0] if abs(u - du_lo) < abs(u - du_hi) else dpts[-1]
-        return F.to_uf(*end)[1]
-
-    def canal_f(u: float) -> float:
-        fc = f_at_u_of(_a_us, _a_fs, u)
-        return flo - span if fc is None else fc + 4 * g
-
-    # The low bound is the collector's BANK IN FALL - `_drain_bank`, the very function `_carve`
-    # hems its closing rank onto - not a flat margin. `_fill_wedges` used a flat 3 * grain, which
-    # is neither: too much where the collector is narrow (it left the last residue of doubled bunds
-    # along the fan's toe, wedges this pass was forbidden to reach) and too little downstream,
-    # where the drain widens to DRAIN_FT[1] and `paddy_bunds_clear_the_collector` measures a
-    # slope-leaned set-back that a flat margin does not cover. Same predicate as the placer, so
-    # ground this pass plants is ground the carve would have been allowed to plant.
-    below = _band(F, us, [drain_f(u) - bank(u) for u in us], fhi + span)
-    above = _band(F, us, [canal_f(u) for u in us], flo - span)
-    return unary_union([below, above])

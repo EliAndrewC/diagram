@@ -159,17 +159,7 @@ Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
     dike-pond leftover parcels - GUESS research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice, at even odds; rice or pond, even odds
 """
-POND_LAYOUT_MOSAIC = 0.5
-"""Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""
 
-# THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
-# term over the ELIGIBLE set, and the archetype opts out of the topographic filter by name
-# (`eligible="all"`); 0.9 is the hand-authored Kuwabata's figure - "(almost) every former paddy cell"
-# - so a few leftover parcels still read as standing rice among the ponds (research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
-# The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
-# by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
-DIKEPOND_CONVERSION = 0.9
-"""Research: share of the block converted - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: 0.9, leftovers in rice"""
 
 # ...but only the proven one is ROLLED, and `polder_grid` is opt-in until it survives a COHORT.
 #

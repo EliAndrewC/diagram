@@ -129,17 +129,6 @@ def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     return best, at[0], at[1]
 
 
-def ruled_run_ok(course: Sequence[Pt], view: Sequence[float], tol: float = RULED_TOL_FT, most: float = RULED_MAX_FT) -> bool:
-    """No straight run of the course inside the view is longer than `most` - the pool test's whole body (water:W03).
-
-    Research:
-        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - no straight run over RULED_MAX_FT in view
-    """
-    x0, y0, w, h = (float(v) for v in view)
-    on = [p for p in course if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]
-    return straightest_run(on, tol) <= most
-
-
 def tap_index(course: Sequence[Pt], taps: Sequence[Pt]) -> int:
     """The vertex the head race leaves from - the one nearest a tap, found by position as the pool test finds it."""
     return min(range(len(course)), key=lambda k: min((math.dist(course[k], t) for t in taps), default=0.0))

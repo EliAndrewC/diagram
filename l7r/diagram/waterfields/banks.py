@@ -7,7 +7,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from .frame import BANK_MARGIN, Poly, Pt, _f_at_u, _Frame, _pip, _seg_d, _seg_x, taper_w
+from .frame import BANK_MARGIN, Poly, Pt, _pip, _seg_d, _seg_x, taper_w
 
 _PAST_EPS = 0.25  # arc slack at a supply stroke's ends: covers the 0.1-px manifest rounding of vertex + stroke point together (see supply_bank_clearance)
 
@@ -257,36 +257,6 @@ class StrokeIndex:
 
 
 _EDGE_EPS = 1e-6  # px: past any rounding between an edge's distance to a segment and its samples' gaps (`edge_beyond`)
-
-
-def floor_overhang(pts: Poly, dpts: Poly, down_deg: float) -> list[float]:
-    """Per-vertex DOWN-FALL overhang past the flat-extended collector line, in px (0 = clear).
-
-    The fan's command area ends at its collector: ground down-fall of the drain line - extended
-    LEVEL beyond both drawn ends, exactly as `_fill_wedges`' `drain_f_clamped` extends it - cannot
-    drain into it and is never planted, so field floor there is dead ground wearing the field's
-    color (Mizuguchi's SE needle, 2026-08-16: the raw envelope closed from the collector's thin
-    head across ~350 ft of bare floor to the outer thread's tail). ONE predicate, shared by
-    the comb builder's envelope trim and by the gate (`comb_floor_ends_at_the_collector`), for the
-    same reason `supply_bank_clearance` is: a trimmer and a checker that classify the same ground
-    from two formulas drift into disagreeing about where the command area ends.
-
-    Research:
-        command area ends at the collector - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the drain on the field's lowest line, ground down-fall of it unplanted
-        past the drain's ends - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the drain line extended level beyond both ends, ground down-fall of it unplanted
-    """
-    F = _Frame(down_deg)
-    u0 = F.to_uf(*dpts[0])[0]
-    u1 = F.to_uf(*dpts[-1])[0]
-    out: list[float] = []
-    for p in pts:
-        u, f = F.to_uf(*p)
-        fd = _f_at_u(F, dpts, u)
-        if fd is None:  # off either end past the interp slack: the boundary continues LEVEL
-            end = dpts[0] if abs(u - u0) <= abs(u - u1) else dpts[-1]
-            fd = F.to_uf(*end)[1]
-        out.append(max(0.0, f - fd))
-    return out
 
 
 def hem_to_bank(ring: Poly, dpts: Poly, down_deg: float, w0: float, w1: float) -> Poly:
@@ -719,80 +689,6 @@ def swept_bend(P: Pt, u0: Pt, u1: Pt, interior: float, radius: float, run: float
     t0, t1 = math.atan2(a[1] - c[1], a[0] - c[0]), math.atan2(b[1] - c[1], b[0] - c[0])
     sweep = (t1 - t0 + math.pi) % (2 * math.pi) - math.pi  # the short way round, the side the corner turns
     return [(round(c[0] + r * math.cos(t0 + sweep * s / steps), 1), round(c[1] + r * math.sin(t0 + sweep * s / steps), 1)) for s in range(steps + 1)]
-
-
-def straight_ring(poly: Poly, max_turn: float = 4.0) -> Poly:
-    """`poly` with every vertex that turns the ring by less than `max_turn` degrees removed, again until none does: a side stored
-    as a run of short segments is the one side it is (feature 328 wave 40, the wet paddy's glyph-check on Sawada: two plots
-    tapering to 18.8 and 22.8 deg behind 1.6-2.3 ft tips kept the tint, their sides stored in ~6 ft segments that
-    `tapers_to_a_point` reads as a chamfer's short steps). Unlike `dedup_ring` it removes only straight vertices, so no corner
-    the ring has is sharpened and no spike is made.
-
-    Research: plumbing - NONE: ring normalization for `tapers_to_a_point`
-    """
-    pts = list(poly)
-    changed = True
-    while changed and len(pts) > 3:
-        changed = False
-        for i in range(len(pts)):
-            a, b, c = pts[i - 1], pts[i], pts[(i + 1) % len(pts)]
-            t1 = math.atan2(b[1] - a[1], b[0] - a[0])
-            t2 = math.atan2(c[1] - b[1], c[0] - b[0])
-            turn = abs((math.degrees(t2 - t1) + 180.0) % 360.0 - 180.0)
-            if turn < max_turn:
-                del pts[i]
-                changed = True
-                break
-    return pts
-
-
-def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> bool:
-    """Does this ring run out to a TRUNCATED point - a short end edge capping two converging sides?
-
-    The honest form of the question `dedup_ring(r, end)` was standing in for (settlement-review,
-    Inashiro 2026-08-17). Deduping at an end width does collapse a truncation, but it is a GLOBAL
-    operation: it merges short edges anywhere on the ring, so a staircase of chamfers in the middle
-    of a perfectly good basin fuses into a spike that was never there. Four measured fabrications on
-    one roll - ring #550 whose SHARPEST real corner is 86.7 deg reported 2.3 after collapsing 4.0 /
-    2.4 / 4.2 ft edges, and ring #622 (83.7 -> 20.1) sat at the east toe inside the flooded candidate
-    zone, one roll away from demoting an honest basin.
-
-    So the test is per-EDGE and local. A short edge is an END only if the sides it caps are real
-    basin walls: both neighbors at least `arm` long. Collapse that one edge (never a chain) and the
-    angle between the two arms is the apex the wedge would have had if the toe had not cut it off -
-    which is what "reads as a point" means, and is invariant to how deep the truncation went.
-
-    `arm` is 4x the end width: a staircase's neighbors are themselves short, so requiring the arms
-    to be several times the end separates a capped taper from a chamfered corner without tuning.
-
-    Research: truncated point - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a short end capping two diverging arms is read as the point it would have had
-    """
-    n = len(poly)
-    if n < 4:
-        return False
-    for i in range(n):
-        b, c = poly[i], poly[(i + 1) % n]
-        if math.dist(b, c) >= end:
-            continue
-        a, d = poly[i - 1], poly[(i + 2) % n]
-        if math.dist(a, b) < arm or math.dist(c, d) < arm:
-            continue  # a chamfer between two short steps, not the end of a taper
-        # AND THE RING MUST ACTUALLY BE WIDER BACK THERE. The angle between the two backward arms is
-        # the apex angle only when they DIVERGE; for parallel sides it is 0, which reads as
-        # "maximally pointed" while describing a strip of constant width. Measured on Inashiro, that
-        # is not hypothetical - ring #633 is a parallel-sided strip with a 2.3 ft chamfer and scored
-        # converge = 0.0 exactly. A taper is narrow HERE and wide THERE, so require the far ends of
-        # the two arms to stand at least 3x the end edge apart before the angle means anything.
-        if math.dist(a, d) < 3.0 * math.dist(b, c):
-            continue
-        v1 = (a[0] - b[0], a[1] - b[1])
-        v2 = (d[0] - c[0], d[1] - c[1])
-        d1 = math.hypot(*v1) or 1.0
-        d2 = math.hypot(*v2) or 1.0
-        cs = max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (d1 * d2)))
-        if math.degrees(math.acos(cs)) < min_deg:
-            return True
-    return False
 
 
 # A BUND RUNS ON, OR IT TURNS FOR A REASON - IT DOES NOT STEP SIDEWAYS AND CARRY ON (GM 2026-08-18,

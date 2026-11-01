@@ -19,7 +19,6 @@ from l7r.diagram.sitegen.types import Pt as Pt  # noqa: F401
 from .consts_fields import COPSE_SITINGS as COPSE_SITINGS
 from .consts_fields import DEFAULT_HARVEST_WEATHER as DEFAULT_HARVEST_WEATHER
 from .consts_fields import DIKE_CROPS as DIKE_CROPS
-from .consts_fields import DIKEPOND_CONVERSION as DIKEPOND_CONVERSION
 
 # The field archetypes and knobs live in consts_fields.py (feature 405, the 1,000-line bar) and are re-exported here by name.
 from .consts_fields import FIELD_ARCHETYPES as FIELD_ARCHETYPES
@@ -34,7 +33,6 @@ from .consts_fields import POND_BANK_CROWN_FT as POND_BANK_CROWN_FT
 from .consts_fields import POND_BANK_FT as POND_BANK_FT
 from .consts_fields import POND_BANK_PITCH_FT as POND_BANK_PITCH_FT
 from .consts_fields import POND_BANKS as POND_BANKS
-from .consts_fields import POND_LAYOUT_MOSAIC as POND_LAYOUT_MOSAIC
 from .consts_fields import POND_LAYOUTS as POND_LAYOUTS
 from .consts_fields import ROLLED_ARCHETYPES as ROLLED_ARCHETYPES
 from .consts_fields import WATERWARD_DEPTH as WATERWARD_DEPTH
@@ -42,7 +40,6 @@ from .consts_fields import WATERWARD_DEPTH as WATERWARD_DEPTH
 # The water constants live in consts_water.py (feature 316, the 1,000-line bar) and are re-exported here by name.
 from .consts_water import BROOK_BEND_WIDTHS as BROOK_BEND_WIDTHS
 from .consts_water import BROOK_CROSSING_COST_FT as BROOK_CROSSING_COST_FT
-from .consts_water import BROOK_FAN_TRIM as BROOK_FAN_TRIM
 from .consts_water import BROOK_FLANKS as BROOK_FLANKS
 from .consts_water import BROOK_FRAME_MARGIN as BROOK_FRAME_MARGIN
 from .consts_water import BROOK_MAX_TURN_DEG as BROOK_MAX_TURN_DEG

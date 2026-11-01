@@ -50,26 +50,3 @@ def dikepond_inset(polys: Sequence[Sequence[Sequence[float]]], share: float) -> 
     cx, cy = sum(v[0] for v in q) / n, sum(v[1] for v in q) / n
     apo = sum(math.hypot((q[i][0] + q[(i + 1) % n][0]) / 2 - cx, (q[i][1] + q[(i + 1) % n][1]) / 2 - cy) for i in range(n)) / n
     return apo * (1.0 - math.sqrt(share))
-
-
-def line_cuts(poly: Sequence[Sequence[float]], px: float, py: float, dx: float, dy: float) -> list[tuple[float, float]] | None:
-    """Where the line through (px, py) with direction (dx, dy) lies inside `poly`, as `[(t0, t1)]` in the line's own
-    parameter - the general form of `row_cuts` for the comb's angled dry rows (feature 225 FR-004). `[]` when the
-    line misses the polygon, None when it meets the edges other than twice (a concave plot keeps its clip). Each
-    edge is crossed where the edge's endpoints lie on opposite sides of the line (half-open, so a vertex on the
-    line counts once), the same rule as the horizontal case."""
-    ts: list[float] = []
-    n = len(poly)
-    for i in range(n):
-        (x1, y1), (x2, y2) = (poly[i][0], poly[i][1]), (poly[(i + 1) % n][0], poly[(i + 1) % n][1])
-        s1 = (x1 - px) * dy - (y1 - py) * dx  # the side of the line each endpoint lies on
-        s2 = (x2 - px) * dy - (y2 - py) * dx
-        if (s1 > 0) != (s2 > 0):
-            f = s1 / (s1 - s2)  # the crossing along the edge
-            cx, cy = x1 + (x2 - x1) * f, y1 + (y2 - y1) * f
-            ts.append((cx - px) * dx + (cy - py) * dy)
-    if not ts:
-        return []
-    if len(ts) != 2:
-        return None
-    return [(min(ts), max(ts))]

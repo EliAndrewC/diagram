@@ -40,27 +40,6 @@ def _tiles(region: Any, cells: list[Any]) -> None:
     assert abs(sum(c.area for c in cells) - region.area) < 1e-6 * region.area + 1e-3, "and no two cells overlap"
 
 
-def test_the_planted_region_is_the_envelope_less_its_water_and_what_it_cannot_command() -> None:
-    env = [(0.0, 0.0), (400.0, 0.0), (400.0, 400.0), (0.0, 400.0)]
-    chan = [{"pts": [(200.0, -10.0), (200.0, 410.0)], "w": 12.0, "w_tail": 12.0, "role": "branch"}]
-    region = pt.planted_region(_Frame(90.0), env, chan, [(-500.0, -500.0), (900.0, -500.0)], [(-500.0, 900.0), (900.0, 900.0)], 1.0, lambda _u: 2.0)
-    assert region.geom_type == "MultiPolygon", "the ditch splits the field in two"
-    assert not region.contains(_box(199, 100, 201, 101)), "the ditch and its banks are not planted"
-    assert 0.9 * 160000 < region.area < 160000
-    rings = pt.region_rings(region)
-    assert len(rings) == 2 and all(len(r) >= 4 for r in rings)
-    assert len(pt.region_rings(_box(0, 0, 10, 10))) == 1, "a single polygon has its one ring"
-
-
-def test_a_sliver_line_in_the_region_is_not_a_ring() -> None:
-    """Feature 304's scaling leg (seed 7, 40 households): the difference that makes the region left a LineString beside its
-    polygons, and reading its exterior raised. A line plants nothing; only the polygons are rings."""
-    from shapely.geometry import GeometryCollection, LineString
-
-    mixed = GeometryCollection([_box(0, 0, 10, 10), LineString([(20.0, 0.0), (30.0, 0.0)])])
-    assert pt.region_rings(mixed) == pt.region_rings(_box(0, 0, 10, 10))
-
-
 def test_extend_pushes_both_ends_out_along_their_own_directions() -> None:
     assert pt._extend([(0.0, 0.0), (10.0, 0.0)], 2.0) == [(-2.0, 0.0), (0.0, 0.0), (10.0, 0.0), (12.0, 0.0)]
     assert pt._extend([(0.0, 0.0)], 2.0) == [(0.0, 0.0)], "a single point has no direction"

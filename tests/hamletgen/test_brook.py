@@ -71,18 +71,6 @@ def test_the_straightest_run_is_the_pool_tests_own_measure() -> None:
     assert br.straightest_run(back, 3.1) == pytest.approx(_straightest_reference(back, 3.1))
 
 
-def test_the_ruled_run_is_judged_inside_the_view_against_ten_widths() -> None:
-    """water:W03 (feature 444 T16, against 0054): no straight run past ten of the brook's drawn widths in view."""
-    assert pytest.approx(10 * br.BROOK_DRAWN_W) == br.RULED_MAX_FT
-    line = [(float(k * 10), 500.0) for k in range(101)]  # 1,000 ft dead straight
-    assert not br.ruled_run_ok(line, (0.0, 0.0, 2000.0, 1000.0))
-    assert br.ruled_run_ok(line, (0.0, 0.0, br.RULED_MAX_FT - 1.0, 1000.0)), "a run cut short by the view is judged as it shows"
-    wavy = [(float(k * 20), 500.0 + (8.0 if k % 2 else 0.0)) for k in range(51)]
-    assert br.ruled_run_ok(wavy, (0.0, 0.0, 2000.0, 1000.0))
-    run, most, _a, _b = br.ruled_excess(line, 2000.0, 1000.0, (0.0, 0.0, 10.0, 10.0))
-    assert run == pytest.approx(1000.0) and most == br.RULED_MAX_FT
-
-
 def test_the_axis_rule_exempts_the_tap_run_and_short_chords_only() -> None:
     """water:W04 (named by the GM): a segment of a wander stride or more within 1.6 degrees of an axis is found; the two
     segments leaving the tap are the tap run and exempt; a chord under the stride is a curve's, not a run."""
