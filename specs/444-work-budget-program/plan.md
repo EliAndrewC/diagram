@@ -555,7 +555,10 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
   odds alone - 114 plots at 40. Commit 740aed0ec (T16's third claims round) made a cleared middle (`fan_middle`, 1 map in 4 - the knob's weights, cleared 0.25, `settlement/fields/grain.py` `FAN_MIDDLE`)
   lay one band along the whole canal whatever the need (0011). Measured 2026-11-01 by `make work-budget`
   (`dev/work-budget/20261101T085501Z-39d51a626dd7.json`): hem plots at 40 of 241, 119, 158 and 150 on seeds 4, 25, 39 and 47,
-  mean about 167; the stage's total, 27,012 at 40 and 47,513 at 80, under the derivation's 27,238 and 49,631. At the
+  mean about 167; the stage's total, 27,012 at 40 and 47,513 at 80, under the derivation's 27,238 and 49,631 as it stood that
+  morning. The derivation was re-derived later that day (`phases/field_greenfield.derivation.md`, the round arbiter's accept on
+  ask:444-T16-field-turns-round, the GM's yes on 444#4): 34,656, 62,494 and 114,953 at 20, 40 and 80 households, exponent 0.86 -
+  the derivation the 1.9 below multiplies (1.9 x 62,494 = 118,739; 1.9 x 114,953 = 218,411). At the
   derivation's next re-derivation, price the dry hem, the hem's laid plots, the outline by bands and the hem's registry share
   on `fan_middle`'s odds, and name the cleared-middle band in the contract's Writes. Not before: the arbiter forbade editing
   the derivation now (FR-013).
