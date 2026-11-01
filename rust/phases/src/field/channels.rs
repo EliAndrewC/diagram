@@ -133,7 +133,7 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
 /// rows draws no ditch.
 ///
 /// Research:
-///     the lean - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals at right angles - a delivery along its row's bund, nearly square to its canal, the row taken only where its bund leans downstream off the flank (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream; its 35 degrees a branch's where no lattice sets the angle)
+///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a delivery ditch in the comb follows its row's bund, leaving nearly square to its canal, drawn only where that bund leans downstream off the canal's flank; the 35 degrees a branch's where nothing on the ground sets the angle
 ///     where an offtake goes - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on moving an offtake to a leaning row; the nearest within three rows, never the first or last row, none where no row leans
 fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> {
     let mut lines_at: Vec<usize> = Vec::new();
@@ -178,9 +178,9 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 /// the flank inward, so the ditch leaves its canal leaning downstream.
 ///
 /// Research:
-///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins, delivery ditches leaving them, one drain gathering the water along the lowest line - each delivery along its row's bund, at the angle the bund leaves its canal (`offtake_lines`)
+///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins, delivery ditches leaving them nearly at right angles, one drain gathering the water along the lowest line - each delivery along its row's bund, leaning downstream as the bund does (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a delivery ditch in the comb follows its row's bund; `offtake_lines`)
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
-///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head
+///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head; where a canal stops at its last offtake, narrowed to 1.5 ft, that last delivery leaves at 1.2 ft and runs flat
 ///     the canals' courses - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from a corner fork, or swept along the head to its own corner from a middle one
 ///     the head race - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0 ft, the whole fan's above the fork - at that width throughout
 ///     the head race's course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - one straight run
