@@ -198,7 +198,7 @@ def test_a_lane_crosses_the_brook_and_a_channel_square() -> None:
 
 
 def test_every_brook_crossing_is_under_a_deck() -> None:
-    M = {"streams": [BROOK], "lanes": [_lane((0.0, 0.0), (200.0, 0.0))], "bridges": [{"x": 100.0, "y": 10.0, "span": 20.0}]}
+    M = {"streams": [BROOK], "lanes": [_lane((0.0, 0.0), (200.0, 0.0))], "bridges": [{"x": 110.0, "y": 0.0, "span": 20.0}]}
     assert law.deck_covers(M["bridges"][0], 100.0, 0.0)
     assert law.unbridged_crossings(M) == []
     M["bridges"] = [{"x": 100.0, "y": 25.0}]  # no span recorded: read at the 20 ft default

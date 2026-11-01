@@ -152,11 +152,15 @@ def deck_covers(deck: Any, x: float, y: float) -> bool:
     """Does this deck's own span reach the point (x, y)? ONE predicate (feature 287, ways W02): `bridges()` and `bridge()`
     skip a crossing only when a standing deck covers it, and the lane law (`law.unbridged_crossings`) asks the same. A deck
     reaches half its span from its center each way (the round-4 claims check: the whole span read a crossing a full span off
-    as covered, and left it without a deck).
+    as covered, and left it without a deck) ALONG ITS BEARING, and half its width across it (the fifth: a circle of half the
+    span read a crossing 12 ft up the brook beside a 30 ft deck as covered, its way left running through the water).
 
-    Research: a deck covers its own reach - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one deck per crossing place - a standing deck stands for a crossing it reaches, half its span from its center
+    Research: a deck covers its own reach - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one deck per crossing place - a standing deck stands for a crossing it reaches, within half its span along its bearing and half its width across it
     """
-    return math.hypot(float(deck["x"]) - x, float(deck["y"]) - y) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT)) / 2
+    a = math.radians(float(deck.get("rot", 0.0)))
+    dx, dy = x - float(deck["x"]), y - float(deck["y"])
+    along, across = dx * math.cos(a) + dy * math.sin(a), -dx * math.sin(a) + dy * math.cos(a)
+    return abs(along) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT)) / 2 and abs(across) <= float(deck.get("w", 4.0)) / 2
 
 
 def flooded_ground(M: Any) -> list[list[Pt]]:
@@ -392,7 +396,7 @@ class BridgesMixin:
 
         Research:
             one deck per crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a deck within the tolerance that covers the point stands for it
-            carried deck always planked - DEVIATION research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: a town's road bridges take one of two forms, rolled per settlement - every carried deck is drawn planked (0084's one timber deck as wide as the way, a hamlet's form) until the town tier rolls the form (feature 381's carried item, road-bridge forms)
+            carried deck always planked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a hamlet's way crosses on one timber deck as wide as the way - the hamlet the one tier that calls `bridges()` (`hamletgen/frame.py`, `ways/checks.py`); a town's road bridges, one of two forms rolled per settlement (0087), are feature 381's carried item (road-bridge forms), to be rolled here when a town first calls it
             deck drawn over the water - CONVENTION: the top layer
             merge tolerance - NONE: half the span, between 4 and 12 px
         """
@@ -459,9 +463,11 @@ class BridgesMixin:
             # ...AND A DECK THAT WOULD STAND ON ANOTHER is merged into it: the standing deck is re-seated
             # long enough to cover both crossings, rather than the second being skipped (and left
             # unbridged) or drawn on top of the first (`features_do_not_overlap`).
+            # One crossing PLACE is within half the new span of a standing deck, along its bearing or across it; the merged deck
+            # is widened as well as lengthened (the fifth claims check: lengthening alone never reached a way 12 ft beside it)
             near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
             if near:
-                self._reseat_to_cover(near[0], p, _span)
+                self._reseat_to_cover(near[0], p, _span, rw)
                 continue
             # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
             # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
@@ -471,16 +477,19 @@ class BridgesMixin:
             n += 1
         return n
 
-    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt, own: float) -> None:  # type: ignore[misc]
+    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt, own: float, own_w: float) -> None:  # type: ignore[misc]
         """Lengthen a standing deck along its own bearing until it reaches past `p` - a second crossing close enough that its
-        own deck (`own`, the span solved there) would stand on this one (feature 287, ways W02) - by that deck's own half-span,
-        so the merged deck clears the second water and lands as its own would; and redraw it, record and ink together.
+        own deck (`own` long, `own_w` wide) would stand on this one (feature 287, ways W02) - by that deck's own half-span,
+        so the merged deck clears the second water and lands as its own would, and widen it across its bearing to take that
+        way's own width at `p` (a deck covers only its own rectangle, `deck_covers`); and redraw it, record and ink together.
 
         Research: two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner past the water onto dry ground
         """
         c, a = (float(deck["x"]), float(deck["y"])), math.radians(float(deck["rot"]))
         along = abs((p[0] - c[0]) * math.cos(a) + (p[1] - c[1]) * math.sin(a))
+        across = abs(-(p[0] - c[0]) * math.sin(a) + (p[1] - c[1]) * math.cos(a))
         deck["span"] = round(max(float(deck["span"]), 2.0 * along + own), 1)
+        deck["w"] = round(max(float(deck["w"]), 2.0 * across + own_w), 1)
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float | None = None, seg_caps: Any = None) -> int:  # type: ignore[misc]

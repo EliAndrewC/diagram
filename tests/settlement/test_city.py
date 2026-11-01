@@ -364,6 +364,8 @@ def test_a_crossing_is_decked_unless_a_standing_deck_covers_it() -> None:
     # a deck reaches half its span from its center each way, never its whole span (the round-4 claims check)
     assert deck_covers({"x": 0, "y": 0, "span": 20}, 9.0, 0.0) and not deck_covers({"x": 0, "y": 0, "span": 20}, 11.0, 0.0)
     assert not deck_covers({"x": 0, "y": 0, "span": 5}, 3.0, 0.0)
+    # ...along its bearing only, within half its width across it: 12 ft up the brook from a 30 ft deck is not its reach
+    assert deck_covers({"x": 0, "y": 0, "span": 30, "w": 6, "rot": 90.0}, 0.0, 14.0) and not deck_covers({"x": 0, "y": 0, "span": 30, "w": 6, "rot": 90.0}, 12.0, 0.0)
     far = _crop_settlement()
     far.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
     far.M["lanes"] = [{"pts": [[300, 100], [300, 500]], "w": 6}, {"pts": [[700, 100], [700, 500]], "w": 6}]
@@ -443,8 +445,11 @@ def test_a_merged_deck_is_redrawn_to_reach_both_crossings() -> None:
     deck = s.M["bridges"][0]
     # a crossing 20 ft along the deck's own bearing whose own deck would be 30 ft: the merged deck reaches past it by that
     # deck's half-span, 2 x 20 + 30 (the round-4 claims check: 2 x 20 + 2 ended the deck in the second water)
-    s._reseat_to_cover(deck, (500.0, 320.0), 30.0)
+    s._reseat_to_cover(deck, (500.0, 320.0), 30.0, 6.0)
     assert deck["span"] == 70.0 and 'width="70.0"' in s.top[int(deck["z"]) - s.TOPZ]
+    # ...and a crossing 2 ft across its bearing widens it to take that way's own 6 ft there, 2 x 2 + 6
+    s._reseat_to_cover(deck, (502.0, 300.0), 30.0, 6.0)
+    assert deck["w"] == 10.0 and deck["span"] == 70.0
 
 
 def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:
