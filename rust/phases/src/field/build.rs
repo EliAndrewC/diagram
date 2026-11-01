@@ -8,7 +8,7 @@
 use std::collections::HashMap;
 
 use super::beans::bean_runs;
-use super::brook::{brook, clearance, file as file_brook, weir, Brook, BrookIn};
+use super::brook::{brook, clearance, weir, Brook, BrookIn};
 use super::channels::{channels, Channel};
 use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD};
 use super::fan::{fan, Fan, Pt};
@@ -254,14 +254,61 @@ fn rows_held(bs: &[Basin], cell: f64, counts: &mut Counts) -> Result<(), FieldRe
     Ok(())
 }
 
+/// A water segment and its width (feet).
+type Seg = (Pt, Pt, f64);
+
+/// The field's water index (D5): the brook filed first, so the outline - placed point by point, each point asked of the brook in
+/// its cells - keeps outside the brook's skirt while the index holds only the brook (one index, not a second of the brook's own:
+/// the MODE BUDGET, T16); then the ditches, each segment at the wider of its two ends. Returns the index and the segments.
+///
+/// Research:
+///     the field off the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the fan of paddies is cut away from the brook, leaving the stream its margin - an outline point within the brook's skirt refuses the field
+///     the water filed - NONE: each ditch's segments at the wider of its two ends, the brook at its width, so every test of the water asks its widest
+///
+/// # Errors
+/// `FieldRefused` when an outline point stands within the brook's skirt.
+fn water(
+    chans: &[Channel],
+    br: &Brook,
+    inp: &FieldIn,
+    f: &Fan,
+    counts: &mut Counts,
+) -> Result<(Index, Vec<Seg>), FieldRefused> {
+    let mut ix = Index::default();
+    let mut segments = Vec::new();
+    for c in chans {
+        for w in c.pts.windows(2) {
+            segments.push((w[0], w[1], c.w.max(c.w_tail)));
+        }
+    }
+    let ditches = segments.len();
+    segments.extend(br.pts.windows(2).map(|p| (p[0], p[1], inp.brook.w)));
+    for (a, b, w) in &segments[ditches..] {
+        ix.file_w(*a, *b, *w);
+    }
+    for p in &f.ring {
+        let d = clearance(*p, 2.0 * inp.brook.skirt, &mut ix);
+        if d < inp.brook.skirt - 1e-6 {
+            return Err(FieldRefused {
+                rule: "the brook's skirt",
+                detail: format!("an outline point {d:.1} ft from the brook"),
+            });
+        }
+    }
+    for (a, b, w) in &segments[..ditches] {
+        ix.file_w(*a, *b, *w);
+    }
+    counts.add("candidate@outline", 2 * f.ring.len() as u64);
+    counts.add("write@ditch", ditches as u64);
+    Ok((ix, segments))
+}
+
 /// One field on its fan.
 ///
 /// Research:
 ///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft
-///     the field off the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the fan of paddies is cut away from the brook, leaving the stream its margin - an outline point within the brook's skirt refuses the field
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)
 ///     the grave's form - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none
-///     the water filed - NONE: each ditch's segments at the wider of its two ends, the brook at its width, so every test of the water asks its widest
 ///     the intake's place and siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake at the left, the center or the right of the fan's head, and (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html) in a straight reach or on the outside of a bend - the `intake_place` and `intake_siting` knobs, read here for the brook
 ///     the grave off the pond's plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave beside a pocket pond; never in the pond's plot
 ///     the hem later - NONE: each field built without its dry plots; `build` hems the first one once every field stands
@@ -296,33 +343,7 @@ fn one(
         center,
         inp.seed,
     );
-    let mut ix = Index::default();
-    let mut segments = Vec::new();
-    for c in &chans {
-        for w in c.pts.windows(2) {
-            segments.push((w[0], w[1], c.w.max(c.w_tail)));
-        }
-    }
-    segments.extend(br.pts.windows(2).map(|p| (p[0], p[1], inp.brook.w)));
-    for (a, b, w) in &segments {
-        ix.file_w(*a, *b, *w);
-    }
-    let widths = ix.widths.clone();
-    // the outline placed point by point, each point asked of the brook in its cells: the field keeps outside the brook's skirt
-    let mut brook_ix = Index::default();
-    file_brook(&br, &mut brook_ix);
-    for p in &f.ring {
-        let d = clearance(*p, 2.0 * inp.brook.skirt, &mut brook_ix);
-        if d < inp.brook.skirt - 1e-6 {
-            return Err(FieldRefused {
-                rule: "the brook's skirt",
-                detail: format!("an outline point {d:.1} ft from the brook"),
-            });
-        }
-    }
-    counts.add("candidate@outline", 2 * f.ring.len() as u64);
-    counts.add("write@ditch", segments.len() as u64);
-    counts.add("write@water_index", brook_ix.touched);
+    let (ix, segments) = water(&chans, &br, inp, f, counts)?;
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
     let mut work = 0;
     let st = states(&bs, inp.seed, tag, unsettled, &mut work);
@@ -332,7 +353,7 @@ fn one(
         2 * st.iter().filter(|s| **s != State::Green).count() as u64,
     );
     let mut work = 0;
-    let beans = bean_runs(&bs, inp.seed, tag, &mut ix, &widths, &mut work);
+    let beans = bean_runs(&bs, inp.seed, tag, &mut work);
     counts.add("write@bean", work);
     let mut work = 0;
     let pond = pocket_pond(&bs, inp.seed, tag, &mut work);
@@ -353,7 +374,7 @@ fn one(
     counts.add("candidate@feature", work);
     // the water index's cells and the segments its queries handed back, the beans' among them (the audit, T16)
     counts.add("write@water_index", ix.touched);
-    counts.add("candidate@water_index", ix.examined + brook_ix.examined);
+    counts.add("candidate@water_index", ix.examined);
     counts.add("write@feature", 6);
     Ok(Field {
         fan: f.clone(),

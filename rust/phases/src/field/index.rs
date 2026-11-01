@@ -144,7 +144,9 @@ fn cell_of(v: f64) -> i64 {
 }
 
 impl Index {
-    /// File a segment in every cell it crosses (Amanatides-Woo traversal); returns its id.
+    /// File a segment in every cell it crosses (Amanatides-Woo traversal); returns its id - for the tests, the stage filing each
+    /// segment with its width (`file_w`).
+    #[cfg(test)]
     pub fn file(&mut self, a: Pt, b: Pt) -> usize {
         self.file_w(a, b, 0.0)
     }

@@ -5,7 +5,7 @@
 //!     ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: paddy on a broad valley floor - a pond on a low plot, no rock outcrop, may have a grave
 
 use super::fan::Pt;
-use super::geom::{dist, signed_area};
+use super::geom::{dist, seg_dist, signed_area};
 use super::lattice::Basin;
 use super::rules::{held, FieldRefused};
 use crate::pyrand::knob_rng;
@@ -20,6 +20,11 @@ pub const POND_PCT: u32 = 55;
 /// Research:
 ///     the pond's size - GUESS: the record silent on its size, 0008 sinks it wholly in one plot, never across a bund, and gives no size; 0.4 and 0.28 of the plot's shorter side
 pub const POND_SHARE: (f64, f64) = (0.4, 0.28);
+/// The share of the room from the pond's middle to its plot's nearest side its longer radius may take.
+///
+/// Research:
+///     the fit - NONE: a margin of the geometry, so the edge stands just inside the plot rather than on its bund
+pub const POND_FIT: f64 = 0.95;
 /// The share of maps that draw a grave in the fields, in tenths.
 ///
 /// Research:
@@ -70,14 +75,14 @@ fn centroid(ring: &[Pt]) -> Pt {
     )
 }
 
-/// The pocket pond, if this map sinks one: in a plot of the lowest row chosen from the seed, at its middle, its radii shrunk until
-/// its edge lies wholly inside the plot.
+/// The pocket pond, if this map sinks one: in a plot of the lowest row chosen from the seed, at its middle, its radii fitted once
+/// inside the middle's least distance to the plot's sides, so its edge lies wholly inside the plot.
 ///
 /// Research:
 ///     the pond in a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: sunk wholly in one low plot, never across a bund - sixteen points of its edge held inside the plot
 ///     the pond's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's shape and where in its plot; an ellipse squared to the map at the plot's middle
 ///     the pond's odds - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a little over half the time, where it has low plots (`POND_PCT`)
-///     the pond's size - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's size; `POND_SHARE` of the plot's shortest side, shrunk by 0.85 a step until it fits
+///     the pond's size - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's size; `POND_SHARE` of the plot's shortest side, fitted once to `POND_FIT` of the room from its middle to the plot's nearest side where that is smaller
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -104,6 +109,9 @@ pub fn pocket_pond(
         .fold(f64::INFINITY, f64::min);
     let (x, y) = centroid(r);
     let (mut rx, mut ry) = (short * POND_SHARE.0, short * POND_SHARE.1);
+    if !super::geom::inside((x, y), r) {
+        return None;
+    }
     let mut within = |rx: f64, ry: f64| {
         *work += 16;
         (0..16).all(|k| {
@@ -111,13 +119,14 @@ pub fn pocket_pond(
             super::geom::inside((x + rx * a.cos(), y + ry * a.sin()), r)
         })
     };
-    for _ in 0..12 {
-        if within(rx, ry) {
-            break;
-        }
-        rx *= 0.85;
-        ry *= 0.85;
-    }
+    // the radii fitted once, not shrunk until they pass (the MODE BUDGET, T16): an ellipse whose longer radius is under the middle's
+    // least distance to the plot's sides lies within that disc, and so within the plot
+    let room = (0..r.len())
+        .map(|k| seg_dist((x, y), r[k], r[(k + 1) % r.len()]))
+        .fold(f64::INFINITY, f64::min);
+    let fit = (room * POND_FIT / rx.max(ry)).min(1.0);
+    rx *= fit;
+    ry *= fit;
     within(rx, ry).then_some((i, Pond { x, y, rx, ry }))
 }
 

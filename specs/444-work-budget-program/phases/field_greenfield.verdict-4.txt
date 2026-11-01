@@ -1,0 +1,21 @@
+UNDERIVED - the pocket pond row's "shrunk a bounded number of times (about 3 typical, 48)" gives no reason or measurement for the 3, which makes it a tuned retry count (S2). The "grave" in the same row, with its worst case of 8 hosts, is not in the contract's Writes.
+
+1. Is each factor derived? No, and this is the finding that blocks (derivation.md line 60). Every other "typical" figure cites the 2026-11-01 re-measure or a construction; the pond's 3 shrinks cite nothing. A fit that shrinks until it passes is a retry loop. A cheaper derived form is a radius computed once from the distance to the nearest thing that stands, then the 16 points placed once. The grave is the same kind of finding as verdict-1's keep-out chords: work charged for something the contract never writes. It costs only about 50 of 18,925, but that does not change the verdict. The arithmetic itself checks: the totals re-add to 18,925, 33,782 and 61,381, and the exponent is 0.85.
+
+2. Is there a cheaper standard algorithm? Yes, two that are LOOSE:
+- The beans' water-index ask (2 a bean, line 54) is 1,770, 3,540 and 6,766 operations. The comb lays every ditch on the lattice's own lines and lays its sweeps itself. So the bean runs can stop at the ditch banks and at each junction's sweep by construction, the same "construction in place of search" the derivation uses for the hem and the comb (line 95). The derivation neither uses this nor says why it cannot. The tighter bound is 2 a bean, placed and written. Also, "kept" implies refused candidates, whose asks are not charged.
+- The water index row's "the brook's again in its own index for the outline's test (2 a station)" (line 63) is 646, 896 and 1,262 operations. `## Indexes` names no brook index. Line 22 tests the outline against "the brook in its water-index cell", and the outline is laid before the comb, so at that point the water index holds only the brook. The tighter bound is 701, 968 and 1,348 segments x 2 = 1,402, 1,936 and 2,696.
+- There is no `- pruning:` line, and none is needed: no row picks a winner from a set that grows with the map.
+
+3. Is any factor padded? Yes. In the overlap registry (line 61), a hem plot "against what stands in its cells (6)" has no stated reason. Line 28 gives that plot's neighbors as about 2 laid plots plus 2.4 water segments, which is 4.4. The tighter bound is 4.4 a plot, 251, 502 and 999 rather than 342, 684 and 1,362.
+
+4. Is each figure read at its source's size and unit? One figure is misread, though in the under-counting direction. `## Indexes` (line 36) gives "about 2 plots' boxes a cell", but line 58 charges "the about 2 laid plots handed back" for a query over 6.8 cells. A per-cell figure is used as a per-query figure. Two other under-counts also go to the MODE AUDIT:
+- The outline's own segments are filed in the water index by the contract and by line 31, but no row charges them (78, 90 and 105 points x about 2).
+- Building the outline-by-bands index is not charged.
+
+Earlier findings: I can confirm closed verdict-1's findings 1, 5, 7 and 8, verdict-2's exponent, and verdict-3's cap. I cannot confirm verdict-1's finding 2, the cut-off of a sharp point:
+- The cut-basins row it was charged in is now 0, and the rows'-angles row (line 52) charges the test but nothing for a test that fails.
+- The contract still requires "a refused point cut off into a headland".
+- The derivation should either show that the lattice gives no angle under 25 degrees, or charge the cut-off branch.
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md.

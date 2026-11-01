@@ -50,6 +50,12 @@ pub const TRACT_APART_DEG: f64 = 20.0;
 /// Research:
 ///     the bound - NONE: a guard far past any canvas (64 bands, over two miles); research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html has the plots climb out as far from the canal as the ground runs, until they hold the grain
 pub const MAX_BANDS: u32 = 64;
+/// How far a candidate's corners are pulled toward its middle before the lap test (feet): plots laid side by side share their
+/// corners and edges exactly, which is no lap.
+///
+/// Research:
+///     the pull - NONE: a tolerance of the geometry, under any plot's side
+pub const LAP_PULL_FT: f64 = 1.0;
 /// The dry crops (0006's four), each map drawing its own mix.
 ///
 /// Research:
@@ -110,11 +116,12 @@ pub fn hem(
             .map(|(_, c)| *c)
             .collect()
     };
-    let len: f64 = line.windows(2).map(|w| dist(w[0], w[1])).sum();
     let segs: Vec<(Pt, Pt)> = line.windows(2).map(|w| (w[0], w[1])).collect();
     if segs.is_empty() {
         return (Vec::new(), 0.0, 0);
     }
+    let canal = Canal::new(segs, out);
+    let len = canal.len();
     let fall = ((-down.1, down.0), down);
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
     // the plots laid so far, by cell: each candidate asks only the plots near it (the audit's square scan, T16)
@@ -163,10 +170,10 @@ pub fn hem(
                     // the canal's own course pushed out along its smoothed normal: neighbors share their sides and the bands
                     // nest, so the hem follows the canal as a hem does
                     let poly = vec![
-                        offset(&segs, out, d0, o0),
-                        offset(&segs, out, d0 + PLOT_FT.0, o0),
-                        offset(&segs, out, d0 + PLOT_FT.0, o1),
-                        offset(&segs, out, d0, o1),
+                        canal.offset(d0, o0),
+                        canal.offset(d0 + PLOT_FT.0, o0),
+                        canal.offset(d0 + PLOT_FT.0, o1),
+                        canal.offset(d0, o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
                     if got >= need || refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
@@ -246,48 +253,72 @@ fn apart(rolled: (bool, f64), near: &[f64]) -> (bool, f64) {
         .unwrap_or(rolled)
 }
 
-/// The point `d` feet along the segments pushed `o` feet out along their normal there, the normal smoothed over a plot's length
-/// either way and turned to `out`'s side.
+/// The canal's course as the hem lays along it: its segments, the distance along it at each segment's start, and the one side
+/// the plots stand (`side`: +1 to the left of the course's direction, -1 to the right), fixed once for the whole course from its
+/// first segment against `out`, so the plots stand on the same side of every leg - along the head, where the course runs square
+/// to `out`, the side read a segment at a time flipped at random and folded plots back onto the rice (the audit, T16).
 ///
 /// Research:
-///     the offset - NONE: geometry, the canal's course pushed out
-#[expect(
-    clippy::many_single_char_names,
-    reason = "the plane geometry's own names"
-)]
-fn offset(segs: &[(Pt, Pt)], out: Pt, d: f64, o: f64) -> Pt {
-    let (p, _) = along(segs, d);
-    let u = unit(
-        along(segs, (d - PLOT_FT.0).max(0.0)).0,
-        along(segs, d + PLOT_FT.0).0,
-    );
-    let n = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
-        (-u.1, u.0)
-    } else {
-        (u.1, -u.0)
-    };
-    (p.0 + n.0 * o, p.1 + n.1 * o)
+///     the canal's course - NONE: geometry, the line the hem follows and the side it stands
+struct Canal {
+    segs: Vec<(Pt, Pt)>,
+    starts: Vec<f64>,
+    side: f64,
 }
 
-/// The point `d` feet along the segments, and their heading there (past the end, the last segment's end).
-///
-/// Research:
-///     the point along - NONE: geometry
-#[expect(
-    clippy::many_single_char_names,
-    reason = "the plane geometry's own names"
-)]
-fn along(segs: &[(Pt, Pt)], d: f64) -> (Pt, Pt) {
-    let mut left = d;
-    let mut k = 0;
-    while k + 1 < segs.len() && left > dist(segs[k].0, segs[k].1) {
-        left -= dist(segs[k].0, segs[k].1);
-        k += 1;
+impl Canal {
+    fn new(segs: Vec<(Pt, Pt)>, out: Pt) -> Self {
+        let mut starts = Vec::with_capacity(segs.len() + 1);
+        let mut d = 0.0;
+        for (a, b) in &segs {
+            starts.push(d);
+            d += dist(*a, *b);
+        }
+        starts.push(d);
+        let u = unit(segs[0].0, segs[0].1);
+        let side = if -u.1 * out.0 + u.0 * out.1 >= 0.0 {
+            1.0
+        } else {
+            -1.0
+        };
+        Self { segs, starts, side }
     }
-    let (a, b) = segs[k];
-    let u = unit(a, b);
-    let t = left.min(dist(a, b));
-    ((a.0 + u.0 * t, a.1 + u.1 * t), u)
+
+    fn len(&self) -> f64 {
+        self.starts[self.segs.len()]
+    }
+
+    /// The point `d` feet along the course, and its heading there (past the end, the last segment's end): the segment found by
+    /// a binary search of the distances, not a walk from the start.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "the plane geometry's own names"
+    )]
+    fn along(&self, d: f64) -> (Pt, Pt) {
+        let k = self.starts[..self.segs.len()]
+            .partition_point(|s| *s <= d)
+            .saturating_sub(1);
+        let (a, b) = self.segs[k];
+        let u = unit(a, b);
+        let t = (d - self.starts[k]).clamp(0.0, dist(a, b));
+        ((a.0 + u.0 * t, a.1 + u.1 * t), u)
+    }
+
+    /// The point `d` feet along the course pushed `o` feet out to the hem's side, along its normal smoothed over a plot's
+    /// length either way.
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "the plane geometry's own names"
+    )]
+    fn offset(&self, d: f64, o: f64) -> Pt {
+        let (p, _) = self.along(d);
+        let u = unit(
+            self.along((d - PLOT_FT.0).max(0.0)).0,
+            self.along(d + PLOT_FT.0).0,
+        );
+        let n = (-u.1 * self.side, u.0 * self.side);
+        (p.0 + n.0 * o, p.1 + n.1 * o)
+    }
 }
 
 /// Whether a dry plot is refused: onto the rice (its middle or its outer corners in the field - its inner edge may lie on the
@@ -311,9 +342,18 @@ fn refused(
     let mut onto = || [middle, poly[2], poly[3]].iter().any(|p| field.inside(*p));
     let mut laps = || {
         let (lo, hi) = bbox(poly);
+        // each corner pulled a foot toward the middle: a neighbor's shared corner and edge are not a lap (the corners exactly
+        // on a laid plot's edge read inside it, and refused about a plot a candidate - the audit, T16)
+        let pulled: Vec<Pt> = poly
+            .iter()
+            .map(|c| {
+                let u = unit(*c, middle);
+                (c.0 + u.0 * LAP_PULL_FT, c.1 + u.1 * LAP_PULL_FT)
+            })
+            .collect();
         laid.near(lo, hi).into_iter().any(|i| {
             let q = &plots[i].poly;
-            inside(middle, q) || poly.iter().any(|c| inside(*c, q))
+            inside(middle, q) || pulled.iter().any(|c| inside(*c, q))
         })
     };
     onto() || laps() || wet(poly, ix, clear)

@@ -120,6 +120,31 @@ fn rice_pond(
         .map(|(k, q)| (hosts[k].0, q.x, q.y, q.rx, q.ry))
 }
 
+/// The polder's plots drawn apart (`states::polder_states`), each low plot wet and the rest green on a dike-pond block, whose
+/// parcels `_dikeponds` draws.
+///
+/// Research:
+///     the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's parcels are drawn by its ponds
+fn polder_drawn(
+    plots: &[super::polder::Plot],
+    resting: &[usize],
+    seed: i64,
+    dikepond: bool,
+    counts: &mut crate::counts::Counts,
+) -> Vec<State> {
+    let drawn: Vec<(usize, usize, bool)> = plots.iter().map(|x| (x.row, x.col, x.low)).collect();
+    if dikepond {
+        return drawn
+            .iter()
+            .map(|x| if x.2 { State::Wet } else { State::Green })
+            .collect();
+    }
+    let mut work = 0;
+    let out = super::states::polder_states(&drawn, resting, seed, &mut work);
+    counts.add("candidate@polder_states", work);
+    out
+}
+
 /// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block - its block, dike, outfall, resting plots and,
 /// on a dike-pond, its conversion - the records out for the thin Python to write and draw.
 ///
@@ -164,6 +189,7 @@ pub fn stage_polder<'py>(
         rice_pond(&p.plots, &resting, seed)
     };
     let mut counts = crate::counts::Counts::default();
+    let states = polder_drawn(&p.plots, &resting, seed, dikepond, &mut counts);
     counts.add("candidate@polder_shape", 4);
     counts.add("write@polder_plot", 5 * p.plots.len() as u64);
     counts.add(
@@ -188,6 +214,7 @@ pub fn stage_polder<'py>(
         q.set_item("col", x.col)?;
         q.set_item("low", x.low)?;
         q.set_item("rest", resting.contains(&i))?;
+        q.set_item("state", state(states[i]))?;
         plots.append(q)?;
     }
     d.set_item("plots", plots)?;

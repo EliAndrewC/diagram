@@ -273,10 +273,11 @@ pub fn weir(
     (ring, bar.1.atan2(bar.0).to_degrees().rem_euclid(360.0))
 }
 
-/// The brook's segments filed in the water index (D5).
+/// The brook's segments filed in the water index (D5), for the tests: the stage files them with their width (`build::one`).
 ///
 /// Research:
 ///     the filing - NONE: the index's bookkeeping
+#[cfg(test)]
 pub fn file(brook: &Brook, ix: &mut Index) -> Vec<usize> {
     brook.pts.windows(2).map(|p| ix.file(p[0], p[1])).collect()
 }

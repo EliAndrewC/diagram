@@ -54,8 +54,56 @@ pub enum State {
 ///
 /// Research:
 ///     the draw - NONE: a seeded draw, positional; what it decides is `states`'s
-fn plot_draw(seed: i64, tag: &str, what: &str, b: &Basin, n: u32) -> u32 {
-    knob_rng(seed, &format!("{tag}:{what}:{}:{}", b.row, b.col)).randbelow(n)
+fn plot_draw(seed: i64, tag: &str, what: &str, (row, col): (usize, usize), n: u32) -> u32 {
+    knob_rng(seed, &format!("{tag}:{what}:{row}:{col}")).randbelow(n)
+}
+
+/// Whether this map draws the seasonal plots at all (one map in `SEASONAL_IN`), rolled for the field `tag`.
+fn seasonal_map(seed: i64, tag: &str) -> bool {
+    knob_rng(seed, &format!("{tag}:seasonal")).randbelow(SEASONAL_IN) == 0
+}
+
+/// A polder's plots drawn apart, each `(row, col, low)`: a low plot wet (0007: a polder tints every low plot), a plot in
+/// `resting` rested, and of the rest, on a map that draws them, one in `FLOODED_IN` flooded and one in `GOLD_IN` gold, rolled
+/// positionally as the comb's are; each draw counted in `work`.
+///
+/// Research:
+///     the polder's plots drawn apart - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: on some maps about one rice plot in sixteen drawn still flooded and one in twenty gold, no exception for a polder - the comb's rolls (`SEASONAL_IN`, `FLOODED_IN`, `GOLD_IN`) over the polder's plots that are neither low nor resting
+///     every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot
+#[must_use]
+pub fn polder_states(
+    plots: &[(usize, usize, bool)],
+    resting: &[usize],
+    seed: i64,
+    work: &mut u64,
+) -> Vec<State> {
+    let seasonal = seasonal_map(seed, "polder");
+    *work += 1;
+    plots
+        .iter()
+        .enumerate()
+        .map(|(i, &(row, col, low))| {
+            if low {
+                return State::Wet;
+            }
+            if resting.contains(&i) {
+                return State::Rest;
+            }
+            if !seasonal {
+                return State::Green;
+            }
+            *work += 1;
+            if plot_draw(seed, "polder", "flooded", (row, col), FLOODED_IN) == 0 {
+                return State::Flooded;
+            }
+            *work += 1;
+            if plot_draw(seed, "polder", "gold", (row, col), GOLD_IN) == 0 {
+                State::Gold
+            } else {
+                State::Green
+            }
+        })
+        .collect()
 }
 
 /// Whether two basins share a bund: neighbors in a row, or in neighboring rows the upper's foot and the lower's top overlapping
@@ -103,7 +151,7 @@ pub fn states(
     work: &mut u64,
 ) -> Vec<State> {
     let last = basins.iter().map(|b| b.row).max().unwrap_or(0);
-    let seasonal = knob_rng(seed, &format!("{tag}:seasonal")).randbelow(SEASONAL_IN) == 0;
+    let seasonal = seasonal_map(seed, tag);
     let mut out: Vec<State> = basins
         .iter()
         .map(|b| {
@@ -111,7 +159,7 @@ pub fn states(
             // draws them (the audit, T16), each counted as asked
             let mut draw = |what: &str, n: u32| {
                 *work += 1;
-                plot_draw(seed, tag, what, b, n)
+                plot_draw(seed, tag, what, (b.row, b.col), n)
             };
             let wet = b.row == last
                 && draw("wet", 100) < WET_PCT
@@ -172,9 +220,30 @@ pub fn states(
 
 #[cfg(test)]
 mod tests {
-    use super::{states, State, REST_PLOTS};
+    use super::{polder_states, states, State, REST_PLOTS};
     use crate::field::fan::fan;
     use crate::field::lattice::{basins, ROW_FT};
+
+    #[test]
+    fn a_polders_plots_drawn_apart() {
+        let plots: Vec<(usize, usize, bool)> =
+            (0..400).map(|i| (i / 20, i % 20, i >= 380)).collect();
+        let mut work = 0;
+        let maps: Vec<_> = (0..12)
+            .map(|seed| polder_states(&plots, &[3], seed, &mut work))
+            .collect();
+        assert!(work > 0);
+        let low_wet = maps
+            .iter()
+            .all(|s| s[380..].iter().all(|x| *x == State::Wet));
+        let rested = maps.iter().all(|s| s[3] == State::Rest);
+        let flooded = maps.iter().any(|s| s.contains(&State::Flooded));
+        let gold = maps.iter().any(|s| s.contains(&State::Gold));
+        let plain = maps
+            .iter()
+            .any(|s| !s.contains(&State::Flooded) && !s.contains(&State::Gold));
+        assert!(low_wet && rested && flooded && gold && plain, "{maps:?}");
+    }
 
     #[test]
     fn the_plots_drawn_apart() {

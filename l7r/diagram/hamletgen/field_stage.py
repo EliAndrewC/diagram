@@ -315,7 +315,8 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     Research:
         the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)
         every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint; none rests (`polder::rest` never picks a low plot), so none is drawn untinted through `rest_basin`
-        the polder's plots wet or green - GUESS: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html silent on whether a polder shows the odd flooded or ripening plot; its plots wet on the low row, green elsewhere
+        the polder's plots drawn apart - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: on some maps about one rice plot in sixteen drawn still flooded and one in twenty gold - each plot drawn in the state the Rust rolled (`states::polder_states`), the flooded ones recorded as the comb's are
+        the banks kept - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the bank kept along a canal, 2.6 to 4.9 ft - a no-build bank (`DITCH_BANK_FT` past the half-width) along every channel the polder draws, its feeder and its outfall too
         no dry plots inside a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies, its dry landward shore beyond
         no beans on a polder's bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a polder's bunds; the polder drawn without the comb's bean runs
         a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot - the Rust's roll (`stage_polder`'s `pocket_pond`), recorded and drawn here as the comb's is
@@ -348,7 +349,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     px, py, rx, ry = out["pond"]
     s.pond(px, py, rx, ry)
     s.marsh([tuple(q) for q in out["fringe"]], role="pond_fringe")
-    plots = [{"poly": p["ring"], "fill": FLOODED if p["low"] else _RICE_GREEN, "low": p["low"], "rest": p["rest"], "state": "wet" if p["low"] else "green", "drain_side": None} for p in out["plots"]]
+    plots = [{"poly": p["ring"], "fill": FILL[p["state"]], "low": p["low"], "rest": p["rest"], "state": p["state"], "drain_side": None} for p in out["plots"]]
     chans = [{"role": r, "seg": seg, "pts": pts, "w": w, "w_tail": wt} for r, seg, pts, w, wt in out["ditches"]]
     outline = out["outline"]
     net: dict[str, Any] = {
@@ -387,6 +388,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans)
     M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": POND_FEEDER_FT, "field": name})
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
+    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["state"] == "flooded")
     dk = out["dike"]
     band = dk["outer"] + list(reversed(dk["inner"]))
     M.setdefault("dikes", []).append(
@@ -426,10 +428,12 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         M.setdefault("field_ponds", []).append(pond)
         ink.pocket_pond(s, pond)
     s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], POND_FEEDER_FT, POND_FEEDER_FT, late=True)
+    s.corridors.append((out["feeder"], s.px(POND_FEEDER_FT / 2 + DITCH_BANK_FT)))
     run = out["outfall"]
     M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": OUTFALL_FT})
     col, cls = ditch_style("drain", plan.field_archetype)
     s.field_channel(run, col, OUTFALL_FT, OUTFALL_FT, late=True, cls=cls)
+    s.corridors.append((run, s.px(OUTFALL_FT / 2 + DITCH_BANK_FT)))
     s.field_polys.append(outline)
     plan.net = net
     plan.envelope = outline

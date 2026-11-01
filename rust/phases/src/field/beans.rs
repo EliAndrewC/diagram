@@ -31,29 +31,20 @@ pub const BEAD_STEP_FT: f64 = 8.0;
 pub const BEAD_R_FT: f64 = 1.5;
 
 /// The runs of beans on `basins`' bunds: a basin's bund with the next in its row (never the flank's, nor the drain's at the fan's
-/// middle), chosen at `BUND_SHARE` from the map's seed and the bund's place, its beads `BEAD_STEP_FT` apart about its middle. A
-/// bead within a bead's radius of the water filed in `ix` (each segment at its half-width, `widths`) is drowned and dropped; a run
-/// left with fewer than two is dropped whole.
+/// middle), chosen at `BUND_SHARE` from the map's seed and the bund's place, its beads `BEAD_STEP_FT` apart about its middle. No
+/// bead is asked of the water here: the bunds chosen run between two basins of a row, where no ditch is laid, and every bead meets
+/// the map's final water once, at its finish (`settle`) - the test here dropped none on the reference rolls (the MODE BUDGET, T16).
 ///
 /// Research:
-///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund
+///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund - held at the map's finish (`settle`), against its final water
 ///     which bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on which bunds carry them; the bund between two neighbors in a row, never a row's foot, the fan's outer bund or the bund the drain runs in
 ///     how many - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html says some bunds carry a row, not how many; three bunds in eight (`BUND_SHARE`), each its own roll
 ///     a run's beads - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries them shows at least two beads
 ///     a run's most and its spacing - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on how many beads a run holds and how far apart; four at most (`RUN_BEADS`), `BEAD_STEP_FT` apart
 ///     the run on its bund - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on where along a bund the row stands, saying only in a single row on it; about the bund's middle, none past a bead's radius of either end
 #[must_use]
-pub fn bean_runs(
-    basins: &[Basin],
-    seed: i64,
-    tag: &str,
-    ix: &mut Index,
-    widths: &[f64],
-    work: &mut u64,
-) -> Vec<Vec<Pt>> {
+pub fn bean_runs(basins: &[Basin], seed: i64, tag: &str, work: &mut u64) -> Vec<Vec<Pt>> {
     let mut runs = Vec::new();
-    // the widest water once, not once a bead (the audit, T16)
-    let water = (widths, widths.iter().copied().fold(0.0, f64::max));
     for (i, b) in basins.iter().enumerate() {
         let next = basins.get(i + 1).filter(|n| n.row == b.row);
         if next.is_none() || b.on_drain_right {
@@ -72,7 +63,6 @@ pub fn bean_runs(
             .map(|k| (f64::from(k) - f64::from(n - 1) / 2.0) * BEAD_STEP_FT)
             .filter(|off| off.abs() <= reach)
             .map(|off| (mid.0 + along.0 * off, mid.1 + along.1 * off))
-            .filter(|p| !drowned(*p, ix, water))
             .collect();
         // each bead placed on its bund and written (2), counted as kept
         if run.len() >= RUN_BEADS.0 as usize {
@@ -137,15 +127,13 @@ fn drowned(p: Pt, ix: &mut Index, (widths, widest): (&[f64], f64)) -> bool {
 mod tests {
     use super::{bean_runs, settle, RUN_BEADS};
     use crate::field::fan::fan;
-    use crate::field::index::Index;
     use crate::field::lattice::{basins, ROW_FT};
 
     #[test]
     fn beans_in_runs_of_two_or_more_and_none_in_the_water() {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
-        let mut ix = Index::default();
-        let runs = bean_runs(&b, 4, "f0", &mut ix, &[], &mut 0);
+        let runs = bean_runs(&b, 4, "f0", &mut 0);
         assert!(!runs.is_empty());
         assert!(runs
             .iter()
@@ -153,14 +141,9 @@ mod tests {
         #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let share = runs.len() as f64 / b.len() as f64;
         assert!((0.15..0.5).contains(&share), "{share}");
-        // a ditch along every bund drowns every bead
-        let mut wet = Index::default();
-        let mut widths = Vec::new();
-        for x in &b {
-            wet.file(x.ring[1], x.ring[2]);
-            widths.push(2.5);
-        }
-        assert!(bean_runs(&b, 4, "f0", &mut wet, &widths, &mut 0).is_empty());
+        // a ditch along every bund drowns every bead at the finish
+        let wet: Vec<_> = b.iter().map(|x| (x.ring[1], x.ring[2], 2.5)).collect();
+        assert!(settle(&runs, &wet, &[]).is_empty());
         // finish's settling: a ditch through a run drowns it, a pond on a bead drowns that bead, a dry run stands
         let run = vec![(0.0, 0.0), (8.0, 0.0), (16.0, 0.0)];
         let kept = settle(&[run.clone()], &[], &[(16.0, 0.0, 3.0, 3.0)]);
