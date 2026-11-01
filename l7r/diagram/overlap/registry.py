@@ -260,6 +260,9 @@ class Standing:
         self.reserved = Reservations()  # the corridors and wood seats the seating reserved (`reserved.py`)
         self._holds: set[tuple[str, int]] = set()  # parts held before they are drawn (`hold`): standing, though on no list
         self._next = 0
+        # every filing and every removal, so a question kept for its record (`_asked`) is reused only where nothing changed since
+        self._changes = 0
+        self._asked: tuple[Any, ...] | None = None
 
     def __len__(self) -> int:
         return len(self._held)
@@ -307,23 +310,26 @@ class Standing:
         # ...THE RECORD'S OWN PIECES, binned in the same cells: each asked only of its later pieces sharing a cell. Every pair was
         # asked once (feature 444 T16's audit: the brook's 448 pieces at 40 households were 100,000 own pairs a call, 200,474 of
         # the field stage's 218,329 counted operations, the pieces' boxes missing in all but a few hundred)
+        # ...each piece asking the bins of the pieces BEFORE it, then binned itself, so a pair is read once and no piece reads itself
+        # or a later one (the work-budget audit at T16's landing: every piece read every entry of its cells to keep the later ones)
         own_bins: dict[tuple[int, int], list[int]] = {}
         several = len(own) > 1  # a record of one piece meets nothing of its own: no bins of its own (MODE BUDGET, 444 T16)
-        for i, cells in enumerate(cells_of if several else []):
-            if __debug__:
-                OPS["write@Standing.bins"] += len(cells)
-            for cell in cells:
-                own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
             b, cells = boxes[i], cells_of[i]
-            if __debug__ and several:  # each cell read (feature 444 T16's third audit); the later pieces it hands back, the pairs below
-                OPS["index_cell@Standing.conflicts"] += len(cells)
-            near = sorted({j for cell in cells for j in own_bins.get(cell, ()) if j > i}) if several else []
+            near: list[int] = []
+            if several:
+                got = [j for cell in cells for j in own_bins.get(cell, ())]
+                if __debug__:  # each cell read and each entry it hands back, before the dedup; each cell the piece is binned in
+                    OPS["index_cell@Standing.conflicts"] += len(cells) + len(got)
+                    OPS["write@Standing.bins"] += len(cells)
+                near = sorted(set(got))
+                for cell in cells:
+                    own_bins.setdefault(cell, []).append(i)
             for j in near:  # the record's own pieces against each other: the same rule as any pair
                 if __debug__:
                     OPS["index_examined@Standing.conflicts"] += 1
-                if pair_forbidden(e, own[j], priv, b, boxes[j]):
-                    out.append((key, own[j][0], *_center(e[1])))
+                if pair_forbidden(own[j], e, priv, boxes[j], b):  # the pair as it was always named: the earlier piece's place
+                    out.append((key, e[0], *_center(own[j][1])))
                     if first:
                         return out
             if not ccells[i]:
@@ -345,7 +351,13 @@ class Standing:
                         out.append((e[0], other[0], *_center(e[1])))
                         if first:
                             return out
-        return out + self.reserved.conflicts(key, o, own)  # ...and the ground the seating reserved (`reserved.py`)
+        out += self.reserved.conflicts(key, o, own)  # ...and the ground the seating reserved (`reserved.py`)
+        # ...KEPT for the record that follows its own question (`refuse_unadmitted`, a placer's `admits`): nothing filed between,
+        # the record files these extents and cells without finding them again (the work-budget audit at T16's landing: the brook's
+        # ribbons built and binned for the question and again for the record)
+        if prep is None and ignore is None:
+            self._asked = (key, id(o), self._changes, own, {"boxes": boxes, "clamped": clamped, "cells": ccells}, list(out))
+        return out
 
     def hold(self, key: str, rec: Any) -> Any:
         """Stand `rec` under `key` before it is drawn - a part the seating laid that a later stage draws (a household's well
@@ -376,11 +388,17 @@ class Standing:
         """May `o` be recorded under `key` on what already stands? The question every placer asks of its candidate."""
         return not self.conflicts(key, o, ignore, first=True)
 
-    def record(self, key: str, o: Any) -> None:
-        """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands."""
-        own = self.extents(key, o)  # once, for the question and the filing both
-        prep: dict[str, Any] = {}
-        bad = self.conflicts(key, o, own=own, prep=prep)
+    def record(self, key: str, o: Any, own: list[Extent] | None = None) -> None:
+        """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands. `own` is its extents
+        where the caller has just drawn them (`rerecord`)."""
+        asked = self._asked
+        if asked is not None and asked[0] == key and asked[1] == id(o) and asked[2] == self._changes:
+            own, prep, bad = asked[3], asked[4], asked[5]  # its own question just asked, nothing filed since
+        else:
+            own = self.extents(key, o) if own is None else own  # once, for the question and the filing both
+            prep = {}
+            bad = self.conflicts(key, o, own=own, prep=prep)
+        self._asked = None
         if bad:
             self.refuse(bad)
         if __debug__:
@@ -403,6 +421,7 @@ class Standing:
         return Kept(self, key, rec)
 
     def _add(self, key: str, o: Any, own: list[Extent] | None = None, prep: dict[str, Any] | None = None) -> None:
+        self._changes += 1
         ids: list[int] = []
         exts = self.extents(key, o) if own is None else own
         if prep:  # the boxes and cells the question found (`conflicts`): the filing finds none of them again
@@ -429,6 +448,7 @@ class Standing:
 
     def forget(self, key: str, o: Any) -> None:
         """Take `o` off the map (a removal, a rebind, a record replaced)."""
+        self._changes += 1
         held = self._held.pop((key, id(o)), None)
         if held is None:
             return
@@ -448,10 +468,13 @@ class Standing:
     def rerecord(self, key: str, o: Any) -> None:
         """`o` was reshaped in place: forget what it was and record what it is (the raise as `record`)."""
         held = self._held.get((key, id(o)))
-        if held is not None and [self._ext[n][0] for n in held[1]] == self.extents(key, o):
+        now = self.extents(key, o)
+        if __debug__ and held is not None:  # the held extents compared with what it covers now, point by point (444 T16's audit)
+            OPS["pt_test@Standing.resync"] += sum(len(e[1]) for e in now)
+        if held is not None and [self._ext[n][0] for n in held[1]] == now:
             return  # nothing it covers moved
         self.forget(key, o)
-        self.record(key, o)
+        self.record(key, o, now)
         if __debug__ and held is not None:  # a move, not a drop and a placement (an unheld record's is its first placement)
             OPS["moved@Standing.rerecord"] += 1
             OPS["dropped@Standing.forget"] -= 1

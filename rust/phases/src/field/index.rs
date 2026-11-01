@@ -104,6 +104,7 @@ impl Bands {
             out.edges.push((a, b));
             for band in cell_of(a.1.min(b.1))..=cell_of(a.1.max(b.1)) {
                 out.by_band.entry(band).or_default().push(id);
+                out.tested += 1; // each edge filed in each band it spans, counted with the bands' tests (the audit, T16)
             }
         }
         out

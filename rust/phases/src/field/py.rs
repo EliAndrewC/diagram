@@ -84,7 +84,6 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
             )
         }),
     )?;
-    d.set_item("segments", f.segments.clone())?;
     Ok(d)
 }
 

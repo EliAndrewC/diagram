@@ -185,10 +185,18 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     let mut fields = Vec::new();
     let need = f64::from(inp.households) * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE;
     let mut drained = 0.0;
+    let mut first: Option<super::fan::Fan> = None;
     for k in 0..n {
         let tag = format!("f{k}");
         let area = paddy / f64::from(n);
-        let first = fan(area, inp.aspect, inp.down_deg, inp.center, inp.seed);
+        // the first field's fan, laid once: the next fields step from it, and the first IS it (the work-budget audit at T16's
+        // landing: the same fan traced twice for the first field); each fan's two traces and its area's walk counted
+        if first.is_none() {
+            let laid = fan(area, inp.aspect, inp.down_deg, inp.center, inp.seed);
+            counts.add("write@fan_outline", 3 * laid.ring.len() as u64);
+            first = Some(laid);
+        }
+        let first = first.clone().unwrap_or_else(|| unreachable!("laid above"));
         // the next field beside the last, across the fall, past its brook's skirt
         let step = (first.half_head + first.half_foot)
             + 2.0 * (inp.brook.skirt + inp.brook.wander)
@@ -198,13 +206,19 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             inp.center.0 + first.across.0 * off,
             inp.center.1 + first.across.1 * off,
         );
-        let f = fan(
-            area,
-            inp.aspect,
-            inp.down_deg,
-            center,
-            inp.seed + i64::from(k),
-        );
+        let f = if k == 0 {
+            first
+        } else {
+            let laid = fan(
+                area,
+                inp.aspect,
+                inp.down_deg,
+                center,
+                inp.seed + i64::from(k),
+            );
+            counts.add("write@fan_outline", 3 * laid.ring.len() as u64);
+            laid
+        };
         let field = one(inp, &f, (&tag, k == 0), &knobs, &mut counts)?;
         // the drained plots' area, read only where the barley counts it (the audit, T16: every roll walked every ring for it)
         if is("winter_crop", "barley") {

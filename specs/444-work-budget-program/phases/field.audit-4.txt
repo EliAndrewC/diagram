@@ -1,0 +1,26 @@
+UNCOUNTED - fan.rs `traced()` builds the field's outline ring with no counter, four times per field (`fan()` traces it twice, build.rs 191 and 201 each call `fan()`), and registry.py:321's own-pieces read counts only the deduplicated later pieces it keeps; either one alone is more than the stage's 307 operations of headroom at 40 households.
+
+**1. Within budget?** Yes, but only just. The budget is 1.14 per thing times the derivation's items: 71,243 at 40 and 131,046 at 80. Measured is 70,936 at 40 and 123,475 at 80. The run's own summary still shows the old figure (`budget_at_40` 62,494, ratio 1.135), so 1.14 is the measured ratio rounded up, and the margin at 40 is 307 operations. Seed 4 alone is 76,231 at 40. The 20-household mean, 42,396, is over its 39,508, though 20 is not a held size. All 16 rolls finished and none was refused, including at 80.
+
+**2. Does a counter cover every inner loop (S5)?** No.
+- **The fan's outline:** fan.rs 116-118 and 167-170 have no `counts.add` at all. The ring is about 96 points at 40 (`candidate@outline`/2) and grows with the square root of households. Four traces plus two area walks come to about 580 uncounted operations at 40. For the first field, the two `fan()` calls take identical inputs.
+- **The registry's own pieces:** the set comprehension at registry.py:321 reads every entry in each piece's cells, including the piece itself and every earlier one. Line 324 counts only the later pieces, after the dedup. The registry's own main loop (337-342) counts an entry even when it skips it, and index.rs 74 was fixed in T16 to count IDs as they are handed back. For the brook's 448 pieces, asked twice, the uncounted reads are at least about 2,100 at 40.
+- **Smaller ones:**
+  - Rerecord's extent compare in `resync` (451), which work_budget.py:69 charges to this stage.
+  - `Bands::new` (index.rs 99-110).
+  - The tract-below scan (dry.rs 152-155) and the rest-of-band loop once the grain is held.
+  - `fit()`'s passes beyond `s.len()`.
+  - py.rs 87 converts `segments` for Python, and field_stage.py never reads it.
+- **Couldn't audit:** the modules behind `write@field_ink` and `write@drawing_records` (`ink.draw`), and `s.stream`, are not in the bundle.
+
+**3. Anything placed and then repaired (S4)?** No `dropped@` or `moved@` counts. The six points the arbiter asked about:
+- **Hem plots:** a refused seat is skipped, not retried (dry.rs 184-187), and its seat, onto, lap and water tests are all charged. But `pt_test@hem_refused` is the hem's whole test count, `apart` included, not just refused tries.
+- **Tracts against the 4.1:** the derivation isn't in the bundle, so I can't check it, and the counters can't show tests per tract. About 20 tracts at 40 means roughly 100 operations, far too few to be the 8,441 gap the GM accepted.
+- **The brook's registry pieces against its stations:** that gap matches the registry work instead. There is one piece per station, but at seed 4, 40 households, the brook's ribbons are built three times and asked twice: ribbon writes are exactly 5,936 = 3×448×4 + 2×70×4, and extents are exactly 4,776 = 2×448×4 + 70×4 + 227×4 + 4. That is an ask before the record, the record itself, then `resync`.
+- **The ditch segment's length:** each segment is filed in every cell it crosses, counted in `ix.touched`. That includes the drain, which is a single segment the length of the fan.
+- **The rows' angle breach:** `held()` refuses the whole field rather than repairing it, and checks only each row's two end basins. A refused roll drops out of the field's mean (work_budget.py:168), and `generate()` re-rolls it.
+- **The beans' finish:** `settle` at finish drops beads after they were placed, outside this stage's window. That is a place-then-drop by design, and its drops are not visible here.
+
+**4. Linear growth (S6)?** Yes: the exponent from 20 to 80 is 0.77, under both the budget's 0.86 and the 1.15 limit.
+
+Files are in /tmp/l7r-check/work-budget-audit-field/code/: fan.rs, build.rs, registry.py, dry.rs, index.rs, py.rs, beans.rs, and the harness's work_budget.py. chains.txt is an old perf log (20261028, T12), so I built the chains from the code.

@@ -144,6 +144,7 @@ pub fn hem(
                 f64::from(rng.randbelow(2 * TURN_DEG.0 + 1)) - f64::from(TURN_DEG.0),
             );
             let span = (d, d + f64::from(n) * PLOT_FT.0);
+            ix.tests += below.len() as u64; // the band below's tracts read for the ones under this one (the audit, T16)
             let near: Vec<f64> = band
                 .last()
                 .map(|t| t.2)
