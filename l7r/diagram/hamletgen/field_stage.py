@@ -314,7 +314,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)
-        every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint
+        every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint; none rests (`polder::rest` never picks a low plot), so none is drawn untinted through `rest_basin`
         the polder's plots wet or green - GUESS: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html silent on whether a polder shows the odd flooded or ripening plot; its plots wet on the low row, green elsewhere
         no dry plots inside a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies, its dry landward shore beyond
         no beans on a polder's bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a polder's bunds; the polder drawn without the comb's bean runs

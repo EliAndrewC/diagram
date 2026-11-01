@@ -133,7 +133,7 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
 /// rows draws no ditch.
 ///
 /// Research:
-///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream - a delivery along its row's bund, the row taken only where that bund leans downstream off the flank
+///     the lean - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals at right angles - a delivery along its row's bund, nearly square to its canal, the row taken only where its bund leans downstream off the flank (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream; its 35 degrees a branch's where no lattice sets the angle)
 ///     where an offtake goes - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on moving an offtake to a leaning row; the nearest within three rows, never the first or last row, none where no row leans
 fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> {
     let mut lines_at: Vec<usize> = Vec::new();
@@ -178,18 +178,17 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 /// the flank inward, so the ditch leaves its canal leaning downstream.
 ///
 /// Research:
-///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals at right angles, one drain gathering the water along the lowest line
+///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins, delivery ditches leaving them, one drain gathering the water along the lowest line - each delivery along its row's bund, at the angle the bund leaves its canal (`offtake_lines`)
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
 ///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head
 ///     the canals' courses - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from a corner fork, or swept along the head to its own corner from a middle one
 ///     the head race - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0 ft, the whole fan's above the fork - at that width throughout
 ///     the head race's course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - one straight run
 ///     the widths by role - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0, supply 4.5 to 1.5 along the upper edge and 4.0 to 1.5 along the other, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft - canal A the upper edge's, along the head and down the far flank, canal B the other edge's, down the brook's flank (`HEAD_W`, `SUPPLY_W`, `DELIVERY_W`, `DRAIN_W`)
-///     a canal with no offtake - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on a canal its fractions give no offtake; it runs the flank's length to the crop's edge
+///     a canal with no offtake - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on a canal whose fractions leave it no offtake, the second canal feeding at least one; canal A runs on to the crop's edge, canal B half way down its edge
 ///     the canal's steps - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on how fast a canal narrows; an equal step a leg from its head's width to the thread
 ///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
 ///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way
-///     a stopping canal's tail - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: where it ends at its offtake, the canal hands its whole flow to the delivery ditch - narrowing only to the width that ditch's head is capped against (`DELIVERY_W` over `DELIVERY_CAP`)
 ///     the second canal partway - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one delivery ditch, so it is drawn partway down its edge - stopping at its last offtake's junction, the first canal taking either ending
 #[must_use]
 pub fn channels(
@@ -235,6 +234,7 @@ pub fn channels(
         let last = lines_at.last().copied();
         let end = match (last, runs_on, side) {
             (Some(r), false, _) | (Some(r), _, 1) => lines.u(r, s),
+            (None, _, 1) => fan.length / 2.0,
             _ => fan.length,
         };
         // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
@@ -261,13 +261,8 @@ pub fn channels(
         }
         #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
         let n = legs.len() as f64;
-        // a canal running on narrows to the thread; one stopping at its last offtake hands that ditch its whole flow, so it narrows
-        // only to the width the ditch's head is capped against
-        let tail = if end < fan.length - 1e-9 {
-            DELIVERY_W.0 / DELIVERY_CAP
-        } else {
-            THREAD_W
-        };
+        // every canal narrows to a thread, the one stopping at its last offtake there; that ditch's head is capped against it
+        let tail = THREAD_W;
         for (i, pts) in legs.into_iter().enumerate() {
             #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
             let (a, b) = (i as f64 / n, (i + 1) as f64 / n);
@@ -351,6 +346,9 @@ mod tests {
         assert!(both.contains(&true) && both.contains(&false));
         let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, false, 4);
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
+        // canal A with no offtake runs on to the crop's edge
+        let bare = channels(&f, intake, (&[], &[0.5]), 48.0, -1.0, false, 4);
+        assert!(bare.iter().filter(|x| x.role == "branch").count() <= 1);
     }
 
     #[test]
