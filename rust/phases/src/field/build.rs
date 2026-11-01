@@ -160,7 +160,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             .basins
             .iter()
             .zip(&field.states)
-            .filter(|(_, s)| **s != State::Wet)
+            .filter(|(_, s)| **s != State::Wet && **s != State::Rest)
             .map(|(b, _)| super::geom::signed_area(&b.ring).abs())
             .sum::<f64>();
         fields.push(field);

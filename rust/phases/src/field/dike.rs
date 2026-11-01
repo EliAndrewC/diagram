@@ -119,6 +119,8 @@ fn stations(ring: &[Pt]) -> Vec<(Pt, Pt, f64)> {
 ///     the band's breadth - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 14 to 40 ft across, changing along the length on two seeded waves
 ///     its two faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the inner face on the fields' envelope; the outer face that face pushed out by the rolled breadth, the waterward strip of reeds and wet ground laid against it later (`hamletgen/water/waterward.py`'s `dike_face`, which reads the outline this records), so the water's edge runs along the outer face
 ///     its trees - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the willow row three quarters of the way out toward the water, 8.5 ft apart; the mulberry a quarter of the way, on the field side, 4.4 ft apart
+///     the crowns rolled - GUESS: each tree's crown within its row's `CROWN_FT`, in tenths of a foot
+///     the crest - NONE: the band's midline, where its walked top runs
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"

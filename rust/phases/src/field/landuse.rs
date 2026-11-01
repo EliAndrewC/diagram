@@ -129,6 +129,7 @@ pub fn inset(parcels: &[Vec<Pt>], share: f64) -> f64 {
 /// Research:
 ///     the leftover form - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice
 ///     the bank on the parcel's line - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: each pond ringed by a bank of its own mud - the bank's outer edge the parcel's own line, the water pushed in the village's inset from it
+///     the ponds' uneven shapes - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: ponds of uneven shape - the bank and the water each rounded at its own reach (`REACH_FT`), a corner's cut rolled about it
 ///     the crop on the banks - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: every dike of a dike-pond hamlet is planted, and all of them with one crop - mulberry, fruit or tea, the nursery's banks too
 ///     the fry ponds - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: the smallest ponds are given to fry until they hold up to seven-tenths of its pond water - taken smallest first by their water's area while the water they hold stays within `FRY_SHARE` of every pond's
 #[must_use]

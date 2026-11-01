@@ -215,14 +215,14 @@ def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> No
     plan.seat = {"out": (1.0, 0.0)}
     assert hg.polder_flanks(plan) == {"head": "N", "foot": "S", "plus": "E", "minus": "W", "cluster": "E"}
     assert hg.waterward_flanks(plan) == ["W", "S"]
-    assert hg.polder_crossing_caps(plan) == {"feeder": 1, "w_toe": 1, "drain": 0, "e_toe": 3, "column": 1}
+    assert hg.polder_crossing_caps(plan) == {"drain": 0, "e_toe": 3}
     plan.seat = {"out": (-1.0, 0.0)}
     assert hg.waterward_flanks(plan) == ["E", "S"]
-    assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 1
+    assert hg.polder_crossing_caps(plan) == {"drain": 0, "w_toe": 3}
     plan.seat = {"out": (0.0, -1.0)}  # seated at the HEAD: the feeder is the village's collector
-    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "column": 1}
+    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0}
     plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain abuts it, and takes no plank (feature 287, `plank_on_supply`)
-    assert hg.polder_crossing_caps(plan) == {"feeder": 1, "drain": 0, "e_toe": 2, "w_toe": 2, "column": 1}
+    assert hg.polder_crossing_caps(plan) == {"drain": 0, "e_toe": 2, "w_toe": 2}
     plan.seat = {}
     assert hg.polder_flanks(plan)["cluster"] == ""
 

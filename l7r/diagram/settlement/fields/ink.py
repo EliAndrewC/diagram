@@ -92,7 +92,7 @@ def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
         a dish pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an earthen bank round its edge (the bund's earth stroke), the wet ground just inside it where the reeds stand (the wet tint), and open water in the middle
         its proportions - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's proportions; the wet ring 2.5 ft past the water, eight reeds evenly round it 1.2 ft out from the water's edge
         its sheen - CONVENTION: a light ring on the water
-        the bank's line - CONVENTION: the earthen bank's edge a 2.2 stroke in the bund's earth, heavier than a bund's 1.5 so the pond's rim reads"""
+        the bank's line - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's bank width; the earthen bank 2.2 ft, a little wider than a bund's 1.5"""
     x, y, rx, ry = pond["x"], pond["y"], pond["rx"], pond["ry"]
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx + 2.5:.1f}" ry="{ry + 2.5:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond")
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{POND_WATER}" stroke="{POND_RIM}" stroke-width="1.2"/>', "field pond")

@@ -214,14 +214,14 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
 
     Research:
         no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
-        crossings wherever both ends are useful - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included, and a long ditch takes a crossing near its middle, a very long one several - the count by length is `channel_footbridges`'; these caps hold it, never asking a plank of the drain
-        more where the village lives - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; the village's own collector capped at three (two a toe at the foot), every other supply collector at one
+        crossings wherever both ends are useful - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included, and a long ditch takes a crossing near its middle, a very long one several - every supply collector counted by its length (`channel_footbridges`' spacing), the drain capped at none
+        at most three where the village lives - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; the village's own collector capped at three (two a toe at the foot), so its planks stand near the houses rather than strung along it
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:
-        return {"feeder": 1, "w_toe": 1, "drain": 0, "e_toe": 3, "column": 1}
+        return {"drain": 0, "e_toe": 3}
     if f["cluster"] == f["minus"]:
-        return {"feeder": 1, "e_toe": 1, "drain": 0, "w_toe": 3, "column": 1}
+        return {"drain": 0, "w_toe": 3}
     # The village at the HEAD or the FOOT: its own collector is the one it abuts - the feeder at the
     # head, the drain at the foot - and THAT carries the crossings, with one plank on each toe. The
     # first cut here gave both toes two and the feeder none, which satisfied
@@ -230,9 +230,9 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     # crossings are where the CHECK wanted them, not where the feet are"). The research the rule
     # rests on - people cross where they LIVE - applies to whichever collector that is.
     if f["cluster"] == f["head"]:
-        return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "column": 1}
+        return {"feeder": 3, "drain": 0}
     # ...EXCEPT THAT A DRAIN TAKES NO PLANK (feature 287, ways W14 and the WAYS law's `plank_on_supply`: a footplank stands on
     # a supply ditch - research 0084, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
     # plank, so its crossings go on the supply ditches that reach it - the two toe collectors (role `lateral`) run down to
     # the foot, two a side - and none is asked of the drain that `channel_footbridges` would refuse.
-    return {"feeder": 1, "drain": 0, "e_toe": 2, "w_toe": 2, "column": 1}
+    return {"drain": 0, "e_toe": 2, "w_toe": 2}

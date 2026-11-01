@@ -38,8 +38,8 @@ CELL_SHARE = 31.0
 """Research: a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft"""
 ROW_FT_DEFAULT = 48.0
 """Research: the rows' spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal, a hamlet's basin row"""
-ROW_FT = {"small_irregular": 34.0, "large_block": 70.0}
-"""Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band, which plot size takes which a GUESS; Rust maps the same (`lattice::row_ft_for`)"""
+ROW_FT = {"small_irregular": 40.0, "large_block": 60.0}
+"""Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin some 40 to 60 ft across - a small plot's row at its foot, 40 ft, a large block's at its top, 60 ft; Rust maps the same (`lattice::row_ft_for`)"""
 INTAKE_PLACE = register_knob(Knob("intake_place", ["shoulder", "center"], default="shoulder"))
 """Research: the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake stands at the left, the center or the right of the fan's head, chosen at random for each settlement with odds of 1:2:1 (a guess) - a shoulder (the plan's flank, left or right at even odds) or the middle, at even odds"""
 WEIR_KEY_FT = 1.0
@@ -311,6 +311,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     Research:
         the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)
         every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint
+        the polder's plots wet or green - GUESS: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html silent on whether a polder shows the odd flooded or ripening plot; its plots wet on the low row, green elsewhere
         its water source - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head, by the inlet - recorded as a reservoir at the high corner"""
     from l7r.diagram.settlement.water_ways.water import ditch_style
 

@@ -154,3 +154,11 @@ def test_a_multi_line_attribute_keeps_the_doc_above_it() -> None:
     )
     _errors, units = cr.rust_units(src, "x.rs")
     assert [(u.qualname, [c.label for c in u.claims], u.inherited) for u in units] == [("f", ["its own"], False)]
+
+
+def test_a_semicolon_inside_a_type_does_not_end_the_item() -> None:
+    """Found 2026-11-01 (feature 444 T16's third claims wave): `-> ([Pt; 4], f64)` ended `brook.rs::weir` at its signature, so its
+    bundle showed no body and its fingerprint read none of its code."""
+    src = "pub fn weir(a: [f64; 4]) -> ([f64; 4], f64) {\n    (a, 1.0)\n}\nconst N: [u8; 2] = [0; 2];\n"
+    _errors, units = cr.rust_units(src, "x.rs")
+    assert [(u.qualname, u.lineno, u.end_lineno) for u in units] == [("weir", 1, 3), ("N", 4, 4)]

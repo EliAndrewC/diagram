@@ -182,8 +182,10 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
 ///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head
 ///     the canals' courses - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from the fork
+///     the head race - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0 ft, the whole fan's above the fork - one straight run from the intake to the fork at that width
 ///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
 ///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way
+///     the second canal partway - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one delivery ditch, so it is drawn partway down its edge, narrowing to a thread - its running tail a row past its last offtake
 #[must_use]
 pub fn channels(
     fan: &Fan,
@@ -224,10 +226,12 @@ pub fn channels(
         let mut lines_at = offtake_lines(fan, &lines, fracs, s);
         lines_at.sort_unstable();
         lines_at.dedup();
-        let end = if runs_on || lines_at.is_empty() {
-            fan.length
-        } else {
-            lines.u(*lines_at.last().unwrap_or(&0), s)
+        // canal A runs on to the crop's edge when its tail runs on; canal B, partway down its edge, a row past its last offtake
+        let last = lines_at.last().copied();
+        let end = match (last, runs_on, side) {
+            (Some(r), true, 1) => lines.u((r + 1).min(lines.rows), s).min(fan.length),
+            (Some(r), false, _) => lines.u(r, s),
+            _ => fan.length,
         };
         // the canal's legs: the fork to its head corner (swept), then down the flank cut at each offtake, the width stepping down
         // a leg from `w` to the thread (the manifest's `main` pieces, each with its own taper)

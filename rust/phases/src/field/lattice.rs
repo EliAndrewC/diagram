@@ -15,16 +15,16 @@ use crate::pyrand::knob_rng;
 ///     the row spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal
 pub const ROW_FT: f64 = 48.0;
 
-/// The rows' spacing by the plan's `plot_size`: the small irregular plots' 34 ft, the page's medium 48, the large block's 70.
+/// The rows' spacing by the plan's `plot_size`: the small irregular plots' 40 ft, the page's medium 48, the large block's 60.
 ///
 /// Research:
 ///     paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal (`ROW_FT`), the plan's medium
-///     the small and large rows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band; which plot size takes which a GUESS
+///     the small and large rows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin some 40 to 60 ft across - a small plot's 40 ft at its foot, a large block's 60 ft at its top
 #[must_use]
 pub fn row_ft_for(plot_size: &str) -> f64 {
     match plot_size {
-        "small_irregular" => 34.0,
-        "large_block" => 70.0,
+        "small_irregular" => 40.0,
+        "large_block" => 60.0,
         _ => ROW_FT,
     }
 }
@@ -296,7 +296,7 @@ mod tests {
     #[test]
     fn a_row_cuts_at_the_researched_lengths_and_converges() {
         assert!(
-            (row_ft_for("large_block") - 70.0).abs() < 1e-9
+            (row_ft_for("large_block") - 60.0).abs() < 1e-9
                 && row_ft_for("small_irregular") < row_ft_for("medium")
         );
         let s = cuts(9, 3, 900.0);

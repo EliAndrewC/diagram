@@ -37,7 +37,7 @@ def _codeid():  # noqa: ANN202 - scripts/gates/codeid.py by path: the one defini
 def _end(text: str, start: int) -> int:
     """The offset just past the item that opens at `start`: its matching `}`, or the `;` that ends a body-less item - strings,
     chars and comments skipped."""
-    i, n, depth = start, len(text), 0
+    i, n, depth, nest = start, len(text), 0, 0  # braces, and the parentheses and brackets a `;` inside does not end
     while i < n:
         c = text[i]
         if text.startswith("//", i):
@@ -64,7 +64,12 @@ def _end(text: str, start: int) -> int:
             depth -= 1
             if depth == 0:
                 return i + 1
-        elif c == ";" and depth == 0:
+        elif c in "([":
+            nest += 1
+        elif c in ")]":
+            nest -= 1
+        elif c == ";" and depth == 0 and nest == 0:
+            # ...not a `;` inside a type's brackets: `-> ([Pt; 4], f64)` ended `weir` at its signature (found 2026-11-01, T16)
             return i + 1
         i += 1
     return n
