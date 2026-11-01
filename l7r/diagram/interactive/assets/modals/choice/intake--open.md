@@ -18,10 +18,10 @@ Guesses:
 - How far above the fork the intake sits, chosen afresh for each map within a short run: no source gives how far a village's head race ran.
 
 Depiction: The map opens the head race straight out of the brook's bank at the head of the fan of paddies, leaving at an acute
-angle pointing downstream, with no gate or boards at its mouth; the brook runs on past it down the flank of the fields.
+angle pointing downstream, with no gate or boards at its mouth; the brook runs on past it down the flank of the fields. The head race is drawn wider than the brook that feeds it: on the map a channel's width shows its rank among the waters, not the water it carries, so the two widths are not matched.
 
 Name: An open intake
 Covers: `meta.intake = open`
 Sources: suido-ishizue-iseki, maff-toshuko-history, people-zhishui-2025, pwsannong-quxi, shimane-toshuko-lecture, tabayashi-1987, thepaper-guangai, pwsannong-gudai-shuili, hrr-agagawa-dento, kosaka-2014-tamagawa-bunsui
 Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html
-Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html
+Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html
