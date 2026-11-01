@@ -79,6 +79,7 @@ fn centroid(ring: &[Pt]) -> Pt {
 /// inside the middle's least distance to the plot's sides, so its edge lies wholly inside the plot.
 ///
 /// Research:
+///     which low plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on which low plot holds the pond; any plot of the lowest row, at even odds
 ///     the pond in a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: sunk wholly in one low plot, never across a bund - sixteen points of its edge held inside the plot
 ///     the pond's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's shape and where in its plot; an ellipse squared to the map at the plot's middle
 ///     the pond's odds - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a little over half the time, where it has low plots (`POND_PCT`)

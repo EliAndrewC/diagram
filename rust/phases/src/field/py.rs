@@ -92,6 +92,7 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
 ///
 /// Research:
 ///     the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s
+///     a four-sided host - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds
 ///     never a resting plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a pond in a plot left to rest; never its host
 fn rice_pond(
     plots: &[super::polder::Plot],
@@ -124,7 +125,7 @@ fn rice_pond(
 /// parcels `_dikeponds` draws.
 ///
 /// Research:
-///     the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's parcels are drawn by its ponds
+///     the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's states set here draw nothing, every parcel of it converted and drawn by its ponds (`field_stage._dikeponds`)
 fn polder_drawn(
     plots: &[super::polder::Plot],
     resting: &[usize],
@@ -151,6 +152,7 @@ fn polder_drawn(
 /// Research:
 ///     the polder's seam - NONE: the records out; each placement is claimed at the Rust that makes it
 ///     a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host
+///     resting only when unsettled - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`polder::rest`), a settled one none
 ///     no resting plot on a dike-pond block - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested
 #[pyfunction]
 #[expect(

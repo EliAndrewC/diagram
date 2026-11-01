@@ -74,7 +74,7 @@ impl Basin {
 ///
 /// Research:
 ///     the basin's length - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 26 to 36 ft along it, a knob rolled each basin, every basin of a half-row inside the band where a whole count fits it
-///     a half-row between counts - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain)
+///     a half-row between counts - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream
 ///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
 #[must_use]
 pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {

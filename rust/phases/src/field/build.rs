@@ -157,7 +157,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             center,
             inp.seed + i64::from(k),
         );
-        let field = one(inp, &f, &tag, &knobs, &mut counts)?;
+        let field = one(inp, &f, (&tag, k == 0), &knobs, &mut counts)?;
         drained += field
             .basins
             .iter()
@@ -255,6 +255,9 @@ fn rows_held(bs: &[Basin], cell: f64, counts: &mut Counts) -> Result<(), FieldRe
 }
 
 /// A water segment and its width (feet).
+///
+/// Research:
+///     the segment - NONE: a tuple of the water index's, deciding nothing about the place
 type Seg = (Pt, Pt, f64);
 
 /// The field's water index (D5): the brook filed first, so the outline - placed point by point, each point asked of the brook in
@@ -311,13 +314,14 @@ fn water(
 ///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)
 ///     the grave's form - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none
-///     the intake's place and siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake at the left, the center or the right of the fan's head, and (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html) in a straight reach or on the outside of a bend - the `intake_place` and `intake_siting` knobs, read here for the brook
+///     the intake's place and siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake at the left, the center or the right of the fan's head, and (research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html) in a straight reach or on the outside of a bend - the `intake_place` knob rolling the head's middle or a shoulder, the shoulder the one on the brook's side (`brook_side`, the plan's), and the `intake_siting` knob, read here for the brook
+///     the grave once a map - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: about three maps in ten draw a grave in the fields - rolled once, on the first field
 ///     the grave off the pond's plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave beside a pocket pond; never in the pond's plot
 ///     the hem later - NONE: each field built without its dry plots; `build` hems the first one once every field stands
 fn one(
     inp: &FieldIn,
     f: &Fan,
-    tag: &str,
+    (tag, first): (&str, bool),
     knobs: &HashMap<String, String>,
     counts: &mut Counts,
 ) -> Result<Field, FieldRefused> {
@@ -364,8 +368,9 @@ fn one(
             "island",
             |v| if v == "corner" { "corner" } else { "island" },
         );
+    // a map's grave, at its odds once: only the first field may hold it
     let gr = grave(
-        &bs,
+        if first { &bs } else { &[] },
         inp.seed,
         tag,
         form,

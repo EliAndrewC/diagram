@@ -246,6 +246,7 @@ class PaddyMixin:
             canals set in from the edges - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the main and the drain 1.4 plots inside the field's high and low edges, a lateral's ends 0.7 plot in
             dry where water fails - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: above the main, below the drain and at the margins, 62% dry grain and the rest soy
             flooded near the ditches - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: 30% of plots near the main or drain painted flooded
+            the field's border and the soy - CONVENTION: map drawing convention, a 3.5 px earth-brown line (#A98A52) round the field's outline, and soy filled a flat green (#9CB36A) apart from dry grain's hatch, so the two dry crops read apart
             plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: columns 0.9-1.35 and rows 0.85-1.5 of the grain, 34 px by default
             canal widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: main 3.3, drain 3.0, lateral 2.0, feed and outfall 2.6 px, untapered
             each plot's green - CONVENTION: picked at random from RICE_GREENS, three near-identical greens of rice at one stage, so the paddy reads as one crop

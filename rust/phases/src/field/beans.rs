@@ -78,6 +78,7 @@ pub fn bean_runs(basins: &[Basin], seed: i64, tag: &str, work: &mut u64) -> Vec<
 /// left with fewer than two dropped whole.
 ///
 /// Research:
+///     a drowned bead alone - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a row that meets water; the drowned bead dropped and the rest of its run left where it stands, the gap shown as the water crossing it
 ///     a run shows at least two - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries them shows at least two beads
 ///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund - none inside a pond grown by a bead's radius, none within a bead's radius past a line's half-width
 #[must_use]

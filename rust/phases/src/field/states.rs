@@ -59,6 +59,9 @@ fn plot_draw(seed: i64, tag: &str, what: &str, (row, col): (usize, usize), n: u3
 }
 
 /// Whether this map draws the seasonal plots at all (one map in `SEASONAL_IN`), rolled for the field `tag`.
+///
+/// Research:
+///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the flooded and the gold drawn on some maps (`SEASONAL_IN`), not every map - the maps that do rolled at even odds, a GUESS of "some"
 fn seasonal_map(seed: i64, tag: &str) -> bool {
     knob_rng(seed, &format!("{tag}:seasonal")).randbelow(SEASONAL_IN) == 0
 }
@@ -69,7 +72,7 @@ fn seasonal_map(seed: i64, tag: &str) -> bool {
 ///
 /// Research:
 ///     the polder's plots drawn apart - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: on some maps about one rice plot in sixteen drawn still flooded and one in twenty gold, no exception for a polder - the comb's rolls (`SEASONAL_IN`, `FLOODED_IN`, `GOLD_IN`) over the polder's plots that are neither low nor resting
-///     every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot
+///     every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - wet before resting, though `polder::rest` never names a low plot
 #[must_use]
 pub fn polder_states(
     plots: &[(usize, usize, bool)],

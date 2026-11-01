@@ -267,6 +267,10 @@ struct Canal {
 }
 
 impl Canal {
+    /// The canal's segments with their running starts, its side fixed once from the first segment against `out`.
+    ///
+    /// Research:
+    ///     the canal's measure - NONE: geometry, the line the hem follows
     fn new(segs: Vec<(Pt, Pt)>, out: Pt) -> Self {
         let mut starts = Vec::with_capacity(segs.len() + 1);
         let mut d = 0.0;
@@ -284,6 +288,10 @@ impl Canal {
         Self { segs, starts, side }
     }
 
+    /// The canal's whole length.
+    ///
+    /// Research:
+    ///     the canal's measure - NONE: geometry, the line the hem follows
     fn len(&self) -> f64 {
         self.starts[self.segs.len()]
     }
@@ -294,6 +302,10 @@ impl Canal {
         clippy::many_single_char_names,
         reason = "the plane geometry's own names"
     )]
+    /// The point at `d` along the canal and its heading there.
+    ///
+    /// Research:
+    ///     the canal's measure - NONE: geometry, the line the hem follows
     fn along(&self, d: f64) -> (Pt, Pt) {
         let k = self.starts[..self.segs.len()]
             .partition_point(|s| *s <= d)
@@ -310,6 +322,10 @@ impl Canal {
         clippy::many_single_char_names,
         reason = "the plane geometry's own names"
     )]
+    /// The point at `d` along the canal set `o` out on its side.
+    ///
+    /// Research:
+    ///     the canal's measure - NONE: geometry, the line the hem follows
     fn offset(&self, d: f64, o: f64) -> Pt {
         let (p, _) = self.along(d);
         let u = unit(
@@ -327,6 +343,7 @@ impl Canal {
 ///
 /// Research:
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
+///     off the water - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on how near the water a dry plot may come; a plot whose inner edge or outer corners come within `clear` of any filed water dropped, a bend of the canal meeting it
 fn refused(
     poly: &[Pt],
     field: &mut Bands,

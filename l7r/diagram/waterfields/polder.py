@@ -577,7 +577,8 @@ def _polder_channels(
     a hard corner) and runs off-map south through the dike (the south sluice).
 
     Research:
-        channel widths - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: in feet at the map's scale through `chan_px` - the feeder the supply canal's 4.5 to 1.5 ft, the toes and the laterals the delivery ditch's 2.5 to 1.2 ft, the drain widening 1.2 to 5.5 ft (0068's ladder)
+        channel widths - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: in feet at the map's scale through `chan_px` - the feeder the supply canal's 4.5 to 1.5 ft, the toes and the laterals the delivery ditch's 2.5 to 1.2 ft (0068's ladder)
+        the drain's width - GUESS: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html silent on a drain its outfall taps mid-run; the outfall's 5.5 ft throughout, since one stroke cannot widen toward a middle outfall from both ends
         one lateral a module line - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a lateral on every interior column line, feeder to drain
         laterals join on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each tip set on the trunk's drawn line
         sluices through the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: an inlet stub to the pond and an outfall brook from the drain's middle, the dike notched at each
