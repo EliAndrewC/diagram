@@ -50134,6 +50134,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._widen_for_confluence#its salts, guards and sentinels": {
@@ -50225,8 +50226,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#deck along the way": {
   "body": "054543c748c653c7",
   "claim": "deck along the way - road-bridges-over-rivers-and-canals-hashi.drawing",
-  "code": "052ad83861936824",
-  "core": "d227e7b92a71a33e",
+  "code": "42a2fcf6a638ce64",
+  "core": "a718c78ad8909f88",
   "date": "2026-11-01",
   "note": "rot from the way's bearing",
   "pages": {
@@ -50255,6 +50256,7 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:5fb0771021ca6c69"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -50272,13 +50274,14 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#unseated crossing": {
   "body": "054543c748c653c7",
   "claim": "unseated crossing - NONE: raised as an engine defect",
-  "code": "de663f9e2a0155c1",
-  "core": "d227e7b92a71a33e",
+  "code": "1834deb436fdcaca",
+  "core": "a718c78ad8909f88",
   "date": "2026-11-01",
   "note": "raises an engine defect, draws nothing",
   "pages": {},
@@ -79608,6 +79611,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e551e0e1e0a35b13"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's end": {
@@ -79657,6 +79661,7 @@
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
@@ -79675,6 +79680,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
@@ -79692,6 +79698,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:56868c4083858740",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e551e0e1e0a35b13"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
@@ -79721,6 +79728,7 @@
   "note": "the pages are silent; running on to the crop edge fits the rule \"never ... cut off in the middle of an edge\"",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race": {
@@ -79739,6 +79747,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race's course": {
@@ -79757,6 +79766,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -79775,6 +79785,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the second canal with none": {
@@ -79793,6 +79804,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the widths by role": {
@@ -79819,6 +79831,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::division#the fork": {
