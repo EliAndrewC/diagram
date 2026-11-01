@@ -76,6 +76,7 @@ impl Basin {
 ///     the basin's length - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 26 to 36 ft along it, a knob rolled each basin, every basin of a half-row inside the band where a whole count fits it
 ///     a half-row between counts - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream
 ///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
+#[cfg(test)]
 #[must_use]
 pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
     cuts_counted(seed, row, breadth, &mut 0)
@@ -133,13 +134,18 @@ pub fn cuts_counted(seed: i64, row: usize, breadth: f64, work: &mut u64) -> Vec<
 /// Research:
 ///     the fit - NONE: arithmetic; the band is `cuts`'s
 fn fit(lengths: &mut [f64], whole: f64, band: (f64, f64), work: &mut u64) {
+    // THE SUM KEPT AS THE LENGTHS MOVE, and done the moment a share moves none onto the band (the work-budget audit at T16's
+    // landing: every pass summed and tested every length again, about five reads a basin): one sum, then each pass reads only
+    // the lengths it may move
     let n = lengths.len() as u64;
+    *work += n;
+    let mut sum: f64 = lengths.iter().sum();
     for _ in 0..=lengths.len() {
-        *work += 2 * n; // the sum and the band test, each a read of every length
-        let left = whole - lengths.iter().sum::<f64>();
+        let left = whole - sum;
         if left.abs() < 1e-9 {
             return;
         }
+        *work += n; // the band test
         let free: Vec<usize> = (0..lengths.len())
             .filter(|&i| {
                 if left > 0.0 {
@@ -155,14 +161,21 @@ fn fit(lengths: &mut [f64], whole: f64, band: (f64, f64), work: &mut u64) {
         #[expect(clippy::cast_precision_loss, reason = "a small count of basins")]
         let each = left / free.len() as f64;
         *work += free.len() as u64;
+        let mut clamped = false;
         for i in free {
-            lengths[i] = (lengths[i] + each).clamp(band.0, band.1);
+            let moved = (lengths[i] + each).clamp(band.0, band.1);
+            clamped |= (moved - (lengths[i] + each)).abs() > 0.0;
+            sum += moved - lengths[i];
+            lengths[i] = moved;
+        }
+        if !clamped {
+            return; // every share taken whole: the lengths sum to `whole`
         }
     }
-    *work += 2 * n; // the closing sum and its share
-    let left = whole - lengths.iter().sum::<f64>();
+    let left = whole - sum;
     #[expect(clippy::cast_precision_loss, reason = "a small count of basins")]
     let each = left / lengths.len().max(1) as f64;
+    *work += n;
     for l in lengths.iter_mut() {
         *l += each;
     }
@@ -289,9 +302,24 @@ pub fn basins_counted(
 
 #[cfg(test)]
 mod tests {
-    use super::{basins, cuts, row_ft_for, ALONG_FT, ROW_FT};
+    use super::{basins, cuts, fit, row_ft_for, ALONG_FT, ROW_FT};
     use crate::field::fan::fan;
     use crate::field::geom::signed_area;
+
+    #[test]
+    fn a_fit_already_whole_reads_its_sum_and_stops() {
+        let mut lengths = [30.0, 30.0, 30.0];
+        let mut work = 0;
+        fit(&mut lengths, 90.0, (26.0, 36.0), &mut work);
+        assert_eq!((lengths, work), ([30.0, 30.0, 30.0], 3));
+        // a share that moves one onto the band shares the rest among the others, and every length stays inside it
+        let mut lengths = [35.0, 30.0, 30.0];
+        fit(&mut lengths, 105.0, (26.0, 36.0), &mut work);
+        assert!(
+            (lengths.iter().sum::<f64>() - 105.0).abs() < 1e-9
+                && lengths.iter().all(|l| (26.0..=36.0).contains(l))
+        );
+    }
 
     #[test]
     fn a_half_row_is_cut_inside_the_band_where_a_count_fits_it() {

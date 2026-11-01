@@ -144,18 +144,7 @@ pub fn hem(
                 f64::from(rng.randbelow(2 * TURN_DEG.0 + 1)) - f64::from(TURN_DEG.0),
             );
             let span = (d, d + f64::from(n) * PLOT_FT.0);
-            ix.tests += below.len() as u64; // the band below's tracts read for the ones under this one (the audit, T16)
-            let near: Vec<f64> = band
-                .last()
-                .map(|t| t.2)
-                .into_iter()
-                .chain(
-                    below
-                        .iter()
-                        .filter(|t| t.0 < span.1 && span.0 < t.1)
-                        .map(|t| t.2),
-                )
-                .collect();
+            let near = neighbors(&band, &below, span, &mut ix.tests);
             // the grain held, no plot of the band's rest is laid and the climb ends with it: its tracts' rows are not asked
             let (down, turn) = if got >= need {
                 rolled
@@ -171,10 +160,7 @@ pub fn hem(
                     break;
                 }
                 if got >= need {
-                    // the grain held: the band's rest is room the hem did not take, its columns counted at once, not walked
-                    // (the work-budget audit at T16's landing: every column and strip was visited only to add to `room`)
-                    let columns = ((len - d0) / PLOT_FT.0).floor();
-                    room += columns * f64::from(strips) * PLOT_FT.0 * PLOT_FT.1;
+                    room += room_left(len - d0, strips);
                     break 'band;
                 }
                 let (a, b) = canal.column(d0, &mut frames, &mut ix.tests);
@@ -224,6 +210,40 @@ pub fn hem(
     ix.touched += laid.touched;
     ix.examined += laid.examined;
     (plots, room, bands.tested)
+}
+
+/// The rows' directions a tract's neighbors run: the tract before it along its band, and those of the band below whose stretch
+/// overlaps `span`; each of the band below's read counted in `tests` (the work-budget audit at T16's landing).
+///
+/// Research:
+///     the neighbors - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract set apart from the tract beside it along its band and those directly downslope
+fn neighbors(
+    band: &[(f64, f64, f64)],
+    below: &[(f64, f64, f64)],
+    span: (f64, f64),
+    tests: &mut u64,
+) -> Vec<f64> {
+    *tests += below.len() as u64;
+    band.last()
+        .map(|t| t.2)
+        .into_iter()
+        .chain(
+            below
+                .iter()
+                .filter(|t| t.0 < span.1 && span.0 < t.1)
+                .map(|t| t.2),
+        )
+        .collect()
+}
+
+/// The room a band's rest holds once the grain is held (square feet): its whole columns over the course still ahead, `ahead`
+/// feet, each `strips` plots deep - counted at once, not walked (the work-budget audit at T16's landing: every column and strip
+/// was visited only to add to the room).
+///
+/// Research:
+///     the room - NONE: arithmetic over the plot's size, `PLOT_FT`'s
+fn room_left(ahead: f64, strips: u32) -> f64 {
+    (ahead / PLOT_FT.0).floor() * f64::from(strips) * PLOT_FT.0 * PLOT_FT.1
 }
 
 /// The rows' direction for a tract rolled `rolled` (down to the outfall, and its turn in degrees) whose neighbors' rows run `near`
