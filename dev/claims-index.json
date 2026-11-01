@@ -10717,11 +10717,11 @@
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
   "body": "2e0bb2fa019fc89b",
-  "claim": "its water source - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond that feeds the polder stands at its head, by the inlet - recorded as a reservoir at the high corner",
-  "code": "338c92703cfb152d",
+  "claim": "its water source - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond that feeds the polder stands at its head, by the inlet - recorded at the high corner under `reservoir`, the manifest's one name for a pond a field draws its water from, which its readers take for any feeding pond",
+  "code": "df2d4181355b6601",
   "core": "4aff6719a73f4388",
   "date": "2026-11-01",
-  "note": "the meta `water_source=\"reservoir\"` records the polder's source as a reservoir, but the page says \"The wild pond that feeds the polder stands to its northwest\"; `corner_high` matches \"an inlet at the polder's head\". Either record a wild pond, or have the claim say why the record calls it a reservoir",
+  "note": "the meta records the feeding wild pond as `reservoir` at `corner_high`, which matches the page: the inlet sits at the polder's head, read as its high end, and the feeding pond stands to its northwest, a corner. The pond itself is placed by the Rust (`out[\"pond\"]`).",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -10730,7 +10730,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no beans on a polder's bunds": {
   "body": "2e0bb2fa019fc89b",
@@ -50140,14 +50140,14 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._reseat_to_cover#the merged deck's width": {
   "body": "28d55f6730538c14",
-  "claim": "the merged deck's width - GUESS: plank-bridges-over-farm-ditches-itabashi.drawing silent on two ways crossing one water a few feet apart; one deck as wide as both ways together, where the page's deck is as wide as the one way it carries",
-  "code": "8ca6e6e3faeb9654",
+  "claim": "the merged deck's width - GUESS: plank-bridges-over-farm-ditches-itabashi.drawing silent on two ways crossing one water a few feet apart; one deck widened evenly about its own unmoved center until it takes the second way's width at the crossing (so about the ways' offset wider than both ways together), where the page's deck is as wide as the one way it carries",
+  "code": "e0a431060da84c91",
   "core": "0f920eab12810515",
   "date": "2026-11-01",
-  "note": "the record has nothing on two ways a few feet apart, so the GUESS is the right kind, but the claim misdescribes what the code does: `w = max(deck[\"w\"], 2.0 * across + own_w)` widens the deck evenly on both sides of the standing deck's unmoved center, so the merged deck comes out about `across` wider than both ways together (d + w1/2 + w2/2); either the claim should say \"widened evenly about its own center until it takes the second way's width\", or the code should shift the center",
+  "note": "the page covers one deck as wide as the one way it carries and one deck where a way meets two waters, and says nothing on two ways crossing one water; the code widens the deck about its unmoved center (`2*across + own_w`), which comes out about the offset wider than the two ways' combined footprint, as the claim says",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin._reseat_to_cover#two crossings, one deck": {
   "body": "28d55f6730538c14",
@@ -79125,19 +79125,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/build.rs::RingStats#the comb": {
+ "rust/phases/src/field/build.rs::RingStats#the plot's figures": {
   "body": "c74602b52243daf1",
-  "claim": "the comb - rice-paddies-and-their-plots-suiden.drawing: the fan of paddies, its basins and bunds",
-  "code": "e9e86ba6c37dada1",
+  "claim": "the plot's figures - NONE: geometry of the ring, the record's type",
+  "code": "1790aa310cad31b5",
   "core": "6ac425646277b500",
   "date": "2026-11-01",
-  "note": "the type alias holds a ring's bounding box, centroid and area and decides nothing about the fan, its basins or its bunds; the claim inherited from the module docstring does not fit this unit, which should carry its own claim: NONE (geometry of the ring)",
-  "pages": {
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
-  },
-  "research": "69aa78ae06a3c11d",
+  "note": "a type alias for the ring's bounds, center and area; it decides nothing",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::SQ_FT_PER_ACRE#the acre": {
   "body": "d88557018bdaef0d",
@@ -79288,6 +79286,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/build.rs::drained_area#no barley on a resting plot": {
+  "body": "01bf267055f5b63b",
+  "claim": "no barley on a resting plot - paddies-left-to-rest-kataarashi.drawing: a resting plot is grazed among the cropped ones that year, not cropped, so it grows no winter barley - its area taken out with the wet plots'",
+  "code": "6cf86fe16a40c66d",
+  "core": "0901f22a0f707039",
+  "date": "2026-11-01",
+  "note": "the rested plots' area is taken out with the wet plots' area; a resting plot is \"grazed\" and not cropped that year, so it grows no barley",
+  "pages": {
+   "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
+  },
+  "research": "a9a8377184fbd08b",
+  "rests": [
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:24ed3820d560e0ab",
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/build.rs::drained_area#the drained plots": {
   "body": "01bf267055f5b63b",
   "claim": "the drained plots - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, so only the drained plots count",
@@ -79303,14 +79318,6 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751"
   ],
   "verdict": "IN-STEP"
- },
- "rust/phases/src/field/build.rs::drained_area#the rested plots carry no winter barley (taken out of the drained area)": {
-  "code": "0901f22a0f707039",
-  "core": "0901f22a0f707039",
-  "date": "2026-11-01",
-  "note": "the rested plots carry no winter barley (taken out of the drained area)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/field/build.rs::hem_bounds#a barley hamlet's shortfall": {
   "body": "8178f3c4a1083a98",
@@ -80370,71 +80377,35 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::Canal.column#the dry hem": {
+ "rust/phases/src/field/dry.rs::Canal.column#the column's frames": {
   "body": "36f312c6b7177491",
-  "claim": "the dry hem - dry-fields-and-their-crops-hatake.drawing: a hem of small rectangular plots just upslope of the supply canal that runs along the paddy's high edge",
-  "code": "2245b7201c8a4428",
+  "claim": "the column's frames - NONE: plumbing of the canal's course; the need is `hem`'s caller's",
+  "code": "65dd03f6e68e85ba",
   "core": "480964cdbfd804fe",
   "date": "2026-11-01",
-  "note": "columns of PLOT_FT.0 along the canal, each sharing its frame with the next so the plots abut along the curving line",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
-  ],
+  "note": "plumbing: it hands on consecutive frames one PLOT_FT.0 apart, and the step is PLOT_FT's",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::Canal.column#the need": {
-  "body": "36f312c6b7177491",
-  "claim": "the need - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household, a GUESS resting on attested rates",
-  "code": "5a1f6001d1853232",
-  "core": "480964cdbfd804fe",
-  "date": "2026-11-01",
-  "note": "nothing here sizes the need: the 0.85-acre figure is hem's caller's, and `held` only skips building frames once the grain is held; the inherited claim should be NONE (frame plumbing) on this unit",
-  "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
-  },
-  "research": "8159982a6874674a",
-  "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/field/dry.rs::Canal.frame#the dry hem": {
-  "body": "e94674345a2c177a",
-  "claim": "the dry hem - dry-fields-and-their-crops-hatake.drawing: a hem of small rectangular plots just upslope of the supply canal that runs along the paddy's high edge",
-  "code": "3706a13af48e3244",
+ "rust/phases/src/field/dry.rs::Canal.frame#plots squared to the canal's local line (normal to its tangent, taken over a chord of PLOT_FT.0 either side), not to the paddy's slope": {
+  "code": "68a40227397f8d9d",
   "core": "68a40227397f8d9d",
   "date": "2026-11-01",
-  "note": "the frame's offset runs square to the canal's local heading, toward the dry side (`self.side`)",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
-  ],
-  "verdict": "IN-STEP"
+  "note": "plots squared to the canal's local line (normal to its tangent, taken over a chord of PLOT_FT.0 either side), not to the paddy's slope",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
- "rust/phases/src/field/dry.rs::Canal.frame#the need": {
+ "rust/phases/src/field/dry.rs::Canal.frame#the frame": {
   "body": "e94674345a2c177a",
-  "claim": "the need - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household, a GUESS resting on attested rates",
-  "code": "b52e55e5a767a7f8",
+  "claim": "the frame - NONE: geometry of the canal's course",
+  "code": "e85e775a40bfa4b9",
   "core": "68a40227397f8d9d",
   "date": "2026-11-01",
-  "note": "a frame computation does not decide the need; the inherited claim should be NONE on this unit",
-  "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
-  },
-  "research": "8159982a6874674a",
-  "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
-  ],
+  "note": "the frame's second vector, (-u.1*side, u.0*side), is perpendicular to the canal's local tangent. That is the placement rule \"each is a rectangle square to the canal where it stands\", and the page records it as this project's choice (\"That a plot is squared to the canal, not the rice, is this project's choice\"). Label it research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html rather than NONE",
+  "pages": {},
+  "research": "",
   "verdict": "MISLABELED"
  },
  "rust/phases/src/field/dry.rs::Canal.len#the canal's measure": {
@@ -80462,38 +80433,16 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::Canal.seat#the dry hem": {
+ "rust/phases/src/field/dry.rs::Canal.seat#the seat": {
   "body": "ce51aaf3aeccf62e",
-  "claim": "the dry hem - dry-fields-and-their-crops-hatake.drawing: a hem of small rectangular plots just upslope of the supply canal that runs along the paddy's high edge",
-  "code": "3c4e12ac7addacaf",
+  "claim": "the seat - NONE: geometry of the canal's course; the plot's size and where the hem stands are `PLOT_FT`'s and `hem`'s",
+  "code": "2567d8667458f959",
   "core": "512f8f361cc2e587",
   "date": "2026-11-01",
-  "note": "a plot built from two adjacent canal frames at the strip's depth offsets: square to the canal, abutting its neighbors",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
-  ],
+  "note": "it only joins two frames at the given offsets; the squaring is the frame's, the size is PLOT_FT's and the offsets are hem's",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
- },
- "rust/phases/src/field/dry.rs::Canal.seat#the need": {
-  "body": "ce51aaf3aeccf62e",
-  "claim": "the need - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household, a GUESS resting on attested rates",
-  "code": "8e6498e51d545fdb",
-  "core": "512f8f361cc2e587",
-  "date": "2026-11-01",
-  "note": "building a plot's corners does not decide the need; the inherited claim should be NONE on this unit",
-  "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
-  },
-  "research": "8159982a6874674a",
-  "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
-  ],
-  "verdict": "MISLABELED"
  },
  "rust/phases/src/field/dry.rs::DryPlot#a dry plot's record": {
   "body": "2c628fca607e452e",
@@ -80621,14 +80570,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::apart#the fallback when no turn within ±17 on either side stands 20 degrees from the neighbors: the turn farthest from them (range ends or midway between them), which may be under 20 apart": {
-  "code": "da5c203f70fe4de4",
-  "core": "da5c203f70fe4de4",
-  "date": "2026-11-01",
-  "note": "the fallback when no turn within ±17 on either side stands 20 degrees from the neighbors: the turn farthest from them (range ends or midway between them), which may be under 20 apart",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/dry.rs::apart#tracts apart": {
   "body": "dc8224f49a028fe6",
   "claim": "tracts apart - dry-fields-and-their-crops-hatake.drawing: tracts are set apart by at least 20 degrees, turned up to about 17 degrees, the two directions a right angle apart",
@@ -80644,6 +80585,17 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dry.rs::apart#where none stands apart": {
+  "body": "dc8224f49a028fe6",
+  "claim": "where none stands apart - GUESS: dry-fields-and-their-crops-hatake.drawing silent on a tract whose neighbors leave no turn 20 degrees from them on either side; the turn farthest from them all, of the range's ends and the turns midway between them, though under 20 degrees",
+  "code": "251a6ae327c9eb2b",
+  "core": "da5c203f70fe4de4",
+  "date": "2026-11-01",
+  "note": "the page sets \"at least 20 degrees\" and \"up to about 17 degrees\" but says nothing about a tract with no turn free; the fallback the code runs (the range's ends and the floored midpoints between neighbors, on both sides, keeping the largest gap) is what the claim states",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a band's strips": {

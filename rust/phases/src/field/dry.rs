@@ -408,7 +408,7 @@ impl Canal {
     /// lookups, counted in `work`; a column of seats shares its two frames, the next column the second.
     ///
     /// Research:
-    ///     the frame - NONE: geometry of the canal's course
+    ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot a rectangle square to the canal where it stands, the project's choice - the normal to the course's local line, taken over a plot's length either way, not to the paddy's slope
     fn frame(&self, d: f64, work: &mut u64) -> (Pt, Pt) {
         *work += 3;
         let (p, _) = self.along(d);
