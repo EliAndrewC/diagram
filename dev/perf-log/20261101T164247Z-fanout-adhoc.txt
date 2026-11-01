@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+field: 103,197 calls @20, 165,347 calls @40, growth exponent 0.68
+  placed @40: dry_plots +143, comb_floors.inashiro-paddies +97, flooded_plots +94, wet_plots +15, drawn_channels +13, field_ditches +12, channels +1, field_graves +1, field_ponds +1, fields +1, streams +1, weirs +1; 435 calls per thing placed
+
+all stages: 103,197 calls @20, 165,347 calls @40

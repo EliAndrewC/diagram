@@ -102,7 +102,11 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     asked = tooling_asked(config.getoption("markexpr", "") or "", config.args)
     skip_tooling = _tooling_unchanged() and not FULL and not asked
     keep, drop = [], []
+    from tests._waiting_ports import WAITING  # the pool tests a later Python stage owes, held strict to its port (444 FR-019)
+
     for item in items:
+        if item.nodeid in WAITING:
+            item.add_marker(pytest.mark.xfail(strict=True, reason=WAITING[item.nodeid]))
         if "/tests/tooling/" in str(item.fspath) and item.get_closest_marker("tooling") is None:
             item.add_marker(pytest.mark.tooling)  # the ci package's tests are tooling tests by location (git repos in tmp, the dispatcher)
         m = item.get_closest_marker("tiers")
