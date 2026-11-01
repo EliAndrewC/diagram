@@ -409,7 +409,21 @@ def counted_files(root: Path, counts: list[dict]) -> list[Path]:
         text = p.read_text(encoding="utf-8")
         if any(re.search(rf"^\s*(?:pub(?:\(crate\))?\s+)?fn {re.escape(n)}\b", text, re.M) for n in names):
             found.append(p)
+    # ...AND WHEREVER A KEY IS COUNTED BY ITS OWN NAME (the round arbiter's tooling fix on ask:444-T16-field-audit-5): a key that
+    # names no function - `write@field_ink`, counted in the ink's `draw` - brought no module, and the audit could not see its loops
+    keys = {k for r in counts for k in (r.get("ops") or {}) if "@" in k}
+    for p in sorted((root / "l7r").rglob("*.py")):
+        if p not in found and any(f'"{k}"' in p.read_text(encoding="utf-8") for k in keys):
+            found.append(p)
     return found
+
+
+def newest_source(root: Path) -> float:
+    """The newest modification time of the engine's sources - its Python and its Rust phases (their build trees left out)."""
+    sources = [*(root / "l7r").rglob("*.py")]
+    if (root / RUST).is_dir():
+        sources += [q for q in (root / RUST).rglob("*.rs") if "target" not in q.parts]
+    return max((q.stat().st_mtime for q in sources), default=0.0)
 
 
 def fanout_section(root: Path, phase: str) -> str:
@@ -417,6 +431,10 @@ def fanout_section(root: Path, phase: str) -> str:
     reports = sorted((root / FANOUT).glob("*-fanout-*.txt"))
     if not reports:
         return f"no `make perf-fanout` report is kept: run `make perf-fanout STAGES={phase}`\n"
+    # ...NEVER A STALE ONE (the round arbiter's tooling fix on ask:444-T16-field-audit-5: an audit got T12's report of a deleted
+    # engine and rebuilt the chains by hand): a report older than the newest engine source is refused, with the command
+    if reports[-1].stat().st_mtime < newest_source(root):
+        return f"STALE: {reports[-1].relative_to(root)} is older than the engine it would describe - run `make perf-fanout STAGES={phase}` first\n"
     text = reports[-1].read_text(encoding="utf-8")
     m = re.search(rf"^{re.escape(phase)}: .*?(?=^[a-z_]+: |\Z)", text, re.M | re.S)  # a stage's section opens `<stage>: ` at column 0
     return f"from {reports[-1].relative_to(root)}\n\n" + (m.group(0) if m else f"(the report has no section for {phase})\n")
@@ -433,12 +451,15 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     counts = [{"seed": r["seed"], "households": r["households"], **r["stages"][phase]} for r in run["rows"] if phase in r["stages"]]
     table = json.loads((root / TABLE).read_text(encoding="utf-8"))
     files = files + [p for p in counted_files(root, counts) if p not in files]
+    chains = fanout_section(root, phase)
+    if chains.startswith("STALE: "):
+        return 2, f"work-budget-bundle: {chains.removeprefix('STALE: ').strip()}"
     out.mkdir(parents=True, exist_ok=True)
     (out / "code").mkdir(exist_ok=True)
     for p in files:
         shutil.copy(p, out / "code" / p.name)
     (out / "counts.json").write_text(json.dumps({"run": runs[-1].name, "summary": run["summary"]["stages"].get(phase), "rolls": counts}, indent=1), encoding="utf-8")
-    (out / "chains.txt").write_text(fanout_section(root, phase), encoding="utf-8")
+    (out / "chains.txt").write_text(chains, encoding="utf-8")
     pinned = json.loads((root / budget).read_text(encoding="utf-8")) if budget else table["stages"].get(phase)
     (out / "budget.json").write_text(json.dumps(pinned, indent=1), encoding="utf-8")
     shutil.copy(root / RUBRIC, out / "rubric.md")

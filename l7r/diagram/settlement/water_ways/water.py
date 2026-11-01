@@ -9,6 +9,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.overlap.registry import refuse_unadmitted
+from l7r.diagram.work_counts import OPS
 
 from .._geom import (
     winding,
@@ -134,6 +135,8 @@ class WaterBodiesMixin:
         self._flow_record(rec, pts, flow)
         refuse_unadmitted(self.M, "streams", rec)  # asked before its ink (feature 287, water W53): the course is its fit's
         self.M["streams"].append(rec)
+        if __debug__:  # its course written into its record and its ink, a point at a time (feature 444 T16's audit)
+            OPS["write@stream"] += 2 * len(rec["poly"])
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
         # THE SHEEN IS BUTT-CAPPED (settlement-review 2026-08-29, Mizuguchi error 2 and Kashikawa's bead).

@@ -45,3 +45,22 @@ def test_a_counter_a_rust_function_keeps_brings_its_rs_file_into_the_audit(tmp_p
     (tmp_path / "l7r" / "plan.py").write_text("def _rust_rolls():\n    pass\n")
     got = wbb.counted_files(tmp_path, [{"ops": {"candidate@roll_plan": 6, "write@_rust_rolls": 13}}])
     assert [p.relative_to(tmp_path).as_posix() for p in got] == ["l7r/plan.py", "rust/phases/src/water_frame.rs"]
+
+
+def test_a_key_counted_by_its_own_name_brings_its_module_and_a_stale_chain_report_is_refused(tmp_path: Path) -> None:
+    """The round arbiter's tooling fix on ask:444-T16-field-audit-5: `write@field_ink` names no function, so the ink's module was
+    left out of the audit; and a call-chain report older than the engine described a deleted one."""
+    import os
+
+    (tmp_path / "l7r").mkdir()
+    (tmp_path / "l7r" / "ink.py").write_text('def draw(s):\n    OPS["write@field_ink"] += 1\n')
+    (tmp_path / "l7r" / "other.py").write_text("def other():\n    pass\n")
+    got = wbb.counted_files(tmp_path, [{"ops": {"write@field_ink": 4}}])
+    assert [p.relative_to(tmp_path).as_posix() for p in got] == ["l7r/ink.py"]
+    log = tmp_path / "dev" / "perf-log"
+    log.mkdir(parents=True)
+    (log / "x-fanout-y.txt").write_text("field: 1 calls\n  a\n")
+    os.utime(log / "x-fanout-y.txt", (1, 1))
+    assert wbb.fanout_section(tmp_path, "field").startswith("STALE: ") and "make perf-fanout STAGES=field" in wbb.fanout_section(tmp_path, "field")
+    os.utime(log / "x-fanout-y.txt", None)
+    assert wbb.fanout_section(tmp_path, "field").endswith("field: 1 calls\n  a\n")
