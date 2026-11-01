@@ -379,6 +379,12 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         parts.append("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n")
         for ref in context:
             parts.append(f"## CONTEXT {ref}\n\n```{'rust' if ref.partition('::')[0].endswith('.rs') else 'python'}\n{context_source(root, ref)}\n```\n")
+            # ...and its own claims with their last verdicts, so a decision it already claims is not claimed twice (the round
+            # arbiter's fix on ask:444-T16-claims-rounds)
+            own = [(k, v) for k, v in index.items() if k.startswith(ref + "#") and v.get("verdict") != "UNCLAIMED"]
+            parts += [f"- its claim `{k.partition('#')[2]}`: last judged {v.get('verdict', 'unjudged')}" for k, v in own]
+            if own:
+                parts.append("")
     for p in (p.rsplit("/", 1)[-1] for p in pages):  # a path or a bare name; a page named and not found is an error, never
         if not (qdir / p).is_file():  # dropped (feature 374: a pointer-form path was skipped in silence)
             raise ValueError(f"PAGES: no question file {p} under {qdir}")
@@ -524,7 +530,30 @@ def open_findings(rows: Mapping[str, Mapping[str, str]], deferred: frozenset[str
     sorted by key. ONE selection, read by `report` and by the claims gate at `clean` (feature 445, D3), so the gate refuses
     exactly what the report lists."""
     out = [(shown(k, v["verdict"], deferred), k, v.get("note", "")) for k, v in sorted(rows.items())]
-    return [(verdict, k, note) for verdict, k, note in out if verdict not in ("IN-STEP", "DEFERRED")]
+    claimed = in_step_constants(rows)
+    return [(verdict, k, note) for verdict, k, note in out if verdict not in ("IN-STEP", "DEFERRED") and not (verdict == "UNCLAIMED" and names_claimed(k, claimed))]
+
+
+#: a constant's name as a decision names it
+CONSTANT = re.compile(r"\b[A-Z][A-Z0-9_]{2,}\b")
+
+
+def in_step_constants(rows: Mapping[str, Mapping[str, str]]) -> frozenset[tuple[str, str]]:
+    """(path, NAME) of each constant whose every claim stands IN-STEP (the round arbiter's fix on ask:444-T16-claims-rounds)."""
+    seen: dict[tuple[str, str], bool] = {}
+    for k, v in rows.items():
+        path, _, rest = k.partition("::")
+        name = rest.partition("#")[0]
+        if CONSTANT.fullmatch(name) and v.get("verdict") != "UNCLAIMED":
+            seen[(path, name)] = seen.get((path, name), True) and v.get("verdict") == "IN-STEP"
+    return frozenset(key for key, ok in seen.items() if ok)
+
+
+def names_claimed(key: str, claimed: frozenset[tuple[str, str]]) -> bool:
+    """Whether an UNCLAIMED decision names a constant of its own file whose claims stand IN-STEP: that constant already claims it
+    (round five of feature 444 T16: seven of nine UNCLAIMED named such a constant, and each would have been a duplicate claim)."""
+    path, _, rest = key.partition("::")
+    return any((path, n) in claimed for n in CONSTANT.findall(rest.partition("#")[2]))
 
 
 def report(
