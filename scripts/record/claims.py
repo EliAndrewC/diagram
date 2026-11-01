@@ -299,6 +299,17 @@ def context_source(root: Path, ref: str) -> str:
     return ast.get_source_segment(text, node) or ""
 
 
+def rust_constants(root: Path, path: str, source: str) -> list[str]:
+    """`path::NAME` of each `const` or `static` of the `.rs` file at `path` that `source` names (feature 444 T16)."""
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from l7r.diagram.tools import claims_rust  # noqa: PLC0415
+
+    named = set(re.findall(r"\b[A-Z][A-Z0-9_]+\b", source))
+    items = claims_rust._items((root / path).read_text(encoding="utf-8"), 0, "", False)
+    return [f"{path}::{q}" for q, kind, _f, _l, _d, body in items if kind == "constant" and q in named and not source.lstrip().startswith(body.lstrip()[:40])]
+
+
 #: the most of its own module's functions a unit carries into its bundle as context (`callees`)
 CALLEES_MAX = 6
 
@@ -349,7 +360,11 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         parts.append(f"\n```{lang}\n{mark_changed(src, first, marked.get(unit.path, set()))}\n```\n")
         # ...the module's own functions it calls, and what a CANNOT-TELL asked for (385 T25, D47) - read off Python's syntax tree, so a
         # Rust unit's context is what `WITH=` names (feature 444 T16)
-        if unit.kind != "section" and not unit.path.endswith(".rs"):
+        if unit.path.endswith(".rs"):
+            # ...A RUST UNIT carries its own file's constants that its body names (feature 444 T16's fifth claims wave: nine verdicts
+            # CANNOT-TELL for a constant the bundle did not show)
+            context = list(dict.fromkeys([*context, *rust_constants(root, unit.path, src)]))
+        elif unit.kind != "section":
             asked = [n for r in rows for n in re.findall(r"`([A-Za-z_]\w*)", (index.get(r.key) or {}).get("note", "")) if (index.get(r.key) or {}).get("verdict") == "CANNOT-TELL"]
             far = claims_context.direct(root, unit, src, context_source) if any(claims_context.DISTANCE.search(r.claim.label) for r in rows) else []
             context = list(dict.fromkeys([*context, *callees(root, unit, src), *far, *claims_context.chase(root, unit.path, asked, context_source)]))

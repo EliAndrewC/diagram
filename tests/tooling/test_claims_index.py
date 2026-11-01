@@ -946,3 +946,11 @@ def test_a_rust_unit_is_bundled_with_rust_context() -> None:
     assert "fn quarter_deg" in cx.context_source(root, "rust/phases/src/water_frame.rs::quarter_deg")
     with pytest.raises(ValueError, match="no `nothing`"):
         cx.context_source(root, "rust/phases/src/water_frame.rs::nothing")
+
+
+def test_a_rust_unit_carries_the_constants_it_names(tmp_path: pathlib.Path) -> None:
+    """Feature 444 T16's fifth claims wave: nine CANNOT-TELLs asked for a constant of the unit's own file the bundle did not show."""
+    (tmp_path / "x.rs").write_text("pub const BAND: f64 = 14.0;\nconst UNUSED: u8 = 1;\npub fn f() -> f64 {\n    BAND * 2.0\n}\n", encoding="utf-8")
+    src = cx.context_source(tmp_path, "x.rs::f")
+    assert cx.rust_constants(tmp_path, "x.rs", src) == ["x.rs::BAND"]
+    assert cx.rust_constants(tmp_path, "x.rs", "fn g() {}") == []
