@@ -51,6 +51,8 @@ pub fn bean_runs(basins: &[Basin], seed: i64, tag: &str, work: &mut u64) -> Vec<
             continue;
         }
         let mut rng = knob_rng(seed, &format!("{tag}:beans:{}:{}", b.row, b.col));
+        // every bund's draw counted, kept or not (the audit, T16: only the kept were)
+        *work += 1;
         if rng.randbelow(BUND_SHARE.1) >= BUND_SHARE.0 {
             continue;
         }
@@ -75,7 +77,7 @@ pub fn bean_runs(basins: &[Basin], seed: i64, tag: &str, work: &mut u64) -> Vec<
 
 /// The runs that survive the map's final water (finish's settling, feature 287 W33): each bead within a bead's radius past a
 /// segment's half-width of `segs`, or inside one of `ponds` (x, y, rx, ry) grown by a bead's radius, drowned and dropped; a run
-/// left with fewer than two dropped whole.
+/// left with fewer than two dropped whole. `counts` takes the work, [the water segments filed and asked of, the beads dropped].
 ///
 /// Research:
 ///     a drowned bead alone - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a row that meets water; the drowned bead dropped and the rest of its run left where it stands, the gap shown as the water crossing it
@@ -86,6 +88,7 @@ pub fn settle(
     runs: &[Vec<Pt>],
     segs: &[(Pt, Pt, f64)],
     ponds: &[(f64, f64, f64, f64)],
+    counts: &mut [u64; 2],
 ) -> Vec<Vec<Pt>> {
     let mut ix = Index::default();
     for (a, b, w) in segs {
@@ -98,15 +101,24 @@ pub fn settle(
             ((p.0 - x) / (rx + BEAD_R_FT)).powi(2) + ((p.1 - y) / (ry + BEAD_R_FT)).powi(2) <= 1.0
         })
     };
-    runs.iter()
+    let kept: Vec<Vec<Pt>> = runs
+        .iter()
         .map(|r| {
             r.iter()
                 .copied()
-                .filter(|p| !in_pond(*p) && !drowned(*p, &mut ix, water))
+                .filter(|p| {
+                    counts[0] += ponds.len() as u64;
+                    !in_pond(*p) && !drowned(*p, &mut ix, water)
+                })
                 .collect::<Vec<_>>()
         })
         .filter(|r| r.len() >= RUN_BEADS.0 as usize)
-        .collect()
+        .collect();
+    // the index's own work, and every bead the water took (S4: placed, then dropped - the counter says how often)
+    counts[0] += ix.touched + ix.examined + segs.len() as u64;
+    let beads = |rs: &[Vec<Pt>]| rs.iter().map(Vec::len).sum::<usize>() as u64;
+    counts[1] += beads(runs) - beads(&kept);
+    kept
 }
 
 /// Whether a bead at `p` lies in the water filed in `ix`, each segment at its width in `widths` (the widest, `widest`, the reach
@@ -144,17 +156,20 @@ mod tests {
         assert!((0.15..0.5).contains(&share), "{share}");
         // a ditch along every bund drowns every bead at the finish
         let wet: Vec<_> = b.iter().map(|x| (x.ring[1], x.ring[2], 2.5)).collect();
-        assert!(settle(&runs, &wet, &[]).is_empty());
+        assert!(settle(&runs, &wet, &[], &mut [0; 2]).is_empty());
         // finish's settling: a ditch through a run drowns it, a pond on a bead drowns that bead, a dry run stands
         let run = vec![(0.0, 0.0), (8.0, 0.0), (16.0, 0.0)];
-        let kept = settle(&[run.clone()], &[], &[(16.0, 0.0, 3.0, 3.0)]);
+        let kept = settle(&[run.clone()], &[], &[(16.0, 0.0, 3.0, 3.0)], &mut [0; 2]);
         assert_eq!(kept, vec![vec![(0.0, 0.0), (8.0, 0.0)]]);
         assert!(settle(
             &[run.clone()],
             &[((8.0, -10.0), (8.0, 10.0), 2.5)],
-            &[(0.0, 0.0, 1.0, 1.0)]
+            &[(0.0, 0.0, 1.0, 1.0)],
+            &mut [0; 2]
         )
         .is_empty());
-        assert_eq!(settle(&[run.clone()], &[], &[]), vec![run]);
+        let mut counts = [0; 2];
+        assert_eq!(settle(&[run.clone()], &[], &[], &mut counts), vec![run]);
+        assert_eq!(counts[1], 0, "a dry run drops nothing");
     }
 }

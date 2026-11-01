@@ -27,6 +27,9 @@ pub struct Index {
     pub touched: u64,
     /// The segments a query handed back to be tested, for the counters (D6).
     pub examined: u64,
+    /// The geometric tests asked of what the queries handed back - the hem's water, lap and row-direction tests - for the
+    /// counters (S5: the work counted where it happens, the work-budget audit at T16's landing).
+    pub tests: u64,
 }
 
 /// Boxes filed in every cell they cover, a box asked of the cells it overlaps: the hem's plots laid so far, asked of each
@@ -68,9 +71,10 @@ impl Boxes {
                 }
             }
         }
+        // each id the cells handed back is sorted and deduplicated: counted as it is handed back, not after (the audit, T16)
+        self.examined += out.len() as u64;
         out.sort_unstable();
         out.dedup();
-        self.examined += out.len() as u64;
         out
     }
 }
@@ -206,9 +210,10 @@ impl Index {
                 }
             }
         }
+        // each id the cells handed back is sorted and deduplicated: counted as it is handed back, not after (the audit, T16)
+        self.examined += out.len() as u64;
         out.sort_unstable();
         out.dedup();
-        self.examined += out.len() as u64;
         out
     }
 }

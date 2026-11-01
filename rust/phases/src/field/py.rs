@@ -98,6 +98,7 @@ fn rice_pond(
     plots: &[super::polder::Plot],
     resting: &[usize],
     seed: i64,
+    work: &mut u64,
 ) -> Option<(usize, f64, f64, f64, f64)> {
     let hosts: Vec<(usize, super::lattice::Basin)> = plots
         .iter()
@@ -117,7 +118,8 @@ fn rice_pond(
         })
         .collect();
     let basins: Vec<super::lattice::Basin> = hosts.iter().map(|(_, b)| b.clone()).collect();
-    super::features::pocket_pond(&basins, seed, "polder", &mut 0)
+    *work += plots.len() as u64;
+    super::features::pocket_pond(&basins, seed, "polder", work)
         .map(|(k, q)| (hosts[k].0, q.x, q.y, q.rx, q.ry))
 }
 
@@ -185,12 +187,14 @@ pub fn stage_polder<'py>(
     let dike = super::dike::dike(&p.inner_env, &p.sluices, seed);
     let run = super::polder::outfall(p.sluices[1], down_deg, canvas);
     let resting = super::polder::rest(&p.plots, seed, unsettled && !dikepond);
+    let mut pond_work = 0_u64;
     let pocket = if dikepond {
         None
     } else {
-        rice_pond(&p.plots, &resting, seed)
+        rice_pond(&p.plots, &resting, seed, &mut pond_work)
     };
     let mut counts = crate::counts::Counts::default();
+    counts.add("candidate@polder_pond", pond_work);
     let states = polder_drawn(&p.plots, &resting, seed, dikepond, &mut counts);
     counts.add("candidate@polder_shape", 4);
     counts.add("write@polder_plot", 5 * p.plots.len() as u64);
@@ -269,7 +273,8 @@ pub fn stage_polder<'py>(
     Ok(d)
 }
 
-/// The bean runs that survive the map's final water (finish's settling): `runs` against `segs` (a, b, width) and `ponds`.
+/// The bean runs that survive the map's final water (finish's settling): `runs` against `segs` (a, b, width) and `ponds`, with the
+/// work done and the beads dropped, for the counters.
 #[pyfunction]
 #[expect(
     clippy::needless_pass_by_value,
@@ -280,8 +285,10 @@ pub fn settle_runs(
     runs: Vec<Vec<Pt>>,
     segs: Vec<(Pt, Pt, f64)>,
     ponds: Vec<(f64, f64, f64, f64)>,
-) -> Vec<Vec<Pt>> {
-    super::beans::settle(&runs, &segs, &ponds)
+) -> (Vec<Vec<Pt>>, u64, u64) {
+    let mut counts = [0; 2];
+    let kept = super::beans::settle(&runs, &segs, &ponds, &mut counts);
+    (kept, counts[0], counts[1])
 }
 
 /// A dike-pond's pond or bank rounded from its parcel (`ponds::rounded`): the path and its samples, `draw` a draw from the caller's

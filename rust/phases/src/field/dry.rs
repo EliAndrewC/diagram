@@ -155,7 +155,12 @@ pub fn hem(
                         .map(|t| t.2),
                 )
                 .collect();
-            let (down, turn) = apart(rolled, &near);
+            // the grain held, no plot of the band's rest is laid and the climb ends with it: its tracts' rows are not asked
+            let (down, turn) = if got >= need {
+                rolled
+            } else {
+                apart(rolled, &near, &mut ix.tests)
+            };
             band.push((span.0, span.1, turn + if down { 90.0 } else { 0.0 }));
             for k in 0..n {
                 let d0 = d + f64::from(k) * PLOT_FT.0;
@@ -218,8 +223,9 @@ pub fn hem(
 ///
 /// Research:
 ///     tracts apart - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: tracts are set apart by at least 20 degrees, turned up to about 17 degrees, the two directions a right angle apart
-fn apart(rolled: (bool, f64), near: &[f64]) -> (bool, f64) {
-    let gap = |a: f64| {
+fn apart(rolled: (bool, f64), near: &[f64], tests: &mut u64) -> (bool, f64) {
+    let mut gap = |a: f64| {
+        *tests += near.len() as u64;
         near.iter()
             .map(|b| {
                 let s = (a - b).rem_euclid(180.0);
@@ -228,29 +234,40 @@ fn apart(rolled: (bool, f64), near: &[f64]) -> (bool, f64) {
             .fold(f64::INFINITY, f64::min)
     };
     let most = i32::try_from(TURN_DEG.0).unwrap_or(17);
-    let mut options: Vec<(bool, f64)> = [rolled.0, !rolled.0]
+    #[expect(
+        clippy::cast_possible_truncation,
+        reason = "the rolled turn is a whole degree within the turn's bound"
+    )]
+    let at = rolled.1 as i32;
+    // nearest the roll first, the rolled side before the other, the smaller turn first at an equal distance: the order a sort
+    // by that cost gave, laid down in that order instead of sorted (the audit, T16)
+    let options: Vec<(bool, f64)> = [rolled.0, !rolled.0]
         .iter()
-        .flat_map(|&down| (-most..=most).map(move |t| (down, f64::from(t))))
-        .collect();
-    options.sort_by(|a, b| {
-        let cost = |o: &(bool, f64)| (u8::from(o.0 != rolled.0), (o.1 - rolled.1).abs());
-        cost(a)
-            .partial_cmp(&cost(b))
-            .unwrap_or(std::cmp::Ordering::Equal)
-    });
-    let dir = |o: &(bool, f64)| o.1 + if o.0 { 90.0 } else { 0.0 };
-    options
-        .iter()
-        .find(|o| gap(dir(o)) >= TRACT_APART_DEG)
-        .or_else(|| {
-            options.iter().max_by(|a, b| {
-                gap(dir(a))
-                    .partial_cmp(&gap(dir(b)))
-                    .unwrap_or(std::cmp::Ordering::Equal)
+        .flat_map(|&down| {
+            (0..=2 * most).flat_map(move |k| {
+                let pair = if k == 0 {
+                    vec![at]
+                } else {
+                    vec![at - k, at + k]
+                };
+                pair.into_iter()
+                    .filter(move |t| (-most..=most).contains(t))
+                    .map(move |t| (down, f64::from(t)))
             })
         })
-        .copied()
-        .unwrap_or(rolled)
+        .collect();
+    let dir = |o: &(bool, f64)| o.1 + if o.0 { 90.0 } else { 0.0 };
+    let mut best = (rolled, f64::NEG_INFINITY);
+    for o in &options {
+        let g = gap(dir(o));
+        if g >= TRACT_APART_DEG {
+            return *o;
+        }
+        if g > best.1 {
+            best = (*o, g);
+        }
+    }
+    best.0
 }
 
 /// The canal's course as the hem lays along it: its segments, the distance along it at each segment's start, and the one side
@@ -368,12 +385,25 @@ fn refused(
                 (c.0 + u.0 * LAP_PULL_FT, c.1 + u.1 * LAP_PULL_FT)
             })
             .collect();
-        laid.near(lo, hi).into_iter().any(|i| {
+        let mut tests = 0_u64;
+        let hit = laid.near(lo, hi).into_iter().any(|i| {
             let q = &plots[i].poly;
-            inside(middle, q) || pulled.iter().any(|c| inside(*c, q))
-        })
+            tests += 1;
+            inside(middle, q)
+                || pulled.iter().any(|c| {
+                    tests += 1;
+                    inside(*c, q)
+                })
+        });
+        (hit, tests)
     };
-    onto() || laps() || wet(poly, ix, clear)
+    onto()
+        || {
+            let (lapped, tests) = laps();
+            ix.tests += tests;
+            lapped
+        }
+        || wet(poly, ix, clear)
 }
 
 /// Whether the plot `poly` meets the water filed in `ix`: a segment near it crossing its sides, ending inside it, or within `clear`
@@ -386,13 +416,18 @@ fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
     let (lo, hi) = bbox(poly);
     ix.near((lo.0 - reach, lo.1 - reach), (hi.0 + reach, hi.1 + reach))
         .into_iter()
+        .collect::<Vec<_>>()
+        .into_iter()
         .any(|i| {
             let (a, b) = ix.segs[i];
             let near = clear + ix.widths[i] / 2.0;
+            ix.tests += 2;
             inside(a, poly)
                 || inside(b, poly)
-                || (0..poly.len())
-                    .any(|k| seg_seg_dist(a, b, poly[k], poly[(k + 1) % poly.len()]) < near)
+                || (0..poly.len()).any(|k| {
+                    ix.tests += 1;
+                    seg_seg_dist(a, b, poly[k], poly[(k + 1) % poly.len()]) < near
+                })
         })
 }
 

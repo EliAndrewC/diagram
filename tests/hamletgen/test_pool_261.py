@@ -285,23 +285,7 @@ def test_every_lane_is_drawn_at_its_own_rank(gen: str) -> None:
     assert not off, f"lanes drawn off their rank (lane, rank, ft): {off}"
 
 
-# KASHIKAWA SINCE FEATURE 444 T16 (the field rebuilt in Rust): a household bamboo strip is seated 19 ft past the bottom of the
-# view `stage_hinterland` decides - `frame_extras` reserves each household's copse crowns as content, not its bamboo strip. Both
-# are Python stages; under 444 amendment 5 (the GM 2026-10-31: "it's okay for the Python code to have errors since we will fix
-# those when those stages are ported to Rust") it waits for their port, held here so the day it passes says so.
-_STANDS_WAITING: set[str] = {"kashikawa"}
-
-
-@pytest.mark.parametrize(
-    "gen",
-    [
-        pytest.param(g, marks=pytest.mark.xfail(strict=True, reason="a household bamboo strip past the decided view - the Python stages' port (feature 444 amendment 5)"))
-        if i in _STANDS_WAITING
-        else g
-        for g, i in zip(GENS, IDS, strict=True)
-    ],
-    ids=IDS,
-)
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_every_bamboo_stand_is_on_the_sheet(gen: str) -> None:
     """A bamboo stand is drawn where a reader can see it (feature 293 round 3, settlement-review of Kashikawa: the thicket
     stood wholly above the view, every culm clipped, while the page offered its class)."""

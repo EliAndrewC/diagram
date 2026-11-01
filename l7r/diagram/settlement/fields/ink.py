@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING, Any
 from l7r.diagram.interactive.tags import Split
 from l7r.diagram.settlement.water_ways.water import ditch_style
 from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, BEAN_GREEN, FLOODED, aze_w
+from l7r.diagram.work_counts import OPS
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -163,7 +164,10 @@ def settle(s: Settlement) -> None:
     ponds += [(float(p["x"]), float(p["y"]), float(p["rx"]), float(p["ry"])) for p in s.M.get("field_ponds") or []]
     r_px = s.px(BEAD_R_FT)
     for z, runs, rec, own in s._bead_slots:
-        kept = phases().settle_runs([[(float(x), float(y)) for x, y in r] for r in runs], segs, ponds + [tuple(float(v) for v in p) for p in own])
+        kept, work, dropped = phases().settle_runs([[(float(x), float(y)) for x, y in r] for r in runs], segs, ponds + [tuple(float(v) for v in p) for p in own])
+        if __debug__:
+            OPS["candidate@bean_settle"] += work
+            OPS["dropped@bean_settle"] += dropped
         rec["bund_beans"] = [[x, y] for r in kept for x, y in r]
         beads = "".join(f'<circle cx="{x}" cy="{y}" r="{r_px:.2f}" fill="{BEAN_GREEN}"/>' for r in kept for x, y in r)
         s.out[z] = f'<g opacity="0.85">{beads}</g>'

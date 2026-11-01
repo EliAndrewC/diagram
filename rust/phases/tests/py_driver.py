@@ -72,8 +72,8 @@ held = [p for p in ponds if p["pocket_pond"] is not None]
 assert held and len(held) < len(ponds) and all(p["plots"][p["pocket_pond"][0]]["low"] for p in held)
 
 # finish's bead settling: a run through a ditch is dropped, a dry one stands
-assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [((4.0, -5.0), (4.0, 5.0), 9.0)], []) == []
-assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [], []) == [[(0.0, 0.0), (8.0, 0.0)]]
+assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [((4.0, -5.0), (4.0, 5.0), 9.0)], [])[0::2] == ([], 2)
+assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [], [])[0::2] == ([[(0.0, 0.0), (8.0, 0.0)]], 0)
 
 # a dike-pond's pond rounded from its parcel
 d, pts = l7r_phases.rounded_pond([(0.0, 0.0), (200.0, 0.0), (200.0, 100.0), (0.0, 100.0)], 16.0, 16.0, 7)

@@ -159,13 +159,10 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             inp.seed + i64::from(k),
         );
         let field = one(inp, &f, (&tag, k == 0), &knobs, &mut counts)?;
-        drained += field
-            .basins
-            .iter()
-            .zip(&field.states)
-            .filter(|(_, s)| **s != State::Wet && **s != State::Rest)
-            .map(|(b, _)| super::geom::signed_area(&b.ring).abs())
-            .sum::<f64>();
+        // the drained plots' area, read only where the barley counts it (the audit, T16: every roll walked every ring for it)
+        if is("winter_crop", "barley") {
+            drained += drained_area(&field, &mut counts);
+        }
         fields.push(field);
     }
     // the coarse grain: a drained winter paddy grows its barley acre for acre; what is left goes to the dry hem of the first field
@@ -196,7 +193,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         let out = (f.fan.across.0 * far, f.fan.across.1 * far);
         // the field's own water index, filed once in `one`: only what the hem's queries add is counted here
         let ix = &mut f.water;
-        let before = (ix.touched, ix.examined);
+        let before = (ix.touched, ix.examined, ix.tests);
         let (dry, r, tested) = hem(
             &line,
             out,
@@ -217,6 +214,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         counts.add("write@hem_index", ix.touched - before.0);
         counts.add("candidate@hem_index", ix.examined - before.1);
         counts.add("pt_test@hem_onto", tested);
+        counts.add("pt_test@hem_refused", ix.tests - before.2);
         #[expect(clippy::cast_precision_loss, reason = "a hamlet's hundred dry plots")]
         let plots = dry.len() as f64;
         f.dry = dry;
@@ -402,6 +400,28 @@ fn one(
         segments,
         water: ix,
     })
+}
+
+/// The area of a field's drained plots (square feet), neither wet nor resting - the barley's ground; each ring's walk counted.
+///
+/// Research:
+///     the drained plots - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, so only the drained plots count
+fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
+    let rings: Vec<_> = field
+        .basins
+        .iter()
+        .zip(&field.states)
+        .filter(|(_, s)| **s != State::Wet && **s != State::Rest)
+        .map(|(b, _)| &b.ring)
+        .collect();
+    counts.add(
+        "pt_test@drained",
+        rings.iter().map(|r| r.len() as u64).sum(),
+    );
+    rings
+        .iter()
+        .map(|r| super::geom::signed_area(r).abs())
+        .sum::<f64>()
 }
 
 /// The hem's bounds, (the grain it holds, the bands it may climb): a wild middle's hem climbs until the grain is held where the

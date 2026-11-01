@@ -231,11 +231,19 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     plots, chans, dry, ponds, grave_recs = net["plots"], net["channels"], net["dry_plots"], net["pocket_ponds"], net["grave_records"]
     beans, outline = net["bund_beans"], net["envelope"]
     rings = [p["poly"] for p in plots]
-    plot_recs = []
+    plot_recs, centers = [], []
     for p in plots:
         b = _bbox(p["poly"])
         c = _center(p["poly"])
+        centers.append(c)
         plot_recs.append([round(b[2] - b[0], 1), round(b[3] - b[1], 1), round(c[0], 1), round(c[1], 1), len(p["poly"]), 0])
+    # the writer's own walks of the rings, counted where they happen (S5; the work-budget audit at T16's landing): each plot's
+    # box, middle and area, a dry plot's area, and the record built for each plot, dry plot and channel in `comb_net`
+    if __debug__:
+        from l7r.diagram import work_counts
+
+        work_counts.OPS["pt_test@write_field"] += sum(3 * len(r) for r in rings) + sum(len(d["poly"]) for d in dry)
+        work_counts.OPS["write@comb_net"] += len(plots) + len(dry) + len(chans)
     hem = [p["drain_side"] for p in plots if p["drain_side"]]
     if grave_recs:
         s.meta(grave_form=grave_recs[0]["form"])
@@ -264,8 +272,8 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
             {"x": f["intake"][0], "y": f["intake"][1], "len": round(2 * WEIR_HALF, 2), "w": WEIR_THICK_FT.get(form, WEIR_THICK_FALLBACK_FT), "deg": round(deg, 1), "form": form, "poly": ring}
         )
     M.setdefault("dry_plots", []).extend({k: d[k] for k in ("poly", "crop", "theta", "tract")} for d in dry)
-    M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
-    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["state"] == "flooded")
+    M.setdefault("wet_plots", []).extend(list(c) for p, c in zip(plots, centers, strict=True) if p["low"])
+    M.setdefault("flooded_plots", []).extend(list(c) for p, c in zip(plots, centers, strict=True) if p["state"] == "flooded")
     if ponds:
         M.setdefault("field_ponds", []).extend(ponds)
     if grave_recs:
@@ -372,6 +380,13 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         "threads": [],
     }
     rings = [p["poly"] for p in plots]
+    # the writer's own walks of the rings, counted where they happen (S5, the work-budget audit at T16's landing): each plot's
+    # box and middle for its record, its middle again for the wet or flooded record, its area for the acres
+    if __debug__:
+        from l7r.diagram import work_counts
+
+        work_counts.OPS["pt_test@write_polder"] += sum(4 * len(r) for r in rings)
+        work_counts.OPS["write@polder_net"] += len(plots) + len(chans)
     M = s.M
     M["fields"].append(
         {
