@@ -225,11 +225,13 @@ def test_seat_faults_names_each_rule_the_reserved_seat_fails() -> None:
 
 def test_no_polder_seat_asks_a_plank_of_a_ditch_the_law_refuses() -> None:
     """ways W14 (`plank_on_supply`): a footplank stands on a supply ditch. Every seg the caps give a plank to is, on the ring
-    `build_polder` lays, a supply role - at the foot the village's crossings go on the toes, none on the drain."""
-    from l7r.diagram.waterfields import build_polder
+    the Rust polder lays (`stage_polder`, feature 444 T16), a supply role - at the foot the village's crossings go on the toes,
+    none on the drain."""
+    from l7r.diagram.hamletgen.phases_ext import phases
 
-    roles = {c["seg"]: c["role"] for c in build_polder(2200, 2600, (360, 320), 21)["channels"] if c.get("seg")}
-    assert set(roles) >= {"feeder", "e_toe", "w_toe", "drain", "lateral"}
+    out = phases().stage_polder(21, 15, False, "mosaic", 90.0, (1100.0, 1300.0), 1.0, (2200.0, 2600.0), False, (0.5, "none", "none", "none"))
+    roles = {seg: role for role, seg, _pts, _w, _wt in out["ditches"]}
+    assert set(roles) >= {"feeder", "e_toe", "w_toe", "drain", "column"}
     plan = a_plan(field_archetype="polder_grid")
     for out in ((1.0, 0.0), (-1.0, 0.0), (0.0, -1.0), (0.0, 1.0)):
         plan.seat = {"out": out}

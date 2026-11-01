@@ -347,7 +347,7 @@ def deck_glyph(x: float, y: float, rot: float, span: float, deck_w: float, form:
     Research:
         one glyph per form - CONVENTION: seams and rails, a rounded trunk, trodden earth with log ends
         its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 7 (plank seams); 8 (plank seams); 0.3 (crown highlight); 2.4 (rail offset); 0.2 (rail offset); 0.8 (tick length)
-        its log girth - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 0.7 (log at 7/10 of the deck; 0084 names a single log and gives no girth)
+        its log girth - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on a log's girth, naming only a single log or board; the trunk seven tenths of the deck's width
     """
     hl, hw = span / 2, deck_w / 2
     g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
@@ -387,7 +387,7 @@ class BridgesMixin:
 
         Research:
             one deck per crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a deck within the tolerance that covers the point stands for it
-            carried deck always planked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html, research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
+            carried deck always planked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where a way crosses a stream or a ditch, one timber deck as wide as the way, always planked whatever form the settlement's ditch crossings take
             deck drawn over the water - CONVENTION: the top layer
             merge tolerance - NONE: half the span, between 4 and 12 px
         """
@@ -495,7 +495,7 @@ class BridgesMixin:
 
         Research:
             supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain, the foot drains and diagonal edge drains
-            feeder left unplanked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - the feeder is left unplanked at a flank seat, a departure the code keeps until feature 417 T34; by `seg_caps` (feeder 0 at a flank seat, 3 at the head), not by `SUPPLY_ROLES`, which takes the feeder as `main`
+            the feeder planked by its cap - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - the polder's feeder takes the planks `seg_caps` gives it (one, or three where the village is at the head), not by `SUPPLY_ROLES`, which takes the feeder as `main`
             no path leads to a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one near the middle, more on a long run - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one per 320 px of the run wide enough
             short stub stepped over - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); under 140 px, no plank
@@ -503,7 +503,7 @@ class BridgesMixin:
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
-            polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground - zero caps where both banks are useful, a departure the code keeps until feature 417 T34; seg_caps: at a flank seat none on the feeder, far toe or drain; at the head the feeder 3; at the foot the toes 2 each
+            polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`): three where the village lives, one on every other supply collector, none on the drain
             a join rules a seat out - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
@@ -511,7 +511,7 @@ class BridgesMixin:
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
             assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`)
             assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
-            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width is stored in feet, the same real size on every map, and 0031 records a 2.5 ft channel - the fallback is 2.5 px, not feet, a departure the code keeps until feature 417 T34; 2.5 px where a record has none (`DEFAULT_W`)
+            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width is stored in feet, the same real size on every map - 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
@@ -557,7 +557,7 @@ class BridgesMixin:
         # polygons whose box - a pixel wider - meets the deck's box hold every one it can meet, and `quad_hits_poly`
         # decides as before; `any` over them is `any` over all. The homes are boxed the same way for `_quads_overlap`.
         dry_grid, ground_grid, house_grid = (boxed_grid(boxed_polys(q, 1.0)) for q in (dry_quads, ground_quads, houses))
-        DEFAULT_W = {"streams": self.px(7.0), "channels": 2.5, "field_ditches": self.px(2.5)}  # a brook 7 ft (0035), a field ditch 2.5 ft at its head (0084); the channel UNRESEARCHED
+        DEFAULT_W = {"streams": self.px(7.0), "channels": self.px(2.5), "field_ditches": self.px(2.5)}  # a brook 7 ft (0035), a field ditch 2.5 ft at its head (0084), a channel 2.5 ft (0031)
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
         # junction where the water is the main's width, not the branch's. Listing only streams and
@@ -591,9 +591,8 @@ class BridgesMixin:
             _lw = [taper_w(w, w_tail, k2 / 40.0) for k2 in range(41)]
             n = max(1, round(total * sum(1 for v in _lw if worth_planking(v, v, self.ftpx)) / len(_lw) / spacing))
             # SIDE-AWARE crossings (research 2026-07-22): on a polder the ring-canal `seg` tag caps crossings
-            # per side - they cluster on the SETTLEMENT (east) toe, sparse on the interior laterals, NONE on
-            # the unsettled feeder / far toe / drain (people cross to the fields where they live, then walk the
-            # bund network). `seg_caps` maps seg -> max planks (0 = none); an untagged ditch uses the spacing.
+            # per side - they cluster on the SETTLEMENT toe, one on each interior column ditch, the feeder and the far
+            # toe, NONE on the drain (people cross to the fields where they live, then walk the bund network). `seg_caps` maps seg -> max planks (0 = none); an untagged ditch uses the spacing.
             if seg_caps is not None and d.get("seg") in seg_caps:
                 cap = seg_caps[d["seg"]]
                 if cap <= 0:

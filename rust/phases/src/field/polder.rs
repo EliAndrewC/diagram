@@ -2,8 +2,8 @@
 //! polder) or drifted (the dike-pond mosaic), its plots - strips on the rice polder, ponds' parcels on the dike-pond - the ring
 //! canal at the dike's inside foot, a field ditch in each column corridor, the two sluices and the wild pond that feeds it.
 //! Written from `phases/polder_greenfield.derivation.md` and `phases/field.md`'s "The polder's design, next"; the old code unread.
-//! The dike, its trees, the reed fringe and the dike-pond's ponds are the free helpers' (`perimeter_dike`, `marsh`,
-//! `apply_land_use`), which the thin Python calls with these records.
+//! The dike and its trees are `dike.rs`'s, the dike-pond's ponds `landuse.rs`'s; the thin Python draws them and fills the reed
+//! fringe (`marsh`).
 //!
 //! Research:
 //!     the rice polder's grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder is drawn on a surveyed grid
@@ -37,6 +37,11 @@ pub const BOW_NUDGE_FT: (f64, f64) = (6.0, 3.0);
 /// Research:
 ///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, a GUESS of 0.15 of a module
 pub const DRIFT_SHARE: f64 = 0.15;
+/// Of this many rice polder modules, one is left whole rather than split into strips.
+///
+/// Research:
+///     whole modules among the strips - GUESS: research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html silent on how many, saying only that most split into two or three oblong strips; one in five left whole
+pub const WHOLE_IN: u32 = 5;
 /// Of this many rice polder modules, one is merged with the next down the fall; of this many dike-pond modules, one stands alone.
 ///
 /// Research:
@@ -53,16 +58,23 @@ pub const RING_FT: (f64, f64) = (6.0, 12.0);
 ///     the wild pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands to its northwest, at the head; its size SILENT, Kuwabata's 82 and 54 ft and 140 ft out, a GUESS
 pub const POND_FT: (f64, f64, f64) = (82.0, 54.0, 140.0);
 
-/// One polder plot: its row and column of modules, its ring, and whether it lies on the block's low row.
+/// One polder plot: its first row and column of modules, the rows it spans, its ring, and whether it lies on the block's low row.
+///
+/// Research:
+///     a plot's record - NONE: the record's type, holding what `plots` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Plot {
     pub row: usize,
+    pub span: usize,
     pub col: usize,
     pub ring: Vec<Pt>,
     pub low: bool,
 }
 
 /// One of the polder's channels: its role and its piece of the ring (`seg`), its course and its widths.
+///
+/// Research:
+///     a channel's record - NONE: the record's type, holding what `ditches` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Ditch {
     pub role: &'static str,
@@ -73,6 +85,9 @@ pub struct Ditch {
 }
 
 /// The polder built.
+///
+/// Research:
+///     the polder's record - NONE: the record's type, holding what `polder` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Polder {
     pub outline: Vec<Pt>,
@@ -109,6 +124,9 @@ pub fn shape(modules: u32, aspect: f64) -> (usize, usize) {
 }
 
 /// A frame on the map: the block's head-left corner and the unit vectors down the fall and across it.
+///
+/// Research:
+///     the frame - NONE: a coordinate transform, down the fall and across it
 struct Frame {
     origin: Pt,
     down: Pt,
@@ -116,6 +134,10 @@ struct Frame {
 }
 
 impl Frame {
+    /// The map point `u` down the fall and `x` across from the frame's origin.
+    ///
+    /// Research:
+    ///     the frame - NONE: a coordinate transform
     fn at(&self, u: f64, x: f64) -> Pt {
         (
             self.origin.0 + self.down.0 * u + self.across.0 * x,
@@ -124,34 +146,114 @@ impl Frame {
     }
 }
 
-/// The lattice's deformation at (`u`, `x`) in a block `length` by `breadth`: on the rice polder each line's bow and each
-/// crossing's nudge (both zero on the block's edge), on a mosaic a smooth drift fading to the edge, on a chessboard none.
-fn warp(seed: i64, form: &str, u: f64, x: f64, size: (f64, f64), module: f64) -> (f64, f64) {
-    let (length, breadth) = size;
-    let edge = (std::f64::consts::PI * u / length).sin().abs()
-        * (std::f64::consts::PI * x / breadth).sin().abs();
-    if form == "chessboard" {
-        return (0.0, 0.0);
-    }
-    let mut rng = knob_rng(seed, "polder_warp");
-    let ph: Vec<f64> = (0..4)
-        .map(|_| f64::from(rng.randbelow(360)).to_radians())
-        .collect();
-    if form == "mosaic" {
-        let a = DRIFT_SHARE * module * edge;
-        return (
-            a * (x / breadth * std::f64::consts::TAU + ph[0]).sin(),
-            a * (u / length * std::f64::consts::TAU + ph[1]).sin(),
+/// The lattice's deformation: on the rice polder each row and column line's own bow and each crossing's own nudge, both nothing
+/// on the block's edge lines; on a mosaic a smooth drift fading to the edge; on a chessboard none.
+///
+/// Research:
+///     the rice polder's lines - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the dike and the ring canal at the block's edge stay put - a bow rolled for each line, a nudge for each crossing, both sides of a bund moved together
+///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the lattice that fades to nothing at the fixed outer edge
+struct Warp {
+    form: &'static str,
+    size: Pt,
+    pitch: Pt,
+    module: f64,
+    rows: Vec<f64>,
+    cols: Vec<f64>,
+    nodes: Vec<Vec<Pt>>,
+    ph: Pt,
+}
+
+impl Warp {
+    /// The warp of a block `size` (down the fall, across) of modules `lattice.0` on a side whose lines stand `lattice.1` apart, `grid` modules each way, rolled
+    /// from the seed's `polder_warp` stream: a bow for each interior line and a nudge for each interior crossing.
+    ///
+    /// Research:
+    ///     the rolls - NONE: each line's bow and each crossing's nudge drawn within `BOW_NUDGE_FT`, either way
+    fn new(seed: i64, form: &'static str, size: Pt, lattice: (f64, Pt), grid: (usize, usize)) -> Self {
+        let (module, pitch) = lattice;
+        let mut rng = knob_rng(seed, "polder_warp");
+        let ph = (
+            f64::from(rng.randbelow(360)).to_radians(),
+            f64::from(rng.randbelow(360)).to_radians(),
         );
+        let mut either = |most: f64| most * (2.0 * f64::from(rng.randbelow(1001)) / 1000.0 - 1.0);
+        let mut line = |n: usize, most: f64| -> Vec<f64> {
+            (0..=n)
+                .map(|k| if k == 0 || k == n { 0.0 } else { either(most) })
+                .collect()
+        };
+        let rows = line(grid.0, BOW_NUDGE_FT.0);
+        let cols = line(grid.1, BOW_NUDGE_FT.0);
+        let nodes = (0..=grid.0)
+            .map(|k| {
+                (0..=grid.1)
+                    .map(|j| {
+                        if k == 0 || k == grid.0 || j == 0 || j == grid.1 {
+                            (0.0, 0.0)
+                        } else {
+                            (either(BOW_NUDGE_FT.1), either(BOW_NUDGE_FT.1))
+                        }
+                    })
+                    .collect()
+            })
+            .collect();
+        Self {
+            form,
+            size,
+            pitch,
+            module,
+            rows,
+            cols,
+            nodes,
+            ph,
+        }
     }
-    let bow = BOW_NUDGE_FT.0 * edge;
-    let nudge = BOW_NUDGE_FT.1 * edge;
-    (
-        bow * (x / breadth * std::f64::consts::PI * 2.0 + ph[2]).sin()
-            + nudge * ((u + x) * 0.37 + ph[3]).sin(),
-        bow * (u / length * std::f64::consts::PI * 2.0 + ph[3]).sin()
-            + nudge * ((u - x) * 0.29 + ph[2]).sin(),
-    )
+
+    /// The deformation at (`u`, `x`).
+    ///
+    /// Research:
+    ///     the deformation - NONE: each line's bow along it (a single arch, nothing at its ends), interpolated between lines, and
+    ///     the crossings' nudges interpolated between crossings, so both sides of one bund move together
+    fn at(&self, u: f64, x: f64) -> Pt {
+        let (length, breadth) = self.size;
+        let pi = std::f64::consts::PI;
+        if self.form == "chessboard" {
+            return (0.0, 0.0);
+        }
+        if self.form == "mosaic" {
+            let edge = (pi * u / length).sin().abs() * (pi * x / breadth).sin().abs();
+            let a = DRIFT_SHARE * self.module * edge;
+            return (
+                a * (x / breadth * std::f64::consts::TAU + self.ph.0).sin(),
+                a * (u / length * std::f64::consts::TAU + self.ph.1).sin(),
+            );
+        }
+        let arch = |v: f64, whole: f64| (pi * (v / whole).clamp(0.0, 1.0)).sin();
+        #[expect(clippy::cast_precision_loss, reason = "a small count of lines")]
+        let lerp = |vals: &[f64], at: f64| {
+            let t = at.clamp(0.0, (vals.len() - 1) as f64);
+            #[expect(
+                clippy::cast_possible_truncation,
+                clippy::cast_sign_loss,
+                reason = "a small positive line index"
+            )]
+            let k = (t.floor() as usize).min(vals.len() - 2);
+            let f = t - k as f64;
+            (vals[k] * (1.0 - f) + vals[k + 1] * f, k, f)
+        };
+        let (tu, tx) = (u / self.pitch.0, x / self.pitch.1);
+        let (bow_u, ku, fu) = lerp(&self.rows, tu);
+        let (bow_x, kx, fx) = lerp(&self.cols, tx);
+        let node = |k: usize, j: usize| self.nodes[k][j];
+        let (a, b, c, d) = (node(ku, kx), node(ku, kx + 1), node(ku + 1, kx), node(ku + 1, kx + 1));
+        let mix = |p: f64, q: f64, r: f64, s: f64| {
+            (p * (1.0 - fx) + q * fx) * (1.0 - fu) + (r * (1.0 - fx) + s * fx) * fu
+        };
+        (
+            bow_u * arch(x, breadth) + mix(a.0, b.0, c.0, d.0),
+            bow_x * arch(u, length) + mix(a.1, b.1, c.1, d.1),
+        )
+    }
 }
 
 /// The polder of `paddy` square feet: the rice polder's grid (`dikepond` false) or the dike-pond block, falling along
@@ -161,6 +263,8 @@ fn warp(seed: i64, form: &str, u: f64, x: f64, size: (f64, f64), module: f64) ->
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
 ///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles
 ///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided
+///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
+///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
 #[must_use]
 pub fn polder(
     paddy: f64,
@@ -208,8 +312,15 @@ pub fn polder(
     } else {
         "chessboard"
     };
+    let warp = Warp::new(
+        seed,
+        form,
+        size,
+        (module, (module + row_gap, module + col_gap)),
+        (rows, cols),
+    );
     let put = |u: f64, x: f64| {
-        let (du, dxx) = warp(seed, form, u, x, size, module);
+        let (du, dxx) = warp.at(u, x);
         frame.at(u + du, x + dxx)
     };
     let plots = plots(
@@ -229,14 +340,14 @@ pub fn polder(
     };
     let (canal, env) = (ring(RING_FT.0), ring(RING_FT.1));
     let inlet = frame.at(-RING_FT.1, size.1 + RING_FT.1);
-    let outfall = frame.at(size.0 + RING_FT.1, size.1 / 2.0);
+    let outfall = frame.at(size.0 + RING_FT.1, size.1 + RING_FT.1);
     let pond_at = frame.at(-RING_FT.1 - POND_FT.2, size.1 + RING_FT.1);
     let feeder = vec![
         pond_at,
         frame.at(-RING_FT.1 - POND_FT.1, size.1 + RING_FT.1),
         inlet,
     ];
-    let ditches = ditches(&frame, &canal, size, (cols, module, col_gap));
+    let ditches = ditches(&put, &canal, size, (cols, module, col_gap));
     Polder {
         outline: ring(0.0),
         inner_env: env,
@@ -249,9 +360,13 @@ pub fn polder(
     }
 }
 
-/// The block's plots: on the rice polder each module split into 2 or 3 strips across its breadth by walking bunds, one in
-/// `MERGE_IN.0` merged with the module below; on the dike-pond the modules paired down the fall into ponds' parcels, one in
-/// `MERGE_IN.1` left alone. Every plot four-sided, its corners the warped lattice's.
+/// The block's plots: on the rice polder most modules split into 2 or 3 strips across their breadth by walking bunds (one in
+/// `WHOLE_IN` left whole), one in `MERGE_IN.0` merged with the module below; on the dike-pond the modules paired down the fall into
+/// ponds' parcels, one in `MERGE_IN.1` left alone. Every plot four-sided, its corners the warped lattice's.
+///
+/// Research:
+///     the strips - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three oblong strips, cut by the plain 3 ft walking bund, and a few merge along the fall
+///     the dike-pond's parcels - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs
 fn plots(
     put: &dyn Fn(f64, f64) -> Pt,
     grid: (usize, usize),
@@ -278,12 +393,17 @@ fn plots(
                 r as f64 * (module + row_gap),
                 (r + span) as f64 * (module + row_gap) - row_gap,
             );
-            let strips = if dikepond { 1 } else { 2 + rng.randbelow(2) };
+            let strips = if dikepond || rng.randbelow(WHOLE_IN) == 0 {
+                1
+            } else {
+                2 + rng.randbelow(2)
+            };
             let w = (module - f64::from(strips - 1) * row_gap) / f64::from(strips);
             for k in 0..strips {
                 let a = x0 + f64::from(k) * (w + row_gap);
                 out.push(Plot {
                     row: r,
+                    span,
                     col: c,
                     ring: vec![put(u0, a), put(u0, a + w), put(u1, a + w), put(u1, a)],
                     low: r + span == rows,
@@ -301,8 +421,10 @@ fn plots(
 /// Research:
 ///     the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side
 ///     the field ditches - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor of about 8 ft
-///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 4.5 to 1.5, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft
-fn ditches(frame: &Frame, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64)) -> Vec<Ditch> {
+///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 4.5 to 1.5 across the head, delivery 2.5 to 1.2 down each column, drain 1.2 to 5.5 ft across the tail to the outfall's corner
+///     the flanks - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral, its 1.5 ft tail held down each flank of the ring
+///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it
+fn ditches(put: &dyn Fn(f64, f64) -> Pt, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64)) -> Vec<Ditch> {
     let (n, module, gap) = cols;
     let mut out = vec![
         Ditch {
@@ -334,13 +456,23 @@ fn ditches(frame: &Frame, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64
             w_tail: 5.5,
         },
     ];
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a small positive count of stations"
+    )]
+    let steps = ((size.0 + 2.0 * RING_FT.0) / (module / 4.0)).ceil().max(1.0) as usize;
     for c in 1..n {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let x = c as f64 * (module + gap) - gap / 2.0;
+        #[expect(clippy::cast_precision_loss, reason = "a small count")]
+        let pts = (0..=steps)
+            .map(|k| put(-RING_FT.0 + (size.0 + 2.0 * RING_FT.0) * k as f64 / steps as f64, x))
+            .collect();
         out.push(Ditch {
             role: "lateral",
             seg: "column",
-            pts: vec![frame.at(-RING_FT.0, x), frame.at(size.0 + RING_FT.0, x)],
+            pts,
             w: 2.5,
             w_tail: 1.2,
         });
@@ -354,14 +486,27 @@ fn ditches(frame: &Frame, canal: &[Pt], size: (f64, f64), cols: (usize, f64, f64
 ///     the outfall off the map - research/questions/0060-field-drains-akusuiro.drawing.html: then straight down the fall off the map
 pub const OUTFALL_PAST_FT: f64 = 20.0;
 
-/// The drain's outfall from the tail's sluice: on along the drain's exit, which from the tail's middle is the fall itself, so
-/// straight down it until off the `canvas` - no turn to hold to the 55 degrees.
+/// The first leg of the outfall out of the tail corner, before it turns onto the fall (feet): past the dike's broadest band.
 ///
 /// Research:
-///     the outfall's course - research/questions/0060-field-drains-akusuiro.drawing.html: on along the drain's exit, curving onto the fall at most 55 degrees a turn, then straight down the fall off the map
+///     the outfall's first leg - GUESS: research/questions/0060-field-drains-akusuiro.drawing.html silent on its length; 60 ft, past the 40 ft dike so the turn is on open ground
+pub const OUTFALL_LEG_FT: f64 = 60.0;
+
+/// The drain's outfall from the tail corner's sluice: the drain arrives across the fall, so its run onward bends out of that
+/// exit heading half way onto the fall (45 degrees) for `OUTFALL_LEG_FT`, then the other half, straight down the fall until off
+/// the `canvas` - two turns of 45 degrees.
+///
+/// Research:
+///     the outfall's course - research/questions/0060-field-drains-akusuiro.drawing.html: the drain's own run onward bends out of the collector's exit heading, the turn held to 55 degrees or less, then straight down the fall off the map
 #[must_use]
 pub fn outfall(sluice: Pt, down_deg: f64, canvas: Pt) -> Vec<Pt> {
     let (dx, dy) = heading(down_deg);
+    let (ax, ay) = (-dy, dx);
+    let half = std::f64::consts::FRAC_1_SQRT_2;
+    let bend = (
+        sluice.0 + (ax + dx) * half * OUTFALL_LEG_FT,
+        sluice.1 + (ay + dy) * half * OUTFALL_LEG_FT,
+    );
     // the distance along the fall to leave the canvas's box, and a little more
     let to_edge = |p: f64, d: f64, hi: f64| {
         if d > 1e-9 {
@@ -372,19 +517,19 @@ pub fn outfall(sluice: Pt, down_deg: f64, canvas: Pt) -> Vec<Pt> {
             f64::INFINITY
         }
     };
-    let run = to_edge(sluice.0, dx, canvas.0)
-        .min(to_edge(sluice.1, dy, canvas.1))
+    let run = to_edge(bend.0, dx, canvas.0)
+        .min(to_edge(bend.1, dy, canvas.1))
         .max(0.0)
         + OUTFALL_PAST_FT;
-    vec![sluice, (sluice.0 + dx * run, sluice.1 + dy * run)]
+    vec![sluice, bend, (bend.0 + dx * run, bend.1 + dy * run)]
 }
 
 /// The polder's resting plots on an `unsettled` paddy: 2 to 4 rolled from the seed's `polder_rest` stream, a plot's weight its
-/// row from the head (the far end of the water's run likeliest), none sharing a bund with another (the same column, the same or
-/// the next row). Returns the plots' indices.
+/// row from the head (the far end of the water's run likeliest), none sharing a bund with another (the same column, their rows
+/// touching or overlapping, a merged plot's span counted). Returns the plots' indices.
 ///
 /// Research:
-///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots, no two sharing a bund, likelier down the slope, GUESSes
+///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`states::REST_PLOTS`), no two sharing a bund, likelier down the slope
 #[must_use]
 pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
     if !unsettled || plots.is_empty() {
@@ -408,8 +553,11 @@ pub fn rest(plots: &[Plot], seed: i64, unsettled: bool) -> Vec<usize> {
             pick -= u32::try_from(plots[i].row + 1).unwrap_or(u32::MAX);
             i += 1;
         }
-        let shares =
-            |j: usize| plots[i].col == plots[j].col && plots[i].row.abs_diff(plots[j].row) <= 1;
+        let a = &plots[i];
+        let shares = |j: usize| {
+            let o = &plots[j];
+            a.col == o.col && a.row <= o.row + o.span && o.row <= a.row + a.span
+        };
         if !chosen.contains(&i) && !chosen.iter().any(|&j| shares(j)) {
             chosen.push(i);
         }
@@ -469,10 +617,8 @@ mod tests {
             assert!((1..=4).contains(&r.len()));
             for (k, &i) in r.iter().enumerate() {
                 for &j in &r[k + 1..] {
-                    assert!(
-                        p.plots[i].col != p.plots[j].col
-                            || p.plots[i].row.abs_diff(p.plots[j].row) > 1
-                    );
+                    let (a, b) = (&p.plots[i], &p.plots[j]);
+                    assert!(a.col != b.col || a.row > b.row + b.span || b.row > a.row + a.span);
                 }
             }
         }
@@ -485,7 +631,8 @@ mod tests {
             (45.0, (6400.0, 6400.0)),
         ] {
             let run = outfall((3200.0, 3300.0), deg, canvas);
-            let end = run[1];
+            let end = run[run.len() - 1];
+            assert_eq!(run.len(), 3, "two turns of 45 degrees onto the fall");
             assert!(end.0 < 0.0 || end.1 < 0.0 || end.0 > canvas.0 || end.1 > canvas.1);
         }
         let flat = polder(paddy, true, "chessboard", 90.0, (0.0, 0.0), 1.0, 4);

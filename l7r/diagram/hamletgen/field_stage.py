@@ -2,7 +2,7 @@
 stage's own knobs through Rust from their tables (D3), calls `l7r_phases.stage_field`, and writes what it returns - the
 manifest's keys with their record shapes (`specs/444-work-budget-program/phases/field.keys.json`), the plan's `acres`,
 `envelope`, `net` and `brook`, and the engine's no-build registries (`phases/field.state.json`) - then draws it
-(`settlement/fields/ink.py`, D12). The polder forms take the old Python until their port (D11: the comb first).
+(`settlement/fields/ink.py`, D12). The polder forms are Rust's too (`stage_polder`), written and drawn by `_polder`.
 
 Research:
     the field's seam - NONE: the stage's plumbing; each rule's claim is at the Rust that decides it (`rust/phases/src/field/`)
@@ -20,27 +20,40 @@ from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, FLOODED, RIPE_GOLD
 from .consts import POLDER_ARCHETYPES, SQ_FT_PER_ACRE
 from .consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, BROOK_WANDER_STEP, OFFTAKE_DEG, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT
 from .phases_ext import phases
+from .water.brook_rules import BROOK_DRAWN_W
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
 
     from .plan import SitePlan
 
-BROOK_W = 7.0
-"""Research: the feed brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor"""
+BROOK_W = BROOK_DRAWN_W
+"""Research: the feed brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft, narrower than the 6.0 ft head race it feeds (the brook rules' `BROOK_DRAWN_W`, one figure)"""
 BROOK_STATION = 20.0
 """Research: the brook's station spacing - CONVENTION: one station every 20 ft, enough that a bend led in over two reads round"""
 DITCH_BANK_FT = 4.0
-"""Research: a field ditch's no-build bank - GUESS: the record gives a ditch's width, not the ground kept off it; 4 ft past its
-half-width, as a farm's own channel keeps (`homesteads/farm_water.py`)"""
+"""Research: a field ditch's no-build bank - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the bank an early Yayoi paddy kept along its canal, 2.6 to 4.9 ft; 4 ft past the ditch's half-width kept off by buildings"""
 CELL_SHARE = 31.0
 """Research: a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft"""
+ROW_FT_DEFAULT = 48.0
+"""Research: the rows' spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal, a hamlet's basin row"""
 ROW_FT = {"small_irregular": 34.0, "large_block": 70.0}
-"""Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 48 ft, the plan's small (34) and large block (70) departures - the cell's row; Rust maps the same (`lattice::row_ft_for`)"""
+"""Research: the rows' spacing by plot size - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on rows other than the hamlet's 48 ft; a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft); Rust maps the same (`lattice::row_ft_for`)"""
 STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form")
 """Research: the stage's own knobs, in the order each typing rule reads the last - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the nearness of a town sets the winter crop's odds"""
-FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": FLOODED, "gold": RIPE_GOLD, "rest": _RICE_GREEN}
-"""Research: the plots' paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green; research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in sixteen flooded, one in twenty gold"""
+FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": ink.POND_WATER, "gold": RIPE_GOLD, "rest": _RICE_GREEN}
+"""Research:
+    the plots' paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green, the tint marking the ground, not the season
+    the freshly flooded plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in sixteen drawn still flooded and the flooded basin a flat color - the open water's own ink (`ink.POND_WATER`), so it reads apart from the wet ground's tint
+    the ripening plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in twenty gold, ripening early"""
+GRAVE_KEEP_FT = 6.5
+"""Research: a field grave's keep-out - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave's size; the disc of the drawn mound's half-length, 6.5 ft (`ink.grave`)"""
+WEIR_THICK_FALLBACK_FT = 1.5
+"""Research: a weir's thickness, its form unknown - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: four forms 1.5 to 5 ft thick; a form missing from the table takes the thinnest, the fence's"""
+POND_FEEDER_FT = 3.0
+"""Research: the polder's pond feeder - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a pond feeder at roughly twice the 1.5 ft floor"""
+OUTFALL_FT = 5.5
+"""Research: the polder's outfall - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the drain's 5.5 ft at its tail, carried on past the outfall"""
 
 
 def _knob_tables(s: Settlement, plan: SitePlan) -> list[tuple[str, list[str], list[float], str | None]]:
@@ -92,7 +105,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     knobs = _knob_tables(s, plan)
     brook = (plan.head_lead * ftpx, OFFTAKE_DEG, BROOK_TAP_RUN, BROOK_SLEW, BROOK_SKIRT, BROOK_WANDER, BROOK_STATION, BROOK_W)
     _ = BROOK_WANDER_STEP  # the plan's walk step: the Rust walk steps a slew a station (brook.rs)
-    row = ROW_FT.get(plan.plot_size, 48.0)
+    row = ROW_FT.get(plan.plot_size, ROW_FT_DEFAULT)
     out = phases().stage_field(
         plan.spec.seed,
         plan.spec.households,
@@ -142,7 +155,10 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
 def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_middle: str | None) -> dict[str, Any]:
     """The `net` of one comb the Rust stage returned: its plots (a grave's host replaced by the rings it leaves), channels, dry
     plots, pocket ponds and graves, in the shapes the free readers and the ink read (`plan.net`; the test fixtures build theirs
-    with it too)."""
+    with it too).
+
+    Research:
+        the comb's net - NONE: the Rust's records in the readers' shapes; the one figure it adds is claimed where it stands (`GRAVE_KEEP_FT`)"""
     graves = f["grave"]
     host = graves[2] if graves else None
     plots: list[dict[str, Any]] = []
@@ -174,7 +190,7 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
         "bund_beans": beans,
         "furrows_vary": True,
         "fan_middle": fan_middle,
-        "grave_discs": [(g["x"], g["y"], 6.5) for g in grave_recs],
+        "grave_discs": [(g["x"], g["y"], GRAVE_KEEP_FT) for g in grave_recs],
         "bead_ponds": [(p["x"], p["y"], p["rx"], p["ry"]) for p in ponds],
         "grave_records": grave_recs,
         "pocket_ponds": ponds,
@@ -183,9 +199,12 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
 
 
 def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, rolled: dict[str, str]) -> float:
-    """One field's records, registries and ink; returns its paddy acres."""
+    """One field's records, registries and ink; returns its paddy acres.
+
+    Research:
+        the comb's records - NONE: written from the Rust's; the figures it adds are claimed where they stand (`ROW_FT_DEFAULT`, `WEIR_THICK_FALLBACK_FT`, `DITCH_BANK_FT`, `BROOK_W`)"""
     M = s.M
-    cell = ROW_FT.get(plan.plot_size, 48.0) * CELL_SHARE
+    cell = ROW_FT.get(plan.plot_size, ROW_FT_DEFAULT) * CELL_SHARE
     net = comb_net(f, name, cell, plan.down_deg, rolled.get("fan_middle"))
     plots, chans, dry, ponds, grave_recs = net["plots"], net["channels"], net["dry_plots"], net["pocket_ponds"], net["grave_records"]
     beans, outline = net["bund_beans"], net["envelope"]
@@ -218,7 +237,9 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     M.setdefault("channels", []).append({"poly": chans[0]["pts"], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": name}, "w": chans[0]["w"], "field": name})
     if f["weir"]:
         ring, deg, form = f["weir"]
-        M.setdefault("weirs", []).append({"x": f["intake"][0], "y": f["intake"][1], "len": 2 * WEIR_HALF_FT, "w": WEIR_THICK_FT.get(form, 1.5), "deg": round(deg, 1), "form": form, "poly": ring})
+        M.setdefault("weirs", []).append(
+            {"x": f["intake"][0], "y": f["intake"][1], "len": 2 * WEIR_HALF_FT, "w": WEIR_THICK_FT.get(form, WEIR_THICK_FALLBACK_FT), "deg": round(deg, 1), "form": form, "poly": ring}
+        )
     M.setdefault("dry_plots", []).extend({k: d[k] for k in ("poly", "crop", "theta", "tract")} for d in dry)
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["fill"] == FLOODED)
@@ -250,7 +271,9 @@ def _area(ring: list[tuple[float, float]]) -> float:
 
 
 POND_FRINGE_FT = 40.0
-"""Research: the wild pond's reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin, the comb source pond's 40"""
+"""Research:
+    the wild pond's reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds standing on wet ground at its shore
+    the fringe's width - GUESS: research/questions/0061-reservoir-ponds-tameike.drawing.html silent on how wide the fringe stands; 40 ft, the comb's old source pond's"""
 
 
 def _roll(s: Settlement, plan: SitePlan, name: str) -> Any:
@@ -274,7 +297,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     fills the fringe ring round the Rust's wild pond.
 
     Research:
-        the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: from outside in, the wild water, the dike, the ring canal, the field ditches and the paddies"""
+        the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FRINGE_FT`, `POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)"""
     from l7r.diagram.settlement.land.wet import pond_fringe_ring
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
@@ -341,7 +364,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         }
     )
     M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans)
-    M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": 1.5, "field": name})
+    M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": POND_FEEDER_FT, "field": name})
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     dk = out["dike"]
@@ -378,11 +401,11 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         col, cls = ditch_style(c["role"], plan.field_archetype)
         s.field_channel(c["pts"], col, c["w"], c["w_tail"], late=True, cls=cls)
         s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
-    s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], 1.5, 1.5, late=True)
+    s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], POND_FEEDER_FT, POND_FEEDER_FT, late=True)
     run = out["outfall"]
-    M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 5.5})
+    M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": OUTFALL_FT})
     col, cls = ditch_style("drain", plan.field_archetype)
-    s.field_channel(run, col, 5.5, 5.5, late=True, cls=cls)
+    s.field_channel(run, col, OUTFALL_FT, OUTFALL_FT, late=True, cls=cls)
     s.field_polys.append(outline)
     plan.net = net
     plan.envelope = outline
@@ -407,6 +430,9 @@ def _dikeponds(s: Settlement, plan: SitePlan, out: dict[str, Any], split: float)
             "leftover_plots": [list(_center(p["parcel"])) for p in ponds if p["kind"] == "rice"],
         }
     )
-    s.dikepond_inset = float(out["inset"])  # read by the pig sties (`pondstock`) through getattr with its default, as the old overlay left it
+    # ...read by the pig sties (`pondstock`) through getattr with its default, as the old overlay left it; written through the
+    # instance's dict because the settlement declares no such attribute, and declaring one would put core.py in this landing
+    # (the round arbiter's ruling on ask:444-T16-fr021-scope: T16 touches only the port's files)
+    vars(s)["dikepond_inset"] = float(out["inset"])
     s.meta(dike_crop=plan.dike_crop, dikepond_inset=round(float(out["inset"]), 1), dikepond_split=split, fry_form=plan.fry_form, land_use_overlay="mulberry_fishpond", leftover=plan.leftover)
     ink.dikeponds(s, out["dikeponds"], out["crops"], aze_w(plan.ftpx))

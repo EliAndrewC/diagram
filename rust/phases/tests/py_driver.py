@@ -61,7 +61,7 @@ for seed in range(20):
 for dike, layout in ((False, "mosaic"), (True, "mosaic"), (True, "chessboard")):
     p = l7r_phases.stage_polder(4, 15, dike, layout, 90.0, (3200.0, 3200.0), 1.0, (6400.0, 6400.0), True, (0.3, "rice", "fry_village", "tea" if layout == "chessboard" else "mulberry"))
     assert p["plots"] and all(len(x["ring"]) == 4 for x in p["plots"]) and len(p["sluices"]) == 2
-    assert p["dike"]["trees"] and len(p["outfall"]) == 2 and (("dikeponds" in p) == dike)
+    assert p["dike"]["trees"] and len(p["outfall"]) == 3 and (("dikeponds" in p) == dike)
     assert dike or any(x["rest"] for x in p["plots"])
     assert p["ditches"][0][1] == "feeder" and len(p["pond"]) == 4 and p["counts"]["candidate@polder_shape"] == 4
 

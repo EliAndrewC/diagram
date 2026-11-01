@@ -203,7 +203,7 @@ fn one(
     knobs: &HashMap<String, String>,
     counts: &mut Counts,
 ) -> Result<Field, FieldRefused> {
-    let br = brook(f, inp.brook_side, inp.brook, inp.seed, inp.canvas);
+    let br = brook(f, inp.brook_side, inp.brook, inp.canvas);
     counts.add("write@brook", 2 * br.pts.len() as u64);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
@@ -401,10 +401,10 @@ mod tests {
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());
-        // a race leaving along the fall from the corner itself runs the brook down the outline: refused by name
+        // a race leaving along the fall from beside the corner itself brings the brook past it within its skirt: refused by name
         let mut hug = inp(20, 4);
         hug.brook.offtake_deg = 0.0;
-        hug.brook.tap_run = 600.0;
+        hug.brook.lead = 5.0;
         assert_eq!(build(&hug).unwrap_err().rule, "the brook's skirt");
     }
 }

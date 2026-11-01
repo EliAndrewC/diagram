@@ -16,7 +16,6 @@ from .castle_civic import CastleCivicMixin
 from .city import CityMixin
 from .farm_fixtures import FarmFixturesMixin, PondStockMixin
 from .fields import FieldsMixin
-from .fields.landuse import DIKEPOND_WATER_INSET
 from .finish import FinishMixin
 from .hard_ground import HardGroundMixin
 from .homestead_parts import HomesteadPartsMixin
@@ -68,7 +67,6 @@ class Settlement(
             a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
             swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: the clearings registry, which stays empty: its registrars (a shrine's and a grave plot's swept ground) were retired with the town and city drawing code by feature 392
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
-            a dike-pond bank's inset by default - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the bank of the water-heavy split, `DIKEPOND_WATER_INSET`, until the field stage sets the village's own from its parcels
             registries and record streams - NONE
             its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 1820 (default sheet size); 1180 (default sheet size)
             its salts, guards and sentinels - NONE: they decide nothing about the place - 23 (default seed)
@@ -176,7 +174,6 @@ class Settlement(
         #                           into a continuous confluence instead of stacking opacity (a dark seam).
         self._paddy_z: list[int] = []  # the PADDY layer (feature 287, water W38): every plot's slot, lifted under the water block at finish
         self._bead_slots: list[Any] = []  # each field's azemame ink slot, its runs, its record and its ponds (`settle_beads`, water W33)
-        self.dikepond_inset: float = DIKEPOND_WATER_INSET  # the dike-pond block's bank inset: the field stage sets it from its Rust conversion, the pig sties read it (feature 444 T16)
         self.bscale = 1.0  # urban-building footprint scale (a large town packs at a finer grain)
         self.ftpx = 1.0  # declared REAL scale, feet per pixel - set via meta(ftpx=...); the
         #                           glyph library is calibrated at town scale (1 ft/px), so 1.0 = identity
@@ -219,6 +216,8 @@ class Settlement(
         # WET GROUND (feature 150 T50, GM 2026-08-28: houses and a garden stood on marsh): every drawn marsh
         # polygon, read by `_hard_ground` so no footprint the placer tests can land on reed or bog.
         self.wet_polys: list[Any] = []
+        self._pending_fringe: Poly | None = None  # a source pond's reed fringe, held until the field's channels are recorded so the reeds can keep off them (feature 151; `fields/comb.py`)
+        self._pending_block: Poly | None = None  # ...and the pond's no-build rect that must follow it (see `fields/comb.py`)
         self._hard_cache_key: tuple[int, ...] | None = None
         self._hard_cache: list[Any] = []
         self._hard_grid: tuple[list[Any], PointGrid] | None = None  # `_hard_index`'s grid, keyed by the hard list it was built from (feature 278)

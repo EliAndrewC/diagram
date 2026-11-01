@@ -9,12 +9,35 @@ use std::collections::HashMap;
 
 use pyo3::prelude::*;
 
-use crate::counts::Counts;
 use crate::pyrand::knob_rng;
 
 /// One knob of the plan as Python gathered it: its name, how many forms its table holds, whether the spec pins it, and the
 /// branch it applies on.
 type KnobIn = (String, u32, bool, String);
+
+/// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll_plan` for a draw here,
+/// `write@_rust_rolls` for a field Python writes back (D9) - compiled out of a build
+/// without the `counters` feature (FR-012).
+///
+/// Research:
+///     the counts - NONE: the work-budget's own bookkeeping
+#[derive(Default)]
+struct Counts(HashMap<String, u64>);
+
+impl Counts {
+    #[cfg_attr(
+        not(feature = "counters"),
+        expect(clippy::unused_self, reason = "the counters compile out (FR-012)")
+    )]
+    fn add(&mut self, key: &str, n: u64) {
+        #[cfg(feature = "counters")]
+        {
+            *self.0.entry(key.to_owned()).or_insert(0) += n;
+        }
+        #[cfg(not(feature = "counters"))]
+        let _ = (key, n);
+    }
+}
 
 /// The bearing of a wind quarter, in compass degrees (north 0, clockwise).
 fn quarter_deg(windward: &str) -> f64 {

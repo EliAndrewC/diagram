@@ -128,6 +128,11 @@ def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.
     return dense, inner_s, outer_s, w_seen, (cx, cy)
 
 
+def dike_crest(inner_s: Poly, outer_s: Poly) -> Poly:
+    """The crest centerline - the midpoint of the two faces at every densified point, a closed loop."""
+    return [((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) for a, b in zip(inner_s, outer_s, strict=True)]
+
+
 CREST_REACH = 3.0  # a watercourse within this of the crest line runs ON the dike (the rule's own reach, feature 287 water W42)
 GAP_REACH = 60.0  # ...and a crossing within this of a recorded gap is that gap - the sluice or the outfall, a decided crossing
 

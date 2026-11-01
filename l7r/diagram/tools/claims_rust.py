@@ -86,7 +86,15 @@ def _items(text: str, base_line: int, prefix: str, in_impl: bool) -> list[tuple[
             k += 1
             continue
         if stripped.startswith("#[") or stripped.startswith("#!["):
-            k += 1
+            # ...THE WHOLE ATTRIBUTE, to its closing bracket: a `#[expect(` that clippy's rustfmt wraps over several lines read
+            # one line at a time ended the doc above it at its second line, and the item inherited the module's claims in place
+            # of its own (found 2026-10-31, feature 444 T16's claims wave: `field/dike.rs::dike` judged on its module's three)
+            depth = 0
+            while k < len(lines):
+                depth += lines[k].count("[") - lines[k].count("]")
+                k += 1
+                if depth <= 0:
+                    break
             continue
         m = _ITEM.match(lines[k])
         if not m:

@@ -27,24 +27,34 @@ Pt = tuple[float, float]
 DRY_STROKE = "#A98C58"
 """Research: the dry plot's outline - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a thin tan-brown line, about 1.4 ft wide on a hamlet map, a map drawing convention"""
 DRY_STROKE_FT = 1.4
-"""Research: the dry plot's outline width - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: about 1.4 ft wide on a hamlet or town map"""
+"""Research: the dry plot's outline width - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: about 1.4 ft wide on a hamlet or town map, the same stroke on the sheet (2.8 ft on a village map, 4.2 on a city's)"""
 CROP_FILL = {"barley": "#C9B57A", "millet": "#C29A55", "buckwheat": "#D9CFC0", "soy": "#8DAA6A"}
 """Research: the dry crops' colors - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: barley tan-gold, millet ochre, buckwheat pale with reddish stems, soybean green, each at its ripest"""
 CROP_FURROW = {"barley": "#9C8650", "millet": "#8E6E36", "buckwheat": "#A8574A", "soy": "#5E7A44"}
-"""Research: the furrows' colors - CONVENTION: each crop's own color, darkened so its rows read"""
+"""Research:
+    the furrows' colors - CONVENTION: barley's, millet's and soybean's own color darkened so its rows read
+    buckwheat's furrows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: buckwheat pale with reddish stems, its rows the stems' red"""
 POND_WATER, POND_RIM, POND_SHEEN, REED = "#9CB4C8", "#5C7488", "#B6CAD8", "#7FA040"
 """Research: the pocket pond's ink - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an earthen bank round its edge, the wet ground where the reeds stand, open water in the middle"""
 MOUND, MOUND_EDGE, STONE, STONE_EDGE = "#CFC6B4", "#8C8470", "#9AA1A4", "#5A584F"
 """Research: the grave's ink - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot, or a corner grave against the bunds"""
+BEAD_R_FT = 1.5
+"""Research: the bean's bead - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a round bead about 3 ft across"""
 
 
 def _pts(ring: Sequence[Pt]) -> str:
+    """A ring as an SVG points list.
+
+    Research: points - NONE: formatting"""
     return " ".join(f"{x:.1f},{y:.1f}" for x, y in ring)
 
 
 def paddies(s: Settlement, net: dict[str, Any], name: str) -> None:
     """Each basin by its state: a resting one through `rest_basin`, the rest a polygon in its paint with the bund round it -
-    `wet paddy` for the wet low row, `paddy` otherwise (the classification's `_comb_draw_paddies` classes)."""
+    `wet paddy` for the wet low row, `paddy` otherwise (the classification's `_comb_draw_paddies` classes).
+
+    Research:
+        the basins' ink - CONVENTION: each basin a polygon in its state's paint (`field_stage.FILL`), the bund's earth stroke round it"""
     bund = aze_w(s.ftpx)
     for p in net["plots"]:
         if p["rest"]:
@@ -55,22 +65,33 @@ def paddies(s: Settlement, net: dict[str, Any], name: str) -> None:
 
 
 def ditches(s: Settlement, net: dict[str, Any], archetype: str) -> None:
-    """Each of the field's channels a tapered stroke in the late water block, its paint and class by its role."""
+    """Each of the field's channels a tapered stroke in the late water block, its paint and class by its role.
+
+    Research:
+        the channels' ink - CONVENTION: the shared ditch style by role, tapered from its head's width to its tail's"""
     for c in net["channels"]:
         col, cls = ditch_style(c["role"], archetype)
         s.field_channel(c["pts"], col, c["w"], c["w_tail"], late=True, cls=cls)
 
 
 def dry_plots(s: Settlement, net: dict[str, Any]) -> None:
-    """Each dry plot in its crop's paint with its thin outline, and its furrows (`_draw_furrows`)."""
-    w = DRY_STROKE_FT / s.ftpx
+    """Each dry plot in its crop's paint with its thin outline, and its furrows (`_draw_furrows`).
+
+    Research:
+        the dry plots' ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each plot in its crop's color with a thin tan-brown outline, about 1.4 ft on a hamlet map, 2.8 on a village's and 4.2 on a city's - the one stroke on the sheet at every scale"""
+    w = DRY_STROKE_FT
     for d in net["dry_plots"]:
         s.add_paddy(f'<polygon points="{_pts(d["poly"])}" fill="{d["fill"]}" stroke="{DRY_STROKE}" stroke-width="{w:.2f}" stroke-linejoin="round"/>', cls=d["crop"])
         s._draw_furrows(d["poly"], d["furrow"], d["theta"], d["crop"])
 
 
 def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
-    """The pocket pond: its bank, its water, its sheen and a ring of reeds, class `field pond`."""
+    """The pocket pond: its bank, its water, its sheen and a ring of reeds, class `field pond`.
+
+    Research:
+        a dish pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an earthen bank round its edge (the bund's earth stroke), the wet ground just inside it where the reeds stand (the wet tint), and open water in the middle
+        its proportions - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's proportions; the wet ring 2.5 ft past the water, eight reeds evenly round it 1.2 ft out from the water's edge
+        its sheen - CONVENTION: a light ring on the water"""
     x, y, rx, ry = pond["x"], pond["y"], pond["rx"], pond["ry"]
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx + 2.5:.1f}" ry="{ry + 2.5:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond")
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{POND_WATER}" stroke="{POND_RIM}" stroke-width="1.2"/>', "field pond")
@@ -84,7 +105,10 @@ def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
 
 
 def grave(s: Settlement, g: dict[str, Any]) -> None:
-    """The grave: its mound and its stones, class `field grave`."""
+    """The grave: its mound and its stones, class `field grave`.
+
+    Research:
+        the grave's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 3 ft apart"""
     x, y = g["x"], g["y"]
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="6.5" ry="4.5" fill="{MOUND}" stroke="{MOUND_EDGE}" stroke-width="1.2"/>', "field grave")
     stones = "".join(f'<rect x="{x - 3 + 3 * k:.1f}" y="{y - 2.5:.1f}" width="1.8" height="3" fill="{STONE}" stroke="{STONE_EDGE}" stroke-width="0.5"/>' for k in range(2))
@@ -92,13 +116,19 @@ def grave(s: Settlement, g: dict[str, Any]) -> None:
 
 
 def weir(s: Settlement, w: dict[str, Any]) -> None:
-    """The weir across the brook at the intake, its bar in its form's thickness, class `weir`."""
+    """The weir across the brook at the intake, its bar in its form's thickness, class `weir`.
+
+    Research:
+        the weir's ink - CONVENTION: the bar the Rust placed, in timber browns"""
     s.add(f'<polygon points="{_pts(w["poly"])}" fill="#7A6A52" stroke="#4E4232" stroke-width="0.6"/>', cls="weir")
 
 
 def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
     """The field's ink in its order: the floor under the plots (`comb_base_fill`), the plots, the dry hem, the channels, the
-    beans (`_comb_draw_beads`), then the features."""
+    beans (`_comb_draw_beads`), then the features.
+
+    Research:
+        the order - NONE: the ink's layering"""
     s.comb_base_fill(net, name)
     paddies(s, net, name)
     dry_plots(s, net)
@@ -113,7 +143,11 @@ def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
 def settle(s: Settlement) -> None:
     """The beans settled after the last water (feature 287 W33, at `finish`): each field's bead slot rewritten from the runs that
     survive the map's final water - its ditches, channels and streams, the pond and the field ponds - in Rust (`settle_runs`),
-    its record's `bund_beans` with it."""
+    its record's `bund_beans` with it.
+
+    Research:
+        the runs kept - NONE: the Rust's settle clips each run against the water (`settle_runs`)
+        the beads - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a round bead about 3 ft across (`BEAD_R_FT`), in the beans' pine green at 0.85, a CONVENTION of its ink"""
     from l7r.diagram.hamletgen.phases_ext import phases
 
     if not s._bead_slots:
@@ -126,10 +160,11 @@ def settle(s: Settlement) -> None:
             segs += [((float(a[0]), float(a[1])), (float(b[0]), float(b[1])), w) for a, b in zip(pts, pts[1:], strict=False)]
     ponds = [tuple(float(v) for v in s.M["pond"][:4])] if s.M.get("pond") else []
     ponds += [(float(p["x"]), float(p["y"]), float(p["rx"]), float(p["ry"])) for p in s.M.get("field_ponds") or []]
+    r_px = s.px(BEAD_R_FT)
     for z, runs, rec, own in s._bead_slots:
         kept = phases().settle_runs([[(float(x), float(y)) for x, y in r] for r in runs], segs, ponds + [tuple(float(v) for v in p) for p in own])
         rec["bund_beans"] = [[x, y] for r in kept for x, y in r]
-        beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for r in kept for x, y in r)
+        beads = "".join(f'<circle cx="{x}" cy="{y}" r="{r_px:.2f}" fill="{BEAN_GREEN}"/>' for r in kept for x, y in r)
         s.out[z] = f'<g opacity="0.85">{beads}</g>'
 
 
@@ -142,7 +177,10 @@ BANK_FILL, POND_WATER_FRY = "#A9AE7C", "#A7B3AE"
 
 
 def dike(s: Settlement, dk: dict[str, Any]) -> None:
-    """The polder's dike as the Rust placed it: the band between its faces, its two rows of crowns, and a gate at each sluice."""
+    """The polder's dike as the Rust placed it: the band between its faces, its two rows of crowns, and a gate at each sluice.
+
+    Research:
+        the dike's ink - CONVENTION: the band in the dike's earth, the crowns in their greens at 0.92, each gate an 8 ft square in timber browns"""
     outer, inner = _pts(dk["outer"]), _pts(dk["inner"])
     s.add(f'<path d="M {outer} Z M {inner} Z" fill="{DIKE_EARTH}" fill-rule="evenodd" stroke="{DIKE_EDGE}" stroke-width="1.0"/>', cls="perimeter dike")
     for kind, crowns in dk["trees"]:
@@ -154,7 +192,10 @@ def dike(s: Settlement, dk: dict[str, Any]) -> None:
 
 def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) -> None:
     """The dike-pond block as the Rust converted it: each pond's bank and water (a nursery's grayer), each rice parcel, and the
-    banks' crop."""
+    banks' crop.
+
+    Research:
+        the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge a 3 ft stroke in the tea green"""
     for kind, parcel, bank, water in parcels:
         if kind == "rice":
             s.add_paddy(f'<polygon points="{_pts(parcel)}" fill="{_RICE_GREEN}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))

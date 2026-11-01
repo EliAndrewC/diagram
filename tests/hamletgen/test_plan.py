@@ -201,6 +201,13 @@ def test_a_nonsense_pond_layout_is_refused() -> None:
         hg.HamletSpec(name="X", seed=1, pond_layout="chessboard")
 
 
+def test_the_polder_fabric_table_covers_every_polder_archetype() -> None:
+    """A polder archetype without a fabric row would KeyError in `stage_polder`."""
+    assert set(hg.POLDER_ARCHETYPES) == set(hg.POLDER_FABRIC)
+    assert set(hg.POLDER_ARCHETYPES) <= set(hg.FIELD_ARCHETYPES)
+    assert "mulberry_dike_fishpond" not in hg.ROLLED_ARCHETYPES  # opt-in until a cohort is green
+
+
 def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> None:
     """Fall S, village seated E: the west flank and the south foot face the water - the
     hand-authored Kuwabata's `["W", "S"]`, derived. The head (N, the reservoir) is never a flank."""
@@ -208,14 +215,14 @@ def test_the_waterward_flanks_are_the_ones_the_village_does_not_stand_on() -> No
     plan.seat = {"out": (1.0, 0.0)}
     assert hg.polder_flanks(plan) == {"head": "N", "foot": "S", "plus": "E", "minus": "W", "cluster": "E"}
     assert hg.waterward_flanks(plan) == ["W", "S"]
-    assert hg.polder_crossing_caps(plan) == {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}
+    assert hg.polder_crossing_caps(plan) == {"feeder": 1, "w_toe": 1, "drain": 0, "e_toe": 3, "column": 1}
     plan.seat = {"out": (-1.0, 0.0)}
     assert hg.waterward_flanks(plan) == ["E", "S"]
-    assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 0
+    assert hg.polder_crossing_caps(plan)["w_toe"] == 3 and hg.polder_crossing_caps(plan)["e_toe"] == 1
     plan.seat = {"out": (0.0, -1.0)}  # seated at the HEAD: the feeder is the village's collector
-    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
+    assert hg.polder_crossing_caps(plan) == {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "column": 1}
     plan.seat = {"out": (0.0, 1.0)}  # at the foot: the drain abuts it, and takes no plank (feature 287, `plank_on_supply`)
-    assert hg.polder_crossing_caps(plan) == {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}
+    assert hg.polder_crossing_caps(plan) == {"feeder": 1, "drain": 0, "e_toe": 2, "w_toe": 2, "column": 1}
     plan.seat = {}
     assert hg.polder_flanks(plan)["cluster"] == ""
 

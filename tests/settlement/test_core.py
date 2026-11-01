@@ -8,7 +8,7 @@ import tempfile
 import pytest
 
 from l7r.diagram.settlement import Settlement, surface_water_dist, village_population
-from l7r.diagram.waterfields import dedup_ring, pointed_ring, polyline_cum, supply_bank_clearance
+from l7r.diagram.waterfields import dedup_ring, floor_overhang, pointed_ring, polyline_cum, supply_bank_clearance
 from tests.settlement._builders import _cap020, _crop_settlement, _max_turn_deg, _town, crop
 
 
@@ -415,6 +415,17 @@ def test_supply_bank_clearance_is_past_at_the_strokes_exact_ends():
         ((50.0, 2.0), False),  # mid-span: governed, as before
     ):
         assert supply_bank_clearance(q, pts, 8.0, 3.0, cum)[2] is want, q
+
+
+def test_floor_overhang_measures_past_the_flat_extended_collector():
+    # fall straight down-screen (90 deg): u = x, f = y. Collector from (100, 50) to (200, 60);
+    # beyond either drawn end the command boundary continues LEVEL (the wedge filler's own rule).
+    dpts = [(100.0, 50.0), (200.0, 60.0)]
+    ovs = floor_overhang([(150.0, 40.0), (150.0, 75.0), (50.0, 80.0), (250.0, 40.0)], dpts, 90.0)
+    assert ovs[0] == 0.0  # up-fall of the interpolated line (55 at u=150): clear
+    assert ovs[1] == pytest.approx(20.0)  # 20 px down-fall of it: the needle class
+    assert ovs[2] == pytest.approx(30.0)  # beyond the head: LEVEL extension at f=50, 30 px past
+    assert ovs[3] == 0.0  # beyond the tail but up-fall of its level line (60): clear
 
 
 def test_pointed_ring_separates_needles_from_basins():

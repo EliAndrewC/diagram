@@ -881,6 +881,21 @@ def _polder_close(plots: list[dict[str, Any]], channels: list[dict[str, Any]], s
     return _drn
 
 
+def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
+    """Run the parcel/channel cleanup on a block built with `clean_parcels=False`, and re-measure its
+    acreage (feature 150 T55). `fit_polder` bisects with up to 45 candidate blocks and only one of them
+    is drawn, so the cleanup - which densifies every outline against every nearby channel - runs on the
+    WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it.
+
+    Research:
+        its salts, guards and sentinels - NONE: they decide nothing about the place - 43560 (square feet in an acre)
+    """
+    _plots_clear_of_channels(net["plots"], net["channels"], float(net.get("ftpx", 1.0)))
+    unpoint_parcels(net["plots"])  # the cleanup moves outlines, so the apex pass runs again after it (feature 287, water W19)
+    net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * float(net.get("ftpx", 1.0)) ** 2 / 43560
+    return net
+
+
 def end_on_centerline(end: Pt, trunk: list[Pt], tol: float = 0.5) -> bool:
     """THE RULE (feature 287, water W45): a watercourse joins the one it feeds ON ITS CENTERLINE - `end` lies within `tol`
     of the trunk's polyline. The toe snap below and its test read this one predicate.

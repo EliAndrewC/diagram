@@ -6,6 +6,8 @@ Research: field constants plumbing - NONE"""
 
 from __future__ import annotations
 
+from typing import Any
+
 # THE FIELD ARCHETYPES this generator can draw, and why there are two rather than five. The pool's
 # hamlets span five (`valley_paddy`, `polder_grid`, `mulberry_dike_fishpond`, `contour_terraces`,
 # `ribbon_valley`) and they are not variations on one shape - a comb fan is grown around a head-race
@@ -32,6 +34,30 @@ Research:
 POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 """Research: dike-pond built as a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html"""
 
+# THE PARCEL FABRIC PER POLDER ARCHETYPE - every number is `build_polder`'s TRUE-SCALE SIZING note
+# (researched 2026-07-21, source-verified the same day; 1 px = 1 ft, no legibility inflation):
+# - a RICE polder's module is ~190 ft (feature 280 M54, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.html: a polder parcel before modernity ran about
+#   three mu - the 1897 fish-scale register of nineteen Taipingqiao polders outside Suzhou, 3,700 parcels on 11,000 mu -
+#   so the bay/half/third mix of the old ~110 ft module, whose ~1 mu mean was Buck's 1929-33 survey, is carried to
+#   110 x sqrt 3 ~ 190 ft), most bays split into strips ((0.52, 0.16, 0.12)), with 3 ft walking
+#   bunds between rows and 8 ft ditch corridors on the module lines ((1.5, 4.0));
+# - a DIKE-POND's ponds were 0.4-0.6 ha oblongs (Ruddle & Zhong / FAO; CAVEAT in the note: the
+#   sizes are Republican-to-1980s surveys of the traditional landscape, not Ming/Qing documents),
+#   so a ~160 ft module with a merge-heavy mix ((0.10, 0.0, 0.60): mostly 160x320 ft ~0.48 ha 1:2
+#   ponds, a square ~2.4-mu minority), the grid's ~22 ft gaps ((11, 11)), and each pond's water inset 23 ft inside its
+#   parcel (`settlement/fields/landuse.py` `DIKEPOND_WATER_INSET`). THE WATER SHARE (feature 280 M58,
+#   research/archetypes/610): every page that writes the water-to-dike split as a number (6:4, 7:3, 4:6) is modern, and
+#   the oldest figures are Qu Dajun's for Jiujiang in 1678 - read together (a GUESS, this record's arithmetic) water to
+#   dike about 5:3 - so a parcel is calibrated to about 6 parts water in 10 (0.62 measured on Kuwabata, 2026-09-29);
+#   the 11 ft inset it replaced left 80% water per parcel, wetter than any figure read in any period. The dike's
+#   width itself has no premodern figure (the 6-10 m once cited is a modern manual's): it follows from the share.
+# `fit_polder` scales the GRID to the acreage and never the cell, so these calibrations hold
+# whatever the household count asks for.
+POLDER_FABRIC: dict[str, dict[str, Any]] = {
+    "polder_grid": {"cell": 190.0, "parcel_mix": (0.52, 0.16, 0.12), "gap": (1.5, 4.0)},
+    "mulberry_dike_fishpond": {"cell": 160.0, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0)},
+}
+"""Research: polder parcel fabric - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: rice 190 ft modules, dike-pond 160 ft"""
 
 # THE POND LAYOUT - ONE ATTESTED FORM AT POND SCALE (feature 280 M56, research/archetypes/130): the grid is attested for
 # the Song tangpu CANALS, the mosaic for the PONDS, while a uniform chessboard of ponds is found only as today's aerial view
@@ -133,7 +159,17 @@ Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
     dike-pond leftover parcels - GUESS research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: every parcel a pond, or about one parcel in ten left in standing rice, at even odds; rice or pond, even odds
 """
+POND_LAYOUT_MOSAIC = 0.5
+"""Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""
 
+# THE SHARE OF THE BLOCK THAT CONVERTED in the end state. `apply_land_use(fraction=)` is the ECONOMIC
+# term over the ELIGIBLE set, and the archetype opts out of the topographic filter by name
+# (`eligible="all"`); 0.9 is the hand-authored Kuwabata's figure - "(almost) every former paddy cell"
+# - so a few leftover parcels still read as standing rice among the ponds (research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: leftovers of a wholesale conversion are repainted as paddy, not left as outlines).
+# The exact share is a DEGREE along the attested continuum (Shunde: rice under one-tenth of the land
+# by c. 1900), a calibrated liberty rather than a measured number - recorded as such.
+DIKEPOND_CONVERSION = 0.9
+"""Research: share of the block converted - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: 0.9, leftovers in rice"""
 
 # ...but only the proven one is ROLLED, and `polder_grid` is opt-in until it survives a COHORT.
 #

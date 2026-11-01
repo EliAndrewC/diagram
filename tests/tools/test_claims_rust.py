@@ -143,3 +143,14 @@ def test_a_rust_step_on_the_placement_page_shows_its_doc_and_its_claims(tmp_path
         pass
     else:
         raise AssertionError("an item the file does not hold")
+
+
+def test_a_multi_line_attribute_keeps_the_doc_above_it() -> None:
+    """Found 2026-10-31 (feature 444 T16's claims wave): rustfmt wraps a long `#[expect(...)]` over several lines, and reading the
+    attribute a line at a time ended the doc at its second line, so the item inherited its module's claims in place of its own."""
+    src = (
+        "//! Research:\n//!     the module - CONVENTION: inherited\n\n"
+        "/// Research:\n///     its own - NONE\n#[expect(\n    clippy::many_single_char_names,\n    reason = \"the names\"\n)]\n#[must_use]\npub fn f() {}\n"
+    )
+    _errors, units = cr.rust_units(src, "x.rs")
+    assert [(u.qualname, [c.label for c in u.claims], u.inherited) for u in units] == [("f", ["its own"], False)]

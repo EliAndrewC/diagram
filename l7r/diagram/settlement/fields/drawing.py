@@ -64,10 +64,12 @@ class FieldDrawingMixin:
     def _comb_draw_beads(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]
         """Draw what survived `_comb_drop_drowned_beads` - the ink, after the record it agrees with.
 
-        Research: bead glyph - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: r 1.4 px, BEAN_GREEN at 0.85"""
+        Research: bead glyph - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a round bead about 3 ft across (`ink.BEAD_R_FT`), BEAN_GREEN at 0.85"""
         from l7r.diagram.waterfields import BEAN_GREEN
 
-        beads = "".join(f'<circle cx="{x}" cy="{y}" r="1.4" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
+        from .ink import BEAD_R_FT
+
+        beads = "".join(f'<circle cx="{x}" cy="{y}" r="{self.px(BEAD_R_FT):.2f}" fill="{BEAN_GREEN}"/>' for x, y in net["bund_beans"])
         z = self.add(f'<g opacity="0.85">{beads}</g>', cls="bund beans")
         # THE SLOT IS KEPT ON THE SETTLEMENT (`_bead_slots`), so a re-roll's deep copy of it carries its beads' slots with it
         self._bead_slots.append((z, net["bund_bean_runs"], self.M["fields"][-1] if self.M.get("fields") else None, list(net.get("bead_ponds") or [])))
@@ -130,7 +132,7 @@ class FieldDrawingMixin:
         Research:
             pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
             pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
-            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 (inner sheen inset)
+            its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 12 and 10 (the inner sheen's inset across and down), 2.4 (the rim)
         """
         refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:

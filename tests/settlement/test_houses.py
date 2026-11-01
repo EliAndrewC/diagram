@@ -283,6 +283,26 @@ def test_cluster_anchor_places_each_position_on_the_right_dry_margin():
         s.cluster_anchor("nowhere", fb, dd)
 
 
+def test_plot_texture_sets_the_grain_and_records_its_knobs():
+    """The old comb read its grain here; the field stage's Rust reads its own (feature 444 T16), and this stays until the
+    dead-code task deletes it with its caller list (the round arbiter's ruling on ask:444-T16-fr021-scope)."""
+    s = Settlement(1400, 1800, seed=1)
+    s.meta(name="Pt", scale="village", ftpx=2)  # ftpx>=2 -> the real-feet calibration branch
+    a_small, _step_small = s.plot_texture("small_irregular", "organic")
+    a_large, _step_large = s.plot_texture("large_block", "organic")
+    assert a_small < a_large  # smaller plot_across = smaller paddies
+    _a, org = s.plot_texture("medium", "organic")
+    _a2, grid = s.plot_texture("medium", "grid")
+    assert (grid[1] - grid[0]) < (org[1] - org[0])
+    assert s.M["meta"]["plot_size"] == "medium" and s.M["meta"]["plot_regularity"] == "grid"
+    s1 = Settlement(1400, 1800, seed=1)
+    s1.meta(name="Pt", scale="hamlet", ftpx=1)
+    assert s1.plot_texture("medium", "organic", record=False)[0] > 0 and "plot_size" not in s1.M["meta"]
+    for bad in (("huge", "organic"), ("medium", "checkerboard")):
+        with pytest.raises(ValueError):
+            s.plot_texture(*bad)
+
+
 def test_cluster_seeds_record_false_and_bad_shape():
     import random as _r
 

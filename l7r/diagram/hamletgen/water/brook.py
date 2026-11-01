@@ -61,7 +61,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
     Research:
         no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back
         no level run - CONVENTION: no run held level along the frame, in any view
-        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - the rule's bound is looser, a departure the code keeps until feature 417 T34; the straightest run within its bound (`ruled_excess`)
+        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - the straightest run on the canvas within RULED_MAX_FT, ten drawn widths (`ruled_excess`)
         no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course never enters the field's envelope
         off-map ends - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source and the mouth both off the canvas

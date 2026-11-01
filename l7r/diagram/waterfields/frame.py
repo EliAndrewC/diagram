@@ -5,6 +5,7 @@ Research: frame geometry - NONE: the contour/fall frame, point and segment predi
 
 import math
 import random
+from collections.abc import Callable, Sequence
 
 from l7r.diagram.work_counts import OPS
 
@@ -20,6 +21,34 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,
 # its work the seeds that broke (m:wave85-thread-floor-reverted; the patch is in the spec's audit/reverted/).
 
+# THE CHANNEL LADDER, IN TRUE FEET (GM 2026-08-17: "update the net to be actual size").
+#
+# These were multipliers-times-grain chosen by eye, and pricing them against a real irrigation duty
+# found the whole net drawn 5-6x oversize - a hamlet's head-race wants ~2.5-5 ft and was drawn at 14.
+# They are now TRUE WIDTHS IN FEET, converted to pixels by `chan_px`, so the comb net is to scale
+# like everything else on a to-scale sheet. The research, the two independent derivations behind
+# each figure, and the disclosed departures are in
+# `../../../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`.
+#
+# Sized from the ATTESTED tier ladder (a field ditch watering one paddy ~0.3 m; a distribution
+# lateral ~1 m; a district main/yosui ~5 m) placed by COMMAND AREA, with a Manning/Lacey check on a
+# real duty as corroboration rather than as the primary source - the attested tiers are measurements
+# of real channels, while a Manning figure rests on four assumed parameters. A hamlet fan of ~8.5 ha
+# sits between the lateral and the small-main tiers, which is where the head-race lands.
+# The trunk, above the fork. Set to 6.0 rather than 5.0 on the tier-consistency check that
+# `settlement-review` raised (2026-08-17): at 5.0 the top three tiers sat within 1 ft of each other,
+# so the ONE junction where hierarchy most wants to read - the bunsuiguchi - was where it read least.
+# A trunk that splits into 4.5 and 4.0 ft arms carries both, and under the width-goes-as-sqrt(Q) law
+# this engine already adopts that is sqrt(4.5^2 + 4.0^2) = 6.0. This is TIER SELECTION using the law
+# as a sanity check on where the trunk sits, NOT conservation-at-junctions (ruled against 2026-08-16
+# - never chain drawn widths down from the source). It also has a real referent: a sluice-fed
+# head-race genuinely is wider and slower than the water feeding it, ponding above the weir.
+HEAD_RACE_FT = 6.0
+"""Research: head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6.0 ft, a small main canal"""
+CANAL_A_FT = (4.5, 1.5)  # the high-margin supply canal: head -> the thread it dies as
+"""Research: upper-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.5 ft dwindling to 1.5"""
+CANAL_B_FT = (4.0, 1.5)  # the far-margin arm, commanding the smaller flank
+"""Research: far-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.0 ft dwindling to 1.5"""
 DELIVERY_FT = (2.5, 1.2)  # a delivery ditch: head at its takeoff -> the terminal field-ditch tier
 """Research: delivery ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 ft dwindling to 1.2"""
 DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the outfall. Drainage
@@ -27,6 +56,26 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 # is why the drain's tail is wider than the head-race that fed the same ground.
 """Research: drain width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: 1.2 ft at its head gathering to 5.5 at the outfall"""
 
+# A DELIVERY IS NEVER DRAWN WIDER THAN THE CANAL FEEDING IT (settlement-review 2026-08-17: the flat
+# delivery head read 7.96 px against a parent tapered to 5.73, inverting the rank read low in the
+# tree - the one thing width-as-rank exists to convey). The head is capped at this fraction of the
+# parent's LOCAL width at the takeoff. It binds on roughly HALF the deliveries of a hamlet fan
+# (three of five on Inashiro, including the second offtake off canal A with the canal still at
+# two-thirds of its head) - not merely on the last one or two, which an earlier draft of this
+# comment claimed.
+# This is NOT a switch to conservation-at-junctions, which the GM ruled against on 2026-08-16
+# (drawn width is RANK, not discharge; do not chain widths down from the source) - it is the weaker
+# and sufficient guarantee that a child reads as subordinate to its parent.
+DELIVERY_PARENT_FRAC = 0.8
+"""Research: delivery never wider than its canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: its head capped at 0.8 of the canal's local width"""
+# A mid-block sub-ditch against the HEAD of the delivery it branches off - not that delivery's local
+# width at the junction, which is what a delivery itself uses against its canal. The asymmetry is
+# deliberate and was measured: at true scale a delivery is ~2.2 ft a third of the way down, so 0.75
+# of its LOCAL width is 1.64 ft, which against the 1.5 px floor leaves a sub-ditch 0.14 px of room to
+# taper in - and `delivery_ditches_taper` rejected exactly that on 22 of 24 cohort maps. A ditch that
+# cannot taper should not be drawn claiming to.
+SUB_PARENT_FRAC = 0.75
+"""Research: sub-ditch cap - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 0.75 of its delivery ditch's head"""
 
 # THE VISIBILITY FLOOR, and the one place map SCALE enters the ladder. True widths are honest at
 # hamlet/village resolution (1-2 ft/px) and vanish above it: at a provincial city's 3 ft/px the
@@ -53,6 +102,19 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 MIN_CHANNEL_PX = 1.5
 """Research: visibility floor - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: no stroke drawn under 1.5 px, 1.5 ft on a hamlet map"""
 
+# THE CANAL BERM: bare ground between a supply canal's BANK and the dry-crop hem above it, in feet.
+# Measured from the bank, never from the centerline - the hem's stand-off used to be a flat `8 * g`
+# from the canal's CENTERLINE, which is a pinned number wearing a derived one's clothes: it did not
+# move when the net went to true size, so the water inside it shrank threefold while the bare stripe
+# GREW (12.3 -> 14.8 px median on Inashiro, identical before and after - settlement-review
+# 2026-08-17). A berm defined by its relationship to a bank has to be derived from that bank.
+#
+# 5.0 ft is the spoil bank plus standing room: GB50288 puts a lateral/farm canal's embankment TOP at
+# not less than 1 m, and a canal wants a walkable side for the annual dredging that keeps it flowing.
+# The old effective figure was ~10 ft of bare ground, which was never chosen - it is what 16 ft from
+# the centerline left once a 12.4 px canal was subtracted, i.e. an artifact of the inflation.
+CANAL_BERM_FT = 5.0
+"""Research: bank beside a supply canal - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5 ft of bare earth past the stroke's edge"""
 
 # A FARMER STEPS OVER A DITCH THIS NARROW RATHER THAN DECKING IT (settlement-review 2026-08-17).
 # The footplank rule used to be about LENGTH only - any ditch over ~140 px got a plank about midway -
@@ -243,6 +305,37 @@ def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
     return pts[-1]
 
 
+def _f_at_u(F: _Frame, pts: Poly, u: float) -> float | None:
+    """Fall of a u-monotone polyline at contour coordinate u (clamped; None outside range).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)
+    """
+    uf = [F.to_uf(*p) for p in pts]
+    return f_at_u_of([q[0] for q in uf], [q[1] for q in uf], u)
+
+
+def f_at_u_of(us: Sequence[float], fs: Sequence[float], u: float) -> float | None:
+    """`_f_at_u` of a polyline already in the frame (`us`, `fs` its contour and fall coordinates): a caller asking one
+    polyline at many stations converts it once (feature 427 T09: the collector's 70 points converted at each of 1,170
+    stations, 83k conversions at 40 households).
+
+    Research:
+        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 20 (range tolerance)
+    """
+    if not (min(us[0], us[-1]) - 20 <= u <= max(us[0], us[-1]) + 20):
+        return None
+    for i in range(len(us) - 1):
+        ua, ub = us[i], us[i + 1]
+        if (ua <= u <= ub or ub <= u <= ua) and ub != ua:
+            k = (u - ua) / (ub - ua)
+            fa, fb = fs[i], fs[i + 1]
+            return fa + k * (fb - fa)
+    # off either end (within the gate slack): clamp to the NEARER end - clamping to the far
+    # end returned its fall for points near the START, falsely suppressing a mid-field band
+    return fs[0] if abs(u - us[0]) <= abs(u - us[-1]) else fs[-1]
+
+
 def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     r = (b[0] - a[0], b[1] - a[1])
     s = (d[0] - c[0], d[1] - c[1])
@@ -254,6 +347,55 @@ def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     if 0 <= t <= 1 and 0 <= u <= 1:
         return (a[0] + t * r[0], a[1] + t * r[1])
     return None
+
+
+def _drain_bank(F: _Frame, dpts: Poly, g: float) -> Callable[[float], float]:
+    """Return `bank(u)`: how far ABOVE the collector's centerline, IN FALL, a paddy bund must stop.
+
+    A paddy's low bund IS the collector's top-of-bank - the two touch - so the drawn bund line
+    belongs at the EDGE of the ditch's stroke, never on its centerline. Until 2026-08-08 the carve
+    held off by a flat `2 * g` everywhere, which is INSIDE the stroke over most of the collector's
+    run (it widens `chan_px(DRAIN_FT[0], g)` -> `chan_px(DRAIN_FT[1], g)` downstream, so the half-width alone
+    reaches `3 * g`): the field's bottom bunds were drawn under the blue ditch with the paddy fill
+    poking out the far side. That is half of the GM's "the earthen bunds overlap with the drainage
+    ditch" on Hoshizora - the other half was the HEM PASS laying its quads on the contour, fixed
+    there.
+
+    Two conversions, both cheap and both wrong to skip:
+
+      - the ditch TAPERS, so the clearance has to taper with it. A constant is either inside the
+        stroke at the outfall or a visible bare stripe at the head, and which one you get depends
+        on the map's grain, which is the worst way for a number to be wrong.
+      - fall is not perpendicular distance. The collector is fitted as `f = a + b*u`, i.e. it runs
+        at atan(b) to the contour, so holding off by `c` perpendicular costs `c * hypot(1, b)` of
+        FALL. The fit clamps `b` to <= 0.35, so this is <= 6% - small, but free to be exact.
+
+    The extra `0.75 * g` is half the drawn bund stroke (`aze_w`, ~1.5 real ft), so the bund and the
+    ditch ABUT at the bank rather than overlapping by half a line width.
+
+    Research: bunds clear a widening drain - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half the drain's local width plus half a bund, converted to fall on the local segment
+    """
+    uf = [F.to_uf(*p) for p in dpts]
+    us = [q[0] for q in uf]
+    u_lo, u_hi = min(us), max(us)
+    span = (u_hi - u_lo) or 1.0
+    # The fall->perpendicular conversion is taken from the LOCAL segment, not from a head-to-outfall
+    # fit: the collector wanders, and the gate measures a bund against the segment it actually
+    # stands on (`drain_bank_clearance`). A global slope disagrees with that by a few percent, which
+    # is a fraction of a pixel - and a fraction of a pixel is exactly enough to make a bund the
+    # engine laid ON the bank read as a bund inside the ditch.
+    segs = []
+    for i in range(len(uf) - 1):
+        du = uf[i + 1][0] - uf[i][0]
+        segs.append((min(uf[i][0], uf[i + 1][0]), max(uf[i][0], uf[i + 1][0]), math.hypot(1.0, abs((uf[i + 1][1] - uf[i][1]) / du) if du else 0.0)))
+
+    def bank(u: float) -> float:
+        t = max(0.0, min(1.0, (u - u_lo) / span))
+        half = taper_w(chan_px(DRAIN_FT[0], g), chan_px(DRAIN_FT[1], g), t) / 2
+        slope = next((s for lo, hi, s in segs if lo <= u <= hi), segs[0][2] if u <= u_lo else segs[-1][2])
+        return (half + BANK_MARGIN * g) * slope
+
+    return bank
 
 
 BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap
@@ -306,3 +448,93 @@ def _signed_area(poly: Poly) -> float:
 
 def _poly_area(poly: Poly) -> float:
     return abs(_signed_area(poly))
+
+
+def _dug_polyline(
+    R: random.Random,
+    F: _Frame,
+    x: float,
+    y: float,
+    ang: float,
+    length: float,
+    wobble: float,
+    seg: tuple[float, float],
+    W: float,
+    H: float,
+) -> Poly:
+    """A hand-dug canal: few long segments, tiny heading changes (obtuse only).
+
+    Research: dug canal course - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); long straight segments with a small random heading change at each, kept 25 px off the frame
+    """
+    pts = [(x, y)]
+    trav = 0.0
+    while trav < length:
+        step = min(R.uniform(*seg), length - trav)
+        ang += R.uniform(-wobble, wobble)
+        nx, ny = x + step * math.cos(ang), y + step * math.sin(ang)
+        if not (25 < nx < W - 25 and 25 < ny < H - 25):
+            break
+        x, y = nx, ny
+        pts.append((x, y))
+        trav += step
+    return pts
+
+
+def _point_along(pts: Poly, frac: float) -> Pt:
+    total = sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1))
+    d = frac * total
+    for i in range(len(pts) - 1):
+        L = math.dist(pts[i], pts[i + 1])
+        if d <= L:
+            t = d / L
+            return (pts[i][0] + t * (pts[i + 1][0] - pts[i][0]), pts[i][1] + t * (pts[i + 1][1] - pts[i][1]))
+        d -= L
+    return pts[-1]
+
+
+def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
+    """Per-BOUNDARY upslope offset normals for hem columns tiled along the boundary points `bpts`:
+    each interior boundary gets the mitred average of its two chords' upslope normals, scaled by
+    1/cos(half-bend) - the stroked-polyline miter join, so the offset band keeps its true upslope
+    depth at the seam (capped at 2x for a degenerate hairpin; a 180-degree fold, where no shared
+    offset direction exists, falls back to the outgoing chord's normal). The two end boundaries
+    take their single chord's normal unscaled.
+
+    WHY (GM 2026-08-16, Inashiro): _dry_fields used to offset each column along its OWN chord's
+    normal, so both quads at a shared boundary point pushed that point in slightly different
+    directions wherever the canal bent - a wedge of bare ground on a convex bend, a lap on a
+    concave one, ~bend-angle x depth px wide at the ragged edge (the worst Inashiro pair lapped
+    245 sq ft; 7 pairs overlapped outright, and every scripted hamlet had some). Offsetting each
+    boundary point along ONE shared vector makes every seam a single straight line both quads lie
+    on - gated by dry_plot_seams_shared.
+
+    Research: dry plots abut along the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one shared offset per boundary, so neighbors share each seam, nothing sheared or stepped
+    """
+    # A BOUNDARY WITH NO CHORD HAS NO NORMAL (feature 146, and this raised rather than returning).
+    # `bpts` comes from the hem's column boundaries, and a fan whose hem is one boundary wide - measured
+    # on a down_deg=210 fan sluiced at the west edge, where the dry band is clipped to a single column -
+    # produced an empty `cn` and then `cn[0]` IndexError'd. The caller loops `range(len(bounds) - 1)`, so
+    # with one boundary it tiles nothing and never indexes this list; an empty answer is the honest one.
+    if len(bpts) < 2:
+        return []
+    cn: list[Pt] = []
+    for i in range(len(bpts) - 1):
+        tx, ty = bpts[i + 1][0] - bpts[i][0], bpts[i + 1][1] - bpts[i][1]
+        tl = math.hypot(tx, ty) or 1.0
+        nx, ny = -ty / tl, tx / tl  # unit normal to this chord
+        mx, my = (bpts[i][0] + bpts[i + 1][0]) / 2, (bpts[i][1] + bpts[i + 1][1]) / 2
+        if F.to_uf(mx + nx, my + ny)[1] > F.to_uf(mx, my)[1]:  # point it UPSLOPE (decreasing fall)
+            nx, ny = -nx, -ny
+        cn.append((nx, ny))
+    out: list[Pt] = [cn[0]]
+    for k in range(1, len(cn)):
+        sx, sy = cn[k - 1][0] + cn[k][0], cn[k - 1][1] + cn[k][1]
+        sl = math.hypot(sx, sy)
+        if sl < 1e-9:  # 180-degree fold: opposite chord normals cancel
+            out.append(cn[k])
+            continue
+        ux, uy = sx / sl, sy / sl
+        scale = 1.0 / max(0.5, ux * cn[k][0] + uy * cn[k][1])  # 1/cos(half-bend), miter-limited at 2x
+        out.append((ux * scale, uy * scale))
+    out.append(cn[-1])
+    return out

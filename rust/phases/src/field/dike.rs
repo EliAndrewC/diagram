@@ -31,7 +31,7 @@ pub const WIDTH_WAVES: (f64, f64) = (9.0, 23.0);
 /// Half the opening a sluice cuts in the band (feet).
 ///
 /// Research:
-///     the gap - CONVENTION: half of a 30 ft cut, the opening the shared dike drawing steps the reeds into (`DIKE_GAP_HW`)
+///     the gap - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the opening the shared dike drawing steps the reeds into (`DIKE_GAP_HW`)
 pub const GAP_HALF_FT: f64 = 15.0;
 /// Each row's place across the band from the field side, and its trees' spacing along it (feet), willow then mulberry.
 ///
@@ -41,13 +41,19 @@ pub const ROWS: [(&str, f64, f64); 2] = [("willow", 0.75, 8.5), ("mulberry", 0.2
 /// Each row's crown radius, least and most (feet).
 ///
 /// Research:
-///     the crowns - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the trees spaced so their crowns read as a run of touching trees; willow 3.5-5.5 ft and mulberry 2.2-3.6 ft, a CONVENTION of the drawing
+///     the crowns - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on a crown's size, giving only the spacing at which the crowns read as a run of touching trees; willow 3.5-5.5 ft and mulberry 2.2-3.6 ft, each about its row's spacing across
 pub const CROWN_FT: [(f64, f64); 2] = [(3.5, 5.5), (2.2, 3.6)];
 
 /// A tree's crown: its middle and its radius (feet).
+///
+/// Research:
+///     a crown - NONE: the record's type, holding what `dike` decides
 pub type Crown = (f64, f64, f64);
 
 /// The dike built: its inner and outer faces, its crest, the gaps' middles, its trees by row (x, y, radius) and its breadths.
+///
+/// Research:
+///     the dike's record - NONE: the record's type, holding what `dike` decides
 #[derive(Debug, Clone, PartialEq)]
 pub struct Dike {
     pub inner: Vec<Pt>,
@@ -60,6 +66,9 @@ pub struct Dike {
 
 /// The closed ring `ring` walked every `STATION_FT`: each station's point, its outward normal (the ring turning clockwise on the
 /// map's axes, outward is the left of travel) and its distance along.
+///
+/// Research:
+///     the stations - NONE: sampling, each corner's normal the mean of its sides' so the outer face turns it rounded; the breadth and the faces are `dike`'s
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -106,7 +115,10 @@ fn stations(ring: &[Pt]) -> Vec<(Pt, Pt, f64)> {
 ///
 /// Research:
 ///     a dike round the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices
-///     the rows cut at the gaps - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, and the rows stop with it
+///     the rows cut at the gaps - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: where a channel crosses the dike, the band is cut, and the rows stop with it - no tree within `GAP_HALF_FT` of a sluice
+///     the band's breadth - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 14 to 40 ft across, changing along the length on two seeded waves
+///     its two faces - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the inner face on the fields' envelope; the outer face that face pushed out by the rolled breadth, the waterward strip of reeds and wet ground laid against it later (`hamletgen/water/waterward.py`'s `dike_face`, which reads the outline this records), so the water's edge runs along the outer face
+///     its trees - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the willow row three quarters of the way out toward the water, 8.5 ft apart; the mulberry a quarter of the way, on the field side, 4.4 ft apart
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"

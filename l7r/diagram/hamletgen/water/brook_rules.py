@@ -45,14 +45,19 @@ LEVEL_MAX_RUN_FT = 150.0  # ... for longer than this runs ruled along the frame 
 """Research: level run length - CONVENTION: over 150 ft along the frame is refused"""
 RULED_TOL_FT = 3.1  # water:W03 - a straight run: every vertex within this of its chord ...
 """Research: straight run tolerance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every vertex within 3.1 ft of its chord"""
-RULED_SHARE = 0.4  # ... may cover at most this share of the brook's length on the page ...
-"""Research: straight run share - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width (about 70 ft here) - a straight run of up to 0.4 of the brook in view is allowed, a departure the code keeps until feature 417 T34; at most 0.4 of the brook's length in view"""
+# THE MARSH'S VISIBLE EDGE keeps the brook's old straight-run bar (feature 294 B2: `settlement/land/outline.py`, `tools/marsh_edges.py`):
+# a straight run of at most 0.4 of the edge in view once 300 ft is in view. The brook itself is held to `RULED_MAX_FT` since
+# feature 444 T16 (its claims round, against 0054's ten widths), so these two bind only the marsh.
+RULED_SHARE = 0.4  # ... may cover at most this share of a marsh edge's length on the page ...
+"""Research: straight run share - GUESS: the record silent on how straight a drawn marsh edge may run; at most 0.4 of the edge's length in view, the bar the brook kept until feature 444 T16"""
 RULED_MIN_LEN_FT = 300.0  # ... once that length is at least this (settlement-review of Sawada, round 0ae309f0)
-"""Research: straight run floor - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width (about 70 ft here) - the share rule waits for 300 ft of brook in view, a departure the code keeps until feature 417 T34; the share rule applies from 300 ft of brook in view"""
+"""Research: straight run floor - GUESS: the record silent on how straight a drawn marsh edge may run; the share applies from 300 ft of edge in view"""
 AXIS_EPS_DEG = 1.6  # water:W04 - a segment of a wander stride or more this near a screen axis is a ruled line
 """Research: screen-axis segment - CONVENTION: a segment within 1.6 deg of a screen axis reads as ruled"""
-BROOK_DRAWN_W = 7.0  # the width `draw_comb_field` draws a hamlet's brook at (`settlement/fields/comb.py`, `stream(width=7)`)
-"""Research: brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 ft, mirrored from `draw_comb_field`"""
+BROOK_DRAWN_W = 5.25  # the width the field stage draws a hamlet's brook at (`field_stage.BROOK_W` is this)
+"""Research: brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft, narrower than the 6.0 ft head race it feeds"""
+RULED_MAX_FT = 10.0 * BROOK_DRAWN_W  # water:W03 - the longest straight run the brook may take, anywhere on the page
+"""Research: no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - ten of the brook's drawn widths, 52.5 ft"""
 CROSSING_END_TOL = BROOK_DRAWN_W / 2  # water:W08 - a joiner whose end lies inside the brook's drawn width meets it at a confluence
 """Research: a joiner meets the water - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "a meeting is a junction when either channel's end lies inside the other's drawn width" (it was a flat 13 px, feature 328 wave 42)"""
 # THE ROOM A LEVEL-RUN BEND NEEDS (water:W02): a station held against the frame box still has the skirt's floor 10 px
@@ -98,14 +103,15 @@ def straightest_run(pts: Sequence[Pt], tol: float) -> float:
     of its line - the pool test's `_straightest`, lifted (water:W03) and made quadratic: from each start, the bearings a
     chord may take narrow with every vertex passed (a vertex `r` out allows those within asin(tol / r) of its own), and
     once none is left no longer chord from that start can qualify.
-    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_SHARE's); the W03 chord a natural brook is held off
+    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_MAX_FT's); the W03 chord a natural brook is held off
     """
     return straightest_chord(pts, tol)[0]
 
 
 def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     """`straightest_run` with the chord's two vertex indices - what the placer's repair bends at the middle of.
-    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_SHARE's); the W03 chord a natural brook is held off
+
+    Research: straight run - NONE: the longest chord within a tolerance, geometry that decides nothing itself (the decision is RULED_TOL_FT's and RULED_MAX_FT's); the W03 chord a natural brook is held off
     """
     best, at = 0.0, (0, 0)
     for i, (ax, ay) in enumerate(pts):
@@ -123,15 +129,15 @@ def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     return best, at[0], at[1]
 
 
-def ruled_share_ok(course: Sequence[Pt], view: Sequence[float], tol: float = RULED_TOL_FT, share: float = RULED_SHARE, min_len: float = RULED_MIN_LEN_FT) -> bool:
-    """No straight run covers more than `share` of the course's length inside the view, when that length is at least
-    `min_len` - the pool test's whole body (water:W03).
-    Research: straight run share - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width (about 70 ft here) - a straight run of up to 0.4 of the brook in view is allowed, a departure the code keeps until feature 417 T34; no straight run over RULED_SHARE of the brook in view
+def ruled_run_ok(course: Sequence[Pt], view: Sequence[float], tol: float = RULED_TOL_FT, most: float = RULED_MAX_FT) -> bool:
+    """No straight run of the course inside the view is longer than `most` - the pool test's whole body (water:W03).
+
+    Research:
+        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - no straight run over RULED_MAX_FT in view
     """
     x0, y0, w, h = (float(v) for v in view)
     on = [p for p in course if x0 <= p[0] <= x0 + w and y0 <= p[1] <= y0 + h]
-    length = sum(math.dist(a, b) for a, b in zip(on, on[1:], strict=False))
-    return length < min_len or straightest_run(on, tol) <= share * length
+    return straightest_run(on, tol) <= most
 
 
 def tap_index(course: Sequence[Pt], taps: Sequence[Pt]) -> int:
@@ -237,14 +243,15 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
     A view is a box, so it holds the box round them all.
 
     Research:
-        its figures against the drawn brook - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 9 (brook width in the keep-off band, where the unit's own BROOK_DRAWN_W is 7) - a departure the code keeps until feature 417 T34
+        its figures against the drawn brook - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the brook's drawn width, BROOK_DRAWN_W, in the keep-off band and at the frame's stations alike
+        the view's reach - CONVENTION: the brook kept in the frame BROOK_FRAME_MARGIN plus a foot round the field and its hem, how much of the brook a view shows
         its bund margin - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (the hem-drop band's 3 ft beyond the brook's half width)
     """
 
     net = plan.net or {}
     paddies = [list(p["poly"]) for p in net.get("plots") or []] or [list(plan.envelope)]
     xs, ys = [float(q[0]) for r in paddies for q in r], [float(q[1]) for r in paddies for q in r]
-    wet = WetLines([([(float(x), float(y)) for x, y in course], 9.0 / 2 + 3.0)])  # filed once, asked per hem plot
+    wet = WetLines([([(float(x), float(y)) for x, y in course], BROOK_DRAWN_W / 2 + 3.0)])  # filed once, asked per hem plot
     hem = [list(p["poly"]) for p in net.get("dry_plots") or [] if not hem_on_water(p["poly"], wet, None)]
     fx = [float(q[0]) for r in [list(plan.envelope), *hem] for q in r]
     fy = [float(q[1]) for r in [list(plan.envelope), *hem] for q in r]
@@ -259,16 +266,17 @@ def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, fl
 def ruled_excess(fin: Sequence[Pt], W: float, H: float, box: Sequence[float]) -> tuple[float, float, Pt, Pt]:
     """(straightest run on the canvas, the most it may be, its two ends) - water:W03's VIEW-INDEPENDENT bound (plan D5).
 
-    The view is decided six stages after the brook, and the rule is a share of the brook's length IN it. So the placer
-    asks a sufficient bound: the straightest run on the whole canvas at most `RULED_SHARE` of the larger of
-    `RULED_MIN_LEN_FT` and the length inside `box` (`reserved_box`, which every view contains). Any view where the rule
-    applies then holds at least that length, and no longer a straight run than the canvas has, so the test's inequality
-    follows. Stricter than the test by design - the engine's standing convention for a placer."""
+    The view is decided six stages after the brook; the straightest run on the whole canvas is at least that in any view, so
+    holding it to `RULED_MAX_FT` holds every view (`box`, the ground every view holds, is kept in the signature for the callers'
+    one reading of the frame). Since feature 444 T16 the bound is a length, ten widths, not the old share of the brook in view.
+
+    Research:
+        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - the straightest run on the canvas held to RULED_MAX_FT
+    """
+    del box
     on = [p for p in fin if 0.0 <= p[0] <= W and 0.0 <= p[1] <= H]
-    inside = lambda q: box[0] <= q[0] <= box[2] and box[1] <= q[1] <= box[3]  # noqa: E731
-    held = sum(math.dist(a, b) for a, b in zip(fin, fin[1:], strict=False) if inside(a) and inside(b))
     run, i, j = straightest_chord(on, RULED_TOL_FT)
-    return run, RULED_SHARE * max(RULED_MIN_LEN_FT, held), on[i] if on else (0.0, 0.0), on[j] if on else (0.0, 0.0)
+    return run, RULED_MAX_FT, on[i] if on else (0.0, 0.0), on[j] if on else (0.0, 0.0)
 
 
 def level_runs_any_view(fin: Sequence[Pt], W: float, H: float, box: Sequence[float]) -> list[tuple[int, int, int, float]]:

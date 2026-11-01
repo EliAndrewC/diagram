@@ -205,21 +205,23 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): people cross to the fields where they LIVE and then walk the bund network,
-    so crossings CLUSTER on the collector the village abuts. On a FLANK: three on the settlement-side toe, one on each
-    interior lateral, NONE on the feeder, the far toe or the drain. At the HEAD: three on the feeder, one on each toe.
-    At the FOOT: two on each toe and none on the drain. `build_polder` names the +cross collector `e_toe` and the other
+    so crossings CLUSTER on the collector the village abuts, and every other supply collector, whose both ends reach the
+    fields, keeps one. On a FLANK: three on the settlement-side toe, one on each interior lateral, the feeder and the far
+    toe, none on the drain (the interior laterals are the Rust polder's `column` ditches). At the HEAD: three on the feeder, one on each toe. At the FOOT: two on each toe, one on the
+    feeder and none on the drain. `build_polder` names the +cross collector `e_toe` and the other
     `w_toe`; which is the settlement side is read off the seat, not assumed. (A valley hamlet such as the reference has
     no polder: this and the dike gates draw nothing there.)
 
     Research:
         no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
-        crossings where the village lives - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - the far toe and the feeder are capped at none on the flank seats, a departure the code keeps until feature 417 T34; at a flank seat three on the collector the village abuts, one per lateral, none on the feeder or far toe; at the head the feeder 3 and the toes 1, at the foot the toes 2 each
+        crossings where the village lives - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - three on the collector the village abuts (two a toe at the foot, where the drain takes none), one on every other supply collector
+        three where the village lives - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on how many; three on the village's own collector, one elsewhere
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:
-        return {"feeder": 0, "w_toe": 0, "drain": 0, "e_toe": 3, "lateral": 1}
+        return {"feeder": 1, "w_toe": 1, "drain": 0, "e_toe": 3, "column": 1}
     if f["cluster"] == f["minus"]:
-        return {"feeder": 0, "e_toe": 0, "drain": 0, "w_toe": 3, "lateral": 1}
+        return {"feeder": 1, "e_toe": 1, "drain": 0, "w_toe": 3, "column": 1}
     # The village at the HEAD or the FOOT: its own collector is the one it abuts - the feeder at the
     # head, the drain at the foot - and THAT carries the crossings, with one plank on each toe. The
     # first cut here gave both toes two and the feeder none, which satisfied
@@ -228,9 +230,9 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
     # crossings are where the CHECK wanted them, not where the feet are"). The research the rule
     # rests on - people cross where they LIVE - applies to whichever collector that is.
     if f["cluster"] == f["head"]:
-        return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "lateral": 1}
+        return {"feeder": 3, "drain": 0, "e_toe": 1, "w_toe": 1, "column": 1}
     # ...EXCEPT THAT A DRAIN TAKES NO PLANK (feature 287, ways W14 and the WAYS law's `plank_on_supply`: a footplank stands on
     # a supply ditch - research 0084, archetypes/110). The village at the FOOT abuts the drain, which the law refuses a
     # plank, so its crossings go on the supply ditches that reach it - the two toe collectors (role `lateral`) run down to
     # the foot, two a side - and none is asked of the drain that `channel_footbridges` would refuse.
-    return {"feeder": 0, "drain": 0, "e_toe": 2, "w_toe": 2, "lateral": 1}
+    return {"feeder": 1, "drain": 0, "e_toe": 2, "w_toe": 2, "column": 1}
