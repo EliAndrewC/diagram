@@ -354,6 +354,12 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
         parts.append(f"## UNIT {uid} ({unit.kind}, {unit.path}:{unit.lineno})\n")
         for r in rows:
             parts.append(f"- KEY `{r.key}`: `{r.claim.line}`" + (" (inherited from the module docstring)" if unit.inherited else ""))
+        # ...and the unit's other claims, judged already: an owed-only bundle that hid them had its agents call decisions those
+        # claims cover UNCLAIMED, a wasted round on seven units (ask:444-T16-claims-round3)
+        owed_lines = {r.claim.line for r in rows}
+        for c in unit.claims:
+            if c.line not in owed_lines:
+                parts.append(f"- ALSO CLAIMED (checked already; context, no verdict owed): `{c.line}`")
         if unit.names:
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
         first, src = source_span(root, unit)
