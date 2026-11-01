@@ -26,7 +26,7 @@ ditches leave them nearly square and run down the slope between the plots, each 
 
 Each ditch is drawn at its true width, the order of the widths kept - head race widest, then the canals, then the
 delivery ditches - and narrows along its run as its water is drawn off, though at true size the narrowing is too gentle
-for the eye to follow. The finest ditch drawn is held to a floor so it still shows. Where a canal stops at its last delivery ditch, that ditch leaves it already at the width a delivery ditch narrows to at its end and runs flat rather than narrowing, so no ditch is drawn wider than the canal feeding it. A stroke's width shows its rank, not
+for the eye to follow. The finest ditch drawn is held to a floor so it still shows. No delivery ditch is drawn wider than the canal feeding it: where the canal has narrowed, its delivery ditches leave it narrower than the full width, and a canal's last delivery ditch, leaving where the canal has dwindled to its end, starts already at the width a delivery ditch narrows to at its end and runs flat rather than narrowing. A stroke's width shows its rank, not
 its water, so where a ditch forks the two branches together look wider than their trunk. The foot-wide ditch to a single
 paddy, the inlets in the bunds and the water passing from plot to plot are too small to draw, so the bunds run unbroken
 along every ditch, and the paddies stand back from a supply canal behind a bare bank. No gate, boards or settling basin
