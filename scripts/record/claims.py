@@ -270,6 +270,17 @@ def context_source(root: Path, ref: str) -> str:
     (feature 374: a CANNOT-TELL re-check asked for a helper's body, a constant or a caller the judged unit only names)."""
     path, _, qual = ref.partition("::")
     text = (root / path).read_text(encoding="utf-8")
+    if path.endswith(".rs"):
+        # ...A RUST ITEM, by the Rust reader's own item scan (feature 444 T16's claims round: a `WITH=` unit in a `.rs` file was
+        # parsed as Python and every Rust bundle carrying one refused)
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from l7r.diagram.tools import claims_rust  # noqa: PLC0415
+
+        found = next((body for q, _k, _f, _l, _d, body in claims_rust._items(text, 0, "", False) if q == qual), None)
+        if found is None:
+            raise ValueError(f"no `{qual}` in {path}")
+        return found
     body: list[ast.stmt] = ast.parse(text).body
     node: ast.AST | None = None
     for name in qual.split("."):
@@ -328,7 +339,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
     marked = changed_lines(root)
     for uid, rows in by_uid.items():
         unit = rows[0].unit
-        lang = "markdown" if unit.kind == "section" else "python"
+        lang = "markdown" if unit.kind == "section" else "rust" if unit.path.endswith(".rs") else "python"
         parts.append(f"## UNIT {uid} ({unit.kind}, {unit.path}:{unit.lineno})\n")
         for r in rows:
             parts.append(f"- KEY `{r.key}`: `{r.claim.line}`" + (" (inherited from the module docstring)" if unit.inherited else ""))
@@ -336,7 +347,9 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
             parts.append("- constants it reads: " + "; ".join(f"`{n}`" for n in unit.names))
         first, src = source_span(root, unit)
         parts.append(f"\n```{lang}\n{mark_changed(src, first, marked.get(unit.path, set()))}\n```\n")
-        if unit.kind != "section":  # ...the module's own functions it calls, and what a CANNOT-TELL asked for (385 T25, D47)
+        # ...the module's own functions it calls, and what a CANNOT-TELL asked for (385 T25, D47) - read off Python's syntax tree, so a
+        # Rust unit's context is what `WITH=` names (feature 444 T16)
+        if unit.kind != "section" and not unit.path.endswith(".rs"):
             asked = [n for r in rows for n in re.findall(r"`([A-Za-z_]\w*)", (index.get(r.key) or {}).get("note", "")) if (index.get(r.key) or {}).get("verdict") == "CANNOT-TELL"]
             far = claims_context.direct(root, unit, src, context_source) if any(claims_context.DISTANCE.search(r.claim.label) for r in rows) else []
             context = list(dict.fromkeys([*context, *callees(root, unit, src), *far, *claims_context.chase(root, unit.path, asked, context_source)]))
@@ -350,7 +363,7 @@ def bundle(root: Path, cur: dict[str, Row], keys: Sequence[str], out: Path, cont
     if context:
         parts.append("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n")
         for ref in context:
-            parts.append(f"## CONTEXT {ref}\n\n```python\n{context_source(root, ref)}\n```\n")
+            parts.append(f"## CONTEXT {ref}\n\n```{'rust' if ref.partition('::')[0].endswith('.rs') else 'python'}\n{context_source(root, ref)}\n```\n")
     for p in (p.rsplit("/", 1)[-1] for p in pages):  # a path or a bare name; a page named and not found is an error, never
         if not (qdir / p).is_file():  # dropped (feature 374: a pointer-form path was skipped in silence)
             raise ValueError(f"PAGES: no question file {p} under {qdir}")
