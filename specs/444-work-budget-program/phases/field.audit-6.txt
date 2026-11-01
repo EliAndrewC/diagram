@@ -1,0 +1,18 @@
+MODE AUDIT, round 6 (2026-11-01, the work-budget agent on make work-budget-bundle MODE=audit PHASE=field; the last on this subject, the round arbiter on ask:444-T16-field-audit-6)
+
+UNCOUNTED - `foot` in `_clip_to_stream` (clipping.py:186-202) is not counted. It measures a distance to every segment of every stream for each end of each field channel, through `_write_field` (field_stage.py:329) -> `ink.draw` -> `ditches` -> `field_channel` (clipping.py:261) -> `_clip_to_stream` -> `snap_front` -> `foot`. The brook is already in `M["streams"]` by then (field_stage.py:326), so this is at least 26 x 448 = about 11,600 distances at 40 households and about 16,000 at 80, against a margin of 1,129 at 40.
+
+1. Counters against the budget. The counted mean is 117,610 at 40 against 118,739 (ratio 0.990), and 208,492 at 80 against 218,411. The fitted exponent is 0.80 against the pinned 0.86. Those numbers fit, but they can't be trusted. The uncounted `foot` loop alone is about 10 times the margin at 40 and more than the 9,919 margin at 80. Counted, the stage would be OVER at both sizes. Sizes come from `write@brook` (2 per station: about 448 stations at 40, 631 at 80) and the 13 drawn channels at 40. That 13 is from chains.txt, which is a calls summary from a different run (`20261101T221053Z-fanout-adhoc`), not the caller chains the MANIFEST promises; I traced the chain above from the code. `foot` also needs an index: it is a scan over a growing set run for every channel end (S1, S3).
+
+2. Does a counter cover every inner loop (S5)? Besides `foot`:
+- Rust-to-Python copy (py.rs:37, :44): `write@py_export` (py.rs:378-391) leaves out the fan ring and the brook points that `field_dict` copies, about 96 + 448 points at 40. It also charges 7 per basin for 9 values and 4 per dry plot for 7.
+- The stream (water.py:139): `write@stream` charges 2 per point, for the record and its ink. The flow record's copy (water.py:101) and the corridor copy (water.py:155), which this scope says were counted, have no counter. That is about 898 at 40, close to the whole margin by itself.
+- `field_channel`: `fillet_polyline` (curves.py), `taper_pieces`, the rounded `rec` copy and the per-piece joins are charged one per point at most (`write@drawing_records`).
+- `comb_base_fill`: the envelope is joined (drawing.py:46) and rounded (:69) with no counter, about 96 to 135 points.
+- `_draw_furrows`: the corner walks are charged 4 per corner where the code makes 8 passes (bounded). The clip fallback loop (drawing.py:121) is uncounted but should be rare for a 4-corner seat.
+
+What passes: `fit` covers the sum, each pass's band test and moved lengths, and the tail. `hem`: after the need is met, at most `strips` skipped strips, then `room_left` (O(1)) and `break 'band`. `_comb_draw_beads`: covered by the bean term of `write@field_ink`. `rest_basin`: its loop is bounded and counted; no basin rested on these seeds, so `candidate@rest_basin` appears in no roll. `rerecord`: charged at `pt_test@Standing.resync`, which equals `pt_test@Standing.extents` in all 16 rolls.
+
+3. Placed and then repaired (S4)? No. `placed@Standing.record` equals `candidate@Standing.conflicts` in all 16 rolls, and there are no `dropped@` or `moved@` keys.
+
+4. Linear growth (S6)? Yes for what is counted: exponent 0.80, under 1.15. The `foot` loop grows with brook stations times channels and is not in the fit.
