@@ -89,3 +89,17 @@ def test_what_the_stage_s_code_calls_rides_in_the_audit_and_a_call_no_module_def
     assert missing == []
     stage.write_text("from l7r.diagram.helpers import gone\n\ndef stage_field(s):\n    gone()\n")
     assert wbb.called_files(tmp_path, [stage])[1] == ["gone (from l7r.diagram.helpers, called in l7r/diagram/stage.py)"]
+
+
+def test_a_name_a_module_only_re_exports_is_found_where_it_is_defined(tmp_path: Path) -> None:
+    """`law.undeckable_at` is a package's submodule's re-export of `bridges.undeckable_at`: refused as undefined by the first cut
+    of the fix, which failed main's `make quick`."""
+    pkg = tmp_path / "l7r" / "diagram"
+    (pkg / "law").mkdir(parents=True)
+    (pkg / "bridges.py").write_text("def undeckable_at(p):\n    pass\n")
+    (pkg / "law" / "__init__.py").write_text("from .ends import *\n")
+    (pkg / "law" / "ends.py").write_text("from l7r.diagram.bridges import undeckable_at as undeckable_at\n")
+    stage = pkg / "stage.py"
+    stage.write_text("from l7r.diagram import law\n\ndef stage_x(s):\n    law.undeckable_at(s)\n")
+    got, missing = wbb.called_files(tmp_path, [stage])
+    assert [p.relative_to(tmp_path).as_posix() for p in got] == ["l7r/diagram/bridges.py"] and missing == []

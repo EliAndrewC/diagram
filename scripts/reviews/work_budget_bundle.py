@@ -452,13 +452,23 @@ def _imports(root: Path, path: Path, tree: ast.Module) -> tuple[dict[str, tuple[
     return names, mods
 
 
-def _definer(root: Path, mod: str, name: str) -> Path | None:
-    """The file defining `name` imported from `mod`: the module itself, or, for a package re-exporting it, the submodule that does."""
+def _definer(root: Path, mod: str, name: str, seen: frozenset[str] = frozenset()) -> Path | None:
+    """The file defining `name` imported from `mod`: the module itself, the module it re-exports the name from (followed), or, for
+    a package, the submodule that defines it."""
     f = _module_file(root, mod)
-    if f is None:
+    if f is None or mod in seen:
         return None
-    here = [f] + (sorted(q for q in f.parent.rglob("*.py") if q != f) if f.name == "__init__.py" else [])
-    return next((q for q in here if name in _defined(ast.parse(q.read_text(encoding="utf-8")))), None)
+    tree = ast.parse(f.read_text(encoding="utf-8"))
+    if name in _defined(tree):
+        return f
+    names, _ = _imports(root, f, tree)
+    if name in names and (q := _definer(root, *names[name], seen | {mod})):  # `from .law_water import crossing_points`
+        return q
+    for q in sorted(q for q in f.parent.rglob("*.py") if q != f) if f.name == "__init__.py" else []:
+        sub = ".".join(q.relative_to(root).with_suffix("").parts)
+        if found := _definer(root, sub.removesuffix(".__init__"), name, seen | {mod}):  # a submodule's own, or its re-export
+            return found
+    return None
 
 
 def called_files(root: Path, seeds: list[Path]) -> tuple[list[Path], list[str]]:
