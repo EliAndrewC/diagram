@@ -1,0 +1,29 @@
+LOOSE - the registry's pieces (derivation.md line 73): charge 2 a cell, not 4. Ask each piece of the standing cells it crosses, then append it there (1 read and 1 write a cell), giving 10.8 a brook station, 14.8 a ditch segment and 21.6 a hem plot: 5,508, 8,326 and 12,965 instead of 7,552, 11,604 and 18,394. The page gives no reason a record also needs bins of its own at the question.
+
+1. **Is each factor derived?** Yes, every row names a reason. The totals re-add to 35,650, 64,487 and 118,934, the exponent is ln(118,934 / 35,650) / ln 4 = 0.87, a basin costs about 47 operations against the 4,000 limit, and slack is 1. Two figures are still thin but not blocking: the hem seats' "4 a tract" (line 74) does not say how many turns are tried before one stands apart, and the "4 offtakes" (line 76) is the figure verdict-7 itself proposed, with no source in the Bounds. Line 22 still says "about 3 brook segments", where the outline row and the Bounds say about 2.
+
+2. **Is there a cheaper standard algorithm?** Yes, in the registry's pieces row:
+   - Each piece is written into the question's own bins and into the standing, then read in each (line 35, line 73). The derivation neither uses a single bin nor says why it cannot.
+   - Asking against the standing and then appending reaches the same entries at half the cell work. The entries met are already charged in the overlap registry row (line 67).
+   - If S4 (no filing before the record is asked) is the reason for the question's own bins, the derivation has to say so.
+   - S9 holds: no row picks a winner from a growing set, and every knob's branch is charged at its share (the hem and its bands at even odds, the seasonal rolls at one in two, the pond at 0.55, the grave at 0.3).
+
+3. **Is any factor padded?** Yes:
+   - **The lead finding.** Verdict-7 finding 3 said "Binning once gives 2", and line 119 says it is fixed ("binned once"). Row 73 still writes into two bins and reads two, 4 a cell, so the closure line contradicts the row.
+   - **A second padding in the same row.** A hem plot's "ring" is its 4 corners, already placed and written in the dry hem row (5 a plot, line 63). Drawing it again charges 4 x 57, 114 and 227 a second time; only the box read off the corners is new. With that removed as well, the row is 5,280, 7,870 and 12,057. A stroke's ribbon is real construction (offset corners) and stands.
+
+4. **Is each figure read at its source's size and unit?** These two under-counts carry over from earlier verdicts, sent to the phase's MODE AUDIT by their precedent:
+   - Row 73 bins 322, 447 and 630 brook stations, but the Bounds say the registry draws the brook's record denser, 430 pieces at 20.
+   - "A ditch segment of about 120 ft" (line 69, reused at 3.4 cells in row 73) still has no source (verdict-6).
+
+**Earlier findings:**
+- Verdict-7 findings 1, 2 and 4 are closed on the current rows:
+  - the offtakes' lean is read from the plan (4), and the hem seat's offsets are one forward cursor step each;
+  - the channels' count is gone;
+  - the basins' walks are recorded as the comb is laid (72, 102, 144);
+  - ribbons are named, the cells are 1.4, 3.4 and 6.8, and the 2 x 3.7 figure and the "about 4 laid plots" entries are corrected.
+- Verdict-7 finding 3 is closed for the field's record (3 a basin) and the ink (channels no longer charged), but **not** for the registry's double binning: that is the lead finding.
+- Verdicts 1 to 6 stay closed. Verdict-1's items went with the clipped basins, verdict-2's exponent was restated, and verdict-3's cap still means one field at each size.
+- Earlier verdicts' notes for the MODE AUDIT still stand (S4): the rows' angle breach "refusing the field", and the beans' finish. The hem's lap and outline tests belong with them. Line 126 says the band-by-band laying means no plot is ever refused by the rice or a laid plot, which means either those tests cannot fail or refused tries go uncharged.
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-7.txt
