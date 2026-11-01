@@ -287,12 +287,6 @@ HOUSEHOLD_BAND = (10, 20)
 # other size is this fan scaled by a single multiplier (see `fit_field`), so the fan's ASPECT - the
 # thing that makes a comb read as a comb - is a constant of the tier and only its area varies.
 REF_HOUSEHOLDS = 15
-REF_FIELD_FALL = 1150.0
-"""Research: reference fan's fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1,150 ft, Ikegami's hand-drawn fan"""
-REF_CANAL_A = (1250.0, 1450.0)
-"""Research: reference fan's canal A - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1,250 to 1,450 ft, Ikegami's hand-drawn fan"""
-REF_CANAL_B = (680.0, 800.0)
-"""Research: reference fan's canal B - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 680 to 800 ft, Ikegami's hand-drawn fan"""
 
 # ...and its ASPECT is rolled, which matters more than it sounds. `fit_field` scales the reference
 # fan by one multiplier, so without this every hamlet of a given household count and fall direction

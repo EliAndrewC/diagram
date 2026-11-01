@@ -210,18 +210,6 @@ def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
     return req is None or terrain == req
 
 
-def _toward(frm: Pt, to: Pt, dist: float) -> Pt:
-    """A point `dist` along the way from `frm` to `to`, never past 45% of the run - so a fillet leg
-    piled onto a short plot edge still leaves that edge with a middle.
-    Research: geometry - NONE
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.45 (leg cap ("geometry - NONE"))
-    """
-    vx, vy = to[0] - frm[0], to[1] - frm[1]
-    ln = math.hypot(vx, vy) or 1.0
-    dd = min(dist, ln * 0.45)
-    return (frm[0] + vx / ln * dd, frm[1] + vy / ln * dd)
-
-
 def _centroid(poly: Sequence[Pt]) -> list[float]:
     """Rounded centroid of a plot polygon - the identity a land-use record and a wet-plot record share.
     Research: geometry - NONE"""
@@ -513,17 +501,6 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 
 """Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
 """Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 4 ft"""
-
-
-#: The scales that draw as a WALLED URBAN RING at the city grain. A domain capital is a bigger
-#: city, not a different kind of thing: it wants the same execution-ground sizing, the same
-#: in-wall grove suppression, the same street widths and the same walled-ring paddy handling. So
-#: the tier predicates are WIDENED rather than forked (feature 019) - the opposite of what
-#: citybudget does for the BUDGET, and for the opposite reason: there a shared path risked
-#: repricing shipped cities, here the shared behavior is simply the correct behavior and
-#: duplicating it would fork the drawing vocabulary.
-CITY_TIER_SCALES = ("city", "capital")
-"""Research: a capital draws as a bigger city - research/questions/0138-how-a-capital-differs-from-a-provincial-city-what-multiplies-what-changes-form-and-what-only-a-capital-has.html"""
 
 
 # NO DRAWN FLOOR FOR THE BOUNDARY STONE (feature 328 wave 7): it was drawn at a 7 px floor, about 21 ft at the city grain,

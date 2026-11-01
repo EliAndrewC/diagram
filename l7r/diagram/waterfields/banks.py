@@ -449,32 +449,6 @@ _TOE_MIN_THICKNESS = 0.16
 # `paddy_plots_are_workable_basins` fires at 15 - placer stricter than gate, as everywhere else.
 _TOE_MIN_APEX = 25.0
 """Research: no point sharper than 25 deg - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the placer refuses a basin's apex under 25 deg"""
-# THE TINT DEMOTION ASKS A DIFFERENT QUESTION, so it measures a different ring - not a different
-# threshold. Two settlement-reviews shaped this, and the second corrected the first.
-#
-# Sawada (2026-08-17) found the demotion had gone structurally DEAD: it tested apexes below 25 deg,
-# the needle fix set the placer's own floor to the same 25, so after the fix no ring below 25 exists
-# and the predicate could never fire - while the sharpest survivors piled up on its boundary and one
-# 91 x 18 ft blue wedge missed demotion by 0.05 deg on the map briefed "no pond". The first fix was
-# to raise the threshold to 40. THAT WAS WRONG, in both directions, and Inashiro's review measured
-# it: raising it demoted a 35.5 x 118.3 ft strip keeping 82% workable floor (an honest basin), while
-# still passing plot 456, which tapers 30.0 -> 3.4 ft over 75 ft and scores 49.6 deg only because its
-# needle is TRUNCATED 8 ft short of the point. The claim that 25-40 is an empty band was also simply
-# false - 15 plots sit in it on that map alone.
-#
-# THE REAL DISCRIMINATOR IS THE END, NOT THE CORNER. What makes a blue plot read as a pond is coming
-# to a POINT; an interior angle cannot see a taper whose tip has been cut off, and a long honest
-# strip can carry one sharpish corner. So the threshold goes back to 25 and the ring is DEDUPED AT AN
-# END WIDTH first: an end narrower than `_TINT_END_FT` collapses to a single vertex, and the wedge
-# then shows the apex it really has. That also un-deadens the predicate without a threshold race -
-# it is now a different MEASUREMENT from the placer's guard rather than a number sitting next to it.
-#
-# 5 ft is the narrowest end that can hold water at all: two aze at AZE_FT 1.5 each is 3 ft of wall,
-# leaving ~2 ft of standing water between them. Below that a basin has no end, it has a point.
-_TINT_MIN_APEX = 25.0
-"""Research: pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: an apex under 25 deg loses the tint"""
-_TINT_END_FT = 5.0
-"""Research: an end that holds water - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: an end under 5 ft is read as a point"""
 # The GATE's own line, kept here so the placer margins above are all expressed against ONE number
 # rather than each carrying a copy of it. `paddy_plots_are_workable_basins` fires below this; every
 # constant above it is a margin over it, and the invariant the calibration rests on is that all of
@@ -644,14 +618,6 @@ def is_chevron(poly: Poly, min_apex: float = _CHEVRON_MIN_APEX, min_solidity: fl
     """
     ring = dedup_ring([(float(p[0]), float(p[1])) for p in poly], 1.0)
     return len(ring) >= 3 and pointed_ring(ring, min_apex) and ring_solidity(ring) < min_solidity
-
-
-def cell_area(plot_across: float, row_step: tuple[float, float]) -> float:
-    """The fan's DESIGN cell in px^2 - the area one carved paddy was aimed at.
-
-    ONE expression, so the placer's floor and the gate's read the same reference (the same-source
-    doctrine). `row_step` is a (min, max) band, so the cell takes its midpoint."""
-    return plot_across * (row_step[0] + row_step[1]) / 2.0
 
 
 def hem_on_paddy(quad: Poly, paddy_outline: Poly) -> bool:

@@ -21,34 +21,6 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,
 # its work the seeds that broke (m:wave85-thread-floor-reverted; the patch is in the spec's audit/reverted/).
 
-# THE CHANNEL LADDER, IN TRUE FEET (GM 2026-08-17: "update the net to be actual size").
-#
-# These were multipliers-times-grain chosen by eye, and pricing them against a real irrigation duty
-# found the whole net drawn 5-6x oversize - a hamlet's head-race wants ~2.5-5 ft and was drawn at 14.
-# They are now TRUE WIDTHS IN FEET, converted to pixels by `chan_px`, so the comb net is to scale
-# like everything else on a to-scale sheet. The research, the two independent derivations behind
-# each figure, and the disclosed departures are in
-# `../../../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`.
-#
-# Sized from the ATTESTED tier ladder (a field ditch watering one paddy ~0.3 m; a distribution
-# lateral ~1 m; a district main/yosui ~5 m) placed by COMMAND AREA, with a Manning/Lacey check on a
-# real duty as corroboration rather than as the primary source - the attested tiers are measurements
-# of real channels, while a Manning figure rests on four assumed parameters. A hamlet fan of ~8.5 ha
-# sits between the lateral and the small-main tiers, which is where the head-race lands.
-# The trunk, above the fork. Set to 6.0 rather than 5.0 on the tier-consistency check that
-# `settlement-review` raised (2026-08-17): at 5.0 the top three tiers sat within 1 ft of each other,
-# so the ONE junction where hierarchy most wants to read - the bunsuiguchi - was where it read least.
-# A trunk that splits into 4.5 and 4.0 ft arms carries both, and under the width-goes-as-sqrt(Q) law
-# this engine already adopts that is sqrt(4.5^2 + 4.0^2) = 6.0. This is TIER SELECTION using the law
-# as a sanity check on where the trunk sits, NOT conservation-at-junctions (ruled against 2026-08-16
-# - never chain drawn widths down from the source). It also has a real referent: a sluice-fed
-# head-race genuinely is wider and slower than the water feeding it, ponding above the weir.
-HEAD_RACE_FT = 6.0
-"""Research: head race width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 6.0 ft, a small main canal"""
-CANAL_A_FT = (4.5, 1.5)  # the high-margin supply canal: head -> the thread it dies as
-"""Research: upper-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.5 ft dwindling to 1.5"""
-CANAL_B_FT = (4.0, 1.5)  # the far-margin arm, commanding the smaller flank
-"""Research: far-edge supply canal width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 4.0 ft dwindling to 1.5"""
 DELIVERY_FT = (2.5, 1.2)  # a delivery ditch: head at its takeoff -> the terminal field-ditch tier
 """Research: delivery ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 ft dwindling to 1.2"""
 DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the outfall. Drainage
@@ -56,26 +28,6 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 # is why the drain's tail is wider than the head-race that fed the same ground.
 """Research: drain width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: 1.2 ft at its head gathering to 5.5 at the outfall"""
 
-# A DELIVERY IS NEVER DRAWN WIDER THAN THE CANAL FEEDING IT (settlement-review 2026-08-17: the flat
-# delivery head read 7.96 px against a parent tapered to 5.73, inverting the rank read low in the
-# tree - the one thing width-as-rank exists to convey). The head is capped at this fraction of the
-# parent's LOCAL width at the takeoff. It binds on roughly HALF the deliveries of a hamlet fan
-# (three of five on Inashiro, including the second offtake off canal A with the canal still at
-# two-thirds of its head) - not merely on the last one or two, which an earlier draft of this
-# comment claimed.
-# This is NOT a switch to conservation-at-junctions, which the GM ruled against on 2026-08-16
-# (drawn width is RANK, not discharge; do not chain widths down from the source) - it is the weaker
-# and sufficient guarantee that a child reads as subordinate to its parent.
-DELIVERY_PARENT_FRAC = 0.8
-"""Research: delivery never wider than its canal - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: its head capped at 0.8 of the canal's local width"""
-# A mid-block sub-ditch against the HEAD of the delivery it branches off - not that delivery's local
-# width at the junction, which is what a delivery itself uses against its canal. The asymmetry is
-# deliberate and was measured: at true scale a delivery is ~2.2 ft a third of the way down, so 0.75
-# of its LOCAL width is 1.64 ft, which against the 1.5 px floor leaves a sub-ditch 0.14 px of room to
-# taper in - and `delivery_ditches_taper` rejected exactly that on 22 of 24 cohort maps. A ditch that
-# cannot taper should not be drawn claiming to.
-SUB_PARENT_FRAC = 0.75
-"""Research: sub-ditch cap - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 0.75 of its delivery ditch's head"""
 
 # THE VISIBILITY FLOOR, and the one place map SCALE enters the ladder. True widths are honest at
 # hamlet/village resolution (1-2 ft/px) and vanish above it: at a provincial city's 3 ft/px the
@@ -448,48 +400,6 @@ def _signed_area(poly: Poly) -> float:
 
 def _poly_area(poly: Poly) -> float:
     return abs(_signed_area(poly))
-
-
-def _dug_polyline(
-    R: random.Random,
-    F: _Frame,
-    x: float,
-    y: float,
-    ang: float,
-    length: float,
-    wobble: float,
-    seg: tuple[float, float],
-    W: float,
-    H: float,
-) -> Poly:
-    """A hand-dug canal: few long segments, tiny heading changes (obtuse only).
-
-    Research: dug canal course - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); long straight segments with a small random heading change at each, kept 25 px off the frame
-    """
-    pts = [(x, y)]
-    trav = 0.0
-    while trav < length:
-        step = min(R.uniform(*seg), length - trav)
-        ang += R.uniform(-wobble, wobble)
-        nx, ny = x + step * math.cos(ang), y + step * math.sin(ang)
-        if not (25 < nx < W - 25 and 25 < ny < H - 25):
-            break
-        x, y = nx, ny
-        pts.append((x, y))
-        trav += step
-    return pts
-
-
-def _point_along(pts: Poly, frac: float) -> Pt:
-    total = sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1))
-    d = frac * total
-    for i in range(len(pts) - 1):
-        L = math.dist(pts[i], pts[i + 1])
-        if d <= L:
-            t = d / L
-            return (pts[i][0] + t * (pts[i + 1][0] - pts[i][0]), pts[i][1] + t * (pts[i + 1][1] - pts[i][1]))
-        d -= L
-    return pts[-1]
 
 
 def _miter_normals(bpts: Poly, F: _Frame) -> list[Pt]:
