@@ -272,7 +272,7 @@ fn apart(rolled: (bool, f64), near: &[f64], tests: &mut u64) -> (bool, f64) {
             .map(|b| (b - base + 90.0).rem_euclid(180.0) - 90.0)
             .collect();
         cs.sort_by(f64::total_cmp);
-        let mids = cs.windows(2).map(|w| ((w[0] + w[1]) / 2.0).floor());
+        let mids = cs.windows(2).map(|w| f64::midpoint(w[0], w[1]).floor());
         for t in [-most, most].into_iter().chain(mids) {
             if (-most..=most).contains(&t) {
                 let g = gap(t + base);
