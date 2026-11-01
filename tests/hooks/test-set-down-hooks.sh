@@ -50,6 +50,11 @@ python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"con
 line "Note: a file changed - Command running in background with ID: b4note. Output is being written to: x"
 [ "$(stop)" = 2 ] && ok "a launch notice quoted in a system note is not a launch - refused (2026-10-28)" || no "a noted notice counted as running"
 
+python3 -c 'import json; print(json.dumps({"type": "user", "message": {"content": [{"type": "tool_result", "content": "Workflow launched in background. Task ID: w9wave"}]}, "toolUseResult": {"status": "async_launched", "taskId": "w9wave", "taskType": "local_workflow"}}))' >> "$T/tr.jsonl"
+[ "$(stop)" = 0 ] && ok "a workflow not reported back is running (2026-11-01)" || no "a running workflow read as nothing running"
+line "<task-notification><task-id>w9wave</task-id><status>completed</status></task-notification>"
+[ "$(stop)" = 2 ] && ok "the workflow reported back: refused again" || no "workflow reported back"
+
 echo "4. a question is no way out (the plan review, 2026-10-19)"
 python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": "Shall I go on to the next task?"}]}}))' >> "$T/tr.jsonl"
 [ "$(stop)" = 2 ] && ok "a turn ending on a question is refused" || no "question"

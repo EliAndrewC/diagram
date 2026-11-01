@@ -30,7 +30,9 @@ OPEN = re.compile(r"^- \[ \] (T\d+[a-z]?) (.*)$", re.M)
 # ...A LAUNCH IS THE TOOL'S OWN RECORD, NEVER ITS TEXT (2026-10-28): the notice's words reach the transcript quoted - in the session's
 # commands and in the system's notes of a changed file - and each quote read as a launch kept the guard silent; the tool result's
 # structured fields (`backgroundTaskId`, an async agent's `agentId`) are written only by a real launch
-LAUNCHED = re.compile(r'"(?:backgroundTaskId|agentId)":\s*"([A-Za-z0-9]+)"')
+#: ...and a workflow's launch, `"status": "async_launched", "taskId": ...` (found 2026-11-01: a running check wave read as nothing running,
+#: and every turn ending on it was refused)
+LAUNCHED = re.compile(r'(?:"(?:backgroundTaskId|agentId)"|"status":\s*"async_launched",\s*"taskId"):\s*"([A-Za-z0-9]+)"')
 NOTIFIED = re.compile(r"<task-id>([A-Za-z0-9]+)</task-id>")
 #: a task ended with TaskStop sends no notification, so its stop is its end (2026-10-28: a background command stopped on 10-25 stayed
 #: "running" for three days and let every turn of the session end unrefused; the same fix `hm_checks` made in feature 385 T104)
