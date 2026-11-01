@@ -45586,6 +45586,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/overlap/registry.py::_ribbons#registry plumbing": {
+  "body": "0818029e91872f42",
+  "claim": "registry plumbing - NONE: recording, indexing and asking the matrix",
+  "code": "35f622466f7730a5",
+  "core": "82086992f786223c",
+  "date": "2026-11-01",
+  "note": "an instrumentation wrapper that counts work under `__debug__` and returns `_mx_stroke`'s ribbons unchanged; nothing physical or visual is decided",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/registry.py::box_of#registry plumbing": {
   "code": "d2dc8785a2a01071",
   "core": "db6572f12611fe86",
@@ -45595,73 +45607,79 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#drawn extents": {
-  "code": "5a4e97c4cf1e3973",
-  "core": "939b47d3d26659db",
+  "code": "5624568d76697780",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-12",
   "note": "reads the drawn box",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#its drawn sizes": {
   "body": "47b1a69fbd968592",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 2.5 (ward fence line's drawn width)",
-  "code": "01dd103cf971bbd8",
-  "core": "939b47d3d26659db",
+  "code": "130f8f467583840d",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-25",
   "note": "the ward fence is tested at its drawn hairline width",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#its search steps and tolerances": {
   "body": "47b1a69fbd968592",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (π/8 angle step); 12 (well polygon vertex count); 16 (pond polygon vertex count)",
-  "code": "e7ce9e919ea96f4f",
-  "core": "939b47d3d26659db",
+  "code": "b14a10eb718b95bf",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-25",
   "note": "polygon vertex counts for discs",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#its wall width": {
   "body": "47b1a69fbd968592",
   "claim": "its wall width - CONVENTION: the wall's drawn width - 10 (wall stroke width fallback)",
-  "code": "558ec9bc8ca6575a",
-  "core": "939b47d3d26659db",
+  "code": "1bf716c4230e40d3",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-25",
   "note": "mirrors the drawn wall stroke; no hamlet producer",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#its way width fallbacks": {
   "body": "47b1a69fbd968592",
   "claim": "its way width fallbacks - NONE: they decide nothing about the place; no generator writes a road, ring road or moat, and lanes carry w - 20 (ring road width fallback); 6 (lane width fallback); 30 (road width fallback); 22 (moat width fallback)",
-  "code": "381d3e9f120ba064",
-  "core": "939b47d3d26659db",
+  "code": "6896a3e1748cf585",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-25",
   "note": "checker extents; nothing drawn depends on them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#its well radius": {
   "body": "47b1a69fbd968592",
   "claim": "its well radius - NONE: they decide nothing about the place; every well record carries r and vr - 8 (well radius fallback)",
-  "code": "f53767fbbad7e5b9",
-  "core": "939b47d3d26659db",
+  "code": "2d0ee2f3acc81f8c",
+  "core": "a021cdd9fb8513cb",
   "date": "2026-10-25",
   "note": "the 8 is a fallback that no well record reaches",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::elements#registry plumbing": {
@@ -47288,8 +47306,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_mx_stroke#geometry and bookkeeping": {
-  "code": "71c9b4f99c556142",
-  "core": "151acb635185112e",
+  "code": "e219d2c8c302a470",
+  "core": "c2e10c1fcd33e9d6",
   "date": "2026-10-03",
   "note": "geometry",
   "pages": {},
@@ -50196,20 +50214,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#carried deck always planked": {
-  "body": "b6f2f50dec413bd1",
+  "body": "172333dcf44304b3",
   "claim": "carried deck always planked - plank-bridges-over-farm-ditches-itabashi.drawing: a hamlet's way crosses on one timber deck as wide as the way - the hamlet the one tier that calls `bridges()` (`hamletgen/frame.py`, `ways/checks.py`); a town's road bridges, one of two forms rolled per settlement (0087), are feature 381's carried item (road-bridge forms), to be rolled here when a town first calls it",
   "code": "4622d15d17ae151c",
   "core": "21dad52d07f216da",
   "date": "2026-11-01",
-  "note": "every carried deck is fixed at `form=\"plank\"`, which is right for a hamlet (\"always planked whatever form the settlement's ditch crossings take\"). But the claim says the hamlet is the only tier that calls bridges(), and the bundle contradicts that. This is the city mixin, and its own docstrings name town callers: \"the city moat at a gate\", Minami's ring road over the cargo canal, scanned \"now\". A town's road bridges \"take one of two forms, a knob chosen at random for each settlement\". So either show the code has no town caller, or restate the claim as a known departure the code keeps until feature 381 Tnn.",
+  "note": "bridges() calls bridge() with the default form \"plank\" and deck_w the way's own width rw, as §13 says (\"one timber deck as wide as the way, always planked whatever form the settlement's ditch crossings take\"); the corrected docstring, which now says only the hamlet calls it and leaves town road bridges to feature 381, matches the code",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
   "research": "1dd5fd71121f4a06",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:4c07eec58fdb2746",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#deck drawn over the water": {
   "body": "b6f2f50dec413bd1",
