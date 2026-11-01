@@ -96,6 +96,8 @@ pub fn pocket_pond(
     tag: &str,
     work: &mut u64,
 ) -> Option<(usize, Pond)> {
+    // the lowest row's plots: two walks of the basins, counted (the work-budget audit, T16)
+    *work += 2 * basins.len() as u64;
     let last = basins.iter().map(|b| b.row).max()?;
     let low: Vec<usize> = (0..basins.len())
         .filter(|&i| basins[i].row == last)

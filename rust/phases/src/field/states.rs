@@ -153,6 +153,8 @@ pub fn states(
     unsettled: bool,
     work: &mut u64,
 ) -> Vec<State> {
+    // the lowest row found by a walk of the basins, counted (the work-budget audit, T16)
+    *work += basins.len() as u64;
     let last = basins.iter().map(|b| b.row).max().unwrap_or(0);
     let seasonal = seasonal_map(seed, tag);
     let mut out: Vec<State> = basins

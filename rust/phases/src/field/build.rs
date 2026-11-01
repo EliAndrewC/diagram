@@ -82,6 +82,45 @@ pub struct Field {
     pub segments: Vec<(Pt, Pt, f64)>,
     /// The water index of `segments`, each at its width: the field's beans and the hem ask it, filed once.
     pub water: Index,
+    /// Each basin's box (x0, y0, x1, y1), middle and area (square feet), from one walk of its ring (`ring_stats`): the field's
+    /// record and the barley's ground read them, no ring walked again (the work-budget audit, T16).
+    pub stats: Vec<RingStats>,
+}
+
+/// A ring's box (x0, y0, x1, y1), middle (the mean of its points) and area (square feet).
+pub type RingStats = ([f64; 4], Pt, f64);
+
+/// A ring's `RingStats` in one walk, each figure as the record has always taken it: the box's least and most, the points' mean,
+/// the shoelace sum's half, unsigned.
+///
+/// Research:
+///     the plot's figures - NONE: geometry of the ring; what they record is the field record's
+fn ring_stats(ring: &[Pt]) -> RingStats {
+    let n = ring.len();
+    let (mut bx, mut s, mut cross) = (
+        [
+            f64::INFINITY,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NEG_INFINITY,
+        ],
+        (0.0, 0.0),
+        0.0,
+    );
+    for (i, p) in ring.iter().enumerate() {
+        bx = [
+            bx[0].min(p.0),
+            bx[1].min(p.1),
+            bx[2].max(p.0),
+            bx[3].max(p.1),
+        ];
+        s = (s.0 + p.0, s.1 + p.1);
+        let q = ring[(i + 1) % n];
+        cross += p.0 * q.1 - q.0 * p.1;
+    }
+    #[expect(clippy::cast_precision_loss, reason = "a ring of a handful of points")]
+    let m = n as f64;
+    (bx, (s.0 / m, s.1 / m), cross.abs() / 2.0)
 }
 
 /// The stage's output: the knobs as rolled, the fields, the coarse grain's acres (drawn, needed, the room) and the counts.
@@ -241,6 +280,8 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
 /// # Errors
 /// `FieldRefused` when an outermost basin breaks a basin's rule.
 fn rows_held(bs: &[Basin], cell: f64, counts: &mut Counts) -> Result<(), FieldRefused> {
+    // the rows' ends: two walks of the basins, counted (the work-budget audit, T16)
+    counts.add("candidate@rows_held", 2 * bs.len() as u64);
     let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
     let mut ends: Vec<(Option<usize>, Option<usize>)> = vec![(None, None); rows];
     for (i, b) in bs.iter().enumerate() {
@@ -342,6 +383,11 @@ fn one(
     let mut work = 0;
     let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work);
     counts.add("write@basin", work);
+    let stats: Vec<RingStats> = bs.iter().map(|b| ring_stats(&b.ring)).collect();
+    counts.add(
+        "write@plot_record",
+        bs.iter().map(|b| b.ring.len() as u64).sum(),
+    );
     rows_held(&bs, inp.cell, counts)?;
     let chans = channels(
         f,
@@ -399,28 +445,23 @@ fn one(
         grave: gr,
         segments,
         water: ix,
+        stats,
     })
 }
 
-/// The area of a field's drained plots (square feet), neither wet nor resting - the barley's ground; each ring's walk counted.
+/// The area of a field's drained plots (square feet), neither wet nor resting - the barley's ground, read from each plot's
+/// `stats`.
 ///
 /// Research:
 ///     the drained plots - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, so only the drained plots count
 fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
-    let rings: Vec<_> = field
-        .basins
+    counts.add("candidate@drained", field.states.len() as u64);
+    field
+        .stats
         .iter()
         .zip(&field.states)
         .filter(|(_, s)| **s != State::Wet && **s != State::Rest)
-        .map(|(b, _)| &b.ring)
-        .collect();
-    counts.add(
-        "pt_test@drained",
-        rings.iter().map(|r| r.len() as u64).sum(),
-    );
-    rings
-        .iter()
-        .map(|r| super::geom::signed_area(r).abs())
+        .map(|(x, _)| x.2)
         .sum::<f64>()
 }
 

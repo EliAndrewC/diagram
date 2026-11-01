@@ -50,9 +50,10 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
             .map(|(ring, deg, form)| (ring.to_vec(), *deg, form.clone())),
     )?;
     let plots = PyList::empty(py);
-    for (b, s) in f.basins.iter().zip(&f.states) {
+    for ((b, s), x) in f.basins.iter().zip(&f.states).zip(&f.stats) {
         let p = PyDict::new(py);
         p.set_item("ring", pts(&b.ring))?;
+        p.set_item("stats", (x.0, x.1, x.2))?;
         p.set_item("row", b.row)?;
         p.set_item("col", b.col)?;
         p.set_item("state", state(*s))?;

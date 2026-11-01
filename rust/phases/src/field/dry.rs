@@ -172,16 +172,14 @@ pub fn hem(
                         depth + f64::from(j) * PLOT_FT.1,
                         depth + f64::from(j + 1) * PLOT_FT.1,
                     );
-                    // the canal's own course pushed out along its smoothed normal: neighbors share their sides and the bands
-                    // nest, so the hem follows the canal as a hem does
-                    let poly = vec![
-                        canal.offset(d0, o0),
-                        canal.offset(d0 + PLOT_FT.0, o0),
-                        canal.offset(d0 + PLOT_FT.0, o1),
-                        canal.offset(d0, o1),
-                    ];
+                    // the grain held, the band's rest is room the hem did not take: no seat built (the audit, T16: each was
+                    // built only to be counted as room)
                     room += PLOT_FT.0 * PLOT_FT.1;
-                    if got >= need || refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
+                    if got >= need {
+                        continue;
+                    }
+                    let poly = canal.seat(d0, (o0, o1), &mut ix.tests);
+                    if refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -331,6 +329,19 @@ impl Canal {
         let u = unit(a, b);
         let t = (d - self.starts[k]).clamp(0.0, dist(a, b));
         ((a.0 + u.0 * t, a.1 + u.1 * t), u)
+    }
+
+    /// A plot's seat `d` feet along the course, `o.0` to `o.1` feet out: the canal's own course pushed out along its smoothed
+    /// normal, so neighbors share their sides and the bands nest and the hem follows the canal as a hem does - four offsets, each
+    /// three lookups along the course, counted in `work` with the hem's tests.
+    fn seat(&self, d: f64, (o0, o1): (f64, f64), work: &mut u64) -> Vec<Pt> {
+        *work += 12;
+        vec![
+            self.offset(d, o0),
+            self.offset(d + PLOT_FT.0, o0),
+            self.offset(d + PLOT_FT.0, o1),
+            self.offset(d, o1),
+        ]
     }
 
     /// The point `d` feet along the course pushed `o` feet out to the hem's side, along its normal smoothed over a plot's

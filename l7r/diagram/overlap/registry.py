@@ -269,26 +269,32 @@ class Standing:
     def extents(self, key: str, o: Any) -> list[Extent]:
         return element_extents(key, o, self.M)
 
-    def conflicts(self, key: str, o: Any, ignore: Any = None, first: bool = False) -> list[tuple[str, str, float, float]]:
+    def conflicts(self, key: str, o: Any, ignore: Any = None, first: bool = False, own: list[Extent] | None = None) -> list[tuple[str, str, float, float]]:
         """Every forbidden overlap recording `o` under `key` would make: (key, the standing key, x, y), empty when the
         matrix admits it. `ignore` is a record whose own extents do not count (the one `o` replaces). `first` stops at the
         first one found - all `admits` asks (feature 417 T56: the wells' seats asked every overlap of a seat refused at its
-        first, 2,231 refused seats at 499 calls each on seed 39 at 40 households, measured 2026-10-27)."""
+        first, 2,231 refused seats at 499 calls each on seed 39 at 40 households, measured 2026-10-27). `own` is `o`'s extents
+        where the caller already has them (`record`, which files the same extents after)."""
         if __debug__:  # the counted work (feature 443): a candidate asked of what stands
             OPS["candidate@Standing.conflicts"] += 1
-        own = self.extents(key, o)
+        own = self.extents(key, o) if own is None else own
         if not own:
             return []
         priv = self.priv | ({pw} if (pw := private_well(o) if key == "wells" else None) else set())
         skip = set(self._held[(key, id(ignore))][1]) if ignore is not None and (key, id(ignore)) in self._held else set()
         out: list[tuple[str, str, float, float]] = []
         boxes = [box_of(e[1]) for e in own]
+        # each piece's points walked for its extent and its box, counted where it happens (S5; feature 444 T16's second audit)
+        if __debug__:
+            OPS["pt_test@Standing.extents"] += sum(len(e[1]) for e in own)
         # ...THE RECORD'S OWN PIECES, binned in the same cells: each asked only of its later pieces sharing a cell. Every pair was
         # asked once (feature 444 T16's audit: the brook's 448 pieces at 40 households were 100,000 own pairs a call, 200,474 of
         # the field stage's 218,329 counted operations, the pieces' boxes missing in all but a few hundred)
         own_bins: dict[tuple[int, int], list[int]] = {}
         for i, b in enumerate(boxes):
             for cell in self._cells(b):  # unclamped: pieces off the canvas still meet each other, as every pair did
+                if __debug__:
+                    OPS["write@Standing.bins"] += 1
                 own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
             b = boxes[i]
@@ -349,12 +355,13 @@ class Standing:
 
     def record(self, key: str, o: Any) -> None:
         """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands."""
-        bad = self.conflicts(key, o)
+        own = self.extents(key, o)  # once, for the question and the filing both
+        bad = self.conflicts(key, o, own=own)
         if bad:
             self.refuse(bad)
         if __debug__:
             OPS["placed@Standing.record"] += 1
-        self._add(key, o)
+        self._add(key, o, own)
 
     def refuse(self, bad: Sequence[tuple[str, str, float, float]]) -> None:
         """Raise `OverlapRefused` for the first of `bad` - on a STRICT registry (`strict`), which a generator whose every
@@ -371,10 +378,12 @@ class Standing:
         """`rec` as a record that keeps itself recorded: a later write to one of its drawn fields asks the registry first."""
         return Kept(self, key, rec)
 
-    def _add(self, key: str, o: Any) -> None:
+    def _add(self, key: str, o: Any, own: list[Extent] | None = None) -> None:
         ids: list[int] = []
-        for e in self.extents(key, o):
+        for e in self.extents(key, o) if own is None else own:
             b = box_of(e[1])
+            if __debug__:  # the piece's box, and each cell it is filed in below, counted (feature 444 T16's second audit)
+                OPS["pt_test@Standing.extents"] += len(e[1])
             cb = self._clamp(b)
             n = self._next
             self._next += 1
@@ -383,6 +392,8 @@ class Standing:
             if cb[2] < cb[0] or cb[3] < cb[1]:
                 continue
             for cell in self._cells(cb):
+                if __debug__:
+                    OPS["write@Standing.bins"] += 1
                 self._bins.setdefault(cell, []).append(n)
         prev = self._held.get((key, id(o)))
         self._held[(key, id(o))] = (o, (prev[1] if prev else []) + ids)

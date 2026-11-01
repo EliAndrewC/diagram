@@ -203,7 +203,9 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
     for i, p in enumerate(f["plots"]):
         rings = graves[3] if i == host else [p["ring"]]
         for ring in rings:
-            plots.append({"poly": ring, "fill": FILL[p["state"]], "low": p["state"] == "wet", "rest": p["state"] == "rest", "state": p["state"], "drain_side": p["drain_side"]})
+            # the Rust's own walk of the ring (`stats`: box, middle, area), a grave's rings walked here (`_write_field`)
+            stats = p.get("stats") if i != host else None
+            plots.append({"poly": ring, "fill": FILL[p["state"]], "low": p["state"] == "wet", "rest": p["state"] == "rest", "state": p["state"], "drain_side": p["drain_side"], "stats": stats})
     chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
     dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
     ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
@@ -247,20 +249,26 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     plots, chans, dry, ponds, grave_recs = net["plots"], net["channels"], net["dry_plots"], net["pocket_ponds"], net["grave_records"]
     beans, outline = net["bund_beans"], net["envelope"]
     rings = [p["poly"] for p in plots]
-    plot_recs, centers, acres = [], [], 0.0
+    plot_recs, centers, acres, walked = [], [], 0.0, 0
     for p in plots:
-        b, c, a = _ring_stats(p["poly"])
+        if p.get("stats"):
+            (x0, y0, x1, y1), c, a = p["stats"]
+            b = [round(x0, 1), round(y0, 1), round(x1, 1), round(y1, 1)]
+        else:
+            b, c, a = _ring_stats(p["poly"])
+            walked += len(p["poly"])
         centers.append(c)
         acres += a
         plot_recs.append([round(b[2] - b[0], 1), round(b[3] - b[1], 1), round(c[0], 1), round(c[1], 1), len(p["poly"]), 0])
     acres /= SQ_FT_PER_ACRE
-    # the writer's own walks of the rings, counted where they happen (S5; the work-budget audit at T16's landing): each plot's
-    # ring once (`_ring_stats`), a dry plot's for its area, and the record built for each plot, dry plot and channel in `comb_net`
+    # the writer's own walks, counted where they happen (S5; the work-budget audit at T16's landing): a grave's rings (every other
+    # plot's figures are the Rust's), a dry plot's ring for its area, the outline and every channel point for the field's boxes,
+    # the beans flattened, and the record built for each plot, dry plot and channel in `comb_net`
     if __debug__:
         from l7r.diagram import work_counts
 
-        work_counts.OPS["pt_test@write_field"] += sum(len(r) for r in rings) + sum(len(d["poly"]) for d in dry)
-        work_counts.OPS["write@comb_net"] += len(plots) + len(dry) + len(chans)
+        work_counts.OPS["pt_test@write_field"] += walked + sum(len(d["poly"]) for d in dry) + 2 * len(outline) + sum(len(c["pts"]) for c in chans)
+        work_counts.OPS["write@comb_net"] += len(plots) + len(dry) + len(chans) + len(beans)
     hem = [p["drain_side"] for p in plots if p["drain_side"]]
     if grave_recs:
         s.meta(grave_form=grave_recs[0]["form"])
