@@ -78,6 +78,15 @@ def elements(key: str, value: Any) -> list[Any]:
     return list(value) if isinstance(value, list) else []
 
 
+def _ribbons(pts: Any, hw: float) -> list[list[tuple[float, float]]]:
+    """`_mx_stroke`'s ribbons of a stroke, each segment's 4 corners counted as they are built (feature 444 T16: the registry's
+    pieces counted where they are made)."""
+    quads = _mx_stroke(pts, hw)
+    if __debug__:
+        OPS["write@Standing.ribbon"] += 4 * len(quads)
+    return quads
+
+
 def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
     """Every DRAWN extent of ONE record `o` under key `k`, as (key, polygon, own id, parent id).
 
@@ -101,7 +110,7 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
     if k == "wards":
         # the fence LINE at a hair's width: a fence is thin, and a generous stroke would manufacture defects out of
         # houses that merely front it
-        for q in _mx_stroke(o.get("boundary") or [], 2.5):
+        for q in _ribbons(o.get("boundary") or [], 2.5):
             out.append((k, q, None, None))
     elif k == "kido":
         # THE FULL DRAWN FOOTPRINT, AND IT IS TWO DIFFERENT THINGS (GM 2026-07-27: "in general we always want overlap
@@ -135,7 +144,7 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
         out.append((k, [(o[0] + o[2] * math.cos(a_), o[1] + o[3] * math.sin(a_)) for a_ in [i * math.pi / 8 for i in range(16)]], None, None))
     elif k in ("road", "moat", "ring_road", "wall", "lane"):
         _w = {"road": float(M.get("road_width") or 30.0), "moat": float(M.get("moat_width") or 22.0), "ring_road": 20.0, "wall": 10.0, "lane": 6.0}[k]
-        for q in _mx_stroke(o or [], _w / 2):
+        for q in _ribbons(o or [], _w / 2):
             out.append((k, q, None, None))
     elif k == "torii":
         if isinstance(o, (list, tuple)) and len(o) >= 2:
@@ -146,7 +155,7 @@ def element_extents(k: str, o: Any, M: Mapping[str, Any]) -> list[Extent]:
         pl2 = o.get("poly") or o.get("pts")
         if pl2:
             par = o.get(pfield) if pfield else None
-            for q in _mx_stroke(pl2, float(o.get("w") or _MX_LINE_W[k]) / 2):
+            for q in _ribbons(pl2, float(o.get("w") or _MX_LINE_W[k]) / 2):
                 out.append((k, q, None, par))
     elif isinstance(o, dict):
         par = o.get(pfield) if pfield else None
