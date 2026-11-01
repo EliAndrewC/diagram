@@ -1,0 +1,26 @@
+UNDERIVED - the canals' courses row charges an offtake probe, "each of the 4 offtakes' lean probed at up to 7 rows of 3 points (84)", but no offtake count, no 7 and no 3 appear in the Bounds, Keeps or contract, "up to" is a maximum (S8), and the hem seats row's "3 lookups along the canal's course each" (12 a plot) gives no reason either.
+
+1. **Is each factor derived?** No. The new rows claim to be "each from this page's Bounds, none from the counts" (derivation.md line 116), but the canals' courses' 84 (line 75) and the hem seats' 3 lookups an offset (line 73) have no source on the page. Verdict-4 set the precedent: an unreasoned figure blocks even when small (the pond's 3 shrinks). The "about 12, 16 and 21 channels" (lines 70 and 75; 66 = 54 + 12) are also absent from the Bounds, which give only ditch segments (54, 70, 85); verdict-2 flagged the same gap. The arithmetic itself holds: the totals re-add to 48,652, 86,513 and 157,765, the exponent is ln(157,765 / 48,652) / ln 4 = 0.85, and a basin costs about 64, far under 4,000.
+
+2. **Is there a cheaper standard algorithm?** Yes, in three places:
+   - The probe is a search for a lean the plan already supplies (Reads: the fall and the drainage bearing). Computed once from those, it is 4.
+   - The hem's plots are laid in order along the canal's course, so a cursor that moves forward (incremental) gives about 1 lookup an offset, not 3.
+   - The basins' walks row (line 74) is LOOSE under S9 and has no `- pruning:` line. It walks every basin, a set that grows with the map, 5.5 times to find the rows' ends, the low row (twice) and the drained plots. The construction already knows all of them: the rows' angles row tests each row's two outermost basins, the low row is the last row laid, and the drained plots are known when their states are rolled. Recorded at construction, that is about 2 a row plus the low row's basins once (about 72, 102 and 144), not 4,158, 8,283 and 16,610.
+
+3. **Is any factor padded?** Yes:
+   - **The registry's pieces (line 72, 31 a piece, 28% of the total):**
+     - It walks each piece's extent and box at the question and again at the filing (8). The box does not change between the two, so computing it once gives 4.
+     - It bins each piece twice (4). Binning once gives 2.
+     - It charges 2 x (2 + 7.4) to read the cells. The entries met at the question are already charged in the overlap registry row (6.74, 6.9, 6.8), and filing only appends, reading nothing.
+     - The tighter bound on the row's own structure is about 8 a piece: 3,464, 5,048 and 7,536.
+   - **The field's record (line 70):** its 6 a basin includes "the record written", which the interior basin's 6 already charges (line 50). That is 1 a basin counted twice.
+   - **The field's ink (line 71):** it charges the channels' drawing points (231, 358, 555) a second time; the drawing records row (line 67) already writes them once. The contract's Writes names drawing records, not a separate ink.
+
+4. **Is each figure read at its source's size and unit?** No:
+   - The registry's pieces gives every piece "its 4 points". A brook station or ditch segment has 2 ends, unless the registry draws channels as ribbons, and the derivation should say if it does.
+   - Its "about 2 cells" contradicts the page's own 1.4 for a brook station, 3.4 for a ditch segment and 6.8 for a hem plot (line 68, Bounds).
+   - Its "2 cells x 3.7 = 7.4" is the very figure verdict-5 found was not the source.
+
+Earlier findings: verdict-6's three are closed on the current rows. The items are 756, 1,506 and 3,020; the beads a run are stated (about 3); the registry uses each size's own figure; and a hem plot's cells are stated one way (2 plots, 2.4 segments, 6 recorded) in the algorithm, Indexes and rows. One slip in the record, not blocking: the `## Earlier findings` entries for verdict-4 findings 3 and 4 and verdict-5 finding 4 still say "about 4 laid plots". Verdicts 1 to 5 stay closed as verdict-6 confirmed. The S4 notes for the MODE AUDIT still stand: the rows' angle breach, and the beans' finish.
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-6.txt
