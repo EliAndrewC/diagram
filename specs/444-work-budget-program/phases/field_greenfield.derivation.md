@@ -19,7 +19,7 @@
 
     the field's area from the households and the land each works (2)
     the brook laid down the valley, each point placed and its bend kept to its sweep (2 a point); the intake, its weir and its channel to the field's fork (10)
-    the brook filed in the water index first; the outline placed point by point over the ground below the intake, each point tested against the brook in the water index's cells its box overlaps (placed 1, tested 1, the about 3 brook segments handed back); then the ditches filed
+    the brook filed in the water index first; the outline placed point by point over the ground below the intake, each point tested against the brook in the water index's cells its box overlaps (placed 1, tested 1, the about 2 brook segments handed back); then the ditches filed
     the comb: the main ditches across the fall at the row spacing, their branches leaning downstream, each segment laid on the lattice's own lines (1) - the outline is the lattice's edge, so no segment is tested against it
     each row between two ditches cut along at the plot length: an interior basin is a quadrilateral whose corners are the comb's own crossings - its angles the comb's, tested once for its row, not again a basin - so its 4 corners and its record written (5)
     no basin the outline cuts: the comb's basins are the lattice's quadrilaterals to its edge (the 2026-10-29 derivation clipped 265 to 637 cut basins against the outline; the comb as designed has none)
@@ -32,9 +32,9 @@
     every ditch and brook segment filed in the water index's cells it crosses
     each basin's box, middle and area read off its corners as they are laid; the rows' ends and the low row recorded as the comb is laid; the drained plots' area the field's less its wet and resting plots'
     the field's record and the readers' net written a basin, a dry plot and a bean at a time; the ink writes each basin's and dry plot's corners and each bean
-    every record's pieces given their extents and boxes once, their cells found once, binned once in the question's bins and once in the standing, and read once in each at the question; the filing reads nothing
+    every record's pieces given their extents and boxes once, their cells found once, binned once in the question's own bins (a record asked whole before any of it is filed, S4) and once in the standing, and read once in each at the question; the filing reads nothing
     each hem seat's 4 offsets a cursor's steps forward along the canal's course; its lap and water tests, and its tract's row direction, counted as they are asked
-    each offtake's lean read once from the plan's fall and drainage bearing
+    each offtake's lean asked at its own row, the next rows only where its bow does not lean
 
 ## Indexes
 
@@ -70,23 +70,23 @@
 | the plots' figures | over the run | 3,024 at 20, 6,024 at 40, 12,080 at 80 | each basin's box, middle and area read off its 4 corners as they are laid (4), the record's and the barley's ground's | always 4 a basin |
 | the field's record | over the run | 3,238 at 20, 6,442 at 40, 12,726 at 80 | the map's record of each basin - its plot entry and its ring's (2) - and the readers' net entry (1), 3 a basin; a low basin's wet middle (28, 40, 56); each dry plot's net entry (57, 114, 227); each bean flattened into the net (885, 1,770, 3,383) | always 3 a basin |
 | the field's ink | over the run | 4,137 at 20, 8,250 at 40, 16,371 at 80 | every point the ink writes that no other row does: each basin's 4 corners, each dry plot's 4 (57, 114, 227) and each bean (885, 1,770, 3,383) - the channels' points are the drawing records' row | the typical field |
-| the registry's pieces | over the run | 7,552 at 20, 11,604 at 40, 18,394 at 80 | each piece recorded, its extent drawn as a 4-cornered ribbon (a stroke's segment) or ring (a hem plot) and its box read off those corners once (8); its cells, found once, written once into the question's own bins and once into the standing (2 a cell) and read once in each at the question (2 a cell), none read at the filing - a brook station's 1.4 cells (13.6: 322, 447, 630), a ditch segment's 3.4 (21.6: 54, 70, 85), a hem plot's 6.8 (35.2: 57, 114, 227); the entries met in those cells are the overlap registry's row | the typical field |
-| the hem's seats and tests | over the run | 1,639 at 20, 3,278 at 40, 6,523 at 80 | 28.4 a plot: its seat's 4 offsets, each one step of a cursor moving forward along the canal's course (4); its lap test, 5 points against each of the about 2 laid plots its cells hand back, all 5 asked where it does not lap (10); its water test, each of the 2.4 segments handed back tested at its 2 ends and its 4 sides (14.4) - at 57, 114 and 227 plots, every plot tried a plot laid; and each tract's rows asked against its about 2 neighbors' at the first turn that stands apart (4 a tract), a tract about 3 strips of 4 plots (`TRACT_STRIPS` 2 to 4, `TRACT_PLOTS` 3 to 5), 5, 10 and 19 tracts | barley short of the need: twice |
+| the registry's pieces | over the run | 7,324 at 20, 11,148 at 40, 17,486 at 80 | each piece recorded: a stroke's segment drawn as a 4-cornered ribbon (4) and its box read off those corners (4), 8; a hem plot's ring its 4 corners already written (the dry hem's row), only its box read (4); its cells found once, each written once into the question's own bins and once into the standing (2 a cell) and read once in each at the question (2 a cell), none read at the filing - the question's own bins because a record is asked whole before any of it is filed (rubric S4: nothing filed and then taken back when a later piece is refused), so its pieces meet each other in bins of their own - a brook station's 1.4 cells (13.6: 322, 447, 630), a ditch segment's 3.4 (21.6: 54, 70, 85), a hem plot's 6.8 (31.2: 57, 114, 227); the entries met in those cells are the overlap registry's row | the typical field |
+| the hem's seats and tests | over the run | 1,639 at 20, 3,278 at 40, 6,523 at 80 | 28.4 a plot: its seat's 4 offsets, each one step of a cursor moving forward along the canal's course (4); its lap test, 5 points against each of the about 2 laid plots its cells hand back, all 5 asked where it does not lap (10); its water test, each of the 2.4 segments handed back tested at its 2 ends and its 4 sides (14.4) - at 57, 114 and 227 plots, every plot tried a plot laid; and each tract's rows asked against its about 2 neighbors' (the tract beside it along its band and the one below), its rolled turn and on the mean one more before one stands 20 degrees from both (4 a tract), a tract about 3 strips of 4 plots (`TRACT_STRIPS` 2 to 4, `TRACT_PLOTS` 3 to 5), 5, 10 and 19 tracts | barley short of the need: twice |
 | the basins' walks | over the run | 72 at 20, 102 at 40, 144 at 80 | none: the rows' two ends (2 a row: 22, 31, 44) and the low row (its basins once: 28, 40, 56) recorded as the comb is laid, the drained plots' area the field's less its wet and resting plots' | always 2 a row and the low row |
-| the canals' courses | over the run | 58 at 20, 74 at 40, 89 at 80 | each ditch segment laid by its point (1: 54, 70, 85) and each of the 4 offtakes' lean read once from the plan's fall and drainage bearing (4) | the typical field |
+| the canals' courses | over the run | 66 at 20, 86 at 40, 101 at 80 | each ditch segment laid by its point (1: 54, 70, 85) and each offtake's lean asked at its own row, its row's point, the one above and the one inward (3), 1.04 rows an offtake on the mean (459 of 480 offtakes leaned at their own row, measured 2026-11-01 over 60 reference fans, the rows' bows rolled per line so no lean is known before it is asked): the plan's 4 offtakes at 20 households and 5 at 40 and 80 (`OFFTAKE_LADDER`: 3 and 1, then 4 and 1), 12, 16 and 16 | the typical field |
 | the bunds' rolls | over the run | 734 at 20, 1,475 at 40, 2,976 at 80 | each bund between two basins of a row rolled for its beans, kept or not (1): the basins less the rows (22, 31, 44) | always 1 a bund |
 
 So: the basins x (6 x 1), plus the area, the brook, the intake, the outline, the ditches, the rows' angles, the cut basins, the beans, the plots drawn apart, the plots' states, the dry hem, the hem's laid plots, the field's outline by bands, the pocket pond and the grave, the drawing records, the water index and the overlap registry, and the plots' figures, the field's record, the field's ink, the registry's pieces, the hem's seats and tests, the basins' walks, the canals' courses and the bunds' rolls.
 
 ## Totals
 
-- at 20: 756 x 6 x 1 + 2 + 646 + 9 + 272 + 54 + 198 + 0 + 1770 + 258 + 820 + 798 + 912 + 809 + 15 + 297 + 924 + 2876 + 3024 + 3238 + 4137 + 7552 + 1639 + 72 + 58 + 734 = 35650
-- at 40: 1506 x 6 x 1 + 2 + 896 + 9 + 384 + 70 + 279 + 0 + 3540 + 464 + 1555 + 1596 + 1824 + 1578 + 15 + 467 + 1272 + 4251 + 6024 + 6442 + 8250 + 11604 + 3278 + 102 + 74 + 1475 = 64487
-- at 80: 3020 x 6 x 1 + 2 + 1262 + 9 + 540 + 85 + 396 + 0 + 6766 + 836 + 2998 + 3178 + 3632 + 3086 + 15 + 737 + 1745 + 6224 + 12080 + 12726 + 16371 + 18394 + 6523 + 144 + 89 + 2976 = 118934
+- at 20: 756 x 6 x 1 + 2 + 646 + 9 + 272 + 54 + 198 + 0 + 1770 + 258 + 820 + 798 + 912 + 809 + 15 + 297 + 924 + 2876 + 3024 + 3238 + 4137 + 7324 + 1639 + 72 + 66 + 734 = 35430
+- at 40: 1506 x 6 x 1 + 2 + 896 + 9 + 384 + 70 + 279 + 0 + 3540 + 464 + 1555 + 1596 + 1824 + 1578 + 15 + 467 + 1272 + 4251 + 6024 + 6442 + 8250 + 11148 + 3278 + 102 + 86 + 1475 = 64043
+- at 80: 3020 x 6 x 1 + 2 + 1262 + 9 + 540 + 85 + 396 + 0 + 6766 + 836 + 2998 + 3178 + 3632 + 3086 + 15 + 737 + 1745 + 6224 + 12080 + 12726 + 16371 + 17486 + 6523 + 144 + 101 + 2976 = 118038
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.87 (from the totals, ln(118,934 / 35,650) / ln 4): the basins, the beans, the plots' states and the dry hem with the field's area, the brook, the ditches and the rows with its side.
+From 20 to 80 households the stage grows at an exponent of about 0.87 (from the totals, ln(118,038 / 35,430) / ln 4): the basins, the beans, the plots' states and the dry hem with the field's area, the brook, the ditches and the rows with its side.
 
 ## Earlier findings
 
@@ -119,6 +119,7 @@ From 20 to 80 households the stage grows at an exponent of about 0.87 (from the 
 - verdict-7, finding 2: fixed - the cheaper algorithms priced (the round arbiter, ask:444-T16-field-budget-cheaper: the code takes them): the basins' walks recorded at construction (72, 102, 144); the registry's pieces boxed and binned once, nothing read at the filing, each piece's cells at the page's own 1.4, 3.4 and 6.8
 - verdict-7, finding 3: fixed - the field's record no longer charges the record the interior basin's 6 writes (3 a basin: the map's plot entry and ring, the net's entry); the ink no longer charges the channels' points, the drawing records' row
 - verdict-7, finding 4: fixed - a registry piece a 4-cornered ribbon (a stroke's segment) or ring, its cells the page's 1.4, 3.4 and 6.8; the 2 x 3.7 figure dropped; the stale "about 4 laid plots" entries corrected
+- verdict-8, finding 1: fixed - the registry's question keeps its own bins, the reason stated (a record asked whole before any of it is filed, S4), and a hem plot's ring no longer charged again (its box alone, 4); the offtakes the plan's ladder's (4 at 20, 5 at 40 and 80), the lean asked at its own row, 1.04 rows on the mean as measured over 60 reference fans; a tract's turns stated; the outline's brook segments about 2
 ## Cheaper algorithms considered
 
 - sweep: used - each row between two ditches is cut along once at the plot length, and the comb's angles are tested once a row, not a basin

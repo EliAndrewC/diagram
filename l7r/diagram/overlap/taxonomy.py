@@ -10,6 +10,7 @@ from typing import Any
 
 from l7r.diagram.settlement import _assert_not_main_tree, sat_overlap
 from l7r.diagram.settlement._geom.primitives import convex_hull as convex_hull  # re-exported: the hull lives in the geometry package since feature 140
+from l7r.diagram.work_counts import OPS
 
 _assert_not_main_tree(__file__)  # standalone gate runs must also happen in a session clone, never in main (CLAUDE.md "Session clones"; settlement's own import-time guard backstops this)
 
@@ -818,6 +819,8 @@ def _mx_stroke(pts: Sequence[Any], hw: float) -> list[list[tuple[float, float]]]
         ln = math.hypot(bx - ax, by - ay) or 1.0
         nx, ny = -(by - ay) / ln * hw, (bx - ax) / ln * hw
         quads.append([(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)])
+    if __debug__:  # each segment's ribbon, its 4 corners built (feature 444 T16: the registry's pieces counted where they are made)
+        OPS["write@Standing.ribbon"] += 4 * len(quads)
     return quads
 
 

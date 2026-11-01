@@ -83,7 +83,7 @@ def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[
 
     out: dict[str, list[int]] = {}
     for manifest, files in crates.items():
-        got = rust_checks.uncovered(manifest, manifest.parent / "tests" / "py_driver.py", rust_checks.TARGET.parent / f"l7r-cover-{manifest.parent.name}")
+        got = rust_checks.uncovered(manifest, manifest.parent / "tests" / "py_driver.py", rust_checks.TARGET / f"cover-{manifest.parent.name}")
         for f in files:
             if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
                 out[f] = lines

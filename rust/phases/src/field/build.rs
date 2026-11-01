@@ -85,6 +85,11 @@ pub struct Field {
     /// Each basin's box (x0, y0, x1, y1), middle and area (square feet), from one walk of its ring (`ring_stats`): the field's
     /// record and the barley's ground read them, no ring walked again (the work-budget audit, T16).
     pub stats: Vec<RingStats>,
+    /// The field's plots' area (square feet), summed as their `stats` were read; the low row's plots (the last the lattice laid)
+    /// and the resting plots (`states`), so the drained plots' area is the field's less theirs, with no walk of the basins.
+    pub area: f64,
+    pub low: std::ops::Range<usize>,
+    pub rested: Vec<usize>,
 }
 
 /// A ring's box (x0, y0, x1, y1), middle (the mean of its points) and area (square feet).
@@ -279,18 +284,16 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
 ///
 /// # Errors
 /// `FieldRefused` when an outermost basin breaks a basin's rule.
-fn rows_held(bs: &[Basin], cell: f64, counts: &mut Counts) -> Result<(), FieldRefused> {
-    // the rows' ends: two walks of the basins, counted (the work-budget audit, T16)
-    counts.add("candidate@rows_held", 2 * bs.len() as u64);
-    let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
-    let mut ends: Vec<(Option<usize>, Option<usize>)> = vec![(None, None); rows];
-    for (i, b) in bs.iter().enumerate() {
-        let e = &mut ends[b.row];
-        e.0.get_or_insert(i);
-        e.1 = Some(i);
-    }
-    for (first, last) in ends {
-        for i in first.into_iter().chain(last.filter(|l| Some(*l) != first)) {
+fn rows_held(
+    bs: &[Basin],
+    ends: &[(usize, usize)],
+    cell: f64,
+    counts: &mut Counts,
+) -> Result<(), FieldRefused> {
+    // the rows' ends as the lattice recorded them while it laid the comb (the work-budget audit, T16: two walks of the basins)
+    counts.add("candidate@rows_held", 2 * ends.len() as u64);
+    for &(first, last) in ends {
+        for i in std::iter::once(first).chain((last != first).then_some(last)) {
             held(&bs[i].ring, cell)?;
             counts.add("candidate@held", bs[i].ring.len() as u64);
         }
@@ -381,15 +384,17 @@ fn one(
     });
     counts.add("write@intake", 9);
     let mut work = 0;
-    let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work);
+    let mut ends = Vec::new();
+    let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work, &mut ends);
     counts.add("write@basin", work);
     let stats: Vec<RingStats> = bs.iter().map(|b| ring_stats(&b.ring)).collect();
+    let area: f64 = stats.iter().map(|x| x.2).sum();
     counts.add(
         "write@plot_record",
         bs.iter().map(|b| b.ring.len() as u64).sum(),
     );
-    rows_held(&bs, inp.cell, counts)?;
-    let chans = channels(
+    rows_held(&bs, &ends, inp.cell, counts)?;
+    let (chans, probes) = channels(
         f,
         br.intake,
         (&inp.offtakes.0, &inp.offtakes.1),
@@ -398,20 +403,16 @@ fn one(
         center,
         inp.seed,
     );
-    // the canals' courses as laid, each flank point a write, and each offtake's lean probed at up to seven rows of three points
-    // (the bound counted: a few dozen a field - the work-budget audit, T16)
+    // the canals' courses as laid, each flank point a write, and each offtake's lean as it was asked (the work-budget audit, T16)
     counts.add(
         "write@channel_pts",
         chans.iter().map(|c| c.pts.len() as u64).sum(),
     );
-    counts.add(
-        "pt_test@offtake_lines",
-        21 * (inp.offtakes.0.len() + inp.offtakes.1.len()) as u64,
-    );
+    counts.add("pt_test@offtake_lines", probes);
     let (ix, segments) = water(&chans, &br, inp, f, counts)?;
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
     let mut work = 0;
-    let st = states(&bs, inp.seed, tag, unsettled, &mut work);
+    let (st, rested) = states(&bs, inp.seed, tag, &ends, unsettled, &mut work);
     counts.add("candidate@states", work);
     counts.add(
         "write@drawn_apart",
@@ -421,7 +422,12 @@ fn one(
     let beans = bean_runs(&bs, inp.seed, tag, &mut work);
     counts.add("write@bean", work);
     let mut work = 0;
-    let pond = pocket_pond(&bs, inp.seed, tag, &mut work);
+    #[expect(
+        clippy::range_plus_one,
+        reason = "a half-open range, the type `Field::low` keeps"
+    )]
+    let low = ends.last().map_or(0..0, |e| e.0..e.1 + 1);
+    let pond = pocket_pond(&bs, Some(low.clone()), inp.seed, tag, &mut work);
     let form =
         knobs.get("grave_form").map_or(
             "island",
@@ -456,6 +462,9 @@ fn one(
         segments,
         water: ix,
         stats,
+        area,
+        low,
+        rested,
     })
 }
 
@@ -465,14 +474,19 @@ fn one(
 /// Research:
 ///     the drained plots - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley followed the rice on a paddy that drained, never on a wet one, so only the drained plots count
 fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
-    counts.add("candidate@drained", field.states.len() as u64);
-    field
-        .stats
-        .iter()
-        .zip(&field.states)
-        .filter(|(_, s)| **s != State::Wet && **s != State::Rest)
-        .map(|(x, _)| x.2)
-        .sum::<f64>()
+    // only the low row is ever wet (`states`), and the rested plots are named: the field's area less theirs
+    counts.add(
+        "candidate@drained",
+        (field.low.len() + field.rested.len()) as u64,
+    );
+    let wet: f64 = field
+        .low
+        .clone()
+        .filter(|&i| field.states[i] == State::Wet)
+        .map(|i| field.stats[i].2)
+        .sum();
+    let rested: f64 = field.rested.iter().map(|&i| field.stats[i].2).sum();
+    field.area - wet - rested
 }
 
 /// The hem's bounds, (the grain it holds, the bands it may climb): a wild middle's hem climbs until the grain is held where the

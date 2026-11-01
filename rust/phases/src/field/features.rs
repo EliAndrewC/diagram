@@ -92,16 +92,23 @@ fn centroid(ring: &[Pt]) -> Pt {
 #[must_use]
 pub fn pocket_pond(
     basins: &[Basin],
+    low_row: Option<std::ops::Range<usize>>,
     seed: i64,
     tag: &str,
     work: &mut u64,
 ) -> Option<(usize, Pond)> {
-    // the lowest row's plots: two walks of the basins, counted (the work-budget audit, T16)
-    *work += 2 * basins.len() as u64;
-    let last = basins.iter().map(|b| b.row).max()?;
-    let low: Vec<usize> = (0..basins.len())
-        .filter(|&i| basins[i].row == last)
-        .collect();
+    // the lowest row's plots: the comb's as the lattice laid it (`low_row`), else found by two walks of the basins, counted
+    // (the work-budget audit, T16)
+    let low: Vec<usize> = if let Some(r) = low_row {
+        *work += r.len() as u64;
+        r.collect()
+    } else {
+        *work += 2 * basins.len() as u64;
+        let last = basins.iter().map(|b| b.row).max()?;
+        (0..basins.len())
+            .filter(|&i| basins[i].row == last)
+            .collect()
+    };
     let mut rng = knob_rng(seed, &format!("{tag}:pond"));
     if low.is_empty() || rng.randbelow(100) >= POND_PCT {
         return None;
@@ -296,7 +303,7 @@ mod tests {
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
         let ponds: Vec<_> = (0..40)
-            .filter_map(|s| pocket_pond(&b, s, "f0", &mut 0))
+            .filter_map(|s| pocket_pond(&b, None, s, "f0", &mut 0))
             .collect();
         assert!((10..35).contains(&ponds.len()));
         for (i, p) in &ponds {
@@ -326,7 +333,7 @@ mod tests {
             }
         }
         assert!(seen.0 > 3 && seen.1 > 3, "{seen:?}");
-        assert!(pocket_pond(&[], 1, "f0", &mut 0).is_none());
+        assert!(pocket_pond(&[], None, 1, "f0", &mut 0).is_none());
         assert!(grave(&[], 1, "f0", "island", None, 1488.0, &mut 0)
             .unwrap()
             .is_none());
@@ -343,7 +350,7 @@ mod tests {
             on_drain_left: false,
         };
         let fits: Vec<_> = (0..60)
-            .filter_map(|s| pocket_pond(&[sliver(60.0)], s, "f0", &mut 0))
+            .filter_map(|s| pocket_pond(&[sliver(60.0)], None, s, "f0", &mut 0))
             .collect();
         assert!(!fits.is_empty() && fits.iter().all(|(_, p)| p.rx < 0.4 * 60.0));
         let chevron = Basin {
@@ -358,7 +365,7 @@ mod tests {
             ..sliver(0.0)
         };
         // its middle outside it: no pond
-        assert!((0..60).all(|s| pocket_pond(&[chevron.clone()], s, "f0", &mut 0).is_none()));
+        assert!((0..60).all(|s| pocket_pond(&[chevron.clone()], None, s, "f0", &mut 0).is_none()));
         // an island split on a ring wound the other way: its mound still clear of both halves
         let (at, halves) = island(&[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]);
         assert!(halves.iter().all(|h| !inside(at, h)));

@@ -162,11 +162,14 @@ pub fn hem(
                 apart(rolled, &near, &mut ix.tests)
             };
             band.push((span.0, span.1, turn + if down { 90.0 } else { 0.0 }));
+            // each column's two frames found once, its strips' seats built from them, the next column taking the second
+            let mut frames: Option<(Pt, Pt)> = None;
             for k in 0..n {
                 let d0 = d + f64::from(k) * PLOT_FT.0;
                 if d0 + PLOT_FT.0 > len {
                     break;
                 }
+                let (a, b) = canal.column(d0, got >= need, &mut frames, &mut ix.tests);
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + f64::from(j) * PLOT_FT.1,
@@ -178,7 +181,7 @@ pub fn hem(
                     if got >= need {
                         continue;
                     }
-                    let poly = canal.seat(d0, (o0, o1), &mut ix.tests);
+                    let poly = Canal::seat(a, b, (o0, o1), &mut ix.tests);
                     if refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
                         continue;
                     }
@@ -279,6 +282,8 @@ struct Canal {
     segs: Vec<(Pt, Pt)>,
     starts: Vec<f64>,
     side: f64,
+    /// The segment the last lookup found: the hem asks the course in order along it, so each lookup steps from here
+    cursor: std::cell::Cell<usize>,
 }
 
 impl Canal {
@@ -300,7 +305,12 @@ impl Canal {
         } else {
             -1.0
         };
-        Self { segs, starts, side }
+        Self {
+            segs,
+            starts,
+            side,
+            cursor: std::cell::Cell::new(0),
+        }
     }
 
     /// The canal's whole length.
@@ -322,46 +332,60 @@ impl Canal {
     /// Research:
     ///     the canal's measure - NONE: geometry, the line the hem follows
     fn along(&self, d: f64) -> (Pt, Pt) {
-        let k = self.starts[..self.segs.len()]
-            .partition_point(|s| *s <= d)
-            .saturating_sub(1);
+        // the last segment starting at or before `d` (the first, before the start): stepped to from the last lookup's, the hem's
+        // lookups moving forward along the course (the work-budget audit, T16: a binary search a lookup)
+        let n = self.segs.len();
+        let mut k = self.cursor.get().min(n - 1);
+        while k + 1 < n && self.starts[k + 1] <= d {
+            k += 1;
+        }
+        while k > 0 && self.starts[k] > d {
+            k -= 1;
+        }
+        self.cursor.set(k);
         let (a, b) = self.segs[k];
         let u = unit(a, b);
         let t = (d - self.starts[k]).clamp(0.0, dist(a, b));
         ((a.0 + u.0 * t, a.1 + u.1 * t), u)
     }
 
-    /// A plot's seat `d` feet along the course, `o.0` to `o.1` feet out: the canal's own course pushed out along its smoothed
-    /// normal, so neighbors share their sides and the bands nest and the hem follows the canal as a hem does - four offsets, each
-    /// three lookups along the course, counted in `work` with the hem's tests.
-    fn seat(&self, d: f64, (o0, o1): (f64, f64), work: &mut u64) -> Vec<Pt> {
-        *work += 12;
-        vec![
-            self.offset(d, o0),
-            self.offset(d + PLOT_FT.0, o0),
-            self.offset(d + PLOT_FT.0, o1),
-            self.offset(d, o1),
-        ]
+    /// A plot's seat between the frames `a` and `b` (`frame` at its two ends along the course), `o.0` to `o.1` feet out: the
+    /// canal's own course pushed out along its smoothed normal, so neighbors share their sides and the bands nest and the hem
+    /// follows the canal as a hem does - four offsets, counted in `work` with the hem's tests.
+    fn seat(a: (Pt, Pt), b: (Pt, Pt), (o0, o1): (f64, f64), work: &mut u64) -> Vec<Pt> {
+        *work += 4;
+        let at = |f: (Pt, Pt), o: f64| (f.0 .0 + f.1 .0 * o, f.0 .1 + f.1 .1 * o);
+        vec![at(a, o0), at(b, o0), at(b, o1), at(a, o1)]
     }
 
-    /// The point `d` feet along the course pushed `o` feet out to the hem's side, along its normal smoothed over a plot's
-    /// length either way.
-    #[expect(
-        clippy::many_single_char_names,
-        reason = "the plane geometry's own names"
-    )]
-    /// The point at `d` along the canal set `o` out on its side.
-    ///
-    /// Research:
-    ///     the canal's measure - NONE: geometry, the line the hem follows
-    fn offset(&self, d: f64, o: f64) -> Pt {
+    /// A column's two frames at `d` and a plot's length past it, the first the last column's second where there is one (`frames`
+    /// keeps it); none found once the grain is held (`held`), the column then building no seat.
+    fn column(
+        &self,
+        d: f64,
+        held: bool,
+        frames: &mut Option<(Pt, Pt)>,
+        work: &mut u64,
+    ) -> ((Pt, Pt), (Pt, Pt)) {
+        if held {
+            return (((0.0, 0.0), (0.0, 0.0)), ((0.0, 0.0), (0.0, 0.0)));
+        }
+        let a = frames.unwrap_or_else(|| self.frame(d, work));
+        let b = self.frame(d + PLOT_FT.0, work);
+        *frames = Some(b);
+        (a, b)
+    }
+
+    /// The point `d` feet along the course and its normal to the hem's side, smoothed over a plot's length either way: three
+    /// lookups, counted in `work`; a column of seats shares its two frames, the next column the second.
+    fn frame(&self, d: f64, work: &mut u64) -> (Pt, Pt) {
+        *work += 3;
         let (p, _) = self.along(d);
         let u = unit(
             self.along((d - PLOT_FT.0).max(0.0)).0,
             self.along(d + PLOT_FT.0).0,
         );
-        let n = (-u.1 * self.side, u.0 * self.side);
-        (p.0 + n.0 * o, p.1 + n.1 * o)
+        (p, (-u.1 * self.side, u.0 * self.side))
     }
 }
 

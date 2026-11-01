@@ -150,12 +150,12 @@ pub fn states(
     basins: &[Basin],
     seed: i64,
     tag: &str,
+    ends: &[(usize, usize)],
     unsettled: bool,
     work: &mut u64,
-) -> Vec<State> {
-    // the lowest row found by a walk of the basins, counted (the work-budget audit, T16)
-    *work += basins.len() as u64;
-    let last = basins.iter().map(|b| b.row).max().unwrap_or(0);
+) -> (Vec<State>, Vec<usize>) {
+    // the lowest row the last laid (the lattice lays the rows in order, head to foot): no walk of the basins to find it
+    let last = basins.last().map_or(0, |b| b.row);
     let seasonal = seasonal_map(seed, tag);
     let mut out: Vec<State> = basins
         .iter()
@@ -193,25 +193,26 @@ pub fn states(
         let mut chosen: Vec<usize> = Vec::new();
         // a draw over the plots' own weights (each its row from the head, counted from one), so a plot lower down is likelier
         // whatever its row holds; a refused pick (a shared bund, a plot drawn otherwise) tries again, a bounded number of times
-        let weights: Vec<u32> = basins
-            .iter()
-            .map(|b| u32::try_from(b.row + 1).unwrap_or(u32::MAX))
-            .collect();
-        // each plot's weight summed down the list, so a pick is a binary search, not a walk of the plots before it (the audit)
-        let ends: Vec<u32> = weights
-            .iter()
-            .scan(0_u32, |s, w| {
-                *s += w;
-                Some(*s)
-            })
-            .collect();
-        let weight: u32 = ends.last().copied().unwrap_or(0);
+        // ...summed A ROW AT A TIME: every plot of a row weighs the same, the rows laid in order, so a pick finds its row by a
+        // binary search over the rows' running sums and its plot by division - the same plot the plots' own sums named, at a
+        // row's work, not a basin's (the work-budget audit, T16)
+        let mut rows: Vec<(usize, u32, u32)> = Vec::new(); // (first plot, the row's weight a plot, the running sum after it)
+        let mut sum = 0_u32;
+        for &(start, end) in ends {
+            let w = u32::try_from(basins[start].row + 1).unwrap_or(u32::MAX);
+            sum += w * u32::try_from(end + 1 - start).unwrap_or(u32::MAX);
+            rows.push((start, w, sum));
+            *work += 1;
+        }
+        let weight = sum;
         for _ in 0..want * 8 {
             if chosen.len() >= want as usize {
                 break;
             }
             let pick = rng.randbelow(weight.max(1));
-            let i = ends.partition_point(|e| *e <= pick).min(basins.len() - 1);
+            let r = rows.partition_point(|x| x.2 <= pick).min(rows.len() - 1);
+            let before = if r == 0 { 0 } else { rows[r - 1].2 };
+            let i = (rows[r].0 + ((pick - before) / rows[r].1) as usize).min(basins.len() - 1);
             *work += 1 + chosen.len() as u64;
             let touches = |j: usize| shares_bund(&basins[i], &basins[j]);
             if out[i] == State::Green && !chosen.iter().any(|&j| touches(j)) {
@@ -219,15 +220,28 @@ pub fn states(
                 out[i] = State::Rest;
             }
         }
+        return (out, chosen);
     }
-    out
+    (out, Vec::new())
 }
 
 #[cfg(test)]
 mod tests {
     use super::{polder_states, states, State, REST_PLOTS};
     use crate::field::fan::fan;
-    use crate::field::lattice::{basins, ROW_FT};
+    use crate::field::lattice::{basins, Basin, ROW_FT};
+
+    /// Each row's first and last basin, as the lattice records them while it lays the comb.
+    fn ends_of(b: &[Basin]) -> Vec<(usize, usize)> {
+        let mut out: Vec<(usize, usize)> = Vec::new();
+        for (i, x) in b.iter().enumerate() {
+            match out.last_mut() {
+                Some(e) if b[e.0].row == x.row => e.1 = i,
+                _ => out.push((i, i)),
+            }
+        }
+        out
+    }
 
     #[test]
     fn a_polders_plots_drawn_apart() {
@@ -255,12 +269,12 @@ mod tests {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
-        let s = states(&b, 4, "f0", false, &mut 0);
+        let s = states(&b, 4, "f0", &ends_of(&b), false, &mut 0).0;
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();
         assert!(!wet.is_empty() && wet.iter().all(|&i| b[i].row == last));
         // the flooded and the gold on some maps, not every one
         let maps: Vec<_> = (0..16)
-            .map(|seed| states(&b, seed, "f0", false, &mut 0))
+            .map(|seed| states(&b, seed, "f0", &ends_of(&b), false, &mut 0).0)
             .collect();
         let seasonal = |m: &Vec<State>| m.contains(&State::Flooded) || m.contains(&State::Gold);
         let some = maps.iter().filter(|m| seasonal(m)).count();
@@ -270,9 +284,10 @@ mod tests {
         assert!((b.len() / 40..b.len() / 8).contains(&flooded));
         assert!(maps.iter().any(|m| m.contains(&State::Gold)));
         assert!(!s.contains(&State::Rest), "a settled field rests none");
-        assert_eq!(s, states(&b, 4, "f0", false, &mut 0), "positional");
+        let again = states(&b, 4, "f0", &ends_of(&b), false, &mut 0).0;
+        assert_eq!(s, again, "positional");
         for seed in 0..12 {
-            let r = states(&b, seed, "f0", true, &mut 0);
+            let r = states(&b, seed, "f0", &ends_of(&b), true, &mut 0).0;
             let rest: Vec<_> = (0..b.len()).filter(|&i| r[i] == State::Rest).collect();
             assert!(rest.len() <= REST_PLOTS.1 as usize && !rest.is_empty());
             for (k, &i) in rest.iter().enumerate() {
@@ -282,6 +297,6 @@ mod tests {
                 }
             }
         }
-        assert!(states(&[], 1, "f0", true, &mut 0).is_empty());
+        assert!(states(&[], 1, "f0", &[], true, &mut 0).0.is_empty());
     }
 }

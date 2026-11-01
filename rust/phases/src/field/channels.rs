@@ -136,7 +136,7 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
 /// Research:
 ///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a delivery ditch in the comb follows its row's bund, leaving nearly square to its canal, drawn only where that bund leans downstream off the canal's flank; the 35 degrees a branch's where nothing on the ground sets the angle
 ///     where an offtake goes - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on moving an offtake to a leaning row; the nearest within three rows, never the first or last row, none where no row leans
-fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> {
+fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64, probes: &mut u64) -> Vec<usize> {
     let mut lines_at: Vec<usize> = Vec::new();
     for &f in fracs {
         #[expect(
@@ -146,7 +146,8 @@ fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> 
         )]
         let r0 = ((f.clamp(0.0, 1.0) * fan.length / lines.step).round() as usize)
             .clamp(1, lines.rows.max(2) - 1);
-        let leans = |r: usize| {
+        let mut leans = |r: usize| {
+            *probes += 3; // the row's point, the one above it and the one inward
             let j = fan.at(lines.u(r, s), s);
             let up = fan.at((lines.u(r, s) - lines.step).max(0.0), s);
             let inward = fan.at(lines.u(r, s * 0.8), s * 0.8);
@@ -201,7 +202,7 @@ pub fn channels(
     brook_side: f64,
     center: bool,
     seed: i64,
-) -> Vec<Channel> {
+) -> (Vec<Channel>, u64) {
     let fork = division(fan, brook_side, center);
     let mut out = vec![Channel {
         role: "main",
@@ -209,6 +210,8 @@ pub fn channels(
         w: HEAD_W,
         w_tail: HEAD_W,
     }];
+    // each offtake's lean asked of its rows, counted where it is asked (the work-budget audit, T16)
+    let mut probes = 0_u64;
     let runs_on = tail_runs_on(seed);
     let lines = Lines::new(fan, seed, row_ft);
     // the flank's course from `u0` to `u1` as drawn: a point every `EDGE_STEP_FT`
@@ -229,7 +232,7 @@ pub fn channels(
     {
         // canal A on the far flank, along the upper edge first; canal B down the brook's flank from the fork
         let s = if side == 0 { -brook_side } else { brook_side };
-        let mut lines_at = offtake_lines(fan, &lines, fracs, s);
+        let mut lines_at = offtake_lines(fan, &lines, fracs, s, &mut probes);
         lines_at.sort_unstable();
         lines_at.dedup();
         // canal A runs on to the crop's edge when its tail runs on; canal B, partway down its edge, stops at its last offtake
@@ -305,7 +308,7 @@ pub fn channels(
         w: DRAIN_W.0,
         w_tail: DRAIN_W.1,
     });
-    out
+    (out, probes)
 }
 
 #[cfg(test)]
@@ -326,7 +329,8 @@ mod tests {
             1.0,
             false,
             4,
-        );
+        )
+        .0;
         let roles: Vec<_> = c.iter().map(|x| x.role).collect();
         assert_eq!(roles.iter().filter(|r| **r == "branch").count(), 4);
         assert_eq!(roles[0], "main");
@@ -363,16 +367,17 @@ mod tests {
             1.0,
             false,
             on,
-        );
+        )
+        .0;
         let legs: Vec<_> = ran.iter().filter(|x| x.role == "main").skip(1).collect();
         assert!(legs.iter().all(|x| x.w_tail >= THREAD_W - 1e-9));
         assert!(legs
             .iter()
             .any(|x| (x.w - THREAD_W).abs() < 1e-9 && (x.w_tail - THREAD_W).abs() < 1e-9));
-        let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, false, 4);
+        let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, false, 4).0;
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
         // canal A with no offtake runs on to the crop's edge
-        let bare = channels(&f, intake, (&[], &[0.5]), 48.0, -1.0, false, 4);
+        let bare = channels(&f, intake, (&[], &[0.5]), 48.0, -1.0, false, 4).0;
         assert!(bare.iter().filter(|x| x.role == "branch").count() <= 1);
     }
 

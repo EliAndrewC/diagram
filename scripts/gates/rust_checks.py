@@ -15,8 +15,10 @@ first Rust phase lands, `make static` and `make format` run these over nothing a
              crate's Python driver imports it, and one report reads both profiles. The driver is the crate's `tests/py_driver.py`
              (`--driver` for another) - the module's Python callers, so a `#[pyfunction]` only Python calls is not uncovered
 
-The build goes to one target directory outside the tree (`~/.cache/l7r-cargo-target`), so a check never writes `target/` into a
-checkout and every clone shares the compiled dependencies.
+The build goes to a target directory outside the tree, ONE A CLONE (`~/.cache/l7r-cargo-target/<the checkout's name>`), so a check
+never writes `target/` into a checkout. WHY ONE A CLONE (feature 444 T16, 2026-11-01): cargo keys a path package's build by its name,
+not its path, so every clone sharing one directory shared one test binary - a binary built at 08:25 from main's three source files
+(6 tests) read as fresh in a clone whose crate held the field's dozens, and `make rust-test` passed a test written to fail.
 """
 
 from __future__ import annotations
@@ -30,7 +32,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CRATES = "rust"
-TARGET = pathlib.Path.home() / ".cache" / "l7r-cargo-target"
+TARGET = pathlib.Path.home() / ".cache" / "l7r-cargo-target" / ROOT.name
 CARGO = pathlib.Path.home() / ".cargo" / "bin" / "cargo"
 
 
@@ -144,7 +146,7 @@ def _listing(cmd: str, manifest: pathlib.Path) -> subprocess.CompletedProcess[st
     tests = [str(p) for p in python_callers(ROOT, manifest)]
     if not tests:
         return subprocess.CompletedProcess([], 0, "", "")
-    work = TARGET.parent / f"l7r-callers-{manifest.parent.name}"
+    work = TARGET / f"callers-{manifest.parent.name}"
     env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
     built = _env_run(["maturin", "build", "--quiet", "--all-features", "-o", str(work / "dist"), "-m", str(manifest)], env)  # as cover builds: the driver reads the counters
     wheels = sorted((work / "dist").glob("*.whl"))
@@ -191,7 +193,7 @@ def build(manifest: pathlib.Path, ext: pathlib.Path) -> subprocess.CompletedProc
 def _build_locked(manifest: pathlib.Path, ext: pathlib.Path, name: str, mark: pathlib.Path, now: str) -> subprocess.CompletedProcess[str]:
     """`build`'s work, the lock held."""
     env = {**os.environ, "PATH": f"{CARGO.parent}:{os.environ.get('PATH', '')}", "CARGO_TARGET_DIR": str(TARGET)}
-    dist = TARGET.parent / f"l7r-dist-{name}"
+    dist = TARGET / f"dist-{name}"
     built = _env_run(["maturin", "build", "--release", "--quiet", "--features", "counters", "-o", str(dist), "-m", str(manifest)], env)
     wheels = sorted(dist.glob(f"{name}-*.whl"), key=lambda w: w.stat().st_mtime)
     if built.returncode != 0 or not wheels:
@@ -236,7 +238,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.cmd in ("dead", "callers"):
             r = _listing(args.cmd, m)
         elif args.cmd == "cover":
-            work = TARGET.parent / f"l7r-cover-{m.parent.name}"
+            work = TARGET / f"cover-{m.parent.name}"
             r = cover(m, pathlib.Path(args.driver) if args.driver else m.parent / "tests" / "py_driver.py", work)
         else:
             r = run(args.cmd, m, args.check)

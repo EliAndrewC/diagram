@@ -269,12 +269,14 @@ class Standing:
     def extents(self, key: str, o: Any) -> list[Extent]:
         return element_extents(key, o, self.M)
 
-    def conflicts(self, key: str, o: Any, ignore: Any = None, first: bool = False, own: list[Extent] | None = None) -> list[tuple[str, str, float, float]]:
+    def conflicts(self, key: str, o: Any, ignore: Any = None, first: bool = False, own: list[Extent] | None = None, prep: dict[str, Any] | None = None) -> list[tuple[str, str, float, float]]:
         """Every forbidden overlap recording `o` under `key` would make: (key, the standing key, x, y), empty when the
         matrix admits it. `ignore` is a record whose own extents do not count (the one `o` replaces). `first` stops at the
         first one found - all `admits` asks (feature 417 T56: the wells' seats asked every overlap of a seat refused at its
         first, 2,231 refused seats at 499 calls each on seed 39 at 40 households, measured 2026-10-27). `own` is `o`'s extents
-        where the caller already has them (`record`, which files the same extents after)."""
+        where the caller already has them (`record`, which files the same extents after), and `prep` takes each piece's box,
+        clamped box and cells as found here, so the filing finds none of them again (`_add`; feature 444 T16, the round arbiter on
+        ask:444-T16-field-budget-cheaper: a piece boxed and binned once, nothing read at the filing)."""
         if __debug__:  # the counted work (feature 443): a candidate asked of what stands
             OPS["candidate@Standing.conflicts"] += 1
         own = self.extents(key, o) if own is None else own
@@ -284,23 +286,28 @@ class Standing:
         skip = set(self._held[(key, id(ignore))][1]) if ignore is not None and (key, id(ignore)) in self._held else set()
         out: list[tuple[str, str, float, float]] = []
         boxes = [box_of(e[1]) for e in own]
-        # each piece's points walked for its extent and its box, counted where it happens (S5; feature 444 T16's second audit)
+        cells_of = [list(self._cells(b)) for b in boxes]  # unclamped: pieces off the canvas still meet each other, as every pair did
+        clamped = [self._clamp(b) for b in boxes]
+        ccells = [list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else [] for cb in clamped]
+        if prep is not None:
+            prep.update(boxes=boxes, clamped=clamped, cells=ccells)
+        # each piece's box read off its extent's corners and its cells found - once, counted where it happens (S5; 444 T16; a
+        # stroke's ribbon is counted where `_mx_stroke` builds it)
         if __debug__:
             OPS["pt_test@Standing.extents"] += sum(len(e[1]) for e in own)
         # ...THE RECORD'S OWN PIECES, binned in the same cells: each asked only of its later pieces sharing a cell. Every pair was
         # asked once (feature 444 T16's audit: the brook's 448 pieces at 40 households were 100,000 own pairs a call, 200,474 of
         # the field stage's 218,329 counted operations, the pieces' boxes missing in all but a few hundred)
         own_bins: dict[tuple[int, int], list[int]] = {}
-        for i, b in enumerate(boxes):
-            for cell in self._cells(b):  # unclamped: pieces off the canvas still meet each other, as every pair did
-                if __debug__:
-                    OPS["write@Standing.bins"] += 1
+        for i, cells in enumerate(cells_of):
+            if __debug__:
+                OPS["write@Standing.bins"] += len(cells)
+            for cell in cells:
                 own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
-            b = boxes[i]
-            cells = list(self._cells(b))
-            if __debug__:  # each cell read and each id it holds, before the dedup (feature 444 T16's third audit)
-                OPS["index_cell@Standing.conflicts"] += len(cells) + sum(len(own_bins.get(cell, ())) for cell in cells)
+            b, cells = boxes[i], cells_of[i]
+            if __debug__:  # each cell read (feature 444 T16's third audit); the later pieces it hands back are the pairs below
+                OPS["index_cell@Standing.conflicts"] += len(cells)
             near = sorted({j for cell in cells for j in own_bins.get(cell, ()) if j > i})
             for j in near:  # the record's own pieces against each other: the same rule as any pair
                 if __debug__:
@@ -309,15 +316,16 @@ class Standing:
                     out.append((key, own[j][0], *_center(e[1])))
                     if first:
                         return out
-            cb = self._clamp(b)
-            if cb[2] < cb[0] or cb[3] < cb[1]:
+            if not ccells[i]:
                 continue  # wholly off the canvas - nothing on the map can meet it
             seen: set[int] = set()
-            for cell in self._cells(cb):
-                if __debug__:  # each cell read, and each entry in it, a skipped one too (feature 444 T16's third audit)
-                    OPS["index_cell@Standing.conflicts"] += 1 + len(self._bins.get(cell, ()))
+            for cell in ccells[i]:
+                if __debug__:  # each cell read (feature 444 T16's third audit)
+                    OPS["index_cell@Standing.conflicts"] += 1
                 for n in self._bins.get(cell, ()):
                     if n in seen or n in skip:
+                        if __debug__:  # an entry met again in a second cell, or the replaced record's: read, then passed
+                            OPS["index_examined@Standing.conflicts"] += 1
                         continue
                     seen.add(n)
                     if __debug__:
@@ -361,12 +369,13 @@ class Standing:
     def record(self, key: str, o: Any) -> None:
         """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands."""
         own = self.extents(key, o)  # once, for the question and the filing both
-        bad = self.conflicts(key, o, own=own)
+        prep: dict[str, Any] = {}
+        bad = self.conflicts(key, o, own=own, prep=prep)
         if bad:
             self.refuse(bad)
         if __debug__:
             OPS["placed@Standing.record"] += 1
-        self._add(key, o, own)
+        self._add(key, o, own, prep)
 
     def refuse(self, bad: Sequence[tuple[str, str, float, float]]) -> None:
         """Raise `OverlapRefused` for the first of `bad` - on a STRICT registry (`strict`), which a generator whose every
@@ -383,22 +392,25 @@ class Standing:
         """`rec` as a record that keeps itself recorded: a later write to one of its drawn fields asks the registry first."""
         return Kept(self, key, rec)
 
-    def _add(self, key: str, o: Any, own: list[Extent] | None = None) -> None:
+    def _add(self, key: str, o: Any, own: list[Extent] | None = None, prep: dict[str, Any] | None = None) -> None:
         ids: list[int] = []
-        for e in self.extents(key, o) if own is None else own:
-            b = box_of(e[1])
-            if __debug__:  # the piece's box, and each cell it is filed in below, counted (feature 444 T16's second audit)
-                OPS["pt_test@Standing.extents"] += len(e[1])
-            cb = self._clamp(b)
+        exts = self.extents(key, o) if own is None else own
+        if prep:  # the boxes and cells the question found (`conflicts`): the filing finds none of them again
+            boxes, clamped, cells_of = prep["boxes"], prep["clamped"], prep["cells"]
+        else:
+            boxes = [box_of(e[1]) for e in exts]
+            clamped = [self._clamp(b) for b in boxes]
+            cells_of = [list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else [] for cb in clamped]
+            if __debug__:  # a filing with no question before it walks each piece for its box (feature 444 T16)
+                OPS["pt_test@Standing.extents"] += sum(len(e[1]) for e in exts)
+        for e, b, cb, cells in zip(exts, boxes, clamped, cells_of, strict=True):
             n = self._next
             self._next += 1
             self._ext[n] = (e, b, cb)
             ids.append(n)
-            if cb[2] < cb[0] or cb[3] < cb[1]:
-                continue
-            for cell in self._cells(cb):
-                if __debug__:
-                    OPS["write@Standing.bins"] += 1
+            if __debug__:
+                OPS["write@Standing.bins"] += len(cells)
+            for cell in cells:  # none for a piece wholly off the canvas
                 self._bins.setdefault(cell, []).append(n)
         prev = self._held.get((key, id(o)))
         self._held[(key, id(o))] = (o, (prev[1] if prev else []) + ids)

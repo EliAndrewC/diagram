@@ -131,13 +131,10 @@ def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
 
     Research:
         the order - CONVENTION: the floor under the plots, the dry hem beside them, the channels over both, then the beans and the features over all, so each reads where it stands"""
-    if __debug__:  # every point the ink writes - each plot's and dry plot's ring, each channel's course, each bean (444 T16's audit)
-        OPS["write@field_ink"] += (
-            sum(len(p["poly"]) for p in net.get("plots", []))
-            + sum(len(d["poly"]) for d in net.get("dry_plots", []))
-            + sum(len(c["pts"]) for c in net.get("channels", []))
-            + len(net.get("bund_beans", []))
-        )
+    if __debug__:  # every point the ink writes (444 T16's audit): each plot's and dry plot's ring and each bean, and apart from them
+        # the channels' drawing points, the derivation's drawing records
+        OPS["write@field_ink"] += sum(len(p["poly"]) for p in net.get("plots", [])) + sum(len(d["poly"]) for d in net.get("dry_plots", [])) + len(net.get("bund_beans", []))
+        OPS["write@drawing_records"] += sum(len(c["pts"]) for c in net.get("channels", []))
     s.comb_base_fill(net, name)
     paddies(s, net, name)
     dry_plots(s, net)
