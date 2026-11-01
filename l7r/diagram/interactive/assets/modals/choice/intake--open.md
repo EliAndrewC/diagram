@@ -9,7 +9,7 @@ stood deep and steady. From it the dug head race ran down to its first fork, whe
 while the brook ran on below. What the mouth of a village's race was lined or shut with is not recorded; the heads of great
 canals were closed with gates of timber or stone, or with boards lifted in and out.
 
-How far a head race ran is not recorded either; the small mountain canals ran "for short distances". The mouth was small:
+How far a head race ran is not recorded either; the small mountain canals ran "for short distances". Where a village's water was taken off a larger channel, the mouth could be small:
 in 1657 a branch of the Tamagawa aqueduct serving one village left through an opening about 8 in (21 cm) square, and in
 1722 one serving fourteen villages through one about 3 ft (91 cm) square.
 

@@ -8,7 +8,7 @@ water the paddies and take what they let out; a separate supply ditch and drain 
 land consolidation. The drain let its water go into a river or a natural stream, where the villages below took it up
 again - in a drought, all of it.
 
-It was an earth ditch, in many cases no more than dug out and trodden firm. Water left each paddy by a small opening in
+It was a dug earth ditch, probably as plain as the supply ditches, which before the early modern period were in many cases no more than dug out and trodden firm. Water left each paddy by a small opening in
 its bund; the lowest paddies' bunds probably ran along the drain's bank.
 
 A drain probably needed little width where it began, carrying one paddy's runoff, and widened as it gathered water. The
