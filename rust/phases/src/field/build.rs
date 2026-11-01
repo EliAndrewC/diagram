@@ -481,6 +481,7 @@ fn drained_area(field: &Field, counts: &mut Counts) -> f64 {
 ///
 /// Research:
 ///     the hem's climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: where a hamlet's paddy lies bare over the winter its dry fields climb from the toe into the wild middle until they hold the grain; where it carries barley its dry fields stay on the toe; a cleared middle drawn only as the hem along the whole canal - the toe one band, the climb bounded only by `MAX_BANDS`, a guard far past any canvas
+///     a barley hamlet's shortfall - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on where the grain goes when the toe's one band holds less than the drained barley left owed; drawn short, the shortfall recorded beside the need (`grain`: drawn, needed, the room), never refused
 fn hem_bounds(wild: bool, barley: bool, need: f64) -> (f64, u32) {
     match (wild, barley) {
         (true, false) => (need, MAX_BANDS),
