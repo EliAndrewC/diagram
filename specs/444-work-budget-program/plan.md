@@ -242,7 +242,7 @@ What the build changed, each recorded at its point of change and in `phases/fiel
    (ask:444-T16-move-drawing, ask:444-T16-brook-predicates) - drawing code (`settlement/fields/drawing.py`, D12's drawing functions) and check-side predicates (`brook_rules.WetLines`, `hem_on_water`), neither placing anything; the old engine's tests with it; the tests' `lay_comb` over the Rust comb.
 5. **The order, unchanged.** After `water_frame`; the last of step 4.
 6. **The exits.** Green, adding to the first Approach's Green (the budget met at 40 and 80 households, the old code deleted): `make rust-gate` green (54 seeds, 2026-10-31T22:01Z), FR-012 measured, the claims round to zero open
-   (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
+   (FR-021), MODE AUDIT WITHIN, the occasions' reviews, one landing. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in the stage's own code - its Rust, the Python units the delta adds or changes, the Python its seam reads at run time - refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
 ### T16 Approach (2026-11-01T00:39Z)
 
 The claims round's fixes (FR-021, the round arbiter's route (a) on `ask:444-T16-fr021-scope`), answered against the checklist's
@@ -251,7 +251,7 @@ part A after the Decisions of 19:37Z and the first wave's verdicts:
 1. **The goal, in the world.** The comb and the polder the reader sees are the ones the record describes, line by line: a brook
    narrower than the race it feeds and never ruled straight past ten widths, a polder whose lines each bow on their own, ponds
    ringed by one bank's width, graves the paddy is carved round - every placement's claim true of its code.
-2. **The constraints.** Each open finding in a file T16's delta changes (`make claims-report`, FR-021); the brook rules
+2. **The constraints.** Each open finding in the stage's own code (`make claims-report`, FR-021 as amended 2026-11-01); the brook rules
    (`brook_violations`), the basin rules (`rules::held`), `make rust-gate`'s fresh block, `make quick`, `make static`'s line floor (every line covered).
 3. **Where each comes from.** R, each at its page: ten widths (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html);
    the creek's width, the delivery's cap and the pond feeder (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html);
@@ -266,7 +266,7 @@ part A after the Decisions of 19:37Z and the first wave's verdicts:
 5. **The order.** The brook, then the fan cut away from it; the lattice, then the features carved from its plots; the parcels, then
    the ponds pushed in from them. No later placement moves an earlier one.
 6. **The exits.** (a) the O meander wavelength moved (`MEANDER_WAVE_FT`, a GUESS) to meet R's ten widths; (c) the share-of-view rule replaced by a
-   length, which dissolves the view-dependence; (e) conform for the inset, the cap and the notch. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in a file the landing changes refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
+   length, which dissolves the view-dependence; (e) conform for the inset, the cap and the notch. Red, over its budget: rebuilt again, or the budget raised with the GM's words (`make budget-change`) - never set down, never an arbiter's accept; a claims finding open in the stage's own code - its Rust, the Python units the delta adds or changes, the Python its seam reads at run time - refuses it until the claim or the code is fixed, or the research done (FR-021); only a process stop goes to `make arbiter-ask`, and a stop to assess goes to the GM.
 7. **The search smell.** None added: every fix is a construction (a true inward offset, a fitted half-row, a tract's direction
    chosen from the allowed set, the trough at the intake); the one search left is `apart`'s scan of 70 candidate directions.
 8. **The budget.** About three hours for the round's fixes and one wave (a GUESS, the round's own estimate); twice that is part B's trigger.
@@ -540,34 +540,14 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T23 (the round arbiter's ruling on ask:444-T16-fr021-scope: T16's delta holds only the port's files, so the code its port leaves dead is deleted in a landing of its own)
+### T23 - folded into T16 (the round arbiter on ask:444-T16-fr021-scope-2, 2026-11-01)
 
-- **Approach**: after T16 lands, `make dead-closure BASE=<T16's merge base>` lists what the field's port left with no caller; each name
-  it lists is deleted with its tests, in a non-phase landing under the claims switch's report (feature 445). Measured at T16's landing:
-  the names the arbiter's ruling lists (`plot_texture`, the old comb's pending slots, `_sharp_corners`, `_toward`, `CITY_TIER_SCALES`,
-  the dead constants in `consts.py`, `consts_fields.py` and `consts_water.py`, `dike_crest`, the dead names in `waterfields/banks.py`,
-  `frame.py`, `partition.py`, `polder.py` and `seams/pockets.py`), and `water_frame.rs` reaching the shared `counts.rs`.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the deletion | each deleted name's test deleted with it; `make dead-closure` empty after | n/a (no live code moves) | none | n/a |
-
-### T23 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes: the engine sheds code no stage calls.
-2. **The constraints.** The round arbiter's ruling on ask:444-T16-fr021-scope; the 100% coverage floor; FR-012 (no counter moves).
-3. **Where each comes from.** G: the ruling, routed by the GM's FR-021 ("every Rust stage end its initial implementation with zero open claims"); O: `make dead-closure`'s list.
-4. **Do they describe the world here?** `make dead-closure` lists only code no caller reaches, measured at T16's landing.
-5. **The order.** After T16's landing, before T22.
-6. **The exits.** Green: `make dead-closure` empty and `make done` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None: a deletion by list.
-8. **The budget.** One landing.
-9. **Done, measured.** `make dead-closure` lists nothing T16's port left.
-10. **Before moving a constant.** n/a: constants deleted, none moved.
-11. **Before fitting things into room.** n/a.
-
-**Performance work?** No.
-
+- **Approach**: the code the field's port left dead is deleted in T16's own landing, as FR-005 and the GM's design have it
+  (`request.md` section 3 step 5: "The old implementation is deleted in the same landing, with no fallback path"; section 5 item 5).
+  spec-fidelity BLOCKED the separate landing this block first planned (`phases/plan-T23-T24.verdict.json`); FR-021, amended, holds
+  T16 to the claims of the stage's own code, so the shared files the deletion touches no longer bring their old findings into it.
+  The list is `make dead-closure BASE=<T16's merge base>`'s, each name deleted with its tests; `water_frame.rs` reaching the shared
+  `counts.rs` is water_frame's leftover and stays with T22.
 
 ### T24 (the round arbiter's ruling ask:444-T16-hem-cleared-reprice, 2026-11-01)
 
