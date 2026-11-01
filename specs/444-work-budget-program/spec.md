@@ -210,8 +210,9 @@ standards" (`request.md`).
   and the gate's seeds hold no fixed block.
 
 - **SC-014** (FR-021): a test finds a phase task's landing refused with an open claim finding at a unit its delta adds or
-  changes or at an unchanged Python unit the stage's seam reads, not refused once the finding is closed, and not refused by a
-  finding at a unit of a file the delta touches only to delete other code; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
+  changes or at an unchanged Python unit the stage's seam or its Rust reads at run time, not refused once the finding is closed,
+  and not refused by a finding at a unit neither the seam nor its Rust reads, of a file the delta touches only to delete other
+  code or an unchanged unit of a file it edits; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
   Python file water_frame's port (T19) changed.
 
 ## Edge Cases
