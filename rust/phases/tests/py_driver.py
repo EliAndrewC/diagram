@@ -38,6 +38,9 @@ for seed in range(8):
     seen |= {p["state"] for p in f["plots"]} | {"weir" if f["weir"] else "open"} | {"pond" if f["pond"] else "-"} | {"grave" if f["grave"] else "-"}
     assert set(out["knobs"]) >= {"intake", "paddy_rest"} and len(out["grain"]) == 3 and out["counts"] is not None
 assert {"green", "wet", "rest", "weir", "open"} <= seen, seen
+# ...and a settlement past the single-field cap draws its fields side by side (each after the first laid beside the last)
+wide = l7r_phases.stage_field(4, 220, 90.0, 1.0, (9000.0, 9000.0), (18000.0, 18000.0), 1.0, brook, ([0.30, 0.62, 0.93], [0.55]), weir, "medium", 1488.0, field_knobs)
+assert len(wide["fields"]) >= 3, len(wide["fields"])
 try:
     l7r_phases.stage_field(1, 15, 90.0, 1.0, (0.0, 0.0), (1000.0, 1000.0), 1.0, (105.0, 35.0, 70.0, 22.0, 34.0, 10.0, 20.0, 7.0), ([0.5], [0.5]), weir, "small_irregular", 1e9, field_knobs)
 except ValueError as e:

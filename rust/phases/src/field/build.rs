@@ -79,7 +79,6 @@ pub struct Field {
     pub dry: Vec<DryPlot>,
     pub pond: Option<(usize, Pond)>,
     pub grave: Option<Grave>,
-    pub segments: Vec<(Pt, Pt, f64)>,
     /// The water index of `segments`, each at its width: the field's beans and the hem ask it, filed once.
     pub water: Index,
     /// Each basin's box (x0, y0, x1, y1), middle and area (square feet), from one walk of its ring (`ring_stats`): the field's
@@ -185,39 +184,25 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     let mut fields = Vec::new();
     let need = f64::from(inp.households) * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE;
     let mut drained = 0.0;
-    let mut first: Option<super::fan::Fan> = None;
+    let area = paddy / f64::from(n);
+    // the first field's fan, laid once: the next fields step from it, and the first IS it (the work-budget audit at T16's
+    // landing: the same fan traced twice for the first field)
+    let first = laid_fan(inp, area, inp.center, inp.seed, &mut counts);
     for k in 0..n {
         let tag = format!("f{k}");
-        let area = paddy / f64::from(n);
-        // the first field's fan, laid once: the next fields step from it, and the first IS it (the work-budget audit at T16's
-        // landing: the same fan traced twice for the first field); each fan's two traces and its area's walk counted
-        if first.is_none() {
-            let laid = fan(area, inp.aspect, inp.down_deg, inp.center, inp.seed);
-            counts.add("write@fan_outline", 3 * laid.ring.len() as u64);
-            first = Some(laid);
-        }
-        let first = first.clone().unwrap_or_else(|| unreachable!("laid above"));
-        // the next field beside the last, across the fall, past its brook's skirt
-        let step = (first.half_head + first.half_foot)
-            + 2.0 * (inp.brook.skirt + inp.brook.wander)
-            + inp.brook.w;
-        let off = step * f64::from(k);
-        let center = (
-            inp.center.0 + first.across.0 * off,
-            inp.center.1 + first.across.1 * off,
-        );
         let f = if k == 0 {
-            first
+            first.clone()
         } else {
-            let laid = fan(
-                area,
-                inp.aspect,
-                inp.down_deg,
-                center,
-                inp.seed + i64::from(k),
+            // the next field beside the last, across the fall, past its brook's skirt
+            let step = (first.half_head + first.half_foot)
+                + 2.0 * (inp.brook.skirt + inp.brook.wander)
+                + inp.brook.w;
+            let off = step * f64::from(k);
+            let center = (
+                inp.center.0 + first.across.0 * off,
+                inp.center.1 + first.across.1 * off,
             );
-            counts.add("write@fan_outline", 3 * laid.ring.len() as u64);
-            laid
+            laid_fan(inp, area, center, inp.seed + i64::from(k), &mut counts)
         };
         let field = one(inp, &f, (&tag, k == 0), &knobs, &mut counts)?;
         // the drained plots' area, read only where the barley counts it (the audit, T16: every roll walked every ring for it)
@@ -426,7 +411,7 @@ fn one(
         chans.iter().map(|c| c.pts.len() as u64).sum(),
     );
     counts.add("pt_test@offtake_lines", probes);
-    let (ix, segments) = water(&chans, &br, inp, f, counts)?;
+    let (ix, _segments) = water(&chans, &br, inp, f, counts)?;
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
     let mut work = 0;
     let (st, rested) = states(&bs, inp.seed, tag, &ends, unsettled, &mut work);
@@ -476,13 +461,28 @@ fn one(
         dry: Vec::new(),
         pond,
         grave: gr,
-        segments,
         water: ix,
         stats,
         area,
         low,
         rested,
     })
+}
+
+/// A field's fan of `area` square feet at `center`, rolled from `seed`: its two traces and its area's walk counted.
+///
+/// Research:
+///     the fan - NONE: the fan's own claims are `fan::fan`'s; this counts its work
+fn laid_fan(
+    inp: &FieldIn,
+    area: f64,
+    center: Pt,
+    seed: i64,
+    counts: &mut Counts,
+) -> super::fan::Fan {
+    let laid = fan(area, inp.aspect, inp.down_deg, center, seed);
+    counts.add("write@fan_outline", 3 * laid.ring.len() as u64);
+    laid
 }
 
 /// The area of a field's drained plots (square feet), neither wet nor resting - the barley's ground, read from each plot's
@@ -625,13 +625,24 @@ mod tests {
         assert!(toe_first.unwrap() > f.fan.length * 0.66);
         assert_eq!(out.knobs["winter_crop"], "none");
         assert!(!out.knobs.contains_key("unused"));
-        assert!(!f.segments.is_empty());
+        assert!(!f.water.segs.is_empty());
         let past_cap = build(&inp(220, 4)).unwrap();
         assert!(past_cap.fields.len() >= 3, "several fields past the cap");
         let mut barley = inp(20, 5);
         barley.knobs[3].3 = Some("barley".to_owned());
         let b = build(&barley).unwrap();
         assert!(b.grain.1 < 1e-9 && b.fields[0].dry.is_empty());
+        // ...and on an unsettled field the resting plots and the wet ones are taken out of the barley's ground
+        barley.knobs[2].3 = Some("unsettled".to_owned());
+        let u = build(&barley).unwrap();
+        let f0 = &u.fields[0];
+        assert!(!f0.rested.is_empty() && f0.low.clone().any(|i| f0.states[i] == State::Wet));
+        assert!(
+            u.grain.1
+                <= b.grain.1
+                    + f0.rested.iter().map(|&i| f0.stats[i].2).sum::<f64>() / 43_560.0
+                    + 1e-9
+        );
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());
