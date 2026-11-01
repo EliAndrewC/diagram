@@ -100,8 +100,8 @@ def test_importing_the_whole_engine_does_not_load_shapely_but_building_geometry_
         "    except BaseException:\n"
         "        pass\n"
         "print('after imports:', 'shapely' in sys.modules)\n"
-        "from l7r.diagram.waterfields.seams.geoms import ring_polygons\n"
-        "ring_polygons([[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]])\n"
+        "from l7r.diagram.hamletgen.homesteads.rows import hard_ground\n"  # seams.geoms went with the old field (444 T16)
+        "hard_ground([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)])\n"
         "print('after geometry:', 'shapely' in sys.modules)\n"
     )
     out = subprocess.run([sys.executable, "-c", probe], capture_output=True, text=True, check=True).stdout

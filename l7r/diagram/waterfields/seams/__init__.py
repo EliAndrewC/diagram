@@ -9,8 +9,7 @@ reached are gone. What stays:
   planted region is cut from; `_parts` and `_ring`, read by the grave cut;
 - `close.py` - `hold_ring_rules`, the re-hold a later cut owes the rules (`settlement/fields/features.py` cuts a grave island
   from a plot and re-holds), with `_weld_within_rules` and `_split_steps` / `_cut_on_hop` (which `waterfields/settle.py` also
-  splits a staircase with);
-- `geoms.py` - `ring_polygons` and `GeomTree`.
+  splits a staircase with).
 """
 
 from .pockets import _parts as _parts
