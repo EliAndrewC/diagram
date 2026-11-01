@@ -79,15 +79,16 @@ def test_the_rust_gate_record_is_made_before_the_gate_and_the_cohort(tmp_path: p
     assert land.long_runs(tmp_path) == 1 and ran == [], "nothing - not the gate stamp, not the cohort - ran before it"
 
 
-def test_a_rust_stage_lands_with_no_open_claim_in_the_files_it_changes(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
-    """Feature 444 FR-021 (amendment 6, SC-014): a phase task's landing is refused while `make claims-report` lists an open finding
-    in a file its delta changes under rust/ or l7r/; a finding in a file it leaves alone, or none, refuses nothing."""
+def test_a_rust_stage_lands_with_no_open_claim_in_its_own_code(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 444 FR-021 (amendment 6, SC-014, as amended 2026-11-01): a phase task's landing is refused while `make claims-report`
+    lists an open finding in its Rust; a finding in a file it leaves alone, or none, refuses nothing."""
     land = _land()
     d = tmp_path / "specs" / "444-work-budget-program"
     d.mkdir(parents=True)
     text = "- [ ] T16 phase: field - the comb field\n      phase: field\n- [ ] T09 a tooling task\n"
     report = "claims: ...\n  MISLABELED     rust/phases/src/field.rs::Basin#the plots - a counter, no decision\n  DRIFTED        l7r/other.py::f#x - y\n"
     monkeypatch.setattr(land, "delta_names", lambda _root: ["rust/phases/src/field.rs", "specs/444-work-budget-program/plan.md"])
+    monkeypatch.setattr(land, "_stage_seam", lambda _root, _phase: [])
     monkeypatch.setattr(land, "run", lambda _root, cmd, env=None, quiet=True: (0, report))  # noqa: ARG005
     why = land.open_claims_refusal(tmp_path, d, text, "T16")
     assert "1 open claim finding(s)" in why and "rust/phases/src/field.rs::Basin" in why and "l7r/other.py" not in why
@@ -97,3 +98,31 @@ def test_a_rust_stage_lands_with_no_open_claim_in_the_files_it_changes(tmp_path:
     monkeypatch.setattr(land, "delta_names", lambda _root: ["specs/x.md"])
     assert land.open_claims_refusal(tmp_path, d, text, "T16") == "", "no rust/ or l7r/ file changed"
     assert land.open_claims_refusal(tmp_path, tmp_path / "specs" / "443-x", text, "T16") == "", "only feature 444's phases"
+
+
+def test_the_python_a_rust_stage_answers_for_is_what_it_changes_and_what_its_seam_reads(tmp_path: pathlib.Path) -> None:
+    """SC-014 as amended (the round arbiter on ask:444-T16-fr021-scope-2; spec-fidelity's exception check): a finding at a unit the
+    delta changes refuses; one at an unchanged unit the seam imports at run time refuses; one at another unit of a file the delta
+    touches only to delete code, or at a constant imported only for type checking, is filed to the open-claims feature instead."""
+    land = _land()
+    scope = land._claims_scope()
+    pkg = tmp_path / "l7r" / "diagram"
+    pkg.mkdir(parents=True)
+    (pkg / "shared.py").write_text('KEEP = 1\n"""Research: keep - GUESS: x"""\n\nOLD = 2\n\n\ndef edited():\n    return 3\n\n\ndef other():\n    return 4\n')
+    (pkg / "consts.py").write_text('TAP = 70\n"""Research: tap - x"""\nHINT = 1\n')
+    (pkg / "seam.py").write_text(
+        "from typing import TYPE_CHECKING\n\nfrom l7r.diagram.consts import TAP\n\nif TYPE_CHECKING:\n    from l7r.diagram.consts import HINT\n\n\ndef stage_field(s):\n    return TAP\n"
+    )
+    report = (
+        "claims\n  DRIFTED        l7r/diagram/shared.py::edited#e - a line the delta changed\n"
+        "  DRIFTED        l7r/diagram/shared.py::other#o - a unit it left alone\n"
+        "  NEEDS-RESEARCH l7r/diagram/consts.py::TAP#tap - the seam reads it\n"
+        "  DRIFTED        l7r/diagram/consts.py::HINT#h - a type-checking import only\n"
+        "  DRIFTED        l7r/diagram/elsewhere.py::f#f - a file the delta never touched\n"
+    )
+    diff = {"l7r/diagram/shared.py": "@@ -5,1 +4,0 @@\n-OLD2 = 9\n@@ -8 +8 @@\n-    return 2\n+    return 3\n"}
+    own, left = scope.split(tmp_path, report, ["l7r/diagram/shared.py"], [pkg / "seam.py"], lambda p: diff.get(p, ""))
+    assert [ln.split("#")[0].split("::")[1] for ln in own] == ["edited", "TAP"]
+    assert [ln.split("#")[0].split("::")[1] for ln in left] == ["other"]
+    (tmp_path / "specs" / "405-engine-findings-from-385").mkdir(parents=True)
+    assert scope.file_left(tmp_path, "T16", left) == 1 and scope.file_left(tmp_path, "T16", left) == 0, "filed once"
