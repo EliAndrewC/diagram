@@ -476,8 +476,8 @@ class BridgesMixin:
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float | None = None, seg_caps: Any = None) -> int:  # type: ignore[misc]
-        """Standalone plank FOOTBRIDGES across the SUPPLY ditches (main, branch, lateral - never the collector, the drain
-        or the feeder, `SUPPLY_ROLES`), where field-workers cross a ditch while
+        """Standalone plank FOOTBRIDGES across the SUPPLY ditches (main, branch, lateral, a polder's feeder among them -
+        never the collector or the drain, `SUPPLY_ROLES`), where field-workers cross a ditch while
         walking the paddy bunds - NOT carried by any lane (people reach them along the earthen bunds, so no
         path leads to them). Any ditch stretch longer than `min_len` gets a plank about MIDWAY; a long stretch
         gets one roughly every `spacing` px, evenly spaced along it. Each plank crosses PERPENDICULAR to the
@@ -511,9 +511,9 @@ class BridgesMixin:
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
             off groves - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
-            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`, in feet as the records are)
+            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`, in pixels at the map's scale as the records are)
             assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
-            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width is stored in feet, the same real size on every map - a record's width and the default alike, 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel
+            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width the same real size on every map - a record's width and the default alike in pixels at the map's scale, converted to feet once (`worth_planking`), the default 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
@@ -559,11 +559,9 @@ class BridgesMixin:
         # polygons whose box - a pixel wider - meets the deck's box hold every one it can meet, and `quad_hits_poly`
         # decides as before; `any` over them is `any` over all. The homes are boxed the same way for `_quads_overlap`.
         dry_grid, ground_grid, house_grid = (boxed_grid(boxed_polys(q, 1.0)) for q in (dry_quads, ground_quads, houses))
-        DEFAULT_W = {
-            "streams": 7.0,
-            "channels": 2.5,
-            "field_ditches": 2.5,
-        }  # in feet, as the records hold theirs: a brook 7 ft (0035), a field ditch 2.5 ft at its head (0084), a channel 2.5 ft (0031)
+        # in pixels at the map's scale, as the records hold theirs (`worth_planking` converts once): a brook 7 ft (0035), a field
+        # ditch 2.5 ft at its head (0084), a channel 2.5 ft (0031)
+        DEFAULT_W = {"streams": self.px(7.0), "channels": self.px(2.5), "field_ditches": self.px(2.5)}
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
         # junction where the water is the main's width, not the branch's. Listing only streams and
@@ -575,7 +573,7 @@ class BridgesMixin:
         _water_segs = water_segment_index(other_water)  # built once for every deck candidate below (feature 278, FR-003)
         for d in self.M.get("field_ditches", []):
             if d.get("role") not in SUPPLY_ROLES:
-                continue  # a plank is laid on a supply ditch, never the collector, the drain or the feeder (ways W14, `SUPPLY_ROLES`)
+                continue  # a plank is laid on a supply ditch, never the collector or the drain (ways W14, `SUPPLY_ROLES`)
             pts = d["poly"]
             seg = [math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1)]
             total = sum(seg)
