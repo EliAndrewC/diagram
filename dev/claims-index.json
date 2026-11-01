@@ -10476,6 +10476,7 @@
   "rests": [
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::WEIR_HALF#the weir's half-length": {
@@ -10600,6 +10601,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
@@ -10617,6 +10619,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no beans or dry plots on a polder": {
@@ -10628,29 +10631,8 @@
   "note": "bund_beans and dry_plots are empty. The bunds page never says which fields carry beans, and the polders page puts only paddies inside the dike, with the dry ground on the landward shore",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/field_stage.py::_polder#no pocket pond in a polder": {
-  "body": "df6c906d18fc8692",
-  "claim": "no pocket pond in a polder - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: the dike-pond ground of a delta has no pond among its plots - and a rice polder none either, a GUESS for it",
-  "code": "9c126707bfd81b7a",
-  "core": "df2d8f3b91033ed2",
-  "date": "2026-10-31",
-  "note": "`\"bead_ponds\": []` gives a rice polder no pond, but the page's table gives a polder a pond \"on a low plot\" (§19-§20), kept \"a little over half the time, where it has low plots\" (§28); only the dike-pond ground has none (§23-§26, §29). The claim's \"a rice polder none either, a GUESS\" contradicts the page: the code should roll the low-plot pond for a rice polder, or the claim should cite a DEVIATION recorded on the page",
-  "pages": {
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
-  },
-  "research": "2b8a8213b9c89d51",
-  "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:02605b446c604185",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:03ed9353fdea1d55",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:083596e0af6f1902",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:140bedbf9c3f6d56",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2",
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
-  ],
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's plots wet or green": {
   "body": "df6c906d18fc8692",
@@ -10661,6 +10643,7 @@
   "note": "the cited 0009 drawing page is not in the bundle, so I cannot confirm it is silent on a polder showing the odd flooded or ripening plot; need questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html.txt. The wet-low-row half agrees with 0007",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's records": {
@@ -10673,6 +10656,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_roll#the field's seam": {
@@ -78181,6 +78165,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#on past the intake": {
@@ -78199,6 +78184,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#outside the crop": {
@@ -78210,6 +78196,7 @@
   "note": "the page says only that the brook is left \"its margin\", with no distance; skirt, slew and swing limit match the code",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the intake's place": {
@@ -78228,6 +78215,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the meander outward": {
@@ -78240,6 +78228,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the meander's wave": {
@@ -78252,6 +78241,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/brook.rs::brook#the race turns away from the brook": {
@@ -78268,6 +78258,7 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:ba02ca4b015c8cac"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the tap's stride": {
@@ -78280,25 +78271,8 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
- },
- "rust/phases/src/field/brook.rs::brook#the trough at the intake": {
-  "body": "9498837997f637a1",
-  "claim": "the trough at the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki: an offtake on the outside of a bend, a mouth on the concave side, just below the middle of a bend's concave bank - the intake at the bend's apex on the fields' side, the brook there running down the fall",
-  "code": "5d8d804f11848e45",
-  "core": "cc2268fdd25956e8",
-  "date": "2026-10-31",
-  "note": "the phase line always puts the intake at a bend's apex on the fields' side, but §31 attests two sitings (\"prefers a straight reach, and failing that the outside of a bend\"); roll between the two forms per settlement, or record the bend-only siting as a DEVIATION on the drawing page",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "470d939e84e4b2e9"
-  },
-  "research": "72acce47e8c337c3",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:11d3e3427f4eb9fa",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:a3ba05f968bc4461",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:d1aa54ed5581b2a8"
-  ],
-  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/brook.rs::clearance#the clearance": {
   "body": "ba64997e67239dc8",
@@ -78584,6 +78558,7 @@
    "0013-paddies-left-to-rest-kataarashi.drawing.html:2923b84b63379ea8",
    "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the basins' rules where decided": {
@@ -78603,6 +78578,7 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:52e13caf7165417a",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:a5467bc2b3076539"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the field off the brook": {
@@ -78619,6 +78595,7 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave's form": {
@@ -78636,6 +78613,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the water filed": {
@@ -78648,6 +78626,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the weir": {
@@ -78667,6 +78646,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
@@ -78869,6 +78849,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's end": {
@@ -78887,6 +78868,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's steps": {
@@ -78898,6 +78880,7 @@
   "note": "every leg narrows by the same step, w + (THREAD_W - w)*i/n; the pages give a head width and a tail width but no rate of narrowing",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals taper": {
@@ -78914,6 +78897,7 @@
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
@@ -78931,6 +78915,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
@@ -78949,6 +78934,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
@@ -78967,6 +78953,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/channels.rs::channels#the drain's widths, DRAIN_W widening from head to outfall (1.2 -> 5.5 on the ladder)": {
@@ -78993,6 +78980,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race's course": {
@@ -79010,6 +78998,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the lean": {
@@ -79027,6 +79016,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "rust/phases/src/field/channels.rs::channels#the second canal partway": {
@@ -79044,6 +79034,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#which head width each supply canal takes: SUPPLY_W.0 for the canal along the upper edge and the far flank, SUPPLY_W.1 for the brook-flank canal": {
@@ -79087,23 +79078,6 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
-  ],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/channels.rs::offtake_lines#the lean": {
-  "body": "53d264dc508d6e56",
-  "claim": "the lean - which-way-water-flows-and-how-channels-bend-and-join.drawing: a branch leaves its parent leaning downstream",
-  "code": "258de3ba39c7dec7",
-  "core": "f0250475dad118c1",
-  "date": "2026-10-31",
-  "note": "picks the nearest row whose delivery points downstream of the junction (dot > 0)",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
   "verdict": "IN-STEP"
  },
@@ -81858,6 +81832,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#the polder's seam": {
@@ -81870,6 +81845,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::state#the seam": {
