@@ -5,12 +5,12 @@ naturally and a canal cut from it. China's intakes, too, came "with a dam and wi
 River drew all its water without dams.
 
 The intake stood on one bank, the side of the land it served, where the deepest current ran against the bank and the water
-stood deep and steady. From it the dug head race ran down to its first fork, where the water was divided among the fields,
+stood deep and steady. From it the head race - before the early modern period in many cases no more than earth dug out and trodden firm - ran down to its first fork, where the water was divided among the fields,
 while the brook ran on below. What the mouth of a village's race was lined or shut with is not recorded; the heads of great
 canals were closed with gates of timber or stone, or with boards lifted in and out.
 
 How far a head race ran is not recorded either; the small mountain canals ran "for short distances". Where a village's water was taken off a larger channel, the mouth could be small:
-in 1657 a branch of the Tamagawa aqueduct serving one village left through an opening about 8 in (21 cm) square, and in
+in the Edo period, in 1657, a branch of the Tamagawa aqueduct serving one village left through an opening about 8 in (21 cm) square, and in
 1722 one serving fourteen villages through one about 3 ft (91 cm) square.
 
 Guesses:
@@ -23,5 +23,5 @@ angle pointing downstream, with no gate or boards at its mouth; the brook runs o
 Name: An open intake
 Covers: `meta.intake = open`
 Sources: suido-ishizue-iseki, maff-toshuko-history, people-zhishui-2025, pwsannong-quxi, shimane-toshuko-lecture, tabayashi-1987, thepaper-guangai, pwsannong-gudai-shuili, hrr-agagawa-dento, kosaka-2014-tamagawa-bunsui
-Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html
+Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
 Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html
