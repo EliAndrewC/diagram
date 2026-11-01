@@ -91,6 +91,8 @@
       research: rendering
 - [ ] T23 the code T16's field port left dead deleted, with its tests, as its own non-phase landing right after T16 under the claims switch's report (the round arbiter's ruling on ask:444-T16-fr021-scope): make dead-closure's list - plot_texture, the old comb's pending slots in core.py, _sharp_corners, _toward and CITY_TIER_SCALES in _knobs.py, the dead constants in consts.py, consts_fields.py and consts_water.py, dike_crest, banks.py's floor_overhang, cell_area, straight_ring and tapers_to_a_point, frame.py's canal constants and helpers, partition.py's planted_region and region_rings, polder.py's clean_polder_parcels, seams/pockets.py's _outside_command, and the waterfields re-exports; and water_frame.rs reaching the shared Counts in counts.rs (the copy T16 left it, moved with T22)
       research: rendering
+- [ ] T24 At the field derivation's next re-derivation, re-price the dry hem, the hem's laid plots, the outline by bands and the hem's share of the overlap registry on fan_middle's odds (a cleared middle lays one band along the whole canal, 0011; 740aed0ec), and name the cleared-middle band in the contract's Writes (the round arbiter, ask:444-T16-hem-cleared-reprice)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

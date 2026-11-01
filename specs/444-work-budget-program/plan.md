@@ -548,3 +548,35 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 
 **Performance work?** No.
 
+
+### T24 (the round arbiter's ruling ask:444-T16-hem-cleared-reprice, 2026-11-01)
+
+- **Approach**: the accepted field derivation (`phases/field_greenfield.derivation.md`) prices the dry hem on the winter crop's
+  odds alone - 114 plots at 40. Commit 740aed0ec (T16's third claims round) made a cleared middle (`fan_middle`, 1 map in 4)
+  lay one band along the whole canal whatever the need (0011). Measured 2026-11-01 by `make work-budget`
+  (`dev/work-budget/20261101T085501Z-39d51a626dd7.json`): hem plots at 40 of 241, 119, 158 and 150 on seeds 4, 25, 39 and 47,
+  mean about 167; the stage's total, 27,012 at 40 and 47,513 at 80, under the derivation's 27,238 and 49,631. At the
+  derivation's next re-derivation, price the dry hem, the hem's laid plots, the outline by bands and the hem's registry share
+  on `fan_middle`'s odds, and name the cleared-middle band in the contract's Writes. Not before: the arbiter forbade editing
+  the derivation now (FR-013).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T24 Approach (checklist part A)
+
+1. **The goal, in the world.** No map change; the field's work budget prices the hem as the field lays it.
+2. **The constraints.** FR-013 (a figure change re-owes a ruling), FR-014 (the typical case), FR-015 (the standing pin).
+3. **Where each comes from.** R: 0011's drawing page (a cleared middle drawn only as the hem along the whole canal); O: the
+   2026-11-01 work-budget record above.
+4. **Do they describe the world here?** Measured on the four reference seeds, above.
+5. **The order.** At the field derivation's next re-derivation, after T16 lands.
+6. **The exits.** Green: a MODE BUDGET verdict on the re-priced rows. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The hem rows' expected plots at 40 within the measured mean's band.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+**Performance work?** No - a budget's arithmetic, not the code's.
+
