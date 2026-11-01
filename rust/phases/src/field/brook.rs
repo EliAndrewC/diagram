@@ -96,14 +96,17 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 ///     the meander's wave - GUESS: the record silent on a meander's length; `MEANDER_WAVE_FT` down the fall, claimed at the constant
 ///     outside the crop - GUESS: the record silent on how far outside the crop the brook keeps; the plan's `BROOK_SKIRT` square to the flank (wider across the fall by the flank's lean), moving in by at most a station's slew; out at once below a shoulder intake, at most `CENTER_SWING_DEG` off the fall below a middle one
 ///     the meander outward - GUESS: the record silent on a brook's swing; held to the side away from the fan so the skirt is kept, its swing the wider of the plan's wander and `MEANDER_FT`, so one wave carries the course's whole stray
-///     the trough at the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: an offtake on the outside of a bend, a mouth on the concave side, just below the middle of a bend's concave bank - the intake at the bend's apex on the fields' side, the brook there running down the fall
+///     the intake's siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: an offtake in a straight reach, or else on the outside of a bend, a mouth on the concave side - the `intake_siting` knob: at a bend's apex on the fields' side, or where the wave crosses its line on a straight reach
+///     the middle intake raised - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork - for a middle intake the race as long as the swing out past the head's corner asks, the plan's `lead` where that is longer
+///     the shoulder intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the head race leaves the intake at an acute angle pointing downstream and runs to the fork - the intake `lead` up the race from the head's corner, turned `offtake_deg` off the fall
 ///     above the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a hamlet's brook comes down off the high ground - from off the map straight down the fall along the intake's line, meandering
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
 )]
 #[must_use]
-pub fn brook(fan: &Fan, side: f64, b: BrookIn, center: bool, canvas: Pt) -> Brook {
+pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) -> Brook {
+    let (center, straight) = place;
     let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
     // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
     let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
@@ -120,7 +123,6 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, center: bool, canvas: Pt) -> Broo
         let corner_x = side * fan.half_side(0.0, side);
         (-b.lead * cos, corner_x + side * b.lead * sin)
     };
-    let intake = local(fan, u_i, x_i);
     let off = |p: Pt| {
         p.0 < -OFF_MAP_FT
             || p.1 < -OFF_MAP_FT
@@ -129,13 +131,20 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, center: bool, canvas: Pt) -> Broo
     };
     // the wave's trough at the intake: no offset and no slope there, so the brook passes through the intake heading down the fall
     // (a straight stride at the tap, measured on 120 rolls, ran 110-160 ft straight against 0054's ten widths; T16's claims round)
-    let phase = -std::f64::consts::FRAC_PI_2 - u_i / MEANDER_WAVE_FT * std::f64::consts::TAU;
+    // ...or, sited on a straight reach, where the wave crosses its line heading away from the fields: the intake then stands on
+    // the course there, the wave held outward of the skirt either way
+    let phase = if straight {
+        0.0
+    } else {
+        -std::f64::consts::FRAC_PI_2
+    } - u_i / MEANDER_WAVE_FT * std::f64::consts::TAU;
     // the meander held to the outward side, so the skirt is kept; a wave of `MEANDER_WAVE_FT` down the fall
     // its swing the plan's wander or the meander's, whichever is wider: the one wave carries the course's whole stray, so no
     // second walk can cancel it into a level run
     let meander = |u: f64| {
         side * swing * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin()) / 2.0
     };
+    let intake = local(fan, u_i, x_i + meander(u_i));
     // upstream: from off the map down the fall to the intake
     let mut up = Vec::new();
     let mut v = u_i;
@@ -317,7 +326,7 @@ mod tests {
     fn the_brook_keeps_outside_the_crop_and_bends_gently() {
         for side in [1.0, -1.0] {
             let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
-            let br = brook(&f, side, B, false, (6400.0, 6400.0));
+            let br = brook(&f, side, B, (false, side < 0.0), (6400.0, 6400.0));
             let mut ix = Index::default();
             let ids = file(&br, &mut ix);
             assert_eq!(ids.len(), br.pts.len() - 1);
@@ -332,7 +341,7 @@ mod tests {
         }
         // straight into the head's middle: the intake on the fan's axis, the brook swinging out to its flank outside the crop
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
-        let mid = brook(&f, 1.0, B, true, (6400.0, 6400.0));
+        let mid = brook(&f, 1.0, B, (true, false), (6400.0, 6400.0));
         assert!((mid.intake.0 - f.fork.0).abs() < 1e-6 && mid.intake.1 < f.fork.1);
         let mut ix = Index::default();
         file(&mid, &mut ix);
@@ -349,7 +358,7 @@ mod tests {
         // the swing and the meander on it: past the race's acute angle, never across the fall
         assert!(off > B.offtake_deg && off < 90.0);
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0), 4);
-        let br = brook(&f, 1.0, B, false, (6400.0, 6400.0));
+        let br = brook(&f, 1.0, B, (false, false), (6400.0, 6400.0));
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
         assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);
         assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);

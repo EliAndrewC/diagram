@@ -1,0 +1,817 @@
+{
+ "rust_stages": [
+  "water_frame",
+  "field"
+ ],
+ "start": 726620,
+ "seeds": [
+  {
+   "seed": 726620,
+   "households": 16,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726621,
+   "households": 12,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726622,
+   "households": 19,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726623,
+   "households": 15,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726624,
+   "households": 11,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726625,
+   "households": 18,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726626,
+   "households": 14,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726627,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726628,
+   "households": 17,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726629,
+   "households": 13,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726630,
+   "households": 20,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 29.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726631,
+   "households": 16,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726632,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726633,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726634,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726635,
+   "households": 11,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726636,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726637,
+   "households": 14,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726638,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726639,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726640,
+   "households": 13,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726641,
+   "households": 20,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726642,
+   "households": 16,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726643,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726644,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726645,
+   "households": 15,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 33.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726646,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726647,
+   "households": 18,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726648,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726649,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726650,
+   "households": 17,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726651,
+   "households": 13,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726652,
+   "households": 20,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726653,
+   "households": 16,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 29.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726654,
+   "households": 12,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726655,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726656,
+   "households": 15,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726657,
+   "households": 11,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726658,
+   "households": 18,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726659,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726660,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726661,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726662,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726663,
+   "households": 20,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726664,
+   "households": 16,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726665,
+   "households": 12,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726666,
+   "households": 19,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726667,
+   "households": 15,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726668,
+   "households": 11,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "one",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726669,
+   "households": 18,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726670,
+   "households": 14,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "one",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726671,
+   "households": 10,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 33.2 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726672,
+   "households": 17,
+   "pins": {
+    "farm_water": "channel",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726673,
+   "households": 13,
+   "pins": {
+    "farm_water": "well",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "fail",
+   "stage": "field",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.1 ft from the brook"
+   ]
+  }
+ ],
+ "replays": [
+  {
+   "seed": 726620,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726620-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726621,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726621-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726622,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726622-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726623,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726623-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726624,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726624-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726625,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726625-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726626,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726626-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726628,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726628-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726629,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726629-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726630,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726630-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 29.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726631,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726631-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726635,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726635-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 28.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726637,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726637-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726640,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726640-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726641,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726641-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726642,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726642-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726645,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726645-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 33.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726647,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726647-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726650,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726650-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726651,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726651-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726652,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726652-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.9 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726653,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726653-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 29.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726654,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726654-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.0 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726656,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726656-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726657,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726657-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726658,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726658-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726663,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726663-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 32.5 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726664,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726664-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.4 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726665,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726665-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.7 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726666,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726666-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.3 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726667,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726667-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.6 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726669,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726669-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 30.1 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726671,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726671-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 33.2 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726672,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726672-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.8 ft from the brook"
+   ]
+  },
+  {
+   "seed": 726673,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726673-field.pkl",
+   "failures": [
+    "FAIL refused:ValueError -> the field refused, the brook's skirt: an outline point 31.1 ft from the brook"
+   ]
+  }
+ ],
+ "failing": 70,
+ "engine": "5febab84ba9e6b5069857f46897b14b074d961e9fced076ed5eabbb1b51b563f"
+}

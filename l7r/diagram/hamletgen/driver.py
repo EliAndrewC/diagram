@@ -176,6 +176,7 @@ Research:
     the track out after the homesteads - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: once the last house stands, the track out's start is set on the cluster's edge
     the seat after the water - GUESS: no page orders them; the settlement's seat chosen once the water, the field and the sink stand, so it keeps clear of them
     the appurtenances after the track - GUESS: no page orders them; byres, sheds and wells seated once the track out stands, so they keep off it
+    the pig sties on the ponds - GUESS: no page orders them; a dike-pond hamlet's sties seated on its ponds after the appurtenances and before the burial ground, against the houses they serve
     the burial ground before the web - GUESS: research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html silent on the dead; seated against the houses and wells, reserving ground the web works round
     the bamboo after the scrub - GUESS: no page orders them; the bamboo stands laid after the woodland and the windbreak, over the scrub that kept out of them
     labels last - CANON: the GM, 2026-08-29 (feature 157): "how we place labels will always depend on what else is on the map"

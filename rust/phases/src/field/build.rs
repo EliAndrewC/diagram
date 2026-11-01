@@ -241,7 +241,8 @@ fn one(
     counts: &mut Counts,
 ) -> Result<Field, FieldRefused> {
     let center = knobs.get("intake_place").is_some_and(|v| v == "center");
-    let br = brook(f, inp.brook_side, inp.brook, center, inp.canvas);
+    let straight = knobs.get("intake_siting").is_some_and(|v| v == "straight");
+    let br = brook(f, inp.brook_side, inp.brook, (center, straight), inp.canvas);
     counts.add("write@brook", 2 * br.pts.len() as u64);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
@@ -447,6 +448,12 @@ mod tests {
             vec![],
             vec![],
             Some("center".to_owned()),
+        ));
+        middle.knobs.push((
+            "intake_siting".to_owned(),
+            vec![],
+            vec![],
+            Some("straight".to_owned()),
         ));
         let m = build(&middle).unwrap();
         let fork = super::super::channels::division(&m.fields[0].fan, 1.0, true);

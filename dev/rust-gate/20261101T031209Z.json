@@ -1,0 +1,971 @@
+{
+ "rust_stages": [
+  "water_frame",
+  "field"
+ ],
+ "start": 421097,
+ "seeds": [
+  {
+   "seed": 421097,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421098,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421099,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421100,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421101,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421102,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421103,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421104,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421105,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421106,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421107,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421108,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421109,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421110,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421111,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421112,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421113,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421114,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421115,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421116,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421117,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421118,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421119,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421120,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421121,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421122,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421123,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421124,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421125,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421126,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421127,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421128,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421129,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421130,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421131,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421132,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421133,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421134,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421135,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421136,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421137,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421138,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421139,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421140,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421141,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421142,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421143,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421144,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421145,
+   "households": 14,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "one",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421146,
+   "households": 10,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421147,
+   "households": 17,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "one",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421148,
+   "households": 13,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421149,
+   "households": 20,
+   "pins": {
+    "farm_water": "channel",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 421150,
+   "households": 16,
+   "pins": {
+    "farm_water": "well",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726620,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726621,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726622,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726623,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726624,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726625,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726626,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726628,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726629,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726630,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726631,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726635,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726637,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726640,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726641,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726642,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726645,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726647,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726650,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726651,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726652,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726653,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726654,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726656,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726657,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726658,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726663,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726664,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726665,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726666,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726667,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726669,
+   "households": 18,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726671,
+   "households": 10,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726672,
+   "households": 17,
+   "pins": {
+    "farm_water": "channel",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 726673,
+   "households": 13,
+   "pins": {
+    "farm_water": "well",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  }
+ ],
+ "replays": [
+  {
+   "seed": 726620,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726620-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726621,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726621-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726622,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726622-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726623,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726623-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726624,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726624-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726625,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726625-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726626,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726626-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726628,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726628-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726629,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726629-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726630,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726630-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726631,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726631-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726635,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726635-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726637,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726637-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726640,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726640-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726641,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726641-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726642,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726642-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726645,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726645-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726647,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726647-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726650,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726650-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726651,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726651-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726652,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726652-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726653,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726653-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726654,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726654-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726656,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726656-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726657,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726657-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726658,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726658-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726663,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726663-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726664,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726664-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726665,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726665-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726666,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726666-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726667,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726667-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726669,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726669-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726671,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726671-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726672,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726672-field.pkl",
+   "failures": []
+  },
+  {
+   "seed": 726673,
+   "stage": "field",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/726673-field.pkl",
+   "failures": []
+  }
+ ],
+ "failing": 0,
+ "engine": "fe45e80c957d663de11bcd90c85137ed307bbaeffeb535cfc67cd65e713e57a8"
+}

@@ -382,6 +382,14 @@
    }
   },
   {
+   "key": "intake_siting",
+   "name": "How the brook runs where it is tapped",
+   "values": {
+    "bend": "on the outside of a bend",
+    "straight": "on a straight reach"
+   }
+  },
+  {
    "key": "intake_place",
    "name": "Where the brook is tapped",
    "values": {

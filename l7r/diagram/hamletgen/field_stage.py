@@ -42,11 +42,15 @@ ROW_FT = {"small_irregular": 40.0, "large_block": 60.0}
 """Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin some 40 to 60 ft across - a small plot's row at its foot, 40 ft, a large block's at its top, 60 ft; Rust maps the same (`lattice::row_ft_for`)"""
 INTAKE_PLACE = register_knob(Knob("intake_place", ["shoulder", "center"], default="shoulder"))
 """Research: the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake stands at the left, the center or the right of the fan's head, chosen at random for each settlement with odds of 1:2:1 (a guess) - a shoulder (the plan's flank, left or right at even odds) or the middle, at even odds"""
+INTAKE_SITING = register_knob(Knob("intake_siting", ["bend", "straight"], default="bend"))
+"""Research:
+    the intake's siting - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: an offtake in a straight reach, or else on the outside of a bend - the two forms rolled per settlement
+    the siting's odds - GUESS: the record silent on how often each was chosen; even odds"""
 WEIR_KEY_FT = 1.0
 """Research: the weir keyed into the banks - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on how far a weir runs into each bank, drawing it across the whole brook; a foot either side"""
 WEIR_HALF = BROOK_W / 2.0 / math.cos(math.radians(WEIR_SKEW_DEG)) + WEIR_KEY_FT
 """Research: the weir's half-length - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir is drawn across the whole brook, diagonally upstream - half the drawn brook's width across at the weir's skew, and `WEIR_KEY_FT` into the bank"""
-STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form", "intake_place")
+STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form", "intake_place", "intake_siting")
 """Research: the stage's own knobs, in the order each typing rule reads the last - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the nearness of a town sets the winter crop's odds"""
 FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": ink.POND_WATER, "gold": RIPE_GOLD, "rest": _RICE_GREEN}
 """Research:
@@ -313,7 +317,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint
         the polder's plots wet or green - GUESS: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html silent on whether a polder shows the odd flooded or ripening plot; its plots wet on the low row, green elsewhere
         no beans or dry plots on a polder - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on a polder's bunds; the polder drawn without the comb's bean runs, and its dry ground beyond the dike, not hemmed inside it
-        no pocket pond in a polder - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the dike-pond ground of a delta has no pond among its plots - and a rice polder none either, a GUESS for it
+        a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot - the Rust's roll (`stage_polder`'s `pocket_pond`), recorded and drawn here as the comb's is
         its water source - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head, by the inlet - recorded as a reservoir at the high corner"""
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
@@ -356,7 +360,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         "bund_beans": [],
         "bund_bean_runs": [],
         "furrows_vary": False,
-        "bead_ponds": [],
+        "bead_ponds": [tuple(pocket[1:])] if (pocket := out["pocket_pond"]) else [],
         "brook": [],
         "drain": next(c["pts"] for c in chans if c["seg"] == "drain"),
         "sluice": tuple(out["sluices"][0]),
@@ -416,6 +420,10 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
         col, cls = ditch_style(c["role"], plan.field_archetype)
         s.field_channel(c["pts"], col, c["w"], c["w_tail"], late=True, cls=cls)
         s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
+    if pocket:
+        pond = {"x": pocket[1], "y": pocket[2], "rx": pocket[3], "ry": pocket[4]}
+        M.setdefault("field_ponds", []).append(pond)
+        ink.pocket_pond(s, pond)
     s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], POND_FEEDER_FT, POND_FEEDER_FT, late=True)
     run = out["outfall"]
     M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": OUTFALL_FT})

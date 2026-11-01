@@ -296,6 +296,7 @@ impl Warp {
 ///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank
 ///     the pond's reeds - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)
 ///     the module by form - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a rice polder's module about 190 ft with its 8 ft ditch corridors and 3 ft bunds, a dike-pond block's about 160 ft with gaps of about 22 ft both ways
+///     the ring canal and the wild pond - NONE: `RING_FT` and `POND_FT`, claimed at the constants
 ///     the inlet's side - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent beyond its pool's one polder (the wild pond to its northwest); the inlet, the pond and the outfall on one side of the fall
 #[must_use]
 pub fn polder(

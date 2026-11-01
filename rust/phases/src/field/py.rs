@@ -87,11 +87,44 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
     Ok(d)
 }
 
+/// A rice polder's pocket pond: the comb's own roll over the block's low row, a resting plot never its host (0008) - the host
+/// plot's index, the pond's middle and radii.
+///
+/// Research:
+///     the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s
+fn rice_pond(
+    plots: &[super::polder::Plot],
+    resting: &[usize],
+    seed: i64,
+) -> Option<(usize, f64, f64, f64, f64)> {
+    let hosts: Vec<(usize, super::lattice::Basin)> = plots
+        .iter()
+        .enumerate()
+        .filter(|(i, x)| !resting.contains(i) && x.ring.len() == 4)
+        .map(|(i, x)| {
+            (
+                i,
+                super::lattice::Basin {
+                    row: usize::from(x.low),
+                    col: x.col,
+                    ring: x.ring.clone(),
+                    on_drain_right: false,
+                    on_drain_left: false,
+                },
+            )
+        })
+        .collect();
+    let basins: Vec<super::lattice::Basin> = hosts.iter().map(|(_, b)| b.clone()).collect();
+    super::features::pocket_pond(&basins, seed, "polder")
+        .map(|(k, q)| (hosts[k].0, q.x, q.y, q.rx, q.ry))
+}
+
 /// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block - its block, dike, outfall, resting plots and,
 /// on a dike-pond, its conversion - the records out for the thin Python to write and draw.
 ///
 /// Research:
 ///     the polder's seam - NONE: the records out; each placement is claimed at the Rust that makes it
+///     a rice polder's pocket pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a polder may have a pond on a low plot, a little over half the time; the dike-pond ground has none - the comb's own roll (`features::pocket_pond`) over the block's low row, a resting plot never its host
 ///     no resting plot on a dike-pond block - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on a converted block; its parcels are ponds, their banks and a few in standing rice, and none is rested
 #[pyfunction]
 #[expect(
@@ -124,6 +157,11 @@ pub fn stage_polder<'py>(
     let dike = super::dike::dike(&p.inner_env, &p.sluices, seed);
     let run = super::polder::outfall(p.sluices[1], down_deg, canvas);
     let resting = super::polder::rest(&p.plots, seed, unsettled && !dikepond);
+    let pocket = if dikepond {
+        None
+    } else {
+        rice_pond(&p.plots, &resting, seed)
+    };
     let mut counts = crate::counts::Counts::default();
     counts.add("candidate@polder_shape", 4);
     counts.add("write@polder_plot", 5 * p.plots.len() as u64);
@@ -161,6 +199,7 @@ pub fn stage_polder<'py>(
     d.set_item("sluices", p.sluices.to_vec())?;
     d.set_item("pond", (p.pond.0 .0, p.pond.0 .1, p.pond.1, p.pond.2))?;
     d.set_item("feeder", pts(&p.feeder))?;
+    d.set_item("pocket_pond", pocket)?;
     d.set_item("shape", p.shape)?;
     d.set_item("outfall", run)?;
     let dk = PyDict::new(py);

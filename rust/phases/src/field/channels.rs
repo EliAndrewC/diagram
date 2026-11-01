@@ -133,7 +133,6 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
 /// rows draws no ditch.
 ///
 /// Research:
-///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream
 fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> {
     let mut lines_at: Vec<usize> = Vec::new();
     for &f in fracs {
@@ -184,6 +183,7 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 ///     the canals' courses - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from a corner fork, or swept along the head to its own corner from a middle one
 ///     the head race - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0 ft, the whole fan's above the fork - at that width throughout
 ///     the head race's course - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - one straight run
+///     the widths by role - NONE: each channel's widths its role's, `HEAD_W`, `SUPPLY_W` (canal A's the first, B's the second), `DELIVERY_W` and `DRAIN_W`, each claimed at its constant
 ///     the canal's steps - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on how fast a canal narrows; an equal step a leg from its head's width to the thread
 ///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
 ///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way
@@ -274,9 +274,10 @@ pub fn channels(
                 let q = s * (1.0 - f64::from(k) / 5.0);
                 fan.at(lines.u(r, q), q)
             });
-            // the canal's width where it leaves it: the junction ends the canal's leg `j`
+            // the canal's width where it leaves it: the leg reaching the junction, before its taper to the next (a canal that
+            // stops at its last junction tapers to the thread there, and its last delivery takes the water before it)
             #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
-            let local = w + (THREAD_W - w) * ((j + 1) as f64 / n).min(1.0);
+            let local = w + (THREAD_W - w) * (j as f64 / n).min(1.0);
             let head = DELIVERY_W.0.min(DELIVERY_CAP * local);
             out.push(Channel {
                 role: "branch",

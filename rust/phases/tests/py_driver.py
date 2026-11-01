@@ -64,6 +64,12 @@ for dike, layout in ((False, "mosaic"), (True, "mosaic"), (True, "chessboard")):
     assert p["dike"]["trees"] and len(p["outfall"]) == 3 and (("dikeponds" in p) == dike)
     assert dike or any(x["rest"] for x in p["plots"])
     assert p["ditches"][0][1] == "feeder" and len(p["pond"]) == 4 and p["counts"]["candidate@polder_shape"] == 4
+    assert dike is (p["pocket_pond"] is None) or not dike
+
+# a rice polder's low plot holds a pocket pond on some maps (0008); its host one of the low plots
+ponds = [l7r_phases.stage_polder(s, 15, False, "mosaic", 90.0, (3200.0, 3200.0), 1.0, (6400.0, 6400.0), False, (0.5, "none", "none", "none")) for s in range(12)]
+held = [p for p in ponds if p["pocket_pond"] is not None]
+assert held and len(held) < len(ponds) and all(p["plots"][p["pocket_pond"][0]]["low"] for p in held)
 
 # finish's bead settling: a run through a ditch is dropped, a dry one stands
 assert l7r_phases.settle_runs([[(0.0, 0.0), (8.0, 0.0)]], [((4.0, -5.0), (4.0, 5.0), 9.0)], []) == []
