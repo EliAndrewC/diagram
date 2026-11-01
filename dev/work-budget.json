@@ -23,12 +23,12 @@
   "field": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.79,
+   "exponent": 0.85,
    "derivation": "specs/444-work-budget-program/phases/field_greenfield.derivation.md",
    "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt",
-   "items_at_20": 14045,
-   "items_at_40": 23988,
-   "items_at_80": 42070
+   "items_at_20": 15196,
+   "items_at_40": 27238,
+   "items_at_80": 49631
   },
   "sink": {
    "status": "budgeted",

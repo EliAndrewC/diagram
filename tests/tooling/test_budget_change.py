@@ -125,6 +125,8 @@ def test_a_change_needs_words_and_a_budget_and_is_logged_with_the_words(root: pa
     rows = [json.loads(ln) for ln in (root / bc.LOG).read_text().splitlines()]
     assert [r["words"] for r in rows] == ["raise it to fifty", "and the exponent too"]
     assert rows[1]["from"] == {"per_thing": 50, "exponent": 1.1} and rows[1]["to"] == {"per_thing": 55, "exponent": 1.2}
+    # the item counts a change moves are logged beside it (444#3: a raise by items alone logged only the per-thing figure)
+    assert rows[0]["from"]["items_at_80"] == 40 and rows[0]["to"]["items_at_80"] == 45 and "items_at_40" not in rows[0]["to"]
     # a raise re-points the stage at the derivation it comes from (feature 444 FR-015), only at a SOUND verdict, naming both
     (root / "g.md").write_text("the greenfield derivation\n")
     (root / "g.verdict.txt").write_text("SOUND - x\n")

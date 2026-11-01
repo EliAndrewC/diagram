@@ -244,7 +244,9 @@ def change_budget(
         return f"no derivation at {derivation}"
     if verdict and verdict_of(root / verdict) != SOUND:
         return f"{verdict} is no SOUND verdict - a stage is re-pointed only at a derivation its verdict judged SOUND"
-    before = {"per_thing": st["per_thing"], "exponent": st["exponent"]}
+    # ...and the item counts it moves, each named: a raise by items alone logged only the unchanged per-thing figure (444#3)
+    moved = [f"items_at_{h}" for h in (items or {})]
+    before = {"per_thing": st["per_thing"], "exponent": st["exponent"], **{k: st.get(k) for k in moved}}
     st["per_thing"] = to
     if exponent is not None:
         st["exponent"] = exponent
@@ -255,7 +257,7 @@ def change_budget(
         for k in ("pinned_on", "derivation_sha", "rounds", "spread"):
             st.pop(k, None)
     save(root, table)
-    log(root, {"what": "stage", "phase": phase, "from": before, "to": {"per_thing": st["per_thing"], "exponent": st["exponent"]}, "words": words})
+    log(root, {"what": "stage", "phase": phase, "from": before, "to": {"per_thing": st["per_thing"], "exponent": st["exponent"], **{k: st[k] for k in moved}}, "words": words})
     return ""
 
 

@@ -46,3 +46,4 @@
 {"date": "2026-10-29", "what": "accepted", "phase": "water_frame", "accepted": {"40": 23.0, "80": 23.0}, "audit": "specs/444-work-budget-program/phases/water_frame.audit-2.txt", "run": "20261029T132038Z-ac70759198ab.json"}
 {"date": "2026-10-30", "what": "lowered", "phase": "water_frame", "from": {"20": 69.0, "40": 69.0, "80": 69.0}, "to": {"20": 56.0, "40": 56.0, "80": 56.0}, "verdict": "specs/444-work-budget-program/phases/water_frame_greenfield.verdict-2.txt"}
 {"date": "2026-10-30", "what": "accepted", "phase": "water_frame", "accepted": {"40": 56.0, "80": 56.0}, "audit": "specs/444-work-budget-program/phases/water_frame.audit-3.txt", "run": "20261031T020030Z-62048f9942fe.json"}
+{"date": "2026-11-01", "what": "stage", "phase": "field", "from": {"per_thing": 1.0, "exponent": 0.79}, "to": {"per_thing": 1.0, "exponent": 0.85}, "words": "For 444#3 then yes I am okay with the budget being raised by that amount."}
