@@ -1,0 +1,22 @@
+LOOSE - items (line 45): the 853 basins charged at 20 is the 2026-10-29 plot count, which includes its 265 cut fragments, but the re-derived comb has no cut basins; the field's own 26 acres (1.3 acres x 20 households) divided by a 1,488 sq ft cell holds at most 761 basins (1,522 at 40, 3,044 at 80), fewer once the ditches, bunds, hem and pond take their share, so the bound is the area over the cell or a re-measure on the comb as laid.
+
+1. Is each factor derived? Every row names a reason. The totals re-add to 15,904, 28,587 and 52,292, the exponent is ln(52,292 / 15,904) / ln 4 = 0.86, a basin costs about 19 operations against the 4,000 limit, and slack is 1. Not blocking, for the MODE AUDIT, as in verdicts 2 and 3: "a ditch segment of about 120 ft" (line 64) has no source. 54 segments laid along 22 rows across a field about 1,000 ft wide would run 200 to 400 ft each, so it is an under-count. The arbiter may overrule this routing.
+
+2. Is there a cheaper standard algorithm? None is missed. No row scores, sorts or paints a growing set to keep one or a few of them, so no `- pruning:` line is needed. Every knob's branch is charged at its share: the seasonal plots and the hem at even odds (the hem's bands with it), the pond at 0.55 and the grave at 0.3.
+
+3. Is any factor padded? Yes, the items row.
+- 853 x 1,488 sq ft = 29.1 acres, more than the whole 26-acre field.
+- The 2026-11-01 re-measure "for the figures the comb as laid sets" covered the rows, the low row, the beans, the brook, the ditches, the hem and the outline, but not the basins.
+- Items carries a third of the total, and the plots' states row (0.9 a basin) rides on it. At 761, 1,522 and 3,044 the count falls by about 635, 1,270 and 2,539.
+- Two smaller points. The derivation should state the beads per bund, because the re-measured 885 beans exceed the basin bound unless a bund carries several beads. The laid-plots row rounds 15.6 up to 16 (line 59), but that offsets the dry-hem row rounding 9.2 down to 9.
+
+4. Is each figure read at its source's size and unit? Two are not.
+- Items: fragments are counted as basins (above).
+- The registry row (line 62) applies "about 6.9" at 20, where its own source gives 2,533 / 376 = 6.74 (6.9 is the figure at 40). That gives 2,594 where 2,533 was measured. The row also counts 376 pieces while the Bounds give the brook's record 430 pieces at 20. The total is still the measured one, but the stated reason disagrees with itself.
+
+Earlier findings:
+- Confirmed closed: verdict-5 findings 1, 2 and 3; verdict-4 findings 1 to 3; verdict-3's cap.
+- Verdict-5 finding 4 is only partly closed. Indexes line 39 and the registry row now agree on 4 laid plots and 2 water segments. But algorithm line 28, Indexes line 37, the dry-hem row (2.4 segments) and the laid-plots row (2 laid plots) still give other figures for the same plot's cells at the same moment. So "stated once" is not true. If 4 laid plots is right, the laid-plots row under-counts; if 2 is right, the registry's 6 is padded toward 4.
+- Verdict-5's notes for the MODE AUDIT still stand: either the rows' angle test (line 53) cannot fail, or "a breach refusing the field" is an uncharged drop; and the beans' finish may be a placed-then-moved step (S4).
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-5.txt
