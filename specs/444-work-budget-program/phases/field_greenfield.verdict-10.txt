@@ -1,0 +1,25 @@
+UNDERIVED - the hem's tract turns (derivation.md line 74, "4.4 gap tests a tract on the mean"): a 40-degree window around each neighbour's turn is wider than the turn's 34-degree range (-17 to 17), so often no turn on the same side clears the neighbours, and the page never says what the tract does then or charges for it.
+
+1. **Is each factor derived?** No. The one blocker is line 74:
+   - **The construction can come up empty.** One neighbour on the same side whose turn is within 3 degrees of the centre leaves no turn on that side at all. With both neighbours on the same side, a turn survives only when both sit at least 3 degrees off centre on the same side: 2 x (14/34)^2 = 34% of the time. The fallback is either a second roll (a retry, S2) or a dropped tract (S4), and neither is stated or charged.
+   - **The 4.4 has no arithmetic (S7).** Applying the even odds to the named range gives about 3.6 tests a tract. Taking both neighbours on the same side gives about 5.3. Neither is 4.4. The page also uses 4.4 as "2 plots + 2.4 segments" and as "edges a point", which suggests a reused figure rather than a computed one.
+   - **Why this blocks despite its size (about 22, 44 and 84 operations).** It follows the same precedent as verdict-4 (the pond's shrinks), verdict-7 (the offtake probe) and verdict-9.
+   - **Verdict-9's suggested fix has the same flaw.** "Roll once from the range less the two windows" also comes up empty, because the window is wider than the range. A closed form has to say what happens when nothing on the same side stands (for example, the other direction, contour or down, 90 degrees off, which clears every neighbour) and charge that branch at its share.
+   - **The rest of the arithmetic holds.** The totals re-add to 34,657, 62,497 and 114,959. The exponent is ln(114,959 / 34,657) / ln 4 = 0.86. A basin costs about 46 operations against the 4,000 limit, and slack is 1.
+
+2. **Is there a cheaper standard algorithm?** No new one is missed. S9 holds: no row scores, sorts or paints a growing set to keep a few of its members. Every knob's branch is charged at its share: the hem and its bands at even odds, the seasonal rolls at one in two, the pond at 0.55 and the grave at 0.3.
+
+3. **Is any factor padded?** Nothing beyond the lead. The registry's pieces (line 73) now charge a hem plot 4 + 6.8 x 2 = 17.6, giving 6,549, 9,598 and 14,399, and I re-added all three. Row 74 at 80 rounds 6,530.4 up to 6,531, which is too small to matter.
+
+4. **Is each figure read at its source's size and unit?** Yes for the new figures: tracts of 3 strips x 4 plots give 5, 10 and 19 tracts from 57, 114 and 227 plots. Three under-counts from verdict-9 are unchanged and still go to the MODE AUDIT:
+   - row 73 bins 322, 447 and 630 brook stations, where the Bounds give the registry's brook record 430 pieces at 20;
+   - "a ditch segment of about 120 ft" (lines 69 and 73) still has no source;
+   - row 67 still rounds: 4,251 where 3,564 + 114 x 6 = 4,248, and 6,224 where the measured figures give 6,227.
+
+**Earlier findings:**
+- Verdict-9 finding 3 (a hem plot keeps no bins of its own) is closed.
+- Verdict-9 finding 1 is not closed as written: it is the lead finding above.
+- Verdicts 1 to 8 stay closed.
+- The notes for the MODE AUDIT (S4) still stand: the rows' angle breach "refusing the field", the beans' finish, and whether the hem's lap and outline tests can fail without the refused tries going uncharged.
+
+Bundle: /tmp/l7r-check/work-budget-budget-field/derivation.md, /tmp/l7r-check/work-budget-budget-field/contract.md, /tmp/l7r-check/work-budget-budget-field/rubric.md, /tmp/l7r-check/work-budget-budget-field/field_greenfield.verdict-9.txt

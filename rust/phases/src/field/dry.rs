@@ -240,9 +240,16 @@ fn apart(rolled: (bool, f64), near: &[f64], tests: &mut u64) -> (bool, f64) {
     // the turns that stand apart are the range less each neighbor's window `TRACT_APART_DEG` either side of it, so the nearest to
     // the roll is the roll itself or a window's edge - those few asked, not every turn in cost order (about 38 tests a tract
     // where the neighbors share the roll's side, the record's measure of the scan; about 4 now)
+    if gap(rolled.1 + if rolled.0 { 90.0 } else { 0.0 }) >= TRACT_APART_DEG {
+        return rolled; // the roll itself stands apart: nothing else asked
+    }
     for down in sides {
         let base = if down { 90.0 } else { 0.0 };
-        let mut cands = vec![rolled.1];
+        let mut cands = if down == rolled.0 {
+            Vec::new()
+        } else {
+            vec![rolled.1]
+        };
         for b in near {
             let c = (b - base + 90.0).rem_euclid(180.0) - 90.0;
             cands.extend(
