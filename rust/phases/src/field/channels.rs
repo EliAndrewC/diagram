@@ -265,7 +265,11 @@ pub fn channels(
         // runs that leg flat (0068's drawing page); a canal with no offtake narrows over its one leg. That ditch's head is capped
         // against it
         #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
-        let n = if lines_at.is_empty() { legs.len() } else { lines_at.len() } as f64;
+        let n = if lines_at.is_empty() {
+            legs.len()
+        } else {
+            lines_at.len()
+        } as f64;
         let tail = THREAD_W;
         for (i, pts) in legs.into_iter().enumerate() {
             #[expect(clippy::cast_precision_loss, reason = "a handful of legs")]
@@ -351,7 +355,15 @@ mod tests {
         // a canal running on is at the thread from its last offtake: that leg runs flat to the crop's edge, and every leg
         // narrows to no less than the thread
         let on = (0..16).find(|&s| tail_runs_on(s)).unwrap();
-        let ran = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 1.0, false, on);
+        let ran = channels(
+            &f,
+            intake,
+            (&[0.30, 0.62, 0.93], &[0.55]),
+            48.0,
+            1.0,
+            false,
+            on,
+        );
         let legs: Vec<_> = ran.iter().filter(|x| x.role == "main").skip(1).collect();
         assert!(legs.iter().all(|x| x.w_tail >= THREAD_W - 1e-9));
         assert!(legs
