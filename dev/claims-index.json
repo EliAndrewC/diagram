@@ -52448,12 +52448,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._draw_furrows#furrowed rows": {
-  "body": "e61452cd45c3e796",
+  "body": "2ff7ad2a4fa350e0",
   "claim": "furrowed rows - dry-fields-and-their-crops-hatake.drawing: every dry plot drawn in ridged rows",
-  "code": "1bd222fc817915da",
-  "core": "6a9769d7bdd15d21",
-  "date": "2026-10-31",
-  "note": "every plot it is given is ruled in rows at the theta it is passed, as \"Every dry plot is drawn with furrows\"",
+  "code": "c3229d4f58d866c5",
+  "core": "c965244698ccd543",
+  "date": "2026-11-01",
+  "note": "every plot passed in gets rows at theta across its full reach, with a clip fallback for concave plots; matches \"Every dry plot is drawn with furrows\" and \"worked in ridged rows\"",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
@@ -52462,8 +52462,6 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
-  "triage": "touched",
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._field_feature_ink#the field's drawing": {
@@ -72597,17 +72595,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_stream#a channel mouth is trimmed to 2 px inside the stream bank (hw - 2, plus the cap radius) so it covers the bank stroke; a drawing convention that no claim names": {
+  "code": "677ff9d20a0cd36f",
+  "core": "677ff9d20a0cd36f",
+  "date": "2026-11-01",
+  "note": "a channel mouth is trimmed to 2 px inside the stream bank (hw - 2, plus the cap radius) so it covers the bank stroke; a drawing convention that no claim names",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_stream#its salts, guards and sentinels": {
-  "body": "ef167ab67ce5c32a",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten); 9 (stream fallback)",
-  "code": "d2e9a420093b1151",
-  "core": "ad45d946967ae8d4",
-  "date": "2026-10-25",
-  "note": "sentinel, overwritten seed and fallback width",
+  "body": "df97aa0117b3839a",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten)",
+  "code": "3fdf5e59fe8751b0",
+  "core": "677ff9d20a0cd36f",
+  "date": "2026-11-01",
+  "note": "1e9 is a nearest-distance sentinel; 4.5 is read only when best is None, and snap_front returns before using it",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._pond_anchored#mouths drawn as joins": {
@@ -72623,12 +72629,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._stream_beds#the bed index": {
-  "body": "4f1671a46a73f560",
-  "claim": "the bed index - NONE: an index over the streams' own segments; it decides nothing",
-  "code": "eb1c164756648bb1",
-  "core": "04e045314c26741d",
+  "body": "2cca283b2bf43601",
+  "claim": "the bed index - NONE: an index over the streams' own segments at their own widths (`stream` records every one's `w`); it decides nothing",
+  "code": "f1f1a83b1ff8e0d6",
+  "core": "3886c4d3495f04c5",
   "date": "2026-11-01",
-  "note": "the segment grid, its cache key and the boxes widened by `reach` are only index plumbing; every half-width comes from the stream's own `w`",
+  "note": "a spatial index over the recorded segments at their recorded w/2, widened by the widest half-width so the lookup finds them; it decides nothing",
   "pages": {},
   "research": "",
   "rests": [],

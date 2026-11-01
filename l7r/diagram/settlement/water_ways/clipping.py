@@ -204,6 +204,7 @@ class WaterClipMixin:
         got the argument, and the caller passed it to those two and not to this one.
 
         Research:
+            the mouth inside the bank - CONVENTION: a mouth trimmed 2 px inside the bed's edge, less its cap, so its bed covers the bank stroke
             its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel); 4.5 (initial value, overwritten)
         """
         streams = self.M.get("streams", [])
