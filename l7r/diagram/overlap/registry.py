@@ -356,7 +356,7 @@ class Standing:
         # the record files these extents and cells without finding them again (the work-budget audit at T16's landing: the brook's
         # ribbons built and binned for the question and again for the record)
         if prep is None and ignore is None:
-            self._asked = (key, id(o), self._changes, own, {"boxes": boxes, "clamped": clamped, "cells": ccells}, list(out))
+            self._asked = (key, o, self._changes, own, {"boxes": boxes, "clamped": clamped, "cells": ccells}, list(out))
         return out
 
     def hold(self, key: str, rec: Any) -> Any:
@@ -392,7 +392,9 @@ class Standing:
         """Record `o` under `key`; raise `OverlapRefused` where the matrix forbids it on what already stands. `own` is its extents
         where the caller has just drawn them (`rerecord`)."""
         asked = self._asked
-        if asked is not None and asked[0] == key and asked[1] == id(o) and asked[2] == self._changes:
+        # the very object, held, never its address: a temporary asked and dropped may leave its id to the next record (the fifth
+        # audit at T16's landing)
+        if asked is not None and asked[0] == key and asked[1] is o and asked[2] == self._changes:
             own, prep, bad = asked[3], asked[4], asked[5]  # its own question just asked, nothing filed since
         else:
             own = self.extents(key, o) if own is None else own  # once, for the question and the filing both

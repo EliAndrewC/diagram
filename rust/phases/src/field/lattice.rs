@@ -78,6 +78,15 @@ impl Basin {
 ///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
 #[must_use]
 pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
+    cuts_counted(seed, row, breadth, &mut 0)
+}
+
+/// `cuts`, each fit's reads of its lengths counted in `work` (the work-budget audit at T16's landing: `fit`'s passes uncounted).
+///
+/// Research:
+///     the cuts - NONE: `cuts`' own claims; this counts its work
+#[must_use]
+pub fn cuts_counted(seed: i64, row: usize, breadth: f64, work: &mut u64) -> Vec<f64> {
     let (lo, hi) = (f64::from(ALONG_FT.0), f64::from(ALONG_FT.1));
     let half = breadth / 2.0;
     #[expect(
@@ -104,7 +113,7 @@ pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
         let mut lengths: Vec<f64> = (0..n)
             .map(|_| f64::from(ALONG_FT.0 + rng.randbelow(span)))
             .collect();
-        fit(&mut lengths, half, (lo, hi));
+        fit(&mut lengths, half, (lo, hi), work);
         let total: f64 = lengths.iter().sum::<f64>().max(1e-9);
         let mut s = from;
         for l in &lengths {
@@ -123,8 +132,10 @@ pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
 ///
 /// Research:
 ///     the fit - NONE: arithmetic; the band is `cuts`'s
-fn fit(lengths: &mut [f64], whole: f64, band: (f64, f64)) {
+fn fit(lengths: &mut [f64], whole: f64, band: (f64, f64), work: &mut u64) {
+    let n = lengths.len() as u64;
     for _ in 0..=lengths.len() {
+        *work += 2 * n; // the sum and the band test, each a read of every length
         let left = whole - lengths.iter().sum::<f64>();
         if left.abs() < 1e-9 {
             return;
@@ -143,10 +154,12 @@ fn fit(lengths: &mut [f64], whole: f64, band: (f64, f64)) {
         }
         #[expect(clippy::cast_precision_loss, reason = "a small count of basins")]
         let each = left / free.len() as f64;
+        *work += free.len() as u64;
         for i in free {
             lengths[i] = (lengths[i] + each).clamp(band.0, band.1);
         }
     }
+    *work += 2 * n; // the closing sum and its share
     let left = whole - lengths.iter().sum::<f64>();
     #[expect(clippy::cast_precision_loss, reason = "a small count of basins")]
     let each = left / lengths.len().max(1) as f64;
@@ -248,7 +261,7 @@ pub fn basins_counted(
         #[expect(clippy::cast_precision_loss, reason = "a small row count")]
         let (u0, u1) = (row as f64 * lines.step, (row + 1) as f64 * lines.step);
         let breadth = fan.half_at(u0) + fan.half_at(u1);
-        let s = cuts(seed, row, breadth);
+        let s = cuts_counted(seed, row, breadth, work);
         *work += s.len() as u64;
         let start = out.len();
         for (col, pair) in s.windows(2).enumerate() {

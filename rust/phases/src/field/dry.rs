@@ -136,7 +136,7 @@ pub fn hem(
         let mut d = 0.0;
         let mut band: Vec<(f64, f64, f64)> = Vec::new();
         let placed_before = plots.len();
-        while d + PLOT_FT.0 <= len {
+        'band: while d + PLOT_FT.0 <= len {
             let n = TRACT_PLOTS.0 + rng.randbelow(TRACT_PLOTS.1 - TRACT_PLOTS.0 + 1);
             // the tract's rows: on the contour or down to the outfall, turned up to 17 degrees, at least 20 from its neighbors'
             let rolled = (
@@ -170,7 +170,14 @@ pub fn hem(
                 if d0 + PLOT_FT.0 > len {
                     break;
                 }
-                let (a, b) = canal.column(d0, got >= need, &mut frames, &mut ix.tests);
+                if got >= need {
+                    // the grain held: the band's rest is room the hem did not take, its columns counted at once, not walked
+                    // (the work-budget audit at T16's landing: every column and strip was visited only to add to `room`)
+                    let columns = ((len - d0) / PLOT_FT.0).floor();
+                    room += columns * f64::from(strips) * PLOT_FT.0 * PLOT_FT.1;
+                    break 'band;
+                }
+                let (a, b) = canal.column(d0, &mut frames, &mut ix.tests);
                 for j in 0..strips {
                     let (o0, o1) = (
                         depth + f64::from(j) * PLOT_FT.1,
@@ -385,20 +392,16 @@ impl Canal {
     }
 
     /// A column's two frames at `d` and a plot's length past it, the first the last column's second where there is one (`frames`
-    /// keeps it); none found once the grain is held (`held`), the column then building no seat.
+    /// keeps it).
     ///
     /// Research:
     ///     the column's frames - NONE: plumbing of the canal's course; the need is `hem`'s caller's
     fn column(
         &self,
         d: f64,
-        held: bool,
         frames: &mut Option<(Pt, Pt)>,
         work: &mut u64,
     ) -> ((Pt, Pt), (Pt, Pt)) {
-        if held {
-            return (((0.0, 0.0), (0.0, 0.0)), ((0.0, 0.0), (0.0, 0.0)));
-        }
         let a = frames.unwrap_or_else(|| self.frame(d, work));
         let b = self.frame(d + PLOT_FT.0, work);
         *frames = Some(b);
