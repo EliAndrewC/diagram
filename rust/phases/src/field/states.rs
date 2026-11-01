@@ -91,7 +91,7 @@ fn shares_bund(a: &Basin, b: &Basin) -> bool {
 ///     no two share a bund - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: no two share a bund, a drawing convention
 ///     a resting plot from the green - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on whether a wet plot rests; a plot already drawn wet, flooded or gold is not taken, so each plot wears one state
 ///     one state a plot - CONVENTION: each plot drawn as one - wet first, then flooded, then gold, so the wet tint on the drain's row is never covered by a seasonal one
-///     a field short of its rest - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: two to four whole plots - tried a bounded number of times, a small or crowded field may rest fewer
+///     a field short of its rest - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on a field too small or crowded for its two to four whole plots; tried a bounded number of times, a small or crowded field may rest fewer
 ///     the comb's wet row - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a comb field gives each plot of its lowest row a 45% chance of the tint; a polder tints every low plot, at its own stage (`field_stage._polder`)
 ///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the flooded and the gold drawn on some maps (`SEASONAL_IN`), not every map
 #[must_use]

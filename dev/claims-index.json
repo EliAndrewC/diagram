@@ -9907,18 +9907,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/driver.py::STAGES#the ground's cover after every built thing": {
-  "body": "d39945486f7ad70e",
-  "claim": "the ground's cover after every built thing - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands",
-  "code": "887e5f9d249459dc",
-  "core": "b084280cc46a20dc",
-  "date": "2026-10-31",
-  "note": "the claim says the cover comes after every built thing, but stage_crossings, stage_sties, stage_washing and stage_notice all run after stage_bamboo; the claim should say \"after the web, its wells and the pond bank\", or the built stages should move",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/hamletgen/driver.py::STAGES#the order hinterland, then woodland, then windbreak among the ground's cover": {
   "code": "b084280cc46a20dc",
   "core": "b084280cc46a20dc",
@@ -9958,18 +9946,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/driver.py::STAGES#the waterward fringe before the houses": {
-  "body": "d39945486f7ad70e",
-  "claim": "the waterward fringe before the houses - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent on the order; a polder's reed fringe reserved after the seat and before the houses and the track, so they keep off the wet ground",
-  "code": "5355db72d2b008bb",
-  "core": "b084280cc46a20dc",
-  "date": "2026-10-31",
-  "note": "the claim cites 0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html as silent on the order, but that page is not in the bundle; to judge it I need that page",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
   "body": "d39945486f7ad70e",
@@ -24111,17 +24087,6 @@
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#more where the village lives": {
-  "body": "aa30b508c1d7b77a",
-  "claim": "more where the village lives - GUESS: plank-bridges-over-farm-ditches-itabashi.drawing silent on crossings clustering by the village; the village's own collector capped at three (two a toe at the foot), every other supply collector at one",
-  "code": "ea70f0dcc0ae8f5b",
-  "core": "1f55ad50e22bf211",
-  "date": "2026-10-31",
-  "note": "0084 is silent on crossings clustering by the village and on how far a walker went to reach one, so GUESS fits",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#no plank on the drain": {
   "body": "aa30b508c1d7b77a",
   "claim": "no plank on the drain - plank-bridges-over-farm-ditches-itabashi.drawing: none over the drain at the field's foot",
@@ -24136,6 +24101,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/waterward.py::polder_flanks#polder geometry": {
@@ -78271,6 +78237,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/build.rs::Field#a field's record": {
@@ -78367,6 +78334,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
@@ -78379,6 +78347,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
@@ -78396,6 +78365,7 @@
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
@@ -78412,6 +78382,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
@@ -78424,6 +78395,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
@@ -78442,6 +78414,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#resting plots": {
@@ -78744,6 +78717,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canal's end": {
@@ -78761,6 +78735,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
+  "triage": "touched",
   "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/channels.rs::channels#the canals taper": {
@@ -78777,6 +78752,7 @@
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
@@ -78795,6 +78771,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
@@ -78813,6 +78790,7 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
@@ -78831,6 +78809,7 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the head race: one straight run from the intake to the fork, at HEAD_W from end to end with no taper": {
@@ -78855,6 +78834,7 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::division#the fork": {
@@ -80494,6 +80474,7 @@
   "note": "returns the basin's side on the drain; the page says nothing about a drawn hem (its §18 headland is about refused points)",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::Lines#the lines' record": {
@@ -80669,6 +80650,7 @@
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::row_ft_for#the small and large rows": {
@@ -81931,6 +81913,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::PyRandom#the draws": {
@@ -82045,6 +82028,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::Counts#the counts": {
