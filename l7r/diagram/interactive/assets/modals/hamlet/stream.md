@@ -16,8 +16,8 @@ How wide a village's brook ran is not recorded. For scale, a large dug main cana
 and the finest ditch, the one that watered a single paddy, probably about a foot.
 
 Guesses:
-- Its width, about 7 ft (2 m): no account, from before modern times or after, gives the width of a village's brook, so
-  the figure is set near the narrow end of the dug main canals' range.
+- Its width, about 5.25 ft (1.6 m): no account, from before modern times or after, gives the width of a village's brook, so
+  it is drawn narrower than the 6.0 ft head race it feeds, about three and a half times the 1.5 ft at which the finest ditches are drawn.
 
 Depiction: The map draws the brook coming down off the high ground, passing the head of the paddies on one side and
 running on down that flank, to leave the map or to take in the fields' drain; the irrigation ditch leaves it at the

@@ -26,7 +26,7 @@ Guesses:
 - [weir_form=frame|crib] Its thickness, about 5 ft: no thickness of a village weir was found, only of river works.
 
 Depiction: The map draws the weir closing the brook from bank to bank so that it can be seen; half-river closures were
-the common old form, and across a brook about 7 ft wide a half-bar would be a line a pixel or two long. It runs slantwise
+the common old form, and across a brook about 5.25 ft wide a half-bar would be a line a pixel or two long. It runs slantwise
 upstream from the intake, as the old weirs did, and the title card says which of the four forms this hamlet's takes.
 
 [weir_form=fence] The fence is drawn about 1.5 ft thick, wider than its one row of stakes, so that it shows.
