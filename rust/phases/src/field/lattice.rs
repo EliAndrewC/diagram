@@ -222,8 +222,19 @@ impl Lines {
 ///
 /// Research:
 ///     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain
+#[cfg(test)]
 #[must_use]
 pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
+    basins_counted(fan, seed, row_ft, &mut 0)
+}
+
+/// `basins`, counting as it lays them each basin's 4 corners and its record (5, the derivation's interior basin: every basin of
+/// the comb is one, its corners the lattice's own crossings) and each row's cuts, for the counters (D6).
+///
+/// Research:
+///     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain
+#[must_use]
+pub fn basins_counted(fan: &Fan, seed: i64, row_ft: f64, work: &mut u64) -> Vec<Basin> {
     let lines = Lines::new(fan, seed, row_ft);
     let mut out = Vec::new();
     for row in 0..lines.rows {
@@ -231,7 +242,9 @@ pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
         let (u0, u1) = (row as f64 * lines.step, (row + 1) as f64 * lines.step);
         let breadth = fan.half_at(u0) + fan.half_at(u1);
         let s = cuts(seed, row, breadth);
+        *work += s.len() as u64;
         for (col, pair) in s.windows(2).enumerate() {
+            *work += 5;
             let ring = vec![
                 fan.at(lines.u(row, pair[0]), pair[0]),
                 fan.at(lines.u(row, pair[1]), pair[1]),

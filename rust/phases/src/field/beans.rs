@@ -49,8 +49,11 @@ pub fn bean_runs(
     tag: &str,
     ix: &mut Index,
     widths: &[f64],
+    work: &mut u64,
 ) -> Vec<Vec<Pt>> {
     let mut runs = Vec::new();
+    // the widest water once, not once a bead (the audit, T16)
+    let water = (widths, widths.iter().copied().fold(0.0, f64::max));
     for (i, b) in basins.iter().enumerate() {
         let next = basins.get(i + 1).filter(|n| n.row == b.row);
         if next.is_none() || b.on_drain_right {
@@ -69,9 +72,11 @@ pub fn bean_runs(
             .map(|k| (f64::from(k) - f64::from(n - 1) / 2.0) * BEAD_STEP_FT)
             .filter(|off| off.abs() <= reach)
             .map(|off| (mid.0 + along.0 * off, mid.1 + along.1 * off))
-            .filter(|p| !drowned(*p, ix, widths))
+            .filter(|p| !drowned(*p, ix, water))
             .collect();
+        // each bead placed on its bund and written (2), counted as kept
         if run.len() >= RUN_BEADS.0 as usize {
+            *work += 2 * run.len() as u64;
             runs.push(run);
         }
     }
@@ -96,6 +101,7 @@ pub fn settle(
         ix.file_w(*a, *b, *w);
     }
     let widths = ix.widths.clone();
+    let water = (widths.as_slice(), ix.widest);
     let in_pond = |p: Pt| {
         ponds.iter().any(|(x, y, rx, ry)| {
             ((p.0 - x) / (rx + BEAD_R_FT)).powi(2) + ((p.1 - y) / (ry + BEAD_R_FT)).powi(2) <= 1.0
@@ -105,19 +111,20 @@ pub fn settle(
         .map(|r| {
             r.iter()
                 .copied()
-                .filter(|p| !in_pond(*p) && !drowned(*p, &mut ix, &widths))
+                .filter(|p| !in_pond(*p) && !drowned(*p, &mut ix, water))
                 .collect::<Vec<_>>()
         })
         .filter(|r| r.len() >= RUN_BEADS.0 as usize)
         .collect()
 }
 
-/// Whether a bead at `p` lies in the water filed in `ix`.
+/// Whether a bead at `p` lies in the water filed in `ix`, each segment at its width in `widths` (the widest, `widest`, the reach
+/// asked of the index).
 ///
 /// Research:
 ///     the test - NONE: geometry against the filed water
-fn drowned(p: Pt, ix: &mut Index, widths: &[f64]) -> bool {
-    let reach = BEAD_R_FT + widths.iter().copied().fold(0.0, f64::max) / 2.0;
+fn drowned(p: Pt, ix: &mut Index, (widths, widest): (&[f64], f64)) -> bool {
+    let reach = BEAD_R_FT + widest / 2.0;
     ix.near((p.0 - reach, p.1 - reach), (p.0 + reach, p.1 + reach))
         .into_iter()
         .any(|i| {
@@ -138,7 +145,7 @@ mod tests {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let mut ix = Index::default();
-        let runs = bean_runs(&b, 4, "f0", &mut ix, &[]);
+        let runs = bean_runs(&b, 4, "f0", &mut ix, &[], &mut 0);
         assert!(!runs.is_empty());
         assert!(runs
             .iter()
@@ -153,7 +160,7 @@ mod tests {
             wet.file(x.ring[1], x.ring[2]);
             widths.push(2.5);
         }
-        assert!(bean_runs(&b, 4, "f0", &mut wet, &widths).is_empty());
+        assert!(bean_runs(&b, 4, "f0", &mut wet, &widths, &mut 0).is_empty());
         // finish's settling: a ditch through a run drowns it, a pond on a bead drowns that bead, a dry run stands
         let run = vec![(0.0, 0.0), (8.0, 0.0), (16.0, 0.0)];
         let kept = settle(&[run.clone()], &[], &[(16.0, 0.0, 3.0, 3.0)]);

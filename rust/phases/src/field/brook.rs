@@ -67,6 +67,8 @@ pub struct BrookIn {
 pub struct Brook {
     pub pts: Vec<Pt>,
     pub intake: Pt,
+    /// Each station placed and its bend kept, counted as laid (2 a station, the derivation's), for the counters (D6).
+    pub work: u64,
 }
 
 /// A point `u` feet down the fall from the fan's head middle and `x` feet across it (toward the fan's right looking downhill).
@@ -151,12 +153,17 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) 
         side * swing * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin()) / 2.0
     };
     let intake = local(fan, u_i, x_i + meander(u_i));
+    // each station laid off the screen's axes against the one before it, so nothing laid is moved (D7: held where decided)
+    let out = (fan.across.0 * side, fan.across.1 * side);
     // upstream: from off the map down the fall to the intake
     let mut up = Vec::new();
+    let mut work = 0;
     let mut v = u_i;
     while up.len() < MAX_STATIONS {
+        work += 2;
         v -= b.station;
-        let p = local(fan, v, x_i + meander(v));
+        let below = up.last().copied().unwrap_or(intake);
+        let p = off_axis(below, local(fan, v, x_i + meander(v)), out, -1.0);
         up.push(p);
         if off(p) {
             break;
@@ -167,6 +174,7 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) 
     pts.push(intake);
     let (mut u, mut x) = (u_i, x_i);
     for _ in 0..MAX_STATIONS {
+        work += 2;
         u += b.station;
         // the flank as drawn, its waves applied, at its widest within half a station either way (past the foot, the foot's)
         let at = |v: f64| fan.half_side(v.clamp(0.0, fan.length), side);
@@ -187,55 +195,33 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, place: (bool, bool), canvas: Pt) 
         } else {
             x + (want - x).clamp(-b.slew, b.slew)
         };
-        let p = local(fan, u, x + meander(u));
+        let above = pts.last().copied().unwrap_or(intake);
+        let p = off_axis(above, local(fan, u, x + meander(u)), out, 1.0);
         pts.push(p);
         if u > fan.length && off(p) {
             break;
         }
     }
-    off_the_axes(&mut pts, intake, (fan.across.0 * side, fan.across.1 * side));
-    Brook { pts, intake }
+    Brook { pts, intake, work }
 }
 
-/// The brook kept off the screen's axes: a segment within `AXIS_OFF_DEG` of the map's x or y axis has its downstream end moved
-/// outward (`out`) until it leans that far off - its upstream end where the downstream end is the intake, which stays put.
+/// `new` leaned off the screen's axes against `laid`, the station already laid: where the segment between them runs within
+/// `AXIS_OFF_DEG` of the map's x or y axis, `new` is moved along `out` (times `sign`: outward below a station, inward above it,
+/// so the segment leans the same way) until it leans that far off. The station laid, and the intake, never move.
 ///
 /// Research:
-///     no screen axis - CANON: the GM, 2026-08-26: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"; the brook rules refuse a segment within 1.6 degrees of an axis, so each is leaned to `AXIS_OFF_DEG`
-fn off_the_axes(pts: &mut [Pt], intake: Pt, out: Pt) {
-    // a move can bring a neighbor onto an axis: passes until none moves, a bounded number
-    for _ in 0..8 {
-        if !off_the_axes_once(pts, intake, out) {
-            return;
-        }
+///     no screen axis - CANON: the GM, 2026-08-26: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"; the brook rules refuse a segment within 1.6 degrees of an axis, so each is laid at least `AXIS_OFF_DEG` off
+///     the push - CONVENTION: half a degree past `AXIS_OFF_DEG`, so one push clears the bar
+fn off_axis(laid: Pt, new: Pt, out: Pt, sign: f64) -> Pt {
+    let deg = (new.1 - laid.1)
+        .atan2(new.0 - laid.0)
+        .to_degrees()
+        .rem_euclid(90.0);
+    if deg.min(90.0 - deg) >= AXIS_OFF_DEG {
+        return new;
     }
-}
-
-/// One pass of `off_the_axes`; whether it moved a point.
-///
-/// Research:
-///     no screen axis - CANON: the GM, 2026-08-26: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake" - a segment within `AXIS_OFF_DEG` of an axis leaned off it
-///     the push - CONVENTION: half a degree past `AXIS_OFF_DEG`, so one push clears the bar; the intake never moved, the race's start held where `brook` set it
-fn off_the_axes_once(pts: &mut [Pt], intake: Pt, out: Pt) -> bool {
-    let mut moved_any = false;
-    for k in 0..pts.len().saturating_sub(1) {
-        let (a, b) = (pts[k], pts[k + 1]);
-        let deg = (b.1 - a.1).atan2(b.0 - a.0).to_degrees().rem_euclid(90.0);
-        let near = deg.min(90.0 - deg);
-        if near >= AXIS_OFF_DEG {
-            continue;
-        }
-        let len = super::geom::dist(a, b);
-        let push = len * (AXIS_OFF_DEG + 0.5).to_radians().tan();
-        let moved = if b == intake { k } else { k + 1 };
-        let sign = if b == intake { -1.0 } else { 1.0 };
-        pts[moved] = (
-            pts[moved].0 + out.0 * push * sign,
-            pts[moved].1 + out.1 * push * sign,
-        );
-        moved_any = true;
-    }
-    moved_any
+    let push = super::geom::dist(laid, new) * (AXIS_OFF_DEG + 0.5).to_radians().tan() * sign;
+    (new.0 + out.0 * push, new.1 + out.1 * push)
 }
 
 /// The weir at a `weir` intake: a bar across the brook, `half` feet either side of the intake, running diagonally upstream

@@ -83,7 +83,12 @@ fn centroid(ring: &[Pt]) -> Pt {
     reason = "the plane geometry's own names"
 )]
 #[must_use]
-pub fn pocket_pond(basins: &[Basin], seed: i64, tag: &str) -> Option<(usize, Pond)> {
+pub fn pocket_pond(
+    basins: &[Basin],
+    seed: i64,
+    tag: &str,
+    work: &mut u64,
+) -> Option<(usize, Pond)> {
     let last = basins.iter().map(|b| b.row).max()?;
     let low: Vec<usize> = (0..basins.len())
         .filter(|&i| basins[i].row == last)
@@ -99,7 +104,8 @@ pub fn pocket_pond(basins: &[Basin], seed: i64, tag: &str) -> Option<(usize, Pon
         .fold(f64::INFINITY, f64::min);
     let (x, y) = centroid(r);
     let (mut rx, mut ry) = (short * POND_SHARE.0, short * POND_SHARE.1);
-    let within = |rx: f64, ry: f64| {
+    let mut within = |rx: f64, ry: f64| {
+        *work += 16;
         (0..16).all(|k| {
             let a = f64::from(k) / 16.0 * std::f64::consts::TAU;
             super::geom::inside((x + rx * a.cos(), y + ry * a.sin()), r)
@@ -136,6 +142,7 @@ pub fn grave(
     form: &'static str,
     skip: Option<usize>,
     cell: f64,
+    work: &mut u64,
 ) -> Result<Option<Grave>, FieldRefused> {
     let mut rng = knob_rng(seed, &format!("{tag}:grave"));
     if basins.is_empty() || rng.randbelow(10) >= GRAVE_IN_TEN {
@@ -148,6 +155,7 @@ pub fn grave(
             continue;
         }
         let plot = &basins[host].ring;
+        *work += 1;
         let (at, rings) = if form == "island" {
             island(plot)
         } else {
@@ -155,6 +163,7 @@ pub fn grave(
             let r: Vec<Pt> = (0..4).map(|j| plot[(k + j) % 4]).collect();
             corner(&r)
         };
+        *work += rings.iter().map(|x| x.len() as u64).sum::<u64>();
         if rings
             .iter()
             .all(|x| held(x, cell).is_ok() && signed_area(x).abs() > 0.0)
@@ -273,7 +282,9 @@ mod tests {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
-        let ponds: Vec<_> = (0..40).filter_map(|s| pocket_pond(&b, s, "f0")).collect();
+        let ponds: Vec<_> = (0..40)
+            .filter_map(|s| pocket_pond(&b, s, "f0", &mut 0))
+            .collect();
         assert!((10..35).contains(&ponds.len()));
         for (i, p) in &ponds {
             assert_eq!(b[*i].row, last);
@@ -284,7 +295,7 @@ mod tests {
         let mut seen = (0, 0);
         for s in 0..40 {
             for form in ["island", "corner"] {
-                if let Some(g) = grave(&b, s, "f0", form, None, 1488.0).unwrap() {
+                if let Some(g) = grave(&b, s, "f0", form, None, 1488.0, &mut 0).unwrap() {
                     let whole = signed_area(&b[g.host].ring).abs();
                     let parts: f64 = g.rings.iter().map(|r| signed_area(r).abs()).sum();
                     assert!(parts <= whole + 1e-6);
@@ -302,12 +313,13 @@ mod tests {
             }
         }
         assert!(seen.0 > 3 && seen.1 > 3, "{seen:?}");
-        assert!(pocket_pond(&[], 1, "f0").is_none());
-        assert!(grave(&[], 1, "f0", "island", None, 1488.0)
+        assert!(pocket_pond(&[], 1, "f0", &mut 0).is_none());
+        assert!(grave(&[], 1, "f0", "island", None, 1488.0, &mut 0)
             .unwrap()
             .is_none());
         let tiny: Vec<_> = b.iter().take(1).cloned().collect();
-        let refused = (0..40).find_map(|s| grave(&tiny, s, "f0", "island", Some(0), 1488.0).err());
+        let refused =
+            (0..40).find_map(|s| grave(&tiny, s, "f0", "island", Some(0), 1488.0, &mut 0).err());
         assert!(refused.is_some());
         // a skewed sliver of a plot: the pond shrunk until its edge is inside, or none where no size fits
         let sliver = |w: f64| Basin {
@@ -318,7 +330,7 @@ mod tests {
             on_drain_left: false,
         };
         let fits: Vec<_> = (0..60)
-            .filter_map(|s| pocket_pond(&[sliver(60.0)], s, "f0"))
+            .filter_map(|s| pocket_pond(&[sliver(60.0)], s, "f0", &mut 0))
             .collect();
         assert!(!fits.is_empty() && fits.iter().all(|(_, p)| p.rx < 0.4 * 60.0));
         let chevron = Basin {
@@ -333,12 +345,12 @@ mod tests {
             ..sliver(0.0)
         };
         // its middle outside it: no pond
-        assert!((0..60).all(|s| pocket_pond(&[chevron.clone()], s, "f0").is_none()));
+        assert!((0..60).all(|s| pocket_pond(&[chevron.clone()], s, "f0", &mut 0).is_none()));
         // an island split on a ring wound the other way: its mound still clear of both halves
         let (at, halves) = island(&[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]);
         assert!(halves.iter().all(|h| !inside(at, h)));
         // a cell so large no half of a split plot holds a quarter of it: every host tried refuses
-        let big = (0..40).find_map(|s| grave(&b, s, "f0", "island", None, 1e5).err());
+        let big = (0..40).find_map(|s| grave(&b, s, "f0", "island", None, 1e5, &mut 0).err());
         assert!(big.is_some_and(|e| e.rule == "the grave's host"));
     }
 }

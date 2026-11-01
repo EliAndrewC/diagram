@@ -14,7 +14,7 @@ use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD};
 use super::fan::{fan, Fan, Pt};
 use super::features::{grave, pocket_pond, Grave, Pond};
 use super::index::Index;
-use super::lattice::{basins, Basin};
+use super::lattice::{basins_counted, Basin};
 use super::rules::{held, FieldRefused};
 use super::states::{states, State};
 use super::{cap_sq_ft, fields_for, paddy_sq_ft};
@@ -80,6 +80,8 @@ pub struct Field {
     pub pond: Option<(usize, Pond)>,
     pub grave: Option<Grave>,
     pub segments: Vec<(Pt, Pt, f64)>,
+    /// The water index of `segments`, each at its width: the field's beans and the hem ask it, filed once.
+    pub water: Index,
 }
 
 /// The stage's output: the knobs as rolled, the fields, the coarse grain's acres (drawn, needed, the room) and the counts.
@@ -191,22 +193,25 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             }));
         }
         let out = (f.fan.across.0 * far, f.fan.across.1 * far);
-        let mut ix = Index::default();
-        for (a, b, w) in &f.segments {
-            ix.file_w(*a, *b, *w);
-        }
-        let (dry, r) = hem(
+        // the field's own water index, filed once in `one`: only what the hem's queries add is counted here
+        let ix = &mut f.water;
+        let before = (ix.touched, ix.examined);
+        let (dry, r, tested) = hem(
             &line,
             out,
             f.fan.down,
             dry_need,
             &f.fan.ring,
-            &mut ix,
+            ix,
             1.0,
             inp.seed,
             "f0",
         );
         counts.add("write@dry_plot", 4 * dry.len() as u64);
+        // the hem's index and its grid of laid plots: their cells and what their queries handed back
+        counts.add("write@hem_index", ix.touched - before.0);
+        counts.add("candidate@hem_index", ix.examined - before.1);
+        counts.add("pt_test@hem_onto", tested);
         #[expect(clippy::cast_precision_loss, reason = "a hamlet's hundred dry plots")]
         let plots = dry.len() as f64;
         f.dry = dry;
@@ -224,11 +229,35 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
     })
 }
 
+/// The comb's angles tested once a row, at its two outermost basins, where the fan's taper makes them sharpest (D7): each row's
+/// first and last basin found in one pass over the basins, not a search of them all per row.
+///
+/// Research:
+///     the basins' rules where decided - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no basin sharper than 25 degrees, none under a quarter of its cell, none an arrowhead - asked of each row's two outermost basins, where the fan's taper makes them sharpest (D7)
+///
+/// # Errors
+/// `FieldRefused` when an outermost basin breaks a basin's rule.
+fn rows_held(bs: &[Basin], cell: f64, counts: &mut Counts) -> Result<(), FieldRefused> {
+    let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
+    let mut ends: Vec<(Option<usize>, Option<usize>)> = vec![(None, None); rows];
+    for (i, b) in bs.iter().enumerate() {
+        let e = &mut ends[b.row];
+        e.0.get_or_insert(i);
+        e.1 = Some(i);
+    }
+    for (first, last) in ends {
+        for i in first.into_iter().chain(last.filter(|l| Some(*l) != first)) {
+            held(&bs[i].ring, cell)?;
+            counts.add("candidate@held", bs[i].ring.len() as u64);
+        }
+    }
+    Ok(())
+}
+
 /// One field on its fan.
 ///
 /// Research:
 ///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft
-///     the basins' rules where decided - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: no basin sharper than 25 degrees, none under a quarter of its cell, none an arrowhead - asked of each row's two outermost basins, where the fan's taper makes them sharpest (D7)
 ///     the field off the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the fan of paddies is cut away from the brook, leaving the stream its margin - an outline point within the brook's skirt refuses the field
 ///     resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)
 ///     the grave's form - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none
@@ -246,7 +275,7 @@ fn one(
     let center = knobs.get("intake_place").is_some_and(|v| v == "center");
     let straight = knobs.get("intake_siting").is_some_and(|v| v == "straight");
     let br = brook(f, inp.brook_side, inp.brook, (center, straight), inp.canvas);
-    counts.add("write@brook", 2 * br.pts.len() as u64);
+    counts.add("write@brook", br.work);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
         let thick = inp.weir.2.get(&form).copied().unwrap_or(WEIR_THIN_FT);
@@ -254,19 +283,10 @@ fn one(
         (ring, deg, form)
     });
     counts.add("write@intake", 10);
-    let bs = basins(f, inp.seed, inp.row_ft);
-    // the comb's angles tested once a row, at its two outermost basins, the sharpest (D7)
-    let rows = bs.iter().map(|b| b.row).max().map_or(0, |r| r + 1);
-    for row in 0..rows {
-        let ends = [
-            bs.iter().find(|b| b.row == row),
-            bs.iter().rev().find(|b| b.row == row),
-        ];
-        for b in ends.into_iter().flatten() {
-            held(&b.ring, inp.cell)?;
-        }
-    }
-    counts.add("write@basin", 5 * bs.len() as u64);
+    let mut work = 0;
+    let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work);
+    counts.add("write@basin", work);
+    rows_held(&bs, inp.cell, counts)?;
     let chans = channels(
         f,
         br.intake,
@@ -278,19 +298,16 @@ fn one(
     );
     let mut ix = Index::default();
     let mut segments = Vec::new();
-    let mut widths = Vec::new();
     for c in &chans {
         for w in c.pts.windows(2) {
-            ix.file(w[0], w[1]);
-            widths.push(c.w.max(c.w_tail));
             segments.push((w[0], w[1], c.w.max(c.w_tail)));
         }
     }
-    for id in file_brook(&br, &mut ix) {
-        let (a, b) = ix.segs[id];
-        widths.push(inp.brook.w);
-        segments.push((a, b, inp.brook.w));
+    segments.extend(br.pts.windows(2).map(|p| (p[0], p[1], inp.brook.w)));
+    for (a, b, w) in &segments {
+        ix.file_w(*a, *b, *w);
     }
+    let widths = ix.widths.clone();
     // the outline placed point by point, each point asked of the brook in its cells: the field keeps outside the brook's skirt
     let mut brook_ix = Index::default();
     file_brook(&br, &mut brook_ix);
@@ -305,25 +322,38 @@ fn one(
     }
     counts.add("candidate@outline", 2 * f.ring.len() as u64);
     counts.add("write@ditch", segments.len() as u64);
-    counts.add("write@water_index", ix.touched + brook_ix.touched);
+    counts.add("write@water_index", brook_ix.touched);
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
-    let st = states(&bs, inp.seed, tag, unsettled);
+    let mut work = 0;
+    let st = states(&bs, inp.seed, tag, unsettled, &mut work);
+    counts.add("candidate@states", work);
     counts.add(
         "write@drawn_apart",
         2 * st.iter().filter(|s| **s != State::Green).count() as u64,
     );
-    let beans = bean_runs(&bs, inp.seed, tag, &mut ix, &widths);
-    counts.add(
-        "write@bean",
-        2 * beans.iter().map(Vec::len).sum::<usize>() as u64,
-    );
-    let pond = pocket_pond(&bs, inp.seed, tag);
+    let mut work = 0;
+    let beans = bean_runs(&bs, inp.seed, tag, &mut ix, &widths, &mut work);
+    counts.add("write@bean", work);
+    let mut work = 0;
+    let pond = pocket_pond(&bs, inp.seed, tag, &mut work);
     let form =
         knobs.get("grave_form").map_or(
             "island",
             |v| if v == "corner" { "corner" } else { "island" },
         );
-    let gr = grave(&bs, inp.seed, tag, form, pond.map(|(i, _)| i), inp.cell)?;
+    let gr = grave(
+        &bs,
+        inp.seed,
+        tag,
+        form,
+        pond.map(|(i, _)| i),
+        inp.cell,
+        &mut work,
+    )?;
+    counts.add("candidate@feature", work);
+    // the water index's cells and the segments its queries handed back, the beans' among them (the audit, T16)
+    counts.add("write@water_index", ix.touched);
+    counts.add("candidate@water_index", ix.examined + brook_ix.examined);
     counts.add("write@feature", 6);
     Ok(Field {
         fan: f.clone(),
@@ -337,6 +367,7 @@ fn one(
         pond,
         grave: gr,
         segments,
+        water: ix,
     })
 }
 

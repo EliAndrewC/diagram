@@ -7,7 +7,7 @@
 
 use super::fan::Pt;
 use super::geom::{dist, inside, seg_dist, unit};
-use super::index::Index;
+use super::index::{bbox, Bands, Boxes, Index};
 use crate::pyrand::knob_rng;
 
 /// The coarse grain a household needs (acres).
@@ -69,8 +69,8 @@ pub struct DryPlot {
 }
 
 /// The hem along `line` (the canal's course, the plots' side `out` of it: the unit normal pointing upslope; `down` the fall), as many plots as
-/// `need` square feet asks, none inside `field`'s ring or within `clear` feet of the water filed in `ix`. Returns the plots and the
-/// room the bands held (square feet).
+/// `need` square feet asks, none inside `field`'s ring or within `clear` feet of the water filed in `ix`. Returns the plots, the
+/// room the bands held (square feet) and the outline's edges tested against a point of a plot.
 ///
 /// Research:
 ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots square to the canal and laid end to end along its curving line
@@ -99,7 +99,7 @@ pub fn hem(
     clear: f64,
     seed: i64,
     tag: &str,
-) -> (Vec<DryPlot>, f64) {
+) -> (Vec<DryPlot>, f64, u64) {
     let mut rng = knob_rng(seed, &format!("{tag}:dry"));
     let mix: Vec<&'static str> = {
         let mask = 1 + rng.randbelow(15);
@@ -113,10 +113,14 @@ pub fn hem(
     let len: f64 = line.windows(2).map(|w| dist(w[0], w[1])).sum();
     let segs: Vec<(Pt, Pt)> = line.windows(2).map(|w| (w[0], w[1])).collect();
     if segs.is_empty() {
-        return (Vec::new(), 0.0);
+        return (Vec::new(), 0.0, 0);
     }
     let fall = ((-down.1, down.0), down);
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
+    // the plots laid so far, by cell: each candidate asks only the plots near it (the audit's square scan, T16)
+    let mut laid = Boxes::default();
+    // the field's outline by bands: each point tested against the edges of its own band, not a walk of the ring
+    let mut bands = Bands::new(field);
     let mut tract = 0;
     // each band's tracts: their stretch along the canal and their rows' direction (degrees), the band below's kept for the next
     let mut below: Vec<(f64, f64, f64)> = Vec::new();
@@ -165,7 +169,7 @@ pub fn hem(
                         offset(&segs, out, d0, o1),
                     ];
                     room += PLOT_FT.0 * PLOT_FT.1;
-                    if got >= need || refused(&poly, field, &plots, ix, clear) {
+                    if got >= need || refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -175,6 +179,8 @@ pub fn hem(
                         .1
                         .atan2((if down { fall.1 } else { fall.0 }).0);
                     let crop = mix[rng.randbelow(u32::try_from(mix.len()).unwrap_or(1)) as usize];
+                    let (lo, hi) = bbox(&poly);
+                    laid.file(lo, hi);
                     plots.push(DryPlot {
                         poly,
                         crop,
@@ -194,7 +200,9 @@ pub fn hem(
             break;
         }
     }
-    (plots, room)
+    ix.touched += laid.touched;
+    ix.examined += laid.examined;
+    (plots, room, bands.tested)
 }
 
 /// The rows' direction for a tract rolled `rolled` (down to the outfall, and its turn in degrees) whose neighbors' rows run `near`
@@ -288,16 +296,27 @@ fn along(segs: &[(Pt, Pt)], d: f64) -> (Pt, Pt) {
 ///
 /// Research:
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
-fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: f64) -> bool {
+fn refused(
+    poly: &[Pt],
+    field: &mut Bands,
+    (plots, laid): (&[DryPlot], &mut Boxes),
+    ix: &mut Index,
+    clear: f64,
+) -> bool {
     let middle = (
         f64::midpoint(poly[0].0, poly[2].0),
         f64::midpoint(poly[0].1, poly[2].1),
     );
-    let onto = [middle, poly[2], poly[3]].iter().any(|p| inside(*p, field));
-    let laps = plots
-        .iter()
-        .any(|q| inside(middle, &q.poly) || poly.iter().any(|c| inside(*c, &q.poly)));
-    onto || laps || wet(poly, ix, clear)
+    // each test asked only if the one before it passed, the cheapest first (the audit, T16)
+    let mut onto = || [middle, poly[2], poly[3]].iter().any(|p| field.inside(*p));
+    let mut laps = || {
+        let (lo, hi) = bbox(poly);
+        laid.near(lo, hi).into_iter().any(|i| {
+            let q = &plots[i].poly;
+            inside(middle, q) || poly.iter().any(|c| inside(*c, q))
+        })
+    };
+    onto() || laps() || wet(poly, ix, clear)
 }
 
 /// Whether the plot `poly` meets the water filed in `ix`: a segment near it crossing its sides, ending inside it, or within `clear`
@@ -306,14 +325,8 @@ fn refused(poly: &[Pt], field: &[Pt], plots: &[DryPlot], ix: &mut Index, clear: 
 /// Research:
 ///     the water test - NONE: geometry against the filed water; what it keeps a plot off is `hem`'s and `refused`'s
 fn wet(poly: &[Pt], ix: &mut Index, clear: f64) -> bool {
-    let reach = clear + ix.widths.iter().copied().fold(0.0, f64::max) / 2.0;
-    let (lo, hi) = poly.iter().fold(
-        (
-            (f64::INFINITY, f64::INFINITY),
-            (f64::NEG_INFINITY, f64::NEG_INFINITY),
-        ),
-        |(l, h), p| ((l.0.min(p.0), l.1.min(p.1)), (h.0.max(p.0), h.1.max(p.1))),
-    );
+    let reach = clear + ix.widest / 2.0;
+    let (lo, hi) = bbox(poly);
     ix.near((lo.0 - reach, lo.1 - reach), (hi.0 + reach, hi.1 + reach))
         .into_iter()
         .any(|i| {
@@ -355,7 +368,7 @@ mod tests {
         let field = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)];
         let need = 15.0 * GRAIN_ACRES_PER_HOUSEHOLD * 43_560.0;
         let mut ix = Index::default();
-        let (plots, room) = hem(
+        let (plots, room, _) = hem(
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -383,7 +396,7 @@ mod tests {
         // a brook through a plot's middle, its ends outside it, refuses it
         let mut through = Index::default();
         through.file_w((-50.0, -100.0), (-50.0, 2000.0), 7.0);
-        let (crossed, _) = hem(
+        let (crossed, _, _) = hem(
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -397,7 +410,7 @@ mod tests {
         assert!(crossed
             .iter()
             .all(|p| p.poly.iter().all(|c| c.0 > -46.0) || p.poly.iter().all(|c| c.0 < -54.0)));
-        let (dry, _) = hem(
+        let (dry, _, _) = hem(
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -409,7 +422,7 @@ mod tests {
             "f0",
         );
         assert!(dry.is_empty());
-        let (none, _) = hem(
+        let (none, _, _) = hem(
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -421,7 +434,7 @@ mod tests {
             "f0",
         );
         assert!(none.is_empty(), "no need, no plots");
-        let (short, _) = hem(
+        let (short, _, _) = hem(
             &[(0.0, 0.0), (0.0, 10.0)],
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -432,7 +445,7 @@ mod tests {
             4,
             "f0",
         );
-        let (dot, _) = hem(
+        let (dot, _, _) = hem(
             &[(0.0, 0.0)],
             (-1.0, 0.0),
             (1.0, 0.0),
@@ -445,7 +458,7 @@ mod tests {
         );
         assert!(dot.is_empty());
         // the other side of the canal: the normal turned to it
-        let (east, _) = hem(
+        let (east, _, _) = hem(
             &line,
             (1.0, 0.0),
             (-1.0, 0.0),

@@ -116,7 +116,7 @@ fn rice_pond(
         })
         .collect();
     let basins: Vec<super::lattice::Basin> = hosts.iter().map(|(_, b)| b.clone()).collect();
-    super::features::pocket_pond(&basins, seed, "polder")
+    super::features::pocket_pond(&basins, seed, "polder", &mut 0)
         .map(|(k, q)| (hosts[k].0, q.x, q.y, q.rx, q.ry))
 }
 

@@ -95,22 +95,43 @@ fn shares_bund(a: &Basin, b: &Basin) -> bool {
 ///     the comb's wet row - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a comb field gives each plot of its lowest row a 45% chance of the tint; a polder tints every low plot, at its own stage (`field_stage._polder`)
 ///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the flooded and the gold drawn on some maps (`SEASONAL_IN`), not every map
 #[must_use]
-pub fn states(basins: &[Basin], seed: i64, tag: &str, unsettled: bool) -> Vec<State> {
+pub fn states(
+    basins: &[Basin],
+    seed: i64,
+    tag: &str,
+    unsettled: bool,
+    work: &mut u64,
+) -> Vec<State> {
     let last = basins.iter().map(|b| b.row).max().unwrap_or(0);
     let seasonal = knob_rng(seed, &format!("{tag}:seasonal")).randbelow(SEASONAL_IN) == 0;
     let mut out: Vec<State> = basins
         .iter()
         .map(|b| {
-            let pointed = (0..b.ring.len()).any(|i| corner_deg(&b.ring, i) < ARROW_POINT_DEG);
-            if b.row == last && !pointed && plot_draw(seed, tag, "wet", b, 100) < WET_PCT {
+            // each test asked only where it can decide: the point only of the low row, the seasonal draws only on a map that
+            // draws them (the audit, T16), each counted as asked
+            let mut draw = |what: &str, n: u32| {
+                *work += 1;
+                plot_draw(seed, tag, what, b, n)
+            };
+            let wet = b.row == last
+                && draw("wet", 100) < WET_PCT
+                && !(0..b.ring.len()).any(|i| corner_deg(&b.ring, i) < ARROW_POINT_DEG);
+            let corners = if b.row == last {
+                b.ring.len() as u64
+            } else {
+                0
+            };
+            let state = if wet {
                 State::Wet
-            } else if seasonal && plot_draw(seed, tag, "flooded", b, FLOODED_IN) == 0 {
+            } else if seasonal && draw("flooded", FLOODED_IN) == 0 {
                 State::Flooded
-            } else if seasonal && plot_draw(seed, tag, "gold", b, GOLD_IN) == 0 {
+            } else if seasonal && draw("gold", GOLD_IN) == 0 {
                 State::Gold
             } else {
                 State::Green
-            }
+            };
+            *work += corners;
+            state
         })
         .collect();
     if unsettled && !basins.is_empty() {
@@ -123,17 +144,22 @@ pub fn states(basins: &[Basin], seed: i64, tag: &str, unsettled: bool) -> Vec<St
             .iter()
             .map(|b| u32::try_from(b.row + 1).unwrap_or(u32::MAX))
             .collect();
-        let weight: u32 = weights.iter().sum();
+        // each plot's weight summed down the list, so a pick is a binary search, not a walk of the plots before it (the audit)
+        let ends: Vec<u32> = weights
+            .iter()
+            .scan(0_u32, |s, w| {
+                *s += w;
+                Some(*s)
+            })
+            .collect();
+        let weight: u32 = ends.last().copied().unwrap_or(0);
         for _ in 0..want * 8 {
             if chosen.len() >= want as usize {
                 break;
             }
-            let mut pick = rng.randbelow(weight.max(1));
-            let mut i = 0;
-            while i + 1 < basins.len() && pick >= weights[i] {
-                pick -= weights[i];
-                i += 1;
-            }
+            let pick = rng.randbelow(weight.max(1));
+            let i = ends.partition_point(|e| *e <= pick).min(basins.len() - 1);
+            *work += 1 + chosen.len() as u64;
             let touches = |j: usize| shares_bund(&basins[i], &basins[j]);
             if out[i] == State::Green && !chosen.iter().any(|&j| touches(j)) {
                 chosen.push(i);
@@ -155,11 +181,13 @@ mod tests {
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
         let b = basins(&f, 4, ROW_FT);
         let last = b.iter().map(|x| x.row).max().unwrap();
-        let s = states(&b, 4, "f0", false);
+        let s = states(&b, 4, "f0", false, &mut 0);
         let wet: Vec<_> = (0..b.len()).filter(|&i| s[i] == State::Wet).collect();
         assert!(!wet.is_empty() && wet.iter().all(|&i| b[i].row == last));
         // the flooded and the gold on some maps, not every one
-        let maps: Vec<_> = (0..16).map(|seed| states(&b, seed, "f0", false)).collect();
+        let maps: Vec<_> = (0..16)
+            .map(|seed| states(&b, seed, "f0", false, &mut 0))
+            .collect();
         let seasonal = |m: &Vec<State>| m.contains(&State::Flooded) || m.contains(&State::Gold);
         let some = maps.iter().filter(|m| seasonal(m)).count();
         assert!(some > 0 && some < maps.len(), "{some} of {}", maps.len());
@@ -168,9 +196,9 @@ mod tests {
         assert!((b.len() / 40..b.len() / 8).contains(&flooded));
         assert!(maps.iter().any(|m| m.contains(&State::Gold)));
         assert!(!s.contains(&State::Rest), "a settled field rests none");
-        assert_eq!(s, states(&b, 4, "f0", false), "positional");
+        assert_eq!(s, states(&b, 4, "f0", false, &mut 0), "positional");
         for seed in 0..12 {
-            let r = states(&b, seed, "f0", true);
+            let r = states(&b, seed, "f0", true, &mut 0);
             let rest: Vec<_> = (0..b.len()).filter(|&i| r[i] == State::Rest).collect();
             assert!(rest.len() <= REST_PLOTS.1 as usize && !rest.is_empty());
             for (k, &i) in rest.iter().enumerate() {
@@ -180,6 +208,6 @@ mod tests {
                 }
             }
         }
-        assert!(states(&[], 1, "f0", true).is_empty());
+        assert!(states(&[], 1, "f0", true, &mut 0).is_empty());
     }
 }
