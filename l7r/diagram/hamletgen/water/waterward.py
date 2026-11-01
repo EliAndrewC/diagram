@@ -204,7 +204,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
-    """Where plank crossings go on a polder's ring canal (research 2026-07-22, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html): people cross to the fields where they LIVE and then walk the bund network,
+    """Where plank crossings go on a polder's ring canal (a reading of 2026-07-22, a GUESS): people cross to the fields where they LIVE and then walk the bund network,
     so crossings CLUSTER on the collector the village abuts, and every other supply collector, whose both ends reach the
     fields, keeps one. On a FLANK: three on the settlement-side toe, one on each interior lateral, the feeder and the far
     toe, none on the drain (the interior laterals are the Rust polder's `column` ditches). At the HEAD: three on the feeder, one on each toe. At the FOOT: two on each toe, one on the

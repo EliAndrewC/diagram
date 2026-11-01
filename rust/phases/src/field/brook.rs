@@ -91,10 +91,12 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
 /// Research:
 ///     the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake stands at the left, the center or the right of the fan's head - the brook down past one shoulder of the fan or straight into the middle (the `intake_place` knob, with the plan's flank)
 ///     the race turns away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves; the race's turn away from the brook is ours
-///     on past the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook runs on past the intake - down the fall, holding the intake's line across for the plan's tap stride, meandering as everywhere
+///     on past the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook runs on past the intake - down the fall, meandering as everywhere
+///     the tap's stride - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on how far below a shoulder intake the brook keeps its line; the plan's tap stride, holding the intake's line across
+///     the meander's wave - GUESS: the record silent on a meander's length; `MEANDER_WAVE_FT` down the fall, claimed at the constant
 ///     outside the crop - GUESS: the record silent on how far outside the crop the brook keeps; the plan's `BROOK_SKIRT` square to the flank (wider across the fall by the flank's lean), moving in by at most a station's slew; out at once below a shoulder intake, at most `CENTER_SWING_DEG` off the fall below a middle one
 ///     the meander outward - GUESS: the record silent on a brook's swing; held to the side away from the fan so the skirt is kept, its swing the wider of the plan's wander and `MEANDER_FT`, so one wave carries the course's whole stray
-///     the trough at the intake - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on where along a brook's bends the intake stands; at a bend's apex on the fields' side, the brook there running down the fall, the line the race's angle is read from
+///     the trough at the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: an offtake on the outside of a bend, a mouth on the concave side, just below the middle of a bend's concave bank - the intake at the bend's apex on the fields' side, the brook there running down the fall
 ///     above the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a hamlet's brook comes down off the high ground - from off the map straight down the fall along the intake's line, meandering
 #[expect(
     clippy::many_single_char_names,
@@ -226,7 +228,7 @@ fn off_the_axes_once(pts: &mut [Pt], intake: Pt, out: Pt) -> bool {
 /// its bearing on the maps' angles.
 ///
 /// Research:
-///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the whole brook, 7 ft half-length, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form
+///     the weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: across the whole brook, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form - its half-length the caller's, across the drawn brook at the skew (`field_stage.WEIR_HALF`)
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
