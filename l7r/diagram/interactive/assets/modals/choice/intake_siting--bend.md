@@ -7,8 +7,8 @@ Guesses:
 - That a hamlet's intake stands on a bend half the time: no source counts how often an intake was sited on a bend and how
   often on a straight reach.
 
-Depiction: The map draws the brook's bend at the intake bowing away from the fields, the intake at its apex on the fields'
-bank, where the turn of the bend carries the brook straight down the slope.
+Depiction: The map draws the brook's bend at the intake bowing toward the fields, so the fields' bank is the outside of the
+bend, the intake at its apex on that bank, where the turn of the bend carries the brook straight down the slope.
 
 Name: How the brook runs where it is tapped: on the outside of a bend
 Covers: `meta.intake_siting = bend`

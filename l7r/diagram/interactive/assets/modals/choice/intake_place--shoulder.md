@@ -16,4 +16,4 @@ Name: Where the brook is tapped: at a shoulder of the fields' head
 Covers: `meta.water_source_position = head_left`, `meta.water_source_position = head_right`
 Sources: maff-toshuko-history, shimane-toshuko-lecture
 Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
-Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html
+Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html

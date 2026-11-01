@@ -22,11 +22,11 @@ Guesses:
 
 Depiction: [field_archetype=valley_paddy] The map lays the water out as a comb: the head race leaves the brook leaning
 downstream and forks at the head of the paddies into two supply canals, one along each high flank, and delivery
-ditches leave them and run down the slope between the plots.
+ditches leave them nearly square and run down the slope between the plots, each along the bund of its row of plots and leaning downstream as that bund does.
 
 Each ditch is drawn at its true width, the order of the widths kept - head race widest, then the canals, then the
 delivery ditches - and narrows along its run as its water is drawn off, though at true size the narrowing is too gentle
-for the eye to follow. The finest ditch drawn is held to a floor so it still shows. A stroke's width shows its rank, not
+for the eye to follow. The finest ditch drawn is held to a floor so it still shows. Where a canal stops at its last delivery ditch, that ditch leaves it already at the width a delivery ditch narrows to at its end and runs flat rather than narrowing, so no ditch is drawn wider than the canal feeding it. A stroke's width shows its rank, not
 its water, so where a ditch forks the two branches together look wider than their trunk. The foot-wide ditch to a single
 paddy, the inlets in the bunds and the water passing from plot to plot are too small to draw, so the bunds run unbroken
 along every ditch, and the paddies stand back from a supply canal behind a bare bank. No gate, boards or settling basin
