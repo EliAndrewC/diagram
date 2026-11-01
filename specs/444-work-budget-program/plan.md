@@ -494,26 +494,31 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T23 (<why: the finding or measurement that files it>)
+### T23 (the round arbiter's ruling on ask:444-T16-fr021-scope: T16's delta holds only the port's files, so the code its port leaves dead is deleted in a landing of its own)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: after T16 lands, `make dead-closure BASE=<T16's merge base>` lists what the field's port left with no caller; each name
+  it lists is deleted with its tests, in a non-phase landing under the claims switch's report (feature 445). Measured at T16's landing:
+  the names the arbiter's ruling lists (`plot_texture`, the old comb's pending slots, `_sharp_corners`, `_toward`, `CITY_TIER_SCALES`,
+  the dead constants in `consts.py`, `consts_fields.py` and `consts_water.py`, `dike_crest`, the dead names in `waterfields/banks.py`,
+  `frame.py`, `partition.py`, `polder.py` and `seams/pockets.py`), and `water_frame.rs` reaching the shared `counts.rs`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the deletion | each deleted name's test deleted with it; `make dead-closure` empty after | n/a (no live code moves) | none | n/a |
 
 ### T23 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes: the engine sheds code no stage calls.
+2. **The constraints.** The round arbiter's ruling on ask:444-T16-fr021-scope; the 100% coverage floor; FR-012 (no counter moves).
+3. **Where each comes from.** G: the ruling, routed by the GM's FR-021 ("every Rust stage end its initial implementation with zero open claims"); O: `make dead-closure`'s list.
+4. **Do they describe the world here?** `make dead-closure` lists only code no caller reaches, measured at T16's landing.
+5. **The order.** After T16's landing, before T22.
+6. **The exits.** Green: `make dead-closure` empty and `make done` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a deletion by list.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** `make dead-closure` lists nothing T16's port left.
+10. **Before moving a constant.** n/a: constants deleted, none moved.
+11. **Before fitting things into room.** n/a.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
