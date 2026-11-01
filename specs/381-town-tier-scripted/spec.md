@@ -20,6 +20,13 @@ Rewriting this into a full spec, a plan and tasks is the work of whoever scripts
 
 Each was a filed feature of its own until 2026-10-10 and now reads `Superseded by 381`; its text is kept here as filed, headings demoted two levels.
 
+### Road-bridge forms (feature 444 T16, the claims round's fourth ruling, ask:444-T16-claims-round4)
+
+0087's drawing page has a town's road bridges take one of two forms, "a knob chosen at random for each settlement", but
+`BridgesMixin.bridge` (`l7r/diagram/settlement/city/bridges.py`) draws every carried deck planked - a hamlet's one timber
+deck (0084). Its claim records the DEVIATION and names this item. When towns are scripted: roll the road-bridge form per
+settlement and pass it to `bridge()` from `bridges()`, then reword the claim back to 0087.
+
 ### 332 - The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)
 
 *Also owed at: provincial city, capital - the later tier confirms it still holds.*

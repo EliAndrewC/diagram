@@ -255,8 +255,9 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
             "fork": f["fork"],
         }
     )
-    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans[1:])
-    M.setdefault("channels", []).append({"poly": chans[0]["pts"], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": name}, "w": chans[0]["w"], "field": name})
+    # the widths in pixels at the map's scale, as every channel record holds them (`bridges.channel_footbridges` reads them so)
+    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "w": s.px(c["w"]), "w_tail": s.px(c["w_tail"])} for c in chans[1:])
+    M.setdefault("channels", []).append({"poly": chans[0]["pts"], "frm": {"kind": "stream"}, "to": {"kind": "field", "name": name}, "w": s.px(chans[0]["w"]), "field": name})
     if f["weir"]:
         ring, deg, form = f["weir"]
         M.setdefault("weirs", []).append(
@@ -385,8 +386,9 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
             "bund_beans": [],
         }
     )
-    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans)
-    M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": POND_FEEDER_FT, "field": name})
+    # the widths in pixels at the map's scale, as every channel record holds them
+    M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": s.px(c["w"]), "w_tail": s.px(c["w_tail"])} for c in chans)
+    M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": s.px(POND_FEEDER_FT), "field": name})
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["state"] == "flooded")
     dk = out["dike"]
@@ -430,7 +432,7 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     s.field_channel(out["feeder"], ditch_style("main", plan.field_archetype)[0], POND_FEEDER_FT, POND_FEEDER_FT, late=True)
     s.corridors.append((out["feeder"], s.px(POND_FEEDER_FT / 2 + DITCH_BANK_FT)))
     run = out["outfall"]
-    M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": OUTFALL_FT})
+    M["channels"].append({"poly": run, "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": s.px(OUTFALL_FT)})
     col, cls = ditch_style("drain", plan.field_archetype)
     s.field_channel(run, col, OUTFALL_FT, OUTFALL_FT, late=True, cls=cls)
     s.corridors.append((run, s.px(OUTFALL_FT / 2 + DITCH_BANK_FT)))

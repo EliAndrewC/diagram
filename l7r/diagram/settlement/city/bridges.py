@@ -150,8 +150,13 @@ Research: unrecorded span - NONE: a fallback for reading a record
 
 def deck_covers(deck: Any, x: float, y: float) -> bool:
     """Does this deck's own span reach the point (x, y)? ONE predicate (feature 287, ways W02): `bridges()` and `bridge()`
-    skip a crossing only when a standing deck covers it, and the lane law (`law.unbridged_crossings`) asks the same."""
-    return math.hypot(float(deck["x"]) - x, float(deck["y"]) - y) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT))
+    skip a crossing only when a standing deck covers it, and the lane law (`law.unbridged_crossings`) asks the same. A deck
+    reaches half its span from its center each way (the round-4 claims check: the whole span read a crossing a full span off
+    as covered, and left it without a deck).
+
+    Research: a deck covers its own reach - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one deck per crossing place - a standing deck stands for a crossing it reaches, half its span from its center
+    """
+    return math.hypot(float(deck["x"]) - x, float(deck["y"]) - y) <= float(deck.get("span", DECK_SPAN_DEFAULT_FT)) / 2
 
 
 def flooded_ground(M: Any) -> list[list[Pt]]:
@@ -264,7 +269,7 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
 
     Research:
         oblique span solved - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: (ww + rw|cos|)/sin
-        landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT (10 ft) onto dry ground
+        landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT (10 ft) onto dry ground, along the deck - seated where every corner stands at least `CARRIED_LANDING_FLOOR_FT`, 6 ft, clear of the water, the floor of the about
         near-parallel clamp - NONE: sin floored at 0.25
         rice at the landing cuts the crossing - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT onto dry ground at every corner, else no deck
     """
@@ -276,7 +281,7 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     _cs = ((rb[0] - ra[0]) * (wb[0] - wa[0]) + (rb[1] - ra[1]) * (wb[1] - wa[1])) / (_rl * _wl)
     _sn = max(math.sqrt(max(0.0, 1.0 - _cs * _cs)), 0.25)
     _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / ftpx
-    _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the check's own carried-way floor
+    _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the seat's floor: a corner of a deck sized for about 10 ft stands at least 6 ft clear
     rot_used, span, seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
     seated = seated and _lands_dry(p, rot_used, span, rw, wet)
     return p, rot_used, span, seated
@@ -387,7 +392,7 @@ class BridgesMixin:
 
         Research:
             one deck per crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a deck within the tolerance that covers the point stands for it
-            carried deck always planked - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where a way crosses a stream or a ditch, one timber deck as wide as the way, always planked whatever form the settlement's ditch crossings take
+            carried deck always planked - DEVIATION research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: a town's road bridges take one of two forms, rolled per settlement - every carried deck is drawn planked (0084's one timber deck as wide as the way, a hamlet's form) until the town tier rolls the form (feature 381's carried item, road-bridge forms)
             deck drawn over the water - CONVENTION: the top layer
             merge tolerance - NONE: half the span, between 4 and 12 px
         """
@@ -456,7 +461,7 @@ class BridgesMixin:
             # unbridged) or drawn on top of the first (`features_do_not_overlap`).
             near = [b2 for b2 in self.M.get("bridges", []) if not b2.get("foot") and math.dist((p[0], p[1]), (float(b2["x"]), float(b2["y"]))) < _span * 0.5]
             if near:
-                self._reseat_to_cover(near[0], p)
+                self._reseat_to_cover(near[0], p, _span)
                 continue
             # ONE DECK PER CROSSING PLACE (feature 126: two decks drawn on top of one another on four
             # cohort seeds once orphan links ran alongside existing ways). A real crossing is a PLACE, not
@@ -466,13 +471,16 @@ class BridgesMixin:
             n += 1
         return n
 
-    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt) -> None:  # type: ignore[misc]
-        """Lengthen a standing deck along its own bearing until it reaches `p` - a second crossing close enough that its own
-        deck would stand on this one (feature 287, ways W02) - and redraw it, record and ink together.
+    def _reseat_to_cover(self: Settlement, deck: dict[str, Any], p: Pt, own: float) -> None:  # type: ignore[misc]
+        """Lengthen a standing deck along its own bearing until it reaches past `p` - a second crossing close enough that its
+        own deck (`own`, the span solved there) would stand on this one (feature 287, ways W02) - by that deck's own half-span,
+        so the merged deck clears the second water and lands as its own would; and redraw it, record and ink together.
 
-        Research: two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both
+        Research: two crossings, one deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: lengthened to reach both - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: every corner past the water onto dry ground
         """
-        deck["span"] = round(max(float(deck["span"]), 2.0 * math.dist((float(deck["x"]), float(deck["y"])), p) + 2.0), 1)
+        c, a = (float(deck["x"]), float(deck["y"])), math.radians(float(deck["rot"]))
+        along = abs((p[0] - c[0]) * math.cos(a) + (p[1] - c[1]) * math.sin(a))
+        deck["span"] = round(max(float(deck["span"]), 2.0 * along + own), 1)
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
     def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float | None = None, seg_caps: Any = None) -> int:  # type: ignore[misc]
@@ -512,9 +520,9 @@ class BridgesMixin:
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
             off groves - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
-            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`, in pixels at the map's scale as the records are: the hamlet's field stage writes each ditch's `w` in feet - `hamletgen/field_stage.py`'s comb and `_polder` - on a map of a foot to the pixel, `ftpx` 1.0)
+            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`, in pixels at the map's scale as the records are: the hamlet's field stage converts each ditch's feet to them - `hamletgen/field_stage.py`'s comb and `_polder`, through `px`)
             assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
-            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width the same real size on every map - a record's width and the default alike in pixels at the map's scale, converted to feet once (`worth_planking`), the default 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel; the hamlet's field stage writes its channels' `w` in feet (`POND_FEEDER_FT`, `OUTFALL_FT`, the comb's head channel) on a map of a foot to the pixel (`ftpx` 1.0), so feet and pixels agree there
+            assumed channel width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: every width the same real size on every map - a record's width and the default alike in pixels at the map's scale, converted to feet once (`worth_planking`), the default 2.5 ft where a channel's record has none (`DEFAULT_W`), as 0031 records a 2.5 ft channel; the hamlet's field stage converts its channels' feet (`POND_FEEDER_FT`, `OUTFALL_FT`, the comb's head channel) through `px` as it records them
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
