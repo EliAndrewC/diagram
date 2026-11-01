@@ -98,7 +98,7 @@ BROOK_FAN_TRIM = 0.72
 # that the head race really does leave it at `OFFTAKE_DEG` - the record's rule is an angle off the parent's
 # DOWNSTREAM HEADING, and a brook already turning at the tap is not heading down the fall there.
 BROOK_TAP_RUN = 70.0
-"""Research: brook straight at the tap - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on how far below a shoulder intake the brook keeps its line; 70 ft, held on either siting the `intake_siting` knob rolls (on a bend or a straight reach), the line the brook's own there"""
+"""Research: brook straight at the tap - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: 70 ft down the fall"""
 # THE WEIR GLYPH at a `weir` hamlet's intake: an oblique bar across the brook, running diagonally upstream from the
 # intake mouth as the old ones did. Half-length in feet. The full closure is a MAP DRAWING CONVENTION - half-river
 # closures were the common old form and at a 7 ft brook a half-bar is a pixel or two.
