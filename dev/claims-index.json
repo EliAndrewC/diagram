@@ -9770,11 +9770,11 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/driver.py::STAGES#bridges and crossings placed after the web and after the hinterland, woodland, windbreak and bamboo": {
+ "l7r/diagram/hamletgen/driver.py::STAGES#appurtenances (byres, sheds, wells) seated after the track out (stage_appurtenances after stage_track)": {
   "code": "b084280cc46a20dc",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "bridges and crossings placed after the web and after the hinterland, woodland, windbreak and bamboo",
+  "note": "appurtenances (byres, sheds, wells) seated after the track out (stage_appurtenances after stage_track)",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -9784,7 +9784,7 @@
   "code": "7a828906f2e9fdec",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_homesteads precedes stage_track and stage_web, \"farmhouses are placed first\"",
+  "note": "stage_homesteads precedes stage_track and stage_web, matching \"farmhouses are placed first, and the lanes are drawn among them after\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -9801,7 +9801,7 @@
   "code": "8a5bd65a4745f4bb",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "caption placement is how things are shown; stage_labels is last",
+  "note": "stage_labels is last and only places captions",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9813,7 +9813,7 @@
   "code": "0c10f74146df8b2b",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_lane_wells follows stage_web, \"seated once the lanes stand\"",
+  "note": "stage_lane_wells directly follows stage_web: \"a lane-side well is seated once the lanes stand\"",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -9830,7 +9830,7 @@
   "code": "01c5d6f9f98e0dd4",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_notice follows stage_frame, \"after the map is cropped to its frame\"",
+  "note": "stage_notice follows stage_frame: \"after the map is cropped to its frame\"",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
@@ -9846,14 +9846,14 @@
   "code": "34d411b045daf333",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "board is the last feature placed; stage_labels after it places captions, not features",
+  "note": "stage_notice is the last stage that places a map feature; stage_labels after it places no feature",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6d524c83364b778b"
   },
   "research": "5b977d097fda2bb4",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
-   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
+   "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0"
   ],
   "verdict": "IN-STEP"
  },
@@ -9863,7 +9863,7 @@
   "code": "225f7a90e30c86df",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_sties follows stage_crossings; CANON names the ruling of 2026-10-12, and seating clear of ways keeps \"nothing is built on a lane\"",
+  "note": "CANON names the GM's ruling of 2026-10-12; stage_sties follows stage_crossings",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -9874,7 +9874,7 @@
   "code": "195cc9980b721aaa",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_pond_bank follows stage_web and stage_lane_wells and precedes stage_hinterland; trees left out where they would fall on \"a roof, a wellhead ... or its trunk on a lane\"",
+  "note": "stage_pond_bank follows the houses, the web and stage_lane_wells, as \"left out where its crown would fall on a roof, a wellhead ... or its trunk on a lane\" needs; the claim says itself that placing it before the scrub is our own choice",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
@@ -9890,7 +9890,7 @@
   "code": "c0ac0bef2ad1ef71",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_bamboo follows hinterland, woodland and windbreak; no cited page orders them",
+  "note": "none of the cited pages orders bamboo against scrub; stage_bamboo follows hinterland, woodland and windbreak",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9902,16 +9902,52 @@
   "code": "20a0e977fae14e06",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_burial precedes stage_web; 0246 says nothing about the dead",
+  "note": "0246 is silent on burial ground; stage_burial comes before stage_web",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/driver.py::STAGES#the order hinterland, then woodland, then windbreak among the ground's cover": {
+ "l7r/diagram/hamletgen/driver.py::STAGES#the cover's order": {
+  "body": "d39945486f7ad70e",
+  "claim": "the cover's order - GUESS: no page orders them; the hinterland's open ground, then the woodland, then the windbreak, then the bamboo",
+  "code": "5ee6f12290888650",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-31",
+  "note": "the code orders hinterland, woodland, windbreak, bamboo, as the GUESS states; no page in the bundle orders them",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/driver.py::STAGES#the crossings after the cover": {
+  "body": "d39945486f7ad70e",
+  "claim": "the crossings after the cover - GUESS: no page orders them; the bridges and plank crossings seated once the ground's cover stands, so each keeps clear of it",
+  "code": "e15a7a0f74e3b8dc",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-31",
+  "note": "stage_crossings follows the four cover stages; no page orders crossings against cover",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/driver.py::STAGES#the ground's cover after the web": {
+  "body": "d39945486f7ad70e",
+  "claim": "the ground's cover after the web - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands - after the web, its wells and the pond bank; the crossings, sties, washing places and the notice board after it, each seated against what stands",
+  "code": "fcc197899a4555cd",
+  "core": "b084280cc46a20dc",
+  "date": "2026-10-31",
+  "note": "the cover stages follow the web, the lane wells and the pond bank, and come before crossings, sties, washing and notice, as the GUESS states",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/driver.py::STAGES#the settlement's seat chosen after the water, the field and the sink (stage_seat after stage_sink)": {
   "code": "b084280cc46a20dc",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "the order hinterland, then woodland, then windbreak among the ground's cover",
+  "note": "the settlement's seat chosen after the water, the field and the sink (stage_seat after stage_sink)",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -9921,7 +9957,7 @@
   "code": "4f15bdeca94c9274",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "lane wells, pond bank and washing places all follow stage_web, as each page has them seated against the lanes",
+  "note": "lane_wells, pond_bank and washing all come after stage_web, as each cited block needs",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
@@ -9937,7 +9973,7 @@
   "code": "896ea8bd03ce3586",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_track follows stage_homesteads, \"once the last house stands, the track out's start is set\"",
+  "note": "stage_track directly follows stage_homesteads: \"once the last house stands, the track out's start is set\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -9953,13 +9989,12 @@
   "code": "bff9a5b920943ae6",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_track precedes stage_lane_wells, a lane-side well sits \"on a lane's verge, its curb within about 8 ft of the tread\"",
+  "note": "stage_track precedes stage_lane_wells, which seats the well on a verge of a standing way",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
   "research": "f166979de9325ea9",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
   "verdict": "IN-STEP"
@@ -9970,7 +10005,7 @@
   "code": "3db28c80d29d8c17",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_washing follows stage_crossings and stage_web, \"where a lane, a bridge or a building takes that spot it is moved along the bank\"",
+  "note": "stage_washing follows the web, the homesteads and stage_crossings: \"where a lane, a bridge or a building takes that spot it is moved along the bank\"",
   "pages": {
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6"
   },
@@ -9986,7 +10021,7 @@
   "code": "a188102a5b36dffd",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "water_frame, then field, then sink: \"lay a settlement's water network out first and cut the paddies between its lines\", the collector along the low line",
+  "note": "the order water_frame, field, sink matches \"lay a settlement's water network out first and cut the paddies between its lines\" and the collector \"along the low line of its field\"",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e",
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
@@ -9994,7 +10029,6 @@
   "research": "1056eb04b585452b",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b9214118b842b138",
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
@@ -10006,10 +10040,9 @@
   "code": "ffbb0fc8e5865ecc",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_waterward follows stage_seat and precedes homesteads and track; no bundle page orders it",
+  "note": "the polder page sites the fringe and the village but orders neither; stage_waterward comes before homesteads and track",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#web after the farmsteads": {
@@ -10018,7 +10051,7 @@
   "code": "97278c38fdcbfdd4",
   "core": "b084280cc46a20dc",
   "date": "2026-10-31",
-  "note": "stage_web follows homesteads, appurtenances, pond_stock and burial; \"lanes are drawn among them after\"",
+  "note": "stage_web follows homesteads, appurtenances, pond_stock and burial; households' ways are laid once the last house stands",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "f2bd89d523b11fbf"
   },
@@ -10259,7 +10292,7 @@
   "code": "540302ff3a1233c4",
   "core": "730eee25e0831ccf",
   "date": "2026-10-31",
-  "note": "the \"flooded\" state painted as a flat color (the pond-water ink), apart from the wet tint, for the odd plot still flooded",
+  "note": "\"flooded\" is one flat color (POND_WATER), different from the wet tint; the one-in-sixteen rate is set elsewhere",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
@@ -10277,7 +10310,7 @@
   "code": "6c27086389f98813",
   "core": "730eee25e0831ccf",
   "date": "2026-10-31",
-  "note": "green for the rice, the blue-green FLOODED tint for \"wet\" plots: a kind of ground, not a season",
+  "note": "\"wet\" is the blue-green FLOODED tint set apart from the rice green; it marks the ground",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
@@ -10295,12 +10328,11 @@
   "code": "e7b1a4ed6c202433",
   "core": "730eee25e0831ccf",
   "date": "2026-10-31",
-  "note": "\"rest\" maps to _RICE_GREEN, and comb_net hands that color to the comb's resting plots; the polder sends them to rest_basin, but whether ink.draw does the same for the comb is not in the bundle, and neither is 0013. Needed: ink.draw's handling of plots with p[\"rest\"] set, plus the 0013 drawing page",
+  "note": "\"rest\" is only a value in the record; a resting basin is inked through rest_basin as grass (ink.paddies routes it there)",
   "pages": {},
   "research": "",
-  "rests": [],
   "section": "730eee25e0831ccf",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::FILL#the ripening plot": {
   "body": "f57c627208a65cdc",
@@ -10308,7 +10340,7 @@
   "code": "f54ba65bccac413d",
   "core": "730eee25e0831ccf",
   "date": "2026-10-31",
-  "note": "\"gold\" RIPE_GOLD for the plot ripening early, about one in twenty",
+  "note": "\"gold\" is RIPE_GOLD, for the odd plot ripening early",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
@@ -10384,24 +10416,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::ROW_FT#the rows' spacing by plot size": {
-  "body": "7fb42ed634e7791d",
-  "claim": "the rows' spacing by plot size - rice-paddies-and-their-plots-suiden.drawing: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band, which plot size takes which a GUESS; Rust maps the same (`lattice::row_ft_for`)",
-  "code": "a565caef5fab586d",
-  "core": "edcb781fdc3b7d9c",
+  "body": "e76b2015f63129de",
+  "claim": "the rows' spacing by plot size - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin some 40 to 60 ft across - a small plot's row at its foot, 40 ft, a large block's at its top, 60 ft; Rust maps the same (`lattice::row_ft_for`)",
+  "code": "6864ebf04e81d7e7",
+  "core": "0aba183cd714ccbb",
   "date": "2026-10-31",
-  "note": "the hamlet page keeps a basin \"about 48 ft across its canal ... about 1,500 sq ft, the size the hamlet maps keep\" and \"some 40 to 60 ft across\". The code's 34 ft rows (about 1,050 sq ft) and 70 ft rows (about 2,170 sq ft) fall outside 40-60 ft, and 34 ft is also outside the town's 52-72 ft rows, which the claim cites as \"that band\". Only the 0.02-0.25 acre household GUESS band contains them. Either the claim marks 34/70 as a GUESS departing from the 48 ft hamlet basin, or the page records the two plot sizes",
+  "note": "40 and 60 ft are the two ends of the attested 40-60 ft basin, a degree fixed by plot form",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:5feacc8ae5435e1f",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
-  "section": "edcb781fdc3b7d9c",
-  "verdict": "DRIFTED"
+  "section": "0aba183cd714ccbb",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::ROW_FT_DEFAULT#the rows' spacing": {
   "body": "92de6a242b31582c",
@@ -10543,18 +10573,27 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/field_stage.py::_polder#a polder has no dry plots and no bund beans (dry_plots=[], dry_acres=0.0, bund_beans=[], furrows_vary=False), though 0005 §29 puts soy along the bunds": {
+  "code": "df2d8f3b91033ed2",
+  "core": "df2d8f3b91033ed2",
+  "date": "2026-10-31",
+  "note": "a polder has no dry plots and no bund beans (dry_plots=[], dry_acres=0.0, bund_beans=[], furrows_vary=False), though 0005 §29 puts soy along the bunds",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/hamletgen/field_stage.py::_polder#every low plot tinted": {
   "body": "df6c906d18fc8692",
   "claim": "every low plot tinted - wet-paddies-that-never-drain-shitsuden.drawing: a polder or terraced field tints every low plot - each low plot in the wet tint",
   "code": "e9a556168503bc38",
   "core": "df2d8f3b91033ed2",
   "date": "2026-10-31",
-  "note": "every low polder plot is filled with FLOODED and given the wet state",
+  "note": "every p[\"low\"] plot gets FLOODED and class \"wet paddy\", as a polder tints every low plot",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
   "verdict": "IN-STEP"
@@ -10565,7 +10604,7 @@
   "code": "b5a81f3ed0daeda3",
   "core": "df2d8f3b91033ed2",
   "date": "2026-10-31",
-  "note": "recorded as a reservoir at the high corner: the wild pond feeds the inlet at the polder's head, its high end",
+  "note": "meta water_source=\"reservoir\", water_source_position=\"corner_high\"; the feeding pond stands at the head, by the inlet, at the high end",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -10576,13 +10615,24 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/field_stage.py::_polder#polder plots are only \"wet\" or \"green\", never freshly flooded or ripening gold (the comb's one-in-sixteen and one-in-twenty states are not drawn on a polder)": {
+ "l7r/diagram/hamletgen/field_stage.py::_polder#no pocket pond in the polder's low plots (bead_ponds=[]), though 0008's table (§89-§92) appears to let a polder's low plot hold a pond": {
   "code": "df2d8f3b91033ed2",
   "core": "df2d8f3b91033ed2",
   "date": "2026-10-31",
-  "note": "polder plots are only \"wet\" or \"green\", never freshly flooded or ripening gold (the comb's one-in-sixteen and one-in-twenty states are not drawn on a polder)",
+  "note": "no pocket pond in the polder's low plots (bead_ponds=[]), though 0008's table (§89-§92) appears to let a polder's low plot hold a pond",
   "research": "",
   "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's plots wet or green": {
+  "body": "df6c906d18fc8692",
+  "claim": "the polder's plots wet or green - GUESS: the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing silent on whether a polder shows the odd flooded or ripening plot; its plots wet on the low row, green elsewhere",
+  "code": "ba72921a15eeb5d0",
+  "core": "df2d8f3b91033ed2",
+  "date": "2026-10-31",
+  "note": "the page gives the odd flooded or gold plot only \"on some maps\" and never names polders; the polder draws low plots wet and the rest green",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's records": {
   "body": "df6c906d18fc8692",
@@ -10590,7 +10640,7 @@
   "code": "9ac48b9361a371b1",
   "core": "df2d8f3b91033ed2",
   "date": "2026-10-31",
-  "note": "placement comes from the Rust, and the figures added here are the named constants",
+  "note": "placement comes from stage_polder; the widths it adds (POND_FEEDER_FT, OUTFALL_FT, DITCH_BANK_FT) are claimed on their constants",
   "pages": {},
   "research": "",
   "rests": [],
@@ -24070,13 +24120,24 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#crossings wherever both ends are useful": {
-  "body": "aa30b508c1d7b77a",
-  "claim": "crossings wherever both ends are useful - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included, and a long ditch takes a crossing near its middle, a very long one several - the count by length is `channel_footbridges`'; these caps hold it, never asking a plank of the drain",
-  "code": "88fba953fe026460",
-  "core": "1f55ad50e22bf211",
+ "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#at most three where the village lives": {
+  "body": "f88a26899d16d097",
+  "claim": "at most three where the village lives - GUESS: plank-bridges-over-farm-ditches-itabashi.drawing silent on crossings clustering by the village; the village's own collector capped at three (two a toe at the foot), so its planks stand near the houses rather than strung along it",
+  "code": "d736603c5f320aac",
+  "core": "bfe05b9c38c0fc06",
   "date": "2026-10-31",
-  "note": "the claim says these caps keep the page's count, but the code caps every collector away from the village at 1 (`\"w_toe\": 1`, `\"feeder\": 1`, `\"column\": 1`) whatever its length. The page says \"a very long one several\", and the code's own comment puts toe planks 350-1,100 ft along the ring canal. The caps override the count by length rather than keep it. Either the claim should say the cap overrides the length count (and put that under the clustering GUESS), or the caps should grow with length",
+  "note": "0084 is silent on crossings clustering by the village, and nothing in it sets a cap of 3 (2 a toe at the foot). But the unit's docstring credits the clustering rule (\"people cross to the fields where they LIVE\") to research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, which is not in the bundle. I need 0019 to tell whether it answers the clustering. If it does, the claim should cite 0019 and keep GUESS only for the cap of three",
+  "pages": {},
+  "research": "",
+  "verdict": "CANNOT-TELL"
+ },
+ "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#crossings wherever both ends are useful": {
+  "body": "f88a26899d16d097",
+  "claim": "crossings wherever both ends are useful - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, a walked dike included, and a long ditch takes a crossing near its middle, a very long one several - every supply collector counted by its length (`channel_footbridges`' spacing), the drain capped at none",
+  "code": "3b38897b48ea69f8",
+  "core": "bfe05b9c38c0fc06",
+  "date": "2026-10-31",
+  "note": "collectors left out of the caps are counted by length, as in \"a long ditch takes a crossing near its middle, and a very long one several\"; the drain gets none",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -24085,15 +24146,15 @@
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/waterward.py::polder_crossing_caps#no plank on the drain": {
-  "body": "aa30b508c1d7b77a",
+  "body": "f88a26899d16d097",
   "claim": "no plank on the drain - plank-bridges-over-farm-ditches-itabashi.drawing: none over the drain at the field's foot",
-  "code": "117f788bc6d11e25",
-  "core": "1f55ad50e22bf211",
+  "code": "103cb5d90973e2d7",
+  "core": "bfe05b9c38c0fc06",
   "date": "2026-10-31",
-  "note": "drain is 0 in all four branches; the page says drains at a field's foot \"carry none\"",
+  "note": "every branch returns \"drain\": 0; the page says the ditches \"at a field's foot ... carry none\"",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -24101,7 +24162,6 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/waterward.py::polder_flanks#polder geometry": {
@@ -49832,14 +49892,14 @@
   "code": "e5bbf5da42f811c4",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "`span_here > span` skips the seat, and the span stays nominal",
+  "note": "span_here > span skips the seat, so the nominal span holds",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
   "research": "1dd5fd71121f4a06",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
   "verdict": "IN-STEP"
  },
@@ -49849,7 +49909,7 @@
   "code": "e668ca4d573a2c59",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "plank_on_supply refuses a seat nearest a non-supply ditch",
+  "note": "plank_on_supply refuses a seat nearest a drain or collector",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -49865,7 +49925,7 @@
   "code": "d15c230d9c37a5e1",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "px(7.0) default for streams, matching \"A brook 7 ft wide\"",
+  "note": "px(7.0) default matches \"A brook 7 ft wide\"",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
   },
@@ -49881,19 +49941,17 @@
   "code": "6c8a703b87edb6e8",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "storing the default in feet (px(2.5)) fits §30, but the 2.5 ft figure rests on 0031, which is not in the bundle. 0068's ladder gives canal heads of 4.0-6.0 ft and gives 2.5 ft only to the delivery ditch, so I need 0031 and a statement of what M['channels'] holds",
+  "note": "px(2.5) is stored in feet; 2.5 ft is 0031's channel width and 0068's delivery-ditch head",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:4fb1798b8b989581",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width": {
   "body": "802422ee7d61a22e",
@@ -49901,7 +49959,7 @@
   "code": "a69bb29ec1d1dcb8",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "px(2.5) for field_ditches, matching \"run 2.5 ft at the head\"",
+  "note": "px(2.5) matches \"run 2.5 ft at the head\"",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -49917,7 +49975,7 @@
   "code": "6e753fcb08a8b201",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "_plank_reaches_useful_ground gate, no plank where it fails",
+  "note": "_plank_reaches_useful_ground is checked on the rounded deck",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -49933,7 +49991,7 @@
   "code": "9272c2385027f7d5",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the 41 taper samples are measurement only",
+  "note": "41 taper samples is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -49961,7 +50019,7 @@
   "code": "6c58c92c6533a366",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "_quads_overlap against every recorded bridge",
+  "note": "a seat overlapping an existing bridge is skipped",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -49978,7 +50036,7 @@
   "code": "383dd393ed703d25",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "dry plots and garden boxes rule a seat out, and seat_order supplies the widest seat left",
+  "note": "dry plots and gardens rule a seat out; seat_order falls back to the widest seat left",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -49994,10 +50052,9 @@
   "code": "c42afe7c87f56895",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the page says nothing on groves, so the claim is rightly a GUESS",
+  "note": "the page is silent on groves; the guess stands",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off the homes": {
@@ -50006,7 +50063,7 @@
   "code": "17b6f7fec9519e19",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the slide skips any seat overlapping a house quad",
+  "note": "the seat slides until it misses every house quad",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50022,7 +50079,7 @@
   "code": "f6e690266cced2eb",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "base at the midpoint for n=1, evenly spaced per 320 over the qualifying run",
+  "note": "n counts the qualifying run at one per spacing, (k+0.5)/n places them; the page gives no interval figure",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50039,7 +50096,7 @@
   "code": "4cdde4276cd06d5c",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "one resolve(\"footbridge_form\") per settlement, applied to every deck; it changes the glyph only",
+  "note": "resolve(\"footbridge_form\") once per settlement; the form changes no placement",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50056,7 +50113,7 @@
   "code": "5e9a38e50ba7f1d0",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "worth_planking at the widest point gates the ditch, and wide seats are tried first",
+  "note": "worth_planking gates the ditch, and seat_order tries water that earns a board first",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50074,7 +50131,7 @@
   "code": "f4461e8be2863b65",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "px(4.0), \"about 4 ft wide\"",
+  "note": "px(4) matches \"about 4 ft wide\"",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50087,11 +50144,11 @@
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side": {
   "body": "802422ee7d61a22e",
-  "claim": "polder crossings by side - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, and drainage ditches carry none - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`) caps each collector's count, none on the drain",
-  "code": "e018b759f2b2a6d1",
+  "claim": "polder crossings by side - plank-bridges-over-farm-ditches-itabashi.drawing: a crossing stands wherever both ends reach useful ground, and drainage ditches carry none - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`) caps the supply ditches' counts it names (the drain is never a supply ditch, so carries none either way)",
+  "code": "4ecf7a8cb42081bb",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the claim says seg_caps \"caps each collector's count\", but the code drops every ditch whose role is not main/branch/lateral before it reads seg_caps, so a collector carries none whatever its cap. The claim should name the supply-role ditches the caps apply to, or the code should read the caps on collectors",
+  "note": "cap <= 0 skips a ditch, and drains never pass SUPPLY_ROLES",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50099,7 +50156,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment": {
   "body": "802422ee7d61a22e",
@@ -50107,8 +50164,7 @@
   "code": "cbb367590817f9b8",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the claim says \"the local width plus PLANK_ABUTMENT\", but the code sets span = w + px(5.5) from the record's head w, and any span_here > span is refused. Whether a seat is ever resized to its local width depends on _widen_for_confluence, which is not in the bundle (I need its source)",
-  "outside": true,
+  "note": "w + px(5.5) gives about 8 ft on a 2.5 ft ditch",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50117,7 +50173,7 @@
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short stub stepped over": {
   "body": "802422ee7d61a22e",
@@ -50125,7 +50181,7 @@
   "code": "a906e1af1856ac3f",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the page gives no length threshold, so the 140 px cut is rightly a GUESS",
+  "note": "the page gives no minimum length; the 140 px guess stands",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -50136,7 +50192,7 @@
   "code": "57a74a9f3ef0d4c7",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the sampling step only",
+  "note": "the sampling step is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -50164,7 +50220,7 @@
   "code": "4a52e8fb9e36e395",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the SUPPLY_ROLES filter excludes drains and collectors",
+  "note": "role not in SUPPLY_ROLES is skipped, so foot and edge drains carry none",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -50180,10 +50236,10 @@
   "code": "7640e3f4a4e58fff",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the page attests no count by side, so the caps are rightly a GUESS; this unit applies them as min(n, cap)",
+  "note": "the account misstates the code: \"three on its own collector\", but this unit skips every collector (role not in SUPPLY_ROLES) before any seg cap is read. It also disagrees with the feeder claim (\"three where the village is at the head\") and the marked comment (cluster \"on the SETTLEMENT toe\"). The page is not silent on count either: min(n, 1) caps a very long ditch at one plank where the page says \"a very long one several\", and the page records no such departure. Restate which seg takes three, and record the cap of one as a DEVIATION or let n stand",
   "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#the feeder planked by its cap": {
   "body": "802422ee7d61a22e",
@@ -50191,7 +50247,7 @@
   "code": "37634cd4bad19dfa",
   "core": "b01685b299120e1b",
   "date": "2026-10-31",
-  "note": "the feeder passes as role main, and its count is min(spacing n, seg_caps cap)",
+  "note": "a feeder with role main passes SUPPLY_ROLES and n = min(n, cap)",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
@@ -52312,7 +52368,7 @@
   "code": "e499484444ee7e2a",
   "core": "43ef64a469498346",
   "date": "2026-10-31",
-  "note": "an AZE-stroked bank ellipse filled with the wet tint, open water inside it, and reeds in the wet ring: this is the page's \"earthen bank round its edge, the wet ground just inside it where the reeds stand, and open water in the middle\"",
+  "note": "the code draws the bank stroke, a wet ring with the reeds in it, and open water in the middle, as the drawing page's dish pond describes",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -52328,7 +52384,7 @@
   "code": "bdf427a5f628b508",
   "core": "43ef64a469498346",
   "date": "2026-10-31",
-  "note": "the code uses rx+2.5 for the wet ring and eight reeds at rx+1.2; the page records the proportions and the reeds' place as a GUESS",
+  "note": "the page records the open-water share and the reeds' placement as a GUESS; the code's 2.5 ft ring, 8 reeds and 1.2 ft offset match the claim",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -52339,7 +52395,7 @@
   "code": "dc9cf67f97669d67",
   "core": "43ef64a469498346",
   "date": "2026-10-31",
-  "note": "a light ring drawn on the water, a display choice only",
+  "note": "an offset light ellipse on the water, which is drawing only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -52347,14 +52403,14 @@
  },
  "l7r/diagram/settlement/fields/ink.py::pocket_pond#the bank's line": {
   "body": "3a6cbe2089662f84",
-  "claim": "the bank's line - CONVENTION: the earthen bank's edge a 2.2 stroke in the bund's earth, heavier than a bund's 1.5 so the pond's rim reads",
-  "code": "c326f488b72ed594",
+  "claim": "the bank's line - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a dish pond's bank width; the earthen bank 2.2 ft, a little wider than a bund's 1.5",
+  "code": "2434bbf093536e59",
   "core": "43ef64a469498346",
   "date": "2026-10-31",
-  "note": "the bund line is drawn at real size (the dividing bund \"about 1.5 ft wide, at its real size\"), so stroke-width=\"2.2\" in the same brown reads as a 2.2 ft earthen bank, a physical width; 0008 is silent on a dish pond's bank width, so the label should be GUESS (citing 0008's drawing page), not CONVENTION",
+  "note": "the page gives no bank width; stroke-width 2.2 matches the claim",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::settle#the beads": {
   "body": "7bc1d24cd5dd91a5",
@@ -77850,20 +77906,30 @@
  },
  "rust/phases/src/field/beans.rs::bean_runs#a run's beads": {
   "body": "c97f2f9c891d23c1",
-  "claim": "a run's beads - bunds-between-the-paddies-aze.drawing: a stretch of bund that carries them shows at least two beads - two to four (`RUN_BEADS`), `BEAD_STEP_FT` apart",
-  "code": "3070aac5a897d455",
+  "claim": "a run's beads - bunds-between-the-paddies-aze.drawing: a stretch of bund that carries them shows at least two beads",
+  "code": "c709486a52628db8",
   "core": "b1606a0eabe63485",
   "date": "2026-10-31",
-  "note": "the page supports only the floor (\"at least two beads\", which the run.len() >= RUN_BEADS.0 check enforces). It is silent on the most a run carries (4, RUN_BEADS.1) and on the 8 ft between beads (BEAD_STEP_FT). Since \"the bead says only where it stands\", that spacing is a physical claim about where plants stood. The claim should mark the upper bound and the step as GUESS or UNRESEARCHED",
+  "note": "the code keeps a run only if `run.len() >= RUN_BEADS.0`, and the page says \"a stretch of bund that carries them shows at least two beads\". The MANIFEST does not include the value of RUN_BEADS, so I cannot confirm that RUN_BEADS.0 is at least 2. I need that constant",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
   "research": "1a1b231001c7410e",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
-   "0014-bunds-between-the-paddies-aze.drawing.html:dc6c6faf409db09b"
+   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "CANNOT-TELL"
+ },
+ "rust/phases/src/field/beans.rs::bean_runs#a run's most and its spacing": {
+  "body": "c97f2f9c891d23c1",
+  "claim": "a run's most and its spacing - GUESS: bunds-between-the-paddies-aze.drawing silent on how many beads a run holds and how far apart; four at most (`RUN_BEADS`), `BEAD_STEP_FT` apart",
+  "code": "a38f73ac7f458f8c",
+  "core": "b1606a0eabe63485",
+  "date": "2026-10-31",
+  "note": "the page gives no bead count per run and no spacing; GUESS is the right label",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#how many": {
   "body": "c97f2f9c891d23c1",
@@ -77871,7 +77937,7 @@
   "code": "693fa5cd6b4941fb",
   "core": "b1606a0eabe63485",
   "date": "2026-10-31",
-  "note": "the page says only \"Some bunds carry a row\"; 3 bunds in 8, each its own roll, is a guess the page does not answer",
+  "note": "the page says only \"Some bunds carry a row of soybeans\"; the share is a GUESS, rolled for each bund",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -77882,7 +77948,7 @@
   "code": "f61be7ed60981c86",
   "core": "b1606a0eabe63485",
   "date": "2026-10-31",
-  "note": "the beads lie along the one bund edge from top to foot in a single line, and any that would land in water are dropped, matching \"in a single row on the bund\"",
+  "note": "beads that would stand in water are dropped, so every bead left sits \"in a single row on the bund\"",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "b171566ab94b2749"
   },
@@ -77898,7 +77964,7 @@
   "code": "0a949ed9513bdf98",
   "core": "b1606a0eabe63485",
   "date": "2026-10-31",
-  "note": "the page is silent on where along a bund the row stands; the run is centered on the bund's middle and stops one bead radius short of each end",
+  "note": "the page does not say where along the bund the row stands; centering the run and keeping it a bead's radius inside each end is a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -77909,7 +77975,7 @@
   "code": "c6202716c6270d6c",
   "core": "b1606a0eabe63485",
   "date": "2026-10-31",
-  "note": "the page is silent on which bunds carry beans; the code takes only the bund between two neighbors in one row, never the last basin's outer bund and never the bund beside the drain, as the guess states",
+  "note": "the page does not say which bunds carry beans; only the bund between two neighbors in a row, skipping drain bunds, is a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -78052,42 +78118,50 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/brook.rs::brook#on past the intake": {
+ "rust/phases/src/field/brook.rs::brook#above the intake": {
   "body": "9498837997f637a1",
-  "claim": "on past the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the brook runs on past the intake - down the fall, holding the intake's line across for the plan's tap stride, meandering as everywhere",
-  "code": "4977a731b078520b",
+  "claim": "above the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a hamlet's brook comes down off the high ground - from off the map straight down the fall along the intake's line, meandering",
+  "code": "2df07eec206924e2",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "the downstream loop carries the brook past the intake to off the map; on a side intake x is held for tap_run",
+  "note": "upstream walk from off the map down the fall to the intake matches \"comes down off the high ground, passes the head of its fan\"",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/brook.rs::brook#on past the intake": {
+  "body": "9498837997f637a1",
+  "claim": "on past the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the brook runs on past the intake - down the fall, holding the intake's line across for the plan's tap stride, meandering as everywhere",
+  "code": "4977a731b078520b",
+  "core": "cc2268fdd25956e8",
+  "date": "2026-10-31",
+  "note": "the brook running on past the intake is attested (\"The brook runs on past the intake\"), but the hold of the intake's line for `b.tap_run` (`!center && u <= u_i + b.tap_run`) is a physical decision the page says nothing about. The code comment rests it on 0054, which is not cited. The hold also applies only to shoulder intakes, and the course still moves out at once inside the stride, so the claim's \"holding the intake's line\" misstates the middle-intake case. Split the tap stride off as UNRESEARCHED/GUESS (or cite 0054) and say it applies to shoulder intakes only",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
+  },
+  "research": "e1b8f27ddc7aab33",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
+  ],
+  "verdict": "NEEDS-RESEARCH"
+ },
  "rust/phases/src/field/brook.rs::brook#outside the crop": {
   "body": "9498837997f637a1",
-  "claim": "outside the crop - GUESS: the record silent on how far outside the crop the brook keeps; the plan's `BROOK_SKIRT` square to the flank (wider across the fall by the flank's lean), moving in by at most a station's slew and out at once",
-  "code": "879ef5d491a628ca",
+  "claim": "outside the crop - GUESS: the record silent on how far outside the crop the brook keeps; the plan's `BROOK_SKIRT` square to the flank (wider across the fall by the flank's lean), moving in by at most a station's slew; out at once below a shoulder intake, at most `CENTER_SWING_DEG` off the fall below a middle one",
+  "code": "87f1938776c398e1",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "the claim says the course moves \"out at once\", but on a center intake the code caps each outward step at b.station*tan(CENTER_SWING_DEG) (`.min(b.station * tan)`); only side intakes move out at once. Reword the claim to name the center case's 45-degree limit",
+  "note": "the page gives the margin but not its width; want = flank + skirt*secant, slew-limited inward, out at once for shoulder, station*tan(CENTER_SWING_DEG) for middle, as stated",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
- },
- "rust/phases/src/field/brook.rs::brook#the brook's course above the intake: from off the map straight down the fall along the intake's line, meandering": {
-  "code": "cc2268fdd25956e8",
-  "core": "cc2268fdd25956e8",
-  "date": "2026-10-31",
-  "note": "the brook's course above the intake: from off the map straight down the fall along the intake's line, meandering",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the intake's place": {
   "body": "9498837997f637a1",
@@ -78095,7 +78169,7 @@
   "code": "ebe6a6771cfb59d1",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "`center` comes from the intake_place knob and the side from the plan's flank, so the three attested places are rolled per settlement",
+  "note": "`center` gives x_i = 0 at the head's middle; otherwise the intake is at the plan's flank corner, on the fan's bank, set back by the lead. The left/center/right knob comes from outside the unit",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
@@ -78103,6 +78177,7 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
   "verdict": "IN-STEP"
@@ -78113,10 +78188,19 @@
   "code": "b248df336517db4f",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "the swing is held outward with (1+sin)/2 and sized as max(MEANDER_FT, wander); no cited page gives a brook's swing",
+  "note": "the record is silent on a brook's swing; the swing is one-sided (side*swing*(1+sin)/2) with swing = MEANDER_FT.max(b.wander), as stated",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/brook.rs::brook#the meander's wavelength MEANDER_WAVE_FT down the fall (the comment rests it on 0054, which no claim cites)": {
+  "code": "cc2268fdd25956e8",
+  "core": "cc2268fdd25956e8",
+  "date": "2026-10-31",
+  "note": "the meander's wavelength MEANDER_WAVE_FT down the fall (the comment rests it on 0054, which no claim cites)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/field/brook.rs::brook#the race turns away from the brook": {
   "body": "9498837997f637a1",
@@ -78124,7 +78208,7 @@
   "code": "46e8220ecc84ae64",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "the intake is set outside the fan's corner by lead*sin, so the race leaves on the fan's bank at offtake_deg; the turn is the project's guess",
+  "note": "the intake stands on the fan's side (\"the side of the land it serves\"); the downstream acute lean (-lead*cos, +lead*sin) is the project's own reading, which the drawing page records",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "470d939e84e4b2e9"
   },
@@ -78136,11 +78220,11 @@
  },
  "rust/phases/src/field/brook.rs::brook#the trough at the intake": {
   "body": "9498837997f637a1",
-  "claim": "the trough at the intake - NONE: the wave's phase set so the brook at the intake runs down the fall, the line the race's angle is read from",
-  "code": "126606db7f622e9d",
+  "claim": "the trough at the intake - GUESS: where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing silent on where along a brook's bends the intake stands; at a bend's apex on the fields' side, the brook there running down the fall, the line the race's angle is read from",
+  "code": "75ad2e914c6ef1f6",
   "core": "cc2268fdd25956e8",
   "date": "2026-10-31",
-  "note": "the phase decides something physical: it puts the intake at a bend's apex with zero offset and slope, on that bend's fan-side outer bank. 0059 bears on this (\"outside of a bend\", the thalweg against the bank), so the claim should cite 0059, or be GUESS if only modern practice backs it; NONE is wrong",
+  "note": "this is not silent: the research page puts an offtake \"on the outside of a bend\", \"the concave side of a bend\", \"just below the middle of a bend's concave bank\". The trough (the swing's minimum toward the fan) puts the intake on the concave bank on the fields' side, so the code is in step with that. Relabel as research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html (a calibrated choice at the apex), not GUESS",
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
@@ -78218,18 +78302,20 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::weir#the weir": {
-  "body": "3e3a92d4ba9b357a",
+  "body": "a075f110b5f8a727",
   "claim": "the weir - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: across the whole brook, 7 ft half-length, diagonally upstream at 30 degrees, 1.5 to 5 ft thick by form",
-  "code": "decdf14dbb8e5510",
-  "core": "3f94266ca0f1aed9",
+  "code": "5746774653241149",
+  "core": "4506c2500b723015",
   "date": "2026-10-31",
-  "note": "the bundle shows only the signature. To judge it I would need the body (does it span the whole brook, does it run upstream from the mouth), WEIR_KEY_FT, BROOK_W and WEIR_SKEW_DEG (to check the 7 ft half-length; BROOK_DRAWN_W is 5.25 and the page says 7 ft), and the weir_form thickness table",
+  "note": "the whole-brook span, the diagonal-upstream bar (square*cos - t*sin), the 30 degree skew and the 1.5-5 ft thickness by form are all in step. But \"7 ft half-length\" is on neither page: the page gives \"a brook 7 ft wide\", and the half passed in, WEIR_HALF = BROOK_W/2/cos(30 deg) + WEIR_KEY_FT, comes to about 5 ft for a 7 ft brook. The claim should state the half-length as derived (the brook's half-width over cos of the skew, plus a 1 ft key into each bank)",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "1de96f5f72986080"
   },
   "research": "e1b8f27ddc7aab33",
   "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:640b5a761e2e1e28",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da",
@@ -78237,8 +78323,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/build.rs::Field#a field's record": {
   "body": "a76f7c9962e37b0c",
@@ -78320,61 +78405,60 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
-  "code": "dc93b6e315c4c205",
-  "core": "9141aaa607063d1c",
+  "code": "0b397e2ba59b6ff3",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "drained counts every basin whose state != State::Wet; I need the State enum to know whether a resting (kataarashi) plot, which grows nothing, is counted as drained barley ground. If it is, that departs from \"only the drained plots count\", and resting plots should be left out",
+  "note": "only non-Wet, non-Rest basins counted, and only under winter_crop=barley; their area offsets the need acre for acre",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander",
-  "code": "cbb85341f2ba2e3d",
-  "core": "9141aaa607063d1c",
+  "code": "ac5507b319d81577",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "the cited material is silent on how a settlement's tracts stand to each other; the step is what the claim says",
+  "note": "GUESS holds: the tract pages give several tracts but say nothing on how they stand to each other",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "the fields under the cap - how-much-farmland-a-settlement-works-and-in-what-tracts: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)",
-  "code": "1a1629f37be8e229",
-  "core": "9141aaa607063d1c",
+  "code": "d9512090291c5f92",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "several tracts when the paddy is larger than one tract can hold; the even share is a disclosed guess",
+  "note": "several tracts where paddy exceeds the cap; the even share is marked GUESS, and no page gives how tracts compare",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html": "e7ac9b403c0f1fdd"
   },
   "research": "47696314c55f9345",
   "rests": [
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:dd6520858c8db007",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:f5f1581aa5536557"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "the grain owed - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household (`GRAIN_ACRES_PER_HOUSEHOLD`)",
-  "code": "fe8a9b9afbdb5752",
-  "core": "9141aaa607063d1c",
+  "code": "325d1e800931a5e6",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "the formula need = households * GRAIN_ACRES_PER_HOUSEHOLD * SQ_FT_PER_ACRE is the right shape, but the bundle does not show the constant's value; I need it to confirm it is about 0.85",
+  "note": "need = households x 0.85 acre, as the page reckons",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
@@ -78382,29 +78466,26 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "the hem on the first field - GUESS: the record silent on which of several fields a hamlet's dry hem fringes; the first, on its flank away from the brook",
-  "code": "0c39940d4528bc83",
-  "core": "9141aaa607063d1c",
+  "code": "08257cae516779ec",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "the cited material does not say which field takes the hem; it is a disclosed guess",
+  "note": "GUESS holds: the drawing page does not say which field the hem fringes",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
-  "body": "ed440070847050ba",
+  "body": "4a7cba50ccd4a113",
   "claim": "the hem's line - where-a-farming-hamlet-grew-its-coarse-grain.drawing: where the middle is left wild the dry plots climb from the toe into the middle; on a fan whose middle is cleared, the hem runs along the whole canal - the first field's far flank up from its foot, and across its head where cleared",
-  "code": "3338069d76757f9d",
-  "core": "9141aaa607063d1c",
+  "code": "54d6a205f777a42d",
+  "core": "d7a51dc8f6747e98",
   "date": "2026-10-31",
-  "note": "a wild middle climbs from the foot only as far as the grain asks; a cleared middle hems the flank and the head",
+  "note": "wild middle: the hem climbs from the toe up the far flank only as far as dry_need asks; cleared middle: the line continues across the head",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
@@ -78412,9 +78493,9 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#resting plots": {
@@ -78703,30 +78784,47 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#a delivery's course": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "a delivery's course - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is",
-  "code": "08d5436676b76239",
-  "core": "bdb4ceb849c1c02b",
+  "code": "432430f767d392b8",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "each delivery follows its row line lines.u(r, q) from the flank (q=s) to the middle (q=0), so it is bowed as the bund is and runs down to the drain",
+  "note": "runs along the row's bund from the flank (q=s) to the middle drain (q=0), which the page's comb and plot-edge ditch attest",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
   "research": "8b7dec608b28495e",
   "rests": [
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:3bd5e9166c70b8ab",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20"
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:b2e18eb0b3415e20",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/channels.rs::channels#the canal's end": {
-  "body": "c457602d5048a6e9",
-  "claim": "the canal's end - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way",
-  "code": "707981515a567b60",
-  "core": "bdb4ceb849c1c02b",
+ "rust/phases/src/field/channels.rs::channels#from a middle fork (`center`) canal B also runs swept along the head to its own corner before going down its flank; the courses claim names only the corner-fork case": {
+  "code": "c4251ca7bd560b54",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "the two endings are rolled per settlement (tail_runs_on), as §41 requires, and every leg narrows to THREAD_W. But the one roll covers both canals, so with runs_on (or with no offtakes) canal B runs to fan.length, against §39's \"the second canal ... is drawn partway down its edge\". I need to know whether fan.length on the brook's flank is \"the edge of the crop\", and whether the run-on form may apply to the second canal",
+  "note": "from a middle fork (`center`) canal B also runs swept along the head to its own corner before going down its flank; the courses claim names only the corner-fork case",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/field/channels.rs::channels#how much a canal narrows: an equal width step per leg (`w + (THREAD_W - w) * i/n`), whatever the leg's length or the number of offtakes": {
+  "code": "c4251ca7bd560b54",
+  "core": "c4251ca7bd560b54",
+  "date": "2026-10-31",
+  "note": "how much a canal narrows: an equal width step per leg (`w + (THREAD_W - w) * i/n`), whatever the leg's length or the number of offtakes",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/field/channels.rs::channels#the canal's end": {
+  "body": "3bc4be7ddda782ae",
+  "claim": "the canal's end - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way",
+  "code": "ca888ae2fd52b208",
+  "core": "c4251ca7bd560b54",
+  "date": "2026-10-31",
+  "note": "the claim says a tail either ends at the crop's edge or stops at its last junction, but when `tail_runs_on` is true canal B ends at `lines.u((r + 1).min(lines.rows), s)`, one row past its last offtake in the middle of its edge. The page attests only two forms: running on, the tail \"ends at that width at the edge of the crop\", or it \"stops at the junction\". Either scope this claim to canal A and leave B to its partway claim, or have the page record B's partway tail as a third form of end",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
@@ -78735,33 +78833,32 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
-  "triage": "touched",
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/channels.rs::channels#the canals taper": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "the canals taper - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: every drawn canal tapers from its head toward its tail",
-  "code": "15bd1719c633c77b",
-  "core": "bdb4ceb849c1c02b",
+  "code": "9f170572616c1ef0",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "every supply leg narrows from SUPPLY_W toward THREAD_W, a step at each offtake. The head race stays at HEAD_W, but no branch leaves it and the ladder gives it one width",
+  "note": "every supply leg narrows from `w` to `THREAD_W` across its offtakes, and the head race has no offtake to taper at",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
   "research": "8b7dec608b28495e",
   "rests": [
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c"
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e0d9ae570ef6c74c",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the canals' courses": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "the canals' courses - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from the fork",
-  "code": "d3330c2124ed49af",
-  "core": "bdb4ceb849c1c02b",
+  "code": "2f09409cc25312b5",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "canal A (s=-brook_side) runs swept along the head to its corner and then down the far flank; canal B runs down the brook's flank from the fork, or along the head first when the fork is in the middle; both stay on the high margins",
+  "note": "canal A takes the far flank (`-brook_side`) and runs swept along the head to its corner, canal B runs down the brook's flank, both on the high margins with one on each flank",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
@@ -78771,16 +78868,15 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the comb": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "the comb - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: delivery ditches leaving the supply canals at right angles, one drain gathering the water along the lowest line",
-  "code": "96725b1e9175413e",
-  "core": "bdb4ceb849c1c02b",
+  "code": "e24a0273bac9b178",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "deliveries leave the flank canals along the cross-slope row lines, near square to them, and one straight drain runs fan.at(0,0) to fan.foot down the low middle",
+  "note": "deliveries leave the flank canals along the row lines, and one drain runs from `fan.at(0,0)` down the low middle to `fan.foot`",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
@@ -78790,16 +78886,15 @@
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:93e10cc9a8adc19b",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:e105c2f647566aa0"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the delivery's head": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "the delivery's head - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head",
-  "code": "907289150030568c",
-  "core": "bdb4ceb849c1c02b",
+  "code": "6b8a7a09d888445f",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "head = min(DELIVERY_W.0, DELIVERY_CAP x the width at the end of leg j, which is where delivery j leaves); tail = min(DELIVERY_W.1, head). The cap's 0.8 value is not inlined, so it was not checked here",
+  "note": "head is `min(DELIVERY_W.0, DELIVERY_CAP * local)`, where `local` is the canal's width at the end of leg j (the junction), and the tail is `min(DELIVERY_W.1, head)`",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
@@ -78809,32 +78904,59 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a201b452f1a78418",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bbb209fa136275b3"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/channels.rs::channels#the head race: one straight run from the intake to the fork, at HEAD_W from end to end with no taper": {
-  "code": "bdb4ceb849c1c02b",
-  "core": "bdb4ceb849c1c02b",
+ "rust/phases/src/field/channels.rs::channels#the head race": {
+  "body": "3bc4be7ddda782ae",
+  "claim": "the head race - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the head race 6.0 ft, the whole fan's above the fork - one straight run from the intake to the fork at that width",
+  "code": "85544e1594f7da15",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "the head race: one straight run from the intake to the fork, at HEAD_W from end to end with no taper",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the untapered `HEAD_W` matches the 6.0 ft rung, but the claim also states the course, \"one straight run from the intake to the fork\" (`pts: vec![intake, fork]`), and 0068 says nothing about the head race's course. Split the course into its own claim, UNRESEARCHED or citing a page that bears on it",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
+  },
+  "research": "0563a9dcc87ebedc",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "rust/phases/src/field/channels.rs::channels#the lean": {
-  "body": "c457602d5048a6e9",
+  "body": "3bc4be7ddda782ae",
   "claim": "the lean - which-way-water-flows-and-how-channels-bend-and-join.drawing: a branch leaves its parent leaning downstream",
-  "code": "5a681bcc30292d50",
-  "core": "bdb4ceb849c1c02b",
+  "code": "87da18cd02626529",
+  "core": "c4251ca7bd560b54",
   "date": "2026-10-31",
-  "note": "offtake_lines keeps only rows whose course from the junction heads downstream (dot > 0) and drops an offtake with no such row, so no delivery leans upstream",
+  "note": "this code applies no lean of its own: a delivery follows `lines.u(r, q)` along its bund. Whether it leaves its canal leaning downstream depends on how `Lines::u` changes from q=s to q=0, and `Lines::u` is not in the bundle. Show `Lines::u` / the row-bund geometry, or say which branch the claim means (the head race's angle off the brook is set outside this unit)",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
-  "triage": "touched",
+  "verdict": "CANNOT-TELL"
+ },
+ "rust/phases/src/field/channels.rs::channels#the second canal partway": {
+  "body": "3bc4be7ddda782ae",
+  "claim": "the second canal partway - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing: the second canal feeds at least one delivery ditch, so it is drawn partway down its edge, narrowing to a thread - its running tail a row past its last offtake",
+  "code": "9f8f4e0bc98491d0",
+  "core": "c4251ca7bd560b54",
+  "date": "2026-10-31",
+  "note": "when the tail runs on, canal B ends one row past its last offtake and tapers to `THREAD_W`, so it is drawn partway down its edge narrowing to a thread",
+  "pages": {
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
+  },
+  "research": "8b7dec608b28495e",
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ada331da1c1d1012",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:f8b1421942a5b808"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::division#the fork": {
@@ -79051,7 +79173,7 @@
   "code": "8f73d1059829a4c6",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "a closed ring all the way round, opened only at the sluice points it is given (\"water crosses the dike only at gated sluices\")",
+  "note": "the band is built as a closed ring on the inner face and its only openings are the sluice points it is given (gaps)",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -79061,21 +79183,13 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dike.rs::dike#each tree's crown size, rolled in tenths of a foot within CROWN_FT per row": {
-  "code": "bfc0359b21ffdd3e",
-  "core": "bfc0359b21ffdd3e",
-  "date": "2026-10-31",
-  "note": "each tree's crown size, rolled in tenths of a foot within CROWN_FT per row",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/dike.rs::dike#its trees": {
   "body": "9d59367c9d929bd0",
   "claim": "its trees - polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the willow row three quarters of the way out toward the water, 8.5 ft apart; the mulberry a quarter of the way, on the field side, 4.4 ft apart",
   "code": "cb540ce5ffc47279",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "the claim's figures match the page (willow 3/4 out at 8.5 ft, mulberry 1/4 at 4.4 ft), but the rows' shares and spacings come from ROWS, which is not printed in the bundle; I need ROWS inline to check them",
+  "note": "ROWS puts the willow at share 0.75 every 8.5 ft and the mulberry at 0.25 every 4.4 ft, both measured out from the field face; the rows on the faces are the deviation §30 records",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
@@ -79083,9 +79197,10 @@
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:33e1d275753fd9fc",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:82871785d9faa91a",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:8763d008740507d7",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:f542d631ea0516a8"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#its two faces": {
   "body": "9d59367c9d929bd0",
@@ -79093,14 +79208,13 @@
   "code": "3452d69042c5f5cf",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "the inner face is the input envelope and the outer face is pushed out by the rolled width, the water laid against it later (\"outer face curving with the water's edge ... inner face along the fields\")",
+  "note": "the inner face is the given envelope and the outer face is that ring pushed out by width(s) at share 1.0",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6"
   ],
   "verdict": "IN-STEP"
  },
@@ -79110,25 +79224,38 @@
   "code": "8264f011c004119a",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "BAND_FT (14, 40) is blended by a clamped mix of two waves with seeded phases, so every width falls within \"14 to 40 ft across\" and varies along the length",
+  "note": "the code keeps the width inside BAND_FT on two waves with seeded phases (mix runs 0 to 1), but the bundle does not show the values of BAND_FT or WIDTH_WAVES, so whether the range is 14 to 40 ft cannot be checked; need those constants inline",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
   "research": "9d4f4eee3c609249",
   "rests": [
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:232a60c6a51c5109",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:46a44cd878ea07e4"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
- "rust/phases/src/field/dike.rs::dike#the crest line set on the band's midline (share 0.5)": {
-  "code": "bfc0359b21ffdd3e",
+ "rust/phases/src/field/dike.rs::dike#the crest": {
+  "body": "9d59367c9d929bd0",
+  "claim": "the crest - NONE: the band's midline, where its walked top runs",
+  "code": "9e563006fc48ee2c",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "the crest line set on the band's midline (share 0.5)",
+  "note": "the crest is the band's midline (share 0.5), which is the geometry of a symmetric band and adds no figure of its own",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dike.rs::dike#the crowns rolled": {
+  "body": "9d59367c9d929bd0",
+  "claim": "the crowns rolled - GUESS: each tree's crown within its row's `CROWN_FT`, in tenths of a foot",
+  "code": "617977b557fbc370",
+  "core": "bfc0359b21ffdd3e",
+  "date": "2026-10-31",
+  "note": "the page gives no crown size, only that the crowns read as touching rather than as one hedge; CROWN_FT (3.5-5.5, 2.2-3.6) is rolled in tenths of a foot",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dike.rs::dike#the rows cut at the gaps": {
   "body": "9d59367c9d929bd0",
@@ -79136,7 +79263,7 @@
   "code": "54d97c9e6b8433d5",
   "core": "bfc0359b21ffdd3e",
   "date": "2026-10-31",
-  "note": "no tree is placed within GAP_HALF_FT of a sluice (\"the band is cut, and the rows stop with it\")",
+  "note": "a tree is skipped when it falls within GAP_HALF_FT of a sluice, so the rows stop at the gap",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "f63356f541e02746"
   },
@@ -79330,13 +79457,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/dry.rs::hem#MAX_BANDS caps how many bands the climb takes (how far from the canal the dry fields can reach), which no claim covers": {
+  "code": "7ca1558f057f167b",
+  "core": "7ca1558f057f167b",
+  "date": "2026-10-31",
+  "note": "MAX_BANDS caps how many bands the climb takes (how far from the canal the dry fields can reach), which no claim covers",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
   "body": "c024394aad659152",
   "claim": "a plot onto rice dropped - dry-fields-and-their-crops-hatake.drawing: a plot that would lap onto another canal's rice is dropped",
   "code": "71f1867e360d246e",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "a polygon that refused() rejects against the field is skipped, never placed; the overlap test itself lives in refused()",
+  "note": "a refused plot is skipped (continue) and never placed",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
@@ -79346,28 +79481,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::hem#in the last band the plots fill from the canal line's start (d=0) along its course until the need is met, so the partial band always stands at one end of the canal": {
-  "code": "7ca1558f057f167b",
-  "core": "7ca1558f057f167b",
-  "date": "2026-10-31",
-  "note": "in the last band the plots fill from the canal line's start (d=0) along its course until the need is met, so the partial band always stands at one end of the canal",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
   "body": "c024394aad659152",
   "claim": "not steep ground - dry-fields-and-their-crops-hatake.drawing: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either",
   "code": "83204a9442b86590",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "the hem stands on gentle fan ground, so §20's contour-only rule for steep ground does not apply, and its tracts roll either form",
+  "note": "the hem draws only gentle fan ground, so the steep-ground contour rule does not apply; tracts take either direction",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
   "research": "ae8a1665f83d153e",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
   "verdict": "IN-STEP"
  },
@@ -79377,13 +79505,13 @@
   "code": "bbbd6330ff08cb31",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "each tract rolls contour or down at even odds (randbelow(2)); the contour is fall.0, square to the fall vector, not the canal heading; the two are a right angle apart",
+  "note": "even-odds bool picks the contour (normal to down) or down the fall, a right angle apart; tract turn within ±TURN_DEG.0, plot turn within ±TURN_DEG.1, apart() keeps tracts apart from neighbors and the band below",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
   "research": "ae8a1665f83d153e",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
   "verdict": "IN-STEP"
@@ -79394,7 +79522,7 @@
   "code": "5e8654f97a8da0dd",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "plots are laid at d0..d0+PLOT_FT.0 along the canal's own segments and pushed out along its normal, so neighbors abut and the bands nest",
+  "note": "corners are offset along the canal's arc length and normal, so plots run end to end along the curving line, square to it, sharing sides",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
@@ -79412,14 +79540,13 @@
   "code": "46f248babcc7811f",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "bands step outward from the bank until got >= need or a band places no plot, so the clearing starts nearest the canal and stops at the need",
+  "note": "bands step outward until got >= need or a whole band places nothing; plots past the need are skipped",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
   "verdict": "IN-STEP"
@@ -79430,7 +79557,7 @@
   "code": "1a85a39c2d8f48a7",
   "core": "7ca1558f057f167b",
   "date": "2026-10-31",
-  "note": "strips and plots per tract are rolled within the TRACT_STRIPS and TRACT_PLOTS ranges; depth starts at BANK_FT; the mix is a random non-empty subset of the four crops, and each plot draws a crop from it at even odds",
+  "note": "strips rolled in TRACT_STRIPS, tract length in TRACT_PLOTS, depth starts at BANK_FT, the mix is a random non-empty subset of the four crops (1 + randbelow(15) as a bitmask), and each plot picks one crop of the mix at even odds",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
   },
@@ -79438,8 +79565,20 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/dry.rs::hem#the last band from the canal's start": {
+  "body": "c024394aad659152",
+  "claim": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
+  "code": "faf8d92038dc3f91",
+  "core": "7ca1558f057f167b",
+  "date": "2026-10-31",
+  "note": "each band fills from d = 0 along the canal until the need is met; the page gives only the outward order (from the toe), not where along the canal the last band stops",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::offset#the offset": {
@@ -80270,21 +80409,13 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/landuse.rs::convert#pond and bank outlines rounded into uneven shapes by REACH_FT (a separate reach for the bank and for the water)": {
-  "code": "acfa27d8caf675d9",
-  "core": "acfa27d8caf675d9",
-  "date": "2026-10-31",
-  "note": "pond and bank outlines rounded into uneven shapes by REACH_FT (a separate reach for the bank and for the water)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/landuse.rs::convert#the bank on the parcel's line": {
   "body": "199e310fcc135029",
   "claim": "the bank on the parcel's line - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: each pond ringed by a bank of its own mud - the bank's outer edge the parcel's own line, the water pushed in the village's inset from it",
   "code": "b5e7f7c725a8fbb9",
   "core": "acfa27d8caf675d9",
   "date": "2026-10-31",
-  "note": "the bank is rounded from the ring at inset 0 (so it sits on the parcel line) and the water from the one village inset_ft",
+  "note": "the bank is rounded at offset 0, so it sits on the parcel line; the water is set in by one village inset_ft; bank and water are built as a ring",
   "pages": {
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
   },
@@ -80292,6 +80423,7 @@
   "rests": [
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:5d8136b689a7529e",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:8cb3b577416449af",
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:9aaf0a58da02aa2b",
    "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
   ],
   "verdict": "IN-STEP"
@@ -80302,14 +80434,15 @@
   "code": "c052658d4432848f",
   "core": "acfa27d8caf675d9",
   "date": "2026-10-31",
-  "note": "one crop string is passed to grow() for every pond parcel, nursery ponds included",
+  "note": "grow() plants every non-rice parcel's bank with the one crop passed in, and runs before the nursery is picked, so fry banks are planted too",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
   "research": "5204a1fdda1ca89b",
   "rests": [
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:563eca2ea8c3ee4b",
-   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:a89d6a71550c7130"
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:a89d6a71550c7130",
+   "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:d0ae5fd2fe2dc7ac"
   ],
   "verdict": "IN-STEP"
  },
@@ -80319,13 +80452,14 @@
   "code": "5cb74ff202c62d56",
   "core": "acfa27d8caf675d9",
   "date": "2026-10-31",
-  "note": "ponds are taken smallest water area first and the loop stops before the held water would pass FRY_SHARE of the total; this only runs when fry == \"fry_village\"",
+  "note": "only when fry == \"fry_village\"; ponds sorted smallest water area first, added while the held water stays within FRY_SHARE of all pond water, stopping at the first that would exceed it",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
   "research": "7c54d1e1ec4abfaa",
   "rests": [
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:3b71b145c095e8f3",
+   "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:4896c5289f15b02c",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:557c25aae872a619",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:e2179169987f8f17"
   ],
@@ -80337,7 +80471,7 @@
   "code": "24b32a5ca598b6ef",
   "core": "acfa27d8caf675d9",
   "date": "2026-10-31",
-  "note": "the leftover form arrives as a knob; under \"rice\", each parcel is left in rice on its own 1-in-RICE_IN draw, otherwise every parcel is a pond",
+  "note": "leftover \"rice\" leaves each parcel in rice at 1 in RICE_IN odds; otherwise every parcel is a pond; the two forms are chosen by the caller",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html": "441358d4350b2e4d"
   },
@@ -80346,6 +80480,25 @@
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:976a6c6d725a9bd9"
   ],
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::convert#the ponds' uneven shapes": {
+  "body": "199e310fcc135029",
+  "claim": "the ponds' uneven shapes - GUESS: dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing silent on how uneven, giving ponds of uneven shape; the bank and the water each rounded at its own reach (`REACH_FT`), a corner's cut rolled about it",
+  "code": "1ec27dc636a7c216",
+  "core": "acfa27d8caf675d9",
+  "date": "2026-10-31",
+  "note": "the page attests uneven ponds but says nothing on how uneven; bank and water are each rounded at their own REACH_FT reach, with a seeded cut per corner",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/landuse.rs::convert#which parcels stay in rice: each one rolled on its own, so the rice is scattered rather than set in patches or any other placement": {
+  "code": "acfa27d8caf675d9",
+  "core": "acfa27d8caf675d9",
+  "date": "2026-10-31",
+  "note": "which parcels stay in rice: each one rolled on its own, so the rice is scattered rather than set in patches or any other placement",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/field/landuse.rs::grow#mulberry rows": {
   "body": "dd5f6c62074d5927",
@@ -80466,15 +80619,14 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::Basin.drain_side#the hem along the drain": {
-  "body": "858eab18a65fa919",
+  "body": "65cb45b93aff848a",
   "claim": "the hem along the drain - GUESS: the record is silent on a drawn hem; the basins' sides on the drain, the bund it runs in",
-  "code": "f11677430eee1ca3",
-  "core": "b6094b2ef4601ab9",
+  "code": "04d20886aaf85874",
+  "core": "6cddf6e90a265e0f",
   "date": "2026-10-31",
-  "note": "returns the basin's side on the drain; the page says nothing about a drawn hem (its §18 headland is about refused points)",
+  "note": "code picks the basin's drain-side edge (ring[1]-ring[2] right, ring[0]-ring[3] left); the page's only drain-side wording is §18's headland cut from a refused point, which says nothing of a drawn hem, so GUESS is right",
   "pages": {},
   "research": "",
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::Lines#the lines' record": {
@@ -80637,12 +80789,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::row_ft_for#paddy plot size": {
-  "body": "6d3d55768a2f2503",
+  "body": "da4c58b9170f0a08",
   "claim": "paddy plot size - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin about 48 ft across its canal (`ROW_FT`), the plan's medium",
-  "code": "c29323a2dacd7e6c",
-  "core": "70c2494baf31972e",
+  "code": "2e6b9bed5bc94609",
+  "core": "2031dc3d9086affd",
   "date": "2026-10-31",
-  "note": "default ROW_FT 48.0 is the page's hamlet basin, about 48 ft across its canal",
+  "note": "the default arm returns ROW_FT, and the claim's \"about 48 ft across its canal\" matches §5, but the bundle doesn't give ROW_FT's value; the inline constant is needed to confirm it is 48",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
@@ -80650,27 +80802,25 @@
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/field/lattice.rs::row_ft_for#the small and large rows": {
-  "body": "6d3d55768a2f2503",
-  "claim": "the small and large rows - rice-paddies-and-their-plots-suiden.drawing: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band; which plot size takes which a GUESS",
-  "code": "ed0c9d238aeed82c",
-  "core": "70c2494baf31972e",
+  "body": "da4c58b9170f0a08",
+  "claim": "the small and large rows - rice-paddies-and-their-plots-suiden.drawing: a hamlet basin some 40 to 60 ft across - a small plot's 40 ft at its foot, a large block's 60 ft at its top",
+  "code": "2e1f179f1cb6ec62",
+  "core": "2031dc3d9086affd",
   "date": "2026-10-31",
-  "note": "\"small_irregular\" => 34.0 and \"large_block\" => 70.0 both lie outside the page's basin \"some 40 to 60 ft across\". The claim only checks area against the 0.02-0.25 acre band (itself a GUESS) and borrows the town's 52-72 ft rows for a hamlet. Either bring the widths inside 40-60 ft or have the drawing page record the narrower and wider rows",
+  "note": "40.0 and 60.0 are the two ends of §1's \"some 40 to 60 ft across\", a degree fixed within the attested range; 60 ft stays far under §4's one-tan block",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
   "research": "69aa78ae06a3c11d",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:5feacc8ae5435e1f",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:a1eff65b097cc456"
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:cbd7bb1f74a11a17"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::BOW_NUDGE_FT#the bow and the nudge": {
   "body": "9567434b85338678",
@@ -81018,29 +81168,35 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::ditches#column ditches are also drawn in a dike-pond block's dikes between ponds (0019's \"interior ditches\" in the mosaic; no claim cites them)": {
-  "code": "505be1fdfefe8ec5",
-  "core": "505be1fdfefe8ec5",
-  "date": "2026-10-31",
-  "note": "column ditches are also drawn in a dike-pond block's dikes between ponds (0019's \"interior ditches\" in the mosaic; no claim cites them)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/polder.rs::ditches#ditches on the warped lattice": {
   "body": "d30beb47d7c41309",
   "claim": "ditches on the warped lattice - parcels-and-bunds-inside-a-polder-aze.drawing: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it",
   "code": "9ea3dc6543d29f47",
   "core": "505be1fdfefe8ec5",
   "date": "2026-10-31",
-  "note": "each column ditch runs along the corridor's midline through put(), the same warp as the plots",
+  "note": "each column ditch is traced through put(), so it follows the column's own warp",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::ditches#the dike-pond's interior ditches": {
+  "body": "d30beb47d7c41309",
+  "claim": "the dike-pond's interior ditches - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic's interior ditches - a column ditch in the dike between each column of ponds, through the same warp",
+  "code": "7b91711f787c75a6",
+  "core": "505be1fdfefe8ec5",
+  "date": "2026-10-31",
+  "note": "the dike-pond gets the same column ditches through the same warp; under the mosaic they bend into meandering lines",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
   ],
   "verdict": "IN-STEP"
  },
@@ -81050,14 +81206,14 @@
   "code": "441056cee78c94d4",
   "core": "505be1fdfefe8ec5",
   "date": "2026-10-31",
-  "note": "w_toe is held at 1.5 ft, the supply canal's lateral tail and the hamlet floor",
+  "note": "w_toe runs from canal[0] to canal[3] as a lateral held at 1.5 ft, which carries on the head arm's 1.5 ft tail at the floor rung",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:1a82ab45b2612fc6",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
@@ -81069,13 +81225,12 @@
   "code": "0b446a71dcc6e17c",
   "core": "505be1fdfefe8ec5",
   "date": "2026-10-31",
-  "note": "one ditch in each gap between columns (c in 1..n), on the corridor's midline",
+  "note": "x = c*(module+gap) - gap/2 puts each ditch in the middle of the corridor between columns, one way only",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:095f7e817a239457",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
@@ -81087,7 +81242,7 @@
   "code": "2f69c706346704a0",
   "core": "505be1fdfefe8ec5",
   "date": "2026-10-31",
-  "note": "four segments on ring(RING_FT.0), between the block and the dike envelope",
+  "note": "the four arms run on canal = ring(RING_FT.0), between the block edge and the dike's inner envelope ring(RING_FT.1)",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -81103,7 +81258,7 @@
   "code": "9044218d3af2cea0",
   "core": "505be1fdfefe8ec5",
   "date": "2026-10-31",
-  "note": "4.5 to 1.5, 4.0 to 1.5, delivery min(2.5, 0.8 x local) tailing to 1.2, drain 1.2 to 5.5 toward the outfall corner",
+  "note": "the code matches the page: head arm 4.5 to 1.5, flank arm 4.0 to 1.5, drain 1.2 to 5.5, delivery 2.5 to 1.2 with its head capped at 0.8 of the head canal's local width",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
@@ -81198,13 +81353,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder.rs::polder#a reed fringe drawn round the wild pond (fringe(pond_at, ...))": {
+  "code": "159fc088b421e80f",
+  "core": "159fc088b421e80f",
+  "date": "2026-10-31",
+  "note": "a reed fringe drawn round the wild pond (fringe(pond_at, ...))",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/field/polder.rs::polder#every pond four-sided": {
   "body": "c55fe244e856fbb8",
   "claim": "every pond four-sided - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice but keeps every pond four-sided",
   "code": "26a39853dbe92fb5",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "every plot ring is four warped corners",
+  "note": "the warp moves lattice points continuously and the plots are built on the warped corners",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -81214,13 +81377,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder.rs::polder#module size and gaps chosen by form (MODULE_FT.0 with POLDER_GAP_FT for rice; MODULE_FT.1 with POND_GAP_FT both ways for dike-pond)": {
+  "code": "159fc088b421e80f",
+  "core": "159fc088b421e80f",
+  "date": "2026-10-31",
+  "note": "module size and gaps chosen by form (MODULE_FT.0 with POLDER_GAP_FT for rice; MODULE_FT.1 with POND_GAP_FT both ways for dike-pond)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/field/polder.rs::polder#never uniform rectangles": {
   "body": "c55fe244e856fbb8",
   "claim": "never uniform rectangles - parcels-and-bunds-inside-a-polder-aze.drawing: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted",
   "code": "31e4a5dc2b1459d9",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "the rice polder gets the bow-and-nudge warp and the mosaic gets the drift",
+  "note": "the rice polder warps as \"polder\" (bowed and nudged) and the mosaic as \"mosaic\" (drifted)",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -81237,7 +81408,7 @@
   "code": "e313820fccc1b6fc",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "a non-mosaic layout gives the straight chessboard, as the other form of the layout knob the caller rolls",
+  "note": "a dike-pond whose layout is not \"mosaic\" is drawn as the chessboard; the layout is rolled upstream as the pond_layout knob",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -81254,10 +81425,18 @@
   "code": "c09daa5528fada4e",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "the feeder's three points lie on one line from pond to inlet; 0019 is silent on the feeder's course",
+  "note": "the feeder runs straight from the pond to the inlet along the inlet's flank; the page says nothing of a feeder's course",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/polder.rs::polder#the inlet, pond and outfall all on one fixed side of the fall (across = (-dy, dx))": {
+  "code": "159fc088b421e80f",
+  "core": "159fc088b421e80f",
+  "date": "2026-10-31",
+  "note": "the inlet, pond and outfall all on one fixed side of the fall (across = (-dy, dx))",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/field/polder.rs::polder#the least polder": {
   "body": "c55fe244e856fbb8",
@@ -81265,13 +81444,14 @@
   "code": "1eeaacd9deadfc49",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "paddy.max(ENCLOSED_FLOOR_ACRES x 43,560) sets the module count",
+  "note": "paddy.max(ENCLOSED_FLOOR_ACRES*43560) means the modules hold at least the enclosed-field floor",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
   "research": "bbd39e07c08e5116",
   "rests": [
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:7dca4c2800e4b3ca"
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:7dca4c2800e4b3ca",
+   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html:e683f56e64a0ff19"
   ],
   "verdict": "IN-STEP"
  },
@@ -81281,7 +81461,7 @@
   "code": "ea8fbe0d7e4ea050",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "ceil to whole modules at or above the paddy; the 1.3 acres a household is set by the caller and lies inside the 1 to 2.5 band",
+  "note": "ceil(paddy/module^2) gives whole modules at or above the paddy; the 1.3 acres a household sits inside the page's 1 to 2.5 acre band",
   "pages": {
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "a9cadcd1c6136196"
   },
@@ -81291,13 +81471,22 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::polder#the wild pond's place: upstream of the inlet corner along the fall, POND_FT.2 beyond the dike, in line with the inlet's flank": {
-  "code": "159fc088b421e80f",
+ "rust/phases/src/field/polder.rs::polder#the wild pond's place": {
+  "body": "c55fe244e856fbb8",
+  "claim": "the wild pond's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank",
+  "code": "fd24568665b5d4b0",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "the wild pond's place: upstream of the inlet corner along the fall, POND_FT.2 beyond the dike, in line with the inlet's flank",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "pond_at sits up the fall from the inlet corner, POND_FT.2 out, on the inlet flank's line, at the polder's head",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#two sluices": {
   "body": "c55fe244e856fbb8",
@@ -81305,7 +81494,7 @@
   "code": "e04d3e0c55c01f61",
   "core": "159fc088b421e80f",
   "date": "2026-10-31",
-  "note": "the inlet is at the head corner in line with the pond and the outfall at the tail corner where the drain reaches 5.5 ft",
+  "note": "there are two sluices: the inlet at the head corner beside the pond, the outfall at the tail corner where the drain reaches 5.5 ft",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -81390,11 +81579,10 @@
   "code": "cc4878b8271ce46d",
   "core": "4ea6ddea12ebff6a",
   "date": "2026-10-31",
-  "note": "the bundle is missing the cited page: MANIFEST lists no file under \"The cited questions\", there is no questions/ directory, and blocks.json and units.json \"pages\" are empty. I need questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html to confirm it says nothing about a pond's corner shape, or about corners cut unevenly by reach*(1±CUT_STRAY)",
+  "note": "the page says only \"ponds of uneven shape\" and nothing about corners; a quadratic corner with a rolled cut length per corner is a guess no block answers",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::rounded#the bank's inset": {
   "body": "c2aa54c646ad2ef8",
@@ -81402,19 +81590,21 @@
   "code": "95dc85b437999621",
   "core": "4ea6ddea12ebff6a",
   "date": "2026-10-31",
-  "note": "the cited drawing page (0018 .drawing) is not in the bundle, so I cannot check that it records one inset for every parcel as a GUESS. The code applies a single `inset` to every side through pushed_in, which is consistent with the claim",
+  "note": "pushed_in(ring, inset) uses one inset on every side; the page records \"that one inset serves every parcel is this project's GUESS\"",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/field/ponds.rs::rounded#when the inset cannot fit, the pond falls back to the parcel shrunk around its centroid by LEAST_SHARE (the smallest pond's share of its parcel); the constant's value is not shown inline": {
-  "code": "4ea6ddea12ebff6a",
+ "rust/phases/src/field/ponds.rs::rounded#the least pond": {
+  "body": "c2aa54c646ad2ef8",
+  "claim": "the least pond - GUESS: where the bank asks more than the parcel holds, the parcel shrunk about its middle to `LEAST_SHARE`",
+  "code": "16fae0e55865675c",
   "core": "4ea6ddea12ebff6a",
   "date": "2026-10-31",
-  "note": "when the inset cannot fit, the pond falls back to the parcel shrunk around its centroid by LEAST_SHARE (the smallest pond's share of its parcel); the constant's value is not shown inline",
+  "note": "the fallback shrinks the corners about their mean by LEAST_SHARE = 0.1, and no block covers a bank wider than its parcel",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::BrookTuple#the seam": {
   "body": "6d60023508fcce3f",
@@ -81777,13 +81967,24 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/states.rs::states#a field short of its rest": {
+  "body": "a45fb33e830eb855",
+  "claim": "a field short of its rest - GUESS: paddies-left-to-rest-kataarashi.drawing silent on a field too small or crowded for its two to four whole plots; tried a bounded number of times, a small or crowded field may rest fewer",
+  "code": "f3cf97d7101aa6b8",
+  "core": "a0f13edab77ab47c",
+  "date": "2026-10-31",
+  "note": "the page gives two to four plots and says nothing of a field too small for them; the bounded retry (want*8) is the guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/states.rs::states#a pointed plot stays green": {
   "body": "a45fb33e830eb855",
   "claim": "a pointed plot stays green - wet-paddies-that-never-drain-shitsuden.drawing: leaves green any plot of that row that tapers to a point",
   "code": "9b7c071a15f85e44",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "`!pointed` keeps a last-row plot that tapers to a point (corner under ARROW_POINT_DEG) out of the wet tint, as the page says",
+  "note": "`!pointed` keeps the wet tint off a pointed plot of the last row, as \"leaves green any plot of that row that tapers to a point\" asks",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
@@ -81800,7 +82001,7 @@
   "code": "df2a52a1f508294b",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "only `State::Green` plots are taken; the cited page does not say whether a wet, flooded or gold plot may rest",
+  "note": "`out[i] == State::Green` lets only green plots rest; the page says nothing on whether a wet, flooded or gold plot rests",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -81811,7 +82012,7 @@
   "code": "fcb12796479fc628",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "a pick that shares a bund with a plot already chosen is refused",
+  "note": "a pick that `shares_bund` with a chosen plot is refused, matching \"No two share a bund\"",
   "pages": {
    "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
   },
@@ -81827,7 +82028,7 @@
   "code": "aaa133d07f405f06",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "the flooded and gold draws happen only when the per-map `seasonal` roll (1 in SEASONAL_IN) succeeds, so they appear on some maps, not every map",
+  "note": "the flooded and gold draws happen only when the per-map `seasonal` roll comes up, matching \"on some maps\"",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
@@ -81839,14 +82040,14 @@
  },
  "rust/phases/src/field/states.rs::states#one state a plot": {
   "body": "a45fb33e830eb855",
-  "claim": "one state a plot - NONE: wet first, then flooded, then gold, each plot drawn as one",
-  "code": "2ad8050d7aba5652",
+  "claim": "one state a plot - CONVENTION: each plot drawn as one - wet first, then flooded, then gold, so the wet tint on the drain's row is never covered by a seasonal one",
+  "code": "b9053e577577798e",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "giving each plot one fill, and the order wet over flooded over gold, is a drawing decision that sets how many plots wear each state; it is not plumbing. The label should be CONVENTION (or should cite 0009/0007 for the precedence)",
+  "note": "the else-if order wet, flooded, gold, green gives each plot one shown state; this is how the map shows it",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/states.rs::states#resting down the slope": {
   "body": "a45fb33e830eb855",
@@ -81854,7 +82055,7 @@
   "code": "1b858fa9f4d49b7d",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "each plot's weight is row+1, counted from the head, so the chance of resting grows down the slope; the page records the rule as a GUESS",
+  "note": "the weight is row+1 counted from the head, so a plot's chance of resting grows down the slope",
   "pages": {
    "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
   },
@@ -81864,28 +82065,18 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/states.rs::states#the bounded retry (`want * 8` tries) can rest fewer than REST_PLOTS.0 plots in a field, and §9 says a field rests \"two to four whole plots\"; the shortfall is not claimed": {
-  "code": "a0f13edab77ab47c",
-  "core": "a0f13edab77ab47c",
-  "date": "2026-10-31",
-  "note": "the bounded retry (`want * 8` tries) can rest fewer than REST_PLOTS.0 plots in a field, and §9 says a field rests \"two to four whole plots\"; the shortfall is not claimed",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/states.rs::states#the comb's wet row": {
   "body": "a45fb33e830eb855",
   "claim": "the comb's wet row - wet-paddies-that-never-drain-shitsuden.drawing: a comb field gives each plot of its lowest row a 45% chance of the tint; a polder tints every low plot, at its own stage (`field_stage._polder`)",
   "code": "224b13c5c6ccda9f",
   "core": "a0f13edab77ab47c",
   "date": "2026-10-31",
-  "note": "`b.row == last` and `plot_draw(..,100) < WET_PCT` with WET_PCT=45 give each plot of the lowest row a 45% chance; the polder half is coded at _polder",
+  "note": "`b.row == last` and `< WET_PCT` (45) give \"a 45% chance of the tint\" on the lowest row; the polder's tint is handled at `_polder`",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:3b41256e849c4671",
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
   "verdict": "IN-STEP"
@@ -81904,16 +82095,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::K#the draws": {
-  "body": "5e854bd076c93cb5",
+  "body": "203b2e37d94fafa7",
   "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
-  "code": "f47d9ff7592cd908",
-  "core": "1f88b22d412553a6",
-  "date": "2026-10-30",
-  "note": "SHA-256 round constants; plumbing",
+  "code": "55cbab2a9167dcb1",
+  "core": "d32ffe982b95fcd1",
+  "date": "2026-10-31",
+  "note": "the standard SHA-256 round constants; hashing plumbing, nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::PyRandom#the draws": {
@@ -82019,16 +82209,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::sha256#the draws": {
-  "body": "0ea6b53366bd0819",
+  "body": "2228191cc7016a29",
   "claim": "the draws - NONE: a deterministic generator, the same draws as the Python knob rolls it stands in for (D7)",
-  "code": "7ddba9cbd861913c",
-  "core": "2d5f12b0473be3c8",
-  "date": "2026-10-30",
-  "note": "hash; plumbing",
+  "code": "3c9b655cfaa4f545",
+  "core": "095888ad383f0071",
+  "date": "2026-10-31",
+  "note": "a plain SHA-256 digest (padding, schedule, compression); plumbing, nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::Counts#the counts": {
