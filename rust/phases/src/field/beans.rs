@@ -38,7 +38,9 @@ pub const BEAD_R_FT: f64 = 1.5;
 /// Research:
 ///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund
 ///     which bunds - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on which bunds carry them; the bund between two neighbors in a row, never a row's foot, the fan's outer bund or the bund the drain runs in
-///     the run on its bund - NONE: its beads about the bund's middle, none past a bead's radius of either end
+///     how many - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html says some bunds carry a row, not how many; three bunds in eight (`BUND_SHARE`), each its own roll
+///     a run's beads - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a stretch of bund that carries them shows at least two beads - two to four (`RUN_BEADS`), `BEAD_STEP_FT` apart
+///     the run on its bund - GUESS: research/questions/0014-bunds-between-the-paddies-aze.drawing.html silent on where along a bund the row stands, saying only in a single row on it; about the bund's middle, none past a bead's radius of either end
 #[must_use]
 pub fn bean_runs(
     basins: &[Basin],

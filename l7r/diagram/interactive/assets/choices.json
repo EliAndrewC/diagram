@@ -382,6 +382,14 @@
    }
   },
   {
+   "key": "intake_place",
+   "name": "Where the brook is tapped",
+   "values": {
+    "shoulder": "at a shoulder of the fields' head",
+    "center": "straight into the middle of the head"
+   }
+  },
+  {
    "key": "footbridge_form",
    "name": "The footbridges",
    "values": {

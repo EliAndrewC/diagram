@@ -503,7 +503,8 @@ class BridgesMixin:
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
-            polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`): three where the village lives, one on every other supply collector, none on the drain
+            polder crossings by side - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, and drainage ditches carry none - `seg_caps` (`hamletgen.water.waterward.polder_crossing_caps`) caps each collector's count, none on the drain
+            the caps by side - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; three on its own collector, one on every other
             a join rules a seat out - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)

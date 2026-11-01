@@ -68,13 +68,15 @@ pub struct DryPlot {
     pub tract: usize,
 }
 
-/// The hem along `line` (the canal's course, the plots' side `out` of it: the unit normal pointing upslope), as many plots as
+/// The hem along `line` (the canal's course, the plots' side `out` of it: the unit normal pointing upslope; `down` the fall), as many plots as
 /// `need` square feet asks, none inside `field`'s ring or within `clear` feet of the water filed in `ix`. Returns the plots and the
 /// room the bands held (square feet).
 ///
 /// Research:
 ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots square to the canal and laid end to end along its curving line
-///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES)
+///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES) - the contour square to the fall, not the canal's heading
+///     not steep ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either
+///     the hem's figures - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract two to four strips of plots running upslope from the canal (`TRACT_STRIPS`), its length along the canal a GUESS (`TRACT_PLOTS`); the plots begin behind the canal's bare bank (`BANK_FT`); each map's mix of the four crops at random, each plot one of the mix at even odds, a GUESS
 ///     the climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the dry plots climb out as far from the canal as the ground runs, until they hold the grain the hamlet needs
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 #[expect(
@@ -85,6 +87,7 @@ pub struct DryPlot {
 pub fn hem(
     line: &[Pt],
     out: Pt,
+    down: Pt,
     need: f64,
     field: &[Pt],
     ix: &mut Index,
@@ -107,7 +110,7 @@ pub fn hem(
     if segs.is_empty() {
         return (Vec::new(), 0.0);
     }
-    let along_at = |d: f64| along(&segs, d);
+    let fall = ((-down.1, down.0), down);
     let (mut plots, mut room, mut got, mut depth) = (Vec::new(), 0.0, 0.0, BANK_FT);
     let mut tract = 0;
     // each band's tracts: their stretch along the canal and their rows' direction (degrees), the band below's kept for the next
@@ -138,8 +141,6 @@ pub fn hem(
                 .collect();
             let (down, turn) = apart(rolled, &near);
             band.push((span.0, span.1, turn + if down { 90.0 } else { 0.0 }));
-            // the tract's heading, for its furrows: its stretch of the canal's
-            let u = unit(along_at(d).0, along_at(d + f64::from(n) * PLOT_FT.0).0);
             for k in 0..n {
                 let d0 = d + f64::from(k) * PLOT_FT.0;
                 if d0 + PLOT_FT.0 > len {
@@ -163,12 +164,11 @@ pub fn hem(
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
-                    let base = u.1.atan2(u.0)
-                        + if down {
-                            std::f64::consts::FRAC_PI_2
-                        } else {
-                            0.0
-                        };
+                    // the rows on the contour, square to the fall (not the canal's heading: canals run diagonally to the fall), or
+                    // down the fall to the outfall
+                    let base = (if down { fall.1 } else { fall.0 })
+                        .1
+                        .atan2((if down { fall.1 } else { fall.0 }).0);
                     let crop = mix[rng.randbelow(u32::try_from(mix.len()).unwrap_or(1)) as usize];
                     plots.push(DryPlot {
                         poly,
@@ -344,12 +344,23 @@ mod tests {
     use crate::field::index::Index;
 
     #[test]
+    #[expect(clippy::too_many_lines, reason = "the hem's cases, one scenario each")]
     fn the_hem_holds_the_need_outside_the_field() {
         let line = [(0.0, 0.0), (0.0, 1200.0)];
         let field = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)];
         let need = 15.0 * GRAIN_ACRES_PER_HOUSEHOLD * 43_560.0;
         let mut ix = Index::default();
-        let (plots, room) = hem(&line, (-1.0, 0.0), need, &field, &mut ix, 4.0, 4, "f0");
+        let (plots, room) = hem(
+            &line,
+            (-1.0, 0.0),
+            (1.0, 0.0),
+            need,
+            &field,
+            &mut ix,
+            4.0,
+            4,
+            "f0",
+        );
         #[expect(clippy::cast_precision_loss, reason = "a hundred plots")]
         let got = plots.len() as f64 * PLOT_FT.0 * PLOT_FT.1;
         assert!(got >= need && got < need + 2.0 * PLOT_FT.0 * PLOT_FT.1 * 4.0);
@@ -367,15 +378,36 @@ mod tests {
         // a brook through a plot's middle, its ends outside it, refuses it
         let mut through = Index::default();
         through.file_w((-50.0, -100.0), (-50.0, 2000.0), 7.0);
-        let (crossed, _) = hem(&line, (-1.0, 0.0), need, &field, &mut through, 1.0, 4, "f0");
+        let (crossed, _) = hem(
+            &line,
+            (-1.0, 0.0),
+            (1.0, 0.0),
+            need,
+            &field,
+            &mut through,
+            1.0,
+            4,
+            "f0",
+        );
         assert!(crossed
             .iter()
             .all(|p| p.poly.iter().all(|c| c.0 > -46.0) || p.poly.iter().all(|c| c.0 < -54.0)));
-        let (dry, _) = hem(&line, (-1.0, 0.0), need, &field, &mut wet, 5000.0, 4, "f0");
+        let (dry, _) = hem(
+            &line,
+            (-1.0, 0.0),
+            (1.0, 0.0),
+            need,
+            &field,
+            &mut wet,
+            5000.0,
+            4,
+            "f0",
+        );
         assert!(dry.is_empty());
         let (none, _) = hem(
             &line,
             (-1.0, 0.0),
+            (1.0, 0.0),
             0.0,
             &field,
             &mut Index::default(),
@@ -387,6 +419,7 @@ mod tests {
         let (short, _) = hem(
             &[(0.0, 0.0), (0.0, 10.0)],
             (-1.0, 0.0),
+            (1.0, 0.0),
             need,
             &field,
             &mut Index::default(),
@@ -397,6 +430,7 @@ mod tests {
         let (dot, _) = hem(
             &[(0.0, 0.0)],
             (-1.0, 0.0),
+            (1.0, 0.0),
             need,
             &field,
             &mut Index::default(),
@@ -409,6 +443,7 @@ mod tests {
         let (east, _) = hem(
             &line,
             (1.0, 0.0),
+            (-1.0, 0.0),
             need,
             &[],
             &mut Index::default(),

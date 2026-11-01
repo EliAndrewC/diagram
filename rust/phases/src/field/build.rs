@@ -198,6 +198,7 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
         let (dry, r) = hem(
             &line,
             out,
+            f.fan.down,
             dry_need,
             &f.fan.ring,
             &mut ix,
@@ -239,7 +240,8 @@ fn one(
     knobs: &HashMap<String, String>,
     counts: &mut Counts,
 ) -> Result<Field, FieldRefused> {
-    let br = brook(f, inp.brook_side, inp.brook, inp.canvas);
+    let center = knobs.get("intake_place").is_some_and(|v| v == "center");
+    let br = brook(f, inp.brook_side, inp.brook, center, inp.canvas);
     counts.add("write@brook", 2 * br.pts.len() as u64);
     let weir = knobs.get("intake").filter(|v| *v == "weir").map(|_| {
         let form = knobs.get("weir_form").cloned().unwrap_or_default();
@@ -267,6 +269,7 @@ fn one(
         (&inp.offtakes.0, &inp.offtakes.1),
         inp.row_ft,
         inp.brook_side,
+        center,
         inp.seed,
     );
     let mut ix = Index::default();
@@ -437,6 +440,20 @@ mod tests {
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());
+        // the intake straight into the head's middle: the fork there, the brook still clear of the field
+        let mut middle = inp(20, 4);
+        middle.knobs.push((
+            "intake_place".to_owned(),
+            vec![],
+            vec![],
+            Some("center".to_owned()),
+        ));
+        let m = build(&middle).unwrap();
+        let fork = super::super::channels::division(&m.fields[0].fan, 1.0, true);
+        assert!(m.fields[0].channels[0]
+            .pts
+            .last()
+            .is_some_and(|p| super::super::geom::dist(*p, fork) < 1e-6));
         // a race leaving along the fall from beside the corner itself brings the brook past it within its skirt: refused by name
         let mut hug = inp(20, 4);
         hug.brook.offtake_deg = 0.0;

@@ -122,6 +122,8 @@ pub fn fan(area: f64, aspect: f64, down_deg: f64, center: Pt, seed: i64) -> Fan 
 ///
 /// Research:
 ///     the flanks' waves - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on how a fan's flanks bulge; each flank's waves at phases rolled per settlement from the seed's `fan_wave` stream
+///     the fan down the fall - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a fan of paddies narrows toward its drain - its long axis down the fall, the fork upslope and the foot down, its length the area over its mean breadth (the aspect's)
+///     the taper - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on how much a fan narrows; the head and the foot a fifth either side of its mean breadth (`TAPER`)
 fn traced(area: f64, aspect: f64, down_deg: f64, center: Pt, seed: i64) -> Fan {
     let mean = (area / aspect.max(0.1)).sqrt();
     let length = area / mean;

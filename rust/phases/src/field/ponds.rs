@@ -70,7 +70,7 @@ pub fn pushed_in(ring: &[Pt], by: f64) -> Option<Vec<Pt>> {
 /// points that sample it.
 ///
 /// Research:
-///     the bank's inset - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: one inset holds for the whole village - the same bank's width on every side of every pond
+///     the bank's inset - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html records that one inset serves every parcel as this project's GUESS - the same bank's width on every side of every pond
 ///     rounded corners - GUESS: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html silent on a pond's corners, giving ponds of uneven shape; each corner rounded on a quadratic curve
 #[must_use]
 pub fn rounded(ring: &[Pt], inset: f64, reach: f64, draw: u32) -> (String, Vec<Pt>) {

@@ -10,15 +10,16 @@ Research:
 
 from __future__ import annotations
 
+import math
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.tags import Split
-from l7r.diagram.settlement._knobs import KNOBS
+from l7r.diagram.settlement._knobs import KNOBS, Knob, register_knob
 from l7r.diagram.settlement.fields import ink
 from l7r.diagram.waterfields.palette import _RICE_GREEN, AZE, FLOODED, RIPE_GOLD, aze_w
 
 from .consts import POLDER_ARCHETYPES, SQ_FT_PER_ACRE
-from .consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, BROOK_WANDER_STEP, OFFTAKE_DEG, WEIR_HALF_FT, WEIR_SKEW_DEG, WEIR_THICK_FT
+from .consts_water import BROOK_SKIRT, BROOK_SLEW, BROOK_TAP_RUN, BROOK_WANDER, BROOK_WANDER_STEP, OFFTAKE_DEG, WEIR_SKEW_DEG, WEIR_THICK_FT
 from .phases_ext import phases
 from .water.brook_rules import BROOK_DRAWN_W
 
@@ -38,14 +39,21 @@ CELL_SHARE = 31.0
 ROW_FT_DEFAULT = 48.0
 """Research: the rows' spacing - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal, a hamlet's basin row"""
 ROW_FT = {"small_irregular": 34.0, "large_block": 70.0}
-"""Research: the rows' spacing by plot size - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on rows other than the hamlet's 48 ft; a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft); Rust maps the same (`lattice::row_ft_for`)"""
-STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form")
+"""Research: the rows' spacing by plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band, which plot size takes which a GUESS; Rust maps the same (`lattice::row_ft_for`)"""
+INTAKE_PLACE = register_knob(Knob("intake_place", ["shoulder", "center"], default="shoulder"))
+"""Research: the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake stands at the left, the center or the right of the fan's head, chosen at random for each settlement with odds of 1:2:1 (a guess) - a shoulder (the plan's flank, left or right at even odds) or the middle, at even odds"""
+WEIR_KEY_FT = 1.0
+"""Research: the weir keyed into the banks - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on how far a weir runs into each bank, drawing it across the whole brook; a foot either side"""
+WEIR_HALF = BROOK_W / 2.0 / math.cos(math.radians(WEIR_SKEW_DEG)) + WEIR_KEY_FT
+"""Research: the weir's half-length - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir is drawn across the whole brook, diagonally upstream - half the drawn brook's width across at the weir's skew, and `WEIR_KEY_FT` into the bank"""
+STAGE_KNOBS = ("town_nearness", "winter_crop", "fan_middle", "paddy_rest", "plot_regularity", "weir_form", "grave_form", "intake_place")
 """Research: the stage's own knobs, in the order each typing rule reads the last - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the nearness of a town sets the winter crop's odds"""
 FILL = {"green": _RICE_GREEN, "wet": FLOODED, "flooded": ink.POND_WATER, "gold": RIPE_GOLD, "rest": _RICE_GREEN}
 """Research:
     the plots' paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green, the tint marking the ground, not the season
     the freshly flooded plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in sixteen drawn still flooded and the flooded basin a flat color - the open water's own ink (`ink.POND_WATER`), so it reads apart from the wet ground's tint
-    the ripening plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in twenty gold, ripening early"""
+    the ripening plot - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: one in twenty gold, ripening early
+    the resting plot's fill - NONE: its record's; a resting basin's ink is `rest_basin`'s (research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html)"""
 GRAVE_KEEP_FT = 6.5
 """Research: a field grave's keep-out - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave's size; the disc of the drawn mound's half-length, 6.5 ft (`ink.grave`)"""
 WEIR_THICK_FALLBACK_FT = 1.5
@@ -87,6 +95,16 @@ def _center(ring: list[tuple[float, float]]) -> tuple[float, float]:
     return (sum(p[0] for p in ring) / len(ring), sum(p[1] for p in ring) / len(ring))
 
 
+def _water_source(place: str | None, brook_side: int) -> str:
+    """Where the water comes in, in the names the manifest has always used: the head's middle, or the shoulder the brook comes
+    down past (the brook's flank, +1 the fan's right looking downhill).
+
+    Research: the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: at the left, the center or the right of the fan's head"""
+    if place == "center":
+        return "head_center"
+    return "head_right" if brook_side > 0 else "head_left"
+
+
 def stage_field(s: Settlement, plan: SitePlan) -> None:
     """The field: a comb or a polder, placed in Rust (`rust/phases/src/field/`), written and drawn here (D1, D12).
 
@@ -116,7 +134,7 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         float(plan.brook_side),
         brook,
         (list(plan.offtakes_a), list(plan.offtakes_b)),
-        (WEIR_HALF_FT, WEIR_SKEW_DEG, dict(WEIR_THICK_FT)),
+        (WEIR_HALF, WEIR_SKEW_DEG, dict(WEIR_THICK_FT)),
         plan.plot_size,
         row * CELL_SHARE,
         knobs,
@@ -138,8 +156,8 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
         weir_form=rolled.get("weir_form") if plan.intake == "weir" else None,
         grave_form=None,
         dry_furrows_vary=True,
-        water_source="head_center",
-        water_source_position="head_center",
+        water_source=(place := _water_source(rolled.get("intake_place"), plan.brook_side)),
+        water_source_position=place,
         plot_size=plan.plot_size,
         grain_drift=plan.grain_drift,
         coarse_grain_dry_acres=round(drawn, 2),
@@ -238,11 +256,11 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     if f["weir"]:
         ring, deg, form = f["weir"]
         M.setdefault("weirs", []).append(
-            {"x": f["intake"][0], "y": f["intake"][1], "len": 2 * WEIR_HALF_FT, "w": WEIR_THICK_FT.get(form, WEIR_THICK_FALLBACK_FT), "deg": round(deg, 1), "form": form, "poly": ring}
+            {"x": f["intake"][0], "y": f["intake"][1], "len": round(2 * WEIR_HALF, 2), "w": WEIR_THICK_FT.get(form, WEIR_THICK_FALLBACK_FT), "deg": round(deg, 1), "form": form, "poly": ring}
         )
     M.setdefault("dry_plots", []).extend({k: d[k] for k in ("poly", "crop", "theta", "tract")} for d in dry)
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
-    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["fill"] == FLOODED)
+    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["state"] == "flooded")
     if ponds:
         M.setdefault("field_ponds", []).extend(ponds)
     if grave_recs:
@@ -291,7 +309,9 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     fills the fringe ring the Rust returns round its wild pond.
 
     Research:
-        the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)"""
+        the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)
+        every low plot tinted - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder or terraced field tints every low plot - each low plot in the wet tint
+        its water source - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head, by the inlet - recorded as a reservoir at the high corner"""
     from l7r.diagram.settlement.water_ways.water import ditch_style
 
     ftpx = plan.ftpx
@@ -359,7 +379,6 @@ def _polder(s: Settlement, plan: SitePlan) -> None:
     M.setdefault("field_ditches", []).extend({"field": name, "poly": c["pts"], "role": c["role"], "seg": c["seg"], "w": c["w"], "w_tail": c["w_tail"]} for c in chans)
     M.setdefault("channels", []).append({"poly": out["feeder"], "frm": {"kind": "pond"}, "to": {"kind": "field", "name": name}, "w": POND_FEEDER_FT, "field": name})
     M.setdefault("wet_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
-    M.setdefault("flooded_plots", []).extend(list(_center(p["poly"])) for p in plots if p["low"])
     dk = out["dike"]
     band = dk["outer"] + list(reversed(dk["inner"]))
     M.setdefault("dikes", []).append(

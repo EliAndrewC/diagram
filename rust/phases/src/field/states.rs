@@ -58,6 +58,29 @@ fn plot_draw(seed: i64, tag: &str, what: &str, b: &Basin, n: u32) -> u32 {
     knob_rng(seed, &format!("{tag}:{what}:{}:{}", b.row, b.col)).randbelow(n)
 }
 
+/// Whether two basins share a bund: neighbors in a row, or in neighboring rows the upper's foot and the lower's top overlapping
+/// along the row's line (each ring top-left, top-right, foot-right, foot-left).
+///
+/// Research:
+///     a shared bund - NONE: geometry; the rule it serves is `states`'
+fn shares_bund(a: &Basin, b: &Basin) -> bool {
+    if a.row == b.row {
+        return a.col.abs_diff(b.col) == 1;
+    }
+    if a.row.abs_diff(b.row) != 1 {
+        return false;
+    }
+    let (up, lo) = if a.row < b.row { (a, b) } else { (b, a) };
+    let d = super::geom::unit(up.ring[3], up.ring[2]);
+    let at = |p: super::fan::Pt| (p.0 - up.ring[3].0) * d.0 + (p.1 - up.ring[3].1) * d.1;
+    let (u0, u1) = (at(up.ring[3]), at(up.ring[2]));
+    let (l0, l1) = (
+        at(lo.ring[0]).min(at(lo.ring[1])),
+        at(lo.ring[0]).max(at(lo.ring[1])),
+    );
+    u0.max(l0) + 1e-6 < u1.min(l1)
+}
+
 /// Each basin's state. The lowest row is wet at `WET_PCT` unless it tapers to a point; of the rest, one in `FLOODED_IN` floods and
 /// one in `GOLD_IN` is gold; on an `unsettled` field 2 to 4 plots rest, chosen down the slope (a plot's weight its row, so the far
 /// end of the water's run is likeliest), never two sharing a bund (adjacent in a row or across one).
@@ -66,7 +89,7 @@ fn plot_draw(seed: i64, tag: &str, what: &str, b: &Basin, n: u32) -> u32 {
 ///     a pointed plot stays green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: leaves green any plot of that row that tapers to a point
 ///     resting down the slope - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: a plot's chance of resting grows the farther down the field's slope it lies, a GUESS
 ///     no two share a bund - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: no two share a bund, a drawing convention
-///     a resting plot from the green - NONE: a plot already drawn wet, flooded or gold is not taken, so each plot wears one state
+///     a resting plot from the green - GUESS: research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html silent on whether a wet plot rests; a plot already drawn wet, flooded or gold is not taken, so each plot wears one state
 ///     one state a plot - NONE: wet first, then flooded, then gold, each plot drawn as one
 ///     the comb's wet row - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a comb field gives each plot of its lowest row a 45% chance of the tint; a polder tints every low plot, at its own stage (`field_stage._polder`)
 ///     on some maps - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the flooded and the gold drawn on some maps (`SEASONAL_IN`), not every map
@@ -89,36 +112,28 @@ pub fn states(basins: &[Basin], seed: i64, tag: &str, unsettled: bool) -> Vec<St
             }
         })
         .collect();
-    if unsettled {
+    if unsettled && !basins.is_empty() {
         let mut rng = knob_rng(seed, &format!("{tag}:rest"));
         let want = REST_PLOTS.0 + rng.randbelow(REST_PLOTS.1 - REST_PLOTS.0 + 1);
         let mut chosen: Vec<usize> = Vec::new();
-        // a draw over the rows' weights, the plot then drawn within its row; a refused pick (a shared bund, a wet plot) tries again,
-        // a bounded number of times
-        let weight: u32 = (0..=last)
-            .map(|r| u32::try_from(r + 1).unwrap_or(u32::MAX))
-            .sum();
+        // a draw over the plots' own weights (each its row from the head, counted from one), so a plot lower down is likelier
+        // whatever its row holds; a refused pick (a shared bund, a plot drawn otherwise) tries again, a bounded number of times
+        let weights: Vec<u32> = basins
+            .iter()
+            .map(|b| u32::try_from(b.row + 1).unwrap_or(u32::MAX))
+            .collect();
+        let weight: u32 = weights.iter().sum();
         for _ in 0..want * 8 {
             if chosen.len() >= want as usize {
                 break;
             }
             let mut pick = rng.randbelow(weight.max(1));
-            let mut row = 0;
-            while pick > u32::try_from(row).unwrap_or(u32::MAX) {
-                pick -= u32::try_from(row + 1).unwrap_or(u32::MAX);
-                row += 1;
+            let mut i = 0;
+            while i + 1 < basins.len() && pick >= weights[i] {
+                pick -= weights[i];
+                i += 1;
             }
-            let in_row: Vec<usize> = (0..basins.len())
-                .filter(|&i| basins[i].row == row)
-                .collect();
-            if in_row.is_empty() {
-                continue;
-            }
-            let i = in_row[rng.randbelow(u32::try_from(in_row.len()).unwrap_or(1)) as usize];
-            let touches = |j: usize| {
-                let (a, b) = (&basins[i], &basins[j]);
-                a.row.abs_diff(b.row) <= 1 && (a.row != b.row || a.col.abs_diff(b.col) <= 1)
-            };
+            let touches = |j: usize| shares_bund(&basins[i], &basins[j]);
             if out[i] == State::Green && !chosen.iter().any(|&j| touches(j)) {
                 chosen.push(i);
                 out[i] = State::Rest;
@@ -159,9 +174,8 @@ mod tests {
             assert!(rest.len() <= REST_PLOTS.1 as usize && !rest.is_empty());
             for (k, &i) in rest.iter().enumerate() {
                 for &j in &rest[k + 1..] {
-                    let near = b[i].row.abs_diff(b[j].row) <= 1
-                        && (b[i].row != b[j].row || b[i].col.abs_diff(b[j].col) <= 1);
-                    assert!(!near, "no two resting plots share a bund");
+                    // no two resting plots share a bund
+                    assert!(!super::shares_bund(&b[i], &b[j]));
                 }
             }
         }

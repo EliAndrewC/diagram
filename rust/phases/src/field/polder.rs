@@ -12,6 +12,11 @@
 use super::fan::{heading, Pt};
 use crate::pyrand::knob_rng;
 
+/// The least paddy an enclosed field is drawn with (acres).
+///
+/// Research:
+///     the enclosed floor - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is at least 8 acres
+pub const ENCLOSED_FLOOR_ACRES: f64 = 8.0;
 /// A rice polder's module and a dike-pond block's (feet on a side).
 ///
 /// Research:
@@ -60,8 +65,7 @@ pub const POND_FT: (f64, f64, f64) = (82.0, 54.0, 140.0);
 /// How far the wild pond's reed fringe stands out past its water (feet), and the points its ring is drawn with.
 ///
 /// Research:
-///     the reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: every reservoir pond has a fringe of reeds standing on wet ground at its shore
-///     the fringe's width - GUESS: research/questions/0061-reservoir-ponds-tameike.drawing.html silent on how wide the fringe stands; 40 ft, the comb's old source pond's, on a ring of 16 points
+///     the reed fringe - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond that feeds the polder, setting reed marsh along the block's low side; a fringe of reeds at its shore, as every reservoir pond has (research/questions/0061-reservoir-ponds-tameike.drawing.html), 40 ft wide, the comb's old source pond's, on a ring of 16 points
 pub const FRINGE_FT: (f64, usize) = (40.0, 16);
 
 /// One polder plot: its first row and column of modules, the rows it spans, its ring, and whether it lies on the block's low row.
@@ -175,7 +179,7 @@ impl Warp {
     /// from the seed's `polder_warp` stream: a bow for each interior line and a nudge for each interior crossing.
     ///
     /// Research:
-    ///     the rolls - NONE: each line's bow and each crossing's nudge drawn within `BOW_NUDGE_FT`, either way
+    ///     the rolls - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the dike and the ring canal at the block's edge stay put - a bow for each interior line and a nudge for each interior crossing within `BOW_NUDGE_FT`, either way, the edge lines and crossings held at nothing
     fn new(
         seed: i64,
         form: &'static str,
@@ -225,8 +229,8 @@ impl Warp {
     /// The deformation at (`u`, `x`).
     ///
     /// Research:
-    ///     the deformation - NONE: each line's bow along it (a single arch, nothing at its ends), interpolated between lines, and
-    ///     the crossings' nudges interpolated between crossings, so both sides of one bund move together
+    ///     the rice polder's deformation - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the block's edge stays put - each line's bow a single arch along it, nothing at its ends, interpolated between lines; the crossings' nudges interpolated between crossings, so both sides of one bund move together
+    ///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module); the chessboard held straight
     #[expect(
         clippy::many_single_char_names,
         reason = "the plane geometry's own names"
@@ -283,7 +287,9 @@ impl Warp {
 ///
 /// Research:
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
-///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles
+///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted
+///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic - drawn straight, the `pond_layout` knob's other form
+///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
 ///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
@@ -308,7 +314,8 @@ pub fn polder(
         clippy::cast_sign_loss,
         reason = "a small positive count of modules"
     )]
-    let modules = ((paddy / (module * module)).ceil() as u32).max(2);
+    let modules =
+        ((paddy.max(ENCLOSED_FLOOR_ACRES * 43_560.0) / (module * module)).ceil() as u32).max(2);
     let (rows, cols) = shape(modules, aspect);
     #[expect(clippy::cast_precision_loss, reason = "a small count")]
     let size = (
@@ -407,6 +414,7 @@ fn fringe(at: Pt, r: (f64, f64)) -> Vec<Pt> {
 /// ponds' parcels, one in `MERGE_IN.1` left alone. Every plot four-sided, its corners the warped lattice's.
 ///
 /// Research:
+///     the low plots - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder tints every low plot - the block's last row, at its tail, the low one
 ///     the strips - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three oblong strips, cut by the plain 3 ft walking bund, and a few merge along the fall
 ///     the dike-pond's parcels - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs
 fn plots(
@@ -463,8 +471,8 @@ fn plots(
 /// Research:
 ///     the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side
 ///     the field ditches - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor of about 8 ft
-///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: supply 4.5 to 1.5 across the head, delivery 2.5 to 1.2 down each column, drain 1.2 to 5.5 ft across the tail to the outfall's corner
-///     the flanks - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral, its 1.5 ft tail held down each flank of the ring
+///     the widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: from the inlet's corner the supply's two arms, 4.5 to 1.5 across the head and 4.0 to 1.5 down the inlet's flank, as a fan's canals A and B; a delivery 2.5 to 1.2 down each column, its head capped at 0.8 of the head canal's width where it leaves; the drain 1.2 to 5.5 ft across the tail to the outfall's corner
+///     the far flank - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral - the head arm's 1.5 ft tail held down the far flank
 ///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it
 fn ditches(
     put: &dyn Fn(f64, f64) -> Pt,
@@ -489,10 +497,10 @@ fn ditches(
             w_tail: 1.5,
         },
         Ditch {
-            role: "lateral",
+            role: "main",
             seg: "e_toe",
             pts: vec![canal[1], canal[2]],
-            w: 1.5,
+            w: 4.0,
             w_tail: 1.5,
         },
         Ditch {
@@ -523,12 +531,15 @@ fn ditches(
                 )
             })
             .collect();
+        // the head canal's width where the column leaves it: 4.5 ft at the inlet's corner (x = breadth), its 1.5 ft tail at the far one
+        let local = 1.5 + (4.5 - 1.5) * (x / size.1).clamp(0.0, 1.0);
+        let head = 2.5_f64.min(0.8 * local);
         out.push(Ditch {
             role: "lateral",
             seg: "column",
             pts,
-            w: 2.5,
-            w_tail: 1.2,
+            w: head,
+            w_tail: 1.2_f64.min(head),
         });
     }
     out

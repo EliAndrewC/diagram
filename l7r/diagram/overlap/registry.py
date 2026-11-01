@@ -283,9 +283,17 @@ class Standing:
         skip = set(self._held[(key, id(ignore))][1]) if ignore is not None and (key, id(ignore)) in self._held else set()
         out: list[tuple[str, str, float, float]] = []
         boxes = [box_of(e[1]) for e in own]
+        # ...THE RECORD'S OWN PIECES, binned in the same cells: each asked only of its later pieces sharing a cell. Every pair was
+        # asked once (feature 444 T16's audit: the brook's 448 pieces at 40 households were 100,000 own pairs a call, 200,474 of
+        # the field stage's 218,329 counted operations, the pieces' boxes missing in all but a few hundred)
+        own_bins: dict[tuple[int, int], list[int]] = {}
+        for i, b in enumerate(boxes):
+            for cell in self._cells(b):  # unclamped: pieces off the canvas still meet each other, as every pair did
+                own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
             b = boxes[i]
-            for j in range(i + 1, len(own)):  # the record's own pieces against each other: the same rule as any pair
+            near = sorted({j for cell in self._cells(b) for j in own_bins.get(cell, ()) if j > i})
+            for j in near:  # the record's own pieces against each other: the same rule as any pair
                 if __debug__:
                     OPS["index_examined@Standing.conflicts"] += 1
                 if pair_forbidden(e, own[j], priv, b, boxes[j]):

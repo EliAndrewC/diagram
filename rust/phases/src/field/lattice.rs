@@ -18,8 +18,8 @@ pub const ROW_FT: f64 = 48.0;
 /// The rows' spacing by the plan's `plot_size`: the small irregular plots' 34 ft, the page's medium 48, the large block's 70.
 ///
 /// Research:
-///     paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal, the plan's medium
-///     the small and large rows - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on rows other than the hamlet's; a small plot's 34 ft and a large block's 70 ft
+///     paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a hamlet basin about 48 ft across its canal (`ROW_FT`), the plan's medium
+///     the small and large rows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a town's rows 52 to 72 ft apart, a village basin of 0.05 acre and a household's plots of 0.02 to 0.25 acre - a small plot's 34 ft and a large block's 70 ft (cells of about 1,050 and 2,170 sq ft) inside that band; which plot size takes which a GUESS
 #[must_use]
 pub fn row_ft_for(plot_size: &str) -> f64 {
     match plot_size {
@@ -180,6 +180,7 @@ impl Lines {
     /// Research:
     ///     the bund's bow - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each interior line's bow rolled up to `BOW` of a row at its own phase
     ///     the head's and foot's lines straight - NONE: they are the fan's own edges, the head race's line and the foot's
+    ///     whole rows - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal - the rows evenly spaced, as many as the fan's length holds at about `row_ft`, so whole rows fill it
     #[must_use]
     pub fn new(fan: &Fan, seed: i64, row_ft: f64) -> Self {
         #[expect(

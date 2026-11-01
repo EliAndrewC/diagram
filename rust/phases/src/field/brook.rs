@@ -30,6 +30,11 @@ pub const MEANDER_WAVE_FT: f64 = 80.0;
 /// Research:
 ///     no screen axis - CANON: the GM, 2026-08-26, on a brook drawn level along the frame: "appears to run exactly east to west parallel to the edge of the map. that makes it look like a mistake"; the brook rules refuse 1.6 degrees, and this keeps a margin past it, 2
 pub const AXIS_OFF_DEG: f64 = 2.0;
+/// How far off the fall a brook fed into the head's middle swings out to its flank below the intake (degrees).
+///
+/// Research:
+///     the swing to the flank - GUESS: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html silent on the brook's course past a middle intake, saying only that it runs on down a flank; 45 degrees, past the race's acute angle, the intake set high enough up the fall that the brook clears the head's corner by its skirt
+pub const CENTER_SWING_DEG: f64 = 45.0;
 /// A bound on the stations either way (a guard: a canvas is a few thousand feet across).
 ///
 /// Research:
@@ -75,13 +80,16 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
     )
 }
 
-/// The brook past the fan on its `side` (+1 the fan's right, -1 its left). The head race leaves the division point's intake turned
-/// `offtake_deg` off the fall away from the brook's flank, so the intake lies `lead` up that line from the fork; the brook comes
+/// The brook past the fan on its `side` (+1 the fan's right, -1 its left), its intake at that shoulder of the head or, `center`,
+/// straight into its middle. At a shoulder the head race leaves the division point's intake turned `offtake_deg` off the fall
+/// away from the brook's flank, so the intake lies `lead` up that line from the fork; at the middle the race runs straight down
+/// the fall and the brook swings out to its flank at `CENTER_SWING_DEG`. The brook comes
 /// down the fall to it, holds the intake's line for `tap_run`, then each `station` moves across at most `slew` toward its line -
 /// the flank, plus the skirt - and runs on past the fan's foot, off the `canvas` both ways, meandering outward by the wider of
 /// `wander` and `MEANDER_FT`, the meander's trough at the intake.
 ///
 /// Research:
+///     the intake's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake stands at the left, the center or the right of the fan's head - the brook down past one shoulder of the fan or straight into the middle (the `intake_place` knob, with the plan's flank)
 ///     the race turns away from the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves; the race's turn away from the brook is ours
 ///     on past the intake - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook runs on past the intake - down the fall, holding the intake's line across for the plan's tap stride, meandering as everywhere
 ///     outside the crop - GUESS: the record silent on how far outside the crop the brook keeps; the plan's `BROOK_SKIRT` square to the flank (wider across the fall by the flank's lean), moving in by at most a station's slew and out at once
@@ -92,10 +100,23 @@ fn local(fan: &Fan, u: f64, x: f64) -> Pt {
     reason = "the plane geometry's own names"
 )]
 #[must_use]
-pub fn brook(fan: &Fan, side: f64, b: BrookIn, canvas: Pt) -> Brook {
+pub fn brook(fan: &Fan, side: f64, b: BrookIn, center: bool, canvas: Pt) -> Brook {
     let (sin, cos) = b.offtake_deg.to_radians().sin_cos();
-    let corner_x = side * fan.half_side(0.0, side);
-    let (u_i, x_i) = (-b.lead * cos, corner_x + side * b.lead * sin);
+    // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
+    let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
+    let secant = lean.hypot(1.0);
+    let swing = MEANDER_FT.max(b.wander);
+    let tan = CENTER_SWING_DEG.to_radians().tan();
+    let (u_i, x_i) = if center {
+        // straight into the head's middle, as high up the fall as the swing out asks: at the head's line it stands past the
+        // corner by the skirt held square to the swing (the skirt over its cosine), the flank at its widest within a station
+        let corner = fan.half_side(0.0, side).max(fan.half_side(b.station, side));
+        let reach = corner + b.skirt * secant / CENTER_SWING_DEG.to_radians().cos() + b.station;
+        (-b.lead.max(reach / tan), 0.0)
+    } else {
+        let corner_x = side * fan.half_side(0.0, side);
+        (-b.lead * cos, corner_x + side * b.lead * sin)
+    };
     let intake = local(fan, u_i, x_i);
     let off = |p: Pt| {
         p.0 < -OFF_MAP_FT
@@ -109,7 +130,6 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, canvas: Pt) -> Brook {
     // the meander held to the outward side, so the skirt is kept; a wave of `MEANDER_WAVE_FT` down the fall
     // its swing the plan's wander or the meander's, whichever is wider: the one wave carries the course's whole stray, so no
     // second walk can cancel it into a level run
-    let swing = MEANDER_FT.max(b.wander);
     let meander = |u: f64| {
         side * swing * (1.0 + (u / MEANDER_WAVE_FT * std::f64::consts::TAU + phase).sin()) / 2.0
     };
@@ -128,9 +148,6 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, canvas: Pt) -> Brook {
     let mut pts = up;
     pts.push(intake);
     let (mut u, mut x) = (u_i, x_i);
-    // the flank leans in as the fan narrows: a skirt held square to it is wider across the fall by the lean's secant
-    let lean = (fan.half_head - fan.half_foot) / fan.length.max(1.0);
-    let secant = lean.hypot(1.0);
     for _ in 0..MAX_STATIONS {
         u += b.station;
         // the flank as drawn, its waves applied, at its widest within half a station either way (past the foot, the foot's)
@@ -139,10 +156,15 @@ pub fn brook(fan: &Fan, side: f64, b: BrookIn, canvas: Pt) -> Brook {
             .max(at(u - b.station / 2.0))
             .max(at(u + b.station / 2.0));
         let want = side * (flank + b.skirt * secant);
-        // the course keeps outside its line: it may move out at once, in by at most a slew - and none in for the tap's stride
+        // the course keeps outside its line: it may move out at once (from a middle intake on its swing), in by at most a slew -
+        // and none in for the tap's stride
         x = if (want - x) * side > 0.0 {
-            want
-        } else if u <= u_i + b.tap_run {
+            if center {
+                x + side * ((want - x) * side).min(b.station * tan)
+            } else {
+                want
+            }
+        } else if !center && u <= u_i + b.tap_run {
             x
         } else {
             x + (want - x).clamp(-b.slew, b.slew)
@@ -292,7 +314,7 @@ mod tests {
     fn the_brook_keeps_outside_the_crop_and_bends_gently() {
         for side in [1.0, -1.0] {
             let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
-            let br = brook(&f, side, B, (6400.0, 6400.0));
+            let br = brook(&f, side, B, false, (6400.0, 6400.0));
             let mut ix = Index::default();
             let ids = file(&br, &mut ix);
             assert_eq!(ids.len(), br.pts.len() - 1);
@@ -305,8 +327,26 @@ mod tests {
             }
             assert!(br.pts.len() > 30);
         }
+        // straight into the head's middle: the intake on the fan's axis, the brook swinging out to its flank outside the crop
+        let f = fan(26.0 * 43_560.0, 1.0, 90.0, (3200.0, 3200.0), 4);
+        let mid = brook(&f, 1.0, B, true, (6400.0, 6400.0));
+        assert!((mid.intake.0 - f.fork.0).abs() < 1e-6 && mid.intake.1 < f.fork.1);
+        let mut ix = Index::default();
+        file(&mid, &mut ix);
+        assert!(f
+            .ring
+            .iter()
+            .all(|p| clearance(*p, B.skirt * 2.0, &mut ix) >= B.skirt - 1e-6));
+        let at = mid.pts.iter().position(|p| *p == mid.intake).unwrap();
+        let next = mid.pts[at + 1];
+        let off = (next.0 - mid.intake.0)
+            .abs()
+            .atan2(next.1 - mid.intake.1)
+            .to_degrees();
+        // the swing and the meander on it: past the race's acute angle, never across the fall
+        assert!(off > B.offtake_deg && off < 90.0);
         let f = fan(26.0 * 43_560.0, 1.0, 90.0, (0.0, 0.0), 4);
-        let br = brook(&f, 1.0, B, (6400.0, 6400.0));
+        let br = brook(&f, 1.0, B, false, (6400.0, 6400.0));
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
         assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);
         assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);

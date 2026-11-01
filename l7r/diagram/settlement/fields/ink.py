@@ -91,7 +91,8 @@ def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
     Research:
         a dish pond - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: an earthen bank round its edge (the bund's earth stroke), the wet ground just inside it where the reeds stand (the wet tint), and open water in the middle
         its proportions - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's proportions; the wet ring 2.5 ft past the water, eight reeds evenly round it 1.2 ft out from the water's edge
-        its sheen - CONVENTION: a light ring on the water"""
+        its sheen - CONVENTION: a light ring on the water
+        the bank's line - CONVENTION: the earthen bank's edge a 2.2 stroke in the bund's earth, heavier than a bund's 1.5 so the pond's rim reads"""
     x, y, rx, ry = pond["x"], pond["y"], pond["rx"], pond["ry"]
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx + 2.5:.1f}" ry="{ry + 2.5:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond")
     s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{POND_WATER}" stroke="{POND_RIM}" stroke-width="1.2"/>', "field pond")
@@ -128,7 +129,7 @@ def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
     beans (`_comb_draw_beads`), then the features.
 
     Research:
-        the order - NONE: the ink's layering"""
+        the order - CONVENTION: the floor under the plots, the dry hem beside them, the channels over both, then the beans and the features over all, so each reads where it stands"""
     s.comb_base_fill(net, name)
     paddies(s, net, name)
     dry_plots(s, net)
@@ -180,7 +181,8 @@ def dike(s: Settlement, dk: dict[str, Any]) -> None:
     """The polder's dike as the Rust placed it: the band between its faces, its two rows of crowns, and a gate at each sluice.
 
     Research:
-        the dike's ink - CONVENTION: the band in the dike's earth, the crowns in their greens at 0.92, each gate an 8 ft square in timber browns"""
+        the dike's ink - CONVENTION: the band in the dike's earth, the crowns in their greens at 0.92, each gate in timber browns
+        the gate's size - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on a sluice gate's size, saying only that water crosses the dike at gated sluices; an 8 ft square"""
     outer, inner = _pts(dk["outer"]), _pts(dk["inner"])
     s.add(f'<path d="M {outer} Z M {inner} Z" fill="{DIKE_EARTH}" fill-rule="evenodd" stroke="{DIKE_EDGE}" stroke-width="1.0"/>', cls="perimeter dike")
     for kind, crowns in dk["trees"]:
@@ -195,7 +197,9 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
     banks' crop.
 
     Research:
-        the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge a 3 ft stroke in the tea green"""
+        the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green
+        the tea hedge's width - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke
+        a nursery's water - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)"""
     for kind, parcel, bank, water in parcels:
         if kind == "rice":
             s.add_paddy(f'<polygon points="{_pts(parcel)}" fill="{_RICE_GREEN}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))

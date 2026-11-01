@@ -214,8 +214,8 @@ def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:
 
     Research:
         no plank on the drain - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: none over the drain at the field's foot
-        crossings where the village lives - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included - three on the collector the village abuts (two a toe at the foot, where the drain takes none), one on every other supply collector
-        three where the village lives - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on how many; three on the village's own collector, one elsewhere
+        crossings wherever both ends are useful - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a crossing stands wherever both ends reach useful ground, a walked dike included, and a long ditch takes a crossing near its middle, a very long one several - the count by length is `channel_footbridges`'; these caps hold it, never asking a plank of the drain
+        more where the village lives - GUESS: research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html silent on crossings clustering by the village; the village's own collector capped at three (two a toe at the foot), every other supply collector at one
     """
     f = polder_flanks(plan)
     if f["cluster"] == f["plus"]:

@@ -136,7 +136,6 @@ pub fn dike(inner: &[Pt], sluices: &[Pt], seed: i64) -> Dike {
         f64::from(rolls.randbelow(360)).to_radians(),
         f64::from(rolls.randbelow(360)).to_radians(),
     );
-    let total = st.last().map_or(1.0, |s| s.2 + STATION_FT);
     let width = |along: f64| {
         let t = along / STATION_FT * std::f64::consts::TAU;
         let mix =
@@ -159,6 +158,10 @@ pub fn dike(inner: &[Pt], sluices: &[Pt], seed: i64) -> Dike {
     let mut trees = Vec::new();
     for (k, (kind, share, step)) in ROWS.iter().enumerate() {
         let line: Vec<Pt> = st.iter().map(|s| at(s, *share)).collect();
+        // the row's own line, all the way round: pushed out from the inner face it is longer than it
+        let around: f64 = (0..line.len())
+            .map(|i| dist(line[i], line[(i + 1) % line.len()]))
+            .sum();
         let mut row = Vec::new();
         let mut walked = 0.0;
         let mut next = 0.0;
@@ -166,7 +169,7 @@ pub fn dike(inner: &[Pt], sluices: &[Pt], seed: i64) -> Dike {
             let (a, b) = (line[i], line[(i + 1) % line.len()]);
             let len = dist(a, b);
             let u = unit(a, b);
-            while next <= walked + len && next < total {
+            while next <= walked + len && next < around {
                 let t = next - walked;
                 let p = (a.0 + u.0 * t, a.1 + u.1 * t);
                 if !gap(p) {

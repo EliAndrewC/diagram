@@ -66,6 +66,11 @@ pub const SWEEP_WIDTHS: f64 = 2.5;
 /// Research:
 ///     the sweep's points - CONVENTION: four segments a turn
 const SWEEP_STEPS: usize = 4;
+/// A turn under this is left sharp (degrees), and a bend's radius at most this share of the straight run on either side.
+///
+/// Research:
+///     the sweep's limits - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a turn of under about 8 degrees is left sharp, and a bend's radius is capped at 35% of the straight run on either side
+pub const SWEEP_LIMITS: (f64, f64) = (8.0, 0.35);
 
 /// How a supply canal ends: running past its last offtake as a thread to the edge of the crop, or handing its whole flow to that
 /// offtake's ditch and stopping at the junction; both attested, so a knob rolled from the seed's `canal_tail` stream.
@@ -82,6 +87,7 @@ pub fn tail_runs_on(seed: i64) -> bool {
 ///
 /// Research:
 ///     sweeps - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every ditch turns on a sweep, never a sharp corner
+///     a bend's radius - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: about two and a half channel widths (`SWEEP_WIDTHS`), capped at 35% of the straight run on either side, a turn under about 8 degrees left sharp (`SWEEP_LIMITS`); the setback never past either leg's middle
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -98,11 +104,14 @@ pub fn swept(pts: &[Pt], w: f64) -> Vec<Pt> {
         let (u0, u1) = (unit(b, a), unit(b, c));
         let cos = (u0.0 * u1.0 + u0.1 * u1.1).clamp(-1.0, 1.0);
         let half = cos.acos() / 2.0; // half the angle between the legs
-        if half.tan().abs() < 1e-9 || (half - std::f64::consts::FRAC_PI_2).abs() < 1e-9 {
+                                     // the turn's own angle, the deflection off straight on: a fold back has none to sweep, and a slight one is left sharp
+        let turn = std::f64::consts::PI - 2.0 * half;
+        if half.tan().abs() < 1e-9 || turn.to_degrees() < SWEEP_LIMITS.0 {
             out.push(b);
             continue;
         }
-        let back = (SWEEP_WIDTHS * w / half.tan()).min(l0 / 2.0).min(l1 / 2.0);
+        let radius = (SWEEP_WIDTHS * w).min(SWEEP_LIMITS.1 * l0.min(l1));
+        let back = (radius / half.tan()).min(l0 / 2.0).min(l1 / 2.0);
         let p0 = (b.0 + u0.0 * back, b.1 + u0.1 * back);
         let p1 = (b.0 + u1.0 * back, b.1 + u1.1 * back);
         // a quadratic Bezier through the corner: tangent to both legs, inside the turn
@@ -156,10 +165,10 @@ fn offtake_lines(fan: &Fan, lines: &Lines, fracs: &[f64], s: f64) -> Vec<usize> 
 ///
 /// Research:
 ///     the fork - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race splits into a supply canal along the upper edge and one along the far edge
-///     the fork's place - GUESS: the record silent on where on the fan's head the race divides; at its corner on the brook's side, where the race arrives
+///     the fork's place - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the race runs from the intake down to the fork at the head of the fan - at the head's corner on the brook's side where the intake stands at that shoulder, at its middle where the intake does
 #[must_use]
-pub fn division(fan: &Fan, brook_side: f64) -> Pt {
-    fan.at(0.0, brook_side)
+pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
+    fan.at(0.0, if center { 0.0 } else { brook_side })
 }
 
 /// The comb's channels on `fan`, its head race from `intake` to the `division`; `offtakes` are the delivery ditches' fractions down each flank
@@ -171,7 +180,10 @@ pub fn division(fan: &Fan, brook_side: f64) -> Pt {
 ///     the comb - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals at right angles, one drain gathering the water along the lowest line
 ///     the lean - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a branch leaves its parent leaning downstream
 ///     the canals taper - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: every drawn canal tapers from its head toward its tail
-///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`)
+///     the delivery's head - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: capped at 0.8 of its canal's local width where it leaves it (`DELIVERY_CAP`), its tail no wider than its head
+///     the canals' courses - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply canals along the high margins - canal A along the head to the far corner, swept, then down the far flank; canal B down the brook's flank from the fork
+///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
+///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way
 #[must_use]
 pub fn channels(
     fan: &Fan,
@@ -179,9 +191,10 @@ pub fn channels(
     offtakes: (&[f64], &[f64]),
     row_ft: f64,
     brook_side: f64,
+    center: bool,
     seed: i64,
 ) -> Vec<Channel> {
-    let fork = division(fan, brook_side);
+    let fork = division(fan, brook_side, center);
     let mut out = vec![Channel {
         role: "main",
         pts: vec![intake, fork],
@@ -226,7 +239,8 @@ pub fn channels(
         stops.push(end);
         let mut legs: Vec<Vec<Pt>> = Vec::new();
         let mut down = flank(0.0, stops[0], s);
-        if side == 0 {
+        // from a middle fork both canals run along the head to their corners
+        if side == 0 || center {
             let mut head = swept(&[fork, fan.at(0.0, s), down[1]], w);
             head.extend(down.drain(2..));
             legs.push(head);
@@ -286,7 +300,15 @@ mod tests {
     fn the_comb_has_its_head_race_canals_ditches_and_drain() {
         let f = fan(26.0 * 43_560.0, 1.0, 315.0, (3200.0, 3200.0), 4);
         let intake = (f.fork.0 - 200.0, f.fork.1);
-        let c = channels(&f, intake, (&[0.30, 0.62, 0.93], &[0.55]), 48.0, 1.0, 4);
+        let c = channels(
+            &f,
+            intake,
+            (&[0.30, 0.62, 0.93], &[0.55]),
+            48.0,
+            1.0,
+            false,
+            4,
+        );
         let roles: Vec<_> = c.iter().map(|x| x.role).collect();
         assert_eq!(roles.iter().filter(|r| **r == "branch").count(), 4);
         assert_eq!(roles[0], "main");
@@ -312,7 +334,7 @@ mod tests {
         }
         let both: Vec<_> = (0..16).map(tail_runs_on).collect();
         assert!(both.contains(&true) && both.contains(&false));
-        let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, 4);
+        let short = channels(&f, intake, (&[0.5], &[]), 48.0, -1.0, false, 4);
         assert!(short.iter().filter(|x| x.role == "branch").count() == 1);
     }
 

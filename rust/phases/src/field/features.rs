@@ -76,6 +76,8 @@ fn centroid(ring: &[Pt]) -> Pt {
 /// Research:
 ///     the pond in a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: sunk wholly in one low plot, never across a bund - sixteen points of its edge held inside the plot
 ///     the pond's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's shape and where in its plot; an ellipse squared to the map at the plot's middle
+///     the pond's odds - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a little over half the time, where it has low plots (`POND_PCT`)
+///     the pond's size - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's size; `POND_SHARE` of the plot's shortest side, shrunk by 0.85 a step until it fits
 #[expect(
     clippy::many_single_char_names,
     reason = "the plane geometry's own names"
@@ -122,6 +124,8 @@ pub fn pocket_pond(basins: &[Basin], seed: i64, tag: &str) -> Option<(usize, Pon
 ///     the island splits its plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: the host plot is split in two through the mound, as if a bund were run out to the island, and each half stops short of the mound, a GUESS - the split across the fall, from one side's middle to the other's
 ///     the bund round the corner - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a corner grave stands a short step in from its corner, clear of any ditch or path along the plot's edge, and the plot's bund is carried round it out to the corner, a GUESS - the corner rolled among the plot's four
 ///     no basin under the grave - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no flooded basin runs under a field grave; the paddy is carved round it
+///     the grave's odds - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: about three maps in ten draw a grave in the fields (`GRAVE_IN_TEN`)
+///     its host - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on which plot keeps a grave; any of the field's plots at even odds, the low ones among them, the pond's plot excepted
 ///
 /// # Errors
 /// `FieldRefused` when no plot tried takes the grave within its rules.
