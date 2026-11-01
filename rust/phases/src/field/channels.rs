@@ -77,6 +77,7 @@ pub const SWEEP_LIMITS: (f64, f64) = (8.0, 0.35);
 ///
 /// Research:
 ///     the canal's tail - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop (Inashiro, Kashikawa, Mizuguchi); where it ends at its offtake it stops at the junction (Sawada)
+///     the endings' odds - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on how often each ending was dug; even odds
 #[must_use]
 pub fn tail_runs_on(seed: i64) -> bool {
     knob_rng(seed, "canal_tail").randbelow(2) == 0
@@ -187,7 +188,7 @@ pub fn division(fan: &Fan, brook_side: f64, center: bool) -> Pt {
 ///     the widths by role - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the head race 6.0, supply 4.5 to 1.5 along the upper edge and 4.0 to 1.5 along the other, delivery 2.5 to 1.2, drain 1.2 to 5.5 ft - canal A the upper edge's, along the head and down the far flank, canal B the other edge's, down the brook's flank (`HEAD_W`, `SUPPLY_W`, `DELIVERY_W`, `DRAIN_W`)
 ///     the first canal with no offtake - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on a first canal its fractions leave no offtake; canal A runs on to the crop's edge
 ///     the second canal with none - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal is drawn partway down its edge - half way, where its fractions leave it no offtake
-///     the canal's steps - GUESS: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html silent on how fast a canal narrows; an equal step a leg from its head's width to the thread
+///     the canal's steps - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a canal narrows in equal steps from its head to 1.5 ft - an equal step a leg from its head's width to the thread
 ///     a delivery's course - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: delivery ditches leaving the supply canals - each along its row's bund from the flank to the drain at the middle, bowed as the bund is
 ///     the canal's end - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: its tail narrows to a thread and ends at the edge of the crop, or stops at its last offtake's junction (`tail_runs_on`) - tapering to the thread at its end either way
 ///     the second canal partway - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one delivery ditch, so it is drawn partway down its edge - stopping at its last offtake's junction, the first canal taking either ending

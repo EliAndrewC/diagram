@@ -75,20 +75,20 @@ pub struct DryPlot {
 }
 
 /// The hem along `line` (the canal's course, the plots' side `out` of it: the unit normal pointing upslope; `down` the fall), as many plots as
-/// `need` square feet asks, none inside `field`'s ring or within `clear` feet of the water filed in `ix`. Returns the plots, the
+/// `need` square feet asks within at most `most_bands` bands, none inside `field`'s ring or within `clear` feet of the water filed in `ix`. Returns the plots, the
 /// room the bands held (square feet) and the outline's edges tested against a point of a plot.
 ///
 /// Research:
 ///     square to the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots square to the canal and laid end to end along its curving line
 ///     rows on the contour or down - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES) - the contour square to the fall, not the canal's heading
 ///     not steep ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either
-///     the hem's figures - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract two to four strips of plots running upslope from the canal (`TRACT_STRIPS`), its length along the canal a GUESS (`TRACT_PLOTS`); the plots begin behind the canal's bare bank (`BANK_FT`); each map's mix of the four crops at random, each plot one of the mix at even odds, a GUESS
+///     the hem's figures - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a tract two to four strips of plots running upslope from the canal (`TRACT_STRIPS`), its length along the canal a GUESS (`TRACT_PLOTS`); the plots begin behind the canal's bare bank (`BANK_FT`); each map's mix of the four crops at random (its one hem, on the first field), each plot one of the mix at even odds, a GUESS
 ///     the plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: roughly 92 ft across and 72 ft down a row (`PLOT_FT`), tiled along and up from the canal
 ///     the tracts apart - CONVENTION: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html sets tracts at least 20 degrees apart by a drawing convention (`apart`)
 ///     a band's strips - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on whether a band's tracts run alike upslope; the strip count rolled once a band, every tract in it as deep
 ///     the climb - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the dry plots climb out as far from the canal as the ground runs, until they hold the grain the hamlet needs
 ///     the last band from the canal's start - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on where along the canal the last of the plots stands; from its start, along it, until the need is met
-///     the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas
+///     the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas; the caller's `most_bands` the climb's own bound
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
 #[expect(
     clippy::too_many_arguments,
@@ -99,7 +99,7 @@ pub fn hem(
     line: &[Pt],
     out: Pt,
     down: Pt,
-    need: f64,
+    (need, most_bands): (f64, u32),
     field: &[Pt],
     ix: &mut Index,
     clear: f64,
@@ -131,7 +131,7 @@ pub fn hem(
     let mut tract = 0;
     // each band's tracts: their stretch along the canal and their rows' direction (degrees), the band below's kept for the next
     let mut below: Vec<(f64, f64, f64)> = Vec::new();
-    for _band in 0..MAX_BANDS {
+    for _band in 0..most_bands.min(MAX_BANDS) {
         let strips = TRACT_STRIPS.0 + rng.randbelow(TRACT_STRIPS.1 - TRACT_STRIPS.0 + 1);
         let mut d = 0.0;
         let mut band: Vec<(f64, f64, f64)> = Vec::new();
@@ -343,7 +343,7 @@ impl Canal {
 ///
 /// Research:
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
-///     off the water - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on how near the water a dry plot may come; a plot whose inner edge or outer corners come within `clear` of any filed water dropped, a bend of the canal meeting it
+///     off the water - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html silent on how near the water a dry plot may come; a plot any of whose edges comes within `clear` past a filed water's half-width, or that holds a water's end, dropped - a bend of the canal meeting it
 fn refused(
     poly: &[Pt],
     field: &mut Bands,
@@ -414,9 +414,36 @@ fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use super::{hem, GRAIN_ACRES_PER_HOUSEHOLD, PLOT_FT, TRACT_APART_DEG};
+    use super::{
+        hem, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS, PLOT_FT, TRACT_APART_DEG, TRACT_STRIPS,
+    };
     use crate::field::geom::inside;
     use crate::field::index::Index;
+
+    #[test]
+    fn a_cleared_middles_hem_is_one_band_along_the_whole_canal() {
+        let line = [(0.0, 0.0), (0.0, 1200.0)];
+        let field = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)];
+        let mut ix = Index::default();
+        let (plots, _, _) = hem(
+            &line,
+            (-1.0, 0.0),
+            (1.0, 0.0),
+            (f64::INFINITY, 1),
+            &field,
+            &mut ix,
+            4.0,
+            4,
+            "f0",
+        );
+        // the whole canal, end to end, and no deeper than one band's strips
+        let deepest = BANK_FT + f64::from(TRACT_STRIPS.1) * PLOT_FT.1 + 1.0;
+        assert!(plots.iter().all(|p| p.poly.iter().all(|c| -c.0 <= deepest)));
+        assert!(plots.iter().any(|p| p.poly.iter().any(|c| c.1 < 1.0)));
+        assert!(plots
+            .iter()
+            .any(|p| p.poly.iter().any(|c| c.1 > 1200.0 - PLOT_FT.0 - 1.0)));
+    }
 
     #[test]
     #[expect(clippy::too_many_lines, reason = "the hem's cases, one scenario each")]
@@ -429,7 +456,7 @@ mod tests {
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &field,
             &mut ix,
             4.0,
@@ -457,7 +484,7 @@ mod tests {
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &field,
             &mut through,
             1.0,
@@ -471,7 +498,7 @@ mod tests {
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &field,
             &mut wet,
             5000.0,
@@ -483,7 +510,7 @@ mod tests {
             &line,
             (-1.0, 0.0),
             (1.0, 0.0),
-            0.0,
+            (0.0, MAX_BANDS),
             &field,
             &mut Index::default(),
             4.0,
@@ -495,7 +522,7 @@ mod tests {
             &[(0.0, 0.0), (0.0, 10.0)],
             (-1.0, 0.0),
             (1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &field,
             &mut Index::default(),
             4.0,
@@ -506,7 +533,7 @@ mod tests {
             &[(0.0, 0.0)],
             (-1.0, 0.0),
             (1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &field,
             &mut Index::default(),
             4.0,
@@ -519,7 +546,7 @@ mod tests {
             &line,
             (1.0, 0.0),
             (-1.0, 0.0),
-            need,
+            (need, MAX_BANDS),
             &[],
             &mut Index::default(),
             4.0,
