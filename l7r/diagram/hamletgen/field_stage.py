@@ -269,6 +269,8 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
 
         work_counts.OPS["pt_test@write_field"] += walked + sum(len(d["poly"]) for d in dry) + 2 * len(outline) + sum(len(c["pts"]) for c in chans)
         work_counts.OPS["write@comb_net"] += len(plots) + len(dry) + len(chans) + len(beans)
+        # ...and the writer's own passes over the plots: their records, their rings, the drain hem, the wet and flooded middles
+        work_counts.OPS["write@plot_pass"] += 5 * len(plots)
     hem = [p["drain_side"] for p in plots if p["drain_side"]]
     if grave_recs:
         s.meta(grave_form=grave_recs[0]["form"])

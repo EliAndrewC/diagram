@@ -298,7 +298,10 @@ class Standing:
                 own_bins.setdefault(cell, []).append(i)
         for i, e in enumerate(own):
             b = boxes[i]
-            near = sorted({j for cell in self._cells(b) for j in own_bins.get(cell, ()) if j > i})
+            cells = list(self._cells(b))
+            if __debug__:  # each cell read and each id it holds, before the dedup (feature 444 T16's third audit)
+                OPS["index_cell@Standing.conflicts"] += len(cells) + sum(len(own_bins.get(cell, ())) for cell in cells)
+            near = sorted({j for cell in cells for j in own_bins.get(cell, ()) if j > i})
             for j in near:  # the record's own pieces against each other: the same rule as any pair
                 if __debug__:
                     OPS["index_examined@Standing.conflicts"] += 1
@@ -311,6 +314,8 @@ class Standing:
                 continue  # wholly off the canvas - nothing on the map can meet it
             seen: set[int] = set()
             for cell in self._cells(cb):
+                if __debug__:  # each cell read, and each entry in it, a skipped one too (feature 444 T16's third audit)
+                    OPS["index_cell@Standing.conflicts"] += 1 + len(self._bins.get(cell, ()))
                 for n in self._bins.get(cell, ()):
                     if n in seen or n in skip:
                         continue

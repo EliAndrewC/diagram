@@ -398,6 +398,16 @@ fn one(
         center,
         inp.seed,
     );
+    // the canals' courses as laid, each flank point a write, and each offtake's lean probed at up to seven rows of three points
+    // (the bound counted: a few dozen a field - the work-budget audit, T16)
+    counts.add(
+        "write@channel_pts",
+        chans.iter().map(|c| c.pts.len() as u64).sum(),
+    );
+    counts.add(
+        "pt_test@offtake_lines",
+        21 * (inp.offtakes.0.len() + inp.offtakes.1.len()) as u64,
+    );
     let (ix, segments) = water(&chans, &br, inp, f, counts)?;
     let unsettled = knobs.get("paddy_rest").is_some_and(|v| v == "unsettled");
     let mut work = 0;
