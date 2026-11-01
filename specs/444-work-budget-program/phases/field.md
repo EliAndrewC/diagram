@@ -61,7 +61,17 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (2026-10-31, night) the polder's seam closed: every polder placement in Rust (`dike.rs`, `polder.rs`'s
+**Resume here:** (2026-11-01, late) the budget is the GM's 1.9 per thing (444#6), the field 112,814 at 40 and 200,310 at 80 within
+it, box 7 closed on the arbiter's accept (above); `make rust-gate` 54/54; no claim owed and no open finding in the delta (FR-021).
+`make land F=444 T=T16` refuses, before anything ran, on: (1) the plan's T23/T24 blocks - spec-fidelity dispatched on
+`make plan-delta F=444`, record its verdict; (2) three of the round arbiter's tooling fixes still open - ask:444-T16-claims-rounds,
+-claims-round3 and -claims-after-counters (the claims and triage bundlers; `make land`'s refusal quotes each), built with a test
+and settled by `make arbiter-fix-done` (the two work-budget-bundle fixes are settled); (3) boxes 1-8 here, each ticked with its
+evidence; (4) the review occasions - settlement-review on inashiro and kuwabata, glyph-check on field-grave/inashiro,
+field-pond/kashikawa, inashiro-paddy, irrigation-ditch/kuwabata and kuwabata-dike-pond (5 glyph units: one `check-wave`), each
+after a green `make done` (`make verify` writes their prompts). Then `make land F=444 T=T16`, and stop for the GM before the sink.
+
+**Earlier:** (2026-10-31, night) the polder's seam closed: every polder placement in Rust (`dike.rs`, `polder.rs`'s
 outfall and resting pick, `landuse.rs`'s conversion), written and drawn by `field_stage._polder` and `ink.py`; the shared helpers
 the field was the last caller of deleted (`apply_land_use` and its steps, `outfall_run`, `resting_plots`), `perimeter_dike` kept for
 the tier that still calls it. Seed 37's level run FIXED (the one meander). The plan's T16 blocks CLEAR. The claims fix landed alone
