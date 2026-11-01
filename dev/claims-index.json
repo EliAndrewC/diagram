@@ -10696,6 +10696,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#every low plot tinted": {
@@ -10713,6 +10714,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
@@ -10730,6 +10732,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no beans on a polder's bunds": {
@@ -10742,6 +10745,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no dry plots inside a polder": {
@@ -10759,6 +10763,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the banks kept": {
@@ -10775,6 +10780,7 @@
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:db56eaba6ec79cd4"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's plots drawn apart": {
@@ -10792,6 +10798,7 @@
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:594d6970b954f06f",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:97d836fcef777ada"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's records": {
@@ -10804,6 +10811,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_roll#the field's seam": {
@@ -10847,6 +10855,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
@@ -50224,8 +50233,8 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#deck along the way": {
   "body": "054543c748c653c7",
   "claim": "deck along the way - road-bridges-over-rivers-and-canals-hashi.drawing",
-  "code": "42a2fcf6a638ce64",
-  "core": "a718c78ad8909f88",
+  "code": "da0954ba53a40f54",
+  "core": "d78b34b9d51271d2",
   "date": "2026-11-01",
   "note": "rot from the way's bearing",
   "pages": {
@@ -50254,6 +50263,7 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:5fb0771021ca6c69"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#merge radius: a crossing within half the new deck's span (any direction) of a standing carried deck counts as the same crossing place and is merged into it. §13 says only \"at one point\" and §19 \"one bridge to each\", so the radius is unresearched.": {
@@ -50278,6 +50288,7 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#unseated crossing": {
@@ -50290,6 +50301,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -52998,6 +53010,7 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22",
    "0014-bunds-between-the-paddies-aze.drawing.html:f2531c75e25ce090"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::settle#the runs kept": {
@@ -53009,6 +53022,7 @@
   "note": "clipping the bead runs against water is overlap geometry",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::weir#the weir's ink": {
@@ -78573,6 +78587,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#a run's most and its spacing": {
@@ -78584,6 +78599,7 @@
   "note": "the page is silent on both; the code rolls 2 to 4 beads, BEAD_STEP_FT apart",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#how many": {
@@ -78595,6 +78611,7 @@
   "note": "each bund gets its own seeded roll against 3/8; the page says only \"some bunds\"",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#no bead in the water": {
@@ -78611,6 +78628,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#the run on its bund": {
@@ -78622,6 +78640,7 @@
   "note": "the run is centered on the bund's midpoint and beads past half the length less BEAD_R_FT are dropped; the page is silent on where along the bund",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::bean_runs#which bunds": {
@@ -78633,6 +78652,7 @@
   "note": "the code skips the last basin of a row and the basins marked on_drain_right; the page is silent on which bunds",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::drowned#the test": {
@@ -78656,6 +78676,7 @@
   "note": "each bead is filtered on its own and the rest of its run kept; the page is silent on a row that meets water",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::settle#a run shows at least two": {
@@ -78672,6 +78693,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/beans.rs::settle#no bead in the water": {
@@ -78688,6 +78710,7 @@
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::AXIS_OFF_DEG#no screen axis": {
@@ -79152,6 +79175,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
@@ -79163,6 +79187,7 @@
   "note": "the record is silent on how a settlement's tracts stand to each other; the step across the fall is what the claim says",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
@@ -79174,6 +79199,7 @@
   "note": "hem laid only on -brook_side; the page names only \"the hem along the whole canal\" and says nothing about the strip between canal B and the brook",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
@@ -79191,6 +79217,7 @@
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
@@ -79207,6 +79234,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
@@ -79219,6 +79247,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
@@ -80413,6 +80442,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a band's strips": {
@@ -80424,6 +80454,7 @@
   "note": "strips rolled once a band; the page sets 2-4 strips and calls the tract's size a GUESS, silent on whether a band's tracts share a depth",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
@@ -80440,6 +80471,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
@@ -80458,6 +80490,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#rows on the contour or down": {
@@ -80476,6 +80509,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#square to the canal": {
@@ -80494,6 +80528,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb": {
@@ -80512,6 +80547,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb's bound": {
@@ -80524,6 +80560,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the hem's figures": {
@@ -80542,6 +80579,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the last band from the canal's start": {
@@ -80553,6 +80591,7 @@
   "note": "the last band fills from d=0 along the canal until need is met; 0011 gives only the order out from the toe, nothing along the canal",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the plot": {
@@ -80569,6 +80608,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
@@ -80580,6 +80620,7 @@
   "note": "apart() is checked against the previous tract in the band and the overlapping tracts of the band below; the page calls the 20-degree spacing a drawing convention",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
@@ -80596,6 +80637,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#off the water": {
@@ -80607,6 +80649,7 @@
   "note": "the page gives only the bank beside the plot's own canal and is silent on clearance from other water; wet(poly, ix, clear) is applied last",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::seg_seg_dist#the distance": {
@@ -80631,6 +80674,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::EDGE_STEP_FT#the edge's point spacing": {
@@ -81296,6 +81340,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/index.rs::CELL_FT#the index's cell": {
@@ -81320,6 +81365,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/index.rs::Index.file#the water index": {
@@ -81356,6 +81402,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/index.rs::bbox#the water index": {
@@ -82880,6 +82927,7 @@
   "note": "the page wants the pond wholly inside one low plot but names no shape for the host, so GUESS is right",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::rice_pond#never a resting plot": {
@@ -82891,6 +82939,7 @@
   "note": "the code filters out resting plots; neither page says anything about a pond in a resting plot",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::rice_pond#the pond's host": {
@@ -82903,6 +82952,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::roll_knob#the seam": {
@@ -82939,6 +82989,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_field#the seam": {
@@ -82973,6 +83024,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:ffcefa561c09cbc3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#no resting plot on a dike-pond block": {
@@ -82984,6 +83036,7 @@
   "note": "unsettled && !dikepond; page 0013 says nothing about a converted block",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#resting only when unsettled": {
@@ -83002,6 +83055,7 @@
    "0013-paddies-left-to-rest-kataarashi.drawing.html:2923b84b63379ea8",
    "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#the polder's seam": {
@@ -83014,6 +83068,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::state#the seam": {

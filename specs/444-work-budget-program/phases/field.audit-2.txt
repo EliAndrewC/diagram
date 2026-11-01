@@ -1,0 +1,29 @@
+MODE AUDIT, round 2 (2026-11-01, the work-budget agent on make work-budget-bundle MODE=audit PHASE=field)
+
+OVER - the field stage counts 42,440 operations at 40 households against a budget of 27,238 (1.56x) and 76,610 at 80 against
+49,631 (1.54x); the largest share is the dry hem chain `dry::hem` <- `build::build` <- `py stage_field` <- `field_stage.stage_field`,
+at about 10,470 a roll at 40, ahead of `lattice::basins_counted` <- `build::one` (8,690) and the Python writer's walk of every ring,
+`_write_field` <- `stage_field` (`pt_test@write_field` 6,389 plus `write@comb_net` 1,609).
+
+Q1, budget. It fails at both sizes; the exponent passes (0.83 against the budget's 0.85). The figures are the means of four seeds
+at 40 households, from counts.json. The hem's counters add up to about 10,470: hem_refused 3,877, write@hem_index 2,976, hem_onto
+1,679, candidate@hem_index 1,332, dry_plot 609. The hem also varies most by seed: 17,341 on seed 4 against 6,546 on seed 25. Next
+come write@basin 8,690, the Python writer's walk 6,389, write@bean 4,550 and index_examined@Standing.conflicts 4,473. The excess is
+about 15,200.
+
+Q2, counters cover every loop (S5): no, and this alone would block a WITHIN.
+- Overlap registry (registry.py): the stage records its brook, ditches and channels through StandingManifest -> Standing.record ->
+  conflicts; only candidate@ (one per record) and index_examined@ (one per pair tested) are counted, not the per-piece work:
+  element_extents / _mx_stroke (one stroke quad per segment), box_of per extent, the own_bins cell fill, _add's per-extent,
+  per-cell bin writes. The brook alone is about 448 pieces at 40 households.
+- Hem candidates (dry.rs): each candidate seat is built from 4 canal.offset calls, 3 binary-searched along lookups each, none
+  counted; seats are still built after the grain is held, only to add to room.
+- Python writer (field_stage.py): vis_bbox walks every channel point, comb_net flattens every bean point; neither is counted.
+- Smaller scans: rows_held (build.rs), pocket_pond (features.rs) and states (states.rs) each walk every basin with no counter;
+  they only compare - noted, not the finding.
+
+Q3, placed then repaired (S4): none. No roll shows moved@ or dropped@.
+
+Q4, growth (S6): linear, 0.83 from 20 to 80 households; each counted function grows about 4x for 4x the households.
+
+The bundle's chains.txt is out of date (the 2026-10-28 perf log of the old Python code); the chains above were built from the code.
