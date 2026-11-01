@@ -35,7 +35,7 @@ file, so it does not read as a road bridge. All of a settlement's ditch crossing
 [footbridge_form=plank] The planked form is drawn with its seams running across the deck, so the boards read as laid from
 bank to bank.
 
-Where a lane or a road crosses water, the map draws one deck as wide as the way, always planked whatever form the settlement's ditch crossings take, though logs under trodden earth were by far the commonest bridge over Japan's rivers, and never two decks at one point.
+Where a lane or a road crosses water, the map draws one deck as wide as the way, always planked whatever form the settlement's ditch crossings take, though until the Edo period logs under trodden earth were by far the commonest bridge over Japan's rivers, and never two decks at one point.
 
 Name: footbridge
 Covers: `bridges[foot]` - every plank and deck over water

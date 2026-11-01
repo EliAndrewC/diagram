@@ -9083,10 +9083,10 @@
   "date": "2026-10-03",
   "note": "150 ft, the GUESS 0035 records",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_FAN_TRIM#fan cut back from the brook": {
@@ -9096,9 +9096,9 @@
   "date": "2026-10-05",
   "note": "brook-side supply canal stops short, its degree a calibration",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
@@ -9111,10 +9111,10 @@
   "date": "2026-10-03",
   "note": "deriving the flank away from the seat means the hamlet is always drawn beside its brook, never astride it, while 0035 attests both forms (\"houses go on both banks ... where the best site straddles the brook\"); a site that straddles the brook can never arise. Roll or derive the brook so it can, or record beside-only as a DEVIATION",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_FRAME_MARGIN#water plumbing": {
@@ -9201,10 +9201,10 @@
   "date": "2026-10-03",
   "note": "0035: on a reach straight enough to cross square",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::FORD_HALF#crossing place's length": {
@@ -9224,10 +9224,10 @@
   "date": "2026-10-03",
   "note": "160 ft, the GUESS 0035 records",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::HEAD_RACE_LEAD#head race length": {
@@ -9244,9 +9244,9 @@
   "date": "2026-10-03",
   "note": "two forms, even odds, the GUESS 0059 records",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -9363,6 +9363,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
   },
   "research": "ca5eadf339aff05e",
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -9375,9 +9376,9 @@
   "date": "2026-10-25",
   "note": "30 degrees, the surveyed average.",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
@@ -9391,9 +9392,9 @@
   "date": "2026-10-03",
   "note": "four forms at 1.5/2/5/5 ft as 0059 gives (stale comment says reed; 0059 says brushwood, not reed)",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "section": "a792d7c6a362ad0d",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
@@ -10427,9 +10428,9 @@
   "date": "2026-10-31",
   "note": "shoulder or center at even odds, the shoulder on the brook's flank, gives left:center:right at 1:2:1",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
@@ -10597,9 +10598,9 @@
   "date": "2026-10-31",
   "note": "1.5 ft is the fence's, the thinnest of the four forms (1.5 to 5 ft)",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
@@ -10687,6 +10688,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:36c65c85e5f4ce74",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#every low plot tinted": {
@@ -10704,6 +10706,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
@@ -10721,6 +10724,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no beans on a polder's bunds": {
@@ -10733,6 +10737,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no dry plots inside a polder": {
@@ -10751,6 +10756,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the banks kept": {
@@ -10768,6 +10774,7 @@
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:db56eaba6ec79cd4"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -10787,6 +10794,7 @@
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:a7401b1ec92e2d4b",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:b4b7bec3eacdb232"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's records": {
@@ -10799,6 +10807,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_roll#the field's seam": {
@@ -10822,9 +10831,9 @@
   "date": "2026-10-31",
   "note": "maps the place to head_left, head_center or head_right: the left, center or right of the fan's head",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
@@ -10842,6 +10851,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
@@ -13343,19 +13353,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "42f23813863928b9",
   "core": "f7424f26c8c5d865",
   "date": "2026-10-07",
   "note": "the one-bank farmstead GUESS is carried to the homestead's share of the copse",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse reach from a house": {
@@ -14183,19 +14194,20 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip on its house's bank": {
   "body": "35dd72e761dc8816",
   "claim": "strip on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: refused across a stream",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "23831b860da1ccd0",
   "core": "d58cd60cb3225d99",
   "date": "2026-10-18",
   "note": "crosses_a_stream from house to strip, as the one-bank rule",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip out of the sun": {
@@ -14516,19 +14528,20 @@
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip on its house's bank": {
   "body": "7ac324e18ead7789",
   "claim": "strip on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: refused across a stream",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "24d88bec423c90ac",
   "core": "b98ae342168710f1",
   "date": "2026-10-18",
   "note": "crosses_a_stream, the straight-line rule",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::strip_refused#strip out of the sun": {
@@ -15827,19 +15840,20 @@
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_flexible_clear#pit on its house's bank": {
   "body": "56cfcc0b220823b9",
   "claim": "pit on its house's bank - villages-beside-their-stream-one-bank-or-both.drawing: no brook between pit and house",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "02b76943ecb3fe44",
   "core": "aae8c3304246a7c1",
   "date": "2026-10-18",
   "note": "across_the_brook refuses a seat whose line to the house crosses a stream; this is the page's rule for every fixture",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:6062bfc803d4863c"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::_ring#fixture drawing plumbing": {
@@ -15873,10 +15887,10 @@
   "date": "2026-10-03",
   "note": "the page's own line rule",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::draw_laid_fixture#fixture drawing plumbing": {
@@ -23487,9 +23501,9 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -23572,9 +23586,9 @@
   "date": "2026-10-31",
   "note": "the brook comes down off the high ground and runs on down the flank \"to leave the map\"; both ends are held off the canvas",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
@@ -23591,9 +23605,9 @@
   "date": "2026-10-31",
   "note": "course_enters against the envelope; \"the fan of paddies is cut away from the brook\"",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
@@ -23919,18 +23933,20 @@
  "l7r/diagram/hamletgen/water/brook_rules.py::course_enters#brook skirts the field": {
   "body": "f6edd976241f771d",
   "claim": "brook skirts the field - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: no interior vertex inside a field ring",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "93070ace0b59d13a",
   "core": "7a980f557c318236",
   "date": "2026-11-01",
   "note": "the predicate flags any interior vertex inside a field ring, which matches the page's brook that \"passes the head of its fan of paddies on one side\" and runs on down the flank, the fan \"cut away from the brook\"",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#a joiner's width": {
@@ -23990,9 +24006,9 @@
   "date": "2026-10-03",
   "note": "matches 0059",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -24949,41 +24965,43 @@
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#square at the water, as laid": {
   "body": "9b82a013ed364e1b",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6843ab392504f937",
   "core": "0787ffce504b10bf",
   "date": "2026-10-27",
   "note": "the branch is squared by square_run where it crosses water",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed": {
   "body": "9b82a013ed364e1b",
   "claim": "water between is crossed - DEVIATION villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: one water course at most (the straight step's count; each squared leg judged clear too) - a ditch crossed where the line takes it, as 0084 has it, but the brook crossed wherever the run-on target points, where 0035 crosses only at a crossing place and leaves off a spur that can reach the field only across the brook - a departure the code keeps until feature 417 T32",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "037d733a02b94730",
   "core": "0787ffce504b10bf",
   "date": "2026-10-27",
   "note": "known (417 T32): the code allows one water course at most (over_water 0, then 1, on the straight step and on each squared leg) and crosses the brook wherever the target points, with no crossing place, and does not leave off a spur that can only reach the field across the brook; the stated departure matches the code",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:e3d3d47298cee739"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#a junction stays a T": {
@@ -25007,20 +25025,22 @@
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#square at the water, as laid": {
   "body": "8b7abf69a8040d6a",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T50)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "12f582dfd7923382",
   "core": "4a5222577138c6e0",
   "date": "2026-10-27",
   "note": "squared_step at the drawn channels, then square_run on both the junction branch and the lengthened lane",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path width": {
@@ -25060,18 +25080,20 @@
  "l7r/diagram/hamletgen/ways/bund.py::carry_on#the brook crossed where the step falls": {
   "body": "8b7abf69a8040d6a",
   "claim": "the brook crossed where the step falls - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the water only at a crossing place - a step carried on to the bund crosses the brook wherever it falls (squared, not moved to a crossing place), a departure the code keeps until feature 417 T32",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "715ac2b66759d930",
   "core": "4a5222577138c6e0",
   "date": "2026-10-27",
   "note": "known (417 T32): the step crosses the brook where it falls, squared but not moved to a crossing place; the stated departure matches the code",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::off_the_fixtures#off the fixtures": {
@@ -25362,10 +25384,10 @@
   "date": "2026-10-03",
   "note": "calibrated within \"cross the brook squarely\"",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::NetworkMemo#plumbing": {
@@ -25563,10 +25585,10 @@
   "date": "2026-10-03",
   "note": "0035: every 160 ft or so, GUESS",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::brook_fords#only on a straight reach": {
@@ -25575,10 +25597,10 @@
   "date": "2026-10-03",
   "note": "0035: reach straight enough to cross square",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::crossing_lands_on_crop#no deck on crop": {
@@ -25620,19 +25642,21 @@
  "l7r/diagram/hamletgen/ways/checks.py::ford_crossing#square at the ford": {
   "body": "df8803a59a120005",
   "claim": "square at the ford - villages-beside-their-stream-one-bank-or-both.drawing: the ford that makes the walk shortest, landings square to the reach",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ecdf0e76991883be",
   "core": "0196473a00c27a5a",
   "date": "2026-10-22",
   "note": "ford minimizing start->ford->end, landings on the normal to the nearest reach",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::ford_leg#its cache size": {
@@ -25797,10 +25821,10 @@
   "date": "2026-10-03",
   "note": "0035 square crossings",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::stream_segs#ditches cross freely": {
@@ -25824,19 +25848,21 @@
  "l7r/diagram/hamletgen/ways/checks.py::stream_segs#the brook crossed only at a ford": {
   "body": "760b42c33347ba4c",
   "claim": "the brook crossed only at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the stream's segments gapped at each crossing place, 30 ft either side",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5df26200fd47c1a6",
   "core": "594a6e4519295d3d",
   "date": "2026-10-22",
   "note": "\"only at a crossing place\" is §111, but no block gives a crossing place's width. Split the 30 ft either side (`FORD_HALF`) out as UNRESEARCHED",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/checks.py::track_ends_off_the_web#the track meets the lanes": {
@@ -26466,10 +26492,10 @@
   "date": "2026-10-03",
   "note": "0035 \"The ways between the two banks cross the brook squarely\"",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::GABLE_MARGIN_FT#gable margin": {
@@ -26680,19 +26706,21 @@
  "l7r/diagram/hamletgen/ways/corridors.py::_run_from#over the brook at a ford": {
   "body": "b3e3d0b826ffaa49",
   "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: square, at the ford that makes the walk shortest",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "565c412bd55da9a0",
   "core": "75543877ab3159d7",
   "date": "2026-10-22",
   "note": "crosses at a crossing place, square to the reach, the ford with the shortest walk",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::_shortest_runs#its search steps and tolerances": {
@@ -26897,19 +26925,21 @@
  "l7r/diagram/hamletgen/ways/corridors.py::field_router#the brook at its fords": {
   "body": "d663adad6db15780",
   "claim": "the brook at its fords - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "51c07adeb3a94b3c",
   "core": "6a9941f89a77ba13",
   "date": "2026-10-22",
   "note": "water lines walled, crossings only in the brook's band at fords, tolled",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#dry hem after the paddy": {
@@ -26950,19 +26980,21 @@
  "l7r/diagram/hamletgen/ways/corridors.py::field_runs#over the brook at a ford": {
   "body": "ac375a2c5e461ef5",
   "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: square, at the ford that makes the walk shortest",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d00d462edbed56c1",
   "core": "20bb914d44544a06",
   "date": "2026-10-22",
   "note": "passes through to `_run_from`/`ford_crossing`: square, at the ford with the shortest walk",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::is_tree#a row's streets kept": {
@@ -27072,18 +27104,20 @@
  "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#over the brook at a ford": {
   "body": "35eb3e3c34d7edd5",
   "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the fords nearest the network, crossed square",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "69dd8efe85a11e2a",
   "core": "7c508ad148726b01",
   "date": "2026-10-22",
   "note": "crosses only at recorded fords, landings square to the nearest reach",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::samples_along#roles and indexing": {
@@ -27357,21 +27391,22 @@
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#square at the water, as laid": {
   "body": "5bf650e06aedd7e0",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d931c3e6196e3b50",
   "core": "85280e8c1b96dfa8",
   "date": "2026-10-27",
   "note": "square_run before it is judged and drawn",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
-  "triaged": "2026-10-27",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane width": {
@@ -29650,19 +29685,21 @@
  "l7r/diagram/hamletgen/ways/last_resort.py::refuse_unmended#no way out over the brook and back": {
   "body": "5eb1b5e8e6ee603c",
   "claim": "no way out over the brook and back - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "37bb5e78a6b72280",
   "core": "3275d105d9fbfb02",
   "date": "2026-10-22",
   "note": "0035 puts a price on a crossing (\"keeps to its own bank unless crossing saves it more than about 150 ft\") and bans none. The code refuses every way out that crosses over and back (`law.way_out_carriers`), whatever walk it saves. Charge the two crossings per §279, or record the ban as a GUESS or DEVIATION with its account",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#every farmhouse served": {
@@ -29739,19 +29776,21 @@
  "l7r/diagram/hamletgen/ways/law/ends.py::adds_a_way_out_crossing#no way out over and back": {
   "body": "7982ace1b7e959e2",
   "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1290da8229ea2665",
   "core": "03a4b7c724644df1",
   "date": "2026-10-22",
   "note": "no block of 0035 forbids a second crossing of one brook. §110 only charges a crossing about 150 ft of walk, and §112 only limits a replacement way's crossings. Label the hard never-twice rule GUESS/UNRESEARCHED, or record it on the page",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law/ends.py::breaks_mid_run#plumbing and wrappers": {
@@ -30069,19 +30108,21 @@
  "l7r/diagram/hamletgen/ways/law/ends.py::way_outs_crossing#no way out over and back": {
   "body": "9700b1e89cbe5dba",
   "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "22443da1f5ebc654",
   "core": "f6237ee95baa7cea",
   "date": "2026-10-22",
   "note": "the hard limit of one crossing per brook on a way out is on no block. §110 charges a crossing about 150 ft of walk and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law/ends.py::way_targets#plumbing and wrappers": {
@@ -31066,17 +31107,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::deck_seats#a deck's corners on dry ground": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "451cebc8a66365c6",
   "core": "d65304bbdd0122c6",
   "date": "2026-10-07",
   "note": "every corner tested on dry ground",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::lane_pts#plumbing and wrappers": {
@@ -31092,35 +31135,39 @@
  "l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square brook crossing": {
   "body": "93cfea5bcd545703",
   "claim": "square brook crossing - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ab1c14d90a3ee1c2",
   "core": "5bb421dd3e5f8371",
   "date": "2026-10-22",
   "note": "crossings more than 10 degrees off square are flagged; the page has \"cross the brook squarely\"",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6696176d9f1fbaf0",
   "core": "5bb421dd3e5f8371",
   "date": "2026-10-07",
   "note": "`off_square(...) > FORD_SQUARE_TOL_DEG` flags any lane crossing a channel more than 10 degrees off square, but 0087 says a carried deck runs along its way and \"the crossing is solved for that angle exactly\"; only a footplank (§107) or a brook crossing (0035 §89) is square. Either drop the squaring for channels or relabel it a DEVIATION/UNRESEARCHED, since no page gives the 10 degrees",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:a2caf9cbb57b7bcc",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:e80757a17e964546",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:fe15e8d64c04f45e"
   ],
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::oblique_crossings#plumbing and wrappers": {
@@ -31136,34 +31183,38 @@
  "l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#crossed at a ford": {
   "body": "38418a9b02fe2080",
   "claim": "crossed at a ford - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "eb8f26206a39a19f",
   "core": "08b1b140114cb704",
   "date": "2026-10-22",
   "note": "a crossing away from every recorded crossing place is flagged",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far off a crossing place": {
   "body": "38418a9b02fe2080",
   "claim": "how far off a crossing place - villages-beside-their-stream-one-bank-or-both.drawing: within `FORD_HALF`, half the crossing place's 60 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4073d56c4c1bb61a",
   "core": "08b1b140114cb704",
   "date": "2026-10-22",
   "note": "the page gives no crossing-place width (\"half the crossing place's 60 ft\" is not on it; it sets only \"every 160 ft or so\"), so FORD_HALF 30 ft should be claimed UNRESEARCHED",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::off_ford_crossings#plumbing and wrappers": {
@@ -31187,19 +31238,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::over_and_back#over and back": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5b222101f85df43b",
   "core": "91d55f23a72f56d7",
   "date": "2026-10-07",
   "note": "a crossing is charged as extra walk; a farmstead stays on one bank",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::plank_faults#planks on supply ditches": {
@@ -31219,18 +31271,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::short_decks#a deck spans its water": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "702354e6f9d3cea1",
   "core": "c5afad6265e729ba",
   "date": "2026-10-07",
   "note": "the deck runs bank to bank",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:34c6192b89c0fa6b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed brook width": {
@@ -31276,18 +31330,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::unbridged_crossings#every crossing decked": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e6e675c3308deccb",
   "core": "0aee5554cb99f3be",
   "date": "2026-10-07",
   "note": "every crossing of a way and water is bridged",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law_water.py::undeckable_crossings#plumbing and wrappers": {
@@ -31521,20 +31577,22 @@
  "l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#square at the water, as laid": {
   "body": "407d45773fc85a88",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8bc497164bcb57cc",
   "core": "5f23936b1c5bae08",
   "date": "2026-10-26",
   "note": "the tree lane is squared before `s.lane` draws it",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#worn look": {
@@ -31583,20 +31641,22 @@
  "l7r/diagram/hamletgen/ways/reach.py::settle_field#over the brook at a ford": {
   "body": "fa2b5697acf12068",
   "claim": "over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: square, at the ford that makes the walk shortest",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "454120a2b4a63288",
   "core": "2a295f8f3ed9672b",
   "date": "2026-10-22",
   "note": "the choice of \"the ford that makes the walk shortest\" is made in `field_runs`/`routed_field_runs`, which the bundle does not include. This unit only squares each run and takes the first lawful one. The body of field_runs is needed",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/ways/reach.py::settle_field#the field reached": {
@@ -31720,18 +31780,20 @@
  "l7r/diagram/hamletgen/ways/route.py::_route#a brook crossing tolled": {
   "body": "f95ce73d29dda10a",
   "claim": "a brook crossing tolled - GUESS villages-beside-their-stream-one-bank-or-both.drawing: the search charges a crossing (`_CROSSING[\"cost\"]`) and the pull refuses a shortcut that adds one (`_new_crossing`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1b3ec4110645f52b",
   "core": "27338db6085f1637",
   "date": "2026-10-25",
   "note": "the page's GUESS: \"the maps charge a crossing as that much extra walk\"; the pull keeping crossings only where the lattice paid for them fits the rule that a way crosses only at a crossing place",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::_route#a worn path takes the shortest way": {
@@ -31928,10 +31990,10 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::set_crossing#its salts, guards and sentinels": {
@@ -32518,18 +32580,19 @@
  "l7r/diagram/hamletgen/ways/serve.py::door_path#water on the way": {
   "body": "2a1bb5bb09109bca",
   "claim": "water on the way - villages-beside-their-stream-one-bank-or-both.drawing: a straight step crosses no water, and a routed path is squared where it crosses (`square_run`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3b2378c7331c47e6",
   "core": "68163345fdfc5aca",
   "date": "2026-10-27",
   "note": "`ok` refuses a step across water; the path and each gathered form go through `square_run`",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::flank_doors#a flank door as fallback": {
@@ -33288,19 +33351,21 @@
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.fault#no way out over and back": {
   "body": "a9fa917056256fca",
   "claim": "no way out over and back - villages-beside-their-stream-one-bank-or-both.drawing: tree lanes",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d7273c4a86d6320e",
   "core": "798de6488989d440",
   "date": "2026-10-22",
   "note": "tree lanes are refused for an over-and-back way out, a rule 0035 does not state; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#bends like a path": {
@@ -33324,19 +33389,21 @@
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#crossings": {
   "body": "26e1ea21fe8a80a4",
   "claim": "crossings - villages-beside-their-stream-one-bank-or-both.drawing: `_crossing_fault`",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f64202c0ef9eea96",
   "core": "fe880131a5ef2fa6",
   "date": "2026-10-22",
   "note": "_crossing_fault refuses a crossing off a crossing place, twice, or off square",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/lawful.py::Lawful.ground_fault#nothing built on a lane": {
@@ -33520,6 +33587,7 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
   "research": "281143d409996aaf",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#brook crossed twice": {
@@ -33528,27 +33596,29 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-22",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#crossed off a ford": {
   "body": "bd33cfc7b695077b",
   "claim": "crossed off a ford - villages-beside-their-stream-one-bank-or-both.drawing: the crossing goes",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cd3acb9bc74657f4",
   "core": "2dc75f7457cfffd5",
   "date": "2026-10-22",
   "note": "a crossing away from any crossing place is cut",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_crossing_fault#crossed off square": {
@@ -33557,11 +33627,11 @@
   "date": "2026-10-03",
   "note": "matches the claim",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
-  "triaged": "2026-10-22",
+  "research": "cdf1f302b90334a2",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle/shapes.py::_cut_gap#lane cut at the water's bank": {
@@ -33994,17 +34064,19 @@
  "l7r/diagram/hamletgen/ways/squaring.py::square_run#square brook crossing": {
   "body": "05120df3f2942c8c",
   "claim": "square brook crossing - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5ceea7f3dc584887",
   "core": "2f29ee1e5f664c18",
   "date": "2026-10-22",
   "note": "run squared at the brook as the settle does",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/squaring.py::square_run#square ditch crossing": {
@@ -34077,20 +34149,22 @@
  "l7r/diagram/hamletgen/ways/squaring.py::squared_against#square crossing": {
   "body": "4de210a02f7222de",
   "claim": "square crossing - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "433c072e3d0306c1",
   "core": "2005c2816f673ff2",
   "date": "2026-10-22",
   "note": "square_crossings against each course",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::MEET_THE_ROAD_FT#street carried on to the road": {
@@ -34210,26 +34284,29 @@
   "date": "2026-10-25",
   "note": "only crossings outside [first, last] are cut back, so the street crosses the brook wherever its line meets it between the end farms, against 0035's \"A way crosses the water only at one of them\" (the crossing places), crossed squarely. The departure is stated, but it is labeled as a question claim; it should be DEVIATION with the departure recorded on 0035's drawing page, or the code changed at T32 [§212, §215, §218]; a known drift accepted by the round arbiter (ask:417-T29-drifted) to land as filed",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/street.py::brook_bounds#street end short of the brook": {
   "body": "ddb05669991506e0",
   "claim": "street end short of the brook - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the water only at one of its crossing places; the street stops short of the crossing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e289cc8d02e5ad3a",
   "core": "003002f6e5b05740",
   "date": "2026-10-25",
   "note": "the run past the end farms is drawn in short of the brook, never past the farms",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::brook_bounds#street end's stand-off": {
@@ -34878,18 +34955,20 @@
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track kept off drawn water": {
   "body": "a6181ba244b18e6a",
   "claim": "the track kept off drawn water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "386b5b328677a5a1",
   "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
   "note": "routed against the watercourses, with the brook gapped at its fords; an unrouted piece is taken only over no water",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#the track's route walled": {
@@ -34930,34 +35009,38 @@
  "l7r/diagram/hamletgen/ways/thread.py::_thread_the_fabric#water crossed only at a crossing place": {
   "body": "a6181ba244b18e6a",
   "claim": "water crossed only at a crossing place - villages-beside-their-stream-one-bank-or-both.drawing: a grove fallback route is searched with the water lines, so it crosses at the fords; the swing, whose legs would meet the water anywhere, is taken only where it crosses none",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5003aad96b881a55",
   "core": "96eb304c7a6aa25e",
   "date": "2026-10-22",
   "note": "grove fallback routes searched with the ford-gapped lines; the swing is refused on any water crossing; replacement crossings capped at the replaced run's",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_unrouted_clear#an unrouted piece over no water": {
   "body": "df9a1bbd23d208d7",
   "claim": "an unrouted piece over no water - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses water only at a crossing place, and a piece no route found was never brought to one",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9cbd7671f4d009da",
   "core": "432abcd8afd836a6",
   "date": "2026-10-22",
   "note": "an unrouted piece is refused on any water crossing, its ends drawn in",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/thread.py::_water_crossings#track plumbing": {
@@ -35055,21 +35138,23 @@
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#square at the water, as laid": {
   "body": "db0f1c434f2c687e",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0a6c86a8f32082d9",
   "core": "91ec226541e17768",
   "date": "2026-10-26",
   "note": "the threaded run and both dry exits are squared at their crossings with square_run",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::choose_track_out#the track out decided once": {
@@ -35120,20 +35205,22 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook crossed at its crossing places": {
   "body": "78231be076742dce",
   "claim": "brook crossed at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook as the track is laid (`squaring.square_run`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "52ab6499e3510d64",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-26",
   "note": "the track keeps to its own bank and crosses only at crossing places about 160 ft apart on straight reaches (FORD_SPACING, FORD_BEND_DEG); it crosses only when that finds a way the own-bank fill does not, or is more than 150 ft shorter; the squaring is left to square_run, as the claim says",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#dry exit off the wet": {
@@ -35185,18 +35272,20 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#only the brook gapped at its crossing places": {
   "body": "78231be076742dce",
   "claim": "only the brook gapped at its crossing places - villages-beside-their-stream-one-bank-or-both.drawing: the crossing places stand on the brook; a drawn channel or the drain is crossed only as the last resort (on a deck, 0084)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2894e763f068a357",
   "core": "244a34e5859ee3b4",
   "date": "2026-10-22",
   "note": "only segments on the brook's course are gapped; channels and the drain are opened last",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#pond berth": {
@@ -35310,19 +35399,21 @@
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#each brook crossed at most once": {
   "body": "c585090c734c50d3",
   "claim": "each brook crossed at most once - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "42d20cc11ef68728",
   "core": "7aaa82541f142c42",
   "date": "2026-10-22",
   "note": "0035 prices a crossing (§101), places it (§102) and caps only a replacement way's crossings relative to the one it replaces (§103); no block caps a way at one crossing. The claim should be UNRESEARCHED or GUESS until the page records the cap",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_keeps_the_law#no building on the connector": {
@@ -35433,10 +35524,10 @@
   "date": "2026-10-25",
   "note": "`if best[0][:2] == (0, 0): return best[1]` keeps a bearing whose water violations are non-zero, against \"Where no crossing place lies on a track's line, the track does not cross there\" [§343, §344]; a known drift accepted by the round arbiter (ask:417-T29-drifted) to land as filed",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
-  "triaged": "2026-10-28",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track drawn taut": {
@@ -35559,33 +35650,36 @@
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
   "body": "beca90676dd039e4",
   "claim": "brook crossed only at crossing places - villages-beside-their-stream-one-bank-or-both.drawing: fords opened on straight reaches, the only free cells in the brook's band",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cf69d22918de14c8",
   "core": "b5b7765d6f29fd9e",
   "date": "2026-10-22",
   "note": "fords at FORD_SPACING 160 ft on reaches bent under 20 deg, with the crossing cost set",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#every way pays the crossing": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "66a9632b4197af2f",
   "core": "b5b7765d6f29fd9e",
   "date": "2026-10-07",
   "note": "BROOK_CROSSING_COST_FT=150 matches the ~150 ft crossing charge",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triaged": "2026-10-22",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_seat#seat off the reed fringe": {
@@ -35680,19 +35774,20 @@
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road over the brook at a ford": {
   "body": "324f4f084a043ed2",
   "claim": "row road over the brook at a ford - villages-beside-their-stream-one-bank-or-both.drawing: the ford that makes the walk shortest, each leg threaded to its landing (`thread_over_the_ford`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b5f6467d6de7539b",
   "core": "1b96763703065a9c",
   "date": "2026-10-26",
   "note": "ford_crossing, then thread_over_the_ford threads each leg to its landing, then the run is squared",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
@@ -35714,21 +35809,23 @@
  "l7r/diagram/hamletgen/ways/track.py::stage_track#square at the water, as laid": {
   "body": "9c601658aaebaecb",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square - the row road squared here as laid (`square_run`, feature 417 T49); the valley and polder connector as chosen and threaded (`choose_track_out`, `_connector_through`, which square it)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "09f7484ce331f5f8",
   "core": "1b96763703065a9c",
   "date": "2026-10-26",
   "note": "the row road is `square_run` over the run threaded across the ford; the valley and polder connectors are handed on as `choose_track_out` chose them",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
@@ -35779,18 +35876,20 @@
  "l7r/diagram/hamletgen/ways/track.py::thread_over_the_ford#crossed at a ford": {
   "body": "60656ba1e0c478d2",
   "claim": "crossed at a ford - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook at a ford",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e7b295a9d5eda56f",
   "core": "98621eba49fead2d",
   "date": "2026-10-22",
   "note": "each leg threaded to its landing, and the deck at the recorded ford kept",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#its unstated figures": {
@@ -36046,20 +36145,21 @@
  "l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
   "body": "5bab44e36c948dbd",
   "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7c5a3a51ee4363db",
   "core": "e983c47ae52a75a9",
   "date": "2026-10-27",
   "note": "0035 sets no once-per-brook cap (\"no page we read says how many crossings one way of a hamlet made\"). It records as a GUESS only that a replacement way crosses no more often than the one it replaces. The claim should be a GUESS stating the cap, or the page should record it",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/tree.py::alongside_points#beside, as the map reads it": {
@@ -36745,19 +36845,21 @@
  "l7r/diagram/hamletgen/ways/tree.py::way_out_once#way out crosses each brook once": {
   "body": "532f7b1f43db1654",
   "claim": "way out crosses each brook once - villages-beside-their-stream-one-bank-or-both.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6076345628d07450",
   "core": "b41a6425ae5615f3",
   "date": "2026-10-22",
   "note": "the at-most-once rule is on no block; §110 charges a crossing about 150 ft and does not forbid it. Label GUESS/UNRESEARCHED or record the rule",
   "outside": true,
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
+  "triaged": "2026-11-01",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/ways/tree_base.py::Ends#plumbing": {
@@ -37171,18 +37273,20 @@
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton arm over the brook": {
   "body": "fb73c098606fff45",
   "claim": "skeleton arm over the brook - villages-beside-their-stream-one-bank-or-both.drawing: an inner arm crossing the brook takes the ford that makes its walk shortest, square to the reach",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "273b5cd97c7e3c98",
   "core": "95d551de585a96f1",
   "date": "2026-10-27",
   "note": "ford_crossing at a crossing place, square to the reach",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton arm trimmed back to the last point serving a house": {
@@ -37360,20 +37464,22 @@
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#square at the water, as laid": {
   "body": "fb73c098606fff45",
   "claim": "square at the water, as laid - villages-beside-their-stream-one-bank-or-both.drawing, plank-bridges-over-farm-ditches-itabashi.drawing: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5c6d1d4d50267559",
   "core": "95d551de585a96f1",
   "date": "2026-10-27",
   "note": "square_run before admitted_runs and laid_lawfully",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "164bd61d79dc4aa2"
   },
-  "research": "4286351e944ac920",
+  "research": "cdf1f302b90334a2",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:4c69a45b4f1a1d24",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_web_cut_lines#a cut's room": {
@@ -38004,9 +38110,10 @@
   "date": "2026-10-26",
   "note": "`clear_runs(..., lines=list(plan.watercourses) + drawn_water, ...)` and the same water list passed to `lay_reachable_runs`/`_lay_web_lane` clip every web cut at the water, so it never crosses. The page says \"A way keeps to its own bank unless crossing saves it more than about 150 ft\" and sets crossing places \"every 160 ft or so\". The page does not record a never-cross rule for web lanes; it records only the track's and the field spur's (§151). The pointer also covers the drawn irrigation channels, which this brook page does not speak to. Either the page records the departure and the claim is relabeled `DEVIATION`, or the cuts cross at a crossing place (T32); a known drift accepted by the round arbiter (ask:417-T46-departures) to land as filed",
   "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "1a1a7553a10864f1"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "research": "9354777ef34af3d3",
+  "research": "2882cfeb4389da9a",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
@@ -46025,19 +46132,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#bridge": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "240516a8e1d05533",
   "core": "7bfc685e4b891122",
   "date": "2026-10-12",
   "note": "deck on its crossing; shares ground with the water gate",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:c1e72c6eeac46cb8",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:fe15e8d64c04f45e"
   ],
   "section": "7bfc685e4b891122",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#dock and jetty": {
@@ -46452,10 +46561,11 @@
   "date": "2026-10-03",
   "note": "0087 every crossing bridged",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "section": "37132e1a4d2e6b55",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_PAIRS#way through a ward fence": {
@@ -46773,16 +46883,16 @@
   "date": "2026-10-18",
   "note": "the log_booms entry exempts \"a cabled chain of floating logs\" that \"FLOATS on the river\". 0210 says \"No floating log boom is drawn\"; what is drawn is moored raft-mats or a pond. Re-word the entry and its claim to the moored stock",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f",
    "0065-washing-places-at-the-waters-edge.drawing.html": "53f6bbd749f189f6",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3",
    "0148-towers-along-the-city-wall-mamian.drawing.html": "27ca7d42e46e076e",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965",
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90",
    "0210-timber-yards-and-log-booms-kiba.drawing.html": "f17b51f2d5f34284"
   },
-  "research": "a2d4b8ad1ff2671c",
+  "research": "ebea4f2d71d6cbd0",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
    "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6",
@@ -48875,6 +48985,7 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
   "research": "281143d409996aaf",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/ways.py::LANDING_FT#carried deck landing": {
@@ -48886,6 +48997,7 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
   "research": "281143d409996aaf",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/ways.py::PLANK_ABUTMENT#footplank abutment": {
@@ -50085,35 +50197,37 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#deck along the way": {
   "body": "054543c748c653c7",
   "claim": "deck along the way - road-bridges-over-rivers-and-canals-hashi.drawing",
-  "code": "93329abf83e44223",
-  "core": "f2f3da7b503179fa",
+  "code": "052ad83861936824",
+  "core": "d227e7b92a71a33e",
   "date": "2026-11-01",
   "note": "rot from the way's bearing",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:fe15e8d64c04f45e"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#every crossing bridged": {
   "body": "054543c748c653c7",
   "claim": "every crossing bridged - road-bridges-over-rivers-and-canals-hashi.drawing: each carried way over each crossed water",
-  "code": "30847364126a0234",
-  "core": "f2f3da7b503179fa",
+  "code": "90c74e601e536a8d",
+  "core": "d227e7b92a71a33e",
   "date": "2026-11-01",
   "note": "every crossing is decked or raised as a defect",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:5fb0771021ca6c69"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#one deck per crossing place": {
@@ -50130,18 +50244,20 @@
   "rests": [
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:3779136189db8200"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridges#unseated crossing": {
   "body": "054543c748c653c7",
   "claim": "unseated crossing - NONE: raised as an engine defect",
-  "code": "49dbfa6367313934",
-  "core": "f2f3da7b503179fa",
+  "code": "de663f9e2a0155c1",
+  "core": "d227e7b92a71a33e",
   "date": "2026-11-01",
   "note": "raises an engine defect, draws nothing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a ditch with no tail width": {
@@ -50763,34 +50879,38 @@
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#oblique span solved": {
   "body": "4b8d1e569e8ec204",
   "claim": "oblique span solved - road-bridges-over-rivers-and-canals-hashi.drawing: (ww + rw|cos|)/sin",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "eb6eea90e9fb93e4",
   "core": "524c2bea8be046a9",
   "date": "2026-11-01",
   "note": "(ww + rw|cos|)/sin",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#rice at the landing cuts the crossing": {
   "body": "4b8d1e569e8ec204",
   "claim": "rice at the landing cuts the crossing - road-bridges-over-rivers-and-canals-hashi.drawing: LANDING_FT onto dry ground at every corner, else no deck",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1d2323cc35dd5e86",
   "core": "524c2bea8be046a9",
   "date": "2026-11-01",
   "note": "a corner in rice leaves the deck unseated",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_admitted#plumbing": {
@@ -50812,17 +50932,6 @@
   "note": "a standing deck covers a crossing within its full span of its center",
   "research": "",
   "verdict": "UNCLAIMED"
- },
- "l7r/diagram/settlement/city/bridges.py::deck_covers#plumbing": {
-  "body": "ff73ecebf18ccd58",
-  "claim": "plumbing - NONE",
-  "code": "a4d86345e09a8d5e",
-  "core": "5919d654ff49295d",
-  "date": "2026-11-01",
-  "note": "this predicate decides whether a crossing is bridged, and it tests `dist <= span` where a deck reaches only span/2 from its center: a crossing up to a full span away is read as covered and left without its own deck. It should carry a 0084 §13 / 0087 §19 claim, and the radius should be span/2",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/city/bridges.py::deck_glyph#its drawn sizes": {
   "body": "123cec8456b1fc7e",
@@ -50860,18 +50969,20 @@
  "l7r/diagram/settlement/city/bridges.py::flooded_ground#no deck lands in the rice": {
   "body": "d24130ffdbc7a6f5",
   "claim": "no deck lands in the rice - road-bridges-over-rivers-and-canals-hashi.drawing: every corner on dry ground",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5e5ff9ae7080d9fb",
   "core": "e3cb5d437fbdf059",
   "date": "2026-11-01",
   "note": "paddy plot rings",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::plank_ditch#plumbing": {
@@ -50905,17 +51016,19 @@
  "l7r/diagram/settlement/city/bridges.py::seat_deck#deck grown until its corners clear": {
   "body": "1b28e467d9c7cc87",
   "claim": "deck grown until its corners clear - road-bridges-over-rivers-and-canals-hashi.drawing: up to 14 steps of 12% of the span",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fa1b6023b0bc73dc",
   "core": "a63e0a2526e45568",
   "date": "2026-11-01",
   "note": "tested on the four corners",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::seat_deck#its search steps and tolerances": {
@@ -50932,17 +51045,19 @@
  "l7r/diagram/settlement/city/bridges.py::seat_deck#skewed toward square": {
   "body": "1b28e467d9c7cc87",
   "claim": "skewed toward square - road-bridges-over-rivers-and-canals-hashi.drawing: at most 7 deg, inside the 8 deg a deck may lie off its way",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "64ddfb691b7b91e1",
   "core": "a63e0a2526e45568",
   "date": "2026-11-01",
   "note": "at most 7 deg, within the 8 deg",
   "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "070e3525d0ab33d3"
   },
-  "research": "281143d409996aaf",
+  "research": "771cf8c216d2c2bb",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:8c3220bda515ebc5"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::seat_order#the widest left": {
@@ -72449,10 +72564,10 @@
   "date": "2026-10-03",
   "note": "taper_pieces uses the square-root law",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "0bc4aea9fd754888"
   },
-  "research": "be69f0d771c8374a",
-  "triaged": "2026-10-05",
+  "research": "6a770d010097b9e0",
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/focal.py::FocalMixin#focal-feature plumbing": {
@@ -72983,10 +73098,10 @@
   "date": "2026-10-03",
   "note": "2.5 px is 2.5 ft at 1 ft/px and 5 ft at 2 ft/px, against 0068's field ditch \"about 0.3 m (~1 ft)\"; a legibility floor is a deviation 0068 does not record - label DEVIATION with a recorded ruling, or draw to scale",
   "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "0bc4aea9fd754888"
   },
-  "research": "be69f0d771c8374a",
-  "triaged": "2026-10-05",
+  "research": "6a770d010097b9e0",
+  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch winding": {
@@ -78621,35 +78736,39 @@
  "rust/phases/src/field/brook.rs::brook#above the intake": {
   "body": "8daecff58dbaa716",
   "claim": "above the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a hamlet's brook comes down off the high ground - from off the map straight down the fall along the intake's line, meandering",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "151d0f41cd034073",
   "core": "096637f3b4e90259",
   "date": "2026-11-01",
   "note": "the upstream run comes from off the map down the fall along the intake's line x_i, past one shoulder or into the middle",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#on past the intake": {
   "body": "8daecff58dbaa716",
   "claim": "on past the intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the brook runs on past the intake - down the fall, meandering as everywhere",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "45a0a0618b6848f3",
   "core": "096637f3b4e90259",
   "date": "2026-11-01",
   "note": "the downstream loop carries the brook on past the intake, down the flank, until it leaves the map; the brook is never taken whole",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a931ae1edb39839c",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#outside the crop": {
@@ -78666,18 +78785,20 @@
  "rust/phases/src/field/brook.rs::brook#the intake's place": {
   "body": "8daecff58dbaa716",
   "claim": "the intake's place - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake stands at the left, the center or the right of the fan's head - the brook down past one shoulder of the fan or straight into the middle (the `intake_place` knob, with the plan's flank)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cdc3921096534577",
   "core": "096637f3b4e90259",
   "date": "2026-11-01",
   "note": "the `center` flag and `side` give the left, center or right of the fan's head as the page's knob does; the 1:2:1 odds are rolled upstream of this function",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the intake's siting": {
@@ -78723,17 +78844,19 @@
  "rust/phases/src/field/brook.rs::brook#the middle intake raised": {
   "body": "8daecff58dbaa716",
   "claim": "the middle intake raised - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the race runs from the intake down to the fork - for a middle intake the race as long as the swing out past the head's corner asks, the plan's `lead` where that is longer",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "434a4f5890d9883e",
   "core": "096637f3b4e90259",
   "date": "2026-11-01",
   "note": "the race runs from the intake down to the fork; its length, max(lead, reach/tan), is a short run chosen per map, and the page records that figure as a guess",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the race turns away from the brook": {
@@ -78755,19 +78878,21 @@
  "rust/phases/src/field/brook.rs::brook#the shoulder intake": {
   "body": "8daecff58dbaa716",
   "claim": "the shoulder intake - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the head race leaves the intake at an acute angle pointing downstream and runs to the fork - the race from the head's corner turned `offtake_deg` off the brook's own line (on a straight reach the brook leans out by the wave's slope, so the race that much less off the fall), the brook's line `lead` up it, the intake on the race where the brook crosses it - on a straight reach half the wave's swing farther up",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f88ce761415e6251",
   "core": "096637f3b4e90259",
   "date": "2026-11-01",
   "note": "the race leaves the head's corner at offtake_deg, less swing_deg on a straight reach (the wave's slope at its midline); the brook's line is lead up the race, and the intake is swing/2 farther up the race on a straight reach, on the race itself, at an acute angle pointing downstream",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:8e97e1a3baf26730",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/brook.rs::brook#the tap's stride": {
@@ -78942,14 +79067,15 @@
  "rust/phases/src/field/build.rs::WEIR_THIN_FT#the fallback": {
   "body": "1b792f1940ccc20e",
   "claim": "the fallback - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms 1.5 to 5 ft thick; the fence's 1.5",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1072e5a07137875b",
   "core": "f1d6c32a9621fedd",
   "date": "2026-11-01",
   "note": "1.5 ft is the fence's drawn thickness, the thinnest of the four",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
@@ -78957,6 +79083,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
@@ -78975,6 +79102,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
@@ -78986,6 +79114,7 @@
   "note": "step = half_head+half_foot + 2(skirt+wander) + brook width, as stated; 0017 is silent on how tracts stand to each other",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
@@ -78997,6 +79126,7 @@
   "note": "hem laid on -brook_side only; 0011 is silent on the brook flank",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
@@ -79015,6 +79145,7 @@
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:b7b24861de8f4304"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
@@ -79031,6 +79162,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem on the first field": {
@@ -79043,6 +79175,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the hem's line": {
@@ -79140,39 +79273,43 @@
  "rust/phases/src/field/build.rs::one#the intake's place and siting": {
   "body": "7bc38938f8e3a057",
   "claim": "the intake's place and siting - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake at the left, the center or the right of the fan's head, and (where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki) in a straight reach or on the outside of a bend - the `intake_place` knob rolling the head's middle or a shoulder, the shoulder the one on the brook's side (`brook_side`, the plan's), and the `intake_siting` knob, read here for the brook",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "81ec4ae8f42d8396",
   "core": "99981bfd6877d551",
   "date": "2026-11-01",
   "note": "center or the brook-side shoulder, as the claim states; intake_siting read as straight or bend",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:41b10ab472dcebe7",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the weir": {
   "body": "7bc38938f8e3a057",
   "claim": "the weir - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f841f70a55b5d806",
   "core": "99981bfd6877d551",
   "date": "2026-11-01",
   "note": "drawn only when intake=weir, form from weir_form, thickness from the table, 1.5 ft fallback",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
@@ -79215,17 +79352,19 @@
  "rust/phases/src/field/build.rs::water#the field off the brook": {
   "body": "7b116842d2664f80",
   "claim": "the field off the brook - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the fan of paddies is cut away from the brook, leaving the stream its margin - an outline point within the brook's skirt refuses the field",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "852425f89421cca5",
   "core": "4e07b5f907d90e83",
   "date": "2026-11-01",
   "note": "an outline point closer to the brook than its skirt refuses the field",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::water#the water filed": {
@@ -79555,18 +79694,20 @@
  "rust/phases/src/field/channels.rs::channels#the head race's course": {
   "body": "d104ff743c4c3e12",
   "claim": "the head race's course - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the race runs from the intake down to the fork at the head of the fan - one straight run",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "17353edcaaf6803a",
   "core": "506bb8e9d015d634",
   "date": "2026-11-01",
   "note": "intake to fork, one segment; \"the shape is derived\"",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::channels#the second canal partway": {
@@ -79649,18 +79790,20 @@
  "rust/phases/src/field/channels.rs::division#the fork's place": {
   "body": "70d99dbd9deb939f",
   "claim": "the fork's place - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the race runs from the intake down to the fork at the head of the fan - at the head's corner on the brook's side where the intake stands at that shoulder, at its middle where the intake does",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6a0e5448e4a64535",
   "core": "b3a6703e5a4fc982",
   "date": "2026-11-01",
   "note": "the fork is at the head, at the intake's place: brook-side corner or the middle",
   "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "eb0a53acf790713d"
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
   },
-  "research": "ca5eadf339aff05e",
+  "research": "ba89a97c1cc159a1",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a581b2bc02500546"
   ],
+  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::offtake_lines#the lean": {
@@ -80224,6 +80367,7 @@
   "note": "the page is silent on band-wide depth; strips rolled once per band within 2-4",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
@@ -80240,6 +80384,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
@@ -80257,6 +80402,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#rows on the contour or down": {
@@ -80274,6 +80420,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#square to the canal": {
@@ -80291,6 +80438,7 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb": {
@@ -80307,6 +80455,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb's bound": {
@@ -80348,6 +80497,7 @@
   "note": "the page records the outward order (from the toe) as a guess and is silent on the order along the canal",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the plot": {
@@ -80364,6 +80514,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
@@ -80375,6 +80526,7 @@
   "note": "the page names this a drawing convention",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
