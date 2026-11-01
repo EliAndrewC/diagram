@@ -954,3 +954,19 @@ def test_a_rust_unit_carries_the_constants_it_names(tmp_path: pathlib.Path) -> N
     src = cx.context_source(tmp_path, "x.rs::f")
     assert cx.rust_constants(tmp_path, "x.rs", src) == ["x.rs::BAND"]
     assert cx.rust_constants(tmp_path, "x.rs", "fn g() {}") == []
+
+
+def test_an_unclaimed_decision_naming_a_claimed_constant_is_not_opened() -> None:
+    """The round arbiter's fix on ask:444-T16-claims-rounds: seven of round five's nine UNCLAIMED named a constant of the unit's
+    own file whose own claim stood IN-STEP; each is that constant's, not a finding. One naming a constant still open stays."""
+    rows = {
+        "x.rs::RING_FT#the ring": {"verdict": "IN-STEP"},
+        "x.rs::POND_FT#the pond": {"verdict": "MISLABELED"},
+        "x.rs::polder#the ring canal at RING_FT": {"verdict": "UNCLAIMED"},
+        "x.rs::polder#the pond's size POND_FT": {"verdict": "UNCLAIMED"},
+        "x.rs::polder#a decision naming nothing": {"verdict": "UNCLAIMED"},
+        "y.rs::polder#the ring at RING_FT": {"verdict": "UNCLAIMED"},
+    }
+    keys = [k for _v, k, _n in cx.open_findings(rows, frozenset())]
+    assert "x.rs::polder#the ring canal at RING_FT" not in keys
+    assert {"x.rs::POND_FT#the pond", "x.rs::polder#the pond's size POND_FT", "x.rs::polder#a decision naming nothing", "y.rs::polder#the ring at RING_FT"} <= set(keys)
