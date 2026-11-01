@@ -22,7 +22,7 @@
   },
   "field": {
    "status": "budgeted",
-   "per_thing": 1.0,
+   "per_thing": 1.14,
    "exponent": 0.86,
    "derivation": "specs/444-work-budget-program/phases/field_greenfield.derivation.md",
    "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt",
