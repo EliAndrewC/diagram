@@ -392,6 +392,26 @@ and 905 at the site, after the hem was bounded (ask:444-T16-hem-budget, route b)
 9. **After a ruling, the step it named?** The ruling on `ask:444-T16-hem-budget` named route (b): the hem re-derived and bounded,
    now before MODE BUDGET.
 
+### T16 part B (2026-11-01T12:34Z)
+
+The trigger: the cohort at 2026-11-01T12:33Z - seeds 4, 7, 9 and 901 at the seating and 905 at the site, the same five Python-stage
+seeds the GM was told of on 444#1's answer, after the claims round's fifth fixes (`hem_bounds`, the merged deck re-tested) and the
+MODE AUDIT's counters.
+
+1. **What exactly is refusing?** Later Python stages: the seating (`cluster.seat_cluster`, SeatRefused on 4, 9 and 901), the web
+   (7, a lane over a threshing yard) and the site (905). `make rust-gate` passes the field on 54 seeds
+   (`dev/rust-gate/20261101T123253Z.json`, 0 failing).
+2. **A3 again.** Amendment 5 (the GM 2026-11-01 on 444#1: "it's okay for the Python code to have errors since we will fix those
+   when those stages are ported to Rust"): a later Python stage's failure on a moved map waits for its own port.
+3. **A4 again.** The rule that refuses is the seating's room beside the hem; the hem stands where 0006 and 0011 put it.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither for these seeds: the changes were the claims' fixes and the counters, not a seat.
+6. **The one-sentence test.** "The field in Rust passes every check of its own; the five seeds refuse in Python stages that
+   amendment 5 leaves to their ports."
+7. **The next step is a measurement.** The second MODE AUDIT on the counted field (42,440 at 40 against 27,238), then the landing.
+8. **Every route measured before the arbiter was asked?** No new ruling asked: nothing here is a process stop.
+9. **After a ruling, the step it named?** ask:444-T16-claims-round5 named the fifth pass and its fixes, done.
+
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
 - **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the
