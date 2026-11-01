@@ -67,25 +67,26 @@ impl Basin {
     }
 }
 
-/// The cut positions across one row, as fractions s in [-1, 1], with a cut at 0 where the drain runs down the fan's middle: each
-/// half's lengths rolled in `ALONG_FT` from the row's own stream (positional, so a change to one row re-rolls only it), as many as
-/// the band holds across the half's breadth (the count nearest its middle), then fitted to it: what they fall short or run over
-/// is shared among them, each held inside the band.
+/// `cuts_counted` with its work thrown away, for the tests.
 ///
 /// Research:
-///     the basin's length - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 26 to 36 ft along it, a knob rolled each basin, every basin of a half-row inside the band where a whole count fits it
-///     a half-row between counts - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream
-///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
+///     the cuts - NONE: `cuts_counted`'s own claims; this drops the count
 #[cfg(test)]
 #[must_use]
 pub fn cuts(seed: i64, row: usize, breadth: f64) -> Vec<f64> {
     cuts_counted(seed, row, breadth, &mut 0)
 }
 
-/// `cuts`, each fit's reads of its lengths counted in `work` (the work-budget audit at T16's landing: `fit`'s passes uncounted).
+/// The cut positions across one row, as fractions s in [-1, 1], with a cut at 0 where the drain runs down the fan's middle: each
+/// half's lengths rolled in `ALONG_FT` from the row's own stream (positional, so a change to one row re-rolls only it), as many as
+/// the band holds across the half's breadth (the count nearest its middle), then fitted to it: what they fall short or run over
+/// is shared among them, each held inside the band. Each fit's reads of its lengths are counted in `work` (the work-budget
+/// audit at T16's landing: `fit`'s passes uncounted).
 ///
 /// Research:
-///     the cuts - NONE: `cuts`' own claims; this counts its work
+///     the basin's length - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: 26 to 36 ft along it, a knob rolled each basin, every basin of a half-row inside the band where a whole count fits it
+///     a half-row between counts - GUESS: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html silent on a row no whole count of such basins fills; the count nearest the band's middle, its basins as long as the breadth makes them (the fan narrowing toward its drain) - the same count on both halves of a row, the drain at its middle, each basin's length rolled from the row's own stream
+///     the drain a bund of its own - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: one drain gathering the water along the lowest line
 #[must_use]
 pub fn cuts_counted(seed: i64, row: usize, breadth: f64, work: &mut u64) -> Vec<f64> {
     let (lo, hi) = (f64::from(ALONG_FT.0), f64::from(ALONG_FT.1));
