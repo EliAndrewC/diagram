@@ -1,0 +1,146 @@
+{
+ "t16-grave-f1": {
+  "quantity": "the grave stones' heights and bases on Inashiro",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "glyph-check--field-grave--inashiro",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/inashiro/inashiro.svg",
+  "command": "grep -oE '<rect x=\"[0-9.]+\" y=\"[0-9.]+\" width=\"1.8\" height=\"[0-9.]+\" fill=\"#9AA1A4\"' pool/hamlets/inashiro/inashiro.svg",
+  "method": "the two stones' rects read from the regenerated map",
+  "value": {
+   "stones": [
+    [
+     3016.1,
+     3013.5,
+     3.0
+    ],
+    [
+     3019.6,
+     3012.3,
+     2.2
+    ]
+   ],
+   "abreast": false
+  }
+ },
+ "t16-grave-f2": {
+  "quantity": "the grave island's carved ground drawn as dry earth",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "glyph-check--field-grave--inashiro",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/inashiro/inashiro.svg",
+  "command": "grep -c 'fill=\"#CFC6B4\" stroke=\"none\"' pool/hamlets/inashiro/inashiro.svg",
+  "method": "the dry-ground polygon counted on the regenerated map",
+  "value": {
+   "dry_ground_polygons": 1
+  }
+ },
+ "t16-fishpond-f1": {
+  "quantity": "Kuwabata's parcels' skew, the mosaic restored",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/kuwabata/kuwabata.json",
+  "command": "python3 skew.py pool/hamlets/kuwabata/kuwabata.json (each parcel's four extreme corners, the largest deviation from 90 deg)",
+  "method": "the same measure on main's Kuwabata gives median 13.9, p90 23.8",
+  "value": {
+   "measured": "22 corner dev median 14.5 p90 20.1",
+   "main": "35 corner dev median 13.9 p90 23.8"
+  }
+ },
+ "t16-fishpond-f2": {
+  "quantity": "the notes' water share against the rolled split",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'Superseded (feature 385 T10' pool/hamlets/kuwabata/kuwabata.notes.md",
+  "method": "the supersession line read",
+  "value": {
+   "supersession_present": true
+  }
+ },
+ "t16-sr-inashiro-f1": {
+  "quantity": "the notes' district direction against the connector",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "settlement-review--inashiro",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md",
+  "command": "grep -n 'district direction' pool/hamlets/inashiro/inashiro.notes.md",
+  "method": "the bullet read beside the manifest's connector, (2737,1774) to (5950,1774)",
+  "value": {
+   "district_direction": "east"
+  }
+ },
+ "t16-sr-inashiro-f2": {
+  "quantity": "the notes' burial against meta.hamlet_burial",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "settlement-review--inashiro",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md",
+  "command": "grep -nE 'burial|field grave' pool/hamlets/inashiro/inashiro.notes.md",
+  "method": "the Subject and Features read",
+  "value": {
+   "own_ground_glade_claimed": false,
+   "field_grave_bullet": true
+  }
+ },
+ "t16-sr-inashiro-f3": {
+  "quantity": "a feature-444 entry in the notes",
+  "observed": "2026-11-02",
+  "verifies": "F3",
+  "subject": "settlement-review--inashiro",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/inashiro/inashiro.notes.md",
+  "command": "grep -n 'feature 444 T16' pool/hamlets/inashiro/inashiro.notes.md",
+  "method": "the entry read",
+  "value": {
+   "entry_present": true
+  }
+ },
+ "t16-sr-kuwabata-f1": {
+  "quantity": "the notes' retirement-house count against the manifest",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "settlement-review--kuwabata",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'of its 16 homesteads' pool/hamlets/kuwabata/kuwabata.notes.md",
+  "method": "the bullet read beside the manifest's 7 retirement houses",
+  "value": {
+   "bullet": true
+  }
+ },
+ "t16-sr-kuwabata-f2": {
+  "quantity": "a feature-444 entry naming the old block's counts as history",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "settlement-review--kuwabata",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'feature 444 T16' pool/hamlets/kuwabata/kuwabata.notes.md",
+  "method": "the entry read",
+  "value": {
+   "entry_present": true
+  }
+ },
+ "t16-sr-kuwabata-f3": {
+  "quantity": "the 6:4 reading marked superseded by the rolled split",
+  "observed": "2026-11-02",
+  "verifies": "F3",
+  "subject": "settlement-review--kuwabata",
+  "answers": "12ba28d38ac4",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md",
+  "command": "grep -n 'Superseded (feature 385 T10' pool/hamlets/kuwabata/kuwabata.notes.md",
+  "method": "the line read",
+  "value": {
+   "supersession_present": true
+  }
+ }
+}
