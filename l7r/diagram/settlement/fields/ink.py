@@ -227,6 +227,7 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
     banks' crop.
 
     Research:
+        the bank a ring - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: the bank is a ring, not a disk under the pond, and pointing at a bank lights the bank alone
         the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green
         the tea hedge's width - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke
         the leftover rice drawn growing - GUESS: the Rust's conversion gives a rice parcel left among the ponds no water state; drawn as standing rice, never flooded
@@ -245,7 +246,12 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
             random.setstate(st)
             continue
         cls = "fry pond" if kind == "fry" else "fish pond"
-        s.add_paddy(f'<path d="{bank[0]}" fill="{BANK_FILL}" stroke="{AZE}" stroke-width="{bund:.2f}"/>', cls=cls)
+        # THE BANK IS A RING, NOT A DISK UNDER THE POND (0018; the glyph check of Kuwabata, feature 444 T16): the bank's outline and
+        # its water's together, even-odd, in the dike's own class, so pointing at a bank lights the bank alone, as on main
+        s.add_paddy(
+            f'<path d="{bank[0]} {water[0]}" fill="{BANK_FILL}" fill-rule="evenodd" stroke="{AZE}" stroke-width="{bund:.2f}"/>',
+            cls=f"{crops[0]} dike" if crops[0] in ("mulberry", "fruit", "tea") else "mulberry dike",
+        )
         s.add(f'<path d="{water[0]}" fill="{POND_WATER_FRY if kind == "fry" else POND_WATER}" stroke="{POND_RIM}" stroke-width="1.0"/>', cls=cls)
     crop, crowns, hedges = crops
     cls = f"{crop} dike" if crop in ("mulberry", "fruit", "tea") else "mulberry dike"

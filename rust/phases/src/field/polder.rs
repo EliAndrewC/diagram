@@ -390,7 +390,7 @@ pub fn polder(
         frame.at(-RING_FT.1 - POND_FT.1, size.1 + RING_FT.1),
         inlet,
     ];
-    let ditches = ditches(&put, &canal, size, (cols, module, col_gap));
+    let ditches = ditches(&put, &canal, size, (cols, module, col_gap), (rows, row_gap));
     Polder {
         outline: ring(0.0),
         inner_env: env,
@@ -463,13 +463,29 @@ fn plots(
                 2 + rng.randbelow(2)
             };
             let w = (module - f64::from(strips - 1) * row_gap) / f64::from(strips);
+            // a merged parcel keeps a corner on each side where its middle row line crosses, the column ditch's own station
+            // (`ditches`), so the warp cannot bow the ditch across a straight parcel side (the glyph check of Kuwabata, feature 444 T16)
+            #[expect(clippy::cast_precision_loss, reason = "a small count")]
+            let um = (r + 1) as f64 * (module + row_gap) - row_gap / 2.0;
             for k in 0..strips {
                 let a = x0 + f64::from(k) * (w + row_gap);
+                let corners = if span == 2 {
+                    vec![
+                        put(u0, a),
+                        put(u0, a + w),
+                        put(um, a + w),
+                        put(u1, a + w),
+                        put(u1, a),
+                        put(um, a),
+                    ]
+                } else {
+                    vec![put(u0, a), put(u0, a + w), put(u1, a + w), put(u1, a)]
+                };
                 out.push(Plot {
                     row: r,
                     span,
                     col: c,
-                    ring: vec![put(u0, a), put(u0, a + w), put(u1, a + w), put(u1, a)],
+                    ring: corners,
                     low: r + span == rows,
                 });
             }
@@ -495,6 +511,7 @@ fn ditches(
     canal: &[Pt],
     size: (f64, f64),
     cols: (usize, f64, f64),
+    rows: (usize, f64),
 ) -> Vec<Ditch> {
     let (n, module, gap) = cols;
     let mut out = vec![
@@ -527,26 +544,25 @@ fn ditches(
             w_tail: 5.5,
         },
     ];
-    #[expect(
-        clippy::cast_possible_truncation,
-        clippy::cast_sign_loss,
-        reason = "a small positive count of stations"
-    )]
-    let steps = ((size.0 + 2.0 * RING_FT.0) / (module / 4.0))
-        .ceil()
-        .max(1.0) as usize;
+    // THE DITCH'S STATIONS ARE THE PARCELS' OWN (the glyph check of Kuwabata, feature 444 T16): every row's start and end and the
+    // middle of every gap between rows, where the parcels beside it keep their corners (`plots`) - so between two stations the
+    // ditch and the parcels' sides are straight runs of the same warp, and the ditch stays in its gap; sampled finer, the mosaic's
+    // drift bowed it up to 24 ft into the banks
+    let (row_n, row_gap) = rows;
+    let mut stations = vec![-RING_FT.0];
+    for r in 0..row_n {
+        #[expect(clippy::cast_precision_loss, reason = "a small count")]
+        let u0 = r as f64 * (module + row_gap);
+        stations.extend([u0, u0 + module]);
+        if r + 1 < row_n {
+            stations.push(u0 + module + row_gap / 2.0);
+        }
+    }
+    stations.push(size.0 + RING_FT.0);
     for c in 1..n {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
         let x = c as f64 * (module + gap) - gap / 2.0;
-        #[expect(clippy::cast_precision_loss, reason = "a small count")]
-        let pts = (0..=steps)
-            .map(|k| {
-                put(
-                    -RING_FT.0 + (size.0 + 2.0 * RING_FT.0) * k as f64 / steps as f64,
-                    x,
-                )
-            })
-            .collect();
+        let pts = stations.iter().map(|&u| put(u, x)).collect();
         // the head canal's width where the column leaves it: 4.5 ft at the inlet's corner (x = breadth), its 1.5 ft tail at the far one
         let local = 1.5 + (4.5 - 1.5) * (x / size.1).clamp(0.0, 1.0);
         let head = 2.5_f64.min(0.8 * local);
@@ -668,12 +684,16 @@ mod tests {
             let p = polder(paddy, dikepond, layout, 90.0, (3200.0, 3200.0), 1.0, 4);
             let area: f64 = p.plots.iter().map(|x| signed_area(&x.ring).abs()).sum();
             assert!(area >= paddy * 0.8, "{area} for {paddy}");
-            assert!(p.plots.iter().all(|x| x.ring.len() == 4));
+            assert!(p
+                .plots
+                .iter()
+                .all(|x| x.ring.len() == 4 || x.ring.len() == 6));
             assert!(p.plots.iter().any(|x| x.low));
+            #[expect(clippy::cast_precision_loss, reason = "a parcel's few corners")]
             let center = |r: &[(f64, f64)]| {
                 (
-                    r.iter().map(|q| q.0).sum::<f64>() / 4.0,
-                    r.iter().map(|q| q.1).sum::<f64>() / 4.0,
+                    r.iter().map(|q| q.0).sum::<f64>() / r.len() as f64,
+                    r.iter().map(|q| q.1).sum::<f64>() / r.len() as f64,
                 )
             };
             assert!(p
