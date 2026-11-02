@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "009c2d67fcf338fb17a558241c7ba5865a6531b9f823b45b405ddec77435b08d",
+   "sha256": "2e7848e6344fcb667459d5b91440f1ea088ed2d4692f75cb2c67166bb2490ff2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-02",
    "declared": "spec-fidelity"
@@ -45,13 +45,13 @@
   },
   "### T01 Approach (checklist part A)": {
    "sha256": "ae7d7d1458b0efcf1b77d3acc3c50254b6cc02fe655ef77f923b496be9f38d83",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-02",
    "declared": "spec-fidelity"
   },
   "### T02 Approach (checklist part A)": {
-   "sha256": "36332be348e15340b819d6b31abfc9fc5de64b55b104cfeaf7524334584f4752",
-   "verdict": "BLOCKED",
+   "sha256": "2913f49045b4b07b7faf7788e441a4d47f4de9eff20fc85a8ae4a57bd938887f",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-02",
    "declared": "spec-fidelity"
   }
@@ -415,6 +415,59 @@
      "summary": "After T01, same landing.",
      "class": "within",
      "why": "Sequencing; narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "## Decisions",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Slated = (a) stage_files of every STAGES stage not accepted (76 files, hamletgen/) plus (b) engine modules unreachable from the roots that stay Python once (a) is removed (14 files); the 146-file phase_sources union rejected because its counted_files half takes in the kept trees.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. The GM relaxes the floor for engine code 'since that's going away' and keeps it for code 'not currently slated to be removed'; FR-001 names exactly the code slated for removal by a 444 phase or the whole-engine replacement. Keeping the driver, STAGES, rendering, consts, thin doors at the floor is the GM's own second clause, not a narrowing; rejecting the 146-file union keeps the floor on tools/ci/pipeline that FR-003 and the GM protect."
+    },
+    {
+     "id": "D2",
+     "summary": "dev/coverage-exempt.json: ruling + entries (path, stages, why), seeded once, edited by hand after; a path not in it is held to the full floor.",
+     "class": "within",
+     "why": "Unchanged. FR-001 (one record, each entry with its reason) and FR-004 (default is the floor)."
+    },
+    {
+     "id": "D3",
+     "summary": "One reader ci/coverage_exempt.py (entries/exempt, omit, report); Makefile floor line, hamlet_floor check, cover_changed (and so make land) and now preflight.py's coverage step exempt the live entries and print their unrun lines as information; source=[l7r] unchanged.",
+     "class": "within",
+     "why": "The only change is adding preflight.py's coverage step, which FR-002 names explicitly ('make preflight's coverage step'); its earlier absence was the gap. Every reader FR-002 lists is now carried, each exempting the record's entries only and still reporting their unrun lines, as FR-002 and SC-003 require."
+    },
+    {
+     "id": "D4",
+     "summary": "Stale: path gone; (a) entry whose every stage is accepted; (b) entry the reader's reachability finds reached from kept roots. Stale is not exempt, report exits 1 naming the cure make coverage-exempt PRUNE=1; make land's cheap refusals run the check first.",
+     "class": "within",
+     "why": "Unchanged. FR-005 verbatim in mechanism: the three staleness conditions, the floor returning, and the gate and make land failing with the removing command."
+    },
+    {
+     "id": "D5",
+     "summary": "Docs: every operative statement FR-006's search finds - root, l7r/diagram, settlement, tools, tests CLAUDE.md; efficiency-tooling, guards, migration-plan; incremental.py docstring; pyproject note; plan-template Principle X gate; constitution Principle X clause 5 (2.34.0) - plus the phase checklist's rebuild box; the two floor tests pin 'only omission is the record's'.",
+     "class": "within",
+     "why": "The list now matches FR-006's named set item for item (the earlier block omitted tools/, tests/ CLAUDE.md, guards, migration-plan, incremental.py and the plan template). The added phase-checklist box is a doc carrying the same exemption where a phase acts on it, extending rather than narrowing FR-006; the test change is FR-006's last clause."
+    },
+    {
+     "id": "T01-exits",
+     "summary": "T01: constraints FR-001..FR-005 and D1-D4; 90 entries, 0 stale (one-shot, 2026-11-02, make coverage-exempt); exits the reader's, hamlet floor's, cover-changed's and land's tests plus the landing's gate floor; done = make done floor green with every kept file at the full floor (SC-002).",
+     "class": "within",
+     "why": "Text unchanged; its constraint D3 now carries preflight, so T01 implements every FR-002 reader. Done criterion is SC-002 as written. Nothing narrows the request."
+    },
+    {
+     "id": "T02-done",
+     "summary": "T02 done check: every doc D5 lists names dev/coverage-exempt.json and carries the GM's 2026-11-02 words, checked by git grep over that list.",
+     "class": "within",
+     "why": "The earlier done check covered a subset of the docs (the narrowing that blocked it); it now covers D5's full list, which equals FR-006's, so SC-003's doc half is checked whole."
     }
    ]
   }
