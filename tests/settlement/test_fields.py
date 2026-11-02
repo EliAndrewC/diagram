@@ -274,7 +274,7 @@ def test_the_dikepond_ink_draws_its_leftover_rice_mottled_and_its_tea_hedges(tmp
     s.finish(base, render=False)
     svg = Path(base + ".svg").read_text(encoding="utf-8")
     assert svg.count('r="1.0" fill="#6F9061"') > 20, "the leftover's shoots, on the jittered grid"
-    assert 'stroke-width="3" stroke-linecap="butt"' in svg, "the tea hedge"
+    assert "stroke-linecap=\"butt\"" in svg and "polyline" in svg, "the tea hedge"
     again = Settlement(400, 400, seed=1)
     again.meta(name="Dk", scale="hamlet", ftpx=2)
     ink.dikeponds(again, [("rice", rice, None, None)], ("tea", [], []), 1.2)

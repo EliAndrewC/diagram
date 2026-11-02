@@ -434,6 +434,26 @@ The trigger: two red `make done` runs in a row (the round arbiter on red-gate@20
 8. **Every route measured before the arbiter was asked?** Yes: the arbiter's two rulings named this route.
 9. **After a ruling, the step it named?** The cheap check, then the gate - in that order.
 
+### T16 part B (2026-11-02T02:31Z)
+
+The trigger: a third red `make done` in a row (the round arbiter on red-gate@2026-11-02T02:03:28Z).
+
+1. **What exactly is refusing?** The coverage floors alone: 11 uncovered entries (run-log 20261102T020327946232-118828), down from
+   20; 12,169 tests passed and the roll census held.
+2. **Where each comes from.** None was the held Sawada roll's alone. Two were opened by the D10 deletion taking its tests with it
+   (`waterfields/frame.py`'s `_seg_d` and `_signed_area`, `twins.py`'s found branch); one was a drawing T16's ink had dropped (the
+   dike-pond's leftover rice, the GM's 2026-07-23 jittered grid); the rest are branches no pool map rolls (a rice polder's plots and
+   pocket pond, a drain meeting the brook, a covered crossing).
+3. **The fix at each cause.** The callerless helpers deleted (`_seg_d`, `_signed_area`, `SitePlan.head_deg`); `_field_feature_ink`'s
+   always-None hold-list removed; the mottle restored, its pitch in feet; a unit test for each branch no pool map rolls.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Restoring a ruled drawing, deleting dead code, adding tests.
+6. **The one-sentence test.** "Every line the floor names is reached by a test, or gone."
+7. **The next step is a measurement.** One `make done`: the 11 covered, and no new range opened by the mottle or the ink's rewrite. A
+   coverage red made mostly of new ranges from the deletion is a process fault, not another round.
+8. **Every route measured before the arbiter was asked?** Yes.
+9. **After a ruling, the step it named?** The gate run.
+
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 
 - **Approach**: the roll through the Rust stages alone, the checks asked by what they read, the seeds with no fixed block and the

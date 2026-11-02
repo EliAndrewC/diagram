@@ -208,6 +208,7 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
     Research:
         the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green
         the tea hedge's width - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke
+        the leftover rice drawn growing - GUESS: the Rust's conversion gives a rice parcel left among the ponds no water state; drawn as standing rice, never flooded
         the leftover rice's shoots - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: unruled shoots on a jittered grid about 4.5 ft apart (the GM 2026-07-23, the polder-leftover repaint)
         a nursery's water - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)"""
     for kind, parcel, bank, water in parcels:
@@ -231,4 +232,4 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
         dots = "".join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}"/>' for x, y, r in crowns)
         s.add(f'<g fill="{CROWN_FILL.get(crop, "#87A45C")}" opacity="0.9">{dots}</g>', cls=cls)
     for h in hedges:
-        s.add(f'<polyline points="{_pts(h)}" fill="none" stroke="{CROWN_FILL["tea"]}" stroke-width="3" stroke-linecap="butt"/>', cls=cls)
+        s.add(f'<polyline points="{_pts(h)}" fill="none" stroke="{CROWN_FILL["tea"]}" stroke-width="{s.px(3):.2f}" stroke-linecap="butt"/>', cls=cls)

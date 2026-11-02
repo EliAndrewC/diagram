@@ -52666,12 +52666,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#a nursery's water": {
-  "body": "4c761256d5345bbc",
+  "body": "97c99e562468d9cd",
   "claim": "a nursery's water - fish-fry-and-nursery-ponds-yumiao.drawing: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)",
-  "code": "769a63ed5c67bd97",
-  "core": "9616e1d31d793dc5",
+  "code": "bbfeba1f94e12579",
+  "core": "d6751c355c919f5d",
   "date": "2026-11-01",
-  "note": "fry ponds take POND_WATER_FRY, the \"grayer, muddier water\"",
+  "note": "fry parcels take `POND_WATER_FRY` and grow-out ponds take `POND_WATER`, one color for each form as the page says (\"drawn in grayer, muddier water\"); the exact shade is the page's convention and belongs to the constant's own claim",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
@@ -52680,15 +52680,28 @@
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:3b71b145c095e8f3",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:a55235764553bafc"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the block's ink": {
-  "body": "4c761256d5345bbc",
+  "body": "97c99e562468d9cd",
   "claim": "the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green",
-  "code": "27dc546cebf87f10",
-  "core": "9616e1d31d793dc5",
+  "code": "5e3d12546306b87b",
+  "core": "d6751c355c919f5d",
   "date": "2026-11-01",
-  "note": "colors and the 0.9 crown opacity only set how things are shown",
+  "note": "fills, rim, 0.9 crown opacity and the tea-green stroke are all choices about how things are shown",
+  "pages": {},
+  "research": "",
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/ink.py::dikeponds#the leftover rice drawn growing": {
+  "body": "896cf329ae4253e3",
+  "claim": "the leftover rice drawn growing - GUESS: the Rust's conversion gives a rice parcel left among the ponds no water state; drawn as standing rice, never flooded",
+  "code": "195465a2981f3ba7",
+  "core": "377fb327038824bb",
+  "date": "2026-11-01",
+  "note": "the code draws the leftover parcel as shoots with `flooded=False` and no water fill; the cited pages say how the shoots are drawn (§41) but never whether this parcel is flooded, so GUESS is the right label",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -52710,15 +52723,16 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:909e488b5831f110",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:b84e43d5cf98e814"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the tea hedge's width": {
-  "body": "4c761256d5345bbc",
+  "body": "97c99e562468d9cd",
   "claim": "the tea hedge's width - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke",
-  "code": "1613f2d74c31c487",
-  "core": "9616e1d31d793dc5",
+  "code": "58e4fe1cd77f1303",
+  "core": "d6751c355c919f5d",
   "date": "2026-11-01",
-  "note": "stroke-width=\"3\" matches \"each hedge is about 3 ft wide\", recorded as a GUESS; the Rust supplies the two rows and the breaks",
+  "note": "`stroke-width=\"3\"` is a bare 3 map units, while this same function turns feet into map units with `s.px(...)` (`pitch=s.px(4.5)`). So the hedge is 3 px wide, not the page's \"each hedge is about 3 ft wide\". It should be `s.px(3)`",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
@@ -52726,7 +52740,8 @@
   "rests": [
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
   ],
-  "verdict": "IN-STEP"
+  "triage": "touched",
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/ink.py::ditches#the channels' ink": {
   "body": "81c62431da38af7f",
