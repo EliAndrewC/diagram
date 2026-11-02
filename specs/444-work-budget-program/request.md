@@ -377,3 +377,10 @@ Told that the field's re-derived budget sat above the standing pin (444#4):
 Told that, with every loop the audits named counted, the field measured 1.88 times its derivation, and offered (a) 1.9 times the derivation or (b) the furrows' spacing widened first (444#6):
 
 "I go with option (a) - this is well within what we should consider acceptable, even if our original estimate was a bit off because of failing to count/consider/calculate everything."
+
+## 2026-11-02, T16 - the Python stages' speed
+
+Told that T16's `make perf-ab` timed the field at 0.05 s (was 1.64) and the whole roll 21% slower, the later Python web stage
+taking 3.81 s where it took 1.60, its calls doubled:
+
+"I don't care about the python code getting slower.  We are no longer trying to optimize or fix the python code since it is getter replaced with Rust soon."
