@@ -41,8 +41,8 @@ pub const BOW_NUDGE_FT: (f64, f64) = (6.0, 3.0);
 /// (`MOSAIC_WAVES`), fading to nothing at the block's edge.
 ///
 /// Research:
-///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.16 of a module (the 0.5 strength at 0.32 a module that map was drawn with), restored after the port's single weak wave drew it as a chessboard (the glyph check, feature 444 T16)
-pub const DRIFT_SHARE: f64 = 0.16;
+///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.48 of a module, the strength at which Kuwabata's parcels skew as main drew them (measured 2026-11-02 on the four extreme corners of each parcel: median corner deviation 14.5 deg against main's 13.9, p90 20.1 against 23.8); the port's single weak wave at 0.15 drew 4.6 deg, a chessboard (the glyph check, feature 444 T16)
+pub const DRIFT_SHARE: f64 = 0.48;
 /// The mosaic's two waves on each axis, as (weight, cycles across the block) pairs: down the fall from the fall and from across, and
 /// across from across and from the fall.
 ///
