@@ -10551,12 +10551,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#a rice polder's pocket pond": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "a rice polder's pocket pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: a polder may have a pond on a low plot - the Rust's roll (`stage_polder`'s `pocket_pond`), recorded and drawn here as the comb's is",
-  "code": "8c836aa39d0d230b",
-  "core": "4aff6719a73f4388",
+  "code": "a72604434c24816d",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "the polder row lets a pond sit on a low plot; how often is left to the Rust's roll, and the pond is drawn and recorded as the comb's is",
+  "note": "the polder row of the page's table puts its pond \"on a low plot\", and the code draws the Rust's pocket_pond as the comb's pond is drawn",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -10571,12 +10571,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#every low plot tinted": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "every low plot tinted - wet-paddies-that-never-drain-shitsuden.drawing: a polder or terraced field tints every low plot - each low plot in the wet tint (`states::polder_states` returns `wet` for every low plot before any other roll, so its `FILL` is the wet one); none rests (`polder::rest` never picks a low plot), so none is drawn untinted through `rest_basin`",
-  "code": "2b573dedadb80d86",
-  "core": "4aff6719a73f4388",
+  "code": "5c70d45e0e61a9b3",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "the fill comes from the state, a low plot is wet, a low plot never rests, and wet_plots is taken from low",
+  "note": "\"A polder or terraced field tints every low plot\"; the fill comes from each plot's state through FILL, low plots are recorded wet, and no low plot goes through rest_basin",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
@@ -10588,12 +10588,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#its water source": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "its water source - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond that feeds the polder stands at its head, by the inlet - recorded at the high corner under `reservoir`, the manifest's one name for a pond a field draws its water from, which its readers take for any feeding pond",
-  "code": "df2d4181355b6601",
-  "core": "4aff6719a73f4388",
+  "code": "b9d2f74c81f4c754",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "the meta records the feeding wild pond as `reservoir` at `corner_high`, which matches the page: the inlet sits at the polder's head, read as its high end, and the feeding pond stands to its northwest, a corner. The pond itself is placed by the Rust (`out[\"pond\"]`).",
+  "note": "the wild pond feeds the polder at its head, where the inlet is, and the head is read as the high end; the code records it as reservoir at corner_high",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -10605,24 +10605,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no beans on a polder's bunds": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "no beans on a polder's bunds - GUESS: bunds-between-the-paddies-aze.drawing silent on a polder's bunds; the polder drawn without the comb's bean runs",
-  "code": "6bd2c27528f2970a",
-  "core": "4aff6719a73f4388",
+  "code": "0601f6b514973968",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "bund_beans and bund_bean_runs are left empty; nothing in the bundle's cited pages addresses a polder's bunds",
+  "note": "nothing in the bundle's cited pages speaks of beans on a polder's bunds; bund_beans and bund_bean_runs are empty, as the claim says",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#no dry plots inside a polder": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "no dry plots inside a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies, its dry landward shore beyond",
-  "code": "1e26b821267cbad4",
-  "core": "4aff6719a73f4388",
+  "code": "8ca9e19226392e35",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "dry_plots is empty and dry_acres 0; inside the dike, from outside in, come the ring canal, the ditches and the paddies, with the dry shore outside",
+  "note": "from the outside in: dike, ring canal, field ditches, paddies, with the dry shore outside; the code sets dry_plots to [] and dry_acres to 0.0",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -10635,12 +10635,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the banks kept": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "the banks kept - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the bank kept along a canal, 2.6 to 4.9 ft - a no-build bank (`DITCH_BANK_FT` past the half-width) along every channel the polder draws, its feeder and its outfall too",
-  "code": "1480ea68b3f5d164",
-  "core": "4aff6719a73f4388",
+  "code": "509dc9a5c308ce9a",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "every polder channel, the feeder and the outfall included, gets a no-build strip of the half-width plus DITCH_BANK_FT (4.0), which is inside the 2.6 to 4.9 ft bank",
+  "note": "DITCH_BANK_FT 4.0 lies inside the attested bank of \"2.6 to 4.9 ft\", applied past the half-width on every channel, feeder and outfall included",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
   },
@@ -10651,12 +10651,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's plots drawn apart": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "the polder's plots drawn apart - the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing: on some maps about one rice plot in sixteen drawn still flooded and one in twenty gold - each plot drawn in the state the Rust rolled (`states::polder_states`), the flooded ones recorded as the comb's are",
-  "code": "1f58b1e38d25142f",
-  "core": "4aff6719a73f4388",
+  "code": "3227c6e961883fed",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "each plot is drawn in the state the Rust rolled, and flooded plots are recorded as the comb's are; about 1 in 16 flooded and 1 in 20 gold",
+  "note": "each plot is painted in the state the Rust rolled, and the flooded ones are recorded as the comb's are; the one-in-sixteen and one-in-twenty rates live in the Rust",
   "pages": {
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
@@ -10668,12 +10668,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_polder#the polder's records": {
-  "body": "2e0bb2fa019fc89b",
+  "body": "83b9da63f73b9701",
   "claim": "the polder's records - NONE: written and drawn from `stage_polder`'s, whose placement is claimed at the Rust (`field/polder.rs`, `field/dike.rs`, `field/landuse.rs`); the figures it adds are claimed where they stand (`POND_FEEDER_FT`, `OUTFALL_FT`, `DITCH_BANK_FT`)",
-  "code": "ac73d0d042e98eda",
-  "core": "4aff6719a73f4388",
+  "code": "82211fa6e7d42a3b",
+  "core": "dac40c4ed2a3e696",
   "date": "2026-11-01",
-  "note": "this is writing records and drawing what the Rust placed; its figures and fills are claimed where they are defined",
+  "note": "the code writes and draws the Rust's placements; the figures it adds (feeder, outfall, bank widths) are claimed at their own constants",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10735,16 +10735,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
-  "body": "b1756929775b5c60",
+  "body": "abfb9d84d4cd1c14",
   "claim": "the comb's net - NONE: the Rust's records in the readers' shapes; the one figure it adds is claimed where it stands (`GRAVE_KEEP_FT`)",
-  "code": "3439883ad8831910",
-  "core": "89fc820b71c38283",
+  "code": "531f0afa1cfc0cdf",
+  "core": "8161bde493462fcd",
   "date": "2026-11-01",
-  "note": "the unit mostly reshapes the Rust's records (plots, channels, dry plots, ponds, graves, beans, the dry_acres sum), and GRAVE_KEEP_FT is claimed where it is defined. But the unit sets `\"supply_banks\": True` and `\"furrows_vary\": True` for every comb, and passes empty `threads`/`brook`/`dry_reserve`. To tell whether those are only switches for the reader, or physical choices (banks drawn along every supply channel, furrow directions that vary plot to plot) that the NONE label would then mislabel, I need the code that reads `supply_banks` and `furrows_vary` (comb_base_fill / ditch / furrow ink)",
+  "note": "it reshapes the Rust's records for the readers; its one added figure, GRAVE_KEEP_FT, is claimed at its own constant",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::stage_field#the comb": {
   "body": "95e6cccdd4a4dfc4",
