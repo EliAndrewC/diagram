@@ -61,8 +61,8 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
   runs) and `make preflight`'s coverage step, the readers that a search of the tree before this feature finds (`git grep -l -E
   "fail-under|fail_under|missing_lines|CoverageData|analysis2|Coverage\(" 69982e1ee -- scripts l7r Makefile`, each hit read for a
   refusal on unrun lines; the hits that only gather coverage data or measure the Rust crate's - `pipeline/gencache.py`,
-  `tools/cache_audit.py`, `ci/incremental.py`, `scripts/gates/rust_checks.py`, `scripts/measure/uncovered-in-diff.py` - refuse
-  nothing of the Python's) - exempts the entries of that record and only them; their unrun lines are still reported, as information.
+  `ci/incremental.py`, `scripts/gates/rust_checks.py`, `scripts/measure/uncovered-in-diff.py` - refuse nothing of the Python's;
+  and, outside the search, `tools/cache_audit.py` runs coverage only to pick mutation sites) - exempts the entries of that record and only them; their unrun lines are still reported, as information.
 - **FR-003**: Everything else keeps the 100% floor unchanged - in particular `l7r/diagram/tools/`, `ci/`, `pipeline/`,
   `interactive/`, the gate's checks under `tests/gate/` and the automated checks of the hand-drawn maps, and `scripts/`.
 - **FR-004**: A module is held to the floor unless the record names it (a new module defaults to the floor).
@@ -101,6 +101,8 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
   classes; SC-003 restated as an observable outcome.
 - 2026-11-02, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - FR-002's search widened so it finds the hamlet
   floor, the non-refusing hits named; FR-006 adds `tests/soak/CLAUDE.md`; the edge case on kept importers split by class.
+- 2026-11-02, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - round 2's three items resolved; its note applied (`cache_audit.py`
+  moved outside FR-002's search hits, where it is not one).
 
 ## Decisions Recorded
 

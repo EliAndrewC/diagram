@@ -32,7 +32,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "2e7848e6344fcb667459d5b91440f1ea088ed2d4692f75cb2c67166bb2490ff2",
+   "sha256": "128dc2830e64d56bd3f91e635417ee625a7964056f2753a4ae10f970ce9a085f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-02",
    "declared": "spec-fidelity"
@@ -468,6 +468,45 @@
      "summary": "T02 done check: every doc D5 lists names dev/coverage-exempt.json and carries the GM's 2026-11-02 words, checked by git grep over that list.",
      "class": "within",
      "why": "The earlier done check covered a subset of the docs (the narrowing that blocked it); it now covers D5's full list, which equals FR-006's, so SC-003's doc half is checked whole."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "## Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Slated = (a) stage_files of every STAGES stage not accepted (76 files under hamletgen/) plus (b) engine modules unreached from the roots that stay Python once (a) is removed (14 files); the broader phase_sources union (146 files) rejected; later phases add their own entries.",
+     "class": "within",
+     "why": "The GM relaxed the floor for 'the engine code ... since that's going away' and kept it for 'other Python code not currently slated to be removed'. (a) is the code 444's phases rebuild and delete; (b) is engine code with no surviving importer, i.e. FR-001's whole-engine replacement. Engine modules that stay Python (driver, plan.py, consts, thin doors) are not going away, so keeping their floor is the request's own proviso, not a narrowing. The rejected union would have swept in FR-003's kept trees, which the request forbids. Unchanged since the CLEAR verdict."
+    },
+    {
+     "id": "D2",
+     "summary": "One record, dev/coverage-exempt.json (ruling, entries with path/stages/why), seeded once from D1 and hand-edited after; a path not in it keeps the full floor.",
+     "class": "within",
+     "why": "Carries FR-001 and FR-004 directly; the default-to-floor rule serves 'so long as we maintain it for our other Python code'. Unchanged."
+    },
+    {
+     "id": "D3",
+     "summary": "One reader, ci/coverage_exempt.py (entries/exempt/omit/report), wired into the Makefile floor line, hamlet_floor.check, cover_changed.py (and so make land) and preflight's coverage step; exempt unrun lines still printed as information; coverage source unchanged.",
+     "class": "within",
+     "why": "FR-002 names exactly these readers and requires the exempt entries' unrun lines still reported; nothing outside the record loses its floor. Unchanged."
+    },
+    {
+     "id": "D4",
+     "summary": "An entry is stale when its path is gone, when every stage it names is accepted, or (b entry) when the reader's reachability measure finds kept code importing it; stale entries fail report, make land's cheap refusals, with make coverage-exempt PRUNE=1 as the cure.",
+     "class": "within",
+     "why": "Restates FR-005's three staleness conditions and its 'fails the gate and make land with the command that removes it'; it shrinks the exemption back toward the floor, serving the request's proviso. The new PRUNE target is the 'command that removes it' FR-005 requires. Unchanged."
+    },
+    {
+     "id": "D5",
+     "summary": "Every operative doc stating the single 100% floor says the exemption with the GM's 2026-11-02 words - now including tests/soak/CLAUDE.md's gate row and membership rule - plus the constitution's Principle X clause 5 as a dated amendment, the phase checklist's rebuild box, and the two tests pinning 'no --omit' changed to pin that the only omission is the record's.",
+     "class": "within",
+     "why": "The only change since the CLEAR verdict is adding tests/soak/CLAUDE.md's gate row and membership rule, which FR-006 lists by name; the block now matches FR-006's enumeration rather than missing one of its entries. The phase checklist box is an operative statement of the floor read as a phase deletes its Python. The test changes enforce the requested exemption (GM 2026-09-20: enforcement of what was asked is not unrequested scope)."
     }
    ]
   }
