@@ -8,7 +8,7 @@
 
 **Affects**: tooling
 
-**Approved**: the GM, 2026-11-02, "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)." - and *"you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future"* (GM 2026-10-18)
+**Approved**: the GM, 2026-11-02, "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."
 
 **Input**: `request.md` (the GM's words, verbatim).
 
@@ -71,7 +71,7 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 
 - **SC-001**: A fixture with an unrun line in a slated module passes every coverage reader; the same line in a kept module fails
   each of them.
-- **SC-002**: No module outside the record is below 100% at the landing (the floor did not loosen anywhere else).
+- **SC-002**: Every module outside the record is fully covered at the landing (the floor did not loosen anywhere else).
 - **SC-003**: Coverage-driven work on slated modules stops: after landing, no task of feature 444 adds a test only to cover a slated
   module's line.
 
