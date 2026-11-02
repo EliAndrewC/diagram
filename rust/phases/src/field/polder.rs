@@ -298,7 +298,6 @@ impl Warp {
 ///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted; the dike-pond's chessboard the one exception, attested on its own (the next claim)
 ///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic - drawn straight, the `pond_layout` knob's other form
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
-///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
 ///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
 ///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank
@@ -390,7 +389,16 @@ pub fn polder(
         frame.at(-RING_FT.1 - POND_FT.1, size.1 + RING_FT.1),
         inlet,
     ];
-    let ditches = ditches(&put, &canal, size, (cols, module, col_gap), (rows, row_gap));
+    let mut ditches = ditches(&put, &canal, size, (cols, module, col_gap), (rows, row_gap));
+    if dikepond {
+        ditches.extend(row_ditches(
+            &put,
+            size,
+            (cols, module, col_gap),
+            (rows, row_gap),
+            &plots,
+        ));
+    }
     Polder {
         outline: ring(0.0),
         inner_env: env,
@@ -425,11 +433,14 @@ fn fringe(at: Pt, r: (f64, f64)) -> Vec<Pt> {
 
 /// The block's plots: on the rice polder most modules split into 2 or 3 strips across their breadth by walking bunds (one in
 /// `WHOLE_IN` left whole), one in `MERGE_IN.0` merged with the module below; on the dike-pond the modules paired down the fall into
-/// ponds' parcels, one in `MERGE_IN.1` left alone. Every plot four-sided, its corners the warped lattice's.
+/// ponds' parcels, one in `MERGE_IN.1` left alone. Every plot four-sided, its corners the warped lattice's; a merged pair keeps a
+/// point on each side where its middle row line crosses, the column ditch's station, so the ditch beside it cannot cut its side.
 ///
 /// Research:
 ///     the low plots - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder tints every low plot - the block's last row, at its tail, the low one
 ///     the strips - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three oblong strips, cut by the plain 3 ft walking bund, and a few merge along the fall
+///     a dike-pond module never split - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs, each a pond's parcel, never split into strips
+///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided - a merged pair's four corners the lattice's, its two mid-side points on the row line it spans bending its sides there, not adding corners
 ///     the dike-pond's parcels - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs
 fn plots(
     put: &dyn Fn(f64, f64) -> Pt,
@@ -505,7 +516,7 @@ fn plots(
 ///     the deliveries' places - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: between one column of modules and the next, a ditch corridor - one delivery on the middle of each gap between columns, from ring to ring, `cols - 1` of them
 ///     the far flank - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the supply canal dwindling to a lateral - the head arm's 1.5 ft tail held down the far flank, a lateral at that width flat from the head's far corner to the tail's
 ///     ditches on the warped lattice - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it
-///     the dike-pond's interior ditches - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic's interior ditches - a column ditch in the dike between each column of ponds, through the same warp
+///     the dike-pond's interior ditches - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic's lattice of ditches - a column ditch in the dike between each column of ponds, through the same warp; the ditches across the rows are `row_ditches`'
 fn ditches(
     put: &dyn Fn(f64, f64) -> Pt,
     canal: &[Pt],
@@ -573,6 +584,58 @@ fn ditches(
             w: head,
             w_tail: 1.2_f64.min(head),
         });
+    }
+    out
+}
+
+/// The dike-pond's ditches across the rows: in each column, a ditch down the middle of every row gap no parcel spans - where the
+/// column's ponds are not a merged pair across it - joining the column ditches (or the ring canal at the block's flanks), its
+/// stations the column's own corners, so it runs between the banks and never through one.
+///
+/// Research:
+///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond's lattice of ditches bent out of line both ways, with gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank
+fn row_ditches(
+    put: &dyn Fn(f64, f64) -> Pt,
+    size: (f64, f64),
+    cols: (usize, f64, f64),
+    rows: (usize, f64),
+    plots: &[Plot],
+) -> Vec<Ditch> {
+    let ((n, module, col_gap), (row_n, row_gap)) = (cols, rows);
+    let mut out = Vec::new();
+    for c in 0..n {
+        #[expect(clippy::cast_precision_loss, reason = "a small count")]
+        let x0 = c as f64 * (module + col_gap);
+        let left = if c == 0 {
+            -RING_FT.0
+        } else {
+            x0 - col_gap / 2.0
+        };
+        let right = if c + 1 == n {
+            size.1 + RING_FT.0
+        } else {
+            x0 + module + col_gap / 2.0
+        };
+        for r in 0..row_n.saturating_sub(1) {
+            // open where a parcel of this column ends at row `r`
+            if !plots.iter().any(|p| p.col == c && p.row + p.span == r + 1) {
+                continue;
+            }
+            #[expect(clippy::cast_precision_loss, reason = "a small count")]
+            let u = r as f64 * (module + row_gap) + module + row_gap / 2.0;
+            let local = 1.5 + (4.5 - 1.5) * ((x0 + module / 2.0) / size.1).clamp(0.0, 1.0);
+            let w = 2.5_f64.min(0.8 * local);
+            out.push(Ditch {
+                role: "lateral",
+                seg: "row",
+                pts: [left, x0, x0 + module, right]
+                    .iter()
+                    .map(|&x| put(u, x))
+                    .collect(),
+                w,
+                w_tail: w,
+            });
+        }
     }
     out
 }

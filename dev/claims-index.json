@@ -52711,16 +52711,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the block's ink": {
-  "body": "896cf329ae4253e3",
+  "body": "3ec3877e5988dcbf",
   "claim": "the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green",
-  "code": "902b1ba42101b295",
-  "core": "377fb327038824bb",
+  "code": "54bb31104a6807dd",
+  "core": "11b0c66d8c011ac4",
   "date": "2026-11-01",
-  "note": "only fills, strokes, the crowns' 0.9 opacity and the tea green, all of them how things are shown",
+  "note": "fills, the crowns' 0.9 opacity, the tea hedge's green and the pond rim's 1.0 stroke only set how things are shown; widths, pitch and water state are under other claims",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the leftover rice drawn growing": {
@@ -79087,20 +79085,20 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#ditches on the warped lattice": {
-  "body": "d30beb47d7c41309",
+  "body": "6f4f107ee6b5b3a6",
   "claim": "ditches on the warped lattice - parcels-and-bunds-inside-a-polder-aze.drawing: each column line takes its own bow, so a column's ditch runs down its corridor through the same warp as the plots beside it",
-  "code": "9ea3dc6543d29f47",
-  "core": "505be1fdfefe8ec5",
-  "date": "2026-10-31",
-  "note": "each column ditch is traced through put(), so it follows the column's own warp",
+  "code": "d793704724f9af2c",
+  "core": "4a480c45ace9904b",
+  "date": "2026-11-01",
+  "note": "each column ditch sits in the middle of its gap and runs ring to ring through the shared `put` warp, at the same stations the plots use for their corners",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:0df793b462e21b66",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the deliveries' places": {
@@ -79122,21 +79120,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::ditches#the dike-pond's interior ditches": {
-  "body": "d30beb47d7c41309",
-  "claim": "the dike-pond's interior ditches - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic's interior ditches - a column ditch in the dike between each column of ponds, through the same warp",
-  "code": "7b91711f787c75a6",
-  "core": "505be1fdfefe8ec5",
-  "date": "2026-10-31",
-  "note": "the dike-pond gets the same column ditches through the same warp; under the mosaic they bend into meandering lines",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
-  ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "body": "6f4f107ee6b5b3a6",
+  "claim": "the dike-pond's interior ditches - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing draws the lattice of ditches both ways; a column ditch in the dike between each column of ponds, through the same warp, and none across the rows, where most ponds' parcels are merged pairs spanning the row gap - a departure, the row gaps drawn as bank",
+  "code": "40ab54905a7df09c",
+  "core": "4a480c45ace9904b",
+  "date": "2026-11-02",
+  "note": "the claim describes a departure from its own page and labels it GUESS. The cited drawing page has the dike-pond block's \"lattice of ditches bent out of line\", with \"the interior ditches become meandering creeks\" and gaps \"both ways\". The code draws only `cols - 1` column ditches (`for c in 1..n`) and none across the rows. Neither page records this as the project's choice, and no open task is named. Either make it a DEVIATION and record it on 0019.drawing (or 0022.drawing §34), or have the code draw row ditches.",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/polder.rs::ditches#the far flank": {
   "body": "d30beb47d7c41309",
@@ -79244,6 +79236,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder.rs::plots#a dike-pond module is never split into strips (`if dikepond || ...` gives 1)": {
+  "code": "4e5ba4bb6f813ea0",
+  "core": "4e5ba4bb6f813ea0",
+  "date": "2026-11-02",
+  "note": "a dike-pond module is never split into strips (`if dikepond || ...` gives 1)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/field/polder.rs::plots#every pond four-sided": {
+  "body": "692d033a15284bce",
+  "claim": "every pond four-sided - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice but keeps every pond four-sided - a merged pair's four corners the lattice's, its two mid-side points on the row line it spans bending its sides there, not adding corners",
+  "code": "e13465a6d7a50b3c",
+  "core": "4e5ba4bb6f813ea0",
+  "date": "2026-11-02",
+  "note": "a merged pair keeps the lattice's four corners. Its two mid-side points `um` sit on the spanned row line, so the warp bends the sides there without adding a corner, matching \"lines stay continuous but bend ... each pond stays four-sided\".",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder.rs::plots#the dike-pond's parcels": {
   "body": "638c1267e38d9535",
   "claim": "the dike-pond's parcels - parcels-and-bunds-inside-a-polder-aze.drawing: a dike-pond block's modules most merged in pairs",
@@ -79297,24 +79313,6 @@
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
   "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/polder.rs::polder#every pond four-sided": {
-  "body": "c55fe244e856fbb8",
-  "claim": "every pond four-sided - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the mosaic bends the lattice but keeps every pond four-sided",
-  "code": "26a39853dbe92fb5",
-  "core": "159fc088b421e80f",
-  "date": "2026-10-31",
-  "note": "layout \"mosaic\" routes the dike-pond lattice through the warp, and the outline, canal and sluices stay on the unwarped frame (fixed outer edge)",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
-  ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#never uniform rectangles": {
