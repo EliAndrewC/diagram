@@ -12,6 +12,7 @@ Research:
 from __future__ import annotations
 
 import math
+import random
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
@@ -95,15 +96,15 @@ def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
         its sheen - CONVENTION: a light ring on the water
         the bank's line - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a dish pond's bank width; the earthen bank 2.2 ft, a little wider than a bund's 1.5"""
     x, y, rx, ry = pond["x"], pond["y"], pond["rx"], pond["ry"]
-    s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx + 2.5:.1f}" ry="{ry + 2.5:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond")
-    s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{POND_WATER}" stroke="{POND_RIM}" stroke-width="1.2"/>', "field pond")
-    s._field_feature_ink(None, f'<ellipse cx="{x - rx * 0.2:.1f}" cy="{y - ry * 0.2:.1f}" rx="{rx * 0.5:.1f}" ry="{ry * 0.4:.1f}" fill="none" stroke="{POND_SHEEN}" stroke-width="0.9"/>', "field pond")
+    s._field_feature_ink(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx + 2.5:.1f}" ry="{ry + 2.5:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond")
+    s._field_feature_ink(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{POND_WATER}" stroke="{POND_RIM}" stroke-width="1.2"/>', "field pond")
+    s._field_feature_ink(f'<ellipse cx="{x - rx * 0.2:.1f}" cy="{y - ry * 0.2:.1f}" rx="{rx * 0.5:.1f}" ry="{ry * 0.4:.1f}" fill="none" stroke="{POND_SHEEN}" stroke-width="0.9"/>', "field pond")
     reeds = []
     for k in range(8):
         a = k / 8 * math.tau
         cx, cy = x + (rx + 1.2) * math.cos(a), y + (ry + 1.2) * math.sin(a)
         reeds.append(f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{cx:.1f}" y2="{cy - 2.4:.1f}"/>')
-    s._field_feature_ink(None, f'<g opacity="0.9" stroke="{REED}" stroke-width="1.1">{"".join(reeds)}</g>', "field pond")
+    s._field_feature_ink(f'<g opacity="0.9" stroke="{REED}" stroke-width="1.1">{"".join(reeds)}</g>', "field pond")
 
 
 def grave(s: Settlement, g: dict[str, Any]) -> None:
@@ -112,9 +113,9 @@ def grave(s: Settlement, g: dict[str, Any]) -> None:
     Research:
         the grave's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 3 ft apart"""
     x, y = g["x"], g["y"]
-    s._field_feature_ink(None, f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="6.5" ry="4.5" fill="{MOUND}" stroke="{MOUND_EDGE}" stroke-width="1.2"/>', "field grave")
+    s._field_feature_ink(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="6.5" ry="4.5" fill="{MOUND}" stroke="{MOUND_EDGE}" stroke-width="1.2"/>', "field grave")
     stones = "".join(f'<rect x="{x - 3 + 3 * k:.1f}" y="{y - 2.5:.1f}" width="1.8" height="3" fill="{STONE}" stroke="{STONE_EDGE}" stroke-width="0.5"/>' for k in range(2))
-    s._field_feature_ink(None, f"<g>{stones}</g>", "field grave")
+    s._field_feature_ink(f"<g>{stones}</g>", "field grave")
 
 
 def weir(s: Settlement, w: dict[str, Any]) -> None:
@@ -207,10 +208,19 @@ def dikeponds(s: Settlement, parcels: Sequence[Any], crops: Any, bund: float) ->
     Research:
         the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green
         the tea hedge's width - research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke
+        the leftover rice's shoots - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: unruled shoots on a jittered grid, 4.5 px apart (the GM 2026-07-23, the polder-leftover repaint)
         a nursery's water - research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)"""
     for kind, parcel, bank, water in parcels:
         if kind == "rice":
             s.add_paddy(f'<polygon points="{_pts(parcel)}" fill="{_RICE_GREEN}" stroke="{AZE}" stroke-width="{bund:.2f}" stroke-linejoin="round"/>', cls=Split("paddy", "bund"))
+            # ...ITS SHOOTS ON A JITTERED GRID (the GM 2026-07-23, the polder-leftover repaint: ~3-6 px between shoots, alternate
+            # rows offset, no row ruled through), seeded from the parcel so it is drawn the same each roll - the leftover's
+            # surface the deleted Python overlay drew (`landuse.py`, feature 444 T16), restored after its port dropped it
+            st = random.getstate()
+            random.seed(int(sum(x for x, _ in parcel) * 7 + sum(y for _, y in parcel) * 13))
+            with s.feature("paddy"):
+                s._paddy_surface(list(parcel), _pts(parcel), flooded=False, pitch=4.5)
+            random.setstate(st)
             continue
         cls = "fry pond" if kind == "fry" else "fish pond"
         s.add_paddy(f'<path d="{bank[0]}" fill="{BANK_FILL}" stroke="{AZE}" stroke-width="{bund:.2f}"/>', cls=cls)

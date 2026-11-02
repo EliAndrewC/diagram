@@ -249,3 +249,26 @@ def test_a_reseat_on_the_same_flank_leaves_the_fringe_and_the_crossings_as_they_
         before = (hg.waterward_flanks(plan), hg.polder_crossing_caps(plan))
         plan.seat = {"out": other}
         assert (hg.waterward_flanks(plan), hg.polder_crossing_caps(plan)) == before
+
+
+def test_a_rice_polder_writes_and_draws_its_plots_its_rested_ones_and_a_pocket_pond() -> None:
+    """The rice polder's writer (`field_stage._polder`, feature 444 T16): every plot drawn, a rested one as grass, and a pocket
+    pond the Rust rolls recorded and drawn. No pool map is a rice polder (Kuwabata is the dike-pond), so this is its test."""
+    from l7r.diagram.hamletgen import field_stage
+    from l7r.diagram.settlement import Settlement
+
+    def rolled(seed: int) -> Settlement:
+        spec = hg.HamletSpec(name="Test", seed=seed, households=15, down_deg=90.0, windward="N", settlement_form="nucleated", field_archetype="polder_grid", pins={"paddy_rest": "unsettled"})
+        plan = hg.plan_site(spec)
+        s = Settlement(W=plan.W, H=plan.H, seed=seed)
+        s.meta(name="P", scale="hamlet", ftpx=plan.ftpx)
+        s.M.setdefault("fields", [])
+        s.M.setdefault("channels", [])
+        for knob, value in spec.pins.items():
+            s.pin_knob(knob, value)
+        field_stage._polder(s, plan)
+        return s
+
+    pocket = next((s for s in (rolled(seed) for seed in range(1, 41)) if s.M.get("field_ponds")), None)
+    assert pocket is not None, "a pocket pond rolled within 40 seeds"
+    assert pocket.M["fields"][-1]["kind"] == "paddy" and pocket.M["dikes"] and pocket.M["fields"][-1]["plot_rings"]

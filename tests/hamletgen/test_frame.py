@@ -124,3 +124,23 @@ def test_stage_crossings_decks_the_web_and_rewrites_no_lane() -> None:
     )
     stage_crossings(s, types.SimpleNamespace(field_archetype="comb"))
     assert calls == ["bridges"] and s.M["lanes"][0]["pts"] == oblique
+
+
+def test_the_scatter_frame_predicted_before_the_view_takes_in_the_confluence() -> None:
+    """Feature 261 (cohort seed 45): before the view is decided the scatter's frame is a prediction, and it takes in the
+    confluence with its trunk's room, as the frame will (feature 444 T16: no pool map's drain meets the brook now)."""
+    from l7r.diagram.hamletgen.hinterland.frame import scatter_frame
+    from l7r.diagram.hamletgen.sink import BROOK_JOIN_TRUNK
+    from l7r.diagram.settlement import Settlement
+
+    from ._builders import a_plan
+
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 600.0, "y": 600.0, "w": 40.0, "h": 30.0, "rot": 0}]
+    plan.view = None
+    plan.title_pocket = (590.0, 590.0, 610.0, 610.0)
+    before = scatter_frame(s, plan)
+    plan.confluence = (1400.0, 1000.0)
+    x0, y0, x1, y1 = scatter_frame(s, plan)
+    assert x1 >= 1400.0 + BROOK_JOIN_TRUNK * 0.5 and y1 >= 1000.0 + BROOK_JOIN_TRUNK * 0.5 and (x1, y1) != before[2:]

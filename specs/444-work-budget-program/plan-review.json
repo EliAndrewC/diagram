@@ -194,7 +194,13 @@
    "declared": "spec-fidelity"
   },
   "### T16 part B (2026-11-01T12:34Z)": {
-   "sha256": "2a9bb8c05d1b1ff2e6e50fcf38d85ab48c6160a37a5449e3ad1b4ee4c127e848",
+   "sha256": "3dcd4dab5c751d1f774aa27e019b23d45fc1f61e5448c9e4cf7f399123d01c63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-01",
+   "declared": "spec-fidelity"
+  },
+  "### T16 part B (2026-11-02T01:32Z)": {
+   "sha256": "f3d78ce883ddacdb251cfc18fa8356059d2ade7d293ff56ce261fcfe91eaee58",
    "verdict": "CLEAR",
    "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
@@ -3289,6 +3295,179 @@
      "why": "This is the GM's 2026-11-01 answer on 444#1 applied as given ('it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust'). 'Then the landing' does not get round FR-006: the unchanged Red exit still requires a figure over the budget to be rebuilt again or the budget raised with the GM's words, never an arbiter's accept, and the GM's option (a) on 444#6 (1.9 times the derivation) is the GM's words for that raise, which make budget-change records."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-01",
+   "blocks": [
+    "### T16 part B (2026-11-02T01:32Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16B-1 held roll's refusal shared and coverage published",
+     "summary": "A roll held as a strict xfail (Sawada 24, until its seating's port) has its refusal shared across readers (tests/gate/_pool.py) and the coverage it ran published (pipeline/gencache.py), each with its test.",
+     "class": "within",
+     "why": "Instrument fix to the gate's tooling: the lines counted are lines that actually ran, so the 100% coverage floor (section 7 table, one for one) is not relaxed; the roll stays held, consistent with the GM 2026-11-01 ('it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust'). No requested rule is narrowed and no new behavior beyond making the existing gate count correctly."
+    },
+    {
+     "id": "T16B-2 Python field engine deleted per D10",
+     "summary": "The Python field engine is deleted where nothing outside the field path reaches it.",
+     "class": "within",
+     "why": "Restates D10 / FR-005 as accepted (old implementation deleted in the same landing, section 3 item 5 and section 5 item 5); the search space is D10's (git grep -l and make dead-closure). No new carve-out beyond D10's shared-module rule."
+    },
+    {
+     "id": "T16B-3 legacy branches unit-tested",
+     "summary": "Branches the frozen legacy maps still call are covered by unit tests rather than deleted.",
+     "class": "within",
+     "why": "Those branches are outside the field path D10 deletes (D10 keeps what something outside the field path imports); unit-testing them serves the 100% line-coverage floor. Adds tests that only enforce the existing floor."
+    },
+    {
+     "id": "T16B-4 next step and escalation",
+     "summary": "make cover-changed and make cov-file on touched modules, then one make done; a red only on lines the held roll alone reached goes to a fresh make arbiter-ask, never a fourth run.",
+     "class": "within",
+     "why": "Process ordering (cheap check before the gate, arbiter on a repeated red) inside the existing gate and arbiter procedure; it does not relax any acceptance criterion or the coverage floor - an unresolved red is escalated, not waived."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-01",
+   "blocks": [
+    "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)",
+    "### T16 Approach (2026-10-31T22:16Z)",
+    "### T16 Approach (2026-11-01T00:39Z)",
+    "### T16 Approach (2026-11-01T01:55Z)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T16 part B (2026-10-31T20:43Z)",
+    "### T16 part B (2026-11-01T00:41Z)",
+    "### T16 part B (2026-11-01T06:23Z)",
+    "### T16 part B (2026-11-01T12:34Z)",
+    "### T16 part B (2026-11-02T01:32Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "stage_field stays a thin Python seam calling l7r_phases.stage_field; Python writes the same 42 manifest keys and plan fields, keeping fields[].plots as a shape",
+     "class": "within",
+     "why": "FR-004 (same keys read and written) and FR-010 (thin Python function calling the extension)."
+    },
+    {
+     "id": "D2",
+     "summary": "single-field cap rolled 45-60 ha per settlement from 0017; ceil(paddy/cap) fields; cap applies to every rice paddy field incl. polders; fish ponds take no cap",
+     "class": "within",
+     "why": "FR-018 and the GM's 'larger settlements just have multiple fields'; applied to every paddy field with no exception; fish ponds are not a paddy field, so nothing the GM named is carved out."
+    },
+    {
+     "id": "D3",
+     "summary": "the stage's own knob rolls, graves and coarse-grain dry acres counted as the stage's work outside its derivations, each a counter key",
+     "class": "within",
+     "why": "Counts more of the stage's work against its budget (section 1, S5); follows the arbiter's process ruling ask:444-T19-outside-charges; no pin moves."
+    },
+    {
+     "id": "D4",
+     "summary": "knob_rng for every knob, positional jitter seeded per feature; matching today's draws not required",
+     "class": "within",
+     "why": "Amendment 5 as approved: 'matching Python's draws no longer required' (FR-019)."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust's own 64 ft cell water index; segments returned and filed by Python in the settlement index",
+     "class": "within",
+     "why": "Implementation of the derivation's index behind the seam (FR-004, FR-010)."
+    },
+    {
+     "id": "D6",
+     "summary": "counters one key per derivation row and per D3 roll behind the counters feature; on/off identical manifests",
+     "class": "within",
+     "why": "FR-012 verbatim."
+    },
+    {
+     "id": "D7",
+     "summary": "every Keeps rule refused by name where the thing is placed, unit-tested",
+     "class": "within",
+     "why": "Rubric S4 (every rule asked before placement, no repair pass), FR-004."
+    },
+    {
+     "id": "D8",
+     "summary": "both archetypes in Rust; polder acreage by whole 190 ft modules at or above paddy, replacing today's band",
+     "class": "within",
+     "why": "FR-015 greenfield derivation, pinned field.polder; widens, not narrows, what lands."
+    },
+    {
+     "id": "D9",
+     "summary": "the 29 open DRIFTED/MISLABELED findings closed in the Rust; landing refused while one is open",
+     "class": "within",
+     "why": "FR-021 and amendment 6 ('zero open claims')."
+    },
+    {
+     "id": "D10",
+     "summary": "the field's own Python placement deleted in the landing; shared modules and water/skeleton.py stay; drawing code and check-side predicates moved on arbiter rulings",
+     "class": "within",
+     "why": "FR-005 (old implementation deleted, no fallback); FR-010 keeps rendering in Python; what stays is either not the field's placement or water_frame's; the moves were process rulings, nothing placing survives."
+    },
+    {
+     "id": "D11",
+     "summary": "order: comb, then polder, then work-budget, MODE AUDIT, claims round, settlement-reviews - one landing",
+     "class": "within",
+     "why": "Checklist section 3's order; one task one landing (FR-003)."
+    },
+    {
+     "id": "D12",
+     "summary": "the field's SVG stays Python reading only Rust's records; five drawing functions kept, eleven mixed methods lose placement to Rust and their ink rewritten new",
+     "class": "within",
+     "why": "FR-010: rendering stays Python; every placement goes to Rust."
+    },
+    {
+     "id": "Approach 22:16Z (fork, organic comb, polder seam, marsh, deletion moves)",
+     "summary": "division point at the brook-side head corner; waved comb held to brook rules; every polder placement to Rust; marsh fills a Rust-placed polygon; free helpers stay for other tiers",
+     "class": "within",
+     "why": "Construction choices from the research and FR-010's split (placement Rust, drawing Python); no requested behavior kept back."
+    },
+    {
+     "id": "Approach 00:39Z (claims round fixes)",
+     "summary": "GUESS meander wavelength moved to meet 0054's ten widths; share-of-view rule replaced by a length; conform the inset, cap and notch",
+     "class": "within",
+     "why": "FR-021's claims round, the code set to its research."
+    },
+    {
+     "id": "Approach 01:55Z (middle intake)",
+     "summary": "intake at a shoulder or the head's middle per 0059, the fork moving with it; WEIR_HALF derived from the drawn brook",
+     "class": "within",
+     "why": "Restores a form the research names and main rolled; FR-021, FR-015."
+    },
+    {
+     "id": "Part B 20:43Z / 00:41Z / 06:23Z / 12:34Z",
+     "summary": "later Python stages' cohort failures (seating, site, row rules, web) on the moved field left to their own ports; the field not bent to them; the Rust stage gate the port's check",
+     "class": "within",
+     "why": "Amendment 5 ('we don't care at all about the Python stages which come after') and the GM's 2026-11-01 words ('it's okay for the Python code to have errors')."
+    },
+    {
+     "id": "Part B 01:32Z-1 (held roll shares its refusal and publishes coverage)",
+     "summary": "a strict-xfail roll (Sawada 24) shares its refusal via tests/gate/_pool.py and publishes coverage via pipeline/gencache.py, each with a test",
+     "class": "within",
+     "why": "Test tooling so a held roll is rolled once and counted; the hold itself is the GM's 2026-11-01 allowance; no field behavior changes."
+    },
+    {
+     "id": "Part B 01:32Z-2 (deletion of the Python field engine's unreached lines)",
+     "summary": "the Python field engine deleted where nothing outside the field path reaches it",
+     "class": "within",
+     "why": "FR-005 and D10 as already judged; deletion is what was asked."
+    },
+    {
+     "id": "Part B 01:32Z-3 (legacy branches unit-tested)",
+     "summary": "branches the frozen legacy maps still call are kept and unit-tested",
+     "class": "within",
+     "why": "Code reached from outside the field path stays under D10's standing line; it is not a fallback for the field stage, which calls none of it."
+    },
+    {
+     "id": "Part B 01:32Z-4 (the red-gate route)",
+     "summary": "cover-changed and cov-file first, then one make done; a red only on lines the held roll alone reached goes to a fresh arbiter-ask, never a fourth run",
+     "class": "within",
+     "why": "A process step the arbiter named; FR-006 lets the arbiter rule on process, and nothing here accepts a phase over budget or relaxes a requested gate."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3910,28 +4089,129 @@
    "verdict": "CLEAR"
   },
   "T16": {
-   "section_sha256": "42bd31adefe6ae8125d66359b309e291d8c61a2c10ae56ea4defc6a85ad8a172",
+   "section_sha256": "0ba0881e21f8645f91569996ace07137e8b0a6e01574f5ec74123ffd802006b2",
    "reviewed": "2026-11-01",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "FR-021 scope restated (22:16Z exits, 00:39Z constraints and exits, 01:55Z exits)",
-     "summary": "The claims refusal is restated from 'a finding open in a file the landing changes' to 'a finding open in the stage's own code - its Rust, the Python units the delta adds or changes, the Python its seam reads at run time'. Two classes leave the T16 refusal: findings in a file the delta touches only to delete code, and findings in an unchanged unit of a file it edits that the seam and the Rust do not read.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Amendment 6 asks for zero open claims when a Rust stage ends its initial implementation. The restated scope covers that implementation in full: all of the stage's Rust (wider than FR-021's 'the Rust the delta changes'), every Python unit the delta adds or changes (its seam, its STAGES entry, ink.py written new), and every Python unit the stage reads at run time even where the delta leaves it alone, so no claim that governs the stage is excused and the purpose of the rule holds. Each excluded class taken separately: (1) a file touched only to delete code - the deleted lines take their claims with them, and what is left is Python the Rust stage neither is nor calls; (2) an unchanged unit of an edited file that nothing in the stage reads - it is not part of the stage's implementation. Both are the 'claims still open in the Python code base' that the GM's own words of 2026-10-27 give to the open-claims feature, so the exclusion is implied by the request and does not complete the GM's thought for him. The restatement is accepted FR-021 (amended 2026-11-01) word for word; it leaves out FR-021's requirement to file those findings as the open-claims feature's rows in the same landing, but it cites FR-021 and does not waive that requirement."
+     "id": "D1",
+     "summary": "stage_field stays a thin Python seam calling l7r_phases.stage_field; Python writes the same 42 manifest keys and plan fields, keeping fields[].plots as a shape",
+     "class": "within",
+     "why": "FR-004 (same keys read and written) and FR-010 (thin Python function calling the extension)."
     },
     {
-     "id": "part B 2026-11-01T06:23Z - the seating's failures after the hem was bounded",
-     "summary": "Seeds 3, 4, 9 (seating) and 905 (site) fail in later Python stages after the hem was bounded (arbiter's route b on ask:444-T16-hem-budget). The hem is not bent to suit the seating, the seating's margin beside a full hem is noted for that stage's port and for the GM, and the next step is the field's MODE BUDGET on the re-derived budget.",
+     "id": "D2",
+     "summary": "single-field cap rolled 45-60 ha per settlement from 0017; ceil(paddy/cap) fields; cap applies to every rice paddy field incl. polders; fish ponds take no cap",
      "class": "within",
-     "why": "Amendment 5 says it plainly: 'no Rust stage ever ends with any failing checks at the point where that stage has completed ... we don't care at all about the Python stages which come after', and 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step'. The GM said it again on 2026-11-01: 'it's okay for the Python code to have errors'. The Rust gate is reported passing on 54 seeds. The arbiter's route (b) is a ruling on process, not an accept of a budget, and the re-derived budget above the standing pin carries the GM's own yes (444#4), as FR-018 and FR-006 require."
+     "why": "FR-018 and the GM's 'larger settlements just have multiple fields'; applied to every paddy field with no exception; fish ponds are not a paddy field, so nothing the GM named is carved out."
     },
     {
-     "id": "part B 2026-11-01T12:34Z - five Python-stage seeds after the fifth claims pass",
-     "summary": "Seeds 4, 7, 9 and 901 (seating, web) and 905 (site) fail in later Python stages. They wait for those stages' own ports, the Rust gate passes on 54 seeds, and the next step is the second MODE AUDIT on the counted field, then the landing.",
+     "id": "D3",
+     "summary": "the stage's own knob rolls, graves and coarse-grain dry acres counted as the stage's work outside its derivations, each a counter key",
      "class": "within",
-     "why": "This is the GM's 2026-11-01 answer on 444#1 applied as given ('it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust'). 'Then the landing' does not get round FR-006: the unchanged Red exit still requires a figure over the budget to be rebuilt again or the budget raised with the GM's words, never an arbiter's accept, and the GM's option (a) on 444#6 (1.9 times the derivation) is the GM's words for that raise, which make budget-change records."
+     "why": "Counts more of the stage's work against its budget (section 1, S5); follows the arbiter's process ruling ask:444-T19-outside-charges; no pin moves."
+    },
+    {
+     "id": "D4",
+     "summary": "knob_rng for every knob, positional jitter seeded per feature; matching today's draws not required",
+     "class": "within",
+     "why": "Amendment 5 as approved: 'matching Python's draws no longer required' (FR-019)."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust's own 64 ft cell water index; segments returned and filed by Python in the settlement index",
+     "class": "within",
+     "why": "Implementation of the derivation's index behind the seam (FR-004, FR-010)."
+    },
+    {
+     "id": "D6",
+     "summary": "counters one key per derivation row and per D3 roll behind the counters feature; on/off identical manifests",
+     "class": "within",
+     "why": "FR-012 verbatim."
+    },
+    {
+     "id": "D7",
+     "summary": "every Keeps rule refused by name where the thing is placed, unit-tested",
+     "class": "within",
+     "why": "Rubric S4 (every rule asked before placement, no repair pass), FR-004."
+    },
+    {
+     "id": "D8",
+     "summary": "both archetypes in Rust; polder acreage by whole 190 ft modules at or above paddy, replacing today's band",
+     "class": "within",
+     "why": "FR-015 greenfield derivation, pinned field.polder; widens, not narrows, what lands."
+    },
+    {
+     "id": "D9",
+     "summary": "the 29 open DRIFTED/MISLABELED findings closed in the Rust; landing refused while one is open",
+     "class": "within",
+     "why": "FR-021 and amendment 6 ('zero open claims')."
+    },
+    {
+     "id": "D10",
+     "summary": "the field's own Python placement deleted in the landing; shared modules and water/skeleton.py stay; drawing code and check-side predicates moved on arbiter rulings",
+     "class": "within",
+     "why": "FR-005 (old implementation deleted, no fallback); FR-010 keeps rendering in Python; what stays is either not the field's placement or water_frame's; the moves were process rulings, nothing placing survives."
+    },
+    {
+     "id": "D11",
+     "summary": "order: comb, then polder, then work-budget, MODE AUDIT, claims round, settlement-reviews - one landing",
+     "class": "within",
+     "why": "Checklist section 3's order; one task one landing (FR-003)."
+    },
+    {
+     "id": "D12",
+     "summary": "the field's SVG stays Python reading only Rust's records; five drawing functions kept, eleven mixed methods lose placement to Rust and their ink rewritten new",
+     "class": "within",
+     "why": "FR-010: rendering stays Python; every placement goes to Rust."
+    },
+    {
+     "id": "Approach 22:16Z (fork, organic comb, polder seam, marsh, deletion moves)",
+     "summary": "division point at the brook-side head corner; waved comb held to brook rules; every polder placement to Rust; marsh fills a Rust-placed polygon; free helpers stay for other tiers",
+     "class": "within",
+     "why": "Construction choices from the research and FR-010's split (placement Rust, drawing Python); no requested behavior kept back."
+    },
+    {
+     "id": "Approach 00:39Z (claims round fixes)",
+     "summary": "GUESS meander wavelength moved to meet 0054's ten widths; share-of-view rule replaced by a length; conform the inset, cap and notch",
+     "class": "within",
+     "why": "FR-021's claims round, the code set to its research."
+    },
+    {
+     "id": "Approach 01:55Z (middle intake)",
+     "summary": "intake at a shoulder or the head's middle per 0059, the fork moving with it; WEIR_HALF derived from the drawn brook",
+     "class": "within",
+     "why": "Restores a form the research names and main rolled; FR-021, FR-015."
+    },
+    {
+     "id": "Part B 20:43Z / 00:41Z / 06:23Z / 12:34Z",
+     "summary": "later Python stages' cohort failures (seating, site, row rules, web) on the moved field left to their own ports; the field not bent to them; the Rust stage gate the port's check",
+     "class": "within",
+     "why": "Amendment 5 ('we don't care at all about the Python stages which come after') and the GM's 2026-11-01 words ('it's okay for the Python code to have errors')."
+    },
+    {
+     "id": "Part B 01:32Z-1 (held roll shares its refusal and publishes coverage)",
+     "summary": "a strict-xfail roll (Sawada 24) shares its refusal via tests/gate/_pool.py and publishes coverage via pipeline/gencache.py, each with a test",
+     "class": "within",
+     "why": "Test tooling so a held roll is rolled once and counted; the hold itself is the GM's 2026-11-01 allowance; no field behavior changes."
+    },
+    {
+     "id": "Part B 01:32Z-2 (deletion of the Python field engine's unreached lines)",
+     "summary": "the Python field engine deleted where nothing outside the field path reaches it",
+     "class": "within",
+     "why": "FR-005 and D10 as already judged; deletion is what was asked."
+    },
+    {
+     "id": "Part B 01:32Z-3 (legacy branches unit-tested)",
+     "summary": "branches the frozen legacy maps still call are kept and unit-tested",
+     "class": "within",
+     "why": "Code reached from outside the field path stays under D10's standing line; it is not a fallback for the field stage, which calls none of it."
+    },
+    {
+     "id": "Part B 01:32Z-4 (the red-gate route)",
+     "summary": "cover-changed and cov-file first, then one make done; a red only on lines the held roll alone reached goes to a fresh arbiter-ask, never a fourth run",
+     "class": "within",
+     "why": "A process step the arbiter named; FR-006 lets the arbiter rule on process, and nothing here accepts a phase over budget or relaxes a requested gate."
     }
    ],
    "verdict": "CLEAR"

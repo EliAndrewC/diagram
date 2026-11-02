@@ -196,11 +196,8 @@ class FieldDrawingMixin:
         self.M["pond"] = [cx, cy, rx, ry]
         self.ellipses.append((cx, cy, rx, ry))
 
-    def _field_feature_ink(self: Settlement, ink: list[tuple[str, str]] | None, svg: str, cls: str) -> None:  # type: ignore[misc]
-        """Emit one in-field feature's ink now, or hold it in `ink` for the caller to emit later: `draw_comb_field` seats
-        the features BEFORE the paddies are drawn (a grave carves the rings the paddies are drawn from, water W28) and
-        draws their ink after the paddies, where it always was."""
-        if ink is None:
-            self.add(svg, cls=cls)
-        else:
-            ink.append((svg, cls))
+    def _field_feature_ink(self: Settlement, svg: str, cls: str) -> None:  # type: ignore[misc]
+        """Emit one in-field feature's ink (a pond's, a grave's). The hold-for-later list `draw_comb_field` passed - it seated
+        the features before the paddies were drawn - went with the Python comb (feature 444 T16): the Rust lays the field, and
+        the ink draws the features after its paddies."""
+        self.add(svg, cls=cls)

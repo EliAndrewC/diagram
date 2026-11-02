@@ -6,8 +6,6 @@ Research: frame geometry - NONE: segment predicates and a ring's signed area
 
 import math
 
-from l7r.diagram.work_counts import OPS
-
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
 
@@ -168,26 +166,3 @@ def taper_w(w0: float, w1: float, t: float) -> float:
 
 BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap
 """Research: bund and ditch abut - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half a bund's width past the stroke's edge"""
-
-
-def _seg_d(px: float, py: float, a: Pt, b: Pt) -> float:
-    """Distance from a point to a segment (the same arithmetic several passes nest as a local
-    `sd`; module-level here because _bund_beans' burial filter needs it too)."""
-    if __debug__:
-        OPS["dist@_seg_d"] += 1  # the counted work (feature 443): dropped under `python -O`
-    vx, vy = b[0] - a[0], b[1] - a[1]
-    ll = vx * vx + vy * vy or 1.0
-    t = max(0.0, min(1.0, ((px - a[0]) * vx + (py - a[1]) * vy) / ll))
-    return math.hypot(px - a[0] - t * vx, py - a[1] - t * vy)
-
-
-def _signed_area(poly: Poly) -> float:
-    """Shoelace WITH its sign - the sign is the diagnosis. Every basin the carve lays comes out
-    positively wound; one that comes back negative has had its two boundaries cross, so what is
-    drawn is a bowtie, not a field. See the inverted-toe drop in `carve_comb`."""
-    s = 0.0
-    for i in range(len(poly)):
-        x0, y0 = poly[i]
-        x1, y1 = poly[(i + 1) % len(poly)]
-        s += x0 * y1 - x1 * y0
-    return s / 2

@@ -75,11 +75,9 @@ CONSUMED_PUBLIC = [
 ]
 
 # The underscore names with external consumers, and the submodule that owns each
-# (settlement/fields/: _RICE_GREEN;
-# tests/settlement/test_core.py: _seg_d).
+# (settlement/fields/: _RICE_GREEN).
 ALIASED_UNDERSCORE = {
     "_RICE_GREEN": "l7r.diagram.waterfields.palette",
-    "_seg_d": "l7r.diagram.waterfields.frame",
 }
 
 

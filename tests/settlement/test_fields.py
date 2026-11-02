@@ -3,6 +3,7 @@
 import copy
 import os
 import tempfile
+from pathlib import Path
 
 import pytest
 
@@ -258,3 +259,25 @@ def test_the_dikepond_inset_leaves_the_rolled_split_water() -> None:
         assert (1 - d / apo) ** 2 == pytest.approx(share), "the median parcel, scaled as `_rounded_pond` scales it, is the share water"
     assert dikepond_inset([rect], 0.4) > dikepond_inset([rect], 0.6) > dikepond_inset([rect], 0.7), "drier splits, wider banks"
     assert dikepond_inset([], 0.4) == DIKEPOND_WATER_INSET
+
+
+def test_the_dikepond_ink_draws_its_leftover_rice_mottled_and_its_tea_hedges(tmp_path) -> None:  # noqa: ANN001
+    """`ink.dikeponds` (feature 444 T16): a rice parcel the conversion left keeps the GM's 2026-07-23 repaint - its shoots on a
+    jittered grid - and a tea crop's hedges are drawn as clipped strips."""
+    from l7r.diagram.settlement.fields import ink
+
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="Dk", scale="hamlet", ftpx=2)
+    rice = [(10.0, 10.0), (60.0, 10.0), (60.0, 50.0), (10.0, 50.0)]
+    ink.dikeponds(s, [("rice", rice, None, None)], ("tea", [], [[(100.0, 100.0), (180.0, 100.0)]]), 1.2)
+    base = str(tmp_path / "dk")
+    s.finish(base, render=False)
+    svg = Path(base + ".svg").read_text(encoding="utf-8")
+    assert svg.count('r="1.0" fill="#6F9061"') > 20, "the leftover's shoots, on the jittered grid"
+    assert 'stroke-width="3" stroke-linecap="butt"' in svg, "the tea hedge"
+    again = Settlement(400, 400, seed=1)
+    again.meta(name="Dk", scale="hamlet", ftpx=2)
+    ink.dikeponds(again, [("rice", rice, None, None)], ("tea", [], []), 1.2)
+    again.finish(str(tmp_path / "dk2"), render=False)
+    shoots = [ln for ln in svg.split("<") if 'fill="#6F9061"' in ln]
+    assert shoots == [ln for ln in Path(str(tmp_path / "dk2") + ".svg").read_text(encoding="utf-8").split("<") if 'fill="#6F9061"' in ln], "seeded from the parcel"

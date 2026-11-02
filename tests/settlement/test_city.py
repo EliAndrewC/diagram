@@ -490,3 +490,19 @@ def test_a_footplank_is_not_laid_across_the_hem_crop() -> None:
     s.M["field_ditches"] = [{"poly": [[100, 300], [800, 300]], "w": 5, "role": "main"}]
     s.dry_polys.append([(70.0, 270.0), (830.0, 270.0), (830.0, 330.0), (70.0, 330.0)])
     assert s.channel_footbridges(spacing=320) == 0, "every seat along the ditch lands on the dry plot"
+
+
+def test_a_crossing_a_standing_deck_already_covers_is_not_decked_again(monkeypatch) -> None:  # noqa: ANN001
+    """`deck_covers` (feature 287 ways W02): a crossing inside a deck already standing is skipped - judged by the deck's own
+    rectangle, not the new deck's half-span (feature 444 T16's claims round)."""
+    from l7r.diagram.settlement.city import bridges as bm
+
+    s = _crop_settlement()
+    s.M["streams"] = [{"poly": [[100, 300], [900, 300]], "w": 10}]
+    s.M["lanes"] = [{"pts": [[500, 100], [500, 500]], "w": 6}]
+    s.M["bridges"] = [{"x": 500.0, "y": 300.0, "rot": 90.0, "span": 30.0, "w": 12.0}]
+    asked: list[tuple[float, float]] = []
+    real = bm.deck_covers
+    monkeypatch.setattr(bm, "deck_covers", lambda b, x, y: asked.append((x, y)) or real(b, x, y))
+    assert s.bridges() == 0 and len(s.M["bridges"]) == 1, "the standing deck covers the crossing"
+    assert asked, "and it was asked"

@@ -129,3 +129,13 @@ def test_a_straight_mid_leg_confluence_is_not_read_as_a_ruled_run() -> None:
     assert without_straight_joins(fin, [(300.0, 0.0)], 1.0) == fin, "a join on the bend is kept"
     assert without_straight_joins(fin, [], 1.0) == fin, "no join: the course as drawn"
     assert without_straight_joins(fin[:1], [(0.0, 0.0)], 1.0) == fin[:1] and without_straight_joins([], [], 1.0) == []
+
+
+def test_a_crossing_at_the_waters_own_end_is_a_junction_not_a_crossing_mid_run() -> None:
+    """water:W08 (feature 328 wave 42): either channel's end makes the junction - a ditch across the brook's last point, its
+    own ends well clear of the brook, still meets it there and does not cross it mid-run."""
+    from l7r.diagram.hamletgen.water.brook_rules import crosses_mid_run
+
+    brook = [(0.0, 0.0), (100.0, 0.0)]
+    assert crosses_mid_run(brook, [(50.0, -40.0), (50.0, 40.0)]), "the case: across the middle of the run"
+    assert not crosses_mid_run(brook, [(100.0, -40.0), (100.0, 40.0)]), "across the brook's end is its junction"

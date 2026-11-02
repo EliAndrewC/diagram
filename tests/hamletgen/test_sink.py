@@ -507,3 +507,23 @@ def test_a_drain_route_beside_the_brook_joins_it() -> None:
     assert to == "stream" and route[-1] == (0.0, route[-2][1]) and abs(route[-2][0] - 32.0) < 2.0
     away = [(100.0, 0.0), (100.0, 600.0)]
     assert join_beside(away, brook, 1.0) == (away, "offmap")
+
+
+def test_a_confluence_is_judged_with_the_brook_as_drawn_and_a_breaking_one_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`confluence_keeps_the_brook` asks the brook's rules of the course drawn with the meeting held, once the field's head race is
+    recorded (feature 444 T16: the pool's drains reach a pond or the frame, so no roll asks it), and the constructed route's
+    meeting it refuses is refused by name (`SinkRefused`), never drawn."""
+    plan = a_plan()
+    plan.brook = [(0.0, 2400.0), (1500.0, 2420.0), (3000.0, 2440.0)]
+    s = Settlement(W=plan.W, H=plan.H, seed=1)
+    s.meta(name="Test", scale="hamlet", ftpx=1)
+    s.M.setdefault("channels", []).append({"poly": [(1500.0, 2420.0), (1500.0, 2300.0)], "frm": {"kind": "stream"}})
+    asked: list[object] = []
+    monkeypatch.setattr(hg.sink, "brook_violations", lambda *a, **k: asked.append(k["joins"]) or ["W03"])
+    assert not hg.sink.confluence_keeps_the_brook(s, plan, (2000.0, 2430.0))
+    assert asked == [[(2000.0, 2430.0)]], "judged with the meeting held"
+    plan2, _drawn, _out = _u_field_stage(monkeypatch)
+    plan2.brook = [(0.0, 2400.0), (1500.0, 2420.0), (3000.0, 2440.0)]
+    monkeypatch.setattr(hg.sink, "confluence_keeps_the_brook", lambda *a: False)
+    with pytest.raises(hg.sink.SinkRefused, match="breaks its rules"):
+        hg.sink.stage_sink(Settlement(W=plan2.W, H=plan2.H, seed=1), plan2)

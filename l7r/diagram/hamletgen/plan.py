@@ -46,7 +46,6 @@ from .consts import (
     LANE_WEBS,
     LEFTOVER_FORMS,
     MANURE_FORMS,
-    OFFTAKE_DEG,
     OFFTAKE_LADDER,
     PLOT_SIZES,
     POLDER_ARCHETYPES,
@@ -313,20 +312,6 @@ class SitePlan:
     def fall(self) -> Pt:
         """Unit vector pointing DOWNHILL, in screen coordinates."""
         return (math.cos(math.radians(self.down_deg)), math.sin(math.radians(self.down_deg)))
-
-    @property
-    def head_deg(self) -> float:
-        """The bearing the head race leaves the intake on (feature 230).
-
-        An offtake leaves its parent pointing downstream at an acute angle, so the race turns off the
-        brook's own downstream heading - which is the land's fall, the brook running downhill - by the
-        offtake angle, and it turns AWAY from the flank the brook takes, so that the two never run
-        alongside one another.
-
-        Research:
-            head race leaves leaning downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: OFFTAKE_DEG off the fall
-            turned away from the brook's flank - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html: the intake stands on the bank of the land it serves (a modern engineering lecture); the race's turn away from the brook is ours"""
-        return self.down_deg - self.brook_side * OFFTAKE_DEG
 
     @property
     def wind(self) -> Pt:

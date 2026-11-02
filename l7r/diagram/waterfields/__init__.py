@@ -32,6 +32,5 @@ LOCAL random.Random(seed) so field generation never ripples other features' plac
 # tests/waterfields/test_surface.py. Never add logic here.
 from .banks import *
 from .frame import *
-from .frame import _seg_d as _seg_d
 from .palette import *
 from .palette import _RICE_GREEN as _RICE_GREEN

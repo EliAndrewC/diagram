@@ -20793,40 +20793,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/plan.py::SitePlan.head_deg#head race leaves leaning downstream": {
-  "body": "02ad025988bfecfc",
-  "claim": "head race leaves leaning downstream - which-way-water-flows-and-how-channels-bend-and-join.drawing: OFFTAKE_DEG off the fall",
-  "code": "fb83562af1738a72",
-  "core": "de7ec0d6ceb6c4db",
-  "date": "2026-11-01",
-  "note": "down_deg - brook_side*OFFTAKE_DEG(35) is the page's \"35 degrees off the brook's downstream heading\", leaning downstream, recorded there as a GUESS",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/plan.py::SitePlan.head_deg#turned away from the brook's flank": {
-  "body": "02ad025988bfecfc",
-  "claim": "turned away from the brook's flank - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki: the intake stands on the bank of the land it serves (a modern engineering lecture); the race's turn away from the brook is ours",
-  "code": "2dc31ccef1e2a7dc",
-  "core": "de7ec0d6ceb6c4db",
-  "date": "2026-10-25",
-  "note": "the race leaves toward the land it serves, on one bank, at an angle",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html": "470d939e84e4b2e9"
-  },
-  "research": "72acce47e8c337c3",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:ba02ca4b015c8cac",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html:d1aa54ed5581b2a8"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/plan.py::SitePlan.wind#spec and plan plumbing": {
   "code": "18ad80398cf81cf4",
   "core": "756216c7f2855ff5",
@@ -47388,15 +47354,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/curves.py::fillet_polyline#its salts, guards and sentinels": {
-  "body": "a13b809937d860c1",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (samples per fillet (\"curve plumbing - NONE\")); 0.35 (fillet cap per leg (the claim: \"fillet cap and threshold - NONE\"))",
-  "code": "4ef3786d2a346c53",
+  "body": "ad352a07972a7ce3",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (samples per fillet)",
+  "code": "543830fe5f00b157",
   "core": "0b7aedbaa47a9503",
-  "date": "2026-10-25",
-  "note": "6 samples is plumbing, but the 0.35 cap (`min(radius, 0.35 * l0, 0.35 * l1)`) sets how tight a drawn ditch bend is on short legs, below the \"radius of two to three times its own width\" the callers pass. It is physical: label it GUESS, or DEVIATION 0054, not NONE",
+  "date": "2026-11-01",
+  "note": "steps=6 only sets how many points draw each bend; the bend's size and placement come from radius and d, so this is plumbing",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/curves.py::organic_bbox#its salts, guards and sentinels": {
   "body": "3ed3e34a0f348ffc",
@@ -74269,185 +74236,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/banks.py::StrokeIndex#bank geometry": {
-  "body": "4f5e21157f5329ce",
-  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
-  "code": "35affac6071f6603",
-  "core": "7f4c25209f6faf8d",
-  "date": "2026-11-01",
-  "note": "a spatial index and its slots, plumbing only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::StrokeIndex.__init__#its salts, guards and sentinels": {
-  "body": "4cbc0e7a543bcb76",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)",
-  "code": "89d21891e86eff47",
-  "core": "c58841ca9c8f8c4d",
-  "date": "2026-10-25",
-  "note": "index cell size",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::StrokeIndex.clearance#bank geometry": {
-  "body": "17f7487ca232a936",
-  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
-  "code": "ed5db130670de85b",
-  "core": "460a0f44eca09167",
-  "date": "2026-11-01",
-  "note": "looks up cells for the nearest segment, with a fallback to walking every segment; plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::StrokeIndex.edge_beyond#bank geometry": {
-  "body": "ed55bd43b57a75ce",
-  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
-  "code": "b2e9b46180922b79",
-  "core": "b2c1363639bb4c60",
-  "date": "2026-11-01",
-  "note": "a distance test of an edge against segments, using the drawn half-width it reads and a float epsilon; decides nothing physical",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_EDGE_EPS#bank geometry": {
-  "code": "f5f0fa255496a3fd",
-  "core": "a099f65ff3f450ba",
-  "date": "2026-10-03",
-  "note": "float epsilon",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_PAST_EPS#bank geometry": {
-  "body": "8b4903fb6dafe49f",
-  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
-  "code": "b2ca4286d4086286",
-  "core": "4334a4dcc62d7738",
-  "date": "2026-11-01",
-  "note": "0.25 px of slack for the manifest's 0.1 px rounding; not a fact about the place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_nearest_segment#its salts, guards and sentinels": {
-  "body": "3fc75328ff8bf505",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "a655eea34a5c8096",
-  "core": "c1c568e7a2f6ed6e",
-  "date": "2026-10-27",
-  "note": "1e9 is the starting distance before any segment is checked; the function is nearest-segment geometry only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_stroke_verdict#bank geometry": {
-  "body": "8e272ac0a100e64d",
-  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
-  "code": "9f948f94d34ed931",
-  "core": "284b73f62d942085",
-  "date": "2026-11-01",
-  "note": "reads the half-width at the nearest point along the stroke and the rounding-robust \"past the end\" flag; geometry only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::drain_bank_clearance#bank of the collector": {
-  "code": "5074ab2bc0f1001d",
-  "core": "9c49d1c5c7553fba",
-  "date": "2026-10-03",
-  "note": "half the drawn drain width plus a 0.75 margin (half a 1.5 ft bund at 1 ft/px)",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "triaged": "2026-10-27",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::drain_bank_clearance#its salts, guards and sentinels": {
-  "body": "8a2ada1098ee1202",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel starting distance)",
-  "code": "c5f96c6dbf86dc61",
-  "core": "00bf1487f44644ab",
-  "date": "2026-10-25",
-  "note": "sentinel",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-26",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall": {
-  "code": "40218dd19239fc42",
-  "core": "b3b033e100b201df",
-  "date": "2026-10-09",
-  "note": "`abs(gap) < need` sends a vertex in the bank on either side to `off_with_the_fall`, giving \"never into its water\" for a drain where moving up the fall cannot clear it",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "rests": [
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::hem_to_bank#no wall in the ditch": {
-  "code": "0f0e124287b3f2b3",
-  "core": "b3b033e100b201df",
-  "date": "2026-10-09",
-  "note": "a vertex inside the stroke plus half a bund is moved upslope until it clears, so the two meet edge to edge",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "rests": [
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:63df982a8a8be353",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::off_with_the_fall#its salts, guards and sentinels": {
-  "body": "f2f37d079f6df051",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "03992e9a7c9320d2",
-  "core": "093e94f29a11029a",
-  "date": "2026-10-25",
-  "note": "sentinel",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::off_with_the_fall#off at right angles": {
-  "code": "11b64b56e3a96814",
-  "core": "093e94f29a11029a",
-  "date": "2026-10-09",
-  "note": "the vertex moves along the nearest segment's normal, on the side it already lies, until it stands `need` off the centerline, so the bund meets the ditch and stays out of its water",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "rests": [
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0d4f9efff883c0d1",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/waterfields/banks.py::polyline_cum#bank geometry": {
   "body": "b56b2b2143c00a6e",
   "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
@@ -74458,77 +74246,6 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::supply_bank_clearance#bund runs along the supply channel": {
-  "code": "7f5602f52bdcf7af",
-  "core": "dbbbd647be3d4d2f",
-  "date": "2026-10-03",
-  "note": "local drawn half-width from the shared taper rule",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::swept_bend#cut-back within its run": {
-  "body": "972c2c3a2a173c24",
-  "claim": "cut-back within its run - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); a hairpin (a turn over ~137 deg) drawn tighter than the 2.5-width radius so its tangent point stays within 90% of its run; the 90% is this project's margin",
-  "code": "f2a08b4f0cd55533",
-  "core": "3867c8326d97689c",
-  "date": "2026-10-25",
-  "note": "`0.9 * run / tan(half)` binds only on a turn over about 137.3 degrees, within 0054's 35% cap; the 90% margin is ours",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::swept_bend#its figures from 0054": {
-  "body": "972c2c3a2a173c24",
-  "claim": "its figures from 0054 - which-way-water-flows-and-how-channels-bend-and-join.drawing: 0.35 (bend radius capped at 35% of the run (\"capped at 35% of the straight run\"))",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "100b411e4575c57b",
-  "core": "3867c8326d97689c",
-  "date": "2026-10-25",
-  "note": "0.35 of the shorter run is the page's cap",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::swept_bend#its search steps and tolerances": {
-  "body": "972c2c3a2a173c24",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 0.9 (a hairpin's tangent point kept within 90% of its run)",
-  "code": "bfcf523b047416c0",
-  "core": "3867c8326d97689c",
-  "date": "2026-10-25",
-  "note": "the 90% hairpin margin is the project's own; the page is silent on it",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::swept_bend#swept bends": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "6d5e77654a585e12",
-  "core": "3867c8326d97689c",
-  "date": "2026-10-09",
-  "note": "circular arc tangent to both runs, r = min(radius, 0.35*run), cut-back r*tan(turn/2)",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
-  ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::taper_pieces#drawn taper": {
@@ -74613,36 +74330,6 @@
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:9d8037280ef493f3",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/frame.py::_seg_d#frame geometry": {
-  "code": "eb8f28cc23cd9e30",
-  "core": "c1c954e2fb7f780e",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/frame.py::_seg_x#frame geometry": {
-  "code": "f54925252a8fe663",
-  "core": "ae7193d6919615ab",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/frame.py::_signed_area#frame geometry": {
-  "code": "52c302ca708001b5",
-  "core": "93458f84b0e40c52",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "pages": {},
-  "research": "",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
