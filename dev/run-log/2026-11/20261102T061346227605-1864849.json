@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-02T06:13:46Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 408,
+  "result": "failed: test-full",
+  "commit": "81cf181ea",
+  "first_failure_s": 377.6,
+  "last_failure_s": 377.6,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/waterfields/test_surface.py::test_consumed_surface_resolves[BANK_MARGIN]"
+  ],
+  "host": {
+    "load": [
+      3.14,
+      6.01
+    ],
+    "mem_avail_mb": [
+      8705,
+      8843
+    ],
+    "cpu_temp_c": [
+      102.0,
+      75.0
+    ],
+    "stall_s": {
+      "cpu": 1.8,
+      "io": 0.9,
+      "io_full": 0.8,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 49242,
+      "package": 30296
+    }
+  },
+  "phases": {
+    "preflight": 46.0,
+    "static": 27.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 39.0,
+    "counters-inert": 10.0,
+    "pytest": 322.0,
+    "test-full": 331.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a line executed at import time changed in l7r/diagram/waterfields/frame.py",
+  "selected": 10126,
+  "collected": 10126
+}
