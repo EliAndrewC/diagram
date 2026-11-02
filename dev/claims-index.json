@@ -52693,6 +52693,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/ink.py::dikeponds#the bank a ring": {
+  "body": "3ec3877e5988dcbf",
+  "claim": "the bank a ring - dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing: the bank is a ring, not a disk under the pond, and pointing at a bank lights the bank alone",
+  "code": "30387f4562855e77",
+  "core": "11b0c66d8c011ac4",
+  "date": "2026-11-01",
+  "note": "the bank is drawn as one even-odd path of its own outline plus the water's, in the dike's class, with the pond's water drawn on its own in the pond's class. The page records this ring as a map drawing convention, and the code draws it that way.",
+  "pages": {
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html": "5e16deea77a9780b"
+  },
+  "research": "dede4a3ae0c4c6d4",
+  "rests": [
+   "0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html:e636a667b77a7329"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the block's ink": {
   "body": "896cf329ae4253e3",
   "claim": "the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green",

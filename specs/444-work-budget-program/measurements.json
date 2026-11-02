@@ -192,5 +192,33 @@
     "bank"
    ]
   }
+ },
+ "t16-fishpond-r3-f1": {
+  "quantity": "pond-canal length and stroke inside the dike-pond banks",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "ff4d795ed72b",
+  "source": "pool/hamlets/kuwabata/kuwabata.json",
+  "command": "python3+shapely: the field_ditches and drawn_channels lines, and the drawn strokes buffered by half their width, intersected with each bank ring (bank less water)",
+  "method": "the round-three reviewer's measure, on the regenerated map",
+  "value": {
+   "centerline_ft_inside_banks": 0.0,
+   "strokes_overlapping_a_bank": 0,
+   "round_three": "848 ft inside the 4 fish-pond banks"
+  }
+ },
+ "t16-fishpond-r3-f2": {
+  "quantity": "the bank drawn as a ring in the dike's class",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "ff4d795ed72b",
+  "source": "l7r/diagram/settlement/fields/ink.py; pool/hamlets/kuwabata/kuwabata.svg",
+  "command": "grep -c 'fill-rule=\"evenodd\"' pool/hamlets/kuwabata/kuwabata.svg",
+  "method": "the bank path is its outline and its water's, even-odd, class mulberry dike",
+  "value": {
+   "evenodd_banks": 55
+  }
  }
 }
