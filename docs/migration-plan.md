@@ -85,7 +85,7 @@ nothing on maps whose authoring process is deprecated, and - the bigger half - *
 longer need to hold the legacy pool byte-identical**, so new rules ship un-flagged and the
 byte-identity criterion below is retired. The known cost, accepted out loud: the above-hamlet wings
 of the `settlement/` package (towns, cities, the capital) are exercised by no live map until their tiers convert,
-so they are covered by tests instead: the gate holds ONE floor, 100% over the whole tree (feature 174).
+so they are covered by tests instead: the gate holds ONE floor, 100% over the whole tree (feature 174) - but the engine code the Rust port replaces, `dev/coverage-exempt.json` (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc).").
 A frozen map's defects against post-freeze rules are expected, not bugs; the fix is conversion.
 The frozen maps' renders (svg + png) are **write-once exhibits** (GM 2026-08-16), because nothing
 can faithfully re-derive them once the engine drifts. Since feature 178 no render is tracked, so the

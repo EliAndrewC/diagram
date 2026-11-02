@@ -57,16 +57,23 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 
 - **FR-001**: One record names the Python engine code slated for removal by the Rust port, each entry with its reason (the 444
   phase that replaces it, or the program's whole-engine replacement).
-- **FR-002**: Every coverage floor the gate, `make cover-changed`, `make land` and the derived hamlet floor enforce exempts the
-  entries of that record and only them; their unrun lines are still reported, as information.
+- **FR-002**: Every coverage floor - the gate's floored report, the derived hamlet floor, `make cover-changed` (which `make land`
+  runs) and `make preflight`'s coverage step, the readers that a search of the tree before this feature finds (`git grep -l -E
+  "fail-under|fail_under|missing_lines|CoverageData" 69982e1ee -- scripts l7r Makefile`, each hit read for a refusal on unrun
+  lines) - exempts the entries of that record and only them; their unrun lines are still reported, as information.
 - **FR-003**: Everything else keeps the 100% floor unchanged - in particular `l7r/diagram/tools/`, `ci/`, `pipeline/`,
   `interactive/`, the gate's checks under `tests/gate/` and the automated checks of the hand-drawn maps, and `scripts/`.
 - **FR-004**: A module is held to the floor unless the record names it (a new module defaults to the floor).
-- **FR-005**: The record's entries are checked to exist; a stale entry (a path deleted by a Rust landing) fails the gate with the
-  command that removes it, so the list shrinks as the port proceeds.
-- **FR-006**: The docs that state the single 100% floor (`l7r/diagram/CLAUDE.md`, `settlement/CLAUDE.md`'s Coverage, the root
-  `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`, `pyproject.toml`'s coverage note, and the constitution's Principle X
-  clause 5 as a dated amendment) say the exemption, with the GM's words; the tests that pin "no `--omit` on the floored report"
+- **FR-005**: An entry is stale when its path is gone, when every 444 phase it names is accepted (its Rust landed; what is left is
+  the stage's thin door, which stays Python), or, for a whole-engine entry, when code that stays Python now reaches it by import; a
+  stale entry is no longer exempt and fails the gate and `make land` with the command that removes it, so the list shrinks as the
+  port proceeds.
+- **FR-006**: Every operative doc that states the single 100% floor says the exemption, with the GM's words - those a search finds
+  (`git grep -n -E "100% (coverage|line|over)|100%.*floor|fail-under=100"` over the docs, templates and engine docstrings, less the
+  specs, the research record and the run logs): `l7r/diagram/CLAUDE.md`, `settlement/CLAUDE.md`'s Coverage, `tools/CLAUDE.md`'s
+  hamlet-floor row, `tests/CLAUDE.md`'s tree table, the root `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`,
+  `docs/guards.md`'s coverage row, `docs/migration-plan.md`, `ci/incremental.py`'s docstring, `pyproject.toml`'s coverage note,
+  `.specify/templates/plan-template.md`'s Principle X gate, and the constitution's Principle X clause 5 as a dated amendment; the tests that pin "no `--omit` on the floored report"
   pin instead that its only omission is the record's.
 
 ## Success Criteria *(mandatory)*
@@ -74,8 +81,8 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 - **SC-001** (FR-001, FR-002, FR-004, FR-005): A fixture with an unrun line in a slated module passes every coverage reader; the same line in a kept module fails
   each of them.
 - **SC-002** (FR-003): Every module outside the record is fully covered at the landing (the floor did not loosen anywhere else).
-- **SC-003** (FR-006): Coverage-driven work on slated modules stops: after landing, no task of feature 444 adds a test only to cover a slated
-  module's line.
+- **SC-003** (FR-002, FR-006): After landing, no coverage reader FR-002 names refuses a slated module's unrun line, and each prints
+  that line as information; the docs FR-006 names each carry the exemption and the GM's words.
 
 ## Edge Cases
 
@@ -84,12 +91,19 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 - A slated module also imported by kept code: its exemption covers only its own lines; the kept caller's lines stay at 100%.
 - A Rust phase that is withdrawn: its Python's entries leave the record and the floor returns.
 
+## Review history
+
+- 2026-11-02, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-002 adds preflight's coverage step and its search;
+  FR-006 states its search and adds the docs it finds; FR-005 defines stale as the plan's D4 does; the Assumption names both
+  classes; SC-003 restated as an observable outcome.
+
 ## Decisions Recorded
 
 Tooling only: this feature draws and states nothing on any map.
 
 ## Assumptions
 
-- "The engine code ... that's going away" is the Python that feature 444's phases replace; where the plan names a stage's Python
-  as replaced, it is slated, and nothing else is.
+- "The engine code ... that's going away" is, in two classes: a 444 stage's own Python while its phase is not accepted, and the
+  engine modules unreached from what 444 FR-010 and FR-003 keep in Python once those stages' Python is gone (the program's
+  whole-engine replacement). Nothing else is slated.
 - Lint, format and type checks are unchanged for slated modules; only the coverage floor is relaxed.

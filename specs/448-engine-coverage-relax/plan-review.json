@@ -42,6 +42,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-02",
    "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "ae7d7d1458b0efcf1b77d3acc3c50254b6cc02fe655ef77f923b496be9f38d83",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "36332be348e15340b819d6b31abfc9fc5de64b55b104cfeaf7524334584f4752",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -313,6 +325,96 @@
      "summary": "T01: red-first tests (SC-001 fixture, the stale checks, record equals D1's rule at landing, the hamlet-floor/cover-changed split), then the module, record, Makefile, readers, make coverage-exempt and land's cheap refusal. T02: the docs and floor tests, then make land, whose gate floor measures SC-002.",
      "class": "within",
      "why": "Implements D1-D5 and verifies SC-001/SC-002; every test enforces a requested clause."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T01/item-1-goal",
+     "summary": "Engine code the Rust port replaces is not held to the full floor; every other file still is.",
+     "class": "within",
+     "why": "Restates the GM's ruling ('relax that for the engine code ... so long as we maintain it for our other Python code') and FR-002/FR-003/FR-004."
+    },
+    {
+     "id": "T01/item-2-constraints",
+     "summary": "Constraints are FR-001..FR-005 and D1-D4.",
+     "class": "within",
+     "why": "Cites the accepted spec's requirements and decisions whole; no subset is carved out. SC-001 (the fixture: slated line passes, kept line fails) is not cited by T01, but its enforcement half rests on the exit test tests/tooling/ci/test_coverage_exempt.py; within on the condition that SC-001's fixture lives in that test - not confirmable from the bundle."
+    },
+    {
+     "id": "T01/item-4-figure",
+     "summary": "Record is 90 entries, 0 stale, measured 2026-11-02 by make coverage-exempt over stage_files and closure.py.",
+     "class": "within",
+     "why": "Carries a date and a method (one-shot label), so reviewable; not re-run here (bundle-only review), but it reconciles with D1's 76 (a) + 14 (b) = 90."
+    },
+    {
+     "id": "T01/item-6-exits",
+     "summary": "Green: test_coverage_exempt.py, hamlet floor, cover-changed and land tests, and the gate floor; red: recorded and ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Exits cover every floor FR-002 names (gate, cover-changed, land, hamlet floor); the red path is process, not a narrowing."
+    },
+    {
+     "id": "T01/item-8-budget",
+     "summary": "One landing.",
+     "class": "within",
+     "why": "Scheduling; narrows nothing the GM asked."
+    },
+    {
+     "id": "T01/item-9-done",
+     "summary": "Done = make done floor green with the record's omission, every kept file at the full floor (SC-002).",
+     "class": "within",
+     "why": "Measures exactly the GM's condition 'so long as we maintain it for our other Python code' via SC-002."
+    },
+    {
+     "id": "T02/item-1-goal",
+     "summary": "Every doc that states the one floor says the exemption, with the GM's words.",
+     "class": "within",
+     "why": "Restates FR-006 / D5."
+    },
+    {
+     "id": "T02/item-9-l7r-claude-md",
+     "summary": "Done measure lists 'the root and settlement CLAUDE.md' and omits l7r/diagram/CLAUDE.md.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-006 and D5 name three CLAUDE.md files distinctly: the root CLAUDE.md (Python line), l7r/diagram/CLAUDE.md, and settlement/CLAUDE.md's Coverage. T02's done measure names two, so T02 can be ticked with l7r/diagram/CLAUDE.md - the engine's own instructions, the doc a session editing slated code reads - still stating the unexempted floor. Nothing in the request makes amending it impossible or implies leaving it out. Cure: item 9 adds l7r/diagram/CLAUDE.md."
+    },
+    {
+     "id": "T02/item-9-names-record-only",
+     "summary": "Done measure is that each doc 'names dev/coverage-exempt.json'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-006 requires each doc to 'say the exemption, with the GM's words' and D5 to say it AND point to the record; T02's own item 1 says the same. The done check tests only the pointer, so a doc that names the file without the GM's 2026-11-02 ruling passes. Cure: item 9 measures that each doc names the record and carries the GM's words."
+    },
+    {
+     "id": "T02/item-9-phase-checklist",
+     "summary": "Adds 'the phase checklist' to the docs amended.",
+     "class": "within",
+     "why": "Not in FR-006/D5's list, but it is a doc stating the floor, which FR-006's purpose covers ('the docs that state the single 100% floor'); it serves the request rather than departing from it."
+    },
+    {
+     "id": "T02/item-9-constitution-version",
+     "summary": "Constitution amended as 2.34.0.",
+     "class": "within",
+     "why": "FR-006 asks for a dated amendment to Principle X clause 5; the version number is bookkeeping."
+    },
+    {
+     "id": "T02/item-6-exits",
+     "summary": "Green: test_coverage_floor.py and test_docs_match_the_mechanism.py.",
+     "class": "within",
+     "why": "Exactly the tests FR-006 / D5 re-pin to 'the only --omit is the record's'."
+    },
+    {
+     "id": "T02/item-5-order",
+     "summary": "After T01, same landing.",
+     "class": "within",
+     "why": "Sequencing; narrows nothing."
     }
    ]
   }

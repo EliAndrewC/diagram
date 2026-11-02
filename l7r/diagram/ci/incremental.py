@@ -1,5 +1,6 @@
 """THE INCREMENTAL GATE (feature 207, GM 2026-09-07): re-run only the tests a change can reach, and still
-judge 100% coverage over the whole engine.
+judge 100% coverage over the whole engine (but the files `dev/coverage-exempt.json` names: the engine code the Rust port
+replaces, reported and not held - feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc).").
 
 WHY. Since feature 174 a plain `make done` on ANY engine change ran the whole suite - eight to ten
 minutes - because the 100% floor is measured over whatever ran, and a deselected test takes its coverage

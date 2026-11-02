@@ -224,3 +224,25 @@ def test_the_gate_s_preflight_leaves_the_coverage_step_to_make_preflight(tmp_pat
     assert "coverage of the changed lines" in capsys.readouterr().out
     done = Path(__file__).resolve().parents[2].joinpath("Makefile").read_text(encoding="utf-8").split("\ndone:", 1)[1].split("\n\n", 1)[0]
     assert "--no-coverage" in done, "the gate passes it"
+
+
+def test_a_slated_modules_unrun_lines_are_reported_not_refused(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+    """Feature 448 (the GM 2026-11-02): an off-path line of a module `dev/coverage-exempt.json` names is information; a kept
+    module's still stops the gate."""
+    monkeypatch.setattr(pf, "run", lambda cmd, root, quiet=True: 0)
+    monkeypatch.setattr(pf, "git", lambda root, *a: "")
+    monkeypatch.setattr(pf, "changed_lines", lambda root: {})
+    monkeypatch.setattr(pf, "exempt_files", lambda root: {"l7r/slated.py"})
+    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: ({"l7r/slated.py": [4]}, {}))
+    assert pf.main(["--root", str(tmp_path)]) == 0
+    assert "l7r/slated.py lines [4] - unrun, and slated for the Rust port" in capsys.readouterr().out
+    monkeypatch.setattr(pf, "coverage_step", lambda root, changed, workers: ({"l7r/slated.py": [4], "l7r/kept.py": [2]}, {}))
+    assert pf.main(["--root", str(tmp_path)]) == 1 and "l7r/kept.py lines [2]" in capsys.readouterr().out
+
+
+def test_exempt_files_reads_the_record(tmp_path: Path) -> None:
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "l7r").mkdir()
+    (tmp_path / "l7r" / "s.py").write_text("x = 1\n")
+    (tmp_path / "dev" / "coverage-exempt.json").write_text('{"entries": [{"path": "l7r/s.py", "stages": ["sink"], "why": "t"}]}\n')
+    assert pf.exempt_files(tmp_path) == {"l7r/s.py"}

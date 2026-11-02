@@ -219,6 +219,16 @@ def outside_quick(root: Path) -> set[str]:
     return out
 
 
+def exempt_files(root: Path) -> set[str]:
+    """The engine files the coverage floor does not hold (feature 448), through the floor's one reader."""
+    here = str(Path(__file__).resolve().parents[2])
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
+
+    return coverage_exempt.exempt(root)
+
+
 def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tuple[dict[str, list[int]], dict[str, list[int]]]:
     """(off-path uncovered lines, on-path uncovered lines) from one quick-tree run with coverage over the changed files."""
     if not changed:
@@ -468,6 +478,8 @@ def main(argv: list[str] | None = None) -> int:
     # THE COVERAGE STEP IS make preflight's, NOT THE GATE'S (405 T47, D25): 98-107 s of every gate, and in the whole transcript
     # record it refused about twice, once wrongly - the gate's own 100% floor judges the same lines a few minutes later
     off, on = ({}, {}) if a.no_coverage else coverage_step(root, changed_lines(root), a.workers)
+    # THE ENGINE CODE THE RUST PORT REPLACES IS REPORTED, NOT REFUSED (feature 448, the GM 2026-11-02): the gate's floor omits it
+    slated = {f: off.pop(f) for f in sorted(set(off) & exempt_files(root))}
     if not a.no_coverage:
         mark("coverage of the changed lines")
     prev = t0
@@ -476,6 +488,8 @@ def main(argv: list[str] | None = None) -> int:
         steps.append(f"{step} {t - prev:.0f} s")
         prev = t
     print("preflight: " + ", ".join(steps))
+    for f, ls in slated.items():
+        print(f"preflight: {f} lines {ls[:12]} - unrun, and slated for the Rust port (dev/coverage-exempt.json): information, not refused")
     for f, ls in sorted(on.items()):
         print(f"preflight: {f} lines {ls[:12]} - no quick test runs them; a rolled map or a test the quick tier skips may (the gate's floor judges)")
     if off:

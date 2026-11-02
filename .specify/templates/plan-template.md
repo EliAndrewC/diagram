@@ -124,7 +124,9 @@ approval before /speckit-tasks may run.
   WHOLE engine, no opt-in** (`coverage report --fail-under=100`; Principle
   X clause 5 as the GM globalized it on 2026-09-02: a new module owes 100%
   the day it lands, and the measured surface is derived rather than
-  rostered), external boundaries
+  rostered) - but for the engine code the Rust port replaces, the files
+  `dev/coverage-exempt.json` names, whose unrun lines are reported and not
+  held (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."), external boundaries
   tested via saved fixtures (not transport-layer mocks), pinned
   dependencies via `requirements.in` → `requirements.txt` (or `uv.lock`),
   no swallowed exceptions, no `print` in production paths, behavior-named

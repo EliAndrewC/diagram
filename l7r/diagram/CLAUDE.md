@@ -81,7 +81,9 @@ diagnosed and the tooling improved.
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`
-  for a whole affected file (never a `-k` subset alone), `make cover-changed` (~30 s: every line of each changed
+  for a whole affected file (never a `-k` subset alone). **The engine code the Rust port replaces owes no coverage**
+  (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."): `dev/coverage-exempt.json` names it (`make coverage-exempt`), and every floor reports its unrun
+  lines as information; write no test only to cover one of them. `make cover-changed` (~30 s: every line of each changed
   engine module the floor's tests leave unrun, the floor's carried coverage honored, feature 430 - `make land` runs it beside
   the gate, escape `COVER_OK`), then `make done` once,
   backgrounded, never polled.
