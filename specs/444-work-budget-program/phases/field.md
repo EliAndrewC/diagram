@@ -56,10 +56,17 @@ phase's working record: what is measured, what is owed, and where to resume.
   `hamletgen/water/`'s comb, fit and polder, `settlement/fields/`'s placement, `waterfields/`' carve, partition, polder, ring_rules,
   settle, tint, trunks and furrows with the helpers only they read - `make dead-closure` listing only live names (RULED_SHARE,
   RULED_MIN_LEN_FT and twins, which gate checks read; the intake knobs, registered for STAGE_KNOBS).
-- [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; every seed of
+- [x] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; every seed of
   the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
   rate, refusing nothing); the phase's claims round IN-STEP; the reviews
   its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
+  Met: 112,814 at 40 and 200,310 at 80 against 118,739 and 218,411, exponent 0.80 against 0.86 (box 7's run); `make rust-gate` 54/54
+  (`dev/rust-gate/20261102T051350Z.json`); the claims round IN-STEP, none owed; the reviews - settlement-review on inashiro and
+  kuwabata, glyph-check on field-grave/inashiro, field-pond/kashikawa, paddy/inashiro and irrigation-ditch/kuwabata closed (PASS or
+  the round arbiter's accept, findings filed as rows), fish-pond/kuwabata PASS at round four (ruled `continue`, the last round;
+  0 ft of canal in any bank, 22 bank rings in class mulberry dike) - each in `dev/review-ledger.md`; `make perf-ab`: the field
+  stage 1.64 s to 0.05 s, the whole roll +21% and the Python web stage +138% (its calls 7.6M to 15.8M), recorded, not a gate - the
+  Python stages are not tuned (the GM: "I don't care about the python code getting slower").
 - [x] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
   Closed by the round arbiter's accept on ask:444-T16-field-after-audit-6, bound to run `20261101T224654Z-799b3654eff8` at commit
   `b0b720c7d`: audit 6 (`phases/field.audit-6.txt`, UNCOUNTED, final for this box) went the FR-006 route, rebuilt cheaper - 112,814
