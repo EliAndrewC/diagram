@@ -66,18 +66,10 @@ CONSUMED_PUBLIC = [
     "DRAIN_FT",
     "DRY_CROPS",
     "FLOODED",
-    "PADDY_CELL_ACRES",
     "aze_w",
-    "build_polder",
     "chan_px",
-    "dedup_ring",
     "drain_bank_clearance",
-    "hem_on_paddy",
-    "jog_vertices",
-    "paddy_grain",
-    "pointed_ring",
     "polyline_cum",
-    "round_channel_joints",
     "supply_bank_clearance",
     "taper_pieces",
     "taper_w",
@@ -85,10 +77,9 @@ CONSUMED_PUBLIC = [
 ]
 
 # The underscore names with external consumers, and the submodule that owns each
-# (settlement/fields/: _RICE_GREEN; tests/hamletgen/: _Frame;
+# (settlement/fields/: _RICE_GREEN;
 # tests/settlement/test_core.py: _seg_d).
 ALIASED_UNDERSCORE = {
-    "_Frame": "l7r.diagram.waterfields.frame",
     "_RICE_GREEN": "l7r.diagram.waterfields.palette",
     "_seg_d": "l7r.diagram.waterfields.frame",
 }

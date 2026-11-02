@@ -1,18 +1,16 @@
-"""Layer-0 frame math for the water-first field engine: the contour(u)/fall(f) frame, warp-thread state, and pure geometry helpers (segment/polygon predicates, polyline sampling).
+"""The channel widths the field's drawing reads - the taper law, the ditch widths in pixels, when a ditch takes a plank - and the
+segment helpers the banks use (the Python field engine this was the frame of was deleted by feature 444 T16).
 
-Research: frame geometry - NONE: the contour/fall frame, point and segment predicates, areas and polyline sampling
+Research: frame geometry - NONE: segment predicates and a ring's signed area
 """
 
 import math
-import random
 
 from l7r.diagram.work_counts import OPS
 
 Pt = tuple[float, float]  # an (x, y) point in map pixels
 Poly = list[Pt]  # a polyline / polygon as a list of points
 
-DF = 30.0  # fall step of the lockstep march (px)
-"""Research: march step - NONE: the fall step the threads advance by"""
 GAP = 26.0  # threads never pinch closer than this - a plot must fit between them
 """Research: least spacing between ditch threads - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the maps set no least width for a basin, the hamlet basin about 48 ft across its canal - a 26 px floor between threads sets a least column width, a departure the code keeps until feature 417 T34; 26 px"""
 # A FIX THAT FAILED (feature 328 wave 85, 2026-10-09): 0005's basin is some 40 to 60 ft across its ditch, so the floor was
@@ -20,8 +18,6 @@ GAP = 26.0  # threads never pinch closer than this - a plot must fit between the
 # 48-seed cohort went 48 -> 45 and 48 -> 44 (Kashikawa refused by its lane web at the 40 ft floor). Reverted; the row is E3,
 # its work the seeds that broke (m:wave85-thread-floor-reverted; the patch is in the spec's audit/reverted/).
 
-DELIVERY_FT = (2.5, 1.2)  # a delivery ditch: head at its takeoff -> the terminal field-ditch tier
-"""Research: delivery ditch width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 ft dwindling to 1.2"""
 DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the outfall. Drainage
 # EXCEEDS supply at the outfall (it passes drawdown plus storm, not just the irrigation duty), which
 # is why the drain's tail is wider than the head-race that fed the same ground.
@@ -170,79 +166,6 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     return math.sqrt(max(0.0, w0 * w0 + (w1 * w1 - w0 * w0) * t))
 
 
-class _Frame:
-    """Contour/fall frame for an arbitrary downhill screen angle."""
-
-    def __init__(self, down_deg: float) -> None:
-        a = math.radians(down_deg)
-        self.down: float = a
-        self.d: Pt = (math.cos(a), math.sin(a))  # fall unit (downhill)
-        self.c: Pt = (math.sin(a), -math.cos(a))  # contour unit (90 deg left of fall)
-
-    def to_uf(self, x: float, y: float) -> Pt:
-        return (x * self.c[0] + y * self.c[1], x * self.d[0] + y * self.d[1])
-
-    def to_xy(self, u: float, f: float) -> Pt:
-        return (u * self.c[0] + f * self.d[0], u * self.c[1] + f * self.d[1])
-
-
-class _Thread:
-    """One plot-column boundary marched down the fall line."""
-
-    def __init__(
-        self,
-        u: float,
-        f: float,
-        drift: float,
-        ditch_f: float,
-        decay: float = 110.0,
-        fallback: Poly | _Thread | None = None,
-    ) -> None:
-        """Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N6, 2026-10-25) - 110 (thread relax distance)
-        """
-        self.u0, self.f0 = u, f
-        self.u = u
-        self.drift = drift  # du/df at takeoff (from the ditch's dug heading)
-        self.decay = decay  # fall-distance over which drift relaxes to 0
-        self.ditch_f = ditch_f  # dug-ditch prefix ends at this f (plain bund below)
-        self.fallback = fallback  # boundary path ABOVE the takeoff (parent canal/thread)
-        self.pts: Poly = []
-        self.f_end: float | None = None
-        self.spawn_sub: bool = False  # set True on interior blocks that split once
-        self.offtake_fs: list[float] = []  # falls at which this canal spawns offtakes
-        # This ditch's TRUE head width in feet, set by whoever creates it from the width of the
-        # channel it takes off from (see DELIVERY_PARENT_FRAC). Defaulted rather than left unset so
-        # a thread that reaches the drawing pass by some other route still has an honest width.
-        self.head_ft: float = DELIVERY_FT[0]
-
-    def step(self, f: float, R: random.Random) -> float:
-        """Research: thread wander - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2b, 2026-10-25); the takeoff heading relaxing over `decay` px of fall, +/-0.1 of the fall step of jitter a step"""
-        k = math.exp(-max(0.0, f - self.f0) / self.decay)
-        return self.u + (self.drift * k + R.uniform(-0.10, 0.10)) * DF
-
-
-def _falls(F: _Frame, pts: Poly) -> list[float]:
-    """The fall of every vertex of `pts`: `F.to_uf`'s fall, `x * d0 + y * d1`, computed in one comprehension rather than a call
-    per vertex (feature 427 T04, R6: 514k `to_uf` calls under `grid_lines` at 40 households, the T01 survey). Feature 278 cached
-    it per polyline for a carve; the carve went with feature 302."""
-    d0, d1 = F.d
-    return [p[0] * d0 + p[1] * d1 for p in pts]
-
-
-def _at_f(F: _Frame, pts: Poly, f: float) -> Pt:
-    """Point on a fall-monotone polyline at fall f (clamped at the ends)."""
-    fs = _falls(F, pts)
-    if f <= fs[0]:
-        return pts[0]
-    for i in range(len(pts) - 1):
-        fa, fb = fs[i], fs[i + 1]
-        if fa <= f <= fb and fb > fa:
-            k = (f - fa) / (fb - fa)
-            return (pts[i][0] + k * (pts[i + 1][0] - pts[i][0]), pts[i][1] + k * (pts[i + 1][1] - pts[i][1]))
-    return pts[-1]
-
-
 def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
     r = (b[0] - a[0], b[1] - a[1])
     s = (d[0] - c[0], d[1] - c[1])
@@ -271,27 +194,6 @@ def _seg_d(px: float, py: float, a: Pt, b: Pt) -> float:
     return math.hypot(px - a[0] - t * vx, py - a[1] - t * vy)
 
 
-def _pip(x: float, y: float, poly: Poly) -> bool:
-    if __debug__:
-        OPS["pt_test@_pip"] += 1
-    n = len(poly)
-    inside = False
-    j = n - 1
-    for i in range(n):
-        xi, yi = poly[i]
-        xj, yj = poly[j]
-        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi + 1e-12) + xi:
-            inside = not inside
-        j = i
-    return inside
-
-
-def _poly_perim(poly: Poly) -> float:
-    """Perimeter of a closed polygon - the denominator of the 2A/P thickness proxy."""
-    n = len(poly)
-    return sum(math.hypot(poly[(i + 1) % n][0] - poly[i][0], poly[(i + 1) % n][1] - poly[i][1]) for i in range(n))
-
-
 def _signed_area(poly: Poly) -> float:
     """Shoelace WITH its sign - the sign is the diagnosis. Every basin the carve lays comes out
     positively wound; one that comes back negative has had its two boundaries cross, so what is
@@ -302,7 +204,3 @@ def _signed_area(poly: Poly) -> float:
         x1, y1 = poly[(i + 1) % len(poly)]
         s += x0 * y1 - x1 * y0
     return s / 2
-
-
-def _poly_area(poly: Poly) -> float:
-    return abs(_signed_area(poly))

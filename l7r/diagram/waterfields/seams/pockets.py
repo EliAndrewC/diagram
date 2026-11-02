@@ -15,7 +15,7 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 from ..banks import (
     polyline_cum,
 )
-from ..frame import BANK_MARGIN, Poly, _Frame, taper_w
+from ..frame import BANK_MARGIN, Poly, taper_w
 
 _SHAPELY_LOADED = False
 
@@ -121,5 +121,3 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
         for k, geom in zip(idx, list(made), strict=True):
             shapes[k] = geom
     return unary_union(shapes)
-
-

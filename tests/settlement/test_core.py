@@ -1,6 +1,5 @@
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
-import math
 import os
 import random
 import tempfile
@@ -8,8 +7,8 @@ import tempfile
 import pytest
 
 from l7r.diagram.settlement import Settlement, surface_water_dist, village_population
-from l7r.diagram.waterfields import dedup_ring, pointed_ring, polyline_cum, supply_bank_clearance
-from tests.settlement._builders import _cap020, _crop_settlement, _max_turn_deg, _town, crop
+from l7r.diagram.waterfields import polyline_cum, supply_bank_clearance
+from tests.settlement._builders import _cap020, _crop_settlement, _town, crop
 
 
 @pytest.mark.renders  # a test OF rendering (feature 213): it clears the suite's skip-render default for its first half
@@ -195,22 +194,6 @@ def test_commons_and_marsh_skip_the_pond_and_watercourses():
         assert s.M["commons"] if method == "commons" else s.M["marshes"]
 
 
-def test_paddy_grain_hits_the_real_feet_target():
-    # the real-feet paddy calibration (GM 2026-07-22): plot_across x mean row_step, converted at the
-    # map's ftpx, must equal the ~0.05-acre target - the SAME real cell at every scale (see paddy_grain)
-    from l7r.diagram.waterfields import PADDY_CELL_ACRES, paddy_grain
-
-    for ftpx in (1, 2, 3):
-        across, (rlo, rhi) = paddy_grain(ftpx)
-        mean_row = (rlo + rhi) / 2
-        nominal_acres = across * mean_row * ftpx * ftpx / 43560
-        assert abs(nominal_acres - PADDY_CELL_ACRES) < 0.004, (ftpx, nominal_acres)
-        assert rlo < 0.66 * across < rhi  # the row-step (min,max) straddles the along-canal mean (aspect*across)
-    # a coarser ftpx needs FEWER px per plot for the same real cell; a bigger target -> bigger plot
-    assert paddy_grain(1)[0] > paddy_grain(2)[0] > paddy_grain(3)[0]
-    assert paddy_grain(2, target_acres=0.036)[0] < paddy_grain(2, target_acres=0.0675)[0]
-
-
 def test_archetype_knob_typing_rules():
     # field_archetype + land_use_overlay honor terrain typing (research.md D4)
     s = Settlement(1800, 1800, seed=1)
@@ -255,40 +238,6 @@ def test_settlement_form_water_town_is_lion_gated():
     assert lion.resolve("settlement_form") == "water_town"
 
 
-def test_build_polder_mosaic_knob():
-    # GM 2026-07-22: the `mosaic` knob roughs a surveyed polder GRID into an accreted, creek-fitted MOSAIC
-    # (some 桑基魚塘 dike-pond districts read that way; some 圩田 polders read as the clean grid). It must be
-    # deterministic, byte-identical at mosaic=0 (a separate rng drives it), CHANGE the geometry when on, and
-    # make the parcels measurably MORE irregular (skewed toward trapezoids: larger opposite-edge angles).
-    from l7r.diagram.waterfields import build_polder
-
-    kw = {"down_deg": 90, "rows": 10, "cols": 6, "cell": 160, "parcel_mix": (0.10, 0.0, 0.60), "gap": (11.0, 11.0), "edge_wander": 0.4}
-    grid = build_polder(2200, 2600, (360, 320), 21, mosaic=0.0, **kw)
-    mos = build_polder(2200, 2600, (360, 320), 21, mosaic=0.5, **kw)
-    assert build_polder(2200, 2600, (360, 320), 21, **kw)["plots"] == grid["plots"]  # mosaic=0 == default (byte-stable)
-    assert build_polder(2200, 2600, (360, 320), 21, mosaic=0.5, **kw)["plots"] == mos["plots"]  # deterministic
-    assert mos["plots"] != grid["plots"]  # the knob changes the geometry
-
-    def mean_skew(net):
-        vals = []
-        for p in net["plots"]:
-            q = p["quad"]  # the ruled parcel BEFORE the organic pass - the skew lives in its corners
-            if len(q) != 4:
-                continue
-
-            def opp(a, b, c, d):
-                v1 = (b[0] - a[0], b[1] - a[1])
-                v2 = (d[0] - c[0], d[1] - c[1])
-                l1 = math.hypot(*v1) or 1.0
-                l2 = math.hypot(*v2) or 1.0
-                return math.degrees(math.acos(max(-1.0, min(1.0, abs(v1[0] * v2[0] + v1[1] * v2[1]) / (l1 * l2)))))
-
-            vals.append(max(opp(q[0], q[1], q[3], q[2]), opp(q[1], q[2], q[0], q[3])))  # angle between opposite edges
-        return sum(vals) / len(vals)
-
-    assert mean_skew(mos) > mean_skew(grid) * 1.15  # the mosaic parcels run visibly more to trapezoids
-
-
 def test_settlement_form_dike_top_is_low_ground_gated():
     # dike_top stands ON a polder's perimeter dike, so the form needs the polder terrain (low reclaimed
     # ground); anywhere else the typing rule rejects it (research/contents.json#field-archetypes 'Polder waterward fringe + dike-top housing').
@@ -301,39 +250,6 @@ def test_settlement_form_dike_top_is_low_ground_gated():
     low.meta(name="Sl", scale="village", terrain="low")
     low.pin_knob("settlement_form", "dike_top")
     assert low.resolve("settlement_form") == "dike_top"
-
-
-def test_round_channel_joints_sweeps_the_seam_between_two_records():
-    # a run emitted as two tapering records turns at the SEAM, where fillet_polyline cannot reach it
-    from l7r.diagram.waterfields import round_channel_joints
-
-    a = {"pts": [(0.0, 0.0), (200.0, 0.0)], "w": 7.0, "role": "main"}
-    b = {"pts": [(200.0, 0.0), (200.0, 200.0)], "w": 6.0, "role": "main"}
-    round_channel_joints([a, b])
-    assert a["pts"][-1] == b["pts"][0]  # still one continuous run
-    assert _max_turn_deg(a["pts"] + b["pts"][1:]) < 20  # was 90
-    assert (200.0, 0.0) not in a["pts"] + b["pts"]
-
-
-def test_round_channel_joints_leaves_offtakes_and_gentle_seams_alone():
-    from l7r.diagram.waterfields import round_channel_joints
-
-    # a node where a BRANCH also leaves is a junction, not a bend: an offtake is a notch in the bank
-    a = {"pts": [(0.0, 0.0), (200.0, 0.0)], "w": 7.0, "role": "main"}
-    b = {"pts": [(200.0, 0.0), (200.0, 200.0)], "w": 6.0, "role": "main"}
-    branch = {"pts": [(200.0, 0.0), (400.0, 40.0)], "w": 4.0, "role": "branch"}
-    round_channel_joints([a, b, branch])
-    assert a["pts"] == [(0.0, 0.0), (200.0, 0.0)] and b["pts"] == [(200.0, 0.0), (200.0, 200.0)]
-    # ... and a seam that barely bends has no elbow to round
-    c = {"pts": [(0.0, 0.0), (200.0, 0.0)], "w": 7.0, "role": "main"}
-    d = {"pts": [(200.0, 0.0), (400.0, 6.0)], "w": 6.0, "role": "main"}
-    round_channel_joints([c, d])
-    assert c["pts"] == [(0.0, 0.0), (200.0, 0.0)]
-    # ... and neither a zero-length leg nor a one-point record trips it up
-    e = {"pts": [(0.0, 0.0), (200.0, 0.0)], "w": 7.0, "role": "main"}
-    g = {"pts": [(200.0, 0.0), (200.0, 0.0), (200.0, 200.0)], "w": 6.0, "role": "main"}
-    round_channel_joints([e, g, {"pts": [(9.0, 9.0)], "w": 1.0, "role": "main"}])
-    assert e["pts"] == [(0.0, 0.0), (200.0, 0.0)]
 
 
 def test_sluice_gate_label_names_the_black_bar():
@@ -415,33 +331,6 @@ def test_supply_bank_clearance_is_past_at_the_strokes_exact_ends():
         ((50.0, 2.0), False),  # mid-span: governed, as before
     ):
         assert supply_bank_clearance(q, pts, 8.0, 3.0, cum)[2] is want, q
-
-
-def test_pointed_ring_separates_needles_from_basins():
-    # the flooded-wedge discriminator (2026-08-16): fan-seam slivers taper to 7-23 deg apexes
-    # while legitimate flooded hem strips are near-rectangles - the apex angle is the split
-    needle = [(0.0, 0.0), (200.0, 8.0), (200.0, 0.0)]  # ~2.3 deg apex
-    strip = [(0.0, 0.0), (200.0, 0.0), (200.0, 18.0), (0.0, 18.0)]  # 90 deg corners
-    assert pointed_ring(needle, 25.0) and pointed_ring(needle, 15.0)
-    assert not pointed_ring(strip, 25.0)
-    # the two calibrated thresholds really are two lines: a ~20 deg wedge is demoted by the
-    # carve (25) but must not fire the gate (15) - the borderline band that keeps the placer
-    # stricter than the check
-    mid = [(0.0, 0.0), (200.0, 72.0), (200.0, 0.0)]  # ~19.8 deg apex
-    assert pointed_ring(mid, 25.0) and not pointed_ring(mid, 15.0)
-
-
-def test_dedup_ring_collapses_the_trim_corner_reversals():
-    # the Kashikawa merged-roll capture: ~12 near-duplicate points with back-and-forth
-    # reversals in a ~5 px span where the collector cut meets the old boundary
-    jitter = [(100.0 + dx, 50.0 + dy) for dx, dy in ((0.0, 0.0), (0.3, 0.3), (-0.2, 0.1), (0.4, 0.5), (0.1, -0.2))]
-    ring = [(0.0, 0.0), (100.0, 0.0), *jitter, (100.0, 100.0), (0.0, 100.0)]
-    out = dedup_ring(ring, 1.0)
-    assert out == [(0.0, 0.0), (100.0, 0.0), (100.0, 50.0), (100.0, 100.0), (0.0, 100.0)]
-    # ...a clean ring passes through untouched, and the CLOSING pair is deduped too
-    clean = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
-    assert dedup_ring(clean, 1.0) == clean
-    assert dedup_ring([*clean, (0.4, 0.2)], 1.0) == clean
 
 
 def test_the_indexed_water_answers_as_the_distance_does():

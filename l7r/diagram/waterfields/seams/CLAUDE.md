@@ -1,12 +1,5 @@
 # `seams/` - what is left of the seam pass
 
-`close_seams` reconciled a CARVED comb fan into one shared-bund fabric. Feature 302 lays the plots as a partition of the planted
-region instead (`../partition.py`, which carries the shared-bund research), and deleted the pass and everything only it reached
-(`plots.py` whole, the pocket machinery, `_absorb`, `_plant`, `_unjog`, `_shed_necks`, `_visible_parts`, ...). **Load only the
-file the task calls for.**
-
-| file | look here when |
-|---|---|
-| `pockets.py` | the water body and its banks (`_water`) or the band a fan cannot command (`_outside_command`) - the planted region is the envelope less both; `_parts` / `_ring`, read by the grave cut |
-| `close.py` | `hold_ring_rules` - every ring a later cut leaves breaking a rule is split (a staircase, cut on its hop: `_split_steps`, which `../settle.py` also uses), welded, or left bare; the grave cut in `settlement/fields/features.py` is its caller |
-| `__init__.py` | the composed surface only. Never add logic here |
+`pockets.py` holds `_water` (the water body and its banks), with `_parts` and `_ring`: a gate check of every shipped comb field
+(`tests/gate/test_field_302.py`) reads it. Feature 302 retired the seam pass; feature 444 T16 deleted the rest with the Python field
+engine (`close.py`'s re-hold went with the old grave cut). `__init__.py` is the composed surface only - never add logic there.

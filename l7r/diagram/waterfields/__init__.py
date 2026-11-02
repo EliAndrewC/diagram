@@ -31,11 +31,7 @@ LOCAL random.Random(seed) so field generation never ripples other features' plac
 # (settlement/fields/, tests/hamletgen/, tests/settlement/test_core.py); guard:
 # tests/waterfields/test_surface.py. Never add logic here.
 from .banks import *
-from .carve import *
 from .frame import *
-from .frame import _Frame as _Frame
 from .frame import _seg_d as _seg_d
-from .furrows import *
 from .palette import *
 from .palette import _RICE_GREEN as _RICE_GREEN
-from .polder import *

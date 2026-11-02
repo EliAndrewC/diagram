@@ -4,7 +4,6 @@ rules read. The pass itself (`close_seams`) was retired: the plots are laid as a
 
 from typing import Any
 
-from l7r.diagram.waterfields.banks import jog_steps, jog_vertices
 from l7r.diagram.waterfields.seams import _parts, _ring, _water
 
 # A 20 deg wedge truncated to a 3.4 ft end - the shape that reads as a pond when it wears the water
@@ -53,51 +52,6 @@ def test_parts_drops_invalid_rings():
 def test_ring_drops_vertices_that_rounding_collapses():
     assert _ring(Polygon([(0, 0), (0.02, 0.01), (10, 0), (10, 10), (0, 10)])) == [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
     assert _ring(Polygon([(0, 0), (10, 0), (10, 10), (0, 10), (0.02, 0.01)])) == [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)], "a last point rounded onto the first"
-
-
-def test_jog_steps_counts_a_wall_that_steps_sideways_and_carries_on():
-    assert jog_steps(_stepped(9.0), GRAIN) == 1
-    assert jog_steps(_rect(0, 0, 200, 100), GRAIN) == 0
-
-
-def test_jog_steps_ignores_a_step_under_the_placer_floor():
-    # 2 ft is the placer's line (`_JOG_OFF_FT`), one notch under the gate's 3 ft; at GRAIN 2 a foot
-    # is a pixel, so 1.9 px is under it and 2.1 px is over.
-    assert jog_steps(_stepped(1.9), GRAIN) == 0
-    assert jog_steps(_stepped(2.1), GRAIN) == 1
-
-
-def test_jog_steps_ignores_a_hop_too_long_to_be_a_step():
-    # a 31 px hop is a LIMB - an L-shaped parcel, which is the honest odd shape reclamation leaves
-    assert jog_steps(_stepped(31.0), GRAIN) == 0
-
-
-def test_jog_steps_ignores_a_run_too_short_to_be_a_wall():
-    # the run BEFORE the hop is 5 px, under the 6 ft floor: a corner nub, not a wall carrying on
-    assert jog_steps(_stepped(9.0, link_at=5.0), GRAIN) == 0
-
-
-def test_jog_steps_passes_a_narrow_basin_on_its_own_end_wall():
-    # THE REASON HEADINGS ARE COMPARED OVER THE FULL CIRCLE - a thin rectangle is two long parallel
-    # runs a short link apart, which modulo 180 deg is indistinguishable from a step.
-    assert jog_steps(_rect(0, 0, 300, 9), GRAIN) == 0
-
-
-def test_jog_vertices_returns_the_two_ends_of_the_hop():
-    assert jog_vertices(_stepped(9.0), GRAIN) == [((60.0, 0.0), (60.0, 9.0))]
-
-
-def test_jog_steps_ignores_a_gently_curving_bund():
-    # THE CLAUSE THIS HOLDS. A curve sampled into segments is a run, a link and a run resuming
-    # near-parallel, with a perpendicular offset of a few feet purely from the bend - so without the
-    # corner test the rule fires all along it. Measured on Kuwabata, whose paddies are long curved
-    # parcels: 57 reported steps on 43 plot rings, every one a smooth bend.
-    curve = [(0.0, 0.0)]
-    for k in range(1, 9):
-        curve.append((30.0 * k, 7.0 * k + 1.5 * k * k))  # each segment turns a few degrees on the last
-    curve.append((curve[-1][0], curve[-1][1] + 200.0))
-    curve.append((0.0, 200.0))
-    assert jog_steps(curve, GRAIN) == 0
 
 
 def test_water_skips_a_channel_with_a_single_point() -> None:
