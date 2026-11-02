@@ -296,7 +296,7 @@ impl Warp {
 /// Research:
 ///     the polder's acreage - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 1.3 acres gross a household, in whole modules of research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html at or above it
 ///     never uniform rectangles - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: our maps never draw the parcels as a grid of uniform rectangles - the rice polder bowed and nudged, the dike-pond mosaic drifted; the dike-pond's chessboard the one exception, attested on its own (the next claim)
-///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic - drawn straight, the `pond_layout` knob's other form
+///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic, its dikes the black lines and its ponds the squares - drawn straight, its modules never paired, the `pond_layout` knob's other form
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
 ///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
@@ -369,7 +369,7 @@ pub fn polder(
         &put,
         (rows, cols),
         (module, row_gap, col_gap),
-        dikepond,
+        (dikepond, form == "chessboard"),
         seed,
     );
     let ring = |o: f64| {
@@ -446,10 +446,11 @@ fn plots(
     put: &dyn Fn(f64, f64) -> Pt,
     grid: (usize, usize),
     sizes: (f64, f64, f64),
-    dikepond: bool,
+    form: (bool, bool),
     seed: i64,
 ) -> Vec<Plot> {
     let ((rows, cols), (module, row_gap, col_gap)) = (grid, sizes);
+    let (dikepond, chessboard) = form;
     let mut out = Vec::new();
     for c in 0..cols {
         #[expect(clippy::cast_precision_loss, reason = "a small count")]
@@ -457,7 +458,10 @@ fn plots(
         let mut r = 0;
         while r < rows {
             let mut rng = knob_rng(seed, &format!("polder_plot:{r}:{c}"));
-            let pair = if dikepond {
+            // the chessboard's ponds are its squares, never paired (0019: its dikes the black lines, its ponds the squares)
+            let pair = if chessboard {
+                false
+            } else if dikepond {
                 rng.randbelow(MERGE_IN.1) != 0
             } else {
                 rng.randbelow(MERGE_IN.0) == 0
@@ -593,6 +597,7 @@ fn ditches(
 /// stations the column's own corners, so it runs between the banks and never through one.
 ///
 /// Research:
+///     the row ditch's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a sub-ditch at most 0.75 of the delivery's head - of the narrower column ditch it joins
 ///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond's lattice of ditches bent out of line both ways, with gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank
 fn row_ditches(
     put: &dyn Fn(f64, f64) -> Pt,
@@ -623,8 +628,10 @@ fn row_ditches(
             }
             #[expect(clippy::cast_precision_loss, reason = "a small count")]
             let u = r as f64 * (module + row_gap) + module + row_gap / 2.0;
-            let local = 1.5 + (4.5 - 1.5) * ((x0 + module / 2.0) / size.1).clamp(0.0, 1.0);
-            let w = 2.5_f64.min(0.8 * local);
+            // a sub-ditch at most 0.75 of the delivery it leaves (0068): the narrower of the column ditches either side
+            let head =
+                |x: f64| 2.5_f64.min(0.8 * (1.5 + (4.5 - 1.5) * (x / size.1).clamp(0.0, 1.0)));
+            let w = 0.75 * head(left.max(0.0)).min(head(right.min(size.1)));
             out.push(Ditch {
                 role: "lateral",
                 seg: "row",
@@ -777,7 +784,12 @@ mod tests {
                     .iter()
                     .filter(|x| signed_area(&x.ring).abs() > MODULE_FT.1 * MODULE_FT.1 * 1.5)
                     .count();
-                assert!(paired * 2 > p.plots.len());
+                if layout == "mosaic" {
+                    assert!(paired * 2 > p.plots.len());
+                } else {
+                    // the chessboard's ponds are its squares, never paired
+                    assert_eq!(paired, 0);
+                }
             } else {
                 assert!(p.plots.len() > p.shape.0 * p.shape.1);
             }
