@@ -61,7 +61,9 @@ pub fn pushed_in(ring: &[Pt], by: f64) -> Option<Vec<Pt>> {
         out.push((p.0 + u.0 * t, p.1 + u.1 * t));
     }
     let kept = super::geom::signed_area(&out);
-    (kept * turn > 0.0 && kept.abs() < super::geom::signed_area(ring).abs()).then_some(out)
+    // ...NEVER GROWN, and kept whole at no inset (the glyph check of Kuwabata's fish ponds, feature 444 T16): a strict `<` refused
+    // the ring itself at `by` 0, so the bank fell back to a speck a tenth across, under the water
+    (kept * turn > 0.0 && kept.abs() <= super::geom::signed_area(ring).abs() * (1.0 + 1e-9)).then_some(out)
 }
 
 /// The pond (or bank) on `ring`'s four corners: pushed in `inset` feet on every side (`pushed_in`; where the bank asks more than the
@@ -172,5 +174,7 @@ mod tests {
         ];
         // a straight corner kept
         assert_eq!(super::pushed_in(&flat, 10.0).unwrap().len(), 5);
+        // no inset is the ring itself, never the fallback speck (the bank, feature 444 T16's glyph check)
+        assert_eq!(super::pushed_in(&sq, 0.0).unwrap(), sq.to_vec());
     }
 }
