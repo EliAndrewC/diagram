@@ -65,7 +65,9 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 - **FR-005**: The record's entries are checked to exist; a stale entry (a path deleted by a Rust landing) fails the gate with the
   command that removes it, so the list shrinks as the port proceeds.
 - **FR-006**: The docs that state the single 100% floor (`l7r/diagram/CLAUDE.md`, `settlement/CLAUDE.md`'s Coverage, the root
-  `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`) say the exemption, with the GM's words.
+  `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`, `pyproject.toml`'s coverage note, and the constitution's Principle X
+  clause 5 as a dated amendment) say the exemption, with the GM's words; the tests that pin "no `--omit` on the floored report"
+  pin instead that its only omission is the record's.
 
 ## Success Criteria *(mandatory)*
 

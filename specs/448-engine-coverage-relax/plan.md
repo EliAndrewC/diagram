@@ -1,0 +1,89 @@
+# Implementation Plan: relax the coverage floor for the engine code the Rust port replaces
+
+**Branch**: `448-engine-coverage-relax` (no branch; `main` in the clone) | **Date**: 2026-11-02 | **Spec**: `spec.md`
+
+**Input**: `spec.md`, `request.md` (the GM, 2026-11-02).
+
+## Summary
+
+One record, `dev/coverage-exempt.json`, names the Python files the Rust port replaces: the own files of each 444 stage not yet
+landed in Rust, each entry with the stages it serves. One reader, `l7r/diagram/ci/coverage_exempt.py`, gives every coverage floor
+the same set: the gate's `coverage report --fail-under=100` omits it, the derived hamlet floor drops it from its module set, and
+`make cover-changed` (and so `make land`) reports its unrun lines without refusing. The slated files' unrun lines are printed as
+information; everything else keeps the floor.
+
+## Technical Context
+
+**Language/Version**: Python 3.14, bash (the Makefile recipe). **Testing**: `tests/tooling/ci/test_coverage_exempt.py` (new),
+`tests/tooling/test_coverage_floor.py`, `tests/tooling/test_docs_match_the_mechanism.py`, `tests/tooling/test_cover_changed.py`,
+the hamlet floor's tests (`tests/tooling/test_hamlet_floor*.py`). **Project Type**: tooling - the gate's coverage floors; no map,
+no roll changes.
+
+## Performance bookends
+
+None: no code a roll runs changes. The floor step gains one reader call (a JSON read) and one information line per slated module
+with unrun lines.
+
+## Constitution Check
+
+- **I-V, VII-IX, XI, XII, XIX**: N/A - no map, no setting prose, no placement.
+- **VI**: PASS - the tests above, `make quick`, the landing's `make done`.
+- **X, clause 5** (full line coverage on everything, no opt-in, GM 2026-09-02): AMENDED by the GM's 2026-11-02 ruling for the slated files only;
+  D5 writes the amendment into the constitution with his words. The new module and every changed tool owe the full floor as before.
+- **XIII**: PASS - the floor tightens nowhere and loosens only on the record; SC-002 is measured at the landing's gate.
+- **Guard doctrine**: the stale-entry refusal (D4) names the command that cures it, has its test, and is proven to fire.
+
+## Decisions
+
+**D1 - What is slated** (FR-001, the spec's Assumption): the Python files of `work_budget_bundle.stage_files(root, stage)` - the
+module defining `stage_<stage>`, with its subpackage's siblings - for every stage of `STAGES` whose `dev/work-budget.json` status is
+not `accepted`. That is 444's own definition of a stage's old code (`scripts/gates/phase_sources.py`), the code a phase task
+rebuilds and deletes. Measured 2026-11-02 (`stage_files` over `STAGES`, the Python half): 77 files, all under `l7r/diagram/hamletgen/` (`ways/`, `homesteads/`, `hinterland/`,
+`water/`, and the single-file stages `burial`, `frame`, `pondbank`, `pondstock`, `sink`, `washing`).
+NOT slated, though `phase_sources.counted_files` names them as where a stage's work is counted today: `tools/`, `ci/`, `pipeline/`,
+`interactive/`, `labels/` (the hand-drawn sheets' caption placer), `overlap/` (the hand-drawn maps' checks read its registry),
+`settlement/` (its drawing and its above-hamlet tiers stay; its hamlet placement helpers' fate is a phase's to decide), the driver,
+`plan.py`, the `consts*` modules and the two landed stages' thin doors (`field_stage.py`; the water frame's). A file whose fate is
+undecided stays at the floor (FR-004); a phase whose contract names more of its old code adds those entries in its own task.
+Rejected: the union of `phase_sources.sources()` over every stage (146 files, measured 2026-11-02 (the same script)) - its `counted_files` half takes in exactly the
+kept trees FR-003 names.
+
+**D2 - The record** (FR-001, FR-004): `dev/coverage-exempt.json`: a `ruling` key (the GM's words, dated) and an `entries` list, each
+entry its `path`, its `stages` and its `why`; written once by `python3 -m l7r.diagram.ci.coverage_exempt seed` (D1's rule, run at this landing) and edited
+by hand after. A path not in it is held to the full floor.
+
+**D3 - The one reader** (FR-002, User Story 3): `l7r/diagram/ci/coverage_exempt.py`:
+- `entries(root)` / `exempt(root)` - the live entries' paths (a stale entry, D4, is not exempt: its floor returns at once).
+- `omit` (CLI) - prints `--omit=<p1>,<p2>,...` for the live paths, nothing when there are none.
+- `report` (CLI) - from the gate's coverage data, one line per live path with unrun lines: `coverage (information, feature 448 - slated
+  for the Rust port): <path> - unrun lines: ...`; then D4's stale check, exit 1 on a stale entry.
+- Readers: the Makefile's floor line becomes `python3 -m coverage report -m --fail-under=100 $$(python3 -m
+  l7r.diagram.ci.coverage_exempt omit)` followed by `python3 -m l7r.diagram.ci.coverage_exempt report || cov_ec=1`;
+  `tools/hamlet_floor.py`'s `check` drops the exempt paths from its set and names how many it dropped; `scripts/gates/
+  cover_changed.py` splits its result - an exempt module's unrun lines print as `cover-changed: information (slated, feature 448):
+  ...` and do not refuse. `make land` runs `cover_changed.py` and inherits it.
+- Unchanged: `[tool.coverage.run] source = ["l7r"]` - every file is still measured, only the floor moves; `uncovered_marks.py`
+  and `uncovered-in-diff.py` stay information.
+
+**D4 - Stale entries** (FR-005): an entry is stale when its path no longer exists, or when every stage it names is `accepted` in
+`dev/work-budget.json` (the Rust has landed; what remains of the file is the stage's thin door, which keeps the floor). `report`
+names each stale entry and the cure, `make coverage-exempt PRUNE=1` (a new target: lists the record; `PRUNE=1` drops the stale
+entries and writes the file). `make land`'s cheap refusals ask the same check first, so a Rust landing meets it in seconds rather
+than at the gate's end.
+
+**D5 - The docs** (FR-006): the statements of the one floor in the root `CLAUDE.md` (the Python line), `l7r/diagram/CLAUDE.md`,
+`settlement/CLAUDE.md`'s Coverage, `docs/efficiency-tooling.md`, `pyproject.toml`'s coverage note (its "Not a roster" paragraph is
+kept, the 2026-11-02 ruling written beside it) and the constitution's Principle X clause 5 (a dated amendment with the GM's
+words) each say the exemption and point to the record. `tests/tooling/test_coverage_floor.py` and
+`test_docs_match_the_mechanism.py` assert "no `--omit` on the floored report": each now asserts the only `--omit` is the
+record's, generated by the reader, with the GM's 2026-11-02 words beside the 2026-09-02 ones.
+
+## Task approaches
+
+- **T01** (D1-D4, the code): red first - `test_coverage_exempt.py` asserts SC-001 on a fixture (a coverage data file with one
+  unrun line in a slated and in a kept module: `report` exits 0 naming the slated line, the floored report with `omit` fails on the
+  kept one), the stale check (a missing path, an all-accepted entry), and that the record's entries are exactly D1's rule at
+  landing; hamlet floor and cover-changed tests for the split. Then the module, the record seeded, the Makefile (`make guard-edit`),
+  the two readers, `make coverage-exempt`, land's cheap refusal.
+- **T02** (D5, the docs and the floor tests), then the landing: `make land F=448 T=T01,T02` - the gate's floor is the
+  measurement of SC-002.
