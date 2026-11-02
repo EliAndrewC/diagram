@@ -123,6 +123,15 @@ def test_comb_base_fill_noops_on_an_empty_net():
     assert "empty" not in s.M.get("comb_floors", {})
 
 
+def test_comb_base_fill_finds_the_plots_box_itself_when_the_net_carries_none():
+    """A net without the Rust field's `plots_box` (444 T16) is boxed from its plots' corners, and its floor recorded."""
+    s = Settlement(600, 600, seed=1)
+    s.meta(name="Cb", scale="village", ftpx=2)
+    net = {"plots": [{"poly": [(10, 10), (50, 10), (50, 40), (10, 40)]}], "envelope": [(0, 0), (100, 0), (100, 100), (0, 100)]}
+    s.comb_base_fill(net, "boxed")
+    assert s.M["comb_floors"]["boxed"] == [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0], [0.0, 100.0]]
+
+
 # --- feature 112: the composed FieldsMixin surface -----------------------------------------------
 # settlement/fields.py became a package of four sub-mixins composed in fields/__init__.py. The
 # guard below is the whole safety property of that split: core.py imports ONE name and the class

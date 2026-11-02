@@ -360,6 +360,12 @@ Told that water_frame's port landed with its claims findings reported but open (
 
 "actually yeah: we should require that every Rust stage end its initial implementation with zero open claims"
 
+## 2026-11-01, T16 - the Python stages' failures while the Rust stages are ported
+
+Told that T16's port left pool maps failing in Python stages it had not ported:
+
+"it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust"
+
 ## 2026-11-01, T16 - the field's budget (444#4, 444#6)
 
 Told that the field's re-derived budget sat above the standing pin (444#4):
