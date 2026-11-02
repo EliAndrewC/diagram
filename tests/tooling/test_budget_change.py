@@ -273,3 +273,29 @@ def test_an_accept_naming_a_form_pins_it(root: pathlib.Path) -> None:
     d = "specs/444-x/phases/polder_greenfield.derivation.md"
     assert bc.accepted_by(root, d, "field.polder", "ask:444-polder-round-3")
     assert not bc.accepted_by(root, d, "field.dikepond", "ask:444-polder-round-3"), "another form's name is not this accept's"
+
+
+def test_a_rebuilt_phase_is_accepted_on_the_arbiters_accept_in_place_of_a_within(root: pathlib.Path) -> None:
+    """Feature 444 T16: the field's sixth MODE AUDIT, final for box 7, came back UNCOUNTED; the round arbiter accepted the cheaper
+    rebuild that followed (ask:444-T16-field-after-audit-6) in place of a seventh. `budget-accept ARBITER=` takes that accept - only
+    one the log holds naming the phase - and every budget check still holds."""
+    feat = root / "specs" / "444-x"
+    (feat / "phases").mkdir(parents=True)
+    d = "specs/444-x/phases/web.derivation.md"
+    (root / d).write_text("the derivation\n")
+    bc.set_budget(root, "web", 10, 1.0, d, "SOUND.txt", {20: 10, 40: 20, 80: 40})
+    (root / "u.txt").write_text("UNCOUNTED - x\n")
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+    (runs / "1.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 380}}}}}}))
+    assert "not WITHIN" in bc.accept_stage(root, "web", "u.txt"), "an UNCOUNTED alone accepts nothing"
+    assert "holds no accept at ask:444-T16-web-after-6" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-web-after-6")
+    (feat / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:444-T16-track-after-6", "ruling": "accept", "what": "the track stands"}) + "\n")
+    assert "holds no accept" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-track-after-6"), "another phase's accept"
+    (feat / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:444-T16-web-after-6", "ruling": "accept", "what": "box 7 closes on this rebuild"}) + "\n")
+    (runs / "2.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 500}}}}}}))
+    assert "over its budget 400" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-web-after-6"), "the budget still holds"
+    (runs / "3.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 380}}}}}}))
+    assert bc.main(["--root", str(root), "accept", "web", "u.txt", "--arbiter", "ask:444-T16-web-after-6"]) == 0
+    st = bc.load(root)["stages"]["web"]
+    assert st["status"] == "accepted" and st["accept"] == "ask:444-T16-web-after-6"

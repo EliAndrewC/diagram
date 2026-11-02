@@ -274,17 +274,24 @@ def growth(at20: float, at80: float, ratio: float = 4) -> float:
 HELD = (40, 80)  # the sizes an accepted stage is held to (feature 443 T04; the push's ratchet, `work_budget.held`)
 
 
-def accept_stage(root: Path, phase: str, audit: str) -> str:
+def accept_stage(root: Path, phase: str, audit: str, arbiter: str = "") -> str:
     """A rebuilt phase accepted (feature 444 FR-005, checklist boxes 6-8): its MODE AUDIT verdict WITHIN, and its counted operations at
     40 and 80 households in the newest `make work-budget` run at most its budget, recorded as `accepted` - the figures the push's
-    ratchet then holds it to. '' when done, else why not."""
+    ratchet then holds it to. '' when done, else why not.
+
+    ...OR THE ROUND ARBITER'S ACCEPT IN ITS PLACE (`arbiter`, a trigger naming the phase in its log): feature 444 T16's sixth MODE AUDIT
+    was made final for box 7, came back UNCOUNTED, and the arbiter accepted the cheaper rebuild that followed rather than owe a
+    seventh (ask:444-T16-field-after-audit-6) - so `audit` is then the last audit, and every budget check below still holds."""
     table = load(root)
     st = _stage(table, phase)
     if isinstance(st, str):
         return st
     if st.get("status") not in ("budgeted", "accepted"):
         return f"`{phase}` has no budget to be accepted against"
-    if verdict_of(root / audit) != "WITHIN":
+    if arbiter:
+        if not accepted_by(root, str(st.get("derivation") or ""), phase, arbiter):
+            return f"the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept"
+    elif verdict_of(root / audit) != "WITHIN":
         return f"{audit} reads {verdict_of(root / audit) or 'nothing'}, not WITHIN - a phase is accepted on its MODE AUDIT's WITHIN (`make work-budget-bundle MODE=audit PHASE={phase}`)"
     runs = sorted((root / RUNS).glob("*.json"))
     try:
@@ -305,9 +312,9 @@ def accept_stage(root: Path, phase: str, audit: str) -> str:
             f"`{phase}` grows at an exponent of {g:.2f} from 20 to 80 households, past its budget's"
             f" {growth(budget_at(st, 20), budget_at(st, 80)):.2f} (rubric S6, FR-005) - rebuild it again, or raise the budget with the GM's words"
         )
-    st.update(status="accepted", accepted=got, audit=audit)
+    st.update(status="accepted", accepted=got, audit=audit, **({"accept": arbiter} if arbiter else {}))
     save(root, table)
-    log(root, {"what": "accepted", "phase": phase, "accepted": got, "audit": audit, "run": runs[-1].name})
+    log(root, {"what": "accepted", "phase": phase, "accepted": got, "audit": audit, "run": runs[-1].name, **({"accept": arbiter} if arbiter else {})})
     return ""
 
 
@@ -353,6 +360,7 @@ def main(argv: list[str] | None = None) -> int:
     a = sub.add_parser("accept")
     a.add_argument("phase")
     a.add_argument("audit")
+    a.add_argument("--arbiter", default="")
     args = ap.parse_args(argv)
     root = Path(args.root)
     if args.cmd == "set":
@@ -367,7 +375,7 @@ def main(argv: list[str] | None = None) -> int:
         why = change_budget(root, args.phase, args.to, args.exponent, args.words, items, args.derivation, args.verdict)
         done = f"`{args.phase}` changed to {args.to} per thing, logged in {LOG} with the GM's words"
     elif args.cmd == "accept":
-        why = accept_stage(root, args.phase, args.audit)
+        why = accept_stage(root, args.phase, args.audit, args.arbiter)
         done = f"`{args.phase}` accepted at its counted operations at 40 and 80 households, logged in {LOG}"
     else:
         why = set_program(root, args.ops_at_40, args.exponent, args.words)
