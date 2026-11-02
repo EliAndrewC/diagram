@@ -32,3 +32,12 @@ def test_inwall_drain_outfall_normalizes_orientation_and_degenerate_cases():
     s4 = _inwall_settlement()
     out4 = s4.inwall_drain_outfall([(300, 104), (200, 104)])
     assert out4[-1] == (200.0, 104.0)
+
+
+@pytest.mark.tiers("town")
+def test_inwall_drain_outfall_names_its_field_on_the_conduit():
+    """The drain->outfall attribution is exact when the caller names its field (the legacy maps' in-wall fans)."""
+    s = _inwall_settlement()
+    n = len(s.M["channels"])
+    s.inwall_drain_outfall([(500, 300), (150, 110)], field_name="the north fan")
+    assert any((c.get("frm") or {}).get("name") == "the north fan" for c in s.M["channels"][n:])

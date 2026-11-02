@@ -74270,12 +74270,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::StrokeIndex#bank geometry": {
-  "code": "ff68e604dc0c7ffd",
+  "body": "4f5e21157f5329ce",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "35affac6071f6603",
   "core": "7f4c25209f6faf8d",
-  "date": "2026-10-03",
-  "note": "spatial index",
+  "date": "2026-11-01",
+  "note": "a spatial index and its slots, plumbing only",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::StrokeIndex.__init__#its salts, guards and sentinels": {
@@ -74291,21 +74294,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::StrokeIndex.clearance#bank geometry": {
-  "code": "f0fb827c5452e06d",
+  "body": "17f7487ca232a936",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "ed5db130670de85b",
   "core": "460a0f44eca09167",
-  "date": "2026-10-03",
-  "note": "exact indexed lookup",
+  "date": "2026-11-01",
+  "note": "looks up cells for the nearest segment, with a fallback to walking every segment; plumbing",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::StrokeIndex.edge_beyond#bank geometry": {
-  "code": "844bd328d61e923e",
+  "body": "ed55bd43b57a75ce",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "b2e9b46180922b79",
   "core": "b2c1363639bb4c60",
-  "date": "2026-10-03",
-  "note": "conservative skip test",
+  "date": "2026-11-01",
+  "note": "a distance test of an edge against segments, using the drawn half-width it reads and a float epsilon; decides nothing physical",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_EDGE_EPS#bank geometry": {
@@ -74319,12 +74328,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_PAST_EPS#bank geometry": {
-  "code": "202b08365262888e",
+  "body": "8b4903fb6dafe49f",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "b2ca4286d4086286",
   "core": "4334a4dcc62d7738",
-  "date": "2026-10-03",
-  "note": "rounding slack",
+  "date": "2026-11-01",
+  "note": "0.25 px of slack for the manifest's 0.1 px rounding; not a fact about the place",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_nearest_segment#its salts, guards and sentinels": {
@@ -74340,12 +74352,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::_stroke_verdict#bank geometry": {
-  "code": "02b1af5c96407aaf",
+  "body": "8e272ac0a100e64d",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "9f948f94d34ed931",
   "core": "284b73f62d942085",
-  "date": "2026-10-03",
-  "note": "rounding slack at the stroke ends",
+  "date": "2026-11-01",
+  "note": "reads the half-width at the nearest point along the stroke and the rounding-robust \"past the end\" flag; geometry only",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::drain_bank_clearance#bank of the collector": {
@@ -74434,12 +74449,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::polyline_cum#bank geometry": {
-  "code": "51610384a64aa1c0",
+  "body": "b56b2b2143c00a6e",
+  "claim": "bank geometry - NONE: arc lengths, nearest segments, the stroke index, rounding slack",
+  "code": "2b9db65cca4928d2",
   "core": "523b26c65002669f",
-  "date": "2026-10-03",
-  "note": "arc-length plumbing",
+  "date": "2026-11-01",
+  "note": "running length along the line at each point; plumbing",
+  "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/banks.py::supply_bank_clearance#bund runs along the supply channel": {

@@ -58,19 +58,19 @@
   "### T16 Approach (checklist part A)": {
    "sha256": "5e56250d4da119db96ba9ea102ad706ee9066513284a626cb2432c705f6936d3",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "fa0157e9c6af167e04cd6731f0c9658602940a0b8806d8b6a04782d405399565",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)": {
    "sha256": "87abdb3e00c0edf431bced6cfba53f4ea8aeda0681f58ba5830036ccd028547b",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict": {
@@ -124,7 +124,7 @@
   "### T16 Decisions": {
    "sha256": "edb158a81ac775862465d775ea2282da4dd81ef333d9f3590f8dacf93b2929aa",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T16 Approach (2026-10-31T22:16Z)": {
@@ -136,7 +136,7 @@
   "### T16 part B (2026-10-31T20:43Z)": {
    "sha256": "485113f27babe8390a9a22a055b326d0927f14d18726cd1ec97243c74d2d13ac",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T22 (<why: the finding or measurement that files it>)": {
@@ -160,7 +160,7 @@
   "### T16 part B (2026-11-01T00:41Z)": {
    "sha256": "d9075b527f281139d43db6dde7d487d5ff5db76cffdfe83737177579d1f13267",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T16 Approach (2026-11-01T01:55Z)": {
@@ -183,6 +183,18 @@
   },
   "### T23 - folded into T16 (the round arbiter on ask:444-T16-fr021-scope-2, 2026-11-01)": {
    "sha256": "1a5883286f7f65bcc6695ce5012fda4ee517c7072c5bd9ce10814c9bb23bd9b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-01",
+   "declared": "spec-fidelity"
+  },
+  "### T16 part B (2026-11-01T06:23Z)": {
+   "sha256": "0c652e73c038e4650dc8e891692646f80f702fb5d747111bfa714a6fd119b844",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-01",
+   "declared": "spec-fidelity"
+  },
+  "### T16 part B (2026-11-01T12:34Z)": {
+   "sha256": "2a9bb8c05d1b1ff2e6e50fcf38d85ab48c6160a37a5449e3ad1b4ee4c127e848",
    "verdict": "CLEAR",
    "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
@@ -3239,6 +3251,44 @@
      "why": "Goes with the removed T23; the deletion it planned now lives in T16's landing (the folded T23)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-01",
+   "blocks": [
+    "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)",
+    "### T16 Approach (2026-10-31T22:16Z)",
+    "### T16 Approach (2026-11-01T00:39Z)",
+    "### T16 Approach (2026-11-01T01:55Z)",
+    "### T16 Approach (checklist part A)",
+    "### T16 Decisions",
+    "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T16 part B (2026-10-31T20:43Z)",
+    "### T16 part B (2026-11-01T00:41Z)",
+    "### T16 part B (2026-11-01T06:23Z)",
+    "### T16 part B (2026-11-01T12:34Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "FR-021 scope restated (22:16Z exits, 00:39Z constraints and exits, 01:55Z exits)",
+     "summary": "The claims refusal is restated from 'a finding open in a file the landing changes' to 'a finding open in the stage's own code - its Rust, the Python units the delta adds or changes, the Python its seam reads at run time'. Two classes leave the T16 refusal: findings in a file the delta touches only to delete code, and findings in an unchanged unit of a file it edits that the seam and the Rust do not read.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Amendment 6 asks for zero open claims when a Rust stage ends its initial implementation. The restated scope covers that implementation in full: all of the stage's Rust (wider than FR-021's 'the Rust the delta changes'), every Python unit the delta adds or changes (its seam, its STAGES entry, ink.py written new), and every Python unit the stage reads at run time even where the delta leaves it alone, so no claim that governs the stage is excused and the purpose of the rule holds. Each excluded class taken separately: (1) a file touched only to delete code - the deleted lines take their claims with them, and what is left is Python the Rust stage neither is nor calls; (2) an unchanged unit of an edited file that nothing in the stage reads - it is not part of the stage's implementation. Both are the 'claims still open in the Python code base' that the GM's own words of 2026-10-27 give to the open-claims feature, so the exclusion is implied by the request and does not complete the GM's thought for him. The restatement is accepted FR-021 (amended 2026-11-01) word for word; it leaves out FR-021's requirement to file those findings as the open-claims feature's rows in the same landing, but it cites FR-021 and does not waive that requirement."
+    },
+    {
+     "id": "part B 2026-11-01T06:23Z - the seating's failures after the hem was bounded",
+     "summary": "Seeds 3, 4, 9 (seating) and 905 (site) fail in later Python stages after the hem was bounded (arbiter's route b on ask:444-T16-hem-budget). The hem is not bent to suit the seating, the seating's margin beside a full hem is noted for that stage's port and for the GM, and the next step is the field's MODE BUDGET on the re-derived budget.",
+     "class": "within",
+     "why": "Amendment 5 says it plainly: 'no Rust stage ever ends with any failing checks at the point where that stage has completed ... we don't care at all about the Python stages which come after', and 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step'. The GM said it again on 2026-11-01: 'it's okay for the Python code to have errors'. The Rust gate is reported passing on 54 seeds. The arbiter's route (b) is a ruling on process, not an accept of a budget, and the re-derived budget above the standing pin carries the GM's own yes (444#4), as FR-018 and FR-006 require."
+    },
+    {
+     "id": "part B 2026-11-01T12:34Z - five Python-stage seeds after the fifth claims pass",
+     "summary": "Seeds 4, 7, 9 and 901 (seating, web) and 905 (site) fail in later Python stages. They wait for those stages' own ports, the Rust gate passes on 54 seeds, and the next step is the second MODE AUDIT on the counted field, then the landing.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-01 answer on 444#1 applied as given ('it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust'). 'Then the landing' does not get round FR-006: the unchanged Red exit still requires a figure over the budget to be rebuilt again or the budget raised with the GM's words, never an arbiter's accept, and the GM's option (a) on 444#6 (1.9 times the derivation) is the GM's words for that raise, which make budget-change records."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3860,57 +3910,28 @@
    "verdict": "CLEAR"
   },
   "T16": {
-   "section_sha256": "5f15c4317eff2d8d3057638375b5b49be5549d7bc8940e46cd4e3639b87ce65d",
-   "reviewed": "2026-10-31",
+   "section_sha256": "42bd31adefe6ae8125d66359b309e291d8c61a2c10ae56ea4defc6a85ad8a172",
+   "reviewed": "2026-11-01",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "A0155-1 middle intake",
-     "summary": "The intake restored to 0059's three places (a shoulder of the fan's head or its middle, 'at its left, its center or its right'), which the Rust port had dropped.",
-     "class": "within",
-     "why": "Widens the port back to the form the research names; it serves FR-021 (an open claim closed by fixing the code) and FR-004 (the stage writes what its contract says). Nothing the GM asked for is cut."
+     "id": "FR-021 scope restated (22:16Z exits, 00:39Z constraints and exits, 01:55Z exits)",
+     "summary": "The claims refusal is restated from 'a finding open in a file the landing changes' to 'a finding open in the stage's own code - its Rust, the Python units the delta adds or changes, the Python its seam reads at run time'. Two classes leave the T16 refusal: findings in a file the delta touches only to delete code, and findings in an unchanged unit of a file it edits that the seam and the Rust do not read.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Amendment 6 asks for zero open claims when a Rust stage ends its initial implementation. The restated scope covers that implementation in full: all of the stage's Rust (wider than FR-021's 'the Rust the delta changes'), every Python unit the delta adds or changes (its seam, its STAGES entry, ink.py written new), and every Python unit the stage reads at run time even where the delta leaves it alone, so no claim that governs the stage is excused and the purpose of the rule holds. Each excluded class taken separately: (1) a file touched only to delete code - the deleted lines take their claims with them, and what is left is Python the Rust stage neither is nor calls; (2) an unchanged unit of an edited file that nothing in the stage reads - it is not part of the stage's implementation. Both are the 'claims still open in the Python code base' that the GM's own words of 2026-10-27 give to the open-claims feature, so the exclusion is implied by the request and does not complete the GM's thought for him. The restatement is accepted FR-021 (amended 2026-11-01) word for word; it leaves out FR-021's requirement to file those findings as the open-claims feature's rows in the same landing, but it cites FR-021 and does not waive that requirement."
     },
     {
-     "id": "A0155-2 fork moves with the form",
-     "summary": "The canal division sits at the brook-side head corner for a shoulder intake and at the head's middle for a middle intake (channels::division), amending the 22:16Z item 1.",
+     "id": "part B 2026-11-01T06:23Z - the seating's failures after the hem was bounded",
+     "summary": "Seeds 3, 4, 9 (seating) and 905 (site) fail in later Python stages after the hem was bounded (arbiter's route b on ask:444-T16-hem-budget). The hem is not bent to suit the seating, the seating's margin beside a full hem is noted for that stage's port and for the GM, and the next step is the field's MODE BUDGET on the re-derived budget.",
      "class": "within",
-     "why": "A geometric consequence of the restored middle intake, placed by construction before anything is written (S4, FR-004). It narrows no clause of the request or the spec."
+     "why": "Amendment 5 says it plainly: 'no Rust stage ever ends with any failing checks at the point where that stage has completed ... we don't care at all about the Python stages which come after', and 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step'. The GM said it again on 2026-11-01: 'it's okay for the Python code to have errors'. The Rust gate is reported passing on 54 seeds. The arbiter's route (b) is a ruling on process, not an accept of a budget, and the re-derived budget above the standing pin carries the GM's own yes (444#4), as FR-018 and FR-006 require."
     },
     {
-     "id": "A0155-3 conform to the research figures",
-     "summary": "Conform to 0017's 8-acre floor of an enclosed field, 0068's 0.8 delivery cap (the polder's columns included) and pond feeder at twice the floor, and 0054's sweep limits.",
+     "id": "part B 2026-11-01T12:34Z - five Python-stage seeds after the fifth claims pass",
+     "summary": "Seeds 4, 7, 9 and 901 (seating, web) and 905 (site) fail in later Python stages. They wait for those stages' own ports, the Rust gate passes on 54 seeds, and the next step is the second MODE AUDIT on the counted field, then the landing.",
      "class": "within",
-     "why": "This is FR-021's closing of open claims in the delta's files ('until the claim or the code is fixed'). It brings the code to the research and exempts no case."
-    },
-    {
-     "id": "A0155-4 labeled GUESSes",
-     "summary": "The 1:2:1 odds of the three intake places (the page's own guess), CENTER_SWING_DEG and the weir's key into the banks are labeled GUESS where they stand.",
-     "class": "within",
-     "why": "Labeling a figure that has no source is how a claim is made correctly rather than left UNCLAIMED (FR-021). No requirement is relaxed."
-    },
-    {
-     "id": "A0155-5 middle intake's race derived",
-     "summary": "A middle intake sits up the fall by the skirt over the swing's cosine plus a station, so the brook clears the head's corner. It is placed by construction, with no added search.",
-     "class": "within",
-     "why": "A construction rather than a search or repair pass (S2, S4, FR-004). The search-smell answer stays 'none added'."
-    },
-    {
-     "id": "A0155-6 overlap registry's own-pieces pass indexed",
-     "summary": "overlap/registry.py's own-pieces pass is indexed as part of the field's counted work. Measured on 2026-11-01 by a scratch roll of seed 4: 200,474 pairs became 3,294.",
-     "class": "within",
-     "why": "It serves the budget the GM asked the field to meet (rubric S1/S3; FR-005's acceptance at most the budget; FR-006). The file then falls under FR-021's delta rule, and item 9's done condition covers it ('no finding in a delta file'). It is a change to a shared module, not its deletion, so D10's rule that shared modules stay is kept. The figure carries a one-shot label."
-    },
-    {
-     "id": "A0155-7 WEIR_HALF derived from the drawn brook",
-     "summary": "WEIR_HALF_FT's use in the stage is replaced by WEIR_HALF, derived from the drawn brook's width, because the old half-length spanned the brook twice over.",
-     "class": "within",
-     "why": "A constant brought into line with the geometry it measures, as item 10 of the checklist requires. No scope is cut."
-    },
-    {
-     "id": "A0155-8 budget and done",
-     "summary": "About two hours for the wave (a GUESS). Done is when make claims-report lists no finding in a delta file, with the 78 open findings as the baseline. The Red exits are restated unchanged.",
-     "class": "within",
-     "why": "Restates FR-021 and FR-006 as written. The Red exits keep 'never set down, never an arbiter's accept' and send a stop to assess to the GM."
+     "why": "This is the GM's 2026-11-01 answer on 444#1 applied as given ('it's okay for the Python code to have errors since we will fix those when those stages are ported to Rust'). 'Then the landing' does not get round FR-006: the unchanged Red exit still requires a figure over the budget to be rebuilt again or the budget raised with the GM's words, never an arbiter's accept, and the GM's option (a) on 444#6 (1.9 times the derivation) is the GM's words for that raise, which make budget-change records."
     }
    ],
    "verdict": "CLEAR"

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
 import importlib
@@ -538,3 +540,22 @@ def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
     tiny = _crop_settlement()
     tiny.marsh([(500, 500), (503, 500), (503, 503), (500, 503)])
     assert _covered(tiny).area < 10.0
+
+
+def test_perimeter_dike_breaks_its_band_at_each_gap(tmp_path) -> None:  # noqa: ANN001
+    """A gap (a sluice) notches the dike: the band is drawn as the runs between the gaps, while its record keeps the whole band
+    (feature 444 T16: the Python polder that passed gaps was deleted; the legacy maps keep the call)."""
+    env = [(150, 150), (150, 650), (600, 650), (600, 150), (150, 150)]
+
+    def strips(gaps: list[tuple[int, int]]) -> tuple[int, list]:
+        s = Settlement(900, 900, seed=3)
+        s.meta(name="D", scale="hamlet", ftpx=1, toscale=True, households=8, field_archetype="polder_grid")
+        s.perimeter_dike(env, seed=5, gaps=gaps, label="")
+        base = str(tmp_path / f"d{len(gaps)}")
+        s.finish(base, render=False)
+        return Path(base + ".svg").read_text().count('stroke="#9C8558"'), s.M["dikes"][0]["outline"]
+
+    whole, outline = strips([])
+    cut, cut_outline = strips([(150, 400), (600, 400)])
+    assert whole == 1 and cut == 2, "two gaps leave two runs"
+    assert cut_outline == outline, "the record keeps the whole band"
