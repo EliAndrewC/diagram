@@ -450,10 +450,11 @@ print(str(pathlib.Path(tp).parent / sid / "subagents") if tp and sid else "")
             arb="$(python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_arbiter as a
 from pathlib import Path
 root, unit, n = Path(sys.argv[2]), sys.argv[3], int(sys.argv[4])
-shut = a.closed(root, f"round:{unit}@")
+ck = a.unit_content_key(root, unit) if a.closed(root, f"round:{unit}@") else None  # an accept bound to an older sheet has lapsed
+shut = a.closed(root, f"round:{unit}@", ck)
 if shut:
     print(f"closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)")
-elif n - 2 > a.continues(root, f"round:{unit}@"):
+elif n - 2 > a.continues(root, f"round:{unit}@") + a.lapsed(root, f"round:{unit}@", ck):
     a.trip(root, f"round:{unit}@{n}", "round", unit, f"round {n} of a review check")
     print("owed\t" + a.refusal([f"round:{unit}@{n}"], root))  # GUARD_EDIT_OK: feature 375 amendment 2 - a batch at the cap is named as one
 else:

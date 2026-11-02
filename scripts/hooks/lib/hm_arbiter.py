@@ -188,9 +188,21 @@ def _round_no(trigger: str) -> int:
     return int(tail) if tail.isdigit() else 0
 
 
-def closed(root: Path, prefix: str) -> str:
-    """The ruling that closed the unit (`accept` / `process-fault`), or ''."""
-    return next((str(r["ruling"]) for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") in RULINGS[1:]), "")
+def closed(root: Path, prefix: str, content: str | None = None) -> str:
+    """The ruling that closed the unit (`accept` / `process-fault`), or ''. With `content` (the unit's sheet as it reads now), a
+    closing ruling bound to another `content_key` has LAPSED by its own binding and closes nothing (the round arbiter on
+    ask:444-T16-kuwabata-stale-keys: two Kuwabata accepts went stale when a later fix moved the map, and the pair guard still
+    refused their re-run as closed)."""
+    return next((str(r["ruling"]) for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") in RULINGS[1:] and not _lapsed(r, content)), "")
+
+
+def _lapsed(ruling: dict, content: str | None) -> bool:
+    return bool(content) and bool(ruling.get("content_key")) and ruling.get("content_key") != content  # a sheet with no key lapses nothing
+
+
+def lapsed(root: Path, prefix: str, content: str | None) -> int:
+    """How many closing rulings on one unit have lapsed against `content` - each lets one round through, as a `continue` does."""
+    return sum(1 for t, r in rulings(root).items() if t.startswith(prefix) and r.get("ruling") in RULINGS[1:] and _lapsed(r, content))
 
 
 def blocking(root: Path, unit: str = "", gate: bool = False) -> list[str]:

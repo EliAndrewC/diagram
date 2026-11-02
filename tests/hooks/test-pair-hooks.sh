@@ -369,6 +369,15 @@ printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": 
 check "a continue ruling runs the third round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
 printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
 refused_for "...an accept closes the unit" "$GLYPH" "the round arbiter closed"
+# the round arbiter's tooling fix on ask:444-T16-kuwabata-stale-keys - an accept bound to the sheet as it read then closes the
+# unit only while the sheet still reads so; once a later fix moves it, the accept has lapsed and lets one round through
+CK=$(cd "$CLONE" && python3 scripts/reviews/review_prereq.py content-key --clone "$CLONE" --map settlement-review--testmap 2>/dev/null)
+check "the fixture's sheet has a content key" '[ -n "$CK" ]'
+printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands", "content_key": "%s"}\n' "$CK" > "$CLONE/specs/900-x/arbiter.jsonl"
+refused_for "...an accept on the sheet as it reads now still closes it" "$GLYPH" "the round arbiter closed"
+printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands", "content_key": "0123456789abcdef"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
+check "...an accept on an older sheet has lapsed and runs the next round" '[ "$(rc_pretool "$GLYPH")" -eq 0 ]'
+printf '{"trigger": "round:glyph-check|settlement-review--testmap@3", "ruling": "accept", "why": "fine as it stands"}\n' > "$CLONE/specs/900-x/arbiter.jsonl"
 # GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - a landed batch's rounds are spent: two rounds kept before
 # the feature's tasks.md landed on origin/main leave the next batch's review its first round
 printf '# Tasks\n' > "$CLONE/specs/900-x/tasks.md"
