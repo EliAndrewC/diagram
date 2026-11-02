@@ -59,8 +59,10 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
   phase that replaces it, or the program's whole-engine replacement).
 - **FR-002**: Every coverage floor - the gate's floored report, the derived hamlet floor, `make cover-changed` (which `make land`
   runs) and `make preflight`'s coverage step, the readers that a search of the tree before this feature finds (`git grep -l -E
-  "fail-under|fail_under|missing_lines|CoverageData" 69982e1ee -- scripts l7r Makefile`, each hit read for a refusal on unrun
-  lines) - exempts the entries of that record and only them; their unrun lines are still reported, as information.
+  "fail-under|fail_under|missing_lines|CoverageData|analysis2|Coverage\(" 69982e1ee -- scripts l7r Makefile`, each hit read for a
+  refusal on unrun lines; the hits that only gather coverage data or measure the Rust crate's - `pipeline/gencache.py`,
+  `tools/cache_audit.py`, `ci/incremental.py`, `scripts/gates/rust_checks.py`, `scripts/measure/uncovered-in-diff.py` - refuse
+  nothing of the Python's) - exempts the entries of that record and only them; their unrun lines are still reported, as information.
 - **FR-003**: Everything else keeps the 100% floor unchanged - in particular `l7r/diagram/tools/`, `ci/`, `pipeline/`,
   `interactive/`, the gate's checks under `tests/gate/` and the automated checks of the hand-drawn maps, and `scripts/`.
 - **FR-004**: A module is held to the floor unless the record names it (a new module defaults to the floor).
@@ -71,7 +73,7 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 - **FR-006**: Every operative doc that states the single 100% floor says the exemption, with the GM's words - those a search finds
   (`git grep -n -E "100% (coverage|line|over)|100%.*floor|fail-under=100"` over the docs, templates and engine docstrings, less the
   specs, the research record and the run logs): `l7r/diagram/CLAUDE.md`, `settlement/CLAUDE.md`'s Coverage, `tools/CLAUDE.md`'s
-  hamlet-floor row, `tests/CLAUDE.md`'s tree table, the root `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`,
+  hamlet-floor row, `tests/CLAUDE.md`'s tree table, `tests/soak/CLAUDE.md`'s gate row and membership rule, the root `CLAUDE.md`'s Python line, `docs/efficiency-tooling.md`,
   `docs/guards.md`'s coverage row, `docs/migration-plan.md`, `ci/incremental.py`'s docstring, `pyproject.toml`'s coverage note,
   `.specify/templates/plan-template.md`'s Principle X gate, and the constitution's Principle X clause 5 as a dated amendment; the tests that pin "no `--omit` on the floored report"
   pin instead that its only omission is the record's.
@@ -88,7 +90,8 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 
 - A module half slated (one stage's code inside a package that otherwise stays): the record names files, not packages, so only the
   slated files are exempt.
-- A slated module also imported by kept code: its exemption covers only its own lines; the kept caller's lines stay at 100%.
+- A stage's slated module also imported by kept code: its exemption covers only its own lines; the kept caller's lines stay at
+  100%. A whole-engine entry that kept code starts to import is stale (FR-005) and its floor returns.
 - A Rust phase that is withdrawn: its Python's entries leave the record and the floor returns.
 
 ## Review history
@@ -96,6 +99,8 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 - 2026-11-02, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-002 adds preflight's coverage step and its search;
   FR-006 states its search and adds the docs it finds; FR-005 defines stale as the plan's D4 does; the Assumption names both
   classes; SC-003 restated as an observable outcome.
+- 2026-11-02, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 3 items - FR-002's search widened so it finds the hamlet
+  floor, the non-refusing hits named; FR-006 adds `tests/soak/CLAUDE.md`; the edge case on kept importers split by class.
 
 ## Decisions Recorded
 

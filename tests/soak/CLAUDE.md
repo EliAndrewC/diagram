@@ -20,7 +20,7 @@ The four tiers, cheapest first:
 |---|---|---|
 | a targeted test or module | reproducing one specific thing | `make test-file FILE=...` |
 | `make quick` | fast confidence during iteration | `tests/` |
-| `make done` | 100% coverage, every code path exercised | the whole gate |
+| `make done` | 100% coverage, every code path exercised (but the engine code the Rust port replaces, `dev/coverage-exempt.json`, reported and not held - feature 448) | the whole gate |
 | **the soak** | **the same code under REALISTIC LOAD** | **here** |
 
 The gate proves the code is *exercised*. It does not prove the code is *good*: it runs a small number
@@ -43,7 +43,9 @@ Concretely, the shapes that belong here:
 
 The engine's measured surface is `source = ["l7r"]` - the whole of it - and the 100% floor runs on a plain `make
 done`. *A deselected test takes its coverage with it*, so a test that lives here contributes **no coverage**, and if it
-were the only thing reaching some line, the floor would fail and say so by name. So:
+were the only thing reaching some line, the floor would fail and say so by name - except in the engine code the Rust port
+replaces, the files `dev/coverage-exempt.json` names, whose unrun lines the floor reports and does not hold (feature 448,
+the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."). So:
 
 - a soak test exercises **paths the gate already covers**, with different DATA - more seeds, bigger
   maps, longer runs;

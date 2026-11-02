@@ -85,7 +85,7 @@ than at the gate's end.
 
 **D5 - The docs** (FR-006): every operative statement of the one floor FR-006's search finds says the exemption, points to the
 record and carries the GM's 2026-11-02 words: the root `CLAUDE.md` (the Python line), `l7r/diagram/CLAUDE.md` (the loop),
-`settlement/CLAUDE.md`'s Coverage, `tools/CLAUDE.md`'s hamlet-floor row, `tests/CLAUDE.md`'s tree table, `docs/efficiency-tooling.md`,
+`settlement/CLAUDE.md`'s Coverage, `tools/CLAUDE.md`'s hamlet-floor row, `tests/CLAUDE.md`'s tree table, `tests/soak/CLAUDE.md`'s gate row and membership rule, `docs/efficiency-tooling.md`,
 `docs/guards.md`'s coverage row, `docs/migration-plan.md`, `ci/incremental.py`'s docstring, `pyproject.toml`'s coverage note (its
 paragraph on the derived surface kept, the 2026-11-02 ruling written beside it), `.specify/templates/plan-template.md`'s Principle X gate
 and the constitution's Principle X clause 5 (a dated amendment, 2.34.0); and the phase checklist's rebuild box, which a phase reads
