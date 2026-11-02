@@ -291,3 +291,11 @@ def test_a_weighted_knob_rolls_by_its_weights_and_an_unweighted_one_is_unchanged
     assert [plain.roll(seed, {}) for seed in range(8)] == [["a", "b", "c"][settlement.knob_rng(seed, "t_plain").randrange(3)] for seed in range(8)]
     both = settlement.Knob("t_both", ["x", "y"], default="x", weights={"x": 0.5, "y": 0.5})
     assert {both.roll(seed, {}) for seed in range(60)} == {"x", "y"}
+
+
+def test_a_plots_centroid_is_its_corners_mean_rounded_to_a_tenth() -> None:
+    """The identity a land-use record and a wet-plot record share (`_knobs._centroid`)."""
+    from l7r.diagram.settlement._knobs import _centroid
+
+    assert _centroid([(0.0, 0.0), (10.0, 0.0), (10.0, 5.0), (0.0, 5.0)]) == [5.0, 2.5]
+    assert _centroid([(1.0, 1.0), (2.0, 1.0), (2.0, 2.04)]) == [1.7, 1.3]
