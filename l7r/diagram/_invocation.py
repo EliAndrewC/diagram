@@ -226,6 +226,7 @@ OPERATIONS: dict[str, tuple[str, str]] = {
     # would make `test-full` remotely dispatchable and give it its own S3 cache location
     # (`ci/__main__.py`, `dispatch.py`). Do not "correct" it.
     "l7r.diagram.tools.hamlet_floor": ("test-full", "cheap"),
+    "l7r.diagram.ci.coverage_exempt": ("coverage-exempt", "cheap"),  # feature 448: the record of the engine files the Rust port replaces, which the floor reports and does not hold
     "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
     "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),
     "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),

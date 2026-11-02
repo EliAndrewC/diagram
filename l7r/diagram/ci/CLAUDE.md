@@ -36,6 +36,7 @@ do not want to run anything on AWS"* come first, and the speedup second.
 | [`gate_plugin.py`](gate_plugin.py) | the incremental gate's `-p` entry: a tiny shim, because a `-p` module is imported before pytest-cov starts measuring; its hooks delegate to `selection.py` |
 | [`rollcensus.py`](rollcensus.py) | the roll census's `-p` entry (feature 213), tiny for the same reason; delegates to `rollverdict.py` |
 | [`rollverdict.py`](rollverdict.py) | the roll census's attribution (which test rolled which map, map-rolling tests collected first) and its VERDICT, run once after pytest from the Makefile |
+| [`coverage_exempt.py`](coverage_exempt.py) | the engine code the Rust port replaces, exempt from the coverage floor (feature 448, the GM 2026-11-02): the one reader of `dev/coverage-exempt.json` every floor asks (`omit`, `report`, the hamlet floor, `cover_changed.py`, `make land`); a stale entry refuses with `make coverage-exempt PRUNE=1` |
 | [`imagecheck.py`](imagecheck.py) | is the pushed CodeBuild image still built from the tree's current `Dockerfile.ci`? (feature 175: a stale image failed every remote build at `typecheck`) |
 | [`__main__.py`](__main__.py) | `status | check | merge | measure | image | state | door | remote-spend | incremental`, `assert_via_make` at the top |
 

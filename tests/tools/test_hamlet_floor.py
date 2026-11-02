@@ -71,6 +71,17 @@ def test_the_floor_FIRES_on_a_module_in_the_set_with_a_missed_line(tmp_path: Pat
     assert "floor_probe.py" in out.getvalue() and "HAMLET PATH" in out.getvalue()
 
 
+def test_a_module_slated_for_the_Rust_port_is_not_held(tmp_path: Path, monkeypatch: object) -> None:
+    """Feature 448 (the GM 2026-11-02): a hamlet-path module `dev/coverage-exempt.json` names is dropped from the floor's set."""
+    mod, data = _measure(tmp_path, BODY, "f(True)")  # `return 2` never runs
+    rel = str(Path(mod).resolve()).lstrip("/")
+    monkeypatch.setattr(hf, "SKILL", Path("/"))  # type: ignore[attr-defined]
+    monkeypatch.setattr(hf.coverage_exempt, "exempt", lambda root: {rel})  # type: ignore[attr-defined]
+    out = io.StringIO()
+    assert hf.check([rel], data_file=data, out=out) == 0
+    assert "0 modules on the hamlet path" in out.getvalue() and "1 more slated for the Rust port" in out.getvalue()
+
+
 def test_the_floor_is_quiet_when_the_set_is_covered_and_ignores_modules_outside_it(tmp_path: Path, monkeypatch: object) -> None:
     mod, data = _measure(tmp_path, BODY, "f(True); f(False)")
     other = tmp_path / "city_only.py"

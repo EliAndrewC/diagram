@@ -694,6 +694,9 @@ land:           ## [project] land one task or several and tick them: every cheap
 cover-changed:  ## [tests] the coverage floor on the engine modules the change touched, in seconds: every line of each changed module the floor's tests leave unrun, the floor's carried coverage honored (the GM 2026-10-24; feature 430 T03)   [BASE=origin/main]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/cover_changed.py" --base "$(or $(BASE),origin/main)"
 
+coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
+	@python3 -m l7r.diagram.ci.coverage_exempt list $(if $(PRUNE),--prune,)
+
 gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/gate_costs.py" $(if $(SINCE),--since "$(SINCE)",)
 
@@ -1334,7 +1337,8 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	cov_ec=0; \
-	python3 -m coverage report -m --fail-under=100 || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
+	python3 -m coverage report -m --fail-under=100 $$(python3 -m l7r.diagram.ci.coverage_exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
+	python3 -m l7r.diagram.ci.coverage_exempt report || cov_ec=1; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1; \

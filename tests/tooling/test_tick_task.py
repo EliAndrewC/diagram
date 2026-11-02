@@ -979,3 +979,12 @@ def test_every_refusal_is_listed_together_not_the_first_of_a_chain(tmp_path: pat
     monkeypatch.setattr(approach_gate, "refusal", lambda *_a: "")
     assert tt.refusal(tmp_path, d, "T02", "done", landed=False)[0].startswith("tick: refused - T02 is a `research: physical`"), "one refusal: as before"
     assert tt.refusal(tmp_path, d, "T01", "done", landed=False) == ("", "plan review current"), "none: the plan gate's message alone"
+
+
+def test_a_stale_coverage_exempt_entry_is_a_cheap_refusal(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
+    """Feature 448 D4: a stale entry of `dev/coverage-exempt.json` is refused in seconds, naming its cure, not at the gate's floor."""
+    lb, d = _land(tmp_path, monkeypatch)
+    assert lb.stale_exempt_refusal(tmp_path) == ""
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "coverage-exempt.json").write_text(json.dumps({"entries": [{"path": "l7r/gone.py", "stages": ["sink"], "why": "t"}]}), encoding="utf-8")
+    assert lb.cheap_refusals(tmp_path, d, ["T02"], "x") == ["dev/coverage-exempt.json names 1 stale entry (l7r/gone.py) - make coverage-exempt PRUNE=1"]

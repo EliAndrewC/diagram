@@ -28,3 +28,5 @@
 {"date": "2026-11-01", "claims": 2, "keys": ["l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net", "l7r/diagram/settlement/fields/ink.py::draw#the order"], "why": "a claims triage of 2 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-01", "claims": 2, "keys": ["l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net", "l7r/diagram/settlement/fields/ink.py::draw#the order"], "why": "a claims triage of 2 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-01", "claims": 1, "keys": ["rust/phases/src/field/ponds.rs::pushed_in#the offset"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-11-02", "claims": 1, "keys": ["l7r/diagram/_invocation.py::OPERATIONS#invocation guard"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-11-02", "claims": 1, "keys": ["l7r/diagram/_invocation.py::OPERATIONS#invocation guard"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}

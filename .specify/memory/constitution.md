@@ -1,7 +1,12 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.32.2 → 2.33.0
+Version change: 2.33.0 → 2.34.0
+
+Version 2.34.0 (amended 2026-11-02, feature 448): Principle X clause 5's floor EXEMPTS the engine code the Rust port replaces -
+the GM: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)." The exempt files are one record, `dev/coverage-exempt.json` (each stage's own files until its Rust lands, and
+the modules the port leaves unreached), read by every floor through `l7r/diagram/ci/coverage_exempt.py`; their unrun lines are
+reported as information; everything else, a new module included, owes 100% as before. MINOR (a principle's requirement changes).
 
 Version 2.33.0 (amended 2026-10-26, feature 427 T03): Principle VI's performance bookends are WATCHED BY CALL COUNTS, their
 timings recorded only - the GM: "keep recording the timings, but completely stop using timings as a gate on anything ... the
@@ -1111,6 +1116,16 @@ any single rule is reason enough to refuse "done" status.
    reversed that sentence in as many words. A module's coverage duty now
    follows from it being engine code, never from someone remembering to
    add it to a list.
+
+   **The engine code the Rust port replaces is EXEMPT** (amended 2026-11-02,
+   feature 448): "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)." The exempt files are
+   listed once, in `dev/coverage-exempt.json`, each with its reason, and
+   every floor reads that record (`l7r/diagram/ci/coverage_exempt.py`):
+   their unrun lines are printed as information, an entry goes stale -
+   and refuses until `make coverage-exempt PRUNE=1` - once its file is
+   gone or its stage's Rust has landed, and a file the record does not
+   name owes 100% as above. The record is opt-out of the floor, never an
+   opt-in to it.
 
    External-boundary modules (HTTP clients, browser sessions, Claude API
    calls, DB sessions, file I/O against external services) test against
@@ -2358,4 +2373,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.33.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-10-26
+**Version**: 2.34.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-02

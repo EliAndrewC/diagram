@@ -46,6 +46,8 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 from typing import IO, Any
 
+from l7r.diagram.ci import coverage_exempt
+
 SKILL = Path(__file__).resolve().parents[3]
 ENGINE = SKILL / "l7r" / "diagram"
 EXCLUDED_PARTS = ("tests", "ci")  # a test file or the CodeBuild dispatcher is never "the hamlet path"
@@ -167,9 +169,17 @@ def check(files: list[str], data_file: str = ".coverage", out: IO[str] = sys.std
     if not files:
         print(_EmptyPath.__doc__, file=out)
         return 2
+    # THE ENGINE CODE THE RUST PORT REPLACES IS NOT HELD HERE (feature 448, the GM 2026-11-02): the one record every coverage floor
+    # reads; the gate's report prints its unrun lines as information
+    slated = coverage_exempt.exempt(SKILL)
+    held = [f for f in files if f not in slated]
     cov = coverage.Coverage(data_file=data_file)
     cov.load()
-    print(f"hamlet-floor: {len(files)} modules on the hamlet path (derived from the scripted rolls' records)", file=out)
+    print(
+        f"hamlet-floor: {len(held)} modules on the hamlet path (derived from the scripted rolls' records; {len(files) - len(held)} more slated for the Rust port, dev/coverage-exempt.json)",
+        file=out,
+    )
+    files = held
 
     # THE VERDICT IS TAKEN PER LINE, NOT FROM THE PERCENTAGE, so a parked line can be excused without
     # excusing anything else in the same module (feature 147).

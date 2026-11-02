@@ -63,4 +63,7 @@ reach a mixin that already imported it - patch the DEFINING submodule (e.g. `set
 
 Every module of this package that a scripted hamlet roll executes owes 100% - the set is DERIVED from the roll cache's
 records (`hamlet_floor --list`; `tools/hamlet_floor.py` carries the why) and held by the gate's FULL run. The package is
-under the same single 100% floor as the whole engine on a plain `make done` (feature 174 retired the old 94% ratchet).
+under the same single 100% floor as the whole engine on a plain `make done` (feature 174 retired the old 94% ratchet). The
+exception is the engine code the Rust port replaces (feature 448, the GM 2026-11-02: "We can relax that for the engine code ...
+since that's going away"): the modules `dev/coverage-exempt.json` names - in this package, those only the hamlet stages import -
+are reported, not held, by every floor.

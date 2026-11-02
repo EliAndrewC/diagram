@@ -261,6 +261,15 @@ def uncovered(root: Path, modules: list[str], base: tuple[Path, dict] | None) ->
     return out
 
 
+def slated(root: Path) -> set[str]:
+    """The engine files exempt from the coverage floor (`dev/coverage-exempt.json`, read by the floor's one reader)."""
+    if str(ROOT_OF_SCRIPT) not in sys.path:
+        sys.path.insert(0, str(ROOT_OF_SCRIPT))
+    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
+
+    return coverage_exempt.exempt(root)
+
+
 def main(argv: list[str]) -> int:
     base_ref = argv[argv.index("--base") + 1] if "--base" in argv else "origin/main"
     root = Path(git(Path.cwd(), "rev-parse", "--show-toplevel").strip() or ".")
@@ -271,6 +280,9 @@ def main(argv: list[str]) -> int:
         return 0
     missing = uncovered(root, modules, baseline(root)) if modules else {}
     missing |= rust_uncovered(root, crates)
+    # THE ENGINE CODE THE RUST PORT REPLACES IS ASKED, NOT HELD (feature 448, the GM 2026-11-02): its unrun lines are information
+    for path in sorted(set(missing) & slated(root)):
+        print(f"cover-changed: information (slated for the Rust port, feature 448): {path} - lines the floor's tests do not reach: {', '.join(map(str, missing.pop(path)))}")
     for path, lines in missing.items():
         print(f"cover-changed: {path} - lines the floor's tests do not reach: {', '.join(map(str, lines))}")
     if missing:

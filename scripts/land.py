@@ -144,6 +144,18 @@ def _task_block(text: str, task: str) -> str:
     return m.group(0) if m else ""
 
 
+def stale_exempt_refusal(root: Path) -> str:
+    """A stale entry of the coverage-exempt record (feature 448 D4), asked in seconds here rather than at the gate's floor."""
+    if str(HERE.parent) not in sys.path:
+        sys.path.insert(0, str(HERE.parent))
+    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
+
+    stale = coverage_exempt.split(root, reach=True)[1]
+    if not stale:
+        return ""
+    return f"dev/coverage-exempt.json names {len(stale)} stale entr{'y' if len(stale) == 1 else 'ies'} ({', '.join(e['path'] for e, _ in stale)}) - {coverage_exempt.CURE}"
+
+
 def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
     """A feature-444 phase task (`phase: <stage>` in its lines) lands only with its checklist, `phases/<stage>.md`, holding every
     box of the template, each ticked (feature 443 FR-010, plan D12); '' when it may land, else the file and the first box short."""
@@ -232,6 +244,8 @@ def cheap_refusals(root: Path, d: Path, tasks: list[str], note: str, deferred: l
     file_carries(root, d)
     file_known(root)
     commit_escape_records(root)
+    if stale := stale_exempt_refusal(root):
+        stops.append(stale)
     if run(root, ["git", "status", "--porcelain"])[1].strip():
         stops.append("uncommitted changes - commit them first")
     _rc, owed = run(root, [sys.executable, str(HERE / "reviews" / "ledger_owed.py"), "--ledger", str(root / "dev" / "review-ledger.md")])

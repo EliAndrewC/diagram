@@ -6,8 +6,9 @@
 
 ## Summary
 
-One record, `dev/coverage-exempt.json`, names the Python files the Rust port replaces: the own files of each 444 stage not yet
-landed in Rust, each entry with the stages it serves. One reader, `l7r/diagram/ci/coverage_exempt.py`, gives every coverage floor
+One record, `dev/coverage-exempt.json`, names the Python files the Rust port replaces: (a) the own files of each 444 stage not yet
+landed in Rust, each entry with the stages it serves, and (b) the engine modules the port leaves unreached (the program's
+whole-engine replacement), which name no stage. One reader, `l7r/diagram/ci/coverage_exempt.py`, gives every coverage floor
 the same set: the gate's `coverage report --fail-under=100` omits it, the derived hamlet floor drops it from its module set, and
 `make cover-changed` (and so `make land`) reports its unrun lines without refusing. The slated files' unrun lines are printed as
 information; everything else keeps the floor.
@@ -35,21 +36,28 @@ with unrun lines.
 
 ## Decisions
 
-**D1 - What is slated** (FR-001, the spec's Assumption): the Python files of `work_budget_bundle.stage_files(root, stage)` - the
-module defining `stage_<stage>`, with its subpackage's siblings - for every stage of `STAGES` whose `dev/work-budget.json` status is
-not `accepted`. That is 444's own definition of a stage's old code (`scripts/gates/phase_sources.py`), the code a phase task
-rebuilds and deletes. Measured 2026-11-02 (`stage_files` over `STAGES`, the Python half): 77 files, all under `l7r/diagram/hamletgen/` (`ways/`, `homesteads/`, `hinterland/`,
-`water/`, and the single-file stages `burial`, `frame`, `pondbank`, `pondstock`, `sink`, `washing`).
-NOT slated, though `phase_sources.counted_files` names them as where a stage's work is counted today: `tools/`, `ci/`, `pipeline/`,
-`interactive/`, `labels/` (the hand-drawn sheets' caption placer), `overlap/` (the hand-drawn maps' checks read its registry),
-`settlement/` (its drawing and its above-hamlet tiers stay; its hamlet placement helpers' fate is a phase's to decide), the driver,
-`plan.py`, the `consts*` modules and the two landed stages' thin doors (`field_stage.py`; the water frame's). A file whose fate is
-undecided stays at the floor (FR-004); a phase whose contract names more of its old code adds those entries in its own task.
-Rejected: the union of `phase_sources.sources()` over every stage (146 files, measured 2026-11-02 (the same script)) - its `counted_files` half takes in exactly the
-kept trees FR-003 names.
+**D1 - What is slated** (FR-001: "the 444 phase that replaces it, or the program's whole-engine replacement"), two parts:
+- **(a) the phases' own code**: the Python files of `work_budget_bundle.stage_files(root, stage)` - the module defining
+  `stage_<stage>`, with its subpackage's siblings - for every stage of `STAGES` not `accepted` in `dev/work-budget.json`; 444's own
+  definition of a stage's old code (`scripts/gates/phase_sources.py`), the code a phase task rebuilds and deletes. Measured
+  2026-11-02 (`stage_files` over `STAGES`, the Python half, the accepted stages left out): 76 files, all under
+  `l7r/diagram/hamletgen/`.
+- **(b) the whole-engine replacement**: every engine module the port leaves dead - not reached by imports from any root that stays
+  Python once (a) is removed. The roots are what 444 FR-010 keeps Python (the driver, `STAGES`, the manifest, rendering, the pool's
+  `.gen.py` scripts, the tools and the pytest suite) and the trees FR-003 keeps: every module of `tools/`, `ci/`, `pipeline/`,
+  `interactive/`, `labels/` and `overlap/`, every module run as a program, and every importer under `pool/` and `scripts/`.
+  Measured 2026-11-02 (`specs/448-engine-coverage-relax/closure.py`: an AST import graph over `l7r/`, a name re-exported by a
+  package resolved to the module defining it, reachability from those roots with (a) removed): 14 files - `hamletgen/ways/law/`
+  (5), `hamletgen/ways/settle/` (5), `settlement/fields/landuse.py`, `settlement/fields/outfall.py`,
+  `settlement/rolling/gap_ways.py`, `waterfields/twins.py`. Everything else the closure reaches - the driver, `plan.py`, the
+  `consts*` modules, `clearance.py`, `cluster.py`, `hinterland/parcels/`, the two landed stages' thin doors (`field_stage.py`; the
+  water frame's), the rest of `settlement/` and `waterfields/` - stays Python after the port and keeps the floor.
+Rejected: the union of `phase_sources.sources()` over every stage (146 files, measured 2026-11-02 (the same `stage_files` script
+with `counted_files`)) - its `counted_files` half takes in exactly the kept trees FR-003 names. A later phase whose contract slates
+more adds its entries in its own task (FR-004: the default is the floor).
 
 **D2 - The record** (FR-001, FR-004): `dev/coverage-exempt.json`: a `ruling` key (the GM's words, dated) and an `entries` list, each
-entry its `path`, its `stages` and its `why`; written once by `python3 -m l7r.diagram.ci.coverage_exempt seed` (D1's rule, run at this landing) and edited
+entry its `path`, its `stages` and its `why`; written once at this landing by `seeded` - D1(a) from `stage_files`, D1(b) the paths `closure.py` measured - and edited
 by hand after. A path not in it is held to the full floor.
 
 **D3 - The one reader** (FR-002, User Story 3): `l7r/diagram/ci/coverage_exempt.py`:
@@ -65,8 +73,11 @@ by hand after. A path not in it is held to the full floor.
 - Unchanged: `[tool.coverage.run] source = ["l7r"]` - every file is still measured, only the floor moves; `uncovered_marks.py`
   and `uncovered-in-diff.py` stay information.
 
-**D4 - Stale entries** (FR-005): an entry is stale when its path no longer exists, or when every stage it names is `accepted` in
-`dev/work-budget.json` (the Rust has landed; what remains of the file is the stage's thin door, which keeps the floor). `report`
+**D4 - Stale entries** (FR-005): an entry is stale when its path no longer exists, or - for a (a) entry - when every stage it names
+is `accepted` in `dev/work-budget.json` (the Rust has landed; what remains of the file is the stage's thin door, which keeps the
+floor). A (b) entry names no stage and is stale when its path is gone or when the reader's own reachability measure (`unreached`, the
+same rule as D1(b)'s `closure.py`, moved into the reader) finds it reached from the kept roots - a module kept code begins to
+import is no longer going away, and its floor returns. `report`
 names each stale entry and the cure, `make coverage-exempt PRUNE=1` (a new target: lists the record; `PRUNE=1` drops the stale
 entries and writes the file). `make land`'s cheap refusals ask the same check first, so a Rust landing meets it in seconds rather
 than at the gate's end.

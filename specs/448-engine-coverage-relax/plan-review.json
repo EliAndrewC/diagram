@@ -1,0 +1,320 @@
+{
+ "feature": "448-engine-coverage-relax",
+ "blocks": {
+  "preamble": {
+   "sha256": "ef84b57690c3dcc4bf438a34ec5a388d2c951115a95fab14387845bde6ca8bf7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "e0502e37a83201ba8d19e4b0b3e1d14704f83f61ab99a8dae74914088863b36d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "2c52f4ca2590c17edde035a652e132a1e639b1ebefd4a17d4260b31c16e2ddd3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "6f000370a7661f86aa5c12c0249afeec022edea84106b7f9336f9152eb7779ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "14be83438225046919b2ad5d57fa0df63db515d3ca6c6a5b1a39e55b7d6adc14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Decisions": {
+   "sha256": "009c2d67fcf338fb17a558241c7ba5865a6531b9f823b45b405ddec77435b08d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  },
+  "## Task approaches": {
+   "sha256": "eaab878e48c9bfbfbd5e8ff99c2d20e0f9c7140142b8067d5d1ca54bbfa3f9bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-02",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1a",
+     "summary": "Slated = stage_files of every 444 stage not yet accepted (77 files under hamletgen/); the 146-file phase_sources union rejected because its counted_files half takes in FR-003's kept trees.",
+     "class": "within",
+     "why": "The stage-owned old code is engine code the Rust port replaces (FR-001's per-phase reason); rejecting the union keeps FR-003's trees at the floor. Figures carry a dated one-shot method label."
+    },
+    {
+     "id": "D1b",
+     "summary": "NOT slated: tools/, ci/, pipeline/, interactive/ (and scripts/).",
+     "class": "within",
+     "why": "Named by FR-003; the GM named 'tools'."
+    },
+    {
+     "id": "D1c",
+     "summary": "NOT slated: labels/ (hand-drawn sheets' caption placer) and overlap/ (registry read by the hand-drawn maps' checks).",
+     "class": "within",
+     "why": "The GM named 'automated checks for hand-drawn maps' as code that keeps the floor; FR-003 carries them."
+    },
+    {
+     "id": "D1d",
+     "summary": "NOT slated: settlement/'s drawing and above-hamlet tiers; the landed stages' thin doors (field_stage.py, the water frame's).",
+     "class": "within",
+     "why": "Not hamlet engine code the port removes; the thin doors survive their landing and no phase slates them, which is the GM's 'not currently slated to be removed'."
+    },
+    {
+     "id": "D1e",
+     "summary": "NOT slated: the driver, plan.py, the consts* modules and settlement/'s hamlet placement helpers, kept at the floor as 'fate undecided'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "These are engine code by the plain reading of the GM's line (engine code, which is going away, vs. tools and checks for hand-drawn maps); the GM's context says the Python engine 'is getting replaced with Rust soon'. The accepted FR-001 gives each entry the reason 'the 444 phase that replaces it, OR the program's whole-engine replacement' - the spec anticipates entries slated by the program as a whole, not only by a phase. D1 derives the record solely from per-stage stage_files, never mentions the whole-engine category, and states 'fate undecided' without measuring it. Not physically impossible, not implied by the GM's words ('currently slated' qualifies the OTHER code), and it preserves the floor on part of the engine the GM asked to relax. Cure: D1 either enumerates the entries the program's whole-engine replacement slates (the driver, plan.py, consts*, the hamlet placement helpers - whichever 444's contract or dev/work-budget.json commits to removing), with that reason, or shows that set measured empty with the command that produced it. Also: D1 cites 'the spec's Assumption' as support, but no Assumption is in spec-cited.md (which should hold every passage the blocks name), so it could not be checked here; it does not change this ruling, which stands on FR-001."
+    },
+    {
+     "id": "D2",
+     "summary": "The record dev/coverage-exempt.json: ruling key, entries {path, stages, why}, seeded once by coverage_exempt seed, edited by hand after; a path not in it keeps the floor.",
+     "class": "within",
+     "why": "FR-001 and FR-004."
+    },
+    {
+     "id": "D3",
+     "summary": "One reader l7r/diagram/ci/coverage_exempt.py (entries/exempt, omit, report) feeding the Makefile floor line, tools/hamlet_floor.py and scripts/gates/cover_changed.py (and so make land); exempt lines printed as information; source=['l7r'] unchanged; stale entries not exempt.",
+     "class": "within",
+     "why": "FR-002 (every floor exempts the record and only it; unrun lines still reported as information) and FR-005."
+    },
+    {
+     "id": "D4a",
+     "summary": "Stale also when every stage an entry names is accepted in dev/work-budget.json, though the path exists (the remaining file is the thin door, which keeps the floor).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-005's 'a path deleted by a Rust landing' is a parenthetical example; its stated purpose is that the list shrinks as the port proceeds. A file no unaccepted stage owns is, by the GM's own words, code 'not currently slated to be removed'. It inherits D1's premise: if the whole-engine category (D1e) proves non-empty, entries carrying that reason must not go stale on stage acceptance alone."
+    },
+    {
+     "id": "D4b",
+     "summary": "make coverage-exempt PRUNE=1 as the named cure; make land's cheap refusals run the same stale check early.",
+     "class": "within",
+     "why": "FR-005 asks for the stale refusal with the command that removes it; land's early run is the same check, not new reach."
+    },
+    {
+     "id": "D5",
+     "summary": "The six doc statements of the floor (Principle X clause 5 as a dated amendment with the GM's words) say the exemption; the 'no --omit' tests now assert the only --omit is the record's, generated by the reader.",
+     "class": "within",
+     "why": "FR-006 verbatim."
+    },
+    {
+     "id": "CC",
+     "summary": "Constitution Check: X clause 5 amended for slated files only; XIII floor loosens only on the record, SC-002 measured at the landing's gate.",
+     "class": "within",
+     "why": "FR-006, SC-002."
+    },
+    {
+     "id": "T01-T02",
+     "summary": "Red-first tests of SC-001 on a fixture, the stale check, and that the record equals D1's rule at landing; then code, record, Makefile, readers, target, land refusal; T02 docs and floor tests, landed by make land.",
+     "class": "within",
+     "why": "Enforcement of SC-001, FR-005, FR-001 and FR-006; the record-equals-D1 test inherits D1e's fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-scope",
+     "summary": "The Summary block defines the record as 'the own files of each 444 stage not yet landed in Rust, each entry with the stages it serves', which is D1(a) alone.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 slates 'the 444 phase that replaces it, OR the program's whole-engine replacement', and the GM's grant is 'the engine code ... since that's going away'. D1(b) now carries the second half: 14 files that are no stage's own files and that, by D4, name no stage. The Summary was not brought along. It is byte-identical to the text last judged BLOCKED, and a per-block CLEAR on it would record an (a)-only scope as accepted. Nothing makes the narrower reading physically necessary, and the GM's words do not imply it. Cure, one sentence: the record names D1(a), the own files of each 444 stage not yet landed, each with its stages, and D1(b), the engine modules the port leaves unreachable, which name no stage."
+    },
+    {
+     "id": "D1(a)",
+     "summary": "Slated part (a): the own files (stage_files) of every STAGES stage not yet accepted in dev/work-budget.json; 76 files under hamletgen/, the landed stages' thin doors left out.",
+     "class": "within",
+     "why": "Carries FR-001's 'the 444 phase that replaces it'. The GM relaxed the floor for engine code 'since that's going away'; a landed stage's thin door stays Python and so is not going away, and the GM's condition keeps the floor on it."
+    },
+    {
+     "id": "D1(b)",
+     "summary": "Slated part (b): every engine module left unreachable (AST import closure) from the roots that stay Python under 444 FR-010 and FR-003 once (a) is removed; 14 files.",
+     "class": "within",
+     "why": "Carries FR-001's 'the program's whole-engine replacement', which the earlier D1 left to 'a phase's to decide'. The closure is a stated, dated method."
+    },
+    {
+     "id": "D1(b)-keep-list",
+     "summary": "Engine modules the closure still reaches keep the floor: plan.py, consts*, clearance.py, cluster.py, hinterland/parcels/, the rest of settlement/ and waterfields/.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "444 FR-010 does not name these modules as staying Python. The plan infers 'stays after the port' from today's import reachability, which keeps the floor on code the GM called 'engine code' and so narrows the relaxation. It is legitimate on the GM's own qualifier: the relaxation covers code 'going away', and the floor stays on code 'not currently slated to be removed'. FR-004 sends a module whose fate is undecided to the floor, and D1 lets a later phase add entries. The premise to re-measure is that reachability from the kept roots stands in for 'slated'; a later phase that removes these modules adds them to the record."
+    },
+    {
+     "id": "D1-rejected",
+     "summary": "The union of phase_sources.sources() (146 files) is rejected because its counted_files half takes in the kept trees.",
+     "class": "within",
+     "why": "Taking that union would exempt tools/, ci/, pipeline/ and interactive/, which the GM said must keep the floor and FR-003 names."
+    },
+    {
+     "id": "D1-kept-trees",
+     "summary": "labels/ and overlap/ (the hand-drawn sheets' caption placer and the hand-drawn maps' checks' registry) are kept roots alongside FR-003's trees.",
+     "class": "within",
+     "why": "These are the 'automated checks for hand-drawn maps, etc.' the GM named as keeping the floor."
+    },
+    {
+     "id": "D2",
+     "summary": "Record dev/coverage-exempt.json: ruling key with the GM's words, entries {path, stages, why}, seeded once at landing from D1, hand-edited after; unlisted paths held to the full floor.",
+     "class": "within",
+     "why": "FR-001 (one record, each entry with its reason) and FR-004 (the default is the floor)."
+    },
+    {
+     "id": "D3",
+     "summary": "One reader, ci/coverage_exempt.py (entries/exempt, omit, report). The gate's fail-under=100 omits only the record's live paths, the hamlet floor drops them, and cover-changed (so make land) prints their unrun lines as information without refusing. Coverage source is unchanged.",
+     "class": "within",
+     "why": "FR-002: every named floor exempts the record's entries and only them, and their unrun lines are still reported as information."
+    },
+    {
+     "id": "D4",
+     "summary": "Stale entries: the path is gone, or for an (a) entry every stage it names is accepted (the floor returns on the thin door). Stale means not exempt, and report exits 1 naming the cure 'make coverage-exempt PRUNE=1'. make land checks this early.",
+     "class": "within",
+     "why": "FR-005 (a stale entry fails the gate with the command that removes it, so the list shrinks). The accepted-stage criterion only brings the floor back on code that stays Python, which is the GM's 'maintain it for our other Python code'. It enforces the request and does not narrow it."
+    },
+    {
+     "id": "D5",
+     "summary": "Docs (root CLAUDE.md, l7r/diagram/CLAUDE.md, settlement/CLAUDE.md, docs/efficiency-tooling.md, pyproject.toml note, constitution X.5 as a dated amendment) state the exemption with the GM's words; the floor tests pin that the only --omit is the record's.",
+     "class": "within",
+     "why": "FR-006 as written."
+    },
+    {
+     "id": "ConstitutionCheck-X5",
+     "summary": "Principle X clause 5 is amended for the slated files only; new and changed tooling owes the full floor.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-02 ruling, and it keeps the floor on 'our other Python code', as SC-002 and FR-003 require."
+    },
+    {
+     "id": "Perf-none",
+     "summary": "No performance bookends, because no roll code changes.",
+     "class": "within",
+     "why": "The plan touches tooling only, and the request does not involve roll performance."
+    },
+    {
+     "id": "T01-T02",
+     "summary": "T01 is red-first: SC-001 fixture, stale checks, a test that the record equals D1's rule at landing, and hamlet-floor/cover-changed split tests, then the code. T02 is the docs and floor tests, then make land, where the gate's floor measures SC-002.",
+     "class": "within",
+     "why": "The tests only enforce what was asked (SC-001, SC-002, FR-005), so they serve the request and are not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-02",
+   "blocks": [
+    "## Constitution Check",
+    "## Decisions",
+    "## Performance bookends",
+    "## Summary",
+    "## Task approaches",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary",
+     "summary": "One record naming (a) the own files of 444 stages not yet landed and (b) engine modules the port leaves unreached; one reader feeds every floor; slated unrun lines printed as information.",
+     "class": "within",
+     "why": "Restates D1-D3. Now names both halves of FR-001 ('the 444 phase that replaces it, or the program's whole-engine replacement'); the earlier text named only (a). Exempting only code slated for removal and keeping the floor everywhere else is the GM's 'relax that for the engine code ... since that's going away, so long as we maintain it for our other Python code'."
+    },
+    {
+     "id": "Technical Context",
+     "summary": "Python/bash tooling change; new test_coverage_exempt.py plus the existing floor, docs, cover-changed and hamlet-floor tests; no map or roll changes.",
+     "class": "within",
+     "why": "The tests enforce FR-002/FR-003/FR-006 and SC-001; no added behavior."
+    },
+    {
+     "id": "Performance bookends",
+     "summary": "None: no roll code changes; the floor step gains one JSON read and information lines.",
+     "class": "within",
+     "why": "Statement of no effect on roll code; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "Constitution Check X.5",
+     "summary": "Principle X clause 5 amended for the slated files only, written into the constitution with the GM's words; the new module and changed tools owe the full floor.",
+     "class": "within",
+     "why": "FR-006 requires the dated amendment; holding the new reader and changed tools to the floor is FR-003/FR-004 ('maintain it for our other Python code')."
+    },
+    {
+     "id": "D1(a)",
+     "summary": "Slated (a): stage_files() of every STAGES stage not accepted in dev/work-budget.json (76 files under hamletgen/, measured 2026-11-02).",
+     "class": "within",
+     "why": "FR-001's '444 phase that replaces it', using 444's own definition of a stage's old code. Accepted stages' thin doors stay Python and keep the floor, as the GM's 'not currently slated to be removed' requires."
+    },
+    {
+     "id": "D1(b)",
+     "summary": "Slated (b): engine modules unreached by imports from the roots that stay Python (444 FR-010's kept parts and FR-003's kept trees) once (a) is removed; 14 files measured 2026-11-02 by closure.py.",
+     "class": "within",
+     "why": "Operationalizes FR-001's 'program's whole-engine replacement' as code that will actually go away. Engine modules still imported by kept code (driver, plan.py, consts, the rest of settlement/ and waterfields/) are not slated for removal and so fall under the GM's 'maintain it for our other Python code not currently slated to be removed'. This classifies the request's own terms rather than carving a case out of it."
+    },
+    {
+     "id": "D1 rejected alternative",
+     "summary": "Rejects the union of phase_sources.sources() (146 files) because its counted_files half takes in the kept trees FR-003 names; later phases add entries in their own tasks.",
+     "class": "within",
+     "why": "Taking the union would strip the floor from tools/ci/etc., contradicting the GM's 'so long as' clause and FR-003. Later additions default to the floor (FR-004)."
+    },
+    {
+     "id": "D2",
+     "summary": "dev/coverage-exempt.json with a dated ruling key and entries (path, stages, why), seeded once from D1 and edited by hand after; any path not in it keeps the floor.",
+     "class": "within",
+     "why": "FR-001 and FR-004 directly."
+    },
+    {
+     "id": "D3",
+     "summary": "One reader (entries/exempt/omit/report); the Makefile floor omits only the record's live paths, the hamlet floor drops them, cover-changed and so land print them as information; source=['l7r'] unchanged.",
+     "class": "within",
+     "why": "FR-002 names exactly these floors (gate, cover-changed, land, hamlet floor), exempts the record and only it, and keeps unrun lines reported as information. Every file is still measured."
+    },
+    {
+     "id": "D4",
+     "summary": "Stale entries: path gone; an (a) entry whose stages are all accepted; a (b) entry whose path is gone or which the reader's reachability measure finds reached from kept roots. A stale entry loses its exemption, report exits 1 naming make coverage-exempt PRUNE=1, and land's cheap refusals run the same check.",
+     "class": "within",
+     "why": "FR-005 ('a stale entry fails the gate with the command that removes it, so the list shrinks'). The new (b) reachability rule is the changed text. It is enforcement, not new scope: its only effect is that a module kept code begins to import, so no longer going away, regains the floor. That is the GM's 'so long as we maintain it for our other Python code' and FR-004. Under the earlier rule a (b) entry stayed exempt until deleted even if kept code came to depend on it, so the exemption could cover code that is staying. The refusal reaches only the record's own entries."
+    },
+    {
+     "id": "D5",
+     "summary": "The docs FR-006 lists state the exemption and point to the record; the constitution amendment is dated with the GM's words; the two floor tests pin that the only --omit is the reader's.",
+     "class": "within",
+     "why": "FR-006 clause by clause."
+    },
+    {
+     "id": "Task approaches",
+     "summary": "T01: red-first tests (SC-001 fixture, the stale checks, record equals D1's rule at landing, the hamlet-floor/cover-changed split), then the module, record, Makefile, readers, make coverage-exempt and land's cheap refusal. T02: the docs and floor tests, then make land, whose gate floor measures SC-002.",
+     "class": "within",
+     "why": "Implements D1-D5 and verifies SC-001/SC-002; every test enforces a requested clause."
+    }
+   ]
+  }
+ ]
+}

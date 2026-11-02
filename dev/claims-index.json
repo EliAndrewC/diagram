@@ -4859,12 +4859,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
-  "body": "9971b76ee3190bf2",
+  "body": "20508512f0d4d313",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "357b7329ee5e227b",
-  "core": "a2eb796b4786d71f",
-  "date": "2026-10-31",
-  "note": "registry mapping modules to make targets and a prompting cost; the added rust_gate row is plumbing and makes no map decision",
+  "code": "11f75549890d4ec7",
+  "core": "91b3fde0221c8afa",
+  "date": "2026-11-02",
+  "note": "a registry from module to make target and prompting cost, including the new coverage-exempt row; nothing on the map is decided",
   "pages": {},
   "research": "",
   "rests": [],
@@ -74335,18 +74335,6 @@
   "research": "7b7ec68aadb810d3",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/waterfields/frame.py::BANK_MARGIN#bund and ditch abut": {
-  "code": "3f81f551913b3e5e",
-  "core": "0fa5d7ed690b9389",
-  "date": "2026-10-03",
-  "note": "0.75 is multiplied by grain (= 2/ftpx), giving 1.5 ft, the full bund 0014/0055 give (\"about 1.5 ft\"), not half - 0.375 (or 0.75/ftpx in px) would be half; or the drawn bund is 3 ft, which is the other drift",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/waterfields/frame.py::DRAIN_FT#drain width": {
   "code": "993934ff418543fa",
   "core": "30fdbbe70082079f",
@@ -74568,42 +74556,6 @@
   "research": "1a1b231001c7410e",
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/seams/pockets.py::_water#bund abuts the water": {
-  "body": "2d872c5dab996a45",
-  "claim": "bund abuts the water - where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing: each course's local half-width plus half a bund is ground no bund stands in",
-  "code": "1a03eb5289fa700d",
-  "core": "a00e04e22c909506",
-  "date": "2026-10-31",
-  "note": "`+ BANK_MARGIN * g` (0.75, half of a 1.5 ft bund) is added to every course, but the docstring says the input includes supply canals, and beside those the page draws a bund \"about 3 ft along the head race or a canal\" (half is 1.5 ft) and a \"bare earth bank 5 ft wide\". So \"half a bund\" is short by 0.75 ft along canals, and the \"BANK\" the docstring names is not the page's 5 ft bank. Either the margin should follow each course's bund width, or the claim should say it covers only the 1.5 ft bund",
-  "pages": {
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
-  },
-  "research": "39036ea15e57c448",
-  "rests": [
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:d0ef52fff21446f2",
-   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/seams/pockets.py::_water#width along the run": {
-  "body": "2d872c5dab996a45",
-  "claim": "width along the run - how-our-maps-draw-a-channel-narrowing-along-its-run.drawing: the half-width read from the shared taper law",
-  "code": "b01e6a81180578dc",
-  "core": "a00e04e22c909506",
-  "date": "2026-10-31",
-  "note": "each segment is buffered at `half(i)`, the taper width at its START vertex only. Where a course widens downstream (a drain, \"3.0 to 12.0 ft\"), the far end of the segment is wider than its buffer, so water lies outside the ground this pass protects. That breaks \"one shared rule gives it, so no second formula can lay a bund inside the water\", which also requires the width \"at that point\". Each segment should use the larger of its two end widths (or a buffer that tapers along it)",
-  "pages": {
-   "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html": "fffdea8d8ea0c9ee"
-  },
-  "research": "7b7ec68aadb810d3",
-  "rests": [
-   "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html:55b0a14ca2b92f8f",
-   "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html:5c302723c219015b",
-   "0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html:e3fb8092f7586df7"
-  ],
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/twins.py::TWIN_DEG#running the same way": {
   "code": "0b311afdec58f613",

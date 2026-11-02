@@ -140,3 +140,20 @@ def test_a_changed_rust_file_is_grouped_by_its_crate_and_its_unreached_lines_nam
     assert cc.rust_uncovered(root, crates) == {"rust/phases/src/field.rs": [0]}, "a crate whose run failed names every changed file"
     monkeypatch.chdir(root)
     assert cc.main(["--base", base]) == 1 and "rust/phases/src/field.rs" in capsys.readouterr().out
+
+
+def test_a_slated_modules_unrun_lines_are_information_and_refuse_nothing(repo: tuple[Path, str], monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 448 (the GM 2026-11-02): a module `dev/coverage-exempt.json` names is asked and reported, never refused; a kept one
+    beside it still refuses."""
+    root, base = repo
+    (root / "dev").mkdir()
+    (root / "l7r" / "slated.py").write_text("x = 1\n")
+    (root / "dev" / "coverage-exempt.json").write_text('{"entries": [{"path": "l7r/slated.py", "stages": ["sink"], "why": "t"}]}\n')
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(cc, "changed_modules", lambda r, m: ["l7r/slated.py"])
+    monkeypatch.setattr(cc, "uncovered", lambda r, mods, b: {"l7r/slated.py": [3]})
+    assert cc.main(["--base", base]) == 0
+    assert "information (slated for the Rust port, feature 448): l7r/slated.py - lines the floor's tests do not reach: 3" in capsys.readouterr().out
+    monkeypatch.setattr(cc, "changed_modules", lambda r, m: ["l7r/slated.py", "l7r/m.py"])
+    monkeypatch.setattr(cc, "uncovered", lambda r, mods, b: {"l7r/slated.py": [3], "l7r/m.py": [6]})
+    assert cc.main(["--base", base]) == 1 and "cover-changed: l7r/m.py - lines" in capsys.readouterr().out

@@ -171,6 +171,11 @@ markers = [
 # old roster had excluded on 2026-09-02 - *"I agree that none of that is abandoned code. Therefore, it
 # should all have tests, and we should require one hundred percent code coverage for it"* - so none
 # was deleted and all were brought up by tests. If you add a file under `l7r/`, it is measured.
+# THE FLOOR, NOT THE MEASURE, EXEMPTS THE ENGINE CODE THE RUST PORT REPLACES (feature 448; the GM 2026-11-02: "We can relax that for
+# the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to
+# be removed"). Everything stays measured here; the Makefile's floored report omits the files `dev/coverage-exempt.json` names, and
+# their unrun lines print as information. That record is opt-out of the floor, kept with each file's reason, not the opt-in roster
+# the note above retired.
 source = ["l7r"]  # THE WHOLE ENGINE. Not a roster - see the note above (GM 2026-09-02).
 # `waterfields` and `interactive` joined the measured set with feature 145: both are on the hamlet path (the field
 # engine, the interactive page) and the derived floor (tools/hamlet_floor.py) judges every hamlet-path module, so
