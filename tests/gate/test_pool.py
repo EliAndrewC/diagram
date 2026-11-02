@@ -31,3 +31,21 @@ def test_a_pool_map_read_twice_by_one_test_is_obtained_once(monkeypatch: pytest.
     again = _pool.obtain_full("pool/x/x.gen.py")
     assert calls == ["pool/x/x.gen.py"], "the map is rolled once"
     assert first[0] == again[0] and again[1] == "CACHED"
+
+
+def test_a_refused_pool_map_is_rolled_once_a_run_and_its_refusal_re_raised(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:  # noqa: ANN001
+    """Feature 444 T16's gate: Sawada's roll, refused until a later stage's port (a strict xfail), wrote no manifest to share, so
+    its twelve readers each rolled it again and the census failed the gate. The refusal is shared across the run's workers."""
+    calls: list[str] = []
+
+    def refuse(g: str) -> tuple[str, str, float]:
+        calls.append(g)
+        raise ValueError("SeatRefused: no seat")
+
+    monkeypatch.setattr(_pool.gencache, "gate_obtain", refuse)
+    monkeypatch.setattr(rollcache, "_run_share_path", lambda key: str(tmp_path / "share" / key[0]))
+    for _ in range(2):
+        _pool._OBTAINED.clear()  # a fresh test, as `tests/conftest.py` empties it
+        with pytest.raises(Exception, match="SeatRefused"):
+            _pool.obtain_full("pool/s/s.gen.py")
+    assert calls == ["pool/s/s.gen.py"], "rolled once; the second reader is handed the first one's refusal"
