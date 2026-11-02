@@ -43,8 +43,8 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 The polder is laid by the Rust `field` stage (`rust/phases/src/field/polder.rs`, `dike.rs`, `landuse.rs`) and drawn by
 `settlement/fields/ink.py`; the Python polder and its overlay are deleted. The block is now an axis-aligned rectangle of 22 ponds
-(17 fry, 5 grow-out), with 11 bridges and 2 pig sties. The counts the sections below give - 29 ponds, 0.62 over 29 ponds, 22 fry
-ponds, 26 dike groups, 7 sties - are the older block's history; the census block (`make notes-census`) is the one to read.
+(18 fry, 4 grow-out on the mosaic calibrated 2026-11-02), with 11 bridges and 3 pig sties. The counts the sections below give - 29 ponds, 0.62 over 29 ponds, 22 fry
+ponds, 26 dike groups, 7 sties, three fry ponds and the duck pens - are the older block's history; the census block (`make notes-census`) is the one to read.
 
 ## The declaration
 
