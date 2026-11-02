@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-02T03:57:16Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 332,
+  "result": "green",
+  "commit": "0df8de4fe",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 9814,
+  "host": {
+    "load": [
+      3.47,
+      4.7
+    ],
+    "mem_avail_mb": [
+      7698,
+      8019
+    ],
+    "cpu_temp_c": [
+      90.0,
+      84.0
+    ],
+    "stall_s": {
+      "cpu": 1.9,
+      "io": 1.0,
+      "io_full": 0.9,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 21204,
+      "package": 11940
+    }
+  },
+  "phases": {
+    "preflight": 61.0,
+    "static": 28.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "reference": 5.0,
+    "counters-inert": 10.0,
+    "pytest": 271.0,
+    "floors": 12.0,
+    "test-full": 287.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/src/field/polder.rs",
+  "collected": 9814
+}
