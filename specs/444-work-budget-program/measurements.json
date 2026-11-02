@@ -174,5 +174,23 @@
     "grow_out": 4
    }
   }
+ },
+ "t16-kuwabata-r2-diff": {
+  "quantity": "what changed in kuwabata.json since round two's review",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "325869aeb42e",
+  "source": "pool/hamlets/kuwabata/kuwabata.json",
+  "command": "python3: every top-level key of 98b7ed6f5~1:kuwabata.json against HEAD's, and every field of each dikeponds record",
+  "method": "a structural diff of the manifest (the round arbiter on ask:444-T16-review-round-3)",
+  "value": {
+   "top_level_changed": [
+    "dikeponds"
+   ],
+   "dikeponds_fields_changed": [
+    "bank"
+   ]
+  }
  }
 }
