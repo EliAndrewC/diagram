@@ -3,8 +3,12 @@
 The template's eight boxes (`.specify/templates/phase-checklist.md`), ticked in order with their evidence. Below them, the
 phase's working record: what is measured, what is owed, and where to resume.
 
-- [ ] 1. **Contract.** What the phase reads from the manifest and what it writes; the research claims that govern it (from the
+- [x] 1. **Contract.** What the phase reads from the manifest and what it writes; the research claims that govern it (from the
   claims index); the cohort properties it must keep.
+  EVIDENCE (2026-11-02): the keys and plan fields below (`phases/field.keys.json`, `phases/polder.bounds.json`); the claims - the
+  Rust's doc comments and the seam's, every one checked, `make claims-owed` "no claim is owed" and no open finding in the stage's own
+  code (FR-021 as amended 2026-11-01, `scripts/record/claims_scope.py`); the cohort properties held by `make rust-gate` (54 seeds, 0
+  failing, `dev/rust-gate/20261101T225014Z.json`).
   Measured so far (2026-10-31): the keys the stage writes, on all three archetypes - `phases/field.keys.json` (42 keys: 28 on a
   comb, 19 on a polder grid, 26 on a dike-pond); the polder's record and point counts at 10 and 20 households -
   `phases/polder.bounds.json`. The plan fields the stage writes for later stages: `acres`, `envelope`, `net` (a dict of the irrigation network - the
@@ -13,17 +17,23 @@ phase's working record: what is measured, what is owed, and where to resume.
   `phases/field.claims.json` - 493 research claims in the field's 17 own files (464 IN-STEP, 21 DRIFTED, 8 MISLABELED, read from
   the claims index, the code unread). Each is a decision the Rust makes again and claims again in its doc comments; the 29 open
   findings cannot be carried: under FR-021 the Rust lands with each set right.
-- [ ] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
+- [x] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
   before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
   scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/<stage>.derivation.md`.
   The comb: `phases/field_greenfield.derivation.md` (verdict-3 SOUND, T18, under the single-field cap). Owed: the POLDER's own
   greenfield derivation (the Approach's item 4) - the polder grid and the dike-pond - from 0019, 0022, 0026, 0027 and
   `polder.bounds.json`; and the GAP between the comb derivation's Contract and what the stage writes (below).
-- [ ] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
+  EVIDENCE (2026-11-02): the comb's `phases/field_greenfield.derivation.md`, re-derived to the counted stage (34,656 / 62,494 / 114,953
+  at 20 / 40 / 80, exponent 0.86) and accepted by the round arbiter on ask:444-T16-field-turns-round after verdict-10; the polder's
+  `phases/polder_greenfield.derivation.md`, accepted on ask:444-polder-round-3. The furrow rows and the copy to Python are owed to the
+  next re-derivation (T24, the GM on 444#6).
+- [x] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
   The comb: pinned (23,988 at 40, exponent 0.79). The polder: pinned as `field.polder` (`dev/work-budget.json`), 4,651 at 10 and
   6,584 at 20 households, exponent 0.50, on the round arbiter's accept after two rounds (ask:444-polder-round-3; verdict-1 UNDERIVED,
   verdict-2 LOOSE, every finding closed); `phases/polder_greenfield.derivation.md`.
+  EVIDENCE (2026-11-02): the comb's budget at 1.9 per thing of the accepted derivation (118,739 at 40, 218,411 at 80, exponent 0.86)
+  on the GM's words on 444#6 (`make budget-change`, `dev/work-budget-changes.jsonl`); the polder's as pinned above.
 - [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
   The before, on main's engine: `make perf LABEL=444-start SCALING=1` (`dev/perf-log/20261031T173305Z-444-start-diagram-backlog.json`):
@@ -36,8 +46,13 @@ phase's working record: what is measured, what is owed, and where to resume.
   (`phases/field_greenfield.derivation.md`, verdicts 4-6) 15,196, 27,238 and 49,631, exponent 0.85, above the standing pin's
   23,988 at 40 - a raise owed the GM's words (`make budget-change`; the for_gm the hem-budget ruling queued). The before and after
   split at the hem: `phases/field.hem-budget.md`.
-- [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
+- [x] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path.
+  EVIDENCE (2026-11-02): `stage_field` calls the Rust stage (`rust/phases/src/field/`) through `field_stage.py`'s seam; no `moved@` or
+  `dropped@` key in any roll (MODE AUDIT 6, item 3); the Python field engine deleted in this landing (plan D10 and the folded T23) -
+  `hamletgen/water/`'s comb, fit and polder, `settlement/fields/`'s placement, `waterfields/`' carve, partition, polder, ring_rules,
+  settle, tint, trunks and furrows with the helpers only they read - `make dead-closure` listing only live names (RULED_SHARE,
+  RULED_MIN_LEN_FT and twins, which gate checks read; the intake knobs, registered for STAGE_KNOBS).
 - [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households and the exponent at most the budget's; every seed of
   the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
   rate, refusing nothing); the phase's claims round IN-STEP; the reviews

@@ -4,10 +4,9 @@
 
 **Subject**: a small outlying rice-farming community of ~15 households / ~75 inhabitants, belonging
 to a village district whose headman lives in the main village. Like every hamlet it has no headman
-of its own, no shrine, no tax-free plots and no cremation ground. It keeps a burial ground of its own
-(its rolled `hamlet_burial` is own_ground, feature 273): a small common ground holding the urns brought
-home from the main village's cremation ground, in a glade cut into the windbreak west-north-west of the
-houses, beyond its last houses.
+of its own, no shrine, no tax-free plots and no cremation ground. Its dead lie in the main village's ground
+(`meta.hamlet_burial` village_ground, feature 280 M68), so no burial ground is drawn; the one grave on the map is a grave
+island standing in the paddy (feature 012).
 
 **Kanji triangle**: 稲 *ina* "rice plant" + 代 *shiro* "paddy" (as in 苗代 *nawashiro*, a seedbed).
 稲代 Inashiro, "the rice-field" - the plainest possible name for the plainest possible hamlet, which
@@ -25,17 +24,18 @@ is the point: this map exists to be ordinary.
 ### Place
 
 - **district**: Mizuho-no-sato
-- **district direction**: southwest
+- **district direction**: east
 
 *Mizuho-no-sato (瑞穂の里, "village of ripe rice ears") is INVENTED for this map - drawn from gm-assistant's
 `place-names/pool.jsonl`, which carries its kanji and meaning, and not ruled on by the GM. The
-DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 221 deg, southwest (measured 2026-09-27).*
+DIRECTION is not invented: it is the bearing of this map's own connector track where it leaves the cluster - compass 90 deg, east (measured 2026-11-02 on the
+manifest: the connector runs from (2737, 1774) to (5950, 1774); it ran southwest, 221 deg, when measured 2026-09-27).*
 
 
 ### Features
 
 - **threshing yard**: This map's harvest weather is settled, the regional default, so no rack is drawn by the houses: its racks would be put up out on the paddies after the harvest, which is the seasonal map's business and not drawn here (settled weather keeping the racks off the houses is our reading of the survey, which records racks gathered by the houses only on a coast of changeable weather).
-- **burial ground**: Inashiro keeps its own ground: a glade of graves cut into the windbreak west-north-west of the houses, beyond its last houses, holding the urns brought home from the main village's cremation ground. The land falls south, but the ground below the houses is paddy.
+- **field grave**: a grave island stands in the paddy - a low mound with two upright stones, drawn where the field's grave form rolls one (feature 012; research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html).
 - **retirement house**: Inashiro keeps the custom of the separate retirement house: 10 of its 15 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
 
 ## Why it exists
@@ -80,6 +80,13 @@ pipeline's, and it is the same order a person follows:
 8. **Wells and byres** drop into the courtyards the finished layout left.
 9. **The hinterland**, then the **woodland patches** (found by scanning for ground still open), then
    the **windbreak belt**, shaped to the houses that actually landed.
+
+## 2026-11-02 - feature 444 T16: the comb field laid by the Rust stage
+
+The field is laid by the Rust `field` stage (`rust/phases/src/field/`) and drawn by `settlement/fields/ink.py`; the Python
+engine that laid it before is deleted. What the manifest holds now: 14 wet plots, 85 dry plots, no flooded plot, 3 wells and 7
+bridges, the drain's trunk to the tameike, and a grave island in the paddy. The geometry the sections below record - 629 basins,
+81 dry plots, the pocket pond at (2144, 1724) - is the older roll's history, kept as the record of what was decided then.
 
 ## Known open
 
