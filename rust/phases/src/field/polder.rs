@@ -37,11 +37,18 @@ pub const POND_GAP_FT: f64 = 22.0;
 /// Research:
 ///     the bow and the nudge - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet; the figures a GUESS, 6 and 3 ft
 pub const BOW_NUDGE_FT: (f64, f64) = (6.0, 3.0);
-/// The dike-pond mosaic's drift at the block's middle, as a share of a module (it fades to nothing at the edge).
+/// The dike-pond mosaic's drift, as a share of a module: each axis's displacement is this times the sum of its two harmonics
+/// (`MOSAIC_WAVES`), fading to nothing at the block's edge.
 ///
 /// Research:
-///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, a GUESS of 0.15 of a module
-pub const DRIFT_SHARE: f64 = 0.15;
+///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift that fades to nothing at the fixed outer edge; how strongly is a calibrated liberty, set on the Kuwabata map - 0.16 of a module (the 0.5 strength at 0.32 a module that map was drawn with), restored after the port's single weak wave drew it as a chessboard (the glyph check, feature 444 T16)
+pub const DRIFT_SHARE: f64 = 0.16;
+/// The mosaic's two waves on each axis, as (weight, cycles across the block) pairs: down the fall from the fall and from across, and
+/// across from across and from the fall.
+///
+/// Research:
+///     the mosaic's waves - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the drift's shape, saying only that it is smooth and that neighboring crossings move together; the waves Kuwabata's mosaic was drawn with, 1.3 and 2.1 cycles down the fall, 1.1 and 1.9 across, the second at 0.6
+pub const MOSAIC_WAVES: [(f64, f64); 4] = [(1.0, 1.3), (0.6, 2.1), (1.0, 1.1), (0.6, 1.9)];
 /// Of this many rice polder modules, one is left whole rather than split into strips.
 ///
 /// Research:
@@ -171,7 +178,7 @@ struct Warp {
     rows: Vec<f64>,
     cols: Vec<f64>,
     nodes: Vec<Vec<Pt>>,
-    ph: Pt,
+    ph: [f64; 4],
 }
 
 impl Warp {
@@ -189,10 +196,7 @@ impl Warp {
     ) -> Self {
         let (module, pitch) = lattice;
         let mut rng = knob_rng(seed, "polder_warp");
-        let ph = (
-            f64::from(rng.randbelow(360)).to_radians(),
-            f64::from(rng.randbelow(360)).to_radians(),
-        );
+        let ph = [0; 4].map(|_| f64::from(rng.randbelow(360)).to_radians());
         let mut either = |most: f64| most * (2.0 * f64::from(rng.randbelow(1001)) / 1000.0 - 1.0);
         let mut line = |n: usize, most: f64| -> Vec<f64> {
             (0..=n)
@@ -230,7 +234,7 @@ impl Warp {
     ///
     /// Research:
     ///     the rice polder's deformation - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the block's edge stays put - each line's bow a single arch along it, nothing at its ends, interpolated between lines; the crossings' nudges interpolated between crossings, so both sides of one bund move together
-    ///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module); the chessboard held straight
+    ///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice out of line, fading to nothing at the fixed outer edge (`DRIFT_SHARE` of a module on `MOSAIC_WAVES`); the chessboard held straight
     #[expect(
         clippy::many_single_char_names,
         reason = "the plane geometry's own names"
@@ -244,9 +248,14 @@ impl Warp {
         if self.form == "mosaic" {
             let edge = (pi * u / length).sin().abs() * (pi * x / breadth).sin().abs();
             let a = DRIFT_SHARE * self.module * edge;
+            let (zu, zx) = (u / length, x / breadth);
+            let wave = |k: usize, z: f64| {
+                let (w, f) = MOSAIC_WAVES[k];
+                w * (std::f64::consts::TAU * f * z + self.ph[k]).sin()
+            };
             return (
-                a * (x / breadth * std::f64::consts::TAU + self.ph.0).sin(),
-                a * (u / length * std::f64::consts::TAU + self.ph.1).sin(),
+                a * (wave(0, zu) + wave(1, zx)),
+                a * (wave(2, zx) + wave(3, zu)),
             );
         }
         let arch = |v: f64, whole: f64| (pi * (v / whole).clamp(0.0, 1.0)).sin();

@@ -107,14 +107,22 @@ def pocket_pond(s: Settlement, pond: dict[str, float]) -> None:
     s._field_feature_ink(f'<g opacity="0.9" stroke="{REED}" stroke-width="1.1">{"".join(reeds)}</g>', "field pond")
 
 
+STONE_STEPS = ((-2.0, 0.5, 3.0), (1.5, 2.5, 2.2))
+"""Research: the grave stones' stagger - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's markers; two stones, each (across, back from the mound's middle, tall) in ft - the second 3.5 ft to one side, 2 ft further back and shorter, both bases inside the 13 by 9 ft mound"""
+
+
 def grave(s: Settlement, g: dict[str, Any]) -> None:
     """The grave: its mound and its stones, class `field grave`.
 
     Research:
-        the grave's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 3 ft apart, each 1.8 ft wide and 3 ft tall, the pair a little west of the mound's middle"""
+        the grave's form - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 1.8 ft wide, staggered (`STONE_STEPS`)"""
     x, y = g["x"], g["y"]
     s._field_feature_ink(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="6.5" ry="4.5" fill="{MOUND}" stroke="{MOUND_EDGE}" stroke-width="1.2"/>', "field grave")
-    stones = "".join(f'<rect x="{x - 3 + 3 * k:.1f}" y="{y - 2.5:.1f}" width="1.8" height="3" fill="{STONE}" stroke="{STONE_EDGE}" stroke-width="0.5"/>' for k in range(2))
+    # THE STONES ARE STAGGERED, NEVER ABREAST (the glyph check on Inashiro, feature 230 pass 11 and feature 302 round 2; T16's ink
+    # had set them side by side again, which reads as a pair of eyes): a family's markers are set one behind another as they were
+    # added and differ in size, so the second steps back and to one side of the first and is shorter - the step back scaled to fit
+    # this mound (`STONE_STEPS`, each base inside its ellipse at its x)
+    stones = "".join(f'<rect x="{x + dx - 0.9:.1f}" y="{y - up - h:.1f}" width="1.8" height="{h:.1f}" fill="{STONE}" stroke="{STONE_EDGE}" stroke-width="0.5"/>' for dx, up, h in STONE_STEPS)
     s._field_feature_ink(f"<g>{stones}</g>", "field grave")
 
 
