@@ -158,7 +158,7 @@ def test_a_whole_engine_entry_is_live_while_only_slated_code_reaches_it_and_stal
             "l7r/diagram/tools/__init__.py": "",
             "l7r/diagram/tools/t.py": "from l7r.diagram import pkg\n",
             "l7r/diagram/pkg/__init__.py": "from .inner import shown as shown\n",
-            "l7r/diagram/pkg/inner.py": "shown = 1\n",
+            "l7r/diagram/pkg/inner.py": "shown = 1\ntyped: int = 2\n",
             "l7r/diagram/stage.py": "from .dead import f\nfrom . import pkg\n",
             "l7r/diagram/dead.py": "def f():\n    return 1\n",
             "l7r/diagram/prog.py": "import l7r.diagram.stage\nif __name__ == '__main__':\n    pass\n",
@@ -171,6 +171,7 @@ def test_a_whole_engine_entry_is_live_while_only_slated_code_reaches_it_and_stal
     imports, roots = ce.import_graph(root)
     assert "l7r/diagram/tools/t.py" in roots and "l7r/diagram/prog.py" in roots and "pool/m.gen.py" in roots and "scripts/s.py" not in roots
     assert imports["pool/m.gen.py"] == {"l7r/diagram/pkg/inner.py"}, "a name the package re-exports resolves to the module defining it"
+    assert ce._top_names(__import__("ast").parse("typed: int = 2\n")) == {"typed"}, "an annotated name is a definition too"
     assert imports["l7r/diagram/stage.py"] == {"l7r/diagram/dead.py", "l7r/diagram/pkg/__init__.py"}
     assert [e["path"] for e in ce.split(root, reach=True)[0]] == ["l7r/diagram/stage.py", "l7r/diagram/dead.py"]
     (root / "l7r/diagram/tools/t.py").write_text("from l7r.diagram.dead import f\n", encoding="utf-8")
