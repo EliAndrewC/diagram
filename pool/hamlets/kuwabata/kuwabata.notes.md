@@ -4,6 +4,8 @@
 `hamletgen` declaration. The earlier notes (reconstructed 2026-08-08 from the old generator's
 comments) are in git history with that script; what they recorded that still holds is carried here.*
 
+**Superseded (feature 385 T10, 2026-10-18):** the split is now ROLLED, the `dikepond_split` knob (0018: 6:4, 4:6, 7:3, 5:5 or 3:7) - this map rolls 0.3, three parts water to seven of dike, and its modal says so. The 2026-08-28 reading below is the history.
+
 **Decision recorded (GM 2026-08-28, feature 143):** the dike-pond parcels are drawn at **6 parts water to 4 parts dike** as a *disclosed regional reading* - the classic prescription survives in both orders (基六塘四 on the page read; 六分为塘、四分为基 elsewhere; 7:3 in some districts). Kept as drawn; the interactive map's modal for this map's ponds and banks carries that sentence. Full record: `research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html`.
 
 **Subject**: 16 households on polder geometry carried to the dike-pond system's rare
@@ -35,7 +37,14 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 ### Features
 
 - **burial ground**: Kuwabata keeps none of its own: its dead lie in the main village's ground, by the shrine that is the setting's parish temple.
-- **retirement house**: Kuwabata keeps the custom of the separate retirement house: 4 of its 16 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
+- **retirement house**: Kuwabata keeps the custom of the separate retirement house: 7 of its 16 homesteads have one, a small roof of its own a ken or two off the farmhouse's back wall or flank, its door facing away.
+
+## 2026-11-02 - feature 444 T16: the dike-pond block laid by the Rust stage
+
+The polder is laid by the Rust `field` stage (`rust/phases/src/field/polder.rs`, `dike.rs`, `landuse.rs`) and drawn by
+`settlement/fields/ink.py`; the Python polder and its overlay are deleted. The block is now an axis-aligned rectangle of 22 ponds
+(17 fry, 5 grow-out), with 11 bridges and 2 pig sties. The counts the sections below give - 29 ponds, 0.62 over 29 ponds, 22 fry
+ponds, 26 dike groups, 7 sties - are the older block's history; the census block (`make notes-census`) is the one to read.
 
 ## The declaration
 
