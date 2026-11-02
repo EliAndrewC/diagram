@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-02T04:25:00Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 332,
+  "result": "green",
+  "commit": "89486b935",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 9815,
+  "host": {
+    "load": [
+      6.23,
+      6.92
+    ],
+    "mem_avail_mb": [
+      7076,
+      8062
+    ],
+    "cpu_temp_c": [
+      78.0,
+      100.0
+    ],
+    "stall_s": {
+      "cpu": 5.5,
+      "io": 1.4,
+      "io_full": 1.2,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 29352,
+      "package": 17303
+    }
+  },
+  "phases": {
+    "preflight": 78.0,
+    "static": 43.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 6.0,
+    "counters-inert": 10.0,
+    "pytest": 259.0,
+    "floors": 9.0,
+    "test-full": 272.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/src/field/ponds.rs",
+  "collected": 9815
+}
