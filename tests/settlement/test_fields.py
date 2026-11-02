@@ -281,3 +281,17 @@ def test_the_dikepond_ink_draws_its_leftover_rice_mottled_and_its_tea_hedges(tmp
     again.finish(str(tmp_path / "dk2"), render=False)
     shoots = [ln for ln in svg.split("<") if 'fill="#6F9061"' in ln]
     assert shoots == [ln for ln in Path(str(tmp_path / "dk2") + ".svg").read_text(encoding="utf-8").split("<") if 'fill="#6F9061"' in ln], "seeded from the parcel"
+
+
+def test_a_field_graves_carved_ground_is_drawn_as_dry_earth(tmp_path) -> None:  # noqa: ANN001
+    """0008: no flooded basin runs under a field grave - the ground its host plot is carved round is drawn in the mound's earth,
+    under the plot's halves, so the island does not stand in a square of the field's green floor (feature 444 T16's glyph check)."""
+    from l7r.diagram.settlement.fields import ink
+
+    s = Settlement(200, 200, seed=1)
+    s.meta(name="G", scale="hamlet", ftpx=1)
+    ink.grave_ground(s, {"x": 50.0, "y": 50.0, "ground": [(30.0, 30.0), (70.0, 30.0), (70.0, 70.0), (30.0, 70.0)]})
+    ink.grave_ground(s, {"x": 50.0, "y": 50.0})
+    s.finish(str(tmp_path / "g"), render=False)
+    svg = Path(str(tmp_path / "g") + ".svg").read_text(encoding="utf-8")
+    assert svg.count(f'fill="{ink.MOUND}" stroke="none"') == 1, "the carved ground, once; a grave with no ground record draws none"

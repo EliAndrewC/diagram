@@ -111,6 +111,17 @@ STONE_STEPS = ((-2.0, 0.5, 3.0), (1.5, 2.5, 2.2))
 """Research: the grave stones' stagger - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a field grave's markers; two stones, each (across, back from the mound's middle, tall) in ft - the second 3.5 ft to one side, 2 ft further back and shorter, both bases inside the 13 by 9 ft mound"""
 
 
+def grave_ground(s: Settlement, g: dict[str, Any]) -> None:
+    """The ground a field grave's host plot is carved round, drawn as dry earth under the plot's two halves, so the island stands on
+    dry ground and not in a square of the field's green floor (the glyph check on Inashiro, feature 444 T16).
+
+    Research:
+        the island's dry ground - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: no flooded basin runs under a field grave, the paddy carved round it - the carved ground in the mound's earth
+    """
+    if g.get("ground"):
+        s.add_paddy(f'<polygon points="{_pts(g["ground"])}" fill="{MOUND}" stroke="none"/>', cls="field grave")
+
+
 def grave(s: Settlement, g: dict[str, Any]) -> None:
     """The grave: its mound and its stones, class `field grave`.
 
@@ -145,6 +156,8 @@ def draw(s: Settlement, net: dict[str, Any], name: str, archetype: str) -> None:
         OPS["write@field_ink"] += sum(len(p["poly"]) for p in net.get("plots", [])) + sum(len(d["poly"]) for d in net.get("dry_plots", [])) + len(net.get("bund_beans", []))
         OPS["write@drawing_records"] += sum(len(c["pts"]) for c in net.get("channels", []))
     s.comb_base_fill(net, name)
+    for g in net.get("grave_records", []):
+        grave_ground(s, g)
     paddies(s, net, name)
     dry_plots(s, net)
     ditches(s, net, archetype)

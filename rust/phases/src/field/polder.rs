@@ -168,8 +168,7 @@ impl Frame {
 /// on the block's edge lines; on a mosaic a smooth drift fading to the edge; on a chessboard none.
 ///
 /// Research:
-///     the rice polder's lines - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the dike and the ring canal at the block's edge stay put - a bow rolled for each line, a nudge for each crossing, both sides of a bund moved together
-///     the mosaic's drift - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the lattice that fades to nothing at the fixed outer edge
+///     the warp's state - NONE: the rolled bows, nudges and phases `Warp::at` applies, claimed there
 struct Warp {
     form: &'static str,
     size: Pt,

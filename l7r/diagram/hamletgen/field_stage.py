@@ -209,7 +209,7 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
     chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
     dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
     ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
-    grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1]}] if graves else []
+    grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1], "ground": f["plots"][host]["ring"]}] if graves else []
     beans = [pt for run in f["beans"] for pt in run]
     outline = f["ring"]
     net: dict[str, Any] = {

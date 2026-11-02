@@ -633,3 +633,33 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 
 **Performance work?** No - a budget's arithmetic, not the code's.
 
+
+### T25 (escalation-check on the T16 glyph check of Inashiro's paddy, F1, 2026-11-02)
+
+- **Approach**: the Rust comb lattice (`rust/phases/src/field/lattice.rs`, `fan.rs`) lays every basin as a whole quadrilateral of its
+  lattice to the fan's edge; 0005's drawing page asks for a comb "never as the tidy grid", with triangular basins "on every map".
+  Measured 2026-11-02 on the T16 roll of Inashiro against main's (the escalation-check's count on `pool/hamlets/inashiro/inashiro.json`
+  and main's): 0 triangles against 2, 563 of 565 basins four-sided against 554 of 622, basin-area CV 0.16 against 0.23, p90 corner
+  deviation 12.7 deg against 26.4. The `plot_regularity` knob reaches the lattice: a valley_paddy's edge basins clipped by the fan's
+  outline (its triangles) and its bunds wobbled; the regular lattice kept for a planned field.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the knob reaches the lattice | its test red without it | the 48-seed cohort, the Rust gate | the comb maps | n/a |
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** A valley comb that reads hand-laid: uneven basins, triangles at its edge.
+2. **The constraints.** 0005's drawing page; the field's accepted budget (FR-006); FR-021's zero open claims.
+3. **Where each comes from.** R: 0005's drawing page; O: the 2026-11-02 counts above.
+4. **Do they describe the world here?** The counts above, on the shipped roll and main's.
+5. **The order.** After T16 lands; with the field's next re-derivation (T24) if the work moves.
+6. **The exits.** Green: the counts within main's on the comb maps, `make rust-gate` and the cohort green, the budget held. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** Triangles and the basin-area CV on Inashiro at or past main's.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+
+**Performance work?** No.
+
