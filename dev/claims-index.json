@@ -10735,17 +10735,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
-  "body": "628efd7361636d8b",
+  "body": "b1756929775b5c60",
   "claim": "the comb's net - NONE: the Rust's records in the readers' shapes; the one figure it adds is claimed where it stands (`GRAVE_KEEP_FT`)",
-  "code": "9de601435b808d20",
-  "core": "395baece91f645c7",
-  "date": "2026-10-31",
-  "note": "reshapes the Rust's records; its paint comes from FILL and its grave disc from GRAVE_KEEP_FT, both claimed",
+  "code": "3439883ad8831910",
+  "core": "89fc820b71c38283",
+  "date": "2026-11-01",
+  "note": "the unit mostly reshapes the Rust's records (plots, channels, dry plots, ponds, graves, beans, the dry_acres sum), and GRAVE_KEEP_FT is claimed where it is defined. But the unit sets `\"supply_banks\": True` and `\"furrows_vary\": True` for every comb, and passes empty `threads`/`brook`/`dry_reserve`. To tell whether those are only switches for the reader, or physical choices (banks drawn along every supply channel, furrow directions that vary plot to plot) that the NONE label would then mislabel, I need the code that reads `supply_banks` and `furrows_vary` (comb_base_fill / ditch / furrow ink)",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/hamletgen/field_stage.py::stage_field#the comb": {
   "body": "95e6cccdd4a4dfc4",
@@ -52764,16 +52763,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::draw#the order": {
-  "body": "96cd9718709309d1",
+  "body": "6015d6e21548e694",
   "claim": "the order - CONVENTION: the floor under the plots, the dry hem beside them, the channels over both, then the beans and the features over all, so each reads where it stands",
-  "code": "e6c096d9cfa20e08",
-  "core": "c603ab33209bf546",
-  "date": "2026-10-31",
-  "note": "the code's order (base fill, paddies, dry plots, ditches, beads, ponds, graves) is what the claim states, and it is a layering choice only",
+  "code": "28479eb159d22239",
+  "core": "e8131a7f6918cc7f",
+  "date": "2026-11-01",
+  "note": "the drawing order (floor, grave ground, plots, dry hem, channels, beans, ponds, graves on top) is purely how the map is shown; the OPS counting is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dry_plots#the dry plots' ink": {
@@ -52803,6 +52801,22 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/ink.py::grave_ground#the island's dry ground": {
+  "body": "ce56a561949ddb65",
+  "claim": "the island's dry ground - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: no flooded basin runs under a field grave, the paddy carved round it - the carved ground in the mound's earth",
+  "code": "c85bc1945f74c634",
+  "core": "020a730f61d1b86a",
+  "date": "2026-11-01",
+  "note": "draws the host plot's carved ground as dry earth under the mound, so no flooded basin runs under the grave and the paddy is carved round it, as the page records; filling it with the mound's color only sets how it looks",
+  "pages": {
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
+  },
+  "research": "2b8a8213b9c89d51",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::paddies#the basins' ink": {
@@ -78986,40 +79000,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::Warp#the mosaic's drift": {
-  "body": "7dfeba51ff3a062c",
-  "claim": "the mosaic's drift - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a smooth drift of the lattice that fades to nothing at the fixed outer edge",
-  "code": "c0f77126bdfb8ba5",
-  "core": "9dff2334904599fe",
-  "date": "2026-10-31",
-  "note": "a smooth sinusoidal drift scaled by |sin| products that are zero at the outer edge, and its strength is a calibrated liberty",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
-  ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/polder.rs::Warp#the rice polder's lines": {
-  "body": "7dfeba51ff3a062c",
-  "claim": "the rice polder's lines - parcels-and-bunds-inside-a-polder-aze.drawing: each row and column line takes its own gentle bow and each crossing is nudged a few feet, while the dike and the ring canal at the block's edge stay put - a bow rolled for each line, a nudge for each crossing, both sides of a bund moved together",
-  "code": "2961d8b5aa1da69d",
+ "rust/phases/src/field/polder.rs::Warp#the warp's state": {
+  "body": "b09581ad13b15bc6",
+  "claim": "the warp's state - NONE: the rolled bows, nudges and phases `Warp::at` applies, claimed there",
+  "code": "32a2d8b208e737da",
   "core": "74d15662cf4e93f8",
-  "date": "2026-10-31",
-  "note": "each line has its own bow, each crossing its own nudge, and the edge lines and edge nodes stay at zero",
-  "pages": {
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
-  },
-  "research": "5b339210163f008f",
-  "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
-  ],
-  "triaged": "2026-11-01",
+  "date": "2026-11-01",
+  "note": "the struct only holds state; the rolled form, bows and phases are decided in `Warp::at`, where the claim says they are covered",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::Warp.at#the mosaic's drift": {
