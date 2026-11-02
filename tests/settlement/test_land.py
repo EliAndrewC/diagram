@@ -1,10 +1,9 @@
-from pathlib import Path
-
 """Split from test_settlement.py by feature 025 - see tests/settlement/CLAUDE.md for the index."""
 
 import importlib
 import math
 import random
+from pathlib import Path
 
 import pytest
 

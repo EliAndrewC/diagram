@@ -7,7 +7,6 @@ import tempfile
 import pytest
 
 from l7r.diagram.settlement import Settlement, surface_water_dist, village_population
-from l7r.diagram.waterfields import polyline_cum, supply_bank_clearance
 from tests.settlement._builders import _cap020, _crop_settlement, _town, crop
 
 
@@ -312,25 +311,6 @@ def test_a_homestead_may_not_stand_in_a_neighbours_drying_sun():
 
 def _flat(runs):
     return [q for run in runs for q in run]
-
-
-def test_supply_bank_clearance_is_past_at_the_strokes_exact_ends():
-    # THE SEED-25 HAIRLINE (2026-08-16): the placer works in unrounded floats and exempted a
-    # carved corner projecting epsilon PAST a branch tail; the manifest rounds both the corner
-    # and the stroke poly to 0.1 px, collapsing them onto the same coordinates - the gate then
-    # computed t = 1.0 exactly, `past` came back False, and the check fired at gap 0 on a corner
-    # the placer had legally exempted. `past` is now arc-based with _PAST_EPS slack, so the
-    # predicate gives ONE verdict on both sides of the round-trip.
-    pts = [(0.0, 0.0), (60.0, 0.0), (100.0, 0.0)]
-    cum = polyline_cum(pts)
-    for q, want in (
-        ((100.0, 0.0), True),  # exactly AT the tail: the rounding-collapse case
-        ((0.0, 0.0), True),  # exactly at the head, symmetric
-        ((100.4, 0.0), True),  # genuinely past the tail (the pre-fix rule already exempted this)
-        ((99.0, 0.0), False),  # 1 px inside the tail: governed, as before
-        ((50.0, 2.0), False),  # mid-span: governed, as before
-    ):
-        assert supply_bank_clearance(q, pts, 8.0, 3.0, cum)[2] is want, q
 
 
 def test_the_indexed_water_answers_as_the_distance_does():

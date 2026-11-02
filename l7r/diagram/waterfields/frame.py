@@ -37,7 +37,7 @@ DRAIN_FT = (1.2, 5.5)  # the akusui, mirrored: a thread at its head, full at the
 # and separated from the brown lattice it runs among only by hue. 1.2 fixes that and is also truer
 # (1.2 ft IS the field-ditch tier, ~0.3-0.37 m, so at hamlet scale the floor would bind on nothing).
 #
-# But the floor feeds `supply_bank_clearance`, so lowering it moves every bund that hems a supply
+# But the floor fed the Python field's bank clearance (deleted by feature 444 T16), so lowering it moved every bund that hems a supply
 # stroke, and `close_seams` then welds a different set of scraps. Measured on the 24-seed cohort,
 # with the change isolated by reverting this line alone: **1.2 costs seeds 19 and 22 to
 # `paddy_plot_seams_shared` (22/24 -> 20/24); at 1.5 they pass.** A cosmetic ambiguity is not worth
@@ -164,19 +164,6 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     Research: square-root taper - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: the width squared runs linearly along the run
     """
     return math.sqrt(max(0.0, w0 * w0 + (w1 * w1 - w0 * w0) * t))
-
-
-def _seg_x(a: Pt, b: Pt, c: Pt, d: Pt) -> Pt | None:
-    r = (b[0] - a[0], b[1] - a[1])
-    s = (d[0] - c[0], d[1] - c[1])
-    den = r[0] * s[1] - r[1] * s[0]
-    if abs(den) < 1e-9:
-        return None
-    t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den
-    u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den
-    if 0 <= t <= 1 and 0 <= u <= 1:
-        return (a[0] + t * r[0], a[1] + t * r[1])
-    return None
 
 
 BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap

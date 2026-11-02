@@ -80,8 +80,8 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     rectangles, so two of them meeting at a bend leave a WEDGE of uncovered ground on the outside
     of the turn. Ten of Inashiro's new basins came out with a bund inside a delivery ditch through
     exactly those notches - the ground looked bare to this pass and was water to the gate. The
-    discs close them without the over-claim a round CAP would add past the head and tail, where
-    `supply_bank_clearance` reports `past` and the stroke governs nothing anyway.
+    discs close them without the over-claim a round CAP would add past the head and tail, past
+    the stroke's ends, where it governs nothing anyway.
 
     Research:
         bund abuts the water - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: each course's local half-width plus half a bund is ground no bund stands in

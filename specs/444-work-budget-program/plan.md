@@ -408,9 +408,31 @@ MODE AUDIT's counters.
 5. **Tuning or changing?** Neither for these seeds: the changes were the claims' fixes and the counters, not a seat.
 6. **The one-sentence test.** "The field in Rust passes every check of its own; the five seeds refuse in Python stages that
    amendment 5 leaves to their ports."
-7. **The next step is a measurement.** The second MODE AUDIT on the counted field (42,440 at 40 against 27,238), then the landing.
+7. **The next step is a measurement.** The second MODE AUDIT on the counted field (42,440 at 40 against 27,238; 2026-11-01, `make work-budget`, means at 40 over seeds 4, 25, 39 and 47, `phases/field.audit-2.txt`), then the landing.
 8. **Every route measured before the arbiter was asked?** No new ruling asked: nothing here is a process stop.
 9. **After a ruling, the step it named?** ask:444-T16-claims-round5 named the fifth pass and its fixes, done.
+
+### T16 part B (2026-11-02T01:32Z)
+
+The trigger: two red `make done` runs in a row (the round arbiter on red-gate@2026-11-02T00:09:56Z and ask:444-T16-red-gates).
+
+1. **What exactly is refusing?** The first red: preflight, my first cut of the work-budget bundle's call resolver refusing re-exported
+   names (fixed and landed the same hour). The second: the coverage floors, 20 uncovered entries (run-log 20261102T000956,
+   `failed_names`), and the roll census (Sawada 24 rolled 12 times).
+2. **Where each comes from.** Sawada 24's roll, held as a strict xfail until its seating's port (amendment 5), saved no coverage and
+   shared no refusal, so its readers re-rolled it and its field's lines (the pinned knob, the resting basins) went unreached; the
+   rest were the Python field engine's lines only its own tests and the old rolls reached (plan D10), and branches the frozen
+   legacy maps still call.
+3. **The fix at each cause.** A refused roll's refusal is shared (`tests/gate/_pool.py`) and its coverage published
+   (`pipeline/gencache.py`), each with its test; the Python field engine deleted where nothing outside the field path reaches it
+   (D10); the legacy branches unit-tested.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: a test tool, a deletion and tests.
+6. **The one-sentence test.** "A held roll still counts what it ran, and the code only the old field reached is gone."
+7. **The next step is a measurement.** `make cover-changed` and `make cov-file` on the touched modules, then one `make done`; a red
+   only on lines the held roll alone reached goes to a fresh `make arbiter-ask` with those lines, never a fourth run.
+8. **Every route measured before the arbiter was asked?** Yes: the arbiter's two rulings named this route.
+9. **After a ruling, the step it named?** The cheap check, then the gate - in that order.
 
 ### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: "Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.")
 

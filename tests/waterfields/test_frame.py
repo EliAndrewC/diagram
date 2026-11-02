@@ -9,10 +9,8 @@ straight line, a bund gets drawn inside the water.
 
 import math
 
-import pytest
-
-from l7r.diagram.waterfields import supply_bank_clearance, taper_pieces, taper_w
-from l7r.diagram.waterfields.frame import _seg_x, chan_px
+from l7r.diagram.waterfields import taper_pieces, taper_w
+from l7r.diagram.waterfields.frame import chan_px
 
 
 def _linear(w0: float, w1: float, t: float) -> float:
@@ -86,20 +84,6 @@ def test_taper_never_returns_a_negative_root() -> None:
     assert taper_w(8.0, 0.0, 1.0) == 0.0
 
 
-def test_the_drawn_stroke_and_the_bank_clearance_use_the_SAME_law() -> None:
-    """THE RATCHET. `supply_bank_clearance` reports the half-width a paddy bund must stand off, and
-    the gate re-measures the bunds against it - so it has to agree with the stroke the renderer
-    actually inks. Both now come from `taper_w`; revert either to a straight line and the two
-    disagree by up to ~0.55 ft at mid-run, which is a bund drawn inside the water."""
-    pts = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)]
-    cum = [0.0, 100.0, 200.0]
-    w0, w1 = 8.0, 3.0
-    for x in (50.0, 100.0, 150.0):
-        _gap, halfw, _past, _foot, _nrm = supply_bank_clearance((x, 40.0), pts, w0, w1, cum)
-        assert math.isclose(halfw, taper_w(w0, w1, x / 200.0) / 2, rel_tol=1e-9)
-        assert halfw > _linear(w0, w1, x / 200.0) / 2  # and it is the NEW law, not the old one
-
-
 def test_chan_px_converts_TRUE_FEET_to_pixels_at_the_map_scale() -> None:
     """The net is drawn at true size (GM 2026-08-17), so a width in feet must come out as that many
     feet of pixels. `grain` is defined as 2 / ftpx, so grain 2.0 is a 1 ft/px hamlet and grain 2/3 is
@@ -156,16 +140,3 @@ def test_taper_pieces_survives_a_ZERO_LENGTH_polyline() -> None:
     """Repeated identical vertices make the total arc zero; the `or 1.0` guard must keep the divide
     alive rather than raising in the middle of a render."""
     assert [w for _p, w in taper_pieces([(5.0, 5.0), (5.0, 5.0)], 8.0, 3.0)] == [8.0]
-
-
-def test_seg_x_returns_nothing_for_segments_that_cannot_meet() -> None:
-    """Feature 174: the parallel/degenerate guard - the one statement in this module no roll reached.
-
-    Its positive branch is exercised by every comb fan; only the refusal was unreached, so the
-    crossing case is asserted beside it rather than leaving the guard proved by its absence alone.
-    """
-    assert _seg_x((0.0, 0.0), (10.0, 0.0), (0.0, 5.0), (10.0, 5.0)) is None, "parallel segments never meet"
-    assert _seg_x((0.0, 0.0), (10.0, 0.0), (0.0, 0.0), (10.0, 0.0)) is None, "collinear is the same degenerate determinant"
-    assert _seg_x((0.0, 0.0), (0.0, 0.0), (0.0, 5.0), (10.0, 5.0)) is None, "a zero-length segment has no direction"
-    hit = _seg_x((0.0, 0.0), (10.0, 0.0), (5.0, -5.0), (5.0, 5.0))
-    assert hit is not None and hit[0] == pytest.approx(5.0) and hit[1] == pytest.approx(0.0), "the crossing case still works"

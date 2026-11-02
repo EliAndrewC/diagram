@@ -33,7 +33,7 @@ def fillet_polyline(pts: Poly, radius: float, steps: int = 6, min_turn_deg: floa
 
     A FIX THAT FAILED (feature 328 wave 83, 2026-10-09): 0054 gives the bend a RADIUS of about 2.5 widths, and `radius` here is
     the cut-back, so a gentle turn's quadratic bends 13 to 25 widths wide (batch 9's glyph check of Kuwabata's drain). Drawn
-    as a circular arc of that radius (the arc `waterfields.banks.swept_bend` draws), every pool map moved and the 48-seed cohort
+    as a circular arc of that radius (the arc `waterfields.banks.swept_bend` drew, deleted with the Python field by feature 444 T16), every pool map moved and the 48-seed cohort
     went 48 -> 45 (seeds 23, 40, 902, 904 newly refused - the web, a farm off its street; 33 newly passing). Reverted; the row
     is E3, its work the layouts that broke (m:wave83-fillet-radius-reverted; the patch is in the spec's audit/reverted/).
 
