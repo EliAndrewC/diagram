@@ -204,6 +204,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
+  },
+  "### T16 part B (2026-11-02T02:31Z)": {
+   "sha256": "2fc98a9e00b4d3c244d3190079a0559c93cdc4269fe88ef0cb6553f72e99c4de",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-01",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3466,6 +3472,45 @@
      "summary": "cover-changed and cov-file first, then one make done; a red only on lines the held roll alone reached goes to a fresh arbiter-ask, never a fourth run",
      "class": "within",
      "why": "A process step the arbiter named; FR-006 lets the arbiter rule on process, and nothing here accepts a phase over budget or relaxes a requested gate."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-01",
+   "blocks": [
+    "### T16 part B (2026-11-02T02:31Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T16-B.3a",
+     "summary": "Delete the callerless helpers the D10 deletion left behind (_seg_d, _signed_area, SitePlan.head_deg) rather than cover them",
+     "class": "within",
+     "why": "D10/FR-005 delete the field's old Python with no fallback, and the request's section 5.5 says a phase is done when the old code is gone; deleting dead leftovers completes that deletion and removes the uncovered lines without relaxing the coverage floor (section 7, 100% line coverage one for one)."
+    },
+    {
+     "id": "T16-B.3b",
+     "summary": "Remove _field_feature_ink's always-None hold-list",
+     "class": "within",
+     "why": "Dead code in the ink that D10 moves to settlement/fields/ink.py; removing a parameter that is always None changes no drawing and serves the same deletion rule."
+    },
+    {
+     "id": "T16-B.3c",
+     "summary": "Restore the dike-pond's leftover-rice mottle (the GM's 2026-07-23 jittered grid) that T16's ink dropped, its pitch expressed in feet",
+     "class": "within",
+     "why": "D10 keeps the field's DRAWING functions and moves the MIXED ink; the mottle's loss was a regression against a GM-ruled drawing, and restoring it serves the request rather than narrowing it. The block states it is restoring, not tuning; expressing the pitch in feet is a unit of statement, not a change of what is drawn, provided the restored mottle matches the ruled drawing."
+    },
+    {
+     "id": "T16-B.3d",
+     "summary": "A unit test for each branch no pool map rolls (rice polder plots and pocket pond, drain meeting the brook, covered crossing)",
+     "class": "within",
+     "why": "Enforces the 100% line-coverage floor the request carries one for one into the port (section 7); a test whose only effect is to make the required floor hold is enforcement of the request, not added scope. No branch is excluded or the floor lowered."
+    },
+    {
+     "id": "T16-B.7",
+     "summary": "Next step is one make done; a coverage red made mostly of new ranges from the deletion is treated as a process fault, not another arbiter round",
+     "class": "within",
+     "why": "Procedural sequencing of the gate run; it neither lowers the floor nor admits a red gate, and treating self-inflicted new ranges as a fault to fix (not a fresh round) is stricter, consistent with the GM's 2026-10-28 demand that fixes be process, not care."
     }
    ]
   }

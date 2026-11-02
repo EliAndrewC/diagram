@@ -52666,12 +52666,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#a nursery's water": {
-  "body": "97c99e562468d9cd",
+  "body": "896cf329ae4253e3",
   "claim": "a nursery's water - fish-fry-and-nursery-ponds-yumiao.drawing: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)",
-  "code": "bbfeba1f94e12579",
-  "core": "d6751c355c919f5d",
+  "code": "69d2fe5a9dc1ce2b",
+  "core": "377fb327038824bb",
   "date": "2026-11-01",
-  "note": "fry parcels take `POND_WATER_FRY` and grow-out ponds take `POND_WATER`, one color for each form as the page says (\"drawn in grayer, muddier water\"); the exact shade is the page's convention and belongs to the constant's own claim",
+  "note": "fry ponds take POND_WATER_FRY and the rest POND_WATER, which matches \"grayer, muddier water than a grow-out pond\"; the exact shade is a convention",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
@@ -52680,19 +52680,18 @@
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:3b71b145c095e8f3",
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html:a55235764553bafc"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the block's ink": {
-  "body": "97c99e562468d9cd",
+  "body": "896cf329ae4253e3",
   "claim": "the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green",
-  "code": "5e3d12546306b87b",
-  "core": "d6751c355c919f5d",
+  "code": "902b1ba42101b295",
+  "core": "377fb327038824bb",
   "date": "2026-11-01",
-  "note": "fills, rim, 0.9 crown opacity and the tea-green stroke are all choices about how things are shown",
+  "note": "only fills, strokes, the crowns' 0.9 opacity and the tea green, all of them how things are shown",
   "pages": {},
   "research": "",
-  "triage": "touched",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the leftover rice drawn growing": {
@@ -52707,12 +52706,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the leftover rice's shoots": {
-  "body": "97c99e562468d9cd",
+  "body": "896cf329ae4253e3",
   "claim": "the leftover rice's shoots - rice-paddies-and-their-plots-suiden.drawing: unruled shoots on a jittered grid about 4.5 ft apart (the GM 2026-07-23, the polder-leftover repaint)",
-  "code": "3f2bcfc156263880",
-  "core": "d6751c355c919f5d",
+  "code": "8bb9331d1fde5ed8",
+  "core": "377fb327038824bb",
   "date": "2026-11-01",
-  "note": "pitch s.px(4.5) and unruled jittered scatter match the polder rice's denser sample, never ruled rows",
+  "note": "an unflooded scatter with pitch=s.px(4.5), which matches \"the shoots stand about 4.5 ft apart\" for rice among a polder's fish ponds, never in ruled rows",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
   },
@@ -52720,19 +52719,17 @@
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:05dbbaaa28bedd67",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:292fbf2fcec1d588",
-   "0005-rice-paddies-and-their-plots-suiden.drawing.html:909e488b5831f110",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:b84e43d5cf98e814"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the tea hedge's width": {
-  "body": "97c99e562468d9cd",
+  "body": "896cf329ae4253e3",
   "claim": "the tea hedge's width - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke",
-  "code": "58e4fe1cd77f1303",
-  "core": "d6751c355c919f5d",
+  "code": "3606f677725bbff2",
+  "core": "377fb327038824bb",
   "date": "2026-11-01",
-  "note": "`stroke-width=\"3\"` is a bare 3 map units, while this same function turns feet into map units with `s.px(...)` (`pitch=s.px(4.5)`). So the hedge is 3 px wide, not the page's \"each hedge is about 3 ft wide\". It should be `s.px(3)`",
+  "note": "the hedge stroke is s.px(3), which matches \"each hedge is about 3 ft wide\", recorded on the page as a GUESS",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
@@ -52740,8 +52737,7 @@
   "rests": [
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html:27ddbd14d16bb415"
   ],
-  "triage": "touched",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::ditches#the channels' ink": {
   "body": "81c62431da38af7f",
