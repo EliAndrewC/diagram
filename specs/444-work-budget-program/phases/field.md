@@ -61,15 +61,19 @@ phase's working record: what is measured, what is owed, and where to resume.
 
 ## Working record
 
-**Resume here:** (2026-11-01, late) the budget is the GM's 1.9 per thing (444#6), the field 112,814 at 40 and 200,310 at 80 within
-it, box 7 closed on the arbiter's accept (above); `make rust-gate` 54/54; no claim owed and no open finding in the delta (FR-021).
-`make land F=444 T=T16` refuses, before anything ran, on: (1) the plan's T23/T24 blocks - spec-fidelity dispatched on
-`make plan-delta F=444`, record its verdict; (2) three of the round arbiter's tooling fixes still open - ask:444-T16-claims-rounds,
--claims-round3 and -claims-after-counters (the claims and triage bundlers; `make land`'s refusal quotes each), built with a test
-and settled by `make arbiter-fix-done` (the two work-budget-bundle fixes are settled); (3) boxes 1-8 here, each ticked with its
-evidence; (4) the review occasions - settlement-review on inashiro and kuwabata, glyph-check on field-grave/inashiro,
-field-pond/kashikawa, inashiro-paddy, irrigation-ditch/kuwabata and kuwabata-dike-pond (5 glyph units: one `check-wave`), each
-after a green `make done` (`make verify` writes their prompts). Then `make land F=444 T=T16`, and stop for the GM before the sink.
+**Resume here:** (2026-11-02, early) DONE since the last note: the plan's T16/T23/T24 blocks CLEAR (spec-fidelity); FR-021 narrowed
+to the stage's own code (the arbiter on ask:444-T16-fr021-scope-2; spec-fidelity MODE 1 and its verify round; the arbiter's accept
+on ask:444-fr021-spec-round-3), built as `scripts/record/claims_scope.py` and on main; T23 folded into T16 and the field port's dead
+code deleted (`make dead-closure` leaves only live names: RULED_SHARE, RULED_MIN_LEN_FT and twins, read by gate checks; the intake
+knobs, registered for STAGE_KNOBS); all five of the arbiter's tooling fixes settled; no claim owed; `budget-accept` takes the
+arbiter's accept (ARBITER=). NEXT: (1) the coverage floor - `make done` (run-log 20261102T000956) went red on 20 uncovered entries
+(`failed_names`) and the roll census; the census is fixed (`tests/gate/_pool.py` shares a refused roll); the arbiter's ruling on
+ask:444-T16-red-gates says check the 20 with a coverage run of the rolling tests, not a gate: those only Sawada 24's held roll
+reached get a coverage counterpart (another seed) or an accounting dropped at the port, those from the deletion (`_band` in
+pockets.py 128-131, banks.py, ring_rules.py, carve.py, frame.py) are deleted or tested; then ONE `make done`. (2) the checklist's
+boxes 1-6 and 8 with their evidence, `make budget-accept PHASE=field AUDIT=specs/444-work-budget-program/phases/field.audit-6.txt
+ARBITER=ask:444-T16-field-after-audit-6`, `make perf-ab`'s time. (3) the seven reviews (`make verify` writes their prompts; five
+glyph units as one `check-wave`). (4) `make land F=444 T=T16`, then stop for the GM before the sink.
 
 **Earlier:** (2026-10-31, night) the polder's seam closed: every polder placement in Rust (`dike.rs`, `polder.rs`'s
 outfall and resting pick, `landuse.rs`'s conversion), written and drawn by `field_stage._polder` and `ink.py`; the shared helpers
