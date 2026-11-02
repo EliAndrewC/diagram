@@ -47,7 +47,7 @@ def taper_pieces(pts: Poly, w0: float, w1: float) -> list[tuple[Poly, float]]:
     px on most strokes, 0.21-0.23 on the two coarse-tailed deliveries, 0.52 on the collector, and
     **1.19 px on the 2-point stub**, where one piece has to stand for a run whose law goes 7.2 ->
     3.2; the stub's nearest plot ring ends up +0.25 px clear of the drawn edge against a designed
-    `BANK_MARGIN` of 0.75. Nothing crosses on any shipped map, so this is a shrunken abutment, not a
+    margin of 0.75 grains. Nothing crosses on any shipped map, so this is a shrunken abutment, not a
     bund in the water. IF IT IS EVER WORTH CLOSING: have each reader of a band's width take `t` at the arc midpoint of the
     segment it identifies as nearest, instead of at the query point's own arc fraction (the Python field's
     bank clearances that did this read were deleted by feature 444 T16). It re-rolls

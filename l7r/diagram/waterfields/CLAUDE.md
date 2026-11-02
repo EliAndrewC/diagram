@@ -14,4 +14,3 @@ consumed surface via `__init__.py` (star re-exports plus an aliased block for un
 | `banks.py` | a tapered channel cut one piece a segment (`taper_pieces`, the ink's and the keep-outs'), and the bank clearances and bends the drawing reads |
 | `palette.py` | the colors (`_RICE_GREEN`, `FLOODED`, `RIPE_GOLD`, `BUND`, `AZE`, `BEAN_GREEN`), `aze_w`, `DRY_CROPS` |
 | `twins.py` | TWO WATERCOURSES DO NOT RUN SIDE BY SIDE (feature 294 B4): the predicate the sink and a gate check read |
-| `seams/` | `pockets.py`'s `_water` - the water body and its banks, which a gate check of every shipped comb field reads |

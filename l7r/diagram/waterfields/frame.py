@@ -162,7 +162,3 @@ def taper_w(w0: float, w1: float, t: float) -> float:
     Research: square-root taper - research/questions/0069-how-our-maps-draw-a-channel-narrowing-along-its-run.drawing.html: the width squared runs linearly along the run
     """
     return math.sqrt(max(0.0, w0 * w0 + (w1 * w1 - w0 * w0) * t))
-
-
-BANK_MARGIN = 0.75  # half a drawn bund stroke (aze_w is ~1.5 real ft), so bund and ditch ABUT rather than overlap
-"""Research: bund and ditch abut - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: half a bund's width past the stroke's edge"""
