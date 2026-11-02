@@ -1,0 +1,63 @@
+{
+  "utc": "2026-11-02T02:03:27Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 524,
+  "result": "failed: test-full",
+  "commit": "c244c905e",
+  "first_failure_s": 519.0,
+  "last_failure_s": 524.4,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/field_stage.py:465-468, 477-479",
+    "uncovered l7r/diagram/hamletgen/hinterland/frame.py:241-245",
+    "uncovered l7r/diagram/hamletgen/plan.py:329",
+    "uncovered l7r/diagram/hamletgen/sink.py:467, 789",
+    "uncovered l7r/diagram/hamletgen/water/brook_rules.py:201, 282",
+    "uncovered l7r/diagram/settlement/city/bridges.py:459",
+    "uncovered l7r/diagram/settlement/fields/drawing.py:206",
+    "uncovered l7r/diagram/settlement/fields/ink.py:213-214, 224",
+    "uncovered l7r/diagram/settlement/fields/paddy.py:153-162",
+    "uncovered l7r/diagram/waterfields/frame.py:176-181, 188-193",
+    "uncovered l7r/diagram/waterfields/twins.py:119"
+  ],
+  "host": {
+    "load": [
+      4.6,
+      4.47
+    ],
+    "mem_avail_mb": [
+      8561,
+      8269
+    ],
+    "cpu_temp_c": [
+      87.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 3.4,
+      "io": 1.6,
+      "io_full": 1.4,
+      "memory": 0.5
+    },
+    "throttle_ms": {
+      "core": 78307,
+      "package": 49137
+    }
+  },
+  "phases": {
+    "preflight": 27.0,
+    "static": 31.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 5.0,
+    "hooks-test": 44.0,
+    "counters-inert": 10.0,
+    "pytest": 418.0,
+    "floors": 11.0,
+    "test-full": 431.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_waiting_ports.py (+1)",
+  "selected": 12188,
+  "collected": 12188
+}
