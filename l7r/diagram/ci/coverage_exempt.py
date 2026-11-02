@@ -122,7 +122,7 @@ def import_graph(root: Path) -> tuple[dict[str, set[str]], set[str]]:
     every module of the kept trees, every module run as a program, and every file under `pool/` and `scripts/` that imports one."""
     mods = _module_names(root)
     trees: dict[str, ast.Module] = {}
-    for name, rel in mods.items():
+    for rel in mods.values():
         with contextlib.suppress(SyntaxError):
             trees[rel] = ast.parse((root / rel).read_text(encoding="utf-8"))
     defs = {name: _top_names(trees[rel]) for name, rel in mods.items() if rel in trees}

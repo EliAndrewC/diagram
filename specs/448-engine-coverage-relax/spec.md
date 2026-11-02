@@ -71,10 +71,10 @@ the derived hamlet floor, `make land`'s cover step) reads that one record.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: A fixture with an unrun line in a slated module passes every coverage reader; the same line in a kept module fails
+- **SC-001** (FR-001, FR-002, FR-004, FR-005): A fixture with an unrun line in a slated module passes every coverage reader; the same line in a kept module fails
   each of them.
-- **SC-002**: Every module outside the record is fully covered at the landing (the floor did not loosen anywhere else).
-- **SC-003**: Coverage-driven work on slated modules stops: after landing, no task of feature 444 adds a test only to cover a slated
+- **SC-002** (FR-003): Every module outside the record is fully covered at the landing (the floor did not loosen anywhere else).
+- **SC-003** (FR-006): Coverage-driven work on slated modules stops: after landing, no task of feature 444 adds a test only to cover a slated
   module's line.
 
 ## Edge Cases
