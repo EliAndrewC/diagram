@@ -1,0 +1,72 @@
+{
+  "utc": "2026-11-02T00:09:56Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 464,
+  "result": "failed: test-full",
+  "commit": "debe71d5d",
+  "first_failure_s": 457.4,
+  "last_failure_s": 463.1,
+  "failed_names": [
+    "uncovered l7r/diagram/hamletgen/driver.py:298",
+    "uncovered l7r/diagram/hamletgen/field_stage.py:465-468, 477-479",
+    "uncovered l7r/diagram/hamletgen/hinterland/frame.py:241-245",
+    "uncovered l7r/diagram/hamletgen/plan.py:329",
+    "uncovered l7r/diagram/hamletgen/sink.py:467, 789",
+    "uncovered l7r/diagram/hamletgen/water/brook_rules.py:201, 282",
+    "uncovered l7r/diagram/settlement/_knobs.py:215",
+    "uncovered l7r/diagram/settlement/city/bridges.py:459",
+    "uncovered l7r/diagram/settlement/city/moat.py:139",
+    "uncovered l7r/diagram/settlement/fields/drawing.py:66-67, 206",
+    "uncovered l7r/diagram/settlement/fields/ink.py:62-63, 213-214, 224",
+    "uncovered l7r/diagram/settlement/fields/paddy.py:93-94, 153-162, 210-226",
+    "uncovered l7r/diagram/settlement/land/dikes.py:237-238",
+    "uncovered l7r/diagram/waterfields/banks.py:562, 574, 613-619, 783",
+    "uncovered l7r/diagram/waterfields/carve.py:20-21, 27, 29",
+    "uncovered l7r/diagram/waterfields/frame.py:221-222, 243",
+    "uncovered l7r/diagram/waterfields/palette.py:153",
+    "uncovered l7r/diagram/waterfields/ring_rules.py:276-295, 313-314, 324-327, 344-350, 408-415, 436, 440, 442, 444, 446, 448",
+    "uncovered l7r/diagram/waterfields/seams/pockets.py:128-131",
+    "uncovered l7r/diagram/waterfields/tint.py:24"
+  ],
+  "host": {
+    "load": [
+      1.93,
+      5.85
+    ],
+    "mem_avail_mb": [
+      7832,
+      8254
+    ],
+    "cpu_temp_c": [
+      99.0,
+      87.0
+    ],
+    "stall_s": {
+      "cpu": 2.7,
+      "io": 1.5,
+      "io_full": 1.4,
+      "memory": 0.7
+    },
+    "throttle_ms": {
+      "core": 57133,
+      "package": 36140
+    }
+  },
+  "phases": {
+    "preflight": 20.0,
+    "static": 29.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 5.0,
+    "hooks-test": 2.0,
+    "counters-inert": 10.0,
+    "pytest": 399.0,
+    "floors": 13.0,
+    "test-full": 415.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_waiting_ports.py (+1)",
+  "selected": 12282,
+  "collected": 12282
+}
