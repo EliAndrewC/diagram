@@ -79275,13 +79275,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::plots#the chessboard's ponds never paired (decided here; the dike-pond's-parcels claim says \"most merged in pairs\" and does not exempt the chessboard)": {
-  "code": "d2261bd16bea2283",
+ "rust/phases/src/field/polder.rs::plots#the chessboard's ponds single": {
+  "body": "d3e2e244a760b2e1",
+  "claim": "the chessboard's ponds single - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the chessboard's dikes the black lines and its ponds the squares - its modules never paired",
+  "code": "6c556d253ca3553b",
   "core": "d2261bd16bea2283",
   "date": "2026-11-02",
-  "note": "the chessboard's ponds never paired (decided here; the dike-pond's-parcels claim says \"most merged in pairs\" and does not exempt the chessboard)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "chessboard forces pair=false and dikepond forces strips=1, so every pond is one square 160 ft module, as in \"its dikes the black lines and its ponds the squares\"",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::plots#the dike-pond's parcels": {
   "body": "d3e2e244a760b2e1",
@@ -79379,6 +79387,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/polder.rs::polder#the grid's bearing": {
+  "body": "49b44fb634a906b6",
+  "claim": "the grid's bearing - GUESS: parcels-and-bunds-inside-a-polder-aze.drawing silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns",
+  "code": "3a1aa9ac0facb88a",
+  "core": "d22bf76925a4f228",
+  "date": "2026-11-02",
+  "note": "the page says only that ditch and bund run \"one way ... the other way\", nothing on how they lie to the fall; merges along u (down) match \"merge along the fall\"",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/polder.rs::polder#the inlet's side": {
   "body": "49b44fb634a906b6",
   "claim": "the inlet's side - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing silent beyond its pool's one polder (the wild pond to its northwest); the inlet, the pond and the outfall on one side of the fall",
@@ -79426,14 +79445,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/polder.rs::polder#the module grid's orientation to the fall: 3 ft walking-bund rows across the fall, 8 ft ditch-corridor columns along it": {
-  "code": "d22bf76925a4f228",
-  "core": "d22bf76925a4f228",
-  "date": "2026-11-02",
-  "note": "the module grid's orientation to the fall: 3 ft walking-bund rows across the fall, 8 ft ditch-corridor columns along it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/polder.rs::polder#the polder's acreage": {
   "body": "49b44fb634a906b6",
   "claim": "the polder's acreage - how-much-farmland-a-settlement-works-and-in-what-tracts.drawing: 1.3 acres gross a household, in whole modules of parcels-and-bunds-inside-a-polder-aze.drawing at or above it",
@@ -79479,20 +79490,20 @@
  },
  "rust/phases/src/field/polder.rs::polder#the wild pond's place": {
   "body": "49b44fb634a906b6",
-  "claim": "the wild pond's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank",
-  "code": "fe8e0eef8f80a7bf",
+  "claim": "the wild pond's place - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's \"northwest\" is its one pool polder's compass, the head read from the fall here, as every map's)",
+  "code": "1b8961453ce2d956",
   "core": "d22bf76925a4f228",
   "date": "2026-11-02",
-  "note": "the page puts the pond \"to its northwest\" and the claim reads that as \"at its head\"; the pond sits up the fall on the +across flank, and I need Frame's axis convention (is +across west when the fall runs south?) to tell whether that is northwest or northeast",
+  "note": "pond_at sits POND_FT.2 up the fall from the inlet corner, on the inlet's flank x, so it feeds at the head where the inlet is; \"northwest\" read as head-side, as the claim says",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/polder.rs::polder#the wild pond's size": {
   "body": "49b44fb634a906b6",
@@ -79559,11 +79570,11 @@
  },
  "rust/phases/src/field/polder.rs::row_ditches#the lattice both ways": {
   "body": "a6f38f278b2bb81e",
-  "claim": "the lattice both ways - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the dike-pond's lattice of ditches bent out of line both ways, with gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank",
-  "code": "526f14c0e63e55e4",
+  "claim": "the lattice both ways - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the dike-pond's lattice of ditches bent out of line both ways; parcels-and-bunds-inside-a-polder-aze.drawing: gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank",
+  "code": "3e7e5d72d64ed181",
   "core": "fec0543ab7b91a0b",
   "date": "2026-11-02",
-  "note": "a row ditch only in an open 22 ft gap, with no ditch inside a merged pair, giving the lattice both ways",
+  "note": "dike-pond row ditches go through the warp `put` at each open row gap, and a merged pair's span covers its gap so no ditch is drawn there; 22 ft gaps both ways; the claim's \"its own bank\" is loosely worded, since in plots() the pair's parcel takes in the gap",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
