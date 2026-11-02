@@ -52249,12 +52249,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._field_feature_ink#the field's drawing": {
-  "body": "cc26df6d17724252",
+  "body": "9cb4a59d85867b5b",
   "claim": "the field's drawing - NONE: drawing; each record's claims are at the Rust that places it",
-  "code": "c062d1aa0d8c9316",
-  "core": "65725b5370e65a62",
-  "date": "2026-10-31",
-  "note": "emits now or holds for later; plumbing",
+  "code": "e17d750f7f4e2f16",
+  "core": "facbfe94c99a0cc8",
+  "date": "2026-11-01",
+  "note": "plumbing: it passes the svg on to add() and decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -52666,12 +52666,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#a nursery's water": {
-  "body": "205f78e201a63fe0",
+  "body": "4c761256d5345bbc",
   "claim": "a nursery's water - fish-fry-and-nursery-ponds-yumiao.drawing: its fry ponds drawn in grayer, muddier water than the clear ponds (`POND_WATER_FRY`)",
-  "code": "f35b99544c2e0089",
-  "core": "a082b8fc468adfb1",
-  "date": "2026-10-31",
-  "note": "POND_WATER_FRY for kind \"fry\" matches \"grayer, muddier water than a grow-out pond\"; the exact shade is a convention",
+  "code": "769a63ed5c67bd97",
+  "core": "9616e1d31d793dc5",
+  "date": "2026-11-01",
+  "note": "fry ponds take POND_WATER_FRY, the \"grayer, muddier water\"",
   "pages": {
    "0024-fish-fry-and-nursery-ponds-yumiao.drawing.html": "62bb3e51a7a5a1b1"
   },
@@ -52683,23 +52683,42 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the block's ink": {
-  "body": "205f78e201a63fe0",
+  "body": "4c761256d5345bbc",
   "claim": "the block's ink - CONVENTION: banks in the bank's earth and water in the pond's, rice in the paddy's green, the crowns at 0.9, the tea hedge in the tea green",
-  "code": "84938be651070c4b",
-  "core": "a082b8fc468adfb1",
-  "date": "2026-10-31",
-  "note": "BANK_FILL banks, pond water, rice green, crowns at opacity 0.9 and the tea hedge in CROWN_FILL[\"tea\"] are all display choices; the tan banks fit §92",
+  "code": "27dc546cebf87f10",
+  "core": "9616e1d31d793dc5",
+  "date": "2026-11-01",
+  "note": "colors and the 0.9 crown opacity only set how things are shown",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/ink.py::dikeponds#the leftover rice's shoots": {
+  "body": "97c99e562468d9cd",
+  "claim": "the leftover rice's shoots - rice-paddies-and-their-plots-suiden.drawing: unruled shoots on a jittered grid about 4.5 ft apart (the GM 2026-07-23, the polder-leftover repaint)",
+  "code": "3f2bcfc156263880",
+  "core": "d6751c355c919f5d",
+  "date": "2026-11-01",
+  "note": "pitch s.px(4.5) and unruled jittered scatter match the polder rice's denser sample, never ruled rows",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+  },
+  "research": "69aa78ae06a3c11d",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:05dbbaaa28bedd67",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:292fbf2fcec1d588",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:909e488b5831f110",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:b84e43d5cf98e814"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/ink.py::dikeponds#the tea hedge's width": {
-  "body": "205f78e201a63fe0",
+  "body": "4c761256d5345bbc",
   "claim": "the tea hedge's width - mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing: two clipped hedges along the bank, each about 3 ft wide, a GUESS - a 3 ft stroke",
-  "code": "53ca83e358b8b71a",
-  "core": "a082b8fc468adfb1",
-  "date": "2026-10-31",
-  "note": "stroke-width=\"3\" matches \"each hedge is about 3 ft wide\", which the page records as a GUESS",
+  "code": "1613f2d74c31c487",
+  "core": "9616e1d31d793dc5",
+  "date": "2026-11-01",
+  "note": "stroke-width=\"3\" matches \"each hedge is about 3 ft wide\", recorded as a GUESS; the Rust supplies the two rows and the breaks",
   "pages": {
    "0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html": "9dd5f2a5abf3954e"
   },
@@ -52752,12 +52771,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::grave#the grave's form": {
-  "body": "626c1c611512ba8d",
-  "claim": "the grave's form - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 3 ft apart",
-  "code": "9109fe129d03c3f2",
-  "core": "a37b67919f28a2e2",
-  "date": "2026-10-31",
-  "note": "rx 6.5/ry 4.5 makes a 13x9 mound and the stones stand 3 apart; the page gives no size",
+  "body": "8dc540701f4f9d71",
+  "claim": "the grave's form - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a field grave's size and its markers; a mound 13 by 9 ft with two upright stones 3 ft apart, each 1.8 ft wide and 3 ft tall, the pair a little west of the mound's middle",
+  "code": "ad88559af8d41561",
+  "core": "b1c02aabe8714097",
+  "date": "2026-11-01",
+  "note": "the code draws the stated mound (rx 6.5, ry 4.5) and stones (1.8 x 3, 3 ft apart, pair centered at x-0.6); 0005 in the bundle gives no grave size; 0008's drawing page is not in the bundle",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -52774,12 +52793,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::pocket_pond#a dish pond": {
-  "body": "3a6cbe2089662f84",
+  "body": "c3bb7cd2651a7967",
   "claim": "a dish pond - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: an earthen bank round its edge (the bund's earth stroke), the wet ground just inside it where the reeds stand (the wet tint), and open water in the middle",
-  "code": "e499484444ee7e2a",
-  "core": "43ef64a469498346",
-  "date": "2026-10-31",
-  "note": "the code draws the bank stroke, a wet ring with the reeds in it, and open water in the middle, as the drawing page's dish pond describes",
+  "code": "26c67147cf1b8e79",
+  "core": "e03f9ce891683790",
+  "date": "2026-11-01",
+  "note": "drawn from the outside in: an earthen bank stroke, the wet ring in FLOODED where the reeds stand, then open water",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -52790,35 +52809,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::pocket_pond#its proportions": {
-  "body": "3a6cbe2089662f84",
+  "body": "c3bb7cd2651a7967",
   "claim": "its proportions - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a dish pond's proportions; the wet ring 2.5 ft past the water, eight reeds evenly round it 1.2 ft out from the water's edge",
-  "code": "bdf427a5f628b508",
-  "core": "43ef64a469498346",
-  "date": "2026-10-31",
-  "note": "the page records the open-water share and the reeds' placement as a GUESS; the code's 2.5 ft ring, 8 reeds and 1.2 ft offset match the claim",
+  "code": "5aeefbcf0fc418ae",
+  "core": "e03f9ce891683790",
+  "date": "2026-11-01",
+  "note": "rx+2.5 for the wet ring and eight reeds at rx+1.2; the page records the proportions as a GUESS",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::pocket_pond#its sheen": {
-  "body": "3a6cbe2089662f84",
+  "body": "c3bb7cd2651a7967",
   "claim": "its sheen - CONVENTION: a light ring on the water",
-  "code": "dc9cf67f97669d67",
-  "core": "43ef64a469498346",
-  "date": "2026-10-31",
-  "note": "an offset light ellipse on the water, which is drawing only",
+  "code": "559b7040a6476a11",
+  "core": "e03f9ce891683790",
+  "date": "2026-11-01",
+  "note": "a light ring on the water, shown only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::pocket_pond#the bank's line": {
-  "body": "3a6cbe2089662f84",
+  "body": "c3bb7cd2651a7967",
   "claim": "the bank's line - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a dish pond's bank width; the earthen bank 2.2 ft, a little wider than a bund's 1.5",
-  "code": "2434bbf093536e59",
-  "core": "43ef64a469498346",
-  "date": "2026-10-31",
-  "note": "the page gives no bank width; stroke-width 2.2 matches the claim",
+  "code": "70969f05eb69d46f",
+  "core": "e03f9ce891683790",
+  "date": "2026-11-01",
+  "note": "stroke-width 2.2 against the page's 1.5 ft bund; the page gives no bank width",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
