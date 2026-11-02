@@ -142,5 +142,37 @@
   "value": {
    "supersession_present": true
   }
+ },
+ "t16-fishpond-r2-f1": {
+  "quantity": "each dike-pond bank's share of its parcel",
+  "observed": "2026-11-02",
+  "verifies": "F1",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "325869aeb42e",
+  "source": "pool/hamlets/kuwabata/kuwabata.json",
+  "command": "python3: area(bank)/area(parcel) over meta dikeponds",
+  "method": "the shoelace area of each record's bank ring over its parcel, on the regenerated map (main's banks cover 1.000)",
+  "value": {
+   "ponds": 22,
+   "min": 0.997,
+   "median": 0.999
+  }
+ },
+ "t16-fishpond-r2-f2": {
+  "quantity": "the notes' T16 pond counts against the manifest",
+  "observed": "2026-11-02",
+  "verifies": "F2",
+  "subject": "glyph-check--fish-pond--kuwabata",
+  "answers": "325869aeb42e",
+  "source": "pool/hamlets/kuwabata/kuwabata.notes.md; pool/hamlets/kuwabata/kuwabata.json",
+  "command": "grep -n '18 fry, 4 grow-out' pool/hamlets/kuwabata/kuwabata.notes.md",
+  "method": "the T16 entry read beside the manifest's counts",
+  "value": {
+   "notes": true,
+   "manifest": {
+    "fry": 18,
+    "grow_out": 4
+   }
+  }
  }
 }

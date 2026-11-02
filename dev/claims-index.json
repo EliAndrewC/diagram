@@ -79541,12 +79541,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/ponds.rs::pushed_in#the offset": {
-  "body": "b6e68d5c5295b3db",
+  "body": "ff5a6c7ff8236cb0",
   "claim": "the offset - NONE: geometry",
-  "code": "178f3643bd9dd3ae",
-  "core": "2a600963c62fc556",
-  "date": "2026-10-31",
-  "note": "pure polygon offset; the distance comes from the caller",
+  "code": "02e1239eb322aa1d",
+  "core": "4f66724788d2a35d",
+  "date": "2026-11-01",
+  "note": "pure polygon inset: moves each side inward by the caller's `by`, intersects neighbouring lines, refuses a ring that flips or grows; 1e-9 is a float tolerance, and the inset distance is chosen by the caller, not here",
   "pages": {},
   "research": "",
   "rests": [],
