@@ -300,8 +300,9 @@ impl Warp {
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
 ///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
-///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond that feeds the polder stands at its head - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank
+///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's "northwest" is its one pool polder's compass, the head read from the fall here, as every map's)
 ///     the pond's reeds - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)
+///     the grid's bearing - GUESS: research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns
 ///     the module by form - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a rice polder's module about 190 ft with its 8 ft ditch corridors and 3 ft bunds, a dike-pond block's about 160 ft with gaps of about 22 ft both ways
 ///     the ring canal's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side - `RING_FT` out from the plots, inside the dike's inner face
 ///     the wild pond's size - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on its size and distance (`POND_FT`)
@@ -439,6 +440,7 @@ fn fringe(at: Pt, r: (f64, f64)) -> Vec<Pt> {
 /// Research:
 ///     the low plots - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a polder tints every low plot - the block's last row, at its tail, the low one
 ///     the strips - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three oblong strips, cut by the plain 3 ft walking bund, and a few merge along the fall
+///     the chessboard's ponds single - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the chessboard's dikes the black lines and its ponds the squares - its modules never paired
 ///     a dike-pond module never split - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs, each a pond's parcel, never split into strips
 ///     every pond four-sided - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic bends the lattice but keeps every pond four-sided - a merged pair's four corners the lattice's, its two mid-side points on the row line it spans bending its sides there, not adding corners
 ///     the dike-pond's parcels - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a dike-pond block's modules most merged in pairs
@@ -598,7 +600,7 @@ fn ditches(
 ///
 /// Research:
 ///     the row ditch's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a sub-ditch at most 0.75 of the delivery's head - of the narrower column ditch it joins
-///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond's lattice of ditches bent out of line both ways, with gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank
+///     the lattice both ways - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the dike-pond's lattice of ditches bent out of line both ways; research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: gaps of about 22 ft both ways - a row's ditch only where its gap is open, a merged pair's gap its own bank
 fn row_ditches(
     put: &dyn Fn(f64, f64) -> Pt,
     size: (f64, f64),
