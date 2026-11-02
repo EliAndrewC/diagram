@@ -60,7 +60,6 @@ def _public_clashes(modules: list[types.ModuleType]) -> list[tuple[str, str, str
 # (contracts/package-surface.md census, re-taken 2026-08-16 at implement time).
 CONSUMED_PUBLIC = [
     "AZE",
-    "BANK_MARGIN",
     "BEAN_GREEN",
     "BUND",
     "DRAIN_FT",
