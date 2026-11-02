@@ -21,14 +21,20 @@
    "audit": "specs/444-work-budget-program/phases/water_frame.audit-3.txt"
   },
   "field": {
-   "status": "budgeted",
+   "status": "accepted",
    "per_thing": 1.9,
    "exponent": 0.86,
    "derivation": "specs/444-work-budget-program/phases/field_greenfield.derivation.md",
    "verdict": "specs/444-work-budget-program/phases/field_greenfield.verdict-2.txt",
    "items_at_20": 34656,
    "items_at_40": 62494,
-   "items_at_80": 114953
+   "items_at_80": 114953,
+   "accepted": {
+    "40": 112814.0,
+    "80": 200310.5
+   },
+   "audit": "specs/444-work-budget-program/phases/field.audit-6.txt",
+   "accept": "ask:444-T16-field-after-audit-6"
   },
   "sink": {
    "status": "budgeted",

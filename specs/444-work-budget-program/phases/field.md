@@ -34,7 +34,7 @@ phase's working record: what is measured, what is owed, and where to resume.
   verdict-2 LOOSE, every finding closed); `phases/polder_greenfield.derivation.md`.
   EVIDENCE (2026-11-02): the comb's budget at 1.9 per thing of the accepted derivation (118,739 at 40, 218,411 at 80, exponent 0.86)
   on the GM's words on 444#6 (`make budget-change`, `dev/work-budget-changes.jsonl`); the polder's as pinned above.
-- [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
+- [x] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
   The before, on main's engine: `make perf LABEL=444-start SCALING=1` (`dev/perf-log/20261031T173305Z-444-start-diagram-backlog.json`):
   the field 0.24-0.35 s of a 1.4-2.1 s roll at 10 households, 0.51-1.19 s of 3.4-4.5 s at 20, 0.94-1.26 s of 6.3-7.6 s at 40
@@ -46,6 +46,9 @@ phase's working record: what is measured, what is owed, and where to resume.
   (`phases/field_greenfield.derivation.md`, verdicts 4-6) 15,196, 27,238 and 49,631, exponent 0.85, above the standing pin's
   23,988 at 40 - a raise owed the GM's words (`make budget-change`; the for_gm the hem-budget ruling queued). The before and after
   split at the hem: `phases/field.hem-budget.md`.
+  EVIDENCE (2026-11-02): `make work-budget` on the landed code (`dev/work-budget/20261102T025754Z-12ba28d38ac4.json`) - 39,253 /
+  65,657 / 112,814 / 200,310 counted at 10 / 20 / 40 / 80 households, exponent 0.80, against 118,739 at 40 and 218,411 at 80 (1.0x);
+  the hot chains from `make perf-fanout STAGES=field` (`dev/perf-log/20261101T221053Z-fanout-adhoc.txt`).
 - [x] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path.
   EVIDENCE (2026-11-02): `stage_field` calls the Rust stage (`rust/phases/src/field/`) through `field_stage.py`'s seam; no `moved@` or
@@ -57,7 +60,7 @@ phase's working record: what is measured, what is owed, and where to resume.
   the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
   rate, refusing nothing); the phase's claims round IN-STEP; the reviews
   its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
-- [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
+- [x] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN on the landed code (`make work-budget-bundle MODE=audit`).
   Closed by the round arbiter's accept on ask:444-T16-field-after-audit-6, bound to run `20261101T224654Z-799b3654eff8` at commit
   `b0b720c7d`: audit 6 (`phases/field.audit-6.txt`, UNCOUNTED, final for this box) went the FR-006 route, rebuilt cheaper - 112,814
   at 40 and 200,310 at 80 against 118,739 and 218,411, exponent 0.80 against 0.86. Each of audit 6's items and the key that now
@@ -72,7 +75,10 @@ phase's working record: what is measured, what is owed, and where to resume.
   6. the furrow corners - walked once (was eight passes), in `pt_test@furrows` 12,254 (was 26,003: the rows now swept, each cut
      against only the edges it crosses);
   7. the furrow clip fallback - every row written under the clip, in `pt_test@furrows` at the row that finds the plot concave.
-- [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
+- [x] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
+  EVIDENCE (2026-11-02): `make budget-accept PHASE=field AUDIT=phases/field.audit-6.txt ARBITER=ask:444-T16-field-after-audit-6`
+  (`dev/work-budget-changes.jsonl`): `field` accepted at 112,814 at 40 and 200,310 at 80; `dev/work-budget.md` rewritten by the run
+  above, the whole roll's target 139,987 at 40 (the GM on 444#6).
 
 ## Working record
 
