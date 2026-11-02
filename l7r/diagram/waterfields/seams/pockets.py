@@ -123,9 +123,3 @@ def _water(channels: list[dict[str, Any]], g: float) -> BaseGeometry:
     return unary_union(shapes)
 
 
-def _band(F: _Frame, us: list[float], fs: list[float], f_far: float) -> Polygon:
-    """The region between the sampled curve f(u) and a constant fall far outside the fan."""
-    _load_shapely()
-    pts = [F.to_xy(u, f) for u, f in zip(us, fs, strict=True)]
-    pts += [F.to_xy(us[-1], f_far), F.to_xy(us[0], f_far)]
-    return Polygon(pts).buffer(0)

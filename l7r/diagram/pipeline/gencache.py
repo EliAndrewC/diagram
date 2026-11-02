@@ -821,10 +821,15 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
         + "from l7r.diagram.pipeline import gencache\n"
         + ENGINE_IMPORTS
         + switch
-        + "t0 = time.process_time()\n"
-        + f"deps = gencache.run_and_record({gen!r})\n"
-        + f"json.dump({{'deps': deps, 'cpu': time.process_time() - t0}}, open({recfile!r}, 'w'))\n"
-        + epilogue
+        # ...SAVED HOWEVER THE GEN ENDS (feature 444 T16's gate): a map refused at a later stage, held as a strict xfail until
+        # that stage's port (Sawada's house seating), executed its field and sink before it failed, and a child that saved
+        # its coverage only on success left those lines - the resting basins, the pinned knob - unreached by the floor
+        + "try:\n"
+        + "    t0 = time.process_time()\n"
+        + f"    deps = gencache.run_and_record({gen!r})\n"
+        + f"    json.dump({{'deps': deps, 'cpu': time.process_time() - t0}}, open({recfile!r}, 'w'))\n"
+        + "finally:\n"
+        + ("".join(f"    {ln}\n" for ln in epilogue.splitlines()) or "    pass\n")
     )
     # the child must be the ONLY coverage recorder in its process: strip the parent pytest-cov
     # session's subprocess hooks, or two recorders fight over the sys.monitoring tool id
@@ -833,20 +838,26 @@ def gate_obtain(gen: str) -> tuple[str, str, float | None]:
     env[_census.GEN_ENV] = gen  # the census marks this roll as the shipped generator's, whoever requested it (feature 217)
     try:
         proc = subprocess.run([sys.executable, driver], cwd=HERE, env=env, capture_output=True, text=True)
+        covfiles = sorted(glob.glob(covbase + ".*"))
         if proc.returncode:
+            _publish(covfiles, stem)  # what the refused roll executed still counts for the floor; nothing is stored
             raise RuntimeError(f"gate regeneration failed for {os.path.basename(gen)} (exit {proc.returncode}):\n{proc.stdout[-2000:]}\n{proc.stderr[-2000:]}")
         with open(recfile) as fh:
             rec = json.load(fh)
-        covfiles = sorted(glob.glob(covbase + ".*"))
         store(gen, rec["deps"], gen_cpu_s=rec["cpu"], coverage_data=covfiles[0] if covfiles else None)
-        for i, covfile in enumerate(covfiles):
-            # the child's recording also feeds THIS run's coverage: published onto the session
-            # data-file glob (`.coverage.*`) that the Makefile's `coverage combine --append`
-            # sweeps. Copy-then-replace, because the scratch dir is on another filesystem (a bare
-            # os.replace raises EXDEV) and the final landing must still be atomic.
-            dest = os.path.join(HERE, f".coverage.gatehit-{stem}-{os.getpid()}-{i}")
-            shutil.copyfile(covfile, dest + ".tmp")
-            os.replace(dest + ".tmp", dest)
+        _publish(covfiles, stem)
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
     return manifest, "REGENERATED", float(rec["cpu"])
+
+
+def _publish(covfiles: list[str], stem: str) -> None:
+    """The child's coverage published onto this run's session data-file glob (`.coverage.*`)."""
+    for i, covfile in enumerate(covfiles):
+        # the child's recording also feeds THIS run's coverage: published onto the session
+        # data-file glob (`.coverage.*`) that the Makefile's `coverage combine --append`
+        # sweeps. Copy-then-replace, because the scratch dir is on another filesystem (a bare
+        # os.replace raises EXDEV) and the final landing must still be atomic.
+        dest = os.path.join(HERE, f".coverage.gatehit-{stem}-{os.getpid()}-{i}")
+        shutil.copyfile(covfile, dest + ".tmp")
+        os.replace(dest + ".tmp", dest)

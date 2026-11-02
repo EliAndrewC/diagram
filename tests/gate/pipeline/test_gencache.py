@@ -179,3 +179,21 @@ def test_gate_bypass_forces_regeneration(tmp_path, monkeypatch, clean_gatehit):
     monkeypatch.setenv(gencache.GATE_BYPASS, "1")
     _, how, cpu = gencache.gate_obtain(str(gen))
     assert (how, cpu is not None) == ("REGENERATED", True), "the bypass must force regeneration"
+
+
+@pytest.mark.tooling
+@pytest.mark.rolls_map
+def test_a_refused_gen_still_publishes_what_it_executed_and_stores_nothing(tmp_path, monkeypatch, clean_gatehit):
+    """Feature 444 T16's gate: Sawada, refused at its house seating until that stage's port (a strict xfail), had run its field and
+    sink first, and a child that saved its coverage only on success left the floor 20 entries short. The child now saves however
+    the gen ends, the parent publishes it, and a refused roll stores no entry."""
+    eng, gen, _ = _fixture(tmp_path)
+    _with_engine(monkeypatch, tmp_path, eng)
+    monkeypatch.delenv(gencache.GATE_BYPASS, raising=False)
+    gen.write_text(gen.read_text() + "\nraise RuntimeError('refused at a later stage')\n")
+    mine = os.path.join(HERE, f".coverage.gatehit-toy-{os.getpid()}*")
+    before = set(glob.glob(mine))
+    with pytest.raises(RuntimeError, match="gate regeneration failed"):
+        gencache.gate_obtain(str(gen))
+    assert len(set(glob.glob(mine)) - before) == 1, "the refused roll's coverage reaches the run"
+    assert not Path(gencache.CACHE_DIR, "toy", gencache.COVERAGE_NAME).exists(), "and no entry is stored for it"
