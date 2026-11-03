@@ -79683,39 +79683,53 @@
  },
  "rust/phases/src/sink/brook.rs::TWIN_HI#twin band ceiling": {
   "body": "a884d71eab9c2b83",
-  "claim": "twin band ceiling - GUESS: no source gives one; 32 ft, the ceiling of the band do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws records as its guess",
-  "code": "d24b2c298a23eb63",
+  "claim": "twin band ceiling - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: \"within about 12 to 32 ft of it\" - the ceiling of the band, which the page records as a guess",
+  "code": "a86148469bd1f1a4",
   "core": "409ce6c34ae8b109",
   "date": "2026-11-03",
-  "note": "the bundle includes no question files (the \"cited questions\" list is empty, and questions/ has nothing). I need research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html, or its .drawing.html, to confirm it records 32 ft as a guess",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "note": "32.0 is the band's ceiling as §4 gives it, and the claim says the page records it as a guess",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb",
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:84ee1d1c6db588ab"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/brook.rs::TWIN_LO#twin band floor": {
   "body": "fee38f4ad8dd35ad",
-  "claim": "twin band floor - GUESS: no source gives one; 12 ft, the floor of the band do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws records as its guess (\"within about 12 to 32 ft of it\")",
-  "code": "2ba43cb986668de4",
+  "claim": "twin band floor - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: \"within about 12 to 32 ft of it\" - the floor of the band, which the page records as a guess",
+  "code": "54fa78948da31829",
   "core": "b618b781ad439f07",
   "date": "2026-11-03",
-  "note": "question 0067 is not in the bundle, so I can't confirm the quoted \"within about 12 to 32 ft of it\" or that the page records 12 ft as a guess. I need 0067 and its drawing page",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "note": "12.0 is the band's floor as §4 gives it, and the claim says the page records it as a guess",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb",
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:84ee1d1c6db588ab"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/brook.rs::TWIN_RUN#twin run": {
   "body": "82a0f8d58e0ddebe",
-  "claim": "twin run - GUESS: no source gives one; more than 60 ft past where it leaves, a sixth of the shortest delivery, as do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws records its guess",
-  "code": "8f5d64b3a25f7cc5",
+  "claim": "twin run - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: \"for more than 60 ft past where it leaves\" - the run, which the page records as a guess, a sixth of the shortest delivery",
+  "code": "dc5f27bab8db8af3",
   "core": "a5ffcfcd3d7b9b5c",
   "date": "2026-11-03",
-  "note": "question 0067 is not in the bundle. I need it to confirm the page records 60 ft as a guess, and that \"a sixth of the shortest delivery\" is its own account",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "note": "60.0 is the \"more than 60 ft\" run in §4, which the page records as a guess set at a sixth of the shortest delivery",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/brook.rs::TWIN_STEP#the twin's samples": {
   "body": "173f003e7f04090b",
