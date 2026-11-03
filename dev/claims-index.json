@@ -22703,14 +22703,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_rules.py::turn_deg#course measurement": {
-  "code": "a602487f552da526",
-  "core": "51754a0498a2c77f",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/skeleton.py::grows_grain#grain to thresh": {
   "code": "567f95d2d5c3ce41",
   "core": "cfc5de8d454d598a",
@@ -79964,14 +79956,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::JOIN_REACH#join reach": {
-  "body": "cc9bb18ee352569a",
-  "claim": "join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 420 ft from the outfall",
-  "code": "53459e00539126ce",
-  "core": "2e658878fd116db0",
+  "body": "c67c6677a06bcb60",
+  "claim": "join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 500 ft from the outfall (420 until feature 444 T26: the field port laid Kashikawa's brook 464 ft off its outfall, and the confluence its generator declares was lost)",
+  "code": "33db1c5ea1752d5d",
+  "core": "8917c57946a0589f",
   "date": "2026-11-03",
-  "note": "\"comes near\" carries no figure",
+  "note": "GUESS of 500 ft from the outfall; the bundle cites no question and nothing in it answers this reach, and the claim's account matches the changed value (420 to 500 ft, feature 444 T26)",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::JOIN_STRIDE#the walk's stride": {
