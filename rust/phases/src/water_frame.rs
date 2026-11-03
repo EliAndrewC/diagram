@@ -126,6 +126,7 @@ fn applies(branch: &str, form: &str) -> bool {
 ///     the fall rolled first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall rolled before any knob and any feature; the drainage bearing is `plan_site`'s, declared or taken from the fall
 ///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, never chosen
 ///     the fall at even odds - GUESS: no page gives the falls' shares, so each admitted point is equally likely
+///     each knob at even odds over its table - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: half clustered, three in ten scattered, two in ten as rows - a table's shares are its repeated entries (the settlement form's 5, 3 and 2 of ten), so an even draw keeps them
 #[must_use]
 pub fn roll_plan(
     seed: i64,
