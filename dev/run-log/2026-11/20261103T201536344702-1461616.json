@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-03T20:15:36Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 265,
+  "result": "green",
+  "commit": "59322d406",
+  "cache": "cold",
+  "mode": "full",
+  "selected": 9788,
+  "host": {
+    "load": [
+      2.03,
+      5.24
+    ],
+    "mem_avail_mb": [
+      9306,
+      9472
+    ],
+    "cpu_temp_c": [
+      79.0,
+      103.0
+    ],
+    "stall_s": {
+      "cpu": 1.1,
+      "io": 0.3,
+      "io_full": 0.3,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 104985,
+      "package": 56390
+    }
+  },
+  "phases": {
+    "preflight": 22.0,
+    "static": 27.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 7.0,
+    "counters-inert": 9.0,
+    "pytest": 206.0,
+    "floors": 10.0,
+    "test-full": 219.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/src/water_frame.rs",
+  "collected": 9788
+}
