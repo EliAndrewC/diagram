@@ -40,7 +40,7 @@ from .homesteads.wells import stage_lane_wells
 from .plan import HamletSpec, SitePlan, plan_site
 from .pondbank import stage_pond_bank
 from .pondstock import stage_pond_stock
-from .sink import stage_sink
+from .sink_stage import stage_sink
 from .washing import stage_washing
 from .water import stage_water_frame, stage_waterward
 from .ways import stage_seat, stage_track, stage_web
@@ -283,6 +283,17 @@ def build(plan: SitePlan) -> Settlement:
     return s
 
 
+def walks_after(stage: Any) -> bool:
+    """Does the registry's backstop walk the manifest after `stage` (feature 444 T26 D3)? Not after a Rust stage - one a
+    `rust/phases/src/<stage>.rs` holds, as `rust_prefix.rust_stages` derives it: its thin seam only appends records, each filed as
+    it lands (measured 2026-11-03 over cohort seeds 1-48: after water_frame, field and sink the walk moved no record, its whole
+    cost the extents it recomputed to compare). The next Python stage's walk still re-records anything reshaped in place.
+
+    Research: plumbing - NONE: when the registry's backstop runs"""
+    name = getattr(stage, "__name__", "").removeprefix("stage_")
+    return not (Path(__file__).resolve().parents[3] / "rust" / "phases" / "src" / f"{name}.rs").is_file()
+
+
 def fresh_settlement(plan: SitePlan) -> Settlement:
     """The `Settlement` the stages are run against: the plan's canvas and seed, the overlap matrix held at record time, the
     spec's pins on the engine's catalog - `build`'s, and the Rust stage gate's (`hamletgen/rust_prefix.py`)."""
@@ -328,7 +339,8 @@ def _run_stages(s: Settlement, plan: SitePlan) -> None:
                 if __debug__:
                     before = dict(work_counts.OPS)
                 stage(s, plan)
-                s.standing.resync()  # a record a stage reshaped in place is recorded again (the registry's backstop, feature 287 M8)
+                if walks_after(stage):
+                    s.standing.resync()  # a record a stage reshaped in place is recorded again (the registry's backstop, feature 287 M8)
                 if __debug__:
                     work_counts.BY_STAGE[stage.__name__.replace("stage_", "")] = {k: n - before.get(k, 0) for k, n in work_counts.OPS.items() if n != before.get(k, 0)}
         return
@@ -343,7 +355,8 @@ def _run_stages(s: Settlement, plan: SitePlan) -> None:
         for stage in STAGES:
             t0 = time.time()
             stage(s, plan)
-            s.standing.resync()  # as above
+            if walks_after(stage):
+                s.standing.resync()  # as above
             timings.append((stage.__name__, time.time() - t0))
     total = sum(d for _n, d in timings)
     slowest = max(timings, key=lambda t: t[1])

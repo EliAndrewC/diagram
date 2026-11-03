@@ -7,12 +7,6 @@ Research: water plumbing - NONE: every constant here with no claim of its own
 
 from __future__ import annotations
 
-# How far below the drain outfall a tameike may stand before the map is better off without one.
-# Calibrated against the drawn ponds: an ordinary set-back lands well under 200 px, and the case
-# that motivated the limit was 575. See `stage_sink`.
-POND_SETBACK_LIMIT = 300.0
-"""Research: tameike set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 300 ft below the outfall"""
-
 # THE INTAKE, AND THE BROOK THAT RUNS ON PAST IT (feature 230, GM 2026-09-12; researched -
 # research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html). A brook does not
 # turn into a ditch: it is TAPPED at an intake on one bank and keeps its own course below it, so the
@@ -163,20 +157,6 @@ FORD_SPACING = 160.0
 FORD_BEND_DEG = 20.0
 """Research: crossing on a straight reach - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: none where the brook turns over 20 degrees"""
 
-# A NATURAL BROOK DOES NOT DOUBLE BACK (feature 261, settlement-review of Sawada): no vertex of the drawn course turns it
-# more than this. The pool's brooks turn at most 41-53 deg anywhere on their meandered courses; 100 deg is well above that
-# and well below the 113-131 deg folds the exit has produced at the frame edge. A map drawing convention.
-BROOK_MAX_TURN_DEG = 100.0
-"""Research: brook never doubles back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; no turn over 100 degrees"""
-
-# A BROOK TURNS ON A CURVE (feature 261, settlement-review of Sawada): every corner of the drawn course is filleted at this
-# many widths of its drawn bed, the ratio the ditches have been drawn at since 2026-07-25 (`fillet_polyline`,
-# research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: sharp corners belong to stone-lined channels, and nothing
-# on these maps shows one) - Sawada's brook drew mitred corners of 27-47 degrees. Rounded at the end of the water stages
-# (`round_the_brooks` in `stage_sink`, feature 287; the crossings stage until then) by `finished_course`, and held at
-# the tap the head race leaves from. A map drawing convention on an accurate rule.
-BROOK_BEND_WIDTHS = 2.5
-"""Research: brook's bend radius - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: 2.5 bed widths"""
 
 # WHAT A WAY PAYS TO CROSS THE BROOK (feature 261, settlement-review of Kashikawa). Fords made the brook passable, and
 # at no cost the router took any ford that was a few feet shorter: a lane crossed the brook and came straight back to

@@ -3,8 +3,6 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
-import pytest
-
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
@@ -77,64 +75,6 @@ def test_the_waterward_strip_stops_at_the_dikes_face() -> None:
 
 
 # ---- the intake, and the brook that runs on past it (feature 230) --------------------------------
-
-
-def test_the_finished_course_rounds_the_bends_and_holds_the_tap() -> None:
-    """`finished_course` (feature 287, M2): a course in, the drawn course out - every free corner rounded at
-    `BROOK_BEND_WIDTHS` of the width, the vertex at the tap kept, the ends kept; a tap more than a foot off every vertex,
-    or at an end, holds nothing; a two-point course has no corner."""
-    from l7r.diagram.hamletgen.consts import BROOK_BEND_WIDTHS
-    from l7r.diagram.hamletgen.water.brook import finished_course
-    from l7r.diagram.settlement._geom import fillet_polyline
-
-    course = [(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (600.0, 300.0)]
-    held = finished_course(course, 8.0, [(300.4, 300.3)])
-    assert held[0] == (0.0, 0.0) and held[-1] == (600.0, 300.0) and (300.0, 300.0) in held, "the ends and the tap stay"
-    assert (300.0, 0.0) not in held and len(held) > 4, "the free corner is rounded"
-    assert held == [*fillet_polyline(course[:3], BROOK_BEND_WIDTHS * 8.0), *fillet_polyline(course[2:], BROOK_BEND_WIDTHS * 8.0)[1:]]
-    free = finished_course(course, 8.0, [(300.0, 302.0), (0.0, 0.0)])
-    assert free == fillet_polyline(course, BROOK_BEND_WIDTHS * 8.0) and (300.0, 300.0) not in free, "no tap within a foot: both corners round"
-    assert finished_course([(0, 0), (5, 5)], 8.0) == [(0.0, 0.0), (5.0, 5.0)]
-
-
-def test_round_the_brooks_draws_each_brook_at_its_finished_course() -> None:
-    """`round_the_brooks` + `Settlement.round_stream` (feature 287, M2): the drawn brook IS `finished_course` of the course
-    as first drawn, its width and the head race's tap; the first course is kept as `stations`, the no-build corridor
-    follows the drawn course, a second pass draws the same course, and a two-point stream is left alone."""
-    from l7r.diagram.hamletgen.water.brook import finished_course, round_the_brooks
-
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    first = [(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (700.0, 400.0)]
-    s.stream(first, width=9)
-    s.stream([(10.0, 10.0), (20.0, 700.0)], width=7)
-    s.M["channels"].append({"poly": [[400.0, 400.0], [460.0, 520.0]], "frm": {"kind": "stream"}, "to": {"kind": "field"}, "w": 6})
-    s.M["channels"].append({"poly": [], "frm": {"kind": "stream"}})
-    rec, short = s.M["streams"][-2], s.M["streams"][-1]
-    round_the_brooks(s)  # type: ignore[arg-type]
-    want = finished_course(first, 9.0, [(400.0, 400.0)])
-    assert [tuple(p) for p in rec["poly"]] == want, "round_stream applies finished_course"
-    assert (400.0, 400.0) in want and (400.0, 100.0) not in want
-    assert rec["stations"] == [list(p) for p in first], "the course as first drawn is kept"
-    assert any(list(c[0]) == want for c in s.corridors) and not any(list(c[0]) == first for c in s.corridors), "the corridor follows"
-    round_the_brooks(s)  # type: ignore[arg-type]
-    assert [tuple(p) for p in rec["poly"]] == want, "a second pass rounds the first course again, not the rounded one"
-    assert "stations" not in short and short["poly"] == [[10.0, 10.0], [20.0, 700.0]]
-
-
-def test_the_sink_stage_finishes_the_water_after_the_sink(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, M2: the brook is rounded as `stage_sink`'s last step - after the drain is laid, before the seat."""
-    calls: list[str] = []
-    monkeypatch.setattr(hg.sink, "lay_sink", lambda s_, plan_: calls.append("sink"))
-    monkeypatch.setattr(hg.sink, "round_the_brooks", lambda s_: calls.append("round"))
-    from types import SimpleNamespace
-
-    s = SimpleNamespace(M={"meta": {}})
-    hg.sink.stage_sink(s, SimpleNamespace(water_sink="offmap"))  # type: ignore[arg-type]
-    assert calls == ["sink", "round"]
-    assert s.M["meta"]["water_sink"] == "offmap", "the sink as drawn is recorded for the title card (feature 319 plan D10)"
-    names = [st.__name__ for st in hg.driver.STAGES]
-    assert names.index("stage_sink") + 1 == names.index("stage_seat"), "nothing reads the water between the sink and the seat"
 
 
 def test_the_ways_route_against_the_course_as_first_drawn() -> None:

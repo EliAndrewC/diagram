@@ -10,13 +10,8 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
-from typing import Any
 
-from l7r.diagram.settlement import point_in_poly
-from l7r.diagram.settlement._geom import point_quad_dist, quad_hits_seg, seg_reach_index
-
-from ..consts import BROOK_FRAME_MARGIN, BROOK_SKIRT, BROOK_WANDER_STEP, Poly, Pt
-from ..plan import SitePlan
+from ..consts import BROOK_FRAME_MARGIN, BROOK_SKIRT, Pt
 
 
 def turn_deg(p: Pt, q: Pt, r: Pt) -> float:
@@ -28,21 +23,11 @@ def turn_deg(p: Pt, q: Pt, r: Pt) -> float:
     return math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (na * nb))))) if na and nb else 0.0
 
 
-def max_turn_deg(course: Sequence[Pt]) -> float:
-    """The sharpest turn anywhere on `course`, degrees - held at or under `BROOK_MAX_TURN_DEG` on the drawn course
-    (water:W01, the retired `test_no_brook_folds_back_on_itself`)."""
-    return max((turn_deg(p, q, r) for p, q, r in zip(course, course[1:], course[2:], strict=False)), default=0.0)
-
-
 # ---- THE BROOK'S RULES, one predicate each (feature 287, M1): the placer below judges its candidate with these, and the
 # pool tests read the same functions. Every one is measured on the DRAWN course, `finished_course`.
 
-LEVEL_NEAR_FT = 80.0  # water:W02 - a stretch this close to the view's edge ...
-"""Research: level run near the frame - CONVENTION: within 80 ft of the view's edge, a line ruled along the frame reads as a mistake (GM 2026-08-26)"""
 LEVEL_TOL_FT = 4.0  # ... that holds one coordinate within this ...
 """Research: level run tolerance - CONVENTION: a coordinate held within 4 ft"""
-LEVEL_MAX_RUN_FT = 150.0  # ... for longer than this runs ruled along the frame (the GM on Sawada, 2026-08-26)
-"""Research: level run length - CONVENTION: over 150 ft along the frame is refused"""
 RULED_TOL_FT = 3.1  # water:W03 - a straight run: every vertex within this of its chord ...
 """Research: straight run tolerance - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); every vertex within 3.1 ft of its chord"""
 # THE MARSH'S VISIBLE EDGE keeps the brook's old straight-run bar (feature 294 B2: `settlement/land/outline.py`, `tools/marsh_edges.py`):
@@ -56,35 +41,10 @@ AXIS_EPS_DEG = 1.6  # water:W04 - a segment of a wander stride or more this near
 """Research: screen-axis segment - CONVENTION: a segment within 1.6 deg of a screen axis reads as ruled"""
 BROOK_DRAWN_W = 5.25  # the width the field stage draws a hamlet's brook at (`field_stage.BROOK_W` is this)
 """Research: brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft, narrower than the 6.0 ft head race it feeds"""
-RULED_MAX_FT = 10.0 * BROOK_DRAWN_W  # water:W03 - the longest straight run the brook may take, anywhere on the page
-"""Research: no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - ten of the brook's drawn widths, 52.5 ft"""
-CROSSING_END_TOL = BROOK_DRAWN_W / 2  # water:W08 - a joiner whose end lies inside the brook's drawn width meets it at a confluence
-"""Research: a joiner meets the water - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "a meeting is a junction when either channel's end lies inside the other's drawn width" (it was a flat 13 px, feature 328 wave 42)"""
 # THE ROOM A LEVEL-RUN BEND NEEDS (water:W02): a station held against the frame box still has the skirt's floor 10 px
 # inside it, so a bend of the level tolerance plus a foot either way fits between the two. Asserted at import: a consts
 # change that took the room away fails here, not on a map.
 assert BROOK_FRAME_MARGIN - BROOK_SKIRT >= 2 * (LEVEL_TOL_FT + 1.0), "the frame box leaves the brook no room to bend off a level run"
-
-
-def level_runs_along_frame(course: Sequence[Pt], view: Sequence[float], near: float = LEVEL_NEAR_FT, tol: float = LEVEL_TOL_FT, max_run: float = LEVEL_MAX_RUN_FT) -> list[tuple[int, int, int, float]]:
-    """Every stretch of `course` within `near` of the view's (x, y, w, h) edge that holds one coordinate within `tol` for
-    more than `max_run` ft - (axis, first vertex, last vertex, length) - the test's loop, lifted (water:W02). The placer
-    asks it of the whole canvas with `near` infinite, a superset of every view the crop can choose.
-    Research: level run along the frame - CONVENTION: the W02 rule, a stretch near the view's edge holding one coordinate
-    """
-    x0, y0, w, h = (float(v) for v in view)
-    runs = []
-    for i in range(len(course)):
-        for axis, lo, hi in ((0, x0, x0 + w), (1, y0, y0 + h)):
-            if min(abs(course[i][axis] - lo), abs(course[i][axis] - hi)) > near:
-                continue
-            j = i
-            while j + 1 < len(course) and abs(course[j + 1][axis] - course[i][axis]) <= tol:
-                j += 1
-            run = sum(math.dist(course[k], course[k + 1]) for k in range(i, j))
-            if run > max_run:
-                runs.append((axis, i, j, run))
-    return runs
 
 
 def _clip_arcs(arcs: list[tuple[float, float]], c: float, half: float) -> list[tuple[float, float]]:
@@ -129,215 +89,5 @@ def straightest_chord(pts: Sequence[Pt], tol: float) -> tuple[float, int, int]:
     return best, at[0], at[1]
 
 
-def tap_index(course: Sequence[Pt], taps: Sequence[Pt]) -> int:
-    """The vertex the head race leaves from - the one nearest a tap, found by position as the pool test finds it."""
-    return min(range(len(course)), key=lambda k: min((math.dist(course[k], t) for t in taps), default=0.0))
-
-
-def axis_segments(course: Sequence[Pt], taps: Sequence[Pt], eps: float = AXIS_EPS_DEG, min_len: float = BROOK_WANDER_STEP) -> list[int]:
-    """The segments of `min_len` or more lying within `eps` degrees of a screen axis, the two leaving the tap excepted -
-    the pool test's loop, lifted (water:W04, one of the five rules the GM named).
-    Research: screen-axis segment - CONVENTION: the W04 rule, the tap run excepted
-    """
-    tap = tap_index(course, taps)
-    bad = []
-    for i, (a, b) in enumerate(zip(course, course[1:], strict=False)):
-        if i in (tap, tap + 1) or math.dist(a, b) < min_len:
-            continue
-        deg = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) % 90.0
-        if min(deg, 90.0 - deg) < eps:
-            bad.append(i)
-    return bad
-
-
-def course_enters(course: Sequence[Pt], rings: Sequence[Sequence[Pt]]) -> bool:
-    """Does any interior vertex of `course` lie inside one of `rings` - a stream through a field (water:W06).
-    Research: brook skirts the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: no interior vertex inside a field ring
-    """
-    return any(point_in_poly(p[0], p[1], list(r)) for r in rings if len(r) >= 3 for p in course[1:-1])
-
-
-def ends_off_canvas(course: Sequence[Pt], W: float, H: float, ends: Sequence[int] = (0, -1)) -> bool:
-    """Do the named ends of `course` lie off the (0, 0, W, H) canvas - an end declared off-map (water:W07).
-    Research: both ends off the map - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source upslope and the mouth below the fan off the canvas
-    """
-    return all(not (0.0 <= course[e][0] <= W and 0.0 <= course[e][1] <= H) for e in ends)
-
-
-def _proper_cross(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> bool:
-    """Do the two open segments properly cross (a shared end is a junction) - the junction test's own predicate.
-
-    Research: plumbing - NONE: segment geometry (restored by feature 435 T02 from 427 T09's inlining)"""
-
-    def side(p: Pt, q: Pt, r: Pt) -> float:
-        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
-
-    return ((side(a0, a1, b0) > 0) != (side(a0, a1, b1) > 0)) and ((side(b0, b1, a0) > 0) != (side(b0, b1, a1) > 0))
-
-
-def _dist_to_course(p: Pt, course: Sequence[Pt]) -> float:
-    """The distance from `p` to the polyline `course`."""
-    best = math.inf
-    for a, b in zip(course, course[1:], strict=False):
-        vx, vy = b[0] - a[0], b[1] - a[1]
-        L2 = vx * vx + vy * vy
-        t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2))
-        best = min(best, math.hypot(p[0] - a[0] - t * vx, p[1] - a[1] - t * vy))
-    return best
-
-
-def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROSSING_END_TOL, joiner_w: float = 2.5) -> bool:
-    """Does `joiner` cross `water` away from a confluence - a crossing where neither end of the joiner stands within `tol`
-    of the water, and neither end of the water within half the joiner's drawn width `joiner_w` of the joiner (water:W08,
-    the junction test's rule, lifted; feature 328 wave 42: 0054 tests either channel's end, it tested the joiner's alone).
-    Research:
-        no crossing mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a ditch meets the brook only at a confluence, never across it
-        either end makes the junction - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "a meeting is a junction when either channel's end lies inside the other's drawn width"
-        a joiner's width - GUESS: 2.5 px, the hairline ditch `channel` draws, where the caller gives none
-    """
-    if len(joiner) < 2 or len(water) < 2 or min(_dist_to_course(e, water) for e in (joiner[0], joiner[-1])) < tol:
-        return False
-    if min(_dist_to_course(e, joiner) for e in (water[0], water[-1])) < joiner_w / 2.0:
-        return False
-    return any(_proper_cross(j0, j1, w0, w1) for j0, j1 in zip(joiner, joiner[1:], strict=False) for w0, w1 in zip(water, water[1:], strict=False))
-
-
-def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
-    """Does every step of `course` run down the fall (or level) - the brook below its tap carrying the runoff on
-    downhill (water:W11).
-    Research: runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every step below the tap runs down the fall
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.01 (rounding slack in the "runs downhill" test)
-    """
-    us = [p[0] * fall[0] + p[1] * fall[1] for p in course]
-    return all(b >= a - slack for a, b in zip(us, us[1:], strict=False))
-
-
-def to_edge(p: Pt, d: Pt, W: float, H: float) -> float:
-    """How far from `p` along the unit bearing `d` the (0, 0, W, H) canvas ends (0 where `p` is already past it)."""
-    spans = [((W if d[0] > 0 else 0.0) - p[0]) / d[0]] if abs(d[0]) > 1e-9 else []
-    spans += [((H if d[1] > 0 else 0.0) - p[1]) / d[1]] if abs(d[1]) > 1e-9 else []
-    return max(0.0, min(spans)) if spans else 0.0
-
-
-def reserved_box(course: Sequence[Pt], plan: SitePlan) -> tuple[float, float, float, float]:
-    """(x0, y0, x1, y1): ground EVERY view the crop can choose contains, on the canvas (water:W02/W03, plan D5) - read
-    from what the frame itself will read, so it is known when the brook is laid:
-
-    - the paddies' visible box: the crop frames each field by its `vis_bbox`, the box of its plots (`crop_boxes`);
-    - each station of `course` within `BROOK_FRAME_MARGIN` of the field and the dry hem, at the brook's half width -
-      `hinterland.frame.brook_beside_the_field` reserves exactly those as content. The hem it reads is the hem DRAWN, and
-      `_comb_draw_hem` drops a plot the brook's own band crosses (`hem_on_water`, the course with a bund's margin), so
-      the plots it would drop are left out here by the same predicate.
-
-    A view is a box, so it holds the box round them all.
-
-    Research:
-        its figures against the drawn brook - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the brook's drawn width, BROOK_DRAWN_W, in the keep-off band and at the frame's stations alike
-        the view's reach - CONVENTION: the brook kept in the frame BROOK_FRAME_MARGIN plus a foot round the field and its hem, how much of the brook a view shows
-        its bund margin - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (the hem-drop band's 3 ft beyond the brook's half width)
-    """
-
-    net = plan.net or {}
-    paddies = [list(p["poly"]) for p in net.get("plots") or []] or [list(plan.envelope)]
-    xs, ys = [float(q[0]) for r in paddies for q in r], [float(q[1]) for r in paddies for q in r]
-    wet = WetLines([([(float(x), float(y)) for x, y in course], BROOK_DRAWN_W / 2 + 3.0)])  # filed once, asked per hem plot
-    hem = [list(p["poly"]) for p in net.get("dry_plots") or [] if not hem_on_water(p["poly"], wet, None)]
-    fx = [float(q[0]) for r in [list(plan.envelope), *hem] for q in r]
-    fy = [float(q[1]) for r in [list(plan.envelope), *hem] for q in r]
-    m, hw = BROOK_FRAME_MARGIN + 1.0, BROOK_DRAWN_W / 2.0
-    for q in course:
-        if min(fx) - m <= q[0] <= max(fx) + m and min(fy) - m <= q[1] <= max(fy) + m:
-            xs += [q[0] - hw, q[0] + hw]
-            ys += [q[1] - hw, q[1] + hw]
-    return (max(0.0, min(xs)), max(0.0, min(ys)), min(float(plan.W), max(xs)), min(float(plan.H), max(ys)))
-
-
-def ruled_excess(fin: Sequence[Pt], W: float, H: float, box: Sequence[float]) -> tuple[float, float, Pt, Pt]:
-    """(straightest run on the canvas, the most it may be, its two ends) - water:W03's VIEW-INDEPENDENT bound (plan D5).
-
-    The view is decided six stages after the brook; the straightest run on the whole canvas is at least that in any view, so
-    holding it to `RULED_MAX_FT` holds every view (`box`, the ground every view holds, is kept in the signature for the callers'
-    one reading of the frame). Since feature 444 T16 the bound is a length, ten widths, not the old share of the brook in view.
-
-    Research:
-        no ruled run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a natural stream rarely runs straight more than about ten times its own width - the straightest run on the canvas held to RULED_MAX_FT
-    """
-    del box
-    on = [p for p in fin if 0.0 <= p[0] <= W and 0.0 <= p[1] <= H]
-    run, i, j = straightest_chord(on, RULED_TOL_FT)
-    return run, RULED_MAX_FT, on[i] if on else (0.0, 0.0), on[j] if on else (0.0, 0.0)
-
-
-def level_runs_any_view(fin: Sequence[Pt], W: float, H: float, box: Sequence[float]) -> list[tuple[int, int, int, float]]:
-    """water:W02 for EVERY view the crop can choose: `level_runs_along_frame` over the canvas with no nearness limit, kept
-    where the run's first vertex could lie within `LEVEL_NEAR_FT` of some view's edge. A view holds `box` (`reserved_box`)
-    and lies on the canvas, so its left edge is at or left of the box's; a vertex further than that inside the box can
-    be near no view's edge. A superset of what any view's test reads, and no more than that."""
-    return [r for r in level_runs_along_frame(fin, (0.0, 0.0, W, H), near=math.inf) if not (box[r[0]] + LEVEL_NEAR_FT < fin[r[1]][r[0]] < box[r[0] + 2] - LEVEL_NEAR_FT)]
-
-
-def ditch_strokes(plan: SitePlan) -> list[Poly]:
-    """Every ditch of the fitted net the brook must not cross mid-run (water:W08) - the head race included, whose mouth on
-    the brook is its confluence and so exempt by the predicate itself."""
-    return [[(float(x), float(y)) for x, y in c["pts"]] for c in (plan.net or {}).get("channels") or [] if len(c.get("pts") or ()) >= 2]
-
-
-def without_straight_joins(fin: Sequence[Pt], joins: Sequence[Pt], tol: float, deg: float = 0.5) -> Poly:
-    """`fin` less each confluence vertex (`joins`, matched within `tol`) that lies on a straight line between its neighbors - what the ruled rule
-    (water:W03) reads. A confluence held mid-leg changes no stroke the map draws, but its vertex made a single straight leg,
-    which the rule's chord test leaves alone, a three-vertex run it counts: on Kashikawa (feature 302) every meeting the drain
-    could make with its brook read "ruled" while the brook itself, judged without the join, kept the rule."""
-    out = [fin[0]] if fin else []
-    for k in range(1, len(fin) - 1):
-        p = fin[k]
-        if any(math.dist(p, q) <= tol for q in joins):
-            (ax, ay), (bx, by) = fin[k - 1], fin[k + 1]
-            h1, h2 = math.atan2(p[1] - ay, p[0] - ax), math.atan2(by - p[1], bx - p[0])
-            if abs((math.degrees(h2 - h1) + 180.0) % 360.0 - 180.0) < deg:
-                continue
-        out.append(p)
-    return [*out, fin[-1]] if len(fin) >= 2 else list(fin)
-
-
 # THE BROOK'S VIEW'S TWO HELPERS, moved unchanged from settlement/fields/comb.py with the comb's old placement deleted (feature
 # 444 T16, the round arbiter's ruling on ask:444-T16-brook-predicates): `reserved_box` is their one live caller.
-
-
-class WetLines:
-    """The `(polyline, half-width)` pairs `hem_on_water` asks, each segment filed once by its box widened by its half-width
-    (`seg_reach_index`), so a plot asks only the segments whose widened box meets its own box (feature 287 perf: the
-    coarse-grain top-up asks the whole wild middle, 558 plots on the reference seed 4, and each walked every ditch segment
-    on the map - 35,000 `quad_hits_seg`). EXACT: a stroke that meets a plot has a point within its half-width of the
-    plot, so its widened box meets the plot's box; a segment it skips could not have hit, and `any` does not care about
-    order."""
-
-    __slots__ = ("grid",)
-
-    def __init__(self, wet: Sequence[tuple[Any, float]]) -> None:
-        self.grid = seg_reach_index([([(float(q[0]), float(q[1])) for q in pl], float(hw)) for pl, hw in wet], 0.0)
-
-    def hit(self, poly: Poly) -> bool:
-        x0, y0 = min(q[0] for q in poly), min(q[1] for q in poly)
-        x1, y1 = max(q[0] for q in poly), max(q[1] for q in poly)
-        for a, b, hw, bx0, by0, bx1, by1 in self.grid.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2):
-            if bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1:
-                continue
-            if quad_hits_seg(poly, a, b, hw):
-                return True
-        return False
-
-
-def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: Any) -> bool:
-    """Does this dry-hem plot lie across a watercourse or over the pond?
-
-    LIFTED OUT OF `_comb_draw_hem` (feature 146, GM 2026-08-28 on inner functions and testability). The
-    hem yields to standing water because the comb builder lays the fan from pure geometry and `draw_comb_field`
-    used to render it blind - it was the ONLY placer that consulted nothing, so a hem plot could be drawn
-    straight across a stream that had been authored earlier (Ubame's). The stream arm and the pond arm are
-    different geometry and want asking separately, which through the method meant building a whole comb net.
-
-    Research: hem off water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a dry plot across a watercourse or over the pond is not a field
-    """
-    if (wet if isinstance(wet, WetLines) else WetLines(wet)).hit(poly):  # a caller asking many plots hands the index in
-        return True
-    return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))

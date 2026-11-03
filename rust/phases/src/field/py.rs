@@ -32,7 +32,7 @@ fn state(s: State) -> &'static str {
     }
 }
 
-fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
+fn field_dict<'py>(py: Python<'py>, f: &Field, drawn: &[Pt]) -> PyResult<Bound<'py, PyDict>> {
     let d = PyDict::new(py);
     d.set_item("ring", pts(&f.fan.ring))?;
     d.set_item(
@@ -42,6 +42,7 @@ fn field_dict<'py>(py: Python<'py>, f: &Field) -> PyResult<Bound<'py, PyDict>> {
     d.set_item("head_middle", f.fan.fork)?;
     d.set_item("foot", f.fan.foot)?;
     d.set_item("brook", pts(&f.brook.pts))?;
+    d.set_item("brook_drawn", pts(drawn))?;
     d.set_item("intake", f.brook.intake)?;
     d.set_item(
         "weir",
@@ -370,9 +371,24 @@ pub fn stage_field<'py>(
     let d = PyDict::new(py);
     d.set_item("knobs", out.knobs)?;
     let fields = PyList::empty(py);
+    // THE BROOK DRAWN WHERE IT IS LAID (T26 D2): its bends rounded with its tap - the head race's first point - held, so no stage
+    // after files it a second time; its stations go to Python beside it, the course the ways keep routing against
+    let mut work = 0;
+    let mut drawn_pts = 0;
     for f in &out.fields {
-        fields.append(field_dict(py, f)?)?;
+        let taps: Vec<Pt> = f
+            .channels
+            .first()
+            .and_then(|c| c.pts.first().copied())
+            .into_iter()
+            .collect();
+        let drawn = crate::course::drawn(&f.brook.pts, &taps, &[], w, &mut work);
+        drawn_pts += drawn.len() as u64;
+        fields.append(field_dict(py, f, &drawn)?)?;
     }
+    *out.counts
+        .entry("write@brook_drawn".to_owned())
+        .or_insert(0) += work;
     // what crosses to Python, written a value at a time (the fifth and sixth audits at T16's landing): the fan's ring and the
     // brook's course, each plot's ring and its nine values, each channel's and bean's points, each dry plot's seven values
     let exported: u64 = out
@@ -390,7 +406,7 @@ pub fn stage_field<'py>(
                 + 7 * f.dry.len() as u64
         })
         .sum();
-    *out.counts.entry("write@py_export".to_owned()).or_insert(0) += exported;
+    *out.counts.entry("write@py_export".to_owned()).or_insert(0) += exported + drawn_pts;
     d.set_item("fields", fields)?;
     d.set_item("grain", out.grain)?;
     d.set_item("counts", out.counts)?;

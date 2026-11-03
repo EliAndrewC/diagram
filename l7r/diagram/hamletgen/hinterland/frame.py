@@ -101,7 +101,7 @@ def frame_extras(s: Settlement, plan: SitePlan) -> list[tuple[float, float, floa
     """The ground a hamlet's frame reserves as CONTENT beyond the crop's own boxes (x0, y0, x1, y1): an OUTSIDE title
     pocket, the confluence with a trunk's length round it, and the brook's reach beside the field. `stage_frame` used to
     assemble these itself; `frame_for` reads them now, so the view decided early carries them (feature 287, M6)."""
-    from ..sink import BROOK_JOIN_TRUNK  # noqa: PLC0415 - sink imports the hinterland package
+    from ..sink_stage import BROOK_JOIN_TRUNK  # noqa: PLC0415 - sink imports the hinterland package
 
     pocket = title_pocket(s, plan)  # the pocket the belt was dented around (feature 150) - reserved once
     extra = [pocket] if plan.title_pocket_outside else []  # an OUTSIDE reservation is content the crop must take in; an inside one changes nothing
@@ -238,7 +238,7 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
         ys += [b[1], b[3]]
     if plan.confluence is not None:  # ...and the confluence with its trunk, which the frame reserves too (feature 261: cohort
         # seed 45's moved with the brook's walk and the view reached 41 px past a prediction that did not know it)
-        from ..sink import BROOK_JOIN_TRUNK  # noqa: PLC0415 - kept beside its one use
+        from ..sink_stage import BROOK_JOIN_TRUNK  # noqa: PLC0415 - kept beside its one use
 
         _t = BROOK_JOIN_TRUNK * 0.5
         xs += [plan.confluence[0] - _t, plan.confluence[0] + _t]

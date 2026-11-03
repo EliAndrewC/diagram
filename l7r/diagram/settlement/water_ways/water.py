@@ -105,7 +105,7 @@ class WaterBodiesMixin:
         # upstream -> downstream is (downstream - upstream); we built (upstream - downstream) above
         rec["flow_deg"] = round(math.degrees(math.atan2(-vy, -vx)) % 360, 1)
 
-    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float | None = None, flow: str = "forward", cls: str = "stream") -> None:  # type: ignore[misc]
+    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float | None = None, flow: str = "forward", cls: str = "stream", stations: Any = None) -> None:  # type: ignore[misc]
         """A natural watercourse. If frm/to anchors are given (e.g. a forest brook
         feeding a pond), it is recorded and the gate checks it actually connects
         them - just like an irrigation channel. `width` is the water's drawn width
@@ -121,6 +121,10 @@ class WaterBodiesMixin:
         drawing code wants the other order). The derived bearing is recorded as `flow_deg`, so
         checks read ONE number rather than re-deriving direction from anchor semantics.
 
+        `stations` is the course as first laid where `pts` is already its drawn course (feature 444 T26 D2: the hamlet's brook is
+        rounded by the stage that lays it), recorded as `round_stream` records it, for the readers that route against the course
+        as first drawn.
+
         Research:
             every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
             stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 1.6 m (~5.25 ft) for a village brook, drawn 5.25 ft at the map's scale by default
@@ -132,11 +136,14 @@ class WaterBodiesMixin:
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}
+        kept: list[list[float]] = [[x, y] for x, y in stations] if stations is not None else []
+        if stations is not None:
+            rec["stations"] = kept
         self._flow_record(rec, pts, flow)
         refuse_unadmitted(self.M, "streams", rec)  # asked before its ink (feature 287, water W53): the course is its fit's
         self.M["streams"].append(rec)
         if __debug__:  # its course written into its record, its ink, its flow's copy and its corridor, a point at a time (feature 444 T16's audits)
-            OPS["write@stream"] += (4 + self._pond_anchored(frm, to)) * len(rec["poly"])
+            OPS["write@stream"] += (4 + self._pond_anchored(frm, to)) * len(rec["poly"]) + len(kept)
         bed_t = f'<path d="{{dd}}" fill="none" stroke="#9CB4C8" stroke-width="{width}" stroke-linejoin="round" stroke-linecap="round"/>'
         # lighter mid-current highlight (NOT a dashed lane line - this is water, not a road)
         # THE SHEEN IS BUTT-CAPPED (settlement-review 2026-08-29, Mizuguchi error 2 and Kashikawa's bead).

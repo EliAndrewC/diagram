@@ -9,7 +9,6 @@ the star imports below (clause 14 - a re-export `__init__` is derived, never a m
 |---|---|
 | `skeleton.py` | the sluice, the fall or the canvas is wrong - STAGE 1, `stage_water_frame` |
 | `brook.py` | the stream's own COURSE, its intake, or the weir glyph - feature 230's `brook_skirt`, `feed_brook`, `draw_intake` and the four helpers that keep the course off the crop and inside the frame |
-| `brook_course.py` | the course's leaf helpers, split from `brook.py` by feature 316 and re-exported there |
 | (STAGE 2, the field) | rebuilt in Rust by feature 444 T16: `hamletgen/field_stage.py`, `rust/phases/src/field/` |
 | `waterward.py` | STAGE `stage_waterward`, the waterward reed fringe on a polder's flanks, and the crossings' caps (`polder_crossing_caps`); the polder itself is Rust's (feature 444 T16) |
 

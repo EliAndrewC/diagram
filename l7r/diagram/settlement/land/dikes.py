@@ -25,7 +25,7 @@ from l7r.diagram.interactive.tags import Planted
 from l7r.diagram.settlement._geom.primitives import keepout_ring
 from l7r.diagram.work_counts import OPS
 
-from .._geom import Poly, Pt, point_in_poly, seg_dist, smooth_closed, smooth_points
+from .._geom import Poly, Pt, point_in_poly, smooth_closed, smooth_points
 
 DIKE_GAP_HW = 15.0  # half the width the band is CUT by at a sluice notch or a crossing; exported because the waterward reed strip steps into exactly that opening (feature 150 T54, hamletgen/water/polder.py `dike_face`) and a drifted copy would leave the wet ground short of the cut or lapping the band
 """Research:
@@ -126,50 +126,6 @@ def dike_band(inner_env: Any, seed: int, width: tuple[float, float] = (14.0, 40.
     w_seen = hand_piled_widths(w_seen, (wlo, whi))
     outer_s = [(x + nx * w, y + ny * w) for (x, y, _ei), (nx, ny), w in zip(dense, normals, w_seen, strict=True)]
     return dense, inner_s, outer_s, w_seen, (cx, cy)
-
-
-CREST_REACH = 3.0  # a watercourse within this of the crest line runs ON the dike (the rule's own reach, feature 287 water W42)
-GAP_REACH = 60.0  # ...and a crossing within this of a recorded gap is that gap - the sluice or the outfall, a decided crossing
-
-
-def course_breaches(course: Poly, crest: Poly, gaps: Poly, reach: float = CREST_REACH, gap_reach: float = GAP_REACH) -> list[Pt]:
-    """THE RULE (feature 287, water W42): the midpoints of `course`'s segments that lie on the dike crest (within `reach`
-    of the closed crest line) farther than `gap_reach` from every recorded gap - a channel cut through the dike where
-    the settlement decided no water should cross. The stage that gaps the dike and the test of it read this one
-    predicate.
-
-    Research: water crosses only at sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a course on the crest away from every recorded gap breaches the dike"""
-    loop = [*crest, crest[0]] if crest else []
-    out: list[Pt] = []
-    for a, b in zip(course, course[1:], strict=False):
-        mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
-        if not loop or min(seg_dist(mid[0], mid[1], p, q) for p, q in zip(loop, loop[1:], strict=False)) > reach:
-            continue
-        if gaps and min(math.dist(mid, g) for g in gaps) <= gap_reach:
-            continue
-        out.append(mid)
-    return out
-
-
-def breaches_any_dike(course: Poly, dikes: Any, step: float = 1.0) -> bool:
-    """Does `course` breach the crest of any recorded dike (`M["dikes"]`, each with its `crest` and `gaps`) away from its
-    gaps? `course_breaches` - the one predicate - asked over the course walked at `step`, so a long leg that crosses the
-    crest far from its own midpoint is seen, and half a foot stricter on both reaches than the rule, since the record
-    rounds to 0.1 px (feature 287, water W42's second half: a channel router drawing after the dike asks this and refuses
-    the course).
-
-    Research: water crosses only at sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a course breaching any dike's crest away from its gaps is refused"""
-    pts = [(float(p[0]), float(p[1])) for p in course]
-    dense: Poly = pts[:1]
-    for a, b in zip(pts, pts[1:], strict=False):
-        n = max(1, math.ceil(math.dist(a, b) / step))
-        dense += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(1, n + 1)]
-    for dk in dikes or ():
-        crest = [(float(p[0]), float(p[1])) for p in dk.get("crest") or ()]
-        gaps = [(float(g[0]), float(g[1])) for g in dk.get("gaps") or ()]
-        if crest and course_breaches(dense, crest, gaps, CREST_REACH + 0.5, GAP_REACH - 0.5):
-            return True
-    return False
 
 
 if TYPE_CHECKING:

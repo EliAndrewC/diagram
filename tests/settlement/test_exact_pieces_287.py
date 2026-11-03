@@ -8,7 +8,6 @@ import math
 import random
 
 from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
-from l7r.diagram.hamletgen.water.brook_rules import WetLines, hem_on_water
 from l7r.diagram.settlement._geom import point_quad_dist, quad_hits_seg, seg_dist, segments_cross
 from l7r.diagram.settlement.homestead_parts.stands import BankNear
 
@@ -27,24 +26,6 @@ def _old_hem_on_water(poly, wet, pond) -> bool:
     if any(quad_hits_seg(poly, pl_[i], pl_[i + 1], hw_) for pl_, hw_ in wet for i in range(len(pl_) - 1)):
         return True
     return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
-
-
-def test_the_hems_filed_watercourses_are_the_whole_scan() -> None:
-    """A plot lies across a watercourse by the index exactly when the scan over every segment says so - strokes of every
-    half-width, through, beside and far from the plot, one index asked of many plots, and a pond beside."""
-    rng = random.Random(2871)
-    hits = 0
-    for _ in range(80):
-        wet = [(_polyline(rng), rng.choice((1.25, 4.5, 7.5, 7.0))) for _ in range(rng.randint(0, 6))]
-        lines = WetLines(wet)
-        pond = None if rng.random() < 0.5 else (rng.uniform(0, 600), rng.uniform(0, 600), rng.uniform(10, 60), rng.uniform(10, 60))
-        for _k in range(25):
-            plot = _quad(rng)
-            want = _old_hem_on_water(plot, wet, pond)
-            hits += want
-            assert hem_on_water(plot, lines, pond) is want
-            assert hem_on_water(plot, wet, pond) is want
-    assert 100 < hits < 1900, "the sample holds plots on the water and off it"
 
 
 def _old_overlaps_any(poly, rings) -> bool:

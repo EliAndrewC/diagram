@@ -21,7 +21,7 @@ from l7r.diagram.work_counts import OPS
 
 from .consts import POND_BANK_CROWN_FT, POND_BANK_FT, POND_BANK_PITCH_FT, POND_BANKS, Pt
 from .plan import SitePlan, _roll
-from .sink import SINK_FRINGE
+from .sink_stage import SINK_FRINGE
 from .water.brook_rules import BROOK_DRAWN_W
 
 TREE_TONES = {"mulberry": ("#6E8B4A", "#4F6E33"), "cudrania": ("#4F6E33", "#3C5526")}

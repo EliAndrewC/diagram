@@ -321,3 +321,82 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 
 **Performance work?** No.
 
+
+### T26 - phase: sink, in Rust under amendment 7 (the GM 2026-11-03: "then work on converting the next stage with these guidelines in place ... like the entire next phase"; FR-003-FR-006, FR-017, FR-022)
+
+Occasions: settlement-review on the pool hamlets the rebuilt sink moves (a pond, its ditch or the drain's run off the map redrawn); glyph-check only if a glyph is redrawn.
+
+Measured 2026-11-03 before the plan (throwaway probes rolling the first three stages, nothing committed): over cohort seeds 1-48 the sink takes two branches, 24 a pond and 23 a searched run off the map (no confluence, no constructed route), and seed 29 fails in the sink today (its constructed route refused by the overlap matrix); the only standing feature that ever refused the sink is a resting basin (`fallow_patches`, 62 refusals of a drain run on the 8 maps that have one; the pond was never refused). At the reference spec, 40 households, seed 4: of the stage's 167,264 counted operations, laying the pond and its drain is 1,158, rounding the brook 150,314 (the whole brook re-filed in the overlap registry, every piece asked again), and the driver's end-of-stage walk of the manifest 15,792. The session read the old `hamletgen/sink.py` while scoping, before `make task-start`; the rebuild is written from the derivation's contract, the research pages and these measurements.
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** The field's runoff ends where the record says it does (0060): a pond at the field's foot about three parts in a hundred of the paddy, clear of the crop and the brook, its reeds at the shore (0061), joined to the collector's outfall by a dug ditch that runs downhill and never across the brook; or, on the off-map roll, the drain joining the passing brook where it is in reach, else run off the map out of the collector's exit, turning at most 55 degrees, downhill, never through the rice, a resting basin or a dike off its gap; the brook drawn with its bends rounded (0054).
+2. **The constraints.** FR-003 to FR-006, FR-017, FR-019 to FR-022; rubric S1-S10; `phases/sink_greenfield.derivation.md` and its budget, 149 at 40, exponent 0.61; the pages 0060, 0061, 0054, 0068; the manifest keys the stage writes (the probe of 2026-11-03: `streams`, `channels`, `drawn_channels`, `pond`, `pond_layer`, `marshes`, `meta.water_sink`, `meta.pond_role`) and the plan's `water_sink`, `sink_pond`, `sink_brook`, `confluence`.
+3. **Where each comes from.** G: amendment 7 and the GM's request of 2026-11-03. R: 0060 (where the runoff goes, the odds, the 55 degrees, downhill), 0061 (the reeds), 0054 (bends rounded, join rather than cross). O: the probes above.
+4. **Do they describe the world here?** A hamlet's drain on a valley comb, the reference roll; the off-map branch is outside the reference roll (its `water_sink` is pinned `pond`), held to the same rules by the Rust stage gate's fresh block, which rolls both.
+5. **The order.** After `field`, before `seat`. The brook is rounded by the stage that lays it (D2), so nothing after the field re-files it.
+6. **The exits.** Green: `make rust-gate` with no failing seed through water_frame, field and sink (seed 29 among them); the counted operations at 40 and 80 at most the (raised) budget, or within amendment 7's LEEWAY; MODE AUDIT WITHIN or LEEWAY; the claims round IN-STEP (FR-021); the reviews owed; `phases/sink.md`'s eight boxes; the old sink Python deleted. Red: over what FR-022 admits - rebuilt again, or the budget raised on a re-derivation naming the missed work (`make budget-set RAISE=1`, past twice the first with a second SOUND), or with the GM's words past ten times; a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The off-map run is a search over bearings and junction distances (0060's turn and downhill rules); its candidates are derived from the 55 degree turn and the canvas, and it stops at the first that keeps every rule (S9).
+8. **The budget.** One landing; `make rust-gate` after each increment; one MODE AUDIT pass a round.
+9. **Done, measured.** `make work-budget`: sink at 40 and 80 against its budget; the whole roll's total against 18.3M at 40 (dev/work-budget.md, 2026-11-03).
+10. **Before moving a constant.** Each figure the Rust reads is cited to its page at the Rust (0060's 3/100 share and 55 degrees, 0061's reeds, 0068's widths); a GUESS stays a GUESS, a knob where the record gives forms.
+11. **Before fitting things into room.** A pond with no clear seat drains off the map (0060: "A map whose pond would have to sit far below the fields sends its drain off the map as well").
+
+**Performance work?** yes - docs/performance-checklist.md's questions follow.
+
+### T26 Decisions
+
+- **D1 - the seam** (FR-004, FR-010): `stage_sink(s, plan)` stays a thin Python function. It gathers what the stage reads - the plan's
+  fall, drainage bearing, canvas, scale, households, `water_sink` and the field's outline; the drain collector (`field_ditches`,
+  role `drain`); the brook's stations and its taps (the heads of the channels taken off it); the dikes; the resting basins'
+  rings - and calls `l7r_phases.stage_sink` (`rust/phases/src/sink.rs`, its submodules under `rust/phases/src/sink/`). Rust
+  returns the run (its points and what it ends at), the pond (center and radii) or none, the reeds' ring, the confluence and the
+  brook's drawn course where a confluence moved it; Python writes the same keys with the same record shapes (`channels`,
+  `drawn_channels` through `field_channel`, `pond`, `pond_layer`, `marshes`, the meta's `water_sink` and `pond_role`, the
+  plan's `water_sink`, `sink_pond`, `sink_brook`, `confluence`, the no-build box) and draws them.
+- **D2 - the brook rounded where it is laid** (0054; the measurement above): the Rust field returns the brook's drawn course
+  beside its stations - every bend filleted at 2.5 drawn widths, each tap held (0054: "every corner filleted"; a tap is a
+  junction, not a bend) - and the field's seam writes the stream record on its drawn course with `stations` the course as first
+  laid, which the ways and the fords keep reading as today. The sink re-draws the brook only where its confluence adds a held
+  vertex, and seats a confluence only on a straight stretch at least the fillet's cut-back from any corner, so holding it leaves
+  the drawn course as it was. This changes the field's seam and its Rust: the field's counted work is re-measured against its
+  accepted figures (the ratchet) and audited once in MODE AUDIT.
+- **D3 - the end-of-stage filing after a Rust stage** (`hamletgen/driver.py`, `rust_prefix.py`, `tools/work_budget.py`): a Rust
+  stage's seam only appends records, so after it the registry files the records it does not hold (`Standing.resync(new_only=True)`)
+  in place of the walk of every record on the manifest; the next Python stage's full walk still re-records anything reshaped in
+  place, so no reshape goes unasked.
+- **D4 - the pond** (0060, 0061): its area 3/100 of the field's paddy (0060's GUESS), its aspect the plan's, its seat on the
+  drainage line beyond the collector's outfall by its own half-length, stepped on by a half-length where its rim or its box meets
+  the crop or the brook (the water index's cells), stepped across the fall a long radius each way where the line is blocked, and
+  given up past the set-back limit (`POND_SETBACK_LIMIT`, a GUESS) for the off-map branch; its ditch from the outfall bowed off the
+  chord, or led round on a curve where the pond lies more than 100 degrees off the collector's heading, never crossing the brook;
+  the reeds a ring at the shore (0061; its width a GUESS, 44 ft).
+- **D5 - the off-map branch** (0060): the passing brook joined where a point on its course lies within reach, fallen below the
+  outfall, with a trunk below it, reached without crossing the crop, on a straight stretch (D2); else the run out of the
+  collector's exit searched over bearings round the fall and the collector's heading and junction distances, nearest first, the
+  first keeping every rule (turn at most 55 degrees, not through the crop, a resting basin or a dike off its gap, downhill, under 90
+  degrees off the drainage bearing, the brook not crossed mid-run nor run beside as its twin); else the constructed route round the
+  field's hull. Seed 29's refusal is diagnosed and its rule kept by construction (FR-019).
+- **D6 - the draws**: the sink rolls nothing of its own; the plan's `water_sink` is water_frame's knob.
+- **D7 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`, behind the `counters` feature; a seed rolled with the
+  feature on and off writes identical manifests (`phases/sink.fr012.md`).
+- **D8 - the derivation re-derived** (FR-022 rule 2): `phases/sink_greenfield.derivation.md` revised with `## Work the first
+  derivation missed` - the ditch to the pond, the reeds' ring, the stage's records filed in the overlap registry, the brook's
+  drawn course (D2) where it is drawn, the resting basins asked - each priced from the contract, judged in MODE BUDGET; past twice
+  the first budget, a second independent dispatch.
+- **D9 - deletion** (FR-005): `hamletgen/sink.py` and what only it reaches (`brook_course.round_the_brooks` and the helpers only it
+  calls) deleted in the landing, found by `git grep -l` and `make dead-closure`; the seam stays in a new `hamletgen/sink_stage.py`.
+
+### T26 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the brook's rounding: 150,314 of the sink's 167,264 counted operations at 40 (seed 4, the
+   probe of 2026-11-03), the whole brook re-filed in the overlap registry with every piece asked again; the end-of-stage walk
+   15,792; the pond and its drain 1,158.
+2. **Removes work, or only moves it?** Removes it: the brook is filed once, on its drawn course, by the stage that lays it (D2),
+   where today it is filed raw and then re-filed rounded; the walk after a Rust stage files only what is new (D3).
+3. **What do you expect it to save, and why?** About 165,000 operations at 40 from the whole roll (the rounding's re-filing and
+   the sink's walk), less what filing a rounded brook costs the field over a raw one (its fillets add vertices).
+4. **How does the work grow with the settlement?** The pond's seat grows with its box's cells (x1.41 in each radius a doubling,
+   the derivation's 0.61); the brook's filing with its length, once.
+5. **What did the before and after show, and under what conditions?** `make perf-ab` recorded at the landing, best of N.
+6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.

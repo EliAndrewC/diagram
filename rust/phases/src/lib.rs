@@ -4,8 +4,10 @@
 //!     phases module - NONE: the extension's own machinery; each phase carries its own claims
 
 mod counts;
+mod course;
 mod field;
 mod pyrand;
+mod sink;
 mod water_frame;
 
 use pyo3::prelude::*;
@@ -23,5 +25,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(field::py::stage_polder, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::settle_runs, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::rounded_pond, m)?)?;
+    m.add_function(wrap_pyfunction!(sink::py::stage_sink, m)?)?;
     Ok(())
 }

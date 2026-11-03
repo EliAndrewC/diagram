@@ -12,7 +12,7 @@ def test_the_confluence_reserves_its_own_room_in_the_view() -> None:
     trail off the edge, so one was drawn 7.4 ft outside the sheet with none of its trunk in view. The junction reserves
     itself as content, the way the title pocket does - in `frame_extras`, which the view is decided by (feature 287)."""
     from l7r.diagram.hamletgen.hinterland.frame import frame_extras, frame_for
-    from l7r.diagram.hamletgen.sink import BROOK_JOIN_TRUNK
+    from l7r.diagram.hamletgen.sink_stage import BROOK_JOIN_TRUNK
     from l7r.diagram.settlement import Settlement
 
     from ._builders import a_plan
@@ -130,7 +130,7 @@ def test_the_scatter_frame_predicted_before_the_view_takes_in_the_confluence() -
     """Feature 261 (cohort seed 45): before the view is decided the scatter's frame is a prediction, and it takes in the
     confluence with its trunk's room, as the frame will (feature 444 T16: no pool map's drain meets the brook now)."""
     from l7r.diagram.hamletgen.hinterland.frame import scatter_frame
-    from l7r.diagram.hamletgen.sink import BROOK_JOIN_TRUNK
+    from l7r.diagram.hamletgen.sink_stage import BROOK_JOIN_TRUNK
     from l7r.diagram.settlement import Settlement
 
     from ._builders import a_plan

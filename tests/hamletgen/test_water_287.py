@@ -10,117 +10,17 @@ from __future__ import annotations
 import math
 from typing import Any
 
-import pytest
-
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.pondstock import _bank_seats, reserve_sty_seat, seat_faults, stage_pond_stock, sty_in_reach, sty_on_near_half
-from l7r.diagram.hamletgen.water.brook import course_corner, join_vertices
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import SUPPLY_ROLES
-from l7r.diagram.settlement.land.dikes import breaches_any_dike, course_breaches
 
 from ._builders import a_plan
 
 # ---- water W42: a drain never crosses a dike's crest off its gaps ------------------------------------------------------
 
-CREST = [(380.0, 380.0), (1020.0, 380.0), (1020.0, 1020.0), (380.0, 1020.0)]  # a square crest round the square crop
-
-
-def _dike(*gaps: tuple[float, float]) -> dict[str, Any]:
-    return {"crest": [list(p) for p in CREST], "gaps": [list(g) for g in gaps]}
-
-
-def test_a_course_crossing_the_crest_away_from_every_gap_breaches_it_and_one_at_a_gap_does_not() -> None:
-    """W42: the rule's predicate (`course_breaches`) asked over the course walked at a foot - a long leg whose own midpoint
-    is nowhere near the crest still breaches it where it crosses, 200 px from either sluice."""
-    leg = [(700.0, 900.0), (700.0, 1500.0)]  # its midpoint (700, 1200) is 180 px off the crest
-    assert not course_breaches(leg, CREST, [(380.0, 380.0)]), "the bare predicate reads midpoints only"
-    assert breaches_any_dike(leg, [_dike((380.0, 380.0), (1020.0, 380.0))])
-    assert not breaches_any_dike(leg, [_dike((700.0, 1020.0))]), "within the gap's reach: the outfall, a decided crossing"
-    assert not breaches_any_dike(leg, []), "no dike, nothing to breach"
-
-
-def test_the_route_refusals_name_the_dike() -> None:
-    plan = a_plan()
-    out = (700.0, 990.0)
-    route = [out, (700.0, 1100.0), (700.0, 3200.0)]
-    assert "dike" in hg.sink.route_refusals(plan, out, (0.0, 1.0), True, route, [], [_dike((380.0, 380.0))])
-    assert hg.sink.route_refusals(plan, out, (0.0, 1.0), True, route, [], [_dike((700.0, 1020.0))]) == []
-
-
-def _sink_stage(monkeypatch: pytest.MonkeyPatch, *gaps: tuple[float, float], sink: str = "offmap") -> tuple[Any, Settlement, list[tuple[list[tuple[float, float]], str]]]:
-    plan = a_plan()  # falls due south, the square crop at x 400-1000, y 400-1000
-    plan.water_sink = sink
-    plan.brook = []
-    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
-    s.M["dikes"] = [_dike(*gaps)]
-    drawn: list[tuple[list[tuple[float, float]], str]] = []
-    monkeypatch.setattr(hg.sink, "drain_outfall", lambda s_, name: (700.0, 990.0))
-    monkeypatch.setattr(hg.sink, "drain_heading", lambda s_, name: (0.0, 1.0))
-    monkeypatch.setattr(hg.sink, "drain_run", lambda s_, pts, to: drawn.append((list(pts), to)))
-    return plan, s, drawn
-
-
-def test_the_drain_is_drawn_through_the_dike_only_at_its_gap(monkeypatch: pytest.MonkeyPatch) -> None:
-    """W42's second half: the sink's searched routes ask the predicate, so the drain drawn leaves the dike at its gap."""
-    _plan, s, drawn = _sink_stage(monkeypatch, (700.0, 1020.0))
-    hg.sink.lay_sink(s, _plan)
-    assert drawn and not breaches_any_dike(drawn[0][0], s.M["dikes"])
-
-
-def test_a_drain_with_no_route_through_a_gap_is_refused_by_name_never_drawn_across_the_crest(monkeypatch: pytest.MonkeyPatch) -> None:
-    """W42 / FR-005: every searched route and the constructed one cross the crest 200+ px from the only gap - the sink
-    refuses by name rather than draw a breach."""
-    plan, s, drawn = _sink_stage(monkeypatch, (380.0, 380.0))
-    with pytest.raises(hg.sink.SinkRefused, match="crosses the dike"):
-        hg.sink.lay_sink(s, plan)
-    assert drawn == []
-
-
-def test_a_confluence_reached_only_across_the_crest_is_not_taken(monkeypatch: pytest.MonkeyPatch) -> None:
-    plan, s, drawn = _sink_stage(monkeypatch, (700.0, 1020.0))
-    monkeypatch.setattr(hg.sink, "brook_join", lambda plan_, out, keeps=None: (1000.0, 1060.0))  # crosses the crest ~130 px east of the gap
-    hg.sink.lay_sink(s, plan)
-    assert drawn and drawn[0][1] == "offmap" and not breaches_any_dike(drawn[0][0], s.M["dikes"])
-
-
-def test_a_pond_reached_only_across_the_crest_drains_off_the_frame_instead(monkeypatch: pytest.MonkeyPatch) -> None:
-    """W42: the tameike's ditch is asked before the pond is dug; one that breaches sends the field off the frame."""
-    plan, s, drawn = _sink_stage(monkeypatch, (700.0, 1020.0), sink="pond")
-    calls: list[int] = []
-    monkeypatch.setattr(hg.sink, "breaches_any_dike", lambda course, dikes: not calls and not calls.append(1))
-    hg.sink.lay_sink(s, plan)
-    assert plan.water_sink == "offmap" and not s.M.get("pond") and drawn and drawn[0][1] == "offmap"
-
 
 # ---- labels L16: the rounding holds every confluence ------------------------------------------------------------------
-
-
-def _bent() -> list[tuple[float, float]]:
-    """A brook with a 100 degree corner at (300, 0), then a gentler one."""
-    t = math.radians(100.0)
-    b = (300.0 + 300.0 * math.cos(t), 300.0 * math.sin(t))
-    return [(0.0, 0.0), (300.0, 0.0), b, (b[0] + 200.0, b[1] + 100.0)]
-
-
-def test_join_vertices_inserts_an_end_on_a_segment_and_leaves_one_off_the_course() -> None:
-    course = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0)]
-    out, held = join_vertices(course, [(40.0, 0.4), (300.0, 300.0), (100.0, 0.0), (0.0, 0.0)], hold_corners=False)
-    assert (40.0, 0.0) in out and held[0] == (40.0, 0.0)
-    assert (100.0, 0.0) not in held, "an end on a corner is left to the rounding"
-    assert (0.0, 0.0) in held, "an end on the course's own end is no corner, and is held"
-    assert join_vertices([(0.0, 0.0)], [(0.0, 0.0)]) == ([(0.0, 0.0)], [])
-    assert course_corner((100.0, 0.0), course) and not course_corner((50.0, 0.0), course)
-    assert not course_corner((100.0, 0.0), [(0.0, 0.0), (100.0, 0.0), (100.0, 0.0), (200.0, 0.0)]), "a repeated vertex turns nothing"
-
-
-def test_the_drain_is_not_joined_to_the_brook_on_a_corner() -> None:
-    """L16: the stride walk's first candidate on every leg is the leg's start - a corner - and a confluence held there would
-    be a mitred bend. The nearest fallen point here IS the apex of a V; the join is taken off it."""
-    plan = a_plan()
-    plan.brook = [(1350.0, 950.0), (1100.0, 1150.0), (1350.0, 1350.0), (1350.0, 2400.0)]
-    join = hg.brook_join(plan, (1050.0, 1050.0))
-    assert join is not None and join != (1100.0, 1150.0) and not course_corner(join, plan.brook)
 
 
 # ---- water W50: the sty's seat is reserved before the houses ----------------------------------------------------------

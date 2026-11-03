@@ -37,11 +37,9 @@ from .consts_fields import ROLLED_ARCHETYPES as ROLLED_ARCHETYPES
 from .consts_fields import WATERWARD_DEPTH as WATERWARD_DEPTH
 
 # The water constants live in consts_water.py (feature 316, the 1,000-line bar) and are re-exported here by name.
-from .consts_water import BROOK_BEND_WIDTHS as BROOK_BEND_WIDTHS
 from .consts_water import BROOK_CROSSING_COST_FT as BROOK_CROSSING_COST_FT
 from .consts_water import BROOK_FLANKS as BROOK_FLANKS
 from .consts_water import BROOK_FRAME_MARGIN as BROOK_FRAME_MARGIN
-from .consts_water import BROOK_MAX_TURN_DEG as BROOK_MAX_TURN_DEG
 from .consts_water import BROOK_SKIRT as BROOK_SKIRT
 from .consts_water import BROOK_SLEW as BROOK_SLEW
 from .consts_water import BROOK_TAP_RUN as BROOK_TAP_RUN
@@ -54,7 +52,6 @@ from .consts_water import HEAD_RACE_LEAD as HEAD_RACE_LEAD
 from .consts_water import INTAKE_FORMS as INTAKE_FORMS
 from .consts_water import OFFTAKE_DEG as OFFTAKE_DEG
 from .consts_water import OFFTAKE_LADDER as OFFTAKE_LADDER
-from .consts_water import POND_SETBACK_LIMIT as POND_SETBACK_LIMIT
 from .consts_water import SINKS as SINKS
 from .consts_water import WEIR_SKEW_DEG as WEIR_SKEW_DEG
 from .consts_water import WEIR_THICK_FT as WEIR_THICK_FT

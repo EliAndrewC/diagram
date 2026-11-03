@@ -202,19 +202,6 @@ def test_every_fields_member_resolves_on_settlement_itself():
     assert not unreachable, f"not resolvable on Settlement: {unreachable}"
 
 
-def test_hem_on_water_sees_a_stream_and_a_pond_separately():
-    """the comb builder lays the fan from pure geometry and `draw_comb_field` used to render it blind - it
-    was the ONLY placer that consulted nothing, so a dry-hem plot could be drawn straight across a
-    stream authored earlier (Ubame's). The two arms are different geometry: a stroked watercourse with
-    a half-width, and the pond's ellipse."""
-    from l7r.diagram.hamletgen.water.brook_rules import hem_on_water
-
-    plot = [(100.0, 100.0), (140.0, 100.0), (140.0, 140.0), (100.0, 140.0)]
-    assert hem_on_water(plot, [([(0.0, 120.0), (500.0, 120.0)], 4.5)], None), "the stream runs under it"
-    assert hem_on_water(plot, [], (120.0, 120.0, 60.0, 40.0)), "and the pond stands under it"
-    assert not hem_on_water(plot, [([(0.0, 900.0), (500.0, 900.0)], 4.5)], (800.0, 800.0, 20.0, 20.0))
-
-
 def test_comb_base_fill_can_floor_the_whole_envelope():
     """Cities crop tight and carry no surrounding scrub, so their field floor must cover the edge
     junctions too; a village clips the fill to the plots' union bbox instead, which hides the nucleated

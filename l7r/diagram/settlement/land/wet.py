@@ -69,30 +69,6 @@ MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the sam
 """Research: tuft reach - CONVENTION: 7 bs"""
 
 
-def pond_fringe_ring(cx: float, cy: float, rx: float, ry: float, margin: float, n: int = 16) -> list[tuple[float, float]]:
-    """The reedy MARGIN of a pond, as the polygon `marsh(role="pond_fringe")` scatters (feature 151).
-
-    One helper because there are two call sites and they diverged: the sink's tameike keeps 44 px of fringe,
-    a comb source pond 40, and each built the ring by hand. The margins still differ - a tameike is dug and
-    its shallows are wider - but the difference is an ARGUMENT now rather than two literals a reader has to
-    notice.
-
-    TWO ORDERING RULES BOTH CALLERS OWE, both learned by getting them wrong on 2026-08-29:
-
-    1. Scatter the fringe only AFTER the water it must keep off is recorded. `draw_comb_field` drew it
-       before the field's channels existed, so the reed keep-out had nothing to keep off and three blades
-       were drawn across the inlet hairline.
-    2. (Retired by feature 298.) The pond's own no-build rect (`block_polys`) once had to follow the fringe,
-       because the reed scatter read it and, appended first, it cost 45% of the annulus. The reeds are a tile
-       now, and the marsh cuts the pond's own ellipse (`pond_cut`) rather than its box, so the order no longer
-       thins them.
-
-    Research: pond reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round the shore at the caller's margin
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 16 (ring vertex count)
-    """
-    return [(cx + (rx + margin) * math.cos(a), cy + (ry + margin) * math.sin(a)) for a in [i * math.pi / (n / 2) for i in range(n)]]
-
-
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 """Research: reed feather - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 46 bs over which grass and reed grade into each other"""
 

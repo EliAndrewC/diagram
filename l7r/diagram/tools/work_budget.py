@@ -46,7 +46,7 @@ def roll(seed: int, households: int) -> dict[str, Any]:
     things it placed (`perf_profile.placed_counts`) and its seconds; a roll the generator refuses keeps the stages it ran."""
     from l7r.diagram import work_counts
     from l7r.diagram.hamletgen import HamletSpec, plan_site
-    from l7r.diagram.hamletgen.driver import STAGES, roll_scope
+    from l7r.diagram.hamletgen.driver import STAGES, roll_scope, walks_after
     from l7r.diagram.hamletgen.plan import beyond_the_band
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.tools.perf_profile import placed_counts
@@ -66,7 +66,8 @@ def roll(seed: int, households: int) -> dict[str, Any]:
             try:
                 with redirect_stdout(io.StringIO()):
                     st(s, plan)
-                s.standing.resync()
+                if walks_after(st):  # as the roll walks it (feature 444 T26 D3)
+                    s.standing.resync()
             except (ValueError, RuntimeError) as e:  # the generator's refusals, as the snapshot reads them
                 refused, refused_at = f"{type(e).__name__}: {str(e)[:120]}", name
             ops = {k: n - before.get(k, 0) for k, n in work_counts.OPS.items() if n != before.get(k, 0)}

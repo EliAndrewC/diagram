@@ -319,7 +319,8 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
         s.block_polys.append(d["poly"])
     for c in chans:
         s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
-    s.stream(f["brook"], frm={"kind": "offmap"}, to={"kind": "offmap"}, width=BROOK_W)
+    # on its drawn course, its bends rounded where it is laid (T26 D2), its stations the course the ways keep routing against
+    s.stream(f["brook_drawn"], frm={"kind": "offmap"}, to={"kind": "offmap"}, width=BROOK_W, stations=f["brook"])
     if f["weir"]:
         ink.weir(s, M["weirs"][-1])
     ink.draw(s, net, name, plan.field_archetype)

@@ -10,7 +10,7 @@ import pytest
 from l7r.diagram.hamletgen import pondbank as pb
 from l7r.diagram.hamletgen.consts import POND_BANK_CROWN_FT, POND_BANK_FT, POND_BANK_PITCH_FT, POND_BANKS
 from l7r.diagram.hamletgen.plan import HamletSpec
-from l7r.diagram.hamletgen.sink import SINK_FRINGE
+from l7r.diagram.hamletgen.sink_stage import SINK_FRINGE
 from l7r.diagram.settlement import Settlement
 
 POND = (400.0, 400.0, 80.0, 50.0)
