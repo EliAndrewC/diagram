@@ -81183,14 +81183,23 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/water_frame.rs::roll_plan#every knob's options are rolled at even odds (randbelow(n)), including knob 0, the settlement form, where 0031 gives shares of 5/3/2 unless the Python table weights the options by repeating them": {
-  "code": "e5cf8474848affce",
+ "rust/phases/src/water_frame.rs::roll_plan#each knob at even odds over its table": {
+  "body": "6c6a04429783f7fd",
+  "claim": "each knob at even odds over its table - clustered-and-scattered-villages-shuson-sanson.drawing: half clustered, three in ten scattered, two in ten as rows - a table's shares are its repeated entries (the settlement form's 5, 3 and 2 of ten), so an even draw keeps them",
+  "code": "0fa5e6c8ebe09904",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "every knob's options are rolled at even odds (randbelow(n)), including knob 0, the settlement form, where 0031 gives shares of 5/3/2 unless the Python table weights the options by repeating them",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "randbelow(n) draws evenly over the table's entries, and the settlement form's table (nucleated x5, dispersed x3, linear x2) keeps the page's \"Half... three in ten scattered and two in ten as rows\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+  },
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
   "body": "6c6a04429783f7fd",
