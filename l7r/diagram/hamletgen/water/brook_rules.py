@@ -13,7 +13,6 @@ from collections.abc import Sequence
 
 from ..consts import BROOK_FRAME_MARGIN, BROOK_SKIRT, Pt
 
-
 # ---- THE BROOK'S RULES, one predicate each (feature 287, M1): the placer below judges its candidate with these, and the
 # pool tests read the same functions. Every one is measured on the DRAWN course, `finished_course`.
 
