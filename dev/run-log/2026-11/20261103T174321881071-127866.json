@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-03T17:43:21Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 445,
+  "result": "failed: test-full",
+  "commit": "9faa86698",
+  "first_failure_s": 157.2,
+  "last_failure_s": 157.2,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/hamletgen/test_rust_prefix.py::test_the_rust_stages_are_derived_from_the_crate_and_held_to_the_front"
+  ],
+  "host": {
+    "load": [
+      3.05,
+      6.56
+    ],
+    "mem_avail_mb": [
+      8940,
+      9406
+    ],
+    "cpu_temp_c": [
+      101.0,
+      83.0
+    ],
+    "stall_s": {
+      "cpu": 2.2,
+      "io": 0.8,
+      "io_full": 0.7,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 50970,
+      "package": 30725
+    }
+  },
+  "phases": {
+    "preflight": 20.0,
+    "static": 30.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "reference": 0.0,
+    "hooks-test": 69.0,
+    "counters-inert": 11.0,
+    "pytest": 328.0,
+    "test-full": 334.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_waiting_ports.py",
+  "selected": 9996,
+  "collected": 9996
+}
