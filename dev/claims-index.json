@@ -8290,17 +8290,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FALL_BEARINGS#land's fall": {
+  "body": "db1c61e203ecd255",
+  "claim": "land's fall - which-way-water-flows-and-how-channels-bend-and-join.drawing: declared, else rolled among eight points",
   "code": "2fd8a3a00dc4f0b3",
   "core": "afcd38adaefc5f30",
-  "date": "2026-10-03",
-  "note": "every map declares a fall; the roll supplies one when undeclared",
+  "date": "2026-11-03",
+  "note": "the drawing page says only that every map declares its land's fall and that a hamlet may take its water's bearing from that fall. It says nothing about rolling an undeclared fall, or about limiting a rolled fall to the eight compass points. The claim should be GUESS or UNRESEARCHED until a page records the roll",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triage": "touched",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
+  "research": "68e3dc87e83ea403",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/consts.py::FAN_ASPECTS#fan aspect": {
   "body": "a6ef2e6eaec7545d",
@@ -71875,16 +71880,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin._flow_record#flow direction recorded": {
+  "body": "3292bbc9fcfb9a72",
+  "claim": "flow direction recorded - which-way-water-flows-and-how-channels-bend-and-join.drawing: the net upstream-to-downstream bearing",
   "code": "076c58b40b875b5e",
   "core": "f01dda491eceb75d",
-  "date": "2026-10-03",
-  "note": "every course declares its flow",
+  "date": "2026-11-03",
+  "note": "every watercourse declares which way it runs, and a course's heading is checked against the map's bearing; the atan2 call matches the maps' angle convention (0 = east, 90 = south)",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triage": "touched",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch class": {
@@ -81070,7 +81082,7 @@
   "code": "ad9eb93e46cf121c",
   "core": "58b736415105e807",
   "date": "2026-11-03",
-  "note": "work-budget bookkeeping, nothing physical",
+  "note": "work-budget bookkeeping only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -81082,7 +81094,7 @@
   "code": "becbc1e51681b2b0",
   "core": "986b177ca9618cf0",
   "date": "2026-11-03",
-  "note": "bookkeeping only",
+  "note": "counter plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -81094,7 +81106,7 @@
   "code": "771a0a389a825633",
   "core": "b585f57b8dc13a6a",
   "date": "2026-11-03",
-  "note": "the shape of the data handed over from Python",
+  "note": "a tuple shape, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -81106,7 +81118,7 @@
   "code": "227fd6e554cef289",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "cardinal falls only, matching \"usually laid north-south and east-west, was not seldom tilted ... a tilted paddy grid is not drawn, a deviation\"",
+  "note": "the cardinal mode allows only 90-degree falls, so the paddy grid stays untilted, and the drawing page records that as a deviation (\"a tilted paddy grid is not drawn, a deviation\")",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -81122,7 +81134,7 @@
   "code": "9fffcf2cc28cc510",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "the filter keeps falls f with (f - quarter_deg(windward)) mod 360 in [0, 180], but quarter_deg is not in the bundle. The set matches \"fall away from the wind or square across it\" with both ends in only if quarter_deg returns the wind's bearing +90 (315 for NW, giving falls 315 to 135). If it returns the wind's own bearing (225 for NW), the set admits a fall toward the wind and drops one square-across fall. I need quarter_deg's source",
+  "note": "quarter_deg gives compass bearings (N=0, E=90) and the falls are map angles (clockwise from east, 90 is south), so the filter (f - w) mod 360 <= 180 allows compass falls 90 to 270 degrees off the wind, both ends included: \"fall away from the wind or square across it\", recorded as a deliberate deviation",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -81130,18 +81142,18 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#the fall to the compass points": {
   "body": "030b28237589aaa4",
-  "claim": "the fall to the compass points - CONVENTION: a fall off a polder snapped to the eight points at 45 degrees",
-  "code": "6e07b31276da0342",
+  "claim": "the fall to the compass points - UNRESEARCHED: a fall off a polder snapped to the eight points at 45 degrees",
+  "code": "ca71c65e7b9686a7",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "snapping the land's fall to 8 points 45 degrees apart decides which way the ground slopes, which is a physical decision, not a way of showing something. Declared falls elsewhere are not snapped (\"Hoshizora's ground slopes ... at 115 degrees\"). The label should be UNRESEARCHED, or a DEVIATION that the 0054 drawing page records",
+  "note": "nothing cited says how a hamlet's fall is snapped to the compass points",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted_falls#the falls handed to Python": {
   "body": "13d6a9edb3a63450",
@@ -81149,7 +81161,7 @@
   "code": "0b5071773a8b8fd8",
   "core": "7f372e3303264b45",
   "date": "2026-11-03",
-  "note": "a test wrapper",
+  "note": "a wrapper that passes its arguments through",
   "pages": {},
   "research": "",
   "rests": [],
@@ -81161,7 +81173,7 @@
   "code": "b2c468923f79fd2f",
   "core": "a781e4360abc518b",
   "date": "2026-11-03",
-  "note": "reads which form a knob applies to; the added not_dispersed branch is plumbing too",
+  "note": "matches a branch name against the form; the new not_dispersed arm decides nothing itself, and the rule lives in the Python table",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -81172,31 +81184,35 @@
   "code": "45f9e43fec337134",
   "core": "8e8369ef9f0c786b",
   "date": "2026-11-03",
-  "note": "turns a compass name into degrees",
+  "note": "turns a compass name into compass degrees; the shift into the map's angle frame happens in admitted",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::roll_plan#every knob's options are rolled at even odds (randbelow(n)), including knob 0, the settlement form, where 0031 gives shares of 5/3/2 unless the Python table weights the options by repeating them": {
+  "code": "e5cf8474848affce",
+  "core": "e5cf8474848affce",
+  "date": "2026-11-03",
+  "note": "every knob's options are rolled at even odds (randbelow(n)), including knob 0, the settlement form, where 0031 gives shares of 5/3/2 unless the Python table weights the options by repeating them",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
   "body": "6c6a04429783f7fd",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a528c046ed32d6c4",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "each knob is rolled from its own seed, the form first and the others gated by form; an even draw over the 10-entry table gives the half / three in ten / two in ten shares; a pinned knob stands for a hand-fixed one",
+  "note": "each knob is rolled from its own seed unless pinned, and a map may fix one by hand",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
   "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#the fall at even odds": {
@@ -81205,7 +81221,7 @@
   "code": "1ba46c912a880d35",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "randbelow over the admitted falls; no page gives the falls' shares",
+  "note": "no cited page gives shares for the falls",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -81216,7 +81232,7 @@
   "code": "37db0e050ed3d044",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "the fall is drawn from knob_rng(seed, \"down_deg\") before the knob loop; a pinned fall is not rolled; the flow is left to plan_site",
+  "note": "the fall is rolled from its own seed stream (returns None when pinned), and a hamlet's bearing comes from its fall unless it declares one",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
@@ -81232,7 +81248,7 @@
   "code": "ffee43eebd94b98c",
   "core": "c1c72051bf03c46e",
   "date": "2026-11-03",
-  "note": "each knob rolled from its own seed key through roll_plan, gated by its branch so a value its rule forbids is never drawn",
+  "note": "hands off to roll_plan",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -81249,7 +81265,7 @@
   "code": "95cc0bdc5e1b95ad",
   "core": "c1c72051bf03c46e",
   "date": "2026-11-03",
-  "note": "hands admitted() to roll_plan, so the fall is rolled first; the flow is plan_site's",
+  "note": "hands off to roll_plan with admitted's falls",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },

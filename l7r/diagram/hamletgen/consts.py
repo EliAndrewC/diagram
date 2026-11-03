@@ -297,7 +297,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 # cannot know that, so an unpinned bearing is ROLLED and the spec always lets the GM pin the real
 # one. The roll exists so a cohort varies, not because a rolled bearing is as good as a known one.
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
-"""Research: land's fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: declared, else rolled among eight points"""
+"""Research: land's fall - UNRESEARCHED: an undeclared fall rolled among the eight compass points; no page records the roll or its points"""
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
 """Research: polder grid's orientation - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
 
