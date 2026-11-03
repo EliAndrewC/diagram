@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-03T18:19:22Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 373,
+  "result": "green",
+  "commit": "61103d026",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 9998,
+  "host": {
+    "load": [
+      2.1,
+      5.02
+    ],
+    "mem_avail_mb": [
+      9120,
+      9425
+    ],
+    "cpu_temp_c": [
+      100.0,
+      96.0
+    ],
+    "stall_s": {
+      "cpu": 1.4,
+      "io": 0.3,
+      "io_full": 0.3,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 93629,
+      "package": 53141
+    }
+  },
+  "phases": {
+    "preflight": 25.0,
+    "static": 26.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "reference": 0.0,
+    "counters-inert": 10.0,
+    "pytest": 322.0,
+    "floors": 10.0,
+    "test-full": 334.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_waiting_ports.py",
+  "collected": 9998
+}
