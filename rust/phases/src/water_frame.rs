@@ -71,7 +71,7 @@ fn quarter_deg(windward: &str) -> f64 {
 ///
 /// Research:
 ///     high side and windward side as one - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin, which the page calls one
-///     case among several, taken on every hamlet, both ends in - a fall away from the wind or square across it
+///     case among several, taken on every hamlet, both ends in, a fall away from the wind or square across it
 ///     the fall to the compass points - UNRESEARCHED: a fall off a polder snapped to the eight points at 45 degrees
 ///     a polder's fall to the cardinals - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the surveyed grid, usually laid north-south and east-west
 ///     and not seldom tilted, drawn untilted
