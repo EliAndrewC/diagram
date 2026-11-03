@@ -446,8 +446,8 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     hill AND to the wind, the high side and the windward side being one side (`seat_cluster`).
 
     Research:
-        high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin
-        fall square to or away from the wind - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high margin on the windward side, one case among several (how common, a GUESS); a fall square to or away from the wind keeps the high side and the windward side together"""
+        high side and windward side as one - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html calls the high windward margin one case among several, how common a GUESS; taken on every hamlet (the rule Rust's `admitted` keeps, this predicate its test's reference)
+        fall square to or away from the wind - GUESS: a fall square to or away from the wind keeps the high side and the windward side together, so the windward tie is held on every field the fit can draw"""
     if __debug__:  # the counted work (feature 444 T15): a fall tested against the wind
         work_counts.OPS["pt_test@fall_backs_the_wind"] += 1
     return _fall_into_wind(down_deg, windward) <= 1e-9
@@ -548,7 +548,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         dike-pond knobs only on a dike-pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder's layout fixed to the grid
         regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: DEFAULT_WINDWARD unless declared
         rolled fall backs the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: only falls leaving a windward margin, the settlement laid out with its back to the wind
-        water flow follows the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: unless declared
+        water flow follows the fall - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html holds the flow and the slope may differ; a hamlet rolls no drainage bearing of its own, so its flow is taken as its fall unless the spec declares one
+        the fan's aspect and the head race's lead - GUESS: rolled per hamlet from their tables (`FAN_ASPECTS`, `HEAD_RACE_LEAD`), each table's own claim in consts
         flood-prone ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a polder's farms
         paddy by households - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: GROSS_ACRES_PER_HOUSEHOLD each
         row on the edge on flood ground - research/questions/0033-row-villages-resson.drawing.html
