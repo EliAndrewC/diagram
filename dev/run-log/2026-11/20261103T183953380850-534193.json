@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-03T18:39:53Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 252,
+  "result": "green",
+  "commit": "b351bfae4",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 9742,
+  "host": {
+    "load": [
+      2.4,
+      5.92
+    ],
+    "mem_avail_mb": [
+      8807,
+      9411
+    ],
+    "cpu_temp_c": [
+      99.0,
+      90.0
+    ],
+    "stall_s": {
+      "cpu": 1.0,
+      "io": 0.3,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 76504,
+      "package": 46227
+    }
+  },
+  "phases": {
+    "preflight": 15.0,
+    "static": 27.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "reference": 1.0,
+    "counters-inert": 10.0,
+    "pytest": 200.0,
+    "floors": 10.0,
+    "test-full": 212.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/src/sink/offmap.rs",
+  "collected": 9742
+}
