@@ -422,3 +422,22 @@ The trigger: two red gates in a row on T26 (17:43Z, 17:50Z), the tripwire ruled 
 7. **Done:** the prefix test names three stages; `pond_reeds`'s drops are tested in `tests/settlement/test_wet_ground.py`.
 8. **Every route measured before the arbiter was asked?** The tripwire asked, with each fix and its passing tests in hand.
 9. **After a ruling, the step it named?** Yes: `make cover-changed` clean on the three files it named, then `make done` once.
+
+### T26 part B (2026-11-03T18:55Z)
+
+The trigger: cohort seed 904 newly failing against main (`dev/cohort-log/20261103T183048Z-diagram-backlog-503049.json`,
+groves_crossed_by_lanes 2), at set-down.
+
+1. **What exactly is refusing?** Two bamboo groves of one farm (at about (894, 1646) and (838, 1707)) lie under lanes. The
+   sink (pond form) is not the refusing stage: the bamboo strip and the lane web, Python stages after it, judged on the Rust
+   sink's moved pond and ditch.
+2. **A3 again.** The rule is the bamboo's, unchanged (no grove crossed by a lane).
+3. **A4 again.** Read in the cohort's log.
+4. **Moving something placed earlier to suit something later?** Declined: the sink's pond is placed by its own research; the
+   groves and the lanes are the later stages'.
+5. **Tuning or changing?** Neither. Held to the bamboo stage's port, as Kashikawa's bamboo is (found row 358).
+6. **The one-sentence test.** "A later Python stage trips on the Rust sink's moved pond at seed 904; held to its own port."
+7. **Done:** nothing changed for it; the T26 join-reach change does not reach it (904 is a pond sink).
+8. **Every route measured before the arbiter was asked?** The JOIN_REACH change ruled out (pond sink); the room knob
+   (`SEATING_GROUND_FT`, a GUESS) not moved, since the failing stage is not the sink's.
+9. **After a ruling, the step it named?** To follow.
