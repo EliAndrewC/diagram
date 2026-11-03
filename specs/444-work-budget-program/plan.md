@@ -440,4 +440,4 @@ groves_crossed_by_lanes 2), at set-down.
 7. **Done:** nothing changed for it; the T26 join-reach change does not reach it (904 is a pond sink).
 8. **Every route measured before the arbiter was asked?** The JOIN_REACH change ruled out (pond sink); the room knob
    (`SEATING_GROUND_FT`, a GUESS) not moved, since the failing stage is not the sink's.
-9. **After a ruling, the step it named?** To follow.
+9. **After a ruling, the step it named?** Yes: ask:set-down-T26 ruled `continue` - seed 904 recorded as a found row for the household groves' port, kept off the Rust failing list (FR-020), T26's landing left to its budget route.
