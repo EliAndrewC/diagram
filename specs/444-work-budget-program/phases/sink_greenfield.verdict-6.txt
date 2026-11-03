@@ -1,0 +1,28 @@
+UNDERIVED - the reeds' ground (486 of 749 at 40): the contract gives no reason for it, because its Keeps line makes the reeds "a drawing of its record, not a search" and its Reads leave out the overlap registry the row searches; without the row the totals are 220 / 263 / 334, 65% lower at 40, so it would block as LOOSE even if its reason were only misattributed.
+
+**1. Is each factor derived?**
+- **The reeds' ground row (S1, S7).** Its reason is credited to the Writes line ("its wet shore and reeds as one layer record"), but that line asks only for the record. The Keeps line puts the reeds' keep-off as "a drawing of its record, not a search". Against that, the row searches the registry (1 a cell, 1 a piece). It also builds bare ground out of pieces that belong to other stages: the dry plots, and "any water's". The Writes line says the registry is filed for "every later stage", and it is not among the stage's Reads.
+- **Its only source is the code.** The row's source is the rebuild's MODE AUDIT (`phases/sink.audit-1.txt`). That shows the code does this work, not that the contract owes it. It is render-time work, and the item fails as "work the first derivation missed" (arbiter's (a)).
+- **Its inner figures have no source either.** The "about 12 pieces" and the 4 points a piece have no figure in the Bounds. The 68 ft reach ("the widest tint, 28, and 40") is unexplained, and the ring's 44 ft is labeled a GUESS.
+- **The other rows are derived.** The form, the outline, the seat's test, the ditch, the ring and the registry rows are each derived at the typical case from the Bounds.
+- **The other items under "Work the first derivation missed".** The ditch and the registry filing are owed. The "outline and brook read by the sink itself" item only re-prices where the seat's test gets its data; it adds no work.
+- **The raise.** It is 749 / 149 = 5.03x the first figure, past twice it, so it needs two SOUNDs. It is still under ten times.
+
+**2. Is there a cheaper standard algorithm?**
+- Bisecting the brook by its order along the fall is sound.
+- The outline is read in full: once in its own row, then twice more in the reeds' ground (68 / 96 / 135 each time). Only the kept 5 / 6 / 9 segments matter, and no row has a `- pruning:` line saying why the full read is needed (S9). That is about 180 of 749 at 40, under half (S10), so it is a note.
+
+**3. Is any factor padded?**
+- The registry row's reasons add up to 16 + 16 + 8 / 13 / 21 = 40 / 45 / 53, but the row says 48 / 53 / 61: 8 operations with no reason. That is a note.
+- (c) The ring's points are not 16 throughout. The ring is 16 and the rim read for the registry box is 16, but the pond's ellipse is 32 in the drawn ground and 64 in the keep-out. That is one shape at two resolutions, with no reason given for 32.
+
+**4. Is each figure read at its source's size and unit?**
+- The pond's 268 / 378 / 535 by 171 / 241 / 341 ft are read as diameters. The 20 ft stations and the 63 ft segments are used as the Bounds state them, and the cell products check out.
+- (b) The 120 ft cells are consistent in the Indexes line and in both rows. "Cheaper algorithms considered" still says "the registry's 64 ft cells", and the Bounds' per-64 ft densities (3.7, 1.8) are no longer used anywhere. These are notes.
+- The dikes and resting basins in the Reads are still not priced for the ditch's legs. That is a note.
+
+**(d) The measured row (810-850, 945-995, 1,155-1,200).**
+- I did not judge the derivation against these figures. This mode holds no counts of the code so they cannot anchor the target, and the figures describe the rebuild, not the contract.
+- They do set up a choice. Against an owed derivation of about 263 at 40, the rebuild measures about 3.6-3.8x, past twice: that would be OVER in MODE AUDIT. Either the reeds' ground moves out of the sink stage to render time, or the GM amends the contract in his own words to owe it here. That choice is above this verdict.
+
+Bundle: /tmp/l7r-check/work-budget-budget-sink/derivation.md, /tmp/l7r-check/work-budget-budget-sink/contract.md, /tmp/l7r-check/work-budget-budget-sink/rubric.md

@@ -236,7 +236,7 @@
    "declared": "spec-fidelity"
   },
   "### T26 Decisions": {
-   "sha256": "e18ae25050341290c949c761bf17bf5f9aaf5ce6d240826274d0432e81f993b1",
+   "sha256": "d2bc1a6bb2aafff3f33e6d4b4e2209ca09b465ee2d0574e382f2007849dafac4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-03",
    "declared": "spec-fidelity"
@@ -3899,6 +3899,78 @@
      "why": "Prompts under docs/performance-checklist.md, never a gate; perf-ab as a record matches checklist box 6."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-03",
+   "blocks": [
+    "### T26 - phase: sink, in Rust under amendment 7 (the GM 2026-11-03: \"then work on converting the next stage with these guidelines in place ... like the entire next phase\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T26 Approach (checklist part A)",
+    "### T26 Decisions",
+    "### T26 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "stage_sink stays a thin Python seam gathering the stage's reads and calling l7r_phases.stage_sink in rust/phases/src/sink.rs; Python writes the same keys and record shapes",
+     "class": "within",
+     "why": "Design section 7 and FR-010 (a thin Python function calling into one extension module) and FR-004 (same keys read and written). Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D2",
+     "summary": "the brook rounded by the field stage that lays it (filleted at 2.5 drawn widths, taps held); the sink re-draws only where a confluence adds a held vertex on a straight stretch; the field is re-measured against its accepted figure and audited",
+     "class": "within",
+     "why": "Takes out the counted work of re-filing the brook (the request's whole aim), keeps 0054's rounded bends, and keeps the changed field under section 5 item 3's ratchet and MODE AUDIT. Narrows nothing the GM asked for. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D3",
+     "summary": "the driver skips the end-of-stage manifest walk after a Rust stage (walks_after), since the registry files records as they are appended and a Rust seam reshapes nothing (measured 2026-11-03, cohort seeds 1-48: the walk moved no record after water_frame, field and sink); the next Python stage's walk still re-records any reshape, and the Rust stage gate (rust_prefix.py) keeps its own walk",
+     "class": "within",
+     "why": "The only block changed since the CLEAR verdict: earlier it filed only new records (resync new_only), now it skips the walk. Neither the request nor the spec asks for that walk; it is driver bookkeeping, and dropping it removes counted work, which is what the request asks for. Every GM rule it could touch still holds. The FR-019 gate runs its own walk, so the checks judged where a Rust stage ends see the same registry. FR-004's same keys and no-repair rule are untouched. A reshape left for a later Python stage is that stage's to catch (the GM 2026-10-31 and 2026-11-01). The premise is a dated, one-shot measurement with its method stated. Note for the implementer, not a ruling: D1 and D2 have the sink seam re-draw the brook's course where a confluence adds a vertex. D2 makes that geometrically identical, so the registry is not left stale, but the premise that the seam reshapes nothing was measured on today's sink, not the rebuilt one."
+    },
+    {
+     "id": "D4",
+     "summary": "the pond: 3/100 of the paddy (0060's GUESS), seated beyond the outfall and stepped where blocked, given up past POND_SETBACK_LIMIT (a GUESS) for the off-map branch; ditch bowed or curved, never across the brook; reeds a 44 ft ring (GUESS)",
+     "class": "within",
+     "why": "Each rule asked before placing (S4). The give-up follows 0060's own words (a pond that would sit far below the fields sends its drain off the map). GUESS values stay labeled GUESS. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D5",
+     "summary": "off-map branch: join the passing brook where in reach and below the outfall, else a run searched over bearings and junction distances nearest first, stopping at the first that keeps every rule, else a constructed route round the field's hull; seed 29's refusal diagnosed and its rule kept by construction",
+     "class": "within",
+     "why": "0060's rules (55 degrees, downhill, never through the crop) asked before placing. Candidates are derived and the search stops at the first that passes (S2, S9). Seed 29 is fixed under FR-019's all-seeds rule rather than excused. Unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "D6",
+     "summary": "the sink rolls nothing of its own; water_sink is water_frame's knob",
+     "class": "within",
+     "why": "FR-019 does not require matching Python's draws, and this keeps the stage's input fixed (FR-003). Unchanged."
+    },
+    {
+     "id": "D7",
+     "summary": "counters keyed <kind>@<row> behind the counters feature; manifests identical with the feature on and off",
+     "class": "within",
+     "why": "FR-012 and section 1 (the counters compiled out, identical manifests). Unchanged."
+    },
+    {
+     "id": "D8",
+     "summary": "the derivation revised under '## Work the first derivation missed' (ditch, reeds, registry filing, the brook's drawn course, resting basins), judged in MODE BUDGET; past twice the first budget, a second independent dispatch",
+     "class": "within",
+     "why": "FR-022 rule 2, applying amendment 7's words as written, ceilings included. Unchanged."
+    },
+    {
+     "id": "D9",
+     "summary": "hamletgen/sink.py and what only it reaches (brook_course.round_the_brooks and its helpers) deleted in the landing, found by git grep -l and make dead-closure; the seam in a new hamletgen/sink_stage.py",
+     "class": "within",
+     "why": "FR-005 and section 5 item 5 (no fallback path). It states how the list is searched (git grep -l and dead-closure). Unchanged."
+    },
+    {
+     "id": "Approach-exits",
+     "summary": "green and red exits: rust-gate with no failing seed, counts within the budget or LEEWAY, claims IN-STEP, reviews, eight boxes, old Python deleted; red goes to a rebuild, a raise on a re-derivation, the GM's words past ten times, or the arbiter on a cannot-be-done claim",
+     "class": "within",
+     "why": "Repeats FR-006, FR-019, FR-021 and FR-022 without loosening them. The arbiter rules only on a claim that the work cannot be done, never accepts a phase over budget, so FR-006 holds. Unchanged."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4696,118 +4768,69 @@
    "verdict": "CLEAR"
   },
   "T26": {
-   "section_sha256": "ed540a54a772135c8ca46fc4e995d9ba2f12ce64c75c1b844fe82c6bdfc4d49a",
+   "section_sha256": "4c3ca70f2d1b6625f460210310c96f44ceff3d407f649959c79d089fcec6fe54",
    "reviewed": "2026-11-03",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "occasions",
-     "summary": "settlement-review on the pool hamlets the rebuilt sink moves; glyph-check only if a glyph is redrawn",
-     "class": "within",
-     "why": "The reviews its occasions owe are checklist box 6 (request section 3 step 6); FR-019 says a port's moved pool hamlets owe their settlement-reviews. The 'only if' condition names when glyph-check is owed; it does not waive any review an occasion owes."
-    },
-    {
-     "id": "A1-A3 goal and constraints",
-     "summary": "the stage's world goal (pond or off-map run per 0060/0061/0054), its constraints FR-003-006, FR-017, FR-019-022, S1-S10, the sink derivation and budget, the manifest keys it writes",
-     "class": "within",
-     "why": "Restates the phase's contract and the governing requirements; adds no carve-out. The keys listed are those FR-004 says the rebuild must read and write."
-    },
-    {
-     "id": "A4 off-map branch outside the reference roll",
-     "summary": "the reference roll pins water_sink=pond, so make work-budget measures only the pond branch; the off-map branch is held to the same rules by the Rust gate's fresh block",
-     "class": "within",
-     "why": "The request (section 1) defines make work-budget on the reference hamlet and its pinned seeds and FR-014 counts the typical case; the plan does not change that, and FR-019/FR-020 already put both branches under the gate. It is a fact the plan states, not a narrowing it makes. Note: the off-map search (A7) is therefore budget-counted only through MODE AUDIT's reading of its loops, not by a measured count."
-    },
-    {
-     "id": "A5 order",
-     "summary": "after field, before seat, in STAGES order",
-     "class": "within",
-     "why": "FR-003 and request section 6 step 6: phases rebuilt in pipeline order."
-    },
-    {
-     "id": "A6 exits",
-     "summary": "Green: rust-gate with no failing seed through water_frame/field/sink, count at most the (raised) budget or within LEEWAY, MODE AUDIT WITHIN or LEEWAY, claims IN-STEP, reviews owed, eight boxes, old sink deleted. Red: rebuilt again or the budget raised per FR-022 rule 2 or with the GM's words past ten times; a claim it cannot be done ruled through make arbiter-ask",
-     "class": "within",
-     "why": "Each green exit maps to FR-005, FR-019, FR-021, FR-022 rule 1 and checklist box 6; each red exit is FR-006/FR-022 rule 2 verbatim. The arbiter clause is within only as a process ruling: FR-006 and request section 5 item 4 forbid the arbiter accepting a phase over its budget, and FR-006 forbids setting a phase down, so an arbiter ruling here cannot end the phase or admit a count FR-022 does not."
-    },
-    {
-     "id": "A7 search smell",
-     "summary": "the off-map run searches bearings and junction distances derived from the 55 degree turn and the canvas, stopping at the first that keeps every rule",
-     "class": "within",
-     "why": "Rubric S2 (derived candidates, never a tuned retry count) and S9; no rule relaxed."
-    },
-    {
-     "id": "A8-A9 budget and done",
-     "summary": "one landing, rust-gate per increment, one MODE AUDIT a round; done measured by make work-budget at 40 and 80 and the whole roll against the standing record's total",
-     "class": "within",
-     "why": "Request section 3 steps 6-8 and FR-005. The 18.3M is the standing whole-roll figure the record shows, not a replacement for the program target (FR-009)."
-    },
-    {
-     "id": "A10-A11 constants and room",
-     "summary": "every figure cited to its page at the Rust, a GUESS stays a GUESS; a pond with no clear seat drains off the map (0060)",
-     "class": "within",
-     "why": "A11 is asked before placing (FR-004, S4), not a placed-then-repaired fallback, and rests on the research page's own words."
-    },
-    {
      "id": "D1",
-     "summary": "stage_sink stays a thin Python function calling l7r_phases.stage_sink in rust/phases/src/sink.rs and submodules; Python writes the same keys and record shapes",
+     "summary": "stage_sink stays a thin Python seam gathering the stage's reads and calling l7r_phases.stage_sink in rust/phases/src/sink.rs; Python writes the same keys and record shapes",
      "class": "within",
-     "why": "FR-010's shape (thin Python function calling the extension, submodules) and FR-004 (same keys read and written)."
+     "why": "Design section 7 and FR-010 (a thin Python function calling into one extension module) and FR-004 (same keys read and written). Unchanged since its CLEAR verdict."
     },
     {
      "id": "D2",
-     "summary": "the brook rounded by the field stage that lays it (fillets at 2.5 drawn widths, taps held), stream record written on its drawn course with stations as first laid; the sink re-draws only where a confluence adds a held vertex and seats confluences only on straight stretches; field's seam and Rust changed, re-measured against its accepted figures under the ratchet, audited once in MODE AUDIT",
-     "class": "narrowing",
-     "why": "A carve-out from FR-003 (phases rebuilt in STAGES order so each rebuild's input is fixed) and FR-005 (an accepted phase stands at its accepted figure): the sink's task reopens the accepted field's seam and Rust and changes what the field writes. Ruled on the structural argument, not on the old code's figure: a brook filed raw in the overlap registry by the field and rounded afterwards must be filed and asked a second time on its rounded course, whatever algorithm the sink uses; rounding it where it is laid files and asks it once. Holding the field fixed would therefore build double filing into a greenfield sink, defeating the request's stated purpose (an algorithmically sensible operation count, GM 2026-10-27) concretely. The fixed-input purpose is not gutted: the input moves once, in the same landing, before the sink is built and measured against it. Manifest keys stay the same (FR-004) and a moved map is allowed (FR-019). It escapes no measurement: the field stays under its ratchet at its accepted figure and owes a MODE AUDIT, so fillets that push it past that figure are refused, not excused. The straight-stretch rule for confluences is asked before placing (S4).",
-     "ruling": "LEGITIMATE"
+     "summary": "the brook rounded by the field stage that lays it (filleted at 2.5 drawn widths, taps held); the sink re-draws only where a confluence adds a held vertex on a straight stretch; the field is re-measured against its accepted figure and audited",
+     "class": "within",
+     "why": "Takes out the counted work of re-filing the brook (the request's whole aim), keeps 0054's rounded bends, and keeps the changed field under section 5 item 3's ratchet and MODE AUDIT. Narrows nothing the GM asked for. Unchanged since its CLEAR verdict."
     },
     {
      "id": "D3",
-     "summary": "after a Rust stage the driver files only the records the registry does not hold (Standing.resync(new_only=True)) instead of walking the whole manifest; the next Python stage's full walk re-records anything reshaped in place",
+     "summary": "the driver skips the end-of-stage manifest walk after a Rust stage (walks_after), since the registry files records as they are appended and a Rust seam reshapes nothing (measured 2026-11-03, cohort seeds 1-48: the walk moved no record after water_frame, field and sink); the next Python stage's walk still re-records any reshape, and the Rust stage gate (rust_prefix.py) keeps its own walk",
      "class": "within",
-     "why": "Removes counted work without dropping any rule the GM set, and narrows nothing in the request. Its premise - that a Rust stage's seam only appends records - is a state the bundle does not show measured, for water_frame or field or the sink, and D3 changes driver.py for every Rust stage; for the sink it holds only if D2 holds (a held confluence vertex leaving the drawn course unchanged). This 'within' is a class, not an endorsement of that premise: it is owed a measurement before D3 lands."
+     "why": "The only block changed since the CLEAR verdict: earlier it filed only new records (resync new_only), now it skips the walk. Neither the request nor the spec asks for that walk; it is driver bookkeeping, and dropping it removes counted work, which is what the request asks for. Every GM rule it could touch still holds. The FR-019 gate runs its own walk, so the checks judged where a Rust stage ends see the same registry. FR-004's same keys and no-repair rule are untouched. A reshape left for a later Python stage is that stage's to catch (the GM 2026-10-31 and 2026-11-01). The premise is a dated, one-shot measurement with its method stated. Note for the implementer, not a ruling: D1 and D2 have the sink seam re-draw the brook's course where a confluence adds a vertex. D2 makes that geometrically identical, so the registry is not left stale, but the premise that the seam reshapes nothing was measured on today's sink, not the rebuilt one."
     },
     {
      "id": "D4",
-     "summary": "the pond: 3/100 of the paddy (0060 GUESS), the plan's aspect, seated beyond the outfall and stepped on/across where blocked, given up past POND_SETBACK_LIMIT (a GUESS) for the off-map branch; its ditch bowed or led round, never across the brook; reeds a ring at the shore (0061, 44 ft GUESS)",
+     "summary": "the pond: 3/100 of the paddy (0060's GUESS), seated beyond the outfall and stepped where blocked, given up past POND_SETBACK_LIMIT (a GUESS) for the off-map branch; ditch bowed or curved, never across the brook; reeds a 44 ft ring (GUESS)",
      "class": "within",
-     "why": "Every rule is asked of a candidate seat before it is placed (FR-004, S4); falling back to the off-map branch is 0060's own rule (A11), not a placed-then-dropped repair. GUESS figures stay labeled per A10."
+     "why": "Each rule asked before placing (S4). The give-up follows 0060's own words (a pond that would sit far below the fields sends its drain off the map). GUESS values stay labeled GUESS. Unchanged since its CLEAR verdict."
     },
     {
      "id": "D5",
-     "summary": "off-map branch: join the passing brook within reach on a straight stretch, else a searched run out of the collector's exit (turn at most 55 degrees, not through crop/basin/dike off its gap, downhill, under 90 degrees off drainage, no crossing or twinning the brook), else the constructed route round the field's hull; seed 29's refusal diagnosed and its rule kept by construction",
+     "summary": "off-map branch: join the passing brook where in reach and below the outfall, else a run searched over bearings and junction distances nearest first, stopping at the first that keeps every rule, else a constructed route round the field's hull; seed 29's refusal diagnosed and its rule kept by construction",
      "class": "within",
-     "why": "Implements 0060's branch as asked; seed 29 is fixed by construction as FR-019 requires (no failing seed), not excepted. Nothing is placed then repaired."
+     "why": "0060's rules (55 degrees, downhill, never through the crop) asked before placing. Candidates are derived and the search stops at the first that passes (S2, S9). Seed 29 is fixed under FR-019's all-seeds rule rather than excused. Unchanged since its CLEAR verdict."
     },
     {
      "id": "D6",
      "summary": "the sink rolls nothing of its own; water_sink is water_frame's knob",
      "class": "within",
-     "why": "Keeps FR-004's same inputs; FR-019 permits a port its own generator but does not require one."
+     "why": "FR-019 does not require matching Python's draws, and this keeps the stage's input fixed (FR-003). Unchanged."
     },
     {
      "id": "D7",
-     "summary": "counters one key per derivation row behind the counters feature; feature on and off write identical manifests",
+     "summary": "counters keyed <kind>@<row> behind the counters feature; manifests identical with the feature on and off",
      "class": "within",
-     "why": "FR-012 and request section 1 as written."
+     "why": "FR-012 and section 1 (the counters compiled out, identical manifests). Unchanged."
     },
     {
      "id": "D8",
-     "summary": "the sink derivation revised with '## Work the first derivation missed' (pond ditch, reeds ring, registry filing, brook drawn course where drawn, resting basins asked), judged in MODE BUDGET, past twice the first budget a second independent dispatch",
+     "summary": "the derivation revised under '## Work the first derivation missed' (ditch, reeds, registry filing, the brook's drawn course, resting basins), judged in MODE BUDGET; past twice the first budget, a second independent dispatch",
      "class": "within",
-     "why": "FR-022 rule 2 as amendment 7 asks ('it makes sense to raise the operations budget' for work not taken into account), with its ceilings: two dispatches past twice, the GM's words past ten times (A6). Whether each item is genuinely owed by the contract is MODE BUDGET's ruling."
+     "why": "FR-022 rule 2, applying amendment 7's words as written, ceilings included. Unchanged."
     },
     {
      "id": "D9",
-     "summary": "hamletgen/sink.py and what only it reaches (brook_course.round_the_brooks and helpers) deleted in the landing, found by git grep -l and make dead-closure; the seam in a new hamletgen/sink_stage.py",
+     "summary": "hamletgen/sink.py and what only it reaches (brook_course.round_the_brooks and its helpers) deleted in the landing, found by git grep -l and make dead-closure; the seam in a new hamletgen/sink_stage.py",
      "class": "within",
-     "why": "FR-005 (old implementation deleted in the same landing, no fallback); the search space is named, and the waist (what only the old sink reaches) is the closure make dead-closure walks. The git grep -l names no search token, so its reach cannot be checked from the plan; make dead-closure is the waist that carries the census."
+     "why": "FR-005 and section 5 item 5 (no fallback path). It states how the list is searched (git grep -l and dead-closure). Unchanged."
     },
     {
-     "id": "performance checklist",
-     "summary": "where the time goes, removes not moves, expected saving about 165,000 at 40, growth, perf-ab recorded, maps-moved and reviews",
+     "id": "Approach-exits",
+     "summary": "green and red exits: rust-gate with no failing seed, counts within the budget or LEEWAY, claims IN-STEP, reviews, eight boxes, old Python deleted; red goes to a rebuild, a raise on a re-derivation, the GM's words past ten times, or the arbiter on a cannot-be-done claim",
      "class": "within",
-     "why": "Prompts under docs/performance-checklist.md, never a gate; perf-ab as a record matches checklist box 6."
+     "why": "Repeats FR-006, FR-019, FR-021 and FR-022 without loosening them. The arbiter rules only on a claim that the work cannot be done, never accepts a phase over budget, so FR-006 holds. Unchanged."
     }
    ],
    "verdict": "CLEAR"

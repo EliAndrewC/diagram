@@ -25,18 +25,18 @@
     the ditch from the outfall to the pond's center: three points, bowed off the chord (3); its legs tested against the
         brook's segments along it, inside the range the seat's bisections found (1 each); run downhill (1); its turn at the
         outfall (1)
-    the reeds: a ring at the shore, 44 ft out (0061's reeds; the width a GUESS), written at 24 points (24)
+    the reeds: a ring at the shore, 44 ft out (0061's reeds; the width a GUESS), written at 16 points (16)
     the reeds' ground: the ring less the crop, the pond and what stands beside the pond - the registry's cells under the ring's
         box grown by the reeds' reach asked for the drain's and any water's or dry plot's pieces there (1 a cell, 1 a piece);
         the ring, the field's outline, the pond's ellipse and those pieces read once for the drawn ground (1 a point) and filed
         once in the reeds' keep-out (1 a point, the pond's ellipse twice: the water and the tufts' pad); the bare ground built
         from what the keep-out holds under the ring (1 an item gathered, 2 a shape buffered and unioned)
     filed in the overlap registry: the ditch's two legs, each a ribbon of 4 corners and its box of 4 (8 each); the pond's rim
-        read at 24 points for its box (24), the box binned in the registry's 64 ft cells (1 each)
+        read at 16 points for its box (16), the box binned in the registry's 120 ft cells (1 each)
 
 ## Indexes
 
-- the overlap registry: cells of 64 ft, the pond's box binned in the cells it covers; densest case from a smallest side of 64 ft, the pond's 171 ft side at 20
+- the overlap registry: cells of 120 ft, the pond's box binned in the cells it covers, the reeds' ground asked of the cells under the ring; densest case from a smallest side of 120 ft, the pond's 171 ft side at 20
 
 No grid of the brook: its stations stand in order along the fall (it falls the whole way, the Bounds), so a range of the fall is found by bisection, log2 of the stations (324, 449 and 632: 9, 9 and 10 halvings), with nothing built.
 
@@ -51,21 +51,21 @@ No grid of the brook: its stations stand in order along the fall (it falls the w
 | the seat's test | per item | 33 at 20, 37 at 40, 47 at 80 | the brook's range found by two bisections, 2 x 9, 9, 10 = 18, 18, 20; the brook's segments in the range, the box's depth along the fall over the 20 ft stations, 171/20, 241/20, 341/20 to the nearest = 9, 12, 17, each tested (1); the kept outline segments facing the box, its long side over the outline's 63 ft segments, 268/63, 378/63, 535/63 rounded up = 5, 6, 9, each tested (1); the drain's last segment (1): 18 + 9 + 5 + 1 = 33, 18 + 12 + 6 + 1 = 37, 20 + 17 + 9 + 1 = 47 | a brook close under the toe |
 | the writes | per item | 3 | the pond, its outlet and its layer | always |
 | the ditch to the pond (missed work) | per item | 12 at 20, 14 at 40, 18 at 80 | its 3 points written (3); its run the pond's own half-length from the outfall to the center (134, 189 and 268 ft), inside the range of the brook the seat's bisections found (no search of its own), the brook's segments along it, 134/20, 189/20, 268/20 to the nearest = 7, 9, 13, each tested (1); downhill (1); the turn at the outfall (1): 3 + 7 + 1 + 1 = 12, 3 + 9 + 1 + 1 = 14, 3 + 13 + 1 + 1 = 18 | a brook beside the toe |
-| the reeds' ring (missed work) | per item | 24 | the ring written at the 24 points the pond's rim is drawn at (0061: reeds at the shore) | always 24 |
-| the reeds' ground (missed work) | per item | 423 at 20, 486 at 40, 577 at 80 | the registry's cells under the ring's box grown by the reeds' reach (68 ft: the widest tint, 28, and 40), (1 + 492/120)(1 + 395/120) = 22 at 20 (29 at 40, 42 at 80) in its 120 ft cells, and the pieces they hand back, the drain's tail and the water or dry plot beside the pond, about 12 at the typical case (34, 41, 54); the drawn ground's points, the ring's 16, the outline's 68, 96, 135, the pond's ellipse 32 and the pieces' 12 x 4 = 48 (164, 192, 231); the keep-out's points, the outline's, the ellipse twice (64) and the pieces' 48 (180, 208, 247); the bare ground, the 15 items gathered and each shape buffered and unioned (2 x 15), 45 | a brook or a dry plot beside the pond |
-| the overlap registry (cells written; missed work) | per item | 59 at 20, 73 at 40, 99 at 80 | the ditch's 2 legs filed as ribbons, 4 corners and a box of 4 each (16); the pond's rim read at 24 points for its box (24); that box binned in the registry's 64 ft cells, (1 + 268/64)(1 + 171/64) = 19 at 20, 33 at 40, 59 at 80 | always |
+| the reeds' ring (missed work) | per item | 16 | the ring written at the 16 points the pond's fringe is drawn at (0061: reeds at the shore) | always 16 |
+| the reeds' ground (missed work) | per item | 423 at 20, 486 at 40, 577 at 80 | the registry's cells under the ring's box grown by the reeds' reach (68 ft: the widest tint, 28, and 40), (1 + 492/120)(1 + 395/120) = 22 at 20 (29 at 40, 42 at 80) in its 120 ft cells, and the pieces they hand back, the drain's tail and the water or dry plot beside the pond, about 12 at the typical case (34, 41, 54); the drawn ground's points, the ring's 16 (as written), the outline's 68, 96, 135, the pond's ellipse 32 and the pieces' 12 x 4 = 48 (164, 192, 231); the keep-out's points, the outline's, the ellipse twice (64) and the pieces' 48 (180, 208, 247); the bare ground, the 15 items gathered and each shape buffered and unioned (2 x 15), 45 | a brook or a dry plot beside the pond |
+| the overlap registry (cells written; missed work) | per item | 48 at 20, 53 at 40, 61 at 80 | the ditch's 2 legs filed as ribbons, 4 corners and a box of 4 each (16); the pond's rim read at 16 points for its box (16); that box binned in the registry's 120 ft cells, (1 + 268/120)(1 + 171/120) = 8 at 20 (13 at 40, 21 at 80) | always |
 
 So: 1 x (7 + the outline + the seat's test x 2 + the writes + the ditch + the reeds + the reeds' ground + the registry).
 
 ## Totals
 
-- at 20: 1 x (7 + 68 + 33 x 2 + 3 + 12 + 24 + 423 + 59) = 662
-- at 40: 1 x (7 + 96 + 37 x 2 + 3 + 14 + 24 + 486 + 73) = 777
-- at 80: 1 x (7 + 135 + 47 x 2 + 3 + 18 + 24 + 577 + 99) = 957
+- at 20: 1 x (7 + 68 + 33 x 2 + 3 + 12 + 16 + 423 + 48) = 643
+- at 40: 1 x (7 + 96 + 37 x 2 + 3 + 14 + 16 + 486 + 53) = 749
+- at 80: 1 x (7 + 135 + 47 x 2 + 3 + 18 + 16 + 577 + 61) = 911
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.27 (662 to 957): one pond, the outline's points and its box's cells growing with the field's breadth, beside the reeds' fixed 24.
+From 20 to 80 households the stage grows at an exponent of about 0.25 (643 to 911): one pond, the outline's points and its box's cells growing with the field's breadth, beside the reeds' fixed 16.
 
 ## Work the first derivation missed
 

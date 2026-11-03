@@ -1,0 +1,28 @@
+UNDERIVED - the reeds' ground (423 / 486 / 577): no rule of the contract owes it, since the contract's Keeps line makes the reeds "a drawing of its record, not a search". Its figures also have no source: the 44 ft ring width is marked GUESS, the 68 ft reach ("28, and 40") cites nothing, and the "about 12" pieces of 4 points each come from no measurement. Without the row the stage is 220 / 263 / 334, 65% less at 40.
+
+**The raise.** 749 / 149 is 5.03 times the first figure at 40. That is past twice, so it needs the rigorous analysis and this second blind dispatch. It is under ten times (1,490). The reeds' ground alone takes it from the last SOUND's 291 to 749.
+
+**Work the first derivation missed.**
+- The ditch: owed, by the contract's Writes and 0060's "runs on as a ditch ... to the pond".
+- The registry filing: owed ("filed in the overlap registry"). But the row's parts add to 16 + 16 + 8 = 40 (45, 53), not 48 (53, 61). That is 8 too many at each size with no reason (Q3, about 1%).
+- The ring's 16 points: a write the contract names, 2%. Accepted.
+- The outline read and the brook's bisection: not missed work. This item only re-prices where the seat's test reads its inputs, which the first count had already priced from the water index.
+- The reeds' ground: not owed. The row asks the registry's cells for other stages' pieces, files a keep-out, and buffers and unions "a tile's bare ground". That is a search and a drawing of the ground, which the contract says the reeds are not. The contract keeps the reeds off the embankment only; it names no crop, drain or plot to subtract. The item's own source is the rebuilt code's audit (`phases/sink.audit-1.txt`), which is exactly the anchoring MODE BUDGET leaves out of the bundle.
+
+**Q1 (derived).** The reeds' ground has no contract rule behind it, and its figures (44 ft, 68 ft, 12 pieces, 4 points each) have none either. The other rows are derived and their arithmetic checks: the seat's test 33 / 37 / 47, the ditch 12 / 14 / 18, the totals 643 / 749 / 911, the exponent 0.25. Earlier findings: verdict-1 finding 1's closure line still quotes cell reads (36, 53, 83) that are no longer in the count. It is moot, not fixed, as both earlier dispatches said.
+
+**Q2 (cheaper algorithm, S9).** The memoizing line says the outline is read once and its low segments kept. Yet it is read in full three times at 40 (96 + 96 + 96), the last two inside the reeds' ground, and there is no `- pruning:` line. That is about 38% at 40, under half, so it is a note, and it goes away with the row.
+
+**Q3 (padded).** Only the registry row's 8 at each size. Separately, the reeds' ground prices "buffered and unioned" at 2 a shape, but S5 counts per element and buffering an n-point shape is per-point work. If the row stood, it would be under-priced, not padded.
+
+**Q4 (source sizes) passes.** The "across" figures are diameters, so the half-length is 134 = 268/2. The ring's box is the diameter plus 88, grown by 136. A segment is 6,050 / 96, about 63 ft. The stations are 20 ft apart. The short axis lies along the fall, as stated.
+
+**(a) The reeds' ground.** It is render-time work, the drawing of the layer record, not work the sink stage owes (see above).
+
+**(b) The registry's cells at 120 ft.** The Indexes line and both rows use 120 ft. But "Cheaper algorithms considered" still says "the registry's 64 ft cells", so it is not 120 ft throughout. The contract's densities are per 64 ft cell and nothing in the count rescales them. The Indexes line also sizes its cells from a "densest case", which is the case S8 says not to count.
+
+**(c) The ring's 16 points.** The ring is 16 where it is written and where it is drawn, and the pond's rim is read at 16 for its box. The pond's ellipse is not: it is 32 in the drawn ground and 64 (twice) in the keep-out.
+
+**(d) The rebuild's measured counts.** The figures of 810-850 / 945-995 / 1,155-1,200 play no part in this verdict. The bundle leaves out counts of the code so they cannot anchor the target, and a row is no sounder or looser for matching the rebuild. They are 1.26 to 1.33 times the derivation; whether that gap is acceptable is a question for MODE AUDIT, not this one. The one thing they do show is that the rebuild works out the reeds' ground inside the sink stage. That is a finding about the rebuild, not a reason to price it here.
+
+Files: /tmp/l7r-check/work-budget-budget-sink/derivation.md, /tmp/l7r-check/work-budget-budget-sink/contract.md, /tmp/l7r-check/work-budget-budget-sink/rubric.md

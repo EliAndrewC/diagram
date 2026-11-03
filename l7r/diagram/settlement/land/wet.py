@@ -335,13 +335,13 @@ class WetGroundMixin:
             edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
             reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
             marsh edge form - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: every edge cut and
-                open; the uncut edge's alder and willow carr is never rolled
+                open; the uncut edge's alder and willow carr is never rolled - a departure the code keeps until feature 417 T34
             reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
             reed tile - CONVENTION: the drawn ground filled with the reed tile
             its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)
-            its figures against 0074 - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34
-            its crescent pond pad - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34
+            reeds to the water's edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "the reeds are drawn right to the water's edge" - the pond's ellipse and a crescent pond kept bare with no rim (feature 444 T26 retired the 1.5 ft and 2 ft rims)
+            the near fringe's blocks - NONE: a pond fringe laid by the Rust sink reads the field's dry plots and the pond's own ellipse from the registry under it - at the sink they are the only no-build blocks standing (the field files each dry plot as one, `hamletgen/field_stage.py`)
         """
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
@@ -476,12 +476,13 @@ class WetGroundMixin:
         # with the reed tile (tint, glints and reeds) at the bottom of the stack. Nothing is thrown, so nothing is thrown again
         # once the view is decided (the re-throw of feature 287, M6, is gone with the throw).
         pad = MARSH_TUFT_R * bs
-        pond_pad = 2.0 if role == "pond_fringe" else 2.0 + pad
+        # (slots 4 and 5, the crescent ponds and the pond, with no rim: the reeds are drawn right to the water's edge, 0074 - the 2 ft
+        # and 1.5 ft rims a thrown reed kept, retired by feature 444 T26)
         # (slot 6, the pond moved up a blade so no thrown tip crossed its rim, is a thrown reed's alone: a tile has none, and it left
         # a bare crescent under the pond)
         # (slot 3, the watercourses, at their drawn width alone - feature 300: the 2 ft and a tuft's reach a thrown reed kept
         # off the water left a bare strip down both banks; the reeds stand at the water's edge, and the bank band lines it)
-        bare = keep.shape((0.0, pad, pad, 0.0, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
+        bare = keep.shape((0.0, pad, pad, 0.0, 0.0, 0.0, None), (x0, y0, x1, y1))
         self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
         self._cover_n += 1
         dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)

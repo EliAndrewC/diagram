@@ -527,7 +527,6 @@ def test_draw_furrows_writes_cut_rows_for_a_convex_plot_and_keeps_the_clip_for_a
 def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
     """Feature 297 (plan B2): a crescent pond is filed into the marsh's one region, so the reed tile's shape (feature 298)
     leaves its water out; and a marsh too small to hold any ground draws nothing."""
-    from shapely.geometry import Point
 
     from tests.settlement._builders import _covered
 
@@ -535,7 +534,14 @@ def test_marsh_keeps_its_reeds_off_a_crescent_pond_and_a_sliver_draws_nothing():
     s.M["crescent_ponds"] = [{"cx": 300.0, "cy": 300.0, "r": 60.0}]
     s.marsh([(150, 150), (450, 150), (450, 450), (150, 450)])
     reeds = _covered(s)
-    assert reeds.area > 1000.0 and reeds.intersection(Point(300.0, 300.0).buffer(60.0)).area < 1.0, "reeds on the crescent pond's water"
+    # the pond as drawn, its 32-sided ring (`ellipse_ring`): the reeds come right to its water's edge (0074, feature 444 T26)
+    from shapely.geometry import Polygon
+
+    from l7r.diagram.settlement.land.wet import ellipse_ring
+
+    water = Polygon(ellipse_ring(300.0, 300.0, 60.0, 60.0))
+    assert reeds.area > 1000.0 and reeds.intersection(water).area < 1.0, "reeds on the crescent pond's water"
+    assert reeds.distance(water) < 1.0, "the reeds right to the water's edge, no rim left bare"
     tiny = _crop_settlement()
     tiny.marsh([(500, 500), (503, 500), (503, 503), (500, 503)])
     assert _covered(tiny).area < 10.0

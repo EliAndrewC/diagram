@@ -18,7 +18,7 @@ UNCOUNTED - `Settlement.marsh` (`wet.py:305`, called from `_write`, `sink_stage.
 **3. Is anything placed and then repaired (S4)?** Nothing.
 - No `dropped@` or `moved@` keys appear in any roll.
 - Pond seats are asked nearest first, with every rule checked before the pond is written.
-- `_clip_to_pond` snapping the ditch's end from the pond's centre to its rim is part of drawing the join, not a repair.
+- `_clip_to_pond` snapping the ditch's end from the pond's center to its rim is part of drawing the join, not a repair.
 - `marsh()` has a drop path (`marsh_dropped`) that did not fire.
 - All 16 rolls took the pond branch. No `test@offmap`, `candidate@offmap_run` or `write@run` appears, so these counts never exercise the off-map branch: `searched`'s 108 candidate runs, `constructed` and `beside`.
 

@@ -22106,32 +22106,31 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink_stage.py::_write#no building on the water": {
-  "body": "8d76878e2a674007",
+  "body": "f8af439f2ddb86ae",
   "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); `NO_BUILD_FT` round the pond's box",
-  "code": "7621ecaa5c48650d",
-  "core": "9747c233128e377f",
+  "code": "bb4398218483893a",
+  "core": "3a0a6e52384bac6b",
   "date": "2026-11-03",
-  "note": "NO_BUILD_FT round the pond's box; the pages are silent",
+  "note": "the cited pages give no pad for keeping buildings off a pond, so 10 ft round the pond's box is a fair guess",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink_stage.py::_write#the drain's run drawn": {
-  "body": "8d76878e2a674007",
+  "body": "f8af439f2ddb86ae",
   "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class, at the collector's own outfall width",
-  "code": "e9cd587a680723f4",
-  "core": "9747c233128e377f",
+  "code": "1a5dc52260117dfd",
+  "core": "3a0a6e52384bac6b",
   "date": "2026-11-03",
-  "note": "the drainage-ditch class, at the 5.5 ft outfall width",
+  "note": "the run onward is the drainage-ditch class, drawn at the collector's full outfall width",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
+   "0060-field-drains-akusuiro.drawing.html:59546d4f9be5c411",
    "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
-   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f"
   ],
   "verdict": "IN-STEP"
  },
@@ -43840,6 +43839,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/overlap/registry.py::Standing.pieces#registry plumbing": {
+  "body": "7778b478769b5624",
+  "claim": "registry plumbing - NONE: recording, indexing and asking the matrix",
+  "code": "261cd21b1a62b79e",
+  "core": "4508348cd9155a02",
+  "date": "2026-11-03",
+  "note": "cell lookup and key filter",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/registry.py::Standing.record#registry plumbing": {
   "code": "3625fc6a1f506a00",
   "core": "c61b48c79b2bf7be",
@@ -46438,23 +46449,27 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid._trees_for#its salts, guards and sentinels": {
-  "body": "250b1161a0032219",
+  "body": "032aabb9a9bc9996",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (the same margin); 0.02 (arc chord-error margin)",
-  "code": "6cba93208250d03b",
-  "core": "cca148c013f30679",
-  "date": "2026-10-25",
-  "note": "keep-out margin and arc chord-error margin, plumbing",
+  "code": "8f48e5bd547adebb",
+  "core": "b49aaca59fb41f82",
+  "date": "2026-11-03",
+  "note": "buffer margins and op counters only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.circles#spatial indexes": {
-  "code": "23fbb89fdd7056a9",
-  "core": "f3335b06e00e5642",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "62eb487cde2399d6",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "452b86d18eaa7e45",
+  "core": "ab8bc4995792d912",
+  "date": "2026-11-03",
+  "note": "filing and a counter",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.hit#spatial indexes": {
@@ -46474,27 +46489,39 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.rects#spatial indexes": {
-  "code": "067814599006882e",
-  "core": "1973e2bd27ef7442",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "bd0717b1c30893f1",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "56eb719052694b40",
+  "core": "03dec1d07ff26828",
+  "date": "2026-11-03",
+  "note": "filing and a counter",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.rings#spatial indexes": {
-  "code": "6c83fe0c5b472ece",
-  "core": "8507d8288e60696b",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "e7d35f373eeb5da3",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "d242c7b21e3efa32",
+  "core": "28841dcb8b165f3a",
+  "date": "2026-11-03",
+  "note": "filing and counters",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.segs#spatial indexes": {
-  "code": "2433c9f1f837dd2a",
-  "core": "4eda766ac4f0c6fb",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "body": "3ce4c91c1a36f6a3",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "a8567a05c4addb1b",
+  "core": "7060c8786d02ff06",
+  "date": "2026-11-03",
+  "note": "filing and a counter",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.shape#spatial indexes": {
@@ -61479,22 +61506,28 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#bare treads": {
-  "code": "9e8cb6f1978961c1",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "0057 gives the causeway's bare tread; the other roles agree with 0081 (no track crosses wet ground)",
+  "body": "84ed911e07930cfc",
+  "claim": "bare treads - marshes-and-wetlands-shitchi.drawing: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)",
+  "code": "a771a0a8df28f246",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "every trodden way is a corridor keep-out; the claim says openly that the record gives only the defensive belt's causeway",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:6c4de979924f3878"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#edge shaped": {
-  "code": "b59e21129fdbf141",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-04",
-  "note": "strips shaped, pond fringe left as laid",
+  "body": "84ed911e07930cfc",
+  "claim": "edge shaped - reed-beds-and-the-marshs-edge-yoshihara.drawing: rounded and waved, a pond fringe left as laid",
+  "code": "63dc51a3feea16e6",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "`natural_outline` is skipped only for a pond fringe; the edge is rounded and waved",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -61504,57 +61537,26 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its crescent pond pad": {
-  "body": "586f39781f692c05",
-  "claim": "its crescent pond pad - reed-beds-and-the-marshs-edge-yoshihara.drawing: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
-  "code": "c434c2ea1856e023",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-25",
-  "note": "reeds kept 2 px plus a tuft's reach off a crescent pond (2 px alone on a pond fringe), where the reeds run \"right to the water's edge\"; the claim names this and T34 is filed",
-  "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
-  },
-  "research": "a44790630d28af23",
-  "rests": [
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc",
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its figures against 0074": {
-  "body": "586f39781f692c05",
-  "claim": "its figures against 0074 - reed-beds-and-the-marshs-edge-yoshihara.drawing: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
-  "code": "071a9a4af5d85b89",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-25",
-  "note": "`min(pad, 1.5)` leaves a bare rim where the page has reeds \"right to the water's edge\"; acknowledged and tracked by T34, but not recorded on the page",
-  "pages": {
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
-  },
-  "research": "a44790630d28af23",
-  "rests": [
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
-  ],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its salts, guards and sentinels": {
-  "body": "586f39781f692c05",
+  "body": "84ed911e07930cfc",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)",
-  "code": "8586fc6ae62d19c6",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-25",
-  "note": "prefilter reach, slot ids",
+  "code": "6c0db85a13fa309f",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "40 is a prefilter reach (also the new near-mode box); 5 and 6 are slot ids",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh edge form": {
-  "code": "4840c190d6034788",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-05",
-  "note": "the page says \"Each settlement should take one or the other; so far our maps draw only the first, a shortfall\"; the alder-and-willow uncut edge is not rolled",
+  "body": "84ed911e07930cfc",
+  "claim": "marsh edge form - reed-beds-and-the-marshs-edge-yoshihara.drawing: every edge cut and open; the uncut edge's alder and willow carr is never rolled",
+  "code": "8ff786de826735a2",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the page attests two forms, \"the managed one ... and a wet wood of alder and willow along an edge nobody cuts\", and says \"Each settlement should take one or the other\", but the code always draws the cut edge and never rolls. The claim states the shortfall without naming the task that carries the fix (`a departure the code keeps until feature NNN Tnn`)",
+  "outside": true,
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -61566,78 +61568,113 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
-  "code": "898282a01416cf0f",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "toe below the fields and a defensive belt hugging the wall, as 0057",
+  "body": "84ed911e07930cfc",
+  "claim": "marsh roles - marshes-and-wetlands-shitchi.drawing: the toe and a defensive belt",
+  "code": "13050e538d425f34",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the 'toe' and 'defense' roles match the marsh below the fields and the wall-hugging defensive belt",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:0ce9629142b7ff47",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:36bba6480c2f3c56",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:5298f662e8ea1911",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#no-build marsh": {
-  "code": "bca91369518381a2",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "body": "84ed911e07930cfc",
+  "claim": "no-build marsh - ground-too-wet-to-build-on.drawing: every marsh but a pond fringe is no-build ground",
+  "code": "16d4828f9a09e510",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "every role but `pond_fringe` is added to block_polys",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
   "research": "b2af2942f0a54e5d",
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#polder waterside role": {
-  "code": "f425a7778ccaea2e",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "0019: a reed fringe on every flank but the landward one",
+  "body": "84ed911e07930cfc",
+  "claim": "polder waterside role - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a reed fringe along the polder's water side",
+  "code": "c0731079d1d869c8",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the 'waterside' role is the reed fringe on the polder's water side",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#pond fringe role": {
-  "code": "9a47400c946773c3",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "0061: reeds on wet ground at the shore",
+  "body": "84ed911e07930cfc",
+  "claim": "pond fringe role - reservoir-ponds-tameike.drawing: reeds round a pond's shore",
+  "code": "000ae1fe509c4d6b",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "reeds on wet ground at the pond's shore",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
   "research": "5b102e334372ecb3",
-  "triaged": "2026-10-18",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
+   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reed tile": {
-  "code": "653d0f6acbdd8a66",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "how the reeds are shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards": {
-  "body": "586f39781f692c05",
-  "claim": "reeds off the dooryards - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); no reed inside the urban-clearance halo round dooryards",
-  "code": "39b6d69e767afa0d",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-25",
-  "note": "no page keeps reeds off the dooryards",
+  "body": "84ed911e07930cfc",
+  "claim": "reed tile - CONVENTION: the drawn ground filled with the reed tile",
+  "code": "5e90ce3bca081049",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "how the ground is shown, nothing more",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds kept off no-build blocks and swept clearings; in near mode only the registry's `dry_plots` pieces and the pond ellipse are kept out, not `self.block_polys": {
+  "code": "53fa8142a729661a",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "reeds kept off no-build blocks and swept clearings; in near mode only the registry's `dry_plots` pieces and the pond ellipse are kept out, not `self.block_polys",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards": {
+  "body": "84ed911e07930cfc",
+  "claim": "reeds off the dooryards - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); no reed inside the urban-clearance halo round dooryards",
+  "code": "5691e59074bed845",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the pages are silent on this",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds": {
-  "body": "586f39781f692c05",
+  "body": "84ed911e07930cfc",
   "claim": "reeds off the mounds - reservoir-ponds-tameike.drawing: no reed or tint on a dike crest or a pond bank",
-  "code": "7ffde642f5b7c4fb",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-18",
-  "note": "keeping reeds off the fish-pond mulberry banks (slot 2) and the pond ellipse is what 0061 finds (\"nor on any raised rim around a pond\"). Keeping reeds off a polder perimeter dike crest (slot 1) has no backing: 0061 is about pond embankments only, and 0019's page says nothing about reeds on a crest. Split the claim and mark the dike-crest half UNRESEARCHED",
+  "code": "ce067605f258d934",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the dike crests (slot 1) and pond banks (slot 2) are kept out at the tuft's pad, and outside roles lose the filled dike block",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
@@ -61645,29 +61682,35 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds to the water and the paddy": {
-  "code": "1958768780b3fcf1",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "body": "84ed911e07930cfc",
+  "claim": "reeds to the water and the paddy - reed-beds-and-the-marshs-edge-yoshihara.drawing: reeds stand at the water's edge and meet the paddy",
+  "code": "e8f0542a5b27d9f4",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the paddy is kept out with pad 0 and the watercourses with extra 0 at their drawn width, in both the near and the full mode",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
-  "triaged": "2026-10-04",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width": {
-  "body": "586f39781f692c05",
+  "body": "84ed911e07930cfc",
   "claim": "tread keep-out width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 3 bs either side of every way",
-  "code": "c38578e2d037e39a",
-  "core": "c2cd04e8c7b38736",
-  "date": "2026-10-25",
-  "note": "`_corridor_buffers(3 * bs)`; the record gives a bare causeway but no width",
+  "code": "a56979c1294e32aa",
+  "core": "53fa8142a729661a",
+  "date": "2026-11-03",
+  "note": "the pages are silent on this",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flare size": {
@@ -79533,6 +79576,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/sink/crop.rs::Crop.holds_low#the outline as read": {
+  "body": "e2b24abeb015817a",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "228783e3bfee8aef",
+  "core": "75537aca617c27f5",
+  "date": "2026-11-03",
+  "note": "a point-in-polygon ray cast",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/sink/crop.rs::Crop.pond_clear#the pond clear of the crop": {
   "body": "150fef4ff6904d7f",
   "claim": "the pond clear of the crop - field-drains-akusuiro.drawing: the pond at the field's foot",
@@ -79866,48 +79921,48 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#else off the map": {
-  "body": "19849dc93b806449",
+  "body": "08709cfbf80fa900",
   "claim": "else off the map - field-drains-akusuiro.drawing: \"where it does not, the drain runs on as a ditch to the edge of the map\"",
-  "code": "fb9bc29a9fbda8a1",
-  "core": "2d5790b2dce416ac",
+  "code": "e7c72f72393345b4",
+  "core": "2d07c2e773f4f3ab",
   "date": "2026-11-03",
-  "note": "when no confluence is found, or the brook leg crosses a resting basin, the drain runs on as a ditch to the edge of the map, and the route built as a fallback is held to the 55-degree turn out of the collector",
+  "note": "with no confluence, the run is searched or built to the map's edge",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#the drain joins the passing brook": {
-  "body": "19849dc93b806449",
+  "body": "08709cfbf80fa900",
   "claim": "the drain joins the passing brook - field-drains-akusuiro.drawing: \"Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below\"",
-  "code": "0256b7fb1cf49723",
-  "core": "2d5790b2dce416ac",
+  "code": "4b1cf5ec6329a52a",
+  "core": "2d07c2e773f4f3ab",
   "date": "2026-11-03",
-  "note": "when `confluence` finds the brook within reach of the outfall, the run ends at it with to \"stream\"; no turn limit at the brook, as §15 leaves that angle open",
+  "note": "a confluence within reach takes the run to the brook",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/sink/offmap.rs::lay#the drain's ditch to the brook is drawn bowed sideways across the fall, with a bow of `pond::BOW.0 * dist(out, q)` capped at `pond::BOW.1`; nothing on the page covers this curve, and no claim on this unit names it (GUESS or CONVENTION)": {
-  "code": "2d5790b2dce416ac",
-  "core": "2d5790b2dce416ac",
+ "rust/phases/src/sink/offmap.rs::lay#the run to the brook bowed": {
+  "body": "08709cfbf80fa900",
+  "claim": "the run to the brook bowed - GUESS: no source could speak to it, a value of ours; bowed off its chord as the pond's ditch is (`pond::BOW`)",
+  "code": "9417fb34dbe382c1",
+  "core": "2d07c2e773f4f3ab",
   "date": "2026-11-03",
-  "note": "the drain's ditch to the brook is drawn bowed sideways across the fall, with a bow of `pond::BOW.0 * dist(out, q)` capped at `pond::BOW.1`; nothing on the page covers this curve, and no claim on this unit names it (GUESS or CONVENTION)",
+  "note": "the page rules on no shape or angle for a run meeting the brook",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::meets_brook#a drain meeting the brook joins it": {
   "body": "5d0b02bb3147d5be",
@@ -80152,28 +80207,29 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/pond.rs::lay#a drain ending in a pond of its own": {
-  "body": "9a2cab33b28cb35b",
+  "body": "3d09713c5481b4ee",
   "claim": "a drain ending in a pond of its own - GUESS: field-drains-akusuiro.drawing: \"A drain that ends in a pond of its own is our own guess\"",
-  "code": "8721fa9e58d20760",
-  "core": "f78bd9e5725fc7e8",
+  "code": "9dda9ff713d53bfd",
+  "core": "1ac0598b2ecb4048",
   "date": "2026-11-03",
-  "note": "recorded as a guess",
+  "note": "the page records this as a guess",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/pond.rs::lay#a pond at the field's foot": {
-  "body": "9a2cab33b28cb35b",
+  "body": "3d09713c5481b4ee",
   "claim": "a pond at the field's foot - field-drains-akusuiro.drawing: \"about two maps in three lay a pond at the field's foot\"",
-  "code": "0503ee4d090261ee",
-  "core": "f78bd9e5725fc7e8",
+  "code": "83933a81adeaf0db",
+  "core": "1ac0598b2ecb4048",
   "date": "2026-11-03",
-  "note": "seated below the outfall along the fall",
+  "note": "the pond is seated downslope of the outfall, and no seat within the set-back limit means no pond (the drain goes off the map)",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
