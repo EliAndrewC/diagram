@@ -35,8 +35,8 @@ standards" (`request.md`).
 1. **Given** a phase, **When** it is rebuilt, **Then** its checklist (`.specify/templates/phase-checklist.md`, copied to
    `phases/<stage>.md`) is ticked in order: contract, minimal algorithm, budget reviewed, today's measurement, the rebuild
    behind the manifest seam with the old code deleted, acceptance, the MODE AUDIT review, the standing record.
-2. **Given** acceptance, **Then** the phase's counted operations are at most its budget at 40 and 80 households and its
-   exponent at most the budget's; every seed of the Rust stage gate passes where each Rust stage completes (FR-019, amendment 5:
+2. **Given** acceptance, **Then** the phase's counted operations are at most its budget at 40 and 80 households - or at most
+   twice it, on the MODE AUDIT's LEEWAY (FR-022, amendment 7) - and its exponent at most the budget's; every seed of the Rust stage gate passes where each Rust stage completes (FR-019, amendment 5:
    the Python stages after it report a rate and refuse nothing - not every seed passing them is feature 417's goal); its claims round is IN-STEP; the reviews its occasions owe have run;
    its time is recorded by `make perf-ab`.
 
@@ -61,10 +61,12 @@ standards" (`request.md`).
   Where a rebuild does one of feature 417's tasks for its phase, that task is ticked with the landing as its evidence.
 - **FR-005**: A phase is accepted only as User Story 2 states, and only with the old implementation deleted in the same landing
   (no fallback path, no flag); its accepted figure goes into `dev/work-budget.json`, which feature 443's ratchet then holds.
-- **FR-006**: A phase is never set down because its time saved is small; a phase over its budget is either rebuilt again or
-  its budget raised with the GM's words (`make budget-change`). The trial form's set-down rule does not apply to this
+- **FR-006**: A phase is never set down because its time saved is small; a phase past what FR-022 admits (for example, more than
+  twice its budget at 40 or 80 households, above it without the MODE AUDIT's LEEWAY, or past FR-022 rule 2's ceilings on its
+  first budget) is either rebuilt again or its budget raised - on a
+  re-derivation that names the work the budget missed (FR-022 rule 2), or with the GM's words (`make budget-change`). The trial form's set-down rule does not apply to this
   program. The round arbiter may rule on process, but may not accept a phase over its budget, at acceptance (checklist box
-  6) or anywhere else.
+  6) or anywhere else: LEEWAY comes only from the `work-budget` agent's MODE AUDIT, never from the arbiter.
 - **FR-007**: This feature adds `make work-budget-bundle MODE=table`: the whole standing record (`dev/work-budget.md`, the
   latest `make work-budget` run and the one before it), one bundle for one agent. At each phase landing the `work-budget`
   agent reads it in MODE AUDIT: no unbudgeted or unconverted stage grew, and the sum still converges on the target.
@@ -172,6 +174,35 @@ standards" (`request.md`).
   switch's `report` (feature 445) stands for every other landing. water_frame, the Rust stage landed before this rule, is held to it by a task of its
   own: its open findings closed.
 
+- **FR-022**: The budget is an estimate, held with leeway, and raised for work it missed (amendment 7, the GM 2026-11-03: "if we
+  discover that there are things that we didn't take into account, then it makes sense to raise the operations budget rather than
+  to fight ... I would frankly be okay with things that are 50% higher or even twice as high ... I don't want to just completely
+  relax the performance requirements, because if we end up with some kind of n squared algorithm, then even in Rust that will
+  become a problem"). Four rules:
+  1. **Leeway at acceptance.** A rebuilt stage counting more than its budget at 40 or 80 households, and at most twice it at
+     both, is accepted on the `work-budget` agent's MODE AUDIT verdict LEEWAY: every loop counted (S5), nothing placed and
+     repaired (S4), its growth within the budget's (S6), and the excess named - the work or the factor the derivation did not
+     price - and judged reasonable. At most its budget it is WITHIN, as before; past twice it, OVER. `make budget-accept` reads the
+     word against the counts.
+  2. **A raise for missed work.** Where the rebuild finds work the stage must do that its derivation did not count (a branch, a
+     write, a rule of its contract), the derivation is revised to count it, under a `## Work the first derivation missed`
+     section naming each item, and judged in MODE BUDGET as any derivation; on SOUND, `make budget-set RAISE=1` raises the budget
+     with no GM words, to at most twice the stage's first greenfield budget at 40 households. Past twice it - toward the order of
+     magnitude the GM would not take "without extremely rigorous analysis" - the raise needs that analysis, stated here: every
+     missed item tied to the rule of the contract that owes it, and SOUND from two independent MODE BUDGET dispatches of the same
+     bundle, the second blind to the first. The same line holds the accepted count, raise and leeway together: on a budget
+     raised on one SOUND, the accepted count is held to at most twice the first budget at 40 and 80, LEEWAY not carrying it past
+     that; a count past twice the first owes the two-dispatch analysis on its raise (or the GM's words), and on a budget raised
+     with that analysis LEEWAY stands up to the ten-times line. No raise and no accepted count passes ten times the first budget
+     without the GM's words (`make budget-change`).
+  3. **No leeway on growth.** The exponent caps stand (S3, S6; the tool's 1.15 from 20 to 80, and a stage's measured exponent at
+     most its budget's plus seed noise): neither the leeway nor a raise admits an all-pairs pass or a growth past n log n.
+  4. **No squeezing.** Apart from rule 1's count (past twice the budget is OVER whatever the findings) and rule 3's growth, a
+     MODE BUDGET LOOSE or a MODE AUDIT OVER is given for a finding only where it would move the stage's total at 40 households by
+     more than half; a tighter bound worth less is a note under SOUND, WITHIN or LEEWAY, owing no round.
+  The push's ratchet holds an accepted stage to its accepted figure, which is at most twice its budget. The rules are written
+  into the standards (`docs/work-budget-rubric.md`, S10) and the agent's contract (`.claude/agents/work-budget.md`).
+
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
@@ -214,6 +245,13 @@ standards" (`request.md`).
   and not refused by a finding at a unit neither the seam nor its Rust reads, of a file the delta touches only to delete other
   code or an unchanged unit of a file it edits; `make claims-report` lists no open finding in `rust/phases/src/water_frame.rs` or in any
   Python file water_frame's port (T19) changed.
+
+- **SC-015** (FR-022): a test finds `make budget-accept` taking a stage at 1.5 times its budget on LEEWAY, refusing it on WITHIN,
+  refusing a stage past twice its budget on either word; `make budget-set RAISE=1` raising a budgeted stage on a SOUND
+  derivation with its missed-work section, refused without that section, refused past twice the first budget at 40 without a
+  second, distinct SOUND verdict, and refused past ten times it on any; `make budget-accept` refusing a count past ten times the
+  first budget on a raised stage, and past twice the first budget on a stage raised on one SOUND;
+  and the ratchet not refusing an accepted stage above its budget and within its accepted figure.
 
 ## Edge Cases
 
@@ -275,3 +313,14 @@ standards" (`request.md`).
 - 2026-11-01, FR-021 narrowed to the stage's own code (the round arbiter on ask:444-T16-fr021-scope-2, after spec-fidelity
   BLOCKED T23's separate deletion landing against FR-005): a unit the delta adds or changes, not every old finding in a file it
   touches only to delete dead code; those findings filed to the open-claims feature. T23 folded into T16.
+- 2026-11-03, amendment 7 (the GM on leeway and missed work, `request.md`): FR-022 - a stage accepted at up to twice its budget
+  on the MODE AUDIT's LEEWAY; a budget raised on a SOUND re-derivation naming the work it missed, to twice its first, past that on two
+  independent SOUNDs, never past ten times it without his words; no
+  leeway on growth; no round owed for a finding worth less than half; User Story 2 and FR-006 read it; SC-015 tests it.
+- 2026-11-03, amendment 7's review (spec-fidelity, MODE 3): CHANGES REQUIRED, 4 items - FR-006's two outcomes against rule 1's
+  leeway; rule 2's no-words raise to ten times on an ordinary SOUND (now twice, past it two blind SOUNDs, the stated "extremely
+  rigorous analysis"); rule 4's carve-outs and LEEWAY; the ratchet's bound.
+- 2026-11-03, amendment 7's review, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - the leeway stacking on a
+  one-SOUND raise to four times the first budget; the accepted count now held within twice the first on such a raise.
+- 2026-11-03, amendment 7's review, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - the hold on the accepted count resolved in
+  the spec, the rubric, the agent's contract and the tool.

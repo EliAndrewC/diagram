@@ -16,7 +16,15 @@ these targets needs `GUARD_EDIT_OK`.
     budget_change.py set PHASE PER_THING EXPONENT DERIVATION VERDICT [--reason WHY] [--lower]
     budget_change.py change PHASE TO [--exponent E] --words WORDS
     budget_change.py program OPS_AT_40 EXPONENT --words WORDS
-    budget_change.py accept PHASE AUDIT       (a rebuilt phase's MODE AUDIT WITHIN and its counts at 40 and 80 within budget)
+    budget_change.py set ... --raise          (a re-derivation counting work the first missed, on its SOUND: feature 444 FR-022)
+    budget_change.py accept PHASE AUDIT       (a rebuilt phase's MODE AUDIT WITHIN and its counts at 40 and 80 within budget, or
+                                              LEEWAY and its counts at most twice it: feature 444 FR-022)
+
+THE LEEWAY AND THE RAISE (feature 444 amendment 7, the GM 2026-11-03: "I would frankly be okay with things that are 50% higher or
+even twice as high in terms of the number of operations than what we have budgeted ... if we end up with some kind of n squared
+algorithm, then even in Rust that will become a problem"): a budget is an estimate, so a stage is accepted at up to `LEEWAY` times
+it on the work-budget agent's LEEWAY, and a budget is raised without his words on a SOUND re-derivation that names the work the
+first one missed, to at most `RAISE_CAP` times its first figure at 40; neither touches the growth caps.
 """
 
 from __future__ import annotations
@@ -150,6 +158,8 @@ def set_budget(
     reason: str = "",
     lower: bool = False,
     growth_reason: str = "",
+    raise_: bool = False,
+    second: str = "",
 ) -> str:
     """A first budget, from a SOUND verdict or the round arbiter's accept of the derivation (feature 444 FR-013, the GM 2026-10-28):
     '' when set, else why not. `lower` re-pins a budgeted stage at no more than its standing budget at any size (no GM words: a
@@ -161,7 +171,17 @@ def set_budget(
     st = _stage(table, phase)
     if isinstance(st, str):
         return st
-    if st["status"] != "unbudgeted" and not lower:
+    if raise_ and lower:
+        return "RAISE=1 and LOWER=1 together - a re-pin is one or the other"
+    if raise_:
+        if st["status"] != "budgeted":
+            return f"`{phase}` is {st['status']} - RAISE=1 raises a budgeted stage, before its acceptance (feature 444 FR-022)"
+        if not missed_work(root, derivation):
+            return (
+                f"{derivation} names no work its first derivation missed - a raise without the GM's words counts each item under"
+                f" `{MISSED}` (feature 444 FR-022); a figure that is only an estimate off is the leeway's, at acceptance"
+            )
+    if st["status"] != "unbudgeted" and not (lower or raise_):
         return f"`{phase}` is {st['status']} already - a change needs the GM's words: make budget-change PHASE={phase} TO=<per thing> WORDS=\"<the GM's words>\"; a lowering re-pins with LOWER=1"
     if lower and st["status"] == "unbudgeted":
         return f"`{phase}` has no budget to lower - a first one is set without LOWER"
@@ -181,6 +201,25 @@ def set_budget(
     if missing := [h for h in sz if (items or {}).get(h) is None]:
         return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: {' '.join(f'ITEMS_AT_{h}=' for h in sz)} (feature 444 D2)"
     new = {h: per_thing * (items or {})[h] for h in sz}
+    if raise_:
+        first = first_budget(st, 40)
+        if new.get(40, 0) <= budget_at(st, 40):
+            return f"`{phase}`'s re-derived budget at 40, {new.get(40, 0):,.0f}, is no raise on {budget_at(st, 40):,.0f} - a lowering re-pins with LOWER=1"
+        if new[40] > RAISE_CAP * first:
+            return (
+                f"`{phase}`'s re-derived budget at 40, {new[40]:,.0f}, is past {RAISE_CAP:g} times its first, {first:,.0f} - an order of magnitude"
+                f" needs the GM's words (feature 444 FR-022): make budget-change PHASE={phase} TO=<per thing> DERIVATION= VERDICT= WORDS=\"<the GM's words>\""
+            )
+        # PAST TWICE THE FIRST, THE RIGOROUS ANALYSIS (FR-022 rule 2; the GM: "I don't want us to just think it's reasonable to have
+        # things take an order of magnitude more operations than we estimated. Without extremely rigorous analysis"): a second
+        # MODE BUDGET dispatch of the same bundle, blind to the first, judges it SOUND too
+        if new[40] > LEEWAY * first and (not second or second == verdict or verdict_of(root / second) != SOUND):
+            read = f" ({second} reads {verdict_of(root / second) or 'nothing'})" if second and second != verdict else ""
+            return (
+                f"`{phase}`'s re-derived budget at 40, {new[40]:,.0f}, is {new[40] / first:.1f} times its first, {first:,.0f} - past {LEEWAY:g} times a raise"
+                " needs a second SOUND, from an independent MODE BUDGET dispatch of the same bundle blind to the first: SECOND=<its verdict file>"
+                f"{read}"
+            )
     if lower and (raised := [h for h in sz if new[h] > budget_at(st, h)]):
         return (
             f"`{phase}` would rise at {', '.join(str(h) for h in raised)} households ({', '.join(f'{new[h]:,.0f} against {budget_at(st, h):,.0f}' for h in raised)})"
@@ -195,7 +234,7 @@ def set_budget(
             " re-derive it, or name why its n is bounded: GROWTH_REASON=\"<why>\""
         )
     today = today_at_40(root, phase) if 40 in sz else None
-    if today is not None and new[40] > today and not reason.strip():
+    if today is not None and new[40] > today and not reason.strip() and not raise_:
         return (
             f"`{phase}`'s budget at 40 households, {new[40]:,.0f}, is above what the stage counts today, {today:,.0f} (the newest `make work-budget`"
             f" run) - a budget the stage already meets is no target (ask:444-budget-standard). Re-derive at the typical case, or name why:"
@@ -217,8 +256,12 @@ def set_budget(
         ),
         **({"reason": reason.strip()} if reason.strip() else {}),
         **({"growth_reason": growth_reason.strip()} if growth_reason.strip() else {}),
+        **({"first": {str(h): first_budget(st, h) for h in sz}} if raise_ else {}),
+        **({"second": second} if raise_ and second else {}),
     }
     save(root, table)
+    if raise_:
+        log(root, {"what": "raised", "phase": phase, "from": {h: budget_at(st, h) for h in sz}, "to": new, "verdict": verdict, "missed": missed_work(root, derivation)})
     if lower:
         log(root, {"what": "lowered", "phase": phase, "from": {h: budget_at(st, h) for h in ITEM_SIZES}, "to": new, "verdict": arbiter or verdict})
     return ""
@@ -261,6 +304,28 @@ def change_budget(
     return ""
 
 
+LEEWAY = 2.0  # FR-022 rule 1: a stage accepted at up to twice its budget, on the MODE AUDIT's LEEWAY (the GM 2026-11-03: "even twice as high")
+RAISE_CAP = 10.0  # FR-022 rule 2: a raise without the GM's words reaches at most ten times the first budget at 40 ("an order of magnitude")
+MISSED = "## Work the first derivation missed"  # FR-022 rule 2: the section a raising re-derivation counts its missed items under
+
+
+def first_budget(st: dict[str, Any], h: int) -> float:
+    """The stage's budget at `h` households before its first raise (`first`, recorded at the raise), else its standing budget."""
+    return float((st.get("first") or {}).get(str(h)) or budget_at(st, h))
+
+
+def missed_work(root: Path, derivation: str) -> list[str]:
+    """The items under the derivation's `MISSED` section - its `- ` lines up to the next heading - or [] when it has none."""
+    try:
+        text = (root / derivation).read_text(encoding="utf-8")
+    except OSError:
+        return []
+    if MISSED not in text:
+        return []
+    body = re.split(r"\n## ", text.split(MISSED, 1)[1], maxsplit=1)[0]
+    return [ln[2:].strip() for ln in body.splitlines() if ln.startswith("- ") and ln[2:].strip()]
+
+
 GROWTH_CAP = 1.15  # rubric S6: a stage's exponent from 20 to 80 households, which allows n log n and no n squared
 GROWTH_SLACK = 0.05  # an accepted stage's measured exponent may sit this far above its budget's: seed noise between two sizes
 
@@ -291,8 +356,8 @@ def accept_stage(root: Path, phase: str, audit: str, arbiter: str = "") -> str:
     if arbiter:
         if not accepted_by(root, str(st.get("derivation") or ""), phase, arbiter):
             return f"the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept"
-    elif verdict_of(root / audit) != "WITHIN":
-        return f"{audit} reads {verdict_of(root / audit) or 'nothing'}, not WITHIN - a phase is accepted on its MODE AUDIT's WITHIN (`make work-budget-bundle MODE=audit PHASE={phase}`)"
+    elif (word := verdict_of(root / audit)) not in ("WITHIN", "LEEWAY"):
+        return f"{audit} reads {word or 'nothing'}, not WITHIN or LEEWAY - a phase is accepted on its MODE AUDIT's WITHIN, or LEEWAY at up to {LEEWAY:g} times its budget (`make work-budget-bundle MODE=audit PHASE={phase}`)"
     runs = sorted((root / RUNS).glob("*.json"))
     try:
         per = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]["stages"][phase]["per"]
@@ -303,9 +368,27 @@ def accept_stage(root: Path, phase: str, audit: str, arbiter: str = "") -> str:
         row = per.get(str(h))
         if not row:
             return f"the newest run has no roll at {h} households for `{phase}` - run `make work-budget` at every size"
-        if float(row["ops"]) > budget_at(st, h):
-            return f"`{phase}`: {float(row['ops']):,.0f} counted operations at {h} households, over its budget {budget_at(st, h):,.0f} - rebuild it again, or raise the budget with the GM's words (`make budget-change`, FR-006)"
-        got[str(h)] = float(row["ops"])
+        ops, budget = float(row["ops"]), budget_at(st, h)
+        # FR-022 rule 1: past the budget only on the audit's LEEWAY (the agent named the excess and judged it), never past twice it;
+        # the arbiter's accept stands in for a WITHIN, never for a LEEWAY (FR-006: the arbiter accepts no phase over its budget)
+        if ops > LEEWAY * budget or (ops > budget and (arbiter or verdict_of(root / audit) != "LEEWAY")):
+            past = ops > LEEWAY * budget
+            return (
+                f"`{phase}`: {ops:,.0f} counted operations at {h} households, {ops / budget:.2f} times its budget {budget:,.0f}"
+                + (f", past the leeway's {LEEWAY:g} times" if past else " - over it, a phase is accepted on the MODE AUDIT's LEEWAY")
+                + " - rebuild it again, raise the budget on a SOUND re-derivation naming the work it missed (`make budget-set RAISE=1`, FR-022),"
+                " or with the GM's words (`make budget-change`, FR-006)"
+            )
+        # FR-022 rule 2: raise and leeway together - within twice the FIRST budget on a raise judged by one SOUND, within ten
+        # times it on one judged by two independent ones; past that, the GM's words
+        cap = RAISE_CAP if st.get("second") else LEEWAY
+        if st.get("first") and ops > cap * first_budget(st, h):
+            return (
+                f"`{phase}`: {ops:,.0f} counted operations at {h} households, past {cap:g} times its first budget {first_budget(st, h):,.0f}"
+                + (" - an order of magnitude needs the GM's words (`make budget-change`, FR-022)" if st.get("second") else
+                   " - past twice the first, its raise owes a second, independent SOUND (`make budget-set RAISE=1 SECOND=`) or the GM's words (FR-022)")
+            )
+        got[str(h)] = ops
     at20 = float((per.get("20") or {}).get("ops", 0))
     if (g := growth(at20, got["80"])) > growth(budget_at(st, 20), budget_at(st, 80)) + GROWTH_SLACK:
         return (
@@ -341,6 +424,8 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--spread", default="", help="with --arbiter: the totals' spread across the rounds, `<low>-<high> at <households>`")
     s.add_argument("--reason", default="", help="why a budget above the stage's count today at 40 is the target (ask:444-budget-standard)")
     s.add_argument("--lower", action="store_true", help="re-pin a budgeted stage at no more than its standing budget at any size")
+    s.add_argument("--second", default="", help="with --raise past twice the first budget: the second, independent MODE BUDGET verdict (444 FR-022)")
+    s.add_argument("--raise", dest="raise_", action="store_true", help="raise a budgeted stage on a SOUND re-derivation naming the work its first missed (444 FR-022)")
     s.add_argument("--growth-reason", default="", help="why a budget growing past rubric S6's 1.15 from 20 to 80 households has a bounded n")
     for h in (10, *ITEM_SIZES):  # 10: a form at a bounded n (ask:444-polder-sizes)
         s.add_argument(f"--items-at-{h}", type=int)
@@ -367,9 +452,9 @@ def main(argv: list[str] | None = None) -> int:
         items = {h: getattr(args, f"items_at_{h}") for h in (10, *ITEM_SIZES) if getattr(args, f"items_at_{h}") is not None}
         why = set_budget(
             root, args.phase, float(args.per_thing), float(args.exponent), args.derivation, args.verdict, items, args.arbiter, args.spread, args.reason, args.lower,
-            args.growth_reason,
+            args.growth_reason, args.raise_, args.second,
         )
-        done = f"`{args.phase}` {'lowered to' if args.lower else 'budgeted at'} {args.per_thing} per thing, exponent {args.exponent}\nbudget-set: {per_house(root)}" if not why else ""
+        done = f"`{args.phase}` {'lowered to' if args.lower else 'raised to' if args.raise_ else 'budgeted at'} {args.per_thing} per thing, exponent {args.exponent}\nbudget-set: {per_house(root)}" if not why else ""
     elif args.cmd == "change":
         items = {h: getattr(args, f"items_at_{h}") for h in ITEM_SIZES if getattr(args, f"items_at_{h}") is not None}
         why = change_budget(root, args.phase, args.to, args.exponent, args.words, items, args.derivation, args.verdict)

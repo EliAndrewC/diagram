@@ -364,7 +364,7 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE BUDGET - {phase}\n\n"
         "MODE BUDGET: judge the derivation before the rebuild. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S9 and the worked homestead reference;\n"
+        "- `rubric.md` - the standards S1-S10 and the worked homestead reference;\n"
         "- `contract.md` - what the stage reads and writes;\n"
         "- `derivation.md` - the pseudocode and the operation count, factor by factor;\n"
         "- any `<stage>.verdict-<N>.txt` - the earlier verdicts; the derivation's `## Earlier findings` answers each - confirm each closed.\n\n"
@@ -558,12 +558,13 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE AUDIT - {phase}\n\n"
         "MODE AUDIT: judge the landed code against its counters. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S9;\n"
+        "- `rubric.md` - the standards S1-S10;\n"
         f"- `code/` - the stage's modules and every module defining a function its counters name: {', '.join(p.name for p in files)};\n"
         "- `counts.json` - the newest run's counted operations for the stage at each size, by kind and by function;\n"
         "- `chains.txt` - the callers above each counted function;\n"
         "- `budget.json` - the stage's pinned budget.\n\n"
-        "The first line of your reply is the verdict: WITHIN, OVER or UNCOUNTED.\n",
+        "The first line of your reply is the verdict: WITHIN, LEEWAY (over the budget and at most twice it, the excess named and"
+        " reasonable: rubric S10, feature 444 FR-022), OVER or UNCOUNTED.\n",
         encoding="utf-8",
     )
     return 0, str(out / "MANIFEST.md")

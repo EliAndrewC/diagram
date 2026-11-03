@@ -148,7 +148,7 @@ def _run_file(run_dir: Path, code_id: str, ops40: float, ops80: float, placed: f
     (run_dir / f"{stamp}-{code_id}.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": per}}}}))
 
 
-def test_the_ratchet_holds_an_accepted_stage_to_its_figure_and_its_budget(tmp_path: Path) -> None:
+def test_the_ratchet_holds_an_accepted_stage_to_its_figure_and_twice_its_budget(tmp_path: Path) -> None:
     """Feature 443 T04 (FR-006, SC-003): over the accepted figure refuses, over the budget refuses, under both passes, and the
     refusal names the stage, the figures and `make budget-change`."""
     runs = tmp_path / "runs"
@@ -158,8 +158,12 @@ def test_the_ratchet_holds_an_accepted_stage_to_its_figure_and_its_budget(tmp_pa
     _run_file(runs, "abc", 1600, 3400, stamp="20261028T010000Z")  # the newest run at the code id is the one read
     rc, msg = wb.review("GATED", _accepted(), "abc", str(runs))
     assert rc == 1 and "web: 1,600 counted operations at 40 households, over its accepted 1,500" in msg and "make budget-change PHASE=" in msg
-    rc, msg = wb.review("GATED-LOCAL", _accepted(per_thing=7), "abc", str(runs))  # budget 7 x 200 = 1,400 at 40
-    assert rc == 1 and "over its budget 1,400 (7 per thing x 200 items)" in msg
+    # FR-022 (the GM 2026-11-03: "even twice as high"): above its budget and within its accepted figure passes; past twice it refuses
+    rc, msg = wb.review("GATED-LOCAL", _accepted(per_thing=3), "abc", str(runs))  # budget 3 x 200 = 600 at 40: 1,600 past 1,200
+    assert rc == 1 and "past 2 times its budget 600 (3 per thing x 200 items)" in msg
+    _run_file(runs, "abc", 1400, 3400, stamp="20261028T020000Z")
+    rc, msg = wb.review("GATED-LOCAL", _accepted(per_thing=7), "abc", str(runs))  # 1,400 at 40 within 2 x 1,400; 3,400 within 2 x 2,800
+    assert rc == 0, msg
     assert wb.held(_accepted(), {"stages": {"web": {"per": {"40": {"ops": 1, "placed": 1}}}}}) == ["web: the run has no roll at 80 households to hold it to"]
 
 

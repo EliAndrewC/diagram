@@ -280,9 +280,17 @@ def newest_run(code_id: str, run_dir: str = RUN_DIR) -> dict[str, Any] | None:
         return dict(json.load(fh))
 
 
+LEEWAY = 2.0
+"""An accepted stage may stand at up to twice its budget, as `budget-accept` takes it on the MODE AUDIT's LEEWAY (feature 444 FR-022,
+the GM 2026-11-03: "I would frankly be okay with things that are 50% higher or even twice as high"); its accepted figure still
+holds it at what it counted.
+
+Research: plumbing - NONE: the GM's band for an estimate's leeway"""
+
+
 def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
-    """Each refusal of an ACCEPTED stage whose counted operations at 40 or 80 households exceed its accepted figure or its budget
-    (`budget_at`: `per_thing` times the derivation's items at that size), naming the figures and the two commands; and each
+    """Each refusal of an ACCEPTED stage whose counted operations at 40 or 80 households exceed its accepted figure or `LEEWAY` times
+    its budget (`budget_at`: `per_thing` times the derivation's items at that size), naming the figures and the two commands; and each
     budgeted row with no items (`missing_items`)."""
     out: list[str] = list(missing_items(table)) + stale_pins(table)
     for name, b in (table.get("stages") or {}).items():
@@ -297,8 +305,8 @@ def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
             ops, accepted, budget = got["ops"], (b.get("accepted") or {}).get(str(h)), budget_at(b, h)
             if accepted is not None and ops > accepted:
                 out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its accepted {accepted:,.0f}")
-            if budget is not None and ops > budget:
-                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, over its budget {budget:,.0f} ({b['per_thing']:g} per thing x {b[f'items_at_{h}']:,} items)")
+            if budget is not None and ops > LEEWAY * budget:
+                out.append(f"{name}: {ops:,.0f} counted operations at {h} households, past {LEEWAY:g} times its budget {budget:,.0f} ({b['per_thing']:g} per thing x {b[f'items_at_{h}']:,} items)")
     return out
 
 

@@ -205,7 +205,7 @@ def test_a_rebuilt_phase_is_accepted_only_within_its_budget_on_its_audits_within
     bc.set_budget(root, "web", 10, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40})
     (root / "a.txt").write_text("WITHIN - x\n")
     (root / "o.txt").write_text("OVER - x\n")
-    assert "not WITHIN" in bc.accept_stage(root, "web", "o.txt")
+    assert "not WITHIN or LEEWAY" in bc.accept_stage(root, "web", "o.txt")
     runs = root / bc.RUNS
     runs.mkdir(parents=True, exist_ok=True)
 
@@ -216,7 +216,7 @@ def test_a_rebuilt_phase_is_accepted_only_within_its_budget_on_its_audits_within
     assert "no roll at 80" in bc.accept_stage(root, "web", "a.txt")
     run("2.json", {"40": {"ops": 150}, "80": {"ops": 500}})
     why = bc.accept_stage(root, "web", "a.txt")
-    assert "over its budget 400" in why and "make budget-change" in why
+    assert "1.25 times its budget 400 - over it" in why and "make budget-change" in why and "RAISE=1" in why
     run("3.json", {"40": {"ops": 150}, "80": {"ops": 380}})
     assert bc.main(["--root", str(root), "accept", "web", "a.txt"]) == 0
     st = bc.load(root)["stages"]["web"]
@@ -288,14 +288,77 @@ def test_a_rebuilt_phase_is_accepted_on_the_arbiters_accept_in_place_of_a_within
     runs = root / bc.RUNS
     runs.mkdir(parents=True, exist_ok=True)
     (runs / "1.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 380}}}}}}))
-    assert "not WITHIN" in bc.accept_stage(root, "web", "u.txt"), "an UNCOUNTED alone accepts nothing"
+    assert "not WITHIN or LEEWAY" in bc.accept_stage(root, "web", "u.txt"), "an UNCOUNTED alone accepts nothing"
     assert "holds no accept at ask:444-T16-web-after-6" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-web-after-6")
     (feat / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:444-T16-track-after-6", "ruling": "accept", "what": "the track stands"}) + "\n")
     assert "holds no accept" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-track-after-6"), "another phase's accept"
     (feat / "arbiter.jsonl").write_text(json.dumps({"trigger": "ask:444-T16-web-after-6", "ruling": "accept", "what": "box 7 closes on this rebuild"}) + "\n")
     (runs / "2.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 500}}}}}}))
-    assert "over its budget 400" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-web-after-6"), "the budget still holds"
+    assert "1.25 times its budget 400" in bc.accept_stage(root, "web", "u.txt", "ask:444-T16-web-after-6"), "the budget still holds: an accept is no LEEWAY"
     (runs / "3.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 100}, "40": {"ops": 150}, "80": {"ops": 380}}}}}}))
     assert bc.main(["--root", str(root), "accept", "web", "u.txt", "--arbiter", "ask:444-T16-web-after-6"]) == 0
     st = bc.load(root)["stages"]["web"]
     assert st["status"] == "accepted" and st["accept"] == "ask:444-T16-web-after-6"
+
+
+def test_a_stage_is_accepted_at_up_to_twice_its_budget_on_its_audits_leeway(root: pathlib.Path) -> None:
+    """Feature 444 FR-022 rule 1, SC-015 (the GM 2026-11-03: "I would frankly be okay with things that are 50% higher or even twice
+    as high"): over its budget a stage is accepted only on the MODE AUDIT's LEEWAY, never past twice it on either word, and its
+    growth holds it as before."""
+    bc.set_budget(root, "web", 10, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40})
+    (root / "w.txt").write_text("WITHIN - x\n")
+    (root / "l.txt").write_text("LEEWAY - the brook's rounding unpriced, counted and linear\n")
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+
+    def run(name: str, at20: float, at40: float, at80: float) -> None:
+        (runs / name).write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": at20}, "40": {"ops": at40}, "80": {"ops": at80}}}}}}))
+
+    run("1.json", 150, 300, 600)  # 1.5 times at every size
+    assert "1.50 times its budget 200 - over it, a phase is accepted on the MODE AUDIT's LEEWAY" in bc.accept_stage(root, "web", "w.txt")
+    run("2.json", 300, 500, 900)  # 2.5 times at 40
+    assert "past the leeway's 2 times" in bc.accept_stage(root, "web", "l.txt"), "past twice it, even on LEEWAY"
+    run("3.json", 40, 300, 600)  # within the band, but growing at 1.94 against the budget's 1.00
+    assert "past its budget's 1.00" in bc.accept_stage(root, "web", "l.txt"), "no leeway on growth (FR-022 rule 3)"
+    run("4.json", 150, 300, 600)
+    assert bc.accept_stage(root, "web", "l.txt") == ""
+    assert bc.load(root)["stages"]["web"]["accepted"] == {"40": 300.0, "80": 600.0}
+
+
+def test_a_budget_is_raised_on_a_sound_rederivation_naming_its_missed_work(root: pathlib.Path) -> None:
+    """Feature 444 FR-022 rule 2, SC-015 (the GM 2026-11-03: "if we discover that there are things that we didn't take into account,
+    then it makes sense to raise the operations budget"): RAISE=1 raises a budgeted stage on a SOUND derivation with its missed-work
+    section, logged with the items; refused without the section, on a figure no higher, and past ten times the first budget at 40."""
+    items = {20: 10, 40: 20, 80: 40}
+    bc.set_budget(root, "web", 10, 1.0, "d.md", "SOUND.txt", items)  # 200 at 40
+    assert "names no work its first derivation missed" in bc.set_budget(root, "web", 20, 1.0, "d.md", "SOUND.txt", items, raise_=True)
+    (root / "r.md").write_text(f"# x\n\n{bc.MISSED}\n\n- the brook rounded at the stage's end\n- the off-map route's search\n\n## Growth\n\n- not an item\n")
+    assert bc.missed_work(root, "r.md") == ["the brook rounded at the stage's end", "the off-map route's search"]
+    assert "not SOUND" in bc.set_budget(root, "web", 20, 1.0, "r.md", "LOOSE.txt", items, raise_=True)
+    assert "is no raise" in bc.set_budget(root, "web", 10, 1.0, "r.md", "SOUND.txt", items, raise_=True)
+    assert "together" in bc.set_budget(root, "web", 20, 1.0, "r.md", "SOUND.txt", items, raise_=True, lower=True)
+    _run(root, "web", 100)  # today's count below the raise: a raise owes no REASON, its section is the reason
+    assert bc.main(["--root", str(root), "set", "web", "18", "1.0", "r.md", "SOUND.txt", "--raise", *[f"--items-at-{h}={n}" for h, n in items.items()]]) == 0
+    st = bc.load(root)["stages"]["web"]
+    assert st["per_thing"] == 18 and st["first"] == {"20": 100.0, "40": 200.0, "80": 400.0} and st["derivation"] == "r.md"
+    # raised on one SOUND, LEEWAY stops at twice the FIRST 200, not twice the raised 360
+    (root / "l.txt").write_text("LEEWAY - x\n")
+    (root / bc.RUNS / "20261028T120000Z-x.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 225}, "40": {"ops": 450}, "80": {"ops": 900}}}}}}))
+    assert "past 2 times its first budget 200" in bc.accept_stage(root, "web", "l.txt") and "SECOND=" in bc.accept_stage(root, "web", "l.txt")
+    row = json.loads((root / bc.LOG).read_text().splitlines()[-1])
+    assert row["what"] == "raised" and row["to"]["40"] == 360 and len(row["missed"]) == 2
+    # past twice the FIRST 200 (not the standing 360): the rigorous analysis, a second SOUND from a distinct dispatch
+    why = bc.set_budget(root, "web", 60, 1.0, "r.md", "SOUND.txt", items, raise_=True)
+    assert "6.0 times its first, 200" in why and "SECOND=" in why
+    assert "SECOND=" in bc.set_budget(root, "web", 60, 1.0, "r.md", "SOUND.txt", items, raise_=True, second="SOUND.txt"), "the same verdict twice is one"
+    assert "LOOSE.txt reads LOOSE" in bc.set_budget(root, "web", 60, 1.0, "r.md", "SOUND.txt", items, raise_=True, second="LOOSE.txt")
+    (root / "SOUND2.txt").write_text("SOUND - the second reading\n")
+    why = bc.set_budget(root, "web", 101, 1.0, "r.md", "SOUND.txt", items, raise_=True, second="SOUND2.txt")  # 2,020 > 10 x 200
+    assert "past 10 times its first, 200" in why and "make budget-change" in why
+    assert bc.set_budget(root, "web", 60, 1.0, "r.md", "SOUND.txt", items, raise_=True, second="SOUND2.txt") == ""
+    st = bc.load(root)["stages"]["web"]
+    assert st["first"]["40"] == 200.0 and st["second"] == "SOUND2.txt", "the first figure survives a second raise"
+    # the leeway does not stack past ten times the first: 1.9 x 1,200 at 40 is 2,280, past 2,000
+    (root / bc.RUNS / "20261029T000000Z-x.json").write_text(json.dumps({"summary": {"stages": {"web": {"per": {"20": {"ops": 1140}, "40": {"ops": 2280}, "80": {"ops": 4560}}}}}}))
+    assert "past 10 times its first budget 200" in bc.accept_stage(root, "web", "l.txt")
+    assert "unbudgeted - RAISE=1 raises a budgeted stage" in bc.set_budget(root, "track", 1, 1.0, "r.md", "SOUND.txt", items, raise_=True)

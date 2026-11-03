@@ -42,6 +42,23 @@ Python calls and seconds are recorded beside them, and neither is the budget.
   of its count was the search for the winner - and four rounds passed it, because the cheaper-algorithm question asked for data
   structures, never whether the set needed visiting, and a reason that the stage is one thing satisfied the reference's screen.
 
+- **S10 An estimate, held with leeway; growth held hard.** A budget is an estimate, so a rebuilt stage counting more than it, and
+  at most twice it at 40 and 80 households, is accepted on MODE AUDIT's LEEWAY: every loop counted (S5), nothing repaired (S4),
+  growth within the budget's (S6), and the excess named - the work or the factor the derivation did not price - and judged
+  reasonable. Work the stage must do that the derivation never counted (a branch, a write, a rule of its contract) is not
+  leeway: the derivation is revised to count it under `## Work the first derivation missed`, judged in MODE BUDGET as any other,
+  and on SOUND the budget is raised (`make budget-set RAISE=1`) to at most twice its first figure at 40. Past twice it the raise
+  owes the rigorous analysis: each missed item tied to the contract's rule that owes it, and a second SOUND from an independent
+  MODE BUDGET dispatch of the same bundle (`SECOND=`). On a budget raised on one SOUND, the accepted count stays within
+  twice the first figure, LEEWAY not carrying it past; nothing passes ten times the first figure at 40 - not a raise, not an
+  accepted count on a raised budget - without the GM's words. Apart from the twice-the-budget count and growth, a LOOSE or an OVER
+  is given for a finding only where it would move the stage's total at 40 by more than half; a tighter bound worth less is a note
+  under SOUND, WITHIN or LEEWAY, owing no round. Nothing here loosens S3 or S6. WHY (the GM
+  2026-11-03, feature 444 amendment 7): "if we discover that there are things that we didn't take into account, then it makes
+  sense to raise the operations budget rather than to fight ... I would frankly be okay with things that are 50% higher or even
+  twice as high ... I don't want to just completely relax the performance requirements, because if we end up with some kind of
+  n squared algorithm, then even in Rust that will become a problem."
+
 ## The reference: a homestead (S7 worked out)
 
 The design's reference point, factor by factor. Its figures are the design's illustration, labeled GUESS until feature 444's
@@ -62,7 +79,9 @@ operations, flat in the number of households (S6: the index keeps the neighbors 
 
 - MODE BUDGET (a derivation, before the rebuild; no code and no counts of today's code in the bundle): **SOUND**; **LOOSE**,
   naming the factor and a tighter bound; **UNDERIVED**, naming the factor with no reason.
-- MODE AUDIT (the landed code against its counters): **WITHIN**; **OVER**, naming the chain; **UNCOUNTED**, naming the loop.
+- MODE AUDIT (the landed code against its counters): **WITHIN**; **LEEWAY**, over the budget and at most twice it, naming the
+  excess and why it is reasonable (S10); **OVER**, naming the chain; **UNCOUNTED**, naming the loop.
 
-The agent's contract is `.claude/agents/work-budget.md`; a first budget is set only from a SOUND verdict (`make budget-set`), and
-changed only with the GM's words (`make budget-change`).
+The agent's contract is `.claude/agents/work-budget.md`; a first budget is set only from a SOUND verdict (`make budget-set`),
+raised on a SOUND re-derivation naming the work it missed (`make budget-set RAISE=1`, S10), and otherwise changed only with the
+GM's words (`make budget-change`).
