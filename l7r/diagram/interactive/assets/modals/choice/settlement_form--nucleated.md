@@ -21,7 +21,7 @@ Depiction: The map gathers the houses together on the dry ground at the edge of 
 lane, and shelters the houses behind a belt of trees along their windward edge rather than a grove at each farm, a belt that runs on past the edge of the map where it meets it;
 clumps of trees, the dooryard copse, stand in the gaps between the farms; the map counts the copse as the farms' own woods, each of which really stood on its own farm's lot. The houses are drawn as a compact cluster,
 whatever its shape; a village of a dozen houses or more is held to a least packing, so it is not strung out in a wide, hollow arc that leaves houses stranded from the fields, while a hamlet is not held to it; how densely
-a real village was built is not recorded. The title card says where this cluster sits and what
+a real village was built is not recorded. A hamlet's houses always sit on the high edge of its fields with their back to the winter wind, its land laid to fall away from the wind or square across it: in reality that was one seat among several, but the map gives it to every hamlet so its houses keep their back to the wind. The title card says where this cluster sits and what
 shape it takes.
 
 Name: How the houses stand: clustered together (nucleated)
