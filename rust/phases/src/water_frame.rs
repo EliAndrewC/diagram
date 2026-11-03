@@ -13,6 +13,9 @@ use crate::pyrand::knob_rng;
 
 /// One knob of the plan as Python gathered it: its name, how many forms its table holds, whether the spec pins it, and the
 /// branch it applies on.
+///
+/// Research:
+///     the knob's tuple - NONE: plumbing, the shape Python hands a knob in
 type KnobIn = (String, u32, bool, String);
 
 /// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll_plan` for a draw here,
@@ -29,6 +32,10 @@ impl Counts {
         not(feature = "counters"),
         expect(clippy::unused_self, reason = "the counters compile out (FR-012)")
     )]
+    /// One count added under `key`.
+    ///
+    /// Research:
+    ///     a count kept - NONE: the work-budget's own bookkeeping
     fn add(&mut self, key: &str, n: u64) {
         #[cfg(feature = "counters")]
         {
@@ -39,7 +46,11 @@ impl Counts {
     }
 }
 
-/// The bearing of a wind quarter, in compass degrees (north 0, clockwise).
+/// The bearing of a wind quarter, in compass degrees (north 0, clockwise; the map frame turns clockwise from east, and
+/// `admitted` reads the fall against this bearing so).
+///
+/// Research:
+///     a quarter's bearing - NONE: plumbing, a compass name read as degrees
 fn quarter_deg(windward: &str) -> f64 {
     match windward {
         "NE" => 45.0,
@@ -59,7 +70,10 @@ fn quarter_deg(windward: &str) -> f64 {
 /// in place of a test of each fall (measured 2026-10-30: the same admitted set as `plan.fall_backs_the_wind` on every quarter).
 ///
 /// Research:
-///     high side and windward side as one - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin, the wind read before the fall
+///     high side and windward side as one - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the page draws the high
+///     windward margin as one case among several, how common a GUESS; taken here on every hamlet, the easier route where the record
+///     is silent on the share (the GM 2026-10-25), both ends in - a fall square across the wind admitted with the windward side level
+///     the fall to the compass points - CONVENTION: a fall rolled among the eight points at 45 degrees, or the four cardinals at 90 on a polder's survey grid
 #[must_use]
 pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
     let w = quarter_deg(windward);
@@ -71,6 +85,9 @@ pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
 }
 
 /// The admitted falls, for Python's test against the rule it replaces.
+///
+/// Research:
+///     the falls handed to Python - NONE: a wrapper over `admitted` for a test
 #[pyfunction]
 #[expect(clippy::needless_pass_by_value, reason = "PyO3 hands a String")]
 #[must_use]
@@ -79,14 +96,19 @@ pub fn admitted_falls(windward: String, cardinal: bool) -> Vec<f64> {
 }
 
 /// Whether a knob on `branch` applies to a map of settlement form `form`: the derivation's knob row - `all`, the nucleated
-/// form's own, every form but nucleated (the farm's grove), the dispersed farm's, a row's, or `off` (Python found its branch
+/// form's own, every form but nucleated (the farm's grove), the dispersed farm's, every form but dispersed (the lane web), a row's, or `off` (Python found its branch
 /// absent: no brook, a fixed row on flood ground).
+///
+/// Research:
+///     a knob's branch - NONE: plumbing, the derivation's knob row read against the form; the rule each branch keeps is at the
+///     knob's own table in Python
 fn applies(branch: &str, form: &str) -> bool {
     match branch {
         "all" => true,
         "nucleated" => form == "nucleated",
         "not_nucleated" => form != "nucleated",
         "dispersed" => form == "dispersed",
+        "not_dispersed" => form != "dispersed",
         "linear" => form == "linear",
         _ => false,
     }
@@ -95,7 +117,9 @@ fn applies(branch: &str, form: &str) -> bool {
 /// The plan's rolls, as the derivation counts them: the fall from `n_falls` admitted bearings (unless pinned), and for each
 /// knob in order - the settlement form first, named by `forms` - its allowed forms read, one rolled or the pin taken, and
 /// written (3); a knob with one form left read and written (2); a knob off its branch written alone (1). Returns the fall's
-/// index (`None` where pinned), each knob's index (`None` where pinned or off its branch), and the counts.
+/// index (`None` where pinned), each knob's index (`None` where pinned or off its branch), and the counts. Each draw is even over
+/// the knob's table, so a table's weights are its repeated entries (the settlement form's is nucleated 5, dispersed 3, linear 2 of
+/// ten); a pinned form arrives as its table's one entry, so `forms.first()` is the pin and gates the knobs after it.
 #[must_use]
 pub fn roll_plan(
     seed: i64,
@@ -215,6 +239,7 @@ mod tests {
                 && applies("all", "x")
                 && !applies("off", "x")
         );
+        assert!(applies("not_dispersed", "linear") && !applies("not_dispersed", "dispersed"));
         let forms = vec!["nucleated".to_owned()];
         let knobs = vec![
             knob("settlement_form", 1, "all"),

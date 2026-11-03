@@ -461,7 +461,7 @@ _KNOBS: tuple[tuple[str, str], ...] = (
     ("cluster_shape", "all"),  # every form: `band_extent` sizes every map's margin band and canvas by it, a row's and a farm's too
     ("water_sink", "all"),
     ("lane_skeleton", "all"),
-    ("lane_web", "all"),
+    ("lane_web", "not_dispersed"),  # a dispersed hamlet draws no web (`ways/web/stage.py`), so reads no web form; its skeleton is read, for the track's gateway
     ("bamboo", "all"),
     ("grove_sides", "not_nucleated"),
     ("grove_flank", "not_nucleated"),
@@ -488,7 +488,9 @@ def _rust_rolls(spec: HamletSpec, archetype: str, windward: str) -> dict[str, An
     table's first form (a fixed row on flood ground, "edge"). The counts Rust kept are the plan's own (D9).
 
     Research:
-        the plan's rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet from the seed, only where the map's form uses it"""
+        the plan's rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet from the seed, only where the map's form uses it
+        grove sides on flood ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a polder's farms - the flood table where the spec or the archetype puts the map on flood ground; a dike-top hamlet is never rolled (`SETTLEMENT_FORMS` holds the three rolled forms), only pinned, so the spec decides it
+        the row on the dry edge on flood ground - research/questions/0033-row-villages-resson.drawing.html: on flood ground the row is fixed to the edge (row_line "edge"), not rolled"""
     from l7r.diagram.hamletgen.phases_ext import phases  # noqa: PLC0415 - built on first use (D8)
 
     _flood_known = spec.flood_ground if spec.flood_ground is not None else (archetype in POLDER_ARCHETYPES or spec.settlement_form == "dike_top")

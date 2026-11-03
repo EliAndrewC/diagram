@@ -224,29 +224,47 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 9. **After a ruling, the step it named?** Yes: `make done` once more; one more fresh red is a process fault (how much new code
    lands before a single `make done`), per the ruling.
 
-### T22 (<why: the finding or measurement that files it>)
+### T22 (FR-021, amendment 6: the 15 open claims findings on water_frame's port)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each finding fixed in its claim or its code, decided 2026-11-03 by reading the code each names:
+  - **D1 - the eight MISLABELED** (`Counts.add`, `KnobIn`, `quarter_deg`, `admitted_falls`, `applies`, each inheriting the module's
+    two claims): each carries its own `Research:` NONE line, so it no longer inherits a claim it does not keep.
+  - **D2 - the fall quantized (UNCLAIMED)**: claimed at `admitted` as a CONVENTION - the eight compass points at 45 degrees, the
+    four cardinals at 90 on a polder's survey grid.
+  - **D3 - the fall backs the wind (DRIFTED)**: the page draws the high windward margin as one case among several, how common a
+    GUESS. The record is silent on the share, so the easier route is taken and said (the GM 2026-10-25): the tie kept on every
+    hamlet, both ends in, relabeled a DEVIATION of 0031 that says so. No map moves.
+  - **D4 - `roll_plan` and `stage_water_frame` (CANNOT-TELL)**: the docstring states what the checker lacked - each draw is even over
+    the knob's table, and the settlement form's table repeats its forms 5, 3 and 2 of ten (`consts.SETTLEMENT_FORMS`), the page's
+    half, three in ten and two in ten; a pinned form arrives as the table's one entry, so `forms.first()` is the pin.
+  - **D5 - `_KNOBS` (CANNOT-TELL)**: a dispersed hamlet reads `lane_skeleton` (the track's gateway, `ways/track.py`) but never
+    `lane_web` (`ways/web/stage.py` returns first); `lane_web` moves to a new `not_dispersed` branch (`applies`), so it is rolled
+    only where its form uses it. Each knob draws from its own stream (`knob_rng(seed, name)`), so no other knob moves; a dispersed
+    map's unread `lane_web` takes its table's first form.
+  - **D6 - `_rust_rolls`'s two UNCLAIMED**: claimed - the flood grove table where the spec or the archetype puts the map on flood
+    ground (a dike-top hamlet is never rolled, only pinned, so the spec decides it: no rolled-form case exists), and the row fixed
+    to the dry edge on flood ground (0033).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| D1-D4, D6 | claims only | no map can move | none | n/a |
+| D5 | a dispersed map's `lane_web` value only, unread | to measure at the gate | none expected | n/a |
 
 ### T22 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No place changes: the water frame's claims say what its code does.
+2. **The constraints.** FR-021 (no open claim in the units a phase delta changes); constitution XII (every decision labeled).
+3. **Where each comes from.** R: 0031, 0033, 0036; G: the GM 2026-10-25 (the easier route where the record is silent); O: the code read.
+4. **Do they describe the world here?** Read in the code each finding names (2026-11-03).
+5. **The order.** After T26's committed work; independent of T26's landing.
+6. **The exits.** Green: every one of the 15 re-checked IN-STEP. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** `make claims-report` lists none of the 15.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** No.
 
 <!-- plan-archive: T23 to T16 moved to plan-done.md, 2026-11-02 (feature 375 FR-044) -->
 ### T24 (the round arbiter's ruling ask:444-T16-hem-cleared-reprice, 2026-11-01)
