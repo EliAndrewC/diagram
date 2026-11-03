@@ -9142,18 +9142,20 @@
  "l7r/diagram/hamletgen/consts_water.py::OFFTAKE_DEG#offtake angle": {
   "body": "37336381247078c5",
   "claim": "offtake angle - which-way-water-flows-and-how-channels-bend-and-join.drawing: 35 degrees, leaning downstream",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c4acff192cf99020",
   "core": "65f58c4f7a46e9f6",
   "date": "2026-11-01",
   "note": "35 degrees leaning downstream, a GUESS the page records",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one)": {
@@ -73804,49 +73806,55 @@
  "rust/phases/src/course.rs::BEND_WIDTHS#the brook's bend": {
   "body": "90e80742583d7997",
   "claim": "the brook's bend - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"About 2.5 channel widths in radius\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "eadb3256f431cf07",
   "core": "8e558e6a2a672036",
   "date": "2026-11-03",
   "note": "2.5 widths, as the page gives",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::LEG_CAP#the bend's cap": {
   "body": "5c2292846343ce81",
   "claim": "the bend's cap - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"A bend's radius is capped at 35% of the straight run on either side\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2b73200d21121ef0",
   "core": "f2c25245e15bf06a",
   "date": "2026-11-03",
   "note": "35% of each leg",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::MIN_TURN_DEG#turn left sharp": {
   "body": "b6d45e306b8bc6b2",
   "claim": "turn left sharp - which-way-water-flows-and-how-channels-bend-and-join.drawing: a turn under 8 deg is not rounded",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "701f76d65debd0a9",
   "core": "b26afd7fc1d52ded",
   "date": "2026-11-03",
   "note": "under 8 deg left sharp",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::ON_COURSE#an offtake on the course": {
@@ -73864,17 +73872,19 @@
  "rust/phases/src/course.rs::TANGENT_CAP#neighboring bends apart": {
   "body": "9b2c1bd25034f26b",
   "claim": "neighboring bends apart - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"Two neighboring bends never swallow the straight between them\" - the page's 35% kept on the tangent run too, so neighbors leave at least 30% of a leg straight",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "29d46da8529fc230",
   "core": "d7f08d46772fb1bc",
   "date": "2026-11-03",
   "note": "0.35 is the page's 35%; capping the tangent run too is what makes \"never swallow the straight between them\" hold",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::arc#the brook as drawn": {
@@ -73912,34 +73922,38 @@
  "rust/phases/src/course.rs::drawn#the main channel not rounded at an offtake": {
   "body": "747a3954f6a6668f",
   "claim": "the main channel not rounded at an offtake - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"Where a branch leaves, the main channel is not rounded\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7807a3828fd9e4ab",
   "core": "c664b88288a20df9",
   "date": "2026-11-03",
   "note": "held vertices within ON_COURSE are pushed unrounded before the turn test",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8cec24e795423384"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::mouth#a junction on the drawn course": {
   "body": "4f3034a759bd6748",
   "claim": "a junction on the drawn course - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e8e507f171e41e35",
   "core": "b8f0fb55ed422b43",
   "date": "2026-11-03",
   "note": "the tip is set on the main channel's drawn line",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/course.rs::turn#the brook as drawn": {
@@ -75217,18 +75231,20 @@
  "rust/phases/src/field/channels.rs::SWEEP_LIMITS#the sweep's limits": {
   "body": "ae79df53dcd20339",
   "claim": "the sweep's limits - which-way-water-flows-and-how-channels-bend-and-join.drawing: a turn of under about 8 degrees is left sharp, and a bend's radius is capped at 35% of the straight run on either side",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f5eb40e14aa8a638",
   "core": "c11b7b4b101226ad",
   "date": "2026-11-01",
   "note": "8 degrees and 35%, as the page says",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::SWEEP_STEPS#the sweep's points": {
@@ -75559,19 +75575,20 @@
  "rust/phases/src/field/channels.rs::offtake_lines#the lean": {
   "body": "53d264dc508d6e56",
   "claim": "the lean - which-way-water-flows-and-how-channels-bend-and-join.drawing: a delivery ditch in the comb follows its row's bund, leaving nearly square to its canal, drawn only where that bund leans downstream off the canal's flank; the 35 degrees a branch's where nothing on the ground sets the angle",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b67c430911bbe66a",
   "core": "c67e13cc04423881",
   "date": "2026-11-01",
   "note": "an offtake is kept only where the bund leans downstream off the flank (dot > 0)",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:034c86e8a450290d",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::offtake_lines#where an offtake goes": {
@@ -75590,35 +75607,39 @@
  "rust/phases/src/field/channels.rs::swept#a bend's radius": {
   "body": "eeb90ab089e13a93",
   "claim": "a bend's radius - which-way-water-flows-and-how-channels-bend-and-join.drawing: about two and a half channel widths (`SWEEP_WIDTHS`), capped at 35% of the straight run on either side, a turn under about 8 degrees left sharp (`SWEEP_LIMITS`); the setback never past either leg's middle",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "caa6a307804781eb",
   "core": "4a86ce1d910a0a81",
   "date": "2026-11-01",
   "note": "min(2.5w, 0.35*shorter leg), sharp under 8 degrees, setback capped at half of each leg",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::swept#sweeps": {
   "body": "eeb90ab089e13a93",
   "claim": "sweeps - which-way-water-flows-and-how-channels-bend-and-join.drawing: every ditch turns on a sweep, never a sharp corner",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5b9ac64651146de3",
   "core": "4a86ce1d910a0a81",
   "date": "2026-11-01",
   "note": "every interior corner of 8 degrees or more is rounded",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/channels.rs::tail_runs_on#the canal's tail": {
@@ -78814,14 +78835,15 @@
  "rust/phases/src/field/py.rs::stage_field#the brook drawn where it is laid": {
   "body": "30dbfc1ed6725109",
   "claim": "the brook drawn where it is laid - which-way-water-flows-and-how-channels-bend-and-join.drawing: every bend of 8 degrees or more on its arc, the brook not rounded where the race leaves it (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "86f4f06237a97f7a",
   "core": "67086af5240d1f74",
   "date": "2026-11-03",
   "note": "course::drawn rounds bends of 8 degrees or more at 2.5 widths and holds the head race's mouth; course::mouth sets the race's first point on the drawn line; only the head race leaves the brook",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:034c86e8a450290d",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
@@ -78832,6 +78854,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#a rice polder's pocket pond": {
@@ -79605,17 +79628,19 @@
  "rust/phases/src/sink/brook.rs::Brook.crossed#either end makes the junction": {
   "body": "496db5c33de26cad",
   "claim": "either end makes the junction - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "42e05241248c746b",
   "core": "c742ebf6773ca0be",
   "date": "2026-11-03",
   "note": "an end within half the drawn width makes a junction",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/brook.rs::Brook.crossed#no crossing mid-run": {
@@ -79773,17 +79798,19 @@
  "rust/phases/src/sink/brook.rs::JOIN_TOL_SHARE#a joiner meets the water": {
   "body": "272e96a10293fcff",
   "claim": "a joiner meets the water - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "476111116296cff4",
   "core": "0bc4f28a235ec4f0",
   "date": "2026-11-03",
   "note": "half the drawn width, i.e. inside the width",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/brook.rs::Stations#the brook as read": {
@@ -80246,34 +80273,38 @@
  "rust/phases/src/sink/offmap.rs::keeps#runs downhill": {
   "body": "31f1fe8876d13438",
   "claim": "runs downhill - which-way-water-flows-and-how-channels-bend-and-join.drawing: net travel down the fall, strictly under 90 degrees off it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4efa73796486b77e",
   "core": "be8e1a6169548fcf",
   "date": "2026-11-03",
   "note": "net travel strictly under 90 deg off the fall",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::keeps#with the drainage bearing": {
   "body": "31f1fe8876d13438",
   "claim": "with the drainage bearing - which-way-water-flows-and-how-channels-bend-and-join.drawing: under 90 degrees off the water's flow",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "051fd87bc12cdbcc",
   "core": "be8e1a6169548fcf",
   "date": "2026-11-03",
   "note": "under 90 deg off the bearing",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#else off the map": {
