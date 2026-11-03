@@ -74300,6 +74300,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/work_budget.py::LEEWAY#plumbing": {
+  "body": "d45a4356d36abc0e",
+  "claim": "plumbing - NONE: the GM's band for an estimate's leeway",
+  "code": "fe6db102a71a9fc5",
+  "core": "6f1b8dc9cc6bf543",
+  "date": "2026-11-03",
+  "note": "a tolerance for how far a work-budget estimate may run over; it decides nothing about the hamlet and nothing about how the map looks",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/work_budget.py::SIZES#plumbing": {
   "body": "82ffa976b954a5c6",
   "claim": "plumbing - NONE: the sizes the design names (10, 20, 40 and 80 households; 80 past the band, as the scaling legs roll it)",
