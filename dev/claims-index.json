@@ -22114,6 +22114,7 @@
   "note": "the cited pages give no pad for keeping buildings off a pond, so 10 ft round the pond's box is a fair guess",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink_stage.py::_write#the drain's run drawn": {
@@ -22132,6 +22133,7 @@
    "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
    "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink_stage.py::stage_sink#a collector beside a dike": {
@@ -61519,6 +61521,7 @@
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:6c4de979924f3878"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
@@ -61536,20 +61539,54 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its salts, guards and sentinels": {
-  "body": "84ed911e07930cfc",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)",
-  "code": "6c0db85a13fa309f",
-  "core": "53fa8142a729661a",
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its crescent pond pad": {
+  "body": "586f39781f692c05",
+  "claim": "its crescent pond pad - reed-beds-and-the-marshs-edge-yoshihara.drawing: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
+  "code": "c434c2ea1856e023",
+  "core": "c2cd04e8c7b38736",
   "date": "2026-11-03",
-  "note": "40 is a prefilter reach (also the new near-mode box); 5 and 6 are slot ids",
+  "note": "known (417 T34): slot 4 (crescents) is cut at `pond_pad` = 2.0 + MARSH_TUFT_R*bs, where the page draws the reeds \"right to the water's edge\". The claim is incomplete: for role 'pond_fringe' the pad is 2 ft with no tuft's reach",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its figures against 0074": {
+  "body": "586f39781f692c05",
+  "claim": "its figures against 0074 - reed-beds-and-the-marshs-edge-yoshihara.drawing: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
+  "code": "071a9a4af5d85b89",
+  "core": "c2cd04e8c7b38736",
+  "date": "2026-11-03",
+  "note": "known (417 T34): slot 5 (the pond's ellipse) keeps a `min(pad, 1.5)` bare rim, where the page draws reeds \"right to the water's edge\"",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its salts, guards and sentinels": {
+  "body": "586f39781f692c05",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)",
+  "code": "8586fc6ae62d19c6",
+  "core": "c2cd04e8c7b38736",
+  "date": "2026-11-03",
+  "note": "the prefilter reach and the grid slot ids are plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh edge form": {
@@ -61568,6 +61605,7 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:97697d59c9e28e0c",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
   ],
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
@@ -61587,6 +61625,7 @@
    "0057-marshes-and-wetlands-shitchi.drawing.html:5298f662e8ea1911",
    "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
@@ -61605,6 +61644,7 @@
    "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
@@ -61622,16 +61662,17 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#pond fringe role": {
-  "body": "84ed911e07930cfc",
+  "body": "586f39781f692c05",
   "claim": "pond fringe role - reservoir-ponds-tameike.drawing: reeds round a pond's shore",
-  "code": "000ae1fe509c4d6b",
-  "core": "53fa8142a729661a",
+  "code": "9a47400c946773c3",
+  "core": "c2cd04e8c7b38736",
   "date": "2026-11-03",
-  "note": "reeds on wet ground at the pond's shore",
+  "note": "a fringe ring at the shore, clipped to outside the water",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
   },
@@ -61640,7 +61681,6 @@
    "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reed tile": {
@@ -61653,16 +61693,9 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds kept off no-build blocks and swept clearings; in near mode only the registry's `dry_plots` pieces and the pond ellipse are kept out, not `self.block_polys": {
-  "code": "53fa8142a729661a",
-  "core": "53fa8142a729661a",
-  "date": "2026-11-03",
-  "note": "reeds kept off no-build blocks and swept clearings; in near mode only the registry's `dry_plots` pieces and the pond ellipse are kept out, not `self.block_polys",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards": {
   "body": "84ed911e07930cfc",
@@ -61674,6 +61707,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
@@ -61691,25 +61725,25 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
   ],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds to the water and the paddy": {
-  "body": "84ed911e07930cfc",
+  "body": "586f39781f692c05",
   "claim": "reeds to the water and the paddy - reed-beds-and-the-marshs-edge-yoshihara.drawing: reeds stand at the water's edge and meet the paddy",
-  "code": "e8f0542a5b27d9f4",
-  "core": "53fa8142a729661a",
+  "code": "1958768780b3fcf1",
+  "core": "c2cd04e8c7b38736",
   "date": "2026-11-03",
-  "note": "the paddy is kept out with pad 0 and the watercourses with extra 0 at their drawn width, in both the near and the full mode",
+  "note": "field_pad=0.0, the field rings at pad 0 and the watercourses (slot 3) at their drawn width with no pad; the pond and crescent rims carry their own filed claims",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
   "rests": [
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width": {
@@ -61722,7 +61756,130 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-03",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#its salts, guards and sentinels": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the registry's reach past the reeds' tint round the ring)",
+  "code": "12c626f2cb343086",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "the 40 is only the registry query's reach",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#no-build marsh": {
+  "body": "7d0b65bffec29579",
+  "claim": "no-build marsh - ground-too-wet-to-build-on.drawing: every marsh but a pond fringe is no-build ground, so the fringe files neither a no-build block nor hard ground (`wet_polys`)",
+  "code": "e7c482052ca64b65",
+  "core": "4caea0b40b194527",
+  "date": "2026-11-03",
+  "note": "the fringe goes only to `_covers` and `M['marshes']` as a `pond_fringe` and is never added to `wet_polys` or to any no-build block. That matches the page: \"A pond's reed fringe does not count as marsh\"",
+  "pages": {
+   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
+  },
+  "research": "b2af2942f0a54e5d",
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:0a7edc2c78add98c",
+   "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#pond fringe": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "pond fringe - reservoir-ponds-tameike.drawing: reeds round a pond's shore",
+  "code": "c659f75a351bf0ab",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "the reed tile is laid on the fringe ring at the pond's shore, on ground drawn wet",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
+  },
+  "research": "5b102e334372ecb3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
+   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
+  ],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reed tile": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "reed tile - CONVENTION: the drawn ground filled with the reed tile",
+  "code": "2883e99b954d4986",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "how the ground is shown",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reeds meet the paddy": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "reeds meet the paddy - reed-beds-and-the-marshs-edge-yoshihara.drawing: reeds stand at the water's edge and meet the paddy, the field kept bare with no pad",
+  "code": "a5b6020334329ed3",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "`drawn_ground(..., field_pad=0.0)` and `keep.shape((0.0,))` keep the field bare with no pad",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reeds to the water's edge": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "reeds to the water's edge - reed-beds-and-the-marshs-edge-yoshihara.drawing: \"the reeds are drawn right to the water's edge\", the open water and the watercourses kept bare at their drawn width with no rim",
+  "code": "2c82ac41e034b3fa",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "the pond's ellipse and the streams, channels and field ditches are cut at pad 0.0 with no rim; the quote matches the page",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#the fringe left as laid": {
+  "body": "7d0b65bffec29579",
+  "claim": "the fringe left as laid - CONVENTION: a pond fringe's ring not reshaped, as `marsh` leaves one",
+  "code": "55b826cb02cbdfe7",
+  "core": "4caea0b40b194527",
+  "date": "2026-11-03",
+  "note": "the ring is only clipped to open ground: the pond, the field, the dry plots, and the largest piece kept. Nothing rounds or waves its outline, which is purely how it is drawn",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#what stands beside the pond": {
+  "body": "e11d01bfa23d95b1",
+  "claim": "what stands beside the pond - NONE: at the sink the field's dry plots are its only no-build blocks (the field files each as one) and the water is the brook, the channels and the field's ditches",
+  "code": "0e7bfd2a2be12ab5",
+  "core": "288aa2fe96a7173c",
+  "date": "2026-11-03",
+  "note": "which registry families are read at the sink is plumbing; keeping reeds off the dry plots and the water follows the page's rule",
+  "pages": {},
+  "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flare size": {

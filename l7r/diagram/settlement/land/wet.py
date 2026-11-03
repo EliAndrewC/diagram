@@ -71,8 +71,6 @@ MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the sam
 """Research: tuft reach - CONVENTION: 7 bs"""
 
 
-
-
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 """Research: reed feather - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 46 bs over which grass and reed grade into each other"""
 
@@ -484,8 +482,8 @@ class WetGroundMixin:
         """THE REEDS AT A TAIL POND'S SHORE, laid with the pond by the Rust sink (feature 444 T26): the fringe `ring` drawn as the
         reed tile on the ground it holds less the open water, the field, the dry plots and the water beside it - each read from
         the registry's cells under the ring (`Standing.pieces`), never from the whole map: at the sink only the field, its dry
-        plots and the water stand. Recorded in `M['marshes']` as a `pond_fringe` with its drawn ground, a shore and no no-build
-        ground, as `marsh` records one.
+        plots and the water stand. Recorded in `M['marshes']` as a `pond_fringe` with its drawn ground: a shore, filed as no
+        no-build ground of either kind (0058).
 
         Research:
             pond fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
@@ -494,6 +492,8 @@ class WetGroundMixin:
             what stands beside the pond - NONE: at the sink the field's dry plots are its only no-build blocks (the field files each as one) and the water is the brook, the channels and the field's ditches
             its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the registry's reach past the reeds' tint round the ring)
             reed tile - CONVENTION: the drawn ground filled with the reed tile
+            no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground, so the fringe files neither a no-build block nor hard ground (`wet_polys`)
+            the fringe left as laid - CONVENTION: a pond fringe's ring not reshaped, as `marsh` leaves one
         """
         pond = self.M.get("pond")
         poly = _clipped_to_open_ground(ring, (), (), pond)
@@ -512,7 +512,6 @@ class WetGroundMixin:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
             return
         drawn = [(round(px, 1), round(py, 1)) for px, py in ground]
-        self.wet_polys.append(list(drawn))
         keep = KeepoutGrid()
         keep.rings(self.field_polys)
         keep.rings(blocks)
