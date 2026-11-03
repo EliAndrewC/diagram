@@ -4834,6 +4834,63 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T22": {
+   "section_sha256": "616cf63cc4b2a285c4aa47cabf91c4a60c9edc95ae4da80d0b6ae2fd98a2f2e8",
+   "reviewed": "2026-11-03",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "the eight MISLABELED findings closed by each unit carrying its own Research: NONE line",
+     "class": "within",
+     "why": "FR-021 asks the stage's findings closed, in claim or code; a unit's own NONE line in place of an inherited module claim is a claim-side closure. Note: the line names five units 'each inheriting the module's two claims', which is 10 (or 5), not eight - see SCOPE."
+    },
+    {
+     "id": "D2",
+     "summary": "the quantized fall claimed at `admitted` as a CONVENTION (8 compass points at 45, 4 cardinals at 90)",
+     "class": "within",
+     "why": "an UNCLAIMED decision given a labeled claim; closes the finding as FR-021 and amendment 6 ask."
+    },
+    {
+     "id": "D3",
+     "summary": "the DRIFTED windward-margin finding closed by relabeling the tie a DEVIATION of 0031, no map moved",
+     "class": "within",
+     "why": "FR-021 does not say whether a finding closes in claim or code; a stated DEVIATION is not among FR-021's open states, so it does not narrow 'zero open claims'. Note: its cited authority (the GM 2026-10-25, the easier route where the record is silent) is not in request.md and was not checked here."
+    },
+    {
+     "id": "D4",
+     "summary": "roll_plan and stage_water_frame CANNOT-TELL closed by a docstring stating the even draw over the form table and the pin as forms.first()",
+     "class": "within",
+     "why": "a claim-side closure of a CANNOT-TELL, which FR-021 counts as open."
+    },
+    {
+     "id": "D5",
+     "summary": "_KNOBS CANNOT-TELL closed in code: lane_web moved to a new not_dispersed branch of `applies`, rolled only where read",
+     "class": "within",
+     "why": "a code-side closure; FR-021 names Python units the stage reads at run time as the stage's own, and amendment 6 asks them closed. The GM's 2026-11-02 words on not fixing Python concern speed, not claims."
+    },
+    {
+     "id": "D6",
+     "summary": "_rust_rolls' two UNCLAIMED decisions claimed (flood grove table, row fixed to the dry edge on flood ground, 0033)",
+     "class": "within",
+     "why": "UNCLAIMED decisions given claims; closes them as FR-021 asks."
+    },
+    {
+     "id": "ORDER",
+     "summary": "after T26's committed work, independent of T26's landing; one landing",
+     "class": "within",
+     "why": "sequencing, which neither the request nor FR-021 settles."
+    },
+    {
+     "id": "SCOPE",
+     "summary": "the task's reach and its done measure are a fixed list: 'the 15 open claims findings', green when 'every one of the 15 re-checked IN-STEP', done when 'make claims-report lists none of the 15'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM (amendment 6): 'every Rust stage end its initial implementation with zero open claims'; FR-021: water_frame 'is held to it by a task of its own: its open findings closed' - a set defined by units (its Rust, its seam, its STAGES entry, every Python unit the seam or Rust reads at run time). The plan replaces that set with a list of 15 and names no command or search space that produced it; D1's own count does not reconcile (five units each inheriting two claims is not eight); and any finding T22's own delta creates (D5's new branch in `applies`, D6's new claims) is by construction not one of the 15, so the done measure cannot see it. T22 is not a `phase: <stage>` task, so FR-021's landing refusal cannot be assumed to catch what step 9 does not. None of the three legitimating grounds applies: measuring against the unit set is not impossible, the GM's words do not imply a fixed list, and the literal rule serves rather than defeats the purpose. Fix: state the census command that produced the findings; make the green exit and step 9 read 'make claims-report lists no open finding (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, UNCLAIMED) at water_frame's units in FR-021's sense', after T22's own changes."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

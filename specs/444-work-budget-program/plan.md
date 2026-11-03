@@ -224,11 +224,11 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 9. **After a ruling, the step it named?** Yes: `make done` once more; one more fresh red is a process fault (how much new code
    lands before a single `make done`), per the ruling.
 
-### T22 (FR-021, amendment 6: the 15 open claims findings on water_frame's port)
+### T22 (FR-021, amendment 6: every open claims finding at water_frame's units - 15 when filed, listed by `make claims-report`)
 
 - **Approach**: each finding fixed in its claim or its code, decided 2026-11-03 by reading the code each names:
-  - **D1 - the eight MISLABELED** (`Counts.add`, `KnobIn`, `quarter_deg`, `admitted_falls`, `applies`, each inheriting the module's
-    two claims): each carries its own `Research:` NONE line, so it no longer inherits a claim it does not keep.
+  - **D1 - the eight MISLABELED** (six units: `Counts.add`, `KnobIn` and `quarter_deg` each mislabeled under both of the module's
+    claims, `admitted_falls` and `applies` under one): each carries its own `Research:` NONE line, so it no longer inherits a claim it does not keep.
   - **D2 - the fall quantized (UNCLAIMED)**: claimed at `admitted` as a CONVENTION - the eight compass points at 45 degrees, the
     four cardinals at 90 on a polder's survey grid.
   - **D3 - the fall backs the wind (DRIFTED)**: the page draws the high windward margin as one case among several, how common a
@@ -252,15 +252,18 @@ The trigger: the third red gate in a row (14:56Z), ruled `continue` by the round
 
 ### T22 Approach (checklist part A)
 
-1. **The goal, in the world.** No place changes: the water frame's claims say what its code does.
+1. **The goal, in the world.** No place changes: the water frame's claims say what its code does, with zero open findings at its
+   units (amendment 6: "every Rust stage end its initial implementation with zero open claims").
 2. **The constraints.** FR-021 (no open claim in the units a phase delta changes); constitution XII (every decision labeled).
 3. **Where each comes from.** R: 0031, 0033, 0036; G: the GM 2026-10-25 (the easier route where the record is silent); O: the code read.
 4. **Do they describe the world here?** Read in the code each finding names (2026-11-03).
 5. **The order.** After T26's committed work; independent of T26's landing.
-6. **The exits.** Green: every one of the 15 re-checked IN-STEP. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: `make claims-report` lists no open finding (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, UNCLAIMED) at
+   water_frame's units in FR-021's sense - its Rust, its seam, its `STAGES` entry and every Python unit they read at run time - after
+   T22's own changes, including any those changes raise. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** `make claims-report` lists none of the 15.
+9. **Done, measured.** `make claims-report` lists no open finding at water_frame's units (FR-021's sense), after T22's own changes.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 
