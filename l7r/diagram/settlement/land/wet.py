@@ -489,7 +489,9 @@ class WetGroundMixin:
             pond fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
             reeds to the water's edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "the reeds are drawn right to the water's edge", the open water and the watercourses kept bare at their drawn width with no rim
             reeds meet the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy, the field kept bare with no pad
-            what stands beside the pond - NONE: at the sink the field's dry plots are its only no-build blocks (the field files each as one) and the water is the brook, the channels and the field's ditches
+            reeds off the crop and the water - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "The marsh's reeds already keep off crops" - the field's dry plots kept bare, and the water at its drawn width
+            the bank beyond the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: "Reeds and the wet tint are kept off the embankment" - the fringe is the ring the reeds stand on at the shore, and the bank is the ground beyond it: the pond bank's trees are seated past the fringe's width (`hamletgen/pondbank.py`, its seats beyond `SINK_FRINGE`), so the ring and the bank do not share ground
+            ways and dooryards over the fringe - UNRESEARCHED: a way or a dooryard laid after the fringe is drawn over its reed tile
             its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the registry's reach past the reeds' tint round the ring)
             reed tile - CONVENTION: the drawn ground filled with the reed tile
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground, so the fringe files neither a no-build block nor hard ground (`wet_polys`)
