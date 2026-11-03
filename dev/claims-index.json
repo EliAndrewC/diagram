@@ -8291,21 +8291,15 @@
  },
  "l7r/diagram/hamletgen/consts.py::FALL_BEARINGS#land's fall": {
   "body": "db1c61e203ecd255",
-  "claim": "land's fall - which-way-water-flows-and-how-channels-bend-and-join.drawing: declared, else rolled among eight points",
-  "code": "2fd8a3a00dc4f0b3",
+  "claim": "land's fall - UNRESEARCHED: an undeclared fall rolled among the eight compass points; no page records the roll or its points",
+  "code": "8f39605bc06c7b6c",
   "core": "afcd38adaefc5f30",
   "date": "2026-11-03",
-  "note": "the drawing page says only that every map declares its land's fall and that a hamlet may take its water's bearing from that fall. It says nothing about rolling an undeclared fall, or about limiting a rolled fall to the eight compass points. The claim should be GUESS or UNRESEARCHED until a page records the roll",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
-  },
-  "research": "68e3dc87e83ea403",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "The fall is rolled among the eight compass points, and the bundle cites no question that answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::FAN_ASPECTS#fan aspect": {
   "body": "a6ef2e6eaec7545d",
