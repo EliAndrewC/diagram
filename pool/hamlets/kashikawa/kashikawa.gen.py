@@ -22,6 +22,9 @@ way a knob owes one map per value. Sawada was tried first, at its seed then (6),
 at the canvas edge, so the brook has about 85 px left below the junction against the 150 the rule asks
 (specs/230 research R7). Measured here, on the view box (2026-09-30, the settlement-review, once feature 291 re-laid the map as
 a row village): about 205 ft of the brook visible below the junction, above the rule's 150 (it was 778 ft on 2026-09-27).
+Lost from feature 444 T16 (the field port laid the brook 464 ft off the outfall, past the sink's 420 ft reach) and restored by
+T26 (2026-11-03, the settlement-review), the reach raised to 500: the two join 468 ft from the outfall with about 383 ft of the
+brook visible below the junction.
 
 `bamboo="both"` - DECLARED, NOT ROLLED (feature 261): a knob owes one map per value on the sheet; the value this map
 exhibited is declared so the pool keeps its only exhibit of it whatever the roll.

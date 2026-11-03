@@ -21,8 +21,8 @@ use crate::field::geom::{dist, hull};
 /// How far from the outfall the brook is joined (feet).
 ///
 /// Research:
-///     join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 420 ft from the outfall
-pub const JOIN_REACH: f64 = 420.0;
+///     join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 500 ft from the outfall (420 until feature 444 T26: the field port laid Kashikawa's brook 464 ft off its outfall, and the confluence its generator declares was lost)
+pub const JOIN_REACH: f64 = 500.0;
 /// The stride the brook is walked at for a confluence (feet).
 ///
 /// Research:
