@@ -20,7 +20,7 @@ _wf.__name__ = "stage_water_frame"
 
 
 def test_the_rust_stages_are_derived_from_the_crate_and_held_to_the_front(tmp_path: pathlib.Path) -> None:
-    assert [rp.stage_name(st) for st in rp.rust_stages()] == ["water_frame", "field"], "the ports T19 and T16 made, in STAGES order"
+    assert [rp.stage_name(st) for st in rp.rust_stages()] == ["water_frame", "field", "sink"], "the ports T19, T16 and T26 made, in STAGES order"
     (tmp_path / "field.rs").write_text("")
     (tmp_path / "pyrand.rs").write_text("")  # a helper module, no stage
     got = rp.rust_stages(src=tmp_path)
