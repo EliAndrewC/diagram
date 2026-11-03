@@ -14,15 +14,6 @@ from collections.abc import Sequence
 from ..consts import BROOK_FRAME_MARGIN, BROOK_SKIRT, Pt
 
 
-def turn_deg(p: Pt, q: Pt, r: Pt) -> float:
-    """How far the course p -> q -> r turns at `q`, degrees (0 straight on, 180 straight back); 0 where a leg has no
-    length, since a vertex on top of its neighbor turns nothing. The one reading of a turn: `max_turn_deg`, `unfold` and
-    the pool test all ask it (feature 287, water:W01)."""
-    ax, ay, bx, by = q[0] - p[0], q[1] - p[1], r[0] - q[0], r[1] - q[1]
-    na, nb = math.hypot(ax, ay), math.hypot(bx, by)
-    return math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (na * nb))))) if na and nb else 0.0
-
-
 # ---- THE BROOK'S RULES, one predicate each (feature 287, M1): the placer below judges its candidate with these, and the
 # pool tests read the same functions. Every one is measured on the DRAWN course, `finished_course`.
 

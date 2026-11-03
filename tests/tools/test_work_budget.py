@@ -108,18 +108,23 @@ def test_one_roll_counts_each_stage_and_what_it_placed(monkeypatch: pytest.Monke
         point_in_poly(5.0, 5.0, ring)
         s.M["houses"].append({"x": 1})
 
+    def stage_cluster(s, plan):  # type: ignore[no-untyped-def] - a Python stage: the registry walk runs after it
+        s.M["houses"].append({"x": 2})
+
     def stage_web(s, plan):  # type: ignore[no-untyped-def]
         raise ValueError("the web refused")
 
     def stage_after(s, plan):  # type: ignore[no-untyped-def]
         raise AssertionError("not reached")
 
+    walked: list[int] = []
+
     class S:
         def __init__(self, **_kw):  # type: ignore[no-untyped-def]
             self.M = {"houses": []}
-            self.standing = types.SimpleNamespace(resync=lambda: None)
+            self.standing = types.SimpleNamespace(resync=lambda: walked.append(1))
 
-    monkeypatch.setattr(driver, "STAGES", (stage_field, stage_web, stage_after))
+    monkeypatch.setattr(driver, "STAGES", (stage_field, stage_cluster, stage_web, stage_after))
     monkeypatch.setattr(driver, "roll_scope", lambda spec=None: contextlib.nullcontext())
     import l7r.diagram.hamletgen as hg
     import l7r.diagram.settlement as st
@@ -128,9 +133,10 @@ def test_one_roll_counts_each_stage_and_what_it_placed(monkeypatch: pytest.Monke
     monkeypatch.setattr(st, "Settlement", S)
     work_counts.reset()
     r = wb.roll(25, 10)
-    assert r["refused"] == "ValueError: the web refused" and list(r["stages"]) == ["field", "web"]
+    assert r["refused"] == "ValueError: the web refused" and list(r["stages"]) == ["field", "cluster", "web"]
     assert r["stages"]["field"]["ops"] == {"pt_test@point_in_poly": 1} and r["stages"]["field"]["placed"] == 1
     assert r["stages"]["web"]["ops"] == {} and r["stages"]["web"]["placed"] == 0
+    assert r["stages"]["cluster"]["placed"] == 1 and walked == [1], "the walk runs after the Python stage alone, not the Rust field"
 
 
 def test_the_engine_key_and_commit_name_the_tree() -> None:

@@ -672,3 +672,14 @@ def test_pull_back_stops_at_the_house_it_serves_not_the_edge_of_its_reach() -> N
     assert 435.0 <= shortest[-1][0] <= 445.0, "without `near`: the shortest end still in reach, 60 ft short"
     held = _pull_back(run, reaches, near=lambda tag, q: abs(q[0] - 500.0))
     assert 495.0 <= held[-1][0] <= 505.0, "with it: at the house"
+
+
+def test_a_stream_keeps_its_stations_the_course_as_first_laid() -> None:
+    """`stream(..., stations=)` (feature 444 T26 D2): the drawn course is the record's poly, the course as laid its stations."""
+    s = Settlement(W=1000, H=1000, seed=1)
+    s.meta(name="St", scale="village", ftpx=1)
+    s.stream([(400, 50), (410, 500), (400, 950)], width=9, stations=[(400, 50), (420, 500), (400, 950)])
+    s.stream([(600, 50), (600, 950)], width=9)
+    a, b = s.M["streams"][-2:]
+    assert a["stations"] == [[400, 50], [420, 500], [400, 950]] and a["poly"][1] == [410, 500]
+    assert "stations" not in b, "a stream with no stations records none"
