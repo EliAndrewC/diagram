@@ -61508,8 +61508,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#bare treads": {
   "body": "84ed911e07930cfc",
   "claim": "bare treads - marshes-and-wetlands-shitchi.drawing: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)",
-  "code": "a771a0a8df28f246",
-  "core": "53fa8142a729661a",
+  "code": "20a6245441fdb922",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "every trodden way is a corridor keep-out; the claim says openly that the record gives only the defensive belt's causeway",
   "pages": {
@@ -61519,13 +61519,14 @@
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:6c4de979924f3878"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#edge shaped": {
   "body": "84ed911e07930cfc",
   "claim": "edge shaped - reed-beds-and-the-marshs-edge-yoshihara.drawing: rounded and waved, a pond fringe left as laid",
-  "code": "63dc51a3feea16e6",
-  "core": "53fa8142a729661a",
+  "code": "1fd71759220e9ecf",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "`natural_outline` is skipped only for a pond fringe; the edge is rounded and waved",
   "pages": {
@@ -61535,6 +61536,7 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its salts, guards and sentinels": {
@@ -61547,6 +61549,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh edge form": {
@@ -61570,8 +61573,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
   "body": "84ed911e07930cfc",
   "claim": "marsh roles - marshes-and-wetlands-shitchi.drawing: the toe and a defensive belt",
-  "code": "13050e538d425f34",
-  "core": "53fa8142a729661a",
+  "code": "6ee8876439c7c17c",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "the 'toe' and 'defense' roles match the marsh below the fields and the wall-hugging defensive belt",
   "pages": {
@@ -61584,13 +61587,14 @@
    "0057-marshes-and-wetlands-shitchi.drawing.html:5298f662e8ea1911",
    "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#no-build marsh": {
   "body": "84ed911e07930cfc",
   "claim": "no-build marsh - ground-too-wet-to-build-on.drawing: every marsh but a pond fringe is no-build ground",
-  "code": "16d4828f9a09e510",
-  "core": "53fa8142a729661a",
+  "code": "10faaea5e403d52a",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "every role but `pond_fringe` is added to block_polys",
   "pages": {
@@ -61601,13 +61605,14 @@
    "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#polder waterside role": {
   "body": "84ed911e07930cfc",
   "claim": "polder waterside role - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a reed fringe along the polder's water side",
-  "code": "c0731079d1d869c8",
-  "core": "53fa8142a729661a",
+  "code": "7968ab7a43900dda",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "the 'waterside' role is the reed fringe on the polder's water side",
   "pages": {
@@ -61617,6 +61622,7 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#pond fringe role": {
@@ -61634,18 +61640,20 @@
    "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reed tile": {
   "body": "84ed911e07930cfc",
   "claim": "reed tile - CONVENTION: the drawn ground filled with the reed tile",
-  "code": "5e90ce3bca081049",
-  "core": "53fa8142a729661a",
+  "code": "eb6d5bf4c425e2d5",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "how the ground is shown, nothing more",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds kept off no-build blocks and swept clearings; in near mode only the registry's `dry_plots` pieces and the pond ellipse are kept out, not `self.block_polys": {
@@ -61659,20 +61667,21 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards": {
   "body": "84ed911e07930cfc",
   "claim": "reeds off the dooryards - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); no reed inside the urban-clearance halo round dooryards",
-  "code": "5691e59074bed845",
-  "core": "53fa8142a729661a",
+  "code": "cf63cd3803ed58e1",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "the pages are silent on this",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds": {
   "body": "84ed911e07930cfc",
   "claim": "reeds off the mounds - reservoir-ponds-tameike.drawing: no reed or tint on a dike crest or a pond bank",
-  "code": "ce067605f258d934",
-  "core": "53fa8142a729661a",
+  "code": "a241133d2491e589",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "the dike crests (slot 1) and pond banks (slot 2) are kept out at the tuft's pad, and outside roles lose the filled dike block",
   "pages": {
@@ -61682,6 +61691,7 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds to the water and the paddy": {
@@ -61699,18 +61709,20 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width": {
   "body": "84ed911e07930cfc",
   "claim": "tread keep-out width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 3 bs either side of every way",
-  "code": "a56979c1294e32aa",
-  "core": "53fa8142a729661a",
+  "code": "915c7abd4afc1e73",
+  "core": "95fde7e8bcb6c1a4",
   "date": "2026-11-03",
   "note": "the pages are silent on this",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flare size": {

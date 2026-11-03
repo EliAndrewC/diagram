@@ -56,7 +56,7 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.settlement.Settlement.field_channel
         l7r.diagram.settlement.Settlement.pond
-        l7r.diagram.settlement.Settlement.marsh
+        l7r.diagram.settlement.Settlement.pond_reeds
 
     Research:
         a collector beside a dike - NONE: a diked field (the polder) drains by its own outfall and lays no collector, so the two together are a defect upstream, refused by name
@@ -111,7 +111,7 @@ def _write(s: Settlement, plan: SitePlan, out: dict, field: str) -> None:  # typ
         s.pond(cx, cy, rx, ry)
         plan.sink_pond = (cx, cy, rx, ry)
         s.M["meta"]["pond_role"] = "drainage"
-        s.marsh([(float(x), float(y)) for x, y in out["reeds"]], role="pond_fringe", near=True)  # the reeds kept off what the registry holds beside the pond, not the whole map
+        s.pond_reeds([(float(x), float(y)) for x, y in out["reeds"]])  # the reeds kept off what the registry holds beside the pond, not the whole map
         pad = NO_BUILD_FT
         s.block_polys.append([(cx - rx - pad, cy - ry - pad), (cx + rx + pad, cy - ry - pad), (cx + rx + pad, cy + ry + pad), (cx - rx - pad, cy + ry + pad)])
     run = [(float(x), float(y)) for x, y in out["run"]]

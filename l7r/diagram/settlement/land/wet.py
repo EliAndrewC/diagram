@@ -71,6 +71,8 @@ MARSH_TUFT_R = 7.0  # the tallest reed blade / widest glint (x bscale) - the sam
 """Research: tuft reach - CONVENTION: 7 bs"""
 
 
+
+
 MARSH_FEATHER_BS = 46  # the reeds thin to nothing over this band (x bscale) inside the polygon; `commons` thins its scrub INTO the marsh over the same band
 """Research: reed feather - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 46 bs over which grass and reed grade into each other"""
 
@@ -304,7 +306,7 @@ def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
 
 
 class WetGroundMixin:
-    def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = (), near: bool = False) -> None:  # type: ignore[misc]
+    def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = ()) -> None:  # type: ignore[misc]
         """REED MARSH / WET MEADOW - wet reed ground drawn as a TILE (feature 298): a wet tint, standing-water glints and
         reeds, filling the outline - its strips' corners rounded and edges waved (`natural_outline`, feature 299) - less
         the paddies, the pond's ellipse (`pond_cut`), the mounds, the banks and the water, at the bottom of the stack; a
@@ -321,10 +323,6 @@ class WetGroundMixin:
         direction; placed by `stage_waterward` from `meta.waterward`). WHY:
         research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes'].
 
-        `near` (a pond fringe laid by the Rust sink, feature 444 T26): the no-build blocks and the water the reeds keep off are
-        read from the registry's cells under the fringe (`Standing.pieces`) - each piece as drawn - in place of every block and
-        watercourse on the map; the fields, the clearings and the rest are read as ever.
-
         Research:
             marsh roles - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the toe and a defensive belt
             pond fringe role - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
@@ -335,13 +333,13 @@ class WetGroundMixin:
             edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
             reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
             marsh edge form - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: every edge cut and
-                open; the uncut edge's alder and willow carr is never rolled - a departure the code keeps until feature 417 T34
+                open; the uncut edge's alder and willow carr is never rolled
             reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
             reed tile - CONVENTION: the drawn ground filled with the reed tile
             its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)
-            reeds to the water's edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "the reeds are drawn right to the water's edge" - the pond's ellipse and a crescent pond kept bare with no rim (feature 444 T26 retired the 1.5 ft and 2 ft rims)
-            the near fringe's blocks - NONE: a pond fringe laid by the Rust sink reads the field's dry plots and the pond's own ellipse from the registry under it - at the sink they are the only no-build blocks standing (the field files each dry plot as one, `hamletgen/field_stage.py`)
+            its figures against 0074 - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34
+            its crescent pond pad - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34
         """
         if role not in ("toe", "pond_fringe", "defense", "waterside"):
             raise ValueError(f"unknown marsh role {role!r}; expected 'toe', 'pond_fringe', 'defense', or 'waterside'")
@@ -375,21 +373,7 @@ class WetGroundMixin:
         # ...WITH THE POND CUT AS THE POND (feature 299, plan review): the pond's no-build block is a box round its ellipse, kept
         # to stop BUILDINGS standing on water (`pond_fringe_ring`'s note), and cut from the marsh it left a pale rectangle round
         # the oval pond; the marsh is cut by the water itself, the ellipse - its reed fringe stands round it
-        _near: list[Any] = []
-        if near:
-            _r = max(MARSH_TINT_R, MARSH_TUFT_R) * self.bscale + 40.0
-            _bx = (min(q[0] for q in poly) - _r, min(q[1] for q in poly) - _r, max(q[0] for q in poly) + _r, max(q[1] for q in poly) + _r)
-            _near = self.standing.pieces(_bx, ("dry_plots", "streams", "channels", "field_ditches"))
-            _pond = self.M.get("pond")
-            _blocks = [ellipse_ring(_pond[0], _pond[1], _pond[2], _pond[3])] if _pond else []
-            _blocks += [e[1] for e in _near if e[0] == "dry_plots"]
-        else:
-            _blocks = pond_cut(self.block_polys, self.M.get("pond"))
-        if __debug__ and not near:  # each block asked whether it is the pond's own box, and the drawn ground's shapely difference over every ring it takes (feature 444 T26's MODE AUDIT)
-            OPS["pt_test@marsh.pond_cut"] += len(self.block_polys)
-            OPS["pt_test@marsh.drawn_ground"] += len(poly) + sum(len(r) for r in (*self.field_polys, *_blocks, *self.clearings, *avoid))
-        elif __debug__:
-            OPS["pt_test@marsh.drawn_ground"] += len(poly) + sum(len(r) for r in (*self.field_polys, *_blocks, *self.clearings, *avoid))
+        _blocks = pond_cut(self.block_polys, self.M.get("pond"))
         # ...AND THE PADDY CUT AT ITS EDGE (GM 2026-10-01, after feature 300: the drains at the foot of the paddy "also appear to
         # have a similar clearance ... fixed in the same way"): the 10 ft a thrown reed kept off a paddy's outline left a bare strip
         # outside the collector drain that runs along it; the marsh meets the paddy, and the drain - a watercourse - is lined by
@@ -451,13 +435,7 @@ class WetGroundMixin:
         keep.circles(halo_circles, closed=True)
         keep.segs(_crests, slot=1, reach=max(_pads))
         keep.rings(_banks, slot=2, reach=max(_pads))
-        if near:  # the water under the fringe, each piece as drawn (`Standing.pieces`)
-            keep.rings([e[1] for e in _near if e[0] != "dry_plots"], slot=3, reach=max(_pads) + 2.0)
-        else:
-            _water = self._watercourse_segs(0.0)
-            if __debug__:  # every watercourse's points read into its pairs
-                OPS["pt_test@marsh.watercourses"] += sum(len(pl) for pl, _hw in _water)
-            keep.segs(_water, slot=3, reach=max(_pads) + 2.0)
+        keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
 
         # THE MARSH'S WHOLE REGION IN ONE KEEP-OUT GRID (feature 297, FR-004, plan B2): the crescent ponds and the pond's ellipse -
@@ -476,13 +454,12 @@ class WetGroundMixin:
         # with the reed tile (tint, glints and reeds) at the bottom of the stack. Nothing is thrown, so nothing is thrown again
         # once the view is decided (the re-throw of feature 287, M6, is gone with the throw).
         pad = MARSH_TUFT_R * bs
-        # (slots 4 and 5, the crescent ponds and the pond, with no rim: the reeds are drawn right to the water's edge, 0074 - the 2 ft
-        # and 1.5 ft rims a thrown reed kept, retired by feature 444 T26)
+        pond_pad = 2.0 if role == "pond_fringe" else 2.0 + pad
         # (slot 6, the pond moved up a blade so no thrown tip crossed its rim, is a thrown reed's alone: a tile has none, and it left
         # a bare crescent under the pond)
         # (slot 3, the watercourses, at their drawn width alone - feature 300: the 2 ft and a tuft's reach a thrown reed kept
         # off the water left a bare strip down both banks; the reeds stand at the water's edge, and the bank band lines it)
-        bare = keep.shape((0.0, pad, pad, 0.0, 0.0, 0.0, None), (x0, y0, x1, y1))
+        bare = keep.shape((0.0, pad, pad, 0.0, pond_pad, min(pad, 1.5), None), (x0, y0, x1, y1))
         self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
         self._cover_n += 1
         dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)
@@ -502,6 +479,60 @@ class WetGroundMixin:
             blk = [(round(px, 1), round(py, 1)) for px, py in drawn]
             self.block_polys.append(blk)  # so nothing is placed/dug on a bog (a thin pond-fringe shore ring is exempt)
             self.marsh_blocks.append(blk)  # ...and the scrub scatter treats it as the marsh it is (soft), not as a building (hard)
+
+    def pond_reeds(self: Settlement, ring: Any) -> None:  # type: ignore[misc]
+        """THE REEDS AT A TAIL POND'S SHORE, laid with the pond by the Rust sink (feature 444 T26): the fringe `ring` drawn as the
+        reed tile on the ground it holds less the open water, the field, the dry plots and the water beside it - each read from
+        the registry's cells under the ring (`Standing.pieces`), never from the whole map: at the sink only the field, its dry
+        plots and the water stand. Recorded in `M['marshes']` as a `pond_fringe` with its drawn ground, a shore and no no-build
+        ground, as `marsh` records one.
+
+        Research:
+            pond fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
+            reeds to the water's edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "the reeds are drawn right to the water's edge", the open water and the watercourses kept bare at their drawn width with no rim
+            reeds meet the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy, the field kept bare with no pad
+            what stands beside the pond - NONE: at the sink the field's dry plots are its only no-build blocks (the field files each as one) and the water is the brook, the channels and the field's ditches
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the registry's reach past the reeds' tint round the ring)
+            reed tile - CONVENTION: the drawn ground filled with the reed tile
+        """
+        pond = self.M.get("pond")
+        poly = _clipped_to_open_ground(ring, (), (), pond)
+        if poly is None:
+            self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
+            return
+        r = max(MARSH_TINT_R, MARSH_TUFT_R) * self.bscale + 40.0
+        x0, y0, x1, y1 = min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
+        near = self.standing.pieces((x0 - r, y0 - r, x1 + r, y1 + r), ("dry_plots", "streams", "channels", "field_ditches"))
+        blocks = ([ellipse_ring(pond[0], pond[1], pond[2], pond[3])] if pond else []) + [e[1] for e in near if e[0] == "dry_plots"]
+        water = [e[1] for e in near if e[0] != "dry_plots"]
+        if __debug__:  # the drawn ground's difference and the keep-out's filing, each over the rings they take (S5)
+            OPS["pt_test@pond_reeds"] += len(poly) + sum(len(q) for q in (*self.field_polys, *blocks, *water))
+        ground = drawn_ground(poly, self.field_polys, blocks, (), (), field_pad=0.0)
+        if ground is None:
+            self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
+            return
+        drawn = [(round(px, 1), round(py, 1)) for px, py in ground]
+        self.wet_polys.append(list(drawn))
+        keep = KeepoutGrid()
+        keep.rings(self.field_polys)
+        keep.rings(blocks)
+        keep.rings(water)
+        bare = keep.shape((0.0,), (x0, y0, x1, y1))
+        self._covers.append(Cover("reed", "marsh", [(float(q[0]), float(q[1])) for q in drawn], [bare] if bare is not None else []))
+        self._cover_n += 1
+        dx0, dx1, dy0, dy1 = min(q[0] for q in drawn), max(q[0] for q in drawn), min(q[1] for q in drawn), max(q[1] for q in drawn)
+        self.M["marshes"].append(
+            {
+                "x": round((dx0 + dx1) / 2, 1),
+                "y": round((dy0 + dy1) / 2, 1),
+                "w": round(dx1 - dx0, 1),
+                "h": round(dy1 - dy0, 1),
+                "rot": 0,
+                "role": "pond_fringe",
+                "seq": self._cover_n,
+                "poly": [[round(px, 1), round(py, 1)] for px, py in drawn],  # the drawn ground (feature 287, M7)
+            }
+        )
 
     def trim_off_marsh(self: Settlement, pts: Any, margin: float = 6.0) -> Any:  # type: ignore[misc]
         """Shorten a way so neither END stands on drawn marshland (GM 2026-08-12).
