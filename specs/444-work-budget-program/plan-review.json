@@ -146,9 +146,9 @@
    "declared": "spec-fidelity"
   },
   "### T22 Approach (checklist part A)": {
-   "sha256": "5b01b1aef9d7d57e0d4ceb7d9220e17db2a5ccf212f4535470351f8528ab0502",
+   "sha256": "1bb986bc5722f79ba7d447e0df1b60477b867b8d2294ae02a820a3170e39b429",
    "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
+   "reviewed": "2026-11-03",
    "declared": "spec-fidelity"
   },
   "### T16 Approach (2026-11-01T00:39Z)": {
@@ -243,6 +243,12 @@
   },
   "### T26 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "cf4894db2ea8ea5fc5db660a80379da5bb2d02463a0c1cfc394c9f982f544b48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-03",
+   "declared": "spec-fidelity"
+  },
+  "### T22 (FR-021, amendment 6: every open claims finding at water_frame's units - 15 when filed, listed by `make claims-report`)": {
+   "sha256": "041db6b8791d6a654792986201bec2420728db63391b7f86aa1e914e030aea4e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-03",
    "declared": "spec-fidelity"
@@ -3971,6 +3977,64 @@
      "why": "Repeats FR-006, FR-019, FR-021 and FR-022 without loosening them. The arbiter rules only on a claim that the work cannot be done, never accepts a phase over budget, so FR-006 holds. Unchanged."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-03",
+   "blocks": [
+    "### T22 (FR-021, amendment 6: every open claims finding at water_frame's units - 15 when filed, listed by `make claims-report`)",
+    "### T22 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "scope/exits",
+     "summary": "Goal, Green exit and Done read: make claims-report lists no open finding (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, UNCLAIMED) at water_frame's units in FR-021's sense - its Rust, seam, STAGES entry and every Python unit they read at run time - after T22's own changes, including any they raise; the 15 are named as the count when filed, not the bound.",
+     "class": "within",
+     "why": "Amendment 6: 'every Rust stage end its initial implementation with zero open claims'; FR-021 holds water_frame to it by its own task, 'its open findings closed'. The earlier text bounded the exit to 'the 15' re-checked, which would pass with findings outside that list or raised by T22's own edits; the block now states the whole of what was asked and no less."
+    },
+    {
+     "id": "D1",
+     "summary": "The eight MISLABELED findings on six units each get the unit's own Research: NONE line so it no longer inherits the module's claims.",
+     "class": "within",
+     "why": "A fix in the claim that closes the finding; the plan's 'fixed in its claim or its code' is the request's 'zero open claims' with no unit left out."
+    },
+    {
+     "id": "D2",
+     "summary": "The quantized fall (UNCLAIMED) claimed at admitted as a CONVENTION (eight compass points at 45 degrees, cardinals at 90 on a survey grid).",
+     "class": "within",
+     "why": "Labels the decision; closes the UNCLAIMED finding as FR-021 requires."
+    },
+    {
+     "id": "D3",
+     "summary": "The fall-backs-the-wind DRIFTED finding resolved in the claim: the tie kept on every hamlet and relabeled a DEVIATION of 0031 stating the record is silent on the share; no map moves.",
+     "class": "within",
+     "why": "The request asks that no claim be left open, not that every drifted claim be resolved by changing code; DEVIATION is not among FR-021's open states, and the label says plainly what the code does against what the page draws, so the claims system's purpose (claims that say what the code does, departures declared) is kept, not gutted. It excepts no unit from the zero-open rule. The cited GM ruling of 2026-10-25 is not in the bundle and this ruling does not rest on it."
+    },
+    {
+     "id": "D4",
+     "summary": "roll_plan and stage_water_frame (CANNOT-TELL): docstring states each draw is even over the knob's table, SETTLEMENT_FORMS repeats forms 5/3/2 of ten as the page's half, three and two in ten, and a pin arrives as the table's single entry.",
+     "class": "within",
+     "why": "Supplies what the checker lacked so the finding can be decided; a claim fix toward zero open findings."
+    },
+    {
+     "id": "D5",
+     "summary": "_KNOBS (CANNOT-TELL): lane_web moved to a new not_dispersed applies branch so it is rolled only where its form reads it; per-knob streams keep every other knob fixed; a dispersed map's unread lane_web takes its table's first form.",
+     "class": "within",
+     "why": "A fix in the code that closes the finding; no map's read behavior changes, and any new finding it raises is held by the Green exit. Amendment 5 already allows maps to move in a Rust stage, so even the manifest value moving is not outside what was asked."
+    },
+    {
+     "id": "D6",
+     "summary": "_rust_rolls's two UNCLAIMED: claimed - the flood grove table where spec or archetype puts the map on flood ground (dike-top is pinned only), and the row fixed to the dry edge on flood ground (0033).",
+     "class": "within",
+     "why": "Labels both decisions with their ground; closes the UNCLAIMED findings."
+    },
+    {
+     "id": "order/budget/red",
+     "summary": "After T26's committed work, independent of its landing; one landing; Red records the failure and sets the task down, a claim it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Sequencing and the standing escalation route; nothing in the request is relaxed - a cannot-be-done claim goes to the arbiter rather than being granted by the session."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4836,61 +4900,60 @@
    "verdict": "CLEAR"
   },
   "T22": {
-   "section_sha256": "616cf63cc4b2a285c4aa47cabf91c4a60c9edc95ae4da80d0b6ae2fd98a2f2e8",
+   "section_sha256": "ad0b142335f36b0569b8c19517a81c77e5ce830108b4b00a113c8571e0baa3ab",
    "reviewed": "2026-11-03",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1",
-     "summary": "the eight MISLABELED findings closed by each unit carrying its own Research: NONE line",
+     "id": "scope/exits",
+     "summary": "Goal, Green exit and Done read: make claims-report lists no open finding (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, UNCLAIMED) at water_frame's units in FR-021's sense - its Rust, seam, STAGES entry and every Python unit they read at run time - after T22's own changes, including any they raise; the 15 are named as the count when filed, not the bound.",
      "class": "within",
-     "why": "FR-021 asks the stage's findings closed, in claim or code; a unit's own NONE line in place of an inherited module claim is a claim-side closure. Note: the line names five units 'each inheriting the module's two claims', which is 10 (or 5), not eight - see SCOPE."
+     "why": "Amendment 6: 'every Rust stage end its initial implementation with zero open claims'; FR-021 holds water_frame to it by its own task, 'its open findings closed'. The earlier text bounded the exit to 'the 15' re-checked, which would pass with findings outside that list or raised by T22's own edits; the block now states the whole of what was asked and no less."
+    },
+    {
+     "id": "D1",
+     "summary": "The eight MISLABELED findings on six units each get the unit's own Research: NONE line so it no longer inherits the module's claims.",
+     "class": "within",
+     "why": "A fix in the claim that closes the finding; the plan's 'fixed in its claim or its code' is the request's 'zero open claims' with no unit left out."
     },
     {
      "id": "D2",
-     "summary": "the quantized fall claimed at `admitted` as a CONVENTION (8 compass points at 45, 4 cardinals at 90)",
+     "summary": "The quantized fall (UNCLAIMED) claimed at admitted as a CONVENTION (eight compass points at 45 degrees, cardinals at 90 on a survey grid).",
      "class": "within",
-     "why": "an UNCLAIMED decision given a labeled claim; closes the finding as FR-021 and amendment 6 ask."
+     "why": "Labels the decision; closes the UNCLAIMED finding as FR-021 requires."
     },
     {
      "id": "D3",
-     "summary": "the DRIFTED windward-margin finding closed by relabeling the tie a DEVIATION of 0031, no map moved",
+     "summary": "The fall-backs-the-wind DRIFTED finding resolved in the claim: the tie kept on every hamlet and relabeled a DEVIATION of 0031 stating the record is silent on the share; no map moves.",
      "class": "within",
-     "why": "FR-021 does not say whether a finding closes in claim or code; a stated DEVIATION is not among FR-021's open states, so it does not narrow 'zero open claims'. Note: its cited authority (the GM 2026-10-25, the easier route where the record is silent) is not in request.md and was not checked here."
+     "why": "The request asks that no claim be left open, not that every drifted claim be resolved by changing code; DEVIATION is not among FR-021's open states, and the label says plainly what the code does against what the page draws, so the claims system's purpose (claims that say what the code does, departures declared) is kept, not gutted. It excepts no unit from the zero-open rule. The cited GM ruling of 2026-10-25 is not in the bundle and this ruling does not rest on it."
     },
     {
      "id": "D4",
-     "summary": "roll_plan and stage_water_frame CANNOT-TELL closed by a docstring stating the even draw over the form table and the pin as forms.first()",
+     "summary": "roll_plan and stage_water_frame (CANNOT-TELL): docstring states each draw is even over the knob's table, SETTLEMENT_FORMS repeats forms 5/3/2 of ten as the page's half, three and two in ten, and a pin arrives as the table's single entry.",
      "class": "within",
-     "why": "a claim-side closure of a CANNOT-TELL, which FR-021 counts as open."
+     "why": "Supplies what the checker lacked so the finding can be decided; a claim fix toward zero open findings."
     },
     {
      "id": "D5",
-     "summary": "_KNOBS CANNOT-TELL closed in code: lane_web moved to a new not_dispersed branch of `applies`, rolled only where read",
+     "summary": "_KNOBS (CANNOT-TELL): lane_web moved to a new not_dispersed applies branch so it is rolled only where its form reads it; per-knob streams keep every other knob fixed; a dispersed map's unread lane_web takes its table's first form.",
      "class": "within",
-     "why": "a code-side closure; FR-021 names Python units the stage reads at run time as the stage's own, and amendment 6 asks them closed. The GM's 2026-11-02 words on not fixing Python concern speed, not claims."
+     "why": "A fix in the code that closes the finding; no map's read behavior changes, and any new finding it raises is held by the Green exit. Amendment 5 already allows maps to move in a Rust stage, so even the manifest value moving is not outside what was asked."
     },
     {
      "id": "D6",
-     "summary": "_rust_rolls' two UNCLAIMED decisions claimed (flood grove table, row fixed to the dry edge on flood ground, 0033)",
+     "summary": "_rust_rolls's two UNCLAIMED: claimed - the flood grove table where spec or archetype puts the map on flood ground (dike-top is pinned only), and the row fixed to the dry edge on flood ground (0033).",
      "class": "within",
-     "why": "UNCLAIMED decisions given claims; closes them as FR-021 asks."
+     "why": "Labels both decisions with their ground; closes the UNCLAIMED findings."
     },
     {
-     "id": "ORDER",
-     "summary": "after T26's committed work, independent of T26's landing; one landing",
+     "id": "order/budget/red",
+     "summary": "After T26's committed work, independent of its landing; one landing; Red records the failure and sets the task down, a claim it cannot be done ruled through make arbiter-ask.",
      "class": "within",
-     "why": "sequencing, which neither the request nor FR-021 settles."
-    },
-    {
-     "id": "SCOPE",
-     "summary": "the task's reach and its done measure are a fixed list: 'the 15 open claims findings', green when 'every one of the 15 re-checked IN-STEP', done when 'make claims-report lists none of the 15'",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM (amendment 6): 'every Rust stage end its initial implementation with zero open claims'; FR-021: water_frame 'is held to it by a task of its own: its open findings closed' - a set defined by units (its Rust, its seam, its STAGES entry, every Python unit the seam or Rust reads at run time). The plan replaces that set with a list of 15 and names no command or search space that produced it; D1's own count does not reconcile (five units each inheriting two claims is not eight); and any finding T22's own delta creates (D5's new branch in `applies`, D6's new claims) is by construction not one of the 15, so the done measure cannot see it. T22 is not a `phase: <stage>` task, so FR-021's landing refusal cannot be assumed to catch what step 9 does not. None of the three legitimating grounds applies: measuring against the unit set is not impossible, the GM's words do not imply a fixed list, and the literal rule serves rather than defeats the purpose. Fix: state the census command that produced the findings; make the green exit and step 9 read 'make claims-report lists no open finding (DRIFTED, MISLABELED, NEEDS-RESEARCH, CANNOT-TELL, UNCLAIMED) at water_frame's units in FR-021's sense', after T22's own changes."
+     "why": "Sequencing and the standing escalation route; nothing in the request is relaxed - a cannot-be-done claim goes to the arbiter rather than being granted by the session."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

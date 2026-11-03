@@ -70,10 +70,10 @@ fn quarter_deg(windward: &str) -> f64 {
 /// in place of a test of each fall (measured 2026-10-30: the same admitted set as `plan.fall_backs_the_wind` on every quarter).
 ///
 /// Research:
-///     high side and windward side as one - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the page draws the high
-///     windward margin as one case among several, how common a GUESS; taken here on every hamlet, the easier route where the record
-///     is silent on the share (the GM 2026-10-25), both ends in - a fall square across the wind admitted with the windward side level
-///     the fall to the compass points - CONVENTION: a fall rolled among the eight points at 45 degrees, or the four cardinals at 90 on a polder's survey grid
+///     high side and windward side as one - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html calls the high windward
+///     margin one case among several, how common a GUESS; taken on every hamlet, both ends in
+///     the fall to the compass points - CONVENTION: a fall off a polder snapped to the eight points at 45 degrees
+///     a polder's fall to the cardinals - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid, usually laid north-south and east-west, never tilted here
 #[must_use]
 pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
     let w = quarter_deg(windward);
