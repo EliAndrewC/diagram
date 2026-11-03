@@ -548,7 +548,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         dike-pond knobs only on a dike-pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder's layout fixed to the grid
         regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: DEFAULT_WINDWARD unless declared
         rolled fall backs the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: only falls leaving a windward margin, the settlement laid out with its back to the wind
-        water flow follows the fall - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html holds the flow and the slope may differ; a hamlet rolls no drainage bearing of its own, so its flow is taken as its fall unless the spec declares one
+        water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the page holds the flow and the slope may differ; a hamlet rolls no drainage bearing of its own, so its flow is taken as its fall unless the spec declares one
         the fan's aspect and the head race's lead - GUESS: rolled per hamlet from their tables (`FAN_ASPECTS`, `HEAD_RACE_LEAD`), each table's own claim in consts
         flood-prone ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a polder's farms
         paddy by households - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: GROSS_ACRES_PER_HOUSEHOLD each

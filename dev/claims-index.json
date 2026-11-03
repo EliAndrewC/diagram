@@ -8032,18 +8032,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#seat on the field's margin": {
+  "body": "787a21fc12846670",
+  "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy",
   "code": "a9b7b20f7247a1c8",
   "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the seat is on the field margin, upslope scored, which is the higher, drier ground beside the paddy",
+  "date": "2026-11-03",
+  "note": "seated on the margin beside the field, upslope scored, wet toe refused; that every hamlet takes the windward high margin is now recorded as a deliberate deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#seat standoff from the field": {
@@ -8177,17 +8178,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CARDINAL_BEARINGS#polder grid's orientation": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9e683c60a9cabc3d",
   "core": "524d4a978c0a3ef0",
   "date": "2026-10-05",
   "note": "the untilted grid is recorded as a deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CLUSTER_BAND_ASPECT#seat band's aspect per shape": {
@@ -8196,11 +8199,11 @@
   "date": "2026-10-03",
   "note": "calibrates the attested shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "section": "4eeef5d0b7066eae",
-  "triaged": "2026-10-05",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CLUSTER_DRAWN_ASPECT#drawn aspect a shape is declared at": {
@@ -8209,11 +8212,11 @@
   "date": "2026-10-03",
   "note": "calibrates the attested shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "section": "aab8bfa6fa28c4f6",
-  "triaged": "2026-10-05",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CLUSTER_ROW_SPAN#front row's reach per shape": {
@@ -8222,27 +8225,29 @@
   "date": "2026-10-03",
   "note": "calibrates the attested lump/line/crescent shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "section": "bf262e184f91c6e0",
-  "triaged": "2026-10-05",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CLUSTER_SHAPES#cluster shape": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3565b136f742f11f",
   "core": "89dcd19ea618862e",
   "date": "2026-10-05",
   "note": "lump, line and crescent rolled from the hamlet's table; a hamlet never splits",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::CLUSTER_SPAN_FACTOR#cluster's reach along the field edge": {
@@ -8314,10 +8319,10 @@
   "date": "2026-10-03",
   "note": "channel or well, even odds",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GRAIN#aliases and plumbing": {
@@ -8329,20 +8334,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GRAIN_DRIFTS#furrow drift": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ef673336c1119fa2",
   "core": "d7be6f1d32aff467",
   "date": "2026-10-05",
   "note": "dry furrows only, up to 8 degrees on a hamlet, paddy never tilted",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "d2a695abb2df0233",
+  "research": "39ee84ede2710eae",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-10-11",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household": {
@@ -8415,48 +8421,54 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_SKELETONS#lane along the water": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "294d13e965fdbec7",
   "core": "df261d5817368280",
   "date": "2026-10-12",
   "note": "the fifth shape only where water runs along the cluster",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_SKELETONS#lane skeleton": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "771f10f79499d42f",
   "core": "df261d5817368280",
   "date": "2026-10-12",
   "note": "the four shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_SKELETONS_BY_WATER#lane along the water": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "02487ef2644c8f47",
   "core": "aa9d287ea1412de4",
   "date": "2026-10-12",
   "note": "five shapes; the page gives no odds",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::LANE_WEBS#lane web form": {
@@ -8583,38 +8595,42 @@
   "date": "2026-10-03",
   "note": "5:3:2, as the page states",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WATER_ALONG_FT#water along the cluster": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d91bc1fb66c1ee1d",
   "core": "474b89153ce0450b",
   "date": "2026-10-12",
   "note": "the page names no band",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WATER_ALONG_SHARE#water along the cluster's depth": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "526ad912b0a11c8d",
   "core": "1d6b70823f288449",
   "date": "2026-10-12",
   "note": "the page names no band",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WELL_SITINGS#even odds": {
@@ -8686,10 +8702,10 @@
   "date": "2026-10-03",
   "note": "5:3:2, as 0031",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_fields.py::COPSE_SITINGS#village copse siting": {
@@ -11497,20 +11513,21 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#one village belt for the clustered form only": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8329bc9024772d35",
   "core": "74810b743d69290a",
   "date": "2026-10-07",
   "note": "returns no belt when not _nucleated; the record makes it one shared belt or a grove per farm, never both",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html": "5505f4d0f0752806"
   },
-  "research": "be5e2d92a73b3b19",
+  "research": "28ebe0a638f1ed47",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:d05a175e3f65183f"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#shoulder past the end houses": {
@@ -14747,20 +14764,22 @@
  "l7r/diagram/hamletgen/homesteads/boundary.py::install_site_boundary#a scattered hamlet's line round its own fields": {
   "body": "53bced89ed33a83f",
   "claim": "a scattered hamlet's line round its own fields - clustered-and-scattered-villages-shuson-sanson.drawing: the paddy and its dry plots unioned as one cultivated outline, a scattered farm's own fields",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "18980474aeabc136",
   "core": "8c2a409f586685b5",
   "date": "2026-10-18",
   "note": "the ring is drawn round the planted outline (paddy and dry plots joined), as the page's \"within reach of the rice that is drawn\" and \"hugged to the field edge in single file\" say",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4391a37aafe094b1",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/boundary.py::install_site_boundary#no house on the toe marsh": {
@@ -14993,17 +15012,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::DOORYARD_STEPS#where in the dooryard": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9db64082f0d6ddfe",
   "core": "5df0d1d0d99fcdaf",
   "date": "2026-10-07",
   "note": "(1.0,) is one step, as in \"a step off the threshing yard\", recorded as a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8938b2e21d1d2d33"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::DOORYARD_STEP_FT#channel end off the yard": {
@@ -15012,10 +15033,10 @@
   "date": "2026-10-03",
   "note": "\"a step off the threshing yard\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::FARM_CHANNEL#channel routing": {
@@ -15027,17 +15048,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::FARM_CHANNEL_W_FT#channel width": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a8b44a14d8760218",
   "core": "1eb0a4946e32100e",
   "date": "2026-10-05",
   "note": "2.5 ft, a convention as recorded",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1e100f11fd1ac668"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::ROUTE_CELL_FT#channel routing": {
@@ -15085,17 +15108,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::_obstacles#routed round the farm": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "22f06f5a455fff80",
   "core": "c44902d733deb134",
   "date": "2026-10-05",
   "note": "buildings, yards, gardens and other farms' groves walled, its own grove open",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8938b2e21d1d2d33"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::_obstacles#walled off lanes, wells and crop": {
@@ -15139,28 +15164,30 @@
   "date": "2026-10-03",
   "note": "a step off the yard",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#a channel into the grounds": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dbb75554851928fe",
   "core": "f34b7bf4f9949545",
   "date": "2026-10-07",
   "note": "routed from the nearest courses into the grounds, shortest kept; the route is a GUESS on the page",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321"
   },
-  "research": "967f5d0e6eba0417",
+  "research": "a34215740e5dc63f",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:6d7feca13b25fe6d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8938b2e21d1d2d33",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e49e9bf838528a48",
    "0031-clustered-and-scattered-villages-shuson-sanson.html:ddb2cd488e951ac7"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#channel corridor": {
@@ -15198,31 +15225,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#no way back drawn": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "de70f61914f75641",
   "core": "f34b7bf4f9949545",
   "date": "2026-10-07",
   "note": "the page records the deliberate deviation (\"way back to the field is not drawn\")",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:6d6b0ca03f98f605"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dd8cb555a8c91703",
   "core": "f34b7bf4f9949545",
   "date": "2026-10-07",
   "note": "dooryard_end at step*k with DOORYARD_STEP_FT 6 and k=1, recorded as a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8938b2e21d1d2d33"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#a farm no channel reaches": {
@@ -15231,10 +15262,10 @@
   "date": "2026-10-03",
   "note": "page: given a well of its own",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#farms nearest the water first": {
@@ -15254,10 +15285,10 @@
   "date": "2026-10-03",
   "note": "page: a later channel may be led off one drawn (GUESS)",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places": {
@@ -15290,10 +15321,10 @@
   "date": "2026-10-03",
   "note": "nearest taken, recorded as convention",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/farm_water.py::straight_or_routed#channel routing": {
@@ -15310,11 +15341,11 @@
   "date": "2026-10-03",
   "note": "main/branch ditch or brook, never the drain",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321"
   },
-  "research": "967f5d0e6eba0417",
-  "triaged": "2026-10-05",
+  "research": "a34215740e5dc63f",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE#bath room wall": {
@@ -17494,14 +17525,15 @@
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#a scattered farm's own water": {
   "body": "1d6523fc4281551e",
   "claim": "a scattered farm's own water - clustered-and-scattered-villages-shuson-sanson.drawing: its channel ends in its frame, or, where no channel reaches it, its own well in its frame (a well off its way in on a `well` map)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "27fec7b5c6a05dd4",
   "core": "2de4f845643ff6b7",
   "date": "2026-10-19",
   "note": "checks that a channel ends in the farm's frame or that a private well stands there as a fallback, and under `well` that a private well stands in the frame off its way in, as 0031 has it",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:164954258b520a6f",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
@@ -17509,6 +17541,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/row_rules.py::water_rules#well in the way in": {
@@ -18257,19 +18290,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/seat_geometry.py::declare_cluster_shape#cluster shape knob": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a590dffc41d4f187",
   "core": "2f47ed861d7f4044",
   "date": "2026-10-05",
   "note": "the page has a hamlet \"choose its cluster's shape ... by chance\"; the code replaces the roll with whatever the houses drew (round declared on 57 of 64 maps by its own docstring), so the roll does not decide the shape - the drawing page should record this resolution as a DEVIATION, or the roll should bind",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/seat_geometry.py::in_a_shapes_band#a cluster's longest draw": {
@@ -18300,10 +18335,10 @@
   "date": "2026-10-03",
   "note": "round/elongated/crescent/split = lump/string/crescent/split",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/seat_geometry.py::turn_the_seat#a turned seat's reach": {
@@ -18527,19 +18562,21 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
   "body": "e9d534b358c49ecd",
   "claim": "a scattered hamlet's seating - clustered-and-scattered-villages-shuson-sanson.drawing: the whole line hugged to the field edge in single file, round the paddy and its dry plots, where the line holds every farm; otherwise ranks behind a front row, the page's known gap",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ccfad018b0154d70",
   "core": "4873b2d0639dc303",
   "date": "2026-10-18",
   "note": "the single-file half matches §29 (\"the whole line is hugged to the field edge in single file\"), but the fallback `return _seat_households_as(s, plan, False)` seats ranks behind a front row on 14 of 18 dispersed seeds, a form 0031 drawing does not attest and does not record as a known gap; §29's remedy is \"a roomier field, or declare fewer households\". The fallback needs its own DEVIATION label recorded on 0031 drawing, or CANON naming the arbiter's ruling",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the line tried on a copy": {
@@ -18610,36 +18647,40 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a scattered hamlet's room": {
   "body": "25d11e8186d54127",
   "claim": "a scattered hamlet's room - clustered-and-scattered-villages-shuson-sanson.drawing: one band for every form, which a scattered hamlet's line never reads - its \"roughly twice the room per farm\" is the ring round its fields",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "905643f5665e13a7",
   "core": "cad6663612919c9b",
   "date": "2026-10-18",
   "note": "the single-file line ignores `bound`, the ranks and the band's dep/lat. It seats on the fields' ring at a farmstead's own width with its grove, so the page's \"roughly twice the room per farm ... hugged to the field edge in single file\" is the ring round the fields, and no homestead is squeezed",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#a scattered hamlet's seating": {
   "body": "25d11e8186d54127",
   "claim": "a scattered hamlet's seating - clustered-and-scattered-villages-shuson-sanson.drawing: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a94f68b2e44c6de2",
   "core": "cad6663612919c9b",
   "date": "2026-10-18",
   "note": "the claim describes only the ranks mode (front row, brick ranks, rescue cloud, exhaustive pass), which 0031 drawing does not attest for a scattered hamlet (\"in single file\"), and it omits the `single_file` branch this body now runs. Restate it for both branches and label the ranks mode a DEVIATION (or CANON) recorded on the page",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#front-row standoff from the field set by the house and its yard": {
@@ -18749,37 +18790,41 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the front row's size": {
   "body": "25d11e8186d54127",
   "claim": "the front row's size - clustered-and-scattered-villages-shuson-sanson.drawing: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it, where the page has a scattered hamlet's line hugged to the field edge in single file",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "946cce5c6635eb98",
   "core": "cad6663612919c9b",
   "date": "2026-10-18",
   "note": "`front_cap = ... sqrt(households * (_lo_a + _hi_a))` stands a scattered hamlet in ranks behind a row, against §29's \"in single file\". The aspect comes from `CLUSTER_DRAWN_ASPECT`, the shapes of a village cluster (§41), which the page never gives a scattered form. The claim itself names the contradiction; label the ranks fallback a recorded DEVIATION or CANON",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's offer": {
   "body": "25d11e8186d54127",
   "claim": "the line's offer - clustered-and-scattered-villages-shuson-sanson.drawing: every household in the line and none in ranks behind it (`front_cap` the households, `_rows_seated`) - the whole line hugged to the field edge in single file; the seats are the ring's own, a farmstead's width apart",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ddc83dd144a720ee",
   "core": "cad6663612919c9b",
   "date": "2026-10-18",
   "note": "`front_cap` equals the household count, `front_row` is offered every household on `_seat_ring_chains` with the pitch set to the farmstead's own width and an unlimited reach, and `_rows_seated` skips both the ranks and `seat_the_rest`. That is the page's \"whole line is hugged to the field edge in single file\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3477bf438758147d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's reach": {
@@ -18816,18 +18861,20 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the line's step": {
   "body": "25d11e8186d54127",
   "claim": "the line's step - clustered-and-scattered-villages-shuson-sanson.drawing: each homestead with its own grove keeps its own spacing - the line's farms one farmstead's own box apart (its width, grove in it)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2d2280b6d82d8f1a",
   "core": "cad6663612919c9b",
   "date": "2026-10-18",
   "note": "the pitch is `max(_bb[2], _bb[3])` of the full farmstead box, grove included: \"each homestead carries its own grove and keeps its own spacing\", a fitting rule, not a measured distance",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::_seat_households_as#the passage share": {
@@ -19096,19 +19143,21 @@
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
   "body": "cd638eed2f5781b6",
   "claim": "the declared cluster shape - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "be01f13947e948eb",
   "core": "da789b7f4f8332f8",
   "date": "2026-10-18",
   "note": "the page's own rule rolls the shape: \"A hamlet chooses its cluster's shape ... by chance\". Only the crescent and the split are marked GUESS. Should be a plain question claim on the 0031 drawing page",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-03",
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the track's stretch the ways join": {
@@ -19788,10 +19837,10 @@
   "date": "2026-10-03",
   "note": "a channel or a dooryard well, per the knob; a well where no channel can reach",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::lane_and_fallback_wells#its search steps and tolerances": {
@@ -19916,22 +19965,23 @@
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water": {
   "body": "4c4c6813881b08d4",
   "claim": "grove farms take their own water - communal-wells-ido.drawing, clustered-and-scattered-villages-shuson-sanson.drawing: a dispersed farm draws from its own channel or well, not the shared-well rule of towns, so every grove farm takes its own water (`grove_water`) and is left out of the communal wells",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "634f621261f64b65",
   "core": "3e3de2e62bd29398",
   "date": "2026-10-17",
   "note": "grove farms go to grove_water (a channel or own well; a row's shared or per-farm wells by its knob) and are left out of the communal wells",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0196-communal-wells-ido.drawing.html": "56e6f8c5c702f586"
   },
-  "research": "63885799b21f3c1d",
+  "research": "0cbf96b37856d260",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d",
    "0196-communal-wells-ido.drawing.html:ef7c809e824ffb35"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#its search steps and tolerances": {
@@ -20793,14 +20843,15 @@
  "l7r/diagram/hamletgen/plan.py::_KNOBS#a knob rolled only where the map's form uses it": {
   "body": "321db7f770f72091",
   "claim": "a knob rolled only where the map's form uses it - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet; cluster_shape and well_siting on every form, since every map's band and its grove-less houses' wells read them",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e13ae0feb4389e7c",
   "core": "9315c9d28f0794ae",
   "date": "2026-11-03",
   "note": "the new `lane_web` \"not_dispersed\" branch matches the page: a scattered settlement draws no lane network (only the road out), and a row's inner lanes are drawn from its houses, so a row still reads a web form; a hamlet rolls its lane pattern from its own table; farm_water rolls only on the scattered form; cluster_shape and well_siting roll on every form as the claim says",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:164954258b520a6f",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
@@ -20810,6 +20861,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::_fall_into_wind#spec and plan plumbing": {
@@ -20852,18 +20904,20 @@
  "l7r/diagram/hamletgen/plan.py::_rust_rolls#the plan's rolls": {
   "body": "e3292b9049f66f0a",
   "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "11800b7658b2982e",
   "core": "b4621d46eb8b4ad0",
   "date": "2026-10-30",
   "note": "each knob is rolled per seed, a pin is honored, and a knob off its branch takes its table's first form",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::_rust_rolls#the row on the dry edge on flood ground": {
@@ -20963,6 +21017,7 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
   ],
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "DRIFTED"
  },
@@ -20975,6 +21030,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
+  "triage": "touched",
   "triaged": "2026-10-29",
   "verdict": "DRIFTED"
  },
@@ -21090,14 +21146,15 @@
  "l7r/diagram/hamletgen/plan.py::plan_site#knob rolls": {
   "body": "1be71875d60cc4a1",
   "claim": "knob rolls - clustered-and-scattered-villages-shuson-sanson.drawing: cluster_shape, lane_skeleton, plot_size and grain_drift rolled per hamlet; each table's own claim in consts",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9f7904b1f55d26f4",
   "core": "d6cf20ad0486beed",
   "date": "2026-10-30",
   "note": "cluster shape (no split), lane skeleton, plot size and a grain drift of up to 8 degrees are each rolled per hamlet",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
@@ -21105,6 +21162,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#paddy by households": {
@@ -21126,17 +21184,19 @@
  "l7r/diagram/hamletgen/plan.py::plan_site#polder grid's orientation": {
   "body": "1be71875d60cc4a1",
   "claim": "polder grid's orientation - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: falls from the four cardinals only, the dike-pond mosaic too, never tilted",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "20e4b4390721da10",
   "core": "d6cf20ad0486beed",
   "date": "2026-10-30",
   "note": "the polder flag sends Rust to the cardinal falls, and the page records \"a tilted paddy grid is not drawn, a deviation\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#polder on the survey grid": {
@@ -21202,14 +21262,17 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/plan.py::plan_site#the fan's aspect (FAN_ASPECTS) and the head race's lead (HEAD_RACE_LEAD) rolled per hamlet": {
-  "code": "d6cf20ad0486beed",
+ "l7r/diagram/hamletgen/plan.py::plan_site#the fan's aspect and the head race's lead": {
+  "body": "1be71875d60cc4a1",
+  "claim": "the fan's aspect and the head race's lead - GUESS: rolled per hamlet from their tables (`FAN_ASPECTS`, `HEAD_RACE_LEAD`), each table's own claim in consts",
+  "code": "89e30b6be6ee8e1f",
   "core": "d6cf20ad0486beed",
-  "date": "2026-10-30",
-  "note": "the fan's aspect (FAN_ASPECTS) and the head race's lead (HEAD_RACE_LEAD) rolled per hamlet",
-  "outside": true,
+  "date": "2026-11-03",
+  "note": "both rolled per hamlet from their tables, and nothing cited gives either figure",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
@@ -21224,6 +21287,7 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
@@ -22369,17 +22433,19 @@
  "l7r/diagram/hamletgen/washing.py::each_house_places#its figures from 0031": {
   "body": "e6821daa25a84b6a",
   "claim": "its figures from 0031 - clustered-and-scattered-villages-shuson-sanson.drawing: 2.5 (fallback farm-channel width at the step)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "bbb8bb2f1e2f759d",
   "core": "e0b80bd242d3e4ca",
   "date": "2026-10-25",
   "note": "\"The channel is drawn 2.5 ft wide\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1e100f11fd1ac668"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::each_house_places#one step at each house on the channel": {
@@ -22481,18 +22547,19 @@
  "l7r/diagram/hamletgen/washing.py::passing_courses#its figures from 0031": {
   "body": "1398f861ef1b4b5b",
   "claim": "its figures from 0031 - clustered-and-scattered-villages-shuson-sanson.drawing: 2.5 (fallback farm-channel width)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "71a8e862b40a6dd0",
   "core": "40440e84364708d6",
   "date": "2026-10-25",
   "note": "farm channel 2.5 ft",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1e100f11fd1ac668"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::passing_courses#its figures from 0068": {
@@ -22740,18 +22807,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#compact bundle for the clustered form only": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9b3616184e543f2c",
   "core": "7df01189a5e5cfd8",
   "date": "2026-10-13",
   "note": "each non-clustered farm takes its own grove",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
   ],
-  "triaged": "2026-10-29",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#fall and drainage declared first": {
@@ -24405,19 +24473,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::unreached_houses#dispersed hamlet exempt": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d02c185bb071484a",
   "core": "074207330ee026a7",
   "date": "2026-10-07",
   "note": "a dispersed form has no lane network, so the rule does not apply to it",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
   ],
-  "triaged": "2026-10-27",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/checks.py::unreached_houses#every farmhouse served": {
@@ -25519,18 +25588,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::is_tree#a row's streets kept": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a966aa721b250c9a",
   "core": "039f6a16eb392ea0",
   "date": "2026-10-04",
   "note": "road before houses",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2b715651d89e6207"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::is_tree#the access tree kept": {
@@ -33119,11 +33189,11 @@
   "date": "2026-10-03",
   "note": "matches",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0033-row-villages-resson.drawing.html": "7f062305b79e2200"
   },
-  "research": "c7499e2ba613a178",
-  "triaged": "2026-10-13",
+  "research": "7700f57b4362c91a",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/street.py::thread#street threaded round the steadings": {
@@ -35883,20 +35953,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton form": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "18750b7f85d24fff",
   "core": "95d551de585a96f1",
   "date": "2026-10-12",
   "note": "`lane_skeleton_for` rolls the shape per seed, and the waterside shape is offered only when `side` finds water along a flank",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
-  "triaged": "2026-10-27",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::_lay_skeleton#skeleton laid after the houses": {
@@ -36181,33 +36252,37 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::lane_skeleton_for#lane along the water": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b1a9de7acad1c92c",
   "core": "ce66f01b73588122",
   "date": "2026-10-12",
   "note": "five shapes where water runs along the cluster",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::oriented_skeleton#lane along the water on its flank": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "96cce4caf809997c",
   "core": "de0e8a39c72ca7ef",
   "date": "2026-10-12",
   "note": "the waterside template is mirrored onto the +x flank when the water runs there",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::served_arm#shortest arm": {
@@ -36251,17 +36326,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/skeleton.py::water_along_side#water along the cluster": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fabd292917de2e5d",
   "core": "d38623e195d8bee2",
   "date": "2026-10-12",
   "note": "the page names no band",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::_reachable_runs#a web with no skeleton": {
@@ -36455,18 +36532,19 @@
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#dispersed hamlet draws no web": {
   "body": "7211c336ff08f58f",
   "claim": "dispersed hamlet draws no web - clustered-and-scattered-villages-shuson-sanson.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2b115a465abbdaa9",
   "core": "9590bb47e32917bc",
   "date": "2026-10-19",
   "note": "returns before any lane is drawn when settlement_form is \"dispersed\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342"
   ],
-  "triaged": "2026-10-26",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web/stage.py::stage_web#door path reach": {
@@ -47756,35 +47834,39 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#cluster_position forms": {
+  "body": "40111b5628ec21a3",
+  "claim": "cluster_position forms - clustered-and-scattered-villages-shuson-sanson.drawing: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise",
   "code": "482d9775e1f51f22",
   "core": "9a3103912a0619ab",
-  "date": "2026-10-11",
-  "note": "the high margin is \"one case among several\", and the other positions are calibrated cases of the dry ground beside the paddy",
+  "date": "2026-11-03",
+  "note": "the knob rolls six named positions (flank, mid_margin, valley_mouth, valley_head, on_rise, high_margin), but the page names only \"the higher, drier ground beside its paddy\" and \"the high margin on the windward side is one case among several\"; five of the six are named nowhere on it, so the claim should cite where they are attested or mark them GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#cluster_shape forms": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "adf2473090cbc735",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "lump, string, crescent and split are the shapes the page records; a hamlet never splits",
   "pages": {
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html": "8d5bae222470dc31",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "82ffe3acf176f08d",
+  "research": "e0ab8d9f36622c0f",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#field_archetype forms": {
@@ -47809,18 +47891,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#grain_drift range": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "67b57c978669d4be",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "±12 degrees is the village ceiling; the hamlet's 8 comes from its own table",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#hamlet default values": {
@@ -47835,19 +47919,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#hamlet knobs unrolled": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "24763de280967627",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "a hamlet rolls its shape, lanes, plot size and drift from its own tables",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms": {
@@ -47885,19 +47971,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#lane_skeleton forms": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4198aaa46a0c1db0",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "the five lane forms the drawing page records as a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:08760ad7b1fd1e64",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#lane_web forms": {
@@ -47934,42 +48022,45 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_regularity forms": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ae0440e793066844",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "irregular plots and surveyed rows, the rows gated on a planned field",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.html": "f93aa13e6a29a549",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "417d3bbe429eb45a",
+  "research": "b3d9e043bdc329d8",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.html:00e43b29a7290915",
    "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:8e7dc25140e55c18",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#plot_size forms": {
   "body": "40111b5628ec21a3",
   "claim": "plot_size forms - rice-paddies-and-their-plots-suiden, clustered-and-scattered-villages-shuson-sanson.drawing: small_irregular, medium, large_block, strip",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cb7f9a0bf0c6385b",
   "core": "9a3103912a0619ab",
   "date": "2026-10-25",
   "note": "irregular plots of every size, plus strips",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.html": "f93aa13e6a29a549",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "417d3bbe429eb45a",
+  "research": "b3d9e043bdc329d8",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
    "0005-rice-paddies-and-their-plots-suiden.html:c46626798feff5b4",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#researched defaults": {
@@ -48016,34 +48107,38 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#settlement_form weights": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "71c1b33074c5634a",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "the Knob(\"settlement_form\", ...) call gives no weights, so it rolls its 5 forms evenly (0.2 each), but the page says \"Half our settlements are drawn clustered, three in ten scattered and two in ten as rows\"; the registry should carry 0.5/0.3/0.2 over the page's three forms (where water_town and dike_top sit in those shares is unsettled)",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5"
   ],
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5a6b234e90c1f6bf",
   "core": "9a3103912a0619ab",
   "date": "2026-10-11",
   "note": "the corners, mid-margin, chain and stream edges the page records",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::<module>#water_town form": {
@@ -48144,10 +48239,10 @@
   "date": "2026-10-03",
   "note": "the five shapes 0031 drawing records",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::LANE_WEBS#two lane webs": {
@@ -48207,10 +48302,10 @@
   "date": "2026-10-03",
   "note": "matches 0031 drawing rule",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_field_archetype_ok#field form follows terrain": {
@@ -48292,22 +48387,23 @@
   "date": "2026-10-03",
   "note": "matches 0031 drawing rule",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_plot_regularity_ok#a grid needs a surveyed field": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "be3fdddc69143eb8",
   "core": "cc7e146b37de35b4",
   "date": "2026-10-05",
   "note": "even rows only where a survey laid the field out",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.html": "f93aa13e6a29a549",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "1775e4396ed80847",
+  "research": "abf1c0d8a7eb8b5e",
   "rests": [
    "0005-rice-paddies-and-their-plots-suiden.html:00e43b29a7290915",
    "0005-rice-paddies-and-their-plots-suiden.html:3067d2fd5a61b385",
@@ -48315,7 +48411,7 @@
    "0005-rice-paddies-and-their-plots-suiden.html:816dacced1c6f5b2",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b63de3757149f3e3"
   ],
-  "triaged": "2026-10-25",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::_settlement_form_ok#dike-top needs low ground": {
@@ -48348,10 +48444,10 @@
   "date": "2026-10-03",
   "note": "matches 0031 drawing rule",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::bridge_carried_ways#its salts, guards and sentinels": {
@@ -48501,10 +48597,10 @@
   "date": "2026-10-03",
   "note": "the five 0031 drawing shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_knobs.py::web_cuts#a cut in the widest gap": {
@@ -59439,6 +59535,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -59459,10 +59556,10 @@
   "date": "2026-10-03",
   "note": "the four attested and extended shapes",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.cluster_seeds#its crescent reach": {
@@ -59479,17 +59576,19 @@
  "l7r/diagram/settlement/houses.py::HousesMixin.cluster_seeds#its figures guessed on 0031": {
   "body": "940a19d329abf653",
   "claim": "its figures guessed on 0031 - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: 0.22 (crescent spread); 0.95 (crescent depth); 0.42 (split sub-clusters); 0.82 (split sub-clusters); 0.62 (split sub-clusters)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6a2dc221511ff379",
   "core": "032331617ba17bfe",
   "date": "2026-10-25",
   "note": "the page records the crescent and split forms as this project's GUESS; these are their proportions",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.cluster_seeds#its search steps and tolerances": {
@@ -63544,19 +63643,21 @@
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#no grove of its own in a cluster": {
   "body": "b551821804638c16",
   "claim": "no grove of its own in a cluster - clustered-and-scattered-villages-shuson-sanson.drawing, shelter-belts-on-a-villages-windward-side-bofurin.drawing: a nucleus shelters behind one village belt",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "085f94fdc4abdf95",
   "core": "e7e2a5102650b993",
   "date": "2026-10-17",
   "note": "nucleated bundle lays no grove",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
-  "research": "35c66821e35fb10f",
+  "research": "0d4697d125e5b7d5",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#outer stable off the wall": {
@@ -64135,18 +64236,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#well pocket in the dooryard": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3986c9fdb240c02b",
   "core": "b80c7eb2000bacc0",
   "date": "2026-10-08",
   "note": "in the dooryard beside the yard, off the way in; its place is a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b326e625eaeec6d4"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/dispersed.py::canonical_farmstead#wellhead off the house's front wall": {
@@ -66769,19 +66872,20 @@
  "l7r/diagram/settlement/rolling/place.py::PlacerMixin._slide#dispersed farm packed against its nearest neighbor": {
   "body": "a70020217e1e67d9",
   "claim": "dispersed farm packed against its nearest neighbor - clustered-and-scattered-villages-shuson-sanson.drawing: each homestead keeps its own spacing, and 0285 has scattered farms 100 to 200 m apart - a dispersed farm is slid against its neighbor, a departure the code keeps until feature 417 T33; the second slide, toward the nearest neighbor, where 0031 has a scattered homestead keep its own spacing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "52a2b00d65eaf2f8",
   "core": "230d899cba0847cc",
   "date": "2026-10-25",
   "note": "the second slide shoves a scattered farm toward its neighbor. §98 says each homestead \"keeps its own spacing\" and \"do not squeeze the homesteads\". The claim admits the departure but no bundled page records it",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/place.py::PlacerMixin._slide#dispersed farm packed toward field and neighbor": {
@@ -66790,10 +66894,10 @@
   "date": "2026-10-03",
   "note": "0031: the line hugged to the field edge in single file",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-28",
+  "research": "7c2bf95c3c36f0e4",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/place.py::PlacerMixin._slide#its salts, guards and sentinels": {
@@ -66984,11 +67088,11 @@
   "date": "2026-10-03",
   "note": "0033 finds row neighbors \"one frontage apart, lot against lot\" (about 54-240 ft) and rows \"on one side of its line or on both\"; the code takes uniform random positions along the line (clumps and gaps, no frontage) with symmetric jitter, and does not roll one side or both",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0033-row-villages-resson.html": "484faa488ad676c6"
   },
-  "research": "775716bbb484ad7e",
-  "triaged": "2026-10-13",
+  "research": "629a8b38a25a9cfc",
+  "triaged": "2026-11-03",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.scatter_seeds#scattered farmsteads": {
@@ -66997,11 +67101,11 @@
   "date": "2026-10-03",
   "note": "scatter, hugged to the field edge as 0031.drawing states",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298",
    "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321"
   },
-  "research": "967f5d0e6eba0417",
-  "triaged": "2026-10-05",
+  "research": "a34215740e5dc63f",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.waterfront_seeds#a ±10 px jitter on each house seat": {
@@ -74929,19 +75033,21 @@
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
   "body": "104bf3c8bb5399c0",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0ae2059c22ad198e",
   "core": "ed878889b80c3e81",
   "date": "2026-11-01",
   "note": "each knob rolled from the seed by its weights; a hand-set pin overrides the roll",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
@@ -79318,19 +79424,21 @@
  "rust/phases/src/pyrand.rs::roll#knob rolls": {
   "body": "a51caa380e2f27be",
   "claim": "knob rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e861db643eca81af",
   "core": "535ecfe3c2a1351a",
   "date": "2026-10-31",
   "note": "picks a weighted form from a per-knob seeded rng (uniform when no weights are given), so each form is chosen by chance from the map's seed as the page rules; the weights come from the caller",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::sha256#the draws": {
@@ -80956,30 +81064,35 @@
  },
  "rust/phases/src/water_frame.rs::admitted#a polder's fall to the cardinals": {
   "body": "030b28237589aaa4",
-  "claim": "a polder's fall to the cardinals - DEVIATION polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a surveyed grid, usually laid north-south and east-west, never tilted here",
-  "code": "859eb2f50dea0325",
+  "claim": "a polder's fall to the cardinals - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the surveyed grid, usually laid north-south and east-west and not seldom tilted, drawn untilted",
+  "code": "227fd6e554cef289",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "the 0019 drawing page records no departure about the grid's orientation; it says only \"A rice polder is drawn on a surveyed grid\". The cited phrase \"usually laid north-south and east-west\" and the recorded deviation (\"a tilted paddy grid is not drawn, a deviation\") are on the 0031 drawing page at §82, so the pointer should be 0031.drawing §82",
+  "note": "cardinal falls only, matching \"usually laid north-south and east-west, was not seldom tilted ... a tilted paddy grid is not drawn, a deviation\"",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "765c28e2d975a432",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
   "body": "030b28237589aaa4",
-  "claim": "high side and windward side as one - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing calls the high windward margin one case among several, how common a GUESS; taken on every hamlet, both ends in",
-  "code": "00d28e32523e2abd",
+  "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one",
+  "code": "d887b7f14b355e59",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "the filter `(f - w).rem_euclid(360.0) <= 180.0` admits only falls that run away from windward, on every hamlet, so no hamlet's high side is ever to leeward. The page says \"the high margin on the windward side is one case among several\", which leaves room for other cases. Either the code rolls the windward-high rule per hamlet, or the drawing page records the every-hamlet rule as a deliberate deviation",
-  "pages": {},
-  "research": "",
-  "verdict": "DRIFTED"
+  "note": "(f - w) mod 360 <= 180 with f clockwise from east and w clockwise from north admits exactly the falls downwind or square to the wind (NW gives 315, 0, 45, 90, 135); a share is not rolled, as the recorded deviation says",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+  },
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#the fall to the compass points": {
   "body": "030b28237589aaa4",
@@ -81027,82 +81140,86 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/water_frame.rs::roll_plan#fall and drainage declared first": {
-  "body": "6c6a04429783f7fd",
-  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
-  "code": "30ef5146d4e9c378",
-  "core": "e5cf8474848affce",
-  "date": "2026-11-03",
-  "note": "this unit rolls only the fall (down_deg), before any knob. The page needs the water's bearing declared \"separately\" from the fall. To judge, I need the code that rolls or declares the drainage bearing, to see whether it is independent of the fall and comes before any feature is placed",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
-  ],
-  "verdict": "CANNOT-TELL"
- },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
   "body": "6c6a04429783f7fd",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a528c046ed32d6c4",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
   "note": "each knob is rolled from its own seed, the form first and the others gated by form; an even draw over the 10-entry table gives the half / three in ten / two in ten shares; a pinned knob stands for a hand-fixed one",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
   ],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/water_frame.rs::roll_plan#the land's fall drawn at even odds from the admitted compass points": {
-  "code": "e5cf8474848affce",
+ "rust/phases/src/water_frame.rs::roll_plan#the fall at even odds": {
+  "body": "6c6a04429783f7fd",
+  "claim": "the fall at even odds - GUESS: no page gives the falls' shares, so each admitted point is equally likely",
+  "code": "1ba46c912a880d35",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "the land's fall drawn at even odds from the admitted compass points",
+  "note": "randbelow over the admitted falls; no page gives the falls' shares",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/water_frame.rs::stage_water_frame#fall and drainage declared first": {
-  "body": "dd7905be48febfad",
-  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall rolled before any feature is placed",
-  "code": "60778baf24f16a4c",
-  "core": "c1c72051bf03c46e",
+ "rust/phases/src/water_frame.rs::roll_plan#the fall rolled first": {
+  "body": "6c6a04429783f7fd",
+  "claim": "the fall rolled first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall rolled before any knob and any feature; the drainage bearing is `plan_site`'s, declared or taken from the fall",
+  "code": "37db0e050ed3d044",
+  "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "only the fall is rolled here, through roll_plan. To judge, I need where the drainage bearing is declared and whether it is independent of the fall",
+  "note": "one fall rolled per map unless pinned, the map's declared fall; the drainage bearing is left to plan_site",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
   },
   "research": "42264e7bb9d79cb9",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::stage_water_frame#knobs rolled from the seed": {
   "body": "dd7905be48febfad",
-  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "code": "bfaf71d1a294a603",
+  "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, through `roll_plan`",
+  "code": "ffee43eebd94b98c",
   "core": "c1c72051bf03c46e",
   "date": "2026-11-03",
-  "note": "hands the work to roll_plan, which rolls each knob per hamlet",
+  "note": "each knob rolled from its own seed key through roll_plan, gated by its branch so a value its rule forbids is never drawn",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/water_frame.rs::stage_water_frame#the fall rolled first": {
+  "body": "dd7905be48febfad",
+  "claim": "the fall rolled first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the fall rolled before any knob and any feature, through `roll_plan`; the drainage bearing is `plan_site`'s",
+  "code": "95cc0bdc5e1b95ad",
+  "core": "c1c72051bf03c46e",
+  "date": "2026-11-03",
+  "note": "hands roll_plan the admitted falls; the fall is declared per map, apart from the bearing",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
   ],
   "verdict": "IN-STEP"
  }
