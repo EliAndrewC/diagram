@@ -401,3 +401,24 @@ Measured 2026-11-03 before the plan (throwaway probes rolling the first three st
    the derivation's 0.61); the brook's filing with its length, once.
 5. **What did the before and after show, and under what conditions?** `make perf-ab` recorded at the landing, best of N.
 6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
+
+### T26 part B (2026-11-03T18:01Z)
+
+The trigger: two red gates in a row on T26 (17:43Z, 17:50Z), the tripwire ruled `continue` by the round arbiter
+(red-gate@2026-11-03T17:50:56Z).
+
+1. **What exactly is refusing?** First gate: `tests/hamletgen/test_rust_prefix.py` listed the Rust stages as water_frame and
+   field, and T26 made sink the third. Second gate: the hamlet-path coverage floor, `settlement/land/wet.py` 503-504 and 514-515
+   (`pond_reeds`'s two "no open ground left" drops), unrun since the first gate and hidden by its failure.
+2. **A3 again.** The project's own rules, unchanged: the Rust stages are derived from the crate and the test pins them; a module
+   on the hamlet path is held at 100%.
+3. **A4 again.** Each refusal read in the gate's log.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: tests added where each failed, and one dead function deleted. As the ruling asked, the other
+   spans `make cover-changed` named were closed too: the registry walk after a Python stage (`work_budget.py` 70) and a
+   stream's stations (`water.py` 139) are tested, and `brook_rules.turn_deg`, left with no caller by T26, is deleted.
+   `tests/tools/test_perf_snapshot.py` already names the sink.
+6. **The one-sentence test.** "T26 made the sink a Rust stage; one test listed the old stages, and the reeds' drops had no test."
+7. **Done:** the prefix test names three stages; `pond_reeds`'s drops are tested in `tests/settlement/test_wet_ground.py`.
+8. **Every route measured before the arbiter was asked?** The tripwire asked, with each fix and its passing tests in hand.
+9. **After a ruling, the step it named?** Yes: `make cover-changed` clean on the three files it named, then `make done` once.
