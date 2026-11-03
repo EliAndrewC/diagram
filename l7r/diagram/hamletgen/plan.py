@@ -446,8 +446,8 @@ def fall_backs_the_wind(down_deg: float, windward: str) -> bool:
     hill AND to the wind, the high side and the windward side being one side (`seat_cluster`).
 
     Research:
-        high side and windward side as one - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html calls the high windward margin one case among several, how common a GUESS; taken on every hamlet (the rule Rust's `admitted` keeps, this predicate its test's reference)
-        fall square to or away from the wind - GUESS: a fall square to or away from the wind keeps the high side and the windward side together, so the windward tie is held on every field the fit can draw"""
+        high side and windward side as one - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin, which the page calls one case among several, taken on every hamlet (the rule Rust's `admitted` keeps, this predicate its test's reference)
+        fall square to or away from the wind - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet's land falls away from the wind or square across it, its high side windward or level, so the windward tie holds on every field the fit can draw"""
     if __debug__:  # the counted work (feature 444 T15): a fall tested against the wind
         work_counts.OPS["pt_test@fall_backs_the_wind"] += 1
     return _fall_into_wind(down_deg, windward) <= 1e-9

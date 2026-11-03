@@ -70,10 +70,11 @@ fn quarter_deg(windward: &str) -> f64 {
 /// in place of a test of each fall (measured 2026-10-30: the same admitted set as `plan.fall_backs_the_wind` on every quarter).
 ///
 /// Research:
-///     high side and windward side as one - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html calls the high windward
-///     margin one case among several, how common a GUESS; taken on every hamlet, both ends in
-///     the fall to the compass points - CONVENTION: a fall off a polder snapped to the eight points at 45 degrees
-///     a polder's fall to the cardinals - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid, usually laid north-south and east-west, never tilted here
+///     high side and windward side as one - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the high windward margin, which the page calls one
+///     case among several, taken on every hamlet, both ends in - a fall away from the wind or square across it
+///     the fall to the compass points - UNRESEARCHED: a fall off a polder snapped to the eight points at 45 degrees
+///     a polder's fall to the cardinals - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the surveyed grid, usually laid north-south and east-west
+///     and not seldom tilted, drawn untilted
 #[must_use]
 pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
     let w = quarter_deg(windward);
@@ -120,6 +121,11 @@ fn applies(branch: &str, form: &str) -> bool {
 /// index (`None` where pinned), each knob's index (`None` where pinned or off its branch), and the counts. Each draw is even over
 /// the knob's table, so a table's weights are its repeated entries (the settlement form's is nucleated 5, dispersed 3, linear 2 of
 /// ten); a pinned form arrives as its table's one entry, so `forms.first()` is the pin and gates the knobs after it.
+///
+/// Research:
+///     the fall rolled first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall rolled before any knob and any feature; the drainage bearing is `plan_site`'s, declared or taken from the fall
+///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, never chosen
+///     the fall at even odds - GUESS: no page gives the falls' shares, so each admitted point is equally likely
 #[must_use]
 pub fn roll_plan(
     seed: i64,
@@ -169,6 +175,10 @@ pub fn roll_plan(
 
 /// The stage's entry from Python (`plan_site`, D6): the settlement form's pin, where the spec gives one, stands in `forms` as
 /// its only entry.
+///
+/// Research:
+///     the fall rolled first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall rolled before any knob and any feature, through `roll_plan`; the drainage bearing is `plan_site`'s
+///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, through `roll_plan`
 #[pyfunction]
 #[expect(
     clippy::needless_pass_by_value,
