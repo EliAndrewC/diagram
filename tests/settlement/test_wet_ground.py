@@ -313,3 +313,16 @@ def test_drawn_ground_keeps_the_largest_piece_when_a_keep_out_cuts_the_marsh_in_
     got = drawn_ground(band, blocks=[wall])
     assert got is not None and min(p[0] for p in got) >= 110.0 - 1e-6, "the larger, eastern piece"
     assert drawn_ground(band, blocks=[[(900.0, 900.0), (950.0, 900.0), (950.0, 950.0)]]) == band
+
+
+def test_a_pond_fringe_inside_the_open_water_or_the_field_is_dropped_by_name() -> None:
+    """`pond_reeds` (feature 444 T26): a fringe ring the pond's water swallows, or one the field covers, draws no reeds."""
+    s = Settlement(1000, 1000, seed=1)
+    s.meta(name="V", scale="village")
+    s.M["pond"] = (400.0, 400.0, 200.0, 200.0)
+    s.pond_reeds(_FRINGE)
+    s.M["pond"] = None
+    s.field_polys.append([(200.0, 200.0), (600.0, 200.0), (600.0, 600.0), (200.0, 600.0)])
+    s.pond_reeds(_FRINGE)
+    assert s.M["meta"]["marsh_dropped"] == [{"role": "pond_fringe", "why": "no open ground left"}] * 2
+    assert not s.M["marshes"]
