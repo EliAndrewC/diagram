@@ -8298,6 +8298,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
   },
   "research": "42264e7bb9d79cb9",
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -9044,10 +9045,10 @@
   "date": "2026-10-03",
   "note": "smoothing threshold serving 0054's sweeps-not-corners rule",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_TAP_RUN#how far it runs straight": {
@@ -21285,17 +21286,16 @@
   "code": "6cb6361cd3db7aa7",
   "core": "d6cf20ad0486beed",
   "date": "2026-11-03",
-  "note": "`water_flow = spec.water_flow if spec.water_flow is not None else down_deg` takes the flow from the fall, but the 0054 drawing page records no hamlet departure. It says the opposite: \"Deriving the flow from the slope would force every stream straight down the fall line, which is wrong\". Either the page records the hamlet's flow-equals-fall as this project's deliberate deviation, or the claim's label changes",
+  "note": "`water_flow = spec.water_flow if ... else down_deg` is the hamlet deviation the drawing page records: flow taken from the fall unless declared",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#woodland patches": {
   "code": "4774a26ee0c66af7",
@@ -22829,19 +22829,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#fall and drainage declared first": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "body": "034f3afdbde32ffd",
+  "claim": "fall and drainage declared first - which-way-water-flows-and-how-channels-bend-and-join.drawing: the bearing and the fall recorded before anything is placed",
   "code": "9b4b7ee98776004a",
   "core": "7df01189a5e5cfd8",
-  "date": "2026-10-13",
-  "note": "both declared, separately",
+  "date": "2026-11-03",
+  "note": "water_flow and down_deg are each written to the meta in the first stage, before anything is placed",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#field footbridges on every hamlet": {
@@ -45251,11 +45252,11 @@
   "date": "2026-10-03",
   "note": "field's own lattice of ditches (0054)",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "section": "7aa0abfea7309a5f",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_PARENT_FIELD#a resting plot in its field": {
@@ -45344,11 +45345,11 @@
   "date": "2026-10-03",
   "note": "0054 confluences (crossings gated elsewhere)",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "section": "8fc0203d01efbabe",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_CLASS_OK#ways meet": {
@@ -71210,10 +71211,10 @@
   "date": "2026-10-03",
   "note": "no code",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._clip_to_moat#its salts, guards and sentinels": {
@@ -71294,10 +71295,10 @@
   "date": "2026-10-03",
   "note": "predicate",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin._stream_beds#the bed index": {
@@ -71318,10 +71319,10 @@
   "date": "2026-10-03",
   "note": "fillet at 2.5 x max width",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#ditch class": {
@@ -71353,10 +71354,10 @@
   "date": "2026-10-03",
   "note": "all four clips applied",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
+  "research": "68e3dc87e83ea403",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/clipping.py::WaterClipMixin.field_channel#taper along the run": {
@@ -71866,11 +71867,11 @@
   "date": "2026-10-03",
   "note": "level -> flow_deg None, as 0054",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
   },
-  "research": "f5cf6904aff49b6c",
-  "triaged": "2026-11-01",
+  "research": "53ca31f79c883a6f",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin._flow_record#flow direction recorded": {
@@ -71882,6 +71883,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
   },
   "research": "42264e7bb9d79cb9",
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -71942,21 +71944,22 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#every course declares its flow": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "body": "36d4885bd12fc93e",
+  "claim": "every course declares its flow - which-way-water-flows-and-how-channels-bend-and-join.drawing: authored upstream-first",
   "code": "306dda53cc6a4593",
   "core": "c95c63d62ddf4fce",
-  "date": "2026-10-07",
-  "note": "upstream-first, flow_deg recorded",
+  "date": "2026-11-03",
+  "note": "every stream records its flow, upstream-first; the added `stations` is plumbing",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:0dcd1fb0182f7b9d",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
-  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#houses kept off the stream": {
@@ -73905,16 +73908,15 @@
   "code": "22118c942950cf3e",
   "core": "c664b88288a20df9",
   "date": "2026-11-03",
-  "note": "a turn of MIN_TURN_DEG (8) or more is rounded at BEND_WIDTHS (2.5) times w, and a gentler turn keeps its point unrounded, as the page says",
+  "note": "a turn under MIN_TURN_DEG (8) is left sharp, any other is arced at BEND_WIDTHS (2.5) x width, and held offtake points are not rounded",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:096deada616e93fb",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8cec24e795423384",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
   "verdict": "IN-STEP"
@@ -75264,14 +75266,13 @@
   "claim": "sweeps - which-way-water-flows-and-how-channels-bend-and-join.drawing: a radius of about two and a half channel widths",
   "code": "bd42a338f02521c2",
   "core": "5c669abad69e8fa4",
-  "date": "2026-11-01",
-  "note": "2.5 channel widths",
+  "date": "2026-11-03",
+  "note": "2.5 widths",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
   "verdict": "IN-STEP"
@@ -76570,19 +76571,17 @@
  "rust/phases/src/field/fan.rs::heading#bearings": {
   "body": "2e60c1fe150f04df",
   "claim": "bearings - which-way-water-flows-and-how-channels-bend-and-join.drawing: the maps' angles turn clockwise from east, so 90 is south",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "314a7d280e879f9e",
   "core": "208b2f219464c91d",
-  "date": "2026-10-31",
-  "note": "(cos, sin) on y-down map axes puts 90 at south, angles turning clockwise from east",
+  "date": "2026-11-03",
+  "note": "(cos, sin) in screen coordinates (y down) turns clockwise from east, so 90 is south",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
   ],
-  "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/fan.rs::traced#the fan down the fall": {
@@ -81119,11 +81118,11 @@
  },
  "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
   "body": "030b28237589aaa4",
-  "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one",
-  "code": "d887b7f14b355e59",
+  "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one case among several, taken on every hamlet, both ends in, a fall away from the wind or square across it",
+  "code": "9fffcf2cc28cc510",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-03",
-  "note": "(f - w) mod 360 <= 180 with f clockwise from east and w clockwise from north admits exactly the falls downwind or square to the wind (NW gives 315, 0, 45, 90, 135); a share is not rolled, as the recorded deviation says",
+  "note": "the filter keeps falls f with (f - quarter_deg(windward)) mod 360 in [0, 180], but quarter_deg is not in the bundle. The set matches \"fall away from the wind or square across it\" with both ends in only if quarter_deg returns the wind's bearing +90 (315 for NW, giving falls 315 to 135). If it returns the wind's own bearing (225 for NW), the set admits a fall toward the wind and drops one square-across fall. I need quarter_deg's source",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -81131,7 +81130,7 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/water_frame.rs::admitted#the fall to the compass points": {
   "body": "030b28237589aaa4",
@@ -81217,14 +81216,13 @@
   "code": "37db0e050ed3d044",
   "core": "e5cf8474848affce",
   "date": "2026-11-03",
-  "note": "one fall rolled per map unless pinned, the map's declared fall; the drainage bearing is left to plan_site",
+  "note": "the fall is drawn from knob_rng(seed, \"down_deg\") before the knob loop; a pinned fall is not rolled; the flow is left to plan_site",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
   ],
   "verdict": "IN-STEP"
  },
@@ -81251,14 +81249,13 @@
   "code": "95cc0bdc5e1b95ad",
   "core": "c1c72051bf03c46e",
   "date": "2026-11-03",
-  "note": "hands roll_plan the admitted falls; the fall is declared per map, apart from the bearing",
+  "note": "hands admitted() to roll_plan, so the fall is rolled first; the flow is plan_site's",
   "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
-  "research": "42264e7bb9d79cb9",
+  "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
   ],
   "verdict": "IN-STEP"
  }
