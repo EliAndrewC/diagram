@@ -1,1 +1,3 @@
 # Handoff - feature 444 T22, the windward tie recorded on 0031
+## Session W
+- SECTION=0031/how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson - the bullet 'Where does a village's cluster sit?' (anchor research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html#how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson): the windward high margin on every hamlet recorded as a deliberate deviation, new grounds note -8; Evidence comment's deviation list extended; two feature-292 history comments pruned to stay under the 20,000-byte cap (commit 6f196ab4a)
