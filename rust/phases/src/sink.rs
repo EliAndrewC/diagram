@@ -2,7 +2,7 @@
 //! off-map roll, the drain joining the passing brook or run off the map - laid once, every rule asked before anything is written.
 //!
 //! Research:
-//!     where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: "Where the passing brook comes near the collector's outfall, the drain joins it ... where it does not, the drain runs on as a ditch to the edge of the map, or to the pond at the field's foot"
+//!     the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it
 
 use std::collections::HashMap;
 use std::fmt;
@@ -52,8 +52,8 @@ pub struct SinkIn {
     pub drain: Vec<Pt>,
     /// The brook's drawn width (feet).
     pub brook_w: f64,
-    /// The heads of the races taken off the brook (its taps).
-    pub taps: Vec<Pt>,
+    /// The drain's run's drawn width (feet), the collector's own at its outfall.
+    pub run_w: f64,
     /// The resting basins' rings, which no run crosses.
     pub resting: Vec<Vec<Pt>>,
     /// The reeds' width out from the pond's shore (feet; Python's `SINK_FRINGE`, which the pond's bank reads too).
@@ -78,8 +78,6 @@ pub struct Sunk {
     pub reeds: Vec<Pt>,
     /// Where the run joins the brook.
     pub confluence: Option<Pt>,
-    /// The brook as drawn again round a confluence held on a bend (D2), where one was.
-    pub brook_drawn: Option<Vec<Pt>>,
     /// The counters (D7).
     pub counts: HashMap<String, u64>,
 }
@@ -111,6 +109,9 @@ pub fn tally(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
 ///
 /// # Errors
 /// `SinkRefused` where no run the rules allow exists.
+///
+/// Research:
+///     where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: "Where the passing brook comes near the collector's outfall, the drain joins it ... where it does not, the drain runs on as a ditch to the edge of the map, or to the pond at the field's foot"
 pub fn sink(inp: &SinkIn, stations: &mut dyn Stations) -> Result<Option<Sunk>, SinkRefused> {
     let (Some(&out), Some(head)) = (inp.drain.last(), heading(&inp.drain)) else {
         return Ok(None);

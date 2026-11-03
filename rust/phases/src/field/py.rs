@@ -317,10 +317,14 @@ pub fn roll_knob(seed: i64, name: &str, n: u32, weights: Vec<f64>) -> u32 {
     crate::pyrand::roll(seed, name, n, &weights)
 }
 
-/// The comb stage (T16): Python's gathered inputs in, the records out.
+/// The comb stage (T16): Python's gathered inputs in, the records out - and each field's brook as drawn beside its stations,
+/// rounded here where the brook is laid, and the head race's mouth set on it (T26 D2).
 ///
 /// # Errors
 /// `ValueError` naming the rule when a basin or a grave breaks one where it is decided (D7).
+///
+/// Research:
+///     the brook drawn where it is laid - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every corner on its arc (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)
 #[pyfunction]
 #[expect(
     clippy::too_many_arguments,
@@ -371,18 +375,16 @@ pub fn stage_field<'py>(
     let d = PyDict::new(py);
     d.set_item("knobs", out.knobs)?;
     let fields = PyList::empty(py);
-    // THE BROOK DRAWN WHERE IT IS LAID (T26 D2): its bends rounded with its tap - the head race's first point - held, so no stage
-    // after files it a second time; its stations go to Python beside it, the course the ways keep routing against
+    // THE BROOK DRAWN WHERE IT IS LAID (T26 D2): its bends rounded on their arcs, so no stage after files it a second time, and the
+    // head race's mouth - its first point - set on that drawn course; the stations go to Python beside it, the course the ways keep
+    // routing against
     let mut work = 0;
     let mut drawn_pts = 0;
-    for f in &out.fields {
-        let taps: Vec<Pt> = f
-            .channels
-            .first()
-            .and_then(|c| c.pts.first().copied())
-            .into_iter()
-            .collect();
-        let drawn = crate::course::drawn(&f.brook.pts, &taps, &[], w, &mut work);
+    for f in &mut out.fields {
+        let drawn = crate::course::drawn(&f.brook.pts, w, &mut work);
+        if let Some(tap) = f.channels.first_mut().and_then(|c| c.pts.first_mut()) {
+            *tap = crate::course::mouth(*tap, &drawn, &mut work);
+        }
         drawn_pts += drawn.len() as u64;
         fields.append(field_dict(py, f, &drawn)?)?;
     }

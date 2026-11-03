@@ -12,7 +12,7 @@ use super::brook::Stations;
 use super::{sink, SinkIn};
 use crate::field::fan::Pt;
 
-/// The plan's brook as Python holds it, a list of points, each read when the sink first looks at it.
+/// The brook as drawn, the list of points its stream record holds, each read when the sink first looks at it.
 struct PyStations<'a, 'py> {
     list: &'a Bound<'py, PyList>,
 }
@@ -24,7 +24,8 @@ impl Stations for PyStations<'_, '_> {
     fn at(&mut self, i: usize) -> Pt {
         self.list
             .get_item(i)
-            .and_then(|p| p.extract::<Pt>())
+            .and_then(|p| p.extract::<Vec<f64>>())
+            .map(|v| (v[0], v[1]))
             .unwrap_or((f64::NAN, f64::NAN))
     }
 }
@@ -49,7 +50,7 @@ pub fn stage_sink<'py>(
     drain: Vec<Pt>,
     brook: Bound<'py, PyList>,
     brook_w: f64,
-    taps: Vec<Pt>,
+    run_w: f64,
     resting: Vec<Vec<Pt>>,
     reed_ft: f64,
     join_trunk: f64,
@@ -62,7 +63,7 @@ pub fn stage_sink<'py>(
         outline,
         drain,
         brook_w,
-        taps,
+        run_w,
         resting,
         reed_ft,
         join_trunk,
@@ -79,7 +80,6 @@ pub fn stage_sink<'py>(
     d.set_item("pond", s.pond)?;
     d.set_item("reeds", s.reeds)?;
     d.set_item("confluence", s.confluence)?;
-    d.set_item("brook_drawn", s.brook_drawn)?;
     d.set_item("counts", s.counts)?;
     Ok(Some(d))
 }

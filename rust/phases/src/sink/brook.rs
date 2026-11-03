@@ -1,8 +1,8 @@
-//! The brook as the sink reads it (feature 444 T26 D4, D5): its stations stand in order along the fall - the brook falls the
-//! whole way - so the stretch beside a pond or a run is found by bisection, and only the stations read are read.
+//! The brook as the sink reads it (feature 444 T26 D4, D5): the course as drawn, its points in order along the fall, so the
+//! stretch beside a pond or a run is found by bisection, and only the points read are read.
 //!
 //! Research:
-//!     the brook's order - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: water only moves downhill, so a brook's stations fall in order
+//!     the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it
 
 #![expect(
     clippy::many_single_char_names,
@@ -39,28 +39,23 @@ pub const JOIN_TOL_SHARE: f64 = 0.5;
 /// Two courses nearer than this are one course or a junction, not twins (feet).
 ///
 /// Research:
-///     twin band floor - GUESS: 12 ft, the floor of the spacing the reviews measured between side-by-side pairs
+///     twin band floor - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it ... The band and the run are a guess"
 pub const TWIN_LO: f64 = 12.0;
 /// The twins' band's ceiling (feet).
 ///
 /// Research:
-///     twin band ceiling - GUESS: 32 ft, the ceiling of the spacing the reviews measured
+///     twin band ceiling - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it ... The band and the run are a guess"
 pub const TWIN_HI: f64 = 32.0;
 /// Running the same way: within this of the other's bearing (degrees).
 ///
 /// Research:
-///     running the same way - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: within 15 deg of the other's bearing
+///     running the same way - GUESS: research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html says "running the same way" and gives no angle; within 15 deg of the other's bearing is ours
 pub const TWIN_DEG: f64 = 15.0;
 /// Longer than this side by side is a twin (feet).
 ///
 /// Research:
-///     twin run - GUESS: more than 60 ft side by side, a sixth of the shortest delivery
+///     twin run - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "for more than 60 ft past where it leaves ... the run a sixth of the shortest delivery"
 pub const TWIN_RUN: f64 = 60.0;
-/// Near where one course leaves or joins the other, running close is the junction itself (feet).
-///
-/// Research:
-///     junction reach - GUESS: running close within 60 ft of where one course leaves the other is the junction
-pub const TWIN_JOIN: f64 = 60.0;
 /// The twin measure's sampling step along a run (feet).
 ///
 /// Research:
@@ -79,7 +74,10 @@ pub struct Brook<'a> {
 }
 
 impl<'a> Brook<'a> {
-    /// The brook over `src`, falling along `fall` (a unit vector).
+    /// The brook over `src`, falling along `fall` (a unit vector): which way its points run, read from its two ends.
+    ///
+    /// Research:
+    ///     the brook's order - NONE: the field lays its brook a station at a time, each a station further down the fall (`field::brook::brook`), and the drawn course's arcs turn between two falling legs, so its points stand in order along the fall
     pub fn new(src: &'a mut dyn Stations, fall: Pt) -> Self {
         let mut b = Brook {
             src,
@@ -126,12 +124,13 @@ impl<'a> Brook<'a> {
         }
     }
 
-    /// The first station whose key is at least `k`.
-    fn first_from(&mut self, k: f64) -> usize {
+    /// The first station whose key is at least `k` (`above`: past `k`).
+    fn first_from(&mut self, k: f64, above: bool) -> usize {
         let (mut lo, mut hi) = (0, self.len());
         while lo < hi {
             let mid = usize::midpoint(lo, hi);
-            if self.key(mid) < k {
+            let key = self.key(mid);
+            if key < k || (above && key <= k) {
                 lo = mid + 1;
             } else {
                 hi = mid;
@@ -140,14 +139,15 @@ impl<'a> Brook<'a> {
         lo
     }
 
-    /// The segments `(i, i + 1)` of the brook that can reach places along the fall between `lo` and `hi`.
+    /// The segments `(i, i + 1)` of the brook that can reach places along the fall between `lo` and `hi`: from the one ending at or
+    /// past `lo` to the one starting at or before `hi`.
     pub fn span(&mut self, lo: f64, hi: f64) -> std::ops::Range<usize> {
         if self.len() < 2 {
             return 0..0;
         }
         let (a, b) = if self.rising { (lo, hi) } else { (-hi, -lo) };
-        let first = self.first_from(a);
-        let last = self.first_from(b);
+        let first = self.first_from(a, false);
+        let last = self.first_from(b, true);
         first.saturating_sub(1)..last.min(self.len() - 1)
     }
 
@@ -201,10 +201,12 @@ impl<'a> Brook<'a> {
         if run.len() < 2 || self.len() < 2 {
             return false;
         }
+        // an end of the run within the brook's half drawn width is its mouth: a crossing there is the junction, any other a crossing
         let tol = JOIN_TOL_SHARE * w;
-        if self.dist_near(run[0], tol) < tol || self.dist_near(run[run.len() - 1], tol) < tol {
-            return false;
-        }
+        let mouths: Vec<Pt> = [run[0], run[run.len() - 1]]
+            .into_iter()
+            .filter(|&e| self.dist_near(e, tol) < tol)
+            .collect();
         for leg in run.windows(2) {
             let (ua, ub) = (
                 leg[0].0 * self.fall.0 + leg[0].1 * self.fall.1,
@@ -212,7 +214,12 @@ impl<'a> Brook<'a> {
             );
             for i in self.span(ua.min(ub), ua.max(ub)) {
                 let (a, b) = self.seg(i);
-                if proper_cross(leg[0], leg[1], a, b) {
+                if proper_cross(leg[0], leg[1], a, b)
+                    && !mouths.iter().any(|&m| {
+                        seg_dist(m, a, b) < tol
+                            && (dist(m, leg[0]) < 2.0 * tol || dist(m, leg[1]) < 2.0 * tol)
+                    })
+                {
                     return true;
                 }
             }
@@ -221,18 +228,15 @@ impl<'a> Brook<'a> {
     }
 
     /// The longest stretch, in feet, along which `run` runs beside the brook as its twin: within `TWIN_LO`-`TWIN_HI` of it, within
-    /// `TWIN_DEG` of its bearing, past `TWIN_JOIN` of an end of the run that stands on the brook; sampled every `TWIN_STEP`.
+    /// `TWIN_DEG` of its bearing and running the same way (down it, as the run flows from the outfall); sampled every `TWIN_STEP`.
     ///
     /// Research:
-    ///     twin run measure - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: the longest stretch within the band, the same way, past the junction reach
+    ///     twin run measure - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it, running the same way, for more than 60 ft past where it leaves" - the stretch measured from the run's start, with no further reach set aside
     pub fn twin_run(&mut self, run: &[Pt]) -> f64 {
         if run.len() < 2 || self.len() < 2 {
             return 0.0;
         }
-        let total: f64 = run.windows(2).map(|l| dist(l[0], l[1])).sum();
-        let on = |b: &mut Self, p: Pt| b.dist_near(p, TWIN_LO) < TWIN_LO;
-        let (head_on, tail_on) = (on(self, run[0]), on(self, run[run.len() - 1]));
-        let (mut best, mut cur, mut s) = (0.0_f64, 0.0_f64, 0.0_f64);
+        let (mut best, mut cur) = (0.0_f64, 0.0_f64);
         for leg in run.windows(2) {
             let len = dist(leg[0], leg[1]);
             if len <= 0.0 {
@@ -242,9 +246,7 @@ impl<'a> Brook<'a> {
             let mut t = 0.0;
             while t <= len {
                 let p = (leg[0].0 + d.0 * t, leg[0].1 + d.1 * t);
-                let near_join =
-                    (head_on && s + t < TWIN_JOIN) || (tail_on && total - (s + t) < TWIN_JOIN);
-                if !near_join && self.beside(p, d) {
+                if self.beside(p, d) {
                     cur += TWIN_STEP;
                     best = best.max(cur);
                 } else {
@@ -252,11 +254,13 @@ impl<'a> Brook<'a> {
                 }
                 t += TWIN_STEP;
             }
-            s += len;
         }
         best
     }
 
+    /// Research:
+    ///     twin run measure - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it, running the same way"
+    ///
     /// Whether `p`, heading `d`, runs beside the brook: its nearest brook segment within the twins' band and its bearing within
     /// `TWIN_DEG`.
     fn beside(&mut self, p: Pt, d: Pt) -> bool {
@@ -274,7 +278,9 @@ impl<'a> Brook<'a> {
         if !(TWIN_LO..=TWIN_HI).contains(&e) || len <= 0.0 {
             return false;
         }
-        (d.0 * v.0 + d.1 * v.1).abs() / len >= TWIN_DEG.to_radians().cos()
+        // the brook's segment turned to run down the brook, the way its water flows, as the run's does from the outfall
+        let down = if self.rising { 1.0 } else { -1.0 };
+        down * (d.0 * v.0 + d.1 * v.1) / len >= TWIN_DEG.to_radians().cos()
     }
 }
 

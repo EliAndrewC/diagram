@@ -41,7 +41,11 @@ NO_BUILD_FT = 10.0
 """Research: no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box"""
 
 RUN_RECORD_W = 2.5
-"""Research: a drain's record width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 2.5 (the drain's width in its record, read by passing_courses as its water, inside the drain's 1.2 to 5.5 ft)"""
+"""The run's TOPOLOGY record width: `M["channels"]` is the connectivity graph the anchor checks walk, its widths held at a
+hairline so a natural watercourse out-measures a field ditch by a wide margin; the drawn width lives in `M["drawn_channels"]`,
+which `field_channel` records at the collector's outfall width (writing the drawn width here fired two checks on 14 cohort maps).
+
+Research: the run's topology record - CONVENTION: a hairline 2.5 in the connectivity record, the drawn 5.5 ft in `drawn_channels` (research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the drain at 5.5 ft at its outfall)"""
 
 
 def stage_sink(s: Settlement, plan: SitePlan) -> None:
@@ -53,7 +57,6 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.field_channel
         l7r.diagram.settlement.Settlement.pond
         l7r.diagram.settlement.Settlement.marsh
-        l7r.diagram.settlement.Settlement.round_stream
 
     Research:
         where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot, the passing brook, or off the map
@@ -68,7 +71,8 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         raise SinkRefused(f"{plan.spec.name}: a collector beside a dike - the sink's runs are asked of no dike")
     out = None
     if drain is not None:
-        taps = [(float(c["poly"][0][0]), float(c["poly"][0][1])) for c in M.get("channels") or [] if (c.get("frm") or {}).get("kind") == "stream" and c.get("poly")]
+        # the brook as the map draws it - the field's stream record, its bends rounded where it was laid (T26 D2)
+        drawn = next((rec["poly"] for rec in M.get("streams") or [] if rec.get("stations")), [])
         resting = [[(float(x), float(y)) for x, y in r["outline"]] for r in M.get("fallow_patches") or []]
         try:
             out = phases().stage_sink(
@@ -78,9 +82,9 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
                 float(plan.water_flow),
                 plan.envelope,
                 drain,
-                plan.brook,
+                drawn,
                 BROOK_DRAWN_W,
-                taps,
+                chan_px(DRAIN_FT[1], GRAIN),
                 resting,
                 SINK_FRINGE,
                 BROOK_JOIN_TRUNK,
@@ -94,7 +98,11 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
 
 def _write(s: Settlement, plan: SitePlan, out: dict, field: str) -> None:  # type: ignore[type-arg]
     """The records the Rust sink returned, written to the manifest and drawn: the run's record names its `field`, whose
-    collector it continues - a sibling of that field's own plots, as the collector is (the overlap matrix's parents)."""
+    collector it continues - a sibling of that field's own plots, as the collector is (the overlap matrix's parents).
+
+    Research:
+        the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class, at the collector's own outfall width
+        no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); `NO_BUILD_FT` round the pond's box"""
     for k, n in (out.get("counts") or {}).items():
         work_counts.OPS[k] += n
     if out["pond"] is not None:
@@ -113,6 +121,3 @@ def _write(s: Settlement, plan: SitePlan, out: dict, field: str) -> None:  # typ
     plan.sink_brook = run
     if out["confluence"] is not None:
         plan.confluence = tuple(out["confluence"])  # `stage_frame` reserves it: the junction is a feature, and the crop must show it
-    if out["brook_drawn"] is not None:
-        for rec in s.M.get("streams") or []:
-            s.round_stream(rec, out["brook_drawn"])

@@ -8978,18 +8978,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/consts_water.py::BROOK_BEND_WIDTHS#brook's bend radius": {
-  "code": "5652726499dba969",
-  "core": "1eb0a4946e32100e",
-  "date": "2026-10-03",
-  "note": "2.5 widths, as 0054",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_CROSSING_COST_FT#cost of crossing the brook": {
   "code": "9031d792cd6992b7",
   "core": "d9e8735159ac6ec8",
@@ -9021,17 +9009,6 @@
   "note": "a bound sized to the crop margin; plumbing",
   "research": "",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts_water.py::BROOK_MAX_TURN_DEG#brook never doubles back": {
-  "body": "0bf5976b7fa89a1f",
-  "claim": "brook never doubles back - CONVENTION: a map drawing convention - no vertex turns past the cap, so the line reads as one stream; 0054 gives a bend radius of two to three widths and speaks to no loop; no turn over 100 degrees",
-  "code": "6cd7a8332cc45bae",
-  "core": "444f866ae8da7cd0",
-  "date": "2026-10-25",
-  "note": "the cap decides the brook's course on the ground (how sharply it may turn, and that it never doubles back). That is a physical fact about the place, not how it is shown. Label it GUESS (searched: 0054 gives a sweep radius and no turn cap or loop rule)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/consts_water.py::BROOK_SKIRT#brook outside the crop": {
   "body": "ed0c3f4a2a1bb30d",
@@ -9201,17 +9178,6 @@
   "core": "d92abb987fbe7a5d",
   "date": "2026-10-25",
   "note": "no page counts offtakes; 0053's drawing page asks only that canal B feed at least one",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/consts_water.py::POND_SETBACK_LIMIT#tameike set-back limit": {
-  "body": "8bfa61303291eb83",
-  "claim": "tameike set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 300 ft below the outfall",
-  "code": "d4fe1679bdfb5fd8",
-  "core": "aabc3f166a6b0ce5",
-  "date": "2026-10-25",
-  "note": "0060's drawing page states the rule (\"would have to sit far below\") and gives no figure",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -10010,14 +9976,14 @@
  "l7r/diagram/hamletgen/driver.py::_run_stages#its salts, guards and sentinels": {
   "body": "b199adec2501c73f",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (profile print threshold, in seconds)",
-  "code": "3b1e53695ff15267",
-  "core": "af6d53860cbd34f4",
+  "code": "0e6204ced2be3dcf",
+  "core": "99ac01a7bc0625b7",
   "date": "2026-10-25",
   "note": "print threshold",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::baseline_verdict#driving the roll": {
@@ -10725,13 +10691,14 @@
  "l7r/diagram/hamletgen/field_stage.py::_write_field#the comb's records": {
   "body": "a3ffaf61d9327517",
   "claim": "the comb's records - NONE: written from the Rust's; the figures it adds are claimed where they stand (`ROW_FT_DEFAULT`, `WEIR_THICK_FALLBACK_FT`, `DITCH_BANK_FT`, `BROOK_W`)",
-  "code": "5607fe0e4b29acb1",
-  "core": "5dbf40ca37ba1375",
+  "code": "3510f338f0423af8",
+  "core": "30df98cce432f284",
   "date": "2026-11-01",
   "note": "this is writing records, registries and work counts from the Rust's net; its figures are claimed where they are defined",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
@@ -11852,11 +11819,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/frame.py::frame_extras#page frame": {
-  "code": "b0ea2825ddbaa372",
-  "core": "bda67952eae9b1b6",
+  "code": "812e1447a7291636",
+  "core": "c43425794314eb1e",
   "date": "2026-10-03",
   "note": "frame reservations",
+  "pages": {},
   "research": "",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/frame.py::frame_for#page frame": {
@@ -11881,13 +11850,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/frame.py::scatter_frame#page frame": {
-  "code": "dc7be2977ff2f6cd",
-  "core": "7f71407c99d7ca18",
+  "code": "5ce9d95f90832892",
+  "core": "8d9e0d938e041540",
   "date": "2026-10-05",
   "note": "the predicted throw frame, presentation and plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/frame.py::scatter_frame_for#page frame": {
@@ -22065,896 +22035,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/sink.py::BROOK_JOIN_DESCENT#confluence fallen below the outfall": {
-  "body": "de5d69bcf6f2c2f5",
-  "claim": "confluence fallen below the outfall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 20 ft down the fall",
-  "code": "4c49947176cb167a",
-  "core": "212f34fd481113bf",
-  "date": "2026-10-25",
-  "note": "20.0 descent; the page says only that water moves downhill",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::BROOK_JOIN_LEAD#crop lead tolerance": {
-  "body": "d52ceb9e8d57b1b2",
-  "claim": "crop lead tolerance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.3 of the drain's run may lie in the rice as the field's own edge",
-  "code": "005878c61ee92073",
-  "core": "c37f8cc5fea40757",
-  "date": "2026-10-25",
-  "note": "0.3 of the run; no page gives a figure",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::BROOK_JOIN_TRUNK#brook below a confluence": {
-  "code": "74f5844da9f04f48",
-  "core": "d9e8735159ac6ec8",
-  "date": "2026-10-03",
-  "note": "legibility",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::CROP_MARGIN_PX#crop margin": {
-  "code": "edf72dfea81a6447",
-  "core": "8eb43ce07ccbc755",
-  "date": "2026-10-03",
-  "note": "framing (the #: comment above it describes BROOK_JOIN_TRUNK; comments shifted one constant)",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::GATE_FLOW_SPAN#drain plumbing": {
-  "code": "a56449d306fb0134",
-  "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "measuring span",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::JUNCTION_TURN_MAX_DEG#drain junction turn": {
-  "code": "8d1a65c8ec735d06",
-  "core": "ee6cea7981ee7018",
-  "date": "2026-10-05",
-  "note": "55 degrees",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::SINK_FRINGE#reed fringe width": {
-  "body": "d4803ee2a331e3a4",
-  "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
-  "code": "6883e516c9774ddf",
-  "core": "8b791e6a9595beb5",
-  "date": "2026-10-25",
-  "note": "0061 gives no fringe width, only \"even where the fringe is narrow\"",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::SinkRefused#drain plumbing": {
-  "code": "0e587b056d01df2e",
-  "core": "000ff59f78e20f64",
-  "date": "2026-10-03",
-  "note": "type",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::_through_the_crop#drain not through the rice": {
-  "body": "3bf4228fdbd47547",
-  "claim": "drain not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the first 0.3 of the run exempt as the field's edge",
-  "code": "f67a15c61d3f39f0",
-  "core": "c8645b62018c8d51",
-  "date": "2026-10-25",
-  "note": "`lead > BROOK_JOIN_LEAD` refused, then crosses_poly on the rest",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::_through_the_crop#its search steps and tolerances": {
-  "body": "3bf4228fdbd47547",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 20 (samples along the run); 21 (range bound for the same samples)",
-  "code": "1d4c48475348284b",
-  "core": "c8645b62018c8d51",
-  "date": "2026-10-25",
-  "note": "sample count along the route",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#confluence below the outfall": {
-  "code": "1a5555565711518c",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-08",
-  "note": "the confluence must have fallen along the land's fall; 20 ft is a minimum drop chosen within \"heads downhill\"",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#drain joins the passing brook": {
-  "code": "9b32906745c676f1",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-08",
-  "note": "the drain joins the brook where it comes near the outfall, as the drainage \"returned to the river\"",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#join reach": {
-  "body": "276e38244ea4bcd8",
-  "claim": "join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 420 ft from the outfall",
-  "code": "f755d02cb5abfe68",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-25",
-  "note": "reach=420.0; the page says \"comes near\" with no figure",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#not on a corner of the brook": {
-  "code": "5d0682e2b32cb0e4",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-08",
-  "note": "this only keeps a mitred bend from being drawn at the junction, so it is a drawing convention",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#the nearest fallen point, off the crop": {
-  "body": "276e38244ea4bcd8",
-  "claim": "the nearest fallen point, off the crop - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain to the brook never crosses the crop, and the nearest fallen candidate is the confluence",
-  "code": "9c066012b1621f4a",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-25",
-  "note": "nearest found point by d, off the crop; the selection rule is unrecorded",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::brook_join#trunk below the junction": {
-  "code": "61463f9fe9e74451",
-  "core": "78a40e597cdd7908",
-  "date": "2026-10-08",
-  "note": "150 ft of brook on the canvas below the junction is there so the junction can be read, a convention",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::confluence_keeps_the_brook#drain plumbing": {
-  "code": "6696df9a805a0041",
-  "core": "221446c5b6858e61",
-  "date": "2026-10-03",
-  "note": "check",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_admitted#drain plumbing": {
-  "code": "a0e6b23a6ad4c607",
-  "core": "37b4caf8ff756f29",
-  "date": "2026-10-03",
-  "note": "admission",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_heading#drain plumbing": {
-  "code": "6d03c3f45d028df1",
-  "core": "e59d17876226404f",
-  "date": "2026-10-03",
-  "note": "heading",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_outfall#drain plumbing": {
-  "code": "586d54a39fa6118e",
-  "core": "cc88770d0beaf6f3",
-  "date": "2026-10-03",
-  "note": "readback",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_record#its record width": {
-  "body": "1f23aea094b62198",
-  "claim": "its record width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: 2.5 (the drain's width in its record, read by passing_courses as its water, inside the drain's 1.2 to 5.5 ft)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "538215376a895242",
-  "core": "4c1cc454bee4e8e8",
-  "date": "2026-10-25",
-  "note": "2.5 ft is inside the drain's 1.2 to 5.5 ft rung",
-  "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
-  },
-  "research": "65ae107a7028a36f",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_run#a drain is a dug ditch": {
-  "code": "a98b94834da36d11",
-  "core": "4d6614c4663205d1",
-  "date": "2026-10-07",
-  "note": "every sink, whether brook, pond or off the map, draws one drainage-ditch class, matching \"a dug channel that reaches a watercourse, never a brook of its own\"",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423",
-   "0060-field-drains-akusuiro.html": "7b625486db29c64e"
-  },
-  "research": "e331fb05a145b0ad",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
-   "0060-field-drains-akusuiro.html:276d85f705c71036",
-   "0060-field-drains-akusuiro.html:4b3633b28168abb3"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_run#drain width": {
-  "code": "59c879307ec77f24",
-  "core": "4d6614c4663205d1",
-  "date": "2026-10-07",
-  "note": "the run onward is \"the same dug ditch\" and carries the collector's full outfall width (chan_px(DRAIN_FT[1])), as the page draws it",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:59546d4f9be5c411",
-   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drain_run#no no-build corridor on a hamlet": {
-  "code": "7657bfbb9d1a3754",
-  "core": "4d6614c4663205d1",
-  "date": "2026-10-07",
-  "note": "field_channel registers no corridor; the 33 ft strip is the town and city maps' rule, and a hamlet's rule is the marsh and the ground below the drain",
-  "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
-  },
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:03e1139db8b24365",
-   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
-   "0058-ground-too-wet-to-build-on.drawing.html:4250400643e41942",
-   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6",
-   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::drawn_brook#drain plumbing": {
-  "body": "174a52bcf91f4b40",
-  "claim": "drain plumbing - NONE: reading the collector back, records, admissions, spans and the refusal type",
-  "code": "19c98d43df12e827",
-  "core": "3b1259631895413f",
-  "date": "2026-10-31",
-  "note": "reads the brook back through finished_course at the stream heads, using BROOK_DRAWN_W that brook_rules decides; this unit decides nothing physical itself",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::edge_run#drain plumbing": {
-  "code": "325669fb74608d00",
-  "core": "82a27da0cfff4882",
-  "date": "2026-10-03",
-  "note": "distance",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::hull_route#constructed route": {
-  "code": "78c2fbc7086ddb8a",
-  "core": "6c51f6fc7873d7dc",
-  "date": "2026-10-03",
-  "note": "geometry under the rules",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::hull_route#ends at the brook or off the map": {
-  "code": "99e4db5edff06ff4",
-  "core": "6c51f6fc7873d7dc",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::hull_route#hull standoff": {
-  "body": "82f54aeced8122e7",
-  "claim": "hull standoff - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain skirts the field's hull 12 ft off",
-  "code": "a2f413536defedff",
-  "core": "6c51f6fc7873d7dc",
-  "date": "2026-10-25",
-  "note": "convex hull buffer(pad=12.0)",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::hull_route#its salts, guards and sentinels": {
-  "body": "82f54aeced8122e7",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 100000 (ray length sentinel)",
-  "code": "1315c139c4a0de0f",
-  "core": "6c51f6fc7873d7dc",
-  "date": "2026-10-25",
-  "note": "ray length sentinel",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::hull_route#its search steps and tolerances": {
-  "body": "82f54aeced8122e7",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 260 (off-canvas leg length (\"its length is free\")); 40 (cap on lengthening tries); 400 (lengthening step off the canvas)",
-  "code": "11f0ba64d7326815",
-  "core": "6c51f6fc7873d7dc",
-  "date": "2026-10-25",
-  "note": "an off-canvas leg whose length is free",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::join_beside#a twin joins the brook": {
-  "code": "9c2d8315f79108dc",
-  "core": "a13f6d90980e4013",
-  "date": "2026-10-03",
-  "note": "0067: joins the brook; 32 ft band top",
-  "pages": {
-   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
-  },
-  "research": "6c5761492b0d7655",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#bowed ditch": {
-  "body": "84d0dc57d1df3109",
-  "claim": "bowed ditch - CONVENTION",
-  "code": "d0364d4798e8cb1d",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#brook first, then off the frame": {
-  "body": "84d0dc57d1df3109",
-  "claim": "brook first, then off the frame - field-drains-akusuiro.drawing",
-  "code": "681f7f8f5c8214b0",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#its salts, guards and sentinels": {
-  "body": "84d0dc57d1df3109",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 1e+09 (sentinel)",
-  "code": "cac37422e11a405c",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-25",
-  "note": "sentinel",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#its search steps and tolerances": {
-  "body": "84d0dc57d1df3109",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 12 (bearing swings tried (claim: route search is NONE)); 24 (bearing swings tried (claim: route search is NONE)); 40 (how far back up the drain the start may move to sit inside the field); 60 (a search step or candidate the pass ruled with its row); 38 (bearing swings tried (claim: route search is NONE)); 54 (a search step or candidate the pass ruled with its row); 260 (run carried off the canvas); 20 (pond clamped 20 inside the working canvas); 70 (junction distances, first sweep); 110 (junction distances, first sweep); 160 (a search step or candidate the pass ruled with its row); 300 (junction distances, wider sweep); 400 (a search step or candidate the pass ruled with its row); 120 (floor on the run to the edge)",
-  "code": "9c92dbd9506977de",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-25",
-  "note": "swings, back-offs, junction distances and off-canvas runs; no page speaks to them",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#its unstated figures": {
-  "body": "84d0dc57d1df3109",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N5, 2026-10-25) - 0.08 (drain-to-brook bow, as at line 476)",
-  "code": "622620ba24d691a8",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-25",
-  "note": "bow of 0.08 of the run, at most 10",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#no building on the water": {
-  "body": "84d0dc57d1df3109",
-  "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box",
-  "code": "514d8497c6ce29eb",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-25",
-  "note": "no bundled page gives a no-build margin round the water itself; the bank's dry ring is a separate rule",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#off-map route search": {
-  "body": "84d0dc57d1df3109",
-  "claim": "off-map route search - NONE: swings, junction distances and run lengths under route_refusals",
-  "code": "c95e25c7f38b39c5",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#pond area": {
-  "body": "84d0dc57d1df3109",
-  "claim": "pond area - GUESS field-drains-akusuiro.drawing: a drainage sink about 3/100 of its paddy, not 0061's watering pond of two or three tenths",
-  "code": "2b6f3832c9c9fdb5",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "116 x 74 ft radii at 15 households is about 0.62 acre (about 3/100 of about 20 acres of paddy), grown by sqrt(households/15) so the share holds; the drawing page records it as a GUESS",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#pond reference size": {
-  "body": "84d0dc57d1df3109",
-  "claim": "pond reference size - GUESS field-drains-akusuiro.drawing: about 230 by 150 ft at 15 households (116 x 74 ft radii), grown with the hamlet by the square root",
-  "code": "453438479fde9435",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "116 x 74 ft radii (about 232 x 148 ft) at REF_HOUSEHOLDS=15, radius grown by sqrt(households/15) so the area share holds; recorded as a guess (\"about 230 by 150 ft ... grows with the hamlet so that the share stays the same\")",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": {
-  "body": "84d0dc57d1df3109",
-  "claim": "pond's role - field-drains-akusuiro.drawing: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the field's sink, not as a reservoir that waters the paddy",
-  "code": "0317bfafab6f3745",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "the drain ending in its own pond is a GUESS recorded there; meta pond_role is drainage",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe": {
-  "body": "84d0dc57d1df3109",
-  "claim": "reed fringe - reservoir-ponds-tameike.drawing: a fringe of reeds at the shore",
-  "code": "c9ac3815736f62a5",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-18",
-  "note": "a pond_fringe marsh ring at the shore",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
-   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#reed fringe width": {
-  "body": "84d0dc57d1df3109",
-  "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
-  "code": "5ae59f7728fce28e",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-25",
-  "note": "0061 gives reeds at the shore but no width",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::lay_sink#too far below, no pond": {
-  "body": "6a9c3073a3eddb8a",
-  "claim": "too far below, no pond - GUESS field-drains-akusuiro.drawing: a pond that would sit far below the fields sends the drain off the map (how far is pond_seat's set-back limit)",
-  "code": "b4bebfff38b23eef",
-  "core": "10f84713cebcd884",
-  "date": "2026-10-28",
-  "note": "`back > POND_SETBACK_LIMIT` sends the drain off the map, the rule the page states; the page gives no distance, so the limit is a guess",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#its salts, guards and sentinels": {
-  "body": "3583ccc642eab933",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 12 (pi/12 rim step)",
-  "code": "4652d4adfab91ad8",
-  "core": "94d50935cd7774a1",
-  "date": "2026-10-25",
-  "note": "rim angle step",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#its search steps and tolerances": {
-  "body": "3583ccc642eab933",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 24 (rim sample count)",
-  "code": "fc1e09d05b7ea1f3",
-  "core": "94d50935cd7774a1",
-  "date": "2026-10-25",
-  "note": "rim sample count",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_clear_of_crop#tameike clear of the paddy": {
-  "code": "c1bdfeddfddc973c",
-  "core": "94d50935cd7774a1",
-  "date": "2026-10-03",
-  "note": "pond at the field's foot",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_run#bowed ditch": {
-  "code": "7026c1bf6399c625",
-  "core": "f46d0520baebfd4b",
-  "date": "2026-10-03",
-  "note": "drawing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_run#its search steps and tolerances": {
-  "body": "444bc26c134e33b2",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.45 (cubic's handle length, measured to keep bends at or under 36 degrees); 12 (curve sampled at twelfths); 13 (range bound for the same samples)",
-  "code": "af8ae7f2dc82853a",
-  "core": "f46d0520baebfd4b",
-  "date": "2026-10-25",
-  "note": "cubic handle and sample count",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_run#its unstated figures": {
-  "body": "444bc26c134e33b2",
-  "claim": "its unstated figures - GUESS: searched, the record silent (feature 417 T38 pass N5, 2026-10-25) - 0.08 (drain's bow off the chord, 0.08 of the run, at most 10 ft)",
-  "code": "f0037420fba7255d",
-  "core": "f46d0520baebfd4b",
-  "date": "2026-10-25",
-  "note": "the code's min(10, 0.08*dist)",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_run#led round a pond behind": {
-  "code": "49244c858a09a8fc",
-  "core": "f46d0520baebfd4b",
-  "date": "2026-10-03",
-  "note": "drawing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_seat#ditch runs downhill, not over the brook": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "fc8d26d07e12fd9b",
-  "core": "04abaaf8dace495b",
-  "date": "2026-10-05",
-  "note": "runs_downhill and no mid-run brook crossing match the water-only-downhill and no-channel-crosses rules",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317",
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "eba428dbb4714c44",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:34fdf73fd25acb82",
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_seat#pond in a pocket below the fields": {
-  "code": "112fbe902e07fe89",
-  "core": "04abaaf8dace495b",
-  "date": "2026-10-05",
-  "note": "a pond at the field's foot, a recorded guess",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_seat#set-back limit": {
-  "body": "7db1ec424fcfb13e",
-  "claim": "set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); POND_SETBACK_LIMIT",
-  "code": "c4bdc3472b4d9877",
-  "core": "04abaaf8dace495b",
-  "date": "2026-10-25",
-  "note": "the page records the rule (\"far below the fields sends its drain off the map\") but no figure",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_seat#sways across the fall": {
-  "body": "7db1ec424fcfb13e",
-  "claim": "sways across the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.9 and 1.8 long radii",
-  "code": "cf01c79189b1d2e1",
-  "core": "04abaaf8dace495b",
-  "date": "2026-10-25",
-  "note": "sways 0, ±0.9, ±1.8 prx",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_setback#its search steps and tolerances": {
-  "body": "be549c4e4e358c7c",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 14 (step of the walk downslope); 900 (walk's ceiling; the real limit, `POND_SETBACK_LIMIT` 300, is SEARCHED-SILENT (T36 pass P2a)); 24 (rim sample count)",
-  "code": "c9ac84c810ffd503",
-  "core": "f0f615c47b8bcaba",
-  "date": "2026-10-25",
-  "note": "walk step and ceiling; the real limit is held by the caller",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_setback#pond downslope of the outfall": {
-  "code": "76df5c62d2363a42",
-  "core": "f0f615c47b8bcaba",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::pond_setback#set-back margins": {
-  "body": "be549c4e4e358c7c",
-  "claim": "set-back margins - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); at least the rim plus 46 ft, a 12 ft cushion, 12 ft off the brook",
-  "code": "23582190e702f613",
-  "core": "f0f615c47b8bcaba",
-  "date": "2026-10-25",
-  "note": "d starts at pry+46, returns d+12, brook ellipse +12, as claimed",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#brook not crossed mid-run": {
-  "code": "aff1c11e2624d801",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-03",
-  "note": "crosses_mid_run refuses; 0054: \"they join rather than cross\"",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
-  },
-  "research": "34d289056db0221b",
-  "triaged": "2026-10-25",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#dike crossed only at a gap": {
-  "code": "28ca9187eb13a1bd",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-03",
-  "note": "0019 sluices only",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#junction turn": {
-  "code": "fde6b192663237ca",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#not the brook's twin": {
-  "code": "ec361732dd506309",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-03",
-  "note": "0067 60 ft run",
-  "pages": {
-   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
-  },
-  "research": "6c5761492b0d7655",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#not through the rice": {
-  "body": "3c9a1f63c2a03e05",
-  "claim": "not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); no interior vertex or leg in the field",
-  "code": "bb3ed2de35e37f80",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-25",
-  "note": "nothing on the cited pages says where a drain's run onward may go relative to the field",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#runs downhill": {
-  "code": "0736e5ceeb6a955e",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
-   "0060-field-drains-akusuiro.drawing.html:da73e3a8230fe620"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::route_refusals#with the drainage bearing": {
-  "code": "32e8529d2742b600",
-  "core": "286d0c909d8c4a9f",
-  "date": "2026-10-03",
-  "note": "under 90",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::stage_sink#brook rounded": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "e8f3296f024badca",
-  "core": "af57cf7ac143d984",
-  "date": "2026-10-05",
-  "note": "the brook is rounded onto sweeps per the bend rule",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:096deada616e93fb",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::stage_sink#sink before the houses": {
-  "code": "98f2daf0b2261ffd",
-  "core": "af57cf7ac143d984",
-  "date": "2026-10-05",
-  "note": "stage order only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::stage_sink#tameike below the fields": {
-  "code": "2810f76c8a67b45d",
-  "core": "af57cf7ac143d984",
-  "date": "2026-10-05",
-  "note": "the drawing page records a drain ending in its own pond as a GUESS",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/sink.py::stage_sink#where the runoff goes": {
-  "code": "a04d9c622c2781a5",
-  "core": "af57cf7ac143d984",
-  "date": "2026-10-05",
-  "note": "pond at the foot, the passing brook, or off the map",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
-   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
-  ],
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/washing.py::BANK_SHIFTS_FT#a seat along the bank": {
   "code": "c64ccb9cf5c44e7f",
   "core": "60f8e2bfb3f07759",
@@ -23354,232 +22434,6 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#no crossing": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "no crossing - which-way-water-flows-and-how-channels-bend-and-join.drawing: the course crosses no ditch mid-run",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "c22161e8b10caa20",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "crosses_mid_run over every ditch; the page says \"No channel crosses another\"",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:34fdf73fd25acb82",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c13662e06a80966e"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#no fold-back": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "no fold-back - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25) - 0054 gives a bend radius of two to three widths and no turn cap or loop rule; no vertex turns past BROOK_MAX_TURN_DEG (100 deg), a natural brook does not double back",
-  "code": "7d05cbb238855eda",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "the 100 deg turn cap is a guess; 0054 gives only the bend radius and the sharp-turn floor, no cap on turning",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#no level run": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "no level run - CONVENTION: no run held level along the frame, in any view",
-  "code": "df3ca54e04393862",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "level_runs_any_view takes only the canvas and the box, not plan.fall, so it is screen geometry against the frame, a convention",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#no ruled run": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "no ruled run - which-way-water-flows-and-how-channels-bend-and-join: a natural stream rarely runs straight more than about ten times its own width - the straightest run on the canvas within RULED_MAX_FT, ten drawn widths (`ruled_excess`)",
-  "code": "7eea07bff04e12ee",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "fixing the cap at ten widths fits \"rarely more than about ten times its own width\" for natural water",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
-  },
-  "research": "34d289056db0221b",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:860152613169f808"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#no screen axis": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "no screen axis - CONVENTION: no segment along a screen axis, the tap run excepted",
-  "code": "981cef5e84d2cbb1",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "axis_segments with the sluice excepted is purely how the course sits on the screen",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#off-map ends": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "off-map ends - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the source and the mouth both off the canvas",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "b33889008bf11e4b",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "the brook comes down off the high ground and runs on down the flank \"to leave the map\"; both ends are held off the canvas",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#out of the field": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "out of the field - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the course never enters the field's envelope",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "46991e32ec55b21b",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "course_enters against the envelope; \"the fan of paddies is cut away from the brook\"",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill": {
-  "body": "d00c33dd2e1546e9",
-  "claim": "runs downhill - which-way-water-flows-and-how-channels-bend-and-join.drawing: below the tap every step runs down the fall or level, none climbing (strictly under 90)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "7d9a1b46e491d716",
-  "core": "a0828b23a4d1b8f8",
-  "date": "2026-10-31",
-  "note": "monotone_down below the tap against plan.fall; the bound is a strict \"under 90\"",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::FILLET_MIN_TURN_DEG#turn left sharp": {
-  "code": "824e7c125901adfb",
-  "core": "232d3ac8ac8b4b8c",
-  "date": "2026-10-03",
-  "note": "matches 0054",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::JOIN_ON_COURSE#plumbing": {
-  "code": "18aa903fa4ae780b",
-  "core": "7276802b5dc226e3",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::course_corner#plumbing": {
-  "code": "deef5d467a372cbd",
-  "core": "c0217ad13333bb65",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::drawn_course#plumbing": {
-  "code": "56d15f493aa753ff",
-  "core": "94b49dac122073ea",
-  "date": "2026-10-08",
-  "note": "only puts the joins in as vertices and calls the rounding; decides nothing itself",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-31",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::finished_course#bends rounded": {
-  "code": "3a08f1a40f7a0c8a",
-  "core": "a2ef36e6f978051e",
-  "date": "2026-10-03",
-  "note": "matches 0054",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::finished_course#tap not rounded": {
-  "code": "406612f5463d77dc",
-  "core": "a2ef36e6f978051e",
-  "date": "2026-10-03",
-  "note": "matches 0054",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::join_vertices#plumbing": {
-  "code": "55da3f3dc0850ea6",
-  "core": "2238082f70eb95a5",
-  "date": "2026-10-08",
-  "note": "vertex insertion within a 1 px tolerance is plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::round_the_brooks#its fallback brook width": {
-  "body": "f22667f2aa806ff5",
-  "claim": "its fallback brook width - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a brook whose record has no `w` taken at `BROOK_DRAWN_W`, the page's brook about 5.25 ft",
-  "code": "088a07f10b43a0e0",
-  "core": "e0fe6fe16281097c",
-  "date": "2026-11-01",
-  "note": "a brook with no `w` falls back to BROOK_DRAWN_W=5.25, which is the page's \"brook about 5.25 ft wide\"",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:5fcdeacb667b42dd"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_course.py::round_the_brooks#plumbing": {
-  "code": "bcbf646ceee6e85f",
-  "core": "e0fe6fe16281097c",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/brook_rules.py::AXIS_EPS_DEG#screen-axis segment": {
   "code": "eabb4357cb186a6c",
   "core": "e15b81875840cd6f",
@@ -23610,61 +22464,12 @@
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_rules.py::CROSSING_END_TOL#a joiner meets the water": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "b53d6420e4c569af",
-  "core": "f7c11829689361d0",
-  "date": "2026-10-08",
-  "note": "half the brook's drawn width from its line is what \"inside the other's drawn width\" measures, and it is measured across the channel",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:faa05993c68d1ef6"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::LEVEL_MAX_RUN_FT#level run length": {
-  "code": "3444fd0bd1d12f7a",
-  "core": "d9e8735159ac6ec8",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::LEVEL_NEAR_FT#level run near the frame": {
-  "code": "2d4eba43908c63e3",
-  "core": "3c46ea823e395ddc",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/brook_rules.py::LEVEL_TOL_FT#level run tolerance": {
   "code": "9ad7af4d6ee5ff5d",
   "core": "eab5cc0df856d783",
   "date": "2026-10-03",
   "note": "purely how it is shown",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::RULED_MAX_FT#no ruled run": {
-  "body": "6c81612599aa8ae3",
-  "claim": "no ruled run - which-way-water-flows-and-how-channels-bend-and-join: a natural stream rarely runs straight more than about ten times its own width - ten of the brook's drawn widths, 52.5 ft",
-  "code": "97b32ae85507923a",
-  "core": "6d2c44f96b1c5ba8",
-  "date": "2026-10-31",
-  "note": "10 x the brook's width, \"Rarely more than about ten times its own width\", natural water",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
-  },
-  "research": "34d289056db0221b",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:860152613169f808"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::RULED_MIN_LEN_FT#straight run floor": {
@@ -23703,278 +22508,12 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_rules.py::WetLines#course measurement": {
-  "body": "6a4095669d6b365b",
-  "claim": "course measurement - NONE: turns, chords, distances and view bounds read off the drawn course; each rule is claimed on its own unit",
-  "code": "e9767d2150c0da1f",
-  "core": "a12521a524a6da33",
-  "date": "2026-10-31",
-  "note": "plumbing: an exact segment index, decides nothing physical",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::WetLines.__init__#course measurement": {
-  "body": "72a29200b6b5ce9d",
-  "claim": "course measurement - NONE: turns, chords, distances and view bounds read off the drawn course; each rule is claimed on its own unit",
-  "code": "e8dd85589fd5d440",
-  "core": "0ccdfb0eea81c75f",
-  "date": "2026-10-31",
-  "note": "plumbing: files the segments by their widened boxes",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::WetLines.hit#course measurement": {
-  "body": "cab27f73c964baee",
-  "claim": "course measurement - NONE: turns, chords, distances and view bounds read off the drawn course; each rule is claimed on its own unit",
-  "code": "6c0eec4e0a5098eb",
-  "core": "dcdcfbb7feaf8770",
-  "date": "2026-10-31",
-  "note": "plumbing: a box prefilter, then the exact quad_hits_seg",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/brook_rules.py::_clip_arcs#course measurement": {
   "code": "82761b109c8a6e9c",
   "core": "36e4e5984e71953d",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::_dist_to_course#course measurement": {
-  "code": "166d0119145b0b50",
-  "core": "590e14dd793925a4",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-27",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::_proper_cross#plumbing": {
-  "body": "77996a161dd8c8bf",
-  "claim": "plumbing - NONE: segment geometry (restored by feature 435 T02 from 427 T09's inlining)",
-  "code": "1f94cc175d30e645",
-  "core": "5528d66cf43f5f7e",
-  "date": "2026-10-27",
-  "note": "an orientation test for whether two segments properly cross; it decides nothing about the place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::axis_segments#screen-axis segment": {
-  "code": "6552bcb2fef87d56",
-  "core": "a765148f313aea5a",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::course_enters#brook skirts the field": {
-  "body": "f6edd976241f771d",
-  "claim": "brook skirts the field - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: no interior vertex inside a field ring",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "93070ace0b59d13a",
-  "core": "7a980f557c318236",
-  "date": "2026-11-01",
-  "note": "the predicate flags any interior vertex inside a field ring, which matches the page's brook that \"passes the head of its fan of paddies on one side\" and runs on down the flank, the fan \"cut away from the brook\"",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#a joiner's width": {
-  "code": "65dd0a82b8c03b0a",
-  "core": "09ca23aeef78ce4c",
-  "date": "2026-10-08",
-  "note": "the cited questions say nothing on a default hairline width; GUESS is right",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-27",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#either end makes the junction": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ee0b0d2dfbdaf9f6",
-  "core": "09ca23aeef78ce4c",
-  "date": "2026-10-08",
-  "note": "both channels' ends are tested against the other's half drawn width",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#no crossing mid-run": {
-  "code": "f156777055176212",
-  "core": "09ca23aeef78ce4c",
-  "date": "2026-10-08",
-  "note": "a crossing away from a confluence is flagged; the research says ditches join rather than cross",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
-  },
-  "research": "34d289056db0221b",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:a3aafd75f942612b"
-  ],
-  "triaged": "2026-10-27",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#course measurement": {
-  "code": "f4d7581c95457917",
-  "core": "12b2b059428954d0",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::ends_off_canvas#both ends off the map": {
-  "code": "b5db132eb5688e9e",
-  "core": "9979fb12715c1a72",
-  "date": "2026-10-03",
-  "note": "matches 0059",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::hem_on_water#hem off water": {
-  "code": "49831b2fb5a14160",
-  "core": "dd44ab103f717db8",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
-  },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::level_runs_along_frame#level run along the frame": {
-  "code": "6dcee796fee83529",
-  "core": "ade5a938ae64e251",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::level_runs_any_view#course measurement": {
-  "code": "f5b6c5c3a9e4ab91",
-  "core": "ca4f6f38195963af",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::max_turn_deg#course measurement": {
-  "code": "11f16b3969d277bb",
-  "core": "71be4d3c06eb7ad1",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::monotone_down#its search steps and tolerances": {
-  "body": "11b4d61c4e11e46e",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 0.01 (rounding slack in the \"runs downhill\" test)",
-  "code": "275884bc7ebf5fd1",
-  "core": "8e52411d6248162b",
-  "date": "2026-10-25",
-  "note": "rounding slack",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::monotone_down#runs downhill": {
-  "code": "2b26fd07cd181f1c",
-  "core": "8e52411d6248162b",
-  "date": "2026-10-03",
-  "note": "matches 0054",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::reserved_box#its bund margin": {
-  "body": "8f74a00a86d3b618",
-  "claim": "its bund margin - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 3 (the hem-drop band's 3 ft beyond the brook's half width)",
-  "code": "3b2987b322793e39",
-  "core": "c96d6731c55bdeb6",
-  "date": "2026-10-31",
-  "note": "the 3.0 ft added to the half-width in WetLines is not answered by the cited pages (the 5 ft berm is for supply canals, not the brook's hem drop)",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::reserved_box#its figures against the drawn brook": {
-  "body": "8f74a00a86d3b618",
-  "claim": "its figures against the drawn brook - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the brook's drawn width, BROOK_DRAWN_W, in the keep-off band and at the frame's stations alike",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "1655c6f7ca6b310c",
-  "core": "c96d6731c55bdeb6",
-  "date": "2026-10-31",
-  "note": "BROOK_DRAWN_W is used in both the keep-off band and the half-width at the stations",
-  "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
-  },
-  "research": "65ae107a7028a36f",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::reserved_box#the view's reach": {
-  "body": "8f74a00a86d3b618",
-  "claim": "the view's reach - CONVENTION: the brook kept in the frame BROOK_FRAME_MARGIN plus a foot round the field and its hem, how much of the brook a view shows",
-  "code": "4ad93c03deef12d7",
-  "core": "c96d6731c55bdeb6",
-  "date": "2026-10-31",
-  "note": "BROOK_FRAME_MARGIN + 1 decides how much of the brook a view frames, which is framing only",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::ruled_excess#no ruled run": {
-  "body": "d4316be2c7e0c51b",
-  "claim": "no ruled run - which-way-water-flows-and-how-channels-bend-and-join: a natural stream rarely runs straight more than about ten times its own width - the straightest run on the canvas held to RULED_MAX_FT",
-  "code": "cab02882f94b9866",
-  "core": "208c8ab7f518943d",
-  "date": "2026-10-31",
-  "note": "holds the straightest run on the canvas to RULED_MAX_FT (ten widths), which binds every view",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
-  },
-  "research": "34d289056db0221b",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:860152613169f808"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::straightest_chord#straight run": {
@@ -24001,33 +22540,9 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_rules.py::tap_index#course measurement": {
-  "code": "9cfa763ae91597ef",
-  "core": "33ba4b0973a38f13",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::to_edge#course measurement": {
-  "code": "5127716f6ff4a389",
-  "core": "ab98fc39da20de57",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/water/brook_rules.py::turn_deg#course measurement": {
   "code": "a602487f552da526",
   "core": "51754a0498a2c77f",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/water/brook_rules.py::without_straight_joins#course measurement": {
-  "code": "dbc3d8b8bf564fa7",
-  "core": "7e76e1c5cbb15367",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
@@ -53013,39 +51528,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/outfall.py::DOWNHILL_FRACTION#downhill share": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "2ed4bb691a49fd6e",
-  "core": "cebcf669e4894abd",
-  "date": "2026-10-08",
-  "note": "0.0 with a strict > is the strict \"under 90\" degrees off the fall",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/outfall.py::runs_downhill#water runs downhill": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "42878b8b1de799bd",
-  "core": "d936f611ea6962b0",
-  "date": "2026-10-08",
-  "note": "the net displacement must have a positive component down the fall, i.e. strictly under 90 degrees off it",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/paddy.py::PADDY_REST#rest forms": {
   "code": "1f283ffd514d808a",
   "core": "0a0dfb06d365f9b0",
@@ -61658,14 +60140,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/dikes.py::CREST_REACH#plumbing": {
-  "code": "e7f0f562061003bd",
-  "core": "7a33414bed51de7b",
-  "date": "2026-10-03",
-  "note": "tolerance",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/land/dikes.py::DIKE_GAP_HW#cut width": {
   "body": "25ac765379fddbf8",
   "claim": "cut width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 15 px either side of a sluice or crossing, a 30 px gap",
@@ -62069,44 +60543,12 @@
   "triaged": "2026-10-28",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/dikes.py::GAP_REACH#plumbing": {
-  "code": "a72d2dfab7ca805f",
-  "core": "c0101826cceee8b7",
-  "date": "2026-10-03",
-  "note": "tolerance",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/land/dikes.py::_IRREGULARITY_AIM#plumbing": {
   "code": "68463792c50b2eea",
   "core": "f5794fd909ddf404",
   "date": "2026-10-03",
   "note": "rounding slack",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/dikes.py::breaches_any_dike#water crosses only at sluices": {
-  "code": "2149107cc29da249",
-  "core": "848b81f06883584f",
-  "date": "2026-10-03",
-  "note": "per 0019",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/dikes.py::course_breaches#water crosses only at sluices": {
-  "code": "fac837b3986783b9",
-  "core": "a0be63bb8c330d37",
-  "date": "2026-10-03",
-  "note": "per 0019",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::dike_band#dike width": {
@@ -63283,35 +61725,6 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/wet.py::pond_fringe_ring#its search steps and tolerances": {
-  "body": "d43fbeadb9e6d82f",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 16 (ring vertex count)",
-  "code": "52c11f838fc19ad4",
-  "core": "f2c11c7ec4b5a862",
-  "date": "2026-10-25",
-  "note": "vertex count",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/land/wet.py::pond_fringe_ring#pond reed fringe": {
-  "body": "d43fbeadb9e6d82f",
-  "claim": "pond reed fringe - reservoir-ponds-tameike.drawing: reeds round the shore at the caller's margin",
-  "code": "9ac9289e78a24298",
-  "core": "f2c11c7ec4b5a862",
-  "date": "2026-10-18",
-  "note": "a ring of reeds round the pond's shore, at the margin the caller passes in",
-  "pages": {
-   "0061-reservoir-ponds-tameike.drawing.html": "c22de534b95132ef"
-  },
-  "research": "5b102e334372ecb3",
-  "rests": [
-   "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
-   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#its salts, guards and sentinels": {
@@ -73019,8 +71432,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#bed and sheen": {
-  "code": "231a57c57c7d6628",
-  "core": "5f9d09c473e7d4e1",
+  "code": "75c18a1056c7948b",
+  "core": "c95c63d62ddf4fce",
   "date": "2026-10-07",
   "note": "ink only",
   "pages": {},
@@ -73028,13 +71441,13 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:1c4ab4cdec854bfe"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#every course declares its flow": {
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "5fc1caddcb7613d6",
-  "core": "5f9d09c473e7d4e1",
+  "code": "306dda53cc6a4593",
+  "core": "c95c63d62ddf4fce",
   "date": "2026-10-07",
   "note": "upstream-first, flow_deg recorded",
   "pages": {
@@ -73046,40 +71459,40 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#houses kept off the stream": {
   "body": "5cfff42c7d82c6c4",
   "claim": "houses kept off the stream - GUESS: searched, the record silent (feature 417 T36 pass P2b, 2026-10-25); a no-build corridor of max(30, half-width + 20) px",
-  "code": "7bdee858f7577137",
-  "core": "5f9d09c473e7d4e1",
+  "code": "8b41e9cfba62830a",
+  "core": "c95c63d62ddf4fce",
   "date": "2026-10-25",
   "note": "`max(30, width / 2 + 20)` as claimed; the record is silent",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#its drawn sizes": {
   "body": "5cfff42c7d82c6c4",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 0.35 (sheen stroke)",
-  "code": "0667be3203f86f0d",
-  "core": "5f9d09c473e7d4e1",
+  "code": "841fb59e434a4138",
+  "core": "c95c63d62ddf4fce",
   "date": "2026-10-25",
   "note": "sheen stroke",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": {
   "body": "0648b56c1fd32982",
   "claim": "stream width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths: the page's GUESS of about 1.6 m (~5.25 ft) for a village brook, drawn 5.25 ft at the map's scale by default",
-  "code": "eb4bb748c4773dee",
-  "core": "5f9d09c473e7d4e1",
+  "code": "da2720ce916e8ca6",
+  "core": "c95c63d62ddf4fce",
   "date": "2026-11-01",
   "note": "default self.px(5.25) is the page's own recorded figure for a village brook, \"about 1.6 m (~5.25 ft)\", and the claim states it is the page's GUESS; a single fixed degree is allowed",
   "pages": {
@@ -73089,7 +71502,7 @@
   "rests": [
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:af463e655acdc98f"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/water.py::channel_class#watercourse records": {
@@ -74609,38 +73022,6 @@
   "core": "c0101826cceee8b7",
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/twins.py::_STEP_FT#twin geometry": {
-  "code": "9bc1d9e03a39ae2d",
-  "core": "f7b8474fd73a4ae7",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/twins.py::_apart#twin geometry": {
-  "code": "d5ee7b35e3672f1c",
-  "core": "74e7795536862a50",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/twins.py::_nearest#twin geometry": {
-  "code": "28337bbb82960745",
-  "core": "de739700d6f12aac",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/twins.py::_samples#twin geometry": {
-  "code": "a2b718cf32464fd2",
-  "core": "6fd77fda4c598963",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -79665,14 +78046,14 @@
  "rust/phases/src/field/py.rs::field_dict#the seam": {
   "body": "81143356a1e01c52",
   "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
-  "code": "73eb739a425379c4",
-  "core": "5abac16efa06e4cd",
+  "code": "5ec04b8a9a2bc42f",
+  "core": "ba5598b615f64940",
   "date": "2026-11-01",
   "note": "copies built records into a dict and decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::polder_drawn#the polder's plots drawn apart": {
@@ -79778,6 +78159,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -80270,14 +78652,14 @@
  "rust/phases/src/lib.rs::l7r_phases#phases module": {
   "body": "be4d7b6e0be329ad",
   "claim": "phases module - NONE: the extension's own machinery; each phase carries its own claims",
-  "code": "97f8954f87c92323",
-  "core": "764978fe4c087145",
+  "code": "488c205fcb8c7d1d",
+  "core": "d55edcac79578994",
   "date": "2026-10-30",
   "note": "pymodule registration of two phase functions only; no physical or rendering decision",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-31",
+  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::K#the draws": {

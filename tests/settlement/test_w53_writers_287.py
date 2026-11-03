@@ -81,25 +81,6 @@ def test_a_stream_a_pond_and_a_sluice_the_matrix_forbids_are_refused_before_any_
     assert len(s.M["streams"]) == 1 and s.M["pond"] == [800.0, 800.0, 60.0, 40.0] and len(s.M["sluice_gates"]) == 1
 
 
-def test_a_brook_is_rounded_only_onto_ground_the_registry_admits_and_is_recorded_as_rounded() -> None:
-    """`round_stream` reshaped a brook in place and left the index on the course as first drawn until the stage's end, where
-    the backstop re-recorded it unasked (9 of 25 census brooks). It asks first, and records what it wrote."""
-    s = _hamlet()
-    s.stream([(0.0, 500.0), (500.0, 500.0), (500.0, 1000.0)], width=7)
-    rec = s.M["streams"][0]
-    s.M["dry_plots"].append({"poly": _square(520.0, 440.0, 560.0, 480.0)})
-    with pytest.raises(OverlapRefused):
-        s.round_stream(rec, [(0.0, 500.0), (540.0, 460.0), (500.0, 1000.0)])
-    assert rec["poly"] == [[0.0, 500.0], [500.0, 500.0], [500.0, 1000.0]] and "stations" not in rec, "nothing of the refused course written"
-    corner = {"poly": _square(496.0, 496.0, 504.0, 504.0)}
-    assert not s.admits("dry_plots", corner)
-    s.round_stream(rec, [(0.0, 500.0), (480.0, 520.0), (500.0, 1000.0)])
-    assert rec["poly"][1] == [480.0, 520.0] and s.admits("dry_plots", corner), "the registry holds the rounded course"
-    stray = {"poly": [[0.0, 0.0], [10.0, 0.0], [20.0, 0.0]], "w": 7}  # a record on no manifest list is not recorded by its rounding
-    s.round_stream(stray, [(0.0, 0.0), (10.0, 1.0), (20.0, 0.0)])
-    assert s.admits("dry_plots", {"poly": _square(5.0, -5.0, 15.0, 5.0)}), "the stray is not on the map"
-
-
 def _net(channels: list[dict[str, Any]], dry: list[list[tuple[float, float]]]) -> dict[str, Any]:
     plots = [{"poly": p, "fill": "#C8B070", "furrow": "#A08850", "theta": 0.0, "crop": "barley"} for p in dry]
     return {"channels": channels, "dry_plots": plots, "plots": []}

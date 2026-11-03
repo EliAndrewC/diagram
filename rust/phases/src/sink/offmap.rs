@@ -3,8 +3,7 @@
 //! does, constructed round the field's hull.
 //!
 //! Research:
-//!     the drain joins the passing brook - research/questions/0060-field-drains-akusuiro.drawing.html: "Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below"
-//!     else off the map - research/questions/0060-field-drains-akusuiro.drawing.html: "where it does not, the drain runs on as a ditch to the edge of the map"
+//!     the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it
 
 #![expect(
     clippy::many_single_char_names,
@@ -16,7 +15,6 @@ use std::collections::HashMap;
 use super::brook::{Brook, TWIN_HI, TWIN_RUN};
 use super::crop::{off_resting, Crop};
 use super::{tally, SinkIn, SinkRefused, Sunk};
-use crate::course::{on_bend, BEND_WIDTHS};
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, hull};
 
@@ -113,16 +111,15 @@ fn keeps(
         && crop.run_clear(run, anchored, tests)
         && !brook.crossed(run, inp.brook_w)
         && brook.twin_run(run) <= TWIN_RUN
-        && off_resting(run, &inp.resting, anchored, tests)
+        && off_resting(run, &inp.resting, inp.run_w, anchored, tests)
 }
 
-/// The confluence: the nearest point on the brook within `JOIN_REACH` of the outfall, fallen `JOIN_DESCENT` below it, with
-/// the trunk's length (`SinkIn::join_trunk`) of brook on the canvas below it, reached without crossing the crop past the run's lead, and on a straight
-/// stretch - at least a bend's cut-back from any bend, so holding it leaves the brook as drawn (D2).
+/// The confluence: the nearest point on the brook as drawn within `JOIN_REACH` of the outfall, fallen `JOIN_DESCENT` below it,
+/// with the trunk's length (`SinkIn::join_trunk`) of brook on the canvas below it, reached without crossing the crop past the run's
+/// lead - a point of the drawn course, so the drain's mouth lies in it (D2).
 ///
 /// Research:
 ///     the nearest fallen point, off the crop - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the nearest fallen candidate is the confluence
-///     not on a bend - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "no watercourse on them has a mitered corner"
 fn confluence(
     inp: &SinkIn,
     crop: &Crop,
@@ -131,20 +128,10 @@ fn confluence(
     tests: &mut u64,
 ) -> Option<Pt> {
     let f = inp.fall;
-    let cut = BEND_WIDTHS * inp.brook_w;
     let mut best: Option<(f64, Pt)> = None;
     for i in brook.span(u(out, f) + JOIN_DESCENT, u(out, f) + JOIN_REACH) {
         let (a, b) = brook.seg(i);
         let run = dist(a, b);
-        let bends = |brook: &mut Brook, k: usize| {
-            k > 0
-                && k + 1 < brook.len()
-                && on_bend(
-                    brook.at(k),
-                    &[brook.at(k - 1), brook.at(k), brook.at(k + 1)],
-                )
-        };
-        let (bend_a, bend_b) = (bends(brook, i), bends(brook, i + 1));
         let steps = (run / JOIN_STRIDE).floor();
         let mut s = 0.0;
         while s <= steps {
@@ -159,11 +146,7 @@ fn confluence(
             {
                 continue;
             }
-            if (bend_a && t * run < cut)
-                || (bend_b && (1.0 - t) * run < cut)
-                || !trunk_below(inp, brook, i, q, tests)
-                || through_crop(crop, out, q, tests)
-            {
+            if !trunk_below(inp, brook, i, q, tests) || through_crop(crop, out, q, tests) {
                 continue;
             }
             best = Some((d, q));
@@ -173,6 +156,9 @@ fn confluence(
 }
 
 /// Whether the brook runs on the trunk's length on the canvas below `q` on segment `i`, walked down from it until it has.
+///
+/// Research:
+///     brook below a confluence - CONVENTION: the trunk's length on the canvas, so the junction reads
 fn trunk_below(inp: &SinkIn, brook: &mut Brook, i: usize, q: Pt, tests: &mut u64) -> bool {
     let mut len = 0.0;
     let mut from = q;
@@ -217,6 +203,9 @@ pub fn on_canvas(a: Pt, b: Pt, canvas: Pt) -> f64 {
 
 /// Whether a straight run from the outfall to `q` goes through the rice past its lead: the first `JOIN_LEAD` of it, where it
 /// leaves the field, is the field's own edge.
+///
+/// Research:
+///     not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the run leaves the field within its lead and never re-enters it
 fn through_crop(crop: &Crop, out: Pt, q: Pt, tests: &mut u64) -> bool {
     let at = |t: f64| (out.0 + (q.0 - out.0) * t, out.1 + (q.1 - out.1) * t);
     let lead = (0..=20)
@@ -229,6 +218,9 @@ fn through_crop(crop: &Crop, out: Pt, q: Pt, tests: &mut u64) -> bool {
 /// The runs searched, nearest first: bearings swung round the fall and round the collector's heading, at the near junction
 /// distances and then the wide; the junction on the bisector of the heading and the bearing, so the run turns half the angle
 /// twice; the run carried past the canvas edge along its bearing.
+///
+/// Research:
+///     the run's form and order - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); a lead on the bisector, then straight off the map, the fall's bearings before the heading's and the near junctions before the wide
 fn searched(inp: &SinkIn, out: Pt, head: Pt) -> Vec<Vec<Pt>> {
     let fall_deg = inp.fall.1.atan2(inp.fall.0).to_degrees();
     let head_deg = head.1.atan2(head.0).to_degrees();
@@ -275,6 +267,9 @@ fn searched(inp: &SinkIn, out: Pt, head: Pt) -> Vec<Vec<Pt>> {
 /// `HULL_PAD` (a turn of 0 at the junction), round it on the side the land falls to, and from its lowest point straight down the
 /// fall off the canvas, lengthened until the whole run descends within 90 degrees of the drainage bearing. The hull is convex, so
 /// no step round it enters the field. Where it meets the brook, the run ends there, a confluence.
+///
+/// Research:
+///     constructed route - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); round the field's hull to its lowest point, then down the fall, lengthened 400 ft a try
 fn constructed(
     inp: &SinkIn,
     crop: &Crop,
@@ -296,7 +291,7 @@ fn constructed(
             .unwrap_or((0, ring[0]))
     } else {
         (0..n)
-            .map(|i| (i, nearest_on(out, ring[i], ring[(i + 1) % n])))
+            .map(|i| (i, super::crop::nearest_on(out, ring[i], ring[(i + 1) % n])))
             .min_by(|a, b| dist(a.1, out).total_cmp(&dist(b.1, out)))
             .unwrap_or((0, ring[0]))
     };
@@ -350,6 +345,9 @@ fn constructed(
 
 /// The first place, leg by leg, where `route` meets the brook (its leg's index and the point), past half a foot from the leg's
 /// start.
+///
+/// Research:
+///     a drain meeting the brook joins it - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: ditches join rather than cross; research/questions/0060-field-drains-akusuiro.drawing.html: the drain joins the passing brook
 fn meets_brook(brook: &mut Brook, route: &[Pt]) -> Option<(usize, Pt)> {
     let f = brook.fall();
     for (i, leg) in route.windows(2).enumerate() {
@@ -403,21 +401,6 @@ fn beside(brook: &mut Brook, route: &[Pt], tests: &mut u64) -> (Vec<Pt>, &'stati
     (head, "stream")
 }
 
-/// Whether `q` lies within `cut` of a bend of the brook - where the rounding moves the course off it.
-fn near_bend(brook: &mut Brook, q: Pt, cut: f64) -> bool {
-    let f = brook.fall();
-    let r = brook.span(u(q, f) - cut, u(q, f) + cut);
-    (r.start..=r.end).any(|k| {
-        k > 0
-            && k + 1 < brook.len()
-            && dist(brook.at(k), q) < cut
-            && on_bend(
-                brook.at(k),
-                &[brook.at(k - 1), brook.at(k), brook.at(k + 1)],
-            )
-    })
-}
-
 /// Where segment `a0-a1` meets segment `b0-b1`, if they cross.
 fn hit(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> Option<Pt> {
     let r = (a1.0 - a0.0, a1.1 - a0.1);
@@ -429,14 +412,6 @@ fn hit(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> Option<Pt> {
     let v = (qp.0 * r.1 - qp.1 * r.0) / den;
     ((0.0..=1.0).contains(&t) && (0.0..=1.0).contains(&v))
         .then_some((a0.0 + r.0 * t, a0.1 + r.1 * t))
-}
-
-/// The point of segment `a-b` nearest `p`.
-fn nearest_on(p: Pt, a: Pt, b: Pt) -> Pt {
-    let (vx, vy) = (b.0 - a.0, b.1 - a.1);
-    let l2 = (vx * vx + vy * vy).max(1e-12);
-    let t = (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0);
-    (a.0 + vx * t, a.1 + vy * t)
 }
 
 /// A convex ring grown outward by `pad`: each corner moved out along its bisector so each edge stands `pad` off the old one (a
@@ -465,6 +440,10 @@ fn grown(ring: &[Pt], pad: f64) -> Vec<Pt> {
 ///
 /// # Errors
 /// `SinkRefused` where the constructed route breaks a rule.
+///
+/// Research:
+///     the drain joins the passing brook - research/questions/0060-field-drains-akusuiro.drawing.html: "Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below"
+///     else off the map - research/questions/0060-field-drains-akusuiro.drawing.html: "where it does not, the drain runs on as a ditch to the edge of the map"
 pub fn lay(
     inp: &SinkIn,
     crop: &Crop,
@@ -485,7 +464,13 @@ pub fn lay(
             ),
             q,
         ];
-        if off_resting(&run, &inp.resting, crop.holds(out, &mut tests), &mut tests) {
+        if off_resting(
+            &run,
+            &inp.resting,
+            inp.run_w,
+            crop.holds(out, &mut tests),
+            &mut tests,
+        ) {
             tally(counts, "test@offmap", tests);
             tally(counts, "write@run", 3);
             return Ok(Sunk {
@@ -521,30 +506,18 @@ pub fn lay(
     tally(counts, "candidate@offmap_run", tried);
     let (run, to) = constructed(inp, crop, brook, start, head, &mut tests);
     tally(counts, "test@offmap", tests);
-    if !off_resting(&run, &inp.resting, anchored, &mut tests) {
+    if !off_resting(&run, &inp.resting, inp.run_w, anchored, &mut tests) {
         return Err(SinkRefused(
             "the drain's constructed route crosses a resting basin".to_owned(),
         ));
     }
     tally(counts, "write@run", run.len() as u64);
     let confluence = (to == "stream").then(|| run[run.len() - 1]);
-    // a meeting the construction found on a bend's cut-back moves the brook as drawn round the held mouth (D2): the brook is drawn
-    // again with it held - the one branch that re-draws it, and only here
-    let brook_drawn = confluence
-        .filter(|&q| near_bend(brook, q, BEND_WIDTHS * inp.brook_w))
-        .map(|q| {
-            let stations: Vec<Pt> = (0..brook.len()).map(|k| brook.at(k)).collect();
-            let mut work = 0;
-            let drawn = crate::course::drawn(&stations, &inp.taps, &[q], inp.brook_w, &mut work);
-            tally(counts, "write@brook_drawn", work);
-            drawn
-        });
     Ok(Sunk {
         form: "offmap",
         run,
         to,
         confluence,
-        brook_drawn,
         ..Sunk::default()
     })
 }

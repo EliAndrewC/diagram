@@ -2,8 +2,7 @@
 //! collector's outfall where its rim clears the crop and the brook, its ditch run downhill from the outfall, its reeds at the shore.
 //!
 //! Research:
-//!     a pond at the field's foot - research/questions/0060-field-drains-akusuiro.drawing.html: "about two maps in three lay a pond at the field's foot"
-//!     a drain ending in a pond of its own - GUESS: research/questions/0060-field-drains-akusuiro.drawing.html: "A drain that ends in a pond of its own is our own guess"
+//!     the pond's branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it
 
 #![expect(
     clippy::many_single_char_names,
@@ -51,25 +50,28 @@ pub const SWAYS: [f64; 5] = [0.0, -0.9, 0.9, -1.8, 1.8];
 /// How far inside the canvas the pond's rim keeps (feet).
 ///
 /// Research:
-///     the pond on the canvas - NONE: the canvas's own margin, 20 ft
+///     the pond on the canvas - CONVENTION: a pond shown whole, 20 ft inside the canvas's edge
 pub const CANVAS_INSET: f64 = 20.0;
 /// The reeds' ring's points.
 ///
 /// Research:
-///     the ring's points - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25); 16
+///     the ring's points - NONE: drawing resolution, sixteen points
 pub const REED_PTS: u32 = 16;
 /// The ditch's bow off its chord, a share of the run, and its most (feet).
 ///
 /// Research:
-///     bowed ditch - CONVENTION: up to 10 ft off the chord, 0.08 of the run, so it reads as dug earth
+///     bowed ditch - GUESS: no source could speak to it, a value of ours; up to 10 ft off the chord, 0.08 of the run, a dug ditch's course
 pub const BOW: (f64, f64) = (0.08, 10.0);
 /// Past this off the collector's heading the ditch is led round to the pond on a curve, not run straight back (degrees).
 ///
 /// Research:
-///     led round a pond behind - CONVENTION: a cubic past 100 degrees off the heading, its handle 0.45 of the run, sampled at twelfths
+///     led round a pond behind - GUESS: no source could speak to it, a value of ours; a cubic past 100 degrees off the heading, its handles 0.45 and 0.225 of the run, sampled at twelfths
 pub const LED_ROUND_DEG: f64 = 100.0;
 
-/// The pond's radii: its area `SHARE` of the paddy, its shape `ASPECT`.
+/// The pond's radii: its area `SHARE` of the paddy, its shape `ASPECT`, its long axis across the page.
+///
+/// Research:
+///     the pond's long axis - GUESS: no source could speak to it, a value of ours; east to west on the page
 #[must_use]
 pub fn radii(area: f64) -> (f64, f64) {
     let ry = (SHARE * area / (std::f64::consts::PI * ASPECT)).sqrt();
@@ -78,6 +80,9 @@ pub fn radii(area: f64) -> (f64, f64) {
 
 /// The ditch from the outfall `out` to the pond's center `c`: bowed off the chord where the pond lies ahead of the collector's
 /// `head`ing, led round on a cubic where it lies more than `LED_ROUND_DEG` off it.
+///
+/// Research:
+///     the ditch to the pond - research/questions/0060-field-drains-akusuiro.drawing.html: the drain "runs on as a ditch ... to the pond at the field's foot", its course `BOW`'s and `LED_ROUND_DEG`'s
 #[must_use]
 pub fn ditch(out: Pt, head: Pt, c: Pt, fall: Pt) -> Vec<Pt> {
     let (tx, ty) = (c.0 - out.0, c.1 - out.1);
@@ -157,6 +162,10 @@ fn fits(
 /// The pond and its ditch, seated nearest first: on the drainage line below the outfall, stepped on by the pond's half-length
 /// along the fall, then a step across the fall each way (`SWAYS`), until a seat fits and its ditch runs downhill clear of the
 /// brook and the resting basins; None past `SETBACK_LIMIT` at every sway.
+///
+/// Research:
+///     a pond at the field's foot - research/questions/0060-field-drains-akusuiro.drawing.html: "about two maps in three lay a pond at the field's foot"
+///     a drain ending in a pond of its own - GUESS: research/questions/0060-field-drains-akusuiro.drawing.html: "A drain that ends in a pond of its own is our own guess"
 pub fn lay(
     inp: &SinkIn,
     crop: &Crop,
@@ -185,7 +194,7 @@ pub fn lay(
                 let run = ditch(out, head, c, f);
                 tests += 1;
                 if !brook.crossed(&run, inp.brook_w)
-                    && off_resting(&run, &inp.resting, anchored, &mut tests)
+                    && off_resting(&run, &inp.resting, inp.run_w, anchored, &mut tests)
                 {
                     found = Some((c, run));
                     break 'sways;

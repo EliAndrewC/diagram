@@ -2,8 +2,7 @@
 //! outfall kept - the only ones a pond seated below the outfall can meet.
 //!
 //! Research:
-//!     the crop the sink keeps clear of - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
-//!     not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); no interior vertex or leg of a run in the field
+//!     the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it
 
 use std::collections::HashMap;
 
@@ -50,6 +49,9 @@ impl Crop {
     /// Whether the pond centered at `c` with radii `rx`, `ry` lies clear of the crop: no low segment meets its ellipse, and its
     /// center is outside the outline (a ray cast down the fall crosses the outline an even number of times - every segment it can
     /// cross reaches below the center, so below the outfall, so is low).
+    ///
+    /// Research:
+    ///     the pond clear of the crop - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
     pub fn pond_clear(&self, c: Pt, rx: f64, ry: f64, tests: &mut u64) -> bool {
         let mut odd = false;
         let cu = c.0 * self.fall.0 + c.1 * self.fall.1;
@@ -76,6 +78,9 @@ impl Crop {
 
     /// Whether the run's legs keep out of the rice: no leg crossing the outline and no interior vertex inside it - the first leg
     /// exempt where `anchored`, the run starting inside the field at the collector's own outfall. `tests` counts the work.
+    ///
+    /// Research:
+    ///     not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); no interior vertex or leg of a run in the field
     pub fn run_clear(&self, run: &[Pt], anchored: bool, tests: &mut u64) -> bool {
         let n = self.ring.len();
         for (k, leg) in run.windows(2).enumerate() {
@@ -111,12 +116,12 @@ pub fn meets_ellipse(a: Pt, b: Pt, c: Pt, rx: f64, ry: f64) -> bool {
     seg_dist((0.0, 0.0), s(a), s(b)) <= 1.0
 }
 
-/// How far a run's center line keeps off a resting basin's edge (feet): the run's record half its 2.5 ft width, and the 0.2 the
-/// registry asks a stroked candidate past it.
+/// How far past its drawn half-width a run keeps off a resting basin's edge (feet): the 0.2 the registry asks a stroked candidate
+/// past its width, as a placer stricter by a hair.
 ///
 /// Research:
-///     a run's record width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the drain's record 2.5 ft, inside the drain's 1.2 to 5.5 ft
-pub const RUN_CLEAR: f64 = 1.25 + 0.2;
+///     a placer stricter by a hair - NONE: the registry's rounding margin, 0.2 ft
+pub const RUN_MARGIN: f64 = 0.2;
 
 /// The distance between segments `a0-a1` and `b0-b1` (0 where they cross).
 fn seg_seg(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> f64 {
@@ -129,21 +134,38 @@ fn seg_seg(a0: Pt, a1: Pt, b0: Pt, b1: Pt) -> f64 {
         .min(seg_dist(b1, a0, a1))
 }
 
-/// Whether a run's legs keep off every resting basin: no leg within `RUN_CLEAR` of a basin's ring, no point of the run past its
+/// Whether a run's legs keep off every resting basin: no leg within its drawn half-width (`run_w`) and `RUN_MARGIN` of a basin's ring, no point of the run past its
 /// first inside one (the overlap matrix: a drain never runs across a resting basin) - the first leg exempt where `anchored`, the
 /// run starting inside the field: that leg is the collector's own continuation through its field, a sibling of the field's own
 /// plots as the collector is (its record names the field).
 ///
 /// Research:
-///     no drain across a resting basin - GUESS: no source could speak to it, a value of ours; a resting basin is one of its field's plots (research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: resting plots scattered through the fields), kept as the crop is kept
+///     no drain across a resting basin - GUESS: no source could speak to it, a value of ours; a resting basin is one of its field's plots (research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: resting plots scattered through the fields), kept clear by the run's drawn half-width and a margin, its first leg exempt as the collector's own
 #[must_use]
-pub fn off_resting(run: &[Pt], resting: &[Vec<Pt>], anchored: bool, tests: &mut u64) -> bool {
+pub fn off_resting(
+    run: &[Pt],
+    resting: &[Vec<Pt>],
+    run_w: f64,
+    anchored: bool,
+    tests: &mut u64,
+) -> bool {
     let skip = usize::from(anchored);
+    let clear = run_w / 2.0 + RUN_MARGIN;
     resting.iter().all(|ring| {
         let n = ring.len();
         *tests += (n * run.len()) as u64;
-        !run.windows(2).skip(skip).any(|leg| {
-            (0..n).any(|i| seg_seg(leg[0], leg[1], ring[i], ring[(i + 1) % n]) < RUN_CLEAR)
-        }) && !run.iter().skip(1 + skip).any(|&p| inside(p, ring))
+        !run.windows(2)
+            .skip(skip)
+            .any(|leg| (0..n).any(|i| seg_seg(leg[0], leg[1], ring[i], ring[(i + 1) % n]) < clear))
+            && !run.iter().skip(1 + skip).any(|&p| inside(p, ring))
     })
+}
+
+/// The point of segment `a-b` nearest `p`.
+#[must_use]
+pub fn nearest_on(p: Pt, a: Pt, b: Pt) -> Pt {
+    let (vx, vy) = (b.0 - a.0, b.1 - a.1);
+    let l2 = (vx * vx + vy * vy).max(1e-12);
+    let t = (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0);
+    (a.0 + vx * t, a.1 + vy * t)
 }

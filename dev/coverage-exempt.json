@@ -324,13 +324,6 @@
    "why": "the old Python of pond_stock (feature 444's phase), deleted at its Rust landing"
   },
   {
-   "path": "l7r/diagram/hamletgen/sink.py",
-   "stages": [
-    "sink"
-   ],
-   "why": "the old Python of sink (feature 444's phase), deleted at its Rust landing"
-  },
-  {
    "path": "l7r/diagram/hamletgen/washing.py",
    "stages": [
     "washing"
@@ -346,13 +339,6 @@
   },
   {
    "path": "l7r/diagram/hamletgen/water/brook.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/brook_course.py",
    "stages": [
     "waterward"
    ],
@@ -707,11 +693,6 @@
   },
   {
    "path": "l7r/diagram/settlement/fields/landuse.py",
-   "stages": [],
-   "why": "the whole-engine replacement: only slated code imports it, so the port leaves it dead"
-  },
-  {
-   "path": "l7r/diagram/settlement/fields/outfall.py",
    "stages": [],
    "why": "the whole-engine replacement: only slated code imports it, so the port leaves it dead"
   },

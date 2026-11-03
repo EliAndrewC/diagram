@@ -597,33 +597,6 @@ def test_dropping_the_field_spur_is_always_recorded_and_a_passes_own_reason_is_k
     assert s.M["meta"]["field_spur_swept"] == "isolated - the pass's own words", "a pass that said why keeps its own reason"
 
 
-def test_a_drawn_stream_is_redrawn_on_the_rounded_course_it_is_handed():
-    """`round_stream` (settlement-review of Sawada, feature 261; feature 287): a stream already drawn is redrawn on the rounded
-    course it is handed - the record, the deferred bed and sheen, and its corridor together - and keeps its first course."""
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    s.stream([(100.0, 100.0), (400.0, 100.0), (400.0, 400.0), (700.0, 400.0)], width=9)
-    rec = s.M["streams"][-1]
-    rounded = [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0), (700.0, 400.0)]
-    s.round_stream(rec, rounded)
-    assert [tuple(p) for p in rec["poly"]] == rounded, "the record is the course handed in"
-    assert any(list(c[0]) == rounded for c in s.corridors), "and so is the stream's no-build corridor"
-    assert rec["stations"] == [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0], [700.0, 400.0]], "the course as first drawn is kept"
-    entry = next(e for e in s.water if e["rec"] is rec)
-    assert "400.0,100.0" not in entry["bed"] and "400.0,100.0" not in entry["sheen"], "the ink follows the record"
-
-
-def test_a_rounded_stream_also_redraws_a_late_or_clipped_entry():
-    """`round_stream`: a late-block entry with no sheen and a pond clip follows the rounded course too."""
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="T", scale="hamlet", ftpx=1)
-    rec = {"poly": [[100.0, 100.0], [400.0, 100.0], [400.0, 400.0]], "w": 9}
-    s.late_water.append({"bed": '<path d="M100,100 L400,100 L400,400"/>', "sheen": None, "rec": rec, "clip": {"pts": []}})
-    s.round_stream(rec, [(100.0, 100.0), (380.0, 100.0), (400.0, 120.0), (400.0, 400.0)])
-    entry = s.late_water[-1]
-    assert "L400,100 " not in entry["bed"] and entry["sheen"] is None and entry["clip"]["pts"] and entry["clip"]["pts"][0] == (100.0, 100.0)
-
-
 def test_a_lane_ending_behind_a_house_has_reached_it() -> None:
     """0246 (feature 328 wave 67): an end within 12 ft of the steading's built ground reaches the house on ANY side - the
     dooryard-only rule of feature 287's water W57 (Kuwabata's lane 5, 11 ft behind house 1's back wall, judged not arrived)

@@ -10,7 +10,7 @@ Split from the 1,130-line `water_ways.py` by feature 173 (constitution Principle
 |---|---|
 | `_helpers.py` (214) | the module-level helpers the mixins and the tests share - `junction_floor`, `fan_rival`, `_pull_back` and the two angle/length measures |
 | `focal.py` (68) | the focal features a settlement is built around - the mill, the secondary shrine, and the block they reserve |
-| `water.py` (219) | the water bodies themselves: `stream`, `round_stream`, `channel`, and the flow record every one of them writes |
+| `water.py` (219) | the water bodies themselves: `stream` (its record keeping the course as first laid as `stations`, feature 444 T26), `channel`, and the flow record every one of them writes |
 | `clipping.py` (262) | clipping a way or a channel to water it must not cross - pond, moat, river and stream, plus `field_channel` |
 | `lanes.py` (349) | lanes: drawing one (`lane`), re-inking it (`reink_lane`), and `trim_lane_stubs`, the pass that pulls back the ends that serve nothing |
 | `kido.py` (194) | the kido barrier - its rectangles (`_kido_rects`), the barrier itself (`kido`), and the mesh that places them all (`kido_mesh`) |

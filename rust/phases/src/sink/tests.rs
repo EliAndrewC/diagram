@@ -1,9 +1,14 @@
 //! The sink's own tests (feature 444 T26): each rule the stage keeps, on a field small enough to read.
 
+#![expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+
 use super::brook::{proper_cross, Brook};
 use super::crop::{meets_ellipse, off_resting, Crop};
 use super::*;
-use crate::course::{drawn, fillet, on_bend};
+use crate::course::{drawn, mouth};
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {
     vec![(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
@@ -19,7 +24,7 @@ fn inp(pond: bool) -> SinkIn {
         outline: square(1000.0, 800.0, 2600.0, 2000.0),
         drain: vec![(1100.0, 1900.0), (1600.0, 1950.0), (2000.0, 1990.0)],
         brook_w: 5.25,
-        taps: vec![],
+        run_w: 5.5,
         resting: vec![],
         reed_ft: 44.0,
         join_trunk: 150.0,
@@ -82,7 +87,6 @@ fn the_drain_joins_a_brook_running_on_within_reach_below_the_outfall() {
     let q = s.confluence.unwrap();
     assert!(q.1 >= 1990.0 + offmap::JOIN_DESCENT);
     assert!(dist(q, (2000.0, 1990.0)) <= offmap::JOIN_REACH);
-    assert!(s.brook_drawn.is_none());
 }
 
 #[test]
@@ -151,30 +155,35 @@ fn a_run_across_a_resting_basin_or_beside_its_edge_is_refused() {
     assert!(!off_resting(
         &[(-50.0, 50.0), (150.0, 50.0)],
         &[ring.clone()],
+        2.5,
         false,
         &mut t
     ));
     assert!(!off_resting(
         &[(-50.0, 101.0), (150.0, 101.0)],
         &[ring.clone()],
+        2.5,
         false,
         &mut t
     ));
     assert!(off_resting(
         &[(-50.0, 110.0), (150.0, 110.0)],
         &[ring.clone()],
+        2.5,
         false,
         &mut t
     ));
     assert!(off_resting(
         &[(50.0, 50.0), (50.0, 150.0), (50.0, 300.0)],
         &[ring.clone()],
+        2.5,
         true,
         &mut t
     ));
     assert!(!off_resting(
         &[(50.0, 50.0), (60.0, 60.0), (70.0, 70.0)],
         &[ring],
+        2.5,
         true,
         &mut t
     ));
@@ -220,31 +229,27 @@ fn a_pond_behind_the_collector_is_reached_by_a_curve() {
 }
 
 #[test]
-fn the_brook_as_drawn_rounds_its_bends_and_holds_its_taps() {
+fn the_brook_as_drawn_rounds_its_bends_on_arcs_and_a_mouth_lies_on_it() {
     let course = vec![(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (600.0, 300.0)];
     let mut t = 0;
-    let plain = drawn(&course, &[], &[], 5.25, &mut t);
-    assert!(plain.len() > course.len());
-    assert!(!plain.contains(&(300.0, 0.0)));
-    let tapped = drawn(&course, &[(300.0, 0.0)], &[], 5.25, &mut t);
-    assert!(tapped.contains(&(300.0, 0.0)));
-    let mid = drawn(&course, &[(150.0, 0.5)], &[(300.0, 0.0)], 5.25, &mut t);
-    assert!(mid.iter().any(|p| dist(*p, (150.0, 0.0)) < 1e-9));
-    assert!(!mid.contains(&(300.0, 0.0)));
-    assert_eq!(
-        drawn(&course[..2], &[(5.0, 0.0)], &[], 5.25, &mut t).len(),
-        3
-    );
-    assert_eq!(drawn(&[], &[(0.0, 0.0)], &[], 5.25, &mut t).len(), 0);
-    assert_eq!(drawn(&course, &[(50.0, 80.0)], &[], 5.25, &mut t), plain);
-    assert_eq!(fillet(&course[..2], 13.0, &mut t).len(), 2);
+    let d = drawn(&course, 5.25, &mut t);
+    assert!(d.len() > course.len() && !d.contains(&(300.0, 0.0)));
+    // the first bend's arc: every point the radius from its center, 2.5 widths
+    let r = crate::course::BEND_WIDTHS * 5.25;
+    let c = (300.0 - r, r);
+    assert!(d[1..=7].iter().all(|p| (dist(*p, c) - r).abs() < 1e-6));
+    let m = mouth((300.0, 0.0), &d, &mut t);
+    assert!(dist(m, (300.0, 0.0)) < r && dist(m, (300.0, 0.0)) > 0.0);
+    assert_eq!(drawn(&course[..2], 5.25, &mut t).len(), 2);
     let repeated = vec![(0.0, 0.0), (10.0, 0.0), (10.0, 0.0), (20.0, 5.0)];
-    assert_eq!(fillet(&repeated, 3.0, &mut t).len(), 2);
+    assert_eq!(drawn(&repeated, 3.0, &mut t).len(), 2);
     assert_eq!(
-        fillet(&[(0.0, 0.0), (10.0, 0.0), (20.0, 0.5)], 3.0, &mut t).len(),
+        drawn(&[(0.0, 0.0), (10.0, 0.0), (20.0, 0.5)], 3.0, &mut t).len(),
         3
     );
-    assert!(on_bend((300.0, 0.0), &course) && !on_bend((150.0, 0.0), &course));
+    // a hairpin's tangent capped at half its legs
+    let pin = drawn(&[(0.0, 0.0), (100.0, 0.0), (0.0, 10.0)], 50.0, &mut t);
+    assert!(pin[1..pin.len() - 1].iter().all(|p| p.0 >= 45.0));
 }
 
 #[test]
@@ -305,7 +310,6 @@ fn a_constructed_route_down_beside_the_brook_joins_it_and_one_met_on_a_bend_redr
     ];
     let s = sink(&uphill(), &mut bent).unwrap().unwrap();
     assert_eq!(s.to, "stream");
-    assert!(s.brook_drawn.is_some());
 }
 
 #[test]
@@ -394,4 +398,19 @@ fn a_run_ending_on_the_brook_is_no_twin_near_its_mouth() {
     let mut src: Vec<Pt> = (0..=50).map(|k| (700.0, 20.0 * f64::from(k))).collect();
     let mut br = Brook::new(&mut src, (0.0, 1.0));
     assert!(br.twin_run(&[(720.0, 100.0), (720.0, 900.0), (700.0, 950.0)]) > brook::TWIN_RUN);
+}
+
+#[test]
+fn a_crossing_at_the_runs_own_mouth_is_its_junction_and_a_twin_reads_the_brooks_own_order() {
+    let mut src: Vec<Pt> = (0..=50).map(|k| (700.0, 20.0 * f64::from(k))).collect();
+    let mut br = Brook::new(&mut src, (0.0, 1.0));
+    assert!(!br.crossed(&[(600.0, 310.0), (701.0, 310.0)], 5.25));
+    assert!(br.crossed(&[(600.0, 310.0), (800.0, 310.0)], 5.25));
+    assert!(br.twin_run(&[(720.0, 900.0), (720.0, 100.0)]) < 1.0);
+    let mut up: Vec<Pt> = (0..=50)
+        .rev()
+        .map(|k| (700.0, 20.0 * f64::from(k)))
+        .collect();
+    let mut br = Brook::new(&mut up, (0.0, 1.0));
+    assert!(br.twin_run(&[(720.0, 100.0), (720.0, 900.0)]) > brook::TWIN_RUN);
 }

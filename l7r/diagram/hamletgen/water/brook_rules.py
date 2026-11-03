@@ -1,5 +1,5 @@
 """THE BROOK'S RULES, one predicate each (feature 287, M1, water:W01-W11) - lifted out of the pool and gate tests, read by the
-brook's placer (`brook.py`, `feed_brook`), by the sink's route search (`sink.py`) and by the tests alike, so a rule a
+brook's placer (`brook.py`, `feed_brook`) and by the tests alike, so a rule a
 placer decides and the rule a test asserts are one function. Split from `brook.py` when the placer's repair took that
 file past the 1,000-line bar (constitution X clause 13). See `CLAUDE.md` in this directory.
 

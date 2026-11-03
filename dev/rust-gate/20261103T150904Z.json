@@ -1,0 +1,467 @@
+{
+ "rust_stages": [
+  "water_frame",
+  "field",
+  "sink"
+ ],
+ "start": 854693,
+ "seeds": [
+  {
+   "seed": 854693,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854694,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854695,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854696,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854697,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854698,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854699,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854700,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854701,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854702,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854703,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854704,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854705,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854706,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854707,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854708,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854709,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854710,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854711,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854712,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854713,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854714,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854715,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854716,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854717,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854718,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854719,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854720,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854721,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854722,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854723,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854724,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854725,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854726,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854727,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854728,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854729,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854730,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854731,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854732,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854733,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854734,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854735,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854736,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854737,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854738,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854739,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854740,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854741,
+   "households": 11,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "one",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854742,
+   "households": 18,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854743,
+   "households": 14,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "one",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854744,
+   "households": 10,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854745,
+   "households": 17,
+   "pins": {
+    "farm_water": "channel",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 854746,
+   "households": 13,
+   "pins": {
+    "farm_water": "well",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  }
+ ],
+ "replays": [],
+ "failing": 0,
+ "engine": "45310535dd449ffec27e0a4731d1db0b46adba84815e19be35998e53870098ed"
+}

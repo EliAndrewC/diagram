@@ -167,7 +167,7 @@ class FieldDrawingMixin:
         while the shore rim still shows and the mouths stay clean; the inner highlight is a sheen.
 
         ASKED BEFORE ANYTHING IS DRAWN (feature 287, water W53): its placer has walked its alternatives (the sink's pond
-        falls back to an off-map run, `hamletgen/sink.py`), so a pond the matrix still forbids is refused by name here.
+        falls back to an off-map run, the Rust sink `rust/phases/src/sink/`), so a pond the matrix still forbids is refused by name here.
 
         Research:
             pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
