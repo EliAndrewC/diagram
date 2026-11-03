@@ -1,0 +1,21 @@
+OVER - `stage_sink` → `_write` → `Settlement.pond_reeds` (`drawn_ground` and `KeepoutGrid.rings` over the whole `self.field_polys`): the stage counts 919 ops at 40 against a budget of 291 (3.16x) and 1,107 at 80 against 380 (2.91x), past the twice-the-budget ceiling (582 / 760).
+
+**1. Counters against budget.** Mean ops are 764 / 919 / 1,107 at 20 / 40 / 80 households. The budget is 291 at 40 and 380 at 80, raised on two SOUND verdicts (`budget.json` holds both `first` and `second`). Even twice the raised figure is exceeded, and twice `first` (298 at 40) far more so. The Rust `sink()` alone counts about 320 at 40 (`read@outline` 96, `test@brook` 88, `read@brook` 66, `test@pond_seat` 44, writes 22), about 1.1x the budget. The roughly 600 above that is the Python write side after Rust returns:
+- **The reeds (the main excess).** `pond_reeds` has `pt_test@pond_reeds` about 228, plus `pt_test@KeepoutGrid.rings` about 146 and the `KeepoutGrid.shape` / `Standing.pieces` counters at about 60. That is about 435, or 1.5x the whole budget on its own. `pond_reeds` (wet.py:509-518) hands the full field outline to both `drawn_ground` and `KeepoutGrid.rings` to mask a 16-point reed ring. Rust's `Crop::read` already read that same outline once, so it is scanned three times, and it is the input that grows (49 → 68 → 96 → 135 points from 10 to 80). That is a repeated scan, not work the contract owes. `pond_reeds` already fetches the dry plots and water through `Standing.pieces` by box; the field is the one keep-out it does not.
+- **The ditch.** `field_channel` and its `_water` / `Standing` registration (`write@field_channel` 42, `Standing.extents` 40, `conflicts` 35, `bins` 21, ribbon 8) come to about 150.
+- **The brook (second tier, a note).** `read@brook` + `test@brook` come to about 155 for one pond seat. `fits`, `crossed` and `dist_near` each run their own `span()` bisections.
+
+**2. Inner loops (S5).** Every loop over a growing set in the stage has a counter: `Crop::read`, `pond_clear` and `holds_low` over `low`, `off_resting` (n x run), `run_clear`, `crop.holds`, `trunk_below`, `confluence`'s stride walk, `_trees_for`'s cells and items, `RingIndex`, and `PointGrid.near`. Three notes, none changing the verdict:
+- `KeepoutGrid._trees_for` counts shapely's buffer and `union_all` at 2 per shape, not per vertex. A 96-point field ring is undercounted there, which only adds to the excess.
+- The thin Python's `resting` gather over `fallow_patches` and PyO3's conversion of those rings have no counter.
+- `_clipped_to_open_ground` is not in the bundle, so I could not read it.
+
+**3. Repair (S4).** `placed@Standing.record` is 2 and no `dropped@` or `moved@` appears on any roll. `pond_reeds`' `marsh_dropped` branches (wet.py:500-502, 511-513) never fired. `_clip_to_pond` trims the drawn mouth to the pond's rim, while `M["channels"]` keeps the Rust run, so it is drawing, not re-seating. `pond::lay` falling back to `offmap::lay` happens before anything is placed.
+
+**4. Growth (S6).** The fitted exponent is 0.267, against the budget's 0.34 and the 1.15 limit. It holds.
+
+**Notes on the bundle.**
+- All 16 rolls took the pond branch (`write@pond` 3 everywhere, no `test@offmap`), so `offmap::lay` is unexercised. Its `confluence` runs `through_crop` (up to 21 whole-ring `holds` plus a `run_clear`) for each candidate sample along 420 ft of brook. That cost is bounded by the reach but scales with the outline, and this sample does not measure it.
+- `chains.txt` holds only a call-count summary from a different ad-hoc run (about 119k calls against counts.json's 3.4k), not caller chains. The chain above is traced from the code.
+
+Files: /tmp/l7r-check/work-budget-audit-sink/counts.json, /tmp/l7r-check/work-budget-audit-sink/budget.json, /tmp/l7r-check/work-budget-audit-sink/code/l7r__diagram__settlement__land__wet.py, /tmp/l7r-check/work-budget-audit-sink/code/l7r__diagram__hamletgen__sink_stage.py, /tmp/l7r-check/work-budget-audit-sink/code/rust__phases__src__sink__crop.rs, /tmp/l7r-check/work-budget-audit-sink/code/l7r__diagram__settlement___geom__indexes.py

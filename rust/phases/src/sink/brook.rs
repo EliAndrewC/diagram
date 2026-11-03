@@ -39,12 +39,12 @@ pub const JOIN_TOL_SHARE: f64 = 0.5;
 /// Two courses nearer than this are one course or a junction, not twins (feet).
 ///
 /// Research:
-///     twin band floor - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it ... The band and the run are a guess"
+///     twin band floor - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it" - the floor of the band, which the page records as a guess
 pub const TWIN_LO: f64 = 12.0;
 /// The twins' band's ceiling (feet).
 ///
 /// Research:
-///     twin band ceiling - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it ... The band and the run are a guess"
+///     twin band ceiling - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "within about 12 to 32 ft of it" - the ceiling of the band, which the page records as a guess
 pub const TWIN_HI: f64 = 32.0;
 /// Running the same way: within this of the other's bearing (degrees).
 ///
@@ -54,7 +54,7 @@ pub const TWIN_DEG: f64 = 15.0;
 /// Longer than this side by side is a twin (feet).
 ///
 /// Research:
-///     twin run - GUESS research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "for more than 60 ft past where it leaves ... the run a sixth of the shortest delivery"
+///     twin run - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: "for more than 60 ft past where it leaves" - the run, which the page records as a guess, a sixth of the shortest delivery
 pub const TWIN_RUN: f64 = 60.0;
 /// The twin measure's sampling step along a run (feet).
 ///

@@ -1,4 +1,7 @@
 //! The sink's own tests (feature 444 T26): each rule the stage keeps, on a field small enough to read.
+//!
+//! Research:
+//!     the sink's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests
 
 #![expect(
     clippy::many_single_char_names,
