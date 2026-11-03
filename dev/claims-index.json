@@ -21006,33 +21006,36 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind": {
-  "code": "95f8ac3555e7a055",
+  "body": "81c2e865fc3ff3a7",
+  "claim": "fall square to or away from the wind - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet's land falls away from the wind or square across it, its high side windward or level, so the windward tie holds on every field the fit can draw",
+  "code": "9d5166370d039386",
   "core": "1dd36fe92e6d96f4",
-  "date": "2026-10-13",
-  "note": "the docstring says \"a rolled fall is rolled over the falls this admits, so the seat's back to the wind holds by construction\". That makes the high windward margin every map's case, where the page calls it \"one case among several\". Either some settlements' rolls should admit falls that do not back the wind, or the drawing page should record always-windward as this project's deviation",
+  "date": "2026-11-03",
+  "note": "`_fall_into_wind(...) <= 1e-9` admits only falls square to the wind or away from it, so the high side is windward or level, as §23 records (\"rolled to fall away from the wind or square across it, its high side windward or level\"); the 1e-9 is a float tolerance",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
+  "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "triage": "touched",
-  "triaged": "2026-10-29",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#high side and windward side as one": {
-  "code": "abaaa4fb12e55efd",
+  "body": "81c2e865fc3ff3a7",
+  "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one case among several, taken on every hamlet (the rule Rust's `admitted` keeps, this predicate its test's reference)",
+  "code": "0f9e65a1670f2d10",
   "core": "1dd36fe92e6d96f4",
-  "date": "2026-10-03",
-  "note": "0031: \"the high margin on the windward side is one case among several\"; the predicate (and plan_site's roll over it) makes it the only case for every rolled fall - roll it or record a deviation",
+  "date": "2026-11-03",
+  "note": "§23 now records the high windward margin on every hamlet as a deliberate deviation (\"Our hamlets take it on every map, a deliberate deviation\"), which is what this predicate enforces",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triage": "touched",
-  "triaged": "2026-10-29",
-  "verdict": "DRIFTED"
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::offtakes_for#delivery ditches by size": {
   "code": "1cd69e5a5ec17796",
@@ -21275,20 +21278,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "a86d7279b054997d",
+  "body": "1be71875d60cc4a1",
+  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: the page holds the flow and the slope may differ; a hamlet rolls no drainage bearing of its own, so its flow is taken as its fall unless the spec declares one",
+  "code": "6cb6361cd3db7aa7",
   "core": "d6cf20ad0486beed",
-  "date": "2026-10-13",
-  "note": "the code sets water_flow = down_deg when it is not declared, but §268 says \"Deriving the flow from the slope ... is wrong\" and the two differ by design; record it on the 0054 drawing page as a hamlet's deviation, or roll a bearing",
+  "date": "2026-11-03",
+  "note": "`water_flow = spec.water_flow if spec.water_flow is not None else down_deg` takes the flow from the fall, but the 0054 drawing page records no hamlet departure. It says the opposite: \"Deriving the flow from the slope would force every stream straight down the fall line, which is wrong\". Either the page records the hamlet's flow-equals-fall as this project's deliberate deviation, or the claim's label changes",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
   },
   "research": "42264e7bb9d79cb9",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "triage": "touched",
-  "triaged": "2026-11-01",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#woodland patches": {
@@ -59527,17 +59531,21 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.cluster_anchor#cluster position": {
+  "body": "da637f2f88d87765",
+  "claim": "cluster position - clustered-and-scattered-villages-shuson-sanson.drawing: six margins of the field, the cluster along the margin, depth capped at 118 px",
   "code": "dab056aa35f9a6cb",
   "core": "3237c5c4e8a527db",
-  "date": "2026-10-03",
-  "note": "dry margin positions, calibrated depth",
+  "date": "2026-11-03",
+  "note": "the page covers the cluster on \"the higher, drier ground beside its paddy\" and its position varying per village. It is silent on the six margins (high_margin, valley_head, mid_margin, flank, valley_mouth, on_rise) and on the cluster's depth capped at 118 px (`min(max(ad, au) * depth_frac, 118.0)`). So those should be UNRESEARCHED, or GUESS with the 118 in the placement-figures claim. The low-end valley_mouth also does not obviously fit \"higher, drier ground\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "4e7ba7479292ad40",
-  "triage": "touched",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin.cluster_anchor#its placement figures": {
   "body": "da637f2f88d87765",
