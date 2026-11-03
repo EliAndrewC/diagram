@@ -179,7 +179,7 @@ pub fn lay(
     let h = (rx * f.0).hypot(ry * f.1);
     let across = (-f.1, f.0);
     let mut tests = 0;
-    let anchored = crop.holds(out, &mut tests);
+    let anchored = crop.holds_low(out, &mut tests);
     let mut seats = 0;
     let mut found = None;
     'sways: for sway in SWAYS {

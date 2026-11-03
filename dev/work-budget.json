@@ -30,10 +30,10 @@
    "items_at_40": 62494,
    "items_at_80": 114953,
    "accepted": {
-    "40": 112814.0,
-    "80": 200310.5
+    "40": 182061.5,
+    "80": 291541.5
    },
-   "audit": "specs/444-work-budget-program/phases/field.audit-6.txt",
+   "audit": "specs/444-work-budget-program/phases/field.audit-7.txt",
    "accept": "ask:444-T16-field-after-audit-6"
   },
   "sink": {

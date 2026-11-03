@@ -120,3 +120,9 @@ assert l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, d
 north = [(1100.0, 900.0), (1600.0, 850.0), (2000.0, 810.0)]
 l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, -1.0), 270.0, field, north, [], 5.25, 5.5, [], 44.0, 150.0)
 l7r_phases.stage_sink(False, (4000.0, 4000.0), (-1.0, 0.0), 180.0, field, [(1100.0, 1100.0), (1050.0, 1500.0), (1010.0, 1900.0)], [], 5.25, 5.5, [], 44.0, 150.0)
+try:
+    l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, [(3200.0, 2200.0), (3200.0, 2100.0)], [], 5.25, 5.5, [], 44.0, 150.0)
+except ValueError as e:
+    assert "55 degrees" in str(e), e
+else:
+    raise AssertionError("a constructed route turning past 55 degrees out of the collector is refused by name")

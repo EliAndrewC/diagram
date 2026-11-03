@@ -1,0 +1,34 @@
+UNCOUNTED - `Settlement.marsh` (`wet.py:305`, called from `_write`, `sink_stage.py:114`, for the pond's reed fringe) runs over sets that grow with the map and no counter covers them: `drawn_ground` over every paddy ring, `KeepoutGrid.rings(self.field_polys)` building a `RingIndex` per paddy, `keep.segs(self._watercourse_segs(0.0))` filing every water segment, and `keep.shape` buffering and merging each filed item in shapely (C).
+
+**1. Are the counters within budget?** The counted work is within the leeway band, but the uncounted loop in question 2 rules out LEEWAY.
+- At 40 households: 554.75 ops against 291, a ratio of 1.91. At 80: 703 against 380, a ratio of 1.85.
+- `budget.json` holds a `second` verdict, so the cap is twice the raised figure (582 at 40, 760 at 80), not twice `first` (149). Ten times `first` (1,490) is nowhere near.
+- The fitted exponent is 0.353 against the budget's 0.34.
+- Most of the excess at 40 is `read@outline` (96.5), `test@pond_seat` (119) and `test@brook` (88). About 96 of the 119 `test@pond_seat` come from the whole-ring `crop.holds(out)` (`pond.rs:182`). A ray cast over only the outline's lower segments, as `pond_clear` already does, would roughly halve that. It is worth well under half the total, so it is a note, not a finding.
+
+**2. Does a counter cover every inner loop (S5)?** No.
+- `wet.py` has no counters at all.
+- In `indexes.py`, the `RingIndex` constructor (from line 432), `PointGrid.extend` (line 264) and `_trees_for` (lines 661-754) count nothing. `_trees_for` reads the grid's buckets directly, bypassing the counted `near`, then buffers and merges the shapes in shapely.
+- `pond_cut` (`wet.py:213`) scans every no-build block's points; `_clipped_to_open_ground` and `drawn_ground` do shapely differences. None are counted.
+- `counts.json` shows not one key from these functions; the fringe's only figure is Rust's `write@reeds 16`. `chains.txt` shows 151,460 calls at 40 households against 555 ops, which points to the uncounted work being large. Because paddies grow with households, the fitted 0.353 does not describe the stage's real growth.
+- I could not audit everything, and this is a gap rather than a finding. The sink's own `brook.rs` and its `mod.rs` are not in the bundle: the MANIFEST lists `brook.rs` twice, and the copy in `code/` is the field brook. So I could not see the loops behind `read@brook` and `test@brook`: `Brook::span`, `seg`, `crossed`, `twin_run`, `dist_near` and `nearest`.
+- Because of that, the brook-segment loop in `pond::fits` (`pond.rs:153-158`) and `offmap::meets_brook` (`offmap.rs:353-367`) look uncounted from here. Neither increments `tests` itself.
+- `_clip_to_stream` is fine: it asks the index (`index_query@PointGrid.near`), and its bed grid is counted when built (`write@stream_beds`).
+
+**3. Is anything placed and then repaired (S4)?** Nothing.
+- No `dropped@` or `moved@` keys appear in any roll.
+- Pond seats are asked nearest first, with every rule checked before the pond is written.
+- `_clip_to_pond` snapping the ditch's end from the pond's centre to its rim is part of drawing the join, not a repair.
+- `marsh()` has a drop path (`marsh_dropped`) that did not fire.
+- All 16 rolls took the pond branch. No `test@offmap`, `candidate@offmap_run` or `write@run` appears, so these counts never exercise the off-map branch: `searched`'s 108 candidate runs, `constructed` and `beside`.
+
+**4. Is the growth linear (S6)?** The counted ops grow at 0.353 from 20 to 80 households, well inside 1.15. That figure leaves out the uncounted `marsh()` work over the paddy rings and watercourses in question 2, so it cannot yet stand for the stage.
+
+Files:
+- /tmp/l7r-check/work-budget-audit-sink/code/wet.py
+- /tmp/l7r-check/work-budget-audit-sink/code/indexes.py
+- /tmp/l7r-check/work-budget-audit-sink/code/sink_stage.py
+- /tmp/l7r-check/work-budget-audit-sink/code/pond.rs
+- /tmp/l7r-check/work-budget-audit-sink/code/offmap.rs
+- /tmp/l7r-check/work-budget-audit-sink/counts.json
+- /tmp/l7r-check/work-budget-audit-sink/budget.json

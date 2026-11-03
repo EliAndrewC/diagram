@@ -384,6 +384,29 @@ class Standing:
             out += [("wood seat", w, None, None) for w in self.reserved.seat_walls()]
         return out
 
+    def pieces(self, box: Box, keys: Iterable[str]) -> list[Extent]:
+        """The drawn pieces of what stands under `keys` whose cells meet `box`, each once: a placer or a drawing asks what is near
+        it here rather than walking every record (feature 444 T26: the sink's reed fringe filed the whole map's water and
+        blocks to keep its reeds off the few beside one pond)."""
+        want = set(keys)
+        seen: set[int] = set()
+        out: list[Extent] = []
+        cb = self._clamp(box)
+        cells = list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else []
+        if __debug__:
+            OPS["index_cell@Standing.pieces"] += len(cells)
+        for cell in cells:
+            for n in self._bins.get(cell, ()):
+                if n in seen:
+                    continue
+                seen.add(n)
+                if __debug__:
+                    OPS["index_examined@Standing.pieces"] += 1
+                e = self._ext[n][0]
+                if e[0] in want:
+                    out.append(e)
+        return out
+
     def admits(self, key: str, o: Any, ignore: Any = None) -> bool:
         """May `o` be recorded under `key` on what already stands? The question every placer asks of its candidate."""
         return not self.conflicts(key, o, ignore, first=True)

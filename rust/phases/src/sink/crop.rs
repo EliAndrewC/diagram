@@ -101,6 +101,24 @@ impl Crop {
         true
     }
 
+    /// Whether `p`, at or below the outfall along the fall, lies inside the outline: a ray cast down the fall crosses the outline an
+    /// odd number of times - every segment it can cross reaches below `p`, so is low (counted).
+    pub fn holds_low(&self, p: Pt, tests: &mut u64) -> bool {
+        let pu = p.0 * self.fall.0 + p.1 * self.fall.1;
+        let ray = (p.0 + self.fall.0 * 1e6, p.1 + self.fall.1 * 1e6);
+        let mut odd = false;
+        for &(a, b) in &self.low {
+            *tests += 1;
+            if (a.0 * self.fall.0 + a.1 * self.fall.1).max(b.0 * self.fall.0 + b.1 * self.fall.1)
+                >= pu
+                && proper_cross(p, ray, a, b)
+            {
+                odd = !odd;
+            }
+        }
+        odd
+    }
+
     /// Whether `p` lies inside the outline (a whole-ring test, counted).
     pub fn holds(&self, p: Pt, tests: &mut u64) -> bool {
         *tests += self.ring.len() as u64;

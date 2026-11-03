@@ -10123,6 +10123,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/driver.py::walks_after#plumbing": {
+  "body": "1a42b124b567b672",
+  "claim": "plumbing - NONE: when the registry's backstop runs",
+  "code": "2b79fc762e283918",
+  "core": "00a1e1af4e2168bf",
+  "date": "2026-11-03",
+  "note": "plumbing: when the registry runs its backstop",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/field_stage.py::BROOK_STATION#the brook's station spacing": {
   "body": "0cb25f0cac330cb4",
   "claim": "the brook's station spacing - CONVENTION: one station every 20 ft, enough that a bend led in over two reads round",
@@ -22033,6 +22045,157 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::BROOK_JOIN_TRUNK#brook below a confluence": {
+  "body": "59125c2f616759a7",
+  "claim": "brook below a confluence - CONVENTION: 150 ft on the canvas, so the junction reads",
+  "code": "74f5844da9f04f48",
+  "core": "d9e8735159ac6ec8",
+  "date": "2026-11-03",
+  "note": "a framing rule, so the junction shows on the canvas",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::NO_BUILD_FT#no building on the water": {
+  "body": "4b2810a788304af3",
+  "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 10 ft round the pond's box",
+  "code": "d47adb144560006f",
+  "core": "e3bbe3a7edb35017",
+  "date": "2026-11-03",
+  "note": "the pages are silent on a standoff round a pond; the 33 ft strip is only for town and city maps",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::RUN_RECORD_W#the run's topology record": {
+  "body": "ba6751ce79a4814c",
+  "claim": "the run's topology record - CONVENTION: a hairline 2.5 in the connectivity record, the drawn 5.5 ft in `drawn_channels` (how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: the drain at 5.5 ft at its outfall)",
+  "code": "f040fb623d24b5b1",
+  "core": "1eb0a4946e32100e",
+  "date": "2026-11-03",
+  "note": "a hairline width in an undrawn record; the drawn width is held elsewhere",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::SINK_FRINGE#reed fringe width": {
+  "body": "d4803ee2a331e3a4",
+  "claim": "reed fringe width - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); a 44 ft ring",
+  "code": "6883e516c9774ddf",
+  "core": "8b791e6a9595beb5",
+  "date": "2026-11-03",
+  "note": "the pages give the fringe no width",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::SinkRefused#the sink's seam": {
+  "body": "8a2cae493a85be3f",
+  "claim": "the sink's seam - NONE: the stage's plumbing; each rule's claim is at the Rust that decides it (`rust/phases/src/sink/`)",
+  "code": "7c1a44cafb5d8aef",
+  "core": "000ff59f78e20f64",
+  "date": "2026-11-03",
+  "note": "an error type",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::_write#no building on the water": {
+  "body": "8d76878e2a674007",
+  "claim": "no building on the water - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); `NO_BUILD_FT` round the pond's box",
+  "code": "7621ecaa5c48650d",
+  "core": "9747c233128e377f",
+  "date": "2026-11-03",
+  "note": "NO_BUILD_FT round the pond's box; the pages are silent",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::_write#the drain's run drawn": {
+  "body": "8d76878e2a674007",
+  "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class, at the collector's own outfall width",
+  "code": "e9cd587a680723f4",
+  "core": "9747c233128e377f",
+  "date": "2026-11-03",
+  "note": "the drainage-ditch class, at the 5.5 ft outfall width",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
+   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::stage_sink#a collector beside a dike": {
+  "body": "c2457aaca7bdf63b",
+  "claim": "a collector beside a dike - NONE: a diked field (the polder) drains by its own outfall and lays no collector, so the two together are a defect upstream, refused by name",
+  "code": "d7f29d252a9681a4",
+  "core": "768dbfb66556e52d",
+  "date": "2026-11-03",
+  "note": "a consistency check that raises and draws nothing; NONE is right",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::stage_sink#no no-build corridor on a hamlet": {
+  "body": "c2457aaca7bdf63b",
+  "claim": "no no-build corridor on a hamlet - ground-too-wet-to-build-on.drawing: the 33 ft strip is the town and city maps' rule",
+  "code": "d3c9dec2f0bd9e7c",
+  "core": "768dbfb66556e52d",
+  "date": "2026-11-03",
+  "note": "the 33 ft strip is the town and city maps' rule",
+  "pages": {
+   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
+  },
+  "research": "b2af2942f0a54e5d",
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:03e1139db8b24365",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::stage_sink#the drain's run drawn": {
+  "body": "c2457aaca7bdf63b",
+  "claim": "the drain's run drawn - field-drains-akusuiro.drawing: the drainage-ditch class whichever way it runs, at the collector's own outfall width",
+  "code": "ab322ed6b9fd08eb",
+  "core": "768dbfb66556e52d",
+  "date": "2026-11-03",
+  "note": "the drainage-ditch class at the outfall width",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
+   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/sink_stage.py::stage_sink#where the runoff goes": {
+  "body": "c2457aaca7bdf63b",
+  "claim": "where the runoff goes - field-drains-akusuiro.drawing: a pond at the foot, the passing brook, or off the map",
+  "code": "b6b8578e00eade77",
+  "core": "768dbfb66556e52d",
+  "date": "2026-11-03",
+  "note": "the pond form if rolled, otherwise the brook or off the map",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/washing.py::BANK_SHIFTS_FT#a seat along the bank": {
@@ -71419,18 +71582,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.round_stream#a stream turns on a curve": {
-  "code": "f2934ab2e6269260",
-  "core": "c1ed3f24587fa670",
-  "date": "2026-10-03",
-  "note": "rounded course, no mitered corner",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
-  },
-  "research": "42264e7bb9d79cb9",
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#bed and sheen": {
   "code": "75c18a1056c7948b",
   "core": "c95c63d62ddf4fce",
@@ -73289,6 +73440,171 @@
   "core": "cfe4bdc44b074f2b",
   "date": "2026-10-31",
   "note": "adds to a counter behind a feature flag, plumbing with nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::BEND_STEPS#the bend's samples": {
+  "body": "22d75ed45fe2f28a",
+  "claim": "the bend's samples - NONE: drawing resolution, six steps a bend",
+  "code": "987cb356092486af",
+  "core": "03e53151d43fa8bf",
+  "date": "2026-11-03",
+  "note": "drawing resolution",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::BEND_WIDTHS#the brook's bend": {
+  "body": "90e80742583d7997",
+  "claim": "the brook's bend - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"About 2.5 channel widths in radius\"",
+  "code": "eadb3256f431cf07",
+  "core": "8e558e6a2a672036",
+  "date": "2026-11-03",
+  "note": "2.5 widths, as the page gives",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::LEG_CAP#the bend's cap": {
+  "body": "5c2292846343ce81",
+  "claim": "the bend's cap - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"A bend's radius is capped at 35% of the straight run on either side\"",
+  "code": "2b73200d21121ef0",
+  "core": "f2c25245e15bf06a",
+  "date": "2026-11-03",
+  "note": "35% of each leg",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::MIN_TURN_DEG#turn left sharp": {
+  "body": "b6d45e306b8bc6b2",
+  "claim": "turn left sharp - which-way-water-flows-and-how-channels-bend-and-join.drawing: a turn under 8 deg is not rounded",
+  "code": "701f76d65debd0a9",
+  "core": "b26afd7fc1d52ded",
+  "date": "2026-11-03",
+  "note": "under 8 deg left sharp",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::ON_COURSE#an offtake on the course": {
+  "body": "6bd3a588aea7b92f",
+  "claim": "an offtake on the course - NONE: a tolerance, a foot",
+  "code": "a1ae50d834ad65a8",
+  "core": "49158bc57fc53e07",
+  "date": "2026-11-03",
+  "note": "a one-foot snap tolerance for matching a held vertex; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::TANGENT_CAP#neighboring bends apart": {
+  "body": "9b2c1bd25034f26b",
+  "claim": "neighboring bends apart - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"Two neighboring bends never swallow the straight between them\" - the page's 35% kept on the tangent run too, so neighbors leave at least 30% of a leg straight",
+  "code": "29d46da8529fc230",
+  "core": "d7f08d46772fb1bc",
+  "date": "2026-11-03",
+  "note": "0.35 is the page's 35%; capping the tangent run too is what makes \"never swallow the straight between them\" hold",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::arc#the brook as drawn": {
+  "body": "c0c3b9b0fe25fe96",
+  "claim": "the brook as drawn - NONE: the course's geometry; each rule's claim is at the unit that keeps it",
+  "code": "1f8521ea33f6f2c2",
+  "core": "a2a332a5c0cc4287",
+  "date": "2026-11-03",
+  "note": "the arc's geometry; the caps are claimed at their constants",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::drawn#an earthen channel bends on a sweep": {
+  "body": "747a3954f6a6668f",
+  "claim": "an earthen channel bends on a sweep - which-way-water-flows-and-how-channels-bend-and-join.drawing: every interior corner of 8 degrees or more filleted at about 2.5 widths, a gentler one left",
+  "code": "22118c942950cf3e",
+  "core": "c664b88288a20df9",
+  "date": "2026-11-03",
+  "note": "a turn of MIN_TURN_DEG (8) or more is rounded at BEND_WIDTHS (2.5) times w, and a gentler turn keeps its point unrounded, as the page says",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:096deada616e93fb",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::drawn#the main channel not rounded at an offtake": {
+  "body": "747a3954f6a6668f",
+  "claim": "the main channel not rounded at an offtake - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"Where a branch leaves, the main channel is not rounded\"",
+  "code": "7807a3828fd9e4ab",
+  "core": "c664b88288a20df9",
+  "date": "2026-11-03",
+  "note": "held vertices within ON_COURSE are pushed unrounded before the turn test",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8cec24e795423384"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::mouth#a junction on the drawn course": {
+  "body": "4f3034a759bd6748",
+  "claim": "a junction on the drawn course - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "code": "e8e507f171e41e35",
+  "core": "b8f0fb55ed422b43",
+  "date": "2026-11-03",
+  "note": "the tip is set on the main channel's drawn line",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/course.rs::turn#the brook as drawn": {
+  "body": "c447bb2bf5fa31f9",
+  "claim": "the brook as drawn - NONE: the course's geometry; each rule's claim is at the unit that keeps it",
+  "code": "e82b41ba253ab9ff",
+  "core": "807d9d47abcb1f50",
+  "date": "2026-11-03",
+  "note": "geometry",
   "pages": {},
   "research": "",
   "rests": [],
@@ -78149,18 +78465,27 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/py.rs::stage_field#the seam": {
-  "body": "378c58422f217775",
-  "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
-  "code": "199f8fefc40b2153",
-  "core": "b4e9432eade34325",
-  "date": "2026-11-01",
-  "note": "unpacks the inputs, calls build and returns a dict",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triage": "touched",
-  "triaged": "2026-11-01",
+ "rust/phases/src/field/py.rs::stage_field#the brook drawn where it is laid": {
+  "body": "30dbfc1ed6725109",
+  "claim": "the brook drawn where it is laid - which-way-water-flows-and-how-channels-bend-and-join.drawing: every bend of 8 degrees or more on its arc, the brook not rounded where the race leaves it (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)",
+  "code": "86f4f06237a97f7a",
+  "core": "67086af5240d1f74",
+  "date": "2026-11-03",
+  "note": "course::drawn rounds bends of 8 degrees or more at 2.5 widths and holds the head race's mouth; course::mouth sets the race's first point on the drawn line; only the head race leaves the brook",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:034c86e8a450290d",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:80703ec130ace6f3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8cec24e795423384",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#a rice polder's pocket pond": {
@@ -78783,6 +79108,1131 @@
   "core": "095888ad383f0071",
   "date": "2026-10-31",
   "note": "a plain SHA-256 digest (padding, schedule, compression); plumbing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::HEADING_SPAN#the collector's heading": {
+  "body": "7408c9171900b978",
+  "claim": "the collector's heading - NONE: a measuring chord, 40 ft",
+  "code": "591ed6e6985794ad",
+  "core": "57871f0dced614d7",
+  "date": "2026-11-03",
+  "note": "a measuring chord",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::SinkIn#the sink": {
+  "body": "680a2de2c9a0499f",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "ce0935f8396259f1",
+  "core": "d1086ed626908af1",
+  "date": "2026-11-03",
+  "note": "a struct",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::SinkRefused#the sink": {
+  "body": "52ab28607b2834b1",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "8d5081d92c2719cd",
+  "core": "7dbc554074d1b76e",
+  "date": "2026-11-03",
+  "note": "an error type",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::SinkRefused.fmt#the sink": {
+  "body": "c6f50627696eb607",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "208c867218da2203",
+  "core": "207babff5f0ae209",
+  "date": "2026-11-03",
+  "note": "formatting",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::Sunk#the sink": {
+  "body": "de6888e45d7a9c7d",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "cc2942b60c4ecbd8",
+  "core": "b25b6542487c6d64",
+  "date": "2026-11-03",
+  "note": "a struct",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::heading#the sink": {
+  "body": "696d224fcf0474ac",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "9923bacb910b344a",
+  "core": "54f558cc12d16276",
+  "date": "2026-11-03",
+  "note": "measures the heading",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::sink#where the runoff goes": {
+  "body": "54b2390db0cb17a2",
+  "claim": "where the runoff goes - field-drains-akusuiro.drawing: \"Where the passing brook comes near the collector's outfall, the drain joins it ... where it does not, the drain runs on as a ditch to the edge of the map, or to the pond at the field's foot\"",
+  "code": "a09f9fe807e47471",
+  "core": "ed789298432ef06c",
+  "date": "2026-11-03",
+  "note": "the pond if rolled, otherwise the brook or off the map; a pond that would sit too far below also goes off the map",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink.rs::tally#the sink": {
+  "body": "5200d230f1e23f29",
+  "claim": "the sink - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "39cade225c6e1d0d",
+  "core": "62dc3074d9877393",
+  "date": "2026-11-03",
+  "note": "counters",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook#the brook as read": {
+  "body": "1f2d901ac1c22c3b",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "fd5a555d33b37853",
+  "core": "2695f91cbdc59494",
+  "date": "2026-11-03",
+  "note": "a reader",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.at#the brook as read": {
+  "body": "e4e8a2f09305f5cb",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "9d81d8d13bab81dd",
+  "core": "c7f83e614e5f9dcd",
+  "date": "2026-11-03",
+  "note": "a cache",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.beside#twin run measure": {
+  "body": "721e1a72e2f05327",
+  "claim": "twin run measure - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: \"within about 12 to 32 ft of it, running the same way\"",
+  "code": "6e7dfdc378887f82",
+  "core": "f7e3d4bda0445495",
+  "date": "2026-11-03",
+  "note": "12 to 32 ft, running the same way",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.crossed#either end makes the junction": {
+  "body": "496db5c33de26cad",
+  "claim": "either end makes the junction - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "code": "42e05241248c746b",
+  "core": "c742ebf6773ca0be",
+  "date": "2026-11-03",
+  "note": "an end within half the drawn width makes a junction",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.crossed#no crossing mid-run": {
+  "body": "496db5c33de26cad",
+  "claim": "no crossing mid-run - which-way-water-flows-and-how-channels-bend-and-join: a ditch meets the brook only at a confluence, never across it",
+  "code": "70ee9becc518da59",
+  "core": "c742ebf6773ca0be",
+  "date": "2026-11-03",
+  "note": "channels join, never cross",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
+  },
+  "research": "34d289056db0221b",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.dist_near#the brook as read": {
+  "body": "ed5aeec6e61a047a",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "943774980b6227e7",
+  "core": "215af7514ec4cc2c",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.fall#the brook as read": {
+  "body": "895ef9b09386c0c2",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "5f4c449b2e8b43eb",
+  "core": "c5d5e3e696a5f44e",
+  "date": "2026-11-03",
+  "note": "an accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.first_from#the brook as read": {
+  "body": "af440b5cbff456ed",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "15dc1aca26ed2398",
+  "core": "50e39ffe6344f994",
+  "date": "2026-11-03",
+  "note": "a binary search",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.key#the brook as read": {
+  "body": "d7f402b6e1a6294a",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "574f1d52ca301af7",
+  "core": "f64636c9f4a36645",
+  "date": "2026-11-03",
+  "note": "indexing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.len#the brook as read": {
+  "body": "6ffe65893515f315",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "025afcf960a2ebc0",
+  "core": "edfaceafd376174f",
+  "date": "2026-11-03",
+  "note": "an accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.nearest#the brook as read": {
+  "body": "9984a571825d0bc1",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "41f4f4452a7653b7",
+  "core": "27dc809909cf318c",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.new#the brook's order": {
+  "body": "7a4022c35eba3419",
+  "claim": "the brook's order - NONE: the field lays its brook a station at a time, each a station further down the fall (`field::brook::brook`), and the drawn course's arcs turn between two falling legs, so its points stand in order along the fall",
+  "code": "87f087b3a7fc056c",
+  "core": "5dbc911d6157e07f",
+  "date": "2026-11-03",
+  "note": "orientation for indexing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.seg#the brook as read": {
+  "body": "d5edaef7866b4504",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "e62610c084763a9e",
+  "core": "d906a5cdb325d526",
+  "date": "2026-11-03",
+  "note": "an accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.span#the brook as read": {
+  "body": "3846c4af378d803b",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "ba5dec72dcd40f43",
+  "core": "e499ec36781624f2",
+  "date": "2026-11-03",
+  "note": "indexing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.twin_run#twin run measure": {
+  "body": "a697b659f6f949de",
+  "claim": "twin run measure - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: \"within about 12 to 32 ft of it, running the same way, for more than 60 ft past where it leaves\" - the stretch measured from the run's start, with no further reach set aside",
+  "code": "829fe255875caed8",
+  "core": "ec5e4b63e5cd9dcd",
+  "date": "2026-11-03",
+  "note": "the longest side-by-side stretch, measured from the run's start",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Brook.u#the brook as read": {
+  "body": "79e5de38d4255aa5",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "02337046d53e2b2d",
+  "core": "ddac63ec73906691",
+  "date": "2026-11-03",
+  "note": "a projection",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::JOIN_TOL_SHARE#a joiner meets the water": {
+  "body": "272e96a10293fcff",
+  "claim": "a joiner meets the water - which-way-water-flows-and-how-channels-bend-and-join.drawing: \"a meeting is a junction when either channel's end lies inside the other's drawn width\"",
+  "code": "476111116296cff4",
+  "core": "0bc4f28a235ec4f0",
+  "date": "2026-11-03",
+  "note": "half the drawn width, i.e. inside the width",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Stations#the brook as read": {
+  "body": "42d11e1ce485fb2c",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "4ec530034993055d",
+  "core": "420a6a4875aaa28a",
+  "date": "2026-11-03",
+  "note": "a trait",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::TWIN_DEG#running the same way": {
+  "body": "e6bcf6d40b9d7018",
+  "claim": "running the same way - GUESS: do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws says \"running the same way\" and gives no angle; within 15 deg of the other's bearing is ours",
+  "code": "008bbf1d6caf3520",
+  "core": "3e88633969caf227",
+  "date": "2026-11-03",
+  "note": "the page gives no angle",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::TWIN_STEP#the twin's samples": {
+  "body": "173f003e7f04090b",
+  "claim": "the twin's samples - NONE: measuring resolution, five feet",
+  "code": "b2cda23fe509d41b",
+  "core": "04f720065fbc8259",
+  "date": "2026-11-03",
+  "note": "measuring resolution",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Vec.at#the brook as read": {
+  "body": "9b8e70a1532c6486",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "299153e2234f6ca7",
+  "core": "f9c02d3f4915f107",
+  "date": "2026-11-03",
+  "note": "an accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::Vec.len#the brook as read": {
+  "body": "1e82fe8e3e0ad5eb",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "d2c53e2b96aad9ea",
+  "core": "aaedf55ec39520ca",
+  "date": "2026-11-03",
+  "note": "an accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/brook.rs::proper_cross#the brook as read": {
+  "body": "1c85d86afcf20651",
+  "claim": "the brook as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "11cb044f5ec122e4",
+  "core": "e746a2595d7bb598",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::Crop#the outline as read": {
+  "body": "fa9f1342b6cf5755",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "aa29cf5c44a6cbac",
+  "core": "c0853ec96636e020",
+  "date": "2026-11-03",
+  "note": "a struct",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::Crop.holds#the outline as read": {
+  "body": "df184dc4dff0d518",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "0b6cdfc5aeaf4605",
+  "core": "2de43f071dcd4e88",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::Crop.pond_clear#the pond clear of the crop": {
+  "body": "150fef4ff6904d7f",
+  "claim": "the pond clear of the crop - field-drains-akusuiro.drawing: the pond at the field's foot",
+  "code": "1269e84fd312d659",
+  "core": "9b50a06dc2f4ecef",
+  "date": "2026-11-03",
+  "note": "the pond lies below the field, off its ring",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::Crop.read#the outline as read": {
+  "body": "fd3b54549a8b932e",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "f12eedbb1bf9aee8",
+  "core": "5da2ddb0f2267be2",
+  "date": "2026-11-03",
+  "note": "reading, with a 1 ft tolerance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::Crop.run_clear#not through the rice": {
+  "body": "9edf5cad5b4cf285",
+  "claim": "not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); no interior vertex or leg of a run in the field",
+  "code": "e4123e568a6b6bb1",
+  "core": "dcd2f9ecdcb7ed35",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::RUN_MARGIN#a placer stricter by a hair": {
+  "body": "81f4af83b9090a9d",
+  "claim": "a placer stricter by a hair - NONE: the registry's rounding margin, 0.2 ft",
+  "code": "e3e0cac267b9773f",
+  "core": "b313c5e44977ac16",
+  "date": "2026-11-03",
+  "note": "a rounding margin",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::meets_ellipse#the outline as read": {
+  "body": "a18495e79cc005a1",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "39151edf0ddc075d",
+  "core": "0ab6cd9700f41e1d",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::nearest_on#the outline as read": {
+  "body": "ef87950d043d3166",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "36af574262f05c3a",
+  "core": "26de18b48dee3e8b",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::off_resting#no drain across a resting basin": {
+  "body": "48cf54a73d5ef855",
+  "claim": "no drain across a resting basin - GUESS: no source could speak to it, a value of ours; a resting basin is one of its field's plots (paddies-left-to-rest-kataarashi.drawing: resting plots scattered through the fields), kept clear by the run's drawn half-width and a margin, its first leg exempt as the collector's own",
+  "code": "a1aad0e7e7dd432b",
+  "core": "588ce7e3517991e2",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/crop.rs::seg_seg#the outline as read": {
+  "body": "1293e32826cb0043",
+  "claim": "the outline as read - NONE: its reading and geometry; each rule's claim is at the unit that keeps it",
+  "code": "c81cb4724719847d",
+  "core": "db944b8e60496e44",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::BACK_OFF#the start inside the field": {
+  "body": "17fa907e6cc89349",
+  "claim": "the start inside the field - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); 0 to 60 ft back",
+  "code": "ef881b0311d14f21",
+  "core": "81584a96c80fd1c3",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::HULL_PAD#hull standoff": {
+  "body": "581ab0ef3f42625f",
+  "claim": "hull standoff - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the drain skirts the field's hull 12 ft off",
+  "code": "d452d1c57880f526",
+  "core": "cab9a2966c1198fc",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::JOIN_DESCENT#confluence fallen below the outfall": {
+  "body": "88df801c790e9bcd",
+  "claim": "confluence fallen below the outfall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 20 ft down the fall",
+  "code": "a0eb359855107048",
+  "core": "dd8131a206a72bf6",
+  "date": "2026-11-03",
+  "note": "the run heads downhill; no figure is given",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::JOIN_LEAD#crop lead tolerance": {
+  "body": "e21a77f08da8f77f",
+  "claim": "crop lead tolerance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.3 of the drain's run",
+  "code": "3598ce6c213884f6",
+  "core": "6dafe5e92db40142",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::JOIN_REACH#join reach": {
+  "body": "cc9bb18ee352569a",
+  "claim": "join reach - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 420 ft from the outfall",
+  "code": "53459e00539126ce",
+  "core": "2e658878fd116db0",
+  "date": "2026-11-03",
+  "note": "\"comes near\" carries no figure",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::JOIN_STRIDE#the walk's stride": {
+  "body": "28d65460479ccf39",
+  "claim": "the walk's stride - NONE: a search step, 10 ft",
+  "code": "9672f51d292e3d67",
+  "core": "6a04de60c386d603",
+  "date": "2026-11-03",
+  "note": "a search step",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::JUNCTIONS#junction distances": {
+  "body": "9e4e2e4b4fdf5645",
+  "claim": "junction distances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); 70 to 230 ft, then 300 and 400",
+  "code": "663daf75bef39260",
+  "core": "0ba32af958619c4c",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::OFF_CANVAS#run carried off the canvas": {
+  "body": "289e7bd2461a0bff",
+  "claim": "run carried off the canvas - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); 260 ft past the edge, at least 120 to it",
+  "code": "72e00a9071fab44a",
+  "core": "13f03cb4c4dadf91",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::SWINGS#bearing swings": {
+  "body": "82b25dd4dcb80def",
+  "claim": "bearing swings - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); 12, 24, 38 and 54 degrees each way, inside the 55 degree turn",
+  "code": "241b0ce0a70dbcf2",
+  "core": "4026705ecd257612",
+  "date": "2026-11-03",
+  "note": "inside the 55 deg turn",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::TURN_MAX_DEG#drain junction turn": {
+  "body": "64982ea06762613f",
+  "claim": "drain junction turn - field-drains-akusuiro.drawing: \"The turn is held to 55 degrees or less\"",
+  "code": "02115f7d1079d815",
+  "core": "20bdedb921d84145",
+  "date": "2026-11-03",
+  "note": "55 deg",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::beside#a twin joins the brook": {
+  "body": "02067a6964d23f18",
+  "claim": "a twin joins the brook - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: cut within `TWIN_HI` and carried onto the brook",
+  "code": "b06ae43d936ef3ea",
+  "core": "1729904330b66cef",
+  "date": "2026-11-03",
+  "note": "a twin joins the brook instead",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::confluence#the nearest fallen point, off the crop": {
+  "body": "6a844e6ec63f5847",
+  "claim": "the nearest fallen point, off the crop - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the nearest fallen candidate is the confluence",
+  "code": "105a56be08f19f1e",
+  "core": "aa07dd752fc6d38d",
+  "date": "2026-11-03",
+  "note": "the pages give no rule for picking the point",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::constructed#constructed route": {
+  "body": "b233eacbbece0254",
+  "claim": "constructed route - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); round the field's hull to its lowest point, then down the fall, lengthened 400 ft a try",
+  "code": "ca4a71c04e87ae7d",
+  "core": "79fd0f08d04dc094",
+  "date": "2026-11-03",
+  "note": "an off-map run's exit turn is \"held to 55 degrees or less\", but where `start` lies outside the grown hull the first leg goes to `nearest_on` with no check against TURN_MAX_DEG (the route never passes through `keeps`). Test the turn, or file this as a recorded departure",
+  "pages": {},
+  "research": "",
+  "verdict": "DRIFTED"
+ },
+ "rust/phases/src/sink/offmap.rs::grown#the off-map branch": {
+  "body": "2991b1679bb80ae7",
+  "claim": "the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "44cbb5c0a573a407",
+  "core": "3d109cf318beda95",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::hit#the off-map branch": {
+  "body": "ed231aca751c75ab",
+  "claim": "the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "47902c145a6ac416",
+  "core": "bf862a780864d1aa",
+  "date": "2026-11-03",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::keeps#not the brook's twin": {
+  "body": "31f1fe8876d13438",
+  "claim": "not the brook's twin - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws",
+  "code": "9753027bb4eb7814",
+  "core": "be8e1a6169548fcf",
+  "date": "2026-11-03",
+  "note": "a twin candidate is refused",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::keeps#runs downhill": {
+  "body": "31f1fe8876d13438",
+  "claim": "runs downhill - which-way-water-flows-and-how-channels-bend-and-join.drawing: net travel down the fall, strictly under 90 degrees off it",
+  "code": "4efa73796486b77e",
+  "core": "be8e1a6169548fcf",
+  "date": "2026-11-03",
+  "note": "net travel strictly under 90 deg off the fall",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::keeps#with the drainage bearing": {
+  "body": "31f1fe8876d13438",
+  "claim": "with the drainage bearing - which-way-water-flows-and-how-channels-bend-and-join.drawing: under 90 degrees off the water's flow",
+  "code": "051fd87bc12cdbcc",
+  "core": "be8e1a6169548fcf",
+  "date": "2026-11-03",
+  "note": "under 90 deg off the bearing",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "98af85102073d317"
+  },
+  "research": "42264e7bb9d79cb9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::lay#else off the map": {
+  "body": "19849dc93b806449",
+  "claim": "else off the map - field-drains-akusuiro.drawing: \"where it does not, the drain runs on as a ditch to the edge of the map\"",
+  "code": "fb9bc29a9fbda8a1",
+  "core": "2d5790b2dce416ac",
+  "date": "2026-11-03",
+  "note": "when no confluence is found, or the brook leg crosses a resting basin, the drain runs on as a ditch to the edge of the map, and the route built as a fallback is held to the 55-degree turn out of the collector",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::lay#the drain joins the passing brook": {
+  "body": "19849dc93b806449",
+  "claim": "the drain joins the passing brook - field-drains-akusuiro.drawing: \"Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below\"",
+  "code": "0256b7fb1cf49723",
+  "core": "2d5790b2dce416ac",
+  "date": "2026-11-03",
+  "note": "when `confluence` finds the brook within reach of the outfall, the run ends at it with to \"stream\"; no turn limit at the brook, as §15 leaves that angle open",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::lay#the drain's ditch to the brook is drawn bowed sideways across the fall, with a bow of `pond::BOW.0 * dist(out, q)` capped at `pond::BOW.1`; nothing on the page covers this curve, and no claim on this unit names it (GUESS or CONVENTION)": {
+  "code": "2d5790b2dce416ac",
+  "core": "2d5790b2dce416ac",
+  "date": "2026-11-03",
+  "note": "the drain's ditch to the brook is drawn bowed sideways across the fall, with a bow of `pond::BOW.0 * dist(out, q)` capped at `pond::BOW.1`; nothing on the page covers this curve, and no claim on this unit names it (GUESS or CONVENTION)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/sink/offmap.rs::meets_brook#a drain meeting the brook joins it": {
+  "body": "5d0b02bb3147d5be",
+  "claim": "a drain meeting the brook joins it - which-way-water-flows-and-how-channels-bend-and-join: ditches join rather than cross; field-drains-akusuiro.drawing: the drain joins the passing brook",
+  "code": "d37efc2631ab6065",
+  "core": "9f2c4f8cfbfa49af",
+  "date": "2026-11-03",
+  "note": "the route is cut at the meeting",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "7572798318663d7e"
+  },
+  "research": "34d289056db0221b",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::off#the off-map branch": {
+  "body": "daa006ac2f27820b",
+  "claim": "the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "4d2109ad33477df4",
+  "core": "9e92430a9ca56fac",
+  "date": "2026-11-03",
+  "note": "angle arithmetic",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::on_canvas#the off-map branch": {
+  "body": "7bf49ca5f4daf956",
+  "claim": "the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "8bf209c11d624be1",
+  "core": "42d92e65b40f1ff6",
+  "date": "2026-11-03",
+  "note": "clipping",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::searched#the run's form and order": {
+  "body": "5939db3b17a2907b",
+  "claim": "the run's form and order - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25); a lead on the bisector, then straight off the map, the fall's bearings before the heading's and the near junctions before the wide",
+  "code": "cc3a17f8534fc1ab",
+  "core": "3639e9e5e5762d28",
+  "date": "2026-11-03",
+  "note": "the form is a guess within §14",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::through_crop#not through the rice": {
+  "body": "4633005db0b598c9",
+  "claim": "not through the rice - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); the run leaves the field within its lead and never re-enters it",
+  "code": "9511115f486024b9",
+  "core": "5e3190b05d8b3119",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::trunk_below#brook below a confluence": {
+  "body": "61e473d631574897",
+  "claim": "brook below a confluence - CONVENTION: the trunk's length on the canvas, so the junction reads",
+  "code": "d531c0894745eeef",
+  "core": "19fd07acf93bd06f",
+  "date": "2026-11-03",
+  "note": "framing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::u#the off-map branch": {
+  "body": "a3582d95f5cbbe5f",
+  "claim": "the off-map branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "49f0c8e785c1b502",
+  "core": "ffb3255b2e635205",
+  "date": "2026-11-03",
+  "note": "a projection",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::ASPECT#pond's shape": {
+  "body": "5a3d2a8f0bb32487",
+  "claim": "pond's shape - GUESS field-drains-akusuiro.drawing: \"In a hamlet of fifteen households it is about 230 by 150 ft\"",
+  "code": "7b78754cebfb952d",
+  "core": "6549e844cf39733f",
+  "date": "2026-11-03",
+  "note": "230 by 150, recorded as a guess",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::BOW#bowed ditch": {
+  "body": "6d5fa81117c3a6d5",
+  "claim": "bowed ditch - GUESS: no source could speak to it, a value of ours; up to 10 ft off the chord, 0.08 of the run, a dug ditch's course",
+  "code": "f1ccf42d4dad0030",
+  "core": "b3d1240a0c29b6b8",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::BROOK_GAP#the pond off the brook": {
+  "body": "de298c09a3fcce50",
+  "claim": "the pond off the brook - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 12 ft off the brook",
+  "code": "818a97f63ed866f9",
+  "core": "f715171175266b55",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::CANVAS_INSET#the pond on the canvas": {
+  "body": "98b0aa02662a97a4",
+  "claim": "the pond on the canvas - CONVENTION: a pond shown whole, 20 ft inside the canvas's edge",
+  "code": "f3a8396b42f5c756",
+  "core": "d576ecb234db87cc",
+  "date": "2026-11-03",
+  "note": "framing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::CUSHION#the first seat's cushion": {
+  "body": "095a8d768907e5c3",
+  "claim": "the first seat's cushion - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); a 12 ft cushion below the outfall",
+  "code": "13c85e3dd62164e1",
+  "core": "6c6811da3557dcfe",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::LED_ROUND_DEG#led round a pond behind": {
+  "body": "fb12cb373efda97e",
+  "claim": "led round a pond behind - GUESS: no source could speak to it, a value of ours; a cubic past 100 degrees off the heading, its handles 0.45 and 0.225 of the run, sampled at twelfths",
+  "code": "11b3ac95e36ebb6b",
+  "core": "bb1dd224e6d26dd4",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::REED_PTS#the ring's points": {
+  "body": "5bef182aa7f4ab58",
+  "claim": "the ring's points - NONE: drawing resolution, sixteen points",
+  "code": "a0e0ea1f899ea1f3",
+  "core": "10be893b87fbb3f9",
+  "date": "2026-11-03",
+  "note": "drawing resolution",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::SETBACK_LIMIT#set-back limit": {
+  "body": "3e7d32b86d9c2b9a",
+  "claim": "set-back limit - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); 300 ft below the outfall - field-drains-akusuiro.drawing: \"A map whose pond would have to sit far below the fields sends its drain off the map as well\"",
+  "code": "43b68c4e52bde64e",
+  "core": "96d597a1d4b4b7e4",
+  "date": "2026-11-03",
+  "note": "\"far below\" carries no figure",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::SHARE#pond area": {
+  "body": "fa8d479f5a8d41d2",
+  "claim": "pond area - GUESS field-drains-akusuiro.drawing: \"The pond at a field's foot covers about three parts in a hundred of the paddy it drains\"",
+  "code": "346f62918f7c040b",
+  "core": "b9acb90ba650bc47",
+  "date": "2026-11-03",
+  "note": "3 in 100, recorded as a guess",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::SWAYS#sways across the fall": {
+  "body": "e66f067a01174bd6",
+  "claim": "sways across the fall - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); 0.9 and 1.8 long radii",
+  "code": "d44eb3e527856bd0",
+  "core": "c09d1e70d7ccc5df",
+  "date": "2026-11-03",
+  "note": "the pages are silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::ditch#the ditch to the pond": {
+  "body": "b4fe703da426c68c",
+  "claim": "the ditch to the pond - field-drains-akusuiro.drawing: the drain \"runs on as a ditch ... to the pond at the field's foot\", its course `BOW`'s and `LED_ROUND_DEG`'s",
+  "code": "5c3eeba54eb58ecd",
+  "core": "d73b7c8ee0083ff6",
+  "date": "2026-11-03",
+  "note": "runs on as a ditch to the pond",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::fits#the pond's branch": {
+  "body": "a993b8d161cd3d62",
+  "claim": "the pond's branch - NONE: the branch's machinery; each rule's claim is at the unit that keeps it",
+  "code": "d5358fc0f468e227",
+  "core": "b1a6a0cec8d339a1",
+  "date": "2026-11-03",
+  "note": "its rules are claimed at their constants",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::lay#a drain ending in a pond of its own": {
+  "body": "9a2cab33b28cb35b",
+  "claim": "a drain ending in a pond of its own - GUESS: field-drains-akusuiro.drawing: \"A drain that ends in a pond of its own is our own guess\"",
+  "code": "8721fa9e58d20760",
+  "core": "f78bd9e5725fc7e8",
+  "date": "2026-11-03",
+  "note": "recorded as a guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::lay#a pond at the field's foot": {
+  "body": "9a2cab33b28cb35b",
+  "claim": "a pond at the field's foot - field-drains-akusuiro.drawing: \"about two maps in three lay a pond at the field's foot\"",
+  "code": "0503ee4d090261ee",
+  "core": "f78bd9e5725fc7e8",
+  "date": "2026-11-03",
+  "note": "seated below the outfall along the fall",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:c68b896ac3cc1631",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/pond.rs::radii#the pond's long axis": {
+  "body": "fc6dad47fd881980",
+  "claim": "the pond's long axis - GUESS: no source could speak to it, a value of ours; east to west on the page",
+  "code": "b39848cc96aedfad",
+  "core": "a8c1fe939496a2d1",
+  "date": "2026-11-03",
+  "note": "the pages are silent on orientation",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/py.rs::PyStations#the seam": {
+  "body": "b9bcda02dafeb1e4",
+  "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
+  "code": "058caa76366e3684",
+  "core": "f84a047799930292",
+  "date": "2026-11-03",
+  "note": "the seam",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/py.rs::PyStations.at#the seam": {
+  "body": "d66553fdd2dbfe49",
+  "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
+  "code": "ec39b7d58431521a",
+  "core": "ac11bf594d94abf5",
+  "date": "2026-11-03",
+  "note": "the seam",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/py.rs::PyStations.len#the seam": {
+  "body": "db81b339171ca675",
+  "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
+  "code": "3172bc8e34038d6f",
+  "core": "52c413193e8e345b",
+  "date": "2026-11-03",
+  "note": "the seam",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/py.rs::stage_sink#the seam": {
+  "body": "d89c066dd24ba6ea",
+  "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
+  "code": "07b5c44f0a82bd83",
+  "core": "8faa4475170dadad",
+  "date": "2026-11-03",
+  "note": "the seam",
   "pages": {},
   "research": "",
   "rests": [],

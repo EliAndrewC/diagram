@@ -88,6 +88,14 @@ So: the basins x (6 x 1), plus the area, the brook, the intake, the outline, the
 
 From 20 to 80 households the stage grows at an exponent of about 0.86 (from the totals, ln(114,953 / 34,656) / ln 4): the basins, the beans, the plots' states and the dry hem with the field's area, the brook, the ditches and the rows with its side.
 
+## Work the first derivation missed
+
+Recorded for the field's next re-pin (feature 444 FR-022 rule 2; T26 D2, accepted on `phases/field.audit-7.txt`'s LEEWAY at
+182,062 and 291,542 at 40 and 80, 1.53 and 1.33 times this budget). Not yet priced in the count above:
+
+- the brook as drawn - its bends rounded on arcs where the field lays it (`write@brook_drawn`), about four drawn points a station, so the stream's record, its beds and its export carry about four times the stations' points
+- the drawn brook filed in the overlap registry in place of its stations - about four times the pieces, each ribboned, boxed, binned and asked of its cells
+
 ## Earlier findings
 
 - verdict-1, finding 1: fixed - the keep-out chords dropped; the drawing records are the hem, the channels' points and the pocket pond, 297, 467 and 737

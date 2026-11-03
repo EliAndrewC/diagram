@@ -26,6 +26,11 @@
         brook's segments along it, inside the range the seat's bisections found (1 each); run downhill (1); its turn at the
         outfall (1)
     the reeds: a ring at the shore, 44 ft out (0061's reeds; the width a GUESS), written at 24 points (24)
+    the reeds' ground: the ring less the crop, the pond and what stands beside the pond - the registry's cells under the ring's
+        box grown by the reeds' reach asked for the drain's and any water's or dry plot's pieces there (1 a cell, 1 a piece);
+        the ring, the field's outline, the pond's ellipse and those pieces read once for the drawn ground (1 a point) and filed
+        once in the reeds' keep-out (1 a point, the pond's ellipse twice: the water and the tufts' pad); the bare ground built
+        from what the keep-out holds under the ring (1 an item gathered, 2 a shape buffered and unioned)
     filed in the overlap registry: the ditch's two legs, each a ribbon of 4 corners and its box of 4 (8 each); the pond's rim
         read at 24 points for its box (24), the box binned in the registry's 64 ft cells (1 each)
 
@@ -47,19 +52,20 @@ No grid of the brook: its stations stand in order along the fall (it falls the w
 | the writes | per item | 3 | the pond, its outlet and its layer | always |
 | the ditch to the pond (missed work) | per item | 12 at 20, 14 at 40, 18 at 80 | its 3 points written (3); its run the pond's own half-length from the outfall to the center (134, 189 and 268 ft), inside the range of the brook the seat's bisections found (no search of its own), the brook's segments along it, 134/20, 189/20, 268/20 to the nearest = 7, 9, 13, each tested (1); downhill (1); the turn at the outfall (1): 3 + 7 + 1 + 1 = 12, 3 + 9 + 1 + 1 = 14, 3 + 13 + 1 + 1 = 18 | a brook beside the toe |
 | the reeds' ring (missed work) | per item | 24 | the ring written at the 24 points the pond's rim is drawn at (0061: reeds at the shore) | always 24 |
+| the reeds' ground (missed work) | per item | 423 at 20, 486 at 40, 577 at 80 | the registry's cells under the ring's box grown by the reeds' reach (68 ft: the widest tint, 28, and 40), (1 + 492/120)(1 + 395/120) = 22 at 20 (29 at 40, 42 at 80) in its 120 ft cells, and the pieces they hand back, the drain's tail and the water or dry plot beside the pond, about 12 at the typical case (34, 41, 54); the drawn ground's points, the ring's 16, the outline's 68, 96, 135, the pond's ellipse 32 and the pieces' 12 x 4 = 48 (164, 192, 231); the keep-out's points, the outline's, the ellipse twice (64) and the pieces' 48 (180, 208, 247); the bare ground, the 15 items gathered and each shape buffered and unioned (2 x 15), 45 | a brook or a dry plot beside the pond |
 | the overlap registry (cells written; missed work) | per item | 59 at 20, 73 at 40, 99 at 80 | the ditch's 2 legs filed as ribbons, 4 corners and a box of 4 each (16); the pond's rim read at 24 points for its box (24); that box binned in the registry's 64 ft cells, (1 + 268/64)(1 + 171/64) = 19 at 20, 33 at 40, 59 at 80 | always |
 
-So: 1 x (7 + the outline + the seat's test x 2 + the writes + the ditch + the reeds + the registry).
+So: 1 x (7 + the outline + the seat's test x 2 + the writes + the ditch + the reeds + the reeds' ground + the registry).
 
 ## Totals
 
-- at 20: 1 x (7 + 68 + 33 x 2 + 3 + 12 + 24 + 59) = 239
-- at 40: 1 x (7 + 96 + 37 x 2 + 3 + 14 + 24 + 73) = 291
-- at 80: 1 x (7 + 135 + 47 x 2 + 3 + 18 + 24 + 99) = 380
+- at 20: 1 x (7 + 68 + 33 x 2 + 3 + 12 + 24 + 423 + 59) = 662
+- at 40: 1 x (7 + 96 + 37 x 2 + 3 + 14 + 24 + 486 + 73) = 777
+- at 80: 1 x (7 + 135 + 47 x 2 + 3 + 18 + 24 + 577 + 99) = 957
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.34 (239 to 380): one pond, the outline's points and its box's cells growing with the field's breadth, beside the reeds' fixed 24.
+From 20 to 80 households the stage grows at an exponent of about 0.27 (662 to 957): one pond, the outline's points and its box's cells growing with the field's breadth, beside the reeds' fixed 24.
 
 ## Work the first derivation missed
 
@@ -68,12 +74,15 @@ Feature 444 FR-022 rule 2 (amendment 7, the GM 2026-11-03): each item is work th
 - the ditch from the drain's outfall to the pond - the contract's run onward (0060: the drain "runs on as a ditch ... to the pond at the field's foot"); the first count placed the pond and its outlet but drew no run to it
 - the reeds' ring at the shore - the contract's "its wet shore and reeds as one layer record" (0061); the first count wrote the record and priced none of its points
 - the field's outline read for its stretch below the outfall, and the brook found by its order along the fall - the first count read both from a water index the field filed, which does not outlive the field's stage: no index of the field's is handed to the stages after it, so the sink reads what it needs itself
+- the reeds' ground - the contract's "its wet shore and reeds as one layer record" draws the reeds on the ring less the crop, the pond and the water and plots beside it, and keeps them off those as a tile's bare ground; the first count wrote the ring and priced none of that ground, which the registry's cells under the ring hand to the drawing (found by the work-budget agent's MODE AUDIT of the rebuild, `phases/sink.audit-1.txt`)
 - the stage's records filed in the overlap registry - every later stage asks the registry before it places (the overlap matrix: a house, a lane or a tree kept off the water), so the pond and its ditch are filed there as they are written; the first count filed the pond only in the water index
 
 Outside the reference roll, and so in no figure above: the off-map branch (the plan's sink rolled off-map, or a pond with no seat inside the set-back - 0060's "about one hamlet map in three"), which joins the passing brook where it is in reach or runs the drain off the map; the reference spec pins its sink a pond. It is held to rubric S1-S9 by its design - its candidates the bearings round the fall and the collector's heading at the junction distances the canvas allows, nearest first, the first that keeps every rule taken (S9); each candidate asked of the water index's cells it crosses (S1) - and to every rule by the Rust stage gate's fresh block, which rolls it.
 
 ## Earlier findings
 
+- verdict-3, finding 1: fixed - the notes taken where they move the count: the pond's long axis stated across the page (its short one along a fall down the page, the seat's 9, 12, 17 stations), the outfall asked of the outline's low segments only; the reeds' ring kept as the record's points, the outline read in full kept for every seat it serves
+- verdict-4, finding 1: fixed - as verdict-3's: the axis stated, the outfall's test on the low segments; the registry's box kept on its filed rim, the ditch's brook test kept on its own run
 - verdict-2, finding 1: fixed - the stream-topped pond's smaller share is the share read once in the 7 row (0060's drainage pond at about 3/100 of its paddy, below 0061's watering pond); the outline cells are taken along the box's long side, the larger count
 - verdict-1, finding 1: fixed - each cell under the box read alone, segments charged only in the cells the outline and the drain cross (5, 7, 9 outline cells at 1.8; the drain's 2 cells at 3.7): 36, 53 and 83
 - verdict-1, finding 2: fixed - the row recomputed from its cells, no 6.5 product left

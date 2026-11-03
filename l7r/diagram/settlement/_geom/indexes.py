@@ -575,6 +575,10 @@ class KeepoutGrid:
             idx = RingIndex(poly)
             r = pad + reach
             items.append((self.RING, idx, pad, slot, idx.x0 - r, idx.y0 - r, idx.x1 + r, idx.y1 + r))
+            if __debug__:  # each ring's points indexed once (feature 444 T26's MODE AUDIT: the scatters' filing was uncounted)
+                OPS["pt_test@KeepoutGrid.rings"] += len(idx.ring)
+        if __debug__:
+            OPS["write@KeepoutGrid.file"] += len(items)
         self.grid.extend(items)
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
@@ -586,14 +590,20 @@ class KeepoutGrid:
                 a, b = pl[i], pl[i + 1]
                 r = hw + reach
                 items.append((self.SEG, a, b, hw, slot, min(a[0], b[0]) - r, min(a[1], b[1]) - r, max(a[0], b[0]) + r, max(a[1], b[1]) + r))
+        if __debug__:  # each segment boxed and filed once
+            OPS["write@KeepoutGrid.file"] += len(items)
         self.grid.extend(items)
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def rects(self, rects: Any, closed: bool = False) -> None:
+        if __debug__:
+            OPS["write@KeepoutGrid.file"] += len(rects)
         self.grid.extend([(self.RECT, x0, y0, x1, y1, closed, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def circles(self, circles: Any, closed: bool = False) -> None:
+        if __debug__:
+            OPS["write@KeepoutGrid.file"] += len(circles)
         self.grid.extend([(self.CIRCLE, cx, cy, r, closed, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles])
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
@@ -684,6 +694,9 @@ class KeepoutGrid:
                     items[id(it)] = it
         for it in self.grid.oversized:
             items[id(it)] = it
+        if __debug__:  # the cells under `within` read, and each item they hand back
+            OPS["index_cell@KeepoutGrid.shape"] += (int(wx1 // c) - int(wx0 // c) + 1) * (int(wy1 // c) - int(wy0 // c) + 1)
+            OPS["index_examined@KeepoutGrid.shape"] += len(items)
         geoms: list[Any] = []  # (shape, radius): grown = shape buffered by radius + margin, shrunk by radius - margin
         radii: list[float] = []
         edge_lines: list[Any] = []  # an invalid ring's own edges, for its pad band
@@ -744,6 +757,8 @@ class KeepoutGrid:
                 shrunk.append(box(x0 + m, y0 + m, x1 - m, y1 - m))
         # ONE PREPARED UNION A SIDE: a point asked of a prepared shape is answered from its own index, and the vectorized
         # predicate asks every point in one call - far cheaper than a tree query returning (point, shape) pairs.
+        if __debug__:  # each shape buffered and unioned in shapely (C), counted per shape a side (S5)
+            OPS["write@KeepoutGrid.shape"] += 2 * (len(geoms) + len(edge_lines) + len(rects))
         su = shapely.union_all(shrunk) if shrunk else None
         gu = shapely.union_all(grown) if grown else None
         for u in (su, gu):

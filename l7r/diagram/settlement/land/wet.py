@@ -32,6 +32,8 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 
 # THE REEDS ARE A TILE (feature 298): the marsh's tint, glints and reed tufts, thrown one by one until then, are the reed tile
 # (`land.tiles`) filling the drawn ground less what the tufts were kept off (`Cover`, `Settlement.flush_covers`).
+from l7r.diagram.work_counts import OPS
+
 from .._geom import KeepoutGrid, Pt, point_in_poly, seg_dist
 from .._knobs import scope_seed
 from .outline import natural_outline
@@ -302,7 +304,7 @@ def bank_rings(dikeponds: Any, near: Any) -> list[list[tuple[float, float]]]:
 
 
 class WetGroundMixin:
-    def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = ()) -> None:  # type: ignore[misc]
+    def marsh(self: Settlement, poly: Any, role: str = "toe", avoid: Any = (), near: bool = False) -> None:  # type: ignore[misc]
         """REED MARSH / WET MEADOW - wet reed ground drawn as a TILE (feature 298): a wet tint, standing-water glints and
         reeds, filling the outline - its strips' corners rounded and edges waved (`natural_outline`, feature 299) - less
         the paddies, the pond's ellipse (`pond_cut`), the mounds, the banks and the water, at the bottom of the stack; a
@@ -318,6 +320,10 @@ class WetGroundMixin:
         back - a polder floor sits BELOW the outside water level, so the wet fringe surrounds it regardless of the fall
         direction; placed by `stage_waterward` from `meta.waterward`). WHY:
         research/questions/0058-ground-too-wet-to-build-on.html + 'Defensive marshland - the engineered wet belt' + research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html. Recorded M['marshes'].
+
+        `near` (a pond fringe laid by the Rust sink, feature 444 T26): the no-build blocks and the water the reeds keep off are
+        read from the registry's cells under the fringe (`Standing.pieces`) - each piece as drawn - in place of every block and
+        watercourse on the map; the fields, the clearings and the rest are read as ever.
 
         Research:
             marsh roles - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the toe and a defensive belt
@@ -369,7 +375,21 @@ class WetGroundMixin:
         # ...WITH THE POND CUT AS THE POND (feature 299, plan review): the pond's no-build block is a box round its ellipse, kept
         # to stop BUILDINGS standing on water (`pond_fringe_ring`'s note), and cut from the marsh it left a pale rectangle round
         # the oval pond; the marsh is cut by the water itself, the ellipse - its reed fringe stands round it
-        _blocks = pond_cut(self.block_polys, self.M.get("pond"))
+        _near: list[Any] = []
+        if near:
+            _r = max(MARSH_TINT_R, MARSH_TUFT_R) * self.bscale + 40.0
+            _bx = (min(q[0] for q in poly) - _r, min(q[1] for q in poly) - _r, max(q[0] for q in poly) + _r, max(q[1] for q in poly) + _r)
+            _near = self.standing.pieces(_bx, ("dry_plots", "streams", "channels", "field_ditches"))
+            _pond = self.M.get("pond")
+            _blocks = [ellipse_ring(_pond[0], _pond[1], _pond[2], _pond[3])] if _pond else []
+            _blocks += [e[1] for e in _near if e[0] == "dry_plots"]
+        else:
+            _blocks = pond_cut(self.block_polys, self.M.get("pond"))
+        if __debug__ and not near:  # each block asked whether it is the pond's own box, and the drawn ground's shapely difference over every ring it takes (feature 444 T26's MODE AUDIT)
+            OPS["pt_test@marsh.pond_cut"] += len(self.block_polys)
+            OPS["pt_test@marsh.drawn_ground"] += len(poly) + sum(len(r) for r in (*self.field_polys, *_blocks, *self.clearings, *avoid))
+        elif __debug__:
+            OPS["pt_test@marsh.drawn_ground"] += len(poly) + sum(len(r) for r in (*self.field_polys, *_blocks, *self.clearings, *avoid))
         # ...AND THE PADDY CUT AT ITS EDGE (GM 2026-10-01, after feature 300: the drains at the foot of the paddy "also appear to
         # have a similar clearance ... fixed in the same way"): the 10 ft a thrown reed kept off a paddy's outline left a bare strip
         # outside the collector drain that runs along it; the marsh meets the paddy, and the drain - a watercourse - is lined by
@@ -431,7 +451,13 @@ class WetGroundMixin:
         keep.circles(halo_circles, closed=True)
         keep.segs(_crests, slot=1, reach=max(_pads))
         keep.rings(_banks, slot=2, reach=max(_pads))
-        keep.segs(self._watercourse_segs(0.0), slot=3, reach=max(_pads) + 2.0)
+        if near:  # the water under the fringe, each piece as drawn (`Standing.pieces`)
+            keep.rings([e[1] for e in _near if e[0] != "dry_plots"], slot=3, reach=max(_pads) + 2.0)
+        else:
+            _water = self._watercourse_segs(0.0)
+            if __debug__:  # every watercourse's points read into its pairs
+                OPS["pt_test@marsh.watercourses"] += sum(len(pl) for pl, _hw in _water)
+            keep.segs(_water, slot=3, reach=max(_pads) + 2.0)
         crescents = self.M.get("crescent_ponds", [])  # read once (feature 218)  # base = the drawn half-width; the query adds 2 px + the mark's pad in the SAME association the linear scan used
 
         # THE MARSH'S WHOLE REGION IN ONE KEEP-OUT GRID (feature 297, FR-004, plan B2): the crescent ponds and the pond's ellipse -

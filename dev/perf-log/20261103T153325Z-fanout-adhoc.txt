@@ -1,0 +1,13 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+sink: 141,197 calls @20, 151,460 calls @40, growth exponent 0.10
+  placed @40: pond +4, channels +1, drawn_channels +1, marshes +1; 21,637 calls per thing placed
+field: 161,933 calls @20, 240,788 calls @40, growth exponent 0.57
+  placed @40: dry_plots +143, comb_floors.inashiro-paddies +97, flooded_plots +94, wet_plots +15, drawn_channels +13, field_ditches +12, channels +1, field_graves +1, field_ponds +1, fields +1, streams +1, weirs +1; 633 calls per thing placed
+  fastest growers @20 -> @40:
+    x1.5 'append' of 'list' objects [26,860 -> 41,591]
+    x1.5 builtins.len [14,550 -> 21,753]
+    x1.4 'get' of 'dict' objects [14,611 -> 21,102]
+    x1.4 overlap/registry.py:212:pair_forbidden [18,737 -> 25,621]
+
+all stages: 303,130 calls @20, 392,248 calls @40

@@ -232,7 +232,7 @@ fn a_pond_behind_the_collector_is_reached_by_a_curve() {
 fn the_brook_as_drawn_rounds_its_bends_on_arcs_and_a_mouth_lies_on_it() {
     let course = vec![(0.0, 0.0), (300.0, 0.0), (300.0, 300.0), (600.0, 300.0)];
     let mut t = 0;
-    let d = drawn(&course, 5.25, &mut t);
+    let d = drawn(&course, 5.25, &[], &mut t);
     assert!(d.len() > course.len() && !d.contains(&(300.0, 0.0)));
     // the first bend's arc: every point the radius from its center, 2.5 widths
     let r = crate::course::BEND_WIDTHS * 5.25;
@@ -240,15 +240,16 @@ fn the_brook_as_drawn_rounds_its_bends_on_arcs_and_a_mouth_lies_on_it() {
     assert!(d[1..=7].iter().all(|p| (dist(*p, c) - r).abs() < 1e-6));
     let m = mouth((300.0, 0.0), &d, &mut t);
     assert!(dist(m, (300.0, 0.0)) < r && dist(m, (300.0, 0.0)) > 0.0);
-    assert_eq!(drawn(&course[..2], 5.25, &mut t).len(), 2);
+    assert_eq!(drawn(&course[..2], 5.25, &[], &mut t).len(), 2);
     let repeated = vec![(0.0, 0.0), (10.0, 0.0), (10.0, 0.0), (20.0, 5.0)];
-    assert_eq!(drawn(&repeated, 3.0, &mut t).len(), 2);
+    assert_eq!(drawn(&repeated, 3.0, &[], &mut t).len(), 2);
     assert_eq!(
-        drawn(&[(0.0, 0.0), (10.0, 0.0), (20.0, 0.5)], 3.0, &mut t).len(),
+        drawn(&[(0.0, 0.0), (10.0, 0.0), (20.0, 0.5)], 3.0, &[], &mut t).len(),
         3
     );
     // a hairpin's tangent capped at half its legs
-    let pin = drawn(&[(0.0, 0.0), (100.0, 0.0), (0.0, 10.0)], 50.0, &mut t);
+    let pin = drawn(&[(0.0, 0.0), (100.0, 0.0), (0.0, 10.0)], 50.0, &[], &mut t);
+    assert!(drawn(&course, 5.25, &[(300.0, 0.5)], &mut t).contains(&(300.0, 0.0)));
     assert!(pin[1..pin.len() - 1].iter().all(|p| p.0 >= 45.0));
 }
 
@@ -413,4 +414,34 @@ fn a_crossing_at_the_runs_own_mouth_is_its_junction_and_a_twin_reads_the_brooks_
         .collect();
     let mut br = Brook::new(&mut up, (0.0, 1.0));
     assert!(br.twin_run(&[(720.0, 100.0), (720.0, 900.0)]) > brook::TWIN_RUN);
+}
+
+#[test]
+fn a_constructed_route_turning_past_55_degrees_out_of_the_collector_is_refused() {
+    let mut i = uphill();
+    i.drain = vec![(3200.0, 2200.0), (3200.0, 2100.0)];
+    let e = sink(&i, &mut Vec::new()).unwrap_err();
+    assert!(e.0.contains("55 degrees"));
+}
+
+#[test]
+fn the_outfall_is_found_in_the_field_from_its_low_segments_alone() {
+    let ring = vec![
+        (0.0, 0.0),
+        (100.0, 0.0),
+        (100.0, 80.0),
+        (60.0, 100.0),
+        (0.0, 80.0),
+    ];
+    let c = Crop::read(&ring, (50.0, 90.0), (0.0, 1.0), &mut HashMap::new());
+    let mut t = 0;
+    for p in [
+        (50.0, 90.0),
+        (50.0, 99.0),
+        (90.0, 70.0),
+        (50.0, 110.0),
+        (150.0, 90.0),
+    ] {
+        assert_eq!(c.holds_low(p, &mut t), c.holds(p, &mut t));
+    }
 }

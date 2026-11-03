@@ -444,6 +444,7 @@ fn grown(ring: &[Pt], pad: f64) -> Vec<Pt> {
 /// Research:
 ///     the drain joins the passing brook - research/questions/0060-field-drains-akusuiro.drawing.html: "Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below"
 ///     else off the map - research/questions/0060-field-drains-akusuiro.drawing.html: "where it does not, the drain runs on as a ditch to the edge of the map"
+///     the run to the brook bowed - GUESS: no source could speak to it, a value of ours; bowed off its chord as the pond's ditch is (`pond::BOW`)
 pub fn lay(
     inp: &SinkIn,
     crop: &Crop,
@@ -455,7 +456,7 @@ pub fn lay(
     let mut tests = 0;
     let found = confluence(inp, crop, brook, out, &mut tests);
     if let Some(q) = found {
-        let bow = (0.08 * dist(out, q)).min(10.0);
+        let bow = (super::pond::BOW.0 * dist(out, q)).min(super::pond::BOW.1);
         let run = vec![
             out,
             (
@@ -468,7 +469,7 @@ pub fn lay(
             &run,
             &inp.resting,
             inp.run_w,
-            crop.holds(out, &mut tests),
+            crop.holds_low(out, &mut tests),
             &mut tests,
         ) {
             tally(counts, "test@offmap", tests);
@@ -506,6 +507,20 @@ pub fn lay(
     tally(counts, "candidate@offmap_run", tried);
     let (run, to) = constructed(inp, crop, brook, start, head, &mut tests);
     tally(counts, "test@offmap", tests);
+    // ...AND OUT OF THE COLLECTOR AT MOST THE TURN EVERY RUN IS HELD TO: from inside the hull its first leg runs on along the heading
+    // (a turn of 0); from outside, toward the hull's nearest point, which is asked
+    let lead = (run[1].0 - run[0].0, run[1].1 - run[0].1);
+    let ln = (lead.0 * lead.0 + lead.1 * lead.1).sqrt().max(1e-9);
+    if ((head.0 * lead.0 + head.1 * lead.1) / ln)
+        .clamp(-1.0, 1.0)
+        .acos()
+        .to_degrees()
+        > TURN_MAX_DEG
+    {
+        return Err(SinkRefused(
+            "the drain's constructed route turns past 55 degrees out of the collector".to_owned(),
+        ));
+    }
     if !off_resting(&run, &inp.resting, inp.run_w, anchored, &mut tests) {
         return Err(SinkRefused(
             "the drain's constructed route crosses a resting basin".to_owned(),

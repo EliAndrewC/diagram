@@ -27,11 +27,16 @@ pub const MIN_TURN_DEG: f64 = 8.0;
 /// Research:
 ///     the bend's cap - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "A bend's radius is capped at 35% of the straight run on either side"
 pub const LEG_CAP: f64 = 0.35;
-/// The most of either leg a bend's tangent run takes, so two neighboring bends never meet past the middle of the leg between them.
+/// The most of either leg a bend's tangent run takes, so two neighboring bends leave a straight between them.
 ///
 /// Research:
-///     neighboring bends apart - GUESS: no source could speak to it, a value of ours; half of each leg
-pub const TANGENT_CAP: f64 = 0.5;
+///     neighboring bends apart - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "Two neighboring bends never swallow the straight between them" - the page's 35% kept on the tangent run too, so neighbors leave at least 30% of a leg straight
+pub const TANGENT_CAP: f64 = LEG_CAP;
+/// How near a channel's end lies to a vertex of the course to be its offtake there (feet).
+///
+/// Research:
+///     an offtake on the course - NONE: a tolerance, a foot
+pub const ON_COURSE: f64 = 1.0;
 /// The points a bend's arc is drawn with past its first.
 ///
 /// Research:
@@ -86,19 +91,24 @@ fn arc(p0: Pt, p1: Pt, p2: Pt, deg: f64, r: f64) -> Vec<Pt> {
 }
 
 /// The brook as drawn: every interior bend of at least `MIN_TURN_DEG` rounded on an arc of `BEND_WIDTHS` drawn widths `w`, capped
-/// by its legs. `tests` counts the bends asked and the points written.
+/// by its legs - but a vertex within `ON_COURSE` of a point of `held` (a race's offtake) left as it is. `tests` counts the bends
+/// asked and the points written.
 ///
 /// Research:
-///     an earthen channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: every interior corner filleted
-///     no mitered corner - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "no watercourse on them has a mitered corner", so no vertex is held unrounded; a channel's mouth is set on the drawn course instead (`mouth`)
+///     an earthen channel bends on a sweep - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every interior corner of 8 degrees or more filleted at about 2.5 widths, a gentler one left
+///     the main channel not rounded at an offtake - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "Where a branch leaves, the main channel is not rounded"
 #[must_use]
-pub fn drawn(course: &[Pt], w: f64, tests: &mut u64) -> Vec<Pt> {
+pub fn drawn(course: &[Pt], w: f64, held: &[Pt], tests: &mut u64) -> Vec<Pt> {
     if course.len() < 3 {
         return course.to_vec();
     }
     let mut out = vec![course[0]];
     for i in 1..course.len() - 1 {
-        *tests += 1;
+        *tests += 1 + held.len() as u64;
+        if held.iter().any(|&h| dist(h, course[i]) <= ON_COURSE) {
+            out.push(course[i]);
+            continue;
+        }
         match turn(course, i) {
             None => {}
             Some(t) if t < MIN_TURN_DEG => out.push(course[i]),

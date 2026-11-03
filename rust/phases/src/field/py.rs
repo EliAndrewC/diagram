@@ -324,7 +324,7 @@ pub fn roll_knob(seed: i64, name: &str, n: u32, weights: Vec<f64>) -> u32 {
 /// `ValueError` naming the rule when a basin or a grave breaks one where it is decided (D7).
 ///
 /// Research:
-///     the brook drawn where it is laid - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every corner on its arc (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)
+///     the brook drawn where it is laid - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every bend of 8 degrees or more on its arc, the brook not rounded where the race leaves it (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)
 #[pyfunction]
 #[expect(
     clippy::too_many_arguments,
@@ -381,7 +381,13 @@ pub fn stage_field<'py>(
     let mut work = 0;
     let mut drawn_pts = 0;
     for f in &mut out.fields {
-        let drawn = crate::course::drawn(&f.brook.pts, w, &mut work);
+        let taps: Vec<Pt> = f
+            .channels
+            .first()
+            .and_then(|c| c.pts.first().copied())
+            .into_iter()
+            .collect();
+        let drawn = crate::course::drawn(&f.brook.pts, w, &taps, &mut work);
         if let Some(tap) = f.channels.first_mut().and_then(|c| c.pts.first_mut()) {
             *tap = crate::course::mouth(*tap, &drawn, &mut work);
         }

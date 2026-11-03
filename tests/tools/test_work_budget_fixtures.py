@@ -143,7 +143,7 @@ def test_an_audit_bundle_holds_the_code_counts_chains_and_budget(tmp_path: Path)
     assert rc == 0
     names = {p.name for p in (tmp_path / "out").iterdir()}
     assert names == {"MANIFEST.md", "code", "counts.json", "chains.txt", "budget.json", "rubric.md"}
-    assert any(p.name == "__init__.py" for p in (tmp_path / "out" / "code").iterdir()), "the stage's own package"
+    assert any(p.name.endswith("homesteads____init__.py") for p in (tmp_path / "out" / "code").iterdir()), "the stage's own package, named by its path"
     assert wbb.audit_bundle(REPO, "no_such_stage", tmp_path / "o2")[0] == 2
 
 

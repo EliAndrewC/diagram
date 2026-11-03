@@ -387,8 +387,36 @@ def stage_files(root: Path, phase: str) -> list[Path]:
     rs = re.compile(rf"^\s*(?:pub(?:\(crate\))?\s+)?fn\s+stage_{re.escape(phase)}\b", re.M)
     rust = [p for p in sorted((root / RUST).rglob("*.rs")) if rs.search(p.read_text(encoding="utf-8"))] if (root / RUST).is_dir() else []
     if rust:
-        files += sorted(rust[0].parent.glob("*.rs")) if rust[0].parent.name != "src" else rust[:1]
+        home_rs = rust[0].parent
+        if home_rs.name != "src":
+            # the module's own file above its directory (`src/sink.rs` for `src/sink/`), where it is not a `mod.rs` inside it
+            files += [q for q in [home_rs.parent / f"{home_rs.name}.rs"] if q.is_file()] + sorted(home_rs.glob("*.rs"))
+        else:
+            files += rust[:1]
+        files += [q for q in crate_modules(root, [f for f in files if f.suffix == ".rs"]) if q not in files]
     return files
+
+
+def crate_modules(root: Path, rs: list[Path]) -> list[Path]:
+    """The crate's modules the stage's Rust reaches by path (`crate::course::drawn` brings `src/course.rs`) - THE AUDIT READS EVERY
+    LOOP THE STAGE RUNS (feature 444 T26's MODE AUDITs: the field's bundle lacked `course.rs`, whose loops its new counter names)."""
+    src = root / RUST / "phases" / "src"
+    out: list[Path] = []
+    for p in rs:
+        for name in sorted(set(re.findall(r"\bcrate::([a-z_][a-z0-9_]*)::", p.read_text(encoding="utf-8")))):
+            for q in (src / f"{name}.rs", src / name / "mod.rs"):
+                if q.is_file() and q not in out and q not in rs:
+                    out.append(q)
+    return out
+
+
+def bundled_name(root: Path, p: Path) -> str:
+    """A file's name in the bundle's `code/`: its path from the repository root, `/` as `__`, so two modules of one name (the field's
+    and the sink's `brook.rs`, feature 444 T26) never overwrite each other."""
+    try:
+        return p.relative_to(root).as_posix().replace("/", "__")
+    except ValueError:
+        return p.name
 
 
 def counted_files(root: Path, counts: list[dict]) -> list[Path]:
@@ -549,7 +577,7 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     out.mkdir(parents=True, exist_ok=True)
     (out / "code").mkdir(exist_ok=True)
     for p in files:
-        shutil.copy(p, out / "code" / p.name)
+        shutil.copy(p, out / "code" / bundled_name(root, p))
     (out / "counts.json").write_text(json.dumps({"run": runs[-1].name, "summary": run["summary"]["stages"].get(phase), "rolls": counts}, indent=1), encoding="utf-8")
     (out / "chains.txt").write_text(chains, encoding="utf-8")
     pinned = json.loads((root / budget).read_text(encoding="utf-8")) if budget else table["stages"].get(phase)
@@ -559,7 +587,7 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
         f"# work-budget MODE AUDIT - {phase}\n\n"
         "MODE AUDIT: judge the landed code against its counters. Read, beside this file:\n\n"
         "- `rubric.md` - the standards S1-S10;\n"
-        f"- `code/` - the stage's modules and every module defining a function its counters name: {', '.join(p.name for p in files)};\n"
+        f"- `code/` - the stage's modules and every module defining a function its counters name, each named by its path (`/` as `__`): {', '.join(bundled_name(root, p) for p in files)};\n"
         "- `counts.json` - the newest run's counted operations for the stage at each size, by kind and by function;\n"
         "- `chains.txt` - the callers above each counted function;\n"
         "- `budget.json` - the stage's pinned budget.\n\n"

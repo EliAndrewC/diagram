@@ -361,10 +361,11 @@ Measured 2026-11-03 before the plan (throwaway probes rolling the first three st
   vertex, and seats a confluence only on a straight stretch at least the fillet's cut-back from any corner, so holding it leaves
   the drawn course as it was. This changes the field's seam and its Rust: the field's counted work is re-measured against its
   accepted figures (the ratchet) and audited once in MODE AUDIT.
-- **D3 - the end-of-stage filing after a Rust stage** (`hamletgen/driver.py`, `rust_prefix.py`, `tools/work_budget.py`): a Rust
-  stage's seam only appends records, so after it the registry files the records it does not hold (`Standing.resync(new_only=True)`)
-  in place of the walk of every record on the manifest; the next Python stage's full walk still re-records anything reshaped in
-  place, so no reshape goes unasked.
+- **D3 - the end-of-stage walk after a Rust stage** (`hamletgen/driver.py`, `tools/work_budget.py`): the registry files each record
+  as it is appended (`StandingList`), so the walk at a stage's end only re-records what was reshaped in place; a Rust stage's
+  seam reshapes nothing (measured 2026-11-03 over cohort seeds 1-48: after water_frame, field and sink the walk moved no record,
+  its whole cost the extents it recomputed to compare), so the driver skips the walk after a Rust stage (`walks_after`). The next
+  Python stage's walk still re-records anything reshaped in place, and the Rust stage gate (`rust_prefix.py`) keeps its own.
 - **D4 - the pond** (0060, 0061): its area 3/100 of the field's paddy (0060's GUESS), its aspect the plan's, its seat on the
   drainage line beyond the collector's outfall by its own half-length, stepped on by a half-length where its rim or its box meets
   the crop or the brook (the water index's cells), stepped across the fall a long radius each way where the line is blocked, and
