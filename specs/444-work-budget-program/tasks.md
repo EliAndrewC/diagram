@@ -106,6 +106,8 @@
       research: rendering
 - [ ] T29 phase: waterward - a polder's reed strips outside its dike on the flanks that face the water, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
       research: rendering
+- [ ] T30 phase: homesteads - every household seated on its own ground (the cluster grown from its first house, each homestead's parts laid in its box, the track out chosen once and each household's way laid in the gaps), rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

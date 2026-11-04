@@ -334,15 +334,19 @@
   "waterward.polder": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.43,
+   "exponent": 0.46,
    "derivation": "specs/444-work-budget-program/phases/waterward_polder.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/waterward_polder.verdict-3.txt",
-   "items_at_10": 17813,
-   "items_at_20": 24059,
+   "verdict": "specs/444-work-budget-program/phases/waterward_polder.verdict-5.txt",
+   "items_at_10": 27296,
+   "items_at_20": 37653,
    "sizes": [
     10,
     20
-   ]
+   ],
+   "first": {
+    "10": 17813.0,
+    "20": 24059.0
+   }
   }
  }
 }

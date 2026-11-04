@@ -261,6 +261,12 @@ def test_a_form_of_a_stage_is_budgeted_at_its_bounded_n(root: pathlib.Path) -> N
     assert after.split(";")[0] == before.split(";")[0], f"a form at a bounded n holds no figure at 40: {before!r} -> {after!r}"
     assert bc.growth(100, 141, 2) == pytest.approx(0.496, abs=0.01)
     # the table's item check reading a form's own sizes is `tests/tools/test_work_budget.py`'s (it lands with the engine)
+    # raised at its own top size (feature 444 T29: the raise path read the budget at 40, which a bounded form has none of)
+    (root / "p.md").write_text(f"- Bounds: a bounded n: households 10-20 (0019)\n\n{bc.MISSED}\n\n- the strip drawing's passes\n")
+    assert bc.set_budget(root, "field.polder", 400, 0.5, "p.md", "SOUND.txt", {10: 19, 20: 38}, raise_=True) == ""
+    st = bc.load(root)["stages"]["field.polder"]
+    assert st["first"] == {"10": 245 * 19, "20": 245 * 38} and st["per_thing"] == 400
+    assert "budget at 20, 11,400, is no raise on 15,200" in bc.set_budget(root, "field.polder", 300, 0.5, "p.md", "SOUND.txt", {10: 19, 20: 38}, raise_=True)
 
 
 def test_an_accept_naming_a_form_pins_it(root: pathlib.Path) -> None:
