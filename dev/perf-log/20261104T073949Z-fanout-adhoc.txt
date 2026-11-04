@@ -1,0 +1,14 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+seat: 213,696 calls @20, 457,091 calls @40, growth exponent 1.10
+  placed @40: nothing in the manifest
+  anchor hamletgen/cluster.py:62:back_fouled [72]
+    hamletgen/cluster.py:89:<genexpr> [209,554|93,653] <- hamletgen/cluster.py:62:back_fouled [72|47]
+    hamletgen/cluster.py:82:<genexpr> [51,480|23,265] <- hamletgen/cluster.py:62:back_fouled [72|47]
+  fastest growers @20 -> @40:
+    x2.4 'setdefault' of 'dict' objects [21,211 -> 51,250]
+    x2.4 'append' of 'list' objects [26,754 -> 63,087]
+    x2.2 hamletgen/cluster.py:89:<genexpr> [93,653 -> 209,554]
+    x2.2 hamletgen/cluster.py:82:<genexpr> [23,265 -> 51,480]
+
+all stages: 213,696 calls @20, 457,091 calls @40
