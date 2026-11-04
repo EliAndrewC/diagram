@@ -270,6 +270,9 @@ fn searched(inp: &SinkIn, out: Pt, head: Pt) -> Vec<Vec<Pt>> {
 ///
 /// Research:
 ///     constructed route - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); round the field's hull to its lowest point, then down the fall, lengthened 400 ft a try
+///     its turn out of the collector - research/questions/0060-field-drains-akusuiro.drawing.html: "The turn is held to 55 degrees or less", asked by `lay` of the route this returns (a first leg toward the hull from outside it can turn), which refuses one past it
+///     a drain meeting the brook joins it - research/questions/0060-field-drains-akusuiro.drawing.html: the drain joins the passing brook; the route cut where it first meets the brook (`meets_brook`) and ended there
+///     not the brook's twin - research/questions/0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html: a route running beside the brook past `TWIN_RUN` is laid by `beside` instead
 fn constructed(
     inp: &SinkIn,
     crop: &Crop,

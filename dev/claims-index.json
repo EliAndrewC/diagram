@@ -62184,12 +62184,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::_closest_pair#plumbing": {
-  "body": "1969e392b6ced15a",
+  "body": "89bf7aed68d5de6e",
   "claim": "plumbing - NONE: lazy imports, geometry, keyholing and manifest records",
-  "code": "fa77b3a317f691f9",
-  "core": "1bd9ddb236b8ca83",
+  "code": "cc56fb4ca0c95748",
+  "core": "13658305320fd4a8",
   "date": "2026-11-04",
-  "note": "vertex-pair search for the keyhole seam, plumbing",
+  "note": "a closest-vertex-pair search and operation counters, nothing physical",
   "pages": {},
   "research": "",
   "rests": [],
@@ -80282,16 +80282,49 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/sink/offmap.rs::constructed#a route that runs alongside the brook for more than TWIN_RUN is redrawn by `beside` instead of going off the map": {
+  "code": "79fd0f08d04dc094",
+  "core": "79fd0f08d04dc094",
+  "date": "2026-11-04",
+  "note": "a route that runs alongside the brook for more than TWIN_RUN is redrawn by `beside` instead of going off the map",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/sink/offmap.rs::constructed#constructed route": {
   "body": "b233eacbbece0254",
   "claim": "constructed route - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P2a, 2026-10-25); round the field's hull to its lowest point, then down the fall, lengthened 400 ft a try",
   "code": "ca4a71c04e87ae7d",
   "core": "79fd0f08d04dc094",
-  "date": "2026-11-03",
-  "note": "an off-map run's exit turn is \"held to 55 degrees or less\", but where `start` lies outside the grown hull the first leg goes to `nearest_on` with no check against TURN_MAX_DEG (the route never passes through `keeps`). Test the turn, or file this as a recorded departure",
+  "date": "2026-11-04",
+  "note": "going round the hull to its lowest vertex, then down the fall, adding 400 ft a try until the net heading is downhill and within 90 degrees of the flow: the page says only that the run heads downhill and ends at the map's edge; it says nothing on how the route gets round the field, so GUESS is right",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/sink/offmap.rs::constructed#its turn out of the collector": {
+  "body": "b233eacbbece0254",
+  "claim": "its turn out of the collector - field-drains-akusuiro.drawing: \"The turn is held to 55 degrees or less\", asked by `lay` of the route this returns (a first leg toward the hull from outside it can turn), which refuses one past it",
+  "code": "a39ad5960cf143b1",
+  "core": "79fd0f08d04dc094",
+  "date": "2026-11-04",
+  "note": "the claim puts the 55-degree refusal in `lay`, which the bundle does not show; this unit makes no turn check itself. From inside the hull the first leg follows `head` (no turn); from outside it goes to the nearest hull point (any turn). I need `lay`'s source to confirm it refuses a turn over 55 degrees, and to see whether it also applies that rule to the \"stream\" routes this returns, where the page rules on no angle",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ "rust/phases/src/sink/offmap.rs::constructed#the drain is cut where its route meets the passing brook and ends there as a join (`meets_brook`, \"stream\"); the page backs this [§5]": {
+  "code": "79fd0f08d04dc094",
+  "core": "79fd0f08d04dc094",
+  "date": "2026-11-04",
+  "note": "the drain is cut where its route meets the passing brook and ends there as a join (`meets_brook`, \"stream\"); the page backs this [§5]",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/sink/offmap.rs::grown#the off-map branch": {
   "body": "2991b1679bb80ae7",
