@@ -1,0 +1,219 @@
+//! The seating's unit tests (feature 444 T30).
+//!
+//! Research:
+//!     the seating's tests - NONE: fixtures and assertions, deciding nothing about the place
+#![expect(
+    clippy::manual_midpoint,
+    reason = "two half-sizes summed in the tests' own checks"
+)]
+
+use super::bearing::Margin;
+use super::fit::{corners, quad_gap, EAVE_FT};
+use super::fixtures::{Forms, Kind};
+use super::ground::Ground;
+use super::layout::Byre;
+use super::lots::Lots;
+use super::place::{
+    box_reach, field_distance, grow, keeps_its_distance, seat_toward, union, Keep, Seating, Site,
+};
+
+#[test]
+fn a_cluster_grows_from_its_first_house_every_rule_kept() {
+    let mut t = 0;
+    let canvas = (2400.0, 2400.0);
+    let field = vec![
+        (200.0, 1500.0),
+        (2200.0, 1500.0),
+        (2200.0, 2300.0),
+        (200.0, 2300.0),
+    ];
+    let mut ground = Ground::new((0.0, 0.0), canvas, &mut t);
+    ground.fill_ring(&field, &mut t);
+    let reach = ground.reach(&[(1200.0, 100.0)], &mut t);
+    let margin = Margin::new(&field, 0.0, &mut t);
+    let lots = Lots::deal(
+        4,
+        12,
+        0.3,
+        &[(Kind::Privy, 1.0), (Kind::Coop, 0.5), (Kind::Woodpile, 0.4)],
+    );
+    let forms = Forms::default();
+    let beyond = |_p: (f64, f64)| true;
+    let site = Site {
+        ground: &ground,
+        beyond: &beyond,
+        reach: &reach,
+        field: &field,
+        streams: &[],
+        canvas,
+        bearing: (&margin, 0.0),
+        lots: &lots,
+        byre: Some(Byre::YardShed),
+        forms: &forms,
+        shade: 50.0,
+    };
+    assert!(beyond((0.0, 0.0)));
+    let st = grow(&site, (1200.0, 1350.0), 12);
+    assert_eq!(st.seated.len(), 12);
+    // the first house nearest the seat, the cluster compact about it
+    assert!(st
+        .seated
+        .iter()
+        .enumerate()
+        .all(|(k, s)| s.lot == k && s.seat.0 > 0.0));
+    let first = &st.seated[0].bundle;
+    assert!((first.house.0 - 1200.0).hypot(first.house.1 - 1350.0) < 200.0);
+    for (i, a) in st.seated.iter().enumerate() {
+        // off the field
+        assert!(a.bundle.bbox.1 + a.bundle.bbox.3 / 2.0 <= 1500.0 + 8.0 * 1.5);
+        for b in &st.seated[i + 1..] {
+            let (ra, rb) = (a.bundle.bbox, b.bundle.bbox);
+            assert!(
+                (ra.0 - rb.0).abs() >= (ra.2 + rb.2) / 2.0 - 1e-6
+                    || (ra.1 - rb.1).abs() >= (ra.3 + rb.3) / 2.0 - 1e-6
+            );
+            let gap = quad_gap(
+                &corners(a.bundle.house, a.bundle.turn),
+                &corners(b.bundle.house, b.bundle.turn),
+            );
+            assert!(gap >= EAVE_FT.0);
+        }
+    }
+    assert!(st.search.0 >= 12 && st.search.3 >= 12 && st.tests > 0);
+    // no household is seated where the seat's ground is all taken
+    let mut full = Ground::new((0.0, 0.0), canvas, &mut t);
+    full.fill_ring(
+        &[
+            (-10.0, -10.0),
+            (2410.0, -10.0),
+            (2410.0, 2410.0),
+            (-10.0, 2410.0),
+        ],
+        &mut t,
+    );
+    let none = full.reach(&[(1200.0, 100.0)], &mut t);
+    let site_full = Site {
+        ground: &full,
+        reach: &none,
+        ..site
+    };
+    assert!(grow(&site_full, (1200.0, 1350.0), 3).seated.is_empty());
+    // the geometry of the growth's step
+    let r = box_reach((0.0, 0.0), (0.0, 0.0, 20.0, 10.0));
+    assert_eq!(r, (10.0, 10.0, 5.0, 5.0));
+    assert_eq!(union(r, (1.0, 20.0, 1.0, 1.0)), (10.0, 20.0, 5.0, 5.0));
+    let q = seat_toward((0.0, 0.0), r, r, 0.0, 2.0);
+    assert!((q.0 - 22.0).abs() < 1e-9 && q.1.abs() < 1e-9);
+    assert!(seat_toward((0.0, 0.0), r, r, std::f64::consts::FRAC_PI_2, 2.0).1 > 11.0);
+    assert!(
+        keeps_its_distance((30.0, 0.0, 10.0, 10.0), (0.0, 0.0), r, 2.0)
+            && !keeps_its_distance((14.0, 0.0, 10.0, 10.0), (0.0, 0.0), r, 2.0)
+    );
+    assert!((field_distance((0.0, 0.0), &field) - (200.0f64.hypot(1500.0))).abs() < 1e-6);
+}
+
+#[test]
+fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_the_growth() {
+    let mut t = 0;
+    let canvas = (600.0, 600.0);
+    let ground = Ground::new((0.0, 0.0), canvas, &mut t);
+    let reach = ground.reach(&[(300.0, 300.0)], &mut t);
+    let margin = Margin::new(
+        &[(0.0, 590.0), (600.0, 590.0), (600.0, 600.0), (0.0, 600.0)],
+        0.0,
+        &mut t,
+    );
+    let forms = Forms::default();
+    let lots = Lots::deal(4, 1, 0.0, &[]);
+    let beyond = |_p: (f64, f64)| true;
+    let field = [(0.0, 590.0), (600.0, 590.0), (600.0, 600.0), (0.0, 600.0)];
+    let site = Site {
+        ground: &ground,
+        beyond: &beyond,
+        reach: &reach,
+        field: &field,
+        streams: &[],
+        canvas,
+        bearing: (&margin, 0.0),
+        lots: &lots,
+        byre: None,
+        forms: &forms,
+        shade: 50.0,
+    };
+    assert!(beyond((0.0, 0.0)));
+    // off the canvas
+    let mut st = Seating::default();
+    assert!(!st.offer(&site, 5.0, 5.0, None));
+    // seated once, then the lots are spent
+    assert!(st.offer(&site, 300.0, 250.0, None));
+    assert!(!st.offer(&site, 300.0, 450.0, None));
+    // a seat whose yard laps one standing homestead is moved off it, and the move asks the growth's distance
+    let two = Lots::deal(4, 2, 0.0, &[]);
+    let site_two = Site { lots: &two, ..site };
+    let mut pair = Seating::default();
+    assert!(pair.offer(&site_two, 300.0, 400.0, None));
+    let a = pair.seated[0].bundle.bbox;
+    let keep = Keep {
+        from: ((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0)),
+        gap: 1.0,
+        standing: vec![],
+    };
+    assert!(pair.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&keep)));
+    // a move that would break the growth's distance is refused
+    let mut again = Seating::default();
+    assert!(again.offer(&site_two, 300.0, 400.0, None));
+    let strict = Keep {
+        from: ((300.0, 400.0), (2000.0, 2000.0, 2000.0, 2000.0)),
+        gap: 1.0,
+        standing: vec![],
+    };
+    assert!(!again.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&strict)));
+    // a lot whose fixture finds no seat is unlaid on every side
+    let unlaid = Lots::deal(4, 2, 0.0, &[(Kind::Retirement, 1.0)]);
+    let nowhere = Forms {
+        retirement_gaps: vec![],
+        ..Forms::default()
+    };
+    let site_unlaid = Site {
+        lots: &unlaid,
+        forms: &nowhere,
+        ..site
+    };
+    assert!(!Seating::default().offer(&site_unlaid, 300.0, 250.0, None));
+    // a reach that no yard touches: the seat is refused, and the first house's grid offers nothing
+    let mut walled = Ground::new((0.0, 0.0), canvas, &mut t);
+    walled.fill_ring(
+        &[(0.0, 0.0), (600.0, 0.0), (600.0, 40.0), (0.0, 40.0)],
+        &mut t,
+    );
+    walled.fill_ring(
+        &[(40.0, 40.0), (600.0, 40.0), (600.0, 600.0), (40.0, 600.0)],
+        &mut t,
+    );
+    let pocket = walled.reach(&[(10.0, 10.0)], &mut t);
+    let open = Ground::new((0.0, 0.0), canvas, &mut t);
+    let site_far = Site {
+        ground: &open,
+        reach: &pocket,
+        ..site
+    };
+    assert!(!Seating::default().offer(&site_far, 300.0, 250.0, None));
+    assert!(grow(&site_far, (300.0, 300.0), 1).seated.is_empty());
+    // a window smaller than the canvas: its first house's grid asks past the window of the window's owner
+    let small = Ground::new((0.0, 0.0), (300.0, 300.0), &mut t);
+    let small_reach = small.reach(&[(150.0, 150.0)], &mut t);
+    let site_small = Site {
+        ground: &small,
+        reach: &small_reach,
+        ..site
+    };
+    assert!(grow(&site_small, (150.0, 150.0), 1).seated.len() <= 1);
+    // a ground that holds a few: the growth widens past its table and stops when no new seat is queued
+    let many = Lots::deal(4, 30, 0.0, &[]);
+    let site_many = Site {
+        lots: &many,
+        ..site
+    };
+    let st = grow(&site_many, (300.0, 300.0), 30);
+    assert!(!st.seated.is_empty() && st.seated.len() < 30);
+}

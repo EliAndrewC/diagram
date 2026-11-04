@@ -19,10 +19,13 @@ pub mod fixtures;
 pub mod ground;
 pub mod layout;
 pub mod lots;
+pub mod place;
 
 #[cfg(test)]
 mod fit_tests;
 #[cfg(test)]
 mod fixtures_tests;
+#[cfg(test)]
+mod place_tests;
 #[cfg(test)]
 mod tests;
