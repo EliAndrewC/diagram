@@ -45,6 +45,19 @@ impl Judge for WaysJudge<'_> {
     }
 
     fn tree_admits(&mut self, drawn: &[Pt], k: usize, tests: &mut Counts) -> bool {
+        self.refusal(drawn, k, tests).is_none()
+    }
+
+    fn reserve(&mut self, drawn: &[Pt], k: usize) {
+        let mut t = Counts::default();
+        self.tree.append(drawn, self.centers[k], &mut t);
+    }
+}
+
+impl WaysJudge<'_> {
+    /// The first rule a household's drawn way is refused by, named - its laid run on its own household or another homestead, else
+    /// the tree's - or None where it is admitted.
+    pub fn refusal(&mut self, drawn: &[Pt], k: usize, tests: &mut Counts) -> Option<&'static str> {
         let laid = self.tree.laid(drawn, tests);
         if laid != drawn {
             let p = &self.parts[k];
@@ -61,14 +74,11 @@ impl Judge for WaysJudge<'_> {
                 tests.add(&key, n);
             }
             if !others {
-                return false;
+                return Some(if own { "others_clear" } else { "own_clear" });
             }
         }
-        self.tree.admits(drawn, self.centers[k], tests)
-    }
-
-    fn reserve(&mut self, drawn: &[Pt], k: usize) {
-        let mut t = Counts::default();
-        self.tree.append(drawn, self.centers[k], &mut t);
+        let yard = self.parts[k].yard_records_quad();
+        self.tree
+            .refusal(drawn, self.centers[k], Some(&yard), tests)
     }
 }

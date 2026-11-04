@@ -19,7 +19,7 @@ from __future__ import annotations
 import math
 import os
 from collections.abc import Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
@@ -185,6 +185,216 @@ def compare_rust_track(s: Settlement, plan: SitePlan, track: Poly, path: str) ->
         "python": [[round(q[0], 1), round(q[1], 1)] for q in track],
         "rust": None if got is None else [[round(q[0], 1), round(q[1], 1)] for q in got["track"]],
         "rust_counts": None if got is None else sum(got["counts"].values()),
+    }
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(rec) + "\n")
+
+
+def ways_inputs(s: Settlement) -> dict[str, object]:
+    """What the Rust households' ways read (`l7r_phases.households_ways`, feature 444 T30), gathered where `gap_ways.lay_the_ways`
+    and the seating's lane law (`tree.seating_law`) read it, before any way is laid.
+
+    Research: plumbing - NONE: the households' ways' inputs, each read where the Python reads it"""
+    from l7r.diagram.settlement._knobs import bridge_crossed_waters
+    from l7r.diagram.settlement.city.bridges import flooded_ground
+    from l7r.diagram.settlement.rolling.access import on_site_ground
+
+    from ..ways import law
+    from ..ways.corridors import open_ground_rings
+    from ..ways.geom import memo_ground, steading_footprints, worked_ground
+    from ..ways.law_water import water_courses
+    from ..ways.settle import square_waters
+    from ..ways.tree import seating_law
+
+    pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
+    ring = lambda r: [pt(q) for q in r]  # noqa: E731
+    box = lambda b: tuple(float(v) for v in b)  # noqa: E731
+    houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
+    rows = []
+    for rec in houses:
+        geom = rec["geom"]
+        bx = geom.get("boxes") or {}
+        fixtures = [(name == "persimmon", box(b)) for name, b in (bx.get("fixtures") or {}).items()]
+        sheds = [box(bx[k]) for k in ("shed", "byre") if bx.get(k) is not None]
+        beds = [box(b) for b in [bx.get("well"), *(bx.get("gardens") or ())] if b is not None]
+        yard = bx.get("yard") or geom.get("yard") or geom["house"]
+        well = geom.get("well")
+        head = None if well is None else (float(well[0]), float(well[1]), 2.0 * float(s._well_vr()), 2.0 * float(s._well_vr()))
+        rows.append(
+            (
+                box(bx.get("house") or geom["house"]),
+                box(yard),
+                beds,
+                sheds,
+                fixtures,
+                box(geom["house"]),
+                box(geom.get("yard") or yard),
+                float(geom.get("turn") or 0.0),
+                box(geom["bbox"]),
+                (float(rec["x"]), float(rec["y"])),
+                head,
+            )
+        )
+    segs = [(pt(a), pt(b)) for a, b in s._access.segs]  # type: ignore[attr-defined]
+    placed = [box(b) for b in getattr(s, "placed", []) or []]
+    xs = [b[0] - b[2] / 2 for b in placed] + [q[0] for ab in segs for q in ab]
+    ys = [b[1] - b[3] / 2 for b in placed] + [q[1] for ab in segs for q in ab]
+    xe = [b[0] + b[2] / 2 for b in placed] + [q[0] for ab in segs for q in ab]
+    ye = [b[1] + b[3] / 2 for b in placed] + [q[1] for ab in segs for q in ab]
+    # the site at the lane raster's own 5 ft cells, as `gap_ways.lane_layers` asks it (its origin, 160 ft past every placed box -
+    # the households' and what else stands, or the cells are not the raster's), and 40 ft further each way for the lines the
+    # standing ground samples
+    lx0, ly0 = max(0.0, min(xs) - 160.0), max(0.0, min(ys) - 160.0)
+    x0, y0 = lx0 - 8 * 5.0, ly0 - 8 * 5.0
+    x1, y1 = min(float(s.W), max(xe) + 160.0) + 40.0, min(float(s.H), max(ye) + 160.0) + 40.0
+    nx, ny = max(1, math.ceil((x1 - x0) / 5.0)), max(1, math.ceil((y1 - y0) / 5.0))
+    cells = [not on_site_ground(s, c, c) for j in range(ny) for i in range(nx) for c in [(x0 + (i + 0.5) * 5.0, y0 + (j + 0.5) * 5.0)]]
+    wood = getattr(s, "_wood", None)
+    seats = [(float(q[0]), float(q[1])) for bucket in (wood.seats.buckets.values() if wood is not None else ()) for q in bucket]
+    lawful = seating_law(s)
+    st = getattr(s.M, "standing", None)
+    lanes = st.forbidding("lanes") if st is not None else []
+    decks = st.forbidding("bridges") if st is not None else []
+    edge = memo_ground(s, "worked", worked_ground).edge
+    edge_segs = [] if edge is None else [(pt(a), pt(b)) for g in getattr(edge, "geoms", [edge]) for a, b in zip(g.coords, list(g.coords)[1:], strict=False)]
+    turned = lambda h: (float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))  # noqa: E731
+    own = lambda h, r: r.get("of") and math.dist(pt(r["of"]), (float(h["x"]), float(h["y"]))) <= 0.5  # noqa: E731
+    parts_of = lambda h: [ring(r["poly"]) for key in ("byres", "farm_sheds", "threshing_yards", "gardens") for r in s.M.get(key) or [] if own(h, r) and r.get("poly")]  # noqa: E731
+    return {
+        "households": rows,
+        "extra": [box(b) for b in getattr(s, "placed", []) or [] if not any(b is h["geom"]["bbox"] for h in houses)],
+        "segs": segs,
+        "ground": ((x0, y0), 5.0, nx, cells),
+        "seats": seats,
+        "lane_gap": float(wood.lane_gap) if wood is not None else 0.0,
+        "canvas": (float(s.W), float(s.H)),
+        "square_waters": [(ring(c), float(h)) for c, h in square_waters(s.M)],
+        "brooks": [ring(b) for b in law._brooks(s.M)],
+        "destinations": ([(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []] + law.way_targets(s.M), edge_segs, [ring(p) for p in steading_footprints(s.M)]),
+        "root": ring(s.M.get("way_out_track") or []),
+        "steadings": [(turned(h), parts_of(h)) for h in s.M.get("houses") or [] if all(k in h for k in ("x", "y", "w", "h"))],
+        "houses": [turned(h) for h in lawful.houses if all(k in h for k in ("x", "y", "w", "h"))],
+        "yards": [(ring(p), None if o is None else pt(o)) for p, o in lawful.yards if len(p) >= 3],
+        "solid": [box(b) for b in lawful.solid],
+        "fixtures": [ring(q) for q in lawful.fixtures],
+        "buildings": [ring(q) for q in lawful.buildings],
+        "open_rings": [ring(r) for r in open_ground_rings(s.M)],
+        "forbidding": [ring(e[1]) for e in lanes],
+        "channels": [ring(c) for c in water_courses(s.M, "channel")],
+        "crossed": [(ring(w), float(ww)) for w, ww in bridge_crossed_waters(s.M)],
+        "fords": [pt(f) for f in (s.M.get("meta") or {}).get("brook_fords") or []],
+        "flooded": flooded_ground(s.M),
+        "deck_forbidding": [ring(e[1]) for e in decks if e[0] != "bridges"],
+    }
+
+
+def watch_verdicts(path: str) -> Any:
+    """Record every verdict Python's lane law gives a household's way while `lay_the_ways` runs - the run, the house, the first
+    rule `Lawful.fault` names - to the JSON lines at `path`, for bisecting a way the Rust admits and Python refuses; returns the
+    undo.
+
+    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
+    import json
+
+    from ..ways import tree as tree_mod
+    from ..ways.settle.lawful import Lawful
+
+    fh = open(path, "a", encoding="utf-8")  # noqa: SIM115 - closed by the undo
+    faults: list[Any] = []
+    orig_fault, orig_admits = Lawful.fault, tree_mod.admits
+
+    def fault(self: Any, run: Any, width: float, skip: Any = None) -> Any:
+        why = orig_fault(self, run, width, skip)
+        faults.append(why)
+        return why
+
+    def admits(base: Any, M: Any, run: Any, role: Any = "access", house: Any = None, yard: Any = None) -> bool:
+        faults.clear()
+        ok = orig_admits(base, M, run, role, house, yard)
+        rec = {
+            "house": None if house is None else [round(float(house["x"]), 1), round(float(house["y"]), 1)],
+            "run": [[round(q[0], 1), round(q[1], 1)] for q in run],
+            "ok": ok,
+            "faults": [f for f in faults if f],
+        }
+        fh.write(json.dumps(rec) + "\n")
+        return ok
+
+    from l7r.diagram.settlement.rolling import access as acc
+    from l7r.diagram.settlement.rolling import gap_ways as gw
+
+    orig_first, orig_taut = gw._first_admitted, gw.taut
+    legs: list[Any] = []
+
+    def first(s_: Any, runs: Any, leg_ok: Any, geom: Any, memo: Any) -> Any:
+        def logged(a: Any, b: Any) -> bool:
+            ok = leg_ok(a, b)
+            if not ok:
+                why = [
+                    n
+                    for n, f in (
+                        ("house", lambda: acc.house_clear(a, b, geom, acc.house_gap(s_))),
+                        ("fixtures", lambda: acc.fixtures_clear(s_, a, b, geom)),
+                        ("parts", lambda: acc.parts_clear(s_, a, b, geom)),
+                        ("standing", lambda: acc.standing_ground(s_, a, b, memo)),
+                    )
+                    if not f()
+                ]
+                legs.append([[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], why])
+            return ok
+
+        for q in runs:
+            legs.clear()
+            run = orig_taut(q, logged, acc.doubles_back, gw.GAP_LEGS)
+            drawn = acc.admitted(s_, run, geom, memo) if run is not None else None
+            fh.write(
+                json.dumps(
+                    {
+                        "house": [round(float(geom["house"][0]), 1), round(float(geom["house"][1]), 1)],
+                        "cand": [[round(p[0], 1), round(p[1], 1)] for p in q],
+                        "taut": None if run is None else [[round(p[0], 1), round(p[1], 1)] for p in run],
+                        "drawn": drawn is not None,
+                        "refused_legs": legs[:6],
+                    }
+                )
+                + "\n"
+            )
+            if drawn is not None:
+                return drawn
+        return None
+
+    Lawful.fault, tree_mod.admits = fault, admits  # type: ignore[method-assign]
+    gw._first_admitted = first
+
+    def undo() -> None:
+        Lawful.fault, tree_mod.admits = orig_fault, orig_admits  # type: ignore[method-assign]
+        gw._first_admitted = orig_first
+        fh.close()
+
+    return undo
+
+
+def compare_rust_ways(s: Settlement, inputs: dict[str, object], path: str) -> None:
+    """Run the Rust households' ways on the state `inputs` was gathered from and append each household's way beside Python's -
+    which `lay_the_ways` has laid since - to the JSON lines at `path`; the map is not touched.
+
+    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
+    import json
+
+    from ..phases_ext import phases
+
+    got = phases().households_ways(inputs)
+    houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
+    python = [None if h["geom"].get("access") is None else [[round(q[0], 1), round(q[1], 1)] for q in h["geom"]["access"]] for h in houses]
+    rust = [None if w is None else [[round(q[0], 1), round(q[1], 1)] for q in w] for w in got["drawn"]]
+    rec = {
+        "centers": [[round(float(h["x"]), 1), round(float(h["y"]), 1)] for h in houses],
+        "households": len(houses),
+        "placed": len(getattr(s, "placed", []) or []),
+        "python": python,
+        "rust": rust,
+        "rust_counts": sum(got["counts"].values()),
+        "rust_verdicts": [[[[round(q[0], 1), round(q[1], 1)] for q in w], k, ok] for w, k, ok in got["verdicts"]],
     }
     with open(path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps(rec) + "\n")

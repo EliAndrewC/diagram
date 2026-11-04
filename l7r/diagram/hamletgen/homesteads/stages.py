@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import copy
 import math
+import os
 import random
 from collections.abc import Callable
 from typing import Any
@@ -30,7 +31,7 @@ from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, u
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
-from .household_ways import chose_the_track, near_the_cluster
+from .household_ways import chose_the_track, compare_rust_ways, near_the_cluster, watch_verdicts, ways_inputs
 from .rank_rounds import _seat_rank_rounds
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
@@ -228,7 +229,16 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         s.M["way_out_gate"] = list(s.M["way_out_track"][0])
         for a, b in near_the_cluster(s, track, s.px(JOIN_FAR_FT)):
             s._access.add(a, b)
-    s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
+    compare = os.environ.get("L7R_RUST_COMPARE") if getattr(s, "_access", None) is not None else None
+    inputs = ways_inputs(s) if compare else None  # feature 444 T30: the Rust households' ways run beside them, logged
+    verdicts = watch_verdicts(compare + ".verdicts") if compare else None
+    try:
+        s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
+    finally:
+        if verdicts is not None:
+            verdicts()
+    if compare and inputs is not None:
+        compare_rust_ways(s, inputs, compare + ".ways")
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None

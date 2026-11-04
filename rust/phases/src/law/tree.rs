@@ -304,14 +304,48 @@ impl<'a> Tree<'a> {
     }
 
     /// Would the tree, the way `run` of household `of` added, keep the lane law among its lanes?
-    pub fn admits(&self, run: &[Pt], of: Pt, tests: &mut Counts) -> bool {
+    pub fn admits(&mut self, run: &[Pt], of: Pt, tests: &mut Counts) -> bool {
+        self.refusal(run, of, None, tests).is_none()
+    }
+
+    /// The first rule the tree refuses the way `run` of household `of` by, named, or None where it admits it - its threshing yard
+    /// `yard` (as the least that will be drawn of it) standing among the steadings a lane's end reaches while it is asked, as
+    /// `tree.admits` judges a corridor against its household's records-to-be (`records_of`).
+    pub fn refusal(
+        &mut self,
+        run: &[Pt],
+        of: Pt,
+        yard: Option<&[Pt]>,
+        tests: &mut Counts,
+    ) -> Option<&'static str> {
+        let owner = self
+            .steadings
+            .iter()
+            .position(|s| dist(s.house.at, of) <= 0.5);
+        if let Some(y) = yard {
+            self.destinations.steadings.push(y.to_vec());
+            if let Some(k) = owner {
+                self.steadings[k].parts.push(y.to_vec());
+            }
+        }
+        let why = self.judged(run, of, tests);
+        if yard.is_some() {
+            self.destinations.steadings.pop();
+            if let Some(k) = owner {
+                self.steadings[k].parts.pop();
+            }
+        }
+        why
+    }
+
+    fn judged(&self, run: &[Pt], of: Pt, tests: &mut Counts) -> Option<&'static str> {
         let run = dedup(run);
         let Some(h) = run
             .last()
             .and_then(|&q| self.host_of(q))
             .filter(|_| run.len() >= 2)
         else {
-            return false;
+            return Some("no host");
         };
         let new = self.lane_for(&run, of, h, tests);
         let stub = self.stub();
@@ -338,29 +372,29 @@ impl<'a> Tree<'a> {
             tests.add("candidate@admits", 1);
             let mut others: Vec<Lane> = lanes[..lanes.len() - 1].to_vec();
             others.push(stub.clone());
-            if self
-                .fault(&others, &new.pts, new.w, Some(of), tests)
-                .is_some()
-            {
-                return false;
+            if let Some(why) = self.fault(&others, &new.pts, new.w, Some(of), tests) {
+                return Some(why);
             }
-            if all && !self.whole_lawful(lanes, &stub, &chain, &new, tests) {
-                return false;
+            if let Some(why) = all
+                .then(|| self.whole_fault(lanes, &stub, &chain, &new, tests))
+                .flatten()
+            {
+                return Some(why);
             }
         }
-        true
+        None
     }
 
     /// The whole tree's own rules with the new lane: no needle with the track or with the ends joined, at most two free ends a
     /// farmhouse, the way out across each brook once, no way beside another past a pitch.
-    fn whole_lawful(
+    fn whole_fault(
         &self,
         lanes: &[Lane],
         stub: &Lane,
         chain: &[usize],
         new: &Lane,
         tests: &mut Counts,
-    ) -> bool {
+    ) -> Option<&'static str> {
         let mut trial = lanes.to_vec();
         trial.push(stub.clone());
         let ways: Vec<Vec<Pt>> = trial.iter().map(|l| l.pts.clone()).collect();
@@ -370,13 +404,13 @@ impl<'a> Tree<'a> {
             .map(|l| l.pts)
             .collect();
         if needles(&ways, tests) + needles(&joined, tests) > 0 {
-            return false;
+            return Some("needle_loops");
         }
         if fronting_counts(&trial, &self.steadings)
             .iter()
             .any(|&n| n > JOIN.2)
         {
-            return false;
+            return Some("doorstep_ends");
         }
         let mut path = new.pts.clone();
         for &k in chain {
@@ -396,12 +430,13 @@ impl<'a> Tree<'a> {
             .iter()
             .any(|b| crossing_points(&path, b, tests).len() > 1)
         {
-            return false;
+            return Some("way_out_over_and_back");
         }
-        !(tree_shadows(
+        (tree_shadows(
             &lanes.iter().map(|l| l.pts.clone()).collect::<Vec<_>>(),
             tests,
         ) || walked_shadows(lanes, tests))
+        .then_some("shadows")
     }
 
     /// Reserve the admitted way `run` of household `of` in the tree.

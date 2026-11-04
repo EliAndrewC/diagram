@@ -18,6 +18,7 @@ pub const CELL: f64 = 8.0;
 pub struct Ground {
     x0: f64,
     y0: f64,
+    cell: f64,
     nx: usize,
     ny: usize,
     taken: Vec<bool>,
@@ -39,18 +40,34 @@ impl Ground {
         Self {
             x0,
             y0,
+            cell: CELL,
             nx,
             ny,
             taken: vec![false; nx * ny],
         }
     }
 
+    /// A window from `x0, y0`, `nx` cells to a row of `cell` feet, its cells `taken` - row by row - taken, not snapped: the raster
+    /// the door hands over at another raster's own cells; None where the flags are not one a cell.
+    #[must_use]
+    pub fn from_cells(origin: Pt, cell: f64, nx: usize, taken: Vec<bool>) -> Option<Self> {
+        let ny = taken.len().checked_div(nx)?;
+        (nx * ny == taken.len() && ny > 0).then_some(Self {
+            x0: origin.0,
+            y0: origin.1,
+            cell,
+            nx,
+            ny,
+            taken,
+        })
+    }
+
     /// The center of cell (i, j).
     #[expect(clippy::cast_precision_loss, reason = "cell indices of a few hundred")]
     fn center(&self, i: usize, j: usize) -> Pt {
         (
-            self.x0 + (i as f64 + 0.5) * CELL,
-            self.y0 + (j as f64 + 0.5) * CELL,
+            self.x0 + (i as f64 + 0.5) * self.cell,
+            self.y0 + (j as f64 + 0.5) * self.cell,
         )
     }
 
@@ -61,7 +78,7 @@ impl Ground {
         reason = "a cell index, its sign tested first"
     )]
     fn cell_of(&self, p: Pt) -> Option<(usize, usize)> {
-        let (fi, fj) = ((p.0 - self.x0) / CELL, (p.1 - self.y0) / CELL);
+        let (fi, fj) = ((p.0 - self.x0) / self.cell, (p.1 - self.y0) / self.cell);
         (fi >= 0.0 && fj >= 0.0 && (fi as usize) < self.nx && (fj as usize) < self.ny)
             .then_some((fi as usize, fj as usize))
     }
@@ -79,8 +96,8 @@ impl Ground {
         reason = "row indices clamped into the window"
     )]
     fn rows(&self, ya: f64, yb: f64) -> std::ops::Range<usize> {
-        let lo = ((ya.min(yb) - self.y0) / CELL - 0.5).ceil().max(0.0) as usize;
-        let hi = (((ya.max(yb) - self.y0) / CELL - 0.5).floor() + 1.0).max(0.0) as usize;
+        let lo = ((ya.min(yb) - self.y0) / self.cell - 0.5).ceil().max(0.0) as usize;
+        let hi = (((ya.max(yb) - self.y0) / self.cell - 0.5).floor() + 1.0).max(0.0) as usize;
         lo.min(self.ny)..hi.min(self.ny)
     }
 
@@ -112,8 +129,8 @@ impl Ground {
             tests.add("write@fill_ring", xs.len() as u64);
             xs.sort_by(f64::total_cmp);
             for pair in xs.chunks_exact(2) {
-                let a = ((pair[0] - self.x0) / CELL - 0.5).ceil().max(0.0) as usize;
-                let b = (((pair[1] - self.x0) / CELL - 0.5).floor() + 1.0).max(0.0) as usize;
+                let a = ((pair[0] - self.x0) / self.cell - 0.5).ceil().max(0.0) as usize;
+                let b = (((pair[1] - self.x0) / self.cell - 0.5).floor() + 1.0).max(0.0) as usize;
                 for i in a.min(self.nx)..b.min(self.nx) {
                     self.taken[j * self.nx + i] = true;
                     tests.add("write@fill_ring", 1);
@@ -132,8 +149,8 @@ impl Ground {
         let lo = (a.0.min(b.0) - r, a.1.min(b.1) - r);
         let hi = (a.0.max(b.0) + r, a.1.max(b.1) + r);
         for j in self.rows(lo.1, hi.1) {
-            let i0 = ((lo.0 - self.x0) / CELL - 0.5).ceil().max(0.0) as usize;
-            let i1 = (((hi.0 - self.x0) / CELL - 0.5).floor() + 1.0).max(0.0) as usize;
+            let i0 = ((lo.0 - self.x0) / self.cell - 0.5).ceil().max(0.0) as usize;
+            let i1 = (((hi.0 - self.x0) / self.cell - 0.5).floor() + 1.0).max(0.0) as usize;
             for i in i0.min(self.nx)..i1.min(self.nx) {
                 tests.add("write@paint_strip", 1);
                 if crate::field::geom::seg_dist(self.center(i, j), a, b) <= r {
@@ -203,6 +220,7 @@ impl Ground {
         Reach {
             x0: self.x0,
             y0: self.y0,
+            cell: self.cell,
             nx: self.nx,
             ny: self.ny,
             reached,
@@ -223,6 +241,7 @@ fn root(parent: &mut [usize], mut k: usize) -> usize {
 pub struct Reach {
     x0: f64,
     y0: f64,
+    cell: f64,
     nx: usize,
     ny: usize,
     reached: Vec<bool>,
@@ -237,10 +256,10 @@ impl Reach {
         reason = "cell indices clamped into the window"
     )]
     pub fn touches(&self, lo: Pt, hi: Pt, tests: &mut Counts) -> bool {
-        let i0 = ((lo.0 - self.x0) / CELL).floor().max(0.0) as usize;
-        let j0 = ((lo.1 - self.y0) / CELL).floor().max(0.0) as usize;
-        let i1 = (((hi.0 - self.x0) / CELL).floor().max(-1.0) + 1.0) as usize;
-        let j1 = (((hi.1 - self.y0) / CELL).floor().max(-1.0) + 1.0) as usize;
+        let i0 = ((lo.0 - self.x0) / self.cell).floor().max(0.0) as usize;
+        let j0 = ((lo.1 - self.y0) / self.cell).floor().max(0.0) as usize;
+        let i1 = (((hi.0 - self.x0) / self.cell).floor().max(-1.0) + 1.0) as usize;
+        let j1 = (((hi.1 - self.y0) / self.cell).floor().max(-1.0) + 1.0) as usize;
         (j0..j1.min(self.ny)).any(|j| {
             (i0..i1.min(self.nx)).any(|i| {
                 tests.add("index_query@touches", 1);

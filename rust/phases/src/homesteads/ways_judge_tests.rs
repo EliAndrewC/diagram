@@ -83,6 +83,7 @@ fn each_household_is_laid_a_lawful_way_onto_the_track() {
         wood: &wood,
         canvas: (2000.0, 2000.0),
         lane_gap: 25.0,
+        extra: &[],
     };
     let households: Vec<Household> = bundles
         .iter()

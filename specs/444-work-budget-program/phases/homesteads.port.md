@@ -112,8 +112,19 @@ names and is listed so a refused seed can be traced to it.
 
 `L7R_RUST_COMPARE=<path> make hamlet ARGS="..."` runs the Rust track out (`l7r_phases.track_out`, its inputs gathered by
 `homesteads/household_ways.py` `track_inputs`) beside Python's `choose_track_out` on the same state, once the last house stands,
-and appends both to the JSON lines at `<path>`; the map is untouched.
+and appends both to the JSON lines at `<path>`; then the Rust households' ways (`l7r_phases.households_ways`, gathered by
+`ways_inputs` before `lay_the_ways`) beside Python's, to `<path>.ways`, with every verdict Python's lane law gave to
+`<path>.verdicts` (`watch_verdicts`) and the Rust's, named, in the record. The map is untouched. The reference settlement's roll
+writes its own record to the same files when its cache misses: read every line, and match a record by its `centers`.
 
 - 2026-11-04, the track out: 7 of 7 rolled maps (seeds 1, 2, 4-8, 10, 13-15 at the cohort's household ladder, the cached and the
   refused aside) drew the Rust track point for point as Python's. Four of the sixteen specs (seeds 3, 9, 11, 12 under fresh names)
   were refused by Python's own web stage after the homesteads (`WebRefused`), the fresh block's recorded rate (feature 386).
+- 2026-11-04, the households' ways: 118 of 118 ways on 8 rolled maps (seeds 2, 7-10, 13 and 17 under fresh names, and the
+  reference settlement) laid point for point as Python's - one first point 0.1 ft apart where 2567.25 rounds either way. Three
+  of the fourteen specs (seeds 3, 11, 12) were refused by Python's later stages, and four (5, 14-16) build no access tree. What
+  it took to match: the wellhead first among a household's fixture gaps; the boxes placed besides the households (the persimmon,
+  bamboo and retirement seats, the pockets) in the lane raster's cover and the standing ground; the site handed over at the lane
+  raster's own 5 ft cells from its own origin (every placed box's, or the cells sample half a cell off); and the household's own
+  threshing yard, as the least drawn of it, standing among the steadings while its way is judged (`tree.records_of`: a way
+  ending at its own yard serves its steading).

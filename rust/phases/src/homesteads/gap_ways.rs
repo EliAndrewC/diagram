@@ -148,6 +148,8 @@ pub struct GapSite<'a> {
     pub canvas: Pt,
     /// The lane's gap off a reserved seat.
     pub lane_gap: f64,
+    /// What else the seating placed that holds lane ground off: the persimmons, bamboo strips, retirement houses and pockets.
+    pub extra: &'a [Rect],
 }
 
 /// A household as its way reads it: its parts, its homestead's box, and its house's center.
@@ -501,11 +503,16 @@ pub fn lay_the_ways(
     if households.is_empty() || tree.segs.is_empty() {
         return out;
     }
-    let boxes: Vec<Rect> = households.iter().map(|h| h.bbox).collect();
+    // the households' own boxes first, so a household's index is its box's; what else was placed after them
+    let boxes: Vec<Rect> = households
+        .iter()
+        .map(|h| h.bbox)
+        .chain(site.extra.iter().copied())
+        .collect();
     let segs = tree.segs.clone();
     let l = lane_layers(site, &boxes, &segs, tests);
     let ring = ACCESS_HALF_FT + SEARCH.0 as f64 * GAP_CELL;
-    let rings: Vec<_> = boxes
+    let rings: Vec<_> = boxes[..households.len()]
         .iter()
         .map(|b| {
             l.span(

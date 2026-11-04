@@ -199,3 +199,54 @@ except KeyError as e:
     assert "canvas" in str(e), e
 else:
     raise AssertionError("a field the dict lacks is named")
+
+# the households' ways (feature 444 T30), as the homesteads' door gathers them: one farmstead south of a way out on open ground,
+# its way laid to it, the ground past the raster asked as taken; a raster whose cells are not one a cell, refused by name
+ways_in = {
+    "households": [
+        (
+            (500.0, 500.0, 40.0, 25.0),
+            (500.0, 530.0, 30.0, 20.0),
+            [(560.0, 530.0, 20.0, 20.0)],
+            [(440.0, 470.0, 12.0, 12.0)],
+            [(True, (440.0, 540.0, 16.0, 16.0)), (False, (560.0, 470.0, 4.0, 4.0))],
+            (500.0, 500.0, 40.0, 25.0),
+            (500.0, 530.0, 30.0, 20.0),
+            0.0,
+            (500.0, 515.0, 150.0, 110.0),
+            (500.0, 500.0),
+            (575.0, 560.0, 4.0, 4.0),
+        )
+    ],
+    "extra": [(800.0, 200.0, 30.0, 30.0)],
+    "segs": [((300.0, 700.0), (700.0, 700.0))],
+    "ground": ((0.0, 0.0), 5.0, 140, [False] * 28000),
+    "seats": [(900.0, 900.0)],
+    "lane_gap": 20.0,
+    "canvas": (1000.0, 1000.0),
+    "square_waters": [],
+    "brooks": [],
+    "destinations": ([(500.0, 500.0)], [], []),
+    "root": [(300.0, 700.0), (700.0, 700.0)],
+    "steadings": [((500.0, 500.0, 40.0, 25.0, 0.0), [])],
+    "houses": [(500.0, 500.0, 40.0, 25.0, 0.0)],
+    "yards": [([(485.0, 520.0), (515.0, 520.0), (515.0, 540.0), (485.0, 540.0)], (500.0, 500.0))],
+    "solid": [],
+    "fixtures": [],
+    "buildings": [],
+    "open_rings": [],
+    "forbidding": [],
+    "channels": [],
+    "crossed": [],
+    "fords": [],
+    "flooded": [],
+    "deck_forbidding": [],
+}
+laid_ways = l7r_phases.households_ways(ways_in)
+assert laid_ways["drawn"][0] is not None and laid_ways["pinched"] == [None] and laid_ways["verdicts"] and laid_ways["counts"], laid_ways
+try:
+    l7r_phases.households_ways(dict(ways_in, ground=((0.0, 0.0), 5.0, 140, [False] * 27999)))
+except ValueError as e:
+    assert "one a cell" in str(e), e
+else:
+    raise AssertionError("a raster whose cells are not one a cell is refused by name")

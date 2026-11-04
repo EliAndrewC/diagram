@@ -75,6 +75,7 @@ fn each_household_is_laid_a_way_in_the_gaps_to_the_track_or_pinched() {
         wood: &wood,
         canvas: (3000.0, 3000.0),
         lane_gap: 25.0,
+        extra: &[],
     };
     let houses = [
         household(500.0, 500.0),

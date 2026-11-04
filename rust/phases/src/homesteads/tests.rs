@@ -412,3 +412,14 @@ fn the_threads_tally_is_drained_into_the_stages_counts() {
     crate::counts::drain_into(&mut again);
     assert!(again.0.is_empty());
 }
+
+#[test]
+fn a_raster_is_built_from_the_cells_python_marks_taken() {
+    let g = Ground::from_cells((0.0, 0.0), 5.0, 2, vec![false, true]).expect("two cells");
+    assert_eq!(g.taken_at((2.0, 2.0)), Some(false));
+    assert_eq!(g.taken_at((7.0, 2.0)), Some(true));
+    assert_eq!(g.taken_at((12.0, 2.0)), None);
+    assert!(Ground::from_cells((0.0, 0.0), 5.0, 2, vec![true]).is_none());
+    assert!(Ground::from_cells((0.0, 0.0), 5.0, 0, vec![true]).is_none());
+    assert!(Ground::from_cells((0.0, 0.0), 5.0, 2, vec![]).is_none());
+}

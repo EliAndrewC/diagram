@@ -130,6 +130,7 @@ pub fn parts_of(b: &Bundle) -> Parts {
         fixtures,
         raw: (b.house, b.yard),
         turn: b.turn,
+        well: None,
     }
 }
 
@@ -150,6 +151,8 @@ pub struct Parts {
     pub raw: (Rect, Rect),
     /// The turn (degrees).
     pub turn: f64,
+    /// The well pocket's wellhead, where the household has one (a dispersed farm's, or a nucleated household's own).
+    pub well: Option<Rect>,
 }
 
 impl Parts {
@@ -159,23 +162,28 @@ impl Parts {
         !seg_box_within(a, b, self.house, house_gap(), tests)
     }
 
-    /// The boxes a way's line keeps off at the corridor's half-width: each fixture's (a persimmon by its trunk).
+    /// The boxes a way's line keeps off at the corridor's half-width: the well pocket's wellhead, then each fixture's (a persimmon
+    /// by its trunk).
+    ///
+    /// Research:
+    ///     path clear of its own well - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     ///
     /// Research:
     ///     path clear of its own fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round its own garden beds and fixtures - the corridor off privy, stack and shed
     ///     fixtures held off at the corridor's half-width - GUESS research/questions/0081-village-lanes.drawing.html: no page gives how far a household's own way keeps off its own fixtures or well; held off at the corridor's half-width (`ACCESS_HALF_FT`, 7 ft from the line), so a 3 ft tread's edge stands 5.5 ft off
     #[must_use]
     pub fn fixture_gaps(&self) -> Vec<(Rect, f64)> {
-        self.fixtures
+        self.well
             .iter()
-            .map(|&(k, r)| {
+            .map(|&w| (w, ACCESS_HALF_FT))
+            .chain(self.fixtures.iter().map(|&(k, r)| {
                 let r = if k == Kind::Persimmon {
                     (r.0, r.1, TRUNK_FT, TRUNK_FT)
                 } else {
                     r
                 };
                 (r, ACCESS_HALF_FT)
-            })
+            }))
             .collect()
     }
 
@@ -248,6 +256,27 @@ impl Parts {
             (-w / 2.0, h / 2.0),
         ]
         .map(|(dx, dy)| (x + dx * c - dy * s, y + dx * s + dy * c))
+    }
+
+    /// The threshing yard as the least that will be drawn of it - its rect shrunk by the drawing's jitter and turned with its
+    /// house - the record a way's end is judged to reach (`tree.records_of`).
+    ///
+    /// Research:
+    ///     the yard drawn - NONE: the drawing's 0.10 jitter of the yard's corners, which every drawn yard contains
+    #[must_use]
+    pub fn yard_records_quad(&self) -> Vec<Pt> {
+        let (x, y, w, h) = self.raw.1;
+        let k = 1.0 - 0.10;
+        let (s, c) = self.turn.to_radians().sin_cos();
+        [
+            (-w * k / 2.0, -h * k / 2.0),
+            (w * k / 2.0, -h * k / 2.0),
+            (w * k / 2.0, h * k / 2.0),
+            (-w * k / 2.0, h * k / 2.0),
+        ]
+        .iter()
+        .map(|&(dx, dy)| (x + dx * c - dy * s, y + dx * s + dy * c))
+        .collect()
     }
 
     /// The corridor as the web will draw it: from where its tread leaves the homestead's own yard, else as found.

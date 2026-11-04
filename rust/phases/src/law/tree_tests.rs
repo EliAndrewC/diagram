@@ -80,7 +80,7 @@ fn a_way_is_squared_where_it_crosses_and_its_way_out_crosses_once() {
     let brook = vec![(-100.0, 200.0), (900.0, 200.0)];
     let waters = [(brook.clone(), 8.0)];
     let brooks = [brook];
-    let t = tree(&waters, &brooks);
+    let mut t = tree(&waters, &brooks);
     let run = [(100.0, 125.0), (130.0, 300.0)];
     let r = rejoined(&run, &waters);
     assert!(r.len() > 2);
@@ -211,7 +211,7 @@ fn the_whole_trees_own_rules_refuse_what_the_lane_alone_passes() {
     assert!(!t.admits(&[(140.0, 110.0), (250.0, 300.0)], (100.0, 100.0), &mut c));
     // a way out over the brook and back, the ground judging no water
     let brooks = [vec![(-100.0, 200.0), (900.0, 200.0)]];
-    let wet = tree(&[], &brooks);
+    let mut wet = tree(&[], &brooks);
     let over = [
         (500.0, 125.0),
         (500.0, 250.0),
