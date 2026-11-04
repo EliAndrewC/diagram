@@ -15,6 +15,7 @@
 pub use crate::counts::Counts;
 
 pub mod dry_exit;
+pub mod gateway;
 pub mod route;
 pub mod squaring;
 pub mod through;
@@ -22,6 +23,8 @@ pub mod track;
 
 #[cfg(test)]
 mod dry_exit_tests;
+#[cfg(test)]
+mod gateway_tests;
 #[cfg(test)]
 mod route_tests;
 #[cfg(test)]
