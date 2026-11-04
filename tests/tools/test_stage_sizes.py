@@ -23,6 +23,7 @@ def test_points_are_counted_in_rings_and_in_records() -> None:
 def test_the_input_is_measured_where_the_stage_would_run_and_a_refusal_named(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     def lay(s: Any, plan: Any) -> None:
         s.M["lines"] = [{"pts": [(0.0, 0.0), (5.0, 5.0)]}]
+        s.block_polys.append([(0.0, 0.0), (1.0, 0.0), (1.0, 1.0)])
         plan.envelope = [(0.0, 0.0), (9.0, 0.0), (9.0, 9.0)]
 
     def boom(_s: Any, _plan: Any) -> None:
@@ -37,6 +38,7 @@ def test_the_input_is_measured_where_the_stage_would_run_and_a_refusal_named(mon
     assert dumped["M"]["lines"][0]["pts"] == [[0.0, 0.0], [5.0, 5.0]] and "toe_band" in dumped["calls"] and dumped["plan"]["envelope"]
     assert got["M.lines"] == [1, 2] and len(got["canvas"]) == 2 and "s.toe_band()" in got
     assert got["plan.envelope"] == [3, 3]
+    assert got["s.block_polys"][1] >= 3 and "s.clearings" not in got or got["s.clearings"][0] >= 0, "the settlement's registries counted"
     monkeypatch.setattr(driver, "STAGES", (boom, after))
     assert ss.sizes(25, 12, name) == {"refused": "stage_boom: ValueError"}
     with pytest.raises(ValueError, match="no stage"):

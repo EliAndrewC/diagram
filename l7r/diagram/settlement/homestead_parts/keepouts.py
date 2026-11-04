@@ -53,6 +53,8 @@ class KeepoutsMixin:
             corr.append(([tuple(p) for p in self.M["ring_road"]], self.M.get("ring_road_width", 20) / 2 + extra))
         if self.M.get("road"):
             corr.append(([tuple(p) for p in self.M["road"]], self.M.get("road_width", 30) / 2 + extra))
+        if __debug__:  # each way's points copied (S5)
+            OPS["read@_corridor_buffers"] += sum(len(c[0]) for c in corr)
         return corr
 
     def _watercourse_segs(self: Settlement, pad: float = 2.0, channel_margin: float = 0.0) -> list[tuple[Any, float]]:  # type: ignore[misc]
@@ -85,6 +87,8 @@ class KeepoutsMixin:
 
                 for piece, wk in taper_pieces(p, w0, w1):
                     out.append((piece, wk / 2 + pad + channel_margin))
+        if __debug__:  # each watercourse's points handed on (S5)
+            OPS["read@_watercourse_segs"] += sum(len(c[0]) for c in out)
         return out
 
     def _on_watercourse(self: Settlement, px: float, py: float, pad: float = 2.0, near: Any = None) -> bool:  # type: ignore[misc]
@@ -467,4 +471,6 @@ class KeepoutsMixin:
                         rects.append((rx0, ry0, rx1, ry1))
         wh = self._HALO_WELL_FT * self.bscale
         circles = [(o["x"], o["y"], o.get("vr", o["r"]) + wh) for o in self.M.get("wells", []) if bx0 - 40 <= o["x"] <= bx1 + 40 and by0 - 40 <= o["y"] <= by1 + 40]
+        if __debug__:  # each structure, plot and well read against the box (S5)
+            OPS["pt_test@_urban_keepouts"] += sum(len(self._reclist(k)) for keys in (self._HALO_STRUCT_KEYS, self._HALO_PLOT_KEYS) for k in keys) + len(self.M.get("wells", []))
         return rects, circles

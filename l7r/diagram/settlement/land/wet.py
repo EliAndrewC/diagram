@@ -305,7 +305,7 @@ def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any =
             cuts.append(g.buffer(pad) if pad else g)
         if __debug__:  # each keep-out's points read for its box, and each cut's ring buffered and taken out (S5)
             OPS["pt_test@drawn_ground"] += len(pts) + sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam)
-            OPS["moved@drawn_ground"] += sum(len(g.exterior.coords) for g in cuts if hasattr(g, "exterior"))
+            OPS["write@drawn_ground"] += sum(len(g.exterior.coords) for g in cuts if hasattr(g, "exterior"))
         out = keep.difference(unary_union(cuts)) if cuts else keep
     except ValueError, GEOSException:  # pragma: no cover - buffer(0) repairs every ring a placer records [287: a degenerate outline keeps the drop honest]
         return None

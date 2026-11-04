@@ -76,6 +76,9 @@ def sizes(seed: int, households: int, stage: str, calls: tuple[str, ...] = (), d
         for k, v in vars(plan).items():
             if (n := _points(v)) is not None:
                 got[f"plan.{k}"] = [len(v), n]
+        for k in REGISTRIES:  # the settlement's own no-build registries, which a placer's keep-outs read
+            if (n := _points(getattr(s, k, None))) is not None:
+                got[f"s.{k}"] = [len(getattr(s, k)), n]
         rings: dict[str, Any] = {}
         for c in calls:
             ring = rings[c] = getattr(s, c)() or []
@@ -84,6 +87,13 @@ def sizes(seed: int, households: int, stage: str, calls: tuple[str, ...] = (), d
         plain = {k: v for k, v in vars(plan).items() if _plain(v)}
         Path(dump).write_text(json.dumps({"M": s.M, "plan": plain, "calls": rings}, default=list))
     return got
+
+
+REGISTRIES = ("field_polys", "block_polys", "clearings", "wet_polys", "dry_polys")
+"""The settlement's ring lists a stage's keep-outs read, beside the manifest's parts (feature 444 T29: the waterward fringe's
+marsh is cut by them).
+
+Research: plumbing - NONE: which of the settlement's lists the table counts"""
 
 
 def _plain(v: Any) -> bool:

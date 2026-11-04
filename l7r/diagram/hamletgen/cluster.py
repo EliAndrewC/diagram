@@ -37,7 +37,7 @@ def exit_walls(plan: SitePlan, toe: Poly | None = None, wet: Sequence[Poly] = ()
 
     walls: list[tuple[Poly, float]] = [(wet_grown_by_the_lane(w), 0.0) for w in [*([toe] if toe else []), *wet] if len(w) >= 3]
     if __debug__:
-        work_counts.OPS["moved@exit_walls"] += sum(len(w) for w, _ in walls)
+        work_counts.OPS["write@exit_walls"] += sum(len(w) for w, _ in walls)
     walls.append((list(plan.envelope), 0.0))
     if plan.sink_pond:
         px, py, rx, ry = plan.sink_pond

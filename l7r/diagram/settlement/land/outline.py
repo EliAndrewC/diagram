@@ -18,6 +18,8 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from l7r.diagram.work_counts import OPS
+
 #: The corner rounding's radius in feet (x the map's `bscale`), halved until the rounding keeps `ROUND_KEEP` of the area - a
 #: band narrower than twice the radius would vanish under it. Calibrated by eye on Inashiro's toe (the GM's "a rounded curve"):
 #: 60 ft reads as a curve at fit zoom on a marsh some 1,300 ft across.
@@ -71,7 +73,9 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
         return pts
     rounded = laid
     r = ROUND_FT * bs
+    tries = 0
     while r >= 5.0 * bs:
+        tries += 1
         trial = _largest(laid.buffer(-r, quad_segs=8).buffer(r, quad_segs=8))
         if trial is not None and trial.area >= ROUND_KEEP * laid.area:
             rounded = trial.intersection(laid)
@@ -97,6 +101,9 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
     waved = _largest(Polygon((xy + inward * depth[:, None]).tolist()).buffer(0).intersection(rounded))
     shape = waved if waved is not None and waved.area >= 0.5 * rounded.area else rounded
     shape = _largest(shape.simplify(SIMPLIFY_FT * bs, preserve_topology=True)) or shape
+    if __debug__:  # each rounding's two buffers over the laid ring (8 a corner's arc), each sample placed on the ring (a bisection
+        # of its vertices), waved by four components and moved along its normal (8), and the waved ring cut and simplified (S5)
+        OPS["write@natural_outline"] += tries * 2 * 8 * len(pts) + n * (max(1, len(ring.coords).bit_length()) + 8) + 2 * n
     return [(round(x, 1), round(y, 1)) for x, y in list(shape.exterior.coords)[:-1]]
 
 
