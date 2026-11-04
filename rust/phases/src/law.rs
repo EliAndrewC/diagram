@@ -15,11 +15,14 @@
 pub use crate::counts::Counts;
 
 pub mod ground;
+pub mod meet;
 pub mod rules;
 pub mod water;
 
 #[cfg(test)]
 mod ground_tests;
+#[cfg(test)]
+mod meet_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
