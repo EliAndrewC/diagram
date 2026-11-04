@@ -159,3 +159,4 @@ ring = (
 ww = l7r_phases.stage_waterward([(ring, [(1000.0, 1500.0)])], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), (1.0, 0.0))
 assert ww["flanks"] == ["W", "S"] and len(ww["strips"]) == 2 and ww["counts"]
 assert l7r_phases.stage_waterward([], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), None)["strips"] == []
+assert l7r_phases.water_flanks((0.0, 1.0), (1.0, 0.0)) == ["W", "S"] and l7r_phases.water_flanks((0.0, 1.0), None) == ["W", "E", "S"]

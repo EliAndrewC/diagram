@@ -7,8 +7,16 @@
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
-use super::fringe;
+use super::{flanks, fringe};
 use crate::field::fan::Pt;
+
+/// The flanks of a polder falling along `fall` that face the water, the village's back `seat_out` (T29): the one derivation the
+/// fringe and the house seating read.
+#[pyfunction]
+#[must_use]
+pub fn water_flanks(fall: Pt, seat_out: Option<Pt>) -> Vec<String> {
+    flanks(fall, seat_out).iter().map(char::to_string).collect()
+}
 
 /// The waterward stage (T29): the dikes in, the flanks facing the water and their strips out.
 #[pyfunction]

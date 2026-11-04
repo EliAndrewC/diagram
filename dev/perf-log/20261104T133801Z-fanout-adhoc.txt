@@ -1,0 +1,10 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+seat: 8,502 calls @20, 13,306 calls @40, growth exponent 0.65
+  placed @40: nothing in the manifest
+hem: 43,842 calls @20, 65,075 calls @40, growth exponent 0.57
+  placed @40: dry_plots +143; 455 calls per thing placed
+  fastest growers @20 -> @40:
+    x1.5 'append' of 'list' objects [14,091 -> 21,251]
+
+all stages: 52,344 calls @20, 78,381 calls @40

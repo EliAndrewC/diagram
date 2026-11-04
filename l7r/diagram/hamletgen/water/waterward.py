@@ -38,20 +38,16 @@ def polder_flanks(plan: SitePlan) -> dict[str, str]:
 
 
 def waterward_flanks(plan: SitePlan) -> list[str]:
-    """Which flanks of the dike face the fluctuating water it was reclaimed from.
-
-    research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html: outside the dike is the lake, creek, reed marsh or
-    mudflat the block was dug out of - EXCEPT on the landward flank where the polder abuts the
-    natural shore, which is where the village stands (nobody lives on a flood-fighting earthwork
-    when dry ground is a few steps away), and the head flank, where the header reservoir already
-    stands as the wild water. So: the foot (the outfall side, already wet) and the cross flank(s)
-    the cluster does not occupy. This is the hand-authored Kuwabata's and Enokida's `["W", "S"]`
-    derived rather than declared.
+    """Which flanks of the dike face the fluctuating water it was reclaimed from - the Rust's own derivation
+    (`rust/phases/src/waterward.rs` `flanks`, feature 444 T29), the one the fringe is drawn on, asked here for the stages that read
+    the flanks too, never derived a second time.
 
     Research: waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands
     """
-    f = polder_flanks(plan)
-    return [q for q in (f["minus"], f["plus"], f["foot"]) if q != f["cluster"]]
+    from ..phases_ext import phases
+
+    out = plan.seat.get("out") if plan.seat else None
+    return list(phases().water_flanks(plan.fall, (float(out[0]), float(out[1])) if out else None))
 
 
 def polder_crossing_caps(plan: SitePlan) -> dict[str, int]:

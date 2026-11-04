@@ -300,6 +300,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-04",
    "declared": "spec-fidelity"
+  },
+  "### T29 - phase: waterward, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
+   "sha256": "c60e589940560883502c1aca6187508dd1cd9868e6fc784e3865cdcc6330cb01",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Decisions": {
+   "sha256": "0546d809206298a7bfe1cb054d0e4e799a39cc4dad265edb63054b25bcbc12ad",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (2026-11-04T13:35Z)": {
+   "sha256": "3e3a52069b09604e48853b2303fa1665a16a377069b9aec8e4142642246a40f7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4281,6 +4299,66 @@
      "why": "Departs from FR-020's letter (an entry is held at 'the Rust stage it failed in'), so it is weighed as an exception. Literal application defeats FR-020's own definition and purpose: the frozen seat input is 'the map and the plan as the stages before it left them', and after this landing no stage before the seat lays a dry hem, so the old fixture is an input the pipeline can no longer produce; replaying it would test an unreachable map. Re-freezing one stage earlier keeps every entry on the list, still replays through the seat where it failed (now plus the hem), and keeps the GM's leaving rule verbatim in substance ('always checked until the first time they pass'; FR-020: leaves only when BOTH the replay and the roll pass). Round 1's two gaps - the replay's reach and the leaving rule - are now stated. The entries all charged to the seat are one class (every one carries the field's old hem), so one ruling covers them. Rust stages only, consistent with amendment 5."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-04",
+   "blocks": [
+    "### T29 - phase: waterward, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T29 Approach (2026-11-04T13:35Z)",
+    "### T29 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The seam: Rust owns the waterward flanks, each flank's outer face and its strip; the thin Python door gathers the inputs (dike rings and notches, the band's widest cut, the fall, the seat's back), draws each strip with Settlement.marsh, declares the flanks in meta.waterward and reserves the sty's seat, as the Python stage did.",
+     "class": "within",
+     "why": "Request section 7: 'Each stage stays a thin Python function with its docstring and calls into Rust'; the algorithmic work (flanks, face, fringe) is in Rust per FR-017 and FR-010, and the door reuses existing Python helpers for the manifest reads and writes rather than rewriting any in Python. FR-004: same manifest keys read and written."
+    },
+    {
+     "id": "D2",
+     "summary": "Deletion: the old stage_waterward and dike_face deleted with their tests; polder_flanks and waterward_flanks kept because the house seating's capacity and the crossings' caps read them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-005 / request section 3 box 5 ('the old implementation is deleted in the same landing, with no fallback path') by keeping two of the old module's functions. Legitimate because applying the rule literally would require rewriting the still-Python house and crossing stages that read those helpers, which FR-017 (amendment 4: 'we don't end up doing any Python rewrites') forbids, and the GM's 2026-11-01/02 words leave the unported Python stages as they are until their own port. The rule's purpose - no fallback path or flag for THIS stage - is kept: the stage's own entry point and its face computation are deleted, and the kept helpers are not a path the waterward stage can take. The ruling rests on the premise that those two helpers are called by those other stages and not by the new waterward door; that consumer list carries no stated search command, and the bundle does not let me verify it."
+    },
+    {
+     "id": "D3",
+     "summary": "The counters: one key per derivation row, as the seat's are.",
+     "class": "within",
+     "why": "FR-012 / request section 1: the Rust counters as 443 FR-001's, behind the counters feature, comparable to the derivation; no narrowing."
+    },
+    {
+     "id": "A-occasions",
+     "summary": "No settlement-review owed (the pool's polder Kuwabata unchanged against HEAD, measured with make map 2026-11-04); no glyph-check (no glyph redrawn).",
+     "class": "within",
+     "why": "Checklist box 6 owes the reviews its occasions owe; FR-019 owes settlement-review for moved pool hamlets. A measured unchanged manifest means none is owed; this applies the rule, it does not except a case."
+    },
+    {
+     "id": "A-order",
+     "summary": "The stage stays after the hem and before the houses and the track.",
+     "class": "within",
+     "why": "FR-003: phases rebuilt in STAGES order; the plan keeps the existing position, it does not move it."
+    },
+    {
+     "id": "A-done",
+     "summary": "Done measured as 0 counted at 40 and 80 against a budget of 1 (valley reference rolls draw no fringe); the face is one pass over the dike's points into bins.",
+     "class": "within",
+     "why": "FR-014: a budget counts the typical case; FR-005/FR-022 rule 1: at most the budget is WITHIN. A single binned pass stays within FR-022 rule 3's ban on all-pairs work."
+    },
+    {
+     "id": "A-constants",
+     "summary": "No constant moved; the run past the dike's ends, the bins and the depth keep their claims (GUESS and CONVENTION) at the Rust.",
+     "class": "within",
+     "why": "Moves nothing. FR-021's zero-open-claims gate still applies to the landing; GUESS and CONVENTION are labels, not open findings, and the exits list the IN-STEP claims round."
+    },
+    {
+     "id": "A-exits",
+     "summary": "Green exits: rust-gate 0 failing, the count within budget, MODE AUDIT WITHIN, claims IN-STEP, the eight checklist boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green mirrors checklist box 6 under FR-019 and FR-021. The red exit is within only on its conjunctive reading: the task is set down only on a claim that it cannot be done, which the arbiter rules on, matching the GM's 2026-11-04 'only stop ... if you believe this request is somehow impossible'. It does not cover a budget overage: FR-006 bars setting down a phase over budget (rebuilt again or the budget raised; the arbiter may not accept over budget), so a set-down for budget reasons would be outside this ruling."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5304,6 +5382,63 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Departs from FR-020's letter (an entry is held at 'the Rust stage it failed in'), so it is weighed as an exception. Literal application defeats FR-020's own definition and purpose: the frozen seat input is 'the map and the plan as the stages before it left them', and after this landing no stage before the seat lays a dry hem, so the old fixture is an input the pipeline can no longer produce; replaying it would test an unreachable map. Re-freezing one stage earlier keeps every entry on the list, still replays through the seat where it failed (now plus the hem), and keeps the GM's leaving rule verbatim in substance ('always checked until the first time they pass'; FR-020: leaves only when BOTH the replay and the roll pass). Round 1's two gaps - the replay's reach and the leaving rule - are now stated. The entries all charged to the seat are one class (every one carries the field's old hem), so one ruling covers them. Rust stages only, consistent with amendment 5."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T29": {
+   "section_sha256": "c5fb8ead01c6a49a9c9c4e0bae0fab12a015201d78b2c50f9e44628f2658b738",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The seam: Rust owns the waterward flanks, each flank's outer face and its strip; the thin Python door gathers the inputs (dike rings and notches, the band's widest cut, the fall, the seat's back), draws each strip with Settlement.marsh, declares the flanks in meta.waterward and reserves the sty's seat, as the Python stage did.",
+     "class": "within",
+     "why": "Request section 7: 'Each stage stays a thin Python function with its docstring and calls into Rust'; the algorithmic work (flanks, face, fringe) is in Rust per FR-017 and FR-010, and the door reuses existing Python helpers for the manifest reads and writes rather than rewriting any in Python. FR-004: same manifest keys read and written."
+    },
+    {
+     "id": "D2",
+     "summary": "Deletion: the old stage_waterward and dike_face deleted with their tests; polder_flanks and waterward_flanks kept because the house seating's capacity and the crossings' caps read them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-005 / request section 3 box 5 ('the old implementation is deleted in the same landing, with no fallback path') by keeping two of the old module's functions. Legitimate because applying the rule literally would require rewriting the still-Python house and crossing stages that read those helpers, which FR-017 (amendment 4: 'we don't end up doing any Python rewrites') forbids, and the GM's 2026-11-01/02 words leave the unported Python stages as they are until their own port. The rule's purpose - no fallback path or flag for THIS stage - is kept: the stage's own entry point and its face computation are deleted, and the kept helpers are not a path the waterward stage can take. The ruling rests on the premise that those two helpers are called by those other stages and not by the new waterward door; that consumer list carries no stated search command, and the bundle does not let me verify it."
+    },
+    {
+     "id": "D3",
+     "summary": "The counters: one key per derivation row, as the seat's are.",
+     "class": "within",
+     "why": "FR-012 / request section 1: the Rust counters as 443 FR-001's, behind the counters feature, comparable to the derivation; no narrowing."
+    },
+    {
+     "id": "A-occasions",
+     "summary": "No settlement-review owed (the pool's polder Kuwabata unchanged against HEAD, measured with make map 2026-11-04); no glyph-check (no glyph redrawn).",
+     "class": "within",
+     "why": "Checklist box 6 owes the reviews its occasions owe; FR-019 owes settlement-review for moved pool hamlets. A measured unchanged manifest means none is owed; this applies the rule, it does not except a case."
+    },
+    {
+     "id": "A-order",
+     "summary": "The stage stays after the hem and before the houses and the track.",
+     "class": "within",
+     "why": "FR-003: phases rebuilt in STAGES order; the plan keeps the existing position, it does not move it."
+    },
+    {
+     "id": "A-done",
+     "summary": "Done measured as 0 counted at 40 and 80 against a budget of 1 (valley reference rolls draw no fringe); the face is one pass over the dike's points into bins.",
+     "class": "within",
+     "why": "FR-014: a budget counts the typical case; FR-005/FR-022 rule 1: at most the budget is WITHIN. A single binned pass stays within FR-022 rule 3's ban on all-pairs work."
+    },
+    {
+     "id": "A-constants",
+     "summary": "No constant moved; the run past the dike's ends, the bins and the depth keep their claims (GUESS and CONVENTION) at the Rust.",
+     "class": "within",
+     "why": "Moves nothing. FR-021's zero-open-claims gate still applies to the landing; GUESS and CONVENTION are labels, not open findings, and the exits list the IN-STEP claims round."
+    },
+    {
+     "id": "A-exits",
+     "summary": "Green exits: rust-gate 0 failing, the count within budget, MODE AUDIT WITHIN, claims IN-STEP, the eight checklist boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Green mirrors checklist box 6 under FR-019 and FR-021. The red exit is within only on its conjunctive reading: the task is set down only on a claim that it cannot be done, which the arbiter rules on, matching the GM's 2026-11-04 'only stop ... if you believe this request is somehow impossible'. It does not cover a budget overage: FR-006 bars setting down a phase over budget (rebuilt again or the budget raised; the arbiter may not accept over budget), so a set-down for budget reasons would be outside this ruling."
     }
    ],
    "verdict": "CLEAR"
