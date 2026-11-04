@@ -5220,6 +5220,45 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T28": {
+   "section_sha256": "1ff6f615a38ecbedc6ffeb558f25d28ba8d9826f9377e605c8338ec57686e8d0",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "the dry hem becomes its own Rust stage after the seat, before the waterward fringe and the houses",
+     "class": "within",
+     "why": "The request lets maps move under new algorithms (amendment 5) and asks for greenfield stages; the order is grounded in research 0006 (paddy, houses, dry fields behind). The hem is Rust after the Rust seat, so the Rust stages stay the front of STAGES (FR-019). Nothing asked is dropped."
+    },
+    {
+     "id": "D2",
+     "summary": "the seam: Field.hem carries the hem's inputs, plan.hem_in keeps them, the hem's door writes the dry plots' records, registries, net, grain, title-card room and ink",
+     "class": "within",
+     "why": "The hem's door writes the same outputs the field wrote for the dry plots (FR-004); plan.hem_in is a plan carrier between Rust stages, not a dropped or narrowed output. Implementation of the seam, no scope change."
+    },
+    {
+     "id": "D3",
+     "summary": "the settlement's ground as the seat's band; a column whose first strip would stand on it is laid behind it a strip's depth at a time, at most the ground's own reach",
+     "class": "within",
+     "why": "Asked before placing (the push stops at the first clear depth, the column is not placed then moved), so S4 holds; the standoff carries a GUESS label from 0029, which is not one of FR-021's open findings, and the claims round IN-STEP is an exit."
+    },
+    {
+     "id": "U1 (unlabeled)",
+     "summary": "the hem budgeted as its own stage, its work moved out of the field's count ('its budget derived with it'; exit 'within a budget derived for it')",
+     "class": "within",
+     "why": "Within FR-001, FR-013 and FR-015 provided the hem's budget is derived greenfield and pinned on SOUND or an arbiter accept, and the field's accepted figure in dev/work-budget.json drops by the work that moved, so FR-002's approved sum is not quietly raised by counting the same work twice. Not a narrowing; recorded so the derivation is owed, not assumed."
+    },
+    {
+     "id": "D4",
+     "summary": "the seat's failing-list entries re-charged to the field, each with the field's own input frozen (make rust-gate REFREEZE=field)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Narrows FR-020 (an entry stays charged to the stage it failed in, with that stage's input frozen, until seed and fixture both pass). The ground for re-charging is real: after D1 no stage before the seat lays a hem, so the seat's old fixture is no longer 'the map and the plan as the stages before it left them', and keeping it would push the seat to be tweaked for an input it can never receive, the shape the GM rejected in amendment 5. But FR-020 replays a fixture 'into its stage', and the plan nowhere says a field-charged fixture is replayed past the field. The field never raised on these seeds, so a field-only replay passes trivially, and the entry then leaves the list on the seed roll alone - exactly what FR-020 exists to forbid (a failure leaving because an upstream change, e.g. a later water_frame change, turned its seed into another map). The measured line '15 replays through water_frame, field, sink, seat and hem' describes the gate's span, not each replay (a field-input fixture cannot pass through water_frame), so it does not establish that these replays reach the seat. D4 becomes LEGITIMATE when it says: a re-charged entry's fixture is replayed from the field's frozen input forward through every Rust stage to the seat (and the hem), and the entry leaves only when that replay and the seed roll both pass."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
