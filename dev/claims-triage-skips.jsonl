@@ -37,3 +37,5 @@
 {"date": "2026-11-04", "claims": 1, "keys": ["l7r/diagram/settlement/land/wet.py::_closest_pair#plumbing"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-04", "claims": 1, "keys": ["l7r/diagram/settlement/land/wet.py::_closest_pair#plumbing"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
 {"date": "2026-11-04", "claims": 1, "keys": ["l7r/diagram/settlement/land/wet.py::_closest_pair#plumbing"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-11-04", "claims": 1, "keys": ["rust/phases/src/sink/tests.rs::a_field_whose_land_falls_north_drains_up_the_page#the sink's tests"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}
+{"date": "2026-11-04", "claims": 1, "keys": ["rust/phases/src/sink/tests.rs::a_field_whose_land_falls_north_drains_up_the_page#the sink's tests"], "why": "a claims triage of 1 claim(s), at most 3, goes straight to impl-drift (feature 430 D6)"}

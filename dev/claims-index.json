@@ -80717,16 +80717,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/tests.rs::a_field_whose_land_falls_north_drains_up_the_page#the sink's tests": {
-  "body": "b53e1bae375b7f10",
+  "body": "d17fb2c611b2ef8e",
   "claim": "the sink's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "c9cbc7077d978206",
-  "core": "28499834b3e1c475",
-  "date": "2026-11-03",
-  "note": "test fixtures and assertions",
+  "code": "a35173d5e2730800",
+  "core": "44d5f0877464e8b7",
+  "date": "2026-11-04",
+  "note": "test fixture and assertions only; its coordinates, fall vectors and flow angles are test inputs, not decisions the generator makes",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/tests.rs::a_pond_behind_the_collector_is_reached_by_a_curve#the sink's tests": {
