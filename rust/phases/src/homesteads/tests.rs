@@ -2,8 +2,11 @@
 //!
 //! Research:
 //!     the homesteads' tests - NONE: fixtures and assertions, deciding nothing about the place
+#![expect(clippy::too_many_lines, reason = "one test a rule, its cases together")]
 
 use super::bearing::{house_rot, soft_limit, turned_box, wrap_square, Margin, SPREAD_DEG};
+use super::bundle::{bbox_of, bundle, envelope, Lot, Sun};
+use super::fixtures::{Forms, Kind};
 use super::ground::{Ground, CELL};
 use super::layout::{
     beds, byre, hjit, kura, yard, yard_area_ft2, Byre, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO,
@@ -206,4 +209,134 @@ fn a_house_turns_with_the_margin_it_stands_by_held_under_the_spread() {
     // a box turned a quarter swaps its sides
     let b = turned_box((0.0, 0.0, 40.0, 20.0), 90.0);
     assert!((b.2 - 20.0).abs() < 1e-9 && (b.3 - 40.0).abs() < 1e-9);
+}
+
+#[test]
+fn a_bundle_turns_as_one_piece_and_its_envelope_holds_every_side() {
+    let lot = Lot {
+        house: (46.0, 28.0),
+        kura: true,
+        byre: Some(Byre::YardShed),
+        fixtures: vec![Kind::Privy, Kind::Coop, Kind::Persimmon],
+    };
+    let forms = Forms::default();
+    let sun = Sun {
+        shade: 50.0,
+        turns: &[0.0],
+    };
+    let mut t = 0;
+    let flat = bundle(
+        &lot,
+        (300.0, 200.0),
+        Side::SE,
+        (300.0, 200.0),
+        0.0,
+        &forms,
+        &sun,
+        &mut t,
+    );
+    assert!(flat.unlaid.is_none() && flat.kura.is_some() && flat.byre.is_some());
+    // the yard before the south wall, unturned
+    assert!((flat.yard.0 - 300.0).abs() < 1e-9 && flat.yard.1 > 214.0);
+    // turned a quarter, the yard is carried round to the west of the house
+    let quarter = bundle(
+        &lot,
+        (300.0, 200.0),
+        Side::SE,
+        (300.0, 200.0),
+        90.0,
+        &forms,
+        &sun,
+        &mut t,
+    );
+    assert!((quarter.turn - 90.0).abs() < 1e-12 && quarter.bath.is_none());
+    assert!(quarter.yard.0 < 300.0 - 14.0 && (quarter.yard.1 - 200.0).abs() < 1e-6);
+    // every part inside its box, and the envelope round every side's
+    let env = envelope(
+        &lot,
+        (300.0, 200.0),
+        (300.0, 200.0),
+        10.0,
+        &forms,
+        &sun,
+        &mut t,
+    );
+    for side in SIDES {
+        let b = bundle(
+            &lot,
+            (300.0, 200.0),
+            side,
+            (300.0, 200.0),
+            10.0,
+            &forms,
+            &sun,
+            &mut t,
+        );
+        for r in &b.boxes {
+            assert!(
+                r.0 - r.2 / 2.0 >= b.bbox.0 - b.bbox.2 / 2.0 - 1e-9
+                    && r.0 + r.2 / 2.0 <= env.0 + env.2 / 2.0 + 1e-9
+            );
+        }
+    }
+    // a lot with no fixtures lays none; one whose fixtures find no seat is unlaid
+    let bare = Lot {
+        house: (46.0, 28.0),
+        kura: false,
+        byre: None,
+        fixtures: vec![],
+    };
+    assert!(bundle(
+        &bare,
+        (0.0, 0.0),
+        Side::E,
+        (0.0, 0.0),
+        0.0,
+        &forms,
+        &sun,
+        &mut t
+    )
+    .fixtures
+    .is_empty());
+    let walled = Lot {
+        house: (46.0, 28.0),
+        kura: false,
+        byre: Some(Byre::Courtyard),
+        fixtures: vec![Kind::Bath, Kind::Retirement, Kind::Retirement],
+    };
+    let tight = Forms {
+        retirement_gaps: vec![0.5],
+        retirement_ft: (60.0, 40.0),
+        ..Forms::default()
+    };
+    let _ = bundle(
+        &walled,
+        (0.0, 0.0),
+        Side::W,
+        (0.0, 0.0),
+        0.0,
+        &tight,
+        &sun,
+        &mut t,
+    );
+    let nowhere = Forms {
+        retirement_gaps: vec![],
+        ..Forms::default()
+    };
+    assert!(bundle(
+        &walled,
+        (0.0, 0.0),
+        Side::W,
+        (0.0, 0.0),
+        0.0,
+        &nowhere,
+        &sun,
+        &mut t
+    )
+    .unlaid
+    .is_some());
+    assert_eq!(
+        bbox_of(&[(0.0, 0.0, 2.0, 2.0), (10.0, 0.0, 2.0, 2.0)]),
+        (5.0, 0.0, 12.0, 2.0)
+    );
 }

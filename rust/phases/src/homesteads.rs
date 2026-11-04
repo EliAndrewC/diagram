@@ -13,6 +13,7 @@
 )]
 
 pub mod bearing;
+pub mod bundle;
 pub mod fixtures;
 pub mod ground;
 pub mod layout;
