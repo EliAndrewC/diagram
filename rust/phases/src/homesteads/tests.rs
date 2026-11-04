@@ -11,6 +11,7 @@ use super::ground::{Ground, CELL};
 use super::layout::{
     beds, byre, hjit, kura, yard, yard_area_ft2, Byre, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO,
 };
+use super::lots::{larger_first, quota_carriers, size_ladder, Lots};
 
 #[test]
 fn a_ring_takes_the_cells_whose_centers_lie_inside_it() {
@@ -338,5 +339,54 @@ fn a_bundle_turns_as_one_piece_and_its_envelope_holds_every_side() {
     assert_eq!(
         bbox_of(&[(0.0, 0.0, 2.0, 2.0), (10.0, 0.0, 2.0, 2.0)]),
         (5.0, 0.0, 12.0, 2.0)
+    );
+}
+
+#[test]
+fn the_lots_are_dealt_as_the_python_seating_deals_them() {
+    // seed 4, 20 households, read off the Python seating's deal (`settlement/rolling/lot.py`)
+    let sizes = size_ladder(4, 20);
+    let lengths: Vec<f64> = sizes
+        .iter()
+        .take(5)
+        .map(|s| (s.0 * 1e4).round() / 1e4)
+        .collect();
+    assert_eq!(lengths, vec![1.2625, 0.9875, 1.0625, 1.3375, 1.0375]);
+    let kura: Vec<usize> = larger_first(4, "kura", &sizes, 0.125)
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| **c)
+        .map(|(k, _)| k)
+        .collect();
+    assert_eq!(kura, vec![3, 9, 16]);
+    let byre: Vec<usize> = quota_carriers(4, "byre", 20, 0.3)
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| **c)
+        .map(|(k, _)| k)
+        .collect();
+    assert_eq!(byre, vec![1, 4, 6, 9, 11, 18]);
+    let lots = Lots::deal(4, 20, 0.3, &[(Kind::Woodpile, 0.4), (Kind::Privy, 1.0)]);
+    let (house, keeps_kura, keeps_beast, kinds) = lots.lot(3).expect("a declared household");
+    assert!(
+        (house.0 - 46.0 * 1.3375).abs() < 1e-9
+            && keeps_kura
+            && !keeps_beast
+            && kinds.contains(&Kind::Privy)
+    );
+    assert!(lots.lot(20).is_none());
+    // every kind's quota keyed on its own name
+    let all = Lots::deal(4, 20, 0.0, &super::fixtures::ORDER.map(|k| (k, 0.5)));
+    assert_eq!(all.fixtures.len(), 9);
+    assert!(all
+        .fixtures
+        .iter()
+        .all(|(_, c)| c.iter().filter(|x| **x).count() == 10));
+    assert_eq!(
+        lots.fixtures
+            .iter()
+            .find(|(k, _)| *k == Kind::Woodpile)
+            .map(|(_, c)| c.iter().filter(|x| **x).count()),
+        Some(8)
     );
 }

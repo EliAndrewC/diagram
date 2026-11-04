@@ -17,6 +17,7 @@ pub mod bundle;
 pub mod fixtures;
 pub mod ground;
 pub mod layout;
+pub mod lots;
 
 #[cfg(test)]
 mod fixtures_tests;
