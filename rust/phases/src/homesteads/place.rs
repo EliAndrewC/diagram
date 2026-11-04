@@ -1,7 +1,7 @@
 //! Seating a nucleated cluster (feature 444 T30): the first house on the free ground nearest the seat's center, each next house
 //! offered from a standing one at the distance their footprints part, ring by ring, jittered by the standing house's position,
 //! wider rings while households are left; each offer laid on its four garden sides and judged - the house's box, the union of the
-//! sides, each side's own box with at most one computed move off a single neighbor, the parts' rules - and the least-shaded side
+//! sides, each side's own box with at most one computed move off a single neighbor, the parts' rules - and the first side by its rank kept
 //! kept. Every household is seated or the seating stops short; no house is taken back.
 //!
 //! Research:
@@ -19,7 +19,7 @@ use std::collections::{BinaryHeap, HashSet};
 use super::bearing::{house_rot, turned_box, Margin};
 use super::bundle::{bundle, Bundle, Lot, Sun};
 use super::fit::{
-    across_a_stream, on_free_ground, opens, shades, sun_ok, too_near, Placed, Standing, SUN_FT,
+    across_a_stream, on_free_ground, opens, sun_ok, too_near, Placed, Standing, SUN_FT,
 };
 use super::fixtures::Forms;
 use super::ground::{Ground, Reach};
@@ -187,7 +187,12 @@ pub struct Seated {
     pub seat: Pt,
     /// Its homestead.
     pub bundle: Bundle,
+    /// Its share of the homestead wood: the seats it reserved.
+    pub wood: Vec<Pt>,
 }
+
+/// A seat placed: where its house stands, its homestead, its wood's seats and its copse keep-outs.
+type Placement = (Pt, Bundle, Vec<Pt>, super::wood::Keepouts);
 
 /// How a box stands against the ground and the standing homesteads.
 #[derive(Clone, Copy, PartialEq)]
@@ -211,6 +216,8 @@ pub struct Seating {
     pub search: (u64, u64, u64, u64),
     /// The operations counted.
     pub tests: u64,
+    /// The households' wood reservations.
+    pub wood: super::wood::Shares,
 }
 
 impl Seating {
@@ -280,7 +287,7 @@ impl Seating {
     }
 
     /// The seat at (x, y) for the next household: its four sides laid, the union tested, each side's own box with at most one
-    /// computed move off a single neighbor, the parts' rules asked, the least-shaded side kept. `keep` is the growth's distance a
+    /// computed move off a single neighbor, the parts' rules asked, the first side by its rank kept. `keep` is the growth's distance a
     /// moved box must still keep.
     #[expect(
         clippy::cast_possible_truncation,
@@ -293,7 +300,7 @@ impl Seating {
         x: f64,
         y: f64,
         keep: Option<&Keep>,
-    ) -> Option<(Pt, Bundle)> {
+    ) -> Option<Placement> {
         self.search.1 += 1;
         let (hw, hh) = lot.house;
         let turn = Self::turn(site, (x, y), &mut self.tests);
@@ -308,7 +315,7 @@ impl Seating {
         let env = super::bundle::bbox_of(&sides.iter().map(|b| b.bbox).collect::<Vec<_>>());
         self.search.2 += 1;
         let union_clear = self.blocked(site, env) == Block::Clear;
-        let mut best: Option<((u32, usize, u32), Pt, Bundle)> = None;
+        let mut best: Option<((usize, u32), Placement)> = None;
         let mut reaches: std::collections::HashMap<(i64, i64), bool> =
             std::collections::HashMap::new();
         for (rank, (side, mut b)) in SIDES.iter().zip(sides).enumerate() {
@@ -357,36 +364,49 @@ impl Seating {
             {
                 continue;
             }
-            let shaded = u32::try_from(
-                b.boxes[2..2 + b.gardens.len()]
-                    .iter()
-                    .filter(|&&g| self.garden_shaded(g))
-                    .count(),
-            )
-            .unwrap_or(u32::MAX);
+            // the wood, last: no part over another household's seat, and its own floor within its reach
+            let own = Self::keepouts_of(&b);
+            if self.wood.covers_a_seat(&own, &mut self.tests) {
+                continue;
+            }
+            let wsite = super::wood::WoodSite {
+                ground: site.ground,
+                streams: site.streams,
+                canvas: site.canvas,
+            };
+            let Some(seats) = self.wood.share(
+                (b.house.0, b.house.1),
+                b.turn,
+                &own,
+                &wsite,
+                &mut self.tests,
+            ) else {
+                continue;
+            };
             let hand = u32::from(rank % 2 == 1) ^ u32::from(hjit(cx, cy, 12.0) < 0.5);
-            let score = (shaded, rank / 2, hand);
-            if best.as_ref().is_none_or(|(s, _, _)| score < *s) {
-                best = Some((score, (cx, cy), b));
+            // (a bed in a standing house's sun is refused by `sun_ok`, so no kept layout's garden is shaded: the sides are ordered by their
+            // rank and their hand alone)
+            let score = (rank / 2, hand);
+            if best.as_ref().is_none_or(|(s, ..)| score < *s) {
+                best = Some((score, ((cx, cy), b, seats, own)));
             }
         }
-        best.map(|(_, at, b)| (at, b))
+        best.map(|(_, p)| p)
     }
 
-    /// Does a standing house stand in a bed's south sun?
-    fn garden_shaded(&mut self, g: Rect) -> bool {
-        let (reach, side) = (SUN_FT.0 + SUN_FT.1, SUN_FT.1);
-        let south = g.1 + g.3 / 2.0;
-        let near = self.standing.meeting(
-            (g.0 - g.2 / 2.0 - side, south),
-            (g.0 + g.2 / 2.0 + side, south + reach),
-            &mut self.tests,
-        );
-        near.iter()
-            .any(|&k| shades(self.standing.all[k].house_box, g, reach, side))
+    /// A homestead's copse keep-outs, from its parts as drawn: its buildings and fixtures, and its yard and beds.
+    fn keepouts_of(b: &Bundle) -> super::wood::Keepouts {
+        let mut solids = vec![b.house];
+        solids.extend(b.kura);
+        solids.extend(b.byre.map(|(r, _)| r));
+        solids.extend(b.fixtures.iter().map(|(_, r)| *r));
+        let mut plots = vec![b.yard];
+        plots.extend(&b.gardens);
+        super::wood::keepouts(&solids, &plots)
     }
 
-    fn stand(&mut self, seat: Pt, b: Bundle) {
+    fn stand(&mut self, seat: Pt, b: Bundle, wood: Vec<Pt>, own: super::wood::Keepouts) {
+        self.wood.commit(&wood, own, &mut self.tests);
         let placed = Placed {
             house: (b.house, b.turn),
             house_box: b.boxes[0],
@@ -400,6 +420,7 @@ impl Seating {
             lot,
             seat,
             bundle: b,
+            wood,
         });
     }
 
@@ -409,10 +430,10 @@ impl Seating {
         let Some(lot) = self.lot(site) else {
             return false;
         };
-        let Some((_at, b)) = self.place(site, &lot, x, y, keep) else {
+        let Some((_at, b, wood, own)) = self.place(site, &lot, x, y, keep) else {
             return false;
         };
-        self.stand((x, y), b);
+        self.stand((x, y), b, wood, own);
         true
     }
 

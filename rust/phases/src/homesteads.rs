@@ -20,6 +20,7 @@ pub mod ground;
 pub mod layout;
 pub mod lots;
 pub mod place;
+pub mod wood;
 
 #[cfg(test)]
 mod fit_tests;
@@ -29,3 +30,5 @@ mod fixtures_tests;
 mod place_tests;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod wood_tests;

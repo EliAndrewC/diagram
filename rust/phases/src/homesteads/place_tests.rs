@@ -60,7 +60,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         .seated
         .iter()
         .enumerate()
-        .all(|(k, s)| s.lot == k && s.seat.0 > 0.0));
+        .all(|(k, s)| s.lot == k && s.seat.0 > 0.0 && s.wood.len() >= 24));
     let first = &st.seated[0].bundle;
     assert!((first.house.0 - 1200.0).hypot(first.house.1 - 1350.0) < 200.0);
     for (i, a) in st.seated.iter().enumerate() {
@@ -68,10 +68,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         assert!(a.bundle.bbox.1 + a.bundle.bbox.3 / 2.0 <= 1500.0 + 8.0 * 1.5);
         for b in &st.seated[i + 1..] {
             let (ra, rb) = (a.bundle.bbox, b.bundle.bbox);
-            assert!(
-                (ra.0 - rb.0).abs() >= (ra.2 + rb.2) / 2.0 - 1e-6
-                    || (ra.1 - rb.1).abs() >= (ra.3 + rb.3) / 2.0 - 1e-6
-            );
+            assert!(apart(ra, rb));
             let gap = quad_gap(
                 &corners(a.bundle.house, a.bundle.turn),
                 &corners(b.bundle.house, b.bundle.turn),
@@ -156,7 +153,7 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
     let keep = Keep {
         from: ((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0)),
         gap: 1.0,
-        standing: vec![],
+        standing: vec![((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0))],
     };
     assert!(pair.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&keep)));
     // a move that would break the growth's distance is refused
@@ -216,4 +213,67 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
     };
     let st = grow(&site_many, (300.0, 300.0), 30);
     assert!(!st.seated.is_empty() && st.seated.len() < 30);
+}
+
+/// Do two boxes stand apart on one axis at least?
+fn apart(a: (f64, f64, f64, f64), b: (f64, f64, f64, f64)) -> bool {
+    let dx = (a.0 - b.0).abs() >= (a.2 + b.2) / 2.0 - 1e-6;
+    let dy = (a.1 - b.1).abs() >= (a.3 + b.3) / 2.0 - 1e-6;
+    dx || dy
+}
+
+#[test]
+fn a_homestead_may_not_stand_its_parts_over_a_neighbors_wood() {
+    let mut t = 0;
+    let canvas = (1200.0, 1200.0);
+    let ground = Ground::new((0.0, 0.0), canvas, &mut t);
+    let reach = ground.reach(&[(600.0, 600.0)], &mut t);
+    let margin = Margin::new(
+        &[
+            (0.0, 1190.0),
+            (1200.0, 1190.0),
+            (1200.0, 1200.0),
+            (0.0, 1200.0),
+        ],
+        0.0,
+        &mut t,
+    );
+    let forms = Forms::default();
+    let lots = Lots::deal(4, 2, 0.0, &[]);
+    let beyond = |_p: (f64, f64)| true;
+    assert!(beyond((0.0, 0.0)));
+    let field = [
+        (0.0, 1190.0),
+        (1200.0, 1190.0),
+        (1200.0, 1200.0),
+        (0.0, 1200.0),
+    ];
+    let site = Site {
+        ground: &ground,
+        beyond: &beyond,
+        reach: &reach,
+        field: &field,
+        streams: &[],
+        canvas,
+        bearing: (&margin, 0.0),
+        lots: &lots,
+        byre: None,
+        forms: &forms,
+        shade: 50.0,
+    };
+    let mut st = Seating::default();
+    assert!(st.offer(&site, 600.0, 600.0, None));
+    // a seat whose house would stand on the first homestead's wood, behind it to the north
+    let h = st.seated[0].bundle.house;
+    let seat = st.seated[0]
+        .wood
+        .iter()
+        .copied()
+        .max_by(|p, q| ((p.0 - h.0) + (h.1 - p.1)).total_cmp(&((q.0 - h.0) + (h.1 - q.1))))
+        .unwrap_or((0.0, 0.0));
+    assert!(!st.offer(&site, seat.0, seat.1, None));
+    assert!(
+        !apart((0.0, 0.0, 2.0, 2.0), (1.0, 1.0, 2.0, 2.0))
+            && apart((0.0, 0.0, 2.0, 2.0), (0.0, 5.0, 2.0, 2.0))
+    );
 }

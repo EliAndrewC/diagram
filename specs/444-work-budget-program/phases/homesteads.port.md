@@ -21,6 +21,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 | the households' lots | `lots.rs` | `rolling/lot.py` (`size_ladder`, `quota_carriers`, `larger_first`, `HouseholdLots`) |
 | the fit rules: the south sun both ways, the eave gap on turned roofs, one bank, free ground, the yard's opening | `fit.rs` (`Standing`, `sun_ok`, `too_near`, `across_a_stream`, `on_free_ground`, `opens`) | `rolling/fit.py` `_sun_corridor_ok`, `_gardens_sun_ok`, `_house_too_near_a_neighbor`, `_parts_across_stream`, `_rect_hits`/`_rect_on_water` (by the raster), `SeatRegion.opens` |
 | the placer and the growth: the first house nearest the seat, the rest grown ring by ring; each offer's sides, the one computed move, the least-shaded side | `place.rs` (`grow`, `Seating::offer`, `Keep`) | `rolling/place.py` `_place_bundle_nucleated`, `homesteads/growth.py` `grow_the_margin`, `capacity.py` `free_seats`/`offer_seats` (the nucleated path; the passage share's tight seats still owed) |
+| the wood share, judged at its lattice square on the map's lattice, each household's keep-outs barring the others' | `wood.rs` (`Shares`, `keepouts`), asked last of every layout by `place.rs` | `homestead_parts/wood_share.py` (`WoodShares.share`, `seat_barred`, `covers_a_seat`, `copse_keepouts`) |
 | Python's string-seeded `random.Random` | `pyrand.rs` (`from_text`, `shuffled`, `sha512`) | - (pinned against CPython's own draws) |
 
 ## Left, in the order they are needed
@@ -33,8 +34,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
    parts meet at seating time), the house on a tread, too near a neighbor, unreachable.
 2. (ported: the placer.) 3. The growth's passage share and its tight seats (the rest ported) - the growth (`homesteads/growth.py` `grow_the_margin`, `footprint`, `seat_toward`, `settled_seat`, `keeps_its_distance`,
    `keeps_every_gap`; the first house by `capacity.py` `free_seats`), the passage share and tight seats.
-4. The wood share (`homestead_parts/wood_share.py` `WoodShares`: the lattice, the bars, the crowns) - priced in the derivation at its
-   lattice square (a GUESS, labeled there).
+4. (ported: the wood share.)
 5. The track out (`ways/track.py` `choose_track_out`, via `homesteads/household_ways.py` `chose_the_track`, `near_the_cluster`).
 6. The households' ways (`rolling/gap_ways.py` `lay_the_ways`: the lane layers, the flood, each door's exits, the taut run, the lane
    law's rules each leg asks - `fixtures_clear`, `parts_clear`, `lawful_leg`, `tree_admits` - and `access.reserve`); the lane law's
