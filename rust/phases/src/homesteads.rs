@@ -13,8 +13,11 @@
 )]
 
 pub mod bearing;
+pub mod fixtures;
 pub mod ground;
 pub mod layout;
 
+#[cfg(test)]
+mod fixtures_tests;
 #[cfg(test)]
 mod tests;
