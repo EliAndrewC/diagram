@@ -1,0 +1,3 @@
+UNCOUNTED - `drawn_ground` (wet.py:298-304), reached through `WetGroundMixin.marsh` (wet.py:422) from `stage_waterward` (waterward_stage.py:47), runs over every ring in `field_polys`, `block_polys`, `clearings` and `avoid` with no counter, and those sets grow with the households; `reserve_sty_seat`'s pond and bank-seat walk (pondstock.py:128-139) is uncounted too.
+
+(2026-11-04, MODE AUDIT of waterward. Also uncounted: `pond_cut` (wet.py:258-273) reading every block ring. Notes: no reference roll is a polder, so the counts are {} and the budget of 1 was never tested - it needs a real derivation and a measured polder roll; a strip with no open ground is a refusal after the Rust laid it, to watch once polder rolls are counted.)
