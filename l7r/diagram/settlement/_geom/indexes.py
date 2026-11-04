@@ -566,7 +566,17 @@ class KeepoutGrid:
 
     def __init__(self) -> None:
         self.grid = PointGrid()
-        self._trees: dict[tuple[Any, ...], Any] = {}  # `hit_many`'s and `shape`'s unions, per (extra, the queried points' box)
+        self._trees: dict[tuple[Any, ...], Any] = {}
+
+    def _cells(self, items: Any) -> int:
+        """The cells `PointGrid.extend` files these items in - each item's box over the grid's cells, an oversized one once (the
+        counter's own reading, feature 444 T29's MODE AUDIT: a filing was charged 1 an item)."""
+        c, span = self.grid.cell, self.grid._MAX_SPAN
+        n = 0
+        for it in items:
+            di, dj = int(it[-2] // c) - int(it[-4] // c), int(it[-1] // c) - int(it[-3] // c)
+            n += 1 if di > span or dj > span else (di + 1) * (dj + 1)
+        return n  # `hit_many`'s and `shape`'s unions, per (extra, the queried points' box)
 
     def rings(self, polys: Any, pad: float = 0.0, slot: int = 0, reach: float = 0.0) -> None:
         """Rings refused inside or within `pad` (+ the query's extra for `slot`) of an edge."""
@@ -575,10 +585,11 @@ class KeepoutGrid:
             idx = RingIndex(poly)
             r = pad + reach
             items.append((self.RING, idx, pad, slot, idx.x0 - r, idx.y0 - r, idx.x1 + r, idx.y1 + r))
-            if __debug__:  # each ring's points indexed once (feature 444 T26's MODE AUDIT: the scatters' filing was uncounted)
-                OPS["pt_test@KeepoutGrid.rings"] += len(idx.ring)
+            if __debug__:  # each ring's points indexed once, and each edge filed in every row its height spans (feature 444 T26's
+                # MODE AUDIT: the scatters' filing was uncounted; T29's: the rows were charged 1 a point)
+                OPS["pt_test@KeepoutGrid.rings"] += len(idx.ring) + sum(len(v) for v in idx.rows.values())
         if __debug__:
-            OPS["write@KeepoutGrid.file"] += len(items)
+            OPS["write@KeepoutGrid.file"] += self._cells(items)
         self.grid.extend(items)
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
@@ -590,14 +601,14 @@ class KeepoutGrid:
                 a, b = pl[i], pl[i + 1]
                 r = hw + reach
                 items.append((self.SEG, a, b, hw, slot, min(a[0], b[0]) - r, min(a[1], b[1]) - r, max(a[0], b[0]) + r, max(a[1], b[1]) + r))
-        if __debug__:  # each segment boxed and filed once
-            OPS["write@KeepoutGrid.file"] += len(items)
+        if __debug__:  # each segment boxed and filed in every cell its box covers
+            OPS["write@KeepoutGrid.file"] += self._cells(items)
         self.grid.extend(items)
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 
     def rects(self, rects: Any, closed: bool = False) -> None:
         if __debug__:
-            OPS["write@KeepoutGrid.file"] += len(rects)
+            OPS["write@KeepoutGrid.file"] += len(rects) * 2
         self.grid.extend([(self.RECT, x0, y0, x1, y1, closed, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
         self._trees.clear()  # `hit_many`'s shapes are of the items filed so far
 

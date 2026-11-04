@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import math
 from typing import TYPE_CHECKING, Any
+
 from l7r.diagram.work_counts import OPS
 
 if TYPE_CHECKING:

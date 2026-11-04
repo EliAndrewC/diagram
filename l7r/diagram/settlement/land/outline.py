@@ -86,7 +86,16 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
     length = ring.length
     n = max(12, int(length / (WAVE_STEP_FT * bs)))
     s = np.linspace(0.0, length, n, endpoint=False)
-    xy = np.array([ring.interpolate(float(v)).coords[0] for v in s])
+    # ...PLACED IN ONE PASS OVER THE RING (feature 444 T29's MODE AUDIT): `ring.interpolate` walked the ring from its start for
+    # every sample, a pass over its vertices each; its cumulative lengths taken once, each sample's edge is found by bisection
+    # and the point interpolated along it - the same points
+    rc = np.asarray(ring.coords, dtype=float)
+    seg = rc[1:] - rc[:-1]
+    seglen = np.hypot(seg[:, 0], seg[:, 1])
+    cum = np.concatenate(([0.0], np.cumsum(seglen)))
+    k = np.clip(np.searchsorted(cum, s, side="right") - 1, 0, len(seg) - 1)
+    t = np.where(seglen[k] > 0.0, (s - cum[k]) / np.where(seglen[k] > 0.0, seglen[k], 1.0), 0.0)
+    xy = rc[k] + t[:, None] * seg[k]
     rng = np.random.default_rng(seed)
     wave = np.zeros(n)
     lengths = np.array([rng.uniform(WAVE_LENGTH_FT[0], WAVE_LEAD_FT), *rng.uniform(WAVE_LEAD_FT, WAVE_LENGTH_FT[1], 2), rng.uniform(*WAVE_SHORT_FT)]) * bs
@@ -101,9 +110,9 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
     waved = _largest(Polygon((xy + inward * depth[:, None]).tolist()).buffer(0).intersection(rounded))
     shape = waved if waved is not None and waved.area >= 0.5 * rounded.area else rounded
     shape = _largest(shape.simplify(SIMPLIFY_FT * bs, preserve_topology=True)) or shape
-    if __debug__:  # each rounding's two buffers over the laid ring (8 a corner's arc), each sample placed on the ring (a bisection
-        # of its vertices), waved by four components and moved along its normal (8), and the waved ring cut and simplified (S5)
-        OPS["write@natural_outline"] += tries * 2 * 8 * len(pts) + n * (max(1, len(ring.coords).bit_length()) + 8) + 2 * n
+    if __debug__:  # each rounding's two buffers over the laid ring (8 a corner's arc), the ring's cumulative lengths (2 a vertex), each sample placed on
+        # it (a bisection of them), waved by four components and moved along its normal (8), and the waved ring cut and simplified (S5)
+        OPS["write@natural_outline"] += tries * 2 * 8 * len(pts) + 2 * len(rc) + n * (max(1, len(rc).bit_length()) + 8) + 2 * n
     return [(round(x, 1), round(y, 1)) for x, y in list(shape.exterior.coords)[:-1]]
 
 

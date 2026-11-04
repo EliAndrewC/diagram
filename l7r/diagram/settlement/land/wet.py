@@ -304,7 +304,7 @@ def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any =
             g = ShapelyPolygon(rp).buffer(0)
             cuts.append(g.buffer(pad) if pad else g)
         if __debug__:  # each keep-out's points read for its box, and each cut's ring buffered and taken out (S5)
-            OPS["pt_test@drawn_ground"] += len(pts) + sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam)
+            OPS["pt_test@drawn_ground"] += 5 * (len(pts) + sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam))  # copied, and its box's four scans
             OPS["write@drawn_ground"] += sum(len(g.exterior.coords) for g in cuts if hasattr(g, "exterior"))
         out = keep.difference(unary_union(cuts)) if cuts else keep
     except ValueError, GEOSException:  # pragma: no cover - buffer(0) repairs every ring a placer records [287: a degenerate outline keeps the drop honest]
@@ -429,6 +429,9 @@ class WetGroundMixin:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": role, "why": "no open ground left"})
             return
         drawn = [(round(px, 1), round(py, 1)) for px, py in _ground]  # at the record's grain, so the scatter keeps a mark in exactly what is recorded
+        if __debug__:  # the drawn ring rounded, copied to the wet ground, scanned for its box, copied into its cover, scanned four
+            # times for the record's box, written to it and copied twice as no-build ground (S5; `pond_reeds` counts the same work)
+            OPS["write@marsh"] += 10 * len(drawn)
         self.wet_polys.append(list(drawn))
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
@@ -471,6 +474,8 @@ class WetGroundMixin:
         # reed based 0.8 ft inside a drawn corner passed the keep-out - found when feature 281 moved the marsh's throws
         # (a change it then withdrew, having bought no time: specs/281 Amendment 1).
         _banks = bank_rings(self.M.get("dikeponds", []), _near_box)
+        if __debug__:  # each crest scanned four times for its box and copied, each bank ring scanned for its box (S5)
+            OPS["pt_test@marsh"] += 5 * sum(len(dk.get("crest") or []) for dk in self.M.get("dikes", [])) + 4 * sum(len(p.get("parcel") or []) for p in self.M.get("dikeponds", []))
         keep = KeepoutGrid()
         keep.rings(self.field_polys, pad=0.0)  # at the paddy's edge (GM 2026-10-01; the note at `drawn_ground` above)
         keep.rings(_blocks)  # the pond as its ellipse, not its building box (`pond_cut`, feature 299)

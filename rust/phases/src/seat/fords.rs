@@ -95,9 +95,11 @@ pub fn gapped(
     counts: &mut HashMap<String, u64>,
 ) -> Vec<(Pt, Pt)> {
     let mut near = Cells::new(CELL);
+    let mut filed = 0;
     for (i, &f) in fords.iter().enumerate() {
-        near.file(i, &[f]);
+        filed += near.file(i, &[f]);
     }
+    tally(counts, "write@ford_cells", filed);
     let mut out = Vec::new();
     let mut tests = 0;
     for (a, b) in streams

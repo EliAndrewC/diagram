@@ -22,9 +22,9 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
-from l7r.diagram.work_counts import OPS
 from l7r.diagram.settlement.farm_fixtures import STY_FT
 from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET
+from l7r.diagram.work_counts import OPS
 
 from .consts import Pt
 from .plan import SitePlan
