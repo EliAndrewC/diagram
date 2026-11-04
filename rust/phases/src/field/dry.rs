@@ -235,22 +235,22 @@ fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut
         })
         .fold(0.0, f64::max);
     let mut behind = 0.0;
-    while behind <= reach {
+    loop {
         let poly = Canal::seat(a, b, (depth + behind, depth + behind + PLOT_FT.1), tests);
         let middle = (
             f64::midpoint(poly[0].0, poly[2].0),
             f64::midpoint(poly[0].1, poly[2].1),
         );
         *tests += 5 * keep.len() as u64;
-        if !keep
+        let on = keep
             .iter()
-            .any(|k| inside(middle, k) || poly.iter().any(|c| inside(*c, k)))
-        {
+            .any(|k| inside(middle, k) || poly.iter().any(|c| inside(*c, k)));
+        // clear of the ground, or past its own reach: no ground stands farther out than its box's diagonal
+        if !on || behind > reach {
             return behind;
         }
         behind += PLOT_FT.1;
     }
-    behind
 }
 
 /// The rows' directions a tract's neighbors run: the tract before it along its band, and those of the band below whose stretch
@@ -581,7 +581,8 @@ fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        hem, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS, PLOT_FT, TRACT_APART_DEG, TRACT_STRIPS,
+        apart, hem, past_keep, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS, PLOT_FT,
+        TRACT_APART_DEG, TRACT_STRIPS,
     };
     use crate::field::geom::inside;
     use crate::field::index::Index;
@@ -729,5 +730,28 @@ mod tests {
         );
         assert!(east.iter().all(|p| p.poly.iter().all(|c| c.0 >= -1e-9)));
         assert!(short.is_empty());
+    }
+
+    #[test]
+    fn a_tract_s_turn_stands_apart_from_its_neighbors_nearest_the_roll() {
+        let mut t = 0;
+        // the roll 15 on the contour between neighbors at 30 and -30: too near the first; on its side the windows' edges 10 and
+        // -10 both stand apart, and the one nearer the roll is taken
+        assert_eq!(apart((false, 15.0), &[30.0, -30.0], &mut t), (false, 10.0));
+    }
+
+    #[test]
+    fn a_column_on_ground_no_strip_clears_is_pushed_past_its_reach() {
+        let mut t = 0;
+        let frames = (((0.0, 0.0), (-1.0, 0.0)), ((0.0, 91.4), (-1.0, 0.0)));
+        let ground = vec![vec![
+            (-1000.0, -10.0),
+            (-1.0, -10.0),
+            (-1.0, 100.0),
+            (-1000.0, 100.0),
+        ]];
+        let behind = past_keep(frames.0, frames.1, 6.0, &ground, &mut t);
+        assert!(behind > 900.0, "{behind}");
+        assert!(past_keep(frames.0, frames.1, 6.0, &[], &mut t) == 0.0);
     }
 }

@@ -639,6 +639,10 @@ mod tests {
     }
 
     #[test]
+    #[expect(
+        clippy::many_single_char_names,
+        reason = "the plane geometry's own names"
+    )]
     fn a_hamlet_s_comb_end_to_end() {
         let out = build(&inp(20, 4)).unwrap();
         assert_eq!(out.fields.len(), 1);
@@ -660,11 +664,7 @@ mod tests {
             .map(|(&(a, b), &w)| (a, b, w))
             .collect();
         let laid = crate::hem::lay(h, &f.fan.ring, &water, &[]);
-        assert!(
-            laid.grain.0 >= need && laid.grain.1 >= laid.grain.0,
-            "{:?}",
-            laid.grain
-        );
+        assert!(laid.grain.0 >= need && laid.grain.1 >= laid.grain.0);
         let (dx, dy) = f.fan.down;
         let toe_first = laid
             .plots

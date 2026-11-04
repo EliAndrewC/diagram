@@ -5,11 +5,6 @@
 //! Research:
 //!     the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it
 
-#![expect(
-    clippy::many_single_char_names,
-    reason = "the plane geometry's own names"
-)]
-
 use std::collections::HashMap;
 
 use crate::field::fan::Pt;
@@ -73,7 +68,8 @@ pub fn flanks(fall: Pt, seat_out: Option<Pt>) -> Vec<char> {
 #[must_use]
 #[expect(
     clippy::too_many_arguments,
-    reason = "the face's ring, flank, span, cut and notches"
+    clippy::float_cmp,
+    reason = "the face's ring, flank, span, cut and notches; a run of bins holds the one value taken, compared exactly"
 )]
 pub fn face(
     pts: &[Pt],
@@ -108,7 +104,6 @@ pub fn face(
         #[expect(
             clippy::cast_possible_truncation,
             clippy::cast_sign_loss,
-            clippy::cast_precision_loss,
             reason = "a bin of 32, its sign tested first"
         )]
         if k >= 0.0 && (k as usize) < BINS && own {

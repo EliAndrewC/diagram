@@ -14,7 +14,8 @@ use crate::field::fan::Pt;
 #[pyfunction]
 #[expect(
     clippy::too_many_arguments,
-    reason = "the stage's inputs, each a plan field Python gathered (D1)"
+    clippy::needless_pass_by_value,
+    reason = "the stage's inputs, each a plan field Python gathered (D1); PyO3 hands Vecs from Python lists"
 )]
 pub fn stage_waterward(
     py: Python<'_>,

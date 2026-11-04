@@ -42,3 +42,32 @@ fn the_hem_keeps_off_the_settlement_s_ground_and_stands_behind_it() {
     let wet = lay(&h, &field, &[((-40.0, 0.0), (-40.0, 1200.0), 4.0)], &[]);
     assert!(wet.plots.len() < open.plots.len());
 }
+
+#[test]
+fn a_ground_no_strip_clears_pushes_its_columns_past_its_reach() {
+    let line: Vec<(f64, f64)> = (0..=8).map(|k| (0.0, 50.0 * f64::from(k))).collect();
+    let h = HemIn {
+        line,
+        out: (-1.0, 0.0),
+        down: (0.0, 1.0),
+        bounds: (f64::INFINITY, 1),
+        seed: 4,
+    };
+    // a ground reaching far past its own box's diagonal on the hem's side: no column clears it within its reach
+    let ground = vec![
+        (-100_000.0, -1000.0),
+        (-1.0, -1000.0),
+        (-1.0, 2000.0),
+        (-100_000.0, 2000.0),
+    ];
+    let laid = lay(
+        &h,
+        &square(1.0, -10.0, 900.0, 1300.0),
+        &[],
+        &[ground.clone()],
+    );
+    assert!(laid
+        .plots
+        .iter()
+        .all(|p| !p.poly.iter().any(|c| inside(*c, &ground))));
+}

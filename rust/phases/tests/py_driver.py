@@ -36,6 +36,10 @@ for seed in range(8):
     f = out["fields"][0]
     assert f["plots"] and f["channels"][0][0] == "main" and len(f["ring"]) > 20
     seen |= {p["state"] for p in f["plots"]} | {"weir" if f["weir"] else "open"} | {"pond" if f["pond"] else "-"} | {"grave" if f["grave"] else "-"}
+    # the hem the field hands on, laid by the hem stage on the field's own outline and water (T28)
+    h = f["hem"]
+    real = l7r_phases.stage_hem(h["line"], tuple(h["out"]), tuple(h["down"]), tuple(h["bounds"]), h["seed"], f["ring"], h["water"], [])
+    assert real["grain"][1] >= real["grain"][0] >= 0.0  # a barley field may owe the hem nothing
     assert set(out["knobs"]) >= {"intake", "paddy_rest"} and len(out["grain"]) == 3 and out["counts"] is not None
 assert {"green", "wet", "rest", "weir", "open"} <= seen, seen
 # ...and a settlement past the single-field cap draws its fields side by side (each after the first laid beside the last)
@@ -146,7 +150,12 @@ laid = l7r_phases.stage_hem(hem_line, (-1.0, 0.0), (0.0, 1.0), (float("inf"), 1)
 assert laid["dry"] and laid["grain"][0] > 0.0 and laid["counts"]
 
 # the waterward stage (feature 444 T29), as the thin `stage_waterward` calls it: a polder's strips on its water-facing flanks
-ring = [(1000.0 + 50.0 * k, 1000.0) for k in range(21)] + [(2000.0, 1000.0 + 50.0 * k) for k in range(21)] + [(2000.0 - 50.0 * k, 2000.0) for k in range(21)] + [(1000.0, 2000.0 - 50.0 * k) for k in range(21)]
+ring = (
+    [(1000.0 + 50.0 * k, 1000.0) for k in range(21)]
+    + [(2000.0, 1000.0 + 50.0 * k) for k in range(21)]
+    + [(2000.0 - 50.0 * k, 2000.0) for k in range(21)]
+    + [(1000.0, 2000.0 - 50.0 * k) for k in range(21)]
+)
 ww = l7r_phases.stage_waterward([(ring, [(1000.0, 1500.0)])], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), (1.0, 0.0))
 assert ww["flanks"] == ["W", "S"] and len(ww["strips"]) == 2 and ww["counts"]
 assert l7r_phases.stage_waterward([], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), None)["strips"] == []
