@@ -4,7 +4,9 @@
 //!     the homesteads' tests - NONE: fixtures and assertions, deciding nothing about the place
 
 use super::ground::{Ground, CELL};
-use super::layout::{beds, hjit, yard, yard_area_ft2, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO};
+use super::layout::{
+    beds, byre, hjit, kura, yard, yard_area_ft2, Byre, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO,
+};
 
 #[test]
 fn a_ring_takes_the_cells_whose_centers_lie_inside_it() {
@@ -124,4 +126,27 @@ fn the_garden_lies_on_its_side_and_splits_in_one_household_in_four() {
         .map(|k| beds((f64::from(k), 3.0), 6.0, 6.0, Side::W).len())
         .max();
     assert_eq!(tiny, Some(1));
+}
+
+#[test]
+fn the_storehouse_annex_keeps_its_band_and_the_byre_its_flank() {
+    // the ordinary minka's north annex inside the band, unchanged at 21.2 x 12.6 ft
+    let n = kura(46.0, 28.0, true);
+    assert!((n.2 - 21.16).abs() < 1e-9 && (n.3 - 12.6).abs() < 1e-9 && (n.1 + 18.9).abs() < 1e-9);
+    // a long house's annex held to the band's 1.8 to one; a shallow house's at the band's floor
+    assert!(kura(70.0, 28.0, true).2 <= 1.8 * 12.6 + 1e-9);
+    let floor = kura(46.0, 18.0, true);
+    assert!((floor.2 - 18.0).abs() < 1e-9 && (floor.3 - 10.0).abs() < 1e-9);
+    // the west annex along the wall, its length in the band
+    let w = kura(46.0, 28.0, false);
+    assert!(w.0 < 0.0 && (18.0..=27.0).contains(&w.3) && w.2 <= w.3 / 1.5 + 1e-9);
+    // the byre on the flank away from the garden, long side along the wall
+    let (dx, _dy, bw, bh, turn) = byre(46.0, 28.0, Side::E, Byre::YardShed);
+    assert!(dx < -23.0 && bw < bh && (turn - 90.0).abs() < 1e-9);
+    let (dx, dy, _, _, turn) = byre(46.0, 28.0, Side::W, Byre::Courtyard);
+    assert!(dx > 23.0 && dy >= 0.0 && (turn + 90.0).abs() < 1e-9);
+    assert!(
+        byre(46.0, 28.0, Side::SE, Byre::Courtyard).4 > 0.0
+            && byre(10.0, 4.0, Side::SW, Byre::Courtyard).1 == 0.0
+    );
 }
