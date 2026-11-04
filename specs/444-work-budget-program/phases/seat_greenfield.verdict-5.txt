@@ -1,0 +1,3 @@
+UNDERIVED - the way out's walk: its 1.5 asks per cell and "three cells a step" have no reason, its 4,964 ft is not in the Bounds, and the walk runs inside the fall-back down the ladder ("the next margin taken where the head has no way out") with no stated bound (S3). The revision owes that bound, for example walked cells memoized across margins so the run walks at most the canvas once, plus reasons for the two figures.
+
+(2026-11-04, MODE BUDGET round 4, the second blind dispatch. Notes: the brook's 30 ft reach not named a knob; the score's seven terms counted 6; the reeds charged on every roll; the S8 notes open; the back's unit and width as verdict-4; whether each ladder rung owes its own way out. Past ten times the first figure, the raise owes the GM's words.)
