@@ -42,7 +42,7 @@ def waterward_flanks(plan: SitePlan) -> list[str]:
     (`rust/phases/src/waterward.rs` `flanks`, feature 444 T29), the one the fringe is drawn on, asked here for the stages that read
     the flanks too, never derived a second time.
 
-    Research: waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands
+    Research: waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: every flank but the landward one holds water back; a reed fringe along the low foot where the outfall drains and along the cross flank off the shore, the wild pond that feeds the polder at its head - its water drawn there as the pond, so no reed strip is laid off the head
     """
     from ..phases_ext import phases
 

@@ -7631,48 +7631,47 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its polygon": {
-  "body": "fc71fd651247be17",
+  "body": "1ef84ee76abf07e4",
   "claim": "its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)",
-  "code": "647bc545c13743c7",
-  "core": "2e9b448c8b7d0ac4",
+  "code": "91231d174f3258fe",
+  "core": "20391d1dfd90d3d8",
   "date": "2026-11-04",
-  "note": "the 16-gon is just how the pond disc's outline is built",
+  "note": "the 16-gon only approximates the pond disc; it is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its salts, guards and sentinels": {
-  "body": "fc71fd651247be17",
+  "body": "1ef84ee76abf07e4",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)",
-  "code": "6b8125711949d107",
-  "core": "2e9b448c8b7d0ac4",
+  "code": "9358291d47405feb",
+  "core": "20391d1dfd90d3d8",
   "date": "2026-11-04",
-  "note": "the pi/8 step of the same 16-gon is plumbing",
+  "note": "the pi/8 step of that same 16-gon; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#tameike berth": {
-  "body": "fc71fd651247be17",
+  "body": "1ef84ee76abf07e4",
   "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
-  "code": "e35558d92f96129f",
-  "core": "2e9b448c8b7d0ac4",
+  "code": "4d484e8187cdda4a",
+  "core": "20391d1dfd90d3d8",
   "date": "2026-11-04",
-  "note": "the code sets an 80 ft berth and nothing in the bundle answers it, so GUESS is right",
+  "note": "nothing on the lanes page sizes a pond's berth, so the 80 ft is a fair guess",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#the way out's walls": {
-  "body": "fc71fd651247be17",
+  "body": "1ef84ee76abf07e4",
   "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
-  "code": "3e890ad3074dea31",
-  "core": "2e9b448c8b7d0ac4",
+  "code": "878b4719e94f3c82",
+  "core": "20391d1dfd90d3d8",
   "date": "2026-11-04",
-  "note": "the walls are the toe and reed fringe grown by the track's width, the field, and the pond; the watercourses are lines the way may not cross. This matches the page's dry-ground, no-crossing-row-crops, stop-at-the-paddy and off-the-map rules",
+  "note": "the toe, the wet rings, the field and the pond walled, and the water lines kept, as a track off wet ground that runs off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -7680,7 +7679,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:48cdd569d493520c",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
@@ -21973,11 +21971,11 @@
  },
  "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the way out off the wet ground laid": {
   "body": "fdcd94c97a814152",
-  "claim": "the way out off the wet ground laid - village-lanes.drawing: every way keeps off every marsh's reeds; at the seat the wet toe and a pond's reed fringe are the marsh laid, the hinterland's marshes laid after it (`STAGES`)",
-  "code": "2a175d9ead9ce12f",
+  "claim": "the way out off the wet ground laid - village-lanes.drawing: every way keeps off every marsh's reeds; at the seat the wet toe and a pond's reed fringe are the marsh laid, a polder's waterside strip and the hinterland's marshes laid after it (`STAGES`)",
+  "code": "8cd93687bf9744ee",
   "core": "fedf1d4c07dd5f96",
   "date": "2026-11-04",
-  "note": "walls the toe and pond_fringe, the marshes laid by this stage; the page's every-marsh rule holds as laid",
+  "note": "toe_band plus marsh_ground(only pond_fringe) are the marsh laid at the seat; every way keeps off every marsh's reeds",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -22831,16 +22829,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/waterward.py::waterward_flanks#waterward flanks": {
-  "code": "40f289c388241d5e",
-  "core": "b4d7a45fc20551fc",
-  "date": "2026-10-03",
-  "note": "matches the pool layout 0019 drawing describes",
+  "body": "56d6c91c91d28a29",
+  "claim": "waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands",
+  "code": "77a06dfb25348260",
+  "core": "2c77652cdc188604",
+  "date": "2026-11-04",
+  "note": "the claim leaves out the head, but the page says the dike holds water back on \"every flank of a polder but the landward one\", and the head faces the wild pond that feeds it; the derivation is now in Rust (waterward.rs flanks, not in the bundle), so either the head goes in or the drawing page records leaving it out as a deviation",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
-  "triaged": "2026-10-12",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/waterward_stage.py::stage_waterward#a notch through the whole band": {
   "body": "60193af801977ead",
@@ -30443,36 +30448,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::set_crossing#crossing the brook is charged": {
-  "code": "09e01b0450925c00",
-  "core": "0aa23bd88ddb4794",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "body": "43ad0ddf7ada6385",
+  "claim": "crossing the brook is charged - villages-beside-their-stream-one-bank-or-both.drawing: `cost` to enter the band, so a way keeps to its own bank unless crossing saves more",
+  "code": "86659d8ea963572a",
+  "core": "ed29dc15d2f34cea",
+  "date": "2026-11-04",
+  "note": "it charges a cost to enter the band, so a way keeps to its own bank",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
   "research": "2882cfeb4389da9a",
-  "triaged": "2026-11-01",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::set_crossing#its salts, guards and sentinels": {
-  "body": "6e6a340aec819599",
+  "body": "43ad0ddf7ada6385",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 20 (spatial-index cell floor)",
-  "code": "cb2f5d6f5fb15aa7",
-  "core": "0aa23bd88ddb4794",
-  "date": "2026-10-25",
-  "note": "the 20 cell floor only buckets the spatial index",
+  "code": "30928addc75831ea",
+  "core": "ed29dc15d2f34cea",
+  "date": "2026-11-04",
+  "note": "the cell floor of the spatial index; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/route.py::set_crossing#its search steps and tolerances": {
-  "body": "6e6a340aec819599",
+  "body": "43ad0ddf7ada6385",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 5 (brook sampling step)",
-  "code": "82da6cc2f87a85c7",
-  "core": "0aa23bd88ddb4794",
-  "date": "2026-10-25",
-  "note": "brook sampled every 5 ft for the band test; nothing cited answers it",
+  "code": "100b566ebfd8c776",
+  "core": "ed29dc15d2f34cea",
+  "date": "2026-11-04",
+  "note": "the 5 ft sampling step; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
@@ -61821,75 +61830,85 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flare size": {
-  "code": "bbe7244f0c32cf3e",
-  "core": "218200a86a6f451e",
-  "date": "2026-10-03",
-  "note": "1.5*pad*t**1.6 as claimed; 0057 gives the bow, not its size",
+  "body": "0780da39dfd2e961",
+  "claim": "flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile",
+  "code": "c4db1034d827df0e",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "the page says the ends bow outward but gives no size; 1.5 pad on t**1.6 is a fair guess",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#flaring flanks": {
-  "code": "92e0d541fc013fec",
-  "core": "218200a86a6f451e",
-  "date": "2026-10-03",
-  "note": "0057: ends bow outward downhill as seepage spreads, part of the straight-band deviation",
+  "body": "0780da39dfd2e961",
+  "claim": "flaring flanks - marshes-and-wetlands-shitchi.drawing: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads",
+  "code": "ecca3c02eb96c157",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "the ends bow outward downhill toward v_out, the deviation the page records",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-27",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#its drawn sizes": {
-  "body": "8ab2a16e26b484e7",
+  "body": "0780da39dfd2e961",
   "claim": "its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 120 (bleed past the canvas edge)",
-  "code": "55ded25eca3b4ad3",
-  "core": "77b8850ef2673150",
-  "date": "2026-10-25",
-  "note": "bleed",
+  "code": "4b38553cf0d8cec3",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "the 120 bleed lies off the sheet",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#its search steps and tolerances": {
-  "body": "8ab2a16e26b484e7",
+  "body": "0780da39dfd2e961",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 24 (cross-slope station step floor); 0.2 (flank sample station); 0.4 (flank sample station); 0.6 (flank sample station); 0.8 (flank sample station)",
-  "code": "76cbc460a7bee34e",
-  "core": "77b8850ef2673150",
-  "date": "2026-10-25",
-  "note": "station sampling",
+  "code": "2202de1fa518f5b7",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "the page says \"at short steps\" and gives no figure; the station step and the flank samples are ours",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-27",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#toe band edge": {
-  "code": "e43ee4d3814d26e9",
-  "core": "218200a86a6f451e",
-  "date": "2026-10-03",
-  "note": "stations pad above local lowest fan point, running max of three, as 0057 (pad is raw px: 90 ft only at 1 ft/px)",
+  "body": "0780da39dfd2e961",
+  "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: 90 ft above the local lowest field, smoothed over three stations",
+  "code": "965d73dabecc599c",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "pad above the local lowest fan point within a pad window, a running max over three stations; the bisection reads the same window",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-27",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.toe_band#toe band width": {
-  "code": "107becddce7e4f5e",
-  "core": "218200a86a6f451e",
-  "date": "2026-10-03",
-  "note": "fan plots + dry plots +/- pad, clipped near the frame, as 0057 (same px caveat)",
+  "body": "0780da39dfd2e961",
+  "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: as wide as the fields plus 90 ft each side",
+  "code": "95b710c424967867",
+  "core": "219b616feb8efa31",
+  "date": "2026-11-04",
+  "note": "the cultivated ground's cross-slope extent plus pad each side, clipped at the frame and its bleed",
   "pages": {
    "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
   },
   "research": "d85a68dc96fcb1d6",
-  "triaged": "2026-10-27",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.trim_off_marsh#its search steps and tolerances": {
@@ -76265,19 +76284,19 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::past_keep#the dry fields behind the houses": {
-  "body": "72549a143e5d5946",
+  "body": "2e35a71486652124",
   "claim": "the dry fields behind the houses - dry-fields-and-their-crops-hatake.drawing: the hem drawn behind the settlement where it stands on the paddy's high edge, the houses between the canal and the dry fields; just upslope of the canal along the rest",
-  "code": "48cc092083c83a1b",
-  "core": "4fc915cd96f9fe40",
+  "code": "b9c140b6054c41a9",
+  "core": "491b705b44d1c708",
   "date": "2026-11-04",
-  "note": "a column's strips are pushed behind the seat's ground where they meet it, so the houses stand between the canal and the dry fields; elsewhere behind = 0, just upslope of the canal",
+  "note": "pushes the hem strip back past the houses' ground and leaves it at 0 where there is no such ground, so the houses stand between the canal and the dry fields",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
   "research": "99a077469bb67bf5",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
   "verdict": "IN-STEP"
  },
@@ -79379,16 +79398,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/lib.rs::l7r_phases#phases module": {
-  "body": "be4d7b6e0be329ad",
+  "body": "64e6ae86f0523673",
   "claim": "phases module - NONE: the extension's own machinery; each phase carries its own claims",
-  "code": "b29e9da73df0deb9",
-  "core": "0e7c30047d62f1b4",
-  "date": "2026-10-30",
-  "note": "pymodule registration of two phase functions only; no physical or rendering decision",
+  "code": "3376f3655954971b",
+  "core": "fb11146bb0951436",
+  "date": "2026-11-04",
+  "note": "registers functions with Python; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::K#the draws": {
@@ -79674,12 +79692,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::Exit.has_exit#a track keeps off wet ground": {
-  "body": "613030dbabc2ef5c",
+  "body": "38fa3d5a2870736c",
   "claim": "a track keeps off wet ground - village-lanes.drawing: clear of every wall's margin and every water line",
-  "code": "4a22019ef9c6e2d7",
-  "core": "93bd1dd076ad9050",
+  "code": "50050b37de317af7",
+  "core": "b9401a3fdd027e9d",
   "date": "2026-11-04",
-  "note": "every cell the walk takes and every straight run keep clear of each wall's margin and each water line, as \"A track keeps off wet ground\" asks",
+  "note": "straight runs and a cell walk over walkable ground only",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -79690,12 +79708,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::Exit.has_exit#dry way out of the seat": {
-  "body": "613030dbabc2ef5c",
+  "body": "38fa3d5a2870736c",
   "claim": "dry way out of the seat - village-lanes.drawing: lanes keep to dry ground; a walled-in head is refused",
-  "code": "86a0a3acdf91559b",
-  "core": "93bd1dd076ad9050",
+  "code": "48ee32667e83734e",
+  "core": "b9401a3fdd027e9d",
   "date": "2026-11-04",
-  "note": "the seat passes only if dry walkable ground joins it to the map's edge, and a walled-in seat is refused, matching \"The track out runs off the edge of the map\"",
+  "note": "true only when the walk reaches past the frame, so a walled-in head is refused",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
@@ -79708,12 +79726,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::Exit.has_exit#the walk remembered": {
-  "body": "613030dbabc2ef5c",
+  "body": "38fa3d5a2870736c",
   "claim": "the walk remembered - NONE: a memo across the margins the head falls back to; a cell tested is never tested again",
-  "code": "8b0db51e37136f56",
-  "core": "93bd1dd076ad9050",
+  "code": "85c5fbb8b669ce08",
+  "core": "b9401a3fdd027e9d",
   "date": "2026-11-04",
-  "note": "the tested and known memos are a cache",
+  "note": "a memo of cells; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -79947,12 +79965,12 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/index.rs::Cells.in_box#the indexes": {
-  "body": "86e47d1a79a5c022",
+  "body": "fc3709a3d265bb33",
   "claim": "the indexes - NONE: plane geometry and its indexes",
-  "code": "3a56729aee625224",
-  "core": "0b3ff78eda13fed2",
+  "code": "01aad67477ef3bd6",
+  "core": "6a5432ddfe7c25fc",
   "date": "2026-11-04",
-  "note": "box query over cells, plumbing",
+  "note": "a grid index query; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -80398,41 +80416,49 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#band on the canvas": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame",
-  "code": "0d524bb6ff2d67a5",
-  "core": "e490ea583e96d0a8",
+  "code": "d32c8550b27e1329",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "the center kept lat inside the frame, a framing rule",
+  "note": "the center must sit at least lat inside the frame, a framing convention",
   "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#brook across the band": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: \"a site the brook does not cross is still preferred when two are otherwise level\", the brook's share the tie-break, never refused",
-  "code": "25dddc4bf51ff4ea",
-  "core": "e490ea583e96d0a8",
+  "code": "5d0243ca5bb19159",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "on_brook ascending after score, never refused",
+  "note": "the brook's share is only the tie-break after tier and score, never a refusal",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
   "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:f54a11bd02ade3e7"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542"
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
-  "body": "e9cdd5990426c173",
-  "claim": "no drain rule at the seat - ground-too-wet-to-build-on.drawing: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster",
-  "code": "b2a8fbdf76dacc7e",
-  "core": "e490ea583e96d0a8",
+ "rust/phases/src/seat/margins.rs::ranked#how far the dry hem may lie from the seat before it is scored down: 2.0 * dep, the hem's reach from the margin": {
+  "code": "35117ff39b5a7a66",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "the seat has no drain test; the rule is scoped to dispersed farms",
+  "note": "how far the dry hem may lie from the seat before it is scored down: 2.0 * dep, the hem's reach from the margin",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
+  "body": "285c51de3ab5fcc0",
+  "claim": "no drain rule at the seat - ground-too-wet-to-build-on.drawing: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster",
+  "code": "8ffd679247ed1b16",
+  "core": "35117ff39b5a7a66",
+  "date": "2026-11-04",
+  "note": "no below-the-drain refusal for the nucleated cluster",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
@@ -80444,40 +80470,40 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not in the reed fringe": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from ground-too-wet-to-build-on.drawing, which does not count the fringe as marsh",
-  "code": "3bceb20f8167b115",
-  "core": "e490ea583e96d0a8",
+  "code": "a4e22bc18b9e963a",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "CANON names the GM's ruling and the departure from 0058",
+  "note": "the GM ruling is named and the departure from §181 is stated; a center in the reeds is refused and the reed share is scored",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing: seat and anchor off the marsh below the fields",
-  "code": "7819f06f7f375596",
-  "core": "e490ea583e96d0a8",
+  "code": "2fb5f6302152f24d",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "center and anchor are refused inside the toe; houses keep off marsh",
+  "note": "a center or anchor inside the toe is refused",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
   "research": "b2af2942f0a54e5d",
   "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
+   "0058-ground-too-wet-to-build-on.drawing.html:b4a87b781a7d121a",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy, scored upslope",
-  "code": "5c03bfc49de20971",
-  "core": "e490ea583e96d0a8",
+  "code": "cbf2941858891ccc",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "outline margins, upslope scored, the windward high margin on every hamlet",
+  "note": "margins scored up the slope against the fall",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -80488,41 +80514,40 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the back's width": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from",
-  "code": "8d52648d69cdbd36",
-  "core": "e490ea583e96d0a8",
+  "code": "1a217da7e1303f9b",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "the back strip spans ±0.5·dep along the band, which is one half-depth across, as claimed; no page sizes it",
+  "note": "the page does not size the ground behind a seat",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the band on open ground": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "the band on open ground - clustered-and-scattered-villages-shuson-sanson.drawing: beside its paddy, the band's points off the field",
-  "code": "f1f57f1e458ab4ac",
-  "core": "e490ea583e96d0a8",
+  "code": "5554350ddeb18532",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "every band sample is refused inside the field outline; the cluster sits beside its paddy",
+  "note": "a band with any sample point inside the outline is refused",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
   "research": "7c2bf95c3c36f0e4",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4391a37aafe094b1",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
-  "body": "e9cdd5990426c173",
+  "body": "285c51de3ab5fcc0",
   "claim": "the ladder - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet never splits, so the margins it falls back to are whole seats, ranked",
-  "code": "f85ab39f4fa38044",
-  "core": "e490ea583e96d0a8",
+  "code": "afd61d004bae405f",
+  "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "whole seats ranked by tier, never split",
+  "note": "every margin kept is a whole seat, ranked best first; a hamlet never splits",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },

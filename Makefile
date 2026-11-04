@@ -51,8 +51,8 @@ perf-share:     ## [performance] where a module's time is: its share of each sta
 phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
 	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 
-work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
-	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
+work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80] [SPEC='<JSON over the reference spec>': a stage only another form runs, its run the audit's and the standing record untouched (444 T29)]
+	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",) $(if $(SPEC),--spec '$(SPEC)',)
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"

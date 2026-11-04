@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import math
 from typing import TYPE_CHECKING, Any
+from l7r.diagram.work_counts import OPS
 
 if TYPE_CHECKING:
     from .core import Settlement
@@ -308,6 +309,8 @@ class PondStockMixin:
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)
+        if __debug__:  # every standing fixture read against the seat (S5)
+            OPS["pt_test@pond_fixture_fits"] += sum(len(self.M.get(k, [])) for k in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"))
         for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:

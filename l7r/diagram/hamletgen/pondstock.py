@@ -22,6 +22,7 @@ import math
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, knob_rng
+from l7r.diagram.work_counts import OPS
 from l7r.diagram.settlement.farm_fixtures import STY_FT
 from l7r.diagram.settlement.fields.landuse import DIKEPOND_WATER_INSET
 
@@ -69,6 +70,8 @@ def _bank_seats(parcel: list[Any], toward: Pt, inset: float = BANK_INSET_FT) -> 
                 vl = math.hypot(vx, vy) or 1.0
                 seats.append(((mx + vx / vl * inset, my + vy / vl * inset), rot))
         seats.sort(key=lambda s: math.dist(s[0], toward))
+        if __debug__:  # each edge's seats set in and ranked (S5)
+            OPS["candidate@_bank_seats"] += len(seats) * max(1, len(seats).bit_length())
         return seats
 
     # ...EVERY SEAT OF THE BANK, IN ONE RANKING (feature 287, water W50: a sty whose every edge midpoint was taken by a
@@ -83,6 +86,8 @@ def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -
     its test read this one predicate; the placer asks it `margin` stricter, since the sty is recorded rounded to 0.1.
 
     Research: sty on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: no farther from the houses than the pond's middle"""
+    if __debug__:  # the parcel's points read for its center (S5)
+        OPS["pt_test@sty_on_near_half"] += len(parcel)
     return math.dist(seat, hc) + margin <= math.dist(_centroid(parcel), hc)
 
 
@@ -126,6 +131,8 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         return None
     toward = (float(plan.seat["cx"]), float(plan.seat["cy"]))
     order = sorted((i for i, p in enumerate(ponds) if p.get("kind") != "fry"), key=lambda i: math.dist(_centroid(ponds[i]["parcel"]), toward))
+    if __debug__:  # each pond's parcel read for its center, the ponds ranked (S5)
+        OPS["pt_test@reserve_sty_seat"] += sum(len(p["parcel"]) for p in ponds) + len(order) * max(1, len(order).bit_length())
     if not order:
         return None
     for i in order:

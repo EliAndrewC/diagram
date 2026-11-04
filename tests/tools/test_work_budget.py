@@ -93,6 +93,26 @@ def test_run_writes_the_run_and_the_record(tmp_path: Path, monkeypatch: pytest.M
     assert wb.main([]) == 0
 
 
+def test_a_spec_run_is_the_audits_alone(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """`--spec`: the rolls are the form's, the run is written apart from the ratchet's (`-spec.json`), no calls are counted and the
+    standing record is left as it stands (feature 444 T29: the polder's waterward fringe, which the reference never runs)."""
+    monkeypatch.setattr(wb, "RUN_DIR", str(tmp_path / "runs"))
+    monkeypatch.setattr(wb, "RECORD", str(tmp_path / "work-budget.md"))
+    monkeypatch.setattr(wb, "BUDGETS", str(tmp_path / "none.json"))
+    monkeypatch.setattr(wb, "_code_id", lambda: "key123")
+    monkeypatch.setattr(wb, "_commit", lambda: "abc")
+    seen: list[dict] = []
+    monkeypatch.setattr(wb, "roll", lambda seed, h, spec: seen.append(spec) or _row(seed, h, h / 20))
+    summary, path, other = wb.run((4,), (20, 40), calls=lambda seeds, h: pytest.fail("the call census rolls the reference"), spec={"field_archetype": "polder_grid"})
+    saved = json.loads(Path(path).read_text())
+    assert path == other and path.endswith("-key123-spec.json") and saved["meta"]["spec"] == {"field_archetype": "polder_grid"}
+    assert seen == [{"field_archetype": "polder_grid"}] * 2 and not Path(tmp_path / "work-budget.md").exists()
+    assert wb.newest_run("key123", str(tmp_path / "runs")) is None, "the ratchet never reads an audit's run"
+    monkeypatch.setattr(wb, "run", lambda seeds, sizes, spec: (summary, path, path))
+    assert wb.main(["--spec", '{"field_archetype": "polder_grid"}', "--sizes", "20,40"]) == 0
+    assert "standing record untouched" in capsys.readouterr().out
+
+
 def test_one_roll_counts_each_stage_and_what_it_placed(monkeypatch: pytest.MonkeyPatch) -> None:
     """`roll` on stand-in stages: each stage's counts and things placed taken across it, a refusal keeping the stages before it."""
     import contextlib

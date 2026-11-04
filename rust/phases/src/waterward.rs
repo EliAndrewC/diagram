@@ -48,7 +48,7 @@ fn compass(v: Pt) -> char {
 /// village does not stand on - not the head, where the header reservoir stands as the wild water.
 ///
 /// Research:
-///     waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands
+///     waterward flanks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: every flank but the landward one holds water back; a reed fringe along the low foot where the outfall drains and along the cross flank off the shore, the wild pond that feeds the polder at its head - its water drawn there as the pond, so no reed strip is laid off the head
 #[must_use]
 pub fn flanks(fall: Pt, seat_out: Option<Pt>) -> Vec<char> {
     let (dx, dy) = fall;

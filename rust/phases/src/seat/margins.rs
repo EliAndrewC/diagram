@@ -359,8 +359,9 @@ impl<'a> Ground<'a> {
 ///     the band on open ground - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: beside its paddy, the band's points off the field
 ///     not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
-///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "a site the brook does not cross is still preferred when two are otherwise level", the brook's share the tie-break, never refused
+///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "A hamlet site the brook does not cross is preferred when two sites are otherwise equally good", the brook's share the tie-break, never refused
 ///     the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from
+///     the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of the margin, the band's own depth, scores the seat down
 ///     the ladder - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet never splits, so the margins it falls back to are whole seats, ranked
 #[expect(
     clippy::too_many_lines,

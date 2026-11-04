@@ -255,6 +255,8 @@ def pond_cut(blocks: Any, pond: Any, slack: float = 25.0) -> list[Any]:
     cx, cy, rx, ry = (float(v) for v in pond[:4])
     out: list[Any] = []
     swapped = False
+    if __debug__:  # each block's points read for its box (S5)
+        OPS["pt_test@pond_cut"] += sum(len(b) for b in blocks)
     for b in blocks:
         xs, ys = [float(q[0]) for q in b], [float(q[1]) for q in b]
         if (
@@ -301,6 +303,9 @@ def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any =
                 continue  # a keep-out beyond the marsh's reach cuts nothing
             g = ShapelyPolygon(rp).buffer(0)
             cuts.append(g.buffer(pad) if pad else g)
+        if __debug__:  # each keep-out's points read for its box, and each cut's ring buffered and taken out (S5)
+            OPS["pt_test@drawn_ground"] += len(pts) + sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam)
+            OPS["moved@drawn_ground"] += sum(len(g.exterior.coords) for g in cuts if hasattr(g, "exterior"))
         out = keep.difference(unary_union(cuts)) if cuts else keep
     except ValueError, GEOSException:  # pragma: no cover - buffer(0) repairs every ring a placer records [287: a degenerate outline keeps the drop honest]
         return None

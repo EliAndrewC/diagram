@@ -41,8 +41,8 @@ FIT = (20, 80)
 """Research: plumbing - NONE: the exponent is fitted from 20 to 80 households (rubric S6)"""
 
 
-def roll(seed: int, households: int) -> dict[str, Any]:
-    """One roll of the reference at `households`: per stage its counts (`work_counts.BY_STAGE`'s difference across it), the
+def roll(seed: int, households: int, spec: dict[str, Any] | None = None) -> dict[str, Any]:
+    """One roll of the reference at `households` (`spec` laid over it, for a stage only another form runs): per stage its counts (`work_counts.BY_STAGE`'s difference across it), the
     things it placed (`perf_profile.placed_counts`) and its seconds; a roll the generator refuses keeps the stages it ran."""
     from l7r.diagram import work_counts
     from l7r.diagram.hamletgen import HamletSpec, plan_site
@@ -53,7 +53,7 @@ def roll(seed: int, households: int) -> dict[str, Any]:
     from l7r.diagram.tools.perf_snapshot import REFERENCE
 
     with beyond_the_band():
-        plan = plan_site(HamletSpec(seed=seed, **{**REFERENCE, "households": households}))
+        plan = plan_site(HamletSpec(seed=seed, **{**REFERENCE, **(spec or {}), "households": households}))
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     stages: dict[str, dict[str, Any]] = {}
     refused: str | None = None
@@ -230,16 +230,20 @@ def _commit() -> str:
     return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=SKILL, capture_output=True, text=True).stdout.strip() or "unknown"
 
 
-def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tuple[dict[str, Any], str, str]:
-    """Roll, count, summarize; write the run and the standing record. `calls` is `perf_snapshot.count_calls` (a seam for tests)."""
+def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None, spec: dict[str, Any] | None = None) -> tuple[dict[str, Any], str, str]:
+    """Roll, count, summarize; write the run and the standing record. `calls` is `perf_snapshot.count_calls` (a seam for tests).
+
+    With `spec` (a stage only another form runs - the polder's waterward fringe, feature 444 T29) the rolls are that form's: the
+    run is written as `<stamp>-<code id>-spec.json`, which the push's ratchet never reads (`newest_run`), its calls are not counted
+    (the call census rolls the reference) and the standing record is left as it stands - the run is the audit's, not the program's."""
     from l7r.diagram.tools import perf_snapshot
 
     count = calls or perf_snapshot.count_calls
     rows: list[dict[str, Any]] = []
     for h in sizes:
-        by_seed = count(seeds, h)
+        by_seed = count(seeds, h) if spec is None else {}
         for seed in seeds:
-            r = roll(seed, h)
+            r = roll(seed, h) if spec is None else roll(seed, h, spec)
             for name, n in (by_seed.get(seed) or {}).items():
                 if name in r["stages"]:
                     r["stages"][name]["calls"] = n
@@ -255,11 +259,14 @@ def run(seeds: tuple[int, ...], sizes: tuple[int, ...], calls: Any = None) -> tu
         "seeds": list(seeds),
         "sizes": list(sizes),
         "refused": [f"seed {r['seed']} at {r['households']}: {r['refused']}" for r in rows if r["refused"]],
+        **({"spec": spec} if spec is not None else {}),
     }
     os.makedirs(RUN_DIR, exist_ok=True)
-    path = os.path.join(RUN_DIR, f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{meta['code_id']}.json")
+    path = os.path.join(RUN_DIR, f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{meta['code_id']}{'' if spec is None else '-spec'}.json")
     with open(path, "w", encoding="utf-8") as fh:
         json.dump({"meta": meta, "rows": rows, "summary": summary}, fh, indent=1, sort_keys=True)
+    if spec is not None:
+        return summary, path, path
     with open(RECORD, "w", encoding="utf-8") as fh:
         fh.write(table_md(summary, meta))
     return summary, path, RECORD
@@ -337,6 +344,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--seed", type=int, default=None, help="one seed (default: the reference seeds)")
     ap.add_argument("--sizes", default=",".join(str(h) for h in SIZES))
+    ap.add_argument("--spec", default=None, help="JSON laid over the reference spec, for a stage only another form runs; the run is the audit's, the standing record untouched")
     ap.add_argument("--review", metavar="ROUTE", help="the push's ratchet on the route sync-with-main.sh chose (`make work-budget-review`)")
     a = ap.parse_args(argv)
     if a.review is not None:
@@ -344,7 +352,14 @@ def main(argv: list[str] | None = None) -> int:
         print(msg)
         return rc
     seeds = (a.seed,) if a.seed is not None else DEFAULT_SEEDS
-    _summary, path, record = run(seeds, tuple(int(x) for x in a.sizes.split(",") if x.strip()))
+    sizes = tuple(int(x) for x in a.sizes.split(",") if x.strip())
+    if a.spec is not None:
+        summary, path, _ = run(seeds, sizes, spec=json.loads(a.spec))
+        for name, st in summary["stages"].items():
+            print(f"{name}: " + ", ".join(f"{h}: {v['ops']:,.0f}" for h, v in sorted(st["per"].items(), key=lambda kv: int(kv[0]))))
+        print(f"wrote {os.path.relpath(path, SKILL)} (the standing record untouched)")
+        return 0
+    _summary, path, record = run(seeds, sizes)
     with open(record, encoding="utf-8") as fh:
         print(fh.read())
     print(f"wrote {os.path.relpath(path, SKILL)} and {os.path.relpath(record, SKILL)}")

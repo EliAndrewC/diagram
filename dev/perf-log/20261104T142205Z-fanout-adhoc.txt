@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+waterward: 2 calls @20, 2 calls @40, growth exponent 0.00
+  placed @40: nothing in the manifest
+
+all stages: 2 calls @20, 2 calls @40
