@@ -23,6 +23,18 @@ use crate::field::fan::Pt;
 ///     the homestead's wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: at least 6,000 sq ft within 90 ft of the house
 pub const WOOD: (f64, f64) = (6000.0, 90.0);
 
+/// The gap a corridor's line keeps off a reserved seat: the corridor's half-width, the crown's reach (or 0.45 of the clump and
+/// 4 ft) and the placer's margin.
+///
+/// Research:
+///     path refused over a household's reserved grove seats - research/questions/0081-village-lanes.drawing.html: a path goes round a grove, never across one (0036, 0072)
+#[must_use]
+pub fn lane_gap(half: f64, bscale: f64) -> f64 {
+    let (clump, lift) = (CLUMP_FT * bscale, 3.0 * bscale / 0.82);
+    let r = clump / 2.0 - 2.0;
+    half + (clump * 0.45 + 4.0).max(r.hypot(r + lift)) + MARGINS.0
+}
+
 /// The copse's clump, across (ft), and the lattice's pitch: the clump's radius times the square root of two, the widest square
 /// lattice whose crowns leave no point of a cell bare.
 ///
@@ -235,6 +247,24 @@ impl Shares {
             }
         }
         None
+    }
+
+    /// Would a corridor a-b run within `gap` of a reserved seat? Each seat cell near enough the segment asked of its seats.
+    #[must_use]
+    pub fn corridor_bars(&self, a: Pt, b: Pt, gap: f64, tests: &mut Counts) -> bool {
+        let reach = gap + GRID * 0.5f64.sqrt();
+        (cell(a.0.min(b.0) - gap, GRID)..=cell(a.0.max(b.0) + gap, GRID)).any(|i| {
+            (cell(a.1.min(b.1) - gap, GRID)..=cell(a.1.max(b.1) + gap, GRID)).any(|j| {
+                self.seats.get(&(i, j)).is_some_and(|v| {
+                    #[expect(clippy::cast_precision_loss, reason = "a cell index of a few hundred")]
+                    let c = ((i as f64 + 0.5) * GRID, (j as f64 + 0.5) * GRID);
+                    tests.add("dist@corridor_bars", 1 + v.len() as u64);
+                    crate::field::geom::seg_dist(c, a, b) < reach
+                        && v.iter()
+                            .any(|&p| crate::field::geom::seg_dist(p, a, b) < gap)
+                })
+            })
+        })
     }
 
     /// Reserve a homestead's seats and file its keep-outs for every later seat.

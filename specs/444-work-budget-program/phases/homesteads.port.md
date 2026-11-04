@@ -32,6 +32,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 | the track out chosen once: the gateway on the cloud's downslope edge out of the field, stepped off what stands, swept; a walled-in gateway's turned bearings; then the connector as drawn | `ways/gateway.rs` (`choose_track_out`, `gateway_track`, `cluster_gateway`, `gate_out_of_the_field`) | `ways/track.py` `choose_track_out`; `ways/cluster_edge.py` `_cluster_gateway`, `gate_out_of_the_field`; `ways/gateway.py` (`gateway_track`, `turned_gateway_track`, `clear_of_what_stands`) |
 | the homesteads as seated for the track out (every part's box, a persimmon by its trunk, each wood seat an octagon of a lane's reach) and the track's stretch about the cluster | `homesteads/track_out.rs` (`seated_parts`, `seat_reach`, `near_the_cluster`, `clip`) | `homesteads/household_ways.py` (`seated_parts`, `seat_walls`, `near_the_cluster`, `box_poly`), `homesteads/region.py` `_clip` |
 | a household's way leg by leg: off its house, fixtures, beds and annexes; its dooryard's doors; its yard left once and drawn from past it; the taut pull; the tree of reserved corridors | `homesteads/access.rs` (`Parts`, `seg_box_within`, `point_clear`, `doubles_back`, `leaves_its_yard`, `past_the_yard`, `taut`, `AccessTree`) | `rolling/access.py` (`_seg_box_gap`, `seg_box_within`, `house_clear`, `house_gap`, `fixtures_clear`, `fixture_gaps`, `parts_clear`, `part_gaps`, `point_clear`, `doors_of`, `yard_quad`, `past_the_yard`, `drawn_corridor`, `leaves_its_yard`, `doubles_back`, `AccessTree` `add`/`bar`/`covers_box`), `rolling/route.py` `taut` |
+| the standing ground a household's way keeps off: the site's raster sampled every 8 ft (the site beyond its window), the reserved seats within the lane's gap, the other homesteads at the corridor's half-width, remembered per line | `homesteads/standing.rs` (`Standing`), `wood.rs` (`corridor_bars`, `lane_gap`) | `rolling/access.py` (`standing_ground`, `_standing_clear`, `site_edge_samples`, `site_samples_clear`, `_standing_memo`), `wood_share.py` `corridor_bars`, `lane_gap` |
 | Python's string-seeded `random.Random` | `pyrand.rs` (`from_text`, `shuffled`, `sha512`) | - (pinned against CPython's own draws) |
 
 ## Left, in the order they are needed
@@ -51,7 +52,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
       `fixture_gaps`, `parts_clear`/`part_gaps`, `point_clear`, `doors_of`, `doubles_back`, `leaves_its_yard`, `yard_quad`,
       `past_the_yard` (shapely's buffer - port as the tread's clip against the yard grown by its half-width), `drawn_corridor`,
       `reserve`, the `AccessTree`; `rolling/route.py` `taut`.
-   b. the standing ground (`_standing_clear`: the free-ground raster's samples - `ground.rs` -, the site chains and corridors,
+   b. (ported: `homesteads/standing.rs`) the standing ground (`_standing_clear`: the free-ground raster's samples - `ground.rs` -, the site chains and corridors,
       the wood seats' `corridor_bars` - `wood.rs` -, the placed boxes at the corridor's half-width).
    c. the lane layers, the flood, each household's search out of its homestead, the trace, the gathered foot, the pinch (the
       rest of `gap_ways.py`).
