@@ -36,6 +36,8 @@ pub struct Lane {
     pub connector: bool,
     /// A row village's street.
     pub street: bool,
+    /// The household whose way it is, by its house's center.
+    pub of: Option<Pt>,
 }
 
 /// The point of the segment u-v nearest `q`.
