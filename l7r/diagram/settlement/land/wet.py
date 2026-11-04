@@ -479,7 +479,7 @@ class WetGroundMixin:
         # (a change it then withdrew, having bought no time: specs/281 Amendment 1).
         _banks = bank_rings(self.M.get("dikeponds", []), _near_box)
         if __debug__:  # each crest scanned four times for its box and copied, each bank ring scanned for its box (S5)
-            OPS["pt_test@marsh"] += 5 * sum(len(dk.get("crest") or []) for dk in self.M.get("dikes", [])) + 4 * sum(len(p.get("parcel") or []) for p in self.M.get("dikeponds", []))
+            OPS["pt_test@marsh"] += 5 * sum(len(dk.get("crest") or []) for dk in self.M.get("dikes", [])) + 4 * sum(len(p.get("bank") or []) for p in self.M.get("dikeponds", []))
         keep = KeepoutGrid()
         keep.rings(self.field_polys, pad=0.0)  # at the paddy's edge (GM 2026-10-01; the note at `drawn_ground` above)
         keep.rings(_blocks)  # the pond as its ellipse, not its building box (`pond_cut`, feature 299)

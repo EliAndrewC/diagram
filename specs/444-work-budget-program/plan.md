@@ -624,26 +624,36 @@ Occasions: settlement-review on a pool polder the rebuilt fringe moves (Kuwabata
 
 **Performance work?** no - a valley hamlet draws no fringe; the polder's strips are one pass over the dike's points.
 
-### T30 (<why: the finding or measurement that files it>)
+### T30 - phase: homesteads, in Rust under amendment 7 (the GM 2026-11-04: "please take this entire feature to completion"; FR-003-FR-006, FR-017, FR-022)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Occasions: settlement-review on the pool hamlets the rebuilt seating moves (every pool hamlet: a house seated a foot off moves the ways and the wood laid round it), at the landing; glyph-check only if a glyph is redrawn (none: the farmsteads keep their ink).
+
+- **Approach**: the household seating - the site boundary and its free-ground raster, the seat region, the cluster grown from its first house, each homestead's parts laid in its box and held to the rules the parts read, the homestead wood's share - rebuilt in Rust behind a thin `homesteads/stages.py` door that writes the records and draws the farmsteads as today; measured 2026-11-04 (`make work-budget`): 1,716,870 at 40 against the budget's 4,118 (416.9x), 17,909,350 Python calls at 40 (`make perf-fanout STAGES=homesteads`), the stage mapped in `phases/homesteads.map.md`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
+### T30 Decisions
+
+- **D1 - the seam** (FR-003, FR-005): the stage is two jobs, and the plan's one-task-a-phase is kept by splitting it at the line the map already draws between them - the SEATING (every household on its own ground while no way stands, 0246: "houses before lanes") and the HOUSEHOLDS' WAYS (the track out chosen once the last house stands and each household's way laid in the gaps to it, 0246, held to the lane law of 0081). The seating is this phase, in Rust. The ways become a stage of their own, `stage_household_ways`, directly after it in `STAGES`, unchanged Python until its own phase - the track's (`stage_track` draws the course it chooses) - so the lane law (`ways/law/`), which the web shares, is ported once, with the ways, not twice. The seating hands the ways what they read today on the settlement (the access tree's anchor and bearing, the free ground, the wood seats, the homestead boxes), carried on the plan.
+- **D2 - the seating's parts** (0029, 0036-0040, 0043-0048, 0285): the Rust lays each homestead's parts as the bundle lays them today - the house on its size ladder, the yard, the beds, the kura, the byre and the fixtures - and the wood share; the door keeps the ink (`Settlement.farmsteads`) and the overlap registry's records, as the hem's door keeps the dry plots'.
+- **D3 - the search** (S9; 0029: nearest the seat first, the field the tie-break): the first house on the free ground nearest the seat's center; each next house offered from a standing one at the distance their footprints part, ring by ring, jittered by the standing house's position; every offer judged against a raster of the free ground painted once and the standing homesteads' boxes in a grid; no house is taken back.
+- **D4 - deletion** (FR-005): the Python seating (`growth.py`, `boundary.py`, `region.py`, the nucleated placer and fit tests in `settlement/rolling/`, `wood_share.py`'s share search) deleted in the same landing where only the seating reached it; the dispersed and row forms, which no reference roll seats, kept as they stand and named in the landing's report as the stage's remaining Python.
+- **D5 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`.
+
 ### T30 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+1. **The goal, in the world.** Every household of a clustered hamlet seated on its own ground beside its paddy, the cluster grown irregularly from its first house nearest the seat, each homestead with its yard to the south sun, its beds, its fixtures and its wood behind it, on ground no water, crop, wet or registered way takes (0001, 0029, 0031, 0036, 0038, 0246, 0285).
+2. **The constraints.** FR-003 to FR-006, FR-012, FR-017, FR-019 to FR-022; the pages named in D2 and D3; the stage map `phases/homesteads.map.md`; D1's seam.
+3. **Where each comes from.** G: the GM's request of 2026-11-04 and amendment 7. R: the pages above. O: the stage's input and work, measured 2026-11-04 (`make stage-sizes STAGE=homesteads`, `make work-budget`, `make perf-fanout STAGES=homesteads`).
+4. **Do they describe the world here?** A nucleated valley hamlet, the reference roll; the Rust stage gate's fresh block rolls every form the seating meets.
+5. **The order.** After the waterward fringe, before the households' ways (D1), the track and the appurtenances.
+6. **The exits.** Green: `make rust-gate` with no failing seed through the seating; the counted operations at 40 and 80 at most the budget (re-derived under FR-022 rule 2; past ten times the first, the GM's words); MODE AUDIT WITHIN or LEEWAY; the claims round IN-STEP; the settlement-reviews owed; `phases/homesteads.md`'s eight boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** A search over offered seats: each offer refused cheapest first, against a raster painted once (S9).
+8. **The budget.** One landing for the seating; the ways' stage moves in the same landing, unchanged.
+9. **Done, measured.** `make work-budget`'s count for the seating at 40 and 80 against its re-derived budget.
+10. **Before moving a constant.** None moved: each constant keeps its claim at the Rust that reads it.
+11. **Before fitting things into room.** Not a room question: every household is seated or the site refused, as today (0001).
 
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

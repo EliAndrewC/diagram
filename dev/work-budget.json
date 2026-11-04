@@ -84,7 +84,7 @@
    "audit": "specs/444-work-budget-program/phases/hem.audit-1.txt"
   },
   "waterward": {
-   "status": "budgeted",
+   "status": "accepted",
    "per_thing": 1.0,
    "exponent": 0.0,
    "derivation": "specs/444-work-budget-program/phases/waterward_greenfield.derivation.md",
@@ -92,7 +92,12 @@
    "items_at_20": 1,
    "items_at_40": 1,
    "items_at_80": 1,
-   "reason": "today's counters count nothing for the stage; its budget is its one test of the plan's form"
+   "reason": "today's counters count nothing for the stage; its budget is its one test of the plan's form",
+   "accepted": {
+    "40": 0.0,
+    "80": 0.0
+   },
+   "audit": "specs/444-work-budget-program/phases/waterward.audit-4.txt"
   },
   "homesteads": {
    "status": "budgeted",
@@ -332,7 +337,7 @@
    "spread": "4609-4804 at 10"
   },
   "waterward.polder": {
-   "status": "budgeted",
+   "status": "accepted",
    "per_thing": 1.0,
    "exponent": 0.46,
    "derivation": "specs/444-work-budget-program/phases/waterward_polder.derivation.md",
@@ -346,7 +351,12 @@
    "first": {
     "10": 17813.0,
     "20": 24059.0
-   }
+   },
+   "accepted": {
+    "10": 28232.0,
+    "20": 38331.25
+   },
+   "audit": "specs/444-work-budget-program/phases/waterward.audit-4.txt"
   }
  }
 }

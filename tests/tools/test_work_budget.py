@@ -202,6 +202,13 @@ def test_the_ratchet_holds_nothing_unaccepted_or_off_the_engine_and_refuses_a_mi
     assert wb.review("GATED", _accepted(), "abc", str(tmp_path))[0] == 1, "a run at another engine is not this one's"
 
 
+def test_the_ratchet_holds_no_form_at_its_bounded_n() -> None:
+    """Feature 444 T29: a form accepted at its bounded n (`waterward.polder`) is held by its own audit's run; the reference run, which
+    no form of it rolls, holds it to nothing."""
+    table = {"stages": {"waterward.polder": {"status": "accepted", "per_thing": 1, "sizes": [10, 20], "items_at_10": 9, "items_at_20": 12, "accepted": {"10": 9, "20": 12}}}}
+    assert wb.held(table, {"stages": {}}) == []
+
+
 def test_the_review_flag_prints_the_verdict(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setattr(wb, "review", lambda route: (1, f"refused on {route}"))
     assert wb.main(["--review", "GATED"]) == 1 and "refused on GATED" in capsys.readouterr().out

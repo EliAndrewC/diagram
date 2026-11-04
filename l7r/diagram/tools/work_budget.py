@@ -302,7 +302,7 @@ def held(table: dict[str, Any], summary: dict[str, Any]) -> list[str]:
     budgeted row with no items (`missing_items`)."""
     out: list[str] = list(missing_items(table)) + stale_pins(table)
     for name, b in (table.get("stages") or {}).items():
-        if b.get("status") != "accepted":
+        if b.get("status") != "accepted" or "." in name:  # a form at its bounded n is held by its audit's run, which no reference roll is
             continue
         per = ((summary.get("stages") or {}).get(name) or {}).get("per") or {}
         for h in HELD:
