@@ -23,6 +23,7 @@ Research: plumbing - NONE: lazy imports, geometry, keyholing and manifest record
 """
 
 import math
+from bisect import bisect_left
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
@@ -143,6 +144,8 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     rings += [list(f) for f in fields if len(f) >= 3]
     if not rings and not pond:
         return poly
+    if __debug__:  # the difference, over the rings it takes: the outline, each cut and the pond's 64-point ellipse (S5)
+        OPS["pt_test@_clipped_to_open_ground"] += len(poly) + sum(len(r) for r in rings) + (64 if pond else 0)
     out = None
     for repair in (False, True):
         try:
@@ -167,9 +170,48 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     return _keyholed(best)
 
 
+def _clipped_to_box(rings: Any, bounds: tuple[float, float, float, float]) -> list[list[Pt]]:
+    """Each ring cut to `bounds` (x0, y0, x1, y1), its pieces kept, a ring outside them dropped: what a keep-out asked only inside
+    `bounds` reads of a ring, without handing on the whole of it (feature 444 T26's audit: the field's 96-135-point outline filed
+    whole round a pond's 16-point reed ring)."""
+    _load_shapely()
+    from shapely import clip_by_rect  # noqa: PLC0415 - shapely loads lazily (`_load_shapely`)
+
+    out: list[list[Pt]] = []
+    for ring in rings:
+        if len(ring) < 3:
+            continue
+        g = clip_by_rect(ShapelyPolygon([(float(q[0]), float(q[1])) for q in ring]).buffer(0), *bounds)
+        out += [[(float(x), float(y)) for x, y in p.exterior.coords[:-1]] for p in getattr(g, "geoms", [g]) if p.geom_type == "Polygon" and not p.is_empty]
+    return out
+
+
 def _signed_area(ring: Any) -> float:
     """Twice a ring's signed area - positive one way round, negative the other. Orientation only."""
     return sum(ring[k][0] * ring[(k + 1) % len(ring)][1] - ring[(k + 1) % len(ring)][0] * ring[k][1] for k in range(len(ring)))
+
+
+def _closest_pair(ring: list[Pt], pts: list[Pt]) -> tuple[int, int]:
+    """The closest pair of vertices, one of `ring` and one of `pts`, as their indexes: the first such pair in (ring, pts) order
+    on a tie, as a scan of every pair finds. The hole's vertices are sorted by x and walked out from each ring vertex's place in
+    them, a side abandoned once its x alone is farther than the closest pair yet (feature 444 T26's audit: every pair was
+    16 x 64 distances on each pond's reed ring)."""
+    order = sorted(range(len(pts)), key=lambda b: pts[b][0])
+    xs = [pts[b][0] for b in order]
+    best = (math.inf, 0, 0)
+    seen = 0
+    for a, (x, _y) in enumerate(ring):
+        k = bisect_left(xs, x)
+        for side in (range(k, len(xs)), range(k - 1, -1, -1)):
+            for q in side:
+                if abs(xs[q] - x) > best[0]:
+                    break
+                seen += 1
+                best = min(best, (math.dist(ring[a], pts[order[q]]), a, order[q]))
+    if __debug__:  # the sort, a search a ring vertex, and each distance taken (S5)
+        OPS["index_examined@_keyholed"] += len(pts) + len(ring)
+        OPS["dist@_keyholed"] += seen
+    return best[1], best[2]
 
 
 def _keyholed(g: Any) -> Any:
@@ -191,7 +233,7 @@ def _keyholed(g: Any) -> Any:
         pts = [(float(x), float(y)) for x, y in hole.coords[:-1]]
         if len(pts) < 3 or len(ring) < 3:
             continue
-        i, j = min(((a, b) for a in range(len(ring)) for b in range(len(pts))), key=lambda ab: math.dist(ring[ab[0]], pts[ab[1]]))
+        i, j = _closest_pair(ring, pts)
         loop = pts[j:] + pts[:j]  # the hole, starting at its closest vertex
         if _signed_area(loop) * _signed_area(ring) > 0:
             loop.reverse()  # ...walked the OPPOSITE way round the outer ring, so the seam subtracts
@@ -492,30 +534,32 @@ class WetGroundMixin:
             reeds off the crop and the water - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "The marsh's reeds already keep off crops" - the field's dry plots kept bare, and the water at its drawn width
             the bank beyond the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: "Reeds and the wet tint are kept off the embankment" - the fringe is the ring the reeds stand on at the shore, and the bank is the ground beyond it: the pond bank's trees are seated past the fringe's width (`hamletgen/pondbank.py`, its seats beyond `SINK_FRINGE`), so the ring and the bank do not share ground
             ways and dooryards over the fringe - UNRESEARCHED: a way or a dooryard laid after the fringe is drawn over its reed tile
-            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the registry's reach past the reeds' tint round the ring)
+            its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the reach past the reeds' tint round the ring: the registry's pieces asked, and the field cut to it)
             reed tile - CONVENTION: the drawn ground filled with the reed tile
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground, so the fringe files neither a no-build block nor hard ground (`wet_polys`)
             the fringe left as laid - CONVENTION: a pond fringe's ring not reshaped, as `marsh` leaves one
         """
         pond = self.M.get("pond")
-        poly = _clipped_to_open_ground(ring, (), (), pond)
-        if poly is None:
-            self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
-            return
+        # the open water is cut once, with the field and the dry plots, by `drawn_ground` below: a first clip of the pond alone
+        # (`_clipped_to_open_ground`) keyholed the ring twice, 16 x 64 distances each time (feature 444 T26's audit)
+        poly = [(float(q[0]), float(q[1])) for q in ring]
         r = max(MARSH_TINT_R, MARSH_TUFT_R) * self.bscale + 40.0
         x0, y0, x1, y1 = min(q[0] for q in poly), min(q[1] for q in poly), max(q[0] for q in poly), max(q[1] for q in poly)
         near = self.standing.pieces((x0 - r, y0 - r, x1 + r, y1 + r), ("dry_plots", "streams", "channels", "field_ditches"))
         blocks = ([ellipse_ring(pond[0], pond[1], pond[2], pond[3])] if pond else []) + [e[1] for e in near if e[0] == "dry_plots"]
         water = [e[1] for e in near if e[0] != "dry_plots"]
-        if __debug__:  # the drawn ground's difference and the keep-out's filing, each over the rings they take (S5)
-            OPS["pt_test@pond_reeds"] += len(poly) + sum(len(q) for q in (*self.field_polys, *blocks, *water))
-        ground = drawn_ground(poly, self.field_polys, blocks, (), (), field_pad=0.0)
+        fields = _clipped_to_box(self.field_polys, (x0 - r, y0 - r, x1 + r, y1 + r))
+        if __debug__:  # the field cut to the reeds' reach, then the drawn ground's difference and the keep-out's filing, each over the rings they take (S5)
+            OPS["pt_test@pond_reeds"] += sum(len(q) for q in self.field_polys) + len(poly) + sum(len(q) for q in (*fields, *blocks, *water))
+        ground = drawn_ground(poly, fields, blocks, (), (), field_pad=0.0)
         if ground is None:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
             return
         drawn = [(round(px, 1), round(py, 1)) for px, py in ground]
+        if __debug__:  # the drawn ring rounded, copied into its cover, scanned for its box and written to the record (S5)
+            OPS["write@pond_reeds"] += 7 * len(ground)
         keep = KeepoutGrid()
-        keep.rings(self.field_polys)
+        keep.rings(fields)
         keep.rings(blocks)
         keep.rings(water)
         bare = keep.shape((0.0,), (x0, y0, x1, y1))

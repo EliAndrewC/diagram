@@ -6,13 +6,15 @@ polygon in `wet_polys`, which `_hard_ground` folds in beside the crop, the bog a
 
 from __future__ import annotations
 
+import math
+import random
 import re
 from typing import Any
 
 from shapely.geometry import Polygon
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.land.wet import _clipped_to_open_ground
+from l7r.diagram.settlement.land.wet import _closest_pair, _clipped_to_box, _clipped_to_open_ground
 
 _FRINGE = [(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)]
 
@@ -326,3 +328,21 @@ def test_a_pond_fringe_inside_the_open_water_or_the_field_is_dropped_by_name() -
     s.pond_reeds(_FRINGE)
     assert s.M["meta"]["marsh_dropped"] == [{"role": "pond_fringe", "why": "no open ground left"}] * 2
     assert not s.M["marshes"]
+
+
+def test_the_closest_pair_is_the_one_every_pair_finds_ties_and_all() -> None:
+    """`_closest_pair` (feature 444 T26): the x-sorted sweep finds the pair a scan of every pair finds, the first on a tie."""
+    rng = random.Random(7)
+    for _ in range(200):
+        ring = [(rng.uniform(0, 100), rng.uniform(0, 100)) for _ in range(rng.randint(3, 20))]
+        pts = [(rng.choice((10.0, 20.0, rng.uniform(0, 100))), rng.uniform(0, 100)) for _ in range(rng.randint(3, 40))]
+        brute = min(((a, b) for a in range(len(ring)) for b in range(len(pts))), key=lambda ab: math.dist(ring[ab[0]], pts[ab[1]]))
+        assert _closest_pair(ring, pts) == brute
+    square = [(0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0)]
+    assert _closest_pair(square, [(5.0, 5.0), (5.0, 5.0)]) == (0, 0), "four corners tie with the center: the first pair"
+
+
+def test_a_ring_is_cut_to_the_box_it_is_asked_in() -> None:
+    """`_clipped_to_box` (feature 444 T26): a ring cut to the box, one beyond it dropped, a sliver of two points skipped."""
+    got = _clipped_to_box([[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)], [(500.0, 500.0), (600.0, 500.0), (600.0, 600.0)], [(1.0, 1.0), (2.0, 2.0)]], (50.0, 50.0, 200.0, 200.0))
+    assert len(got) == 1 and Polygon(got[0]).area == 2500.0

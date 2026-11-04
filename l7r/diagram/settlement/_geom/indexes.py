@@ -702,6 +702,7 @@ class KeepoutGrid:
         edge_lines: list[Any] = []  # an invalid ring's own edges, for its pad band
         edge_radii: list[float] = []
         rects: list[tuple[float, float, float, float]] = []
+        pts = 0  # the vertices shapely works over, for the counter below
         for it in items.values():
             kind = it[0]
             if kind == 0:
@@ -709,6 +710,8 @@ class KeepoutGrid:
                 ex = extra[slot]
                 if ex is None or len(idx.ring) < 3:
                     continue
+                if __debug__:
+                    pts += len(idx.ring)
                 poly = Polygon(idx.ring)
                 if poly.is_valid:
                     geoms.append(poly)
@@ -726,11 +729,17 @@ class KeepoutGrid:
                 ex = extra[slot]
                 if ex is None:
                     continue
+                if __debug__:
+                    pts += 2
                 geoms.append(LineString([a, b]) if (a[0], a[1]) != (b[0], b[1]) else Point(a))
                 radii.append(hw + ex)
             elif kind == 2:
+                if __debug__:
+                    pts += 4
                 rects.append(it[1:5])
             else:
+                if __debug__:
+                    pts += 1
                 _k, cx, cy, r, *_rest = it
                 geoms.append(Point(cx, cy))
                 radii.append(r)
@@ -757,8 +766,9 @@ class KeepoutGrid:
                 shrunk.append(box(x0 + m, y0 + m, x1 - m, y1 - m))
         # ONE PREPARED UNION A SIDE: a point asked of a prepared shape is answered from its own index, and the vectorized
         # predicate asks every point in one call - far cheaper than a tree query returning (point, shape) pairs.
-        if __debug__:  # each shape buffered and unioned in shapely (C), counted per shape a side (S5)
-            OPS["write@KeepoutGrid.shape"] += 2 * (len(geoms) + len(edge_lines) + len(rects))
+        if __debug__:  # each shape built, then buffered and unioned a side in shapely (C): four passes a vertex (S5; feature 444 T26's audit:
+            # counted per shape, a 96-point field outline was 2)
+            OPS["write@KeepoutGrid.shape"] += 4 * pts
         su = shapely.union_all(shrunk) if shrunk else None
         gu = shapely.union_all(grown) if grown else None
         for u in (su, gu):

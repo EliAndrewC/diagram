@@ -1,0 +1,3 @@
+UNCOUNTED - `_keyholed`'s all-pairs loop at `l7r/diagram/settlement/land/wet.py:194`, reached through `pond_reeds` -> `_clipped_to_open_ground`, takes 16 x 64 = 1,024 distances on every pond roll and no counter covers them.
+
+(2026-11-04, MODE AUDIT against the budget raised on the GM's words to 850 / 1,000 / 1,200. Also noted: the clip's shapely difference uncounted; `drawn_ground` keyholes the ring a second time; `KeepoutGrid._trees_for` counted per shape, not per vertex; the off-map branch unrolled by the bundle's seeds. Answered by counting both, and by cutting the pond once, in `drawn_ground`.)
