@@ -45,9 +45,21 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
    `keeps_every_gap`; the first house by `capacity.py` `free_seats`), the passage share and tight seats.
 4. (ported: the wood share.)
 5. The track out, the sweep ported (`ways/track.rs`): the dry exit ported (`ways/dry_exit.rs`); the router and `connector_through` ported (`ways/route.rs`, `ways/through.rs`, `ways/squaring.rs`, `law/rules.rs`; the registry's `forbidding("lanes")`, the wood seats' walls and the brook's toll are the door's input, and the door releases the seats a dry exit took); the gateway and the choice ported (`ways/gateway.rs`); the seated parts and the cluster's stretch ported (`homesteads/track_out.rs`). The track is asked once a roll, after the last house, so the dry exit's three fills share one raster of the walls and Python's 8-entry memo (`_blocked_memo`, kept for the seat search's many asks) is not owed here.
-6. The households' ways (`rolling/gap_ways.py` `lay_the_ways`: the lane layers, the flood, each door's exits, the taut run, the lane
-   law's rules each leg asks - `fixtures_clear`, `parts_clear`, `lawful_leg`, `tree_admits` - and `access.reserve`); the lane law's
-   rules into `rust/phases/src/law/` (D1).
+6. The households' ways (`rolling/gap_ways.py` `lay_the_ways`), mapped 2026-11-04 - in the order to port:
+   a. the leg tests of `rolling/access.py`: `seg_box_within` (`_seg_box_gap`), `house_clear`/`house_gap`, `fixtures_clear`/
+      `fixture_gaps`, `parts_clear`/`part_gaps`, `point_clear`, `doors_of`, `doubles_back`, `leaves_its_yard`, `yard_quad`,
+      `past_the_yard` (shapely's buffer - port as the tread's clip against the yard grown by its half-width), `drawn_corridor`,
+      `reserve`, the `AccessTree`; `rolling/route.py` `taut`.
+   b. the standing ground (`_standing_clear`: the free-ground raster's samples - `ground.rs` -, the site chains and corridors,
+      the wood seats' `corridor_bars` - `wood.rs` -, the placed boxes at the corridor's half-width).
+   c. the lane layers, the flood, each household's search out of its homestead, the trace, the gathered foot, the pinch (the
+      rest of `gap_ways.py`).
+   d. the ground half of the lane law (`settle/lawful.py` `Lawful.on_lawful_ground`, `ground_fault`, `corridor_on_lawful_ground`,
+      `forced.py`), installed in Python as `_corridor_ground`.
+   e. the tree's admission (`ways/tree.py` `admits`, `seating_judge`, `laid_run`, `rejoined`, `own_clear`, `others_clear`;
+      `ways/tree_base.py`; `as_joined`, `way_out_once`, `tree_shadows`, `walked_shadows`) over the whole lane law
+      (`settle/lawful.py` `Lawful.__call__`/`fault`, `ways/law/` shape, meet, ends, registry, `law_water.py`), installed as
+      `_corridor_tree` - the lane law's rules into `rust/phases/src/law/` (D1), beside `law/rules.rs`.
 7. The dispersed hamlet's front row and ranks (`homesteads/stages.py` `_seat_households_as`, `capacity.py`) and the row village
    (`homesteads/rows.py`) - D4; a grove farm's layout (`rolling/dispersed.py`).
 8. The door: `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
