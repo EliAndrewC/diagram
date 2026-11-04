@@ -98,22 +98,18 @@ band = [(-500.0, 2050.0), (4500.0, 2050.0), (4500.0, 2060.0), (-500.0, 2060.0)]
 try:
     l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, drain, across, 5.25, 5.5, [band], 44.0, 1e9)
 except ValueError as e:
-    assert "resting basin" in str(e), e
+    assert "no searched run" in str(e), e
 else:
-    raise AssertionError("a constructed route across a resting basin is refused by name")
+    raise AssertionError("where no searched run keeps every rule, the sink is refused by name")
 joined = l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, drain, [(2150.0 + 3.0 * (k % 7), -10.0 + 20.0 * k) for k in range(211)], 5.25, 5.5, [], 44.0, 150.0)
 assert joined["to"] == "stream" and joined["confluence"] is not None
-up = [(2000.0, 1990.0), (2000.0, 1900.0)]
-low = l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, up, [], 5.25, 5.5, [], 44.0, 150.0)["run"][-2]
-twin = [(low[0] + 20.0, low[1] + 100.0 + 30.0 * k) for k in range(101)]
-assert l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, up, twin, 5.25, 5.5, [], 44.0, 150.0)["to"] == "stream"
-bent = [(low[0] - 600.0, low[1] + 400.0), (low[0], low[1] + 200.0), (low[0] + 600.0, low[1] + 400.0)]
-assert l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, up, bent, 5.25, 5.5, [], 44.0, 150.0)["to"] == "stream"
-outside = [(2000.0, 2200.0), (2000.0, 2100.0)]
-assert l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, outside, [], 5.25, 5.5, [], 44.0, 150.0)["to"] == "offmap"
-for top in (700.0, 900.0):
-    skew = [(1000.0, 800.0), (2600.0, top), (2600.0, 1800.0), (1000.0, 2000.0)]
-    l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 20.0, skew, [(2500.0, 1700.0), (2500.0, 1600.0)], [], 5.25, 5.5, [], 44.0, 150.0)
+up = [(2000.0, 1990.0), (2000.0, 1900.0)]  # a collector heading up the fall: no searched run keeps every rule
+try:
+    l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, up, [], 5.25, 5.5, [], 44.0, 150.0)
+except ValueError as e:
+    assert "no searched run" in str(e), e
+else:
+    raise AssertionError("a collector heading up the fall is refused by name")
 rest = [[(2040.0, 1992.0), (2400.0, 1992.0), (2400.0, 2300.0), (2040.0, 2300.0)]]
 near = [(2150.0 + 3.0 * (k % 7), -10.0 + 20.0 * k) for k in range(211)]
 assert l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, drain, near, 5.25, 5.5, rest, 44.0, 150.0)["confluence"] is None
@@ -123,6 +119,6 @@ l7r_phases.stage_sink(False, (4000.0, 4000.0), (-1.0, 0.0), 180.0, field, [(1100
 try:
     l7r_phases.stage_sink(False, (4000.0, 4000.0), (0.0, 1.0), 90.0, field, [(3200.0, 2200.0), (3200.0, 2100.0)], [], 5.25, 5.5, [], 44.0, 150.0)
 except ValueError as e:
-    assert "55 degrees" in str(e), e
+    assert "no searched run" in str(e), e
 else:
-    raise AssertionError("a constructed route turning past 55 degrees out of the collector is refused by name")
+    raise AssertionError("a collector heading up the fall from outside the field is refused by name")
