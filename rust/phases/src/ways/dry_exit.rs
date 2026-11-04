@@ -24,6 +24,7 @@
     reason = "the plane geometry's own names, and grid indices of a few thousand"
 )]
 
+use super::Counts;
 use std::collections::{HashMap, VecDeque};
 
 use super::track::{edge_dist, grown, in_poly, seg_dist, Pond, FABRIC_GAP_FT, WET_GROWN_FT};
@@ -162,7 +163,7 @@ pub fn blocked(
     g: &Grid,
     walls: &[(Vec<Pt>, f64)],
     lines: &[(Pt, Pt)],
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Vec<bool> {
     let mut out = vec![false; (g.nx * g.ny) as usize];
     let pad = g.cell * 0.5f64.sqrt();
@@ -178,7 +179,7 @@ pub fn blocked(
                 .filter(|(p, q)| (p.1 > cy) != (q.1 > cy))
                 .map(|(p, q)| (q.0 - p.0) * (cy - p.1) / (q.1 - p.1 + 1e-9) + p.0)
                 .collect();
-            *tests += n as u64;
+            tests.add("pt_test@blocked", n as u64);
             xs.sort_by(f64::total_cmp);
             for i in cols.clone().filter(|_| !xs.is_empty()) {
                 let cx = g.x0 + (i as f64 + 0.5) * g.cell;
@@ -191,7 +192,7 @@ pub fn blocked(
             let (a, c) = (ring[k], ring[(k + 1) % n]);
             g.near(a, c, reach, |ij| {
                 let at = (ij.1 * g.nx + ij.0) as usize;
-                *tests += 1;
+                tests.add("dist@blocked", 1);
                 if !out[at] && seg_dist(g.center(ij), a, c) < reach {
                     out[at] = true;
                 }
@@ -201,7 +202,7 @@ pub fn blocked(
     for &(a, c) in lines {
         g.near(a, c, g.cell, |ij| {
             let at = (ij.1 * g.nx + ij.0) as usize;
-            *tests += 1;
+            tests.add("dist@blocked", 1);
             if !out[at] && seg_dist(g.center(ij), a, c) < g.cell {
                 out[at] = true;
             }
@@ -213,7 +214,13 @@ pub fn blocked(
 /// A track from `start` off the `w` x `h` canvas through cells not `blocked`, the start's own cell walkable whatever stands
 /// there, string-pulled and run on past the edge; None when the start is walled in.
 #[must_use]
-pub fn fill(g: &Grid, start: Pt, blocked: &[bool], canvas: Pt, tests: &mut u64) -> Option<Vec<Pt>> {
+pub fn fill(
+    g: &Grid,
+    start: Pt,
+    blocked: &[bool],
+    canvas: Pt,
+    tests: &mut Counts,
+) -> Option<Vec<Pt>> {
     let s = g.at(start);
     let mut back: HashMap<(i64, i64), (i64, i64)> = HashMap::from([(s, s)]);
     let mut queue = VecDeque::from([s]);
@@ -235,7 +242,7 @@ pub fn fill(g: &Grid, start: Pt, blocked: &[bool], canvas: Pt, tests: &mut u64) 
             (-1, -1),
         ] {
             let nb = (c.0 + d.0, c.1 + d.1);
-            *tests += 1;
+            tests.add("candidate@fill", 1);
             if g.index(nb).is_some_and(|k| !blocked[k]) && !back.contains_key(&nb) {
                 back.insert(nb, c);
                 queue.push_back(nb);
@@ -268,10 +275,10 @@ pub fn fill(g: &Grid, start: Pt, blocked: &[bool], canvas: Pt, tests: &mut u64) 
 
 /// The chain of cell centers string-pulled: from each point, the farthest later point whose straight leg samples only walkable
 /// cells (the start's own cell included).
-fn pull(g: &Grid, pts: &[Pt], blocked: &[bool], start: (i64, i64), tests: &mut u64) -> Vec<Pt> {
+fn pull(g: &Grid, pts: &[Pt], blocked: &[bool], start: (i64, i64), tests: &mut Counts) -> Vec<Pt> {
     let mut clear = |a: Pt, b: Pt| {
         let n = (((b.0 - a.0).hypot(b.1 - a.1) / (g.cell / 4.0)) as i64).max(1);
-        *tests += (n + 1) as u64;
+        tests.add("pt_test@pull", (n + 1) as u64);
         (0..=n).all(|k| {
             let f = k as f64 / n as f64;
             let c = g.at((a.0 + (b.0 - a.0) * f, a.1 + (b.1 - a.1) * f));
@@ -383,7 +390,7 @@ fn on_course(s: (Pt, Pt), course: &[Pt]) -> bool {
 /// brook but at its crossing places where crossing finds a way or saves the crossing's cost in walk, a drawn channel but where no
 /// other way out stands. None where no fill finds a way out of the frame.
 #[must_use]
-pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut u64) -> Option<Vec<Pt>> {
+pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut Counts) -> Option<Vec<Pt>> {
     let mut walls: Vec<(Vec<Pt>, f64)> = site
         .wet
         .iter()
@@ -413,7 +420,9 @@ pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut u64) -> Option<
     let at = fords(site.course, spacing, half, bend, &mut counts);
     let segs: Vec<Vec<Pt>> = brook.iter().map(|&(a, b)| vec![a, b]).collect();
     let gapped_brook = gapped(&segs, &at, half, &mut counts);
-    *tests += counts.values().sum::<u64>();
+    for (k, n) in &counts {
+        tests.add(k, *n);
+    }
     let bands: Vec<&[Pt]> = site
         .fabric
         .iter()
@@ -431,7 +440,7 @@ pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut u64) -> Option<
     let g = Grid::new(site.canvas.0, site.canvas.1, cell);
     // the walls rastered once; each fill adds its own water lines
     let walled = blocked(&g, &walls, &[], tests);
-    let with = |lines: &[(Pt, Pt)], tests: &mut u64| {
+    let with = |lines: &[(Pt, Pt)], tests: &mut Counts| {
         let wet = blocked(&g, &[], lines, tests);
         let both: Vec<bool> = walled.iter().zip(&wet).map(|(a, b)| *a || *b).collect();
         fill(&g, start, &both, site.canvas, tests)

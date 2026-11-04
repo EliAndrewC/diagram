@@ -23,6 +23,7 @@
     reason = "the plane geometry's own names, and lattice indices of a few hundred"
 )]
 
+use super::Counts;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
@@ -215,13 +216,16 @@ impl Fouling {
 
     /// Is `q` inside a polygon, within a polygon's margin of its edge, or within a line's margin?
     #[must_use]
-    pub fn fouled(&self, q: Pt, tests: &mut u64) -> bool {
+    pub fn fouled(&self, q: Pt, tests: &mut Counts) -> bool {
         let at = (
             floor_i((q.0 - self.origin.0) / self.cell),
             floor_i((q.1 - self.origin.1) / self.cell),
         );
         let near = self.grid.get(&at).map_or(&[][..], Vec::as_slice);
-        *tests += 1 + (self.big.len() + near.len()) as u64;
+        tests.add(
+            "index_examined@fouled",
+            1 + (self.big.len() + near.len()) as u64,
+        );
         self.big.iter().chain(near).any(|&k| {
             let (e, m, b) = &self.entries[k];
             if q.0 < b.0 || q.0 > b.2 || q.1 < b.1 || q.1 > b.3 {
@@ -236,7 +240,7 @@ impl Fouling {
 }
 
 /// Does a clear run of the link a-b, sampled every 3 ft and asked of `fouled`, reach `need` - decided as soon as it is known?
-pub fn link_survives(a: Pt, b: Pt, idx: &Fouling, need: f64, tests: &mut u64) -> bool {
+pub fn link_survives(a: Pt, b: Pt, idx: &Fouling, need: f64, tests: &mut Counts) -> bool {
     let (floor, eps) = (0.5, 1e-6);
     let n = (((b.0 - a.0).hypot(b.1 - a.1) / 3.0) as usize).max(1);
     let thr = need.max(floor);
@@ -298,7 +302,7 @@ impl Grounds<'_> {
 
     /// Is the short link a-b that closes a junction walkable at `gap` off everything but the water?
     #[must_use]
-    pub fn clear_touch(&self, a: Pt, b: Pt, gap: f64, tests: &mut u64) -> bool {
+    pub fn clear_touch(&self, a: Pt, b: Pt, gap: f64, tests: &mut Counts) -> bool {
         let span = (b.0 - a.0).hypot(b.1 - a.1);
         if span < 1.0 {
             return true;
@@ -312,7 +316,7 @@ impl Grounds<'_> {
 
 /// Is the link a-b walkable: a clear run along it within 3 ft of its length, asked of the link index?
 #[must_use]
-pub fn clear_link(a: Pt, b: Pt, idx: &Fouling, tests: &mut u64) -> bool {
+pub fn clear_link(a: Pt, b: Pt, idx: &Fouling, tests: &mut Counts) -> bool {
     let span = (b.0 - a.0).hypot(b.1 - a.1);
     span < 1.0 || link_survives(a, b, idx, span - 3.0, tests)
 }
@@ -324,7 +328,7 @@ pub fn clear_runs(
     idx: &Fouling,
     step: f64,
     floor: f64,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Vec<Vec<Pt>> {
     let mut samples = vec![pts[0]];
     for w in pts.windows(2) {
@@ -361,7 +365,7 @@ pub fn clip_to_clear(
     obstacles: &[Vec<Pt>],
     margin: f64,
     lines: &[(Pt, Pt)],
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Vec<Pt> {
     if obstacles.is_empty() && lines.is_empty() {
         return pts.to_vec();
@@ -403,7 +407,7 @@ pub struct Crossing {
 impl Crossing {
     /// The band about `brook`, `radius` either side, tolled `cost`.
     #[must_use]
-    pub fn new(brook: &[Pt], radius: f64, cost: f64, tests: &mut u64) -> Self {
+    pub fn new(brook: &[Pt], radius: f64, cost: f64, tests: &mut Counts) -> Self {
         let cell = (radius + 1.0).max(20.0);
         let mut grid: HashMap<(i64, i64), Vec<Pt>> = HashMap::new();
         for w in brook.windows(2) {
@@ -415,7 +419,7 @@ impl Crossing {
                 grid.entry((floor_i(q.0 / cell), floor_i(q.1 / cell)))
                     .or_default()
                     .push(q);
-                *tests += 1;
+                tests.add("write@new", 1);
             }
         }
         let cost = if grid.is_empty() { 0.0 } else { cost };
@@ -429,12 +433,12 @@ impl Crossing {
 
     /// Is `p` within the brook's band?
     #[must_use]
-    pub fn in_band(&self, p: Pt, tests: &mut u64) -> bool {
+    pub fn in_band(&self, p: Pt, tests: &mut Counts) -> bool {
         let (gx, gy) = (floor_i(p.0 / self.cell), floor_i(p.1 / self.cell));
         (-1..=1).any(|dx| {
             (-1..=1).any(|dy| {
                 self.grid.get(&(gx + dx, gy + dy)).is_some_and(|v| {
-                    *tests += v.len() as u64;
+                    tests.add("dist@in_band", v.len() as u64);
                     v.iter()
                         .any(|q| (p.0 - q.0).hypot(p.1 - q.1) <= self.radius)
                 })
@@ -444,7 +448,7 @@ impl Crossing {
 
     /// Would pulling `path[i..=j]` straight enter the band where the lattice route between them stayed out of it?
     #[must_use]
-    pub fn new_crossing(&self, path: &[Pt], i: usize, j: usize, tests: &mut u64) -> bool {
+    pub fn new_crossing(&self, path: &[Pt], i: usize, j: usize, tests: &mut Counts) -> bool {
         if path[i..=j].iter().any(|&q| self.in_band(q, tests)) {
             return false;
         }
@@ -532,10 +536,10 @@ fn search(
     lat: &Lattice,
     s: (i64, i64),
     g: (i64, i64),
-    free: &mut dyn FnMut((i64, i64), &mut u64) -> bool,
-    band: &mut dyn FnMut((i64, i64), &mut u64) -> bool,
+    free: &mut dyn FnMut((i64, i64), &mut Counts) -> bool,
+    band: &mut dyn FnMut((i64, i64), &mut Counts) -> bool,
     toll: f64,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Option<Vec<(i64, i64)>> {
     let n = (lat.nx * lat.ny) as usize;
     let (mut dist, mut prev) = (vec![f64::INFINITY; n], vec![usize::MAX; n]);
@@ -558,7 +562,7 @@ fn search(
             (1, 0),
             (1, 1),
         ] {
-            *tests += 1;
+            tests.add("candidate@search", 1);
             let j = (ix + dx, iy + dy);
             if !((0..lat.nx).contains(&j.0) && (0..lat.ny).contains(&j.1)) {
                 continue;
@@ -616,7 +620,7 @@ pub fn route(
     grounds: &Grounds,
     crossing: Option<&Crossing>,
     ask: Ask,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Vec<Pt> {
     let span = (goal.0 - start.0).hypot(goal.1 - start.1);
     if span < 1.0 {
@@ -646,13 +650,13 @@ pub fn route(
     );
     let (s, g) = (lat.near(start), lat.near(goal));
     let mut free_memo: HashMap<(i64, i64), bool> = HashMap::from([(s, true), (g, true)]);
-    let mut free = |c: (i64, i64), t: &mut u64| {
+    let mut free = |c: (i64, i64), t: &mut Counts| {
         *free_memo
             .entry(c)
             .or_insert_with(|| !plan.fouled(lat.pt(c), t))
     };
     let mut band_memo: HashMap<(i64, i64), bool> = HashMap::new();
-    let mut band = |c: (i64, i64), t: &mut u64| {
+    let mut band = |c: (i64, i64), t: &mut Counts| {
         *band_memo
             .entry(c)
             .or_insert_with(|| crossing.is_some_and(|x| x.in_band(lat.pt(c), t)))
@@ -693,7 +697,7 @@ pub fn route(
 ///     no zigzag - research/questions/0081-village-lanes.drawing.html: two 50 degree turns within 40 ft chorded
 ///     chord clear of the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the chord's line 7 ft (`WEB_FABRIC_GAP`) off a garden fence, the page's fence to the middle of the lane
 #[must_use]
-pub fn unjog(mut out: Vec<Pt>, grounds: &Grounds, tests: &mut u64) -> Vec<Pt> {
+pub fn unjog(mut out: Vec<Pt>, grounds: &Grounds, tests: &mut Counts) -> Vec<Pt> {
     let (hairpin, zigzag, run) = BENDS;
     let gap = WEB_FABRIC_GAP;
     let mut k = 1;
@@ -748,7 +752,7 @@ pub fn unjog(mut out: Vec<Pt>, grounds: &Grounds, tests: &mut u64) -> Vec<Pt> {
 /// Research:
 ///     a path goes round what stands - research/questions/0081-village-lanes.drawing.html: no hairpin, the apex's side
 #[must_use]
-pub fn ease_corner(a: Pt, apex: Pt, b: Pt, grounds: &Grounds, tests: &mut u64) -> Option<Pt> {
+pub fn ease_corner(a: Pt, apex: Pt, b: Pt, grounds: &Grounds, tests: &mut Counts) -> Option<Pt> {
     let (m, (dx, dy)) = (
         (f64::midpoint(a.0, b.0), f64::midpoint(a.1, b.1)),
         (b.0 - a.0, b.1 - a.1),
@@ -767,7 +771,7 @@ pub fn ease_corner(a: Pt, apex: Pt, b: Pt, grounds: &Grounds, tests: &mut u64) -
     for i in 1..=steps {
         let off = reach * f64::from(i) / f64::from(steps);
         for sign in [side, -side] {
-            *tests += 1;
+            tests.add("candidate@ease_corner", 1);
             let c = (m.0 + px * off * sign, m.1 + py * off * sign);
             if turn_deg(a, c, b) >= BENDS.0 {
                 continue;

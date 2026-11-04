@@ -14,6 +14,7 @@
     reason = "two half-sizes summed at a map's few hundred feet, where no overflow is possible"
 )]
 
+use super::Counts;
 use std::collections::{BinaryHeap, HashSet};
 
 use super::bearing::{house_rot, turned_box, Margin};
@@ -215,7 +216,7 @@ pub struct Seating {
     /// The offers, the positions, the rectangles and the part layouts tried.
     pub search: (u64, u64, u64, u64),
     /// The operations counted.
-    pub tests: u64,
+    pub tests: Counts,
     /// The households' wood reservations.
     pub wood: super::wood::Shares,
 }
@@ -231,7 +232,7 @@ impl Seating {
         })
     }
 
-    fn turn(site: &Site, p: Pt, tests: &mut u64) -> f64 {
+    fn turn(site: &Site, p: Pt, tests: &mut Counts) -> f64 {
         house_rot(p, site.bearing.1, site.bearing.0.follow(p, tests))
     }
 
@@ -493,7 +494,7 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
     for i in 0..ni {
         for j in 0..nj {
             let q = (inset + i as f64 * pitch, inset + j as f64 * pitch);
-            st.tests += 1;
+            st.tests.add("candidate@grow", 1);
             if site.ground.taken_at(q).unwrap_or_else(|| (site.beyond)(q)) {
                 continue;
             }
@@ -511,7 +512,7 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
             .then(a.1.total_cmp(&b.1))
             .then(a.2.total_cmp(&b.2))
     });
-    st.tests += grid.len() as u64 * 12;
+    st.tests.add("candidate@grow", grid.len() as u64 * 12);
     for (since, &(_, _, _, q)) in grid.iter().enumerate() {
         if !st.seated.is_empty() || since >= dry || want == 0 {
             break;
@@ -549,7 +550,7 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
                         c.1 + (base.1 - c.1) * far * ring,
                     );
                     let key = ((q.0 / 10.0).round() as i64, (q.1 / 10.0).round() as i64);
-                    st.tests += 8;
+                    st.tests.add("candidate@grow", 8);
                     if q.0 >= 0.0
                         && q.1 >= 0.0
                         && q.0 <= site.canvas.0
@@ -631,7 +632,7 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
 }
 
 /// Does a seat's smallest yard, in front of the house at `q`, touch the reach - the first house's ground a way can come to?
-fn opens_at(site: &Site, q: Pt, tests: &mut u64) -> bool {
+fn opens_at(site: &Site, q: Pt, tests: &mut Counts) -> bool {
     let hh = 28.0 * 0.90;
     let y = (q.0, q.1 + hh / 2.0 + 3.0 + 10.0, 30.0, 20.0);
     site.reach

@@ -5,10 +5,11 @@
 
 use super::ground::Ground;
 use super::wood::{in_keepouts, keepouts, Shares, WoodSite, PITCH_FT, WOOD};
+use super::Counts;
 
 #[test]
 fn a_homestead_reserves_its_floor_behind_its_house_and_none_twice() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let ground = Ground::new((0.0, 0.0), (1000.0, 1000.0), &mut t);
     let site = WoodSite {
         ground: &ground,
@@ -50,7 +51,7 @@ fn a_homestead_reserves_its_floor_behind_its_house_and_none_twice() {
 #[test]
 fn a_seat_is_barred_off_the_sheet_on_taken_ground_or_across_a_stream_and_a_crowded_house_is_refused(
 ) {
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut ground = Ground::new((0.0, 0.0), (400.0, 400.0), &mut t);
     let none = keepouts(&[], &[]);
     // near the sheet's corner, the seats past the edge are barred, the rest enough

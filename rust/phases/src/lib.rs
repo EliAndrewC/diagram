@@ -13,6 +13,7 @@ mod seat;
 mod sink;
 mod water_frame;
 mod waterward;
+mod ways;
 
 use pyo3::prelude::*;
 

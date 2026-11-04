@@ -12,10 +12,11 @@ use super::layout::{
     beds, byre, hjit, kura, yard, yard_area_ft2, Byre, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO,
 };
 use super::lots::{larger_first, quota_carriers, size_ladder, Lots};
+use super::Counts;
 
 #[test]
 fn a_ring_takes_the_cells_whose_centers_lie_inside_it() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut g = Ground::new((0.0, 0.0), (100.0, 100.0), &mut t);
     g.fill_ring(
         &[(20.0, 20.0), (60.0, 20.0), (60.0, 60.0), (20.0, 60.0)],
@@ -38,12 +39,12 @@ fn a_ring_takes_the_cells_whose_centers_lie_inside_it() {
     );
     assert_eq!(g.taken_at((90.0, 50.0)), Some(true));
     assert_eq!(g.taken_at((75.0, 50.0)), Some(false));
-    assert!(t > 0);
+    assert!(t.total() > 0);
 }
 
 #[test]
 fn a_strip_takes_the_cells_within_its_reach_and_a_rect_is_refused_at_nine_points() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut g = Ground::new((0.0, 0.0), (200.0, 200.0), &mut t);
     g.paint_strip((0.0, 100.0), (200.0, 100.0), 6.0, &mut t);
     assert_eq!(g.taken_at((50.0, 100.0)), Some(true));
@@ -57,14 +58,14 @@ fn a_strip_takes_the_cells_within_its_reach_and_a_rect_is_refused_at_nine_points
     assert!(!g.rect_refused((180.0, 20.0), (260.0, 60.0), &never, &mut t));
     assert!(g.rect_refused((180.0, 20.0), (260.0, 60.0), &always, &mut t));
     // a window of no extent is one cell
-    let mut u = 0;
+    let mut u = Counts::default();
     let one = Ground::new((5.0, 5.0), (5.0, 5.0), &mut u);
     assert_eq!(one.taken_at((5.0, 5.0)), Some(false));
 }
 
 #[test]
 fn the_reach_is_the_free_ground_joined_to_its_seeds() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut g = Ground::new((0.0, 0.0), (160.0, 160.0), &mut t);
     // a wall across the window at x 72-88, the whole height: the east is cut off from a seed in the west
     g.fill_ring(
@@ -171,7 +172,7 @@ fn a_house_turns_with_the_margin_it_stands_by_held_under_the_spread() {
         assert!((r - 5.0).abs() < SPREAD_DEG);
     }
     // a margin square to the axis gives no turn; one bent 20 degrees turns a house beside it, fading past the pull's reach
-    let mut t = 0;
+    let mut t = Counts::default();
     let square = Margin::new(
         &[(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)],
         0.0,
@@ -225,7 +226,7 @@ fn a_bundle_turns_as_one_piece_and_its_envelope_holds_every_side() {
         shade: 50.0,
         turns: &[0.0],
     };
-    let mut t = 0;
+    let mut t = Counts::default();
     let flat = bundle(
         &lot,
         (300.0, 200.0),
@@ -389,4 +390,14 @@ fn the_lots_are_dealt_as_the_python_seating_deals_them() {
             .map(|(_, c)| c.iter().filter(|x| **x).count()),
         Some(8)
     );
+}
+
+#[test]
+fn the_counts_file_each_kind_and_total_all_but_the_moves() {
+    let mut c = Counts::default();
+    c.add("pt_test@a", 2);
+    c.add("pt_test@a", 3);
+    c.add("moved@b", 4);
+    assert_eq!(c.0.len(), 2);
+    assert_eq!(c.total(), 5);
 }

@@ -7,6 +7,7 @@ use super::route::{
     clear_link, clear_runs, clip_to_clear, crosses_the_crop, ease_corner, length, link_survives,
     route, turn_deg, unjog, Ask, Crossing, Fouling, Ground, Grounds,
 };
+use super::Counts;
 use crate::field::fan::Pt;
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {
@@ -21,7 +22,7 @@ const NONE: Grounds<'static> = Grounds {
 
 #[test]
 fn the_index_fouls_inside_a_ring_within_its_margin_or_near_a_line() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let hard = [
         Ground::plain(square(0.0, 0.0, 10.0, 10.0)),
         Ground {
@@ -90,7 +91,7 @@ fn the_index_fouls_inside_a_ring_within_its_margin_or_near_a_line() {
 
 #[test]
 fn runs_clips_links_and_touches_measure_what_the_ground_allows() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let wall = square(40.0, -5.0, 60.0, 5.0);
     let hard = [Ground::plain(wall.clone())];
     let idx = Fouling::new(&hard, 0.0, &[], 0.0, &[], 0.0);
@@ -155,7 +156,7 @@ fn runs_clips_links_and_touches_measure_what_the_ground_allows() {
 
 #[test]
 fn the_route_threads_round_a_wall_and_refuses_where_there_is_no_way() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let walls = [square(40.0, -60.0, 60.0, 60.0)];
     let g = Grounds {
         hard: &[],
@@ -240,7 +241,7 @@ fn the_route_threads_round_a_wall_and_refuses_where_there_is_no_way() {
 
 #[test]
 fn a_brook_crossing_is_tolled_and_the_pull_takes_back_none() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let brook = [(-200.0, 50.0), (400.0, 50.0)];
     let x = Crossing::new(&brook, 10.0, 150.0, &mut t);
     assert!(x.in_band((0.0, 55.0), &mut t) && !x.in_band((0.0, 70.0), &mut t));
@@ -278,7 +279,7 @@ fn a_brook_crossing_is_tolled_and_the_pull_takes_back_none() {
 
 #[test]
 fn the_jogs_are_chorded_kneed_or_eased_where_the_chord_is_blocked() {
-    let mut t = 0;
+    let mut t = Counts::default();
     // a hairpin on open ground: chorded
     let hp = unjog(vec![(0.0, 0.0), (50.0, 0.0), (0.0, 5.0)], &NONE, &mut t);
     assert_eq!(hp, vec![(0.0, 0.0), (0.0, 5.0)]);
@@ -348,7 +349,7 @@ fn the_jogs_are_chorded_kneed_or_eased_where_the_chord_is_blocked() {
 
 #[test]
 fn the_rarer_turns_of_the_search_the_pull_and_the_jogs() {
-    let mut t = 0;
+    let mut t = Counts::default();
     // a run that meets the wall exactly at its need
     let wall = Fouling::new(
         &[Ground::plain(square(40.5, -5.0, 60.0, 5.0))],

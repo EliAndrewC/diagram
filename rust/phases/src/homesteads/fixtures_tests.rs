@@ -14,6 +14,7 @@ use super::fixtures::{
     Unlaid, Wall, ORDER, PIT_FT, PRIVY_SUN, WALL_GAP_FT,
 };
 use super::layout::{hjit, Rect};
+use super::Counts;
 
 fn frame<'a>(
     roofs: &'a [Rect],
@@ -41,7 +42,7 @@ fn every_kind_is_laid_beside_its_house_in_order_with_its_rule_kept() {
     let bed = (30.0, 25.0, 12.0, 14.0);
     let turns = [0.0, 10.0];
     let forms = Forms::default();
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut seen = 0;
     for k in 0..40 {
         let seat = (f64::from(k) * 53.0, f64::from(k) * 17.0);
@@ -87,7 +88,7 @@ fn every_kind_is_laid_beside_its_house_in_order_with_its_rule_kept() {
 fn a_kind_with_no_seat_refuses_the_layout_and_a_persimmon_is_simply_not_kept() {
     let forms = Forms::default();
     let roll = |s: f64| hjit(1.0, 2.0, s);
-    let mut t = 0;
+    let mut t = Counts::default();
     // the house walled round by a ring of roofs: no bath room, no shed, no privy
     let house = (0.0, 0.0, 46.0, 28.0);
     let wall = (0.0, 0.0, 800.0, 800.0);
@@ -228,7 +229,7 @@ fn the_tables_and_rolls_hold_their_research() {
         .any(|(p, _)| *p == Place::Barn));
     // the shed's rule and the sun ground
     let walls = [(0.0, 0.0, 46.0, 28.0)];
-    let mut t = 0;
+    let mut t = Counts::default();
     assert!(shed_off_a_wall(
         (0.0, -(14.0 + WALL_GAP_FT + 6.0 + 6.0), 24.0, 12.0),
         &walls,

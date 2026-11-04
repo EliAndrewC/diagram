@@ -22,9 +22,26 @@ impl Counts {
     pub fn add(&mut self, key: &str, n: u64) {
         #[cfg(feature = "counters")]
         {
-            *self.0.entry(key.to_owned()).or_insert(0) += n;
+            // looked up first, so a key already counted costs no allocation (the ways' point tests count by the million)
+            if let Some(v) = self.0.get_mut(key) {
+                *v += n;
+            } else {
+                self.0.insert(key.to_owned(), n);
+            }
         }
         #[cfg(not(feature = "counters"))]
         let _ = (key, n);
+    }
+
+    /// The work counted, the moves, drops and placements reported and left out (`tools/work_budget.py`'s total) - the tests'
+    /// reading; Python totals what a stage returns.
+    #[cfg(test)]
+    #[must_use]
+    pub fn total(&self) -> u64 {
+        self.0
+            .iter()
+            .filter(|(k, _)| !matches!(k.split('@').next(), Some("placed" | "dropped" | "moved")))
+            .map(|(_, n)| n)
+            .sum()
     }
 }

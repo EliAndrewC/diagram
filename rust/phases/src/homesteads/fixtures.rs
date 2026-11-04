@@ -19,6 +19,7 @@
 )]
 
 use super::layout::{kura, Rect};
+use super::Counts;
 
 /// A fixture's kind.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -272,9 +273,9 @@ pub fn size_ft(kind: Kind, forms: &Forms, roll: &dyn Fn(f64) -> f64) -> (f64, f6
 
 /// Does `r` stand clear of every rect in `taken` by `gap` - apart by the two half-sizes and the gap on one axis at least?
 #[must_use]
-pub fn clears(r: Rect, taken: &[Rect], gap: f64, tests: &mut u64) -> bool {
+pub fn clears(r: Rect, taken: &[Rect], gap: f64, tests: &mut Counts) -> bool {
     taken.iter().all(|t| {
-        *tests += 1;
+        tests.add("pt_test@clears", 1);
         (r.0 - t.0).abs() >= (r.2 + t.2) / 2.0 + gap || (r.1 - t.1).abs() >= (r.3 + t.3) / 2.0 + gap
     })
 }
@@ -691,7 +692,7 @@ pub fn forward_of_front(seat: Rect, hh: f64) -> bool {
 ///     wood shed a ken off a wall - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across the dooryard
 ///     a ken off the house, clear of the kura - GUESS research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a short step off a house wall, and the kura's wall kept as far, a building of its own
 #[must_use]
-pub fn shed_off_a_wall(seat: Rect, walls: &[Rect], tests: &mut u64) -> bool {
+pub fn shed_off_a_wall(seat: Rect, walls: &[Rect], tests: &mut Counts) -> bool {
     let off = WALL_GAP_FT + WOODSHED_STEP_FT;
     clears(seat, walls, off - 1e-6, tests)
         && against_a_wall(seat, &walls[..1], off + 1e-6, 0.0)
@@ -780,7 +781,7 @@ pub fn lay(
     fr: &Frame,
     roll: &dyn Fn(f64) -> f64,
     forms: &Forms,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Result<Laid, Unlaid> {
     let (hw, hh) = fr.house;
     let g = WALL_GAP_FT;
@@ -828,7 +829,7 @@ pub fn lay(
                 });
                 let shade = r + SHADE_MARGIN_FT;
                 let found = ring.iter().copied().chain(paced).find(|&(lx, ly)| {
-                    *tests += 1;
+                    tests.add("candidate@lay", 1);
                     in_dooryard(lx, ly, r, hw, hh, dooryard)
                         && clears((lx, ly, trunk, trunk), &taken, 2.0, tests)
                         && clears((lx, ly, 2.0 * r, 2.0 * r), &built, pad, tests)

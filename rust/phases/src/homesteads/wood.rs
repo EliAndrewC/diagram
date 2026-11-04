@@ -9,6 +9,7 @@
 //!     seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours
 //!     a seat's ground its lattice square - GUESS: the crown (22 ft across) covers its 15.6 ft lattice square, its half-diagonal 11 ft, so the floor counted by squares is at most the floor drawn (feature 444 T30's derivation)
 
+use super::Counts;
 use std::collections::{HashMap, HashSet};
 
 use super::fit::{crossing, GRID};
@@ -136,7 +137,7 @@ pub struct WoodSite<'a> {
 impl Shares {
     /// Would a homestead's keep-outs stand over a seat another household reserved?
     #[must_use]
-    pub fn covers_a_seat(&self, own: &Keepouts, tests: &mut u64) -> bool {
+    pub fn covers_a_seat(&self, own: &Keepouts, tests: &mut Counts) -> bool {
         let boxes = own
             .0
             .iter()
@@ -145,7 +146,7 @@ impl Shares {
         boxes.into_iter().any(|(x0, y0, x1, y1)| {
             (cell(x0, GRID)..=cell(x1, GRID)).any(|i| {
                 (cell(y0, GRID)..=cell(y1, GRID)).any(|j| {
-                    *tests += 1;
+                    tests.add("index_query@covers_a_seat", 1);
                     self.seats
                         .get(&(i, j))
                         .is_some_and(|v| v.iter().any(|&p| in_keepouts(p, own)))
@@ -154,8 +155,15 @@ impl Shares {
         })
     }
 
-    fn barred(&self, p: Pt, house: Pt, own: &Keepouts, site: &WoodSite, tests: &mut u64) -> bool {
-        *tests += 4;
+    fn barred(
+        &self,
+        p: Pt,
+        house: Pt,
+        own: &Keepouts,
+        site: &WoodSite,
+        tests: &mut Counts,
+    ) -> bool {
+        tests.add("pt_test@barred", 4);
         let inset = MARGINS.1;
         if !(inset <= p.0
             && p.0 <= site.canvas.0 - inset
@@ -196,7 +204,7 @@ impl Shares {
         rot: f64,
         own: &Keepouts,
         site: &WoodSite,
-        tests: &mut u64,
+        tests: &mut Counts,
     ) -> Option<Vec<Pt>> {
         let (floor, reach) = WOOD;
         let th = rot.to_radians();
@@ -215,7 +223,7 @@ impl Shares {
             }
         }
         lattice.sort_by(|a, b| a.0.total_cmp(&b.0));
-        *tests += lattice.len() as u64 * 7;
+        tests.add("candidate@share", lattice.len() as u64 * 7);
         let mut seats = Vec::new();
         for (_, p, sq) in lattice {
             if self.squares.contains(&sq) || self.barred(p, house, own, site, tests) {
@@ -230,7 +238,7 @@ impl Shares {
     }
 
     /// Reserve a homestead's seats and file its keep-outs for every later seat.
-    pub fn commit(&mut self, seats: &[Pt], own: Keepouts, tests: &mut u64) {
+    pub fn commit(&mut self, seats: &[Pt], own: Keepouts, tests: &mut Counts) {
         for &p in seats {
             self.squares
                 .insert((cell(p.0, PITCH_FT), cell(p.1, PITCH_FT)));
@@ -253,7 +261,7 @@ impl Shares {
                     if v.last() != Some(&k) {
                         v.push(k);
                     }
-                    *tests += 1;
+                    tests.add("write@commit", 1);
                 }
             }
         }

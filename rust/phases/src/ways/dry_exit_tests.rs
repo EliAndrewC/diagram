@@ -7,6 +7,7 @@ use super::dry_exit::{
     blocked, clear_of_bands, connector_dry_exit, fill, push_out_of, DrySite, Grid, OVERSHOOT_FT,
 };
 use super::track::{in_poly, seg_dist};
+use super::Counts;
 use crate::field::fan::Pt;
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {
@@ -32,7 +33,7 @@ fn site<'a>(
 
 #[test]
 fn the_fill_finds_the_neck_between_two_marshes_and_pulls_it_taut() {
-    let mut t = 0;
+    let mut t = Counts::default();
     // marsh on every side but a neck to the north
     let wet = [
         square(-100.0, 600.0, 1100.0, 1100.0),
@@ -64,12 +65,12 @@ fn the_fill_finds_the_neck_between_two_marshes_and_pulls_it_taut() {
     assert!(
         connector_dry_exit(&site(&shut, &[], &brook, &course), (500.0, 500.0), &mut t).is_none()
     );
-    assert!(t > 0);
+    assert!(t.total() > 0);
 }
 
 #[test]
 fn the_brook_is_crossed_at_its_crossing_places_and_a_channel_only_last() {
-    let mut t = 0;
+    let mut t = Counts::default();
     // a brook across the map north of the gateway; the marsh walls the south, east and west
     let course = [(-50.0, 300.0), (1050.0, 300.0)];
     let brook = [(course[0], course[1])];
@@ -108,7 +109,7 @@ fn the_brook_is_crossed_at_its_crossing_places_and_a_channel_only_last() {
 
 #[test]
 fn a_gateway_in_a_grove_band_is_walked_out_first_on_the_finer_grid() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let band = square(450.0, 450.0, 550.0, 550.0);
     let fabric = [(band.clone(), true), (square(0.0, 0.0, 10.0, 10.0), false)];
     let p = connector_dry_exit(&site(&[], &fabric, &[], &[]), (500.0, 540.0), &mut t)
@@ -138,7 +139,7 @@ fn a_gateway_in_a_grove_band_is_walked_out_first_on_the_finer_grid() {
 
 #[test]
 fn the_raster_and_the_fill_at_their_edges() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let g = Grid::new(100.0, 100.0, 20.0);
     // a ring of fewer than three corners walls nothing; a horizontal edge and a line block their strips
     let cells = blocked(
@@ -157,5 +158,5 @@ fn the_raster_and_the_fill_at_their_edges() {
     assert_eq!(out.len(), 2);
     // a start whose cell sits exactly on its center: the overshoot keeps its point
     let at = fill(&g, (-30.0, 50.0 - 0.0), &none, (100.0, 100.0), &mut t).expect("off already");
-    assert!(at.len() == 2 && t > 0);
+    assert!(at.len() == 2 && t.total() > 0);
 }

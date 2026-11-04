@@ -16,10 +16,11 @@ use super::lots::Lots;
 use super::place::{
     box_reach, field_distance, grow, keeps_its_distance, seat_toward, union, Keep, Seating, Site,
 };
+use super::Counts;
 
 #[test]
 fn a_cluster_grows_from_its_first_house_every_rule_kept() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let canvas = (2400.0, 2400.0);
     let field = vec![
         (200.0, 1500.0),
@@ -76,7 +77,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
             assert!(gap >= EAVE_FT.0);
         }
     }
-    assert!(st.search.0 >= 12 && st.search.3 >= 12 && st.tests > 0);
+    assert!(st.search.0 >= 12 && st.search.3 >= 12 && st.tests.total() > 0);
     // no household is seated where the seat's ground is all taken
     let mut full = Ground::new((0.0, 0.0), canvas, &mut t);
     full.fill_ring(
@@ -111,7 +112,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
 
 #[test]
 fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_the_growth() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let canvas = (600.0, 600.0);
     let ground = Ground::new((0.0, 0.0), canvas, &mut t);
     let reach = ground.reach(&[(300.0, 300.0)], &mut t);
@@ -224,7 +225,7 @@ fn apart(a: (f64, f64, f64, f64), b: (f64, f64, f64, f64)) -> bool {
 
 #[test]
 fn a_homestead_may_not_stand_its_parts_over_a_neighbors_wood() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let canvas = (1200.0, 1200.0);
     let ground = Ground::new((0.0, 0.0), canvas, &mut t);
     let reach = ground.reach(&[(600.0, 600.0)], &mut t);

@@ -5,6 +5,7 @@
 //! Research:
 //!     the free ground - NONE: the seating's machinery; each member's rule is claimed where the stage gathers it
 
+use super::Counts;
 use crate::field::fan::Pt;
 
 /// The raster's cell (feet): under half the narrowest gap a homestead leaves, so a gap of free ground holds two cells.
@@ -30,11 +31,11 @@ impl Ground {
         clippy::cast_sign_loss,
         reason = "a window of a few hundred cells a side, its sizes positive"
     )]
-    pub fn new(lo: Pt, hi: Pt, tests: &mut u64) -> Self {
+    pub fn new(lo: Pt, hi: Pt, tests: &mut Counts) -> Self {
         let (x0, y0) = ((lo.0 / CELL).floor() * CELL, (lo.1 / CELL).floor() * CELL);
         let nx = (((hi.0 - x0) / CELL).ceil() as usize).max(1);
         let ny = (((hi.1 - y0) / CELL).ceil() as usize).max(1);
-        *tests += (nx * ny) as u64;
+        tests.add("write@new", (nx * ny) as u64);
         Self {
             x0,
             y0,
@@ -90,7 +91,7 @@ impl Ground {
         clippy::cast_sign_loss,
         reason = "column indices clamped into the window"
     )]
-    pub fn fill_ring(&mut self, ring: &[Pt], tests: &mut u64) {
+    pub fn fill_ring(&mut self, ring: &[Pt], tests: &mut Counts) {
         let n = ring.len();
         if n < 3 {
             return;
@@ -98,7 +99,7 @@ impl Ground {
         let (lo, hi) = ring
             .iter()
             .fold((f64::MAX, f64::MIN), |(a, b), p| (a.min(p.1), b.max(p.1)));
-        *tests += n as u64;
+        tests.add("pt_test@fill_ring", n as u64);
         for j in self.rows(lo, hi) {
             let y = self.center(0, j).1;
             let mut xs: Vec<f64> = Vec::new();
@@ -108,14 +109,14 @@ impl Ground {
                     xs.push(a.0 + (y - a.1) / (b.1 - a.1) * (b.0 - a.0));
                 }
             }
-            *tests += xs.len() as u64;
+            tests.add("write@fill_ring", xs.len() as u64);
             xs.sort_by(f64::total_cmp);
             for pair in xs.chunks_exact(2) {
                 let a = ((pair[0] - self.x0) / CELL - 0.5).ceil().max(0.0) as usize;
                 let b = (((pair[1] - self.x0) / CELL - 0.5).floor() + 1.0).max(0.0) as usize;
                 for i in a.min(self.nx)..b.min(self.nx) {
                     self.taken[j * self.nx + i] = true;
-                    *tests += 1;
+                    tests.add("write@fill_ring", 1);
                 }
             }
         }
@@ -127,14 +128,14 @@ impl Ground {
         clippy::cast_sign_loss,
         reason = "column indices clamped into the window"
     )]
-    pub fn paint_strip(&mut self, a: Pt, b: Pt, r: f64, tests: &mut u64) {
+    pub fn paint_strip(&mut self, a: Pt, b: Pt, r: f64, tests: &mut Counts) {
         let lo = (a.0.min(b.0) - r, a.1.min(b.1) - r);
         let hi = (a.0.max(b.0) + r, a.1.max(b.1) + r);
         for j in self.rows(lo.1, hi.1) {
             let i0 = ((lo.0 - self.x0) / CELL - 0.5).ceil().max(0.0) as usize;
             let i1 = (((hi.0 - self.x0) / CELL - 0.5).floor() + 1.0).max(0.0) as usize;
             for i in i0.min(self.nx)..i1.min(self.nx) {
-                *tests += 1;
+                tests.add("write@paint_strip", 1);
                 if crate::field::geom::seg_dist(self.center(i, j), a, b) <= r {
                     self.taken[j * self.nx + i] = true;
                 }
@@ -149,14 +150,14 @@ impl Ground {
         lo: Pt,
         hi: Pt,
         beyond: &dyn Fn(Pt) -> bool,
-        tests: &mut u64,
+        tests: &mut Counts,
     ) -> bool {
         let (mx, my) = (f64::midpoint(lo.0, hi.0), f64::midpoint(lo.1, hi.1));
         [lo.0, mx, hi.0]
             .iter()
             .flat_map(|&x| [lo.1, my, hi.1].map(|y| (x, y)))
             .any(|p| {
-                *tests += 1;
+                tests.add("pt_test@rect_refused", 1);
                 self.taken_at(p).unwrap_or_else(|| beyond(p))
             })
     }
@@ -165,13 +166,13 @@ impl Ground {
     /// north neighbors (union-find over the labels), the seeds' labels kept - nothing changes the free ground while the houses are
     /// seated (no way stands, no house is painted: 0246), so the reach is labeled once.
     #[must_use]
-    pub fn reach(&self, seeds: &[Pt], tests: &mut u64) -> Reach {
+    pub fn reach(&self, seeds: &[Pt], tests: &mut Counts) -> Reach {
         let n = self.nx * self.ny;
         let mut parent: Vec<usize> = (0..n).collect();
         for j in 0..self.ny {
             for i in 0..self.nx {
                 let k = j * self.nx + i;
-                *tests += 3;
+                tests.add("index_query@reach", 3);
                 if self.taken[k] {
                     continue;
                 }
@@ -198,7 +199,7 @@ impl Ground {
         let reached = (0..n)
             .map(|k| !self.taken[k] && keep.binary_search(&root(&mut parent, k)).is_ok())
             .collect();
-        *tests += n as u64;
+        tests.add("write@reach", n as u64);
         Reach {
             x0: self.x0,
             y0: self.y0,
@@ -235,14 +236,14 @@ impl Reach {
         clippy::cast_sign_loss,
         reason = "cell indices clamped into the window"
     )]
-    pub fn touches(&self, lo: Pt, hi: Pt, tests: &mut u64) -> bool {
+    pub fn touches(&self, lo: Pt, hi: Pt, tests: &mut Counts) -> bool {
         let i0 = ((lo.0 - self.x0) / CELL).floor().max(0.0) as usize;
         let j0 = ((lo.1 - self.y0) / CELL).floor().max(0.0) as usize;
         let i1 = (((hi.0 - self.x0) / CELL).floor().max(-1.0) + 1.0) as usize;
         let j1 = (((hi.1 - self.y0) / CELL).floor().max(-1.0) + 1.0) as usize;
         (j0..j1.min(self.ny)).any(|j| {
             (i0..i1.min(self.nx)).any(|i| {
-                *tests += 1;
+                tests.add("index_query@touches", 1);
                 self.reached[j * self.nx + i]
             })
         })

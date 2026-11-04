@@ -10,6 +10,7 @@
 use super::bearing::turned_box;
 use super::fixtures::{lay, Forms, Frame, Kind, Wall};
 use super::layout::{beds, byre, kura, yard, Byre, Rect, Side, SIDES};
+use super::Counts;
 use crate::field::fan::Pt;
 
 /// What a household's lot keeps, as the seating rolls it.
@@ -94,7 +95,7 @@ pub fn bundle(
     turn: f64,
     forms: &Forms,
     sun: &Sun,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Bundle {
     let (hw, hh) = lot.house;
     let house = (0.0, 0.0, hw, hh);
@@ -145,7 +146,7 @@ pub fn bundle(
     boxes.extend(b.kura.map(|k| turned_box(k, turn)));
     boxes.extend(b.byre.map(|(r, t)| turned_box(r, turn + t)));
     boxes.extend(b.fixtures.iter().map(|&(_, r)| turned_box(r, turn)));
-    *tests += boxes.len() as u64 * 4;
+    tests.add("write@bundle", boxes.len() as u64 * 4);
     b.bbox = bbox_of(&boxes);
     b.boxes = boxes;
     b
@@ -161,7 +162,7 @@ pub fn envelope(
     turn: f64,
     forms: &Forms,
     sun: &Sun,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> Rect {
     let boxes: Vec<Rect> = SIDES
         .iter()

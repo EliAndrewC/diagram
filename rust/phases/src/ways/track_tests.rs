@@ -8,6 +8,7 @@ use super::track::{
     pairs_within, past_the_frame, poly_box, pull_clear, seg_intersect, segments_cross,
     shallow_crossing, Checker, Swept, TrackSite,
 };
+use super::Counts;
 use crate::field::fan::Pt;
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {
@@ -16,7 +17,7 @@ fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {
 
 #[test]
 fn the_path_rules_measure_crossings_angles_decks_and_samples() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let sq = square(0.0, 0.0, 10.0, 10.0);
     assert!(in_poly((5.0, 5.0), &sq) && !in_poly((15.0, 5.0), &sq));
     assert!(segments_cross(
@@ -97,7 +98,7 @@ fn the_path_rules_measure_crossings_angles_decks_and_samples() {
 
 #[test]
 fn the_checker_counts_each_foul_segment_and_the_decks_too_close() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let crop = square(100.0, 100.0, 200.0, 200.0);
     let brook = [((0.0, 300.0), (400.0, 300.0))];
     let waters = [((50.0, 0.0), (50.0, 400.0)), ((60.0, 0.0), (60.0, 400.0))];
@@ -121,7 +122,7 @@ fn the_checker_counts_each_foul_segment_and_the_decks_too_close() {
 
 #[test]
 fn the_fabric_is_fouled_by_a_crossing_a_near_corner_or_a_leg_inside() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let steading = square(100.0, 100.0, 140.0, 140.0);
     let fab = [(steading.clone(), poly_box(&steading))];
     let b = poly_box(&steading);
@@ -179,7 +180,7 @@ fn the_fabric_is_fouled_by_a_crossing_a_near_corner_or_a_leg_inside() {
 
 #[test]
 fn the_frame_the_grown_ring_and_the_gateway_pulled_clear() {
-    let mut t = 0;
+    let mut t = Counts::default();
     // east from the middle: to the edge and past it; straight down; from outside the canvas the margin alone
     assert!((past_the_frame((100.0, 100.0), 0.0, 1000.0, 1000.0) - 1300.0).abs() < 1e-9);
     assert!(
@@ -221,7 +222,7 @@ fn the_frame_the_grown_ring_and_the_gateway_pulled_clear() {
 
 #[test]
 fn the_sweep_takes_the_clean_bearing_the_least_dry_one_or_the_dry_exit() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let field = vec![square(0.0, 600.0, 1000.0, 1000.0)];
     let fabric = vec![square(480.0, 420.0, 520.0, 460.0)];
     let site = TrackSite {
@@ -284,5 +285,5 @@ fn the_sweep_takes_the_clean_bearing_the_least_dry_one_or_the_dry_exit() {
     let wet = vec![ring.clone(), vec![(0.0, 0.0)]];
     let soaked = TrackSite { wet: &wet, ..site };
     assert_eq!(connector(&soaked, (500.0, 500.0), &mut t).1, Swept::DryExit);
-    assert!(t > 0 && everywhere[0].len() == 4);
+    assert!(t.total() > 0 && everywhere[0].len() == 4);
 }

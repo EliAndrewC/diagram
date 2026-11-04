@@ -12,6 +12,7 @@ use super::fit::{
 use super::fixtures::Forms;
 use super::ground::Ground;
 use super::layout::Side;
+use super::Counts;
 
 fn placed_at(x: f64, y: f64) -> Placed {
     let lot = Lot {
@@ -31,7 +32,7 @@ fn placed_at(x: f64, y: f64) -> Placed {
             shade: 0.0,
             turns: &[0.0],
         },
-        &mut 0,
+        &mut Counts::default(),
     );
     Placed {
         house: (b.house, 0.0),
@@ -44,7 +45,7 @@ fn placed_at(x: f64, y: f64) -> Placed {
 
 #[test]
 fn a_house_keeps_off_the_sun_of_every_yard_both_ways() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let lot = Lot {
         house: (46.0, 28.0),
         kura: false,
@@ -142,7 +143,7 @@ fn a_house_keeps_off_the_sun_of_every_yard_both_ways() {
 
 #[test]
 fn two_roofs_shed_apart_and_a_farmstead_keeps_to_one_bank() {
-    let mut t = 0;
+    let mut t = Counts::default();
     let mut standing = Standing::default();
     standing.add(placed_at(0.0, 0.0), &mut t);
     assert!(too_near((50.0, 0.0, 46.0, 28.0), 0.0, &standing, &mut t));

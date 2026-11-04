@@ -12,21 +12,18 @@
     )
 )]
 
+pub use crate::counts::Counts;
+
 pub mod bearing;
 pub mod bundle;
-pub mod dry_exit;
 pub mod fit;
 pub mod fixtures;
 pub mod ground;
 pub mod layout;
 pub mod lots;
 pub mod place;
-pub mod route;
-pub mod track;
 pub mod wood;
 
-#[cfg(test)]
-mod dry_exit_tests;
 #[cfg(test)]
 mod fit_tests;
 #[cfg(test)]
@@ -34,10 +31,6 @@ mod fixtures_tests;
 #[cfg(test)]
 mod place_tests;
 #[cfg(test)]
-mod route_tests;
-#[cfg(test)]
 mod tests;
-#[cfg(test)]
-mod track_tests;
 #[cfg(test)]
 mod wood_tests;

@@ -13,6 +13,7 @@
     reason = "two half-sizes summed at a map's few hundred feet, where no overflow is possible"
 )]
 
+use super::Counts;
 use std::collections::HashMap;
 
 use super::bundle::Bundle;
@@ -69,13 +70,13 @@ fn cell(v: f64) -> i64 {
 
 impl Standing {
     /// File a homestead standing.
-    pub fn add(&mut self, p: Placed, tests: &mut u64) {
+    pub fn add(&mut self, p: Placed, tests: &mut Counts) {
         let k = self.all.len();
         let b = p.bbox;
         for i in cell(b.0 - b.2 / 2.0)..=cell(b.0 + b.2 / 2.0) {
             for j in cell(b.1 - b.3 / 2.0)..=cell(b.1 + b.3 / 2.0) {
                 self.cells.entry((i, j)).or_default().push(k);
-                *tests += 1;
+                tests.add("write@add", 1);
             }
         }
         self.all.push(p);
@@ -83,11 +84,11 @@ impl Standing {
 
     /// The homesteads whose boxes meet the box from `lo` to `hi`, each once.
     #[must_use]
-    pub fn meeting(&self, lo: Pt, hi: Pt, tests: &mut u64) -> Vec<usize> {
+    pub fn meeting(&self, lo: Pt, hi: Pt, tests: &mut Counts) -> Vec<usize> {
         let mut out: Vec<usize> = Vec::new();
         for i in cell(lo.0)..=cell(hi.0) {
             for j in cell(lo.1)..=cell(hi.1) {
-                *tests += 1;
+                tests.add("index_examined@meeting", 1);
                 for &k in self.cells.get(&(i, j)).map_or(&[][..], Vec::as_slice) {
                     let b = self.all[k].bbox;
                     if !out.contains(&k)
@@ -117,7 +118,7 @@ pub fn shades(house: Rect, plot: Rect, reach: f64, side: f64) -> bool {
 
 /// Does `b` leave every yard and bed its sun - this house shading no standing plot, no standing house shading its plots?
 #[must_use]
-pub fn sun_ok(b: &Bundle, standing: &Standing, tests: &mut u64) -> bool {
+pub fn sun_ok(b: &Bundle, standing: &Standing, tests: &mut Counts) -> bool {
     let (reach, side) = (SUN_FT.0 + SUN_FT.1, SUN_FT.1);
     let house = b.boxes[0];
     let north = house.1 - house.3 / 2.0;
@@ -125,7 +126,7 @@ pub fn sun_ok(b: &Bundle, standing: &Standing, tests: &mut u64) -> bool {
     let hi = (house.0 + house.2 / 2.0 + side, north);
     for k in standing.meeting(lo, hi, tests) {
         let p = &standing.all[k];
-        *tests += 1 + p.beds.len() as u64;
+        tests.add("pt_test@sun_ok", 1 + p.beds.len() as u64);
         if shades(house, p.yard, reach, side)
             || p.beds.iter().any(|&g| shades(house, g, reach, side))
         {
@@ -143,7 +144,7 @@ pub fn sun_ok(b: &Bundle, standing: &Standing, tests: &mut u64) -> bool {
             tests,
         );
         near.iter().all(|&k| {
-            *tests += 1;
+            tests.add("pt_test@sun_ok", 1);
             !shades(standing.all[k].house_box, plot, reach, side)
         })
     })
@@ -192,7 +193,7 @@ pub fn quad_gap(a: &[Pt; 4], b: &[Pt; 4]) -> f64 {
 
 /// Would this house (its rectangle and rake) stand nearer a standing house than the two roofs' drip lines and the path between?
 #[must_use]
-pub fn too_near(house: Rect, rot: f64, standing: &Standing, tests: &mut u64) -> bool {
+pub fn too_near(house: Rect, rot: f64, standing: &Standing, tests: &mut Counts) -> bool {
     let lim = EAVE_FT.0 + EAVE_FT.1;
     let reach = lim + house.2.hypot(house.3) / 2.0;
     let mine = corners(house, rot);
@@ -205,7 +206,7 @@ pub fn too_near(house: Rect, rot: f64, standing: &Standing, tests: &mut u64) -> 
         .into_iter()
         .any(|k| {
             let (r, t) = standing.all[k].house;
-            *tests += 16;
+            tests.add("seg_test@too_near", 16);
             quad_gap(&mine, &corners(r, t)) < lim
         })
 }
@@ -213,11 +214,11 @@ pub fn too_near(house: Rect, rot: f64, standing: &Standing, tests: &mut u64) -> 
 /// Does the straight line from the house's center to any part's cross a stream, or a stream run through a part - a farmstead
 /// keeps to one bank?
 #[must_use]
-pub fn across_a_stream(b: &Bundle, streams: &[(Pt, Pt)], tests: &mut u64) -> bool {
+pub fn across_a_stream(b: &Bundle, streams: &[(Pt, Pt)], tests: &mut Counts) -> bool {
     let h = (b.house.0, b.house.1);
     b.boxes[1..].iter().any(|r| {
         streams.iter().any(|&(s0, s1)| {
-            *tests += 2;
+            tests.add("seg_test@across_a_stream", 2);
             crossing((h, (r.0, r.1)), (s0, s1)) || seg_in_box(s0, s1, *r)
         })
     })
@@ -256,7 +257,7 @@ pub fn on_free_ground(
     b: &Bundle,
     ground: &Ground,
     beyond: &dyn Fn(Pt) -> bool,
-    tests: &mut u64,
+    tests: &mut Counts,
 ) -> bool {
     b.boxes.iter().all(|r| {
         !ground.rect_refused(
@@ -270,7 +271,7 @@ pub fn on_free_ground(
 
 /// Does the yard open onto ground a way can reach - its box, grown by a cell, touching the reach?
 #[must_use]
-pub fn opens(b: &Bundle, reach: &Reach, tests: &mut u64) -> bool {
+pub fn opens(b: &Bundle, reach: &Reach, tests: &mut Counts) -> bool {
     let y = b.boxes[1];
     let g = CELL;
     reach.touches(

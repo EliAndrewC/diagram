@@ -15,6 +15,7 @@
     reason = "the plane geometry's own names"
 )]
 
+use super::Counts;
 use crate::field::fan::Pt;
 
 /// A pond: its center and half-axes (ft).
@@ -137,15 +138,15 @@ pub fn edge_dist(p: Pt, ring: &[Pt]) -> f64 {
     reason = "a sample count of at most 900"
 )]
 #[must_use]
-pub fn crosses_poly(a: Pt, b: Pt, ring: &[Pt], tests: &mut u64) -> bool {
+pub fn crosses_poly(a: Pt, b: Pt, ring: &[Pt], tests: &mut Counts) -> bool {
     let n = ring.len();
-    *tests += n as u64;
+    tests.add("seg_test@crosses_poly", n as u64);
     if (0..n).any(|i| segments_cross(a, b, ring[i], ring[(i + 1) % n])) {
         return true;
     }
     let (step, cap) = SAMPLING;
     let k = ((((b.0 - a.0).hypot(b.1 - a.1)) / step) as usize).clamp(2, cap);
-    *tests += (k + 1) as u64;
+    tests.add("pt_test@crosses_poly", (k + 1) as u64);
     (0..=k).any(|i| {
         let f = i as f64 / k as f64;
         in_poly((a.0 + (b.0 - a.0) * f, a.1 + (b.1 - a.1) * f), ring)
@@ -190,7 +191,7 @@ fn cell(v: f64, size: f64) -> i64 {
 
 /// How many pairs of points lie within `reach` of each other, by cells of side `reach`.
 #[must_use]
-pub fn pairs_within(points: &[Pt], reach: f64, tests: &mut u64) -> u64 {
+pub fn pairs_within(points: &[Pt], reach: f64, tests: &mut Counts) -> u64 {
     if reach <= 0.0 || points.len() < 2 {
         return 0;
     }
@@ -202,8 +203,8 @@ pub fn pairs_within(points: &[Pt], reach: f64, tests: &mut u64) -> u64 {
             .or_default()
             .push(p);
     }
-    let near = |u: Pt, v: Pt, tests: &mut u64| {
-        *tests += 1;
+    let near = |u: Pt, v: Pt, tests: &mut Counts| {
+        tests.add("dist@pairs_within", 1);
         u64::from((u.0 - v.0).hypot(u.1 - v.1) < reach)
     };
     let mut count = 0;
@@ -256,13 +257,13 @@ fn seg_box(a: Pt, b: Pt, pad: f64) -> Box4 {
 
 /// Does the run pass within `gap` of the ring: an edge crossed, a corner of either near the other, or a leg's end inside it?
 #[must_use]
-pub fn crosses_fabric(run: &[Pt], ring: &[Pt], rb: Box4, gap: f64, tests: &mut u64) -> bool {
+pub fn crosses_fabric(run: &[Pt], ring: &[Pt], rb: Box4, gap: f64, tests: &mut Counts) -> bool {
     run.windows(2).any(|w| {
         let (a, b) = (w[0], w[1]);
         if !boxes_meet(seg_box(a, b, gap), rb) {
             return false;
         }
-        *tests += 2 * ring.len() as u64 + 2;
+        tests.add("seg_test@crosses_fabric", 2 * ring.len() as u64 + 2);
         (0..ring.len()).any(|j| {
             let (c, d) = (ring[j], ring[(j + 1) % ring.len()]);
             segments_cross(a, b, c, d) || seg_dist(c, a, b) < gap
@@ -275,13 +276,13 @@ pub fn crosses_fabric(run: &[Pt], ring: &[Pt], rb: Box4, gap: f64, tests: &mut u
 
 /// How many of the steadings the run fouls within `gap`, each skipped whose box, widened by `gap`, misses the run's.
 #[must_use]
-pub fn fabric_hits(run: &[Pt], fabric: &[(Vec<Pt>, Box4)], gap: f64, tests: &mut u64) -> usize {
+pub fn fabric_hits(run: &[Pt], fabric: &[(Vec<Pt>, Box4)], gap: f64, tests: &mut Counts) -> usize {
     let rb = poly_box(run);
     let rb = (rb.0 - gap, rb.1 - gap, rb.2 + gap, rb.3 + gap);
     fabric
         .iter()
         .filter(|(ring, b)| {
-            *tests += 1;
+            tests.add("index_examined@fabric_hits", 1);
             boxes_meet(*b, rb) && crosses_fabric(run, ring, *b, gap, tests)
         })
         .count()
@@ -341,11 +342,11 @@ pub fn grown(ring: &[Pt], out: f64) -> Vec<Pt> {
 
 /// The gateway stepped toward `toward` until it stands clear of every obstacle by the margin, or the tries run out.
 #[must_use]
-pub fn pull_clear(pt: Pt, toward: Pt, obstacles: &[&[Pt]], tests: &mut u64) -> Pt {
+pub fn pull_clear(pt: Pt, toward: Pt, obstacles: &[&[Pt]], tests: &mut Counts) -> Pt {
     let (margin, step, tries) = CLEAR_OF_CROP;
     let mut p = pt;
     for _ in 0..tries {
-        *tests += obstacles.len() as u64;
+        tests.add("pt_test@pull_clear", obstacles.len() as u64);
         if !obstacles
             .iter()
             .any(|o| in_poly(p, o) || edge_dist(p, o) < margin)
@@ -391,14 +392,17 @@ impl Checker {
     /// How many of the path's segments foul the crop, the pond, the brook or the water, and how many pairs of its crossings
     /// stand too close (0 = clear).
     #[must_use]
-    pub fn violations(&self, path: &[Pt], tests: &mut u64) -> u64 {
+    pub fn violations(&self, path: &[Pt], tests: &mut Counts) -> u64 {
         let (berth, _, pad, apart) = WATER_RULES;
         let mut bad = 0;
         let mut hits = Vec::new();
         for w in path.windows(2) {
             let (a, b) = (w[0], w[1]);
             let bx = seg_box(a, b, 0.0);
-            *tests += (self.avoid.len() + self.brook.len() + 2 * self.waters.len()) as u64;
+            tests.add(
+                "index_examined@violations",
+                (self.avoid.len() + self.brook.len() + 2 * self.waters.len()) as u64,
+            );
             let meets = |s: &(Pt, Pt)| boxes_meet(bx, seg_box(s.0, s.1, 0.0));
             let waters: Vec<&(Pt, Pt)> = self.waters.iter().filter(|s| meets(s)).collect();
             let landing: Vec<&[Pt]> = self
@@ -467,7 +471,7 @@ pub struct TrackSite<'a> {
 /// The track out from `start`: the gateway stepped clear of the crop, then the bearings swept nearest the ideal first, ranked by
 /// wet ground, then steadings, then crop and water; the start it was drawn from beside what it found.
 #[must_use]
-pub fn connector(site: &TrackSite, start: Pt, tests: &mut u64) -> (Pt, Swept) {
+pub fn connector(site: &TrackSite, start: Pt, tests: &mut Counts) -> (Pt, Swept) {
     let ((ox, oy), (fx, fy)) = site.lean;
     let base = (LEAN.0 * oy + LEAN.1 * fy)
         .atan2(LEAN.0 * ox + LEAN.1 * fx)
@@ -492,7 +496,7 @@ pub fn connector(site: &TrackSite, start: Pt, tests: &mut u64) -> (Pt, Swept) {
     swings.sort_by_key(|k| k.abs());
     let mut best: Option<((u64, usize, u64), Vec<Pt>)> = None;
     for k in swings {
-        *tests += 1;
+        tests.add("candidate@connector", 1);
         let theta = (base + step * f64::from(k)).to_radians();
         let far = past_the_frame(start, theta, site.canvas.0, site.canvas.1);
         let path = vec![

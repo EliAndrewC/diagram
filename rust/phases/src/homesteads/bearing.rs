@@ -6,6 +6,7 @@
 //!     farmhouse bearing - research/questions/0029-farmhouses-minka.drawing.html: common bearing plus the lane's turn plus a by-eye spread, held under 30 degrees by a soft limit; no quarter-turned house
 
 use super::layout::{hjit, Rect};
+use super::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::dist;
 
@@ -77,7 +78,7 @@ impl Margin {
         clippy::cast_precision_loss,
         reason = "sample counts of a few thousand and cell indices of a few hundred"
     )]
-    pub fn new(ring: &[Pt], along: f64, tests: &mut u64) -> Self {
+    pub fn new(ring: &[Pt], along: f64, tests: &mut Counts) -> Self {
         let step = FOLLOW.3;
         let mut samples = Vec::new();
         for i in 0..ring.len() {
@@ -99,7 +100,7 @@ impl Margin {
                 .or_default()
                 .push(i);
         }
-        *tests += 2 * samples.len() as u64;
+        tests.add("write@new", 2 * samples.len() as u64);
         Self {
             samples,
             cells,
@@ -113,7 +114,7 @@ impl Margin {
         clippy::cast_possible_truncation,
         reason = "cell indices of a few hundred"
     )]
-    fn nearest(&self, p: Pt, tests: &mut u64) -> Option<usize> {
+    fn nearest(&self, p: Pt, tests: &mut Counts) -> Option<usize> {
         let reach = FOLLOW.2;
         let mut pad = MARGIN_CELL;
         while pad <= reach * 2.0 {
@@ -129,7 +130,7 @@ impl Margin {
             for i in i0..=i1 {
                 for j in j0..=j1 {
                     for &k in self.cells.get(&(i, j)).map_or(&[][..], Vec::as_slice) {
-                        *tests += 1;
+                        tests.add("index_query@nearest", 1);
                         let d = dist(p, self.samples[k]);
                         if d <= pad && best.is_none_or(|(bd, bk)| (d, k) < (bd, bk)) {
                             best = Some((d, k));
@@ -152,7 +153,7 @@ impl Margin {
         clippy::many_single_char_names,
         reason = "the plane geometry's own names"
     )]
-    pub fn follow(&self, p: Pt, tests: &mut u64) -> f64 {
+    pub fn follow(&self, p: Pt, tests: &mut Counts) -> f64 {
         let n = self.samples.len();
         let Some(k) = self.nearest(p, tests).filter(|_| n >= 3) else {
             return 0.0;
