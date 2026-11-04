@@ -1,0 +1,46 @@
+# The homesteads port, piece by piece (feature 444 T30)
+
+Load this file when: you continue porting the homesteads stage to Rust - what is ported, what is left, and where each piece's
+Python lives. The stage's map is `homesteads.map.md`; the plan's decisions are `plan.md` T30 (D1-D5, CLEAR on 2026-11-04).
+
+The Rust lives in `rust/phases/src/homesteads/`, behind `#![cfg_attr(not(test), expect(dead_code))]` in `homesteads.rs` until the stage
+is whole: nothing calls it but its tests, so it lands with T27-T29 without changing a map, and is wired into `STAGES` (a thin
+`homesteads/stages.py` door) only when every piece below is in. Each piece keeps its Python's research claims at its constants.
+
+## Ported (2026-11-04)
+
+| piece | Rust | Python it replaces |
+|---|---|---|
+| the free ground's raster, a rectangle at nine points | `ground.rs` (`Ground`) | `homesteads/boundary.py` `FreeGround`, `SiteCorridors` |
+| the reach, labeled once | `ground.rs` (`Ground::reach`, `Reach`) | `homesteads/region.py` `SeatRegion` (the flood) |
+| the positional hash, the yard, the garden and its beds | `layout.rs` | `houses.py` `_hjit`, `homestead_parts/yards.py` `_yard_area_ft2`/`_yard_dims`, `rolling/bundle.py` `_garden_beds` |
+| the storehouse annex, the byre | `layout.rs` (`kura`, `byre`) | `farm_fixtures.py` `kura_rect`, `shrines_wells/byres.py` `byre_part` |
+| the farmhouse's turn | `bearing.rs` | `rolling/bearing.py` (`MarginBearing`, `house_rot`, `turned_box`) |
+| the fixtures | `fixtures.rs` | `homestead_parts/fixture_seats.py` (`lay_fixtures` and every kind's seats) |
+| the bundle and its envelope | `bundle.rs` | `rolling/bundle.py` `_bundle_geom`, `_bundle_layout` (nucleated), `_rake_parts`, `_bundle_envelope` |
+| the households' lots | `lots.rs` | `rolling/lot.py` (`size_ladder`, `quota_carriers`, `larger_first`, `HouseholdLots`) |
+| Python's string-seeded `random.Random` | `pyrand.rs` (`from_text`, `shuffled`, `sha512`) | - (pinned against CPython's own draws) |
+
+## Left, in the order they are needed
+
+1. The fit rules a layout is asked (`rolling/fit.py` `_parts_fit` and its rules, 309-431 and 433-930): the wood seat covered, the
+   south sun of the yard and beds (`_sun_corridor_ok`, `_yard_sun_conflict`, `_gardens_sun_ok`, `_persimmon_sun_conflict`), the yard
+   opening onto the reach (`SeatRegion.opens`), the house's wall on the bund (`houses.py` `_wall_on_the_bund`), the parts across a
+   stream, the parts and fixtures off the field (`_rect_hits`), the beds off the water (`_rect_on_water`), the registry's admission
+   of each part (`rolling/lot.py` `bundle_admitted` - the overlap matrix the standing registry reads: port the pairs a homestead's
+   parts meet at seating time), the house on a tread, too near a neighbor, unreachable.
+2. The placer (`rolling/place.py` `_place_bundle_nucleated`, 191-300): the house box refused, the four sides' union and each side's own
+   box against the raster and the homesteads' grid, the one computed move off a single neighbor, the least-shaded side kept.
+3. The growth (`homesteads/growth.py` `grow_the_margin`, `footprint`, `seat_toward`, `settled_seat`, `keeps_its_distance`,
+   `keeps_every_gap`; the first house by `capacity.py` `free_seats`), the passage share and tight seats.
+4. The wood share (`homestead_parts/wood_share.py` `WoodShares`: the lattice, the bars, the crowns) - priced in the derivation at its
+   lattice square (a GUESS, labeled there).
+5. The track out (`ways/track.py` `choose_track_out`, via `homesteads/household_ways.py` `chose_the_track`, `near_the_cluster`).
+6. The households' ways (`rolling/gap_ways.py` `lay_the_ways`: the lane layers, the flood, each door's exits, the taut run, the lane
+   law's rules each leg asks - `fixtures_clear`, `parts_clear`, `lawful_leg`, `tree_admits` - and `access.reserve`); the lane law's
+   rules into `rust/phases/src/law/` (D1).
+7. The dispersed hamlet's front row and ranks (`homesteads/stages.py` `_seat_households_as`, `capacity.py`) and the row village
+   (`homesteads/rows.py`) - D4; a grove farm's layout (`rolling/dispersed.py`).
+8. The door: `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
+   `rolling/lot.py` `record_parts`), draws the farmsteads (`Settlement.farmsteads`) and reserves the seating; the counters (D5); the
+   Python above deleted (D4); `make rust-gate` through the stage; the tests moved.
