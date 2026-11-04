@@ -4,6 +4,7 @@
 //!     the homesteads' tests - NONE: fixtures and assertions, deciding nothing about the place
 
 use super::ground::{Ground, CELL};
+use super::layout::{beds, hjit, yard, yard_area_ft2, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO};
 
 #[test]
 fn a_ring_takes_the_cells_whose_centers_lie_inside_it() {
@@ -74,4 +75,53 @@ fn the_reach_is_the_free_ground_joined_to_its_seeds() {
     // seeded on both sides, both are reached
     let both = g.reach(&[(20.0, 20.0), (120.0, 120.0)], &mut t);
     assert!(both.touches((100.0, 10.0), (150.0, 30.0), &mut t));
+}
+
+#[test]
+fn the_rolls_are_the_python_seatings_and_the_yard_is_log_normal_about_its_median() {
+    // the hash as the Python seating computes it (`Settlement._hjit`): sin(12.9898 x + 4.1414 y + 7.373 salt) x 43758.5453, fractional
+    let v = (100.0f64 * 12.9898 + 200.0 * 4.1414 + 3.0 * 7.373).sin() * 43_758.545_3;
+    assert!((hjit(100.0, 200.0, 3.0) - (v - v.floor())).abs() < 1e-12);
+    assert!((0.0..1.0).contains(&hjit(-5.0, 7.0, 9.0)));
+    // the yard: never under the least, larger for a larger house at the same seat
+    let small = yard_area_ft2((10.0, 10.0), 30.0, 20.0);
+    let big = yard_area_ft2((10.0, 10.0), 60.0, 34.0);
+    assert!(small >= YARD_MIN_TSUBO * TSUBO_FT2 - 1e-9 && big > small);
+    let y = yard((10.0, 10.0), 46.0, 28.0);
+    assert!(y.0 == 0.0 && y.1 > 14.0 && (y.2 / y.3 - 1.45).abs() < 1e-9);
+}
+
+#[test]
+fn the_garden_lies_on_its_side_and_splits_in_one_household_in_four() {
+    let mut forms = [0usize; 4];
+    for k in 0..400 {
+        let seat = (f64::from(k) * 37.0, f64::from(k) * 11.0);
+        for side in SIDES {
+            let b = beds(seat, 46.0, 28.0, side);
+            for r in &b {
+                match side {
+                    Side::E | Side::SE => assert!(b.len() == 2 || r.0 > 0.0),
+                    Side::W | Side::SW => assert!(b.len() == 2 || r.0 < 0.0),
+                }
+                assert!(r.2 >= 6.0 - 1e-9 && r.3 > 0.0);
+            }
+            if side == Side::SE {
+                forms[b.len() - 1] += 1;
+                if b.len() == 2 {
+                    let flank = b[0].0 > 0.0 && b[1].0 < 0.0;
+                    let stacked = (b[0].0 - b[1].0).abs() < 1e-9;
+                    forms[2 + usize::from(stacked && !flank)] += 1;
+                }
+            }
+        }
+    }
+    // about one in four split, and both split forms occur
+    assert!(forms[1] > 60 && forms[1] < 150, "{forms:?}");
+    assert!(forms[2] > 0 && forms[3] > 0, "{forms:?}");
+    // a garden too narrow to split stays whole
+    assert!(beds((0.0, 0.0), 8.0, 28.0, Side::E).len() <= 2);
+    let tiny = (0..200)
+        .map(|k| beds((f64::from(k), 3.0), 6.0, 6.0, Side::W).len())
+        .max();
+    assert_eq!(tiny, Some(1));
 }
