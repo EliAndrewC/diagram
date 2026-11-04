@@ -44,3 +44,11 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 8. The door: `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
    `rolling/lot.py` `record_parts`), draws the farmsteads (`Settlement.farmsteads`) and reserves the seating; the counters (D5); the
    Python above deleted (D4); `make rust-gate` through the stage; the tests moved.
+
+## Size of what is left (measured 2026-11-04, `wc -l`)
+
+The track out (`ways/track.py` 549, `thread.py` 268, `gateway.py` 71, `dry_exit.py` 212, `clearance.py` 395, `route.py` 423,
+`cluster_edge.py` 79), the households' ways (`rolling/gap_ways.py` 591, `access.py` 823, `passage.py` 329, `route.py` 305), the lane law
+the ways ask (`ways/law/` and `law_water.py`, 1,431), the dispersed and row forms (`homesteads/rows.py` 690, `capacity.py`, the front
+row in `stages.py`, `rolling/dispersed.py`) and the door: about 7,000 lines of Python. The seat's way-out walk
+(`rust/phases/src/seat/exit.rs`) is the dry exit's form already in Rust, for the track's fallback to reuse.
