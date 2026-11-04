@@ -128,6 +128,7 @@ CONSUMED_PUBLIC = [
     "push_out_of",
     "route_around",
     "seat_cluster",
+    "stage_waterward",
     "shallow_crossing",
     "stage_notice",
     "stage_water_frame",

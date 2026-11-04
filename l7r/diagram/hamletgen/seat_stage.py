@@ -79,6 +79,10 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     seating falls back down, decided in Rust and written here; the brook's fords opened first, so every way is routed over the brook
     there and nowhere else. NOTHING IS DRAWN, and no ground is reserved: the stage runs before the houses without constraining them.
 
+    Steps:
+        l7r.diagram.settlement.Settlement.toe_band
+        l7r.diagram.hamletgen.ways.route.set_crossing
+
     Research:
         every way pays the crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `BROOK_CROSSING_COST_FT` set on the router for the whole roll
         the wind is kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a seat off the wind is recorded, never the wind renamed

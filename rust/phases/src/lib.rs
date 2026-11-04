@@ -11,6 +11,7 @@ mod pyrand;
 mod seat;
 mod sink;
 mod water_frame;
+mod waterward;
 
 use pyo3::prelude::*;
 
@@ -30,5 +31,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(sink::py::stage_sink, m)?)?;
     m.add_function(wrap_pyfunction!(seat::py::stage_seat, m)?)?;
     m.add_function(wrap_pyfunction!(hem::py::stage_hem, m)?)?;
+    m.add_function(wrap_pyfunction!(waterward::py::stage_waterward, m)?)?;
     Ok(())
 }

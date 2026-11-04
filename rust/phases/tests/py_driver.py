@@ -144,3 +144,9 @@ hem_line = [(0.0, 50.0 * k) for k in range(25)]
 hem_ring = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)]
 laid = l7r_phases.stage_hem(hem_line, (-1.0, 0.0), (0.0, 1.0), (float("inf"), 1), 4, hem_ring, [], [[(-300.0, 300.0), (-1.0, 300.0), (-1.0, 700.0), (-300.0, 700.0)]])
 assert laid["dry"] and laid["grain"][0] > 0.0 and laid["counts"]
+
+# the waterward stage (feature 444 T29), as the thin `stage_waterward` calls it: a polder's strips on its water-facing flanks
+ring = [(1000.0 + 50.0 * k, 1000.0) for k in range(21)] + [(2000.0, 1000.0 + 50.0 * k) for k in range(21)] + [(2000.0 - 50.0 * k, 2000.0) for k in range(21)] + [(1000.0, 2000.0 - 50.0 * k) for k in range(21)]
+ww = l7r_phases.stage_waterward([(ring, [(1000.0, 1500.0)])], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), (1.0, 0.0))
+assert ww["flanks"] == ["W", "S"] and len(ww["strips"]) == 2 and ww["counts"]
+assert l7r_phases.stage_waterward([], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), None)["strips"] == []

@@ -67,6 +67,17 @@
    "items_at_40": 191,
    "items_at_80": 221
   },
+  "hem": {
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.7,
+   "derivation": "specs/444-work-budget-program/phases/hem_greenfield.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/hem_greenfield.verdict-2.txt",
+   "items_at_20": 18531,
+   "items_at_40": 29549,
+   "items_at_80": 48991,
+   "reason": "the hem is a new stage (T28) whose count today is already the Rust rebuild, not old code it replaces: its derivation, SOUND, prices the same work 2.9% above the measured count (the furrows' rows at their typical crossing, the ground's per-size means)"
+  },
   "waterward": {
    "status": "budgeted",
    "per_thing": 1.0,

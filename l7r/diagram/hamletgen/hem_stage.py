@@ -54,6 +54,9 @@ def stage_hem(s: Settlement, plan: SitePlan) -> None:
     registries (`dry_polys`, `block_polys`), the plan's net and the grain figures on the title card, and its ink. A field with no hem
     (the polder) lays none.
 
+    Steps:
+        l7r.diagram.settlement.fields.ink.dry_plots
+
     Research:
         the dry plots' records - NONE: written from the Rust's, as the field wrote them before T28
         the coarse grain - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the grain drawn and the room left, beside the need the field set"""

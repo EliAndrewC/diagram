@@ -44,7 +44,8 @@ from .pondstock import stage_pond_stock
 from .seat_stage import stage_seat
 from .sink_stage import stage_sink
 from .washing import stage_washing
-from .water import stage_water_frame, stage_waterward
+from .water import stage_water_frame
+from .waterward_stage import stage_waterward
 from .ways import stage_track, stage_web
 from .ways.last_resort import WebRefused
 
