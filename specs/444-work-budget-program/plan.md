@@ -537,26 +537,35 @@ Occasions: settlement-review on the pool hamlets the rebuilt seat moves (a clust
 6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
 
 
-### T28 (<why: the finding or measurement that files it>)
+### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro and Kashikawa, measured 2026-11-04 (`make map`): their manifests moved against HEAD); glyph-check only if a glyph is redrawn (none: the dry plots keep their ink).
+
+- **Approach**: the field hands on what the hem is laid from (`Field.hem`: the canal's course, its side, the fall, the bounds, the seed, with the field's water at its widths) and a new Rust stage `hem` (`rust/phases/src/hem.rs`, behind `hamletgen/hem_stage.py`) lays it after the seat, a column pushed past the settlement's ground where its first strip would stand on it (`field::dry::past_keep`); measured 2026-11-04 (`make rust-gate`): 69 seeds and 15 replays through water_frame, field, sink, seat and hem, 0 failing, where the seat refused about one seed in ten on the field's old hem.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T28 Approach (checklist part A)
+### T28 Decisions
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+- **D1 - the order**: the hem after the seat, before the waterward fringe and the houses: the seat chosen on ground with no dry plot yet, the hem laid behind it (0006, form (b) of the research pass of 2026-11-04: paddy, houses, dry fields behind).
+- **D2 - the seam**: the field's Rust hands the hem's inputs on (`Field.hem`, its water as segments with widths), the field's Python door keeps them on the plan (`plan.hem_in`); the hem's door writes the dry plots' records, the no-build registries, the plan's net, the grain drawn and the room left on the title card, and the dry plots' ink (`ink.dry_plots`, the field's own drawing).
+- **D3 - the settlement's ground**: the seat's band from the field's margin out past its two half-depths and the belt's far edge (`hem_stage.settlement_ground`: the standoff a GUESS from 0029; the belt's far edge the 0071 convention), the band's length along the margin; a column whose first strip would stand on it laid behind it, a strip's depth at a time, at most the ground's own reach.
+- **D4 - the failing list**: the seat's entries re-charged to the field, each with the field's own input frozen (`make rust-gate REFREEZE=field`), so no fixture replays the old field's hem into the seat (the round arbiter's ruling).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+### T28 Approach (2026-11-04T12:38Z)
+
+1. **The goal, in the world.** A clustered hamlet's houses stand between the paddy's canal and its dry fields where the settlement stands on the paddy's high edge; the dry hem runs just upslope of the canal along the rest (0006).
+2. **The constraints.** FR-005, FR-019 to FR-022; 0006's finding and drawing page as redrawn on 2026-11-04; the round arbiter's ruling on ask:444-T27-seat-hem.
+3. **Where each comes from.** R: 0006 (yamamoto-torisu-1984, Torisu Hongo: paddy in front, the dry fields behind the settlement). O: the seat's refusal tallies, measured 2026-11-04 (`make rust-gate`): on every refused seed the dry hem under or behind every wind-facing margin.
+4. **Do they describe the world here?** One clustered plateau-edge hamlet attests the order; the hamlet's map is a clustered settlement on its paddy's high edge, the case attested.
+5. **The order.** After the seat, before the waterward fringe and the houses.
+6. **The exits.** Green: `make rust-gate` 0 failing through hem; the claims round IN-STEP; Inashiro's and Kashikawa's settlement-reviews; the hem's counted work within a budget derived for it. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None new: the hem's own search is the field's, unchanged; the push past the settlement's ground stops at the first clear depth.
+8. **The budget.** One landing, with T27 (the hem is a Rust stage after the seat, which must be Rust before it).
+9. **Done, measured.** `make rust-gate` 0 failing, measured 2026-11-04 (69 seeds, 15 replays).
+10. **Before moving a constant.** None moved: the hem's figures stay the field's (0006, 0011).
+11. **Before fitting things into room.** The room is the settlement's ground, kept by the hem rather than the seat squeezed off its margin.
+
+**Performance work?** no - the hem's work moves from the field's count to its own stage's; its budget derived with it.
 
