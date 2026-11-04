@@ -103,3 +103,29 @@ def test_a_name_a_module_only_re_exports_is_found_where_it_is_defined(tmp_path: 
     stage.write_text("from l7r.diagram import law\n\ndef stage_x(s):\n    law.undeckable_at(s)\n")
     got, missing = wbb.called_files(tmp_path, [stage])
     assert [p.relative_to(tmp_path).as_posix() for p in got] == ["l7r/diagram/bridges.py"] and missing == []
+
+
+def test_a_rust_phase_s_module_file_and_the_crate_modules_it_reaches_ride_too_and_no_two_files_share_a_name(tmp_path: Path) -> None:
+    """Feature 444 T26's MODE AUDITs: the sink's bundle held the field's `brook.rs` in place of its own (copied by bare name), and
+    neither held `src/sink.rs` above the stage's directory or `src/course.rs`, which the stage reaches by `crate::course::`."""
+    ham = tmp_path / "l7r" / "diagram" / "hamletgen"
+    ham.mkdir(parents=True)
+    (ham / "sink_stage.py").write_text("def stage_sink(s):\n    pass\n")
+    src = tmp_path / "rust" / "phases" / "src"
+    (src / "sink").mkdir(parents=True)
+    (src / "field").mkdir()
+    (src / "sink.rs").write_text("pub mod py;\n")
+    (src / "sink" / "py.rs").write_text("pub fn stage_sink() { crate::course::drawn(); }\n")
+    (src / "sink" / "brook.rs").write_text("pub fn span() {}\n")
+    (src / "field" / "brook.rs").write_text("pub fn brook() {}\n")
+    (src / "course.rs").write_text("pub fn drawn() {}\n")
+    got = [p.relative_to(tmp_path).as_posix() for p in wbb.stage_files(tmp_path, "sink")]
+    assert got == [
+        "l7r/diagram/hamletgen/sink_stage.py",
+        "rust/phases/src/sink.rs",
+        "rust/phases/src/sink/brook.rs",
+        "rust/phases/src/sink/py.rs",
+        "rust/phases/src/course.rs",
+    ]
+    names = {wbb.bundled_name(tmp_path, p) for p in [src / "sink" / "brook.rs", src / "field" / "brook.rs"]}
+    assert names == {"rust__phases__src__sink__brook.rs", "rust__phases__src__field__brook.rs"}
