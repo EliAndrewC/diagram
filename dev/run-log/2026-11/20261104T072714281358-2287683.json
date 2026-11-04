@@ -1,0 +1,50 @@
+{
+  "utc": "2026-11-04T07:27:14Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 333,
+  "result": "green",
+  "commit": "f6b45ac5a",
+  "cache": "warm",
+  "mode": "full",
+  "selected": 9754,
+  "host": {
+    "load": [
+      4.13,
+      4.79
+    ],
+    "mem_avail_mb": [
+      8050,
+      9565
+    ],
+    "cpu_temp_c": [
+      83.0,
+      94.0
+    ],
+    "stall_s": {
+      "cpu": 1.4,
+      "io": 0.4,
+      "io_full": 0.4,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 52167,
+      "package": 31119
+    }
+  },
+  "phases": {
+    "preflight": 29.0,
+    "static": 49.0,
+    "format": 0.0,
+    "typecheck": 2.0,
+    "reference": 0.0,
+    "hooks-test": 4.0,
+    "counters-inert": 18.0,
+    "pytest": 245.0,
+    "floors": 10.0,
+    "test-full": 259.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "an engine file that is not Python changed: rust/phases/src/sink/brook.rs",
+  "collected": 9754
+}
