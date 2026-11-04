@@ -19,11 +19,12 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 | the fixtures | `fixtures.rs` | `homestead_parts/fixture_seats.py` (`lay_fixtures` and every kind's seats) |
 | the bundle and its envelope | `bundle.rs` | `rolling/bundle.py` `_bundle_geom`, `_bundle_layout` (nucleated), `_rake_parts`, `_bundle_envelope` |
 | the households' lots | `lots.rs` | `rolling/lot.py` (`size_ladder`, `quota_carriers`, `larger_first`, `HouseholdLots`) |
+| the fit rules: the south sun both ways, the eave gap on turned roofs, one bank, free ground, the yard's opening | `fit.rs` (`Standing`, `sun_ok`, `too_near`, `across_a_stream`, `on_free_ground`, `opens`) | `rolling/fit.py` `_sun_corridor_ok`, `_gardens_sun_ok`, `_house_too_near_a_neighbor`, `_parts_across_stream`, `_rect_hits`/`_rect_on_water` (by the raster), `SeatRegion.opens` |
 | Python's string-seeded `random.Random` | `pyrand.rs` (`from_text`, `shuffled`, `sha512`) | - (pinned against CPython's own draws) |
 
 ## Left, in the order they are needed
 
-1. The fit rules a layout is asked (`rolling/fit.py` `_parts_fit` and its rules, 309-431 and 433-930): the wood seat covered, the
+1. The fit rules still owed (the rest ported in `fit.rs`): the wood seat covered, the persimmon's sun conflict, the house's wall on the bund, the registry's admission beyond the raster, the house unreachable - the fit rules a layout is asked (`rolling/fit.py` `_parts_fit` and its rules, 309-431 and 433-930): the wood seat covered, the
    south sun of the yard and beds (`_sun_corridor_ok`, `_yard_sun_conflict`, `_gardens_sun_ok`, `_persimmon_sun_conflict`), the yard
    opening onto the reach (`SeatRegion.opens`), the house's wall on the bund (`houses.py` `_wall_on_the_bund`), the parts across a
    stream, the parts and fixtures off the field (`_rect_hits`), the beds off the water (`_rect_on_water`), the registry's admission

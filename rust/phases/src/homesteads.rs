@@ -14,11 +14,14 @@
 
 pub mod bearing;
 pub mod bundle;
+pub mod fit;
 pub mod fixtures;
 pub mod ground;
 pub mod layout;
 pub mod lots;
 
+#[cfg(test)]
+mod fit_tests;
 #[cfg(test)]
 mod fixtures_tests;
 #[cfg(test)]
