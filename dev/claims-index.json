@@ -4861,13 +4861,14 @@
  "l7r/diagram/_invocation.py::OPERATIONS#invocation guard": {
   "body": "20508512f0d4d313",
   "claim": "invocation guard - NONE: process-tree inspection, no map decision",
-  "code": "11f75549890d4ec7",
-  "core": "91b3fde0221c8afa",
+  "code": "76eb068918d0e6a7",
+  "core": "cb4db401ecff87bf",
   "date": "2026-11-02",
   "note": "a registry from module to make target and prompting cost, including the new coverage-exempt row; nothing on the map is decided",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/_invocation.py::_Ladder#invocation guard": {
@@ -7633,8 +7634,8 @@
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its polygon": {
   "body": "1ef84ee76abf07e4",
   "claim": "its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)",
-  "code": "17a51b29be3a2c57",
-  "core": "d00b92c7283fed66",
+  "code": "6a96eabb1e85eef8",
+  "core": "5bcdd7b9d7c8f9bd",
   "date": "2026-11-04",
   "note": "the 16-gon only approximates the pond disc; it is plumbing",
   "pages": {},
@@ -7646,8 +7647,8 @@
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its salts, guards and sentinels": {
   "body": "1ef84ee76abf07e4",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)",
-  "code": "27f457ee7740d7ed",
-  "core": "d00b92c7283fed66",
+  "code": "5c7c06bfdd5e688f",
+  "core": "5bcdd7b9d7c8f9bd",
   "date": "2026-11-04",
   "note": "the pi/8 step of that same 16-gon; plumbing",
   "pages": {},
@@ -7656,13 +7657,25 @@
   "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/cluster.py::exit_walls#no watercourse crossed off its fords": {
-  "body": "445106163092a0ed",
-  "claim": "no watercourse crossed off its fords - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, so the way out may not cross the brook or a watercourse it feeds",
-  "code": "ecae80ba477cb13a",
-  "core": "d00b92c7283fed66",
+ "l7r/diagram/hamletgen/cluster.py::exit_walls#tameike berth": {
+  "body": "1ef84ee76abf07e4",
+  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
+  "code": "1f3863f4378246bd",
+  "core": "5bcdd7b9d7c8f9bd",
   "date": "2026-11-04",
-  "note": "the code shown files every segment of `plan.sink_brook` as a line the way may not cross and leaves no gap at a ford, though the docstring says \"the brook gapped at its fords\" and the page lets a way cross \"only at one of them\"; I need `connector_dry_exit`'s line test, or how `sink_brook` stores its fords, to tell whether a way can cross at a ford; also 0035 speaks only of the brook, so \"a watercourse it feeds\" rests on 0081, not this page",
+  "note": "nothing on the lanes page sizes a pond's berth, so the 80 ft is a fair guess",
+  "pages": {},
+  "research": "",
+  "triaged": "2026-11-04",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/cluster.py::exit_walls#the brook crossed only at its fords": {
+  "body": "b01b8eb87373a5e2",
+  "claim": "the brook crossed only at its fords - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place; the brook reaches the way out as the seat gapped it at its fords (`plan.watercourses`, written by `stage_seat`), so a ford is open to it and the rest of the brook is not",
+  "code": "f0a92ba81e0a74f9",
+  "core": "5bcdd7b9d7c8f9bd",
+  "date": "2026-11-04",
+  "note": "the brook reaches the walls only as `plan.watercourses` gapped at its fords, so the way crosses at a crossing place or keeps to its bank",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
@@ -7671,25 +7684,13 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
-  "verdict": "CANNOT-TELL"
- },
- "l7r/diagram/hamletgen/cluster.py::exit_walls#tameike berth": {
-  "body": "1ef84ee76abf07e4",
-  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
-  "code": "9c9d9e21e63a2ace",
-  "core": "d00b92c7283fed66",
-  "date": "2026-11-04",
-  "note": "nothing on the lanes page sizes a pond's berth, so the 80 ft is a fair guess",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#the way out's walls": {
   "body": "1ef84ee76abf07e4",
   "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
-  "code": "8536d49fbd12a559",
-  "core": "d00b92c7283fed66",
+  "code": "1a130adad0083ba1",
+  "core": "5bcdd7b9d7c8f9bd",
   "date": "2026-11-04",
   "note": "the toe, the wet rings, the field and the pond walled, and the water lines kept, as a track off wet ground that runs off the map",
   "pages": {
@@ -10353,16 +10354,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::_write_field#the comb's records": {
-  "body": "a3ffaf61d9327517",
+  "body": "93b325cff557c7ba",
   "claim": "the comb's records - NONE: written from the Rust's; the figures it adds are claimed where they stand (`ROW_FT_DEFAULT`, `WEIR_THICK_FALLBACK_FT`, `DITCH_BANK_FT`, `BROOK_W`)",
-  "code": "3510f338f0423af8",
-  "core": "30df98cce432f284",
-  "date": "2026-11-01",
-  "note": "this is writing records, registries and work counts from the Rust's net; its figures are claimed where they are defined",
+  "code": "9060c8d5d4aeabd1",
+  "core": "316f1741336b034b",
+  "date": "2026-11-04",
+  "note": "records and registries written from the Rust's net; the figures it reads are claimed at their constants; the moved dry-plot registry is ordering only",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
@@ -21384,41 +21384,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#bank seats by distance": {
-  "body": "7bd3460b64ad1840",
+  "body": "13f43efe31ae060f",
   "claim": "bank seats by distance - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking",
-  "code": "ac97284f339ed981",
-  "core": "87976cb0db302a0d",
+  "code": "41a015fdb37eea30",
+  "core": "a873cfa00d721f07",
   "date": "2026-11-04",
-  "note": "all seats in one ranking, nearest `toward` first",
+  "note": "the midpoints and eighths of every edge are ranked together, nearest the houses first",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:8e78365da5853109",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#its search steps and tolerances": {
-  "body": "7bd3460b64ad1840",
+  "body": "13f43efe31ae060f",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.125 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.25 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.375 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.625 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.75 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.875 (a search step or candidate the pass ruled with its row)",
-  "code": "4063ca98bb48032f",
-  "core": "87976cb0db302a0d",
+  "code": "981899dea58d5e9b",
+  "core": "a873cfa00d721f07",
   "date": "2026-11-04",
-  "note": "the eighths are a value of ours; the page gives the rule, not the fractions",
+  "note": "the eighths are a candidate step; the record gives \"the place nearest the houses that has room\", not fractions",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat on the bank": {
-  "body": "7bd3460b64ad1840",
+  "body": "13f43efe31ae060f",
   "claim": "sty seat on the bank - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: each bank seat set in from the parcel's edge by half the bank's width - the map's own inset since feature 385 T10 (`BANK_INSET_FT` the fallback) - so the sty stands on the bank and not out by the canal",
-  "code": "214bfab15c67d4e6",
-  "core": "87976cb0db302a0d",
+  "code": "0d2d3dec4610e26b",
+  "core": "a873cfa00d721f07",
   "date": "2026-11-04",
-  "note": "each seat is moved `inset` along the line to the parcel's centroid (`vx / vl * inset`), so it sits only inset times cos(angle) in from its edge; at the eighths of a long edge of an elongated parcel that is a fraction of half the bank (about 3.6 ft on a 4:1 parcel at 0.125), so the 8x6 sty reaches the canal edge, where the page says \"set in from the edge of the plot by half the bank's width\"; the code should set it in along the edge's inward normal",
-  "outside": true,
+  "note": "each seat is now set in along its edge's inward normal by half the 23 ft bank (the map's inset, `BANK_INSET_FT` the fallback), so the earlier cos-angle shortfall is gone",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21427,7 +21426,7 @@
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:02c8bea0e76c8504",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_centroid#pond-bank geometry": {
   "code": "df36f378ab2c0872",
@@ -21437,18 +21436,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#its search steps and tolerances": {
+ "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#its polygon": {
   "body": "f71fd6497871ab68",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 16 (reserved disc drawn as a 16-gon)",
-  "code": "48f897a08576539e",
+  "claim": "its polygon - NONE: it decides nothing about the place - 16 (the reserved disc drawn as a 16-gon)",
+  "code": "1d13f4a5466adebb",
   "core": "37121cffc86825cf",
   "date": "2026-11-04",
-  "note": "16 is how many sides the keep-out disc is drawn with, which decides nothing about the place; it should be NONE, as exit_walls' \"its polygon\" is",
-  "outside": true,
+  "note": "the 16-gon only approximates the reserved disc; the radius is decided and claimed elsewhere",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nearest pond first": {
   "body": "f71fd6497871ab68",
@@ -46380,6 +46378,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid._cells#spatial indexes": {
+  "body": "c7a07d3070203330",
+  "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
+  "code": "8fb58d9f463cad73",
+  "core": "cb9e494c73f12091",
+  "date": "2026-11-04",
+  "note": "a work counter's cell tally, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid._trees_for#its salts, guards and sentinels": {
   "body": "032aabb9a9bc9996",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.05 (the same margin); 0.02 (arc chord-error margin)",
@@ -46424,37 +46434,40 @@
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.rects#spatial indexes": {
   "body": "bd0717b1c30893f1",
   "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
-  "code": "56eb719052694b40",
-  "core": "03dec1d07ff26828",
+  "code": "98bf3fb0ddae07f4",
+  "core": "c64d60d62dba4048",
   "date": "2026-11-03",
   "note": "filing and a counter",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.rings#spatial indexes": {
   "body": "e7d35f373eeb5da3",
   "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
-  "code": "d242c7b21e3efa32",
-  "core": "28841dcb8b165f3a",
+  "code": "4cfe7b78a19ab718",
+  "core": "493f1817bd91d51d",
   "date": "2026-11-03",
   "note": "filing and counters",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.segs#spatial indexes": {
   "body": "3ce4c91c1a36f6a3",
   "claim": "spatial indexes - NONE: prefilters that prune, the caller's test decides",
-  "code": "a8567a05c4addb1b",
-  "core": "7060c8786d02ff06",
+  "code": "d1f354ee23745957",
+  "core": "3206decb0a36f101",
   "date": "2026-11-03",
   "note": "filing and a counter",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::KeepoutGrid.shape#spatial indexes": {
@@ -46518,13 +46531,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.__init__#spatial indexes": {
-  "code": "b56a34c9811758aa",
-  "core": "e2f618d1aec631ee",
+  "code": "968c6abdbe01e61e",
+  "core": "2164e5a04ae918ed",
   "date": "2026-10-03",
   "note": "plumbing, no physical decision",
   "pages": {},
   "research": "",
-  "triaged": "2026-10-27",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/indexes.py::RingIndex.edge_within#spatial indexes": {
@@ -50673,37 +50686,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#its search steps and tolerances": {
-  "body": "b355eb8c61d94505",
+  "body": "3d2e4bc49c8f5e66",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (stand-in size for a record with no `w` (as T29 C))",
-  "code": "f9d4830dab2eec76",
-  "core": "a8c72a2ea157dd31",
+  "code": "326237681c80ee0f",
+  "core": "bfcf21bdc5409b24",
   "date": "2026-11-04",
-  "note": "the stand-in size of 6 is a value of ours",
+  "note": "a stand-in size for a record with no `w`; the record is silent",
   "pages": {},
   "research": "",
-  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance": {
-  "body": "b355eb8c61d94505",
-  "claim": "sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33",
-  "code": "b1284df03d20b4b4",
-  "core": "a8c72a2ea157dd31",
+  "body": "3d2e4bc49c8f5e66",
+  "claim": "sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the plank crossings cleared as they are recorded, in `bridges` (feature 444 T29: the key read was `footbridges`, which nothing writes - the bug filed in feature 417 T33)",
+  "code": "d57b4228548a9015",
+  "core": "bfcf21bdc5409b24",
   "date": "2026-11-04",
-  "note": "known (417 T33): the code reads `footbridges`, which nothing writes, so no plank crossing in `bridges` is cleared; the half-diagonal plus 2 ft is as stated",
-  "outside": true,
+  "note": "the GUESS (half-diagonal plus 2 ft, against the other's half-diagonal) is what the code does, but the claim that plank crossings are \"cleared as they are recorded, in `bridges`\" depends on `M[\"bridges\"]` records carrying `x`, `y`, `w`, `h`. A record with no `x` is skipped silently, and one with no `h` gets the 6 stand-in rather than its span. I need the record shape `bridges` writes",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty on the bank": {
-  "body": "b355eb8c61d94505",
+  "body": "3d2e4bc49c8f5e66",
   "claim": "sty on the bank - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike: the dike is field ground the sty may stand on",
-  "code": "9e38e844228f077c",
-  "core": "a8c72a2ea157dd31",
+  "code": "1143432905159c3b",
+  "core": "bfcf21bdc5409b24",
   "date": "2026-11-04",
-  "note": "nothing holds the sty off the bank; the pen stands on the fish-pond bank",
+  "note": "the bank is field ground with no no-build registry over it, so the sty stands on the dike by its pond",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f"
   },
@@ -60950,8 +60960,8 @@
  "l7r/diagram/settlement/land/outline.py::natural_outline#its search steps and tolerances": {
   "body": "1e4c7e5c73c2f00a",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 12 (fewest wave sample points); 5 (smallest rounding radius the search tries); 8 (buffer curve resolution)",
-  "code": "e9eeb83b0f5542d5",
-  "core": "a66772a924a73ef3",
+  "code": "f5a03fc3105e3003",
+  "core": "d30c422e05d339d9",
   "date": "2026-10-25",
   "note": "sampling and search floors",
   "pages": {},
@@ -61481,8 +61491,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#bare treads": {
   "body": "586f39781f692c05",
   "claim": "bare treads - marshes-and-wetlands-shitchi.drawing: every trodden way kept bare through the reeds in every role (the record gives the defensive belt's causeway)",
-  "code": "9e8cb6f1978961c1",
-  "core": "c2cd04e8c7b38736",
+  "code": "5d162ffa9fd42d00",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "every corridor is filed as a keep-out; the causeway's bare tread is the record's case",
   "pages": {
@@ -61492,13 +61502,14 @@
   "rests": [
    "0057-marshes-and-wetlands-shitchi.drawing.html:6c4de979924f3878"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#edge shaped": {
   "body": "586f39781f692c05",
   "claim": "edge shaped - reed-beds-and-the-marshs-edge-yoshihara.drawing: rounded and waved, a pond fringe left as laid",
-  "code": "b59e21129fdbf141",
-  "core": "c2cd04e8c7b38736",
+  "code": "767841ad2acdd4e9",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "`natural_outline` rounds and waves every role except pond_fringe",
   "pages": {
@@ -61508,13 +61519,14 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:3168d02a5ef8ea6d"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its crescent pond pad": {
   "body": "586f39781f692c05",
   "claim": "its crescent pond pad - reed-beds-and-the-marshs-edge-yoshihara.drawing: 2 (reeds kept 2 ft plus a tuft's reach off a crescent pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
-  "code": "c434c2ea1856e023",
-  "core": "c2cd04e8c7b38736",
+  "code": "478a775091a914ac",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "known (417 T34): slot 4 (crescents) is cut at `pond_pad` = 2.0 + MARSH_TUFT_R*bs, where the page draws the reeds \"right to the water's edge\". The claim is incomplete: for role 'pond_fringe' the pad is 2 ft with no tuft's reach",
   "pages": {
@@ -61525,13 +61537,14 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triaged": "2026-11-04",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its figures against 0074": {
   "body": "586f39781f692c05",
   "claim": "its figures against 0074 - reed-beds-and-the-marshs-edge-yoshihara.drawing: 1.5 (bare rim the reeds keep off the pond, where the page draws reeds to the water's edge) - a departure the code keeps until feature 417 T34",
-  "code": "071a9a4af5d85b89",
-  "core": "c2cd04e8c7b38736",
+  "code": "ad919c7d8993a43e",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "known (417 T34): slot 5 (the pond's ellipse) keeps a `min(pad, 1.5)` bare rim, where the page draws reeds \"right to the water's edge\"",
   "pages": {
@@ -61542,25 +61555,27 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triaged": "2026-11-04",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#its salts, guards and sentinels": {
   "body": "586f39781f692c05",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter reach for crests near the box); 5 (keep-out grid slot id); 6 (keep-out grid slot id)",
-  "code": "8586fc6ae62d19c6",
-  "core": "c2cd04e8c7b38736",
+  "code": "66b35bfd4f9da0b5",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the prefilter reach and the grid slot ids are plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh edge form": {
   "body": "586f39781f692c05",
   "claim": "marsh edge form - reed-beds-and-the-marshs-edge-yoshihara.drawing: every edge cut and open; the uncut edge's alder and willow carr is never rolled",
-  "code": "4840c190d6034788",
-  "core": "c2cd04e8c7b38736",
+  "code": "c1581db5b63ad082",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the page attests two edge forms (\"Each settlement should take one or the other\") and calls drawing only the cut edge \"a shortfall\", not a deliberate deviation; the code fixes the cut form. Either roll the alder and willow carr per settlement, or file the task and state the claim as `a departure the code keeps until feature NNN Tnn`",
   "pages": {
@@ -61570,13 +61585,14 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:97697d59c9e28e0c"
   ],
+  "triaged": "2026-11-04",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh roles": {
   "body": "586f39781f692c05",
   "claim": "marsh roles - marshes-and-wetlands-shitchi.drawing: the toe and a defensive belt",
-  "code": "898282a01416cf0f",
-  "core": "c2cd04e8c7b38736",
+  "code": "d2c6f9b5da3808a5",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the 'toe' and 'defense' roles match the marsh below the fields and the wet belt that hugs the walls",
   "pages": {
@@ -61589,13 +61605,14 @@
    "0057-marshes-and-wetlands-shitchi.drawing.html:7751ffdb23ce30ec",
    "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#no-build marsh": {
   "body": "586f39781f692c05",
   "claim": "no-build marsh - ground-too-wet-to-build-on.drawing: every marsh but a pond fringe is no-build ground",
-  "code": "bca91369518381a2",
-  "core": "c2cd04e8c7b38736",
+  "code": "a6dbef2b3826f0ba",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "`role != \"pond_fringe\"` adds the drawn ground to block_polys; the pond fringe is exempt as the page says",
   "pages": {
@@ -61606,13 +61623,14 @@
    "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#polder waterside role": {
   "body": "586f39781f692c05",
   "claim": "polder waterside role - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a reed fringe along the polder's water side",
-  "code": "f425a7778ccaea2e",
-  "core": "c2cd04e8c7b38736",
+  "code": "ba010e3ae811bec7",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the 'waterside' role is clipped outside the filed dike block, matching a reed fringe on every flank but the landward one",
   "pages": {
@@ -61623,13 +61641,14 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#pond fringe role": {
   "body": "586f39781f692c05",
   "claim": "pond fringe role - reservoir-ponds-tameike.drawing: reeds round a pond's shore",
-  "code": "9a47400c946773c3",
-  "core": "c2cd04e8c7b38736",
+  "code": "2ecee88e12ea9f84",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "a fringe ring at the shore, clipped to outside the water",
   "pages": {
@@ -61640,36 +61659,39 @@
    "0061-reservoir-ponds-tameike.drawing.html:a70a5b42abaea94f",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reed tile": {
   "body": "586f39781f692c05",
   "claim": "reed tile - CONVENTION: the drawn ground filled with the reed tile",
-  "code": "653d0f6acbdd8a66",
-  "core": "c2cd04e8c7b38736",
+  "code": "0d4f1623b4611b7e",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "filling the drawn ground with the reed tile is purely how the marsh is shown; the page calls the tile blocks a map drawing convention",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the dooryards": {
   "body": "586f39781f692c05",
   "claim": "reeds off the dooryards - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); no reed inside the urban-clearance halo round dooryards",
-  "code": "39b6d69e767afa0d",
-  "core": "c2cd04e8c7b38736",
+  "code": "f499f53e7b944deb",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the cited pages say nothing about the urban-clearance halo",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds off the mounds": {
   "body": "586f39781f692c05",
   "claim": "reeds off the mounds - reservoir-ponds-tameike.drawing: no reed or tint on a dike crest or a pond bank",
-  "code": "7ffde642f5b7c4fb",
-  "core": "c2cd04e8c7b38736",
+  "code": "2f7713d82fdd6faf",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "dike crests (slot 1) and pond banks (slot 2) are kept bare at the tuft's pad: \"nor on any raised rim around a pond\"",
   "pages": {
@@ -61679,13 +61701,14 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#reeds to the water and the paddy": {
   "body": "586f39781f692c05",
   "claim": "reeds to the water and the paddy - reed-beds-and-the-marshs-edge-yoshihara.drawing: reeds stand at the water's edge and meet the paddy",
-  "code": "1958768780b3fcf1",
-  "core": "c2cd04e8c7b38736",
+  "code": "c85d0d159dd9c8b0",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "field_pad=0.0, the field rings at pad 0 and the watercourses (slot 3) at their drawn width with no pad; the pond and crescent rims carry their own filed claims",
   "pages": {
@@ -61696,25 +61719,27 @@
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#tread keep-out width": {
   "body": "586f39781f692c05",
   "claim": "tread keep-out width - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 3 bs either side of every way",
-  "code": "c38578e2d037e39a",
-  "core": "c2cd04e8c7b38736",
+  "code": "4cf1ef0b67374265",
+  "core": "ccdb785846700d25",
   "date": "2026-11-03",
   "note": "the cited pages give no figure for the 3 bs either side of a way",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#its salts, guards and sentinels": {
   "body": "0d9b03175733d259",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (the reach past the reeds' tint round the ring: the registry's pieces asked, and the field cut to it)",
-  "code": "e757cf35b454d268",
-  "core": "3d414513e891a845",
+  "code": "acd51d8e3fb78b80",
+  "core": "335615ea524a35af",
   "date": "2026-11-04",
   "note": "the 40 widens the box that the registry and field clip are asked over; with every cut at pad 0, ground past the ring's own bounds changes nothing drawn",
   "pages": {},
@@ -61726,8 +61751,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#no-build marsh": {
   "body": "7d0b65bffec29579",
   "claim": "no-build marsh - ground-too-wet-to-build-on.drawing: every marsh but a pond fringe is no-build ground, so the fringe files neither a no-build block nor hard ground (`wet_polys`)",
-  "code": "0e6b3ea3236fb2e2",
-  "core": "3d414513e891a845",
+  "code": "3735dbe1f4fe7a00",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "the fringe goes only to `_covers` and `M['marshes']` as a `pond_fringe` and is never added to `wet_polys` or to any no-build block. That matches the page: \"A pond's reed fringe does not count as marsh\"",
   "pages": {
@@ -61745,8 +61770,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#pond fringe": {
   "body": "7d0b65bffec29579",
   "claim": "pond fringe - reservoir-ponds-tameike.drawing: reeds round a pond's shore",
-  "code": "602da584a4b186eb",
-  "core": "3d414513e891a845",
+  "code": "3e66d7da033b962d",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "a reed fringe drawn on wet ground at the shore; the finding covers any shallow pond (\"around a shallow pond\")",
   "pages": {
@@ -61763,8 +61788,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reed tile": {
   "body": "7d0b65bffec29579",
   "claim": "reed tile - CONVENTION: the drawn ground filled with the reed tile",
-  "code": "6c86a7d6f19511cf",
-  "core": "3d414513e891a845",
+  "code": "37adde76f30c41d9",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "the fringe's drawn ground filled by Cover(\"reed\", ...) is a drawing convention",
   "pages": {},
@@ -61775,19 +61800,20 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reeds meet the paddy": {
   "body": "0d9b03175733d259",
   "claim": "reeds meet the paddy - UNRESEARCHED: the reeds run flush to the paddy, the field kept bare with no pad; 0074 keeps reeds off the crop and draws them to the water's edge, and no page gives the gap between a reed bed and a field",
-  "code": "6b011217fcfe57cc",
-  "core": "3d414513e891a845",
+  "code": "22b18c715bef6330",
+  "core": "335615ea524a35af",
   "date": "2026-11-04",
   "note": "field_pad=0.0 runs the reeds flush to the field with no gap. The bundle's pages keep reeds off the crop but give no measured gap between a reed bed and a paddy (0057 §75's \"up to each field's low edge\" is a drawing statement, not a finding)",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reeds off the crop and the water": {
   "body": "7d0b65bffec29579",
   "claim": "reeds off the crop and the water - reed-beds-and-the-marshs-edge-yoshihara.drawing: \"The marsh's reeds already keep off crops\" - the field's dry plots kept bare, and the water at its drawn width",
-  "code": "2c14e25ad3c17ec2",
-  "core": "3d414513e891a845",
+  "code": "cb8f24763d6a87ce",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "dry plots go in `blocks` (cut from the ground and filed as keep-out), and streams, channels and field ditches are filed as rings at pad 0.0, so the reeds keep off the crops and the water and run to its edge",
   "pages": {
@@ -61805,8 +61831,8 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#reeds to the water's edge": {
   "body": "0d9b03175733d259",
   "claim": "reeds to the water's edge - reed-beds-and-the-marshs-edge-yoshihara.drawing: \"the reeds are drawn right to the water's edge\", the open water and the watercourses kept bare at their drawn width with no rim",
-  "code": "59d92f07d32f5e11",
-  "core": "3d414513e891a845",
+  "code": "230dbe5e69d54ea5",
+  "core": "335615ea524a35af",
   "date": "2026-11-04",
   "note": "the pond ellipse is cut from the drawn ground at pad 0, and the streams, channels and field ditches are filed bare at pad 0 (`keep.shape((0.0,), ...)`), so the reeds run to the water with no rim",
   "pages": {
@@ -61816,13 +61842,14 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#the bank beyond the reeds": {
   "body": "7d0b65bffec29579",
   "claim": "the bank beyond the reeds - reservoir-ponds-tameike.drawing: \"Reeds and the wet tint are kept off the embankment\" - the fringe is the ring the reeds stand on at the shore, and the bank is the ground beyond it: the pond bank's trees are seated past the fringe's width (`hamletgen/pondbank.py`, its seats beyond `SINK_FRINGE`), so the ring and the bank do not share ground",
-  "code": "eea4736eeb6a0b60",
-  "core": "3d414513e891a845",
+  "code": "6f4fe706bfac148a",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "reeds drawn only on the fringe ring, with no reed or tint carried onto the bank; the bank is ground beyond the reeds, as the page has it",
   "pages": {
@@ -61840,30 +61867,32 @@
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#the fringe left as laid": {
   "body": "0d9b03175733d259",
   "claim": "the fringe left as laid - CONVENTION: a pond fringe's ring not reshaped, as `marsh` leaves one",
-  "code": "9897aa0ca39d9da6",
-  "core": "3d414513e891a845",
+  "code": "fdb6ca15dd2bb083",
+  "core": "335615ea524a35af",
   "date": "2026-11-04",
   "note": "no smoothing or waving of the ring, a choice about how the edge is shown (0074 treats the edge's shaping as a drawing convention); the fringe's width is decided elsewhere",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#the record across a watercourse": {
   "body": "0d9b03175733d259",
   "claim": "the record across a watercourse - GUESS: the recorded fringe keeps its ground where a stream, a channel or a field ditch crosses it, which only the drawn cover leaves bare; the record holds one ring, and a watercourse is its own record",
-  "code": "919ffd010d3d1336",
-  "core": "3d414513e891a845",
+  "code": "872cf20f9da74e5b",
+  "core": "335615ea524a35af",
   "date": "2026-11-04",
   "note": "streams, channels and field ditches go only into the cover's keep-out (`keep.rings(water)`), never into `drawn_ground`, so the recorded ring keeps that ground; the pages cover how the reeds are drawn at the water, not what the record holds",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::WetGroundMixin.pond_reeds#ways and dooryards over the fringe": {
   "body": "7d0b65bffec29579",
   "claim": "ways and dooryards over the fringe - UNRESEARCHED: a way or a dooryard laid after the fringe is drawn over its reed tile",
-  "code": "9cb271608991ba21",
-  "core": "3d414513e891a845",
+  "code": "356da4795edf21a0",
+  "core": "335615ea524a35af",
   "date": "2026-11-03",
   "note": "none of the cited pages says whether a way or a dooryard covers a pond's reeds; 0074 keeps reeds off buildings only, and 0058 §34 takes the fringe out of the no-build rule",
   "pages": {},
@@ -62110,8 +62139,8 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::drawn_ground#plumbing": {
-  "code": "5ce615c216006fcb",
-  "core": "70a592c1aa50682a",
+  "code": "0d0f50f61f098dbd",
+  "core": "8a78d486330177e5",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "pages": {},
@@ -62142,13 +62171,14 @@
  "l7r/diagram/settlement/land/wet.py::pond_cut#its salts, guards and sentinels": {
   "body": "d516c2f21e03179b",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 25 (slack when matching the pond's own box)",
-  "code": "d889eb4b01078ab9",
-  "core": "3619b9e1918cbca1",
+  "code": "aff7e8c814b91918",
+  "core": "80b2fbea6271d879",
   "date": "2026-11-04",
   "note": "slack for matching the box, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#its salts, guards and sentinels": {
@@ -79948,8 +79978,8 @@
  "rust/phases/src/seat/fords.rs::gapped#the brook crossed only at a ford": {
   "body": "2c9ec429c93ef2f4",
   "claim": "the brook crossed only at a ford - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, the stream's segments gapped at each",
-  "code": "24fcd9ec4583de3f",
-  "core": "b66067c408b9868f",
+  "code": "ace2844866bb5be2",
+  "core": "5678b9ca8d81f325",
   "date": "2026-11-04",
   "note": "stream segments cut within `half` of each ford, so later ways cross only there",
   "pages": {
@@ -79959,17 +79989,19 @@
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/fords.rs::gapped#the crossing place's length": {
   "body": "2c9ec429c93ef2f4",
   "claim": "the crossing place's length - UNRESEARCHED: 0035 sets the places and their spacing, not their length; a 60 ft gap, `half` either side (Python's `FORD_HALF`), so a deck crossing near square lands on both banks",
-  "code": "7ae11a0ef300eb5f",
-  "core": "b66067c408b9868f",
+  "code": "7d0c94e25cd8fdb8",
+  "core": "5678b9ca8d81f325",
   "date": "2026-11-04",
   "note": "the page sets where crossing places go and how far apart, not how long they are; the gap of `half` either side is unresearched",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/index.rs::CELL#index cells": {
@@ -80264,13 +80296,14 @@
  "rust/phases/src/seat/margins.rs::Ground.back_share#the margins": {
   "body": "acd5dbe0efac59ea",
   "claim": "the margins - NONE: the seat's machinery; each rule's claim is at the unit that keeps it",
-  "code": "11693d9d63670dad",
-  "core": "b646dfba8a11b82d",
+  "code": "e0f982538b8b43fc",
+  "core": "3eb93794acb0f1df",
   "date": "2026-11-04",
   "note": "clipped-area share, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::Ground.hem#the margins": {
@@ -82466,12 +82499,13 @@
  "rust/phases/src/waterward.rs::face#strip at the dike's outer face": {
   "body": "1c26e871c5a310b2",
   "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch",
-  "code": "162f57647ec301ec",
-  "core": "de2f3e4eb865b457",
+  "code": "dd5cdaea13aedfd1",
+  "core": "49b2cc4ee1f06173",
   "date": "2026-11-04",
   "note": "outermost coordinate per bin, stepped in by `cut` at a notch; the pages place the face at the water's edge but not where the reeds stop",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::flanks#waterward flanks": {

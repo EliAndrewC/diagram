@@ -305,7 +305,7 @@ class PondStockMixin:
 
         Research:
             sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the dike is field ground the sty may stand on
-            sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the plank crossings cleared as they are recorded, in `bridges` (feature 444 T29: the key read was `footbridges`, which nothing writes - the bug filed in feature 417 T33)
+            sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the plank crossings cleared as they are recorded, in `bridges` - each at its deck's width `w` and its `span` for its length (feature 444 T29: the key read was `footbridges`, which nothing writes - the bug filed in feature 417 T33)
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (stand-in size for a record with no `w` (as T29 C))
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
@@ -314,7 +314,7 @@ class PondStockMixin:
             OPS["pt_test@pond_fixture_fits"] += sum(len(self.M.get(k, [])) for k in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "bridges"))
         for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "bridges"):
             for o in self.M.get(key, []):
-                if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
+                if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", o.get("span", 6)))) / 2:
                     return False
         # ...and the registry of what stands admits the sty as `pig_sty` will record it (feature 287, water W53)
         return self.admits("pig_sties", {"x": round(cx, 1), "y": round(cy, 1), "w": round(w, 1), "h": round(h, 1), "rot": round(rot, 1)})
