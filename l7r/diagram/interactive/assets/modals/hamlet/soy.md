@@ -2,7 +2,7 @@ About: Soybean (daizu) grew as a crop of its own in the dry fields (hatake), far
 was also sown in a row along the paddy bunds. The dry fields mostly took the higher, well-drained ground the paddy
 water could not reach, such as river levees and terraces. A farming household ate its soybeans at home, in Ehime in the
 late Meiji and Taisho years as tofu or boiled beans; near Kyoto a tenth of the shogun's land tax was reckoned in
-soybeans, though paid in silver.
+soybeans, though paid in silver. A farm household also set soybeans aside for the miso it made at home: in the Edo period, about 37 lb (17 kg) a person a year, children counted in, in one Shinano village, and about 20 lb (9 kg) in a northern domain's estimate.
 
 A dry field was worked in ridges and furrows, its crop growing in rows: ridges were the core of dry farming in north
 China by the sixth century, with rules for soybeans and millet, and Edo-period Japanese farmers still weeded along the
@@ -38,6 +38,6 @@ needs.
 
 Name: soy
 Covers: `dry_plots[crop=soy]` and their furrows
-Sources: fukui-kenshi-noji, nabunken-azemame, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, zgkpw-longzuo, nogyo-zensho-joun-sera, cropfarming-soybeans, wikipedia-soybean, maruyanagi-daizu-hatake, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain, ehime-kenshi-seiryoki, nagaokakyo-nengu-jono
-Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html, research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
-Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html, research/questions/0033-row-villages-resson.drawing.html
+Sources: fukui-kenshi-noji, nabunken-azemame, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, zgkpw-longzuo, nogyo-zensho-joun-sera, cropfarming-soybeans, wikipedia-soybean, maruyanagi-daizu-hatake, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain, ehime-kenshi-seiryoki, nagaokakyo-nengu-jono, shigematsu-2022
+Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html, research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0303-how-much-miso-and-soy-sauce-did-a-household-use-and-what-did-they-cost-era-by-era.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0033-row-villages-resson.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]

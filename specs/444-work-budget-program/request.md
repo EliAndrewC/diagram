@@ -402,3 +402,10 @@ operation is, then told an operation is one basic geometric step:
 And, while the landing ran:
 
 "Once you have finished with this, please do the entire next phase as well.  I'm going to sleep so I'd love to see it done when I get up in the morning."
+
+## 2026-11-04, the port continued in the GM's absence; budget overages held for his return
+
+Told that T26 and T22 had landed, T27's Rust seat was built with its budget SOUND twice past ten times its first figure, and the
+field's dry hem was being moved behind the settlement (T28):
+
+"Okay, I'm leaving for work soon - do you think you could actually complete the entire feature in my absence?  I can approve or reject any operation budget overages when I get back, but I'd prefer you to not need to stop mid-feature to ask, and to instead handle that with me after the Rust port is complete."

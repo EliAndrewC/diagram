@@ -12,7 +12,7 @@ spring, and turned gold in May, when a ripening field looked like a rice field i
 
 A single dry field averaged a tenth to a sixth of an acre in the late sixteenth and seventeenth centuries,
 the smallest under a twentieth and the largest a third. A farm family of the
-early 1900s worked about 2.5 acres of paddy and dry field together; how much of it bore barley is not recorded.
+early 1900s worked about 2.5 acres of paddy and dry field together; how much of it bore barley is not recorded. In the everyday pot barley was cooked in with the rice, in one account about one part to four in a paddy district of the Katsushika delta, and seven or eight parts in ten in the dry-field belt of the Kanto plain.
 
 Guesses:
 - How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
@@ -42,6 +42,6 @@ needs.
 
 Name: barley
 Covers: `dry_plots[crop=barley]` and their furrows
-Sources: omugi-jawiki, fukui-kenshi-noji, hakubaku-omugi-ichinen, zakkoku-kotobank, kotobank-nimosaku, nimosaku-jawiki, kotobank-kanden, shizen-teibo-jawiki, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
+Sources: omugi-jawiki, fukui-kenshi-noji, hakubaku-omugi-ichinen, zakkoku-kotobank, kotobank-nimosaku, nimosaku-jawiki, kotobank-kanden, shizen-teibo-jawiki, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, katemeshi-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
 Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html
 Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html, research/questions/0033-row-villages-resson.drawing.html
