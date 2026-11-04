@@ -304,14 +304,14 @@ class PondStockMixin:
 
         Research:
             sty on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the dike is field ground the sty may stand on
-            sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33
+            sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the plank crossings cleared as they are recorded, in `bridges` (feature 444 T29: the key read was `footbridges`, which nothing writes - the bug filed in feature 417 T33)
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (stand-in size for a record with no `w` (as T29 C))
         """
         w, h = self.px(STY_FT[0]), self.px(STY_FT[1])
         half = math.hypot(w, h) / 2 + self.px(2.0)
         if __debug__:  # every standing fixture read against the seat (S5)
-            OPS["pt_test@pond_fixture_fits"] += sum(len(self.M.get(k, [])) for k in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"))
-        for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "footbridges"):
+            OPS["pt_test@pond_fixture_fits"] += sum(len(self.M.get(k, [])) for k in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "bridges"))
+        for key in ("pig_sties", "houses", "farm_sheds", "byres", "retirement_houses", "wells", "kosatsuba", "bridges"):
             for o in self.M.get(key, []):
                 if "x" in o and math.hypot(float(o["x"]) - cx, float(o["y"]) - cy) < half + math.hypot(float(o.get("w", 6)), float(o.get("h", 6))) / 2:
                     return False

@@ -7656,6 +7656,23 @@
   "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/cluster.py::exit_walls#no watercourse crossed off its fords": {
+  "body": "445106163092a0ed",
+  "claim": "no watercourse crossed off its fords - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, so the way out may not cross the brook or a watercourse it feeds",
+  "code": "ecae80ba477cb13a",
+  "core": "d00b92c7283fed66",
+  "date": "2026-11-04",
+  "note": "the code shown files every segment of `plan.sink_brook` as a line the way may not cross and leaves no gap at a ford, though the docstring says \"the brook gapped at its fords\" and the page lets a way cross \"only at one of them\"; I need `connector_dry_exit`'s line test, or how `sink_brook` stores its fords, to tell whether a way can cross at a ford; also 0035 speaks only of the brook, so \"a watercourse it feeds\" rests on 0081, not this page",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
+  },
+  "research": "2882cfeb4389da9a",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:12e95881e8cf00ae",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#tameike berth": {
   "body": "1ef84ee76abf07e4",
   "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
@@ -21367,12 +21384,12 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#bank seats by distance": {
-  "body": "87fe9c97e593da88",
+  "body": "7bd3460b64ad1840",
   "claim": "bank seats by distance - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking",
-  "code": "b90616bb5fa09f26",
-  "core": "594333028697ea5b",
-  "date": "2026-10-18",
-  "note": "every seat on the bank in one ranking, nearest the houses first",
+  "code": "ac97284f339ed981",
+  "core": "87976cb0db302a0d",
+  "date": "2026-11-04",
+  "note": "all seats in one ranking, nearest `toward` first",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21380,38 +21397,37 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#its search steps and tolerances": {
-  "body": "87fe9c97e593da88",
+  "body": "7bd3460b64ad1840",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.125 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.25 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.375 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.625 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.75 (candidate seats at each eighth of a bank edge (the record gives the rule, not the fractions)); 0.875 (a search step or candidate the pass ruled with its row)",
-  "code": "8243cbb2b19c4edd",
-  "core": "594333028697ea5b",
-  "date": "2026-10-25",
-  "note": "candidate fractions of each bank edge; the ranking rule is 0025's",
+  "code": "4063ca98bb48032f",
+  "core": "87976cb0db302a0d",
+  "date": "2026-11-04",
+  "note": "the eighths are a value of ours; the page gives the rule, not the fractions",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat on the bank": {
-  "body": "87fe9c97e593da88",
+  "body": "7bd3460b64ad1840",
   "claim": "sty seat on the bank - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: each bank seat set in from the parcel's edge by half the bank's width - the map's own inset since feature 385 T10 (`BANK_INSET_FT` the fallback) - so the sty stands on the bank and not out by the canal",
-  "code": "6d3e2c8bec84ed73",
-  "core": "594333028697ea5b",
-  "date": "2026-10-18",
-  "note": "seat set in by half the map's own inset",
+  "code": "214bfab15c67d4e6",
+  "core": "87976cb0db302a0d",
+  "date": "2026-11-04",
+  "note": "each seat is moved `inset` along the line to the parcel's centroid (`vx / vl * inset`), so it sits only inset times cos(angle) in from its edge; at the eighths of a long edge of an elongated parcel that is a fraction of half the bank (about 3.6 ft on a 4:1 parcel at 0.125), so the 8x6 sty reaches the canal edge, where the page says \"set in from the edge of the plot by half the bank's width\"; the code should set it in along the edge's inward normal",
+  "outside": true,
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
   "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:02c8bea0e76c8504",
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/pondstock.py::_centroid#pond-bank geometry": {
   "code": "df36f378ab2c0872",
@@ -21422,25 +21438,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#its search steps and tolerances": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 16 (reserved disc drawn as a 16-gon)",
-  "code": "aa26ce11352be18b",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-25",
-  "note": "the disc drawn as a 16-sided polygon",
+  "code": "48f897a08576539e",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "16 is how many sides the keep-out disc is drawn with, which decides nothing about the place; it should be NONE, as exit_walls' \"its polygon\" is",
+  "outside": true,
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nearest pond first": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "nearest pond first - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: grow-out ponds walked nearest the seat",
-  "code": "744869daac5ae15d",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
-  "note": "grow-out ponds walked nearest the seat (the houses' place before they stand)",
+  "code": "60fae725a820994b",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "grow-out ponds walked nearest the seat, fry ponds excluded",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21448,16 +21464,15 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:8e78365da5853109"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#no seat in reach, no sty": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "no seat in reach, no sty - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: a household with no pond within that reach keeps none",
-  "code": "fd6394cd30e76fe5",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
-  "note": "returns None where no pond has a seat within reach",
+  "code": "220122324a557e04",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "returns None when no pond has a seat within `sty_in_reach`",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21465,29 +21480,27 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:af6a57ff5d562c70"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#seat reserved before the houses": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "seat reserved before the houses - NONE: placement order, the sty's rules unchanged",
-  "code": "dbbdbe6aea16535e",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
+  "code": "f5b99dab9e79401d",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
   "note": "placement order only",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat clear of the sluices": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "the reserved seat clear of the sluices - GUESS pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: `pond_fixture_fits` keeps the sty off a drawn sluice only; the record is silent on a sluice beside a sty",
-  "code": "933db2da00783088",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
-  "note": "the page records that no sluice decides where a sty stands, and that the record is silent on it",
+  "code": "d59e6bcf8c9167fa",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "the page records that no pond sluice is drawn and that the record is silent on a sty beside one",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21495,16 +21508,15 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:34ba2202d649041d"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat on the near half": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "the reserved seat on the near half - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: on the half of its pond's bank facing the seat (`sty_on_near_half`)",
-  "code": "479b95a87360eebf",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
-  "note": "sty_on_near_half",
+  "code": "6f45744c198a3f3e",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "`sty_on_near_half` asked of the seat center",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
@@ -21512,20 +21524,18 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat's disc": {
-  "body": "cf51ed5504ca7096",
+  "body": "f71fd6497871ab68",
   "claim": "the reserved seat's disc - GUESS: no homestead within the sty's half-diagonal, 2 ft and `STY_RESERVE_REACH_FT` (24 ft) of it",
-  "code": "e08415747f1db24e",
-  "core": "8ffca1232f595ac1",
-  "date": "2026-10-18",
-  "note": "the 2 ft, the 24 ft and the half-diagonal are on no page",
+  "code": "a21a82bbe9a835c8",
+  "core": "37121cffc86825cf",
+  "date": "2026-11-04",
+  "note": "the reach is the half-diagonal + 2 ft + 24 ft, as claimed; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::seat_faults#pond-bank geometry": {
@@ -21698,15 +21708,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::sty_on_near_half#sty on the near half": {
-  "code": "9a8b4d1d256b6881",
-  "core": "cd5736a264a6b775",
-  "date": "2026-10-03",
-  "note": "no farther than the pond's middle",
+  "body": "bea02e2cf90af2a2",
+  "claim": "sty on the near half - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing: no farther from the houses than the pond's middle",
+  "code": "58c9cb3c29c9c55f",
+  "core": "a138b9ffa003afcc",
+  "date": "2026-11-04",
+  "note": "no farther from the houses than the pond's centroid",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
-  "triage": "touched",
+  "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/rust_prefix.py::Reads#the Rust stage gate": {
@@ -22845,22 +22859,20 @@
  },
  "l7r/diagram/hamletgen/water/waterward.py::waterward_flanks#waterward flanks": {
   "body": "56d6c91c91d28a29",
-  "claim": "waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands",
-  "code": "77a06dfb25348260",
+  "claim": "waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back; a reed fringe along the low foot where the outfall drains and along the cross flank off the shore, the wild pond that feeds the polder at its head - its water drawn there as the pond, so no reed strip is laid off the head",
+  "code": "5ac32a0ad1d36553",
   "core": "2c77652cdc188604",
   "date": "2026-11-04",
-  "note": "the claim leaves out the head, but the page says the dike holds water back on \"every flank of a polder but the landward one\", and the head faces the wild pond that feeds it; the derivation is now in Rust (waterward.rs flanks, not in the bundle), so either the head goes in or the drawing page records leaving it out as a deviation",
+  "note": "asks the Rust `flanks` and does not derive it a second time",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/waterward_stage.py::stage_waterward#a notch through the whole band": {
   "body": "60193af801977ead",
@@ -50661,40 +50673,46 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#its search steps and tolerances": {
-  "body": "bfbaf940b553fadf",
+  "body": "b355eb8c61d94505",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N12, 2026-10-25) - 6 (stand-in size for a record with no `w` (as T29 C))",
-  "code": "a09cd33019ffe7a7",
-  "core": "b0fb9b0d25098f34",
-  "date": "2026-10-25",
-  "note": "stand-in size for a record with no `w`",
+  "code": "f9d4830dab2eec76",
+  "core": "a8c72a2ea157dd31",
+  "date": "2026-11-04",
+  "note": "the stand-in size of 6 is a value of ours",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance": {
-  "body": "bfbaf940b553fadf",
+  "body": "b355eb8c61d94505",
   "claim": "sty clearance - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); its half-diagonal plus 2 ft from every placed structure; the crossings it means to clear are read from `footbridges`, a key nothing writes (planks are recorded in `bridges`), so no footbridge is seen - a bug filed in feature 417 T33",
-  "code": "f534eb6c66e81404",
-  "core": "b0fb9b0d25098f34",
-  "date": "2026-10-25",
-  "note": "GUESS; 0025 gives no distance between a sty and other structures (the `footbridges` key bug is already filed in T33)",
+  "code": "b1284df03d20b4b4",
+  "core": "a8c72a2ea157dd31",
+  "date": "2026-11-04",
+  "note": "known (417 T33): the code reads `footbridges`, which nothing writes, so no plank crossing in `bridges` is cleared; the half-diagonal plus 2 ft is as stated",
+  "outside": true,
   "pages": {},
   "research": "",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty on the bank": {
-  "code": "7e9725cd54f1638e",
-  "core": "b0fb9b0d25098f34",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or class",
+  "body": "b355eb8c61d94505",
+  "claim": "sty on the bank - pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike: the dike is field ground the sty may stand on",
+  "code": "9e38e844228f077c",
+  "core": "a8c72a2ea157dd31",
+  "date": "2026-11-04",
+  "note": "nothing holds the sty off the bank; the pen stands on the fish-pond bank",
   "pages": {
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f"
   },
   "research": "c2db08a5a30de209",
-  "triage": "touched",
+  "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:8066dc6183c4f04d",
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:8cd57681bf90272e",
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html:c11f1476be15582c"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::SHRINE_RED#shrine vermilion": {
@@ -62122,16 +62140,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::pond_cut#its salts, guards and sentinels": {
-  "body": "32eea1c167e46970",
+  "body": "d516c2f21e03179b",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 25 (slack when matching the pond's own box)",
-  "code": "8bdaf23a4d158603",
-  "core": "bcc41c24d9909a59",
-  "date": "2026-10-25",
-  "note": "matching slack",
+  "code": "d889eb4b01078ab9",
+  "core": "3619b9e1918cbca1",
+  "date": "2026-11-04",
+  "note": "slack for matching the box, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#its salts, guards and sentinels": {
@@ -73098,6 +73115,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/tools/stage_sizes.py::REGISTRIES#plumbing": {
+  "body": "9e2d09f8e72b4c82",
+  "claim": "plumbing - NONE: which of the settlement's lists the table counts",
+  "code": "1185482d09bc0758",
+  "core": "e1e614a812e68541",
+  "date": "2026-11-04",
+  "note": "tool table keys",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/tools/work_budget.py::FIT#plumbing": {
   "body": "0c827fff559981cc",
   "claim": "plumbing - NONE: the exponent is fitted from 20 to 80 households (rubric S6)",
@@ -80456,11 +80485,11 @@
  },
  "rust/phases/src/seat/margins.rs::ranked#brook across the band": {
   "body": "285c51de3ab5fcc0",
-  "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: \"a site the brook does not cross is still preferred when two are otherwise level\", the brook's share the tie-break, never refused",
-  "code": "5d0243ca5bb19159",
+  "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: \"A hamlet site the brook does not cross is preferred when two sites are otherwise equally good\", the brook's share the tie-break, never refused",
+  "code": "3885838371fd404c",
   "core": "35117ff39b5a7a66",
   "date": "2026-11-04",
-  "note": "the brook's share is only the tie-break after tier and score, never a refusal",
+  "note": "the brook's share only breaks ties after tier and score, and never refuses a seat",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
@@ -80470,14 +80499,6 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542"
   ],
   "verdict": "IN-STEP"
- },
- "rust/phases/src/seat/margins.rs::ranked#how far the dry hem may lie from the seat before it is scored down: 2.0 * dep, the hem's reach from the margin": {
-  "code": "35117ff39b5a7a66",
-  "core": "35117ff39b5a7a66",
-  "date": "2026-11-04",
-  "note": "how far the dry hem may lie from the seat before it is scored down: 2.0 * dep, the hem's reach from the margin",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
   "body": "285c51de3ab5fcc0",
@@ -80566,6 +80587,18 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat/margins.rs::ranked#the dry hem's reach": {
+  "body": "285c51de3ab5fcc0",
+  "claim": "the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of the margin, the band's own depth, scores the seat down",
+  "code": "709989ecfcf114ed",
+  "core": "35117ff39b5a7a66",
+  "date": "2026-11-04",
+  "note": "`hem(mid, 2.0 * dep)` scored down, only where there are plots; a value of ours",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
@@ -82443,18 +82476,17 @@
  },
  "rust/phases/src/waterward.rs::flanks#waterward flanks": {
   "body": "762478c5662ef547",
-  "claim": "waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the foot and the cross flanks the village does not stand on, not the head where the reservoir stands",
-  "code": "a9a49212255e5ee2",
+  "claim": "waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back; a reed fringe along the low foot where the outfall drains and along the cross flank off the shore, the wild pond that feeds the polder at its head - its water drawn there as the pond, so no reed strip is laid off the head",
+  "code": "4b281db36af0051d",
   "core": "7ed2775fb839bc1b",
   "date": "2026-11-04",
-  "note": "the two cross flanks and the foot, minus the cluster's flank; the head is left to the feeding pond",
+  "note": "both flanks across the fall plus the low foot, minus the landward flank; no fringe at the head",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "research": "765c28e2d975a432",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
   "verdict": "IN-STEP"

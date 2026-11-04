@@ -22,13 +22,14 @@ from .plan import SitePlan
 
 def exit_walls(plan: SitePlan, toe: Poly | None = None, wet: Sequence[Poly] = ()) -> tuple[list[tuple[Poly, float]], list[tuple[Pt, Pt]]]:
     """The walls and the water lines a seat's dry way out keeps off (feature 287, ways W23), as `connector_dry_exit` walls them:
-    the wet toe and the reed fringe grown by the lane's width, the field, the tameike at its 80 ft berth; the drain's run and
-    every watercourse (the brook gapped at its fords) are lines it may not cross. Read by the seat (`seat_stage`) and by each
+    the wet toe and the reed fringe grown by the lane's width, the field, the tameike at its 80 ft berth; the drain's run off the
+    map (`plan.sink_brook`) and every watercourse (`plan.watercourses`: the ditches, the drawn channels and the brook as the seat
+    gapped it at its fords) are lines it may not cross. Read by the seat (`seat_stage`) and by each
     ladder rung the house seating falls back to (`seat_has_dry_exit`).
 
     Research:
         the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
-        no watercourse crossed off its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the way out may not cross the brook or a watercourse it feeds
+        the brook crossed only at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place; the brook reaches the way out as the seat gapped it at its fords (`plan.watercourses`, written by `stage_seat`), so a ford is open to it and the rest of the brook is not
         tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
         its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)

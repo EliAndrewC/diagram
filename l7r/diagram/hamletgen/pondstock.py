@@ -66,9 +66,14 @@ def _bank_seats(parcel: list[Any], toward: Pt, inset: float = BANK_INSET_FT) -> 
             rot = math.degrees(math.atan2(float(b[1]) - float(a[1]), float(b[0]) - float(a[0])))
             for f in fracs:
                 mx, my = float(a[0]) + (float(b[0]) - float(a[0])) * f, float(a[1]) + (float(b[1]) - float(a[1])) * f
-                vx, vy = cx - mx, cy - my
-                vl = math.hypot(vx, vy) or 1.0
-                seats.append(((mx + vx / vl * inset, my + vy / vl * inset), rot))
+                # ...SET IN ALONG THE EDGE'S INWARD NORMAL (the claims round of 2026-11-04): set in toward the parcel's centroid, a
+                # seat at an eighth of a long edge of an elongated parcel stood only inset x cos(angle) in from its edge, about 3.6 ft
+                # on a 4:1 parcel, and the sty reached the canal; the normal turned toward the centroid sets it the full inset in
+                el = math.hypot(float(b[0]) - float(a[0]), float(b[1]) - float(a[1])) or 1.0
+                nx, ny = -(float(b[1]) - float(a[1])) / el, (float(b[0]) - float(a[0])) / el
+                if nx * (cx - mx) + ny * (cy - my) < 0.0:
+                    nx, ny = -nx, -ny
+                seats.append(((mx + nx * inset, my + ny * inset), rot))
         seats.sort(key=lambda s: math.dist(s[0], toward))
         if __debug__:  # each edge's seats set in and ranked (S5)
             OPS["candidate@_bank_seats"] += len(seats) * max(1, len(seats).bit_length())
@@ -124,7 +129,7 @@ def reserve_sty_seat(s: Settlement, plan: SitePlan) -> tuple[Pt, float, int] | N
         the reserved seat on the near half - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the half of its pond's bank facing the seat (`sty_on_near_half`)
         the reserved seat clear of the sluices - GUESS research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: `pond_fixture_fits` keeps the sty off a drawn sluice only; the record is silent on a sluice beside a sty
         the reserved seat's disc - GUESS: no homestead within the sty's half-diagonal, 2 ft and `STY_RESERVE_REACH_FT` (24 ft) of it
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 16 (reserved disc drawn as a 16-gon)
+        its polygon - NONE: it decides nothing about the place - 16 (the reserved disc drawn as a 16-gon)
     """
     ponds = s.M.get("dikeponds") or []
     if plan.field_archetype != "mulberry_dike_fishpond" or not ponds or not plan.seat:

@@ -115,7 +115,7 @@ def test_seat_faults_names_each_rule_the_reserved_seat_fails() -> None:
     ponds, near = s.M["dikeponds"], [{"x": 450.0, "y": 100.0}]
     assert seat_faults(s, got, ponds, (450.0, 150.0), near) == ["none (the seat qualifies; the pond loop found no other)"]
     far = [{"x": 450.0, "y": -2000.0}]
-    assert seat_faults(s, got, ponds, (450.0, 150.0), far) == ["a household's reach (nearest farmhouse 2369 ft, reach 320)"]
+    assert seat_faults(s, got, ponds, (450.0, 150.0), far) == ["a household's reach (nearest farmhouse 2372 ft, reach 320)"]
     s.pond_fixture_fits = lambda x, y, rot: False  # type: ignore[method-assign]
     assert seat_faults(s, got, ponds, (450.0, 150.0), near) == ["the fit (a sluice or a shed took it)"]
 
