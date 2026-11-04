@@ -5442,6 +5442,70 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T30": {
+   "section_sha256": "19e12eb4991ef5b917144da43d3e057b37476e23610368474b793a71ca51fd8c",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The homesteads stage is split in two: the seating is this phase and goes to Rust; the households' ways become a new STAGES entry, stage_household_ways, which stays unchanged Python until the track's phase.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-003 makes this phase the homesteads stage's rebuild, and FR-004/FR-005 require that rebuild to write what the stage writes, with the stage's old implementation deleted in the same landing. The GM asked for 'the entire next phase' (2026-11-03) and for no Python rewrites (amendment 4). Splitting the stage removes half its work from the phase. It also redefines 'the old implementation' so that FR-005 can be met while the ways stay in Python. None of the three grounds holds. (1) Nothing makes it impossible: the ways run directly after the seating and before stage_track, so their input exists now. (2) No GM words imply it. (3) Porting the whole stage does not defeat any purpose of the request. The only reason given is cost: port the lane law once rather than twice. That reason does not follow, because porting the ways now also ports the lane law once, and the web stage can read it later. The split also attacks a purpose of the program. The homesteads budget (4,118 at 40) was derived and approved for the stage as it stood. The plan never says how that budget divides between the seating and the ways, and Approach items 6 and 9 hold the seating to a 're-derived' budget under FR-022 rule 2, which is the rule for raising a budget for missed work, not for dividing one. The new stage gets no budget of its own (SC-001). Under FR-019, the households' ways checks leave the Rust gate. To be legitimate, the plan would need the ways ported in this phase, or a ruling from the GM or the arbiter that the stage boundary may move. It would also need the budget divided by a derivation that MODE BUDGET judges."
+    },
+    {
+     "id": "D2",
+     "summary": "The Rust lays each homestead's parts (house on its size ladder, yard, beds, kura, byre, fixtures) and the wood share. The Python door keeps the ink (Settlement.farmsteads) and the overlap registry's records.",
+     "class": "within",
+     "why": "Laying the same parts is FR-004's same output. Rendering stays Python and each stage stays a thin Python door, as the request's section 7 says. The 'as the bundle lays them today' wording must mean the contract's parts, not today's algorithm (2026-10-30): D3 supplies a new search, so this is not a narrowing."
+    },
+    {
+     "id": "D3",
+     "summary": "The search: the first house goes on the free ground nearest the seat's center; each later house is offered ring by ring from a standing one; every offer is judged against a free-ground raster painted once and a grid of the standing boxes; no house is taken back.",
+     "class": "within",
+     "why": "This is a new algorithm held to S1, S2, S4 and S9, as the request's section 2 and the 2026-10-30 words ask. It narrows nothing."
+    },
+    {
+     "id": "D4",
+     "summary": "The Python seating is deleted in the landing, but the dispersed and row forms are kept in Python 'as they stand', because no reference roll seats them, and are named in the report as the stage's remaining Python.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-005 and the request's section 5 item 5 say a phase is done when the old code is gone, with no fallback path and no flag. FR-017 rules out keeping any part of a phase in Python. Keeping two settlement forms on Python inside a stage counted as Rust is exactly the partial port those rules forbid. The ground given, that no reference roll seats these forms, is the reference-seed overfitting the GM rejected in amendment 5 ('our problems stemmed from overfitting on our reference seeds'). FR-020 replaced the reference block with a fresh block and the six pinned row variants. The plan's own Approach item 4 says the fresh block rolls 'every form the seating meets', so these forms will be rolled through a Rust-gate stage running Python. That is neither impossible to avoid nor implied by the GM's words, and it defeats FR-005's purpose. The dispersed and row forms must be ported in this phase, or the GM must rule otherwise."
+    },
+    {
+     "id": "D5",
+     "summary": "The counters: one key per derivation row, written <kind>@<row>.",
+     "class": "within",
+     "why": "This is how FR-012's counters are laid out. It narrows nothing."
+    },
+    {
+     "id": "occasions",
+     "summary": "Settlement-review is owed on every moved pool hamlet; glyph-check is owed only if a glyph is redrawn (none is).",
+     "class": "within",
+     "why": "FR-019 says moved pool hamlets owe their settlement-reviews, and checklist box 6 owes the reviews its occasions name."
+    },
+    {
+     "id": "exits",
+     "summary": "Green: the Rust gate with no failing seed; counts at 40 and 80 within the budget under FR-022 (the GM's words past ten times the first budget); MODE AUDIT WITHIN or LEEWAY; claims IN-STEP; the reviews owed. Red: the failure recorded, and a claim that the work cannot be done ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "This follows FR-019, FR-021 and FR-022 and the GM's 2026-11-04 instruction to stop only if the work is impossible. The 're-derived budget' this item points to is ruled on under D1."
+    },
+    {
+     "id": "order",
+     "summary": "The seating runs after the waterward fringe and before the households' ways, the track and the appurtenances.",
+     "class": "within",
+     "why": "This is the STAGES order (FR-003). The new ways entry it names belongs to D1."
+    },
+    {
+     "id": "constants-and-room",
+     "summary": "No constant is moved; each keeps its claim where the Rust reads it. Every household is seated or the site is refused, as today (0001).",
+     "class": "within",
+     "why": "The first keeps FR-021's claims. The second keeps the stage's contract and asks the rules before placing anything (S4)."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
