@@ -336,7 +336,10 @@ fn a_field_whose_land_falls_north_drains_up_the_page() {
     let s = sink(&i, &mut Vec::new()).unwrap().unwrap();
     assert!(s.run[s.run.len() - 1].1 < 0.0);
     i.drain = vec![(2000.0, 810.0), (2000.0, 900.0)];
-    assert!(sink(&i, &mut Vec::new()).is_err(), "a collector heading against the fall has no searched run");
+    assert!(
+        sink(&i, &mut Vec::new()).is_err(),
+        "a collector heading against the fall has no searched run"
+    );
     i.fall = (-1.0, 0.0);
     i.flow_deg = 180.0;
     i.drain = vec![(1100.0, 1100.0), (1050.0, 1500.0), (1010.0, 1900.0)];
