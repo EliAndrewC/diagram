@@ -11,7 +11,7 @@ was checked to pass on main before the Rust field moved it. Nothing here goes on
 
 from __future__ import annotations
 
-_SEAT = "Sawada (seed 24) refuses at the seating (cluster.seat_cluster, SeatRefused) on the Rust field - the seating's port (444 FR-019)"
+_SEAT = "Sawada (seed 24) refuses at the Rust seat (SeatRefused): its declared fall runs into the wind, and the wet toe band the hinterland derives (`Settlement.toe_band`) lies under every margin facing it - the toe band's port with the hinterland's (444 FR-019)"
 _MARSH = "Inashiro's toe marsh drawn with sharp corners on the Rust field's edge - the waterward marsh's port (444 FR-019)"
 _BAMBOO = "a bamboo stand seated off Kashikawa's sheet on the Rust field and sink (T26) - the bamboo stage's port (444 FR-019)"
 _WEB = "two of Mizuguchi's ways run side by side past a pitch on the Rust field and sink (T26) - the web's port (444 FR-019)"

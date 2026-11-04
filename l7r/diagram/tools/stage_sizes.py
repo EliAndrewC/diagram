@@ -42,11 +42,12 @@ def _points(v: Any) -> int | None:
     return n
 
 
-def sizes(seed: int, households: int, stage: str, calls: tuple[str, ...] = (), dump: str = "") -> dict[str, Any]:
+def sizes(seed: int, households: int, stage: str, calls: tuple[str, ...] = (), dump: str = "", spec: dict[str, Any] | None = None) -> dict[str, Any]:
     """The parts of the manifest and the plan that hold points, as `stage` is handed them on the reference roll at `households`:
     each as (records, points); `calls` names settlement methods taking no argument whose returned ring is counted too. A roll
     refused before `stage` reports where. `dump` names a file the stage's input is written to as JSON - the manifest, the plan's
-    parts that serialize, and each call's ring - for a measurement this table does not make."""
+    parts that serialize, and each call's ring - for a measurement this table does not make. `spec` overrides the reference's
+    fields - a pool hamlet's own (its name, its declared fall) - the households still `households`."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES, roll_scope, walks_after
     from l7r.diagram.hamletgen.plan import beyond_the_band
@@ -57,7 +58,7 @@ def sizes(seed: int, households: int, stage: str, calls: tuple[str, ...] = (), d
     if f"stage_{stage}" not in names:
         raise ValueError(f"no stage `{stage}` in STAGES")
     with beyond_the_band():
-        plan = plan_site(HamletSpec(seed=seed, **{**REFERENCE, "households": households}))
+        plan = plan_site(HamletSpec(seed=seed, **{**REFERENCE, **(spec or {}), "households": households}))
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     with roll_scope(plan.spec):
         for st in STAGES[: names.index(f"stage_{stage}")]:
@@ -116,15 +117,19 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--sizes", default=",".join(str(h) for h in SIZES if h >= 20))
     ap.add_argument("--calls", default="", help="settlement methods taking no argument whose ring is counted, comma-separated")
     ap.add_argument("--dump", default="", help="a directory each roll's input is written to, as <seed>-<households>.json")
+    ap.add_argument("--spec", default="", help="a JSON object overriding the reference spec's fields (a pool hamlet's own)")
+    ap.add_argument("--seeds", default="", help="the seeds, comma-separated (default: the reference seeds)")
     a = ap.parse_args(argv)
     calls = tuple(c for c in a.calls.split(",") if c)
+    spec = json.loads(a.spec) if a.spec else None
+    seeds = tuple(int(x) for x in a.seeds.split(",")) if a.seeds else SEEDS
     rows: dict[int, list[dict[str, Any]]] = {}
     for h in (int(x) for x in a.sizes.split(",")):
         rows[h] = []
-        for seed in SEEDS:
-            r = sizes(seed, h, a.stage, calls, str(Path(a.dump) / f"{seed}-{h}.json") if a.dump else "")
+        for seed in seeds:
+            r = sizes(seed, h, a.stage, calls, str(Path(a.dump) / f"{seed}-{h}.json") if a.dump else "", spec)
             rows[h].append({"seed": seed, **r})
-    print(f"stage-sizes: what `{a.stage}` is handed on the reference roll, seeds {', '.join(map(str, SEEDS))}, the mean over the seeds that reach it\n")
+    print(f"stage-sizes: what `{a.stage}` is handed on the {'given spec' if spec else 'reference'} roll, seeds {', '.join(map(str, seeds))}, the mean over the seeds that reach it\n")
     print(table(rows))
     return 0
 

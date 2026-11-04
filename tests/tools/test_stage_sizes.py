@@ -32,7 +32,7 @@ def test_the_input_is_measured_where_the_stage_would_run_and_a_refusal_named(mon
     after = driver.STAGES[0]
     name = after.__name__.removeprefix("stage_")
     monkeypatch.setattr(driver, "STAGES", (lay, after))
-    got = ss.sizes(25, 12, name, ("toe_band",), str(tmp_path / "in.json"))
+    got = ss.sizes(25, 12, name, ("toe_band",), str(tmp_path / "in.json"), {"down_deg": 90})
     dumped = json.loads((tmp_path / "in.json").read_text())
     assert dumped["M"]["lines"][0]["pts"] == [[0.0, 0.0], [5.0, 5.0]] and "toe_band" in dumped["calls"] and dumped["plan"]["envelope"]
     assert got["M.lines"] == [1, 2] and len(got["canvas"]) == 2 and "s.toe_band()" in got
@@ -48,8 +48,9 @@ def test_the_table_and_the_command(monkeypatch: pytest.MonkeyPatch, capsys: pyte
     out = ss.table(rows)
     assert "| M.a | 2.0 / 10 | - |" in out and "| canvas (first seed) | 10 x 20 | - |" in out and "seed 25 at 20" in out
     seen: list[str] = []
-    monkeypatch.setattr(ss, "sizes", lambda seed, h, stage, calls, dump: seen.append(dump) or {"canvas": [1.0, 1.0], "M.b": [1, h]})
+    monkeypatch.setattr(ss, "sizes", lambda seed, h, stage, calls, dump, spec=None: seen.append(dump) or {"canvas": [1.0, 1.0], "M.b": [1, h]})
     monkeypatch.setattr(ss, "SEEDS", (4,))
     assert ss.main(["seat", "--sizes", "20", "--calls", "toe_band"]) == 0
     assert ss.main(["seat", "--sizes", "20", "--dump", "/x"]) == 0 and seen == ["", "/x/4-20.json"]
     assert "| M.b | 1.0 / 20 |" in capsys.readouterr().out
+    assert ss.main(["seat", "--sizes", "19", "--seeds", "24", "--spec", '{"down_deg": 225}']) == 0 and "given spec" in capsys.readouterr().out
