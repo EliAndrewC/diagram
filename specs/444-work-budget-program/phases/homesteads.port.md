@@ -22,6 +22,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 | the fit rules: the south sun both ways, the eave gap on turned roofs, one bank, free ground, the yard's opening | `fit.rs` (`Standing`, `sun_ok`, `too_near`, `across_a_stream`, `on_free_ground`, `opens`) | `rolling/fit.py` `_sun_corridor_ok`, `_gardens_sun_ok`, `_house_too_near_a_neighbor`, `_parts_across_stream`, `_rect_hits`/`_rect_on_water` (by the raster), `SeatRegion.opens` |
 | the placer and the growth: the first house nearest the seat, the rest grown ring by ring; each offer's sides, the one computed move, the least-shaded side | `place.rs` (`grow`, `Seating::offer`, `Keep`) | `rolling/place.py` `_place_bundle_nucleated`, `homesteads/growth.py` `grow_the_margin`, `capacity.py` `free_seats`/`offer_seats` (the nucleated path; the passage share's tight seats still owed) |
 | the wood share, judged at its lattice square on the map's lattice, each household's keep-outs barring the others' | `wood.rs` (`Shares`, `keepouts`), asked last of every layout by `place.rs` | `homestead_parts/wood_share.py` (`WoodShares.share`, `seat_barred`, `covers_a_seat`, `copse_keepouts`) |
+| the track out's sweep: the gateway pulled clear of the crop, 41 bearings nearest the ideal first, ranked wet, steadings, then crop and water, the least-bad dry bearing kept, else the dry exit | `track.rs` (`connector`, `Checker`, `fabric_hits`, `grown`, `past_the_frame`, `pull_clear`) | `ways/track.py` `connector_track`, `past_the_frame`, `wet_grown_by_the_lane`; `ways/checks.py` `PathChecker`, `shallow_crossing`, `crossing_lands_on_crop`; `ways/fabric.py` `fabric_hits_boxed`, `_crosses_fabric`; `clearance.py` `pairs_within`; `sitegen/geom.py` `pull_clear`, `crosses_poly` |
 | Python's string-seeded `random.Random` | `pyrand.rs` (`from_text`, `shuffled`, `sha512`) | - (pinned against CPython's own draws) |
 
 ## Left, in the order they are needed
@@ -35,7 +36,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 2. (ported: the placer.) 3. The growth's passage share and its tight seats (the rest ported) - the growth (`homesteads/growth.py` `grow_the_margin`, `footprint`, `seat_toward`, `settled_seat`, `keeps_its_distance`,
    `keeps_every_gap`; the first house by `capacity.py` `free_seats`), the passage share and tight seats.
 4. (ported: the wood share.)
-5. The track out (`ways/track.py` `choose_track_out`, via `homesteads/household_ways.py` `chose_the_track`, `near_the_cluster`).
+5. The track out, the sweep ported (`track.rs`): still owed the dry exit (`ways/dry_exit.py`, reusing `seat/exit.rs`), `connector_through` (`route_around`, the thread through the fabric in `thread.py`), the gateway (`cluster_edge.py` `_cluster_gateway`) and the choice (`ways/track.py` `choose_track_out`, via `homesteads/household_ways.py` `chose_the_track`, `near_the_cluster`).
 6. The households' ways (`rolling/gap_ways.py` `lay_the_ways`: the lane layers, the flood, each door's exits, the taut run, the lane
    law's rules each leg asks - `fixtures_clear`, `parts_clear`, `lawful_leg`, `tree_admits` - and `access.reserve`); the lane law's
    rules into `rust/phases/src/law/` (D1).
