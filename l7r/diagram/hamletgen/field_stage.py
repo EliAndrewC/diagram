@@ -325,10 +325,7 @@ def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, ro
     plan.envelope = outline
     plan.brook = f["brook"]
     # the no-build registries the stages after read (`phases/field.state.json`)
-    s.field_polys.append(outline)
-    for d in dry:
-        s.dry_polys.append(d["poly"])
-        s.block_polys.append(d["poly"])
+    s.field_polys.append(outline)  # (the dry plots' registries are the hem's to fill, after the seat: `hem_stage`, T28)
     for c in chans:
         s.corridors.append((c["pts"], s.px(max(c["w"], c["w_tail"]) / 2 + DITCH_BANK_FT)))
     # on its drawn course, its bends rounded where it is laid (T26 D2), its stations the course the ways keep routing against

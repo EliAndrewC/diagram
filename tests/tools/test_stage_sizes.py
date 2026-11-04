@@ -29,9 +29,11 @@ def test_the_input_is_measured_where_the_stage_would_run_and_a_refusal_named(mon
     def boom(_s: Any, _plan: Any) -> None:
         raise ValueError("no seat")
 
-    lay.__name__, boom.__name__ = "stage_lay", "stage_boom"
-    after = driver.STAGES[0]
-    name = after.__name__.removeprefix("stage_")
+    def after(_s: Any, _plan: Any) -> None:  # a stand-in: the stage measured is never run, and no real stage rolls (the census)
+        raise AssertionError("the stage measured is not run")
+
+    lay.__name__, boom.__name__, after.__name__ = "stage_lay", "stage_boom", "stage_after"
+    name = "after"
     monkeypatch.setattr(driver, "STAGES", (lay, after))
     got = ss.sizes(25, 12, name, ("toe_band",), str(tmp_path / "in.json"), {"down_deg": 90})
     dumped = json.loads((tmp_path / "in.json").read_text())
