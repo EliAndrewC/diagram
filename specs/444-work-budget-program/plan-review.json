@@ -258,6 +258,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-04",
    "declared": "spec-fidelity"
+  },
+  "### T27 - phase: seat, in Rust under amendment 7 (the GM 2026-11-04: \"Once you have finished with this, please do the entire next phase as well\"; FR-003-FR-006, FR-017, FR-022)": {
+   "sha256": "4d160c3ee053dec13057be63434f535f1b3f1cc10f59cfb45a20ea3779a5c941",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Decisions": {
+   "sha256": "641189bc385ddffd6762ed8880837ed6413da64351c9c0792429e43dd7d87b30",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (2026-11-04T12:30Z)": {
+   "sha256": "25286f65dcb194c9ccd9b5aa2ccd6d2e71c5eed09144dcc4d8bcbdeff8ad8d9c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fb0d80ece580f93e1eb7849132aed0a14e0bdfa0c5ae3fd9113878fabcb55ebf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4125,6 +4149,84 @@
      "why": "The removed text made no decision: no approach, no figures, an empty table. T22 itself is not dropped, since T26's exit still lands T=\"T22 T26\". Removing an empty stub narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-04",
+   "blocks": [
+    "### T27 - phase: seat, in Rust under amendment 7 (the GM 2026-11-04: \"Once you have finished with this, please do the entire next phase as well\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T27 Approach (2026-11-04T12:30Z)",
+    "### T27 Decisions",
+    "### T27 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The seam: the Rust owns the margins, refusals, score, ranking, head's way out, fords and gapped streams; the thin seat_stage gathers inputs (including cluster.exit_walls), sets the router's crossing cost and writes the same plan and manifest keys; a ladder rung's way out stays the house seating's seat_has_dry_exit, asked on fallback.",
+     "class": "within",
+     "why": "FR-010 / section 7's shape (a thin Python function calling Rust) and FR-004 (same keys read and written). seat_has_dry_exit is not one of the seat search's names D6 deletes as 'what only it reached', so it belongs to the later house-seating stage and its unchanged use there is that stage's behavior, not seat work left in Python (FR-017). The seam reads cluster.exit_walls at run time, which FR-021 already brings under the zero-open-claims rule; no narrowing."
+    },
+    {
+     "id": "D2",
+     "summary": "The margins: candidates facing within 90 degrees of the wind (a flank just past the 45-degree bar), refused cheapest first (frame, belt off canvas, toe, field, centered in reeds, crop behind), survivors scored; the brook a tie-break per 0035 where it was a 3.0 weight; the back's crop an area share where it was 21 samples; the belt's room clipped to the canvas.",
+     "class": "within",
+     "why": "Each rule cites its research page (0031, 0072, 0058, 0035) or the GM's 2026-08-28 ruling, and FR-021 needs the DRIFTED finding closed. The refusal list matches the deleted old names one for one, but the same research pages yield the same rule set; the mechanism (area clipping, the tie-break, the cells and strips of perf item 2) is not the old one, which is what the GM's 2026-10-30 words are about."
+    },
+    {
+     "id": "D3",
+     "summary": "The way out: straight runs off the canvas, then a walk of 20 ft way-out cells (GUESS) aimed at the nearest edge, the cells tested remembered across fallback margins.",
+     "class": "within",
+     "why": "Implements 0081's dry way out; the knob is labeled GUESS as the claims rules require; remembering the tested cells avoids repeated work (S9). Does not narrow the request."
+    },
+    {
+     "id": "D4",
+     "summary": "The fords: the brook walked once, a ford on each straight reach at its spacing by bisection on running lengths; each stream segment gapped only by the fords filed near it, where the Python asked every ford of every segment.",
+     "class": "within",
+     "why": "Implements 0035's fords. Replacing the all-pairs ford-by-segment test with a local lookup is what S3 and the GM's 2026-10-30 words ask for; the result is unchanged."
+    },
+    {
+     "id": "D5",
+     "summary": "The counters: one key per derivation row, <kind>@<row>, as the sink's are.",
+     "class": "within",
+     "why": "FR-012 counters behind the Cargo feature, keyed to the derivation so MODE AUDIT can compare."
+    },
+    {
+     "id": "D6",
+     "summary": "Deletion: the old seat search and what only it reached deleted with their tests, track.stage_seat deleted; seat_cluster kept by name in seat_stage as the Rust seat without the fords, for the house seating's tests.",
+     "class": "within",
+     "why": "FR-005 deletes the old implementation in the same landing with no fallback path or flag. A kept name that calls the Rust is neither a fallback nor a second implementation; it is an entry point a later stage's tests start from."
+    },
+    {
+     "id": "A-oldcode",
+     "summary": "Approach: the session read the old cluster.py and track.py::stage_seat while scoping, before make task-start; the rebuild is written from the greenfield derivation (SOUND twice blind), the research pages and the measurements.",
+     "class": "within",
+     "why": "Treated as a decision, not background, because the GM's 2026-10-30 words fear the old algorithm coming back. Judged on the purpose: the derivation stayed greenfield and blind (FR-015, which the block does not cite, and should), and the mechanism the block describes differs from the old one (area clipping instead of 21 samples, the tie-break instead of a 3.0 weight, bisection and nearby fords instead of every ford, ring tests by strip and cell, no walk of the manifest afterwards). Reading the old code to learn the seam's keys is what FR-004 needs. Disclosed, not a carve-out."
+    },
+    {
+     "id": "A-order",
+     "summary": "Approach 5: the seat runs after the sink, before the waterward stage and the houses; the fords open before any way is routed.",
+     "class": "within",
+     "why": "FR-003 / FR-019: ported in STAGES order, so the Rust stages stay the front of the pipeline."
+    },
+    {
+     "id": "A-exit",
+     "summary": "Approach 6 and 9: green on make rust-gate with no failing seed through water_frame, field, sink and seat; the counted operations at most the budget the GM sets (a raise past ten times the first owes his words) or within LEEWAY; MODE AUDIT; claims IN-STEP; eight boxes; old search deleted. Rust counted 25,765 at 40, under the re-derived 30,325.",
+     "class": "within",
+     "why": "FR-006, FR-019, FR-021 and FR-022 rule 2 as written: the raise past ten times the first budget keeps owing the GM's words. His 2026-11-04 words ('I can approve or reject any operation budget overages when I get back') put off that approval; they do not waive it, and the block does not claim they do. The LEEWAY clause carries nothing here (25,765 < 30,325). The block does not say whether the accepted figure goes into dev/work-budget.json (FR-005) before his words arrive. That ordering is outside this block and is not ruled here."
+    },
+    {
+     "id": "A-hem",
+     "summary": "Approach 11: on about one seed in ten the dry hem or the wet toe blocks every windward margin (the old Python seat refused the same seeds); the arbiter (ask:444-T27-seat-hem) ruled it the field's fault; T28 lays the hem after the seat, behind the settlement, and with it every Rust gate seed seats (69 seeds, 15 replays, 0 failing).",
+     "class": "within",
+     "why": "FR-019 requires every seed to pass through the Rust stages. The block keeps that requirement whole: the seat's rules were not loosened to pass the seeds, the fix is upstream and research-attested, and FR-019's 'never a reason to change the Rust stage' clause covers Python stages failing on Rust output, which is not this case. The arbiter's ruling and T28's own fidelity are not in this bundle and are not ruled here."
+    },
+    {
+     "id": "A-constants",
+     "summary": "Approach 10: no constant moved; the Rust's knobs keep their claims at the Rust (GUESS); the brook's weight became 0035's tie-break, the back's crop an area share.",
+     "class": "within",
+     "why": "FR-021's zero open claims at the stage's Rust; the two changes follow their research page (0035) or replace sampling with an exact area. No narrowing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5041,6 +5143,80 @@
      "summary": "After T26's committed work, independent of its landing; one landing; Red records the failure and sets the task down, a claim it cannot be done ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and the standing escalation route; nothing in the request is relaxed - a cannot-be-done claim goes to the arbiter rather than being granted by the session."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T27": {
+   "section_sha256": "02e407d1671be4158ef56ad3400ad17f19af52d33d7f2625b91bdfe0bf736bb2",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The seam: the Rust owns the margins, refusals, score, ranking, head's way out, fords and gapped streams; the thin seat_stage gathers inputs (including cluster.exit_walls), sets the router's crossing cost and writes the same plan and manifest keys; a ladder rung's way out stays the house seating's seat_has_dry_exit, asked on fallback.",
+     "class": "within",
+     "why": "FR-010 / section 7's shape (a thin Python function calling Rust) and FR-004 (same keys read and written). seat_has_dry_exit is not one of the seat search's names D6 deletes as 'what only it reached', so it belongs to the later house-seating stage and its unchanged use there is that stage's behavior, not seat work left in Python (FR-017). The seam reads cluster.exit_walls at run time, which FR-021 already brings under the zero-open-claims rule; no narrowing."
+    },
+    {
+     "id": "D2",
+     "summary": "The margins: candidates facing within 90 degrees of the wind (a flank just past the 45-degree bar), refused cheapest first (frame, belt off canvas, toe, field, centered in reeds, crop behind), survivors scored; the brook a tie-break per 0035 where it was a 3.0 weight; the back's crop an area share where it was 21 samples; the belt's room clipped to the canvas.",
+     "class": "within",
+     "why": "Each rule cites its research page (0031, 0072, 0058, 0035) or the GM's 2026-08-28 ruling, and FR-021 needs the DRIFTED finding closed. The refusal list matches the deleted old names one for one, but the same research pages yield the same rule set; the mechanism (area clipping, the tie-break, the cells and strips of perf item 2) is not the old one, which is what the GM's 2026-10-30 words are about."
+    },
+    {
+     "id": "D3",
+     "summary": "The way out: straight runs off the canvas, then a walk of 20 ft way-out cells (GUESS) aimed at the nearest edge, the cells tested remembered across fallback margins.",
+     "class": "within",
+     "why": "Implements 0081's dry way out; the knob is labeled GUESS as the claims rules require; remembering the tested cells avoids repeated work (S9). Does not narrow the request."
+    },
+    {
+     "id": "D4",
+     "summary": "The fords: the brook walked once, a ford on each straight reach at its spacing by bisection on running lengths; each stream segment gapped only by the fords filed near it, where the Python asked every ford of every segment.",
+     "class": "within",
+     "why": "Implements 0035's fords. Replacing the all-pairs ford-by-segment test with a local lookup is what S3 and the GM's 2026-10-30 words ask for; the result is unchanged."
+    },
+    {
+     "id": "D5",
+     "summary": "The counters: one key per derivation row, <kind>@<row>, as the sink's are.",
+     "class": "within",
+     "why": "FR-012 counters behind the Cargo feature, keyed to the derivation so MODE AUDIT can compare."
+    },
+    {
+     "id": "D6",
+     "summary": "Deletion: the old seat search and what only it reached deleted with their tests, track.stage_seat deleted; seat_cluster kept by name in seat_stage as the Rust seat without the fords, for the house seating's tests.",
+     "class": "within",
+     "why": "FR-005 deletes the old implementation in the same landing with no fallback path or flag. A kept name that calls the Rust is neither a fallback nor a second implementation; it is an entry point a later stage's tests start from."
+    },
+    {
+     "id": "A-oldcode",
+     "summary": "Approach: the session read the old cluster.py and track.py::stage_seat while scoping, before make task-start; the rebuild is written from the greenfield derivation (SOUND twice blind), the research pages and the measurements.",
+     "class": "within",
+     "why": "Treated as a decision, not background, because the GM's 2026-10-30 words fear the old algorithm coming back. Judged on the purpose: the derivation stayed greenfield and blind (FR-015, which the block does not cite, and should), and the mechanism the block describes differs from the old one (area clipping instead of 21 samples, the tie-break instead of a 3.0 weight, bisection and nearby fords instead of every ford, ring tests by strip and cell, no walk of the manifest afterwards). Reading the old code to learn the seam's keys is what FR-004 needs. Disclosed, not a carve-out."
+    },
+    {
+     "id": "A-order",
+     "summary": "Approach 5: the seat runs after the sink, before the waterward stage and the houses; the fords open before any way is routed.",
+     "class": "within",
+     "why": "FR-003 / FR-019: ported in STAGES order, so the Rust stages stay the front of the pipeline."
+    },
+    {
+     "id": "A-exit",
+     "summary": "Approach 6 and 9: green on make rust-gate with no failing seed through water_frame, field, sink and seat; the counted operations at most the budget the GM sets (a raise past ten times the first owes his words) or within LEEWAY; MODE AUDIT; claims IN-STEP; eight boxes; old search deleted. Rust counted 25,765 at 40, under the re-derived 30,325.",
+     "class": "within",
+     "why": "FR-006, FR-019, FR-021 and FR-022 rule 2 as written: the raise past ten times the first budget keeps owing the GM's words. His 2026-11-04 words ('I can approve or reject any operation budget overages when I get back') put off that approval; they do not waive it, and the block does not claim they do. The LEEWAY clause carries nothing here (25,765 < 30,325). The block does not say whether the accepted figure goes into dev/work-budget.json (FR-005) before his words arrive. That ordering is outside this block and is not ruled here."
+    },
+    {
+     "id": "A-hem",
+     "summary": "Approach 11: on about one seed in ten the dry hem or the wet toe blocks every windward margin (the old Python seat refused the same seeds); the arbiter (ask:444-T27-seat-hem) ruled it the field's fault; T28 lays the hem after the seat, behind the settlement, and with it every Rust gate seed seats (69 seeds, 15 replays, 0 failing).",
+     "class": "within",
+     "why": "FR-019 requires every seed to pass through the Rust stages. The block keeps that requirement whole: the seat's rules were not loosened to pass the seeds, the fix is upstream and research-attested, and FR-019's 'never a reason to change the Rust stage' clause covers Python stages failing on Rust output, which is not this case. The arbiter's ruling and T28's own fidelity are not in this bundle and are not ruled here."
+    },
+    {
+     "id": "A-constants",
+     "summary": "Approach 10: no constant moved; the Rust's knobs keep their claims at the Rust (GUESS); the brook's weight became 0035's tie-break, the back's crop an area share.",
+     "class": "within",
+     "why": "FR-021's zero open claims at the stage's Rust; the two changes follow their research page (0035) or replace sampling with an exact area. No narrowing."
     }
    ],
    "verdict": "CLEAR"
