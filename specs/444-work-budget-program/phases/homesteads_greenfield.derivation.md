@@ -1,57 +1,117 @@
-# Derivation - homesteads, greenfield (feature 444 FR-015)
+# Derivation - homesteads, greenfield (feature 444 FR-015; re-derived for the whole stage under FR-022 rule 2, 2026-11-04)
 
 ## Contract
 
-- Reads: the plan's seat - the cluster's anchor on the field's dry margin, its axis and shape - and the belt's band; the households and the plan's family and byre forms; the field's outline, the brook, the ditches and the pond in the water index.
-- Writes: each household's homestead on its own ground - the house, its threshing yard, its kitchen beds, its fixtures (the privy, the manure heap, the coop, the persimmon), its storehouse or shed and its byre where it keeps one, a retirement house where the household has one, and its way in to its door - and the access corridors from each door to where a lane will reach it; every part filed in the registry.
-- Keeps: a household of a clustered settlement on a square of ground about 104 ft a side, spread once seated over about 162 ft a side with its stand of wood (0285: "Once seated ... a household is spread over about 162 ft a side, some 735 tsubo, which also holds its stand of wood"); a compact cluster, not a hollow arc (0032); the threshing yard and the kitchen beds keep 39 ft clear to their south of any house and 50 ft east, west and south of any tree (0038), rows of homesteads about 92 ft apart for it (0038: "Rows are set 92 ft apart, and a house (28 ft deep), its yard (about 26 ft) and 39 ft of sun come to about 93 ft"); a bed to the southeast, southwest, east or west of its house (0038); the storehouse on the side the settlement's form gives it (0040); every rule asked of a seat before the house is drawn (S4).
-- Bounds (measured 2026-10-29 on the reference manifests at 10 and 20 households): the houses 10 and 20, a mean nearest neighbor 170 and 164 ft (the 162 ft seated square); lots of 162 ft grown breadth-first from the anchor (the field's highest margin point, set off it by half a lot), never through a lot the field's outline crosses, clear of the water and the pond at 10 of 17 and 20 of 29 lots tried (p 0.59 and 0.69, 0.69 taken at 20), the refused ones crossed by the outline 3 and 3 and by a water 4 and 6, none by the pond (0.15 and 0.30 a house at 20), no lot seated inside the field on either; the anchor's own lot crossed by the brook at the intake on both rolls - refused but grown through, never by the outline (were the outline to cross it, the walk starts from the next lot off the field against the fall); each house's ground record 11.5 and 11.45 keys, of them the parts drawn: the house, the yard, 2 beds, 4 fixtures, a byre at 4 of 10 and 7 of 20, a storehouse or shed at 1 of 10 and 3 of 20 (0.35 and 0.15 a household at 20), the rest of its keys the layout's turn, boxes and notes; retirement houses 5 and 11 (0.55 a household); access corridors 22 and 51 (2.55 a household at 20), 2 points each; the way in 4 points; the typical densities (`items.md`, rubric S8): water segments 3.7 and the field's outline segments 1.8 a crossed 64 ft cell.
+- Reads: the plan's seat - the cluster's center and anchor on the field's dry margin, its axis, its band's two half-extents and the ladder of margins after it - and the households, the settlement's form and the cluster's shape, the family, byre and fixture forms; the field's outline; the no-build ground standing (the dry plots, the wet ground, the wet toe below the fields, the ponds, the marshes); every watercourse with its width (the brook gapped at its fords, the ditches, the drawn channels); the registered corridors; the canvas.
+- Writes: each household's homestead on its own ground - the house, its threshing yard, its kitchen beds, its fixtures (the privy, the manure heap, the coop, the bath, the woodpile, the household shrine, the persimmon), its storehouse or shed and its byre where it keeps one, a retirement house where the household has one, and its stand of wood - every part filed in the registry and drawn; the track out of the cluster, chosen once the last house stands, and each household's way laid in the gaps between the homesteads to the track or to a way already laid, recorded as the access corridors; the cluster's declared shape; the seating's measures.
+- Keeps: every declared household seated, or the site refused (0001); houses before lanes - no way stands or is reserved while a house is seated (0246: "every household seated while no lane stands on the map"); a household of a clustered settlement spread once seated over about 162 ft a side with its stand of wood (0285); the cluster grown irregularly from its first house nearest the seat (0031), the next house nearest a standing one, the field the tie-break (0029); no house refused for its distance from the fields (0032); the threshing yard and the kitchen beds keep 39 ft clear to their south of any house and 50 ft west of any tree (0038); a farmhouse on the size ladder of 0029, the storehouse to one farm in eight (0040), the byre by the byre form (0048), the fixtures by their quota (0028, 0044, 0046, 0047), the homestead's wood at least 6,000 sq ft within 90 ft of the house (0036); no house on the wet toe (0058); a farmstead on one bank of the brook (0035); each household's way laid in the gaps between plots, joining a way within 25 ft, its treads 3 ft off a wall, held to the lane law's rules a way asks (0081, 0246); every rule asked of a seat before the house is drawn (S4); no house taken back.
+- Bounds (measured 2026-11-04 on the reference rolls, seeds 4, 25, 39, 47, the mean; the seating's own record `meta.seat_search` and the stage's outputs, `make stage-sizes STAGE=track DUMP=`, and its inputs, `make stage-sizes STAGE=homesteads`): the houses 20, 40 and 80; the seats offered by the growth 152, 242 and 522; the positions tried 538, 694 and 1,673 (the offered seats and the moves off a neighbor); the rectangles tested 877, 1,261 and 3,165; the part layouts asked of the parts' rules 237, 406 and 868; the fixtures 91, 180 and 359 (about 4.5 a household); the wood seats kept 434, 874 and 1,742 (about 22 a household); the access corridors 50, 96 and 207 legs of 2 points, their length 5,329, 9,926 and 20,896 ft (about 260 ft a household); the track out 2 to 4 points; the cluster's extent 1,361 by 707, 1,797 by 1,253 and 2,317 by 1,662 ft; the dry plots 94, 150 and 249 of 4 points, about 91 by 72 ft; the field's outline 68, 96 and 135 points across 1,263, 1,786 and 2,526 ft; the watercourses 454, 592 and 781 segments, about 60 ft long, their keep-out about 16 ft across (the drawn half-width and 5 ft each side); the canvas 6,400, 8,900 and 12,550 ft square.
 
 ## The algorithm
 
-    the lots: squares of 162 ft on a lattice set on the anchor and the axis, grown breadth-first from the anchor's lot: a lot
-        popped (1) and its 4 neighbors pushed once each (4), the cluster's shape a stretch of the lattice's metric; each lot's box
-        asked of the water index's cells it overlaps (each cell 1, each segment in a crossed cell 1) and of the belt's band (1);
-        a lot the field's outline crosses is refused and not grown through, so the outline walls the field's inside off - a lot
-        inside the field is never reached and needs no inside test - and its test stops at the first cell holding an outline
-        segment; a lot a water crosses is refused but grown through, and only after all its cells are read, so that no outline
-        segment in a cell not yet read is missed; the first clear lots taken, one a household
-    within its lot, the homestead laid from the form's own layout: the house at the lot's north side turned to the plan's bearing,
-        its yard south of it, 39 ft of the lot clear to the yard's south before the next row's house (the 162 ft pitch keeps
-        28 + 26 + 39 = 93 ft inside the lot, so no neighbor's house can shade it: the sun rule holds by construction), the beds on the
-        house's flanks, the fixtures behind it, the storehouse on the form's side, a byre, a shed and a retirement house where rolled:
-        each part's box from the layout (1), turned (1), written (1) and filed in the registry's cells its box overlaps (1.5)
-    each household's kind, wealth, bearing jitter and quarter turn rolled (4); its way in, 4 points written (4) and its 3 legs filed
-        in the registry (1.5 each); its access corridors, 2 points written and the leg filed (3.5 each)
+    the seating's window: a square about the seat's center, 2 x 162 ft x sqrt(households / pi) each side of it - the ground the
+      households' 162 ft squares fill, twice over
+    the free ground painted once over the window, 8 ft cells: the raster cleared; each ring of the no-build ground and the field's
+      outline stepped through the rows its edges span and the spans between filled; each watercourse's keep-out strip painted
+    the reach labeled once: the free cells joined to the way out's anchor, 4-connected, by a two-pass labeling (no way stands and
+      no house is painted while the houses are seated, so the reach does not change while they are)
+    the households seated by the settlement's form - the nucleated cluster grown from its first house (the dispersed hamlet's front
+      row along the paddy's chords and its ranks behind, and the row village along its streets, offer their seats from their own
+      lines into the same tests):
+      the first house offered the free ground nearest the seat's center; each next house offered from a standing one, in a ring of
+        directions round it at the distance the two homesteads' footprints part, jittered by the standing house's position, wider
+        rings while households are left; the offers in a queue keyed on their distance to the seat, the field the tie-break
+      each offered seat: up to 4 positions - the seat and its moves off one overlapping neighbor - each laying the homestead's four
+        garden-side layouts from its size's template (9 parts turned), their union and each layout's own box tested against the
+        raster at 9 points and the standing homesteads' boxes in a 64 ft grid
+      a layout that clears: its parts' rules - the yard's and the beds' south sun against the standing houses, the yard opening onto
+        the reach, every part off the field and the water, the beds off every ditch, each part admitted by the registry, the house
+        off a neighbor's tread - then its fixtures stepped out from the house's walls, and its wood share: the lattice within its
+        reach sorted behind the house first, each seat tested against the bars and its crown's fresh cells counted until 6,000 sq ft
+      the layout with the least shaded garden kept; its parts written and filed; no house taken back
+    the track out: from the cluster's gateway, straight runs off the canvas in 128 ft steps, each step's 3 x 3 cells of the
+      homesteads and the water read, until one is clear
+    the households' ways: the lane ground over the cluster's box and 160 ft round it, the free-ground raster's own 8 ft cells, the
+      homesteads' boxes painted; one flood from the track, a bucket queue on each step's weight (1, and 3 more for the share of
+      blocked cells within three cells); each household's way traced down the flood from its door, pulled taut and each leg held to
+      the lane law's rules the way asks (the fixtures and parts clear, a lawful leg, the tree admitting it), the first admitted of
+      its exits kept and filed as corridors
+    written: each homestead's records and its ink, the corridors, the track, the shape declared
+
+## The knobs the count reads
+
+- the seating's window: 2 x 162 ft x sqrt(households / pi) each side of the seat (0285's ground, twice: NONE, a window's breadth)
+- the free ground's cell: 8 ft (NONE: a raster's grain, under half the 18 ft narrowest gap a homestead leaves)
+- the lane grid: the free ground's own 8 ft cells (a GUESS: two cells to the 18 ft narrowest gap a way takes, 0081), over the cluster's box and 160 ft round it (NONE: the breadth a way may swing out)
+- the flood's weights: 1 a step and 3 more for the blocked share within three cells (a GUESS), quantized to a tenth for the bucket queue (NONE)
+- the growth: 8, 12 and 16 directions on rings of 1 to 2 footprints, jittered 12 degrees and 12% (GUESS); the queue's ring 20 ft (GUESS)
+- the positions: the offered seat and one computed move off a single overlapping neighbor, 4 at most (NONE)
+- the layouts: the four garden sides (0038), 9 parts each (the house, the yard, 2 beds, 4 fixtures and a shed or byre, 0028-0048)
+- the wood share: the lattice at 11 x sqrt(2), about 15.6 ft, within 90 ft (0036: the reach), about 105 points; each crown 22 ft across (0036) on a 2 ft raster, about 95 cells; 6,000 sq ft (0036); about twice the kept seats tested
+- the fixtures: about 3 steps of 8 ft out from a wall before a seat clears (a GUESS, `WALL_GAP` 3.5 ft and 8 ft steps)
+- the registry's and the homesteads' grid: 64 ft cells (NONE)
+- the track's runs: 16, every 22.5 degrees, in 128 ft steps (NONE: a search's breadth)
+- the way's exits: the first of up to 6 admitted, priced at its first, each its 3 joins (25 ft near, 45 ft far, and on to the way out: GUESS, 0081), each run pulled taut to at most 12 legs (0081)
 
 ## Indexes
 
-- water index: cells of 64 ft, each segment filed in every cell it crosses, a box asked of the cells it overlaps; a lot's 162 ft box overlapping (1 + 162/64)^2 = 12.5 cells, segments only in the cells the field's edge or a water crosses, the mean 3.7 water and 1.8 outline segments a crossed cell (`items.md`, rubric S8), from a smallest side of 64 ft
-- registry: cells of 64 ft, every part filed in every cell its box overlaps, a part's box (a 46 by 28 ft house to a 5 ft coop) overlapping about 1.5 cells on average, from a smallest side of 64 ft
+- the free ground: cells of 8 ft over the window, 41,720, 83,520 and 167,080 cells at 20, 40 and 80 (the window 1,634, 2,312 and 3,270 ft a side); a rectangle read at its 9 points; densest case from a smallest side of 8 ft, a cell under three keep-outs
+- the reach: cells of 8 ft, the free ground's own, each labeled once; densest case from a smallest side of 8 ft, a cell where two free pieces meet
+- the homesteads' boxes and the registry: cells of 64 ft, each box filed in the cells it covers (about 2), a box asked of its about 4 cells and the about 2 boxes they hold; densest case from a smallest side of 64 ft, a cell where four homesteads meet
+- the lane ground: cells of 8 ft over the cluster's box and 160 ft round it, 26,975, 52,033 and 81,664 cells (1,681 by 1,027, 2,117 by 1,573 and 2,637 by 1,982 ft); densest case from a smallest side of 8 ft
+- the wood's crowns: cells of 2 ft about each house, a crown's about 95; densest case from a smallest side of 2 ft, a cell under two crowns
 
 ## The count, factor by factor
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 20 at 20, 40 at 40, 80 at 80 | the houses, one a household | the households |
-| the lot's search (water index cells examined) | per item | 33 | 1 / 0.69 = 1.45 lots tried a house at 20 (S8, 1/p), one clear, 0.15 refused by the outline and 0.30 by a water (measured): the clear lot's 12.5 cells read, its pop and 4 pushes (5) and the band (1), the field's outline in the cells it crosses - the third of the lots facing the field, about 3 crossed cells at the mean 1.8 (1.8) - and the water in its border cells, the third of the lots near a ditch or the brook, about 2 crossed cells at the mean 3.7 (2.5): 22.8; a lot the outline crosses stops at its first outline cell, about half its cells and the segments there (9), with its pop (1): 0.15 x 10 = 1.5; a lot a water crosses reads all 12.5 cells, the water's segments in its about 3 crossed cells at the mean 3.7 (11), its pop and pushes (5): 28.5, 0.30 x 28.5 = 8.6; 32.9, rounded to 33 | a cluster pressed against the field and the brook |
-| the parts (registry cells written) | per item | 43 | the house, the yard, 2 beds and 4 fixtures (8), a byre (0.35), a storehouse or shed (0.15) and a retirement house (0.55): 9.05 parts, each its box, turned, written and filed in the cells its box overlaps, about 1.67 on average - the house (1 + 46/64)(1 + 28/64) = 2.5, the 5 ft coop 1.2 (4.67): 42.3, rounded up to 43 | always the layout's parts |
-| the rolls, the way in and the corridors (registry cells written) | per item | 22 | the kind, the wealth, the jitter and the quarter turn (4); the way in's 4 points written (4) and its 3 legs filed in about 1.5 cells each (4.5); 2.55 corridors, each 2 points written and its leg filed (3.5): 8.9; 21.4, rounded to 22 | always |
-| slack | per item | 1.15 | on the lot's search alone (the 33): the same count at 10, from its 0.3 outline and 0.4 water refusals a house, is 22.8 + 3 + 11.4 = 37.2, 13% above the 33 taken | not applicable |
+| items | per item | 20 at 20, 40 at 40, 80 at 80 | the households, each seated | every declared household |
+| the wood share and the wood's crowns' cells | per item | 5,800 | the lattice's about 105 points sorted (7 each), about 44 seats tested (twice the 22 kept, measured), each against the bars in its 64 ft cells (11), the homestead's own 9 parts (9) and its crown's about 95 cells on the 2 ft raster: 735 + 44 x 115 = 5,795, rounded up | a homestead walled by its neighbors, the whole lattice tested |
+| the fixtures | per item | 216 | about 4.5 fixtures (measured), each about 3 steps out from its wall, each step its box against the house's parts (9) and the registry (7) | a fixture stepped its 24 steps |
+| the growth's queue | per item | 192 | each standing house's ring of 8 directions on up to 3 rings pushed (24) and popped, each a heap of about 200 (8) | the widest ring, 16 directions on 3 rings |
+| the household's way | per item | 1,872 | its 3 joins, each traced down the flood about 33 cells from its door (260 ft over 8 ft, measured) reading 8 neighbors (264), pulled taut and held to the lane law's rules leg by leg, 12 legs each its fabric's cells and parts (30): 3 x (264 + 360) | its 6 exits all refused but the last |
+| the records and the reserve | per item | 70 | its 7 parts each written (4) and filed (4), and its about 2.4 corridor legs written (2) and filed (4) | always its parts |
+| the ink | per item | 140 | its 7 parts drawn, each its corners and its fill (20) | always its parts |
+| the positions tried | over the run | 88,232 at 20, 113,816 at 40, 274,372 at 80 | 538, 694 and 1,673 positions (measured), each 4 layouts of 9 parts turned from the template (4 x 9 x 4 corners = 144), their union's 9 raster points (9) and the homesteads' grid round it (11): 164 | a seat moved off a neighbor at every offer |
+| the rectangles: the free ground's points and the homesteads' boxes and the registry's cells examined | over the run | 11,401 at 20, 16,393 at 40, 41,145 at 80 | 877, 1,261 and 3,165 rectangles (measured), each its 9 raster points and its 4 grid cells: 13 | as measured |
+| the parts' rules | over the run | 45,030 at 20, 77,140 at 40, 164,920 at 80 | 237, 406 and 868 layouts asked (measured), each: the south sun of its yard and 2 beds against the standing houses (3 strips, 4 cells and their boxes: 20), the yard's touch of the reach (4, a summed-area table), its 9 parts off the field and the water (81, 9 raster points each), the beds off every ditch (12), each part admitted by the registry (63, 4 cells and 3 records each) and the house off a neighbor's tread (10): 190 | every layout reaching the registry |
+| the free ground's cells painted | once | 92,710 at 20, 179,763 at 40, 352,120 at 80 | the window's cells cleared and filled (2 each: 83,440, 167,040, 334,160); the rings' edges through their rows - the dry plots' 4 points and about 18 rows each (2,068, 3,300, 5,478), the field's outline its points and the rows of its two sides across its breadth (384, 543, 767); the watercourses' strips, each segment's 60 by 16 ft over 64 sq ft cells (15: 6,818, 8,880, 11,715) | every ring inside the window |
+| the reach's cells labeled | once | 125,160 at 20, 250,560 at 40, 501,240 at 80 | each window cell read with its west and north neighbors and labeled, then relabelled: 3 a cell | as always |
+| the track's runs | once | 3,800 at 20, 5,320 at 40, 7,448 at 80 | 16 runs (the knob) of 25, 35 and 49 steps of 128 ft (half the canvas), each step its 3 x 3 cells (9) and about half an item (0.5) | sixteen runs walled |
+| the lane ground's cells flooded | once | 269,750 at 20, 520,330 at 40, 816,640 at 80 | the lane ground's 26,975, 52,033 and 81,664 cells (the Indexes), each popped from the bucket queue (1), its 8 neighbors relaxed (8) and its blocked share read from a summed-area table (1): 10 | as always |
+| slack | per item | 1 | every factor is a count of the stage's own inputs or the seating's own measured search | not applicable |
 
-So: houses x (33 x 1.15 + 43 + 22).
+- reason above the reference: a household is one thing placed, and seating it is a search - its offers, their layouts and their rules, its stand of wood - with the map-wide rasters (the free ground, its reach and the lane ground) and the one flood its way is traced down shared over every household; about 37,000 a household at 40, of it about 22,000 the rasters and the flood
 
-- pruning: the lots are grown breadth-first from the anchor and the search stops at the household's count, so it touches 1.45 lots a house, never the ground's whole lattice.
+So: items x (5,800 + 216 + 192 + 1,872 + 70 + 140) x slack + the positions, the rectangles and the parts' rules over the run + each once term.
 
 ## Totals
 
-- at 20: 20 x (33 x 1.15 + 43 + 22) = 2059
-- at 40: 40 x (33 x 1.15 + 43 + 22) = 4118
-- at 80: 80 x (33 x 1.15 + 43 + 22) = 8236
+- at 20: 20 x (5800 + 216 + 192 + 1872 + 70 + 140) x 1 + 88232 + 11401 + 45030 + 92710 + 125160 + 3800 + 269750 = 801883
+- at 40: 40 x (5800 + 216 + 192 + 1872 + 70 + 140) x 1 + 113816 + 16393 + 77140 + 179763 + 250560 + 5320 + 520330 = 1494922
+- at 80: 80 x (5800 + 216 + 192 + 1872 + 70 + 140) x 1 + 274372 + 41145 + 164920 + 352120 + 501240 + 7448 + 816640 = 2821085
 
 ## Growth
 
-Linear, an exponent of 1.0: each house costs the same at every size, its lot asked only of its own cells.
+From 20 to 80 households the stage grows at an exponent of about 0.91 (801,883 to 2,821,085): the households and their search with the
+households, the rasters with the window and the cluster's extent, which grow with the households' ground. No loop over a growing set runs
+inside another: an offer reads the raster's cells and the grid's boxes near it, never every homestead; the reach is labeled once,
+because nothing changes it while the houses are seated; the lane ground is flooded once from the track and each way traced down it,
+never a search a household.
+
+## Work the first derivation missed
+
+Feature 444 FR-022 rule 2 (amendment 7, the GM 2026-11-03): the first count priced a lattice of 162 ft lots taken in ring order, each
+house's parts written and its way in; the contract the stage keeps holds all of the following, none of which it priced:
+
+- the free ground painted and the reach labeled - the seat refused on any ground the water, the crop, the wet or the no-build takes, and its yard opening onto ground a way can reach (0246, 0058)
+- the growth - the cluster grown irregularly from its first house, each next one nearest a standing one (0031, 0029), where the lots' lattice drew a grid
+- the parts' rules - the yard's and the beds' south sun (0038), the registry's admission of each part, the beds off the ditches, the house off a neighbor's tread (S4)
+- the homestead's wood - at least 6,000 sq ft within 90 ft (0036)
+- the fixtures stepped out from the walls (0028, 0044, 0046, 0047)
+- the track out, chosen once the last house stands (0246)
+- the households' ways laid in the gaps and held to the lane law (0081, 0246) - the first count's "way in" was 4 points written
+- the ink and the records of every part
 
 ## Earlier findings
 
@@ -60,18 +120,18 @@ Linear, an exponent of 1.0: each house costs the same at every size, its lot ask
 - verdict-1, finding 3: fixed - a clear lot on the field's margin reads the outline's segments in the cells it crosses, the third of the lots facing the field (1.8)
 - verdict-1, finding 4: fixed - the Bounds' 11.45 are the ground record's keys; the parts drawn are 9.05, the storehouse among them as the 0.15 storehouse or shed
 - verdict-1, finding 5: fixed - the way in's legs and the corridors filed in the registry (22)
-
 - verdict-2, finding 1: fixed - the lots grown breadth-first from the anchor, never through a lot the outline crosses, so a lot inside the field is never reached (0 on either reference roll); p re-measured from the anchor, 0.59 and 0.69
 - verdict-2, finding 2: fixed - a part's registry overlap 1.67 cells (43)
 - verdict-2, finding 3: fixed - a clear lot's border cells read the water near a ditch or the brook, the third of the lots at 2 crossed cells (2.5)
 - verdict-2, finding 4: fixed - the slack from the measured spread of the lots tried, 1.7 at 10 and 1.45 at 20: 1.15
-
 - verdict-3, finding 1: fixed - a lot a water crosses reads all its cells before it is grown through (28.5), a lot the outline crosses stops at its first outline cell (10), each at its measured share of the refusals, 0.15 and 0.30 a house
+- the re-derivation (2026-11-04): the lots' lattice replaced by the growth the contract keeps (0031), each lot's rows replaced by the offers' and the layouts' measured search; the findings above stand on the rows they answered, which this re-derivation drops
 
 ## Cheaper algorithms considered
 
-- sweep: not used - the lots are taken in ring order, the first clear ones kept
-- grid or spatial index: used - the water index for each lot's box, the registry for filing the parts
-- priority queue: not used - a breadth-first queue over the lattice gives the lots in about distance order, each pushed once
-- incremental update: used - the lots are disjoint on the lattice, so a seated house never re-tests a neighbor's ground; the outline's wall is found by the lots' own tests, never a separate inside test
-- memoizing what a scan does not change: used - the layout's part boxes are the form's own, turned once a house
+- sweep: used - the rings painted row by row through the raster
+- grid or spatial index: used - the free-ground raster for every point a seat asks, the 64 ft grid of the homesteads' boxes, the lane ground's raster; the reach read from a summed-area table
+- priority queue: used - the growth's offers in distance order; the flood's bucket queue on its quantized weights, in place of a heap's log a cell
+- incremental update: not used for the reach - nothing changes it while the houses are seated, so it is labeled once
+- memoizing what a scan does not change: used - one template of parts a house size, turned per seat; the flood once for every household's way
+- pruning: an offer refused at its first raster point taken; a layout's rules cheapest first, the wood share last; a way's first admitted exit kept
