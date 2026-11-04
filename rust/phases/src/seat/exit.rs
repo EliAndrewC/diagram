@@ -213,7 +213,10 @@ impl<'a> Exit<'a> {
     ///     the walk remembered - NONE: a memo across the margins the head falls back to; a cell tested is never tested again
     pub fn has_exit(&mut self, start: Pt, counts: &mut HashMap<String, u64>) -> bool {
         let org = -2.0 * EXIT_CELL;
-        let s = (((start.0 - org) / EXIT_CELL) as i64, ((start.1 - org) / EXIT_CELL) as i64);
+        let s = (
+            ((start.0 - org) / EXIT_CELL) as i64,
+            ((start.1 - org) / EXIT_CELL) as i64,
+        );
         if let Some(&joined) = self.known.get(&s) {
             return joined; // a seat in ground an earlier walk reached: its answer, with no run tried
         }

@@ -113,7 +113,8 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let (spacing, half, bend) = inp.ford;
     let fords = fords::fords(&inp.brook, spacing, half, bend, &mut counts);
     let stream_segs = fords::gapped(&inp.streams, &fords, half, &mut counts);
-    let mut ranked = margins::ranked(inp, &mut counts);
+    let (mut ranked, stopped) = margins::ranked(inp, &mut counts);
+    let mut walled = 0;
     let mut lines = inp.lines.clone();
     lines.extend(stream_segs.iter().copied());
     let mut way = exit::Exit::new(&inp.walls, &lines, inp.canvas, &mut counts);
@@ -122,11 +123,15 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
             break;
         }
         ranked.remove(0);
+        walled += 1;
     }
     if ranked.is_empty() {
-        return Err(SeatRefused(
-            "no field margin turns its back to the wind clear of the dry hem, the toe and the canvas edge".to_owned(),
-        ));
+        let [frame, belt, toe, field, reeds, back] = stopped;
+        return Err(SeatRefused(format!(
+            "no field margin turns its back to the wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: \
+             {frame} off the frame, {belt} with the belt off the canvas, {toe} on the toe, {field} on the field, {reeds} in the reeds, \
+             {back} with crop behind, {walled} walled in)"
+        )));
     }
     tally(&mut counts, "write@frames", 8 * ranked.len() as u64 + 3);
     Ok(Seated {

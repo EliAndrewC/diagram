@@ -347,7 +347,8 @@ impl<'a> Ground<'a> {
     }
 }
 
-/// The margins in the order the seat prefers them - wind-facing ones first, each tier by score, the brook's share on the band
+/// The margins in the order the seat prefers them, and how many each refusal stopped (off the frame, the belt off the canvas, on
+/// the toe, on the field, in the reeds, crop behind) - wind-facing ones first, each tier by score, the brook's share on the band
 /// the tie-break between margins otherwise level, the first met winning a tie - every one that breaks a rule refused.
 ///
 /// Research:
@@ -363,7 +364,7 @@ impl<'a> Ground<'a> {
     clippy::too_many_lines,
     reason = "the refusals in order, cheapest first, then the score: one pass a candidate"
 )]
-pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
+pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [u64; 6]) {
     let (dep, lat) = inp.band;
     let ground = Ground::new(inp, counts);
     let mut scan = 0;
@@ -375,6 +376,7 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
     );
     let (mut refusal, mut scoring) = (0, 0);
     let mut kept: Vec<(f64, f64, u8, Frame)> = Vec::new();
+    let mut stopped = [0u64; 6];
     for (mid, n, tier) in cands {
         let along = (-n.1, n.0);
         let band_pt = |d: f64, t: f64| {
@@ -393,15 +395,18 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
             && lat <= center.1
             && center.1 <= inp.canvas.1 - lat)
         {
+            stopped[0] += 1;
             continue;
         }
         refusal += 8;
         let off = belt_off(center, along, n, inp.band, inp.wind, inp.canvas);
         if off > BELT_ROOM_MAX_OFF {
+            stopped[1] += 1;
             continue;
         }
         if let Some(toe) = &ground.toe {
             if toe.inside(center, &mut refusal) || toe.inside(mid, &mut refusal) {
+                stopped[2] += 1;
                 continue;
             }
         }
@@ -411,9 +416,11 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
             .map(|(d, t)| band_pt(d, t))
             .collect();
         if pts.iter().any(|&p| ground.outline.inside(p, &mut refusal)) {
+            stopped[3] += 1;
             continue;
         }
         if ground.reeds.iter().any(|r| r.inside(center, &mut refusal)) {
+            stopped[4] += 1;
             continue;
         }
         let wet = pts
@@ -429,6 +436,7 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
         ];
         let foul = ground.back_share(&back, &mut refusal);
         if foul > BACK_FOUL_MAX {
+            stopped[5] += 1;
             continue;
         }
         let rel = unit(cen, mid);
@@ -472,5 +480,6 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> Vec<Frame> {
         "test@ranking",
         n * u64::from(64 - n.leading_zeros()),
     );
-    kept.into_iter().map(|k| k.3).collect()
+    tally(counts, "dropped@margins", stopped.iter().sum());
+    (kept.into_iter().map(|k| k.3).collect(), stopped)
 }

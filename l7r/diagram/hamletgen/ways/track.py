@@ -16,7 +16,6 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys, pull_clear
 from l7r.diagram.work_counts import OPS
 
-from ..cluster import seat_cluster
 from ..consts import (
     BROOK_CROSSING_COST_FT,
     FORD_BEND_DEG,
@@ -31,13 +30,12 @@ from ..consts import (
 )
 from ..plan import SitePlan
 from . import law
-from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
+from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments
 from .clearance import route_around
 from .cluster_edge import _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
 from .fabric import _homestead_polys, fabric_hits_boxed, poly_box
 from .geom import polyline_len
-from .route import set_crossing
 from .thread import (
     CONNECTOR_BAND_GAP_FT as CONNECTOR_BAND_GAP_FT,
 )
@@ -56,90 +54,6 @@ from .thread import (
 from .thread import (
     _water_crossings as _water_crossings,
 )
-
-
-def stage_seat(s: Settlement, plan: SitePlan) -> None:
-    """Where the settlement will sit.
-
-    The seat band: which stretch of the field margin the cluster will occupy, with its back to the high ground
-    and its face to the water. NOTHING IS DRAWN HERE - this stage decides a place and reserves no ground at all,
-    which is why it can run before the houses without constraining them. It used to be the front half of a stage
-    that also drew the connector and the field spur, and separating the two is what let every lane move after
-    the farmhouses.
-
-    Decide WHERE the settlement sits. Draws nothing at all.
-
-    THIS IS THE HALF THAT HAS TO RUN FIRST, and separating it is the whole of feature 128. The old
-    `stage_ways` did two unrelated jobs in one pass: it SEATED the cluster - `seat_cluster` sets
-    `plan.seat`, which `stage_homesteads` reads on its first lines - and it DREW the connector and
-    the field spur. Because the seating is a hard dependency of the houses, the stage could not
-    simply be moved after them, and feature 126 worked around that by moving only the skeleton. That
-    is how the connector and spur were left reserving ground before a single house existed.
-
-    Split, the dependency and the drawing go to opposite sides of the houses. Nothing here calls
-    `s.lane`: no lane and no corridor exists when this returns. Before the seat is chosen, the brook's fords are
-    opened and the cost every later route pays to cross the brook is set.
-
-    Steps:
-        l7r.diagram.hamletgen.ways.checks.brook_fords
-        l7r.diagram.hamletgen.ways.route.set_crossing
-        l7r.diagram.sitegen.geom.crop_polys
-        l7r.diagram.settlement.Settlement.toe_band
-        l7r.diagram.hamletgen.cluster.seat_cluster
-
-    Research:
-        brook crossed only at crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
-            fords opened on straight reaches, the only free cells in the brook's band
-        every way pays the crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
-            `BROOK_CROSSING_COST_FT` set on the router for the whole roll
-        seat off the reed fringe - CANON: the GM's ruling of 2026-08-28, the pond's fringe passed as wet; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
-        the wind is kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a seat off the
-            wind is recorded, never the wind renamed
-    """
-    # EVERY watercourse on the map, not just the field's own ditches. The ways are routed to meet
-    # water squarely and to keep their decks off the crop, and that is only as good as the list they
-    # are handed: the STREAMS - the feed brook coming down to the intake, the drain brook leaving
-    # the frame - are drawn in the two stages before this one and were missing from it, so a track
-    # could cross one at a slant and `bridges_span_their_water` would fail on a deck too short for
-    # the water beneath it.
-    # ...and the DRAWN lines, not only the recorded ones. `field_channel` fillets its polyline before
-    # drawing it (`fillet_polyline`, so a mitred corner does not spike), and it is the drawn line a
-    # bridge gets placed on - so routing against the recorded one can send a way across a ditch at a
-    # slant the router never saw. Same rule as the connector's own bow: measure what is drawn.
-    # THE FORDS ARE OPENED FIRST (feature 261): every routing list below reads the brook through `stream_segs`, which
-    # gaps it at these, so a way may cross the brook at a ford and nowhere else.
-    s.brook_fords = brook_fords(plan.brook or [], FORD_SPACING, FORD_BEND_DEG)  # type: ignore[attr-defined]
-    # every route this roll draws pays to cross the brook, at the fords (the only free cells in its band)
-    set_crossing(plan.brook or [], FORD_HALF, s.px(BROOK_CROSSING_COST_FT))
-    s.M["meta"]["brook_fords"] = [[round(x, 1), round(y, 1)] for x, y in s.brook_fords]  # type: ignore[attr-defined]
-    plan.watercourses = (
-        [
-            ((float(a[0]), float(a[1])), (float(b[0]), float(b[1])))
-            for rec in list(s.M.get("field_ditches", [])) + list(s.M.get("channels", []))
-            for a, b in zip(rec["poly"], rec["poly"][1:], strict=False)
-        ]
-        + stream_segs(s)
-        + [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
-    )
-    seat = seat_cluster(
-        plan,
-        dry_plots=crop_polys(s),
-        toe=s.toe_band() or None,
-        wet=marsh_ground(s.M, only=("pond_fringe",)),
-        brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it
-    )  # the reservoir's reed fringe: not building ground (feature 150 T50)
-    plan.seat = seat
-    # THE SEAT BENDS TO THE WIND, NEVER THE WIND TO THE SEAT (feature 261). Until then this stage renamed the
-    # wind after whatever the seat's back faced whenever the two disagreed by more than ~70 degrees, which is how
-    # Kashikawa's belt came to stand on the south and east: the wind a map declares was being rewritten by where
-    # its houses happened to land. `seat_cluster` now seats only on a margin whose back faces the wind, and a map
-    # that had to fall back to one that does not says so here, rather than changing the wind to hide it.
-    s.M["meta"]["seat_offwind"] = bool(seat.get("offwind"))
-    s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
-    # THE SIDE THE HOUSES STAND ON, told to the settlement (feature 140): every field test from here on measures
-    # the outline's few chords facing this seat (`rolling/fit.py::_field_chains`), never the whole outline.
-    if plan.seat:
-        s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
 def thread_over_the_ford(s: Settlement, plan: SitePlan, start: Pt, via: Sequence[Pt], end: Pt) -> Poly:

@@ -1,1 +1,54 @@
-[]
+[
+ {
+  "seed": 733827,
+  "households": 19,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-733827 (seed 733827): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge - the site has no seat (plan D3)",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/733827-seat.pkl",
+  "seed_passes": false
+ },
+ {
+  "seed": 733830,
+  "households": 18,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-733830 (seed 733830): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge - the site has no seat (plan D3)",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/733830-seat.pkl",
+  "seed_passes": false
+ },
+ {
+  "seed": 733838,
+  "households": 19,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-733838 (seed 733838): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge - the site has no seat (plan D3)",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/733838-seat.pkl",
+  "seed_passes": false
+ },
+ {
+  "seed": 733852,
+  "households": 18,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-733852 (seed 733852): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge - the site has no seat (plan D3)",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/733852-seat.pkl",
+  "seed_passes": false
+ },
+ {
+  "seed": 864926,
+  "households": 15,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-864926 (seed 864926): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: 0 off the frame, 0 with the belt off the canvas, 1 on the toe, 2 on the field, 0 in the reeds, 18 with crop behind, 0 walled in) - the site has no sea",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/864926-seat.pkl"
+ },
+ {
+  "seed": 864929,
+  "households": 14,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-864929 (seed 864929): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: 0 off the frame, 0 with the belt off the canvas, 9 on the toe, 0 on the field, 0 in the reeds, 7 with crop behind, 0 walled in) - the site has no seat",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/864929-seat.pkl"
+ }
+]

@@ -3,12 +3,10 @@
 Split from test_hamletgen.py by feature 111; test bodies verbatim. See hamletgen/CLAUDE.md.
 """
 
-import math
-
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.cluster import BELT_ROOM_MAX_OFF, SeatRefused, belt_off_canvas
+from l7r.diagram.hamletgen.cluster import SeatRefused
 from l7r.diagram.hamletgen.consts import CLUSTER_SHAPES, FALL_BEARINGS
 from l7r.diagram.hamletgen.plan import BELT_REACH, FAN_OVERHANG, SEAT_STANDOFF, band_extent, fall_backs_the_wind, seat_room
 
@@ -26,33 +24,6 @@ def a_seat_plan() -> hg.SitePlan:
     _dep, lat = band_extent(plan.spec.households, plan.cluster_shape)
     assert lat <= SEATED[0][1] - _dep - SEAT_STANDOFF, "the fixture's premise: the north band fits on the canvas"
     return plan
-
-
-def test_a_point_below_the_drain_is_recognized_as_wet_ground() -> None:
-    drain = [(0.0, 1000.0), (2000.0, 1000.0)]  # runs east-west across a south-falling map
-    assert hg.below_drain((1000.0, 1080.0), drain, 0.0, 1.0)  # downslope of it, in the toe band
-    assert not hg.below_drain((1000.0, 900.0), drain, 0.0, 1.0)  # above it
-    assert not hg.below_drain((1000.0, 1400.0), drain, 0.0, 1.0)  # past the toe band entirely
-
-
-def test_ground_past_either_end_of_the_drain_is_a_dry_flank() -> None:
-    """Research 0058's drawing page: the ground judged is downslope of the drain WITHIN ITS SPAN ACROSS THE SLOPE; past
-    either end stands a dry flank. The nearest segment's clamped end used to stand in, and refused it."""
-    drain = [(0.0, 1000.0), (2000.0, 1000.0)]
-    assert not hg.below_drain((-10.0, 1080.0), drain, 0.0, 1.0)  # just past the west end, downslope of its line
-    assert not hg.below_drain((2010.0, 1080.0), drain, 0.0, 1.0)  # just past the east end
-    # a diagonal drain falling to the southeast on a south-falling map: measured against the drain where it crosses the
-    # point's own line down the slope, not against its nearest point
-    diagonal = [(0.0, 900.0), (1000.0, 1100.0)]
-    assert hg.below_drain((500.0, 1080.0), diagonal, 0.0, 1.0)  # 80 below the drain's y of 1000 at x = 500
-    assert not hg.below_drain((500.0, 1010.0), diagonal, 0.0, 1.0)  # within the 18 ft margin
-    assert not hg.below_drain((500.0, 1080.0), [(500.0, 900.0), (500.0, 1000.0)], 0.0, 1.0)  # a drain straight down the slope spans nothing across it
-
-
-def test_ground_behind_a_margin_reports_how_much_of_it_is_crop() -> None:
-    assert hg.back_fouled((700.0, 400.0), (0.0, -1.0), 100.0, []) == 0.0
-    fouled = hg.back_fouled((700.0, 1000.0), (0.0, -1.0), 100.0, [SQUARE])  # normal points back INTO the square
-    assert fouled > 0.5
 
 
 def test_the_cluster_is_seated_outside_the_field() -> None:
@@ -161,16 +132,6 @@ def test_a_brook_across_every_margin_still_seats_the_hamlet_facing_the_wind() ->
     assert seat["offwind"] is False
 
 
-def test_a_seat_whose_belt_would_fall_off_the_canvas_is_measured() -> None:
-    """Feature 261 (settlement-review of Mizuguchi): the share of the windbreak's band behind a seat that the canvas
-    cannot hold."""
-    from l7r.diagram.hamletgen.cluster import belt_off_canvas
-
-    inside = belt_off_canvas((1300.0, 1300.0), (0.0, 1.0), (-1.0, 0.0), 300.0, 150.0, (-1.0, 0.0), 2600.0, 2600.0)
-    at_edge = belt_off_canvas((120.0, 1300.0), (0.0, 1.0), (-1.0, 0.0), 300.0, 150.0, (-1.0, 0.0), 2600.0, 2600.0)
-    assert inside == 0.0 and at_edge == 1.0
-
-
 # ---- the seat's back to the wind, by construction (feature 287, homes H30/H31, plan D3) ----------
 
 
@@ -195,15 +156,7 @@ def test_a_rolled_fall_backs_the_wind_and_a_declared_one_is_taken_as_written() -
 def test_a_flank_offers_its_back_turned_to_the_wind_after_every_margin_facing_it() -> None:
     """Homes H30, plan D3: a margin 45 to 90 degrees off the wind offers a seat whose back is turned just past the bar
     toward the wind (tier 1), after every margin that faces it (tier 0); a margin facing away offers none."""
-    from l7r.diagram.hamletgen.cluster import margin_candidates
-
-    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
-    wind = (-0.5, -math.sqrt(0.75))  # 30 degrees west of north: the north edge faces it, the west edge is 60 degrees off
-    got = {m: (o, t) for m, o, t in margin_candidates(square, (50.0, 50.0), wind)}
-    assert set(got) == {(50.0, 0.0), (0.0, 50.0)}, "south and east face away and offer nothing"
-    assert got[(50.0, 0.0)] == ((0.0, -1.0), 0)
-    west, tier = got[(0.0, 50.0)]
-    assert tier == 1 and west[0] * wind[0] + west[1] * wind[1] > hg.WIND_BACK_MIN_DOT and -west[0] > math.cos(math.radians(45.0)), "turned just past the bar, under 45 degrees off its normal"
+    # the candidates' tiers are the Rust seat's own tests (`rust/phases/src/seat/tests.rs`); here, the seat they rank
     plan = a_plan()
     plan.windward = "NW"
     plan.envelope = [(x + 600.0, y + 600.0) for x, y in SQUARE]
@@ -226,9 +179,8 @@ def test_the_canvas_holds_the_seat_and_its_belt_on_the_windward_side(windward: s
     y0 = c - reach if wy < 0 else (c + reach - side if wy > 0 else c - side / 2)
     plan.envelope = [(x0, y0), (x0 + side, y0), (x0 + side, y0 + side), (x0, y0 + side)]
     seat = hg.seat_cluster(plan)
+    # a seat the Rust returns has its belt's room on the canvas: a margin past the belt's room is refused there
     assert seat["out"][0] * wx + seat["out"][1] * wy >= hg.WIND_BACK_MIN_DOT
-    off = belt_off_canvas((seat["cx"], seat["cy"]), seat["along"], seat["out"], seat["lat"], seat["dep"], (wx, wy), plan.W, plan.H)
-    assert off <= BELT_ROOM_MAX_OFF
 
 
 def test_a_canvas_with_no_room_for_the_belt_refuses_the_site() -> None:
@@ -242,9 +194,6 @@ def test_a_canvas_with_no_room_for_the_belt_refuses_the_site() -> None:
     dep, lat = band_extent(10, "round")
     corner = lat + dep + SEAT_STANDOFF + 10.0  # each margin's seat center a whole `lat` (and 10 px) inside its frame edge
     plan.envelope = [(x - 400.0 + corner, y - 400.0 + corner) for x, y in SQUARE]
-    north, west = (corner + 300.0, lat + 10.0), (lat + 10.0, corner + 300.0)
-    assert belt_off_canvas(north, (1.0, 0.0), (0.0, -1.0), lat, dep, plan.wind, plan.W, plan.H) > BELT_ROOM_MAX_OFF, "the premise: the band fits, its belt does not"
-    assert belt_off_canvas(west, (0.0, 1.0), (-1.0, 0.0), lat, dep, plan.wind, plan.W, plan.H) > BELT_ROOM_MAX_OFF
     with pytest.raises(SeatRefused):
         hg.seat_cluster(plan)
     room = seat_room(10, "round")

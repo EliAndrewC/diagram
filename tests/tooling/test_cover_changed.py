@@ -157,3 +157,13 @@ def test_a_slated_modules_unrun_lines_are_information_and_refuse_nothing(repo: t
     monkeypatch.setattr(cc, "changed_modules", lambda r, m: ["l7r/slated.py", "l7r/m.py"])
     monkeypatch.setattr(cc, "uncovered", lambda r, mods, b: {"l7r/slated.py": [3], "l7r/m.py": [6]})
     assert cc.main(["--base", base]) == 1 and "cover-changed: l7r/m.py - lines" in capsys.readouterr().out
+
+
+def test_a_case_with_no_classname_names_no_module(tmp_path: Path) -> None:
+    """`ran_tests` (feature 444 T27): a JUnit case with an empty classname - a crashed collection's - is skipped, not read back as
+    the root's empty path (it raised `ValueError: PosixPath('.') has an empty name` and stopped `make cover-changed`)."""
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_a.py").write_text("")
+    junit = tmp_path / "j.xml"
+    junit.write_text('<testsuite><testcase classname="" name="collect"/><testcase classname="tests.test_a" name="test_x"/></testsuite>')
+    assert cc.ran_tests(tmp_path, junit) == {"tests/test_a.py::test_x"}

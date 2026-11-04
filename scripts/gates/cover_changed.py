@@ -223,7 +223,8 @@ def ran_tests(root: Path, junit: Path) -> set[str]:
     for case in ET.parse(junit).iter("testcase"):
         if case.find("skipped") is not None:
             continue
-        parts = (case.get("classname") or "").split(".")
+        # a case with no classname (one a crashed collection reports) names no module: nothing to read back
+        parts = [p for p in (case.get("classname") or "").split(".") if p]
         for i in range(len(parts), 0, -1):
             if (root / Path(*parts[:i]).with_suffix(".py")).is_file():
                 out.add("::".join([Path(*parts[:i]).with_suffix(".py").as_posix(), *parts[i:], case.get("name") or ""]))

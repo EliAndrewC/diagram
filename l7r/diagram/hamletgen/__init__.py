@@ -87,6 +87,7 @@ from .hinterland import _crop_refuses as _crop_refuses
 from .hinterland import _near_line as _near_line
 from .homesteads import *
 from .plan import *
+from .seat_stage import *
 from .sink_stage import *
 from .water import *
 from .ways import *

@@ -122,3 +122,19 @@ except ValueError as e:
     assert "no searched run" in str(e), e
 else:
     raise AssertionError("a collector heading up the fall from outside the field is refused by name")
+
+# the seat stage (feature 444 T27), as the thin `stage_seat` calls it: a seat and its ladder, the fords and the gapped brook, and a
+# refusal named
+sq = [(2500.0, 2500.0), (3500.0, 2500.0), (3500.0, 3500.0), (2500.0, 3500.0)]
+course = [(1500.0, 20.0 * k) for k in range(301)]
+seat_args = ((6000.0, 6000.0), (0.0, 1.0), (-(0.5**0.5), -(0.5**0.5)), 0.7071, sq, (150.0, 300.0), [], [], [], course, [(sq, 0.0)], [], [course], (160.0, 30.0, 20.0))
+seated = l7r_phases.stage_seat(*seat_args)
+head = seated["frames"][0]
+assert head["out"][1] < 0.0 and not head["offwind"] and {"cx", "cy", "along", "lat", "dep", "anchor"} <= set(head)
+assert seated["fords"] and len(seated["stream_segs"]) > 1 and seated["counts"]
+try:
+    l7r_phases.stage_seat((3600.0, 3600.0), *seat_args[1:5], (150.0, 1300.0), *seat_args[6:])
+except ValueError as e:
+    assert "no field margin" in str(e), e
+else:
+    raise AssertionError("a seat no margin can hold is refused by name")

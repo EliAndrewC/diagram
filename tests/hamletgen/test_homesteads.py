@@ -309,13 +309,14 @@ def _toy_hamlet(households: int, seed: int = 3, east: bool = False):  # type: ig
     margin's frame built directly - the north one, or with `east` the east one, which the twenty-household toy was seated
     on before feature 287 (as the off-wind fallback: the band would not fit north of the square). `seat_cluster` refuses
     both today (homes H30/H31); the stage's branches, not the seat's choice, are under test here."""
-    from l7r.diagram.hamletgen.cluster import _seat_frame
     from l7r.diagram.hamletgen.plan import band_extent
 
     plan = a_plan(households=households)
     dep, lat = band_extent(households, plan.cluster_shape)
     anchor, out = ((1000.0, 700.0), (1.0, 0.0)) if east else ((700.0, 400.0), (0.0, -1.0))
-    plan.seat = {**_seat_frame(anchor, out, lat, dep, plan.wind), "ladder": []}
+    center = (anchor[0] + out[0] * (dep + 12.0), anchor[1] + out[1] * (dep + 12.0))  # the band's 12 ft standoff off the margin
+    offwind = out[0] * plan.wind[0] + out[1] * plan.wind[1] < 0.7071
+    plan.seat = {"cx": center[0], "cy": center[1], "along": (-out[1], out[0]), "out": out, "lat": lat, "dep": dep, "anchor": anchor, "offwind": offwind, "ladder": []}
     plan.settlement_form = "nucleated"
     s = Settlement(1400, 1400, seed=seed)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=households, down_deg=90, water_flow=90, nucleated=True)

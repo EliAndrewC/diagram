@@ -1,6 +1,7 @@
 """Feature 287's perf pass, its exact pieces, each against a copy of the scan it replaced: the hem's watercourses filed once
 (`WetLines`), the wild middle's rings boxed once (`BoxedRings`), the copse's brook barriers filed once (`BankNear`), the site corridors' box test before the
-distance (`SiteCorridors.hit_points`) and the seat's back asked each plot's y-span first (`back_fouled`). Each index PRUNES; the old test DECIDES (`dev/performance.md`)."""
+distance (`SiteCorridors.hit_points`). Each index PRUNES; the old test DECIDES (`dev/performance.md`). (The seat's back went to the Rust
+seat, feature 444 T27, with its own tests.)"""
 
 from __future__ import annotations
 
@@ -79,40 +80,6 @@ def test_the_site_corridors_box_test_is_the_distance() -> None:
             hits += want
             assert corridors.hit_points(pts) is want
     assert 100 < hits < 1700, "the sample holds points on the corridors and off them"
-
-
-def _old_back_fouled(anchor, out, dep, dry_plots, reach=2.6, samples=7):
-    from l7r.diagram.settlement._geom import point_in_poly
-
-    if not dry_plots:
-        return 0.0
-    ax, ay = -out[1], out[0]
-    hit = total = 0
-    for i in range(samples):
-        t = (i + 0.5) / samples
-        for lat in (-0.5, 0.0, 0.5):
-            px = anchor[0] + out[0] * dep * reach * t + ax * dep * lat
-            py = anchor[1] + out[1] * dep * reach * t + ay * dep * lat
-            total += 1
-            hit += any(point_in_poly(px, py, list(poly)) for poly in dry_plots)
-    return hit / total
-
-
-def test_the_seats_back_is_fouled_as_the_whole_ray_test_said() -> None:
-    """`back_fouled` with each plot's y-span asked first answers as the ray test over every plot did - backs under the hem,
-    beside it and clear of it, and a plot with no ring."""
-    from l7r.diagram.hamletgen.cluster import back_fouled
-
-    rng = random.Random(2876)
-    fouled = 0
-    for _ in range(300):
-        plots = [_quad(rng, 400.0) for _ in range(rng.randint(0, 12))] + ([[]] if rng.random() < 0.1 else [])
-        anchor, t = (rng.uniform(0, 400), rng.uniform(0, 400)), rng.uniform(0, 2 * math.pi)
-        out, dep = (math.cos(t), math.sin(t)), rng.uniform(10, 60)
-        want = _old_back_fouled(anchor, out, dep, plots)
-        fouled += want > 0
-        assert back_fouled(anchor, out, dep, plots) == want
-    assert 20 < fouled < 280, "the sample holds fouled backs and clear ones"
 
 
 def test_a_house_box_refused_on_growing_grounds_refuses_every_box_that_holds_it() -> None:
