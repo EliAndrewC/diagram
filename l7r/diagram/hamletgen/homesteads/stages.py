@@ -213,7 +213,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     _declared = declare_cluster_shape(s.M.get("houses", []), plan.cluster_shape, plan.spec.seed)  # the one declaration (homes H04, H05)
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
-    s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
+    s.M["meta"]["seat_search"] = {
+        **s._seat_search,
+        **({"wood_tested": s._wood.tested, "wood_shares": s._wood.asked} if getattr(s, "_wood", None) is not None else {}),
+    }  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
     # THE TRACK OUT, CHOSEN ONCE NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
     # plan D2, FR-008; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were
     # seated; the track's whole course is chosen here by its own search against the homesteads as seated, `stage_track`

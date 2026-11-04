@@ -262,6 +262,8 @@ class WoodShares:
             its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (index cell); 0.45 (floor under `crown_reach`, as at grove_fill:135)
         """
         self.clump = COPSE_CLUMP_BS * s.bscale
+        self.asked = 0  # the shares asked, one a layout that reaches the wood (the same measure)
+        self.tested = 0  # the lattice seats asked, every share (feature 444 T30: the seating's measure, `meta.seat_search.wood_tested`)
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
         self.pitch = SEAT_PITCH_BS * s.bscale
         self.floor = floor_ft2 * s.px(1.0) ** 2  # px^2
@@ -340,6 +342,7 @@ class WoodShares:
                 crowns covering the floor on ground no other household holds, or the seat refused
             seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028) - `back` is the house frame's rear whatever the map's wind, a departure the code keeps until feature 417 T33; the 0.7 is ours; taken nearest a point `FOCUS_DEPTH` (0.7) of the reach behind the house
         """
+        self.asked += 1
         hx, hy = float(geom["house"][0]), float(geom["house"][1])
         th = math.radians(rot)
         back, side = (math.sin(th), -math.cos(th)), (math.cos(th), math.sin(th))  # the house frame's -y and +x, turned with it
@@ -356,6 +359,7 @@ class WoodShares:
         for x, y in lattice:
             if __debug__:
                 OPS["candidate@WoodShares.share"] += 1  # a wood seat tried (feature 443 T10, a miss of the walk)
+            self.tested += 1
             if self.seat_barred(x, y, (hx, hy), own, corridors, banks):
                 continue
             fresh = self.crown(x, y, (hx, hy)) - self.cells - mine
