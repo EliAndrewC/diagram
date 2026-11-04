@@ -249,6 +249,11 @@ impl Shares {
         None
     }
 
+    /// Every reserved seat.
+    pub fn all_seats(&self) -> impl Iterator<Item = &Pt> {
+        self.seats.values().flatten()
+    }
+
     /// Would a corridor a-b run within `gap` of a reserved seat? Each seat cell near enough the segment asked of its seats.
     #[must_use]
     pub fn corridor_bars(&self, a: Pt, b: Pt, gap: f64, tests: &mut Counts) -> bool {

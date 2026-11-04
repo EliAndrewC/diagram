@@ -19,6 +19,7 @@ pub mod bearing;
 pub mod bundle;
 pub mod fit;
 pub mod fixtures;
+pub mod gap_ways;
 pub mod ground;
 pub mod layout;
 pub mod lots;
@@ -33,6 +34,8 @@ mod access_tests;
 mod fit_tests;
 #[cfg(test)]
 mod fixtures_tests;
+#[cfg(test)]
+mod gap_ways_tests;
 #[cfg(test)]
 mod place_tests;
 #[cfg(test)]
