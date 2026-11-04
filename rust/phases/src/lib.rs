@@ -8,6 +8,7 @@ mod course;
 mod field;
 mod hem;
 mod homesteads;
+mod law;
 mod pyrand;
 mod seat;
 mod sink;
