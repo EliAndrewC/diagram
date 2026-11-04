@@ -7633,43 +7633,46 @@
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its polygon": {
   "body": "1ef84ee76abf07e4",
   "claim": "its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)",
-  "code": "91231d174f3258fe",
-  "core": "20391d1dfd90d3d8",
+  "code": "17a51b29be3a2c57",
+  "core": "d00b92c7283fed66",
   "date": "2026-11-04",
   "note": "the 16-gon only approximates the pond disc; it is plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#its salts, guards and sentinels": {
   "body": "1ef84ee76abf07e4",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)",
-  "code": "9358291d47405feb",
-  "core": "20391d1dfd90d3d8",
+  "code": "27f457ee7740d7ed",
+  "core": "d00b92c7283fed66",
   "date": "2026-11-04",
   "note": "the pi/8 step of that same 16-gon; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#tameike berth": {
   "body": "1ef84ee76abf07e4",
   "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
-  "code": "4d484e8187cdda4a",
-  "core": "20391d1dfd90d3d8",
+  "code": "9c9d9e21e63a2ace",
+  "core": "d00b92c7283fed66",
   "date": "2026-11-04",
   "note": "nothing on the lanes page sizes a pond's berth, so the 80 ft is a fair guess",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::exit_walls#the way out's walls": {
   "body": "1ef84ee76abf07e4",
   "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
-  "code": "878b4719e94f3c82",
-  "core": "20391d1dfd90d3d8",
+  "code": "8536d49fbd12a559",
+  "core": "d00b92c7283fed66",
   "date": "2026-11-04",
   "note": "the toe, the wet rings, the field and the pond walled, and the water lines kept, as a track off wet ground that runs off the map",
   "pages": {
@@ -7682,6 +7685,7 @@
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#dry way out of the seat": {
@@ -21376,6 +21380,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#its search steps and tolerances": {
@@ -21388,6 +21393,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat on the bank": {
@@ -21404,6 +21410,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::_centroid#pond-bank geometry": {
@@ -21424,6 +21431,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#nearest pond first": {
@@ -21440,6 +21448,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:8e78365da5853109"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#no seat in reach, no sty": {
@@ -21456,6 +21465,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:af6a57ff5d562c70"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#seat reserved before the houses": {
@@ -21468,6 +21478,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat clear of the sluices": {
@@ -21484,6 +21495,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:34ba2202d649041d"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat on the near half": {
@@ -21500,6 +21512,7 @@
   "rests": [
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:d798fac79f63b146"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::reserve_sty_seat#the reserved seat's disc": {
@@ -21512,6 +21525,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/pondstock.py::seat_faults#pond-bank geometry": {
@@ -21692,6 +21706,7 @@
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
   },
   "research": "1fcdf871b340e87e",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/rust_prefix.py::Reads#the Rust stage gate": {
@@ -50655,6 +50670,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty clearance": {
@@ -50666,6 +50682,7 @@
   "note": "GUESS; 0025 gives no distance between a sty and other structures (the `footbridges` key bug is already filed in T33)",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::PondStockMixin.pond_fixture_fits#sty on the bank": {
@@ -50677,6 +50694,7 @@
    "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html": "ba8c07825c06383f"
   },
   "research": "c2db08a5a30de209",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::SHRINE_RED#shrine vermilion": {
@@ -56999,24 +57017,26 @@
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._corridor_buffers#its salts, guards and sentinels": {
   "body": "77a5a29151a21c4e",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 6 (lane width fallback; lanes always record `w); 20 (ring-road width fallback; no production ring road); 30 (road width fallback; no production road)",
-  "code": "e7b4580b2361bc2b",
-  "core": "5551a49787b359f9",
+  "code": "83072d918835155c",
+  "core": "1224b2d60ce142f3",
   "date": "2026-10-25",
   "note": "width fallbacks",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._corridor_buffers#no vegetation on a tread": {
   "body": "77a5a29151a21c4e",
   "claim": "no vegetation on a tread - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); every lane, street, alley, ring road and road at its half-width",
-  "code": "41b1606bba42ea2c",
-  "core": "5551a49787b359f9",
+  "code": "279a67111fcf23c1",
+  "core": "1224b2d60ce142f3",
   "date": "2026-10-25",
   "note": "the road and lane rules on the pages are the project's own drawing choices, not findings; the tread keep-out is ours",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._crown_covers#plumbing": {
@@ -57139,37 +57159,40 @@
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._urban_keepouts#its salts, guards and sentinels": {
   "body": "ca479e1acf4c8ae2",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 40 (prefilter pad for wells)",
-  "code": "b663415b917c1e88",
-  "core": "05cca3dfed76a1dd",
+  "code": "b0c197d2090ba300",
+  "core": "92f587749ec714c9",
   "date": "2026-10-25",
   "note": "prefilter pad",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._urban_keepouts#swept halo": {
   "body": "ca479e1acf4c8ae2",
   "claim": "swept halo - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); no ground cover within 30 ft of a structure, 20 ft of a wellhead, 8 ft of a yard or bed",
-  "code": "a1d0182f6f96b94e",
-  "core": "05cca3dfed76a1dd",
+  "code": "daa5e5efa7b14a80",
+  "core": "92f587749ec714c9",
   "date": "2026-10-25",
   "note": "nothing on how far ground cover stood off buildings, wells or plots",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._watercourse_segs#its salts, guards and sentinels": {
   "body": "77dbe826a8ed3a33",
   "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 0.2 (uniform-vs-taper tolerance); 6 (channel width fallback, never reached)",
-  "code": "fb152d26dc9619e4",
-  "core": "1d7d967b7eed813d",
+  "code": "0e0f1a37a0f7041f",
+  "core": "04e7ff30568451b9",
   "date": "2026-10-25",
   "note": "taper tolerance, fallback",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin.canopy_frozen#plumbing": {
@@ -60909,13 +60932,14 @@
  "l7r/diagram/settlement/land/outline.py::natural_outline#its search steps and tolerances": {
   "body": "1e4c7e5c73c2f00a",
   "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 12 (fewest wave sample points); 5 (smallest rounding radius the search tries); 8 (buffer curve resolution)",
-  "code": "eba4b3d370bdbfdc",
-  "core": "8a3a5b34ddd52572",
+  "code": "e9eeb83b0f5542d5",
+  "core": "a66772a924a73ef3",
   "date": "2026-10-25",
   "note": "sampling and search floors",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/tiles.py::BAMBOO_ROW#cover tiles": {
@@ -62068,11 +62092,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::drawn_ground#plumbing": {
-  "code": "88c1acf963403633",
-  "core": "ea4b5a3a2fb57079",
+  "code": "5ce615c216006fcb",
+  "core": "70a592c1aa50682a",
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
+  "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::ellipse_ring#its search steps and tolerances": {
@@ -62105,6 +62131,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/wet.py::surface_water_dist#its salts, guards and sentinels": {
