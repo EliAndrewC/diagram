@@ -493,37 +493,46 @@ The trigger: red gates in a row on the T22/T26 landing (06:59Z, 07:11Z, 07:13Z),
 8. **Every route measured before the arbiter was asked?** Each red was read and fixed in its own commit before the next run.
 9. **After a ruling, the step it named?** Yes: `make done` again at the clean head, through `make land F=444 T="T22"`.
 
-### T27 (<why: the finding or measurement that files it>)
+### T27 - phase: seat, in Rust under amendment 7 (the GM 2026-11-04: "Once you have finished with this, please do the entire next phase as well"; FR-003-FR-006, FR-017, FR-022)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Occasions: settlement-review on the pool hamlets the rebuilt seat moves (a cluster seated on another margin moves every house); glyph-check only if a glyph is redrawn.
+
+- **Approach**: the seat's search, its way out and the brook's fords rebuilt in Rust (`rust/phases/src/seat/`) behind a thin `hamletgen/seat_stage.py`, to the greenfield derivation re-derived under FR-022 rule 2 (measured 2026-11-04 (`make stage-sizes STAGE=seat`): 30,325 at 40, SOUND twice blind, verdicts 6 and 7). The session read the old `hamletgen/cluster.py` and `ways/track.py::stage_seat` while scoping, before `make task-start`; the rebuild is written from the derivation, the research pages and those measurements.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T27 Approach (checklist part A)
+### T27 Decisions
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+- **D1 - the seam**: the Rust owns the margins, their refusals and score, the ranking, the head's way out, the fords and the streams gapped at them; the thin `seat_stage` gathers what it reads (the outline, the dry plots, the wet toe as the roll derives it, the reed fringes, the brook as first laid, the way out's walls and lines from `cluster.exit_walls`), sets the crossing cost on the router (`set_crossing`, the router's state), and writes the plan's `seat` and `watercourses`, the manifest's `meta.brook_fords`, `meta.seat_offwind` and `meta.lane_skeleton`, and the field's face. A ladder rung's own way out stays the house seating's (`seat_has_dry_exit`), asked when it falls back to one.
+- **D2 - the margins** (0031, 0072, 0058, the GM's ruling of 2026-08-28): the candidates the margins facing within 90 degrees of the wind, a flank's back turned just past the 45-degree bar; refused cheapest first - off the frame, the belt off the canvas, on the toe, on the field, centered in the reeds, crop behind - and the rest scored; the brook's share on the band the tie-break 0035 states ("preferred when two are otherwise level"), where it was a 3.0 weight (closing `cluster.py`'s DRIFTED finding); the back's crop the share of its area clipped from the plots, where it was 21 sample points; the belt's room its rectangle clipped to the canvas. The refusal names how many margins each rule stopped.
+- **D3 - the way out** (0081): straight runs off the canvas, then a walk of the 20 ft cells aimed at the nearest edge; the cells tested and what was found of them remembered across the margins the head falls back to.
+- **D4 - the fords** (0035): the brook walked once, a ford on each straight reach at its spacing (points along it by bisection on the legs' running lengths); each stream segment gapped only by the fords filed near it - where the Python asked every ford of every segment.
+- **D5 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`, as the sink's are.
+- **D6 - deletion** (FR-005): the old seat search (`seat_cluster`, `margin_candidates`, `back_fouled`, `belt_off_canvas`, `BELT_ROOM_MAX_OFF`, `_seat_frame`, `_seat_center`, `TURN_SLACK`) and what only it reached (`below_drain`, `nearest_within`) deleted with their tests; `track.stage_seat` deleted; `seat_cluster` kept by name in `seat_stage` as the Rust seat without the fords, which the house seating's tests start from.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+### T27 Approach (2026-11-04T11:17Z)
+
+1. **The goal, in the world.** The settlement sits on the higher, drier ground beside its paddy (0031), its back to the wind (0072), off the wet toe (0058), never centered in a pond's reeds (the GM's ruling of 2026-08-28), the brook across its band only a tie-break (0035), with a dry way out of the frame (0081); the brook crossed by every later way only at its fords (0035).
+2. **The constraints.** FR-003 to FR-006, FR-017, FR-019 to FR-022; rubric S1-S10; `phases/seat_greenfield.derivation.md` (30,325 at 40, exponent 0.89); the pages 0031, 0035, 0058, 0072, 0081; the plan fields the stage writes (`seat` and its ladder, `watercourses`) and the manifest's `meta.brook_fords`, `meta.seat_offwind`, `meta.lane_skeleton`.
+3. **Where each comes from.** G: the GM's request of 2026-11-04 and amendment 7. R: the pages above. O: the stage's input, measured 2026-11-04 (`make stage-sizes STAGE=seat`): the outline 96 points at 40, 53 margins facing the wind, 152 dry plots, the brook 450 stations.
+4. **Do they describe the world here?** A hamlet's seat on a valley comb, the reference roll; the Rust stage gate's fresh block rolls every form the seat meets, measured 2026-11-04 (`make rust-gate`).
+5. **The order.** After the sink, before the waterward stage and the houses: the fords open before any way is routed, the seat decided before any house.
+6. **The exits.** Green: `make rust-gate` with no failing seed through water_frame, field, sink and seat; the counted operations at 40 and 80 at most the budget the GM sets (the raise owes his words, past ten times the first), or within amendment 7's LEEWAY; MODE AUDIT WITHIN or LEEWAY; the claims round IN-STEP (FR-021); the reviews owed; `phases/seat.md`'s eight boxes; the old seat search deleted. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The seat is a search over the outline's margins: its candidates the margins facing within 90 degrees of the wind, each refused cheapest first, every survivor scored because the ladder is the whole ranking (S9); the way out stops at the first clear run, its walk remembered across margins.
+8. **The budget.** One landing; `make rust-gate` after each increment; one MODE AUDIT a round.
+9. **Done, measured.** The Rust seat counted 15,694 / 25,765 / 48,101 at 20 / 40 / 80, measured 2026-11-04 (`make work-budget`), under the derivation's 18,191 / 30,325 / 62,012.
+10. **Before moving a constant.** None moved: every figure the Rust reads keeps its claim at the Rust (the sampling knobs named in the derivation, GUESS); the brook's weight became the tie-break 0035 states, and the back's crop an area share where it was sampled.
+11. **Before fitting things into room.** Measured 2026-11-04 (`make rust-gate`, the refusal's tally): on about one seed in ten the dry hem stands behind every margin facing the wind, or the wet toe on it, and the old Python seat refused the same seeds on the Rust field (rolled in a detached worktree at e16522808). Room first: a research pass on where a hamlet's houses stand against its dry fields decides whether the margins are the paddy's or the cultivated block's.
+
+**Performance work?** yes - docs/performance-checklist.md's questions follow.
 
 ### T27 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
-   the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** In the walk of the manifest after the seat (`pt_test@Standing.resync` 8,125, `write@Standing.ribbon` 7,496 of the seat's 25,087 counted at 40) and its 41,160 Python calls at 40, measured 2026-11-04 (`make work-budget`); the seat's own ring tests each walk the whole ring (7,249 point tests of up to 96 edges each).
+2. **Removes work, or only moves it?** Removes it: every ring test asks its strip or its cells, the back's crop is clipped once, the fords and the gaps are found by bisection and cells, and a Rust stage is followed by no walk of the manifest.
+3. **What do you expect it to save, and why?** The seat's Python calls (41,160 to a few hundred) and its share of the roll's time.
+4. **How does the work grow with the settlement?** Exponent 0.81 measured, under the derivation's 0.89.
+5. **What did the before and after show, and under what conditions?** `make perf-ab` recorded at the landing, best of N.
+6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
 
