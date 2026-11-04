@@ -537,6 +537,29 @@ Occasions: settlement-review on the pool hamlets the rebuilt seat moves (a clust
 6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
 
 
+### T27 part B (2026-11-04T15:42Z)
+
+The trigger: the second red gate in a row on T27-T29's clone (15:20Z, 15:40Z; the bundle counts four reds since 07:11Z, each a
+different defect), ruled `continue` by the round arbiter (red-gate@2026-11-04T15:40:07Z).
+
+1. **What exactly is refusing?** First gate: `tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row` -
+   `l7r.diagram.tools.stage_sizes` (added in T27) had no `_invocation.OPERATIONS` row. Second gate: test-full's roll census -
+   `tests/tools/test_stage_sizes.py` ran the real water_frame as its stand-in step, in the test worker, with no roster row; and the
+   hamlet-path floor found `hamletgen/field_stage.py` 330-331 unrun - the field door's dry-plot filing, unreachable since T28 lays
+   every dry plot in the hem.
+2. **A3 again.** The project's own rules, unchanged: every runnable tool names its make target; the gate rolls no map of its own
+   (constitution VI); a module on the hamlet path keeps 100%.
+3. **A4 again.** Each refusal read in the gate's log (`.git/verify-gate-*.log`, the 15:40 run's record
+   `dev/run-log/2026-11/20261104T154006919855-314052.json`).
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: each fixed where it failed, deciding nothing new.
+6. **The one-sentence test.** "T27's new tool needed its registry row and its test a stand-in stage, and T28 left the field's dry
+   filing unreachable."
+7. **Done:** the row added (`stage-sizes`, expensive); the test's step a stand-in with its `InProcess(..., stub=True)` row in
+   `tests/rolls.py`; the unreachable lines deleted; `make cover-changed` read for the changed lines before the third gate.
+8. **Every route measured before the arbiter was asked?** The tripwire asked, with each fix and its passing test in hand.
+9. **After a ruling, the step it named?** Yes: the fixes committed, the unreachable lines removed, `make done` once more.
+
 ### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)
 
 Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro and Kashikawa, measured 2026-11-04 (`make map`): their manifests moved against HEAD); glyph-check only if a glyph is redrawn (none: the dry plots keep their ink).
