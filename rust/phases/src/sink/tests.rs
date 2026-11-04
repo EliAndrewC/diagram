@@ -125,20 +125,19 @@ fn a_confluence_on_a_bend_or_with_no_trunk_below_is_not_taken() {
 }
 
 #[test]
-fn where_every_searched_run_crosses_the_brook_the_constructed_route_meets_it() {
+fn where_every_searched_run_crosses_the_brook_the_sink_refuses() {
     // the brook across the fall just below the outfall, its every point too short a trunk to join: each searched run crosses it
     let b: Vec<Pt> = (0..=60)
         .map(|k| (-100.0 + 70.0 * f64::from(k), 2100.0 + 0.5 * f64::from(k)))
         .collect();
     let mut i = inp(false);
     i.join_trunk = 1e9;
-    let s = sink(&i, &mut b.clone()).unwrap().unwrap();
-    assert_eq!(s.to, "stream");
-    assert!(s.run.len() >= 3 && s.confluence.is_some());
+    let e = sink(&i, &mut b.clone()).unwrap_err();
+    assert!(e.0.contains("no searched run"));
 }
 
 #[test]
-fn a_constructed_route_beside_the_brook_joins_it() {
+fn a_run_beside_the_brook_is_its_twin() {
     let mut src: Vec<Pt> = (0..=50).map(|k| (700.0, 20.0 * f64::from(k))).collect();
     let mut br = Brook::new(&mut src, (0.0, 1.0));
     let route = vec![(720.0, 100.0), (720.0, 900.0)];
@@ -147,8 +146,6 @@ fn a_constructed_route_beside_the_brook_joins_it() {
     let mut br = Brook::new(&mut src2, (0.0, 1.0));
     assert!(br.twin_run(&[(800.0, 0.0), (800.0, 900.0)]) < 1.0);
     assert!(br.twin_run(&[(800.0, 0.0)]) < 1.0);
-    assert!((br.nearest((720.0, 500.0), 40.0).0 - 700.0).abs() < 1e-9);
-    assert_eq!(br.nearest((720.0, 5000.0), 40.0), (720.0, 5000.0));
 }
 
 #[test]
@@ -264,7 +261,7 @@ fn a_refusal_names_itself() {
     assert!(counts.is_empty());
 }
 
-/// A collector whose outfall heads up the page: every searched run turns past 55 degrees or climbs, so the route is constructed.
+/// A collector whose outfall heads up the page: every searched run turns past 55 degrees or climbs, so no run keeps every rule.
 fn uphill() -> SinkIn {
     let mut i = inp(false);
     i.drain = vec![(2000.0, 1990.0), (2000.0, 1900.0)];
@@ -277,43 +274,10 @@ fn with_no_brook_the_sink_still_lays_its_pond_or_its_run() {
         sink(&inp(true), &mut Vec::new()).unwrap().unwrap().form,
         "pond"
     );
-    let s = sink(&uphill(), &mut Vec::new()).unwrap().unwrap();
-    assert_eq!(s.to, "offmap");
-    assert!(s.run.len() > 3);
+    assert!(sink(&uphill(), &mut Vec::new()).is_err());
     let mut none: Vec<Pt> = Vec::new();
     let mut br = Brook::new(&mut none, (0.0, 1.0));
     assert!(!br.crossed(&[(0.0, 0.0), (1.0, 1.0)], 5.0) && br.span(0.0, 1.0).is_empty());
-}
-
-#[test]
-fn the_constructed_route_runs_round_the_hull_and_on_down_the_fall_until_it_descends_with_the_drainage(
-) {
-    let mut i = uphill();
-    i.flow_deg = 150.0;
-    let s = sink(&i, &mut Vec::new()).unwrap().unwrap();
-    let end = s.run[s.run.len() - 1];
-    assert!(end.1 > 4000.0);
-    let mut i = uphill();
-    i.drain = vec![(1100.0, 1990.0), (1100.0, 1900.0)];
-    assert!(sink(&i, &mut Vec::new()).unwrap().unwrap().run.len() > 3);
-}
-
-#[test]
-fn a_constructed_route_down_beside_the_brook_joins_it_and_one_met_on_a_bend_redraws_it() {
-    let s0 = sink(&uphill(), &mut Vec::new()).unwrap().unwrap();
-    let low = s0.run[s0.run.len() - 2];
-    let mut beside: Vec<Pt> = (0..=100)
-        .map(|k| (low.0 + 20.0, low.1 + 100.0 + 30.0 * f64::from(k)))
-        .collect();
-    let s = sink(&uphill(), &mut beside).unwrap().unwrap();
-    assert_eq!(s.to, "stream");
-    let mut bent: Vec<Pt> = vec![
-        (low.0 - 600.0, low.1 + 400.0),
-        (low.0, low.1 + 200.0),
-        (low.0 + 600.0, low.1 + 400.0),
-    ];
-    let s = sink(&uphill(), &mut bent).unwrap().unwrap();
-    assert_eq!(s.to, "stream");
 }
 
 #[test]
@@ -341,7 +305,6 @@ fn the_brook_reads_repeated_stations_and_runs_ending_on_it() {
         (700.0, 1000.0),
     ];
     let mut br = Brook::new(&mut src, (0.0, 1.0));
-    assert!((br.nearest((710.0, 500.0), 20.0).0 - 700.0).abs() < 1e-9);
     assert!(!br.crossed(&[(700.0, 300.0), (800.0, 300.0)], 5.25));
     assert!(br.twin_run(&[(720.0, 100.0), (720.0, 100.0), (720.0, 900.0)]) > brook::TWIN_RUN);
     let c = Crop::read(
@@ -359,23 +322,7 @@ fn the_brook_reads_repeated_stations_and_runs_ending_on_it() {
 }
 
 #[test]
-fn the_constructed_route_from_outside_the_hull_walks_round_either_way_and_lengthens() {
-    let mut i = uphill();
-    i.drain = vec![(2000.0, 2200.0), (2000.0, 2100.0)];
-    assert_eq!(sink(&i, &mut Vec::new()).unwrap().unwrap().to, "offmap");
-    for top in [700.0, 900.0] {
-        let mut i = uphill();
-        i.outline = vec![
-            (1000.0, 800.0),
-            (2600.0, top),
-            (2600.0, 1800.0),
-            (1000.0, 2000.0),
-        ];
-        i.drain = vec![(2500.0, 1700.0), (2500.0, 1600.0)];
-        i.flow_deg = 20.0;
-        let s = sink(&i, &mut Vec::new()).unwrap().unwrap();
-        assert!(s.run[s.run.len() - 1].1 > 4000.0);
-    }
+fn a_run_is_measured_on_the_canvas() {
     assert!(offmap::on_canvas((-10.0, 5.0), (-10.0, 50.0), (100.0, 100.0)) < 1e-9);
     assert!((offmap::on_canvas((50.0, 50.0), (150.0, 50.0), (100.0, 100.0)) - 50.0).abs() < 1e-9);
 }
@@ -389,8 +336,7 @@ fn a_field_whose_land_falls_north_drains_up_the_page() {
     let s = sink(&i, &mut Vec::new()).unwrap().unwrap();
     assert!(s.run[s.run.len() - 1].1 < 0.0);
     i.drain = vec![(2000.0, 810.0), (2000.0, 900.0)];
-    let s = sink(&i, &mut Vec::new()).unwrap().unwrap();
-    assert!(s.run[s.run.len() - 1].1 < 0.0);
+    assert!(sink(&i, &mut Vec::new()).is_err(), "a collector heading against the fall has no searched run");
     i.fall = (-1.0, 0.0);
     i.flow_deg = 180.0;
     i.drain = vec![(1100.0, 1100.0), (1050.0, 1500.0), (1010.0, 1900.0)];
@@ -420,11 +366,11 @@ fn a_crossing_at_the_runs_own_mouth_is_its_junction_and_a_twin_reads_the_brooks_
 }
 
 #[test]
-fn a_constructed_route_turning_past_55_degrees_out_of_the_collector_is_refused() {
+fn a_collector_heading_up_the_fall_from_outside_the_field_is_refused() {
     let mut i = uphill();
     i.drain = vec![(3200.0, 2200.0), (3200.0, 2100.0)];
     let e = sink(&i, &mut Vec::new()).unwrap_err();
-    assert!(e.0.contains("55 degrees"));
+    assert!(e.0.contains("no searched run"));
 }
 
 #[test]

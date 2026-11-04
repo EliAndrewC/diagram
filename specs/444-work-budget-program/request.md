@@ -390,3 +390,15 @@ taking 3.81 s where it took 1.60, its calls doubled:
 Told that feature 448 had landed and the sink phase waited for his review:
 
 "Okay, Claude. Here's what I'm thinking about our operations budget. It's great that we have estimated our calculations in advance. Love it. But if we discover that there are things that we didn't take into account, then it makes sense to raise the operations budget rather than to fight and do a huge amount of effort and refactoring to try to cram things into a budget that was never meant to account for them. Also, our budget is an estimate, and so I think it makes sense to allow some amount of leeway particularly if, for example, a subagent check looks at it and thinks that it's reasonable. So here are my guidelines, though, because I don't want us to just think it's reasonable to have things take an order of magnitude more operations than we estimated. Without extremely rigorous analysis: I would frankly be okay with things that are 50% higher or even twice as high in terms of the number of operations than what we have budgeted. because that is still massively faster than what we had, and that will still represent an order of magnitude improvement in terms of operations, and more than an order of magnitude improvement in terms of performance, given how much faster Rust is than Python on a per operation basis. So I think what I want is for you to update the guidelines for this Rust rewrite to take that into account, then work on converting the next stage with these guidelines in place so that we do not need to fret or take a huge amount of time to squeeze every last drop of performance out of the system when our performance is already good enough to be perfectly scalable to the thousands of buildings that we eventually need to be able to place on a map. On the other hand, I don't want to just completely relax the performance requirements, because if we end up with some kind of n squared algorithm, then even in Rust that will become a problem. Have I provided enough information for you to be able to move forward with updating the feature guidelines, and then proceed with implementing the next phase, like the entire next phase, according to these guidelines? If so, then please do it. If not, then let's talk more about what the particular changes and tweaks to the guidelines need to be before you are able to move forward. Thanks."
+
+## 2026-11-04, T26 - the sink's budget raised, and the next phase
+
+Told that the sink counted 919 operations at 40 households against a ceiling of 582 (twice its budget of 291), with (a) a raise
+to 1,000 at 40 and 1,200 at 80 households on his words recommended and (b) reworking the reeds' drawing priced, and asked what an
+operation is, then told an operation is one basic geometric step:
+
+"Sounds good, I accept option (a) and have already raised the soft cap to 80%"
+
+And, while the landing ran:
+
+"Once you have finished with this, please do the entire next phase as well.  I'm going to sleep so I'd love to see it done when I get up in the morning."

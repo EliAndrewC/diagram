@@ -151,29 +151,6 @@ impl<'a> Brook<'a> {
         first.saturating_sub(1)..last.min(self.len() - 1)
     }
 
-    /// The fall the brook is ordered along.
-    #[must_use]
-    pub fn fall(&self) -> Pt {
-        self.fall
-    }
-
-    /// The point of the brook nearest `p`, over the segments within `reach` of `p` along the fall (`p` itself where none is).
-    pub fn nearest(&mut self, p: Pt, reach: f64) -> Pt {
-        let u = p.0 * self.fall.0 + p.1 * self.fall.1;
-        let mut best: Option<(f64, Pt)> = None;
-        for i in self.span(u - reach, u + reach) {
-            let (a, b) = self.seg(i);
-            let (vx, vy) = (b.0 - a.0, b.1 - a.1);
-            let l2 = (vx * vx + vy * vy).max(1e-12);
-            let t = (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0);
-            let q = (a.0 + vx * t, a.1 + vy * t);
-            if best.is_none_or(|(m, _)| dist(p, q) < m) {
-                best = Some((dist(p, q), q));
-            }
-        }
-        best.map_or(p, |(_, q)| q)
-    }
-
     /// Segment `i` of the brook.
     pub fn seg(&mut self, i: usize) -> (Pt, Pt) {
         self.tests += 1;

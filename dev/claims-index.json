@@ -80282,13 +80282,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/sink/offmap.rs::constructed#a route that runs alongside the brook for more than TWIN_RUN is redrawn by `beside` instead of going off the map": {
-  "code": "79fd0f08d04dc094",
+ "rust/phases/src/sink/offmap.rs::constructed#a drain meeting the brook joins it": {
+  "body": "b233eacbbece0254",
+  "claim": "a drain meeting the brook joins it - field-drains-akusuiro.drawing: the drain joins the passing brook; the route cut where it first meets the brook (`meets_brook`) and ended there",
+  "code": "efea2f805f21a4ba",
   "core": "79fd0f08d04dc094",
   "date": "2026-11-04",
-  "note": "a route that runs alongside the brook for more than TWIN_RUN is redrawn by `beside` instead of going off the map",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the route is cut where it first meets the brook and ends there with \"stream\", as the page's drain joins the passing brook",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::constructed#constructed route": {
   "body": "b233eacbbece0254",
@@ -80307,7 +80315,7 @@
   "code": "a39ad5960cf143b1",
   "core": "79fd0f08d04dc094",
   "date": "2026-11-04",
-  "note": "the claim puts the 55-degree refusal in `lay`, which the bundle does not show; this unit makes no turn check itself. From inside the hull the first leg follows `head` (no turn); from outside it goes to the nearest hull point (any turn). I need `lay`'s source to confirm it refuses a turn over 55 degrees, and to see whether it also applies that rule to the \"stream\" routes this returns, where the page rules on no angle",
+  "note": "`lay` checks only the first leg (`run[1]-run[0]`). From inside the hull `constructed` makes that leg run along the heading, so it measures 0, but the route then turns at `p1` onto a hull edge (`vec![out, p1, ring[k]]`, with fwd/bwd chosen by which way is lower, never by the turn). That corner is a few feet past the exit and is never checked. The page wants the run to bend \"over the first stretch of its course ... rather than meeting a hard corner. The turn is held to 55 degrees or less.\" The real turn at `p1` (and from outside the hull, the turn at the nearest hull point) needs the 55-degree limit, or the claim has to say the limit covers only the first leg",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -80316,15 +80324,23 @@
    "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
- "rust/phases/src/sink/offmap.rs::constructed#the drain is cut where its route meets the passing brook and ends there as a join (`meets_brook`, \"stream\"); the page backs this [§5]": {
-  "code": "79fd0f08d04dc094",
+ "rust/phases/src/sink/offmap.rs::constructed#not the brook's twin": {
+  "body": "b233eacbbece0254",
+  "claim": "not the brook's twin - do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws: a route running beside the brook past `TWIN_RUN` is laid by `beside` instead",
+  "code": "91bce47dc93e2945",
   "core": "79fd0f08d04dc094",
   "date": "2026-11-04",
-  "note": "the drain is cut where its route meets the passing brook and ends there as a join (`meets_brook`, \"stream\"); the page backs this [§5]",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "§29 says a drain that would run beside the brook \"joins the brook instead\", within a band of about 12 to 32 ft and a run of more than 60 ft. To judge this I need the body of `beside` (does it join the brook or draw a parallel ditch?) and the value of `TWIN_RUN` with the band that `Brook::twin_run` measures, and the bundle shows none of them",
+  "pages": {
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html": "97942f0b9f1a4ea7"
+  },
+  "research": "6c5761492b0d7655",
+  "rests": [
+   "0067-do-two-ditches-run-side-by-side-across-the-fields-not-in-the-old-forms-the-map-draws.html:3a93442cd4ab51cb"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/sink/offmap.rs::grown#the off-map branch": {
   "body": "2991b1679bb80ae7",

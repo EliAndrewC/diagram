@@ -462,3 +462,19 @@ groves_crossed_by_lanes 2), at set-down.
 8. **Every route measured before the arbiter was asked?** The JOIN_REACH change ruled out (pond sink); the room knob
    (`SEATING_GROUND_FT`, a GUESS) not moved, since the failing stage is not the sink's.
 9. **After a ruling, the step it named?** Yes: ask:set-down-T26 ruled `continue` - seed 904 recorded as a found row for the household groves' port, kept off the Rust failing list (FR-020), T26's landing left to its budget route.
+
+### T26 Approach (2026-11-04T06:51Z)
+
+The increment after the GM's answer (2026-11-04, "Sounds good, I accept option (a)"): the sink's budget raised on his words to 850 / 1,000 / 1,200, and the landing.
+
+1. **The goal, in the world.** As the T26 Approach above: the field's runoff ends at a pond with its reeds, or joins the passing brook, or runs off the map on a searched run that keeps every rule of 0060 and 0054.
+2. **The constraints.** FR-022 (the raise on the GM's words, past twice the first and under ten times; LEEWAY at up to twice the raised figure); rubric S5 (every inner loop counted, work in C per element); FR-021 (no open claims finding in a file the landing changes).
+3. **Where each comes from.** G: the GM's answer above. O: MODE AUDIT rounds 3 and 4 (`phases/sink.audit-3.txt`, `-4`), each UNCOUNTED: the keyhole's all-pairs loop and the keep-out's shapely work, uncounted. R: 0060's 55-degree turn, which the constructed route held on its first leg only (impl-drift, 2026-11-04).
+4. **Do they describe the world here?** Yes: the uncounted loops ran on every pond roll; the constructed route on no seed of the Rust gate's 54 and no pool map, measured 2026-11-04 (`make rust-gate` and `make map` of the two off-map hamlets with `lay` refusing before the constructed route; `phases/sink.constructed-routes.md`).
+5. **The order.** Count first, then cut: the counters added, the work measured (3,271 at 40, measured 2026-11-04 (`make work-budget`)), then the pond cut once in `drawn_ground`, the field cut to the reeds' reach, the closest pair swept by x (1,455 at 40, measured 2026-11-04 (`make work-budget`)).
+6. **The exits.** Green: MODE AUDIT LEEWAY (`phases/sink.audit-5.txt`), `make budget-accept`, the claims round IN-STEP on every changed file, `make rust-gate` 0 failing, `make land F=444 T="T22 T26"`. Red: past twice the raised budget - a question for the GM, the raise his own; else what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The constructed route is deleted on the round arbiter's ruling (ask:444-T26-constructed-turn, route b): where no searched run keeps every rule the sink refuses by name; the remedy for a refusing seed is a finer `SWINGS` or a longer lengthening, both GUESS knobs, never a constructed route again.
+8. **The budget.** One MODE AUDIT a change; the round arbiter at the third claims round on one unit (as ruled).
+9. **Done, measured.** sink 1,358 / 1,455 / 1,611 at 20 / 40 / 80, measured 2026-11-04 (`make work-budget`), accepted.
+10. **Before moving a constant.** None moved: the reeds' reach past their tint (the registry's) now bounds the field's cut too, its claim reworded; the pond's ellipse in the reeds' cut is the 32-point ring the blocks already held.
+11. **Before fitting things into room.** Not a room question.

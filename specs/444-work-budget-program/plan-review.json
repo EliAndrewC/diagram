@@ -139,12 +139,6 @@
    "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
-  "### T22 (<why: the finding or measurement that files it>)": {
-   "sha256": "787ce4d6c9eb1a544db3bb0f147bf28bb758980c220519e1800ed6eede46521b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
   "### T22 Approach (checklist part A)": {
    "sha256": "1bb986bc5722f79ba7d447e0df1b60477b867b8d2294ae02a820a3170e39b429",
    "verdict": "CLEAR",
@@ -251,6 +245,18 @@
    "sha256": "041db6b8791d6a654792986201bec2420728db63391b7f86aa1e914e030aea4e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-03",
+   "declared": "spec-fidelity"
+  },
+  "### T26 part B (2026-11-03T18:55Z)": {
+   "sha256": "761b3fbf74655e125cc107f3f3164df3106f8be32275abec4f23df98db79bdd6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (2026-11-04T06:51Z)": {
+   "sha256": "1fc5161a5d09e6086f2633fb09e6b2f442246b315460c08faf75b3ade997e4f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
    "declared": "spec-fidelity"
   }
  },
@@ -4033,6 +4039,90 @@
      "summary": "After T26's committed work, independent of its landing; one landing; Red records the failure and sets the task down, a claim it cannot be done ruled through make arbiter-ask.",
      "class": "within",
      "why": "Sequencing and the standing escalation route; nothing in the request is relaxed - a cannot-be-done claim goes to the arbiter rather than being granted by the session."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-04",
+   "blocks": [
+    "### T26 Approach (2026-11-04T06:51Z)",
+    "### T26 part B (2026-11-03T18:55Z)",
+    "(removed) ### T22 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-B.1",
+     "summary": "Seed 904 (groves_crossed_by_lanes 2) is judged a failure of the later Python bamboo-strip and lane-web stages on the Rust sink's moved pond; the sink is not tuned to avoid it.",
+     "class": "within",
+     "why": "Amendment 5 verbatim: 'it would be a mistake to keep trying to tweak the Rust implementation to avoid triggering a Python bug in a later step ... we don't care at all about the Python stages which come after'. A grove/lane check cannot fail at the point the sink completes, since neither exists yet."
+    },
+    {
+     "id": "T26-B.2",
+     "summary": "Seed 904 is kept off the Rust failing list and recorded as a found row for the household groves' port.",
+     "class": "within",
+     "why": "Amendment 5: the failing-seed list is 'ONLY for Rust stages, NOT for Python stages'; FR-020: 'Python stages never add to it'. Recording it against the groves' port follows the 2026-11-01 words 'we will fix those when those stages are ported to Rust'."
+    },
+    {
+     "id": "T26-B.3",
+     "summary": "Neither the JOIN_REACH change nor the SEATING_GROUND_FT room knob is moved for 904.",
+     "class": "within",
+     "why": "Follows from B.1: the failing stage is not the sink's; moving the sink's knobs for it is the tweak amendment 5 forbids."
+    },
+    {
+     "id": "T26-A.1",
+     "summary": "Sink budget raised on the GM's words to 1,000 at 40 and 1,200 at 80 households.",
+     "class": "within",
+     "why": "The GM 2026-11-04, told option (a) was 'a raise to 1,000 at 40 and 1,200 at 80 households on his words': 'Sounds good, I accept option (a)'. Section 5.4 (budgets change only with the GM's words) is met."
+    },
+    {
+     "id": "T26-A.2",
+     "summary": "The same raise also sets the budget at 20 households to 850, a figure the GM's recorded words do not name.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed wrong, since section 5.4 says budgets change only with the GM's words and the words name only 40 and 80. It is legitimate because the literal reading defeats the request's purpose. FR-022 rule 1 accepts at 40 and 80, so the only thing the 20 figure gates is the growth cap (FR-022 rule 3, S3/S6: the measured exponent at most the budget's). The pre-raise 20 figure is at most the old 291 at 40. Left unraised, the budget's 20-to-80 exponent would be at least ln(1200/291)/ln4 = 1.02, room for exactly the n-squared growth amendment 7 forbids by name ('if we end up with some kind of n squared algorithm, then even in Rust that will become a problem'). 850 gives 0.25, tighter than the GM's own 1,000 to 1,200 shape (0.26). The measured exponent is ln(1611/1358)/ln4 = 0.12, under either. The bundle cannot confirm that 850 itself was put to the GM. That does not move the ruling: the figure only tightens a bound, and any 20 figure of sane shape passes this measured stage."
+    },
+    {
+     "id": "T26-A.3",
+     "summary": "The sink is accepted on MODE AUDIT LEEWAY at 1,358 / 1,455 / 1,611 (20/40/80) against the raised 1,000 at 40 and 1,200 at 80, ceiling twice the raised figure; past that, a question for the GM.",
+     "class": "within",
+     "why": "Amendment 7: 'okay with things that are 50% higher or even twice as high ... than what we have budgeted', judged by a subagent. FR-022 rule 1: LEEWAY up to twice the budget at 40 and 80, and 1,455/1,000 = 1.46 and 1,611/1,200 = 1.34. Beyond twice the first budget (582) the count needs the GM's words, which the raise carries, and it stays under the ten-times line (2,910). Note: the GM accepted 1,000 when told 919, and the count rose once the uncounted loops were counted. Amendment 7's standing leeway, which the GM wrote so the session would not 'fret', covers that excess. The red exit returns anything past twice to him."
+    },
+    {
+     "id": "T26-A.4",
+     "summary": "The constructed (off-map) route is deleted on the round arbiter's ruling. Where no searched run keeps every rule of 0060/0054 the sink refuses by name; the remedy is a finer SWINGS or longer lengthening, never a constructed route again.",
+     "class": "within",
+     "why": "The constructed route broke 0060's 55-degree turn after its first leg. Deleting it makes the stage keep its rules instead of placing and repairing (S4). It changes no requested outcome: it was measured on no seed of the Rust gate's 54 and no pool map. A refusal on a future seed is a failing Rust check and goes on the FR-020 list, so 'all seeds pass for all Rust stages' (amendment 5) still governs."
+    },
+    {
+     "id": "T26-A.5",
+     "summary": "Count first, then cut: the all-pairs keyhole loop and the keep-out's shapely work are counted, then the pond is cut once in drawn_ground, the field is cut to the reeds' reach, and the closest pair is swept by x.",
+     "class": "within",
+     "why": "Counting every inner loop is S5 and section 3's checklist. Removing an all-pairs pass is FR-022 rule 3 and amendment 7 ('n squared'). Algorithm choice is not a fidelity question."
+    },
+    {
+     "id": "T26-A.6",
+     "summary": "No constant is moved. The reeds' reach constant now also bounds the field's cut, and its research claim is reworded to match.",
+     "class": "within",
+     "why": "It reuses an existing registry constant and does not change its value. Under FR-021 the reworded claim must be IN-STEP before the landing, and the exits require that."
+    },
+    {
+     "id": "T26-A.8",
+     "summary": "Round budget: one MODE AUDIT per change, and the round arbiter at the third claims round on one unit (as ruled).",
+     "class": "within",
+     "why": "A process cap. Request section 5.4 lets the round arbiter rule on process (never on a budget). A claims cap that ends in an arbiter ruling still lands no open claim, because make land refuses under FR-021, so amendment 6 holds. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T26-A.7",
+     "summary": "Exits: LEEWAY audit, make budget-accept, a claims round IN-STEP on every changed file, make rust-gate 0 failing, make land F=444 T=\"T22 T26\". The constraint paraphrases FR-021 as 'no open claims finding in a file the landing changes'.",
+     "class": "within",
+     "why": "Amendment 6: 'zero open claims', and amendment 5: 'no Rust stage ever ends with any failing checks'. The exit 'claims round IN-STEP on every changed file' and the constraint paraphrase are narrower than FR-021, which also reaches unchanged Python units the seam or its Rust reads at run time. It stays within only because the plan does not say 'only changed files': it cites FR-021 by id, and the landing is bound to FR-021 as written through make land (SC-014), so the gloss cannot reach main. Had the plan restricted the check to changed files, this would be a narrowing with no legitimate ground. The claims round should cover the run-time-read units too."
+    },
+    {
+     "id": "T22-removed",
+     "summary": "The T22 plan block is removed. Its last-judged text was an unfilled template with placeholders only.",
+     "class": "within",
+     "why": "The removed text made no decision: no approach, no figures, an empty table. T22 itself is not dropped, since T26's exit still lands T=\"T22 T26\". Removing an empty stub narrows nothing."
     }
    ]
   }
