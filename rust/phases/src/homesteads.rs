@@ -12,6 +12,7 @@
     )
 )]
 
+pub mod bearing;
 pub mod ground;
 pub mod layout;
 

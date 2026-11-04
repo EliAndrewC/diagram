@@ -3,6 +3,7 @@
 //! Research:
 //!     the homesteads' tests - NONE: fixtures and assertions, deciding nothing about the place
 
+use super::bearing::{house_rot, soft_limit, turned_box, wrap_square, Margin, SPREAD_DEG};
 use super::ground::{Ground, CELL};
 use super::layout::{
     beds, byre, hjit, kura, yard, yard_area_ft2, Byre, Side, SIDES, TSUBO_FT2, YARD_MIN_TSUBO,
@@ -149,4 +150,60 @@ fn the_storehouse_annex_keeps_its_band_and_the_byre_its_flank() {
         byre(46.0, 28.0, Side::SE, Byre::Courtyard).4 > 0.0
             && byre(10.0, 4.0, Side::SW, Byre::Courtyard).1 == 0.0
     );
+}
+
+#[test]
+fn a_house_turns_with_the_margin_it_stands_by_held_under_the_spread() {
+    assert!((wrap_square(80.0) + 10.0).abs() < 1e-9 && (wrap_square(-50.0) - 40.0).abs() < 1e-9);
+    assert!(
+        soft_limit(60.0, SPREAD_DEG) < SPREAD_DEG && (soft_limit(0.1, 30.0) - 0.1).abs() < 1e-4
+    );
+    // the turn keyed on the seat's 4 ft cell, its spread inside the limit about the common bearing
+    assert!(
+        (house_rot((101.0, 99.0), 5.0, 0.0) - house_rot((100.0, 100.0), 5.0, 0.0)).abs() < 1e-12
+    );
+    for k in 0..50 {
+        let r = house_rot((f64::from(k) * 37.0, 11.0), 5.0, 20.0);
+        assert!((r - 5.0).abs() < SPREAD_DEG);
+    }
+    // a margin square to the axis gives no turn; one bent 20 degrees turns a house beside it, fading past the pull's reach
+    let mut t = 0;
+    let square = Margin::new(
+        &[(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)],
+        0.0,
+        &mut t,
+    );
+    assert!(square.follow((500.0, 50.0), &mut t).abs() < 1e-9);
+    let a = 20f64.to_radians();
+    let bent = Margin::new(
+        &[
+            (0.0, 0.0),
+            (1000.0 * a.cos(), 1000.0 * a.sin()),
+            (500.0, 2000.0),
+        ],
+        0.0,
+        &mut t,
+    );
+    let near = bent.follow((500.0 * a.cos(), 500.0 * a.sin() + 20.0), &mut t);
+    assert!((near - 20.0).abs() < 1.0, "{near}");
+    assert!(bent.follow((5000.0, 5000.0), &mut t).abs() < 1e-12);
+    // halfway through the fade, half the turn
+    let mid = bent.follow(
+        (
+            500.0 * a.cos() - 168.0 * a.sin(),
+            500.0 * a.sin() + 168.0 * a.cos(),
+        ),
+        &mut t,
+    );
+    assert!(mid > 5.0 && mid < 15.0, "{mid}");
+    // a ring of two points turns nothing
+    assert!(
+        Margin::new(&[(0.0, 0.0), (10.0, 0.0)], 0.0, &mut t)
+            .follow((5.0, 1.0), &mut t)
+            .abs()
+            < 1e-12
+    );
+    // a box turned a quarter swaps its sides
+    let b = turned_box((0.0, 0.0, 40.0, 20.0), 90.0);
+    assert!((b.2 - 20.0).abs() < 1e-9 && (b.3 - 40.0).abs() < 1e-9);
 }
