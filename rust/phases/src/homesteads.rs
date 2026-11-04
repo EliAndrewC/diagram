@@ -26,6 +26,7 @@ pub mod lots;
 pub mod place;
 pub mod standing;
 pub mod track_out;
+pub mod ways_judge;
 pub mod wood;
 
 #[cfg(test)]
@@ -44,5 +45,7 @@ mod standing_tests;
 mod tests;
 #[cfg(test)]
 mod track_out_tests;
+#[cfg(test)]
+mod ways_judge_tests;
 #[cfg(test)]
 mod wood_tests;
