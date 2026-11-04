@@ -177,6 +177,8 @@ pub struct Site<'a> {
     pub forms: &'a Forms,
     /// The persimmon's reach off the plots' sun.
     pub shade: f64,
+    /// What the rules read past the raster.
+    pub rules: &'a super::fit_rules::Rules,
 }
 
 /// A household seated: its lot's ordinal, the seat it was offered and its homestead.
@@ -358,10 +360,16 @@ impl Seating {
                 continue;
             }
             self.search.3 += 1;
-            if !sun_ok(&b, &self.standing, &mut self.tests)
+            let rules = site.rules;
+            if super::fit_rules::persimmon_conflict(&mut b, &self.standing, rules, &mut self.tests)
+                || !sun_ok(&b, &self.standing, &mut self.tests)
                 || !on_free_ground(&b, site.ground, site.beyond, &mut self.tests)
                 || across_a_stream(&b, site.streams, &mut self.tests)
+                || super::fit_rules::wall_on_the_bund(&b, rules, &mut self.tests)
+                || super::fit_rules::beds_on_water(&b, rules, &mut self.tests)
+                || !super::fit_rules::admitted(&b, rules, &mut self.tests)
                 || too_near(b.house, b.turn, &self.standing, &mut self.tests)
+                || super::fit_rules::unreachable((b.house.0, b.house.1), rules, &mut self.tests)
             {
                 continue;
             }
@@ -414,6 +422,7 @@ impl Seating {
             yard: b.boxes[1],
             beds: b.boxes[2..2 + b.gardens.len()].to_vec(),
             bbox: b.bbox,
+            persimmon: super::fit_rules::persimmon_of(&b),
         };
         self.standing.add(placed, &mut self.tests);
         let lot = self.seated.len();

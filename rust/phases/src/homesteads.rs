@@ -18,6 +18,7 @@ pub mod access;
 pub mod bearing;
 pub mod bundle;
 pub mod fit;
+pub mod fit_rules;
 pub mod fixtures;
 pub mod gap_ways;
 pub mod ground;
@@ -32,6 +33,8 @@ pub mod wood;
 
 #[cfg(test)]
 mod access_tests;
+#[cfg(test)]
+mod fit_rules_tests;
 #[cfg(test)]
 mod fit_tests;
 #[cfg(test)]

@@ -9,6 +9,7 @@
 
 use super::bearing::Margin;
 use super::fit::{corners, quad_gap, EAVE_FT};
+use super::fit_rules::Rules;
 use super::fixtures::{Forms, Kind};
 use super::ground::Ground;
 use super::layout::Byre;
@@ -52,6 +53,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         byre: Some(Byre::YardShed),
         forms: &forms,
         shade: 50.0,
+        rules: &Rules::default(),
     };
     assert!(beyond((0.0, 0.0)));
     let st = grow(&site, (1200.0, 1350.0), 12);
@@ -137,6 +139,7 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
         byre: None,
         forms: &forms,
         shade: 50.0,
+        rules: &Rules::default(),
     };
     assert!(beyond((0.0, 0.0)));
     // off the canvas
@@ -261,6 +264,7 @@ fn a_homestead_may_not_stand_its_parts_over_a_neighbors_wood() {
         byre: None,
         forms: &forms,
         shade: 50.0,
+        rules: &Rules::default(),
     };
     let mut st = Seating::default();
     assert!(st.offer(&site, 600.0, 600.0, None));

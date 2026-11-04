@@ -50,6 +50,8 @@ pub struct Placed {
     pub beds: Vec<Rect>,
     /// The box round the whole homestead.
     pub bbox: Rect,
+    /// Its persimmon's center, where it keeps one.
+    pub persimmon: Option<Pt>,
 }
 
 /// The standing homesteads, filed in a grid by their boxes.

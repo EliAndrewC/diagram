@@ -22,6 +22,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 | the households' lots | `lots.rs` | `rolling/lot.py` (`size_ladder`, `quota_carriers`, `larger_first`, `HouseholdLots`) |
 | the fit rules: the south sun both ways, the eave gap on turned roofs, one bank, free ground, the yard's opening | `fit.rs` (`Standing`, `sun_ok`, `too_near`, `across_a_stream`, `on_free_ground`, `opens`) | `rolling/fit.py` `_sun_corridor_ok`, `_gardens_sun_ok`, `_house_too_near_a_neighbor`, `_parts_across_stream`, `_rect_hits`/`_rect_on_water` (by the raster), `SeatRegion.opens` |
 | the placer and the growth: the first house nearest the seat, the rest grown ring by ring; each offer's sides, the one computed move, the least-shaded side | `place.rs` (`grow`, `Seating::offer`, `Keep`) | `rolling/place.py` `_place_bundle_nucleated`, `homesteads/growth.py` `grow_the_margin`, `capacity.py` `free_seats`/`offer_seats` (the nucleated path; the passage share's tight seats still owed) |
+| the fit rules past the raster: the house's wall off the paddy's facing chords, every bed off running water, the house out of the ground no way reaches, every part admitted by the extents the registry forbids its key (the door's input), the persimmon dropped from a yard's or bed's sun and a neighbor's tree refusing the seat | `fit_rules.rs` (`chain_violated`, `wall_on_the_bund`, `on_water`, `beds_on_water`, `unreachable`, `admitted`, `crown_shades`, `persimmon_conflict`), asked by `place.rs` | `rolling/fit.py` `_persimmon_sun_conflict`, `_settle_persimmon`, `_persimmon_shades_a_neighbor`, `_rect_on_water`, `_house_unreachable`; `houses.py` `_wall_on_the_bund`; `_geom/primitives.py` `chain_violated`; `rolling/lot.py` `bundle_admitted`, `bundle_records`, `held_part_records`; `homesteads/boundary.py` `UnreachableGround`; `tree_shade.py` `crown_shades`; `fit_index.py` `drop_persimmon` |
 | the wood share, judged at its lattice square on the map's lattice, each household's keep-outs barring the others' | `wood.rs` (`Shares`, `keepouts`), asked last of every layout by `place.rs` | `homestead_parts/wood_share.py` (`WoodShares.share`, `seat_barred`, `covers_a_seat`, `copse_keepouts`) |
 | the track out's sweep: the gateway pulled clear of the crop, 41 bearings nearest the ideal first, ranked wet, steadings, then crop and water, the least-bad dry bearing kept, else the dry exit | `ways/track.rs` (`connector`, `Checker`, `fabric_hits`, `grown`, `past_the_frame`, `pull_clear`) | `ways/track.py` `connector_track`, `past_the_frame`, `wet_grown_by_the_lane`; `ways/checks.py` `PathChecker`, `shallow_crossing`, `crossing_lands_on_crop`; `ways/fabric.py` `fabric_hits_boxed`, `_crosses_fabric`; `clearance.py` `pairs_within`; `sitegen/geom.py` `pull_clear`, `crosses_poly` |
 | the dry exit: the walls rastered once, the fill own-bank, then over the brook's crossing places where that saves the crossing's walk, then over a drawn channel last; a gateway walked out of a grove band first | `ways/dry_exit.rs` (`connector_dry_exit`, `blocked`, `fill`, `push_out_of`, `clear_of_bands`; the fords from `seat/fords.rs`) | `ways/dry_exit.py` (`dry_exit`, `_blocked_cells`, `_pull`, `clear_of_bands`), `ways/track.py` `connector_dry_exit`, `on_course`; `ways/geom.py` `push_out_of` |
@@ -46,7 +47,7 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
 
 ## Left, in the order they are needed
 
-1. The fit rules still owed (the rest ported in `fit.rs`): the wood seat covered, the persimmon's sun conflict, the house's wall on the bund, the registry's admission beyond the raster, the house unreachable - the fit rules a layout is asked (`rolling/fit.py` `_parts_fit` and its rules, 309-431 and 433-930): the wood seat covered, the
+1. (ported: `fit.rs`, `fit_rules.rs`; the house on a tread is not asked, as no lane stands while houses are seated - feature 318.) The fit rules a layout is asked (`rolling/fit.py` `_parts_fit` and its rules, 309-431 and 433-930): the wood seat covered, the
    south sun of the yard and beds (`_sun_corridor_ok`, `_yard_sun_conflict`, `_gardens_sun_ok`, `_persimmon_sun_conflict`), the yard
    opening onto the reach (`SeatRegion.opens`), the house's wall on the bund (`houses.py` `_wall_on_the_bund`), the parts across a
    stream, the parts and fixtures off the field (`_rect_hits`), the beds off the water (`_rect_on_water`), the registry's admission
@@ -105,6 +106,10 @@ names and is listed so a refused seed can be traced to it.
 - `ways/dry_exit.rs`: the walls rastered once for the three fills (Python memoizes the whole raster per wall set).
 - `law/tree.rs` `Tree::admits`: the new lane is not put off the needle (`off_the_needle`), as Python's `TreeBase.lane_for` does
   not; `lanes_of`'s pass for the web is the web stage's.
+- `homesteads/fit_rules.rs` `unreachable`: the hard ground's depth asked at the house's center and 64 points of the circle a
+  way's reach draws about it (Python erodes the union with shapely), so a hole between the points can refuse a seat Python keeps.
+- `homesteads/fit_rules.rs` `admitted`: each part asked of the extents the registry forbids its key when the seating begins (the
+  door's input); the homesteads seated since are held off by the placer's boxes and gaps, not asked of the matrix.
 - Counting: the lane law's predicates count into a thread's tally (`counts::note`), drained into the stage's `Counts` at
   `lay_the_ways` and `choose_track_out`.
 
