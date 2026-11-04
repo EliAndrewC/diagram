@@ -160,4 +160,91 @@ impl Ground {
                 self.taken_at(p).unwrap_or_else(|| beyond(p))
             })
     }
+
+    /// The free cells joined to any of `seeds` through free cells, 4-connected: every cell labeled in one pass reading its west and
+    /// north neighbors (union-find over the labels), the seeds' labels kept - nothing changes the free ground while the houses are
+    /// seated (no way stands, no house is painted: 0246), so the reach is labeled once.
+    #[must_use]
+    pub fn reach(&self, seeds: &[Pt], tests: &mut u64) -> Reach {
+        let n = self.nx * self.ny;
+        let mut parent: Vec<usize> = (0..n).collect();
+        for j in 0..self.ny {
+            for i in 0..self.nx {
+                let k = j * self.nx + i;
+                *tests += 3;
+                if self.taken[k] {
+                    continue;
+                }
+                for nb in [(i > 0).then(|| k - 1), (j > 0).then(|| k - self.nx)]
+                    .into_iter()
+                    .flatten()
+                {
+                    if !self.taken[nb] {
+                        let (a, b) = (root(&mut parent, k), root(&mut parent, nb));
+                        parent[a.max(b)] = a.min(b);
+                    }
+                }
+            }
+        }
+        let mut keep: Vec<usize> = seeds
+            .iter()
+            .filter_map(|&p| self.cell_of(p))
+            .map(|(i, j)| j * self.nx + i)
+            .filter(|&k| !self.taken[k])
+            .map(|k| root(&mut parent, k))
+            .collect();
+        keep.sort_unstable();
+        keep.dedup();
+        let reached = (0..n)
+            .map(|k| !self.taken[k] && keep.binary_search(&root(&mut parent, k)).is_ok())
+            .collect();
+        *tests += n as u64;
+        Reach {
+            x0: self.x0,
+            y0: self.y0,
+            nx: self.nx,
+            ny: self.ny,
+            reached,
+        }
+    }
+}
+
+/// The root of `k`'s label in the union-find, halving the path as it climbs.
+fn root(parent: &mut [usize], mut k: usize) -> usize {
+    while parent[k] != k {
+        parent[k] = parent[parent[k]];
+        k = parent[k];
+    }
+    k
+}
+
+/// The reach: which cells of the free ground a way from the way out's anchor can come to.
+pub struct Reach {
+    x0: f64,
+    y0: f64,
+    nx: usize,
+    ny: usize,
+    reached: Vec<bool>,
+}
+
+impl Reach {
+    /// Whether a box (its corners `lo`, `hi`) touches a reached cell: the cells it covers, clipped to the window.
+    #[must_use]
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "cell indices clamped into the window"
+    )]
+    pub fn touches(&self, lo: Pt, hi: Pt, tests: &mut u64) -> bool {
+        let i0 = ((lo.0 - self.x0) / CELL).floor().max(0.0) as usize;
+        let j0 = ((lo.1 - self.y0) / CELL).floor().max(0.0) as usize;
+        let i1 = (((hi.0 - self.x0) / CELL).floor().max(-1.0) + 1.0) as usize;
+        let j1 = (((hi.1 - self.y0) / CELL).floor().max(-1.0) + 1.0) as usize;
+        (j0..j1.min(self.ny)).any(|j| {
+            (i0..i1.min(self.nx)).any(|i| {
+                *tests += 1;
+                self.reached[j * self.nx + i]
+            })
+        })
+    }
 }
