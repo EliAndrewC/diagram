@@ -120,9 +120,10 @@ pub struct Weights {
 /// The candidate seats a field's outline offers, `(margin midpoint, the back's direction, tier)`, in the outline's order.
 ///
 /// Research:
+///     one seat a margin - GUESS: no page divides a field's edge into seats; each outline edge offers one, at its midpoint
 ///     back faces the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge - tier 0, the margin's own outward normal within 45 degrees of the wind
 ///     45 degree bar - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the bar; 0072 gives no tolerance
-///     back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind offers its back turned toward the wind just past the 45-degree bar, at most 45 degrees off its own normal, so the band still stands off the field; research/questions/0029-farmhouses-minka.drawing.html's quarter turn is a house's off the fall line, on a slope our maps do not draw
+///     back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind offers its back turned toward the wind just past the 45-degree bar, at most 45.5 degrees off its own normal (the bar and its half-degree slack), so the band still stands off the field; research/questions/0029-farmhouses-minka.drawing.html's quarter turn is a house's off the fall line, on a slope our maps do not draw
 #[must_use]
 pub fn candidates(
     outline: &[Pt],
@@ -359,6 +360,7 @@ impl<'a> Ground<'a> {
 ///     not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
 ///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "a site the brook does not cross is still preferred when two are otherwise level", the brook's share the tie-break, never refused
+///     the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from
 ///     the ladder - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet never splits, so the margins it falls back to are whole seats, ranked
 #[expect(
     clippy::too_many_lines,

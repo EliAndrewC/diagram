@@ -282,6 +282,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-04",
    "declared": "spec-fidelity"
+  },
+  "### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)": {
+   "sha256": "4023b67dcc16582a586a771b6d0575b52c5fdcbd8c82c9ceed1d226ec85d0701",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Decisions": {
+   "sha256": "0d6f66284fef720d6f6541e2db221cdf326abcd9b59e829c0cbd8649cf5fc522",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (2026-11-04T12:38Z)": {
+   "sha256": "3fe4f6d67bfdf31cb866eeb342412b83a8284a6e6d627e53ab155268908963cd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4227,6 +4245,42 @@
      "why": "FR-021's zero open claims at the stage's Rust; the two changes follow their research page (0035) or replace sampling with an exact area. No narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-04",
+   "blocks": [
+    "### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)",
+    "### T28 Approach (2026-11-04T12:38Z)",
+    "### T28 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "the dry hem laid by its own stage after the seat, before the waterward fringe and the houses",
+     "class": "within",
+     "why": "The GM was told the field's dry hem was being moved behind the settlement (T28) and directed the whole feature completed (request 2026-11-04); FR-019 and amendment 5 allow the maps to move under a Rust port, the moved pool hamlets owing settlement-reviews, which the Occasions line names (Inashiro, Kashikawa). The order serves the port rather than narrowing any clause."
+    },
+    {
+     "id": "D2",
+     "summary": "the seam: Field.hem handed on, kept as plan.hem_in; the hem's door writes the dry plots' records, no-build registries, net, grain, title-card room and ink",
+     "class": "within",
+     "why": "Implementation seam of a Rust stage behind its Python door (FR-010's shape); it moves the dry plots' writes from the field's door to the hem's without dropping any of them, so nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "D3",
+     "summary": "the settlement's ground as the seat's band out past its half-depths and the belt's far edge; a column whose first strip would stand on it laid behind it, a strip at a time, at most the ground's reach",
+     "class": "within",
+     "why": "Geometry of how the hem keeps clear of the settlement, citing its sources (0029 standoff marked a GUESS, 0071); no request clause is excepted or narrowed. Its claims are owed under FR-021 at landing, not here."
+    },
+    {
+     "id": "D4",
+     "summary": "the seat's failing-list entries re-charged to the field with the field's input frozen; replayed from the field through sink, seat and hem; an entry leaves only when that replay and its seed's roll both pass",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from FR-020's letter (an entry is held at 'the Rust stage it failed in'), so it is weighed as an exception. Literal application defeats FR-020's own definition and purpose: the frozen seat input is 'the map and the plan as the stages before it left them', and after this landing no stage before the seat lays a dry hem, so the old fixture is an input the pipeline can no longer produce; replaying it would test an unreachable map. Re-freezing one stage earlier keeps every entry on the list, still replays through the seat where it failed (now plus the hem), and keeps the GM's leaving rule verbatim in substance ('always checked until the first time they pass'; FR-020: leaves only when BOTH the replay and the roll pass). Round 1's two gaps - the replay's reach and the leaving rule - are now stated. The entries all charged to the seat are one class (every one carries the field's old hem), so one ruling covers them. Rust stages only, consistent with amendment 5."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5222,43 +5276,37 @@
    "verdict": "CLEAR"
   },
   "T28": {
-   "section_sha256": "1ff6f615a38ecbedc6ffeb558f25d28ba8d9826f9377e605c8338ec57686e8d0",
+   "section_sha256": "8f9e7b202319e3e82950a03054ccc44506a2cb6b17cec53e471d44caffc56ec3",
    "reviewed": "2026-11-04",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "D1",
-     "summary": "the dry hem becomes its own Rust stage after the seat, before the waterward fringe and the houses",
+     "summary": "the dry hem laid by its own stage after the seat, before the waterward fringe and the houses",
      "class": "within",
-     "why": "The request lets maps move under new algorithms (amendment 5) and asks for greenfield stages; the order is grounded in research 0006 (paddy, houses, dry fields behind). The hem is Rust after the Rust seat, so the Rust stages stay the front of STAGES (FR-019). Nothing asked is dropped."
+     "why": "The GM was told the field's dry hem was being moved behind the settlement (T28) and directed the whole feature completed (request 2026-11-04); FR-019 and amendment 5 allow the maps to move under a Rust port, the moved pool hamlets owing settlement-reviews, which the Occasions line names (Inashiro, Kashikawa). The order serves the port rather than narrowing any clause."
     },
     {
      "id": "D2",
-     "summary": "the seam: Field.hem carries the hem's inputs, plan.hem_in keeps them, the hem's door writes the dry plots' records, registries, net, grain, title-card room and ink",
+     "summary": "the seam: Field.hem handed on, kept as plan.hem_in; the hem's door writes the dry plots' records, no-build registries, net, grain, title-card room and ink",
      "class": "within",
-     "why": "The hem's door writes the same outputs the field wrote for the dry plots (FR-004); plan.hem_in is a plan carrier between Rust stages, not a dropped or narrowed output. Implementation of the seam, no scope change."
+     "why": "Implementation seam of a Rust stage behind its Python door (FR-010's shape); it moves the dry plots' writes from the field's door to the hem's without dropping any of them, so nothing the GM asked for is narrowed."
     },
     {
      "id": "D3",
-     "summary": "the settlement's ground as the seat's band; a column whose first strip would stand on it is laid behind it a strip's depth at a time, at most the ground's own reach",
+     "summary": "the settlement's ground as the seat's band out past its half-depths and the belt's far edge; a column whose first strip would stand on it laid behind it, a strip at a time, at most the ground's reach",
      "class": "within",
-     "why": "Asked before placing (the push stops at the first clear depth, the column is not placed then moved), so S4 holds; the standoff carries a GUESS label from 0029, which is not one of FR-021's open findings, and the claims round IN-STEP is an exit."
-    },
-    {
-     "id": "U1 (unlabeled)",
-     "summary": "the hem budgeted as its own stage, its work moved out of the field's count ('its budget derived with it'; exit 'within a budget derived for it')",
-     "class": "within",
-     "why": "Within FR-001, FR-013 and FR-015 provided the hem's budget is derived greenfield and pinned on SOUND or an arbiter accept, and the field's accepted figure in dev/work-budget.json drops by the work that moved, so FR-002's approved sum is not quietly raised by counting the same work twice. Not a narrowing; recorded so the derivation is owed, not assumed."
+     "why": "Geometry of how the hem keeps clear of the settlement, citing its sources (0029 standoff marked a GUESS, 0071); no request clause is excepted or narrowed. Its claims are owed under FR-021 at landing, not here."
     },
     {
      "id": "D4",
-     "summary": "the seat's failing-list entries re-charged to the field, each with the field's own input frozen (make rust-gate REFREEZE=field)",
+     "summary": "the seat's failing-list entries re-charged to the field with the field's input frozen; replayed from the field through sink, seat and hem; an entry leaves only when that replay and its seed's roll both pass",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Narrows FR-020 (an entry stays charged to the stage it failed in, with that stage's input frozen, until seed and fixture both pass). The ground for re-charging is real: after D1 no stage before the seat lays a hem, so the seat's old fixture is no longer 'the map and the plan as the stages before it left them', and keeping it would push the seat to be tweaked for an input it can never receive, the shape the GM rejected in amendment 5. But FR-020 replays a fixture 'into its stage', and the plan nowhere says a field-charged fixture is replayed past the field. The field never raised on these seeds, so a field-only replay passes trivially, and the entry then leaves the list on the seed roll alone - exactly what FR-020 exists to forbid (a failure leaving because an upstream change, e.g. a later water_frame change, turned its seed into another map). The measured line '15 replays through water_frame, field, sink, seat and hem' describes the gate's span, not each replay (a field-input fixture cannot pass through water_frame), so it does not establish that these replays reach the seat. D4 becomes LEGITIMATE when it says: a re-charged entry's fixture is replayed from the field's frozen input forward through every Rust stage to the seat (and the hem), and the entry leaves only when that replay and the seed roll both pass."
+     "ruling": "LEGITIMATE",
+     "why": "Departs from FR-020's letter (an entry is held at 'the Rust stage it failed in'), so it is weighed as an exception. Literal application defeats FR-020's own definition and purpose: the frozen seat input is 'the map and the plan as the stages before it left them', and after this landing no stage before the seat lays a dry hem, so the old fixture is an input the pipeline can no longer produce; replaying it would test an unreachable map. Re-freezing one stage earlier keeps every entry on the list, still replays through the seat where it failed (now plus the hem), and keeps the GM's leaving rule verbatim in substance ('always checked until the first time they pass'; FR-020: leaves only when BOTH the replay and the roll pass). Round 1's two gaps - the replay's reach and the leaving rule - are now stated. The entries all charged to the seat are one class (every one carries the field's old hem), so one ruling covers them. Rust stages only, consistent with amendment 5."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

@@ -107,6 +107,7 @@ pub fn tally(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
 /// `SeatRefused` where no margin keeps every rule.
 ///
 /// Research:
+///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();

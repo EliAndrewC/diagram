@@ -28,7 +28,7 @@ pub const EXIT_CELL: f64 = 20.0;
 /// The straight runs tried off the canvas, one every 22.5 degrees.
 ///
 /// Research:
-///     the straight runs - GUESS: no page gives a sampling, a knob of ours (feature 444 T27); 16 bearings
+///     the straight runs - NONE: a search's breadth, deciding nothing about the place - the walk answers where no run is clear; 16 bearings
 pub const BEARINGS: u32 = 16;
 
 /// The index of the walls' edges and the water lines (feet): wider than the farthest a wall's margin reaches, so the 3 x 3 cells
@@ -185,6 +185,9 @@ impl<'a> Exit<'a> {
 
     /// Whether a way-out cell centered at `c` is one a track may stand in: off every wall by its margin and half the cell's
     /// diagonal, inside none, and a cell off every water line.
+    ///
+    /// Research:
+    ///     a track's clearance off wet ground - GUESS: research/questions/0081-village-lanes.drawing.html keeps a track off wet ground and gives no distance; a cell (20 ft) off a water line, a wall's margin and half a cell's diagonal (about 14 ft) off its edge, so every point of a walkable cell keeps the margin
     fn walkable(&self, c: Pt, tests: &mut u64) -> bool {
         let pad = EXIT_CELL * std::f64::consts::FRAC_1_SQRT_2;
         for i in self.near(c, c, tests) {
@@ -209,7 +212,6 @@ impl<'a> Exit<'a> {
     /// Research:
     ///     dry way out of the seat - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground; a walled-in head is refused
     ///     a track keeps off wet ground - research/questions/0081-village-lanes.drawing.html: clear of every wall's margin and every water line
-    ///     tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft, the pond's ring's margin as the thin Python gathers it
     ///     the walk remembered - NONE: a memo across the margins the head falls back to; a cell tested is never tested again
     pub fn has_exit(&mut self, start: Pt, counts: &mut HashMap<String, u64>) -> bool {
         let org = -2.0 * EXIT_CELL;

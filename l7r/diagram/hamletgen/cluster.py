@@ -26,6 +26,7 @@ def exit_walls(plan: SitePlan, toe: Poly | None = None, wet: Sequence[Poly] = ()
     ladder rung the house seating falls back to (`seat_has_dry_exit`).
 
     Research:
+        the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
         tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
         its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)
         its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)
