@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+sink: 110,029 calls @20, 110,077 calls @40, growth exponent 0.00
+  placed @40: pond +4, channels +1, drawn_channels +1, marshes +1; 15,725 calls per thing placed
+
+all stages: 110,029 calls @20, 110,077 calls @40

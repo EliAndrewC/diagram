@@ -299,12 +299,19 @@ def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any =
         cuts = []
         for ring, pad in [*((f, field_pad) for f in fields), *((r, 0.0) for fam in (blocks, clearings, avoid) for r in fam)]:
             rp = [(float(q[0]), float(q[1])) for q in ring]
-            if len(rp) < 3 or min(q[0] for q in rp) - pad > x1 or max(q[0] for q in rp) + pad < x0 or min(q[1] for q in rp) - pad > y1 or max(q[1] for q in rp) + pad < y0:
+            if len(rp) < 3:
+                continue
+            # ...ITS BOX IN ONE PASS (feature 444 T26's re-audit): four scans of the ring, one an axis, read every point four times
+            rx0 = ry0 = math.inf
+            rx1 = ry1 = -math.inf
+            for qx, qy in rp:
+                rx0, rx1, ry0, ry1 = min(rx0, qx), max(rx1, qx), min(ry0, qy), max(ry1, qy)
+            if rx0 - pad > x1 or rx1 + pad < x0 or ry0 - pad > y1 or ry1 + pad < y0:
                 continue  # a keep-out beyond the marsh's reach cuts nothing
             g = ShapelyPolygon(rp).buffer(0)
             cuts.append(g.buffer(pad) if pad else g)
         if __debug__:  # each keep-out's points read for its box, and each cut's ring buffered and taken out (S5)
-            OPS["pt_test@drawn_ground"] += 5 * (len(pts) + sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam))  # copied, and its box's four scans
+            OPS["pt_test@drawn_ground"] += len(pts) + 2 * sum(len(r) for fam in (fields, blocks, clearings, avoid) for r in fam)  # copied, and its box's one pass
             OPS["write@drawn_ground"] += sum(len(g.exterior.coords) for g in cuts if hasattr(g, "exterior"))
         out = keep.difference(unary_union(cuts)) if cuts else keep
     except ValueError, GEOSException:  # pragma: no cover - buffer(0) repairs every ring a placer records [287: a degenerate outline keeps the drop honest]
@@ -561,8 +568,9 @@ class WetGroundMixin:
         blocks = ([ellipse_ring(pond[0], pond[1], pond[2], pond[3])] if pond else []) + [e[1] for e in near if e[0] == "dry_plots"]
         water = [e[1] for e in near if e[0] != "dry_plots"]
         fields = _clipped_to_box(self.field_polys, (x0 - r, y0 - r, x1 + r, y1 + r))
-        if __debug__:  # the field cut to the reeds' reach, then the drawn ground's difference and the keep-out's filing, each over the rings they take (S5)
-            OPS["pt_test@pond_reeds"] += sum(len(q) for q in self.field_polys) + len(poly) + sum(len(q) for q in (*fields, *blocks, *water))
+        if __debug__:  # the field cut to the reeds' reach and the ring read (S5); the drawn ground's difference and the keep-out's filing
+            # are counted where they are done (`drawn_ground`, `KeepoutGrid`), so not here a second time (feature 444 T26's re-audit)
+            OPS["pt_test@pond_reeds"] += sum(len(q) for q in self.field_polys) + len(poly)
         ground = drawn_ground(poly, fields, blocks, (), (), field_pad=0.0)
         if ground is None:
             self.M["meta"].setdefault("marsh_dropped", []).append({"role": "pond_fringe", "why": "no open ground left"})
