@@ -202,21 +202,23 @@ def set_budget(
         return f"no items at {', '.join(str(h) for h in missing)} households - a budget is per thing x the derivation's own items at each size: {' '.join(f'ITEMS_AT_{h}=' for h in sz)} (feature 444 D2)"
     new = {h: per_thing * (items or {})[h] for h in sz}
     if raise_:
-        first = first_budget(st, 40)
-        if new.get(40, 0) <= budget_at(st, 40):
-            return f"`{phase}`'s re-derived budget at 40, {new.get(40, 0):,.0f}, is no raise on {budget_at(st, 40):,.0f} - a lowering re-pins with LOWER=1"
-        if new[40] > RAISE_CAP * first:
+        # ...AT THE DERIVATION'S TOP SIZE: 40 households, or a form's bounded n (`waterward.polder` at 10-20, feature 444 T29)
+        top = 40 if 40 in sz else sz[-1]
+        first = first_budget(st, top)
+        if new.get(top, 0) <= budget_at(st, top):
+            return f"`{phase}`'s re-derived budget at {top}, {new.get(top, 0):,.0f}, is no raise on {budget_at(st, top):,.0f} - a lowering re-pins with LOWER=1"
+        if new[top] > RAISE_CAP * first:
             return (
-                f"`{phase}`'s re-derived budget at 40, {new[40]:,.0f}, is past {RAISE_CAP:g} times its first, {first:,.0f} - an order of magnitude"
+                f"`{phase}`'s re-derived budget at {top}, {new[top]:,.0f}, is past {RAISE_CAP:g} times its first, {first:,.0f} - an order of magnitude"
                 f" needs the GM's words (feature 444 FR-022): make budget-change PHASE={phase} TO=<per thing> DERIVATION= VERDICT= WORDS=\"<the GM's words>\""
             )
         # PAST TWICE THE FIRST, THE RIGOROUS ANALYSIS (FR-022 rule 2; the GM: "I don't want us to just think it's reasonable to have
         # things take an order of magnitude more operations than we estimated. Without extremely rigorous analysis"): a second
         # MODE BUDGET dispatch of the same bundle, blind to the first, judges it SOUND too
-        if new[40] > LEEWAY * first and (not second or second == verdict or verdict_of(root / second) != SOUND):
+        if new[top] > LEEWAY * first and (not second or second == verdict or verdict_of(root / second) != SOUND):
             read = f" ({second} reads {verdict_of(root / second) or 'nothing'})" if second and second != verdict else ""
             return (
-                f"`{phase}`'s re-derived budget at 40, {new[40]:,.0f}, is {new[40] / first:.1f} times its first, {first:,.0f} - past {LEEWAY:g} times a raise"
+                f"`{phase}`'s re-derived budget at {top}, {new[top]:,.0f}, is {new[top] / first:.1f} times its first, {first:,.0f} - past {LEEWAY:g} times a raise"
                 " needs a second SOUND, from an independent MODE BUDGET dispatch of the same bundle blind to the first: SECOND=<its verdict file>"
                 f"{read}"
             )
