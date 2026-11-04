@@ -130,6 +130,9 @@ pub fn carried_onto(mut pts: Vec<Pt>, host: &[Pt]) -> Vec<Pt> {
     rounded(&pts)
 }
 
+/// Each run laid, by its points' bits.
+type Laid = std::collections::HashMap<Vec<(u64, u64)>, Vec<Pt>>;
+
 /// A household's way in the tree: its run as reserved, its household, its host (-1 the track out) and its lane as drawn.
 #[derive(Clone)]
 struct Record {
@@ -152,6 +155,8 @@ pub struct Tree<'a> {
     pub brooks: &'a [Vec<Pt>],
     root: Vec<Pt>,
     recs: Vec<Record>,
+    // each run laid once while the water stands: the judge, the admission and the reservation all lay the same run
+    laid_memo: std::cell::RefCell<Laid>,
 }
 
 impl<'a> Tree<'a> {
@@ -172,13 +177,20 @@ impl<'a> Tree<'a> {
             brooks,
             root,
             recs: Vec::new(),
+            laid_memo: std::cell::RefCell::default(),
         }
     }
 
     /// The run as the web lays it: rejoined either side of its crossings and squared at them.
     #[must_use]
     pub fn laid(&self, run: &[Pt], tests: &mut Counts) -> Vec<Pt> {
-        square_run(&rejoined(run, self.waters), self.waters, tests)
+        let key: Vec<(u64, u64)> = run.iter().map(|p| (p.0.to_bits(), p.1.to_bits())).collect();
+        if let Some(hit) = self.laid_memo.borrow().get(&key) {
+            return hit.clone();
+        }
+        let laid = square_run(&rejoined(run, self.waters), self.waters, tests);
+        self.laid_memo.borrow_mut().insert(key, laid.clone());
+        laid
     }
 
     fn stub(&self) -> Lane {

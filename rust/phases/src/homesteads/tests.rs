@@ -401,3 +401,14 @@ fn the_counts_file_each_kind_and_total_all_but_the_moves() {
     assert_eq!(c.0.len(), 2);
     assert_eq!(c.total(), 5);
 }
+
+#[test]
+fn the_threads_tally_is_drained_into_the_stages_counts() {
+    crate::counts::note("seg_test@noted", 3);
+    let mut c = Counts::default();
+    crate::counts::drain_into(&mut c);
+    assert_eq!(c.0.get("seg_test@noted"), Some(&3));
+    let mut again = Counts::default();
+    crate::counts::drain_into(&mut again);
+    assert!(again.0.is_empty());
+}

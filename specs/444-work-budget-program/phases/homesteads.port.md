@@ -84,3 +84,26 @@ The track out (`ways/track.py` 549, `thread.py` 268, `gateway.py` 71, `dry_exit.
 the ways ask (`ways/law/` and `law_water.py`, 1,431), the dispersed and row forms (`homesteads/rows.py` 690, `capacity.py`, the front
 row in `stages.py`, `rolling/dispersed.py`) and the door: about 7,000 lines of Python. The seat's way-out walk
 (`rust/phases/src/seat/exit.rs`) is the dry exit's form already in Rust, for the track's fallback to reuse.
+
+## Departures from the Python (each a place to bisect a seed the gate refuses)
+
+The maps may move for speed where the research holds (the GM, 2026-10-18); each change of method below keeps the rule its claim
+names and is listed so a refused seed can be traced to it.
+
+- `law/faces.rs`: a face with a lane loop standing free inside it is read by its outer ring (shapely subtracts the hole), so it
+  reads wider, never thinner - no needle Python would not find; collinear overlapping treads are not merged.
+- `law/walk.rs` `fronting_counts` and `law/tree.rs`: the free ends a farmhouse discharges are counted whole each time, not kept
+  incrementally (`tree_base.Ends`); the needles counted on the whole web, not only the faces a change meets (`Faces.needles_with`).
+- `law/routes.rs`: the handover is read as standing once a way joins the track out (Python asks `kosatsuba_handover`).
+- `homesteads/access.rs` `past_the_yard`: the run's last point within the tread and pad of the yard found by halving along each
+  segment (the distance to a convex quad is convex), where Python intersects with shapely's buffer (16 segments a quarter circle).
+- `law/ground.rs` `ground_fault`: the crossing fault is asked of every run, without Python's `water_near` gate - the same verdict.
+- `homesteads/gap_ways.rs` `trace`: a cell with no step back stays where it is (Python would raise); the flood gives every finite
+  cell but the way out's a step, so it is never met.
+- `homesteads/standing.rs`: a sample on taken ground or past the raster's window is refused by the raster alone (Python asks
+  the uncertain samples of the site chains and corridors exactly; the Rust raster is exact at its cells).
+- `ways/dry_exit.rs`: the walls rastered once for the three fills (Python memoizes the whole raster per wall set).
+- `law/tree.rs` `Tree::admits`: the new lane is not put off the needle (`off_the_needle`), as Python's `TreeBase.lane_for` does
+  not; `lanes_of`'s pass for the web is the web stage's.
+- Counting: the lane law's predicates count into a thread's tally (`counts::note`), drained into the stage's `Counts` at
+  `lay_the_ways` and `choose_track_out`.

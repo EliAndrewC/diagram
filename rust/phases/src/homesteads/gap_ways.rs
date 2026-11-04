@@ -561,6 +561,8 @@ pub fn lay_the_ways(
         }
         out.drawn[k] = Some(got);
     }
+    // the lane law's predicates counted in the thread's tally, drained into the stage's
+    crate::counts::drain_into(tests);
     for k in 0..households.len() {
         if out.drawn[k].is_none() {
             let h = households[k].at;

@@ -56,6 +56,7 @@ pub const STEADING: (f64, f64) = (60.0, 12.0);
 /// The ways a walker reads: every chain of lanes met end to end joined into one polyline, and each lane's way.
 #[must_use]
 pub fn as_walked(lanes: &[Lane]) -> (Vec<Vec<Pt>>, Vec<usize>) {
+    crate::counts::note("write@as_walked", lanes.len() as u64);
     let n = lanes.len();
     let mut link: std::collections::HashMap<(usize, i8), (usize, i8)> =
         std::collections::HashMap::new();
@@ -178,6 +179,7 @@ pub fn walked_shadows(lanes: &[Lane], tests: &mut Counts) -> bool {
 /// How far `q` lies from the box (0 inside it).
 #[must_use]
 pub fn box_gap(q: Pt, b: Box4) -> f64 {
+    crate::counts::note("dist@box_gap", 1);
     (b.0 - q.0)
         .max(0.0)
         .max(q.0 - b.2)
@@ -187,6 +189,7 @@ pub fn box_gap(q: Pt, b: Box4) -> f64 {
 /// Does the end `q` of way `i` touch no other way?
 #[must_use]
 pub fn free_end(ways: &[Vec<Pt>], i: usize, q: Pt) -> bool {
+    crate::counts::note("seg_test@free_end", ways.len().saturating_sub(1) as u64);
     ways.iter()
         .enumerate()
         .filter(|&(k, _)| k != i)

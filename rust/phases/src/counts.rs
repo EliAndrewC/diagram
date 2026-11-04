@@ -45,3 +45,23 @@ impl Counts {
             .sum()
     }
 }
+
+thread_local! {
+    /// The work the lane law's predicates count where no `Counts` is handed down to them: dozens of call sites deep, each asked of
+    /// a candidate many times over, threading a counter through every one would double their signatures for bookkeeping alone.
+    /// The stage that asks them drains it into its own `Counts` once (`drain_into`), so what it reports is every element counted.
+    static NOTED: std::cell::RefCell<Counts> = std::cell::RefCell::new(Counts::default());
+}
+
+/// Count `n` of the work `key` in the thread's tally, for the stage to drain (compiled out without the `counters` feature).
+pub fn note(key: &str, n: u64) {
+    NOTED.with(|c| c.borrow_mut().add(key, n));
+}
+
+/// Move the thread's tally into `counts`, emptying it.
+pub fn drain_into(counts: &mut Counts) {
+    let noted = NOTED.with(|c| std::mem::take(&mut *c.borrow_mut()));
+    for (k, n) in noted.0 {
+        counts.add(&k, n);
+    }
+}

@@ -90,6 +90,11 @@ pub const REACHES: (f64, f64, f64) = (60.0, 6.0, 12.0);
 /// track out and a street count as a way touching, and two lanes that meet at both ends are a loop, not a joint.
 #[must_use]
 pub fn joints(lanes: &[Lane]) -> Vec<(usize, i8, usize, i8)> {
+    let segs: usize = lanes.iter().map(|l| l.pts.len().saturating_sub(1)).sum();
+    crate::counts::note(
+        "dist@joints",
+        (2 * lanes.len() * (2 * lanes.len() + segs)) as u64,
+    );
     let at = |m: usize, e: i8| {
         if e == 0 {
             lanes[m].pts[0]
@@ -234,6 +239,8 @@ fn forced_meeting(
 pub fn needle_ends(lanes: &[Lane], blocked: Blocked) -> Vec<(usize, i8, usize, Pt, Pt)> {
     let mut out = Vec::new();
     let tol = TOUCH.1;
+    let segs: usize = lanes.iter().map(|l| l.pts.len().saturating_sub(1)).sum();
+    crate::counts::note("seg_test@needle_ends", (2 * lanes.len() * segs) as u64);
     for (i, ln) in lanes
         .iter()
         .enumerate()
@@ -306,6 +313,10 @@ pub fn along_tail(pts: &[Pt], other: &[Pt], deg: f64) -> Option<usize> {
         return None;
     }
     let mut k = samples.len() - 1;
+    crate::counts::note(
+        "dist@along_tail",
+        (samples.len() * (other.len() - 1)) as u64,
+    );
     while k > 0 {
         let q = samples[k];
         let u = (
@@ -332,6 +343,7 @@ pub fn along_tail(pts: &[Pt], other: &[Pt], deg: f64) -> Option<usize> {
 /// Does either end of `p` run on beside `o` at the doubled tail's angle?
 #[must_use]
 pub fn tail_doubled(p: &[Pt], o: &[Pt]) -> bool {
+    crate::counts::note("seg_test@tail_doubled", 1);
     let rev: Vec<Pt> = p.iter().rev().copied().collect();
     o.len() >= 2 && (along_tail(p, o, ALONG.2).is_some() || along_tail(&rev, o, ALONG.2).is_some())
 }
@@ -351,6 +363,10 @@ pub struct Destinations {
 /// Does a lane end reach something worth walking to: another way, a farmhouse, the bund, or the built ground of a steading?
 #[must_use]
 pub fn end_serves(q: Pt, segs: &[(Pt, Pt)], d: &Destinations) -> bool {
+    crate::counts::note(
+        "dist@end_serves",
+        (segs.len() + d.centers.len() + d.edge.len() + d.steadings.len()) as u64,
+    );
     let (reach, bund, steading) = REACHES;
     segs.iter().any(|&(a, b)| seg_dist(q, a, b) <= reach)
         || d.centers.iter().any(|&h| dist(q, h) <= reach)

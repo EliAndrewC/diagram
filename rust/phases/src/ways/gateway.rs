@@ -141,6 +141,8 @@ pub fn gateway_track(c: &Choice, gate: Pt, tests: &mut Counts) -> Option<Vec<Pt>
 #[must_use]
 pub fn choose_track_out(c: &Choice, tests: &mut Counts) -> Option<(Vec<Pt>, bool)> {
     let first = cluster_gateway(c.fabric.houses, c.axes, c.fallback, 0.0, c.standing, tests);
-    let track = gateway_track(c, gate_out_of_the_field(c.fabric.envelope, first), tests)?;
-    connector_through(&track, c.fabric, c.law, c.dry, tests)
+    let track = gateway_track(c, gate_out_of_the_field(c.fabric.envelope, first), tests);
+    let out = track.and_then(|t| connector_through(&t, c.fabric, c.law, c.dry, tests));
+    crate::counts::drain_into(tests);
+    out
 }

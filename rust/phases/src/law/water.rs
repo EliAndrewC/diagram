@@ -220,6 +220,11 @@ impl Waters {
     /// Does the run cross a brook or a drawn channel more than the tolerance off square?
     #[must_use]
     pub fn oblique(&self, run: &[Pt]) -> bool {
+        let edges: usize = self.brooks.iter().chain(&self.channels).map(Vec::len).sum();
+        crate::counts::note(
+            "seg_test@oblique",
+            (run.len().saturating_sub(1) * edges) as u64,
+        );
         let rb = poly_box(run);
         self.brooks.iter().chain(&self.channels).any(|course| {
             let cb = poly_box(course);

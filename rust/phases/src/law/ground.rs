@@ -141,6 +141,10 @@ pub fn over_a_fixture(
 /// Does any leg of the run cross a building's wall, or stand inside one?
 #[must_use]
 pub fn through_a_building(run: &[Pt], quads: &[Vec<Pt>]) -> bool {
+    crate::counts::note(
+        "seg_test@through_a_building",
+        (5 * run.len() * quads.len()) as u64,
+    );
     quads.iter().any(|q| {
         run.iter().any(|&p| in_poly(p, q))
             || run
@@ -211,6 +215,7 @@ impl LawGround {
         owner: Option<Pt>,
         tests: &mut Counts,
     ) -> Option<usize> {
+        tests.add("candidate@fouled_segment", 1);
         let theirs: Vec<(Vec<Pt>, Box4)> = self
             .yards
             .iter()
@@ -236,6 +241,11 @@ impl LawGround {
     /// Does the run cross no field outline, dry plot or marsh?
     #[must_use]
     pub fn open_ground(&self, run: &[Pt]) -> bool {
+        let edges: usize = self.open_rings.iter().map(Vec::len).sum();
+        crate::counts::note(
+            "seg_test@open_ground",
+            (run.len().saturating_sub(1) * edges) as u64,
+        );
         !self.open_rings.iter().any(|ring| {
             let n = ring.len();
             run.windows(2)
