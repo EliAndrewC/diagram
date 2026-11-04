@@ -297,6 +297,7 @@ impl<'a> Exit<'a> {
             }
         }
         let joined = out.unwrap_or(false);
+        tally(counts, "write@exit_known", seen.len() as u64);
         // every cell this walk reached shares its start's answer: one connected piece of walkable ground
         for c in seen {
             if self.tested.get(&c).copied().unwrap_or(c == s) {

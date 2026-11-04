@@ -54,6 +54,8 @@ def set_crossing(brook: Sequence[Pt], radius: float, cost: float) -> None:
     # ...AND THE CELLS NEAR IT, ONCE (feature 284, FR-010): an ask far from the course read nine empty cells; a point whose cell
     # has no sample in its 3 x 3 neighborhood is out of the band without reading any of them.
     near = {(gx + dx, gy + dy) for gx, gy in grid for dx in (-1, 0, 1) for dy in (-1, 0, 1)}
+    if __debug__:  # each 5 ft sample filed, and each filed cell's 3 x 3 neighborhood (S5)
+        OPS["write@set_crossing"] += sum(len(v) for v in grid.values()) + 9 * len(grid)
     _CROSSING.update(grid=grid, radius=radius, cost=cost if grid else 0.0, cell=cell, near=near)
 
 

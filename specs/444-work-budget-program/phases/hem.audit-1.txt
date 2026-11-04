@@ -1,0 +1,3 @@
+WITHIN - counts are 0.977 / 0.972 / 0.961 of the budget at 20 / 40 / 80 (18,098 / 28,716 / 47,061.5), the fitted exponent is 0.689 against the budget's 0.7, and no roll shows a drop or a move.
+
+(2026-11-04, MODE AUDIT of the hem stage. Notes: the bundle lacked field/dry.rs and field/index.rs, the Rust loops judged from their counters; the plots' area sum in hem_stage uncounted, about 600 at 40; seed 4 runs 1.47x at 40, its plots doubling, the mean within.)

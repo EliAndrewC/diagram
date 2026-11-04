@@ -482,6 +482,6 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [
         "test@ranking",
         n * u64::from(64 - n.leading_zeros()),
     );
-    tally(counts, "dropped@margins", stopped.iter().sum());
+    tally(counts, "candidate@margins_refused", stopped.iter().sum());
     (kept.into_iter().map(|k| k.3).collect(), stopped)
 }

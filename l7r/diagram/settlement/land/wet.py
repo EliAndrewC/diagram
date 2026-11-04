@@ -23,7 +23,7 @@ Research: plumbing - NONE: lazy imports, geometry, keyholing and manifest record
 """
 
 import math
-from bisect import bisect_left
+from bisect import bisect_left, bisect_right
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds the runtime ones
@@ -707,14 +707,22 @@ class WetGroundMixin:
         # The research this band encodes (research/questions/0057-marshes-and-wetlands-shitchi.drawing.html)
         # is about the FAN's spring line; a dry plot is not a fan and has no toe.
         fan = [p for poly in polys for p in poly]
-        us_fan = [p[0] * ux + p[1] * uy for p in fan]
-        vs = [p[0] * dx + p[1] * dy for p in fan]
+        # THE FAN'S POINTS IN THEIR ORDER ACROSS THE SLOPE, ONCE (feature 444 T27's audit: every station walked every fan point):
+        # a station's points within `pad` of it are a slice of that order, found by bisection - the same points, the same maximum
+        by_u = sorted((p[0] * ux + p[1] * uy, p[0] * dx + p[1] * dy) for p in fan)
+        us_fan = [uu for uu, _v in by_u]
         local: list[float] = []
+        examined = 0
         for u in stations:
-            near = [v for v, uu in zip(vs, us_fan, strict=True) if abs(uu - u) <= pad]
+            lo, hi = bisect_left(us_fan, u - pad), bisect_right(us_fan, u + pad)
+            examined += hi - lo
+            near = [v for _uu, v in by_u[lo:hi]]
             local.append((max(near) if near else v_in + pad) - pad)
         edge = [max(local[max(0, k - 1) : k + 2]) for k in range(n)]
         inner = [(u * ux + v * dx, u * uy + v * dy) for u, v in zip(stations, edge, strict=True)]
+        if __debug__:  # the crop's points read for its edges (2 a point), the fan's projected and sorted (3 a point), each station's slice and its two bisections, the edge's and the inner line's (S5)
+            OPS["pt_test@toe_band"] += 2 * len(cult) + 3 * len(fan) + examined + 4 * n
+            OPS["index_query@toe_band"] += 2 * n * max(1, len(fan).bit_length())
 
         # THE LATERAL ENDS FLARE, they do not run ruled to the frame (settlement-review at the T99
         # acceptance, 2026-08-27: the west limit was a straight cross-slope line at u0 from the inner edge

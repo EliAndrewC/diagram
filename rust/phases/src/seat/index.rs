@@ -112,6 +112,7 @@ impl Cells {
             for cy in self.at(lo.1)..=self.at(hi.1) {
                 read += 1;
                 for &i in self.cells.get(&(cx, cy)).map_or(&[][..], Vec::as_slice) {
+                    read += 1; // each item read and checked against those already handed back, a handful a box
                     if !seen.contains(&i) {
                         seen.push(i);
                     }

@@ -33,7 +33,7 @@ def stage_waterward(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         the strip drawn - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a marsh strip off each water-facing flank, drawn as the waterside marsh
-        strip depth - CONVENTION: WATERWARD_DEPTH outlasts any crop, the strip running off the frame
+        strip depth - GUESS: no page gives a reed fringe's breadth; WATERWARD_DEPTH's 280 ft, outlasting any crop this tier makes, the strip held to the frame
         a notch through the whole band - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the band cut where a channel crosses, the strip stepping in by the band's widest"""
     if plan.field_archetype not in POLDER_ARCHETYPES or not s.M.get("dikes"):
         return

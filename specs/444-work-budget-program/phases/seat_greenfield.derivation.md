@@ -2,16 +2,20 @@
 
 ## Contract
 
-- Reads: the field's outline; the plan's fall, wind, settlement form, the cluster's shape and the households; the dry plots; the brook's course; the wet toe below the fields and a tail pond's reed fringe; the pond and the drain's run off it; every watercourse on the map - the field's ditches, the farm channels as drawn and the brook - for the ways' routing and for the seat's way out.
+- Reads: the field's outline; the plan's fall, wind, settlement form, the cluster's shape and the households; the dry plots standing (none: the dry hem is laid after the seat, behind it - 0006, feature 444 T28); the brook's course; the wet toe below the fields and a tail pond's reed fringe; the pond and the drain's run off it; every watercourse on the map - the field's ditches, the farm channels as drawn and the brook - for the ways' routing and for the seat's way out. It derives the wet toe below the fields from the field's outline, grows the way out's wet walls by the lane's width, and sets the cost every later way pays to cross the brook on the brook's course.
 - Writes: where the settlement sits - the cluster's band on a margin of the field, its center, its long and short axes, its anchor and whether its back is off the wind - with the ranked margins after it, the ladder the house seating falls back down when the chosen margin cannot seat every household; the brook's fords, the only places a way may cross it, and the cost every later way pays to cross; the list of watercourses every later way is routed against; the side of the field the houses stand on. Drawn nowhere. The ladder's rungs are asked their own way out by the house seating when it falls back to one, not here.
-- Keeps: a village's cluster sits on the higher, drier ground beside its paddy (0031: "On the higher, drier ground beside its paddy, as old settlements stood on the natural levee"), its back to the wind (0072: a clustered village shelters behind one belt at its windward edge), so the belt's band is kept on the canvas before any house is seated; the band stands on open ground, off the field, its back clear of the dry crop; never on the wet toe below the fields (0058: "seat and anchor off the marsh below the fields"); never centered in a pond's reed fringe (the GM's ruling of 2026-08-28), an end in it scored down; the brook across the band scored down, never refused (0035: "a site the brook does not cross is still preferred when two are otherwise level"); the seat has a dry way out of the frame (0081: lanes keep to dry ground); a way crosses the brook only at a ford, opened on a straight reach (0035).
-- Bounds (measured 2026-11-04, `make stage-sizes STAGE=seat` on the reference rolls, with the wet toe below the fields as the roll derives it, seeds 4, 25, 39, 47, the mean over the seeds that reach the seat): the field's outline 68, 96 and 135 points at 20, 40 and 80 households, of whose margins 37, 53 and 74 face within 90 degrees of the wind; the dry plots 95, 152 and 251, at 380, 609 and 1,003 points; the brook 324, 450 and 632 stations, 20 ft apart; the wet toe 71, 90 and 118 points; the reed fringe 52, 54 and 54 points; the watercourses 487, 642 and 856 segments; the canvas 6,400, 8,900 and 12,550 ft square. On the reference rolls' finished seats (`make stage-sizes STAGE=waterward DUMP=`, the seat as the next stage is handed it): the band's half-depth 152 to 300 ft and half-length 389 to 918 ft, and the ranked margins that pass every refusal 13, 17 and 36 (the chosen one and its ladder, the mean); the band's half-depth 169, 232 and 300 ft at 20, 40 and 80 (the mean; "a band depth" below is this half-depth throughout, the band two of them deep); the dry plots' sides about 72 ft, each plot's box over about 6.3 cells of 64 ft, 2.7 plots in a cell that holds any; from each reference seat, the straight runs off the canvas tried until one keeps clear of the walls and the water, 3, 4 and 8 on the mean, and on one seat of the eleven (seed 47 at 80, 4,964 ft from the nearest canvas edge) none of the sixteen, its way out found only by a walk of the 20 ft cells (measured 2026-11-04 on the dumped seats: the walls, the water lines and the runs replayed on each).
+- Keeps: a village's cluster sits on the higher, drier ground beside its paddy (0031: "On the higher, drier ground beside its paddy, as old settlements stood on the natural levee"), its back to the wind (0072: a clustered village shelters behind one belt at its windward edge), so the belt's band is kept on the canvas before any house is seated; the band stands on open ground, off the field, its back clear of the dry crop (the hem laid after it keeps off the settlement's ground, so none stands behind a margin when it is asked); never on the wet toe below the fields (0058: "seat and anchor off the marsh below the fields"); never centered in a pond's reed fringe (the GM's ruling of 2026-08-28), an end in it scored down; the brook across the band scored down, never refused (0035: "a site the brook does not cross is still preferred when two are otherwise level"); the seat has a dry way out of the frame (0081: lanes keep to dry ground); a way crosses the brook only at a ford, opened on a straight reach (0035).
+- Bounds (measured 2026-11-04, `make stage-sizes STAGE=seat` on the reference rolls, with the wet toe below the fields as the roll derives it, seeds 4, 25, 39, 47, the mean over the seeds that reach the seat): the field's outline 68, 96 and 135 points at 20, 40 and 80 households, of whose margins 37, 53 and 74 face within 90 degrees of the wind; no dry plot (the hem is laid after the seat); the brook 324, 450 and 632 stations, 20 ft apart; the wet toe 71, 90 and 118 points; the reed fringe 52, 54 and 54 points; the watercourses 487, 642 and 856 segments; the canvas 6,400, 8,900 and 12,550 ft square. On the reference rolls' finished seats (`make stage-sizes STAGE=waterward DUMP=`, the seat as the next stage is handed it): the band's half-depth 152 to 300 ft and half-length 389 to 918 ft, the band's half-depth 169, 232 and 300 ft at 20, 40 and 80 (the mean; "a band depth" below is this half-depth throughout, the band two of them deep); re-measured 2026-11-04 on the reference rolls with the hem after the seat (`make stage-sizes STAGE=hem DUMP=`, the seat as the next stage is handed it): the ranked margins that pass every refusal 29, 42 and 59 at 20, 40 and 80 (the mean); the straight runs a head tries until one keeps clear, 1, 9 and 1 on three seeds and none of the sixteen on the fourth (seed 47, at every size), 6.75 on the mean, its way out a walk of 128, 176 and 248 of the 20 ft cells toward the nearest edge (32, 44 and 62 on the mean), each walked cell's new neighbors about 3 (the walk aimed at the edge, its cells remembered); the field's breadth across the fall 1,263, 1,786 and 2,526 ft (the mean); the brook's course 6,854, 9,524 and 13,371 ft; the way out's wet walls 111, 130 and 154 points.
 
 ## The algorithm
 
     the plan read: the form, the shape, the fall, the wind, the households (5); the band's two half-extents from the households (2)
-    the indexes, once: the outline's, the toe's and the reeds' edges filed by horizontal strip; each dry plot's points read and the
-      plot filed in the cells its box covers; the brook read once in its order along the fall; the walls of the way out (the toe,
+    the wet toe derived: the field's points read for the crop's low edge and projected across the fall, sorted once; a station every
+      30 ft across the field's breadth and 90 ft past each side, each taking the points within 90 ft of it by bisection
+    the way out's wet walls - the toe and the reeds - grown by the lane's width, each point along its normals
+    the crossing cost set on the brook's course: a sample every 5 ft filed in cells a hair wider than the crossing's half-length,
+      and each filed cell's 3 x 3 neighborhood
+    the indexes, once: the outline's, the toe's and the reeds' edges filed by horizontal strip; the dry plots' cells, empty at the seat; the brook read once in its order along the fall; the walls of the way out (the toe,
       the reeds, the outline and the pond's ring) and every watercourse segment filed in cells
     the margins: each outline edge's midpoint, outward normal and its turn against the wind (2 a point); a margin facing within 90
       degrees of the wind is a candidate, its back the normal, or turned to the wind off a flank
@@ -23,7 +27,7 @@
       the back's clear ground: the share of the back's area - its depth the belt's and the cluster's, its width the band's depth -
         under the dry plots, from the cells it covers and each plot in them clipped to it
     for each candidate that passes, the score:
-      the nearest dry-plot edge within two band depths, from the cells round the margin (the hem)
+      the nearest dry-plot edge (the hem): none stands, the cells empty, the search ends at once
       the brook on the band: 15 points each asked the brook's nearest segment within 30 ft, the segments found by bisection on
         the brook's order along the fall
       the score itself: the wind, the upslope end, the reeds' share, the hem, the back, the belt's room, and the brook as the
@@ -31,7 +35,7 @@
     the passing margins ranked by score, the first met winning a tie
     the head's dry way out: straight runs off the canvas tried every 22.5 degrees, each run asked the cells it crosses of the walls
       and the water, until one is clear; where none is, the walk of the 20 ft cells toward the nearest canvas edge, each cell asked
-      of the walls and the water as it is reached, until one off the canvas; the next margin taken where the head has no way out, its walk reading what the walks before it found - a cell tested is never tested again, and reaching a cell already joined to an edge, or already walled in, ends the walk
+      of the walls and the water as it is reached, until one off the canvas, every cell it reached remembered with its answer; the next margin taken where the head has no way out, its walk reading what the walks before it found - a cell tested is never tested again, and reaching a cell already joined to an edge, or already walled in, ends the walk
     the fords: the brook walked station by station, a ford opened on each straight reach at its spacing (2 a station, a write a ford)
     the crossing cost set once; the watercourses gathered for the ways (1 a segment)
     written: the seat's frame for each passing margin (8 each), the off-wind flag, the skeleton and the field's face (3)
@@ -50,7 +54,7 @@ Each a GUESS: no page gives a sampling or a spacing, and each is a value of ours
 ## Indexes
 
 - the outline, the toe and the reeds: cells of 64 ft, each a horizontal strip, every edge filed in the strips it spans (measured 2026-11-04 on the seat's input, `make stage-sizes STAGE=seat DUMP=`: 102, 143 and 201 filings for the outline at 20, 40 and 80, 204, 280 and 388 for the toe, 66, 71 and 78 for the reeds); a point test reads its strip and the edges in it, the typical strip about 6 of the outline's edges and 4 of the toe's or the reeds'; densest case from a smallest side of 64 ft, a strip holding 33 of the outline's edges at 40 where its lobes run along the strip
-- the dry plots: cells of 64 ft, each plot filed in the cells its box covers (605, 948 and 1,570 filings, about 6.3 a plot, its sides about 72 ft); the back's rectangle - 2.6 band depths by one, 439 by 169 ft at 20, 603 by 232 at 40, 780 by 300 at 80 - covers (439 / 64 + 1) x (169 / 64 + 1) = 29, 48 and 75 cells, holding 29 x 2.7 / 6.3 = 12, 21 and 32 distinct plots, each clipped to it (8); the hem reads the 9 cells round a margin, ring by ring, and stops at the first ring past the nearest edge (out to two band depths, about 6 rings at 40, where no hem stands near); densest case from a smallest side of 64 ft, 6 plots in one cell
+- the dry plots: cells of 64 ft, empty at the seat (the hem is laid after it); the back's rectangle - 2.6 band depths by one, 439 by 169 ft at 20, 603 by 232 at 40, 780 by 300 at 80 - covers (439 / 64 + 1) x (169 / 64 + 1) = 29, 48 and 75 cells, each read and found empty; densest case from a smallest side of 64 ft, 6 plots in one cell where a hem stood
 - the way out: cells of 64 ft, the walls (the outline, the toe, the reeds and the pond's 16-point ring: 208, 256 and 324 edges, about 2 cells each) and every watercourse segment (1,095, 1,504 and 2,022 filings) filed in the cells they cross; a straight run off the canvas crosses half the canvas, 50, 70 and 98 cells, holding about 0.1 items a cell (about 2,000 filings over about 19,300 cells at 40); densest case from a smallest side of 64 ft, a cell where the brook and a ditch meet
 
 No grid of the brook: its stations stand in order along the fall (measured 2026-11-03 on the reference rolls: each station no higher than the one before), so a range along the fall is found by bisection, 9, 9 and 10 halvings at 324, 450 and 632 stations, and the segments in it within 30 ft of the point, about 3, are asked.
@@ -65,46 +69,46 @@ No grid of the brook: its stations stand in order along the fall (measured 2026-
 | the wet toe | per item | 8 | the anchor and the center, 4 edges each in their strips | the toe reaching the margin |
 | open ground | per item | 54 | 9 band points, 6 of the outline's edges each in their strips | the outline's lobes beside the margin, up to 33 an edge strip |
 | the reeds | per item | 40 | the center and 9 band points, 4 edges each in their strips | a pond roll; a brook-sink roll has no fringe |
-| the dry plots' cells | per item | 29 at 20, 48 at 40, 75 at 80 | the cells the back's rectangle covers (the Indexes) | always these |
-| the back's clear ground | per item | 96 at 20, 168 at 40, 256 at 80 | 12, 21 and 32 plots in those cells, each clipped to the rectangle (8) | a margin backing onto the dry hem, 6 plots a cell |
-| margins passing every refusal | over the run | 13 at 20, 17 at 40, 36 at 80 | the chosen margin and its ladder, measured on the reference seats | every candidate passing |
-| the dry plots' cells round each passing margin | over the run | 9 a passing margin | the hem's first ring | about 6 rings out to two band depths where no hem stands near |
-| the hem | over the run | 97 a passing margin | 9 cells of 2.7 plots of 4 edges, each an edge's distance | the hem within two band depths |
-| the brook on the band | over the run | 180 at 20, 180 at 40, 195 at 80, a passing margin | 15 points (the knob), each 9, 9 or 10 bisection steps and 3 segments | the brook across the band |
-| the score | over the run | 7 a passing margin | its seven terms: the wind, the upslope end, the reeds' share, the hem, the back, the belt's room and the brook's tie-break | always 7 |
-| the ranking | over the run | 52 at 20, 85 at 40, 216 at 80 | the passing margins sorted, n log n: 13 x 4, 17 x 5, 36 x 6 | every candidate passing |
+| the dry plots' cells | per item | 29 at 20, 48 at 40, 75 at 80 | the cells the back's rectangle covers (the Indexes), each read and found empty: no dry plot stands at the seat | a plot standing, each clipped (8) |
+| margins passing every refusal | over the run | 29 at 20, 42 at 40, 59 at 80 | the chosen margin and its ladder, measured on the reference seats with the hem after the seat | every candidate passing |
+| the brook on the band | over the run | 315 at 20, 315 at 40, 345 at 80, a passing margin | 15 points (the knob), each two bisections of 9, 9 or 10 steps (the stations within 30 ft either side of its place) and 3 segments | the brook across the band |
+| the score | over the run | 7 a passing margin | its seven terms: the wind, the upslope end, the reeds' share, the hem (none standing), the back, the belt's room and the brook's tie-break | always 7 |
+| the ranking | over the run | 145 at 20, 252 at 40, 354 at 80 | the passing margins sorted, n log n: 29 x 5, 42 x 6, 59 x 6 | every candidate passing |
 | the plan read and the band's size | once | 7 | the five plan fields and the two half-extents | always 7 |
 | the margins' scan | once | 136 at 20, 192 at 40, 270 at 80 | each outline point's normal and turn against the wind (2 a point) | the typical field |
 | the outline's strips filed | once | 102 at 20, 143 at 40, 201 at 80 | each edge in the strips it spans, measured | the typical field |
 | the toe's strips filed | once | 204 at 20, 280 at 40, 388 at 80 | each edge in the strips it spans, measured | the typical toe |
 | the reeds' strips filed | once | 66 at 20, 71 at 40, 78 at 80 | each edge in the strips it spans, measured | a pond roll |
-| the dry plots read | once | 380 at 20, 609 at 40, 1,003 at 80 | each plot's points | the typical hem |
-| the dry plots' cells filed | once | 605 at 20, 948 at 40, 1,570 at 80 | each plot in the cells its box covers, measured | the typical hem |
 | the brook read | once | 324 at 20, 450 at 40, 632 at 80 | each station read once in its order | the typical brook |
+| the way out's wet walls grown | once | 111 at 20, 130 at 40, 154 at 80 | each point of the toe and the reeds moved along its normals by the lane's width, measured | a pond roll |
 | the way out's walls filed | once | 416 at 20, 512 at 40, 648 at 80 | 208, 256 and 324 edges in about 2 cells each | a pond roll |
 | the way out's water filed | once | 1,095 at 20, 1,504 at 40, 2,022 at 80 | each watercourse segment in the cells it crosses, measured | the typical map |
-| the way out's cells | once | 150 at 20, 280 at 40, 784 at 80 | the straight runs tried, measured (3, 4 and 8 on the mean), each 50, 70 or 98 cells | sixteen runs walled |
-| the way out's items | once | 15 at 20, 28 at 40, 78 at 80 | about 0.1 a cell along those runs | as above |
-| the way out's walk | once | 0 at 20, 0 at 40, 6,200 at 80 | where no run is clear, the walk of the 20 ft cells toward the nearest edge - one seat in four at 80 (seed 47, 4,964 ft from its nearest edge): 248 steps of 20 ft, each step testing its new neighbors, 5 of the 8 a cell on a walk aimed at the edge, each test the 9 reach cells round it read, the 4 wall and water edges in them asked and the 4 walls' strips (about 20), so 248 x 5 x 20 = 24,800, a quarter of it on the mean | a seat walled in on the way to every edge: every 20 ft cell of the canvas tested once, about 394,000 at 80, the walk's cells remembered across margins so no cell is tested twice |
+| the way out's cells along its runs | once | 1,603 at 20, 2,248 at 40, 3,146 at 80 | 6.75 runs on the mean (measured), each half the canvas in 128 ft steps (25, 35 and 49), each step its 3 x 3 reach cells read (9) and about half an item new (0.5) - 6.75 x 25 x 9.5, 6.75 x 35 x 9.5, 6.75 x 49 x 9.5 | sixteen runs walled |
+| the way out's walk | once | 1,344 at 20, 1,848 at 40, 2,604 at 80 | 32, 44 and 62 walked cells on the mean (measured: seed 47 walks, the others do not), each its about 3 new neighbors tested once, each test its 9 reach cells, an item and its 4 walls' strips (14) - 42 a walked cell | a seat walled in on the way to every edge: every 20 ft cell of the canvas tested once, its cells remembered across margins |
+| the walk remembered | once | 145 at 20, 221 at 40, 312 at 80 | every cell the walk reached marked with its answer, about 5 a walked cell (its new neighbors and itself), measured | as the walk's |
 | the fords | once | 689 at 20, 956 at 40, 1,343 at 80 | each station's bend tested (2 a station) and a ford written each 160 ft of brook (the knob: 41, 56, 79) | the typical brook |
 | the watercourses gathered | once | 488 at 20, 643 at 40, 857 at 80 | each segment listed for the ways (487, 642, 856) and the crossing cost set (1) | the typical map |
-| the frames written | once | 107 at 20, 139 at 40, 291 at 80 | 8 for each passing margin, and the flag, the skeleton and the face (3) | every candidate passing |
+| the frames written | once | 235 at 20, 339 at 40, 475 at 80 | 8 for each passing margin, and the flag, the skeleton and the face (3) | every candidate passing |
+| the wet toe derived | once | 1,684 at 20, 2,328 at 40, 3,375 at 80 | the field's 68, 96 and 135 points read twice for the crop's low edge (2) and projected and sorted (3); a station every 30 ft across the breadth and 90 ft past each side (48, 66 and 90), each two bisections of 7, 7 or 8 steps, the about 10 points within 90 ft of it, and its edge and inner line (4) | a field whose points bunch under one station |
+| the crossing cost set | once | 3,954 at 20, 5,496 at 40, 7,723 at 80 | a sample every 5 ft of the brook (1,371, 1,905 and 2,674) filed in 31 ft cells, about 1.3 cells a 31 ft run (287, 399 and 561), each cell's 3 x 3 neighborhood (9) | the typical brook |
 | slack | per item | 1 | every factor is a count of the stage's own inputs | not applicable |
 
-So: items x (10 + 21 + 8 + 54 + 40 + the back's cells + the back's plots) x slack + the passing margins x (9 + 97 + the brook on the band + 7) + the ranking + each once term.
+So: items x (10 + 21 + 8 + 54 + 40 + the back's cells) x slack + the passing margins x (the brook on the band + 7) + the ranking + each once term.
 
 ## Totals
 
-- at 20: 37 x (10 + 21 + 8 + 54 + 40 + 29 + 96) x 1 + 13 x (9 + 97 + 180 + 7) + 52 + 7 + 136 + 102 + 204 + 66 + 380 + 605 + 324 + 416 + 1095 + 150 + 15 + 0 + 689 + 488 + 107 = 18191
-- at 40: 53 x (10 + 21 + 8 + 54 + 40 + 48 + 168) x 1 + 17 x (9 + 97 + 180 + 7) + 85 + 7 + 192 + 143 + 280 + 71 + 609 + 948 + 450 + 512 + 1504 + 280 + 28 + 0 + 956 + 643 + 139 = 30325
-- at 80: 74 x (10 + 21 + 8 + 54 + 40 + 75 + 256) x 1 + 36 x (9 + 97 + 195 + 7) + 216 + 7 + 270 + 201 + 388 + 78 + 1003 + 1570 + 632 + 648 + 2022 + 784 + 78 + 6200 + 1343 + 857 + 291 = 62012
+- at 20: 37 x (10 + 21 + 8 + 54 + 40 + 29) x 1 + 29 x (315 + 7) + 145 + 7 + 136 + 102 + 204 + 66 + 324 + 111 + 416 + 1095 + 1603 + 1344 + 145 + 689 + 488 + 235 + 1684 + 3954 = 28080
+- at 40: 53 x (10 + 21 + 8 + 54 + 40 + 48) x 1 + 42 x (315 + 7) + 252 + 7 + 192 + 143 + 280 + 71 + 450 + 130 + 512 + 1504 + 2248 + 1848 + 221 + 956 + 643 + 339 + 2328 + 5496 = 40737
+- at 80: 74 x (10 + 21 + 8 + 54 + 40 + 75) x 1 + 59 x (345 + 7) + 354 + 7 + 270 + 201 + 388 + 78 + 632 + 154 + 648 + 2022 + 3146 + 2604 + 312 + 1343 + 857 + 475 + 3375 + 7723 = 60749
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.89 (18,191 to 62,012): the candidates with the outline's points
-(37 to 74), the back's cells and plots with the band's depth squared (x2.6), the plots and the brook with the field and the canvas,
-the passing margins x2.8, and the way out with the canvas (the walk where a seat needs it). The stage is a seat and its ladder, not one seat: about 1,800 operations a passing margin at 40 (its refusals and its score, the 53 candidates' refusals shared over the 17 it ranks) and the map-wide indexes (about 6,000 at 40) every margin asks. No loop over a growing set runs inside another: each candidate's tests
-read cells and strips, never the whole of a ring; the way out's walk remembers every cell it has tested and every cell it has found joined to an edge or walled in, across the margins the head falls back to, so the whole run tests each cell of the canvas at most once.
+From 20 to 80 households the stage grows at an exponent of about 0.56 (28,080 to 60,749): the candidates with the outline's points
+(37 to 74), the passing margins (29 to 59), the brook and its crossing cost with the brook's length, the wet toe's stations with the
+field's breadth, and the way out with the canvas. The wet toe's stations and the field's points are two growing sets, but each station
+takes its slice of the points by bisection, so the toe grows with the stations and the points, not their product. No other loop over a
+growing set runs inside another; the way out's walk remembers every cell it has tested and every cell it has found joined to an edge
+or walled in, across the margins the head falls back to, so the whole run tests each cell of the canvas at most once.
 
 ## Work the first derivation missed
 
@@ -118,6 +122,7 @@ first count priced one pass over the outline for its highest point; the contract
 - the brook's fords and the crossing cost (0035: a way crosses the brook only at a ford, opened on a straight reach), which the seat opens before any way is routed
 - the watercourses gathered for every later way, the brook gapped at its fords
 - the indexes each of these reads, built once: nothing a stage before the seat files outlives it, so the seat files what it asks
+- the wet toe below the fields (0058: seat and anchor off the marsh below the fields), which the seat's refusals read and the seat derives through its door; the way out's wet walls grown by the lane's width (0081); and the crossing cost every later way pays (0035), set on the brook as the fords are opened - found uncounted by the MODE AUDIT of 2026-11-04 (`phases/seat.audit-1.txt`)
 
 ## Earlier findings
 
@@ -141,6 +146,11 @@ first count priced one pass over the outline for its highest point; the contract
 - note (verdict 3), the brook's bisection along the fall: it brackets the stations whose places along the fall lie within 30 ft of the point's, and one station either side, which holds every segment within 30 ft of the point - a segment that near has an end within 30 ft along the fall, or spans the point's place; about 3 segments asked
 - note (verdicts 2-4), the way out's items: about 0.1 a cell, as measured, in its row
 - note (verdict 4), the figure of about 30,000 a seat: said in Growth - a seat and its ladder of 17 at 40, and the map-wide indexes every margin asks
+- verdict-6, finding 1: fixed - its SOUND stood on the pipeline with the hem before the seat; the hem now follows the seat (T28), so the dry plots' rows are gone and the inputs re-measured; its notes answered below
+- verdict-7, finding 1: fixed - as verdict-6's; its notes answered below
+- verdicts 6-7, notes: the belt's 146 ft is the shelter belt's near face (36 ft, a GUESS) and its 110 ft depth (0071), claimed where the seat asks the belt's room, and the 2.6 is a knob at every size; the refusals' upper bound is about 25% of the total at 40 now, 53 x 181 = 9,593 against the 4,270 counted (under S10's half); the walk measured, not a minimum (44 cells at 40 on the mean, 176 on seed 47), its worst case in cells; the brook's tie-break is asked of every passing margin, as priced; the plots' filings - none now; the straight runs read the walk's memo first (a head in ground an earlier walk reached takes its answer with no run tried); an orthogonal step's 3 new neighbors priced in the walk's row; Growth no longer counts the indexes twice
+- seat.audit-1, finding 1: fixed - the wet toe's derivation counted and priced, its stations' slices by bisection where each station walked every point of the field; the crossing cost's samples and cells counted and priced; the way out's grown walls counted and priced
+- seat.audit-1, notes: the cells' duplicate check counted in each box's reads, the walk's memo counted, its neighbors' tests beside the runs'; the refusals' counter named for refusals, not drops
 
 ## Cheaper algorithms considered
 
