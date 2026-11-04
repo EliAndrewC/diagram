@@ -659,9 +659,9 @@ Occasions: settlement-review on the pool hamlets the rebuilt seating moves (ever
 
 ### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** In the seating's tests of each offered seat and the ways laid after it: 17,909,350 Python calls at 40 (`make perf-fanout STAGES=homesteads`, 2026-11-04), the hottest chains the fabric's crossing tests (`fabric_hits_boxed`), the gap ways' leg tests (`gap_ways.leg_ok`, `access.fixtures_clear`), the boundary's line samples (`boundary._samples`, growing 18.7x from 20 to 40) and the fixtures' reach tests (`fixture_seats.within_reach_of`); 1,716,870 counted at 40 (`make work-budget`).
+1. **Where does the time go?** In the seating's tests of each offered seat and the ways laid after it: 17,909,350 Python calls at 40, measured 2026-11-04 (`make perf-fanout STAGES=homesteads`), the hottest chains the fabric's crossing tests (`fabric_hits_boxed`), the gap ways' leg tests (`gap_ways.leg_ok`, `access.fixtures_clear`), the boundary's line samples (`boundary._samples`, growing 18.7x from 20 to 40) and the fixtures' reach tests (`fixture_seats.within_reach_of`); 1,716,870 counted at 40, measured 2026-11-04 (`make work-budget`).
 2. **Removes work, or only moves it?** Removes it in the seating: the boundary painted once and each offer read from the raster and a grid of the standing boxes, the parts laid from one template a size, the wood's share by its lattice once a homestead; the ways' stage (D1) keeps its work until its own phase.
-3. **What do you expect it to save, and why?** The seating's Python calls, most of the stage's, and its share of the roll's time (the stage 3.93 s of the roll at 40 on seed 25, `make perf-ab`, 2026-11-04).
-4. **How does the work grow with the settlement?** 0.84 measured from 20 to 80 (`make work-budget`); the seating's derivation will say its own.
+3. **What do you expect it to save, and why?** The seating's Python calls, most of the stage's, and its share of the roll's time (the stage 3.93 s of the roll at 40 on seed 25, measured 2026-11-04 (`make perf-ab`)).
+4. **How does the work grow with the settlement?** 0.84 from 20 to 80, measured 2026-11-04 (`make work-budget`); the seating's derivation will say its own.
 5. **What did the before and after show, and under what conditions?** `make perf-ab` recorded at the landing, best of N.
 6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
