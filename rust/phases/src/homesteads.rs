@@ -14,6 +14,7 @@
 
 pub mod bearing;
 pub mod bundle;
+pub mod dry_exit;
 pub mod fit;
 pub mod fixtures;
 pub mod ground;
@@ -23,6 +24,8 @@ pub mod place;
 pub mod track;
 pub mod wood;
 
+#[cfg(test)]
+mod dry_exit_tests;
 #[cfg(test)]
 mod fit_tests;
 #[cfg(test)]
