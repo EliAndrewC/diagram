@@ -102,6 +102,8 @@
       verify: DONE. the audit bundle names each code file by its repository path, / as __ (bundled_name), so the field's and the sink's brook.rs both land
 - [ ] T27 phase: seat - where the settlement sits on the field's margin, its back to the wind, with the brook's fords and the crossing cost every later way pays, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
       research: rendering
+- [ ] T28 the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04): a clustered hamlet's dry fields stand behind its houses, paddy - houses - dry fields (0006, form b of the 2026-11-04 research pass); the Rust field lays its hem just upslope of the canal, where on about one seed in ten the houses would stand - so the hem moves after the seat, laid behind the settlement's band and along the canal elsewhere, and 0006's drawing page redrawn to it
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
