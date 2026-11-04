@@ -7,6 +7,7 @@ mod counts;
 mod course;
 mod field;
 mod pyrand;
+mod seat;
 mod sink;
 mod water_frame;
 
@@ -26,5 +27,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(field::py::settle_runs, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::rounded_pond, m)?)?;
     m.add_function(wrap_pyfunction!(sink::py::stage_sink, m)?)?;
+    m.add_function(wrap_pyfunction!(seat::py::stage_seat, m)?)?;
     Ok(())
 }

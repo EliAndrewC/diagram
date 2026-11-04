@@ -131,6 +131,17 @@ first count priced one pass over the outline for its highest point; the contract
 - verdict-5, finding 1: fixed - the walk's step (20 ft), its 5 new neighbors a step aimed at the edge and its 20 a test derived in its row, the 4,964 ft in the Bounds, and its bound across the ladder stated: the cells it has tested and what it found of them remembered, so the canvas is walked at most once
 - verdict-5, notes: the brook's 30 ft reach named a knob; the score's seven terms counted 7; the ladder's rungs' own way out is the house seating's (the contract's Writes), not the seat's
 
+- note (verdicts 2-5), every refusal charged to every candidate: kept - the count prices each of the 53 candidates every refusal, the cheapest first; no reference measurement says which refusal stops which candidate, so the per-item term is an upper bound, at most about 26% of the total at 40 above a candidate that stops at its first refusal (under S10's half)
+- note (verdicts 2-5), the plots' density behind a clear back: kept at 2.7 a cell, the density of the cells that hold any - an upper figure; a back that passes holds under 0.30 of its area in crop, so the plots it clips are fewer than the 21 at 40 priced
+- note (verdicts 4-5), the reeds' test on every roll: a pond roll's work; the reference rolls are all pond rolls (the reference spec's sink is a pond), and a brook-sink roll has no fringe, its 40 a candidate and its strips not paid
+- note (verdict 5), the brook's 30 ft reach: named under `## The knobs the count reads`
+- note (verdict 5), the score's terms: seven, counted 7
+- note (verdict 5), each ladder rung's way out: the house seating's, when it falls back to one (the contract's Writes), not the seat's
+- note (verdict 2), the hem's ring search past 9 cells: its worst case in its row, about 6 rings out to two band depths where no hem stands near
+- note (verdict 3), the brook's bisection along the fall: it brackets the stations whose places along the fall lie within 30 ft of the point's, and one station either side, which holds every segment within 30 ft of the point - a segment that near has an end within 30 ft along the fall, or spans the point's place; about 3 segments asked
+- note (verdicts 2-4), the way out's items: about 0.1 a cell, as measured, in its row
+- note (verdict 4), the figure of about 30,000 a seat: said in Growth - a seat and its ladder of 17 at 40, and the map-wide indexes every margin asks
+
 ## Cheaper algorithms considered
 
 - sweep: used - one pass over the outline's points for the margins; the brook walked once for its fords
