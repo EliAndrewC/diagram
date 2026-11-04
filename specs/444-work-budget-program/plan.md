@@ -478,3 +478,17 @@ The increment after the GM's answer (2026-11-04, "Sounds good, I accept option (
 9. **Done, measured.** sink 1,358 / 1,455 / 1,611 at 20 / 40 / 80, measured 2026-11-04 (`make work-budget`), accepted.
 10. **Before moving a constant.** None moved: the reeds' reach past their tint (the registry's) now bounds the field's cut too, its claim reworded; the pond's ellipse in the reeds' cut is the 32-point ring the blocks already held.
 11. **Before fitting things into room.** Not a room question.
+
+### T22 part B (2026-11-04T07:16Z)
+
+The trigger: red gates in a row on the T22/T26 landing (06:59Z, 07:11Z, 07:13Z), the tripwire ruled `continue` by the round arbiter (red-gate@2026-11-04T07:13:57Z).
+
+1. **What exactly is refusing?** The landing's `make done`, each time a different cheap check: preflight's Python driver (`rust/phases/tests/py_driver.py`) still expecting the deleted constructed route's refusals; static's rustfmt on the rewritten sink test; static's Rust coverage on an `assert!` message line that never runs.
+2. **A3 again.** The rules are the checks' own (the driver's named refusals, rustfmt, the Rust line floor), unchanged.
+3. **A4 again.** Read in each run's record (`dev/run-log/2026-11/`).
+4. **Moving something placed earlier to suit something later?** No: each fix is in the delta that caused it.
+5. **Tuning or changing?** Neither: the driver's cases follow the deletion, the test is formatted, the unrun message made a comment.
+6. **The one-sentence test.** "Deleting the constructed route left its driver cases, a format and a coverage line behind."
+7. **Done:** `make quick` and `make static` clean at the head (2026-11-04).
+8. **Every route measured before the arbiter was asked?** Each red was read and fixed in its own commit before the next run.
+9. **After a ruling, the step it named?** Yes: `make done` again at the clean head, through `make land F=444 T="T22"`.
