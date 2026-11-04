@@ -171,6 +171,41 @@ def run(start: int, stages: Sequence[Any] | None = None, failing_path: str = FAI
     return {"rust_stages": [stage_name(st) for st in stages], "start": start, "seeds": rows, "replays": replays, "failing": failing}
 
 
+def refreeze(to: str, stages: Sequence[Any] | None = None, failing_path: str = FAILING, frozen_dir: str = FROZEN) -> list[str]:
+    """Each listed entry charged to a Rust stage after `to` re-charged to `to`: its seed rolled afresh and `to`'s own input frozen
+    from the roll's trace in place of the later stage's, its old fixture removed. For a fault the round arbiter rules upstream of the
+    stage that refused (ask:444-T27-seat-hem: the seat refused on the old field's dry hem, a fixture of which would replay that
+    ground into the seat for ever). Returns one line per entry moved.
+
+    Research:
+        the fixtures - NONE: the gate's own bookkeeping"""
+    stages = list(rust_stages() if stages is None else stages)
+    names = [stage_name(st) for st in stages]
+    if to not in names:
+        raise ValueError(f"no Rust stage `{to}` (the Rust stages: {', '.join(names)})")
+    listed, moved = load_failing(failing_path), []
+    for e in listed:
+        if e.get("stage") not in names or names.index(e["stage"]) <= names.index(to):
+            continue
+        r = roll(e["seed"], e["households"], dict(e.get("pins") or {}), stages[: names.index(to) + 1])
+        frozen = next((f for name, f, _w in r["trace"] if name == to), None)
+        old = e.get("frozen")
+        path = None
+        if frozen is not None:
+            os.makedirs(frozen_dir, exist_ok=True)
+            path = os.path.join(frozen_dir, f"{e['seed']}-{to}.pkl")
+            with open(path, "wb") as fh:
+                fh.write(frozen)
+        if old and old != path and os.path.exists(old):
+            os.remove(old)
+        moved.append(f"seed {e['seed']}: {e['stage']} -> {to}")
+        e.update(stage=to, frozen=path)
+    with open(failing_path, "w", encoding="utf-8") as fh:
+        json.dump(listed, fh, indent=1)
+        fh.write("\n")
+    return moved
+
+
 def write_record(record: dict[str, Any], log: str = LOG) -> str:
     """The run, with the engine it rolled (`ci.delta.engine_key_worktree`, what the landing asks a record by)."""
     from pathlib import Path  # noqa: PLC0415
@@ -188,7 +223,12 @@ def write_record(record: dict[str, Any], log: str = LOG) -> str:
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--start", type=int, required=True, help="the fresh block's first seed (cohort_gate.py fresh-seed)")
+    ap.add_argument("--refreeze-to", default="", help="re-charge the list's later-stage entries to this Rust stage, freezing its input, and stop")
     args = ap.parse_args(argv)
+    if args.refreeze_to:
+        for line in refreeze(args.refreeze_to):
+            print(f"rust-gate: refrozen {line}")
+        return 0
     off = off_the_front(STAGES, rust_stages())
     if off:
         print(f"rust-gate: REFUSED - Rust stage(s) {', '.join(off)} are not the front of STAGES: port the stages in STAGES order (FR-019)", file=sys.stderr)

@@ -82,6 +82,7 @@ from .cluster import _arm_crossing_accidental as _arm_crossing_accidental
 from .consts import *
 from .driver import *
 from .frame import *
+from .hem_stage import *
 from .hinterland import *
 from .hinterland import _crop_refuses as _crop_refuses
 from .hinterland import _near_line as _near_line

@@ -69,11 +69,26 @@ fn field_dict<'py>(py: Python<'py>, f: &Field, drawn: &[Pt]) -> PyResult<Bound<'
     }
     d.set_item("channels", chans)?;
     d.set_item("beans", f.beans.iter().map(|r| pts(r)).collect::<Vec<_>>())?;
-    let dry = PyList::empty(py);
-    for p in &f.dry {
-        dry.append((pts(&p.poly), p.crop, p.theta, p.tract))?;
+    // what the hem stage lays the dry hem from, after the seat (T28): the first field's, with the field's water at its widths
+    if let Some(h) = &f.hem {
+        let hem = PyDict::new(py);
+        hem.set_item("line", pts(&h.line))?;
+        hem.set_item("out", h.out)?;
+        hem.set_item("down", h.down)?;
+        hem.set_item("bounds", h.bounds)?;
+        hem.set_item("seed", h.seed)?;
+        let water: Vec<(Pt, Pt, f64)> = f
+            .water
+            .segs
+            .iter()
+            .zip(&f.water.widths)
+            .map(|(&(a, b), &w)| (a, b, w))
+            .collect();
+        hem.set_item("water", water)?;
+        d.set_item("hem", hem)?;
+    } else {
+        d.set_item("hem", py.None())?;
     }
-    d.set_item("dry", dry)?;
     d.set_item("pond", f.pond.map(|(i, p)| (i, p.x, p.y, p.rx, p.ry)))?;
     d.set_item(
         "grave",
@@ -411,7 +426,9 @@ pub fn stage_field<'py>(
                     .sum::<u64>()
                 + f.channels.iter().map(|c| c.pts.len() as u64).sum::<u64>()
                 + f.beans.iter().map(|r| r.len() as u64).sum::<u64>()
-                + 7 * f.dry.len() as u64
+                + f.hem
+                    .as_ref()
+                    .map_or(0, |h| h.line.len() as u64 + 3 * f.water.segs.len() as u64)
         })
         .sum();
     *out.counts.entry("write@py_export".to_owned()).or_insert(0) += exported + drawn_pts;

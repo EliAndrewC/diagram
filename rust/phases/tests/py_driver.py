@@ -138,3 +138,9 @@ except ValueError as e:
     assert "no field margin" in str(e), e
 else:
     raise AssertionError("a seat no margin can hold is refused by name")
+
+# the hem stage (feature 444 T28), as the thin `stage_hem` calls it: the hem laid along a canal, kept off the settlement's ground
+hem_line = [(0.0, 50.0 * k) for k in range(25)]
+hem_ring = [(1.0, -10.0), (900.0, -10.0), (900.0, 1300.0), (1.0, 1300.0)]
+laid = l7r_phases.stage_hem(hem_line, (-1.0, 0.0), (0.0, 1.0), (float("inf"), 1), 4, hem_ring, [], [[(-300.0, 300.0), (-1.0, 300.0), (-1.0, 700.0), (-300.0, 700.0)]])
+assert laid["dry"] and laid["grain"][0] > 0.0 and laid["counts"]

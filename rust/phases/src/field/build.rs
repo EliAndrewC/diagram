@@ -10,7 +10,7 @@ use std::collections::HashMap;
 use super::beans::bean_runs;
 use super::brook::{brook, clearance, weir, Brook, BrookIn};
 use super::channels::{channels, Channel};
-use super::dry::{hem, DryPlot, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS};
+use super::dry::{GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS};
 use super::fan::{fan, Fan, Pt};
 use super::features::{grave, pocket_pond, Grave, Pond};
 use super::index::Index;
@@ -76,7 +76,8 @@ pub struct Field {
     pub states: Vec<State>,
     pub channels: Vec<Channel>,
     pub beans: Vec<Vec<Pt>>,
-    pub dry: Vec<DryPlot>,
+    /// What the hem is laid from, for the hem stage after the seat (T28): the first field's only.
+    pub hem: Option<HemIn>,
     pub pond: Option<(usize, Pond)>,
     pub grave: Option<Grave>,
     /// The water index of `segments`, each at its width: the field's beans and the hem ask it, filed once.
@@ -91,6 +92,20 @@ pub struct Field {
     pub plots_box: [f64; 4],
     pub low: std::ops::Range<usize>,
     pub rested: Vec<usize>,
+}
+
+/// What the hem stage lays the dry hem from (T28): the canal's course it climbs from, the side it climbs to, the fall, the grain
+/// it lays and the bands it may climb, and the roll's seed.
+///
+/// Research:
+///     the hem's inputs - NONE: the record's type, holding what `build` hands on
+#[derive(Debug, Clone)]
+pub struct HemIn {
+    pub line: Vec<Pt>,
+    pub out: Pt,
+    pub down: Pt,
+    pub bounds: (f64, u32),
+    pub seed: i64,
 }
 
 /// A ring's box (x0, y0, x1, y1), middle (the mean of its points) and area (square feet).
@@ -239,34 +254,21 @@ pub fn build(inp: &FieldIn) -> Result<FieldOut, FieldRefused> {
             }));
         }
         let out = (f.fan.across.0 * far, f.fan.across.1 * far);
-        // the field's own water index, filed once in `one`: only what the hem's queries add is counted here
-        let ix = &mut f.water;
-        let before = (ix.touched, ix.examined, ix.tests);
-        let (dry, r, tested) = hem(
-            &line,
+        // THE HEM IS LAID AFTER THE SEAT (T28, the round arbiter on ask:444-T27-seat-hem): the dry fields stand behind the houses
+        // where the settlement stands on the paddy's high edge (0006), and the field cannot know where that is - so the field
+        // hands on what the hem is laid from, and the hem stage lays it with the seat's ground kept
+        f.hem = Some(HemIn {
+            line,
             out,
-            f.fan.down,
-            hem_bounds(
+            down: f.fan.down,
+            bounds: hem_bounds(
                 is("fan_middle", "wild"),
                 is("winter_crop", "barley"),
                 dry_need,
             ),
-            &f.fan.ring,
-            ix,
-            1.0,
-            inp.seed,
-            "f0",
-        );
-        counts.add("write@dry_plot", 4 * dry.len() as u64);
-        // the hem's index and its grid of laid plots: their cells and what their queries handed back
-        counts.add("write@hem_index", ix.touched - before.0);
-        counts.add("candidate@hem_index", ix.examined - before.1);
-        counts.add("pt_test@hem_onto", tested);
-        counts.add("pt_test@hem_refused", ix.tests - before.2);
-        #[expect(clippy::cast_precision_loss, reason = "a hamlet's hundred dry plots")]
-        let plots = dry.len() as f64;
-        f.dry = dry;
-        (plots * super::dry::PLOT_FT.0 * super::dry::PLOT_FT.1, r)
+            seed: inp.seed,
+        });
+        (0.0, 0.0)
     };
     Ok(FieldOut {
         knobs,
@@ -455,7 +457,7 @@ fn one(
         states: st,
         channels: chans,
         beans,
-        dry: Vec::new(),
+        hem: None,
         pond,
         grave: gr,
         water: ix,
@@ -645,12 +647,27 @@ mod tests {
         assert_eq!(f.states.len(), f.basins.len());
         assert!(f.states.contains(&State::Wet));
         assert!(f.weir.is_some(), "the pinned weir");
-        assert!(!f.beans.is_empty() && !f.dry.is_empty());
+        assert!(!f.beans.is_empty());
+        // the hem handed on, not laid: the hem stage lays it after the seat (T28)
+        let h = f.hem.as_ref().unwrap();
         let (drawn, need, room) = out.grain;
-        assert!(drawn >= need && room >= drawn, "{:?}", out.grain);
+        assert!(drawn == 0.0 && room == 0.0 && need > 0.0, "{:?}", out.grain);
+        let water: Vec<_> = f
+            .water
+            .segs
+            .iter()
+            .zip(&f.water.widths)
+            .map(|(&(a, b), &w)| (a, b, w))
+            .collect();
+        let laid = crate::hem::lay(h, &f.fan.ring, &water, &[]);
+        assert!(
+            laid.grain.0 >= need && laid.grain.1 >= laid.grain.0,
+            "{:?}",
+            laid.grain
+        );
         let (dx, dy) = f.fan.down;
-        let toe_first = f
-            .dry
+        let toe_first = laid
+            .plots
             .first()
             .map(|d| (d.poly[0].0 - f.fan.fork.0) * dx + (d.poly[0].1 - f.fan.fork.1) * dy);
         assert!(toe_first.unwrap() > f.fan.length * 0.66);
@@ -662,7 +679,7 @@ mod tests {
         let mut barley = inp(20, 5);
         barley.knobs[3].3 = Some("barley".to_owned());
         let b = build(&barley).unwrap();
-        assert!(b.grain.1 < 1e-9 && b.fields[0].dry.is_empty());
+        assert!(b.grain.1 < 1e-9 && b.fields[0].hem.is_some());
         // ...and on an unsettled field the resting plots and the wet ones are taken out of the barley's ground
         barley.knobs[2].3 = Some("unsettled".to_owned());
         let u = build(&barley).unwrap();

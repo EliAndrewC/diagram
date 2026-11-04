@@ -33,6 +33,7 @@ from .burial import stage_burial
 from .consts import DIKE_CROPS, FIELD_ARCHETYPES, LEFTOVER_FORMS, REF_HOUSEHOLDS
 from .field_stage import stage_field
 from .frame import stage_crossings, stage_frame, stage_labels, stage_notice
+from .hem_stage import stage_hem
 from .hinterland import stage_bamboo, stage_hinterland, stage_windbreak, stage_woodland
 from .homesteads import stage_appurtenances, stage_homesteads
 from .homesteads.sties import stage_sties
@@ -101,6 +102,7 @@ STAGES = (
     stage_field,
     stage_sink,
     stage_seat,  # decides WHERE the settlement sits. Draws nothing.
+    stage_hem,  # the dry hem, behind the settlement and along the canal elsewhere (T28): after the seat, so the houses stand between the paddy and the dry fields
     # A POLDER'S WATERWARD FRINGE (feature 150) - the reed strips outside the dike on the flanks that
     # face the water. It needs the SEAT (which flank is landward is a fact about where the village
     # stands) and it RESERVES ground, so it goes here and not in the hinterland: laid at stage 9 it

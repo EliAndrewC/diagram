@@ -105,6 +105,7 @@ pub fn hem(
     clear: f64,
     seed: i64,
     tag: &str,
+    keep: &[Vec<Pt>],
 ) -> (Vec<DryPlot>, f64, u64) {
     let mut rng = knob_rng(seed, &format!("{tag}:dry"));
     let mix: Vec<&'static str> = {
@@ -164,10 +165,14 @@ pub fn hem(
                     break 'band;
                 }
                 let (a, b) = canal.column(d0, &mut frames, &mut ix.tests);
+                // THE SETTLEMENT'S GROUND KEPT: where the column's first strip would stand on the seat's band or its belt, its
+                // strips are laid behind it, a strip's depth at a time until clear - the houses between the paddy and the dry
+                // fields (0006)
+                let behind = past_keep(a, b, depth, keep, &mut ix.tests);
                 for j in 0..strips {
                     let (o0, o1) = (
-                        depth + f64::from(j) * PLOT_FT.1,
-                        depth + f64::from(j + 1) * PLOT_FT.1,
+                        depth + behind + f64::from(j) * PLOT_FT.1,
+                        depth + behind + f64::from(j + 1) * PLOT_FT.1,
                     );
                     // the grain held, the band's rest is room the hem did not take: no seat built (the audit, T16: each was
                     // built only to be counted as room)
@@ -210,6 +215,41 @@ pub fn hem(
     ix.touched += laid.touched;
     ix.examined += laid.examined;
     (plots, room, bands.tested)
+}
+
+/// How far past `depth` a column's strips stand so their first is clear of the settlement's ground `keep` (feet): 0 where it
+/// already is, else whole strips' depths until it is, at most as far as the ground's box reaches.
+///
+/// Research:
+///     the dry fields behind the houses - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem drawn behind the settlement where it stands on the paddy's high edge, the houses between the canal and the dry fields; just upslope of the canal along the rest
+fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut u64) -> f64 {
+    if keep.is_empty() {
+        return 0.0;
+    }
+    let reach = keep
+        .iter()
+        .map(|k| {
+            let (lo, hi) = bbox(k);
+            dist(lo, hi)
+        })
+        .fold(0.0, f64::max);
+    let mut behind = 0.0;
+    while behind <= reach {
+        let poly = Canal::seat(a, b, (depth + behind, depth + behind + PLOT_FT.1), tests);
+        let middle = (
+            f64::midpoint(poly[0].0, poly[2].0),
+            f64::midpoint(poly[0].1, poly[2].1),
+        );
+        *tests += 5 * keep.len() as u64;
+        if !keep
+            .iter()
+            .any(|k| inside(middle, k) || poly.iter().any(|c| inside(*c, k)))
+        {
+            return behind;
+        }
+        behind += PLOT_FT.1;
+    }
+    behind
 }
 
 /// The rows' directions a tract's neighbors run: the tract before it along its band, and those of the band below whose stretch
@@ -560,6 +600,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         // the whole canal, end to end, and no deeper than one band's strips
         let deepest = BANK_FT + f64::from(TRACT_STRIPS.1) * PLOT_FT.1 + 1.0;
@@ -587,6 +628,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         #[expect(clippy::cast_precision_loss, reason = "a hundred plots")]
         let got = plots.len() as f64 * PLOT_FT.0 * PLOT_FT.1;
@@ -615,6 +657,7 @@ mod tests {
             1.0,
             4,
             "f0",
+            &[],
         );
         assert!(crossed
             .iter()
@@ -629,6 +672,7 @@ mod tests {
             5000.0,
             4,
             "f0",
+            &[],
         );
         assert!(dry.is_empty());
         let (none, _, _) = hem(
@@ -641,6 +685,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         assert!(none.is_empty(), "no need, no plots");
         let (short, _, _) = hem(
@@ -653,6 +698,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         let (dot, _, _) = hem(
             &[(0.0, 0.0)],
@@ -664,6 +710,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         assert!(dot.is_empty());
         // the other side of the canal: the normal turned to it
@@ -677,6 +724,7 @@ mod tests {
             4.0,
             4,
             "f0",
+            &[],
         );
         assert!(east.iter().all(|p| p.poly.iter().all(|c| c.0 >= -1e-9)));
         assert!(short.is_empty());

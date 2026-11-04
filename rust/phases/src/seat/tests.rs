@@ -10,7 +10,7 @@ use super::exit::{in_any, seg_seg, Exit};
 use super::fords::{fords, gapped};
 use super::index::{area, clipped, Cells, Strips};
 use super::margins::{belt_off, candidates, Brook};
-use super::{seat, SeatIn, SeatRefused};
+use super::{seat, SeatIn};
 use crate::field::fan::Pt;
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<Pt> {

@@ -187,6 +187,9 @@ def stage_field(s: Settlement, plan: SitePlan) -> None:
     acres = 0.0
     for k, f in enumerate(out["fields"]):
         acres += _write_field(s, plan, f, f"{plan.spec.name.lower()}-paddies" + (f"-{k + 1}" if k else ""), rolled)
+    # the hem's inputs, the first field's, for the hem stage after the seat (T28), with its outline and its name
+    first = out["fields"][0]
+    plan.hem_in = {**first["hem"], "ring": first["ring"], "field": f"{plan.spec.name.lower()}-paddies"} if first.get("hem") else None
     plan.acres = acres
 
 
@@ -207,7 +210,7 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
             stats = p.get("stats") if i != host else None
             plots.append({"poly": ring, "fill": FILL[p["state"]], "low": p["state"] == "wet", "rest": p["state"] == "rest", "state": p["state"], "drain_side": p["drain_side"], "stats": stats})
     chans = [{"role": r, "pts": pts, "w": w, "w_tail": wt} for r, pts, w, wt in f["channels"]]
-    dry = [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in f["dry"]]
+    dry = dry_records(f.get("dry") or [], name)  # the hem is laid after the seat (`hem_stage`, T28): none here
     ponds = [{"x": x, "y": y, "rx": rx, "ry": ry} for _, x, y, rx, ry in [f["pond"]]] if f["pond"] else []
     grave_recs = [{"x": graves[0][0], "y": graves[0][1], "form": graves[1], "ground": f["plots"][host]["ring"]}] if graves else []
     beans = [pt for run in f["beans"] for pt in run]
@@ -233,6 +236,15 @@ def comb_net(f: dict[str, Any], name: str, cell: float, down_deg: float, fan_mid
         "plots_box": f.get("plots_box"),
     }
     return net
+
+
+def dry_records(dry: Any, name: str) -> list[dict[str, Any]]:
+    """The dry plots the Rust laid, in the shapes the readers and the ink read: each plot's ring, crop, rows' direction and its
+    tract named for its field.
+
+    Research:
+        the dry plots' records - NONE: the Rust's in the readers' shapes"""
+    return [{"poly": poly, "crop": crop, "theta": theta, "tract": f"{name}:{tract}", "fill": ink.CROP_FILL[crop], "furrow": ink.CROP_FURROW[crop]} for poly, crop, theta, tract in dry]
 
 
 def _write_field(s: Settlement, plan: SitePlan, f: dict[str, Any], name: str, rolled: dict[str, str]) -> float:

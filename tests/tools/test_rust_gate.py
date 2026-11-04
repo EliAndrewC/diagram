@@ -163,3 +163,41 @@ def test_a_check_reaches_the_plan_only_through_the_recorded_meta() -> None:
     seen: set[str] = set()
     rp.Reads(r["manifest"], seen)["meta"].get("settlement_form")
     assert "meta.settlement_form" in seen, "the plan's fields reach a check as meta reads, recorded"
+
+
+def test_an_entry_is_recharged_to_an_earlier_stage_with_that_stage_s_input(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """`refreeze` (feature 444 T28, the round arbiter on ask:444-T27-seat-hem): a later stage's entry moves to the earlier stage,
+    its seed rolled afresh and that stage's input frozen from the trace; an entry at or before it, or of no Rust stage, stays."""
+
+    def st(name: str) -> Any:
+        def f(_s: Any, _p: Any) -> None:
+            return None
+
+        f.__name__ = f"stage_{name}"
+        return f
+
+    stages = [st("water_frame"), st("field"), st("seat")]
+    old = tmp_path / "9-seat.pkl"
+    old.write_bytes(b"old")
+    failing = tmp_path / "failing.json"
+    entries = [
+        {"seed": 9, "households": 12, "pins": {}, "stage": "seat", "frozen": str(old)},
+        {"seed": 8, "households": 12, "pins": {}, "stage": "water_frame", "frozen": None},
+        {"seed": 7, "households": 12, "pins": {}, "stage": "web", "frozen": None},
+    ]
+    failing.write_text(json.dumps(entries))
+    monkeypatch.setattr(rg, "roll", lambda seed, n, pins, sts: {"lines": [], "trace": [(rp.stage_name(s), f"in:{rp.stage_name(s)}".encode(), set()) for s in sts]})
+    moved = rg.refreeze("field", stages, str(failing), str(tmp_path / "frozen"))
+    assert moved == ["seed 9: seat -> field"] and not old.exists()
+    got = json.loads(failing.read_text())
+    assert got[0]["stage"] == "field" and pathlib.Path(got[0]["frozen"]).read_bytes() == b"in:field"
+    assert got[1]["stage"] == "water_frame" and got[2]["stage"] == "web"
+    with pytest.raises(ValueError, match="no Rust stage"):
+        rg.refreeze("nowhere", stages, str(failing))
+    # a roll that never reached the stage leaves the entry no fixture
+    failing.write_text(json.dumps([{"seed": 9, "households": 12, "pins": {}, "stage": "seat", "frozen": None}]))
+    monkeypatch.setattr(rg, "roll", lambda seed, n, pins, sts: {"lines": ["FAIL x"], "trace": []})
+    assert rg.refreeze("field", stages, str(failing), str(tmp_path / "frozen")) == ["seed 9: seat -> field"]
+    assert json.loads(failing.read_text())[0] == {"seed": 9, "households": 12, "pins": {}, "stage": "field", "frozen": None}
+    monkeypatch.setattr(rg, "refreeze", lambda to: [f"seed 1: seat -> {to}"])
+    assert rg.main(["--start", "1", "--refreeze-to", "field"]) == 0 and "refrozen seed 1: seat -> field" in capsys.readouterr().out

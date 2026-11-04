@@ -256,6 +256,8 @@ class SitePlan:
     offtakes_b: tuple[float, ...] = ()
     # filled in by the stages as the map is built, so a later stage can read an earlier one's result
     net: dict[str, Any] = field(default_factory=dict)
+    # what the hem stage lays the dry hem from, after the seat: the field's canal course, side, fall, bounds, seed and water (T28)
+    hem_in: dict[str, Any] | None = None
     # THE PLAN'S OWN COUNTED WORK (feature 444 T15, rubric S5): `plan_site` runs before the roll's counters open, so the rolls
     # it counts are kept here and `stage_water_frame`, the stage that writes the plan, counts them as its own
     counted: dict[str, int] = field(default_factory=dict, compare=False, repr=False)
