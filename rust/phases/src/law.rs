@@ -19,6 +19,7 @@ pub mod ground;
 pub mod meet;
 pub mod routes;
 pub mod rules;
+pub mod tree;
 pub mod walk;
 pub mod water;
 
@@ -32,6 +33,8 @@ mod meet_tests;
 mod routes_tests;
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tree_tests;
 #[cfg(test)]
 mod walk_tests;
 #[cfg(test)]
