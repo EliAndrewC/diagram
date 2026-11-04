@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-04T15:20:36Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 329,
+  "result": "failed: test-full",
+  "commit": "4e1e1c0a6",
+  "first_failure_s": 206.5,
+  "last_failure_s": 206.5,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/test_operations_registry.py::test_every_entry_point_has_a_registry_row"
+  ],
+  "host": {
+    "load": [
+      1.99,
+      6.74
+    ],
+    "mem_avail_mb": [
+      9170,
+      9382
+    ],
+    "cpu_temp_c": [
+      101.0,
+      86.0
+    ],
+    "stall_s": {
+      "cpu": 2.0,
+      "io": 0.9,
+      "io_full": 0.8,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 104966,
+      "package": 52942
+    }
+  },
+  "phases": {
+    "preflight": 27.0,
+    "static": 29.0,
+    "format": 0.0,
+    "typecheck": 0.0,
+    "reference": 6.0,
+    "hooks-test": 39.0,
+    "counters-inert": 11.0,
+    "pytest": 237.0,
+    "test-full": 243.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_waiting_ports.py",
+  "selected": 9926,
+  "collected": 9926
+}
