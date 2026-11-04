@@ -160,3 +160,41 @@ ww = l7r_phases.stage_waterward([(ring, [(1000.0, 1500.0)])], 20.0, 15.0, 280.0,
 assert ww["flanks"] == ["W", "S"] and len(ww["strips"]) == 2 and ww["counts"]
 assert l7r_phases.stage_waterward([], 20.0, 15.0, 280.0, (3000.0, 3000.0), (0.0, 1.0), None)["strips"] == []
 assert l7r_phases.water_flanks((0.0, 1.0), (1.0, 0.0)) == ["W", "S"] and l7r_phases.water_flanks((0.0, 1.0), None) == ["W", "E", "S"]
+
+# the track out (feature 444 T30), as the homesteads' door gathers it: north off a field to the south, past one steading; walled
+# in by marsh on every side, none; a field the dict lacks, named
+track_in = {
+    "canvas": (1000.0, 1000.0),
+    "out": (0.0, -1.0),
+    "fall": (0.0, -1.0),
+    "seat": (500.0, 500.0),
+    "along": (1.0, 0.0),
+    "fallback": (500.0, 450.0),
+    "houses": [(500.0, 500.0)],
+    "envelope": [(0.0, 600.0), (1000.0, 600.0), (1000.0, 1000.0), (0.0, 1000.0)],
+    "crops": [],
+    "wet": [],
+    "paddy": [],
+    "steadings": [([(480.0, 480.0), (520.0, 480.0), (520.0, 520.0), (480.0, 520.0)], False)],
+    "solid": [(480.0, 490.0, 520.0, 510.0)],
+    "pond": None,
+    "sink_brook": [(0.0, 950.0), (1000.0, 960.0)],
+    "watercourses": [],
+    "drawn": [],
+    "course": [],
+    "forbidding": [[(900.0, 100.0), (910.0, 100.0), (910.0, 110.0)]],
+    "seats": [],
+    "brooks": [],
+    "square_waters": [],
+    "crossing": ([(0.0, 900.0), (1000.0, 900.0)], 10.0, 150.0),
+}
+got = l7r_phases.track_out(track_in)
+assert got is not None and got["track"][-1][1] < 0.0 and not got["seats_taken"], got
+shut = dict(track_in, wet=[[(-100.0, -100.0), (1100.0, -100.0), (1100.0, 1100.0), (-100.0, 1100.0)]])
+assert l7r_phases.track_out(shut) is None
+try:
+    l7r_phases.track_out({k: v for k, v in track_in.items() if k != "canvas"})
+except KeyError as e:
+    assert "canvas" in str(e), e
+else:
+    raise AssertionError("a field the dict lacks is named")

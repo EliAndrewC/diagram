@@ -36,5 +36,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(hem::py::stage_hem, m)?)?;
     m.add_function(wrap_pyfunction!(waterward::py::stage_waterward, m)?)?;
     m.add_function(wrap_pyfunction!(waterward::py::water_flanks, m)?)?;
+    m.add_function(wrap_pyfunction!(homesteads::py::track_out, m)?)?;
     Ok(())
 }
