@@ -330,6 +330,19 @@
    "derivation_sha": "229d4d7d3c2599e83c4f6ec9ac653aefc78033ba7eea5edb9f2649142a42a161",
    "rounds": 2,
    "spread": "4609-4804 at 10"
+  },
+  "waterward.polder": {
+   "status": "budgeted",
+   "per_thing": 1.0,
+   "exponent": 0.43,
+   "derivation": "specs/444-work-budget-program/phases/waterward_polder.derivation.md",
+   "verdict": "specs/444-work-budget-program/phases/waterward_polder.verdict-3.txt",
+   "items_at_10": 17813,
+   "items_at_20": 24059,
+   "sizes": [
+    10,
+    20
+   ]
   }
  }
 }

@@ -294,6 +294,10 @@ impl<'a> Ground<'a> {
 
     /// The share of the back's rectangle under the dry plots.
     fn back_share(&self, rect: &[Pt; 4], tests: &mut u64) -> f64 {
+        *tests += 1;
+        if self.plots.is_empty() {
+            return 0.0; // no dry plot stands (the hem is laid after the seat): no cell is read
+        }
         let lo = (
             rect.iter().map(|p| p.0).fold(f64::MAX, f64::min),
             rect.iter().map(|p| p.1).fold(f64::MAX, f64::min),

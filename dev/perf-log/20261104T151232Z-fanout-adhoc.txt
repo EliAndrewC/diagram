@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+seat: 6,103 calls @20, 8,039 calls @40, growth exponent 0.40
+  placed @40: nothing in the manifest
+
+all stages: 6,103 calls @20, 8,039 calls @40
