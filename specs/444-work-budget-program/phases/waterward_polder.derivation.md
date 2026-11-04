@@ -66,6 +66,12 @@ No grid for the wave's samples: each is placed by a bisection of the ring's cumu
 | the drawn ground's keep-out rings | over the run | 393 at 10, 534 at 20 | the same three rings read for their boxes | as measured |
 | the cuts buffered | over the run | 262 at 10, 356 at 20 | the two earlier rings that reach a later strip (the foot's corners against the cross flanks') buffered and taken out | every earlier ring reaching |
 | the earlier strips indexed | over the run | 393 at 10, 534 at 20 | the same three rings' points indexed in the grid | as measured |
+| the marsh's ring passes | over the run | 3,930 at 10, 5,340 at 20 | each strip's drawn ring (131, 178) rounded to the record's grain, copied to the wet ground, copied into its cover, scanned for the record's box (4), written to it and copied twice as no-build ground: 10 a point, three strips | always its ring |
+| the outline's box | over the run | 393 at 10, 534 at 20 | each strip's shaped ring read once for its box | always its ring |
+| the crest's scans | over the run | 1,800 at 10, 2,670 at 20 | the dike's crest (120, 178 points) read for its box against each strip's reach (4 scans) and copied (1): 5 a point, three strips | always the whole crest |
+| the keep-out rings indexed, beyond their points | over the run | 1,533 at 10, 2,083 at 20 | each ring filed in the grid - the earlier strips', three over the run - copied and its edges built (2 a point), each edge in the rows its height spans and the cells its box covers in the ring's own 64 ft index (an edge of the shaped ring about 18 ft at 10 and 20 ft at 20, 1.3 rows and 1.6 cells): 4.9 a point less the 1 already priced - 3 x 131 x 3.9, 3 x 178 x 3.9 | a ring whose edges run along the rows |
+| the grid's cells | over the run | 1,083 at 10, 1,875 at 20 | each item filed in every 128 ft cell its box covers, beyond the one priced: the crest's segments about 30 ft long (the dike's 3,512 and 5,076 ft perimeter over its points), 1.25 cells each (150, 223 a strip), the drawn water's segments as the grid takes them - the laterals split at their tapers, 98 and 197 points a strip - 1.25 each (123, 246), the field's ring over its box (62 and 119 cells) and an earlier strip's (26, 37); three strips | a crest segment across a cell corner |
+| the face's extra passes | over the run | 744 at 10, 1,092 at 20 | each flank's face reads the dike's points twice more, for their coordinate along the flank and its extremes (2 a point, three flanks) | always the whole dike |
 | the inputs read | once | 126 at 10, 184 at 20 | the dike's outline and its 2 notches | the typical dike |
 | the notches filed | once | 8 | each of the 2 notches against the 4 flanks | always 8 |
 | the form's test and the flanks | once | 1 | the plan's form read; the flanks from the fall and the seat in the same pass | always 1 |
@@ -77,21 +83,29 @@ So: items x (the face + 34 + 544 + the clip + the drawn ground's own ring + the 
 
 ## Totals
 
-- at 10: 3 x (188 + 34 + 544 + 259 + 135 + 254 + 26 + 64 + 1032 + 143 + 2) x 1 + 8194 + 393 + 393 + 262 + 393 + 126 + 8 + 1 = 17813
-- at 20: 3 x (246 + 34 + 544 + 364 + 182 + 414 + 37 + 100 + 1512 + 190 + 2) x 1 + 11033 + 534 + 534 + 356 + 534 + 184 + 8 + 1 = 24059
+- at 10: 3 x (188 + 34 + 544 + 259 + 135 + 254 + 26 + 64 + 1032 + 143 + 2) x 1 + 8194 + 393 + 393 + 262 + 393 + 3930 + 393 + 1800 + 1533 + 1083 + 744 + 126 + 8 + 1 = 27296
+- at 20: 3 x (246 + 34 + 544 + 364 + 182 + 414 + 37 + 100 + 1512 + 190 + 2) x 1 + 11033 + 534 + 534 + 356 + 534 + 5340 + 534 + 2670 + 2083 + 1875 + 1092 + 184 + 8 + 1 = 37653
 
 ## Growth
 
-From 10 to 20 households the stage grows at an exponent of about 0.43 (17,813 to 24,059): the strips are three at both sizes, and each
+From 10 to 20 households the stage grows at an exponent of about 0.46 (27,296 to 37,653): the strips are three at both sizes, and each
 grows with the dike - its outline, its crest and its extent - and the drawn water beside it. No loop over a growing set runs inside
 another: the face bins the dike's points once a flank, the wave's samples each take a bisection, and the bare ground reads the grid's
 cells under one strip's box, never every keep-out.
 
 ## Work the first derivation missed
 
-None: this is the polder form's first derivation. The valley form's (`waterward_greenfield.derivation.md`, SOUND at verdict-1) priced
-the one test of the plan's form and left the polder's figure to its own form "when one is rolled"; it is rolled here
-(`make work-budget SPEC=`), at the polder's bounded n, as the field's polder form is budgeted at its own (ask:444-polder-sizes).
+Feature 444 FR-022 rule 2: the form's first budget (17,813 / 24,059 at 10 / 20, SOUND twice blind, verdicts 3 and 4) priced each of
+the strip drawing's passes over a ring at 1 a point; the MODE AUDITs of 2026-11-04 (`phases/waterward.audit-2.txt`, `-3.txt`) found the
+passes the drawing makes, each work the contract owes - the strip drawn as marsh, recorded, its ring no-build ground (0058), its reeds
+kept off the crest (0074) and its bare ground built from the keep-outs near it:
+
+- the marsh's ring passes - the drawn ring rounded, copied, boxed, written and filed as no-build ground
+- the outline's box, read once
+- the crest's scans against each strip's reach
+- the keep-out rings indexed - their edges in their rows and cells, beyond the one a point priced
+- the grid's cells - every item in each cell its box covers, beyond the one an item priced
+- the face's extra passes over the dike's points
 
 ## Earlier findings
 
@@ -100,6 +114,11 @@ the one test of the plan's form and left the polder's figure to its own form "wh
 - verdicts 1-2, notes: the water's third is an upper figure, its reason stated (the laterals' mouths at the dike); the wave's samples by bisection - kept, see below; the grid filed again for each strip - each strip's grid holds the earlier strips' rings, which change between strips, and the crest and water are filed with them (about 4%); the earlier rings' boxes read from their points (about 4%); the whole dike binned on each flank (under 2%); the rounding's arcs at every vertex (about 3%); the grid row at 40 no longer owed
 - waterward.audit-1, finding 1: fixed - the drawn ground, the pond's cut and the ground's readers counted and priced here; the stage measured on polder rolls, where it runs
 - waterward.audit-1, notes: a strip with no open ground is never recorded and then removed - it is not drawn, a refusal after the Rust laid it, priced as a strip drawn; the sty's seat on a dike-pond is the dike-pond form's, which the polder grid's rolls do not run
+- verdict-3, finding 1: fixed - its SOUND stood on each pass priced at 1 a point; the passes the audits found priced under `## Work the first derivation missed`
+- verdict-4, finding 1: fixed - as verdict-3's
+- verdicts 3-4, notes: answered under the rows - the wave's samples by bisection (kept: the shaping's own interpolation), the grid filed again a strip (it holds the earlier strips' rings), the earlier rings' boxes read from their points (one pass each now), the whole dike a flank (under 2%)
+- waterward.audit-2, finding 1: fixed - the marsh's ring passes counted and priced; the outline's samples placed in one pass over the ring, its cumulative lengths taken once (the walk from the ring's start for each sample removed)
+- waterward.audit-3, finding 1: fixed - the ring index's passes counted, its box found in its edge loop; the marsh's and the pond cut's boxes in one pass; the face's extra passes tallied; each priced above
 
 ## Cheaper algorithms considered
 

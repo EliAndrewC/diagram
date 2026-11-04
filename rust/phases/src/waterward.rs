@@ -90,6 +90,7 @@ pub fn face(
         .iter()
         .fold((f64::MAX, f64::MIN), |(a, b), &v| (a.min(v), b.max(v)));
     let mid = f64::midpoint(fmin, fmax);
+    *tests += 2 * pts.len() as u64; // the face's coordinates read and their extremes found, two passes
     #[expect(clippy::cast_precision_loss, reason = "32 bins")]
     let step = (hi - lo) / BINS as f64;
     let mut buckets: Vec<Vec<f64>> = vec![Vec::new(); BINS];

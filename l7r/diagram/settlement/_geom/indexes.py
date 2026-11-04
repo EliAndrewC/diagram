@@ -12,6 +12,7 @@ Split from settlement/_geom.py by feature 117 - see settlement/_geom/CLAUDE.md f
 Research: spatial indexes - NONE: prefilters that prune, the caller's test decides
 """
 
+import math
 from collections.abc import Callable
 from typing import Any, SupportsIndex, cast
 
@@ -454,8 +455,11 @@ class RingIndex:
         n = len(self.ring)
         edges = []
         self.rows: dict[int, list[tuple[float, float, float, float]]] = {}
+        x0 = y0 = math.inf
+        x1 = y1 = -math.inf
         for i in range(n):
             (xi, yi), (xj, yj) = self.ring[i], self.ring[(i + 1) % n]
+            x0, x1, y0, y1 = min(x0, xi), max(x1, xi), min(y0, yi), max(y1, yi)  # the ring's box in the same pass (feature 444 T29's audit)
             edges.append(((xi, yi), (xj, yj), min(xi, xj), min(yi, yj), max(xi, xj), max(yi, yj)))
             # the ray test's own condition is `(yi > py) != (yj > py)`, so an edge can only count for
             # the rows its y-span covers; file it there and the crossing count is exact per row
@@ -463,9 +467,7 @@ class RingIndex:
                 self.rows.setdefault(r, []).append((xi, yi, xj, yj))
         self.grid = PointGrid(cell)
         self.grid.extend(edges)
-        xs = [p[0] for p in self.ring]
-        ys = [p[1] for p in self.ring]
-        self.x0, self.x1, self.y0, self.y1 = min(xs), max(xs), min(ys), max(ys)
+        self.x0, self.x1, self.y0, self.y1 = x0, x1, y0, y1
 
     def inside(self, px: float, py: float) -> bool:
         """`point_in_poly`, restricted to the edges whose y-span can cross the ray."""
@@ -587,7 +589,8 @@ class KeepoutGrid:
             items.append((self.RING, idx, pad, slot, idx.x0 - r, idx.y0 - r, idx.x1 + r, idx.y1 + r))
             if __debug__:  # each ring's points indexed once, and each edge filed in every row its height spans (feature 444 T26's
                 # MODE AUDIT: the scatters' filing was uncounted; T29's: the rows were charged 1 a point)
-                OPS["pt_test@KeepoutGrid.rings"] += len(idx.ring) + sum(len(v) for v in idx.rows.values())
+                # and T29's round 3: the ring copied, its edges built, each filed in the cells of the index's own grid
+                OPS["pt_test@KeepoutGrid.rings"] += 2 * len(idx.ring) + sum(len(v) for v in idx.rows.values()) + sum(len(v) for v in idx.grid.buckets.values()) + len(idx.grid.oversized)
         if __debug__:
             OPS["write@KeepoutGrid.file"] += self._cells(items)
         self.grid.extend(items)

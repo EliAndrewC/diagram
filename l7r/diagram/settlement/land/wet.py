@@ -258,18 +258,12 @@ def pond_cut(blocks: Any, pond: Any, slack: float = 25.0) -> list[Any]:
     if __debug__:  # each block's points read for its box (S5)
         OPS["pt_test@pond_cut"] += sum(len(b) for b in blocks)
     for b in blocks:
-        xs, ys = [float(q[0]) for q in b], [float(q[1]) for q in b]
-        if (
-            xs
-            and min(xs) <= cx - rx
-            and max(xs) >= cx + rx
-            and min(ys) <= cy - ry
-            and max(ys) >= cy + ry
-            and min(xs) >= cx - rx - slack
-            and max(xs) <= cx + rx + slack
-            and min(ys) >= cy - ry - slack
-            and max(ys) <= cy + ry + slack
-        ):
+        bx0 = by0 = math.inf
+        bx1 = by1 = -math.inf
+        for q in b:  # its box in one pass (feature 444 T29's audit: two lists and eight scans)
+            qx, qy = float(q[0]), float(q[1])
+            bx0, bx1, by0, by1 = min(bx0, qx), max(bx1, qx), min(by0, qy), max(by1, qy)
+        if b and bx0 <= cx - rx and bx1 >= cx + rx and by0 <= cy - ry and by1 >= cy + ry and bx0 >= cx - rx - slack and bx1 <= cx + rx + slack and by0 >= cy - ry - slack and by1 <= cy + ry + slack:
             swapped = True
             continue
         out.append(b)
@@ -440,9 +434,12 @@ class WetGroundMixin:
             # times for the record's box, written to it and copied twice as no-build ground (S5; `pond_reeds` counts the same work)
             OPS["write@marsh"] += 10 * len(drawn)
         self.wet_polys.append(list(drawn))
-        xs = [p[0] for p in poly]
-        ys = [p[1] for p in poly]
-        x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+        x0 = y0 = math.inf
+        x1 = y1 = -math.inf
+        for qx, qy in poly:  # the outline's box in one pass (feature 444 T29's audit: two lists and four scans)
+            x0, x1, y0, y1 = min(x0, qx), max(x1, qx), min(y0, qy), max(y1, qy)
+        if __debug__:
+            OPS["pt_test@marsh"] += len(poly)
         bs = self.bscale
         pond = self.M.get("pond")
         halo_rects, halo_circles = self._urban_keepouts((x0, y0, x1, y1))  # the urban-clearance halo (see _urban_keepouts): reeds no more belong in a dooryard than scrub does
