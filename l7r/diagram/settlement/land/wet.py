@@ -126,7 +126,7 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
     away by a rule that was never checking where it was. Filling the ring makes the geometry do what this
     docstring says, rather than the tie-break doing it by luck.
 
-    Returns the largest remaining piece's exterior. Records carry ONE ring, so several pieces cannot all
+    Returns the largest remaining piece, its holes keyholed into its ring (`_keyholed`). Records carry ONE ring, so several pieces cannot all
     be kept; with the block filled, a second piece can only arise where a single `marsh()` call wraps the
     block on two flanks and is cut in half by it, and each flank is its own call.
 
@@ -138,7 +138,8 @@ def _clipped_to_open_ground(poly: Any, dikes: Any, fields: Any = (), pond: Any =
 
     Research:
         wet wild outside the dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a toe or waterside marsh loses the filled diked block
-        marsh below the fields - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a toe marsh loses the fields, a pond fringe the open water"""
+        marsh below the fields - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: a toe marsh loses the fields
+        reeds out of the open water - research/questions/0061-reservoir-ponds-tameike.drawing.html: a pond fringe loses the open water"""
     _load_shapely()
     rings = [list(dk["outline"]) for dk in dikes if len(dk.get("outline") or []) >= 3]
     rings += [list(f) for f in fields if len(f) >= 3]
@@ -209,8 +210,8 @@ def _closest_pair(ring: list[Pt], pts: list[Pt]) -> tuple[int, int]:
                 seen += 1
                 best = min(best, (math.dist(ring[a], pts[order[q]]), a, order[q]))
     if __debug__:  # the sort, a search a ring vertex, and each distance taken (S5)
-        OPS["index_examined@_keyholed"] += len(pts) + len(ring)
-        OPS["dist@_keyholed"] += seen
+        OPS["index_examined@_closest_pair"] += len(pts) + len(ring)
+        OPS["dist@_closest_pair"] += seen
     return best[1], best[2]
 
 
@@ -530,7 +531,8 @@ class WetGroundMixin:
         Research:
             pond fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: reeds round a pond's shore
             reeds to the water's edge - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "the reeds are drawn right to the water's edge", the open water and the watercourses kept bare at their drawn width with no rim
-            reeds meet the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy, the field kept bare with no pad
+            reeds meet the paddy - UNRESEARCHED: the reeds run flush to the paddy, the field kept bare with no pad; 0074 keeps reeds off the crop and draws them to the water's edge, and no page gives the gap between a reed bed and a field
+            the record across a watercourse - GUESS: the recorded fringe keeps its ground where a stream, a channel or a field ditch crosses it, which only the drawn cover leaves bare; the record holds one ring, and a watercourse is its own record
             reeds off the crop and the water - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: "The marsh's reeds already keep off crops" - the field's dry plots kept bare, and the water at its drawn width
             the bank beyond the reeds - research/questions/0061-reservoir-ponds-tameike.drawing.html: "Reeds and the wet tint are kept off the embankment" - the fringe is the ring the reeds stand on at the shore, and the bank is the ground beyond it: the pond bank's trees are seated past the fringe's width (`hamletgen/pondbank.py`, its seats beyond `SINK_FRINGE`), so the ring and the bank do not share ground
             ways and dooryards over the fringe - UNRESEARCHED: a way or a dooryard laid after the fringe is drawn over its reed tile

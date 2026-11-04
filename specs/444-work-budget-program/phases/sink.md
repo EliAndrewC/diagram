@@ -23,11 +23,14 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
   448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away"): `dev/coverage-exempt.json` names it, so no test is added only to cover a line of it; the landing's
   `make coverage-exempt PRUNE=1` drops its entries once the stage is accepted, and the stage's thin door keeps the floor.
   Evidence: `rust/phases/src/sink/` and `rust/phases/src/course.rs` behind `hamletgen/sink_stage.py` (STAGES unchanged); the old `hamletgen/sink.py`, `water/brook_course.py`, `settlement/fields/outfall.py`, `Settlement.round_stream` and every unit only they reached deleted (`make dead-closure`), with their tests; no fallback path; the field's brook drawn where it is laid (D2), the walk after a Rust stage skipped (D3); FR-012 `phases/sink.fr012.md`
-- [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households - or at most twice it on the MODE AUDIT's
+- [x] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households - or at most twice it on the MODE AUDIT's
   LEEWAY, and work the derivation missed re-derived and raised (`make budget-set RAISE=1`), never squeezed (feature 444 FR-022) - and
   the exponent at most the budget's, with no leeway; every seed of
   the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
   rate, refusing nothing); the phase's claims round IN-STEP, with no open claim finding in a file the landing changes (feature 444 FR-021, refused at `make land`); the reviews
   its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
-- [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN, or LEEWAY, on the landed code (`make work-budget-bundle MODE=audit`).
-- [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
+  Evidence: the budget raised on the GM's words to 850 / 1,000 / 1,200 (2026-11-04, "Sounds good, I accept option (a)"; `dev/work-budget-changes.jsonl`), 6.7x the first, under ten times; counted 1,358 / 1,455 / 1,611, 1.45x at 40 on LEEWAY, exponent 0.12 against 0.25 (`dev/work-budget.md`, 2026-11-04); `make rust-gate` 54 seeds, 0 failing (`dev/rust-gate/20261104T061551Z.json`); the claims round on `wet.py` and `indexes.py` IN-STEP (`make claims-checked`, 2026-11-04); Inashiro, Mizuguchi and Kashikawa settlement-reviewed PASS (2026-11-03); the reeds' clip re-rolled on the pool maps by the landing's `make done`; `make perf-ab A=origin/main`, seed 25 at 40: the sink 0.04 s to under 0.01, the roll 10.25 s to 10.08 (-2%, inside the floor's 4%)
+- [x] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN, or LEEWAY, on the landed code (`make work-budget-bundle MODE=audit`).
+  Evidence: `phases/sink.audit-5.txt` LEEWAY, after `sink.audit-3.txt` (the keyhole's all-pairs loop UNCOUNTED) and `sink.audit-4.txt` (the keep-out's shapely work counted per shape) were each answered by counting the work and cutting it: the pond cut once, the field cut to the reeds' reach, the closest pair swept
+- [x] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
+  Evidence: `dev/work-budget.md` (2026-11-04): sink accepted at 1,455 / 1,611; the whole roll 18,958,515 at 40; `make budget-accept PHASE=sink`
