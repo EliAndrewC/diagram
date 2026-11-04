@@ -24,7 +24,7 @@ Guesses:
   the grain a household ate and the yields the land surveys assessed, not found as a figure.
 
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
-paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
+paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. Where the houses stand on that edge, the hem is drawn behind them instead, so the houses lie between the canal and their dry fields. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
 household worked there was most likely its kitchen bed. A row village whose farms line both sides of its street is the exception: each farm across the street from the paddy has its holding drawn behind it as a strip of dry field, cut across into plots all of one crop, the cuts standing for nothing on the ground, and the title card says whether this settlement is one. Every plot is furrowed, and in the hem neighboring plots form a tract whose rows run
 one way, each tract turned well apart from the next so the strips can be told apart; on steep ground every tract runs along the contour instead. Buckwheat is drawn a pale tan with reddish furrow lines, the colors of the ripe crop, which stood pale on reddish

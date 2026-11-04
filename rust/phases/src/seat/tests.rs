@@ -1,4 +1,7 @@
 //! The seat's unit tests (feature 444 T27).
+//!
+//! Research:
+//!     the seat's tests - NONE: fixtures and assertions, deciding nothing about the place
 
 #![expect(
     clippy::many_single_char_names,

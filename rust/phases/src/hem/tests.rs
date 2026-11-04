@@ -1,4 +1,7 @@
 //! The hem stage's unit tests (feature 444 T28).
+//!
+//! Research:
+//!     the hem's tests - NONE: fixtures and assertions, deciding nothing about the place
 
 use super::lay;
 use crate::field::build::HemIn;

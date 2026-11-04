@@ -7586,36 +7586,23 @@
   "triaged": "2026-10-26",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/cluster.py::BELT_ROOM_MAX_OFF#belt room off the canvas": {
-  "code": "3cdc36fcbef62697",
-  "core": "eb3cdf5f0110babc",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or label",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/cluster.py::EXIT_BEARINGS#seat geometry": {
   "code": "be9d3f3cbc9d6003",
   "core": "11446c938549e6bb",
   "date": "2026-10-03",
   "note": "plumbing, no map decision",
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::SeatRefused#seat geometry": {
-  "code": "3c93a22f4570e0d5",
+  "code": "dc8ac248792769d9",
   "core": "f4a86449f4cc672d",
   "date": "2026-10-03",
   "note": "plumbing, no map decision",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::TURN_SLACK#seat geometry": {
-  "code": "203cfde1f4a396d0",
-  "core": "1685da2f03b12cc6",
-  "date": "2026-10-03",
-  "note": "plumbing, no map decision",
-  "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::_arm_crossing_accidental#arms cross only where the layout does": {
@@ -7631,446 +7618,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::_arm_hit#seat geometry": {
-  "code": "91ec37c56ce99f32",
+  "code": "2a54cf20b8f2d7e5",
   "core": "62c504bf87ecdee1",
   "date": "2026-10-03",
   "note": "plumbing, no map decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::_seat_center#standoff from the field": {
-  "body": "e5c2708c836cc6e7",
-  "claim": "standoff from the field - GUESS farmhouses-minka.drawing: 12 ft",
-  "code": "04b54803ba608e84",
-  "core": "9620860ddfbae273",
-  "date": "2026-10-25",
-  "note": "12 ft falls inside the page's 10 to 13 ft from the paddy; the page builds that figure from guesses because no source gives one",
-  "pages": {
-   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
-  },
-  "research": "a3cfa2fba63bb45d",
-  "rests": [
-   "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
-   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
-   "0029-farmhouses-minka.drawing.html:882eae57cf31d6f9"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::_seat_frame#standoff from the field": {
-  "body": "6b723fe23364cf2e",
-  "claim": "standoff from the field - GUESS farmhouses-minka.drawing: our maps draw farmhouses 10 to 13 ft from the paddy, a figure the page builds from guesses; 12 ft; 12 ft, the band's near edge hugging the field",
-  "code": "d359dec984443c08",
-  "core": "df6bac16f2045434",
-  "date": "2026-10-25",
-  "note": "the band's near edge 12 ft out sits inside the page's 10 to 13 ft, which the page builds from guesses",
-  "pages": {
-   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
-  },
-  "research": "a3cfa2fba63bb45d",
-  "rests": [
-   "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
-   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
-   "0029-farmhouses-minka.drawing.html:882eae57cf31d6f9"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::back_fouled#depth sampled behind the margin": {
-  "body": "7f05b2e069cdd7a7",
-  "claim": "depth sampled behind the margin - GUESS: no source could speak to it, an algorithm's order, breadth or tolerance of ours (feature 417 T29 pass E, judged by the session from the code, 2026-10-25); 2.6 band depths, the cluster and its belt",
-  "code": "4f189df18b692d09",
-  "core": "b137498b975f2313",
-  "date": "2026-10-25",
-  "note": "a sampling depth of ours; no bundled page gives a depth behind the cluster to sample",
   "pages": {},
   "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::back_fouled#its search steps and tolerances": {
-  "body": "7f05b2e069cdd7a7",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 7 (sample count along the back (claim: T29 pass E))",
-  "code": "3b1e9647f06ffcea",
-  "core": "b137498b975f2313",
-  "date": "2026-10-25",
-  "note": "sample count",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::below_drain#toe band": {
-  "body": "940a7b66c21f05b3",
-  "claim": "toe band - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the figures - houses stood at a slope's foot, above the paddy (0031; Otsubo, modern, pass B); 18 ft past the drain line, within 150 ft of it",
-  "code": "320ee94c9acbe28a",
-  "core": "ef4ef5f3aceafd2e",
-  "date": "2026-10-25",
-  "note": "the page gives no depth for the ground below the drain, so the 18 and 150 ft figures are a fair GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain": {
-  "code": "62617692b5700d94",
-  "core": "ef4ef5f3aceafd2e",
-  "date": "2026-10-07",
-  "note": "the point is measured downslope along the set fall, against the drain where it crosses the point's line, so ground past the drain's ends is never below it",
-  "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
-  },
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
-   "0058-ground-too-wet-to-build-on.drawing.html:4250400643e41942",
-   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6",
-   "0058-ground-too-wet-to-build-on.drawing.html:e9a77c81eb42ba81"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt's depth": {
-  "code": "a69cbb2f1ae5d044",
-  "core": "d763e6d04210e466",
-  "date": "2026-10-08",
-  "note": "100 ft band plus 10 ft rag, inside the drawn 80 to 120 ft, a convention",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:57a7ec65fd3ad92b"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt's distance upwind": {
-  "code": "8aadc94bd201ecb9",
-  "core": "d763e6d04210e466",
-  "date": "2026-10-08",
-  "note": "the page says the grove stands back from the houses but gives no distance, so the 36 ft near face is a guess; the 50 ft west rule belongs to the belt's placer, as the claim says",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:c491d9aaff941cf5",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#its search steps and tolerances": {
-  "body": "dc412c630372ce0a",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.45 (lateral sample position across the belt); 0.9 (outer lateral sample position)",
-  "code": "76e3c17a069d340f",
-  "core": "d763e6d04210e466",
-  "date": "2026-10-25",
-  "note": "sample positions",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::margin_candidates#45 degree bar": {
-  "body": "0e4f570c7650d614",
-  "claim": "45 degree bar - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the bar - 0029's 34 degrees is a house's turn off its neighbors, a different quantity; WIND_BACK_MIN_DOT, tier 0; 0072 gives no tolerance",
-  "code": "53aecd5693f88d32",
-  "core": "36804f1eb96b1c22",
-  "date": "2026-10-25",
-  "note": "0072 has the back to the wind with no tolerance, so the 0.7071 bar is a GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::margin_candidates#back faces the wind": {
-  "code": "3f7b049e5a78fa6f",
-  "core": "36804f1eb96b1c22",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or label",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::margin_candidates#back turned off a flank": {
-  "body": "0e4f570c7650d614",
-  "claim": "back turned off a flank - farmhouses-minka.drawing: the Okinawan slope survey has houses a quarter turn off the fall line, facing south - the cap is 45 degrees, a departure the code keeps until feature 417 T33; tier 1, at most 45 degrees off the margin's normal",
-  "code": "525cca2e698518ba",
-  "core": "36804f1eb96b1c22",
-  "date": "2026-10-25",
-  "note": "`math.pi / 4 - TURN_SLACK` caps the turn at 45 degrees, but the page finds houses \"faced a quarter away from the fall of its ground\" and does not record the cap as a deviation; the same block also says \"on a slope our maps do not draw\", so T33 must decide whether to record a DEVIATION or change the pointer",
-  "pages": {
-   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
-  },
-  "research": "a3cfa2fba63bb45d",
-  "rests": [
-   "0029-farmhouses-minka.drawing.html:9dd656a3a4653098",
-   "0029-farmhouses-minka.drawing.html:bc0fc421a952f357",
-   "0029-farmhouses-minka.drawing.html:e7581431873229ff"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/cluster.py::nearest_within#seat geometry": {
-  "code": "1afff29c3bed961b",
-  "core": "8f9ed6188134e633",
-  "date": "2026-10-03",
-  "note": "plumbing, no map decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#back to the wind": {
-  "code": "f76f5d71a3ec803a",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the seat backs onto the plan's wind, northwest unless declared",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#band area": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "band area - how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing: a clustered village's house lots ran about 90 to 180 tsubo; the band's area is ours; households times the homestead's ground; 0037 sizes only the yard",
-  "code": "d61dc268a6436177",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "households times 104 squared is the page's convention, \"a square of ground about 104 ft a side\", and the page states its cost against the 90-180 tsubo lots",
-  "pages": {
-   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html": "3b1690ae23a895f7"
-  },
-  "research": "9f29d8163350d018",
-  "rests": [
-   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:4be8279feed1f163",
-   "0285-how-big-was-a-farmhouses-lot-in-a-clustered-village.drawing.html:b60d67a3b614a0c3"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": {
-  "code": "e93ae30cba44afb5",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the code tests lat <= seat_c <= W-lat, where lat is the semi-axis",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#belt room on the canvas": {
-  "code": "c10e0b8ad8d9d872",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "a canvas framing rule",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band": {
-  "body": "787a21fc12846670",
-  "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: scored down, never refused",
-  "code": "74516a2e383c73e5",
-  "core": "420579099e956353",
-  "date": "2026-11-01",
-  "note": "the brook is scored and never refused, as the claim says, but `score -= 3.0 * crossed` is no tie-break: a third of the 15 band points near the water costs 1.0, as much as the whole wind term (1.0 * n.w). So a wind-facing site the brook crosses loses to a worse site, which goes against \"preferred when two sites are otherwise equally good\" and \"Where the site that faces the fields and has its back to the winter wind is crossed by the brook, the houses are built on both banks\". Either make the brook penalty a tie-break, or record on the drawing page that it outweighs the wind",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
-  },
-  "research": "2882cfeb4389da9a",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:f54a11bd02ade3e7"
-  ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight": {
-  "code": "9c25d1d886197b43",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the page states the preference with no weight",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#brook reach on the band": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "brook reach on the band - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the 30 ft - homesteads faced their channel (Takamine 1977, pass B); a band point within 30 ft of the brook counts as on the water",
-  "code": "38d4571bbfb714a5",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "0035 gives no reach for a band on the water; the 150 and 160 ft figures there measure other things",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#clear ground behind": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "clear ground behind - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); refused past 0.30 of the back under dry crop",
-  "code": "430e01093f4809ee",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "the 0.30 share is ours",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#dry hem penalty": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "dry hem penalty - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 1.6 within two band depths, plus 2.5 times the back's foul",
-  "code": "28cfef944f5969be",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "1.6 and 2.5 match the code; no page weighs them",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#dry way out": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "dry way out - village-lanes.drawing: a walled-in head is refused",
-  "code": "5a18f23da46260a2",
-  "core": "420579099e956353",
-  "date": "2026-10-22",
-  "note": "a seat with no dry way out (walled in by wet ground, the field or water) is refused, so the track out keeps off the wet ground and reaches the map edge",
-  "pages": {
-   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
-  },
-  "research": "348d3cab06271e76",
-  "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:48cdd569d493520c"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#its search steps and tolerances": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N5, 2026-10-25) - 0.3 (seat refused past 0.30 of its back under crop); 0.6 (lateral sample, reed-fringe share); 0.45 (lateral sample, brook on the band); 0.9 (outer lateral sample, brook on the band); 34 (middle sample depth, brook on the band)",
-  "code": "351a489d32e2aabb",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "refusal share and sample positions",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#no drain rule at the seat": {
-  "code": "62325932a5430427",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the seat does not call below_drain; the rule is for dispersed farmsteads only",
-  "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
-  },
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb",
-   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe": {
-  "code": "3289980ce75aae1f",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "CANON names the GM's ruling and the departure from the page's fringe rule",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#not on the wet toe": {
-  "code": "2dce984e0689eaa5",
-  "core": "420579099e956353",
-  "date": "2026-10-07",
-  "note": "the seat and the anchor are refused inside the toe marsh",
-  "pages": {
-   "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
-  },
-  "research": "b2af2942f0a54e5d",
-  "rests": [
-   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
-   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#reed-fringe share weight": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "reed-fringe share weight - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 2.5 times the band's share in the reeds",
-  "code": "c0ffaf3de1d8b29d",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "the 2.5 weight is ours; 0058 does not count the fringe as marsh",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#seat on the field's margin": {
-  "body": "787a21fc12846670",
-  "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy",
-  "code": "a9b7b20f7247a1c8",
-  "core": "420579099e956353",
-  "date": "2026-11-03",
-  "note": "seated on the margin beside the field, upslope scored, wet toe refused; that every hamlet takes the windward high margin is now recorded as a deliberate deviation",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#seat standoff from the field": {
-  "code": "346dfa5fcb8ee4a9",
-  "core": "420579099e956353",
-  "date": "2026-10-09",
-  "note": "the code sets the seat at `mid + n*(dep + 12.0)`, and the belt check uses the same point; no cited page gives a gap between the field's edge and the houses (0031 says only \"higher, drier ground beside its paddy\"), so GUESS is the right label",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6",
-   "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb"
-  ],
-  "triaged": "2026-10-28",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_cluster#wind and upslope weights": {
-  "body": "5c0539e30a2f41f4",
-  "claim": "wind and upslope weights - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 1.0 for facing the wind, 0.8 for upslope",
-  "code": "dbfe4a7596bf90e2",
-  "core": "420579099e956353",
-  "date": "2026-10-25",
-  "note": "the pages give the direction only, no weights",
-  "pages": {},
-  "research": "",
-  "triaged": "2026-10-28",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#dry way out of the seat": {
@@ -8089,42 +7643,7 @@
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f"
   ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#its polygon": {
-  "body": "a3273ee3ef98b2b2",
-  "claim": "its polygon - NONE: they decide nothing about the place - 16 (pond disc drawn as a 16-gon)",
-  "code": "77970363307a922c",
-  "core": "c343fe7afc88d756",
-  "date": "2026-10-25",
-  "note": "The 16-gon is wall geometry for the flood fill",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#its salts, guards and sentinels": {
-  "body": "a3273ee3ef98b2b2",
-  "claim": "its salts, guards and sentinels - NONE: they decide nothing about the place - 8 (pi/8 step of the same 16-gon)",
-  "code": "3e011cd6f0d599ce",
-  "core": "c343fe7afc88d756",
-  "date": "2026-10-25",
-  "note": "polygon step",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#tameike berth": {
-  "body": "a3273ee3ef98b2b2",
-  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
-  "code": "409a2457a192a86b",
-  "core": "c343fe7afc88d756",
-  "date": "2026-10-25",
-  "note": "the 80 ft is not given by any page",
-  "pages": {},
-  "research": "",
-  "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::straight_exit#its margins": {
@@ -8340,15 +7859,15 @@
   "date": "2026-10-05",
   "note": "dry furrows only, up to 8 degrees on a hamlet, paddy never tilted",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
-  "research": "39ee84ede2710eae",
+  "research": "29decf2473552bed",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-11-03",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::GROSS_ACRES_PER_HOUSEHOLD#paddy per household": {
@@ -9656,8 +9175,8 @@
  "l7r/diagram/hamletgen/driver.py::STAGES#homesteads before lanes": {
   "body": "d39945486f7ad70e",
   "claim": "homesteads before lanes - how-our-maps-lay-a-clustered-settlements-lanes.drawing: every lane drawn after the farmhouses",
-  "code": "7a828906f2e9fdec",
-  "core": "b084280cc46a20dc",
+  "code": "e025534ffc24dc82",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_homesteads precedes stage_track and stage_web, so every house is seated before any lane",
   "pages": {
@@ -9668,25 +9187,27 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#labels last": {
   "body": "d39945486f7ad70e",
   "claim": "labels last - CONVENTION",
-  "code": "8a5bd65a4745f4bb",
-  "core": "b084280cc46a20dc",
+  "code": "36cb5d9459c2b68b",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "captions only, how the map is shown",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#lane-side wells after the web": {
   "body": "d39945486f7ad70e",
   "claim": "lane-side wells after the web - communal-wells-ido.drawing: a clustered hamlet's lane-side well seated on a lane's verge once the lanes stand (`stage_lane_wells`)",
-  "code": "0c10f74146df8b2b",
-  "core": "b084280cc46a20dc",
+  "code": "97b5530e9e18d92a",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_lane_wells follows stage_web, \"seated once the lanes stand\"",
   "pages": {
@@ -9697,13 +9218,14 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board after the frame": {
   "body": "d39945486f7ad70e",
   "claim": "notice board after the frame - notice-boards-kosatsuba.drawing: placed after the map is cropped to its frame (the GM's ruling of 2026-08-29)",
-  "code": "01c5d6f9f98e0dd4",
-  "core": "b084280cc46a20dc",
+  "code": "0bad9bbaa83db3a4",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_notice follows stage_frame",
   "pages": {
@@ -9713,13 +9235,14 @@
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#notice board last": {
   "body": "d39945486f7ad70e",
   "claim": "notice board last - notice-boards-kosatsuba.drawing: the board is the last thing placed, after the map is cropped to its frame",
-  "code": "34d411b045daf333",
-  "core": "b084280cc46a20dc",
+  "code": "4648f5def875bd35",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "no feature is placed after the board; stage_labels places captions only",
   "pages": {
@@ -9730,24 +9253,26 @@
    "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a",
    "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#pig sties after the crossings": {
   "body": "d39945486f7ad70e",
   "claim": "pig sties after the crossings - CANON: the GM's ruling of 2026-10-12, the order an implementation detail where the placement keeps to the research; each sty is seated where no way runs, as how-our-maps-lay-a-clustered-settlements-lanes.drawing has a household's way go round its fixtures, and in the bundle it moved the seating and the web refused maps (m:w151-sty-room)",
-  "code": "225f7a90e30c86df",
-  "core": "b084280cc46a20dc",
+  "code": "7e2158ce9d3926b2",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "the claim names the GM's ruling of 2026-10-12; no cited page orders sties against crossings",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#pond-bank trees after the wells": {
   "body": "d39945486f7ad70e",
   "claim": "pond-bank trees after the wells - reservoir-ponds-tameike.drawing: a bank tree is left out where its crown would fall on a roof or a wellhead, or its trunk on a lane, so the trees are seated against what stands; coming before the hinterland's scrub and copse is ours; seated against the houses, ways and wells already standing, before the hinterland's scrub and copse fill round them (`stage_pond_bank`)",
-  "code": "195cc9980b721aaa",
-  "core": "b084280cc46a20dc",
+  "code": "ae89825263f2be02",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_pond_bank follows the web and the lane wells and comes before the hinterland, so it is seated against the roofs, wellheads and lanes",
   "pages": {
@@ -9757,88 +9282,96 @@
   "rests": [
    "0061-reservoir-ponds-tameike.drawing.html:9ba649087fb63da1"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the appurtenances after the track": {
   "body": "d39945486f7ad70e",
   "claim": "the appurtenances after the track - GUESS: no page orders them; the sheds and wells seated once the track out stands, so they keep off it - the byres' stalls reserved with the seating's lots (`homesteads/stages.py`), before the track, and only drawn here (`draft_byres`)",
-  "code": "62efb69bdd0f194f",
-  "core": "b084280cc46a20dc",
+  "code": "689de826cfc6f66c",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "no cited page orders sheds/wells against the track out; 0246 sets the track after the last house only, 0196 orders lane-side wells after the lanes (stage_lane_wells), not cluster wells against the track",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the bamboo after the scrub": {
   "body": "d39945486f7ad70e",
   "claim": "the bamboo after the scrub - GUESS: no page orders them; the bamboo stands laid after the woodland and the windbreak, over the scrub that kept out of them",
-  "code": "c0ac0bef2ad1ef71",
-  "core": "b084280cc46a20dc",
+  "code": "6b4163650064b427",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "no cited page orders the bamboo",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the burial ground before the web": {
   "body": "d39945486f7ad70e",
   "claim": "the burial ground before the web - GUESS: how-our-maps-lay-a-clustered-settlements-lanes.drawing silent on the dead; seated against the houses and wells, reserving ground the web works round",
-  "code": "20a0e977fae14e06",
-  "core": "b084280cc46a20dc",
+  "code": "6f2e31d6f0cc5068",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "0246 is silent on burial ground; stage_burial comes before stage_web",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the cover's order": {
   "body": "d39945486f7ad70e",
   "claim": "the cover's order - GUESS: no page orders them; the hinterland's open ground, then the woodland, then the windbreak, then the bamboo",
-  "code": "5ee6f12290888650",
-  "core": "b084280cc46a20dc",
+  "code": "b56c3b7e12c73914",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "order is hinterland, woodland, windbreak, bamboo; no cited page orders them",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the crossings after the cover": {
   "body": "d39945486f7ad70e",
   "claim": "the crossings after the cover - GUESS: no page orders them; the bridges and plank crossings seated once the ground's cover stands, so each keeps clear of it",
-  "code": "e15a7a0f74e3b8dc",
-  "core": "b084280cc46a20dc",
+  "code": "3cd2660c4cacb70b",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "no cited page orders crossings against cover",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the ground's cover after the web": {
   "body": "d39945486f7ad70e",
   "claim": "the ground's cover after the web - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); the hinterland, the woodland, the windbreak and the bamboo fill the ground the built things left, the bamboo over the scrub that kept out of its stands - after the web, its wells and the pond bank; the crossings, sties, washing places and the notice board after it, each seated against what stands",
-  "code": "fcc197899a4555cd",
-  "core": "b084280cc46a20dc",
+  "code": "0fd96bdf52c68919",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "cover comes after the web, wells and pond bank and before crossings, sties, washing and the board; the order is silent in the pages, and the board's clearing no ground fits it",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the pig sties on the ponds": {
   "body": "d39945486f7ad70e",
   "claim": "the pig sties on the ponds - GUESS: no page orders them; a dike-pond hamlet's sties seated on its ponds after the appurtenances and before the burial ground, against the houses they serve",
-  "code": "a62defbe5e7f7889",
-  "core": "b084280cc46a20dc",
+  "code": "a2bcfeebd28b96c6",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_pond_stock comes after the appurtenances and before the burial ground; no cited page orders it",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the seat after the water": {
@@ -9850,13 +9383,14 @@
   "note": "stage_seat follows water, field and sink; 0053 orders water before paddies, not the seat",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the stages after the web": {
   "body": "d39945486f7ad70e",
   "claim": "the stages after the web - communal-wells-ido.drawing: a lane-side well is seated once the lanes stand; reservoir-ponds-tameike.drawing: a bank tree left out where it would fall on a lane; washing-places-at-the-waters-edge.drawing: a footing moved along the bank where a lane takes its spot - each seated against the web standing",
-  "code": "4f15bdeca94c9274",
-  "core": "b084280cc46a20dc",
+  "code": "c2d10521038da420",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "lane wells, pond bank and washing all follow stage_web",
   "pages": {
@@ -9866,13 +9400,14 @@
   "rests": [
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the track out after the homesteads": {
   "body": "d39945486f7ad70e",
   "claim": "the track out after the homesteads - how-our-maps-lay-a-clustered-settlements-lanes.drawing: once the last house stands, the track out's start is set on the cluster's edge",
-  "code": "896ea8bd03ce3586",
-  "core": "b084280cc46a20dc",
+  "code": "40e0e2e2102bb86c",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "the track is chosen at the end of stage_homesteads and drawn by stage_track after it",
   "pages": {
@@ -9882,25 +9417,27 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#the waterward fringe after the seat": {
   "body": "d39945486f7ad70e",
   "claim": "the waterward fringe after the seat - GUESS: no page orders them; a polder's reed strips laid once the seat names its landward flank, and before the homesteads and the track, so both treat it as the wet ground it is",
-  "code": "5d1516e72ff5e2f7",
-  "core": "b084280cc46a20dc",
+  "code": "06b193a628aca48e",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "code matches: stage_waterward runs after stage_seat and before stage_homesteads and stage_track. None of the seven cited pages orders a polder's waterward reed strips (0061 covers only a pond's reeds), so GUESS is the right label",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#track before the wells": {
   "body": "d39945486f7ad70e",
   "claim": "track before the wells - communal-wells-ido.drawing: the lanes are drawn after the farmsteads, so a lane-side well is seated once the lanes stand; a well dug where the track already runs",
-  "code": "bff9a5b920943ae6",
-  "core": "b084280cc46a20dc",
+  "code": "4331b9d71f1cc856",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_track comes before stage_appurtenances and stage_lane_wells",
   "pages": {
@@ -9911,13 +9448,14 @@
    "0196-communal-wells-ido.drawing.html:dc63c2a27c9f3914",
    "0196-communal-wells-ido.drawing.html:efbaf09c4c6ac59b"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#washing places after the crossings": {
   "body": "d39945486f7ad70e",
   "claim": "washing places after the crossings - washing-places-at-the-waters-edge.drawing: where a lane, a bridge or a building takes a footing's spot it is moved along the bank, so they stand first",
-  "code": "3db28c80d29d8c17",
-  "core": "b084280cc46a20dc",
+  "code": "dd032833501456e2",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_washing follows the web, crossings and sties, so each footing is moved round what stands",
   "pages": {
@@ -9928,13 +9466,14 @@
    "0065-washing-places-at-the-waters-edge.drawing.html:8c38dba2f4c10ba6",
    "0065-washing-places-at-the-waters-edge.drawing.html:f10be60ed7ac0748"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#water, then field, then sink": {
   "body": "d39945486f7ad70e",
   "claim": "water, then field, then sink - irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing, field-drains-akusuiro.drawing: lay a settlement's water network out first and cut the paddies between its lines, the drain along its field's low line - the water frame, then the field with its own drain, then the sink the drain runs to",
-  "code": "9dbb29d8e87fbc6b",
-  "core": "b084280cc46a20dc",
+  "code": "87c5a9972bb647a5",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "stage_water_frame, stage_field, stage_sink matches \"lay a settlement's water network out first and cut the paddies between its lines\", collector along the low line, then its run onward to brook/pond/edge",
   "pages": {
@@ -9949,25 +9488,27 @@
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
    "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#waterward fringe before the houses": {
   "body": "d39945486f7ad70e",
   "claim": "waterward fringe before the houses - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground",
-  "code": "ffbb0fc8e5865ecc",
-  "core": "b084280cc46a20dc",
+  "code": "a864d9d492b2ab60",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "no cited page speaks to the polder fringe's order",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGES#web after the farmsteads": {
   "body": "d39945486f7ad70e",
   "claim": "web after the farmsteads - how-our-maps-lay-a-clustered-settlements-lanes.drawing: the farmhouses are placed first, and the lanes are drawn among them after; a household's way leaves its dooryard round its own garden beds and fixtures - so the web follows the houses, their appurtenances, sties on the ponds and burial ground, and each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands",
-  "code": "97278c38fdcbfdd4",
-  "core": "b084280cc46a20dc",
+  "code": "d828040f14034efc",
+  "core": "835030e2443b2ab0",
   "date": "2026-11-01",
   "note": "re-read row now answered: stage_homesteads lays each homestead's beds, kura and fixtures inside its seat (`_parts_fit`), holds them for the ways (`hold_laid_parts`) and reserves the byre stalls (`_lots`), then lays each household's way once the last house stands. So the ways go round their own beds and fixtures, and stage_web follows the appurtenances, the sties on the ponds and the burial ground",
   "pages": {
@@ -9981,6 +9522,7 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:e1df41a4a71cb26a",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/driver.py::STAGE_PROFILE_ENV#driving the roll": {
@@ -10001,6 +9543,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-03",
   "verdict": "IN-STEP"
  },
@@ -10734,20 +10277,21 @@
  "l7r/diagram/hamletgen/field_stage.py::comb_net#the comb's net": {
   "body": "abfb9d84d4cd1c14",
   "claim": "the comb's net - NONE: the Rust's records in the readers' shapes; the one figure it adds is claimed where it stands (`GRAVE_KEEP_FT`)",
-  "code": "531f0afa1cfc0cdf",
-  "core": "8161bde493462fcd",
+  "code": "cce432e9b827fdad",
+  "core": "b017b3d959fe89ed",
   "date": "2026-11-01",
   "note": "it reshapes the Rust's records for the readers; its one added figure, GRAVE_KEEP_FT, is claimed at its own constant",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/field_stage.py::stage_field#the comb": {
   "body": "95e6cccdd4a4dfc4",
   "claim": "the comb - rice-paddies-and-their-plots-suiden.drawing: the fan of paddies, its basins and bunds",
-  "code": "aeb78ebaaadd792b",
-  "core": "2064aeb979997070",
+  "code": "1a93d67d79de3935",
+  "core": "853cf0e8a7ce3a98",
   "date": "2026-10-31",
   "note": "picks the comb or the polder and hands the comb's fan, cell and weir to the Rust stage",
   "pages": {
@@ -10759,6 +10303,7 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:cb0a4d71c016c8d8"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/frame.py::band_to_edge#its search steps and tolerances": {
@@ -20808,14 +20353,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan#spec and plan plumbing": {
-  "code": "5e63b78ecc4a978b",
-  "core": "9e435055a8a232ee",
+  "code": "32a394d8ff3b0f2c",
+  "core": "77b390e70693ae1a",
   "date": "2026-10-13",
   "note": "fields only; plan_site sets every knob",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-10-30",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::SitePlan.fall#spec and plan plumbing": {
@@ -34261,67 +33806,6 @@
   "triaged": "2026-10-22",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
-  "body": "beca90676dd039e4",
-  "claim": "brook crossed only at crossing places - villages-beside-their-stream-one-bank-or-both.drawing: fords opened on straight reaches, the only free cells in the brook's band",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "cf69d22918de14c8",
-  "core": "b5b7765d6f29fd9e",
-  "date": "2026-10-22",
-  "note": "fords at FORD_SPACING 160 ft on reaches bent under 20 deg, with the crossing cost set",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
-  },
-  "research": "2882cfeb4389da9a",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:b3065e39b7eabc45",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::stage_seat#every way pays the crossing": {
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "66a9632b4197af2f",
-  "core": "b5b7765d6f29fd9e",
-  "date": "2026-10-07",
-  "note": "BROOK_CROSSING_COST_FT=150 matches the ~150 ft crossing charge",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
-  },
-  "research": "2882cfeb4389da9a",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
-  ],
-  "triaged": "2026-11-01",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::stage_seat#seat off the reed fringe": {
-  "code": "8397b91b73e48a9b",
-  "core": "b5b7765d6f29fd9e",
-  "date": "2026-10-07",
-  "note": "names the GM's ruling of 2026-08-28; `marsh_ground(only=(\"pond_fringe\",))`",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::stage_seat#the wind is kept": {
-  "code": "1d9aa4131a694e51",
-  "core": "b5b7765d6f29fd9e",
-  "date": "2026-10-07",
-  "note": "the declared wind is left as it is and seat_offwind is recorded",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
-  ],
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
   "body": "9c601658aaebaecb",
   "claim": "connector width - village-lanes.drawing: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike",
@@ -45386,11 +44870,11 @@
   "date": "2026-10-03",
   "note": "0006 neighbors abut continuously",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "section": "871c4f61762631b7",
-  "triaged": "2026-10-11",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_SAME_KEY_OK#one continuous work": {
@@ -51054,18 +50538,20 @@
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._draw_furrows#furrowed rows": {
   "body": "2ff7ad2a4fa350e0",
   "claim": "furrowed rows - dry-fields-and-their-crops-hatake.drawing: every dry plot drawn in ridged rows",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c3229d4f58d866c5",
   "core": "c965244698ccd543",
   "date": "2026-11-01",
   "note": "every plot passed in gets rows at theta across its full reach, with a clip fallback for concave plots; matches \"Every dry plot is drawn with furrows\" and \"worked in ridged rows\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/drawing.py::FieldDrawingMixin._field_feature_ink#the field's drawing": {
@@ -51324,10 +50810,10 @@
   "date": "2026-10-03",
   "note": "as cited",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
+  "research": "99a077469bb67bf5",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/grain.py::top_up#top-up order": {
@@ -51360,38 +50846,42 @@
  "l7r/diagram/settlement/fields/ink.py::CROP_FILL#the dry crops' colors": {
   "body": "6288ffeb1f683465",
   "claim": "the dry crops' colors - dry-fields-and-their-crops-hatake.drawing: barley tan-gold, millet ochre, buckwheat pale with reddish stems, soybean green, each at its ripest",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f9f4599ce9423255",
   "core": "a2b24af332de3d05",
   "date": "2026-10-31",
   "note": "four ripest-season fills match the page's tan-gold, ochre, pale and green; the season question is left open on the page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:640cea571aba6412",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:9fe8ff40fe5e68aa"
   ],
   "section": "a2b24af332de3d05",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::CROP_FURROW#buckwheat's furrows": {
   "body": "c49114d44c675ad9",
   "claim": "buckwheat's furrows - dry-fields-and-their-crops-hatake.drawing: buckwheat pale with reddish stems, its rows the stems' red",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d830850b0c075751",
   "core": "e6f4a3d42cabb7ca",
   "date": "2026-10-31",
   "note": "the red #A8574A rows match the page's \"pale with reddish stems\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f"
   ],
   "section": "e6f4a3d42cabb7ca",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::CROP_FURROW#the furrows' colors": {
@@ -51422,33 +50912,37 @@
  "l7r/diagram/settlement/fields/ink.py::DRY_STROKE#the dry plot's outline": {
   "body": "d6712bd8a51e1c19",
   "claim": "the dry plot's outline - dry-fields-and-their-crops-hatake.drawing: a thin tan-brown line, about 1.4 ft wide on a hamlet map, a map drawing convention",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c080f56e5e325742",
   "core": "317e74093f5409f6",
   "date": "2026-10-31",
   "note": "#A98C58 is a thin tan-brown outline, which the page calls a map drawing convention",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::DRY_STROKE_FT#the dry plot's outline width": {
   "body": "9a7d3243e2a15956",
   "claim": "the dry plot's outline width - dry-fields-and-their-crops-hatake.drawing: about 1.4 ft wide on a hamlet or town map, the same stroke on the sheet (2.8 ft on a village map, 4.2 on a city's)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4b126561f4ceb172",
   "core": "2ba5cf4fe49d9993",
   "date": "2026-10-31",
   "note": "one fixed 1.4 stroke on the sheet, about 1.4/2.8/4.2 ft by map scale, as the page says",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::STONE_STEPS#the grave stones' stagger": {
@@ -51617,18 +51111,20 @@
  "l7r/diagram/settlement/fields/ink.py::dry_plots#the dry plots' ink": {
   "body": "6289634cdd65932e",
   "claim": "the dry plots' ink - dry-fields-and-their-crops-hatake.drawing: each plot in its crop's color with a thin tan-brown outline, about 1.4 ft on a hamlet map, 2.8 on a village's and 4.2 on a city's - the one stroke on the sheet at every scale",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3f20b888a3803e95",
   "core": "f3bcd42b1e15bae7",
   "date": "2026-10-31",
   "note": "the crop's fill, the tan-brown DRY_STROKE outline at the one 1.4 stroke on the sheet",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:f263da6e48629364"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/ink.py::grave#the grave's form": {
@@ -51901,10 +51397,10 @@
   "date": "2026-10-03",
   "note": "theta = uniform(-0.6, 0.6) per plot independently, where 0006 has plots in tracts sharing one direction (\"along the contour or down to its outfall\"), each plot turning \"about 3 degrees\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
+  "research": "99a077469bb67bf5",
+  "triaged": "2026-11-04",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#its drawn sizes": {
@@ -51922,19 +51418,21 @@
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#its figures against 0006": {
   "body": "c38f4db21812e808",
   "claim": "its figures against 0006 - dry-fields-and-their-crops-hatake.drawing: 0.6 (random row angle per plot, ±34°) - a departure the code keeps until feature 417 T34",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6ba55d1bd1ffd4a2",
   "core": "07dd66f6e417e3d9",
   "date": "2026-10-25",
   "note": "`random.uniform(-0.6, 0.6)` per plot (±34°) against tracts whose rows run \"along the contour or down to its outfall ... turned up to about 17 degrees\", each plot \"about 3 degrees either way\". The page records no such departure; known, held for feature 417 T34",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-11-04",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#row ink": {
@@ -51951,10 +51449,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
-  "triaged": "2026-10-11",
+  "research": "99a077469bb67bf5",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._taxfree_plots#its search steps and tolerances": {
@@ -73485,11 +72983,11 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "section": "ac524dd6d801e72b",
-  "triaged": "2026-10-11",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::FLOODED#wet-paddy tint": {
@@ -74685,14 +74183,14 @@
  "rust/phases/src/field/build.rs::Field#a field's record": {
   "body": "e966b285cbe1d904",
   "claim": "a field's record - NONE: the record's type, holding what `one` decides",
-  "code": "a72a7eef2595081f",
-  "core": "20f5ef2b0294136e",
+  "code": "811d6b410480c90a",
+  "core": "cffdc3b060cdc9a8",
   "date": "2026-11-01",
   "note": "record type, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::FieldIn#the stage's inputs": {
@@ -74792,8 +74290,8 @@
  "rust/phases/src/field/build.rs::build#barley on the drained paddy": {
   "body": "ec1b26362f453ec9",
   "claim": "barley on the drained paddy - where-a-farming-hamlet-grew-its-coarse-grain.drawing: barley followed the rice on a paddy that drained, never on a wet one, and a drained paddy's winter barley is counted acre for acre against the dry field it spares",
-  "code": "00d24e1457154de4",
-  "core": "a7ec05e8632dd42d",
+  "code": "69cbc442f5719884",
+  "core": "c3f87c77ec63286f",
   "date": "2026-11-01",
   "note": "when the winter crop is barley, dry_need = (need - drained).max(0), the drained area counted acre for acre",
   "pages": {
@@ -74804,38 +74302,38 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:973ce82b528d1f80"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#fields side by side": {
   "body": "ec1b26362f453ec9",
   "claim": "fields side by side - GUESS: the record silent on where a settlement's tracts stood to each other; across the fall, each fan's half-breadths apart with the brook between them, its width and twice its skirt and wander",
-  "code": "6e3c98fb603f73f1",
-  "core": "a7ec05e8632dd42d",
+  "code": "f45de19d56c618f9",
+  "core": "c3f87c77ec63286f",
   "date": "2026-11-01",
   "note": "step = half_head + half_foot + 2*(skirt + wander) + brook.w across the fall; the pages are silent on how tracts stand to each other",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the brook's flank unhemmed": {
   "body": "ec1b26362f453ec9",
   "claim": "the brook's flank unhemmed - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on dry plots between canal B and the brook; that flank left to the brook's skirt, the hem the high margin's",
-  "code": "965e03321d37fae6",
-  "core": "a7ec05e8632dd42d",
+  "code": "aec8966bb1e8c4bd",
+  "core": "c3f87c77ec63286f",
   "date": "2026-11-01",
   "note": "the line runs only on far = -brook_side and across the head; the page is silent on the brook flank",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the fields under the cap": {
   "body": "ec1b26362f453ec9",
   "claim": "the fields under the cap - how-much-farmland-a-settlement-works-and-in-what-tracts: a settlement with more farmland had several tracts - the paddy shared evenly among them, a GUESS (no page gives how a settlement's tracts compare)",
-  "code": "23f88bfb2c01cdcb",
-  "core": "a7ec05e8632dd42d",
+  "code": "e5c1d7d1258659ec",
+  "core": "c3f87c77ec63286f",
   "date": "2026-11-01",
   "note": "n = fields_for(paddy, cap), area = paddy / n, several tracts when the paddy exceeds one, the even share a stated GUESS",
   "pages": {
@@ -74846,7 +74344,7 @@
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:7316d44de7260de8",
    "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html:744a350ef9d49115"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::build#the grain owed": {
@@ -74863,6 +74361,7 @@
   "rests": [
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -74876,6 +74375,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -74896,6 +74396,7 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -74976,8 +74477,8 @@
  "rust/phases/src/field/build.rs::one#resting plots": {
   "body": "7bc38938f8e3a057",
   "claim": "resting plots - paddies-left-to-rest-kataarashi.drawing: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)",
-  "code": "54ee909f16a15737",
-  "core": "30b1474b440366d9",
+  "code": "48734eb9120ad967",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "paddy_rest=unsettled passed to states() for each field; the 2-4 count is decided in states()",
   "pages": {
@@ -74989,26 +74490,26 @@
    "0013-paddies-left-to-rest-kataarashi.drawing.html:2923b84b63379ea8",
    "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave off the pond's plot": {
   "body": "7bc38938f8e3a057",
   "claim": "the grave off the pond's plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a grave beside a pocket pond; never in the pond's plot",
-  "code": "a51ff13920ccae5f",
-  "core": "30b1474b440366d9",
+  "code": "eafa431d28088abf",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "the pond's basin index passed to grave(); 0008 is silent on a grave beside a pond",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave once a map": {
   "body": "7bc38938f8e3a057",
   "claim": "the grave once a map - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: about three maps in ten draw a grave in the fields - rolled once, on the first field",
-  "code": "1768127dc1e91675",
-  "core": "30b1474b440366d9",
+  "code": "233520b4e0634de8",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "only the first field's basins are offered, so the grave's odds are rolled once a map",
   "pages": {
@@ -75018,14 +74519,14 @@
   "rests": [
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the grave's form": {
   "body": "7bc38938f8e3a057",
   "claim": "the grave's form - ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing: an island inside a plot or a grave in a plot's corner - the `grave_form` knob's, an island where the knob gave none",
-  "code": "3384e0846dfce0a9",
-  "core": "30b1474b440366d9",
+  "code": "fbc03c53983db901",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "the grave_form knob gives corner or island, island when missing",
   "pages": {
@@ -75036,7 +74537,7 @@
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the hem later": {
@@ -75049,6 +74550,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -75056,8 +74558,8 @@
   "body": "7bc38938f8e3a057",
   "claim": "the intake's place and siting - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: the intake at the left, the center or the right of the fan's head, and (where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki) in a straight reach or on the outside of a bend - the `intake_place` knob rolling the head's middle or a shoulder, the shoulder the one on the brook's side (`brook_side`, the plan's), and the `intake_siting` knob, read here for the brook",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "ef82008d63069085",
-  "core": "30b1474b440366d9",
+  "code": "4b86d1f486d1285d",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "center or the brook-side shoulder, as the claim states; intake_siting read as straight or bend",
   "pages": {
@@ -75070,15 +74572,15 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the weir": {
   "body": "7bc38938f8e3a057",
   "claim": "the weir - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir hamlet's weir in one of four forms, each its own thickness - drawn only where the `intake` knob is a weir, a form missing from the table at the thinnest, the fence's 1.5 ft",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "3a94ec19928e0f21",
-  "core": "30b1474b440366d9",
+  "code": "4daddcf688b85424",
+  "core": "715d2344884f4bea",
   "date": "2026-11-01",
   "note": "drawn only when intake=weir, form from weir_form, thickness from the table, 1.5 ft fallback",
   "pages": {
@@ -75091,7 +74593,7 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:ff4f3cb5d5a3a8fa"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::plot_figures#the plots' figures": {
@@ -76038,20 +75540,22 @@
  "rust/phases/src/field/dry.rs::Canal.frame#square to the canal": {
   "body": "e94674345a2c177a",
   "claim": "square to the canal - dry-fields-and-their-crops-hatake.drawing: each plot a rectangle square to the canal where it stands, the project's choice - the normal to the course's local line, taken over a plot's length either way, not to the paddy's slope",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d2b43bbfdf9c8820",
   "core": "68a40227397f8d9d",
   "date": "2026-11-01",
   "note": "normal to the chord along(d-PLOT_FT.0)..along(d+PLOT_FT.0) squares the plot to the canal's local line where it stands, which the drawing page records as the project's choice over squaring to the paddy's slope; the either-way span is a calibration of \"where it stands\"",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::Canal.len#the canal's measure": {
@@ -76144,33 +75648,37 @@
  "rust/phases/src/field/dry.rs::PLOT_FT#the plot": {
   "body": "585a3d14b46dfecf",
   "claim": "the plot - dry-fields-and-their-crops-hatake.drawing: roughly 92 ft across and 72 ft down a row on the village map; about 0.15 acre on the hamlet's",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "85d1d583ce5be4c7",
   "core": "8957b407807ef327",
   "date": "2026-11-01",
   "note": "91.4 x 71.5 ft, about 0.15 acre",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::TRACT_APART_DEG#tracts apart": {
   "body": "6a3bd9dbe8bb2563",
   "claim": "tracts apart - dry-fields-and-their-crops-hatake.drawing: tracts are set apart by at least 20 degrees, by a drawing convention - their rows' directions, the right angle between contour and down counted, against the tract beside each along its band and those directly downslope; where the turns allowed leave no such direction, the one farthest from them all (the page: two rows within about 6 degrees read as one)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "bcd0205986886815",
   "core": "8d7f2ad4613f1060",
   "date": "2026-11-01",
   "note": "20 degrees, a recorded convention",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::TRACT_PLOTS#a tract's length": {
@@ -76187,50 +75695,56 @@
  "rust/phases/src/field/dry.rs::TRACT_STRIPS#a tract": {
   "body": "55b58b1b491335c3",
   "claim": "a tract - dry-fields-and-their-crops-hatake.drawing: a tract is two to four strips of plots running upslope from the canal",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8f2efd663b093c8e",
   "core": "b5f22148cb338681",
   "date": "2026-11-01",
   "note": "two to four strips",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::TURN_DEG#the turns": {
   "body": "8e40ea2086a16abe",
   "claim": "the turns - dry-fields-and-their-crops-hatake.drawing: turned up to about 17 degrees; within a tract each plot turns about 3 degrees either way",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e795ad3f356ce145",
   "core": "27cc56d32ac61894",
   "date": "2026-11-01",
   "note": "17 degrees per tract, 3 per plot",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::apart#tracts apart": {
   "body": "dc8224f49a028fe6",
   "claim": "tracts apart - dry-fields-and-their-crops-hatake.drawing: tracts are set apart by at least 20 degrees, turned up to about 17 degrees, the two directions a right angle apart",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "528d97eb243859a4",
   "core": "da5c203f70fe4de4",
   "date": "2026-11-01",
   "note": "candidates kept within ±TURN_DEG.0 on the contour or down side (the two 90 apart), each kept TRACT_APART_DEG clear of its neighbors' rows",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::apart#where none stands apart": {
@@ -76247,66 +75761,66 @@
  "rust/phases/src/field/dry.rs::hem#a band's strips": {
   "body": "be70b188654f314f",
   "claim": "a band's strips - GUESS: dry-fields-and-their-crops-hatake.drawing silent on whether a band's tracts run alike upslope; the strip count rolled once a band, every tract in it as deep",
-  "code": "ed1bf496166e6c3f",
-  "core": "b1ad13548c5f76c0",
+  "code": "cbcbed458f6220c2",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "the strip count is rolled once a band, so every tract in the band is as deep; the page is silent on this",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#a plot onto rice dropped": {
   "body": "be70b188654f314f",
   "claim": "a plot onto rice dropped - dry-fields-and-their-crops-hatake.drawing: a plot that would lap onto another canal's rice is dropped",
-  "code": "16c417f40c7cbafc",
-  "core": "b1ad13548c5f76c0",
+  "code": "6a9cf1e3bada3ece",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "`refused` drops any plot whose middle or upslope corners fall inside the field's rice",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
   "body": "be70b188654f314f",
   "claim": "not steep ground - dry-fields-and-their-crops-hatake.drawing: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either",
-  "code": "307947c0e188ce23",
-  "core": "b1ad13548c5f76c0",
+  "code": "87a535642276fcbe",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "no steep-ground case; tracts take either direction on the fan's gentle ground",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:a0379c2117836a92"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#rows on the contour or down": {
   "body": "be70b188654f314f",
   "claim": "rows on the contour or down - dry-fields-and-their-crops-hatake.drawing: rows run either along the contour or down to its outfall, the two a right angle apart; even odds a tract between them, a GUESS (the page: the tract's size and the turns are GUESSES) - the contour square to the fall, not the canal's heading",
-  "code": "47b3bda012b7a4b6",
-  "core": "b1ad13548c5f76c0",
+  "code": "f2ee05b3bc5ff333",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "even odds of contour or down per tract; the base angle is taken from the fall, not from the canal",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#square to the canal": {
@@ -76323,6 +75837,7 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
@@ -76342,19 +75857,20 @@
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the climb's bound": {
   "body": "be70b188654f314f",
   "claim": "the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas; the caller's `most_bands` the climb's own bound",
-  "code": "97ad8448cddc5373",
-  "core": "b1ad13548c5f76c0",
+  "code": "e7fcc59bac7883a2",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "MAX_BANDS is a guard, and most_bands is the caller's",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the hem's figures": {
@@ -76373,18 +75889,20 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the last band from the canal's start": {
   "body": "e6fdeabcc475baff",
   "claim": "the last band from the canal's start - GUESS: where-a-farming-hamlet-grew-its-coarse-grain.drawing silent on where along the canal the last of the plots stands; from its start, along it, until the need is met",
-  "code": "3834df6ed7a3bf27",
-  "core": "b1ad13548c5f76c0",
+  "code": "3d5bd4500e8001ce",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "each band starts at `d = 0` and runs along the canal, breaking once the need is met; the page's one GUESS on order is toe versus middle (upslope), not where along the canal, so it is silent here",
   "pages": {},
   "research": "",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the plot": {
@@ -76401,52 +75919,57 @@
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:591a6d4189483c04"
   ],
+  "triage": "touched",
   "triaged": "2026-11-01",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
   "body": "be70b188654f314f",
   "claim": "the tracts apart - CONVENTION: dry-fields-and-their-crops-hatake.drawing sets tracts at least 20 degrees apart by a drawing convention (`apart`)",
-  "code": "ab3bb0dd8048fc2b",
-  "core": "b1ad13548c5f76c0",
+  "code": "ee76f8ba1a86fa58",
+  "core": "93a24015cda7ae5a",
   "date": "2026-11-01",
   "note": "the 20-degree separation is set through `apart`, and the page calls it a drawing convention",
   "pages": {},
   "research": "",
-  "triaged": "2026-11-01",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::neighbors#the neighbors": {
   "body": "5acc53481d0ec6fd",
   "claim": "the neighbors - dry-fields-and-their-crops-hatake.drawing: a tract set apart from the tract beside it along its band and those directly downslope",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5fe3d1d9e712650c",
   "core": "a0f0bd7240083af3",
   "date": "2026-11-01",
   "note": "compares a tract with the one before it in its band and with the tracts below whose span overlaps it, matching the neighboring-tract seams the 20-degree convention sets apart",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
   "body": "bbfc4611445f4c15",
   "claim": "a plot onto rice dropped - dry-fields-and-their-crops-hatake.drawing: a plot that would lap onto another canal's rice is dropped",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "de73aa4b42a8dfc8",
   "core": "f2c814eaeed796bb",
   "date": "2026-11-01",
   "note": "the `onto` test on the middle and the upslope corners refuses plots on the rice",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
   ],
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#off the water": {
@@ -78792,14 +78315,14 @@
  "rust/phases/src/field/py.rs::field_dict#the seam": {
   "body": "81143356a1e01c52",
   "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
-  "code": "5ec04b8a9a2bc42f",
-  "core": "ba5598b615f64940",
+  "code": "a4a0343c68e2d69c",
+  "core": "cfc703c5b992bbc2",
   "date": "2026-11-01",
   "note": "copies built records into a dict and decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-03",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::polder_drawn#the polder's plots drawn apart": {
@@ -78899,8 +78422,8 @@
   "body": "30dbfc1ed6725109",
   "claim": "the brook drawn where it is laid - which-way-water-flows-and-how-channels-bend-and-join.drawing: every bend of 8 degrees or more on its arc, the brook not rounded where the race leaves it (`course::drawn`), the race's mouth on the drawn course (`course::mouth`)",
   "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
-  "code": "86f4f06237a97f7a",
-  "core": "67086af5240d1f74",
+  "code": "8a348dcb66dbd051",
+  "core": "fc9a052da4ea6c8d",
   "date": "2026-11-03",
   "note": "course::drawn rounds bends of 8 degrees or more at 2.5 widths and holds the head race's mouth; course::mouth sets the race's first point on the drawn line; only the head race leaves the brook",
   "pages": {
@@ -78917,7 +78440,7 @@
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f38e171f34c00b1c",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f482bb32429c2ba3"
   ],
-  "triaged": "2026-11-03",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/py.rs::stage_polder#a rice polder's pocket pond": {
@@ -79409,14 +78932,14 @@
  "rust/phases/src/lib.rs::l7r_phases#phases module": {
   "body": "be4d7b6e0be329ad",
   "claim": "phases module - NONE: the extension's own machinery; each phase carries its own claims",
-  "code": "488c205fcb8c7d1d",
-  "core": "d55edcac79578994",
+  "code": "b29e9da73df0deb9",
+  "core": "0e7c30047d62f1b4",
   "date": "2026-10-30",
   "note": "pymodule registration of two phase functions only; no physical or rendering decision",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-03",
+  "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::K#the draws": {
