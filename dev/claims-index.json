@@ -80284,50 +80284,50 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#else off the map": {
-  "body": "08709cfbf80fa900",
+  "body": "579f8122496c4fc0",
   "claim": "else off the map - field-drains-akusuiro.drawing: \"where it does not, the drain runs on as a ditch to the edge of the map\"",
-  "code": "e7c72f72393345b4",
-  "core": "2d07c2e773f4f3ab",
-  "date": "2026-11-03",
-  "note": "with no confluence, the run is searched or built to the map's edge",
+  "code": "6c8800a3fdda4b25",
+  "core": "2ec5ba7886fa9006",
+  "date": "2026-11-04",
+  "note": "when no brook confluence is found, or the bowed run to it fails off_resting, the drain is laid as a searched run off the map (to: \"offmap\"), as the page says",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17",
+   "0060-field-drains-akusuiro.drawing.html:fddf3b65d30ae7c2"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#the drain joins the passing brook": {
-  "body": "08709cfbf80fa900",
+  "body": "579f8122496c4fc0",
   "claim": "the drain joins the passing brook - field-drains-akusuiro.drawing: \"Where the passing brook comes near the collector's outfall, the drain joins it, as a district's drainage returned to the river to be taken up below\"",
-  "code": "4b1cf5ec6329a52a",
-  "core": "2d07c2e773f4f3ab",
-  "date": "2026-11-03",
-  "note": "a confluence within reach takes the run to the brook",
+  "code": "9b25b9ff1021910d",
+  "core": "2ec5ba7886fa9006",
+  "date": "2026-11-04",
+  "note": "the run goes from the outfall to the confluence point with to: \"stream\", the drain joining the passing brook where it is in reach; the page sets no angle for the joint",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e"
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
+   "0060-field-drains-akusuiro.drawing.html:bf7bb8a238b01bbb"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::lay#the run to the brook bowed": {
-  "body": "08709cfbf80fa900",
+  "body": "579f8122496c4fc0",
   "claim": "the run to the brook bowed - GUESS: no source could speak to it, a value of ours; bowed off its chord as the pond's ditch is (`pond::BOW`)",
-  "code": "9417fb34dbe382c1",
-  "core": "2d07c2e773f4f3ab",
-  "date": "2026-11-03",
-  "note": "the page rules on no shape or angle for a run meeting the brook",
+  "code": "68aacff154ec347c",
+  "core": "2ec5ba7886fa9006",
+  "date": "2026-11-04",
+  "note": "the midpoint is bowed off the chord square to the fall by pond::BOW (a share of the chord, with a cap); the page records nothing on the shape of a brook-bound run, so GUESS is the right label",
   "pages": {},
   "research": "",
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/sink/offmap.rs::off#the off-map branch": {
