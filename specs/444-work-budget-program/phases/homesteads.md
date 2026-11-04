@@ -1,0 +1,36 @@
+# Phase checklist - homesteads (feature 444)
+
+Copy to `specs/444-work-budget-program/phases/<stage>.md` and tick each box, in order, as its step is done; each box carries
+the evidence beside it (a path, a ledger row, a figure with its run). `make land` refuses a `phase: <stage>` task of feature 444
+while this file is absent, short of any of the eight boxes, or holds one unticked (feature 443 FR-010). The steps are section 3 of
+the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request.md`).
+
+- [x] 1. **Contract.** What the phase reads from the manifest and what it writes; the research claims that govern it (from the
+  claims index); the cohort properties it must keep.
+  Evidence: `phases/homesteads.map.md` (the stage mapped 2026-11-04: its reads, writes, algorithm, constants and repair passes) and `plan.md` T30 (D1-D5, decide CLEAR on round 2); the claims governing it - 0001, 0004, 0028-0040, 0043-0048, 0058, 0071, 0074, 0075, 0081, 0196, 0246, 0285 - to be held at the Rust that decides each; the cohort properties: every household seated or the site refused (0001), every house reached (the access tree), the Rust stage gate through the stage
+- [ ] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
+  before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
+  scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/<stage>.derivation.md`.
+  Evidence: pending: the stage's re-derivation for the whole stage under FR-022 rule 2 (`phases/homesteads_greenfield.derivation.md`)
+- [ ] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
+  the budget and exponent pinned (`make budget-set`).
+  Evidence: pending: two blind MODE BUDGET SOUNDs; past ten times the first figure (4,118 at 40), the GM's words
+- [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
+  `make perf-fanout`.
+  Evidence: before the rebuild, measured 2026-11-04 (`make work-budget`): 1,303,212 / 1,716,870 / 4,204,265 at 20 / 40 / 80, 416.9x the budget, exponent 0.84; 17,909,350 Python calls at 40 (`make perf-fanout STAGES=homesteads`, `dev/perf-log/`)
+- [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
+  the old implementation deleted in the same landing, with no fallback path. The old Python owes no coverage on the way out (feature
+  448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away"): `dev/coverage-exempt.json` names it, so no test is added only to cover a line of it; the landing's
+  `make coverage-exempt PRUNE=1` drops its entries once the stage is accepted, and the stage's thin door keeps the floor.
+  Evidence: pending: the Rust stage behind `homesteads/stages.py` (D1), every form (D4), the Python deleted (D4); engine work waits until T27-T29 have landed
+- [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households - or at most twice it on the MODE AUDIT's
+  LEEWAY, and work the derivation missed re-derived and raised (`make budget-set RAISE=1`), never squeezed (feature 444 FR-022) - and
+  the exponent at most the budget's, with no leeway; every seed of
+  the Rust stage gate passing where the Rust stages complete (`make rust-gate`, feature 444 FR-019; the whole-pipeline cohort a
+  rate, refusing nothing); the phase's claims round IN-STEP, with no open claim finding in a file the landing changes (feature 444 FR-021, refused at `make land`); the reviews
+  its occasions owe; `make perf-ab`'s time recorded, as a record and not a gate.
+  Evidence: pending
+- [ ] 7. **Audit review, MODE AUDIT.** The `work-budget` agent's WITHIN, or LEEWAY, on the landed code (`make work-budget-bundle MODE=audit`).
+  Evidence: pending
+- [ ] 8. **Standing record updated.** `dev/work-budget.md`, for this phase and for the whole roll; the stage accepted.
+  Evidence: pending
