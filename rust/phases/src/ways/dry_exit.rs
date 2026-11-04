@@ -354,6 +354,7 @@ pub fn clear_of_bands(mut p: Pt, bands: &[&[Pt]], clear: f64) -> Pt {
 }
 
 /// What the dry exit reads: the walls and the water.
+#[derive(Clone, Copy)]
 pub struct DrySite<'a> {
     /// The wet polygons (grown by the lane here).
     pub wet: &'a [Vec<Pt>],

@@ -17,6 +17,7 @@ pub use crate::counts::Counts;
 pub mod dry_exit;
 pub mod route;
 pub mod squaring;
+pub mod through;
 pub mod track;
 
 #[cfg(test)]
@@ -25,5 +26,7 @@ mod dry_exit_tests;
 mod route_tests;
 #[cfg(test)]
 mod squaring_tests;
+#[cfg(test)]
+mod through_tests;
 #[cfg(test)]
 mod track_tests;
