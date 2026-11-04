@@ -96,8 +96,9 @@
       research: rendering
 - [ ] T25 Inashiro's rebuilt comb ships more regular than main's, against 0005's drawing page ("never as the tidy grid"; "a triangular basin is legitimate, and several stand on every map"): measured 2026-11-02 on the T16 roll, 0 triangles against main's 2, 563 of 565 basins four-sided against 554 of 622, basin-area CV 0.16 against 0.23, p90 corner deviation 12.7 deg against 26.4 (escalation-check on the T16 glyph check's paddy F1). The derivation's basins are the lattice's whole quadrilaterals to its edge; the route is the plot_regularity knob reaching the Rust lattice - clipped edge basins and wobbled bunds for a valley_paddy, the regular lattice for a planned field
       research: rendering
-- [ ] T26 phase: sink - the drain's run and its tameike, the off-map route and the brook's confluence, and the brook rounded, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
+- [x] T26 phase: sink - the drain's run and its tameike, the off-map route and the brook's confluence, and the brook rounded, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
       research: rendering
+      verify: DONE. the audit bundle names each code file by its repository path, / as __ (bundled_name), so the field's and the sink's brook.rs both land
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

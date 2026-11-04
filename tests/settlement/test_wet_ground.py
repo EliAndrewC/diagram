@@ -14,7 +14,7 @@ from typing import Any
 from shapely.geometry import Polygon
 
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.land.wet import _closest_pair, _clipped_to_box, _clipped_to_open_ground
+from l7r.diagram.settlement.land.wet import _clipped_to_box, _clipped_to_open_ground, _closest_pair
 
 _FRINGE = [(300.0, 300.0), (500.0, 300.0), (500.0, 500.0), (300.0, 500.0)]
 
