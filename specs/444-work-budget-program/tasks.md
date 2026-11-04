@@ -100,6 +100,8 @@
 - [x] T26 phase: sink - the drain's run and its tameike, the off-map route and the brook's confluence, and the brook rounded, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
       research: rendering
       verify: DONE. the audit bundle names each code file by its repository path, / as __ (bundled_name), so the field's and the sink's brook.rs both land
+- [ ] T27 phase: seat - where the settlement sits on the field's margin, its back to the wind, with the brook's fords and the crossing cost every later way pays, rebuilt in Rust to its greenfield derivation under amendment 7's leeway, through the checklist (FR-003-FR-006, FR-017, FR-022)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
