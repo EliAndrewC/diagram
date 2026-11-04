@@ -16,6 +16,7 @@ pub use crate::counts::Counts;
 
 pub mod ground;
 pub mod meet;
+pub mod routes;
 pub mod rules;
 pub mod water;
 
@@ -23,6 +24,8 @@ pub mod water;
 mod ground_tests;
 #[cfg(test)]
 mod meet_tests;
+#[cfg(test)]
+mod routes_tests;
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
