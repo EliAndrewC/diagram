@@ -570,37 +570,33 @@ Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro 
 **Performance work?** no - the hem's work moves from the field's count to its own stage's; its budget derived with it.
 
 
-### T29 (<why: the finding or measurement that files it>)
+### T29 - phase: waterward, in Rust under amendment 7 (the GM 2026-11-04: "please take this entire feature to completion"; FR-003-FR-006, FR-017, FR-022)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+Occasions: settlement-review on a pool polder the rebuilt fringe moves (Kuwabata, measured 2026-11-04 (`make map`): its manifest unchanged against HEAD, so none owed); glyph-check only if a glyph is redrawn (none).
+
+- **Approach**: the flanks, the dike's outer face and the strips rebuilt in Rust (`rust/phases/src/waterward.rs`) behind a thin `hamletgen/waterward_stage.py`, which draws each strip as the waterside marsh, declares the flanks and reserves the sty's seat; measured 2026-11-04 (`make work-budget`): 0 counted at every reference size against the budget's 1 (a valley hamlet draws no fringe), and `make rust-gate` 54 seeds through the six Rust stages, 0 failing.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T29 Approach (checklist part A)
+### T29 Decisions
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+- **D1 - the seam**: the Rust owns the flanks facing the water (`flanks`), each flank's outer face (`face`) and its strip (`fringe`); the thin door gathers the dikes' rings and notches, the band's widest cut, the fall and the seat's back, draws each strip with `Settlement.marsh` (the waterside role's ink and cover), declares the flanks (`meta.waterward`) and reserves the sty's seat (`reserve_sty_seat`), all as the Python stage did.
+- **D2 - deletion** (FR-005): the old `stage_waterward` and `dike_face` deleted with their tests; `polder_flanks` and `waterward_flanks` kept (the house seating's capacity and the crossings' caps read them).
+- **D3 - the counters** (FR-012): one key a derivation row, as the seat's are.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+### T29 Approach (2026-11-04T13:35Z)
 
-### T29 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+1. **The goal, in the world.** A polder's reed fringe outside its dike on the flanks that face the water it was reclaimed from, stopping at the embankment's outer face and stepping in through each notch; nothing on a valley hamlet (0019, 0027).
+2. **The constraints.** FR-003 to FR-006, FR-017, FR-019 to FR-022; `phases/waterward_greenfield.derivation.md` (its budget 1 at 40); the pages 0019 and 0027.
+3. **Where each comes from.** R: 0019 (the waterward flanks), 0027 (the band cut at a notch). O: the reference rolls, measured 2026-11-04 (`make work-budget`): 0 at every size.
+4. **Do they describe the world here?** A polder hamlet's case; the reference roll draws none, and the pool's polder (Kuwabata) is unchanged, measured 2026-11-04 (`make map`).
+5. **The order.** After the hem, before the houses and the track, so both treat the strip as wet ground.
+6. **The exits.** Green: `make rust-gate` 0 failing through waterward; the count within the budget; MODE AUDIT WITHIN; the claims round IN-STEP; `phases/waterward.md`'s eight boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the face is one pass over the dike's points into bins.
+8. **The budget.** One landing, with T27 and T28.
+9. **Done, measured.** 0 counted at 40 and 80, measured 2026-11-04 (`make work-budget`).
+10. **Before moving a constant.** None moved: the run past the dike's ends, the bins and the depth keep their claims at the Rust (GUESS and CONVENTION as before).
+11. **Before fitting things into room.** Not a room question.
 
-1. **Where does the time go?** <the stage and the loop: `make perf-profile` time beside `make phase-calls` / `make perf-fanout` calls>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <calls; `make perf-ab` best of N with each arm's spread,
-   the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
-
+**Performance work?** no - a valley hamlet draws no fringe; the polder's strips are one pass over the dike's points.
