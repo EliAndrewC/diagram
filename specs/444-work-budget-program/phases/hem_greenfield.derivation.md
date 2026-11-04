@@ -30,9 +30,9 @@
 |---|---|---|---|---|
 | items | per item | 94 at 20, 150 at 40, 249 at 80 | the dry plots laid, measured on the reference rolls | the whole canal hemmed on a cleared middle |
 | the plot's seat and its tests | per item | 28 | the field's SOUND row: the seat's 4 offsets a cursor's steps (4), its lap test's 5 points against the about 2 laid plots (10), its water test (8) and its tract's row direction (6) | as the field's |
-| the water index's cells | per item | 14 | its corners placed and written (5), its box asked of the 6.8 cells and the 2.4 segments handed back (9) | as the field's |
+| the field's water's cells | per item | 14 | its corners placed and written (5), its box asked of the 6.8 cells and the 2.4 segments handed back (9) | as the field's |
 | the laid plots' cells | per item | 16 | its box asked of the grid's 6.8 cells and filed in them (13.6), the about 2 laid plots handed back | as the field's |
-| the outline's cells | per item | 13 | its middle and two outer corners, each crossing its ray over the 4.4 edges of its band | as the field's |
+| the field's outline by bands's cells | per item | 13 | its middle and two outer corners, each crossing its ray over the 4.4 edges of its band | as the field's |
 | the record and the net | per item | 6 | its record (the ring's 4 corners and its crop, rows and tract) and its net entry (2) | always 6 |
 | the overlap registry | per item | 10 | the plot's box read off its 4 corners (4) and asked of its cells' about 2 laid plots and 2 water segments (6) | the hem beside the water |
 | the ink's corners and outline | per item | 8 | its 4 corners walked for its paint and its 4 for its outline | always 8 |
@@ -46,13 +46,13 @@ So: items x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x slack + the settlement's gro
 
 ## Totals
 
-- at 20: 94 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 600 + 756 + 6 = 18904
-- at 40: 150 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 1134 + 1040 + 6 = 28930
-- at 80: 249 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 2000 + 1438 + 6 = 47015
+- at 20: 94 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 600 + 756 + 6 = 18188
+- at 40: 150 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 1134 + 1040 + 6 = 29030
+- at 80: 249 x (28 + 14 + 16 + 13 + 6 + 10 + 8 + 84) x 1 + 2000 + 1438 + 6 = 48015
 
 ## Growth
 
-From 20 to 80 households the stage grows at an exponent of about 0.66 (18,904 to 47,015): the plots with the grain the hamlet needs or the canal's length, the water with the field. No loop over a growing set runs inside another: each plot's tests read cells and bands, never a whole ring or every plot.
+From 20 to 80 households the stage grows at an exponent of about 0.70 (18,188 to 48,015): the plots with the grain the hamlet needs or the canal's length, the water with the field. No loop over a growing set runs inside another: each plot's tests read cells and bands, never a whole ring or every plot.
 
 ## Work the first derivation missed
 

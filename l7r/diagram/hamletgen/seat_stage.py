@@ -83,6 +83,7 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         every way pays the crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `BROOK_CROSSING_COST_FT` set on the router for the whole roll
         the wind is kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a seat off the wind is recorded, never the wind renamed
         the side the houses stand on - NONE: the field tests from here on measure the outline's chords facing the seat (`field_face`)
+        the way out off the wet ground laid - research/questions/0081-village-lanes.drawing.html: every way keeps off every marsh's reeds; at the seat the wet toe and a pond's reed fringe are the marsh laid, the hinterland's marshes laid after it (`STAGES`)
         the way out off the ditches - research/questions/0081-village-lanes.drawing.html: lanes keep to the bunds and dry ground; the seat's way out may not cross a field ditch, a channel or a drawn channel, a GUESS of the page's dry ground that leaves the ditches' planks to the ways
     """
     M = s.M

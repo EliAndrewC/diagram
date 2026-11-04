@@ -222,7 +222,7 @@ pub fn hem(
 ///
 /// Research:
 ///     the dry fields behind the houses - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem drawn behind the settlement where it stands on the paddy's high edge, the houses between the canal and the dry fields; just upslope of the canal along the rest
-///     the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground, at most the ground's own diagonal
+///     the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground, at most the ground's own diagonal and a strip past it
 fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut u64) -> f64 {
     if keep.is_empty() {
         return 0.0;

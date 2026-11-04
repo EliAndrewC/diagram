@@ -7666,14 +7666,25 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/cluster.py::exit_walls#the walls the dry way out keeps off: the wet toe and reed fringe grown by the lane's width, the field envelope at zero margin, and the brook and watercourses as lines it may not cross (0081 §9, §12 bear on it)": {
-  "code": "2e9b448c8b7d0ac4",
+ "l7r/diagram/hamletgen/cluster.py::exit_walls#the way out's walls": {
+  "body": "fc71fd651247be17",
+  "claim": "the way out's walls - village-lanes.drawing: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross",
+  "code": "3e890ad3074dea31",
   "core": "2e9b448c8b7d0ac4",
   "date": "2026-11-04",
-  "note": "the walls the dry way out keeps off: the wet toe and reed fringe grown by the lane's width, the field envelope at zero margin, and the brook and watercourses as lines it may not cross (0081 §9, §12 bear on it)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the walls are the toe and reed fringe grown by the track's width, the field, and the pond; the watercourses are lines the way may not cross. This matches the page's dry-ground, no-crossing-row-crops, stop-at-the-paddy and off-the-map rules",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#dry way out of the seat": {
   "body": "0d78f91a32ddacdc",
@@ -10545,22 +10556,31 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hem_stage.py::BELT_FAR_FT#belt's depth": {
-  "body": "b61c491d54945be8",
-  "claim": "belt's depth - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: a back wood drawn 80 to 120 ft deep, a convention; the belt's band to 146 ft behind the cluster's fringe",
-  "code": "33e91acd30f1920a",
+  "body": "4f8fabfedaea91bc",
+  "claim": "belt's depth - groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing: a back wood drawn 80 to 120 ft deep, a convention; 110 ft",
+  "code": "64fea93b375dd9bf",
   "core": "d63438701c9afe57",
   "date": "2026-11-04",
-  "note": "the claim calls 146.0 the belt's depth or band, but the page says \"The back grove is drawn 80 to 120 ft deep\"; 146 ft behind the band's far edge is outside that range. If 146 is a standoff plus a depth, the standoff has no figure on the page (§35 gives none) and needs its own GUESS or UNRESEARCHED claim, with the depth kept inside 80 to 120",
+  "note": "the 110 ft depth inside 146 is within the page's \"80 to 120 ft deep\", a convention",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
   "research": "90cf9ff106c766c9",
   "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hem_stage.py::BELT_FAR_FT#belt's distance behind the fringe": {
+  "body": "4f8fabfedaea91bc",
+  "claim": "belt's distance behind the fringe - GUESS: no page gives it; the near face 36 ft behind the cluster's fringe",
+  "code": "1ccb1af07ea7c2a0",
+  "core": "d63438701c9afe57",
+  "date": "2026-11-04",
+  "note": "the page says the grove \"stands back from the row of houses\" but gives no figure; 36 ft fits the 150 ft rule for a stand near a farmhouse",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hem_stage.py::STANDOFF_FT#seat standoff from the field": {
   "body": "b5d8b1a6923dd1ca",
@@ -10580,13 +10600,24 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hem_stage.py::settlement_ground#the belt's ground is reserved between the houses and the dry hem, so the hem stands behind the belt; 0006 §75 puts the fields behind the houses but says nothing of a belt between them": {
-  "code": "8fcb1206e71c78f1",
+ "l7r/diagram/hamletgen/hem_stage.py::settlement_ground#the belt's ground kept": {
+  "body": "3025e1816b58971f",
+  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too and the hem stands behind it; 0006 says nothing of a belt between the houses and the dry fields",
+  "code": "106fad6135e3527c",
   "core": "8fcb1206e71c78f1",
   "date": "2026-11-04",
-  "note": "the belt's ground is reserved between the houses and the dry hem, so the hem stands behind the belt; 0006 §75 puts the fields behind the houses but says nothing of a belt between them",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the ground runs from the margin through the band to the belt behind it, on the windward side and as long as the band; the hem stands beyond it, behind the houses",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+  },
+  "research": "5892781a1ab23bcb",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hem_stage.py::settlement_ground#the settlement's ground": {
   "body": "3025e1816b58971f",
@@ -21910,14 +21941,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the seat's dry way out may not cross the field ditches, channels or drawn channels (ditches + drawn passed as uncrossable lines)": {
-  "code": "fedf1d4c07dd5f96",
-  "core": "fedf1d4c07dd5f96",
-  "date": "2026-11-04",
-  "note": "the seat's dry way out may not cross the field ditches, channels or drawn channels (ditches + drawn passed as uncrossable lines)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the side the houses stand on": {
   "body": "02737ecdf728b4f9",
   "claim": "the side the houses stand on - NONE: the field tests from here on measure the outline's chords facing the seat (`field_face`)",
@@ -21928,6 +21951,32 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the way out is walled only by the toe and the `pond_fringe` marsh (`marsh_ground(M, only=(\"pond_fringe\",))`), not by every marsh role, where 0081 §12 says \"Every way on these maps keeps off every marsh's reeds\"": {
+  "code": "fedf1d4c07dd5f96",
+  "core": "fedf1d4c07dd5f96",
+  "date": "2026-11-04",
+  "note": "the way out is walled only by the toe and the `pond_fringe` marsh (`marsh_ground(M, only=(\"pond_fringe\",))`), not by every marsh role, where 0081 §12 says \"Every way on these maps keeps off every marsh's reeds\"",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the way out off the ditches": {
+  "body": "02737ecdf728b4f9",
+  "claim": "the way out off the ditches - village-lanes.drawing: lanes keep to the bunds and dry ground; the seat's way out may not cross a field ditch, a channel or a drawn channel, a GUESS of the page's dry ground that leaves the ditches' planks to the ways",
+  "code": "1f25cd4a78677561",
+  "core": "fedf1d4c07dd5f96",
+  "date": "2026-11-04",
+  "note": "the field ditches, channels and drawn channels are handed to the way out as lines; the GUESS reading of \"keep to the bunds and dry ground\" is stated",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/seat_stage.py::stage_seat#the wind is kept": {
@@ -50904,15 +50953,15 @@
   "claim": "the fan's middle - dry-fields-and-their-crops-hatake.drawing: each map decides at random whether an alluvial fan's dry middle is left wild, on three maps in four, a GUESS (moved here from the field's old `water/fit.py` by feature 444 T16, the field's own Python deleted)",
   "code": "5035e9710572865e",
   "core": "f55bec4d42b9c678",
-  "date": "2026-10-31",
-  "note": "per-map knob rolls between the two attested forms (wild/cleared), wild at 0.75 matching \"On three maps in four, a GUESS\"",
+  "date": "2026-11-04",
+  "note": "a random choice per map, wild 0.75 and cleared 0.25, is the page's \"three maps in four\", a GUESS",
   "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "469e336354ed5f0a"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "research": "ae8a1665f83d153e",
+  "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:78e339c5e0d9be52",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:fe49530da0a21b10"
   ],
   "verdict": "IN-STEP"
  },
@@ -76232,13 +76281,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::past_keep#the gap between the houses and the dry fields, set by stepping back one whole strip depth (71.5 ft) at a time until the strip clears the seat; it gives up after the seat's largest bbox diagonal, and only the strip's corners and middle are tested": {
-  "code": "4fc915cd96f9fe40",
+ "rust/phases/src/field/dry.rs::past_keep#the push behind": {
+  "body": "72549a143e5d5946",
+  "claim": "the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground, at most the ground's own diagonal",
+  "code": "1b95c589dd474bcd",
   "core": "4fc915cd96f9fe40",
   "date": "2026-11-04",
-  "note": "the gap between the houses and the dry fields, set by stepping back one whole strip depth (71.5 ft) at a time until the strip clears the seat; it gives up after the seat's largest bbox diagonal, and only the strip's corners and middle are tested",
+  "note": "the claim says the push is \"at most the ground's own diagonal\", but when nothing clears, the loop exits with `behind > reach` and returns up to one strip (71.5 ft) past the diagonal. Either cap the return at `reach` or reword the claim",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
   "body": "bbfc4611445f4c15",
@@ -79527,13 +79579,23 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat.rs::seat#a margin with no way out off the map is dropped and the seat goes to the next-best margin in the ranking (the seat must have a way out)": {
-  "code": "9df4dda3d9cec276",
+ "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
+  "body": "dd9c1afe36781da7",
+  "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken",
+  "code": "43a6b628bc74d8b7",
   "core": "9df4dda3d9cec276",
   "date": "2026-11-04",
-  "note": "a margin with no way out off the map is dropped and the seat goes to the next-best margin in the ranking (the seat must have a way out)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "a head with no dry way out of the frame is dropped and the next one ranked is taken; this matches \"a track keeps off wet ground\" and \"runs off the edge of the map\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the fords before the seat": {
   "body": "dd9c1afe36781da7",
@@ -79633,18 +79695,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat/exit.rs::Exit.has_exit#tameike berth": {
-  "body": "613030dbabc2ef5c",
-  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft, the pond's ring's margin as the thin Python gathers it",
-  "code": "1372932d6b446f34",
-  "core": "93bd1dd076ad9050",
-  "date": "2026-11-04",
-  "note": "the 80 ft does not appear in this unit: has_exit reads each wall's margin m from what it is handed and never sets it. To judge the claim I would need the caller that builds the pond's ring and its 80 ft margin; the claim probably belongs on that unit",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
- },
  "rust/phases/src/seat/exit.rs::Exit.has_exit#the walk remembered": {
   "body": "613030dbabc2ef5c",
   "claim": "the walk remembered - NONE: a memo across the margins the head falls back to; a cell tested is never tested again",
@@ -79693,24 +79743,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat/exit.rs::Exit.walkable#how far a track keeps from wet ground: 20 ft off a water line, and the wall's margin plus half a cell's diagonal (about 14.1 ft) off a wall edge": {
-  "code": "50dafd92fb026582",
-  "core": "50dafd92fb026582",
-  "date": "2026-11-04",
-  "note": "how far a track keeps from wet ground: 20 ft off a water line, and the wall's margin plus half a cell's diagonal (about 14.1 ft) off a wall edge",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/seat/exit.rs::Exit.walkable#the way out": {
+ "rust/phases/src/seat/exit.rs::Exit.walkable#a track's clearance off wet ground": {
   "body": "4b48e4f78b0bae11",
-  "claim": "the way out - NONE: the seat's machinery; each rule's claim is at the unit that keeps it",
-  "code": "c49752a435ad9fa7",
+  "claim": "a track's clearance off wet ground - GUESS: village-lanes.drawing keeps a track off wet ground and gives no distance; a cell (20 ft) off a water line, a wall's margin and half a cell's diagonal (about 14 ft) off its edge, so every point of a walkable cell keeps the margin",
+  "code": "3917087037004b34",
   "core": "50dafd92fb026582",
   "date": "2026-11-04",
-  "note": "this unit is where the clearances are actually set: a cell is refused if it lies within 20 ft (EXIT_CELL) of a water line, or within the wall's margin plus 14.1 ft of a wall edge. That is how far a track keeps from wet ground, a physical decision. The page says a track keeps off wet ground but gives no distance, so the label should be GUESS, citing 0081 drawing §12 for the rule, not NONE",
+  "note": "the code keeps 20 ft off a line, and a wall's margin plus 14.1 ft (half the cell's diagonal) off a wall's edge; the page gives no distance off wet ground, so GUESS is correct",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/exit.rs::REACH_CELL#its salts, guards and sentinels": {
   "body": "87e19b1be412241c",
@@ -80322,22 +80364,26 @@
  },
  "rust/phases/src/seat/margins.rs::candidates#back turned off a flank": {
   "body": "40fe5e15f152345b",
-  "claim": "back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind offers its back turned toward the wind just past the 45-degree bar, at most 45 degrees off its own normal, so the band still stands off the field; farmhouses-minka.drawing's quarter turn is a house's off the fall line, on a slope our maps do not draw",
-  "code": "73d8d4860174fd56",
+  "claim": "back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind offers its back turned toward the wind just past the 45-degree bar, at most 45.5 degrees off its own normal (the bar and its half-degree slack), so the band still stands off the field; farmhouses-minka.drawing's quarter turn is a house's off the fall line, on a slope our maps do not draw",
+  "code": "ecf22c6c0d464ea9",
   "core": "f39e1bd4a0d3dfce",
   "date": "2026-11-04",
-  "note": "the claim says the turn is at most 45 degrees off the margin's normal, but the code's turn is off - (45 deg - TURN_SLACK) with off < 90 deg (dot > 0.0), which reaches 45.5 deg. Either say \"at most 45.5 degrees\" or clamp the turn. No page gives a cap.",
+  "note": "a tier-1 back is turned to 44.5 degrees off the wind, a turn of 0.5 to 45.5 degrees off its own normal as claimed; the page sets no bearing rule or cap",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/seat/margins.rs::candidates#one seat per outline edge, anchored at the edge's midpoint": {
-  "code": "f39e1bd4a0d3dfce",
+ "rust/phases/src/seat/margins.rs::candidates#one seat a margin": {
+  "body": "40fe5e15f152345b",
+  "claim": "one seat a margin - GUESS: no page divides a field's edge into seats; each outline edge offers one, at its midpoint",
+  "code": "0b86f63447048eb2",
   "core": "f39e1bd4a0d3dfce",
   "date": "2026-11-04",
-  "note": "one seat per outline edge, anchored at the edge's midpoint",
+  "note": "one seat at each outline edge's midpoint; no page in the bundle divides a field's edge into seats",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#band on the canvas": {
   "body": "e9cdd5990426c173",
@@ -80429,13 +80475,17 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/seat/margins.rs::ranked#the back rectangle's width, one band depth across the margin (t = +-0.5 dep/lat)": {
-  "code": "e490ea583e96d0a8",
+ "rust/phases/src/seat/margins.rs::ranked#the back's width": {
+  "body": "e9cdd5990426c173",
+  "claim": "the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from",
+  "code": "8d52648d69cdbd36",
   "core": "e490ea583e96d0a8",
   "date": "2026-11-04",
-  "note": "the back rectangle's width, one band depth across the margin (t = +-0.5 dep/lat)",
+  "note": "the back strip spans ±0.5·dep along the band, which is one half-depth across, as claimed; no page sizes it",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the band on open ground": {
   "body": "e9cdd5990426c173",
