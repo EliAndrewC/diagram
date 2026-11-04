@@ -281,6 +281,26 @@ def test_an_accept_naming_a_form_pins_it(root: pathlib.Path) -> None:
     assert not bc.accepted_by(root, d, "field.dikepond", "ask:444-polder-round-3"), "another form's name is not this accept's"
 
 
+def test_a_form_is_accepted_from_its_own_audit_run_at_its_bounded_n(root: pathlib.Path) -> None:
+    """Feature 444 T29: a form at its bounded n (`waterward.polder`, 10-20) is accepted from `make work-budget SPEC=`'s run (`-spec.json`),
+    under its stage's name, at its own sizes; a stage is never accepted from a form's run, which rolls another form of it."""
+    (root / "p.md").write_text("- Bounds: a bounded n: households 10-20 (0019)\n")
+    (root / "w.txt").write_text("WITHIN - x\n")
+    assert bc.set_budget(root, "field.polder", 100, 0.5, "p.md", "SOUND.txt", {10: 10, 20: 14}) == ""
+    runs = root / bc.RUNS
+    runs.mkdir(parents=True, exist_ok=True)
+    assert "no `make work-budget SPEC=` run counts `field.polder`" in bc.accept_stage(root, "field.polder", "w.txt")
+    (runs / "20261104T000000Z-x-spec.json").write_text(json.dumps({"summary": {"stages": {"field": {"per": {"10": {"ops": 900}, "20": {"ops": 1300}}}}}}))
+    (runs / "20261103T000000Z-x.json").write_text(json.dumps({"summary": {"stages": {"field": {"per": {"40": {"ops": 1}}}}}}))
+    assert bc.accept_stage(root, "field.polder", "w.txt") == ""
+    assert bc.load(root)["stages"]["field.polder"]["accepted"] == {"10": 900.0, "20": 1300.0}
+    # the stage itself reads the reference run, never the newer form's
+    bc.set_budget(root, "field", 1, 1.0, "d.md", "SOUND.txt", {20: 10, 40: 20, 80: 40}, reason="a test")
+    assert "no roll at 80" in bc.accept_stage(root, "field", "w.txt")
+    (runs / "20261104T000000Z-x-spec.json").write_text(json.dumps({"summary": {"stages": {"field": {"per": {"10": {"ops": 500}, "20": {"ops": 1300}}}}}}))
+    assert "from 10 to 20 households" in bc.accept_stage(root, "field.polder", "w.txt")
+
+
 def test_a_rebuilt_phase_is_accepted_on_the_arbiters_accept_in_place_of_a_within(root: pathlib.Path) -> None:
     """Feature 444 T16: the field's sixth MODE AUDIT, final for box 7, came back UNCOUNTED; the round arbiter accepted the cheaper
     rebuild that followed (ask:444-T16-field-after-audit-6) in place of a seventh. `budget-accept ARBITER=` takes that accept - only

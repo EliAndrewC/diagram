@@ -265,7 +265,7 @@ def set_budget(
     if raise_:
         log(root, {"what": "raised", "phase": phase, "from": {h: budget_at(st, h) for h in sz}, "to": new, "verdict": verdict, "missed": missed_work(root, derivation)})
     if lower:
-        log(root, {"what": "lowered", "phase": phase, "from": {h: budget_at(st, h) for h in ITEM_SIZES}, "to": new, "verdict": arbiter or verdict})
+        log(root, {"what": "lowered", "phase": phase, "from": {h: budget_at(st, h) for h in sz}, "to": new, "verdict": arbiter or verdict})
     return ""
 
 
@@ -360,13 +360,20 @@ def accept_stage(root: Path, phase: str, audit: str, arbiter: str = "") -> str:
             return f"the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept"
     elif (word := verdict_of(root / audit)) not in ("WITHIN", "LEEWAY"):
         return f"{audit} reads {word or 'nothing'}, not WITHIN or LEEWAY - a phase is accepted on its MODE AUDIT's WITHIN, or LEEWAY at up to {LEEWAY:g} times its budget (`make work-budget-bundle MODE=audit PHASE={phase}`)"
-    runs = sorted((root / RUNS).glob("*.json"))
+    # A FORM AT ITS BOUNDED N (`waterward.polder`, feature 444 T29) is counted by its own audit's run, `make work-budget SPEC=`
+    # (`<stamp>-<code id>-spec.json`), under its stage's name and at its own sizes; a stage, by the reference run alone - never a
+    # form's, which rolls another form of the same stage
+    form = "." in phase
+    sizes = tuple(int(h) for h in st.get("sizes") or HELD) if form else HELD
+    runs = sorted(r for r in (root / RUNS).glob("*.json") if r.name.endswith("-spec.json") == form)
     try:
-        per = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]["stages"][phase]["per"]
+        per = json.loads(runs[-1].read_text(encoding="utf-8"))["summary"]["stages"][phase.split(".", 1)[0] if form else phase]["per"]
     except (IndexError, KeyError, TypeError, ValueError, OSError):
+        if form:
+            return f"no `make work-budget SPEC=` run counts `{phase}` - run it with the form's spec at its sizes ({', '.join(map(str, sizes))}) first"
         return f"no `make work-budget` run counts `{phase}` - run `make work-budget` (all of 10,20,40,80) first"
     got: dict[str, float] = {}
-    for h in HELD:
+    for h in sizes:
         row = per.get(str(h))
         if not row:
             return f"the newest run has no roll at {h} households for `{phase}` - run `make work-budget` at every size"
@@ -391,11 +398,12 @@ def accept_stage(root: Path, phase: str, audit: str, arbiter: str = "") -> str:
                    " - past twice the first, its raise owes a second, independent SOUND (`make budget-set RAISE=1 SECOND=`) or the GM's words (FR-022)")
             )
         got[str(h)] = ops
-    at20 = float((per.get("20") or {}).get("ops", 0))
-    if (g := growth(at20, got["80"])) > growth(budget_at(st, 20), budget_at(st, 80)) + GROWTH_SLACK:
+    lo, hi = (sizes[0], sizes[-1]) if form else (20, 80)
+    at_lo = float((per.get(str(lo)) or {}).get("ops", 0))
+    if (g := growth(at_lo, got[str(hi)], hi / lo)) > (b := growth(budget_at(st, lo), budget_at(st, hi), hi / lo)) + GROWTH_SLACK:
         return (
-            f"`{phase}` grows at an exponent of {g:.2f} from 20 to 80 households, past its budget's"
-            f" {growth(budget_at(st, 20), budget_at(st, 80)):.2f} (rubric S6, FR-005) - rebuild it again, or raise the budget with the GM's words"
+            f"`{phase}` grows at an exponent of {g:.2f} from {lo} to {hi} households, past its budget's"
+            f" {b:.2f} (rubric S6, FR-005) - rebuild it again, or raise the budget with the GM's words"
         )
     st.update(status="accepted", accepted=got, audit=audit, **({"accept": arbiter} if arbiter else {}))
     save(root, table)
