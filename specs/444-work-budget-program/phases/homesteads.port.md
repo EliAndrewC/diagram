@@ -107,3 +107,13 @@ names and is listed so a refused seed can be traced to it.
   not; `lanes_of`'s pass for the web is the web stage's.
 - Counting: the lane law's predicates count into a thread's tally (`counts::note`), drained into the stage's `Counts` at
   `lay_the_ways` and `choose_track_out`.
+
+## Compared against Python (before the door)
+
+`L7R_RUST_COMPARE=<path> make hamlet ARGS="..."` runs the Rust track out (`l7r_phases.track_out`, its inputs gathered by
+`homesteads/household_ways.py` `track_inputs`) beside Python's `choose_track_out` on the same state, once the last house stands,
+and appends both to the JSON lines at `<path>`; the map is untouched.
+
+- 2026-11-04, the track out: 7 of 7 rolled maps (seeds 1, 2, 4-8, 10, 13-15 at the cohort's household ladder, the cached and the
+  refused aside) drew the Rust track point for point as Python's. Four of the sixteen specs (seeds 3, 9, 11, 12 under fresh names)
+  were refused by Python's own web stage after the homesteads (`WebRefused`), the fresh block's recorded rate (feature 386).

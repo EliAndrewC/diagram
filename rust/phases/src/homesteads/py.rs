@@ -27,6 +27,16 @@ fn quad(b: Box4) -> Vec<Pt> {
     vec![(b.0, b.1), (b.2, b.1), (b.2, b.3), (b.0, b.3)]
 }
 
+fn boxed(polys: Vec<Vec<Pt>>) -> Vec<(Vec<Pt>, Box4)> {
+    polys
+        .into_iter()
+        .map(|p| {
+            let b = poly_box(&p);
+            (p, b)
+        })
+        .collect()
+}
+
 fn segs(course: &[Pt]) -> Vec<(Pt, Pt)> {
     course.windows(2).map(|w| (w[0], w[1])).collect()
 }
@@ -55,18 +65,14 @@ pub fn track_out<'py>(
     let drawn: Vec<(Pt, Pt)> = field(inp, "drawn")?;
     waters.extend(&drawn);
     let course: Vec<Pt> = field(inp, "course")?;
-    let forbidding: Vec<(Vec<Pt>, Box4)> = field::<Vec<Vec<Pt>>>(inp, "forbidding")?
-        .into_iter()
-        .map(|p| {
-            let b = poly_box(&p);
-            (p, b)
-        })
-        .collect();
+    let forbidding = boxed(field::<Vec<Vec<Pt>>>(inp, "forbidding")?);
     let seats: Vec<Vec<Pt>> = field(inp, "seats")?;
     let brooks: Vec<Vec<Pt>> = field(inp, "brooks")?;
     let square: Vec<(Vec<Pt>, f64)> = field(inp, "square_waters")?;
     let houses: Vec<Pt> = field(inp, "houses")?;
     let paddy: Vec<Vec<Pt>> = field(inp, "paddy")?;
+    // the thread walls the planned watercourses and the drawn channels, not the streams (`_thread_the_fabric`)
+    let thread_lines: Vec<(Pt, Pt)> = field(inp, "thread_lines")?;
     let toll: Option<(Vec<Pt>, f64, f64)> = field(inp, "crossing")?;
     let mut tests = Counts::default();
     let crossing = toll.map(|(c, r, cost)| Crossing::new(&c, r, cost, &mut tests));
@@ -102,7 +108,7 @@ pub fn track_out<'py>(
         crops: &crops,
         wet: &wet,
         paddy: &paddy,
-        lines: &waters,
+        lines: &thread_lines,
         houses: &houses,
         crossing: crossing.as_ref(),
     };
@@ -114,14 +120,7 @@ pub fn track_out<'py>(
         waters: &square,
     };
     // the gateway walks out clear of the homesteads alone, as `_cluster_gateway` reads `_homestead_polys`
-    let standing: Vec<(Vec<Pt>, Box4)> = steadings
-        .iter()
-        .map(|s| s.0.clone())
-        .map(|p| {
-            let b = poly_box(&p);
-            (p, b)
-        })
-        .collect();
+    let standing = boxed(steadings.iter().map(|s| s.0.clone()).collect());
     let c = Choice {
         sweep: &sweep,
         dry: &dry,

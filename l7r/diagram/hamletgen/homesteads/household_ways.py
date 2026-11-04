@@ -17,6 +17,7 @@ Research: houses before lanes - research/questions/0246-how-our-maps-lay-a-clust
 from __future__ import annotations
 
 import math
+import os
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
@@ -112,6 +113,83 @@ def near_the_cluster(s: Settlement, track: Poly, margin: float) -> list[tuple[Pt
     return out
 
 
+def track_inputs(s: Settlement, plan: SitePlan) -> dict[str, object]:
+    """What the Rust track out reads (`l7r_phases.track_out`, feature 444 T30), gathered as `track.choose_track_out` reads it, with
+    the homesteads as seated standing in for the farmsteads (`seated_parts`, installed by the caller).
+
+    Research: plumbing - NONE: the track out's inputs, each read where `choose_track_out` reads it"""
+    from l7r.diagram.settlement import skeleton_layout
+    from l7r.diagram.settlement.land.wet import marsh_ground
+    from l7r.diagram.sitegen.geom import crop_polys
+
+    from ..ways import law
+    from ..ways.checks import drawn_water_segs
+    from ..ways.fabric import _homestead_polys
+    from ..ways.route import _CROSSING
+    from ..ways.settle import square_waters
+
+    seat = plan.seat
+    ax, ay = seat["along"]
+    ox, oy = seat["out"]
+    layout = skeleton_layout(plan.lane_skeleton, 0.0, 0.0, seat["lat"], seat["dep"])
+    gx, gy = float(layout["gateway"][0]), float(layout["gateway"][1])
+    polys = _homestead_polys(s)
+    toe = s.toe_band()
+    st = getattr(s.M, "standing", None)
+    forbid = st.forbidding("lanes") if st is not None else []
+    channels = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
+    pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
+    ring = lambda r: [pt(q) for q in r]  # noqa: E731
+    return {
+        "canvas": (float(plan.W), float(plan.H)),
+        "out": (float(ox), float(oy)),
+        "fall": pt(plan.fall),
+        "seat": (float(seat["cx"]), float(seat["cy"])),
+        "along": (float(ax), float(ay)),
+        "fallback": (seat["cx"] + ax * gx + ox * gy, seat["cy"] + ay * gx + oy * gy),
+        "houses": [(float(h["x"]), float(h["y"])) for h in s.M.get("houses") or []],
+        "envelope": ring(plan.envelope),
+        "crops": [ring(c) for c in crop_polys(s)],
+        "wet": [ring(w) for w in ([toe] if toe else []) + marsh_ground(s.M)],
+        "paddy": [ring(f["outline"]) for f in s.M.get("fields") or [] if f.get("outline")],
+        "steadings": [(ring(poly), kind == "groves") for poly, _owner, kind in polys],
+        "solid": [tuple(float(v) for v in b) for b in law.solid_boxes(s.M)],
+        "pond": tuple(float(v) for v in plan.sink_pond) if plan.sink_pond else None,
+        "sink_brook": ring(plan.sink_brook or []),
+        "watercourses": [(pt(a), pt(b)) for a, b in plan.watercourses],
+        "drawn": drawn_water_segs(s),
+        "thread_lines": [*((pt(a), pt(b)) for a, b in plan.watercourses), *channels],
+        "course": ring(getattr(plan, "brook", None) or []),
+        "forbidding": [ring(e[1]) for e in forbid if e[0] != "wood seat"],
+        "seats": [ring(e[1]) for e in forbid if e[0] == "wood seat"],
+        "brooks": [ring(b) for b in law._brooks(s.M)],
+        "square_waters": [(ring(c), float(h)) for c, h in square_waters(s.M)],
+        "crossing": (ring(plan.brook), float(_CROSSING["radius"]), float(_CROSSING["cost"])) if float(_CROSSING["cost"]) and getattr(plan, "brook", None) else None,  # type: ignore[arg-type]
+    }
+
+
+def compare_rust_track(s: Settlement, plan: SitePlan, track: Poly, path: str) -> None:
+    """Run the Rust track out on the state `track` was chosen from and append both, with the Rust's counted work, to the JSON
+    lines at `path` - the comparison of feature 444 T30 before the stage is wired; the map is not touched.
+
+    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
+    import json
+
+    from ..phases_ext import phases
+
+    got = phases().track_out(track_inputs(s, plan))
+    rec = {
+        "name": plan.spec.name,
+        "seed": plan.spec.seed,
+        "households": plan.spec.households,
+        "python": [[round(q[0], 1), round(q[1], 1)] for q in track],
+        "rust": None if got is None else [[round(q[0], 1), round(q[1], 1)] for q in got["track"]],
+        "rust_counts": None if got is None else sum(got["counts"].values()),
+    }
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(rec) + "\n")
+
+
 def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
     """The track out chosen once the last house stands (`track.choose_track_out`), with the homesteads as seated standing in
     for the farmsteads not yet drawn (`seated_parts`).
@@ -121,6 +199,10 @@ def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
 
     s._seated_parts = seated_parts(s)  # type: ignore[attr-defined]
     try:
-        return choose_track_out(s, plan)
+        track = choose_track_out(s, plan)
+        compare = os.environ.get("L7R_RUST_COMPARE")
+        if compare:  # feature 444 T30: the Rust track out run beside it on the same state, logged, the map untouched
+            compare_rust_track(s, plan, track, compare)
+        return track
     finally:
         s._seated_parts = None  # type: ignore[attr-defined]

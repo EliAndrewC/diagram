@@ -179,6 +179,7 @@ track_in = {
     "solid": [(480.0, 490.0, 520.0, 510.0)],
     "pond": None,
     "sink_brook": [(0.0, 950.0), (1000.0, 960.0)],
+    "thread_lines": [],
     "watercourses": [],
     "drawn": [],
     "course": [],
