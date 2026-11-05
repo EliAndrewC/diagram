@@ -110,6 +110,8 @@
       research: rendering
 - [ ] T31 phase: homesteads - every household of the Rust gate's seed 778251 seated on its margin 1 (12 of 17 today; room from the margin's length or a second margin, never a researched room narrowed)
       research: rendering
+- [ ] T32 phase: track - a row village's road run on off the map at both ends over a ford, threaded and squared, rebuilt in Rust; every other form's track out drawn as the homesteads chose it (FR-003-FR-006, FR-017, FR-022)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

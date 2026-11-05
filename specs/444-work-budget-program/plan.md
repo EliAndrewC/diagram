@@ -681,3 +681,50 @@ after the seat, `specs/444-work-budget-program/phases/homesteads.gate-seeds.md`)
   `make arbiter-ask`.
 - research: rendering
 
+
+### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: "please take this entire feature to completion"; FR-003-FR-006, FR-017, FR-022)
+
+Occasions: settlement-review on the pool hamlets the stage moves, at the landing (a row village's road: none of the pool's five
+is a row village, so none is expected to move; `make maps-moved` says); glyph-check only if a glyph is redrawn (none: the track
+keeps its ink).
+
+- **Approach**: the track out is chosen in Rust once the last house stands (T30, `ways/gateway.rs`), so what the stage still
+  decides is a row village's road (0033): its first street's drawn span (its farms' span at their reach, stopped short of the
+  brook past its end farms), run on off the sheet at both ends along each end's last leg, each run over the brook at the ford
+  that makes the walk shortest (0035), threaded through the steadings and squared where it crosses water (0084). That goes
+  to Rust (`rust/phases/src/track.rs`), reading what `household_ways.track_inputs` gathers and the planned street; the door
+  draws each run it returns (`Settlement.lane`, the ink and the registry), the far run marked `run_on`; every other form draws
+  the track out recorded at the homesteads (`way_out_track`), as today.
+
+### T32 Decisions
+
+- **D1 - the seam** (FR-003 to FR-005, FR-017): the row road in Rust behind a thin `ways/track.py` `stage_track` door; its
+  output the runs the stage lays today. The Python helpers only the road reached (`thread_over_the_ford`, the track's own use of
+  `street_runs_out` and `ford_crossing`) are deleted in the same landing where nothing else reaches them; `street_span` stays
+  in Python for the web until the web's phase, its Rust twin shared then.
+- **D2 - no new rule**: every constant keeps its claim at the Rust that reads it (the 60 ft run past the sheet, the 22 ft ford
+  landing, the 40 ft vertex step, 1.5 frames of reach and half a frame of run, `ROW_FRAME_FT`).
+- **D3 - the budget**: the stage's SOUND greenfield derivation (`phases/track_greenfield.derivation.md`, verdict 2: 223 at 40)
+  priced the track out the homesteads now choose; the row road it did not price is re-derived if the audit finds the stage
+  past it (FR-022), never squeezed. The registry's records of the lane (`Standing.ribbon`, the stage end's `resync`) are the
+  door's and every stage's.
+- **D4 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`.
+
+### T32 Approach (checklist part A)
+
+1. **The goal, in the world.** A row village's road: the street its farms stand along runs on off the map at both ends as the
+   road it stands for (0033), over the brook at a ford (0035).
+2. **The constraints.** FR-003 to FR-006, FR-012, FR-017, FR-019 to FR-022; 0033, 0035, 0081, 0084; D1's seam.
+3. **Where each comes from.** G: the GM's request of 2026-11-04 and amendment 7. R: the pages above. O: `stage_track` today.
+4. **Do they describe the world here?** The Rust stage gate's pinned row variants (901-904) and its fresh block's row villages.
+5. **The order.** After the homesteads, before the appurtenances, as today.
+6. **The exits.** Green: `make rust-gate` with no failing seed through the stage; MODE AUDIT WITHIN or LEEWAY; the claims round
+   IN-STEP; `phases/track.md`'s boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the road is laid once, threaded by the ported router.
+8. **The budget.** One landing.
+9. **Done, measured.** `make work-budget`'s count for the stage at 40 and 80 against its budget.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+- research: rendering
+
