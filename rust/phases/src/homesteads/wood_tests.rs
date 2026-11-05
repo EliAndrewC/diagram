@@ -4,8 +4,9 @@
 //!     the wood's tests - NONE: fixtures and assertions, deciding nothing about the place
 
 use super::ground::Ground;
-use super::wood::{in_keepouts, keepouts, Shares, WoodSite, PITCH_FT, WOOD};
+use super::wood::{crown_cells, in_keepouts, keepouts, Shares, WoodSite, CANOPY, WOOD};
 use super::Counts;
+use std::collections::HashSet;
 
 #[test]
 fn a_homestead_reserves_its_floor_behind_its_house_and_none_twice() {
@@ -23,14 +24,20 @@ fn a_homestead_reserves_its_floor_behind_its_house_and_none_twice() {
     let seats = shares
         .share((500.0, 500.0), 0.0, &own, &site, &mut t)
         .expect("room for the wood");
-    // the floor covered by the squares kept, within the reach, none on a part's keep-out, behind the house first
-    assert!(f64::from(u32::try_from(seats.len()).unwrap_or(0)) * PITCH_FT * PITCH_FT >= WOOD.0);
+    // the floor covered by the kept seats' crowns, within the reach, none on a part's keep-out, behind the house first
+    let held: HashSet<(i64, i64)> = seats
+        .iter()
+        .flat_map(|&p| crown_cells(p, CANOPY.1, CANOPY.0))
+        .collect();
+    assert!(f64::from(u32::try_from(held.len()).unwrap_or(0)) * CANOPY.0 * CANOPY.0 >= WOOD.0);
+    // the lattice anchored on the house: a seat a whole number of pitches off it, to a tenth
+    assert!(seats.iter().any(|p| (p.0 - 500.0).abs() < 1e-9));
     assert!(seats
         .iter()
         .all(|p| (p.0 - 500.0).hypot(p.1 - 500.0) <= WOOD.1 && !in_keepouts(*p, &own)));
     let behind = seats.iter().filter(|p| p.1 < 500.0).count();
     assert!(behind * 2 > seats.len());
-    // a neighbor beside it may not cover those seats with its keep-outs, nor take their squares
+    // a neighbor beside it may not cover those seats with its keep-outs, nor seat a crown on their cells alone
     shares.commit(&seats, own, &mut t);
     let close = keepouts(&[(560.0, 470.0, 46.0, 28.0)], &[]);
     assert!(shares.covers_a_seat(&close, &mut t));
@@ -95,8 +102,8 @@ fn a_seat_is_barred_off_the_sheet_on_taken_ground_or_across_a_stream_and_a_crowd
     assert!(shares
         .share((200.0, 200.0), 0.0, &none, &full, &mut t)
         .is_none());
-    // a seat past the raster's window is barred too
-    let small = Ground::new((170.0, 170.0), (230.0, 230.0), &mut t);
+    // a seat past the raster's window is barred too: the window holds the house's three by three seats, too few for the floor
+    let small = Ground::new((180.0, 180.0), (220.0, 220.0), &mut t);
     let window = WoodSite {
         ground: &small,
         streams: &[],
@@ -105,4 +112,19 @@ fn a_seat_is_barred_off_the_sheet_on_taken_ground_or_across_a_stream_and_a_crowd
     assert!(shares
         .share((200.0, 200.0), 0.0, &none, &window, &mut t)
         .is_none());
+}
+
+#[test]
+fn a_crowns_cells_are_those_whose_centers_it_holds() {
+    let got: HashSet<(i64, i64)> = crown_cells((10.3, -4.7), 11.0, 2.0).into_iter().collect();
+    let mut want = HashSet::new();
+    for i in -10..15 {
+        for j in -15..10 {
+            let (x, y) = ((f64::from(i) + 0.5) * 2.0, (f64::from(j) + 0.5) * 2.0);
+            if (x - 10.3).powi(2) + (y + 4.7).powi(2) <= 121.0 {
+                want.insert((i64::from(i), i64::from(j)));
+            }
+        }
+    }
+    assert_eq!(got, want);
 }

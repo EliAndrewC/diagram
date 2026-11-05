@@ -65,7 +65,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         .seated
         .iter()
         .enumerate()
-        .all(|(k, s)| s.lot == k && s.seat.0 > 0.0 && s.wood.len() >= 24));
+        .all(|(k, s)| s.lot == k && s.seat.0 > 0.0 && s.wood.len() >= 20));
     let first = &st.seated[0].bundle;
     assert!((first.house.0 - 1200.0).hypot(first.house.1 - 1350.0) < 200.0);
     for (i, a) in st.seated.iter().enumerate() {
@@ -183,40 +183,43 @@ fn a_household_on_a_tight_seat_is_reached_across_its_neighbors_yard() {
     };
     let (c, fp) = st.footprint(0);
     let mut seated = false;
-    'seek: for dx in [-4.0, -8.0, -12.0, -16.0, -20.0] {
-        for dy in [0.0, -4.0, -8.0, -12.0] {
-            // east-southeast, within a quarter turn of its yard: there its footprint ends at its box, and the seat laps it
-            let q = seat_toward(c, fp, fp, std::f64::consts::FRAC_PI_6, TIGHT.0);
-            let tight = Tight {
-                nb: 0,
-                land: land_box(c, fp),
-                own: (fp.0 + 40.0, fp.1 + 40.0, fp.2 + 20.0, fp.3),
-            };
-            let keep = Keep {
-                from: (c, fp),
-                gap: TIGHT.0,
-                standing: vec![(c, fp)],
-                others: 20.0,
-                tight: Some(tight),
-            };
-            // land that does not adjoin the neighbor's has no passage: a moved layout there is refused
-            let alone = Keep {
-                tight: Some(Tight {
-                    own: (0.0, 0.0, 0.0, 0.0),
-                    ..tight
-                }),
-                ..Keep {
+    'seek: for ang in [1.0, 2.0] {
+        for dx in (-15..=10).map(|k| f64::from(k) * 4.0) {
+            for dy in (-10..=10).map(|k| f64::from(k) * 4.0) {
+                // within a quarter turn of its yard (east-southeast, then southeast): there its footprint ends at its box, and the seat
+                // laps it at some offset toward the house
+                let q = seat_toward(c, fp, fp, std::f64::consts::FRAC_PI_6 * ang, TIGHT.0);
+                let tight = Tight {
+                    nb: 0,
+                    land: land_box(c, fp),
+                    own: (fp.0 + 40.0, fp.1 + 40.0, fp.2 + 20.0, fp.3),
+                };
+                let keep = Keep {
                     from: (c, fp),
                     gap: TIGHT.0,
                     standing: vec![(c, fp)],
                     others: 20.0,
-                    tight: None,
+                    tight: Some(tight),
+                };
+                // land that does not adjoin the neighbor's has no passage: a moved layout there is refused
+                let alone = Keep {
+                    tight: Some(Tight {
+                        own: (0.0, 0.0, 0.0, 0.0),
+                        ..tight
+                    }),
+                    ..Keep {
+                        from: (c, fp),
+                        gap: TIGHT.0,
+                        standing: vec![(c, fp)],
+                        others: 20.0,
+                        tight: None,
+                    }
+                };
+                assert!(!st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&alone)));
+                if st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&keep)) {
+                    seated = true;
+                    break 'seek;
                 }
-            };
-            assert!(!st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&alone)));
-            if st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&keep)) {
-                seated = true;
-                break 'seek;
             }
         }
     }
@@ -502,4 +505,24 @@ fn a_homestead_may_not_stand_its_parts_over_a_neighbors_wood() {
         !apart((0.0, 0.0, 2.0, 2.0), (1.0, 1.0, 2.0, 2.0))
             && apart((0.0, 0.0, 2.0, 2.0), (0.0, 5.0, 2.0, 2.0))
     );
+}
+
+#[test]
+fn a_homesteads_copse_keeps_off_its_retirement_house_and_well_and_not_its_other_fixtures() {
+    use super::bundle::Bundle;
+    use super::wood::{in_keepouts, WELL_KEEPOUT_FT};
+    let b = Bundle {
+        house: (0.0, 0.0, 46.0, 28.0),
+        yard: (0.0, 40.0, 30.0, 20.0),
+        fixtures: vec![
+            (Kind::Retirement, (-200.0, 0.0, 20.0, 16.0)),
+            (Kind::Privy, (200.0, 0.0, 6.0, 6.0)),
+        ],
+        well: Some((0.0, -300.0, 10.0, 10.0)),
+        ..Bundle::default()
+    };
+    let own = Seating::keepouts_of(&b);
+    assert!(in_keepouts((-200.0, 20.0), &own) && !in_keepouts((200.0, -20.0), &own));
+    assert!(in_keepouts((0.0, -300.0 + WELL_KEEPOUT_FT - 1.0), &own));
+    assert!(!in_keepouts((0.0, -300.0 + WELL_KEEPOUT_FT + 1.0), &own));
 }

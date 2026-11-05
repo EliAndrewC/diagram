@@ -25,7 +25,7 @@ use super::bundle::{bundle, Bundle, Lot, Sun};
 use super::fit::{
     across_a_stream, on_free_ground, opens, sun_ok, too_near, Placed, Standing, SUN_FT,
 };
-use super::fixtures::Forms;
+use super::fixtures::{Forms, Kind};
 use super::ground::{Ground, Reach};
 use super::layout::{hjit, Rect, Side, SIDES};
 use super::lots::Lots;
@@ -612,15 +612,24 @@ impl Seating {
         best.map(|(_, p)| p)
     }
 
-    /// A homestead's copse keep-outs, from its parts as drawn: its buildings and fixtures, and its yard and beds.
-    fn keepouts_of(b: &Bundle) -> super::wood::Keepouts {
+    /// A homestead's copse keep-outs, from its parts as drawn: its house, kura, byre and retirement house, its yard and beds, and
+    /// its well pocket (`wood_share.py` `bundle_parts`, `copse_keepouts`: of the fixtures only the retirement house is a solid).
+    pub(super) fn keepouts_of(b: &Bundle) -> super::wood::Keepouts {
         let mut solids = vec![b.house];
         solids.extend(b.kura);
         solids.extend(b.byre.map(|(r, _)| r));
-        solids.extend(b.fixtures.iter().map(|(_, r)| *r));
+        solids.extend(
+            b.fixtures
+                .iter()
+                .filter(|(k, _)| *k == Kind::Retirement)
+                .map(|(_, r)| *r),
+        );
         let mut plots = vec![b.yard];
         plots.extend(&b.gardens);
-        super::wood::keepouts(&solids, &plots)
+        let mut own = super::wood::keepouts(&solids, &plots);
+        own.0
+            .extend(b.well.map(|w| (w.0, w.1, super::wood::WELL_KEEPOUT_FT)));
+        own
     }
 
     fn stand(

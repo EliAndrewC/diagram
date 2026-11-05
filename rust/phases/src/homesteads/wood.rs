@@ -1,13 +1,13 @@
 //! Each household's share of the homestead wood (feature 444 T30): reserved at its seat, a lattice of seats within the dooryard's
 //! reach taken behind the house first and spreading to the flanks, each seat kept where no part's keep-out, no other homestead's,
-//! no taken ground, no stream between it and its house and no other household's ground bars it, until the ground the kept seats
-//! hold covers the floor - else the seat is refused. A seat's ground is its own lattice square, which its crown covers; the
-//! lattice is the map's, so two households' squares are one grid and a square is reserved once.
+//! no taken ground, no stream between it and its house and no other household's ground bars it, until the ground the kept seats'
+//! crowns cover - the canopy raster's cells no household holds - covers the floor; else the seat is refused. The lattice is
+//! anchored on the house, as `wood_share.py` anchors it (`WoodShares.share`, `crown_cells`).
 //!
 //! Research:
 //!     each household's floor reserved - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: crowns covering the floor on ground no other household holds, or the seat refused
 //!     seats behind the house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: the deep stands stood windward, northwest by default, the house's south left open (0028); the 0.7 is ours
-//!     a seat's ground its lattice square - GUESS: the crown (22 ft across) covers its 15.6 ft lattice square, its half-diagonal 11 ft, so the floor counted by squares is at most the floor drawn (feature 444 T30's derivation)
+//!     a seat's ground its crown's cells - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: crowns covering the floor on ground no other household holds; the canopy raster's 2 ft cells, a cell held where its center lies within a crown (`wood_canopy`'s raster)
 
 use super::Counts;
 use std::collections::{HashMap, HashSet};
@@ -45,6 +45,12 @@ pub const CLUMP_FT: f64 = 22.0;
 /// The lattice's pitch (ft).
 pub const PITCH_FT: f64 = 11.0 * std::f64::consts::SQRT_2;
 
+/// The canopy raster's cell (ft) and a reserved crown's radius (ft, the clump's half to a tenth, as the planted copse records it).
+///
+/// Research:
+///     the canopy raster - CONVENTION: `wood_canopy`'s raster, 2 bscale units a cell, the cells a crown covers counted as its ground
+pub const CANOPY: (f64, f64) = (2.0, 11.0);
+
 /// Where the reservation is centered behind the house (a share of the reach), and how much dearer a foot aside is than a foot
 /// deeper.
 ///
@@ -57,6 +63,13 @@ pub const FOCUS: (f64, f64) = (0.7, 2.0);
 /// Research:
 ///     plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a tree's 50 ft south of each yard and bed, 50 ft east of each down to 50 ft below it, and west and southwest at the map's afternoon lane
 pub const SUN_LANES_FT: (f64, f64, f64) = (50.0, 50.0, 50.0);
+
+/// How far a clump's center keeps off a well pocket's center (ft): the wellhead's drawn half-size, 1.05 clumps, a foot and the
+/// placer's margin.
+///
+/// Research:
+///     copse off the wellhead - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); its drawn half-size (12.376 ft, research/questions/0196-communal-wells-ido.drawing.html) plus 1.05 clumps
+pub const WELL_KEEPOUT_FT: f64 = 12.376 + CLUMP_FT * 1.05 + 1.0 + MARGINS.0;
 
 /// The margin a keep-out is grown by, and the sheet's inset a seat keeps (ft).
 ///
@@ -126,13 +139,52 @@ fn cell(v: f64, size: f64) -> i64 {
     (v / size).floor() as i64
 }
 
-/// The households' wood reservations for one seating: the keep-outs of every homestead admitted, the squares reserved, and the
-/// seats.
+/// The canopy cells a crown at `p` of radius `r` covers, the raster `c` a side: each cell whose center lies within the crown,
+/// found a column at a time (`wood_share.py` `crown_cells`).
+#[must_use]
+#[expect(
+    clippy::cast_possible_truncation,
+    clippy::cast_precision_loss,
+    clippy::many_single_char_names,
+    reason = "cell indices of a few thousand; the plane geometry's own names"
+)]
+pub fn crown_cells(p: Pt, r: f64, c: f64) -> Vec<(i64, i64)> {
+    let (x, y) = p;
+    let r2 = r * r;
+    let (j_lo, j_hi) = (((y - r) / c).floor() as i64, ((y + r) / c).floor() as i64);
+    let mut out = Vec::new();
+    for i in ((x - r) / c).floor() as i64..=((x + r) / c).floor() as i64 {
+        let dx2 = ((i as f64 + 0.5) * c - x).powi(2);
+        if dx2 > r2 {
+            continue;
+        }
+        let s = (r2 - dx2).sqrt();
+        // a cell wider than the circle's span each side, then narrowed by the same test
+        let mut lo = j_lo.max(((y - s) / c - 0.5).ceil() as i64 - 1);
+        let mut hi = j_hi.min(((y + s) / c - 0.5).floor() as i64 + 1);
+        while lo <= hi && dx2 + ((lo as f64 + 0.5) * c - y).powi(2) > r2 {
+            lo += 1;
+        }
+        while hi >= lo && dx2 + ((hi as f64 + 0.5) * c - y).powi(2) > r2 {
+            hi -= 1;
+        }
+        out.extend((lo..=hi).map(|j| (i, j)));
+    }
+    out
+}
+
+/// A value to a tenth (`round(v, 1)`).
+fn tenth(v: f64) -> f64 {
+    (v * 10.0).round() / 10.0
+}
+
+/// The households' wood reservations for one seating: the keep-outs of every homestead admitted, the canopy cells the reserved
+/// crowns cover, and the seats.
 #[derive(Default)]
 pub struct Shares {
     bars: Vec<Keepouts>,
     bar_cells: HashMap<(i64, i64), Vec<usize>>,
-    squares: HashSet<(i64, i64)>,
+    cells: HashSet<(i64, i64)>,
     seats: HashMap<(i64, i64), Vec<Pt>>,
 }
 
@@ -202,13 +254,15 @@ impl Shares {
             .any(|&(a, b)| crossing((p, house), (a, b)))
     }
 
-    /// The seats a homestead at `house`, turned `rot` degrees, would reserve among its keep-outs `own`: the lattice within the reach,
-    /// nearest a point behind the house first, each kept where it is not barred and its square no household holds, until the
-    /// squares kept cover the floor; None where the ground within the reach cannot hold it.
+    /// The seats a homestead at `house`, turned `rot` degrees, would reserve among its keep-outs `own`: the lattice anchored on the
+    /// house within the reach, nearest a point behind the house first, each kept where it is not barred and its crown covers cells
+    /// no household holds, until the cells kept cover the floor; None where the ground within the reach cannot hold it.
     #[must_use]
     #[expect(
         clippy::cast_precision_loss,
-        reason = "a lattice index of a few hundred"
+        clippy::cast_possible_truncation,
+        clippy::many_single_char_names,
+        reason = "a lattice index of a few, a cell count of a few thousand; the plane geometry's own names"
     )]
     pub fn share(
         &self,
@@ -219,30 +273,43 @@ impl Shares {
         tests: &mut Counts,
     ) -> Option<Vec<Pt>> {
         let (floor, reach) = WOOD;
+        let (c, cr) = CANOPY;
         let th = rot.to_radians();
         let (back, aside) = ((th.sin(), -th.cos()), (th.cos(), th.sin()));
         let (depth, lateral) = (FOCUS.0 * reach, FOCUS.1);
-        let mut lattice: Vec<(f64, Pt, (i64, i64))> = Vec::new();
-        for i in cell(house.0 - reach, PITCH_FT)..=cell(house.0 + reach, PITCH_FT) {
-            for j in cell(house.1 - reach, PITCH_FT)..=cell(house.1 + reach, PITCH_FT) {
-                let p = ((i as f64 + 0.5) * PITCH_FT, (j as f64 + 0.5) * PITCH_FT);
+        let n = (reach / PITCH_FT).floor() as i64;
+        let mut lattice: Vec<(f64, Pt)> = Vec::new();
+        for i in -n..=n {
+            for j in -n..=n {
+                let p = (
+                    tenth(house.0 + i as f64 * PITCH_FT),
+                    tenth(house.1 + j as f64 * PITCH_FT),
+                );
                 let (dx, dy) = (p.0 - house.0, p.1 - house.1);
-                if dx.hypot(dy) > reach {
-                    continue;
-                }
                 let (u, v) = (dx * aside.0 + dy * aside.1, dx * back.0 + dy * back.1);
-                lattice.push((lateral * u * u + (v - depth).powi(2), p, (i, j)));
+                lattice.push((lateral * u * u + (v - depth).powi(2), p));
             }
         }
         lattice.sort_by(|a, b| a.0.total_cmp(&b.0));
         tests.add("candidate@share", lattice.len() as u64 * 7);
+        let mut mine: HashSet<(i64, i64)> = HashSet::new();
         let mut seats = Vec::new();
-        for (_, p, sq) in lattice {
-            if self.squares.contains(&sq) || self.barred(p, house, own, site, tests) {
+        for (_, p) in lattice {
+            if self.barred(p, house, own, site, tests) {
                 continue;
             }
+            let crown = crown_cells(p, cr, c);
+            tests.add("write@crown_cells", crown.len() as u64);
+            let fresh: Vec<(i64, i64)> = crown
+                .into_iter()
+                .filter(|k| !self.cells.contains(k) && !mine.contains(k))
+                .collect();
+            if fresh.is_empty() {
+                continue;
+            }
+            mine.extend(fresh);
             seats.push(p);
-            if seats.len() as f64 * PITCH_FT * PITCH_FT >= floor {
+            if mine.len() as f64 * c * c >= floor {
                 return Some(seats);
             }
         }
@@ -275,8 +342,9 @@ impl Shares {
     /// Reserve a homestead's seats and file its keep-outs for every later seat.
     pub fn commit(&mut self, seats: &[Pt], own: Keepouts, tests: &mut Counts) {
         for &p in seats {
-            self.squares
-                .insert((cell(p.0, PITCH_FT), cell(p.1, PITCH_FT)));
+            let crown = crown_cells(p, CANOPY.1, CANOPY.0);
+            tests.add("write@crown_cells", crown.len() as u64);
+            self.cells.extend(crown);
             self.seats
                 .entry((cell(p.0, GRID), cell(p.1, GRID)))
                 .or_default()
