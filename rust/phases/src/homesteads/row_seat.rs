@@ -10,7 +10,7 @@
 //!     farms one frame apart, never more than 240 ft - research/questions/0033-row-villages-resson.drawing.html: the row steps one frame, `lot = min(fw, ROW_FRONTAGE_MAX_FT)`
 //!     the next street past the last one's holdings - research/questions/0033-row-villages-resson.drawing.html: each further street is set out past the last street's frames and their holdings
 //!     holding set behind its frame - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the strip starts half the 15 ft gap (7.5 ft) behind its farm's frame
-//!     at most `MAX_STREETS` (6) parallel streets - GUESS: six streets at most (research/questions/0033-row-villages-resson.drawing.html)
+//!     at most `MAX_STREETS` (6) parallel streets - research/questions/0033-row-villages-resson.drawing.html: six parallel streets at most
 //!     front door's ground: a frame refused without `DOOR_ROOM_FT` (16 ft) and half `LANE_ROOM_FT` clear before its front - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the 16 ft door room
 //!     frame off the street - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
 //!     first street on the hard ground's edge - research/questions/0033-row-villages-resson.drawing.html: the first street runs along the stretch of the hard ground's edge that holds the most clear frames (`best_row_line`)
