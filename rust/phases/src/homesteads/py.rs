@@ -239,6 +239,7 @@ fn law_ground(d: &Bound<'_, PyDict>) -> PyResult<LawGround> {
             fords: field(d, "fords")?,
             wet: field(d, "flooded")?,
             deck_forbidding: boxed(field(d, "deck_forbidding")?),
+            boxes: std::cell::OnceCell::new(),
         },
     })
 }

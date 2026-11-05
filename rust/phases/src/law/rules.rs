@@ -82,13 +82,25 @@ fn cell(v: f64) -> i64 {
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
 #[must_use]
 pub fn crossing_points(p: &[Pt], course: &[Pt], tests: &mut Counts) -> Vec<(usize, Pt)> {
-    // ...none where the run's box misses the course's: the course's points read once, before any is filed (a household's way, short
-    // and far from the brook, filed the whole course afresh on every ask - 9 million cells at 40, the work-budget run of 2026-11-05)
+    tests.add("pt_test@crossing_points", course.len() as u64);
+    crossing_points_in(p, course, poly_box(course), tests)
+}
+
+/// `crossing_points` with the course's box known (`Waters`, `Tree`: read once where the courses are held): none where the run's box
+/// misses it, the course filed only where it meets (a household's way, short and far from the brook, filed the whole course afresh on
+/// every ask - 9 million cells at 40, the work-budget run of 2026-11-05).
+#[must_use]
+pub fn crossing_points_in(
+    p: &[Pt],
+    course: &[Pt],
+    cb: Box4,
+    tests: &mut Counts,
+) -> Vec<(usize, Pt)> {
     if p.len() < 2 || course.len() < 2 {
         return Vec::new();
     }
-    tests.add("pt_test@crossing_points", (p.len() + course.len()) as u64);
-    let (rb, cb) = (poly_box(p), poly_box(course));
+    tests.add("pt_test@crossing_points", p.len() as u64);
+    let rb = poly_box(p);
     if rb.2 < cb.0 || cb.2 < rb.0 || rb.3 < cb.1 || cb.3 < rb.1 {
         return Vec::new();
     }

@@ -25,13 +25,13 @@ use super::meet::{
     along_tail, connector_hairpin_ends, dangling_lane_ends, folded_joint_pairs, foot, needle_ends,
     Destinations, Lane, ALONG,
 };
-use super::rules::crossing_points;
+use super::rules::crossing_points_in;
 use super::walk::{as_joined, fronting_counts, tree_shadows, walked_shadows, Steading, JOIN};
 use super::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
 use crate::ways::squaring::{square_run, LEG_PAD_FT};
-use crate::ways::track::{poly_box, seg_intersect, segments_cross};
+use crate::ways::track::{poly_box, seg_intersect, segments_cross, Box4};
 
 /// A household's way's tread, the track out's as judged, how far off its host a way's end is set on its foot, and the pad past
 /// the square leg a run is given a vertex at either side of a crossing (ft).
@@ -153,6 +153,8 @@ pub struct Tree<'a> {
     pub waters: &'a [(Vec<Pt>, f64)],
     /// The brooks a way out crosses once.
     pub brooks: &'a [Vec<Pt>],
+    /// Their boxes, read once.
+    brook_boxes: Vec<Box4>,
     root: Vec<Pt>,
     recs: Vec<Record>,
     // each run laid once while the water stands: the judge, the admission and the reservation all lay the same run
@@ -175,6 +177,7 @@ impl<'a> Tree<'a> {
             steadings: Vec::new(),
             waters,
             brooks,
+            brook_boxes: brooks.iter().map(|b| poly_box(b)).collect(),
             root,
             recs: Vec::new(),
             laid_memo: std::cell::RefCell::default(),
@@ -428,7 +431,8 @@ impl<'a> Tree<'a> {
         if self
             .brooks
             .iter()
-            .any(|b| crossing_points(&path, b, tests).len() > 1)
+            .zip(&self.brook_boxes)
+            .any(|(b, &cb)| crossing_points_in(&path, b, cb, tests).len() > 1)
         {
             return Some("way_out_over_and_back");
         }

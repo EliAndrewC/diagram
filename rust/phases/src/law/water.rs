@@ -20,7 +20,7 @@
     reason = "the plane geometry's own names"
 )]
 
-use super::rules::{crossing_points, sat_overlap};
+use super::rules::{crossing_points_in, sat_overlap};
 use super::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
@@ -55,6 +55,8 @@ pub struct Waters {
     pub wet: Vec<Vec<Pt>>,
     /// What stands that a deck may not stand on, each with its box.
     pub deck_forbidding: Vec<(Vec<Pt>, Box4)>,
+    /// The boxes of the brooks, the channels and the crossed courses, read once at the first rule that asks (`courses`).
+    pub boxes: std::cell::OnceCell<[Vec<Box4>; 3]>,
 }
 
 /// How many degrees the run a-b crosses the course u-v off square.
@@ -170,6 +172,25 @@ pub fn crossing_deck(
 }
 
 impl Waters {
+    /// The boxes of the brooks, the channels and the crossed courses, each course's points read once: every rule asked of a run read
+    /// them afresh (12 million points at 40, the work-budget run of 2026-11-05).
+    fn courses(&self, tests: &mut Counts) -> &[Vec<Box4>; 3] {
+        self.boxes.get_or_init(|| {
+            let mut boxed = |cs: &mut dyn Iterator<Item = &Vec<Pt>>| {
+                cs.map(|c| {
+                    tests.add("pt_test@courses", c.len() as u64);
+                    poly_box(c)
+                })
+                .collect::<Vec<_>>()
+            };
+            [
+                boxed(&mut self.brooks.iter()),
+                boxed(&mut self.channels.iter()),
+                boxed(&mut self.crossed.iter().map(|c| &c.0)),
+            ]
+        })
+    }
+
     /// Does a deck at `p` stand clear of what stands that a deck may not stand on?
     fn deck_admitted(&self, p: Pt, rot: f64, span: f64, width: f64, tests: &mut Counts) -> bool {
         let r = |v: f64| (v * 10.0).round() / 10.0;
@@ -190,14 +211,14 @@ impl Waters {
         // ...each course asked only where its box meets the run's (every run segment against every crossed course's every segment was
         // 7 million tests at 40, the work-budget run of 2026-11-05)
         let bx = poly_box(run);
+        let boxes = self.courses(tests)[2].clone();
+        tests.add("pt_test@undeckable", (run.len() + boxes.len()) as u64);
         let near: Vec<&(Vec<Pt>, f64)> = self
             .crossed
             .iter()
-            .filter(|(course, _)| {
-                tests.add("pt_test@undeckable", course.len() as u64);
-                let cb = poly_box(course);
-                !(bx.2 < cb.0 || cb.2 < bx.0 || bx.3 < cb.1 || cb.3 < bx.1)
-            })
+            .zip(&boxes)
+            .filter(|(_, cb)| !(bx.2 < cb.0 || cb.2 < bx.0 || bx.3 < cb.1 || cb.3 < bx.1))
+            .map(|(c, _)| c)
             .collect();
         run.windows(2).any(|w| {
             let (ra, rb) = (w[0], w[1]);
@@ -218,8 +239,9 @@ impl Waters {
     /// Does the run cross a brook farther than half a crossing place from every ford?
     #[must_use]
     pub fn off_a_ford(&self, run: &[Pt], tests: &mut Counts) -> bool {
-        self.brooks.iter().any(|b| {
-            crossing_points(run, b, tests).iter().any(|&(_, x)| {
+        let boxes = self.courses(tests)[0].clone();
+        self.brooks.iter().zip(boxes).any(|(b, cb)| {
+            crossing_points_in(run, b, cb, tests).iter().any(|&(_, x)| {
                 self.fords
                     .iter()
                     .map(|&f| dist(x, f))
@@ -231,37 +253,46 @@ impl Waters {
 
     /// Does the run cross a brook or a drawn channel more than the tolerance off square?
     #[must_use]
-    pub fn oblique(&self, run: &[Pt]) -> bool {
+    pub fn oblique(&self, run: &[Pt], tests: &mut Counts) -> bool {
         let rb = poly_box(run);
-        self.brooks.iter().chain(&self.channels).any(|course| {
-            // the course's box read, and its segments asked of the run's only where the boxes meet - counted as asked
-            crate::counts::note("pt_test@oblique", course.len() as u64);
-            let cb = poly_box(course);
-            !(rb.2 < cb.0 || cb.2 < rb.0 || rb.3 < cb.1 || cb.3 < rb.1)
-                && {
-                    crate::counts::note(
-                        "seg_test@oblique",
-                        (run.len().saturating_sub(1) * course.len().saturating_sub(1)) as u64,
-                    );
-                    true
-                }
-                && run.windows(2).any(|w| {
-                    course.windows(2).any(|c| {
-                        segments_cross(w[0], w[1], c[0], c[1])
-                            && off_square(w[0], w[1], c[0], c[1]) > SQUARE_TOL_DEG
+        let [brooks, channels, _] = self.courses(tests).clone();
+        tests.add(
+            "pt_test@oblique",
+            (run.len() + brooks.len() + channels.len()) as u64,
+        );
+        self.brooks
+            .iter()
+            .chain(&self.channels)
+            .zip(brooks.iter().chain(&channels))
+            .any(|(course, cb)| {
+                // its segments asked of the run's only where the boxes meet - counted as asked
+                !(rb.2 < cb.0 || cb.2 < rb.0 || rb.3 < cb.1 || cb.3 < rb.1)
+                    && {
+                        crate::counts::note(
+                            "seg_test@oblique",
+                            (run.len().saturating_sub(1) * course.len().saturating_sub(1)) as u64,
+                        );
+                        true
+                    }
+                    && run.windows(2).any(|w| {
+                        course.windows(2).any(|c| {
+                            segments_cross(w[0], w[1], c[0], c[1])
+                                && off_square(w[0], w[1], c[0], c[1]) > SQUARE_TOL_DEG
+                        })
                     })
-                })
-        })
+            })
     }
 
     /// The run's crossing fault: a brook crossed twice, a crossing off a ford, off square, or where no deck seats.
     #[must_use]
     pub fn crossing_fault(&self, run: &[Pt], width: f64, tests: &mut Counts) -> bool {
+        let boxes = self.courses(tests)[0].clone();
         self.brooks
             .iter()
-            .any(|b| crossing_points(run, b, tests).len() >= 2)
+            .zip(boxes)
+            .any(|(b, cb)| crossing_points_in(run, b, cb, tests).len() >= 2)
             || self.off_a_ford(run, tests)
-            || self.oblique(run)
+            || self.oblique(run, tests)
             || self.undeckable(run, width, tests)
     }
 }

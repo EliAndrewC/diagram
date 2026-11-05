@@ -34,9 +34,9 @@ fn a_run_crosses_each_brook_once_at_a_ford_square_and_where_a_deck_seats() {
         3.0,
         &mut t
     ));
-    assert!(w.oblique(&[(180.0, 50.0), (220.0, 150.0)]));
-    assert!(w.oblique(&[(150.0, 250.0), (250.0, 350.0)]));
-    assert!(!w.oblique(&[(150.0, 500.0), (250.0, 600.0)]));
+    assert!(w.oblique(&[(180.0, 50.0), (220.0, 150.0)], &mut Counts::default()));
+    assert!(w.oblique(&[(150.0, 250.0), (250.0, 350.0)], &mut Counts::default()));
+    assert!(!w.oblique(&[(150.0, 500.0), (250.0, 600.0)], &mut Counts::default()));
     assert!(w.crossing_fault(&[(180.0, 50.0), (220.0, 150.0)], 3.0, &mut t));
     assert!((off_square((0.0, 0.0), (0.0, 1.0), (0.0, 0.0), (1.0, 0.0))).abs() < 1e-9);
     // a deck on paddy, or on what stands, does not seat
@@ -49,6 +49,7 @@ fn a_run_crosses_each_brook_once_at_a_ford_square_and_where_a_deck_seats() {
             fords: vec![],
             wet: vec![],
             deck_forbidding: vec![],
+            boxes: std::cell::OnceCell::new(),
         }
     };
     assert!(wet.undeckable(&[(200.0, 50.0), (200.0, 150.0)], 3.0, &mut t));
