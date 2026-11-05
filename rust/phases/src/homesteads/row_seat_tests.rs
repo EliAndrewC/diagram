@@ -13,7 +13,7 @@ use super::grove_seat::{Axes, Corridors, GroveSite};
 use super::level::Hard;
 use super::lots::Lots;
 use super::place::Site;
-use super::row_seat::{seat_rows, RowSite};
+use super::row_seat::{row_room, seat_rows, RowSite};
 use super::rows::Form;
 use super::Counts;
 use crate::field::fan::Pt;
@@ -280,4 +280,15 @@ fn a_row_village_seats_its_farms_along_its_streets_with_their_holdings() {
         ..rs
     });
     assert!(none.seating.seated.is_empty() && none.streets.is_empty());
+    // the row's room, asked before any farm stands: at least the farms the seating stood, none stood by the asking
+    let room = row_room(&rs);
+    assert!(room.room >= n && room.seating.seated.is_empty());
+    assert_eq!(
+        row_room(&RowSite {
+            hard: &Hard::new(&[], &[], &mut t),
+            ..rs
+        })
+        .room,
+        0
+    );
 }

@@ -274,34 +274,33 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     Research:
         every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused
         no house taken back - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: the placer searches wider ground rather than starting over, so the houses already placed stay where they are
-        the next margins tried on a copy - NONE: a trial decides which margin the seating is drawn on, and nothing of a refused trial is drawn (the dispersed line's own pattern, feature 385 T06)
+        a row village's margin by its room - research/questions/0033-row-villages-resson.drawing.html: the rows take every household; a margin whose frames admit fewer is left for the next, its room asked before any house stands
     """
     want = plan.spec.households
     mark = seating_mark(s)
     s.M.setdefault("meta", {})["houses_taken_back"] = 0  # ...and any house a later cut takes, counted (SC-001: held at 0)
     ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
-    # A MARGIN THAT SEATS SOME HOUSEHOLDS BUT NOT ALL: THE LADDER'S NEXT MARGINS TRIED ON A COPY OF THE MAP AS IT STOOD BEFORE ANY
-    # HOUSE (T31, the round arbiter on ask:444-T30-fresh-seed-refusals: "get room from the margin's length or a second margin"),
-    # the first that seats every household kept - its trial is the map, so no house the map shows is taken back (0004); the Rust
-    # gate's seed 778251 seated 12 of 17 on its first margin, all 17 on the next
-    before = copy.deepcopy((s.__dict__, plan.__dict__)) if ladder else None
-    placed, cloud = _seat_households(s, plan)
-    asked = 1
-    for margin in ladder if 0 < placed < want else ():
-        if before is None:  # pragma: no cover - a ladder always takes its snapshot
-            break
-        trial, tplan = copy.copy(s), copy.copy(plan)
-        trial.__dict__, tplan.__dict__ = copy.deepcopy(before)
-        tplan.seat = {**margin, "ladder": ladder}
-        trial.field_face = (float(margin["cx"]), float(margin["cy"]))
-        trial.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
-        got, got_cloud = _seat_households(trial, tplan)
-        asked += 1
-        if got >= want:
-            s.__dict__, plan.__dict__ = trial.__dict__, tplan.__dict__
-            placed, cloud = got, got_cloud
-            break
+    # A ROW VILLAGE'S MARGIN CHOSEN BY ITS ROOM, ASKED BEFORE ANY HOUSE STANDS (T31; FR-016, "a margin whose streets cannot hold
+    # every farm is left for the next"; the round arbiter on ask:444-T30-fresh-seed-refusals, "room from ... a second margin"; S4 -
+    # every rule asked of a candidate before it is placed, nothing placed dropped): where the chosen margin's frames admit fewer
+    # farms than the households, each ladder margin's room is asked in turn and the first that admits them all is seated, once -
+    # the Rust gate's seed 778251 seated 12 of 17 on its first margin, whose frames admit 16; its next admits all 17
+    rung = 0
     toe: Any = None
+    if plan.settlement_form == "linear" and ladder and _seat_households_as(s, plan, False, ask_only=True)[0] < want:
+        for k, margin in enumerate(ladder, start=1):
+            toe = (s.toe_band() or None,) if toe is None else toe
+            if not seat_has_dry_exit(plan, (float(margin["cx"]), float(margin["cy"])), toe[0], marsh_ground(s.M, only=("pond_fringe",))):
+                continue  # ...a rung with no dry way out is not seated, as below
+            held, plan.seat = plan.seat, {**margin, "ladder": ladder}
+            if _seat_households_as(s, plan, False, ask_only=True)[0] >= want:
+                s.field_face = (float(margin["cx"]), float(margin["cy"]))
+                s.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
+                rung = k
+                break
+            plan.seat = held
+    placed, cloud = _seat_households(s, plan)
+    asked = 1 + rung
     for margin in ladder if placed == 0 else ():
         # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is asked the
         # same, lazily
@@ -386,7 +385,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     return _seat_households_as(s, plan, False)
 
 
-def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tuple[int, int]:
+def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool, ask_only: bool = False) -> tuple[int, int]:
     """Seat the households on `plan.seat`'s margin: the site boundary installed for it, the exit strip and the field's
     corridor, then - a nucleated cluster - the growth (`growth.grow_the_margin`), or - a dispersed hamlet - the front row,
     the ranks, the rescue rounds and the exhaustive pass over the legal ground within reach (homes H14), or - a row
@@ -582,6 +581,8 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
     # FR-016 - a margin whose streets cannot hold every farm is left for the next), a scattered hamlet's front row, ranks, rescue and
     # exhaustive pass (`grove_rounds.rs`; in single file round its fields, its line alone), or a nucleated cluster grown (`place.rs`)
     if plan.settlement_form == "linear":
+        if ask_only:  # the margin's room, asked before any house stands (T31): its frames' farms, nothing seated
+            return rust_rows(s, plan, _house_max, bound, (lat, dep), _quota, ask_only=True), 0
         placed = rust_rows(s, plan, _house_max, bound, (lat, dep), _quota)
     elif not grows(plan):
         placed = rust_scatter(s, plan, single_file, _house_max, bound, (lat, dep), _quota)

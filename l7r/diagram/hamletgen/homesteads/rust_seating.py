@@ -420,10 +420,11 @@ def rust_scatter(s: Settlement, plan: SitePlan, single_file: bool, house_max: tu
     return record_seated(s, phases().seat_scattered(grove_inputs(s, plan, single_file, house_max, bound, band, quota)))
 
 
-def rust_rows(s: Settlement, plan: SitePlan, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> int:
+def rust_rows(s: Settlement, plan: SitePlan, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float], ask_only: bool = False) -> int:
     """Seat a row village's grove farms along its streets in Rust (`l7r_phases.seat_rows`), from the hard ground `rows.seat_rows`
     gathers, and record what that writes: each farm as `_try_place_bundle` does, its sheltered mark, the holdings reserved (drawn
-    later, kept off by the next placers and the woods), and the streets that seated a farm, for the web. How many stand.
+    later, kept off by the next placers and the woods), and the streets that seated a farm, for the web. How many stand - or,
+    `ask_only`, how many its frames admit, every rule asked and nothing seated or recorded (`row_room`, feature 444 T31).
 
     Research: a row village's seating in Rust - research/questions/0033-row-villages-resson.drawing.html: farms in rows along their streets, each further street parallel past the far row's holdings; its rules asked at the Rust that seats it"""
     from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
@@ -450,6 +451,9 @@ def rust_rows(s: Settlement, plan: SitePlan, house_max: tuple[float, float], bou
         polys,
         strips,
     )
+    if ask_only:
+        inputs["ask_only"] = True
+        return int(phases().seat_rows(inputs)["room"])
     got = phases().seat_rows(inputs)
     placed = record_seated(s, got)
     recs = s._pending_farmsteads[len(s._pending_farmsteads) - placed :]

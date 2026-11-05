@@ -326,21 +326,51 @@
    "declared": "spec-fidelity"
   },
   "### T30 Decisions": {
-   "sha256": "2b5cc43ea64e09e7839874e9b02a0bdbd5c8c587854dd309f30130de612a9028",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
+   "sha256": "43acd3411bb9193d70209ba06cd98f6a23c87ed1451f06d7c9c79d788ecef10e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
    "declared": "spec-fidelity"
   },
   "### T30 Approach (checklist part A)": {
-   "sha256": "2a757566e3d09a58eda0f279571d9331ea44698993df733c94466da57e1c84d9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
+   "sha256": "59cb1fb9eda4dcdc3f61de10f2ff083941ef75927c5a5be0ad14126ffdd83b9d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
    "declared": "spec-fidelity"
   },
   "### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "84a918c0f7757819ce4b315a3b4564abe647c628c577e605ed5c7e5c1cbcf8f3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-04",
+   "declared": "spec-fidelity"
+  },
+  "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1": {
+   "sha256": "80ef0a54e103bb1dfd4fb4069c406ac60e95e827367f5c458c431396f998ae5c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
+   "declared": "spec-fidelity"
+  },
+  "### T31 Approach (checklist part A)": {
+   "sha256": "e7cdba7cee6704f75bf83f505779edc47e32aab1d6b576445d70ae879a49583c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
+   "declared": "spec-fidelity"
+  },
+  "### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
+   "sha256": "a324fe85468c5eea75502f9ab40fb3d7836adb21a7ce47deba5eed1fb41fcafa",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
+   "declared": "spec-fidelity"
+  },
+  "### T32 Decisions": {
+   "sha256": "8fddc2301da0cce5356fa7267db36b26b5ea84752585c25105b35deecd61e3ac",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
+   "declared": "spec-fidelity"
+  },
+  "### T32 Approach (checklist part A)": {
+   "sha256": "8efad69fca3a4846053d40462439c0bb90890457794cd55da974d457362c5548",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-05",
    "declared": "spec-fidelity"
   }
  },
@@ -4429,6 +4459,125 @@
      "summary": "Approach items 6 and 9: the count at 40 and 80 held to the budget re-derived for the whole stage under FR-022 rule 2, past ten times the first needing the GM's words; acceptance on MODE AUDIT WITHIN or LEEWAY.",
      "class": "within",
      "why": "Restates FR-022 rules 1 and 2 and FR-006 as written; nothing relaxed. Any raise still owes the named missed work and SOUND (two blind dispatches past twice), and the GM said he would rule on overages on his return (2026-11-04)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-05",
+   "blocks": [
+    "### T30 Approach (checklist part A)",
+    "### T30 Decisions",
+    "### T31 Approach (checklist part A)",
+    "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1",
+    "### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T32 Approach (checklist part A)",
+    "### T32 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T30-D1",
+     "summary": "Whole homesteads stage in Rust behind a thin door; track out chosen after the last house; lane law ported as its own module",
+     "class": "within",
+     "why": "Unchanged from the text judged CLEAR; FR-003 to FR-005, FR-017, request 0246 houses before lanes."
+    },
+    {
+     "id": "T30-D2",
+     "summary": "Rust lays each homestead's parts; the door keeps the ink and registry records",
+     "class": "within",
+     "why": "Unchanged from the CLEAR text; the phase writes what the stage writes (FR-004)."
+    },
+    {
+     "id": "T30-D3",
+     "summary": "Search: first house nearest the seat, next offered ring by ring, judged against a raster painted once, no house taken back",
+     "class": "within",
+     "why": "Unchanged from the CLEAR text; S4, S9."
+    },
+    {
+     "id": "T30-D4",
+     "summary": "Every form ported and the Python deleted; the gate's fresh block and pinned rows are to roll every form, checked at the landing, a form neither rolls given a pinned row",
+     "class": "within",
+     "why": "New tail only checks that the gate covers every form D4 ports, enforcing FR-005's deletion and FR-019's all-seeds-pass. It adds coverage and narrows nothing."
+    },
+    {
+     "id": "T30-D5",
+     "summary": "Counters: one key per derivation row",
+     "class": "within",
+     "why": "FR-012; unchanged."
+    },
+    {
+     "id": "T30-Approach-1-6",
+     "summary": "Goal widened from a clustered hamlet to every form; exit widened from 'through the seating' to 'through the stage'",
+     "class": "within",
+     "why": "Brings the approach in line with D1's whole-stage seam and D4's every form, which the earlier BLOCKED ruling required. A broadening, not a narrowing."
+    },
+    {
+     "id": "T31-done",
+     "summary": "Seed 778251 seats all 17 and the stage's checks pass there; matching Python is not required; red exits through the arbiter",
+     "class": "within",
+     "why": "FR-019 and FR-020 as written: a failing seed stays on the list until both seed and frozen input pass. 'Matching Python is not required' is FR-019 verbatim."
+    },
+    {
+     "id": "T31-room",
+     "summary": "Room from the margin's length or a second margin; bundle pitch and researched room not narrowed",
+     "class": "within",
+     "why": "The arbiter's ruling on process. It keeps the researched room (0001, the claims) intact and does not narrow the request."
+    },
+    {
+     "id": "T31-Approach-7",
+     "summary": "The ladder's margins tried on a copy of the map, the first that seats everyone kept",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Seating houses on a copy and throwing the copy away when not everyone fits is placing and then dropping. FR-004 (no pass drops a placed thing; counted drops zero), S4 and 0004 ('no house taken back', which item 2 of this same block lists as a constraint) refuse it, and so does S2 (a ladder tried until one fits is a retry). It also defeats S4's purpose, since the discarded seats never reach the drop counter: this is the 803-envelopes, 95%-discarded waste the request names. Nothing makes the rule impossible to follow here. A margin's room can be asked before any house is seated (its length against the bundle pitch and the standoffs), or margin 2 can take the households margin 1 cannot hold without unseating any. That second route is item 11's own reading, 'Room from a second margin', so items 7 and 11 contradict each other. Remedy: item 7 states the margin's room asked before seating, or the overflow seated on the next margin, with no trial seating discarded."
+    },
+    {
+     "id": "T31-Approach-8",
+     "summary": "One commit inside T30's landing",
+     "class": "within",
+     "why": "Scheduling; narrows nothing."
+    },
+    {
+     "id": "T32-heading",
+     "summary": "Track out already chosen in Rust at T30; the stage's remaining work is a row village's road, ported to Rust; other forms draw the recorded way_out_track as today",
+     "class": "within",
+     "why": "Follows T30 D1 (CLEAR). FR-003 to FR-005, FR-017; 0033, 0035, 0084."
+    },
+    {
+     "id": "T32-occasions",
+     "summary": "settlement-review on moved pool hamlets, measured by make maps-moved at the landing; glyph-check only if a glyph is redrawn",
+     "class": "within",
+     "why": "The expectation of no moves is checked by measurement at the landing, not assumed."
+    },
+    {
+     "id": "T32-D1",
+     "summary": "Row road in Rust behind a thin stage_track door; helpers only the road reached deleted in the same landing; street_span stays in Python for the web until the web's phase",
+     "class": "within",
+     "why": "FR-005 deletes the phase's own old implementation with no fallback. A helper that a still-live Python stage (the web) reads is not a fallback path for this phase, since the track no longer calls it."
+    },
+    {
+     "id": "T32-D2",
+     "summary": "No new rule: each constant keeps its claim at the Rust that reads it",
+     "class": "within",
+     "why": "FR-021."
+    },
+    {
+     "id": "T32-D3",
+     "summary": "Budget: keep the SOUND 223-at-40 derivation, which priced the track out the homesteads now choose; the row road it did not price is re-derived only if the audit finds the stage past it",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "D3 names the missed work itself, a row road the derivation did not price, and defers its derivation until MODE AUDIT has measured the built code. That breaks three rules. (1) FR-022 rule 2 revises the derivation where the rebuild finds work it did not count, not only when the count is over. (2) The request's section 1 wants a budget derived from first principles before the current code is looked at, and checklist boxes 2 and 3 want the minimal algorithm and its MODE BUDGET verdict before the rebuild. Deriving only after the code is measured anchors the budget on the code, which the GM's 2026-10-29 words refuse. (3) T30 D1 (CLEAR) makes the homesteads' re-derived budget the whole stage's, track out included. Leaving 223 on the track stage prices the track out in two stages and the row road in neither, so the row road's cost is never held to a derived figure. Physical impossibility is not argued, and the derivation can be written before the port. Remedy: re-derive the track stage for what it now does (the row road) before the rebuild, drop the track out's rows from it, and get a MODE BUDGET verdict on it."
+    },
+    {
+     "id": "T32-D4",
+     "summary": "Counters: one key per derivation row",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T32-Approach",
+     "summary": "Goal, constraints, order (after the homesteads), exits by the Rust gate, MODE AUDIT and claims IN-STEP; item 4 cites pinned row variants 901-904",
+     "class": "within",
+     "why": "Item 4's 901-904 are the row-village subset of FR-020's six pins (901-906), naming where the row road is exercised. The gate still rolls all six, so this narrows nothing."
     }
    ]
   }

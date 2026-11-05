@@ -22,7 +22,7 @@ use super::level::Hard;
 use super::lots::{kind_name, Lots};
 use super::place::{grow, Site};
 use super::py::field;
-use super::row_seat::{seat_rows as seat_rows_on, RowSite};
+use super::row_seat::{row_room, seat_rows as seat_rows_on, RowSite};
 use super::rows::Form;
 use super::Counts;
 use crate::field::fan::Pt;
@@ -340,6 +340,7 @@ type RowsOut = (
 #[pyfunction]
 pub fn seat_rows<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bound<'py, PyDict>> {
     let extra: std::cell::RefCell<RowsOut> = std::cell::RefCell::default();
+    let room: std::cell::RefCell<usize> = std::cell::RefCell::default();
     let d = seat_with(py, inp, &|site, inp| {
         let g = GroveIn::of(inp)?;
         let (both, form, shelter, wind, front, sheet, anchor, polys, strips): RowsIn =
@@ -355,7 +356,10 @@ pub fn seat_rows<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bou
         };
         let mut tests = Counts::default();
         let hard = Hard::new(&polys, &strips, &mut tests);
-        let rows = seat_rows_on(&RowSite {
+        let ask_only: bool = inp
+            .get_item("ask_only")?
+            .map_or(Ok(false), |v| v.extract())?;
+        let rs = RowSite {
             gs: g.site(site, inp)?,
             hard: &hard,
             anchor,
@@ -364,7 +368,13 @@ pub fn seat_rows<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bou
             shelter: (shelter, wind),
             front,
             sheet,
-        });
+        };
+        let rows = if ask_only {
+            row_room(&rs)
+        } else {
+            seat_rows_on(&rs)
+        };
+        *room.borrow_mut() = rows.room;
         let mut st = rows.seating;
         for (k, v) in tests.0 {
             st.tests.add(&k, v);
@@ -376,6 +386,7 @@ pub fn seat_rows<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bou
     d.set_item("streets", streets)?;
     d.set_item("holdings", holdings)?;
     d.set_item("sheltered", sheltered)?;
+    d.set_item("room", room.take())?;
     Ok(d)
 }
 

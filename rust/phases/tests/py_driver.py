@@ -338,3 +338,33 @@ except ValueError as e:
     assert "no row line form" in str(e), e
 else:
     raise AssertionError("an unknown row line form is refused by name")
+
+# a row village's room (feature 444 T31): its frames' farms asked, nothing seated
+room = l7r_phases.seat_rows(dict(rows_in, ask_only=True))
+assert room["room"] >= len(rows["seated"]) and not room["seated"], room["room"]
+
+# a row village's road (feature 444 T32), as the track's door gathers it: the street run on off the sheet at both ends, the
+# nearer end's run first, the far one over the brook at its ford
+road_in = dict(
+    track_in,
+    canvas=(3000.0, 2000.0),
+    street=[(600.0 + 8.0 * k, 1000.0) for k in range(238)],
+    farms=[(1000.0, 1060.0), (1600.0, 940.0), (2200.0, 1060.0)],
+    frames=[200.0],
+    brook=[(300.0, 0.0), (300.0, 2000.0)],
+    fords=[(300.0, 1200.0)],
+    steadings=[],
+    envelope=[],
+    crossing=None,
+)
+road = l7r_phases.row_road_runs(road_in)
+assert len(road["runs"]) == 2 and road["runs"][0][-1][0] > 3000.0 and road["runs"][1][-1][0] < 0.0 and road["counts"], road["runs"]
+assert (322.0, 1200.0) in [tuple(p) for p in road["runs"][1]]
+road_toll = l7r_phases.row_road_runs(dict(road_in, crossing=([(0.0, 900.0), (1000.0, 900.0)], 10.0, 150.0)))
+assert len(road_toll["runs"]) == 2
+try:
+    l7r_phases.row_road_runs({k: v for k, v in road_in.items() if k != "street"})
+except KeyError as e:
+    assert "street" in str(e), e
+else:
+    raise AssertionError("a road with no street is refused by name")

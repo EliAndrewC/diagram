@@ -400,6 +400,23 @@ impl Seating {
         self.offer_grove_as(gs, x, y, false)
     }
 
+    /// Would the `k`-th lot's grove farm be admitted at (x, y) - every rule `offer_grove_as` asks, asked, and nothing stood (a
+    /// row's room counted before any farm is seated, feature 444 T31: S4, every rule asked of a candidate before it is placed)?
+    pub fn admits_grove_as(&mut self, gs: &GroveSite, k: usize, x: f64, y: f64) -> bool {
+        let lot = gs
+            .site
+            .lots
+            .lot(k)
+            .map(|(house, _kura, _beast, fixtures)| Lot {
+                house,
+                kura: false,
+                byre: None,
+                fixtures,
+            });
+        lot.and_then(|lot| self.place_grove(gs, &lot, x, y, true))
+            .is_some()
+    }
+
     /// Offer the seat (x, y) to the next household as a grove farm, `exact` for a row's (nudged, never slid); true where it is seated.
     pub fn offer_grove_as(&mut self, gs: &GroveSite, x: f64, y: f64, exact: bool) -> bool {
         self.search.0 += 1;

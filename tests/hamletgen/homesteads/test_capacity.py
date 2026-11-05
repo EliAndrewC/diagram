@@ -72,8 +72,8 @@ def test_a_margin_left_is_cut_back_to_its_mark_and_any_house_cut_is_counted() ->
 
 
 def test_a_short_margin_is_refused_and_no_house_it_seated_is_taken_back(monkeypatch: pytest.MonkeyPatch) -> None:
-    """SC-001 (feature 318): the chosen margin seats 7 of 10 and every later margin, tried on a copy of the map (T31), as few -
-    the seating is refused, naming the count and the margins asked, and the 7 houses still stand; nothing is unseated."""
+    """SC-001 (feature 318): the chosen margin seats 7 of 10 - the seating is refused, naming the count, and the 7 houses still
+    stand; no other margin is seated over them. The ladder is asked only past a margin that seated NO house."""
     s, plan = _toy(10)
     calls: list[tuple[float, float]] = []
     taken: list[int] = []
@@ -86,29 +86,43 @@ def test_a_short_margin_is_refused_and_no_house_it_seated_is_taken_back(monkeypa
 
     monkeypatch.setattr(stages, "_seat_households", seat_on)
     monkeypatch.setattr(stages, "unseat_to", lambda s_, mark: taken.append(len(s_.M["houses"])))
-    rungs = len(plan.seat["ladder"])
-    with pytest.raises(SiteRefused, match=rf"Test \(seed 3\): seated 7 of 10 households on margin {1 + rungs}; no house is taken back"):
+    with pytest.raises(SiteRefused, match=r"Test \(seed 3\): seated 7 of 10 households on margin 1; no house is taken back"):
         stages.seat_every_household(s, plan)
-    assert len(calls) == 1 + rungs and len(s.M["houses"]) == 7 and taken == [], "each margin tried, its houses standing, nothing unseated"
+    assert len(calls) == 1 and len(s.M["houses"]) == 7 and taken == [], "one seating, its houses standing, nothing unseated"
 
 
-def test_a_short_margin_gives_way_to_a_later_one_that_seats_everyone_on_a_copy_of_the_map(monkeypatch: pytest.MonkeyPatch) -> None:
-    """T31 (the round arbiter on ask:444-T30-fresh-seed-refusals: room from a second margin): the chosen margin seats 7 of 10, the
-    next all 10 on a copy of the map as it stood before any house - the map is the trial's, the first margin's 7 never drawn."""
+def test_a_row_village_is_seated_once_on_the_first_margin_whose_room_holds_every_farm(monkeypatch: pytest.MonkeyPatch) -> None:
+    """T31 (FR-016; S4): a row village's chosen margin admits 7 of 10 farms, asked before any house stands; the next margin's
+    room holds all 10 - the seating runs once, there, and nothing is seated on the first margin to be dropped."""
     s, plan = _toy(10)
+    plan.settlement_form = "linear"
     assert len(plan.seat["ladder"]) >= 1
     second = (plan.seat["ladder"][0]["cx"], plan.seat["ladder"][0]["cy"])
+    seated: list[tuple[float, float]] = []
 
-    def seat_on(s_: Settlement, plan_: hg.SitePlan) -> tuple[int, int]:
-        n = 10 if (plan_.seat["cx"], plan_.seat["cy"]) == second else 7
-        for k in range(n):
-            s_.M["houses"].append({"x": float(k), "y": 1.0 if n == 10 else 0.0, "kind": "plain"})
-        return n, 0
+    def seat_as(s_: Settlement, plan_: hg.SitePlan, single_file: bool, ask_only: bool = False) -> tuple[int, int]:
+        at = (plan_.seat["cx"], plan_.seat["cy"])
+        room = 10 if at == second else 7
+        if ask_only:
+            return room, 0
+        seated.append(at)
+        for k in range(room):
+            s_.M["houses"].append({"x": float(k), "y": 0.0, "kind": "plain"})
+        return room, 0
 
-    monkeypatch.setattr(stages, "_seat_households", seat_on)
+    monkeypatch.setattr(stages, "_seat_households_as", seat_as)
+    monkeypatch.setattr(stages, "seat_has_dry_exit", lambda *a: True)
     assert stages.seat_every_household(s, plan) == (10, 0)
-    assert len(s.M["houses"]) == 10 and all(h["y"] == 1.0 for h in s.M["houses"]), "the second margin's houses alone"
-    assert s.M["meta"]["seat_margin"] == 2 and (plan.seat["cx"], plan.seat["cy"]) == second and s.M["meta"]["houses_taken_back"] == 0
+    assert seated == [second] and len(s.M["houses"]) == 10, "seated once, on the margin with room"
+    assert s.M["meta"]["seat_margin"] == 2 and s.M["meta"]["houses_taken_back"] == 0
+    # a rung with no dry way out is not asked; no rung with room: the chosen margin seated, and refused short
+    s, plan = _toy(10)
+    plan.settlement_form = "linear"
+    seated.clear()
+    monkeypatch.setattr(stages, "seat_has_dry_exit", lambda *a: False)
+    with pytest.raises(SiteRefused, match="seated 7 of 10 households on margin 1"):
+        stages.seat_every_household(s, plan)
+    assert len(seated) == 1
 
 
 def test_a_margin_that_seats_no_house_passes_to_the_next_and_a_rung_with_no_dry_exit_is_passed_over(monkeypatch: pytest.MonkeyPatch) -> None:
