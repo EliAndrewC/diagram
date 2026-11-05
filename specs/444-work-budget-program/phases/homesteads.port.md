@@ -74,7 +74,10 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
       `_corridor_tree` - the lane law's rules into `rust/phases/src/law/` (D1), beside `law/rules.rs`.
 7. The dispersed hamlet's front row and ranks (`homesteads/stages.py` `_seat_households_as`, `capacity.py`) and the row village
    (`homesteads/rows.py`) - D4; a grove farm's layout (`rolling/dispersed.py`).
-8. The door: `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
+8. The door - its first half in (2026-11-04): under `L7R_RUST_SEATING` the nucleated growth runs in Rust
+   (`homesteads/rust_seating.py` gathers, `py_seat.rs` `seat_households` grows, each household recorded as
+   `_try_place_bundle` records one); still owed: the switch made the default, the Python growth deleted, and the rest below.
+   `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
    `rolling/lot.py` `record_parts`), draws the farmsteads (`Settlement.farmsteads`) and reserves the seating; the counters (D5); the
    Python above deleted (D4); `make rust-gate` through the stage; the tests moved.
 
@@ -110,8 +113,28 @@ names and is listed so a refused seed can be traced to it.
   way's reach draws about it (Python erodes the union with shapely), so a hole between the points can refuse a seat Python keeps.
 - `homesteads/fit_rules.rs` `admitted`: each part asked of the extents the registry forbids its key when the seating begins (the
   door's input); the homesteads seated since are held off by the placer's boxes and gaps, not asked of the matrix.
+- `homesteads/ground.rs` `reach`: flooded once over the taken ground grown by a lane's room (`LANE_GROW_FT`, the seat region's
+  one-cell growth), where Python floods again as each household's wood seats are painted; `fit.rs` `opens` grows the yard by the
+  corridor's half-width and a cell, as `SeatRegion.opens` does. Both found by the Rust-seated cohort (2026-11-04: seeds 17, 21,
+  24 and 26 regressed while the reach flooded the raw cells and a yard was grown by a cell alone).
+- `homesteads/wood.rs`: each household's seats on the map's one lattice (a square reserved once), where Python anchors a lattice
+  on each house - so a Rust-seated household reserves other seats than Python's would, and the clusters part from the second
+  house on (seed 21, 2026-11-04: 25 seats against 22, the lattice 4.7 ft over).
 - Counting: the lane law's predicates count into a thread's tally (`counts::note`), drained into the stage's `Counts` at
   `lay_the_ways` and `choose_track_out`.
+
+## The Rust seating against the Python, by the cohort (under `L7R_RUST_SEATING`)
+
+Each found by a seed the Rust seating failed and Python passed, fixed at the port (2026-11-04):
+
+- the boxes placed before the houses (the shared byres' pockets) met as boxes the placer moves a seat off, not taken ground (seed 24);
+- Python's half-to-even `round` where it keys (the house's spread, the bath room's length, the first house's ring, the growth's
+  seen seats) - a seat on the grid's own points lands on halves (seed 21's first house turned 1.5 degrees apart);
+- the growth's queue on the exact distances and on the site's facing chains, not the field's outline;
+- the guess every seat is parted by (the next household's reach at the first house), the settle's start from it and its
+  refusal of a seat whose house the placer refuses outright (`settled_seat`, `seat_refused`);
+- a standing homestead's footprint taking in its reserved wood seats (`footprint`);
+- the reach flooded over the taken ground grown by a lane's room, the reserved wood seats painted as they are reserved.
 
 ## Compared against Python (before the door)
 

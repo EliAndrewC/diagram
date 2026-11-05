@@ -15,7 +15,8 @@ use super::ground::Ground;
 use super::layout::Byre;
 use super::lots::Lots;
 use super::place::{
-    box_reach, field_distance, grow, keeps_its_distance, seat_toward, union, Keep, Seating, Site,
+    box_reach, chain_distance, field_distance, grow, keeps_its_distance, seat_toward, union, Keep,
+    Seating, Site,
 };
 use super::Counts;
 
@@ -101,6 +102,8 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
     // a shared byre's pocket, reserved before any house, takes no wood seat
     let pocket = Rules {
         bars: vec![(1200.0, 1300.0, 80.0)],
+        placed: vec![(1200.0, 1300.0, 22.0, 17.0), (300.0, 300.0, 10.0, 10.0)],
+        site_chains: vec![vec![((200.0, 1500.0), (2200.0, 1500.0), (0.0, -1.0))]],
         ..Rules::default()
     };
     let barred = grow(
@@ -117,6 +120,13 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         .flat_map(|s| &s.wood)
         .all(|w| (w.0 - 1200.0).hypot(w.1 - 1300.0) >= 80.0));
     assert!((field_distance((0.0, 0.0), &field) - (200.0f64.hypot(1500.0))).abs() < 1e-6);
+}
+
+#[test]
+fn the_growths_tie_break_reads_the_facing_chains() {
+    assert!(chain_distance((5.0, 5.0), &[]).abs() < 1e-12);
+    let chord = vec![vec![((0.0, 0.0), (10.0, 0.0), (0.0, -1.0))]];
+    assert!((chain_distance((5.0, 5.0), &chord) - 5.0).abs() < 1e-9);
 }
 
 #[test]
@@ -180,6 +190,8 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
         gap: 1.0,
         standing: vec![((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0))],
     };
+    // (the first household's wood seats would close the second's yard off the reach here: this asks the move, not the wood)
+    pair.seats.clear();
     assert!(pair.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&keep)));
     // a move that would break the growth's distance is refused
     let mut again = Seating::default();
@@ -189,6 +201,7 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
         gap: 1.0,
         standing: vec![],
     };
+    again.seats.clear();
     assert!(!again.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&strict)));
     // a lot whose fixture finds no seat is unlaid on every side
     let unlaid = Lots::deal(4, 2, 0.0, &[(Kind::Retirement, 1.0)]);

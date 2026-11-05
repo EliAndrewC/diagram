@@ -175,9 +175,10 @@ impl Margin {
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 11 (jitter salts (triangular spread)); 14 (jitter salts (triangular spread))
 #[must_use]
 pub fn house_rot(p: Pt, common: f64, lane: f64) -> f64 {
+    // keyed as Python's `round` keys it, a half to the even cell: a seat on the grid's own points lands on halves
     let (kx, ky) = (
-        (p.0 / KEY_CELL).round() * KEY_CELL,
-        (p.1 / KEY_CELL).round() * KEY_CELL,
+        (p.0 / KEY_CELL).round_ties_even() * KEY_CELL,
+        (p.1 / KEY_CELL).round_ties_even() * KEY_CELL,
     );
     let spread = (hjit(kx, ky, 11.0) + hjit(kx, ky, 14.0) - 1.0) * JITTER_DEG;
     common + soft_limit(lane + spread, SPREAD_DEG)

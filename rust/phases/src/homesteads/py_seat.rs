@@ -96,6 +96,8 @@ fn rules_of(d: &Bound<'_, PyDict>) -> PyResult<Rules> {
         forbidding: field(d, "forbidding")?,
         sun: field(d, "sun")?,
         bars: field(d, "bars")?,
+        placed: field(d, "placed")?,
+        site_chains: field(d, "site_chains")?,
     })
 }
 

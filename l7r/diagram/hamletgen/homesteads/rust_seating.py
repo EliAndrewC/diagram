@@ -35,8 +35,8 @@ PART_KEYS = ("houses", "threshing_yards", "gardens", "farm_sheds", "byres", "far
 def ground_cells(s: Settlement) -> tuple[tuple[float, float], float, int, list[bool]]:
     """The free ground over the canvas at `GROUND_CELL_FT`, row by row: a cell taken where the site's raster surely takes its
     center, or - its center in a cell the raster leaves uncertain - the site's chains or corridors refuse it there (the tests
-    `access.site_samples_clear` asks, every uncertain cell at once as `gap_ways.lane_layers` asks them), or a box placed before
-    the growth (a shared byre's pocket) covers it. Built in arrays: a canvas is half a million cells.
+    `access.site_samples_clear` asks, every uncertain cell at once as `gap_ways.lane_layers` asks them). Built in arrays: a canvas
+    is half a million cells. (The boxes placed before the growth go as boxes, `placed`, which the placer moves a seat off.)
 
     Research: plumbing - NONE: the site boundary's own verdicts, read at cell centers"""
     import numpy as np
@@ -69,8 +69,6 @@ def ground_cells(s: Settlement) -> tuple[tuple[float, float], float, int, list[b
         for j, i in zip(ja.tolist(), ia.tolist(), strict=True):
             if corr.hit_points([(float(cx[i]), float(cy[j]))]):
                 taken[j, i] = True
-    for px, py, pw, ph in (tuple(float(v) for v in p[:4]) for p in getattr(s, "placed", None) or ()):
-        taken[(np.abs(cy - py) <= ph / 2)[:, None] & (np.abs(cx - px) <= pw / 2)[None, :]] = True
     return (0.0, 0.0), c, nx, taken.ravel().tolist()
 
 
@@ -131,6 +129,8 @@ def seat_inputs(s: Settlement, plan: SitePlan, byre_share: float, quota: dict[st
         "forbidding": [(k, [ring(e[1]) for e in st.forbidding(k)] if st is not None else []) for k in PART_KEYS],
         "sun": bool(getattr(s, "_sun_corridor_ft", 0.0)),
         "bars": pocket_bars(s),
+        "placed": [tuple(float(v) for v in b[:4]) for b in getattr(s, "placed", None) or ()],
+        "site_chains": [[(pt(a), pt(b), pt(n)) for a, b, n in chain] for chain in getattr(s, "_site_chains", None) or ()],
         "center": (float(plan.seat["cx"]), float(plan.seat["cy"])),
         "want": int(plan.spec.households),
     }
@@ -186,6 +186,7 @@ def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quo
     from ..phases_ext import phases
 
     got = phases().seat_households(seat_inputs(s, plan, byre_share, quota))
+
     form = getattr(s, "_byre_form", None)
     for h in got["seated"]:
         geom = homestead_geom(h)

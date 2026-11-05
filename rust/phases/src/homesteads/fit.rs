@@ -271,11 +271,11 @@ pub fn on_free_ground(
     })
 }
 
-/// Does the yard open onto ground a way can reach - its box, grown by a cell, touching the reach?
+/// Does the yard open onto ground a way can reach - its box, grown by the corridor's half-width and a cell, touching the reach?
 #[must_use]
 pub fn opens(b: &Bundle, reach: &Reach, tests: &mut Counts) -> bool {
     let y = b.boxes[1];
-    let g = CELL;
+    let g = super::access::ACCESS_HALF_FT + CELL;
     reach.touches(
         (y.0 - y.2 / 2.0 - g, y.1 - y.3 / 2.0 - g),
         (y.0 + y.2 / 2.0 + g, y.1 + y.3 / 2.0 + g),

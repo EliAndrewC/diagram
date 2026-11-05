@@ -14,6 +14,19 @@ use crate::field::fan::Pt;
 ///     the free ground's cell - NONE: a raster's grain, under half the 18 ft narrowest gap a homestead leaves
 pub const CELL: f64 = 8.0;
 
+/// How far the taken ground is grown before the reach is flooded over it (feet): a lane's room, so a sliver of free ground no lane
+/// can pass reaches nothing beyond it.
+///
+/// Research:
+///     a lane's room - NONE: the seat region's flood (`region.py` `LaneGround`) reads the taken cells grown by one free-ground cell, about a corridor's half-width - 8
+pub const LANE_GROW_FT: f64 = 8.0;
+
+/// How far round a reserved wood seat the reach's ground is taken (feet), before the lane's room is grown about it.
+///
+/// Research:
+///     reserved wood seats bar lane ground - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a household's reserved wood seats are no ground its way runs on; no page read shows a way through a household's grove - the seat region's disc, two of its 8 ft cells and an eighth (`Region.circle`'s growth) - 17
+pub const WOOD_PAINT_FT: f64 = 17.0;
+
 /// A window of the canvas painted on cells of `CELL` feet: a cell is taken where its center lies in a member.
 pub struct Ground {
     x0: f64,
@@ -101,6 +114,18 @@ impl Ground {
         lo.min(self.ny)..hi.min(self.ny)
     }
 
+    /// The columns of cells whose centers lie between `xa` and `xb`, clipped to the window.
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "column indices clamped into the window"
+    )]
+    fn rows_x(&self, xa: f64, xb: f64) -> std::ops::Range<usize> {
+        let lo = ((xa.min(xb) - self.x0) / self.cell - 0.5).ceil().max(0.0) as usize;
+        let hi = (((xa.max(xb) - self.x0) / self.cell - 0.5).floor() + 1.0).max(0.0) as usize;
+        lo.min(self.nx)..hi.min(self.nx)
+    }
+
     /// Fill the cells whose centers lie inside `ring` (even-odd, by scanlines through the cell centers): each edge stepped
     /// through the rows it spans, the spans between its crossings filled.
     #[expect(
@@ -179,25 +204,73 @@ impl Ground {
             })
     }
 
-    /// The free cells joined to any of `seeds` through free cells, 4-connected: every cell labeled in one pass reading its west and
-    /// north neighbors (union-find over the labels), the seeds' labels kept - nothing changes the free ground while the houses are
-    /// seated (no way stands, no house is painted: 0246), so the reach is labeled once.
+    /// The taken cells grown by `LANE_GROW_FT` on every side (a square of cells, by a row pass then a column pass): ground a lane
+    /// cannot pass at its width is not free to the reach.
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a few cells' reach"
+    )]
+    fn lane_blocked(&self, taken: &[bool], tests: &mut Counts) -> Vec<bool> {
+        let r = (LANE_GROW_FT / self.cell).round().max(1.0) as usize;
+        let (nx, ny) = (self.nx, self.ny);
+        let mut rows = vec![false; nx * ny];
+        for j in 0..ny {
+            for i in 0..nx {
+                rows[j * nx + i] =
+                    (i.saturating_sub(r)..(i + r + 1).min(nx)).any(|u| taken[j * nx + u]);
+            }
+        }
+        tests.add("write@lane_blocked", (2 * nx * ny * (2 * r + 1)) as u64);
+        (0..nx * ny)
+            .map(|k| {
+                let (i, j) = (k % nx, k / nx);
+                (j.saturating_sub(r)..(j + r + 1).min(ny)).any(|v| rows[v * nx + i])
+            })
+            .collect()
+    }
+
+    /// The free cells joined to any of `seeds` through free cells, 4-connected, the taken ground grown by a lane's room first
+    /// (`lane_blocked`): every cell labeled in one pass reading its west and north neighbors (union-find over the labels), the seeds'
+    /// labels kept - nothing changes the free ground while the houses are seated (no way stands, no house is painted: 0246), so the
+    /// reach is labeled once.
     #[must_use]
     pub fn reach(&self, seeds: &[Pt], tests: &mut Counts) -> Reach {
+        self.reach_painted(seeds, &[], tests)
+    }
+
+    /// The reach with `discs` painted onto the taken ground first, each `WOOD_PAINT_FT` round - the wood seats the households
+    /// seated so far reserved, which no way runs through (`region.py` `SeatRegion.sync`).
+    #[must_use]
+    pub fn reach_painted(&self, seeds: &[Pt], discs: &[Pt], tests: &mut Counts) -> Reach {
         let n = self.nx * self.ny;
+        let mut taken = self.taken.clone();
+        let paint = WOOD_PAINT_FT;
+        for &(x, y) in discs {
+            for j in self.rows(y - paint, y + paint) {
+                for i in self.rows_x(x - paint, x + paint) {
+                    let c = self.center(i, j);
+                    tests.add("write@reach_painted", 1);
+                    if (c.0 - x).hypot(c.1 - y) <= paint {
+                        taken[j * self.nx + i] = true;
+                    }
+                }
+            }
+        }
+        let blocked = self.lane_blocked(&taken, tests);
         let mut parent: Vec<usize> = (0..n).collect();
         for j in 0..self.ny {
             for i in 0..self.nx {
                 let k = j * self.nx + i;
                 tests.add("index_query@reach", 3);
-                if self.taken[k] {
+                if blocked[k] {
                     continue;
                 }
                 for nb in [(i > 0).then(|| k - 1), (j > 0).then(|| k - self.nx)]
                     .into_iter()
                     .flatten()
                 {
-                    if !self.taken[nb] {
+                    if !blocked[nb] {
                         let (a, b) = (root(&mut parent, k), root(&mut parent, nb));
                         parent[a.max(b)] = a.min(b);
                     }
@@ -208,16 +281,17 @@ impl Ground {
             .iter()
             .filter_map(|&p| self.cell_of(p))
             .map(|(i, j)| j * self.nx + i)
-            .filter(|&k| !self.taken[k])
+            .filter(|&k| !blocked[k])
             .map(|k| root(&mut parent, k))
             .collect();
         keep.sort_unstable();
         keep.dedup();
         let reached = (0..n)
-            .map(|k| !self.taken[k] && keep.binary_search(&root(&mut parent, k)).is_ok())
+            .map(|k| !blocked[k] && keep.binary_search(&root(&mut parent, k)).is_ok())
             .collect();
         tests.add("write@reach", n as u64);
         Reach {
+            seeds: seeds.to_vec(),
             x0: self.x0,
             y0: self.y0,
             cell: self.cell,
@@ -239,6 +313,8 @@ fn root(parent: &mut [usize], mut k: usize) -> usize {
 
 /// The reach: which cells of the free ground a way from the way out's anchor can come to.
 pub struct Reach {
+    /// Where it was flooded from.
+    pub seeds: Vec<Pt>,
     x0: f64,
     y0: f64,
     cell: f64,

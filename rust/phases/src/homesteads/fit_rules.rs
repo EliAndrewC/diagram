@@ -61,6 +61,10 @@ pub struct Rules {
     pub sun: bool,
     /// The wood's keep-outs reserved before any house (a shared byre's pocket), each a disc.
     pub bars: Vec<(f64, f64, f64)>,
+    /// The boxes placed before any house (a shared byre's pocket), which the placer meets as a standing homestead's box.
+    pub placed: Vec<Rect>,
+    /// The site boundary's facing chains, the growth's tie-break measures to.
+    pub site_chains: Vec<Vec<Chord>>,
 }
 
 impl Rules {

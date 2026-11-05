@@ -259,7 +259,7 @@ pub fn size_ft(kind: Kind, forms: &Forms, roll: &dyn Fn(f64) -> f64) -> (f64, f6
         Kind::Privy => PRIVY_SIZES_FT[(roll(101.3) * 16.0) as usize % 16],
         Kind::Bath => {
             let (d, (lo, hi)) = BATH_FT;
-            ((lo + (hi - lo) * roll(104.3)).round(), d)
+            ((lo + (hi - lo) * roll(104.3)).round_ties_even(), d)
         }
         Kind::Manure if forms.manure_pit => (PIT_FT, PIT_FT),
         Kind::Persimmon => (PERSIMMON.0 * 2.0, PERSIMMON.0 * 2.0),

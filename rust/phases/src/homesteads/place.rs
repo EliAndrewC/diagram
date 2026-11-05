@@ -49,6 +49,12 @@ pub const JITTER: (f64, f64) = (12.0, 0.12);
 ///     the queue's ring - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); 20 ft
 pub const TIE_RING_FT: f64 = 20.0;
 
+/// A reserved wood seat's clump, by which a standing homestead's footprint reaches past the seat (feet).
+///
+/// Research:
+///     the household's wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: its reserved copse seats inside its footprint, beside its house, so no lane comes between them - in every account found the way runs outside the grove or through a gap in it to the house - 12 (`growth.py` `WOOD_CLUMP_PX`)
+pub const WOOD_CLUMP_FT: f64 = 12.0;
+
 /// The narrowest gap a way takes between two homesteads, and the parting the growth adds (feet).
 ///
 /// Research:
@@ -221,6 +227,10 @@ pub struct Seating {
     pub tests: Counts,
     /// The households' wood reservations.
     pub wood: super::wood::Shares,
+    /// The reach reflooded with the wood seats reserved so far painted, once they change; None before any is reserved.
+    pub reach: Option<super::ground::Reach>,
+    /// The wood seats reserved so far.
+    pub seats: Vec<Pt>,
 }
 
 impl Seating {
@@ -256,6 +266,36 @@ impl Seating {
         )
     }
 
+    /// The reach the next household's yard is asked of, taken out while it is asked: reflooded with the wood seats reserved since
+    /// it was last flooded, or None while none is reserved (the site's own reach stands).
+    fn take_reach(&mut self, site: &Site) -> Option<super::ground::Reach> {
+        if self.reach.is_none() && !self.seats.is_empty() {
+            self.reach = Some(site.ground.reach_painted(
+                &site.reach.seeds,
+                &self.seats,
+                &mut self.tests,
+            ));
+        }
+        self.reach.take()
+    }
+
+    /// The envelope the household of `lot` lays at `q`, its rake the seat's.
+    fn envelope_at(&mut self, site: &Site, lot: &Lot, q: Pt) -> Rect {
+        let turn = Self::turn(site, q, &mut self.tests);
+        super::bundle::envelope(
+            lot,
+            q,
+            q,
+            turn,
+            site.forms,
+            &Sun {
+                shade: site.shade,
+                turns: &[turn],
+            },
+            &mut self.tests,
+        )
+    }
+
     /// How a box stands: clear, refused by the canvas, the ground or two homesteads, or over exactly one standing homestead's box.
     fn blocked(&mut self, site: &Site, b: Rect) -> Block {
         let (lo, hi) = (
@@ -282,9 +322,26 @@ impl Seating {
             (hi.0 + margin, hi.1 + margin),
             &mut self.tests,
         );
-        match near.len() {
-            0 => Block::Clear,
-            1 => Block::One(self.standing.all[near[0]].bbox),
+        // ...and the boxes placed before any house (a shared byre's pocket), met as a standing homestead's box is
+        let (x0, y0, x1, y1) = (lo.0 - margin, lo.1 - margin, hi.0 + margin, hi.1 + margin);
+        let early: Vec<Rect> = site
+            .rules
+            .placed
+            .iter()
+            .filter(|p| {
+                p.0 + p.2 / 2.0 > x0
+                    && p.0 - p.2 / 2.0 < x1
+                    && p.1 + p.3 / 2.0 > y0
+                    && p.1 - p.3 / 2.0 < y1
+            })
+            .copied()
+            .collect();
+        self.tests
+            .add("index_query@blocked", site.rules.placed.len() as u64);
+        match (near.len(), early.as_slice()) {
+            (0, []) => Block::Clear,
+            (1, []) => Block::One(self.standing.all[near[0]].bbox),
+            (0, [p]) => Block::One(*p),
             _ => Block::Refused,
         }
     }
@@ -319,6 +376,8 @@ impl Seating {
         self.search.2 += 1;
         let union_clear = self.blocked(site, env) == Block::Clear;
         let mut best: Option<((usize, u32), Placement)> = None;
+        let painted = self.take_reach(site);
+        let reach = painted.as_ref().unwrap_or(site.reach);
         let mut reaches: std::collections::HashMap<(i64, i64), bool> =
             std::collections::HashMap::new();
         for (rank, (side, mut b)) in SIDES.iter().zip(sides).enumerate() {
@@ -355,7 +414,7 @@ impl Seating {
             let tests = &mut self.tests;
             if !*reaches
                 .entry(((cx * 8.0).round() as i64, (cy * 8.0).round() as i64))
-                .or_insert_with(|| opens(&b, site.reach, tests))
+                .or_insert_with(|| opens(&b, reach, tests))
             {
                 continue;
             }
@@ -400,6 +459,7 @@ impl Seating {
                 best = Some((score, ((cx, cy), b, seats, own)));
             }
         }
+        self.reach = painted;
         best.map(|(_, p)| p)
     }
 
@@ -416,6 +476,10 @@ impl Seating {
 
     fn stand(&mut self, seat: Pt, b: Bundle, wood: Vec<Pt>, own: super::wood::Keepouts) {
         self.wood.commit(&wood, own, &mut self.tests);
+        if !wood.is_empty() {
+            self.seats.extend(&wood);
+            self.reach = None;
+        }
         let placed = Placed {
             house: (b.house, b.turn),
             house_box: b.boxes[0],
@@ -455,7 +519,14 @@ impl Seating {
     fn footprint(&self, k: usize) -> (Pt, Footprint) {
         let s = &self.seated[k].bundle;
         let c = (s.house.0, s.house.1);
-        let (w, e, n, mut so) = box_reach(c, s.bbox);
+        let (mut w, mut e, mut n, mut so) = box_reach(c, s.bbox);
+        // ...its reserved wood seats inside it, each by its clump, so no lane comes between a household and its grove
+        for &(x, y) in &self.seated[k].wood {
+            w = w.max(c.0 - x + WOOD_CLUMP_FT);
+            e = e.max(x - c.0 + WOOD_CLUMP_FT);
+            n = n.max(c.1 - y + WOOD_CLUMP_FT);
+            so = so.max(y - c.1 + WOOD_CLUMP_FT);
+        }
         let sun = SUN_FT.0 + SUN_FT.1;
         for r in std::iter::once(s.boxes[1]).chain(s.boxes[2..2 + s.gardens.len()].iter().copied())
         {
@@ -465,7 +536,23 @@ impl Seating {
     }
 }
 
-/// How far `q` stands from the field's outline - the queue's tie-break within a ring.
+/// How far `q` stands from the nearest chord of the field's facing chains (unsigned), 0 where there are none - the growth's tie-break
+/// within a ring (`growth.py` `field_distance`, `chain_distance`).
+#[must_use]
+pub fn chain_distance(q: Pt, chains: &[Vec<super::fit_rules::Chord>]) -> f64 {
+    let d = chains
+        .iter()
+        .flatten()
+        .map(|&(a, b, _)| seg_dist(q, a, b))
+        .fold(f64::INFINITY, f64::min);
+    if d.is_finite() {
+        d
+    } else {
+        0.0
+    }
+}
+
+/// How far `q` stands from the field's outline - the first house's tie-break within a ring.
 #[must_use]
 pub fn field_distance(q: Pt, field: &[Pt]) -> f64 {
     let n = field.len();
@@ -474,9 +561,9 @@ pub fn field_distance(q: Pt, field: &[Pt]) -> f64 {
         .fold(f64::MAX, f64::min)
 }
 
-/// An offer's place in the growth's queue: its ring, its field distance and its distance, in thousandths of a foot, and its
-/// order queued - the least first (`Reverse`), and the offer itself by its ordinal.
-type QueueKey = std::cmp::Reverse<(i64, i64, i64, usize)>;
+/// An offer's place in the growth's queue: its ring, its field distance and its distance (each non-negative, so its bits order as
+/// it does - Python's float key exactly), and its order queued - the least first (`Reverse`), and the offer itself by its ordinal.
+type QueueKey = std::cmp::Reverse<(i64, u64, u64, usize)>;
 
 /// Seat `want` households of a nucleated cluster about `center`: the first on the free ground nearest it, the rest grown from the
 /// standing ones. Returns the seating; fewer seated than wanted where the ground is full.
@@ -514,7 +601,7 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
             }
             let d = (q.0 - center.0).hypot(q.1 - center.1);
             grid.push((
-                (d / pitch).round() as i64,
+                (d / pitch).round_ties_even() as i64,
                 field_distance(q, site.field),
                 d,
                 q,
@@ -542,6 +629,15 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
     let mut offers: Vec<(Pt, (Pt, Footprint, f64, f64))> = Vec::new();
     let mut seen: HashSet<(i64, i64)> = HashSet::new();
     let (mut level, mut done) = (0usize, 0usize);
+    // the next household's reach rolled at the first house - the guess every queued seat is parted by, and the settle's start
+    let guess = match (st.seated.first(), st.lot(site)) {
+        (Some(h0), Some(lot)) => {
+            let at = (h0.bundle.house.0, h0.bundle.house.1);
+            box_reach(at, st.envelope_at(site, &lot, at))
+        }
+        _ => (0.0, 0.0, 0.0, 0.0),
+    };
+    let mut start = guess;
     while st.seated.len() < want && !st.seated.is_empty() {
         let (ndir, rings): (u32, Vec<f64>) = match LEVELS.get(level) {
             Some((n, r)) => (*n, r.to_vec()),
@@ -550,7 +646,6 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
         let mut queued = 0;
         for k in done..st.seated.len() {
             let (c, reach) = st.footprint(k);
-            let guess = reach;
             for d in 0..ndir {
                 let jit = JITTER.0 * 8.0 / f64::from(ndir);
                 let ang = (360.0 / f64::from(ndir) * f64::from(d)
@@ -563,7 +658,10 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
                         c.0 + (base.0 - c.0) * far * ring,
                         c.1 + (base.1 - c.1) * far * ring,
                     );
-                    let key = ((q.0 / 10.0).round() as i64, (q.1 / 10.0).round() as i64);
+                    let key = (
+                        (q.0 / 10.0).round_ties_even() as i64,
+                        (q.1 / 10.0).round_ties_even() as i64,
+                    );
                     st.tests.add("candidate@grow", 8);
                     if q.0 >= 0.0
                         && q.1 >= 0.0
@@ -575,8 +673,8 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
                         let dist = (q.0 - center.0).hypot(q.1 - center.1);
                         heap.push(std::cmp::Reverse((
                             (dist / TIE_RING_FT) as i64,
-                            (field_distance(q, site.field) * 1000.0).round() as i64,
-                            (dist * 1000.0).round() as i64,
+                            chain_distance(q, &site.rules.site_chains).to_bits(),
+                            dist.to_bits(),
                             offers.len(),
                         )));
                         offers.push((q, (c, reach, ang, far * ring)));
@@ -595,32 +693,26 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
         };
         let (c, reach, ang, scale) = offers[top.0 .3].1;
         let Some(lot) = st.lot(site) else { break };
-        // the settled seat: moved out while the household's envelope there outgrows the one it was offered for
-        let mut new = reach;
+        // the settled seat: from the start, moved out while the household's envelope there outgrows the one it was offered for; none
+        // as soon as a seat it would roll at is one the placer refuses its house outright (`seat_refused`)
+        let mut new = start;
         let mut got = None;
         for _ in 0..SETTLE_TRIES {
             let base = seat_toward(c, reach, new, ang, gap);
             let q = (c.0 + (base.0 - c.0) * scale, c.1 + (base.1 - c.1) * scale);
             let turn = Seating::turn(site, q, &mut st.tests);
-            let env = super::bundle::envelope(
-                &lot,
-                q,
-                q,
-                turn,
-                site.forms,
-                &Sun {
-                    shade: site.shade,
-                    turns: &[turn],
-                },
-                &mut st.tests,
-            );
-            let r = box_reach(q, env);
+            let house = turned_box((q.0, q.1, lot.house.0, lot.house.1), turn);
+            if st.blocked(site, house) == Block::Refused {
+                break;
+            }
+            let r = box_reach(q, st.envelope_at(site, &lot, q));
             if r.0 <= new.0 + 1e-9
                 && r.1 <= new.1 + 1e-9
                 && r.2 <= new.2 + 1e-9
                 && r.3 <= new.3 + 1e-9
             {
                 got = Some(q);
+                start = union(guess, r);
                 break;
             }
             new = union(r, new);
