@@ -8,7 +8,7 @@ use super::meet::Lane;
 use super::walk::{
     as_joined, as_walked, box_gap, free_end, fronting_counts, meets_clean, near_misses,
     reach_to_steading, runs_beside, sampled, shadowed_by, span_walkable, tree_shadows,
-    walked_shadows, Steading,
+    walked_shadows, Steading, WayIndex,
 };
 use super::water::Waters;
 use super::Counts;
@@ -92,6 +92,21 @@ fn an_end_short_of_the_way_it_makes_for_is_carried_onto_it() {
     ];
     assert!(!free_end(&ways, 1, (50.0, 2.0)));
     assert!(free_end(&ways, 1, (50.0, 100.0)));
+    // the index's answer is the walk's, end for end, near and far
+    let index = WayIndex::new(&ways);
+    for i in 0..ways.len() {
+        for q in [
+            (50.0, 2.0),
+            (50.0, 100.0),
+            (0.0, 0.0),
+            (3.9, 1.0),
+            (4.1, -3.0),
+            (200.0, 0.0),
+            (100.0, 4.0),
+        ] {
+            assert_eq!(index.free_end(i, q), free_end(&ways, i, q));
+        }
+    }
     // meeting cleanly; a hook, a needle, a fold, the track's hairpin do not
     assert!(meets_clean(
         &[(50.0, 100.0), (50.0, 0.0)],

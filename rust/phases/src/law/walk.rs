@@ -21,7 +21,7 @@
     reason = "the plane geometry's own names, and sample counts of a few hundred"
 )]
 
-use super::ground::{hooked, house_hit, House, LawGround};
+use super::ground::{hooked, house_hit, BoxGrid, House, LawGround};
 use super::meet::{
     connector_hairpin_ends, folded_joint_pairs, foot, joints, needle_ends, Lane, TOUCH,
 };
@@ -186,6 +186,54 @@ pub fn box_gap(q: Pt, b: Box4) -> f64 {
         .hypot((b.1 - q.1).max(0.0).max(q.1 - b.3))
 }
 
+/// The ways' segments filed in the lane law's box grid, each with its way: an end asks only the segments near it.
+pub struct WayIndex {
+    segs: Vec<(Pt, Pt, usize)>,
+    grid: BoxGrid,
+}
+
+impl WayIndex {
+    /// The segments of `ways` (a way of fewer than two points has none), filed by box.
+    #[must_use]
+    pub fn new(ways: &[Vec<Pt>]) -> Self {
+        let segs: Vec<(Pt, Pt, usize)> = ways
+            .iter()
+            .enumerate()
+            .flat_map(|(k, w)| w.windows(2).map(move |s| (s[0], s[1], k)))
+            .collect();
+        let grid = BoxGrid::new(
+            segs.iter()
+                .map(|&(a, b, _)| (a.0.min(b.0), a.1.min(b.1), a.0.max(b.0), a.1.max(b.1))),
+        );
+        Self { segs, grid }
+    }
+
+    /// The ways with a segment whose box comes within `r` of `q`, each once, in order.
+    #[must_use]
+    pub fn ways_near(&self, q: Pt, r: f64) -> Vec<usize> {
+        let mut out: Vec<usize> = self
+            .grid
+            .near((q.0 - r, q.1 - r, q.0 + r, q.1 + r))
+            .into_iter()
+            .map(|k| self.segs[k].2)
+            .collect();
+        out.dedup();
+        out
+    }
+
+    /// Does the end `q` of way `i` touch no other way (`free_end`, asked of the segments within the touch of it)?
+    #[must_use]
+    pub fn free_end(&self, i: usize, q: Pt) -> bool {
+        let t = TOUCH.1;
+        let near = self.grid.near((q.0 - t, q.1 - t, q.0 + t, q.1 + t));
+        crate::counts::note("seg_test@free_end", near.len() as u64 + 1);
+        near.iter().all(|&k| {
+            let (a, b, of) = self.segs[k];
+            of == i || seg_dist(q, a, b) > t
+        })
+    }
+}
+
 /// Does the end `q` of way `i` touch no other way?
 #[must_use]
 pub fn free_end(ways: &[Vec<Pt>], i: usize, q: Pt) -> bool {
@@ -281,6 +329,7 @@ pub fn span_walkable(
 #[must_use]
 pub fn near_misses(g: &LawGround, lanes: &[Lane], tests: &mut Counts) -> Vec<(usize, i8, Pt)> {
     let ways: Vec<Vec<Pt>> = lanes.iter().map(|l| l.pts.clone()).collect();
+    let index = WayIndex::new(&ways);
     let (reach, aim, _) = JOIN;
     let mut out = Vec::new();
     for (i, ln) in lanes.iter().enumerate() {
@@ -289,19 +338,14 @@ pub fn near_misses(g: &LawGround, lanes: &[Lane], tests: &mut Counts) -> Vec<(us
             continue;
         }
         for (end, q, b) in [(-1i8, p[p.len() - 1], p[p.len() - 2]), (0, p[0], p[1])] {
-            if !free_end(&ways, i, q) || dist(q, b) < 1e-6 || (end == 0 && ln.of.is_some()) {
+            if !index.free_end(i, q) || dist(q, b) < 1e-6 || (end == 0 && ln.of.is_some()) {
                 continue;
             }
             let head = ((q.0 - b.0) / dist(q, b), (q.1 - b.1) / dist(q, b));
             let mut best: Option<(f64, usize, Pt)> = None;
-            for (k, o) in ways
-                .iter()
-                .enumerate()
-                .filter(|&(k, o)| k != i && o.len() >= 2)
-            {
-                if box_gap(q, poly_box(o)) > reach {
-                    continue;
-                }
+            // ...asked only of the ways with a segment within the reach of the end (a way nearer than the reach has one), in order
+            for k in index.ways_near(q, reach).into_iter().filter(|&k| k != i) {
+                let o = &ways[k];
                 let f = o
                     .windows(2)
                     .map(|w| foot(q, (w[0], w[1])))
@@ -384,7 +428,7 @@ pub fn reach_to_steading(end: Pt, s: &Steading) -> bool {
 /// nearest farmhouse.
 #[must_use]
 pub fn fronting_counts(lanes: &[Lane], steadings: &[Steading]) -> Vec<usize> {
-    let ways: Vec<Vec<Pt>> = lanes.iter().map(|l| l.pts.clone()).collect();
+    let index = WayIndex::new(&lanes.iter().map(|l| l.pts.clone()).collect::<Vec<_>>());
     let mut counts = vec![0; steadings.len()];
     if steadings.is_empty() {
         return counts;
@@ -395,7 +439,7 @@ pub fn fronting_counts(lanes: &[Lane], steadings: &[Steading]) -> Vec<usize> {
         .filter(|(_, l)| !l.connector && l.pts.len() >= 2)
     {
         for end in [ln.pts[0], ln.pts[ln.pts.len() - 1]] {
-            if !free_end(&ways, i, end) {
+            if !index.free_end(i, end) {
                 continue;
             }
             let best = (0..steadings.len())

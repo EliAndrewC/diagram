@@ -3,7 +3,7 @@
 //! Research:
 //!     the faces' tests - NONE: fixtures and assertions, deciding nothing about the place
 
-use super::faces::{needles, web_faces, Face};
+use super::faces::{cuts_of, needles, web_faces, Face};
 use super::Counts;
 
 #[test]
@@ -58,4 +58,31 @@ fn a_sliver_between_two_ways_is_a_needle_and_a_wide_loop_is_not() {
         perimeter: 0.5,
     };
     assert!(!speck.is_needle());
+}
+
+#[test]
+fn the_cuts_asked_of_near_segments_are_the_cuts_asked_of_every_pair() {
+    let mut t = Counts::default();
+    // a web of crossing and touching legs: a lattice, a diagonal through it, an end standing on a leg
+    let mut segs: Vec<((f64, f64), (f64, f64))> = Vec::new();
+    for k in 0..8 {
+        let v = f64::from(k) * 37.0;
+        segs.push(((v, 0.0), (v + 13.0, 300.0)));
+        segs.push(((0.0, v), (300.0, v + 9.0)));
+    }
+    segs.push(((0.0, 0.0), (300.0, 300.0)));
+    segs.push(((74.0, 150.0), (74.0 + 13.0 * 0.5, 150.0)));
+    let near = cuts_of(&segs, true, &mut t);
+    let all = cuts_of(&segs, false, &mut t);
+    let sorted = |c: &[Vec<f64>]| -> Vec<Vec<f64>> {
+        c.iter()
+            .map(|v| {
+                let mut v = v.clone();
+                v.sort_by(f64::total_cmp);
+                v
+            })
+            .collect()
+    };
+    assert_eq!(sorted(&near), sorted(&all));
+    assert!(all.iter().map(Vec::len).sum::<usize>() > 2 * segs.len());
 }

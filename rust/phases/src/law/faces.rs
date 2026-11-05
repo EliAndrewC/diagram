@@ -17,11 +17,12 @@
 
 use std::collections::HashMap;
 
+use super::ground::BoxGrid;
 use super::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
 use crate::ways::route::length;
-use crate::ways::track::{seg_intersect, segments_cross};
+use crate::ways::track::{seg_intersect, segments_cross, Box4};
 
 /// A needle's mean width, and the perimeter under which a face is a noding speck (ft).
 ///
@@ -53,25 +54,24 @@ fn key(p: Pt) -> (i64, i64) {
     ((p.0 * 1e7).round() as i64, (p.1 * 1e7).round() as i64)
 }
 
-/// The bounded faces of the treads `ways` (each of two points or more and a foot long or more), noded where they cross.
+/// Each segment's cuts, as fractions along it: its two ends, where another crosses it, and where another's end stands on it. Asked
+/// `near`, each segment only of the segments whose boxes meet its own (a crossing, or an end within 1e-6, lies in both boxes);
+/// else of every other - the walk of every pair was the stage's superlinear work (the work-budget audit at T30's landing).
 #[must_use]
-pub fn web_faces(ways: &[Vec<Pt>], tests: &mut Counts) -> Vec<Face> {
-    let lines: Vec<&Vec<Pt>> = ways
-        .iter()
-        .filter(|w| w.len() >= 2 && length(w) >= 1.0)
-        .collect();
-    if lines.len() < 2 {
-        return Vec::new();
-    }
-    let segs: Vec<(Pt, Pt)> = lines
-        .iter()
-        .flat_map(|w| w.windows(2).map(|s| (s[0], s[1])))
-        .filter(|&(a, b)| dist(a, b) > 0.0)
-        .collect();
-    // each segment's cuts: where another crosses it, and where another's end stands on it
+pub fn cuts_of(segs: &[(Pt, Pt)], near: bool, tests: &mut Counts) -> Vec<Vec<f64>> {
     let mut cuts: Vec<Vec<f64>> = vec![vec![0.0, 1.0]; segs.len()];
+    let boxes: Vec<Box4> = segs
+        .iter()
+        .map(|&(a, b)| (a.0.min(b.0), a.1.min(b.1), a.0.max(b.0), a.1.max(b.1)))
+        .collect();
+    let grid = BoxGrid::new(boxes.iter().copied());
     for i in 0..segs.len() {
-        for j in i + 1..segs.len() {
+        let others: Vec<usize> = if near {
+            grid.near(boxes[i])
+        } else {
+            (0..segs.len()).collect()
+        };
+        for j in others.into_iter().filter(|&j| j > i) {
             let ((a, b), (c, d)) = (segs[i], segs[j]);
             tests.add("seg_test@web_faces", 1);
             if segments_cross(a, b, c, d) {
@@ -89,6 +89,25 @@ pub fn web_faces(ways: &[Vec<Pt>], tests: &mut Counts) -> Vec<Face> {
             }
         }
     }
+    cuts
+}
+
+/// The bounded faces of the treads `ways` (each of two points or more and a foot long or more), noded where they cross.
+#[must_use]
+pub fn web_faces(ways: &[Vec<Pt>], tests: &mut Counts) -> Vec<Face> {
+    let lines: Vec<&Vec<Pt>> = ways
+        .iter()
+        .filter(|w| w.len() >= 2 && length(w) >= 1.0)
+        .collect();
+    if lines.len() < 2 {
+        return Vec::new();
+    }
+    let segs: Vec<(Pt, Pt)> = lines
+        .iter()
+        .flat_map(|w| w.windows(2).map(|s| (s[0], s[1])))
+        .filter(|&(a, b)| dist(a, b) > 0.0)
+        .collect();
+    let cuts = cuts_of(&segs, true, tests);
     let mut verts: Vec<Pt> = Vec::new();
     let mut index: HashMap<(i64, i64), usize> = HashMap::new();
     let mut vert = |p: Pt| {
@@ -98,6 +117,7 @@ pub fn web_faces(ways: &[Vec<Pt>], tests: &mut Counts) -> Vec<Face> {
         })
     };
     let mut edges: Vec<(usize, usize)> = Vec::new();
+    let mut seen: std::collections::HashSet<(usize, usize)> = std::collections::HashSet::new();
     for (k, &(a, b)) in segs.iter().enumerate() {
         let mut ts = cuts[k].clone();
         ts.sort_by(f64::total_cmp);
@@ -107,7 +127,7 @@ pub fn web_faces(ways: &[Vec<Pt>], tests: &mut Counts) -> Vec<Face> {
             .collect();
         for w in pts.windows(2) {
             let (u, v) = (w[0].min(w[1]), w[0].max(w[1]));
-            if u != v && !edges.contains(&(u, v)) {
+            if u != v && seen.insert((u, v)) {
                 edges.push((u, v));
             }
         }
