@@ -322,3 +322,23 @@ def test_a_box_written_without_lands_open_is_ticked_too(root: pathlib.Path) -> N
     gm.accept(d, "the steam arcs off center", "a drawing nicety no norm sets")
     gm.reviewed(root, d)
     assert "- [x] GM review (make gm-reviewed F=375)" in (d / "tasks.md").read_text()
+
+
+def test_a_kept_question_the_record_overturned_is_closed_only_as_superseded_by_a_later_one(root: pathlib.Path) -> None:
+    """The round arbiter, ask:444-gm-review-supersede (2026-11-05): a kept question the GM has not reviewed is cut only as
+    superseded by a later question row of its feature; without one, or with an earlier one, it is still refused."""
+    d = root / "specs" / "375-x"
+    old = gm.question(d, "raise the budget, within the 2x leeway?", "ask:a1")
+    gm.escalated(d, old, "KEEP", "test 1: his budget")
+    with pytest.raises(ValueError, match="SUPERSEDED_BY"):
+        gm.escalated(d, old, "CUT", "premise overturned")
+    new = gm.question(d, "raise the budget, at 8.9 times?", "ask:a2")
+    with pytest.raises(ValueError, match="no later question"):
+        gm.escalated(d, new, "CUT", "two words", superseded_by=old)
+    with pytest.raises(ValueError, match="no later question"):
+        gm.escalated(d, old, "CUT", "two words", superseded_by=old)
+    assert "CUT" in gm.escalated(d, old, "CUT", "premise overturned", superseded_by=new)
+    r = gm.rows(d)[old]
+    assert r["status"] == "cut" and r["reviewed"] and r["escalation"].startswith(f"superseded by row {new}: ")
+    with pytest.raises(ValueError, match="SUPERSEDED_BY closes a kept question"):
+        gm.escalated(d, old, "CUT", "again two", superseded_by=new)

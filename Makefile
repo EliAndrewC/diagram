@@ -51,8 +51,8 @@ perf-share:     ## [performance] where a module's time is: its share of each sta
 phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
 	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 
-work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80]
-	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",)
+work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80] [SPEC='<JSON over the reference spec>': a stage only another form runs, its run the audit's and the standing record untouched (444 T29)]
+	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",) $(if $(SPEC),--spec '$(SPEC)',)
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"
@@ -65,6 +65,9 @@ work-budget-bundle: ## [performance] the work-budget agent's bundle: MODE=budget
 
 budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted; the budget is per thing x the derivation's own items at each size (features 443, 444)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> ITEMS_AT_20=<n> ITEMS_AT_40=<n> ITEMS_AT_80=<n> DERIVATION=<file> VERDICT=<verdict file> | ARBITER=ask:<id> SPREAD="<low>-<high> at <households>" (the round arbiter's accept, feature 444 FR-013) [REASON="<why above today's count at 40>"] [GROWTH_REASON="<why its n is bounded>": past rubric S6's 1.15 from 20 to 80] [LOWER=1: re-pin a budgeted stage, no higher at any size] [RAISE=1: raise a budgeted stage on a SOUND re-derivation naming the work its first missed (444 FR-022) - past twice its first at 40 with SECOND=<an independent MODE BUDGET's SOUND>, never past 10 times it]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)" $(if $(ARBITER),--arbiter "$(ARBITER)",) $(if $(SPREAD),--spread "$(SPREAD)",) $(if $(ITEMS_AT_10),--items-at-10 "$(ITEMS_AT_10)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(REASON),--reason "$(REASON)",) $(if $(GROWTH_REASON),--growth-reason "$(GROWTH_REASON)",) $(if $(LOWER),--lower,) $(if $(RAISE),--raise,) $(if $(SECOND),--second "$(SECOND)",)
+
+stage-sizes:    ## [performance] what a stage of the hamlet roll is handed - each manifest and plan part's records and points, and the canvas - on the reference roll at 20/40/80 households, for a derivation's bounds (feature 444 T27)   STAGE=<name> [SIZES=20,40,80] [CALLS=<settlement methods, comma-separated>] [DUMP=<dir>: each roll's input written as JSON] [SPEC='<JSON over the reference spec>'] [SEEDS=<n,n>]
+	$(RUN).tools.stage_sizes "$(STAGE)" $(if $(SIZES),--sizes "$(SIZES)",) $(if $(CALLS),--calls "$(CALLS)",) $(if $(DUMP),--dump "$(DUMP)",) $(if $(SPEC),--spec '$(SPEC)',) $(if $(SEEDS),--seeds "$(SEEDS)",)
 
 budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$(WORDS)"
@@ -240,8 +243,8 @@ cohort-landing: ## [maps] the landing cohort a gated push requires: main's basel
 	-@$(MAKE) --no-print-directory cohort N=48 FRESH=0
 	@python3 scripts/gates/cohort_gate.py check
 
-rust-gate:      ## [maps] the Rust stage gate (feature 444 FR-019, FR-020): every seed rolled through the Rust stages alone and judged where they complete - a fresh block, the pinned row variants on fresh seeds, the failing list and its frozen inputs; exit 1 on a failing seed
-	$(RUN).tools.rust_gate --start $$(python3 scripts/gates/cohort_gate.py fresh-seed)
+rust-gate:      ## [maps] the Rust stage gate (feature 444 FR-019, FR-020): every seed rolled through the Rust stages alone and judged where they complete - a fresh block, the pinned row variants on fresh seeds, the failing list and its frozen inputs; exit 1 on a failing seed   [REFREEZE=<stage>: re-charge the list's later-stage entries to that Rust stage, its input frozen, on a round arbiter's ruling, and stop]
+	$(RUN).tools.rust_gate --start $$(python3 scripts/gates/cohort_gate.py fresh-seed) $(if $(REFREEZE),--refreeze-to "$(REFREEZE)",)
 
 hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 hamlet:         ## [maps] generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
@@ -777,9 +780,9 @@ gm-question:    ## [project] put a question to the GM: written OWED escalation-c
 	@if [ -z "$(F)" ] || [ -z "$(Q)" ] || [ -z "$(SOURCE)" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py question "$(F)" "$(Q)" "$(SOURCE)"
 
-gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>"
+gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>" [SUPERSEDED_BY=<a later question row>: CUT a kept question the GM has not reviewed, its premise overturned]
 	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$(REASON)" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)" "$(SUPERSEDED_BY)"
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
