@@ -657,6 +657,23 @@ Occasions: settlement-review on the pool hamlets the rebuilt seating moves (ever
 
 **Performance work?** yes - docs/performance-checklist.md's questions follow.
 
+### T30 Approach (re-answered 2026-11-05T19:41Z)
+
+1. **The goal, in the world.** As above: every household seated on its own ground by its settlement's form.
+2. **The constraints.** As above, and S4 at every choice the seating makes between candidates: a row's first street and a row
+   village's margin are chosen by their room, asked before any farm stands (`row_seat.rs` `row_room`), never by seating each
+   and keeping one.
+3. **Where each comes from.** As above; spec-fidelity's plan review of 2026-11-05 (S4, FR-004, FR-016).
+4. **Do they describe the world here?** The Rust stage gate's fresh blocks and pinned rows, every form.
+5. **The order.** As above.
+6. **The exits.** As above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Each offer refused cheapest first against a raster painted once; each row street's and margin's room
+   asked once, nothing placed to be dropped.
+8. **The budget.** One landing.
+9. **Done, measured.** As above.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
 ### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
 1. **Where does the time go?** In the seating's tests of each offered seat and the ways laid after it: 17,909,350 Python calls at 40, measured 2026-11-04 (`make perf-fanout STAGES=homesteads`), the hottest chains the fabric's crossing tests (`fabric_hits_boxed`), the gap ways' leg tests (`gap_ways.leg_ok`, `access.fixtures_clear`), the boundary's line samples (`boundary._samples`, growing 18.7x from 20 to 40) and the fixtures' reach tests (`fixture_seats.within_reach_of`); 1,716,870 counted at 40, measured 2026-11-04 (`make work-budget`).
@@ -689,11 +706,11 @@ after the seat, `specs/444-work-budget-program/phases/homesteads.gate-seeds.md`)
 4. **Do they describe the world here?** A row village on the Rust seat's margin; the ladder's next margins on the same field.
 5. **The order.** Inside the homesteads stage's seating (`seat_every_household`).
 6. **The exits.** Green: 778251 seats all 17 and the stage's checks pass there (`make rust-gate`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** The ladder's margins tried on a copy of the map, the first that seats everyone kept.
+7. **The search smell.** None placed and dropped (FR-004, S4): each ladder margin's room - its row's frames asked every rule a farm is seated by, nothing stood (`row_seat.rs` `row_room`) - asked before any house, and the row seated once, on the first margin whose room holds every household (FR-016).
 8. **The budget.** One commit inside T30's landing.
 9. **Done, measured.** `make rust-gate`'s failing list without 778251.
 10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Room from a second margin, the ruling's first route.
+11. **Before fitting things into room.** Room from a second margin, the ruling's route, its room asked before any house stands.
 
 - research: rendering
 
@@ -720,10 +737,10 @@ keeps its ink).
   in Python for the web until the web's phase, its Rust twin shared then.
 - **D2 - no new rule**: every constant keeps its claim at the Rust that reads it (the run past the sheet, CONVENTION; the ford landing, GUESS;
   the vertex step; the reach and run in frames, GUESS; `ROW_FRAME_FT`, 0033 - each as its constant's claim reads).
-- **D3 - the budget**: the stage's SOUND greenfield derivation (`phases/track_greenfield.derivation.md`, verdict 2: 223 at 40)
-  priced the track out the homesteads now choose; the row road it did not price is re-derived if the audit finds the stage
-  past it (FR-022), never squeezed. The registry's records of the lane (`Standing.ribbon`, the stage end's `resync`) are the
-  door's and every stage's.
+- **D3 - the budget** (FR-022 rule 2): the stage re-derived for what it now does - the row road; the track out it no longer
+  chooses (the homesteads' re-derivation prices it, T30 D1) dropped - before the rebuild's count is read, in
+  `phases/track_road.derivation.md`, with its MODE BUDGET verdict (`make work-budget-bundle MODE=budget`). The registry's
+  records of a lane (`Standing.ribbon`, the stage end's `resync`) are the door's, as every stage's.
 - **D4 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`.
 
 ### T32 Approach (checklist part A)

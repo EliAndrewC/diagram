@@ -18,6 +18,7 @@ mod tests;
 use crate::counts::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
+use crate::law::ground::BoxGrid;
 use crate::law::rules::crossing_points;
 use crate::ways::squaring::square_run;
 use crate::ways::through::{thread_the_fabric, Fabric};
@@ -124,17 +125,27 @@ pub fn street_span(
     for w in line.windows(2) {
         arc.push(arc[arc.len() - 1] + dist(w[0], w[1]));
     }
+    // ...each farm asks only the segments whose boxes come within its reach (a segment nearer than the reach has one)
+    let grid = BoxGrid::new(line.windows(2).map(|w| {
+        (
+            w[0].0.min(w[1].0),
+            w[0].1.min(w[1].1),
+            w[0].0.max(w[1].0),
+            w[0].1.max(w[1].1),
+        )
+    }));
     let mut along = Vec::new();
     for &h in farms {
         // the nearest segment, the lower index on a tie
+        let near = grid.near((h.0 - reach, h.1 - reach, h.0 + reach, h.1 + reach));
+        tests.add("dist@street_span", near.len() as u64 + 1);
         let mut best = (f64::INFINITY, 0usize);
-        for (i, w) in line.windows(2).enumerate() {
-            let d = seg_dist(h, w[0], w[1]);
+        for i in near {
+            let d = seg_dist(h, line[i], line[i + 1]);
             if d < best.0 {
                 best = (d, i);
             }
         }
-        tests.add("dist@street_span", line.len() as u64 - 1);
         if best.0 > reach {
             continue;
         }
