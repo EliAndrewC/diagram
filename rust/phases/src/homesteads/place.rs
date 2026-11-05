@@ -242,8 +242,6 @@ pub struct Seating {
     pub tests: Counts,
     /// The households' wood reservations.
     pub wood: super::wood::Shares,
-    /// The reach reflooded with the wood seats reserved so far painted, once they change; None before any is reserved.
-    pub reach: Option<super::ground::Reach>,
     /// The wood seats reserved so far.
     pub seats: Vec<Pt>,
     /// How many passages lie between each seated household and a way of its own.
@@ -252,8 +250,6 @@ pub struct Seating {
     pub walks: super::access::AccessTree,
     /// The passages the settlement's share has left.
     pub passage_left: usize,
-    /// Whether `reach` lacks the wood seats reserved since it was flooded.
-    pub reach_stale: bool,
     /// A row village's holdings reserved so far, which no later part stands on.
     pub holdings: Vec<Vec<Pt>>,
 }
@@ -289,18 +285,6 @@ impl Seating {
             &sun,
             &mut self.tests,
         )
-    }
-
-    /// The reach the next household's yard is asked of, taken out while it is asked: reflooded with the wood seats reserved since
-    /// it was last flooded, or None while none is reserved (the site's own reach stands).
-    fn take_reach(&mut self, site: &Site) -> Option<super::ground::Reach> {
-        if (self.reach.is_none() || self.reach_stale) && !self.seats.is_empty() {
-            // ...from the last flood, its painted seats carried and only those reserved since painted
-            let last = self.reach.as_ref().unwrap_or(site.reach);
-            self.reach = Some(last.painted(&self.seats, &mut self.tests));
-            self.reach_stale = false;
-        }
-        self.reach.take()
     }
 
     /// What a walk keeps off besides the two households' parts, at the tight seat against `nb`: every other homestead's box and the
@@ -515,13 +499,14 @@ impl Seating {
             .iter()
             .map(|&side| self.lay(site, lot, (x, y), side, (x, y)))
             .collect();
-        let painted = self.take_reach(site);
-        let reach = painted.as_ref().unwrap_or(site.reach);
+        // THE REACH LABELED ONCE (the derivation's invariant: no house is painted into it while the houses are seated, 0246): flooded
+        // again after every household with its reserved wood seats painted on - as the Python's seat region was - it was most of the
+        // stage's counted work, the exponent near 2, and a 48-seed cohort and the Rust gate seated and failed the same seeds either way
+        let reach = site.reach;
         // a tight seat is judged by its land, not one layout: taken only where some layout here has a walk to the neighbor's yard and
         // none a way of its own (`passage.landlocked`)
         let tight = keep.and_then(|k| k.tight);
         if !tight.is_none_or(|t| self.landlocked(site, &sides, &t, reach)) {
-            self.reach = painted;
             return None;
         }
         let mut own_way = false;
@@ -599,7 +584,6 @@ impl Seating {
                 best = Some((score, ((cx, cy), b, seats, own, passage)));
             }
         }
-        self.reach = painted;
         best.map(|(_, p)| p)
     }
 
@@ -635,7 +619,6 @@ impl Seating {
             .push(Some(passage.as_ref().map_or(0, |p| p.depth)));
         if !wood.is_empty() {
             self.seats.extend(&wood);
-            self.reach_stale = true;
         }
         let placed = Placed {
             house: (b.house, b.turn),

@@ -1,10 +1,11 @@
 [
  {
-  "seed": 729966,
-  "households": 19,
+  "seed": 794121,
+  "households": 18,
   "pins": {},
   "stage": "homesteads",
-  "failure": "FAIL refused:SiteRefused -> Rust-729966 (seed 729966): seated 18 of 19 households on margin 1; no house is taken back",
-  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/729966-homesteads.pkl"
+  "failure": "FAIL refused:SiteRefused -> Rust-794121 (seed 794121): seated 0 of 18 households on margin 6; no house is taken back",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/794121-homesteads.pkl",
+  "seed_passes": false
  }
 ]

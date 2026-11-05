@@ -143,9 +143,11 @@ names and is listed so a refused seed can be traced to it.
   sheet, before its own clear frames (the gate's seeds 406155 and 406169; Python refused 406169 too).
 - `homesteads/row_seat.rs` the first street's slack: a row's length, where Python laid two lots (a GUESS the record leaves to us - the
   Rust gate's seed 729966 seated 18 of 19 with two).
-- `homesteads/ground.rs` `reach_in` and `Reach::painted`: the reach flooded over the seating's window (Python's seat region's own),
-  seeded at its inner edges, and each flood painting only the seats reserved since (exact) - 2.83 billion counted operations at 40
-  where the canvas was flooded whole after every household.
+- `homesteads/ground.rs` `reach_in`: the reach flooded over the seating's window (Python's seat region's own), seeded at its inner
+  edges, and LABELED ONCE, as the derivation has it (no house is painted into it while the houses are seated, 0246), where Python's
+  seat region was flooded again with each household's wood seats painted on - 2.83 billion counted operations at 40, the exponent
+  near 2, when the canvas was flooded whole after every household; the 48-seed cohort and the Rust gate seat and fail the same seeds
+  labeled once as painted (2026-11-05).
 - `overlap/registry.py` `Standing.__setstate__`: an unpickled registry re-keys its records by their new ids (the gate's replays).
 - `homesteads/level.rs`: the hard ground grown by a distance traced as a level set on 4 ft cells (marching squares, linearly
   interpolated), where Python buffers with shapely - its ring within 1% of shapely's length and a foot of its line.
@@ -169,7 +171,8 @@ Each found by a seed the Rust seating failed and Python passed, fixed at the por
 - the guess every seat is parted by (the next household's reach at the first house), the settle's start from it and its
   refusal of a seat whose house the placer refuses outright (`settled_seat`, `seat_refused`);
 - a standing homestead's footprint taking in its reserved wood seats (`footprint`);
-- the reach flooded over the taken ground grown by a lane's room, the reserved wood seats painted as they are reserved.
+- the reach flooded over the taken ground grown by a lane's room (the wood seats painted on as they were reserved, until the reach
+  was labeled once - below).
 
 What it left, 2026-11-04 (48 seeds, the passage share in): 39/54 against Python's 41/54 on the same tree - seeds 24 and 44 fail
 `track_ends_off_the_web`, a check of the web (a later stage's, not asked at the Rust gate, FR-019); seed 39 raises `NoDryExit`

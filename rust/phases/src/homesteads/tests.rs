@@ -86,7 +86,7 @@ fn the_reach_is_the_free_ground_joined_to_its_seeds() {
 }
 
 #[test]
-fn the_reach_over_a_window_runs_on_past_its_open_sides_and_paints_only_the_new_seats() {
+fn the_reach_over_a_window_runs_on_past_its_open_sides() {
     let mut t = Counts::default();
     let mut g = Ground::new((0.0, 0.0), (400.0, 400.0), &mut t);
     // a wall at x 200-220 the whole height: the window east of it is cut off from a seed in the west of the canvas
@@ -106,17 +106,6 @@ fn the_reach_over_a_window_runs_on_past_its_open_sides_and_paints_only_the_new_s
     // a window against the canvas's west edge: past that side nothing runs on
     let edge = g.reach_in(((0.0, 100.0), (80.0, 200.0)), &[], &mut t);
     assert!(!edge.touches((-40.0, 140.0), (-20.0, 150.0), &mut t));
-    // painted again: the seats it holds carried, only the new one painted - the same as painting them all from the ground
-    let one = w.painted(&[(280.0, 150.0)], &mut t);
-    let two = one.painted(&[(280.0, 150.0), (300.0, 120.0)], &mut t);
-    let whole = w.painted(&[(280.0, 150.0), (300.0, 120.0)], &mut t);
-    for p in [(278.0, 148.0), (298.0, 118.0), (260.0, 190.0)] {
-        assert_eq!(
-            two.touches(p, (p.0 + 2.0, p.1 + 2.0), &mut t),
-            whole.touches(p, (p.0 + 2.0, p.1 + 2.0), &mut t)
-        );
-    }
-    assert!(!two.touches((298.0, 118.0), (300.0, 120.0), &mut t));
 }
 
 #[test]
