@@ -18,7 +18,7 @@
 //!     the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form, a farm with its street and the grove row beyond it to windward is seated as a full farm and marked `sheltered`
 //!     a street across the wind - GUESS: within 67.5 degrees of the farm's windward bearing; no page gives an angle
 //!     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (holdings clipped 30 px inside the sheet)
-//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with a row's length of slack, kept half a frame inside the sheet (two lots of slack, the Python's, left a row against the sheet one farm short: the Rust stage gate's seed 729966, 18 of 19)
+//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with a row's length of slack, kept half a frame inside the sheet (two lots of slack, the Python's, left a row against the sheet one farm short: the Rust stage gate's seed 729966, 18 of 19); where that row falls short of the households, the row is seated too on the street Python chose - two lots of slack, ranked by its own clear frames - and the one seating more kept (seed 290494: 14 of 19 on the first, 19 on Python's)
 //!     street tread reserved - research/questions/0081-village-lanes.drawing.html: a way's corridor kept clear of built and worked ground while its farms are seated; released when the row is seated
 
 #![expect(
@@ -31,9 +31,9 @@ use super::grove_seat::GroveSite;
 use super::level::Hard;
 use super::place::Seating;
 use super::rows::{
-    best_row_line, clear_frames, frame_extent, frame_refused, holding_clear, holding_quad,
-    inside_the_sheet, parallel, row_offsets, row_seats, row_step, street_bend_radius_ft, Form,
-    Frames, FIELD_KEEP_FT, HOLDING_DEPTH_FRAMES, MAX_STREETS, ROW_FRONTAGE_MAX_FT, STREET_HALF_FT,
+    clear_frames, frame_extent, frame_refused, holding_clear, holding_quad, inside_the_sheet,
+    parallel, row_lines, row_offsets, row_seats, row_step, street_bend_radius_ft, Form, Frames,
+    FIELD_KEEP_FT, HOLDING_DEPTH_FRAMES, MAX_STREETS, ROW_FRONTAGE_MAX_FT, STREET_HALF_FT,
 };
 use super::Counts;
 use crate::field::fan::Pt;
@@ -115,10 +115,6 @@ fn planned_streets(
 
 /// Seat a row village's farms (`rows.seat_rows`).
 #[must_use]
-#[expect(
-    clippy::too_many_lines,
-    reason = "the row's one loop, as `seat_rows` runs it"
-)]
 pub fn seat_rows(rs: &RowSite) -> Rows {
     let mut out = Rows::default();
     let gs0 = &rs.gs;
@@ -128,7 +124,6 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
     let frame = out.seating.largest(gs0, (0.0, 0.0), Some(0.0)).bbox;
     let (fw, fd) = (frame.2.max(frame.3), frame.2.min(frame.3));
     let lot = fw.min(ROW_FRONTAGE_MAX_FT);
-    let (hx_off, hy_off) = (frame.0, frame.1);
     let hold_depth = lot
         * if rs.form == Form::Street {
             HOLDING_DEPTH_FRAMES.0
@@ -162,7 +157,7 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
         }
         held.min(want)
     };
-    let first = best_row_line(
+    let (by_row, _) = row_lines(
         rs.hard,
         rs.anchor,
         (
@@ -175,7 +170,73 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
         &capacity,
         tests,
     );
-    let planned = streets_of(&first, tests);
+    let plan = Plan {
+        frame,
+        fr,
+        hold_depth,
+        gap,
+        sheet,
+    };
+    // ...seated from the street its whole row ranks first, a row's length of slack; where that falls short of the households
+    // wanted, from the street Python chose too - two lots of slack, ranked by its own clear frames - the row that seats more kept
+    // (each count a promise the seating may not keep: the Rust stage gate's seed 729966 seated 18 of 19 on Python's street, seed
+    // 290494 14 of 19 on the whole row's, all 19 on Python's)
+    let tried = std::mem::take(&mut out.seating.tests);
+    let mut tries = vec![seat_along(rs, &by_row, &plan)];
+    if tries[0].seating.seated.len() < want {
+        let (_, by_own) = row_lines(
+            rs.hard,
+            rs.anchor,
+            (first_off, per_line as f64 * lot + lot, 2.0 * lot),
+            rs.form,
+            &fr,
+            &capacity,
+            &mut tries[0].seating.tests,
+        );
+        tries.push(seat_along(rs, &by_own, &plan));
+    }
+    // the first of the rows that seat the most (the last maximum of the tries reversed), every try's work counted
+    let k = (0..tries.len())
+        .rev()
+        .max_by_key(|&i| tries[i].seating.seated.len())
+        .unwrap_or(0);
+    let mut got = tries.swap_remove(k);
+    for (k, n) in tries.into_iter().flat_map(|t| t.seating.tests.0) {
+        got.seating.tests.add(&k, n);
+    }
+    for (k, n) in tried.0 {
+        got.seating.tests.add(&k, n);
+    }
+    got
+}
+
+/// What a row's seating along a first street reads beyond the site: the frame, its judgment, the holding's depth, the frame's gap off
+/// the street and the sheet's inner bounds.
+struct Plan {
+    frame: super::layout::Rect,
+    fr: Frames,
+    hold_depth: f64,
+    gap: f64,
+    sheet: (f64, f64, f64, f64),
+}
+
+/// The row's farms seated along `first` and the streets set out beside it.
+fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan) -> Rows {
+    let mut out = Rows::default();
+    let gs0 = &rs.gs;
+    let want = gs0.want;
+    let Plan {
+        frame,
+        fr,
+        hold_depth,
+        gap,
+        sheet,
+    } = *plan;
+    let (hx_off, hy_off) = (frame.0, frame.1);
+    let (w, h) = rs.sheet;
+    let bounds = fr.bounds;
+    let tests = &mut out.seating.tests;
+    let planned = planned_streets(first, frame, (rs.both, gap, hold_depth), tests);
     let all_streets: Vec<Vec<Pt>> = planned
         .iter()
         .filter(|l| l.len() >= 2)

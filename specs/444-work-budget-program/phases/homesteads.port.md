@@ -129,9 +129,11 @@ names and is listed so a refused seed can be traced to it.
   one-cell growth), where Python floods again as each household's wood seats are painted; `fit.rs` `opens` grows the yard by the
   corridor's half-width and a cell, as `SeatRegion.opens` does. Both found by the Rust-seated cohort (2026-11-04: seeds 17, 21,
   24 and 26 regressed while the reach flooded the raw cells and a yard was grown by a cell alone).
-- `homesteads/wood.rs`: each household's seats on the map's one lattice (a square reserved once), where Python anchors a lattice
-  on each house - so a Rust-seated household reserves other seats than Python's would, and the clusters part from the second
-  house on (seed 21, 2026-11-04: 25 seats against 22, the lattice 4.7 ft over).
+- `homesteads/wood.rs`: RETIRED 2026-11-05 - the wood share is Python's again, the lattice anchored on each house and the floor counted
+  by the crowns' canopy cells (`wood_share.py` `share`, `crown_cells`), with Python's copse keep-outs (of the fixtures only the
+  retirement house, and the well pocket). The map's one lattice had made the first house's footprint 87.9 ft west where Python's
+  is 58.6, every later seat parted that much farther, and the Rust gate's seed 901303 seated 14 of 15 where Python seats 15; house
+  0's 22 seats are now Python's, seat for seat.
 - `homesteads/grove_seat.rs` `fixtures_in_bands`: a fixture asked of its own farm's bands only - Python asks a neighbor's too, but after
   the side fit has refused every box within 2 ft of a standing one, so no neighbor's band can meet it (the half never refuses).
 - `homesteads/grove_rounds.rs` the exhaustive pass: a grid point is dropped on the free ground's full verdict at its cell (Python drops
@@ -142,7 +144,9 @@ names and is listed so a refused seed can be traced to it.
   on a diagonal street lapped its neighbor; the first street ranked by how many farms its whole row holds, its further streets on the
   sheet, before its own clear frames (the gate's seeds 406155 and 406169; Python refused 406169 too).
 - `homesteads/row_seat.rs` the first street's slack: a row's length, where Python laid two lots (a GUESS the record leaves to us - the
-  Rust gate's seed 729966 seated 18 of 19 with two).
+  Rust gate's seed 729966 seated 18 of 19 with two); where that row falls short of the households, it is seated too on the street
+  Python chose (two lots of slack, ranked by its own clear frames, `rows.rs` `row_lines`) and the row seating more kept - the Rust
+  gate's seed 290494 seated 14 of 19 on the first, all 19 on Python's (2026-11-05).
 - `homesteads/ground.rs` `reach_in`: the reach flooded over the seating's window (Python's seat region's own), seeded at its inner
   edges, and LABELED ONCE, as the derivation has it (no house is painted into it while the houses are seated, 0246), where Python's
   seat region was flooded again with each household's wood seats painted on - 2.83 billion counted operations at 40, the exponent

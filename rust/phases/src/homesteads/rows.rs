@@ -661,9 +661,35 @@ pub fn best_row_line(
     capacity: &Capacity,
     tests: &mut Counts,
 ) -> Line {
+    row_lines(
+        hard,
+        anchor,
+        (offset, length, slack),
+        form,
+        fr,
+        capacity,
+        tests,
+    )
+    .0
+}
+
+/// The first street ranked two ways over the same candidates: by its whole row's farms (`best_row_line`), and by its own clear
+/// frames alone, the nearest the seat among equals (`rows.py` `best_row_line`) - each count a promise the seating may not keep, so
+/// the row is seated from the second where the first falls short (the Rust stage gate, seed 290494: the whole row's count chose a
+/// street whose frames the seating refused, 14 of 19, where the street Python chose seats all 19).
+#[must_use]
+pub fn row_lines(
+    hard: &Hard,
+    anchor: Pt,
+    (offset, length, slack): (f64, f64, f64),
+    form: Form,
+    fr: &Frames,
+    capacity: &Capacity,
+    tests: &mut Counts,
+) -> (Line, Line) {
     const SAMPLES: usize = 16;
     let Some(ring) = ring_near(hard, anchor, offset, tests) else {
-        return Vec::new();
+        return (Vec::new(), Vec::new());
     };
     let (s0, total) = (project(&ring, anchor), ring_length(&ring));
     // ...within one row's length of the seat along the edge (cohort seed 12: a stretch at the sheet's far side was refused)
@@ -675,14 +701,18 @@ pub fn best_row_line(
         )
     }));
     let mut best: Option<((usize, usize, f64), Line)> = None;
+    let mut own: Option<((usize, f64), Line)> = None;
     for a in tries {
         tests.add("candidate@best_row_line", 1);
         let line = street_on(&ring, hard, a, length, form, slack, tests);
-        let score = (
-            capacity(&line, tests),
-            clear_frames(&line, fr, hard, tests),
-            -dist(a, anchor),
-        );
+        let clear = clear_frames(&line, fr, hard, tests);
+        let score = (capacity(&line, tests), clear, -dist(a, anchor));
+        if own
+            .as_ref()
+            .is_none_or(|b| clear > b.0 .0 || (clear == b.0 .0 && score.2 > b.0 .1))
+        {
+            own = Some(((clear, score.2), line.clone()));
+        }
         if best.as_ref().is_none_or(|b| {
             score.0 > b.0 .0
                 || (score.0 == b.0 .0
@@ -691,5 +721,8 @@ pub fn best_row_line(
             best = Some((score, line));
         }
     }
-    best.map(|b| b.1).unwrap_or_default()
+    (
+        best.map(|b| b.1).unwrap_or_default(),
+        own.map(|b| b.1).unwrap_or_default(),
+    )
 }
