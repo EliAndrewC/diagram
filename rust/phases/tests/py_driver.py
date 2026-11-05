@@ -258,6 +258,7 @@ seat_cells = [j * 8.0 + 4.0 >= 1500.0 for j in range(250) for _i in range(nx)]  
 seat_in = {
     "ground": ((0.0, 0.0), 8.0, nx, seat_cells),
     "seeds": [(1200.0, 100.0)],
+    "window": ((100.0, 100.0), (2300.0, 2300.0)),
     "field": [(200.0, 1500.0), (2200.0, 1500.0), (2200.0, 2300.0), (200.0, 2300.0)],
     "streams": [],
     "canvas": (2400.0, 2400.0),
@@ -316,6 +317,7 @@ scatter_in = dict(
     bound=490.0,
     single_file=False,
     want=4,
+    window=None,
 )
 farms = l7r_phases.seat_scattered(scatter_in)["seated"]
 assert farms and all(h["groves"] for h in farms) and all(h["well"] for h in farms), farms

@@ -86,6 +86,40 @@ fn the_reach_is_the_free_ground_joined_to_its_seeds() {
 }
 
 #[test]
+fn the_reach_over_a_window_runs_on_past_its_open_sides_and_paints_only_the_new_seats() {
+    let mut t = Counts::default();
+    let mut g = Ground::new((0.0, 0.0), (400.0, 400.0), &mut t);
+    // a wall at x 200-220 the whole height: the window east of it is cut off from a seed in the west of the canvas
+    g.fill_ring(
+        &[
+            (200.0, -10.0),
+            (220.0, -10.0),
+            (220.0, 410.0),
+            (200.0, 410.0),
+        ],
+        &mut t,
+    );
+    let w = g.reach_in(((240.0, 100.0), (320.0, 200.0)), &[(20.0, 20.0)], &mut t);
+    // ...but the window's own free edge cells lead on out of it: its inside is reached, and a box past its east side touches it
+    assert!(w.touches((260.0, 140.0), (270.0, 150.0), &mut t));
+    assert!(w.touches((330.0, 140.0), (360.0, 150.0), &mut t));
+    // a window against the canvas's west edge: past that side nothing runs on
+    let edge = g.reach_in(((0.0, 100.0), (80.0, 200.0)), &[], &mut t);
+    assert!(!edge.touches((-40.0, 140.0), (-20.0, 150.0), &mut t));
+    // painted again: the seats it holds carried, only the new one painted - the same as painting them all from the ground
+    let one = w.painted(&[(280.0, 150.0)], &mut t);
+    let two = one.painted(&[(280.0, 150.0), (300.0, 120.0)], &mut t);
+    let whole = w.painted(&[(280.0, 150.0), (300.0, 120.0)], &mut t);
+    for p in [(278.0, 148.0), (298.0, 118.0), (260.0, 190.0)] {
+        assert_eq!(
+            two.touches(p, (p.0 + 2.0, p.1 + 2.0), &mut t),
+            whole.touches(p, (p.0 + 2.0, p.1 + 2.0), &mut t)
+        );
+    }
+    assert!(!two.touches((298.0, 118.0), (300.0, 120.0), &mut t));
+}
+
+#[test]
 fn the_rolls_are_the_python_seatings_and_the_yard_is_log_normal_about_its_median() {
     // the hash as the Python seating computes it (`Settlement._hjit`): sin(12.9898 x + 4.1414 y + 7.373 salt) x 43758.5453, fractional
     let v = (100.0f64 * 12.9898 + 200.0 * 4.1414 + 3.0 * 7.373).sin() * 43_758.545_3;

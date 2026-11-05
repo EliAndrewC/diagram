@@ -231,6 +231,59 @@ impl Ground {
             .collect()
     }
 
+    /// The reach over the seating's WINDOW alone (`boundary.seating_window`, a cost window, never an answer - feature 318): the
+    /// ground cropped to the window grown by a lane's room on every side (so the lane-blocked ground at its edges is the canvas's),
+    /// flooded from `seeds` and from every free cell on the window's inner edges - where a way can run on to the rest of the
+    /// canvas - and a box reaching out of it touches the reach (`Reach::touches`). The whole canvas flooded after every household
+    /// was most of the stage's counted work (the work-budget run of 2026-11-05: 792 million of the reach's cells at 40).
+    #[must_use]
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        clippy::cast_precision_loss,
+        reason = "cell indices clamped into the canvas"
+    )]
+    pub fn reach_in(&self, window: (Pt, Pt), seeds: &[Pt], tests: &mut Counts) -> Reach {
+        let r = (LANE_GROW_FT / self.cell).round().max(1.0);
+        let pad = (r + 1.0) * self.cell;
+        let clip = |v: f64, n: usize| (v.max(0.0) as usize).min(n);
+        let i0 = clip(((window.0 .0 - pad - self.x0) / self.cell).floor(), self.nx);
+        let j0 = clip(((window.0 .1 - pad - self.y0) / self.cell).floor(), self.ny);
+        let i1 = clip(((window.1 .0 + pad - self.x0) / self.cell).ceil(), self.nx).max(i0 + 1);
+        let j1 = clip(((window.1 .1 + pad - self.y0) / self.cell).ceil(), self.ny).max(j0 + 1);
+        let (wx, wy) = (i1 - i0, j1 - j0);
+        let mut taken = Vec::with_capacity(wx * wy);
+        for j in j0..j1 {
+            taken.extend_from_slice(&self.taken[j * self.nx + i0..j * self.nx + i1]);
+        }
+        tests.add("write@reach_in", (wx * wy) as u64);
+        let crop = Self {
+            x0: self.x0 + i0 as f64 * self.cell,
+            y0: self.y0 + j0 as f64 * self.cell,
+            cell: self.cell,
+            nx: wx,
+            ny: wy,
+            taken,
+        };
+        // ...seeded at the inner edges too: a free cell on an edge the canvas runs on past leads on out of the window
+        let mut all = seeds.to_vec();
+        let edges = (i0 > 0, j0 > 0, i1 < self.nx, j1 < self.ny);
+        for j in 0..wy {
+            for i in 0..wx {
+                let edge = (edges.0 && i == 0)
+                    || (edges.1 && j == 0)
+                    || (edges.2 && i == wx - 1)
+                    || (edges.3 && j == wy - 1);
+                if edge && !crop.taken[j * wx + i] {
+                    all.push(crop.center(i, j));
+                }
+            }
+        }
+        let mut reach = crop.reach_painted(&all, &[], tests);
+        reach.open = edges;
+        reach
+    }
+
     /// The free cells joined to any of `seeds` through free cells, 4-connected, the taken ground grown by a lane's room first
     /// (`lane_blocked`): every cell labeled in one pass reading its west and north neighbors (union-find over the labels), the seeds'
     /// labels kept - nothing changes the free ground while the houses are seated (no way stands, no house is painted: 0246), so the
@@ -244,21 +297,45 @@ impl Ground {
     /// seated so far reserved, which no way runs through (`region.py` `SeatRegion.sync`).
     #[must_use]
     pub fn reach_painted(&self, seeds: &[Pt], discs: &[Pt], tests: &mut Counts) -> Reach {
+        let blocked = self.lane_blocked(&self.taken, tests);
+        self.flood_painted(seeds, blocked, discs, tests)
+    }
+
+    /// The reach over `blocked` - the taken ground already grown by a lane's room - with each of `discs` painted on and grown by it
+    /// too: growing distributes over the union, so a disc painted onto the grown ground is the disc painted before the growth, and the
+    /// ground grown once is carried from one flood to the next (`Reach::painted`), only the seats reserved since painted.
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        clippy::many_single_char_names,
+        reason = "a few cells' reach; the raster's own short names"
+    )]
+    fn flood_painted(
+        &self,
+        seeds: &[Pt],
+        mut blocked: Vec<bool>,
+        discs: &[Pt],
+        tests: &mut Counts,
+    ) -> Reach {
         let n = self.nx * self.ny;
-        let mut taken = self.taken.clone();
         let paint = WOOD_PAINT_FT;
+        let r = (LANE_GROW_FT / self.cell).round().max(1.0) as usize;
         for &(x, y) in discs {
             for j in self.rows(y - paint, y + paint) {
                 for i in self.rows_x(x - paint, x + paint) {
                     let c = self.center(i, j);
                     tests.add("write@reach_painted", 1);
                     if (c.0 - x).hypot(c.1 - y) <= paint {
-                        taken[j * self.nx + i] = true;
+                        for v in j.saturating_sub(r)..(j + r + 1).min(self.ny) {
+                            for u in i.saturating_sub(r)..(i + r + 1).min(self.nx) {
+                                blocked[v * self.nx + u] = true;
+                            }
+                        }
+                        tests.add("write@reach_painted", ((2 * r + 1) * (2 * r + 1)) as u64);
                     }
                 }
             }
         }
-        let blocked = self.lane_blocked(&taken, tests);
         let mut parent: Vec<usize> = (0..n).collect();
         for j in 0..self.ny {
             for i in 0..self.nx {
@@ -294,6 +371,9 @@ impl Ground {
         Reach {
             ground: self.clone(),
             seeds: seeds.to_vec(),
+            blocked,
+            painted: discs.len(),
+            open: (false, false, false, false),
             x0: self.x0,
             y0: self.y0,
             cell: self.cell,
@@ -319,6 +399,12 @@ pub struct Reach {
     ground: Ground,
     /// Where it was flooded from.
     pub seeds: Vec<Pt>,
+    /// The lane-blocked ground it was flooded over, its painted discs on it.
+    blocked: Vec<bool>,
+    /// How many discs are painted on it.
+    painted: usize,
+    /// Which of its sides (west, north, east, south) the canvas runs on past - a box reaching past one touches the reach.
+    open: (bool, bool, bool, bool),
     x0: f64,
     y0: f64,
     cell: f64,
@@ -328,10 +414,18 @@ pub struct Reach {
 }
 
 impl Reach {
-    /// The reach flooded again over its own ground with `discs` painted onto it (`Ground::reach_painted`).
+    /// The reach flooded again with `discs` painted on (`Ground::reach_painted`): `discs` are the seats reserved so far, in the
+    /// order reserved, so the ones this reach holds are carried and only those reserved since are painted (seats are never released
+    /// while houses are seated).
     #[must_use]
     pub fn painted(&self, discs: &[Pt], tests: &mut Counts) -> Self {
-        self.ground.reach_painted(&self.seeds, discs, tests)
+        let held = self.painted.min(discs.len());
+        let mut next =
+            self.ground
+                .flood_painted(&self.seeds, self.blocked.clone(), &discs[held..], tests);
+        next.painted = discs.len();
+        next.open = self.open;
+        next
     }
 
     /// Whether a box (its corners `lo`, `hi`) touches a reached cell: the cells it covers, clipped to the window.
@@ -339,9 +433,22 @@ impl Reach {
     #[expect(
         clippy::cast_possible_truncation,
         clippy::cast_sign_loss,
+        clippy::cast_precision_loss,
         reason = "cell indices clamped into the window"
     )]
     pub fn touches(&self, lo: Pt, hi: Pt, tests: &mut Counts) -> bool {
+        // ...a box reaching past a side of the window the canvas runs on past touches it: the window bounds a cost, never a seat
+        let (x1, y1) = (
+            self.x0 + self.nx as f64 * self.cell,
+            self.y0 + self.ny as f64 * self.cell,
+        );
+        if (self.open.0 && lo.0 < self.x0)
+            || (self.open.1 && lo.1 < self.y0)
+            || (self.open.2 && hi.0 > x1)
+            || (self.open.3 && hi.1 > y1)
+        {
+            return true;
+        }
         let i0 = ((lo.0 - self.x0) / self.cell).floor().max(0.0) as usize;
         let j0 = ((lo.1 - self.y0) / self.cell).floor().max(0.0) as usize;
         let i1 = (((hi.0 - self.x0) / self.cell).floor().max(-1.0) + 1.0) as usize;

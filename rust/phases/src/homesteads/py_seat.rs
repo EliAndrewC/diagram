@@ -138,7 +138,12 @@ fn seat_with<'py>(
     let (origin, cell, nx, cells): (Pt, f64, usize, Vec<bool>) = field(inp, "ground")?;
     let ground = Ground::from_cells(origin, cell, nx, cells)
         .ok_or_else(|| bad("the raster's cells are not one a cell".to_owned()))?;
-    let reach = ground.reach(&field::<Vec<Pt>>(inp, "seeds")?, &mut tests);
+    // the reach over the seating's window where the door hands one (a nucleated cluster's), else the whole ground
+    let seeds: Vec<Pt> = field(inp, "seeds")?;
+    let reach = match field::<Option<(Pt, Pt)>>(inp, "window")? {
+        Some(w) => ground.reach_in(w, &seeds, &mut tests),
+        None => ground.reach(&seeds, &mut tests),
+    };
     let field_ring: Vec<Pt> = field(inp, "field")?;
     let streams: Vec<(Pt, Pt)> = field(inp, "streams")?;
     let (along, common): (f64, f64) = field(inp, "bearing")?;

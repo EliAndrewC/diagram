@@ -16,7 +16,7 @@ from l7r.diagram.settlement.rolling.passage import reserve_way
 
 from ..clearance import margin_of
 from ..consts import WEB_HARD_GAP, Pt
-from .boundary import web_hard_ground
+from .boundary import seating_window, web_hard_ground
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -108,6 +108,8 @@ def seat_inputs(s: Settlement, plan: SitePlan, byre_share: float, quota: dict[st
     return {
         "ground": ground_cells(s),
         "seeds": seeds,
+        # ...over the seating's window, as the seat region rasterized it (a cost window, never an answer: `boundary.seating_window`)
+        "window": (lambda w: ((w[0], w[1]), (w[2], w[3])))(seating_window(s, (float(plan.seat["cx"]), float(plan.seat["cy"])), plan.spec.households)) if getattr(s, "_nucleated", False) else None,
         "field": ring(plan.envelope),
         "streams": streams,
         "canvas": (float(s.W), float(s.H)),

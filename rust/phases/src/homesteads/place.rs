@@ -252,6 +252,8 @@ pub struct Seating {
     pub walks: super::access::AccessTree,
     /// The passages the settlement's share has left.
     pub passage_left: usize,
+    /// Whether `reach` lacks the wood seats reserved since it was flooded.
+    pub reach_stale: bool,
     /// A row village's holdings reserved so far, which no later part stands on.
     pub holdings: Vec<Vec<Pt>>,
 }
@@ -292,8 +294,11 @@ impl Seating {
     /// The reach the next household's yard is asked of, taken out while it is asked: reflooded with the wood seats reserved since
     /// it was last flooded, or None while none is reserved (the site's own reach stands).
     fn take_reach(&mut self, site: &Site) -> Option<super::ground::Reach> {
-        if self.reach.is_none() && !self.seats.is_empty() {
-            self.reach = Some(site.reach.painted(&self.seats, &mut self.tests));
+        if (self.reach.is_none() || self.reach_stale) && !self.seats.is_empty() {
+            // ...from the last flood, its painted seats carried and only those reserved since painted
+            let last = self.reach.as_ref().unwrap_or(site.reach);
+            self.reach = Some(last.painted(&self.seats, &mut self.tests));
+            self.reach_stale = false;
         }
         self.reach.take()
     }
@@ -630,7 +635,7 @@ impl Seating {
             .push(Some(passage.as_ref().map_or(0, |p| p.depth)));
         if !wood.is_empty() {
             self.seats.extend(&wood);
-            self.reach = None;
+            self.reach_stale = true;
         }
         let placed = Placed {
             house: (b.house, b.turn),
