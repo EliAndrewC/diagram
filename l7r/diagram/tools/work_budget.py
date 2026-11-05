@@ -93,10 +93,11 @@ def exponent(points: list[tuple[int, float]]) -> float | None:
     return None if den == 0 else sum((x - mx) * (y - my) for x, y in pts) / den
 
 
-def budgets(path: str = BUDGETS) -> dict[str, Any]:
-    """The budget table (T03 writes it); absent, every stage unbudgeted."""
+def budgets(path: str | None = None) -> dict[str, Any]:
+    """The budget table (T03 writes it); absent, every stage unbudgeted. The path is read when called (a default bound at the
+    definition kept `BUDGETS` from being set aside, and `run`'s tests read the live table and its pins)."""
     try:
-        with open(path, encoding="utf-8") as fh:
+        with open(BUDGETS if path is None else path, encoding="utf-8") as fh:
             return dict(json.load(fh))
     except FileNotFoundError:
         return {"program": {}, "stages": {}}

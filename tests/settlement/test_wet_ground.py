@@ -303,6 +303,9 @@ def test_a_marsh_with_no_open_ground_left_is_neither_drawn_nor_recorded() -> Non
     assert s.M["marshes"] == [] and s.wet_polys == []
     assert s.M["meta"]["marsh_dropped"] == [{"role": "toe", "why": "no open ground left"}]
     assert drawn_ground([(0.0, 0.0), (1.0, 1.0)]) is None, "two points are no ground"
+    square = [(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]
+    got = drawn_ground(square, blocks=[[(10.0, 10.0), (20.0, 20.0)]])
+    assert got is not None and abs(abs(sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(got, got[1:] + got[:1]))) / 2 - 10000.0) < 1e-6, "a keep-out of two points cuts nothing"
 
 
 def test_drawn_ground_keeps_the_largest_piece_when_a_keep_out_cuts_the_marsh_in_two() -> None:
