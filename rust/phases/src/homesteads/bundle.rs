@@ -8,8 +8,11 @@
 //!     farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the kinds the household's lot keeps, laid in its own frame
 
 use super::bearing::turned_box;
+use super::dispersed::{
+    cut_east, dispersed_layout, door_room, way_in_strip, Depth, Face, Spec, Turn, FT,
+};
 use super::fixtures::{lay, Forms, Frame, Kind, Wall};
-use super::layout::{beds, byre, kura, yard, Byre, Rect, Side, SIDES};
+use super::layout::{beds, byre, kura, yard, Byre, Rect, Side, PART_GAP_FT, SIDES};
 use super::Counts;
 use crate::field::fan::Pt;
 
@@ -53,6 +56,26 @@ pub struct Bundle {
     pub boxes: Vec<Rect>,
     /// The box round them all.
     pub bbox: Rect,
+    /// A grove farm's bands, unraked, each with its face as turned and its depth.
+    pub groves: Vec<(Rect, Face, Depth)>,
+    /// A grove farm's own well pocket, carried with its house.
+    pub well: Option<Rect>,
+}
+
+/// How a grove farm is laid: its grove's side count, the symmetry carrying it to the map's wind, whether the map keeps the sun
+/// (`sun_band`), its well pocket's side, and the yard's sun strip a ring's south band keeps out of.
+#[derive(Clone, Copy, Debug)]
+pub struct Grove {
+    /// How many sides the grove takes.
+    pub sides: u32,
+    /// The symmetry to the map's wind.
+    pub turn: Turn,
+    /// Whether the map keeps every tree out of the plots' sun.
+    pub sun_band: bool,
+    /// The well pocket's side.
+    pub well: f64,
+    /// The yard's sun strip.
+    pub yard_sun: f64,
 }
 
 /// How a fixture's persimmon keeps out of the plots' sun: how far, and at which rakes.
@@ -149,6 +172,121 @@ pub fn bundle(
     boxes.extend(b.fixtures.iter().map(|&(_, r)| turned_box(r, turn)));
     tests.add("write@bundle", boxes.len() as u64 * 4);
     b.bbox = bbox_of(&boxes);
+    b.boxes = boxes;
+    b
+}
+
+/// The door's room past the yard and its half-width (feet).
+///
+/// Research:
+///     the door's room past the yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); `DOOR_OUT_FT` (8 ft) past the yard's far edge, where the web's door path starts - 8
+///     the door's room - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `DOOR_ROOM_HALF_FT`, a routing tolerance - 12
+pub const DOOR_FT: (f64, f64) = (8.0, 12.0);
+
+/// A grove farm's homestead at `at` (`bundle._bundle_layout`'s dispersed branch): its yard rolled at the seat, its garden capped at
+/// an ordinary farm's, its own grove on the rolled sides turned to the wind (`dispersed.rs`), its fixtures laid round its own bands
+/// (its persimmon may stand in them) and off its way in, the house's rake carrying the yard, the bed, the well and the fixtures, the
+/// bands kept out of the bed's morning sun, each part's box as drawn and the box round them with the grove's frame.
+///
+/// Research:
+///     garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.48 x 0.85 of the house, capped at 42 x 30 ft on a grove farm, under 0039's 1,507 sq ft
+///     dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind
+///     a grove farm's way in kept clear - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way-in strip and the door's room handed to the fixtures as `keep`
+#[must_use]
+#[expect(
+    clippy::too_many_arguments,
+    reason = "the lot, its seat, its place, its rake, the forms, the sun and the grove"
+)]
+pub fn grove_bundle(
+    lot: &Lot,
+    seat: Pt,
+    at: Pt,
+    turn: f64,
+    forms: &Forms,
+    sun: &Sun,
+    grove: &Grove,
+    tests: &mut Counts,
+) -> Bundle {
+    let (hw, hh) = lot.house;
+    let house = (0.0, 0.0, hw, hh);
+    let y = yard(seat, hw, hh);
+    let garden = ((0.48 * hw).min(42.0), (0.85 * hh).min(30.0));
+    let (_, way_in, room, back, _, thin, east) = FT;
+    let spec = Spec {
+        gap: PART_GAP_FT,
+        garden,
+        yard: (y.2, y.3),
+        sides: grove.sides,
+        garden_by_yard: false,
+        thin,
+        sun_east: east,
+        way_in,
+        yard_sun: grove.yard_sun,
+        sun_band: grove.sun_band,
+        back,
+        well: grove.well,
+    };
+    let lay_out = dispersed_layout(house, &spec, grove.turn, room / 2.0);
+    let faces: Vec<Face> = lay_out.faces.iter().map(|f| f.0).collect();
+    let mut roofs = vec![house];
+    roofs.extend(lay_out.well);
+    let ground = [lay_out.yard, lay_out.garden];
+    let mut keep: Vec<Rect> = way_in_strip(house, &lay_out.groves, &faces)
+        .into_iter()
+        .collect();
+    if !lay_out.groves.is_empty() {
+        keep.push(door_room(house, lay_out.yard, DOOR_FT.0, DOOR_FT.1));
+    }
+    let roll = |s: f64| super::layout::hjit(seat.0, seat.1, s);
+    let fr = Frame {
+        house: (hw, hh),
+        roofs: &roofs,
+        ground: &ground,
+        yard: Some(lay_out.yard),
+        kura: false,
+        shade: (sun.shade, sun.turns),
+        keep: &keep,
+        fruit: &lay_out.groves,
+    };
+    let (fixtures, bath, unlaid) = if lot.fixtures.is_empty() {
+        (Vec::new(), None, None)
+    } else {
+        match lay(&lot.fixtures, &fr, &roll, forms, tests) {
+            Ok((laid, bath)) => (laid, bath, None),
+            Err(why) => (Vec::new(), None, Some(why.0)),
+        }
+    };
+    let th = turn.to_radians();
+    let (c, s) = (th.cos(), th.sin());
+    let carried = |r: Rect| (at.0 + r.0 * c - r.1 * s, at.1 + r.0 * s + r.1 * c, r.2, r.3);
+    let moved = |r: Rect| (at.0 + r.0, at.1 + r.1, r.2, r.3);
+    let gardens = vec![carried(lay_out.garden)];
+    let groves = lay_out
+        .groves
+        .iter()
+        .zip(&lay_out.faces)
+        .filter_map(|(&r, &(f, d))| cut_east(moved(r), &gardens, east).map(|k| (k, f, d)))
+        .collect();
+    let mut b = Bundle {
+        house: (at.0, at.1, hw, hh),
+        yard: carried(lay_out.yard),
+        gardens,
+        fixtures: fixtures.iter().map(|&(k, r)| (k, carried(r))).collect(),
+        bath,
+        unlaid,
+        turn,
+        groves,
+        well: lay_out.well.map(carried),
+        ..Bundle::default()
+    };
+    let mut boxes = vec![turned_box(b.house, turn), turned_box(b.yard, turn)];
+    boxes.extend(b.gardens.iter().map(|&g| turned_box(g, turn)));
+    boxes.extend(b.fixtures.iter().map(|&(_, r)| turned_box(r, turn)));
+    tests.add("write@grove_bundle", boxes.len() as u64 * 4);
+    let mut framed = vec![moved(lay_out.frame), boxes[1], boxes[2]];
+    framed.extend(b.well.map(|w| turned_box(w, turn)));
+    framed.extend(boxes[3..].iter().copied());
+    b.bbox = bbox_of(&framed);
     b.boxes = boxes;
     b
 }

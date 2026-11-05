@@ -4,8 +4,8 @@
 //!     the dispersed layout's tests - NONE: fixtures and assertions, deciding nothing about the place
 
 use super::dispersed::{
-    bundle_turn, clear_east_of_beds, dispersed_layout, turn_face, turns_axes, Depth, Spec, E, N, S,
-    W,
+    bundle_turn, clear_east_of_beds, dispersed_layout, door_room, turn_face, turns_axes,
+    way_in_strip, Depth, Layout, Spec, E, N, S, W,
 };
 use super::layout::Rect;
 
@@ -154,4 +154,165 @@ fn a_band_in_a_beds_morning_sun_is_cut_back_or_dropped_as_pythons() {
         50.0,
     );
     assert!(near(south[0], (560.0, 461.5, 17.0, 97.0)));
+}
+
+#[test]
+fn a_rings_way_in_and_its_doors_room_are_pythons() {
+    let house = (0.0, 0.0, 46.0, 28.0);
+    let lay = |sides, key| {
+        dispersed_layout(
+            house,
+            &Spec {
+                yard_sun: 22.0,
+                ..spec(sides, false, 0.0)
+            },
+            bundle_turn(key),
+            16.0,
+        )
+    };
+    let faces = |l: &Layout| l.faces.iter().map(|f| f.0).collect::<Vec<_>>();
+    let nw = lay(4, "NW");
+    assert!(near(
+        way_in_strip(house, &nw.groves, &faces(&nw)).unwrap(),
+        (0.0, 38.0, 36.0, 48.0)
+    ));
+    let sw = lay(4, "SW");
+    assert!(near(
+        way_in_strip(house, &sw.groves, &faces(&sw)).unwrap(),
+        (47.45, 0.0, 48.9, 36.0)
+    ));
+    let two = lay(2, "NW");
+    assert!(way_in_strip(house, &two.groves, &faces(&two)).is_none());
+    assert!(near(
+        door_room(house, (0.0, 28.0, 34.0, 22.0), 8.0, 12.0),
+        (0.0, 47.0, 24.0, 24.0)
+    ));
+    assert!(near(
+        door_room(house, (-30.0, 0.0, 22.0, 34.0), 8.0, 12.0),
+        (-49.0, 0.0, 24.0, 24.0)
+    ));
+}
+
+#[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one grove farm's scenarios, each built on the last"
+)]
+fn a_grove_farm_is_laid_round_its_bands_and_turned_with_its_house() {
+    use super::bundle::{grove_bundle, Grove, Lot, Sun};
+    use super::fixtures::{Forms, Kind};
+    use super::Counts;
+    let lot = Lot {
+        house: (46.0, 28.0),
+        kura: false,
+        byre: None,
+        fixtures: vec![Kind::Privy, Kind::Persimmon, Kind::Woodpile],
+    };
+    let grove = Grove {
+        sides: 4,
+        turn: bundle_turn("NW"),
+        sun_band: true,
+        well: 55.6,
+        yard_sun: 66.62,
+    };
+    let sun = Sun {
+        shade: 50.0,
+        turns: &[8.0],
+    };
+    let mut t = Counts::default();
+    let b = grove_bundle(
+        &lot,
+        (500.0, 400.0),
+        (500.0, 400.0),
+        8.0,
+        &Forms::default(),
+        &sun,
+        &grove,
+        &mut t,
+    );
+    assert!(b.unlaid.is_none(), "{:?}", b.unlaid);
+    assert_eq!(b.groves.len(), 5);
+    assert!(b.groves.iter().any(|g| g.2 == Depth::Deep));
+    // the yard and the bed turned with the house about its center; the bands unraked
+    // (at 8 degrees a yard 28 ft or more south of the house's center stands over 3.5 ft sideways of it)
+    assert!((b.yard.0 - 500.0).abs() > 3.5);
+    assert!(b.well.is_some() && b.boxes.len() == 2 + b.gardens.len() + b.fixtures.len());
+    // every part and the grove's frame inside the box round them
+    let inside = |r: Rect| {
+        r.0 - r.2 / 2.0 >= b.bbox.0 - b.bbox.2 / 2.0 - 1e-9
+            && r.0 + r.2 / 2.0 <= b.bbox.0 + b.bbox.2 / 2.0 + 1e-9
+    };
+    assert!(b.groves.iter().all(|g| inside(g.0)) && b.boxes.iter().all(|&r| inside(r)));
+    // no fixture but the persimmon stands in a band
+    let meets = |a: Rect, g: Rect| {
+        (a.0 - g.0).abs() < f64::midpoint(a.2, g.2) && (a.1 - g.1).abs() < f64::midpoint(a.3, g.3)
+    };
+    assert!(b
+        .fixtures
+        .iter()
+        .filter(|(k, _)| *k != Kind::Persimmon)
+        .all(|&(_, f)| b.groves.iter().all(|g| !meets(f, g.0))));
+    // a two-sided grove with no well: no way in to keep, no pocket
+    let open = grove_bundle(
+        &lot,
+        (500.0, 400.0),
+        (500.0, 400.0),
+        0.0,
+        &Forms::default(),
+        &sun,
+        &Grove {
+            sides: 2,
+            well: 0.0,
+            sun_band: false,
+            yard_sun: 22.0,
+            ..grove
+        },
+        &mut t,
+    );
+    assert!(open.well.is_none() && open.groves.len() == 2);
+    // a lot whose bath room finds no wall clear inside a closed ring is not the household's
+    let crowded = Lot {
+        fixtures: vec![
+            Kind::Retirement,
+            Kind::Bath,
+            Kind::Woodpile,
+            Kind::Privy,
+            Kind::Coop,
+            Kind::Shrine,
+            Kind::Grave,
+        ],
+        house: (64.0, 40.0),
+        ..lot
+    };
+    let tight = (0..40).map(|k| {
+        let seat = (f64::from(k) * 37.0, f64::from(k) * 11.0);
+        grove_bundle(
+            &crowded,
+            seat,
+            seat,
+            0.0,
+            &Forms::default(),
+            &sun,
+            &grove,
+            &mut t,
+        )
+    });
+    assert!(tight.into_iter().any(|b| b.unlaid.is_some()));
+    // a lot with no fixtures lays none
+    let bare = Lot {
+        fixtures: vec![],
+        ..lot
+    };
+    assert!(grove_bundle(
+        &bare,
+        (500.0, 400.0),
+        (500.0, 400.0),
+        0.0,
+        &Forms::default(),
+        &sun,
+        &grove,
+        &mut t
+    )
+    .fixtures
+    .is_empty());
 }

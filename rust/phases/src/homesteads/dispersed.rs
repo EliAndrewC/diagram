@@ -322,30 +322,120 @@ pub fn dispersed_layout(house: Rect, sp: &Spec, turn: Turn, pad: f64) -> Layout 
 pub fn clear_east_of_beds(groves: &[Rect], beds: &[Rect], reach: f64) -> Vec<Rect> {
     groves
         .iter()
-        .filter_map(|&g| {
-            let mut r = g;
-            for &(bx, by, bw, bh) in beds {
-                let east = bx + bw / 2.0;
-                let (top, bottom) = (by - bh / 2.0, by + bh / 2.0);
-                let west = r.0 - r.2 / 2.0;
-                if !(east - 2.0 <= west
-                    && west < east + reach
-                    && r.1 - r.3 / 2.0 < bottom + 1.0
-                    && top - 1.0 < r.1 + r.3 / 2.0)
-                {
-                    continue;
-                }
-                let (y0, y1) = if r.1 < by {
-                    (r.1 - r.3 / 2.0, top - 1.0)
-                } else {
-                    (bottom + 1.0, r.1 + r.3 / 2.0)
-                };
-                if y1 - y0 < r.2 {
-                    return None;
-                }
-                r = (r.0, (y0 + y1) / 2.0, r.2, y1 - y0);
-            }
-            Some(r)
-        })
+        .filter_map(|&g| cut_east(g, beds, reach))
         .collect()
+}
+
+/// One band cut back out of each bed's east reach it stands in, or None where its cut run would be shorter than it is wide.
+#[must_use]
+pub fn cut_east(band: Rect, beds: &[Rect], reach: f64) -> Option<Rect> {
+    let mut r = band;
+    for &(bx, by, bw, bh) in beds {
+        let east = bx + bw / 2.0;
+        let (top, bottom) = (by - bh / 2.0, by + bh / 2.0);
+        let west = r.0 - r.2 / 2.0;
+        if !(east - 2.0 <= west
+            && west < east + reach
+            && r.1 - r.3 / 2.0 < bottom + 1.0
+            && top - 1.0 < r.1 + r.3 / 2.0)
+        {
+            continue;
+        }
+        let (y0, y1) = if r.1 < by {
+            (r.1 - r.3 / 2.0, top - 1.0)
+        } else {
+            (bottom + 1.0, r.1 + r.3 / 2.0)
+        };
+        if y1 - y0 < r.2 {
+            return None;
+        }
+        r = (r.0, (y0 + y1) / 2.0, r.2, y1 - y0);
+    }
+    Some(r)
+}
+
+/// The ground a grove farm's way in crosses: from its house's front wall to the break in its front band, as wide as the break - None
+/// where no band is broken (`fixture_seats.way_in_strip`). Bands and house in one frame.
+///
+/// Research:
+///     a grove farm's way in kept clear - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way-in strip handed to the fixtures as `keep`
+#[must_use]
+pub fn way_in_strip(house: Rect, bands: &[Rect], faces: &[Face]) -> Option<Rect> {
+    let front = faces
+        .iter()
+        .copied()
+        .find(|f| faces.iter().filter(|g| *g == f).count() >= 2)?;
+    let pieces: Vec<Rect> = bands
+        .iter()
+        .zip(faces)
+        .filter(|(_, f)| **f == front)
+        .map(|(r, _)| *r)
+        .collect();
+    let ns = front.0 == 0;
+    let h = along_of(house, ns);
+    let lo = pieces
+        .iter()
+        .map(|&r| along_of(r, ns))
+        .filter(|a| a.0 < h.0)
+        .map(|a| a.0 + a.1 / 2.0)
+        .reduce(f64::max)?;
+    let hi = pieces
+        .iter()
+        .map(|&r| along_of(r, ns))
+        .filter(|a| a.0 > h.0)
+        .map(|a| a.0 - a.1 / 2.0)
+        .reduce(f64::min)?;
+    let sign = f64::from(if ns { front.1 } else { front.0 });
+    let near = h.2 + sign * h.3 / 2.0;
+    let band = pieces
+        .iter()
+        .map(|&r| {
+            let a = along_of(r, ns);
+            a.2 - sign * a.3 / 2.0
+        })
+        .min_by(|a, b| (a - near).abs().total_cmp(&(b - near).abs()))?;
+    let (mid, span) = ((lo + hi) / 2.0, (hi - lo).max(0.0));
+    let (mid_across, depth) = ((near + band) / 2.0, (band - near).abs());
+    Some(if ns {
+        (mid, mid_across, span, depth)
+    } else {
+        (mid_across, mid, depth, span)
+    })
+}
+
+/// A rect read along a front: its center and size along the band, then across it.
+fn along_of(r: Rect, ns: bool) -> (f64, f64, f64, f64) {
+    if ns {
+        (r.0, r.2, r.1, r.3)
+    } else {
+        (r.1, r.3, r.0, r.2)
+    }
+}
+
+/// The square kept clear about a grove farm's front door - `out` past the yard's far edge, straight out along the line from the house
+/// through the yard, `half` each way (`fixture_seats.door_room`).
+///
+/// Research:
+///     the door's room past the yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); 8 ft past the yard's far edge, where the web's door path starts
+///     the door's room - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P1, 2026-10-25); `half` each way, a routing tolerance
+#[must_use]
+pub fn door_room(house: Rect, yard: Rect, out: f64, half: f64) -> Rect {
+    let (dx, dy) = (yard.0 - house.0, yard.1 - house.1);
+    if dx.abs() >= dy.abs() {
+        let s = if dx >= 0.0 { 1.0 } else { -1.0 };
+        (
+            yard.0 + s * (yard.2 / 2.0 + out),
+            yard.1,
+            2.0 * half,
+            2.0 * half,
+        )
+    } else {
+        let s = if dy >= 0.0 { 1.0 } else { -1.0 };
+        (
+            yard.0,
+            yard.1 + s * (yard.3 / 2.0 + out),
+            2.0 * half,
+            2.0 * half,
+        )
+    }
 }
