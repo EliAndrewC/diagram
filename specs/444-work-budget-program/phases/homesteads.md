@@ -15,9 +15,9 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
 - [ ] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
   Evidence: pending: two blind MODE BUDGET SOUNDs; past ten times the first figure (4,118 at 40), the GM's words
-- [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
+- [x] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
-  Evidence: before the rebuild, measured 2026-11-04 (`make work-budget`): 1,303,212 / 1,716,870 / 4,204,265 at 20 / 40 / 80, 416.9x the budget, exponent 0.84; 17,909,350 Python calls at 40 (`make perf-fanout STAGES=homesteads`, `dev/perf-log/`)
+  Evidence: before the rebuild, measured 2026-11-04 (`make work-budget`): 1,303,212 / 1,716,870 / 4,204,265 at 20 / 40 / 80, 416.9x the budget, exponent 0.84; 17,909,350 Python calls at 40. The rebuilt stage, measured 2026-11-05 (`make work-budget`, `dev/work-budget/20261105T143357Z-a0fc83819063.json`): 4,943,654 / 9,881,356 / 26,988,726 / 64,773,280 at 10 / 20 / 40 / 80, 6,553.8x the pinned 4,118 and 18.3x the re-derived 1,477,085, exponent 1.36; 9,621,301 Python calls at 40. On the way the audit's inefficiencies were fixed on their merits (the round arbiter on ask:444-homesteads-repin): the reach's canvas-wide reflood (2.83 billion at 40, then windowed and labeled once, as the derivation has it), the streams and the water rules asked of every course (indexed and box-filtered), the door's corridors asked a cell at a time (vectorized); the largest key left, the door's chain test, is 17% of the stage, under FR-022 rule 4's half
 - [x] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path. The old Python owes no coverage on the way out (feature
   448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away"): `dev/coverage-exempt.json` names it, so no test is added only to cover a line of it; the landing's
