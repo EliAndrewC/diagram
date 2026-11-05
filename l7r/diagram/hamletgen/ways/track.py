@@ -113,7 +113,20 @@ def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
     # took the bare sweep, so a gateway the houses walled in refused the roll (dike-pond seeds 1 and 10, `NoDryExit`) where a
     # valley hamlet's turned to the next bearing
     track = gateway_track(s, plan, seat, band_gate, gate, avoid, wet, drawn_water_segs(s), fabric)
-    return connector_through(s, plan, track, avoid, wet, [*plan.watercourses, *drawn_water_segs(s)], fabric)
+    waters = [*plan.watercourses, *drawn_water_segs(s)]
+    try:
+        return connector_through(s, plan, track, avoid, wet, waters, fabric)
+    except NoDryExit:
+        # ...AND A GATEWAY WHOSE SWEPT TRACK THE DRY EXIT CANNOT LEAVE BY TURNED AS THE SWEEP'S WAS (cohort seed 39 on the Rust
+        # seating: the downslope gateway stood in a block of dry plots, the sweep kept its least-bad bearing across them and the
+        # fill started walled in) - the turned gateways, the nearest turn first, each swept and taken out as the first was
+        from .gateway import GATEWAY_TURNS_DEG, clear_of_what_stands
+
+        for deg in GATEWAY_TURNS_DEG:
+            turned = clear_of_what_stands(s, gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate, deg)))
+            with contextlib.suppress(NoDryExit):
+                return connector_through(s, plan, connector_track(plan, turned, avoid=avoid, wet=wet, waters=drawn_water_segs(s), fabric=fabric), avoid, wet, waters, fabric)
+        raise
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:

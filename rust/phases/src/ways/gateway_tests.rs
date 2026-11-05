@@ -111,6 +111,24 @@ fn the_track_out_is_swept_from_the_gateway_turned_where_walled_and_threaded() {
     };
     let r = gateway_track(&turned, (500.0, 450.0), &mut t).expect("east or west");
     assert!(r[r.len() - 1].0 < 0.0 || r[r.len() - 1].0 > 1000.0);
+    // a track the sweep finds but no thread or dry exit can take out: every turned gateway's track asked the same, none taken
+    // (cohort seed 39's case, where the downslope gateway's track crossed a block of dry plots and the fill began walled in)
+    let walled = [square(-100.0, -100.0, 1100.0, 1100.0)];
+    let w_dry = DrySite {
+        wet: &walled,
+        ..dry
+    };
+    let w_fabric = Fabric {
+        wet: &walled,
+        ..fabric
+    };
+    let stuck = Choice {
+        dry: &w_dry,
+        fabric: &w_fabric,
+        ..c
+    };
+    assert!(gateway_track(&stuck, (500.0, 450.0), &mut t).is_some());
+    assert!(choose_track_out(&stuck, &mut t).is_none());
     // walled on every side: none
     let shut = [square(-100.0, -100.0, 1100.0, 1100.0)];
     let s2 = TrackSite {

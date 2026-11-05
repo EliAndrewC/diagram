@@ -136,13 +136,32 @@ pub fn gateway_track(c: &Choice, gate: Pt, tests: &mut Counts) -> Option<Vec<Pt>
 }
 
 /// The track out, chosen once the last house stands: the gateway on the cloud's downslope edge out of the field, swept, then
-/// bent round the field and threaded through the steadings; the run and whether it gave up a wood seat, None where no way
-/// leaves the frame.
+/// bent round the field and threaded through the steadings - where that cannot leave, the turned gateways' tracks taken out the same
+/// way; the run and whether it gave up a wood seat, None where no way leaves the frame.
 #[must_use]
 pub fn choose_track_out(c: &Choice, tests: &mut Counts) -> Option<(Vec<Pt>, bool)> {
     let first = cluster_gateway(c.fabric.houses, c.axes, c.fallback, 0.0, c.standing, tests);
-    let track = gateway_track(c, gate_out_of_the_field(c.fabric.envelope, first), tests);
-    let out = track.and_then(|t| connector_through(&t, c.fabric, c.law, c.dry, tests));
+    let Some(track) = gateway_track(c, gate_out_of_the_field(c.fabric.envelope, first), tests)
+    else {
+        crate::counts::drain_into(tests);
+        return None;
+    };
+    // ...AND A GATEWAY WHOSE SWEPT TRACK THE DRY EXIT CANNOT LEAVE BY TURNED AS THE SWEEP'S IS (cohort seed 39 on the Rust seating:
+    // the downslope gateway stood in a block of dry plots - one push out of a plot lands in the next - the sweep kept its least-bad
+    // bearing across them, and the fill started walled in): the turned gateways, the nearest turn first, each swept and taken out
+    let walls: Vec<&[Pt]> = c.law.forbidding.iter().map(|e| e.0.as_slice()).collect();
+    let out = connector_through(&track, c.fabric, c.law, c.dry, tests).or_else(|| {
+        TURNS_DEG.iter().find_map(|&deg| {
+            let turned =
+                cluster_gateway(c.fabric.houses, c.axes, c.fallback, deg, c.standing, tests);
+            let gate = clear_of_bands(
+                gate_out_of_the_field(c.fabric.envelope, turned),
+                &walls,
+                CONNECTOR_WIDTH_FT / 2.0,
+            );
+            swept(c, gate, tests).and_then(|t| connector_through(&t, c.fabric, c.law, c.dry, tests))
+        })
+    });
     crate::counts::drain_into(tests);
     out
 }

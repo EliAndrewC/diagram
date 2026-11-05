@@ -172,6 +172,12 @@ The row village under `L7R_RUST_SEATING` (2026-11-05), the three seating forms a
 24, 39 and 44, as before (their causes above). The linear seeds still failing (3, 11, 12, 23, 40, 901, 904) are refused by the web
 stage after the homesteads (`WebRefused`), as every one of them is under Python's own seating.
 
+Seed 39's `NoDryExit` answered at the stage (2026-11-05): on the Rust seating the downslope gateway stood in a block of dry plots -
+one push out of a plot lands in the next, so `clear_of_what_stands` left it inside - the sweep kept its least-bad bearing across them
+and the dry exit's fill started walled in. The whole choice is now taken from the turned gateways where the downslope track cannot
+be taken out (`ways/gateway.rs` `choose_track_out`, and Python's `track.choose_track_out` alike). The cohort with every seating form
+in Rust: 43/54 against Python's 41/54 (seeds 9, 22, 30, 42 to pass; 24 and 44 to fail on `track_ends_off_the_web`, the web's).
+
 ## Compared against Python (before the door)
 
 `L7R_RUST_COMPARE=<path> make hamlet ARGS="..."` runs the Rust track out (`l7r_phases.track_out`, its inputs gathered by
