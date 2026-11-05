@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import copy
 import math
-import os
 import random
 from collections.abc import Callable
 from typing import Any
@@ -18,7 +17,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree, exit_bearing
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
-from l7r.diagram.settlement.rolling.gap_ways import JOIN_FAR_FT, lay_the_ways
+from l7r.diagram.settlement.rolling.gap_ways import JOIN_FAR_FT
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
@@ -29,9 +28,9 @@ from ..plan import SitePlan, band_extent
 from .boundary import install_site_boundary, seating_window
 from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
-from .growth import built_share, grow_the_margin, grows
+from .growth import built_share, grows
 from .holds import hold_laid_parts
-from .household_ways import chose_the_track, compare_rust_ways, near_the_cluster, watch_verdicts, ways_inputs
+from .household_ways import chose_the_track, lay_the_ways, near_the_cluster
 from .rank_rounds import _seat_rank_rounds
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
@@ -230,16 +229,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         s.M["way_out_gate"] = list(s.M["way_out_track"][0])
         for a, b in near_the_cluster(s, track, s.px(JOIN_FAR_FT)):
             s._access.add(a, b)
-    compare = os.environ.get("L7R_RUST_COMPARE") if getattr(s, "_access", None) is not None else None
-    inputs = ways_inputs(s) if compare else None  # feature 444 T30: the Rust households' ways run beside them, logged
-    verdicts = watch_verdicts(compare + ".verdicts") if compare else None
-    try:
-        s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
-    finally:
-        if verdicts is not None:
-            verdicts()
-    if compare and inputs is not None:
-        compare_rust_ways(s, inputs, compare + ".ways")
+    s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
@@ -727,15 +717,13 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
     # and 156): the row takes every household it can, and no front-row, frontage or rank pass takes the rest. Where its
     # streets cannot hold every farm, `seat_every_household` takes them back and seats the next margin, and past the last
     # the site is refused (feature 287 plan D2 - the GM's choice of 2026-09-30, over the unseated remainder 291 reported).
-    if _linear:
-        from .rows import seat_rows  # the row module reads this stage's frame; imported where it is used
-
-        placed += rust_rows(s, plan, _house_max, bound, (lat, dep), _quota) if os.environ.get("L7R_RUST_SEATING") else seat_rows(s, plan, _g0["bbox"])
+    if _linear:  # in Rust (feature 444 T30, `row_seat.rs`)
+        placed += rust_rows(s, plan, _house_max, bound, (lat, dep), _quota)
         front_cap = placed
         _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): a margin whose streets cannot hold every farm is left for the next
     # ...A SCATTERED HAMLET IN RUST WHERE ASKED (feature 444 T30): its front row, ranks, rescue and exhaustive pass, compared before
     # the stage is wired
-    if os.environ.get("L7R_RUST_SEATING") and not (_grown or _linear):
+    if not (_grown or _linear):
         placed += rust_scatter(s, plan, _single_file, _house_max, bound, (lat, dep), _quota)
         s._seat_search["front"] = placed
         return placed, 0
@@ -820,7 +808,7 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
         # y1) - no radius and no distance from the field bounds the growth (feature 318)
         s.M["site_boundary"]["window"] = [0.0, 0.0, round(float(s.W), 1), round(float(s.H), 1)]
         # ...IN RUST WHERE ASKED (feature 444 T30): the door's first half, compared against the growth before the stage is wired
-        placed = rust_grow(s, plan, placed, _share, _quota) if os.environ.get("L7R_RUST_SEATING") else grow_the_margin(s, plan, placed, _house_max)
+        placed = rust_grow(s, plan, placed, _share, _quota)
     elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
         placed = seat_the_rest(s, plan, placed)
     return placed, _cloud_placed

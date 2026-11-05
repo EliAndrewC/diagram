@@ -17,7 +17,6 @@ Research: houses before lanes - research/questions/0246-how-our-maps-lay-a-clust
 from __future__ import annotations
 
 import math
-import os
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
@@ -401,18 +400,60 @@ def compare_rust_ways(s: Settlement, inputs: dict[str, object], path: str) -> No
 
 
 def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
-    """The track out chosen once the last house stands (`track.choose_track_out`), with the homesteads as seated standing in
-    for the farmsteads not yet drawn (`seated_parts`).
+    """The track out chosen once the last house stands, in Rust (`l7r_phases.track_out`, feature 444 T30), with the homesteads as
+    seated standing in for the farmsteads not yet drawn (`seated_parts`); the wood seats it gave up released along it by name
+    (`meta.wood_seats_to_the_connector`). `NoDryExit` where no way leaves the frame - the stage's own refusal.
 
     Research: the track out decided once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out"""
-    from ..ways.track import choose_track_out  # the ways' layer sits above the homesteads; asked here once the houses stand
+    from ..phases_ext import phases
+    from ..ways.track import CONNECTOR_WIDTH, NoDryExit  # the ways' layer sits above the homesteads; asked here once the houses stand
 
     s._seated_parts = seated_parts(s)  # type: ignore[attr-defined]
     try:
-        track = choose_track_out(s, plan)
-        compare = os.environ.get("L7R_RUST_COMPARE")
-        if compare:  # feature 444 T30: the Rust track out run beside it on the same state, logged, the map untouched
-            compare_rust_track(s, plan, track, compare)
-        return track
+        got = phases().track_out(track_inputs(s, plan))
     finally:
         s._seated_parts = None  # type: ignore[attr-defined]
+    if got is None:
+        raise NoDryExit("no dry way out of the frame from a gateway on any bearing off the cluster")
+    s._seat_search["track_counts"] = sum(got["counts"].values())
+    track = [(float(q[0]), float(q[1])) for q in got["track"]]
+    st = getattr(s.M, "standing", None)
+    if got["seats_taken"] and st is not None:  # ...over a reserved seat, which the way out takes: given up by name
+        gone = st.reserved.release_seats_along(track, CONNECTOR_WIDTH)
+        if gone:
+            s.M["meta"]["wood_seats_to_the_connector"] = [[round(x, 1), round(y, 1)] for x, y in gone]
+    return track
+
+
+def lay_the_ways(s: Settlement) -> tuple[int, int]:
+    """Every household's way laid in the gaps once the last house stands, in Rust (`l7r_phases.households_ways`, feature 444 T30),
+    and recorded as `gap_ways.lay_the_ways` records one: its corridor reserved on the tree and the manifest, its way on its record,
+    a passage it makes unnecessary ended; a household no way reaches pinched across the neighbor's yard the Rust names. Returns
+    (passages ended, pinches); nothing where no access tree stands.
+
+    Research: each household's way in Rust - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the homesteads built first and the lanes after, each household's way run along the gaps to the track out or a way before it, one no way reaches reached across a neighbor's yard"""
+    from l7r.diagram.settlement.rolling.access import reserve
+    from l7r.diagram.settlement.rolling.gap_ways import pinch
+
+    from ..phases_ext import phases
+
+    houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
+    if getattr(s, "_access", None) is None or not houses:
+        return 0, 0
+    got = phases().households_ways(ways_inputs(s))
+    s._seat_search["ways_counts"] = sum(got["counts"].values())
+    ended = pinched = 0
+    for rec, way in zip(houses, got["drawn"], strict=True):
+        if way is None:
+            continue
+        run = tuple((float(q[0]), float(q[1])) for q in way)
+        reserve(s, run, (float(rec["x"]), float(rec["y"])))
+        rec["geom"]["access"] = run
+        if rec.pop("reached_across", None) is not None:  # ...a passage the finished map makes unnecessary, ended where it stands
+            rec.pop("passage_depth", None)
+            rec.pop("passage", None)
+            ended += 1
+    for rec, near in zip(houses, got["pinched"], strict=True):
+        if near is not None and not rec.get("reached_across"):
+            pinched += pinch(rec, [houses[near]])
+    return ended, pinched
