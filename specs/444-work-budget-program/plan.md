@@ -675,10 +675,26 @@ after the seat, `specs/444-work-budget-program/phases/homesteads.gate-seeds.md`)
 
 - Done when: the Rust homesteads seat all 17 on this seed and the stage's checks pass there (FR-019; matching Python is not
   required).
-- Room comes first from the margin's length or a second margin; the 100 ft bundle pitch and the researched room for the lane,
+- Room comes first from the margin's length or a second margin; the bundle pitch and the researched room for the lane,
   the footpath, the yard's sun and the front row's standoff are not narrowed to make 17 fit (the arbiter's ruling).
 - Red: what failed recorded in `homesteads.gate-seeds.md` and the task set down; a claim that it cannot be done is ruled through
   `make arbiter-ask`.
+
+### T31 Approach (checklist part A)
+
+1. **The goal, in the world.** Every declared household of seed 778251 seated beside its paddy (0001).
+2. **The constraints.** FR-019; the arbiter's ruling (room from the margin's length or a second margin; no researched room
+   narrowed); 0004's no house taken back.
+3. **Where each comes from.** G: amendment 5's FR-019. R: 0001, 0004. O: the gate records in `homesteads.gate-seeds.md`.
+4. **Do they describe the world here?** A row village on the Rust seat's margin; the ladder's next margins on the same field.
+5. **The order.** Inside the homesteads stage's seating (`seat_every_household`).
+6. **The exits.** Green: 778251 seats all 17 and the stage's checks pass there (`make rust-gate`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The ladder's margins tried on a copy of the map, the first that seats everyone kept.
+8. **The budget.** One commit inside T30's landing.
+9. **Done, measured.** `make rust-gate`'s failing list without 778251.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Room from a second margin, the ruling's first route.
+
 - research: rendering
 
 
@@ -702,8 +718,8 @@ keeps its ink).
   output the runs the stage lays today. The Python helpers only the road reached (`thread_over_the_ford`, the track's own use of
   `street_runs_out` and `ford_crossing`) are deleted in the same landing where nothing else reaches them; `street_span` stays
   in Python for the web until the web's phase, its Rust twin shared then.
-- **D2 - no new rule**: every constant keeps its claim at the Rust that reads it (the 60 ft run past the sheet, the 22 ft ford
-  landing, the 40 ft vertex step, 1.5 frames of reach and half a frame of run, `ROW_FRAME_FT`).
+- **D2 - no new rule**: every constant keeps its claim at the Rust that reads it (the run past the sheet, CONVENTION; the ford landing, GUESS;
+  the vertex step; the reach and run in frames, GUESS; `ROW_FRAME_FT`, 0033 - each as its constant's claim reads).
 - **D3 - the budget**: the stage's SOUND greenfield derivation (`phases/track_greenfield.derivation.md`, verdict 2: 223 at 40)
   priced the track out the homesteads now choose; the row road it did not price is re-derived if the audit finds the stage
   past it (FR-022), never squeezed. The registry's records of the lane (`Standing.ribbon`, the stage end's `resync`) are the
