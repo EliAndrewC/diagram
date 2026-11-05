@@ -23,9 +23,13 @@ LIVE=$(printf '%s' "$INPUT" | python3 "$EF_HERE/lib/hm_engine_freeze.py" judge 2
 TP=$(printf '%s' "$INPUT" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("transcript_path",""))' 2>/dev/null)
 SUB="${TP%.jsonl}/subagents"
 {
-  printf 'BLOCKED: an engine edit while a map review is still running - its verdict would come back NOT-REVIEWABLE.\n'
+  case "$LIVE" in *rolling*)
+    printf 'BLOCKED: an engine edit while a Rust gate, cohort or work-budget roll runs in this clone - the extension would be rebuilt under the rolls still to come.\n' ;;
+  *)
+    printf 'BLOCKED: an engine edit while a map review is still running - its verdict would come back NOT-REVIEWABLE.\n' ;;
+  esac
   printf '%s\n' "$LIVE" | sed 's/^/  running: /'
-  printf 'Draft the fix outside the clone (the scratchpad) and make it once every review has returned.\n'
+  printf 'Draft the fix outside the clone (the scratchpad) and make it once every review and roll has returned.\n'
   case "$LIVE" in *stalled*)
     printf 'A stalled review is still running until stopped: TaskStop it, then run exactly:\n'
     printf '%s\n' "$LIVE" | awk -v d="$SUB" '$3=="stalled"{print "  scripts/hooks/agent-stall-hooks.sh ack " d " " $1}' ;;

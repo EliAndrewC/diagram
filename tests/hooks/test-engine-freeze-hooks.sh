@@ -40,7 +40,7 @@ edit "$ENG";                                  check "no review running: an engin
 agent a1 glyph-check "$MIDTOOL"
 edit "$ENG";                                  check "a glyph-check mid tool call refuses an engine edit" 2 "$RC"
 says "the refusal names the running review" "a1 glyph-check live"
-says "the refusal names the route" "once every review has returned"
+says "the refusal names the route" "once every review and roll has returned"
 edit "$ENG" Write;                            check "Write is refused too" 2 "$RC"
 edit "$C/pool/hamlets/sawada/sawada.gen.py";  check "a pool gen is engine: refused" 2 "$RC"
 edit "$C/pool/hamlets/sawada/sawada.json";    check "a pool manifest is engine: refused" 2 "$RC"
@@ -85,6 +85,19 @@ mkdir -p "$C/l7r/diagram/interactive/classes"; IA=$C/l7r/diagram/interactive/cla
 printf 'class Lane:\n    """A worn path."""\n' > "$IA"
 edit2 "$IA" "A worn path." "A lane.";         check "an interactive class docstring is modal text: refused" 2 "$RC"
 touch "$SESSION/stall-ack/a5"
+# A RUST GATE, COHORT OR WORK-BUDGET ROLL IN THE CLONE FREEZES THE ENGINE TOO (feature 444, 2026-11-05: a crate edit mid-gate rebuilt
+# the extension under the rolls still to come); a roll in another tree does not
+printf 'def f():\n    return 1\n' > "$ENG"
+(cd "$C" && exec python3 -c 'import time; time.sleep(30)' l7r.diagram.tools.rust_gate) & ROLL=$!
+sleep 0.5
+edit2 "$ENG" "return 1" "return 2";           check "a Rust gate rolling in the clone refuses an engine edit" 2 "$RC"
+says "the refusal names the roll" "rust_gate rolling"
+says "the refusal says why" "rebuilt under the rolls still to come"
+kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
+(cd "$T" && exec python3 -c 'import time; time.sleep(30)' l7r.diagram.tools.cohort) & ROLL=$!
+sleep 0.5
+edit2 "$ENG" "return 1" "return 2";           check "a roll in another tree does not freeze this clone" 0 "$RC"
+kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && { echo "ok    firings are recorded"; PASS=$((PASS+1)); } || { echo "FAIL  no guard-log entry"; FAIL=$((FAIL+1)); }
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"

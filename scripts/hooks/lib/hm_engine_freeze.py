@@ -52,22 +52,56 @@ def _is_engine(root: str, rel: str) -> bool:
     return bool(mod.is_engine(rel))
 
 
-def engine_edit(payload: dict) -> bool:
+ROLLS = ("l7r.diagram.tools.rust_gate", "l7r.diagram.tools.cohort", "l7r.diagram.tools.work_budget")
+"""The rolls an engine edit may not land under: each builds the Rust extension once and rolls on it, and an edit mid-roll
+rebuilds it under the rolls still to come (2026-11-05, feature 444: a crate edit while `make rust-gate` rolled)."""
+
+
+def live_rolls(root: str, procs: str = "/proc") -> list[str]:
+    """The gate, cohort and work-budget rolls running in the clone at `root`: each process whose command line names one and
+    whose working directory is the clone."""
+    out: list[str] = []
+    try:
+        pids = [p for p in os.listdir(procs) if p.isdigit()]
+    except OSError:
+        return out
+    real = os.path.realpath(root)
+    for pid in pids:
+        try:
+            with open(os.path.join(procs, pid, "cmdline"), "rb") as fh:
+                cmd = fh.read().replace(b"\0", b" ").decode("utf-8", "replace")
+            cwd = os.path.realpath(os.readlink(os.path.join(procs, pid, "cwd")))
+        except OSError:
+            continue
+        name = next((r for r in ROLLS if r in cmd), None)
+        if name and cwd == real:
+            out.append(f"{pid} {name.rsplit('.', 1)[-1]} rolling")
+    return out
+
+
+def engine_root(payload: dict) -> str:
+    """The clone an engine edit lands in, or "" where the payload is no engine edit."""
     if (payload.get("tool_name") or "") not in FILE_TOOLS:
-        return False
+        return ""
     ti = payload.get("tool_input") or {}
     path = ti.get("file_path") or ti.get("notebook_path") or ""
     if not path.startswith("/"):
-        return False
+        return ""
     d = os.path.dirname(path)
     while d and not os.path.isdir(d):
         d = os.path.dirname(d)
     top = subprocess.run(["git", "-C", d or "/", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
     root = top.stdout.strip()
     if top.returncode or not root:
-        return False
+        return ""
     rel = os.path.relpath(os.path.realpath(path), os.path.realpath(root))
-    return not rel.startswith("..") and _is_engine(root, rel) and not docstring_only(rel, path, ti, payload.get("tool_name") or "")
+    ok = not rel.startswith("..") and _is_engine(root, rel) and not docstring_only(rel, path, ti, payload.get("tool_name") or "")
+    return root if ok else ""
+
+
+def engine_edit(payload: dict) -> bool:
+    """Is the payload an edit of an engine path (not a docstring alone)?"""
+    return bool(engine_root(payload))
 
 
 def docstring_only(rel: str, path: str, ti: dict, tool: str) -> bool:
@@ -157,15 +191,17 @@ def main() -> int:
         payload = json.load(sys.stdin) or {}
     except Exception:
         return 0
-    if not engine_edit(payload):
+    root = engine_root(payload)
+    if not root:
         return 0
+    rolls = live_rolls(root)
+    for line in rolls:
+        print(line)
     tp = payload.get("transcript_path") or ""
-    if not tp.endswith(".jsonl"):
-        return 0
-    found = live_reviews(tp[: -len(".jsonl")] + "/subagents", review_types())
+    found = live_reviews(tp[: -len(".jsonl")] + "/subagents", review_types()) if tp.endswith(".jsonl") else []
     for aid, atype, state, age in found:
         print(f"{aid} {atype} {state} {age}s")
-    return 1 if found else 0
+    return 1 if found or rolls else 0
 
 
 if __name__ == "__main__":
