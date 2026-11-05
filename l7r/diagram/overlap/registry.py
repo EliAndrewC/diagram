@@ -264,6 +264,16 @@ class Standing:
         self._changes = 0
         self._asked: tuple[Any, ...] | None = None
 
+    def __setstate__(self, state: dict[str, Any]) -> None:
+        """A REGISTRY UNPICKLED HOLDS ITS RECORDS BY THEIR NEW ids (feature 444 T30): a record is held by `id(record)`, which unpickling
+        changes, so a frozen settlement's registry knew none of its own records and the first `resync` recorded every one again on
+        itself (the Rust stage gate's replays of seeds 406150, 406155 and 406169: weirs on weirs, fallow on fallow). The records come
+        back as the same objects the manifest holds (one pickle), so each is re-keyed by its new id."""
+        self.__dict__.update(state)
+        moved = {(k, old): (k, id(rec)) for (k, old), (rec, _ents) in self._held.items()}
+        self._held = {moved[key]: held for key, held in self._held.items()}
+        self._holds = {moved.get(h, h) for h in self._holds}
+
     def __len__(self) -> int:
         return len(self._held)
 

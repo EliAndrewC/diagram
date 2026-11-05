@@ -176,6 +176,20 @@ def test_resync_records_again_what_a_stage_reshaped_forgets_what_left_and_takes_
     assert len(st._ext) == before, "nothing moved: nothing recorded again"
 
 
+def test_a_registry_unpickled_with_its_manifest_knows_its_own_records() -> None:
+    """Feature 444 T30: a record is held by its id, which unpickling changes - a frozen settlement's registry recorded every record
+    on itself again at its first resync (the Rust gate's replays: weirs on weirs). Re-keyed, a resync records nothing again."""
+    st, M = _registry()
+    M["houses"].append(dict(HOUSE))
+    st.hold("lanes", {"pts": [[0.0, 100.0], [200.0, 100.0]], "w": 6})
+    before = (len(st), len(st._ext), len(st._holds))
+    st2, M2 = pickle.loads(pickle.dumps((st, M)))
+    st2.strict = True
+    st2.resync()
+    assert (len(st2), len(st2._ext), len(st2._holds)) == before
+    assert all(key == (k, id(rec)) for key, (rec, _e) in st2._held.items() for k in [key[0]])
+
+
 def test_forbidden_segment_names_the_first_segment_the_matrix_refuses() -> None:
     st, M = _registry()
     M["houses"].append(HOUSE)

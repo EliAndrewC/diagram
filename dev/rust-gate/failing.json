@@ -5,7 +5,8 @@
   "pins": {},
   "stage": "homesteads",
   "failure": "FAIL refused:OverlapRefused -> farm_fixtures would be recorded on a dry_plots at (3417, 2501), which the overlap matrix forbids",
-  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406150-homesteads.pkl"
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406150-homesteads.pkl",
+  "seed_passes": true
  },
  {
   "seed": 406155,
@@ -13,7 +14,8 @@
   "pins": {},
   "stage": "homesteads",
   "failure": "FAIL refused:SiteRefused -> Rust-406155 (seed 406155): seated 8 of 13 households on margin 1; no house is taken back",
-  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406155-homesteads.pkl"
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406155-homesteads.pkl",
+  "seed_passes": true
  },
  {
   "seed": 406169,
@@ -21,6 +23,15 @@
   "pins": {},
   "stage": "homesteads",
   "failure": "FAIL refused:SiteRefused -> Rust-406169 (seed 406169): seated 10 of 12 households on margin 1; no house is taken back",
-  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406169-homesteads.pkl"
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/406169-homesteads.pkl",
+  "seed_passes": true
+ },
+ {
+  "seed": 650854,
+  "households": 19,
+  "pins": {},
+  "stage": "homesteads",
+  "failure": "FAIL refused:SiteRefused -> Rust-650854 (seed 650854): seated 17 of 19 households on margin 1; no house is taken back",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/650854-homesteads.pkl"
  }
 ]
