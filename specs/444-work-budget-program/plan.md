@@ -737,10 +737,13 @@ keeps its ink).
   in Python for the web until the web's phase, its Rust twin shared then.
 - **D2 - no new rule**: every constant keeps its claim at the Rust that reads it (the run past the sheet, CONVENTION; the ford landing, GUESS;
   the vertex step; the reach and run in frames, GUESS; `ROW_FRAME_FT`, 0033 - each as its constant's claim reads).
-- **D3 - the budget** (FR-022 rule 2): the stage re-derived for what it now does - the row road; the track out it no longer
-  chooses (the homesteads' re-derivation prices it, T30 D1) dropped - before the rebuild's count is read, in
-  `phases/track_road.derivation.md`, with its MODE BUDGET verdict (`make work-budget-bundle MODE=budget`). The registry's
-  records of a lane (`Standing.ribbon`, the stage end's `resync`) are the door's, as every stage's.
+- **D3 - the budget** (FR-022 rule 2): a REVISION of the stage's greenfield derivation (`phases/track_greenfield.derivation.md`),
+  never a new one: the track out's choice moved out to the homesteads (T30 D1, whose re-derivation prices it), the registry's
+  record of the connector and a row village's road under `## Work the first derivation missed`, revised before the rebuild's
+  count is read and judged in MODE BUDGET; a figure past the pin set by `make budget-set RAISE=1`. The stage's first greenfield
+  pin, 223 at 40 (verdict-2, SOUND), stays the reference for every FR-022 line - the 2x raise, the two blind dispatches past it,
+  the accepted count's ceiling and the ten-times line. The driver's stage-end backstop over the whole map is named there, its
+  pricing the MODE BUDGET verdict's to rule.
 - **D4 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`.
 
 ### T32 Approach (checklist part A)

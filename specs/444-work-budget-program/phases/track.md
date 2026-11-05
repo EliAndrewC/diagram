@@ -12,7 +12,7 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
 - [x] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
   before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
   scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/track.derivation.md`.
-  Evidence: `phases/track_greenfield.derivation.md` (the stage's greenfield derivation, measured 2026-10-29 on the reference manifests): 157 a map at 20, 223 at 40
+  Evidence: `phases/track_greenfield.derivation.md` (the stage's greenfield derivation, measured 2026-10-29 on the reference manifests): 157 a map at 20, 223 at 40; revised 2026-11-05 under FR-022 rule 2 for the stage after T30 (56 / 68 / 92 at 20 / 40 / 80)
 
 - [x] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
