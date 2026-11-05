@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import passage
 from tests.settlement._builders import seed_tree
@@ -58,16 +56,16 @@ def _seated_passage(s: Settlement) -> tuple[dict, dict, dict, tuple]:
     return nb, rec, lay, walk
 
 
-def test_the_passage_asks_no_routed_corridor(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`access_corridor`, `routed` False (the GM's ruling of 2026-10-03): the candidates after the routed marker (`ROUTE_LATER`)
-    are not asked - a household that only a path bending round the homesteads would reach has no way of its own."""
-    from l7r.diagram.settlement.rolling import access
+def test_a_household_reached_across_a_yard_keeps_its_walk_clear_and_records_whom() -> None:
+    from l7r.diagram.settlement import Settlement
+    from l7r.diagram.settlement.rolling.passage import reserve_way
+    from tests.settlement._builders import seed_tree
 
-    s = _open()
-    _pair(s)
-    route = ((0.0, 0.0), (5.0, 5.0), (5.0, 9.0))
-    monkeypatch.setattr(access, "_house_candidates", lambda s, tree, g: iter([access.ROUTE_LATER, route]))
-    monkeypatch.setattr(access, "admitted", lambda s, c, g, memo: c)
-    geom = s._bundle_geom(900.0, 900.0, 46.0, 28.0, "SE", rot=0.0)
-    assert access.access_corridor(s, geom, routed=False) is None, "the routed corridor is not sought"
-    assert access.access_corridor(s, geom) == route, "the seating's own question still routes"
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    tree = seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    s._passage_left = 2  # type: ignore[attr-defined]
+    rec: dict = {}
+    reserve_way(s, rec, {"passage": {"walk": [(0.0, 0.0), (10.04, 0.0), (10.0, 10.0)], "of": (5.04, 5.0), "depth": 1}}, (0.0, 0.0))
+    assert tree.bars.n == 2 and s._passage_left == 1  # type: ignore[attr-defined]
+    assert rec == {"reached_across": [5.0, 5.0], "passage_depth": 1, "passage": [[0.0, 0.0], [10.0, 0.0], [10.0, 10.0]]}

@@ -28,31 +28,24 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.work_counts import OPS
 
-from .._geom import Pt, seg_closest, seg_dist
+from .._geom import Pt
 
 if TYPE_CHECKING:
     from ..core import Settlement
-    from .access import AccessTree
 
 #: The grid a route is searched on, in px: MEASURED on the reference at 40 households (research R5) - 10 px took 59.6 s on seed 25
 #: (26 margins), 12 px 7.2 s (6 margins); finer than a corridor's width (2 x `ACCESS_HALF_FT`), so a gap a corridor fits holds a
 #: grid line. A search breadth, never a rule: every leg is judged exactly (`leg_ok`).
-ROUTE_STEP_PX = 12.0
 #: How far from its door a route is sought, in px: a guess, the reach of a neighborhood (about three homesteads); a door with
 #: no tree within it has no routed path, and the seat is refused as before.
-ROUTE_REACH_PX = 320.0
-"""Research: how far a routed path is sought - GUESS: 320 px from the door, about three homesteads; a door with no tree within it is refused"""
 #: The search's weight on its aim (weighted A*): 1.5 finds a near-shortest route in a fraction of the plain search's grid
 #: points; the route is pulled taut after, so its length beyond the shortest costs nothing drawn.
-ROUTE_WEIGHT = 1.5
 #: The most legs a routed path takes: a guess - a path round two or three homesteads; the web's bend law judges each joint.
-ROUTE_LEGS = 5
-"""Research: most legs of a routed path - GUESS: 5, a path round two or three homesteads"""
 
 Cell = tuple[int, int]
 
@@ -119,77 +112,6 @@ def search(
     return None
 
 
-def taut(pts: Sequence[Pt], leg_ok: Callable[[Pt, Pt], bool], turns_back: Callable[[Pt, Pt, Pt], bool], most: int) -> tuple[Pt, ...] | None:
-    """The polyline through `pts` pulled taut: from each point, the farthest later point a leg to it is admitted (`leg_ok`)
-    without turning back on the leg before (`turns_back`). None where a point admits no leg onward or more than `most` legs
-    are needed.
-
-    Research: path pulled taut - research/questions/0081-village-lanes.drawing.html: straight from point to point where it can, never doubling back
-    """
-    out = [pts[0]]
-    k = 0
-    while k < len(pts) - 1:
-        if __debug__:
-            OPS["candidate@taut"] += 1
-        if len(out) > most:
-            return None
-        far = next((m for m in range(len(pts) - 1, k, -1) if leg_ok(pts[k], pts[m]) and (len(out) < 2 or not turns_back(out[-2], out[-1], pts[m]))), None)
-        if far is None:
-            return None
-        out.append(pts[far])
-        k = far
-    return tuple(out) if len(out) - 1 <= most else None
-
-
-def tree_in_reach(segs: Sequence[tuple[Pt, Pt]], door: Pt, reach: float) -> bool:
-    """Does any of the tree's segments come within the square `reach` about `door` (bounding boxes overlapping)? A route search's
-    every grid point lies within `ROUTE_REACH_PX` of its door on each axis and its goal within a step of a segment
-    (`_cells_to_tree`'s `goal_of`), so where none does, no route can be found.
-
-    Research: search breadth - NONE: an exact prefilter of the route search, the same verdict
-    """
-    x0, y0, x1, y1 = door[0] - reach, door[1] - reach, door[0] + reach, door[1] + reach
-    return any(max(a[0], b[0]) >= x0 and min(a[0], b[0]) <= x1 and max(a[1], b[1]) >= y0 and min(a[1], b[1]) <= y1 for a, b in segs)
-
-
-def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
-    """The routed paths from the homestead's two dooryard doors (`doors_of`: the forecourt, the yard's far edge), each searched
-    once while nothing standing changes (`_standing_memo`).
-
-    Asked only through `access.access_corridor` on a tree that routes; the hamlet's seating no longer asks it while houses are
-    seated (feature 318: its ways are laid by `gap_ways` once the last house stands).
-
-    Research: path routed round what stands - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard; asked while it seats a house only on the village roll, which keeps the older way
-    """
-    from . import access as A
-
-    half = float(tree.half)
-    hgap = A.house_gap(s)
-    memo = A._standing_memo(s)[1]
-    fg = getattr(s, "_free_ground", None)
-    wood = getattr(s, "_wood", None)
-    own = (geom.get("boxes") or {}).get("house") or geom["house"]
-    placed = s._reach_index(s.placed, "placed_reach")
-    step = ROUTE_STEP_PX
-
-    def leg_ok(a: Pt, b: Pt) -> bool:
-        return A.house_clear(a, b, geom, hgap) and A.fixtures_clear(s, a, b, geom) and A.parts_clear(s, a, b, geom) and A.standing_ground(s, a, b, memo) and A.lawful_leg(s, a, b, memo)
-
-    # ...OFF THE HOUSE'S OWN BOX ONLY, and once for the seat's house and yard - its layouts share it, each taking it only where
-    # its own beds and fixtures leave it clear (the taut pull's and `access_corridor`'s leg tests). A FIX THAT FAILED (feature
-    # 317, task T06, research R8): searched for each garden layout round its own beds and fixtures (`own_parts`), it seated more
-    # households with a path before feature 315 merged (seats lost to the path alone 77 -> 21 at 15 households), and after it cost
-    # the homesteads stage 3-43% more than this search on the bookend's seeds (calls, passage off), the layouts no longer seated
-    # better and each searched again. Withdrawn: do not retry it without measuring it against main's layouts first.
-    mine = [(own, hgap)]
-    for door in A.doors_of(geom, half)[:2]:
-        key = ("routed", door, tuple(own), tuple((geom.get("boxes") or {}).get("yard") or ()))
-        if key not in memo:
-            memo[key] = _route_from(s, tree, door, mine, (geom.get("boxes") or {}).get("yard"), half, hgap, fg, wood, placed, step, leg_ok, geom)
-        if memo[key] is not None:
-            yield memo[key]
-
-
 def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> list[tuple[Any, float]]:
     """What a household's own parts keep a WALK off of (`passage.walk_of`, feature 317), each with the gap its leg test keeps:
     the house (`house_clear`'s gap), the shed, byre, well and garden beds (`parts_clear`'s), the fixtures by a corridor's
@@ -210,96 +132,3 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
     # leg off its trunk (`fixtures_clear`), as it did before the route kept off its own parts.
     mine += [(b, half) for kind, b in sorted((boxes.get("fixtures") or {}).items()) if kind != "persimmon"]
     return mine
-
-
-def _route_from(
-    s: Settlement,
-    tree: AccessTree,
-    door: Pt,
-    mine: Sequence[tuple[Any, float]],
-    yard: Any,
-    half: float,
-    hgap: float,
-    fg: Any,
-    wood: Any,
-    placed: Any,
-    step: float,
-    leg_ok: Callable[[Pt, Pt], bool],
-    geom: Any,
-) -> tuple[Pt, ...] | None:
-    """One door's routed path (`routed_corridors`), or None.
-
-    Research: path leaves its own yard once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way leaves its dooryard round its own parts, nothing built on a lane, and the custom of cutting through a neighbor's yard is recorded there; kept off the house, its parts and the neighbors' homesteads, leaving its threshing yard and never crossing it again
-    """
-    from .access import PART_MARGIN_FT, TREAD_HALF_FT, doubles_back, leaves_its_yard
-
-    # ...NOT SEARCHED WHERE NO BRANCH OF THE TREE COMES WITHIN ITS REACH (feature 317, research R10): such a search can find no
-    # goal, and it explored its whole box before failing - 348 of seed 47's 509 failed searches at 40 households, 80% of the cells
-    # they opened. The same verdict, decided before the search
-    if not tree_in_reach(tree.segs, door, int(ROUTE_REACH_PX / step) * step + step):
-        return None
-    found = _cells_to_tree(s, tree, door, mine, half, hgap, fg, wood, placed, step, geom)
-    if found is None:
-        return None
-    cells, q = found
-    pts = [door, *((door[0] + c[0] * step, door[1] + c[1] * step) for c in cells[1:]), q]
-    run = taut(pts, leg_ok, doubles_back, ROUTE_LEGS)
-    # ...AND IT LEAVES ITS OWN YARD, as every straight and round-the-gable corridor must (`_house_candidates`, feature 287 M8)
-    return run if run is not None and leaves_its_yard(run, yard, s.px(TREAD_HALF_FT + PART_MARGIN_FT)) else None
-
-
-def _cells_to_tree(
-    s: Settlement, tree: AccessTree, door: Pt, mine: Sequence[tuple[Any, float]], half: float, hgap: float, fg: Any, wood: Any, placed: Any, step: float, geom: Any
-) -> tuple[list[Cell], Pt] | None:
-    """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None.
-
-    Research: path kept off what stands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane - off the household's own house and the parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
-    """
-    from . import access as A
-    from .access import seg_box_within
-
-    memo = A._standing_memo(s)[1]
-
-    # THE GRID IS THE DOOR'S (feature 314, research R4): laid on the map's own multiples of the step, so that what a point's
-    # standing ground answers could be shared between searches, the narrow ways between homesteads held no grid point and seed 6
-    # at 40 households threw two margins away (16.4 s against the base's 5.9); laid from the door, it seated on one in 2.2 s.
-    # What made the search cheap was not the sharing but the tests below, which refuse a path where it is searched and not
-    # after it is found.
-    x0, y0 = door
-
-    def at(c: Cell) -> Pt:
-        return (x0 + c[0] * step, y0 + c[1] * step)
-
-    # ...OFF THE HOUSEHOLD'S OWN HOUSE AND PARTS (`own_parts`): the first step and the last leg keep their tests (below)
-    def is_open(c: Cell) -> bool:
-        p = at(c)
-        if fg is not None and fg.point_taken(p[0], p[1]):
-            return False
-        if any(seg_box_within(p, p, b, g) for b, g in mine):
-            return False
-        if any(seg_box_within(p, p, (it[0], it[1], it[2], it[3]), half) for it in placed.near(p[0], p[1], half)):
-            return False
-        return not (wood is not None and wood.corridor_bars(p, p))
-
-    def goal_of(c: Cell) -> Pt | None:
-        p = at(c)
-        got = None
-        for a, b, *_ in tree.grid.near(p[0], p[1], step + half):
-            if seg_dist(p[0], p[1], a, b) <= step:
-                got = seg_closest(p[0], p[1], a, b)
-                break
-        # ...and the last leg onto the tree standing on ground the standing tests admit (`standing_ground`), as the taut pull
-        # will ask it: a goal whose last leg grazed a placed homestead was found and then refused (research R2)
-        if got is not None and math.dist(p, got) > 1e-6 and not A.standing_ground(s, p, got, memo):
-            got = None
-        return got
-
-    aims = [((q[0] - x0) / step, (q[1] - y0) / step) for q in tree.targets(door)]
-
-    # ...ITS FIRST STEP OFF ITS OWN PARTS, by the leg tests that read only the household (`house_clear`, `fixtures_clear`,
-    # `parts_clear`) - the refusals a first leg met (research R2); the standing ground's tests, the dearest, are the taut pull's
-    def first_ok(c: Cell) -> bool:
-        p = at(c)
-        return A.house_clear(door, p, geom, hgap) and A.fixtures_clear(s, door, p, geom) and A.parts_clear(s, door, p, geom)
-
-    return search(is_open, goal_of, aims, int(ROUTE_REACH_PX / step), ROUTE_WEIGHT, (0, 0), first_ok)

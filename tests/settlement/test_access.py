@@ -6,7 +6,7 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import access
-from l7r.diagram.settlement.rolling.access import AccessTree, _seg_box_gap, access_corridor, doors_of, fixtures_clear, house_clear, house_gap, parts_clear, reserve, standing_clear
+from l7r.diagram.settlement.rolling.access import AccessTree, _seg_box_gap, doors_of, fixtures_clear, house_clear, house_gap, parts_clear, reserve, standing_clear
 from tests.settlement._builders import seed_tree
 
 
@@ -73,57 +73,6 @@ def test_a_reserved_corridor_joins_the_tree_and_the_manifest_records_it() -> Non
     assert s.M["access_corridors"][-1] == {"pts": [[1.0, 1.0], [2.0, 2.0]], "of": [5.0, 5.0]}
 
 
-def test_a_tree_behind_the_house_is_reached_round_the_gable_from_the_dooryard() -> None:
-    """No straight run from the dooryard reaches a tree behind the house past its neighbors; a flank door carried back
-    along the gable does, in two legs - and each leg is its own record, the first naming the house."""
-    s = _open()
-    seed_tree(s, (720.0, 470.0), (0.0, -1.0), 20.0)  # the tree starts just behind the back wall: every straight run crosses the house
-    geom = s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0)
-    got = access_corridor(s, geom)
-    assert got is not None and len(got) == 3, "round the gable"
-    door, turn, _q = got
-    assert door[1] > 520.0 and turn[1] < 520.0 - 14.0 - 7.0, "leaves the dooryard, turns past the back wall"
-    assert access.round_the_gable(geom, door, 7.0) == turn
-    reserve(s, got, of=(720.0, 520.0))
-    recs = s.M["access_corridors"]
-    assert len(recs) == 2 and recs[0]["of"] == [720.0, 520.0] and "of" not in recs[1] and recs[0]["pts"][1] == recs[1]["pts"][0]
-    assert access.legs(got) == [(door, turn), (turn, _q)]
-
-
-def test_a_corridor_round_the_gable_never_doubles_back_to_a_tree_in_front(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287, homes wave 5 (cohort seed 32): with every straight run from the dooryard refused, a flank door carried
-    past the gable to a tree point back in FRONT of the house turns by more than the web's bend law allows (`doubles_back`,
-    `HAIRPIN_DEG`, the ways' own `_HAIRPIN_DEG`) - the web could not draw it and left the house with no way. The seat is
-    refused instead; the same search to a tree behind the house still goes round the gable."""
-    from l7r.diagram.hamletgen.ways.clearance import _HAIRPIN_DEG
-
-    assert access.HAIRPIN_DEG == _HAIRPIN_DEG
-    assert access.doubles_back((0.0, 0.0), (0.0, -10.0), (1.0, 20.0)) and not access.doubles_back((0.0, 0.0), (0.0, -10.0), (20.0, -12.0))
-    assert not access.doubles_back((0.0, 0.0), (0.0, 0.0), (1.0, 1.0)), "a leg of no length turns nowhere"
-    turns: list[tuple[float, float]] = []
-    real = access.round_the_gable
-
-    def gable(geom, door, half):  # type: ignore[no-untyped-def]
-        turns.append(turn := real(geom, door, half))
-        return turn
-
-    monkeypatch.setattr(access, "round_the_gable", gable)
-    monkeypatch.setattr(access, "parts_clear", lambda *a: True)  # the SE bed at the flank door is not under test (M8)
-    monkeypatch.setattr(access, "standing_ground", lambda s_, a, b, memo=None: any(access.math.dist(p, t) < 1e-6 for t in turns for p in (a, b)))
-
-    def search(tree_at: tuple[float, float], out: tuple[float, float]) -> tuple[tuple[float, float], ...] | None:
-        s = _open()
-        turns.clear()
-        seed_tree(s, tree_at, out, 60.0)
-        return access_corridor(s, s._bundle_geom(720.0, 520.0, 46.0, 28.0, "SE", rot=0.0))
-
-    assert search((820.0, 750.0), (1.0, 0.0)) is None, "the tree in front, beside the house: only a hairpin reaches it"
-    assert len(search((720.0, 400.0), (0.0, -1.0)) or ()) == 3, "the tree behind: round the gable"
-    monkeypatch.setattr(access, "doubles_back", lambda a, b, c: False)
-    got = search((820.0, 750.0), (1.0, 0.0))
-    assert got is not None and len(got) == 3, "the refusal is the hairpin's: without it the gable run is taken"
-
-
 def test_the_bounded_gap_test_gives_the_exact_gaps_verdict() -> None:
     """`seg_box_within` decides by one distance where it can (a box beyond the segment's widened box, a center within the
     reach, a center past the reach by its half-diagonal) and by the exact gap otherwise - the same verdict as
@@ -167,26 +116,6 @@ def _plain_search(s, geom):  # type: ignore[no-untyped-def]
     return None
 
 
-def test_the_homesteads_of_one_house_and_yard_share_the_search_and_each_gets_its_own_answer() -> None:
-    """The four sides of a seat share one search (their house and yard), and each takes the first corridor its own
-    fixtures leave clear: over fixtures laid across the first corridors, straight and round the gable, and a door on
-    the tree itself, the shared search returns what the plain search returns - a refusal included."""
-    import random
-
-    rng = random.Random(3)
-    got = []
-    for center, tree_at, out in (((720.0, 520.0), (720.0, 470.0), (0.0, -1.0)), ((700.0, 700.0), (700.0, 300.0), (1.0, 0.0)), ((700.0, 700.0), (700.0, 735.0), (1.0, 0.0))):
-        s = _open()
-        seed_tree(s, tree_at, out, 300.0 if out[0] else 20.0)
-        base = s._bundle_geom(center[0], center[1], 46.0, 28.0, "SE", rot=0.0)
-        for _ in range(12):
-            geom = {**base, "boxes": {**base["boxes"], "fixtures": {f"f{k}": (center[0] + rng.uniform(-60, 60), center[1] + rng.uniform(-60, 60), 8.0, 8.0) for k in range(rng.randint(0, 3))}}}
-            want = _plain_search(s, geom)
-            assert access_corridor(s, geom) == want
-            got.append(want)
-    assert any(c is None for c in got) and any(c is not None and len(c) == 3 for c in got) and any(c is not None and len(c) == 2 for c in got)
-
-
 def test_the_indexed_targets_are_the_nearest_of_every_point_of_the_tree_in_its_order() -> None:
     """`AccessTree.targets` reads the points along from an index; over trees of one to thirty corridors, small and large,
     it returns what sorting every point of the tree (each corridor's nearest point, then its points along) returns."""
@@ -218,29 +147,6 @@ def test_the_indexed_targets_are_the_nearest_of_every_point_of_the_tree_in_its_o
     assert tiny.targets((5.0, 5.0)) == plain(tiny, (5.0, 5.0)) and len(tiny.targets((5.0, 5.0))) == 2, "a tree of fewer points than tried: every point"
 
 
-def test_a_corridor_is_drawn_from_where_it_leaves_its_own_yard() -> None:
-    """Feature 287 wave 6 (ways W01; cohort seed 39 under the probes: an 81-mat yard 76 x 53 ft, the door in its middle): the
-    matrix forbids a way on a yard, its own household's too, so the corridor the seating reserves and the web draws starts
-    where its tread leaves the yard for good - the yard read as the matrix reads it, turned with its house (`yard_quad`)."""
-    geom = {"house": (0.0, 0.0, 40.0, 28.0), "yard": (0.0, 60.0, 80.0, 50.0), "turn": 0.0}
-    quad = access.yard_quad(geom)
-    assert quad is not None and sorted(round(q[1]) for q in quad) == [35, 35, 85, 85]
-    turned = access.yard_quad({**geom, "turn": 90.0})
-    assert turned is not None and sorted(round(q[0]) for q in turned) == [-25, -25, 25, 25], "turned with its house"
-    assert access.yard_quad({"house": (0.0, 0.0, 1.0, 1.0), "yard": None}) is None
-    run = [(0.0, 60.0), (0.0, 400.0)]
-    past = access.past_the_yard(run, quad, access.TREAD_HALF_FT)
-    assert past is not None and past[0] == (0.0, pytest.approx(85.0 + access.TREAD_HALF_FT + access.YARD_EXIT_PAD_FT)) and past[-1] == (0.0, 400.0)
-    assert access.past_the_yard([(0.0, 300.0), (0.0, 400.0)], quad, 1.5) is None, "never near it"
-    assert access.past_the_yard([(0.0, 400.0), (0.0, 60.0)], quad, 1.5) is None, "ending on it"
-    bent = access.past_the_yard([(0.0, 60.0), (0.0, 60.0), (0.0, 100.0), (200.0, 100.0)], quad, 1.5)
-    assert bent is not None and bent[0] == (0.0, pytest.approx(87.5)) and bent[-1] == (200.0, 100.0), "left along its first leg"
-    s = _open()
-    assert access.drawn_corridor(s, ((0.0, 60.0), (0.0, 400.0)), geom)[0][1] == pytest.approx(87.5)
-    assert access.drawn_corridor(s, ((500.0, 60.0), (500.0, 400.0)), geom) == ((500.0, 60.0), (500.0, 400.0)), "away from its yard: as found"
-    assert access.drawn_corridor(s, ((0.0, 60.0), (0.0, 400.0)), {**geom, "yard": None}) == ((0.0, 60.0), (0.0, 400.0))
-
-
 def test_a_corridor_keeps_off_its_own_well_pocket_and_its_own_fixtures() -> None:
     """`access.fixtures_clear` (feature 318, cohort Audit-24): the wellhead laid in the household's own homestead is drawn as a
     well, which the registry keeps every corridor off - so the corridor is held off its own pocket by the wellhead's box,
@@ -253,22 +159,6 @@ def test_a_corridor_keeps_off_its_own_well_pocket_and_its_own_fixtures() -> None
     assert access.fixtures_clear(s, (200.0, 360.0), (400.0, 360.0), own), "well clear of it"
     assert not access.fixtures_clear(s, (450.0, 300.0), (550.0, 300.0), own), "through its own privy"
     assert access.fixtures_clear(s, (200.0, 300.0), (400.0, 300.0), {"boxes": {}}), "no pocket, no fixtures"
-
-
-def test_the_site_raster_is_asked_of_a_searchs_lines_at_once_and_each_line_once() -> None:
-    """`access.prime_site`: the lines not yet asked go to the free-ground raster in one call, each answer remembered; a line
-    already remembered is not asked again, and with no raster nothing is asked."""
-    from types import SimpleNamespace
-
-    s = _open()
-    seed_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
-    access.prime_site(s, [((0.0, 0.0), (10.0, 0.0))])  # no raster: a no-op
-    calls: list[int] = []
-    s._free_ground = SimpleNamespace(lines_edge_points=lambda lines: calls.append(len(lines)) or [None] * len(lines))
-    a, b = (0.0, 0.0), (40.0, 0.0)
-    access.prime_site(s, [(a, b), (a, b), (b, a)])
-    access.prime_site(s, [(a, b)])
-    assert calls == [2, 0] and access._standing_memo(s)[1][("site", a, b)] is None
 
 
 def test_a_point_is_clear_of_the_boxes_as_the_line_tests_judge_it() -> None:
@@ -312,3 +202,19 @@ def test_the_written_out_segment_to_box_gap_is_the_old_constructions() -> None:
         b = a if rng.random() < 0.05 else (rng.uniform(-100, 100), rng.uniform(-100, 100))
         assert abs(_seg_box_gap(a, b, box) - _old_seg_box_gap(a, b, box)) < 1e-9, (a, b, box)
     assert _seg_box_gap((0.0, 30.0), (0.0, 40.0), (0.0, 0.0, 10.0, 10.0)) == 25.0, "a vertical segment past the box"
+
+
+def test_a_walk_is_barred_and_a_margin_with_no_lawful_bearing_has_no_way_out(monkeypatch: pytest.MonkeyPatch) -> None:
+    s = _open()
+    tree = seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    tree.bar((0.0, 0.0), (10.0, 0.0))
+    assert tree.bars.n == 1 and [b[:2] for b in tree.bars.near(5.0, 0.0)] == [((0.0, 0.0), (10.0, 0.0))], "a passage's walk kept clear"
+    monkeypatch.setattr(access, "lawful_ground", lambda *a: False)
+    assert access.exit_bearing(s, (100.0, 100.0), (0.0, 1.0), 300.0) is None, "no turn off the bearing stands on lawful ground"
+
+
+def test_a_strip_the_site_raster_refuses_is_not_clear(monkeypatch: pytest.MonkeyPatch) -> None:
+    s = _open()
+    seed_tree(s, (100.0, 100.0), (0.0, 1.0), 50.0)
+    monkeypatch.setattr(access, "site_edge_samples", lambda *a: None)
+    assert not standing_clear(s, (0.0, 0.0), (40.0, 0.0))

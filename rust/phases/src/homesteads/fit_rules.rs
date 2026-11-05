@@ -204,7 +204,7 @@ fn rings_meet(a: &[Pt], b: &[Pt]) -> bool {
         || b.first().is_some_and(|&p| in_poly(p, a))
 }
 
-/// Does the registry admit every part `b` lays - its house, yard, beds, annexes as turned and its held fixtures as drawn - none on
+/// Does the registry admit every part `b` lays - its house, yard, beds, annexes and well pocket as turned and its held fixtures as drawn - none on
 /// an extent the matrix forbids its key?
 #[must_use]
 pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
@@ -216,6 +216,13 @@ pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
     parts.extend(b.gardens.iter().map(|&g| ("gardens", turned(g))));
     parts.extend(b.kura.map(|k| ("farm_sheds", turned(k))));
     parts.extend(b.byre.map(|(r, _)| ("byres", turned(r))));
+    // ...and a grove farm's well pocket, filed under `wells` (the Rust stage gate's seed 375337: a pocket on a drawn channel)
+    parts.extend(b.well.map(|w| {
+        (
+            "wells",
+            corners(super::bearing::turned_box(w, b.turn), 0.0).to_vec(),
+        )
+    }));
     let first = 2 + b.gardens.len() + usize::from(b.kura.is_some()) + usize::from(b.byre.is_some());
     parts.extend(
         b.fixtures

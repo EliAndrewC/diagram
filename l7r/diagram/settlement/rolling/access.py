@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import heapq
 import math
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterable, Sequence
 from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.work_counts import OPS
@@ -453,18 +453,6 @@ def site_edge_samples(s: Settlement, a: Pt, b: Pt) -> Iterable[Pt] | None:
     return edge
 
 
-def prime_site(s: Settlement, segs: list[tuple[Pt, Pt]]) -> None:
-    """Ask the site's raster of all these corridors at once (`FreeGround.lines_edge_points`), for `site_edge_samples` to
-    read: a homestead's corridor search is some seventy lines, and asked one by one each paid the array's setup."""
-    fg = getattr(s, "_free_ground", None)
-    if fg is None:
-        return
-    memo = _standing_memo(s)[1]
-    todo = [(a, b) for a, b in dict.fromkeys(segs) if ("site", a, b) not in memo]
-    for (a, b), edge in zip(todo, fg.lines_edge_points([(a, b, max(1, int(math.dist(a, b) / SAMPLE_PX))) for a, b in todo]), strict=True):
-        memo[("site", a, b)] = edge
-
-
 def site_samples_clear(s: Settlement, pts: Iterable[Pt]) -> bool:
     """Do these points stand on ground the site boundary admits - not on the field's side of a chord, not within a water
     course's clearance, not inside the outline of the other ground?"""
@@ -491,268 +479,19 @@ def lawful_ground(s: Settlement, a: Pt, b: Pt) -> bool:
     return ground is None or bool(ground([a, b]))
 
 
-def round_the_gable(geom: Any, door: Pt, half: float) -> Pt:
-    """Where a corridor from a dooryard flank door (`doors_of`) turns once it has passed its house: carried back along the
-    gable, parallel to the house's front-to-yard axis, past the back wall by a corridor's half-width and a foot - so the
-    leg beside the house clears it and the turn stands behind its corner, not behind its wall.
-
-    Research: flank path round the gable - research/questions/0081-village-lanes.drawing.html: a lane's tread keeps 3 ft off a farmhouse wall - the tread's edge is carried 1 ft past the back wall, a departure the code keeps until feature 417 T33; carried along the gable past the back wall by a corridor's half-width and a foot
-    """
-    boxes = geom.get("boxes") or {}
-    yard = boxes.get("yard") or geom.get("yard")
-    hx, hy, hw, hh = boxes.get("house") or geom["house"]
-    d = math.hypot(float(yard[0]) - hx, float(yard[1]) - hy) or 1.0
-    ux, uy = (float(yard[0]) - hx) / d, (float(yard[1]) - hy) / d
-    back = hw / 2 * abs(ux) + hh / 2 * abs(uy) + half + 1.0  # the back wall's reach behind the center, and the strip past it
-    t = (door[0] - hx) * ux + (door[1] - hy) * uy + back
-    return (door[0] - ux * t, door[1] - uy * t)
-
-
-def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, ...] | None:
-    """The corridor this homestead would be admitted with: from a dooryard door to the first of the tree's nearest points
-    that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
-    carried past the gable first (`round_the_gable`), two legs, or - on a tree that routes (`AccessTree.routed`, the
-    nucleated seating's) - routed round what stands (`route.routed_corridors`), at most `ROUTE_LEGS` legs. None when none
-    of these is admitted. ASKED ONLY ON A ROLL WITH NO SEAT REGION (a village's: `fit._parts_fit`, `passage.opens`) - the
-    hamlet's seating searches no path while houses are seated (feature 318) and lays every way in the gaps after the last
-    house stands (`gap_ways`). `routed` False asks the straight and round-the-gable corridors alone.
-
-    THE SEARCH IS SHARED BY THE HOMESTEADS THAT SHARE ITS HOUSE AND YARD, while nothing standing changes (`_standing_memo`):
-    the four garden sides of one seat have the same doors, the same gable and the same house, and differ only in their
-    fixtures. So the candidates that clear the house and the standing ground are found once, in the search's order and
-    only as far as asked (`_house_candidates`), and each homestead takes the first of them its own fixtures leave clear -
-    the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
-
-    Research:
-        seat refused without a path - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
-        routed where none is straight - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
-        a way of its own without the routed search - CANON: the GM's ruling of 2026-10-03, the passage asks the straight and round-the-gable corridors alone (`routed` False)
-    """
-    tree = getattr(s, "_access", None)
-    if tree is None:
-        return None
-    boxes = geom.get("boxes") or {}
-    key = ("corridor", tuple(boxes.get("house") or geom["house"]), tuple(boxes.get("yard") or geom.get("yard") or ()))
-    memo = _standing_memo(s)[1]
-    found = memo.get(key)
-    if found is None:
-        found = memo[key] = ([], _house_candidates(s, tree, geom))
-    seen: list[tuple[Pt, ...]] = found[0]
-    more: Iterator[tuple[Pt, ...]] = found[1]
-    k = 0
-    while True:
-        if k == len(seen):
-            nxt = next(more, None)
-            if nxt is None:
-                return None
-            seen.append(nxt)
-        corridor = seen[k]
-        k += 1
-        if corridor is ROUTE_LATER and not routed:
-            return None  # ...the routed corridors follow the marker, and the passage does not search for one (the GM, 2026-10-03)
-        if corridor is not ROUTE_LATER and (drawn := admitted(s, corridor, geom, memo)) is not None:
-            return drawn
-
-
-def admitted(s: Settlement, corridor: tuple[Pt, ...], geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
-    """The corridor as it will be drawn, where every leg clears the household's own fixtures and beds and the ways' ground test
-    and the whole tree stays lawful with it; else None (`access_corridor`'s question of each candidate)."""
-    # the leg onto the tree passes unasked where it has no length, as the search passed it; every other leg is asked
-    last = len(corridor) - 2
-    # ...and the ways' ground test of each leg the search asked, after its own fixtures and beds (`standing_ground`)
-    if all((n == last and math.dist(a, b) < 1e-6) or (fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom)) for n, (a, b) in enumerate(legs(corridor))) and all(
-        (n == last and math.dist(a, b) < 1e-6) or lawful_leg(s, a, b, memo) for n, (a, b) in enumerate(legs(corridor))
-    ):
-        # ...AS IT WILL BE DRAWN - from where it leaves its own threshing yard (`drawn_corridor`) - AND ONLY WHERE THE WHOLE
-        # TREE STAYS LAWFUL WITH IT (feature 287 wave 6, ways W01): every joint among the tree's lanes is known here, so a
-        # corridor the tree cannot take lawfully is refused now and the next tried, never found at the web's draw
-        drawn = drawn_corridor(s, corridor, geom)
-        if tree_admits(s, drawn, geom):
-            return drawn
-    return None
-
-
-def yard_quad(geom: Any) -> list[Pt] | None:
-    """A homestead's threshing yard as the overlap matrix will read it: its rect turned with its house (`_attach_yard` draws
-    it at the house's rake about its own center, `registry.element_extents` reads the record's turned rect), or None for a
-    bundle with no yard."""
-    yard = geom.get("yard")
-    if yard is None:
-        return None
-    x, y, w, h = (float(v) for v in yard)
-    th = math.radians(float(geom.get("turn") or 0.0))
-    c, sn = math.cos(th), math.sin(th)
-    return [(x + dx * c - dy * sn, y + dx * sn + dy * c) for dx, dy in ((-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2))]
-
-
 #: How far past its own threshing yard's edge, beyond the tread's half-width, a corridor's drawn door end stands
 #: (`past_the_yard`): the overlap matrix asks a tread `PLACER_MARGIN_PX` (0.2) wider than drawn and the record rounds to 0.1,
 #: so a foot is room for both. A map drawing convention.
-YARD_EXIT_PAD_FT = 1.0
-
-
-def past_the_yard(run: Any, yard: Any, half: float) -> list[Pt] | None:
-    """`run` from where its tread (`half` wide either side) leaves the threshing yard `yard` (its quad) for good: the arc past
-    the last point within `half` and `YARD_EXIT_PAD_FT` of the yard. The overlap matrix forbids a way on a yard, its own
-    household's too (a path arrives at its dooryard and does not cross it), and the door stands in the yard's middle
-    (`doors_of`) - an 81-mat yard 76 x 53 ft left every door end the web once trimmed to 40 ft still on it (cohort seed 39
-    under feature 284's probes). The corridor leaves its yard once (`leaves_its_yard`), so the run past it is the reserved
-    ground. None where the run never comes that near the yard or ends on it.
-
-    Research: path not drawn on its own yard - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); the drawn path starts where it leaves the threshing yard
-    """
-    from shapely.geometry import LineString, Point, Polygon
-
-    pts = [(float(q[0]), float(q[1])) for q in run]
-    line = LineString(pts)
-    inside = line.intersection(Polygon([(float(q[0]), float(q[1])) for q in yard]).buffer(half + YARD_EXIT_PAD_FT))
-    if inside.is_empty:
-        return None
-    s0 = max(line.project(Point(c)) for g in getattr(inside, "geoms", [inside]) for c in g.coords)
-    if s0 >= line.length - 1.0:
-        return None
-    out: list[Pt] = []
-    acc = 0.0
-    for a, b in zip(pts, pts[1:], strict=False):
-        d = math.dist(a, b)
-        if acc + d > s0 and d > 0:
-            if not out:
-                t = max(0.0, (s0 - acc) / d)
-                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
-            out.append(b)
-        acc += d
-    return out
-
-
-def drawn_corridor(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> tuple[Pt, ...]:
-    """The corridor as the web will draw it: from where it leaves the homestead's own threshing yard (`past_the_yard`, at
-    the tread's half-width), else as found. What the seating reserves and records, so the tree the web draws is the tree the
-    seating judged."""
-    yard = yard_quad(geom)
-    past = past_the_yard(corridor, yard, s.px(TREAD_HALF_FT)) if yard is not None else None
-    return tuple(past) if past is not None and len(past) >= 2 else corridor
-
-
-def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
-    """Would the access tree, drawn as lanes with this corridor added, keep the whole lane law among its lanes? THE WAYS' OWN
-    PREDICATE (`hamletgen/ways/tree.py:tree_admits`), installed on the settlement by the hamlet's seating as `_corridor_tree`
-    - the settlement package cannot import the hamlet generator. Remembered per corridor while nothing standing changes.
-    With none installed (a village roll) every corridor is admitted, as the ground test is. Asked by the gap pass of each
-    household's way once the last house stands (`gap_ways`, feature 318), never while a house is seated.
-
-    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way, laid once the last house stands, admitted only where the tree drawn as lanes keeps the lane law
-    """
-    judge = getattr(s, "_corridor_tree", None)
-    if judge is None:
-        return True
-    memo = _standing_memo(s)[1]
-    key = ("tree", corridor, tuple(geom["house"]))
-    if key not in memo:
-        memo[key] = bool(judge(corridor, geom))
-    return bool(memo[key])
-
-
-def _house_candidates(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tuple[Pt, ...]]:
-    """The corridors `access_corridor` would try, in its order, that clear the house and the standing ground - a leg onto
-    the tree of no length (a door on the tree) passes unasked, as the search passed it.
-
-    Research:
-        a corridor's order - research/questions/0081-village-lanes.drawing.html: as few turns as the plots allow - each door's straight leg before a flank door's round the gable
-        path leaves its own yard - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the tread kept 0.5 ft clear of the yard it leaves (`leaves_its_yard`)
-    """
-    doors = doors_of(geom, tree.half)
-    turns = {door: round_the_gable(geom, door, tree.half) for door in doors[2:]}
-    prime_site(s, [(door, q) for door in doors for q in tree.targets(door)] + [seg for door, turn in turns.items() for seg in [(door, turn), *((turn, q) for q in tree.targets(turn))]])
-    memo = _standing_memo(s)[1]
-    hgap = house_gap(s)
-
-    def clear(a: Pt, b: Pt) -> bool:
-        # a strip the site's raster refused (`prime_site`) is refused by the standing ground before anything is asked
-        # ...the ways' ground test left to `access_corridor`, which asks it after the fixtures and beds (`standing_ground`)
-        return memo.get(("site", a, b), ()) is not None and house_clear(a, b, geom, hgap) and standing_ground(s, a, b, memo)
-
-    yard = (geom.get("boxes") or {}).get("yard")
-    gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
-    for door in doors:
-        for q in tree.targets(door):
-            if __debug__:
-                OPS["candidate@_house_candidates"] += 1
-            if math.dist(door, q) < 1e-6 or (clear(door, q) and leaves_its_yard((door, q), yard, gap)):
-                yield (door, q)
-    for door in doors[2:]:  # the flank doors: round the gable (none on a bundle with no yard)
-        turn = turns[door]
-        if not clear(door, turn):
-            continue
-        for q in tree.targets(turn):
-            if __debug__:
-                OPS["candidate@_house_candidates"] += 1
-            # ...never back past the house it went round (`doubles_back`): the web could not draw it (cohort seed 32)
-            if math.dist(turn, q) < 1e-6 or (not doubles_back(door, turn, q) and clear(turn, q) and leaves_its_yard((door, turn, q), yard, gap)):
-                yield (door, turn, q)
-    if tree.routed:  # ...then the path routed round what stands (feature 308, plan D3; FR-005)
-        from .route import routed_corridors
-
-        yield ROUTE_LATER  # the seat MAY be reached by a route: `seat_reaches_tree` says so without searching for one
-        # ...IN THE SEAT'S OWN STREAM, SHARED BY ITS LAYOUTS (as on main): searched per layout round each one's own parts, it
-        # was withdrawn (feature 317 T06, research R8), and the per-layout call left in `access_corridor` after it re-asked the
-        # same routes for each of a seat's four layouts - 0.3 s of the homesteads stage at seed 39, 40 households (the perf-audit)
-        yield from routed_corridors(s, tree, geom)
 
 
 #: The marker `_house_candidates` yields between its straight corridors and its routed ones (feature 308): the seat's own
 #: question (`seat_reaches_tree`) takes it as a YES - a route may be found - so the route's search, the dearest of the seat's
 #: questions, is asked only by `access_corridor`, after the parts' cheap refusals (the wood's seats, the sun). The verdict is
 #: the same, asked later: a seat no route reaches is refused there. `access_corridor` passes over it.
-ROUTE_LATER: tuple[Pt, ...] = ((math.inf, math.inf),)  # one object, asked by identity; no corridor is it
-
-
-def leaves_its_yard(corridor: tuple[Pt, ...], yard: Any, gap: float, step: float = 2.0) -> bool:
-    """Does a corridor leave its own threshing yard (`(cx, cy, w, h)`, grown by `gap`) at most once, never to cross it again
-    (feature 287 M8)? The door stands in or beside the dooryard and the web draws the way from where the corridor leaves it
-    (`corridors.door_ends`); a corridor from a flank door back across the yard (cohort seed 48) was a way the matrix refuses
-    anywhere along the yard, so the house was left with none.
-
-    Research: path leaves its yard once - GUESS: searched, the record silent (feature 417 T36 pass P3, 2026-10-25); a corridor that re-enters its own threshing yard is refused
-    """
-    if yard is None:
-        return True
-    cx, cy, w, h = (float(v) for v in yard)
-
-    def inside(p: Pt) -> bool:
-        return abs(p[0] - cx) < w / 2 + gap and abs(p[1] - cy) < h / 2 + gap
-
-    left = False
-    for a, b in legs(corridor):
-        n = max(1, int(math.dist(a, b) // step))
-        for k in range(n + 1):
-            p = (a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n)
-            if inside(p):
-                if left:
-                    return False
-            else:
-                left = True
-    return True
 
 
 #: A turn a path cannot take, in degrees off straight on: the web's own bend law (`hamletgen/ways/clearance._HAIRPIN_DEG`,
 #: "doubles back"), which this package cannot import; `tests/settlement/test_access.py` holds the two equal.
-HAIRPIN_DEG = 140.0
-"""Research: hairpin turn - research/questions/0081-village-lanes.drawing.html: a turn of more than 140 degrees, which a lane never takes (`doubles_back` refuses 140 itself too)"""
-
-
-def doubles_back(a: Pt, b: Pt, c: Pt) -> bool:
-    """THE ONE PREDICATE of a corridor's turn (feature 287, homes wave 5): does the run a-b-c turn at b by `HAIRPIN_DEG` or
-    more? A corridor carried round the gable to a tree point back in front of the house doubles back on itself, and the web
-    - which draws a way along a corridor only where its bend law admits it - left the house with no way at all.
-
-    Research: path never doubles back - research/questions/0081-village-lanes.drawing.html: a turn at `HAIRPIN_DEG` or more refuses the corridor
-    """
-    u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
-    nu, nv = math.hypot(*u), math.hypot(*v)
-    if nu < 1e-9 or nv < 1e-9:
-        return False
-    cos = max(-1.0, min(1.0, (u[0] * v[0] + u[1] * v[1]) / (nu * nv)))
-    return math.degrees(math.acos(cos)) >= HAIRPIN_DEG
 
 
 def legs(corridor: tuple[Pt, ...]) -> list[tuple[Pt, Pt]]:

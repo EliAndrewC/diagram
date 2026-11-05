@@ -221,25 +221,6 @@ def test_the_lines_asked_together_answer_as_each_sample_asked_alone() -> None:
     assert 30 < refused < 270
 
 
-def test_free_ground_decides_a_cell_past_its_bounds_as_one_inside() -> None:
-    """Feature 318: rasterized over a window, the grid decides a cell beyond it by the same two tests, lazily and once - so
-    the window bounds its cost and never changes an answer. A wide water corridor down x = 300: a cell inside the window
-    and one far beyond it answer alike."""
-    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
-
-    water = ([((300.0, 0.0), (300.0, 1000.0), 40.0)], [])
-    whole = FreeGround([], water, None, (0.0, 0.0, 1000.0, 1000.0))
-    small = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
-    for x, y in ((300.0, 100.0), (300.0, 900.0), (600.0, 900.0), (330.0, 900.0), (150.0, 100.0)):
-        assert small.point_taken(x, y) == whole.point_taken(x, y) and small.point_clear(x, y) == whole.point_clear(x, y), (x, y)
-    assert small.point_taken(300.0, 900.0) and small.point_clear(600.0, 900.0) and not small.point_clear(330.0, 900.0)
-    assert len(small._beyond) == 4, "the four cells beyond the window, each asked once"
-    small.point_taken(300.0, 900.0)
-    assert len(small._beyond) == 4
-    bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
-    assert not bare.point_taken(500.0, 500.0) and bare.point_clear(500.0, 500.0), "no ground at all: clear everywhere"
-
-
 def test_a_scattered_hamlets_boundary_rings_its_fields_on_every_side() -> None:
     """Feature 385 T06 (the round arbiter on ask:t06-scattered-single-file): a scattered farm stands by its own fields on any
     side, so the field is asked by CONTAINMENT, not by chords facing one seat, and seats are offered round the paddy and its

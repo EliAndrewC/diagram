@@ -12,7 +12,6 @@ from l7r.diagram.settlement.city.bridges import deck_admitted, undeckable_at
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
-from l7r.diagram.settlement.rolling import access
 from tests.settlement._builders import seed_tree
 
 from ._builders import _crop_settlement
@@ -22,28 +21,6 @@ def _hamlet(W: float = 1400.0) -> Settlement:
     s = Settlement(W, W, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
     return s
-
-
-def test_a_corridor_keeps_off_its_own_beds_and_house_and_leaves_its_yard_once() -> None:
-    s = _hamlet()
-    geom = s._bundle_geom(700.0, 700.0, 46.0, 28.0, "E", rot=0.0)
-    bed = geom["boxes"]["gardens"][0]
-    assert not access.parts_clear(s, (bed[0], bed[1] - 100.0), (bed[0], bed[1] + 100.0), geom), "a line across its own bed"
-    assert access.parts_clear(s, (bed[0] + 200.0, 0.0), (bed[0] + 200.0, 1400.0), geom)
-    hx, hy, hw, hh = geom["boxes"]["house"]
-    gap = access.house_gap(s)
-    assert gap == 1.5 + access.TREAD_WALL_FT + 0.5, "the tread's edge the B7 rule's 3 ft off its own wall (0081, feature 385 T07), and the margin"
-    edge = hx + hw / 2
-    assert not access.house_clear((edge + gap - 0.5, 0.0), (edge + gap - 0.5, 1400.0), geom, gap), "within the rule's bar of its wall"
-    assert not access.house_clear((edge + 1.5 + 2.8, 0.0), (edge + 1.5 + 2.8, 1400.0), geom, gap), "a tread 2.80 ft off: inside the attested 3 ft"
-    # Inashiro's B7 corridor, a tread 3.80 ft off its wall, was refused at the old 4 ft; at the attested 3 ft (feature 385 T07) it
-    # stands outside the rule and its half-foot margin, so it is admitted
-    assert access.house_clear((edge + 1.5 + 3.8, 0.0), (edge + 1.5 + 3.8, 1400.0), geom, gap), "a tread 3.80 ft off: lawful at 3 ft and the margin"
-    assert access.house_clear((edge + gap + 0.5, 0.0), (edge + gap + 0.5, 1400.0), geom, gap)
-    yard = (0.0, 0.0, 20.0, 10.0)
-    assert access.leaves_its_yard(((0.0, 0.0), (0.0, 50.0)), yard, 2.0)
-    assert not access.leaves_its_yard(((0.0, 0.0), (0.0, 50.0), (0.0, -50.0)), yard, 2.0), "out and back across it"
-    assert access.leaves_its_yard(((0.0, 0.0), (0.0, 50.0)), None, 2.0), "no yard"
 
 
 def test_a_lane_rewrite_the_matrix_refuses_is_not_written_and_a_draft_way_is_laid_only_where_admitted() -> None:

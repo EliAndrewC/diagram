@@ -391,10 +391,6 @@ class FreeGround:
             self._state = state
         return self._state
 
-    def point_taken(self, x: float, y: float) -> bool:
-        k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))
-        return k in self.taken if self._inside(k) else self._cell_beyond(k)[0]
-
     def point_clear(self, x: float, y: float) -> bool:
         """Does (x, y) stand in a cell every point of which the site's ground tests pass?"""
         k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))

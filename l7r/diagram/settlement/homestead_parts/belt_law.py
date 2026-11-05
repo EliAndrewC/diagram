@@ -330,23 +330,6 @@ class BeltReading:
         return vs[0] - a <= _BELT_GAP_FT and b - vs[-1] <= _BELT_GAP_FT and between <= 2 * _BELT_GAP_FT
 
 
-def reading_of(m: Any) -> BeltReading | None:
-    """The finished map's belt, read as the placer read it: the manifest's windbreak crowns on and off the page, its
-    houses, its lanes and brook, its recorded view and the band's reach (`meta.belt_reach`, W19). None without a belt.
-
-    Research:
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 14 (belt clump radius fallback; `r` is always recorded)
-    """
-    g = next((g for g in m.get("village_groves") or [] if g.get("role") == "windbreak"), None)
-    if g is None or not (g.get("clumps") or g.get("clumps_offpage")) or not m.get("houses"):
-        return None
-    ways = [rec.get("pts") or rec.get("poly") or [] for rec in [*m.get("lanes", []), *m.get("streams", [])]]
-    meta = m.get("meta") or {}
-    return BeltReading(
-        g.get("clumps") or [], g.get("clumps_offpage") or [], float(g.get("r", 14.0)), m["houses"], wind_unit(meta["windward"]), ways, meta.get("view"), meta.get("belt_reach"), g.get("poly") or ()
-    )
-
-
 def _offers(rd: BeltReading, v_lo: float, v_hi: float, band_uv: Sequence[Pt], step: float = 8.0) -> list[Pt]:
     """The seats (u, v) offered across the stretch [v_lo, v_hi] across the wind: every `step` along the wind from the band's
     near face to `BELT_PUSH_BACK_FT` past its far face there (the band's vertices within a bin of the stretch), at three

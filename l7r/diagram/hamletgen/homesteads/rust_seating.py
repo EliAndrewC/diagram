@@ -27,8 +27,9 @@ if TYPE_CHECKING:
 GROUND_CELL_FT = 4.0
 """Research: plumbing - NONE: a raster's grain, under the 9-point rectangle test's spacing"""
 
-#: The registry keys a homestead's parts are filed under (`rolling/lot.py` `BUNDLE_PART_KEYS`, `held_part_records`).
-PART_KEYS = ("houses", "threshing_yards", "gardens", "farm_sheds", "byres", "farm_fixtures", "retirement_houses")
+#: The registry keys a homestead's parts are filed under (`rolling/lot.py` `held_part_records`), a grove farm's well pocket among them
+#: (`wells`: unasked, a pocket stood on a drawn channel and the registry refused it - the Rust stage gate's seed 375337).
+PART_KEYS = ("houses", "threshing_yards", "gardens", "farm_sheds", "byres", "farm_fixtures", "retirement_houses", "wells")
 """Research: plumbing - NONE: the registry's own keys"""
 
 

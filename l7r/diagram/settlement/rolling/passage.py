@@ -39,7 +39,7 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt
 from .._knobs import knob_rng
-from .access import access_corridor, reserve
+from .access import reserve
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -74,21 +74,6 @@ def passage_budget(share: float, households: int) -> int:
     Research: share reached by passage - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: rounded down to whole households
     """
     return int(math.floor(share * households))
-
-
-def opens(s: Settlement, geom: Any) -> bool:
-    """Has the household laid as `geom` a way of its own: its yard opening onto lane ground connected to the way out (the seat
-    region's one predicate, `SeatRegion.opens`, feature 318 FR-013) - or, on a roll with no seat region, a straight or
-    round-the-gable corridor (`access.access_corridor`, `routed` False)?
-
-    Research:
-        a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
-        the village roll's corridor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
-    """
-    region = getattr(s, "_seat_region", None)
-    if region is not None:
-        return bool(region.opens(geom))
-    return access_corridor(s, geom, routed=False) is not None
 
 
 def grown(box: Any, by: float) -> Box:
