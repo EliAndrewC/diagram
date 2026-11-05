@@ -200,11 +200,11 @@ fn seat_rows_as(rs: &RowSite, ask_only: bool) -> Rows {
     // (each count a promise the seating may not keep: the Rust stage gate's seed 729966 seated 18 of 19 on Python's street, seed
     // 290494 14 of 19 on the whole row's, all 19 on Python's)
     let tried = std::mem::take(&mut out.seating.tests);
-    // ...THE ROW SEATED ONCE, along the street whose room is the larger: the whole row's street, and where its frames admit fewer
-    // farms than the households wanted, the street Python chose, each street's room asked before any farm stands (S4)
+    // ...THE ROW SEATED ONCE, along the street with the most room: the whole row's street, the street Python chose and one twice the
+    // row's length on the same edge, each street's room asked before any farm stands (S4)
     let mut tries = vec![seat_along(rs, &by_row, &plan, true)];
     let mut lines = vec![by_row];
-    if tries[0].room < want {
+    {
         let (_, by_own) = row_lines(
             rs.hard,
             rs.anchor,
@@ -220,7 +220,7 @@ fn seat_rows_as(rs: &RowSite, ask_only: bool) -> Rows {
     // ...AND WHERE BOTH FALL SHORT, ROOM FROM THE MARGIN'S LENGTH (the round arbiter on ask:444-T30-fresh-seed-refusals): the first
     // street laid twice the row's length along the same edge, its room asked as the others' (the Rust gate's seed 20104: every
     // margin's streets held 10 of 15, the further streets falling off the sheet; on the longer street, 15)
-    if tries.iter().all(|t| t.room < want) {
+    {
         let (long, _) = row_lines(
             rs.hard,
             rs.anchor,
@@ -308,6 +308,7 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
         ..*gs0
     };
     let st = &mut out.seating;
+    let mut asked: Vec<super::layout::Rect> = Vec::new();
     for line in &planned {
         if st.seated.len().max(out.room) >= want {
             break;
@@ -351,6 +352,7 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
                     .iter()
                     .copied()
                     .chain(st.seated.iter().map(|s| s.bundle.bbox))
+                    .chain(asked.iter().copied())
                     .collect();
                 hold = holding_clear(
                     &holding_quad(hc, t, nrm, along, hold_depth),
@@ -364,8 +366,15 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
                 }
             }
             if ask_only {
-                out.room +=
-                    usize::from(st.admits_grove_as(&gs, out.room, fx - hx_off, fy - hy_off));
+                // ...the frames admitted so far held as their farms would hold them: each frame's box and its holding, so a later
+                // frame is asked against them as against a seated farm's (nothing stands)
+                if st.admits_grove_as(&gs, out.room, fx - hx_off, fy - hy_off) {
+                    out.room += 1;
+                    asked.push((fx, fy, frame.2, frame.3));
+                    if let Some(q) = hold {
+                        out.holdings.push((q, t, nrm, hold_depth, out.room - 1));
+                    }
+                }
                 continue;
             }
             let shelter =
