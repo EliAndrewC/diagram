@@ -1,1 +1,19 @@
-[]
+[
+ {
+  "seed": 901280,
+  "households": 19,
+  "pins": {},
+  "stage": "seat",
+  "failure": "FAIL refused:SeatRefused -> Rust-901280 (seed 901280): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: 0 off the frame, 0 with the belt off the canvas, 16 on the toe, 3 on the field, 0 in the reeds, 0 with crop behind, 0 walled in) - the site has no sea",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/901280-seat.pkl",
+  "seed_passes": false
+ },
+ {
+  "seed": 778251,
+  "households": 17,
+  "pins": {},
+  "stage": "homesteads",
+  "failure": "FAIL refused:SiteRefused -> Rust-778251 (seed 778251): seated 12 of 17 households on margin 1; no house is taken back",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/778251-homesteads.pkl"
+ }
+]
