@@ -1,0 +1,3 @@
+UNDERIVED - the overlap registry's cells (40 / 52 / 76): the figure "one a cell along its length x 1.27" counts the cells a line crosses, but the bundle says the registry bins each segment's box in every cell the box covers, about (L|cos|/120 + 1)(L|sin|/120 + 1) cells a segment - roughly 150 / 230 / 460 cells, not 40 / 52 / 76.
+
+(Also: the points and corners as one seed's constants - a note, under half the total (S10); the row road at 0 derived for the nucleated reference, a stated figure owed the day a row roll joins the manifest; the driver's backstop not this stage's contract, to be keyed to the driver or derived before MODE AUDIT.)

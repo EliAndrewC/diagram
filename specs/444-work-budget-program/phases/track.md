@@ -12,11 +12,11 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
 - [x] 2. **Minimal algorithm.** Pseudocode and its operation count, factor by factor (S7), written from the contract alone,
   before the current code's numbers are read, in the derivation template (`.specify/templates/derivation.md`: each factor's
   scope, value, reason and worst case, and the cheaper algorithms considered), copied to `phases/track.derivation.md`.
-  Evidence: `phases/track_greenfield.derivation.md` (the stage's greenfield derivation, measured 2026-10-29 on the reference manifests): 157 a map at 20, 223 at 40; revised 2026-11-05 under FR-022 rule 2 for the stage after T30 (56 / 68 / 92 at 20 / 40 / 80)
+  Evidence: `phases/track_greenfield.derivation.md` (the stage's greenfield derivation, measured 2026-10-29 on the reference manifests): 157 a map at 20, 223 at 40; revised 2026-11-05 under FR-022 rule 2 for the stage after T30 (165 / 248 / 477 at 20 / 40 / 80)
 
 - [x] 3. **Budget review, MODE BUDGET.** The `work-budget` agent's SOUND on the derivation (`make work-budget-bundle MODE=budget`);
   the budget and exponent pinned (`make budget-set`).
-  Evidence: `phases/track_greenfield.verdict-2.txt` SOUND; the budget pinned at 223 at 40 (`dev/work-budget.md`, budgeted)
+  Evidence: `phases/track_greenfield.verdict-2.txt` SOUND, the first pin 223 at 40; the revision `phases/track_greenfield.verdict-4.txt` SOUND (verdict-3 UNDERIVED on the registry's cells, fixed), raised to 248 at 40, exponent 0.77 (`make budget-set RAISE=1`, x1.11 the first)
 
 - [x] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.

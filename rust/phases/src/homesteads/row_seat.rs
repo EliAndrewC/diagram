@@ -18,7 +18,7 @@
 //!     the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form, a farm with its street and the grove row beyond it to windward is seated as a full farm and marked `sheltered`
 //!     a street across the wind - GUESS: within 67.5 degrees of the farm's windward bearing; no page gives an angle
 //!     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (holdings clipped 30 px inside the sheet)
-//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with a row's length of slack, kept half a frame inside the sheet (two lots of slack, the Python's, left a row against the sheet one farm short: the Rust stage gate's seed 729966, 18 of 19); where that row falls short of the households, the row is seated too on the street Python chose - two lots of slack, ranked by its own clear frames - and the one seating more kept (seed 290494: 14 of 19 on the first, 19 on Python's)
+//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with a row's length of slack (where no street of that length has room for every farm, one laid twice as long, its room asked before any farm stands), kept half a frame inside the sheet (two lots of slack, the Python's, left a row against the sheet one farm short: the Rust stage gate's seed 729966, 18 of 19); where that row falls short of the households, the row is seated too on the street Python chose - two lots of slack, ranked by its own clear frames - and the one seating more kept (seed 290494: 14 of 19 on the first, 19 on Python's)
 //!     street tread reserved - research/questions/0081-village-lanes.drawing.html: a way's corridor kept clear of built and worked ground while its farms are seated; released when the row is seated
 
 #![expect(
@@ -129,6 +129,10 @@ pub fn row_room(rs: &RowSite) -> Rows {
 }
 
 /// `seat_rows`, or - `ask_only` - its room alone (`Rows::room`, the street chosen's), nothing seated.
+#[expect(
+    clippy::too_many_lines,
+    reason = "the row's setup and its first streets' rooms asked in the one order the seating reads them"
+)]
 fn seat_rows_as(rs: &RowSite, ask_only: bool) -> Rows {
     let mut out = Rows::default();
     let gs0 = &rs.gs;
@@ -212,6 +216,26 @@ fn seat_rows_as(rs: &RowSite, ask_only: bool) -> Rows {
         );
         tries.push(seat_along(rs, &by_own, &plan, true));
         lines.push(by_own);
+    }
+    // ...AND WHERE BOTH FALL SHORT, ROOM FROM THE MARGIN'S LENGTH (the round arbiter on ask:444-T30-fresh-seed-refusals): the first
+    // street laid twice the row's length along the same edge, its room asked as the others' (the Rust gate's seed 20104: every
+    // margin's streets held 10 of 15, the further streets falling off the sheet; on the longer street, 15)
+    if tries.iter().all(|t| t.room < want) {
+        let (long, _) = row_lines(
+            rs.hard,
+            rs.anchor,
+            (
+                first_off,
+                2.0 * (per_line as f64 * lot + lot),
+                2.0 * per_line as f64 * lot,
+            ),
+            rs.form,
+            &fr,
+            &capacity,
+            &mut tries[0].seating.tests,
+        );
+        tries.push(seat_along(rs, &long, &plan, true));
+        lines.push(long);
     }
     // the first of the streets with the most room (the last maximum of the tries reversed), every ask's work counted
     let k = (0..tries.len())

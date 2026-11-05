@@ -117,13 +117,18 @@
   "track": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.52,
+   "exponent": 0.77,
    "derivation": "specs/444-work-budget-program/phases/track_greenfield.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-2.txt",
-   "items_at_20": 157,
-   "items_at_40": 223,
-   "items_at_80": 321,
-   "reason": "today's counters cover almost nothing of the stage; one track and its spur"
+   "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-4.txt",
+   "items_at_20": 165,
+   "items_at_40": 248,
+   "items_at_80": 477,
+   "reason": "the registry's record of the connector, which the first derivation priced in no registry (verdict-4 SOUND), the track out's choice moved to the homesteads (T30 D1)",
+   "first": {
+    "20": 157.0,
+    "40": 223.0,
+    "80": 321.0
+   }
   },
   "appurtenances": {
    "status": "budgeted",
