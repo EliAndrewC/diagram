@@ -211,12 +211,33 @@ pub fn frame_extent(frame: Rect, direction: Pt) -> f64 {
     direction.0.abs() * frame.2 + direction.1.abs() * frame.3
 }
 
+/// How far apart a street's farms stand: the frame's reach along the street, the most over every turn of the line (an axis-aligned
+/// frame reaches farther along a diagonal street than its longer side, `(w + h) / sqrt 2` at 45 degrees) - its longer side where
+/// the line has no length.
+///
+/// Research:
+///     farms one frame apart - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: one frame apart, a grove farm's own ground, grove and lane room, a physical necessity since a grove farm cannot stand on a narrower lot: stepped at the frame's longer side capped at the 240 ft frontage, every other farm on a diagonal street or a frame past 240 ft lapped its neighbor and was refused (the Rust stage gate, seeds 406155 and 406169), so the 240 ft bounds the holding's width and the step is the frame's reach
+#[must_use]
+pub fn row_step(line: &[(Pt, Pt)], frame: Rect) -> f64 {
+    line.windows(2)
+        .filter(|w| w[0].0 != w[1].0)
+        .map(|w| {
+            let l = dist(w[0].0, w[1].0);
+            frame_extent(
+                frame,
+                ((w[1].0 .0 - w[0].0 .0) / l, (w[1].0 .1 - w[0].0 .1) / l),
+            )
+        })
+        .reduce(f64::max)
+        .unwrap_or_else(|| frame.2.max(frame.3))
+}
+
 /// A row seat: its frame's center, its side of the street (+1 the far side, away from the field, -1 the near), the street's
 /// tangent and its outward normal there.
 pub type Seat = (Pt, i32, Pt, Pt);
 
-/// The frame centers along one street, one frame apart (its longer side) or `pitch` apart where that is narrower, from the middle
-/// outward alternating the two ends; each on the far side and, for `both`, the near side too, `gap` off the centerline.
+/// The frame centers along one street, `pitch` apart (the frame's longer side where it is unbounded), from the middle outward
+/// alternating the two ends; each on the far side and, for `both`, the near side too, `gap` off the centerline.
 #[must_use]
 pub fn row_seats(line: &[(Pt, Pt)], frame: Rect, both: bool, gap: f64, pitch: f64) -> Vec<Seat> {
     if line.len() < 2 {
@@ -227,7 +248,11 @@ pub fn row_seats(line: &[(Pt, Pt)], frame: Rect, both: bool, gap: f64, pitch: f6
         arc.push(arc[arc.len() - 1] + dist(w[0].0, w[1].0));
     }
     let total = arc[arc.len() - 1];
-    let step = frame.2.max(frame.3).min(pitch);
+    let step = if pitch.is_finite() {
+        pitch
+    } else {
+        frame.2.max(frame.3)
+    };
     let at = |u: f64| {
         let k = (0..arc.len() - 1)
             .find(|&i| arc[i + 1] >= u)
@@ -581,7 +606,7 @@ fn along(pts: &[Pt], s: f64) -> Pt {
 }
 
 /// What a row seat's frame is judged by: the frame itself (its offset from the house, its size), whether both sides of the street
-/// are seated, the frame's gap off the street, the sheet's bounds, the front face, its lane pad and the door's room, and the pitch.
+/// are seated, the frame's gap off the street, the sheet's bounds, and the front face, its lane pad and the door's room.
 #[derive(Clone, Copy, Debug)]
 pub struct Frames {
     /// The frame (its center's offset from the house, its width and height).
@@ -594,8 +619,6 @@ pub struct Frames {
     pub bounds: (f64, f64, f64, f64),
     /// The front face (a page direction), its lane pad and the door's room.
     pub door: (Pt, f64, f64),
-    /// The row's step along the street.
-    pub pitch: f64,
 }
 
 /// How many of a line's row seats hold a frame clear of the hard ground, inside the bounds, with room at its door.
@@ -603,7 +626,7 @@ pub struct Frames {
 pub fn clear_frames(line: &[(Pt, Pt)], fr: &Frames, hard: &Hard, tests: &mut Counts) -> usize {
     let (w, h) = (fr.frame.2, fr.frame.3);
     let b = fr.bounds;
-    row_seats(line, fr.frame, fr.both, fr.gap, fr.pitch)
+    row_seats(line, fr.frame, fr.both, fr.gap, row_step(line, fr.frame))
         .into_iter()
         .filter(|&((fx, fy), ..)| {
             tests.add("candidate@clear_frames", 1);
@@ -618,9 +641,16 @@ pub fn clear_frames(line: &[(Pt, Pt)], fr: &Frames, hard: &Hard, tests: &mut Cou
         .count()
 }
 
+/// How many farms a row whose first street is the line given holds, its further streets with it.
+pub type Capacity<'a> = dyn Fn(&[(Pt, Pt)], &mut Counts) -> usize + 'a;
+
 /// The first street of a row village: of the lines centered on the planned seat's point of the hard ground's edge grown by
-/// `offset` and on 16 points of that edge within a row's `length` either way of it, the one holding the most clear frames, the
-/// nearest the seat among equals. Empty where there is no hard ground.
+/// `offset` and on 16 points of that edge within a row's `length` either way of it, the one whose whole row - this street and the
+/// streets `capacity` sets out beside it, each on the sheet - holds the most farms, then the one holding the most clear frames
+/// itself, the nearest the seat among equals. Empty where there is no hard ground.
+///
+/// Research:
+///     where the street runs - research/questions/0033-row-villages-resson.drawing.html: the stretch within a row's length of the seat that holds the most farms - the whole row's farms, its further streets with it: ranked by its first street alone, a row against the sheet's edge set its further streets off the sheet and seated 8 of 13 (the Rust stage gate, seed 406155)
 #[must_use]
 pub fn best_row_line(
     hard: &Hard,
@@ -628,6 +658,7 @@ pub fn best_row_line(
     (offset, length, slack): (f64, f64, f64),
     form: Form,
     fr: &Frames,
+    capacity: &Capacity,
     tests: &mut Counts,
 ) -> Line {
     const SAMPLES: usize = 16;
@@ -643,17 +674,22 @@ pub fn best_row_line(
             s0 + near * (2.0 * k as f64 / (SAMPLES - 1) as f64 - 1.0),
         )
     }));
-    let mut best: Option<(usize, f64, Line)> = None;
+    let mut best: Option<((usize, usize, f64), Line)> = None;
     for a in tries {
         tests.add("candidate@best_row_line", 1);
         let line = street_on(&ring, hard, a, length, form, slack, tests);
-        let score = (clear_frames(&line, fr, hard, tests), -dist(a, anchor));
-        if best
-            .as_ref()
-            .is_none_or(|b| score.0 > b.0 || (score.0 == b.0 && score.1 > b.1))
-        {
-            best = Some((score.0, score.1, line));
+        let score = (
+            capacity(&line, tests),
+            clear_frames(&line, fr, hard, tests),
+            -dist(a, anchor),
+        );
+        if best.as_ref().is_none_or(|b| {
+            score.0 > b.0 .0
+                || (score.0 == b.0 .0
+                    && (score.1 > b.0 .1 || (score.1 == b.0 .1 && score.2 > b.0 .2)))
+        }) {
+            best = Some((score, line));
         }
     }
-    best.map(|b| b.2).unwrap_or_default()
+    best.map(|b| b.1).unwrap_or_default()
 }

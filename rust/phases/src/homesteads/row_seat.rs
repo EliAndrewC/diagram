@@ -7,7 +7,7 @@
 //!     far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding one lot wide and `HOLDING_DEPTH_FRAMES` lots deep, all dry field; the near row and a one-sided row hold none
 //!     far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
 //!     farms to a street - research/questions/0033-row-villages-resson.drawing.html: a full street gets a further street set out parallel beside it, never a second row behind
-//!     farms one frame apart, never more than 240 ft - research/questions/0033-row-villages-resson.drawing.html: the row steps one frame, `lot = min(fw, ROW_FRONTAGE_MAX_FT)`
+//!     farms one frame apart, the holding never more than 240 ft - research/questions/0033-row-villages-resson.drawing.html: the row steps one frame along its street (`row_step`, the frame's reach), its holding one lot wide, never past Santome's 240 ft lots
 //!     the next street past the last one's holdings - research/questions/0033-row-villages-resson.drawing.html: each further street is set out past the last street's frames and their holdings
 //!     holding set behind its frame - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); the strip starts half the 15 ft gap (7.5 ft) behind its farm's frame
 //!     at most `MAX_STREETS` (6) parallel streets - research/questions/0033-row-villages-resson.drawing.html: six parallel streets at most
@@ -31,10 +31,11 @@ use super::grove_seat::GroveSite;
 use super::level::Hard;
 use super::place::Seating;
 use super::rows::{
-    best_row_line, frame_extent, frame_refused, holding_clear, holding_quad, inside_the_sheet,
-    parallel, row_offsets, row_seats, street_bend_radius_ft, Form, Frames, FIELD_KEEP_FT,
-    HOLDING_DEPTH_FRAMES, MAX_STREETS, ROW_FRONTAGE_MAX_FT, STREET_HALF_FT,
+    best_row_line, clear_frames, frame_extent, frame_refused, holding_clear, holding_quad,
+    inside_the_sheet, parallel, row_offsets, row_seats, row_step, street_bend_radius_ft, Form,
+    Frames, FIELD_KEEP_FT, HOLDING_DEPTH_FRAMES, MAX_STREETS, ROW_FRONTAGE_MAX_FT, STREET_HALF_FT,
 };
+use super::Counts;
 use crate::field::fan::Pt;
 
 /// Half a lane's room before a farm's front door (`LANE_ROOM_FT` / 2).
@@ -84,6 +85,34 @@ pub struct Rows {
     pub sheltered: Vec<bool>,
 }
 
+/// A row's streets: `first` and the streets set out parallel beside it, each past the last street's far row (its holdings with it,
+/// on both sides) and a lane's room, by the frame's depth along the line's normal (cohort seed 901: on a diagonal street a frame
+/// reaches deeper), each rounded on the inside of a corner.
+fn planned_streets(
+    first: &[(Pt, Pt)],
+    frame: super::layout::Rect,
+    (both, gap, hold_depth): (bool, f64, f64),
+    tests: &mut Counts,
+) -> Vec<super::rows::Line> {
+    let depth_n = first
+        .iter()
+        .map(|&(_, n)| frame_extent(frame, n))
+        .reduce(f64::max)
+        .unwrap_or_else(|| frame.2.min(frame.3));
+    let offsets = row_offsets(
+        depth_n,
+        both,
+        MAX_STREETS,
+        FIELD_KEEP_FT,
+        gap,
+        hold_depth + gap,
+    );
+    offsets
+        .iter()
+        .map(|o| parallel(first, o - offsets[0], street_bend_radius_ft(), tests))
+        .collect()
+}
+
 /// Seat a row village's farms (`rows.seat_rows`).
 #[must_use]
 #[expect(
@@ -114,37 +143,35 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
         gap,
         bounds,
         door: (rs.front, LANE_PAD_FT, super::rows::DOOR_FT.1),
-        pitch: lot,
     };
     let tests = &mut out.seating.tests;
-    // WHERE THE ROW GOES: the stretch of the hard ground's edge whose line holds the most clear frames
+    // WHERE THE ROW GOES: the stretch of the hard ground's edge whose whole row - its street and the streets set out beside it, each
+    // on the sheet - holds the most farms, up to the households wanted
     let first_off = row_offsets(fd, rs.both, 1, FIELD_KEEP_FT, gap, 0.0)[0];
+    let streets_of = |first: &[(Pt, Pt)], tests: &mut Counts| {
+        planned_streets(first, frame, (rs.both, gap, hold_depth), tests)
+    };
+    let sheet = (fd / 2.0, fd / 2.0, w - fd / 2.0, h - fd / 2.0);
+    let capacity = |first: &[(Pt, Pt)], tests: &mut Counts| {
+        let mut held = 0;
+        for line in streets_of(first, tests) {
+            held += clear_frames(&inside_the_sheet(&line, sheet), &fr, rs.hard, tests);
+            if held >= want {
+                break;
+            }
+        }
+        held.min(want)
+    };
     let first = best_row_line(
         rs.hard,
         rs.anchor,
         (first_off, per_line as f64 * lot + lot, 2.0 * lot),
         rs.form,
         &fr,
+        &capacity,
         tests,
     );
-    // ...and the streets beyond it set out by the frame's depth along the line's normal (cohort seed 901)
-    let depth_n = first
-        .iter()
-        .map(|&(_, n)| frame_extent(frame, n))
-        .reduce(f64::max)
-        .unwrap_or(fd);
-    let offsets = row_offsets(
-        depth_n,
-        rs.both,
-        MAX_STREETS,
-        FIELD_KEEP_FT,
-        gap,
-        hold_depth + gap,
-    );
-    let planned: Vec<_> = offsets
-        .iter()
-        .map(|o| parallel(&first, o - offsets[0], street_bend_radius_ft(), tests))
-        .collect();
+    let planned = streets_of(&first, tests);
     let all_streets: Vec<Vec<Pt>> = planned
         .iter()
         .filter(|l| l.len() >= 2)
@@ -165,9 +192,12 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
             break;
         }
         // ...its stretch inside the sheet by half a frame
-        let line = inside_the_sheet(line, (fd / 2.0, fd / 2.0, w - fd / 2.0, h - fd / 2.0));
+        let line = inside_the_sheet(line, sheet);
         let mut mine: Vec<Pt> = Vec::new();
-        let seats = row_seats(&line, frame, rs.both, gap, lot)
+        // ...one frame apart along the street, its holding one lot wide (the frame's reach, never past the 240 ft frontage)
+        let step = row_step(&line, frame);
+        let along = step.min(ROW_FRONTAGE_MAX_FT);
+        let seats = row_seats(&line, frame, rs.both, gap, step)
             .into_iter()
             .filter(|&((fx, fy), ..)| {
                 0.0 < fx - hx_off && fx - hx_off < w && 0.0 < fy - hy_off && fy - hy_off < h
@@ -202,7 +232,7 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
                     .chain(st.seated.iter().map(|s| s.bundle.bbox))
                     .collect();
                 hold = holding_clear(
-                    &holding_quad(hc, t, nrm, lot, hold_depth),
+                    &holding_quad(hc, t, nrm, along, hold_depth),
                     rs.hard,
                     &boxes,
                     bounds,

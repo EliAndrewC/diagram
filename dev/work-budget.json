@@ -104,14 +104,15 @@
    "per_thing": 1.0,
    "exponent": 1.0,
    "derivation": "specs/444-work-budget-program/phases/homesteads_greenfield.derivation.md",
-   "verdict": "ask:444-T12-homesteads_greenfield-round-4",
+   "verdict": "ask:444-homesteads-repin",
    "items_at_20": 2059,
    "items_at_40": 4118,
    "items_at_80": 8236,
    "pinned_on": "accept",
-   "derivation_sha": "e0b8617d102605d9aaf261d8541cec9bd5da3b3476462904aa7434645e6e0416",
-   "rounds": 3,
-   "spread": "1967-2059 at 20"
+   "derivation_sha": "1b1b60f9701abd59f8e195bc455ee765861bd573e356f3c76c18da5cd3b60ece",
+   "rounds": 7,
+   "spread": "1967-2059 at 20",
+   "reason": "the round arbiter's accept on ask:444-homesteads-repin: the figure unchanged, bound to the re-derived document"
   },
   "track": {
    "status": "budgeted",

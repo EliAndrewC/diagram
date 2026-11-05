@@ -18,11 +18,11 @@ the design the GM approved on 2026-10-28 (`specs/443-work-budget-tooling/request
 - [ ] 4. **Today's measurement.** `make work-budget` for the stage - its ratio to budget and its exponent; the hot chains from
   `make perf-fanout`.
   Evidence: before the rebuild, measured 2026-11-04 (`make work-budget`): 1,303,212 / 1,716,870 / 4,204,265 at 20 / 40 / 80, 416.9x the budget, exponent 0.84; 17,909,350 Python calls at 40 (`make perf-fanout STAGES=homesteads`, `dev/perf-log/`)
-- [ ] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
+- [x] 5. **Rebuild.** Behind the manifest seam (`STAGES` in `driver.py`): the same input, the same output, no repair passes (S4);
   the old implementation deleted in the same landing, with no fallback path. The old Python owes no coverage on the way out (feature
   448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away"): `dev/coverage-exempt.json` names it, so no test is added only to cover a line of it; the landing's
   `make coverage-exempt PRUNE=1` drops its entries once the stage is accepted, and the stage's thin door keeps the floor.
-  Evidence: pending: the Rust stage behind `homesteads/stages.py` (D1), every form (D4), the Python deleted (D4); engine work waits until T27-T29 have landed
+  Evidence: the whole stage in Rust behind the `homesteads/stages.py` door (D1): the nucleated growth (485a4ac58, 10114afde, 8b43568df), the dispersed farmstead and its bundle (245313025, 512273f74), the scattered rounds (5012cc76c), the row village (24c4b2f93, 93cb7e39e), the track out's turned gateways (852a81140); Rust the default for every form, the track out and the households' ways (98f28a8f8); the Python they replaced deleted to its dead closure with its tests (ab1677f26, `make dead-closure`); the port's account and its departures `phases/homesteads.port.md`. The landing waits on T27-T29 (444#9, 444#10)
 - [ ] 6. **Acceptance.** Basic operations at most the budget at 40 and 80 households - or at most twice it on the MODE AUDIT's
   LEEWAY, and work the derivation missed re-derived and raised (`make budget-set RAISE=1`), never squeezed (feature 444 FR-022) - and
   the exponent at most the budget's, with no leeway; every seed of

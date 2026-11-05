@@ -208,7 +208,8 @@ fn seat_with<'py>(
         h.set_item("groves", groves)?;
         h.set_item("well", b.well)?;
         // the lot's kura: a grove farm lays none in its bundle, and Python draws it on the house's north wall all the same
-        h.set_item("kura", b.kura.is_some() || site.lots.lot(s.lot).is_some_and(|l| l.1))?;
+        let kura = b.kura.is_some() || site.lots.lot(s.lot).is_some_and(|l| l.1);
+        h.set_item("kura", kura)?;
         seated.append(h)?;
     }
     for (k, v) in st.tests.0 {

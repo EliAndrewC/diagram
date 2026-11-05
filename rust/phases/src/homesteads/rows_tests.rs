@@ -5,9 +5,9 @@
 
 use super::level::Hard;
 use super::rows::{
-    best_row_line, clip_to, door_clear, frame_extent, frame_refused, holding_clear, holding_quad,
-    inside_the_sheet, offset_curve, parallel, polys_meet, ring_near, row_offsets, row_seats,
-    street_bend_radius_ft, street_on, Form, Frames,
+    best_row_line, clear_frames, clip_to, door_clear, frame_extent, frame_refused, holding_clear,
+    holding_quad, inside_the_sheet, offset_curve, parallel, polys_meet, ring_near, row_offsets,
+    row_seats, street_bend_radius_ft, street_on, Form, Frames,
 };
 use super::Counts;
 use crate::field::fan::Pt;
@@ -273,26 +273,44 @@ fn the_sheet_keeps_the_longest_run_and_the_best_line_the_most_frames() {
         gap: 15.0,
         bounds: (30.0, 30.0, 2970.0, 2970.0),
         door: ((0.0, 1.0), 16.0, 16.0),
-        pitch: 100.0,
     };
+    // with no further street to weigh, the line holding the most clear frames itself (stepped at the frame's reach along it, where
+    // Python stepped at a 100 ft pitch and chose the line from (1063, 974) to (1082, 1474)): 500 ft straight, near the seat
+    let none = |_: &[(Pt, Pt)], _: &mut Counts| 0;
     let best = best_row_line(
         &h,
         (1200.0, 1250.0),
         (60.0, 400.0, 100.0),
         Form::Street,
         &fr,
+        &none,
         &mut t,
     );
     assert_eq!(best.len(), 63);
     assert!(
-        near(best[0].0, (1063.164, 974.114), 3.0) && near(best[62].0, (1082.262, 1473.749), 3.0)
+        (dist(best[0].0, best[62].0) - 500.0).abs() < 1.0
+            && dist(best[31].0, (1200.0, 1250.0)) < 450.0
     );
+    assert!(clear_frames(&best, &fr, &h, &mut t) >= 1);
+    // ...but the row whose whole set of streets holds more farms first, whatever its first street holds alone
+    let south = |l: &[(Pt, Pt)], _: &mut Counts| usize::from(l[0].0 .1 > 1100.0);
+    let held = best_row_line(
+        &h,
+        (1200.0, 1250.0),
+        (60.0, 400.0, 100.0),
+        Form::Street,
+        &fr,
+        &south,
+        &mut t,
+    );
+    assert!(held[0].0 .1 > 1100.0, "{:?}", held[0]);
     assert!(best_row_line(
         &Hard::new(&[], &[], &mut t),
         (0.0, 0.0),
         (60.0, 400.0, 0.0),
         Form::Edge,
         &fr,
+        &none,
         &mut t
     )
     .is_empty());
