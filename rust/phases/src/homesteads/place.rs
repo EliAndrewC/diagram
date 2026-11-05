@@ -26,6 +26,7 @@ use super::fixtures::Forms;
 use super::ground::{Ground, Reach};
 use super::layout::{hjit, Rect, Side, SIDES};
 use super::lots::Lots;
+use super::passage::{passage_of, yard_side, Passage, Tight, TIGHT};
 use crate::field::fan::Pt;
 use crate::field::geom::seg_dist;
 
@@ -136,14 +137,19 @@ pub fn keeps_its_distance(b: Rect, center: Pt, standing: Footprint, gap: f64) ->
     apart_x.max(apart_y) >= gap - 1e-9
 }
 
-/// The distance a moved seat must still keep: from the standing homestead it was offered from, and from every other.
+/// The distance a moved seat must still keep: from the standing homestead it was offered from by the parting, and from every other
+/// by the threading gap - the one a tight seat stands against by the tight parting alone; and the tight seat's context.
 pub struct Keep {
     /// The center and reach of the homestead it was offered from.
     pub from: (Pt, Footprint),
-    /// The gap kept.
+    /// The parting kept from it.
     pub gap: f64,
     /// Every standing homestead's center and reach.
     pub standing: Vec<(Pt, Footprint)>,
+    /// The gap kept from every other.
+    pub others: f64,
+    /// The tight seat it is, where it is one.
+    pub tight: Option<Tight>,
 }
 
 impl Keep {
@@ -151,10 +157,14 @@ impl Keep {
     #[must_use]
     pub fn holds(&self, b: Rect) -> bool {
         keeps_its_distance(b, self.from.0, self.from.1, self.gap)
-            && self
-                .standing
-                .iter()
-                .all(|&(c, r)| keeps_its_distance(b, c, r, self.gap))
+            && self.standing.iter().enumerate().all(|(k, &(c, r))| {
+                let g = if self.tight.is_some_and(|t| t.nb == k) {
+                    TIGHT.0
+                } else {
+                    self.others
+                };
+                keeps_its_distance(b, c, r, g)
+            })
     }
 }
 
@@ -198,10 +208,12 @@ pub struct Seated {
     pub bundle: Bundle,
     /// Its share of the homestead wood: the seats it reserved.
     pub wood: Vec<Pt>,
+    /// Its passage across a neighbor's yard, where it is reached by one.
+    pub passage: Option<Passage>,
 }
 
-/// A seat placed: where its house stands, its homestead, its wood's seats and its copse keep-outs.
-type Placement = (Pt, Bundle, Vec<Pt>, super::wood::Keepouts);
+/// A seat placed: where its house stands, its homestead, its wood's seats, its copse keep-outs and its passage.
+type Placement = (Pt, Bundle, Vec<Pt>, super::wood::Keepouts, Option<Passage>);
 
 /// How a box stands against the ground and the standing homesteads.
 #[derive(Clone, Copy, PartialEq)]
@@ -231,6 +243,12 @@ pub struct Seating {
     pub reach: Option<super::ground::Reach>,
     /// The wood seats reserved so far.
     pub seats: Vec<Pt>,
+    /// How many passages lie between each seated household and a way of its own.
+    pub depth: Vec<Option<u32>>,
+    /// The passages' walks, kept clear of every later homestead.
+    pub walks: super::access::AccessTree,
+    /// The passages the settlement's share has left.
+    pub passage_left: usize,
 }
 
 impl Seating {
@@ -270,13 +288,125 @@ impl Seating {
     /// it was last flooded, or None while none is reserved (the site's own reach stands).
     fn take_reach(&mut self, site: &Site) -> Option<super::ground::Reach> {
         if self.reach.is_none() && !self.seats.is_empty() {
-            self.reach = Some(site.ground.reach_painted(
-                &site.reach.seeds,
-                &self.seats,
-                &mut self.tests,
-            ));
+            self.reach = Some(site.reach.painted(&self.seats, &mut self.tests));
         }
         self.reach.take()
+    }
+
+    /// What a walk keeps off besides the two households' parts, at the tight seat against `nb`: every other homestead's box and the
+    /// boxes placed before the houses, the taken ground and the reserved wood.
+    fn walls<'s>(&'s self, site: &'s Site, nb: usize) -> super::passage::Walls<'s> {
+        let boxes = (0..self.standing.all.len())
+            .filter(|&k| k != nb)
+            .map(|k| self.standing.all[k].bbox)
+            .chain(site.rules.placed.iter().copied())
+            .collect();
+        super::passage::Walls {
+            boxes,
+            ground: site.ground,
+            beyond: site.beyond,
+            wood: &self.wood,
+            lane_gap: site.rules.lane_gap,
+        }
+    }
+
+    /// The passage the layout `b` at the tight seat `t` is reached by, or None (`passage.passage_of`).
+    fn passage_for(
+        &self,
+        site: &Site,
+        b: &Bundle,
+        t: &Tight,
+        tests: &mut Counts,
+    ) -> Option<Passage> {
+        let walls = self.walls(site, t.nb);
+        passage_of(
+            b,
+            &self.seated[t.nb].bundle,
+            self.depth[t.nb],
+            t,
+            &walls,
+            tests,
+        )
+    }
+
+    /// Is the household at the tight seat `t` on land the custom covers - some laid side with a walk to the neighbor's yard and none
+    /// with a way of its own (`passage.landlocked`)?
+    fn landlocked(
+        &mut self,
+        site: &Site,
+        sides: &[Bundle],
+        t: &Tight,
+        reach: &super::ground::Reach,
+    ) -> bool {
+        let lays: Vec<&Bundle> = sides.iter().filter(|b| b.unlaid.is_none()).collect();
+        let mut local = Counts::default();
+        let got = !lays.iter().any(|b| opens(b, reach, &mut local))
+            && lays
+                .iter()
+                .any(|b| self.passage_for(site, b, t, &mut local).is_some());
+        for (k, v) in local.0 {
+            self.tests.add(&k, v);
+        }
+        got
+    }
+
+    /// Does a rule of the parts refuse the layout `b` - a neighbor's persimmon in its sun (its own dropped), the sun both ways, the
+    /// taken ground, the stream, the paddy's chords, the water, the registry, a neighbor's eaves or the ground no way reaches?
+    fn parts_refused(&mut self, site: &Site, b: &mut Bundle) -> bool {
+        let rules = site.rules;
+        let t = &mut self.tests;
+        super::fit_rules::persimmon_conflict(b, &self.standing, rules, t)
+            || !sun_ok(b, &self.standing, t)
+            || !on_free_ground(b, site.ground, site.beyond, t)
+            || across_a_stream(b, site.streams, t)
+            || super::fit_rules::wall_on_the_bund(b, rules, t)
+            || super::fit_rules::beds_on_water(b, rules, t)
+            || !super::fit_rules::admitted(b, rules, t)
+            || too_near(b.house, b.turn, &self.standing, t)
+            || super::fit_rules::unreachable((b.house.0, b.house.1), rules, t)
+    }
+
+    /// A layout moved at the tight seat `t`, asked for its passage: none once a layout here had a way of its own (`own_way`), none
+    /// with no walk to the neighbor's yard, none - and `own_way` set - where its yard opens onto lane ground (`fit._parts_fit`).
+    fn tight_passage(
+        &mut self,
+        site: &Site,
+        b: &Bundle,
+        t: &Tight,
+        reach: &super::ground::Reach,
+        own_way: &mut bool,
+    ) -> Option<Passage> {
+        let mut local = Counts::default();
+        let got = (!*own_way)
+            .then(|| self.passage_for(site, b, t, &mut local))
+            .flatten();
+        for (k, v) in local.0 {
+            self.tests.add(&k, v);
+        }
+        let got = got?;
+        *own_way = opens(b, reach, &mut self.tests);
+        (!*own_way).then_some(got)
+    }
+
+    /// The wood seats the layout `b` would reserve among its keep-outs `own` (`wood.rs` `Shares::share`), or None.
+    fn wood_share(
+        &mut self,
+        site: &Site,
+        b: &Bundle,
+        own: &super::wood::Keepouts,
+    ) -> Option<Vec<Pt>> {
+        let wsite = super::wood::WoodSite {
+            ground: site.ground,
+            streams: site.streams,
+            canvas: site.canvas,
+        };
+        self.wood
+            .share((b.house.0, b.house.1), b.turn, own, &wsite, &mut self.tests)
+    }
+
+    /// May a passage cross to the seated household `k` - reached within the chain?
+    fn crossable(&self, k: usize) -> bool {
+        self.depth[k].is_some_and(|d| d < super::passage::PASSAGE.1)
     }
 
     /// The envelope the household of `lot` lays at `q`, its rake the seat's.
@@ -314,6 +444,9 @@ impl Seating {
             .ground
             .rect_refused(lo, hi, site.beyond, &mut self.tests)
         {
+            return Block::Refused;
+        }
+        if self.walks.covers_box(b, &mut self.tests) {
             return Block::Refused;
         }
         let margin = GAP_FT.1;
@@ -372,12 +505,20 @@ impl Seating {
             .iter()
             .map(|&side| self.lay(site, lot, (x, y), side, (x, y)))
             .collect();
+        let painted = self.take_reach(site);
+        let reach = painted.as_ref().unwrap_or(site.reach);
+        // a tight seat is judged by its land, not one layout: taken only where some layout here has a walk to the neighbor's yard and
+        // none a way of its own (`passage.landlocked`)
+        let tight = keep.and_then(|k| k.tight);
+        if !tight.is_none_or(|t| self.landlocked(site, &sides, &t, reach)) {
+            self.reach = painted;
+            return None;
+        }
+        let mut own_way = false;
         let env = super::bundle::bbox_of(&sides.iter().map(|b| b.bbox).collect::<Vec<_>>());
         self.search.2 += 1;
         let union_clear = self.blocked(site, env) == Block::Clear;
         let mut best: Option<((usize, u32), Placement)> = None;
-        let painted = self.take_reach(site);
-        let reach = painted.as_ref().unwrap_or(site.reach);
         let mut reaches: std::collections::HashMap<(i64, i64), bool> =
             std::collections::HashMap::new();
         for (rank, (side, mut b)) in SIDES.iter().zip(sides).enumerate() {
@@ -410,26 +551,26 @@ impl Seating {
             if hit != Block::Clear || b.unlaid.is_some() {
                 continue;
             }
-            // the yard's reach, asked once a position: the seat's unmoved sides share one answer, a moved side is another seat
+            // the yard's reach, asked once a position: the seat's unmoved sides share one answer, a moved side is another seat - but a
+            // side moved at a tight seat is asked for its passage instead: no way of its own, a walk to the neighbor's yard
+            let asked = tight
+                .filter(|_| (cx, cy) != (x, y))
+                .map(|t| self.tight_passage(site, &b, &t, reach, &mut own_way));
             let tests = &mut self.tests;
-            if !*reaches
-                .entry(((cx * 8.0).round() as i64, (cy * 8.0).round() as i64))
-                .or_insert_with(|| opens(&b, reach, tests))
-            {
+            let refused = asked.as_ref().map_or_else(
+                || {
+                    !*reaches
+                        .entry(((cx * 8.0).round() as i64, (cy * 8.0).round() as i64))
+                        .or_insert_with(|| opens(&b, reach, tests))
+                },
+                Option::is_none,
+            );
+            if refused {
                 continue;
             }
+            let passage = asked.flatten();
             self.search.3 += 1;
-            let rules = site.rules;
-            if super::fit_rules::persimmon_conflict(&mut b, &self.standing, rules, &mut self.tests)
-                || !sun_ok(&b, &self.standing, &mut self.tests)
-                || !on_free_ground(&b, site.ground, site.beyond, &mut self.tests)
-                || across_a_stream(&b, site.streams, &mut self.tests)
-                || super::fit_rules::wall_on_the_bund(&b, rules, &mut self.tests)
-                || super::fit_rules::beds_on_water(&b, rules, &mut self.tests)
-                || !super::fit_rules::admitted(&b, rules, &mut self.tests)
-                || too_near(b.house, b.turn, &self.standing, &mut self.tests)
-                || super::fit_rules::unreachable((b.house.0, b.house.1), rules, &mut self.tests)
-            {
+            if self.parts_refused(site, &mut b) {
                 continue;
             }
             // the wood, last: no part over another household's seat, and its own floor within its reach
@@ -437,18 +578,7 @@ impl Seating {
             if self.wood.covers_a_seat(&own, &mut self.tests) {
                 continue;
             }
-            let wsite = super::wood::WoodSite {
-                ground: site.ground,
-                streams: site.streams,
-                canvas: site.canvas,
-            };
-            let Some(seats) = self.wood.share(
-                (b.house.0, b.house.1),
-                b.turn,
-                &own,
-                &wsite,
-                &mut self.tests,
-            ) else {
+            let Some(seats) = self.wood_share(site, &b, &own) else {
                 continue;
             };
             let hand = u32::from(rank % 2 == 1) ^ u32::from(hjit(cx, cy, 12.0) < 0.5);
@@ -456,7 +586,7 @@ impl Seating {
             // rank and their hand alone)
             let score = (rank / 2, hand);
             if best.as_ref().is_none_or(|(s, ..)| score < *s) {
-                best = Some((score, ((cx, cy), b, seats, own)));
+                best = Some((score, ((cx, cy), b, seats, own, passage)));
             }
         }
         self.reach = painted;
@@ -474,8 +604,25 @@ impl Seating {
         super::wood::keepouts(&solids, &plots)
     }
 
-    fn stand(&mut self, seat: Pt, b: Bundle, wood: Vec<Pt>, own: super::wood::Keepouts) {
+    fn stand(
+        &mut self,
+        seat: Pt,
+        b: Bundle,
+        wood: Vec<Pt>,
+        own: super::wood::Keepouts,
+        passage: Option<Passage>,
+    ) {
         self.wood.commit(&wood, own, &mut self.tests);
+        // ...its passage's walk kept clear of every later homestead, counted against the share; a household reached by none has a way
+        // of its own (its yard opened onto lane ground)
+        if let Some(p) = &passage {
+            for w in p.walk.windows(2) {
+                self.walks.bar(w[0], w[1]);
+            }
+            self.passage_left = self.passage_left.saturating_sub(1);
+        }
+        self.depth
+            .push(Some(passage.as_ref().map_or(0, |p| p.depth)));
         if !wood.is_empty() {
             self.seats.extend(&wood);
             self.reach = None;
@@ -495,6 +642,7 @@ impl Seating {
             seat,
             bundle: b,
             wood,
+            passage,
         });
     }
 
@@ -504,10 +652,10 @@ impl Seating {
         let Some(lot) = self.lot(site) else {
             return false;
         };
-        let Some((_at, b, wood, own)) = self.place(site, &lot, x, y, keep) else {
+        let Some((_at, b, wood, own, passage)) = self.place(site, &lot, x, y, keep) else {
             return false;
         };
-        self.stand((x, y), b, wood, own);
+        self.stand((x, y), b, wood, own, passage);
         true
     }
 
@@ -516,7 +664,7 @@ impl Seating {
         clippy::many_single_char_names,
         reason = "the plane geometry's own names: a reach's w, e, n and s"
     )]
-    fn footprint(&self, k: usize) -> (Pt, Footprint) {
+    pub fn footprint(&self, k: usize) -> (Pt, Footprint) {
         let s = &self.seated[k].bundle;
         let c = (s.house.0, s.house.1);
         let (mut w, mut e, mut n, mut so) = box_reach(c, s.bbox);
@@ -561,6 +709,10 @@ pub fn field_distance(q: Pt, field: &[Pt]) -> f64 {
         .fold(f64::MAX, f64::min)
 }
 
+/// A queued seat's offer: the standing homestead's center and reach it was offered from, its bearing, its scale, and the neighbor
+/// it is a tight seat against.
+type Offer = (Pt, Footprint, f64, f64, Option<usize>);
+
 /// An offer's place in the growth's queue: its ring, its field distance and its distance (each non-negative, so its bits order as
 /// it does - Python's float key exactly), and its order queued - the least first (`Reverse`), and the offer itself by its ordinal.
 type QueueKey = std::cmp::Reverse<(i64, u64, u64, usize)>;
@@ -579,7 +731,11 @@ type QueueKey = std::cmp::Reverse<(i64, u64, u64, usize)>;
     reason = "ring indices and grid counts of a few hundred"
 )]
 pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
-    let mut st = Seating::default();
+    let mut st = Seating {
+        passage_left: site.rules.passage_left,
+        walks: super::access::AccessTree::new(super::access::ACCESS_HALF_FT),
+        ..Seating::default()
+    };
     // what the seating reserved before any house - a shared byre's pocket - filed against the wood, so no seat is reserved under it
     if !site.rules.bars.is_empty() {
         st.wood
@@ -626,8 +782,9 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
     // the rest grown from the standing houses, ring by ring
     let gap = GAP_FT.0 + GAP_FT.1;
     let mut heap: BinaryHeap<QueueKey> = BinaryHeap::new();
-    let mut offers: Vec<(Pt, (Pt, Footprint, f64, f64))> = Vec::new();
+    let mut offers: Vec<(Pt, Offer)> = Vec::new();
     let mut seen: HashSet<(i64, i64)> = HashSet::new();
+    let mut tight_q: HashSet<usize> = HashSet::new();
     let (mut level, mut done) = (0usize, 0usize);
     // the next household's reach rolled at the first house - the guess every queued seat is parted by, and the settle's start
     let guess = match (st.seated.first(), st.lot(site)) {
@@ -677,7 +834,34 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
                             dist.to_bits(),
                             offers.len(),
                         )));
-                        offers.push((q, (c, reach, ang, far * ring)));
+                        offers.push((q, (c, reach, ang, far * ring, None)));
+                    }
+                }
+            }
+            // ...and, while the share has room, its tight seats: at the tight parting in the same directions, unjittered in distance,
+            // on its yard's side, queued once a house and only round one a passage may cross to (`growth.py`, feature 317)
+            if st.passage_left > 0 && st.crossable(k) && tight_q.insert(k) {
+                let yard = st.seated[k].bundle.boxes[1];
+                for d in 0..ndir {
+                    let jit = JITTER.0 * 8.0 / f64::from(ndir);
+                    let ang = (360.0 / f64::from(ndir) * f64::from(d)
+                        + (hjit(c.0, c.1, 300.0 + f64::from(d)) - 0.5) * 2.0 * jit)
+                        .to_radians();
+                    if !yard_side(c, (yard.0, yard.1), ang) {
+                        continue;
+                    }
+                    let q = seat_toward(c, reach, guess, ang, TIGHT.0);
+                    st.tests.add("candidate@grow", 4);
+                    if q.0 >= 0.0 && q.1 >= 0.0 && q.0 <= site.canvas.0 && q.1 <= site.canvas.1 {
+                        queued += 1;
+                        let dist = (q.0 - center.0).hypot(q.1 - center.1);
+                        heap.push(std::cmp::Reverse((
+                            (dist / TIE_RING_FT) as i64,
+                            chain_distance(q, &site.rules.site_chains).to_bits(),
+                            dist.to_bits(),
+                            offers.len(),
+                        )));
+                        offers.push((q, (c, reach, ang, 1.0, Some(k))));
                     }
                 }
             }
@@ -691,14 +875,17 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
             done = 0;
             continue;
         };
-        let (c, reach, ang, scale) = offers[top.0 .3].1;
+        let (c, reach, ang, scale, nb) = offers[top.0 .3].1;
+        // a tight seat once the share is spent is no seat: it is not settled (no settle moves the start)
+        let spent = nb.is_some() && st.passage_left == 0;
+        let parting = if nb.is_some() { TIGHT.0 } else { gap };
         let Some(lot) = st.lot(site) else { break };
         // the settled seat: from the start, moved out while the household's envelope there outgrows the one it was offered for; none
         // as soon as a seat it would roll at is one the placer refuses its house outright (`seat_refused`)
         let mut new = start;
         let mut got = None;
-        for _ in 0..SETTLE_TRIES {
-            let base = seat_toward(c, reach, new, ang, gap);
+        for _ in 0..if spent { 0 } else { SETTLE_TRIES } {
+            let base = seat_toward(c, reach, new, ang, parting);
             let q = (c.0 + (base.0 - c.0) * scale, c.1 + (base.1 - c.1) * scale);
             let turn = Seating::turn(site, q, &mut st.tests);
             let house = turned_box((q.0, q.1, lot.house.0, lot.house.1), turn);
@@ -711,13 +898,13 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
                 && r.2 <= new.2 + 1e-9
                 && r.3 <= new.3 + 1e-9
             {
-                got = Some(q);
+                got = Some((q, new));
                 start = union(guess, r);
                 break;
             }
             new = union(r, new);
         }
-        let Some(q) = got else { continue };
+        let Some((q, own)) = got else { continue };
         if st
             .seated
             .iter()
@@ -729,8 +916,14 @@ pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
             (0..st.seated.len()).map(|k| st.footprint(k)).collect();
         let keep = Keep {
             from: (c, reach),
-            gap,
+            gap: parting,
             standing,
+            others: gap,
+            tight: nb.map(|k| Tight {
+                nb: k,
+                land: super::passage::land_box(c, reach),
+                own,
+            }),
         };
         st.offer(site, q.0, q.1, Some(&keep));
     }

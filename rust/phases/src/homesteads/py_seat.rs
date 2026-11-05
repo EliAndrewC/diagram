@@ -98,6 +98,8 @@ fn rules_of(d: &Bound<'_, PyDict>) -> PyResult<Rules> {
         bars: field(d, "bars")?,
         placed: field(d, "placed")?,
         site_chains: field(d, "site_chains")?,
+        lane_gap: field(d, "lane_gap")?,
+        passage_left: field(d, "passage_left")?,
     })
 }
 
@@ -176,6 +178,10 @@ pub fn seat_households<'py>(
         h.set_item("boxes", b.boxes.clone())?;
         h.set_item("bbox", b.bbox)?;
         h.set_item("wood", s.wood.clone())?;
+        h.set_item(
+            "passage",
+            s.passage.as_ref().map(super::passage::Passage::parts),
+        )?;
         seated.append(h)?;
     }
     for (k, v) in st.tests.0 {

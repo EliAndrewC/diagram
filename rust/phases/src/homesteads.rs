@@ -24,6 +24,7 @@ pub mod gap_ways;
 pub mod ground;
 pub mod layout;
 pub mod lots;
+pub mod passage;
 pub mod place;
 pub mod py;
 pub mod py_seat;
@@ -42,6 +43,8 @@ mod fit_tests;
 mod fixtures_tests;
 #[cfg(test)]
 mod gap_ways_tests;
+#[cfg(test)]
+mod passage_tests;
 #[cfg(test)]
 mod place_tests;
 #[cfg(test)]

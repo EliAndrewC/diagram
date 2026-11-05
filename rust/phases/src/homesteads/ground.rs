@@ -28,6 +28,7 @@ pub const LANE_GROW_FT: f64 = 8.0;
 pub const WOOD_PAINT_FT: f64 = 17.0;
 
 /// A window of the canvas painted on cells of `CELL` feet: a cell is taken where its center lies in a member.
+#[derive(Clone)]
 pub struct Ground {
     x0: f64,
     y0: f64,
@@ -291,6 +292,7 @@ impl Ground {
             .collect();
         tests.add("write@reach", n as u64);
         Reach {
+            ground: self.clone(),
             seeds: seeds.to_vec(),
             x0: self.x0,
             y0: self.y0,
@@ -313,6 +315,8 @@ fn root(parent: &mut [usize], mut k: usize) -> usize {
 
 /// The reach: which cells of the free ground a way from the way out's anchor can come to.
 pub struct Reach {
+    /// The ground it was flooded over.
+    ground: Ground,
     /// Where it was flooded from.
     pub seeds: Vec<Pt>,
     x0: f64,
@@ -324,6 +328,12 @@ pub struct Reach {
 }
 
 impl Reach {
+    /// The reach flooded again over its own ground with `discs` painted onto it (`Ground::reach_painted`).
+    #[must_use]
+    pub fn painted(&self, discs: &[Pt], tests: &mut Counts) -> Self {
+        self.ground.reach_painted(&self.seeds, discs, tests)
+    }
+
     /// Whether a box (its corners `lo`, `hi`) touches a reached cell: the cells it covers, clipped to the window.
     #[must_use]
     #[expect(

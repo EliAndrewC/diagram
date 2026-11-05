@@ -130,6 +130,8 @@ def seat_inputs(s: Settlement, plan: SitePlan, byre_share: float, quota: dict[st
         "sun": bool(getattr(s, "_sun_corridor_ft", 0.0)),
         "bars": pocket_bars(s),
         "placed": [tuple(float(v) for v in b[:4]) for b in getattr(s, "placed", None) or ()],
+        "lane_gap": float(s._wood.lane_gap) if getattr(s, "_wood", None) is not None else 0.0,
+        "passage_left": int(getattr(s, "_passage_left", 0) or 0),
         "site_chains": [[(pt(a), pt(b), pt(n)) for a, b, n in chain] for chain in getattr(s, "_site_chains", None) or ()],
         "center": (float(plan.seat["cx"]), float(plan.seat["cy"])),
         "want": int(plan.spec.households),
@@ -188,9 +190,14 @@ def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quo
     got = phases().seat_households(seat_inputs(s, plan, byre_share, quota))
 
     form = getattr(s, "_byre_form", None)
+    recs: list[dict[str, Any]] = []
     for h in got["seated"]:
         geom = homestead_geom(h)
         cx, cy = geom["house"][0], geom["house"][1]
+        if h["passage"] is not None:  # ...reached across a neighbor's yard: its walk, whom, and the chain's depth (`passage_of`)
+            walk, of, depth = h["passage"]
+            geom.pop("opens", None)
+            geom["passage"] = {"walk": [tuple(q) for q in walk], "of": (float(recs[of]["x"]), float(recs[of]["y"])), "depth": int(depth)}
         s.placed.append(geom["bbox"])
         rec = {
             "x": cx,
@@ -209,6 +216,7 @@ def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quo
         record_parts(s, rec, geom, form if geom["byre"] is not None else None)
         s.M["houses"].append(rec)
         s._pending_farmsteads.append(rec)
+        recs.append(rec)
     offered, positions, rects, layouts = got["search"]
     s._seat_search.update({"grow_offered": offered, "grow_took": len(got["seated"]), "positions": positions, "rects": rects, "layouts": layouts, "rust_counts": sum(got["counts"].values())})
     return placed + len(got["seated"])

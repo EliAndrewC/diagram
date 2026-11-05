@@ -65,6 +65,10 @@ pub struct Rules {
     pub placed: Vec<Rect>,
     /// The site boundary's facing chains, the growth's tie-break measures to.
     pub site_chains: Vec<Vec<Chord>>,
+    /// The gap a way keeps off a reserved wood seat (feet).
+    pub lane_gap: f64,
+    /// The passages the settlement's rolled share allows (`passage.passage_budget`).
+    pub passage_left: usize,
 }
 
 impl Rules {

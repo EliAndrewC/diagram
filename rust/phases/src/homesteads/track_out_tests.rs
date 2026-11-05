@@ -34,6 +34,7 @@ fn the_homesteads_as_seated_and_the_tracks_stretch_about_them() {
         seat: (0.0, 0.0),
         bundle: b,
         wood: vec![(100.0, 100.0)],
+        passage: None,
     };
     let parts = seated_parts(&[s], 20.0);
     let kinds: Vec<Part> = parts.iter().map(|p| p.1).collect();

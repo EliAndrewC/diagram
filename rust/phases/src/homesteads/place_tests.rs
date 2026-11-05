@@ -14,6 +14,7 @@ use super::fixtures::{Forms, Kind};
 use super::ground::Ground;
 use super::layout::Byre;
 use super::lots::Lots;
+use super::passage::{land_box, Tight, TIGHT};
 use super::place::{
     box_reach, chain_distance, field_distance, grow, keeps_its_distance, seat_toward, union, Keep,
     Seating, Site,
@@ -130,6 +131,184 @@ fn the_growths_tie_break_reads_the_facing_chains() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one tight seat's scenarios, each built on the last"
+)]
+fn a_household_on_a_tight_seat_is_reached_across_its_neighbors_yard() {
+    let mut t = Counts::default();
+    let canvas = (1000.0, 1000.0);
+    let ground = Ground::new((0.0, 0.0), canvas, &mut t);
+    let open = ground.reach(&[(500.0, 100.0)], &mut t);
+    let shut = ground.reach(&[], &mut t);
+    let field = [
+        (0.0, 990.0),
+        (1000.0, 990.0),
+        (1000.0, 1000.0),
+        (0.0, 1000.0),
+    ];
+    let margin = Margin::new(&field, 0.0, &mut t);
+    let forms = Forms::default();
+    let lots = Lots::deal(4, 2, 0.0, &[]);
+    let beyond = |_p: (f64, f64)| true;
+    assert!(beyond((0.0, 0.0)));
+    let rules = Rules {
+        passage_left: 1,
+        ..Rules::default()
+    };
+    let site = Site {
+        ground: &ground,
+        beyond: &beyond,
+        reach: &open,
+        field: &field,
+        streams: &[],
+        canvas,
+        bearing: (&margin, 0.0),
+        lots: &lots,
+        byre: None,
+        forms: &forms,
+        shade: 50.0,
+        rules: &rules,
+    };
+    let mut st = Seating {
+        passage_left: 1,
+        walks: super::access::AccessTree::new(7.0),
+        ..Seating::default()
+    };
+    assert!(st.offer(&site, 500.0, 400.0, None));
+    // ...then no lane ground reached anywhere: a seat against the first household's land is taken only by passage across its yard
+    let landlocked = Site {
+        reach: &shut,
+        ..site
+    };
+    let (c, fp) = st.footprint(0);
+    let mut seated = false;
+    'seek: for dx in [-4.0, -8.0, -12.0, -16.0, -20.0] {
+        for dy in [0.0, -4.0, -8.0, -12.0] {
+            // east-southeast, within a quarter turn of its yard: there its footprint ends at its box, and the seat laps it
+            let q = seat_toward(c, fp, fp, std::f64::consts::FRAC_PI_6, TIGHT.0);
+            let tight = Tight {
+                nb: 0,
+                land: land_box(c, fp),
+                own: (fp.0 + 40.0, fp.1 + 40.0, fp.2 + 20.0, fp.3),
+            };
+            let keep = Keep {
+                from: (c, fp),
+                gap: TIGHT.0,
+                standing: vec![(c, fp)],
+                others: 20.0,
+                tight: Some(tight),
+            };
+            // land that does not adjoin the neighbor's has no passage: a moved layout there is refused
+            let alone = Keep {
+                tight: Some(Tight {
+                    own: (0.0, 0.0, 0.0, 0.0),
+                    ..tight
+                }),
+                ..Keep {
+                    from: (c, fp),
+                    gap: TIGHT.0,
+                    standing: vec![(c, fp)],
+                    others: 20.0,
+                    tight: None,
+                }
+            };
+            assert!(!st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&alone)));
+            if st.offer(&landlocked, q.0 + dx, q.1 + dy, Some(&keep)) {
+                seated = true;
+                break 'seek;
+            }
+        }
+    }
+    assert!(seated, "a tight seat's household seated by passage");
+    let p = st.seated[1].passage.as_ref().expect("its passage");
+    assert_eq!(
+        (p.of, p.depth, st.depth[1], st.passage_left),
+        (0, 1, Some(1), 0)
+    );
+    assert_eq!(p.parts(), (p.walk.clone(), 0, 1));
+    // ...its walk kept clear of every later homestead: a box over it is refused
+    let w = p.walk[p.walk.len() / 2];
+    // ...and with a third lot, a tight seat asked again against the first: the passage household stands among what its walk keeps off
+    let three = Lots::deal(4, 3, 0.0, &[]);
+    let wider = Site {
+        lots: &three,
+        ..landlocked
+    };
+    let again = Keep {
+        from: (c, fp),
+        gap: TIGHT.0,
+        standing: vec![(c, fp), st.footprint(1)],
+        others: 20.0,
+        tight: Some(Tight {
+            nb: 0,
+            land: land_box(c, fp),
+            own: fp,
+        }),
+    };
+    assert!(!st.offer(&wider, c.0 - 100.0, c.1 + 300.0, Some(&again)));
+    assert!(st.walks.covers_box((w.0, w.1, 4.0, 4.0), &mut t));
+    assert!(!Seating {
+        walks: std::mem::take(&mut st.walks),
+        ..Seating::default()
+    }
+    .offer(&site, w.0, w.1, None));
+}
+
+#[test]
+fn a_cluster_with_lane_ground_only_at_its_first_house_tries_its_tight_seats_and_seats_none() {
+    let mut t = Counts::default();
+    let canvas = (1000.0, 1000.0);
+    let ground = Ground::new((0.0, 0.0), canvas, &mut t);
+    // lane ground only in a pocket about the seat: the first house opens onto it, every later one is landlocked
+    let cell = 4.0;
+    let nx: u32 = 250;
+    let cells: Vec<bool> = (0..nx * nx)
+        .map(|k| {
+            let (i, j) = (k % nx, k / nx);
+            let p = ((f64::from(i) + 0.5) * cell, (f64::from(j) + 0.5) * cell);
+            (p.0 - 500.0).abs() > 25.0 || (p.1 - 520.0).abs() > 25.0
+        })
+        .collect();
+    let lanes = Ground::from_cells((0.0, 0.0), cell, nx as usize, cells).unwrap();
+    let pocket = lanes.reach(&[(500.0, 520.0)], &mut t);
+    let field = [
+        (0.0, 990.0),
+        (1000.0, 990.0),
+        (1000.0, 1000.0),
+        (0.0, 1000.0),
+    ];
+    let margin = Margin::new(&field, 0.0, &mut t);
+    let forms = Forms::default();
+    let lots = Lots::deal(4, 3, 0.0, &[]);
+    let beyond = |_p: (f64, f64)| true;
+    assert!(beyond((0.0, 0.0)));
+    let rules = Rules {
+        passage_left: 1,
+        ..Rules::default()
+    };
+    let site = Site {
+        ground: &ground,
+        beyond: &beyond,
+        reach: &pocket,
+        field: &field,
+        streams: &[],
+        canvas,
+        bearing: (&margin, 0.0),
+        lots: &lots,
+        byre: None,
+        forms: &forms,
+        shade: 50.0,
+        rules: &rules,
+    };
+    // ...its tight seats queued, settled and offered, each refused: one parted from its neighbor's whole footprint (its sun and its
+    // wood) laps no box to be moved off, and a seat it is not moved from asks the lane ground, which it does not reach
+    let st = grow(&site, (500.0, 500.0), 3);
+    assert_eq!((st.seated.len(), st.passage_left), (1, 1));
+    assert!(st.seated[0].passage.is_none() && st.search.0 > 1);
+}
+
+#[test]
 fn the_growths_step_parts_two_footprints() {
     let r = box_reach((0.0, 0.0), (0.0, 0.0, 20.0, 10.0));
     assert_eq!(r, (10.0, 10.0, 5.0, 5.0));
@@ -144,6 +323,10 @@ fn the_growths_step_parts_two_footprints() {
 }
 
 #[test]
+#[expect(
+    clippy::too_many_lines,
+    reason = "one placer's scenarios, each built on the last"
+)]
 fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_the_growth() {
     let mut t = Counts::default();
     let canvas = (600.0, 600.0);
@@ -189,6 +372,8 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
         from: ((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0)),
         gap: 1.0,
         standing: vec![((5000.0, 5000.0), (1.0, 1.0, 1.0, 1.0))],
+        others: 1.0,
+        tight: None,
     };
     // (the first household's wood seats would close the second's yard off the reach here: this asks the move, not the wood)
     pair.seats.clear();
@@ -200,6 +385,8 @@ fn a_seat_is_refused_off_the_canvas_unlaid_or_unreached_and_a_full_ground_stops_
         from: ((300.0, 400.0), (2000.0, 2000.0, 2000.0, 2000.0)),
         gap: 1.0,
         standing: vec![],
+        others: 1.0,
+        tight: None,
     };
     again.seats.clear();
     assert!(!again.offer(&site_two, a.0 - a.2 / 2.0 - 25.0, 400.0, Some(&strict)));
