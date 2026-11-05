@@ -35,7 +35,7 @@ from .household_ways import chose_the_track, compare_rust_ways, near_the_cluster
 from .rank_rounds import _seat_rank_rounds
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
-from .rust_seating import rust_grow, rust_scatter
+from .rust_seating import rust_grow, rust_rows, rust_scatter
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
 from .seats import front_row
 from .wells import place_wells
@@ -730,7 +730,7 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
     if _linear:
         from .rows import seat_rows  # the row module reads this stage's frame; imported where it is used
 
-        placed += seat_rows(s, plan, _g0["bbox"])
+        placed += rust_rows(s, plan, _house_max, bound, (lat, dep), _quota) if os.environ.get("L7R_RUST_SEATING") else seat_rows(s, plan, _g0["bbox"])
         front_cap = placed
         _rows_seated = True  # NEVER IN RANKS (FR-013, plan D15): a margin whose streets cannot hold every farm is left for the next
     # ...A SCATTERED HAMLET IN RUST WHERE ASKED (feature 444 T30): its front row, ranks, rescue and exhaustive pass, compared before

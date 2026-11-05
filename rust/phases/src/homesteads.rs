@@ -32,6 +32,8 @@ pub mod passage;
 pub mod place;
 pub mod py;
 pub mod py_seat;
+pub mod row_seat;
+pub mod rows;
 pub mod standing;
 pub mod track_out;
 pub mod ways_judge;
@@ -57,6 +59,10 @@ mod level_tests;
 mod passage_tests;
 #[cfg(test)]
 mod place_tests;
+#[cfg(test)]
+mod row_seat_tests;
+#[cfg(test)]
+mod rows_tests;
 #[cfg(test)]
 mod standing_tests;
 #[cfg(test)]

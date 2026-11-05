@@ -236,6 +236,7 @@ fn a_scattered_hamlet_seats_its_row_ranks_and_the_rest_and_a_single_file_its_row
         band: (400.0, 150.0),
         bound: 1.15 * 400.0_f64.hypot(150.0),
         single_file: false,
+        streets: (&[], 0.0),
     };
     let st = seat_scattered(&gs);
     assert_eq!(st.seated.len(), 9, "every household seated");
@@ -360,6 +361,7 @@ fn a_crowded_hamlet_takes_its_rescue_and_the_rest_of_the_ground() {
         band: (120.0, 60.0),
         bound: 150.0,
         single_file: false,
+        streets: (&[], 0.0),
     };
     let mut st = seat_scattered(&gs);
     assert!(st.seated.len() < 12 && st.search.0 > 12);

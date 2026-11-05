@@ -22,6 +22,7 @@ use std::collections::HashMap;
 use super::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
+use crate::seat::exit::seg_seg;
 use crate::ways::track::in_poly;
 
 /// The level set's cell and the members' filing cell (feet).
@@ -72,19 +73,45 @@ impl Hard {
                 .filter(|s| s.0 != s.1)
                 .map(|&(a, b, c)| (a, b, c.max(0.5))),
         );
-        let (i0, j0, i1, j1) = edges
+        let mut h = Self {
+            polys,
+            edges,
+            cells: Vec::new(),
+            span: ((0, 0), (0, 0)),
+        };
+        h.refile(tests);
+        h
+    }
+
+    /// A bare polyline as hard ground: its segments, no clearance - the ground a parallel street is offset from.
+    #[must_use]
+    pub fn line(pts: &[Pt], tests: &mut Counts) -> Self {
+        let mut h = Self::new(&[], &[], tests);
+        h.edges = pts
+            .windows(2)
+            .filter(|w| w[0] != w[1])
+            .map(|w| (w[0], w[1], 0.0))
+            .collect();
+        h.refile(tests);
+        h
+    }
+
+    /// File every member in the dense grid of cells it reaches.
+    fn refile(&mut self, tests: &mut Counts) {
+        let (i0, j0, i1, j1) = self
+            .edges
             .iter()
             .map(reach)
             .fold((i64::MAX, i64::MAX, i64::MIN, i64::MIN), |m, r| {
                 (m.0.min(r.0), m.1.min(r.1), m.2.max(r.2), m.3.max(r.3))
             });
-        let (w, h) = if edges.is_empty() {
+        let (w, h) = if self.edges.is_empty() {
             (0, 0)
         } else {
             ((i1 - i0 + 1) as usize, (j1 - j0 + 1) as usize)
         };
         let mut cells: Vec<Vec<usize>> = vec![Vec::new(); w * h];
-        for (k, e) in edges.iter().enumerate() {
+        for (k, e) in self.edges.iter().enumerate() {
             let (a0, b0, a1, b1) = reach(e);
             for j in b0..=b1 {
                 for i in a0..=a1 {
@@ -92,13 +119,9 @@ impl Hard {
                 }
             }
         }
-        tests.add("write@Hard::new", edges.len() as u64);
-        Self {
-            polys,
-            edges,
-            cells,
-            span: ((i0, j0), (w, h)),
-        }
+        tests.add("write@Hard::refile", self.edges.len() as u64);
+        self.cells = cells;
+        self.span = ((i0, j0), (w, h));
     }
 
     /// Is there no hard ground?
@@ -139,25 +162,64 @@ impl Hard {
         self.near(p, cap, tests)
     }
 
-    /// `dist` for a point known to stand outside every polygon: the members filed in the cells within `cap` of it, the cells walked
-    /// held to the ones filed however far the cap reaches; a member filed in two of them read twice, the least kept.
+    /// `dist` for a point known to stand outside every polygon: the members filed in the cells about it, ring by ring of cells outward,
+    /// stopped once a ring's nearest point lies past the best distance found or past `cap`; a member filed in two cells read twice,
+    /// the least kept.
     fn near(&self, p: Pt, cap: f64, tests: &mut Counts) -> f64 {
         let ((i0, j0), (w, h)) = self.span;
-        let lo_i = (cell(p.0 - cap) - i0).max(0);
-        let hi_i = (cell(p.0 + cap) - i0).min(w as i64 - 1);
-        let lo_j = (cell(p.1 - cap) - j0).max(0);
-        let hi_j = (cell(p.1 + cap) - j0).min(h as i64 - 1);
+        let (ci, cj) = (cell(p.0) - i0, cell(p.1) - j0);
         let mut best = cap;
-        for j in lo_j..=hi_j {
-            for i in lo_i..=hi_i {
-                for &k in &self.cells[j as usize * w + i as usize] {
-                    let (a, b, c) = self.edges[k];
-                    tests.add("seg_test@Hard::near", 1);
-                    best = best.min((seg_dist(p, a, b) - c).max(0.0));
+        let (mut r, last) = (0, (cap / CELLS.1).ceil() as i64 + 1);
+        // (every cell of ring r stands at least r - 1 cells from the point)
+        while r <= last && (r - 1) as f64 * CELLS.1 <= best {
+            for j in (cj - r).max(0)..=(cj + r).min(h as i64 - 1) {
+                let rim = j == cj - r || j == cj + r;
+                for i in ((ci - r).max(0)..=(ci + r).min(w as i64 - 1))
+                    .filter(|&i| rim || i == ci - r || i == ci + r)
+                {
+                    for &k in &self.cells[j as usize * w + i as usize] {
+                        let (a, b, c) = self.edges[k];
+                        tests.add("seg_test@Hard::near", 1);
+                        best = best.min((seg_dist(p, a, b) - c).max(0.0));
+                    }
                 }
             }
+            r += 1;
         }
         best
+    }
+
+    /// Does the polygon `poly` meet the hard ground - touch or overlap a polygon, or come within a strip's clearance (shapely's
+    /// `intersects` of the hard ground)? A vertex on the ground, a member's end inside the polygon, or an edge within a member's
+    /// clearance of one of the polygon's, the members read from the cells the polygon's box reaches.
+    #[must_use]
+    pub fn meets(&self, poly: &[Pt], tests: &mut Counts) -> bool {
+        if self.is_empty() || poly.len() < 3 {
+            return false;
+        }
+        if poly.iter().any(|&p| self.dist(p, 1.0, tests) == 0.0) {
+            return true;
+        }
+        let ((i0, j0), (w, h)) = self.span;
+        let (x0, y0, x1, y1) = poly
+            .iter()
+            .fold((f64::MAX, f64::MAX, f64::MIN, f64::MIN), |m, p| {
+                (m.0.min(p.0), m.1.min(p.1), m.2.max(p.0), m.3.max(p.1))
+            });
+        let mut ks: Vec<usize> = Vec::new();
+        for j in (cell(y0) - j0).max(0)..=(cell(y1) - j0).min(h as i64 - 1) {
+            for i in (cell(x0) - i0).max(0)..=(cell(x1) - i0).min(w as i64 - 1) {
+                ks.extend(&self.cells[j as usize * w + i as usize]);
+            }
+        }
+        ks.sort_unstable();
+        ks.dedup();
+        tests.add("seg_test@Hard::meets", (ks.len() * poly.len()) as u64);
+        ks.into_iter().any(|k| {
+            let (a, b, c) = self.edges[k];
+            in_poly(a, poly)
+                || (0..poly.len()).any(|m| seg_seg(poly[m], poly[(m + 1) % poly.len()], a, b) <= c)
+        })
     }
 
     /// The exterior rings of the ground within `d` of the hard ground - each a closed ring, the first point not repeated - traced on a

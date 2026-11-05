@@ -48,7 +48,7 @@ impl Seating {
 
     /// The bundle of the largest house the roll can take at `at`, unturned where `turn` is 0, no fixtures laid - the box a seat is
     /// pushed and the ranks stepped by (`_bundle_envelope` at the largest house).
-    fn largest(&mut self, gs: &GroveSite, at: Pt, turn: Option<f64>) -> Bundle {
+    pub(crate) fn largest(&mut self, gs: &GroveSite, at: Pt, turn: Option<f64>) -> Bundle {
         let site = gs.site;
         let rot = turn.unwrap_or_else(|| {
             super::bearing::house_rot(

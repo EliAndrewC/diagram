@@ -182,7 +182,7 @@ pub fn unreachable(p: Pt, rules: &Rules, tests: &mut Counts) -> bool {
 }
 
 /// The key the registry files a fixture under, where it holds the fixture while the seating lasts.
-fn held_key(k: Kind) -> Option<&'static str> {
+pub(crate) fn held_key(k: Kind) -> Option<&'static str> {
     match k {
         Kind::Persimmon => None,
         Kind::Retirement => Some("retirement_houses"),

@@ -18,9 +18,12 @@ use super::ground::Ground;
 use super::grove_rounds::seat_scattered as seat_scattered_on;
 use super::grove_seat::{Axes, Corridors, GroveSite};
 use super::layout::{Byre, Rect};
+use super::level::Hard;
 use super::lots::{kind_name, Lots};
 use super::place::{grow, Site};
 use super::py::field;
+use super::row_seat::{seat_rows as seat_rows_on, RowSite};
+use super::rows::Form;
 use super::Counts;
 use crate::field::fan::Pt;
 
@@ -229,20 +232,29 @@ pub fn seat_scattered<'py>(
     inp: &Bound<'py, PyDict>,
 ) -> PyResult<Bound<'py, PyDict>> {
     seat_with(py, inp, &|site, inp| {
+        let g = GroveIn::of(inp)?;
+        Ok(seat_scattered_on(&g.site(site, inp)?))
+    })
+}
+
+/// What a grove farm's site reads from Python beyond the seating's own: the grove, the other ground and the water, the axes, the
+/// paddies, the chains and the cluster's shape.
+struct GroveIn {
+    grove: Grove,
+    corridors: Corridors,
+    axes: Axes,
+    paddies: Vec<Vec<Pt>>,
+    chains: Vec<Vec<Chord>>,
+    shape: String,
+}
+
+impl GroveIn {
+    fn of(inp: &Bound<'_, PyDict>) -> PyResult<Self> {
         let (sides, wind, sun_band, well, yard_sun): (u32, String, bool, f64, f64) =
             field(inp, "grove")?;
         let (rings, holes, water): CorridorsIn = field(inp, "corridors")?;
-        let corridors = Corridors {
-            rings,
-            holes,
-            water,
-        };
         let (c, along, out, anchor, lat): (Pt, Pt, Pt, Pt, f64) = field(inp, "axes")?;
-        let paddies: Vec<Vec<Pt>> = field(inp, "paddies")?;
-        let chains: Vec<Vec<Chord>> = field(inp, "row_chains")?;
-        let shape: String = field(inp, "shape")?;
-        let gs = GroveSite {
-            site,
+        Ok(Self {
             grove: Grove {
                 sides,
                 turn: bundle_turn(&wind),
@@ -250,8 +262,11 @@ pub fn seat_scattered<'py>(
                 well,
                 yard_sun,
             },
-            paddies: &paddies,
-            corridors: &corridors,
+            corridors: Corridors {
+                rings,
+                holes,
+                water,
+            },
             axes: Axes {
                 c,
                 along,
@@ -259,18 +274,101 @@ pub fn seat_scattered<'py>(
                 anchor,
                 lat,
             },
-            chains: &chains,
+            paddies: field(inp, "paddies")?,
+            chains: field(inp, "row_chains")?,
+            shape: field(inp, "shape")?,
+        })
+    }
+
+    fn site<'a>(&'a self, site: &'a Site<'a>, inp: &Bound<'_, PyDict>) -> PyResult<GroveSite<'a>> {
+        Ok(GroveSite {
+            site,
+            grove: self.grove,
+            paddies: &self.paddies,
+            corridors: &self.corridors,
+            axes: self.axes,
+            chains: &self.chains,
             house_max: field(inp, "house_max")?,
-            shape: &shape,
+            shape: &self.shape,
             alleys: field(inp, "alleys")?,
             seed: field(inp, "seed")?,
             want: field(inp, "want")?,
             band: field(inp, "band")?,
             bound: field(inp, "bound")?,
             single_file: field(inp, "single_file")?,
+            streets: (&[], 0.0),
+        })
+    }
+}
+
+/// What a row village reads beyond its grove farms' site: both sides or one, the line's form, the sheltered form's roll and the
+/// wind's vector, the farms' front face, the sheet, the planned seat's point, and the hard ground's polygons and water strips.
+type RowsIn = (
+    bool,
+    String,
+    bool,
+    Pt,
+    Pt,
+    Pt,
+    Pt,
+    Vec<Vec<Pt>>,
+    Vec<(Pt, Pt, f64)>,
+);
+
+/// What a row village returns beyond its seating: each street with its farms' houses, each holding (its ring, the street's tangent
+/// and normal, its depth, its farm's lot), and each seated farm's sheltered mark.
+type RowsOut = (
+    Vec<(Vec<Pt>, Vec<Pt>)>,
+    Vec<(Vec<Pt>, Pt, Pt, f64, usize)>,
+    Vec<bool>,
+);
+
+/// A row village's grove farms seated along its streets (`row_seat.rs` `seat_rows`) from Python's gathered state - a scattered
+/// hamlet's, and the `rows` its streets are planned from: each household seated as `seat_households` returns them, with the
+/// `streets`, the `holdings` and the `sheltered` marks.
+///
+/// # Errors
+/// As `seat_households`, and where the line's form is neither `street` nor `edge`.
+#[pyfunction]
+pub fn seat_rows<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bound<'py, PyDict>> {
+    let extra: std::cell::RefCell<RowsOut> = std::cell::RefCell::default();
+    let d = seat_with(py, inp, &|site, inp| {
+        let g = GroveIn::of(inp)?;
+        let (both, form, shelter, wind, front, sheet, anchor, polys, strips): RowsIn =
+            field(inp, "rows")?;
+        let form = match form.as_str() {
+            "street" => Form::Street,
+            "edge" => Form::Edge,
+            other => {
+                return Err(pyo3::exceptions::PyValueError::new_err(format!(
+                    "no row line form {other}"
+                )))
+            }
         };
-        Ok(seat_scattered_on(&gs))
-    })
+        let mut tests = Counts::default();
+        let hard = Hard::new(&polys, &strips, &mut tests);
+        let rows = seat_rows_on(&RowSite {
+            gs: g.site(site, inp)?,
+            hard: &hard,
+            anchor,
+            both,
+            form,
+            shelter: (shelter, wind),
+            front,
+            sheet,
+        });
+        let mut st = rows.seating;
+        for (k, v) in tests.0 {
+            st.tests.add(&k, v);
+        }
+        *extra.borrow_mut() = (rows.streets, rows.holdings, rows.sheltered);
+        Ok(st)
+    })?;
+    let (streets, holdings, sheltered) = extra.take();
+    d.set_item("streets", streets)?;
+    d.set_item("holdings", holdings)?;
+    d.set_item("sheltered", sheltered)?;
+    Ok(d)
 }
 
 /// The other ground and the water as Python gathers them: its exterior rings, its holes, and each water segment with its clearance.

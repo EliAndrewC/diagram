@@ -40,5 +40,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(homesteads::py::households_ways, m)?)?;
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_households, m)?)?;
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_scattered, m)?)?;
+    m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_rows, m)?)?;
     Ok(())
 }

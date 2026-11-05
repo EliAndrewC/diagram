@@ -249,6 +249,8 @@ pub struct Seating {
     pub walks: super::access::AccessTree,
     /// The passages the settlement's share has left.
     pub passage_left: usize,
+    /// A row village's holdings reserved so far, which no later part stands on.
+    pub holdings: Vec<Vec<Pt>>,
 }
 
 impl Seating {

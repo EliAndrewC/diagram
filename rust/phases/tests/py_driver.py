@@ -320,3 +320,19 @@ scatter_in = dict(
 farms = l7r_phases.seat_scattered(scatter_in)["seated"]
 assert farms and all(h["groves"] for h in farms) and all(h["well"] for h in farms), farms
 assert l7r_phases.seat_scattered(dict(scatter_in, single_file=True))["seated"]
+
+# a row village (feature 444 T30): its grove farms along the street the hard ground's edge gives, a far-row farm with its holding;
+# a line form it does not know is refused by name
+rows_in = dict(
+    scatter_in,
+    want=6,
+    rows=(True, "street", True, (-0.7071, -0.7071), (0.0, 1.0), (2400.0, 2400.0), (1200.0, 1250.0), [seat_in["field"]], [((900.0, 1200.0), (900.0, 1490.0), 8.0)]),
+)
+rows = l7r_phases.seat_rows(rows_in)
+assert rows["seated"] and rows["streets"] and len(rows["sheltered"]) == len(rows["seated"]), rows["streets"]
+try:
+    l7r_phases.seat_rows(dict(rows_in, rows=(True, "lane", *rows_in["rows"][2:])))
+except ValueError as e:
+    assert "no row line form" in str(e), e
+else:
+    raise AssertionError("an unknown row line form is refused by name")

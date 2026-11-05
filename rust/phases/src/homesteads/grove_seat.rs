@@ -108,6 +108,7 @@ impl Corridors {
 /// ground and the water, the seat band, the facing chains its front row is offset from, the largest house the roll can take, the
 /// cluster's shape, whether the lanes are alleys, the map's seed, the households wanted, the band's reach, and whether the farms
 /// stand in single file round the fields.
+#[derive(Clone, Copy)]
 pub struct GroveSite<'a> {
     /// The placer's site.
     pub site: &'a Site<'a>,
@@ -137,6 +138,9 @@ pub struct GroveSite<'a> {
     pub bound: f64,
     /// Whether the farms stand in single file round the fields.
     pub single_file: bool,
+    /// A row village's planned streets while its farms are seated, and the half-width of the tread reserved on them (none off a row
+    /// village).
+    pub streets: (&'a [(Pt, Pt)], f64),
 }
 
 fn meet(a: Rect, b: Rect) -> bool {
@@ -289,6 +293,8 @@ impl Seating {
         !self.grove_sun_conflict(b)
             && !Self::fixtures_in_bands(b)
             && admitted(b, rules, &mut self.tests)
+            && !on_the_streets(b, gs.streets, &mut self.tests)
+            && !self.on_a_holding(&solid)
     }
 
     /// Slide the farm at `c` toward `target` 2 ft a step as far as it still fits; where it stops.
@@ -374,8 +380,28 @@ impl Seating {
             .min_by(|a, b| dist(p, *a).total_cmp(&dist(p, *b)))
     }
 
+    /// Does a solid part stand on a row village's holding already reserved (`s.block_polys`)?
+    fn on_a_holding(&mut self, solid: &[Rect]) -> bool {
+        self.tests.add(
+            "seg_test@on_a_holding",
+            (solid.len() * self.holdings.len()) as u64,
+        );
+        let holdings = &self.holdings;
+        let tests = &mut self.tests;
+        holdings.iter().any(|q| {
+            solid
+                .iter()
+                .any(|&r| super::rows::polys_meet(&super::track_out::box_poly(r), q, tests))
+        })
+    }
+
     /// Offer the seat (x, y) to the next household as a grove farm; true where it is seated.
     pub fn offer_grove(&mut self, gs: &GroveSite, x: f64, y: f64) -> bool {
+        self.offer_grove_as(gs, x, y, false)
+    }
+
+    /// Offer the seat (x, y) to the next household as a grove farm, `exact` for a row's (nudged, never slid); true where it is seated.
+    pub fn offer_grove_as(&mut self, gs: &GroveSite, x: f64, y: f64, exact: bool) -> bool {
         self.search.0 += 1;
         // ...none once the lots are spent
         let lot = gs
@@ -388,12 +414,47 @@ impl Seating {
                 byre: None,
                 fixtures,
             });
-        let Some(b) = lot.and_then(|lot| self.place_grove(gs, &lot, x, y, false)) else {
+        let Some(b) = lot.and_then(|lot| self.place_grove(gs, &lot, x, y, exact)) else {
             return false;
         };
         self.stand_grove((x, y), b);
         true
     }
+}
+
+/// Does a part of `b` the reserved tread keeps clear - its house, yard, beds, held fixtures and well (the corridor rule's
+/// built and worked ground; its bands are not) - stand within the tread's half-width of a planned street (`reserved.conflicts`)?
+fn on_the_streets(b: &Bundle, (streets, half): (&[(Pt, Pt)], f64), tests: &mut Counts) -> bool {
+    if streets.is_empty() {
+        return false;
+    }
+    let turned = |r: Rect| super::fit::corners(r, b.turn).to_vec();
+    let mut parts = vec![turned(b.house), turned(b.yard)];
+    // (a grove farm's lot lays neither a kura nor a byre: `offer_grove_as`)
+    parts.extend(b.gardens.iter().map(|&g| turned(g)));
+    parts.extend(
+        b.well
+            .map(|w| super::fit::corners(super::bearing::turned_box(w, b.turn), 0.0).to_vec()),
+    );
+    let first = 2 + b.gardens.len();
+    parts.extend(
+        b.fixtures
+            .iter()
+            .zip(&b.boxes[first..])
+            .filter(|(&(k, _), _)| super::fit_rules::held_key(k).is_some())
+            .map(|(_, &bx)| super::fit::corners(bx, 0.0).to_vec()),
+    );
+    tests.add(
+        "seg_test@on_the_streets",
+        (parts.len() * streets.len()) as u64,
+    );
+    parts.iter().any(|q| {
+        streets.iter().any(|&(a, c)| {
+            crate::ways::track::in_poly(a, q)
+                || (0..q.len())
+                    .any(|m| crate::seat::exit::seg_seg(q[m], q[(m + 1) % q.len()], a, c) < half)
+        })
+    })
 }
 
 /// Does the band `g` stand in the yard `y`'s drying strip, the `STRIPS` depth south of it across its width (`fit._yard_sun_conflict`)?

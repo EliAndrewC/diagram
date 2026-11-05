@@ -15,7 +15,7 @@ from l7r.diagram.settlement.rolling.lot import record_parts
 from l7r.diagram.settlement.rolling.passage import reserve_way
 
 from ..clearance import margin_of
-from ..consts import WEB_HARD_GAP
+from ..consts import WEB_HARD_GAP, Pt
 from .boundary import web_hard_ground
 
 if TYPE_CHECKING:
@@ -251,15 +251,13 @@ def record_seated(s: Settlement, got: dict[str, Any]) -> int:
     return len(got["seated"])
 
 
-def rust_scatter(s: Settlement, plan: SitePlan, single_file: bool, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> int:
-    """Seat a scattered hamlet's grove farms in Rust (`l7r_phases.seat_scattered`): its front row, then - off the single file - its ranks,
-    the rescue and the exhaustive pass, from the site boundary installed for this seating (`install_site_boundary`), and record each as
-    `_try_place_bundle` does. How many stand.
+def grove_inputs(s: Settlement, plan: SitePlan, single_file: bool, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> dict[str, Any]:
+    """What a grove farm's seating hands the Rust (`l7r_phases.seat_scattered`, `seat_rows`): the seating's site, the grove, the other
+    ground and the water, the seat band and its axes, the chains, the largest house, the shape, the lanes' form, the seed, the band's
+    reach and whether its farms stand in single file.
 
-    Research: a scattered hamlet's seating in Rust - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind, a rescue cloud, the exhaustive pass; its rules asked at the Rust that seats it"""
+    Research: plumbing - NONE: Python's gathered state in the Rust's own form"""
     from l7r.diagram.settlement.homestead_parts.grove_sides import windward_pair
-
-    from ..phases_ext import phases
 
     pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
     ring = lambda r: [pt(q) for q in r]  # noqa: E731
@@ -284,4 +282,68 @@ def rust_scatter(s: Settlement, plan: SitePlan, single_file: bool, house_max: tu
             "single_file": bool(single_file),
         }
     )
-    return record_seated(s, phases().seat_scattered(inputs))
+    return inputs
+
+
+def rust_scatter(s: Settlement, plan: SitePlan, single_file: bool, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> int:
+    """Seat a scattered hamlet's grove farms in Rust (`l7r_phases.seat_scattered`): its front row, then - off the single file - its ranks,
+    the rescue and the exhaustive pass, from the site boundary installed for this seating (`install_site_boundary`), and record each as
+    `_try_place_bundle` does. How many stand.
+
+    Research: a scattered hamlet's seating in Rust - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind, a rescue cloud, the exhaustive pass; its rules asked at the Rust that seats it"""
+    from ..phases_ext import phases
+
+    return record_seated(s, phases().seat_scattered(grove_inputs(s, plan, single_file, house_max, bound, band, quota)))
+
+
+def rust_rows(s: Settlement, plan: SitePlan, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> int:
+    """Seat a row village's grove farms along its streets in Rust (`l7r_phases.seat_rows`), from the hard ground `rows.seat_rows`
+    gathers, and record what that writes: each farm as `_try_place_bundle` does, its sheltered mark, the holdings reserved (drawn
+    later, kept off by the next placers and the woods), and the streets that seated a farm, for the web. How many stand.
+
+    Research: a row village's seating in Rust - research/questions/0033-row-villages-resson.drawing.html: farms in rows along their streets, each further street parallel past the far row's holdings; its rules asked at the Rust that seats it"""
+    from l7r.diagram.settlement.homestead_parts.grove_sides import grove_faces
+
+    from ..consts import WIND_VECTORS
+    from ..phases_ext import phases
+
+    pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
+    corr = getattr(s, "_site_corridors", None)
+    # ...AND THE WET GROUND the ways refuse, as `rows.seat_rows` gathers it: the toe marsh and every marsh drawn so far
+    wet = [[pt(q) for q in (s.toe_band() or [])]] + [[pt(q) for q in m["poly"]] for m in s.M.get("marshes", []) if m.get("poly")]
+    field = [pt(q) for q in (plan.envelope or [])]
+    polys = [r for r in [field, *[[pt(q) for q in r] for r in (getattr(corr, "ring_pts", ()) or ())], *wet] if len(r) >= 3]
+    strips = [(pt(a), pt(b), max(float(c), 0.5)) for a, b, c in (getattr(corr, "water", ()) or ()) if tuple(a) != tuple(b)]
+    inputs = grove_inputs(s, plan, False, house_max, bound, band, quota)
+    inputs["rows"] = (
+        plan.row_sides == "both",
+        plan.row_line,
+        plan.row_shelter == "sheltered",
+        pt(WIND_VECTORS.get(plan.windward, WIND_VECTORS["NW"])),
+        pt(grove_faces(plan.windward, plan.grove_sides, plan.grove_flank)[2]),
+        (float(s.W), float(s.H)),
+        (float(plan.seat["cx"]), float(plan.seat["cy"])),
+        polys,
+        strips,
+    )
+    got = phases().seat_rows(inputs)
+    placed = record_seated(s, got)
+    recs = s._pending_farmsteads[len(s._pending_farmsteads) - placed :]
+    for rec, mark in zip(recs, got["sheltered"], strict=True):
+        if mark:  # the leeward row: its grove drawn one tree deep, its bamboo along its south side
+            rec["sheltered"] = True
+            s.M["meta"]["sheltered_farms"] = int(s.M["meta"].get("sheltered_farms", 0)) + 1
+    holdings: list[tuple[list[Pt], Pt, Pt, float]] = []
+    for ring, t, nrm, depth, lot in got["holdings"]:
+        hold = [pt(q) for q in ring]
+        holdings.append((hold, pt(t), pt(nrm), float(depth)))
+        s.M.setdefault("row_holdings", []).append({"id": len(holdings) - 1, "of": [float(recs[lot]["x"]), float(recs[lot]["y"])], "poly": [[round(x, 1), round(y, 1)] for x, y in hold]})
+        s.block_polys.append(hold)  # the next placers and the woods keep off it (plan D16)
+        s.hard_polys.append(hold)
+    streets = [[pt(q) for q in line] for line, _farms in got["streets"]]
+    s._row_holdings = holdings  # type: ignore[attr-defined]
+    s._row_streets = streets  # type: ignore[attr-defined]
+    s._row_street_farms = [[pt(q) for q in farms] for _line, farms in got["streets"]]  # type: ignore[attr-defined]
+    s.M["meta"]["row_streets"] = len(streets)
+    s.M["row_street_plans"] = [[[round(x, 1), round(y, 1)] for x, y in line[:: max(1, len(line) // 60)] + line[-1:]] for line in streets]
+    return placed
