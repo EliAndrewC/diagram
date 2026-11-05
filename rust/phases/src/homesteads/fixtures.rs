@@ -753,6 +753,8 @@ pub struct Frame<'a> {
     pub shade: (f64, &'a [f64]),
     /// The ground no fixture but the bath room stands on (a grove farm's way in and its door's room).
     pub keep: &'a [Rect],
+    /// A grove farm's own bands: taken for every fixture but its persimmon, which may stand in them.
+    pub fruit: &'a [Rect],
 }
 
 /// Each of `kinds` laid beside the parts already laid, in the order of `ORDER`, the box as laid; the bath room's wall where one
@@ -788,6 +790,7 @@ pub fn lay(
     let mut taken: Vec<Rect> = fr
         .roofs
         .iter()
+        .chain(fr.fruit)
         .chain(fr.ground)
         .chain(fr.keep)
         .copied()
@@ -828,10 +831,16 @@ pub fn lay(
                     })
                 });
                 let shade = r + SHADE_MARGIN_FT;
+                // ...its trunk off every part but its own grove's bands, where it may stand (`fruit`)
+                let off: Vec<Rect> = taken
+                    .iter()
+                    .copied()
+                    .filter(|t| !fr.fruit.contains(t))
+                    .collect();
                 let found = ring.iter().copied().chain(paced).find(|&(lx, ly)| {
                     tests.add("candidate@lay", 1);
                     in_dooryard(lx, ly, r, hw, hh, dooryard)
-                        && clears((lx, ly, trunk, trunk), &taken, 2.0, tests)
+                        && clears((lx, ly, trunk, trunk), &off, 2.0, tests)
                         && clears((lx, ly, 2.0 * r, 2.0 * r), &built, pad, tests)
                         && (fr.shade.0 <= 0.0
                             || !shades(lx, ly, shade, fr.ground, fr.shade.0, fr.shade.1))

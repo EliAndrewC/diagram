@@ -117,6 +117,7 @@ pub fn bundle(
         kura: lot.kura,
         shade: (sun.shade, sun.turns),
         keep: &[],
+        fruit: &[],
     };
     let (fixtures, bath, unlaid) = if lot.fixtures.is_empty() {
         (Vec::new(), None, None)

@@ -137,6 +137,11 @@ Each found by a seed the Rust seating failed and Python passed, fixed at the por
 - a standing homestead's footprint taking in its reserved wood seats (`footprint`);
 - the reach flooded over the taken ground grown by a lane's room, the reserved wood seats painted as they are reserved.
 
+What it left, 2026-11-04 (48 seeds, the passage share in): 39/54 against Python's 41/54 on the same tree - seeds 24 and 44 fail
+`track_ends_off_the_web`, a check of the web (a later stage's, not asked at the Rust gate, FR-019); seed 39 raises `NoDryExit`
+from the track out, which is the homesteads stage's own (`ways/gateway.rs`, `dry_exit.rs`): once the door is wired, a track out
+that finds no way is a Rust-stage raise the gate refuses, and is the stage's to answer on the gate's fresh block (FR-020).
+
 ## Compared against Python (before the door)
 
 `L7R_RUST_COMPARE=<path> make hamlet ARGS="..."` runs the Rust track out (`l7r_phases.track_out`, its inputs gathered by

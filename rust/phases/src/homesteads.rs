@@ -17,6 +17,7 @@ pub use crate::counts::Counts;
 pub mod access;
 pub mod bearing;
 pub mod bundle;
+pub mod dispersed;
 pub mod fit;
 pub mod fit_rules;
 pub mod fixtures;
@@ -35,6 +36,8 @@ pub mod wood;
 
 #[cfg(test)]
 mod access_tests;
+#[cfg(test)]
+mod dispersed_tests;
 #[cfg(test)]
 mod fit_rules_tests;
 #[cfg(test)]

@@ -32,7 +32,42 @@ fn frame<'a>(
         kura,
         shade,
         keep,
+        fruit: &[],
     }
+}
+
+#[test]
+fn a_grove_farms_persimmon_may_stand_in_its_own_bands() {
+    // the house walled round by its own grove's bands: the persimmon finds a seat among them, where the same bands as another
+    // farm's buildings leave it none
+    let house = (0.0, 0.0, 46.0, 28.0);
+    let yard = (0.0, 27.0, 30.0, 20.0);
+    let band = (0.0, -40.0, 120.0, 40.0);
+    let forms = Forms::default();
+    let mut t = Counts::default();
+    let roll = |s: f64| hjit(3.0, 5.0, s);
+    let roofs = [house];
+    let ground = [yard];
+    let fruit = [
+        band,
+        (0.0, 60.0, 120.0, 40.0),
+        (-60.0, 10.0, 20.0, 60.0),
+        (60.0, 10.0, 20.0, 60.0),
+    ];
+    let fr = Frame {
+        fruit: &fruit,
+        ..frame(&roofs, &ground, Some(yard), false, (0.0, &[]), &[])
+    };
+    let (laid, _) =
+        lay(&[Kind::Persimmon], &fr, &roll, &forms, &mut t).expect("the persimmon laid");
+    // its own bands take its persimmon
+    assert!(laid.iter().any(|(k, _)| *k == Kind::Persimmon));
+    // ...where the same bands as another farm's buildings leave it none
+    let walled: Vec<Rect> = std::iter::once(house).chain(fruit).collect();
+    let none = frame(&walled, &ground, Some(yard), false, (0.0, &[]), &[]);
+    let (kept, _) = lay(&[Kind::Persimmon], &none, &roll, &forms, &mut t)
+        .expect("a persimmon with no seat is not kept");
+    assert!(kept.is_empty());
 }
 
 #[test]
