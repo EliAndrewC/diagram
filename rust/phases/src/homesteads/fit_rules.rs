@@ -59,6 +59,8 @@ pub struct Rules {
     pub forbidding: Vec<(String, Vec<Vec<Pt>>)>,
     /// Whether the sun corridor is kept.
     pub sun: bool,
+    /// The wood's keep-outs reserved before any house (a shared byre's pocket), each a disc.
+    pub bars: Vec<(f64, f64, f64)>,
 }
 
 impl Rules {

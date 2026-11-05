@@ -30,7 +30,7 @@ use crate::ways::through::{Fabric, Law};
 use crate::ways::track::{poly_box, Box4, Pond, TrackSite};
 
 /// A field of the gathered dict, by name.
-fn field<'py, T: FromPyObject<'py>>(d: &Bound<'py, PyDict>, key: &str) -> PyResult<T> {
+pub(super) fn field<'py, T: FromPyObject<'py>>(d: &Bound<'py, PyDict>, key: &str) -> PyResult<T> {
     d.get_item(key)?
         .ok_or_else(|| pyo3::exceptions::PyKeyError::new_err(key.to_owned()))?
         .extract()

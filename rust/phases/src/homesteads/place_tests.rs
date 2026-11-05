@@ -98,7 +98,29 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         ..site
     };
     assert!(grow(&site_full, (1200.0, 1350.0), 3).seated.is_empty());
-    // the geometry of the growth's step
+    // a shared byre's pocket, reserved before any house, takes no wood seat
+    let pocket = Rules {
+        bars: vec![(1200.0, 1300.0, 80.0)],
+        ..Rules::default()
+    };
+    let barred = grow(
+        &Site {
+            rules: &pocket,
+            ..site
+        },
+        (1200.0, 1350.0),
+        2,
+    );
+    assert!(barred
+        .seated
+        .iter()
+        .flat_map(|s| &s.wood)
+        .all(|w| (w.0 - 1200.0).hypot(w.1 - 1300.0) >= 80.0));
+    assert!((field_distance((0.0, 0.0), &field) - (200.0f64.hypot(1500.0))).abs() < 1e-6);
+}
+
+#[test]
+fn the_growths_step_parts_two_footprints() {
     let r = box_reach((0.0, 0.0), (0.0, 0.0, 20.0, 10.0));
     assert_eq!(r, (10.0, 10.0, 5.0, 5.0));
     assert_eq!(union(r, (1.0, 20.0, 1.0, 1.0)), (10.0, 20.0, 5.0, 5.0));
@@ -109,7 +131,6 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         keeps_its_distance((30.0, 0.0, 10.0, 10.0), (0.0, 0.0), r, 2.0)
             && !keeps_its_distance((14.0, 0.0, 10.0, 10.0), (0.0, 0.0), r, 2.0)
     );
-    assert!((field_distance((0.0, 0.0), &field) - (200.0f64.hypot(1500.0))).abs() < 1e-6);
 }
 
 #[test]

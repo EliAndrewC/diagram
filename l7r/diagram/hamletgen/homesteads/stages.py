@@ -35,6 +35,7 @@ from .household_ways import chose_the_track, compare_rust_ways, near_the_cluster
 from .rank_rounds import _seat_rank_rounds
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
+from .rust_seating import rust_grow
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
 from .seats import front_row
 from .wells import place_wells
@@ -812,7 +813,8 @@ def _seat_households_as(s: Settlement, plan: SitePlan, single_file: bool) -> tup
         # ...and where it may offer a seat, recorded with the boundary for the walk-through's plate: the whole canvas, as (x0, y0, x1,
         # y1) - no radius and no distance from the field bounds the growth (feature 318)
         s.M["site_boundary"]["window"] = [0.0, 0.0, round(float(s.W), 1), round(float(s.H), 1)]
-        placed = grow_the_margin(s, plan, placed, _house_max)
+        # ...IN RUST WHERE ASKED (feature 444 T30): the door's first half, compared against the growth before the stage is wired
+        placed = rust_grow(s, plan, placed, _share, _quota) if os.environ.get("L7R_RUST_SEATING") else grow_the_margin(s, plan, placed, _house_max)
     elif not _rows_seated:  # ...but never behind a row village's rows (FR-016): its next margin is tried instead
         placed = seat_the_rest(s, plan, placed)
     return placed, _cloud_placed

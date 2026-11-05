@@ -250,3 +250,47 @@ except ValueError as e:
     assert "one a cell" in str(e), e
 else:
     raise AssertionError("a raster whose cells are not one a cell is refused by name")
+
+# the seating (feature 444 T30), as the homesteads' door gathers it: four households grown north of a field, each with its parts,
+# boxes and wood; every form a household's byre takes; a fixture kind, privy place, byre form or raster unknown, refused by name
+nx = 300
+seat_cells = [j * 8.0 + 4.0 >= 1500.0 for j in range(250) for _i in range(nx)]  # 2,000 ft of rows: the field past them asked as beyond
+seat_in = {
+    "ground": ((0.0, 0.0), 8.0, nx, seat_cells),
+    "seeds": [(1200.0, 100.0)],
+    "field": [(200.0, 1500.0), (2200.0, 1500.0), (2200.0, 2300.0), (200.0, 2300.0)],
+    "streams": [],
+    "canvas": (2400.0, 2400.0),
+    "bearing": (0.0, 0.0),
+    "lots": (12, 4, 0.3),
+    "shares": [("privy", 1.0), ("coop", 0.5), ("woodpile", 0.4), ("persimmon", 0.5), ("bath", 0.5)],
+    "byre": "yard_shed",
+    "forms": ([("stable", 0.35), ("yard", 0.3), ("front", 0.2), ("barn", 0.15)], 0.8, 0.7, False, (18.0, 15.0), [6.0, 12.0]),
+    "shade": 50.0,
+    "chains": [[((200.0, 1500.0), (2200.0, 1500.0), (0.0, -1.0))]],
+    "waters": [],
+    "hard": [],
+    "forbidding": [],
+    "sun": True,
+    "bars": [(1500.0, 1300.0, 10.0)],
+    "center": (1200.0, 1350.0),
+    "want": 4,
+}
+seated = l7r_phases.seat_households(seat_in)
+homes = seated["seated"]
+assert len(homes) == 4 and all(h["boxes"] and h["wood"] and len(h["bbox"]) == 4 for h in homes) and seated["counts"], seated
+assert any(h["bath"] for h in homes) or all(h["bath"] is None for h in homes)
+for form in (None, "courtyard"):
+    assert len(l7r_phases.seat_households(dict(seat_in, byre=form, want=1))["seated"]) == 1
+for bad, why in (
+    (dict(seat_in, shares=[("barn", 1.0)]), "no fixture kind"),
+    (dict(seat_in, forms=([("loft", 1.0)], *seat_in["forms"][1:])), "no privy place"),
+    (dict(seat_in, byre="pen"), "no byre form"),
+    (dict(seat_in, ground=((0.0, 0.0), 8.0, nx, seat_cells[:-1])), "one a cell"),
+):
+    try:
+        l7r_phases.seat_households(bad)
+    except ValueError as e:
+        assert why in str(e), e
+    else:
+        raise AssertionError(f"{why} is refused by name")

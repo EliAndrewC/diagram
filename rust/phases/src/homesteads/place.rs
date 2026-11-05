@@ -493,6 +493,11 @@ type QueueKey = std::cmp::Reverse<(i64, i64, i64, usize)>;
 )]
 pub fn grow(site: &Site, center: Pt, want: usize) -> Seating {
     let mut st = Seating::default();
+    // what the seating reserved before any house - a shared byre's pocket - filed against the wood, so no seat is reserved under it
+    if !site.rules.bars.is_empty() {
+        st.wood
+            .commit(&[], (site.rules.bars.clone(), Vec::new()), &mut st.tests);
+    }
     // the first house: the free ground's grid, nearest the seat first, the field breaking ties within a pitch
     let (pitch, inset, dry) = FIRST;
     let (ni, nj) = (
