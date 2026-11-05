@@ -117,13 +117,22 @@ pub struct Weights {
     pub belt: f64,
 }
 
+/// How far past square to the wind a margin's dot may fall and still count as square: a margin 90 degrees off the wind is in tier
+/// 1 (its floating point's own slack).
+///
+/// Research:
+///     the square end in - GUESS: tier 1 takes "a margin 45 to 90 degrees off the wind" with both ends in, as the falls are admitted
+///     (square to the wind or away, `water_frame.rs` `admitted`): a fall square to the wind leaves the head square to it, and with
+///     the end out the Rust gate's seed 901280 (its windward flank, parallel to the fall, all on the wet toe) had no seat
+const SQUARE_EPS: f64 = 1e-9;
+
 /// The candidate seats a field's outline offers, `(margin midpoint, the back's direction, tier)`, in the outline's order.
 ///
 /// Research:
 ///     one seat a margin - GUESS: no page divides a field's edge into seats; each outline edge offers one, at its midpoint
 ///     back faces the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge - tier 0, the margin's own outward normal within 45 degrees of the wind
 ///     45 degree bar - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25) on the bar; 0072 gives no tolerance
-///     back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind offers its back turned toward the wind just past the 45-degree bar, at most 45.5 degrees off its own normal (the bar and its half-degree slack), so the band still stands off the field; research/questions/0029-farmhouses-minka.drawing.html's quarter turn is a house's off the fall line, on a slope our maps do not draw
+///     back turned off a flank - GUESS: no page gives a cap; tier 1, a margin 45 to 90 degrees off the wind (both ends in, `SQUARE_EPS`) offers its back turned toward the wind just past the 45-degree bar, at most 45.5 degrees off its own normal (the bar and its half-degree slack), so the band still stands off the field; research/questions/0029-farmhouses-minka.drawing.html's quarter turn is a house's off the fall line, on a slope our maps do not draw
 #[must_use]
 pub fn candidates(
     outline: &[Pt],
@@ -148,7 +157,7 @@ pub fn candidates(
         let dot = nrm.0 * wind.0 + nrm.1 * wind.1;
         if dot >= back_min_dot {
             out.push((mid, nrm, 0));
-        } else if dot > 0.0 {
+        } else if dot > -SQUARE_EPS {
             let off = (nrm.0 * wind.1 - nrm.1 * wind.0).atan2(dot);
             let turn = off - (std::f64::consts::FRAC_PI_4 - TURN_SLACK).copysign(off);
             let ang = nrm.1.atan2(nrm.0) + turn;

@@ -235,8 +235,11 @@ fn the_indexes_answer_as_the_whole_ring_does() {
         std::f64::consts::FRAC_1_SQRT_2,
         &mut t,
     );
-    // only the north margin faces a north wind
-    assert_eq!(c.len(), 1);
+    // only the north margin faces a north wind; the east and west, square to it, turn their backs off the flank (tier 1, the square
+    // end in); the south is behind
+    assert_eq!(c.iter().filter(|k| k.2 == 0).count(), 1);
+    assert_eq!(c.iter().filter(|k| k.2 == 1).count(), 2);
+    assert!(c.iter().all(|k| k.0 .1 < 10.0));
 }
 
 #[test]
