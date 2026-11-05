@@ -274,13 +274,33 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     Research:
         every household drawn - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: every declared household seated, or the site refused
         no house taken back - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: the placer searches wider ground rather than starting over, so the houses already placed stay where they are
+        the next margins tried on a copy - NONE: a trial decides which margin the seating is drawn on, and nothing of a refused trial is drawn (the dispersed line's own pattern, feature 385 T06)
     """
     want = plan.spec.households
     mark = seating_mark(s)
     s.M.setdefault("meta", {})["houses_taken_back"] = 0  # ...and any house a later cut takes, counted (SC-001: held at 0)
+    ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
+    # A MARGIN THAT SEATS SOME HOUSEHOLDS BUT NOT ALL: THE LADDER'S NEXT MARGINS TRIED ON A COPY OF THE MAP AS IT STOOD BEFORE ANY
+    # HOUSE (T31, the round arbiter on ask:444-T30-fresh-seed-refusals: "get room from the margin's length or a second margin"),
+    # the first that seats every household kept - its trial is the map, so no house the map shows is taken back (0004); the Rust
+    # gate's seed 778251 seated 12 of 17 on its first margin, all 17 on the next
+    before = copy.deepcopy((s.__dict__, plan.__dict__)) if ladder else None
     placed, cloud = _seat_households(s, plan)
     asked = 1
-    ladder = margin_ladder(plan, plan.field_archetype in POLDER_ARCHETYPES)
+    for margin in ladder if 0 < placed < want else ():
+        if before is None:  # pragma: no cover - a ladder always takes its snapshot
+            break
+        trial, tplan = copy.copy(s), copy.copy(plan)
+        trial.__dict__, tplan.__dict__ = copy.deepcopy(before)
+        tplan.seat = {**margin, "ladder": ladder}
+        trial.field_face = (float(margin["cx"]), float(margin["cy"]))
+        trial.M["meta"]["seat_offwind"] = bool(margin.get("offwind"))
+        got, got_cloud = _seat_households(trial, tplan)
+        asked += 1
+        if got >= want:
+            s.__dict__, plan.__dict__ = trial.__dict__, tplan.__dict__
+            placed, cloud = got, got_cloud
+            break
     toe: Any = None
     for margin in ladder if placed == 0 else ():
         # A RUNG WITH NO DRY WAY OUT IS NOT SEATED (feature 287, ways W23): `seat_cluster` asked the head; each rung is asked the
