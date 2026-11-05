@@ -38,7 +38,7 @@ reviewing it"* - 370's one row sat pending after exactly that discussion).
     gm_review.py reviewed F [ROW G]                     the GM has reviewed F's rows (GM_WORDS= in the environment: his words)
     gm_review.py reviewed-row F ROW                     the GM has reviewed row ROW of F alone
     gm_review.py question F TEXT SOURCE                 a question for the GM, owed escalation-check (feature 432)
-    gm_review.py escalated F ROW KEEP|CUT REASON        escalation-check's verdict on question ROW of F
+    gm_review.py escalated F ROW KEEP|CUT REASON [LATER] escalation-check's verdict on question ROW of F (LATER: a kept row superseded)
 """
 
 from __future__ import annotations
@@ -141,14 +141,25 @@ def owed_in_delta(root: Path) -> list[str]:
             if r.get("kind") == QUESTION and r.get("status") == "owed" and "reviewed" not in r]
 
 
-def escalated(d: Path, row: int, verdict: str, reason: str, now: str | None = None) -> str:
+def escalated(d: Path, row: int, verdict: str, reason: str, now: str | None = None, superseded_by: int | None = None) -> str:
     """`make gm-escalated`: escalation-check's verdict on an owed question. KEEP holds it for the GM (his decision, named in the
-    session's final message - `escalation-hooks.sh`); CUT closes it, the reason kept on the row (feature 432, FR-002)."""
+    session's final message - `escalation-hooks.sh`); CUT closes it, the reason kept on the row (feature 432, FR-002). A KEPT
+    question the GM has not reviewed is CUT only as superseded by a later question row of the same feature (`superseded_by`):
+    a kept question whose premise the record overturned otherwise stayed listed as his decision (the round arbiter,
+    ask:444-gm-review-supersede, 2026-11-05)."""
     rs = rows(d)
     if not 0 <= row < len(rs) or rs[row].get("kind") != QUESTION:
         raise ValueError(f"ROW={row} is no question of {d.name} - make gm-review lists the owed ones")
-    if rs[row].get("status") != "owed":
-        raise ValueError(f"ROW={row} of {d.name} is already {rs[row].get('status')}")
+    if superseded_by is not None:
+        if verdict != "CUT":
+            raise ValueError("SUPERSEDED_BY closes a question: VERDICT=CUT")
+        if not (row < superseded_by < len(rs) and rs[superseded_by].get("kind") == QUESTION):
+            raise ValueError(f"SUPERSEDED_BY={superseded_by} is no later question of {d.name} than ROW={row}")
+        if rs[row].get("status") != "kept" or rs[row].get("reviewed"):
+            raise ValueError(f"ROW={row} of {d.name} is {rs[row].get('status')}: SUPERSEDED_BY closes a kept question the GM has not reviewed")
+        reason = f"superseded by row {superseded_by}: {reason}"
+    elif rs[row].get("status") != "owed":
+        raise ValueError(f"ROW={row} of {d.name} is already {rs[row].get('status')} - a kept question the record overturned is closed with SUPERSEDED_BY=<its later row>")
     if verdict not in ("KEEP", "CUT"):
         raise ValueError("VERDICT is KEEP or CUT, escalation-check's")
     if len(reason.split()) < 2:
@@ -536,8 +547,9 @@ def main(argv: list[str]) -> int:
             if owed:
                 print("gm-review: dispatch escalation-check on each, then make gm-escalated F=<n> ROW=<n> VERDICT=KEEP|CUT REASON=\"...\"", file=sys.stderr)
                 return 1
-        elif argv[:1] == ["escalated"] and len(argv) == 5:
-            print(f"gm-escalated: {escalated(_feature(root, argv[1]), int(argv[2]), argv[3], argv[4])}")
+        elif argv[:1] == ["escalated"] and len(argv) in (5, 6):
+            later = int(argv[5]) if len(argv) == 6 and argv[5] else None
+            print(f"gm-escalated: {escalated(_feature(root, argv[1]), int(argv[2]), argv[3], argv[4], superseded_by=later)}")
         elif argv[:1] == ["reviewed-row"] and len(argv) == 3:
             print(f"gm-reviewed: {reviewed_row(_feature(root, argv[1]), int(argv[2]), os.environ.get('GM_WORDS', '').strip())}")
         else:

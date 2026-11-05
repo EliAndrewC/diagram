@@ -780,9 +780,9 @@ gm-question:    ## [project] put a question to the GM: written OWED escalation-c
 	@if [ -z "$(F)" ] || [ -z "$(Q)" ] || [ -z "$(SOURCE)" ]; then printf 'make gm-question: F=, Q= and SOURCE= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py question "$(F)" "$(Q)" "$(SOURCE)"
 
-gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>"
+gm-escalated:   ## [project] record escalation-check's verdict on an owed question: KEEP holds it for the GM (name it in the turn's final message), CUT closes it with the reason (feature 432)   F=<NNN> ROW=<n> VERDICT=KEEP|CUT REASON="<escalation-check's reason>" [SUPERSEDED_BY=<a later question row>: CUT a kept question the GM has not reviewed, its premise overturned]
 	@if [ -z "$(F)" ] || [ -z "$(ROW)" ] || [ -z "$(VERDICT)" ] || [ -z "$(REASON)" ]; then printf 'make gm-escalated: F=, ROW=, VERDICT= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/gm_review.py escalated "$(F)" "$(ROW)" "$(VERDICT)" "$(REASON)" "$(SUPERSEDED_BY)"
 
 accept:         ## [project] accept a finding with a reason - the work goes on, and the GM may overturn it after landing (feature 375)   F=375 FINDING="<what>" REASON="<why it can stand>"
 	@if [ -z "$(F)" ] || [ -z "$(FINDING)" ] || [ -z "$(REASON)" ]; then printf 'make accept: F=, FINDING= and REASON= are required\n' >&2; exit 2; fi
