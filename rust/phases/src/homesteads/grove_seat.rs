@@ -261,31 +261,28 @@ impl Seating {
     fn grove_fits(&mut self, gs: &GroveSite, b: &mut Bundle) -> bool {
         let site = gs.site;
         let rules = site.rules;
-        if b.unlaid.is_some() {
-            return false;
-        }
         let mut solid = vec![b.boxes[0], b.boxes[1]];
         solid.extend(b.well.map(|w| super::bearing::turned_box(w, b.turn)));
         solid.extend(b.groves.iter().map(|g| g.0));
         solid.extend(&b.boxes[2..2 + b.gardens.len()]);
-        let inset = 6.0;
-        let bb = b.bbox;
-        if bb.0 - bb.2 / 2.0 < inset
+        let (inset, bb) = (6.0, b.bbox);
+        let off_canvas = bb.0 - bb.2 / 2.0 < inset
             || bb.1 - bb.3 / 2.0 < inset
             || bb.0 + bb.2 / 2.0 > site.canvas.0 - inset
-            || bb.1 + bb.3 / 2.0 > site.canvas.1 - inset
-        {
-            return false;
-        }
-        if solid.iter().any(|&r| self.refused(site, r)) || self.lapped(site, bb) {
-            return false;
-        }
-        let t = &mut self.tests;
-        if wall_on_the_bund(b, rules, t)
-            || too_near(b.house, b.turn, &self.standing, t)
-            || unreachable((b.house.0, b.house.1), rules, t)
-            || persimmon_conflict(b, &self.standing, rules, t)
-            || !sun_ok(b, &self.standing, t)
+            || bb.1 + bb.3 / 2.0 > site.canvas.1 - inset;
+        // ...a layout whose lot found no seat for a part is not the household's; the rest refuse in the order Python asks them
+        if b.unlaid.is_some()
+            || off_canvas
+            || solid.iter().any(|&r| self.refused(site, r))
+            || self.lapped(site, bb)
+            || {
+                let t = &mut self.tests;
+                wall_on_the_bund(b, rules, t)
+                    || too_near(b.house, b.turn, &self.standing, t)
+                    || unreachable((b.house.0, b.house.1), rules, t)
+                    || persimmon_conflict(b, &self.standing, rules, t)
+                    || !sun_ok(b, &self.standing, t)
+            }
         {
             return false;
         }
@@ -380,17 +377,18 @@ impl Seating {
     /// Offer the seat (x, y) to the next household as a grove farm; true where it is seated.
     pub fn offer_grove(&mut self, gs: &GroveSite, x: f64, y: f64) -> bool {
         self.search.0 += 1;
-        let site = gs.site;
-        let Some((house, _kura, _beast, fixtures)) = site.lots.lot(self.seated.len()) else {
-            return false;
-        };
-        let lot = Lot {
-            house,
-            kura: false,
-            byre: None,
-            fixtures,
-        };
-        let Some(b) = self.place_grove(gs, &lot, x, y, false) else {
+        // ...none once the lots are spent
+        let lot = gs
+            .site
+            .lots
+            .lot(self.seated.len())
+            .map(|(house, _kura, _beast, fixtures)| Lot {
+                house,
+                kura: false,
+                byre: None,
+                fixtures,
+            });
+        let Some(b) = lot.and_then(|lot| self.place_grove(gs, &lot, x, y, false)) else {
             return false;
         };
         self.stand_grove((x, y), b);

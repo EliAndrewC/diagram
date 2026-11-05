@@ -292,37 +292,27 @@ fn a_scattered_hamlet_seats_its_row_ranks_and_the_rest_and_a_single_file_its_row
 #[test]
 fn a_crowded_hamlet_takes_its_rescue_and_the_rest_of_the_ground() {
     let mut t = Counts::default();
-    let canvas = (1300.0, 1300.0);
-    // a field across the middle, free ground north and south; a repeated vertex in the paddy's outline
+    let canvas = (1150.0, 800.0);
+    // a field over most of the canvas, free ground north of it and east, past the band's reach; a repeated vertex in the paddy's
+    // outline
     let field = vec![
-        (200.0, 500.0),
-        (1100.0, 500.0),
-        (1100.0, 500.0),
-        (1100.0, 700.0),
-        (200.0, 700.0),
+        (80.0, 220.0),
+        (720.0, 220.0),
+        (720.0, 220.0),
+        (720.0, 780.0),
+        (80.0, 780.0),
     ];
     // the ground's window short of the canvas's south edge: the ground past it asked of `beyond`
-    let mut ground = Ground::new((0.0, 0.0), (1300.0, 1200.0), &mut t);
+    let mut ground = Ground::new((0.0, 0.0), (1150.0, 720.0), &mut t);
     ground.fill_ring(&field, &mut t);
     let reach = ground.reach(&[], &mut t);
     let margin = Margin::new(&field, 0.0, &mut t);
-    let lots = Lots::deal(
-        5,
-        30,
-        0.0,
-        &[
-            (Kind::Retirement, 1.0),
-            (Kind::Bath, 1.0),
-            (Kind::Woodpile, 1.0),
-            (Kind::Privy, 1.0),
-            (Kind::Coop, 1.0),
-        ],
-    );
+    let lots = Lots::deal(5, 12, 0.0, &[(Kind::Retirement, 1.0), (Kind::Bath, 1.0)]);
     let forms = Forms::default();
     let beyond = |_p: Pt| true;
     assert!(beyond((0.0, 0.0)));
     let rules = Rules {
-        chains: vec![vec![((200.0, 500.0), (1100.0, 500.0), (0.0, -1.0))]],
+        chains: vec![vec![((80.0, 220.0), (720.0, 220.0), (0.0, -1.0))]],
         sun: true,
         ..Rules::default()
     };
@@ -355,24 +345,24 @@ fn a_crowded_hamlet_takes_its_rescue_and_the_rest_of_the_ground() {
         paddies: &paddies,
         corridors: &corridors,
         axes: Axes {
-            c: (650.0, 350.0),
+            c: (400.0, 130.0),
             along: (1.0, 0.0),
             out: (0.0, -1.0),
-            anchor: (650.0, 500.0),
-            lat: 200.0,
+            anchor: (400.0, 220.0),
+            lat: 150.0,
         },
         chains: &chains,
         house_max: (62.1, 30.8),
         shape: "round",
         alleys: false,
         seed: 11,
-        want: 30,
+        want: 12,
         band: (120.0, 60.0),
         bound: 150.0,
         single_file: false,
     };
     let mut st = seat_scattered(&gs);
-    assert!(st.seated.len() < 30 && st.search.0 > 30);
+    assert!(st.seated.len() < 12 && st.search.0 > 12);
     // ...and its lots, once spent, take no seat: a ninth lot offered on a three-lot deal is refused
     let three = Lots::deal(5, 3, 0.0, &[]);
     let small = Site {
@@ -385,12 +375,12 @@ fn a_crowded_hamlet_takes_its_rescue_and_the_rest_of_the_ground() {
         ..gs
     });
     assert!(
-        few.seated.len() <= 3 && !few.offer_grove(&GroveSite { site: &small, ..gs }, 650.0, 200.0)
+        few.seated.len() <= 3 && !few.offer_grove(&GroveSite { site: &small, ..gs }, 400.0, 100.0)
     );
     // the nearest point of an outline with a repeated vertex, and none of no outline
-    let _ = st.offer_grove(&gs, 650.0, 120.0);
-    assert!(super::grove_seat::nearest_on((650.0, 400.0), &paddies).is_some());
-    assert!(super::grove_seat::nearest_on((650.0, 400.0), &[]).is_none());
+    let _ = st.offer_grove(&gs, 400.0, 60.0);
+    assert!(super::grove_seat::nearest_on((400.0, 250.0), &paddies).is_some());
+    assert!(super::grove_seat::nearest_on((400.0, 250.0), &[]).is_none());
 }
 
 #[test]
