@@ -1,0 +1,508 @@
+{
+ "rust_stages": [
+  "water_frame",
+  "field",
+  "sink",
+  "seat",
+  "hem",
+  "waterward",
+  "homesteads"
+ ],
+ "start": 993095,
+ "seeds": [
+  {
+   "seed": 993095,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993096,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993097,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993098,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993099,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993100,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993101,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993102,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993103,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993104,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993105,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993106,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993107,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993108,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993109,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993110,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993111,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993112,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993113,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993114,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993115,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993116,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993117,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993118,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993119,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993120,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993121,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993122,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993123,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993124,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993125,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993126,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993127,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993128,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993129,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993130,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993131,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993132,
+   "households": 11,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993133,
+   "households": 18,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993134,
+   "households": 14,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993135,
+   "households": 10,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993136,
+   "households": 17,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993137,
+   "households": 13,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993138,
+   "households": 20,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993139,
+   "households": 16,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993140,
+   "households": 12,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993141,
+   "households": 19,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993142,
+   "households": 15,
+   "pins": {},
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993143,
+   "households": 11,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "one",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993144,
+   "households": 18,
+   "pins": {
+    "row_line": "street",
+    "row_sides": "both",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993145,
+   "households": 14,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "one",
+    "row_water": "shared"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993146,
+   "households": 10,
+   "pins": {
+    "row_line": "edge",
+    "row_sides": "both",
+    "row_water": "own"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993147,
+   "households": 17,
+   "pins": {
+    "farm_water": "channel",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 993148,
+   "households": 13,
+   "pins": {
+    "farm_water": "well",
+    "settlement_form": "dispersed"
+   },
+   "verdict": "pass",
+   "stage": null,
+   "failures": []
+  },
+  {
+   "seed": 901280,
+   "households": 19,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "seat",
+   "failures": [
+    "FAIL refused:SeatRefused -> Rust-901280 (seed 901280): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: 0 off the frame, 0 with the belt off the canvas, 16 on the toe, 3 on the field, 0 in the reeds, 0 with crop behind, 0 walled in) - the site has no sea"
+   ]
+  },
+  {
+   "seed": 778251,
+   "households": 17,
+   "pins": {},
+   "verdict": "fail",
+   "stage": "homesteads",
+   "failures": [
+    "FAIL refused:SiteRefused -> Rust-778251 (seed 778251): seated 12 of 17 households on margin 1; no house is taken back"
+   ]
+  }
+ ],
+ "replays": [
+  {
+   "seed": 901280,
+   "stage": "seat",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/901280-seat.pkl",
+   "failures": [
+    "FAIL refused:SeatRefused -> Rust-901280 (seed 901280): no field margin turns its back to the NW wind clear of the dry hem, the toe and the canvas edge (of the margins facing it: 0 off the frame, 0 with the belt off the canvas, 16 on the toe, 3 on the field, 0 in the reeds, 0 with crop behind, 0 walled in) - the site has no sea"
+   ]
+  },
+  {
+   "seed": 778251,
+   "stage": "homesteads",
+   "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/778251-homesteads.pkl",
+   "failures": [
+    "FAIL refused:SiteRefused -> Rust-778251 (seed 778251): seated 12 of 17 households on margin 1; no house is taken back"
+   ]
+  }
+ ],
+ "failing": 4,
+ "engine": "63e30741f4af4d6c4fa8e156b9809444840ea6d3ae4c07c6289d8f57eb270b56"
+}
