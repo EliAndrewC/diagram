@@ -27,6 +27,7 @@ fn the_track_bends_like_a_path_through_no_building_and_over_each_brook_once() {
     assert_eq!(x.len(), 2);
     assert!(x[0].1 .0 < x[1].1 .0);
     assert!(crossing_points(&[(0.0, 500.0), (10.0, 500.0)], &brook, &mut t).is_empty());
+    assert!(crossing_points(&[(0.0, 0.0)], &brook, &mut t).is_empty());
     // the matrix: a ribbon on a forbidden extent, beside it, or on its box alone
     assert!(sat_overlap(
         &ribbon((0.0, 0.0), (10.0, 0.0), 1.0),

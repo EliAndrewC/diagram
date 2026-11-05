@@ -82,6 +82,16 @@ fn cell(v: f64) -> i64 {
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
 #[must_use]
 pub fn crossing_points(p: &[Pt], course: &[Pt], tests: &mut Counts) -> Vec<(usize, Pt)> {
+    // ...none where the run's box misses the course's: the course's points read once, before any is filed (a household's way, short
+    // and far from the brook, filed the whole course afresh on every ask - 9 million cells at 40, the work-budget run of 2026-11-05)
+    if p.len() < 2 || course.len() < 2 {
+        return Vec::new();
+    }
+    tests.add("pt_test@crossing_points", (p.len() + course.len()) as u64);
+    let (rb, cb) = (poly_box(p), poly_box(course));
+    if rb.2 < cb.0 || cb.2 < rb.0 || rb.3 < cb.1 || cb.3 < rb.1 {
+        return Vec::new();
+    }
     let mut grid: HashMap<(i64, i64), Vec<usize>> = HashMap::new();
     for (j, w) in course.windows(2).enumerate() {
         let b = poly_box(w);

@@ -187,9 +187,21 @@ impl Waters {
     /// Is there a crossing of the run where no deck seats or what stands refuses one?
     #[must_use]
     pub fn undeckable(&self, run: &[Pt], width: f64, tests: &mut Counts) -> bool {
+        // ...each course asked only where its box meets the run's (every run segment against every crossed course's every segment was
+        // 7 million tests at 40, the work-budget run of 2026-11-05)
+        let bx = poly_box(run);
+        let near: Vec<&(Vec<Pt>, f64)> = self
+            .crossed
+            .iter()
+            .filter(|(course, _)| {
+                tests.add("pt_test@undeckable", course.len() as u64);
+                let cb = poly_box(course);
+                !(bx.2 < cb.0 || cb.2 < bx.0 || bx.3 < cb.1 || cb.3 < bx.1)
+            })
+            .collect();
         run.windows(2).any(|w| {
             let (ra, rb) = (w[0], w[1]);
-            self.crossed.iter().any(|(course, ww)| {
+            near.iter().any(|(course, ww)| {
                 course.windows(2).any(|c| {
                     let (wa, wb) = (c[0], c[1]);
                     tests.add("seg_test@undeckable", 1);
@@ -220,15 +232,19 @@ impl Waters {
     /// Does the run cross a brook or a drawn channel more than the tolerance off square?
     #[must_use]
     pub fn oblique(&self, run: &[Pt]) -> bool {
-        let edges: usize = self.brooks.iter().chain(&self.channels).map(Vec::len).sum();
-        crate::counts::note(
-            "seg_test@oblique",
-            (run.len().saturating_sub(1) * edges) as u64,
-        );
         let rb = poly_box(run);
         self.brooks.iter().chain(&self.channels).any(|course| {
+            // the course's box read, and its segments asked of the run's only where the boxes meet - counted as asked
+            crate::counts::note("pt_test@oblique", course.len() as u64);
             let cb = poly_box(course);
             !(rb.2 < cb.0 || cb.2 < rb.0 || rb.3 < cb.1 || cb.3 < rb.1)
+                && {
+                    crate::counts::note(
+                        "seg_test@oblique",
+                        (run.len().saturating_sub(1) * course.len().saturating_sub(1)) as u64,
+                    );
+                    true
+                }
                 && run.windows(2).any(|w| {
                     course.windows(2).any(|c| {
                         segments_cross(w[0], w[1], c[0], c[1])

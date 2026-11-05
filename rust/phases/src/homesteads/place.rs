@@ -252,6 +252,8 @@ pub struct Seating {
     pub passage_left: usize,
     /// A row village's holdings reserved so far, which no later part stands on.
     pub holdings: Vec<Vec<Pt>>,
+    /// The streams filed once a seating, for the layouts' stream test (`parts_refused`).
+    pub streams: Option<crate::field::index::Index>,
 }
 
 impl Seating {
@@ -348,11 +350,34 @@ impl Seating {
     /// taken ground, the stream, the paddy's chords, the water, the registry, a neighbor's eaves or the ground no way reaches?
     fn parts_refused(&mut self, site: &Site, b: &mut Bundle) -> bool {
         let rules = site.rules;
+        // the streams near the layout's box, from the index filed once a seating: a stream crossing the line from the house to a
+        // part, or running through a part, lies in the box round them all (every stream asked of every layout was the stage's
+        // costliest test after the reach - 12 million at 40, the work-budget run of 2026-11-05)
+        let idx = self.streams.get_or_insert_with(|| {
+            let mut i = crate::field::index::Index::default();
+            for &(a, c) in site.streams {
+                i.file_w(a, c, 0.0);
+            }
+            i
+        });
+        let bb = b.bbox;
+        let (before, seen) = (idx.touched, idx.examined);
+        let near: Vec<(Pt, Pt)> = idx
+            .near(
+                (bb.0 - bb.2 / 2.0, bb.1 - bb.3 / 2.0),
+                (bb.0 + bb.2 / 2.0, bb.1 + bb.3 / 2.0),
+            )
+            .into_iter()
+            .map(|k| idx.segs[k])
+            .collect();
+        self.tests.add("index_query@streams", idx.touched - before);
+        self.tests
+            .add("index_examined@streams", idx.examined - seen);
         let t = &mut self.tests;
         super::fit_rules::persimmon_conflict(b, &self.standing, rules, t)
             || !sun_ok(b, &self.standing, t)
             || !on_free_ground(b, site.ground, site.beyond, t)
-            || across_a_stream(b, site.streams, t)
+            || across_a_stream(b, &near, t)
             || super::fit_rules::wall_on_the_bund(b, rules, t)
             || super::fit_rules::beds_on_water(b, rules, t)
             || !super::fit_rules::admitted(b, rules, t)

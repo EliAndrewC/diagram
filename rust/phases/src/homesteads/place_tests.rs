@@ -48,7 +48,7 @@ fn a_cluster_grows_from_its_first_house_every_rule_kept() {
         beyond: &beyond,
         reach: &reach,
         field: &field,
-        streams: &[],
+        streams: &[((1350.0, 1000.0), (1450.0, 1150.0))],
         canvas,
         bearing: (&margin, 0.0),
         lots: &lots,
