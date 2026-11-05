@@ -74,7 +74,14 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
       (`settle/lawful.py` `Lawful.__call__`/`fault`, `ways/law/` shape, meet, ends, registry, `law_water.py`), installed as
       `_corridor_tree` - the lane law's rules into `rust/phases/src/law/` (D1), beside `law/rules.rs`.
 7. The dispersed hamlet's front row and ranks (`homesteads/stages.py` `_seat_households_as`, `capacity.py`) and the row village
-   (`homesteads/rows.py`) - D4; a grove farm's layout (`rolling/dispersed.py`).
+   (`homesteads/rows.py`) - D4; a grove farm's layout (ported: `dispersed.rs`; the fixture layer's bands, `Frame::fruit`).
+   What a roll runs, measured 2026-11-04 under `coverage` (seed 1 dispersed, seed 4 linear): the dispersed form runs
+   `rank_rounds._seat_rank_rounds`, `seats.front_row` (`_front_row_from_chains`, `cluster_aspect`), `capacity.seat_the_rest`, the
+   spiral placer (`place._place_bundle_dispersed`, `_slide`, `_seat_refused`, `_bundle_refused`) and the fit test's dispersed half
+   (`fit._bundle_fits`: `_bundle_common_fits` with its grove bands, `_bundle_side_fits`, `_on_the_access`, `_fixtures_in_bands`,
+   `_garden_sun_conflict`, `_yard_sun_conflict`); the row village runs `rows.py` from `seat_rows` (its streets, frames, holdings
+   and lots - 25 functions) with the same placer and bundle. In order: the dispersed bundle in `bundle.rs` (its bands, frame and
+   fixtures laid round them), the spiral placer and the dispersed fit, the front row and ranks, then `rows.py`.
 8. The door - its first half in (2026-11-04): under `L7R_RUST_SEATING` the nucleated growth runs in Rust
    (`homesteads/rust_seating.py` gathers, `py_seat.rs` `seat_households` grows, each household recorded as
    `_try_place_bundle` records one); still owed: the switch made the default, the Python growth deleted, and the rest below.
