@@ -18,7 +18,7 @@
 //!     the leeward row marked sheltered - research/questions/0033-row-villages-resson.drawing.html: on a street with farms on both sides, where the settlement rolled the sheltered form, a farm with its street and the grove row beyond it to windward is seated as a full farm and marked `sheltered`
 //!     a street across the wind - GUESS: within 67.5 degrees of the farm's windward bearing; no page gives an angle
 //!     its drawn sizes - CONVENTION: sizes on the sheet, not in the world - 30 (holdings clipped 30 px inside the sheet)
-//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with two lots of slack, kept half a frame inside the sheet
+//!     its street run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - the street laid one lot longer than its row, with a row's length of slack, kept half a frame inside the sheet (two lots of slack, the Python's, left a row against the sheet one farm short: the Rust stage gate's seed 729966, 18 of 19)
 //!     street tread reserved - research/questions/0081-village-lanes.drawing.html: a way's corridor kept clear of built and worked ground while its farms are seated; released when the row is seated
 
 #![expect(
@@ -165,7 +165,11 @@ pub fn seat_rows(rs: &RowSite) -> Rows {
     let first = best_row_line(
         rs.hard,
         rs.anchor,
-        (first_off, per_line as f64 * lot + lot, 2.0 * lot),
+        (
+            first_off,
+            per_line as f64 * lot + lot,
+            per_line as f64 * lot,
+        ),
         rs.form,
         &fr,
         &capacity,

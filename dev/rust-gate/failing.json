@@ -1,1 +1,10 @@
-[]
+[
+ {
+  "seed": 729966,
+  "households": 19,
+  "pins": {},
+  "stage": "homesteads",
+  "failure": "FAIL refused:SiteRefused -> Rust-729966 (seed 729966): seated 18 of 19 households on margin 1; no house is taken back",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/729966-homesteads.pkl"
+ }
+]

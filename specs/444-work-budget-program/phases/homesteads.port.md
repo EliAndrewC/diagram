@@ -141,6 +141,11 @@ names and is listed so a refused seed can be traced to it.
   line's turns, the 240 ft bounding the holding), where Python stepped at the frame's longer side capped at 240 ft and every other farm
   on a diagonal street lapped its neighbor; the first street ranked by how many farms its whole row holds, its further streets on the
   sheet, before its own clear frames (the gate's seeds 406155 and 406169; Python refused 406169 too).
+- `homesteads/row_seat.rs` the first street's slack: a row's length, where Python laid two lots (a GUESS the record leaves to us - the
+  Rust gate's seed 729966 seated 18 of 19 with two).
+- `homesteads/ground.rs` `reach_in` and `Reach::painted`: the reach flooded over the seating's window (Python's seat region's own),
+  seeded at its inner edges, and each flood painting only the seats reserved since (exact) - 2.83 billion counted operations at 40
+  where the canvas was flooded whole after every household.
 - `overlap/registry.py` `Standing.__setstate__`: an unpickled registry re-keys its records by their new ids (the gate's replays).
 - `homesteads/level.rs`: the hard ground grown by a distance traced as a level set on 4 ft cells (marching squares, linearly
   interpolated), where Python buffers with shapely - its ring within 1% of shapely's length and a foot of its line.
