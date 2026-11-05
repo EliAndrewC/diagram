@@ -175,7 +175,6 @@ def ways_inputs(s: Settlement) -> dict[str, object]:
     Research: plumbing - NONE: the households' ways' inputs, each read where the Python reads it"""
     from l7r.diagram.settlement._knobs import bridge_crossed_waters
     from l7r.diagram.settlement.city.bridges import flooded_ground
-    from l7r.diagram.settlement.rolling.access import on_site_ground
 
     from ..ways import law
     from ..ways.corridors import open_ground_rings
@@ -183,6 +182,7 @@ def ways_inputs(s: Settlement) -> dict[str, object]:
     from ..ways.law_water import water_courses
     from ..ways.settle import square_waters
     from ..ways.tree import seating_law
+    from .rust_seating import site_cells
 
     pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
     ring = lambda r: [pt(q) for q in r]  # noqa: E731
@@ -226,7 +226,7 @@ def ways_inputs(s: Settlement) -> dict[str, object]:
     x0, y0 = lx0 - 8 * 5.0, ly0 - 8 * 5.0
     x1, y1 = min(float(s.W), max(xe) + 160.0) + 40.0, min(float(s.H), max(ye) + 160.0) + 40.0
     nx, ny = max(1, math.ceil((x1 - x0) / 5.0)), max(1, math.ceil((y1 - y0) / 5.0))
-    cells = [not on_site_ground(s, c, c) for j in range(ny) for i in range(nx) for c in [(x0 + (i + 0.5) * 5.0, y0 + (j + 0.5) * 5.0)]]
+    cells = site_cells(s, (x0, y0), 5.0, (nx, ny)).ravel().tolist()  # the site's verdict at each cell's center, every cell at once
     wood = getattr(s, "_wood", None)
     seats = [(float(q[0]), float(q[1])) for bucket in (wood.seats.buckets.values() if wood is not None else ()) for q in bucket]
     lawful = seating_law(s)

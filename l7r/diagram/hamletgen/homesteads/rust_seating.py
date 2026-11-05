@@ -34,19 +34,29 @@ PART_KEYS = ("houses", "threshing_yards", "gardens", "farm_sheds", "byres", "far
 
 
 def ground_cells(s: Settlement) -> tuple[tuple[float, float], float, int, list[bool]]:
-    """The free ground over the canvas at `GROUND_CELL_FT`, row by row: a cell taken where the site's raster surely takes its
-    center, or - its center in a cell the raster leaves uncertain - the site's chains or corridors refuse it there (the tests
-    `access.site_samples_clear` asks, every uncertain cell at once as `gap_ways.lane_layers` asks them). Built in arrays: a canvas
-    is half a million cells. (The boxes placed before the growth go as boxes, `placed`, which the placer moves a seat off.)
+    """The free ground over the canvas at `GROUND_CELL_FT`, row by row (`site_cells`). Built in arrays: a canvas is half a million
+    cells. (The boxes placed before the growth go as boxes, `placed`, which the placer moves a seat off.)
+
+    Research: plumbing - NONE: the site boundary's own verdicts, read at cell centers"""
+    c = GROUND_CELL_FT
+    nx, ny = max(1, math.ceil(float(s.W) / c)), max(1, math.ceil(float(s.H) / c))
+    return (0.0, 0.0), c, nx, site_cells(s, (0.0, 0.0), c, (nx, ny)).ravel().tolist()
+
+
+def site_cells(s: Settlement, origin: tuple[float, float], c: float, n: tuple[int, int]) -> Any:
+    """Which cells of the grid from `origin`, `c` a side, `n` cells each way, the site refuses at their centers - row by row, as an
+    array: a cell taken where the site's raster surely takes its center, or - its center in a cell the raster leaves uncertain - the
+    site's chains or corridors refuse it there (`access.on_site_ground` at a point, every uncertain cell at once: asked a point at a
+    time, the households' ways' 5 ft lane raster was 184,764 calls and 16.5 s of the stage at 40, `make perf-profile` of 2026-11-05).
 
     Research: plumbing - NONE: the site boundary's own verdicts, read at cell centers"""
     import numpy as np
 
     from l7r.diagram.settlement._geom.primitives import chain_violated_many
 
-    c = GROUND_CELL_FT
-    nx, ny = max(1, math.ceil(float(s.W) / c)), max(1, math.ceil(float(s.H) / c))
-    cx, cy = (np.arange(nx) + 0.5) * c, (np.arange(ny) + 0.5) * c
+    nx, ny = n
+    cx, cy = origin[0] + (np.arange(nx) + 0.5) * c, origin[1] + (np.arange(ny) + 0.5) * c
+
     taken = np.zeros((ny, nx), bool)
     fg = getattr(s, "_free_ground", None)
     gx, gy = np.meshgrid(cx, cy)
@@ -67,15 +77,17 @@ def ground_cells(s: Settlement) -> tuple[tuple[float, float], float, int, list[b
         taken[ja[bad], ia[bad]] = True
         ja, ia = ja[~bad], ia[~bad]
     if corr is not None and len(ja):
-        bad = _corridors_hit(cx[ia], cy[ja], corr)
-        taken[ja[bad], ia[bad]] = True
-    return (0.0, 0.0), c, nx, taken.ravel().tolist()
+        ask = np.zeros((ny, nx), bool)
+        ask[ja, ia] = True
+        taken |= _corridors_grid(cx, cy, ask, corr)
+    return taken
 
 
-def _corridors_hit(xs: Any, ys: Any, corr: Any) -> Any:
-    """`SiteCorridors.hit_points` asked of every point of `(xs, ys)` at once: a water course within its clearance, or the point inside
-    an outline ring and inside none of its holes - each course and ring asked only of the points in its box. Asked one point at a
-    time, the canvas's uncertain cells were 4.3 million calls at 40 (the work-budget run of 2026-11-05, `make perf-fanout`).
+def _corridors_grid(cx: Any, cy: Any, ask: Any, corr: Any) -> Any:
+    """`SiteCorridors.hit_points` at every cell center the grid `cx` by `cy` marks in `ask`: a water course within its clearance, or
+    the center inside an outline ring and inside none of its holes - each course and ring asked only of the cells under its box (the
+    grid's rows and columns found by search, not a mask of the whole grid: a mask a course was 8 s of the stage at 40, `make
+    perf-profile` of 2026-11-05). Asked one point at a time, the canvas's uncertain cells were 4.3 million calls at 40.
 
     Research: plumbing - NONE: the site corridors' own tests, vectorized"""
     import numpy as np
@@ -83,29 +95,36 @@ def _corridors_hit(xs: Any, ys: Any, corr: Any) -> Any:
 
     from l7r.diagram.work_counts import OPS
 
-    hit = np.zeros(len(xs), bool)
+    hit = np.zeros(ask.shape, bool)
+
+    def block(x0: float, y0: float, x1: float, y1: float) -> tuple[slice, slice]:
+        return slice(int(np.searchsorted(cy, y0)), int(np.searchsorted(cy, y1, side="right"))), slice(int(np.searchsorted(cx, x0)), int(np.searchsorted(cx, x1, side="right")))
+
     for (ax, ay), (bx, by), clr in corr.water:
-        near = (xs >= min(ax, bx) - clr) & (xs <= max(ax, bx) + clr) & (ys >= min(ay, by) - clr) & (ys <= max(ay, by) + clr)
-        k = np.nonzero(near & ~hit)[0]
+        rows, cols = block(min(ax, bx) - clr, min(ay, by) - clr, max(ax, bx) + clr, max(ay, by) + clr)
+        want = ask[rows, cols] & ~hit[rows, cols]
         if __debug__:
-            OPS["pt_test@corridors_hit"] += int(k.size)
-        if k.size:
-            dx, dy = bx - ax, by - ay
-            ll = dx * dx + dy * dy
-            t = np.clip(((xs[k] - ax) * dx + (ys[k] - ay) * dy) / ll, 0.0, 1.0) if ll else np.zeros(k.size)
-            hit[k] |= np.hypot(xs[k] - (ax + t * dx), ys[k] - (ay + t * dy)) < clr
+            OPS["pt_test@corridors_hit"] += int(want.sum())
+        if not want.any():
+            continue
+        gx, gy = np.meshgrid(cx[cols], cy[rows])
+        dx, dy = bx - ax, by - ay
+        ll = dx * dx + dy * dy
+        t = np.clip(((gx - ax) * dx + (gy - ay) * dy) / ll, 0.0, 1.0) if ll else np.zeros(gx.shape)
+        hit[rows, cols] |= want & (np.hypot(gx - (ax + t * dx), gy - (ay + t * dy)) < clr)
 
     def inside(rings: Any) -> Any:
-        out = np.zeros(len(xs), bool)
+        out = np.zeros(ask.shape, bool)
         for r in rings:
             if len(r) < 3:
                 continue
-            rx, ry = [q[0] for q in r], [q[1] for q in r]
-            k = np.nonzero((xs >= min(rx)) & (xs <= max(rx)) & (ys >= min(ry)) & (ys <= max(ry)) & ~out)[0]
+            rows, cols = block(min(q[0] for q in r), min(q[1] for q in r), max(q[0] for q in r), max(q[1] for q in r))
+            want = ask[rows, cols] & ~out[rows, cols]
             if __debug__:
-                OPS["pt_test@corridors_hit"] += int(k.size)
-            if k.size:
-                out[k] |= shapely.contains_xy(shapely.Polygon(r), xs[k], ys[k])
+                OPS["pt_test@corridors_hit"] += int(want.sum())
+            if want.any():
+                gx, gy = np.meshgrid(cx[cols], cy[rows])
+                out[rows, cols] |= want & shapely.contains_xy(shapely.Polygon(r), gx, gy)
         return out
 
     return hit | (inside(corr.ring_pts) & ~inside([h.ring for h in corr.holes]))

@@ -1,0 +1,36 @@
+perf-profile seed 25 stage homesteads: 3.1s under cProfile (the stages before it took 0.1s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261105T144505Z-seed25-hh40-homesteads.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2820921 function calls (2807925 primitive calls) in 3.045 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1026 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.009    0.009    3.059    3.059 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:77(stage_homesteads)
+        1    0.000    0.000    2.591    2.591 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:261(seat_every_household)
+        1    0.000    0.000    2.590    2.590 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:349(_seat_households)
+        1    0.000    0.000    2.590    2.590 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:369(_seat_households_as)
+        1    0.007    0.007    1.971    1.971 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/rust_seating.py:265(rust_grow)
+        1    0.003    0.003    1.700    1.700 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/rust_seating.py:147(seat_inputs)
+        2    0.543    0.271    1.637    0.818 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/rust_seating.py:46(site_cells)
+        1    0.007    0.007    1.630    1.630 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/rust_seating.py:36(ground_cells)
+        2    0.623    0.311    0.623    0.312 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:477(chain_violated_many)
+    19015    0.028    0.000    0.348    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+15776/12457    0.009    0.000    0.270    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.003    0.003    0.241    0.241 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/boundary.py:502(install_site_boundary)
+        1    0.001    0.001    0.232    0.232 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/household_ways.py:326(lay_the_ways)
+        1    0.219    0.219    0.219    0.219 {built-in method l7r_phases.l7r_phases.seat_households}
+        1    0.000    0.000    0.207    0.207 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/access.py:224(exit_bearing)
+        9    0.000    0.000    0.207    0.023 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/access.py:473(lawful_ground)
+        9    0.000    0.000    0.207    0.023 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:342(ground)
+        1    0.000    0.000    0.187    0.187 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/farmsteads.py:50(farmsteads)
+        1    0.000    0.000    0.187    0.187 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/rolling/farmsteads.py:70(_farmsteads_bundle)
+     9694    0.003    0.000    0.180    0.000 /home/agent/.local/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:48(_wrapfunc)
+       40    0.000    0.000    0.179    0.004 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/homestead_parts/yards.py:655(_attach_yard)
+       40    0.002    0.000    0.176    0.004 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/homestead_parts/yards.py:524(_draw_threshing_yard)
+       40    0.001    0.000    0.174    0.004 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/homestead_parts/yards.py:87(mat_cells)
+      164    0.000    0.000    0.168    0.001 /home/agent/.local/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:2031(nonzero)
+      164    0.168    0.001    0.168    0.001 {method 'nonzero' of 'numpy.ndarray' objects}
+
+
