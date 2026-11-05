@@ -665,3 +665,19 @@ Occasions: settlement-review on the pool hamlets the rebuilt seating moves (ever
 4. **How does the work grow with the settlement?** 0.84 from 20 to 80, measured 2026-11-04 (`make work-budget`); the stage's re-derivation will say its own.
 5. **What did the before and after show, and under what conditions?** `make perf-ab` recorded at the landing, best of N.
 6. **Did any map move, and does it still keep the research?** `make maps-moved`, `make rust-gate`, the settlement-reviews owed.
+
+### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1
+
+The Rust gate's seed 778251 (17 households) seats 12 of 17 on margin 1 and refuses (SiteRefused). The Rust seat's margin stands
+(the round arbiter, ask:444-T30-fresh-seed-refusals, after the probe: the old Python seat's refusal is the 97 dry plots T28 moved
+after the seat, `specs/444-work-budget-program/phases/homesteads.gate-seeds.md`). The frozen input is
+`dev/rust-gate/frozen/778251-homesteads.pkl`; 778251 stays on the failing list until both its seed and its frozen input pass.
+
+- Done when: the Rust homesteads seat all 17 on this seed and the stage's checks pass there (FR-019; matching Python is not
+  required).
+- Room comes first from the margin's length or a second margin; the 100 ft bundle pitch and the researched room for the lane,
+  the footpath, the yard's sun and the front row's standoff are not narrowed to make 17 fit (the arbiter's ruling).
+- Red: what failed recorded in `homesteads.gate-seeds.md` and the task set down; a claim that it cannot be done is ruled through
+  `make arbiter-ask`.
+- research: rendering
+
