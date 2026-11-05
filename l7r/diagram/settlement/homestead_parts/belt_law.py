@@ -347,18 +347,6 @@ def reading_of(m: Any) -> BeltReading | None:
     )
 
 
-def belt_depths(m: Any) -> list[float | None]:
-    """W16 over a finished manifest (`BeltReading.depths`); [] where the map has no belt."""
-    rd = reading_of(m)
-    return rd.depths() if rd is not None else []
-
-
-def belt_holes(m: Any) -> list[tuple[float, float]]:
-    """W17 over a finished manifest (`BeltReading.holes`); [] where the map has no belt."""
-    rd = reading_of(m)
-    return rd.holes() if rd is not None else []
-
-
 def _offers(rd: BeltReading, v_lo: float, v_hi: float, band_uv: Sequence[Pt], step: float = 8.0) -> list[Pt]:
     """The seats (u, v) offered across the stretch [v_lo, v_hi] across the wind: every `step` along the wind from the band's
     near face to `BELT_PUSH_BACK_FT` past its far face there (the band's vertices within a bin of the stretch), at three

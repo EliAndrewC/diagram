@@ -9,7 +9,13 @@ import random
 import pytest
 
 from l7r.diagram.hamletgen.homesteads.well_seats import PoolScore
-from l7r.diagram.hamletgen.homesteads.wells import most_served_after, worst_after
+from l7r.diagram.hamletgen.homesteads.wells import most_served_after
+
+
+def worst_after(c, needy, standing):  # noqa: ANN001, ANN202
+    """The worst-served walk once a well is dug at `c` (`wells.worst_after` until feature 444 T30 deleted it unused): the oracle's
+    minimax term."""
+    return max(min(sd, math.hypot(h["x"] - c[1], h["y"] - c[2])) for h, sd in zip(needy, standing, strict=True))
 
 
 def _reference(c, served, needy, placed, standing, box, r, belt, near, most):  # noqa: ANN001, ANN202

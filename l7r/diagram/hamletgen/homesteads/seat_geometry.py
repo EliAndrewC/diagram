@@ -6,57 +6,14 @@ Research: seat geometry - NONE: distances, sides and aspects measured; the rules
 
 from __future__ import annotations
 
-import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist
-from l7r.diagram.settlement.rolling.bearing import turned_reach
+from l7r.diagram.settlement import seg_dist
 
 from ..consts import CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, Pt
 from ..plan import _roll
 from .seats import cluster_aspect
-
-
-def water_push(water: Sequence[tuple[Pt, Pt, float]], center: Pt, n: Pt, half_lat: float, near: float, far: float) -> float:
-    """How far a box must move along `n` so that no water course (`(a, b, clearance)` segments) lies within its clearance
-    of the box: the box spans `near`-`far` along `n` and `half_lat` either side of `center` across it. Zero when clear.
-    Each segment is sampled every 8 ft, which is finer than any clearance the courses carry (half-width + 5).
-
-    Research:
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N3, 2026-10-25) - 8 (water segment sampled every 8 ft)
-    """
-    lx, ly = -n[1], n[0]
-    push = 0.0
-    for a, b, clr in water:
-        if seg_dist(center[0], center[1], a, b) > half_lat + (far - near) + clr:
-            continue
-        k = max(1, int(math.dist(a, b) / 8.0))
-        for j in range(k + 1):
-            x, y = a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k
-            if abs((x - center[0]) * lx + (y - center[1]) * ly) <= half_lat + clr:
-                d = x * n[0] + y * n[1]
-                if near - clr <= d <= far + clr:
-                    push = max(push, d + clr - near)
-    return push
-
-
-def turn_the_seat(s: Settlement, seat: Pt, n: Pt, core: tuple[float, float, float, float]) -> Pt:
-    """A front-row seat moved out along `n` by how much further the homestead's core reaches toward its chord once
-    turned (269 B18). `front_row` offsets every seat by the unturned core (`core`: left, top, right, bottom about the house
-    center); the turn is the seat's own, known before it is offered, so the extra is measured, not a slack. Asked twice -
-    the seat it moves to may take a different turn - and the larger move kept; the placer's own tests stay the judge.
-
-    Research: a turned seat's reach - NONE: the seat moved out by the turned core's measured reach; the turn itself is `face_the_houses`'
-    """
-    toward = (-n[0], -n[1])
-    base = turned_reach(core, 0.0, toward)
-    extra = 0.0
-    q = seat
-    for _ in range(2):
-        extra = max(extra, turned_reach(core, s._house_rot(q[0], q[1]), toward) - base)
-        q = (seat[0] + n[0] * extra, seat[1] + n[1] * extra)
-    return q
 
 
 def bank_of(x: float, y: float, brook: Sequence[Pt]) -> int:
@@ -84,19 +41,6 @@ def shapes_drawn_at(drawn: float) -> list[str]:
     ceiling = CLUSTER_DRAWN_ASPECT["round"][1]
     held = [k for k, (lo, hi) in CLUSTER_DRAWN_ASPECT.items() if (lo if k == "round" else max(lo, ceiling + 1e-9)) <= drawn <= hi]
     return held or [min(CLUSTER_DRAWN_ASPECT, key=lambda k: min(abs(drawn - CLUSTER_DRAWN_ASPECT[k][0]), abs(drawn - CLUSTER_DRAWN_ASPECT[k][1])))]
-
-
-def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
-    """THE ONE PREDICATE of `test_the_cluster_draws_inside_the_band_of_the_shape_it_declared` (feature 287, homes wave 5):
-    do the houses draw an aspect (`cluster_aspect`) some shape's band holds (`CLUSTER_DRAWN_ASPECT`)? Every aspect is at
-    least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
-    could only name the nearest band, which the drawing breaks. Nothing is refused for it (feature 318: the 12:1 refusal that
-    took a seating back went with every other take-back); the declared shape records what was drawn (`declare_cluster_shape`).
-
-    Research: a cluster's longest draw - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass B, 2026-10-25); past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1), read and refusing nothing
-    """
-    drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
-    return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
 
 
 def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:

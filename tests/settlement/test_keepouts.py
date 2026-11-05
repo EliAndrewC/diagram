@@ -234,15 +234,6 @@ def test_a_planted_tree_within_the_pad_of_a_plots_sun_is_taken_out() -> None:
     assert s.thin_planted_trees() == 1 and s.out[z] == "<g></g>"
 
 
-def test_a_fixture_is_held_off_a_band_as_its_record_will_read() -> None:
-    """Cohort seed 5 (2026-10-02): the check reads a fixture's turned box from its record, rounded to 0.1 - so the placer asks
-    the same box (`recorded_box`), and a turn that clears at full precision but meets in the record is refused."""
-    from l7r.diagram.settlement.rolling.fit import recorded_box
-
-    x, y, w, h = recorded_box((2264.94, 1014.83, 24.0, 12.0), 13.8)
-    assert (x, y) == (2264.9, 1014.8) and abs(h - (24.0 * math.sin(math.radians(13.8)) + 12.0 * math.cos(math.radians(13.8)))) < 1e-9
-
-
 def test_every_crown_site_keeps_out_of_a_plots_sun() -> None:
     """A windbreak planted over a garden draws no crown in the garden's sun ground, and a wood beside a yard none in the yard's -
     the crown tests read `_sun_keepouts` (feature 310)."""

@@ -4,24 +4,14 @@ import json
 import math
 import random
 
-import pytest
-
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
-from tests.settlement._builders import _crop_settlement, _nuc_village, _pos_where, _town, _village
-
-
-# --- farmsteads(): the deferred draw giving EVERY farmhouse a yard (nudge / drop / bound branches) -----
-def test_try_place_defers_the_farmhouse():
-    # try_place reserves + records the farmhouse but does NOT draw it yet (farmsteads draws it with its yard)
-    s = _town()
-    assert s.try_place(500, 500, "plain")
-    assert len(s.M["houses"]) == 1 and len(s.M["threshing_yards"]) == 0  # deferred, no yard yet
+from tests.settlement._builders import _crop_settlement, _nuc_village, _pos_where, _town, _village, seat_homestead
 
 
 def test_farmsteads_yard_on_the_sunny_south_front():
     s = _town()
-    assert s.try_place(500, 500, "plain")
+    seat_homestead(s, 500, 500, "plain")
     assert s.farmsteads() == 1
     y = s.M["threshing_yards"][0]
     assert y["of"] == [500, 500] and y["y"] > 500  # the yard sits on the house's south/front (+y) side
@@ -30,7 +20,7 @@ def test_farmsteads_yard_on_the_sunny_south_front():
 # --- dooryard kitchen garden: every farmstead also gets a saien on a sunny side --------------
 def test_farmsteads_garden_on_a_sunny_side():
     s = _town()
-    assert s.try_place(500, 500, "plain")
+    seat_homestead(s, 500, 500, "plain")
     assert s.farmsteads() == 1
     gd = s.M["gardens"][0]
     assert gd["of"] == [500, 500] and gd["y"] >= 500 - 5  # never the shady north back
@@ -136,13 +126,6 @@ def test_bundle_parts_turn_about_the_house_center_with_its_rake():
     assert bx - bw / 2 <= geom["yard"][0] - geom["yard"][2] / 2 and geom["yard"][1] + geom["yard"][3] / 2 <= by + bh / 2 + 1e-6
 
 
-def test_nucleated_bundle_returns_none_when_boxed_in():
-    # a bound admitting the seed but no room for even the compact house+yard+garden bundle -> no placement
-    s = _nuc_village()
-    s.bound = [(495, 495), (505, 495), (505, 505), (495, 505)]
-    assert s.try_place(500, 500, "plain") is False
-
-
 def test_fits_steers_off_a_grove():
     # groves are out of `placed` (so they may merge), but `_fits` still keeps the wells off them
     s = Settlement(1000, 1000, seed=1)
@@ -168,8 +151,8 @@ def test_abandoned_ruin_draws_as_a_lone_house_and_big_glyph_renders():
     # geom-less skip. The "big" minka glyph (storeroom wing) renders via a direct draw.
     s = Settlement(800, 800, seed=5)
     s.meta(name="Ruin", scale="village", ftpx=2, toscale=True)
-    assert s.try_place(400, 400, "abandoned")
-    assert s.try_place(560, 400, "plain")  # a bundle placed AFTER the ruin: the shading scan skips the geom-less rec
+    seat_homestead(s, 400, 400, "abandoned")
+    seat_homestead(s, 560, 400, "plain")  # a bundle placed AFTER the ruin: the shading scan skips the geom-less rec
     assert s.farmsteads() == 2
     assert s.M["houses"][0]["kind"] == "abandoned"
     assert len(s.M["threshing_yards"]) == 1 and len(s.M["gardens"]) == 1  # the plain bundle's, not the ruin's
@@ -187,7 +170,7 @@ def test_a_farmstead_belt_is_immune_to_an_upstream_change_in_draw_count():
         for _ in range(perturb):
             random.random()
         for x in (400, 500, 600, 700, 800):
-            s.try_place(x, 500, "plain")
+            seat_homestead(s, x, 500)
         s.farmsteads()
         return {k: json.dumps(s.M[k], sort_keys=True) for k in ("houses", "gardens", "threshing_yards", "farm_sheds")}
 
@@ -204,94 +187,7 @@ def test_house_abandoned_draws_the_collapsed_roof_glyph():
     assert 'stroke-dasharray="5,3"' in svg  # the derelict outline dash
 
 
-# ---- try_place: the LONE ABANDONED ruin (no homestead bundle) ------------------------------
-def test_try_place_abandoned_places_a_lone_ruin_without_a_bundle():
-    s = _nuc_village()  # a to-scale village; the west half (x < 640) is open ground
-    assert s.try_place(300, 300, "abandoned") is True
-    ruin = [h for h in s.M["houses"] if h["kind"] == "abandoned"]
-    assert len(ruin) == 1 and ruin[0]["shed"] is False  # a lone derelict, no kura
-
-
-# ---- try_place: an abandoned ruin that does not FIT is rejected ----------------------------
-def test_try_place_abandoned_rejects_a_ruin_off_the_canvas_edge():
-    s = _nuc_village()
-    assert s.try_place(20, 300, "abandoned") is False  # x < 55 -> _fits fails, no ruin placed
-    assert not [h for h in s.M["houses"] if h["kind"] == "abandoned"]
-
-
 # ---- cluster_shape knob: shape-aware seed generation (feature 005, US1) -------------------------
-
-
-def test_cluster_seeds_shapes_generate_and_record():
-    import random as _r
-
-    s = Settlement(1400, 1400, seed=1)
-    s.meta(name="Cs", scale="village")
-    for shape in ("round", "elongated", "crescent", "split"):
-        pts = s.cluster_seeds(shape, 500, 700, 150, 220, 60, _r.Random(4))
-        assert len(pts) == 60
-        assert s.M["meta"]["cluster_shape"] == shape
-
-    # elongated is taller than wide (stretched along the margin); round is broader across
-    rnd = s.cluster_seeds("round", 500, 700, 150, 220, 200, _r.Random(9))
-    elo = s.cluster_seeds("elongated", 500, 700, 150, 220, 200, _r.Random(9))
-    rw = max(p[0] for p in rnd) - min(p[0] for p in rnd)
-    ew = max(p[0] for p in elo) - min(p[0] for p in elo)
-    assert ew < rw  # elongated is narrower across the margin
-
-    # split forms two lateral lobes -> the x-distribution is bimodal (few points near the center line)
-    spl = s.cluster_seeds("split", 500, 700, 150, 220, 300, _r.Random(9))
-    near_center = sum(1 for p in spl if abs(p[0] - 500) < 30)
-    assert near_center < 0.15 * len(spl)  # a gap between the two sub-hamlets
-
-
-def test_cluster_anchor_places_each_position_on_the_right_dry_margin():
-    # cluster_position resolves against the field bbox + down_deg into an anchor off the paddy. Check each
-    # value lands on the expected side of the field center relative to the fall (down_deg=90 -> downhill = +y).
-    import math as m
-
-    s = Settlement(2000, 2000, seed=1)
-    s.meta(name="Ca", scale="village")
-    fb = (600.0, 400.0, 1400.0, 1200.0)  # a field, center (1000, 800)
-    fcx, fcy = 1000.0, 800.0
-    dd = 90.0
-    dx, dy = m.cos(m.radians(dd)), m.sin(m.radians(dd))  # (0, 1)
-    ux, uy = -dy, dx  # (-1, 0)
-
-    def along(pos):  # signed along-slope offset of the anchor (>0 = downhill of center)
-        cx, cy, _ex, _ey = s.cluster_anchor(pos, fb, dd)
-        return (cx - fcx) * dx + (cy - fcy) * dy
-
-    def lateral(pos):
-        cx, cy, _ex, _ey = s.cluster_anchor(pos, fb, dd)
-        return (cx - fcx) * ux + (cy - fcy) * uy
-
-    assert along("high_margin") < -400 and abs(lateral("high_margin")) < 30  # uphill, centered
-    assert along("valley_head") < -400 and lateral("valley_head") != lateral("mid_margin")  # both high, opposite flanks
-    assert along("mid_margin") < -400
-    assert abs(lateral("flank")) > 400 and abs(along("flank")) < 30  # off to a cross-slope side
-    assert along("valley_mouth") > 0 and abs(lateral("valley_mouth")) > 400  # low end, but on the dry shoulder
-    assert along("on_rise") < -300  # a high-corner knoll
-    # the anchor center sits OFF the paddy footprint (never inside the field bbox) for the margin positions
-    for pos in ("high_margin", "valley_head", "mid_margin", "flank", "valley_mouth"):
-        cx, cy, _ex, _ey = s.cluster_anchor(pos, fb, dd)
-        assert not (fb[0] < cx < fb[2] and fb[1] < cy < fb[3])
-    # extents are positive and the lateral (along-margin) axis is the broader one for a top margin (runs E-W)
-    _cx, _cy, ex, ey = s.cluster_anchor("high_margin", fb, dd)
-    assert ex > ey > 0
-    with pytest.raises(ValueError):
-        s.cluster_anchor("nowhere", fb, dd)
-
-
-def test_cluster_seeds_record_false_and_bad_shape():
-    import random as _r
-
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="Cs2", scale="village")
-    s.cluster_seeds("round", 500, 500, 100, 100, 5, _r.Random(1), record=False)
-    assert "cluster_shape" not in s.M["meta"]  # record=False leaves meta untouched
-    with pytest.raises(ValueError):
-        s.cluster_seeds("spiral", 500, 500, 100, 100, 5, _r.Random(1))
 
 
 def test_hard_polys_footprint_test_refuses_what_the_center_test_allowed():

@@ -20,6 +20,7 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS
@@ -167,28 +168,6 @@ def track_inputs(s: Settlement, plan: SitePlan) -> dict[str, object]:
     }
 
 
-def compare_rust_track(s: Settlement, plan: SitePlan, track: Poly, path: str) -> None:
-    """Run the Rust track out on the state `track` was chosen from and append both, with the Rust's counted work, to the JSON
-    lines at `path` - the comparison of feature 444 T30 before the stage is wired; the map is not touched.
-
-    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
-    import json
-
-    from ..phases_ext import phases
-
-    got = phases().track_out(track_inputs(s, plan))
-    rec = {
-        "name": plan.spec.name,
-        "seed": plan.spec.seed,
-        "households": plan.spec.households,
-        "python": [[round(q[0], 1), round(q[1], 1)] for q in track],
-        "rust": None if got is None else [[round(q[0], 1), round(q[1], 1)] for q in got["track"]],
-        "rust_counts": None if got is None else sum(got["counts"].values()),
-    }
-    with open(path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps(rec) + "\n")
-
-
 def ways_inputs(s: Settlement) -> dict[str, object]:
     """What the Rust households' ways read (`l7r_phases.households_ways`, feature 444 T30), gathered where `gap_ways.lay_the_ways`
     and the seating's lane law (`tree.seating_law`) read it, before any way is laid.
@@ -287,118 +266,6 @@ def ways_inputs(s: Settlement) -> dict[str, object]:
     }
 
 
-def watch_verdicts(path: str) -> Any:
-    """Record every verdict Python's lane law gives a household's way while `lay_the_ways` runs - the run, the house, the first
-    rule `Lawful.fault` names - to the JSON lines at `path`, for bisecting a way the Rust admits and Python refuses; returns the
-    undo.
-
-    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
-    import json
-
-    from ..ways import tree as tree_mod
-    from ..ways.settle.lawful import Lawful
-
-    fh = open(path, "a", encoding="utf-8")  # noqa: SIM115 - closed by the undo
-    faults: list[Any] = []
-    orig_fault, orig_admits = Lawful.fault, tree_mod.admits
-
-    def fault(self: Any, run: Any, width: float, skip: Any = None) -> Any:
-        why = orig_fault(self, run, width, skip)
-        faults.append(why)
-        return why
-
-    def admits(base: Any, M: Any, run: Any, role: Any = "access", house: Any = None, yard: Any = None) -> bool:
-        faults.clear()
-        ok = orig_admits(base, M, run, role, house, yard)
-        rec = {
-            "house": None if house is None else [round(float(house["x"]), 1), round(float(house["y"]), 1)],
-            "run": [[round(q[0], 1), round(q[1], 1)] for q in run],
-            "ok": ok,
-            "faults": [f for f in faults if f],
-        }
-        fh.write(json.dumps(rec) + "\n")
-        return ok
-
-    from l7r.diagram.settlement.rolling import access as acc
-    from l7r.diagram.settlement.rolling import gap_ways as gw
-
-    orig_first, orig_taut = gw._first_admitted, gw.taut
-    legs: list[Any] = []
-
-    def first(s_: Any, runs: Any, leg_ok: Any, geom: Any, memo: Any) -> Any:
-        def logged(a: Any, b: Any) -> bool:
-            ok = leg_ok(a, b)
-            if not ok:
-                why = [
-                    n
-                    for n, f in (
-                        ("house", lambda: acc.house_clear(a, b, geom, acc.house_gap(s_))),
-                        ("fixtures", lambda: acc.fixtures_clear(s_, a, b, geom)),
-                        ("parts", lambda: acc.parts_clear(s_, a, b, geom)),
-                        ("standing", lambda: acc.standing_ground(s_, a, b, memo)),
-                    )
-                    if not f()
-                ]
-                legs.append([[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], why])
-            return ok
-
-        for q in runs:
-            legs.clear()
-            run = orig_taut(q, logged, acc.doubles_back, gw.GAP_LEGS)
-            drawn = acc.admitted(s_, run, geom, memo) if run is not None else None
-            fh.write(
-                json.dumps(
-                    {
-                        "house": [round(float(geom["house"][0]), 1), round(float(geom["house"][1]), 1)],
-                        "cand": [[round(p[0], 1), round(p[1], 1)] for p in q],
-                        "taut": None if run is None else [[round(p[0], 1), round(p[1], 1)] for p in run],
-                        "drawn": drawn is not None,
-                        "refused_legs": legs[:6],
-                    }
-                )
-                + "\n"
-            )
-            if drawn is not None:
-                return drawn
-        return None
-
-    Lawful.fault, tree_mod.admits = fault, admits  # type: ignore[method-assign]
-    gw._first_admitted = first
-
-    def undo() -> None:
-        Lawful.fault, tree_mod.admits = orig_fault, orig_admits  # type: ignore[method-assign]
-        gw._first_admitted = orig_first
-        fh.close()
-
-    return undo
-
-
-def compare_rust_ways(s: Settlement, inputs: dict[str, object], path: str) -> None:
-    """Run the Rust households' ways on the state `inputs` was gathered from and append each household's way beside Python's -
-    which `lay_the_ways` has laid since - to the JSON lines at `path`; the map is not touched.
-
-    Research: plumbing - NONE: a comparison's record, deciding nothing about the place"""
-    import json
-
-    from ..phases_ext import phases
-
-    got = phases().households_ways(inputs)
-    houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
-    python = [None if h["geom"].get("access") is None else [[round(q[0], 1), round(q[1], 1)] for q in h["geom"]["access"]] for h in houses]
-    rust = [None if w is None else [[round(q[0], 1), round(q[1], 1)] for q in w] for w in got["drawn"]]
-    rec = {
-        "centers": [[round(float(h["x"]), 1), round(float(h["y"]), 1)] for h in houses],
-        "households": len(houses),
-        "placed": len(getattr(s, "placed", []) or []),
-        "python": python,
-        "rust": rust,
-        "rust_counts": sum(got["counts"].values()),
-        "rust_verdicts": [[[[round(q[0], 1), round(q[1], 1)] for q in w], k, ok] for w, k, ok in got["verdicts"]],
-    }
-    with open(path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps(rec) + "\n")
-
-
 def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
     """The track out chosen once the last house stands, in Rust (`l7r_phases.track_out`, feature 444 T30), with the homesteads as
     seated standing in for the farmsteads not yet drawn (`seated_parts`); the wood seats it gave up released along it by name
@@ -416,6 +283,8 @@ def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
     if got is None:
         raise NoDryExit("no dry way out of the frame from a gateway on any bearing off the cluster")
     s._seat_search["track_counts"] = sum(got["counts"].values())
+    for k, n in got["counts"].items():  # the Rust's counted work on the stage's (feature 444 D5)
+        work_counts.OPS[k] += n
     track = [(float(q[0]), float(q[1])) for q in got["track"]]
     st = getattr(s.M, "standing", None)
     if got["seats_taken"] and st is not None:  # ...over a reserved seat, which the way out takes: given up by name
@@ -423,6 +292,35 @@ def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
         if gone:
             s.M["meta"]["wood_seats_to_the_connector"] = [[round(x, 1), round(y, 1)] for x, y in gone]
     return track
+
+
+def laid_order(tree: Sequence[tuple[Pt, Pt]], houses: Sequence[dict[str, Any]], drawn: Sequence[Any]) -> list[tuple[dict[str, Any], tuple[Pt, ...]]]:
+    """Each household's drawn way with its record, in an order it could have been laid: a way after the run its end joins - the
+    tree or a way before it - as the gap pass lays them, nearest the way out first, so a record read back in order finds every
+    way's end on the track or an earlier way (SC-007). The Rust returns them by household; a way whose end joins nothing goes
+    last, in household order.
+
+    Research: households' ways in the order laid - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out or a way laid before it"""
+    left = [(rec, tuple((float(q[0]), float(q[1])) for q in way)) for rec, way in zip(houses, drawn, strict=True) if way is not None]
+    segs: list[tuple[Pt, Pt]] = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for a, b in tree]
+    out: list[tuple[dict[str, Any], tuple[Pt, ...]]] = []
+
+    def on(p: Pt) -> bool:
+        return any(_seg_gap(p, a, b) <= 1.0 for a, b in segs)
+
+    while left:
+        k = next((i for i, (_rec, run) in enumerate(left) if on(run[-1])), 0)
+        rec, run = left.pop(k)
+        out.append((rec, run))
+        segs.extend(zip(run, run[1:], strict=False))
+    return out
+
+
+def _seg_gap(p: Pt, a: Pt, b: Pt) -> float:
+    """The distance from `p` to the segment a-b."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    t = 0.0 if dx == dy == 0.0 else max(0.0, min(1.0, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy)))
+    return math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy)
 
 
 def lay_the_ways(s: Settlement) -> tuple[int, int]:
@@ -442,11 +340,10 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
         return 0, 0
     got = phases().households_ways(ways_inputs(s))
     s._seat_search["ways_counts"] = sum(got["counts"].values())
+    for k, n in got["counts"].items():  # the Rust's counted work on the stage's (feature 444 D5)
+        work_counts.OPS[k] += n
     ended = pinched = 0
-    for rec, way in zip(houses, got["drawn"], strict=True):
-        if way is None:
-            continue
-        run = tuple((float(q[0]), float(q[1])) for q in way)
+    for rec, run in laid_order(s._access.segs, houses, got["drawn"]):
         reserve(s, run, (float(rec["x"]), float(rec["y"])))
         rec["geom"]["access"] = run
         if rec.pop("reached_across", None) is not None:  # ...a passage the finished map makes unnecessary, ended where it stands

@@ -10,12 +10,8 @@ from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.homestead_parts.belt_law import (
     MIN_BELT_DEPTH_FT,
     BeltReading,
-    belt_depths,
-    belt_holes,
     on_page,
-    reading_of,
     settle_the_belt,
-    wind_unit,
 )
 
 N = (0.0, -1.0)  # the wind from the north: u is up the sheet, v runs along x
@@ -40,23 +36,6 @@ def _read(seats, houses=HOUSES, ways=(), reach=None, band=BAND, view=PAGE) -> Be
     on = [c for c in seats if on_page(c, 14.0, view)]
     off = [c for c in seats if not on_page(c, 14.0, view)]
     return BeltReading(on, off, 14.0, houses, N, ways, view, reach, band)
-
-
-def test_the_measure_reads_a_thin_stretch_and_a_parted_one() -> None:
-    """The measure itself (lifted from the pool test): a two-row block reads its depth, a lone crown reads one crown, and a
-    lane through a bin leaves that bin unjudged, while one along the belt's inner face does not; nor is a bin the page's
-    edge cuts."""
-    m = {
-        "meta": {"windward": "N"},
-        "houses": [{"x": 0.0, "y": 0.0}],
-        "village_groves": [{"role": "windbreak", "r": 10.0, "clumps": [[5.0, -100.0], [5.0, -120.0], [45.0, -100.0], [85.0, -100.0], [85.0, -160.0]], "clumps_offpage": [[125.0, -100.0]]}],
-        "lanes": [{"pts": [[85.0, 0.0], [85.0, -200.0]]}, {"pts": [[0.0, -80.0], [90.0, -80.0]]}],
-    }
-    assert belt_depths(m) == [None, 20.0, None, None]
-    assert len(belt_holes(m)) == 3, "three 40 ft openings between single crowns, none of them the lane's"
-    assert belt_depths({"houses": [], "village_groves": []}) == [] and belt_holes({"village_groves": [{"role": "copse"}]}) == []
-    assert reading_of({"houses": [{"x": 0.0, "y": 0.0}], "village_groves": [{"role": "windbreak", "clumps": []}]}) is None
-    assert wind_unit("NW") == (-1.0 / math.sqrt(2.0), -1.0 / math.sqrt(2.0)) and wind_unit("E") == (1.0, 0.0)
 
 
 def test_a_hole_and_a_one_row_stretch_are_read() -> None:

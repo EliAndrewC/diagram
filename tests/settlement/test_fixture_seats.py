@@ -26,20 +26,6 @@ def _lay(kinds=ALL, forms=None, roofs=(HOUSE, KURA), ground=(YARD, GARDEN), roll
     return fs.lay_fixtures(kinds, HW, HH, list(roofs), list(ground), YARD, True, lambda salt: roll, forms or fs.FixtureForms(), _px, annex, notes)
 
 
-def test_every_kind_a_household_keeps_is_laid_clear_of_every_part_and_of_each_other() -> None:
-    laid = _lay()
-    assert set(laid) == set(ALL)
-    solid = [(k, r) for k, r in laid.items() if k != "persimmon"]
-    for k, r in solid:  # the bath room abuts the house (`joined_to_house`, below), clear of every other part
-        assert fs.clears(r, [KURA, YARD, GARDEN] if k == "bath" else [HOUSE, KURA, YARD, GARDEN], fs.WALL_GAP_FT - 1e-6), k
-        assert fs.clears(r, [q for kk, q in solid if kk != k], fs.WALL_GAP_FT - 1e-6), k
-    crown = laid["persimmon"]
-    assert fs.clears(crown, [HOUSE, KURA, *(r for _k, r in solid)], fs.CANOPY_PAD - 1e-6), "no crown over a roof"
-    assert fs.clears((crown[0], crown[1], 4.0, 4.0), [YARD, GARDEN], 2.0 - 1e-6), "the trunk stands off the yard and the beds"
-    assert fs.shed_off_a_wall(laid["woodpile"], [*fs.steading_rects(HW, HH, "N", 1.0), laid["retirement"]], fs.WALL_GAP_FT, _px), "the wood shed a ken off a wall"
-    assert fs.joined_to_house(laid["bath"], HW, HH), "the bath a room of the house"
-
-
 def test_the_privy_faces_the_sun_on_its_share_and_takes_an_attested_seat_otherwise() -> None:
     sunny = _lay(("privy",), roll=0.1, ground=(YARD, EAST_BED))["privy"]  # the SE ground open, as an E bed leaves it
     assert sunny[1] > HH / 2 and sunny[0] >= -1e-6, "southeast to south of the house"
@@ -72,23 +58,6 @@ def test_the_heap_stands_beyond_the_privy_and_without_one_at_the_back() -> None:
     assert (heap[0] ** 2 + heap[1] ** 2) > (flank[0] ** 2 + flank[1] ** 2), "further from the house than the privy"
     alone = _lay(("manure",), forms=fs.FixtureForms(manure_form="pit"), ground=(YARD, EAST_BED))["manure"]
     assert alone[1] < 0.0 and (alone[2], alone[3]) == (fs.PIT_FT, fs.PIT_FT), "the pit glyph at the back wall"
-
-
-def test_the_bath_is_a_room_joined_to_the_house_on_an_attested_wall_or_refused() -> None:
-    """Feature 280 M22 (research/homesteads/740): the bath abuts the house - beside the main door, at the stable wing's end
-    wall or the floored rooms' - never a building in the yard. The yard covers the front wall here, so a `main_door` hamlet's
-    room falls to the stable end (the garden takes the +x end); a house with all three walls taken refuses it by name."""
-    notes: dict = {}
-    bath = _lay(("bath",), notes=notes)["bath"]
-    assert fs.joined_to_house(bath, HW, HH) and notes["bath_seat"] == "stable_end" and bath[0] == pytest.approx(-(HW / 2 + 3.0))
-    free = _lay(("bath",), ground=(), forms=fs.FixtureForms(bath_stable_share=0.0), notes=notes)["bath"]
-    assert fs.joined_to_house(free, HW, HH) and notes["bath_seat"] == "main_door" and free[1] == pytest.approx(HH / 2 + 3.0), "against the front wall"
-    ends = [(HW / 2 + 10.0, 0.0, 16.0, 3 * HH), (-(HW / 2 + 10.0), 0.0, 16.0, 3 * HH), (0.0, HH / 2 + 8.0, 3 * HW, 10.0)]
-    with pytest.raises(ValueError, match="bath room"):
-        _lay(("bath",), ground=ends)
-    slid = _lay(("bath",), ground=[(-HW / 2 - 3.0, 0.0, 6.0, 4.0), (HW / 2 + 10.0, 0.0, 16.0, 3 * HH), (0.0, HH / 2 + 8.0, 3 * HW, 10.0)], notes=notes)["bath"]
-    assert fs.joined_to_house(slid, HW, HH) and notes["bath_seat"] == "stable_end" and abs(slid[1]) > HH * 0.25, "slid along its wall past the recorded seats"
-    assert not fs.joined_to_house((0.0, HH / 2 + 3.5 + 3.0, 8.0, 6.0), HW, HH) and not fs.joined_to_house((0.0, 0.0, 8.0, 6.0), HW, HH), "off the wall, or inside"
 
 
 def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> None:
@@ -160,16 +129,6 @@ def test_the_persimmon_keeps_out_of_its_yards_and_beds_sun_at_every_rake() -> No
     alone = fs.lay_fixtures(("persimmon",), HW, HH, [HOUSE], [far_bed], YARD, False, lambda salt: 0.1, front, _px, shade=50.0, turns=turns)["persimmon"]
     assert alone[1] > 0.0, "no yard's sun to keep: the dooryard in front"
     assert fs.sun_turns(0.0, 0.0) == (0.0, 0.0) and fs.sun_turns(-5.0, 5.0) == (-5.0, 0.0, 5.0)
-
-
-def test_the_helpers_read_as_they_say() -> None:
-    assert fs.weighted((("a", 0.3), ("b", 0.3)), 0.99) == "b" and fs.weighted((("a", 0.3), ("b", 0.3)), 0.1) == "a"
-    assert fs.along(0.0, 4.0) == [0] and fs.along(9.0, 4.0) == [0, -4, 4, -8, 8, -9.0, 9.0] and fs.along(8.0, 4.0) == [0, -4, 4, -8, 8]
-    assert fs.fixture_size("woodpile", fs.FixtureForms(), _px) == (24.0, 12.0) and fs.fixture_size("persimmon", fs.FixtureForms(), _px)[0] == 23.0
-    assert len(fs.steading_rects(HW, HH, "W", 1.0)) == 2 and len(fs.steading_rects(HW, HH, None, 1.0)) == 1
-    assert fs.steading_rects(HW, HH, "N", 1.0)[1] == kura_rect(HW, HH, "N", 1.0) == (0.0, -0.675 * HH, 0.46 * HW, 0.45 * HH), "the drawn annex (feature 280 M18)"
-    assert list(fs.outward([(0.0, 0.0, 2.0, 2.0)], 8.0, 1)) == [(0.0, 0.0, 2.0, 2.0)], "a seat at the center stays"
-    assert fs.world_fixtures({"bath": 1, "privy": 2}) == [("bath", 1), ("privy", 2)]
 
 
 def test_the_retirement_house_stands_off_the_back_wall_or_a_flank_in_its_rolled_order() -> None:

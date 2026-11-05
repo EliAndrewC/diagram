@@ -11,7 +11,6 @@ Research: collision and gap predicates - NONE
 
 import math
 from collections.abc import Sequence
-from typing import Any
 
 from .base import Poly, Pt
 from .primitives import point_in_poly, seg_dist, segments_cross
@@ -131,18 +130,6 @@ def poly_gap(p: Poly, q: Poly) -> float:
             for i in range(len(b)):
                 best = min(best, seg_dist(vx, vy, b[i], b[(i + 1) % len(b)]))
     return best
-
-
-def eave_gap(a: Any, b: Any) -> float:
-    """Two recorded footprints' gap WALL TO WALL, on their drawn (rotated) quads - the drip-line rule's one measure.
-
-    `a` and `b` are records carrying `x`, `y`, `w`, `h` and optionally `rot` (degrees). ONE PREDICATE, read by the placer
-    (`_house_too_near_a_neighbor`, which adds its own hair of margin) and by the gate's `farmhouses_shed_separately`
-    (feature 287, FR-003): the gate used to measure UNROTATED w x h boxes, which on a quarter-turned house (Inashiro's
-    at rot 94.3, 45 ft along x) runs the box along the wrong axis and reports a pair the placer correctly admitted."""
-    qa = rot_rect(float(a["x"]), float(a["y"]), float(a["w"]), float(a["h"]), float(a.get("rot") or 0.0))
-    qb = rot_rect(float(b["x"]), float(b["y"]), float(b["w"]), float(b["h"]), float(b.get("rot") or 0.0))
-    return poly_gap(qa, qb)
 
 
 def rects_overlap(p: Poly, q: Poly) -> bool:

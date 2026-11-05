@@ -29,7 +29,7 @@ Research: plumbing - NONE
 from __future__ import annotations
 
 import math
-from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass
 from functools import lru_cache
 from itertools import chain
@@ -504,16 +504,6 @@ def forward_of_front(seat: Rect, hh: float) -> bool:
     return seat[1] + seat[3] / 2 > hh + 1e-6
 
 
-def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool:
-    """THE BATH ROOM'S RULE (feature 280 M22): a room of the house - one edge on a wall of the `hw` x `hh` house, overlapping
-    it along that wall, and not inside it. The one predicate the placer and its test read.
-
-    Research: bath room of the house - research/questions/0044-baths-on-the-farm-furo.drawing.html"""
-    gx = abs(seat[0]) - (seat[2] + hw) / 2
-    gy = abs(seat[1]) - (seat[3] + hh) / 2
-    return (abs(gx) <= tol and gy < 0.0) or (abs(gy) <= tol and gx < 0.0)
-
-
 def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
     """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken out - then every place a
     ken off each wall of the house but its front (feature 328: the front wall's places stood in the dooryard); the first that
@@ -856,8 +846,3 @@ def in_dooryard(lx: float, ly: float, r: float, hw: float, hh: float, reach: flo
         OPS["candidate@in_dooryard"] += 1
     dx, dy = max(abs(lx) - hw / 2, 0.0), max(abs(ly) - hh / 2, 0.0)
     return math.hypot(dx, dy) - r <= reach
-
-
-def world_fixtures(laid: Mapping[str, Any]) -> list[tuple[str, Rect]]:
-    """The laid fixtures in drawing order."""
-    return [(k, laid[k]) for k in FIXTURE_ORDER if k in laid]

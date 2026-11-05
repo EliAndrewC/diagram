@@ -641,18 +641,19 @@ def test_a_bundle_carries_the_constants_a_unit_reads_and_what_a_cannot_tell_name
     got = cx.callees(root, unit, cx.context_source(root, f"{path}::_seat_households_as"))
     assert any(r.endswith("::BUNDLE_PITCH") for r in got), f"an imported constant the unit reads: {got}"
     assert sum(not r.rsplit("::", 1)[1].isupper() for r in got) <= cx.CALLEES_MAX and all(r.startswith("l7r/") for r in got)
-    deep = cc.chase(root, path, ["front_row", "turn_the_seat", "no_such_name"], cx.context_source)
+    # (the unit hands its seating to Rust since feature 444 T30: the chase follows the door's Python - `rust_seating`)
+    deep = cc.chase(root, path, ["rust_scatter", "grove_inputs", "no_such_name"], cx.context_source)
     names = {r.rsplit("::", 1)[1] for r in deep}
-    assert {"front_row", "turn_the_seat", "_front_row_from_chains", "STANDOFF_SLACK_PX", "HOUSE_PADDY_GAP_FT"} <= names, deep
-    assert cc.chase(root, path, ["front_row"], cx.context_source, budget=10) == [], "the budget holds"
+    assert {"rust_scatter", "grove_inputs", "record_seated", "seat_inputs", "CANOPY_SHADE_FT"} <= names, deep
+    assert cc.chase(root, path, ["rust_scatter"], cx.context_source, budget=10) == [], "the budget holds"
     assert cc.chase(root, path, ["HOUSE_PADDY_GAP_FT"], cx.context_source) == ["l7r/diagram/settlement/houses.py::HOUSE_PADDY_GAP_FT"], "a name the module never imports"
     # a label naming a distance, gap or standoff carries every direct callee and the constants they read, uncapped (the words)
     assert cc.DISTANCE.search("front-row standoff from the field") and not cc.DISTANCE.search("the declared cluster shape")
     far = cc.direct(root, unit, cx.context_source(root, f"{path}::_seat_households_as"), cx.context_source)
-    assert any(r.endswith("::front_row") for r in far) and any(r.endswith("::BUNDLE_PITCH") for r in far), far
+    assert any(r.endswith("::rust_scatter") for r in far) and any(r.endswith("::BUNDLE_PITCH") for r in far), far
     assert len(far) > cx.CALLEES_MAX, "uncapped"
     reach = {r.rsplit("::", 1)[1] for r in far}
-    assert {"_front_row_from_chains", "HOUSE_PADDY_GAP_FT", "STANDOFF_SLACK_PX"} <= reach, "two calls down, and what they read"
+    assert {"grove_inputs", "seat_inputs", "CANOPY_SHADE_FT"} <= reach, "two calls down, and what they read"
     assert len(far) == len(set(far)), "each once"
 
 

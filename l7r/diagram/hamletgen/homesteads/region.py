@@ -37,7 +37,6 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.settlement._geom.region import GROW, Region
 from l7r.diagram.settlement.rolling.lot import DEPTH_FACTORS, LENGTH_FACTORS
-from l7r.diagram.work_counts import OPS
 
 from ..consts import Pt
 
@@ -152,37 +151,6 @@ class SeatRegion:
         if x0 < w[0] or y0 < w[1] or x1 > w[2] or y1 > w[3]:
             return True
         return bool(touches_many(self._reached()[1], self.buildable, [x0], [y0], [x1], [y1])[0])
-
-    def offer(self, pts: Sequence[Pt]) -> list[bool]:
-        """For each candidate seat (a house center), whether it is offered: a side's envelope clear, and - where an access tree is
-        installed - its yard's box touching the reachable ground. A seat outside the region's window is offered unjudged (feature
-        318: the window bounds the rasters' cost, never where a house may stand; the placer's own tests decide).
-
-        Research: a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a seat is offered only where its yard opens onto the ground the lanes are laid in, connected to the track out
-        """
-        if __debug__:
-            OPS["candidate@SeatRegion.offer"] += len(pts)
-        import numpy as np
-
-        self.sync()
-        if not pts:
-            return []
-        xs = np.asarray([float(p[0]) for p in pts])
-        ys = np.asarray([float(p[1]) for p in pts])
-        ok = np.zeros(len(pts), dtype=bool)
-        m = self.cell  # each box shrunk by a cell: the placer judges the static ground at a box's nine points, not its every cell
-        for x0, y0, x1, y1 in self.sides:
-            ok |= self.buildable.box_clear_many(xs + x0 + m, ys + y0 + m, xs + x1 - m, ys + y1 - m)
-        if self.yard is not None and getattr(self.s, "_access", None) is not None:
-            y0_, y1_ = self.yard[1], self.yard[3]
-            ok &= touches_many(self._reached()[1], self.buildable, xs + self.yard[0], ys + y0_, xs + self.yard[2], ys + y1_)
-        # ...where every box it asks lies inside the window; one that crosses its edge is judged by no raster cell of its own
-        x0w, y0w, x1w, y1w = self.window[0], self.window[1], self.window[2], self.window[3]
-        boxes = [*self.sides, *([self.yard] if self.yard is not None else [])]
-        bx0, by0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
-        bx1, by1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
-        ok |= (xs + bx0 < x0w) | (xs + bx1 > x1w) | (ys + by0 < y0w) | (ys + by1 > y1w)
-        return [bool(v) for v in ok]
 
 
 class LaneGround:

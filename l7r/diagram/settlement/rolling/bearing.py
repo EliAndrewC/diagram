@@ -23,7 +23,7 @@ import math
 from collections.abc import Callable, Sequence
 from typing import Any
 
-from .._geom import PointGrid, Pt, turn_about
+from .._geom import PointGrid, Pt
 
 # ATTESTED (0029): three points of the compass span some 67 degrees, so a house may stand about 30 degrees from
 # its neighbors' common bearing and still face with them.
@@ -175,11 +175,3 @@ def turned_box(rect: Any, rot: float) -> tuple[float, float, float, float]:
     th = math.radians(rot)
     c, s = abs(math.cos(th)), abs(math.sin(th))
     return (x, y, w * c + h * s, w * s + h * c)
-
-
-def turned_reach(box: tuple[float, float, float, float], rot: float, toward: Pt) -> float:
-    """How far a homestead's core box (left, top, right, bottom about the house center) reaches along the unit vector
-    `toward` once turned by `rot` about the house center - the front row's standoff for a turned homestead."""
-    left, top, right, bottom = box
-    corners = turn_about([(left, top), (right, top), (right, bottom), (left, bottom)], 0.0, 0.0, rot)
-    return max(px * toward[0] + py * toward[1] for px, py in corners)

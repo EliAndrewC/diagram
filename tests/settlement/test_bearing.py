@@ -10,9 +10,8 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import bearing as B
-from l7r.diagram.settlement.rolling.fit import house_box, part_box
 from l7r.diagram.settlement.water_ways._helpers import DOORYARD_REACH_FT, HOUSE_SERVE_FT, dooryard_dist
-from tests.settlement._builders import _nuc_village
+from tests.settlement._builders import _nuc_village, seat_homestead
 
 
 def test_a_line_has_no_front_or_back() -> None:
@@ -68,38 +67,11 @@ def test_the_house_turn_is_common_bearing_lane_and_spread_within_thirty_and_neve
     assert all(x % B.KEY_CELL_PX == 0 and y % B.KEY_CELL_PX == 0 for x, y in seen)
 
 
-def test_a_turned_part_clears_the_box_it_is_drawn_in() -> None:
-    assert B.turned_box((0.0, 0.0, 10.0, 4.0), 0.0) == pytest.approx((0.0, 0.0, 10.0, 4.0))
-    assert B.turned_box((0.0, 0.0, 10.0, 4.0), 90.0) == pytest.approx((0.0, 0.0, 4.0, 10.0))
-    w30 = B.turned_box((0.0, 0.0, 10.0, 4.0), 30.0)
-    assert w30[2] > 10.0 and w30[3] > 4.0, "a raked part needs more ground on both axes"
-    assert B.turned_reach((-5.0, -2.0, 5.0, 2.0), 0.0, (0.0, 1.0)) == pytest.approx(2.0)
-    assert B.turned_reach((-5.0, -2.0, 5.0, 2.0), 90.0, (0.0, 1.0)) == pytest.approx(5.0), "a quarter turn reaches with its length"
-
-
 def test_a_hamlet_house_takes_the_bearing_rule_and_every_other_map_keeps_the_old_rake() -> None:
     s = _nuc_village()
     assert s._house_bearing is None and -5.0 <= s._house_rot(123.0, 456.0) < 5.0
     s._house_bearing = 4.0
     assert s._house_rot(123.0, 456.0) == pytest.approx(B.house_rot(s._hjit, 123.0, 456.0, 4.0, None))
-
-
-def test_the_bundle_boxes_are_the_drawn_parts_turned_and_the_parts_keep_their_true_size() -> None:
-    s = _nuc_village()
-    s._household_seat = (400.0, 400.0)
-    flat = s._bundle_geom(400.0, 400.0, 46.0, 28.0, "SE", shed=True, rot=0.0)
-    assert flat["boxes"]["house"] == pytest.approx(flat["house"]) and flat["boxes"]["yard"] == pytest.approx(flat["yard"])
-    turned = s._bundle_geom(400.0, 400.0, 46.0, 28.0, "SE", shed=True, rot=90.0)
-    assert turned["house"][2:] == pytest.approx((46.0, 28.0)), "the part keeps its true size, in its house's frame"
-    assert turned["boxes"]["house"][2:] == pytest.approx((28.0, 46.0)), "...and clears the ground it is drawn on"
-    assert turned["yard"][0] < 400.0 and abs(turned["yard"][1] - 400.0) < 1.0, "the yard turned with the house: to the west"
-    bb = turned["bbox"]
-    for key in ("house", "yard", "shed"):
-        bx = turned["boxes"][key]
-        assert bb[0] - bb[2] / 2 <= bx[0] - bx[2] / 2 + 1e-6 and bx[0] + bx[2] / 2 <= bb[0] + bb[2] / 2 + 1e-6
-    assert part_box({"yard": (1.0, 2.0, 3.0, 4.0)}, "yard") == (1.0, 2.0, 3.0, 4.0), "a hand-built geometry carries no boxes"
-    assert house_box({"x": 1.0, "y": 2.0, "w": 3.0, "h": 4.0}) == (1.0, 2.0, 3.0, 4.0)
-    assert house_box({"x": 1.0, "y": 2.0, "w": 3.0, "h": 4.0, "geom": turned}) == tuple(turned["boxes"]["house"])
 
 
 def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edge_toward_it_level() -> None:
@@ -108,12 +80,8 @@ def test_a_quarter_turned_homestead_draws_its_yard_beside_the_house_with_the_edg
     stays straight - the level edge is chosen in the house's frame, not the map's."""
     s = _nuc_village()
     s._house_bearing = 90.0
-    n = 0
-    for gx in range(380, 640, 100):
-        for gy in range(200, 720, 90):
-            if n < 4 and s.try_place(gx, gy, "plain"):
-                n += 1
-    assert n, "a quarter-turned homestead was seated"
+    for gx, gy in ((380, 200), (480, 290), (580, 380), (380, 470)):  # seated as the Rust seating records its households (444 T30)
+        seat_homestead(s, gx, gy)
     s.farmsteads()
     for h in s.M["houses"]:
         assert abs(B.wrap_line_deg(h["rot"])) > 45.0, "every house took the quarter turn"

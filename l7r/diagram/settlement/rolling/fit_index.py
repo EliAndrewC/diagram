@@ -43,35 +43,11 @@ def house_extent(rec: Any) -> tuple[float, float, float, float]:
     return x0 - 1.0, y0 - 1.0, x1 + 1.0, y1 + 1.0
 
 
-def recorded_box(r: Any, turn: float) -> tuple[float, float, float, float]:
-    """A laid fixture (x, y, w, h) as `grove_rules.fixtures_on_groves` reads its record: center and size rounded to 0.1 (the
-    drawn record's own rounding, `farm_fixtures`), turned by `turn` degrees (already rounded) - its axis-aligned box."""
-    x, y, w, h = round(float(r[0]), 1), round(float(r[1]), 1), round(float(r[2]), 1), round(float(r[3]), 1)
-    th = math.radians(turn)
-    return (x, y, abs(w * math.cos(th)) + abs(h * math.sin(th)), abs(w * math.sin(th)) + abs(h * math.cos(th)))
-
-
 def part_box(geom: Any, key: str) -> Any:
     """A bundle part as the fit rules read it: its box AS DRAWN, turned with its house (`_bundle_geom`'s `boxes`, 269 B18);
     the part itself where the bundle carries no boxes (a grove arm, which is drawn unturned, or a hand-built geometry)."""
     boxes = geom.get("boxes") or {}
     return boxes[key] if key in boxes else geom.get(key)
-
-
-def farmstead_boxes(geom: Any) -> list[Any]:
-    """The boxes of every part of a farmstead - the house, the yard, the storehouse (`shed`), the byre, the well and each garden
-    bed - as drawn (`part_box`): what the fit holds off every paddy polygon exactly. The house's own set-back from a bund
-    (`_wall_on_the_bund`, at its corners) is a further rule; this is the ground it covers.
-
-    Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the house, yard, storehouse plot, byre, well and garden beds, the whole farmstead, held off every paddy polygon
-    """
-    return [b for b in (part_box(geom, "house"), part_box(geom, "yard"), part_box(geom, "shed"), part_box(geom, "byre"), part_box(geom, "well"), *(part_box(geom, "gardens") or ())) if b is not None]
-
-
-def house_box(rec: Any) -> tuple[float, float, float, float]:
-    """A placed farmhouse's box AS DRAWN, turned (269 B18) - its record's own rect where it carries no bundle."""
-    box = part_box(rec.get("geom") or {}, "house")
-    return tuple(box) if box is not None else (rec["x"], rec["y"], rec["w"], rec["h"])  # type: ignore[return-value]
 
 
 def _extent_boxed(recs: Any) -> list[Any]:

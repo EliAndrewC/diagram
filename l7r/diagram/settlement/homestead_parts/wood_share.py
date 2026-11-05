@@ -383,18 +383,6 @@ class WoodShares:
             got = memo[(x, y)] = crown_cells(x, y, self.cr, self.cell)
         return got
 
-    def covers_a_seat(self, geom: Mapping[str, Any]) -> bool:
-        """Would this homestead's parts, admitted, stand a keep-out over a seat another household reserved?"""
-        circles, rects = self.keepouts(geom)
-        for cx, cy, r in circles:
-            if any((sx - cx) ** 2 + (sy - cy) ** 2 < r * r for sx, sy, *_ in self.seats.near(cx, cy, r)):
-                return True
-        return any(any(x0 < sx < x1 and y0 < sy < y1 for sx, sy, *_ in self.seats.near((x0 + x1) / 2, (y0 + y1) / 2, max(x1 - x0, y1 - y0) / 2)) for x0, y0, x1, y1 in rects)
-
-    def seats_on(self, seats: Iterable[tuple[float, float]], corridor: tuple[Pt, Pt]) -> bool:
-        """Does a corridor run within `lane_gap` of any of these seats?"""
-        return any(seg_dist(x, y, corridor[0], corridor[1]) < self.lane_gap for x, y in seats)
-
     def corridor_bars(self, a: Pt, b: Pt) -> bool:
         """Would a corridor a-b run within `lane_gap` of a reserved seat?"""
         # THE SEATS' CELLS THE STRIP CAN REACH, each asked once: a seat is filed in the one cell holding it, and a seat within
@@ -448,9 +436,6 @@ class ReservedSeats:
         self.pts = [(float(p[0]), float(p[1])) for h in houses for p in (h.get("wood_share") or {}).get("seats") or ()]  # the seats themselves, for an array form
         self.grid = PointGrid(64.0)
         self.grid.extend([(x, y, x, y, x, y) for x, y in self.pts])
-
-    def disc_covers(self, x: float, y: float, r: float) -> bool:
-        return any((sx - x) ** 2 + (sy - y) ** 2 < r * r for sx, sy, *_ in self.grid.near(x, y, r))
 
 
 def well_keepout(s: Settlement) -> float:

@@ -96,21 +96,6 @@ def test_a_settlement_with_no_boundary_runs_the_old_fit_path() -> None:
     assert s._site_chains is None and s._rect_blocked((500.0, 500.0, 40.0, 28.0), fields=True) and not s._rect_blocked((100.0, 100.0, 40.0, 28.0), fields=True)
 
 
-def test_front_row_from_the_chains_stands_off_the_whole_blob_at_the_pitch() -> None:
-    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
-    from l7r.diagram.hamletgen.homesteads.seats import front_row
-
-    s = _site()
-    chains, _corr, _outline = site_boundary(s, (500.0, 150.0))
-    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 150.0, "along": (1.0, 0.0), "anchor": (500.0, 280.0), "lat": 300.0}, "cluster_shape": "crescent", "envelope": SQUARE_FIELD})()
-    row = front_row(plan, 12, standoff=46.0, chains=chains)  # type: ignore[arg-type]
-    front = [(x, y) for x, y in row if 300.0 <= x <= 700.0 and y < 300.0]
-    assert front and all(y <= 300.0 - 46.0 + 4.0 for _x, y in front), "every seat fronting the paddy stands the standoff north of its chords (the hem is the others' outline, which the pre-test asks)"
-    xs = sorted(x for x, _y in front)
-    assert all(b - a >= BUNDLE_PITCH - 1.0 for a, b in zip(xs, xs[1:], strict=False)), "one bundle pitch apart along the front"
-    assert row[0] == min(row, key=lambda q: math.hypot(q[0] - 500.0, q[1] - 150.0)), "ordered center-out"
-
-
 def test_the_ground_between_two_ponds_is_buildable_because_the_others_outline_keeps_its_holes() -> None:
     """The mosaic case (Kuwabata): four ponds around a courtyard. The first cut's one facing blob refused the ground
     behind its front; the others' outline is asked by containment, and the courtyard is a hole in it - buildable."""
@@ -126,21 +111,6 @@ def test_the_ground_between_two_ponds_is_buildable_because_the_others_outline_ke
     assert s._site_blocks_rect((500.0, 780.0, 40.0, 28.0)), "a house on the field, by the paddy's own chains"
 
 
-def test_the_chain_walk_skips_a_zero_length_chord_and_caps_the_row_at_64() -> None:
-    """Two edges of the walk the pool never reaches: a chord whose ends coincide (a facing chain can carry one at a
-    corner) is stepped over, and a very long chain - here 9,000 px, 91 seats at the pitch - is thinned to 64 so a huge
-    fan cannot make the row unbounded (the old envelope walk's own cap, kept)."""
-    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
-    from l7r.diagram.hamletgen.homesteads.seats import front_row
-
-    plan = type("P", (), {"seat": {"cx": 4500.0, "cy": 100.0, "anchor": (4500.0, 300.0), "along": (1.0, 0.0), "lat": 10000.0}, "cluster_shape": "elongated"})()
-    chain = [((0.0, 300.0), (0.0, 300.0), (0.0, -1.0)), ((0.0, 300.0), (9000.0, 300.0), (0.0, -1.0))]
-    row = front_row(plan, 12, standoff=46.0, chains=[chain])  # type: ignore[arg-type]
-    assert len(row) == 64 and all(abs(y - (300.0 - 46.0)) < 1e-6 for _x, y in row)
-    xs = sorted(x for x, _y in row)
-    assert xs[0] == 0.0 and xs[-1] > 9000.0 - 2 * BUNDLE_PITCH, "the thinning keeps the whole span, not the first 64"
-
-
 def test_a_block_polygon_with_fewer_than_three_points_is_no_member() -> None:
     s = Settlement(W=1000, H=1000, seed=2)
     s.block_polys.append([(100.0, 100.0), (200.0, 100.0)])  # a degenerate registration
@@ -149,23 +119,10 @@ def test_a_block_polygon_with_fewer_than_three_points_is_no_member() -> None:
     assert len(rings) == 1 and not holes, "the two-point polygon contributes nothing; the square is the outline"
 
 
-def test_the_computed_standoff_without_an_envelope_is_the_house_alone() -> None:
-    """`standoff=None` with no envelope: the wall rule, the tilt's slack and the house's own half-extent along the
-    chord's normal (a caller that seats a bare house)."""
-    from l7r.diagram.hamletgen.homesteads.seats import DEFAULT_HOUSE, STANDOFF_SLACK_PX, front_row
-    from l7r.diagram.settlement.houses import HOUSE_PADDY_GAP_FT
-
-    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 100.0, "anchor": (500.0, 300.0), "along": (1.0, 0.0), "lat": 1000.0}, "cluster_shape": "round"})()
-    chain = [((300.0, 300.0), (700.0, 300.0), (0.0, -1.0))]
-    row = front_row(plan, 12, standoff=None, chains=[chain])  # type: ignore[arg-type]
-    assert row and all(abs(y - (300.0 - (HOUSE_PADDY_GAP_FT + 1.0 + STANDOFF_SLACK_PX + DEFAULT_HOUSE[1] / 2))) < 1e-6 for _x, y in row)
-
-
 def test_the_indexed_hit_points_answer_as_the_linear_scan_did() -> None:
     """Feature 276 (plan D8): the vertex grids, the hole grid and the one lookup per rectangle answer every rectangle
     exactly as the linear form - every water segment, every ring, every vertex, every hole - over random rings with
     holes and random water, including rectangles that hold a ring vertex without a sample point inside it."""
-    import math
     import random
 
     from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
@@ -209,40 +166,6 @@ def test_the_indexed_hit_points_answer_as_the_linear_scan_did() -> None:
             assert got == linear(pts)
             hits += got
         assert 20 < hits < 280, "non-vacuity: both answers occur"
-
-
-def test_free_ground_with_nothing_to_claim_claims_no_cell() -> None:
-    """Feature 276 (D9): a zero-length chord contributes nothing, no ground at all leaves the raster empty, and ground
-    thinner than the half-pixel shrink leaves it empty too - so a seat there is never pruned."""
-    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
-
-    none = FreeGround([[((10.0, 10.0), (10.0, 10.0), (0.0, 1.0))]], ([], []), None, (0.0, 0.0, 100.0, 100.0))
-    assert none.taken == set() and not none.rect_refused((10.0, 10.0, 4.0, 4.0))
-    thin = FreeGround([], ([((0.0, 50.0), (100.0, 50.0), 0.3)], []), None, (0.0, 0.0, 100.0, 100.0))
-    assert thin.taken == set() and not thin.rect_refused((50.0, 50.0, 4.0, 4.0))
-
-
-def test_a_seat_deeper_than_any_ways_reach_is_refused_and_one_within_reach_is_not() -> None:
-    """Feature 278 (FR-005): a way is never drawn on the web's hard ground nor within `WEB_HARD_GAP` of it, so a house
-    whose center stands more than `WEB_REACH_FT` inside that inflated ground is one `unreached_houses` must fail. A
-    500 px field: its middle is refused; a point 60 px in (a way on the margin 68 px off - within reach) is not, nor is
-    one outside; and with no ground installed the settlement refuses nothing."""
-    from l7r.diagram.hamletgen.consts import WEB_HARD_GAP, WEB_REACH_FT
-    from l7r.diagram.hamletgen.homesteads.boundary import UnreachableGround
-    from l7r.diagram.settlement import Settlement
-
-    field = [(100.0, 100.0), (600.0, 100.0), (600.0, 600.0), (100.0, 600.0)]
-    ground = UnreachableGround([field])
-    assert ground.refuses(350.0, 350.0), "the middle of the field, 258 px from any ground a way may stand on"
-    assert not ground.refuses(160.0, 350.0), "60 px in: a way at the margin stands 68 px off, within reach"
-    assert not ground.refuses(60.0, 350.0), "outside the field"
-    edge = WEB_REACH_FT - WEB_HARD_GAP  # the depth at which a margin way stands exactly at the reach
-    assert not ground.refuses(100.0 + edge - 1.0, 350.0) and ground.refuses(100.0 + edge + 3.0, 350.0), "the line sits at the reach"
-    assert UnreachableGround([]).deep is None and not UnreachableGround([]).refuses(0.0, 0.0)
-    s = Settlement(800, 800, seed=1)
-    assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is False
-    s._unreachable = ground
-    assert s._house_unreachable((350.0, 350.0, 40.0, 26.0)) is True
 
 
 def test_free_ground_asks_blocks_of_cells_first_and_claims_what_asking_every_cell_claims() -> None:
@@ -317,27 +240,6 @@ def test_free_ground_decides_a_cell_past_its_bounds_as_one_inside() -> None:
     assert not bare.point_taken(500.0, 500.0) and bare.point_clear(500.0, 500.0), "no ground at all: clear everywhere"
 
 
-def test_cells_past_the_window_decided_in_one_call_answer_as_one_at_a_time() -> None:
-    """`FreeGround.decide_beyond` (feature 318, the perf-audit's second round): the cells past the grid's window decided in one
-    vectorized call answer exactly as `_cell_beyond` does one at a time; cells inside, and cells already decided, are left."""
-    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
-
-    water = ([((300.0, 0.0), (300.0, 1000.0), 40.0)], [])
-    pts = [(x, y) for x in range(4, 1000, 37) for y in range(4, 1000, 53)]
-    one = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
-    want = {(x, y): (one.point_taken(x, y), one.point_clear(x, y)) for x, y in pts}
-    batch = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
-    batch.decide_beyond([p[0] for p in pts], [p[1] for p in pts])
-    n = len(batch._beyond)
-    assert n == len(one._beyond) > 0 and all((batch.point_taken(x, y), batch.point_clear(x, y)) == want[(x, y)] for x, y in pts)
-    assert len(batch._beyond) == n, "every cell past the window was decided by the batch"
-    batch.decide_beyond([50.0, float(pts[-1][0])], [50.0, float(pts[-1][1])])
-    assert len(batch._beyond) == n, "inside the window, and already decided: nothing more asked"
-    bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
-    bare.decide_beyond([500.0], [500.0])
-    assert bare._beyond[(62, 62)] == (False, True)
-
-
 def test_a_scattered_hamlets_boundary_rings_its_fields_on_every_side() -> None:
     """Feature 385 T06 (the round arbiter on ask:t06-scattered-single-file): a scattered farm stands by its own fields on any
     side, so the field is asked by CONTAINMENT, not by chords facing one seat, and seats are offered round the paddy and its
@@ -358,23 +260,3 @@ def test_a_scattered_hamlets_boundary_rings_its_fields_on_every_side() -> None:
     assert not s._site_blocks_rect((200.0, 500.0, 40.0, 28.0)), "...and one west of it, on a side no chord faced, stands"
     install_site_boundary(s, plan)  # type: ignore[arg-type]
     assert not s._fields_ringed and s._seat_ring_chains == [] and s._site_chains, "the clustered boundary, as before"
-
-
-def test_the_points_asked_together_answer_as_each_point_asked_alone() -> None:
-    """Feature 427 T07: `FreeGround.points_taken` is `point_taken` for every point at once - the grid's cells, and cells past
-    the grid (decided as `_cell_beyond` decides them); a grid of points wholly on the grid asks nothing past it."""
-    import random
-
-    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
-
-    water = ([((0.0, 130.0), (400.0, 170.0), 12.0)], [])
-    ring = ([[(200.0, 220.0), (330.0, 220.0), (330.0, 330.0), (200.0, 330.0)]], [])
-    fg = FreeGround([], water, ring, (0.0, 0.0, 400.0, 400.0))
-    rng = random.Random(11)
-    pts = [(rng.uniform(-60.0, 460.0), rng.uniform(-60.0, 460.0)) for _ in range(800)]
-    got = fg.points_taken([p[0] for p in pts], [p[1] for p in pts]).tolist()
-    alone = FreeGround([], water, ring, (0.0, 0.0, 400.0, 400.0))
-    assert got == [alone.point_taken(x, y) for x, y in pts]
-    assert any(got) and not all(got), "non-vacuity: taken and free points both"
-    on_grid = fg.points_taken([210.0, 10.0], [230.0, 10.0]).tolist()
-    assert on_grid == [fg.point_taken(210.0, 230.0), fg.point_taken(10.0, 10.0)]

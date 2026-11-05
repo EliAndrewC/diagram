@@ -2,6 +2,7 @@
 
 import math
 import re
+from typing import Any
 
 from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement
@@ -233,3 +234,23 @@ def seed_tree(s, center, out, length):  # noqa: ANN001, ANN201
     s.M["access_corridors"] = []
     s.M["way_out_track"] = [list(center), list(end)]  # the tree's root before the track out is drawn (`tree._root`)
     return tree
+
+
+def seat_homestead(s: Any, x: float, y: float, kind: str = "plain", shed: bool = False, size: tuple[float, float] = (46.0, 28.0), side: str = "E") -> dict[str, Any]:
+    """Seat one homestead at (x, y) as the Rust seating's records are written (`rust_seating.record_seated`), with no fit test asked
+    - its bundle laid by `_bundle_geom`, its box placed, its record queued for `farmsteads` - the scene a drawing test needs now the
+    Python placer is gone (feature 444 T30). `kind="abandoned"` is a lone ruin, no bundle. The record, returned."""
+    from l7r.diagram.settlement.rolling.lot import record_parts
+
+    hw, hh = s.px(size[0]), s.px(size[1])
+    if kind == "abandoned":
+        s.placed.append((x, y, hw, hh))
+        rec: dict[str, Any] = {"x": x, "y": y, "w": hw, "h": hh, "kind": kind, "rot": s._house_rot(x, y), "role": None, "shed": False, "wealth": 1.0}
+    else:
+        geom = s._bundle_geom(x, y, hw, hh, side, shed=shed)
+        s.placed.append(geom["bbox"])
+        rec = {"x": x, "y": y, "w": hw, "h": hh, "kind": kind, "rot": s._house_rot(x, y), "role": None, "shed": shed, "shed_side": "N", "wealth": 1.0, "geom": geom}
+        record_parts(s, rec, geom, None)
+    s.M["houses"].append(rec)
+    s._pending_farmsteads.append(rec)
+    return rec

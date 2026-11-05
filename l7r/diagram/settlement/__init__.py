@@ -16,7 +16,6 @@ adapt its checks per village instead of assuming one village's specifics.
 Research: package re-exports - NONE
 """
 
-from ._geom import FARMHOUSE_EAVE_GAP_FT as FARMHOUSE_EAVE_GAP_FT
 from ._geom import LABEL_AIR_CAP as LABEL_AIR_CAP
 from ._geom import LABEL_MIN_AIR as LABEL_MIN_AIR
 from ._geom import LANDING_FT as LANDING_FT

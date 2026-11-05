@@ -129,7 +129,7 @@ Corridor setup:
 - `_corridor_ground`, `_corridor_tree` (`seating_judge`) and `_corridor_drawn` (`seating_drawn`) are installed.
 - `_out = exit_bearing(seat, out, length = 1.5*bound + 100)` tries turns 0, ±15 ... ±90 degrees and takes the first line `lawful_ground` admits (`R/access.py:220-236`). None means return 0 and refuse the margin.
 - `_access = AccessTree(px(7 ft))` starts EMPTY. Its `routed` flag is True, but `access_corridor` is never called here.
-- `_way_out_anchor` is the three points centre, centre + out*bound, centre + out*length (`:583`).
+- `_way_out_anchor` is the three points center, center + out*bound, center + out*length (`:583`).
 - `_seat_region = SeatRegion(seating_window)`.
 - Passage share: `passage_share(seed)` is rolled in 0..0.25. `_passage_left = floor(share * households)`.
 - If `byre_form == detached_commons`, the shared-shed pockets are reserved (`reserve_commons_byres`).
@@ -150,7 +150,7 @@ Corridor setup:
 
 `SiteCorridors` (`:180`) indexes these in `PointGrid(128)` cells. Each ring also carries a vertex `PointGrid(32)`, and the holes carry a `PointGrid(128)` of boxes.
 - `hit_points` asks the water set at all 9 points, and the rings by containment or vertex-in-rectangle.
-- `hit_center` asks the registered set at the centre only.
+- `hit_center` asks the registered set at the center only.
 
 `FreeGround` (`:274`):
 - Cell is `FREE_GROUND_CELL = 8 px`, on the canvas grid, rasterized over `seating_window`.
@@ -168,7 +168,7 @@ Corridor setup:
 - Cell 8 px, FreeGround's own grid, two `Region` rasters over the window.
 - `buildable` holds FreeGround's taken cells, corridor strips at the 7 ft half-width, and the wood seats as radius-1 circles.
 - `lane` holds the taken cells plus the water courses painted at `clr - GROW*cell`, and wood seats.
-- The reach flood (`_reached`): lane taken cells grown by one cell (`LaneGround`, 8-neighbour), free cells labelled 4-connected (`scipy.ndimage.label`), seeded from the tree segments if any, else from `anchor_in_window` (the way-out anchor stretch past the band).
+- The reach flood (`_reached`): lane taken cells grown by one cell (`LaneGround`, 8-neighbor), free cells labeled 4-connected (`scipy.ndimage.label`), seeded from the tree segments if any, else from `anchor_in_window` (the way-out anchor stretch past the band).
 - The flood is cached and recomputed after each house or corridor change.
 - `offer(pts)` is true where at least one of the 4 garden-side envelopes at the smallest house (`LENGTH_FACTORS[0]`, `DEPTH_FACTORS[0]`, unturned, no parts) is clear in `buildable`. The box is shrunk by one cell, and the yard box must touch a reachable cell via a summed-area table. Seats whose boxes leave the window are offered unjudged.
 - `opens(geom)` is the same yard-touches-reach test, with the yard grown by `half + cell`.
@@ -177,14 +177,14 @@ Corridor setup:
 ### 3.4 Growth (`H/growth.py:373`)
 ```
 if no houses:
-    seats = free_seats(seat centre, field=plan.envelope)   # capacity.py:73
+    seats = free_seats(seat center, field=plan.envelope)   # capacity.py:73
         grid pitch 100/3 ft, canvas inset 6 px, drop FreeGround-taken points
         drop points within 50 px of a house
         sort by (round(dist/pitch), field distance, x, y)
     seats = region.offer(seats)
     offer_seats(seats, 0, 1, DRY_SPELL=400)    # 400 offers in a row seating none ends it
 ```
-First house: the free ground nearest the seat centre.
+First house: the free ground nearest the seat center.
 
 Next houses:
 ```
@@ -237,12 +237,12 @@ _try_place_bundle:
 5. For each side (rank 0 to 3):
    - If the union is blocked, test the side's own box with `rect_refused`, then `_envelope_blocked`.
    - `_envelope_blocked` (`R/fit.py:264`) tests the canvas margin (6 px), `self.bound`, `_rect_blocked` (nine-point `_site_blocks_rect`), `tree.covers_box`, and the placed-box index. The placed-box index is a `_reach_index` over `s.placed` (cell size not read), queried with margin 2 px; it returns the one overlapping box, or True for two or more.
-   - On exactly one overlap, apply ONE computed move: shift along the smaller-overlap axis by (overlap + 2 px) away from that neighbour, rebuild the geometry, and re-test. `_grown_keep` must hold or the move is refused.
+   - On exactly one overlap, apply ONE computed move: shift along the smaller-overlap axis by (overlap + 2 px) away from that neighbor, rebuild the geometry, and re-test. `_grown_keep` must hold or the move is refused.
    - If the seat is unmoved, ask `region.opens(geom)` once per seat.
    - Run `_parts_fit`.
    - Score: `(sum(_garden_shaded), rank // 2, hand)`. The hand is `(rank % 2) XOR (hjit(cx, cy, 12) < 0.5)`. The lowest score wins.
 
-The nine points are the 4 corners, 4 edge midpoints and centre (`R/fit.py:256`). `_site_blocks_rect` asks chains at gap 0 only for points not in a `point_clear` cell. A rectangle needs one point in a taken cell to be refused outright.
+The nine points are the 4 corners, 4 edge midpoints and center (`R/fit.py:256`). `_site_blocks_rect` asks chains at gap 0 only for points not in a `point_clear` cell. A rectangle needs one point in a taken cell to be refused outright.
 
 `_parts_fit` order (`R/fit.py:309-431`):
 1. `geom["unlaid"]` refused.
@@ -262,14 +262,14 @@ On success `try_place` appends `geom["bbox"]` to `s.placed`, then calls `reserve
 ### 3.6 Parts layout (`R/bundle.py:194`)
 - House: `px(46)*LENGTH_FACTORS[i]` by `px(28)*DEPTH_FACTORS[i]` from the size ladder, with `LENGTH_FACTORS = (0.85, 1.35)` and `DEPTH_FACTORS = (0.90, 1.10)`. Rung k goes to household k; the ladder is shuffled by seed. Aspect cap 2.7.
 - Gap between house and yard or garden: `px(3)`.
-- Yard: `_yard_dims(hw, hh, seat)`, a rolled area (not read), centred on the south front.
+- Yard: `_yard_dims(hw, hh, seat)`, a rolled area (not read), centered on the south front.
 - Garden: `0.48*hw` by `0.85*hh`, jittered up by `hjit(3)` and `hjit(4)` times 0.25, capped at 44 by 34 ft.
 - Sides: SE, SW (south corners), E, W walls. Beds split with probability 0.26: flank (E and W), stacked (south only), or side by side.
 - Kura: a north annex, `kura_rect`, when `lot[2]`. Share `KURA_SHARE = 0.125` by count, dealt to the largest houses first.
 - Byre: `byre_part` on the flank away from the garden, `BYRE_FT = (16.12, 10.92)`, gap `YARD_SHED_GAP_FT[0] = 6 ft`, when `lot[3]` and the byre form is a household form.
 - Fixtures (`lay_fixtures`, `fixture_seats.py`): kinds from the lot, in the order retirement, bath, woodpile, privy, manure, coop, shrine, grave, persimmon. Wall gap 3.5 ft, outward step 8 ft up to 24 steps. The bath is joined to the house. The wood shed stands a ken off a wall. Sizes are rolled per household.
 - No grove and no well pocket on the nucleated bundle.
-- Rake: each part is carried round the house centre by `_house_rot` (common bearing within 11.25 degrees of south, plus MarginBearing, plus a spread of at most 30 degrees). `boxes` are the turned axis-aligned boxes. `bbox` is the union of all parts.
+- Rake: each part is carried round the house center by `_house_rot` (common bearing within 11.25 degrees of south, plus MarginBearing, plus a spread of at most 30 degrees). `boxes` are the turned axis-aligned boxes. `bbox` is the union of all parts.
 - Template cache keyed on `(hw, hh, side, shed, nucleated, seat, byre, fixtures)`.
 
 Wood share (`P/wood_share.py:332`):
@@ -388,16 +388,16 @@ Under `rng_scope("farmsteads")`:
 - 0075: bamboo.
 - 0081: village lanes: gaps between plots, joins and knots at 25 ft, tread 3 ft off walls, lane law.
 - 0196: wells.
-- 0246: the central page: houses before lanes, the ways laid in the gaps, the threading gap, passage across a neighbour's yard.
+- 0246: the central page: houses before lanes, the ways laid in the gaps, the threading gap, passage across a neighbor's yard.
 - 0285: the 162 ft seating ground.
 
 ## 6. Repair passes and retry loops
 
 Placed, then moved or removed:
-- **One computed move in the placer** (`R/place.py:273-292`): a seat overlapping one neighbour is shifted by overlap + 2 px and re-tested; refused if `_grown_keep` fails.
+- **One computed move in the placer** (`R/place.py:273-292`): a seat overlapping one neighbor is shifted by overlap + 2 px and re-tested; refused if `_grown_keep` fails.
 - **Pushed seat across the brook** (`H/stages.py:384-423`, `_ground_push`, `_tries`). This is on the front-row path, which the grown nucleated path skips (`for _rung in () if _grown`).
 - **`settled_seat`**: up to 4 outward moves until the household's rolled envelope clears.
-- **`_relax_gardens_south`** (`R/farmsteads.py:183`): moves a drawn bed south in 4*bscale steps up to `bed height + house height + 6` when a neighbour's grove shades its east. It is a no-op on nucleated, which has no groves.
+- **`_relax_gardens_south`** (`R/farmsteads.py:183`): moves a drawn bed south in 4*bscale steps up to `bed height + house height + 6` when a neighbor's grove shades its east. It is a no-op on nucleated, which has no groves.
 - **`gap_ways._way_for`**: pops the household's own bbox from `placed` while searching, then re-inserts it (`R/gap_ways.py:519-577`). This is temporary, not a repair.
 - **Passage revoke**: a tight-seat household later given a real way has `reached_across`, `passage_depth` and `passage` popped and `meta.passage_revoked` incremented (`R/gap_ways.py:483-486`).
 - **`unseat_to(mark)`** on the margin ladder, only when no house stands, so no house is ever removed (`:304`).

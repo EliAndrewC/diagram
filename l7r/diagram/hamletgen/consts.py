@@ -148,24 +148,6 @@ LANE_CLEARANCE = 7.0
 CLUSTER_SPAN_FACTOR = 1.6
 """Research: cluster's reach along the field edge - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); 1.6 of the band's half-extent"""
 
-CLUSTER_ROW_SPAN = {"round": 1.2, "crescent": 1.6, "elongated": 2.6, "split": 1.6}
-"""How far the FRONT ROW wraps along the field outline, per rolled `cluster_shape`, as a multiple of
-the seat band's own half-length.
-
-The band aspect (`CLUSTER_BAND_ASPECT`) was not enough on its own, and the measurement says why:
-with the band alone, Kashikawa declared `elongated` and DREW 1.2:1, because the row wraps 1.6x past
-the band in every direction and the lane-frontage pass then fills behind it. A declaration that does
-not describe the drawing is the exact failure the old stamping guard existed to prevent, so binding
-the shape at the band and declaring it unconditionally without this would have reintroduced it in a
-worse form - the knob would read as honored on every map while changing almost nothing.
-
-So the shape governs the ROW's reach too: a round hamlet keeps its row short and packs depth behind
-it, an elongated one strings along the margin. Crescent keeps 1.6, the value every map used before,
-so a crescent map is unchanged. `ways.py` keeps reading the plain `CLUSTER_SPAN_FACTOR` for the lane
-frame - that frame spans the houses that actually landed, which is a different question.
-
-Research: front row's reach per shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 1.2 round to 2.6 elongated"""
-
 # HOW MUCH GROUND ONE HOMESTEAD TAKES, in px at 1 ft/px - the pitch the cluster band is sized on.
 # A bundle's reserved rects come to ~71 x 57 ft. 92 px per household leaves the cluster dense enough
 # to read as a nucleus and open enough for its courtyards, its wells and its byres. See

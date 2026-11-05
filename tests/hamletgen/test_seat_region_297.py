@@ -51,39 +51,6 @@ def test_a_box_touches_reach_where_any_of_its_cells_is_reachable() -> None:
     assert got.tolist() == [True, False]
 
 
-def test_a_seat_is_offered_where_a_side_fits_and_its_yard_reaches_the_tree() -> None:
-    s = _open()
-    s._free_ground = SimpleNamespace(taken={(i, j) for i in range(0, 20) for j in range(0, 175)}, cell=8.0, x0=0.0, y0=0.0)  # the west strip, 160 px, surely taken
-    s.placed = []
-    region = SeatRegion(s, (0.0, 0.0, 1400.0, 1400.0))
-    assert region.cell == 8.0 and region.window[0] == 0.0
-    assert region.offer([]) == []
-    assert region.offer([(60.0, 700.0), (700.0, 700.0)]) == [False, True], "on taken ground / open ground, no tree: reach not asked"
-    s._access = AccessTree(7.0)
-    s._access.add((600.0, 900.0), (900.0, 900.0))
-    s.M["houses"] = [{"x": 1.0, "y": 1.0, "wood_share": {"seats": [(1000.0, 1000.0)]}}]
-    s.placed = [(500.0, 500.0, 30.0, 30.0)]
-    assert region.offer([(700.0, 700.0)]) == [True], "a door with free ground to the tree"
-    fence = Region((0.0, 0.0, 1400.0, 1400.0), 8.0)
-    region.lane.line([(400.0, 300.0), (1100.0, 300.0)], 6.0)  # cut a pocket of lane ground north of a wall, no way to the tree
-    region.lane.line([(400.0, 300.0), (400.0, 100.0)], 6.0)
-    region.lane.line([(1100.0, 300.0), (1100.0, 100.0)], 6.0)
-    region.lane.line([(400.0, 100.0), (1100.0, 100.0)], 6.0)
-    region._reach = None
-    assert region.offer([(750.0, 180.0)]) == [False], "free ground, but walled off from the tree"
-    _ = fence
-
-
-def test_a_seat_outside_the_regions_window_is_offered_unjudged() -> None:
-    """Feature 318 (the perf-audit's correction): the window bounds the rasters' cost, never where a house may stand - a seat
-    outside it is offered for the placer's own tests to decide, though the ground there is taken."""
-    s = _open()
-    s._free_ground = SimpleNamespace(taken={(i, j) for i in range(0, 175) for j in range(0, 175)}, cell=8.0, x0=0.0, y0=0.0)
-    s.placed = []
-    region = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
-    assert region.offer([(600.0, 600.0), (1100.0, 600.0), (600.0, 100.0)]) == [False, True, True], "inside: judged; outside: offered"
-
-
 def test_the_seating_window_grows_with_the_households_and_stays_on_the_canvas() -> None:
     """`boundary.seating_window` (feature 318): the seat out twice the radius the households' seating ground would fill
     (`SEATING_GROUND_FT` each), clipped to the canvas."""
@@ -101,24 +68,6 @@ def test_the_seating_window_grows_with_the_households_and_stays_on_the_canvas() 
     assert big[2] - big[0] > 2 * r, "more households, a wider window"
     assert seating_window(s, (100.0, 3950.0), 15) == (0.0, math.floor((3950.0 - r) / FREE_GROUND_CELL) * FREE_GROUND_CELL, 100.0 + r, 4000.0), "clipped to the canvas"
     assert seating_window(s, (2000.0, 2000.0), 0) == seating_window(s, (2000.0, 2000.0), 1)
-
-
-def test_a_seat_whose_box_crosses_the_windows_edge_is_offered_and_reach_runs_round_the_outside() -> None:
-    """Feature 318: a seat inside the window whose envelope crosses its edge is judged by no raster cell of its own - offered;
-    and with an access tree, ground cut off from it inside the window but open to the window's inner edge is reached."""
-    s = _open()
-    s._free_ground = SimpleNamespace(taken=set(), cell=8.0, x0=0.0, y0=0.0)
-    s.placed = []
-    region = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
-    near_edge = 800.0 - min(b[2] for b in region.sides) + 4.0  # its east box reaches 4 px past the window's east edge
-    assert region.offer([(near_edge, 600.0)]) == [True]
-    tree = AccessTree(half=7.0)
-    tree.add((420.0, 420.0), (460.0, 420.0))
-    s._access = tree
-    walled = SeatRegion(s, (400.0, 400.0, 800.0, 800.0))
-    walled.buildable.line([(500.0, 400.0), (500.0, 800.0)], 4.0)  # a wall between the tree and the east of the window
-    walled._reach = None
-    assert walled.offer([(650.0, 600.0)]) == [True], "reached round the outside, through the window's open east edge"
 
 
 def test_a_yard_opens_onto_lane_ground_connected_to_the_way_out() -> None:

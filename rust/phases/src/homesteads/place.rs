@@ -1,8 +1,11 @@
 //! Seating a nucleated cluster (feature 444 T30): the first house on the free ground nearest the seat's center, each next house
 //! offered from a standing one at the distance their footprints part, ring by ring, jittered by the standing house's position,
 //! wider rings while households are left; each offer laid on its four garden sides and judged - the house's box, the union of the
-//! sides, each side's own box with at most one computed move off a single neighbor, the parts' rules - and the first side by its rank kept
-//! kept. Every household is seated or the seating stops short; no house is taken back.
+//! sides, each side's own box with at most one computed move off a single neighbor, the parts' rules - and the first side by its rank
+//! kept. Every household is seated or the seating stops short; no house is taken back. The GM, 2026-10-02 (feature 308): "once you've
+//! placed the first house, you should notionally be able to compute the minimum distance needed to seat a second house, then place
+//! it in a direction, then repeat, with a little randomized jitter to the distance and direction so that it's not jhusgt [just] an
+//! unrealistic grid" - and "keep in mind the sunlight / shade requirements when computing minimum distance".
 //!
 //! Research:
 //!     the grown irregular cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the cluster grown from its first house

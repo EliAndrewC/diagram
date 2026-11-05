@@ -25,8 +25,6 @@ from .fixtures import _roll as _roll
 from .fixtures import farmstead_fixtures as farmstead_fixtures
 from .retirement import retirement_houses as retirement_houses
 from .seats import cluster_aspect as cluster_aspect
-from .seats import front_row as front_row
-from .seats import lane_frontage as lane_frontage
 from .stages import FORM_BOUND as FORM_BOUND
 from .stages import stage_appurtenances as stage_appurtenances
 from .stages import stage_homesteads as stage_homesteads

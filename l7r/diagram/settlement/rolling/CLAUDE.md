@@ -10,8 +10,8 @@ submodules are grouped by "what a session comes here to change" and are delibera
 `rolling.py` was never a bucket: it is one cohesive pipeline, from *a seat's candidates* down to *does this rectangle
 touch a ditch*. So its core modules are its LINKS, in order:
 
-    seeds -> bundle -> fit -> place -> farmsteads
-    (candidates)  (geometry)  (may it stand?)  (find a spot)  (draw it)
+    bundle -> fit -> place -> farmsteads
+    (geometry)  (may it stand?)  (find a spot)  (draw it)
 
 (Its head link, `roll.py` - the feature-005 knob engine that rolled a whole hamlet from a seed - was retired by feature
 388 once nothing shipped from it; the scripted hamlet, `hamletgen/`, composes these links now.)
@@ -21,7 +21,6 @@ is only worth its churn if tasks stop straddling files:
 
 | task | files it loads |
 |---|---|
-| add a settlement FORM (a new `*_seeds` generator) | `seeds.py` alone |
 | the standing "placer must test the ROTATED footprint it draws" debt ([`dev/placement.md`](../../../../dev/placement.md), CENTER vs FOOTPRINT item 3) | `fit.py` alone - `_bundle_common_fits` is the named three-line landing site |
 | the collision-circle swap (item 2) | `fit.py` + `place.py` |
 | change what the flush DRAWS (the garden relaxation) | `farmsteads.py` alone |
@@ -31,7 +30,6 @@ is only worth its churn if tasks stop straddling files:
 | file | look here when |
 |---|---|
 | `__init__.py` | you need the composition itself; never add logic here |
-| `seeds.py` | you are adding or changing a settlement FORM - the shape houses are strung in before any is placed: `line_seeds` (linear ribbon), `scatter_seeds` (dispersed), and `waterfront_seeds` (water town) |
 | `bundle.py` | you are changing what a homestead BUNDLE is - the dimensions: `_bundle_geom` (the whole metric layout, nucleated and dispersed), `_garden_beds` (the 1-or-2 bed dooryard garden and its three split forms), `_bbox_of`. **Pure geometry** - it places nothing, draws nothing, and calls nothing outside itself |
 | `dispersed.py` | you are changing the DISPERSED farmstead's layout (feature 291): the canonical frame (wind from the NW, deep bands N and W, yard S, garden E), the thin bands on the other rolled sides and the way in through a ring (`canonical_farmstead`), and the carry to the map's wind (`dispersed_layout`). Pure geometry, a leaf `bundle.py` calls |
 | `fit.py` | you are changing whether a bundle may STAND somewhere: `_rect_blocked` (the composite), `_rect_hits` / `_rect_on_water` (the primitives), `_bundle_fits` and its common/side halves, `_sun_corridor_ok` + `sun_corridor` (the opt-in threshing-yard sun rule), `_yard_sun_conflict`, `_garden_shaded`, and the two caches - `_poly_bboxes` and `_water_obstacles` |

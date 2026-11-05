@@ -12,23 +12,7 @@ import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.settlement import Settlement
 
-from .test_homesteads import _WELL_HOUSES, _only_seat, _toy_hamlet
-
-
-def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() -> None:
-    """Feature 287, homes H12: a lattice seat whose wellhead would reach past the crop's box is not drawn."""
-    from types import SimpleNamespace
-
-    from l7r.diagram.hamletgen.homesteads.wells import crop_extent_added
-
-    boxed = SimpleNamespace(_crop_boxes=lambda city: [(900.0, 1100.0, 900.0, 1100.0)])
-    assert crop_extent_added(boxed, (1000.0, 1000.0), [0.0], [0.0]) == 0.0
-    assert crop_extent_added(boxed, (1100.0, 1000.0), [0.0], [0.0]) == pytest.approx(12.376)  # the glyph's roof half-size (feature 328)
-    east = (1110.0, 1000.0)
-    plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0, well_siting="cluster")
-    fake = _only_seat(*east)
-    fake._crop_boxes = lambda city: [(950.0, 1100.0, 950.0, 1450.0)]  # type: ignore[attr-defined]
-    assert hg.place_wells(fake, plan, _WELL_HOUSES) == 0, "the one legal seat reaches 22 px past the box"  # type: ignore[arg-type]
+from .test_homesteads import _toy_hamlet
 
 
 def test_no_clustered_household_carries_a_well_pocket_and_every_well_is_shared() -> None:

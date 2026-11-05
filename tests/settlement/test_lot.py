@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-import math
 import statistics
-
-import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, HouseholdLots, house_aspect_bound, quota_carriers, quota_member, size_ladder
@@ -52,52 +49,6 @@ def _village() -> Settlement:
     s._nucleated = True
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
     return s
-
-
-def test_a_row_of_seats_at_one_pitch_carries_its_share_of_kura() -> None:
-    """H45's aliasing case: twelve seats along one row at one pitch, each household with its lot - 2 kura (12 x 0.125,
-    a half rounded up: feature 280 M20's one farm in eight), and each house drawn at its rung of the ladder."""
-    s = _village()
-    s._lots = HouseholdLots(3, 12)
-    for k in range(12):
-        assert s.try_place(150.0 + k * 100.0, 700.0, "plain")
-    houses = s.M["houses"]
-    assert sum(1 for h in houses if h["shed"]) == math.floor(12 * KURA_SHARE + 0.5) == 2
-    assert [(round(h["w"] / 46, 6), round(h["h"] / 28, 6)) for h in houses] == [(round(a, 6), round(b, 6)) for a, b in size_ladder(3, 12)]
-
-
-def test_an_explicit_size_past_the_minka_norm_is_refused_at_the_call() -> None:
-    s = _village()
-    with pytest.raises(ValueError, match="past 2.7:1"):
-        s.try_place(700.0, 700.0, "plain", size=(80, 20))
-    assert s.try_place(700.0, 700.0, "plain", size=(46, 28))
-
-
-@pytest.mark.parametrize("form", ["courtyard", "yard_shed"])
-def test_a_keepers_byre_is_a_part_of_its_bundle_and_every_one_is_drawn(form: str) -> None:
-    """H06: the byre is reserved inside the keeper's homestead box at seat time, so `draft_byres` draws every keeper's
-    stall where it was reserved - the count is the lots' quota, however full the courtyards are by then."""
-    from l7r.diagram.settlement.shrines_wells.byres import household_byre_form
-
-    s = _village()
-    s.pin_knob("byre_form", form)
-    s._byre_form, share = household_byre_form(s)
-    assert s._byre_form == form and 0.35 <= share <= 0.5
-    s._lots = HouseholdLots(3, 8, 0.5)
-    for k in range(8):
-        assert s.try_place(150.0 + k * 130.0, 700.0, "plain")
-    keepers = [h for h in s.M["houses"] if h.get("byre")]
-    assert len(keepers) == 4
-    for h in keepers:
-        bx, by, bw, bh = h["byre"]["box"]
-        ex, ey, ew, eh = h["geom"]["bbox"]
-        e = 1e-6
-        assert ex - ew / 2 - e <= bx - bw / 2 and bx + bw / 2 <= ex + ew / 2 + e and ey - eh / 2 - e <= by - bh / 2 and by + bh / 2 <= ey + eh / 2 + e, "inside its envelope"
-    # the courtyards filled after the seating: nothing is sought, every reserved stall is drawn
-    s.placed.extend([(h["x"], h["y"] + 60.0, 200.0, 60.0) for h in s.M["houses"]])
-    got = s.draft_byres()
-    assert len(got) == 4 == s.M["meta"]["byre_target"] and all(b["of"] for b in s.M["byres"])
-    assert s.M["meta"]["byre_form"] == form, "a map that draws byres declares their form (`byre_form_declared`)"
 
 
 def test_a_commons_form_or_a_dispersed_seating_lays_no_byre_in_a_bundle() -> None:

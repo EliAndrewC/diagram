@@ -2,7 +2,6 @@
 by seat order, the bundle lays it (`settlement/homestead_parts/fixture_seats.py`), and `farmstead_fixtures` draws it
 where it was laid - so no fixture is recorded short, and `meta.farm_fixtures_unseated` is never written."""
 
-import math
 from collections import Counter
 
 import pytest
@@ -10,22 +9,9 @@ import pytest
 import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram.hamletgen.homesteads import fixtures as fx
 from l7r.diagram.settlement import Settlement
-from l7r.diagram.settlement.rolling.lot import HouseholdLots
 
 from ._builders import a_plan
 from .test_homesteads import _toy_hamlet
-
-
-@pytest.mark.parametrize("n", [10, 13, 17, 20])
-def test_each_kinds_quota_is_its_share_of_the_households_and_a_floor_raises_it(n: int) -> None:
-    shares = fx.fixture_shares(7)
-    quota = fx.fixture_quota(7, n, {"shrine": 2})
-    lots = HouseholdLots(7, n, 0.0, quota)
-    kept = Counter(k for i in range(n) for k in lots.fixtures_of(i))
-    for kind, share in ((k, p) for k, p in shares.items() if k != "sty"):  # the sty is seated once the ways stand, never laid
-        want = max(math.floor(share * n + 0.5), 2 if kind == "shrine" else 0)
-        assert kept[kind] == want, (kind, kept[kind], want)
-    assert lots.fixtures_of(n) == () and lots.fixtures_of(-1) == ()
 
 
 def test_a_seated_hamlet_draws_every_fixture_its_lots_keep_and_records_none_short(monkeypatch: pytest.MonkeyPatch) -> None:

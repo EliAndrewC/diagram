@@ -464,11 +464,6 @@ def owed(M: Mapping[str, Any]) -> list[int]:
     return sorted({j for i in want for j in chain_of(recs, host, i)})
 
 
-def passage_anchors(M: Mapping[str, Any]) -> list[Pt]:
-    """Where each household reached across a neighbor's yard is reached from - the neighbors' positions (`reached_across`)."""
-    return [(float(h["reached_across"][0]), float(h["reached_across"][1])) for h in M.get("houses") or [] if h.get("reached_across")]
-
-
 def settle_tree(s: Any) -> int:
     """Step 4 (ways W01, W03): the tree lanes the web owes (`owed`), drawn as the gap pass judged them (`lanes_of`) - each
     once - and then the ordinary lanes that break a rule against

@@ -3,22 +3,11 @@ windward grove one tree deep, its bamboo a band along its south side past its pl
 
 from __future__ import annotations
 
-import math
 import types
 
 import pytest
 
 from l7r.diagram.hamletgen.homesteads import bamboo as bm
-from l7r.diagram.hamletgen.homesteads.rows import ACROSS_THE_WIND_COS, sheltered_by_the_row_across
-from l7r.diagram.hamletgen.plan import HamletSpec
-
-
-def test_a_farm_is_sheltered_only_with_its_street_across_the_wind_on_its_windward_side() -> None:
-    # a street running east-west, the far side (+1) north of it under a north wind: the street is south of the farm, to its lee
-    assert not sheltered_by_the_row_across(1, (0.0, -1.0), "N")
-    assert sheltered_by_the_row_across(-1, (0.0, -1.0), "N"), "the near row south of the street: the street and the row beyond to its north"
-    assert not sheltered_by_the_row_across(-1, (1.0, 0.0), "N"), "a street running with the wind shelters no one"
-    assert 0.38 < ACROSS_THE_WIND_COS < 0.39 and sheltered_by_the_row_across(-1, (0.0, -1.0), "XX"), "an unknown wind reads as the default NW"
 
 
 def test_a_sheltered_farm_s_windward_band_is_drawn_one_tree_deep_against_its_house() -> None:
@@ -55,13 +44,6 @@ def test_every_sheltered_farm_wants_its_bamboo_where_the_farmsteads_keep_it() ->
     assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="none"), houses) == 0, "none where the knob gave the farmsteads none"
     assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="thicket"), houses) == 0
     assert bm.household_bamboo_wanted(s, types.SimpleNamespace(bamboo="homestead"), houses[1:]) == 0
-
-
-def test_the_spec_takes_the_two_forms_and_refuses_another() -> None:
-    assert HamletSpec(name="T", seed=1, row_shelter="sheltered").row_shelter == "sheltered"
-    with pytest.raises(ValueError, match="row_shelter"):
-        HamletSpec(name="T", seed=1, row_shelter="hedge")
-    assert math.isclose(math.cos(math.radians(67.5)), ACROSS_THE_WIND_COS)
 
 
 def test_its_own_door_path_does_not_part_a_farm_from_its_band() -> None:

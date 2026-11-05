@@ -236,16 +236,6 @@ def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None
     return None
 
 
-def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
-    """May a corridor run a-b? Its strip clears every placed homestead box but its own (`own`, the candidate's bbox, whose
-    house it may not cross either), and its line stands on ground the site boundary admits - not on the field's side of a
-    chord, not within a water course's clearance, not inside the outline of the other ground.
-
-    Research: nothing built on a path - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the corridor clears every other homestead, the field side and the water's clearance
-    """
-    return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
-
-
 #: How far a way's tread edge stands from a farmhouse wall, in feet (feature 294 B7; RESEARCHED by feature 385 T07, 2026-10-18): a
 #: Japanese village house stood about 3 ft (3 shaku) back from a road's boundary (Wigmore 1892, Mino), and a north Chinese house kept
 #: a drip strip of 2 or 3 chi at its wall foot, which takes in the drip of eaves reaching out 2.2 chi (0247). It was 4 ft - a
@@ -580,33 +570,6 @@ def admitted(s: Settlement, corridor: tuple[Pt, ...], geom: Any, memo: dict[Any,
         if tree_admits(s, drawn, geom):
             return drawn
     return None
-
-
-def seat_reaches_tree(s: Settlement, core: Any) -> bool:
-    """Has this house and yard ANY corridor candidate to the access tree - a door whose strip clears the house and the standing
-    ground (`_house_candidates`)? The seat's own question (feature 297, FR-002), asked of the house-and-yard core before any
-    layout is built: the memo entry `access_corridor` keys on the same house and yard is the one created and peeked here, so a
-    layout's corridor search continues from it rather than starting again. True where no tree is installed. ASKED ONLY WHERE
-    NO SEAT REGION STANDS (a village's roll): a hamlet's seat asks `SeatRegion.opens` instead (feature 318).
-
-    Research: seat refused without a path - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
-    """
-    tree = getattr(s, "_access", None)
-    if tree is None:
-        return True
-    boxes = core.get("boxes") or {}
-    key = ("corridor", tuple(boxes.get("house") or core["house"]), tuple(boxes.get("yard") or core.get("yard") or ()))
-    memo = _standing_memo(s)[1]
-    found = memo.get(key)
-    if found is None:
-        found = memo[key] = ([], _house_candidates(s, tree, core))
-    if found[0]:
-        return True
-    nxt = next(found[1], None)
-    if nxt is None:
-        return False
-    found[0].append(nxt)
-    return True
 
 
 def yard_quad(geom: Any) -> list[Pt] | None:

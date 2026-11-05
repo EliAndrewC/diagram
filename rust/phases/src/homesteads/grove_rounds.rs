@@ -3,6 +3,13 @@
 //! stand in single file round the fields - its ranks behind the row in a brick, the rescue rounds and their cloud, and every free
 //! point of the ground nearest the seat first. The offers are `grove_seat.rs`'s.
 //!
+//! The front row's dead ends, carried from the Python stage it replaced (settlement-review, Inashiro, 2026-08-17) so they are not
+//! tried again: TIGHTENING THE BAND is wrong - dropping the row's `bound * 1.3` allowance to `bound` made Inashiro's house-to-lane
+//! median worse (109 to 158 ft) and Mizuguchi's (65 to 93): a row that cannot follow the field outline loses its seats to the cloud,
+//! which sits further from the tracks still. A CAP, NOT A LADDER: offering the standoff ladder twice, capped then uncapped, moved no
+//! median (the uncapped pass seated the houses the cap refused). And ONE COMPUTED RUNG for the standoff (feature 227 FR-002), never a
+//! ladder of them: a rung of one house depth seated nobody on Kuwabata's dike heads and the cluster drifted 112 ft off its field.
+//!
 //! Research:
 //!     a scattered hamlet's seating - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind in a brick pattern (off the line only on an alleys hamlet), a rescue cloud, then the exhaustive pass
 //!     the front row's size - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the square root of the households times the rolled shape's aspect band, at least 6, ranks seated behind it

@@ -84,12 +84,14 @@ is whole: nothing calls it but its tests, so it lands with T27-T29 without chang
    `_garden_sun_conflict`, `_yard_sun_conflict`); the row village runs `rows.py` from `seat_rows` (its streets, frames, holdings
    and lots - 25 functions) with the same placer and bundle. In order: the dispersed bundle in `bundle.rs` (its bands, frame and
    fixtures laid round them), the spiral placer and the dispersed fit, the front row and ranks, then `rows.py`.
-8. The door - its first half in (2026-11-04): under `L7R_RUST_SEATING` the nucleated growth runs in Rust
-   (`homesteads/rust_seating.py` gathers, `py_seat.rs` `seat_households` grows, each household recorded as
-   `_try_place_bundle` records one); still owed: the switch made the default, the Python growth deleted, and the rest below.
-   `homesteads/stages.py` gathers the inputs, calls the Rust, writes the records (`houses.py` `try_place`'s record,
-   `rolling/lot.py` `record_parts`), draws the farmsteads (`Settlement.farmsteads`) and reserves the seating; the counters (D5); the
-   Python above deleted (D4); `make rust-gate` through the stage; the tests moved.
+8. The door (2026-11-05): the stage's seating in all three forms (`rust_seating.py` `rust_grow`, `rust_scatter`, `rust_rows`), the
+   track out (`household_ways.chose_the_track`, `l7r_phases.track_out`) and every household's way (`household_ways.lay_the_ways`,
+   `l7r_phases.households_ways`) run in Rust with no switch, each recorded as the Python recorded it (`record_seated`, `reserve`,
+   `pinch`). The Python they replaced deleted to its dead closure (`make dead-closure`: the growth, the ranks, the exhaustive pass,
+   the front row, the Python rows, the gap ways' laying, the placer and fit chain under `try_place`, the passage search, the seed
+   forms), its tests with it; the front row's recorded dead ends carried to `grove_rounds.rs`. The track stage still chooses the
+   track for a form whose seating records none (the scattered and row forms), from Python's `track.choose_track_out`, until the
+   track phase ports it. Still owed: the counters (D5), `make rust-gate` through the stage, the claims, the audit.
 
 ## Size of what is left (measured 2026-11-04, `wc -l`)
 

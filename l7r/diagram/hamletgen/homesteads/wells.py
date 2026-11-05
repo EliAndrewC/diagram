@@ -44,13 +44,6 @@ def drawn_r(s: Any) -> float:
 # `well_gap_to_dwellings`, feature 287, homes H09); `seat_wells` asks it at each seat, against its own `gap` (feature 374 wave 154: the 80 ft seat, the 95 ft check)
 
 
-def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -> float:
-    """How far past the crop's predicted box a wellhead at `c` (its drawn radius included) reaches - 0 inside it
-    (feature 287, homes H12). The box is `_crop_boxes`, what `content_view` reads; a settlement that keeps none (a
-    stand-in) is judged against the house centers' own box."""
-    return extent_past(crop_box(s, xs, ys), drawn_r(s), c)
-
-
 def crop_box(s: Any, xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float, float, float]:
     """The crop's predicted box (x0, x1, y0, y1): `_crop_boxes`, what `content_view` reads, or the house centers' box on a
     settlement that keeps none. Taken once per well landed by `seat_wells` (feature 387: 13,205 builds a roll, 11.8 s profiled).
@@ -163,14 +156,6 @@ def well_target(households: int) -> int:
     Research: how many wells - research/questions/0196-communal-wells-ido.drawing.html: one per 6 households, one or two
     """
     return max(1, min(2, round(households / 6.0)))
-
-
-def worst_after(c: tuple[float, float, float], needy: Sequence[Mapping[str, Any]], standing: Sequence[float]) -> float:
-    """The walk of the household WORST served once a well is dug at `c` - the minimax objective of the greedy
-    pass in `place_wells`, lifted out (feature 223). `standing[i]` is needy house i's distance to its nearest
-    well already standing, computed once per sort by the caller; the house's walk after the dig is the smaller
-    of that and its distance to `c`, and the seat's score is the largest such walk."""
-    return max(min(sd, math.hypot(h["x"] - c[1], h["y"] - c[2])) for h, sd in zip(needy, standing, strict=True))
 
 
 def own_well_clear(s: Settlement, x: float, y: float, half: float, boxes: Sequence[tuple[float, float, float, float]]) -> bool:

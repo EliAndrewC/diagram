@@ -1,8 +1,7 @@
-"""A NUCLEATED CLUSTER SEATED IN RUST (feature 444 T30, the door's first half): what `growth.grow_the_margin` reads, gathered
-once the seat region stands, handed to `l7r_phases.seat_households` (`rust/phases/src/homesteads/place.rs` `grow`), and each
-household it seats recorded as `Settlement._try_place_bundle` records one - its box placed, its record, its parts and wood
-share. Run where `L7R_RUST_SEATING` is set, the Python growth's stand-in while the port is compared; the stage is wired to it,
-and the Python growth deleted, once the rest of the stage is ported (`specs/444-work-budget-program/phases/homesteads.port.md`).
+"""THE HOMESTEADS SEATED IN RUST (feature 444 T30, the door): what each seating form reads, gathered once the seat region stands,
+handed to `l7r_phases` - a nucleated cluster to `seat_households` (`rust/phases/src/homesteads/place.rs` `grow`), a scattered
+hamlet to `seat_scattered` (`grove_rounds.rs`), a row village to `seat_rows` (`row_seat.rs`) - and each household it seats
+recorded as `Settlement._try_place_bundle` records one: its box placed, its record, its parts and wood share.
 """
 
 from __future__ import annotations
@@ -10,6 +9,7 @@ from __future__ import annotations
 import math
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram import work_counts
 from l7r.diagram.settlement.homestead_parts.tree_shade import CANOPY_SHADE_FT
 from l7r.diagram.settlement.rolling.lot import record_parts
 from l7r.diagram.settlement.rolling.passage import reserve_way
@@ -110,7 +110,7 @@ def seat_inputs(s: Settlement, plan: SitePlan, byre_share: float, quota: dict[st
         "field": ring(plan.envelope),
         "streams": streams,
         "canvas": (float(s.W), float(s.H)),
-        "bearing": (math.degrees(math.atan2(ay, ax)), float(s._house_bearing)),
+        "bearing": (math.degrees(math.atan2(ay, ax)), float(s._house_bearing or 0.0)),
         "lots": (int(plan.spec.seed), int(plan.spec.households), float(byre_share)),
         "shares": [(k, float(v)) for k, v in quota.items()],
         "byre": getattr(s, "_byre_form", None),
@@ -236,7 +236,7 @@ def record_seated(s: Settlement, got: dict[str, Any]) -> int:
             "kind": "plain",
             "rot": geom["turn"],
             "role": None,
-            "shed": geom["shed"] is not None,
+            "shed": bool(h["kura"]),  # the lot's kura: a grove farm's drawn on its north wall, its bundle reserving none (as Python did)
             "shed_side": "N",
             "wealth": 1.0,
             "geom": geom,
@@ -248,6 +248,8 @@ def record_seated(s: Settlement, got: dict[str, Any]) -> int:
         recs.append(rec)
     offered, positions, rects, layouts = got["search"]
     s._seat_search.update({"grow_offered": offered, "grow_took": len(got["seated"]), "positions": positions, "rects": rects, "layouts": layouts, "rust_counts": sum(got["counts"].values())})
+    for k, n in got["counts"].items():  # the Rust's counted work on the stage's (feature 444 D5, as `sink_stage` hands its on)
+        work_counts.OPS[k] += n
     return len(got["seated"])
 
 

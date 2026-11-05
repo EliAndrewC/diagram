@@ -7,7 +7,6 @@ import math
 import random
 
 from l7r.diagram.settlement._geom import seg_dist, segments_cross
-from l7r.diagram.settlement.rolling import fit
 from l7r.diagram.settlement.structures.fixtures import _helpers as fx
 
 Pt = tuple[float, float]
@@ -70,20 +69,6 @@ def _old_on_stream(gc, pts, streams):
             if any(seg_dist(px, py, a, b) < hw for px, py in pts) or any(segments_cross(a, b, gc[e], gc[(e + 1) % 4]) for e in range(4)):
                 return True
     return False
-
-
-def test_the_stream_test_with_its_box_prefilter_is_the_old_test() -> None:
-    """FR-005: `rect_touches_stream` answers as the per-segment scan did - rects on, beside and exactly `hw` off a course."""
-    rng = random.Random(2817)
-    streams = [{"poly": _walk(rng, 25), "w": rng.choice((6.0, 9.0, 12.0))} for _ in range(3)] + [{"poly": [(5.0, 5.0)]}, {"poly": []}]
-    for _ in range(2000):
-        cx, cy, w, h = rng.uniform(-50, 650), rng.uniform(-50, 650), rng.uniform(8, 60), rng.uniform(8, 60)
-        gc = [(cx - w / 2, cy - h / 2), (cx + w / 2, cy - h / 2), (cx + w / 2, cy + h / 2), (cx - w / 2, cy + h / 2)]
-        pts = gc + [(cx, cy)]
-        assert fit.rect_touches_stream(gc, pts, streams) == _old_on_stream(gc, pts, streams)
-    line = [{"poly": [(0.0, 0.0), (100.0, 0.0)], "w": 10.0}]  # hw = 10: a corner exactly 10 off is clear (strict)
-    gc = [(40.0, 10.0), (60.0, 10.0), (60.0, 30.0), (40.0, 30.0)]
-    assert fit.rect_touches_stream(gc, gc + [(50.0, 20.0)], line) is _old_on_stream(gc, gc + [(50.0, 20.0)], line) is False
 
 
 def _old_lanes_clear(b, lanes):

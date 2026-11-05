@@ -7,15 +7,12 @@ import math
 import random
 from typing import Any
 
-import pytest
-
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.city.bridges import deck_admitted, undeckable_at
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import BAR_MARGIN_PX, ground_blocks, open_water_discs
 from l7r.diagram.settlement.rolling import access
-from l7r.diagram.settlement.rolling.lot import bundle_admitted, bundle_records, held_part_records
 from tests.settlement._builders import seed_tree
 
 from ._builders import _crop_settlement
@@ -145,54 +142,6 @@ def _laid_bundle(s: Settlement, x: float = 700.0, y: float = 700.0) -> dict[str,
 
 def _ditch_at(s: Settlement, x: float, y: float) -> None:
     s.M["field_ditches"].append({"poly": [[x - 1.0, y], [x + 1.0, y]], "w": 1.5})
-
-
-def test_every_part_a_bundle_lays_asks_the_registry_first() -> None:
-    """Under feature 284's probes Inashiro laid a privy on a field ditch that no fit rule asked about, and the hold at the
-    seating's end raised `OverlapRefused` (research R9, failure 4). Each part - the house, its yard, each bed, the well
-    pocket, the privy - is asked as the record it will stand as; a ditch under any one of them refuses the layout."""
-    s = _hamlet()
-    geom = _laid_bundle(s)
-    recs = bundle_records(geom, s._well_vr())
-    assert {k for k, _r in recs} == {"houses", "threshing_yards", "gardens", "wells", "farm_fixtures"}
-    assert bundle_admitted(s, geom), "nothing stands: admitted"
-    for key, rec in recs:
-        t = _hamlet()
-        _ditch_at(t, rec["x"], rec["y"])
-        assert not bundle_admitted(t, geom), f"a ditch under its {key}"
-    far = _hamlet()
-    _ditch_at(far, 100.0, 100.0)
-    assert bundle_admitted(far, geom)
-
-
-def test_the_held_parts_are_the_records_the_seat_asked_about() -> None:
-    """The hold and the seat's question build one record per part (`held_part_records`), so a part the seat was admitted
-    with is held on ground the registry admitted."""
-    s = _hamlet()
-    geom = _laid_bundle(s)
-    box = list(geom["boxes"]["fixtures"]["privy"])
-    held = held_part_records(geom["house"][0], geom["house"][1], geom["well"], [("privy", box), ("persimmon", box), ("coop", None)], s._well_vr())
-    assert held == [r for r in bundle_records(geom, s._well_vr()) if r[0] in ("wells", "farm_fixtures")]
-    assert [k for k, _r in held_part_records(0.0, 0.0, None, [("retirement", [1.0, 1.0, 4.0, 4.0])], 12.0)] == ["retirement_houses"]
-
-
-def test_the_bundle_fit_refuses_a_layout_the_registry_refuses(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The placers ask it: `_bundle_fits` (the dispersed spiral and the slides) and `_parts_fit` (the nucleated envelope)
-    refuse a layout one of whose parts the registry refuses, and admit it where nothing stands under it."""
-    s = _hamlet()
-    geom = _laid_bundle(s)
-    monkeypatch.setattr(type(s), "_bundle_common_fits", lambda self, g, grove_off_field=True: True)
-    monkeypatch.setattr(type(s), "_bundle_side_fits", lambda self, g: True)
-    assert s._bundle_fits(geom)
-    privy = geom["boxes"]["fixtures"]["privy"]
-    _ditch_at(s, privy[0], privy[1])
-    assert not s._bundle_fits(geom), "the privy on a ditch"
-    t = _hamlet()
-    for rule in ("_gardens_sun_ok", "_sun_corridor_ok"):
-        monkeypatch.setattr(type(t), rule, lambda self, *a: True)
-    assert t._parts_fit(geom)
-    _ditch_at(t, privy[0], privy[1])
-    assert not t._parts_fit(geom), "the privy on a ditch"
 
 
 def test_a_shared_shed_and_a_sty_ask_the_registry_first() -> None:

@@ -32,11 +32,9 @@ from .bundle import BundleGeomMixin
 from .farmsteads import FarmsteadFlushMixin
 from .fit import BundleFitMixin
 from .place import PlacerMixin
-from .seeds import SeedFormsMixin
 
 
 class RollingMixin(
-    SeedFormsMixin,
     BundleGeomMixin,
     BundleFitMixin,
     PlacerMixin,

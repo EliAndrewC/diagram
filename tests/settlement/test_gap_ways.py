@@ -4,11 +4,8 @@
 from __future__ import annotations
 
 import math
-from types import SimpleNamespace
 
-import numpy as np
-import pytest
-
+from l7r.diagram.hamletgen.homesteads import household_ways as hw
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import gap_ways as gw
 from tests.settlement._builders import seed_tree
@@ -24,7 +21,7 @@ def _site(xs: tuple[float, ...] = (600.0, 900.0)) -> tuple[Settlement, list[dict
     for x in xs:
         geom = s._bundle_geom(x, 700.0, 46.0, 28.0, "SE", rot=0.0)
         s.placed.append(geom["bbox"])
-        houses.append({"x": x, "y": 700.0, "geom": geom})
+        houses.append({"x": x, "y": 700.0, "w": 46.0, "h": 28.0, "rot": 0.0, "geom": geom})  # as a seated record carries them
     s.M["houses"] = houses
     return s, houses
 
@@ -32,16 +29,16 @@ def _site(xs: tuple[float, ...] = (600.0, 900.0)) -> tuple[Settlement, list[dict
 def test_nothing_is_laid_with_no_tree_or_no_house() -> None:
     s, _houses = _site()
     s._access = None
-    assert gw.lay_the_ways(s) == (0, 0)
+    assert hw.lay_the_ways(s) == (0, 0)
     s2, _ = _site(())
-    assert gw.lay_the_ways(s2) == (0, 0)
+    assert hw.lay_the_ways(s2) == (0, 0)
 
 
 def test_every_household_is_given_a_way_through_the_gaps_recorded_as_its_corridor() -> None:
     """D12: each household's way leaves its dooryard and joins the way out or a way laid before it; recorded and reserved as
     the seating's corridor was (`access_corridors`, the first leg naming the house)."""
     s, houses = _site()
-    assert gw.lay_the_ways(s) == (0, 0)
+    assert hw.lay_the_ways(s) == (0, 0)
     assert all(h["geom"].get("access") for h in houses), "every household reached"
     named = [c["of"] for c in s.M["access_corridors"] if c.get("of")]
     assert sorted(named) == [[600.0, 700.0], [900.0, 700.0]]
@@ -54,19 +51,8 @@ def test_a_passage_the_laid_ways_make_unnecessary_is_ended_where_it_stands() -> 
     """FR-001: a household reached across a yard that the gap pass gives a way keeps its house, and its passage ends."""
     s, houses = _site()
     houses[1].update(reached_across=[600.0, 700.0], passage_depth=1, passage=[[0.0, 0.0]])
-    assert gw.lay_the_ways(s) == (1, 0)
+    assert hw.lay_the_ways(s) == (1, 0)
     assert "reached_across" not in houses[1] and "passage" not in houses[1] and houses[1]["geom"]["access"]
-
-
-def test_a_household_no_way_reaches_is_reached_across_the_nearest_neighbors_yard(monkeypatch: pytest.MonkeyPatch) -> None:
-    """D13, the pinch: no admitted way - reached across the yard of the nearest household with one, the walk not drawn."""
-    s, houses = _site((600.0, 900.0, 1150.0))
-    real = gw._way_for
-    monkeypatch.setattr(gw, "_way_for", lambda s_, L, d, p, lays, rec, *a: None if rec is houses[2] else real(s_, L, d, p, lays, rec, *a))
-    assert gw.lay_the_ways(s) == (0, 1)
-    far = houses[2]
-    assert far["reached_across"] == [900.0, 700.0] and far["passage_kind"] == "pinch" and far["passage_depth"] == 1
-    assert "access" not in far["geom"]
 
 
 def test_the_pinch_needs_a_household_with_a_way() -> None:
@@ -76,225 +62,10 @@ def test_the_pinch_needs_a_household_with_a_way() -> None:
     assert gw.pinch(rec, [nb]) and rec["passage"] == [[0.0, 0.0], [10.0, 0.0]], "no yard: to its house"
 
 
-def test_lane_ground_holds_off_the_homesteads_the_wood_seats_and_the_sites_taken_ground() -> None:
-    """`lane_layers`: homesteads counted per cell at the half-width, the wood seats by the lane gap, the free-ground raster's
-    surely taken cells, and its uncertain cells asked exactly."""
-    s, _houses = _site((600.0,))
-    box = s.placed[0]
-    s._wood = SimpleNamespace(lane_gap=10.0, seats=SimpleNamespace(buckets={(0, 0): [(box[0] - box[2] / 2 - 40.0, box[1])]}))
-    state = np.zeros((40, 40), np.int8)
-    state[0, :] = 1  # the westmost column of free-ground cells surely taken
-    state[1, :] = 2  # the next surely clear
-    s._free_ground = SimpleNamespace(x0=0.0, y0=0.0, cell=40.0, nx=40, ny=40, _state=state, lines_edge_points=lambda lines: [])
-    s._site_corridors = SimpleNamespace(hit_points=lambda pts: pts[0][1] > 800.0)  # the uncertain ground south of 800 taken
-    s._site_chains = [[((0.0, 850.0), (1400.0, 850.0), (0.0, -1.0))]]  # ...and south of 850 on the field side of a chord, decided at once
-    L = gw.lane_layers(s, list(s.placed), list(s._access.segs), 7.0)
-    c = L.cell_of((box[0], box[1]))
-    assert c is not None and L.cover[c] == 1 and L.blocked()[c]
-    w = L.cell_of((box[0] - box[2] / 2 - 40.0, box[1]))
-    assert w is not None and L.site[w], "the wood seat"
-    k = (np.floor(L.cx / 40.0).astype(int)[:, None], np.floor(L.cy / 40.0).astype(int)[None, :])
-    clear = L.cover == 0
-    assert L.site[(k[0] == 1) & (k[1] >= 0) & clear].sum() == 0, "surely clear: never asked"
-    south = (k[0] > 1) & (np.broadcast_to(L.cy[None, :], L.site.shape) > 800.0) & clear
-    wx, wy = box[0] - box[2] / 2 - 40.0, box[1]
-    off_wood = (L.cx[:, None] - wx) ** 2 + (L.cy[None, :] - wy) ** 2 > 20.0**2
-    north = (k[0] > 1) & (np.broadcast_to(L.cy[None, :], L.site.shape) < 790.0) & clear & off_wood
-    assert south.any() and L.site[south].all() and not L.site[north].any(), "uncertain: asked exactly"
-    s._site_corridors = None
-    deep = (k[0] > 1) & (np.broadcast_to(L.cy[None, :], L.site.shape) > 855.0) & clear
-    L2 = gw.lane_layers(s, list(s.placed), list(s._access.segs), 7.0)
-    assert deep.any() and L2.site[deep].all() and not L2.site[south & ~deep & (np.broadcast_to(L.cy[None, :], L.site.shape) < 845.0)].any(), "the chords alone"
-    assert L.cell_of((-50.0, 0.0)) is None
-
-
-def test_the_flood_keeps_to_open_ground_cuts_no_corner_and_stops_past_the_last_ring() -> None:
-    L = gw.Layers(0.0, 0.0, 12, 12, 5.0)
-    L.cover[5, 0:11] = 1  # a wall with a gap at the bottom row
-    L.cover[4, 10] = 1  # ...and a corner a diagonal would cut
-    dist, pred = gw.flood(L, [((2.0, 2.0), (2.0, 2.0)), ((-50.0, -50.0), (-40.0, -50.0))], [(8, 9, 0, 1)])
-    assert dist[0, 0] == 0.0 and math.isfinite(dist[8, 0]), "round the wall's end"
-    assert not math.isfinite(dist[5, 3]), "never through it"
-    assert tuple(pred[6, 11]) != (5, 10) and tuple(pred[6, 11]) != (4, 10)
-    far, _ = gw.flood(L, [((2.0, 2.0), (2.0, 2.0))], [(0, 1, 0, 1)])
-    assert math.isfinite(far[0, 1])
-
-
-def test_the_flood_stops_short_past_the_last_ring(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(gw, "FLOOD_PAST_PX", 1.0)
-    L = gw.Layers(0.0, 0.0, 12, 1, 5.0)
-    dist, _ = gw.flood(L, [((2.0, 2.0), (2.0, 2.0))], [(0, 1, 0, 1)])
-    assert math.isfinite(dist[1, 0]) and not math.isfinite(dist[11, 0]), "the ring reached at once: stopped a step past it"
-
-
-def test_a_way_out_starts_at_the_doors_and_ends_on_the_flood() -> None:
-    L = gw.Layers(0.0, 0.0, 6, 6, 5.0)
-    dist = np.full((6, 6), np.inf)
-    dist[5, :] = 3.0
-    exits, back = gw.way_out(L, dist, [(2.0, 2.0), (2.0, 2.0), (-10.0, 0.0)], (0, 6, 0, 6), lambda c: c != (2, 1))
-    assert exits and exits == sorted(exits) and all(i == 5 for _d, i, _j in exits)
-    assert back[(0, 0)] == (2.0, 2.0), "a door's cell steps back to the door"
-    closed, _ = gw.way_out(L, dist, [(2.0, 2.0)], (0, 3, 0, 3), lambda c: True)
-    assert closed == [], "its area ends before the flood"
-
-
-def test_a_trace_joins_a_laid_way_where_the_leg_onto_it_is_clear_else_runs_on() -> None:
-    L = gw.Layers(0.0, 0.0, 6, 1, 10.0)
-    dist = np.array([[0.0], [1.0], [2.0], [3.0], [4.0], [5.0]])
-    pred = np.array([[[0, 0]], [[0, 0]], [[1, 0]], [[2, 0]], [[3, 0]], [[4, 0]]], np.int32)
-    laid = np.zeros((6, 1), bool)
-    laid[3, 0] = True
-    segs = [((5.0, 20.0), (55.0, 20.0))]
-    path, foot = gw.trace(L, dist, pred, laid, (5, 0), segs, lambda here, f: True)
-    assert len(path) == 2 and foot == (35.0, 20.0), "joined at the laid cell, square onto the way"
-    path, foot = gw.trace(L, dist, pred, laid, (5, 0), segs, lambda here, f: False)
-    assert len(path) == 5 and foot == (5.0, 20.0), "the leg refused: on to the way out"
-
-
-def test_a_laid_way_marks_its_cells_within_the_join_radius() -> None:
-    L = gw.Layers(0.0, 0.0, 10, 10, 5.0)
-    laid = np.zeros((10, 10), bool)
-    gw.mark_laid(L, laid, ((2.0, 2.0), (2.0, 40.0)), 1)
-    assert laid[0, 0] and laid[1, 7] and not laid[3, 3]
-
-
-def test_a_household_whose_ways_are_all_refused_gets_none(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`_way_for`: up to `GAP_TRIES` distinct exits, each tried joined near, joined far and run on; None where the taut pull or
-    the corridor's own admission refuses them all - and its homestead back among what stands."""
-    s, houses = _site((600.0,))
-    box = houses[0]["geom"]["bbox"]  # a wood seat just off its homestead: its own search keeps off that ground too
-    s._wood = SimpleNamespace(lane_gap=6.0, corridor_bars=lambda a, b: False, seats=SimpleNamespace(n=1, buckets={(0, 0): [(box[0], box[1] + box[3] / 2 + 12.0)]}))
-    seen: list[int] = []
-    monkeypatch.setattr(gw, "taut", lambda pts, *a: seen.append(1) or (None if len(seen) % 2 else tuple(pts)))
-    monkeypatch.setattr(gw, "admitted", lambda s_, run, g, memo: None)
-    monkeypatch.setattr(gw, "GAP_TRIES", 2)
-    assert gw.lay_the_ways(s) == (0, 0), "no way, and no neighbor with one to be reached across"
-    assert "access" not in houses[0]["geom"] and any(b is houses[0]["geom"]["bbox"] for b in s.placed)
-    assert len(seen) == 2 * 3, "two exits, three joins each"
-
-
 # ---- feature 328 wave 4: a way's foot gathered onto the junction beside it ---------------------------------------------
-
-
-def test_the_junctions_are_every_segment_end_but_a_bend_in_one_way() -> None:
-    """A way's two legs meeting is a bend; a way's end, a foot on another's side and two ways met end to end are junctions."""
-    strip = ((0.0, 0.0), (100.0, 0.0))
-    way = [((50.0, 80.0), (50.0, 40.0)), ((50.0, 40.0), (50.0, 0.0))]  # a bend at (50, 40), its foot on the strip's side
-    on_end = ((100.0, 60.0), (100.0, 0.0))  # a way ending on the strip's end: two segment ends at one point, not a bend
-    got = gw.junction_points([strip, *way, on_end])
-    assert (50.0, 40.0) not in got, "the bend"
-    assert {(0.0, 0.0), (100.0, 0.0), (50.0, 80.0), (50.0, 0.0), (100.0, 60.0)} <= set(got)
-
-
-def test_a_foot_is_gathered_onto_the_nearest_junction_within_the_knot_reach() -> None:
-    js = [(0.0, 0.0), (20.0, 0.0), (100.0, 0.0)]
-    assert gw.gathered_foot((24.0, 0.0), js, gw.KNOT_FT) == (20.0, 0.0)
-    assert gw.gathered_foot((60.0, 0.0), js, gw.KNOT_FT) is None, "none within the reach"
-    assert gw.gathered_foot((100.0, 0.0), js, gw.KNOT_FT) is None, "the foot on a junction is gathered already"
-
-
-def test_a_traced_way_is_run_on_to_its_foot_unless_it_ends_there() -> None:
-    assert gw.ended_at([(0.0, 0.0), (5.0, 0.0)], (9.0, 0.0)) == [(0.0, 0.0), (5.0, 0.0), (9.0, 0.0)]
-    assert gw.ended_at([(0.0, 0.0), (5.0, 0.0)], (5.0, 0.0)) == [(0.0, 0.0), (5.0, 0.0)]
 
 
 def test_the_knot_reach_is_the_web_gathers() -> None:
     from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
 
     assert gw.KNOT_FT == _KNOT_FT == 25.0
-
-
-# the test site's ways, traced, meet the strip at x = 552.5 and 942.5 (`_site`, its two households)
-_FEET = ((552.5, 450.0), (942.5, 450.0))
-
-
-def _refusing_ends_at(monkeypatch: pytest.MonkeyPatch, points: list) -> None:
-    real = gw.admitted
-    monkeypatch.setattr(gw, "admitted", lambda s_, run, geom, memo: None if any(math.dist(run[-1], q) < 0.5 for q in points) else real(s_, run, geom, memo))
-
-
-def test_a_way_whose_foot_stands_beside_a_junction_is_gathered_onto_it(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`_way_for`: a foot within the knot reach of a junction meets the tree AT it (Inashiro's two ways 6 ft apart on the track)."""
-    s, houses = _site()
-    js = [(f[0] + 10.0, f[1]) for f in _FEET]
-    monkeypatch.setattr(gw, "junction_points", lambda segs: js)
-    assert gw.lay_the_ways(s) == (0, 0)
-    assert [h["geom"]["access"][-1] for h in houses] == js
-
-
-def test_a_way_not_admitted_at_the_junction_joins_where_another_exit_is_clear_never_slid(monkeypatch: pytest.MonkeyPatch) -> None:
-    """No slide clear of the junction (glyph-check round 2 of Inashiro, feature 328 wave 4): refused at the junction, every
-    exit's join is asked before a foot beside it - here another exit's, traced to the strip clear of both junctions."""
-    s, houses = _site((600.0,))
-    js = [(545.0, 450.0), (560.0, 450.0)]
-    monkeypatch.setattr(gw, "junction_points", lambda segs: js)
-    _refusing_ends_at(monkeypatch, js)
-    assert gw.lay_the_ways(s) == (0, 0)
-    foot = houses[0]["geom"]["access"][-1]
-    assert all(math.dist(foot, j) > gw.KNOT_FT * gw.KNOT_MARGIN for j in js), "a join of its own, as traced"
-
-
-def test_a_way_takes_the_foot_as_traced_where_every_join_stands_beside_a_junction(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Refused at the junction from every exit: the foot as traced, for the settle to gather (`ways/knots.settle_knots`)."""
-    s, houses = _site((600.0,))
-    j = (0.0, 0.0)
-    monkeypatch.setattr(gw, "gathered_foot", lambda foot, js, reach: j)
-    _refusing_ends_at(monkeypatch, [j])
-    assert gw.lay_the_ways(s) == (0, 0)
-    assert houses[0]["geom"]["access"][-1] == _FEET[0], "reached all the same, a few feet beside the junction"
-
-
-def test_a_households_legs_are_each_asked_once(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`_way_for`: its exits' runs share their legs, and each leg is asked once for the household (the perf-audit of feature
-    328 wave 4) - the same ways laid."""
-    s, houses = _site()
-    asked: list[tuple] = []
-    real = gw.house_clear
-
-    def counted(a, b, *r):
-        if a != b:  # a leg; a cell's own test (`open_here`) asks a point
-            asked.append((tuple(a), tuple(b)))
-        return real(a, b, *r)
-
-    monkeypatch.setattr(gw, "house_clear", counted)
-    gw.lay_the_ways(s)
-    assert asked and all("access" in h["geom"] for h in houses)
-    per = {}
-    for leg in asked:
-        per[leg] = per.get(leg, 0) + 1
-    assert max(per.values()) <= len(houses), "a leg asked at most once a household"
-
-
-def test_a_knotted_foot_is_kept_only_after_three_times_the_exits(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 328 wave 54 (Kuwabata: a foot kept 21.8 ft from a door no gather could reach): where every exit's join stands
-    beside a junction it is refused at, the search runs on to `KNOTTED_TRIES` times `GAP_TRIES` exits before the knotted foot."""
-    s, houses = _site((600.0,))
-    j = (0.0, 0.0)
-    monkeypatch.setattr(gw, "gathered_foot", lambda foot, js, reach: j)
-    _refusing_ends_at(monkeypatch, [j])
-    monkeypatch.setattr(gw, "GAP_TRIES", 1)
-    asked: list[tuple] = []
-    real = gw._first_admitted
-    monkeypatch.setattr(gw, "_first_admitted", lambda s_, runs, *a: asked.append(tuple(map(tuple, runs))) or real(s_, runs, *a))
-    assert gw.lay_the_ways(s) == (0, 0)
-    exits = len(asked) - 1  # one call per exit tried, and the knotted fallback's last
-    assert exits == gw.GAP_TRIES * gw.KNOTTED_TRIES == 3, exits
-    assert houses[0]["geom"]["access"][-1] == _FEET[0], "then the foot as traced"
-
-
-def test_the_nearest_foot_on_the_tree_is_the_scalar_one() -> None:
-    """Feature 427 T07: `SegFeet.nearest` is `min(seg_closest ...)` by distance, a point segment included; none raises."""
-    import random
-
-    from l7r.diagram.settlement._geom import seg_closest
-
-    rng = random.Random(7)
-    for _ in range(200):
-        segs = [((rng.uniform(0, 100), rng.uniform(0, 100)), (rng.uniform(0, 100), rng.uniform(0, 100))) for _ in range(rng.randint(1, 12))]
-        segs.append(((50.0, 50.0), (50.0, 50.0)))
-        p = (rng.uniform(-20, 120), rng.uniform(-20, 120))
-        want = min((seg_closest(p[0], p[1], a, b) for a, b in segs), key=lambda z: math.dist(z, p))
-        got = gw.SegFeet(segs).nearest(p)
-        assert math.isclose(got[0], want[0], abs_tol=1e-9) and math.isclose(got[1], want[1], abs_tol=1e-9)
-    with pytest.raises(ValueError, match="no segment"):
-        gw.SegFeet([]).nearest((0.0, 0.0))

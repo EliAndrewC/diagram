@@ -373,28 +373,6 @@ class FreeGround:
             got = self._beyond[k] = (taken, clear)
         return got
 
-    def decide_beyond(self, xs: Any, ys: Any) -> None:
-        """Decide at once every cell past the grid's bounds the points `(xs, ys)` stand in and no call has yet decided - the
-        same two tests `_cell_beyond` asks one cell at a time, vectorized (feature 318, the perf-audit's second round: the
-        first house's candidates asked 110,873 such cells, one shapely call each, 1.3 s of a 15-household seating).
-
-        Research: plumbing - NONE: the same answers, asked in one call
-        """
-        import numpy as np
-        import shapely
-
-        ki = np.floor_divide(np.asarray(xs, dtype=np.float64) - self.x0, self.cell).astype(np.int64)
-        kj = np.floor_divide(np.asarray(ys, dtype=np.float64) - self.y0, self.cell).astype(np.int64)
-        out = ~((ki >= 0) & (ki < self.nx) & (kj >= 0) & (kj < self.ny))
-        ks = [k for k in set(zip(ki[out].tolist(), kj[out].tolist(), strict=True)) if k not in self._beyond]
-        if not ks:
-            return
-        a = np.asarray(ks, dtype=np.float64)
-        boxes = shapely.box(self.x0 + a[:, 0] * self.cell, self.y0 + a[:, 1] * self.cell, self.x0 + (a[:, 0] + 1) * self.cell, self.y0 + (a[:, 1] + 1) * self.cell)
-        taken = shapely.contains(self._region, boxes) if self._region is not None else np.zeros(len(ks), dtype=bool)
-        clear = shapely.disjoint(self._grown, boxes) if self._grown is not None else np.ones(len(ks), dtype=bool)
-        self._beyond.update(zip(ks, zip(np.asarray(taken, dtype=bool).tolist(), np.asarray(clear, dtype=bool).tolist(), strict=True), strict=True))
-
     def _inside(self, k: tuple[int, int]) -> bool:
         return 0 <= k[0] < self.nx and 0 <= k[1] < self.ny
 
@@ -412,25 +390,6 @@ class FreeGround:
                 state[i, j] = 1
             self._state = state
         return self._state
-
-    def points_taken(self, xs: Any, ys: Any) -> Any:
-        """`point_taken` for every point of the arrays `xs`, `ys` at once, as a boolean array (feature 427 T07: `free_seats`
-        asked it of every grid point of the canvas, 82k calls at 40 households): the grid's cells read from `state_grid`, a
-        cell past it decided by `decide_beyond` and read as `_cell_beyond` reads it.
-
-        Research: plumbing - NONE: the same answers, asked in one call"""
-        import numpy as np
-
-        x, y = np.asarray(xs, dtype=np.float64), np.asarray(ys, dtype=np.float64)
-        ki = np.floor_divide(x - self.x0, self.cell).astype(np.int64)
-        kj = np.floor_divide(y - self.y0, self.cell).astype(np.int64)
-        inside = (ki >= 0) & (ki < self.nx) & (kj >= 0) & (kj < self.ny)
-        out = np.zeros(x.shape, dtype=bool)
-        out[inside] = self.state_grid()[ki[inside], kj[inside]] == 1
-        if not inside.all():
-            self.decide_beyond(x[~inside], y[~inside])
-            out[~inside] = [self._beyond[k][0] for k in zip(ki[~inside].tolist(), kj[~inside].tolist(), strict=True)]
-        return out
 
     def point_taken(self, x: float, y: float) -> bool:
         k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))
@@ -479,12 +438,6 @@ class FreeGround:
         st[inside] = self._state[i[inside], j[inside]]
         return line, xs, ys, st
 
-    def rect_refused(self, rect: Any) -> bool:
-        """Is one of the nine points `_site_blocks_rect` asks of this (cx, cy, w, h) rectangle in a surely-taken cell?"""
-        cx, cy, w, h = rect
-        x0, y0, x1, y1 = cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
-        return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
-
 
 class UnreachableGround:
     """The ground where a farmhouse would stand beyond any way's reach (feature 278, FR-005).
@@ -519,9 +472,6 @@ class UnreachableGround:
             if not core.is_empty:
                 shapely.prepare(core)
                 self.deep = core
-
-    def refuses(self, x: float, y: float) -> bool:
-        return self.deep is not None and bool(self._contains(self.deep, x, y))
 
 
 def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:

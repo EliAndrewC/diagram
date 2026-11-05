@@ -152,42 +152,12 @@ class HouseholdLots:
         # the wood shed on the LARGER houses first (`larger_first`, feature 280 M21), every other kind by the shuffled order
         self.fixtures = {k: larger_first(seed, f"fixture_{k}", self.sizes, p) if k in LARGER_FIRST else quota_carriers(seed, f"fixture_{k}", n, p) for k, p in (fixture_shares or {}).items()}
 
-    def fixtures_of(self, k: int) -> tuple[str, ...]:
-        """The fixture kinds household `k` keeps, in the settlement's order of kinds."""
-        return tuple(kind for kind, carriers in self.fixtures.items() if 0 <= k < self.n and carriers[k])
-
     def lot(self, k: int) -> tuple[float, float, bool, bool] | None:
         """Household `k`'s (length factor, depth factor, keeps a kura, keeps a beast); None past the declared count."""
         if not 0 <= k < self.n:
             return None
         lf, df = self.sizes[k]
         return lf, df, self.kura[k], self.byre[k]
-
-
-def household_parts(s: Any, x: float, y: float, kind: str, role: Any) -> tuple[tuple[float, float, bool, bool] | None, str | None]:
-    """What the household about to be seated at (x, y) carries (plan M5): its lot (the k-th plain household takes lot
-    k), the byre form its bundle reserves a stall for (a keeper on a household form), and its farmstead fixtures (the
-    lot's kinds). Set on the settlement for the seat search (`_household_byre`, `_household_fixtures`), where
-    `_bundle_layout` lays the parts inside the envelope; `seat_parts_done` takes them down. No household carries a well
-    pocket and none is held to a watered seat (feature 374 wave 155): a clustered hamlet's wells are shared, off the
-    farmstead, and seated after the houses with the water reach (`homesteads/wells.reach_wells`); a grove farm's own well
-    is laid in its canonical frame whatever the seat (`dispersed.canonical_farmstead`).
-
-    Research:
-        quota, record and registry plumbing - NONE: the k-th plain household takes lot k; the parts set on the settlement for the seat search
-        a role household gets no byre and no farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: a household with a role (the headman) takes no lot, so no stall and no fixtures, where 0028 says a headman's carries several
-    """
-    lots = getattr(s, "_lots", None)
-    k = sum(1 for h in s.M["houses"] if h.get("kind") == "plain")
-    lot = lots.lot(k) if lots is not None and kind == "plain" and role is None else None
-    form = getattr(s, "_byre_form", None) if lot is not None and lot[3] else None
-    s._household_byre = form
-    s._household_fixtures = lots.fixtures_of(k) if lots is not None and lot is not None else ()
-    return lot, form
-
-
-def seat_parts_done(s: Any) -> None:
-    s._household_byre, s._household_fixtures = None, ()
 
 
 def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> None:
@@ -219,7 +189,9 @@ def record_parts(s: Any, rec: dict[str, Any], geom: Any, form: str | None) -> No
     wood = getattr(s, "_wood", None)
     if seats is not None and wood is not None:  # its share of the wood floor (woods W25, plan D9), reserved and on the record
         covered = wood.commit(geom, seats)
-        rec["wood_share"] = {"seats": [[x, y] for x, y in seats], "r": wood.cr, "ft2": round(covered / s.px(1.0) ** 2)}
+        # ...AT THE RECORD'S 0.1 FT, the copse's clumps' own grain: unrounded, a Rust seat on the map's one lattice stood 0.07 ft off the
+        # clump planted on it and read as unplanted (84 of Inashiro's 375, feature 444 T30)
+        rec["wood_share"] = {"seats": [[round(x, 1), round(y, 1)] for x, y in seats], "r": wood.cr, "ft2": round(covered / s.px(1.0) ** 2)}
 
 
 #: The laid fixtures drawn as a record of their own, and so held until drawn (`hamletgen/homesteads/holds.py`): the farmstead
@@ -251,32 +223,3 @@ def held_part_records(hx: float, hy: float, well: Any, fixtures: Any, vr: float)
 
 #: The key each built or worked part of a bundle is recorded under when it is drawn (`houses.py`, `yards.py`, `gardens.py`,
 #: `byres.py`): the part asked of the registry at seat time under the key the matrix will judge it by.
-BUNDLE_PART_KEYS = (("house", "houses"), ("yard", "threshing_yards"), ("shed", "farm_sheds"), ("byre", "byres"))
-
-
-def bundle_records(geom: Mapping[str, Any], vr: float) -> list[tuple[str, dict[str, Any]]]:
-    """(key, record) for EVERY part a homestead bundle lays (feature 287, water W53): the house, its yard, its kura, its
-    byre and each garden bed as the turned rect it will be drawn as (`rot` the bundle's turn), and the parts held until
-    drawn as they are held (`held_part_records`)."""
-    hx, hy = float(geom["house"][0]), float(geom["house"][1])
-    rot = float(geom.get("turn") or 0.0)
-    of = [round(hx, 1), round(hy, 1)]
-
-    def rect(r: Any, parent: bool) -> dict[str, Any]:
-        rec = {"x": round(float(r[0]), 1), "y": round(float(r[1]), 1), "w": float(r[2]), "h": float(r[3]), "rot": rot}
-        return {**rec, "of": of} if parent else rec
-
-    out = [(key, rect(geom[part], key != "houses")) for part, key in BUNDLE_PART_KEYS if geom.get(part) is not None]
-    out += [("gardens", rect(g, True)) for g in geom.get("gardens") or ()]
-    boxes = (geom.get("boxes") or {}).get("fixtures") or {}
-    return out + held_part_records(hx, hy, geom.get("well"), [(k, boxes.get(k)) for k in (geom.get("fixtures") or {})], vr)
-
-
-def bundle_admitted(s: Any, geom: Mapping[str, Any]) -> bool:
-    """THE BUNDLE ASKS THE REGISTRY FIRST (feature 287, water W53 and plan M8): does the overlap matrix admit every part this
-    bundle lays on what already stands - the field's ditches and channels, the streams, the lanes, the houses and parts
-    already recorded, and the ground the seating reserved? A layout it refuses is refused and the placer tries the next.
-    Under feature 284's probes Inashiro laid a privy on a field ditch at (2960, 1780) that no fit rule of the seat asked
-    about, and the hold raised `OverlapRefused` at the seating's end (research R9, failure 4)."""
-    vr = float(s._well_vr())
-    return all(s.admits(k, rec) for k, rec in bundle_records(geom, vr))

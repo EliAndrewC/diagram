@@ -9,10 +9,8 @@ from typing import Any
 
 import pytest
 
-import l7r.diagram.settlement.rolling.access as access_mod
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads.bamboo import StripNear
-from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
 from l7r.diagram.settlement import Settlement
 
 from ._builders import a_plan, a_seat
@@ -263,23 +261,6 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
         assert len(s.M["houses"]) == 10, "linear: every household seated along the streets"
 
 
-def test_a_row_village_whose_streets_cannot_hold_every_farm_is_refused(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 287 plan D2 over 291's reported remainder (the GM, 2026-09-30): where no margin's streets hold every farm, the
-    site is refused by name - never seated in ranks behind the row, and never shipped short."""
-    from l7r.diagram.hamletgen.homesteads import capacity, rows
-    from l7r.diagram.hamletgen.homesteads import stages as st
-
-    plan = a_plan(households=10, settlement_form="linear")
-    plan.seat = {**a_seat(plan), "ladder": []}
-    s = Settlement(2400, 1400, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=False)
-    s._nucleated = False
-    s.field_polys.append(list(plan.envelope))
-    monkeypatch.setattr(rows, "seat_rows", lambda s_, plan_, frame, allowed=None: 0)  # the streets hold nobody
-    with pytest.raises(capacity.SiteRefused, match=r"seated 0 of 10 households on margin 1; no house is taken back"):
-        st.stage_homesteads(s, plan)
-
-
 def test_a_fixture_across_the_brook_from_its_house_is_across() -> None:
     """Feature 261 FR-013: the line from the house to a fixture's seat crossing a stream puts the seat on the far
     bank; a seat on the house's own bank, or a sheet with no stream, is not."""
@@ -330,133 +311,6 @@ def _toy_hamlet(households: int, seed: int = 3, east: bool = False):  # type: ig
     return s, plan
 
 
-def test_the_front_row_stops_at_its_share_and_the_ranks_seat_the_rest(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 227 D8: the row takes about sqrt(N x A) houses - here fewer than the chain could seat - and stops;
-    the ranks behind seat the rest. The toy's households keep no fixtures (homes H32): their corridors leave the yard
-    round them, and the row's count is the thing under test. Nor a share of the wood floor (woods W25): the exit strip
-    runs up the back of the toy's middle house, whose wood then spreads to its flanks and takes a row seat - measured,
-    the row seats 4 - and the row's count, not the wood, is under test (`tests/settlement/test_wood_share.py` is the
-    wood's)."""
-    _the_passes_the_dispersed_form_keeps(monkeypatch)
-    from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-    from l7r.diagram.hamletgen.homesteads import stages as st
-
-    monkeypatch.setattr(st, "fixture_quota", lambda *a: {})
-    monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)
-    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
-    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
-    _small_yards(monkeypatch)
-    _no_tree(monkeypatch)
-    s, plan = _toy_hamlet(10, seed=5)  # seed 5: feature 280 turned no house a quarter away (M26), and seed 3's chain seats five
-    plan.cluster_shape = "round"  # the tightest band: the row's share is the floor of six, fewer than the chain could seat
-    stage_homesteads(s, plan)
-    lo, hi = CLUSTER_DRAWN_ASPECT["round"]
-    cap = min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
-    assert cap == 6
-    ss = s.M["meta"]["seat_search"]
-    assert len(s.M["houses"]) == 10 and ss["front"] == cap and ss["rounds"] >= 1
-
-
-def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The rescue rounds (five to seven) run only while the quota is short after four rounds of ranks; their cloud
-    seeds a wider band and skips the seeds outside it. Twenty households on the toy's square field is such a quota."""
-    _the_passes_the_dispersed_form_keeps(monkeypatch)
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-
-    s, plan = _toy_hamlet(20, east=True)
-    # the ground beyond 260 ft of the seat is no-build, so the ranks run out of room and the rescue's wider cloud
-    # throws seeds the band refuses
-    cx_, cy_ = float(plan.seat["cx"]), float(plan.seat["cy"])
-    s.block_polys.append([(cx_ - 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 2000.0), (cx_ + 2000.0, cy_ - 260.0), (cx_ - 2000.0, cy_ - 260.0)])
-    s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
-    plan.seat["ladder"] = []  # this margin alone: the refusal below is the chosen margin's
-    # ...AND A QUOTA THE GROUND CANNOT HOLD IS REFUSED, NEVER SHIPPED SHORT (feature 287, homes H14 and plan D2): the
-    # rescue and then the exhaustive pass over every free point within reach ran, and still the ground was full
-    with pytest.raises(SiteRefused, match=r"seated \d+ of 20 households on margin 1; no house is taken back"):
-        stage_homesteads(s, plan)
-    assert s._seat_search["rounds"] >= 5, "the rescue ran"
-    assert s._seat_search["exhaustive_offered"] > 0, "...and the exhaustive pass after it"
-    assert len(s.M["houses"]) < 20, "the ground, not the search, was the limit"
-
-
-def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 227 D8: the seats a pitch beyond each end of the rank are offered ONLY in a round that seated nothing
-    behind - so a cluster whose back is refused grows along the field instead of stopping. Here the ground more than
-    40 px out from the row is no-build, so every seat at a rank's depth is refused and the ends are the only ones
-    left; the houses past the front row's own count can therefore only have come from them."""
-    _the_passes_the_dispersed_form_keeps(monkeypatch)
-    from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, HOMESTEAD_GROUND_FT
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-    from l7r.diagram.hamletgen.homesteads import stages as _stages
-
-    # the seating's band at the band's own figure: the rule under test is the rank's ends, measured on this toy's strip before
-    # feature 306 gave the seating the homestead's whole ground (`SEATING_GROUND_FT`), which seats all 13 here
-    monkeypatch.setattr(_stages, "SEATING_GROUND_FT", HOMESTEAD_GROUND_FT)
-    s, plan = _toy_hamlet(13)  # 13: feature 280's geometry (M26, M18) fits twelve on the strip
-    ax, ay = plan.seat["along"]
-    ox, oy = plan.seat["out"]
-    cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
-    # ...LEAVING A SLOT OPEN ALONG THE BEARING OUT (feature 320): the way out's side is open ground, as on every real map - the
-    # seating's reach is seeded there (`_way_out_anchor`), and a back blocked across it seeds none, so no front-row dooryard opens
-    slot = 20.0
-    for a0, a1 in ((-5000.0, -slot), (slot, 5000.0)):
-        s.block_polys.append(
-            [
-                (cx + ox * 40 + ax * a0, cy + oy * 40 + ay * a0),
-                (cx + ox * 40 + ax * a1, cy + oy * 40 + ay * a1),
-                (cx + ox * 5000 + ax * a1, cy + oy * 5000 + ay * a1),
-                (cx + ox * 5000 + ax * a0, cy + oy * 5000 + ay * a0),
-            ]
-        )
-    # ...AND A STRIP THAT CANNOT HOLD THE QUOTA IS REFUSED, NAMED (feature 287, homes H14 and H32: every household with its
-    # fixtures, or the site refused) - asserted, not suppressed: the ends were offered and taken before the refusal
-    plan.seat["ladder"] = []
-    tried: list[tuple[float, float]] = []
-    real = s.try_place
-
-    def spy(x: float, y: float, *a: object, **kw: object) -> object:
-        tried.append((x, y))
-        return real(x, y, *a, **kw)
-
-    s.try_place = spy  # type: ignore[method-assign]
-    stage_homesteads(s, plan)  # ...no way searched while houses are seated (feature 318): the ends' seats are taken, all 13 stand
-    assert len(s.M["houses"]) == 13
-    ss = s._seat_search
-    assert ss["rounds"] >= 1, "the ranks ran"
-    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field, once the back is refused: every house past the front row's own
-    # count stands along it, beyond the front row's reach
-    front = ss["front"]
-    assert front < 13, "the front row alone could not hold them"
-    row = [(float(h["x"]) - cx) * ax + (float(h["y"]) - cy) * ay for h in s.M["houses"]]
-    reach = max(abs(u) for u in row[:front])
-    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in row[front:]), "a house a pitch past the rank's end"
-
-
-def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`stage_homesteads` (feature 261 D22): an `alleys` hamlet's rank seats take the depth jitter, so the ranks behind the
-    front row are not all on one line; a `back_lane` hamlet seated the same way keeps its ranks exact. Both seat every
-    household."""
-    _the_passes_the_dispersed_form_keeps(monkeypatch)
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-
-    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
-    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
-
-    _no_tree(monkeypatch)
-    seats = {}
-    for form in ("alleys", "back_lane"):
-        s, plan = _toy_hamlet(14)
-        plan.lane_web = form
-        stage_homesteads(s, plan)
-        assert len(s.M["houses"]) == 14
-        seats[form] = {(round(h["x"], 1), round(h["y"], 1)) for h in s.M["houses"]}
-    moved = seats["alleys"] - seats["back_lane"]
-    assert moved and len(moved) < 14, "the ranks' seats moved off their lines; the front row did not"
-
-
 # ---- feature 276 FR-003 (plan D9): the free ground proposes, the fit test decides ----------------------------------
 
 
@@ -468,100 +322,6 @@ def _rescue(form):  # type: ignore[no-untyped-def]
     s.block_polys.append([(cx_ - 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 260.0), (cx_ + 2000.0, cy_ + 2000.0), (cx_ - 2000.0, cy_ + 2000.0)])
     plan.seat["ladder"] = []  # the chosen margin alone, so its seats stand when the site is refused (feature 287, D2)
     return s, plan
-
-
-@pytest.mark.parametrize("scenario", ["rescue", "open"])
-@pytest.mark.parametrize("sides", [2, 4])
-def test_every_seat_the_prescreens_refuse_the_fit_test_refuses(scenario: str, sides: int, monkeypatch: pytest.MonkeyPatch) -> None:
-    """The dispersed pre-screens (plan D9a) are exact: a seat `_seat_refused` turns away, and a bundle `_bundle_refused`
-    turns away, is one `_bundle_fits` refuses - asked at the moment of the refusal, of the same bundle, with the free-ground
-    raster switched off so the answer leans on none of the index. A grove on two sides and on four (feature 291).
-
-    WHY THIS AND NOT A SECOND ROLL (GM 2026-10-01): this replaced a test that seated each toy twice, once with the
-    pre-screens and once with them switched off, and compared the seats - 95 s of the suite, 42 s of it one case, the gate's
-    critical path. Production never runs with the pre-screens off; the second roll was only a yardstick, and a weaker one
-    (a wrongly refused seat can be hidden by an equally good one beside it). This asks the claim itself. The nucleated path
-    has no pre-screen but the free-ground cells, whose exactness is `test_every_surely_taken_cell_is_ground_the_fit_test_refuses`
-    and `test_a_side_is_not_dropped_for_ground_the_loop_never_judges`."""
-    _the_passes_the_dispersed_form_keeps(monkeypatch)
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-    from l7r.diagram.settlement import Settlement
-
-    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); with it, too few farms seat for the neighbor pre-screens to fire
-    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
-    seat_refused, bundle_refused = Settlement._seat_refused, Settlement._bundle_refused
-    # EVERY 97th REFUSAL, from the first: measured 2026-10-01, the four toys refuse 50,000-180,000 seats and bundles each,
-    # and asking the fit test of every one cost 18-62 s a case - the whole of what the old second roll cost. A prime stride
-    # keeps the sample out of step with the spiral's twelve offsets a ring; 700-1,800 asked a case. PROVEN TO FIRE (planted
-    # faults, 2026-10-01): `_seat_refused`'s placed-box margin at 120 px, and `_bundle_refused`'s at 30 px, each fail it on
-    # the seat or bundle wrongly refused; a 40 px margin on the house refuses nothing the fit test admits (the bundle holds it).
-    stride = 97
-    refused_n = {"seat": 0, "bundle": 0}
-    asked = {"seat": 0, "bundle": 0}
-
-    def fits_without_the_index(s, geom):  # type: ignore[no-untyped-def]
-        fg, s._free_ground = s._free_ground, None
-        try:
-            return s._bundle_fits(geom)
-        finally:
-            s._free_ground = fg
-
-    def sampled(kind):  # type: ignore[no-untyped-def]
-        refused_n[kind] += 1
-        if (refused_n[kind] - 1) % stride:
-            return False
-        asked[kind] += 1
-        return True
-
-    def seat(self, x, y, hw, hh):  # type: ignore[no-untyped-def]
-        refused = seat_refused(self, x, y, hw, hh)
-        if refused and sampled("seat"):
-            assert not fits_without_the_index(self, self._bundle_geom(x, y, hw, hh)), ("seat", x, y)
-        return refused
-
-    def bundle(self, geom):  # type: ignore[no-untyped-def]
-        refused = bundle_refused(self, geom)
-        if refused and sampled("bundle"):
-            assert not fits_without_the_index(self, geom), ("bundle", geom["bbox"])
-        return refused
-
-    monkeypatch.setattr(Settlement, "_seat_refused", seat)
-    monkeypatch.setattr(Settlement, "_bundle_refused", bundle)
-    s, plan = _rescue("dispersed") if scenario == "rescue" else _toy_hamlet(15)
-    s._nucleated = False
-    s.M["meta"]["grove_sides"] = sides
-    # the rescue ground cannot hold its quota (D2), nor the open toy fifteen ring farms (feature 291 on 287): a refused site
-    # has still asked every pre-screen on the way
-    with contextlib.suppress(SiteRefused):
-        stage_homesteads(s, plan)
-    assert min(asked.values()) >= 50, f"non-vacuity: each pre-screen's refusals were asked of the fit test {asked}"
-
-
-def test_a_side_is_not_dropped_for_ground_the_loop_never_judges() -> None:
-    """Plan review 2's case: on the nucleated path a side's own box is ground-tested only when the whole envelope was
-    refused. With the envelope clear, an index claiming EVERY other box as taken - each side's own sample points
-    included - must leave the seat exactly as it is with no index at all."""
-    from l7r.diagram.settlement import Settlement
-
-    class RefusesAllButTheEnvelope:
-        def __init__(self, env):  # type: ignore[no-untyped-def]
-            self.env = env
-
-        def rect_refused(self, rect):  # type: ignore[no-untyped-def]
-            return rect != self.env
-
-    seated = 0
-    for x, y in ((300.0, 300.0), (620.0, 410.0), (900.0, 760.0)):
-        s = Settlement(1400, 1400, seed=5)
-        s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=15, down_deg=90, water_flow=90, nucleated=True)
-        s._nucleated = True
-        plain = s._place_bundle_nucleated(x, y, 30.0, 20.0, False)
-        assert s._envelope_blocked(s._bundle_envelope(x, y, 30.0, 20.0, False)) is None, "the case: the whole envelope clear"
-        s._free_ground = RefusesAllButTheEnvelope(s._bundle_envelope(x, y, 30.0, 20.0, False))
-        assert s._place_bundle_nucleated(x, y, 30.0, 20.0, False) == plain
-        seated += plain is not None
-    assert seated == 3, "non-vacuity: each seat was taken"
 
 
 def test_every_surely_taken_cell_is_ground_the_fit_test_refuses() -> None:
@@ -609,31 +369,6 @@ def test_every_surely_clear_cell_is_ground_the_corridor_tests_pass() -> None:
         s._free_ground = fg
         verdicts.append(with_raster)
     assert 10 < sum(verdicts) < 190, "non-vacuity: corridors admitted and refused"
-
-
-def test_the_front_row_loop_stops_once_its_share_is_seated(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """`stage_homesteads`: the row's loop breaks when its share is placed, however many seats the chain still offers - here
-    the chain's seats are offered twice over, and the row still takes exactly its share."""
-    import math
-
-    from l7r.diagram.hamletgen.consts import CLUSTER_DRAWN_ASPECT
-    from l7r.diagram.hamletgen.homesteads import stage_homesteads
-    from l7r.diagram.hamletgen.homesteads import stages as st
-
-    monkeypatch.setattr(st, "fixture_quota", lambda *a: {})  # no fixtures: the row's count is under test (homes H32)
-    monkeypatch.setattr(st, "install_wood_shares", lambda *a: None)  # ...nor wood shares (woods W25; see the test above)
-    # the toy's bundles lay a bed or the well pocket where a flank door stands, and a corridor over its own parts is refused
-    # since feature 287 M8 (`access.parts_clear`); the seating's count, not the parts, is under test here
-    monkeypatch.setattr(access_mod, "parts_clear", lambda *a: True)
-    real = st.front_row
-    monkeypatch.setattr(st, "front_row", lambda *a, **k: (lambda seats: seats + seats)(list(real(*a, **k))))
-    _small_yards(monkeypatch)
-    _no_tree(monkeypatch)
-    s, plan = _toy_hamlet(10, seed=5)  # seed 5, as above (feature 280 M26 moved seed 3's chain to five)
-    plan.cluster_shape = "round"
-    stage_homesteads(s, plan)
-    lo, hi = CLUSTER_DRAWN_ASPECT["round"]
-    assert s.M["meta"]["seat_search"]["front"] == min(10, max(6, round(math.sqrt(10 * (lo + hi)))))
 
 
 def _no_tree(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -739,17 +474,6 @@ def test_strip_blocked_refuses_a_strip_standing_on_a_paddy() -> None:
     assert _blocked(s, 300, 300, 30, 20, 0, 0, [paddy], [], None, []) is False
 
 
-def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:
-    """`water_push` (feature 261): a box whose near side a water course lies across moves along `n` past the course by its
-    clearance; a course beside the box but beyond its lateral span, or one far off, moves nothing."""
-    from l7r.diagram.hamletgen.homesteads.stages import water_push
-
-    brook = [((-100.0, 10.0), (100.0, 10.0), 5.0)]  # across the box, 10 ft past its near edge at 0
-    assert water_push(brook, (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 15.0
-    assert water_push([((200.0, -50.0), (200.0, 90.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
-    assert water_push([((5000.0, 0.0), (5100.0, 0.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
-
-
 def test_a_privy_s_sun_side_reach_is_the_same_whatever_its_size() -> None:
     """Feature 328 (0047): the privy's center stands within 48 ft of its house whatever its size - the feature 280
     widening for a large privy is gone."""
@@ -800,25 +524,3 @@ def test_a_flexible_pit_keeps_off_every_grove_band(monkeypatch: pytest.MonkeyPat
     assert fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None, StripNear(s, []))  # type: ignore[arg-type]
     s.M["groves"] = [{"x": 420.0, "y": 460.0, "w": 100.0, "h": 30.0}]
     assert not fixtures._flexible_clear(s, h, (420.0, 460.0), (8.0, 8.0), [], [], None, [], None, StripNear(s, []))  # type: ignore[arg-type]
-
-
-def test_a_far_row_farm_whose_holding_finds_no_room_is_not_seated_there(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`seat_rows` (plan D16): on a row with farms on both sides, a far-row seat whose holding the hard ground, the sheet or a
-    placed box leaves no room for is passed over, as a farm whose grove has no room is."""
-    import contextlib
-
-    from l7r.diagram.hamletgen.homesteads import capacity, rows, stage_homesteads
-
-    plan = a_plan(households=10, settlement_form="linear")
-    plan.seat = {**a_seat(plan), "ladder": []}
-    plan.row_sides = "both"
-    s = Settlement(plan.W, plan.H, seed=3)
-    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=False)
-    s._nucleated = False
-    s.field_polys.append(list(plan.envelope))
-    offered: list[int] = []
-    monkeypatch.setattr(rows, "holding_clear", lambda *a: offered.append(1) and None)
-    with contextlib.suppress(capacity.SiteRefused):
-        stage_homesteads(s, plan)
-    assert offered, "the far row was offered"
-    assert not s.M.get("row_holdings"), "no holding, so no far-row farm"

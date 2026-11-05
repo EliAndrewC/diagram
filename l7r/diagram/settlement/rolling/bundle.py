@@ -70,13 +70,6 @@ class BundleGeomMixin:
             return [(gx - (gap + pw) / 2, gy, pw, gh), (gx + (gap + pw) / 2, gy, pw, gh)]
         return [(gx, gy, gw, gh)]  # reserved plot too small to split cleanly
 
-    def _bundle_envelope(self: Settlement, hx: float, hy: float, hw: float, hh: float, shed: bool = False) -> tuple[float, float, float, float]:  # type: ignore[misc]
-        """The homestead's ENVELOPE (feature 227): the box around the LARGEST configuration a nucleated bundle can
-        take at this seat - the union of the four garden sides' bundle boxes (house, yard, the garden on either
-        side, the kura when reserved). Tested once before any part is laid; a part laid inside it never needs
-        ground the envelope did not clear."""
-        return self._bbox_of([self._bundle_geom(hx, hy, hw, hh, side, shed)["bbox"] for side in self._NUC_SIDES])
-
     def _bundle_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, garden_side: str = "E", shed: bool = False, rot: float | None = None) -> dict[str, Any]:  # type: ignore[misc]
         """The bundle at (hx, hy): its UNRAKED layout, built once per seat offered, size and garden side (`_bundle_template`,
         `_bundle_layout`), moved here and turned by this seat's rake (feature 276, FR-003, plan D10).
@@ -140,27 +133,6 @@ class BundleGeomMixin:
         # fit alone came back on the record (cohort seed 1: its own yard's sun)
         self._settle_persimmon(base)
         return base
-
-    def _core_geom(self: Settlement, hx: float, hy: float, hw: float, hh: float, shed: bool = False) -> dict[str, Any]:  # type: ignore[misc]
-        """The house and its yard at (hx, hy), as `_bundle_geom` lays and boxes them, without the rest of the layout (feature 297,
-        FR-002): `house`, `yard`, `boxes` (the two turned boxes) and `turn` - what `doors_of` and the corridor search read. The
-        house and the yard are the same for every garden side (research R6), so the first side's template serves."""
-        tpl = self._bundle_template(hw, hh, self._NUC_SIDES[0], shed, getattr(self, "_household_seat", None) or (hx, hy))
-        turn = self._turn_at(hx, hy)
-        th = math.radians(turn or 0.0)
-        c, sn = math.cos(th), math.sin(th)
-        house = (tpl["house"][0] + hx, tpl["house"][1] + hy, tpl["house"][2], tpl["house"][3])
-        yard = None
-        if tpl.get("yard") is not None:
-            px, py = tpl["yard"][0] + hx, tpl["yard"][1] + hy
-            yard = (hx + (px - hx) * c - (py - hy) * sn, hy + (px - hx) * sn + (py - hy) * c, tpl["yard"][2], tpl["yard"][3])
-        _c, _s = abs(c), abs(sn)
-
-        def tbox(r: Any) -> tuple[float, float, float, float]:
-            x, y, w, h = float(r[0]), float(r[1]), float(r[2]), float(r[3])
-            return (x, y, w * _c + h * _s, w * _s + h * _c)
-
-        return {"house": house, "yard": yard, "turn": turn, "boxes": {"house": tbox(house), "yard": tbox(yard) if yard is not None else None}}
 
     def _bundle_template(self: Settlement, hw: float, hh: float, garden_side: str, shed: bool, seat: Any) -> dict[str, Any]:  # type: ignore[misc]
         """The household's unraked layout at the origin for one garden side, its rolls drawn at `seat` (the household's point

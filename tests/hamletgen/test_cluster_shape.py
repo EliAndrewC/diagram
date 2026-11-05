@@ -20,15 +20,6 @@ from l7r.diagram.hamletgen.homesteads import cluster_aspect
 # of the bands - which is the half that was always load-bearing.
 
 
-def test_every_rollable_shape_has_a_band_a_row_span_and_a_drawn_range() -> None:
-    """A shape that can be ROLLED but has no entry falls back to the crescent default, which is how a
-    knob silently stops binding for one of its values - the exact defect this feature fixed."""
-    for shape in set(hg.consts.CLUSTER_SHAPES):
-        assert shape in hg.consts.CLUSTER_BAND_ASPECT, f"{shape} can be rolled but has no band aspect"
-        assert shape in hg.consts.CLUSTER_ROW_SPAN, f"{shape} can be rolled but has no row span"
-        assert shape in hg.consts.CLUSTER_DRAWN_ASPECT, f"{shape} can be rolled but has no drawn range"
-
-
 def test_the_drawn_ranges_admit_the_band_they_are_meant_to_describe() -> None:
     """Ordering sanity, in the observable's own units: round must not reach as long as elongated's
     floor, or the two words describe the same picture and the knob buys no variance at all."""

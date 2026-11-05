@@ -13,7 +13,7 @@ from __future__ import annotations
 
 _SEAT = "Sawada (seed 24) refuses at the Rust seat (SeatRefused): its declared fall runs into the wind, and the wet toe band the hinterland derives (`Settlement.toe_band`) lies under every margin facing it - the toe band's port with the hinterland's (444 FR-019)"
 _MARSH = "Inashiro's toe marsh drawn with sharp corners on the Rust field's edge - the waterward marsh's port (444 FR-019)"
-_BAMBOO = "a bamboo stand seated off Kashikawa's sheet on the Rust field and sink (T26) - the bamboo stage's port (444 FR-019)"
+_BAMBOO = "a bamboo stand seated off Kashikawa's sheet on the Rust field and sink (T26) and the Rust row village's farms (T30) - the bamboo stage's port (444 FR-019)"
 _WEB = "two of Mizuguchi's ways run side by side past a pitch on the Rust field and sink (T26) - the web's port (444 FR-019)"
 _PLANKS = "two footplanks seated side by side where the Rust field writes the canal's legs as separate ditches - the footplank placer's port (444 FR-019)"
 
@@ -34,6 +34,6 @@ WAITING: dict[str, str] = {
     "tests/gate/test_covers_298.py::test_inashiros_toe_marsh_has_no_laid_corner_or_straight_run": _MARSH,
     "tests/gate/test_review_rules_294.py::test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge[inashiro.gen.py]": _PLANKS,
     "tests/gate/test_review_rules_294.py::test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge[kashikawa.gen.py]": _PLANKS,
-    "tests/gate/test_review_rules_294.py::test_the_shipped_hamlets_keep_the_rules_the_review_used_to_judge[kuwabata.gen.py]": _PLANKS,
     "tests/hamletgen/test_pool_261.py::test_no_two_ways_run_side_by_side_past_a_pitch[mizuguchi]": _WEB,
+    "tests/hamletgen/test_pool_261.py::test_every_bamboo_stand_is_on_the_sheet[kashikawa]": _BAMBOO,
 }

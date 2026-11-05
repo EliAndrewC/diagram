@@ -86,30 +86,39 @@ def test_the_ways_are_laid_to_the_tracks_stretch_about_the_cluster() -> None:
 
 
 def test_the_track_is_chosen_with_the_homesteads_as_seated_standing_in_and_they_are_cleared_after(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`chose_the_track`: `choose_track_out` asked with the seated parts on `s._seated_parts` (so `fabric._homestead_polys`
-    reads them), and cleared after - even when the choice raises."""
-    from l7r.diagram.hamletgen.ways import fabric, track
+    """`chose_the_track`: the Rust track out (`l7r_phases.track_out`, feature 444 T30) asked with the seated parts on
+    `s._seated_parts` (so `fabric._homestead_polys` reads them while its inputs are gathered), and cleared after - even when the
+    gathering raises; no way out is `NoDryExit`, the stage's own refusal."""
+    from l7r.diagram.hamletgen import phases_ext
+    from l7r.diagram.hamletgen.ways import fabric
+    from l7r.diagram.hamletgen.ways.track import NoDryExit
 
     s = _open()
+    s._seat_search = {}
     s.M["houses"] = [{"x": 100, "y": 100, "geom": {"boxes": {"house": (100.0, 100.0, 40.0, 20.0)}}}]
     drawn = [{"x": 100, "y": 100, "w": 40, "h": 20}]  # the farmhouses as `fabric._homestead_polys` reads them, swapped in to ask it
     plan = SimpleNamespace()
     seen: list = []
 
-    def choose(st: Settlement, pl: object) -> list:
+    def inputs(st: Settlement, pl: object) -> dict:
         assert pl is plan
         seen.append([k for _p, _o, k in fabric._homestead_polys(SimpleNamespace(M={}, _seated_parts=st._seated_parts))])
-        return [(1.0, 1.0), (2.0, 2.0)]
+        return {}
 
-    monkeypatch.setattr(track, "choose_track_out", choose)
-    assert hw.chose_the_track(s, plan) == [(1.0, 1.0), (2.0, 2.0)]
+    answer: list = [{"track": [(1.0, 1.0), (2.0, 2.0)], "seats_taken": False, "counts": {"x": 3}}]
+    monkeypatch.setattr(hw, "track_inputs", inputs)
+    monkeypatch.setattr(phases_ext, "phases", lambda: SimpleNamespace(track_out=lambda inp: answer[0]))
+    assert hw.chose_the_track(s, plan) == [(1.0, 1.0), (2.0, 2.0)] and s._seat_search["track_counts"] == 3
     assert seen == [["houses"]] and s._seated_parts is None, "read while chosen, cleared after"
     assert [k for _p, _o, k in fabric._homestead_polys(SimpleNamespace(M={"houses": drawn}, _seated_parts=s._seated_parts))] == ["houses"], "once cleared, only the drawn"
+    answer[0] = None
+    with pytest.raises(NoDryExit):
+        hw.chose_the_track(s, plan)
 
-    def fails(st: Settlement, pl: object) -> list:
+    def fails(st: Settlement, pl: object) -> dict:
         raise RuntimeError("no way out")
 
-    monkeypatch.setattr(track, "choose_track_out", fails)
+    monkeypatch.setattr(hw, "track_inputs", fails)
     with pytest.raises(RuntimeError):
         hw.chose_the_track(s, plan)
     assert s._seated_parts is None, "cleared even when the choice raises"
@@ -151,11 +160,10 @@ def test_the_anchor_seeds_the_reach_inside_the_window_or_at_its_edge_or_not_at_a
 # ---- SC-001: nothing reserved or recorded for a way before the last house ----------------------------------------------
 
 
-def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_seated(monkeypatch: pytest.MonkeyPatch) -> None:
-    """SC-001: on a nucleated roll, every time the seating asks whether a homestead opens onto lane ground the access tree is
-    empty, the registry holds no corridor, the manifest records no way, no gate and no track out - and the anchor is painted into
-    no buildable cell (what the buildable raster takes, the lane raster takes too). Once the last house stands the track
-    out is recorded, its first point the gate, and no exit strip ever is."""
+def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_seated() -> None:
+    """SC-001: on a nucleated roll the households are seated in Rust (feature 444 T30) with no way reserved or recorded - the
+    Rust seats them before any way is sought, so the Python records none while they stand; once the last house stands the
+    track out is recorded, its first point the gate, and no exit strip ever is."""
     plan = a_plan(households=10)
     plan.envelope = list(CROWN)
     plan.seat = __import__("l7r.diagram.hamletgen", fromlist=["seat_cluster"]).seat_cluster(plan)
@@ -164,22 +172,8 @@ def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_se
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
     s._nucleated = True
     s.field_polys.append(list(plan.envelope))
-    seen: list[int] = []
-    opens = SeatRegion.opens
-
-    def watched(self: SeatRegion, geom: object) -> bool:
-        st = self.s
-        assert st._access is not None and st._access.segs == [], "the tree is empty while houses are seated"
-        assert st.M["access_corridors"] == [] and not st.standing.reserved.corridors, "no way recorded or reserved"
-        assert not {"access_exit", "way_out_gate", "way_out_track"} & set(st.M), "no strip, no gate, no track"
-        got = opens(self, geom)
-        assert not ((self.buildable.array() != 0) & (self.lane.array() == 0)).any(), "the anchor painted into no buildable cell"
-        seen.append(len(st.M["houses"]))
-        return got
-
-    monkeypatch.setattr(SeatRegion, "opens", watched)
     stages.stage_homesteads(s, plan)
-    assert seen and len(s.M["houses"]) == 10, "the seating asked, and seated every household"
+    assert len(s.M["houses"]) == 10, "every household seated"
     assert "access_exit" not in s.M and len(s.M["way_out_track"]) >= 2 and s.M["way_out_track"][0] == s.M["way_out_gate"]
 
 

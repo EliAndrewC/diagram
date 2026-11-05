@@ -219,13 +219,13 @@ def test_stage_doc_reads_the_title_the_paragraphs_and_the_steps() -> None:
 
         Steps:
             l7r.diagram.hamletgen.plan.plan_site
-            l7r.diagram.settlement.Settlement.try_place
+            l7r.diagram.settlement.Settlement.farmsteads
         """
 
     title, paras, steps = ps.stage_doc(stage_toy)
     assert title == "The toy stage" and paras == ["A paragraph about it, wrapped over two lines."]
-    assert steps == ["l7r.diagram.hamletgen.plan.plan_site", "l7r.diagram.settlement.Settlement.try_place"]
-    assert ps.resolve_step(steps[1]).__name__ == "try_place", "a method resolves through its class"
+    assert steps == ["l7r.diagram.hamletgen.plan.plan_site", "l7r.diagram.settlement.Settlement.farmsteads"]
+    assert ps.resolve_step(steps[1]).__name__ == "farmsteads", "a method resolves through its class"
     with pytest.raises(ImportError):
         ps.resolve_step("no.such.module.here")
     assert ps.step_doc("l7r.diagram.tools.placement_stages._ink")[0] == "_ink"

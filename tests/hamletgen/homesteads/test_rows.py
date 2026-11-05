@@ -2,88 +2,13 @@
 
 from __future__ import annotations
 
-import pytest
-from shapely.geometry import Point
-
 from l7r.diagram.hamletgen.homesteads.row_rules import bamboo_mismatch, continuous, row_rules, water_rules
 from l7r.diagram.hamletgen.homesteads.rows import (
-    ROW_FRONTAGE_MAX_FT,
-    door_clear,
-    frame_extent,
-    frame_on_holdings,
-    hard_ground,
-    holding_clear,
     holding_quad,
     largest_ring,
-    row_offsets,
-    row_seats,
-    street_line,
 )
 
 FIELD = [(400.0, 400.0), (1000.0, 400.0), (1000.0, 1000.0), (400.0, 1000.0)]
-
-
-def test_hard_ground_unions_the_field_the_outline_and_the_water() -> None:
-    hard = hard_ground(FIELD, [[(0.0, 0.0), (50.0, 0.0), (50.0, 50.0)]], [((1100.0, 0.0), (1100.0, 900.0), 10.0)])
-    assert hard.contains(Point(700.0, 700.0)) and hard.contains(Point(30.0, 10.0)) and hard.distance(Point(1108.0, 500.0)) == 0.0
-    assert hard_ground([], (), ()) is None
-
-
-def test_the_edge_line_follows_the_ground_and_the_street_is_straight() -> None:
-    hard = hard_ground(FIELD)
-    edge = street_line(hard, (700.0, 300.0), 40.0, 400.0, "edge")
-    assert edge and all(abs(Point(p).distance(hard) - 40.0) < 1.5 for p, _n in edge), "on the ring grown 40 ft"
-    assert all(n[1] < 0 for _p, n in edge), "the normal points away from the field (north)"
-    street = street_line(hard, (700.0, 300.0), 40.0, 400.0, "street", slack=100.0)
-    ys = [p[1] for p, _n in street]
-    assert max(ys) - min(ys) < 1e-6 and abs(street[-1][0][0] - street[0][0][0]) == pytest.approx(500.0, abs=1.0), "straight, the slack added"
-    assert all(Point(p).distance(hard) >= 39.0 for p, _n in street), "set out so the stretch lies behind it"
-    assert street_line(None, (0.0, 0.0), 10.0, 100.0, "edge") == []
-    corner = street_line(hard, (380.0, 380.0), 40.0, 600.0, "edge")
-    assert len(corner) > 2
-
-
-def test_row_seats_step_one_frame_along_on_one_side_or_both() -> None:
-    line = [((float(x), 0.0), (0.0, -1.0)) for x in range(0, 1001, 8)]
-    frame = (0.0, 0.0, 200.0, 150.0)
-    one = row_seats(line, frame, "one", 20.0)
-    assert one[0][0] == pytest.approx((500.0, -95.0), abs=5.0) and all(side == 1 for _c, side, _t, _n in one)
-    xs = sorted(c[0] for c, *_r in one)
-    assert all(b - a == pytest.approx(200.0, abs=9.0) for a, b in zip(xs, xs[1:], strict=False)), "one frame (its longer side) apart"
-    both = row_seats(line, frame, "both", 20.0)
-    assert len(both) == 2 * len(one) and {side for _c, side, *_r in both} == {1, -1}
-    assert row_seats(line[:1], frame, "one", 20.0) == []
-
-
-def test_a_row_steps_no_wider_than_a_lots_frontage() -> None:
-    """The GM, 2026-10-01: the spacing capped at 240 ft, the widest frontage measured on a planned row (research/contents.json#homesteads
-    155-row-villages-resson.html). A 261 ft frame steps at 240; a frame narrower than the lot keeps its own width."""
-    line = [((float(x), 0.0), (0.0, -1.0)) for x in range(0, 2001, 8)]
-    wide = sorted(c[0] for c, *_r in row_seats(line, (0.0, 0.0, 261.0, 167.0), "one", 20.0, ROW_FRONTAGE_MAX_FT))
-    assert ROW_FRONTAGE_MAX_FT == 240.0 and all(b - a == pytest.approx(240.0, abs=9.0) for a, b in zip(wide, wide[1:], strict=False))
-    narrow = sorted(c[0] for c, *_r in row_seats(line, (0.0, 0.0, 221.0, 167.0), "one", 20.0, ROW_FRONTAGE_MAX_FT))
-    assert all(b - a == pytest.approx(221.0, abs=9.0) for a, b in zip(narrow, narrow[1:], strict=False))
-
-
-def test_frame_extent_offsets_and_door_room() -> None:
-    assert frame_extent((0.0, 0.0, 200.0, 100.0), (1.0, 0.0)) == 200.0 and frame_extent((0.0, 0.0, 200.0, 100.0), (0.0, 1.0)) == 100.0
-    assert row_offsets(100.0, "one", 2, 24.0, 15.0) == [24.0, 24.0 + 100.0 + 30.0 + 24.0]
-    assert row_offsets(100.0, "both", 2, 24.0, 15.0, 300.0) == [139.0, 139.0 + 200.0 + 30.0 + 24.0 + 300.0]
-    hard = hard_ground(FIELD)
-    assert door_clear((700.0, 200.0, 200.0, 150.0), (0, -1), 16.0, hard, 16.0), "the front faces away from the field"
-    assert not door_clear((700.0, 330.0, 200.0, 150.0), (0, 1), 16.0, hard, 16.0), "the door on the field itself"
-    assert door_clear((0.0, 0.0, 10.0, 10.0), (0, 1), 0.0, None, 16.0)
-
-
-def test_a_holding_is_clipped_to_the_sheet_and_refused_on_hard_ground_or_a_box() -> None:
-    quad = holding_quad((100.0, 100.0), (1.0, 0.0), (0.0, 1.0), 80.0, 200.0)
-    assert quad[0] == (60.0, 0.0) and quad[2] == (140.0, 200.0)
-    clipped = holding_clear(quad, None, [], (0.0, 30.0, 1000.0, 1000.0))
-    assert clipped is not None and min(p[1] for p in clipped) == 30.0, "a sheet shows only the near end"
-    assert holding_clear(quad, None, [], (500.0, 500.0, 900.0, 900.0)) is None, "nothing of it on the sheet"
-    assert holding_clear(quad, hard_ground([(90.0, 90.0), (110.0, 90.0), (110.0, 110.0)]), [], (0.0, 0.0, 1000.0, 1000.0)) is None
-    assert holding_clear(quad, None, [(100.0, 150.0, 10.0, 10.0)], (0.0, 0.0, 1000.0, 1000.0)) is None
-    assert frame_on_holdings((100.0, 100.0, 20.0, 20.0), [quad]) and not frame_on_holdings((500.0, 500.0, 20.0, 20.0), [quad])
 
 
 def test_largest_ring_takes_a_multipolygon_s_biggest_part() -> None:
@@ -154,27 +79,6 @@ def test_bamboo_mismatch() -> None:
     assert bamboo_mismatch({"meta": {"household_bamboo_in_grove_farms": [[1.0, 2.0]]}, "groves": []}) == [("rolled_undrawn", (1.0, 2.0))]
 
 
-def test_a_row_seat_s_frame_is_refused_for_its_door_a_street_or_a_holding() -> None:
-    """`frame_refused` (lifted from `seat_rows`): a door with no room, a frame across a street, a frame on a holding."""
-    from shapely.geometry import LineString, MultiLineString
-
-    from l7r.diagram.hamletgen.homesteads.rows import frame_refused
-
-    fr = (700.0, 200.0, 200.0, 150.0)
-    hard = hard_ground(FIELD)
-    assert not frame_refused(fr, (0, -1), 16.0, hard, 16.0, None, [])
-    assert frame_refused((700.0, 330.0, 200.0, 150.0), (0, 1), 16.0, hard, 16.0, None, []), "the door on the field"
-    across = MultiLineString([LineString([(600.0, 200.0), (800.0, 200.0)])])
-    assert frame_refused(fr, (0, -1), 16.0, hard, 16.0, across, []), "a street through the frame"
-    assert frame_refused(fr, (0, -1), 16.0, hard, 16.0, None, [holding_quad((700.0, 200.0), (1.0, 0.0), (0.0, 1.0), 40.0, 40.0)])
-
-
-def test_the_best_row_line_is_none_without_hard_ground() -> None:
-    from l7r.diagram.hamletgen.homesteads.rows import best_row_line
-
-    assert best_row_line(None, (0.0, 0.0), 24.0, 900.0, "edge", 480.0, (0, 0, 240, 200), "one", 15.0, (0, 0, 2000, 2000), (0, 1), 16.0, 16.0) == []
-
-
 def test_a_holding_cell_on_a_lane_is_left_undrawn() -> None:
     from l7r.diagram.hamletgen.homesteads.rows import draw_holdings
     from l7r.diagram.settlement import Settlement
@@ -204,98 +108,3 @@ def _hairpins(pts) -> int:  # type: ignore[no-untyped-def]
         if n1 > 1e-6 and n2 > 1e-6 and (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2) < math.cos(math.radians(140)):
             n += 1
     return n
-
-
-def test_the_next_street_is_a_true_parallel_that_never_doubles_back() -> None:
-    """`parallel` (settlement-review of Mizuguchi, 2026-09-30): set out along each sample's own normal, a street beyond a
-    bend tighter than its offset crossed itself; as an offset curve it runs on, on the outward side, in the first's
-    direction."""
-    from l7r.diagram.hamletgen.homesteads.rows import parallel
-
-    straight = [((float(x), 0.0), (0.0, 1.0)) for x in range(0, 200, 8)]
-    out = parallel(straight, 100.0)
-    assert all(abs(p[1] - 100.0) < 1e-6 for p, _n in out) and out[0][0][0] < out[-1][0][0], "same side, same direction"
-    below = parallel([((float(x), 0.0), (0.0, -1.0)) for x in range(0, 200, 8)], 100.0)
-    assert all(abs(p[1] + 100.0) < 1e-6 for p, _n in below) and below[0][0][0] < below[-1][0][0]
-    # a U bend of radius 60, its normals pointing inward (toward the bend's center), set out 150: the inside of the bend
-    import math
-
-    u = [((60.0 * math.cos(t), 60.0 * math.sin(t)), (-math.cos(t), -math.sin(t))) for t in (math.pi * k / 30 for k in range(31))]
-    assert _hairpins([p for p, _n in parallel(u, 150.0)]) == 0
-    assert parallel(straight[:1], 50.0) == [((0.0, 50.0), (0.0, 1.0))] and parallel(straight, 0.0)[0][0] == (0.0, 0.0)
-    assert parallel([((5.0, 5.0), (0.0, 1.0)), ((5.0, 5.0), (0.0, 1.0))], 10.0) == [], "a line of no length has no offset"
-
-
-def test_the_next_street_is_rounded_on_the_inside_of_a_corner() -> None:
-    """`parallel` with a radius (feature 306, cohort seed 903): set out on the inside of the first street's corner, the next
-    street's corner is as sharp as the first's turn - rounded at `street_bend_radius_ft`, every 40 ft step of it turns well
-    under a kink's 50 degrees; the straight stretches stand where they did."""
-    import math
-
-    from l7r.diagram.hamletgen.homesteads.rows import parallel, street_bend_radius_ft
-
-    first = [((float(x), 0.0), (0.0, 1.0)) for x in range(0, 801, 8)] + [((800.0 - 0.77 * t, 0.64 * t), (0.0, 1.0)) for t in range(8, 401, 8)]
-
-    def worst_turn(pts) -> float:  # type: ignore[no-untyped-def]
-        q = pts[::5]  # the drawn street's 40 ft step
-        turns = [abs(math.degrees(math.atan2(c[1] - b[1], c[0] - b[0]) - math.atan2(b[1] - a[1], b[0] - a[0]))) % 360 for a, b, c in zip(q, q[1:], q[2:], strict=False)]
-        return max(min(t, 360 - t) for t in turns)
-
-    assert 90.0 < street_bend_radius_ft() < 93.0
-    sharp = [p for p, _n in parallel(first, 100.0)]
-    round_ = [p for p, _n in parallel(first, 100.0, street_bend_radius_ft())]
-    assert worst_turn(sharp) > 100.0 and worst_turn(round_) < 35.0, "a 140 degree corner, rounded"
-    assert abs(round_[0][1] - 100.0) < 1e-6 and round_[0][0] == sharp[0][0], "the straight stretch where it was"
-
-    from shapely.geometry import LineString, MultiLineString
-
-    from l7r.diagram.hamletgen.homesteads.rows import longest_part
-
-    assert longest_part(MultiLineString([[(0, 0), (1, 0)], [(0, 5), (9, 5)]])) == [(0.0, 5.0), (9.0, 5.0)]
-    assert longest_part(LineString()) == []
-
-
-def test_a_street_keeps_its_longest_stretch_inside_the_sheet() -> None:
-    from l7r.diagram.hamletgen.homesteads.rows import inside_the_sheet
-
-    n = (0.0, 1.0)
-    line = [((x, 50.0), n) for x in (5.0, 20.0, 40.0, 60.0, 95.0, 40.0)] + [((50.0, 50.0), n)]
-    assert inside_the_sheet(line, (10.0, 10.0, 90.0, 90.0)) == [((20.0, 50.0), n), ((40.0, 50.0), n), ((60.0, 50.0), n)]
-    assert inside_the_sheet(line[:1], (10.0, 10.0, 90.0, 90.0)) == []
-
-
-def test_a_row_seat_is_on_the_sheet_and_where_the_stage_allows() -> None:
-    from l7r.diagram.hamletgen.homesteads.rows import seat_allowed
-
-    assert seat_allowed(10.0, 10.0, 100.0, 100.0, None)
-    assert not seat_allowed(-1.0, 10.0, 100.0, 100.0, None) and not seat_allowed(10.0, 100.0, 100.0, 100.0, None)
-    assert not seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: False)
-    assert seat_allowed(10.0, 10.0, 100.0, 100.0, lambda x, y: True)
-
-
-def test_a_refused_frame_is_passed_over_and_seats_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`seat_rows` passes over a seat whose frame `frame_refused` refuses (feature 294: the shipped rolls stopped reaching it once
-    the access tree refused a shadowing corridor, so it is driven here): every seat refused, no farm seated, no street kept."""
-    from types import SimpleNamespace
-
-    from l7r.diagram.hamletgen.homesteads import rows
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1400, 1400, seed=3)
-    s.meta(name="R", scale="hamlet", ftpx=1, toscale=True, households=2)
-    line = [((float(x), 700.0), (0.0, 1.0)) for x in range(100, 1301, 20)]
-    monkeypatch.setattr(rows, "best_row_line", lambda *a, **k: line)
-    asked: list[object] = []
-    monkeypatch.setattr(rows, "frame_refused", lambda *a: asked.append(a) or True)
-    plan = SimpleNamespace(
-        spec=SimpleNamespace(households=2),
-        envelope=FIELD,
-        seat={"cx": 700.0, "cy": 700.0},
-        row_sides="one",
-        row_line="edge",
-        windward="NW",
-        grove_sides=2,
-        grove_flank=0,
-    )
-    assert rows.seat_rows(s, plan, (0.0, 0.0, 60.0, 40.0)) == 0  # type: ignore[arg-type]
-    assert asked and s._row_streets == []  # type: ignore[attr-defined]
