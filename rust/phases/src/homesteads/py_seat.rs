@@ -10,9 +10,13 @@ use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyList};
 
 use super::bearing::Margin;
+use super::bundle::Grove;
+use super::dispersed::bundle_turn;
 use super::fit_rules::{Chord, Rules};
 use super::fixtures::{Forms, Kind, Place, Wall};
 use super::ground::Ground;
+use super::grove_rounds::seat_scattered as seat_scattered_on;
+use super::grove_seat::{Axes, Corridors, GroveSite};
 use super::layout::{Byre, Rect};
 use super::lots::{kind_name, Lots};
 use super::place::{grow, Site};
@@ -115,6 +119,17 @@ pub fn seat_households<'py>(
     py: Python<'py>,
     inp: &Bound<'py, PyDict>,
 ) -> PyResult<Bound<'py, PyDict>> {
+    seat_with(py, inp, &|site, inp| {
+        Ok(grow(site, field(inp, "center")?, field(inp, "want")?))
+    })
+}
+
+/// The seating's site read from the gathered dict, `run` over it, and every household it seated as plain Python values.
+fn seat_with<'py>(
+    py: Python<'py>,
+    inp: &Bound<'py, PyDict>,
+    run: &dyn Fn(&Site, &Bound<'py, PyDict>) -> PyResult<super::place::Seating>,
+) -> PyResult<Bound<'py, PyDict>> {
     let bad = |m: String| pyo3::exceptions::PyValueError::new_err(m);
     let mut tests = Counts::default();
     let (origin, cell, nx, cells): (Pt, f64, usize, Vec<bool>) = field(inp, "ground")?;
@@ -158,7 +173,7 @@ pub fn seat_households<'py>(
         shade: field(inp, "shade")?,
         rules: &rules,
     };
-    let st = grow(&site, field(inp, "center")?, field(inp, "want")?);
+    let st = run(&site, inp)?;
     let seated = PyList::empty(py);
     for s in &st.seated {
         let b = &s.bundle;
@@ -182,6 +197,13 @@ pub fn seat_households<'py>(
             "passage",
             s.passage.as_ref().map(super::passage::Passage::parts),
         )?;
+        let groves: Vec<(Rect, (i32, i32), bool)> = b
+            .groves
+            .iter()
+            .map(|&(r, f, d)| (r, f, d == super::dispersed::Depth::Deep))
+            .collect();
+        h.set_item("groves", groves)?;
+        h.set_item("well", b.well)?;
         seated.append(h)?;
     }
     for (k, v) in st.tests.0 {
@@ -193,3 +215,63 @@ pub fn seat_households<'py>(
     d.set_item("counts", tests.0)?;
     Ok(d)
 }
+
+/// A scattered hamlet's grove farms seated (`grove_rounds.rs` `seat_scattered`) from Python's gathered state - the seating's site, and
+/// the grove its farms carry, the paddies, the other ground and the water, the seat band and its axes, the chains its front row is
+/// offset from, the largest house, the cluster's shape, the lanes' form, the seed, the households wanted, the band's reach and
+/// whether its farms stand in single file: each household seated, as `seat_households` returns them, its bands and well pocket too.
+///
+/// # Errors
+/// As `seat_households`.
+#[pyfunction]
+pub fn seat_scattered<'py>(
+    py: Python<'py>,
+    inp: &Bound<'py, PyDict>,
+) -> PyResult<Bound<'py, PyDict>> {
+    seat_with(py, inp, &|site, inp| {
+        let (sides, wind, sun_band, well, yard_sun): (u32, String, bool, f64, f64) =
+            field(inp, "grove")?;
+        let (rings, holes, water): CorridorsIn = field(inp, "corridors")?;
+        let corridors = Corridors {
+            rings,
+            holes,
+            water,
+        };
+        let (c, along, out, anchor, lat): (Pt, Pt, Pt, Pt, f64) = field(inp, "axes")?;
+        let paddies: Vec<Vec<Pt>> = field(inp, "paddies")?;
+        let chains: Vec<Vec<Chord>> = field(inp, "row_chains")?;
+        let shape: String = field(inp, "shape")?;
+        let gs = GroveSite {
+            site,
+            grove: Grove {
+                sides,
+                turn: bundle_turn(&wind),
+                sun_band,
+                well,
+                yard_sun,
+            },
+            paddies: &paddies,
+            corridors: &corridors,
+            axes: Axes {
+                c,
+                along,
+                out,
+                anchor,
+                lat,
+            },
+            chains: &chains,
+            house_max: field(inp, "house_max")?,
+            shape: &shape,
+            alleys: field(inp, "alleys")?,
+            seed: field(inp, "seed")?,
+            want: field(inp, "want")?,
+            band: field(inp, "band")?,
+            bound: field(inp, "bound")?,
+            single_file: field(inp, "single_file")?,
+        };
+        Ok(seat_scattered_on(&gs))
+    })
+}
+
+/// The other ground and the water as Python gathers them: its exterior rings, its holes, and each water segment with its clearance.
+type CorridorsIn = (Vec<Vec<Pt>>, Vec<Vec<Pt>>, Vec<(Pt, Pt, f64)>);

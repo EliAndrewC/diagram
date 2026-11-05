@@ -41,6 +41,7 @@ fn placed_at(x: f64, y: f64) -> Placed {
         beds: b.boxes[2..2 + b.gardens.len()].to_vec(),
         bbox: b.bbox,
         persimmon: None,
+        groves: vec![],
     }
 }
 

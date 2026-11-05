@@ -634,6 +634,7 @@ impl Seating {
             beds: b.boxes[2..2 + b.gardens.len()].to_vec(),
             bbox: b.bbox,
             persimmon: super::fit_rules::persimmon_of(&b),
+            groves: Vec::new(),
         };
         self.standing.add(placed, &mut self.tests);
         let lot = self.seated.len();

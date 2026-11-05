@@ -23,6 +23,8 @@ pub mod fit_rules;
 pub mod fixtures;
 pub mod gap_ways;
 pub mod ground;
+pub mod grove_rounds;
+pub mod grove_seat;
 pub mod layout;
 pub mod lots;
 pub mod passage;
@@ -46,6 +48,8 @@ mod fit_tests;
 mod fixtures_tests;
 #[cfg(test)]
 mod gap_ways_tests;
+#[cfg(test)]
+mod grove_seat_tests;
 #[cfg(test)]
 mod passage_tests;
 #[cfg(test)]

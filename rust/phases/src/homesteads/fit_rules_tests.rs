@@ -270,6 +270,7 @@ fn the_persimmon_is_dropped_from_the_sun_and_a_neighbors_refuses_the_seat() {
             beds: vec![],
             bbox: (yard.0, yard.1 - 20.0, 60.0, 60.0),
             persimmon: None,
+            groves: vec![],
         },
         &mut t,
     );
@@ -286,6 +287,7 @@ fn the_persimmon_is_dropped_from_the_sun_and_a_neighbors_refuses_the_seat() {
             beds: vec![],
             bbox: (y.0, y.1 + 30.0, 60.0, 60.0),
             persimmon: Some((y.0, y.1 + y.3 / 2.0 + 10.0)),
+            groves: vec![],
         },
         &mut t,
     );

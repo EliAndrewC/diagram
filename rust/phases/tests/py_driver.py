@@ -298,3 +298,25 @@ for bad, why in (
         assert why in str(e), e
     else:
         raise AssertionError(f"{why} is refused by name")
+
+# a scattered hamlet (feature 444 T30), as the homesteads' door gathers it: grove farms in a row off the field and ranks behind it,
+# each with its bands; in single file round the field, its row alone
+scatter_in = dict(
+    seat_in,
+    grove=(3, "NW", True, 30.0, 66.6),
+    corridors=([[(1700.0, 1100.0), (1800.0, 1100.0), (1800.0, 1200.0)]], [], [((900.0, 1200.0), (900.0, 1490.0), 8.0)]),
+    axes=((1200.0, 1250.0), (1.0, 0.0), (0.0, -1.0), (1200.0, 1500.0), 400.0),
+    paddies=[seat_in["field"]],
+    row_chains=seat_in["chains"],
+    house_max=(62.1, 30.8),
+    shape="crescent",
+    alleys=True,
+    seed=7,
+    band=(400.0, 150.0),
+    bound=490.0,
+    single_file=False,
+    want=4,
+)
+farms = l7r_phases.seat_scattered(scatter_in)["seated"]
+assert farms and all(h["groves"] for h in farms) and all(h["well"] for h in farms), farms
+assert l7r_phases.seat_scattered(dict(scatter_in, single_file=True))["seated"]

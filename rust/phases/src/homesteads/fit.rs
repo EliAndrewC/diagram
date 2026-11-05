@@ -37,8 +37,9 @@ pub const EAVE_FT: (f64, f64) = (8.0, 2.0);
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 64 (spatial-index cell)
 pub const GRID: f64 = 64.0;
 
-/// A homestead standing: its house (drawn rectangle and rake), its yard and beds as drawn, and the box round it.
-#[derive(Debug, Clone)]
+/// A homestead standing: its house (drawn rectangle and rake), its yard and beds as drawn, the box round it, its persimmon and a
+/// grove farm's bands.
+#[derive(Debug, Clone, Default)]
 pub struct Placed {
     /// The house's rectangle and its rake (degrees).
     pub house: (Rect, f64),
@@ -52,6 +53,8 @@ pub struct Placed {
     pub bbox: Rect,
     /// Its persimmon's center, where it keeps one.
     pub persimmon: Option<Pt>,
+    /// A grove farm's bands.
+    pub groves: Vec<Rect>,
 }
 
 /// The standing homesteads, filed in a grid by their boxes.

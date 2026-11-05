@@ -155,7 +155,7 @@ def homestead_geom(h: dict[str, Any]) -> dict[str, Any]:
     notes: dict[str, Any] = {"ft": {k: [r[2], r[3]] for k, r in fixtures.items()}}
     if h["bath"] is not None:
         notes["bath_seat"] = h["bath"]
-    return {
+    out: dict[str, Any] = {
         "house": tuple(h["house"]),
         "yard": tuple(h["yard"]),
         "garden": gardens[0] if gardens else None,
@@ -178,6 +178,28 @@ def homestead_geom(h: dict[str, Any]) -> dict[str, Any]:
         "opens": True,
         "wood": [tuple(p) for p in h["wood"]],
     }
+    grove = grove_parts(h)
+    if "well_box" in grove:
+        out["boxes"]["well"] = grove.pop("well_box")
+    out.update(grove)
+    return out
+
+
+def grove_parts(h: dict[str, Any]) -> dict[str, Any]:
+    """A grove farm's own parts on its geometry, as `dispersed_layout` lays them: its bands and their faces (as turned), and its well
+    pocket and the pocket's box as drawn; nothing for a clustered household.
+
+    Research: plumbing - NONE: the Rust's grove in the record's own form"""
+    if not h.get("groves"):
+        return {}
+    out: dict[str, Any] = {"groves": [tuple(r) for r, _f, _d in h["groves"]], "grove_faces": [(tuple(f), "deep" if d else "thin") for _r, f, d in h["groves"]]}
+    if h.get("well") is not None:
+        w = tuple(h["well"])
+        th = math.radians(float(h["turn"]))
+        c, sn = abs(math.cos(th)), abs(math.sin(th))
+        out["well"] = w
+        out["well_box"] = (w[0], w[1], w[2] * c + w[3] * sn, w[2] * sn + w[3] * c)
+    return out
 
 
 def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quota: dict[str, float]) -> int:
@@ -188,7 +210,14 @@ def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quo
     from ..phases_ext import phases
 
     got = phases().seat_households(seat_inputs(s, plan, byre_share, quota))
+    return placed + record_seated(s, got)
 
+
+def record_seated(s: Settlement, got: dict[str, Any]) -> int:
+    """Record each household the Rust seated as `_try_place_bundle` does: its box placed, its record, its way's reservation, its
+    parts and wood share; the search's counts on the seating's. How many it recorded.
+
+    Research: plumbing - NONE: the Rust's households in the record's own form"""
     form = getattr(s, "_byre_form", None)
     recs: list[dict[str, Any]] = []
     for h in got["seated"]:
@@ -219,4 +248,40 @@ def rust_grow(s: Settlement, plan: SitePlan, placed: int, byre_share: float, quo
         recs.append(rec)
     offered, positions, rects, layouts = got["search"]
     s._seat_search.update({"grow_offered": offered, "grow_took": len(got["seated"]), "positions": positions, "rects": rects, "layouts": layouts, "rust_counts": sum(got["counts"].values())})
-    return placed + len(got["seated"])
+    return len(got["seated"])
+
+
+def rust_scatter(s: Settlement, plan: SitePlan, single_file: bool, house_max: tuple[float, float], bound: float, band: tuple[float, float], quota: dict[str, float]) -> int:
+    """Seat a scattered hamlet's grove farms in Rust (`l7r_phases.seat_scattered`): its front row, then - off the single file - its ranks,
+    the rescue and the exhaustive pass, from the site boundary installed for this seating (`install_site_boundary`), and record each as
+    `_try_place_bundle` does. How many stand.
+
+    Research: a scattered hamlet's seating in Rust - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a front row along the paddy's chords, ranks behind, a rescue cloud, the exhaustive pass; its rules asked at the Rust that seats it"""
+    from l7r.diagram.settlement.homestead_parts.grove_sides import windward_pair
+
+    from ..phases_ext import phases
+
+    pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
+    ring = lambda r: [pt(q) for q in r]  # noqa: E731
+    inputs = seat_inputs(s, plan, 0.0, quota)
+    sun = s.px(CANOPY_SHADE_FT) + s.px(s.CANOPY_R_FT) * 1.7 * 1.15 if getattr(s, "_sun_corridor_ft", 0.0) else 0.0
+    corr = getattr(s, "_site_corridors", None)
+    seat = plan.seat
+    chains = s._seat_ring_chains if single_file else s._site_chains
+    inputs.update(
+        {
+            "grove": (int(s._grove_sides()), windward_pair(s._windward(), s._grove_flank()), bool(sun), float(2.0 * s._well_vr() + s.px(6.0)), float(sun or 22.0)),
+            "corridors": ([ring(r) for r in corr.ring_pts], [ring(h.ring) for h in corr.holes], [(pt(a), pt(b), float(c)) for a, b, c in corr.water]) if corr is not None else ([], [], []),
+            "axes": (pt((seat["cx"], seat["cy"])), pt(seat["along"]), pt(seat["out"]), pt(seat["anchor"]), float(seat["lat"])),
+            "paddies": [ring(p) for p in s.field_polys if len(p) >= 3],
+            "row_chains": [[(pt(a), pt(b), pt(n)) for a, b, n in chain] for chain in chains or ()],
+            "house_max": (float(house_max[0]), float(house_max[1])),
+            "shape": plan.cluster_shape or "crescent",
+            "alleys": plan.lane_web == "alleys",
+            "seed": int(plan.spec.seed),
+            "band": (float(band[0]), float(band[1])),
+            "bound": float(bound),
+            "single_file": bool(single_file),
+        }
+    )
+    return record_seated(s, phases().seat_scattered(inputs))
