@@ -187,8 +187,8 @@ impl Ground {
             })
     }
 
-    /// The taken cells grown by `LANE_GROW_FT` on every side (a square of cells, by a row pass then a column pass): ground a lane
-    /// cannot pass at its width is not free to the reach.
+    /// The taken cells grown by `LANE_GROW_FT` on every side (a square of cells, by a row pass then a column pass, each a running
+    /// count read at the window's two ends): ground a lane cannot pass at its width is not free to the reach.
     #[expect(
         clippy::cast_possible_truncation,
         clippy::cast_sign_loss,
@@ -198,19 +198,26 @@ impl Ground {
         let r = (LANE_GROW_FT / self.cell).round().max(1.0) as usize;
         let (nx, ny) = (self.nx, self.ny);
         let mut rows = vec![false; nx * ny];
+        let mut run = vec![0u32; nx.max(ny) + 1];
         for j in 0..ny {
             for i in 0..nx {
-                rows[j * nx + i] =
-                    (i.saturating_sub(r)..(i + r + 1).min(nx)).any(|u| taken[j * nx + u]);
+                run[i + 1] = run[i] + u32::from(taken[j * nx + i]);
+            }
+            for i in 0..nx {
+                rows[j * nx + i] = run[(i + r + 1).min(nx)] > run[i.saturating_sub(r)];
             }
         }
-        tests.add("write@lane_blocked", (2 * nx * ny * (2 * r + 1)) as u64);
-        (0..nx * ny)
-            .map(|k| {
-                let (i, j) = (k % nx, k / nx);
-                (j.saturating_sub(r)..(j + r + 1).min(ny)).any(|v| rows[v * nx + i])
-            })
-            .collect()
+        let mut out = vec![false; nx * ny];
+        for i in 0..nx {
+            for j in 0..ny {
+                run[j + 1] = run[j] + u32::from(rows[j * nx + i]);
+            }
+            for j in 0..ny {
+                out[j * nx + i] = run[(j + r + 1).min(ny)] > run[j.saturating_sub(r)];
+            }
+        }
+        tests.add("write@lane_blocked", (4 * nx * ny) as u64);
+        out
     }
 
     /// The reach over the seating's WINDOW alone (`boundary.seating_window`, a cost window, never an answer - feature 318): the

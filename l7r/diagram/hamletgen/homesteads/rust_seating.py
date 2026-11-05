@@ -52,8 +52,6 @@ def site_cells(s: Settlement, origin: tuple[float, float], c: float, n: tuple[in
     Research: plumbing - NONE: the site boundary's own verdicts, read at cell centers"""
     import numpy as np
 
-    from l7r.diagram.settlement._geom.primitives import chain_violated_many
-
     nx, ny = n
     cx, cy = origin[0] + (np.arange(nx) + 0.5) * c, origin[1] + (np.arange(ny) + 0.5) * c
 
@@ -73,7 +71,7 @@ def site_cells(s: Settlement, origin: tuple[float, float], c: float, n: tuple[in
     ja, ia = np.nonzero(uncertain & ~taken)
     chains, corr = getattr(s, "_site_chains", None), getattr(s, "_site_corridors", None)
     if len(ja) and chains:
-        bad = chain_violated_many(cx[ia], cy[ja], chains, 0.0)
+        bad = _chains_grid(cx, cy, ja, ia, chains)
         taken[ja[bad], ia[bad]] = True
         ja, ia = ja[~bad], ia[~bad]
     if corr is not None and len(ja):
@@ -81,6 +79,70 @@ def site_cells(s: Settlement, origin: tuple[float, float], c: float, n: tuple[in
         ask[ja, ia] = True
         taken |= _corridors_grid(cx, cy, ask, corr)
     return taken
+
+
+def _chains_grid(cx: Any, cy: Any, ja: Any, ia: Any, chains: Any) -> Any:
+    """`chain_violated_many(cx[ia], cy[ja], chains, 0.0)` for the cells `(ja, ia)` (row by row, as `np.nonzero` gives them): each
+    chord asks only the cells of each row inside its field-side half-strip - the row's x-interval solved from the chord's three
+    linear bounds, widened a hair, then the same test asked of those cells alone. Every cell against every chord was 4.6 million
+    tests at 40 (the work-budget audit at T30's landing), the canvas's area times the field's outline.
+
+    Research: plumbing - NONE: the chain test's own answers, each chord asked only of the cells its strip covers"""
+    import numpy as np
+
+    from l7r.diagram.work_counts import OPS
+
+    bad = np.zeros(len(ja), bool)
+    if not len(ja):
+        return bad
+    nx = len(cx)
+    keys = ja.astype(np.int64) * nx + ia
+    rows = np.unique(ja)
+    ys = cy[rows]
+    pad = 1e-3
+    for chain in chains:
+        for (ax, ay), (bx, by), (nxv, nyv) in chain:
+            ex, ey = bx - ax, by - ay
+            el2 = ex * ex + ey * ey
+            if el2 <= 1e-12:
+                continue
+            lo = np.full(len(rows), -np.inf)
+            hi = np.full(len(rows), np.inf)
+            # each bound c * x >= r (or <=), solved for x row by row: t >= 0, t <= 1, and the signed distance below zero
+            for c, r, ge in ((ex, ax * ex - (ys - ay) * ey, True), (ex, el2 + ax * ex - (ys - ay) * ey, False), (nxv, ax * nxv - (ys - ay) * nyv, False)):
+                if abs(c) <= 1e-12:
+                    # the bound does not move with x: a row it fails is empty (widened a hair, the exact test decides)
+                    fails = (r > pad) if ge else (r < -pad)
+                    lo = np.where(fails, np.inf, lo)
+                    continue
+                b = r / c
+                if (c > 0) == ge:
+                    lo = np.maximum(lo, b - pad)
+                else:
+                    hi = np.minimum(hi, b + pad)
+            live = hi >= lo
+            if __debug__:
+                OPS["seg_test@chain_violated_many"] += len(rows)
+            if not live.any():
+                continue
+            rr = rows[live]
+            il = np.searchsorted(cx, lo[live])
+            ir = np.searchsorted(cx, hi[live], side="right")
+            s0 = np.searchsorted(keys, rr.astype(np.int64) * nx + il)
+            s1 = np.searchsorted(keys, rr.astype(np.int64) * nx + ir)
+            m = s1 > s0
+            if not m.any():
+                continue
+            s0, s1 = s0[m], s1[m]
+            lens = s1 - s0
+            idx = np.repeat(s0 - np.cumsum(lens) + lens, lens) + np.arange(int(lens.sum()))
+            if __debug__:
+                OPS["seg_test@chain_violated_many"] += len(idx)
+            px, py = cx[ia[idx]], cy[ja[idx]]
+            t = ((px - ax) * ex + (py - ay) * ey) / el2
+            on = (t >= 0.0) & (t <= 1.0)
+            bad[idx] |= on & ((px - ax) * nxv + (py - ay) * nyv < 0.0)
+    return bad
 
 
 def _corridors_grid(cx: Any, cy: Any, ask: Any, corr: Any) -> Any:

@@ -241,6 +241,7 @@ fn law_ground(d: &Bound<'_, PyDict>) -> PyResult<LawGround> {
             deck_forbidding: boxed(field(d, "deck_forbidding")?),
             boxes: std::cell::OnceCell::new(),
         },
+        ..LawGround::default()
     })
 }
 

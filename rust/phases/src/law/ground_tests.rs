@@ -8,7 +8,8 @@ use super::ground::{
 };
 use super::water::Waters;
 use super::Counts;
-use crate::ways::track::poly_box;
+use crate::field::fan::Pt;
+use crate::ways::track::{poly_box, segments_cross};
 
 fn square(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<(f64, f64)> {
     vec![(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
@@ -120,6 +121,7 @@ fn the_ground_half_names_the_first_rule_a_run_breaks() {
             fords: vec![(300.0, 450.0)],
             ..Waters::default()
         },
+        ..LawGround::default()
     };
     assert_eq!(
         g.ground_fault(&[(0.0, 0.0)], 3.0, None, &mut t),
@@ -229,4 +231,71 @@ fn a_turn_the_ground_forces_is_lawful() {
         None,
         &mut t
     ));
+}
+
+#[test]
+fn the_grid_asks_the_same_as_the_walk_of_every_outline_and_building() {
+    let quads: Vec<Vec<Pt>> = (0..6)
+        .map(|k| {
+            rot_rect(
+                70.0 * f64::from(k),
+                40.0 * f64::from(k % 3),
+                12.0,
+                8.0,
+                0.3 * f64::from(k),
+            )
+        })
+        .collect();
+    let rings = vec![
+        square(0.0, 0.0, 130.0, 90.0),
+        square(200.0, 30.0, 330.0, 260.0),
+    ];
+    let g = LawGround {
+        buildings: quads.clone(),
+        open_rings: rings.clone(),
+        ..LawGround::default()
+    };
+    let walked = |run: &[Pt]| {
+        !rings.iter().any(|ring| {
+            let n = ring.len();
+            run.windows(2)
+                .any(|w| (0..n).any(|k| segments_cross(w[0], w[1], ring[k], ring[(k + 1) % n])))
+        })
+    };
+    let (mut hits, mut opens) = (0, 0);
+    for i in 0..40 {
+        for j in 0..40 {
+            let a = (f64::from(i) * 9.7 - 20.0, f64::from(j) * 7.3 - 20.0);
+            let run = [
+                a,
+                (a.0 + 37.0, a.1 + 11.0 - f64::from(j % 5) * 6.0),
+                (a.0 + 3.0, a.1 + 29.0),
+            ];
+            assert_eq!(g.through_a_building(&run), through_a_building(&run, &quads));
+            assert_eq!(g.open_ground(&run), walked(&run));
+            hits += usize::from(g.through_a_building(&run));
+            opens += usize::from(g.open_ground(&run));
+        }
+    }
+    assert!(hits > 0 && hits < 1600 && opens > 0 && opens < 1600);
+    // a lone point asks whether it stands inside a building
+    let c = quads[1]
+        .iter()
+        .fold((0.0, 0.0), |a, p| (a.0 + p.0 / 4.0, a.1 + p.1 / 4.0));
+    assert!(g.through_a_building(&[c]) && !g.through_a_building(&[(-500.0, -500.0)]));
+    // a fixture the grid files is met by a run across it, and missed by one far off
+    let well = square(600.0, 600.0, 610.0, 610.0);
+    let fixed = LawGround {
+        fixtures: vec![(well.clone(), poly_box(&well))],
+        ..LawGround::default()
+    };
+    let mut t = Counts::default();
+    assert_eq!(
+        fixed.fouled(&[(590.0, 605.0), (620.0, 605.0)], 3.0, None, &mut t),
+        Some(0)
+    );
+    assert_eq!(
+        fixed.fouled(&[(0.0, 0.0), (20.0, 0.0)], 3.0, None, &mut t),
+        None
+    );
 }

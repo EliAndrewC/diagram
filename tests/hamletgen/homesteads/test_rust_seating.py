@@ -90,3 +90,22 @@ def test_the_corridors_asked_of_a_grid_at_once_are_the_corridors_asked_one_point
     got = rs._corridors_grid(cx, cy, ask, corr)
     want = [[bool(ask[j, i]) and corr.hit_points([(float(x), float(y))]) for i, x in enumerate(cx)] for j, y in enumerate(cy)]
     assert got.tolist() == want and any(any(r) for r in want) and not all(all(r) for r in want)
+
+
+def test_the_chains_asked_of_each_strip_are_the_chains_asked_of_every_cell() -> None:
+    import numpy as np
+
+    from l7r.diagram.settlement._geom.primitives import chain_violated_many
+
+    # a bent field edge, a level chord, an upright one, and a chord too short to count
+    chains = [
+        [((50.0, 300.0), (200.0, 260.0), (-0.26, -0.97)), ((200.0, 260.0), (330.0, 330.0), (0.47, -0.88))],
+        [((100.0, 100.0), (300.0, 100.0), (0.0, 1.0)), ((300.0, 100.0), (300.0, 250.0), (-1.0, 0.0)), ((5.0, 5.0), (5.0, 5.0), (0.0, 1.0))],
+    ]
+    cx = cy = np.arange(0.0, 420.0, 7.0) + 0.5
+    mask = np.ones((len(cy), len(cx)), bool)
+    mask[::3, ::2] = False  # cells not asked
+    ja, ia = np.nonzero(mask)
+    got = rs._chains_grid(cx, cy, ja, ia, chains)
+    want = chain_violated_many(cx[ia], cy[ja], chains, 0.0)
+    assert got.tolist() == want.tolist() and want.any() and not want.all()

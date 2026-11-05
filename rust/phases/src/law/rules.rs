@@ -181,13 +181,33 @@ pub fn forbidden_segment(
     forbidding: &[(Vec<Pt>, Box4)],
     tests: &mut Counts,
 ) -> Option<usize> {
+    forbidden_segment_among(
+        p,
+        width,
+        forbidding,
+        |_| (0..forbidding.len()).collect(),
+        tests,
+    )
+}
+
+/// The first segment whose ribbon overlaps what the matrix forbids, each ribbon tested only against the parts `near` hands back
+/// for its box (every part, or an index's parts near it: a part whose box misses the ribbon's is never a hit).
+pub fn forbidden_segment_among(
+    p: &[Pt],
+    width: f64,
+    forbidding: &[(Vec<Pt>, Box4)],
+    near: impl Fn(Box4) -> Vec<usize>,
+    tests: &mut Counts,
+) -> Option<usize> {
     let r = |v: f64| (v * 10.0).round() / 10.0;
     p.windows(2).position(|w| {
         let (a, b) = ((r(w[0].0), r(w[0].1)), (r(w[1].0), r(w[1].1)));
         let q = ribbon(a, b, width / 2.0 + PLACER_MARGIN_FT);
         let qb = poly_box(&q);
-        tests.add("index_examined@forbidden_segment", forbidding.len() as u64);
-        forbidding.iter().any(|(e, eb)| {
+        let ids = near(qb);
+        tests.add("index_examined@forbidden_segment", ids.len() as u64 + 1);
+        ids.into_iter().any(|i| {
+            let (e, eb) = &forbidding[i];
             !(qb.2 < eb.0 || qb.0 > eb.2 || qb.3 < eb.1 || qb.1 > eb.3) && sat_overlap(&q, e)
         })
     })
