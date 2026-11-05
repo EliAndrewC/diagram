@@ -1,14 +1,1 @@
-[
- {
-  "seed": 375337,
-  "households": 19,
-  "pins": {
-   "farm_water": "channel",
-   "settlement_form": "dispersed"
-  },
-  "stage": "homesteads",
-  "failure": "FAIL refused:OverlapRefused -> wells would be recorded on a channels at (3160, 2441), which the overlap matrix forbids",
-  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/375337-homesteads.pkl",
-  "seed_passes": true
- }
-]
+[]
