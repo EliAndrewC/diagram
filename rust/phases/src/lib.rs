@@ -12,6 +12,7 @@ mod law;
 mod pyrand;
 mod seat;
 mod sink;
+mod track;
 mod water_frame;
 mod waterward;
 mod ways;
@@ -41,5 +42,6 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_households, m)?)?;
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_scattered, m)?)?;
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_rows, m)?)?;
+    m.add_function(wrap_pyfunction!(track::py::row_road_runs, m)?)?;
     Ok(())
 }

@@ -30,7 +30,7 @@ from ..consts import (
 )
 from ..plan import SitePlan
 from . import law
-from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments
+from .checks import PathChecker, brook_fords, drawn_water_segs, gap_segments
 from .clearance import route_around
 from .cluster_edge import _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
@@ -54,24 +54,6 @@ from .thread import (
 from .thread import (
     _water_crossings as _water_crossings,
 )
-
-
-def thread_over_the_ford(s: Settlement, plan: SitePlan, start: Pt, via: Sequence[Pt], end: Pt) -> Poly:
-    """A run threaded round the steadings that crosses the brook at the ford it was laid over (`ford_crossing`'s two
-    landings, `via`): each leg threaded to its landing apart and the deck between them kept. Threaded whole, the router
-    went from the run's first point to its last and dropped the landings, so a road beside a brook crossed it wherever the
-    thread ran and the settle squared that crossing off every ford (cohort seed 22, feature 328 wave 88). Without a
-    landing pair whose middle is a recorded ford, the run is threaded whole as before.
-
-    Research: crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook at a ford"""
-    fords = getattr(s, "brook_fords", None) or ()
-    if len(via) < 2 or not any(math.dist(((via[0][0] + via[1][0]) / 2, (via[0][1] + via[1][1]) / 2), f) <= 1.0 for f in fords):
-        return _thread_the_fabric(s, plan, [start, *via, end])  # no deck at a recorded ford between them: threaded whole, as before
-    near = _thread_the_fabric(s, plan, [start, via[0]])
-    far = _thread_the_fabric(s, plan, [via[1], end])
-    if len(near) < 2 or len(far) < 2 or math.dist(near[-1], via[0]) > 1.0 or math.dist(far[0], via[1]) > 1.0:
-        return _thread_the_fabric(s, plan, [start, *via, end])  # a leg clipped short of its landing: the whole run, as before
-    return [*near, *far]
 
 
 def recorded_track(s: Settlement) -> Poly | None:
@@ -215,23 +197,30 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # the gap, and the street was dropped from the network with all ten of its farms (cohort seed 22, 2026-10-01)
     _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
     if _row and len(_row) >= 2:
-        from .street import drawn_span, street_runs_out  # the street module reads the web's settle, laid after this stage
+        # ...THE ROAD IN RUST (feature 444 T32, `rust/phases/src/track.rs`): the street as drawn, run on off the sheet at both ends
+        # along each end's last leg, the nearer first, each over the brook at a ford, threaded and squared; drawn here
+        from ..homesteads.household_ways import track_inputs
+        from ..phases_ext import phases
 
-        _span = drawn_span(s, 0, s.M.get("houses") or [], plan.brook or [])
-        _a, _b = street_runs_out(_span if len(_span) >= 2 else _row, s.W, s.H)
-        # THE ROAD LEAVES BY THE NEARER EDGE, AND THE STREET RUNS ON OFF THE MAP AT ITS OTHER END TOO (feature 328 wave 5,
-        # research/questions/0033-row-villages-resson.drawing.html: "The street runs on off the map as the road into it"): cut
-        # back to its last farm's path at the far end, the street stopped where the road it stands for went on
-        for _k, _out in enumerate(sorted((_a, _b), key=lambda r: r[0])):
-            _out = _out[1]
-            # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the
-            # street's line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
-            _via = ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ()))
-            from .settle import square_run  # the web's last pass sits above this layer
-
-            # ...squared where it crosses water, as laid (feature 417 T49): a ditch the road crosses, or a run threaded whole
-            s.lane(square_run(s.M, thread_over_the_ford(s, plan, _out[0], _via, _out[-1])), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
-            if _k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
+        pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
+        houses = s.M.get("houses") or []
+        own = getattr(s, "_row_street_farms", None) or []
+        inputs = track_inputs(s, plan)
+        inputs.update(
+            {
+                "street": [pt(q) for q in _row],
+                "farms": [pt(q) for q in own[0]] if own else [(float(h["x"]), float(h["y"])) for h in houses],
+                "frames": [max(float(b[2]), float(b[3])) for b in ((h.get("geom") or {}).get("bbox") for h in houses) if b],
+                "brook": [pt(q) for q in plan.brook or []],
+                "fords": [pt(f) for f in getattr(s, "brook_fords", ()) or ()],
+            }
+        )
+        got = phases().row_road_runs(inputs)
+        for k, n in got["counts"].items():  # the Rust's counted work on the stage's (feature 444 D5)
+            OPS[k] += n
+        for k, run in enumerate(got["runs"]):
+            s.lane([pt(q) for q in run], width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
+            if k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
                 s.M["lanes"][-1]["run_on"] = True
         return
     # THE TRACK OUT AS CHOSEN ONCE THE LAST HOUSE STOOD (feature 320, FR-008), the households' ways already laid to it; chosen

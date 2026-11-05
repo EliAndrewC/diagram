@@ -15,7 +15,6 @@ from l7r.diagram.hamletgen.ways.street import (
     join_to,
     lay_row_streets,
     row_reach,
-    street_run_out,
     street_span,
     thread,
     unneedled,
@@ -64,17 +63,6 @@ def test_lay_row_streets_draws_each_planned_street_as_one_street_lane() -> None:
     joins = [ln for ln in s.M["lanes"] if ln.get("street") and ln.get("street_index") is None]
     assert len(street) == 1 and street[0]["street_index"] == 0 and street[0]["w"] == 6
     assert len(joins) == 1 and joins[0]["pts"][0] == street[0]["pts"][-1] and joins[0]["pts"][-1][0] >= 1299.0, "joined to the connector by a way of its own"
-
-
-def test_street_run_out_leaves_the_sheet_from_the_nearer_end() -> None:
-    run = street_run_out(
-        [(100.0, 500.0), (300.0, 500.0), (500.0, 500.0), (600.0, 500.0), (650.0, 500.0), (700.0, 500.0), (800.0, 500.0), (900.0, 500.0), (950.0, 500.0), (960.0, 500.0)], 1000.0, 1000.0
-    )
-    assert run[0] == (960.0, 500.0) and run[1][0] > 1000.0
-    run = street_run_out([(40.0, 500.0), (300.0, 500.0), (900.0, 500.0)], 1000.0, 1000.0)
-    assert run[0] == (40.0, 500.0) and run[1][0] < 0.0
-    vertical = street_run_out([(500.0, 40.0), (500.0, 600.0)], 1000.0, 1000.0)
-    assert vertical[1][1] < 0.0
 
 
 def test_thread_routes_a_leg_still_grazing_once_more_a_foot_wider(monkeypatch) -> None:  # type: ignore[no-untyped-def]
