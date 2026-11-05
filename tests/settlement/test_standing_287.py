@@ -190,6 +190,22 @@ def test_a_registry_unpickled_with_its_manifest_knows_its_own_records() -> None:
     assert all(key == (k, id(rec)) for key, (rec, _e) in st2._held.items() for k in [key[0]])
 
 
+def test_a_settlement_unpickled_records_what_a_replayed_stage_writes() -> None:
+    """Feature 444 T30: the manifest pickles as a plain dict, so a frozen settlement replayed by the Rust gate wrote past its
+    registry; unpickled, its manifest is live again over the registry it came back with, and nothing is recorded twice."""
+    from l7r.diagram.overlap.registry import StandingList, StandingManifest
+
+    s = Settlement(1000, 1000, seed=3)
+    s.meta(name="V", scale="hamlet")
+    s.M["houses"].append(dict(HOUSE))
+    held = len(s.standing)
+    s2 = pickle.loads(pickle.dumps(s))
+    assert isinstance(s2.M, StandingManifest) and isinstance(s2.M["houses"], StandingList) and s2.standing.M is s2.M
+    assert len(s2.standing) == held, "what it held, held once"
+    s2.M["gardens"].append(dict(GARDEN, x=600.0, y=60.0, of=None))
+    assert len(s2.standing) == held + 1, "a record the replayed stage writes is filed as it is written"
+
+
 def test_forbidden_segment_names_the_first_segment_the_matrix_refuses() -> None:
     st, M = _registry()
     M["houses"].append(HOUSE)

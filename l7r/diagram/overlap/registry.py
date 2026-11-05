@@ -754,3 +754,20 @@ class StandingManifest(dict):  # type: ignore[type-arg]
         if key in self:
             self._unwrap(key)
         return super().pop(key, *default)
+
+
+def relive(standing: Standing, plain: Mapping[str, Any]) -> StandingManifest:
+    """A manifest unpickled as a plain dict (`StandingManifest.__reduce__`) made live again over the registry that came back with
+    it and already holds its records (feature 444 T30): each tested list a `StandingList` again, filled without recording what it
+    holds. Left plain, a settlement frozen for the Rust stage gate (`hamletgen/rust_prefix.py`) wrote past its registry - a placer's
+    `admits` never saw a record a replayed stage appended, and the conflict rose only at the stage's `resync` (the gate's replay
+    of seed 375337: a well recorded on a channel the live roll had kept off it)."""
+    m = StandingManifest(standing)
+    for key, value in plain.items():
+        if tested(key) and key not in WHOLE_VALUE_KEYS and isinstance(value, list) and not isinstance(value, StandingList):
+            filed = StandingList(standing, key)
+            Indexed.extend(filed, value)  # held already: not recorded again
+            value = filed
+        dict.__setitem__(m, key, value)
+    standing.M = m
+    return m

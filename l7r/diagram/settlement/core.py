@@ -325,6 +325,15 @@ class Settlement(
     LABELZ = 20_000_000  # the LABEL layer renders above even the TOP layer - text is never covered
     #                          self.out, z < len(out)), below the TOP layer - so lanes pass UNDER walls
 
+    def __setstate__(self, state: dict[str, Any]) -> None:
+        """A settlement unpickled (the Rust stage gate's frozen input, `hamletgen/rust_prefix.py`) with its manifest live again over
+        its registry (`overlap.registry.relive`): the manifest pickles as a plain dict, so a replayed stage wrote past what stands."""
+        from l7r.diagram.overlap.registry import StandingManifest, relive
+
+        self.__dict__.update(state)
+        if not isinstance(self.M, StandingManifest) and getattr(self, "standing", None) is not None:
+            self.M = relive(self.standing, self.M)
+
     def admits(self: Settlement, key: str, rec: Any, ignore: Any = None) -> bool:
         """May `rec` be recorded under `key` on what already stands (the overlap matrix, feature 287 M8)? Every placer
         whose candidates the matrix can refuse asks this before it chooses one; `ignore` is the record `rec` replaces."""
