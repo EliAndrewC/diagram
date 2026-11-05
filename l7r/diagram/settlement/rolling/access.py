@@ -217,8 +217,8 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
 
 #: The turns off the seat's outward bearing an exit strip is tried at, in degrees, nearest first, where the strip straight
 #: out is refused by the ground: a quarter turn either way at most, so the way out still leaves the cluster away from its field.
-EXIT_TURNS_DEG = (0.0, 15.0, -15.0, 30.0, -30.0, 45.0, -45.0, 60.0, -60.0, 75.0, -75.0, 90.0, -90.0)
-"""Research: bearing out turns - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); at most a quarter turn off the seat's outward bearing, in 15 degree steps"""
+EXIT_TURNS_DEG = (0.0, *(d for k in range(1, 12) for d in (15.0 * k, -15.0 * k)), 180.0)
+"""Research: bearing out turns - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P3, 2026-10-25); the seat's outward bearing, then turns off it in 15 degree steps, the nearest first, round to the back - held to a quarter turn, a margin the seat had found a dry way out of (`cluster.seat_has_dry_exit`, any bearing) seated no one, and every margin of the Rust stage gate's seed 794121 was refused so"""
 
 
 def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None:
