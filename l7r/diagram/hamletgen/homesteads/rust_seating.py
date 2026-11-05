@@ -66,11 +66,49 @@ def ground_cells(s: Settlement) -> tuple[tuple[float, float], float, int, list[b
         bad = chain_violated_many(cx[ia], cy[ja], chains, 0.0)
         taken[ja[bad], ia[bad]] = True
         ja, ia = ja[~bad], ia[~bad]
-    if corr is not None:
-        for j, i in zip(ja.tolist(), ia.tolist(), strict=True):
-            if corr.hit_points([(float(cx[i]), float(cy[j]))]):
-                taken[j, i] = True
+    if corr is not None and len(ja):
+        bad = _corridors_hit(cx[ia], cy[ja], corr)
+        taken[ja[bad], ia[bad]] = True
     return (0.0, 0.0), c, nx, taken.ravel().tolist()
+
+
+def _corridors_hit(xs: Any, ys: Any, corr: Any) -> Any:
+    """`SiteCorridors.hit_points` asked of every point of `(xs, ys)` at once: a water course within its clearance, or the point inside
+    an outline ring and inside none of its holes - each course and ring asked only of the points in its box. Asked one point at a
+    time, the canvas's uncertain cells were 4.3 million calls at 40 (the work-budget run of 2026-11-05, `make perf-fanout`).
+
+    Research: plumbing - NONE: the site corridors' own tests, vectorized"""
+    import numpy as np
+    import shapely
+
+    from l7r.diagram.work_counts import OPS
+
+    hit = np.zeros(len(xs), bool)
+    for (ax, ay), (bx, by), clr in corr.water:
+        near = (xs >= min(ax, bx) - clr) & (xs <= max(ax, bx) + clr) & (ys >= min(ay, by) - clr) & (ys <= max(ay, by) + clr)
+        k = np.nonzero(near & ~hit)[0]
+        if __debug__:
+            OPS["pt_test@corridors_hit"] += int(k.size)
+        if k.size:
+            dx, dy = bx - ax, by - ay
+            ll = dx * dx + dy * dy
+            t = np.clip(((xs[k] - ax) * dx + (ys[k] - ay) * dy) / ll, 0.0, 1.0) if ll else np.zeros(k.size)
+            hit[k] |= np.hypot(xs[k] - (ax + t * dx), ys[k] - (ay + t * dy)) < clr
+
+    def inside(rings: Any) -> Any:
+        out = np.zeros(len(xs), bool)
+        for r in rings:
+            if len(r) < 3:
+                continue
+            rx, ry = [q[0] for q in r], [q[1] for q in r]
+            k = np.nonzero((xs >= min(rx)) & (xs <= max(rx)) & (ys >= min(ry)) & (ys <= max(ry)) & ~out)[0]
+            if __debug__:
+                OPS["pt_test@corridors_hit"] += int(k.size)
+            if k.size:
+                out[k] |= shapely.contains_xy(shapely.Polygon(r), xs[k], ys[k])
+        return out
+
+    return hit | (inside(corr.ring_pts) & ~inside([h.ring for h in corr.holes]))
 
 
 def pocket_bars(s: Settlement) -> list[tuple[float, float, float]]:

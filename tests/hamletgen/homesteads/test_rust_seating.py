@@ -74,3 +74,18 @@ def test_a_row_village_records_its_sheltered_farms_holdings_and_streets(monkeypa
     assert s.M["row_holdings"][0]["of"] == [400.0, 10.0] and s.block_polys == s.hard_polys == [s._row_holdings[0][0]]
     assert s._row_streets == [[(0.0, 50.0), (500.0, 50.0)]] and s._row_street_farms == [[(100.0, 10.0), (400.0, 10.0)]]
     assert s.M["meta"]["row_streets"] == 1 and s.M["row_street_plans"][0][0] == [0.0, 50.0]
+
+
+def test_the_corridors_asked_of_every_cell_at_once_are_the_corridors_asked_one_point_at_a_time() -> None:
+    import numpy as np
+
+    from l7r.diagram.hamletgen.homesteads.boundary import SiteCorridors
+
+    ring = [(100.0, 100.0), (300.0, 100.0), (300.0, 300.0), (100.0, 300.0)]
+    hole = [(150.0, 150.0), (200.0, 150.0), (200.0, 200.0), (150.0, 200.0)]
+    corr = SiteCorridors(([((0.0, 400.0), (400.0, 400.0), 12.0), ((50.0, 50.0), (50.0, 50.0), 5.0)], []), ([ring], [hole]))
+    xs, ys = np.meshgrid(np.arange(0.0, 420.0, 7.0), np.arange(0.0, 420.0, 7.0))
+    xs, ys = xs.ravel(), ys.ravel()
+    got = rs._corridors_hit(xs, ys, corr)
+    want = [corr.hit_points([(float(x), float(y))]) for x, y in zip(xs, ys, strict=True)]
+    assert got.tolist() == want and any(want) and not all(want)
