@@ -317,7 +317,9 @@ fn rank_rounds(gs: &GroveSite, st: &mut Seating) {
 }
 
 /// The exhaustive pass (`capacity.seat_the_rest`): every free grid point of the ground a third of a pitch apart, nearest the seat first
-/// within a pitch's ring and nearer the field breaking ties, offered until every household stands or 400 offers in a row seat none.
+/// within a pitch's ring and nearer the field breaking ties, offered until every household stands - every point, with no dry spell: a
+/// cap of 400 offers in a row seating none (Python's `DRY_SPELL`) ended the pass before the seats that fit and refused the site (the
+/// Rust stage gate's seed 650854, 17 of 19 seated where the whole pass seats every one; the Python seated 18).
 #[expect(
     clippy::cast_possible_truncation,
     clippy::cast_sign_loss,
@@ -329,7 +331,7 @@ fn seat_the_rest(gs: &GroveSite, st: &mut Seating) {
         return;
     }
     let site = gs.site;
-    let (pitch, inset, dry) = (SEAT.0 / 3.0, 6.0, 400);
+    let (pitch, inset) = (SEAT.0 / 3.0, 6.0);
     let (ni, nj) = (
         ((site.canvas.0 - 2.0 * inset) / pitch) as usize + 1,
         ((site.canvas.1 - 2.0 * inset) / pitch) as usize + 1,
@@ -357,12 +359,9 @@ fn seat_the_rest(gs: &GroveSite, st: &mut Seating) {
             .then(a.2.total_cmp(&b.2))
             .then(a.3.total_cmp(&b.3))
     });
-    let (mut since, mut left) = (0, grid.into_iter());
-    // ...until every household stands or the dry spell ends it
-    while let Some((.., q)) = (st.seated.len() < gs.want && since < dry)
-        .then(|| left.next())
-        .flatten()
-    {
+    let mut left = grid.into_iter();
+    // ...until every household stands
+    while let Some((.., q)) = (st.seated.len() < gs.want).then(|| left.next()).flatten() {
         if st
             .seated
             .iter()
@@ -370,9 +369,6 @@ fn seat_the_rest(gs: &GroveSite, st: &mut Seating) {
         {
             continue;
         }
-        since += 1;
-        if st.offer_grove(gs, q.0, q.1) {
-            since = 0;
-        }
+        st.offer_grove(gs, q.0, q.1);
     }
 }

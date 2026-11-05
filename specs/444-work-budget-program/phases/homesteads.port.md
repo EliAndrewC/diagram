@@ -135,7 +135,13 @@ names and is listed so a refused seed can be traced to it.
 - `homesteads/grove_seat.rs` `fixtures_in_bands`: a fixture asked of its own farm's bands only - Python asks a neighbor's too, but after
   the side fit has refused every box within 2 ft of a standing one, so no neighbor's band can meet it (the half never refuses).
 - `homesteads/grove_rounds.rs` the exhaustive pass: a grid point is dropped on the free ground's full verdict at its cell (Python drops
-  only the surely taken and offers the rest), so the dry spell counts fewer offers.
+  only the surely taken and offers the rest); and the pass offers every point, with no dry spell (Python stopped after 400 offers in a
+  row seating none, which refused the Rust gate's seed 650854 at 17 of 19, Python's own roll at 18).
+- `homesteads/rows.rs` `row_step` and `best_row_line`: a row's farms one frame apart along their street (the frame's reach over the
+  line's turns, the 240 ft bounding the holding), where Python stepped at the frame's longer side capped at 240 ft and every other farm
+  on a diagonal street lapped its neighbor; the first street ranked by how many farms its whole row holds, its further streets on the
+  sheet, before its own clear frames (the gate's seeds 406155 and 406169; Python refused 406169 too).
+- `overlap/registry.py` `Standing.__setstate__`: an unpickled registry re-keys its records by their new ids (the gate's replays).
 - `homesteads/level.rs`: the hard ground grown by a distance traced as a level set on 4 ft cells (marching squares, linearly
   interpolated), where Python buffers with shapely - its ring within 1% of shapely's length and a foot of its line.
 - `homesteads/rows.rs` `parallel`: the raw offset (each segment set out, a round join at each vertex) sampled every 2 ft and every

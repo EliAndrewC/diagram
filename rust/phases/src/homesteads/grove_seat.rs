@@ -37,7 +37,7 @@ use crate::ways::track::in_poly;
 
 /// The seating's figures (feet): a bundle's pitch, the front row's standoff slack, a house's wall gap off the paddy and its slack,
 /// a footpath's room off the outline, the lane's room between ranks, the yard's sun corridor, a seat's near-a-house reach, the spiral's
-/// step and reach, the slide's step and steps, and the dry spell of the exhaustive pass.
+/// step and reach, and the slide's step and steps.
 ///
 /// Research:
 ///     the bundle's pitch - research/questions/0029-farmhouses-minka.drawing.html: 100 ft between homesteads, `BUNDLE_PITCH`
@@ -45,7 +45,7 @@ use crate::ways::track::in_poly;
 ///     a footpath's room - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft each side and 6 ft, 20
 ///     a lane's room between ranks - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 18 ft
 ///     a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 39 ft
-///     its search steps and tolerances - NONE: a seat within half a pitch of a house is the same guess again (50); the spiral's rings 7 ft apart out to 91, 14 on a row's exact seat, 12 bearings; the slide 2 ft a step, 48 steps, stopped within 1.5 ft; 400 offers in a row seating none
+///     its search steps and tolerances - NONE: a seat within half a pitch of a house is the same guess again (50); the spiral's rings 7 ft apart out to 91, 14 on a row's exact seat, 12 bearings; the slide 2 ft a step, 48 steps, stopped within 1.5 ft
 pub const SEAT: (f64, f64, f64, f64, f64, f64, f64) = (100.0, 3.0, 7.0, 20.0, 18.0, 39.0, 50.0);
 
 /// The grove farm's sun strips (feet): the yard's drying strip south of it, and a bed's morning-sun reach east.
