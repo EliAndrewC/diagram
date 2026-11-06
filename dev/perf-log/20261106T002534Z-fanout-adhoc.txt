@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+track: 5,098 calls @20, 17,793 calls @40, growth exponent 1.80
+  placed @40: lanes +1; 17,793 calls per thing placed
+
+all stages: 5,098 calls @20, 17,793 calls @40
