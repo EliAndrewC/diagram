@@ -9,7 +9,7 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import Settlement, seg_dist, surface_water_dist
+from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement._geom.indexes import PointGrid
 from l7r.diagram.settlement._geom.primitives import points_in_poly, seg_dists
 from l7r.diagram.settlement.homestead_parts.wood_share import ReservedSeats, well_keepout
@@ -480,7 +480,7 @@ def seat_wells(
     # EVERY house is surface-watered the objective falls back to all of them - wells are still
     # dug (well_target), they just stop chasing houses the water already serves.
     _sw_reach = 760.0 / max(plan.ftpx, 0.01)
-    needy = [h for h in houses if surface_water_dist(s.M, h["x"], h["y"]) > _sw_reach] or list(houses)
+    needy = [h for h, wet in zip(houses, watered_by_open_water(s, houses, _sw_reach), strict=True) if not wet] or list(houses)
     # A RELAXATION LADDER, not a single rule. The tight neighborhood test is right for a compact
     # cluster and impossible for a stretched one: an `elongated` cluster strung along a margin has
     # no point with three homesteads inside 190 px, so the strict pass found nothing at all and the
@@ -827,6 +827,19 @@ def stage_lane_wells(s: Settlement, plan: SitePlan) -> None:
         record_over_ten(s)
 
 
+def watered_by_open_water(s: Settlement, houses: Sequence[Mapping[str, Any]], reach: float) -> list[bool]:
+    """Is each house within `reach` of open water (`surface_water_dist <= reach`), each asked of the water's segments near it - a
+    `PointGrid` of `water_lines`' segments built once - rather than of every segment (the appurtenances' fanout of 2026-11-06:
+    82,496 distances for 40 houses).
+
+    Research: plumbing - NONE: the same distances decide; the index leaves out the segments too far to"""
+    from l7r.diagram.settlement.land.wet import surface_water_within, water_lines
+
+    index = PointGrid()
+    index.extend([(a, b, min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])) for ln in water_lines(s.M) for a, b in zip(ln, ln[1:], strict=False)])
+    return [surface_water_within(s.M, float(h["x"]), float(h["y"]), reach, index) for h in houses]
+
+
 def dry_households(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
     """The households beyond `WATER_REACH_FT` of every communal well and of open water (`surface_water_dist`, the measure
     the seat search and the gate's watered rule read).
@@ -834,7 +847,8 @@ def dry_households(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[M
     Research: every household watered - research/questions/0196-communal-wells-ido.drawing.html: a well, channel, pond or stream within 760 ft"""
     reach = s.px(WATER_REACH_FT)
     ws = [(float(w["x"]), float(w["y"])) for w in s.M.get("wells") or [] if not w.get("private") and not w.get("shrine")]
-    return [h for h in houses if not any(math.hypot(float(h["x"]) - x, float(h["y"]) - y) <= reach for x, y in ws) and surface_water_dist(s.M, float(h["x"]), float(h["y"])) > reach]
+    near_water = watered_by_open_water(s, houses, reach)
+    return [h for h, wet in zip(houses, near_water, strict=True) if not any(math.hypot(float(h["x"]) - x, float(h["y"]) - y) <= reach for x, y in ws) and not wet]
 
 
 def reach_wells(s: Settlement, plan: SitePlan) -> None:
