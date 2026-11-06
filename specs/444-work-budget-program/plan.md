@@ -582,6 +582,22 @@ The trigger: `make cohort` at 03:18Z named pinned row 902 newly failing against 
    goes to `make arbiter-ask`.
 9. **After a ruling, the step it named?** No ruling yet.
 
+**Measured since (2026-11-06T05:30Z-07:00Z).** The default cohort also named seeds 2 and 3, which pass on main (rolled in a detached
+worktree of `origin/main`) and fail on the clone with the grove rule below reverted, so T27-T32's own:
+- **Row 902** (`groves_crossed_by_lanes`): a straight field way laid from its farm's dooryard through that farm's own deep band; the
+  lane law asked no grove of a tree lane. Now `Lawful.ground_fault` refuses a tread through any farm grove band, by the predicate the
+  finished map is held to (`grove_rules.tread_meets_band`). Passes.
+- **Seed 2** (`OverlapRefused`, a lane on a threshing yard): `lay.laid_lawfully` re-asked the matrix only of a run other than the
+  form it held, so a gathered form (an end moved onto a junction) was drawn unasked. Now `_held` compares against the run the caller
+  asked (`asked`). Passes.
+- **Seed 3** (`WebRefused`, a street across its brook off a ford): the row street asked at twice its row's length (T30/T31) ran on
+  across the brook and a farm was seated on the far bank. Now a street's seats are kept to one stretch between its brook crossings
+  and the hard ground its tread meets (`row_seat.rs` `one_reach`). Passes.
+- **Row 901**: from main's `SeatRefused` to a seated map whose road meets its street at a hairpin. The street's east end stands short
+  of its planned line's brook crossing, which is no ford; the ford is about 300 ft north-east, and the only way to it doubles back
+  round a grove band. The next step is `brook_bounds` (street.py and track.rs): end the street short of a crossing the road can
+  reach at a ford, or refuse the row form on that stretch - not another road fallback (the advisor, 2026-11-06).
+
 ### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)
 
 Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro and Kashikawa, measured 2026-11-04 (`make map`): their manifests moved against HEAD); glyph-check only if a glyph is redrawn (none: the dry plots keep their ink).

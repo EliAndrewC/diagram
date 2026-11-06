@@ -319,11 +319,17 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
         // ...one frame apart along the street, its holding one lot wide (the frame's reach, never past the 240 ft frontage)
         let step = row_step(&line, frame);
         let along = step.min(ROW_FRONTAGE_MAX_FT);
-        let seats = row_seats(&line, frame, rs.both, gap, step)
-            .into_iter()
-            .filter(|&((fx, fy), ..)| {
-                0.0 < fx - hx_off && fx - hx_off < w && 0.0 < fy - hy_off && fy - hy_off < h
-            });
+        let seats = one_reach(
+            &line,
+            row_seats(&line, frame, rs.both, gap, step)
+                .into_iter()
+                .filter(|&((fx, fy), ..)| {
+                    0.0 < fx - hx_off && fx - hx_off < w && 0.0 < fy - hy_off && fy - hy_off < h
+                })
+                .collect(),
+            (gs0.site.streams, rs.hard),
+            &mut st.tests,
+        );
         for ((fx, fy), side, t, nrm) in seats {
             st.tests.add("candidate@seat_rows", 1);
             if st.seated.len().max(out.room) >= want {
@@ -397,4 +403,87 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
         }
     }
     out
+}
+
+/// The seats of one stretch of `line` between its crossings of the streams and the hard ground its tread meets - the stretch
+/// holding the most, the first of a tie - so a street's farms stand on one bank and on one stretch of open ground, and the street
+/// laid along its farms (`street.drawn_span`) crosses neither.
+///
+/// Research:
+///     a row's farms on one stretch of its street - GUESS: no source could speak to it, a value of ours (feature 444 T32: cohort seed
+///     3, a street laid twice its row's length ran on across its brook, a farm was seated on the far bank, and the street crossed the
+///     brook between two crossing places; pinned row 901, a street's farms seated either side of the dry hem's plots, and the street
+///     between them refused on the plots); the street's further stretch is laid as another street would be, never between its farms
+fn one_reach(
+    line: &[(Pt, Pt)],
+    seats: Vec<super::rows::Seat>,
+    (streams, hard): (&[(Pt, Pt)], &Hard),
+    tests: &mut Counts,
+) -> Vec<super::rows::Seat> {
+    use crate::field::geom::dist;
+    use crate::ways::track::{seg_intersect, segments_cross};
+    let mut arc = vec![0.0];
+    for w in line.windows(2) {
+        arc.push(arc[arc.len() - 1] + dist(w[0].0, w[1].0));
+    }
+    let mut cuts: Vec<f64> = Vec::new();
+    for (k, w) in line.windows(2).enumerate() {
+        let (a, b) = (w[0].0, w[1].0);
+        tests.add("seg_test@one_reach", streams.len() as u64);
+        for &(c, d) in streams {
+            if segments_cross(a, b, c, d) {
+                if let Some(x) = seg_intersect(a, b, c, d) {
+                    cuts.push(arc[k] + dist(a, x));
+                }
+            }
+        }
+    }
+    // ...and each run of the line's samples whose tread meets the hard ground, one cut at its start
+    let half = STREET_HALF_FT.0 + STREET_HALF_FT.1;
+    let mut on = false;
+    for (k, &(p, _)) in line.iter().enumerate() {
+        let hit = hard.dist(p, half, tests) < half;
+        if hit && !on {
+            cuts.push(arc[k]);
+        }
+        on = hit;
+    }
+    if cuts.is_empty() || seats.is_empty() {
+        return seats;
+    }
+    // ...each seat's stretch by the arc of its nearest point on the line
+    let reach_of = |p: Pt, tests: &mut Counts| {
+        tests.add("pt_test@one_reach", (line.len() - 1) as u64);
+        let (mut best, mut at) = (f64::INFINITY, 0.0);
+        for (k, w) in line.windows(2).enumerate() {
+            let (a, b) = (w[0].0, w[1].0);
+            let (vx, vy) = (b.0 - a.0, b.1 - a.1);
+            let l2 = vx * vx + vy * vy;
+            let t = if l2 > 0.0 {
+                (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0)
+            } else {
+                0.0
+            };
+            let q = (a.0 + vx * t, a.1 + vy * t);
+            let d = dist(p, q);
+            if d < best {
+                (best, at) = (d, arc[k] + t * l2.sqrt());
+            }
+        }
+        cuts.iter().filter(|&&c| c < at).count()
+    };
+    let of: Vec<usize> = seats.iter().map(|s| reach_of(s.0, tests)).collect();
+    let mut count = vec![0usize; cuts.len() + 1];
+    for &r in &of {
+        count[r] += 1;
+    }
+    let keep = (0..count.len())
+        .max_by(|&i, &j| count[i].cmp(&count[j]).then(j.cmp(&i)))
+        .unwrap_or(0);
+    seats
+        .into_iter()
+        .zip(of)
+        .filter(|&(_, r)| r == keep)
+        .map(|(s, _)| s)
+        .collect()
 }

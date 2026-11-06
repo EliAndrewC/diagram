@@ -11,6 +11,7 @@ from typing import Any
 from l7r.diagram.settlement import rot_rect
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import flooded_ground
+from l7r.diagram.settlement.homestead_parts.grove_rules import band_rect, tread_meets_band
 
 from ...consts import WEB_FABRIC_GAP, Poly, Pt
 from .. import law
@@ -90,6 +91,7 @@ class Lawful:
                     "solid": [(b, b) for b in self.solid],
                     "fixtures": [(q, _poly_box(q)) for q in self.fixtures],
                     "buildings": [(q, _poly_box(q)) for q in self.buildings],
+                    "groves": [(r, _poly_box(r)) for r in (band_rect(g) for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h")))],
                 },
             )
             self._square_pad = max((h for _c, h in square_waters(M)), default=0.0) + 1.0
@@ -124,7 +126,8 @@ class Lawful:
             bends like a path - research/questions/0081-village-lanes.drawing.html: no kink or hook
             crossings - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_crossing_fault`
             nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no foul of house, yard, building, fixture
-            off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot"""
+            off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot
+            no tread through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's way in comes by its open front, never through its grove (`tread_meets_band`)"""
         if len(run) < 2:
             return "too short"
         if law.hook_faults(run, width, self.blocked) or law.kink_faults(run, width, self.blocked):
@@ -146,6 +149,10 @@ class Lawful:
         )
         if fouled is not None:
             return "fabric"
+        # ...AND NO TREAD THROUGH A FARM'S GROVE BAND, its own farm's included (the cohort's pinned row 902: a straight field way
+        # from its farm's dooryard run through that farm's own deep band) - the very predicate the finished map is held to
+        if any(tread_meets_band(run, width / 2.0, r) for r in ix.near("groves", run, width / 2.0 + 1.0)):
+            return "grove"
         if not ix.open_ground(run):
             return "off open ground"
         if through_a_building(run, ix.near("buildings", run, 1.0)):

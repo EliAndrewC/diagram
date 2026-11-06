@@ -476,6 +476,31 @@ pub fn connector_through(
     connector_ways(track, fabric, law, dry, false, tests)
 }
 
+/// The fabric's grove bands, each with its box.
+fn band_boxes(fabric: &Fabric) -> Vec<(Vec<Pt>, Box4)> {
+    boxed(
+        &fabric
+            .steadings
+            .iter()
+            .filter(|s| s.1)
+            .map(|s| s.0.clone())
+            .collect::<Vec<_>>(),
+    )
+}
+
+fn keeps_off(bands: &[(Vec<Pt>, Box4)], run: &[Pt], tests: &mut Counts) -> bool {
+    !crosses_any(run, bands, crate::law::rules::CONNECTOR_WIDTH_FT / 2.0, tests)
+}
+
+/// Does a run as it will be drawn keep the track's tread off every grove band of the fabric?
+///
+/// Research:
+///     no way through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's way in comes by its open front, never through its grove
+#[must_use]
+pub fn off_the_bands(fabric: &Fabric, run: &[Pt], tests: &mut Counts) -> bool {
+    keeps_off(&band_boxes(fabric), run, tests)
+}
+
 /// `connector_through` held to the grove bands: None where every way it finds, once squared, cuts a band - so the caller asks the
 /// next gateway before it settles for one that does.
 #[must_use]
@@ -505,17 +530,8 @@ fn connector_ways(
     // ...AND A SQUARED RUN STILL OFF EVERY GROVE BAND (the Rust stage gate's seed 802024): squaring a crossing drops the bends
     // within its leg's reach of the water and lays a straight leg of up to 42 ft, which can cut a band the run was routed round -
     // so each run is asked again once squared, its tread's half-width off every band
-    let bands = boxed(
-        &fabric
-            .steadings
-            .iter()
-            .filter(|s| s.1)
-            .map(|s| s.0.clone())
-            .collect::<Vec<_>>(),
-    );
-    let off_the_bands = |p: &[Pt], tests: &mut Counts| {
-        !crosses_any(p, &bands, crate::law::rules::CONNECTOR_WIDTH_FT / 2.0, tests)
-    };
+    let bands = band_boxes(fabric);
+    let off_the_bands = |p: &[Pt], tests: &mut Counts| keeps_off(&bands, p, tests);
     let around = route_around(fabric.envelope, track, SPUR_SETBACK_FT, tests);
     let mut run = around
         .as_ref()

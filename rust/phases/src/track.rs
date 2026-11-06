@@ -21,7 +21,7 @@ use crate::field::geom::{dist, seg_dist};
 use crate::law::ground::BoxGrid;
 use crate::law::rules::crossing_points;
 use crate::ways::squaring::square_run;
-use crate::ways::through::{thread_the_fabric, Fabric};
+use crate::ways::through::{off_the_bands, thread_the_fabric, Fabric};
 
 /// How far the road is carried past the sheet's edge (ft).
 ///
@@ -272,6 +272,24 @@ pub fn ford_crossing(
     }
 }
 
+/// Does `run` leave `a` turned back past a hairpin's turn from the way it was laid toward `b` - the street's heading?
+///
+/// Research:
+///     no hairpin - research/questions/0081-village-lanes.drawing.html: a turn of more than 140 degrees (`BENDS`)
+fn doubles_back(b: Pt, a: Pt, run: &[Pt]) -> bool {
+    if run.len() < 2 || dist(run[0], a) > 1.0 {
+        return false;
+    }
+    let (u, v) = ((b.0 - a.0, b.1 - a.1), (run[1].0 - run[0].0, run[1].1 - run[0].1));
+    let (nu, nv) = (u.0.hypot(u.1), v.0.hypot(v.1));
+    if nu < 1e-9 || nv < 1e-9 {
+        return false;
+    }
+    let cos = ((u.0 * v.0 + u.1 * v.1) / (nu * nv)).clamp(-1.0, 1.0);
+    // the turn from the street into the run: the angle between the street's heading and the run's first leg
+    cos.acos().to_degrees() > crate::ways::route::BENDS.0
+}
+
 /// A run threaded round the steadings that crosses the brook at the ford it was laid over (`via`, the two landings): each leg
 /// threaded to its landing apart and the deck kept; threaded whole where the landings' middle is no recorded ford or a leg is
 /// clipped short of its landing.
@@ -348,8 +366,27 @@ pub fn row_road(r: &RoadSite, tests: &mut Counts) -> Vec<Vec<Pt>> {
         .map(|(_, out)| {
             let (a, b) = (out[0], out[out.len() - 1]);
             let via = ford_crossing(a, b, r.brook, r.fords, tests);
-            let run = thread_over_the_ford(r.fabric, (a, &via, b), r.fords, tests);
-            square_run(&run, r.waters, tests)
+            let run = square_run(&thread_over_the_ford(r.fabric, (a, &via, b), r.fords, tests), r.waters, tests);
+            // ...AND WHERE THE RUN AS SQUARED DOUBLES BACK ON ITS STREET OR CUTS A GROVE BAND, asked again over the drawn channels and
+            // watercourses (pinned row 901: a farm channel crossed the road just past the street's end, the router went round the
+            // channel's head between two grove bands, and the road met its street at a hairpin - or, squared, cut the band): a way
+            // crosses a ditch on a deck (0084), squared here and decked by the crossings stage
+            let fit = |p: &[Pt], tests: &mut Counts| {
+                p.len() >= 2 && !doubles_back(b, a, p) && off_the_bands(r.fabric, p, tests)
+            };
+            if fit(&run, tests) {
+                return run;
+            }
+            let open = Fabric {
+                lines: &[],
+                ..*r.fabric
+            };
+            let over = square_run(&thread_over_the_ford(&open, (a, &via, b), r.fords, tests), r.waters, tests);
+            if fit(&over, tests) {
+                over
+            } else {
+                run
+            }
         })
         .collect()
 }

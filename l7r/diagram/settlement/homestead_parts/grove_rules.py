@@ -99,32 +99,42 @@ def groves_off_windward(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
     return out
 
 
-def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str, Any]]]:
-    """Each (lane index, band) where a lane's drawn tread - each segment stroked square-ended at half its width - overlaps a
-    farm grove band (feature 291; the settlement-review found lanes through 19 of Kashikawa's 40 windward bands, which the
-    matrix, classing groves as VEGETATION, lets pass). A farm's way in comes by its open front, never through its grove.
+def band_rect(g: Mapping[str, Any]) -> list[tuple[float, float]]:
+    """A farm grove band's drawn rect - its record a box about its center (x, y, w, h, unrotated) - as the lane rules read it.
+
+    Research: plumbing - NONE: the band's record read as a ring"""
+    x, y, hw, hh = float(g["x"]), float(g["y"]), float(g["w"]) / 2, float(g["h"]) / 2
+    return [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y + hh), (x - hw, y + hh)]
+
+
+def tread_meets_band(pts: Sequence[Sequence[float]], half: float, rect: Sequence[tuple[float, float]]) -> bool:
+    """Does a way's drawn tread - each segment stroked square-ended at `half` its width - overlap the band's `rect`? The one
+    predicate `groves_crossed_by_lanes` asks of a finished map and the lane law asks of a run before it is drawn.
 
     Research: no lane through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way in by the open front"""
     from .._geom import poly_gap  # the matrix's own quad gap, exact for convex quads
 
-    bands = [
-        (g, [(g["x"] - g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] - g["h"] / 2), (g["x"] + g["w"] / 2, g["y"] + g["h"] / 2), (g["x"] - g["w"] / 2, g["y"] + g["h"] / 2)])
-        for g in M.get("groves") or ()
-        if all(k in g for k in ("x", "y", "w", "h"))
-    ]
+    for a, b in zip(pts, pts[1:], strict=False):
+        d = max(((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) ** 0.5, 1e-9)
+        nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
+        quad = [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+        if poly_gap(quad, list(rect)) <= 0.0:
+            return True
+    return False
+
+
+def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str, Any]]]:
+    """Each (lane index, band) where a lane's drawn tread overlaps a farm grove band (`tread_meets_band`; feature 291: the
+    settlement-review found lanes through 19 of Kashikawa's 40 windward bands, which the matrix, classing groves as VEGETATION,
+    lets pass). A farm's way in comes by its open front, never through its grove.
+
+    Research: no lane through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the way in by the open front"""
+    bands = [(g, band_rect(g)) for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
     out: list[tuple[int, Mapping[str, Any]]] = []
-    seen: set[tuple[int, int]] = set()
     for i, ln in enumerate(M.get("lanes") or ()):
         pts = [(float(p[0]), float(p[1])) for p in ln.get("pts") or ()]
         half = float(ln.get("w") or 3) / 2.0
-        for a, b in zip(pts, pts[1:], strict=False):
-            d = max(((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) ** 0.5, 1e-9)
-            nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
-            quad = [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
-            for g, rect in bands:
-                if (i, id(g)) not in seen and poly_gap(quad, rect) <= 0.0:
-                    seen.add((i, id(g)))
-                    out.append((i, g))
+        out += [(i, g) for g, rect in bands if tread_meets_band(pts, half, rect)]
     return out
 
 

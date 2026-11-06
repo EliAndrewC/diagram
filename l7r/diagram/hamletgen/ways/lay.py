@@ -40,7 +40,7 @@ def laid_lawfully(s: Any, run: Poly, width: float = 3.0, whole: bool = False, ke
     run = [(float(q[0]), float(q[1])) for q in run]
     ends = () if whole else tuple(e for e in (0, -1) if keep is None or math.dist(run[e], keep) >= 1e-6)
     for form in [*gathered_forms(s, run, ends, lazy_ground(s.M, s)), run]:
-        held = _held(s, form, width, whole, keep)
+        held = _held(s, form, width, whole, keep, asked=run)
         if held is not None:
             return held
     return None
@@ -73,13 +73,14 @@ def gathered_forms(s: Any, run: Poly, ends: tuple[int, ...], blocked: Any) -> li
     return forms
 
 
-def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt | None = None) -> Poly | None:
+def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt | None = None, asked: Poly | None = None) -> Poly | None:
     """`run` as it may be drawn among the lanes standing - re-aimed as a T where its end meets a way as a needle, a fold or a
     hairpin at the connector, cut where its tail doubles a way or it crosses one at a needle's angle - or None where it still
     breaks one after `TRIES` asks, or where a lane already drawn would have to move (its end a needle along the candidate). Each
     candidate changed is squared at the water again (`square_run`) and asked again. `whole`: the candidate is laid only as it
     came - a link, whose join was computed for it (`serve._lay_web_lane`); `keep`: a point the candidate must still pass
-    through as laid - where the run a link joins meets its link.
+    through as laid - where the run a link joins meets its link; `asked`: the run the caller asked the matrix of, so a form other
+    than it (a gathered form) is asked again as served.
 
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
@@ -156,7 +157,10 @@ def _held(s: Any, run: Poly, width: float = 3.0, whole: bool = False, keep: Pt |
             # ...a re-aimed or cut candidate asked of the overlap matrix again: the caller admitted the run it handed in, not this
             if served is not None and ((whole and served != first) or (keep is not None and not any(math.dist(q, keep) < 1e-6 for q in served))):
                 return None
-            return served if served is not None and (served == first or s.admits_lane(served, width)) else None
+            # ...THE RUN THE CALLER ASKED (`asked`), not the form this was handed: a gathered form, its end moved onto a junction
+            # (`gathered_forms`), was never asked, and cohort seed 2's way onto the bund was recorded on a threshing yard
+            mine = [(float(q[0]), float(q[1])) for q in asked] if asked is not None else first
+            return served if served is not None and (served == mine or s.admits_lane(served, width)) else None
         if whole:
             return None  # ...a join computed for the candidate as it came holds only for it unchanged (`whole`)
         run = [(float(q[0]), float(q[1])) for q in fix or []]

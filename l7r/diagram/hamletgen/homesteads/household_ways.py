@@ -140,7 +140,7 @@ def track_inputs(s: Settlement, plan: SitePlan) -> dict[str, object]:
     channels = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for rec in s.M.get("drawn_channels", []) for a, b in zip(rec["pts"], rec["pts"][1:], strict=False)]
     pt = lambda q: (float(q[0]), float(q[1]))  # noqa: E731
     ring = lambda r: [pt(q) for q in r]  # noqa: E731
-    return {
+    got: dict[str, object] = {
         "canvas": (float(plan.W), float(plan.H)),
         "out": (float(ox), float(oy)),
         "fall": pt(plan.fall),
@@ -166,6 +166,24 @@ def track_inputs(s: Settlement, plan: SitePlan) -> dict[str, object]:
         "square_waters": [(ring(c), float(h)) for c, h in square_waters(s.M)],
         "crossing": (ring(plan.brook), float(_CROSSING["radius"]), float(_CROSSING["cost"])) if float(_CROSSING["cost"]) and getattr(plan, "brook", None) else None,  # type: ignore[arg-type]
     }
+    # ...EACH POINT HANDED ON COUNTED WHERE IT IS COPIED (feature 444 S5; the track's fifth MODE AUDIT): every ring, run and segment
+    # the comprehensions above copy, the steadings' corners a second time after `write@homestead_polys`
+    if __debug__:
+        work_counts.OPS["write@track_inputs"] += _points(got)
+    return got
+
+
+def _points(v: object) -> int:
+    """How many points a nest of rings, runs and segments holds - a point a pair of numbers.
+
+    Research: plumbing - NONE: a counter's measure"""
+    if isinstance(v, (tuple, list)):
+        if len(v) == 2 and all(isinstance(c, float) for c in v):
+            return 1
+        return sum(_points(x) for x in v)
+    if isinstance(v, dict):
+        return sum(_points(x) for x in v.values())
+    return 0
 
 
 def ways_inputs(s: Settlement) -> dict[str, object]:
