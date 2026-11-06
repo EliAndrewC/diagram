@@ -390,3 +390,24 @@ def test_a_piece_is_filed_in_the_cells_its_outline_meets_never_fewer_than_it_tou
     quad = [(0.0, 0.0), (3000.0, 3000.0), (3003.0, 2997.0), (3.0, -3.0)]
     box = (0.0, -3.0, 3003.0, 3000.0)
     assert len(reg._shape_cells(quad, box)) < len(list(reg._cells(box))) / 5
+
+
+def test_a_lane_finds_the_wood_seats_within_its_gap_along_its_strip_as_along_its_box() -> None:
+    """The seats a lane's leg asks are its strip's (feature 444 T32's audit), and every seat within its gap is among them."""
+    import random
+
+    from l7r.diagram.overlap.reserved import Reservations
+    from l7r.diagram.settlement._geom import seg_dist
+
+    rng = random.Random(11)
+    r = Reservations()
+    seats = [(rng.uniform(0, 3000), rng.uniform(0, 3000)) for _ in range(3000)]
+    r.reserve_seats(seats, 22.0, 10.0)
+    for _ in range(30):
+        a = (rng.uniform(0, 3000), rng.uniform(0, 3000))
+        b = (rng.uniform(0, 3000), rng.uniform(0, 3000))
+        gap = rng.uniform(5.0, 40.0)
+        along = set(r._seats_along(a, b, gap))
+        want = {p for p in seats if seg_dist(p[0], p[1], a, b) < gap}
+        assert want <= along
+        assert len(along) <= len(set(r._seats_near(min(a[0], b[0]) - gap, min(a[1], b[1]) - gap, max(a[0], b[0]) + gap, max(a[1], b[1]) + gap)))

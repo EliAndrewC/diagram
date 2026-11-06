@@ -34,6 +34,7 @@ from collections.abc import Iterator, Sequence
 from typing import Any
 
 from l7r.diagram.settlement._geom import point_in_poly, seg_dist, segments_cross
+from l7r.diagram.work_counts import OPS
 
 from .taxonomy import OVERLAP_CLASS, _mx_same
 
@@ -123,6 +124,34 @@ class Reservations:
             for n in self._sbins.get(cell, ()):
                 yield self.seats[n]
 
+    def _seats_along(self, a: Sequence[float], b: Sequence[float], gap: float) -> Iterator[tuple[float, float]]:
+        """The reserved seats in the cells the segment a-b's strip `gap` either side meets (its ends grown by `gap` too): each row
+        of cells from the least to the greatest x the strip's edges reach within it - a seat within `gap` of the segment lies in
+        the strip, so in one of them; an oblique leg reads its strip's cells, not its box's (the work-budget audit at T32's
+        landing: the box's cells walked uncounted, every seat in them measured)."""
+        ax, ay, bx, by = float(a[0]), float(a[1]), float(b[0]), float(b[1])
+        dx, dy = bx - ax, by - ay
+        m = math.hypot(dx, dy)
+        ux, uy = (dx / m, dy / m) if m > 0 else (1.0, 0.0)
+        nx, ny = -uy * gap, ux * gap
+        ex, ey = ux * gap, uy * gap
+        quad = [(ax - ex + nx, ay - ey + ny), (bx + ex + nx, by + ey + ny), (bx + ex - nx, by + ey - ny), (ax - ex - nx, ay - ey - ny)]
+        span: dict[int, list[float]] = {}
+        for k in range(4):
+            (px, py), (qx, qy) = quad[k], quad[(k + 1) % 4]
+            lo, hi = min(py, qy), max(py, qy)
+            for gy in range(int(lo // CELL), int(hi // CELL) + 1):
+                y0, y1 = max(gy * CELL, lo), min((gy + 1) * CELL, hi)
+                xs = (px, qx) if qy == py else (px + (qx - px) * (y0 - py) / (qy - py), px + (qx - px) * (y1 - py) / (qy - py))
+                row = span.setdefault(gy, [math.inf, -math.inf])
+                row[0], row[1] = min(row[0], *xs), max(row[1], *xs)
+        cells = [(gx, gy) for gy, (x0, x1) in span.items() for gx in range(int(x0 // CELL), int(x1 // CELL) + 1)]
+        if __debug__:  # each cell of the strip read
+            OPS["index_cell@Reservations.seats"] += len(cells)
+        for cell in cells:
+            for n in self._sbins.get(cell, ()):
+                yield self.seats[n]
+
     def _corridors_near(self, x0: float, y0: float, x1: float, y1: float) -> Iterator[tuple[tuple[float, float], tuple[float, float], float, Any]]:
         seen: set[int] = set()
         for cell in self._cells(x0, y0, x1, y1):
@@ -164,11 +193,7 @@ class Reservations:
             gap = float(o.get("w") or 6.0) / 2.0 + self.lane_buffer
             for a, b in zip(pts, pts[1:], strict=False):
                 hit = next(
-                    (
-                        (sx, sy)
-                        for sx, sy in self._seats_near(min(a[0], b[0]) - gap, min(a[1], b[1]) - gap, max(a[0], b[0]) + gap, max(a[1], b[1]) + gap)
-                        if seg_dist(sx, sy, (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) < gap
-                    ),
+                    ((sx, sy) for sx, sy in self._seats_along(a, b, gap) if seg_dist(sx, sy, (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) < gap),
                     None,
                 )
                 if hit is not None:
