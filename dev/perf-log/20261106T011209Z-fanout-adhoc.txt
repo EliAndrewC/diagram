@@ -1,0 +1,18 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+appurtenances: 727,761 calls @20, 1,173,848 calls @40, growth exponent 0.69
+  placed @40: farm_fixtures +123, tree_crowns +99, persimmons +33, byres +17, wells +2; 4,284 calls per thing placed
+  anchor settlement/land/wet.py:755:surface_water_dist [40]
+    settlement/_geom/primitives.py:64:seg_closest [82,496|36,358] <- settlement/_geom/primitives.py:75:seg_dist [82,496|36,358] <- settlement/land/wet.py:755:surface_water_dist [40|20]
+    settlement/_geom/primitives.py:75:seg_dist [82,496|36,358] <- settlement/land/wet.py:755:surface_water_dist [40|20]
+  fastest growers @20 -> @40:
+    x3.8 builtins.abs [51,039 -> 195,658]
+    x2.8 hamletgen/hinterland/belt.py:209:<genexpr> [8,650 -> 24,535]
+    x2.3 settlement/_geom/primitives.py:64:seg_closest [36,358 -> 82,496]
+    x2.3 settlement/_geom/primitives.py:75:seg_dist [36,358 -> 82,496]
+    x2.2 math.hypot [39,175 -> 86,511]
+    x1.6 builtins.min [145,404 -> 233,948]
+    x1.5 'append' of 'list' objects [34,012 -> 50,356]
+    x1.4 builtins.max [123,179 -> 166,876]
+
+all stages: 727,761 calls @20, 1,173,848 calls @40

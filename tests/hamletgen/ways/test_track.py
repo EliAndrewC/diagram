@@ -1,7 +1,5 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
-import pytest
-
 
 def _box_on(a, b):
     """A 40 x 28 ft building's box standing on the middle of the leg a-b."""
@@ -34,14 +32,15 @@ def test_a_turn_of_exactly_140_degrees_is_no_hairpin() -> None:
     assert not any(kind == "hairpin" for kind, *_r in kink_spans(pts))
 
 
-def test_the_track_out_drawn_is_the_one_the_homesteads_recorded_and_none_recorded_is_refused_by_name() -> None:
-    """Feature 444 T32: the track out is chosen once, at the homesteads, in Rust; the stage draws it as recorded and never chooses
-    one - a form that records none refuses by name (the seating refuses a site with no dry way out before it gets here)."""
+def test_the_track_out_drawn_is_the_one_the_homesteads_recorded_or_one_chosen_now_in_rust(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 444 T32: the stage draws the track out the homesteads recorded, and on a form that records none (a dispersed
+    hamlet) the one the homesteads' own Rust chooser picks now - never a Python choice."""
     import types
 
-    from l7r.diagram.hamletgen.ways.track import NoDryExit, the_recorded_track
+    from l7r.diagram.hamletgen.homesteads import household_ways
+    from l7r.diagram.hamletgen.ways.track import the_track_out
 
     s = types.SimpleNamespace(M={"way_out_track": [[0.0, 0.0], [10.0, 5.0]]})
-    assert the_recorded_track(s) == [(0.0, 0.0), (10.0, 5.0)]
-    with pytest.raises(NoDryExit, match="no track out was recorded"):
-        the_recorded_track(types.SimpleNamespace(M={}))
+    assert the_track_out(s, None) == [(0.0, 0.0), (10.0, 5.0)]
+    monkeypatch.setattr(household_ways, "chose_the_track", lambda s_, plan: [(1.0, 1.0), (2.0, 2.0)])
+    assert the_track_out(types.SimpleNamespace(M={}), None) == [(1.0, 1.0), (2.0, 2.0)]

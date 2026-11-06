@@ -34,17 +34,18 @@ def recorded_track(s: Settlement) -> Poly | None:
     return [(float(q[0]), float(q[1])) for q in r] if r and len(r) >= 2 else None
 
 
-def the_recorded_track(s: Settlement) -> Poly:
-    """The track out the homesteads recorded (`recorded_track`), or `NoDryExit` by name: every form but a row village's records
-    one once its last house stands, and refuses the site where no way leaves the frame (`household_ways.chose_the_track`), so the
-    track is never chosen here (feature 444 T32: the choice is the homesteads' in Rust; its Python fallback, uncounted and never
-    reached, deleted with it).
+def the_track_out(s: Settlement, plan: SitePlan) -> Poly:
+    """The track out the homesteads recorded (`recorded_track`) - or, on a form that records none (a dispersed hamlet, whose
+    seating builds no access tree), the track out chosen now in Rust as the homesteads choose theirs (`household_ways.chose_the_track`,
+    `l7r_phases.track_out`), `NoDryExit` by name where no way leaves the frame. The Python choice went with T32 (feature 444).
 
     Research: the track out decided once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out"""
     track = recorded_track(s)
-    if track is None:
-        raise NoDryExit("no track out was recorded at the homesteads - a form the seating seats records one or refuses the site")
-    return track
+    if track is not None:
+        return track
+    from ..homesteads.household_ways import chose_the_track  # the homesteads' layer: its Rust chooser, asked once the houses stand
+
+    return chose_the_track(s, plan)
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:
@@ -118,7 +119,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # A POLDER'S CONNECTOR is its recorded track out (feature 150), over the dike at its sluice gaps
     if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
-        s.lane(the_recorded_track(s), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        s.lane(the_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
 
     # the CONNECTOR, out to the frame
@@ -163,7 +164,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         return
     # THE TRACK OUT AS CHOSEN ONCE THE LAST HOUSE STOOD (feature 320, FR-008), the households' ways already laid to it; chosen
     # here only on a form that records none
-    s.lane(the_recorded_track(s), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
+    s.lane(the_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
 
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:

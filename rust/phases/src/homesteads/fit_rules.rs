@@ -208,7 +208,12 @@ fn rings_meet(a: &[Pt], b: &[Pt]) -> bool {
 /// an extent the matrix forbids its key?
 #[must_use]
 pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
-    let turned = |r: Rect| corners(r, b.turn).to_vec();
+    // ...each part asked a hair wider than it will be recorded: the record rounds its center to a tenth after the question is
+    // asked, which can carry a part flush with a forbidden one into it (the Rust stage gate's seed 820818: a yard admitted flush
+    // with a field ditch, recorded 0.004 ft into it) - the registry's own placers' margin (`PLACER_MARGIN_FT`)
+    let m = 2.0 * crate::law::rules::PLACER_MARGIN_FT;
+    let grown = |r: Rect| (r.0, r.1, r.2 + m, r.3 + m);
+    let turned = |r: Rect| corners(grown(r), b.turn).to_vec();
     let mut parts: Vec<(&str, Vec<Pt>)> = vec![
         ("houses", turned(b.house)),
         ("threshing_yards", turned(b.yard)),
@@ -220,7 +225,7 @@ pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
     parts.extend(b.well.map(|w| {
         (
             "wells",
-            corners(super::bearing::turned_box(w, b.turn), 0.0).to_vec(),
+            corners(grown(super::bearing::turned_box(w, b.turn)), 0.0).to_vec(),
         )
     }));
     let first = 2 + b.gardens.len() + usize::from(b.kura.is_some()) + usize::from(b.byre.is_some());
@@ -228,7 +233,7 @@ pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
         b.fixtures
             .iter()
             .zip(&b.boxes[first..])
-            .filter_map(|(&(k, _), &bx)| held_key(k).map(|key| (key, corners(bx, 0.0).to_vec()))),
+            .filter_map(|(&(k, _), &bx)| held_key(k).map(|key| (key, corners(grown(bx), 0.0).to_vec()))),
     );
     parts.iter().all(|(key, quad)| {
         let qb = poly_box(quad);

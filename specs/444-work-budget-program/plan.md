@@ -560,6 +560,28 @@ different defect), ruled `continue` by the round arbiter (red-gate@2026-11-04T15
 8. **Every route measured before the arbiter was asked?** The tripwire asked, with each fix and its passing test in hand.
 9. **After a ruling, the step it named?** Yes: the fixes committed, the unreachable lines removed, `make done` once more.
 
+### T27 part B (2026-11-06T03:18Z)
+
+The trigger: `make cohort` at 03:18Z named pinned row 902 newly failing against main (`groves_crossed_by_lanes` 1) and 901 worsened
+(`refused:WebRefused`, main `refused:SeatRefused`).
+
+1. **What exactly is refusing?** Row 902 (linear, a street row on both sides, the water shared): one grove, household 13's, at
+   (1101, 2117), is crossed by a lane the Python web lays after the Rust stages; row 901: the web's last resort refuses a kink it
+   cannot mend without dropping a tree lane.
+2. **A3 again.** The cohort's rule, unchanged: a seed passing on main and failing on the clone is a regression owed before the landing.
+3. **A4 again.** Read in the cohort records: both rows fail identically in every clone record since 2026-11-05T16:05Z
+   (`dev/cohort-log/20261105T160515Z-*` on), before T31-T33's work, so not this morning's change (the seating's parts asked a
+   placer's margin wider, which cleared the Rust gate's seed 820818).
+4. **Moving something placed earlier to suit something later?** No: the grove and the web's lane are judged where they are laid.
+5. **Tuning or changing?** Neither yet: the two rows are diagnosed before the landing cohort, which refuses them.
+6. **The one-sentence test.** "Two pinned rows the Python web judges after the Rust stages regressed on the clone a day ago, and are
+   owed a diagnosis before the landing."
+7. **Done:** each row's lane traced to its stage (the track's row road or the homesteads' lanes) and fixed where it fails, the
+   cohort's two rows passing, before `make cohort-landing`.
+8. **Every route measured before the arbiter was asked?** Not yet asked: the rows are diagnosed first; a claim that a row cannot pass
+   goes to `make arbiter-ask`.
+9. **After a ruling, the step it named?** No ruling yet.
+
 ### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)
 
 Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro and Kashikawa, measured 2026-11-04 (`make map`): their manifests moved against HEAD); glyph-check only if a glyph is redrawn (none: the dry plots keep their ink).

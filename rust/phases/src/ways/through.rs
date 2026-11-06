@@ -29,8 +29,8 @@
 )]
 
 use super::dry_exit::{connector_dry_exit, push_out_of, DrySite, BAND_GAP_FT};
-use super::route::{clip_to_clear, route, Ask, Crossing, Ground, Grounds};
-use super::squaring::square_run;
+use super::route::{clip_to_clear, route, Ask, Crossing, Ground, Grounds, BENDS};
+use super::squaring::{square_run, LEG_PAD_FT};
 use super::track::{
     crosses_fabric, edge_dist, grown, in_poly, poly_box, seg_intersect, segments_cross, Box4,
     FABRIC_GAP_FT,
@@ -473,10 +473,48 @@ pub fn connector_through(
     dry: &DrySite,
     tests: &mut Counts,
 ) -> Option<(Vec<Pt>, bool)> {
+    connector_ways(track, fabric, law, dry, false, tests)
+}
+
+/// `connector_through` held to the grove bands: None where every way it finds, once squared, cuts a band - so the caller asks the
+/// next gateway before it settles for one that does.
+#[must_use]
+pub fn connector_off_the_bands(
+    track: &[Pt],
+    fabric: &Fabric,
+    law: &Law,
+    dry: &DrySite,
+    tests: &mut Counts,
+) -> Option<(Vec<Pt>, bool)> {
+    connector_ways(track, fabric, law, dry, true, tests)
+}
+
+fn connector_ways(
+    track: &[Pt],
+    fabric: &Fabric,
+    law: &Law,
+    dry: &DrySite,
+    strict: bool,
+    tests: &mut Counts,
+) -> Option<(Vec<Pt>, bool)> {
     let r = |p: Vec<Pt>| {
         p.into_iter()
             .map(|q| ((q.0 * 10.0).round() / 10.0, (q.1 * 10.0).round() / 10.0))
             .collect()
+    };
+    // ...AND A SQUARED RUN STILL OFF EVERY GROVE BAND (the Rust stage gate's seed 802024): squaring a crossing drops the bends
+    // within its leg's reach of the water and lays a straight leg of up to 42 ft, which can cut a band the run was routed round -
+    // so each run is asked again once squared, its tread's half-width off every band
+    let bands = boxed(
+        &fabric
+            .steadings
+            .iter()
+            .filter(|s| s.1)
+            .map(|s| s.0.clone())
+            .collect::<Vec<_>>(),
+    );
+    let off_the_bands = |p: &[Pt], tests: &mut Counts| {
+        !crosses_any(p, &bands, crate::law::rules::CONNECTOR_WIDTH_FT / 2.0, tests)
     };
     let around = route_around(fabric.envelope, track, SPUR_SETBACK_FT, tests);
     let mut run = around
@@ -491,7 +529,9 @@ pub fn connector_through(
     }
     if run.len() >= 2 {
         run = square_run(&run, law.waters, tests);
-        if connector_keeps_the_law(&run, law.solid, law.forbidding, law.brooks, tests) {
+        if connector_keeps_the_law(&run, law.solid, law.forbidding, law.brooks, tests)
+            && off_the_bands(&run, tests)
+        {
             return Some((r(run), false));
         }
     }
@@ -501,14 +541,48 @@ pub fn connector_through(
         avoid: &walled,
         ..*dry
     };
+    let mut squared = None;
     if let Some(p) = connector_dry_exit(&site, track[0], tests) {
-        return Some((r(square_run(&p, law.waters, tests)), false));
+        let q = square_run(&p, law.waters, tests);
+        if off_the_bands(&q, tests) {
+            return Some((r(q), false));
+        }
+        squared = Some((q, false));
     }
     let open = [dry.avoid, &matrix].concat();
     let site = DrySite {
         avoid: &open,
         ..*dry
     };
-    connector_dry_exit(&site, track[0], tests)
-        .map(|p| (r(square_run(&p, law.waters, tests)), !law.seats.is_empty()))
+    if let Some(p) = connector_dry_exit(&site, track[0], tests) {
+        let q = square_run(&p, law.waters, tests);
+        if off_the_bands(&q, tests) {
+            return Some((r(q), !law.seats.is_empty()));
+        }
+        squared = squared.or(Some((q, !law.seats.is_empty())));
+    }
+    // ...else the fill again with each band walled past a squared leg's whole reach (the long leg's half and its pad), so no bend
+    // the squaring drops stands near enough a band for its leg to cut one
+    if squared.is_some() {
+        let reach = BENDS.2 / 2.0 + 1.0 + LEG_PAD_FT;
+        let wide: Vec<(Vec<Pt>, bool)> = dry
+            .fabric
+            .iter()
+            .map(|(f, band)| (if *band { grown(f, reach) } else { f.clone() }, *band))
+            .collect();
+        for (avoid, taken) in [(&walled, false), (&open, !law.seats.is_empty())] {
+            let site = DrySite {
+                avoid,
+                fabric: &wide,
+                ..*dry
+            };
+            if let Some(p) = connector_dry_exit(&site, track[0], tests) {
+                let q = square_run(&p, law.waters, tests);
+                if off_the_bands(&q, tests) {
+                    return Some((r(q), taken));
+                }
+            }
+        }
+    }
+    squared.filter(|_| !strict).map(|(q, taken)| (r(q), taken))
 }

@@ -13,7 +13,7 @@
 //!     nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gateway stepped half the connector's tread off every forbidden footprint
 
 use super::dry_exit::{clear_of_bands, connector_dry_exit, push_out_of, DrySite};
-use super::through::{connector_through, push_clear_of_fabric, Fabric, Law, SPUR_SETBACK_FT};
+use super::through::{connector_off_the_bands, connector_through, push_clear_of_fabric, Fabric, Law, SPUR_SETBACK_FT};
 use super::track::{connector, Box4, Swept, TrackSite, FABRIC_GAP_FT};
 use super::Counts;
 use crate::field::fan::Pt;
@@ -150,18 +150,24 @@ pub fn choose_track_out(c: &Choice, tests: &mut Counts) -> Option<(Vec<Pt>, bool
     // the downslope gateway stood in a block of dry plots - one push out of a plot lands in the next - the sweep kept its least-bad
     // bearing across them, and the fill started walled in): the turned gateways, the nearest turn first, each swept and taken out
     let walls: Vec<&[Pt]> = c.law.forbidding.iter().map(|e| e.0.as_slice()).collect();
-    let out = connector_through(&track, c.fabric, c.law, c.dry, tests).or_else(|| {
-        TURNS_DEG.iter().find_map(|&deg| {
-            let turned =
-                cluster_gateway(c.fabric.houses, c.axes, c.fallback, deg, c.standing, tests);
-            let gate = clear_of_bands(
-                gate_out_of_the_field(c.fabric.envelope, turned),
-                &walls,
-                CONNECTOR_WIDTH_FT / 2.0,
-            );
-            swept(c, gate, tests).and_then(|t| connector_through(&t, c.fabric, c.law, c.dry, tests))
+    // ...EACH ASKED FIRST TO KEEP OFF THE GROVE BANDS ONCE SQUARED (the Rust stage gate's seed 802024): the first gateway, then
+    // the turned ones, held to the bands; only where none keeps off them, the same again taking a way that cuts one
+    let ask = |strict: bool, tests: &mut Counts| {
+        let through = if strict { connector_off_the_bands } else { connector_through };
+        through(&track, c.fabric, c.law, c.dry, tests).or_else(|| {
+            TURNS_DEG.iter().find_map(|&deg| {
+                let turned =
+                    cluster_gateway(c.fabric.houses, c.axes, c.fallback, deg, c.standing, tests);
+                let gate = clear_of_bands(
+                    gate_out_of_the_field(c.fabric.envelope, turned),
+                    &walls,
+                    CONNECTOR_WIDTH_FT / 2.0,
+                );
+                swept(c, gate, tests).and_then(|t| through(&t, c.fabric, c.law, c.dry, tests))
+            })
         })
-    });
+    };
+    let out = ask(true, tests).or_else(|| ask(false, tests));
     crate::counts::drain_into(tests);
     out
 }
