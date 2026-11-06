@@ -5,9 +5,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
-from l7r.diagram.hamletgen.ways import _crosses_fabric, _reach, _trim_to_service
-
-from ._builders import _walled_settlement
+from l7r.diagram.hamletgen.ways import _reach, _trim_to_service
 
 
 def test_a_point_in_the_crop_is_pushed_out_on_the_LOCAL_edge_normal() -> None:
@@ -196,48 +194,6 @@ def test_trim_to_service_counts_ARRIVING_AT_THE_BUND_as_service() -> None:
 
 
 # ---- the splice helpers (feature 137 T04) ---------------------------------------------------------
-
-
-def test_thread_the_fabric_takes_a_detour_when_neither_the_route_nor_the_clip_clears() -> None:
-    from l7r.diagram.hamletgen.ways import _homestead_polys, _thread_the_fabric
-
-    s, plan = _walled_settlement()
-    run = [(700.0, 200.0), (700.0, 1200.0)]  # straight through the middle house
-    fabric = [poly for poly, _o, _k in _homestead_polys(s)]
-    assert _crosses_fabric(run, fabric, 8.0), "the fixture must actually be blocked, or the fallback proves nothing"
-    out = _thread_the_fabric(s, plan, run, gap=8.0)
-    assert len(out) >= 2
-    assert out != run, "the straight run was kept - the detour never ran"
-
-
-def test_thread_the_fabric_returns_the_run_untouched_when_there_is_no_fabric() -> None:
-    from l7r.diagram.hamletgen.ways import _thread_the_fabric
-    from l7r.diagram.settlement import Settlement
-
-    from .._builders import a_plan
-
-    s = Settlement(800, 800, seed=1)
-    s.meta(name="E", scale="hamlet", ftpx=1, down_deg=90)
-    run = [(100.0, 100.0), (700.0, 700.0)]
-    assert _thread_the_fabric(s, a_plan(), run) == run  # nothing standing: nothing to thread
-    assert _thread_the_fabric(s, a_plan(), [(1.0, 1.0)]) == [(1.0, 1.0)]  # a one-point run is not a run
-
-
-def test_the_cluster_gateway_falls_back_when_no_house_is_placed_yet() -> None:
-    """Feature 146: the gateway takes the cloud's own extent (`_cluster_edge_toward`, its twin, went with the field spur in 417 T50), and keeps a fallback for a caller that
-    asks before any house is seated; both helpers took the cloud's own extent, and both keep a fallback for a caller that
-    asks before any house is seated - which the shipped order does not do, and which this file's own comment
-    says is the failure mode it has met repeatedly."""
-    from l7r.diagram.hamletgen.ways import _cluster_gateway
-    from l7r.diagram.settlement import Settlement
-
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
-    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
-    fallback = (123.0, 456.0)
-    assert _cluster_gateway(s, seat, fallback) == fallback
-    s.M["houses"].append({"x": 500.0, "y": 500.0, "w": 50.0, "h": 30.0})
-    assert _cluster_gateway(s, seat, fallback) != fallback, "with a house placed it measures the cloud"
 
 
 def test_web_pieces_counts_connected_lanes_and_ignores_stubs() -> None:

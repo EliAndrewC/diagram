@@ -59,9 +59,6 @@ from .route import _route as _route
 from .route import _unjog as _unjog
 from .serve import _lay_web_lane as _lay_web_lane
 from .smooth import web_pieces as web_pieces
-from .track import _cluster_gateway as _cluster_gateway
-from .track import _thread_the_fabric as _thread_the_fabric
-from .track import connector_track as connector_track
 from .track import stage_track as stage_track
 from .web import _lay_skeleton as _lay_skeleton
 from .web import _reachable_runs as _reachable_runs

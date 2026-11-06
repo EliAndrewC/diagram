@@ -23,10 +23,9 @@ from collections import deque
 from collections.abc import Iterator, Sequence, Set
 from functools import lru_cache
 
-from l7r.diagram.settlement import edge_dist, point_in_poly, seg_dist
+from l7r.diagram.settlement import seg_dist
 
 from ..consts import Poly, Pt
-from .geom import push_out_of
 
 EXIT_CELL_FT = 20.0
 """The flood fill's grid - a map drawing convention: finer than any neck a track would use (a track is 6 ft; a neck under 20
@@ -189,19 +188,6 @@ def _pull(pts: Poly, blocked: Set[tuple[int, int]], x0: float, y0: float, cell: 
         out.append(pts[m])
         k = m
     return out
-
-
-def clear_of_bands(p: Pt, bands: Sequence[Poly], clear: float, tries: int = 4) -> Pt:
-    """`p` pushed out past `clear` of every grove band it stands in or within `clear` of (`push_out_of`, a few rounds, since a
-    push off one band can land near another).
-
-    Research: clear of the groves - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a way keeps a footpath's clearance and some working room off the trees - pushed `clear` (the caller's band gap) past every grove band"""
-    for _ in range(tries):
-        near = next((b for b in bands if point_in_poly(p[0], p[1], b) or edge_dist(p[0], p[1], b) < clear), None)
-        if near is None:
-            break
-        p = push_out_of(near, p, clear)
-    return p
 
 
 GROVE_EXIT_CELL_FT = 2.9

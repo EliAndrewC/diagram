@@ -9,7 +9,7 @@ from l7r.diagram.hamletgen.ways import _crosses_fabric, _fabric_hits, _margin_fr
 from l7r.diagram.settlement import Settlement
 
 from .._builders import a_plan, a_seat
-from ._builders import _hamlet_for_ways, _StubSettlement
+from ._builders import _StubSettlement
 
 
 def test_margin_frame_round_trips_a_point_through_arc_and_standoff() -> None:
@@ -149,31 +149,6 @@ def test_crosses_fabric_sees_a_run_VERTEX_that_stands_inside_a_footprint() -> No
     # feature 291: a leg WHOLLY inside, far from every edge, crosses too - it lies on the footprint
     assert _crosses_fabric([(500.0, 500.0), (500.0, 600.0)], [yard], 8.0), "well inside and far from every edge"
     assert not _crosses_fabric([(1100.0, 500.0), (1100.0, 600.0)], [yard], 8.0), "outside and far from every edge"
-
-
-def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
-    """THE FALLBACK MUST NOT BE THE OFFENDING RUN, which is what the first version returned: when routing
-    and clipping both failed it handed back the original path, silently re-drawing the lane straight
-    through the steadings it was meant to avoid. That is worse than failing - the map ships looking
-    finished and the gate is what discovers it, if anything does. So the track goes AROUND, swinging its
-    midpoint out along the cluster's own outward normal, and what comes back never crosses more than the
-    straight line did."""
-    from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
-
-    plan = a_plan()
-    plan.seat = a_seat(plan)
-    s = _hamlet_for_ways()
-    # a wall of steadings, with the run starting inside one of them: nothing can be clipped off the
-    # front, so the straight answer is refused and the detour is the only thing left to try
-    s.M["houses"] = [{"x": 700.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
-    run = [(700.0, 700.0), (950.0, 700.0)]
-    out = _thread_the_fabric(s, plan, run)
-    fabric = [poly for poly, _owner, _kind in _homestead_polys(s)]
-    assert _crosses_fabric(list(run), fabric, 16.0), "the straight line really is blocked"
-    # feature 287 (ways W25, FR-005): with the run starting inside a steading no detour clears, and the terminal hands
-    # back NOTHING rather than the clipped run still crossing - the spur is recorded as dropped, the connector takes the
-    # dry exit
-    assert out == [], "never a track across the steadings"
 
 
 def test_a_join_link_is_refused_outright_when_it_would_cross_a_farmhouse() -> None:

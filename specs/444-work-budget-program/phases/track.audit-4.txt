@@ -1,0 +1,3 @@
+UNCOUNTED - the dry exit's flood fill in `ways/dry_exit.py` has no counter: the raster `_blocked_cells`, the search loop in `dry_exit` and `_pull.clear`, reached by `stage_track` -> `choose_track_out` -> `gateway_track`/`_connector_through` -> `connector_track` -> `connector_dry_exit` -> `dry_exit`. Within budget on the measured path: 409 against 443 at 40 (0.92), 347 against 626 at 80.
+
+(Also: `law.breaks_through` against every solid box uncounted; `track_inputs`' copies of the map's parts uncounted on the row road; `_record_tread` and `track.rs` not in the bundle.)

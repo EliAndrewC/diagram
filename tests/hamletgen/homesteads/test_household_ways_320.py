@@ -13,8 +13,6 @@ from l7r.diagram.hamletgen.homesteads import household_ways as hw
 from l7r.diagram.hamletgen.homesteads import region as rg
 from l7r.diagram.hamletgen.homesteads import stages
 from l7r.diagram.hamletgen.homesteads.region import SeatRegion, _clip, anchor_in_window
-from l7r.diagram.hamletgen.ways.cluster_edge import gate_out_of_the_field
-from l7r.diagram.hamletgen.ways.geom import push_out_of
 from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree
 from tests.hamletgen._builders import CROWN, a_plan
@@ -122,14 +120,6 @@ def test_the_track_is_chosen_with_the_homesteads_as_seated_standing_in_and_they_
     with pytest.raises(RuntimeError):
         hw.chose_the_track(s, plan)
     assert s._seated_parts is None, "cleared even when the choice raises"
-
-
-def test_the_gate_is_pushed_out_of_the_field_and_a_gate_clear_of_it_stays() -> None:
-    field = [(650.0, 650.0), (760.0, 650.0), (760.0, 760.0), (650.0, 760.0)]
-    from l7r.diagram.hamletgen.ways.track import SPUR_SETBACK
-
-    assert gate_out_of_the_field(field, (700.0, 703.0)) == push_out_of(field, (700.0, 703.0), SPUR_SETBACK)
-    assert gate_out_of_the_field(field, (100.0, 100.0)) == (100.0, 100.0)
 
 
 # ---- the reach seed ----------------------------------------------------------------------------------------------------

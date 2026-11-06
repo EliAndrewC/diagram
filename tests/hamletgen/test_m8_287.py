@@ -6,13 +6,10 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.hinterland import frame as hframe
 from l7r.diagram.hamletgen.homesteads import holds
 from l7r.diagram.hamletgen.homesteads.stages import reserve_the_seating
-from l7r.diagram.hamletgen.ways import track
 from l7r.diagram.settlement import Settlement
 
 from ._builders import a_plan
@@ -139,32 +136,6 @@ def test_the_parts_laid_at_seating_stand_until_drawn() -> None:
 
 
 # ---- the connector's last resorts --------------------------------------------------------------------------------------
-
-
-def test_a_gateway_walled_in_by_reserved_seats_leaves_over_a_seat(monkeypatch: pytest.MonkeyPatch) -> None:
-    """The dry exit is walled by the seats; where that walls the gateway in, the way out takes the seats in its path and the
-    manifest names them (`meta.wood_seats_to_the_connector`) - never no connector."""
-    s = _hamlet()
-    plan = a_plan()
-    s.standing.reserved.reserve_seats([(-100.0, 0.0), (500.0, 500.0)], 22.0, 15.0)
-    monkeypatch.setattr(track, "route_around", lambda *a: None)  # ...so no swept track is drawn
-    calls: list[tuple[float, float]] = []
-
-    def walled(plan_: Any, start: Any, avoid: Any, *a: Any) -> list[tuple[float, float]]:
-        calls.append(tuple(start))
-        if len(calls) < 2:
-            raise track.NoDryExit("walled")
-        return [(60.0, 0.0), (-400.0, 0.0)]
-
-    monkeypatch.setattr(track, "connector_dry_exit", walled)
-    run = track.connector_through(s, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], [])
-    assert calls == [(60.0, 60.0), (60.0, 60.0)], "walled by the seats, then over them, from the same gateway"
-    assert run == [(60.0, 0.0), (-400.0, 0.0)] and s.M["meta"]["wood_seats_to_the_connector"] == [[-100.0, 0.0]]
-    assert s.standing.reserved.seats == [(500.0, 500.0)], "the seat the way out took is given up; the other stands"
-    s2 = _hamlet()
-    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(60.0, 0.0), (-400.0, 0.0)])
-    assert track.connector_through(s2, plan, [(60.0, 60.0), (-900.0, 60.0)], [], [], [], []) == [(60.0, 0.0), (-400.0, 0.0)]
-    assert "wood_seats_to_the_connector" not in s2.M["meta"], "the dry exit clear of the seats gives none up"
 
 
 def test_the_title_pocket_is_never_reserved_over_a_households_wood_or_a_corridor() -> None:

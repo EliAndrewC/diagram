@@ -4,38 +4,16 @@ Research: track plumbing - NONE"""
 
 from __future__ import annotations
 
-import contextlib
-import math
-from collections.abc import Mapping, Sequence
-from typing import Any
-
-from l7r.diagram.overlap.registry import forbidden_segment
-from l7r.diagram.settlement import Settlement, seg_dist, skeleton_layout
+from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import ring_offset
-from l7r.diagram.settlement.land.wet import marsh_ground
-from l7r.diagram.sitegen.geom import crop_polys, pull_clear
 from l7r.diagram.work_counts import OPS
 
 from ..consts import (
-    BROOK_CROSSING_COST_FT,
-    FORD_BEND_DEG,
-    FORD_HALF,
-    FORD_SPACING,
     LANE_CLEARANCE,
     POLDER_ARCHETYPES,
-    SPUR_SETBACK,
-    TRACK_FABRIC_GAP,
     Poly,
-    Pt,
 )
 from ..plan import SitePlan
-from . import law
-from .checks import PathChecker, brook_fords, drawn_water_segs, gap_segments
-from .clearance import route_around
-from .cluster_edge import _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
-from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
-from .fabric import _homestead_polys, fabric_hits_boxed, poly_box
-from .geom import polyline_len
 from .thread import (
     CONNECTOR_BAND_GAP_FT as CONNECTOR_BAND_GAP_FT,
 )
@@ -44,15 +22,6 @@ from .thread import (
 )
 from .thread import (  # noqa: F401 - lifted out at the 1,000-line bar (405 T09); re-exported so every importer and test still reaches them here
     _inner as _inner,
-)
-from .thread import (
-    _out_of_bands as _out_of_bands,
-)
-from .thread import (
-    _thread_the_fabric as _thread_the_fabric,
-)
-from .thread import (
-    _water_crossings as _water_crossings,
 )
 
 
@@ -65,50 +34,17 @@ def recorded_track(s: Settlement) -> Poly | None:
     return [(float(q[0]), float(q[1])) for q in r] if r and len(r) >= 2 else None
 
 
-def choose_track_out(s: Settlement, plan: SitePlan) -> Poly:
-    """THE TRACK OUT, CHOSEN ONCE (feature 320, FR-008; the GM: "collapsing the multiple decisions into a single decision
-    regarding the lane"): from the cluster's downslope edge (`_cluster_gateway`, out of the field), swept clear of the wet
-    ground, the steadings and the crop (`gateway_track`, on a polder `connector_track`), bent round the field and threaded
-    through the steadings (`connector_through`). Asked once the last house stands, before any farmstead is drawn, with the
-    homesteads as seated standing in for them (`fabric._homestead_polys` reads `s._seated_parts`), so the households' ways are
-    laid to the track as it will be drawn; asked by `stage_track` on a form that records none. Its first leg and the rest are
-    one choice: a first leg set on the seating's bearing apart from it met a household's way in a 164 degree nub (Inashiro's
-    glyph check).
+def the_recorded_track(s: Settlement) -> Poly:
+    """The track out the homesteads recorded (`recorded_track`), or `NoDryExit` by name: every form but a row village's records
+    one once its last house stands, and refuses the site where no way leaves the frame (`household_ways.chose_the_track`), so the
+    track is never chosen here (feature 444 T32: the choice is the homesteads' in Rust; its Python fallback, uncounted and never
+    reached, deleted with it).
 
-    Research: the track out decided once - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope, off the wet, out past the frame"""
-    from .gateway import gateway_track  # the layer above this one: its fallbacks sweep with `connector_track` (feature 315)
-
-    seat = plan.seat
-    ax, ay = seat["along"]
-    ox, oy = seat["out"]
-    layout = skeleton_layout(plan.lane_skeleton, 0.0, 0.0, seat["lat"], seat["dep"])
-    gx, gy = float(layout["gateway"][0]), float(layout["gateway"][1])
-    band_gate = (seat["cx"] + ax * gx + ox * gy, seat["cy"] + ay * gx + oy * gy)
-    polys = _homestead_polys(s)
-    fabric = [poly for poly, _owner, _kind in polys] + law.solid_quads(s.M)
-    plan.grove_bands = [poly for poly, _owner, kind in polys if kind == "groves"]  # for the dry exit (feature 291)
-    toe = s.toe_band()
-    wet = ([toe] if toe else []) + marsh_ground(s.M)  # 405 T121: a defense belt too - no map draws a causeway (0081)
-    avoid = [list(plan.envelope), *crop_polys(s)]
-    gate = gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate))
-    # ...WITH THE WALLED-IN GATEWAY'S FALLBACK ON EVERY FIELD FORM (feature 374 wave 141): a polder and a dike-pond block
-    # took the bare sweep, so a gateway the houses walled in refused the roll (dike-pond seeds 1 and 10, `NoDryExit`) where a
-    # valley hamlet's turned to the next bearing
-    track = gateway_track(s, plan, seat, band_gate, gate, avoid, wet, drawn_water_segs(s), fabric)
-    waters = [*plan.watercourses, *drawn_water_segs(s)]
-    try:
-        return connector_through(s, plan, track, avoid, wet, waters, fabric)
-    except NoDryExit:
-        # ...AND A GATEWAY WHOSE SWEPT TRACK THE DRY EXIT CANNOT LEAVE BY TURNED AS THE SWEEP'S WAS (cohort seed 39 on the Rust
-        # seating: the downslope gateway stood in a block of dry plots, the sweep kept its least-bad bearing across them and the
-        # fill started walled in) - the turned gateways, the nearest turn first, each swept and taken out as the first was
-        from .gateway import GATEWAY_TURNS_DEG, clear_of_what_stands
-
-        for deg in GATEWAY_TURNS_DEG:
-            turned = clear_of_what_stands(s, gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, band_gate, deg)))
-            with contextlib.suppress(NoDryExit):
-                return connector_through(s, plan, connector_track(plan, turned, avoid=avoid, wet=wet, waters=drawn_water_segs(s), fabric=fabric), avoid, wet, waters, fabric)
-        raise
+    Research: the track out decided once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out"""
+    track = recorded_track(s)
+    if track is None:
+        raise NoDryExit("no track out was recorded at the homesteads - a form the seating seats records one or refuses the site")
+    return track
 
 
 def stage_track(s: Settlement, plan: SitePlan) -> None:
@@ -182,7 +118,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # A POLDER'S CONNECTOR is its recorded track out (feature 150), over the dike at its sluice gaps
     if plan.field_archetype in POLDER_ARCHETYPES:  # both polder archetypes (feature 150)
         s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
-        s.lane(recorded_track(s) or choose_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        s.lane(the_recorded_track(s), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
 
     # the CONNECTOR, out to the frame
@@ -227,169 +163,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         return
     # THE TRACK OUT AS CHOSEN ONCE THE LAST HOUSE STOOD (feature 320, FR-008), the households' ways already laid to it; chosen
     # here only on a form that records none
-    s.lane(recorded_track(s) or choose_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
-
-
-def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:
-    """The track from the settlement's gateway to the map edge, steered clear of the crop.
-
-    Bearings are tried outward from "away from the field, leaning downslope" - the direction a real
-    track leaves by, since the wider world is downstream and the paddy is not walkable - and the
-    first that is clean of wet ground, the steadings and every crop, pond and water wins. Sweeping alternate sides
-    at growing angles (41 bearings) keeps the chosen bearing as close to the ideal as the geometry allows instead
-    of jumping to whatever happens to be clear. Where none is clean, the least-bad bearing is kept only where it is
-    dry and clear of every steading; otherwise the dry exit's flood fill finds the way out (`connector_dry_exit`).
-
-    The track is drawn PAST the canvas edge, not up to it: the gate wants an endpoint at the frame,
-    and the crop is set later from the hard features, so a track that overshoots is trimmed by the
-    viewBox while one that stops short reads as a dead end.
-
-    Research:
-        track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope, wet
-            ground refused first, run past the frame
-        leaning downslope - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25) on the weights - the way out leaves at the water mouth, running with the stream (Wang, Ming-Qing Huizhou, pass D), which the lean follows; the ideal bearing weighs 0.55 away from the field and 0.85 downslope
-        wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
-        the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
-        track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
-        track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings
-        track clear of the pond and the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the water only at a crossing place, and with none on its line the track leaves on its own bank - the fallback keeps the best bearing even where it crosses, a departure the code keeps until feature 417 T32; the pond, the drain brook and the watercourses scored with the crop, a crossing tolerated only in the fallback
-        the gateway off the crop - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the gateway is held 12 ft off the crop, a departure the code keeps until feature 417 T32; stepped 12 ft clear of the crop (`pull_clear(..., 12.0)`), so the track does not start on a paddy's edge
-        its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N4, 2026-10-25) - 9 (41 bearings at 9 deg steps); 21 (41 bearings at 9 deg steps); 20 (41 bearings at 9 deg steps)
-    """
-    # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
-    # found when the taut track first took an eastward bearing). The canvas' diagonal reached it, but every later pass samples
-    # the whole connector (`field_runs` asked `run_on_target` 53% more often, batch 1's pair), so each bearing runs to the
-    # canvas edge and `TRACK_PAST_FRAME_FT` beyond it (`past_the_frame`)
-    dx, dy = plan.fall
-    ox, oy = plan.seat["out"]
-    base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))
-    # ...and clear of the POND. A track skirting the tameike ends up crossing the short drainage
-    # ditch between field and pond at a very shallow angle, and an oblique crossing needs a much
-    # longer deck than a square one - `bridges_span_their_water` caught exactly that, with an
-    # abutment standing in the water. Steering around the pond removes the crossing instead of
-    # widening the bridge, which is also what a real track does: you ford or bridge a ditch where it
-    # is narrow and square, not where it fans into a reservoir.
-    pond = plan.sink_pond
-    brook = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)]
-    # The planned net PLUS whatever water is actually drawn - the caller passes the streams, which
-    # `plan.watercourses` does not carry and which nothing here used to test against.
-    waters = [*plan.watercourses, *waters]
-    # A FINE sweep, nearest bearing first. Sixteen coarse tries were enough when the only obstacle
-    # was the field; with the pond and the drain brook added, a whole quadrant can be closed and a
-    # coarse sweep steps straight over the gap between them - which drops through to the fallback,
-    # and the fallback ignores every constraint. Forty bearings is a few hundred point tests.
-    # The gateway can itself stand on hem ground when the cluster's back is partly hemmed, and a
-    # start point inside a crop makes EVERY bearing fail - which is how the fallback below came to
-    # fire at all. Step it clear first.
-    start = pull_clear(start, (plan.seat["cx"], plan.seat["cy"]), avoid or [plan.envelope], 12.0)
-
-    # A WET POLY IS SCORED WITH THE LANE'S WIDTH ON, not as a bare region (Cohort-41 2026-08-16).
-    # `roads_clear_of_marsh` measures every marsh VERTEX against the way's CENTERLINE with the
-    # way's half-width + 2 px of pad - so a track whose centerline clears the toe band's corner by
-    # 4.5 px routes clean here and fails there. Inflating the polygon by 8 px (half the 6 px
-    # connector lane + the gate's 2 px pad + 3 px slack) makes the router score the tread the gate
-    # will measure, the same probe-measures-what-the-check-measures rule the bow comment below
-    # states for the crop.
-    # ...AND GROWN ALONG ITS NORMALS, NOT SCALED ABOUT ITS CENTROID (feature 145, Sawada after the field
-    # moved). The toe band is a contour strip 2,900 px long and ~200 wide; pushing each vertex 8 px AWAY
-    # FROM THE CENTROID moves the vertices near the band's middle almost entirely along its length and
-    # its far corners not at all in the direction that matters, so the connector routed "clean" past a
-    # corner it then grazed by 4.5 px. `ring_offset` (feature 140) pushes every vertex 8 px along the
-    # ring's own outward normal; its first n vertices are that outer ring.
-    wet_grown = [wet_grown_by_the_lane(w) for w in wet if len(w) >= 3]
-    # THE WATER, THE CROP AND THE POND INDEXED ONCE FOR THE WHOLE SWEEP (feature 276, FR-005): 41 bearings each asked
-    # every segment and polygon again. `PathChecker` answers exactly what `path_violations` did.
-    wet_checks = [PathChecker([w], None, ()) for w in wet_grown]
-    ground_check = PathChecker(avoid or [plan.envelope], pond, brook, waters)
-    best: tuple[tuple[int, int, int], Poly] | None = None
-    fabric_boxes = [poly_box(p) for p in fabric]  # the steadings do not move while the sweep ranks its bearings
-    for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
-        if __debug__:
-            OPS["candidate@connector_track"] += 1
-        theta = math.radians(base + swing)
-        # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN - a probe measures what the check will measure. It is TAUT (feature 328
-        # wave 46, 0081: "Every lane is pulled taut like a string"): the track bowed 34 and 46 px either side of the bearing
-        # "so the path reads as walked", a wander on no page; it bends only where `route_around` and the threading bend it.
-        far = past_the_frame(start, theta, plan.W, plan.H)
-        path: Poly = [start, (start[0] + math.cos(theta) * far, start[1] + math.sin(theta) * far)]
-        # WET GROUND OUTRANKS EVERYTHING ELSE (GM 2026-08-12). The toe marsh is a contour band
-        # spanning the whole canvas below the crop, so on a map whose cluster sits in a pocket of
-        # the fan NO bearing is clean of both - and a single violation count lets one crop clip
-        # outweigh a thousand feet of swamp. Scoring them separately, wet first, makes the sweep
-        # leave along the contour and exit the frame ABOVE the marsh, which is what a real valley
-        # road does; whatever crop it then clips is bent round afterwards by `route_around`, which
-        # the marsh has no equivalent of because a track through a marsh cannot be nudged dry.
-        soaked = sum(chk.violations(path) for chk in wet_checks)  # the WET POLYGON only - pond and brook are scored once, below
-        # THE STEADINGS ARE SCORED TOO, and they have to be scored HERE (feature 128). With the
-        # houses standing before any track is drawn, the sweep's ideal bearing can point straight back
-        # through the cluster - and nothing downstream can rescue that. `_thread_the_fabric` routes
-        # and clips, but `_route` gives up on a span this long (its lattice exceeds the cell cap and
-        # it returns [] for any connector reaching the frame), and a clip can only SHORTEN a run, so a
-        # through-road laid across the hamlet stays laid across the hamlet.
-        #
-        # Measured on Mizuguchi: the gateway sat at the cluster's west face against the map edge, every
-        # westward bearing was blocked, and the sweep swung a full 180 deg and left EAST - back over
-        # the settlement, 0.2 px from a garden and 14.6 px from a farmhouse.
-        #
-        # It ranks between wet and crop, and that ordering is a judgment about what a track can and
-        # cannot be nudged out of afterwards. A marsh cannot (a road through a swamp is not a road), so
-        # wet still outranks everything. A crop clip CAN - `route_around` bends the drawn track round
-        # the hem, which is what that call exists for. A farmstead cannot be nudged either, and it is
-        # somebody's house, so it sits directly under wet and above the crop.
-        steaded = fabric_hits_boxed(path, fabric, fabric_boxes, TRACK_FABRIC_GAP)  # the boxes taken once, before the sweep
-        # PRUNE BEFORE THE EXPENSIVE HALF. `violations` tests every crop polygon on the map and is by
-        # far the costliest term here; `soaked` and `steaded` are cheap by comparison. The rank is
-        # lexicographic, so a candidate already behind on the first two terms cannot win no matter
-        # what the third says - which means it never needs computing.
-        #
-        # This is not an optimization looking for a problem. Adding the fabric term COST time by
-        # itself: a bearing that used to score a clean zero and return on the first try now often
-        # scores a steading, so the sweep runs all 41 candidates instead of stopping at one, and the
-        # measured bill was +25% on the reference seed. Pruning gives it back without changing a
-        # single verdict - the skipped candidates are exactly the ones whose full tuple is already
-        # known to be larger.
-        if best is not None and (soaked, steaded) > best[0][:2]:
-            continue
-        violations = ground_check.violations(path)
-        if soaked == 0 and steaded == 0 and violations == 0:
-            return path
-        if best is None or (soaked, steaded, violations) < best[0]:
-            best = ((soaked, steaded, violations), path)
-    # NO CLEAN BEARING: the least-bad one only where it is DRY and clear of every steading.
-    #
-    # This used to return `start` plus a ray straight away from the field, and that fallback is what
-    # actually shipped the defect: it consulted nothing, so on any map where the sweep came up empty
-    # the connector was drawn through the hem and across the drainage ditch, failing three checks at
-    # once. The least-bad bearing that replaced it degraded a hard map by one violation instead of by
-    # everything - but still emitted it, a track through the marsh or across a farmstead (feature 287,
-    # ways W23, FR-005). A crop clip stays the best bearing's, because `route_around` bends the drawn
-    # track round the field afterwards; a wet or steaded bearing is refused, and the track is found by
-    # the flood fill instead (`dry_exit`).
-    assert best is not None
-    if best[0][:2] == (0, 0):
-        return best[1]
-    return connector_dry_exit(plan, start, avoid, wet, waters, fabric)
-
-
-TRACK_PAST_FRAME_FT = 400.0
-"""How far past the canvas edge the track out is drawn: the frame is cropped to the content later, so the track only has to
-leave the canvas, and a track that stops short reads as a dead end (`connector_track`).
-
-Research: track past the frame - CONVENTION: 400 ft past the canvas edge on its own bearing"""
-
-
-def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
-    """How far along bearing `theta` (radians) from `start` the track runs: to where it leaves the `w` x `h` canvas, and
-    `TRACK_PAST_FRAME_FT` beyond. A start outside the canvas runs the margin alone.
-
-    Research: track past the frame - CONVENTION: to the canvas edge on its own bearing and 400 ft beyond"""
-    c, sn = math.cos(theta), math.sin(theta)
-    exits = [
-        t
-        for t in ((w - start[0]) / c if c > 1e-12 else (-start[0] / c if c < -1e-12 else math.inf), (h - start[1]) / sn if sn > 1e-12 else (-start[1] / sn if sn < -1e-12 else math.inf))
-        if 0.0 <= t < math.inf
-    ]
-    return min(exits, default=0.0) + TRACK_PAST_FRAME_FT
+    s.lane(the_recorded_track(s), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
 
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:
@@ -402,152 +176,7 @@ def wet_grown_by_the_lane(w: Poly) -> Poly:
     return list(ring_offset(w, 8.0, 0.0)[: len(w)])
 
 
-def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
-    """The connector as drawn (`_connector_through`), rounded to the record's 0.1 ft."""
-    run = _connector_through(s, plan, track, avoid, wet, waters, fabric)
-    # ...AT THE RECORD'S 0.1 FT, as every other lane is written (`reshape_lane`): a start left unrounded stood a hair off the
-    # rounded copies of it the web's lanes end on, and they closed a face of no area (cohort seed 20)
-    return [(round(x, 1), round(y, 1)) for x, y in run]
-
-
-def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
-    """The connector as drawn: the swept track bent round the field (`route_around`) and threaded through the steadings
-    (`_thread_the_fabric`); where either cannot make it clean, the flood fill's dry exit from the same gateway (ways W24,
-    W25) - never the track still across the field or a farmstead. It is SQUARED at its water crossings first (`settle.
-    square_run`, as every placer squares the run it lays) and judged as squared (`connector_keeps_the_law`): the web's
-    squaring drops a vertex standing in the water and so merges two legs into one, which is a new leg the rule must see
-    here, since no repair cuts the connector afterwards.
-
-    Research:
-        square at the water, as laid - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a way crosses the brook or a ditch square, squared where it is laid (`square_run`, feature 417 T49)
-        connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: bent and threaded,
-            else the dry exit
-        never stopping in open country - research/questions/0081-village-lanes.drawing.html: the track out never stops in open country, so a
-            threaded run that no longer reaches its far end, past the frame, takes the dry exit (405 T124)
-        gives up a wood seat as last resort - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); the seats the way out crosses are released; the accounts read have a
-            farm's own way in through a gap in its grove, and none covers a through-way taking a household's wood seat
-        connector's berth off the field - research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane may touch a plot's boundary and the field path runs onto the outer bund - the track is held 17 ft off the field, a departure the code keeps until feature 417 T32; bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
-    from .settle import square_run  # the web's last pass sits above this layer
-
-    around = route_around(plan.envelope, track, SPUR_SETBACK)
-    run = _thread_the_fabric(s, plan, around) if around is not None else []
-    # ...AND ONLY A RUN THAT STILL LEAVES THE MAP (405 T124): a clip keeps the run's near part, cut at the first steading it fouls,
-    # and a track out that stops there stops in open country (0081) - that run takes the dry exit instead
-    if len(run) >= 2 and around is not None and math.dist(run[-1], around[-1]) > 1.0:
-        run = []
-    run = square_run(s.M, run) if len(run) >= 2 else run
-    if len(run) >= 2 and connector_keeps_the_law(s.M, run):
-        return run
-    # THE DRY EXIT IS WALLED BY WHAT THE REGISTRY OF WHAT STANDS FORBIDS A WAY ON (feature 287 M8): the overlap matrix's
-    # extents and the households' reserved wood seats (`Reservations.seat_walls`, the copse's lane buffer about each)
-    st = getattr(s.M, "standing", None)
-    forbid = st.forbidding("lanes") if st is not None else []
-    matrix = [e[1] for e in forbid if e[0] != "wood seat"]
-    seats = [e[1] for e in forbid if e[0] == "wood seat"]
-    # THE DRY EXIT SQUARED AS LAID too (feature 417 T49): the flood fill's run crosses water where the fill finds, squared here
-    with contextlib.suppress(NoDryExit):
-        return square_run(s.M, connector_dry_exit(plan, track[0], [*avoid, *matrix, *seats], wet, waters, fabric))
-    # ...AND ONLY THEN OVER A RESERVED SEAT, WHICH THE WAY OUT TAKES: a gateway the seats wall in on every side has one way out,
-    # and the seats it crosses are given up by name (`meta.wood_seats_to_the_connector`) rather than the hamlet left with none
-    run = square_run(s.M, connector_dry_exit(plan, track[0], [*avoid, *matrix], wet, waters, fabric))
-    if st is not None:
-        gone = st.reserved.release_seats_along(run, CONNECTOR_WIDTH)
-        if gone:
-            s.M["meta"]["wood_seats_to_the_connector"] = [[round(x, 1), round(y, 1)] for x, y in gone]
-    return run
-
-
-def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
-    """May `run` be drawn as the connector? It bends like a path (`law.bends_badly`, feature 328 wave 46); its legs run through no building (`law.breaks_through` over `law.solid_boxes`,
-    the lane law's own reading - the connector is a tree lane no settle repair cuts, so this is where the rule is decided),
-    and it crosses each brook at most once (`law.crossing_points`), so a household's way out along it never crosses the
-    brook twice on the connector alone (`law.way_out_carriers` names a crossing on another lane for every such way out).
-    A run refused here is replaced by the dry exit, which crosses no water line and keeps `TRACK_FABRIC_GAP` off every
-    box (`stage_track` walls it with `law.solid_quads`).
-
-    Research:
-        no building on the connector - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no leg through a building's box
-        nothing the matrix forbids - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dry plot, well or steading part
-        each brook crossed at most once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        bends like a path - research/questions/0081-village-lanes.drawing.html: no hairpin and no zigzag on the track out either (`law.bends_badly`)"""
-    if law.breaks_through(run, law.solid_boxes(M)) or law.bends_badly(run):
-        return False
-    if forbidden_segment(M, "lanes", run, CONNECTOR_WIDTH) is not None:
-        return False  # ...and it lies on nothing the overlap matrix forbids a way on (feature 287 M8): a dry plot, a well
-    return all(len(law.crossing_points(run, brook)) <= 1 for brook in law._brooks(M))
-
-
 class NoDryExit(ValueError):
     """The cluster's gateway has no dry way out of the frame: every route crosses marsh, a steading, the field or the brook.
     That is a property of the seat (`seat_cluster` must refuse such an anchor - the homesteads area's rule), raised here
     rather than drawn as a track through the wet (feature 287, ways W23)."""
-
-
-def on_course(seg: tuple[Pt, Pt], course: Sequence[Pt], tol: float = 1.0) -> bool:
-    """Does the segment lie on the polyline `course` - both ends within `tol` of it?"""
-    if len(course) < 2:
-        return False
-    return all(min(seg_dist(q[0], q[1], a, b) for a, b in zip(course, course[1:], strict=False)) <= tol for q in seg)
-
-
-def connector_dry_exit(plan: SitePlan, start: Pt, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
-    """The connector by the flood fill (`dry_exit`): walled by the wet ground (grown by the lane's width), every steading at
-    `TRACK_FABRIC_GAP`, the field and the pond; the brook and the drawn water are lines it may not cross - the brook but at its
-    crossing places, a drawn channel but where no other way out stands (on a deck, 0084).
-
-    Research:
-        dry exit off the wet - research/questions/0081-village-lanes.drawing.html: walled by the marsh, the steadings and the field
-        the track off the steadings - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: 7 ft off every steading (`TRACK_FABRIC_GAP`), a lane's middle off a garden fence
-        the track off the wet - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground (a convention there, no distance given); the 8 ft is ours; the wet ground grown 8 ft (`wet_grown_by_the_lane`)
-        pond berth - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); 80 ft past the pond's larger half-axis
-        grove band gap - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a lane keeps a footpath's clearance and some working room off the trees; `CONNECTOR_BAND_GAP_FT`, 0036's 9.5 ft working room plus the connector's half-width (12.5 ft), on a finer grid
-        track start out of the grove bands - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walked out of grove bands by `CONNECTOR_BAND_GAP_FT` (0036's working room past the half-width) and the fill's cell slack, the wall the fill puts round each band
-        a drawn channel crossed on a deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where a way crosses a stream or ditch the map draws a timber deck as wide as the way (the settle seats it)
-        a channel crossed last - GUESS: searched, the record silent (feature 417 T29 pass D, 2026-10-25); the fill crosses a drawn channel only where no way out keeps to the ground between them; 0084 does not say when a way crosses a ditch rather than going round
-        where on a channel it crosses - GUESS: no source could speak to it, a value of ours (feature 417 T29 pass D, 2026-10-25); anywhere the fill finds; the crossing is squared as the track is laid (`squaring.square_run`)
-        the track's flank - research/questions/0081-village-lanes.drawing.html: it leaves downslope past the end of the wet ground, on the flank the cluster already sits on - the fill takes the shortest way off any frame edge instead, a known gap carried to 405 T111
-        only the brook gapped at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the crossing places stand on the brook; a drawn channel or the drain is crossed only as the last resort (on a deck, 0084)
-        brook crossed at its crossing places - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the fill keeps to its own bank unless crossing at a crossing place (`brook_fords`, gapped by `FORD_HALF`) finds a way it otherwise has not, or saves more than `BROOK_CROSSING_COST_FT` (150 ft) of walk; the crossing is then squared to the brook as the track is laid (`squaring.square_run`)
-        its salts, guards and sentinels - NONE: they decide nothing about the place - 0.71 (half a cell's diagonal); 16 (16-gon for the pond disc)
-    """
-    # ...A FARM'S GROVE BAND AT A FOOTPATH'S GAP, over a grid fine enough to pass between two (feature 291 on 287): dispersed
-    # farms stand a lane's room (32 ft) apart, and at the track's gap on the 20 ft grid every way between them was walled -
-    # cohort seeds 5 and 16 had no dry exit at all
-    bands = {tuple(map(tuple, b)) for b in getattr(plan, "grove_bands", None) or ()}
-    walls = (
-        [(wet_grown_by_the_lane(w), 0.0) for w in wet if len(w) >= 3]
-        + [(list(f), CONNECTOR_BAND_GAP_FT if tuple(map(tuple, f)) in bands else TRACK_FABRIC_GAP) for f in fabric]
-        + [(list(a), 0.0) for a in (avoid or [plan.envelope])]
-    )
-    if plan.sink_pond:
-        px, py, rx, ry = plan.sink_pond  # the pond's disc, at the sweep's own 80 ft berth (`path_violations`)
-        r = max(rx, ry)
-        walls.append(([(px + r * math.cos(k * math.pi / 8), py + r * math.sin(k * math.pi / 8)) for k in range(16)], 80.0))
-    lines = [(plan.sink_brook[i], plan.sink_brook[i + 1]) for i in range(len(plan.sink_brook) - 1)] + list(waters)
-    # ...AND OVER THE BROOK AT ITS CROSSING PLACES (feature 385 T102, D131): a settlement whose every bearing out is wet is where a
-    # way crosses its brook, and 0035 sets a crossing place every 160 ft or so - the fill passes the water within `FORD_HALF` of one
-    # ...THE BROOK'S OWN SEGMENTS ONLY (405 T67): the crossing places stand on the brook's course (`plan.brook`), so only a line
-    # lying on that course is gapped there - a drawn channel or the drain that passed near one was opened with it
-    course = list(getattr(plan, "brook", None) or [])
-    brook_lines = [ab for ab in lines if on_course(ab, course)]
-    channels = [ab for ab in lines if not on_course(ab, course)]
-    opened = gap_segments(brook_lines, brook_fords(course, FORD_SPACING, FORD_BEND_DEG), FORD_HALF) + channels
-    # ...FROM OUTSIDE ANY GROVE BAND: a dispersed seat's gateway can fall inside a farm's deep band, and the fill's start cell
-    # alone is walkable there - every cell round it was band (cohort seed 5); a track may not start in a grove in any case
-    if bands:
-        start = clear_of_bands(start, [list(b) for b in bands], CONNECTOR_BAND_GAP_FT + 0.71 * GROVE_EXIT_CELL_FT + 1.0)
-    cell = GROVE_EXIT_CELL_FT if bands else EXIT_CELL_FT
-    path = dry_exit(start, walls, lines, float(plan.W), float(plan.H), cell=cell)
-    # ...CROSSING ONLY WHERE IT SAVES 0035'S WALK (T102, D131): the fill run again open at the crossing places, and taken where it
-    # finds a way the own-bank fill does not, or one shorter by more than `BROOK_CROSSING_COST_FT`
-    across = dry_exit(start, walls, opened, float(plan.W), float(plan.H), cell=cell) if opened != lines else None
-    if across is not None and (path is None or polyline_len(path) > polyline_len(across) + BROOK_CROSSING_COST_FT):
-        path = across
-    # ...AND, LAST, OVER A DRAWN CHANNEL ON A DECK (405 T10): 0084 draws a timber deck as wide as the way where a way crosses a
-    # stream or ditch, so where neither fill finds a way out the channels are opened (the brook still only at its crossing
-    # places) and the settle seats the deck as at any crossing (`law` decks); it only turns a refused gateway into a way out
-    if path is None and channels:
-        path = dry_exit(start, walls, opened[: len(opened) - len(channels)], float(plan.W), float(plan.H), cell=cell)
-    if path is None:
-        raise NoDryExit(f"no dry way out of the frame from the gateway at ({start[0]:.0f}, {start[1]:.0f})")
-    return path

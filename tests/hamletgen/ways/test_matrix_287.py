@@ -72,16 +72,6 @@ def test_a_way_on_to_the_bund_is_not_carried_over_a_bed() -> None:
     assert B.a_way_onto_the_bund(canal) != "run_on" and len(canal.M["lanes"][1]["pts"]) == 2
 
 
-def test_the_connector_keeps_off_what_the_matrix_forbids_a_way_on() -> None:
-    from l7r.diagram.hamletgen.ways import track
-
-    s = Registered()
-    run = [(10.0, 10.0), (-900.0, 10.0)]
-    assert track.connector_keeps_the_law(s.M, run)
-    s.M["wells"] = [{"x": -300.0, "y": 10.0, "r": 8, "vr": 12.4}]
-    assert not track.connector_keeps_the_law(s.M, run), "a well on the track"
-
-
 def test_the_field_router_walls_what_the_matrix_forbids_and_leaves_its_own_dooryard_open() -> None:
     from l7r.diagram.hamletgen.ways.corridors import field_router
 
