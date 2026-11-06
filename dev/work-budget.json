@@ -117,18 +117,19 @@
   "track": {
    "status": "budgeted",
    "per_thing": 1.0,
-   "exponent": 0.77,
+   "exponent": 0.41,
    "derivation": "specs/444-work-budget-program/phases/track_greenfield.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-4.txt",
-   "items_at_20": 165,
-   "items_at_40": 248,
-   "items_at_80": 477,
-   "reason": "the registry's record of the connector, which the first derivation priced in no registry (verdict-4 SOUND), the track out's choice moved to the homesteads (T30 D1)",
+   "verdict": "specs/444-work-budget-program/phases/track_greenfield.verdict-8.txt",
+   "items_at_20": 352,
+   "items_at_40": 443,
+   "items_at_80": 626,
+   "reason": "the registry's record of the connector - its filing along its outline, its ask of the matrix and the reservations before it is filed - which the first derivation priced in no registry (verdicts 8 and 9, two blind SOUNDs)",
    "first": {
     "20": 157.0,
     "40": 223.0,
     "80": 321.0
-   }
+   },
+   "second": "specs/444-work-budget-program/phases/track_greenfield.verdict-9.txt"
   },
   "appurtenances": {
    "status": "budgeted",

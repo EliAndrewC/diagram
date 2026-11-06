@@ -114,7 +114,7 @@ def test_the_water_reach_is_held_by_the_wells_once_the_forms_have_seated(monkeyp
         return []
 
     monkeypatch.setattr(wl, "seat_wells", seat)
-    monkeypatch.setattr(wl, "surface_water_dist", lambda M, x, y: 1e9)
+    monkeypatch.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
     s = _s([{"x": 0.0, "y": 0.0}], far)
     assert wl.dry_households(s, far) == [far[1]]  # type: ignore[arg-type]
     wl.reach_wells(s, types.SimpleNamespace(well_siting="lane", ftpx=1.0))  # type: ignore[arg-type]
@@ -146,7 +146,7 @@ def test_a_fallback_reach_well_is_counted() -> None:
     mp = pytest.MonkeyPatch()
     try:
         mp.setattr(wl, "seat_wells", seat)
-        mp.setattr(wl, "surface_water_dist", lambda M, x, y: 1e9)
+        mp.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
         wl.reach_wells(s, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     finally:
         mp.undo()
@@ -181,7 +181,7 @@ def test_one_more_well_where_one_serves_more_than_ten(monkeypatch: pytest.Monkey
     """Feature 374 wave 155 (W155-6): while a well is nearest to more than ten households, one more shared well is seated
     and counted (`meta.wells_for_ten`); a well that leaves the busiest count where it was ends the search."""
     houses = [{"x": float(10 * i), "y": 0.0} for i in range(12)]
-    monkeypatch.setattr(wl, "surface_water_dist", lambda M, x, y: 0.0)  # every household watered: only the ceiling asks
+    monkeypatch.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [True] * len(houses))  # every household watered: only the ceiling asks
 
     def seat(s, plan, houses_, placed, want, rungs, form, **k):  # noqa: ANN001, ANN202
         s.M["wells"].append({"x": 110.0, "y": 0.0})
