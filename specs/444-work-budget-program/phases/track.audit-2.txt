@@ -1,0 +1,3 @@
+UNCOUNTED - `fabric._homestead_polys(s)` at track.py line 163 has no counter: on every roll it walks every house, yard, garden, grove, well, shed, byre, fixture and seated or held part on the manifest, a pass that grows with the households, and its only use, `plan.grove_bands`, is the dry exit's.
+
+(Also: the connector asked of the registry twice - `lane()` asks `new`, then files a kept copy, so the record cannot reuse its question's answer: about 320 of the 692 at 40, a repeated scan, OVER not LEEWAY; branch-only uncounted loops in the dry exit (`Standing.forbidding`, `Reservations.release_seats_along`).)

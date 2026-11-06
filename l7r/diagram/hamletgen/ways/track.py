@@ -160,7 +160,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # dry exit keep `TRACK_FABRIC_GAP` off the very boxes `law.breaks_through` asks a connector leg's midpoint to stay out
     # of, so the connector they hand back cannot run through a building by the rule's own reading (a turned house's box
     # is not its drawn quad)
-    plan.grove_bands = [poly for poly, _owner, kind in _homestead_polys(s) if kind == "groves"]  # for the dry exit (feature 291)
+    # (the grove bands the dry exit reads are set where a track out is chosen, `choose_track_out` - never on a recorded track, the
+    # common path, where reading every homestead's polygons was the stage's one uncounted loop: T32's second audit)
 
     # THE SKELETON IS NO LONGER LAID HERE (feature 126). Its arms are drawn in `stage_lanes`,
     # after the houses exist, and are fitted to where the houses actually went. What survives in

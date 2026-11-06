@@ -275,6 +275,8 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
             out.append(([(float(rec["x"]) + r * math.cos(math.pi * k / 4), float(rec["y"]) + r * math.sin(math.pi * k / 4)) for k in range(8)], None, "wells"))
         elif all(k in rec for k in ("x", "y", "w", "h")):
             out.append((rot_rect(float(rec["x"]), float(rec["y"]), float(rec["w"]), float(rec["h"]), 0.0), None, key))
+    if __debug__:  # every part copied or turned into its polygon, a corner a point (feature 444 T32's second audit: uncounted)
+        OPS["write@homestead_polys"] += sum(len(poly) for poly, _c, _k in out)
     return out
 
 

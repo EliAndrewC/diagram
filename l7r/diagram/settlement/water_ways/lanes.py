@@ -73,8 +73,10 @@ class LanesMixin:
         # so a refusal here names the engine defect by name before any of its ink is emitted, as the one-candidate writers do
         # (`registry.refuse_unadmitted`; a Kuwabata lane was the last record the census found written unasked)
         new = {"pts": [[x, y] for x, y in pts], "worn": worn, "w": width, "connector": connector, "spur": spur}
-        refuse_unadmitted(self.M, "lanes", new)
+        # ...THE RECORD ITSELF ASKED, the very object filed after (feature 444 T32's second audit: `new` asked, then a copy kept and
+        # filed, so the record could not take its own question's answer and asked again - the same extents, rows and cells twice)
         rec = self.standing.kept("lanes", new)
+        refuse_unadmitted(self.M, "lanes", rec)
         self.M.setdefault("lanes", []).append(rec)
         self._lane_ink.append(self._lane_ink_at(pts, width, worn, rec))
         # NO `M["lane"]` IS WRITTEN (feature 287 wave 6). It held "the spine" - the longest ordinary way drawn so far - kept by
