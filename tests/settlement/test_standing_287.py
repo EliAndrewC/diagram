@@ -357,3 +357,36 @@ def test_admits_stops_at_the_first_conflict_and_answers_as_conflicts_does() -> N
     every = st.conflicts("houses", {})
     assert len(every) >= 2 and st.conflicts("houses", {}, first=True) == every[:1]
     assert not st.admits("houses", {})
+
+
+def test_a_piece_is_filed_in_the_cells_its_outline_meets_never_fewer_than_it_touches() -> None:
+    """The work-budget audit at T32's landing (feature 444): a long oblique ribbon filed over its box's area cost the track 11 times
+    its budget; filed by its outline it lies in a strip of cells - and every cell any point of it touches is among them, so two
+    pieces that meet still share a cell."""
+    import random
+
+    from l7r.diagram.overlap.registry import CELL, Standing
+
+    reg = Standing({}, 6000.0, 6000.0)
+    rng = random.Random(7)
+    for _ in range(40):
+        ax, ay = rng.uniform(0, 3000), rng.uniform(0, 3000)
+        bx, by = ax + rng.uniform(-2500, 2500), ay + rng.uniform(-2500, 2500)
+        dx, dy = by - ay, ax - bx
+        m = max((dx * dx + dy * dy) ** 0.5, 1e-9)
+        hw = rng.uniform(1.0, 40.0)
+        nx, ny = dx / m * hw, dy / m * hw
+        quad = [(ax + nx, ay + ny), (bx + nx, by + ny), (bx - nx, by - ny), (ax - nx, ay - ny)]
+        box = (min(p[0] for p in quad), min(p[1] for p in quad), max(p[0] for p in quad), max(p[1] for p in quad))
+        got = set(reg._shape_cells(quad, box))
+        # every sampled point of the quad (its edges and between them) lies in a cell filed
+        for _k in range(200):
+            s, t = rng.random(), rng.random()
+            px = quad[0][0] + (quad[1][0] - quad[0][0]) * s + (quad[3][0] - quad[0][0]) * t
+            py = quad[0][1] + (quad[1][1] - quad[0][1]) * s + (quad[3][1] - quad[0][1]) * t
+            assert (int(px // CELL), int(py // CELL)) in got
+        assert len(got) <= len(list(reg._cells(box)))
+    # a long thin diagonal: a strip, far fewer cells than its box
+    quad = [(0.0, 0.0), (3000.0, 3000.0), (3003.0, 2997.0), (3.0, -3.0)]
+    box = (0.0, -3.0, 3003.0, 3000.0)
+    assert len(reg._shape_cells(quad, box)) < len(list(reg._cells(box))) / 5

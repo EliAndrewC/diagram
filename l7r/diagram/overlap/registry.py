@@ -252,6 +252,7 @@ class Standing:
         self.W, self.H = float(W), float(H)
         self._bins: dict[tuple[int, int], list[int]] = {}
         self._ext: dict[int, tuple[Extent, Box, Box]] = {}  # entry id -> (extent, its box, its box clamped to the canvas)
+        self._filed: dict[int, list[tuple[int, int]]] = {}  # entry id -> the cells it is filed in (`_shape_cells`)
         # (key, id(record)) -> (the record, its entry ids): held, so an id is never reused while it stands. Keyed by the key
         # too, because one object may stand under two keys (a shrine's hall is recorded under `religious` and `shrines`)
         self._held: dict[tuple[str, int], tuple[Any, list[int]]] = {}
@@ -270,6 +271,7 @@ class Standing:
         itself (the Rust stage gate's replays of seeds 406150, 406155 and 406169: weirs on weirs, fallow on fallow). The records come
         back as the same objects the manifest holds (one pickle), so each is re-keyed by its new id."""
         self.__dict__.update(state)
+        self.__dict__.setdefault("_filed", {})  # pickled before each entry's cells were kept: its box's cells stand in (`forget`)
         moved = {(k, old): (k, id(rec)) for (k, old), (rec, _ents) in self._held.items()}
         self._held = {moved[key]: held for key, held in self._held.items()}
         self._holds = {moved.get(h, h) for h in self._holds}
@@ -287,6 +289,40 @@ class Standing:
         for gx in range(int(cb[0] // CELL), int(cb[2] // CELL) + 1):
             for gy in range(int(cb[1] // CELL), int(cb[3] // CELL) + 1):
                 yield (gx, gy)
+
+    def _shape_cells(self, pts: Sequence[tuple[float, float]], cb: Box) -> list[tuple[int, int]]:
+        """The cells of the box `cb` a piece's outline `pts` can meet: each row of cells from the least to the greatest x its
+        edges reach within the row, every edge walked over the rows it spans once. Every point of the piece - its edges and what
+        they enclose - lies in one of them, so two pieces that meet share a cell, as with their boxes' cells; a long oblique
+        ribbon is filed along its length, not over its box's area (the work-budget audit at T32's landing: the track's 6 ribbon
+        quads at about 158 box cells each, the stage 11 times its budget)."""
+        if cb[2] < cb[0] or cb[3] < cb[1] or not pts:
+            return []
+        gy0, gy1 = int(cb[1] // CELL), int(cb[3] // CELL)
+        gx0, gx1 = int(cb[0] // CELL), int(cb[2] // CELL)
+        span: dict[int, list[float]] = {}
+        n = len(pts)
+        for k in range(n):
+            (ax, ay), (bx, by) = pts[k], pts[(k + 1) % n]
+            lo, hi = max(min(ay, by), cb[1]), min(max(ay, by), cb[3])
+            if hi < lo:
+                continue
+            for gy in range(int(lo // CELL), int(hi // CELL) + 1):
+                # the edge's x where it crosses the row's two bounds (or its ends, inside the row)
+                y0, y1 = max(gy * CELL, lo), min((gy + 1) * CELL, hi)
+                xs = (ax, bx) if by == ay else (ax + (bx - ax) * (y0 - ay) / (by - ay), ax + (bx - ax) * (y1 - ay) / (by - ay))
+                row = span.setdefault(gy, [math.inf, -math.inf])
+                row[0], row[1] = min(row[0], *xs), max(row[1], *xs)
+        if __debug__:  # each edge walked over the rows it spans (the cells written are counted by their callers)
+            OPS["index_cell@Standing.rows"] += sum(1 for _ in span) + n
+        out: list[tuple[int, int]] = []
+        for gy in sorted(span):
+            if not gy0 <= gy <= gy1:
+                continue
+            x0, x1 = span[gy]
+            for gx in range(max(gx0, int(max(x0, cb[0]) // CELL)), min(gx1, int(min(x1, cb[2]) // CELL)) + 1):
+                out.append((gx, gy))
+        return out
 
     def extents(self, key: str, o: Any) -> list[Extent]:
         return element_extents(key, o, self.M)
@@ -308,9 +344,9 @@ class Standing:
         skip = set(self._held[(key, id(ignore))][1]) if ignore is not None and (key, id(ignore)) in self._held else set()
         out: list[tuple[str, str, float, float]] = []
         boxes = [box_of(e[1]) for e in own]
-        cells_of = [list(self._cells(b)) for b in boxes]  # unclamped: pieces off the canvas still meet each other, as every pair did
+        cells_of = [self._shape_cells(e[1], b) for e, b in zip(own, boxes, strict=True)]  # unclamped: pieces off the canvas still meet each other, as every pair did
         clamped = [self._clamp(b) for b in boxes]
-        ccells = [list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else [] for cb in clamped]
+        ccells = [self._shape_cells(e[1], cb) for e, cb in zip(own, clamped, strict=True)]
         if prep is not None:
             prep.update(boxes=boxes, clamped=clamped, cells=ccells)
         # each piece's box read off its extent's corners and its cells found - once, counted where it happens (S5; 444 T16; a
@@ -464,13 +500,14 @@ class Standing:
         else:
             boxes = [box_of(e[1]) for e in exts]
             clamped = [self._clamp(b) for b in boxes]
-            cells_of = [list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else [] for cb in clamped]
+            cells_of = [self._shape_cells(e[1], cb) for e, cb in zip(exts, clamped, strict=True)]
             if __debug__:  # a filing with no question before it walks each piece for its box (feature 444 T16)
                 OPS["pt_test@Standing.extents"] += sum(len(e[1]) for e in exts)
         for e, b, cb, cells in zip(exts, boxes, clamped, cells_of, strict=True):
             n = self._next
             self._next += 1
             self._ext[n] = (e, b, cb)
+            self._filed[n] = cells
             ids.append(n)
             if __debug__:
                 OPS["write@Standing.bins"] += len(cells)
@@ -491,11 +528,12 @@ class Standing:
             OPS["dropped@Standing.forget"] += 1
         for n in held[1]:
             _e, _b, cb = self._ext.pop(n)
-            if cb[2] < cb[0] or cb[3] < cb[1]:
-                continue
-            for cell in self._cells(cb):
+            filed = self._filed.pop(n, None)
+            if filed is None:  # an entry filed before its cells were kept (a frozen input): its box's cells, as it was filed
+                filed = list(self._cells(cb)) if cb[2] >= cb[0] and cb[3] >= cb[1] else []
+            for cell in filed:
                 lst = self._bins.get(cell)
-                if lst is not None:
+                if lst is not None and n in lst:
                     lst.remove(n)
         if key == "wells" and (pw := private_well(o)):
             self.priv.discard(pw)
