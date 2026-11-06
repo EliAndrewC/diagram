@@ -69,7 +69,7 @@ def test_grove_water_draws_each_farm_a_well_at_its_pocket_unless_a_channel_or_a_
     assert [(w["x"], w["y"]) for w in s.M["wells"]] == [(930.0, 930.0)]
     s = _s()
     s._row_streets = [[(0.0, 300.0), (400.0, 300.0)]]
-    monkeypatch.setattr(wells, "shared_row_wells", lambda s_, hs, st: s_.well(300.0, 310.0) or 1)
+    monkeypatch.setattr(wells.core, "shared_row_wells", lambda s_, hs, st: s_.well(300.0, 310.0) or 1)
     assert grove_water(s, SimpleNamespace(settlement_form="linear", farm_water="well", row_water="shared"), [a, b]) == 1  # type: ignore[arg-type]
     assert sorted((w["x"], w["y"], bool(w.get("private"))) for w in s.M["wells"]) == [(300.0, 310.0, False), (930.0, 930.0, True)], "a within reach, b not"
     assert s.M["meta"]["row_water_drawn"] == "shared"
@@ -130,7 +130,7 @@ def test_place_wells_hands_the_grove_farms_to_their_own_water_and_seats_the_rest
     s = _s()
     h = {"x": 700.0, "y": 700.0, "geom": {"groves": [[0, 0, 1, 1]]}}
     got: list = []
-    monkeypatch.setattr(wells, "grove_water", lambda s_, plan_, hs: got.append(list(hs)) or 0)
+    monkeypatch.setattr(wells.seating, "grove_water", lambda s_, plan_, hs: got.append(list(hs)) or 0)
     plan = SimpleNamespace(settlement_form="dispersed", farm_water="channel", row_water="own")
     assert wells.place_wells(s, plan, [h]) == 0  # type: ignore[arg-type]
     assert got == [[h]]

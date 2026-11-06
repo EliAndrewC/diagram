@@ -19,6 +19,14 @@ def _s(wells: list[dict], houses: list[dict], lanes: list[dict] | None = None) -
 HOUSES = [{"x": float(10 * i), "y": 0.0} for i in range(12)]
 
 
+def _everywhere(mp: pytest.MonkeyPatch, name: str, value: object) -> None:
+    """`name` patched where each of the wells' parts looks it up (a package since feature 444 T33: a test patches a name where it
+    is looked up)."""
+    for m in (wl.core, wl.seating, wl.lane):
+        if hasattr(m, name):
+            mp.setattr(m, name, value)
+
+
 def test_the_spec_takes_the_two_sitings_and_refuses_another() -> None:
     assert HamletSpec(name="T", seed=1, well_siting="lane").well_siting == "lane"
     with pytest.raises(ValueError, match="well_siting"):
@@ -35,8 +43,8 @@ def test_the_lanes_stage_tries_the_lane_form_then_the_cluster_form_then_records_
             return [(0.0, 0.0)]
         return []
 
-    monkeypatch.setattr(wl, "seat_wells", seat)
-    monkeypatch.setattr(wl, "reach_wells", lambda s, plan: None)  # its own test below
+    _everywhere(monkeypatch, "seat_wells", seat)
+    _everywhere(monkeypatch, "reach_wells", lambda s, plan: None)  # its own test below
     plan = types.SimpleNamespace(ftpx=1.0)
     s = _s([{"x": 1.0, "y": 1.0, "form": "cluster"}], HOUSES)
     s._wells_owed = (2, ())
@@ -59,17 +67,32 @@ def test_the_lanes_stage_tries_the_lane_form_then_the_cluster_form_then_records_
 def test_three_then_two_only_where_five_cannot_be_gathered(monkeypatch: pytest.MonkeyPatch) -> None:
     rungs: list[int] = []
     oks: list = []
-    monkeypatch.setattr(wl, "seat_wells", lambda s, plan, houses, placed, want, r, form, **k: rungs.append(r[0][1]) or oks.append(k["seat_ok"]) or [])
+    _everywhere(monkeypatch, "seat_wells", lambda s, plan, houses, placed, want, r, form, **k: rungs.append(r[0][1]) or oks.append(k["seat_ok"]) or [])
     plan = types.SimpleNamespace(ftpx=1.0)
-    wl.seat_cluster(_s([], HOUSES), plan, HOUSES, [], 1)  # type: ignore[arg-type]
+    wl.lane_stage_cluster(_s([], HOUSES), plan, HOUSES, [], 1)  # type: ignore[arg-type]
     assert rungs == [5], "twelve households: five or nothing in the form"
     rungs.clear()
-    wl.seat_cluster(_s([], HOUSES), plan, HOUSES[:4], [], 1)  # type: ignore[arg-type]
+    wl.lane_stage_cluster(_s([], HOUSES), plan, HOUSES[:4], [], 1)  # type: ignore[arg-type]
     assert rungs == [5, 3], "four households: five cannot be gathered"
     lanes = _s([], HOUSES, lanes=[{"pts": [[0, 0], [100, 0]], "w": 4.0}])
     rungs.clear(), oks.clear()
-    wl.seat_cluster(lanes, plan, HOUSES, [], 1)  # type: ignore[arg-type]
+    wl.lane_stage_cluster(lanes, plan, HOUSES, [], 1)  # type: ignore[arg-type]
     assert not oks[0](50.0, 10.0) and oks[0](50.0, 60.0), "off every lane, its verge included"
+
+
+def test_this_stage_s_cluster_form_hands_its_ladder_to_the_rust_seats(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 T33 D5: the cluster form's seats are the Rust's, asked here in order (`seats_in_rust`) - five on every rung,
+    three then two after them only where fewer than five households share the wells, and off every lane's verge."""
+    got: list = []
+    _everywhere(monkeypatch, "seats_in_rust", lambda s, plan, houses, placed, want, rungs, form, ok, track=None: got.append((rungs, form, ok)) or [])
+    plan = types.SimpleNamespace(ftpx=1.0)
+    wl.seat_cluster(_s([], HOUSES), plan, HOUSES, [], 1)  # type: ignore[arg-type]
+    assert [n for _r, n in got[0][0]] == [5, 5, 5, 5] and got[0][1] == "cluster"
+    wl.seat_cluster(_s([], HOUSES), plan, HOUSES[:4], [], 1)  # type: ignore[arg-type]
+    assert [n for _r, n in got[1][0]] == [5, 5, 5, 5, 3, 3, 3, 2], "four households: three then two after five"
+    lanes = _s([], HOUSES, lanes=[{"pts": [[0, 0], [100, 0]], "w": 4.0}])
+    wl.seat_cluster(lanes, plan, HOUSES, [], 1)  # type: ignore[arg-type]
+    assert not got[2][2](50.0, 10.0) and got[2][2](50.0, 60.0), "off every lane, its verge included"
 
 
 def test_a_well_serving_more_than_ten_is_recorded() -> None:
@@ -113,8 +136,8 @@ def test_the_water_reach_is_held_by_the_wells_once_the_forms_have_seated(monkeyp
             return [(1990.0, 0.0)]
         return []
 
-    monkeypatch.setattr(wl, "seat_wells", seat)
-    monkeypatch.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
+    _everywhere(monkeypatch, "seat_wells", seat)
+    _everywhere(monkeypatch, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
     s = _s([{"x": 0.0, "y": 0.0}], far)
     assert wl.dry_households(s, far) == [far[1]]  # type: ignore[arg-type]
     wl.reach_wells(s, types.SimpleNamespace(well_siting="lane", ftpx=1.0))  # type: ignore[arg-type]
@@ -123,7 +146,7 @@ def test_the_water_reach_is_held_by_the_wells_once_the_forms_have_seated(monkeyp
     watered = _s([{"x": 0.0, "y": 0.0}, {"x": 2000.0, "y": 0.0}], far)
     wl.reach_wells(watered, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     assert forms == [] and watered.M["meta"] == {}, "every household within reach: nothing seated"
-    monkeypatch.setattr(wl, "seat_wells", lambda *a, **k: [])
+    _everywhere(monkeypatch, "seat_wells", lambda *a, **k: [])
     dry = _s([{"x": 0.0, "y": 0.0}], far)
     wl.reach_wells(dry, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     assert dry.M["meta"] == {"dry_households": 1}, "no seat at all: the dry household recorded, never silent"
@@ -145,8 +168,8 @@ def test_a_fallback_reach_well_is_counted() -> None:
 
     mp = pytest.MonkeyPatch()
     try:
-        mp.setattr(wl, "seat_wells", seat)
-        mp.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
+        _everywhere(mp, "seat_wells", seat)
+        _everywhere(mp, "watered_by_open_water", lambda s, houses, reach: [False] * len(houses))
         wl.reach_wells(s, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     finally:
         mp.undo()
@@ -181,19 +204,19 @@ def test_one_more_well_where_one_serves_more_than_ten(monkeypatch: pytest.Monkey
     """Feature 374 wave 155 (W155-6): while a well is nearest to more than ten households, one more shared well is seated
     and counted (`meta.wells_for_ten`); a well that leaves the busiest count where it was ends the search."""
     houses = [{"x": float(10 * i), "y": 0.0} for i in range(12)]
-    monkeypatch.setattr(wl, "watered_by_open_water", lambda s, houses, reach: [True] * len(houses))  # every household watered: only the ceiling asks
+    _everywhere(monkeypatch, "watered_by_open_water", lambda s, houses, reach: [True] * len(houses))  # every household watered: only the ceiling asks
 
     def seat(s, plan, houses_, placed, want, rungs, form, **k):  # noqa: ANN001, ANN202
         s.M["wells"].append({"x": 110.0, "y": 0.0})
         placed.append((110.0, 0.0))
         return [(110.0, 0.0)]
 
-    monkeypatch.setattr(wl, "seat_wells", seat)
+    _everywhere(monkeypatch, "seat_wells", seat)
     s = _s([{"x": 0.0, "y": 0.0}], houses)
     wl.reach_wells(s, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     assert s.M["meta"] == {"wells_for_ten": 1} and len(s.M["wells"]) == 2, "twelve at one well: a second, counted for the ten"
     stuck = _s([{"x": 0.0, "y": 0.0}], houses)
-    monkeypatch.setattr(wl, "seat_wells", lambda s_, plan, h, placed, *a, **k: s_.M["wells"].append({"x": 500.0, "y": 0.0}) or placed.append((500.0, 0.0)) or [(500.0, 0.0)])
+    _everywhere(monkeypatch, "seat_wells", lambda s_, plan, h, placed, *a, **k: s_.M["wells"].append({"x": 500.0, "y": 0.0}) or placed.append((500.0, 0.0)) or [(500.0, 0.0)])
     wl.reach_wells(stuck, types.SimpleNamespace(well_siting="cluster", ftpx=1.0))  # type: ignore[arg-type]
     assert len(stuck.M["wells"]) == 2, "a well that served none of the twelve: not tried again"
 

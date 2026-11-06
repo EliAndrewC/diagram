@@ -72,24 +72,26 @@ def test_a_well_is_held_to_the_wall_gap_the_test_reads_not_to_a_center_distance(
     the two used to disagree: a lattice seat 110 px from a 26 px-deep house's CENTER, inside the old rungs' 112 px, but
     97 px from its wall. It is refused - on the lattice, by the rescue ring and at the last resort alike, which is
     handed the same seat - and the hamlet digs no well there. A seat the same center distance off the house's long
-    end (wall 80 px off) is taken. (A clustered household's pocket, always drawn here before, is gone: feature 374 wave 155.)"""
+    end (wall 80 px off) is taken. (A clustered household's pocket, always drawn here before, is gone: feature 374 wave 155.)
+    The lattice is `stage_lane_wells`' since feature 444 T33 (`lane_stage_cluster`); this stage's seats are the Rust's, each
+    within the seat's gap of a dwelling's wall by construction (`appurtenances/tests.rs`)."""
     from types import SimpleNamespace
 
-    from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
+    from l7r.diagram.hamletgen.homesteads.wells import WELL_AMONG_DWELLINGS_PX, lane_stage_cluster, well_gap_to_dwellings
 
     plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0, well_siting="cluster")
     north = (1000.0, 890.0)
     assert math.hypot(north[0] - 1000.0, north[1] - 1000.0) <= 112.0, "inside the old rungs' center distance"
     assert well_gap_to_dwellings(_WELL_HOUSES, *north) == pytest.approx(97.0), "and 97 px from its wall"
     assert WELL_AMONG_DWELLINGS_PX < 97.0, "past the wall gap"
-    assert hg.place_wells(_only_seat(*north, open_seat=north), plan, _WELL_HOUSES) == 0  # type: ignore[arg-type]
+    assert lane_stage_cluster(_only_seat(*north, open_seat=north), plan, _WELL_HOUSES, [], 1) == []  # type: ignore[arg-type]
 
     east = (1110.0, 1000.0)  # the same 110 px from the center, off the long end: the wall is 80 px away
     assert well_gap_to_dwellings(_WELL_HOUSES, *east) == pytest.approx(80.0)
-    assert hg.place_wells(_only_seat(*east), plan, _WELL_HOUSES) == 1  # type: ignore[arg-type]
+    assert len(lane_stage_cluster(_only_seat(*east), plan, _WELL_HOUSES, [], 1)) == 1  # type: ignore[arg-type]
 
     door = (1001.5, 960.0)  # off the lattice: with no rescue and no last resort (feature 287, H10-H12), nothing seeks it
-    assert hg.place_wells(_only_seat(*door, open_seat=door), plan, _WELL_HOUSES) == 0  # type: ignore[arg-type]
+    assert lane_stage_cluster(_only_seat(*door, open_seat=door), plan, _WELL_HOUSES, [], 1) == []  # type: ignore[arg-type]
 
 
 def test_a_lattice_well_keeps_170_px_off_a_standing_well() -> None:

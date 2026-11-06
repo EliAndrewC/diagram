@@ -30,7 +30,7 @@ from typing import Any
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.driver import STAGES, fresh_settlement
 from l7r.diagram.hamletgen.rust_prefix import Reads, held, off_the_front, owned_reads, roll_through, rust_stages, stage_name
-from l7r.diagram.tools.cohort_audit import PINNED_ROWS, POST_CHECKS, fail_line
+from l7r.diagram.tools.cohort_audit import JUDGED_AFTER, PINNED_ROWS, POST_CHECKS, fail_line
 
 HERE = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 LOG = os.path.join(HERE, "dev", "rust-gate")
@@ -56,8 +56,11 @@ def judge(before: dict[str, Any], manifest: dict[str, Any], owned: set[str]) -> 
     something, everything it read either a part the Rust stages own - written by them on any seed of the run, so a stage that
     wrote nothing on this one is still judged on its empty output - or a part the fresh settlement already held (`before`)."""
     allowed = owned | held(before)
+    rust = {stage_name(st) for st in rust_stages()}
     out = []
     for name, check in POST_CHECKS:
+        if JUDGED_AFTER.get(name, "") not in rust | {""}:
+            continue  # its subject laid by a stage not yet Rust (`cohort_audit.JUDGED_AFTER`)
         seen: set[str] = set()
         found = check(Reads(manifest, seen))
         reads = owned_reads(seen)

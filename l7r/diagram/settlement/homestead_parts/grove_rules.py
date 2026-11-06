@@ -138,6 +138,17 @@ def groves_crossed_by_lanes(M: Mapping[str, Any]) -> list[tuple[int, Mapping[str
     return out
 
 
+def wells_in_the_windbreak(M: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    """Each well whose wellhead stands inside the village's drawn windbreak (`village_groves` of role `windbreak`, its ring) - the
+    well seating builds no belt to keep its seats out of (feature 444 T33 D6), so the finished map is held to it here.
+
+    Research: not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a wellhead never stands in the shelter belt"""
+    from .._geom import point_in_poly
+
+    belts = [[(float(a), float(b)) for a, b in g["poly"]] for g in M.get("village_groves") or () if g.get("role") == "windbreak" and len(g.get("poly") or ()) >= 3]
+    return [w for w in M.get("wells") or () if any(point_in_poly(float(w["x"]), float(w["y"]), ring) for ring in belts)]
+
+
 def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any]]]:
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
     overlaps its height - the garden's morning sun cut off.

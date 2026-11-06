@@ -368,3 +368,15 @@ def test_a_band_in_a_turned_beds_east_reach_is_cut_back_or_dropped() -> None:
     assert clear_east_of_beds([stubby], [bed], 22.0) == [], "a band whose cut run would be a stub is dropped, never left in the reach (0038)"
     touching = (24.0, -30.0, 17.0, 40.0)  # its south end AT the bed's top edge (-10): rounded, the two overlap
     assert clear_east_of_beds([touching], [bed], 22.0) == [(24.0, -30.5, 17.0, 39.0)], "a band ending at the bed's edge is cut a pixel clear"
+
+
+def test_a_well_in_the_drawn_windbreak_is_counted() -> None:
+    """`wells_in_the_windbreak` (feature 444 T33 D6, 0072): the well seating builds no belt, so the finished map is asked."""
+    from l7r.diagram.settlement.homestead_parts.grove_rules import wells_in_the_windbreak
+
+    belt = {"role": "windbreak", "poly": [[0.0, 0.0], [100.0, 0.0], [100.0, 40.0], [0.0, 40.0]]}
+    copse = {"role": "copse", "poly": [[200.0, 0.0], [300.0, 0.0], [300.0, 40.0], [200.0, 40.0]]}
+    inside, clear, in_copse = {"x": 50.0, "y": 20.0}, {"x": 50.0, "y": 90.0}, {"x": 250.0, "y": 20.0}
+    M = {"village_groves": [belt, copse, {"role": "windbreak", "poly": []}], "wells": [inside, clear, in_copse]}
+    assert wells_in_the_windbreak(M) == [inside], "only the windbreak's ring, not a copse's"
+    assert wells_in_the_windbreak({"wells": [inside]}) == []

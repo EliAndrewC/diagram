@@ -3,6 +3,7 @@
 //! Research:
 //!     phases module - NONE: the extension's own machinery; each phase carries its own claims
 
+mod appurtenances;
 mod counts;
 mod course;
 mod field;
@@ -43,5 +44,8 @@ fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_scattered, m)?)?;
     m.add_function(wrap_pyfunction!(homesteads::py_seat::seat_rows, m)?)?;
     m.add_function(wrap_pyfunction!(track::py::row_road_runs, m)?)?;
+    m.add_function(wrap_pyfunction!(appurtenances::py::well_seats, m)?)?;
+    m.add_function(wrap_pyfunction!(appurtenances::py::row_wells, m)?)?;
+    m.add_function(wrap_pyfunction!(appurtenances::py::farm_channels, m)?)?;
     Ok(())
 }

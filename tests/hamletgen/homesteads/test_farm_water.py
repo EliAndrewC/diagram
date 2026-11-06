@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import math
-
 from l7r.diagram.hamletgen.homesteads import farm_water as fw
 from l7r.diagram.hamletgen.homesteads.row_rules import water_rules
 from l7r.diagram.settlement import Settlement
@@ -15,26 +13,6 @@ def test_the_supply_courses_are_the_ditches_but_the_drain_and_the_brook() -> Non
         "streams": [{"poly": [[0, 200], [100, 200]]}],
     }
     assert fw.supply_courses(M) == [[(0.0, 0.0), (100.0, 0.0)], [(0.0, 200.0), (100.0, 200.0)]]
-
-
-def test_source_points_are_nearest_first_and_include_each_course_s_nearest_point() -> None:
-    pts = fw.source_points([[(0.0, 0.0), (100.0, 0.0)]], (37.0, 30.0), 20.0, 3)
-    assert pts[0] == (37.0, 0.0), "the course's own nearest point comes first"
-    assert len(pts) == 3 and all(math.dist(pts[i], (37.0, 30.0)) <= math.dist(pts[i + 1], (37.0, 30.0)) for i in range(2))
-
-
-def test_the_dooryard_end_is_a_step_off_the_yard_toward_the_water() -> None:
-    yard = [[0.0, 0.0], [40.0, 0.0], [40.0, 30.0], [0.0, 30.0]]
-    end = fw.dooryard_end(yard, (20.0, 200.0), 6.0)
-    assert end[1] > 30.0 and abs(end[1] - 30.0 - 6.0) < 1.0 and abs(end[0] - 20.0) < 1.0, end
-
-
-def test_a_channel_crosses_no_water_but_at_its_own_mouth() -> None:
-    water = [((-10.0, 0.0), (10.0, 0.0))]
-    assert not fw.crosses_other_water([(0.0, -2.0), (0.0, 100.0)], water, 6.0), "the crossing 2 ft from the start is its mouth"
-    assert fw.crosses_other_water([(0.0, -50.0), (0.0, 100.0)], water, 6.0), "50 ft along is another water"
-    assert fw.cross_t((0.0, 0.0), (1.0, 0.0), (0.5, -1.0), (0.5, 1.0)) == 0.5
-    assert fw.cross_t((0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)) == 0.0, "parallel lines meet nowhere"
 
 
 def _farm_settlement(with_yard: bool = True) -> tuple[Settlement, dict]:
@@ -77,15 +55,7 @@ def test_a_channel_goes_round_another_farm_s_grove_and_frame() -> None:
     other = {"x": 400.0, "y": 440.0, "w": 46.0, "h": 28.0, "geom": {"bbox": [400.0, 440.0, 500.0, 60.0]}}
     s.M["houses"].append(other)
     s.M["groves"] = [{"of": [400.0, 440.0], "x": 400.0, "y": 440.0, "w": 500.0, "h": 40.0}, {"of": [400.0, 300.0], "x": 400.0, "y": 240.0, "w": 200.0, "h": 40.0}]
-    walls = fw._obstacles(s, h)[1]
-    assert any(min(p[0] for p in w) < 160.0 for w in walls), "the other farm's grove is a wall"
-    assert not any(min(p[1] for p in w) >= 219.0 and max(p[1] for p in w) <= 261.0 for w in walls), "its own grove is not"
-
-
-def test_a_straight_chord_is_taken_where_it_crosses_nothing_and_a_source_in_the_crop_is_known() -> None:
-    """`straight_or_routed` / `inside_the_crop` (feature 291 on 287)."""
-    crop = [[(0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (0.0, 100.0)]]
-    assert fw.straight_or_routed((100.0, 50.0), (140.0, 50.0), crop, [], [], 8.0, 2.0) == [(100.0, 50.0), (140.0, 50.0)]
-    routed = fw.straight_or_routed((110.0, -20.0), (110.0, 120.0), [], [[(105.0, 40.0), (115.0, 40.0), (115.0, 60.0), (105.0, 60.0)]], [], 8.0, 2.0)
-    assert len(routed) >= 2 and routed != [(110.0, -20.0), (110.0, 120.0)], "routed round the wall"
-    assert fw.inside_the_crop((50.0, 50.0), crop) and not fw.inside_the_crop((100.0, 50.0), crop) and not fw.inside_the_crop((150.0, 50.0), crop)
+    _hard, walls, own = fw._obstacles(s)
+    assert any(min(p[0] for p in w) < 160.0 for w in own[(400.0, 440.0)]), "the other farm's grove is its own, a wall to this farm's channel"
+    assert any(min(p[1] for p in w) >= 219.0 and max(p[1] for p in w) <= 261.0 for w in own[(400.0, 300.0)]), "this farm's own grove is keyed to it"
+    assert not any(min(p[1] for p in w) >= 219.0 and max(p[1] for p in w) <= 261.0 for w in walls), "and is no common wall"

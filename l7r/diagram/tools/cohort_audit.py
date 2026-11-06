@@ -41,7 +41,14 @@ from l7r.diagram.hamletgen.ways.checks import track_ends_off_the_web  # noqa: E4
 from l7r.diagram.hamletgen.ways.knots import lane_knots  # noqa: E402
 from l7r.diagram.overlap import matrix_violations  # noqa: E402
 from l7r.diagram.settlement._geom.water_index import crosses_a_stream  # noqa: E402 - the same-bank rule's one predicate (feature 417 T04)
-from l7r.diagram.settlement.homestead_parts.grove_rules import fixtures_on_groves, gardens_east_shaded, grove_sides_missing, groves_crossed_by_lanes, groves_off_windward  # noqa: E402
+from l7r.diagram.settlement.homestead_parts.grove_rules import (  # noqa: E402
+    fixtures_on_groves,
+    gardens_east_shaded,
+    grove_sides_missing,
+    groves_crossed_by_lanes,
+    groves_off_windward,
+    wells_in_the_windbreak,
+)
 from l7r.diagram.settlement.homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, bamboo_shading_plots, trees_shading_plots  # noqa: E402
 from l7r.diagram.tools.cohort_roll import ROLL_TARGET, Refusal, roll_or_refusal  # noqa: E402 - imported by NAME, so one class in every process (cohort_roll's docstring)
 
@@ -82,6 +89,17 @@ PINNED_FIRST_SEED = 901
 #     maps read 54/54 here
 #   the grove's own rules (feature 291, `grove_rules`), the row village's and the grove farm's (amendment 3, `row_rules.py`),
 #     the track's end (feature 417 D27, 0081) and the shade (the GM 2026-10-02, features 310 and 315)
+STREET_RULES = frozenset({"street_not_drawn", "street_broken", "farm_not_on_its_street"})
+"""The row rules about the streets as the web lays them (`row_rules`): judged by the cohort on every finished map, and by the Rust
+stage gate only once the stage that lays them is Rust (`JUDGED_AFTER`)."""
+
+JUDGED_AFTER: dict[str, str] = {"row_streets": "web"}
+"""Each check whose subject a later stage lays, and that stage: the Rust stage gate asks it only once that stage is a Rust one -
+before, its parts are partly laid (the track writes `lanes`, the web the streets among them), and a street not drawn yet is no
+failure of the stages that ran (feature 444 T33: ten row seeds failed `street_not_drawn` once the appurtenances, the wells being
+Rust's, made `row_rules`' every read a part the Rust stages write)."""
+
+
 POST_CHECKS: tuple[tuple[str, Any], ...] = (
     ("farmstead_across_brook", lambda M: parts_across_brook(M)),
     ("features_do_not_overlap", lambda M: matrix_violations(M)),
@@ -90,9 +108,11 @@ POST_CHECKS: tuple[tuple[str, Any], ...] = (
     ("groves_off_windward", lambda M: groves_off_windward(M)),
     ("gardens_east_shaded", lambda M: gardens_east_shaded(M)),
     ("groves_crossed_by_lanes", lambda M: groves_crossed_by_lanes(M)),
+    ("wells_in_the_windbreak", lambda M: wells_in_the_windbreak(M)),
     ("track_ends_off_the_web", lambda M: track_ends_off_the_web(M)),
     ("fixtures_on_groves", lambda M: fixtures_on_groves(M)),
-    ("row_rules", lambda M: row_rules(M)),
+    ("row_rules", lambda M: [r for r in row_rules(M) if r[0] not in STREET_RULES]),
+    ("row_streets", lambda M: [r for r in row_rules(M) if r[0] in STREET_RULES]),
     ("water_rules", lambda M: water_rules(M)),
     ("bamboo_mismatch", lambda M: bamboo_mismatch(M)),
     ("trees_shading_plots", lambda M: trees_shading_plots(M, CANOPY_SHADE_FT)),

@@ -40,6 +40,20 @@ def test_a_check_is_asked_where_all_it_reads_is_rust_owned_or_held_by_the_fresh_
     assert [line for line, _reads in lines] == ["FAIL ours -> 1, e.g. [1]", "FAIL empty -> 1, e.g. ['no plot']"], "theirs reads lanes: a later stage's"
 
 
+def test_a_check_whose_subject_a_later_stage_lays_waits_for_that_stage_to_be_rust(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 T33: a check named in `JUDGED_AFTER` is asked only once its stage is a Rust one - before, its subject is laid
+    in part (the track writes lanes, the web the streets among them)."""
+    checks = (("streets", lambda M: ["street_not_drawn"] if M.get("lanes") is not None else []),)
+    monkeypatch.setattr(rg, "POST_CHECKS", checks)
+    monkeypatch.setattr(rg, "JUDGED_AFTER", {"streets": "web"})
+    monkeypatch.setattr(rg, "rust_stages", lambda: [])
+    assert rg.judge({"meta": {}}, {"meta": {}, "lanes": []}, owned={"lanes"}) == [], "the web not Rust yet: not asked"
+    web = lambda s, p: None  # noqa: E731
+    web.__name__ = "stage_web"
+    monkeypatch.setattr(rg, "rust_stages", lambda: [web])
+    assert [line for line, _r in rg.judge({"meta": {}}, {"meta": {}, "lanes": []}, owned={"lanes"})] == ["FAIL streets -> 1, e.g. ['street_not_drawn']"]
+
+
 def test_the_real_rust_stage_passes_a_seed() -> None:
     r = rg.roll(10000, 12, {}, [_wf])
     owned = [set().union(*(w for _n, _f, w in r["trace"]))]
