@@ -77,6 +77,14 @@ Every registry term grows with the track's length (each piece filed along its ou
   cells of the street's grid, its two runs 2 points each, the fords 2 each and the brook's legs once, threaded and squared as
   the track out is
 - moved out, to the homesteads (T30 D1): the start (16 at 40), the leg's water cells (97), the spur (5) and their writes (105)
+- a form that records no track out (a dispersed hamlet, whose seating builds no access tree): the track out chosen here, in Rust
+  (`l7r_phases.track_out`, `ways/gateway.rs` `choose_track_out`) - its inputs copied (`write@track_inputs`, about 15,000 points at
+  40), the sweep, the thread round the steadings, and where no swept way keeps the law, the dry exit: the walls rastered over the
+  grove bands' 2.9 ft grid and a fill toward the nearest edge (A* under the cells left to it), string-pulled. The fill's worst case
+  is every cell of the canvas, about (6,000 / 2.9)^2 = 4.3 million at 40, a fill a try; measured 2026-11-06 on 4 dispersed rolls at
+  40 (`make work-budget SPEC='{"settlement_form": "dispersed"}'`): 0.5, 1.9, 1.9 and 39.6 million, the last six fills of about 4.3
+  million cells each. The reference roll is nucleated, so this factor is 0 there; it is priced here so the audit can read it, and a
+  budget that holds it is past ten times the first pin - the GM's words (FR-022), asked at the end of the port with the other raises
 
 ## Earlier findings
 

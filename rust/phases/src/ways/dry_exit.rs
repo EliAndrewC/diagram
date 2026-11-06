@@ -25,7 +25,7 @@
 )]
 
 use super::Counts;
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
 
 use super::track::{edge_dist, grown, in_poly, seg_dist, Pond, FABRIC_GAP_FT, WET_GROWN_FT};
 use crate::field::fan::Pt;
@@ -213,6 +213,11 @@ pub fn blocked(
 
 /// A track from `start` off the `w` x `h` canvas through cells not `blocked`, the start's own cell walkable whatever stands
 /// there, string-pulled and run on past the edge; None when the start is walled in.
+///
+/// ...SOUGHT TOWARD THE NEAREST EDGE (feature 444 T32, the track's sixth MODE AUDIT): a breadth-first flood visited every cell
+/// nearer the start than the way out - 74 million on a 40-household dispersed roll at the band's 2.9 ft grid. The same fewest steps
+/// are found by A* under the cells left to the nearest edge (an under-estimate that falls by at most one a step, so the first
+/// cell off the canvas reached is one the flood would reach at the same step count), which visits the cells toward that edge.
 #[must_use]
 pub fn fill(
     g: &Grid,
@@ -221,13 +226,29 @@ pub fn fill(
     canvas: Pt,
     tests: &mut Counts,
 ) -> Option<Vec<Pt>> {
+    use std::cmp::Reverse;
+    use std::collections::BinaryHeap;
     let s = g.at(start);
-    let mut back: HashMap<(i64, i64), (i64, i64)> = HashMap::from([(s, s)]);
-    let mut queue = VecDeque::from([s]);
-    let mut goal = None;
-    while let Some(c) = queue.pop_front() {
+    let off = |c: (i64, i64)| {
         let p = g.center(c);
-        if !((0.0..=canvas.0).contains(&p.0) && (0.0..=canvas.1).contains(&p.1)) {
+        !((0.0..=canvas.0).contains(&p.0) && (0.0..=canvas.1).contains(&p.1))
+    };
+    let left = |c: (i64, i64)| {
+        let p = g.center(c);
+        let d = p.0.min(canvas.0 - p.0).min(p.1).min(canvas.1 - p.1).max(0.0);
+        (d / g.cell).floor() as i64
+    };
+    let mut back: HashMap<(i64, i64), (i64, i64)> = HashMap::from([(s, s)]);
+    let mut steps: HashMap<(i64, i64), i64> = HashMap::from([(s, 0)]);
+    let mut seq = 0u64;
+    let mut open = BinaryHeap::from([(Reverse(left(s)), Reverse(0i64), Reverse(seq), s)]);
+    let mut done: std::collections::HashSet<(i64, i64)> = std::collections::HashSet::new();
+    let mut goal = None;
+    while let Some((_, Reverse(n), _, c)) = open.pop() {
+        if !done.insert(c) {
+            continue;
+        }
+        if off(c) {
             goal = Some(c);
             break;
         }
@@ -243,12 +264,15 @@ pub fn fill(
         ] {
             let nb = (c.0 + d.0, c.1 + d.1);
             tests.add("candidate@fill", 1);
-            if g.index(nb).is_some_and(|k| !blocked[k]) && !back.contains_key(&nb) {
+            if g.index(nb).is_some_and(|k| !blocked[k]) && steps.get(&nb).is_none_or(|&m| n + 1 < m) {
+                steps.insert(nb, n + 1);
                 back.insert(nb, c);
-                queue.push_back(nb);
+                seq += 1;
+                open.push((Reverse(n + 1 + left(nb)), Reverse(n + 1), Reverse(seq), nb));
             }
         }
     }
+    tests.add(if goal.is_some() { "call@fill_out" } else { "call@fill_walled" }, 1);
     let mut at = goal?;
     let mut chain = vec![at];
     while at != s {
@@ -274,7 +298,11 @@ pub fn fill(
 }
 
 /// The chain of cell centers string-pulled: from each point, the farthest later point whose straight leg samples only walkable
-/// cells (the start's own cell included).
+/// cells (the start's own cell included), found walking forward while the leg stays clear.
+///
+/// ...WALKED FORWARD, NOT BACK FROM THE END (feature 444 T32, the sixth MODE AUDIT): asking every later point from the chain's end
+/// down was a leg test per pair - 9.3 million samples on one dispersed roll; walking on from the last clear point asks each point
+/// once a leg, and stops at the first blocked one (a chain round a corner is pulled at the corner, as before)
 fn pull(g: &Grid, pts: &[Pt], blocked: &[bool], start: (i64, i64), tests: &mut Counts) -> Vec<Pt> {
     let mut clear = |a: Pt, b: Pt| {
         let n = (((b.0 - a.0).hypot(b.1 - a.1) / (g.cell / 4.0)) as i64).max(1);
@@ -288,9 +316,9 @@ fn pull(g: &Grid, pts: &[Pt], blocked: &[bool], start: (i64, i64), tests: &mut C
     let mut out = vec![pts[0]];
     let mut k = 0;
     while k < pts.len() - 1 {
-        let mut m = pts.len() - 1;
-        while m > k + 1 && !clear(pts[k], pts[m]) {
-            m -= 1;
+        let mut m = k + 1;
+        while m + 1 < pts.len() && clear(pts[k], pts[m + 1]) {
+            m += 1;
         }
         out.push(pts[m]);
         k = m;

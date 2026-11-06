@@ -473,7 +473,8 @@ pub fn connector_through(
     dry: &DrySite,
     tests: &mut Counts,
 ) -> Option<(Vec<Pt>, bool)> {
-    connector_ways(track, fabric, law, dry, false, tests)
+    let (clean, fallback) = connector_ways(track, fabric, law, dry, tests);
+    clean.or(fallback)
 }
 
 /// The fabric's grove bands, each with its box.
@@ -501,27 +502,19 @@ pub fn off_the_bands(fabric: &Fabric, run: &[Pt], tests: &mut Counts) -> bool {
     keeps_off(&band_boxes(fabric), run, tests)
 }
 
-/// `connector_through` held to the grove bands: None where every way it finds, once squared, cuts a band - so the caller asks the
-/// next gateway before it settles for one that does.
-#[must_use]
-pub fn connector_off_the_bands(
-    track: &[Pt],
-    fabric: &Fabric,
-    law: &Law,
-    dry: &DrySite,
-    tests: &mut Counts,
-) -> Option<(Vec<Pt>, bool)> {
-    connector_ways(track, fabric, law, dry, true, tests)
-}
+/// A connector's ways from one gateway: the first held to the grove bands once squared, and the first that cuts one - so the caller
+/// asks the next gateway before it settles for the second, and asks no gateway twice.
+pub type Ways = (Option<(Vec<Pt>, bool)>, Option<(Vec<Pt>, bool)>);
 
-fn connector_ways(
+/// `connector_through` as its two ways (`Ways`): (the way held to the grove bands, else None; the first way that cuts one, else None).
+#[must_use]
+pub fn connector_ways(
     track: &[Pt],
     fabric: &Fabric,
     law: &Law,
     dry: &DrySite,
-    strict: bool,
     tests: &mut Counts,
-) -> Option<(Vec<Pt>, bool)> {
+) -> Ways {
     let r = |p: Vec<Pt>| {
         p.into_iter()
             .map(|q| ((q.0 * 10.0).round() / 10.0, (q.1 * 10.0).round() / 10.0))
@@ -548,7 +541,7 @@ fn connector_ways(
         if connector_keeps_the_law(&run, law.solid, law.forbidding, law.brooks, tests)
             && off_the_bands(&run, tests)
         {
-            return Some((r(run), false));
+            return (Some((r(run), false)), None);
         }
     }
     let matrix: Vec<Vec<Pt>> = law.forbidding.iter().map(|e| e.0.clone()).collect();
@@ -561,7 +554,7 @@ fn connector_ways(
     if let Some(p) = connector_dry_exit(&site, track[0], tests) {
         let q = square_run(&p, law.waters, tests);
         if off_the_bands(&q, tests) {
-            return Some((r(q), false));
+            return (Some((r(q), false)), None);
         }
         squared = Some((q, false));
     }
@@ -573,7 +566,7 @@ fn connector_ways(
     if let Some(p) = connector_dry_exit(&site, track[0], tests) {
         let q = square_run(&p, law.waters, tests);
         if off_the_bands(&q, tests) {
-            return Some((r(q), !law.seats.is_empty()));
+            return (Some((r(q), !law.seats.is_empty())), squared.map(|(q, t)| (r(q), t)));
         }
         squared = squared.or(Some((q, !law.seats.is_empty())));
     }
@@ -595,10 +588,10 @@ fn connector_ways(
             if let Some(p) = connector_dry_exit(&site, track[0], tests) {
                 let q = square_run(&p, law.waters, tests);
                 if off_the_bands(&q, tests) {
-                    return Some((r(q), taken));
+                    return (Some((r(q), taken)), squared.map(|(q, t)| (r(q), t)));
                 }
             }
         }
     }
-    squared.filter(|_| !strict).map(|(q, taken)| (r(q), taken))
+    (None, squared.map(|(q, taken)| (r(q), taken)))
 }
