@@ -327,14 +327,14 @@
   },
   "### T30 Decisions": {
    "sha256": "43acd3411bb9193d70209ba06cd98f6a23c87ed1451f06d7c9c79d788ecef10e",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T30 Approach (checklist part A)": {
    "sha256": "59cb1fb9eda4dcdc3f61de10f2ff083941ef75927c5a5be0ad14126ffdd83b9d",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
@@ -345,38 +345,62 @@
   },
   "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1": {
    "sha256": "80ef0a54e103bb1dfd4fb4069c406ac60e95e827367f5c458c431396f998ae5c",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T31 Approach (checklist part A)": {
    "sha256": "23692891abf7e4ba81494d9f2cbb89b2a4a3cd36c9b1919fb738f26d46d27c2d",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
    "sha256": "a324fe85468c5eea75502f9ab40fb3d7836adb21a7ce47deba5eed1fb41fcafa",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T32 Decisions": {
-   "sha256": "80d8500afe03ebb37daa00d0a67337cba4beceea3150231ad4439434222a76d6",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "sha256": "b3904e781cd065fdb5f40b9dce753965984087a62996cf407b01d6ec533080b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T32 Approach (checklist part A)": {
-   "sha256": "8efad69fca3a4846053d40462439c0bb90890457794cd55da974d457362c5548",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "sha256": "0bdbd477b805d71944a8bb6fb5f798e9a3300238755c07ebab7ea0ae6da2b5a3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   },
   "### T30 Approach (re-answered 2026-11-05T19:41Z)": {
    "sha256": "44e66ce8d66b45d2f072e88aab792239c8954dffb75e51aa9612cb495cf9bee1",
-   "verdict": "BLOCKED",
-   "reviewed": "2026-11-05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
+   "declared": "spec-fidelity"
+  },
+  "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
+   "sha256": "6a7ce00555a24f64563611ffbc8868ae901501945e58d2b33072aea987f5e968",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Decisions": {
+   "sha256": "98f03a65a15ee53c8ce9ecd386d67fad687432dd95ee98bb699280a62c0015b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Approach (checklist part A)": {
+   "sha256": "e49aaa4a67a2f0ac29ac588232b21b7ed6a6859efd3c0185e93602ba9a0596f2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
+   "declared": "spec-fidelity"
+  },
+  "### T33 Approach (re-answered 2026-11-06T08:04Z)": {
+   "sha256": "c28a04ffae3ce85c60113caa789fe0f60974b22f2a6b9a8ecd2ea86e7349af9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-06",
    "declared": "spec-fidelity"
   }
  },
@@ -4697,6 +4721,368 @@
      "summary": "Goal, constraints, order, exits (rust-gate, AUDIT WITHIN/LEEWAY, claims IN-STEP); road laid once, threaded by the ported router; one landing.",
      "class": "within",
      "why": "FR-003-FR-006, FR-019-FR-022. 'Ported router' is held by FR-015's greenfield budget and MODE AUDIT. It does not relax what the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-06",
+   "blocks": [
+    "### T30 Approach (checklist part A)",
+    "### T30 Approach (re-answered 2026-11-05T19:41Z)",
+    "### T30 Decisions",
+    "### T31 Approach (checklist part A)",
+    "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1",
+    "### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T32 Approach (checklist part A)",
+    "### T32 Decisions",
+    "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T33 Approach (checklist part A)",
+    "### T33 Approach (re-answered 2026-11-06T08:04Z)",
+    "### T33 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T30 D1",
+     "summary": "Whole homesteads stage in Rust behind a thin door: houses seated before any way, track out chosen after the last house, gap ways laid; the lane law ported once as its own Rust module.",
+     "class": "within",
+     "why": "FR-003-FR-005, FR-017; the phase writes what the stage writes, as the earlier BLOCKED ruling required; 0246's order kept."
+    },
+    {
+     "id": "T30 D2",
+     "summary": "The Rust lays every homestead part (house ladder, yard, beds, kura, byre, fixtures, wood share); the door keeps the ink and the registry records.",
+     "class": "within",
+     "why": "The stage's output unchanged in kind (FR-004 same manifest keys)."
+    },
+    {
+     "id": "T30 D3",
+     "summary": "Search: first house nearest the seat, next houses offered ring by ring from standing ones, judged against a raster painted once and a grid of boxes; no house taken back.",
+     "class": "within",
+     "why": "S1/S4/S9 as the request's rubric asks; a new algorithm, not today's funnel (GM 2026-10-30)."
+    },
+    {
+     "id": "T30 D4",
+     "summary": "Every form (cluster, dispersed, row) in Rust, Python seating, track choice and gap ways deleted in the same landing, no fallback; gate rolls every form.",
+     "class": "within",
+     "why": "FR-005 and FR-019/FR-020 as written."
+    },
+    {
+     "id": "T30 D5",
+     "summary": "Counters one key per derivation row.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T30 Approach part A",
+     "summary": "Goal, constraints, exits (rust-gate no failing seed, budget under FR-022, MODE AUDIT, claims IN-STEP, reviews); every household seated or site refused.",
+     "class": "within",
+     "why": "Restates FR-019, FR-021, FR-022 and 0001; no carve-out."
+    },
+    {
+     "id": "T30 Approach re-answer",
+     "summary": "Row street and row-village margin chosen by room asked before any farm stands (row_room), never seat-and-keep-one.",
+     "class": "within",
+     "why": "Applies S4/FR-004 and FR-016 more strictly; exits 'as above'."
+    },
+    {
+     "id": "T31",
+     "summary": "Seed 778251 must seat all 17 households in the Rust homesteads with the stage's checks passing; room from the margin's length or a second margin; researched room not narrowed; stays on the failing list until seed and frozen input pass.",
+     "class": "within",
+     "why": "FR-019/FR-020 exactly; matching Python not required per FR-019. Note: the title says 'on its margin 1' while the body and item 11 allow a second margin per the arbiter's ruling - the body governs."
+    },
+    {
+     "id": "T31 Approach part A",
+     "summary": "Each ladder margin's room asked before any house; the row seated once on the first margin that holds every household.",
+     "class": "within",
+     "why": "S4/FR-004, FR-016; no house taken back (0004)."
+    },
+    {
+     "id": "T32 header/Approach",
+     "summary": "Track stage keeps only the row village's road (0033/0035/0084) in Rust; other forms draw the track out recorded at the homesteads; settlement-review expected to move none, checked by make maps-moved.",
+     "class": "within",
+     "why": "Follows T30 D1's move of the track choice; occasions measured by tool, not assumed."
+    },
+    {
+     "id": "T32 D1",
+     "summary": "Row road in Rust behind a thin stage_track door; Python helpers only the road reached deleted; street_span kept in Python for the later web stage until its phase.",
+     "class": "within",
+     "why": "FR-005 deletes the old implementation; a helper a later Python stage still reads is not a fallback for this stage."
+    },
+    {
+     "id": "T32 D2",
+     "summary": "No new rule; constants keep their claims at the Rust that reads them.",
+     "class": "within",
+     "why": "FR-021."
+    },
+    {
+     "id": "T32 D3",
+     "summary": "Budget: a REVISION of the greenfield derivation under '## Work the first derivation missed', judged in MODE BUDGET, raised by budget-set RAISE=1; the first pin 223 at 40 stays the reference for every FR-022 line.",
+     "class": "within",
+     "why": "Exactly FR-022 rule 2's shape; fixes the earlier BLOCKED text, which minted a new derivation and so a new 'first' reference."
+    },
+    {
+     "id": "T32 D4",
+     "summary": "Counters one key per derivation row.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T32 Approach part A",
+     "summary": "Goal, constraints and exits for the row road; rust-gate no failing seed, MODE AUDIT, claims IN-STEP.",
+     "class": "within",
+     "why": "FR-019, FR-021, FR-022."
+    },
+    {
+     "id": "T33 header/Approach",
+     "summary": "Every decision of the stage - grove farms' water, the communal wells (cluster form and lane-side form beside the track out), the retirement houses - goes to Rust.",
+     "class": "within",
+     "why": "FR-005, FR-017."
+    },
+    {
+     "id": "T33 D1",
+     "summary": "Stage's decisions in Rust behind stage_appurtenances; Python searches only it reached deleted; the later stage_lane_wells keeps its own seating until its own phase.",
+     "class": "within",
+     "why": "stage_lane_wells is a separate later stage; ports go in STAGES order (FR-003, FR-019)."
+    },
+    {
+     "id": "T33 D2",
+     "summary": "Every rule (well_at) asked of each candidate in rank order before a well is drawn; nothing moved or dropped.",
+     "class": "within",
+     "why": "S4/FR-004."
+    },
+    {
+     "id": "T33 D3",
+     "summary": "Budget pin 713 at 40 is the reference for every FR-022 line; missed work priced under Work the first derivation missed and raised by RAISE=1, never squeezed.",
+     "class": "within",
+     "why": "FR-022 rules 2 and 4."
+    },
+    {
+     "id": "T33 D4",
+     "summary": "Counters one key per derivation row.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T33 D5",
+     "summary": "Cluster-form wells: needy households halved into well_target groups; candidates the gaps between a group's house pairs within twice WELL_SEAT_FT, ranked by the neighborhood ladder then distance to the group middle; each asked every rule in order, first admitted drawn; constants labeled GUESS.",
+     "class": "within",
+     "why": "A new bounded search (constant pairs per ~10-house group, S1-S3) rather than today's lattice sweep; its constants labeled (FR-021); the greenfield's lattice corner does not exist on Rust-seated ground, and the derivation is revised for it under FR-022 rule 2."
+    },
+    {
+     "id": "T33 D6",
+     "summary": "No belt polygon in the seating: gap seats lie inside the house cloud, short of the belt's near face; held by a finished-map check that counts any well inside the drawn belt; minimax walk replaced by the halving.",
+     "class": "within",
+     "why": "0072's 'not in the windbreak' kept, and now verified on every gate seed rather than ranked; the check only fails when the rule is broken."
+    },
+    {
+     "id": "T33 D7a",
+     "summary": "The lane-side well form beside the track out keeps its Python search (seat_wells with on_a_verge) this landing, with the belt test removed from that Python search.",
+     "class": "narrowing",
+     "why": "Contradicts T33's own header ('goes to Rust') and D1 ('the stage's decisions in Rust'). FR-005 requires the old implementation deleted in the same landing with no fallback; FR-017 forbids Python rewrites, and dropping the belt from seat_wells is one; FR-019 makes a stage Rust only when its .rs holds it. The reason given - stage_lane_wells asks the same verges - is shared-code convenience, not impossibility: T32 D1 in this same bundle ports the road and leaves street_span in Python for the later web stage, and T30 D1 records the earlier refusal of a stage split ('the phase writes what the stage writes'). Port the lane-side form beside the track to Rust in this landing; stage_lane_wells may keep a Python copy of the verge test until its own phase.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T33 D7b",
+     "summary": "Grove farms' water (grove_water) and the retirement houses 'draw what the seating laid'.",
+     "class": "narrowing",
+     "why": "The header says these decisions go to Rust; T30 D2's list of what the Rust homesteads lay names neither grove water nor retirement houses. As written no Rust decides them, so the stage keeps Python decisions in a Rust stage (FR-005, FR-017). Name the Rust that decides each, or port them in this landing.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T33 D7c",
+     "summary": "The retirement search for a settlement seated without lots is deleted only if make dead-closure finds it unreachable.",
+     "class": "narrowing",
+     "why": "The premise ('no hamlet form reaches it') is asserted, not measured, and the reachable branch has no stated outcome, so by default it stays Python (FR-005, FR-017). Fix: 'deleted if unreachable, ported to Rust in this landing if reachable', with the dead-closure result recorded.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T33 Approach re-answer item 6",
+     "summary": "Re-answered exits: green on the 0196 checks on the Rust gate's seeds, the belt count, MODE AUDIT against a re-derivation; red to arbiter-ask on the lattice search.",
+     "class": "narrowing",
+     "why": "Unlike T30's re-answer ('As above'), this item 6 stands alone and omits make rust-gate with no failing seed through the stage (FR-019: every finished-map check the Rust stages wrote, not only 0196's) and the claims round IN-STEP (FR-021). Read as a replacement of part A's item 6 it narrows both. Fix: 'As above, and ...'.",
+     "ruling": "NOT LEGITIMATE"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-06",
+   "blocks": [
+    "### T30 Approach (checklist part A)",
+    "### T30 Approach (re-answered 2026-11-05T19:41Z)",
+    "### T30 Decisions",
+    "### T31 Approach (checklist part A)",
+    "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1",
+    "### T32 - phase: track, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T32 Approach (checklist part A)",
+    "### T32 Decisions",
+    "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T33 Approach (checklist part A)",
+    "### T33 Approach (re-answered 2026-11-06T08:04Z)",
+    "### T33 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T30 D1",
+     "summary": "The whole homesteads stage (seating, the track out's choice, the gap ways) in Rust behind a thin homesteads/stages.py door; the lane law's rules ported once as rust/phases/src/law/.",
+     "class": "within",
+     "why": "FR-003 to FR-005 and FR-010's shape (thin Python stage calling Rust); FR-017 (no Python rewrite); output what the stage writes today (FR-004). It no longer splits the stage's budget, which the 2026-11-04 ruling refused."
+    },
+    {
+     "id": "T30 D2",
+     "summary": "Each homestead's parts laid as the bundle lays them today; the door keeps the ink and the overlap registry's records.",
+     "class": "within",
+     "why": "FR-004: same manifest keys read and written."
+    },
+    {
+     "id": "T30 D3",
+     "summary": "Search: first house nearest the seat, the next offered ring by ring from standing houses, each offer judged against a raster painted once and a grid of boxes; no house taken back.",
+     "class": "within",
+     "why": "A choice of algorithm under S4/S9 and FR-016. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T30 D4",
+     "summary": "Every seating form ported, and the Python seating, track choice and gap ways deleted in the same landing with no fallback; the gate's fresh block and pinned rows roll every form.",
+     "class": "within",
+     "why": "FR-005 (deleted in the same landing, no fallback), FR-019/FR-020 (the gate's seeds)."
+    },
+    {
+     "id": "T30 D5",
+     "summary": "One counter key per derivation row, <kind>@<row>.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T30 Approach A",
+     "summary": "Goal, constraints, order as today, exits (rust-gate, budget under FR-022 rule 2 with the ten-times line, MODE AUDIT, claims IN-STEP, settlement-reviews), search smell S9, every household seated or the site refused as today.",
+     "class": "within",
+     "why": "Each item restates FR-003 to FR-006, FR-019 to FR-022. A refusal is a gate failure under FR-019, and T31 treats it as one to fix, so 'the site refused' excuses no failing seed."
+    },
+    {
+     "id": "T30 Approach re-answered",
+     "summary": "S4 at every choice between candidates: a row's first street and a row village's margin chosen by their room, asked before any farm stands (row_room), never by seating each and keeping one.",
+     "class": "within",
+     "why": "S4/FR-004 and FR-016 applied. It tightens rather than narrows."
+    },
+    {
+     "id": "T31 task",
+     "summary": "Seed 778251 must seat all 17 households and pass the stage's checks; room comes from the margin's length or a second margin; researched room (bundle pitch, lane, footpath, yard sun, front-row standoff) is not narrowed; matching Python is not required; red goes to the arbiter.",
+     "class": "within",
+     "why": "FR-019 (no failing seed through a Rust stage; matching Python not required), FR-020 (the seed and its frozen input both pass before it leaves the list). Keeping the researched room unnarrowed preserves the research and is no carve-out."
+    },
+    {
+     "id": "T31 Approach A",
+     "summary": "Each ladder margin's room asked before any house; the row seated once on the first margin that holds every household; one commit inside T30's landing.",
+     "class": "within",
+     "why": "S4/FR-004, FR-016. Folding the fix into T30's landing narrows nothing."
+    },
+    {
+     "id": "T32 header and Approach",
+     "summary": "The track out is chosen at the homesteads (T30), so the track stage still decides a row village's road (span, run-on off the sheet, ford, threading, squaring); that goes to rust track.rs, the door draws the runs, and other forms draw the recorded track out as today. Settlement-review on moved pool hamlets at the landing.",
+     "class": "within",
+     "why": "FR-003 to FR-005, FR-017. Every decision the stage makes moves to Rust. The review occasions follow docs/reviews."
+    },
+    {
+     "id": "T32 D1",
+     "summary": "The row road in Rust behind a thin stage_track door; Python helpers only the road reached are deleted in the same landing; street_span stays in Python for the web until the web's phase.",
+     "class": "within",
+     "why": "FR-005 deletes this phase's old implementation. street_span still serves a later, unported Python stage (the web), so keeping it is pipeline order (FR-003), not a fallback for this stage, and no Python is rewritten (FR-017)."
+    },
+    {
+     "id": "T32 D2",
+     "summary": "No new rule: every constant keeps its claim at the Rust that reads it.",
+     "class": "within",
+     "why": "FR-021 (claims govern the stage's Rust)."
+    },
+    {
+     "id": "T32 D3",
+     "summary": "The budget is a revision of the greenfield derivation under '## Work the first derivation missed', judged in MODE BUDGET, raised by budget-set RAISE=1; the first pin (223 at 40) stays the reference for every FR-022 line.",
+     "class": "within",
+     "why": "FR-022 rule 2, word for word: the first greenfield budget is the reference for the 2x, two-dispatch and ten-times lines."
+    },
+    {
+     "id": "T32 D4",
+     "summary": "Counters, <kind>@<row>.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T32 Approach A",
+     "summary": "Goal (a row village's road off the map at both ends, over a ford), order as today, exits (rust-gate, MODE AUDIT, claims), road laid once.",
+     "class": "within",
+     "why": "FR-003 to FR-006, FR-019 to FR-022."
+    },
+    {
+     "id": "T33 header and Approach",
+     "summary": "Grove farms' water, the communal wells (the cluster form now, the lane-side form beside the track out, the rest after the lanes) and the retirement houses go to Rust; the door draws what the seating reserved and what the Rust seats.",
+     "class": "within",
+     "why": "FR-003 to FR-005, FR-017. The wells laid 'after the lanes' belong to a later STAGES entry (stage_lane_wells) and are ported in pipeline order (FR-003)."
+    },
+    {
+     "id": "T33 D1",
+     "summary": "Thin stage_appurtenances door; the Python seat searches only this stage reached are deleted in the same landing; the lane-side wells' later seating stays with stage_lane_wells until its own phase.",
+     "class": "within",
+     "why": "FR-005 for this stage's own code. stage_lane_wells is a later stage, so FR-003's order governs it."
+    },
+    {
+     "id": "T33 D2",
+     "summary": "Every rule asked of each Rust candidate, in ranking order, through the engine's well_at, before the seat is drawn; nothing moved or dropped.",
+     "class": "within",
+     "why": "S4/FR-004."
+    },
+    {
+     "id": "T33 D3",
+     "summary": "Pin 713 at 40 from the SOUND greenfield derivation is the reference for every FR-022 line; missed work priced and raised by RAISE=1, never squeezed.",
+     "class": "within",
+     "why": "FR-022 rules 2 and 4."
+    },
+    {
+     "id": "T33 D4",
+     "summary": "Counters, <kind>@<row>.",
+     "class": "within",
+     "why": "FR-012."
+    },
+    {
+     "id": "T33 Approach A",
+     "summary": "Every household watered per 0196, byres and fixtures as seated, retirement houses beside farmhouses (0004); order as today; exits; the search is a ranked list from the house gaps (D5) and the track's verges (D7a).",
+     "class": "within",
+     "why": "FR-003 to FR-006, FR-019 to FR-022. Item 7 now names D7a's verges, which match the Rust port of the lane-side form."
+    },
+    {
+     "id": "T33 D5",
+     "summary": "Cluster-form well seats: the needy households cut into well_target groups by median halving; the candidates are the gaps between pairs of a group's houses within 2x WELL_SEAT_FT, ranked by the neighborhood ladder and then by distance to the group's middle, each asked every rule before drawing. Replaces the old minimax walk and the greenfield's lattice corner, which the Rust seating has no lattice for.",
+     "class": "within",
+     "why": "A new, bounded algorithm is what the GM asked for (2026-10-30: 'we are not trying to re-implement the same algorithms'). Departing from the derivation's lattice seat is priced by re-derivation under FR-022 rule 2 (the exit names it), and every rule is still asked before placing (S4)."
+    },
+    {
+     "id": "T33 D6",
+     "summary": "No belt polygon in the seating. Seats in the gaps between a group's houses stand inside the house cloud, and the belt stands 36 ft behind the windward fringe; 'not in the windbreak' (0072) is held by a check on the finished map that counts wells inside the drawn belt and requires none.",
+     "class": "within",
+     "why": "0072's preference is kept, and held harder than today: today belt seats are only ranked last, while the exit now requires zero wells in the belt, and a seed it fails goes red with no repair (S4). No requested rule or output is dropped."
+    },
+    {
+     "id": "T33 D7a",
+     "summary": "The lane-side form beside the track goes to Rust in this landing: the candidates are verge points along the track out, grouped as D5's and ranked by distance to the group's middle, each asked well_at by the door; no belt polygon; stage_lane_wells keeps its own Python seat_wells until its phase.",
+     "class": "within",
+     "why": "This answers the previous BLOCKED ruling. The stage's lane-side decision now moves to Rust (FR-005, FR-017) rather than staying in Python. The Python seat_wells left behind serves only a later, unported stage (FR-003 order) and is not edited, so nothing is rewritten in Python (FR-017). The earlier D7 dropped the belt inside that Python, which was a Python rewrite; that is gone."
+    },
+    {
+     "id": "T33 D7b",
+     "summary": "Grove farms' well pockets and retirement houses are the Rust seating's (T30), drawn here; the shared row wells' seats and the dispersed channel form's channels are decided in Rust this landing.",
+     "class": "within",
+     "why": "FR-003 to FR-005, FR-017: every decision the stage makes moves to Rust."
+    },
+    {
+     "id": "T33 D7c",
+     "summary": "The retirement search for a settlement whose seating laid none is reachable, so it is ported, not dropped: its floor of one keeper moves into the Rust lots' quota, and the Python search is deleted with dead-closure recorded.",
+     "class": "within",
+     "why": "It keeps today's output, at least one retirement house where the share is above nothing (FR-004), and deletes the old code in the same landing (FR-005). The earlier 'deleted if unreachable' is replaced by a port of behavior found reachable."
+    },
+    {
+     "id": "T33 Approach re-answered exits",
+     "summary": "Exits as T33 part A (rust-gate, claims IN-STEP) plus the 0196 cohort checks on the gate's seeds, zero wells in a drawn belt, and MODE AUDIT against a re-derivation pricing the candidates; red goes to the arbiter on whether the lattice search returns.",
+     "class": "within",
+     "why": "FR-019, FR-021, FR-022. The exits now restore the rust-gate line the earlier text left out of the re-answered item 6."
     }
    ]
   }

@@ -208,17 +208,22 @@ def triage_bundle(
     seen: dict[str, Any] = {}  # the claims index at each recent commit (`checked_at`)
     for key in keys:
         unit = cur[key].unit
-        if index[key].get("code") != cur[key].code:
+        if key not in index:
+            # ...A CLAIM THE INDEX NEVER HELD UNDER THIS KEY (its module split into a package, feature 444 T32: `overlap/taxonomy.py`
+            # became `overlap/taxonomy/`): no check to diff against, so it is owed in full, as a claim whose own line was rewritten,
+            # and shown with no last verdict
+            forced.add(key)
+        if index.get(key, {}).get("code") != cur[key].code:
             if cur[key].uid not in codes:
-                base = checked_at(root, key, str(index[key].get("code")), seen)
+                base = checked_at(root, key, str(index.get(key, {}).get("code")), seen)
                 codes[cur[key].uid] = (code_hunks(root, unit.path, unit.lineno, unit.end_lineno, base), [])
             codes[cur[key].uid][1].append(key)
             line = cur[key].claim.line.strip()
             added = (x[1:].strip() for h in codes[cur[key].uid][0] for x in h.split("\n") if x.startswith("+"))
             if not codes[cur[key].uid][0] or any(line and line in x for x in added):
                 forced.add(key)  # no diff to read, or the claim's own line rewritten: owed in full (D133)
-        if unit.line_keyed and index[key].get("section") not in (None, unit.core):
-            before = set(store.get(index[key]["section"], []))
+        if unit.line_keyed and index.get(key, {}).get("section") not in (None, unit.core):
+            before = set(store.get(index.get(key, {})["section"], []))
             fresh = [b for b in unit.blocks if ru.digest([b]) not in before]
             now = {ru.digest([b]) for b in unit.blocks}
             missing = before - now
@@ -229,7 +234,7 @@ def triage_bundle(
             got[0].extend(w for w in fresh if w not in got[0])
             got[1].extend(w for d, w in sorted(words.items()) if w not in got[1])
             got[2].append(key)
-        for name, old in dict(index[key].get("pages") or {}).items():
+        for name, old in dict(index.get(key, {}).get("pages") or {}).items():
             fp, blocks = page_blocks(name, qdir, memo)
             if fp == old:
                 continue
@@ -267,7 +272,7 @@ def triage_bundle(
             parts += [f"> {w}\n" for w in lost]
         parts.append("Claims in it:\n")
         for k in sorted(ks):
-            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
+            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index.get(k, {}).get('verdict')}: {index.get(k, {}).get('note', '')}")
         parts.append("")
     for uid, (hunks, ks) in sorted(codes.items()):
         if not hunks:
@@ -275,7 +280,7 @@ def triage_bundle(
         parts.append(f"## {uid} (a unit of code; its diff against origin/main)\n\n```diff\n" + "\n".join(hunks) + "\n```\n")
         parts.append("Claims in it:\n")
         for k in sorted(ks):
-            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
+            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index.get(k, {}).get('verdict')}: {index.get(k, {}).get('note', '')}")
         parts.append("")
     for (name, old), ks in sorted(by_page.items()):
         parts.append(f"## {QUESTIONS}/{name}\n\n(against the version these claims were last checked at, {old[:12]})\n\nNew or changed blocks:\n")
@@ -285,7 +290,7 @@ def triage_bundle(
             parts += [f"> {w}\n" for w in gone[f"{name}|{old}"]]
         parts.append("Claims citing it:\n")
         for k in sorted(ks):
-            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index[k].get('verdict')}: {index[k].get('note', '')}")
+            parts.append(f"- KEY `{k}`: `{cur[k].claim.line}` - last verdict {index.get(k, {}).get('verdict')}: {index.get(k, {}).get('note', '')}")
         parts.append("")
     (out / "MANIFEST.md").write_text("\n".join(parts) + "\n", encoding="utf-8")
     units = {
@@ -293,7 +298,7 @@ def triage_bundle(
             "research": cur[k].research,
             "pages": {ptr.rsplit("/", 1)[1]: page_blocks(ptr.rsplit("/", 1)[1], qdir, memo)[0] for ptr in cur[k].claim.pointers},
             **({"section": cur[k].unit.core} if cur[k].unit.line_keyed else {}),
-            **({"code": cur[k].code, "core": cur[k].unit.core} if index[k].get("code") != cur[k].code else {}),
+            **({"code": cur[k].code, "core": cur[k].unit.core} if index.get(k, {}).get("code") != cur[k].code else {}),
         }
         for k in keys
     }
@@ -321,7 +326,7 @@ def record_triage(
     touched |= {k: "a removed block the history no longer shows" for k in forced if k in units and k not in touched}
     out = dict(index)
     for key, fp in sorted(units.items()):
-        row = dict(out[key])
+        row = dict(out.get(key, {}))  # ...a claim the index never held under its key starts from no row (feature 444 T32)
         if key in touched:
             row["triage"] = "touched"
             msgs.append(f"touched: {key} - {touched[key]}")

@@ -70,12 +70,6 @@ pub const CLEAR_OF_CROP: (f64, f64, usize) = (12.0, 12.0, 24);
 ///     two decks too close - CONVENTION: crossings under 46 ft apart counted
 pub const WATER_RULES: (f64, f64, f64, f64) = (80.0, 42.0, 14.0, 46.0);
 
-/// A polygon sampled along a segment: one sample every 8 ft, at most 900.
-///
-/// Research:
-///     its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 8 (sampling step); 900 (sample cap)
-pub const SAMPLING: (f64, usize) = (8.0, 900);
-
 /// A box (x0, y0, x1, y1).
 pub type Box4 = (f64, f64, f64, f64);
 
@@ -131,12 +125,6 @@ pub fn edge_dist(p: Pt, ring: &[Pt]) -> f64 {
 }
 
 /// Does the segment `a`-`b` pass through the ring: an edge crossed, or a sample along it inside?
-#[expect(
-    clippy::cast_possible_truncation,
-    clippy::cast_sign_loss,
-    clippy::cast_precision_loss,
-    reason = "a sample count of at most 900"
-)]
 #[must_use]
 pub fn crosses_poly(a: Pt, b: Pt, ring: &[Pt], tests: &mut Counts) -> bool {
     let n = ring.len();
@@ -144,13 +132,12 @@ pub fn crosses_poly(a: Pt, b: Pt, ring: &[Pt], tests: &mut Counts) -> bool {
     if (0..n).any(|i| segments_cross(a, b, ring[i], ring[(i + 1) % n])) {
         return true;
     }
-    let (step, cap) = SAMPLING;
-    let k = ((((b.0 - a.0).hypot(b.1 - a.1)) / step) as usize).clamp(2, cap);
-    tests.add("pt_test@crosses_poly", (k + 1) as u64);
-    (0..=k).any(|i| {
-        let f = i as f64 / k as f64;
-        in_poly((a.0 + (b.0 - a.0) * f, a.1 + (b.1 - a.1) * f), ring)
-    })
+    // ...A SEGMENT THAT CROSSES NO EDGE LIES WHOLLY ON ONE SIDE OF THE RING (the track's sixth MODE AUDIT): its ends and its middle
+    // settle which, where a point every 8 ft along it, up to 900, was asked (an end or the middle on an edge itself is the one
+    // case a point test reads either way, and the three points ask it from both ends)
+    tests.add("pt_test@crosses_poly", 3);
+    let m = (f64::midpoint(a.0, b.0), f64::midpoint(a.1, b.1));
+    in_poly(a, ring) || in_poly(m, ring) || in_poly(b, ring)
 }
 
 /// Does the segment `a`-`b` cross the water segment `p`-`q` at under the least angle?

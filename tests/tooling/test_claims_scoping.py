@@ -133,6 +133,20 @@ def test_a_removal_the_history_cannot_show_owes_its_claims_in_full(tmp_path: pat
     assert out[SHARE]["triage"] == "touched" and msgs == [f"touched: {SHARE} - a removed block the history no longer shows"], "an empty reply clears nothing forced"
 
 
+def test_a_claim_the_index_never_held_under_its_key_is_owed_in_full(tmp_path: pathlib.Path) -> None:
+    """Feature 444 T32: a module split into a package moves its claims to new keys, which the index never held - the triage
+    crashed reading their last check; such a claim has nothing to diff against, so it is owed in full."""
+    skill, index, store = _checked(tmp_path)
+    _tree(tmp_path, MOD, PAGE.replace("5 ft", "6 ft"))
+    cur = cx.current(skill)
+    missing = {k: v for k, v in index.items() if k != SHARE}
+    cx.triage_bundle(cur, missing, store, [SHARE], skill / QDIR, tmp_path / "t")
+    data = json.loads((tmp_path / "t" / "triage.json").read_text())
+    assert data["forced"] == [SHARE]
+    out, msgs = cx.record_triage(missing, data["units"], "", "d", data["forced"])
+    assert out[SHARE]["triage"] == "touched" and msgs == [f"touched: {SHARE} - a removed block the history no longer shows"]
+
+
 def test_the_backfill_gives_only_rows_checked_at_todays_research_their_pages(tmp_path: pathlib.Path) -> None:
     skill = _tree(tmp_path, MOD, PAGE)
     cur = cx.current(skill)

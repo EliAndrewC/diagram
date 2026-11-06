@@ -180,6 +180,8 @@ pub fn blocked(
                 .map(|(p, q)| (q.0 - p.0) * (cy - p.1) / (q.1 - p.1 + 1e-9) + p.0)
                 .collect();
             tests.add("pt_test@blocked", n as u64);
+            // ...and each cell of the row's span read against the crossings (the track's sixth MODE AUDIT: uncounted)
+            tests.add("pt_test@blocked_cells", cols.clone().count() as u64);
             xs.sort_by(f64::total_cmp);
             for i in cols.clone().filter(|_| !xs.is_empty()) {
                 let cx = g.x0 + (i as f64 + 0.5) * g.cell;
@@ -443,6 +445,10 @@ pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut Counts) -> Opti
         walls.push((disc, POND_BERTH_FT));
     }
     let (spacing, half, bend, cost) = FORDS;
+    tests.add(
+        "seg_test@on_course",
+        (site.lines.len() * site.course.len().saturating_sub(1)) as u64,
+    );
     let (brook, channels): (Vec<Seg>, Vec<Seg>) =
         site.lines.iter().partition(|&&s| on_course(s, site.course));
     let mut counts = HashMap::new();
@@ -458,6 +464,7 @@ pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut Counts) -> Opti
         .filter(|f| f.1)
         .map(|f| f.0.as_slice())
         .collect();
+    tests.add("pt_test@clear_of_bands", 4 * bands.len() as u64); // at most four rounds over the bands
     let (start, cell) = if bands.is_empty() {
         (start, EXIT_CELL_FT)
     } else {
@@ -471,6 +478,7 @@ pub fn connector_dry_exit(site: &DrySite, start: Pt, tests: &mut Counts) -> Opti
     let walled = blocked(&g, &walls, &[], tests);
     let with = |lines: &[(Pt, Pt)], tests: &mut Counts| {
         let wet = blocked(&g, &[], lines, tests);
+        tests.add("write@fill_grid", 2 * walled.len() as u64); // the water's grid and the merge, a cell each
         let both: Vec<bool> = walled.iter().zip(&wet).map(|(a, b)| *a || *b).collect();
         fill(&g, start, &both, site.canvas, tests)
     };

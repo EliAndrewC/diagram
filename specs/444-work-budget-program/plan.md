@@ -811,7 +811,7 @@ at the landing; glyph-check only if a glyph is redrawn (none: the wells, byres, 
 - **Approach**: what the stage decides - each grove farm's own water (its channel or its well), the communal wells of the rolled
   siting among the houses (the cluster form now; the lane-side form beside the track out, the rest after the lanes), and each
   retirement house off its farmhouse's back or flank - goes to Rust, reading what the door gathers (the houses as seated, the
-  free ground, the registry's pieces near the cluster, the water, the crop's box, the reserved wood seats, the belt's footprint);
+  free ground, the registry's pieces near the cluster, the water, the crop's box, the reserved wood seats - no belt footprint, D6);
   the door draws what the seating reserved (the byres, the fixtures) and each well and retirement house the Rust seats.
 
 ### T33 Decisions
@@ -838,11 +838,58 @@ at the landing; glyph-check only if a glyph is redrawn (none: the wells, byres, 
 5. **The order.** After the track, before the pond stock, as today.
 6. **The exits.** Green: `make rust-gate` with no failing seed through the stage; MODE AUDIT WITHIN or LEEWAY; the claims round
    IN-STEP; `phases/appurtenances.md`'s boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** A ranked lattice of well seats, each asked the engine's verdict in order, the first admitted drawn.
+7. **The search smell.** A ranked list of well seats from the gaps between each group's houses (D5) and the track's verges (D7a),
+   each asked the engine's verdict in order, the first admitted drawn.
 8. **The budget.** One landing.
 9. **Done, measured.** `make work-budget`'s count for the stage at 40 and 80 against its budget.
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
+
+### T33 Approach (re-answered 2026-11-06T08:04Z)
+
+The stage counts 145,889 to 317,054 at 40, measured 2026-11-06 (`make work-budget`, the reference rolls), against the
+713 pinned, and 38,000 to 213,000 of it is one question, the windbreak belt's polygon built in the well seating so a seat inside
+it is ranked last (`seat_wells`, `hinterland.belt_polygon`'s crop test, `RingIndex.inside_many`); the rest the lattice sweep's
+distance tables and the registry's records. The greenfield's seat - a corner four seated lots share on the lots' lattice - is not
+the ground the Rust seating lays: its households are seated on the free ground's cells (`place.rs`), not on a lattice of lots,
+so no shared corner is read. The seat search is rebuilt to the derivation's other parts instead:
+
+- **D5 - the cluster form's seats from the houses** (0196, the greenfield's groups): the households a communal well owes
+  (`needy`, as today) cut into `well_target` groups by halving the longer side at its median; each group's candidate seats the
+  gaps between its houses - the middle of the open ground between each pair of the group's houses whose walls stand within
+  twice `WELL_SEAT_FT` of each other (GUESS: 0196's 80 ft seat doubled) - ranked by the neighborhood ladder's rung (the fifth-nearest house within 190, 300, 520
+  px, a GUESS of `seat_cluster`'s, then 0196's 760 ft; three then two where fewer than five need it) and then by the distance to the group's middle; each
+  asked in that order: off a lane's verge (`on_a_verge`), off the reserved wood floor, inside the crop's box, 170 px off a
+  standing well (a GUESS of `seat_wells`'), and the engine's `well_at` (D2), the first admitted drawn. In Rust (`homesteads/wells.rs`): the groups, the
+  candidates and their order; the door asks the verdicts. Labeled: the groups the greenfield's (0196's one well to about ten);
+  the gap's middle a GUESS (no page says where among the houses), a seat between two houses, which is open ground at a
+  dwelling's wall by construction.
+- **D6 - no belt polygon in the seating**: a seat in the gap between two of a group's houses stands inside the house cloud, and
+  the belt's near face stands `BELT_NEAR_FT` (36 ft, a GUESS on 0071) behind the windward fringe, so no such seat lies in the belt (0072: "not in
+  the windbreak", a preference the current ranking keeps by sorting belt seats last) - held by a check on the finished map
+  (a well inside the drawn belt counted), not by building the belt here. Deviation recorded: the ranking's minimax walk (a GUESS,
+  `PoolScore`) gives way to the groups' halving, which bounds each well's households near ten by construction (0196).
+- **D7a - the lane-side form beside the track in Rust, this landing** (spec-fidelity's ruling on the 2026-11-06T08:04Z blocks):
+  its candidates the track's verges - points along the track out at its tread's half-width and `WELL_VERGE_FT` either side -
+  grouped as D5's are and ranked by the distance to their group's middle, asked in that order by the door as D5's are (the
+  engine's `well_at`, D2); no belt polygon (D6). `stage_lane_wells` keeps its own Python copy of `seat_wells` until its phase.
+- **D7b - the grove farms' water and the retirement houses, as the Rust decides them**: each grove farm's well pocket is the Rust
+  seating's (`homesteads/bundle.rs`, T30), drawn here; the shared row wells' seats (`shared_row_wells`: a mark at the middle of
+  each stretch of at most 1.6 reaches, then a half and a quarter lot either way, either side of the tread) and the dispersed
+  channel form's channels (`farm_water.farm_channels`) are decided in Rust this landing (`homesteads/wells.rs`,
+  `homesteads/farm_water.rs`), the door drawing what they return; each keeper's retirement house is the Rust seating's
+  (`Kind::Retirement`, its lots' quota, T30), drawn here.
+- **D7c - the retirement search for a settlement whose seating laid none**: reachable - it runs where no plain house carries a
+  fixture and the family form is `retirement_house`, and seats one house where the seating's share rounded to none (its
+  `max(1, ...)`). Ported, not dropped: the floor of one keeper moves into the Rust lots' quota (`Lots::deal`, the retirement
+  kind's carriers at least one where its share is above nothing), so the seating decides every retirement house and the
+  Python search is deleted with nothing left that reaches it (`make dead-closure` recorded at the landing).
+
+6. **The exits.** As above (T33's checklist part A item 6: `make rust-gate` with no failing seed through the stage, the claims
+   round IN-STEP), and: the cohort's 0196 checks (`settlement_has_wells`, `wells_among_dwellings` and the households a well serves)
+on the Rust stage gate's seeds; a well in a drawn belt counted and none found; MODE AUDIT WITHIN or LEEWAY against a re-derivation
+that prices the candidates asked (`## Work the first derivation missed`). Red: a seed whose wells the groups cannot seat recorded,
+and `make arbiter-ask` on whether the lattice search returns; a claim that it cannot be done ruled through `make arbiter-ask`.
 
 - research: rendering
 

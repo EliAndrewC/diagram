@@ -574,6 +574,10 @@ pub fn connector_ways(
     // the squaring drops stands near enough a band for its leg to cut one
     if squared.is_some() {
         let reach = BENDS.2 / 2.0 + 1.0 + LEG_PAD_FT;
+        tests.add(
+            "write@grown_bands",
+            dry.fabric.iter().map(|f| f.0.len() as u64).sum(),
+        );
         let wide: Vec<(Vec<Pt>, bool)> = dry
             .fabric
             .iter()
