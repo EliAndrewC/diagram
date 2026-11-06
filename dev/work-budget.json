@@ -42,9 +42,9 @@
    "exponent": 0.25,
    "derivation": "specs/444-work-budget-program/phases/sink_greenfield.derivation.md",
    "verdict": "specs/444-work-budget-program/phases/sink_greenfield.verdict-3.txt",
-   "items_at_20": 850,
-   "items_at_40": 1000,
-   "items_at_80": 1200,
+   "items_at_20": 1967,
+   "items_at_40": 2107,
+   "items_at_80": 2316,
    "first": {
     "20": 101.0,
     "40": 149.0,
@@ -62,10 +62,10 @@
    "per_thing": 1.0,
    "exponent": 0.2,
    "derivation": "specs/444-work-budget-program/phases/seat_greenfield.derivation.md",
-   "verdict": "specs/444-work-budget-program/phases/seat_greenfield.verdict-1.txt",
-   "items_at_20": 167,
-   "items_at_40": 191,
-   "items_at_80": 221
+   "verdict": "specs/444-work-budget-program/phases/seat_greenfield.verdict-11.txt",
+   "items_at_20": 28082,
+   "items_at_40": 40741,
+   "items_at_80": 60754
   },
   "hem": {
    "status": "accepted",

@@ -51,6 +51,31 @@ So: homesteads x (13.25 x 1), plus the cuts and the cluster wells.
 
 From 20 to 80 households the stage grows at an exponent of about 1.04: the records a homestead and the wells ten households each, the cuts n log k.
 
+## Work the first derivation missed
+
+Measured 2026-11-06 on the reference roll after T33's rebuild (`make work-budget`): 9,325 / 15,731 / 20,303 / 37,084 at 10 / 20 /
+40 / 80, 28.5x the first pin at 40, exponent 0.62. The first derivation seated a well at a corner four lots share, clear by
+construction, and wrote the registry without asking it; the rebuilt stage (T33 D2, D5, D7a) draws what the Rust seating laid and
+asks each well's seat the engine's verdict, and the first derivation priced none of these (each figure the mean of the 4 rolls at
+40):
+
+- each drawn record filed in the registry and asked of what stands first (`Standing`): its cells read and written (about 2,900),
+  its entries examined (about 1,100), the extents and the crossing and inside tests on what they hand back (about 1,850) - about
+  5,800 for some 180 records at 40 (the first derivation's 13.25 a homestead wrote them and asked nothing)
+- the reserved wood seats asked of each fixture along its strip (`toe_band`: about 880)
+- which households open water already waters (0196: a household within the reach of open water owes no well): each house asks the
+  water's segments within 760 ft of it, a reach most of the map wide - about 90 segments a house, 6,100 examined and 3,700
+  distances at 40; the segments are distinct (deduplicated since, 3,784 to 3,722) and cells as wide as the reach handed back more,
+  not fewer (26,999 at 40, tried and reverted)
+- the lane-side form's seats (D7a), the reference's form at even odds: about 600 verge points either side of the track, each its
+  house cells read (about 2,450, cells twice the gap across) and its rung asked (about 470) - every seat asked once, whichever group
+  ranks it
+- a row village's shared wells (0033) and each grove farm's channel (0031): forms the nucleated reference never rolls, so 0 at the
+  reference sizes
+
+A budget that holds this is past ten times the first pin: the GM's words (FR-022), asked at the end of the port with the other
+raises.
+
 ## Earlier findings
 
 - verdict-1, finding 1: fixed - the well's seat is a corner four seated lots share, clear of every farmstead, every water and the field by construction, so no candidate is refused and none tested

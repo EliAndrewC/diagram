@@ -12,6 +12,8 @@
     reason = "counts of a few dozen houses and seats"
 )]
 
+use std::collections::HashMap;
+
 use crate::counts::Counts;
 use crate::field::fan::Pt;
 use crate::field::geom::{dist, seg_dist};
@@ -141,6 +143,7 @@ pub fn cluster_seats(c: &Cluster, tests: &mut Counts) -> Vec<Vec<Pt>> {
     let owed: Vec<usize> = (0..c.houses.len()).filter(|&i| c.needy.get(i).copied().unwrap_or(true)).collect();
     let owed = if owed.is_empty() { (0..c.houses.len()).collect() } else { owed };
     let pts: Vec<Pt> = owed.iter().map(|&i| centers[i]).collect();
+    let cells = HouseCells::new(c.houses, c.gap);
     groups(&pts, c.want.max(1), tests)
         .into_iter()
         .map(|g| {
@@ -172,25 +175,83 @@ pub fn cluster_seats(c: &Cluster, tests: &mut Counts) -> Vec<Vec<Pt>> {
                     seats.push((e.0 + ux * c.gap / 2.0, e.1 + uy * c.gap / 2.0));
                 }
             }
-            rank(&seats, &centers, c, mid, tests)
+            rank(&marks(&seats, &centers, c, &cells, tests), mid)
         })
         .collect()
 }
 
-fn rank(seats: &[Pt], centers: &[Pt], c: &Cluster, mid: Pt, tests: &mut Counts) -> Vec<Pt> {
-    let mut kept: Vec<(usize, f64, Pt)> = Vec::new();
+/// The houses filed by their boxes in cells twice the gap across, once: a seat asks only the houses filed in the cells its gap
+/// overlaps - at most four - the only ones whose wall can stand within the gap of it (the audit, T33 - every seat once walked
+/// every house, and the field's 64 ft cells asked a dozen a seat).
+struct HouseCells {
+    cell: f64,
+    cells: HashMap<(i64, i64), Vec<usize>>,
+}
+
+impl HouseCells {
+    fn new(houses: &[House], gap: f64) -> Self {
+        let cell = (2.0 * gap).max(1.0);
+        let mut cells: HashMap<(i64, i64), Vec<usize>> = HashMap::new();
+        for (i, &h) in houses.iter().enumerate() {
+            let q = corners(h);
+            let (lo, hi) = q.iter().fold(
+                ((f64::INFINITY, f64::INFINITY), (f64::NEG_INFINITY, f64::NEG_INFINITY)),
+                |(lo, hi), p| ((lo.0.min(p.0), lo.1.min(p.1)), (hi.0.max(p.0), hi.1.max(p.1))),
+            );
+            for cx in at(lo.0, cell)..=at(hi.0, cell) {
+                for cy in at(lo.1, cell)..=at(hi.1, cell) {
+                    cells.entry((cx, cy)).or_default().push(i);
+                }
+            }
+        }
+        Self { cell, cells }
+    }
+
+    /// The houses filed in the cells the box `p` +- `r` overlaps (each once), and the cells asked.
+    fn near(&self, p: Pt, r: f64) -> (Vec<usize>, u64) {
+        let (mut out, mut asked) = (Vec::new(), 0);
+        for cx in at(p.0 - r, self.cell)..=at(p.0 + r, self.cell) {
+            for cy in at(p.1 - r, self.cell)..=at(p.1 + r, self.cell) {
+                asked += 1;
+                if let Some(ids) = self.cells.get(&(cx, cy)) {
+                    out.extend_from_slice(ids);
+                }
+            }
+        }
+        out.sort_unstable();
+        out.dedup();
+        (out, asked)
+    }
+}
+
+#[expect(clippy::cast_possible_truncation, reason = "a map's cells number a few hundred either way")]
+fn at(v: f64, cell: f64) -> i64 {
+    (v / cell).floor() as i64
+}
+
+/// Each seat within the gap of a dwelling's wall and inside no house, with its rung on the ladder; a seat on no rung dropped.
+fn marks(seats: &[Pt], centers: &[Pt], c: &Cluster, cells: &HouseCells, tests: &mut Counts) -> Vec<(usize, Pt)> {
+    let mut kept = Vec::new();
     for &p in seats {
-        tests.add("dist@cluster_walls", c.houses.len() as u64);
-        let walls = c.houses.iter().map(|&h| wall_dist(h, p)).fold(f64::INFINITY, f64::min);
+        let (near, asked) = cells.near(p, c.gap);
+        tests.add("index_cell@house_cells", asked);
+        tests.add("dist@cluster_walls", near.len() as u64);
+        let walls = near.iter().map(|&i| wall_dist(c.houses[i], p)).fold(f64::INFINITY, f64::min);
         if walls <= 0.0 || walls > c.gap {
             continue;
         }
         if let Some(r) = rung(p, centers, c.rungs, tests) {
-            kept.push((r, dist(p, mid), p));
+            kept.push((r, p));
         }
     }
-    kept.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.total_cmp(&b.1)));
-    kept.into_iter().map(|k| k.2).collect()
+    kept
+}
+
+/// The seats kept, ranked by their rung and then their distance to the group's middle.
+fn rank(kept: &[(usize, Pt)], mid: Pt) -> Vec<Pt> {
+    let mut k: Vec<(usize, f64, Pt)> = kept.iter().map(|&(r, p)| (r, dist(p, mid), p)).collect();
+    k.sort_by(|a, b| a.0.cmp(&b.0).then(a.1.total_cmp(&b.1)));
+    k.into_iter().map(|k| k.2).collect()
 }
 
 /// The lane-side form's seats beside the track out: points along it every `step`, `off` either side of its line, grouped and
@@ -216,11 +277,13 @@ pub fn verge_seats(c: &Cluster, track: &[Pt], (off, step): (f64, f64), tests: &m
     let owed: Vec<usize> = (0..c.houses.len()).filter(|&i| c.needy.get(i).copied().unwrap_or(true)).collect();
     let owed = if owed.is_empty() { (0..c.houses.len()).collect() } else { owed };
     let pts: Vec<Pt> = owed.iter().map(|&i| centers[i]).collect();
+    // ...each seat's walls and rung asked once, whichever group it ranks for
+    let kept = marks(&seats, &centers, c, &HouseCells::new(c.houses, c.gap), tests);
     groups(&pts, c.want.max(1), tests)
         .into_iter()
         .map(|g| {
             let g: Vec<usize> = g.into_iter().map(|j| owed[j]).collect();
-            rank(&seats, &centers, c, middle(&centers, &g), tests)
+            rank(&kept, middle(&centers, &g))
         })
         .collect()
 }

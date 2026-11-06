@@ -806,7 +806,8 @@ def surface_water_within(M: Any, x: float, y: float, reach: float, index: Any) -
     """Is `surface_water_dist(M, x, y) <= reach`, asked of `index` - a `PointGrid` of `water_lines(M)`'s segments as
     `(a, b, x0, y0, x1, y1)` - instead of every segment (feature 314: a seat search asks it of every seat it lays out, and the
     scan was 400,000 distances on one map)? The same distances decide; the index only leaves out the segments too far to."""
-    if any(seg_dist(x, y, it[0], it[1]) <= reach for it in index.near(x, y, reach)):
+    # ...each segment once, though filed in every cell it crosses (the appurtenances' audit, T33: one in three handed back twice)
+    if any(seg_dist(x, y, it[0], it[1]) <= reach for it in {id(it): it for it in index.near(x, y, reach)}.values()):
         return True
     pond = M.get("pond")
     return bool(pond) and abs(math.hypot(x - pond[0], y - pond[1]) - max(pond[2], pond[3])) <= reach
