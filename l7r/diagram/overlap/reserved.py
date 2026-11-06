@@ -213,6 +213,8 @@ class Reservations:
         """Give up every seat a way along `pts`, `width` wide, comes within the lane buffer of (the connector's last resort,
         `track.connector_through`); returns them."""
         gap = width / 2.0 + self.lane_buffer
+        if __debug__:  # every seat against every leg (feature 444 T32's third audit: uncounted)
+            OPS["dist@Reservations.release_seats_along"] += len(self.seats) * max(len(pts) - 1, 0)
         gone = [(sx, sy) for sx, sy in self.seats if any(seg_dist(sx, sy, (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) < gap for a, b in zip(pts, pts[1:], strict=False))]
         if gone:
             keep = [p for p in self.seats if p not in set(gone)]
@@ -236,6 +238,8 @@ class Reservations:
             its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - 12 (keep-out polygon sides)
         """
         r = self.lane_buffer if reach is None else reach
+        if __debug__:  # each seat's polygon, a corner a point (feature 444 T32's third audit: uncounted)
+            OPS["write@Reservations.seat_walls"] += sides * len(self.seats)
         return [
             [(sx + r * math.cos(2 * math.pi * k / sides) / math.cos(math.pi / sides), sy + r * math.sin(2 * math.pi * k / sides) / math.cos(math.pi / sides)) for k in range(sides)]
             for sx, sy in self.seats

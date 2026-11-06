@@ -216,6 +216,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
                 "fords": [pt(f) for f in getattr(s, "brook_fords", ()) or ()],
             }
         )
+        OPS["write@row_road_inputs"] += 2 * len(houses)  # each house read for its farm and its frame (T32's third audit)
         got = phases().row_road_runs(inputs)
         for k, n in got["counts"].items():  # the Rust's counted work on the stage's (feature 444 D5)
             OPS[k] += n

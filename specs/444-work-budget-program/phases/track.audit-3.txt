@@ -1,0 +1,3 @@
+UNCOUNTED - `Standing.forbidding`'s scan of every extent on the map (registry.py:428, then `reserved.seat_walls()`) has no counter, reached from two branches of the stage: the row road (`track_inputs`) and the dry-exit fallback. Within budget otherwise: 371 at 40 against 443 (0.84), 313 at 80 against 626.
+
+(Also: `law.solid_boxes`, the door's loop over every house for the farms and frames, and `release_seats_along` uncounted on those branches; `_shape_cells` counts a row once where every edge walks every row it spans; `choose_track_out`'s modules carry no counters, possibly unreachable since the homesteads record the track out.)

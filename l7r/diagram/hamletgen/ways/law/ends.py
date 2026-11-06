@@ -261,6 +261,8 @@ def solid_boxes(M: Mapping[str, Any]) -> list[tuple[float, float, float, float]]
     """The axis boxes of the buildings a lane may not run through: houses, farm sheds and byres."""
     solid = []
     for key in ("houses", "farm_sheds", "byres"):
+        if __debug__:  # each building read (feature 444 T32's third audit: uncounted)
+            OPS["write@solid_boxes"] += len(M.get(key) or [])
         for r in M.get(key) or []:
             if "x" in r and "w" in r:
                 hw, hh = r["w"] / 2, r["h"] / 2

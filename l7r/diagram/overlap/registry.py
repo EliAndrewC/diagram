@@ -302,19 +302,21 @@ class Standing:
         gx0, gx1 = int(cb[0] // CELL), int(cb[2] // CELL)
         span: dict[int, list[float]] = {}
         n = len(pts)
+        rows_walked = 0
         for k in range(n):
             (ax, ay), (bx, by) = pts[k], pts[(k + 1) % n]
             lo, hi = max(min(ay, by), cb[1]), min(max(ay, by), cb[3])
             if hi < lo:
                 continue
             for gy in range(int(lo // CELL), int(hi // CELL) + 1):
+                rows_walked += 1
                 # the edge's x where it crosses the row's two bounds (or its ends, inside the row)
                 y0, y1 = max(gy * CELL, lo), min((gy + 1) * CELL, hi)
                 xs = (ax, bx) if by == ay else (ax + (bx - ax) * (y0 - ay) / (by - ay), ax + (bx - ax) * (y1 - ay) / (by - ay))
                 row = span.setdefault(gy, [math.inf, -math.inf])
                 row[0], row[1] = min(row[0], *xs), max(row[1], *xs)
-        if __debug__:  # each edge walked over the rows it spans (the cells written are counted by their callers)
-            OPS["index_cell@Standing.rows"] += sum(1 for _ in span) + n
+        if __debug__:  # each edge walked over every row it spans, and each edge (the cells written are counted by their callers)
+            OPS["index_cell@Standing.rows"] += rows_walked + n
         out: list[tuple[int, int]] = []
         for gy in sorted(span):
             if not gy0 <= gy <= gy1:
@@ -425,6 +427,8 @@ class Standing:
         """Every standing extent the matrix forbids a record of `key` - one naming no parent - to lie on: the walls a
         router threads a new way between, read from the same predicate a record is refused by (`pair_permitted`)."""
         probe: Extent = (key, [], None, None)
+        if __debug__:  # every standing extent asked (feature 444 T32's third audit: uncounted)
+            OPS["index_examined@Standing.forbidding"] += len(self._ext)
         out = [e for e, _b, _cb in self._ext.values() if not pair_permitted(probe, e, self.priv)]
         if key == "lanes":  # ...and the reserved wood seats a way keeps its buffer off (`Reservations.seat_walls`)
             out += [("wood seat", w, None, None) for w in self.reserved.seat_walls()]
