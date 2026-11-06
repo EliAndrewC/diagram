@@ -19,8 +19,9 @@ re-derivation prices it (T30 D1), and the work below added under "Work the first
 ## The algorithm
 
     the recorded track written as the connector: its points (1 each)
-    filed in the registry: each segment's ribbon, 4 corners (4 each); each segment's box binned in every 120 ft cell the box
-        covers (x^2 / pi + 4x / pi + 1 for a segment x cells long at a random bearing)
+    filed in the registry: each segment's ribbon, 4 corners (4 each); asked of what stands first - its cells read, their entries
+        examined - and filed in the cells its outline meets (its 4 edges walked over the rows they span), once for the question's
+        own bins and once at the filing; the reserved wood seats asked along each segment's strip, each seat in its cells measured
     a row village only: the street's span - each farm's nearest street segment from the street's cells (a 64 ft grid of its
         segments, the farm's cell and its 8 neighbors), its projection, the span's ends drawn in short of the brook (its
         crossings with the street, the brook's legs in the street's cells); each end's run to the sheet's edge (2); the ford
@@ -38,29 +39,35 @@ re-derivation prices it (T30 D1), and the work below added under "Work the first
 | items | per item | 1 | the connector, once a map | always 1 |
 | the points written | per item | 4 | the recorded track's 4 points, measured at 20; its legs do not grow with the households (one leg out, threaded round the cluster's edge) | always 4 |
 | the ribbons (corners written) | per item | 12 | 3 segments, 4 corners each | always 12 |
-| the overlap registry's cells (cells written) | per item | 149 at 20, 232 at 40, 461 at 80 | each of the 3 segments' boxes binned in every 120 ft cell it covers: a segment x = (length / 3) / 120 cells long at a random bearing covers x^2 / pi + 4x / pi + 1 cells (its box's mean area plus its edges' strips); x = 10.5, 13.6, 20.0 at 20, 40, 80 gives 49.7, 77.3, 153.8 a segment | a track across the view's diagonal |
+| the overlap registry's cells (cells written) | per item | 86 at 20, 110 at 40, 158 at 80 | each of the 3 segments' ribbon filed in the cells its outline meets, a strip x = (length / 3) / 120 cells long at a random bearing meeting x 4 / pi + 1 cells (43, 55, 79), written twice - the question's own bins and the filing | a track across the view's diagonal |
+| the overlap registry's rows (cells examined) | per item | 35 at 20, 41 at 40, 53 at 80 | each segment's 4 edges walked over the rows they span, x 2 / pi + 1 rows a segment, and its 4 edges (12) | a track across the view's diagonal |
+| the overlap registry's conflicts (cells examined) | per item | 43 at 20, 55 at 40, 79 at 80 | the record asked of what stands, each of its cells read once | always |
+| the overlap registry's entries (cells examined) | per item | 155 at 20, 198 at 40, 284 at 80 | each cell read hands back its entries: a way leaving the cluster crosses 1.9 cells of 64 ft a 120 ft cell, each with the mean 1.94 ways' legs a crossed 64 ft cell (`items.md`), 3.6 a cell | a track through the cluster's fabric |
+| the reserved seats' cells (cells examined) | per item | 43 at 20, 55 at 40, 79 at 80 | each segment's strip, its gap either side, read for the wood seats reserved in it: the strip's cells as the ribbon's | always |
+| the reserved seats measured | per item | 22 at 20, 28 at 40, 40 at 80 | the copse seats in the strip's cells, about one in two cells: the seats stand behind the houses, the track leaves from their front | a track past a grove |
 | a row street's segments' cells (cells examined) | per item | 0 | the reference roll is nucleated and lays no row road; a row village's farms each ask their cell and its 8 neighbors | a row village: its farms x 9 |
 | slack | per item | 1 | every factor is a length or a count of the reference rolls' input | not applicable |
 
-So: 1 x (4 + 12 + the overlap registry's cells + a row street's segments' cells) x 1.
+So: 1 x (4 + 12 + the overlap registry's cells + its rows + its conflicts + its entries + the reserved seats' cells + the seats measured + a row street's segments' cells) x 1.
 
 Not priced, and why: the driver's backstop over the whole map (every record re-read against what the registry holds) runs after
 no stage rebuilt in Rust (feature 444 T26 D3), so it is not this stage's work once the track is.
 
 ## Totals
 
-- at 20: 1 x (4 + 12 + 149 + 0) x 1 = 165
-- at 40: 1 x (4 + 12 + 232 + 0) x 1 = 248
-- at 80: 1 x (4 + 12 + 461 + 0) x 1 = 477
+- at 20: 1 x (4 + 12 + 86 + 35 + 43 + 155 + 43 + 22 + 0) x 1 = 400
+- at 40: 1 x (4 + 12 + 110 + 41 + 55 + 198 + 55 + 28 + 0) x 1 = 503
+- at 80: 1 x (4 + 12 + 158 + 53 + 79 + 284 + 79 + 40 + 0) x 1 = 709
 
 ## Growth
 
-The registry's cells grow with the square of the track's length (each segment's box), its length x1.47 a doubling past 20: exponent about 0.78 from 20 to 80.
+Every registry term grows with the track's length (each piece filed along its outline since T32), x1.29 from 20 to 40 and x1.47 from 40 to 80: exponent about 0.41 from 20 to 80.
 
 ## Work the first derivation missed
 
-- the registry's record of the connector - each segment's ribbon of 4 corners and its box binned in the registry's 120 ft cells
-  (the first derivation filed the legs in a ways index and priced no registry)
+- the registry's record of the connector - each segment's ribbon of 4 corners filed in the cells its outline meets, the record
+  asked of what stands first (its cells read, their entries examined), and the reserved wood seats asked along its strip (the
+  first derivation filed the legs in a ways index and priced no registry)
 - a row village's road (0033, 0035): the street's span, each end's run off the sheet, the ford, the thread and the squaring - a
   form the nucleated reference never rolls, so its factor is 0 at the reference sizes; for a row village, its farms each ask 9
   cells of the street's grid, its two runs 2 points each, the fords 2 each and the brook's legs once, threaded and squared as
@@ -82,10 +89,16 @@ The registry's cells grow with the square of the track's length (each segment's 
 - verdict-3, finding 3: fixed - the row road at 0 for the nucleated reference, its stated form under "Work the first derivation missed" (a row village's farms each 9 cells, its runs, fords and legs), priced when a row roll joins the manifest
 - verdict-3, finding 4: fixed - the driver's stage-end backstop: not this stage's, and not run after it - the driver walks the manifest after no stage rebuilt in Rust (feature 444 T26 D3), and the track is one since T32
 
+- verdict-4, finding 1: fixed - SOUND, its registry row replaced by the registry's work as it now does it (T32's outline binning)
+- verdict-4, finding 2: fixed - the binning rule named the registry's in "Cheaper algorithms considered", and changed there at T32 for every placer
+- verdict-4, finding 3: fixed - the growth states x1.29 from 20 to 40 and x1.47 from 40 to 80
+- audit-1 (OVER, 11.0x), finding 1: fixed - the registry files a piece in the cells its outline meets (T32), its record's check and the reserved seats' strip priced above as the registry does them
+- audit-1, finding 2 (the reserved seats' cells uncounted): fixed - counted where they are read, and priced above
+
 ## Cheaper algorithms considered
 
 - sweep: not applicable - one lane written.
-- the registry's binning: its rule (each box in every cell it covers) is the shared index's, not this stage's; filing only the cells a segment crosses would cut it to about 70 at 40, a change to the registry for every placer
+- the registry's binning: the shared index's rule, not this stage's - since T32 a piece is filed in the cells its outline meets, not its box's, for every placer
 - grid or spatial index: used - the registry's 120 ft cells; the row road's farms ask a 64 ft grid of the street's segments.
 - priority queue: not applicable.
 - incremental update: used - the track is chosen once, at the homesteads, and drawn here as chosen.
