@@ -764,3 +764,47 @@ keeps its ink).
 
 - research: rendering
 
+
+### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: "please take this entire feature to completion"; FR-003-FR-006, FR-017, FR-022)
+
+Occasions: settlement-review on the pool hamlets the stage moves (a communal well seated a seat off moves the lanes laid round it),
+at the landing; glyph-check only if a glyph is redrawn (none: the wells, byres, fixtures and retirement houses keep their ink).
+
+- **Approach**: what the stage decides - each grove farm's own water (its channel or its well), the communal wells of the rolled
+  siting among the houses (the cluster form now; the lane-side form beside the track out, the rest after the lanes), and each
+  retirement house off its farmhouse's back or flank - goes to Rust, reading what the door gathers (the houses as seated, the
+  free ground, the registry's pieces near the cluster, the water, the crop's box, the reserved wood seats, the belt's footprint);
+  the door draws what the seating reserved (the byres, the fixtures) and each well and retirement house the Rust seats.
+
+### T33 Decisions
+
+- **D1 - the seam** (FR-003 to FR-005, FR-017): the stage's decisions in Rust behind a thin `homesteads/stages.py`
+  `stage_appurtenances` door, its output what the stage writes today; the Python seat searches only the stage reached deleted in
+  the same landing (the lane-side wells' later seating stays with `stage_lane_wells` until its own phase).
+- **D2 - every rule asked before a well stands** (S4): a seat's verdict is the engine's (`well_at`: off the water, the hard
+  ground, every lane, the registry's pieces, the canvas), asked of the Rust's candidates in its ranking's order before the seat
+  is drawn; nothing drawn is moved or dropped.
+- **D3 - the budget** (FR-022): the stage's greenfield derivation (`phases/appurtenances_greenfield.derivation.md`, SOUND at
+  713 at 40) is the pin every FR-022 line reads; work it missed is priced under its `## Work the first derivation missed` and
+  raised by `make budget-set RAISE=1`, never squeezed.
+- **D4 - the counters** (FR-012): one key a derivation row, `<kind>@<row>`.
+
+### T33 Approach (checklist part A)
+
+1. **The goal, in the world.** Every household watered (a grove farm from its own channel or well, the rest from a shared well
+   among them, 0196), the byres and fixtures where the seating laid them, the retirement houses beside their farmhouses (0004).
+2. **The constraints.** FR-003 to FR-006, FR-012, FR-017, FR-019 to FR-022; 0004, 0028, 0048, 0072, 0196; D1's seam.
+3. **Where each comes from.** G: the GM's request of 2026-11-04 and amendment 7. R: the pages above. O: the stage today.
+4. **Do they describe the world here?** The reference roll (nucleated, the cluster form) and the Rust stage gate's fresh blocks
+   and pinned rows (the lane-side form, the grove farms).
+5. **The order.** After the track, before the pond stock, as today.
+6. **The exits.** Green: `make rust-gate` with no failing seed through the stage; MODE AUDIT WITHIN or LEEWAY; the claims round
+   IN-STEP; `phases/appurtenances.md`'s boxes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** A ranked lattice of well seats, each asked the engine's verdict in order, the first admitted drawn.
+8. **The budget.** One landing.
+9. **Done, measured.** `make work-budget`'s count for the stage at 40 and 80 against its budget.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+- research: rendering
+

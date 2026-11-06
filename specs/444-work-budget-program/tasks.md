@@ -112,6 +112,8 @@
       research: rendering
 - [ ] T32 phase: track - a row village's road run on off the map at both ends over a ford, threaded and squared, rebuilt in Rust; every other form's track out drawn as the homesteads chose it (FR-003-FR-006, FR-017, FR-022)
       research: rendering
+- [ ] T33 phase: appurtenances - each grove farm's own water, the communal wells of the rolled siting among the houses and each retirement house off its farmhouse, rebuilt in Rust to its greenfield derivation; the byres and fixtures drawn where the seating laid them (FR-003-FR-006, FR-017, FR-022)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
