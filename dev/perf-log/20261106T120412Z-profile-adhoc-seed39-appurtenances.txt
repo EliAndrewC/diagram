@@ -1,0 +1,36 @@
+perf-profile seed 39 stage appurtenances: 0.0s under cProfile (the stages before it took 2.4s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261106T120412Z-seed39-hh40-appurtenances.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         107508 function calls (105098 primitive calls) in 0.038 seconds
+
+   Ordered by: cumulative time
+   List reduced from 284 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.039    0.039 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/stages.py:596(stage_appurtenances)
+        1    0.000    0.000    0.023    0.023 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/fixtures.py:293(farmstead_fixtures)
+        1    0.000    0.000    0.023    0.023 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/fixtures.py:329(_draw_laid)
+      156    0.001    0.000    0.021    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/fixtures.py:376(draw_laid_fixture)
+      173    0.000    0.000    0.019    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:675(append)
+      173    0.000    0.000    0.018    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:464(record)
+      123    0.001    0.000    0.018    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/farm_fixtures.py:155(farm_fixture)
+      173    0.001    0.000    0.016    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:332(conflicts)
+        1    0.000    0.000    0.013    0.013 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells/seating.py:45(place_wells)
+        1    0.000    0.000    0.012    0.012 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells/seating.py:96(seats_in_rust)
+      140    0.001    0.000    0.009    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/reserved.py:163(conflicts)
+      196    0.001    0.000    0.006    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/reserved.py:55(poly_seg_gap)
+        1    0.001    0.001    0.006    0.006 /diagram/.clones/diagram-backlog/l7r/diagram/hamletgen/homesteads/wells/core.py:295(watered_by_open_water)
+18170/15818    0.002    0.000    0.006    0.000 {built-in method builtins.min}
+        3    0.000    0.000    0.005    0.002 {built-in method builtins.next}
+        6    0.004    0.001    0.005    0.001 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/indexes.py:265(extend)
+        2    0.000    0.000    0.005    0.003 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/shrines_wells/wellground.py:64(frozen_terrain)
+        1    0.000    0.000    0.005    0.005 /usr/lib/python3.14/contextlib.py:136(__enter__)
+        1    0.001    0.001    0.005    0.005 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/shrines_wells/wellground.py:26(_build_well_index)
+      280    0.003    0.000    0.004    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/overlap/registry.py:293(_shape_cells)
+     3383    0.001    0.000    0.004    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:75(seg_dist)
+        1    0.000    0.000    0.003    0.003 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/shrines_wells/byres.py:419(draft_byres)
+       40    0.000    0.000    0.003    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/land/wet.py:805(surface_water_within)
+     3383    0.002    0.000    0.002    0.000 /diagram/.clones/diagram-backlog/l7r/diagram/settlement/_geom/primitives.py:64(seg_closest)
+    17438    0.002    0.000    0.002    0.000 {built-in method builtins.max}
+
+

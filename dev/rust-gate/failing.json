@@ -1,1 +1,18 @@
-[]
+[
+ {
+  "seed": 321512,
+  "households": 16,
+  "pins": {},
+  "stage": "appurtenances",
+  "failure": "FAIL row_rules -> 1, e.g. [('farm_off_its_street', (2112.3, 2729.4))]",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/321512-appurtenances.pkl"
+ },
+ {
+  "seed": 321516,
+  "households": 11,
+  "pins": {},
+  "stage": "homesteads",
+  "failure": "FAIL refused:SiteRefused -> Rust-321516 (seed 321516): seated 0 of 11 households on margin 6; no house is taken back",
+  "frozen": "/diagram/.clones/diagram-backlog/dev/rust-gate/frozen/321516-homesteads.pkl"
+ }
+]

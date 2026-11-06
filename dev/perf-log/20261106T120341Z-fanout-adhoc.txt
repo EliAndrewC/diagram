@@ -1,0 +1,6 @@
+perf-fanout seed 39, sizes 20, 40, HOT 50,000, ANCHOR 300
+
+appurtenances: 161,076 calls @20, 107,506 calls @40, growth exponent -0.58
+  placed @40: farm_fixtures +123, tree_crowns +99, persimmons +33, byres +17; 395 calls per thing placed
+
+all stages: 161,076 calls @20, 107,506 calls @40
