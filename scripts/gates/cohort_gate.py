@@ -183,6 +183,11 @@ def check(root: pathlib.Path) -> tuple[list[str], list[str]]:
     if port_mode(root) == "rust-only" or rust_landing(root):
         notes += [f"(a Rust-stage landing, a rate - FR-019) {r}" for r in refusals if not r.startswith(("no Rust stage gate", "the Rust stage gate"))]
         refusals = [r for r in refusals if r.startswith(("no Rust stage gate", "the Rust stage gate"))]
+    # THE RUST STAGE GATE RETIRED WITH THE PYTHON DRIVER THAT RAN IT (feature 444 T39, FR-024: "switching those off or even just
+    # deleting them outright"): at rust-only no landing waits on it; the Rust driver's own seeds replace it (T42)
+    if port_mode(root) == "rust-only" and refusals:
+        notes += [f"(the Rust stage gate retired with the Python driver, feature 444 T39 - not a refusal) {r}" for r in refusals]
+        refusals = []
     return refusals, notes
 
 

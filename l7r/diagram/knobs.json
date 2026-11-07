@@ -1,0 +1,321 @@
+{
+ "_why": "The hamlet knob registry as the deleted Python engine declared it (feature 444 T39, FR-024 part 3), exported 2026-11-07: each knob's forms, default, weights and typing rule's Python source, read by the modal checks (interactive/conditions.py, scripts/record/modal_bundle.py) and the Rust driver. The title card's declared choices stay in interactive/choices.",
+ "knobs": {
+  "bamboo": {
+   "forms": [
+    "none",
+    "homestead",
+    "thicket",
+    "both"
+   ],
+   "default": "homestead",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "byre_form": {
+   "forms": [
+    "courtyard",
+    "yard_shed",
+    "detached_commons"
+   ],
+   "default": "courtyard",
+   "weights": {
+    "courtyard": 0.6,
+    "yard_shed": 0.3,
+    "detached_commons": 0.1
+   },
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "caravan_inn_form": {
+   "forms": [
+    "wagon",
+    "hatago"
+   ],
+   "default": "wagon",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "cluster_position": {
+   "forms": [
+    "high_margin",
+    "flank",
+    "mid_margin",
+    "valley_mouth",
+    "valley_head",
+    "on_rise"
+   ],
+   "default": "high_margin",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "cluster_shape": {
+   "forms": [
+    "round",
+    "elongated",
+    "crescent",
+    "split"
+   ],
+   "default": "round",
+   "weights": null,
+   "typing_rule": "def _cluster_shape_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"A 'split' cluster needs room for two hamlets to read separately - a village/town, not a hamlet.\n    Research: a hamlet never splits - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html\"\"\"\n    return v != \"split\" or ctx.get(\"scale\") in (\"village\", \"town\")\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "dikepond_split": {
+   "forms": [
+    "0.6",
+    "0.4",
+    "0.7",
+    "0.5",
+    "0.3"
+   ],
+   "default": "0.6",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "family_form": {
+   "forms": [
+    "one_roof",
+    "retirement_house"
+   ],
+   "default": "one_roof",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "fan_middle": {
+   "forms": [
+    "wild",
+    "cleared"
+   ],
+   "default": "wild",
+   "weights": {
+    "wild": 0.75,
+    "cleared": 0.25
+   },
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "field_archetype": {
+   "forms": [
+    "valley_paddy",
+    "contour_terraces",
+    "polder_grid",
+    "ribbon_valley",
+    "mulberry_dike_fishpond"
+   ],
+   "default": "valley_paddy",
+   "weights": null,
+   "typing_rule": "def _field_archetype_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"The FIELD terrain archetype must match the village's stated terrain (research.md D4, China-first):\n    contour_terraces need HILL/upland ground; polder_grid needs LOW reclaimed/coastal-delta ground; a\n    ribbon_valley needs a narrow valley floor; a mulberry_dike_fishpond is the Pearl-delta low-wet system.\n    valley_paddy (the comb default) fits any ordinary valley-bottom terrain. Terrain is read from\n    `ctx['terrain']` when the spec declares it; absent a declaration, only valley_paddy is coherent.\n    Research: field form follows terrain - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: terraces on hills, polders and dike-ponds on low ground, the ribbon on a narrow valley\"\"\"\n    terrain = ctx.get(\"terrain\")\n    need = {\"valley_paddy\": None, \"contour_terraces\": \"hill\", \"polder_grid\": \"low\", \"ribbon_valley\": \"narrow_valley\", \"mulberry_dike_fishpond\": \"low\"}\n    req = need.get(v)\n    return req is None or terrain == req\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "footbridge_form": {
+   "forms": [
+    "log",
+    "earthen",
+    "plank"
+   ],
+   "default": "plank",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "grain_drift": {
+   "forms": [
+    "-12",
+    "-8",
+    "-4",
+    "0",
+    "4",
+    "8",
+    "12"
+   ],
+   "default": "0",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "intake_place": {
+   "forms": [
+    "shoulder",
+    "center"
+   ],
+   "default": "shoulder",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "intake_siting": {
+   "forms": [
+    "bend",
+    "straight"
+   ],
+   "default": "bend",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "kosatsuba_seat": {
+   "forms": [
+    "center",
+    "entrance",
+    "frontage",
+    "bridgehead"
+   ],
+   "default": "center",
+   "weights": null,
+   "typing_rule": "def _kosatsuba_seat_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"Which attested board placements THIS settlement can actually site.\n\n    THE RECORD ATTESTS FOUR VILLAGE SITES AND THESE TIERS AFFORD ALL FOUR (feature 154's five became four when feature 374\n    read 0190: the precinct and the assembly place are only that page's GUESS). The\n    bakufu set kosatsuba *\"at points of heavy passage: barriers and ports, the foot of large bridges,\n    and the entrances and centers of towns and villages\"*; in farming villages at the center or the entrance\n    (0190; a shrine precinct or an assembly place no page it read names); also *\"at bridgeheads and before the\n    gate of the village officials' houses\"* (`research/contents.json#trades-and-services`, four sources READ 2026-08-26\n    under feature 133 T13). The doc's own settlement-scale sentence narrows it: the board stood *\"where\n    the settlement's one lane carries everyone - by the headman's frontage or the lane junction /\n    entrance\"*.\n\n    A BRIDGEHEAD (feature 374 wave 120): 0190 puts village boards \"before the gates of the village officials' houses, as\n    well as bridge ends\", with no size given - it was withheld as \"the foot of large bridges\" until the impl-drift check read\n    the village passage. Offered where a way reaches a bridge (`bridges_on_a_way`), at the widest (`bridgehead_anchor`).\n\n    WITHHELD, DELIBERATELY, and not by this rule - absent from the value space, so nothing can roll it: the SHRINE PRECINCT,\n    which 0190 names only as its own GUESS, no page it read naming one; a board there would also break \"every attested\n    site is ON the way\".\n\n    The anchored three are gated on EVIDENCE IN THE MANIFEST, read the way the validator reads it:\n    a settlement with no recorded approach cannot put its board at one, and a settlement recording no\n    house for its official cannot put it at their gate. Note what that second one is NOT: the record\n    puts the person in the hamlet - *\"the headman (or in a hamlet the senior farmer answering to the\n    village headman) received, copied, and relayed the circulars\"* - so this is a SITING limit, not a\n    claim that a hamlet had no such official.\n\n    Research:\n        seats a settlement can site - research/questions/0190-notice-boards-kosatsuba.html: a board at the center, at an entrance with an approach, on a frontage by a headman's house\n        a board at a bridgehead - research/questions/0190-notice-boards-kosatsuba.html: \"as well as bridge ends\", with no size given, where the settlement records a bridge\n        shrine precinct withheld - research/questions/0190-notice-boards-kosatsuba.html: absent from the value space; a board at a shrine precinct is only that page's GUESS, no page it read naming one\n    \"\"\"\n    if v == \"center\":\n        return True  # every settlement has dwellings, so the assembly ground always exists\n    if v == \"entrance\":\n        return bool(ctx.get(\"has_approach\"))\n    if v == \"frontage\":\n        return bool(ctx.get(\"has_headman_house\"))\n    if v == \"bridgehead\":\n        return bool(ctx.get(\"has_bridge\"))\n    return False\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "land_use_overlay": {
+   "forms": [
+    "none",
+    "mulberry_fishpond",
+    "lotus",
+    "tea_fringe"
+   ],
+   "default": "none",
+   "weights": null,
+   "typing_rule": "def _land_use_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"A LAND-USE overlay must suit the setting: mulberry_fishpond + lotus are wet/valley uses fine on ordinary\n    paddy land; a tea_fringe needs some hill/terrace margin (`ctx['terrain']` hill, or a terrace archetype) to\n    sit on. 'none' (plain rice) is always valid.\n\n    WHY EVERY VALUE HERE IS A *PERMANENT* USE, never a rotation (GM, 2026-07): an overlay recolors SOME plots\n    while the rest stay standing rice, so it may only hold crops that genuinely coexist with rice in the same\n    season. A dike-pond, a lotus paddy and a hill tea garden are permanent installations - the plot is given\n    over to them all year, so the plot next door can be rice. RAPE (油菜) was tried here and REMOVED: rice and\n    rape are the two halves of one ROTATION in the SAME plot (rice transplanted May-June and harvested\n    Sep-Oct; rape sown into the drained stubble Oct-Nov, flowering Mar-Apr, off by May), so they are never\n    both standing. Mixing them at ANY fraction depicts two seasons at once. What varies between households is\n    only whether a plot is double-cropped at all, and that shows up in the SPRING picture as yellow rape\n    against BARE stubble / standing water - never against green rice. Rape therefore belongs on a future\n    seasonal axis (a whole-field state), not on this per-plot land-use axis. Do not re-add it here.\n    Research: overlays are permanent uses, tea on hills - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html\"\"\"\n    if v in (\"none\", \"mulberry_fishpond\", \"lotus\"):\n        return True\n    return ctx.get(\"terrain\") == \"hill\" or ctx.get(\"field_archetype\") == \"contour_terraces\"  # tea_fringe\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "lane_skeleton": {
+   "forms": [
+    "spine",
+    "T",
+    "Y",
+    "cross",
+    "waterside"
+   ],
+   "default": "spine",
+   "weights": null,
+   "typing_rule": "def _lane_skeleton_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"A 'waterside' lane skeleton needs water running ALONG the cluster (a stream/canal beside it), not\n    merely a valley-head pond uphill - so it is allowed only for a stream-fed village or one that\n    explicitly declares a waterside/canal site.\n    Research: waterside lanes need water along the cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html\"\"\"\n    if v == \"waterside\":\n        return ctx.get(\"water_kind\") == \"stream\" or bool(ctx.get(\"waterside_site\"))\n    return True\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "lane_web": {
+   "forms": [
+    "alleys",
+    "back_lane"
+   ],
+   "default": "alleys",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "paddy_rest": {
+   "forms": [
+    "settled",
+    "unsettled"
+   ],
+   "default": "settled",
+   "weights": {
+    "settled": 0.8,
+    "unsettled": 0.2
+   },
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "plot_regularity": {
+   "forms": [
+    "organic",
+    "grid"
+   ],
+   "default": "organic",
+   "weights": null,
+   "typing_rule": "def _plot_regularity_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"A rectilinear 'grid' bund pattern implies a planned/surveyed field (a reclamation or allotment\n    context), not an organically-grown old one - so it is excluded unless the field origin is planned.\n    Research: a grid needs a surveyed field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.html\"\"\"\n    return v != \"grid\" or ctx.get(\"field_origin\") == \"planned\"\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "plot_size": {
+   "forms": [
+    "small_irregular",
+    "medium",
+    "large_block",
+    "strip"
+   ],
+   "default": "medium",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "settlement_form": {
+   "forms": [
+    "nucleated",
+    "linear",
+    "dispersed",
+    "water_town",
+    "dike_top"
+   ],
+   "default": "nucleated",
+   "weights": null,
+   "typing_rule": "def _settlement_form_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"The SETTLEMENT FORM must suit the site: nucleated/linear/dispersed fit anywhere, but a WATER-TOWN (houses\n    fronting a canal) needs a canal - and per GM setting canon artificial transport canals are a LION-lands\n    feature, not the Empire-wide default (see the diagram SKILL.md China-first note), so water_town is excluded\n    unless the map declares Lion lands or a canal (`ctx['clan']=='Lion'` or `ctx['canal']`).\n\n    Research:\n        dike-top needs low ground - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html\n        water town needs a canal - CANON: Lion lands or a declared canal, from the GM's setting canon\n    \"\"\"\n    if v in (\"nucleated\", \"linear\", \"dispersed\"):\n        return True\n    if v == \"dike_top\":  # a dike-top line stands ON a polder's perimeter dike, so it needs LOW reclaimed ground\n        return ctx.get(\"terrain\") == \"low\"\n    return ctx.get(\"clan\") == \"Lion\" or bool(ctx.get(\"canal\"))  # water_town\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "town_nearness": {
+   "forms": [
+    "near",
+    "far"
+   ],
+   "default": "far",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "water_source_position": {
+   "forms": [
+    "corner_NW",
+    "corner_NE",
+    "corner_SW",
+    "corner_SE",
+    "mid_margin",
+    "chain",
+    "edge_N",
+    "edge_E",
+    "edge_S",
+    "edge_W"
+   ],
+   "default": "corner_NW",
+   "weights": null,
+   "typing_rule": "def _water_source_ok(v: Any, ctx: Mapping[str, Any]) -> bool:\n    \"\"\"Stream 'edge_*' entry points need a stream source; the pond positions (corner/mid_margin/chain)\n    need a pond. Gravity feed (source uphill of the field intake) is a PLACEMENT concern enforced when\n    the source is drawn, not a value exclusion here.\n    Research: a stream entry needs a stream, a pond seat a pond - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html\"\"\"\n    if v.startswith(\"edge_\"):\n        return ctx.get(\"water_kind\") == \"stream\"\n    return ctx.get(\"water_kind\") != \"stream\"\n",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "weir_form": {
+   "forms": [
+    "fence",
+    "gabion",
+    "frame",
+    "crib"
+   ],
+   "default": "crib",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "windbreak_belt": {
+   "forms": [
+    "conifer_led",
+    "mixed_broadleaf"
+   ],
+   "default": "conifer_led",
+   "weights": null,
+   "typing_rule": "",
+   "defined_in": "l7r.diagram.settlement._knobs"
+  },
+  "winter_crop": {
+   "forms": [
+    "barley",
+    "none"
+   ],
+   "default": "none",
+   "weights": {
+    "barley": 0.5,
+    "none": 0.5
+   },
+   "typing_rule": "def _grows_on_this_ground(form: str, context: Mapping[str, Any]) -> bool:\n    \"\"\"Research: forms the site can feed - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a bare winter only where the toe and the whole wild middle hold the need\"\"\"\n    if \"grain_room_acres\" not in context:\n        return True\n    return dry_need_acres(int(context[\"grain_households\"]), float(context[\"grain_drained_acres\"]), form) <= float(context[\"grain_room_acres\"])\n",
+   "defined_in": "l7r.diagram.settlement.fields.grain"
+  }
+ }
+}

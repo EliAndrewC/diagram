@@ -12,62 +12,21 @@
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 
 # ---- performance: a bookend pair over band 1 is a flag mentioned at landing, never a refusal ----
-PERF_REVIEW = python3 -m l7r.diagram.tools.perf_review
-perf-explain:   ## [performance] for an investigation of a flagged slowdown: the session's written cause and its evidence     WHY="..." CONTROL=<key> | UNVERIFIED="..." [ENV=local|codebuild]
-##  WHY=<text>           the session's written cause for a band-1 increase
-##  CONTROL=<key>        a measurements.json key: a recorded run of the same subject with the attributed cause removed
-##  UNVERIFIED=<text>    instead of CONTROL - why the attribution was not tested; logged like an escape
-##  ENV=local|codebuild  which environment the increase was measured in (default: local)
-	@$(PERF_REVIEW) explain --why "$(WHY)" --control "$(CONTROL)" --unverified "$(UNVERIFIED)" --environment "$(or $(ENV),local)" $(if $(UNVERIFIED),&& $(LOGBYPASS) permitted "perf-explain UNVERIFIED: $(UNVERIFIED)",)
-perf-confirm:   ## [performance] {internal} an investigation's confirmation of the written cause - the perf-audit SUBAGENT runs this   VERDICT=consistent|inconsistent AS=perf-audit
-##  VERDICT=consistent|inconsistent  whether the written cause matches the recorded per-stage delta
-##  AS=perf-audit                    who is recording - only the subagent may pass this, and nothing else distinguishes the shells
-	@$(PERF_REVIEW) confirm --verdict "$(VERDICT)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-audit:     ## [performance] an investigation's adjudication of a slowdown - the subagent records it   VERDICT=justified|not-justified|cannot-determine NECESSARY= COMMENSURATE= NO_WAY_AROUND= AS=perf-audit
-##  VERDICT=justified|not-justified|cannot-determine  the band-2 adjudication
-##  NECESSARY=<text>                                  is the slowdown necessary?
-##  COMMENSURATE=<text>                               is it commensurate with the functionality gained?
-##  NO_WAY_AROUND=<text>                              was there no good way around it?
-##  AS=perf-audit                                     who is recording - only the subagent may pass this
-	@$(PERF_REVIEW) audit --verdict "$(VERDICT)" --necessary "$(NECESSARY)" --commensurate "$(COMMENSURATE)" --no-way-around "$(NO_WAY_AROUND)" --note "$(NOTE)" --as "$(or $(AS),main)" --environment "$(or $(ENV),local)"
-perf-arbiter:   ## [performance] an investigation may put a band-3 increase to the round arbiter - nothing waits on it (feature 375 amendment 5)   [ENV=local|codebuild]
-	@s="$$($(PERF_REVIEW) arbiter-subject --environment "$(or $(ENV),local)")" || exit 2; \
-	 $(MAKE) --no-print-directory arbiter-ask SUBJECT="$$s" WHY="band 3 on $(or $(ENV),local) for $(SPECIFY_FEATURE): accept this performance increase, or keep optimizing? The perf report is perf-report.txt beside this MANIFEST, the band-1 and band-2 records are in dev/perf-log/, and the band-3 standard is the GM's: necessary, commensurate, no way around it" && \
-	 $(PERF_REVIEW) show --environment "$(or $(ENV),local)" > "/tmp/l7r-check/arbiter-ask-$$s/perf-report.txt"
-perf-signoff:   ## [performance] records a sign-off the GM gave UNPROMPTED, in their words - owed by nothing since feature 375 amendment 5   WHY="..."
-##  WHY=<text>  the GM's own words, given unprompted - band 3
-	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
-perf-review:    ## [performance] each environment's newest bookend pair: its timing band, for information, and its call counts - an increase over the line, or an uncomparable pair, refuses until the round arbiter accepts (the push runs this; feature 427)
-	@$(PERF_REVIEW) check
-perf-fanout:    ## [performance] the call-volume survey: per stage, the Python calls at each size and their growth, and every chain of HOT calls or more up to the loop it hangs from (feature 427 T01)   [SEED=39] [HOUSEHOLDS="20 40"] [STAGES=all] [HOT=50000] [JOBS=3] [LABEL=adhoc]
-	$(RUN).tools.perf_fanout --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),20 40)" --stages "$(or $(STAGES),all)" --hot "$(or $(HOT),50000)" --jobs "$(or $(JOBS),3)" --label "$(or $(LABEL),adhoc)"
-
-perf-ab:        ## [performance] two engines timed against each other - QUICK first (one seed at one size, the default), then a SUBSET or FULL=1, refused without a quick run of the same engines; alternated, wall and CPU best and spread, calls; evidence, never a gate (features 435, 436)   A=<commit> [B=HEAD] [SEEDS=25] [HOUSEHOLDS=40] [FULL=1] [AA=1: the noise floor] [N=1: raise it rarely]
-	$(RUN).tools.perf_ab "$(A)" "$(or $(B),HEAD)" --seeds "$(or $(SEEDS),25)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FULL),--full,) $(if $(AA),--aa,) $(if $(N),--n "$(N)",)
-
-perf-share:     ## [performance] where a module's time is: its share of each stage and its callers, read from the KEPT raw profiles (a stage with none is profiled then); an upper bound under cProfile, never a gate (feature 438)   [MODULE=l7r/diagram/settlement/_geom/primitives.py] [STAGES=homesteads,web,field,hinterland] [SEED=25] [HOUSEHOLDS=40] [PROFILES=<kept .prof files>]
-	$(RUN).tools.perf_share $(if $(MODULE),--module "$(MODULE)",) $(if $(STAGES),--stages "$(STAGES)",) --seed "$(or $(SEED),25)" --households "$(or $(HOUSEHOLDS),40)" $(if $(PROFILES),--profiles "$(PROFILES)",)
-
-phase-calls:    ## [performance] one 40-household hamlet's Python calls by stage and by step, recorded for the placement-stages page (feature 434)   [SEED=39] [HOUSEHOLDS=40] [FORM=nucleated|linear|dispersed] [ARCHETYPE=<field archetype>] [SINK=pond|offmap]
-	$(RUN).tools.phase_calls --seed "$(or $(SEED),39)" --households "$(or $(HOUSEHOLDS),40)" $(if $(FORM),--form "$(FORM)",) $(if $(ARCHETYPE),--archetype "$(ARCHETYPE)",) $(if $(SINK),--sink "$(SINK)",)
 
 work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80] [SPEC='<JSON over the reference spec>': a stage only another form runs, its run the audit's and the standing record untouched (444 T29)]
-	$(RUN).tools.work_budget $(if $(SEED),--seed "$(SEED)",) $(if $(SIZES),--sizes "$(SIZES)",) $(if $(SPEC),--spec '$(SPEC)',)
+	@printf 'work-budget: suspended - the counts came from a Python roll of the reference hamlet, deleted (feature 444 T39); the Rust driver counts the stages through the cut once it stands (T42). dev/work-budget.md is the last record.\n'
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"
 
 work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
-	$(RUN).tools.work_budget --review "$(ROUTE)"
+	@printf 'work-budget-review: suspended - no Python roll to count, and the Rust driver that will count the stages through the cut is T42 (feature 444 T39, FR-024: the gates that presume a whole hamlet switched off)\n'
 
 work-budget-bundle: ## [performance] the work-budget agent's bundle: MODE=budget a stage's derivation (refused holding code or today's counts), MODE=audit the landed code against its counters (feature 443)   MODE=budget|audit PHASE=<stage> [DERIVATION=<file>] [BUDGET=<file>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/work_budget_bundle.py" "$(MODE)" "$(PHASE)" $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(BUDGET),--budget "$(BUDGET)",)
 
 budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND work-budget MODE BUDGET verdict; refused on a stage already budgeted; the budget is per thing x the derivation's own items at each size (features 443, 444)   PHASE=<stage> PER_THING=<ops> EXPONENT=<e> ITEMS_AT_20=<n> ITEMS_AT_40=<n> ITEMS_AT_80=<n> DERIVATION=<file> VERDICT=<verdict file> | ARBITER=ask:<id> SPREAD="<low>-<high> at <households>" (the round arbiter's accept, feature 444 FR-013) [REASON="<why above today's count at 40>"] [GROWTH_REASON="<why its n is bounded>": past rubric S6's 1.15 from 20 to 80] [LOWER=1: re-pin a budgeted stage, no higher at any size] [RAISE=1: raise a budgeted stage on a SOUND re-derivation naming the work its first missed (444 FR-022) - past twice its first at 40 with SECOND=<an independent MODE BUDGET's SOUND>, never past 10 times it]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" set "$(PHASE)" "$(PER_THING)" "$(EXPONENT)" "$(DERIVATION)" "$(VERDICT)" $(if $(ARBITER),--arbiter "$(ARBITER)",) $(if $(SPREAD),--spread "$(SPREAD)",) $(if $(ITEMS_AT_10),--items-at-10 "$(ITEMS_AT_10)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(REASON),--reason "$(REASON)",) $(if $(GROWTH_REASON),--growth-reason "$(GROWTH_REASON)",) $(if $(LOWER),--lower,) $(if $(RAISE),--raise,) $(if $(SECOND),--second "$(SECOND)",)
-
-stage-sizes:    ## [performance] what a stage of the hamlet roll is handed - each manifest and plan part's records and points, and the canvas - on the reference roll at 20/40/80 households, for a derivation's bounds (feature 444 T27)   STAGE=<name> [SIZES=20,40,80] [CALLS=<settlement methods, comma-separated>] [DUMP=<dir>: each roll's input written as JSON] [SPEC='<JSON over the reference spec>'] [SEEDS=<n,n>]
-	$(RUN).tools.stage_sizes "$(STAGE)" $(if $(SIZES),--sizes "$(SIZES)",) $(if $(CALLS),--calls "$(CALLS)",) $(if $(DUMP),--dump "$(DUMP)",) $(if $(SPEC),--spec '$(SPEC)',) $(if $(SEEDS),--seeds "$(SEEDS)",)
 
 budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$(WORDS)"
@@ -79,13 +38,7 @@ budget-program: ## [performance] set the whole roll's work budget with the GM's 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 
 counters-inert: ## [performance] the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]
-	$(RUN).tools.counters_inert --seed "$(or $(SEED),25)" --households "$(or $(HOUSEHOLDS),15)"
-
-perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
-##  SEED=<n>      which seed to profile - e.g. `25`
-##  STAGE=<name>  which single stage to cProfile - e.g. `web`
-##  HOUSEHOLDS=<n> profile the reference at the scaling roll's size (10, 20, 40), where a growth was measured
-	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)" $(if $(HOUSEHOLDS),--households "$(HOUSEHOLDS)",)
+	python3 scripts/gates/rust_checks.py test --no-counters
 
 STATE = python3 -m l7r.diagram.ci state
 
@@ -141,7 +94,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite and every pool map; `FULL=1` adds only the perf bookends)\n')
 
 COHORT_FRESH = 4
-REF_FIRST = @$(if $(REF_OK),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)",$(MAKE) --no-print-directory _reference)
+REF_FIRST = @:  # no reference hamlet is rolled: the Python hamlet engine is deleted (feature 444 T39, FR-024)
 
 # RUN carries make's @ prefix, so a $(RUN) line must start its recipe line, never follow a `\` continuation.
 RUN = @python3 -m l7r.diagram
@@ -228,41 +181,13 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/maps_moved.py" --root "$$(git rev-parse --show-toplevel)"
 
-cohort:         ## [maps] roll N seeds and report every failure      N=10 [SEED=<first seed>] [JOBS=<workers>] [HOUSEHOLDS=<n>]
-##  N=<seeds>   how many seeds to roll, besides the six pinned rows (default: 10 - the GM, 2026-10-12, on the per-seed record: `make cohort-seeds`)
-##  SEED=<n>    the FIRST seed to roll (default: 1) - `N=1 SEED=15` reproduces the cohort's own Audit-15
-##  JOBS=<n>    worker processes (default: cpus - 2) - each holds a roll, ~0.5 GB; the containers share a 10 GB cap
-##  FRESH=<n>   fresh seeds rolled beside the fixed ones, a rate never a pass/fail (default: COHORT_FRESH; 0 rolls none) - feature 386
-##  FAILED_FIRST=1  roll the seeds that failed last run on this seed block first; LAST_FAILED=1 only those (feature 426)
-##  EXITFIRST=1     stop at the first seed that fails (feature 426); a run that skips seeds is partial, never a landing record
-	$(REF_FIRST)
-	$(RUN).tools.cohort_audit --count $(or $(N),10) $(if $(SEED),--seed $(SEED),) $(if $(JOBS),--jobs $(JOBS),) $(if $(HOUSEHOLDS),--households $(HOUSEHOLDS),) $(if $(FAILED_FIRST),--failed-first,) $(if $(LAST_FAILED),--last-failed,) $(if $(EXITFIRST),--exitfirst,) $(if $(EXITFIRST_AGAINST),--exitfirst-against $(EXITFIRST_AGAINST),) $(if $(filter-out 0,$(or $(FRESH),$(COHORT_FRESH))),--fresh $(or $(FRESH),$(COHORT_FRESH)) --fresh-from $$(python3 scripts/gates/cohort_gate.py fresh-seed),); rc=$$?; python3 scripts/measure/cohort_known.py --root . --stamp; $(COMMIT_RUN_RECORD) "$$([ $$rc = 0 ] && echo pass || echo fail)" last-cohort-record; [ $$rc = 0 ] || python3 scripts/measure/cohort_known.py --root .; exit $$rc
-
 probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
 	@python3 scripts/measure/probe.py --root . $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
-cohort-landing: ## [maps] the landing cohort a gated push requires: main's baseline first when its engine has none, then seeds 1-48 and the pinned rows (the 48-seed fresh block, a rate never a refusal, rolls after the push - feature 415) - and what the push will say
-	@if python3 scripts/gates/cohort_gate.py needs-baseline; then \
-	  b=$$(mktemp -d)/base; echo "cohort-landing: main's engine has no 48-seed record - rolling main's baseline first, in a detached worktree ($$b)"; \
-	  git fetch -q origin 2>/dev/null; git worktree add -q --detach "$$b" origin/main && { $(MAKE) --no-print-directory -C "$$b" cohort N=48 FRESH=0; git worktree remove --force "$$b"; }; \
-	fi
-	-@$(MAKE) --no-print-directory cohort N=48 FRESH=0
-	@python3 scripts/gates/cohort_gate.py check
+hamlet:         ## [maps] roll one hamlet - the Rust driver's, not built yet (feature 444 T42); the Python hamlet engine is deleted (T39)
+	@printf 'hamlet: the Python hamlet engine is deleted (feature 444 T39); the Rust driver that replaces it is T42 - not built yet
+' >&2; exit 2
 
-rust-gate:      ## [maps] the Rust stage gate (feature 444 FR-019, FR-020): every seed rolled through the Rust stages alone and judged where they complete - a fresh block, the pinned row variants on fresh seeds, the failing list and its frozen inputs; exit 1 on a failing seed   [REFREEZE=<stage>: re-charge the list's later-stage entries to that Rust stage, its input frozen, on a round arbiter's ruling, and stop]
-	$(RUN).tools.rust_gate --start $$(python3 scripts/gates/cohort_gate.py fresh-seed) $(if $(REFREEZE),--refreeze-to "$(REFREEZE)",)
-
-hamlet: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-hamlet:         ## [maps] generate one hamlet from the CLI   ARGS="--name X --seed 4 ..." [PROFILE=1]
-##  ARGS=<cli args>  passed to the hamletgen CLI - e.g. `"--name Foo --seed 4 --households 15"`
-##  PROFILE=1        also print where the roll spent its time, stage by stage
-	$(REF_FIRST)
-	$(RUN).hamletgen $(ARGS)
-	@$(MAKE) --no-print-directory pool-index-if-stale
-
-cache-audit:    ## [maps] does using the generation cache change any map?
-	$(REF_FIRST)
-	$(RUN).tools.cache_audit $(ARGS)
 placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port's reference until a page from the Rust driver replaces it
 	@printf 'placement-stages: FROZEN - dev/placement-stages-frozen/hamlet-placement.html was generated on 2026-10-31 from main'\''s Python hamlet engine, since deleted, and is kept as the temporary reference the Rust port is judged against (feature 444 amendment 11, FR-024 part 1); nothing regenerates it until a page from the Rust driver replaces it\n'
 
@@ -285,11 +210,6 @@ render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-w
 	$(RUN).pipeline.render_cache $(ARGS)
 
 # ---- cheap: they read a recorded artifact ----
-why-placed:     ## [diagnostics] who placed this, and what refused to        GEN=... AT=x,y | REFUSED=x,y
-##  GEN=<gen path>  the map to ask about
-##  AT=x,y          what was PLACED at this point, and by which stage
-##  REFUSED=x,y     what was REFUSED here, and which rule refused it
-	$(RUN).tools.why_placed $(GEN) $(if $(AT),--at $(AT),)$(if $(REFUSED),--refused $(REFUSED),)
 
 pack-audit:     ## [diagnostics] empty space and geometry in a HAND-DRAWN Mode A compound SVG   ARGS=<in.svg>
 ##  ARGS=<in.svg>  the Mode A compound SVG to measure
@@ -411,36 +331,6 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
-
-perf-gate:      ## [performance] require the feature's -start bookend, take -end, and print the comparison - its timings for information, its call counts judged as the push judges them (feature 427)
-	@f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
-	if [ -z "$$f" ] && [ -f .specify/feature.json ]; then \
-	  f=$$(python3 -c "import json;print(json.load(open('.specify/feature.json'))['feature_directory'].split('/')[-1])" 2>/dev/null); \
-	fi; \
-	n=$$(printf '%s' "$$f" | grep -oE '^[0-9]+' || true); \
-	if [ -z "$$n" ]; then \
-	  printf '\n\033[1mPERF GATE: cannot tell which feature this is.\033[0m\n'; \
-	  printf 'Set SPECIFY_FEATURE=NNN-slug (spec-kit work) or FEATURE=NNN, so the bookends can be paired.\n\n'; \
-	  exit 1; \
-	fi; \
-	if [ -n "$$CODEBUILD_BUILD_ID" ] && ! $(PERF_REVIEW) has-start --feature "$$n" >/dev/null 2>&1; then \
-	  printf '\n\033[1mPERF GATE (in-build): taking the %s-start bookend on the pre-merge main, in a detached worktree.\033[0m\n' "$$n"; \
-	  git worktree add -q --detach /tmp/base"$$n" origin/main && ( cd /tmp/base"$$n" && $(MAKE) --no-print-directory perf LABEL="$$n-start" ) && cp /tmp/base"$$n"/dev/perf-log/*"$$n-start"*.json dev/perf-log/ || exit 1; \
-	fi; \
-	if ! ls dev/perf-log/*"$$n"-start*.json >/dev/null 2>&1; then \
-	  printf '\n\033[1mPERF GATE: no %s-start bookend exists, so a regression cannot be measured.\033[0m\n\n' "$$n"; \
-	  printf 'Constitution VI wants it taken on UNMODIFIED code, before the first edit. Retroactively is\n'; \
-	  printf 'fine and is what the regression baseline already does - take it in a detached worktree at\n'; \
-	  printf 'the pre-feature commit:\n\n'; \
-	  printf '  git worktree add --detach /tmp/base%s <pre-feature-commit>\n' "$$n"; \
-	  printf '  ( cd /tmp/base%s && make perf LABEL=%s-start )\n' "$$n" "$$n"; \
-	  printf '  cp /tmp/base%s/dev/perf-log/*%s-start*.json dev/perf-log/\n\n' "$$n" "$$n"; \
-	  printf 'What is NOT allowed is shipping with no baseline: "did this get slower" then has no answer,\n'; \
-	  printf 'and feature 126 shipped a +51%% slowdown exactly that way.\n\n'; \
-	  exit 1; \
-	fi; \
-	$(MAKE) --no-print-directory perf LABEL="$$n-end" >/dev/null; \
-	$(MAKE) --no-print-directory perf-report AGAINST="$$n-start"
 
 guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
@@ -1091,18 +981,6 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
 	@python3 scripts/measure/dead_closure.py --base "$(or $(BASE),HEAD)"
 
-sweep:          ## [tests] run a random-equivalence test over more seeds than its default, the file unchanged   FILE=tests/hamletgen/ways/test_web_counts.py SEEDS=2000
-##  FILE=<paths>  the test file(s) whose sweeps read `tests/_sweep.py`
-##  SEEDS=<n>     how many seeds each sweep takes (`L7R_SWEEP_SEEDS`)
-	@if [ -z "$(strip $(FILE))" ] || [ -z "$(SEEDS)" ]; then echo "sweep: FILE=<test file> and SEEDS=<n> are required" >&2; exit 2; fi
-	@L7R_SWEEP_SEEDS=$(SEEDS) $(MAKE) --no-print-directory test-file FILE="$(FILE)"
-
-roll-audit:     ## [tests] per rolling context of the gate baseline, the engine lines NO other context reaches   MIN_LINES=2000 (the tier knob)
-	$(RUN).tools.roll_audit --min-lines $(or $(MIN_LINES),2000)
-
-roll-census:    ## [tests] the roll census of the LAST test phase, judged against tests/rolls.py   FULL=1: a stale roster row counts
-	@L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $(if $(FULL),full,)
-
 cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
 ##  FILE=<test path>   the test file to run
 ##  MOD=<module path>  the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`
@@ -1199,8 +1077,7 @@ bypass-audit:    ## [project] every escape token taken, with the reason its user
 	printf '\nlogged to dev/bypass-log/ - proceeding\n\n'
 
 _reference:
-	@python3 -c "import sys; sys.path.insert(0, '.'); 	from l7r.diagram import hamletgen as hg; 	from l7r.diagram.pipeline import rollcache; 	r, how = rollcache.report(hg.HamletSpec(name='Inashiro', seed=4, households=15, down_deg=90, water_sink='pond', settlement_form='nucleated')); 	print('\033[1mreference settlement (Inashiro, seed 4): ' + ('CLEAN\033[0m' if r.ok else 'FAILING\033[0m -> ' + ', '.join(r.failures)) + ' [' + how + (' - served from the roll cache: nothing the roll executes changed' if how == 'HIT' else '') + ']'); 	__import__('os').environ.get('L7R_REF_NO_CLASS') or open(__import__('os').path.join(__import__('subprocess').run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip() or '.git','roll-cache-class'),'w').write('warm' if how.startswith('HIT') or how.startswith('BYPASS-SHARED') else 'cold'); 	sys.exit(0 if r.ok else 1)" || { 	  printf '\n\033[1mSTOPPING HERE.\033[0m The reference settlement is red, so nothing more expensive runs.\n'; 	  printf 'Fix Inashiro first - it rebuilds in about a minute. Everything else is 4x to 25x that,\n'; 	  printf 'and none of it can tell you anything useful while the one map you iterate on is broken.\n'; 	  printf 'To REGENERATE it and read every failure in full: \033[1mmake maps\033[0m.\n'; \
-	  printf 'Do not reach for REF_OK=1 - it prompts, and a prompt with no terminal is refused.\n\n'; exit 1; }
+	@:
 
 IDLE_CTX = $(eval IDLE_CTX := $(shell $(SWITCH) idle 2>/dev/null || echo unreadable))$(IDLE_CTX)
 DONE_NAME = $(if $(filter 0,$(IDLE_CTX)),done,idle-done)
@@ -1209,33 +1086,12 @@ idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/usage_log.py" record --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
 	  exit $$rc
 
-maps:            ## [maps] regenerate and check the pool, picking its own scope from how the last run went   SCOPE=reference|all
-##  SCOPE=reference|all  override the scope; by default it picks its own - the reference hamlet alone after a failed run, the whole tier after a clean one
-	@python3 -m l7r.diagram.tools.mapcheck
-	@$(MAKE) --no-print-directory pool-index-if-stale
-
-perf:            ## [performance] take a performance snapshot of the reference hamlet across its seeds, with the machine's state at both ends   LABEL=<NNN>-start|-end [SCALING=1]
-##  LABEL=<NNN>-start|<NNN>-end  which bookend this snapshot is (default: `adhoc`, which counts as neither)
-##  SCALING=1                    add the 10-, 20- and 40-household legs - for investigating the algorithm, not routine work
-	@python3 -m l7r.diagram.tools.perf_snapshot --record --label "$(or $(LABEL),adhoc)" $(if $(SCALING),--scaling,)
-
-census:           ## [performance] the overlap census: comparisons per call of every check the pool's rolls run, the ones over the flag named
-	@python3 -m l7r.diagram.tools.overlap_census
-
 .PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
 
 fresh-tally:      ## [performance] seeds nobody has used: the failed share pooled, by form and by cause (feature 417)   [COMMIT=<sha prefix>] [SINCE=<UTC stamp>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fresh_tally.py" $(if $(COMMIT),--commit "$(COMMIT)",) $(if $(SINCE),--since "$(SINCE)",)
-
-cohort-seeds:     ## [performance] which cohort seeds found which failure, over how many changes, and the fewest first seeds that find them all (dev/cohort-log/)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/cohort_seeds.py"
-
-perf-report:    ## [performance] the trend, and which BAND the newest bookend pair reaches   AGAINST=<NNN>-start ENV=local|codebuild
-##  AGAINST=<NNN>-start  compare the newest snapshot against this bookend
-##  ENV=local|codebuild  which environment's band-1 line to judge against (default: local)
-	@python3 -m l7r.diagram.tools.perf_snapshot --report $(if $(AGAINST),--against $(AGAINST),)
 
 guard:           ## [static] {internal} refuse to run in main's tree - main is the integration point, never a workspace
 	@top=$$(git rev-parse --show-toplevel 2>/dev/null); \
@@ -1288,11 +1144,9 @@ COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/d
 # going to have to change temporarily"): at rust-only, make done rolls no map - no map-rolling test, no reference map, no floor that
 # rolls a settlement - so nothing waits on the Python stages after the Rust front. `make port-integrated` throws it back.
 PORT = $(eval PORT := $(shell $(SWITCH) state port 2>/dev/null || echo rust-only))$(PORT)
-ROLL_DESELECT = $(if $(filter rust-only,$(PORT)),-m "not rolls_map" $(PY_ENGINE_IGNORE),)
-# ...AND NO PYTHON SETTLEMENT-ENGINE TEST AT ALL (the GM 2026-11-07: "You should immediately stop running all of the python map
-# generating code as well. That's only slowing us down."): the stages the Rust port replaces, their gate readers and their tiers;
-# the tooling, tools, hooks, labels, pipeline and interactive tests still run, none of them generating a settlement
-PY_ENGINE_IGNORE = $(foreach d,hamletgen settlement gate full tier_city tier_town waterfields sitegen soak,--ignore=tests/$(d))
+ROLL_DESELECT = $(if $(filter rust-only,$(PORT)),-m "not rolls_map",)
+# the Python settlement engine and its test trees are DELETED (feature 444 T39, FR-024; the GM 2026-11-07: "literally delete all of
+# the Python code that does any kind of Hamlet generation"), so no tree is left to ignore
 REFERENCE_TIER = hamlet
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 
@@ -1338,7 +1192,6 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	@$(if $(COV_SCOPE),printf 'coverage: %s\n' "$(COV_SCOPE)";,)
 	@$(if $(COV_FLOORS),$(if $(NO_CUTOFF),INCR_NO_CUTOFF=1 ,)python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
-	$(if $(COV_FLOORS),rm -f "$(ROLL_CENSUS)" "$(ROLL_CENSUS).renders";,) \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
 	tpy=$$(date +%s); if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
 	$(if $(COV_FLOORS),$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" pytest $$(( $$(date +%s) - tpy )) 2>/dev/null || true; tfl=$$(date +%s);,) \
@@ -1358,18 +1211,15 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	  echo "hamlet floor and roll census: suspended at rust-only (FR-023) - no floor rolls a settlement"; \
 	,python3 -m coverage report -m --fail-under=100 $$(python3 -m l7r.diagram.ci.coverage_exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
 	python3 -m l7r.diagram.ci.coverage_exempt report || cov_ec=1; \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
-	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1;) \
+	) \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" floors $$(( $$(date +%s) - tfl )) 2>/dev/null || true; \
 	exit $$cov_ec
 
 INCR_FORCE = $(if $(FULL),FULL=1 requested,$(if $(filter 0,$(INCREMENTAL)),INCREMENTAL=0 requested,))
-ROLL_CENSUS = $(shell git rev-parse --absolute-git-dir 2>/dev/null)/roll-census.jsonl
 TOOLING_GATE_ARGS = $(if $(COV_FLOORS),$(if $(INCR_FORCE),,-p tests.tooling._test_deps),)
-INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin -p l7r.diagram.ci.rollcensus $(TOOLING_GATE_ARGS),)
-INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" L7R_ROLL_CENSUS="$(ROLL_CENSUS)" $(if $(TOOLING_GATE_ARGS),L7R_TEST_DEPS=gate,),)
+INCR_ARGS = $(if $(COV_FLOORS),--cov-context=test -p l7r.diagram.ci.gate_plugin $(TOOLING_GATE_ARGS),)
+INCR_ENV = $(if $(COV_FLOORS),L7R_GATE_SELECT="$(shell python3 -m l7r.diagram.ci incremental where 2>/dev/null)" $(if $(TOOLING_GATE_ARGS),L7R_TEST_DEPS=gate,),)
 
 # EVERY MAKE INVOCATION RECORDS ITS RUN (feature 406 T02, D161; the GM 2026-10-19: "it is notionally possible for us to see how
 # often a tool is used"). The event log sees a target only when a session's Bash call runs it; one run from another target's

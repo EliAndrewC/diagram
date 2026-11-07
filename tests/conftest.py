@@ -102,11 +102,8 @@ def pytest_collection_modifyitems(config, items):  # type: ignore[no-untyped-def
     asked = tooling_asked(config.getoption("markexpr", "") or "", config.args)
     skip_tooling = _tooling_unchanged() and not FULL and not asked
     keep, drop = [], []
-    from tests._waiting_ports import WAITING  # the pool tests a later Python stage owes, held strict to its port (444 FR-019)
 
     for item in items:
-        if item.nodeid in WAITING:
-            item.add_marker(pytest.mark.xfail(strict=True, reason=WAITING[item.nodeid]))
         if "/tests/tooling/" in str(item.fspath) and item.get_closest_marker("tooling") is None:
             item.add_marker(pytest.mark.tooling)  # the ci package's tests are tooling tests by location (git repos in tmp, the dispatcher)
         m = item.get_closest_marker("tiers")
@@ -168,44 +165,3 @@ def pytest_report_header(config):  # type: ignore[no-untyped-def]
     if FULL:
         lines.append("scope: FULL - the full tree is collected, the coverage floors are enforced, no cache serves a roll")
     return lines
-
-
-@pytest.fixture(autouse=True)
-def _pool_reads_once_a_test():
-    """A pool map read twice by one test is obtained once (`tests/gate/_pool.py` `_OBTAINED`, feature 417 T44)."""
-    from tests.gate import _pool
-
-    _pool._OBTAINED.clear()
-    yield
-
-
-@pytest.fixture(autouse=True)
-def _no_python_map_at_rust_only(monkeypatch: pytest.MonkeyPatch):  # type: ignore[no-untyped-def]
-    """AT `rust-only` NO TEST REGENERATES A POOL MAP OR ROLLS A SETTLEMENT (feature 444 FR-023; the GM 2026-11-07: "You should
-    immediately stop running all of the python map generating code as well"): the gen cache's gate read of a pool generator and the
-    roll cache's roll are skipped here, for every test whatever helper reaches them - measured the same day, a green `make done`
-    rewrote Inashiro's and Kashikawa's maps through a reader the `rolls_map` marker and `tests/gate/_pool.py` both missed. A
-    generator outside `pool/` (a test's own, in a temporary directory) is read as before."""
-    from pathlib import Path
-
-    from l7r.diagram import switches
-    from l7r.diagram.pipeline import gencache, rollcache
-
-    root = Path(__file__).resolve().parent.parent
-    if switches.read(root).port.state != "rust-only":
-        yield
-        return
-    obtain, roll = gencache.gate_obtain, rollcache._roll_payload
-
-    def gate_obtain(gen: str):  # type: ignore[no-untyped-def]
-        if Path(gen).resolve().is_relative_to(root / "pool"):
-            pytest.skip("the port at rust-only: no pool map is regenerated (feature 444 FR-023)")
-        return obtain(gen)
-
-    def roll_payload(spec):  # type: ignore[no-untyped-def]
-        pytest.skip("the port at rust-only: no settlement is rolled (feature 444 FR-023)")
-        return roll(spec)
-
-    monkeypatch.setattr(gencache, "gate_obtain", gate_obtain)
-    monkeypatch.setattr(rollcache, "_roll_payload", roll_payload)
-    yield

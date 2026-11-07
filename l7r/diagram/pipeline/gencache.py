@@ -758,7 +758,7 @@ def _coverage_is_current(cov_src: str) -> bool:
 
 #: What a child imports BEFORE its coverage context is switched to the requester's - the engine's import
 #: closure, so import-time lines (every `def`) land in the EMPTY context as they do in a worker.
-ENGINE_IMPORTS = "import l7r.diagram.hamletgen, l7r.diagram.settlement, l7r.diagram.waterfields, l7r.diagram.interactive, l7r.diagram.compound  # noqa\n"
+ENGINE_IMPORTS = "import l7r.diagram.interactive, l7r.diagram.compound  # noqa\n"  # the Python hamlet engine deleted (feature 444 T39)
 
 
 def child_coverage(covbase: str | None, label: str | None) -> tuple[str, str, str]:

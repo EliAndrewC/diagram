@@ -7,7 +7,7 @@ them: measured at the end of a full run, 14 to 68 MB per test worker sat freed-b
 charged to the container. `malloc_trim(0)` returns the free pages at the top of every arena to the
 kernel; it costs a few milliseconds and nothing is lost, since the next roll allocates afresh.
 
-Called from `hamletgen.driver.roll_scope()` when a roll ends - every roll, whatever ran it.
+Called from `tests/_heap.py` after a test; it was called from the deleted hamlet driver's `roll_scope()` too (feature 444 T39).
 
 Research: heap trim - NONE: process memory plumbing
 """

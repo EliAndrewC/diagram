@@ -62,15 +62,12 @@ import tempfile
 import time
 from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from l7r.diagram import _census
 from l7r.diagram.pipeline import gencache
 
-STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # = `hamletgen.driver.STAGE_PROFILE_ENV`; the literal keeps the driver out of this module's imports
-
-if TYPE_CHECKING:
-    from l7r.diagram.hamletgen import HamletSpec, Report, SitePlan
+STAGE_PROFILE_ENV = "L7R_STAGE_PROFILE"  # a child's stage profile, printed to stderr under `make map PROFILE=1`
 
 FULL_ENV = "L7R_TESTS_FULL"  # set by `make test-full`: the full run produces everything
 
@@ -463,21 +460,6 @@ def keyed_to[T](test: Callable[..., object], produce: Callable[[], T], label: st
     return obtain(subject, lambda: recorded()[0], share=True, recorded=recorded)
 
 
-def _roll_payload(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any], Report]:
-    """THE ONE ROLL of a spec (feature 213 FR-001): `generate()` - the re-roll loop, the finish, the
-    reachability verdict - and what every reader needs of it: the plan, the finished manifest of the kept
-    attempt, and the Report. `hamlet()` reads the first two, `report()` the third, `report_deps()` (the
-    hamlet floor) the dependency record taken around it. Before this, `hamlet()` rolled `build` alone and
-    `report()` rolled `generate` under a different cache subject, so the cohort seeds were rolled twice
-    per gate and the lane-rule tests read a map `generate` might have re-rolled. Module-level so the child
-    driver calls it by name and a test can compare the child's result with the same code run in-process."""
-    from l7r.diagram import hamletgen as hg
-
-    rep = hg.generate(spec, out_base=None, render=False)
-    assert rep.manifest is not None, "generate() carries the kept attempt's manifest (feature 213)"
-    return rep.plan, rep.manifest, rep
-
-
 # THE ROLL LEAVES THE WORKER (feature 210, GM 2026-09-07: "we should also roll in a forked child ... test out by
 # trying it in one place"). This is the one place: `hamlet()` produces the gate fixtures' rolls, the bulk of a
 # gate's rolls, and its payload is already the picklable pair the FULL run shares between workers. The child is
@@ -521,10 +503,6 @@ _CHILD_DRIVER = (
     "{epilogue}"
 )
 
-#: The child's target for THE roll of a spec: `module:function`, called with the spec.
-ROLL_TARGET = "l7r.diagram.pipeline.rollcache:_roll_payload"
-
-
 def _parent_is_covered() -> bool:
     """Is THIS process recording coverage - so the child must record its own, or the roll's lines vanish
     from the floor. Two signals, either suffices: pytest-cov's subprocess environment (`COV_CORE_SOURCE`),
@@ -535,11 +513,6 @@ def _parent_is_covered() -> bool:
     cov = sys.modules.get("coverage")
     current = getattr(getattr(cov, "Coverage", None), "current", None)
     return current is not None and current() is not None
-
-
-def _hamlet_in_child(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any], Report], dict[str, Any]]:
-    """`(_roll_payload(spec), its dependency record)`, produced in a child process - see `_CHILD_DRIVER`."""
-    return _in_child(ROLL_TARGET, spec)
 
 
 def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
@@ -584,48 +557,3 @@ def _in_child(target: str, arg: Any) -> tuple[Any, dict[str, Any]]:
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
     return payload, deps
-
-
-def _roll(spec: HamletSpec) -> tuple[tuple[SitePlan, dict[str, Any], Report], str]:
-    """THE ONE ROLL a gate makes of `spec` (feature 213 FR-001): `(plan, manifest, report)` under the one
-    subject `roll:<spec>`, produced in a child (feature 210), shared across the run's workers behind the
-    first-wave lock (FR-002), and STORED under the full-run bypass so the hamlet floor's `report_deps` reads
-    the same roll (207's D14). `hamlet()` and `report()` are its two views."""
-
-    def recorded() -> tuple[tuple[SitePlan, dict[str, Any], Report], dict[str, Any]]:
-        return _hamlet_in_child(spec)
-
-    # `produce` is the in-process fallback signature `obtain` expects (as in `keyed_to`); every storing path
-    # takes `recorded` and a `roll:` subject always stores, so it is never called under the gate
-    return obtain(f"roll:{spec!r}", lambda: recorded()[0], share=True, recorded=recorded)
-
-
-def hamlet(spec: HamletSpec) -> tuple[SitePlan, dict[str, Any]]:
-    """The plan and the FINISHED manifest of a scripted hamlet built from `spec` (no files) - the roll
-    `generate()` kept, since feature 213 (before it, a `build`-only roll under a subject of its own)."""
-    (plan, manifest, _rep), _how = _roll(spec)
-    return plan, manifest
-
-
-def report(spec: HamletSpec) -> tuple[Report, str]:
-    """`hg.generate(spec)` - build, finish, gate, with the re-roll loop - and how it was obtained."""
-    (_plan, _manifest, rep), how = _roll(spec)
-    return rep, how
-
-
-def report_deps(spec: HamletSpec) -> dict[str, Any]:
-    """The DEPENDENCY RECORD of `report(spec)` - every engine function and file the roll executed - from
-    the cache when a valid record exists, else by rolling and recording now. Never bypassed: the FULL
-    run bypasses SERVING (a served roll executes nothing the coverage floors could see), but the floor
-    that derives the hamlet path from these records (feature 145, `tools/hamlet_floor.py`) needs the
-    record itself, and on a fresh clone or CodeBuild there is none until something rolls."""
-
-    subject = f"roll:{spec!r}"  # the ONE subject per spec (feature 213); the tests' roll IS this record
-    # only the META is read here - the payload path went with the store body this now delegates to
-    found = _current(subject)
-    if found is not None and isinstance(found[1].get("deps"), dict):
-        deps: dict[str, Any] = found[1]["deps"]
-        return deps
-    # DELEGATES rather than repeating the store (feature 192 FR-008). `_produce_and_store`'s docstring
-    # claims the pair invariant is held by ONE body; a second copy of these lines here made that untrue.
-    return _produce_and_store(subject, lambda: _hamlet_in_child(spec)[0], lambda: _hamlet_in_child(spec))[1]

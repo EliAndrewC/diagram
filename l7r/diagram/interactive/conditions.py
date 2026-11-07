@@ -14,7 +14,7 @@ are registered from modules across the engine, and the vocabulary is parsed at i
 
 from __future__ import annotations
 
-import importlib
+import json
 import pathlib
 import re
 from collections.abc import Iterable, Mapping
@@ -97,21 +97,26 @@ def shown_entry(entry: str, meta: Mapping[str, Any]) -> str:
     return ", ".join(p.strip() for p in kept)
 
 
+KNOBS_FILE = pathlib.Path(__file__).resolve().parents[1] / "knobs.json"
+"""Research: the knob registry - NONE: the hamlet knobs as the deleted Python engine declared them, exported once (feature 444 T39)"""
+
+
+@cache
+def knob_table() -> dict[str, dict[str, Any]]:
+    """Every hamlet knob as `knobs.json` records it: its forms, default, weights and typing rule's source.
+    Research: modal condition plumbing - NONE"""
+    return dict(json.loads(KNOBS_FILE.read_text(encoding="utf-8"))["knobs"])
+
+
 @cache
 def knobs() -> dict[str, tuple[str, ...]]:
-    """Every registered knob and its forms, the registry POPULATED: each module that calls `register_knob(` is imported,
-    found by reading the source tree, so a knob registered in a new module is known without a list to update.
+    """Every knob and its forms - `knobs.json`'s, then the title card's declared choices and the values a manifest records beyond a
+    knob's registry.
     Research: modal condition plumbing - NONE"""
-    root = pathlib.Path(__file__).resolve().parents[1]
-    for path in sorted(root.rglob("*.py")):
-        if "register_knob(" in path.read_text(encoding="utf-8") and path.name != "_knobs.py":
-            importlib.import_module("l7r.diagram." + ".".join(path.relative_to(root).with_suffix("").parts))
-    from l7r.diagram.settlement._knobs import KNOBS  # noqa: PLC0415
-
     from .choices import table  # noqa: PLC0415
 
-    out = {name: tuple(str(v) for v in k.value_space) for name, k in KNOBS.items()}
-    for entry in table():  # the title card's declared choices, and the values a manifest records beyond a knob's registry
+    out = {name: tuple(k["forms"]) for name, k in knob_table().items()}
+    for entry in table():
         out[entry["key"]] = tuple(dict.fromkeys([*out.get(entry["key"], ()), *entry["values"]]))
     return out
 

@@ -337,7 +337,7 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     return [f for f in dict.fromkeys(out) if f not in listed and (root / f).is_file()]
 
 
-ENGINE = HERE.parents[1] / "l7r" / "diagram"
+ENGINE = HERE.parents[1] / "rust" / "phases" / "src"  # the engine whose lines set or read a knob: the Rust stages (feature 444 T39)
 
 
 def knobs_note(doc: str) -> str:
@@ -348,22 +348,20 @@ def knobs_note(doc: str) -> str:
     names = list(dict.fromkeys(re.findall(r"\[([a-z_]+)=[a-z_0-9|-]+\]", doc)))
     if not names:
         return ""
-    import inspect  # noqa: PLC0415
-
     sys.path.insert(0, str(HERE.parents[1]))
     from l7r.diagram.interactive import conditions  # noqa: PLC0415
-    from l7r.diagram.settlement._knobs import KNOBS  # noqa: PLC0415
 
-    forms = conditions.knobs()  # populates the registry
+    forms = conditions.knobs()
+    table = conditions.knob_table()
     parts = ["# The knobs this modal's conditions name - which maps draw what it conditions\n"]
     for name in names:
-        k = KNOBS.get(name)
-        parts.append(f"## {name}\n\nforms: {', '.join(forms.get(name, ())) or '(not registered)'}" + (f"; default {k.default}" if k else "") + "\n")
-        if k is not None and getattr(k, "typing_rule", None) is not None:
-            parts.append("The typing rule (which settlements may take each form):\n\n```python\n" + inspect.getsource(k.typing_rule) + "```\n")
+        k = table.get(name)
+        parts.append(f"## {name}\n\nforms: {', '.join(forms.get(name, ())) or '(not registered)'}" + (f"; default {k['default']}" if k else "") + "\n")
+        if k is not None and k["typing_rule"]:
+            parts.append("The typing rule (which settlements may take each form):\n\n```python\n" + k["typing_rule"] + "```\n")
         hits = [
-            f"{f.relative_to(ENGINE.parents[1])}:{i}: {line.strip()}"
-            for f in sorted(ENGINE.rglob("*.py"))
+            f"{f.relative_to(HERE.parents[1])}:{i}: {line.strip()}"
+            for f in sorted(ENGINE.rglob("*.rs"))
             for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1)
             if f'"{name}"' in line and " - " not in line
         ][:15]
@@ -401,7 +399,7 @@ def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, gre
         put(
             "knobs.md",
             note,
-            "l7r/diagram/settlement/_knobs.py",
+            "l7r/diagram/knobs.json",
             "which maps draw what the modal's conditions name: each knob's forms, typing rule and engine lines - read it before ruling on a conditional link",
         )
     rows = claims_citing(root, [*m.drawing_files(), *candidates])
