@@ -100,10 +100,6 @@ def test_importing_the_whole_engine_does_not_load_shapely_but_building_geometry_
         "    except BaseException:\n"
         "        pass\n"
         "print('after imports:', 'shapely' in sys.modules)\n"
-        "from l7r.diagram.settlement.land.wet import drawn_ground\n"  # seams.geoms went with the old field (444 T16), rows.hard_ground with the Python rows (444 T30)
-        "drawn_ground([(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)])\n"
-        "print('after geometry:', 'shapely' in sys.modules)\n"
     )
     out = subprocess.run([sys.executable, "-c", probe], capture_output=True, text=True, check=True).stdout
     assert "after imports: False" in out, f"the engine still pulls shapely in at import time:\n{out}"
-    assert "after geometry: True" in out, f"the lazy binding did not load it when used:\n{out}"

@@ -78,5 +78,26 @@ printf '{"claims": {"state": "clean"}}' > "$S/dev/switches.json"
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "a pre-existing finding refuses at clean"
 case "$out" in *"open (DRIFTED)"*) ok y y "names the open finding" ;; *) ok n y "names the open finding" ;; esac
 
+# A RUST-ONLY TREE (feature 444 T40, SC-017): with no Python engine at all, an owed Rust claim still refuses - the guard once read
+# `[ -d l7r/diagram/hamletgen ] || exit 0`, which passes every run once the Python hamlet engine is deleted
+R="$(mktemp -d)"
+git -C "$R" init -q -b main; git -C "$R" -c user.name=t -c user.email=t@t commit -q --allow-empty -m root
+mkdir -p "$R/rust/phases/src" "$R/rust/parked/src" "$R/research/questions"
+cat > "$R/rust/phases/src/lib.rs" <<'RS'
+//! Research:
+//!     plumbing - NONE
+
+/// Research: dry share - research/questions/0033-row-villages-resson.html
+pub fn far_row(x: u32) -> u32 {
+    x * 2
+}
+RS
+cp "$R/rust/phases/src/lib.rs" "$R/rust/parked/src/lib.rs"
+cp "$S/research/questions/0033-row-villages-resson.html" "$R/research/questions/"
+out="$( cd "$R" && "$GATE" 2>&1 )"; ok "$?" 1 "an owed Rust claim refuses with no Python engine"
+case "$out" in *"owed (new): rust/phases/src/lib.rs::far_row#dry share"*) ok y y "names the Rust claim" ;; *) ok n y "names the Rust claim" ;; esac
+case "$out" in *"rust/parked/"*) ok n y "a parked stage is claimed by nothing" ;; *) ok y y "a parked stage is claimed by nothing" ;; esac
+rm -rf "$R"
+
 printf 'test-claims-gate: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

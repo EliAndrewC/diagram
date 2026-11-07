@@ -156,7 +156,7 @@ def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch
     assert "--deselect" not in gate and "--deselect" not in full  # no file list can go stale again (research R6)
     # ...AND AT RUST-ONLY NO PYTHON SETTLEMENT-ENGINE TEST AND NO MAP ROLL (feature 444 FR-023, the GM 2026-11-07)
     rust_only = _runs(make(fixture_skill, "-n", "test", "PORT=rust-only").stdout)
-    assert '-m "not rolls_map"' in rust_only and all(f"--ignore=tests/{d}" in rust_only for d in ("hamletgen", "settlement", "gate"))
+    assert '-m "not rolls_map"' in rust_only  # the engine trees are deleted, not ignored (feature 444 T39)
 
 
 # ---- feature 174: the /proc readers, which no test could reach through the real filesystem -------

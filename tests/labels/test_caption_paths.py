@@ -68,21 +68,6 @@ def raw_texts(root: Path = SETTLEMENT) -> set[tuple[str, str]]:
     return {(str(f.relative_to(root)), fn) for f in root.rglob("*.py") for fn in _walk(f.read_text(), _is_raw_text)}
 
 
-def test_no_caption_is_hand_seated_outside_the_named_exceptions() -> None:
-    found = hand_seats()
-    assert found, "the walk found no label call at all - it is looking in the wrong place"
-    stray = found - D8_HAND_SEATS - PHASE_DRAWERS
-    assert not stray, f"a caption seated by hand outside the placer (feature 266 FR-012) - seat it with `seat_caption`/the placer: {sorted(stray)}"
-    assert found >= D8_HAND_SEATS, f"a D8 call site is gone - take it off the list, which only shrinks: {sorted(D8_HAND_SEATS - found)}"
-
-
-def test_no_raw_text_is_written_outside_the_placer() -> None:
-    found = raw_texts()
-    assert found, "the walk found no <text at all"
-    assert found == RAW_TEXT_SETTLEMENT, f"a caption written as raw <text outside the placer (feature 266 FR-012): {sorted(found - RAW_TEXT_SETTLEMENT)}"
-    assert _walk(COMPOUND.read_text(), _is_raw_text) == RAW_TEXT_COMPOUND, "compound.py writes a caption outside the placer"
-
-
 def test_the_path_test_fires_on_a_planted_call(tmp_path: Path) -> None:
     """Shown red: a planted hand seat and a planted raw `<text` are each caught."""
     (tmp_path / "planted.py").write_text('def new_feature(self):\n    self.label(1, 2, "x")\n    return f\'<text x="1">x</text>\'\n')

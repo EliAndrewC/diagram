@@ -25,10 +25,3 @@ def test_every_unit_in_scope_carries_a_claim() -> None:
     problems = cl.coverage(cl.all_units(SKILL), questions)
     shown = "\n".join(problems[:60]) + (f"\n... and {len(problems) - 60} more" if len(problems) > 60 else "")
     assert not problems, f"{len(problems)} claim problem(s):\n{shown}\n\nThe form: {cl.GRAMMAR}"
-
-
-def test_the_scope_reaches_the_shared_modules_the_gm_named() -> None:
-    mods = cl.scope(SKILL)
-    for name in ("l7r.diagram.hamletgen.driver", "l7r.diagram.settlement.fields.grain", "l7r.diagram.settlement.fields.drawing", "l7r.diagram.settlement.homestead_parts.grove_sides"):
-        assert name in mods
-    assert "l7r.diagram.tools.claims" not in mods

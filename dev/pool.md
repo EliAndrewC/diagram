@@ -90,7 +90,7 @@ iteration budget - is [`docs/migration-plan.md`](../docs/migration-plan.md). **U
 finishing any conversion.**
 
 [`hamletgen/`](../l7r/diagram/hamletgen/) is the generator, a package whose
-[`CLAUDE.md`](../l7r/diagram/hamletgen/CLAUDE.md) says which submodule holds which stage, so **load the one stage you
+`CLAUDE.md` (deleted with the Python hamlet engine, feature 444 T39) says which submodule holds which stage, so **load the one stage you
 need rather than the whole engine**; a map is rolled with `make map GEN=...`, a one-off hamlet with `make hamlet ARGS=...`. [`pool/hamlets/`](../pool/hamlets/)
 holds its maps (`meta.generated_by` marks a scripted map). A session drawing anything but a hamlet still follows the
 specifications on its tier's research page (`research/contents.json#tiers` and the topic pages beside it). The lessons

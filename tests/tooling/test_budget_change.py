@@ -6,7 +6,6 @@ checked by `budget-change-hooks.sh`, `tests/hooks/test-budget-change-hooks.sh`),
 
 from __future__ import annotations
 
-import ast
 import importlib.util
 import json
 import pathlib
@@ -42,17 +41,6 @@ def root(tmp_path: pathlib.Path) -> pathlib.Path:
     for word in ("SOUND", "LOOSE", "UNDERIVED"):
         (tmp_path / f"{word}.txt").write_text(f"{word} - the reason\n\nthe body\n")
     return tmp_path
-
-
-def test_the_table_holds_every_stage_of_the_pipeline_unbudgeted() -> None:
-    """The table's stages are `STAGES`, named as `make work-budget` names them, so it cannot drift from the engine."""
-    tree = ast.parse((REPO / "l7r/diagram/hamletgen/driver.py").read_text(encoding="utf-8"))
-    stages = next(n.value for n in tree.body if isinstance(n, ast.Assign) and getattr(n.targets[0], "id", "") == "STAGES")
-    names = [e.id.removeprefix("stage_") for e in stages.elts]  # type: ignore[attr-defined]
-    table = json.loads((REPO / bc.TABLE).read_text(encoding="utf-8"))
-    assert [k for k in table["stages"] if "." not in k] == names
-    assert all(k.split(".")[0] in names for k in table["stages"]), "a form (`<stage>.<form>`) belongs to a stage of the pipeline"
-    assert set(table["program"]) == {"ops_at_40", "exponent"}
 
 
 @pytest.mark.parametrize("word", ["LOOSE", "UNDERIVED"])
@@ -146,56 +134,6 @@ def test_the_programs_budget_needs_words_and_is_logged(root: pathlib.Path, capsy
     assert bc.load(root)["program"] == {"ops_at_40": 1000000, "exponent": 1.2}
     row = json.loads((root / bc.LOG).read_text().splitlines()[-1])
     assert row["what"] == "program" and row["words"] == "a million at forty"
-
-
-def test_an_arbiter_accept_pins_a_first_budget_bound_to_its_derivation(root: pathlib.Path) -> None:
-    """Feature 444 FR-013, SC-008 (the GM 2026-10-28, answering 444#0: "Yes, I am okay with option one, letting the arbiters acceptance
-    pin it"): `budget-set ARBITER=` pins only on an accept the arbiter's log holds naming the stage, and the pin is bound to the
-    derivation - a change after it is flagged as owing the arbiter's ruling."""
-    feat = root / "specs" / "444-x"
-    (feat / "phases").mkdir(parents=True)
-    (feat / "phases" / "web.derivation.md").write_text("the derivation\n")
-    d = "specs/444-x/phases/web.derivation.md"
-    items = {20: 10, 40: 20, 80: 40}
-    assert "holds no accept at ask:444-T05-r9 naming `web`" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "no log"
-    log = feat / "arbiter.jsonl"
-    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "continue", "what": "web again"}) + "\n")
-    assert "holds no accept" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "a continue is no accept"
-    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "the track stands"}) + "\n")
-    assert "holds no accept" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "an accept that names another stage"
-    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "web stands as it reads"}) + "\n")
-    assert "its totals' spread" in bc.set_budget(root, "web", 40, 1.1, d, "", items, "ask:444-T05-r9"), "the spread is owed"
-    for n in (1, 2, 3):
-        (feat / "phases" / f"web.verdict-{n}.txt").write_text("UNDERIVED - x\n")
-    args = ["--arbiter", "ask:444-T05-r9", "--spread", "32,280-38,506 at 20", "--items-at-20", "10", "--items-at-40", "20", "--items-at-80", "40"]
-    assert bc.main(["--root", str(root), "set", "web", "40", "1.1", d, "", *args]) == 0
-    row = bc.load(root)["stages"]["web"]
-    assert row["pinned_on"] == "accept" and row["verdict"] == "ask:444-T05-r9" and row["derivation_sha"] == bc.derivation_sha(root, d)
-    assert row["rounds"] == 3 and row["spread"] == "32,280-38,506 at 20", "the rounds and the spread, for the program target"
-
-    # a greenfield derivation's rounds run under its own name (feature 444 FR-015): an accept naming it names the stage
-    (feat / "phases" / "web_greenfield.derivation.md").write_text("the greenfield derivation\n")
-    g = "specs/444-x/phases/web_greenfield.derivation.md"
-    (feat / "phases" / "web_greenfield.verdict-1.txt").write_text("UNDERIVED - y\n")
-    log.write_text(json.dumps({"trigger": "ask:444-T13-web_greenfield-round-3", "ruling": "accept", "what": "pin it"}) + "\n")
-    assert bc.accepted_by(root, g, "web", "ask:444-T13-web_greenfield-round-3")
-    assert not bc.accepted_by(root, g, "track", "ask:444-T13-web_greenfield-round-3"), "never another stage's"
-    assert not bc.accepted_by(root, d, "track", "ask:444-T13-web_greenfield-round-3")
-    log.write_text(json.dumps({"trigger": "ask:444-T05-r9", "ruling": "accept", "what": "web stands as it reads"}) + "\n")
-
-    import importlib  # noqa: PLC0415
-
-    wb = importlib.import_module("l7r.diagram.tools.work_budget")
-
-    # Only web's own pin is judged: the fixture copies the real table, whose accept-pinned stages' derivations it does not hold.
-    def web_stale() -> list[str]:
-        return [b for b in wb.stale_pins(bc.load(root), str(root)) if b.startswith("web")]
-
-    assert web_stale() == [], "the derivation as pinned"
-    (feat / "phases" / "web.derivation.md").write_text("the derivation, one figure changed\n")
-    bad = web_stale()
-    assert len(bad) == 1 and "changed since the arbiter's accept pinned it (ask:444-T05-r9)" in bad[0] and "make arbiter-ask" in bad[0]
-    assert bad[0] in wb.held(bc.load(root), {"stages": {}}), "the push's ratchet refuses it too"
 
 
 def test_a_rebuilt_phase_is_accepted_only_within_its_budget_on_its_audits_within(root: pathlib.Path) -> None:

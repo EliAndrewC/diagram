@@ -614,52 +614,6 @@ def test_the_base_tree_s_units_are_kept_by_module(tmp_path: pathlib.Path, monkey
     assert cx.base_cores(tree, keep=root) == first, "the second read comes from the memo"
 
 
-def test_a_bundle_carries_the_module_functions_a_unit_calls() -> None:
-    """The round arbiter's tooling fix on ask:t03-claims-at-landing: `_clear_link` was judged CANNOT-TELL because its bundle
-    lacked `link_survives`, the function its answer turns on."""
-    import types
-
-    root = pathlib.Path(__file__).resolve().parents[2]
-    unit = types.SimpleNamespace(path="l7r/diagram/hamletgen/ways/clearance.py", qualname="_clear_link")
-    src = cx.context_source(root, "l7r/diagram/hamletgen/ways/clearance.py::_clear_link")
-    got = cx.callees(root, unit, src)
-    assert "l7r/diagram/hamletgen/ways/clearance.py::link_survives" in got and len(got) <= cx.CALLEES_MAX
-    assert all(not r.endswith("::_clear_link") for r in got), "never itself"
-    assert cx.callees(root, types.SimpleNamespace(path="no/such.py", qualname="f"), "def f():\n    g()\n") == []
-
-
-def test_a_bundle_carries_the_constants_a_unit_reads_and_what_a_cannot_tell_names() -> None:
-    """Feature 385 T25 (plan D47; the round arbiter's fix on ask:t05-old-drifts-at-landing): the standoff claim on
-    `_seat_households` was CANNOT-TELL three rounds running, each for the next layer its note named - imported callees, theirs,
-    then module constants. A first bundle carries the constants the unit reads; a re-bundle chases what the note names."""
-    import sys
-    import types
-
-    root = pathlib.Path(__file__).resolve().parents[2]
-    sys.path.insert(0, str(root / "scripts" / "record"))
-    import claims_context as cc
-
-    path = "l7r/diagram/hamletgen/homesteads/stages.py"
-    unit = types.SimpleNamespace(path=path, qualname="_seat_households_as")
-    got = cx.callees(root, unit, cx.context_source(root, f"{path}::_seat_households_as"))
-    assert any(r.endswith("::BUNDLE_PITCH") for r in got), f"an imported constant the unit reads: {got}"
-    assert sum(not r.rsplit("::", 1)[1].isupper() for r in got) <= cx.CALLEES_MAX and all(r.startswith("l7r/") for r in got)
-    # (the unit hands its seating to Rust since feature 444 T30: the chase follows the door's Python - `rust_seating`)
-    deep = cc.chase(root, path, ["rust_scatter", "grove_inputs", "no_such_name"], cx.context_source)
-    names = {r.rsplit("::", 1)[1] for r in deep}
-    assert {"rust_scatter", "grove_inputs", "record_seated", "seat_inputs", "CANOPY_SHADE_FT"} <= names, deep
-    assert cc.chase(root, path, ["rust_scatter"], cx.context_source, budget=10) == [], "the budget holds"
-    assert cc.chase(root, path, ["HOUSE_PADDY_GAP_FT"], cx.context_source) == ["l7r/diagram/settlement/houses.py::HOUSE_PADDY_GAP_FT"], "a name the module never imports"
-    # a label naming a distance, gap or standoff carries every direct callee and the constants they read, uncapped (the words)
-    assert cc.DISTANCE.search("front-row standoff from the field") and not cc.DISTANCE.search("the declared cluster shape")
-    far = cc.direct(root, unit, cx.context_source(root, f"{path}::_seat_households_as"), cx.context_source)
-    assert any(r.endswith("::rust_scatter") for r in far) and any(r.endswith("::BUNDLE_PITCH") for r in far), far
-    assert len(far) > cx.CALLEES_MAX, "uncapped"
-    reach = {r.rsplit("::", 1)[1] for r in far}
-    assert {"grove_inputs", "seat_inputs", "CANOPY_SHADE_FT"} <= reach, "two calls down, and what they read"
-    assert len(far) == len(set(far)), "each once"
-
-
 def test_findings_a_round_arbiter_ruling_carried_are_filed_with_the_ruling(tmp_path: pathlib.Path) -> None:
     """Feature 385 T45 (D59): KEYS= with RULING= files findings the gate counts as introduced, which an arbiter ruling carried -
     the box and its record row together, the row naming the ruling; a ruling the feature's record does not hold is refused, and

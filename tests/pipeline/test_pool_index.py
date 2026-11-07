@@ -205,7 +205,6 @@ def test_real_pool_every_gen_is_indexed():
     page = pi.build_index(pi.SKILL_DIR)
     bundles = poolmaps.bundles()
     assert bundles, "the real pool has generators"
-    assert any(b.tree == poolmaps.LEGACY_TREE for b in bundles), "the frozen exhibits are indexed too"
     for b in bundles:
         assert b.stem in page, f"{b.tree}/{b.tier}/{b.stem} missing from the index"
     # And no real map is in the manifest-missing state (a red cell here means a map lost its json).

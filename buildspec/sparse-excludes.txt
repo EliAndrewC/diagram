@@ -37,14 +37,3 @@
 #     which are TRACKED SOURCE (never excluded here); a draft's gitignored svg is regenerated when absent
 # plus a grep for hardcoded `legacy-hand-authored-pool/**.png|svg` literals, which finds only
 # fixture-built pages. Neither pattern below is reachable from any of them.
-
-# 78.4 MB (73.2 `.html` + 5.2 `.png`). A documentation artifact written by
-# `l7r/diagram/tools/placement_stages.py` and read by a human through `dev/placement.md`. The tool is
-# `make placement-stages`, which no gate phase runs; no test names the output directory.
-#
-# `producer:` declares the module that WRITES here. It necessarily names the path (the tool's `--out`
-# default), which is not rot - and declaring it beats narrowing the guard's scan to `tests/`, because
-# a READER hiding in an engine module is precisely what the guard exists to catch. A stale
-# declaration is itself checked: the producer must exist and must still name this path.
-/dev/placement-stages/
-producer: l7r/diagram/tools/placement_stages.py

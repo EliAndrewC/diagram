@@ -9,7 +9,7 @@ with intent. It must be run through make."*
 The observed workarounds, which are the threat model, are all the same shape - **an action that can
 be presented as diligence**:
 
-    tier 1  reach for an ungated sibling command   (cohort_audit while `make maps` was gated)
+    tier 1  reach for an ungated sibling command   (a tool's module run bare while its make target was gated)
     tier 2  supply the documented override         (REF_WHY=, skipping a cancel-by-default prompt)
     tier 3  arrange that the prompt cannot fire    (backgrounding the run so nothing could answer)
 
@@ -197,40 +197,12 @@ def _reason() -> str:
 # `cost` decides PROMPTING only. REFUSAL applies to every row.
 OPERATIONS: dict[str, tuple[str, str]] = {
     "l7r.diagram.ci": ("ci-status", "expensive"),  # feature 130: PAID remote runs; ci-status is the free diagnostic every refusal names
-    "l7r.diagram.hamletgen": ("hamlet", "expensive"),
     "l7r.diagram.pipeline.regen": ("map", "expensive"),
     "l7r.diagram.pipeline.render_cache": ("render-sync", "expensive"),
     "l7r.diagram.pipeline.pool_index": ("pool-index", "expensive"),
-    "l7r.diagram.tools.cohort_audit": ("cohort", "expensive"),
-    "l7r.diagram.tools.rust_gate": ("rust-gate", "expensive"),  # feature 444 T21: every seed through the Rust stages alone, judged
-    "l7r.diagram.tools.mapcheck": ("maps", "expensive"),  # feature: `tripwire` retired 2026-09-05 - it was `maps` with a false help line
-    "l7r.diagram.tools.perf_snapshot": ("perf", "expensive"),
-    "l7r.diagram.tools.overlap_census": ("census", "expensive"),  # feature 306: comparisons per call of every check the pool's rolls run
-    "l7r.diagram.tools.roll_audit": ("roll-audit", "cheap"),  # feature 216: the engine lines each roll alone reaches, off the gate baseline
     "l7r.diagram.labels.hand_sheet": ("sheet-render", "cheap"),  # feature 286: a hand-drawn sheet rendered with its captions placed
-    "l7r.diagram.tools.perf_review": ("perf-review", "cheap"),  # feature 129: the review records and the push-time check
     "l7r.diagram.switches": ("switches", "cheap"),  # feature 132: the iteration switches - remote off, scope locked
-    "l7r.diagram.tools.perf_profile": ("perf-profile", "expensive"),  # feature 129: tier 2 - cProfile of one stage of one seed
-    "l7r.diagram.tools.perf_fanout": ("perf-fanout", "expensive"),  # feature 427 T01: it profiles every stage at two sizes
-    "l7r.diagram.tools.perf_ab": ("perf-ab", "expensive"),  # feature 435: two engines timed, alternated - evidence, never a gate
-    "l7r.diagram.tools.perf_share": ("perf-share", "expensive"),  # feature 438: a module's share of each stage, kept profiles
-    "l7r.diagram.tools.work_budget": ("work-budget", "expensive"),  # feature 443: the counted work per stage, the standing record
-    "l7r.diagram.tools.stage_sizes": ("stage-sizes", "expensive"),  # feature 444 T27: what a stage is handed, for a derivation's bounds
-    "l7r.diagram.tools.counters_inert": ("counters-inert", "expensive"),  # feature 443: the counters change no map, two rolls compared
-    "l7r.diagram.tools.phase_calls": ("phase-calls", "expensive"),  # feature 434: every stage of a 40-household roll profiled, each in its own process
-    # RE-POINTED, not removed (feature 198, claimed as 195 and renumbered 2026-09-07): `make hamlet-floor` is gone, but this module still
-    # carries `if __name__ == "__main__":`, so `test_operations_registry._entry_points()` counts
-    # it and a missing row fails the gate - and the block cannot go either, because the gate runs
-    # the module as a program. `test-full` is the target that actually runs it, so the refusal a
-    # bare `python3 -m` earns still names a command that works.
-    # COST STAYS `cheap` ON PURPOSE: it prices this MODULE's operation. Flipping it to `expensive`
-    # would make `test-full` remotely dispatchable and give it its own S3 cache location
-    # (`ci/__main__.py`, `dispatch.py`). Do not "correct" it.
-    "l7r.diagram.tools.hamlet_floor": ("test-full", "cheap"),
     "l7r.diagram.ci.coverage_exempt": ("coverage-exempt", "cheap"),  # feature 448: the record of the engine files the Rust port replaces, which the floor reports and does not hold
-    "l7r.diagram.tools.cache_audit": ("cache-audit", "expensive"),
-    "l7r.diagram.tools.placement_stages": ("placement-stages", "expensive"),
-    "l7r.diagram.tools.why_placed": ("why-placed", "expensive"),
     "l7r.diagram.compound": ("compound", "expensive"),
     "l7r.diagram.tools.pack_audit": ("pack-audit", "cheap"),
     "l7r.diagram.tools.notes_census": ("notes-census", "cheap"),
@@ -272,7 +244,6 @@ class _Ladder:
     whether the cheap one would do first:
 
         make quick        lint, types, and every test that does not roll a map
-        make maps         the pool, scoped by how the last run went
         make help         every operation, with what it does
         make done         the full gate, NOT the quick check
 

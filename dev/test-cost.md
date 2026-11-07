@@ -65,7 +65,7 @@ generators (rolled cold when their key moved, served warm with their coverage re
 **The count is a gate, not a memory, because it drifted.** A week after a packing pass measured a floor of 8-9 rolls,
 a census found 37 (feature 213). The GM: *"we definitely had this solved at one point, and then the problem just came
 back on its own. So that is usually a sign that something about our testing procedures is bad."* So
-[`tests/rolls.py`](../tests/rolls.py) is the roster - one row per spec with what it uniquely carries - and the gate's
+`tests/rolls.py` (deleted with the Python hamlet engine, feature 444 T39) is the roster - one row per spec with what it uniquely carries - and the gate's
 census at `driver.roll_scope`, judged by `ci/rollverdict.py`, fails a second roll of a spec, an unrostered roll, a
 stale row, or a rostered roll that reaches no line of its own. `make roll-audit` answers, per roll, the engine lines
 nothing else reaches.

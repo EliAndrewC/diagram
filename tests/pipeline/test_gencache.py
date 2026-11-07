@@ -479,8 +479,8 @@ _REAL_ENGINE_RELS = [gencache._rel(p) for p in gencache.engine_files()]
 
 
 def test_a_dependency_inside_the_skill_is_recorded_relative_and_outside_it_absolute():
-    inside = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
-    assert gencache._rel(inside) == "l7r/diagram/settlement/houses.py"
+    inside = os.path.join(gencache.HERE, "l7r/diagram/compound.py")
+    assert gencache._rel(inside) == "l7r/diagram/compound.py"
     assert gencache._abs(gencache._rel(inside)) == inside
     # a font, an installed package, the GM's notes mount: no meaningful root-relative form, and the
     # same file for every clone on this machine, so it stays absolute
@@ -492,8 +492,8 @@ def test_a_dependency_inside_the_skill_is_recorded_relative_and_outside_it_absol
 def test_the_key_survives_a_change_of_ROOT_but_not_a_change_of_SOURCE(monkeypatch, tmp_path):
     """The whole feature, in one assertion pair: same sources under a different root key the same;
     a changed source keys differently."""
-    real = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
-    deps = {"functions": [[gencache._rel(real), "place_houses"]], "files": []}
+    real = os.path.join(gencache.HERE, "l7r/diagram/compound.py")
+    deps = {"functions": [[gencache._rel(real), "_rank_depth"]], "files": []}
     here_key = gencache.key_for(b"subject", deps)
 
     # a second "clone": the same engine sources, reachable at a different absolute path
@@ -508,8 +508,8 @@ def test_the_key_survives_a_change_of_ROOT_but_not_a_change_of_SOURCE(monkeypatc
     assert gencache.key_for(b"subject", deps) == here_key, "the same sources under another root must key the same"
 
     # ...and the safe direction: change one recorded function's source and the key must move
-    target = other / "l7r/diagram/settlement/houses.py"
-    target.write_text(target.read_text() + "\n\ndef place_houses_extra() -> None:\n    pass\n", encoding="utf-8")
+    target = other / "l7r/diagram/compound.py"
+    target.write_text(target.read_text() + "\n\ndef _rank_depth_extra() -> None:\n    pass\n", encoding="utf-8")
     assert gencache.key_for(b"subject", deps) != here_key, "a changed engine source must NOT key the same"
 
 
@@ -517,9 +517,9 @@ def test_an_old_absolute_format_entry_cannot_be_re_keyed_under_the_new_rule():
     """Format 1 recorded absolute paths. Re-reading one under the new lookup would silently drop its
     per-function parts, which is the shape that could serve a stale roll - so it must key differently,
     and FORMAT_VERSION is bumped so it is discarded outright."""
-    real = os.path.join(gencache.HERE, "l7r/diagram/settlement/houses.py")
-    relative = {"functions": [[gencache._rel(real), "place_houses"]], "files": []}
-    absolute = {"functions": [[real, "place_houses"]], "files": []}
+    real = os.path.join(gencache.HERE, "l7r/diagram/compound.py")
+    relative = {"functions": [[gencache._rel(real), "_rank_depth"]], "files": []}
+    absolute = {"functions": [[real, "_rank_depth"]], "files": []}
     assert gencache.key_for(b"s", absolute) != gencache.key_for(b"s", relative)
     assert gencache.FORMAT_VERSION != "1"
 

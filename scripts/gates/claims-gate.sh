@@ -21,8 +21,9 @@ CG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 . "$CG_HERE/../hooks/lib/guardlog.sh"
 
-# A fixture tree with no engine in it has no claims to hold: silent, as entry-gate is on a tree with no record.
-[ -d "$ROOT/l7r/diagram/hamletgen" ] || exit 0
+# A fixture tree with no engine in it has no claims to hold: silent, as entry-gate is on a tree with no record. THE ENGINE IS THE
+# RUST STAGES NOW (feature 444 T40): the Python hamlet engine is deleted, and a guard on its directory alone passed every run.
+[ -d "$ROOT/rust/phases" ] || [ -d "$ROOT/l7r/diagram/hamletgen" ] || exit 0
 
 if [ -n "${CLAIMS_OK:-}" ]; then
   if ! python3 "$CG_HERE/../hooks/lib/hm_escape.py" reason-ok <<<"$CLAIMS_OK" >/dev/null; then

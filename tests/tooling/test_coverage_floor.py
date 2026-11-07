@@ -74,7 +74,7 @@ def test_the_floor_phase_asks_coverage_for_ONE_HUNDRED_over_the_WHOLE_TREE() -> 
     assert "coverage_exempt report || cov_ec=1" in MAKEFILE, "the exempt files' unrun lines are reported, and a stale entry fails the floor"
     assert "SETTLEMENT_COV_FLOOR" not in MAKEFILE.replace(floored, ""), "and no ratchet stands beside it"
     assert MAKEFILE.count("cov_ec=1") >= 2, "each floor records its own failure instead of exiting"
-    assert "hamlet_floor" in MAKEFILE, "the finer hamlet-path floor stays - it sits UNDER the 100%, not beside it"
+    assert "hamlet_floor" not in MAKEFILE, "the hamlet-path floor went with the Python hamlet engine (feature 444 T39)"
     assert "exit $$cov_ec" in MAKEFILE, "and the phase exits non-zero once, at the end"
 
 

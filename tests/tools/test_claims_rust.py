@@ -125,26 +125,6 @@ def test_a_doc_comment_cut_off_by_another_line_is_not_the_next_item_s() -> None:
     assert [(u.qualname, u.claims) for u in units] == [("f", [])]
 
 
-def test_a_rust_step_on_the_placement_page_shows_its_doc_and_its_claims(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001
-    """`dev/rust-tooling.md` "the placement-stages page": a `Steps:` name `<file>.rs::<item>` read through the doc-comment reader."""
-    from l7r.diagram.tools import placement_stages as ps  # noqa: PLC0415
-
-    src = tmp_path / "rust" / "phases" / "src"
-    src.mkdir(parents=True)
-    (src / "field.rs").write_text(SRC)
-    monkeypatch.setattr(ps, "REPO", str(tmp_path))
-    name, paras = ps.step_doc("rust/phases/src/field.rs::Basin.area")
-    assert name == "area" and paras == ["The basin's area."]
-    research = ps.research_of(ps.resolve_step("rust/phases/src/field.rs::cut"))
-    assert [r["label"] for r in research] == ["a basin's area"] and research[0]["verdict"] == "unchecked"
-    try:
-        cr.resolve(tmp_path, "rust/phases/src/field.rs::nothing")
-    except LookupError:
-        pass
-    else:
-        raise AssertionError("an item the file does not hold")
-
-
 def test_a_multi_line_attribute_keeps_the_doc_above_it() -> None:
     """Found 2026-10-31 (feature 444 T16's claims wave): rustfmt wraps a long `#[expect(...)]` over several lines, and reading the
     attribute a line at a time ended the doc at its second line, so the item inherited its module's claims in place of its own."""

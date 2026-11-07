@@ -174,7 +174,7 @@ def parse_key(skill: Path, cl: Any) -> Any:
     # THE RUST PHASES' CLAIMS ARE IN SCOPE TOO (feature 444, `claims_rust.all_rust_units`), so their sources key the parse: keyed on
     # the Python alone, an edited `.rs` claim was read from the stale parse (found 2026-10-31, T16's label fixes unread)
     for p in sorted((skill / "rust").rglob("*.rs")) if (skill / "rust").is_dir() else []:
-        if "target" not in p.relative_to(skill / "rust").parts:
+        if "target" not in p.relative_to(skill / "rust").parts and p.relative_to(skill / "rust").parts[0] != "parked":  # 444 FR-024
             h.update(p.relative_to(skill).as_posix().encode() + b"\0" + p.read_bytes() + b"\0")
     return h
 

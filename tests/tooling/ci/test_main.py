@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram import _census, _invocation
+from l7r.diagram import _invocation
 from l7r.diagram.ci import __main__ as cli
 from l7r.diagram.ci import config, dispatch, state
 from tests.tooling.ci.conftest import FakeClient, ScriptedSh, commit, git
@@ -252,36 +252,3 @@ def test_tooling_green_records_the_hash_the_gate_skips_on(roots: Path, capsys: p
     assert "recorded green" in capsys.readouterr().out
     after = state.read(roots)
     assert after is not None and after.tooling == state.tooling_hash(roots), "and now the gate may skip the tooling tests"
-
-
-def test_the_roll_census_verdict_is_routed_by_the_ci_command(roots: Path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 213: `rollcensus verdict` is the Makefile's call after the test phase, routed through the ci
-    command like the incremental subcommands; an open, empty census against the real roster is green on an
-    incremental run (nothing rolled, nothing stale), and no census at all is a usage error."""
-    monkeypatch.delenv(_census.ENV, raising=False)
-    assert cli.main(["rollcensus", "verdict"]) == 2
-    census = tmp_path / "census.jsonl"
-    census.write_text("")
-    monkeypatch.setenv(_census.ENV, str(census))
-    assert cli.main(["rollcensus", "verdict"]) == 0
-    assert "roll census: green" in capsys.readouterr().out
-
-
-def test_the_roll_census_full_run_word_survives_the_ci_parser(roots: Path, monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 215: `--full` is the ci parser's own flag (feature 130) and it ATE the verdict's, so every gate judged
-    with full=False and a stale roster row never failed - found when two rows left behind on purpose came up green.
-    The word `full` is positional now, and this drives it through the real entry point against the real roster."""
-    census = tmp_path / "census.jsonl"
-    spec = {"name": "Inashiro", "seed": 4, "households": 15, "field_archetype": None, "down_deg": 90, "water_sink": "pond", "settlement_form": None}
-    census.write_text(json.dumps({"kind": "roll", "spec": spec, "test": "tests/full/test_villages.py::immune", "request": "r1", "pid": "9", "worker": "7", "dt": 25.0, "ok": True}) + "\n")
-    monkeypatch.setenv(_census.ENV, str(census))
-    # feature 219: the real roster holds no Roll row, so a stale row is planted on it - the Inashiro roll above is the
-    # pool's (a PoolGen) and stays green; only the full-run word can make the planted row count
-    import types
-
-    from tests import rolls
-
-    monkeypatch.setattr(rolls, "by_key", lambda: {("Gone", 1): types.SimpleNamespace(key=("Gone", 1), rolled_by="a child roll")})
-    assert cli.main(["rollcensus", "verdict"]) == 0, "an incremental run: a stale row does not count"
-    assert cli.main(["rollcensus", "verdict", "full"]) == 1, "a full run: the planted row is stale"
-    assert "stale" in capsys.readouterr().out

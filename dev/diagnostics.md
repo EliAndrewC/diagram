@@ -22,7 +22,7 @@ the feature belongs, not earlier.
 
 ## Ask the GEN who placed it - do not grep for the caller
 
-The other half of the same lesson. `open_seat` answers "where does this fit?"; **[`tools/why_placed.py`](../l7r/diagram/tools/why_placed.py)** answers *"who put this here?"* and *"what refused to put anything here?"* - the two questions you actually have when a map comes out wrong.
+The other half of the same lesson. `open_seat` answers "where does this fit?"; **`tools/why_placed.py`** (deleted with the Python hamlet engine, feature 444 T39) answers *"who put this here?"* and *"what refused to put anything here?"* - the two questions you actually have when a map comes out wrong.
 
     make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py AT=1102.6,1429.5
     make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py REFUSED=1102.6,1429.5

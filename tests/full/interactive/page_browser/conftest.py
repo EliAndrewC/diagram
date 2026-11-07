@@ -1,0 +1,127 @@
+"""The Playwright browser and the ONE page the tests drive - the synthetic map (feature 134; split into a
+package on 2026-09-07 when the one file passed the 1,000-line bar - constitution X clause 13). Skipped with
+a reason when Playwright or its Chromium is absent (`setup-dev-env.sh` installs both).
+
+THERE IS NO ROLLED PAGE HERE, AND NO TIMING (GM 2026-09-07). The `inashiro` and `kuwabata` fixtures - a real
+hamletgen roll and, for Kuwabata, its 18.6-megapixel raster, rebuilt by EVERY xdist worker - and the thirteen
+tests over them (the reference mechanics and timings of feature 134, the blue plots of 159, the footnote hover
+of 194, the pointer-move and raster-CPU caps of 199-203) were retired the day the container crashed twice
+under them: the package alone cost 3.9 GiB at 8 workers against an 8 GiB cap. The GM: *"the performance tests
+are never really going to be good enough to detect whether a human feels that the page is too sluggish. that
+is fundamentally a matter of judgment and vibes ... the juice is not worth the squeeze."* A speed request is
+measured by hand in a browser while it is being worked and the numbers go in its research.md - never a
+repeatable test that runs at the gate or on a page edit (`l7r/diagram/interactive/CLAUDE.md`, "Verifying")."""
+
+from __future__ import annotations
+
+import os
+import shutil
+import tempfile
+from collections.abc import Iterator
+from typing import Any
+
+import pytest
+
+from l7r.diagram.interactive.page import render_page
+from l7r.diagram.interactive.sources import RESEARCH_DIR
+from tests.full.interactive.page_browser._driver import Page, _synthetic
+
+# ONE CHROMIUM PER RUN, AND IT IS NOT PARALLELIZED (GM 2026-09-12: *"we should only ever start one chromium for
+# a test run, and that stuff should not be parallelized until such time as we have way, way more tests than we do
+# now"*). Two things were needed for that, and the fixture's scope was only one of them:
+#
+#   - SESSION scope, not module. There are two test modules here, so a module-scoped browser is two browsers even
+#     on one worker.
+#   - ONE XDIST GROUP. Under `--dist worksteal` two modules go to two workers, and a session fixture is per
+#     PROCESS - so each worker built its own. Measured in the 2026-09-12 memory audit: those two workers peaked at
+#     332 and 336 MiB against 126-199 for every other worker, i.e. ~335 MiB of the suite's peak was the second
+#     Chromium. `xdist_group` puts both modules on the same worker (`--dist loadgroup`), which is the only way a
+#     session fixture can actually be shared.
+#
+# The cost of not parallelizing them is nothing to speak of: the package is two modules and a handful of tests on
+# a page of fifteen elements, under 9 s in total, and it is skipped entirely whenever nothing it reads has changed
+# (feature 206's `browser` stamp).
+#
+# THE MARKER LIVES IN EACH TEST MODULE'S OWN `pytestmark`, NOT HERE. A `pytestmark` in a conftest applies to
+# nothing: pytest reads module marks from the TEST module, and a conftest is not on any test's node chain. The
+# 2026-09-13 gate memory profile (dev/performance.md, "Where a gate's RAM goes") found this package's 21 tests spread
+# over 8 of the 10 workers, each with its own Playwright driver (~95 MiB) and Chromium (~55 MiB over five processes) -
+# 1.2 GiB of the gate's 3.2 GiB peak, for a rule this file had stated since 2026-09-12. `tests/test_markers.py`
+# now asserts the mark on every module here, so the rule cannot silently lapse again.
+
+
+@pytest.fixture(scope="session")
+def browser() -> Iterator[Any]:
+    # Imported HERE, not at module level: every worker imports this conftest to collect the package, and
+    # `playwright.sync_api` with the greenlet and asyncio it drags in is ~7 MiB a worker (the same profile) - paid
+    # by the one worker that runs the group, instead of by ten.
+    playwright = pytest.importorskip("playwright.sync_api", reason="playwright is not installed (pip install -r requirements-dev.txt)")
+    with playwright.sync_playwright() as p:
+        try:
+            b = p.chromium.launch()
+        except Exception as e:  # noqa: BLE001 - the launch error is the reason to skip, whatever its type
+            pytest.skip(f"Chromium is not installed for Playwright (python3 -m playwright install --with-deps chromium): {e}")
+        yield b
+        b.close()
+
+
+@pytest.fixture(scope="module")
+def synthetic(browser: Any) -> Iterator[Page]:
+    strings, tags = _synthetic()
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "synthetic.html")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(
+                render_page(
+                    strings,
+                    tags,
+                    "Synthetic",
+                    {"ftpx": 1.0},
+                    {
+                        "marshes": [{"role": "toe", "poly": [[220, 100], [290, 100], [290, 190], [220, 190]]}],
+                        "commons": [{"role": "grazing", "poly": [[0, 120], [300, 120], [300, 200], [0, 200]], "cover": [[[0, 170], [60, 170], [60, 200], [0, 200]]]}],
+                    },
+                )
+            )
+        page = Page(browser, path)
+        yield page
+        page.close()
+
+
+#: A synthetic RESEARCH page (feature 209): the record's three assets by absolute file URL, a heading and a
+#: sentence that use a glossary term, the same term in a code span (never wrapped), one footnote in the page and
+#: - feature 211 - one whose note is only in `window.RECORD_CITATIONS` (the shape `make citations` derives from a
+#: citations page, inlined here so the page needs no second file) - enough to prove the glossary hover and both
+#: footnote hovers share one box, on a page of fifteen elements rather than a real record page (the GM's ruling
+#: of 2026-09-07: no browser test loads a rolled or real page).
+RECORD_PAGE = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Synthetic record</title>
+<link rel="stylesheet" href="file://{assets}/record.css">
+<script src="file://{assets}/glossary.js" defer></script>
+<script src="file://{assets}/record.js" defer></script></head><body><main>
+<h2 id="homestead-groves-yashikirin"><span class="xref"><a href="rendering/x.html#y">How it's drawn</a></span>Homestead groves (yashikirin)</h2>
+<!-- Grounds: a comment the reader never sees; yashikirin -->
+<script>window.RECORD_CITATIONS = {{"fn-2": "<a href='https://example.invalid/'><code>b-key</code></a><span class='sep'> - </span><span class='passages'><span class='pass'>「a derived note naming a tameike」</span><span class='sep'>; </span><span class='pass sub'>「a second passage」</span></span>"}};</script>
+<p>The kainyo of the Tonami plain is a stand of sugi,<sup class="fn"><a id="fnref-1" href="#fn-1">1</a></sup> and <code>yashikirin</code> is the name. At Ochiba the ochiba lies.<sup class="fn"><a id="fnref-2" href="citations/record.html#fn-2">2</a></sup></p>
+<section class="footnotes"><ol><li id="fn-1"><a href="https://example.invalid/"><code>a-key</code></a> - 「a quoted passage about a yashikirin」 (translated from the Japanese by this project; <span class="orig">original: 「原文の一節」</span>) <a class="fnback" href="#fnref-1">back</a></li></ol></section>
+</main></body></html>"""
+
+
+@pytest.fixture(scope="module")
+def record(browser: Any) -> Iterator[Page]:
+    with tempfile.TemporaryDirectory() as d:
+        # feature 301: the glossary script is BUILT into the site, never committed - so the fixture derives its own copy
+        # beside the hand-written assets it links, the stylesheet and the record script
+        from l7r.diagram.interactive.glossary import record_glossary_js
+
+        assets = os.path.join(d, "assets")
+        os.makedirs(assets)
+        for name in ("record.css", "record.js"):
+            shutil.copy(os.path.join(RESEARCH_DIR, "assets", name), assets)
+        with open(os.path.join(assets, "glossary.js"), "w", encoding="utf-8") as fh:
+            fh.write(record_glossary_js())
+        path = os.path.join(d, "record.html")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(RECORD_PAGE.format(assets=assets))
+        page = Page(browser, path)
+        yield page
+        page.close()

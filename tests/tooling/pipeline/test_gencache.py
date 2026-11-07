@@ -14,7 +14,7 @@ from typing import Any
 import pytest
 
 from l7r.diagram.pipeline import gencache
-from tests.pipeline.test_gencache import HERE, _fixture, _with_engine
+from tests.pipeline.test_gencache import _fixture, _with_engine
 
 
 @pytest.mark.tooling
@@ -65,27 +65,6 @@ def test_a_foreign_parallel_coverage_file_reaches_the_report(tmp_path):
     assert c.returncode == 0, c.stdout + c.stderr
     d = run(sys.executable, "-m", "coverage", "report", "--include=spikemod.py", "--fail-under=100")
     assert d.returncode == 0, f"the foreign data file's lines must reach the combined report:\n{d.stdout}{d.stderr}"
-
-
-@pytest.mark.tooling
-def test_regen_skips_frozen_legacy_maps():
-    """The 2026-08-16 legacy freeze, enforced at the ITERATION path: `regen.py pool/*/*/*.gen.py`
-    must not rewrite a frozen exhibit - the engine drifts freely now, so a re-run would replace
-    committed artifacts with output nobody reviewed. The skip happens BEFORE any cache or
-    generation work, and the message carries the policy and the `--frozen-ok` override (tips live
-    in the blocking output, not in docs the moment forgets)."""
-    import contextlib
-    import io
-
-    from l7r.diagram.pipeline import regen
-
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
-        rc = regen.main([os.path.join(HERE, "legacy-hand-authored-pool", "towns", "hoshizora", "hoshizora.gen.py")])
-    out = buf.getvalue()
-    assert rc == 0
-    assert "FROZEN" in out and "--frozen-ok" in out and "docs/migration-plan.md" in out
-    assert "REGENERATED" not in out and "CACHED" not in out, out
 
 
 # ---- feature 174: the defensive branches, under the GM's 2026-09-02 all-code rule ---------------
