@@ -573,7 +573,8 @@ def report(
     """Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011); a finding in a
     deferred unit (`load_deferred`) is counted DEFERRED, and its row is listed only with `show_deferred` (the GM
     2026-10-27: the report showed too much, and a deferred finding is not one to fix now)."""
-    rows = live_rows(cur, index)
+    # (a row a triage marked touched and no check has judged yet carries no verdict: it is owed, counted below, not a finding)
+    rows = {k: v for k, v in live_rows(cur, index).items() if "verdict" in v}
     due = owed(cur, index, qdir, store)
     counts = Counter(shown(k, v["verdict"], deferred) for k, v in rows.items())
     tally = ", ".join(f"{v} {counts[v]}" for v in (*VERDICTS, "DEFERRED") if counts[v]) or "no verdicts yet"

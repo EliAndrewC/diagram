@@ -459,3 +459,5 @@ In the session, as the gate's minutes were measured:
 "Can we get rid of the python driver now that we've turned off the python stages? Can we go Rust only?"
 
 "I'm surprised compilation takes so long. Are we recompiling EVERYTHING every time? I thought Rust compilers were pretty good about modularization, only compiling what you need, etc."
+
+Later the same day, on T36's figure: "I don't recall setting a 100s target. 100 seconds actually seems like FAR too long to me!" and "To the extent we have a goal it's "significantly under a minute" with the exact target TBD."

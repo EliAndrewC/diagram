@@ -225,6 +225,9 @@ def test_the_report_counts_lists_findings_and_the_open_research(tmp_path: pathli
     assert text.startswith("claims: 5 in scope; IN-STEP 4, DRIFTED 1, UNCLAIMED 1; owed 0")
     assert f"DRIFTED        {k} - 296" in text and "gone::x" not in text
     assert "UNRESEARCHED claims (the open research): 1" in text
+    # ...and a row a triage marked touched, no check having judged it yet, is owed, never a finding the report trips on (2026-11-07)
+    index["l7r/diagram/hamletgen/rows.py::helper#an unclaimed thing"] = {"triage": "touched"}
+    assert "UNCLAIMED" not in cx.report(cx.current(skill), index).split("\n")[0]
 
 
 def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Path) -> None:
