@@ -893,3 +893,30 @@ and `make arbiter-ask` on whether the lattice search returns; a claim that it ca
 
 - research: rendering
 
+
+### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: "we no longer need to join our Rust process of making maps with the Python process"; FR-023)
+
+Occasions: none owed - tooling, no map, glyph or research page changed.
+
+### T34 Decisions
+
+- **D1 - one switch**: a third axis of `dev/switches.json`, `port`: `rust-only` (the default while any stage is Python) or `integrated`; read by `l7r/diagram/switches.py` as the claims switch is, a malformed entry closing to `rust-only` (the state in force), thrown by `make switches`, which commits.
+- **D2 - make done**: at `rust-only`, the test phase deselects `rolls_map` (as `make quick` does), the reference step rolls no map, and no floor rolls a settlement: the hamlet-path floor and the roll census's verdict are suspended, and the coverage floor is measured on the tests that run, a line only a map-rolling test reached reported as information (as `dev/coverage-exempt.json`'s lines are); static, format, typecheck, hooks-test, counters-inert, the Python tests that roll no map and `make rust-test` run as before.
+- **D3 - make land and the push**: at `rust-only`, `scripts/land.py` starts no landing cohort, and `scripts/gates/cohort_gate.py` judges every engine landing by the Rust stage gate's record (FR-019) alone, whether or not the delta touches `rust/`.
+- **D4 - what stays, and what waits**: the Rust stage gate, the work budgets and their ratchet (FR-022), the claims rule (FR-021) and the static checks stay; the settlement-reviews FR-019 owes for the pool hamlets a Rust stage moves wait for the switch's throw back to `integrated`, each owed then (T33's among them); the Python stages keep running after the Rust front in `make hamlet` and `make map`, as information.
+
+### T34 Approach (2026-11-07T05:06Z)
+
+1. **The goal, in the world.** Every landing of a Rust stage waits only on what the Rust stages do: no landing cohort, no map-rolling test, no reference map.
+2. **The constraints.** FR-019, FR-021, FR-022, FR-023; feature 132's switch rules (one tracked file, written by its make target, which commits; a malformed file fails to the state in force).
+3. **Where each comes from.** G: the GM 2026-11-07 (`request.md`, amendment 8). O: `make done` a median of 333 s in November, pytest 235 s of it, measured 2026-11-07 (`dev/run-log/2026-11`); `make cohort` about 6 min, measured 2026-11-06 (the run log's timestamps).
+4. **Do they describe the world here?** Tooling only; no map changes.
+5. **The order.** Before any further phase; T27-T33's landing then rides it.
+6. **The exits.** Green: `make hooks-test` and the new switch tests pass, `make done` green at `rust-only` with no `rolls_map` test run, `make land-tooling` lands the scripts. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: a switch read once a run.
+8. **The budget.** One tooling landing.
+9. **Done, measured.** `make done`'s wall time at `rust-only`, measured at the landing (`dev/run-log`).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+**Performance work?** no - tooling; the Rust gate's own time (the row seating's `seat_rows`, 74 s a call on seed 321538, measured 2026-11-07) is a separate task.

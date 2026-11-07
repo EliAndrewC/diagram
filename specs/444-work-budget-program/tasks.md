@@ -114,6 +114,8 @@
       research: rendering
 - [ ] T33 phase: appurtenances - each grove farm's own water, the communal wells of the rolled siting among the houses and each retirement house off its farmhouse, rebuilt in Rust to its greenfield derivation; the byres and fixtures drawn where the seating laid them (FR-003-FR-006, FR-017, FR-022)
       research: rendering
+- [ ] T34 the port switch (amendment 8, FR-023): the Rust stages iterated alone - `make done` without map-rolling tests or the reference map, `make land` with no landing cohort and every engine landing judged by the Rust stage gate alone, while `dev/switches.json` `port` stands at `rust-only` (plan T34 D1-D4)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

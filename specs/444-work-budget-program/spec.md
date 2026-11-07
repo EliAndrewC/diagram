@@ -203,6 +203,21 @@ standards" (`request.md`).
   The push's ratchet holds an accepted stage to its accepted figure, which is at most twice its budget. The rules are written
   into the standards (`docs/work-budget-rubric.md`, S10) and the agent's contract (`.claude/agents/work-budget.md`).
 
+- **FR-023**: The Rust stages are iterated alone (amendment 8, the GM 2026-11-07: "we no longer need to join our Rust process of
+  making maps with the Python process ... at every point we had working maps. I think we should just stop doing that ... the
+  functionality of a make done or a make land are both going to have to change temporarily"). While the PORT SWITCH
+  (`dev/switches.json` `port`) stands at `rust-only`, the default until the last stage is Rust: no landing is refused for, nor
+  waits on, anything the Python stages after the Rust front do - `make land` rolls no landing cohort and judges an engine
+  landing by the Rust stage gate (FR-019) alone, whatever the delta touches; `make done` runs no map-rolling test (`rolls_map`)
+  and rolls no reference map or other settlement, its static checks, the Python unit tests that roll no map and `make rust-test`
+  as before; no floor rolls a settlement - the hamlet-path floor and the roll census's verdict are suspended, and the 100% floor
+  is measured on the tests that run, a line only a map-rolling test reached reported as information, as feature 448's exempt
+  engine code is; a map, pool hamlet or render that fails downstream of the Rust front is information, never a defect owed by the
+  landing, and a settlement-review FR-019 owes for a pool hamlet a Rust stage moves is not owed while the switch stands - each is
+  owed, for every pool hamlet the port moved, when it is thrown back. The Rust stages keep FR-004's manifest contract (the same keys), so the Python stages may still be rolled on their
+  output by hand, as information. Thrown back to `integrated` (FR-019 and feature 386's landing cohort as they stood) when the
+  last stage is Rust, by `make switches`, which commits. The work budgets (FR-022) and the claims rule (FR-021) are unchanged.
+
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
@@ -324,3 +339,10 @@ standards" (`request.md`).
   one-SOUND raise to four times the first budget; the accepted count now held within twice the first on such a raise.
 - 2026-11-03, amendment 7's review, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - the hold on the accepted count resolved in
   the spec, the rubric, the agent's contract and the tool.
+- 2026-11-07, amendment 8 (the GM's words, `request.md`): FR-023 - the port switch at `rust-only`; no landing refused for or waiting on
+  the Python stages after the Rust front; `make done` without map-rolling tests or the reference map; `make land` on the Rust gate
+  alone.
+- 2026-11-07, amendment 8's review, round 5 (spec-fidelity, MODE 4): CHANGES REQUIRED, 2 items - the floors "as before" could not
+  run without rolling maps (now: no floor rolls a settlement, the hamlet-path floor and the roll census suspended, the coverage
+  floor on the tests that run); the settlement-reviews FR-019 owes (now deferred to the switch's throw back, owed for every pool
+  hamlet the port moved). Round 6 closed by the round arbiter's ACCEPT (round:spec-fidelity|444-work-budget-program#5@6).

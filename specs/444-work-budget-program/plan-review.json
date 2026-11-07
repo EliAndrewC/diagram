@@ -380,9 +380,9 @@
    "declared": "spec-fidelity"
   },
   "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
-   "sha256": "6a7ce00555a24f64563611ffbc8868ae901501945e58d2b33072aea987f5e968",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-06",
+   "sha256": "1a8373615de03243e58dc6a63f28dca8e21ddbfd5781a74ddec81c39fdfa56fd",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T33 Decisions": {
@@ -401,6 +401,24 @@
    "sha256": "c28a04ffae3ce85c60113caa789fe0f60974b22f2a6b9a8ecd2ea86e7349af9f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-06",
+   "declared": "spec-fidelity"
+  },
+  "### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: \"we no longer need to join our Rust process of making maps with the Python process\"; FR-023)": {
+   "sha256": "e67327f1fbc2f90fb26b9c6eefa75171c96c367ae64f1e0f22fb4070e1b91ff1",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Decisions": {
+   "sha256": "c7e41a8d9facc4dd48af9c75fcb4559cf9a5a2d442ef0710088ab3718ce452ed",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Approach (2026-11-07T05:06Z)": {
+   "sha256": "88c2ed23699b9967df0786c4889aae9df68c21af0da7771e04797bb8c79f7212",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   }
  },
@@ -5083,6 +5101,55 @@
      "summary": "Exits as T33 part A (rust-gate, claims IN-STEP) plus the 0196 cohort checks on the gate's seeds, zero wells in a drawn belt, and MODE AUDIT against a re-derivation pricing the candidates; red goes to the arbiter on whether the lattice search returns.",
      "class": "within",
      "why": "FR-019, FR-021, FR-022. The exits now restore the rust-gate line the earlier text left out of the re-answered item 6."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: \"we no longer need to join our Rust process of making maps with the Python process\"; FR-023)",
+    "### T34 Approach (2026-11-07T05:06Z)",
+    "### T34 Decisions"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T33-belt",
+     "summary": "The appurtenances' Rust reads no belt footprint from the door (was: the belt's footprint), citing D6.",
+     "class": "within",
+     "why": "An input-list detail of the stage's port; no GM words or requirement in the bundle require the belt footprint as an input. The cited D6 does not resolve in the bundle (spec-cited.md gives the spec's D6, 'make land makes the record', unrelated to belts), so whether dropping it changes FR-004's manifest keys or a placement rule cannot be seen from here; on its face it is within."
+    },
+    {
+     "id": "T34-D1",
+     "summary": "One port switch, dev/switches.json `port`: rust-only (default while any stage is Python) or integrated; malformed closes to rust-only; thrown by make switches, which commits.",
+     "class": "within",
+     "why": "The GM: 'we no longer need to join our Rust process ... with the Python process' and 'make done or make land are both going to have to change temporarily'. A temporary switch, default rust-only until the port ends, is that change; FR-023 carries it."
+    },
+    {
+     "id": "T34-D2-tests",
+     "summary": "At rust-only make done deselects rolls_map tests and rolls no reference map; static, format, typecheck, hooks-test, counters-inert, non-rolling Python tests and make rust-test run as before.",
+     "class": "within",
+     "why": "The GM: 'our gates and our tests are not running through the Python code'. rolls_map is held complete by tests/test_markers.py, so it is a measured boundary for 'tests that roll a map'."
+    },
+    {
+     "id": "T34-D2/D4-floors",
+     "summary": "At rust-only 'the floors run as before' (D2) and 'coverage ... stays' (D4): the 100% coverage floor, the hamlet-path floor and the roll-census verdict are unchanged.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The floors cannot run as before with the rollers deselected. The Makefile says so (line 1319: 'A deselected test takes its coverage with it, so the 100% floors need the whole suite'). l7r/diagram/tools/hamlet_floor.py takes its module set from rollcache.report_deps on the reference settlement, the polder rolls and cohort seeds 41-44. With no record for the code as it stands (rollcache._current, which any engine change invalidates), it rolls each subject whole in a child (_hamlet_in_child), so the whole Python pipeline runs inside make done. That leaves two outcomes. Either make done still rolls whole-pipeline maps and waits on the Python stages, which is what the GM asked to stop ('at every point we had working maps. I think we should just stop doing that'). Or the 100% floors fail on modules only the rollers cover, and make done stays red, which defeats 'to even make it possible to do this'. The plan's own green exit (Approach 6: 'make done green at rust-only with no rolls_map test run') cannot be reached under D2. It is not impossible to change, and the GM's words imply no carve-out: he said 'we will have to disable certain tooling'. It keeps a behavior he did not ask to keep. It is not enforcement of the request either, because it checks Python coverage and whole-pipeline rolls, not the Rust stages."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "At rust-only land.py starts no landing cohort; cohort_gate judges every engine landing by the Rust stage gate record alone, whatever the delta touches.",
+     "class": "within",
+     "why": "The GM: make land 'going to have to change temporarily' and no joining of the Rust and Python processes. FR-023 carries it."
+    },
+    {
+     "id": "T34-D4-rest",
+     "summary": "The Rust stage gate, the work budgets and ratchet, the claims rule and the static checks stay; make hamlet and make map keep running the Python stages after the Rust front, as information.",
+     "class": "within",
+     "why": "The GM narrowed only the Python integration. He said 'then we can begin to talk about our operations budget', so the budgets and gates on the Rust stages stand. Rolling the Python stages by hand as information gates nothing."
     }
    ]
   }
