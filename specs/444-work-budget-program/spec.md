@@ -243,14 +243,12 @@ standards" (`request.md`).
      out of a deleted package where one is needed. The pool hamlets' rendered files and `legacy-hand-authored-pool/` stay as
      frozen exhibits whose scripts no longer run. The PyO3 doors and the crate's `python` feature go with the Python that called
      them. The code stays in git history.
-  4. **The code-reading checks.** Every consumer of the deleted Python is found by one stated search - the deleted packages'
-     names as TEXT (which catches an import too) in every kept file: `l7r/` and `tests/` outside the deleted trees, `scripts/`,
-     `.claude/`, the `Makefile`, `pyproject.toml` and the top-level `dev/*.json` (the append-only run, perf and bypass logs keep
-     their history), the exact command recorded beside the fate table so it can be re-run - and
-     each gets a recorded fate with its reason in the plan (T40's table): PORTED to read the Rust, ALREADY reading the Rust, or
-     DROPPED because what it checks exists only in the deleted Python. A check that reads code to report on it - the claims
-     index, the claims report and the claims gate, the tunables, the work-budget bundle, the file and function caps - is ported,
-     never dropped (the GM: "the code that introspects the Python code should get Rust ports").
+  4. **The code-reading checks.** Every consumer of the deleted Python is caught mechanically (the round arbiter on
+     ask:444-a11-plan-d7): the kept suite and make targets run green after the deletion; a test refuses any kept file that
+     names a deleted package in an import, relative or path form, its history allowlist enumerated file by file; and every
+     check that reads code to report on it - the claims index, the claims report and the claims gate, the tunables, the
+     work-budget bundle, the file and function caps - is ported to read the Rust, never dropped (the GM: "the code that
+     introspects the Python code should get Rust ports"), each with a Rust fixture test proving it still fires.
   5. **The Rust driver.** A Rust program rolls a hamlet from its spec - the plan, the knob rolls, the stages through the cut - and
      writes its map (SVG) and its manifest, with no Python; each pool hamlet's spec is a data file its driver reads. A stage is
      enabled in the driver once it draws; its map is judged against the frozen writeup's plate for that stage.
@@ -415,3 +413,5 @@ standards" (`request.md`).
 - 2026-11-07, amendment 11's review, round 2 (spec-fidelity, MODE 4): BLOCKED - the text search left out kept `l7r/` and `tests/`
   (now: every kept file searched as text, the command recorded); part 1's replacement named (the GM's "new automatically
   generated version after our port", a later task).
+- 2026-11-07, amendment 11's review, round 3 (spec-fidelity, MODE 4): BLOCKED on D7 again; the round arbiter ACCEPTED
+  (ask:444-a11-plan-d7) with D7 replaced by the mechanical rule, part 4 reworded to it as a conforming edit.

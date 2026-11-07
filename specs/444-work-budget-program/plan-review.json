@@ -55,36 +55,6 @@
    "reviewed": "2026-10-31",
    "declared": "round-arbiter"
   },
-  "### T16 Approach (checklist part A)": {
-   "sha256": "5e56250d4da119db96ba9ea102ad706ee9066513284a626cb2432c705f6936d3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "fa0157e9c6af167e04cd6731f0c9658602940a0b8806d8b6a04782d405399565",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 - phase: field, in Rust under the single-field cap, through the checklist (FR-003 to FR-006, FR-017, FR-018; step 4)": {
-   "sha256": "87abdb3e00c0edf431bced6cfba53f4ea8aeda0681f58ba5830036ccd028547b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T18 - the field re-derived under the single-field cap (FR-018), its MODE BUDGET verdict": {
-   "sha256": "5637cccf7a92e7f672e35bf8e553b03e53089c57bbd7cff2868e07b7296f1054",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T18 Approach (checklist part A)": {
-   "sha256": "e69be6a58b566ad02fa37a1120cb19f6639c43712421427f4f90055f9bc46404",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "round-arbiter"
-  },
   "### T21 - the Rust stage gate and the failing-seed list (amendment 5, FR-019, FR-020; the GM 2026-10-31: \"Yes, I agree with your proposals and refinements. Please write up that amendment and then implemente it.\")": {
    "sha256": "68595cc20e15a90da26f86ff7c1d81add37c77cd772f5befde41c9bfe58c5fd7",
    "verdict": "CLEAR",
@@ -103,64 +73,10 @@
    "reviewed": "2026-10-31",
    "declared": "round-arbiter"
   },
-  "### T18 Approach (2026-10-31T16:27Z)": {
-   "sha256": "5b1f75ef7fc2065af0ca6a7b0fd0c4e5ad0a23f0c4e6fc5a6bf1c520466019bf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T18 Decisions": {
-   "sha256": "f3484823a18103e1e603b39947eae799b4039bb79f16b60e4d35972594418d02",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T18 Approach (re-answered 2026-10-31T16:53Z)": {
-   "sha256": "15886353b0b6afca383627aecbf2eb03cc6268873ad1710c4e7ebd516fbc3b00",
-   "verdict": "CLEAR",
-   "reviewed": "2026-10-31",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Decisions": {
-   "sha256": "edb158a81ac775862465d775ea2282da4dd81ef333d9f3590f8dacf93b2929aa",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Approach (2026-10-31T22:16Z)": {
-   "sha256": "8fbd78d48b792d8ea89d1c8f18b2242dda26de64848f5473b2281e0988d7b081",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-10-31T20:43Z)": {
-   "sha256": "485113f27babe8390a9a22a055b326d0927f14d18726cd1ec97243c74d2d13ac",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
   "### T22 Approach (checklist part A)": {
    "sha256": "1bb986bc5722f79ba7d447e0df1b60477b867b8d2294ae02a820a3170e39b429",
    "verdict": "CLEAR",
    "reviewed": "2026-11-03",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Approach (2026-11-01T00:39Z)": {
-   "sha256": "62734b339500cc86dad8c7c2d39ad435fb5cc878bc5c683ad442e868308f3745",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-11-01T00:41Z)": {
-   "sha256": "d9075b527f281139d43db6dde7d487d5ff5db76cffdfe83737177579d1f13267",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 Approach (2026-11-01T01:55Z)": {
-   "sha256": "84bbcb5249b7908cc30360eae4d86d1ba6cd1053202c2db931e61d2ed3d87139",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
    "declared": "spec-fidelity"
   },
   "### T24 (the round arbiter's ruling ask:444-T16-hem-cleared-reprice, 2026-11-01)": {
@@ -170,40 +86,10 @@
    "declared": "spec-fidelity"
   },
   "### T24 Approach (checklist part A)": {
-   "sha256": "1cb6282fc568831fa12a1dad350027b1a85bf4cf769d31c3871bc6d063032f45",
+   "sha256": "826eb54798441749604d7b41bc213942604e606eb634aa924fc8735eb7439e4d",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T23 - folded into T16 (the round arbiter on ask:444-T16-fr021-scope-2, 2026-11-01)": {
-   "sha256": "1a5883286f7f65bcc6695ce5012fda4ee517c7072c5bd9ce10814c9bb23bd9b2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-11-01T06:23Z)": {
-   "sha256": "0c652e73c038e4650dc8e891692646f80f702fb5d747111bfa714a6fd119b844",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-11-01T12:34Z)": {
-   "sha256": "3dcd4dab5c751d1f774aa27e019b23d45fc1f61e5448c9e4cf7f399123d01c63",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-11-02T01:32Z)": {
-   "sha256": "f3d78ce883ddacdb251cfc18fa8356059d2ade7d293ff56ce261fcfe91eaee58",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
-  },
-  "### T16 part B (2026-11-02T02:31Z)": {
-   "sha256": "2fc98a9e00b4d3c244d3190079a0559c93cdc4269fe88ef0cb6553f72e99c4de",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T25 (escalation-check on the T16 glyph check of Inashiro's paddy, F1, 2026-11-02)": {
    "sha256": "c5f05a0022caef882f2e8df5dcd45e494d6e34ace310c041883931693f0d609d",
@@ -212,10 +98,10 @@
    "declared": "spec-fidelity"
   },
   "### T25 Approach (checklist part A)": {
-   "sha256": "4985dc9e1db175c49a4b293929b44c2adf36cd7fecc3c47f4a43ddb367ca58f9",
+   "sha256": "28ebc7a27e113eed4a1745b477d603e8b93fd44e310576486f4d9086107e1b25",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-01",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T26 - phase: sink, in Rust under amendment 7 (the GM 2026-11-03: \"then work on converting the next stage with these guidelines in place ... like the entire next phase\"; FR-003-FR-006, FR-017, FR-022)": {
    "sha256": "441f6d314fd8f65f892c528382c5818c915edc857d1c5344c365b71d4d3e58e2",
@@ -236,10 +122,10 @@
    "declared": "spec-fidelity"
   },
   "### T26 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "cf4894db2ea8ea5fc5db660a80379da5bb2d02463a0c1cfc394c9f982f544b48",
+   "sha256": "d204c82e0ae0c3fd129c89f87612009f1bf31e313adab83174731dce25c04e82",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-03",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T22 (FR-021, amendment 6: every open claims finding at water_frame's units - 15 when filed, listed by `make claims-report`)": {
    "sha256": "041db6b8791d6a654792986201bec2420728db63391b7f86aa1e914e030aea4e",
@@ -254,10 +140,10 @@
    "declared": "spec-fidelity"
   },
   "### T26 Approach (2026-11-04T06:51Z)": {
-   "sha256": "1fc5161a5d09e6086f2633fb09e6b2f442246b315460c08faf75b3ade997e4f5",
+   "sha256": "348941ff133d51f2f44ced5c7e2fc265e6677df810d34c4da579ac4cbb352e53",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T27 - phase: seat, in Rust under amendment 7 (the GM 2026-11-04: \"Once you have finished with this, please do the entire next phase as well\"; FR-003-FR-006, FR-017, FR-022)": {
    "sha256": "4d160c3ee053dec13057be63434f535f1b3f1cc10f59cfb45a20ea3779a5c941",
@@ -296,10 +182,10 @@
    "declared": "spec-fidelity"
   },
   "### T28 Approach (2026-11-04T12:38Z)": {
-   "sha256": "3fe4f6d67bfdf31cb866eeb342412b83a8284a6e6d627e53ab155268908963cd",
+   "sha256": "71d0988542eb6d1203c8e2c5a3610d16483172dbc4ab57a400b683f185d667ed",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T29 - phase: waterward, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
    "sha256": "c60e589940560883502c1aca6187508dd1cd9868e6fc784e3865cdcc6330cb01",
@@ -314,10 +200,10 @@
    "declared": "spec-fidelity"
   },
   "### T29 Approach (2026-11-04T13:35Z)": {
-   "sha256": "3e3a52069b09604e48853b2303fa1665a16a377069b9aec8e4142642246a40f7",
+   "sha256": "41c33bcec5ad756f632a4e23118b4c9bd011e733dbe0d5f136a198200307b0ce",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T30 - phase: homesteads, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
    "sha256": "4ebda4b9668e3befbd91d7c5520cd9bb01a2225f534445241e7c504eab607981",
@@ -338,10 +224,10 @@
    "declared": "spec-fidelity"
   },
   "### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "84a918c0f7757819ce4b315a3b4564abe647c628c577e605ed5c7e5c1cbcf8f3",
+   "sha256": "40afa742a9e86055a380595b3d849b5d31a7958ebb7b2341396f347c5936dfd0",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-04",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T31 The homesteads seat all 17 households of the Rust gate's seed 778251 on its margin 1": {
    "sha256": "80ef0a54e103bb1dfd4fb4069c406ac60e95e827367f5c458c431396f998ae5c",
@@ -398,10 +284,10 @@
    "declared": "spec-fidelity"
   },
   "### T33 Approach (re-answered 2026-11-06T08:04Z)": {
-   "sha256": "c28a04ffae3ce85c60113caa789fe0f60974b22f2a6b9a8ecd2ea86e7349af9f",
+   "sha256": "1a47ecf408bca57fa48519903e4191125204a9763ef0c3a3a2ec8894a5b0dd06",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-06",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-07",
+   "declared": "round-arbiter"
   },
   "### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: \"we no longer need to join our Rust process of making maps with the Python process\"; FR-023)": {
    "sha256": "e67327f1fbc2f90fb26b9c6eefa75171c96c367ae64f1e0f22fb4070e1b91ff1",
@@ -416,10 +302,10 @@
    "declared": "spec-fidelity"
   },
   "### T34 Approach (2026-11-07T05:06Z)": {
-   "sha256": "88c2ed23699b9967df0786c4889aae9df68c21af0da7771e04797bb8c79f7212",
+   "sha256": "0f559f172950d50e4dc5b7cbf53797fe4ac893210139c089bac5d3969d38e022",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T35 - the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z)": {
    "sha256": "cd07490600cd551d4f8f7554414cb45a06e1ffb5247d5117e2dc1f99d181cff4",
@@ -428,10 +314,10 @@
    "declared": "spec-fidelity"
   },
   "### T35 Approach (checklist part A)": {
-   "sha256": "09d6732242cae3c5853d4fb8bd6a380142cd527bfa3976e330f0dffa8014ff63",
+   "sha256": "0cf2edc2ccab791785ce8a3fcca31cf3c45178eb74f4845d071a192a4e16e95f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T34 Approach (re-answered 2026-11-07T13:27Z)": {
    "sha256": "596be1366905de8162b2993ec6cd97361d4a5062a4ccf4f041f2b6648c3392f8",
@@ -440,70 +326,70 @@
    "declared": "spec-fidelity"
   },
   "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")": {
-   "sha256": "7f15142a6bf2cbfbadfeba1d8ec996efaa03f888e1c725f325f39a0cf87f8226",
-   "verdict": "BLOCKED",
+   "sha256": "ed196bafdf93fbe52319df4d081dac5f3aa7f84a8407d02705ab2d7d0a275b8c",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T37-T43 Decisions": {
-   "sha256": "c5dfc0c22d8d336140b1852f2009726602ecbbc02b2190b56fcfdb02d4bb07d1",
-   "verdict": "BLOCKED",
+   "sha256": "9818fe96ad525a7dfb16d958178b3475e8f4de804a9f818810b3dd2f2ecc48da",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T36 Approach (checklist part A)": {
    "sha256": "37a036565a0f28c363a5a62444974056e74a9da6df2b3ebb0daff6fe8b38417b",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T37 Approach (checklist part A)": {
    "sha256": "7c005bc378325d8e12dec43bd64160187af975b5f11ca772b540fa66d5078615",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T38 Approach (checklist part A)": {
    "sha256": "0a7f1aa3bf1f9e98ad7d63d4e3dda3bea8381282c787038b37e1dcc20ec8ebb6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T39 Approach (checklist part A)": {
    "sha256": "bda60c5725ee2d3d140b767d099605080c55773be12e760996df5efb07d6252c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T40 Approach (checklist part A)": {
    "sha256": "766507580b672a77e09542c2475e099d2792c569a26a9f2a92abf06535d8cb7c",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T41 Approach (checklist part A)": {
    "sha256": "dd410519d2cdaa16f49e2b7f11ce23308531084c8f5ade4b5c182bf6086e5254",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T42 Approach (checklist part A)": {
    "sha256": "6d448fa4519fd5c17774b8e48fc9b102c92efd729845c52fa737ad6c0901b617",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T43 Approach (checklist part A)": {
    "sha256": "7e0b38ce61edd1b7285202a54320b59da71bfd98e0e6280468a8d450f91404ea",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T37-T43 the shared approach": {
    "sha256": "a3768bac395a57d389ed05272e9d0a2d3a4b81cb53aa47547a0d145ca4ae085d",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -5599,6 +5485,127 @@
      "summary": "make test-full in significantly under a minute, measured by wall time at the landing, after T41",
      "class": "within",
      "why": "Amendment 10: 'To the extent we have a goal it's \"significantly under a minute\" with the exact target TBD'; no fixed number is invented."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T36 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")",
+    "### T37-T43 Decisions",
+    "### T37-T43 the shared approach",
+    "### T38 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T40 Approach (checklist part A)",
+    "### T41 Approach (checklist part A)",
+    "### T42 Approach (checklist part A)",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Order: freeze writeup, park Rust past the cut, delete Python with code-reading checks and gate switch-offs in one landing, then driver, then crate split",
+     "class": "within",
+     "why": "The order the GM agreed (amendment 11, 'That sounds good. Please proceed with that.'); bundling T39-T41 in one landing keeps the tree green without changing what is done."
+    },
+    {
+     "id": "D2",
+     "summary": "The cut through waterward; seat flagged not cut; parked modules used by no kept module",
+     "class": "within",
+     "why": "FR-024 part 2 settles the cut at waterward; the seat's overage carries the GM's approval (2026-11-07); homesteads (13.2M) is the stage the GM said to stop before."
+    },
+    {
+     "id": "D3",
+     "summary": "Delete set by reachability from kept roots; overlap deleted; knob registry exported to l7r/diagram/knobs.json; work_counts kept because the caption placer imports it",
+     "class": "within",
+     "why": "FR-024 part 3: delete what rolls/draws/checks a hamlet, keep what kept tooling imports, move a shared helper out where needed."
+    },
+    {
+     "id": "D7",
+     "summary": "The consumer census: one recorded git grep and a fate per consumer",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-024 part 4 asks for the deleted names searched as TEXT in every kept file and a fate for each consumer in the plan. (1) The pattern matches settlement/sitegen/waterfields/overlap/citybudget only after an l7r.diagram. or l7r/diagram/ prefix, so it misses from l7r.diagram import settlement, relative imports (from .settlement, from . import overlap) and test-tree paths like tests/settlement in Makefile/pyproject. (2) The counts do not match the table: 38 l7r/ files found, 35 given a fate; 13 scripts/ files found, 15 listed. The clause that adds a missed consumer before the landing defers what part 4 requires now. (3) The hand-drawn maps' .gen.py under pool/, which D3 says import the settlement facade, are kept consumers that the search never covers and the table gives no fate. (4) tests/gate, full, tier_city, tier_town and soak are left out of the search but are not in D3's delete list. (5) One reason covers 17 tools, but part 4 says a check that reads code is PORTED, never dropped; any of them that reads source needs its own fate. Nothing makes a complete census impossible."
+    },
+    {
+     "id": "D4",
+     "summary": "Gates that presume a whole hamlet deleted; Rust tests, coverage, claims rule and through-cut budgets kept; port switch stays rust-only",
+     "class": "within",
+     "why": "FR-024's last paragraph lists these gates and their replacements; the GM: 'switching those off or even just deleting them outright'."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust binary 'hamlet' reading pool/hamlets/<name>/<name>.spec.json, writing svg and json; stages enabled once they draw",
+     "class": "within",
+     "why": "FR-024 part 5."
+    },
+    {
+     "id": "D6",
+     "summary": "Cargo workspace split per stage; python feature and PyO3 removed; counters feature in every build; cargo build --timings before and after",
+     "class": "within",
+     "why": "FR-024 parts 3 and 6; the GM's 'no obvious issues like recompiling every single file'."
+    },
+    {
+     "id": "Occasions",
+     "summary": "No review occasions for deletion/cut/gates/split; T42's first Rust map's glyph-checks deferred to the switch's throw-back",
+     "class": "within",
+     "why": "FR-023 defers review-gate glyph-checks for pool hamlets while the port switch stands at rust-only."
+    },
+    {
+     "id": "T36",
+     "summary": "make test-full significantly under a minute, measured at the landing after T41",
+     "class": "within",
+     "why": "Amendment 10: 'significantly under a minute'."
+    },
+    {
+     "id": "T43-order",
+     "summary": "Crate split after T42, or before it if the driver's builds measure slow",
+     "class": "within",
+     "why": "A reorder for the GM's speed goal, not a narrowing of what is done."
+    },
+    {
+     "id": "T37-T42 exits",
+     "summary": "Per-task green exits (frozen reference named, rust-test without parked, kept tests green, rust-tooling green, make done green, plate comparison)",
+     "class": "within",
+     "why": "Each mirrors an SC-017 clause."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T24 Approach (checklist part A)",
+    "### T25 Approach (checklist part A)",
+    "### T26 Approach (2026-11-04T06:51Z)",
+    "### T26 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T28 Approach (2026-11-04T12:38Z)",
+    "### T29 Approach (2026-11-04T13:35Z)",
+    "### T30 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T33 Approach (re-answered 2026-11-06T08:04Z)",
+    "### T34 Approach (2026-11-07T05:06Z)",
+    "### T35 Approach (checklist part A)",
+    "### T36 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")",
+    "### T37-T43 Decisions",
+    "### T37-T43 the shared approach",
+    "### T38 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T40 Approach (checklist part A)",
+    "### T41 Approach (checklist part A)",
+    "### T42 Approach (checklist part A)",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:444-a11-plan-d7",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
