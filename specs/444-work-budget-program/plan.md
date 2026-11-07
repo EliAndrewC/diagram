@@ -1140,8 +1140,9 @@ engine's tests back in would contradict it.
 
 ### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: "That sounds good. Please proceed with that.")
 
-Occasions: none owed for the deletion, the cut, the gates or the crate split (no map, glyph or research page changes); T41's
-first Rust map owes a glyph-check per element new to a map drawn by Rust, at the landing that first draws it (`docs/reviews.md`).
+Occasions: none owed for the deletion, the cut, the gates or the crate split (no map, glyph or research page changes); T42's
+first Rust map owes the review gate's glyph-checks when the port switch is thrown back (FR-023 defers them while it stands at
+`rust-only`).
 
 ### T37-T43 Decisions
 
@@ -1150,7 +1151,8 @@ first Rust map owes a glyph-check per element new to a map drawn by Rust, at the
   green; T42 the Rust driver; T43 the crate split. One `make done` green before the landing, which carries T27-T33's unlanded
   commits with it.
 - **D2 - the cut** (FR-024 part 2): through `waterward`. Measured on `dev/work-budget.md` (2026-11-06, 4 seeds a size): water_frame
-  56, field 185,335, sink 2,107, seat 36,892, hem 31,440, waterward 0 at 40 households; homesteads 13,170,400. The seat stands at
+  56, field 185,335, sink 2,107, seat 36,892, hem 31,440, waterward 0 at 40 households (the reference spec is a comb field; waterward lays reed strips only on a
+  polder, budgeted at 1 and counted on a polder by the crate's tests); homesteads 13,170,400. The seat stands at
   193 times its paper budget of 191 but at 37 thousand operations in all, its overage approved by the GM (2026-11-07, "the seat
   ones sound good too"); it is flagged, not cut. The parked modules (`homesteads`, `track`, `appurtenances`, `law`, `ways`) are
   used by no kept module (each kept module's `crate::` uses, read 2026-11-07: field uses counts, course, hem and pyrand; sink and
@@ -1162,26 +1164,42 @@ first Rust map owes a glyph-check per element new to a map drawn by Rust, at the
   tests, so it goes too; the modal conditions import `settlement._knobs` lazily, so the knob registry is exported once, before the
   deletion, to a data file (`l7r/diagram/knobs.json`: each knob's name, value space and default) that the modal checks and the
   Rust driver read. Deleted: `hamletgen`, `settlement`, `sitegen`, `waterfields`, `overlap`, `citybudget`, the `pipeline` and `ci`
-  modules and `tools` that roll or read a hamlet, `work_counts`, their tests, and `pool/hamlets/*/*.gen.py`.
-- **D7 - every consumer found, and its fate** (FR-024 part 4): the search is the spec's (imports under `l7r/`, `tests/` and
-  `scripts/`; the names as text across the `Makefile`, `pyproject.toml`, `scripts/`, `.claude/` and the top-level `dev/*.json`),
-  run 2026-11-07 (`git grep -lE`): 21 kept files outside the deleted trees' own tests. Each fate:
+  modules and `tools` that roll or read a hamlet, their tests, and `pool/hamlets/*/*.gen.py`.
+- **D7 - every consumer found, and its fate** (FR-024 part 4). The search, run 2026-11-07 at db3040c62's successor, re-runnable:
+
+  ```
+  P='hamletgen|l7r[./]diagram[./](settlement|sitegen|waterfields|overlap|citybudget)'
+  git grep -lE "$P" -- 'l7r/**' 'tests/**' 'scripts/**' '.claude/**' Makefile pyproject.toml 'dev/*.json' \
+    ':!l7r/diagram/hamletgen' ':!l7r/diagram/settlement' ':!l7r/diagram/sitegen' ':!l7r/diagram/waterfields' \
+    ':!l7r/diagram/overlap' ':!tests/hamletgen' ':!tests/settlement' ':!tests/sitegen' ':!tests/waterfields' ':!tests/gate' \
+    ':!tests/full' ':!tests/tier_city' ':!tests/tier_town' ':!tests/soak' ':!dev/run-log' ':!dev/perf-log' ':!dev/bypass-log'
+  ```
+
+  It finds 38 files in `l7r/`, 76 in `tests/`, 13 in `scripts/`, none in `.claude/`, the `Makefile`, `pyproject.toml` and 4
+  top-level `dev/*.json` (`work_counts`, which the caption placer imports, is KEPT and so not in the pattern). Each fate:
 
   | consumer | what it reads | fate |
   |---|---|---|
   | `scripts/gates/claims-gate.sh` | exits 0 when `l7r/diagram/hamletgen` is absent | PORTED: the guard reads the Rust tree (`rust/`); a test proves it refuses an owed Rust claim with no Python present |
-  | `scripts/record/claims.py`, `l7r/diagram/tools/claims.py`, `claims_rust.py`, `dev/claims-index.json`, `dev/claims-deferred.json` | the claims of `hamletgen` and the Rust | PORTED: the Rust reader already stands (`claims_rust.py`); the Python roots narrow to what is kept, the index's deleted rows retired with their files |
-  | `scripts/record/tunables.py` | the engine's GUESS and CONVENTION values in `hamletgen`, `settlement`, `waterfields` | PORTED: reads the kept Rust's `Research:` lines |
-  | `scripts/reviews/work_budget_bundle.py`, `scripts/budget_change.py` | `hamletgen`'s stages | PORTED: the stages of the Rust through the cut, read from the crate |
-  | `scripts/gates/rust_checks.py` | the extension's import path (`phases_ext.py`) | PORTED: the maturin build and `python` feature dropped (D6) |
+  | `scripts/record/claims.py`, `l7r/diagram/tools/claims.py`, `dev/claims-index.json`, `dev/claims-deferred.json` | the claims of `hamletgen` and the Rust | PORTED: the Rust reader stands (`tools/claims_rust.py`); the Python roots narrow to what is kept; the deleted files' rows retire with them |
+  | `scripts/record/tunables.py` | the GUESS and CONVENTION values in `hamletgen`, `settlement`, `waterfields` | PORTED: reads the kept Rust's `Research:` lines |
+  | `scripts/reviews/work_budget_bundle.py`, `scripts/budget_change.py`, `l7r/diagram/tools/work_budget.py` | `hamletgen`'s stages and their counts | PORTED: the stages through the cut, counted by the crate (the counters test until T42's driver) |
+  | `l7r/diagram/tools/counters_inert.py` | the Python counters' inertness on a roll | PORTED: its Rust half (the `counters` feature changes no output) kept, its Python roll dropped |
+  | `scripts/gates/rust_checks.py` | the extension's import path (`phases_ext.py`) | PORTED: the maturin build and the `python` feature dropped (D6) |
   | `scripts/record/modal_bundle.py`, `l7r/diagram/interactive/conditions.py` | `settlement._knobs`' registry | PORTED: read `l7r/diagram/knobs.json` (D3) |
-  | `scripts/gates/check-file-scale.py`, `scripts/gates/gate-stamp.py`, `scripts/hooks/discard-hooks.sh`, `scripts/measure/dead_closure.py`, `scripts/gates/pool-readers.py` | names in prose or an example | ALREADY general: the example's words updated; `pool-readers.py`'s hamlet manifests DROPPED with them |
+  | `l7r/diagram/ci/incremental.py`, `l7r/diagram/ci/coverage_exempt.py`, `dev/coverage-exempt.json` | the engine trees the gate selects and exempts | PORTED: the kept trees only; the exemption's deleted entries retire |
+  | `l7r/diagram/pipeline/poolmaps.py`, `pool_index.py`, `gencache.py`, `__init__.py` | the scripted engine's pool maps | PORTED: the hand-drawn maps only; the pool hamlets listed from their frozen files |
+  | `l7r/diagram/_invocation.py` | its `hamletgen` entry | DROPPED entry (the module stays) |
+  | `l7r/diagram/_census.py`, `_memory.py`, `pipeline/rollcache.py`, `tools/` `cache_audit`, `cohort_audit`, `hamlet_floor`, `mapcheck`, `marsh_edges`, `notes_census`, `overlap_census`, `perf_fanout`, `perf_profile`, `perf_share`, `perf_snapshot`, `phase_calls`, `placement_stages`, `rust_gate`, `scatter_audit`, `see_through`, `stage_sizes` | a Python roll of a hamlet | DROPPED: each measures or audits only the Python engine's roll; the Rust's counts and seeds replace them (D4, T42) |
+  | `l7r/diagram/CLAUDE.md`, `pipeline/CLAUDE.md`, `tools/CLAUDE.md`, `l7r/diagram/__init__.py` | prose | ALREADY general: the words updated |
+  | `scripts/gates/check-file-scale.py`, `scripts/gates/gate-stamp.py`, `scripts/hooks/discard-hooks.sh`, `scripts/measure/dead_closure.py` | names in prose or an example | ALREADY general: the example's words updated |
+  | `scripts/gates/pool-readers.py` | the tests that read the rerolled hamlet manifests | DROPPED with those tests |
   | `scripts/hooks/lib/hm_make.py` | the `hamletgen/__main__` invocation | DROPPED: the entry point is gone |
   | `scripts/gates/room_table.json`, `scripts/gates/closed-before-375.txt` | closed features' paths | ALREADY history: unchanged |
-  | `Makefile` | the targets that run a deleted tool (`hamlet`, `map`, `cohort*`, `rust-gate`, `placement-stages`, `work-budget`, `perf*`, `phase-calls`, `stage-sizes`, `why-placed`, `roll-audit`, `mapcheck`, the hamlet floor, `PY_ENGINE_IGNORE`) | DROPPED with their tools, `hamlet` and `placement-stages` re-pointed (D5, T37), `work-budget` read from the crate's counts |
+  | `Makefile` | the targets that run a deleted tool (`hamlet`, `map`, `cohort*`, `rust-gate`, `placement-stages`, `work-budget`, `perf*`, `phase-calls`, `stage-sizes`, `why-placed`, `roll-audit`, `mapcheck`, the hamlet floor, `PY_ENGINE_IGNORE`) | DROPPED with their tools; `hamlet` and `placement-stages` re-pointed (D5, T37); `work-budget` read from the crate |
   | `pyproject.toml` | the deleted packages' lint exemptions and coverage sources | DROPPED |
-  | `dev/coverage-exempt.json`, `dev/phase-calls.json` | the deleted modules | DROPPED: entries retired with their files |
-  | `tests/` outside the deleted trees (`rolls.py`, `test_census.py`, `test_villages.py`, `test_memory.py`, `test_road_default.py`, `test_work_counts.py`, the `tests/tools/` and `tests/tooling/` files of the dropped tools) | the deleted code | DROPPED with what they test; a test of a PORTED check moves to its Rust fixture |
+  | `dev/phase-calls.json` | the Python stages' calls | DROPPED with `phase_calls` |
+  | the 76 `tests/` files outside the deleted trees | the deleted code, or its paths in fixtures | DROPPED with what they test; a test of a PORTED check moves to a Rust fixture; a hook fixture whose example command names a deleted path keeps its text (the hook parses it, it runs nothing) |
 
   A consumer the search finds that is not in this table is added to it, with its fate, before the landing.
 - **D4 - the gates** (FR-024's last paragraph): deleted with the Python they run - `tools.rust_gate` and `dev/rust-gate/frozen/`

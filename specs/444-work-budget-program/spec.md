@@ -229,8 +229,9 @@ standards" (`request.md`).
   phase that runs quickly and efficiently is"; "NOT the last stage that is ported, after the last stage which is ported AND
   EFFICIENT"). Six parts, in the order the GM agreed:
   1. **The frozen reference.** The hamlet placement-order writeup (`dev/placement-stages/`), as last generated from the Python
-     stages, is frozen as a temporary reference and never regenerated from Python; `make placement-stages` and the landing's
-     regeneration are retired until the Rust driver generates its replacement (part 5).
+     stages, is frozen as a temporary reference and never regenerated from Python; `make placement-stages` names the frozen copy
+     and the landing's regeneration is retired, until the GM's "new automatically generated version after our port" - a page
+     generated from the Rust driver's stages, a later task than this amendment's - replaces it.
   2. **The cut.** The Rust stages run through the last stage that is ported and efficient - `waterward`, the sixth: each stage
      through it counts at most 185,335 operations at 40 households (`dev/work-budget.md`, measured 2026-11-06), where the next,
      `homesteads`, counts 13.2 million to seat about 40 farmhouses. The stages after the cut (`homesteads`, `track`,
@@ -242,9 +243,10 @@ standards" (`request.md`).
      out of a deleted package where one is needed. The pool hamlets' rendered files and `legacy-hand-authored-pool/` stay as
      frozen exhibits whose scripts no longer run. The PyO3 doors and the crate's `python` feature go with the Python that called
      them. The code stays in git history.
-  4. **The code-reading checks.** Every consumer of the deleted Python is found by one stated search - the imports of the
-     deleted packages under `l7r/`, `tests/` and `scripts/`, and their names as text across the `Makefile`, `pyproject.toml`,
-     `scripts/`, `.claude/` and the top-level `dev/*.json` (the append-only run, perf and bypass logs keep their history) - and
+  4. **The code-reading checks.** Every consumer of the deleted Python is found by one stated search - the deleted packages'
+     names as TEXT (which catches an import too) in every kept file: `l7r/` and `tests/` outside the deleted trees, `scripts/`,
+     `.claude/`, the `Makefile`, `pyproject.toml` and the top-level `dev/*.json` (the append-only run, perf and bypass logs keep
+     their history), the exact command recorded beside the fate table so it can be re-run - and
      each gets a recorded fate with its reason in the plan (T40's table): PORTED to read the Rust, ALREADY reading the Rust, or
      DROPPED because what it checks exists only in the deleted Python. A check that reads code to report on it - the claims
      index, the claims report and the claims gate, the tunables, the work-budget bundle, the file and function caps - is ported,
@@ -410,3 +412,6 @@ standards" (`request.md`).
 - 2026-11-07, amendment 11's review, round 1 (spec-fidelity, MODE 4): BLOCKED - D3's import-only search missed the consumers that
   name the packages as text, the claims gate's `[ -d l7r/diagram/hamletgen ] || exit 0` among them (now: part 4's stated search,
   each consumer's fate recorded, the claims gate ported, and SC-017's claims-gate test).
+- 2026-11-07, amendment 11's review, round 2 (spec-fidelity, MODE 4): BLOCKED - the text search left out kept `l7r/` and `tests/`
+  (now: every kept file searched as text, the command recorded); part 1's replacement named (the GM's "new automatically
+  generated version after our port", a later task).

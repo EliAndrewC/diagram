@@ -446,7 +446,7 @@
    "declared": "spec-fidelity"
   },
   "### T37-T43 Decisions": {
-   "sha256": "6c87e1e9762b9b16097c3102594719addc479229bcef2b9dc55a9f23925e26a9",
+   "sha256": "c5dfc0c22d8d336140b1852f2009726602ecbbc02b2190b56fcfdb02d4bb07d1",
    "verdict": "BLOCKED",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -5525,6 +5525,80 @@
      "summary": "No review occasions for deletion/cut/gates/split; glyph-check owed at the first Rust map",
      "class": "within",
      "why": "Does not remove any review the GM asked for; the first Rust-drawn map still owes its glyph-check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T36 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")",
+    "### T37-T43 Decisions",
+    "### T37-T43 the shared approach",
+    "### T38 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T40 Approach (checklist part A)",
+    "### T41 Approach (checklist part A)",
+    "### T42 Approach (checklist part A)",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Order: freeze writeup (T37), park Rust past the cut (T38), delete Python engine with code-reading checks and gate switch-offs in one landing (T39-T41), Rust driver (T42), crate split (T43)",
+     "class": "within",
+     "why": "The order the GM was told and answered 'That sounds good. Please proceed with that.' (amendment 11); parking before deletion and one landing for T39-T41 only keep the tree green."
+    },
+    {
+     "id": "D2",
+     "summary": "The cut through waterward; homesteads, track, appurtenances, law, ways parked in rust/parked/; seat's overage flagged not cut",
+     "class": "within",
+     "why": "FR-024 part 2 and the GM's clarification 'after the last stage which is ported AND EFFICIENT ... spending millions of operations to lay out a few dozen farmhouses then we should stop BEFORE that': each kept stage counts at most 185,335 at 40 households against homesteads' 13.2M; the seat's overage is the GM's own approval ('the seat ones sound good too', request.md); parking is the GM's 'disable it', not throwing it out. Kept modules' crate:: uses shown to reach no parked module."
+    },
+    {
+     "id": "D3",
+     "summary": "Delete set by reachability from the kept roots: hamletgen, settlement, sitegen, waterfields, overlap, citybudget, the pipeline/ci modules and tools that roll or read a hamlet, work_counts, their tests, the pool .gen.py; the knob registry exported once to l7r/diagram/knobs.json for the modal checks and the Rust driver",
+     "class": "within",
+     "why": "Amendment 11 ('delete all of the Python code that does any kind of Hamlet generation whatsoever ... and the unit tests') and amendment 10 ('stop running all of the python map generating code'); what the GM said stays (helper scripts, hand-drawn map checks) are the kept roots. overlap and citybudget are measured as reached only by the engine. The knob export is FR-024 part 3's 'shared helper moved out of a deleted package where one is needed', keeping the interactive pages working. Round 1's finding (an import-only search) is answered by D7."
+    },
+    {
+     "id": "D7",
+     "summary": "Every consumer found by the spec's stated search (imports under l7r/, tests/, scripts/; names as text in Makefile, pyproject.toml, scripts/, .claude/, top-level dev/*.json) and given a fate PORTED / ALREADY / DROPPED; claims gate, claims index/report, tunables, work-budget bundle, budget_change, rust_checks, modal readers PORTED; entry points, rolling tools, their tests and lint/coverage entries DROPPED; a late-found consumer added before the landing",
+     "class": "narrowing",
+     "why": "The round-1 failure class with two directories swapped in. The stated search (FR-024 part 4, copied into D7) looks for text only in the Makefile, pyproject.toml, scripts/, .claude/ and dev/*.json, and in l7r/ and tests/ for imports only. A kept l7r/ or tests/ file that names a deleted module or path as a STRING (a roots list, a Path(), a subprocess or importlib argument, a fixture path, a skip-if-absent guard like claims-gate.sh's `[ -d l7r/diagram/hamletgen ] || exit 0`) is not an import and is searched nowhere. Such a consumer goes silently vacuous, so the GM's 'the code that introspects the Python code should get Rust ports' cannot be shown to hold, and the 'added before the landing' backstop only catches hits the search can produce. Required: (a) the same names searched as text over the kept l7r/ and tests/, with the exact command (pattern and pathspec) recorded in D7 so it can be re-run - `git grep -lE` with no pattern is a method name, not a command; (b) .claude/ is in the stated space but has no rows: tabulate its hits or say there were none; (c) reconcile '21 kept files' with the table, which names 24 non-test files plus the tests/ row. The fates already given (claims gate, claims, tunables, work-budget bundle PORTED; nothing that reads code DROPPED) are themselves within the request.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D4",
+     "summary": "Gates deleted with the Python they run (Python Rust stage gate and frozen pickles, cohorts, reference map, hamlet-path floor, roll census, review gate's pool-hamlet units, work-budget's Python roll); kept: rust-test, Rust coverage floor, claims rule and budgets on the Rust through the cut; port switch stays rust-only",
+     "class": "within",
+     "why": "The GM: 'whatever combination of switching those off or even just deleting them outright'; the list is FR-024's last paragraph, and the claims rule (FR-021) and budgets (FR-022) the GM never relaxed are kept."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust binary 'hamlet' reading pool/hamlets/<name>/<name>.spec.json, writing SVG and manifest, stages enabled one at a time as each draws, judged against the frozen plates",
+     "class": "within",
+     "why": "FR-024 part 5 and the GM's 'get our Rust code to a point where we have generated a partial map ... the map that I see when I look at the old Hamlet placement order HTML file write-up'."
+    },
+    {
+     "id": "D6",
+     "summary": "Cargo workspace: shared crate, one per stage, one for the driver; PyO3 and the python feature gone; counters on in every build so tests, coverage and driver share one feature set; cargo build --timings before and after",
+     "class": "within",
+     "why": "FR-024 part 6 and the GM's 'no obvious issues like recompiling every single file every time we make a change to one file'."
+    },
+    {
+     "id": "T43-order",
+     "summary": "T43 after T42, or before it if the driver's builds measure slow",
+     "class": "within",
+     "why": "A reorder inside the GM's agreed set, in service of his stated purpose (fast iteration first); both orders finish before any next stage is ported."
+    },
+    {
+     "id": "T36",
+     "summary": "make test-full in significantly under a minute, measured by wall time at the landing, after T41",
+     "class": "within",
+     "why": "Amendment 10: 'To the extent we have a goal it's \"significantly under a minute\" with the exact target TBD'; no fixed number is invented."
     }
    ]
   }
