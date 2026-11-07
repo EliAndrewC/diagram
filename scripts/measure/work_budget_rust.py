@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import datetime
 import json
+import math
 import os
 import subprocess
 import sys
@@ -19,8 +20,9 @@ from pathlib import Path
 SIZES = (10, 20, 40, 80)
 
 
-def counted(root: Path) -> dict[str, dict[int, tuple[int, int]]]:
-    """Each stage's mean operations and rolled seeds at each size, from the driver's `--budget` lines."""
+def counted(root: Path, rows: dict[tuple[int, int], dict]) -> dict[str, dict[int, tuple[int, int]]]:
+    """Each stage's mean operations and rolled seeds at each size, from the driver's `--budget` lines; each roll's stages, their
+    totals and counters, filed in `rows` by (seed, households)."""
     env = {**os.environ, "HAMLET_ARGS": "--budget", "HAMLET_FEATURES": "counters"}
     run = subprocess.run(
         [sys.executable, str(root / "scripts/gates/rust_checks.py"), "hamlet", "--crate", str(root / "rust/phases")],
@@ -31,46 +33,71 @@ def counted(root: Path) -> dict[str, dict[int, tuple[int, int]]]:
     )
     if run.returncode:
         sys.exit(f"work-budget: the driver's budget run failed:\n{run.stdout}{run.stderr}")
-    out: dict[str, dict[int, tuple[int, int]]] = {}
-    for line in (ln for ln in run.stdout.splitlines() if ln.count("\t") == 3):
-        stage, size, mean, rolled = line.split("\t")
-        out.setdefault(stage, {})[int(size)] = (int(mean), int(rolled))
+    totals: dict[str, dict[int, list[int]]] = {}
+    for line in run.stdout.splitlines():
+        cells = line.split("\t")
+        if len(cells) == 4:  # `seed size stage ops`: a roll's stage
+            seed, size, stage, ops = cells
+            totals.setdefault(stage, {}).setdefault(int(size), []).append(int(ops))
+            rows.setdefault((int(seed), int(size)), {}).setdefault(stage, {"total": int(ops), "ops": {}})
+        elif len(cells) == 5:  # `seed size stage key n`: one of its counters
+            seed, size, stage, key, n = cells
+            rows[(int(seed), int(size))][stage]["ops"][key] = int(n)
+    out = {k: {s: (sum(v) // len(v), len(v)) for s, v in per.items()} for k, per in totals.items()}
     return out
 
 
-def budget_at(st: dict, size: int) -> float:
-    """The stage's budget at `size`: per thing times its items there, or at 40 grown by its exponent."""
-    items = st.get(f"items_at_{size}") or st.get("items_at_40", 0) * (size / 40) ** st.get("exponent", 0.0)
-    return st.get("per_thing", 1.0) * items
+def budget_at(st: dict, size: int) -> float | None:
+    """The stage's budget at `size`: per thing times the derivation's items there (the deleted `work_budget.py`'s), none unset."""
+    items = st.get(f"items_at_{size}")
+    return st["per_thing"] * items if items is not None and st.get("per_thing") is not None else None
+
+
+def exponent(ops: list[int]) -> str:
+    """The measured growth from 20 to 80 households, the old record's exponent column."""
+    return f"{math.log(ops[3] / ops[1]) / math.log(4):.2f}" if ops[1] and ops[3] else "-"
 
 
 def table(counts: dict[str, dict[int, tuple[int, int]]], budgets: dict) -> list[str]:
-    head = "| stage | ops @10 | ops @20 | ops @40 | ops @80 | budget @40 | ratio @40 | accepted @40 | status |"
-    rows = [head, "|" + "---|" * 9]
-    whole = {s: 0 for s in SIZES}
+    """The record's table. `work_budget_view.py` reads it by header name and takes each row's last cell as its status and the one
+    before as its ratio, so those two stay last."""
+    head = "| stage | ops @10 | ops @20 | ops @40 | ops @80 | exponent | budget @40 | accepted @40 | ratio | status |"
+    rows = [head, "|" + "---|" * 10]
+    whole = dict.fromkeys(SIZES, 0)
     whole_budget = 0.0
     for stage, per in counts.items():
         st = budgets.get(stage, {})
         ops = [per.get(s, (0, 0))[0] for s in SIZES]
         for s, n in zip(SIZES, ops, strict=True):
             whole[s] += n
-        b40 = budget_at(st, 40) if st else 0.0
-        whole_budget += b40
+        b40 = budget_at(st, 40)
+        whole_budget += b40 or 0.0
         ratio = f"{ops[2] / b40:.1f}x" if b40 and ops[2] else "-"
         acc = (st.get("accepted") or {}).get("40")
-        rows.append(f"| {stage} | " + " | ".join(f"{n:,}" for n in ops) + f" | {b40:,.0f} | {ratio} | {f'{acc:,.0f}' if acc else '-'} | {st.get('status', 'unbudgeted')} |")
+        cells = [stage, *(f"{n:,}" for n in ops), exponent(ops), f"{b40:,.0f}" if b40 else "-", f"{acc:,.0f}" if acc else "-", ratio]
+        rows.append("| " + " | ".join([*cells, st.get("status", "unbudgeted")]) + " |")
     ratio = f"{whole[40] / whole_budget:.1f}x" if whole_budget else "-"
-    rows.append("| **the whole roll** | " + " | ".join(f"{whole[s]:,}" for s in SIZES) + f" | {whole_budget:,.0f} | {ratio} | - | through the cut |")
+    cells = ["**the whole roll**", *(f"{whole[s]:,}" for s in SIZES), exponent(list(whole.values())), f"{whole_budget:,.0f}", "-", ratio]
+    rows.append("| " + " | ".join([*cells, "through the cut"]) + " |")
     return rows
+
+
+def run_file(counts: dict[str, dict[int, tuple[int, int]]], rows: dict[tuple[int, int], dict], when: str, head: str) -> dict:
+    """The run's JSON in the deleted roll's shape: `work_budget_view.moved` reads `summary.stages.<stage>.per.<size>.ops`, the audit
+    bundle `rows[].stages.<stage>.ops` (each counter)."""
+    stages = {k: {"per": {str(s): {"ops": n, "rolled": r} for s, (n, r) in per.items()}} for k, per in counts.items()}
+    rolls = [{"seed": seed, "households": size, "stages": st} for (seed, size), st in sorted(rows.items())]
+    return {"meta": {"when": when, "engine": head, "driver": "rust"}, "rows": rolls, "summary": {"stages": stages}}
 
 
 def main() -> int:
     root = Path(__file__).resolve().parents[2]
     budgets = json.loads((root / "dev/work-budget.json").read_text())["stages"]
-    counts = counted(root)
-    rows = table(counts, budgets)
-    print("\n".join(rows))
-    over = [r.split(" | ")[0].strip("| ") for r in rows[2:-1] if r.split(" | ")[6].endswith("x") and float(r.split(" | ")[6][:-1]) > 2.0]
+    rolls: dict[tuple[int, int], dict] = {}
+    counts = counted(root, rolls)
+    lines = table(counts, budgets)
+    print("\n".join(lines))
+    over = [c[0] for c in (r.strip("| ").split(" | ") for r in lines[2:-1]) if c[-2].endswith("x") and float(c[-2][:-1]) > 2.0]
     if over:
         print(f"work-budget: past twice the budget at 40 (the audit's leeway, 444 FR-022): {', '.join(over)}")
     if "--write" in sys.argv:
@@ -82,9 +109,12 @@ def main() -> int:
             f"Generated by `make work-budget` at {when} on engine {head} from the Rust driver (`hamlet --budget`, counters on), "
             "seeds 4, 25, 39, 47, the reference spec; each figure the mean over the seeds that rolled that size. Only the stages "
             "through the cut run (feature 444 amendment 11); the parked stages' last Python counts are in this file's git history. "
-            "Budgets come from `dev/work-budget.json` (`make budget-set`).\n\n" + "\n".join(rows) + "\n"
+            "Budgets come from `dev/work-budget.json` (`make budget-set`).\n\n" + "\n".join(lines) + "\n"
         )
-        print("work-budget: dev/work-budget.md written")
+        stamp = when.replace("-", "").replace(":", "")
+        run = root / "dev/work-budget" / f"{stamp}-rust-{head}.json"
+        run.write_text(json.dumps(run_file(counts, rolls, when, head), indent=1, sort_keys=True) + "\n")
+        print(f"work-budget: dev/work-budget.md and {run.relative_to(root)} written")
     return 0
 
 

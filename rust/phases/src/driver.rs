@@ -154,7 +154,7 @@ pub struct Rolled {
     pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
     /// Each stage run and its counted operations, the work budget's unit (`ops`).
-    pub by_stage: Vec<(&'static str, u64)>,
+    pub by_stage: Vec<(&'static str, HashMap<String, u64>)>,
     pub svg: String,
 }
 
@@ -334,12 +334,13 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
 ///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
 fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
-    let toe = toe::toe_band(&[g.ring], p.down_deg, (p.w, p.h));
+    let mut counts = HashMap::new();
+    let toe = toe::toe_band(&[g.ring], p.down_deg, (p.w, p.h), &mut counts);
     let reeds: Vec<Vec<(f64, f64)>> = g.reeds.iter().filter(|r| r.len() >= 3).cloned().collect();
     let mut walls: Vec<(Vec<(f64, f64)>, f64)> = std::iter::once(&toe)
         .chain(&reeds)
         .filter(|w| w.len() >= 3)
-        .map(|w| (toe::grow(w, LANE_FT), 0.0))
+        .map(|w| (toe::grow(w, LANE_FT, &mut counts), 0.0))
         .collect();
     walls.push((g.ring.to_vec(), 0.0));
     if let Some((c, rx, ry)) = g.pond {
@@ -379,7 +380,12 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
         },
         ford: FORD,
     };
-    seat(&inp).map_err(seat_refused)
+    seat(&inp).map_err(seat_refused).map(|mut s| {
+        counts
+            .into_iter()
+            .for_each(|(k, n)| *s.counts.entry(k).or_insert(0) += n);
+        s
+    })
 }
 
 #[expect(
@@ -471,12 +477,12 @@ fn sink_refused(e: crate::sink::SinkRefused) -> Refused {
     Refused(format!("the sink refused: {e}"))
 }
 
-/// The sink drawn: the reeds round the pond, the run in the drain's hue at its outfall width, the pond with its rim and sheen.
+/// The sink drawn: the run in the drain's hue at its outfall width, the pond with its rim and sheen (its reeds are drawn under
+/// the field, `roll`).
 ///
 /// Research:
 ///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs, at the collector's own outfall width
 fn draw_sink(svg: &mut Svg, s: &Sunk) {
-    svg.polygon(&s.reeds, REED_TINT, None);
     svg.line(&s.run, ink::DRAIN, RUN_W);
     if let Some((c, rx, ry)) = s.pond {
         svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
@@ -631,6 +637,12 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .zip(seated.as_ref())
         .and_then(|(f, s)| stage_hem(f, s));
     let mut svg = Svg::default();
+    // THE REEDS UNDER THE FIELD (feature 444 T42; the cohort's reeds_on_paddy check, 183 of 300 seeds): the reed ring runs its
+    // 44 ft out from the shore into the paddy above the pond's berth, and the deleted `pond_reeds` cut it there against the drawn
+    // ground; here the field is painted over it, the same cut on the sheet (CONVENTION: the ring is kept whole in the record, the
+    // seat's walls read it grown, and the field is a wall too)
+    sunk.iter()
+        .for_each(|s| svg.polygon(&s.reeds, REED_TINT, None));
     for (i, (f, b)) in out.fields.iter().zip(&brooks).enumerate() {
         let beans = settled(f, b, sunk.as_ref().filter(|_| i == 0), &mut out.counts);
         draw_field(&mut svg, f, b, &beans);
@@ -640,13 +652,15 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         let (fill, furrow) = crop_ink(d.crop);
         svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
     }
-    let by_stage: Vec<(&'static str, u64)> =
-        [("water_frame", ops(&p.counts)), ("field", ops(&out.counts))]
-            .into_iter()
-            .chain(sunk.iter().map(|s| ("sink", ops(&s.counts))))
-            .chain(seated.iter().map(|s| ("seat", ops(&s.counts))))
-            .chain(laid.iter().map(|l| ("hem", ops(&l.counts))))
-            .collect();
+    let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
+        ("water_frame", p.counts.clone()),
+        ("field", out.counts.clone()),
+    ]
+    .into_iter()
+    .chain(sunk.iter().map(|s| ("sink", s.counts.clone())))
+    .chain(seated.iter().map(|s| ("seat", s.counts.clone())))
+    .chain(laid.iter().map(|l| ("hem", l.counts.clone())))
+    .collect();
     sunk.iter()
         .flat_map(|s| &s.counts)
         .chain(seated.iter().flat_map(|s| &s.counts))

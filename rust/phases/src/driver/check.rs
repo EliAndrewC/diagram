@@ -130,6 +130,7 @@ pub fn check(r: &Rolled) -> Vec<String> {
                 .then(|| "off_canvas: the tameike".to_owned()),
         );
     }
+    out.extend(reed_checks(r));
     for f in r.seated.iter().filter_map(|s| s.frames.first()) {
         let on = rings
             .iter()
@@ -146,6 +147,23 @@ pub fn check(r: &Rolled) -> Vec<String> {
         out.push("off_canvas: the field".to_owned());
     }
     out
+}
+
+/// The tameike's reeds off the dry plots; the paddy is painted over them, the deleted `pond_reeds`' cut on the sheet (`roll`).
+///
+/// Research:
+///     no dry plot in the reeds - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots laid clear of the water and the pond's ground
+fn reed_checks(r: &Rolled) -> Vec<String> {
+    r.sunk
+        .iter()
+        .filter(|s| s.reeds.len() >= 3)
+        .filter_map(|s| {
+            r.dry
+                .iter()
+                .position(|d| d.poly.iter().any(|p| depth_inside(*p, &s.reeds) > SLACK_FT))
+        })
+        .map(|i| format!("reeds_on_dry: dry plot {i} has a corner inside the tameike's reeds"))
+        .collect()
 }
 
 /// A polder's own checks: its seat off its block, its waterside reeds off its ground, the block on the canvas.
@@ -231,6 +249,13 @@ mod tests {
                 tract: 2,
             },
         ];
+        let reed = r.sunk.as_ref().map(|s| mean(&s.reeds)).unwrap();
+        r.dry.push(DryPlot {
+            poly: square(reed, 5.0),
+            crop: "soy",
+            theta: 0.0,
+            tract: 3,
+        });
         if let Some(s) = r.sunk.as_mut() {
             s.pond = Some((m, 30.0, 20.0));
         }
@@ -245,6 +270,7 @@ mod tests {
             "off_canvas: dry plot",
             "pond_on_paddy",
             "seat_on_field",
+            "reeds_on_dry",
         ] {
             assert!(found.contains(rule), "{rule} not named in:\n{found}");
         }
