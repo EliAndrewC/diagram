@@ -41,11 +41,19 @@ pub mod ink {
 ///     the bund's stroke - CONVENTION: the deleted `aze_w`, never under 1.5 ft so a bund reads at the map's scale
 pub const BUND_W: f64 = 1.5;
 
+/// The ridged rows' spacing in a dry plot (ft).
+///
+/// Research:
+///     furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows
+///     furrow spacing - GUESS: 5 ft between rows (the deleted `_draw_furrows`)
+pub const ROW_FT: f64 = 5.0;
+
 /// An SVG under construction: the elements in draw order, and the box of everything drawn (for the crop).
 #[derive(Debug, Default)]
 pub struct Svg {
     body: String,
     bbox: Option<[f64; 4]>,
+    clips: usize,
 }
 
 fn f(v: f64) -> String {
@@ -149,6 +157,58 @@ impl Svg {
         }
     }
 
+    /// A dry plot: its ring in the crop's fill with its edge, and its ridged rows `ROW_FT` apart at `theta` (radians), each cut
+    /// to the plot by a clip path - the deleted `_draw_furrows`.
+    pub fn furrowed(
+        &mut self,
+        ring: &[Pt],
+        fill: &str,
+        edge: (&str, f64),
+        furrow: &str,
+        theta: f64,
+    ) {
+        if ring.len() < 3 {
+            return;
+        }
+        self.polygon(ring, fill, Some(edge));
+        #[expect(clippy::cast_precision_loss, reason = "a ring of a few corners")]
+        let n = ring.len() as f64;
+        let c = (
+            ring.iter().map(|p| p.0).sum::<f64>() / n,
+            ring.iter().map(|p| p.1).sum::<f64>() / n,
+        );
+        let reach = ring
+            .iter()
+            .map(|p| (p.0 - c.0).hypot(p.1 - c.1))
+            .fold(0.0, f64::max);
+        let (dx, dy) = (theta.cos(), theta.sin());
+        self.clips += 1;
+        let id = format!("dry{}", self.clips);
+        let _ = writeln!(
+            self.body,
+            r#"<clipPath id="{id}"><path d="{}"/></clipPath>"#,
+            path(ring, true)
+        );
+        let _ = write!(
+            self.body,
+            r#"<g clip-path="url(#{id})" stroke="{furrow}" stroke-width="0.8" opacity="0.8" fill="none">"#
+        );
+        let mut off = -reach;
+        while off <= reach {
+            let (ox, oy) = (c.0 - dy * off, c.1 + dx * off);
+            let _ = write!(
+                self.body,
+                r#"<path d="M{},{} L{},{}"/>"#,
+                f(ox - dx * reach),
+                f(oy - dy * reach),
+                f(ox + dx * reach),
+                f(oy + dy * reach)
+            );
+            off += ROW_FT;
+        }
+        self.body.push_str("</g>\n");
+    }
+
     /// An ellipse.
     pub fn ellipse(&mut self, c: Pt, rx: f64, ry: f64, fill: &str, stroke: Option<(&str, f64)>) {
         self.grow(&[(c.0 - rx, c.1 - ry), (c.0 + rx, c.1 + ry)], 0.0);
@@ -239,6 +299,24 @@ mod tests {
         s.ellipse((15.0, 15.0), 1.0, 0.5, ink::SHEEN, None);
         s.close();
         let doc = s.finish(100.0, 100.0, 5.0);
+        let mut d = Svg::default();
+        d.furrowed(
+            &[(0.0, 0.0), (20.0, 0.0), (20.0, 10.0), (0.0, 10.0)],
+            "#C9B57A",
+            ("#A98C58", 1.4),
+            "#9C8650",
+            0.0,
+        );
+        d.furrowed(
+            &[(0.0, 0.0), (1.0, 1.0)],
+            "#C9B57A",
+            ("#A98C58", 1.4),
+            "#9C8650",
+            0.0,
+        );
+        let dd = d.finish(100.0, 100.0, 0.0);
+        assert!(dd.contains(r#"<clipPath id="dry1">"#) && !dd.contains("dry2"));
+        assert!(dd.matches("<path d=\"M").count() > 4);
         assert!(doc.starts_with("<svg"));
         assert!(doc.contains(r#"viewBox="3.7 3.2 23.1 32.6""#));
         assert_eq!(doc.matches("stroke-width=\"").count(), 6);

@@ -16,6 +16,7 @@ use std::fmt::Write as _;
 
 use crate::field::brook::BrookIn;
 use crate::field::build::{build, Field, FieldIn, KnobIn};
+use crate::field::dry::DryPlot;
 use crate::field::states::State;
 use crate::seat::{seat, SeatIn, Seated};
 use crate::sink::{sink, SinkIn, Sunk};
@@ -73,6 +74,26 @@ const REED_TINT: &str = "#C3D0A4";
 const FORD: (f64, f64, f64) = (160.0, 30.0, 20.0);
 const POND_BERTH: f64 = 80.0;
 const LANE_FT: f64 = 8.0;
+/// The settlement's ground behind the seat's margin: its standoff and the belt's far edge (ft).
+///
+/// Research:
+///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields where the settlement stands, the dry fields behind it
+///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too
+const STANDOFF_FT: f64 = 12.0;
+const BELT_FAR_FT: f64 = 146.0;
+/// A dry plot's edge, and each crop's fill and furrow.
+///
+/// Research:
+///     the crops' paint - CONVENTION: the deleted engine's `CROP_FILL` and `CROP_FURROW`, each crop at its ripe or summer color (0006)
+const DRY_EDGE: (&str, f64) = ("#A98C58", 1.4);
+fn crop_ink(crop: &str) -> (&'static str, &'static str) {
+    match crop {
+        "millet" => ("#C29A55", "#8E6E36"),
+        "buckwheat" => ("#D9CFC0", "#A8574A"),
+        "soy" => ("#8DAA6A", "#5E7A44"),
+        _ => ("#C9B57A", "#9C8650"),
+    }
+}
 /// The crop's margin round what is drawn (ft).
 ///
 /// Research:
@@ -116,6 +137,9 @@ pub struct Rolled {
     pub brooks: Vec<Vec<(f64, f64)>>,
     pub sunk: Option<Sunk>,
     pub seated: Option<Seated>,
+    pub dry: Vec<DryPlot>,
+    /// The coarse grain the hem drew and the room it left (acres).
+    pub grain: Option<(f64, f64)>,
     /// The stages that refused, each with why: the stages before it drawn, none after it.
     pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
@@ -330,6 +354,44 @@ fn seat_refused(e: crate::seat::SeatRefused) -> Refused {
     Refused(format!("the seat refused: {e}"))
 }
 
+/// A water segment at its width: its two ends and its drawn width (ft).
+type Segment = ((f64, f64), (f64, f64), f64);
+
+/// The ground the seat chose for the settlement and its belt: from the margin out past the band and the belt, the band's length
+/// along it - the ground the dry hem keeps off (the deleted `settlement_ground`).
+fn settlement_ground(s: &crate::seat::Frame) -> Vec<(f64, f64)> {
+    let ((ax, ay), (ox, oy), (lx, ly)) = (s.anchor, s.out, s.along);
+    let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + BELT_FAR_FT);
+    vec![
+        (ax - lx * lat, ay - ly * lat),
+        (ax + lx * lat, ay + ly * lat),
+        (ax + lx * lat + ox * deep, ay + ly * lat + oy * deep),
+        (ax - lx * lat + ox * deep, ay - ly * lat + oy * deep),
+    ]
+}
+
+/// The dry hem (stage 5): laid behind the settlement and along the canal elsewhere, keeping off the settlement's ground.
+///
+/// Research:
+///     the dry hem behind the settlement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: paddy, then the houses, then the dry fields behind them
+fn stage_hem(f: &Field, seated: &Seated) -> Option<crate::hem::Laid> {
+    let h = f.hem.as_ref()?;
+    let water: Vec<Segment> = f
+        .water
+        .segs
+        .iter()
+        .zip(&f.water.widths)
+        .map(|(&(a, b), &w)| (a, b, w))
+        .collect();
+    let keep: Vec<Vec<(f64, f64)>> = seated
+        .frames
+        .first()
+        .map(settlement_ground)
+        .into_iter()
+        .collect();
+    Some(crate::hem::lay(h, &f.fan.ring, &water, &keep))
+}
+
 /// The sink (stage 3): the first field's collector run to its pond, to the passing brook or off the map.
 ///
 /// Research:
@@ -450,25 +512,38 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         }
         other => other.and_then(Result::ok),
     };
+    let laid = out
+        .fields
+        .first()
+        .zip(seated.as_ref())
+        .and_then(|(f, s)| stage_hem(f, s));
     let mut svg = Svg::default();
     for (f, b) in out.fields.iter().zip(&brooks) {
         draw_field(&mut svg, f, b);
     }
     sunk.iter().for_each(|s| draw_sink(&mut svg, s));
+    for d in laid.iter().flat_map(|l| &l.plots) {
+        let (fill, furrow) = crop_ink(d.crop);
+        svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
+    }
     sunk.iter()
         .flat_map(|s| &s.counts)
         .chain(seated.iter().flat_map(|s| &s.counts))
+        .chain(laid.iter().flat_map(|l| &l.counts))
         .for_each(|(k, n)| *out.counts.entry(k.clone()).or_insert(0) += n);
     let doc = svg.finish(p.w, p.h, CROP_MARGIN);
     let stages: Vec<&'static str> = ["water_frame", "field"]
         .into_iter()
         .chain(sunk.as_ref().map(|_| "sink"))
         .chain(seated.as_ref().map(|_| "seat"))
+        .chain(laid.as_ref().map(|_| "hem"))
         .collect();
     Ok(Rolled {
         plan: p,
         sunk,
         seated,
+        grain: laid.as_ref().map(|l| l.grain),
+        dry: laid.map(|l| l.plots).unwrap_or_default(),
         refusals,
         stages,
         knobs: out.knobs,
@@ -580,7 +655,19 @@ mod tests {
     #[test]
     fn a_comb_hamlet_rolls_and_draws_its_field() {
         let r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        assert_eq!(r.stages, vec!["water_frame", "field", "sink", "seat"]);
+        assert_eq!(
+            r.stages,
+            vec!["water_frame", "field", "sink", "seat", "hem"]
+        );
+        assert!(!r.dry.is_empty() && r.grain.is_some_and(|g| g.0 > 0.0));
+        assert_eq!(
+            ["barley", "millet", "buckwheat", "soy"]
+                .map(|c| super::crop_ink(c).0)
+                .iter()
+                .collect::<std::collections::HashSet<_>>()
+                .len(),
+            4
+        );
         assert!(r.sunk.as_ref().is_some_and(|s| s.pond.is_some()));
         assert!(!r.fields.is_empty() && !r.fields[0].basins.is_empty());
         assert!(
@@ -589,7 +676,9 @@ mod tests {
         let m = manifest(&r);
         assert!(
             m.contains("\"name\": \"Inashiro\"")
-                && m.contains("\"stages\": [\"water_frame\", \"field\", \"sink\", \"seat\"]")
+                && m.contains(
+                    "\"stages\": [\"water_frame\", \"field\", \"sink\", \"seat\", \"hem\"]"
+                )
                 && m.contains("\"plot_size\"")
         );
     }
