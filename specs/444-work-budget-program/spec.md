@@ -214,7 +214,7 @@ standards" (`request.md`).
   the engine's test trees (`hamletgen`, `settlement`, `gate`, `full`, the tiers, `waterfields`, `sitegen`, `soak`) are left
   out, and a test elsewhere that would regenerate a pool map or roll a settlement is skipped; its static checks, the tooling,
   tools, hooks, labels, pipeline and interactive tests, and `make rust-test` run as before; no floor rolls a settlement - the
-  hamlet-path floor and the roll census's verdict are suspended, and the 100% Python floor is measured on the tests that run, an
+  hamlet-path floor and the roll census's verdict are suspended, and the Python coverage floor is measured on the tests that run, an
   engine line only the left-out trees or a map-rolling test reached reported as information, as feature 448's exempt engine
   code is, while the Rust crate's floor is held whole on its own tests; a map, pool hamlet or render that fails downstream of the
   Rust front is information, never a defect owed by the landing, and a settlement-review FR-019 owes, or a glyph-check the review
@@ -276,7 +276,7 @@ standards" (`request.md`).
   entry closing to the last committed state; at `rust-only` the push judging an engine landing by the Rust stage gate alone (its
   cohort's regressed seeds notes), `make land` starting no landing cohort, and `make done` deselecting `rolls_map`, rolling no
   reference map, leaving out the engine's test trees and skipping a test that would roll a settlement or regenerate a pool map,
-  the 100% Python floor measured on the tests that run with an engine line only the left-out trees reached reported as
+  the Python coverage floor measured on the tests that run with an engine line only the left-out trees reached reported as
   information; at `integrated`, feature 386's landing cohort refusing as it stood.
 
 ## Edge Cases
