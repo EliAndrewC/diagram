@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-07T18:13:02Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 391,
+  "result": "failed: test-full",
+  "commit": "1d9d9b6f0",
+  "first_failure_s": 249.3,
+  "last_failure_s": 249.3,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_file_scale.py::test_the_refusal_prints_the_procedure"
+  ],
+  "host": {
+    "load": [
+      4.01,
+      10.43
+    ],
+    "mem_avail_mb": [
+      8253,
+      8830
+    ],
+    "cpu_temp_c": [
+      91.0,
+      79.0
+    ],
+    "stall_s": {
+      "cpu": 10.4,
+      "io": 1.8,
+      "io_full": 1.3,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 14275,
+      "package": 7942
+    }
+  },
+  "phases": {
+    "preflight": 16.0,
+    "static": 6.0,
+    "format": 0.0,
+    "typecheck": 0.0,
+    "reference": 0.0,
+    "hooks-test": 116.0,
+    "counters-inert": 1.0,
+    "pytest": 263.0,
+    "test-full": 267.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_sweep.py (+3)",
+  "selected": 9059,
+  "collected": 9059
+}
