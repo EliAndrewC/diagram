@@ -423,6 +423,8 @@ def fresh_block_after(root: Path, engine: bool, counter: bool) -> str:
     (feature 446, FR-002) or a landing with no engine code; the line the landing prints, "" for none."""
     if engine and counter:
         return "land: the delta is counter-only (feature 446): no fresh block owed - a counter block changes no map"
+    if engine and _port(root) == "rust-only":  # no Python cohort to roll since the hamlet engine's deletion (feature 444 T41)
+        return ""
     if engine:
         return f"land: the cohort's fresh block started after the push - a rate, never a refusal; its log {start_fresh_block(root)}"
     return ""
