@@ -1022,8 +1022,13 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@python3 scripts/gates/check-file-scale.py .
 	@python3 scripts/gates/spec-lint.py --delta .
 	@python3 scripts/gates/check-partial-citations.py .
-	@if [ -n "$$(git status --porcelain -- tests)" ] || ! git diff --quiet "$$(git merge-base HEAD origin/main 2>/dev/null || echo HEAD)" -- tests; then L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov -p no:randomly tests/test_markers.py >/dev/null 2>&1 || { printf 'quick: a test that rolls a map lacks @pytest.mark.rolls_map (tests/test_markers.py):\n'; L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov tests/test_markers.py; exit 1; }; fi
-	@warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
+	@# THE MARKER SCAN ON A TEST CHANGED SINCE THE LAST QUICK (feature 444 T36, measured 2026-11-07: a whole-tree scan, 2 s, ran on
+	@# every quick of a branch whose tests differed from main - every working branch): a test file newer than `.testmondata`
+	@if [ ! -f .testmondata ] || [ -n "$(ALL)" ] || [ -n "$$(find tests -name '*.py' -newer .testmondata -print -quit)" ]; then L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov -p no:randomly tests/test_markers.py >/dev/null 2>&1 || { printf 'quick: a test that rolls a map lacks @pytest.mark.rolls_map (tests/test_markers.py):\n'; L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov tests/test_markers.py; exit 1; }; fi
+	@# NO WORKERS WHEN TESTMON CAN SELECT NOTHING NEW (feature 444 T36, measured 2026-11-07: six workers brought up for zero tests,
+	@# 2.7 s against 1.1 s in one process): testmon selects from the Python files changed since `.testmondata`, so with none newer
+	@# the one process runs what six would (a failed test kept by --ff, a forced selection), the same tests
+	@warm=$$([ -f .testmondata ] && echo yes || echo no); workers=$$([ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ -z "$$(find l7r tests scripts pool -name '*.py' -newer .testmondata -print -quit)" ] && echo 0 || echo $(XDIST_WORKERS)); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $$workers --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
 	  el=$$(( $$(date +%s) - start )); \
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  root=$$(git rev-parse --show-toplevel); \
