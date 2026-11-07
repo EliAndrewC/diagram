@@ -288,12 +288,16 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
         return cargo(["clippy", "--quiet", "--all-targets", "--all-features"], manifest, ["-D", "warnings"])
     if cmd == "test":
         return cargo(["test", "--quiet", "--all-features"], manifest)
+    if cmd == "test-no-counters":
+        # THE COUNTERS CHANGE NO OUTPUT (feature 443 T02, its Rust half since the Python roll's deletion, feature 444 T39): the tests,
+        # whose expected values are the same in both builds, pass with the counters compiled out
+        return cargo(["test", "--quiet", "--features", "python"], manifest)
     return cargo(["fmt", *(["--check"] if check else [])], manifest)
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test", "cover", "dead", "callers", "build"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "test-no-counters", "cover", "dead", "callers", "build"])
     ap.add_argument("--driver", default="", help="cover: the Python driver (default: the crate's tests/py_driver.py)")
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")

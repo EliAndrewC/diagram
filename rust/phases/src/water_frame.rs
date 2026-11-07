@@ -223,7 +223,12 @@ mod tests {
             vec!["nucleated".to_owned()],
             vec![knob("settlement_form", 3, "all")],
         );
-        assert!(fall.is_some() && picks.len() == 1 && !counts.is_empty());
+        assert!(fall.is_some() && picks.len() == 1);
+        assert_eq!(
+            counts.is_empty(),
+            !cfg!(feature = "counters"),
+            "counted only with the counters"
+        );
     }
 
     fn knob(name: &str, n: u32, branch: &str) -> (String, u32, bool, String) {

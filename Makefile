@@ -38,7 +38,7 @@ budget-program: ## [performance] set the whole roll's work budget with the GM's 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 
 counters-inert: ## [performance] the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]
-	python3 scripts/gates/rust_checks.py test --no-counters
+	python3 scripts/gates/rust_checks.py test-no-counters
 
 STATE = python3 -m l7r.diagram.ci state
 
