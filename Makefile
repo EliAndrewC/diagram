@@ -1012,7 +1012,6 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@python3 scripts/gates/check-function-cap.py && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	@python3 scripts/gates/check-house-style-delta.py --selftest >/dev/null
 	@python3 scripts/gates/check-house-style-delta.py .
-	@python3 scripts/gates/rust_checks.py callers
 	@python3 scripts/gates/check-question-size.py
 	@python3 scripts/gates/check-file-scale.py .
 	@python3 scripts/gates/spec-lint.py --delta .

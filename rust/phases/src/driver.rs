@@ -168,6 +168,8 @@ pub struct Rolled {
     pub dry: Vec<DryPlot>,
     /// The coarse grain the hem drew and the room it left (acres).
     pub grain: Option<(f64, f64)>,
+    /// The coarse grain the field's barley drew, the need it handed the hem and the room it left (acres).
+    pub field_grain: Option<(f64, f64, f64)>,
     /// The stages that refused, each with why: the stages before it drawn, none after it.
     pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
@@ -245,7 +247,7 @@ fn fill(s: State) -> &'static str {
 /// Research:
 ///     the field's floor - CONVENTION: the fan's ring in the rice green beneath its plots, so no seam shows between them
 ///     ditches by role - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply and drainage kept apart; drawn in two hues, a map drawing convention
-fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)]) {
+fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64, f64)>]) {
     svg.polygon(&f.fan.ring, ink::RICE_GREEN, None);
     for (b, s) in f.basins.iter().zip(&f.states) {
         svg.polygon(&b.ring, fill(*s), Some((ink::AZE, BUND_W)));
@@ -267,7 +269,7 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)]) {
     svg.unframed(brook, ink::SHEEN, (0.35 * BROOK_W).max(2.0));
     svg.close();
     svg.group(0.85);
-    for run in &f.beans {
+    for run in beans {
         for p in run {
             svg.ellipse(*p, 1.5, 1.5, ink::BEAN, None);
         }
@@ -718,6 +720,7 @@ fn roll_polder(p: Plan) -> Rolled {
         seated,
         dry: Vec::new(),
         grain: None,
+        field_grain: None,
         refusals,
         stages,
         knobs: HashMap::new(),
@@ -726,6 +729,46 @@ fn roll_polder(p: Plan) -> Rolled {
         counts,
         svg: doc,
     }
+}
+
+/// The bean runs that survive the map's final water (`beans::settle`): the field's ditches at their widths, the brook, the drain's
+/// run, the tameike and the pocket pond.
+///
+/// Research:
+///     no bead in the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: in a single row on the bund - none inside a pond, none on a line's water
+fn settled(
+    f: &Field,
+    brook: &[(f64, f64)],
+    sunk: Option<&Sunk>,
+    counts: &mut HashMap<String, u64>,
+) -> Vec<Vec<(f64, f64)>> {
+    let segs: Vec<Segment> = f
+        .channels
+        .iter()
+        .flat_map(|c| {
+            c.pts
+                .windows(2)
+                .map(move |s| (s[0], s[1], c.w.max(c.w_tail)))
+        })
+        .chain(brook.windows(2).map(|s| (s[0], s[1], BROOK_W)))
+        .chain(
+            sunk.into_iter()
+                .flat_map(|s| s.run.windows(2).map(|w| (w[0], w[1], RUN_W))),
+        )
+        .collect();
+    let ponds: Vec<(f64, f64, f64, f64)> = sunk
+        .and_then(|s| s.pond)
+        .map(|(c, rx, ry)| (c.0, c.1, rx, ry))
+        .into_iter()
+        .chain(f.pond.as_ref().map(|(_, q)| (q.x, q.y, q.rx, q.ry)))
+        .collect();
+    let mut work = [0_u64; 2];
+    let out = crate::field::beans::settle(&f.beans, &segs, &ponds, &mut work);
+    *counts
+        .entry("index_query@settle_runs".to_owned())
+        .or_insert(0) += work[0];
+    *counts.entry("moved@settle_runs".to_owned()).or_insert(0) += work[1];
+    out
 }
 
 /// The hamlet rolled from its spec through the stages enabled so far.
@@ -780,8 +823,9 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .zip(seated.as_ref())
         .and_then(|(f, s)| stage_hem(f, s));
     let mut svg = Svg::default();
-    for (f, b) in out.fields.iter().zip(&brooks) {
-        draw_field(&mut svg, f, b);
+    for (i, (f, b)) in out.fields.iter().zip(&brooks).enumerate() {
+        let beans = settled(f, b, sunk.as_ref().filter(|_| i == 0), &mut out.counts);
+        draw_field(&mut svg, f, b, &beans);
     }
     sunk.iter().for_each(|s| draw_sink(&mut svg, s));
     for d in laid.iter().flat_map(|l| &l.plots) {
@@ -807,6 +851,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         sunk,
         seated,
         grain: laid.as_ref().map(|l| l.grain),
+        field_grain: Some(out.grain),
         dry: laid.map(|l| l.plots).unwrap_or_default(),
         refusals,
         stages,
@@ -890,6 +935,20 @@ pub fn manifest(r: &Rolled) -> String {
         );
     }
     o.push_str(" ],\n");
+    let field_grain = r.field_grain.map_or_else(
+        || "null".to_owned(),
+        |(drawn, need, room)| {
+            format!("{{\"drawn\": {drawn:.2}, \"need\": {need:.2}, \"room\": {room:.2}}}")
+        },
+    );
+    let hem_grain = r.grain.map_or_else(
+        || "null".to_owned(),
+        |(drawn, room)| format!("{{\"drawn\": {drawn:.2}, \"room\": {room:.2}}}"),
+    );
+    let _ = writeln!(
+        o,
+        " \"grain_acres\": {{\"field\": {field_grain}, \"hem\": {hem_grain}}},"
+    );
     let _ = writeln!(
         o,
         " \"refusals\": [{}],",
@@ -938,6 +997,7 @@ mod tests {
             r.svg.starts_with("<svg") && r.svg.matches("<path").count() > r.fields[0].basins.len()
         );
         let m = manifest(&r);
+        assert!(m.contains("\"grain_acres\": {\"field\": {\"drawn\": "));
         assert!(
             m.contains("\"name\": \"Inashiro\"")
                 && m.contains(
@@ -970,6 +1030,7 @@ mod tests {
                 && r.polder.as_ref().is_some_and(|s| s.converted.is_some())
         );
         assert!(r.svg.contains(DIKE_EARTH_FOR_TEST));
+        assert!(manifest(&r).contains("\"grain_acres\": {\"field\": null, \"hem\": null}"));
         let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 0, "field_archetype": "polder_grid", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();
         assert!(rice.polder.as_ref().is_some_and(|s| s.converted.is_none()));
         let tea = roll(&parse(r#"{"name": "T", "seed": 21, "households": 16, "down_deg": 0, "field_archetype": "mulberry_dike_fishpond", "dike_crop": "tea"}"#).unwrap()).unwrap();

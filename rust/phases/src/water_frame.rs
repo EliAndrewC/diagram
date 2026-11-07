@@ -9,9 +9,6 @@ use std::collections::HashMap;
 
 use crate::pyrand::knob_rng;
 
-#[cfg(feature = "python")]
-pub mod py;
-
 /// One knob of the plan as Python gathered it: its name, how many forms its table holds, whether the spec pins it, and the
 /// branch it applies on.
 ///
@@ -84,19 +81,6 @@ pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
         .map(|i| f64::from(i) * step)
         .filter(|f| (f - w).rem_euclid(360.0) <= 180.0 + 1e-9)
         .collect()
-}
-
-/// The admitted falls, for Python's test against the rule it replaces (its door `py::admitted_falls`).
-///
-/// Research:
-///     the falls handed to Python - NONE: a wrapper over `admitted` for a test
-#[expect(
-    clippy::needless_pass_by_value,
-    reason = "the door hands on Python's String"
-)]
-#[must_use]
-pub fn admitted_falls(windward: String, cardinal: bool) -> Vec<f64> {
-    admitted(&windward, cardinal)
 }
 
 /// Whether a knob on `branch` applies to a map of settlement form `form`: the derivation's knob row - `all`, the nucleated
@@ -177,51 +161,18 @@ pub fn roll_plan(
     (fall, out, counts.0)
 }
 
-/// The stage's entry from Python (`plan_site`, D6): the settlement form's pin, where the spec gives one, stands in `forms` as
-/// its only entry.
-///
-/// Research:
-///     the fall rolled first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall rolled before any knob and any feature, through `roll_plan`; the drainage bearing is `plan_site`'s
-///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, through `roll_plan`
-#[expect(
-    clippy::needless_pass_by_value,
-    reason = "the door hands on Python's lists"
-)]
-#[must_use]
-pub fn stage_water_frame(
-    seed: i64,
-    windward: String,
-    cardinal: bool,
-    fall_pinned: bool,
-    forms: Vec<String>,
-    knobs: Vec<KnobIn>,
-) -> (Option<f64>, Vec<Option<u32>>, HashMap<String, u64>) {
-    roll_plan(
-        seed,
-        &admitted(&windward, cardinal),
-        fall_pinned,
-        &forms,
-        &knobs,
-    )
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{admitted_falls, applies, knob_rng, roll_plan, stage_water_frame};
+    use super::{applies, knob_rng, roll_plan};
 
     #[test]
-    fn the_doors_hand_on_the_falls_and_the_plan() {
-        assert_eq!(
-            admitted_falls("N".to_owned(), false),
-            super::admitted("N", false)
-        );
-        let (fall, picks, counts) = stage_water_frame(
+    fn the_plan_rolls_its_fall_and_its_knobs() {
+        let (fall, picks, counts) = super::roll_plan(
             3,
-            "NW".to_owned(),
+            &super::admitted("NW", false),
             false,
-            false,
-            vec!["nucleated".to_owned()],
-            vec![knob("settlement_form", 3, "all")],
+            &["nucleated".to_owned()],
+            &[knob("settlement_form", 3, "all")],
         );
         assert!(fall.is_some() && picks.len() == 1);
         assert_ne!(counts.is_empty(), cfg!(feature = "counters"));

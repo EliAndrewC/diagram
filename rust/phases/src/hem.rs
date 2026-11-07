@@ -12,9 +12,6 @@ use crate::field::dry::{hem, DryPlot, PLOT_FT};
 use crate::field::fan::Pt;
 use crate::field::index::Index;
 
-#[cfg(feature = "python")]
-pub mod py;
-
 /// The square feet in an acre.
 ///
 /// Research:

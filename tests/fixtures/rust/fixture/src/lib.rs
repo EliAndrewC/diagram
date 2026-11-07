@@ -1,6 +1,4 @@
-//! The Rust tooling fixture (feature 444 T17): one stage-shaped function and the module Python imports.
-
-use pyo3::prelude::*;
+//! The Rust tooling fixture (feature 444 T17): one stage-shaped function, its own test reaching it.
 
 /// Sums a row of counts, as a stage sums its work.
 ///
@@ -10,26 +8,6 @@ use pyo3::prelude::*;
 #[must_use]
 pub fn total(counts: &[u64]) -> u64 {
     counts.iter().sum()
-}
-
-/// The stage's entry from Python: the counts in, their total out.
-#[pyfunction]
-#[expect(
-    clippy::needless_pass_by_value,
-    reason = "PyO3 hands a Vec from a Python list"
-)]
-fn stage_total(counts: Vec<u64>) -> u64 {
-    total(&counts)
-}
-
-/// The module Python imports.
-///
-/// # Errors
-/// When the function cannot be added to the module.
-#[pymodule]
-fn l7r_fixture(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(stage_total, m)?)?;
-    Ok(())
 }
 
 #[cfg(test)]

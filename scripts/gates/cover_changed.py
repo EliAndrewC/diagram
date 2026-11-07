@@ -76,14 +76,14 @@ def changed_rust(root: Path, merge: str) -> dict[Path, list[str]]:
 
 
 def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[int]]:
-    """Each changed `.rs` file's lines neither its crate's tests nor its Python driver reach (`rust_checks.uncovered`)."""
+    """Each changed `.rs` file's lines its crate's tests do not reach (`rust_checks.uncovered`)."""
     if str(Path(__file__).resolve().parent) not in sys.path:
         sys.path.insert(0, str(Path(__file__).resolve().parent))  # loaded by path (the tests), its sibling still importable
     import rust_checks  # noqa: PLC0415
 
     out: dict[str, list[int]] = {}
     for manifest, files in crates.items():
-        got = rust_checks.uncovered(manifest, None, rust_checks.TARGET / f"cover-{manifest.parent.name}")  # Rust only, its doors left out
+        got = rust_checks.uncovered(manifest, rust_checks.TARGET / f"cover-{manifest.parent.name}")
         for f in files:
             if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
                 out[f] = lines

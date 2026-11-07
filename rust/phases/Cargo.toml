@@ -1,5 +1,5 @@
-# The rebuilt phases' extension module (feature 444 FR-010): one PyO3 module Python imports, each stage a thin Python function
-# calling into it. Built by `rust_checks.py build` into `.rust-ext/` (D8); its counters behind the `counters` feature (D9, FR-012).
+# The rebuilt hamlet stages (feature 444 FR-010) and the driver that rolls a hamlet through them with no Python (T42,
+# `src/bin/hamlet.rs`); the counters behind the `counters` feature (D9, FR-012). The PyO3 doors went with the Python engine (T39).
 [package]
 name = "l7r_phases"
 version = "0.1.0"
@@ -8,17 +8,10 @@ publish = false
 
 [lib]
 name = "l7r_phases"
-crate-type = ["cdylib", "rlib"]
+crate-type = ["rlib"]
 
 [features]
 counters = []
-# THE PYTHON DOORS BEHIND THEIR OWN FEATURE (the GM 2026-11-07: "Can we go Rust only?"; the round arbiter on
-# red-gate@2026-11-07T12:03:56Z: a door is compiled out, never left in the build and dropped from the floor): the extension built
-# for Python (`rust_checks.py build`, maturin) enables it; the crate's own tests and the Rust-only floor build without it
-python = ["dep:pyo3"]
-
-[dependencies]
-pyo3 = { version = "0.26", features = ["extension-module"], optional = true }
 
 [lints.clippy]
 all = { level = "deny", priority = -1 }

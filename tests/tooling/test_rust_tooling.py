@@ -107,25 +107,23 @@ def test_rust_test_passes_the_fixture_and_refuses_a_failing_test(crate: pathlib.
     assert rc.run("test", broken / "Cargo.toml", check=False).returncode != 0
 
 
-def test_coverage_counts_the_lines_python_reaches_and_refuses_an_untested_line(cov_work: pathlib.Path, crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
-    """Row "coverage and its floors": `cargo llvm-cov --fail-under-lines 100`, plus the Rust lines pytest reaches through the
-    extension - the fixture's own tests reach 40% of its lines, its Python driver the rest (measured 2026-10-30)."""
+def test_coverage_counts_every_line_its_tests_reach_and_refuses_an_untested_line(cov_work: pathlib.Path, crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Row "coverage and its floors": `cargo llvm-cov --fail-under-lines 100` over the crate's own tests (no Python reaches the
+    crate since its PyO3 doors went, feature 444 T39)."""
     m = crate / "Cargo.toml"
-    assert rc.cover(m, crate / "tests" / "py_driver.py", cov_work).returncode == 0, "its tests and its Python caller: every line"
-    r = rc.cover(m, None, cov_work)
-    assert r.returncode != 0, "its own tests alone leave the #[pyfunction] and the module uncovered"
+    assert rc.cover(m, cov_work).returncode == 0, "its tests reach every line"
     broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
-    assert rc.cover(broken / "Cargo.toml", broken / "tests" / "py_driver.py", cov_work).returncode != 0, "an untested line fails"
+    assert rc.cover(broken / "Cargo.toml", cov_work).returncode != 0, "an untested line fails"
 
 
 def test_uncovered_names_the_lines_of_each_file_no_test_reaches(cov_work: pathlib.Path, crate: pathlib.Path, tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     """Row "changed modules' coverage": llvm-cov per `.rs` file, for `make cover-changed`."""
-    assert rc.uncovered(crate / "Cargo.toml", crate / "tests" / "py_driver.py", cov_work) == {}
+    assert rc.uncovered(crate / "Cargo.toml", cov_work) == {}
     broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
-    got = rc.uncovered(broken / "Cargo.toml", broken / "tests" / "py_driver.py", cov_work)
+    got = rc.uncovered(broken / "Cargo.toml", cov_work)
     lib = str(broken / "src" / "lib.rs")
     assert list(got) == [lib] and got[lib], "the new function's lines, in lib.rs"
-    assert rc.uncovered(tmp_path / "none" / "Cargo.toml", None, cov_work) == {str(tmp_path / "none"): [0]}, "a run that fails"
+    assert rc.uncovered(tmp_path / "none" / "Cargo.toml", cov_work) == {str(tmp_path / "none"): [0]}, "a run that fails"
     assert "the coverage run failed on none - fix what it names" in capsys.readouterr().err, "and the failure's output shown"
 
 
@@ -135,32 +133,17 @@ def test_a_private_item_nothing_calls_is_refused(crate: pathlib.Path) -> None:
     assert r.returncode != 0 and "never_called" in r.stderr and "dead_code" in r.stderr
 
 
-def test_a_public_function_nothing_calls_is_refused_and_one_python_calls_is_kept(crate: pathlib.Path) -> None:
+def test_a_public_function_nothing_calls_is_refused(crate: pathlib.Path) -> None:
     """Row "dead closure", its public half: rustc's `dead_code` sees private items only; `rust_checks.py dead` sees a `pub fn`
-    nothing in Rust or Python calls - the fixture's `stage_total` is kept, called by its Python driver."""
+    nothing in the crate's Rust calls."""
     assert rc.dead_public(crate.parent / "noroot", crate / "Cargo.toml") == []
     broken = _with(crate, "\n/// Nothing calls it.\n#[must_use]\npub fn orphan() -> u8 {\n    1\n}\n")
     assert rc.dead_public(crate.parent / "noroot", broken / "Cargo.toml") == ["orphan"]
-    (broken / "tests" / "py_driver.py").write_text((broken / "tests" / "py_driver.py").read_text() + "assert not hasattr(l7r_fixture, 'orphan')\n")
-    assert rc.dead_public(crate.parent / "noroot", broken / "Cargo.toml") == [], "Python naming it counts as a call"
 
 
-def test_a_rust_change_selects_every_python_test_that_imports_the_extension(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
-    """Row "the change-selected tests", its Python half: testmon selects by Python lines, so a `.rs` change selects the Python
-    callers of the extension by their imports - the crate's driver and any test under `tests/` importing it."""
-    root = tmp_path / "repo"
-    (root / "tests" / "phases").mkdir(parents=True)
-    (root / "tests" / "phases" / "test_calls.py").write_text("import l7r_fixture\n")
-    (root / "tests" / "phases" / "test_other.py").write_text("import json\n")
-    got = rc.python_callers(root, crate / "Cargo.toml")
-    assert got == [crate / "tests" / "py_driver.py", root / "tests" / "phases" / "test_calls.py"]
-    assert rc.lib_name(crate / "Cargo.toml") == "l7r_fixture"
-
-
-def test_the_dead_and_callers_commands_run_on_the_named_crate(capsys: pytest.CaptureFixture[str]) -> None:
+def test_the_dead_command_runs_on_the_named_crate(capsys: pytest.CaptureFixture[str]) -> None:
     assert rc.main(["dead", "--crate", "tests/fixtures/rust/fixture"]) == 0
-    assert rc.main(["callers", "--crate", "tests/fixtures/rust/fixture"]) == 0, "the driver runs against the built extension"
-    assert "callers clean on 1 crate(s)" in capsys.readouterr().out
+    assert "dead clean on 1 crate(s)" in capsys.readouterr().out
 
 
 def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count(tmp_path: pathlib.Path) -> None:
@@ -184,9 +167,9 @@ def test_the_floor_reads_the_lines_cover_changed_reads(monkeypatch: pytest.Monke
     """The gate's `cover` refuses on the LCOV lines no test runs, the measure `make cover-changed` reads (2026-11-07: llvm-cov's
     summary counted a line missed where a closure never called shares it with code that runs, and refused what cover-changed
     passed)."""
-    monkeypatch.setattr(rc, "uncovered", lambda m, d, w: {})
+    monkeypatch.setattr(rc, "uncovered", lambda m, w: {})
     assert rc.main(["cover", "--crate", "tests/fixtures/rust/fixture"]) == 0
-    monkeypatch.setattr(rc, "uncovered", lambda m, d, w: {"src/lib.rs": [3, 4]})
+    monkeypatch.setattr(rc, "uncovered", lambda m, w: {"src/lib.rs": [3, 4]})
     assert rc.main(["cover", "--crate", "tests/fixtures/rust/fixture"]) == 1
     assert "src/lib.rs - lines no test reaches: 3, 4" in capsys.readouterr().err
 
@@ -207,7 +190,7 @@ def test_a_closure_never_called_is_refused_by_both_commands(cov_work: pathlib.Pa
     broken = _with(
         crate, "\n/// Sums one past each.\n#[must_use]\npub fn bumped(v: &[u64]) -> u64 {\n    v.iter().map(|x| x + 1).sum()\n}\n\n#[test]\nfn bumped_empty() {\n    assert_eq!(bumped(&[]), 0);\n}\n"
     )
-    got = rc.uncovered(broken / "Cargo.toml", broken / "tests" / "py_driver.py", cov_work)
+    got = rc.uncovered(broken / "Cargo.toml", cov_work)
     lib = str(broken / "src" / "lib.rs")
     assert list(got) == [lib] and got[lib], got
 
@@ -217,6 +200,6 @@ def test_the_counters_change_no_output_refuses_a_test_that_reads_them(crate: pat
     so a test whose result hangs on the counters is refused - the Rust half of the old two-roll comparison."""
     broken = _with(crate, "\n#[cfg(test)]\nmod counted {\n    #[test]\n    fn reads_the_counters() {\n        assert!(cfg!(feature = \"counters\"));\n    }\n}\n")
     toml = broken / "Cargo.toml"
-    toml.write_text(toml.read_text().replace("[dependencies]", "[features]\ncounters = []\n\n[dependencies]", 1))
+    toml.write_text(toml.read_text().replace("[lints.clippy]", "[features]\ncounters = []\n\n[lints.clippy]", 1))
     assert rc.run("test", broken / "Cargo.toml", check=False).returncode == 0, "with every feature it passes"
     assert rc.run("test-no-counters", broken / "Cargo.toml", check=False).returncode != 0, "with the counters out it is refused"

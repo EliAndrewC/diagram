@@ -166,7 +166,7 @@ if [ ! -x "$HOME/.cargo/bin/cargo-llvm-cov" ]; then
     curl -sSfL https://github.com/taiki-e/cargo-llvm-cov/releases/download/v0.6.16/cargo-llvm-cov-x86_64-unknown-linux-gnu.tar.gz \
         | tar xz -C "$HOME/.cargo/bin"
 fi
-pip install --quiet --break-system-packages maturin==1.8.3
+# maturin is no longer installed: the PyO3 doors it built went with the Python hamlet engine (feature 444 T39)
 # The headless browser the interactive-map test drives (feature 134): Playwright's own Chromium,
 # fetched into ~/.cache/ms-playwright. Idempotent; the test skips with a reason when it is absent.
 python3 -m playwright install --with-deps chromium >/dev/null

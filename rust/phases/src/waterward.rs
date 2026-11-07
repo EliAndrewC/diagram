@@ -9,9 +9,6 @@ use std::collections::HashMap;
 
 use crate::field::fan::Pt;
 
-#[cfg(feature = "python")]
-pub mod py;
-
 /// How far the strip runs past the dike's ends, across the other axis (feet): before its start and past its end.
 ///
 /// Research:

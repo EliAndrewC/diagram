@@ -13,8 +13,6 @@ pub mod exit;
 pub mod fords;
 pub mod index;
 pub mod margins;
-#[cfg(feature = "python")]
-pub mod py;
 
 /// Why no margin seats the settlement: refused by name, never seated off the wind (S4).
 #[derive(Debug, PartialEq, Eq)]
