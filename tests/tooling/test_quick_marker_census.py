@@ -16,6 +16,9 @@ def _quick_recipe() -> str:
 
 
 def test_quick_runs_the_marker_census_when_tests_change() -> None:
+    """...ON A TEST FILE CHANGED SINCE THE LAST QUICK (feature 444 T36, measured 2026-11-07: keyed on the branch's delta against main,
+    the 2 s whole-tree census ran on every quick of every working branch): a test file - a new soak test among them, the case the
+    arbiter's fix was for - newer than `.testmondata`, or no record, or ALL=1."""
     recipe = _quick_recipe()
-    line = next(ln for ln in recipe.splitlines() if "tests/test_markers.py" in ln and "git status --porcelain -- tests" in ln)
-    assert "git diff --quiet" in line and "exit 1" in line, "the census refuses quick, on a delta touching tests/ only"
+    line = next(ln for ln in recipe.splitlines() if "tests/test_markers.py" in ln and "-newer .testmondata" in ln)
+    assert "find tests -name '*.py'" in line and "[ ! -f .testmondata ]" in line and "exit 1" in line, "the census refuses quick, on a test changed since the last"
