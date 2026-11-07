@@ -31,6 +31,8 @@ mkrepo() {
   printf 'engine-key:\n\t@printf k\n' > Makefile
   # GUARD_EDIT_OK: feature 294 - the map carries its ink census, the record the occasions are read from
   [ "${2:-}" = withmap ] && { echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
+  # GUARD_EDIT_OK: feature 444 FR-023 - the cases below are the integrated port's; case_4 throws the switch to rust-only
+  mkdir -p dev; echo '{"port": {"state": "integrated"}}' > dev/switches.json
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
   git update-ref refs/remotes/origin/main main
 }
@@ -285,8 +287,18 @@ else echo "  FAIL    another session's map change was charged to this clone"; FA
 
 }
 
+case_4() {
+echo "4. AT RUST-ONLY A HAMLET'S MAP REVIEW WAITS FOR THE THROW BACK (feature 444 FR-023)"
+V=.git/review-verdicts/glyph-check--well--m.json
+mkrepo r4 withmap; echo "$NEW" > "$POOL/m.json"; git add -A; git commit -qm reroll; mkdir -p .git/review-verdicts
+echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
+check "a stale record on a hamlet's map, the switch at integrated: refused" r4 blocked
+( cd "$T/r4" && echo '{"port": {"state": "rust-only"}}' > dev/switches.json && git add -A && git commit -qm rust-only )
+check "...at rust-only it waits for the throw back and ships, no map redrawn" r4 ok
+}
+
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
-CASES=(case_1 case_1b case_2 case_3)
+CASES=(case_1 case_1b case_2 case_3 case_4)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"

@@ -156,6 +156,22 @@ if [ -n "$undeclared" ]; then
   fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
 owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --landing 2>/dev/null || true)"
+# AT RUST-ONLY A HAMLET'S MAP REVIEWS WAIT FOR THE THROW BACK (feature 444 FR-023; the GM 2026-11-07: "You should immediately stop
+# running all of the python map generating code as well"): no hamlet map is rolled while the port switch stands at rust-only, so a
+# review of one is neither redrawn below (`make map` rolled Inashiro and Kashikawa through the Python stages in a landing's cheap
+# refusals) nor refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
+port="$(python3 -c 'import pathlib, sys; sys.path.insert(0, sys.argv[1]); import cohort_gate; print(cohort_gate.port_mode(pathlib.Path(sys.argv[2])))' "$RG_HERE" "$ROOT" 2>/dev/null || echo integrated)"
+if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
+  kept=""
+  for unit in $owed_units; do
+    if [ -d "$ROOT/pool/hamlets/${unit##*--}" ]; then
+      printf 'review-gate: %s waits for the port switch thrown back to integrated (FR-023) - no hamlet map is rolled at rust-only\n' "$unit"
+    else
+      kept="$kept $unit"
+    fi
+  done
+  owed_units="${kept# }"
+fi
 # GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - A STALE RENDER IS NO OCCASION. A sheet's SVG is a gitignored render,
 # and a clone never re-renders on a merge (GM 2026-07-22), so a render drawn before main moved read as an element "new to"
 # its sheet: a spec-only push owed 374's glyph-check and size-audit on a corridor main no longer drew. Redraw what each owed
