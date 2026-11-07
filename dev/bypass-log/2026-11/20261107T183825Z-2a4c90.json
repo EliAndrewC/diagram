@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-07T18:38:25Z",
+  "target": "plan-gate tick 444-work-budget-program",
+  "commit": "8dd290716",
+  "why": "the round arbiter's ACCEPT on ask:444-a11-plan-d7 is the plan review's verdict covering the plan once its named edits are made; the changed Decisions block is exactly those edits"
+}
