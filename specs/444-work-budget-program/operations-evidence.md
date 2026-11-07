@@ -40,8 +40,11 @@ tests that build things:
 | `test_work_budget_fixtures` - main builds and refuses | 21.6 |
 
 The Rust tooling tests each compile a fresh copy of the fixture crate (its own package name, so cargo cannot share a build); the
-claims-index tests build git repositories and run the gate in them. Both are the next speed work: share one fixture build, and
-run the claims gate in process on a prepared tree.
+claims-index tests build git repositories and run the gate in them. Both were taken next, measured 2026-11-07 (cProfile, then
+`make test-file`'s wall time): every claims command re-parsed some 86 files' ASTs twice a call (about 1.4 s), now kept for the
+process by their bytes' digest, the four claims test files 13 s; the work-budget audit bundle parsed the same modules some 1,200
+times, now once a process, its 48 tests 19 s. `make test-full` then ran 9,552 tests in 214 s against 7,586 in 294 s before,
+measured 2026-11-07 (its wall time, `date +%s` either side).
 
 Development time also went to process, the gate's red rounds today: four reds before the green, each in a phase no earlier
 gate had reached (clippy, rustfmt, the coverage floor read two ways, a make `$(if)` split by a comma, five stale assertions), each
