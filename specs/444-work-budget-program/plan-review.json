@@ -438,6 +438,72 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
+  },
+  "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")": {
+   "sha256": "7f15142a6bf2cbfbadfeba1d8ec996efaa03f888e1c725f325f39a0cf87f8226",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T37-T43 Decisions": {
+   "sha256": "6c87e1e9762b9b16097c3102594719addc479229bcef2b9dc55a9f23925e26a9",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T36 Approach (checklist part A)": {
+   "sha256": "37a036565a0f28c363a5a62444974056e74a9da6df2b3ebb0daff6fe8b38417b",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Approach (checklist part A)": {
+   "sha256": "7c005bc378325d8e12dec43bd64160187af975b5f11ca772b540fa66d5078615",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Approach (checklist part A)": {
+   "sha256": "0a7f1aa3bf1f9e98ad7d63d4e3dda3bea8381282c787038b37e1dcc20ec8ebb6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T39 Approach (checklist part A)": {
+   "sha256": "bda60c5725ee2d3d140b767d099605080c55773be12e760996df5efb07d6252c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T40 Approach (checklist part A)": {
+   "sha256": "766507580b672a77e09542c2475e099d2792c569a26a9f2a92abf06535d8cb7c",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "dd410519d2cdaa16f49e2b7f11ce23308531084c8f5ade4b5c182bf6086e5254",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Approach (checklist part A)": {
+   "sha256": "6d448fa4519fd5c17774b8e48fc9b102c92efd729845c52fa737ad6c0901b617",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T43 Approach (checklist part A)": {
+   "sha256": "7e0b38ce61edd1b7285202a54320b59da71bfd98e0e6280468a8d450f91404ea",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T37-T43 the shared approach": {
+   "sha256": "a3768bac395a57d389ed05272e9d0a2d3a4b81cb53aa47547a0d145ca4ae085d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -5379,6 +5445,86 @@
      "summary": "SET_OUT_TOL_FT and FEW_SEGMENTS are moved, labeled as drawing grains at their point of change.",
      "class": "within",
      "why": "Speed work under amendment 10's fast-first words; labeling at the point of change keeps FR-021's claims rule, which FR-023 leaves unchanged."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T36 Approach (checklist part A)",
+    "### T37 Approach (checklist part A)",
+    "### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: \"That sounds good. Please proceed with that.\")",
+    "### T37-T43 Decisions",
+    "### T37-T43 the shared approach",
+    "### T38 Approach (checklist part A)",
+    "### T39 Approach (checklist part A)",
+    "### T40 Approach (checklist part A)",
+    "### T41 Approach (checklist part A)",
+    "### T42 Approach (checklist part A)",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Order: freeze writeup, park Rust past the cut, delete Python + code-reading checks + gates in one landing, driver, crate split",
+     "class": "within",
+     "why": "The GM's agreed order (request.md amendment 11, 'That sounds good. Please proceed with that.'), with parking placed before the deletion and the deletion, checks and gates landed together so the tree stays green; nothing asked is dropped."
+    },
+    {
+     "id": "D2",
+     "summary": "The cut through waterward; homesteads (13.2M at 40) and after parked",
+     "class": "within",
+     "why": "Applies the GM's criterion as he clarified it ('after the last stage which is ported AND EFFICIENT. If the latest ported stage is spending millions of operations to lay out a few dozen farmhouses then we should stop BEFORE that'; 'phases 1 and 2 ... was just my own understanding'). Measured counts in dev/work-budget.md: every kept stage at most 185,335 at 40; homesteads 13,170,400."
+    },
+    {
+     "id": "D2-seat",
+     "summary": "The seat (36,892 at 40, 193x its 191 paper budget) kept inside the cut, flagged",
+     "class": "within",
+     "why": "The GM approved the seat's overage in his own words, logged in dev/work-budget-changes.jsonl line 70 (2026-11-06, to 40,741 at 40); today's 36,892 is under the approved figure, tens of thousands not millions, and its exponent is 0.48. Not a stage the GM's 'millions of operations' test excludes."
+    },
+    {
+     "id": "D3",
+     "summary": "Delete set by reachability over an import graph of l7r/ only",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM asked to delete all hamlet-generation Python 'by completely eliminating in every way this Python code', and that the introspection code get Rust ports so it can still do 'the same things, such as claims reporting'. An import graph over l7r/ cannot see Python importers under tests/ root (rolls.py, test_census.py, test_villages.py, test_memory.py, test_road_default.py, test_work_counts.py) or consumers that hold the package as a PATH STRING (Makefile, pyproject.toml, scripts/gates/, scripts/hooks/, dev/*.json). One of those is the GM's own named example: scripts/gates/claims-gate.sh:25 '[ -d \"$ROOT/l7r/diagram/hamletgen\" ] || exit 0' switches the claims push gate off silently the moment hamletgen is deleted, while D4 says the claims rule is kept. The search space narrows the request in a way that defeats its stated purpose. Fix: name the census's full space and rekey the claims gate to the Rust tree in the same landing."
+    },
+    {
+     "id": "D4",
+     "summary": "Gates deleted with the Python they run; rust-test, Rust coverage, claims rule and budgets through the cut kept; port switch stays rust-only",
+     "class": "within",
+     "why": "The GM: 'switching those off or even just deleting them outright'; FR-024's last paragraph lists the same kept checks. (Its 'claims rule kept' needs D3's census fix to have a mechanism - see D3.)"
+    },
+    {
+     "id": "D5",
+     "summary": "Rust binary 'hamlet', pool specs as .spec.json, make hamlet SPEC=, stages enabled once each draws",
+     "class": "within",
+     "why": "The GM asked for a partial Rust map, working and fast, before the next phase; FR-024 part 5 asks for a spec data file and stage-by-stage enabling against the frozen plates."
+    },
+    {
+     "id": "D6",
+     "summary": "Cargo workspace split per stage; python feature and PyO3 removed; counters on in every build",
+     "class": "within",
+     "why": "The GM: 'no obvious issues like recompiling every single file every time we make a change to one file'; one shared feature set avoids rebuilds between test, coverage and build (FR-024 part 6). FR-012's counters feature remains, enabled everywhere."
+    },
+    {
+     "id": "T36",
+     "summary": "make test-full significantly under a minute, measured at the landing after T41",
+     "class": "within",
+     "why": "The GM's own goal, amendment 10: 'significantly under a minute' with the exact target TBD; no number invented."
+    },
+    {
+     "id": "T43-order",
+     "summary": "Crate split after T42, or before it if the driver's builds measure slow",
+     "class": "within",
+     "why": "A sequencing choice that drops nothing; moving the split earlier serves the GM's 'the literal most important thing here is making things FAST'."
+    },
+    {
+     "id": "occasions",
+     "summary": "No review occasions for deletion/cut/gates/split; glyph-check owed at the first Rust map",
+     "class": "within",
+     "why": "Does not remove any review the GM asked for; the first Rust-drawn map still owes its glyph-check."
     }
    ]
   }

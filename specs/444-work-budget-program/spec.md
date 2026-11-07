@@ -242,8 +242,13 @@ standards" (`request.md`).
      out of a deleted package where one is needed. The pool hamlets' rendered files and `legacy-hand-authored-pool/` stay as
      frozen exhibits whose scripts no longer run. The PyO3 doors and the crate's `python` feature go with the Python that called
      them. The code stays in git history.
-  4. **The code-reading checks.** Each check that read the deleted Python (`dev/rust-tooling.md`) is dropped, or ported to read
-     the Rust where it should still apply (the claims index, the report and the tunables among them).
+  4. **The code-reading checks.** Every consumer of the deleted Python is found by one stated search - the imports of the
+     deleted packages under `l7r/`, `tests/` and `scripts/`, and their names as text across the `Makefile`, `pyproject.toml`,
+     `scripts/`, `.claude/` and the top-level `dev/*.json` (the append-only run, perf and bypass logs keep their history) - and
+     each gets a recorded fate with its reason in the plan (T40's table): PORTED to read the Rust, ALREADY reading the Rust, or
+     DROPPED because what it checks exists only in the deleted Python. A check that reads code to report on it - the claims
+     index, the claims report and the claims gate, the tunables, the work-budget bundle, the file and function caps - is ported,
+     never dropped (the GM: "the code that introspects the Python code should get Rust ports").
   5. **The Rust driver.** A Rust program rolls a hamlet from its spec - the plan, the knob rolls, the stages through the cut - and
      writes its map (SVG) and its manifest, with no Python; each pool hamlet's spec is a data file its driver reads. A stage is
      enabled in the driver once it draws; its map is judged against the frozen writeup's plate for that stage.
@@ -314,7 +319,8 @@ standards" (`request.md`).
   checks and Mode A's tests pass); the crate builds and tests without `rust/parked/`; `make placement-stages` names the frozen
   reference; the Rust driver rolls each pool hamlet's spec to an SVG and a manifest through the cut with no Python, each stage it
   draws compared with the frozen plate; an edit to one stage's file rebuilds only that stage's crate and its dependents,
-  measured; `make done` green with none of the deleted gates.
+  measured; the claims gate still refuses an owed claim or an open finding on the kept Rust with no deleted Python present (a
+  test); `make done` green with none of the deleted gates.
 
 ## Edge Cases
 
@@ -401,3 +407,6 @@ standards" (`request.md`).
   added). Round 2 (spec-fidelity-verify, MODE 3): FAITHFUL.
 - 2026-11-07, amendment 11 (the GM's words, `request.md`): FR-024 and SC-017 - the Python hamlet engine deleted, the Rust stages
   cut after the last efficient one (waterward), the frozen writeup, the Rust driver, the crate split.
+- 2026-11-07, amendment 11's review, round 1 (spec-fidelity, MODE 4): BLOCKED - D3's import-only search missed the consumers that
+  name the packages as text, the claims gate's `[ -d l7r/diagram/hamletgen ] || exit 0` among them (now: part 4's stated search,
+  each consumer's fate recorded, the claims gate ported, and SC-017's claims-gate test).

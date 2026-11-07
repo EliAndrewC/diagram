@@ -462,7 +462,7 @@ In the session, as the gate's minutes were measured:
 
 Later the same day, on T36's figure: "I don't recall setting a 100s target. 100 seconds actually seems like FAR too long to me!" and "To the extent we have a goal it's "significantly under a minute" with the exact target TBD."
 
-## 2026-11-07, amendment 11 - the Python hamlet engine deleted; the Rust stages stopped after the field until a fast baseline stands
+## 2026-11-07, amendment 11 - the Python hamlet engine deleted; the Rust stages stopped at the last efficient stage until a fast baseline stands
 
 In the session, after the claims question was answered (dictated; "right up" heard for "writeup", corrected by the voice mod):
 
