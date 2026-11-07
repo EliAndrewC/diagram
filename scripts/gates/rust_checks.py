@@ -100,7 +100,8 @@ def cover(manifest: pathlib.Path, driver: pathlib.Path | None, work: pathlib.Pat
     steps = [built, _timed("tests", [str(_exe()), "test", *lib], env)]
     if driver is not None and driver.is_file():
         steps.append(_env_run(["maturin", "build", "--quiet", "--all-features", "-o", str(work / "dist"), "-m", str(manifest)], env))
-        wheels = sorted((work / "dist").glob("*.whl"))
+        wheels = sorted((work / "dist").glob(f"{lib_name(manifest)}-*.whl"), key=lambda w: w.stat().st_mtime)  # (its own, the newest: a
+        # shared build directory holds other crates' wheels too)
         if wheels:
             steps.append(_env_run([sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "--target", str(work / "site"), str(wheels[-1])], env))
             steps.append(_env_run([sys.executable, str(driver)], {**env, "PYTHONPATH": str(work / "site")}))

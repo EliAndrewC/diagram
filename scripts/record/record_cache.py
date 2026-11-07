@@ -110,13 +110,25 @@ def _codeid():  # noqa: ANN202 - the module, loaded by path
     return mod
 
 
+#: each Python file's semantic digest by the digest of its bytes, for the process (the GM 2026-11-07: "the literal most important
+#: thing here is making things FAST"): a claims command hashed some 86 files' docstring-free ASTs twice a call, about 1.4 s, the same
+#: bytes each time - keyed by the bytes' own digest, an edited file is never served its old one
+_SEMANTIC: dict[str, bytes] = {}
+
+
 def code_sha(*paths: pathlib.Path) -> str:
     """The version of the code a cache serves: its source files' contents - Python by what runs (feature 426, the audit: an
     extractor's docstring or comment does not change what it extracts), anything else by its bytes."""
     h = hashlib.sha256()
     for p in paths:
         data = p.read_bytes()
-        h.update(_codeid().semantic_bytes(data, p.name) if p.suffix == ".py" else data)
+        if p.suffix == ".py":
+            raw = hashlib.sha256(data).hexdigest()
+            if raw not in _SEMANTIC:
+                _SEMANTIC[raw] = _codeid().semantic_bytes(data, p.name)  # (the bytes themselves: every stored key stays as it was)
+            h.update(_SEMANTIC[raw])
+        else:
+            h.update(data)
     return h.hexdigest()[:16]
 
 
