@@ -184,8 +184,9 @@ maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison
 probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
 	@python3 scripts/measure/probe.py --root . $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
-hamlet:         ## [maps] roll one hamlet - the Rust driver's, not built yet (feature 444 T42); the Python hamlet engine is deleted (T39)
-	@printf 'hamlet: the Python hamlet engine is deleted (feature 444 T39); the Rust driver that replaces it is T42 - not built yet\n' >&2; exit 2
+hamlet:         ## [maps] roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed   SPEC=pool/hamlets/<name>/<name>.spec.json
+	@if [ -z "$(SPEC)" ]; then printf 'make hamlet: SPEC=pool/hamlets/<name>/<name>.spec.json is required\n' >&2; exit 2; fi
+	@HAMLET_SPEC="$(abspath $(SPEC))" python3 scripts/gates/rust_checks.py hamlet --crate rust/phases
 
 placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port's reference until a page from the Rust driver replaces it
 	@printf 'placement-stages: FROZEN - dev/placement-stages-frozen/hamlet-placement.html was generated on 2026-10-31 from main'\''s Python hamlet engine, since deleted, and is kept as the temporary reference the Rust port is judged against (feature 444 amendment 11, FR-024 part 1); nothing regenerates it until a page from the Rust driver replaces it\n'

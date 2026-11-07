@@ -1,0 +1,8 @@
+{
+ "name": "Inashiro",
+ "seed": 4,
+ "households": 15,
+ "down_deg": 90,
+ "water_sink": "pond",
+ "settlement_form": "nucleated"
+}

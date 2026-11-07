@@ -297,6 +297,9 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
         return cargo(["clippy", "--quiet", "--all-targets", "--all-features"], manifest, ["-D", "warnings"])
     if cmd == "test":
         return cargo(["test", "--quiet", "--all-features"], manifest)
+    if cmd == "hamlet":
+        # THE RUST DRIVER (feature 444 T42): a pool hamlet rolled from its spec, built optimized, no Python feature
+        return cargo(["run", "--release", "--quiet", "--bin", "hamlet"], manifest, [os.environ.get("HAMLET_SPEC", "")])
     if cmd == "test-no-counters":
         # THE COUNTERS CHANGE NO OUTPUT (feature 443 T02, its Rust half since the Python roll's deletion, feature 444 T39): the tests,
         # whose expected values are the same in both builds, pass with the counters compiled out
@@ -306,7 +309,7 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test", "test-no-counters", "cover", "dead", "callers", "build"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "test-no-counters", "hamlet", "cover", "dead", "callers", "build"])
     ap.add_argument("--driver", default="", help="cover: the Python driver (default: the crate's tests/py_driver.py)")
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
@@ -331,6 +334,8 @@ def main(argv: list[str] | None = None) -> int:
             r = subprocess.CompletedProcess([], 1 if got else 0, listing, "")
         else:
             r = run(args.cmd, m, args.check)
+        if args.cmd == "hamlet":
+            print(r.stdout, end="")
         if r.returncode != 0:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)

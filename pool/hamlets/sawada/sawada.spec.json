@@ -1,0 +1,11 @@
+{
+ "name": "Sawada",
+ "seed": 24,
+ "households": 19,
+ "down_deg": 225,
+ "water_sink": "offmap",
+ "intake": "open",
+ "pins": {
+  "paddy_rest": "unsettled"
+ }
+}

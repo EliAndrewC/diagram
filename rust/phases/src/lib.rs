@@ -5,6 +5,7 @@
 
 mod counts;
 mod course;
+pub mod driver;
 mod field;
 mod hem;
 mod pyrand;

@@ -1,0 +1,8 @@
+{
+ "name": "Kashikawa",
+ "seed": 3,
+ "households": 20,
+ "down_deg": 315,
+ "water_sink": "offmap",
+ "brook_side": -1
+}
