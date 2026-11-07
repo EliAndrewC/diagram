@@ -210,13 +210,39 @@ def _save_names(repo: pathlib.Path) -> None:
         pass
 
 
+def _stamp(p: pathlib.Path) -> tuple[int, int] | None:
+    try:
+        st = p.stat()
+    except OSError:
+        return None
+    return st.st_mtime_ns, st.st_size
+
+
+#: each `code_sha_of` answer for the process, with the stamps it rests on: its files' and the directories an import is looked up
+#: in, so an edited module or a file added or removed beside one is a miss (feature 444 T36, measured 2026-11-07: a claims gate
+#: walked its import graph 39 times in one run - 7,371 calls, 207,000 stats, 6.0 of a test's 6.7 s; the GM: "any single test which
+#: takes even 100 milliseconds is fairly suspect")
+_CODE_SHAS: dict[tuple[str, ...], tuple[list[tuple[pathlib.Path, tuple[int, int] | None]], str]] = {}
+
+
 def code_sha_of(repo: pathlib.Path, *paths: pathlib.Path) -> str:
     """`code_sha` over `paths` and every project module they import, transitively, in a stable order."""
+    # ...ONLY THIS REPOSITORY'S OWN CODE (a file's time ticks coarsely, and a test rewrites a fixture's module at one size within a
+    # tick; the tools' own modules do not change under a running process): a fixture's, in a temporary directory, is walked each time
+    key = (str(repo), *map(str, paths))
+    keep = all(_REPO in p.resolve().parents for p in paths)
+    kept = _CODE_SHAS.get(key) if keep else None
+    if kept is not None and all(_stamp(p) == s for p, s in kept[0]):
+        return kept[1]
     files: set[pathlib.Path] = set()
     for p in paths:
         imported_files(p, repo, files)
     _save_names(repo)
-    return code_sha(*sorted(files))
+    sha = code_sha(*sorted(files))
+    looked = {f.parent for f in files} | {(f.parent / d).resolve() for f in files for d in ("../hooks/lib", "../reviews", "../record", "../measure", "../gates")}
+    if keep:
+        _CODE_SHAS[key] = ([(q, _stamp(q)) for q in sorted(files | looked)], sha)
+    return sha
 
 
 def text_key(*parts: str) -> str:
