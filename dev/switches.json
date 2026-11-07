@@ -10,5 +10,11 @@
     "why": "the GM 2026-10-28: until we have closed out all of the open claims, basically ignore claims so long as they are properly marked and show up in the claims report (feature 445)",
     "who": "Eli Courtwright",
     "utc": "2026-10-28T15:33:52Z"
+  },
+  "port": {
+    "state": "rust-only",
+    "why": "the GM 2026-11-07 (feature 444 amendment 8): the Rust stages iterated alone until the last stage is Rust",
+    "who": "Eli Courtwright",
+    "utc": "2026-11-07T05:22:23Z"
   }
 }
