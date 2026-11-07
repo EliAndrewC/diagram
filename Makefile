@@ -185,8 +185,7 @@ probe:          ## [maps] what a change does to every seed and pool map against 
 	@python3 scripts/measure/probe.py --root . $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
 hamlet:         ## [maps] roll one hamlet - the Rust driver's, not built yet (feature 444 T42); the Python hamlet engine is deleted (T39)
-	@printf 'hamlet: the Python hamlet engine is deleted (feature 444 T39); the Rust driver that replaces it is T42 - not built yet
-' >&2; exit 2
+	@printf 'hamlet: the Python hamlet engine is deleted (feature 444 T39); the Rust driver that replaces it is T42 - not built yet\n' >&2; exit 2
 
 placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port's reference until a page from the Rust driver replaces it
 	@printf 'placement-stages: FROZEN - dev/placement-stages-frozen/hamlet-placement.html was generated on 2026-10-31 from main'\''s Python hamlet engine, since deleted, and is kept as the temporary reference the Rust port is judged against (feature 444 amendment 11, FR-024 part 1); nothing regenerates it until a page from the Rust driver replaces it\n'
