@@ -1268,10 +1268,10 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
 3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11); the frozen plates (T37).
 4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
 5. **The order.** After the T37-T41 landing.
-6. **The exits.** Green: each pool spec's wall time; each enabled stage compared with its frozen plate. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+6. **The exits.** Green: each pool spec's wall time; each enabled stage held to what its frozen plate says the stage does, never to its output (the GM 2026-11-07: "the maps do NOT have to match, they do NOT need to be identical"), and the cohort's map checks clean; a visual defect pass before the GM looks ("you can do your own visual pass first"). Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing (D1).
-9. **Done, measured.** each pool spec's wall time; each enabled stage compared with its frozen plate.
+9. **Done, measured.** each pool spec's wall time; the cohort's map checks clean on 1,000 comb seeds and 300 of each polder; the visual pass's findings fixed or ruled on by the research.
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 

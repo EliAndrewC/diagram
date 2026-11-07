@@ -497,3 +497,11 @@ And: "No, NOT the last stage that is olrted, after the last stage whch is ported
 Then, on the gate's worker count: "We limited to 6 workers because at the time we did a bunch of measurements and found there was a diminishing return beyond that number, e.g. 8 cores was only slightly faster, same with 10 or 12 and there were literally no gains past that.  This might not be true for Rus, which might change our calculus."
 
 And: "Sorry no, to be cleare we should stop optimizing our python gates for now and focus entirely on our Rust code.  For now we should simply try to avoidf running those Python tests until our Rust is solid."
+
+## 2026-11-07, the functioning baseline; the maps need not match
+
+"sounds good -  how close do we think we are to "okay, we're at the functioning baseline and ready to start having Eli look at the state of things""
+
+"to be clear, the maps do NOT have to match, they do NOT need to be identical, that was NEVER a requirement and has been explicitly, repeatedly, and emphatically designated as NEVER a requirement"
+
+"you can do your own visual pass first and I'll look when you've done that"
