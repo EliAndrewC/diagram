@@ -487,3 +487,9 @@ Told the order proposed (freeze the writeup; delete the Python hamlet engine and
 Then, as the plan was written: "One thing to clarify is that when I mentioned phases 1 and 2, that was just my own understanding of where we were at. I was not telling you that that must be the exact first piece."
 
 And: "No, NOT the last stage that is olrted, after the last stage whch is ported AND EFFICIENT.  If the latest ported staged is spending millions of poerations tolay out a few dozen farmhouses then we should stop BEFPRE that."
+
+## 2026-11-07, the loop first; no landing until it is fast
+
+"How are things going?  I want to make sure that we are laser-focused on "make sure our iteration loop is fast, and all of our slow tests are turned off or eliminated except when absolutely necessary to be run", etc."
+
+"we should stop landing things until we've gotten this timedown.  We already push to the remote branch to save our work, so sopending 5 minutes running landing tests is pure overhead.  There are no other concurrent sessions which need to pull from main, so we can wait arbitrarily long to land our changes."
