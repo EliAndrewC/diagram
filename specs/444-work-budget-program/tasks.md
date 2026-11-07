@@ -136,7 +136,7 @@
       verify: DONE. landed in batch T37+T38+T40+T41: amendment 11: the writeup frozen, the Rust cut after waterward, the Python hamlet engine deleted with its tests and gates, the code-reading checks ported to the Rust
 - [ ] T42 the Rust driver (FR-024 part 5, plan D5): `make hamlet SPEC=` rolls a pool hamlet's spec through the plan and the stages through the cut to an SVG and a manifest with no Python, each stage enabled once it draws and compared with the frozen plate
       research: rendering
-- [ ] T43 the crate split (FR-024 part 6, plan D6): a workspace, one crate a stage, one feature set; `cargo build --timings` from clean and after a one-line edit, before and after
+- [ ] T43 the crate split (FR-024 part 6, plan D6): a workspace, one crate a stage, one feature set; `cargo build --timings` from clean and after a one-line edit, before and after; BEFORE, measured 2026-11-07 with homesteads, track, appurtenances, law and ways parked and no driver yet (`rust_checks.py test`'s wall time after a one-line code edit): sink.rs 0.96 s, field/lattice.rs 0.92 s, a broken edit refused in 0.28 s (so it recompiles), the coverage run 1.2 s to build and 1.7 s to test - re-measured after T42, per its order
       research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
