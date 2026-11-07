@@ -1,0 +1,1661 @@
+{
+ "meta": {
+  "driver": "rust",
+  "engine": "d2201ed94",
+  "when": "2026-11-07T20:53:44Z"
+ },
+ "rows": [
+  {
+   "households": 10,
+   "seed": 4,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 53,
+      "candidate@held": 128,
+      "candidate@outline": 98,
+      "candidate@plots_box": 388,
+      "candidate@rows_held": 32,
+      "candidate@states": 100,
+      "candidate@water_index": 95,
+      "index_query@settle_runs": 3810,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 9,
+      "write@area": 2,
+      "write@basin": 3651,
+      "write@bean": 1242,
+      "write@brook": 472,
+      "write@brook_drawn": 2243,
+      "write@channel_pts": 49,
+      "write@ditch": 41,
+      "write@drawn_apart": 16,
+      "write@fan_outline": 147,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 1552,
+      "write@water_index": 619
+     },
+     "total": 14771
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 492,
+      "pt_test@hem_onto": 825,
+      "pt_test@hem_refused": 2533,
+      "write@dry_plot": 228,
+      "write@hem_index": 1115,
+      "write@hem_water": 417
+     },
+     "total": 5610
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 17,
+      "candidate@margins_refused": 10,
+      "index_examined@toe_band": 278,
+      "index_query@toe_band": 726,
+      "pt_test@toe_band": 255,
+      "read@brook": 237,
+      "read@brook_course": 237,
+      "test@exit_run": 339,
+      "test@fords": 744,
+      "test@gaps": 1249,
+      "test@margins": 98,
+      "test@ranking": 85,
+      "test@refusals": 816,
+      "test@score": 5202,
+      "write@exit_cells": 841,
+      "write@exit_walls": 248,
+      "write@ford_cells": 13,
+      "write@fords": 13,
+      "write@frames": 139,
+      "write@outline_strips": 73,
+      "write@toe_band": 46,
+      "write@watercourses": 210,
+      "write@wet_strips": 168
+     },
+     "total": 12045
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 41,
+      "read@drain": 2,
+      "read@outline": 49,
+      "test@brook": 57,
+      "test@pond_seat": 25,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 197
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 20,
+   "seed": 4,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 61,
+      "candidate@held": 176,
+      "candidate@outline": 136,
+      "candidate@plots_box": 756,
+      "candidate@rows_held": 44,
+      "candidate@states": 140,
+      "candidate@water_index": 145,
+      "index_query@settle_runs": 6260,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 12,
+      "write@area": 2,
+      "write@basin": 7290,
+      "write@bean": 2482,
+      "write@brook": 646,
+      "write@brook_drawn": 3063,
+      "write@channel_pts": 64,
+      "write@ditch": 54,
+      "write@drawn_apart": 24,
+      "write@fan_outline": 204,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 3024,
+      "write@water_index": 868
+     },
+     "total": 25475
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1081,
+      "pt_test@hem_onto": 1598,
+      "pt_test@hem_refused": 5372,
+      "write@dry_plot": 456,
+      "write@hem_index": 2327,
+      "write@hem_water": 582
+     },
+     "total": 11416
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 25,
+      "candidate@margins_refused": 12,
+      "index_examined@toe_band": 400,
+      "index_query@toe_band": 1148,
+      "pt_test@toe_band": 348,
+      "read@brook": 324,
+      "read@brook_course": 324,
+      "test@exit_run": 454,
+      "test@fords": 1134,
+      "test@gaps": 1654,
+      "test@margins": 136,
+      "test@ranking": 125,
+      "test@refusals": 1234,
+      "test@score": 8400,
+      "write@exit_cells": 1123,
+      "write@exit_walls": 296,
+      "write@ford_cells": 14,
+      "write@fords": 14,
+      "write@frames": 203,
+      "write@outline_strips": 102,
+      "write@toe_band": 58,
+      "write@watercourses": 295,
+      "write@wet_strips": 218
+     },
+     "total": 18042
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 52,
+      "read@drain": 2,
+      "read@outline": 68,
+      "test@brook": 68,
+      "test@pond_seat": 33,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 246
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 40,
+   "seed": 4,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 73,
+      "candidate@held": 248,
+      "candidate@outline": 192,
+      "candidate@plots_box": 1506,
+      "candidate@rows_held": 62,
+      "candidate@states": 200,
+      "candidate@water_index": 205,
+      "index_query@settle_runs": 10412,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 24,
+      "write@area": 2,
+      "write@basin": 14411,
+      "write@bean": 4982,
+      "write@brook": 896,
+      "write@brook_drawn": 4244,
+      "write@channel_pts": 82,
+      "write@ditch": 70,
+      "write@drawn_apart": 50,
+      "write@fan_outline": 288,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 6024,
+      "write@water_index": 1231
+     },
+     "total": 45226
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 2162,
+      "pt_test@hem_onto": 3151,
+      "pt_test@hem_refused": 10773,
+      "write@dry_plot": 908,
+      "write@hem_index": 4601,
+      "write@hem_water": 816
+     },
+     "total": 22411
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 36,
+      "candidate@margins_refused": 17,
+      "index_examined@toe_band": 574,
+      "index_query@toe_band": 1596,
+      "pt_test@toe_band": 486,
+      "read@brook": 449,
+      "read@brook_course": 449,
+      "test@exit_run": 608,
+      "test@fords": 1593,
+      "test@gaps": 2305,
+      "test@margins": 192,
+      "test@ranking": 216,
+      "test@refusals": 1797,
+      "test@score": 12096,
+      "write@exit_cells": 1535,
+      "write@exit_walls": 368,
+      "write@ford_cells": 20,
+      "write@fords": 20,
+      "write@frames": 291,
+      "write@outline_strips": 144,
+      "write@toe_band": 76,
+      "write@watercourses": 408,
+      "write@wet_strips": 294
+     },
+     "total": 25571
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 68,
+      "read@drain": 2,
+      "read@outline": 96,
+      "test@brook": 95,
+      "test@pond_seat": 43,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 327
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 80,
+   "seed": 4,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 106,
+      "candidate@held": 352,
+      "candidate@outline": 270,
+      "candidate@plots_box": 3020,
+      "candidate@rows_held": 88,
+      "candidate@states": 280,
+      "candidate@water_index": 260,
+      "index_query@settle_runs": 17574,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 24,
+      "write@area": 2,
+      "write@basin": 28471,
+      "write@bean": 9698,
+      "write@brook": 1262,
+      "write@brook_drawn": 5989,
+      "write@channel_pts": 97,
+      "write@ditch": 85,
+      "write@drawn_apart": 36,
+      "write@fan_outline": 405,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 12080,
+      "write@water_index": 1711
+     },
+     "total": 81834
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 4463,
+      "pt_test@hem_onto": 6299,
+      "pt_test@hem_refused": 22096,
+      "write@dry_plot": 1816,
+      "write@hem_index": 9163,
+      "write@hem_water": 1131
+     },
+     "total": 44968
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 50,
+      "candidate@margins_refused": 24,
+      "index_examined@toe_band": 800,
+      "index_query@toe_band": 2520,
+      "pt_test@toe_band": 675,
+      "read@brook": 632,
+      "read@brook_course": 632,
+      "test@exit_run": 608,
+      "test@fords": 2490,
+      "test@gaps": 3374,
+      "test@margins": 270,
+      "test@ranking": 300,
+      "test@refusals": 2708,
+      "test@score": 18300,
+      "write@exit_cells": 2079,
+      "write@exit_walls": 464,
+      "write@ford_cells": 37,
+      "write@fords": 37,
+      "write@frames": 403,
+      "write@outline_strips": 201,
+      "write@toe_band": 100,
+      "write@watercourses": 557,
+      "write@wet_strips": 404
+     },
+     "total": 37666
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 85,
+      "read@drain": 2,
+      "read@outline": 135,
+      "test@brook": 110,
+      "test@pond_seat": 59,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 414
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 10,
+   "seed": 25,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 20,
+      "candidate@held": 120,
+      "candidate@outline": 98,
+      "candidate@plots_box": 370,
+      "candidate@rows_held": 30,
+      "candidate@states": 100,
+      "candidate@water_index": 98,
+      "index_query@settle_runs": 3113,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 9,
+      "write@area": 2,
+      "write@basin": 3644,
+      "write@bean": 988,
+      "write@brook": 470,
+      "write@brook_drawn": 2240,
+      "write@channel_pts": 50,
+      "write@ditch": 41,
+      "write@drawn_apart": 22,
+      "write@fan_outline": 147,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 1480,
+      "write@water_index": 628
+     },
+     "total": 13694
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 356,
+      "pt_test@hem_onto": 433,
+      "pt_test@hem_refused": 2688,
+      "write@dry_plot": 196,
+      "write@hem_index": 933,
+      "write@hem_water": 422
+     },
+     "total": 5028
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 9,
+      "candidate@margins": 20,
+      "candidate@margins_refused": 7,
+      "index_examined@toe_band": 293,
+      "index_query@toe_band": 726,
+      "pt_test@toe_band": 255,
+      "read@brook": 236,
+      "read@brook_course": 236,
+      "test@exit_run": 809,
+      "test@fords": 744,
+      "test@gaps": 1324,
+      "test@margins": 98,
+      "test@ranking": 100,
+      "test@refusals": 956,
+      "test@score": 6120,
+      "write@exit_cells": 844,
+      "write@exit_walls": 248,
+      "write@ford_cells": 11,
+      "write@fords": 11,
+      "write@frames": 163,
+      "write@outline_strips": 73,
+      "write@toe_band": 46,
+      "write@watercourses": 213,
+      "write@wet_strips": 164
+     },
+     "total": 13706
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 43,
+      "read@drain": 2,
+      "read@outline": 49,
+      "test@brook": 53,
+      "test@pond_seat": 25,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 195
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 20,
+   "seed": 25,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 28,
+      "candidate@held": 176,
+      "candidate@outline": 138,
+      "candidate@plots_box": 774,
+      "candidate@rows_held": 44,
+      "candidate@states": 140,
+      "candidate@water_index": 140,
+      "index_query@settle_runs": 4925,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 12,
+      "write@area": 2,
+      "write@basin": 7454,
+      "write@bean": 2240,
+      "write@brook": 646,
+      "write@brook_drawn": 3076,
+      "write@channel_pts": 66,
+      "write@ditch": 55,
+      "write@drawn_apart": 24,
+      "write@fan_outline": 207,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 3096,
+      "write@water_index": 876
+     },
+     "total": 24143
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 529,
+      "pt_test@hem_onto": 635,
+      "pt_test@hem_refused": 4085,
+      "write@dry_plot": 296,
+      "write@hem_index": 1404,
+      "write@hem_water": 584
+     },
+     "total": 7533
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 9,
+      "candidate@margins": 30,
+      "candidate@margins_refused": 8,
+      "index_examined@toe_band": 407,
+      "index_query@toe_band": 1155,
+      "pt_test@toe_band": 351,
+      "read@brook": 324,
+      "read@brook_course": 324,
+      "test@exit_run": 930,
+      "test@fords": 1134,
+      "test@gaps": 1688,
+      "test@margins": 138,
+      "test@ranking": 150,
+      "test@refusals": 1506,
+      "test@score": 10080,
+      "write@exit_cells": 1105,
+      "write@exit_walls": 296,
+      "write@ford_cells": 16,
+      "write@fords": 16,
+      "write@frames": 243,
+      "write@outline_strips": 103,
+      "write@toe_band": 58,
+      "write@watercourses": 291,
+      "write@wet_strips": 212
+     },
+     "total": 20574
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 50,
+      "read@drain": 2,
+      "read@outline": 69,
+      "test@brook": 58,
+      "test@pond_seat": 33,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 235
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 40,
+   "seed": 25,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 40,
+      "candidate@held": 248,
+      "candidate@outline": 190,
+      "candidate@plots_box": 1542,
+      "candidate@rows_held": 62,
+      "candidate@states": 200,
+      "candidate@water_index": 167,
+      "index_query@settle_runs": 8371,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 24,
+      "write@area": 2,
+      "write@basin": 14509,
+      "write@bean": 4658,
+      "write@brook": 896,
+      "write@brook_drawn": 4270,
+      "write@channel_pts": 85,
+      "write@ditch": 72,
+      "write@drawn_apart": 34,
+      "write@fan_outline": 285,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 6168,
+      "write@water_index": 1220
+     },
+     "total": 43067
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 774,
+      "pt_test@hem_onto": 995,
+      "pt_test@hem_refused": 6206,
+      "write@dry_plot": 416,
+      "write@hem_index": 1911,
+      "write@hem_water": 832
+     },
+     "total": 11134
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 9,
+      "candidate@margins": 42,
+      "candidate@margins_refused": 10,
+      "index_examined@toe_band": 570,
+      "index_query@toe_band": 1589,
+      "pt_test@toe_band": 483,
+      "read@brook": 449,
+      "read@brook_course": 449,
+      "test@exit_run": 907,
+      "test@fords": 1593,
+      "test@gaps": 2387,
+      "test@margins": 190,
+      "test@ranking": 252,
+      "test@refusals": 2183,
+      "test@score": 14112,
+      "write@exit_cells": 1513,
+      "write@exit_walls": 368,
+      "write@ford_cells": 25,
+      "write@fords": 25,
+      "write@frames": 339,
+      "write@outline_strips": 139,
+      "write@toe_band": 76,
+      "write@watercourses": 398,
+      "write@wet_strips": 286
+     },
+     "total": 28394
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 67,
+      "read@drain": 2,
+      "read@outline": 95,
+      "test@brook": 94,
+      "test@pond_seat": 45,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 326
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 80,
+   "seed": 25,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 56,
+      "candidate@held": 344,
+      "candidate@outline": 270,
+      "candidate@plots_box": 3028,
+      "candidate@rows_held": 86,
+      "candidate@states": 280,
+      "candidate@water_index": 248,
+      "index_query@settle_runs": 14139,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 24,
+      "write@area": 2,
+      "write@basin": 28282,
+      "write@bean": 9576,
+      "write@brook": 1260,
+      "write@brook_drawn": 5986,
+      "write@channel_pts": 100,
+      "write@ditch": 87,
+      "write@drawn_apart": 42,
+      "write@fan_outline": 405,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 12112,
+      "write@water_index": 1715
+     },
+     "total": 78066
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1046,
+      "pt_test@hem_onto": 1512,
+      "pt_test@hem_refused": 9345,
+      "write@dry_plot": 596,
+      "write@hem_index": 2575,
+      "write@hem_water": 1145
+     },
+     "total": 16219
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 9,
+      "candidate@margins": 59,
+      "candidate@margins_refused": 15,
+      "index_examined@toe_band": 803,
+      "index_query@toe_band": 2520,
+      "pt_test@toe_band": 675,
+      "read@brook": 631,
+      "read@brook_course": 631,
+      "test@exit_run": 1069,
+      "test@fords": 2460,
+      "test@gaps": 3358,
+      "test@margins": 270,
+      "test@ranking": 354,
+      "test@refusals": 3023,
+      "test@score": 21594,
+      "write@exit_cells": 2067,
+      "write@exit_walls": 464,
+      "write@ford_cells": 36,
+      "write@fords": 36,
+      "write@frames": 475,
+      "write@outline_strips": 201,
+      "write@toe_band": 100,
+      "write@watercourses": 558,
+      "write@wet_strips": 388
+     },
+     "total": 41796
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 88,
+      "read@drain": 2,
+      "read@outline": 135,
+      "test@brook": 120,
+      "test@pond_seat": 61,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 429
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 10,
+   "seed": 39,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 51,
+      "candidate@held": 112,
+      "candidate@outline": 98,
+      "candidate@plots_box": 312,
+      "candidate@rows_held": 28,
+      "candidate@states": 682,
+      "candidate@water_index": 110,
+      "index_query@settle_runs": 3245,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 9,
+      "write@area": 2,
+      "write@basin": 3094,
+      "write@bean": 874,
+      "write@brook": 470,
+      "write@brook_drawn": 2240,
+      "write@channel_pts": 54,
+      "write@ditch": 45,
+      "write@drawn_apart": 78,
+      "write@fan_outline": 147,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 1248,
+      "write@water_index": 627
+     },
+     "total": 13550
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 529,
+      "pt_test@hem_onto": 618,
+      "pt_test@hem_refused": 3358,
+      "write@dry_plot": 284,
+      "write@hem_index": 1422,
+      "write@hem_water": 425
+     },
+     "total": 6636
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 23,
+      "candidate@margins_refused": 4,
+      "index_examined@toe_band": 292,
+      "index_query@toe_band": 714,
+      "pt_test@toe_band": 252,
+      "read@brook": 236,
+      "read@brook_course": 236,
+      "test@exit_run": 323,
+      "test@fords": 744,
+      "test@gaps": 1331,
+      "test@margins": 98,
+      "test@ranking": 115,
+      "test@refusals": 1915,
+      "test@score": 7038,
+      "write@exit_cells": 837,
+      "write@exit_walls": 244,
+      "write@ford_cells": 12,
+      "write@fords": 12,
+      "write@frames": 187,
+      "write@outline_strips": 75,
+      "write@toe_band": 45,
+      "write@watercourses": 212,
+      "write@wet_strips": 167
+     },
+     "total": 15113
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 41,
+      "read@drain": 2,
+      "read@outline": 49,
+      "test@brook": 55,
+      "test@pond_seat": 23,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 193
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 20,
+   "seed": 39,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 59,
+      "candidate@held": 152,
+      "candidate@outline": 136,
+      "candidate@plots_box": 608,
+      "candidate@rows_held": 38,
+      "candidate@states": 1283,
+      "candidate@water_index": 141,
+      "index_query@settle_runs": 5317,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 12,
+      "write@area": 2,
+      "write@basin": 6060,
+      "write@bean": 1844,
+      "write@brook": 646,
+      "write@brook_drawn": 3076,
+      "write@channel_pts": 67,
+      "write@ditch": 56,
+      "write@drawn_apart": 164,
+      "write@fan_outline": 204,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 2432,
+      "write@water_index": 878
+     },
+     "total": 23199
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 756,
+      "pt_test@hem_onto": 797,
+      "pt_test@hem_refused": 4953,
+      "write@dry_plot": 396,
+      "write@hem_index": 1928,
+      "write@hem_water": 584
+     },
+     "total": 9414
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 28,
+      "candidate@margins_refused": 9,
+      "index_examined@toe_band": 404,
+      "index_query@toe_band": 1120,
+      "pt_test@toe_band": 342,
+      "read@brook": 324,
+      "read@brook_course": 324,
+      "test@exit_run": 459,
+      "test@fords": 1134,
+      "test@gaps": 1707,
+      "test@margins": 136,
+      "test@ranking": 140,
+      "test@refusals": 1561,
+      "test@score": 9408,
+      "write@exit_cells": 1131,
+      "write@exit_walls": 288,
+      "write@ford_cells": 17,
+      "write@fords": 17,
+      "write@frames": 227,
+      "write@outline_strips": 102,
+      "write@toe_band": 56,
+      "write@watercourses": 289,
+      "write@wet_strips": 228
+     },
+     "total": 19452
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 52,
+      "read@drain": 2,
+      "read@outline": 68,
+      "test@brook": 62,
+      "test@pond_seat": 31,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 238
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 40,
+   "seed": 39,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 69,
+      "candidate@held": 216,
+      "candidate@outline": 194,
+      "candidate@plots_box": 1224,
+      "candidate@rows_held": 54,
+      "candidate@states": 2504,
+      "candidate@water_index": 206,
+      "index_query@settle_runs": 8979,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 15,
+      "write@area": 2,
+      "write@basin": 11764,
+      "write@bean": 3878,
+      "write@brook": 900,
+      "write@brook_drawn": 4289,
+      "write@channel_pts": 87,
+      "write@ditch": 74,
+      "write@drawn_apart": 320,
+      "write@fan_outline": 291,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 4896,
+      "write@water_index": 1225
+     },
+     "total": 41211
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1076,
+      "pt_test@hem_onto": 1223,
+      "pt_test@hem_refused": 7513,
+      "write@dry_plot": 572,
+      "write@hem_index": 2679,
+      "write@hem_water": 829
+     },
+     "total": 13892
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 43,
+      "candidate@margins_refused": 10,
+      "index_examined@toe_band": 582,
+      "index_query@toe_band": 1561,
+      "pt_test@toe_band": 480,
+      "read@brook": 451,
+      "read@brook_course": 451,
+      "test@exit_run": 440,
+      "test@fords": 1593,
+      "test@gaps": 2424,
+      "test@margins": 194,
+      "test@ranking": 258,
+      "test@refusals": 2473,
+      "test@score": 14448,
+      "write@exit_cells": 1548,
+      "write@exit_walls": 356,
+      "write@ford_cells": 27,
+      "write@fords": 27,
+      "write@frames": 347,
+      "write@outline_strips": 147,
+      "write@toe_band": 73,
+      "write@watercourses": 396,
+      "write@wet_strips": 309
+     },
+     "total": 28639
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 62,
+      "read@drain": 2,
+      "read@outline": 97,
+      "test@brook": 79,
+      "test@pond_seat": 41,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 304
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 80,
+   "seed": 39,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@feature": 85,
+      "candidate@held": 304,
+      "candidate@outline": 270,
+      "candidate@plots_box": 2420,
+      "candidate@rows_held": 76,
+      "candidate@states": 4895,
+      "candidate@water_index": 273,
+      "index_query@settle_runs": 14880,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 15,
+      "write@area": 2,
+      "write@basin": 23502,
+      "write@bean": 7634,
+      "write@brook": 1262,
+      "write@brook_drawn": 6002,
+      "write@channel_pts": 105,
+      "write@ditch": 92,
+      "write@drawn_apart": 596,
+      "write@fan_outline": 405,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 9680,
+      "write@water_index": 1689
+     },
+     "total": 74211
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1539,
+      "pt_test@hem_onto": 1597,
+      "pt_test@hem_refused": 11366,
+      "write@dry_plot": 812,
+      "write@hem_index": 3721,
+      "write@hem_water": 1145
+     },
+     "total": 20180
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 1,
+      "candidate@margins": 59,
+      "candidate@margins_refused": 15,
+      "index_examined@toe_band": 808,
+      "index_query@toe_band": 2456,
+      "pt_test@toe_band": 663,
+      "read@brook": 632,
+      "read@brook_course": 632,
+      "test@exit_run": 605,
+      "test@fords": 2490,
+      "test@gaps": 3429,
+      "test@margins": 270,
+      "test@ranking": 354,
+      "test@refusals": 3334,
+      "test@score": 21594,
+      "write@exit_cells": 2102,
+      "write@exit_walls": 448,
+      "write@ford_cells": 40,
+      "write@fords": 40,
+      "write@frames": 475,
+      "write@outline_strips": 205,
+      "write@toe_band": 96,
+      "write@watercourses": 552,
+      "write@wet_strips": 418
+     },
+     "total": 41718
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 86,
+      "read@drain": 2,
+      "read@outline": 135,
+      "test@brook": 121,
+      "test@pond_seat": 55,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 422
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 10,
+   "seed": 47,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@drained": 22,
+      "candidate@feature": 38,
+      "candidate@held": 120,
+      "candidate@outline": 102,
+      "candidate@plots_box": 390,
+      "candidate@rows_held": 30,
+      "candidate@states": 856,
+      "candidate@water_index": 93,
+      "index_query@settle_runs": 3604,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 9,
+      "write@area": 2,
+      "write@basin": 3667,
+      "write@bean": 1124,
+      "write@brook": 472,
+      "write@brook_drawn": 2256,
+      "write@channel_pts": 54,
+      "write@ditch": 45,
+      "write@drawn_apart": 86,
+      "write@fan_outline": 153,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 1560,
+      "write@water_index": 649
+     },
+     "total": 15356
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 588,
+      "pt_test@hem_onto": 568,
+      "pt_test@hem_refused": 3432,
+      "write@dry_plot": 240,
+      "write@hem_index": 1397,
+      "write@hem_water": 441
+     },
+     "total": 6666
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 16,
+      "candidate@margins": 22,
+      "candidate@margins_refused": 6,
+      "index_examined@toe_band": 297,
+      "index_query@toe_band": 762,
+      "pt_test@toe_band": 267,
+      "read@brook": 237,
+      "read@brook_course": 237,
+      "test@exit_run": 13190,
+      "test@exit_walk": 103,
+      "test@fords": 768,
+      "test@gaps": 1252,
+      "test@margins": 102,
+      "test@ranking": 110,
+      "test@refusals": 1134,
+      "test@score": 6732,
+      "write@exit_cells": 862,
+      "write@exit_known": 434,
+      "write@exit_walls": 256,
+      "write@ford_cells": 13,
+      "write@fords": 13,
+      "write@frames": 179,
+      "write@outline_strips": 73,
+      "write@toe_band": 48,
+      "write@watercourses": 213,
+      "write@wet_strips": 170
+     },
+     "total": 27496
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 38,
+      "read@drain": 2,
+      "read@outline": 51,
+      "test@brook": 48,
+      "test@pond_seat": 27,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 189
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 20,
+   "seed": 47,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@drained": 30,
+      "candidate@feature": 46,
+      "candidate@held": 168,
+      "candidate@outline": 138,
+      "candidate@plots_box": 770,
+      "candidate@rows_held": 42,
+      "candidate@states": 1614,
+      "candidate@water_index": 132,
+      "index_query@settle_runs": 5914,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 12,
+      "write@area": 2,
+      "write@basin": 7502,
+      "write@bean": 2260,
+      "write@brook": 646,
+      "write@brook_drawn": 3089,
+      "write@channel_pts": 70,
+      "write@ditch": 59,
+      "write@drawn_apart": 184,
+      "write@fan_outline": 207,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 3080,
+      "write@water_index": 965
+     },
+     "total": 26954
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 972,
+      "pt_test@hem_onto": 796,
+      "pt_test@hem_refused": 5411,
+      "write@dry_plot": 360,
+      "write@hem_index": 2104,
+      "write@hem_water": 679
+     },
+     "total": 10322
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 16,
+      "candidate@margins": 32,
+      "candidate@margins_refused": 6,
+      "index_examined@toe_band": 414,
+      "index_query@toe_band": 1211,
+      "pt_test@toe_band": 363,
+      "read@brook": 324,
+      "read@brook_course": 324,
+      "test@exit_run": 12526,
+      "test@exit_walk": 130,
+      "test@fords": 1188,
+      "test@gaps": 1792,
+      "test@margins": 138,
+      "test@ranking": 192,
+      "test@refusals": 1722,
+      "test@score": 10752,
+      "write@exit_cells": 1205,
+      "write@exit_known": 580,
+      "write@exit_walls": 312,
+      "write@ford_cells": 22,
+      "write@fords": 22,
+      "write@frames": 259,
+      "write@outline_strips": 99,
+      "write@toe_band": 62,
+      "write@watercourses": 287,
+      "write@wet_strips": 224
+     },
+     "total": 34202
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 51,
+      "read@drain": 2,
+      "read@outline": 69,
+      "test@brook": 70,
+      "test@pond_seat": 35,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 250
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 40,
+   "seed": 47,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@drained": 42,
+      "candidate@feature": 58,
+      "candidate@held": 232,
+      "candidate@outline": 196,
+      "candidate@plots_box": 1502,
+      "candidate@rows_held": 58,
+      "candidate@states": 3087,
+      "candidate@water_index": 185,
+      "index_query@settle_runs": 10178,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 15,
+      "write@area": 2,
+      "write@basin": 13840,
+      "write@bean": 4684,
+      "write@brook": 900,
+      "write@brook_drawn": 4289,
+      "write@channel_pts": 89,
+      "write@ditch": 76,
+      "write@drawn_apart": 338,
+      "write@fan_outline": 294,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 6008,
+      "write@water_index": 1444
+     },
+     "total": 47541
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1162,
+      "pt_test@hem_onto": 1488,
+      "pt_test@hem_refused": 7594,
+      "write@dry_plot": 508,
+      "write@hem_index": 2537,
+      "write@hem_water": 1026
+     },
+     "total": 14315
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 16,
+      "candidate@margins": 48,
+      "candidate@margins_refused": 6,
+      "index_examined@toe_band": 581,
+      "index_query@toe_band": 1666,
+      "pt_test@toe_band": 504,
+      "read@brook": 451,
+      "read@brook_course": 451,
+      "test@exit_run": 12365,
+      "test@exit_walk": 177,
+      "test@fords": 1647,
+      "test@gaps": 2522,
+      "test@margins": 196,
+      "test@ranking": 288,
+      "test@refusals": 2468,
+      "test@score": 16128,
+      "write@exit_cells": 1617,
+      "write@exit_known": 884,
+      "write@exit_walls": 384,
+      "write@ford_cells": 33,
+      "write@fords": 33,
+      "write@frames": 387,
+      "write@outline_strips": 142,
+      "write@toe_band": 80,
+      "write@watercourses": 391,
+      "write@wet_strips": 300
+     },
+     "total": 43765
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 68,
+      "read@drain": 2,
+      "read@outline": 98,
+      "test@brook": 84,
+      "test@pond_seat": 47,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 322
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  },
+  {
+   "households": 80,
+   "seed": 47,
+   "stages": {
+    "field": {
+     "ops": {
+      "candidate@_roll": 9,
+      "candidate@drained": 58,
+      "candidate@feature": 74,
+      "candidate@held": 336,
+      "candidate@outline": 272,
+      "candidate@plots_box": 3076,
+      "candidate@rows_held": 84,
+      "candidate@states": 6187,
+      "candidate@water_index": 244,
+      "index_query@settle_runs": 17541,
+      "moved@settle_runs": 0,
+      "pt_test@offtake_lines": 15,
+      "write@area": 2,
+      "write@basin": 28609,
+      "write@bean": 9710,
+      "write@brook": 1260,
+      "write@brook_drawn": 5986,
+      "write@channel_pts": 104,
+      "write@ditch": 91,
+      "write@drawn_apart": 692,
+      "write@fan_outline": 408,
+      "write@feature": 6,
+      "write@intake": 9,
+      "write@plot_record": 12304,
+      "write@water_index": 1749
+     },
+     "total": 88826
+    },
+    "hem": {
+     "ops": {
+      "candidate@hem_index": 1697,
+      "pt_test@hem_onto": 1827,
+      "pt_test@hem_refused": 11530,
+      "write@dry_plot": 760,
+      "write@hem_index": 3990,
+      "write@hem_water": 1193
+     },
+     "total": 20997
+    },
+    "seat": {
+     "ops": {
+      "candidate@exit_run": 16,
+      "candidate@margins": 66,
+      "candidate@margins_refused": 9,
+      "index_examined@toe_band": 816,
+      "index_query@toe_band": 2640,
+      "pt_test@toe_band": 699,
+      "read@brook": 631,
+      "read@brook_course": 631,
+      "test@exit_run": 16748,
+      "test@exit_walk": 250,
+      "test@fords": 2580,
+      "test@gaps": 3800,
+      "test@margins": 272,
+      "test@ranking": 462,
+      "test@refusals": 3592,
+      "test@score": 24156,
+      "write@exit_cells": 2124,
+      "write@exit_known": 1249,
+      "write@exit_walls": 492,
+      "write@ford_cells": 44,
+      "write@fords": 44,
+      "write@frames": 531,
+      "write@outline_strips": 198,
+      "write@toe_band": 107,
+      "write@watercourses": 557,
+      "write@wet_strips": 411
+     },
+     "total": 63125
+    },
+    "sink": {
+     "ops": {
+      "candidate@pond_seat": 1,
+      "read@brook": 82,
+      "read@drain": 2,
+      "read@outline": 136,
+      "test@brook": 119,
+      "test@pond_seat": 63,
+      "write@ditch": 3,
+      "write@pond": 3,
+      "write@reeds": 16
+     },
+     "total": 425
+    },
+    "water_frame": {
+     "ops": {
+      "candidate@roll_plan": 42,
+      "write@_rust_rolls": 14
+     },
+     "total": 56
+    }
+   }
+  }
+ ],
+ "summary": {
+  "stages": {
+   "field": {
+    "per": {
+     "10": {
+      "ops": 14342,
+      "rolled": 4
+     },
+     "20": {
+      "ops": 24942,
+      "rolled": 4
+     },
+     "40": {
+      "ops": 44261,
+      "rolled": 4
+     },
+     "80": {
+      "ops": 80734,
+      "rolled": 4
+     }
+    }
+   },
+   "hem": {
+    "per": {
+     "10": {
+      "ops": 5985,
+      "rolled": 4
+     },
+     "20": {
+      "ops": 9671,
+      "rolled": 4
+     },
+     "40": {
+      "ops": 15438,
+      "rolled": 4
+     },
+     "80": {
+      "ops": 25591,
+      "rolled": 4
+     }
+    }
+   },
+   "seat": {
+    "per": {
+     "10": {
+      "ops": 17090,
+      "rolled": 4
+     },
+     "20": {
+      "ops": 23067,
+      "rolled": 4
+     },
+     "40": {
+      "ops": 31592,
+      "rolled": 4
+     },
+     "80": {
+      "ops": 46076,
+      "rolled": 4
+     }
+    }
+   },
+   "sink": {
+    "per": {
+     "10": {
+      "ops": 193,
+      "rolled": 4
+     },
+     "20": {
+      "ops": 242,
+      "rolled": 4
+     },
+     "40": {
+      "ops": 319,
+      "rolled": 4
+     },
+     "80": {
+      "ops": 422,
+      "rolled": 4
+     }
+    }
+   },
+   "water_frame": {
+    "per": {
+     "10": {
+      "ops": 56,
+      "rolled": 4
+     },
+     "20": {
+      "ops": 56,
+      "rolled": 4
+     },
+     "40": {
+      "ops": 56,
+      "rolled": 4
+     },
+     "80": {
+      "ops": 56,
+      "rolled": 4
+     }
+    }
+   }
+  }
+ }
+}

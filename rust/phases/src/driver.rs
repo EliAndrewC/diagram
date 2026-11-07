@@ -65,11 +65,11 @@ const CELL_SHARE: f64 = 31.0;
 const RUN_W: f64 = 5.5;
 const REED_FT: f64 = 44.0;
 const JOIN_TRUNK: f64 = 150.0;
-/// The reeds' tint, a pale wet green beneath their ticks.
+/// The ink of a ground kept for a stage past the cut.
 ///
 /// Research:
-///     the reeds' tint - CONVENTION: the engine's reed cover read as a pale wet green with sparse ticks; the tile itself went with the deleted engine
-const REED_TINT: &str = "#C3D0A4";
+///     the placeholder's ink - CONVENTION: a dark brown that reads on the land and the paddy alike
+const RESERVED_INK: &str = "#5A3E22";
 /// The fords' spacing along the brook, their half-length and the bend past which a reach is no crossing place; the tameike's berth
 /// the way out keeps (ft, degrees).
 ///
@@ -641,8 +641,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     // 44 ft out from the shore into the paddy above the pond's berth, and the deleted `pond_reeds` cut it there against the drawn
     // ground; here the field is painted over it, the same cut on the sheet (CONVENTION: the ring is kept whole in the record, the
     // seat's walls read it grown, and the field is a wall too)
-    sunk.iter()
-        .for_each(|s| svg.polygon(&s.reeds, REED_TINT, None));
+    sunk.iter().for_each(|s| svg.reeds(&s.reeds));
     for (i, (f, b)) in out.fields.iter().zip(&brooks).enumerate() {
         let beans = settled(f, b, sunk.as_ref().filter(|_| i == 0), &mut out.counts);
         draw_field(&mut svg, f, b, &beans);
@@ -651,6 +650,12 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     for d in laid.iter().flat_map(|l| &l.plots) {
         let (fill, furrow) = crop_ink(d.crop);
         svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
+    }
+    // THE SETTLEMENT'S GROUND MARKED (feature 444 amendment 11; the GM's look at the partial map): the seat keeps the ground the
+    // hem lays round, and with the homesteads past the cut nothing fills it, so it is dashed and named (CONVENTION: a placeholder
+    // for the stage that draws the houses, gone when it runs)
+    if let Some(frame) = seated.as_ref().and_then(|s| s.frames.first()) {
+        svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
     }
     let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
         ("water_frame", p.counts.clone()),

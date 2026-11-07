@@ -154,6 +154,20 @@ pub fn check(r: &Rolled) -> Vec<String> {
 /// Research:
 ///     no dry plot in the reeds - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots laid clear of the water and the pond's ground
 fn reed_checks(r: &Rolled) -> Vec<String> {
+    let ground: Vec<Vec<Pt>> = r
+        .seated
+        .iter()
+        .filter_map(|s| s.frames.first())
+        .map(super::settlement_ground)
+        .collect();
+    let on_ground = r.dry.iter().enumerate().filter_map(|(i, d)| {
+        d.poly
+            .iter()
+            .any(|p| ground.iter().any(|g| depth_inside(*p, g) > SLACK_FT))
+            .then(|| {
+                format!("dry_on_settlement: dry plot {i} has a corner on the settlement's ground")
+            })
+    });
     r.sunk
         .iter()
         .filter(|s| s.reeds.len() >= 3)
@@ -163,6 +177,7 @@ fn reed_checks(r: &Rolled) -> Vec<String> {
                 .position(|d| d.poly.iter().any(|p| depth_inside(*p, &s.reeds) > SLACK_FT))
         })
         .map(|i| format!("reeds_on_dry: dry plot {i} has a corner inside the tameike's reeds"))
+        .chain(on_ground)
         .collect()
 }
 
@@ -250,6 +265,15 @@ mod tests {
             },
         ];
         let reed = r.sunk.as_ref().map(|s| mean(&s.reeds)).unwrap();
+        let home = mean(&crate::driver::settlement_ground(
+            &r.seated.as_ref().unwrap().frames[0],
+        ));
+        r.dry.push(DryPlot {
+            poly: square(home, 5.0),
+            crop: "soy",
+            theta: 0.0,
+            tract: 4,
+        });
         r.dry.push(DryPlot {
             poly: square(reed, 5.0),
             crop: "soy",
@@ -271,6 +295,7 @@ mod tests {
             "pond_on_paddy",
             "seat_on_field",
             "reeds_on_dry",
+            "dry_on_settlement",
         ] {
             assert!(found.contains(rule), "{rule} not named in:\n{found}");
         }

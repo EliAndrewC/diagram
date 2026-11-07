@@ -8,7 +8,9 @@ use std::collections::HashMap;
 
 use super::plan::Plan;
 use super::svg::{ink, Svg, BUND_W};
-use super::{fill, kept, stage_seat, Ground, Rolled, CROP_MARGIN, REED_TINT, RUN_W};
+use super::{
+    fill, kept, settlement_ground, stage_seat, Ground, Rolled, CROP_MARGIN, RESERVED_INK, RUN_W,
+};
 use crate::field::staged::{polder_stage, PolderStage};
 use crate::seat::Seated;
 use crate::waterward::{fringe, Fringe};
@@ -85,7 +87,7 @@ fn stage_polder(p: &Plan) -> PolderStage {
 ///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it
 fn draw_polder(svg: &mut Svg, s: &PolderStage) {
     let (c, rx, ry) = s.polder.pond;
-    svg.polygon(&s.polder.fringe, REED_TINT, None);
+    svg.reeds(&s.polder.fringe);
     svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
     for (x, st) in s.polder.plots.iter().zip(&s.states) {
         svg.polygon(&x.ring, fill(*st), Some((ink::AZE, BUND_W)));
@@ -214,7 +216,11 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     let mut svg = Svg::default();
     draw_polder(&mut svg, &s);
     for strip in &ward.strips {
-        svg.polygon(strip, REED_TINT, None);
+        svg.reeds(strip);
+    }
+    // the settlement's ground marked, as on a comb (`roll`)
+    if let Some(frame) = seated.as_ref().and_then(|x| x.frames.first()) {
+        svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
     }
     let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
         ("water_frame", p.counts.clone()),

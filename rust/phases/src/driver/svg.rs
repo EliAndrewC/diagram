@@ -33,7 +33,15 @@ pub mod ink {
     pub const STONE_EDGE: &str = "#5A584F";
     pub const BEAN: &str = "#2F6B35";
     pub const REED: &str = "#7FA040";
+    pub const REED_TINT: &str = "#C3D0A4";
 }
+
+/// The reed cover's tile: the pale wet green with sparse paired ticks, upright, a tile 48 ft square (`Svg::reeds`).
+///
+/// Research:
+///     the reeds' glyph - CONVENTION: the deleted engine's reed cover, a pale wet green with sparse ticks, its tile redrawn here
+///     (feature 444 T42, the partial map's look: a flat tint read as meadow)
+const REED_TILE: &str = r##"<pattern id="reed-ticks" patternUnits="userSpaceOnUse" width="48" height="48"><rect width="48" height="48" fill="#C3D0A4"/><g stroke="#7FA040" stroke-width="1.6" stroke-linecap="round"><path d="M8 20 L7 11 M11 20 L12 12 M32 42 L31 33 M35 42 L36 34 M24 8 L23 1 M27 8 L28 2"/></g></pattern>"##;
 
 /// The bund's stroke width (ft): the drawing floor of 1.5.
 ///
@@ -146,6 +154,38 @@ impl Svg {
             r#"<path d="{}" fill="none" stroke="{stroke}" stroke-width="{}" stroke-linecap="round" stroke-linejoin="round"/>"#,
             path(pts, false),
             f(w)
+        );
+    }
+
+    /// A reed cover: the ring filled with the reed tile, unstroked.
+    pub fn reeds(&mut self, ring: &[Pt]) {
+        self.polygon(ring, "url(#reed-ticks)", None);
+    }
+
+    /// A ground kept for what a later stage draws: its ring dashed, unfilled, and its name at its middle - the partial map's mark
+    /// for the settlement the homesteads will fill (feature 444 amendment 11, the cut before them); it frames the crop, so the
+    /// ground it keeps is on the sheet.
+    pub fn reserved(&mut self, ring: &[Pt], stroke: &str, name: &str) {
+        if ring.len() < 3 {
+            return;
+        }
+        self.grow(ring, 2.0);
+        #[expect(clippy::cast_precision_loss, reason = "a ring of a few corners")]
+        let n = ring.len() as f64;
+        let (cx, cy) = (
+            ring.iter().map(|p| p.0).sum::<f64>() / n,
+            ring.iter().map(|p| p.1).sum::<f64>() / n,
+        );
+        let _ = writeln!(
+            self.body,
+            r#"<path d="{}" fill="none" stroke="{stroke}" stroke-width="4" stroke-dasharray="24 16"/>"#,
+            path(ring, true)
+        );
+        let _ = writeln!(
+            self.body,
+            r#"<text x="{}" y="{}" font-family="serif" font-size="56" fill="{stroke}" text-anchor="middle">{name}</text>"#,
+            f(cx),
+            f(cy)
         );
     }
 
@@ -264,7 +304,7 @@ impl Svg {
         let (x0, y0) = ((x0 - margin).max(0.0), (y0 - margin).max(0.0));
         let (x1, y1) = ((x1 + margin).min(w), (y1 + margin).min(h));
         format!(
-            "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"{} {} {} {}\" width=\"{}\" height=\"{}\">\n<rect x=\"0\" y=\"0\" width=\"{}\" height=\"{}\" fill=\"{}\"/>\n{}</svg>\n",
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"{} {} {} {}\" width=\"{}\" height=\"{}\">\n<defs>{REED_TILE}</defs>\n<rect x=\"0\" y=\"0\" width=\"{}\" height=\"{}\" fill=\"{}\"/>\n{}</svg>\n",
             f(x0),
             f(y0),
             f(x1 - x0),
@@ -344,7 +384,26 @@ mod tests {
         assert!(dd.matches("<path d=\"M").count() > 4);
         assert!(doc.starts_with("<svg"));
         assert!(doc.contains(r#"viewBox="3.7 3.2 23.1 32.6""#));
-        assert_eq!(doc.matches("stroke-width=\"").count(), 6);
+        let drawn = doc.split("</defs>").nth(1).unwrap_or_default();
+        assert_eq!(drawn.matches("stroke-width=\"").count(), 6);
+        let mut r = Svg::default();
+        r.reserved(&[(0.0, 0.0), (1.0, 0.0)], "#000", "x");
+        assert!(r.bbox().is_none() && r.body.is_empty());
+        r.reserved(
+            &[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)],
+            "#000",
+            "the settlement",
+        );
+        assert!(
+            r.bbox() == Some([-2.0, -2.0, 12.0, 12.0])
+                && r.body.contains(r#"x="6.7""#)
+                && r.body.contains("dasharray")
+        );
+        r.reeds(&[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)]);
+        assert!(r.body.contains("url(#reed-ticks)"));
+        assert!(r
+            .finish(20.0, 20.0, 0.0)
+            .contains(r#"<pattern id="reed-ticks""#));
         assert!(Svg::default()
             .finish(50.0, 40.0, 5.0)
             .contains(r#"viewBox="0 0 50 40""#));

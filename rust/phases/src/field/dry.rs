@@ -181,7 +181,15 @@ pub fn hem(
                         continue;
                     }
                     let poly = Canal::seat(a, b, (o0, o1), &mut ix.tests);
-                    if refused(&poly, &mut bands, (&plots, &mut laid), ix, clear) {
+                    // EVERY STRIP OFF THE SETTLEMENT'S GROUND (feature 444 T42, the cohort's dry_on_settlement, 8 of 300 seeds):
+                    // the push behind clears the column's first strip, and a ground set askew can still stand across a deeper one
+                    let middle = (
+                        f64::midpoint(poly[0].0, poly[2].0),
+                        f64::midpoint(poly[0].1, poly[2].1),
+                    );
+                    if on_keep(&poly, middle, keep, &mut ix.tests)
+                        || refused(&poly, &mut bands, (&plots, &mut laid), ix, clear)
+                    {
                         continue;
                     }
                     let own = f64::from(rng.randbelow(2 * TURN_DEG.1 + 1)) - f64::from(TURN_DEG.1);
@@ -241,16 +249,24 @@ fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut
             f64::midpoint(poly[0].0, poly[2].0),
             f64::midpoint(poly[0].1, poly[2].1),
         );
-        *tests += 5 * keep.len() as u64;
-        let on = keep
-            .iter()
-            .any(|k| inside(middle, k) || poly.iter().any(|c| inside(*c, k)));
+        let on = on_keep(&poly, middle, keep, tests);
         // clear of the ground, or past its own reach: no ground stands farther out than its box's diagonal
         if !on || behind > reach {
             return behind;
         }
         behind += PLOT_FT.1;
     }
+}
+
+/// Whether a strip `poly` stands on the settlement's ground `keep`: its middle or a corner inside a ground's ring, or a ground's
+/// corner inside the strip (a box set askew pokes its corner into a strip whose own corners clear it); each test counted.
+fn on_keep(poly: &[Pt], middle: Pt, keep: &[Vec<Pt>], tests: &mut u64) -> bool {
+    *tests += keep.iter().map(|k| 5 + k.len() as u64).sum::<u64>();
+    keep.iter().any(|k| {
+        inside(middle, k)
+            || poly.iter().any(|c| inside(*c, k))
+            || k.iter().any(|c| inside(*c, poly))
+    })
 }
 
 /// The rows' directions a tract's neighbors run: the tract before it along its band, and those of the band below whose stretch
