@@ -263,12 +263,11 @@ hamlet:         ## [maps] generate one hamlet from the CLI   ARGS="--name X --se
 cache-audit:    ## [maps] does using the generation cache change any map?
 	$(REF_FIRST)
 	$(RUN).tools.cache_audit $(ARGS)
-placement-stages: ## [maps] re-plate the stage-by-stage walk-through page
-	$(REF_FIRST)
-	$(RUN).tools.placement_stages $(ARGS)
+placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port's reference until a page from the Rust driver replaces it
+	@printf 'placement-stages: FROZEN - dev/placement-stages-frozen/hamlet-placement.html was generated on 2026-10-31 from main'\''s Python hamlet engine, since deleted, and is kept as the temporary reference the Rust port is judged against (feature 444 amendment 11, FR-024 part 1); nothing regenerates it until a page from the Rust driver replaces it\n'
 
-placement-stages-if-classes: ## [maps] {internal} re-plate the walk-through page only if the class registry moved (sync-in runs it)
-	$(RUN).pipeline.render_cache --page-if-classes --no-allow-main
+placement-stages-if-classes: ## [maps] {internal} a no-op since the walk-through page froze (feature 444 amendment 11); sync-in still calls it
+	@:
 
 pool-index:     ## [maps] rebuild the pool index
 	$(RUN).pipeline.pool_index $(ARGS)
