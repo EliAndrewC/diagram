@@ -598,6 +598,95 @@ worktree of `origin/main`) and fail on the clone with the grove rule below rever
   round a grove band. The next step is `brook_bounds` (street.py and track.rs): end the street short of a crossing the road can
   reach at a ford, or refuse the row form on that stretch - not another road fallback (the advisor, 2026-11-06).
 
+### T27 part B (2026-11-07T05:47Z)
+
+The trigger: two red `make done` runs in a row (red-gate@2026-11-07T05:45:49Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** The static phase, each time before any test ran: first clippy on T33's appurtenances Rust
+   (single-letter names, manual midpoints, casts, an iteration style), then rustfmt on the code those fixes rewrote.
+2. **A3 again.** The crate's lint and format rules, unchanged: every Rust file clippy-pedantic clean and rustfmt formatted.
+3. **A4 again.** Read in the gate's log: `rust_checks.py lint` and `format` now clean on the crate.
+4. **Moving something placed earlier to suit something later?** No: lint and format only, the same output.
+5. **Tuning or changing?** Neither: the expressions rewritten to their lint-clean forms (`f64::midpoint`), the geometry's names
+   excused at their module as the crate's other modules do.
+6. **The one-sentence test.** "T33's Rust never met the lint because `make quick` does not run it; it does now, and the gate runs."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
+9. **After a ruling, the step it named?** `make done` once more, after the lint and the format pass clean.
+
+### T27 part B (2026-11-07T08:56Z)
+
+The trigger: a third red `make done` in a row (red-gate@2026-11-07T06:12:19Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** The static phase's `rust_checks.py cover`: the crate below 100% of its lines, on T32's and T33's
+   branches no test or driver call reached (the appurtenances door, the far channel's straight chord, the wells' groups, a row
+   reach cut at a brook, the road's and the connector's band fallbacks, the fill's stale entry) and assert messages on their own
+   lines, which run only when a test fails.
+2. **A3 again.** The crate's floor, unchanged: every line run by its own tests or its Python driver.
+3. **A4 again.** Read in `make cover-changed`: no `.rs` line named; then `rust_checks.py lint` and `format` clean.
+4. **Moving something placed earlier to suit something later?** No: tests and driver calls added; the branch-free rewrites (a
+   point segment's divisor, a never-empty group list, the fill's first pop) give the same output.
+5. **Tuning or changing?** Neither: no number or rule moves.
+6. **The one-sentence test.** "T32's and T33's fallbacks shipped with no test that reached them; each has one now, and a coverage
+   run that fails says why instead of naming every file at line 0."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: cover-changed, lint
+   and format clean first, the pool maps checked, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order; a red that a local pass could have caught is a process fault.
+
+### T27 part B (2026-11-07T12:26Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:03:56Z), the round arbiter ruling PROCESS-FAULT.
+
+1. **What exactly is refusing?** The static phase's `rust_checks.py cover`: llvm-cov's summary counted 7 lines missed, six closures
+   no test called on lines that run, where `make cover-changed`, reading the LCOV lines alone, had passed.
+2. **A3 again.** The crate's floor at the spec's strictness: every line run and every function called, by its own tests.
+3. **A4 again.** Read in both `rust_checks.py cover` and `make cover-changed` on one tree, through the one reader
+   (`rust_checks.lcov_missed`): both clean.
+4. **Moving something placed earlier to suit something later?** No: the six closures each given a test that reaches them (a crop and
+   a far ditch for the channels, a third group of wells, a household's well, wells along a row's street, a dry exit walled by the
+   wood seats); the Python doors compiled out behind the crate's `python` feature, never dropped by a filename pattern.
+5. **Tuning or changing?** Neither: no number or rule moves.
+6. **The one-sentence test.** "The gate and cover-changed read one floor by two measures; they read it through one reader now, at the
+   gate's strictness, and the closures it found are tested."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: the shared reader and its
+   test, the six closures, the doors settled, both floors clean, lint and format, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order.
+
+### T27 part B (2026-11-07T12:33Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:28:52Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** test-full, before any test ran: `/bin/sh: Syntax error: Unterminated quoted string` - the rust-only
+   branch of the test recipe's coverage step held a comma its `$(if)` took as the separator; the static phase was green.
+2. **A3 again.** The gate's recipes parse at both port states.
+3. **A4 again.** Read in `make -n test | sh -n` and `make -n done | sh -n` at rust-only and at `PORT=integrated`, and in
+   `pytest --collect-only` with the rust-only selection.
+4. **Moving something placed earlier to suit something later?** No: one word of a message, the comma made " - ".
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "A message's comma split a make `if` no gate had run; it is gone, and both port states' recipes parse."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: the parse at both states,
+   the rust-only collection, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order.
+
+### T27 part B (2026-11-07T12:45Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:40:50Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** test-full's tests, the first run of the phase to its end at rust-only: 7,586 passed, 5 failed - stale
+   tooling assertions this feature's own moves left (bare-GUESS claims, a test module's claim, `KnobIn` public, the default port,
+   the track's Steps naming T32's deleted functions).
+2. **A3 again.** Each check as it stood, its fixture brought to the tree.
+3. **A4 again.** Read in the four files' run (106 passed) and in the next `make done`.
+4. **Moving something placed earlier to suit something later?** No: claims and assertions brought to what the code now is.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "Five checks still described the code before this feature moved it; they describe it as it stands."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
+9. **After a ruling, the step it named?** That, the tree as it stands; T35 filed for the engine trees the rust-only gate leaves out.
+
 ### T28 - the dry hem laid behind the settlement (the round arbiter on ask:444-T27-seat-hem, 2026-11-04)
 
 Occasions: settlement-review on the pool hamlets whose dry plots move (Inashiro and Kashikawa, measured 2026-11-04 (`make map`): their manifests moved against HEAD); glyph-check only if a glyph is redrawn (none: the dry plots keep their ink).
@@ -900,7 +989,7 @@ Occasions: none owed - tooling, no map, glyph or research page changed.
 
 ### T34 Decisions
 
-- **D1 - one switch**: a third axis of `dev/switches.json`, `port`: `rust-only` (the default while any stage is Python) or `integrated`; read by `l7r/diagram/switches.py` as the claims switch is, a malformed entry closing to `rust-only` (the state in force), thrown by `make switches`, which commits.
+- **D1 - one switch**: a third axis of `dev/switches.json`, `port`: `rust-only` (the default while any stage is Python) or `integrated`; read by `l7r/diagram/switches.py` as the claims switch is, a malformed entry closing to the state in force - the `port` state of the last committed `dev/switches.json` (`git show HEAD:`), `rust-only` only where that too is absent or malformed, thrown by `make switches`, which commits.
 - **D2 - make done**: at `rust-only`, the test phase deselects `rolls_map` (as `make quick` does), the reference step rolls no map, and no floor rolls a settlement: the hamlet-path floor and the roll census's verdict are suspended, and the coverage floor is measured on the tests that run, a line only a map-rolling test reached reported as information (as `dev/coverage-exempt.json`'s lines are); static, format, typecheck, hooks-test, counters-inert, the Python tests that roll no map and `make rust-test` run as before.
 - **D3 - make land and the push**: at `rust-only`, `scripts/land.py` starts no landing cohort, and `scripts/gates/cohort_gate.py` judges every engine landing by the Rust stage gate's record (FR-019) alone, whether or not the delta touches `rust/`.
 - **D4 - what stays, and what waits**: the Rust stage gate, the work budgets and their ratchet (FR-022), the claims rule (FR-021) and the static checks stay; the settlement-reviews FR-019 owes for the pool hamlets a Rust stage moves wait for the switch's throw back to `integrated`, each owed then (T33's among them); the Python stages keep running after the Rust front in `make hamlet` and `make map`, as information.
@@ -920,3 +1009,93 @@ Occasions: none owed - tooling, no map, glyph or research page changed.
 11. **Before fitting things into room.** Not a room question.
 
 **Performance work?** no - tooling; the Rust gate's own time (the row seating's `seat_rows`, 74 s a call on seed 321538, measured 2026-11-07) is a separate task.
+
+### T34 part B (2026-11-07T05:47Z)
+
+The trigger: two red `make done` runs in a row (red-gate@2026-11-07T05:45:49Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** The static phase, each time before any test ran: first clippy on T33's appurtenances Rust
+   (single-letter names, manual midpoints, casts, an iteration style), then rustfmt on the code those fixes rewrote.
+2. **A3 again.** The crate's lint and format rules, unchanged: every Rust file clippy-pedantic clean and rustfmt formatted.
+3. **A4 again.** Read in the gate's log: `rust_checks.py lint` and `format` now clean on the crate.
+4. **Moving something placed earlier to suit something later?** No: lint and format only, the same output.
+5. **Tuning or changing?** Neither: the expressions rewritten to their lint-clean forms (`f64::midpoint`), the geometry's names
+   excused at their module as the crate's other modules do.
+6. **The one-sentence test.** "T33's Rust never met the lint because `make quick` does not run it; it does now, and the gate runs."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
+9. **After a ruling, the step it named?** `make done` once more, after the lint and the format pass clean.
+
+### T34 part B (2026-11-07T08:56Z)
+
+The trigger: a third red `make done` in a row (red-gate@2026-11-07T06:12:19Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** The static phase's `rust_checks.py cover`: the crate below 100% of its lines, on T32's and T33's
+   branches no test or driver call reached (the appurtenances door, the far channel's straight chord, the wells' groups, a row
+   reach cut at a brook, the road's and the connector's band fallbacks, the fill's stale entry) and assert messages on their own
+   lines, which run only when a test fails.
+2. **A3 again.** The crate's floor, unchanged: every line run by its own tests or its Python driver.
+3. **A4 again.** Read in `make cover-changed`: no `.rs` line named; then `rust_checks.py lint` and `format` clean.
+4. **Moving something placed earlier to suit something later?** No: tests and driver calls added; the branch-free rewrites (a
+   point segment's divisor, a never-empty group list, the fill's first pop) give the same output.
+5. **Tuning or changing?** Neither: no number or rule moves.
+6. **The one-sentence test.** "T32's and T33's fallbacks shipped with no test that reached them; each has one now, and a coverage
+   run that fails says why instead of naming every file at line 0."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: cover-changed, lint
+   and format clean first, the pool maps checked, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order; a red that a local pass could have caught is a process fault.
+
+### T34 part B (2026-11-07T12:26Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:03:56Z), the round arbiter ruling PROCESS-FAULT.
+
+1. **What exactly is refusing?** The static phase's `rust_checks.py cover`: llvm-cov's summary counted 7 lines missed, six closures
+   no test called on lines that run, where `make cover-changed`, reading the LCOV lines alone, had passed.
+2. **A3 again.** The crate's floor at the spec's strictness: every line run and every function called, by its own tests.
+3. **A4 again.** Read in both `rust_checks.py cover` and `make cover-changed` on one tree, through the one reader
+   (`rust_checks.lcov_missed`): both clean.
+4. **Moving something placed earlier to suit something later?** No: the six closures each given a test that reaches them (a crop and
+   a far ditch for the channels, a third group of wells, a household's well, wells along a row's street, a dry exit walled by the
+   wood seats); the Python doors compiled out behind the crate's `python` feature, never dropped by a filename pattern.
+5. **Tuning or changing?** Neither: no number or rule moves.
+6. **The one-sentence test.** "The gate and cover-changed read one floor by two measures; they read it through one reader now, at the
+   gate's strictness, and the closures it found are tested."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: the shared reader and its
+   test, the six closures, the doors settled, both floors clean, lint and format, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order.
+
+### T34 part B (2026-11-07T12:33Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:28:52Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** test-full, before any test ran: `/bin/sh: Syntax error: Unterminated quoted string` - the rust-only
+   branch of the test recipe's coverage step held a comma its `$(if)` took as the separator; the static phase was green.
+2. **A3 again.** The gate's recipes parse at both port states.
+3. **A4 again.** Read in `make -n test | sh -n` and `make -n done | sh -n` at rust-only and at `PORT=integrated`, and in
+   `pytest --collect-only` with the rust-only selection.
+4. **Moving something placed earlier to suit something later?** No: one word of a message, the comma made " - ".
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "A message's comma split a make `if` no gate had run; it is gone, and both port states' recipes parse."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: the parse at both states,
+   the rust-only collection, then one `make done`.
+9. **After a ruling, the step it named?** Those, in its order.
+
+### T34 part B (2026-11-07T12:45Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T12:40:50Z), the round arbiter ruling CONTINUE.
+
+1. **What exactly is refusing?** test-full's tests, the first run of the phase to its end at rust-only: 7,586 passed, 5 failed - stale
+   tooling assertions this feature's own moves left (bare-GUESS claims, a test module's claim, `KnobIn` public, the default port,
+   the track's Steps naming T32's deleted functions).
+2. **A3 again.** Each check as it stood, its fixture brought to the tree.
+3. **A4 again.** Read in the four files' run (106 passed) and in the next `make done`.
+4. **Moving something placed earlier to suit something later?** No: claims and assertions brought to what the code now is.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "Five checks still described the code before this feature moved it; they describe it as it stands."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
+9. **After a ruling, the step it named?** That, the tree as it stands; T35 filed for the engine trees the rust-only gate leaves out.
+

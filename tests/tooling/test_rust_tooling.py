@@ -110,7 +110,7 @@ def test_coverage_counts_the_lines_python_reaches_and_refuses_an_untested_line(c
     assert rc.cover(broken / "Cargo.toml", broken / "tests" / "py_driver.py", tmp_path / "w3").returncode != 0, "an untested line fails"
 
 
-def test_uncovered_names_the_lines_of_each_file_no_test_reaches(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+def test_uncovered_names_the_lines_of_each_file_no_test_reaches(crate: pathlib.Path, tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     """Row "changed modules' coverage": llvm-cov per `.rs` file, for `make cover-changed`."""
     assert rc.uncovered(crate / "Cargo.toml", crate / "tests" / "py_driver.py", tmp_path / "u1") == {}
     broken = _with(crate, "\n/// Never called.\n#[must_use]\npub fn unused() -> u64 {\n    7\n}\n")
@@ -118,6 +118,7 @@ def test_uncovered_names_the_lines_of_each_file_no_test_reaches(crate: pathlib.P
     lib = str(broken / "src" / "lib.rs")
     assert list(got) == [lib] and got[lib], "the new function's lines, in lib.rs"
     assert rc.uncovered(tmp_path / "none" / "Cargo.toml", None, tmp_path / "u3") == {str(tmp_path / "none"): [0]}, "a run that fails"
+    assert "the coverage run failed on none - fix what it names" in capsys.readouterr().err, "and the failure's output shown"
 
 
 def test_a_private_item_nothing_calls_is_refused(crate: pathlib.Path) -> None:
@@ -169,3 +170,35 @@ def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count
     toml = copy / "Cargo.toml"
     toml.write_text(toml.read_text().replace('name = "l7r_phases"\nversion', 'name = "l7r_phases_uncounted"\nversion', 1))
     assert rc.run("test", toml, check=False).returncode != 0, "a roll it does not count fails the port's own test"
+
+
+def test_the_floor_reads_the_lines_cover_changed_reads(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """The gate's `cover` refuses on the LCOV lines no test runs, the measure `make cover-changed` reads (2026-11-07: llvm-cov's
+    summary counted a line missed where a closure never called shares it with code that runs, and refused what cover-changed
+    passed)."""
+    monkeypatch.setattr(rc, "uncovered", lambda m, d, w: {})
+    assert rc.main(["cover", "--crate", "tests/fixtures/rust/fixture"]) == 0
+    monkeypatch.setattr(rc, "uncovered", lambda m, d, w: {"src/lib.rs": [3, 4]})
+    assert rc.main(["cover", "--crate", "tests/fixtures/rust/fixture"]) == 1
+    assert "src/lib.rs - lines no test reaches: 3, 4" in capsys.readouterr().err
+
+
+def test_the_one_reader_counts_a_closure_never_called_on_a_line_that_runs() -> None:
+    """The round arbiter's tooling fix on red-gate@2026-11-07T12:03:56Z: a line no test ran, and the line a function no test called
+    starts on, are both missed - the closure on a line whose other code runs is the case the lines alone passed."""
+    text = "SF:/c/src/lib.rs\nFN:3,f\nFN:3,f_closure\nFNDA:4,f\nFNDA:0,f_closure\nDA:3,4\nDA:5,0\nDA:6,2\nend_of_record\nSF:/c/src/b.rs\nFN:1,g\nFNDA:1,g\nDA:1,1\nend_of_record\n"
+    assert rc.lcov_missed(text) == {"/c/src/lib.rs": [3, 5]}
+    # ...but a function two builds carry, under two names, is called where either build called it
+    twice = "SF:/c/src/lib.rs\nFN:7,_RNvCsAAA_3lib1h\nFN:7,_RNvCsBBB_3lib1h\nFNDA:0,_RNvCsAAA_3lib1h\nFNDA:2,_RNvCsBBB_3lib1h\nDA:7,2\nend_of_record\n"
+    assert rc.lcov_missed(twice) == {}
+
+
+def test_a_closure_never_called_is_refused_by_both_commands(crate: pathlib.Path, tmp_path: pathlib.Path) -> None:
+    """Planted on the fixture: a closure no test calls, on a line its test runs - `uncovered` (cover-changed's Rust form and the
+    gate's `cover` alike) names its line."""
+    broken = _with(
+        crate, "\n/// Sums one past each.\n#[must_use]\npub fn bumped(v: &[u64]) -> u64 {\n    v.iter().map(|x| x + 1).sum()\n}\n\n#[test]\nfn bumped_empty() {\n    assert_eq!(bumped(&[]), 0);\n}\n"
+    )
+    got = rc.uncovered(broken / "Cargo.toml", broken / "tests" / "py_driver.py", tmp_path / "u9")
+    lib = str(broken / "src" / "lib.rs")
+    assert list(got) == [lib] and got[lib], got

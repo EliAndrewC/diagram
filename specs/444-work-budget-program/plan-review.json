@@ -405,19 +405,19 @@
   },
   "### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: \"we no longer need to join our Rust process of making maps with the Python process\"; FR-023)": {
    "sha256": "e67327f1fbc2f90fb26b9c6eefa75171c96c367ae64f1e0f22fb4070e1b91ff1",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T34 Decisions": {
-   "sha256": "c7e41a8d9facc4dd48af9c75fcb4559cf9a5a2d442ef0710088ab3718ce452ed",
-   "verdict": "BLOCKED",
+   "sha256": "18fd8a93a76518bba1abddbda7ac9c3c16c0b68e2d483f777254d8e0b981815b",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T34 Approach (2026-11-07T05:06Z)": {
    "sha256": "88c2ed23699b9967df0786c4889aae9df68c21af0da7771e04797bb8c79f7212",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   }
@@ -5152,6 +5152,48 @@
      "why": "The GM narrowed only the Python integration. He said 'then we can begin to talk about our operations budget', so the budgets and gates on the Rust stages stand. Rolling the Python stages by hand as information gates nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T34 - the port switch: the Rust stages iterated alone (amendment 8, the GM 2026-11-07: \"we no longer need to join our Rust process of making maps with the Python process\"; FR-023)",
+    "### T34 Approach (2026-11-07T05:06Z)",
+    "### T34 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-switch",
+     "summary": "A third axis `port` of dev/switches.json, rust-only (default while any stage is Python) or integrated, read by l7r/diagram/switches.py, thrown by make switches which commits.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023 names the switch (`dev/switches.json` `port`), its default (rust-only until the last stage is Rust), and its throw (`make switches`, which commits). The axis, its two values, its reader and its target carry exactly that."
+    },
+    {
+     "id": "D1-malformed",
+     "summary": "A malformed `port` entry closes to the state in force: the `port` value of the last committed dev/switches.json (git show HEAD:), rust-only only where that too is absent or malformed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's finding was that a fixed rust-only fallback would, after the throw-back to integrated, re-suspend the landing cohort, map-rolling tests, floors and owed settlement-reviews on a corrupt file, outside the GM's 'change temporarily' bound that FR-023 ends at the throw. The fix named then ('or to the last committed value') is what D1 now says. Because `make switches` is the only writer and it commits, HEAD holds the last state the switch was thrown to, so a malformed working copy now closes to the state actually in force - integrated once thrown back - and the integrated state is no longer carved out. The residual rust-only applies only where no committed state is recoverable (the axis not yet committed, or HEAD itself malformed): there is no state in force to close to, which is the one case the rule cannot be honored literally, and rust-only is FR-023's stated default for the switch until `make switches` throws it, so the residual fallback is implied by the spec's own words rather than a new carve-out."
+    },
+    {
+     "id": "D2-make-done",
+     "summary": "At rust-only, make done deselects rolls_map, rolls no reference map, suspends the hamlet-path floor and the roll census verdict, measures the coverage floor on the tests that run with map-only lines reported as information; static, format, typecheck, hooks-test, counters-inert, map-free Python tests and make rust-test run as before.",
+     "class": "within",
+     "why": "Unchanged since round 1 (diff against earlier.md touches D1 only). Reproduces FR-023's make-done clause clause by clause, serving the GM's 'our gates and our tests are not running through the Python code'."
+    },
+    {
+     "id": "D3-land-push",
+     "summary": "At rust-only, scripts/land.py starts no landing cohort and cohort_gate.py judges every engine landing by the Rust stage gate's record alone, whether or not the delta touches rust/.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023: 'make land rolls no landing cohort and judges an engine landing by the Rust stage gate (FR-019) alone, whatever the delta touches'; the push's gate is part of 'no landing is refused for, nor waits on' the Python stages."
+    },
+    {
+     "id": "D4-stays-waits",
+     "summary": "The Rust stage gate, work budgets and ratchet, claims rule and static checks stay; settlement-reviews FR-019 owes for pool hamlets a Rust stage moves wait for the throw back to integrated, each owed then (T33's among them); Python stages keep running after the Rust front in make hamlet and make map, as information.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023: work budgets (FR-022) and claims rule (FR-021) unchanged; deferred settlement-reviews are FR-023's own text ('not owed while the switch stands - each is owed ... when it is thrown back'); make hamlet and make map running the Python stages as information is FR-023's 'may still be rolled on their output by hand, as information'."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6276,6 +6318,45 @@
      "summary": "Approach items 6 and 9: the count at 40 and 80 held to the budget re-derived for the whole stage under FR-022 rule 2, past ten times the first needing the GM's words; acceptance on MODE AUDIT WITHIN or LEEWAY.",
      "class": "within",
      "why": "Restates FR-022 rules 1 and 2 and FR-006 as written; nothing relaxed. Any raise still owes the named missed work and SOUND (two blind dispatches past twice), and the GM said he would rule on overages on his return (2026-11-04)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T34": {
+   "section_sha256": "84d899e18998443f3a987557917a135eab0274a2318311393dac4f7185ef32fa",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-switch",
+     "summary": "A third axis `port` of dev/switches.json, rust-only (default while any stage is Python) or integrated, read by l7r/diagram/switches.py, thrown by make switches which commits.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023 names the switch (`dev/switches.json` `port`), its default (rust-only until the last stage is Rust), and its throw (`make switches`, which commits). The axis, its two values, its reader and its target carry exactly that."
+    },
+    {
+     "id": "D1-malformed",
+     "summary": "A malformed `port` entry closes to the state in force: the `port` value of the last committed dev/switches.json (git show HEAD:), rust-only only where that too is absent or malformed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's finding was that a fixed rust-only fallback would, after the throw-back to integrated, re-suspend the landing cohort, map-rolling tests, floors and owed settlement-reviews on a corrupt file, outside the GM's 'change temporarily' bound that FR-023 ends at the throw. The fix named then ('or to the last committed value') is what D1 now says. Because `make switches` is the only writer and it commits, HEAD holds the last state the switch was thrown to, so a malformed working copy now closes to the state actually in force - integrated once thrown back - and the integrated state is no longer carved out. The residual rust-only applies only where no committed state is recoverable (the axis not yet committed, or HEAD itself malformed): there is no state in force to close to, which is the one case the rule cannot be honored literally, and rust-only is FR-023's stated default for the switch until `make switches` throws it, so the residual fallback is implied by the spec's own words rather than a new carve-out."
+    },
+    {
+     "id": "D2-make-done",
+     "summary": "At rust-only, make done deselects rolls_map, rolls no reference map, suspends the hamlet-path floor and the roll census verdict, measures the coverage floor on the tests that run with map-only lines reported as information; static, format, typecheck, hooks-test, counters-inert, map-free Python tests and make rust-test run as before.",
+     "class": "within",
+     "why": "Unchanged since round 1 (diff against earlier.md touches D1 only). Reproduces FR-023's make-done clause clause by clause, serving the GM's 'our gates and our tests are not running through the Python code'."
+    },
+    {
+     "id": "D3-land-push",
+     "summary": "At rust-only, scripts/land.py starts no landing cohort and cohort_gate.py judges every engine landing by the Rust stage gate's record alone, whether or not the delta touches rust/.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023: 'make land rolls no landing cohort and judges an engine landing by the Rust stage gate (FR-019) alone, whatever the delta touches'; the push's gate is part of 'no landing is refused for, nor waits on' the Python stages."
+    },
+    {
+     "id": "D4-stays-waits",
+     "summary": "The Rust stage gate, work budgets and ratchet, claims rule and static checks stay; settlement-reviews FR-019 owes for pool hamlets a Rust stage moves wait for the throw back to integrated, each owed then (T33's among them); Python stages keep running after the Rust front in make hamlet and make map, as information.",
+     "class": "within",
+     "why": "Unchanged since round 1. FR-023: work budgets (FR-022) and claims rule (FR-021) unchanged; deferred settlement-reviews are FR-023's own text ('not owed while the switch stands - each is owed ... when it is thrown back'); make hamlet and make map running the Python stages as information is FR-023's 'may still be rolled on their output by hand, as information'."
     }
    ],
    "verdict": "CLEAR"

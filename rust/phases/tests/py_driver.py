@@ -368,3 +368,25 @@ except KeyError as e:
     assert "street" in str(e), e
 else:
     raise AssertionError("a road with no street is refused by name")
+
+
+# ---- the appurtenances (feature 444 T33): the communal wells' seats, a row's shared wells, the grove farms' channels
+houses = [((k // 2) * 100.0, (k % 2) * 120.0, 46.0, 28.0, 0.0) for k in range(12)]
+wells_in = dict(houses=houses, needy=[True] * 12, want=2, rungs=[(190.0, 5), (300.0, 5), (520.0, 5), (760.0, 5)], gap=80.0, track=None, verge=(10.0, 11.0))
+cluster = l7r_phases.well_seats(wells_in)
+assert len(cluster["groups"]) == 2 and all(cluster["groups"]) and cluster["counts"], cluster
+verge = l7r_phases.well_seats(dict(wells_in, want=1, track=[(-50.0, 60.0), (400.0, 60.0)]))
+assert len(verge["groups"]) == 1 and verge["groups"][0], verge
+try:
+    l7r_phases.well_seats({k: v for k, v in wells_in.items() if k != "gap"})
+except KeyError as e:
+    assert "gap" in str(e), e
+else:
+    raise AssertionError("well seats with no gap are refused by name")
+row = l7r_phases.row_wells(dict(streets=[[(0.0, 0.0), (2000.0, 0.0)]], farms=[(k * 100.0, 40.0) for k in range(20)], frame=240.0, reach=760.0, off=20.0, bend=(40.0, 30.0)))
+assert len(row["marks"]) == 2 and row["counts"], row
+yard = [(950.0, 950.0), (1050.0, 950.0), (1050.0, 1050.0), (950.0, 1050.0)]
+chan_in = dict(farms=[((1000.0, 1000.0), yard, [])], hard=[], walls=[], courses=[[(1000.0, 1300.0), (1400.0, 1300.0)]], water=[((1000.0, 1300.0), (1400.0, 1300.0))])
+chans = l7r_phases.farm_channels(chan_in)
+assert len(chans["paths"]) == 1 and chans["counts"] is not None, chans
+assert l7r_phases.farm_channels(dict(chan_in, courses=[], water=[]))["paths"] == [[]], "no course reaches: an empty run"

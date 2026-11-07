@@ -18,16 +18,18 @@ mod water_frame;
 mod waterward;
 mod ways;
 
+#[cfg(feature = "python")]
 use pyo3::prelude::*;
 
 /// The module Python imports as `l7r_phases`.
 ///
 /// # Errors
 /// When a function cannot be added to the module.
+#[cfg(feature = "python")]
 #[pymodule]
 fn l7r_phases(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(water_frame::stage_water_frame, m)?)?;
-    m.add_function(wrap_pyfunction!(water_frame::admitted_falls, m)?)?;
+    m.add_function(wrap_pyfunction!(water_frame::py::stage_water_frame, m)?)?;
+    m.add_function(wrap_pyfunction!(water_frame::py::admitted_falls, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::stage_field, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::roll_knob, m)?)?;
     m.add_function(wrap_pyfunction!(field::py::stage_polder, m)?)?;

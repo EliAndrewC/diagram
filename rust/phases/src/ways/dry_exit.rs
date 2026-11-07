@@ -237,19 +237,21 @@ pub fn fill(
     };
     let left = |c: (i64, i64)| {
         let p = g.center(c);
-        let d = p.0.min(canvas.0 - p.0).min(p.1).min(canvas.1 - p.1).max(0.0);
+        let d =
+            p.0.min(canvas.0 - p.0)
+                .min(p.1)
+                .min(canvas.1 - p.1)
+                .max(0.0);
         (d / g.cell).floor() as i64
     };
     let mut back: HashMap<(i64, i64), (i64, i64)> = HashMap::from([(s, s)]);
     let mut steps: HashMap<(i64, i64), i64> = HashMap::from([(s, 0)]);
     let mut seq = 0u64;
     let mut open = BinaryHeap::from([(Reverse(left(s)), Reverse(0i64), Reverse(seq), s)]);
-    let mut done: std::collections::HashSet<(i64, i64)> = std::collections::HashSet::new();
     let mut goal = None;
     while let Some((_, Reverse(n), _, c)) = open.pop() {
-        if !done.insert(c) {
-            continue;
-        }
+        // (an entry a shorter walk left behind comes off the queue after that walk's own, so its neighbors were relaxed from the
+        // shorter walk already and it pushes none - no set of the cells done is kept)
         if off(c) {
             goal = Some(c);
             break;
@@ -266,7 +268,8 @@ pub fn fill(
         ] {
             let nb = (c.0 + d.0, c.1 + d.1);
             tests.add("candidate@fill", 1);
-            if g.index(nb).is_some_and(|k| !blocked[k]) && steps.get(&nb).is_none_or(|&m| n + 1 < m) {
+            if g.index(nb).is_some_and(|k| !blocked[k]) && steps.get(&nb).is_none_or(|&m| n + 1 < m)
+            {
                 steps.insert(nb, n + 1);
                 back.insert(nb, c);
                 seq += 1;
@@ -274,7 +277,14 @@ pub fn fill(
             }
         }
     }
-    tests.add(if goal.is_some() { "call@fill_out" } else { "call@fill_walled" }, 1);
+    tests.add(
+        if goal.is_some() {
+            "call@fill_out"
+        } else {
+            "call@fill_walled"
+        },
+        1,
+    );
     let mut at = goal?;
     let mut chain = vec![at];
     while at != s {

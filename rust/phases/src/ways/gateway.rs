@@ -170,7 +170,8 @@ pub fn choose_track_out(c: &Choice, tests: &mut Counts) -> Option<(Vec<Pt>, bool
                 &walls,
                 CONNECTOR_WIDTH_FT / 2.0,
             );
-            swept(c, gate, tests).and_then(|t| take(connector_ways(&t, c.fabric, c.law, c.dry, tests)))
+            swept(c, gate, tests)
+                .and_then(|t| take(connector_ways(&t, c.fabric, c.law, c.dry, tests)))
         })
     });
     let out = out.or(fallback);

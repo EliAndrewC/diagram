@@ -137,6 +137,33 @@ def rust_refusal(root: pathlib.Path) -> str:
     return ""
 
 
+#: the port switch (feature 444 amendment 8, FR-023; `l7r/diagram/switches.py` writes it) - read here without importing the engine
+#: package, as the scripts read the claims switch
+SWITCHES = pathlib.Path("dev") / "switches.json"
+PORT_STATES = ("rust-only", "integrated")
+
+
+def port_mode(root: pathlib.Path) -> str:
+    """The port switch: `rust-only` (absent - the shipped state while any stage is Python) or `integrated`; a malformed entry
+    closes to the last committed file's state, the state in force (plan T34 D1), as `switches.read` does."""
+
+    def state(text: str) -> str | None:
+        try:
+            data = json.loads(text)
+            got = (data.get("port") or {"state": "rust-only"}).get("state") if isinstance(data, dict) else None
+        except (ValueError, AttributeError):
+            return None
+        return got if got in PORT_STATES else None
+
+    path = root / SWITCHES
+    if not path.is_file():
+        return "rust-only"
+    if (now := state(path.read_text(encoding="utf-8"))) is not None:
+        return now
+    committed = git(root, "show", f"HEAD:{SWITCHES.as_posix()}")
+    return (state(committed.stdout) if committed.returncode == 0 else None) or "rust-only"
+
+
 def rust_landing(root: pathlib.Path) -> bool:
     """Does the landing change a Rust stage - anything under `rust/` against `origin/main`, committed or not?"""
     base = git(root, "merge-base", "HEAD", "origin/main").stdout.strip() or "origin/main"
@@ -151,7 +178,9 @@ def check(root: pathlib.Path) -> tuple[list[str], list[str]]:
     refusals, notes = _cohort_check(root)
     if why := rust_refusal(root):
         refusals.append(why)
-    if rust_landing(root):
+    # ...AND, WHILE THE PORT SWITCH STANDS AT rust-only, EVERY ENGINE LANDING (FR-023: "no landing is refused for, nor waits on,
+    # anything the Python stages after the Rust front do", whatever the delta touches)
+    if port_mode(root) == "rust-only" or rust_landing(root):
         notes += [f"(a Rust-stage landing, a rate - FR-019) {r}" for r in refusals if not r.startswith(("no Rust stage gate", "the Rust stage gate"))]
         refusals = [r for r in refusals if r.startswith(("no Rust stage gate", "the Rust stage gate"))]
     return refusals, notes

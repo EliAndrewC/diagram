@@ -116,6 +116,8 @@
       research: rendering
 - [ ] T34 the port switch (amendment 8, FR-023): the Rust stages iterated alone - `make done` without map-rolling tests or the reference map, `make land` with no landing cohort and every engine landing judged by the Rust stage gate alone, while `dev/switches.json` `port` stands at `rust-only` (plan T34 D1-D4)
       research: rendering
+- [ ] T35 the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z): FR-023 keeps "the Python unit tests that roll no map", but the gate at rust-only leaves out the whole engine trees (`PY_ENGINE_IGNORE`: hamletgen, settlement, gate and the rest) on the GM's word of 2026-11-07 ("You should immediately stop running all of the python map generating code as well") - so `tests/gate/test_pool.py`, which rolls no map, never runs at the default port; either FR-023's wording is amended to the GM's word (spec-fidelity reviews it, SC-016) or the ignore narrows to the tests that roll maps
+      research: rendering
 - [ ] GM review (make gm-reviewed F=444) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

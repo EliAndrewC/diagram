@@ -32,6 +32,8 @@ def repo(tmp_path: Path) -> tuple[Path, str]:
     (tmp_path / "l7r" / "m.py").write_text(MOD)
     (tmp_path / "tests").mkdir()
     (tmp_path / "tests" / "test_m.py").write_text(TESTS)
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "switches.json").write_text('{"port": {"state": "integrated"}}\n')
     _git(tmp_path, "add", "-A")
     _git(tmp_path, "commit", "-qm", "base")
     return tmp_path, _git(tmp_path, "rev-parse", "HEAD").strip()
@@ -146,7 +148,6 @@ def test_a_slated_modules_unrun_lines_are_information_and_refuse_nothing(repo: t
     """Feature 448 (the GM 2026-11-02): a module `dev/coverage-exempt.json` names is asked and reported, never refused; a kept one
     beside it still refuses."""
     root, base = repo
-    (root / "dev").mkdir()
     (root / "l7r" / "slated.py").write_text("x = 1\n")
     (root / "dev" / "coverage-exempt.json").write_text('{"entries": [{"path": "l7r/slated.py", "stages": ["sink"], "why": "t"}]}\n')
     monkeypatch.chdir(root)
@@ -167,3 +168,18 @@ def test_a_case_with_no_classname_names_no_module(tmp_path: Path) -> None:
     junit = tmp_path / "j.xml"
     junit.write_text('<testsuite><testcase classname="" name="collect"/><testcase classname="tests.test_a" name="test_x"/></testsuite>')
     assert cc.ran_tests(tmp_path, junit) == {"tests/test_a.py::test_x"}
+
+
+def test_at_rust_only_the_python_half_is_not_run_and_a_rust_line_still_refuses(repo: tuple[Path, str], monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    """Feature 444 FR-023, the GM 2026-11-07: at `rust-only` the Python floor is information and its half took 46 minutes, so
+    `cover-changed` runs no Python test and refuses nothing for a Python module; a Rust line no test reaches still refuses."""
+    root, base = repo
+    (root / "dev" / "switches.json").write_text('{"port": {"state": "rust-only"}}\n')
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(cc, "changed_modules", lambda r, m: ["l7r/m.py"])
+    monkeypatch.setattr(cc, "uncovered", lambda r, mods, b: (_ for _ in ()).throw(AssertionError("the Python half ran")))
+    assert cc.main(["--base", base]) == 0
+    assert "information (the port at rust-only, feature 444 FR-023): 1 changed Python module(s) not asked" in capsys.readouterr().out
+    monkeypatch.setattr(cc, "changed_rust", lambda r, m: {root / "rust" / "phases" / "Cargo.toml": ["rust/phases/src/a.rs"]})
+    monkeypatch.setattr(cc, "rust_uncovered", lambda r, c: {"rust/phases/src/a.rs": [4]})
+    assert cc.main(["--base", base]) == 1 and "cover-changed: rust/phases/src/a.rs - lines" in capsys.readouterr().out

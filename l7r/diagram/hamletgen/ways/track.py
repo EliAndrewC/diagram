@@ -72,9 +72,8 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     map so it would not notice.
 
     Steps:
-        l7r.diagram.hamletgen.ways.track.connector_track
-        l7r.diagram.hamletgen.ways.track._cluster_gateway
-        l7r.diagram.hamletgen.ways.track._thread_the_fabric
+        l7r.diagram.hamletgen.ways.track.the_track_out
+        l7r.diagram.hamletgen.ways.track.recorded_track
         l7r.diagram.hamletgen.ways.clearance.route_around
         l7r.diagram.settlement.Settlement.lane
 

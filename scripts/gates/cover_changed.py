@@ -83,7 +83,7 @@ def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[
 
     out: dict[str, list[int]] = {}
     for manifest, files in crates.items():
-        got = rust_checks.uncovered(manifest, manifest.parent / "tests" / "py_driver.py", rust_checks.TARGET / f"cover-{manifest.parent.name}")
+        got = rust_checks.uncovered(manifest, None, rust_checks.TARGET / f"cover-{manifest.parent.name}")  # Rust only, its doors left out
         for f in files:
             if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
                 out[f] = lines
@@ -271,6 +271,15 @@ def slated(root: Path) -> set[str]:
     return coverage_exempt.exempt(root)
 
 
+def rust_only(root: Path) -> bool:
+    """Is the port switch at `rust-only` (`cohort_gate.port_mode`, feature 444 FR-023)?"""
+    if str(Path(__file__).resolve().parent) not in sys.path:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))  # loaded by path (the tests), its sibling still importable
+    import cohort_gate  # noqa: PLC0415
+
+    return cohort_gate.port_mode(root) == "rust-only"
+
+
 def main(argv: list[str]) -> int:
     base_ref = argv[argv.index("--base") + 1] if "--base" in argv else "origin/main"
     root = Path(git(Path.cwd(), "rev-parse", "--show-toplevel").strip() or ".")
@@ -279,7 +288,13 @@ def main(argv: list[str]) -> int:
     crates = changed_rust(root, merge)
     if not modules and not crates:
         return 0
-    missing = uncovered(root, modules, baseline(root)) if modules else {}
+    # AT `rust-only` THE PYTHON HALF IS NOT RUN (the GM 2026-11-07: "There's no way anything should be running for that long"):
+    # its floor is information there (feature 444 FR-023), and it took 46 minutes of a run meant to take seconds (measured the same
+    # day) - so only the Rust crate's lines are asked
+    python_off = bool(modules) and rust_only(root)
+    if python_off:
+        print(f"cover-changed: information (the port at rust-only, feature 444 FR-023): {len(modules)} changed Python module(s) not asked")
+    missing = uncovered(root, modules, baseline(root)) if modules and not python_off else {}
     missing |= rust_uncovered(root, crates)
     # THE ENGINE CODE THE RUST PORT REPLACES IS ASKED, NOT HELD (feature 448, the GM 2026-11-02): its unrun lines are information
     for path in sorted(set(missing) & slated(root)):

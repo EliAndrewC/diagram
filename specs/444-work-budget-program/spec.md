@@ -267,6 +267,10 @@ standards" (`request.md`).
   second, distinct SOUND verdict, and refused past ten times it on any; `make budget-accept` refusing a count past ten times the
   first budget on a raised stage, and past twice the first budget on a stage raised on one SOUND;
   and the ratchet not refusing an accepted stage above its budget and within its accepted figure.
+- **SC-016** (FR-023): a test finds the port switch at `rust-only` by default, thrown both ways by its make targets, a malformed
+  entry closing to the last committed state; at `rust-only` the push judging an engine landing by the Rust stage gate alone (its
+  cohort's regressed seeds notes), `make land` starting no landing cohort, and `make done` deselecting `rolls_map` and rolling no
+  reference map; at `integrated`, feature 386's landing cohort refusing as it stood.
 
 ## Edge Cases
 

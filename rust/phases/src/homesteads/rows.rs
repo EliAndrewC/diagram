@@ -29,7 +29,7 @@ use super::level::{interpolate, length as ring_length, project, ring_dist, Hard}
 use super::track_out::box_poly;
 use super::Counts;
 use crate::field::fan::Pt;
-use crate::field::geom::{dist, signed_area};
+use crate::field::geom::{dist, seg_dist, signed_area};
 use crate::seat::exit::seg_seg;
 use crate::seat::index::area;
 use crate::ways::track::in_poly;
@@ -444,6 +444,40 @@ pub fn inside_the_sheet(line: &[(Pt, Pt)], bounds: (f64, f64, f64, f64)) -> Line
     best.to_vec()
 }
 
+/// The most segments a simplified line is asked whole, sample by sample, rather than through its cells.
+///
+/// Research:
+///     its salts, guards and sentinels - NONE: a cost crossover, one 64 ft cell's worth of the 2 ft samples
+const FEW_SEGMENTS: usize = 32;
+
+/// How near a line set out keeps to the line it is set out from, its vertices dropped within it (feet).
+///
+/// Research:
+///     its salts, guards and sentinels - NONE: a drawing grain, half the 4 ft grid an edge is traced on (its own error)
+const SET_OUT_TOL_FT: f64 = 2.0;
+
+/// `pts` with every vertex dropped that lies within `tol` of the chord the kept ones span (Douglas-Peucker), its ends kept.
+fn simplified(pts: &[Pt], tol: f64, tests: &mut Counts) -> Vec<Pt> {
+    if pts.len() < 3 {
+        return pts.to_vec();
+    }
+    let mut keep = vec![false; pts.len()];
+    keep[0] = true;
+    keep[pts.len() - 1] = true;
+    let mut stack = vec![(0, pts.len() - 1)];
+    while let Some((i, j)) = stack.pop() {
+        tests.add("seg_test@simplified", (j - i).saturating_sub(1) as u64);
+        let (k, far) = ((i + 1)..j)
+            .map(|k| (k, seg_dist(pts[k], pts[i], pts[j])))
+            .fold((i, 0.0), |m, x| if x.1 > m.1 { x } else { m });
+        if far > tol {
+            keep[k] = true;
+            stack.extend([(i, k), (k, j)]);
+        }
+    }
+    pts.iter().zip(keep).filter(|p| p.1).map(|p| *p.0).collect()
+}
+
 /// `pts` set out `d` on its left (`d` < 0 its right) as a true parallel curve, rounded at the joins: the raw offset - each segment
 /// set out, a round join round each vertex - sampled every `STEP_FT.1`, every sample nearer the line than `d` dropped (the inside
 /// of a bend, where the raw offset loops), the runs either side of a dropped loop joined, the longest run kept.
@@ -494,14 +528,29 @@ pub(crate) fn offset_curve(pts: &[Pt], d: f64, tests: &mut Counts) -> Vec<Pt> {
             (b.0 + n.0 * r, b.1 + n.1 * r),
         );
     }
-    let base = Hard::line(pts, tests);
+    // ...ASKED OF THE LINE SIMPLIFIED to a hundredth of a foot, a fifth of the tolerance below, each sample asked of the
+    // segments filed within `r` of it, stopped at the first nearer (the GM 2026-11-07, on a test of 101 s: "498 seconds is still pretty crazy, right?!"): a street sampled
+    // every 2 ft filed 32 segments in each 64 ft cell, and every sample of its offset read the square of cells within `r` of it -
+    // 452 million segment tests in the row seating's one test; a field's edge traced on a 4 ft grid keeps its thousands of segments
+    // simplified, so asked whole by every sample it was 3.7 billion
+    // (a line of a few segments asked whole, each a test; a longer one through its cells, where a long segment filed in every cell
+    // of its box would be read once a cell)
+    let simple = simplified(pts, STEP_FT.1 / 200.0, tests);
+    let few: Vec<(Pt, Pt)> = simple.windows(2).map(|w| (w[0], w[1])).collect();
+    let base = (few.len() > FEW_SEGMENTS).then(|| Hard::line(&simple, tests));
     // a sample short of `r` by less than a twentieth of a foot is on the curve: a 2 ft chord of a concave line ends inside its
     // neighbor's offset by r * theta^2 / 2, a thousandth of a foot, and a tighter tolerance dropped every chord whole
     let tol = STEP_FT.1 / 40.0;
     let mut runs: Vec<Vec<Pt>> = Vec::new();
     let mut open = false;
     for q in raw {
-        if base.dist(q, r + 1.0, tests) < r - tol {
+        let nearer = if let Some(h) = &base {
+            h.nearer_than(q, r - tol, tests)
+        } else {
+            tests.add("seg_test@offset_curve", few.len() as u64);
+            few.iter().any(|&(a, b)| seg_dist(q, a, b) < r - tol)
+        };
+        if nearer {
             open = false;
             continue;
         }
@@ -553,7 +602,12 @@ pub fn parallel(line: &[(Pt, Pt)], d: f64, radius: f64, tests: &mut Counts) -> L
         })
         .sum();
     let side = (if left >= 0.0 { 1.0 } else { -1.0 }) * d.signum();
-    let mut coords = offset_curve(&pts, side * (d.abs() + radius), tests);
+    // ...SET OUT FROM THE LINE SIMPLIFIED to 2 ft, half the 4 ft grid an edge is traced on and so within its error (`CELLS.0`; the
+    // GM 2026-11-07: "the literal most important thing here is making things FAST"): a field's edge traced on that grid is a
+    // staircase of some 1,400 segments, each corner a round join of up to 117 samples at a 300 ft offset - one call 14 s of the row
+    // seating's test; the second pass sets out the first's arcs as they are, which a 2 ft chord would cut 4 ft short at a corner
+    let first = simplified(&pts, SET_OUT_TOL_FT, tests);
+    let mut coords = offset_curve(&first, side * (d.abs() + radius), tests);
     if radius > 0.0 && coords.len() >= 2 {
         coords = offset_curve(&coords, -side * radius, tests);
     }
@@ -566,16 +620,23 @@ pub fn parallel(line: &[(Pt, Pt)], d: f64, radius: f64, tests: &mut Counts) -> L
     let qs: Vec<Pt> = (0..=k)
         .map(|i| along(&coords, total * i as f64 / k as f64))
         .collect();
-    tests.add("seg_test@parallel", (qs.len() * line.len()) as u64);
+    // ...EACH SAMPLE'S NEAREST POINT OF THE LINE WALKED ON FROM THE LAST ONE'S, to its nearest neighbor (S3, the GM 2026-11-07: "498
+    // seconds is still pretty crazy, right?!"): the samples and the line run the same way, and the parallel stands no nearer the line
+    // than its bends' rounding, so the nearest point only moves on - every sample asked of every point was 54 million tests in one test
+    let mut at = 0usize;
     (0..qs.len())
         .map(|i| {
+            let d2 = |j: usize| dist(line[j].0, qs[i]);
+            let mut asked = 2;
+            while at + 1 < line.len() && d2(at + 1) <= d2(at) {
+                at += 1;
+                asked += 2;
+            }
+            tests.add("seg_test@parallel", asked);
             let (a, b) = (qs[i.saturating_sub(1)], qs[(i + 1).min(qs.len() - 1)]);
             let tl = dist(a, b);
             let tl = if tl == 0.0 { 1.0 } else { tl };
-            let n0 = line
-                .iter()
-                .min_by(|x, y| dist(x.0, qs[i]).total_cmp(&dist(y.0, qs[i])))
-                .map_or((0.0, 0.0), |s| s.1);
+            let n0 = line[at].1;
             let (nx, ny) = (-(b.1 - a.1) / tl, (b.0 - a.0) / tl);
             (
                 qs[i],

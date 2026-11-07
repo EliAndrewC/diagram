@@ -160,3 +160,22 @@ fn the_raster_and_the_fill_at_their_edges() {
     let at = fill(&g, (-30.0, 50.0 - 0.0), &none, (100.0, 100.0), &mut t).expect("off already");
     assert!(at.len() == 2 && t.total() > 0);
 }
+
+#[test]
+fn a_fill_through_scattered_walls_expands_each_cell_once_at_its_shortest_walk() {
+    // a deterministic scatter of a third of the cells walled: the search reaches cells again on shorter walks, and an entry left
+    // behind on the queue is passed over when it comes up
+    let mut t = Counts::default();
+    let g = Grid::new(400.0, 400.0, 4.0);
+    let n = blocked(&g, &[], &[], &mut t).len();
+    let mut seed = 7u64;
+    let walls: Vec<bool> = (0..n)
+        .map(|_| {
+            seed = seed.wrapping_mul(6_364_136_223_846_793_005).wrapping_add(1);
+            (seed >> 33) % 3 == 0
+        })
+        .collect();
+    let out = fill(&g, (200.0, 200.0), &walls, (400.0, 400.0), &mut t);
+    assert!(out.is_none_or(|p| p[0] == (200.0, 200.0)));
+    assert!(t.0.contains_key("candidate@fill"));
+}

@@ -240,6 +240,25 @@ fn a_scattered_hamlet_seats_its_row_ranks_and_the_rest_and_a_single_file_its_row
     };
     let st = seat_scattered(&gs);
     assert_eq!(st.seated.len(), 9, "every household seated");
+    // a watercourse along the front row: each seat pushed off its water, and tried a quarter seat either side
+    let wet = Corridors {
+        water: vec![((200.0, 1420.0), (2200.0, 1420.0), 8.0)],
+        ..Corridors::default()
+    };
+    let pushed = seat_scattered(&GroveSite {
+        corridors: &wet,
+        ..gs
+    });
+    assert!(pushed.seated.len() <= 9);
+    // grove farms with their own well pockets: each well's box among the homestead's parts its streets keep off
+    let welled = seat_scattered(&GroveSite {
+        grove: Grove {
+            well: 8.0,
+            ..gs.grove
+        },
+        ..gs
+    });
+    assert!(welled.seated.iter().any(|a| a.bundle.well.is_some()));
     // every farm off the field, its bands with it, no two homesteads' boxes within 2 ft
     for (i, a) in st.seated.iter().enumerate() {
         assert!(!a.bundle.groves.is_empty());

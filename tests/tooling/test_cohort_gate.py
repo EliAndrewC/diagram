@@ -30,9 +30,13 @@ def _git(root: pathlib.Path, *a: str) -> str:
     return subprocess.run(["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@t", *a], capture_output=True, text=True, check=True).stdout.strip()
 
 
-def _repo(tmp: pathlib.Path) -> tuple[pathlib.Path, str, str]:
+def _repo(tmp: pathlib.Path, port: str | None = "integrated") -> tuple[pathlib.Path, str, str]:
     """main's engine at `base`; branch `work` changes it at `head`. `gate-stamp.py` is copied in, as `tests/tooling/ci/conftest.py`
-    does: the engine key loads it from the tree it reads."""
+    does: the engine key loads it from the tree it reads. The port switch committed at `port` (feature 444 FR-023): `integrated`,
+    feature 386's landing cohort as it stood, unless a test asks otherwise."""
+    if port is not None:
+        (tmp / "dev").mkdir()
+        (tmp / "dev/switches.json").write_text(json.dumps({"port": {"state": port}}) + "\n")
     (tmp / "l7r").mkdir()
     (tmp / "pool").mkdir()
     (tmp / "scripts/gates").mkdir(parents=True)
@@ -196,7 +200,12 @@ def test_the_rust_stage_gate_holds_every_engine_landing_and_a_rust_landing_reads
     (log / "20261031T000003Z.json").write_text(json.dumps({"engine": "K1", "failing": 0}))
     assert cg.rust_refusal(root) == ""
     monkeypatch.setattr(cg, "rust_landing", lambda _root: False)
+    monkeypatch.setattr(cg, "port_mode", lambda _root: "integrated")
     assert cg.check(root) == (["seed 7 NEWLY FAILING (lane_knots 1)"], ["rate"]), "no Rust stage changed: feature 386's cohort as it stands"
+    monkeypatch.setattr(cg, "port_mode", lambda _root: "rust-only")
+    refusals, notes = cg.check(root)
+    assert refusals == [] and any("NEWLY FAILING" in n for n in notes), "at rust-only every engine landing reads the cohort as a rate (FR-023)"
+    monkeypatch.setattr(cg, "port_mode", lambda _root: "integrated")
     monkeypatch.setattr(cg, "rust_landing", lambda _root: True)
     refusals, notes = cg.check(root)
     assert refusals == [] and "(a Rust-stage landing, a rate - FR-019) seed 7 NEWLY FAILING (lane_knots 1)" in notes
@@ -225,3 +234,25 @@ def test_a_rust_only_change_moves_the_fresh_start(tmp_path: pathlib.Path) -> Non
     one = cg.fresh_seed(root)
     (root / "rust/phases/src/water_frame.rs").write_text("fn f() -> u8 { 2 }\n")
     assert cg.fresh_seed(root) != one
+
+
+def test_the_port_switch_reads_rust_only_by_default_and_a_malformed_entry_as_the_committed_state(tmp_path: pathlib.Path) -> None:
+    """Feature 444 amendment 8 (FR-023, plan T34 D1): absent, `rust-only`; a malformed entry closes to the last committed state."""
+    root, _base, _head = _repo(tmp_path, port=None)
+    assert cg.port_mode(root) == "rust-only"
+    sw = root / "dev" / "switches.json"
+    sw.parent.mkdir(parents=True, exist_ok=True)
+    sw.write_text('{"port": {"state": "integrated"}}')
+    assert cg.port_mode(root) == "integrated"
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "integrated")
+    sw.write_text('{"port": {"state": "sideways"}}')
+    assert cg.port_mode(root) == "integrated", "a malformed entry: the committed state in force"
+    sw.write_text("not json")
+    assert cg.port_mode(root) == "integrated"
+    sw.write_text('{"claims": {"state": "report"}}')
+    assert cg.port_mode(root) == "rust-only", "no port entry: the default"
+    _git(root, "add", "-A")
+    _git(root, "commit", "-qm", "no port")
+    sw.write_text("[1]")
+    assert cg.port_mode(root) == "rust-only", "the committed file holds no port: the default"

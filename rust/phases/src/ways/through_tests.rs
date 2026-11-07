@@ -7,8 +7,8 @@
 
 use super::dry_exit::DrySite;
 use super::through::{
-    connector_through, inner, out_of_bands, push_clear_of_fabric, route_around, thread_the_fabric,
-    water_crossings, Fabric, Law,
+    connector_through, connector_ways, inner, out_of_bands, push_clear_of_fabric, route_around,
+    thread_the_fabric, water_crossings, Fabric, Law,
 };
 use super::track::{poly_box, segments_cross};
 use super::Counts;
@@ -307,4 +307,93 @@ fn the_thread_falls_back_to_the_swing_and_the_band_routes() {
         ..fabric(&band, &env, &[(150.0, -100.0)])
     };
     assert!(thread_the_fabric(&closed, &[(0.0, 0.0), (300.0, 0.0)], &mut t).is_empty());
+}
+
+#[test]
+fn a_dry_exit_squared_across_a_band_is_walled_past_its_reach_or_kept_as_the_fallback() {
+    let mut t = Counts::default();
+    let env = square(0.0, 600.0, 1000.0, 1000.0);
+    let houses = [(500.0, 500.0)];
+    let track = [(500.0, 300.0), (500.0, -400.0)];
+    // a building's box over the track: the threaded run is not lawful, so the dry exit is asked
+    let solid = [(400.0, -500.0, 600.0, 450.0)];
+    let law = Law {
+        solid: &solid,
+        forbidding: &[],
+        seats: &[],
+        brooks: &[],
+        waters: &[],
+    };
+    // the dry exit skirts its band at the band's gap, which is inside the wider band the run is held off
+    let near = [(square(350.0, 150.0, 650.0, 170.0), true)];
+    let wider = [(square(335.0, 135.0, 665.0, 185.0), true)];
+    let dry = DrySite {
+        wet: &[],
+        fabric: &near,
+        avoid: &[],
+        pond: None,
+        lines: &[],
+        course: &[],
+        canvas: (1000.0, 1000.0),
+    };
+    let (held, _) = connector_ways(&track, &fabric(&wider, &env, &houses), &law, &dry, &mut t);
+    let (run, _) = held.expect("walled past the band's reach");
+    assert!(!run
+        .iter()
+        .any(|p| (335.0..=665.0).contains(&p.0) && (135.0..=185.0).contains(&p.1)));
+    // a band right across the sheet and far past it, which the dry exit does not know: no way held, the first that cuts it kept
+    let across = [(square(-20000.0, 150.0, 20000.0, 170.0), true)];
+    let blind = DrySite { fabric: &[], ..dry };
+    let (none, cut) = connector_ways(
+        &track,
+        &fabric(&across, &env, &houses),
+        &law,
+        &blind,
+        &mut t,
+    );
+    assert!(none.is_none() && cut.is_some());
+    // the start boxed in by bands but for a gap wide enough for the dry exit at the band's gap, closed once the bands are grown
+    // past a squared leg's reach: the widened search finds no way out, and the first way that cuts the band is kept
+    let pair = [
+        (square(380.0, 200.0, 480.0, 220.0), true),
+        (square(520.0, 200.0, 620.0, 220.0), true),
+        (square(380.0, 380.0, 620.0, 400.0), true),
+        (square(380.0, 200.0, 400.0, 400.0), true),
+        (square(600.0, 200.0, 620.0, 400.0), true),
+    ];
+    let gapped = DrySite {
+        fabric: &pair,
+        ..dry
+    };
+    let (held, kept) = connector_ways(
+        &track,
+        &fabric(&across, &env, &houses),
+        &law,
+        &gapped,
+        &mut t,
+    );
+    assert!(held.is_none() && kept.is_some());
+    // the wood seats walling the near edge: walled by them the dry exit cuts a band to north or south, and over them it leaves
+    // west, off every band - kept, the first cut kept beside it
+    let west = [(150.0, 500.0), (150.0, -400.0)];
+    let solid_w = [(100.0, -500.0, 200.0, 550.0)];
+    let seats = [square(-100.0, -100.0, 140.0, 1100.0)];
+    let walled_w = Law {
+        solid: &solid_w,
+        seats: &seats,
+        ..law
+    };
+    let rows = [
+        (square(-20000.0, 100.0, 20000.0, 120.0), true),
+        (square(-20000.0, 880.0, 20000.0, 900.0), true),
+    ];
+    let open_dry = DrySite { fabric: &[], ..dry };
+    let (over, first) = connector_ways(
+        &west,
+        &fabric(&rows, &env, &houses),
+        &walled_w,
+        &open_dry,
+        &mut t,
+    );
+    assert!(over.is_some_and(|(_, taken)| taken) && first.is_some());
 }

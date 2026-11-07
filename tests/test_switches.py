@@ -275,3 +275,46 @@ def test_a_malformed_claims_entry_closes_claims_alone(skill: Path) -> None:
     assert s.claims.state == "clean" and "MALFORMED" in s.claims.why and not s.remote_off and not s.error
     (skill / "dev" / "switches.json").write_text("not json")
     assert sw.read(skill).claims.state == "clean", "a malformed file closes claims too"
+
+
+# ---- the port switch (feature 444 amendment 8) -----------------------------------------------
+
+
+def test_the_port_switch_defaults_to_rust_only_and_is_thrown_both_ways_keeping_the_others(skill: Path) -> None:
+    assert sw.read(skill).port.state == "rust-only" == sw.DEFAULT_PORT
+    sw.write(skill, "claims", "clean", "strict")
+    s = sw.write(skill, "port", "integrated", "the last stage is Rust", who="GM")
+    assert s.port.state == "integrated" and s.port.who == "GM" and s.claims.state == "clean", "a port throw keeps claims as it stood"
+    s = sw.write(skill, "remote", "off", "no remote")
+    assert s.port.state == "integrated", "a remote throw keeps the port as it stood"
+    assert "port    integrated" in sw.describe(sw.read(skill))
+    with pytest.raises(ValueError, match="unknown switch"):
+        sw.write(skill, "port", "python", "x")
+
+
+def _commit(skill: Path, body: str) -> None:
+    (skill / "dev" / "switches.json").write_text(body)
+    subprocess.run(["git", "-C", str(skill), "add", "dev/switches.json"], check=True)
+    subprocess.run(["git", "-C", str(skill), "-c", "user.email=t@t", "commit", "-qm", "switch"], check=True)
+
+
+def test_a_malformed_port_entry_closes_to_the_last_committed_state_in_force(skill: Path) -> None:
+    # nothing committed: the default
+    (skill / "dev" / "switches.json").write_text('{"port": {"state": "sideways"}}')
+    s = sw.read(skill)
+    assert s.port.state == "rust-only" and "MALFORMED" in s.port.why and not s.error
+    # thrown back to integrated and committed: a broken working copy does NOT bring the suspended checks' holiday back
+    _commit(skill, '{"port": {"state": "integrated"}}')
+    (skill / "dev" / "switches.json").write_text('{"port": {"state": "sideways"}}')
+    assert sw.read(skill).port.state == "integrated"
+    (skill / "dev" / "switches.json").write_text("not json")
+    assert sw.read(skill).port.state == "integrated", "a malformed FILE closes the port to the committed state too"
+    # a committed file that is itself unreadable: the default
+    _commit(skill, "not json")
+    assert sw.read(skill).port.state == "rust-only"
+
+
+def test_the_state_subcommand_prints_the_bare_port_state(skill: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    monkeypatch.chdir(skill)
+    assert sw.main(["state", "port"]) == 0
+    assert capsys.readouterr().out.strip() == "rust-only"

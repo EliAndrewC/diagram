@@ -108,6 +108,7 @@ pub mod landuse;
 pub mod lattice;
 pub mod polder;
 pub mod ponds;
+#[cfg(feature = "python")]
 pub mod py;
 pub mod rules;
 pub mod states;

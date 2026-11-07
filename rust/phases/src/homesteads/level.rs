@@ -177,9 +177,10 @@ impl Hard {
                 for i in ((ci - r).max(0)..=(ci + r).min(w as i64 - 1))
                     .filter(|&i| rim || i == ci - r || i == ci + r)
                 {
-                    for &k in &self.cells[j as usize * w + i as usize] {
+                    let members = &self.cells[j as usize * w + i as usize];
+                    tests.add("seg_test@Hard::near", members.len() as u64);
+                    for &k in members {
                         let (a, b, c) = self.edges[k];
-                        tests.add("seg_test@Hard::near", 1);
                         best = best.min((seg_dist(p, a, b) - c).max(0.0));
                     }
                 }
@@ -187,6 +188,40 @@ impl Hard {
             r += 1;
         }
         best
+    }
+
+    /// Is `p` nearer than `d` to the hard ground? The cells within `d` of it read ring by ring, stopped at the first member nearer.
+    #[must_use]
+    pub fn nearer_than(&self, p: Pt, d: f64, tests: &mut Counts) -> bool {
+        if self.inside(p, tests) {
+            return true;
+        }
+        let ((i0, j0), (w, h)) = self.span;
+        let (ci, cj) = (cell(p.0) - i0, cell(p.1) - j0);
+        let last = (d / CELLS.1).ceil() as i64 + 1;
+        // (the tests tallied here and counted once: a counter's lookup a member cost as much as the member's test)
+        let mut asked = 0u64;
+        let found = 'rings: {
+            for r in 0..=last {
+                for j in (cj - r).max(0)..=(cj + r).min(h as i64 - 1) {
+                    let rim = j == cj - r || j == cj + r;
+                    for i in ((ci - r).max(0)..=(ci + r).min(w as i64 - 1))
+                        .filter(|&i| rim || i == ci - r || i == ci + r)
+                    {
+                        for &k in &self.cells[j as usize * w + i as usize] {
+                            let (a, b, c) = self.edges[k];
+                            asked += 1;
+                            if seg_dist(p, a, b) - c < d {
+                                break 'rings true;
+                            }
+                        }
+                    }
+                }
+            }
+            false
+        };
+        tests.add("seg_test@Hard::nearer_than", asked);
+        found
     }
 
     /// Does the polygon `poly` meet the hard ground - touch or overlap a polygon, or come within a strip's clearance (shapely's
@@ -243,17 +278,36 @@ impl Hard {
         for r in &self.polys {
             fill(r, (ox, oy), h, (nx, ny), &mut inside, tests);
         }
+        // ...EACH MEMBER SPREAD OVER THE NODES WITHIN ITS REACH, NOT EACH NODE ASKING THE CELLS ABOUT IT (the GM 2026-11-07, on a
+        // test of 101 s: "498 seconds is still pretty crazy, right?!"): a node's value is the least distance to any member within
+        // `cap`, else `cap` - the same values `near` gave, at the members' reach in nodes rather than every node times the members
+        // its rings of 64 ft cells hold (a long field edge filed in every cell it crosses, read again by every node near it)
         let cap = d + 2.0 * h;
-        let v: Vec<f64> = (0..nx * ny)
-            .map(|k| {
-                let (i, j) = (k % nx, k / nx);
-                if inside[k] {
-                    -d
-                } else {
-                    self.near(at(i, j), cap, tests) - d
+        let mut v = vec![cap; nx * ny];
+        let node = |x: f64, o: f64, n: usize| (((x - o) / h).max(0.0) as usize).min(n - 1);
+        for &(a, b, c) in &self.edges {
+            let (i0, i1) = (
+                node(a.0.min(b.0) - c - cap, ox, nx),
+                node(a.0.max(b.0) + c + cap + h, ox, nx),
+            );
+            let (j0, j1) = (
+                node(a.1.min(b.1) - c - cap, oy, ny),
+                node(a.1.max(b.1) + c + cap + h, oy, ny),
+            );
+            tests.add(
+                "seg_test@grown_rings",
+                ((i1 - i0 + 1) * (j1 - j0 + 1)) as u64,
+            );
+            for j in j0..=j1 {
+                for i in i0..=i1 {
+                    let k = j * nx + i;
+                    v[k] = v[k].min((seg_dist(at(i, j), a, b) - c).max(0.0));
                 }
-            })
-            .collect();
+            }
+        }
+        for (k, x) in v.iter_mut().enumerate() {
+            *x = if inside[k] { -d } else { *x - d };
+        }
         tests.add("write@grown_rings", (nx * ny) as u64);
         let rings = march(&v, (nx, ny), &at);
         exteriors(rings)

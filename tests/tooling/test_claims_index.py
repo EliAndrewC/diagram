@@ -961,7 +961,7 @@ def test_a_rust_unit_is_bundled_with_rust_context() -> None:
     refused. A Rust item is read by the Rust reader's item scan, and its fence says rust."""
     root = pathlib.Path(__file__).resolve().parents[2]
     src = cx.context_source(root, "rust/phases/src/water_frame.rs::KnobIn")
-    assert src.startswith("type KnobIn") and src.rstrip().endswith(";")
+    assert src.startswith(("type KnobIn", "pub type KnobIn")) and src.rstrip().endswith(";")
     assert "fn quarter_deg" in cx.context_source(root, "rust/phases/src/water_frame.rs::quarter_deg")
     with pytest.raises(ValueError, match="no `nothing`"):
         cx.context_source(root, "rust/phases/src/water_frame.rs::nothing")

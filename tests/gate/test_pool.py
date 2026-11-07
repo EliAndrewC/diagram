@@ -11,6 +11,22 @@ from tests import rolls
 from tests.gate import _pool
 
 
+@pytest.fixture(autouse=True)
+def _integrated(monkeypatch: pytest.MonkeyPatch) -> None:
+    """These tests prove the helper's branches on stubs, as at `integrated`; the rust-only skip has its own test below."""
+    monkeypatch.setattr(_pool, "python_maps_off", lambda: False)
+
+
+def test_at_rust_only_a_pool_map_or_a_roll_is_skipped_never_rolled(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 FR-023, the GM 2026-11-07: at `rust-only` no Python map is rolled or read; the test that asks one is skipped."""
+    monkeypatch.setattr(_pool, "python_maps_off", lambda: True)
+    monkeypatch.setattr(_pool.gencache, "gate_obtain", lambda g: (_ for _ in ()).throw(AssertionError("rolled")))
+    monkeypatch.setattr(rollcache, "hamlet", lambda s: (_ for _ in ()).throw(AssertionError("rolled")))
+    for ask in (lambda: _pool.obtain_full("pool/x/x.gen.py"), lambda: _pool.rolled_map(hg.HamletSpec(name="Probe", seed=3, households=10))):
+        with pytest.raises(pytest.skip.Exception, match="rust-only"):
+            ask()
+
+
 def test_a_spec_the_pool_does_not_carry_goes_to_the_roll_cache(monkeypatch: pytest.MonkeyPatch) -> None:
     spec = hg.HamletSpec(name="Probe", seed=3, households=10)
     assert _pool.gen_of(spec) is None and _pool.gen_of(rolls.REFERENCE) is not None

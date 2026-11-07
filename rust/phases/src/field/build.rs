@@ -691,6 +691,10 @@ mod tests {
                     + f0.rested.iter().map(|&i| f0.stats[i].2).sum::<f64>() / 43_560.0
                     + 1e-9
         );
+        // a cleared middle hems the whole canal, its far flank carried on across the head
+        let mut cleared = inp(20, 4);
+        cleared.knobs[4].3 = Some("cleared".to_owned());
+        assert_eq!(build(&cleared).unwrap().knobs["fan_middle"], "cleared");
         let mut open = inp(20, 4);
         open.knobs[0].3 = Some("open".to_owned());
         assert!(build(&open).unwrap().fields[0].weir.is_none());

@@ -7,16 +7,17 @@
 
 use std::collections::HashMap;
 
-use pyo3::prelude::*;
-
 use crate::pyrand::knob_rng;
+
+#[cfg(feature = "python")]
+pub mod py;
 
 /// One knob of the plan as Python gathered it: its name, how many forms its table holds, whether the spec pins it, and the
 /// branch it applies on.
 ///
 /// Research:
 ///     the knob's tuple - NONE: plumbing, the shape Python hands a knob in
-type KnobIn = (String, u32, bool, String);
+pub type KnobIn = (String, u32, bool, String);
 
 /// The derivation's count, kept by `<kind>@<function>` as the Python counters keep theirs - `candidate@roll_plan` for a draw here,
 /// `write@_rust_rolls` for a field Python writes back (D9) - compiled out of a build
@@ -85,12 +86,14 @@ pub fn admitted(windward: &str, cardinal: bool) -> Vec<f64> {
         .collect()
 }
 
-/// The admitted falls, for Python's test against the rule it replaces.
+/// The admitted falls, for Python's test against the rule it replaces (its door `py::admitted_falls`).
 ///
 /// Research:
 ///     the falls handed to Python - NONE: a wrapper over `admitted` for a test
-#[pyfunction]
-#[expect(clippy::needless_pass_by_value, reason = "PyO3 hands a String")]
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "the door hands on Python's String"
+)]
 #[must_use]
 pub fn admitted_falls(windward: String, cardinal: bool) -> Vec<f64> {
     admitted(&windward, cardinal)
@@ -180,10 +183,9 @@ pub fn roll_plan(
 /// Research:
 ///     the fall rolled first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the fall rolled before any knob and any feature, through `roll_plan`; the drainage bearing is `plan_site`'s
 ///     knobs rolled from the seed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each knob's form rolled per hamlet, through `roll_plan`
-#[pyfunction]
 #[expect(
     clippy::needless_pass_by_value,
-    reason = "PyO3 hands Vecs from Python lists"
+    reason = "the door hands on Python's lists"
 )]
 #[must_use]
 pub fn stage_water_frame(
@@ -205,7 +207,24 @@ pub fn stage_water_frame(
 
 #[cfg(test)]
 mod tests {
-    use super::{applies, knob_rng, roll_plan};
+    use super::{admitted_falls, applies, knob_rng, roll_plan, stage_water_frame};
+
+    #[test]
+    fn the_doors_hand_on_the_falls_and_the_plan() {
+        assert_eq!(
+            admitted_falls("N".to_owned(), false),
+            super::admitted("N", false)
+        );
+        let (fall, picks, counts) = stage_water_frame(
+            3,
+            "NW".to_owned(),
+            false,
+            false,
+            vec!["nucleated".to_owned()],
+            vec![knob("settlement_form", 3, "all")],
+        );
+        assert!(fall.is_some() && picks.len() == 1 && !counts.is_empty());
+    }
 
     fn knob(name: &str, n: u32, branch: &str) -> (String, u32, bool, String) {
         (name.to_owned(), n, false, branch.to_owned())

@@ -27,7 +27,8 @@ Python calls and seconds are recorded beside them, and neither is the budget.
 - **S8 Count the typical case, not the worst.** A budget is what the stage should do on the rolls it is held to: each factor
   at the mean the stage's output shows (things per area, parts per index cell, the candidates the contract's search order
   reaches), never at the densest cell or the last candidate, and never a product of maxima. Slack (at most 2) covers what
-  varies around that mean. A cost per thing placed above the reference's 4,000 needs a named reason. WHY (the GM 2026-10-28,
+  varies around that mean. A cost per thing placed above the reference's 4,000 needs a reason the contract states, never one that describes the
+  algorithm chosen (S11). WHY (the GM 2026-10-28,
   on a target of 15.3M at 40 households, above what the roll counts today: "I thought the idea was to REDUCE the number of
   operations. Why would we be targeting something HIGHER?"; ask:444-budget-standard): every factor taken at its worst at once
   compounds, and a budget the stage already meets is no target.
@@ -58,6 +59,22 @@ Python calls and seconds are recorded beside them, and neither is the budget.
   sense to raise the operations budget rather than to fight ... I would frankly be okay with things that are 50% higher or even
   twice as high ... I don't want to just completely relax the performance requirements, because if we end up with some kind of
   n squared algorithm, then even in Rust that will become a problem."
+
+- **S11 Reasonable, judged from first principles.** Before reading the derivation's count, the judge writes its own estimate
+  of what the stage should cost at 40 households: what the contract makes the stage write (its things and their parts), and
+  for each thing the checks its rules owe against its neighbors through an index (S1), at the reference's few thousand
+  operations per thing placed unless the contract states why a thing costs more. A derivation whose total at 40 is more than
+  twice that estimate is LOOSE, naming the factors that make up the excess, unless each one is tied to a rule of the contract
+  that no indexed, per-thing method can keep. A reason that describes the algorithm the derivation chose ("seating is a
+  search", "the flood is shared over every household") is not such a tie, and neither is a SOUND arithmetic. A term charged
+  once over the map that scales with its area or its cells (a raster painted, labeled or flooded over the whole window) is
+  held as S9 holds a set: it is LOOSE unless the derivation shows why the work cannot be done only around the things that need
+  it, or answered from an index instead. WHY (the GM 2026-11-07, on the homesteads' re-derived 1,477,085 at 40 households,
+  judged SOUND, about 36,900 a household and 64% of it three map-wide rasters: "I question whether fewer than 100 homesteads
+  require 1.5 MILLION operations"; and "our 'is it sound' check also needs to be fixed if it is not judging 'is this
+  reasonable'. The whole point of this process is to make things reasonable!"): the four questions judged each factor against
+  the algorithm the derivation chose, so a costly algorithm, its every factor derived, passed; S8's "named reason" for a cost
+  above 4,000 a thing was met by describing that algorithm.
 
 ## The reference: a homestead (S7 worked out)
 

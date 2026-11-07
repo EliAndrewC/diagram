@@ -115,7 +115,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
 	done; \
 	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
-	tr=$$(date +%s); $(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
+	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
 	for phase in hooks-test counters-inert test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks; then \
@@ -161,6 +161,12 @@ claims-report-only: ## [project] CLAIMS AT REPORT - a claims finding refuses no 
 claims-clean:   ## [project] CLAIMS CLEAN - a landing refuses while make claims-report lists any open finding, so a finding is fixed where it is noticed (feature 445)   REASON="..."
 ##  REASON=<text>  why claims go clean - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=clean MSG="claims clean" REASON="$(REASON)"
+port-integrated: ## [project] PORT INTEGRATED - make done rolls the map-rolling tests, the reference map and the floors, and make land the landing cohort, as before feature 444 amendment 8; thrown when the last stage is Rust (FR-023)   REASON="..."
+##  REASON=<text>  why the port goes integrated - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=port STATE=integrated MSG="port integrated" REASON="$(REASON)"
+port-rust-only: ## [project] PORT RUST-ONLY - the default while any stage is Python: no landing waits on the Python stages after the Rust front, make done rolls no map, make land lands on the Rust stage gate alone (feature 444 FR-023)   REASON="..."
+##  REASON=<text>  why the port goes rust-only - recorded with who and when
+	@$(MAKE) --no-print-directory _switch AXIS=port STATE=rust-only MSG="port rust-only" REASON="$(REASON)"
 ci-on:          ## [remote] REMOTE ON - the default; the gated route may dispatch again   REASON="..."
 ##  REASON=<text>  why remote is being switched back on - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"
@@ -1279,7 +1285,15 @@ FULL_TREE_IGNORE = $(if $(COV_FLOORS),,--ignore=tests/full)
 FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
 BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
 COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/dev/null))
-ROLL_DESELECT =
+# THE PORT SWITCH (feature 444 amendment 8, FR-023; the GM 2026-11-07: "the functionality of a make done or a make land are both
+# going to have to change temporarily"): at rust-only, make done rolls no map - no map-rolling test, no reference map, no floor that
+# rolls a settlement - so nothing waits on the Python stages after the Rust front. `make port-integrated` throws it back.
+PORT = $(eval PORT := $(shell $(SWITCH) state port 2>/dev/null || echo rust-only))$(PORT)
+ROLL_DESELECT = $(if $(filter rust-only,$(PORT)),-m "not rolls_map" $(PY_ENGINE_IGNORE),)
+# ...AND NO PYTHON SETTLEMENT-ENGINE TEST AT ALL (the GM 2026-11-07: "You should immediately stop running all of the python map
+# generating code as well. That's only slowing us down."): the stages the Rust port replaces, their gate readers and their tiers;
+# the tooling, tools, hooks, labels, pipeline and interactive tests still run, none of them generating a settlement
+PY_ENGINE_IGNORE = $(foreach d,hamletgen settlement gate full tier_city tier_town waterfields sitegen soak,--ignore=tests/$(d))
 REFERENCE_TIER = hamlet
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 
@@ -1340,11 +1354,14 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	cov_ec=0; \
-	python3 -m coverage report -m --fail-under=100 $$(python3 -m l7r.diagram.ci.coverage_exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
+	$(if $(filter rust-only,$(PORT)),python3 -m coverage report -m $$(python3 -m l7r.diagram.ci.coverage_exempt omit) | grep -v " 100%" || true; \
+	  echo "COVERAGE: information only - the port switch stands at rust-only (feature 444 FR-023): the map-rolling tests are not run - so a line only they reach is reported and not held; make land's cover-changed holds the changed modules on the tests that run"; \
+	  echo "hamlet floor and roll census: suspended at rust-only (FR-023) - no floor rolls a settlement"; \
+	,python3 -m coverage report -m --fail-under=100 $$(python3 -m l7r.diagram.ci.coverage_exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
 	python3 -m l7r.diagram.ci.coverage_exempt report || cov_ec=1; \
 	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.tools.hamlet_floor || cov_ec=1; \
 	rc_mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); \
-	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1; \
+	L7R_ROLL_CENSUS="$(ROLL_CENSUS)" python3 -m l7r.diagram.ci rollcensus verdict $$([ "$$rc_mode" = full ] && echo full) || cov_ec=1;) \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" floors $$(( $$(date +%s) - tfl )) 2>/dev/null || true; \
 	exit $$cov_ec

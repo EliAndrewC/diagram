@@ -14,6 +14,7 @@ pub mod brook;
 pub mod crop;
 pub mod offmap;
 pub mod pond;
+#[cfg(feature = "python")]
 pub mod py;
 
 use brook::{Brook, Stations};

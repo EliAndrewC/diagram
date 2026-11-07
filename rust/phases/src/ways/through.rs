@@ -490,16 +490,12 @@ fn band_boxes(fabric: &Fabric) -> Vec<(Vec<Pt>, Box4)> {
 }
 
 fn keeps_off(bands: &[(Vec<Pt>, Box4)], run: &[Pt], tests: &mut Counts) -> bool {
-    !crosses_any(run, bands, crate::law::rules::CONNECTOR_WIDTH_FT / 2.0, tests)
-}
-
-/// Does a run as it will be drawn keep the track's tread off every grove band of the fabric?
-///
-/// Research:
-///     no way through a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a farm's way in comes by its open front, never through its grove
-#[must_use]
-pub fn off_the_bands(fabric: &Fabric, run: &[Pt], tests: &mut Counts) -> bool {
-    keeps_off(&band_boxes(fabric), run, tests)
+    !crosses_any(
+        run,
+        bands,
+        crate::law::rules::CONNECTOR_WIDTH_FT / 2.0,
+        tests,
+    )
 }
 
 /// A connector's ways from one gateway: the first held to the grove bands once squared, and the first that cuts one - so the caller
@@ -566,7 +562,10 @@ pub fn connector_ways(
     if let Some(p) = connector_dry_exit(&site, track[0], tests) {
         let q = square_run(&p, law.waters, tests);
         if off_the_bands(&q, tests) {
-            return (Some((r(q), !law.seats.is_empty())), squared.map(|(q, t)| (r(q), t)));
+            return (
+                Some((r(q), !law.seats.is_empty())),
+                squared.map(|(q, t)| (r(q), t)),
+            );
         }
         squared = squared.or(Some((q, !law.seats.is_empty())));
     }

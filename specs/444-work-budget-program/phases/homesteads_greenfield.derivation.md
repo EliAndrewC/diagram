@@ -130,6 +130,8 @@ house's parts written and its way in; the contract the stage keeps holds all of 
 - verdict-6, finding 1: fixed - its SOUND stood on the wood priced a house; the wood repriced over the shares measured, and its notes answered below
 - verdict-6, notes: the west-tree check priced (18 a layout); the window's twice and the 160 ft margin kept as knobs, each under S10's half; the candidates a house rise from 40 to 80 as the measured search does, the cluster's ring widening; the reach's invariant stated in Growth
 - the re-derivation (2026-11-04): the lots' lattice replaced by the growth the contract keeps (0031), each lot's rows replaced by the offers' and the layouts' measured search; the findings above stand on the rows they answered, which this re-derivation drops
+- verdict-7, finding 1: disputed - its SOUND judged each factor against the algorithm chosen, never the total's reasonableness; re-judged under S11 (the GM 2026-11-07)
+- verdict-8, finding 1: disputed - the same: the second SOUND of the raise, re-judged under S11
 
 ## Cheaper algorithms considered
 

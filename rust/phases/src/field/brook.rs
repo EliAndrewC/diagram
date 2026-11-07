@@ -363,6 +363,9 @@ mod tests {
         let (ring, deg) = weir(&br, &f, 1.0, 7.0, 30.0, 1.5);
         assert!((signed_area(&ring).abs() - 14.0 * 1.5).abs() < 1e-6);
         assert!((dist(ring[0], ring[1]) - 14.0).abs() < 1e-9);
+        // the field on the brook's other side: the bar squared the other way, the same size
+        let (other, _) = weir(&br, &f, -1.0, 7.0, 30.0, 1.5);
+        assert!((signed_area(&other).abs() - 14.0 * 1.5).abs() < 1e-6);
         // the brook runs south; the bar runs 30 degrees off square, its far end (away from the field) upstream
         let far = (
             f64::midpoint(ring[1].0, ring[2].0),

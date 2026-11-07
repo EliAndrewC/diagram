@@ -1,0 +1,24 @@
+LOOSE - S11, the three map-wide rasters (free ground painted 179,763, reach labeled 250,560, lane ground flooded 520,330: 950,653, 64% of 1,477,085 at 40): each can be answered per thing from an index or kept to the ground the seats and ways actually touch, about 180k in all, and the derivation never shows why it cannot; the total is 3.8 times a first-principles estimate of about 390k.
+
+First-principles estimate at 40, before the count (contract.md's Writes, Keeps and Bounds only):
+- homestead seating, the reference's 4,000 a house at full slack x 40 = 160,000 (about 17 positions a house, about 10 neighbors, about 10 parts)
+- fixtures: 180 x 3 steps x about 16 indexed checks = about 9,000
+- wood (0036): 25 squares to keep a house, about 55 lattice seats tested, about 25 checks each = 1,375 a house, x 40 = 55,000
+- ways (0081, 0246): a best-first search from each door toward its target (the track, or a laid way within 25 ft, read from the index), about 33 cells x a 10-cell band x 10 = 3,300 a house, x 40 = 132,000; the lane-law checks, 96 legs x 16, about 1,500
+- track out: about 5,000
+- the no-build ground filed in the index: about 1,000 shapes x 3 cells x 2 = about 6,000
+- records and ink: about 450 a household x 40 = 18,000
+- total E = about 390,000 (about 9,700 a household); 2E = about 780,000; the derivation's 1,477,085 is 3.8 E
+
+Q0, is the total reasonable? No.
+- Free ground: the plots, watercourse segments, outline and wet polygons filed in the 64 ft grid and each rectangle's 9 points asked of the shapes in its cell, about 40k; or paint only the tiles a seat asks (the cluster's ground about 16k cells against the window's 83,520).
+- Reach (0246, a yard opening onto ground a way can reach): a connectivity question answerable from the roughly 1,000-1,500 barrier edges, or a flood from each yard's touch stopping at a cell already labeled: about 10-20k.
+- Flood: the ways take about 1,240 cells; the flood visits 52,033 x 10. The contract's join within 25 ft gives each door a local target read from the index, so the search is bounded by the way's own length: about 130k.
+- Those three at about 180k lower the total by about 770k, more than half of 1,477,085 (738,543): worth a round under S10.
+- The wood, secondary: the 105-point lattice sorted again for every share (about 90k) could be sorted once per template bearing; a share is asked of every layout that clears (about 3 a house), not the least-shaded first. Below half the total on its own.
+
+Q1: every factor derived (Bounds means, meta.seat_search figures or labeled knobs; slack 1). Nothing UNDERIVED, so LOOSE is the word that blocks.
+Q2: at the level of data structures everything is "used"; it fails S9 and S11 - the pruning line never asks whether the window's 83,520 cells or the lane ground's 52,033 need visiting at all.
+Q3: only in minor ways (55 wood seats a share scaled from the measured 48; the track's 16 runs an upper figure), both under S10's half.
+Q4: every figure read at its source's size and unit; the total reproduces exactly.
+Earlier findings: verdicts 1-6 stand on rows the re-derivation dropped, so they are closed; verdicts 7 and 8 (both SOUND) are disputed and re-judged here under S11.

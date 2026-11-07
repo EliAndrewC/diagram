@@ -109,3 +109,12 @@ fn a_saddle_cell_is_joined_through_its_center_where_its_mean_is_below_the_level(
     assert_eq!(march(&grid(1.0, -1.0, 1.0, -1.0), (4, 4), &at).len(), 2);
     assert_eq!(march(&grid(1.0, -3.0, 1.0, -3.0), (4, 4), &at).len(), 1);
 }
+
+#[test]
+fn a_point_inside_the_hard_ground_is_nearer_than_any_distance() {
+    let mut t = Counts::default();
+    let h = hard(&mut t);
+    assert!(h.nearer_than((500.0, 1600.0), 1.0, &mut t));
+    assert!(!h.nearer_than((2700.0, 500.0), 50.0, &mut t));
+    assert!(h.nearer_than((2700.0, 500.0), 150.0, &mut t));
+}

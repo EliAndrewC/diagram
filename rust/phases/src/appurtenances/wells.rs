@@ -8,8 +8,11 @@
 //!     one well to about ten households - research/questions/0196-communal-wells-ido.drawing.html: the five to ten houses each dug well served at Karihama - the households cut into the wells' groups by halving the longer side at its median (`groups`)
 //!     the seat between two houses - GUESS: no page says where among the houses a well stands; the middle of the open ground between two of a group's houses, a dwelling's wall on either side
 #![expect(
+    clippy::many_single_char_names,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
     clippy::cast_precision_loss,
-    reason = "counts of a few dozen houses and seats"
+    reason = "the plane geometry's own names, and counts of a few dozen houses, seats and marks"
 )]
 
 use std::collections::HashMap;
@@ -29,18 +32,16 @@ pub type Rungs<'a> = &'a [(f64, usize)];
 fn closest(p: Pt, a: Pt, b: Pt) -> Pt {
     let (vx, vy) = (b.0 - a.0, b.1 - a.1);
     let l2 = vx * vx + vy * vy;
-    let t = if l2 > 0.0 {
-        (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0)
-    } else {
-        0.0
-    };
+    // ...a point segment's own end: its dot product is 0, so any positive divisor gives 0
+    let t = (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2.max(f64::MIN_POSITIVE)).clamp(0.0, 1.0);
     (a.0 + vx * t, a.1 + vy * t)
 }
 
 fn corners(h: House) -> [Pt; 4] {
     let (x, y, w, d, rot) = h;
     let (c, s) = (rot.to_radians().cos(), rot.to_radians().sin());
-    [(-w, -d), (w, -d), (w, d), (-w, d)].map(|(u, v)| (x + (u * c - v * s) / 2.0, y + (u * s + v * c) / 2.0))
+    [(-w, -d), (w, -d), (w, d), (-w, d)]
+        .map(|(u, v)| (x + 0.5 * (u * c - v * s), y + 0.5 * (u * s + v * c)))
 }
 
 /// The nearest point of house `h`'s wall to `p`.
@@ -69,13 +70,12 @@ fn wall_dist(h: House, p: Pt) -> f64 {
 pub fn groups(pts: &[Pt], k: usize, tests: &mut Counts) -> Vec<Vec<usize>> {
     let mut gs: Vec<Vec<usize>> = vec![(0..pts.len()).collect()];
     while gs.len() < k {
-        let Some((i, _)) = gs
+        // ...never empty: each group halved is put back as its two halves
+        let i = gs
             .iter()
             .enumerate()
             .max_by(|a, b| a.1.len().cmp(&b.1.len()).then(b.0.cmp(&a.0)))
-        else {
-            break;
-        };
+            .map_or(0, |(i, _)| i);
         if gs[i].len() < 2 {
             break;
         }
@@ -83,12 +83,18 @@ pub fn groups(pts: &[Pt], k: usize, tests: &mut Counts) -> Vec<Vec<usize>> {
         tests.add("write@well_groups", g.len() as u64);
         let (xs, ys): (Vec<f64>, Vec<f64>) = g.iter().map(|&j| pts[j]).unzip();
         let span = |v: &[f64]| {
-            v.iter().copied().fold(f64::NEG_INFINITY, f64::max) - v.iter().copied().fold(f64::INFINITY, f64::min)
+            v.iter().copied().fold(f64::NEG_INFINITY, f64::max)
+                - v.iter().copied().fold(f64::INFINITY, f64::min)
         };
         let by_x = span(&xs) >= span(&ys);
         g.sort_by(|&a, &b| {
             let (p, q) = (pts[a], pts[b]);
-            if by_x { p.0.total_cmp(&q.0) } else { p.1.total_cmp(&q.1) }.then(a.cmp(&b))
+            if by_x {
+                p.0.total_cmp(&q.0)
+            } else {
+                p.1.total_cmp(&q.1)
+            }
+            .then(a.cmp(&b))
         });
         let hi = g.split_off(g.len() / 2);
         gs.insert(i, hi);
@@ -110,7 +116,9 @@ fn rung(p: Pt, centers: &[Pt], rungs: Rungs, tests: &mut Counts) -> Option<usize
 
 fn middle(pts: &[Pt], g: &[usize]) -> Pt {
     let n = g.len().max(1) as f64;
-    let (sx, sy) = g.iter().fold((0.0, 0.0), |s, &j| (s.0 + pts[j].0, s.1 + pts[j].1));
+    let (sx, sy) = g
+        .iter()
+        .fold((0.0, 0.0), |s, &j| (s.0 + pts[j].0, s.1 + pts[j].1));
     (sx / n, sy / n)
 }
 
@@ -140,8 +148,14 @@ pub struct Cluster<'a> {
 #[must_use]
 pub fn cluster_seats(c: &Cluster, tests: &mut Counts) -> Vec<Vec<Pt>> {
     let centers: Vec<Pt> = c.houses.iter().map(|h| (h.0, h.1)).collect();
-    let owed: Vec<usize> = (0..c.houses.len()).filter(|&i| c.needy.get(i).copied().unwrap_or(true)).collect();
-    let owed = if owed.is_empty() { (0..c.houses.len()).collect() } else { owed };
+    let owed: Vec<usize> = (0..c.houses.len())
+        .filter(|&i| c.needy.get(i).copied().unwrap_or(true))
+        .collect();
+    let owed = if owed.is_empty() {
+        (0..c.houses.len()).collect()
+    } else {
+        owed
+    };
     let pts: Vec<Pt> = owed.iter().map(|&i| centers[i]).collect();
     let cells = HouseCells::new(c.houses, c.gap);
     groups(&pts, c.want.max(1), tests)
@@ -158,10 +172,14 @@ pub fn cluster_seats(c: &Cluster, tests: &mut Counts) -> Vec<Vec<Pt>> {
                     if dist(p, q) > 2.0 * c.gap {
                         continue;
                     }
-                    let m = ((p.0 + q.0) / 2.0, (p.1 + q.1) / 2.0);
+                    let m = (f64::midpoint(p.0, q.0), f64::midpoint(p.1, q.1));
                     let (ux, uy) = crate::field::geom::unit(p, q);
                     let step = c.gap / 4.0;
-                    seats.extend([m, (m.0 - uy * step, m.1 + ux * step), (m.0 + uy * step, m.1 - ux * step)]);
+                    seats.extend([
+                        m,
+                        (m.0 - uy * step, m.1 + ux * step),
+                        (m.0 + uy * step, m.1 - ux * step),
+                    ]);
                 }
             }
             if g.len() == 1 {
@@ -170,7 +188,7 @@ pub fn cluster_seats(c: &Cluster, tests: &mut Counts) -> Vec<Vec<Pt>> {
                 let q = corners(h);
                 for k in 0..4 {
                     let (a, b) = (q[k], q[(k + 1) % 4]);
-                    let e = ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
+                    let e = (f64::midpoint(a.0, b.0), f64::midpoint(a.1, b.1));
                     let (ux, uy) = crate::field::geom::unit((h.0, h.1), e);
                     seats.push((e.0 + ux * c.gap / 2.0, e.1 + uy * c.gap / 2.0));
                 }
@@ -195,8 +213,16 @@ impl HouseCells {
         for (i, &h) in houses.iter().enumerate() {
             let q = corners(h);
             let (lo, hi) = q.iter().fold(
-                ((f64::INFINITY, f64::INFINITY), (f64::NEG_INFINITY, f64::NEG_INFINITY)),
-                |(lo, hi), p| ((lo.0.min(p.0), lo.1.min(p.1)), (hi.0.max(p.0), hi.1.max(p.1))),
+                (
+                    (f64::INFINITY, f64::INFINITY),
+                    (f64::NEG_INFINITY, f64::NEG_INFINITY),
+                ),
+                |(lo, hi), p| {
+                    (
+                        (lo.0.min(p.0), lo.1.min(p.1)),
+                        (hi.0.max(p.0), hi.1.max(p.1)),
+                    )
+                },
             );
             for cx in at(lo.0, cell)..=at(hi.0, cell) {
                 for cy in at(lo.1, cell)..=at(hi.1, cell) {
@@ -224,19 +250,31 @@ impl HouseCells {
     }
 }
 
-#[expect(clippy::cast_possible_truncation, reason = "a map's cells number a few hundred either way")]
+#[expect(
+    clippy::cast_possible_truncation,
+    reason = "a map's cells number a few hundred either way"
+)]
 fn at(v: f64, cell: f64) -> i64 {
     (v / cell).floor() as i64
 }
 
 /// Each seat within the gap of a dwelling's wall and inside no house, with its rung on the ladder; a seat on no rung dropped.
-fn marks(seats: &[Pt], centers: &[Pt], c: &Cluster, cells: &HouseCells, tests: &mut Counts) -> Vec<(usize, Pt)> {
+fn marks(
+    seats: &[Pt],
+    centers: &[Pt],
+    c: &Cluster,
+    cells: &HouseCells,
+    tests: &mut Counts,
+) -> Vec<(usize, Pt)> {
     let mut kept = Vec::new();
     for &p in seats {
         let (near, asked) = cells.near(p, c.gap);
         tests.add("index_cell@house_cells", asked);
         tests.add("dist@cluster_walls", near.len() as u64);
-        let walls = near.iter().map(|&i| wall_dist(c.houses[i], p)).fold(f64::INFINITY, f64::min);
+        let walls = near
+            .iter()
+            .map(|&i| wall_dist(c.houses[i], p))
+            .fold(f64::INFINITY, f64::min);
         if walls <= 0.0 || walls > c.gap {
             continue;
         }
@@ -260,7 +298,12 @@ fn rank(kept: &[(usize, Pt)], mid: Pt) -> Vec<Pt> {
 /// Research:
 ///     a lane-side well's seat - research/questions/0196-communal-wells-ido.drawing.html: on a lane's verge, clear of the tread
 #[must_use]
-pub fn verge_seats(c: &Cluster, track: &[Pt], (off, step): (f64, f64), tests: &mut Counts) -> Vec<Vec<Pt>> {
+pub fn verge_seats(
+    c: &Cluster,
+    track: &[Pt],
+    (off, step): (f64, f64),
+    tests: &mut Counts,
+) -> Vec<Vec<Pt>> {
     let centers: Vec<Pt> = c.houses.iter().map(|h| (h.0, h.1)).collect();
     let mut seats: Vec<Pt> = Vec::new();
     for w in track.windows(2) {
@@ -271,14 +314,29 @@ pub fn verge_seats(c: &Cluster, track: &[Pt], (off, step): (f64, f64), tests: &m
             let f = k as f64 / n as f64;
             let p = (a.0 + (b.0 - a.0) * f, a.1 + (b.1 - a.1) * f);
             tests.add("candidate@verge_seats", 2);
-            seats.extend([(p.0 - uy * off, p.1 + ux * off), (p.0 + uy * off, p.1 - ux * off)]);
+            seats.extend([
+                (p.0 - uy * off, p.1 + ux * off),
+                (p.0 + uy * off, p.1 - ux * off),
+            ]);
         }
     }
-    let owed: Vec<usize> = (0..c.houses.len()).filter(|&i| c.needy.get(i).copied().unwrap_or(true)).collect();
-    let owed = if owed.is_empty() { (0..c.houses.len()).collect() } else { owed };
+    let owed: Vec<usize> = (0..c.houses.len())
+        .filter(|&i| c.needy.get(i).copied().unwrap_or(true))
+        .collect();
+    let owed = if owed.is_empty() {
+        (0..c.houses.len()).collect()
+    } else {
+        owed
+    };
     let pts: Vec<Pt> = owed.iter().map(|&i| centers[i]).collect();
     // ...each seat's walls and rung asked once, whichever group it ranks for
-    let kept = marks(&seats, &centers, c, &HouseCells::new(c.houses, c.gap), tests);
+    let kept = marks(
+        &seats,
+        &centers,
+        c,
+        &HouseCells::new(c.houses, c.gap),
+        tests,
+    );
     groups(&pts, c.want.max(1), tests)
         .into_iter()
         .map(|g| {
@@ -307,7 +365,9 @@ pub struct RowWells<'a> {
 
 fn heading(line: &[Pt], arc: &[f64], at: f64) -> f64 {
     let at = at.clamp(0.0, arc[arc.len() - 1]);
-    let k = (0..arc.len() - 1).find(|&j| arc[j + 1] >= at).unwrap_or(arc.len() - 2);
+    let k = (0..arc.len() - 1)
+        .find(|&j| arc[j + 1] >= at)
+        .unwrap_or(arc.len() - 2);
     let (a, b) = (line[k], line[k + 1]);
     (b.1 - a.1).atan2(b.0 - a.0).to_degrees()
 }
@@ -364,19 +424,30 @@ pub fn row_well_seats(r: &RowWells, tests: &mut Counts) -> Vec<Vec<Pt>> {
         for j in 0..stretches {
             let u = lo + span * (j as f64 + 0.5) / stretches as f64;
             let mut seats = Vec::new();
-            for du in [0.0, r.frame / 2.0, -r.frame / 2.0, r.frame / 4.0, -r.frame / 4.0] {
+            for du in [
+                0.0,
+                r.frame / 2.0,
+                -r.frame / 2.0,
+                r.frame / 4.0,
+                -r.frame / 4.0,
+            ] {
                 let uu = (u + du).clamp(0.0, total);
                 if turns_at(line, &arc, uu, r.bend.0) >= r.bend.1 {
                     continue;
                 }
-                let k = (0..arc.len() - 1).find(|&k| arc[k + 1] >= uu).unwrap_or(arc.len() - 2);
+                let k = (0..arc.len() - 1)
+                    .find(|&k| arc[k + 1] >= uu)
+                    .unwrap_or(arc.len() - 2);
                 let (a, b) = (line[k], line[k + 1]);
                 let seg = dist(a, b).max(1e-9);
                 let f = (uu - arc[k]) / seg;
                 let p = (a.0 + (b.0 - a.0) * f, a.1 + (b.1 - a.1) * f);
                 let (nx, ny) = (-(b.1 - a.1) / seg, (b.0 - a.0) / seg);
                 tests.add("candidate@row_wells", 2);
-                seats.extend([(p.0 + nx * r.off, p.1 + ny * r.off), (p.0 - nx * r.off, p.1 - ny * r.off)]);
+                seats.extend([
+                    (p.0 + nx * r.off, p.1 + ny * r.off),
+                    (p.0 - nx * r.off, p.1 - ny * r.off),
+                ]);
             }
             out.push(seats);
         }

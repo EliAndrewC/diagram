@@ -6,6 +6,7 @@
 //!     the appurtenances' plumbing - NONE: each rule is claimed at its function or constant
 
 pub mod farm_water;
+#[cfg(feature = "python")]
 pub mod py;
 pub mod wells;
 

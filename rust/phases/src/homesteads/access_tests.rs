@@ -171,3 +171,11 @@ fn the_taut_pull_and_the_tree_of_corridors() {
     assert!(!tree.covers_box((50.0, 100.0, 300.0, 40.0), &mut t));
     assert!(tree.covers_box((50.0, 0.0, 400.0, 400.0), &mut t));
 }
+
+#[test]
+fn a_household_s_own_well_is_a_fixture_its_ways_keep_their_gap_to() {
+    let bare = homestead();
+    let mut welled = homestead();
+    welled.well = Some((10.0, -40.0, 6.0, 6.0));
+    assert_eq!(welled.fixture_gaps().len(), bare.fixture_gaps().len() + 1);
+}

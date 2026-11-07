@@ -430,3 +430,14 @@ What do you think? Does this seem like a good way forward? If so, then please do
 
 Earlier the same day, on the sink and the seat (444#10, 444#9): "I approve the sink overages, and the seat ones sound good too, so
 we're okay there to approve those." (`make budget-change`, logged in `dev/work-budget-changes.jsonl`).
+
+## 2026-11-07, amendment 9 - the SOUND check judges whether a budget is reasonable
+
+On the homesteads' re-derived budget of 1,477,085 at 40 households, judged SOUND twice: "I question whether fewer than 100
+homesteads require 1.5 MILLION operations, BTW."
+
+Then, told that the SOUND verdict judged each factor's arithmetic against the algorithm the derivation chose and not whether
+the total was reasonable: "Okay, well then our "is it sound" check also needs to be fixed if it is not judging "is this
+reasonable". The whole point of this process is to make things reasonable!"
+
+Done as S11 in `docs/work-budget-rubric.md` and question 0 of the `work-budget` agent's MODE BUDGET.

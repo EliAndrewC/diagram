@@ -233,7 +233,9 @@ pub fn admitted(b: &Bundle, rules: &Rules, tests: &mut Counts) -> bool {
         b.fixtures
             .iter()
             .zip(&b.boxes[first..])
-            .filter_map(|(&(k, _), &bx)| held_key(k).map(|key| (key, corners(grown(bx), 0.0).to_vec()))),
+            .filter_map(|(&(k, _), &bx)| {
+                held_key(k).map(|key| (key, corners(grown(bx), 0.0).to_vec()))
+            }),
     );
     parts.iter().all(|(key, quad)| {
         let qb = poly_box(quad);

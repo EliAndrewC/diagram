@@ -364,7 +364,7 @@ def budget_bundle(root: Path, phase: str, derivation: str, out: Path) -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE BUDGET - {phase}\n\n"
         "MODE BUDGET: judge the derivation before the rebuild. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S10 and the worked homestead reference;\n"
+        "- `rubric.md` - the standards S1-S11 and the worked homestead reference;\n"
         "- `contract.md` - what the stage reads and writes;\n"
         "- `derivation.md` - the pseudocode and the operation count, factor by factor;\n"
         "- any `<stage>.verdict-<N>.txt` - the earlier verdicts; the derivation's `## Earlier findings` answers each - confirm each closed.\n\n"
@@ -586,7 +586,7 @@ def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[i
     (out / "MANIFEST.md").write_text(
         f"# work-budget MODE AUDIT - {phase}\n\n"
         "MODE AUDIT: judge the landed code against its counters. Read, beside this file:\n\n"
-        "- `rubric.md` - the standards S1-S10;\n"
+        "- `rubric.md` - the standards S1-S11;\n"
         f"- `code/` - the stage's modules and every module defining a function its counters name, each named by its path (`/` as `__`): {', '.join(bundled_name(root, p) for p in files)};\n"
         "- `counts.json` - the newest run's counted operations for the stage at each size, by kind and by function;\n"
         "- `chains.txt` - the callers above each counted function;\n"

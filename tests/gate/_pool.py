@@ -18,9 +18,13 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 from typing import Any
 
+import pytest
+
 from l7r.diagram import hamletgen as hg
+from l7r.diagram import switches
 from l7r.diagram.pipeline import gencache, rollcache
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -28,6 +32,20 @@ POOL: dict[tuple[str, int], str] = {
     ("Inashiro", 4): "pool/hamlets/inashiro/inashiro.gen.py",
     ("Kuwabata", 21): "pool/hamlets/kuwabata/kuwabata.gen.py",
 }
+
+
+def python_maps_off() -> bool:
+    """Is the port switch at `rust-only` (feature 444 FR-023)?"""
+    return switches.read(Path(HERE)).port.state == "rust-only"
+
+
+def no_python_map() -> None:
+    """AT `rust-only` NO PYTHON MAP IS ROLLED OR READ (the GM 2026-11-07: "You should immediately stop running all of the python
+    map generating code as well. That's only slowing us down."): every pool map and roll-cache map a test asks is skipped, never
+    regenerated - measured the same day, tests the `rolls_map` marker misses (they reach a map through this module) rolled
+    Inashiro, Kashikawa, Kuwabata and Mizuguchi again in a run meant to roll none, and rewrote their maps on disk."""
+    if python_maps_off():
+        pytest.skip("the port at rust-only: no Python map is rolled or read (feature 444 FR-023)")
 
 
 def gen_of(spec: hg.HamletSpec) -> str | None:
@@ -47,6 +65,7 @@ def obtain_full(gen: str) -> tuple[str, str, float | None]:
     and fires the moment a merge moves a generator's key - measured on Kuwabata after feature 228
     landed, rolled twice in one run, by the sweep and by the lateral test.
     """
+    no_python_map()
     share = rollcache._run_share_path(("pool", gen))
     with rollcache._share_lock(share):
         if gen in _OBTAINED:  # ...ONCE A TEST (feature 417 T44, the round arbiter's tooling fix on
@@ -110,6 +129,7 @@ def rolled_map(spec: hg.HamletSpec) -> tuple[Any, dict[str, Any]]:
     """`(plan, manifest)` of `spec` - the pool's map for a shipped spec, the roll cache's for any other."""
     gen = gen_of(spec)
     if gen is None:
+        no_python_map()
         return rollcache.hamlet(spec)
     with open(obtain(gen), encoding="utf-8") as fh:
         M: dict[str, Any] = json.load(fh)
@@ -123,6 +143,7 @@ def rolled_map(spec: hg.HamletSpec) -> tuple[Any, dict[str, Any]]:
 def rolled_report(spec: hg.HamletSpec) -> hg.Report:
     """The Report of `spec`'s roll - read back from the pool map's meta for a shipped spec (D3)."""
     if gen_of(spec) is None:
+        no_python_map()
         return rollcache.report(spec)[0]
     plan, M = rolled_map(spec)
     return hg.Report(plan=plan, failures=[], manifest=M)

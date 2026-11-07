@@ -30,7 +30,9 @@ pub mod level;
 pub mod lots;
 pub mod passage;
 pub mod place;
+#[cfg(feature = "python")]
 pub mod py;
+#[cfg(feature = "python")]
 pub mod py_seat;
 pub mod row_seat;
 pub mod rows;

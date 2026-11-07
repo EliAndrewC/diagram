@@ -523,6 +523,14 @@ def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup"), mw: Path = MEMWATCH) -> t
     return max(2, min((os.cpu_count() or 4) - 2 - GATE_WORKERS, (avail - GATE_RESERVE_MB) // ROLL_MB)), avail
 
 
+def _port(root: Path) -> str:
+    """The port switch's state (`cohort_gate.port_mode`, feature 444 FR-023)."""
+    sys.path.insert(0, str(HERE / "gates"))
+    import cohort_gate  # noqa: PLC0415 - a sibling script, imported by path as the rest are
+
+    return cohort_gate.port_mode(root)
+
+
 def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
     """`make cohort-landing` in its own process group, beside the gate (405 T48, D21): its rolls are no gate's (the census
     variable removed), its reference check leaves the gate's `roll-cache-class` alone, its output to a log under the git dir."""
@@ -728,7 +736,8 @@ def long_runs(root: Path) -> int:
         # THE COHORT BESIDE THE GATE (405 T48, D21): they share no work - the gate rolls the five pool maps, the cohort its seeds
         # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
         cohort, log = None, Path()
-        if "done" in targets and engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
+        # ...none while the port switch stands at rust-only (feature 444 FR-023): no landing waits on the Python stages' rolls
+        if "done" in targets and engine_delta(root) and _port(root) != "rust-only" and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
             cohort, log = start_cohort(root)
         cover = start_cover(root)
         try:
@@ -769,7 +778,7 @@ def long_runs(root: Path) -> int:
             if why := cover_refusal(cover):
                 print(f"land: the changed modules' coverage refused - nothing landed:\n  {why}", file=sys.stderr)
                 return 1
-    if engine_delta(root) and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
+    if engine_delta(root) and _port(root) != "rust-only" and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
         print("land: no landing cohort on this engine - make cohort-landing", flush=True)
         if make(root, "cohort-landing"):
             print("land: the landing cohort refused - nothing landed (above)", file=sys.stderr)

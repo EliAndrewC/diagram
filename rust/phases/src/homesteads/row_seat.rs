@@ -93,26 +93,35 @@ pub struct Rows {
 fn planned_streets(
     first: &[(Pt, Pt)],
     frame: super::layout::Rect,
-    (both, gap, hold_depth): (bool, f64, f64),
+    rows: (bool, f64, f64),
     tests: &mut Counts,
 ) -> Vec<super::rows::Line> {
+    let offsets = street_offsets(first, frame, rows);
+    offsets
+        .iter()
+        .map(|o| parallel(first, o - offsets[0], street_bend_radius_ft(), tests))
+        .collect()
+}
+
+/// How far each of a row's streets stands out from `first` (`planned_streets`), the first's own offset first.
+fn street_offsets(
+    first: &[(Pt, Pt)],
+    frame: super::layout::Rect,
+    (both, gap, hold_depth): (bool, f64, f64),
+) -> Vec<f64> {
     let depth_n = first
         .iter()
         .map(|&(_, n)| frame_extent(frame, n))
         .reduce(f64::max)
         .unwrap_or_else(|| frame.2.min(frame.3));
-    let offsets = row_offsets(
+    row_offsets(
         depth_n,
         both,
         MAX_STREETS,
         FIELD_KEEP_FT,
         gap,
         hold_depth + gap,
-    );
-    offsets
-        .iter()
-        .map(|o| parallel(first, o - offsets[0], street_bend_radius_ft(), tests))
-        .collect()
+    )
 }
 
 /// Seat a row village's farms (`rows.seat_rows`).
@@ -161,13 +170,14 @@ fn seat_rows_as(rs: &RowSite, ask_only: bool) -> Rows {
     // WHERE THE ROW GOES: the stretch of the hard ground's edge whose whole row - its street and the streets set out beside it, each
     // on the sheet - holds the most farms, up to the households wanted
     let first_off = row_offsets(fd, rs.both, 1, FIELD_KEEP_FT, gap, 0.0)[0];
-    let streets_of = |first: &[(Pt, Pt)], tests: &mut Counts| {
-        planned_streets(first, frame, (rs.both, gap, hold_depth), tests)
-    };
     let sheet = (fd / 2.0, fd / 2.0, w - fd / 2.0, h - fd / 2.0);
+    // ...EACH STREET SET OUT ONLY WHILE THE ROW STILL HOLDS FEWER THAN THE HOUSEHOLDS WANTED (the GM 2026-11-07: "the literal most
+    // important thing here is making things FAST"): all six were set out for every stretch asked, most never read
     let capacity = |first: &[(Pt, Pt)], tests: &mut Counts| {
+        let offsets = street_offsets(first, frame, (rs.both, gap, hold_depth));
         let mut held = 0;
-        for line in streets_of(first, tests) {
+        for o in &offsets {
+            let line = parallel(first, o - offsets[0], street_bend_radius_ft(), tests);
             held += clear_frames(&inside_the_sheet(&line, sheet), &fr, rs.hard, tests);
             if held >= want {
                 break;
@@ -414,6 +424,10 @@ fn seat_along(rs: &RowSite, first: &[(Pt, Pt)], plan: &Plan, ask_only: bool) -> 
 ///     3, a street laid twice its row's length ran on across its brook, a farm was seated on the far bank, and the street crossed the
 ///     brook between two crossing places; pinned row 901, a street's farms seated either side of the dry hem's plots, and the street
 ///     between them refused on the plots); the street's further stretch is laid as another street would be, never between its farms
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
 fn one_reach(
     line: &[(Pt, Pt)],
     seats: Vec<super::rows::Seat>,
@@ -459,11 +473,9 @@ fn one_reach(
             let (a, b) = (w[0].0, w[1].0);
             let (vx, vy) = (b.0 - a.0, b.1 - a.1);
             let l2 = vx * vx + vy * vy;
-            let t = if l2 > 0.0 {
-                (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0)
-            } else {
-                0.0
-            };
+            // ...a point segment's own end: its dot product is 0, so any positive divisor gives 0
+            let t =
+                (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2.max(f64::MIN_POSITIVE)).clamp(0.0, 1.0);
             let q = (a.0 + vx * t, a.1 + vy * t);
             let d = dist(p, q);
             if d < best {

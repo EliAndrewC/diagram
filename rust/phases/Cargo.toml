@@ -12,12 +12,22 @@ crate-type = ["cdylib", "rlib"]
 
 [features]
 counters = []
+# THE PYTHON DOORS BEHIND THEIR OWN FEATURE (the GM 2026-11-07: "Can we go Rust only?"; the round arbiter on
+# red-gate@2026-11-07T12:03:56Z: a door is compiled out, never left in the build and dropped from the floor): the extension built
+# for Python (`rust_checks.py build`, maturin) enables it; the crate's own tests and the Rust-only floor build without it
+python = ["dep:pyo3"]
 
 [dependencies]
-pyo3 = { version = "0.26", features = ["extension-module"] }
+pyo3 = { version = "0.26", features = ["extension-module"], optional = true }
 
 [lints.clippy]
 all = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }
 too_many_lines = "deny"
 allow_attributes_without_reason = "deny"
+
+# THE TESTS AND THE COVERAGE RUN BUILT OPTIMIZED (the GM 2026-11-07: "There's no way anything should be running for that
+# long"): unoptimized, the crate's own tests took about 17.6 minutes (measured 2026-11-07, `make rust-test`), most of it the
+# row seating's geometry; `cargo test` and `cargo llvm-cov` both build this profile, and llvm-cov instruments before optimizing
+[profile.dev]
+opt-level = 2

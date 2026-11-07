@@ -65,6 +65,14 @@ DEFAULT_REMOTE = "on"
 #: claims gate (`scripts/record/claims_carry.claims_mode`); a malformed entry closes to `clean`, the strict state.
 CLAIMS_STATES = ("report", "clean")
 DEFAULT_CLAIMS = "report"
+#: THE PORT SWITCH (feature 444 amendment 8, FR-023; the GM 2026-11-07: "we no longer need to join our Rust process of making maps
+#: with the Python process ... the functionality of a make done or a make land are both going to have to change temporarily").
+#: `rust-only`: no landing waits on the Python stages after the Rust front - `make done` rolls no map and `make land` no landing
+#: cohort, every engine landing judged by the Rust stage gate alone; `integrated`: feature 386's landing cohort, the map-rolling
+#: tests and the floors as they stood, thrown back when the last stage is Rust. A malformed entry closes to the state in force -
+#: the last committed file's (`git show HEAD:`) - and only where that too is unreadable to the default (plan T34 D1).
+PORT_STATES = ("rust-only", "integrated")
+DEFAULT_PORT = "rust-only"
 
 
 @dataclass(frozen=True)
@@ -80,6 +88,7 @@ class Switches:
     remote: Axis
     error: str = ""  # non-empty when the file was malformed - the axis is then CLOSED
     claims: Axis = Axis(DEFAULT_CLAIMS)
+    port: Axis = Axis(DEFAULT_PORT)
 
     @property
     def remote_off(self) -> bool:
@@ -89,9 +98,10 @@ class Switches:
 DEFAULTS = Switches(Axis(DEFAULT_REMOTE))
 
 
-def _closed(error: str) -> Switches:
+def _closed(error: str, skill: Path | None = None) -> Switches:
     why = f"switches.json is MALFORMED ({error}) - failing closed"
-    return Switches(Axis("off", why), error=error, claims=Axis("clean", why))
+    port = _committed_port(skill) if skill is not None else DEFAULT_PORT
+    return Switches(Axis("off", why), error=error, claims=Axis("clean", why), port=Axis(port, why))
 
 
 def _axis(raw: object, name: str, allowed: tuple[str, ...]) -> Axis:
@@ -110,6 +120,25 @@ def _claims(data: dict) -> Axis:  # type: ignore[type-arg]
         return _axis(data.get("claims", {"state": DEFAULT_CLAIMS}), "claims", CLAIMS_STATES)
     except ValueError as e:
         return Axis("clean", f"the claims entry is MALFORMED ({e}) - failing closed")
+
+
+def _committed_port(skill: Path) -> str:
+    """The `port` state of the last committed `dev/switches.json` - the state in force when the working copy's entry is malformed -
+    or the default where that too cannot be read."""
+    p = subprocess.run(["git", "-C", str(skill), "show", f"HEAD:{FILE.as_posix()}"], capture_output=True, text=True)
+    try:
+        state = (json.loads(p.stdout).get("port") or {}).get("state") if p.returncode == 0 else None
+    except ValueError, AttributeError:
+        state = None
+    return state if state in PORT_STATES else DEFAULT_PORT
+
+
+def _port(data: dict, skill: Path) -> Axis:  # type: ignore[type-arg]
+    """The port axis; a malformed entry closes to the state in force, the last committed one (plan T34 D1)."""
+    try:
+        return _axis(data.get("port", {"state": DEFAULT_PORT}), "port", PORT_STATES)
+    except ValueError as e:
+        return Axis(_committed_port(skill), f"the port entry is MALFORMED ({e}) - the last committed state in force")
 
 
 def read(skill: Path) -> Switches:
@@ -137,9 +166,9 @@ def read(skill: Path) -> Switches:
             data = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(data, dict):
                 raise ValueError("top level is not an object")
-            sw = Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES), claims=_claims(data))
+            sw = Switches(_axis(data.get("remote", {"state": DEFAULT_REMOTE}), "remote", REMOTE_STATES), claims=_claims(data), port=_port(data, skill))
         except (ValueError, OSError) as e:
-            return _closed(str(e))
+            return _closed(str(e), skill)
     return sw
 
 
@@ -208,7 +237,7 @@ def write(skill: Path, axis: str, state: str, why: str, who: str | None = None) 
     the throw or release is the repair, and it is a diff someone reads."""
     if not why.strip():
         raise ValueError("a reason is required (REASON=...) - a reason someone will READ is a decision you have to defend")
-    allowed = {"remote": REMOTE_STATES, "claims": CLAIMS_STATES}.get(axis)
+    allowed = {"remote": REMOTE_STATES, "claims": CLAIMS_STATES, "port": PORT_STATES}.get(axis)
     if allowed is None or state not in allowed:
         raise ValueError(f"unknown switch {axis}={state}")
     cur = read(skill)
@@ -216,10 +245,14 @@ def write(skill: Path, axis: str, state: str, why: str, who: str | None = None) 
         cur = DEFAULTS
     new = Axis(state, why.strip(), who if who is not None else _who(skill), time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     # ...THE OTHER AXIS KEPT AS IT STANDS (feature 445): this wrote `remote` alone, which a `claims` throw would have reset
-    out = Switches(new, claims=cur.claims) if axis == "remote" else Switches(cur.remote, claims=new)
+    out = Switches(
+        new if axis == "remote" else cur.remote,
+        claims=new if axis == "claims" else cur.claims,
+        port=new if axis == "port" else cur.port,
+    )
     path = skill / FILE
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"remote": asdict(out.remote), "claims": asdict(out.claims)}, indent=2) + "\n", encoding="utf-8")
+    path.write_text(json.dumps({"remote": asdict(out.remote), "claims": asdict(out.claims), "port": asdict(out.port)}, indent=2) + "\n", encoding="utf-8")
     return out
 
 
@@ -232,7 +265,7 @@ def describe(sw: Switches) -> str:
     head = "switches (dev/switches.json):"
     if sw.error:
         head += f"\n  MALFORMED - {sw.error} - remote CLOSED until `make ci-on REASON=...` rewrites it"
-    return "\n".join([head, line("remote", sw.remote, DEFAULT_REMOTE), line("claims", sw.claims, DEFAULT_CLAIMS)])
+    return "\n".join([head, line("remote", sw.remote, DEFAULT_REMOTE), line("claims", sw.claims, DEFAULT_CLAIMS), line("port", sw.port, DEFAULT_PORT)])
 
 
 def refusal(sw: Switches, axis: str, what: str) -> str | None:
@@ -272,14 +305,14 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("show")
     s = sub.add_parser("set")
-    s.add_argument("axis", choices=("remote", "claims"))
+    s.add_argument("axis", choices=("remote", "claims", "port"))
     s.add_argument("state")
     s.add_argument("--why", default="")
     c = sub.add_parser("check")
     c.add_argument("axis", choices=("remote",))
     c.add_argument("what")
     q = sub.add_parser("state", help="print one axis's bare state - what the Makefile reads to shape a target")
-    q.add_argument("axis", choices=("remote", "claims"))
+    q.add_argument("axis", choices=("remote", "claims", "port"))
     sub.add_parser("idle", help="print 1 when this process descends from the idle timer (feature 136), else 0")
     a = ap.parse_args(argv)
     skill = Path.cwd()

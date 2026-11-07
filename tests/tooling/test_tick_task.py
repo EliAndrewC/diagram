@@ -417,6 +417,8 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     monkeypatch.setattr(lb, "run_gate", lambda root, target, cover: make(root, target))  # the gate in its own session (415 D6)
     monkeypatch.setattr(lb, "start_cover", lambda root: None)
     monkeypatch.setattr(lb, "engine_delta", lambda root: state["engine"])
+    port = {"state": "integrated"}
+    monkeypatch.setattr(lb, "_port", lambda root: port["state"])
     monkeypatch.setattr(lb, "commit_regenerated", lambda root, why: None)
     # the work-budget review answered clean: `budget_run` (444 T20, D1) has its own tests, tests/tooling/test_land_budget.py
     monkeypatch.setattr(
@@ -463,6 +465,10 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
     assert lb.long_runs(tmp_path) == 1 and made == ["done"], "green, but the stamp still refuses: stop"
     made.clear(), state.update(stamp=1, sticky=False, engine=False, says="  hooks: the last green gate ran against DIFFERENT code (make hooks-test again)\n")
     assert lb.long_runs(tmp_path) == 1 and made == ["hooks-test"], "the stamp names hooks-test: that gate runs, not make done"
+    # feature 444 FR-023: at rust-only no landing cohort runs, beside the gate or after it
+    port["state"] = "rust-only"
+    made.clear(), beside.clear(), state.update(stamp=1, cohort=1, cohort_after=1, engine=True, says="", red="")
+    assert lb.long_runs(tmp_path) == 0 and made == ["done"] and beside == [], "rust-only: the gate alone, no landing cohort"
 
 
 def test_an_owed_red_gate_is_a_cheap_refusal_of_an_engine_landing(tmp_path: pathlib.Path, monkeypatch) -> None:  # noqa: ANN001

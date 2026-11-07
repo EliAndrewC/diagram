@@ -146,13 +146,17 @@ def test_the_directory_decides_when_a_test_runs(fixture_skill: Path, monkeypatch
     so with `L7R_TESTS_FULL=1`. Pinned on the commands make would run, one per target, so a tree added without its
     ignore - or an ignore dropped - fails here by name."""
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
-    quick = _runs(make(fixture_skill, "-n", "quick").stdout)
-    gate = _runs(make(fixture_skill, "-n", "test").stdout)
-    full = _runs(make(fixture_skill, "-n", "test-full").stdout)
+    # (the trees as they stand with the port switch at integrated; at rust-only the gate also leaves out the engine's trees, below)
+    quick = _runs(make(fixture_skill, "-n", "quick", "PORT=integrated").stdout)
+    gate = _runs(make(fixture_skill, "-n", "test", "PORT=integrated").stdout)
+    full = _runs(make(fixture_skill, "-n", "test-full", "PORT=integrated").stdout)
     assert "--ignore=tests/gate" in quick and "--ignore=tests/full" in quick
     assert "--ignore=tests/full" in gate and "--ignore=tests/gate" not in gate and "L7R_TESTS_FULL=1" not in gate
     assert "--ignore=tests/full" not in full and "--ignore=tests/gate" not in full and "L7R_TESTS_FULL=1" in full and "COV_FLOORS=1" in full
     assert "--deselect" not in gate and "--deselect" not in full  # no file list can go stale again (research R6)
+    # ...AND AT RUST-ONLY NO PYTHON SETTLEMENT-ENGINE TEST AND NO MAP ROLL (feature 444 FR-023, the GM 2026-11-07)
+    rust_only = _runs(make(fixture_skill, "-n", "test", "PORT=rust-only").stdout)
+    assert '-m "not rolls_map"' in rust_only and all(f"--ignore=tests/{d}" in rust_only for d in ("hamletgen", "settlement", "gate"))
 
 
 # ---- feature 174: the /proc readers, which no test could reach through the real filesystem -------

@@ -115,6 +115,10 @@ fn a_row_village_seats_its_farms_along_its_streets_with_their_holdings() {
     };
     // seven lots dealt for twelve households: once they are spent a clear seat's offer is refused, and the row goes on to its end
     let rows = seat_rows(&rs);
+    {
+        let mut v: Vec<_> = rows.seating.tests.0.iter().collect();
+        v.sort_by(|a, b| b.1.cmp(a.1));
+    }
     let n = rows.seating.seated.len();
     assert_eq!(n, 7);
     assert_eq!(rows.sheltered.len(), n);
@@ -268,11 +272,63 @@ fn a_row_village_seats_its_farms_along_its_streets_with_their_holdings() {
     let brook = Hard::new(&ponds, &[((1000.0, 1300.0), (1000.0, 1490.0), 8.0)], &mut t);
     let crossed = seat_rows(&RowSite { hard: &brook, ..rs });
     assert!(crossed.seating.seated.len() <= n);
+    // a brook across the row: its farms seated on one bank of it
+    let streams = [((1600.0, 800.0), (1600.0, 1499.0))];
+    let banked = Site {
+        streams: &streams,
+        ..site
+    };
+    let over = seat_rows(&RowSite {
+        gs: GroveSite {
+            site: &banked,
+            ..rs.gs
+        },
+        ..rs
+    });
+    let east = over
+        .seating
+        .seated
+        .iter()
+        .filter(|s| s.bundle.house.0 > 1600.0)
+        .count();
+    assert!(!over.seating.seated.is_empty() && (east == 0 || east == over.seating.seated.len()));
+    // a strip of hard ground across the row: the street's tread meets it, and the farms stand on one stretch either side
+    let strip = Hard::new(
+        &[field.clone()],
+        &[((1600.0, 800.0), (1600.0, 1499.0), 8.0)],
+        &mut t,
+    );
+    let cut = seat_rows(&RowSite { hard: &strip, ..rs });
+    assert!(cut.seating.seated.len() <= n);
+    // grove farms with their own well pockets along the street: each well among the parts the street's tread keeps off
+    let welled = seat_rows(&RowSite {
+        gs: GroveSite {
+            grove: Grove {
+                well: 8.0,
+                ..rs.gs.grove
+            },
+            ..rs.gs
+        },
+        ..rs
+    });
+    assert!(welled
+        .seating
+        .seated
+        .iter()
+        .any(|a| a.bundle.well.is_some()));
     // a dry edge long enough to turn the field's corners: a frame at the bend reaches across its own street and is passed over
     let bent = seat_rows(&RowSite {
         form: Form::Edge,
         ..rs
     });
+    {
+        let mut v: Vec<_> = bent.seating.tests.0.iter().collect();
+        v.sort_by(|a, b| b.1.cmp(a.1));
+    }
+    {
+        let mut v: Vec<_> = bent.seating.tests.0.iter().collect();
+        v.sort_by(|a, b| b.1.cmp(a.1));
+    }
     assert!(bent.seating.seated.len() <= n);
     // no hard ground: no street, no farm
     let none = seat_rows(&RowSite {

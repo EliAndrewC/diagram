@@ -80,14 +80,25 @@ pub fn row_wells<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bou
 /// # Errors
 /// `KeyError` naming a field the dict lacks, or a `TypeError` where one does not convert.
 #[pyfunction]
-pub fn farm_channels<'py>(py: Python<'py>, inp: &Bound<'py, PyDict>) -> PyResult<Bound<'py, PyDict>> {
+pub fn farm_channels<'py>(
+    py: Python<'py>,
+    inp: &Bound<'py, PyDict>,
+) -> PyResult<Bound<'py, PyDict>> {
     let farms: Vec<(Pt, Vec<Pt>, Vec<Vec<Pt>>)> = field(inp, "farms")?;
     let hard: Vec<Vec<Pt>> = field(inp, "hard")?;
     let walls: Vec<Vec<Pt>> = field(inp, "walls")?;
     let courses: Vec<Vec<Pt>> = field(inp, "courses")?;
     let water: Vec<(Pt, Pt)> = field(inp, "water")?;
-    let farms: Vec<Farm> = farms.into_iter().map(|(at, yard, own)| Farm { at, yard, own }).collect();
-    let ground = Ground { hard: &hard, walls: &walls, courses: &courses, water: &water };
+    let farms: Vec<Farm> = farms
+        .into_iter()
+        .map(|(at, yard, own)| Farm { at, yard, own })
+        .collect();
+    let ground = Ground {
+        hard: &hard,
+        walls: &walls,
+        courses: &courses,
+        water: &water,
+    };
     let mut tests = Counts::default();
     let paths = channels(&farms, &ground, &mut tests);
     let d = PyDict::new(py);

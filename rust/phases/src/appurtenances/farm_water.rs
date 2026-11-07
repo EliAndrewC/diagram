@@ -30,15 +30,15 @@ use crate::ways::track::{crosses_fabric, edge_dist, in_poly, poly_box, segments_
 pub const SOURCE_TRIES: usize = 6;
 /// The spacing of candidate points along each supply course (ft).
 ///
-/// Research: its search steps - GUESS (`farm_water.SOURCE_STEP_FT`)
+/// Research: its search steps - GUESS
 pub const SOURCE_STEP_FT: f64 = 20.0;
 /// How far apart two tried sources stand at least (ft).
 ///
-/// Research: its search steps - GUESS (`farm_water.SOURCE_SPREAD_FT`)
+/// Research: its search steps - GUESS
 pub const SOURCE_SPREAD_FT: f64 = 60.0;
 /// The router's lattice for a channel (ft), finer than a lane's.
 ///
-/// Research: its search steps - GUESS (`farm_water.ROUTE_CELL_FT`)
+/// Research: its search steps - GUESS
 pub const ROUTE_CELL_FT: f64 = 8.0;
 /// How far off its threshing yard the channel ends (ft): a step.
 ///
@@ -46,7 +46,7 @@ pub const ROUTE_CELL_FT: f64 = 8.0;
 pub const DOORYARD_STEP_FT: f64 = 6.0;
 /// The channel's gap off what it is routed round (ft), and how far past its mouth it may meet its own course (ft).
 ///
-/// Research: its unstated figures - GUESS (`farm_water.farm_channel`): 2 ft off the walls; 3 ft its own course; 6 ft its mouth
+/// Research: its unstated figures - GUESS: 2 ft off the walls; 3 ft its own course; 6 ft its mouth
 pub const GAPS: (f64, f64, f64) = (2.0, 3.0, 6.0);
 
 /// A farm: its center, its threshing yard's ring, and its walls the others' channels keep off (its grove bands and well pocket).
@@ -75,11 +75,8 @@ pub struct Ground<'a> {
 fn closest(p: Pt, a: Pt, b: Pt) -> Pt {
     let (vx, vy) = (b.0 - a.0, b.1 - a.1);
     let l2 = vx * vx + vy * vy;
-    let t = if l2 > 0.0 {
-        (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2).clamp(0.0, 1.0)
-    } else {
-        0.0
-    };
+    // ...a point segment's own end: its dot product is 0, so any positive divisor gives 0
+    let t = (((p.0 - a.0) * vx + (p.1 - a.1) * vy) / l2.max(f64::MIN_POSITIVE)).clamp(0.0, 1.0);
     (a.0 + vx * t, a.1 + vy * t)
 }
 
@@ -89,14 +86,24 @@ fn length(p: &[Pt]) -> f64 {
 
 /// The `n` points along `courses`, every `step` and at each segment's point nearest `near`, nearest `near` first, each at least
 /// `spread` from those before it (`farm_water.source_points`).
-pub(crate) fn source_points(courses: &[Vec<Pt>], near: Pt, step: f64, n: usize, spread: f64, tests: &mut Counts) -> Vec<Pt> {
+pub(crate) fn source_points(
+    courses: &[Vec<Pt>],
+    near: Pt,
+    step: f64,
+    n: usize,
+    spread: f64,
+    tests: &mut Counts,
+) -> Vec<Pt> {
     let mut pts = Vec::new();
     for c in courses {
         for w in c.windows(2) {
             let k = ((dist(w[0], w[1]) / step) as usize).max(1);
             pts.extend((0..k).map(|i| {
                 let f = i as f64 / k as f64;
-                (w[0].0 + (w[1].0 - w[0].0) * f, w[0].1 + (w[1].1 - w[0].1) * f)
+                (
+                    w[0].0 + (w[1].0 - w[0].0) * f,
+                    w[0].1 + (w[1].1 - w[0].1) * f,
+                )
             }));
             pts.push(closest(near, w[0], w[1]));
         }
@@ -119,7 +126,9 @@ pub(crate) fn source_points(courses: &[Vec<Pt>], near: Pt, step: f64, n: usize, 
 /// `step` off the yard's ring at the ring's point nearest `toward`, out along the line from the yard's middle.
 pub(crate) fn dooryard_end(yard: &[Pt], toward: Pt, step: f64) -> Pt {
     let n = yard.len() as f64;
-    let (cx, cy) = yard.iter().fold((0.0, 0.0), |s, p| (s.0 + p.0 / n, s.1 + p.1 / n));
+    let (cx, cy) = yard
+        .iter()
+        .fold((0.0, 0.0), |s, p| (s.0 + p.0 / n, s.1 + p.1 / n));
     let edge = (0..yard.len())
         .map(|k| closest(toward, yard[k], yard[(k + 1) % yard.len()]))
         .min_by(|a, b| dist(*a, toward).total_cmp(&dist(*b, toward)))
@@ -138,13 +147,21 @@ pub(crate) fn cross_t(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
 }
 
 /// Does `path` cross any of `water` more than `free` along it from its start?
-pub(crate) fn crosses_other_water(path: &[Pt], water: &[(Pt, Pt)], free: f64, tests: &mut Counts) -> bool {
+pub(crate) fn crosses_other_water(
+    path: &[Pt],
+    water: &[(Pt, Pt)],
+    free: f64,
+    tests: &mut Counts,
+) -> bool {
     let mut run = 0.0;
     for w in path.windows(2) {
         let (a, b) = (w[0], w[1]);
         let l = dist(a, b);
         tests.add("seg_test@crosses_other_water", water.len() as u64);
-        if water.iter().any(|&(c, d)| segments_cross(a, b, c, d) && run + cross_t(a, b, c, d) * l > free) {
+        if water
+            .iter()
+            .any(|&(c, d)| segments_cross(a, b, c, d) && run + cross_t(a, b, c, d) * l > free)
+        {
             return true;
         }
         run += l;
@@ -153,13 +170,23 @@ pub(crate) fn crosses_other_water(path: &[Pt], water: &[(Pt, Pt)], free: f64, te
 }
 
 fn inside_the_crop(q: Pt, hard: &[Vec<Pt>]) -> bool {
-    hard.iter().any(|r| r.len() >= 3 && in_poly(q, r) && edge_dist(q, r) > 1.0)
+    hard.iter()
+        .any(|r| r.len() >= 3 && in_poly(q, r) && edge_dist(q, r) > 1.0)
 }
 
 /// The straight chord where it crosses nothing, else the routed way.
-fn straight_or_routed(src: Pt, end: Pt, walls: &[Vec<Pt>], water: &[(Pt, Pt)], ask: Ask, tests: &mut Counts) -> Vec<Pt> {
+fn straight_or_routed(
+    src: Pt,
+    end: Pt,
+    walls: &[Vec<Pt>],
+    water: &[(Pt, Pt)],
+    ask: Ask,
+    tests: &mut Counts,
+) -> Vec<Pt> {
     let chord = [src, end];
-    let clear = !walls.iter().any(|r| r.len() >= 3 && crosses_fabric(&chord, r, poly_box(r), 0.0, tests))
+    let clear = !walls
+        .iter()
+        .any(|r| r.len() >= 3 && crosses_fabric(&chord, r, poly_box(r), 0.0, tests))
         && !water.iter().any(|&(c, d)| segments_cross(src, end, c, d));
     if clear {
         return chord.to_vec();
@@ -167,40 +194,88 @@ fn straight_or_routed(src: Pt, end: Pt, walls: &[Vec<Pt>], water: &[(Pt, Pt)], a
     routed(src, end, walls, water, ask, tests)
 }
 
-fn routed(src: Pt, end: Pt, walls: &[Vec<Pt>], water: &[(Pt, Pt)], ask: Ask, tests: &mut Counts) -> Vec<Pt> {
-    let g = Grounds { hard: &[], walls, water };
+fn routed(
+    src: Pt,
+    end: Pt,
+    walls: &[Vec<Pt>],
+    water: &[(Pt, Pt)],
+    ask: Ask,
+    tests: &mut Counts,
+) -> Vec<Pt> {
+    let g = Grounds {
+        hard: &[],
+        walls,
+        water,
+    };
     route(src, end, &g, None, ask, tests)
 }
 
 /// The channel into `farm`'s grounds (`farm_water.farm_channel`): the nearest sources and a step off the yard's side facing each,
 /// routed, the shortest kept; where none is found, the wider search - more sources, off the crop, the straight chord tried first.
 /// Empty where no course reaches its dooryard.
-fn farm_channel(farm: &Farm, walls: &[Vec<Pt>], ground: &Ground, courses: &[Vec<Pt>], water: &[(Pt, Pt)], tests: &mut Counts) -> Vec<Pt> {
+fn farm_channel(
+    farm: &Farm,
+    walls: &[Vec<Pt>],
+    ground: &Ground,
+    courses: &[Vec<Pt>],
+    water: &[(Pt, Pt)],
+    tests: &mut Counts,
+) -> Vec<Pt> {
     let ring = &farm.yard;
     if ring.len() < 3 {
         return Vec::new();
     }
     let n = ring.len() as f64;
-    let c = ring.iter().fold((0.0, 0.0), |s, p| (s.0 + p.0 / n, s.1 + p.1 / n));
+    let c = ring
+        .iter()
+        .fold((0.0, 0.0), |s, p| (s.0 + p.0 / n, s.1 + p.1 / n));
     let sides: Vec<Pt> = (0..ring.len())
         .map(|k| {
             let (a, b) = (ring[k], ring[(k + 1) % ring.len()]);
-            ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0)
+            (f64::midpoint(a.0, b.0), f64::midpoint(a.1, b.1))
         })
         .collect();
     let all: Vec<Vec<Pt>> = ground.hard.iter().chain(walls).cloned().collect();
-    let ask = Ask { cell: ROUTE_CELL_FT, gap: GAPS.0, ..Ask::default() };
-    let offered = source_points(courses, c, SOURCE_STEP_FT, SOURCE_TRIES * 4, SOURCE_SPREAD_FT * 4.0, tests);
-    let near = source_points(courses, c, SOURCE_STEP_FT, SOURCE_TRIES, SOURCE_SPREAD_FT, tests);
+    let ask = Ask {
+        cell: ROUTE_CELL_FT,
+        gap: GAPS.0,
+        ..Ask::default()
+    };
+    let offered = source_points(
+        courses,
+        c,
+        SOURCE_STEP_FT,
+        SOURCE_TRIES * 4,
+        SOURCE_SPREAD_FT * 4.0,
+        tests,
+    );
+    let near = source_points(
+        courses,
+        c,
+        SOURCE_STEP_FT,
+        SOURCE_TRIES,
+        SOURCE_SPREAD_FT,
+        tests,
+    );
     let wider: Vec<Pt> = near
         .iter()
         .copied()
-        .chain(offered.iter().copied().filter(|q| !near.contains(q) && !inside_the_crop(*q, ground.hard)).take(SOURCE_TRIES))
+        .chain(
+            offered
+                .iter()
+                .copied()
+                .filter(|q| !near.contains(q) && !inside_the_crop(*q, ground.hard))
+                .take(SOURCE_TRIES),
+        )
         .collect();
     let mut routes: Vec<Vec<Pt>> = Vec::new();
     for (srcs, straight) in [(&near, false), (&wider, true)] {
-        for &src in srcs.iter() {
-            let mine: Vec<(Pt, Pt)> = water.iter().copied().filter(|&(a, b)| seg_dist(src, a, b) > GAPS.1).collect();
+        for &src in srcs {
+            let mine: Vec<(Pt, Pt)> = water
+                .iter()
+                .copied()
+                .filter(|&(a, b)| seg_dist(src, a, b) > GAPS.1)
+                .collect();
             let mut toward = vec![src];
             let mut by: Vec<Pt> = sides.clone();
             by.sort_by(|a, b| dist(*a, src).total_cmp(&dist(*b, src)));
@@ -222,7 +297,10 @@ fn farm_channel(farm: &Farm, walls: &[Vec<Pt>], ground: &Ground, courses: &[Vec<
             break;
         }
     }
-    routes.into_iter().min_by(|a, b| length(a).total_cmp(&length(b))).unwrap_or_default()
+    routes
+        .into_iter()
+        .min_by(|a, b| length(a).total_cmp(&length(b)))
+        .unwrap_or_default()
 }
 
 /// Each farm's channel, in the farms' order (`farm_water.farm_channels`): taken nearest the water first, each drawn channel a
@@ -249,7 +327,13 @@ pub fn farm_channels(farms: &[Farm], ground: &Ground, tests: &mut Counts) -> Vec
             .walls
             .iter()
             .cloned()
-            .chain(farms.iter().enumerate().filter(|&(j, _)| j != i).flat_map(|(_, f)| f.own.iter().cloned()))
+            .chain(
+                farms
+                    .iter()
+                    .enumerate()
+                    .filter(|&(j, _)| j != i)
+                    .flat_map(|(_, f)| f.own.iter().cloned()),
+            )
             .collect();
         tests.add("write@channel_walls", walls.len() as u64);
         let path = farm_channel(&farms[i], &walls, ground, &courses, &water, tests);
