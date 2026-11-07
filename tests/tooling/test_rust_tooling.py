@@ -149,18 +149,29 @@ def test_the_dead_command_runs_on_the_named_crate(capsys: pytest.CaptureFixture[
 def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count(tmp_path: pathlib.Path) -> None:
     """Row "the overlap census", replaced by the work-budget counters counted inside Rust (feature 444 T19, D9; the round
     arbiter's Route A on ask:444-T17-rows-need-a-phase): the water frame's own test holds its count to the derivation's, so a copy
-    of the port that rolls a knob without counting it fails `make rust-test`."""
-    port = REPO / "rust" / "phases"
-    assert rc.run("test", port / "Cargo.toml", check=False).returncode == 0
-    copy = tmp_path / "phases"
-    shutil.copytree(port, copy, ignore=shutil.ignore_patterns("target"))
-    src = copy / "src" / "water_frame.rs"
-    text = src.read_text()
-    assert 'counts.add("candidate@roll_plan", 3);' in text
-    src.write_text(text.replace('counts.add("candidate@roll_plan", 3);', "", 1))
+    of the port that rolls a knob without counting it fails `make rust-test`.
+
+    THE WATER FRAME ALONE, not the whole port (feature 444 T36, measured 2026-11-07: the whole crate's tests and then a fresh build
+    of its copy took 20.7 s, run on every Rust edit): the water frame imports only `pyrand`, and `counts` stands alone, so the
+    three files are its own crate, built as it is first (the harness proven sound) and then without the count."""
+    src = REPO / "rust" / "phases" / "src"
+    copy = tmp_path / "uncounted"
+    (copy / "src").mkdir(parents=True)
+    for name in ("water_frame.rs", "pyrand.rs", "counts.rs"):
+        shutil.copy(src / name, copy / "src" / name)
+    (copy / "src" / "lib.rs").write_text("mod counts;\nmod pyrand;\nmod water_frame;\n")
     toml = copy / "Cargo.toml"
-    toml.write_text(toml.read_text().replace('name = "l7r_phases"\nversion', 'name = "l7r_phases_uncounted"\nversion', 1))
-    assert rc.run("test", toml, check=False).returncode != 0, "a roll it does not count fails the port's own test"
+    toml.write_text('[package]\nname = "l7r_phases_uncounted"\nversion = "0.1.0"\nedition = "2021"\n\n[features]\ncounters = []\n')
+    assert rc.run("test", toml, check=False).returncode == 0, "the water frame's own tests pass in the three-file crate"
+    frame = copy / "src" / "water_frame.rs"
+    text = frame.read_text()
+    assert 'counts.add("candidate@roll_plan", 3);' in text
+    frame.write_text(text.replace('counts.add("candidate@roll_plan", 3);', "", 1))
+    failed = rc.run("test", toml, check=False)
+    assert failed.returncode != 0, "a roll it does not count fails the port's own test"
+    # ...by the count's own assertion, not a build that broke
+    said = failed.stdout + failed.stderr
+    assert "src/water_frame.rs" in said and "assertion `left == right` failed" in said, said
 
 
 def test_the_floor_reads_the_lines_cover_changed_reads(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
