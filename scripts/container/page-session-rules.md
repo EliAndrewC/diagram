@@ -15,7 +15,7 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 - "Domain", never "demesne". Gender-neutral office-holders: they / their / them for a generic daimyo, governor,
   magistrate, minister or samurai.
 - Kanji passes the kanji - romaji - meaning triangle: real characters, a plausible reading, a meaning that maps back.
-- Never invent setting details that contradict the GM's notes. The setting canon is read only through
+- Never invent setting details that contradict the GM's notes. The setting canon is searched with
   `make canon TERMS="a|b|c"` (every term in one call).
 
 ## Research (constitution XII; the full rules are the research record's CLAUDE.md and `docs/research-doctrine.md`)

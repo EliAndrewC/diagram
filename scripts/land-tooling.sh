@@ -34,7 +34,10 @@ trap lt_record EXIT
 # GUARD_EDIT_OK: fixing a route that refused correct work - the review ledger too: the push checks every logged check pass
 # against the LEDGER it lands, and the pass log is the clone's, so a session that had run checks could never land tooling
 # without its rows (368, 2026-10-11: 168 passes owed against main's ledger). The ledger is append-only and merges by union.
-tooling() { case "$1" in scripts/*|tests/*|.claude/agents/*|.claude/skills/*|.claude/workflows/*|CLAUDE.md|*/CLAUDE.md|Makefile|.claude/settings.json|docs/make-targets.html|dev/review-ledger.md) return 0 ;; *) return 1 ;; esac; }
+# GUARD_EDIT_OK: feature 444 amendment 11 - THE GUARD INVENTORIES LAND WITH THEIR GUARDS: `tests/test_citation_rule_inventory.py` reads
+# docs/research-doctrine.md's rule table and docs/guards.md is the guard table, so a guard retired alone (the GM 2026-11-07: "you can
+# remove that hook that blocks you") failed the worktree's checks with its rows left behind.
+tooling() { case "$1" in scripts/*|tests/*|.claude/agents/*|.claude/skills/*|.claude/workflows/*|CLAUDE.md|*/CLAUDE.md|Makefile|.claude/settings.json|docs/make-targets.html|dev/review-ledger.md|docs/guards.md|docs/research-doctrine.md) return 0 ;; *) return 1 ;; esac; }
 
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git checkout"
 [ "$(basename "$(dirname "$ROOT")")" = ".clones" ] || die "$ROOT is not a session clone under .clones/"
@@ -114,7 +117,7 @@ if printf '%s\n' "$@" | grep -qx 'Makefile'; then
   fi
 fi
 for f in "$@"; do
-  tooling "$f" || die "$f is not tooling (scripts/, tests/, .claude/agents/, .claude/skills/, .claude/workflows/, a CLAUDE.md, the Makefile, .claude/settings.json, docs/make-targets.html) - it lands with its feature"
+  tooling "$f" || die "$f is not tooling (scripts/, tests/, .claude/agents/, .claude/skills/, .claude/workflows/, a CLAUDE.md, the Makefile, .claude/settings.json, docs/make-targets.html, docs/guards.md, docs/research-doctrine.md) - it lands with its feature"
 done
 git -C "$ROOT" diff --quiet HEAD -- "$@" || die "uncommitted changes in FILES - commit them first; only committed work lands"
 # GUARD_EDIT_OK: feature 385 T53 (the round arbiter's fix on hour:385-approach-checklist@19) - OWED LEDGER ROWS ARE REFUSED FIRST: the
