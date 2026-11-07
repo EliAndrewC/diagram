@@ -1345,3 +1345,51 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
 9. **Done, measured.** `make done`'s wall time, the driver's wall time on each pool spec, the rebuild after a one-line edit.
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
+
+### T37 part B (2026-11-07T18:14Z)
+
+The trigger: a red `make done` in a row (red-gate@2026-11-07T18:13:02Z), the round arbiter ruling CONTINUE. The gate carried
+T37-T41's landing (the frozen writeup, the parked stages, the deletion of the Python hamlet engine and the ported checks).
+
+1. **What exactly is refusing?** Two different one-line defects in two runs: static's Rust coverage (an assertion's message line in
+   `water_frame.rs` no test reached, the assertion rewritten for the counters-off build), then test-full's 1 of 9,058 tests
+   (`test_file_scale.py::test_the_refusal_prints_the_procedure`: a prose edit dropped the `structures/` its refusal names).
+2. **A3 again.** Each check as it stood.
+3. **A4 again.** Each fix read in its own check's run (the crate's cover clean; the file-scale tests 21 passed) and in the next
+   `make done`.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "Two checks read text this landing's edits had changed; each reads it as it stands."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
+9. **After a ruling, the step it named?** That, on the commit holding both fixes.
+
+### T27 part B (2026-11-07T18:14Z)
+
+The trigger: red-gate@2026-11-07T18:13:02Z, ruled CONTINUE; T27 (the seat) is an open task this landing carries, its code kept in
+the crate through the cut (FR-024 part 2) and unchanged by these fixes.
+
+1. **What exactly is refusing?** Not the seat: the two defects of T37 part B.
+2. **A3 again.** Unchanged.
+3. **A4 again.** The crate's tests and coverage clean with the seat in it.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The seat's code is as it was; the gate's reds were elsewhere."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The tripwire asked it; one more `make done`.
+9. **After a ruling, the step it named?** That.
+
+### T34 part B (2026-11-07T18:14Z)
+
+The trigger: red-gate@2026-11-07T18:13:02Z, ruled CONTINUE; T34 (the port switch) rides this landing, its rust-only gate now with
+no Python engine tree left to leave out.
+
+1. **What exactly is refusing?** Not the switch: the two defects of T37 part B.
+2. **A3 again.** Unchanged.
+3. **A4 again.** `tests/tooling/test_switches.py` green with the rust-only assertion reading the deleted trees as deleted.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither.
+6. **The one-sentence test.** "The switch stands at rust-only; the reds were elsewhere."
+7. **Done:** `make done` green at the current tree.
+8. **Every route measured before the arbiter was asked?** The tripwire asked it; one more `make done`.
+9. **After a ruling, the step it named?** That.
