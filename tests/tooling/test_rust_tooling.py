@@ -210,3 +210,13 @@ def test_a_closure_never_called_is_refused_by_both_commands(cov_work: pathlib.Pa
     got = rc.uncovered(broken / "Cargo.toml", broken / "tests" / "py_driver.py", cov_work)
     lib = str(broken / "src" / "lib.rs")
     assert list(got) == [lib] and got[lib], got
+
+
+def test_the_counters_change_no_output_refuses_a_test_that_reads_them(crate: pathlib.Path) -> None:
+    """Row "the counters change no output" (feature 444 T39): the crate's tests pass with the `counters` feature compiled out,
+    so a test whose result hangs on the counters is refused - the Rust half of the old two-roll comparison."""
+    broken = _with(crate, "\n#[cfg(test)]\nmod counted {\n    #[test]\n    fn reads_the_counters() {\n        assert!(cfg!(feature = \"counters\"));\n    }\n}\n")
+    toml = broken / "Cargo.toml"
+    toml.write_text(toml.read_text().replace("[dependencies]", "[features]\ncounters = []\n\n[dependencies]", 1))
+    assert rc.run("test", broken / "Cargo.toml", check=False).returncode == 0, "with every feature it passes"
+    assert rc.run("test-no-counters", broken / "Cargo.toml", check=False).returncode != 0, "with the counters out it is refused"

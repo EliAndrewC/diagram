@@ -503,6 +503,7 @@ _CHILD_DRIVER = (
     "{epilogue}"
 )
 
+
 def _parent_is_covered() -> bool:
     """Is THIS process recording coverage - so the child must record its own, or the roll's lines vanish
     from the floor. Two signals, either suffices: pytest-cov's subprocess environment (`COV_CORE_SOURCE`),

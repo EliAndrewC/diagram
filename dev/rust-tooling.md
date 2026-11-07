@@ -53,6 +53,7 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 
 | row | the check | the test that fires it |
 |---|---|---|
+| the counters change no output | `rust_checks.py test-no-counters` in `make counters-inert`: the crate's tests with the `counters` feature compiled out | `test_the_counters_change_no_output_refuses_a_test_that_reads_them` |
 | lint | `scripts/gates/rust_checks.py lint` in `make static`: clippy, the crate's `[lints.clippy]` denying all and pedantic | `test_lint_passes_the_fixture_and_refuses_a_pedantic_breach` |
 | format | `rust_checks.py format` in `make format` (`--check` refuses) | `test_format_passes_the_fixture_and_refuses_what_rustfmt_would_change` |
 | function cap | clippy `too_many_lines` at the root `clippy.toml`'s 100; `allow_attributes_without_reason` denied | `test_the_function_cap_refuses_a_function_past_a_hundred_lines`, `test_an_exception_with_no_reason_is_refused` |

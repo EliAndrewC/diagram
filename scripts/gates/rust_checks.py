@@ -54,6 +54,15 @@ def cargo(args: list[str], manifest: pathlib.Path, after: list[str] | None = Non
     return subprocess.run(cmd, capture_output=True, text=True, env=env, check=False)
 
 
+def features_but(manifest: pathlib.Path, left_out: str) -> list[str]:
+    """The cargo feature flags naming every feature of the crate but `left_out` (`[]` when that leaves none)."""
+    text = manifest.read_text(encoding="utf-8") if manifest.is_file() else ""
+    feats = re.search(r"^\[features\]\n(.*?)(?:^\[|\Z)", text, re.M | re.S)
+    names = [m.group(1) for m in re.finditer(r"^([A-Za-z_][\w-]*)\s*=", feats.group(1), re.M)] if feats else []
+    rest = [n for n in names if n != left_out]
+    return ["--features", ",".join(rest)] if rest else []
+
+
 def rust_only_features(manifest: pathlib.Path) -> list[str]:
     """The cargo feature flags of a Rust-only build: every feature but `python`, whose doors only a Python caller reaches (the GM
     2026-11-07: "Can we get rid of the python driver now that we've turned off the python stages? Can we go Rust only?") - compiled
@@ -291,7 +300,7 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
     if cmd == "test-no-counters":
         # THE COUNTERS CHANGE NO OUTPUT (feature 443 T02, its Rust half since the Python roll's deletion, feature 444 T39): the tests,
         # whose expected values are the same in both builds, pass with the counters compiled out
-        return cargo(["test", "--quiet", "--features", "python"], manifest)
+        return cargo(["test", "--quiet", *features_but(manifest, "counters")], manifest)
     return cargo(["fmt", *(["--check"] if check else [])], manifest)
 
 
