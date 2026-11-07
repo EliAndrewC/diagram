@@ -441,3 +441,21 @@ the total was reasonable: "Okay, well then our "is it sound" check also needs to
 reasonable". The whole point of this process is to make things reasonable!"
 
 Done as S11 in `docs/work-budget-rubric.md` and question 0 of the `work-budget` agent's MODE BUDGET.
+
+## 2026-11-07, amendment 10 - fast first; no Python map generation at rust-only
+
+In the session, as the gate's minutes were measured:
+
+"I thought we were ripping out the python stuff specifically so that we wouldn't have to spend so many minutes on these gates!"
+
+"I feel like if it's running for that long then you should just stop it because it's bugged. There's no way anyghing shbould be running for that long."
+
+"You should immediately stop running all of the python map generating code as well. That's only slowing us down."
+
+"okay that's a step in the right direction, but 498 seconds is still pretty crazy, right?!"
+
+"Okay, I should emphasized that the literal most important thing here is making things FAST. That is a MORE IMPORTANT first step than making them correct, because if they are slow it will take so much longer to correct anything. 100 seconds is still INSANELY long for this kind of work, right?"
+
+"Can we get rid of the python driver now that we've turned off the python stages? Can we go Rust only?"
+
+"I'm surprised compilation takes so long. Are we recompiling EVERYTHING every time? I thought Rust compilers were pretty good about modularization, only compiling what you need, etc."

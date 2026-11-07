@@ -1099,3 +1099,24 @@ The trigger: a red `make done` in a row (red-gate@2026-11-07T12:40:50Z), the rou
 8. **Every route measured before the arbiter was asked?** The arbiter was asked by the tripwire; its ruling: one more `make done`.
 9. **After a ruling, the step it named?** That, the tree as it stands; T35 filed for the engine trees the rust-only gate leaves out.
 
+
+### T35 - the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z)
+
+FR-023 keeps "the Python unit tests that roll no map", while the gate at rust-only leaves out the engine's whole test trees
+(`PY_ENGINE_IGNORE`) on the GM's word of 2026-11-07 ("You should immediately stop running all of the python map generating code as
+well. That's only slowing us down."), and every test that would regenerate a pool map or roll a settlement is skipped
+(`tests/conftest.py`). The spec and the gate are brought to one rule.
+
+### T35 Approach (checklist part A)
+
+1. **The goal, in the world.** None in the map: the gate does what the spec says it does.
+2. **The constraints.** FR-023, SC-016; the GM's words of 2026-11-07 (request.md amendment 8 and the session's).
+3. **Where each comes from.** G: the GM's words. O: the gate as T34 left it.
+4. **Do they describe the world here?** Not a map question.
+5. **The order.** After T34, before the feature closes.
+6. **The exits.** Green: FR-023's wording and the gate agree, reviewed by spec-fidelity (SC-016). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Not a search.
+8. **The budget.** One landing.
+9. **Done, measured.** `make done` at rust-only collects what FR-023 names.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.

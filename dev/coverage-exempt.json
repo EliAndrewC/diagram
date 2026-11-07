@@ -200,16 +200,6 @@
    "why": "the old Python of homesteads, appurtenances, lane_wells, sties (feature 444's phases), deleted at its Rust landing"
   },
   {
-   "path": "l7r/diagram/hamletgen/homesteads/rank_rounds.py",
-   "stages": [
-    "homesteads",
-    "appurtenances",
-    "lane_wells",
-    "sties"
-   ],
-   "why": "the old Python of homesteads, appurtenances, lane_wells, sties (feature 444's phases), deleted at its Rust landing"
-  },
-  {
    "path": "l7r/diagram/hamletgen/homesteads/region.py",
    "stages": [
     "homesteads",
@@ -300,16 +290,6 @@
    "why": "the old Python of homesteads, appurtenances, lane_wells, sties (feature 444's phases), deleted at its Rust landing"
   },
   {
-   "path": "l7r/diagram/hamletgen/homesteads/wells.py",
-   "stages": [
-    "homesteads",
-    "appurtenances",
-    "lane_wells",
-    "sties"
-   ],
-   "why": "the old Python of homesteads, appurtenances, lane_wells, sties (feature 444's phases), deleted at its Rust landing"
-  },
-  {
    "path": "l7r/diagram/hamletgen/pondbank.py",
    "stages": [
     "pond_bank"
@@ -329,41 +309,6 @@
     "washing"
    ],
    "why": "the old Python of washing (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/__init__.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/brook.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/brook_rules.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/skeleton.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/water/waterward.py",
-   "stages": [
-    "waterward"
-   ],
-   "why": "the old Python of waterward (feature 444's phase), deleted at its Rust landing"
   },
   {
    "path": "l7r/diagram/hamletgen/ways/__init__.py",
@@ -406,14 +351,6 @@
    "why": "the old Python of seat, track (feature 444's phases), deleted at its Rust landing"
   },
   {
-   "path": "l7r/diagram/hamletgen/ways/cluster_edge.py",
-   "stages": [
-    "seat",
-    "track"
-   ],
-   "why": "the old Python of seat, track (feature 444's phases), deleted at its Rust landing"
-  },
-  {
    "path": "l7r/diagram/hamletgen/ways/corridors.py",
    "stages": [
     "seat",
@@ -439,14 +376,6 @@
   },
   {
    "path": "l7r/diagram/hamletgen/ways/forced.py",
-   "stages": [
-    "seat",
-    "track"
-   ],
-   "why": "the old Python of seat, track (feature 444's phases), deleted at its Rust landing"
-  },
-  {
-   "path": "l7r/diagram/hamletgen/ways/gateway.py",
    "stages": [
     "seat",
     "track"
