@@ -232,6 +232,11 @@ def ran_tests(root: Path, junit: Path) -> set[str]:
     return out
 
 
+# THE FLOOR'S RUN ON FOUR WORKERS; its own tests set none (feature 444 T36, measured 2026-11-07: four workers brought up for a fixture
+# repository's two tests were most of a 1.0 s test, the GM: "any single test which takes even 100 milliseconds is fairly suspect")
+WORKERS = "4"
+
+
 def uncovered(root: Path, modules: list[str], base: tuple[Path, dict] | None) -> dict[str, list[int]]:
     """Each changed module's lines the floor's tests leave unrun, less the floor's carried coverage."""
     sources = sorted({str(Path(p).parent) for p in modules})
@@ -240,7 +245,7 @@ def uncovered(root: Path, modules: list[str], base: tuple[Path, dict] | None) ->
         junit = Path(tmp) / "ran.xml"
         # ...WHICH TESTS RAN, FROM A JUNIT REPORT, NOT `--cov-context=test` (the replay of 39ea51383: without the gate's own plugins
         # beside it, the context switch crashed an xdist worker, "no such table: context", every time)
-        cmd = [sys.executable, "-m", "pytest", "-q", "-n", "4", "--dist", "worksteal", "-p", "no:cacheprovider", "-m", floor_markers(root, base), "--cov-fail-under=0", f"--junitxml={junit}"]
+        cmd = [sys.executable, "-m", "pytest", "-q", "-n", WORKERS, "--dist", "worksteal", "-p", "no:cacheprovider", "-m", floor_markers(root, base), "--cov-fail-under=0", f"--junitxml={junit}"]
         cmd += [*(f"--cov={s}" for s in sources), f"--cov-report=json:{report}", *selected_tests(root, modules, base)]
         # ...ITS COVERAGE DATA IN ITS OWN DIRECTORY (feature 415 T05's third red gate): beside a landing's gate, in the same tree,
         # its run wrote `.coverage` files where the gate's workers wrote theirs, and the gate's data lost its tables. Named in a

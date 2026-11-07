@@ -2,7 +2,7 @@
 
 The check fails on a scratch reader of each kind with no row - one using `ast.parse`, `tokenize`, `inspect`, `symtable`, the
 builtin `compile(`, one that only globs `*.py`, one with a `.py` suffix test, a shell `-name '*.py'`, and a Makefile recipe running
-ruff - and passes on the real tree, which it reads to find `scripts/gates/check-file-scale.py` (the round arbiter's note).
+ruff - and finds `scripts/gates/check-file-scale.py` a reader (the round arbiter's note); the real tree's scan is `make rust-tooling`.
 """
 
 from __future__ import annotations
@@ -33,11 +33,12 @@ def _repo(tmp: Path, files: dict[str, str], inventory: str = "") -> Path:
     return tmp
 
 
-def test_the_real_tree_has_a_row_for_every_reader_and_finds_the_file_cap() -> None:
-    files = subprocess.run(["git", "-C", str(REPO), "ls-files"], capture_output=True, text=True, check=True).stdout.split()
-    assert "scripts/gates/check-file-scale.py" in crt.readers(REPO, files)
-    assert crt.problems(REPO) == []
-    assert crt.main(["--root", str(REPO)]) == 0
+def test_the_file_cap_is_found_a_reader() -> None:
+    """The round arbiter's note: the detector finds `check-file-scale.py`, which reads `.py` files by their lines. The real tree's
+    whole scan is `make rust-tooling`, a step of hooks-test; here it scanned the tree two and a half times, 1.3 s alone and 2.9 s
+    under the gate's load (feature 444 T36, measured 2026-11-07; the GM: "any single test which takes even 100 milliseconds is
+    fairly suspect")."""
+    assert crt.readers(REPO, ["scripts/gates/check-file-scale.py"]) == ["scripts/gates/check-file-scale.py"]
 
 
 @pytest.mark.parametrize(

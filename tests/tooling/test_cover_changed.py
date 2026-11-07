@@ -24,6 +24,12 @@ MOD = "def f(x):\n    return x + 1\n\n\ndef g(x):\n    y = x * 2\n    return y\n
 TESTS = "from l7r.m import f, g\n\n\ndef test_f():\n    assert f(1) == 2\n\n\ndef test_g():\n    assert g(1) == 2\n"
 
 
+@pytest.fixture(autouse=True)
+def _no_workers(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A fixture repository's few tests run in the one process: four workers brought up for two tests were most of a 1.0 s test."""
+    monkeypatch.setattr(cc, "WORKERS", "0")
+
+
 @pytest.fixture
 def repo(tmp_path: Path) -> tuple[Path, str]:
     """A tree with one engine module and its mirrored tests, committed as the base."""
