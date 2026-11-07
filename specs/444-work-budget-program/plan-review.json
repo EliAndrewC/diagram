@@ -410,7 +410,7 @@
    "declared": "spec-fidelity"
   },
   "### T34 Decisions": {
-   "sha256": "18fd8a93a76518bba1abddbda7ac9c3c16c0b68e2d483f777254d8e0b981815b",
+   "sha256": "d8cde8a65f5f86c963c2b60380513b7e6b02a92c037d9cae52c7d7bf3bee4d2c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -429,6 +429,12 @@
   },
   "### T35 Approach (checklist part A)": {
    "sha256": "09d6732242cae3c5853d4fb8bd6a380142cd527bfa3976e330f0dffa8014ff63",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T34 Approach (re-answered 2026-11-07T13:27Z)": {
+   "sha256": "596be1366905de8162b2993ec6cd97361d4a5062a4ccf4f041f2b6648c3392f8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -5282,6 +5288,97 @@
      "summary": "Checklist part A: T35 runs after T34 and before the feature closes, in one landing. Green means FR-023's wording and the gate agree, reviewed by spec-fidelity (SC-016). Red means the failure is recorded and a claim that it cannot be done goes through make arbiter-ask. Done means make done at rust-only collects what FR-023 names.",
      "class": "within",
      "why": "This text is unchanged from the last reading and decides only order, budget and exits. None of it narrows the request. Aside: item 2 cites the GM's 2026-11-07 words as 'request.md amendment 8 and the session's'. The quoted 'stop running all of the python map generating code' is under amendment 10 in request.md, so the label should name amendment 10."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T34 Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-D1",
+     "summary": "A third axis of dev/switches.json, port: rust-only (default while any stage is Python) or integrated, read as the claims switch is, a malformed entry closing to the last committed state, thrown by make switches.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. It is how amendment 8's temporary change to make done and make land ('the functionality of a make done or a make land are both going to have to change temporarily') is switched on and later undone; FR-023/SC-016 carry the same switch."
+    },
+    {
+     "id": "T34-D2",
+     "summary": "make done at rust-only: rolls_map deselected, no reference map, hamlet-path floor and roll census suspended, coverage floor measured on the tests that run (lines reached only by map-rolling tests or the left-out engine trees reported as information); NEW: no Python settlement-engine test runs (engine test trees left out, any other test that would roll a settlement or regenerate a pool map skipped); static, format, typecheck, hooks-test, counters-inert, the tooling/tools/hooks/labels/pipeline/interactive tests and make rust-test run as before.",
+     "class": "within",
+     "why": "The change carries amendment 10 verbatim in intent: 'You should immediately stop running all of the python map generating code as well. That's only slowing us down', 'the literal most important thing here is making things FAST', and amendment 8's 'our gates and our tests are not running through the Python code'. The Python settlement-engine tests run the Python map-generating code, so leaving them out is what was asked, not a carve-out from it. Reporting the lines only those trees reached as information is the necessary consequence of not running them, the same class as the map-rolling-test lines the previous CLEAR text already handled, and it is the 'disable certain tooling' amendment 8 anticipated. Every check that does not run Python map generation (static, typecheck, hooks, tooling, rust-test) stays, so nothing the GM did not ask to switch off is switched off."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "make land and the push at rust-only: land.py starts no landing cohort; cohort_gate judges every engine landing by the Rust stage gate's record (FR-019) alone, whether or not the delta touches rust/.",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict. A landing cohort rolls the whole Python pipeline, which amendment 8 ('we no longer need to join our Rust process of making maps with the Python process', make land 'going to have to change temporarily') and amendment 10 stop; the Rust gate FR-019 keeps gating."
+    },
+    {
+     "id": "T34-D4",
+     "summary": "The Rust stage gate, work budgets and ratchet (FR-022), the claims rule (FR-021) and static checks stay; FR-019's settlement-reviews for moved pool hamlets wait for the throw back to integrated, each owed then; Python stages run after the Rust front in make hamlet / make map as information.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Deferring FR-019's settlement-reviews narrows WHEN they are owed, not whether: each stays owed at the throw back. At rust-only no Python settlement is rolled (amendments 8 and 10), so a review of a finished hamlet cannot be done then - the rule cannot be applied in that state, not merely awkward to apply. Every gate the GM's words keep (the Rust gate, the budgets, the claims rule of amendment 6) is kept. Unchanged since its CLEAR verdict."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T34 Approach (re-answered 2026-11-07T13:27Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34.1 goal",
+     "summary": "A Rust-stage landing waits only on the Rust stages: no landing cohort, no map rolled, no Python settlement-engine test; the loop fast.",
+     "class": "within",
+     "why": "Amendment 8 ('we no longer need to join our Rust process of making maps with the Python process ... make done or make land are both going to have to change') and amendment 10 ('immediately stop running all of the python map generating code'); FR-023 carries both."
+    },
+    {
+     "id": "T34.2 constraints",
+     "summary": "Bound by FR-019, FR-021, FR-022, FR-023 (as reworded in T35) and feature 132's switch rules.",
+     "class": "within",
+     "why": "These are the accepted spec's own requirements; FR-023 keeps FR-021 and FR-022 unchanged, as amendment 8 asked only for the gating to change."
+    },
+    {
+     "id": "T34.4 maps may shift",
+     "summary": "The row seating's maps may shift by fractions of a foot.",
+     "class": "within",
+     "why": "Amendment 10: 'the literal most important thing here is making things FAST. That is a MORE IMPORTANT first step than making them correct'. The block's cited ground (the GM 2026-10-18) is not in request.md and was not verified; the ruling rests on amendment 10, and under rust-only a downstream map is information (FR-023)."
+    },
+    {
+     "id": "T34.5 order",
+     "summary": "Before any further phase; T27-T33's landing rides it.",
+     "class": "within",
+     "why": "Amendment 8 calls it 'a good first step' and defers the budget discussion until after it ('please do it, and then we can begin to talk about our operations budget')."
+    },
+    {
+     "id": "T34.6 exits",
+     "summary": "Green: hooks-test and switch tests pass, make done green at rust-only, the landing. Red: failure recorded, task set down, an impossibility claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Matches the 2026-11-04 goal-set instruction (stop only if impossible) and FR-023's make done at rust-only. Exempts nothing the request covers."
+    },
+    {
+     "id": "T34.8 budget",
+     "summary": "One landing.",
+     "class": "within",
+     "why": "Scope of a single task; no part of the request is excluded."
+    },
+    {
+     "id": "T34.9 done measured",
+     "summary": "Done is measured as make done's wall time at rust-only (dev/run-log), with no numeric bar in the exits.",
+     "class": "within",
+     "why": "Not a carve-out: the GM gave no number, so setting one would be completing his thought. Observation for the caller and the GM, not blocking: the block's goal names 'the loop fast', its exits carry no speed bar, its own observed figure is make done 344 s at rust-only (pytest 287 s), and amendment 10 calls 100 s 'still INSANELY long for this kind of work'. Green at 344 s would not by itself meet the GM's stated priority."
+    },
+    {
+     "id": "T34.10 constants",
+     "summary": "SET_OUT_TOL_FT and FEW_SEGMENTS are moved, labeled as drawing grains at their point of change.",
+     "class": "within",
+     "why": "Speed work under amendment 10's fast-first words; labeling at the point of change keeps FR-021's claims rule, which FR-023 leaves unchanged."
     }
    ]
   }

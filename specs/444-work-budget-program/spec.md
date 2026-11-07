@@ -209,12 +209,17 @@ standards" (`request.md`).
   (`dev/switches.json` `port`) stands at `rust-only`, the default until the last stage is Rust: no landing is refused for, nor
   waits on, anything the Python stages after the Rust front do - `make land` rolls no landing cohort and judges an engine
   landing by the Rust stage gate (FR-019) alone, whatever the delta touches; `make done` runs no map-rolling test (`rolls_map`)
-  and rolls no reference map or other settlement, its static checks, the Python unit tests that roll no map and `make rust-test`
-  as before; no floor rolls a settlement - the hamlet-path floor and the roll census's verdict are suspended, and the 100% floor
-  is measured on the tests that run, a line only a map-rolling test reached reported as information, as feature 448's exempt
-  engine code is; a map, pool hamlet or render that fails downstream of the Rust front is information, never a defect owed by the
-  landing, and a settlement-review FR-019 owes for a pool hamlet a Rust stage moves is not owed while the switch stands - each is
-  owed, for every pool hamlet the port moved, when it is thrown back. The Rust stages keep FR-004's manifest contract (the same keys), so the Python stages may still be rolled on their
+  and rolls no reference map or other settlement, and runs no Python settlement-engine test at all (amendment 10, the GM
+  2026-11-07: "You should immediately stop running all of the python map generating code as well. That's only slowing us down"):
+  the engine's test trees (`hamletgen`, `settlement`, `gate`, `full`, the tiers, `waterfields`, `sitegen`, `soak`) are left
+  out, and a test elsewhere that would regenerate a pool map or roll a settlement is skipped; its static checks, the tooling,
+  tools, hooks, labels, pipeline and interactive tests, and `make rust-test` run as before; no floor rolls a settlement - the
+  hamlet-path floor and the roll census's verdict are suspended, and the 100% Python floor is measured on the tests that run, an
+  engine line only the left-out trees or a map-rolling test reached reported as information, as feature 448's exempt engine
+  code is, while the Rust crate's floor is held whole on its own tests; a map, pool hamlet or render that fails downstream of the
+  Rust front is information, never a defect owed by the landing, and a settlement-review FR-019 owes, or a glyph-check the review
+  gate (`docs/reviews.md`) owes, for a pool hamlet a Rust stage moves, is not owed while the switch stands - each is owed, for every pool hamlet the port moved, when
+  it is thrown back. The Rust stages keep FR-004's manifest contract (the same keys), so the Python stages may still be rolled on their
   output by hand, as information. Thrown back to `integrated` (FR-019 and feature 386's landing cohort as they stood) when the
   last stage is Rust, by `make switches`, which commits. The work budgets (FR-022) and the claims rule (FR-021) are unchanged.
 
@@ -269,8 +274,10 @@ standards" (`request.md`).
   and the ratchet not refusing an accepted stage above its budget and within its accepted figure.
 - **SC-016** (FR-023): a test finds the port switch at `rust-only` by default, thrown both ways by its make targets, a malformed
   entry closing to the last committed state; at `rust-only` the push judging an engine landing by the Rust stage gate alone (its
-  cohort's regressed seeds notes), `make land` starting no landing cohort, and `make done` deselecting `rolls_map` and rolling no
-  reference map; at `integrated`, feature 386's landing cohort refusing as it stood.
+  cohort's regressed seeds notes), `make land` starting no landing cohort, and `make done` deselecting `rolls_map`, rolling no
+  reference map, leaving out the engine's test trees and skipping a test that would roll a settlement or regenerate a pool map,
+  the 100% Python floor measured on the tests that run with an engine line only the left-out trees reached reported as
+  information; at `integrated`, feature 386's landing cohort refusing as it stood.
 
 ## Edge Cases
 
@@ -350,3 +357,8 @@ standards" (`request.md`).
   run without rolling maps (now: no floor rolls a settlement, the hamlet-path floor and the roll census suspended, the coverage
   floor on the tests that run); the settlement-reviews FR-019 owes (now deferred to the switch's throw back, owed for every pool
   hamlet the port moved). Round 6 closed by the round arbiter's ACCEPT (round:spec-fidelity|444-work-budget-program#5@6).
+- 2026-11-07, amendment 10 (the GM's words, `request.md`): FR-023 reworded to the gate (T35) - no Python settlement-engine test at
+  rust-only, the engine lines only those trees reached reported as information, a hamlet's map reviews owed at the throw back
+- 2026-11-07, amendment 10's review, round 1 (spec-fidelity, routed MODE 3): CHANGES REQUIRED, 2 items - FR-023 named FR-019 as
+  owing a glyph-check (now: the review gate's, `docs/reviews.md`); SC-016 had no criterion for the engine trees left out (now
+  added). Round 2 (spec-fidelity-verify, MODE 3): FAITHFUL.
