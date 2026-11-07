@@ -223,6 +223,38 @@ standards" (`request.md`).
   output by hand, as information. Thrown back to `integrated` (FR-019 and feature 386's landing cohort as they stood) when the
   last stage is Rust, by `make switches`, which commits. The work budgets (FR-022) and the claims rule (FR-021) are unchanged.
 
+- **FR-024**: The Python hamlet engine is deleted and the Rust stages stop at the last efficient one until a fast baseline
+  stands (amendment 11, the GM 2026-11-07: "we should be able, I think, at this point, to literally delete all of the Python code
+  that does any kind of Hamlet generation whatsoever ... we should disable it and stop after phase 2, or whatever the most recent
+  phase that runs quickly and efficiently is"; "NOT the last stage that is ported, after the last stage which is ported AND
+  EFFICIENT"). Six parts, in the order the GM agreed:
+  1. **The frozen reference.** The hamlet placement-order writeup (`dev/placement-stages/`), as last generated from the Python
+     stages, is frozen as a temporary reference and never regenerated from Python; `make placement-stages` and the landing's
+     regeneration are retired until the Rust driver generates its replacement (part 5).
+  2. **The cut.** The Rust stages run through the last stage that is ported and efficient - `waterward`, the sixth: each stage
+     through it counts at most 185,335 operations at 40 households (`dev/work-budget.md`, measured 2026-11-06), where the next,
+     `homesteads`, counts 13.2 million to seat about 40 farmhouses. The stages after the cut (`homesteads`, `track`,
+     `appurtenances` and the shared `law` and `ways` they alone use) are parked out of the crate (`rust/parked/`): kept in the
+     tree, compiled, tested, counted, budgeted and claimed by nothing until the baseline stands and the GM resumes the next stage.
+  3. **The deletion.** Every Python module that rolls, draws or checks a hamlet or any other generated settlement is deleted with
+     its tests and the pool hamlets' `.gen.py` scripts; what Mode A, the hand-drawn Mode B maps (`pool/magistracies/`,
+     `pool/country-shrines/`), the interactive pages, the labels and the kept tooling still import stays, a shared helper moved
+     out of a deleted package where one is needed. The pool hamlets' rendered files and `legacy-hand-authored-pool/` stay as
+     frozen exhibits whose scripts no longer run. The PyO3 doors and the crate's `python` feature go with the Python that called
+     them. The code stays in git history.
+  4. **The code-reading checks.** Each check that read the deleted Python (`dev/rust-tooling.md`) is dropped, or ported to read
+     the Rust where it should still apply (the claims index, the report and the tunables among them).
+  5. **The Rust driver.** A Rust program rolls a hamlet from its spec - the plan, the knob rolls, the stages through the cut - and
+     writes its map (SVG) and its manifest, with no Python; each pool hamlet's spec is a data file its driver reads. A stage is
+     enabled in the driver once it draws; its map is judged against the frozen writeup's plate for that stage.
+  6. **The fast loop.** The crate is split so that an edit rebuilds only its own stage and what depends on it, one feature set
+     shared by the tests, the coverage run and the build, each measured before and after (`cargo build --timings`).
+  The gates that presume a whole hamlet - the Python Rust stage gate and its frozen inputs, the landing cohort, the reference map,
+  the hamlet-path floor, the roll census, the review gate's pool-hamlet units, the work-budget roll through the Python driver -
+  are deleted, or switched off where a replacement is owed; the Rust driver's own seeds, the crate's tests and coverage, the work
+  budgets of the stages through the cut and the claims rule (FR-021) on the Rust through the cut stand in their place. No
+  further stage is ported until the GM resumes it.
+
 ## Success Criteria *(mandatory)*
 
 - **SC-001** (FR-001, FR-002, FR-013): every stage has a SOUND verdict, or the round arbiter's accept of its derivation (FR-013), given
@@ -278,6 +310,11 @@ standards" (`request.md`).
   reference map, leaving out the engine's test trees and skipping a test that would roll a settlement or regenerate a pool map,
   the Python coverage floor measured on the tests that run with an engine line only the left-out trees reached reported as
   information; at `integrated`, feature 386's landing cohort refusing as it stood.
+- **SC-017** (FR-024): no Python module under `l7r/` rolls or draws a hamlet (none imports a deleted package; the hand-drawn maps'
+  checks and Mode A's tests pass); the crate builds and tests without `rust/parked/`; `make placement-stages` names the frozen
+  reference; the Rust driver rolls each pool hamlet's spec to an SVG and a manifest through the cut with no Python, each stage it
+  draws compared with the frozen plate; an edit to one stage's file rebuilds only that stage's crate and its dependents,
+  measured; `make done` green with none of the deleted gates.
 
 ## Edge Cases
 
@@ -362,3 +399,5 @@ standards" (`request.md`).
 - 2026-11-07, amendment 10's review, round 1 (spec-fidelity, routed MODE 3): CHANGES REQUIRED, 2 items - FR-023 named FR-019 as
   owing a glyph-check (now: the review gate's, `docs/reviews.md`); SC-016 had no criterion for the engine trees left out (now
   added). Round 2 (spec-fidelity-verify, MODE 3): FAITHFUL.
+- 2026-11-07, amendment 11 (the GM's words, `request.md`): FR-024 and SC-017 - the Python hamlet engine deleted, the Rust stages
+  cut after the last efficient one (waterward), the frozen writeup, the Rust driver, the crate split.

@@ -461,3 +461,29 @@ In the session, as the gate's minutes were measured:
 "I'm surprised compilation takes so long. Are we recompiling EVERYTHING every time? I thought Rust compilers were pretty good about modularization, only compiling what you need, etc."
 
 Later the same day, on T36's figure: "I don't recall setting a 100s target. 100 seconds actually seems like FAR too long to me!" and "To the extent we have a goal it's "significantly under a minute" with the exact target TBD."
+
+## 2026-11-07, amendment 11 - the Python hamlet engine deleted; the Rust stages stopped after the field until a fast baseline stands
+
+In the session, after the claims question was answered (dictated; "right up" heard for "writeup", corrected by the voice mod):
+
+"Okay, so here's what we need to do. It seems like I need to be extremely specific here. And I think that this is basically a matter where, because humans have impatience and LLMs do not, It is leading to a situation in which my direction to make things faster to have an efficient dev loop is resulting in you developing a completely unacceptable dev loop because you are not capable of feeling the effects of how long it takes. which is in turn resulting in a completely broken dev process that in practice will simply never complete.
+
+So. We currently have our Hamlet placement order writeup. I would like for that to be the basis of our new implementation. In other words, we should be able, I think, at this point, to literally delete all of the Python code that does any kind of Hamlet generation whatsoever. As well as all of the Python code that is the unit tests for that. and all of the code that introspects the Python code, although the code that introspects the Python code should get Rust ports because we still want it to introspect our Rust code to do the same things, such as claims reporting and such. by completely eliminating in every way this Python code, it will not be able to slow us down. That seems like literally the only way that we could possibly ever get this done. the code will still be available in our Git history. So it is not lost forever. And if we ever have any reason to go back and look at it or even resurrect it in order to run it, then we will be completely able to do that thanks to the magic of version control. But we absolutely cannot allow that old code base to continue slowing down our development loop.
+
+Now, in addition to that, the most important thing that we could possibly do here is to get our Rust code to a point where we have generated a partial map. So for example, maybe that means a map that only has phase 1 and phase 2 and nothing else. In other words, the map that I see when I look at the old Hamlet placement order HTML file write-up. Just that. And then if we can get that both working and fast, and at a point where we can do iteration quickly, and where every part of what we are doing runs quickly and efficiently and has no obvious issues like recompiling every single file every time we make a change to one file, then and only then should we move forward with trying to implement the next phase.
+
+Now, I am not saying that we should literally just throw out all of the work that we have done on the Rust port past our most recent working and efficient phase, but I do believe we should disable it and stop after phase 2, or whatever the most recent phase that runs quickly and efficiently is, until we have a sensible baseline of something which is efficient, performant, completely works, etc.
+
+This will also likely involve modifying our landing gates and things of that nature which are currently written to presume a fully functioning Hamlet map. We will eventually want to develop new gates for the new Rust port, but for right now, that is not feasible. So we can do whatever combination of switching those off or even just deleting them outright because we know that they will need to be replaced makes sense for us.
+
+We will still have Python code, of course, because some of our helper scripts are Python, and the automated checks for hand-drawn maps, such as magistracy maps, are currently Python. So that is all fine for now. My recollection is that those are reasonably efficient and are not a large drag on our efforts. And in fact, if our gates are not bugged, then as long as we are not modifying those things, they don't even get run as part of our development loop or our landing, right?
+
+How does all of this sound as a next step to you?"
+
+Then, mid-turn: "I should mention that I am aware that the hamlet placement order HTML file is generated from the Python code. So if we want to use that then we will needc to freeze a current version of it as a temporary reference which will be replaced by a new autoamtically generated versaion after our port"
+
+Told the order proposed (freeze the writeup; delete the Python hamlet engine and its tests, each code-reading check that should still apply reading Rust; switch off the stages after the field and the gates that presume a whole hamlet; build the Rust driver, plan, knob rolls, drawing and manifest for phases 1 and 2, checked against the frozen stage-2 plate; split the crate so an edit rebuilds only its stage), and that `make test-full` runs the whole suite (214 s) on every engine landing: "That sounds good. Please proceed with that."
+
+Then, as the plan was written: "One thing to clarify is that when I mentioned phases 1 and 2, that was just my own understanding of where we were at. I was not telling you that that must be the exact first piece."
+
+And: "No, NOT the last stage that is olrted, after the last stage whch is ported AND EFFICIENT.  If the latest ported staged is spending millions of poerations tolay out a few dozen farmhouses then we should stop BEFPRE that."

@@ -1137,3 +1137,172 @@ engine's tests back in would contradict it.
 9. **Done, measured.** `make done` at rust-only collects what FR-023 names.
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
+
+### T37-T43 - amendment 11: the Python hamlet engine deleted, the Rust stopped at the last efficient stage (FR-024, SC-017; the GM 2026-11-07: "That sounds good. Please proceed with that.")
+
+Occasions: none owed for the deletion, the cut, the gates or the crate split (no map, glyph or research page changes); T41's
+first Rust map owes a glyph-check per element new to a map drawn by Rust, at the landing that first draws it (`docs/reviews.md`).
+
+### T37-T43 Decisions
+
+- **D1 - the order** (the GM's agreed order): T37 freeze the writeup; T38 park the Rust past the cut; T39 delete the Python hamlet
+  engine and its tests, with the code-reading checks (T40) and the gates (T41's switch-offs) in the same landing so the tree stays
+  green; T42 the Rust driver; T43 the crate split. One `make done` green before the landing, which carries T27-T33's unlanded
+  commits with it.
+- **D2 - the cut** (FR-024 part 2): through `waterward`. Measured on `dev/work-budget.md` (2026-11-06, 4 seeds a size): water_frame
+  56, field 185,335, sink 2,107, seat 36,892, hem 31,440, waterward 0 at 40 households; homesteads 13,170,400. The seat stands at
+  193 times its paper budget of 191 but at 37 thousand operations in all, its overage approved by the GM (2026-11-07, "the seat
+  ones sound good too"); it is flagged, not cut. The parked modules (`homesteads`, `track`, `appurtenances`, `law`, `ways`) are
+  used by no kept module (each kept module's `crate::` uses, read 2026-11-07: field uses counts, course, hem and pyrand; sink and
+  course use field and sink; seat, hem and waterward use field).
+- **D3 - the delete set** (FR-024 part 3): by reachability, not by a list - every `l7r/` module the kept roots (the hand-drawn
+  maps' `.gen.py`, Mode A's modules and tests, the interactive, labels and overlap packages, the kept `scripts/`) do not import
+  once the hamlet packages are gone. Measured 2026-11-07 (an import graph over `l7r/`): the hand-drawn maps reach `hamletgen`
+  and `settlement` today only through `settlement/__init__`'s facade (the overlap checks import `settlement._geom`; the modal
+  conditions import `settlement._knobs` lazily) - so the geometry primitives move to a kept package and the knob registry's
+  readers read the Rust tables or drop. Deleted: `hamletgen`, `settlement`, `sitegen`, `waterfields`, `pipeline`'s roll and
+  gen caches, the tools that roll a hamlet, their tests, and `pool/hamlets/*/*.gen.py`.
+- **D4 - the gates** (FR-024's last paragraph): deleted with the Python they run - `tools.rust_gate` and `dev/rust-gate/frozen/`
+  (Python pickles), `make cohort`/`cohort-landing`, the reference map step, the hamlet-path floor, the roll census, `make
+  hamlet`/`map`, `make work-budget`'s Python roll, `make placement-stages`'s generator, `PY_ENGINE_IGNORE` (nothing left to ignore);
+  the review gate's pool-hamlet units retire with the scripts. Kept: `make rust-test`, the Rust coverage floor, the claims rule on
+  the Rust through the cut, the budgets of the stages through the cut (read from the driver's counts once T42 lands; until then
+  from the crate's counters test). The `port` switch stays at `rust-only`, now its only state that has an engine.
+- **D5 - the driver** (FR-024 part 5): a binary target `hamlet` in the Rust tree; a pool hamlet's spec moves from its `.gen.py`
+  call to `pool/hamlets/<name>/<name>.spec.json` (the same fields: name, seed, households, down_deg, water_sink, settlement form,
+  pins); `make hamlet SPEC=<path>` runs it, writing `<name>.svg` and `<name>.json` beside the spec. Built stage by stage: the
+  plan and the water frame, then the field (the first map), then sink, seat, hem and waterward, each enabled once it draws.
+- **D6 - the crate split** (FR-024 part 6): a cargo workspace - one crate for the shared geometry, counts and random stream, one per
+  stage, one for the driver; the `python` feature and PyO3 gone (D3), the `counters` feature on in every build so the tests, the
+  coverage run and the driver share one feature set. Measured before and after: `cargo build --timings` from clean and after a
+  one-line edit to one stage.
+
+### T36 Approach (checklist part A)
+
+1. **The goal, in the world.** `make test-full` runs in significantly under a minute (the GM 2026-11-07).
+2. **The constraints.** FR-023, FR-024.
+3. **Where each comes from.** G: the GM 2026-11-07 (`request.md`, amendment 10). O: `make test-full` 214 s, measured 2026-11-07 (its wall time); the slowest tests, measured 2026-11-07 (`make durations N=60`).
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After T41: the deleted trees take most of the suite with them, then the tooling tests' fixture builds.
+6. **The exits.** Green: `make test-full`'s wall time, measured at the landing (`date +%s` either side). Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make test-full`'s wall time, measured at the landing (`date +%s` either side).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T37 Approach (checklist part A)
+
+1. **The goal, in the world.** The placement-order writeup stays readable as the reference the Rust map is judged against, and nothing regenerates it from Python.
+2. **The constraints.** FR-024 part 1.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11); the GM's mid-turn word on freezing it.
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** First (D1).
+6. **The exits.** Green: `make placement-stages` names the frozen reference and rolls nothing. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make placement-stages` names the frozen reference and rolls nothing.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T38 Approach (checklist part A)
+
+1. **The goal, in the world.** The crate holds only the stages through waterward.
+2. **The constraints.** FR-024 part 2, FR-021, FR-022.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11). O: the budget table, measured 2026-11-06 (`make work-budget`); the kept modules' `crate::` uses, measured 2026-11-07 (a grep).
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After T37 (D1).
+6. **The exits.** Green: `make rust-test` green with `rust/parked/` outside the crate; its wall time. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make rust-test` green with `rust/parked/` outside the crate; its wall time.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T39 Approach (checklist part A)
+
+1. **The goal, in the world.** No Python module rolls or draws a hamlet; the hand-drawn maps and Mode A unchanged.
+2. **The constraints.** FR-024 part 3, SC-017.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11). O: the import graph over `l7r/`, measured 2026-11-07 (an `ast` walk).
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After T38, in one landing with T40 and T41 (D1).
+6. **The exits.** Green: the kept tests green; `make test-full`'s count and wall time. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** the kept tests green; `make test-full`'s count and wall time.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** Every check that read the deleted Python reads the Rust or is gone.
+2. **The constraints.** FR-024 part 4.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11); `dev/rust-tooling.md`'s rows.
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** With T39 (D1).
+6. **The exits.** Green: `make rust-tooling` green; the claims report reads the kept Rust. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make rust-tooling` green; the claims report reads the kept Rust.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing waits only on checks of what still exists.
+2. **The constraints.** FR-024 (the gates), FR-021, FR-022.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11) ("switching those off or even just deleting them outright").
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** With T39 (D1).
+6. **The exits.** Green: `make done` green, its wall time (`dev/run-log`). Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make done` green, its wall time (`dev/run-log`).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** `make hamlet SPEC=` draws a pool hamlet through the cut from Rust alone.
+2. **The constraints.** FR-004, FR-024 part 5.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11); the frozen plates (T37).
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After the T37-T41 landing.
+6. **The exits.** Green: each pool spec's wall time; each enabled stage compared with its frozen plate. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** each pool spec's wall time; each enabled stage compared with its frozen plate.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T43 Approach (checklist part A)
+
+1. **The goal, in the world.** An edit to one stage rebuilds only that stage and its dependents.
+2. **The constraints.** FR-024 part 6.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11) ("no obvious issues like recompiling every single file every time we make a change to one file").
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After T42, or before it if the driver's builds measure slow.
+6. **The exits.** Green: `cargo build --timings` from clean and after a one-line edit, before and after. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `cargo build --timings` from clean and after a one-line edit, before and after.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T37-T43 the shared approach
+
+1. **The goal, in the world.** A Rust program draws a hamlet through its sixth stage in well under a second, and the loop around it
+   (build, test, gate) runs in well under a minute (the GM 2026-11-07: "significantly under a minute").
+2. **The constraints.** FR-021 (claims), FR-022 (budgets), FR-024; the hand-drawn maps' checks and Mode A unchanged.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11). O: the budget table, measured 2026-11-06 (`make work-budget`);
+   the import graph and the crate's `crate::` uses, measured 2026-11-07 (an `ast` walk, a grep); `make test-full` 214 s, measured
+   2026-11-07 (its wall time).
+4. **Do they describe the world here?** Tooling and engine structure; the maps drawn by Rust replace the Python's, judged against
+   the frozen plates.
+5. **The order.** D1.
+6. **The exits.** Green: SC-017. Red: what failed recorded and the task set down; a process stop to `make arbiter-ask`.
+7. **The search smell.** None new: the driver runs each stage once.
+8. **The budget.** One landing for T37-T41, one each for T42 and T43.
+9. **Done, measured.** `make done`'s wall time, the driver's wall time on each pool spec, the rebuild after a one-line edit.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
