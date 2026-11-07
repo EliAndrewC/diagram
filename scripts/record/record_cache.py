@@ -70,7 +70,7 @@ class RevReader:
     def names(self, directory: str) -> list[str]:
         """The files directly in `directory` (one of `dirs` or below one) at `rev`, as `git ls-tree --name-only` lists them."""
         d = directory.rstrip("/") + "/"
-        return sorted(n for n in self._load() if n.startswith(d) and "/" not in n[len(d):])
+        return sorted(n for n in self._load() if n.startswith(d) and "/" not in n[len(d) :])
 
     def inside(self, path: str) -> bool:
         return any(path == d or path.startswith(d + "/") for d in self.dirs)
@@ -92,28 +92,26 @@ def common_dir(root: pathlib.Path) -> pathlib.Path | None:
     return path if path.is_absolute() else root / path
 
 
-def _codeid():  # noqa: ANN202 - the module, loaded by path
-    """`scripts/gates/codeid.py`, loaded by PATH (stdlib only, as `gate-stamp.py` loads it): this script does not import the
-    engine package."""
+def _gate_stamp():  # noqa: ANN202 - the module, loaded by path
+    """`scripts/gates/gate-stamp.py`, loaded by PATH, for `content_id`: its semantic ids kept under `.git/` across processes."""
     import importlib.util  # noqa: PLC0415
     import sys  # noqa: PLC0415
 
-    cached = sys.modules.get("l7r_codeid")
+    cached = sys.modules.get("l7r_gate_stamp")
     if cached is not None:
         return cached
-    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "codeid.py"
-    spec = importlib.util.spec_from_file_location("l7r_codeid", path)
+    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "gate-stamp.py"
+    spec = importlib.util.spec_from_file_location("l7r_gate_stamp", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules["l7r_codeid"] = mod
+    sys.modules["l7r_gate_stamp"] = mod
     spec.loader.exec_module(mod)
     return mod
 
 
-#: each Python file's semantic digest by the digest of its bytes, for the process (the GM 2026-11-07: "the literal most important
-#: thing here is making things FAST"): a claims command hashed some 86 files' docstring-free ASTs twice a call, about 1.4 s, the same
-#: bytes each time - keyed by the bytes' own digest, an edited file is never served its old one
-_SEMANTIC: dict[str, bytes] = {}
+#: where the semantic ids are kept: this repository's `.git/`, the ids a pure function of a file's bytes (git's blob id), so a
+#: fixture repository's files share them safely
+_REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def code_sha(*paths: pathlib.Path) -> str:
@@ -123,10 +121,10 @@ def code_sha(*paths: pathlib.Path) -> str:
     for p in paths:
         data = p.read_bytes()
         if p.suffix == ".py":
-            raw = hashlib.sha256(data).hexdigest()
-            if raw not in _SEMANTIC:
-                _SEMANTIC[raw] = _codeid().semantic_bytes(data, p.name)  # (the bytes themselves: every stored key stays as it was)
-            h.update(_SEMANTIC[raw])
+            # ...ITS SEMANTIC ID KEPT ACROSS PROCESSES (feature 444 T36, measured 2026-11-07: every record command parsed and dumped
+            # some 86 files' ASTs afresh, 1.3 s of a 3.3 s bundle build; the GM: "any single test which takes even 100 milliseconds
+            # is fairly suspect"): `gate-stamp.content_id`, keyed by git's blob id, computed once per content and read back after
+            h.update(_gate_stamp().content_id(data, p.name, _REPO).encode())
         else:
             h.update(data)
     return h.hexdigest()[:16]
@@ -172,7 +170,7 @@ def _import_names(path: pathlib.Path, repo: pathlib.Path) -> list[str]:
         f = _names_file(repo)
         try:
             loaded = json.loads(f.read_text(encoding="utf-8")) if f is not None and f.is_file() else {}
-        except (OSError, ValueError):
+        except OSError, ValueError:
             loaded = {}
         _NAMES.update(loaded if isinstance(loaded, dict) else {})
     st = path.stat()
@@ -184,7 +182,7 @@ def _import_names(path: pathlib.Path, repo: pathlib.Path) -> list[str]:
     names: list[str] = []
     try:
         tree = ast.parse(path.read_text(encoding="utf-8"))
-    except (SyntaxError, UnicodeDecodeError):
+    except SyntaxError, UnicodeDecodeError:
         tree = None
     for node in ast.walk(tree) if tree is not None else ():
         if isinstance(node, ast.Import):
@@ -397,7 +395,7 @@ class ResultMemo:
             import json  # noqa: PLC0415
 
             kept = json.loads(self.path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
+        except OSError, ValueError:
             return None
         return (kept.get("out", ""), kept.get("err", "")) if isinstance(kept, dict) and kept.get("key") == self.key else None
 
