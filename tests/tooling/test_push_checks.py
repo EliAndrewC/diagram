@@ -62,13 +62,6 @@ def _tree(tmp: pathlib.Path, files: dict[str, str]) -> pathlib.Path:
 WHOLE_TREE = [c for c in pc.CHECKS if not c[4] and c[0] not in ("spec-lint", "downloads", "gate-stamp", "record", "glossary")]
 
 
-@pytest.mark.parametrize("name,rel,argv", [(c[0], c[1], c[2]) for c in WHOLE_TREE], ids=[c[0] for c in WHOLE_TREE])
-def test_each_check_in_this_process_gives_what_it_gives_alone(name: str, rel: str, argv: tuple[str, ...], capfd: pytest.CaptureFixture[str]) -> None:
-    path = ROOT / "scripts" / rel
-    args = [a.replace("{root}", str(ROOT)) for a in argv]
-    assert _inside(path, args, ROOT, capfd) == _alone(path, args, ROOT), name
-
-
 SEEDED = {
     "duplicate-defs": ({"l7r/a.py": "def f():\n    return 1\n\n\ndef f():\n    return 2\n"}, "gates/check-duplicate-defs.py", ["."]),
     "conflict": ({"a.md": "<" * 7 + " ours\nx\n" + "=" * 7 + "\ny\n" + ">" * 7 + " theirs\n"}, "hooks/lib/hm_conflict.py", ["--tracked", "."]),

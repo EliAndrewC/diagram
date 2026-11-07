@@ -13,8 +13,6 @@ import importlib.util
 import pathlib
 import sys
 
-import pytest
-
 from tests._scripts import script
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -46,21 +44,6 @@ def _manifest(d: pathlib.Path) -> str:
     """The bundle's MANIFEST, or its first batch's where the check splits a large page into batches (quote-check)."""
     top = d / "MANIFEST.md"
     return (top if top.is_file() else sorted(d.glob("batch-*/MANIFEST.md"))[0]).read_text(encoding="utf-8")
-
-
-@pytest.mark.parametrize("for_", ["record-format", "quote-check"])
-def test_two_record_bundles_of_one_check_share_less_than_the_limit(for_: str, tmp_path: pathlib.Path) -> None:
-    for q in ("0086", "0087"):
-        assert cb.main([q, "--for", for_, "--no-quotes", "--not-owed-ok", "a test of the shared text", "--out", str(tmp_path / q), "--root", str(REPO)]) == 0
-    assert _shared(tmp_path / "0086", tmp_path / "0087") < LIMIT
-
-
-@pytest.mark.parametrize("for_", ["modal-form", "modal-research", "modal-depiction"])
-def test_two_modal_bundles_of_one_check_share_less_than_the_limit(for_: str, tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("CHECK_ORDER_OK", "a test of the bundle's shared text, not of the check order")
-    for kind in ("Alder", "Barley"):
-        assert mb.bundle(REPO, kind, for_, str(tmp_path / kind), "a test of the shared text") == 0
-    assert _shared(tmp_path / "Alder", tmp_path / "Barley") < LIMIT, "a modal bundle repeats a contract's text - move it to the agent file"
 
 
 def test_the_measure_fails_on_a_block_both_bundles_repeat(tmp_path: pathlib.Path) -> None:

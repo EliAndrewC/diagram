@@ -52,6 +52,9 @@ TOOLING = "tests/tooling/"
 TOOLING_READS = "tooling-reads.json"
 #: a recorded module whose test started a program the recorder cannot see into: its reads are not known
 UNKNOWN = "*"
+#: the tree of a tool's checks over the whole repository: a whole-tree scan reads every file, so its reads would select it for
+#: every edit, but what it checks is its tool's, run when the gate plans full (feature 444 T36, `tests/CLAUDE.md`)
+REAL_TREE = "tests/tooling/real_tree/"
 
 
 def recorded_reads(store: Path) -> dict[str, set[str]] | None:
@@ -80,7 +83,8 @@ def rust_readers(root: Path, changed: list[str] = [], reads: dict[str, set[str]]
 
     A tooling module the gate recorded is selected when one of its tests READ a `changed` path (`reads`, `recorded_reads` of the
     baseline's store); every other module - outside the recorded tree, never recorded, or one whose test started a program the
-    recorder could not see into - when its source names the crate, its tooling or `.rs` (`RUST_READS`). The source rule alone
+    recorder could not see into - when its source names the crate, its tooling or `.rs` (`RUST_READS`); a tool's whole-tree check
+    (`REAL_TREE`) never, its occasion its tool's change. The source rule alone
     selected 20 modules for a one-line edit and missed four that read the crate (measured 2026-11-07: `test_bundle_shared_text`,
     `test_modal_checks`, `test_claims_coverage`, `test_doc_links`), and its tooling tests only ran `rust_checks.py` on a fixture
     crate - their change is a `scripts/` change, planned as one."""
@@ -90,6 +94,8 @@ def rust_readers(root: Path, changed: list[str] = [], reads: dict[str, set[str]]
         if parts[0] in skip or parts[0].startswith("tier_"):
             continue
         rel = p.relative_to(root).as_posix()
+        if rel.startswith(REAL_TREE):
+            continue
         seen = (reads or {}).get(rel) if rel.startswith(TOOLING) else None
         if touches(seen, changed) if seen is not None and UNKNOWN not in seen else RUST_READS.search(p.read_text(encoding="utf-8")):
             out.append(rel)

@@ -530,6 +530,7 @@ def test_a_rust_file_selects_a_recorded_tooling_test_only_when_it_read_the_chang
         "tests/tooling/test_opaque.py": "import rust_checks\n",
         "tests/tooling/test_unrecorded.py": "import rust_checks\n",
         "tests/soak/test_soak.py": "import rust_checks\n",
+        "tests/tooling/real_tree/test_whole_tree.py": "import rust_checks\n",
         "tests/tier_town/test_town.py": "import rust_checks\n",
         "tests/test_a.py": "x = 1\n",
     }.items():
@@ -541,6 +542,7 @@ def test_a_rust_file_selects_a_recorded_tooling_test_only_when_it_read_the_chang
             "tests/tooling/test_reads_it.py::t": {"files": ["rust/phases/src/field.rs"], "dirs": []},
             "tests/tooling/test_fixture_crate.py::t": {"files": ["tests/fixtures/rust/fixture/src/lib.rs"], "dirs": []},
             "tests/tooling/test_opaque.py::t": {"files": [], "dirs": [], "opaque": ["cargo"]},
+            "tests/tooling/real_tree/test_whole_tree.py::t": {"files": ["rust/phases/src/field.rs"], "dirs": []},
         },
         "files": {"tests/tooling/test_lists_its_dir.py": {"entry": {"files": [], "dirs": ["rust/phases/src"]}}},
     }
