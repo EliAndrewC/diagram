@@ -17,10 +17,16 @@ fn cohort(first: i64, count: i64) {
         let s = Instant::now();
         match l7r_phases::driver::roll(&spec) {
             Ok(r) => {
+                let broke = l7r_phases::driver::check::check(&r);
                 let why = r.refusals.first().map_or(String::new(), |w| {
                     format!("  REFUSED: {}", w.chars().take(140).collect::<String>())
                 });
-                refused += usize::from(!r.refusals.is_empty());
+                let why = if broke.is_empty() {
+                    why
+                } else {
+                    format!("{why}  BROKE: {}", broke.join("  BROKE: "))
+                };
+                refused += usize::from(!r.refusals.is_empty() || !broke.is_empty());
                 println!(
                     "{} hh={} {} form={} {:.1} ms - {}{why}",
                     spec.name,
@@ -38,7 +44,7 @@ fn cohort(first: i64, count: i64) {
         }
     }
     println!(
-        "cohort: {count} seed(s) from {first}, {refused} refused, in {:.0} ms",
+        "cohort: {count} seed(s) from {first}, {refused} refused or broke a rule, in {:.0} ms",
         t.elapsed().as_secs_f64() * 1000.0
     );
     if refused > 0 {

@@ -81,6 +81,20 @@ pub fn manifest(r: &Rolled) -> String {
         );
     }
     o.push_str(" ],\n");
+    let dry: Vec<String> = r
+        .dry
+        .iter()
+        .map(|d| {
+            format!(
+                "{{\"crop\": {}, \"tract\": {}, \"theta\": {:.4}, \"poly\": {}}}",
+                js(d.crop),
+                d.tract,
+                d.theta,
+                ring_js(&d.poly)
+            )
+        })
+        .collect();
+    let _ = writeln!(o, " \"dry_plots\": [{}],", dry.join(","));
     let field_grain = r.field_grain.map_or_else(
         || "null".to_owned(),
         |(drawn, need, room)| {

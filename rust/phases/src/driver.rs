@@ -6,6 +6,7 @@
 //! Research:
 //!     the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it
 
+pub mod check;
 pub mod plan;
 mod polder;
 mod record;

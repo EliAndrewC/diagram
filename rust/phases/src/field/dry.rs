@@ -486,7 +486,7 @@ impl Canal {
 }
 
 /// Whether a dry plot is refused: onto the rice (its middle or its outer corners in the field - its inner edge may lie on the
-/// canal's bank), onto a plot an earlier tract laid, or in the water along its inner edge, where a bend of the canal may meet it,
+/// canal's bank), onto a plot an earlier tract laid (either's middle in the other, or its corners in the laid one), or in the water along its inner edge, where a bend of the canal may meet it,
 /// or at its outer corners.
 ///
 /// Research:
@@ -519,8 +519,12 @@ fn refused(
         let mut tests = 0_u64;
         let hit = laid.near(lo, hi).into_iter().any(|i| {
             let q = &plots[i].poly;
-            tests += 1;
+            tests += 2;
+            // ...AND THE LAID PLOT'S MIDDLE IN THE CANDIDATE (feature 444 T42's map checks, cohort seeds 320 and 994): a sliver laid at a
+            // bend lay wholly inside a later, larger plot, none of whose corners stood in the sliver
+            let q_middle = (f64::midpoint(q[0].0, q[2].0), f64::midpoint(q[0].1, q[2].1));
             inside(middle, q)
+                || inside(q_middle, poly)
                 || pulled.iter().any(|c| {
                     tests += 1;
                     inside(*c, q)

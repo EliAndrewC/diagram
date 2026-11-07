@@ -13,3 +13,4 @@
 | `svg.rs` | the SVG writer: the palette, the crop, tapered ditches, furrowed dry plots, the dike's band |
 | `toe.rs` | the wet toe below the field and a ring grown by the lane's width, the seat's inputs |
 | `record.rs` | the JSON record |
+| `check.rs` | the finished map's checks - dry plots off the paddy, the water and each other, the tameike off the paddy, the seat off the field, all on the canvas; `make cohort` fails a seed that breaks one |
