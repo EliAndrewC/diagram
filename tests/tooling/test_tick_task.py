@@ -908,9 +908,12 @@ def test_a_counter_only_landing_rolls_no_fresh_block(tmp_path: pathlib.Path, mon
     lb, _d = _land(tmp_path, monkeypatch)
     started: list[pathlib.Path] = []
     monkeypatch.setattr(lb, "start_fresh_block", lambda root: started.append(root) or root / "fresh.log")
+    monkeypatch.setattr(lb, "_port", lambda root: "integrated")
     assert "counter-only" in lb.fresh_block_after(tmp_path, True, True) and started == []
     assert "fresh block started" in lb.fresh_block_after(tmp_path, True, False) and started == [tmp_path]
     assert lb.fresh_block_after(tmp_path, False, False) == ""
+    monkeypatch.setattr(lb, "_port", lambda root: "rust-only")
+    assert lb.fresh_block_after(tmp_path, True, False) == "" and started == [tmp_path], "no Python cohort at rust-only (444 T41)"
     asked: list[list[str]] = []
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: asked.append([str(c) for c in cmd]) or (0, ""))
     assert lb.counter_only(tmp_path) and asked[-1][-1] == "counter-only" and asked[-1][1].endswith("cohort_gate.py")
