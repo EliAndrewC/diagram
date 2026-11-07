@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import functools
 import json
 import re
 import shutil
@@ -449,6 +450,18 @@ def keyed_files(root: Path, counts: list[dict]) -> list[Path]:
     return [p for p in sorted((root / "l7r").rglob("*.py")) if any(f'"{k}"' in p.read_text(encoding="utf-8") for k in keys)]
 
 
+@functools.cache
+def _parsed_at(path: str, mtime_ns: int) -> tuple[ast.Module, frozenset[str]]:
+    """A module's tree and what it defines, parsed once a process for each version of the file (the GM 2026-11-07: "the literal
+    most important thing here is making things FAST"): an audit parsed and walked the same modules some 1,200 times, 18 s)."""
+    tree = ast.parse(Path(path).read_text(encoding="utf-8"))
+    return tree, frozenset(_defined(tree))
+
+
+def _parsed(path: Path) -> tuple[ast.Module, frozenset[str]]:
+    return _parsed_at(str(path), path.stat().st_mtime_ns)
+
+
 def _defined(tree: ast.Module) -> set[str]:
     """Every function and class a module defines, at its top level or as a method."""
     return {n.name for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
@@ -459,8 +472,20 @@ def _module_file(root: Path, dotted: str) -> Path | None:
     return p.with_suffix(".py") if p.with_suffix(".py").is_file() else p / "__init__.py" if (p / "__init__.py").is_file() else None
 
 
+_IMPORTS: dict[tuple[str, str, int], tuple[dict[str, tuple[str, str]], dict[str, str]]] = {}
+
+
 def _imports(root: Path, path: Path, tree: ast.Module) -> tuple[dict[str, tuple[str, str]], dict[str, str]]:
-    """A module's imports from `l7r`: each name brought in by `from M import n as b` (b -> (M, n)), each `import M as m` (m -> M)."""
+    """A module's imports from `l7r`: each name brought in by `from M import n as b` (b -> (M, n)), each `import M as m` (m -> M);
+    read once a process for each version of the file (`_parsed_at`)."""
+    key = (str(root), str(path), path.stat().st_mtime_ns)
+    if key not in _IMPORTS:
+        _IMPORTS[key] = _imports_of(root, path, tree)
+    return _IMPORTS[key]
+
+
+def _imports_of(root: Path, path: Path, tree: ast.Module) -> tuple[dict[str, tuple[str, str]], dict[str, str]]:
+    """`_imports`' reading."""
     pkg = path.relative_to(root).with_suffix("").parts[:-1] if path.name != "__init__.py" else path.relative_to(root).parts[:-1]
     names: dict[str, tuple[str, str]] = {}
     mods: dict[str, str] = {}
@@ -486,8 +511,8 @@ def _definer(root: Path, mod: str, name: str, seen: frozenset[str] = frozenset()
     f = _module_file(root, mod)
     if f is None or mod in seen:
         return None
-    tree = ast.parse(f.read_text(encoding="utf-8"))
-    if name in _defined(tree):
+    tree, defined = _parsed(f)
+    if name in defined:
         return f
     names, _ = _imports(root, f, tree)
     if name in names and (q := _definer(root, *names[name], seen | {mod})):  # `from .law_water import crossing_points`
@@ -505,14 +530,14 @@ def called_files(root: Path, seeds: list[Path]) -> tuple[list[Path], list[str]]:
     cannot be found (the round arbiter's tooling fix on ask:444-T16-field-audit-6: audits 4 and 5 both found called code missing
     from their bundles - `field_channel`, `rest_basin` - and the gap cost a superseded GM question)."""
     mixins = {
-        q: _defined(ast.parse(q.read_text(encoding="utf-8")))
+        q: set(_parsed(q)[1])
         for q in sorted((root / "l7r" / "diagram" / "settlement").rglob("*.py"))
     } if (root / "l7r" / "diagram" / "settlement").is_dir() else {}
     found: list[Path] = []
     missing: list[str] = []
     for p in seeds:
-        tree = ast.parse(p.read_text(encoding="utf-8"))
-        own, (names, mods) = _defined(tree), _imports(root, p, tree)
+        tree, own_names = _parsed(p)
+        own, (names, mods) = set(own_names), _imports(root, p, tree)
         for c in (n.func for n in ast.walk(tree) if isinstance(n, ast.Call)):
             hit: list[Path | None] = []
             if isinstance(c, ast.Name) and c.id in names:
