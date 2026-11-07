@@ -1244,7 +1244,20 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-<!-- plan-archive: T38 to T38 moved to plan-done.md, 2026-11-07 (feature 375 FR-044) -->
+### T38 Approach (checklist part A)
+
+1. **The goal, in the world.** The crate holds only the stages through waterward.
+2. **The constraints.** FR-024 part 2, FR-021, FR-022.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11). O: the budget table, measured 2026-11-06 (`make work-budget`); the kept modules' `crate::` uses, measured 2026-11-07 (a grep).
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** After T37 (D1).
+6. **The exits.** Green: `make rust-test` green with `rust/parked/` outside the crate; its wall time. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make rust-test` green with `rust/parked/` outside the crate; its wall time.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
 ### T39 Approach (checklist part A)
 
 1. **The goal, in the world.** No Python module rolls or draws a hamlet; the hand-drawn maps and Mode A unchanged.
@@ -1259,8 +1272,34 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-<!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-11-07 (feature 375 FR-044) -->
-<!-- plan-archive: T41 to T41 moved to plan-done.md, 2026-11-07 (feature 375 FR-044) -->
+### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** Every check that read the deleted Python reads the Rust or is gone.
+2. **The constraints.** FR-024 part 4.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11); `dev/rust-tooling.md`'s rows.
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** With T39 (D1).
+6. **The exits.** Green: `make rust-tooling` green; the claims report reads the kept Rust. Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make rust-tooling` green; the claims report reads the kept Rust.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T41 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing waits only on checks of what still exists.
+2. **The constraints.** FR-024 (the gates), FR-021, FR-022.
+3. **Where each comes from.** G: the GM's words (`request.md`, amendment 11) ("switching those off or even just deleting them outright").
+4. **Do they describe the world here?** Tooling and engine structure; no researched value moves.
+5. **The order.** With T39 (D1).
+6. **The exits.** Green: `make done` green, its wall time (`dev/run-log`). Red: what failed recorded and the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (D1).
+9. **Done, measured.** `make done` green, its wall time (`dev/run-log`).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
 ### T42 Approach (checklist part A)
 
 1. **The goal, in the world.** `make hamlet SPEC=` draws a pool hamlet through the cut from Rust alone.

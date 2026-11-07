@@ -120,20 +120,16 @@
       research: rendering
 - [ ] T36 the gate's remaining wall time (the round arbiter on ask:set-down-444-after-ruling-steps): `make test-full` 214 s at rust-only (9,552 tests, measured 2026-11-07, its wall time) against the GM's goal of "significantly under a minute" (2026-11-07, the exact target to be set; he named no 100 s target); the largest lever left is the Rust tooling tests, each compiling a fresh fixture crate under its own package name (57.3, 50.2 and 35.4 s, `make durations`), then the claims-index tests' git builds; NOT to repeat: the counters test's crate copy built unoptimized in its own target directory measured slower (72 s against 57 s) and was reverted
       research: rendering
-- [x] T37 the hamlet placement-order writeup frozen as a temporary reference (FR-024 part 1): `dev/placement-stages/` as last generated from Python, marked frozen, `make placement-stages` and the landing's regeneration retired until the Rust driver generates its replacement
+- [ ] T37 the hamlet placement-order writeup frozen as a temporary reference (FR-024 part 1): `dev/placement-stages/` as last generated from Python, marked frozen, `make placement-stages` and the landing's regeneration retired until the Rust driver generates its replacement
       research: rendering
-      verify: DONE. landed in batch T37+T38+T40+T41: amendment 11: the writeup frozen, the Rust cut after waterward, the Python hamlet engine deleted with its tests and gates, the code-reading checks ported to the Rust
-- [x] T38 the Rust stages cut after waterward, the last efficient one (FR-024 part 2, plan D2): homesteads, track, appurtenances, law and ways parked in `rust/parked/`, outside the crate, compiled, tested, counted, budgeted and claimed by nothing
+- [ ] T38 the Rust stages cut after waterward, the last efficient one (FR-024 part 2, plan D2): homesteads, track, appurtenances, law and ways parked in `rust/parked/`, outside the crate, compiled, tested, counted, budgeted and claimed by nothing
       research: rendering
-      verify: DONE. landed in batch T37+T38+T40+T41: amendment 11: the writeup frozen, the Rust cut after waterward, the Python hamlet engine deleted with its tests and gates, the code-reading checks ported to the Rust
 - [ ] T39 the Python hamlet engine and its tests deleted (FR-024 part 3, plan D3): every `l7r/` module the kept roots do not reach, the pool hamlets' `.gen.py`, the PyO3 doors and the `python` feature; the shared geometry moved to a kept package
       research: rendering
-- [x] T40 the code-reading checks of the deleted Python dropped or ported to the Rust (FR-024 part 4): `dev/rust-tooling.md` row by row
+- [ ] T40 the code-reading checks of the deleted Python dropped or ported to the Rust (FR-024 part 4): `dev/rust-tooling.md` row by row
       research: rendering
-      verify: DONE. landed in batch T37+T38+T40+T41: amendment 11: the writeup frozen, the Rust cut after waterward, the Python hamlet engine deleted with its tests and gates, the code-reading checks ported to the Rust
-- [x] T41 the gates that presume a whole hamlet deleted or switched off (FR-024, plan D4), `make done` green without them
+- [ ] T41 the gates that presume a whole hamlet deleted or switched off (FR-024, plan D4), `make done` green without them
       research: rendering
-      verify: DONE. landed in batch T37+T38+T40+T41: amendment 11: the writeup frozen, the Rust cut after waterward, the Python hamlet engine deleted with its tests and gates, the code-reading checks ported to the Rust
 - [ ] T42 the Rust driver (FR-024 part 5, plan D5): `make hamlet SPEC=` rolls a pool hamlet's spec through the plan and the stages through the cut to an SVG and a manifest with no Python, each stage enabled once it draws and compared with the frozen plate
       research: rendering
 - [ ] T43 the crate split (FR-024 part 6, plan D6): a workspace, one crate a stage, one feature set; `cargo build --timings` from clean and after a one-line edit, before and after
