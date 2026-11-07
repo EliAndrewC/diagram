@@ -894,8 +894,9 @@ keeps its ink).
 
 ### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: "please take this entire feature to completion"; FR-003-FR-006, FR-017, FR-022)
 
-Occasions: settlement-review on the pool hamlets the stage moves (a communal well seated a seat off moves the lanes laid round it),
-at the landing; glyph-check only if a glyph is redrawn (none: the wells, byres, fixtures and retirement houses keep their ink).
+Occasions: settlement-review on the pool hamlets the stage moves (a communal well seated a seat off moves the lanes laid round it) -
+not owed while the port switch stands at rust-only, owed when it is thrown back to `integrated` (FR-023); glyph-check only if a
+glyph is redrawn (none: the wells, byres, fixtures and retirement houses keep their ink).
 
 - **Approach**: what the stage decides - each grove farm's own water (its channel or its well), the communal wells of the rolled
   siting among the houses (the cluster form now; the lane-side form beside the track out, the rest after the lanes), and each
@@ -1105,7 +1106,9 @@ The trigger: a red `make done` in a row (red-gate@2026-11-07T12:40:50Z), the rou
 FR-023 keeps "the Python unit tests that roll no map", while the gate at rust-only leaves out the engine's whole test trees
 (`PY_ENGINE_IGNORE`) on the GM's word of 2026-11-07 ("You should immediately stop running all of the python map generating code as
 well. That's only slowing us down."), and every test that would regenerate a pool map or roll a settlement is skipped
-(`tests/conftest.py`). The spec and the gate are brought to one rule.
+(`tests/conftest.py`). The spec and the gate are brought to one rule, FR-023's wording changed to the gate's: no Python
+settlement-engine test runs at rust-only, as amendment 10 asks ("stop running all of the python map generating code"); putting the
+engine's tests back in would contradict it.
 
 ### T35 Approach (checklist part A)
 

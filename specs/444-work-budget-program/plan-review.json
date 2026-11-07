@@ -380,8 +380,8 @@
    "declared": "spec-fidelity"
   },
   "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)": {
-   "sha256": "1a8373615de03243e58dc6a63f28dca8e21ddbfd5781a74ddec81c39fdfa56fd",
-   "verdict": "BLOCKED",
+   "sha256": "6cc833841fb420dad219b2c36e2de3009c0ee243c1cf39059139d462367407c7",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
@@ -417,6 +417,18 @@
   },
   "### T34 Approach (2026-11-07T05:06Z)": {
    "sha256": "88c2ed23699b9967df0786c4889aae9df68c21af0da7771e04797bb8c79f7212",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T35 - the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z)": {
+   "sha256": "cd07490600cd551d4f8f7554414cb45a06e1ffb5247d5117e2dc1f99d181cff4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Approach (checklist part A)": {
+   "sha256": "09d6732242cae3c5853d4fb8bd6a380142cd527bfa3976e330f0dffa8014ff63",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -5192,6 +5204,84 @@
      "summary": "The Rust stage gate, work budgets and ratchet, claims rule and static checks stay; settlement-reviews FR-019 owes for pool hamlets a Rust stage moves wait for the throw back to integrated, each owed then (T33's among them); Python stages keep running after the Rust front in make hamlet and make map, as information.",
      "class": "within",
      "why": "Unchanged since round 1. FR-023: work budgets (FR-022) and claims rule (FR-021) unchanged; deferred settlement-reviews are FR-023's own text ('not owed while the switch stands - each is owed ... when it is thrown back'); make hamlet and make map running the Python stages as information is FR-023's 'may still be rolled on their output by hand, as information'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T35 - the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z)",
+    "### T35 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T33-occasions-settlement-review",
+     "summary": "T33's Occasions line owes settlement-review of the pool hamlets the stage moves AT THE LANDING.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The text is the same as when it was BLOCKED. FR-023 (amendment 8, the GM 2026-11-07) says a settlement-review FR-019 owes for a pool hamlet a Rust stage moves 'is not owed while the switch stands' at rust-only. It is owed, for every hamlet the port moved, when the switch is thrown back. Reviewing a pool hamlet at the landing means rolling it through the Python stages after the appurtenances. Amendment 8 ('our gates and our tests are not running through the Python code') and amendment 10 ('stop running all of the python map generating code') ended exactly that. Deferring the review is not impossible, the GM's words do not imply it (FR-023 says the opposite), and doing it would defeat the amendments' purpose of a fast Rust-only loop. The block cites FR-003-FR-006, FR-017 and FR-022 but not FR-023, which is why it is stale. It should read: settlement-review of the hamlets the stage moves is not owed at this landing while port stands at rust-only, and is owed per FR-023 when the switch is thrown back to integrated. The glyph-check clause may stay."
+    },
+    {
+     "id": "T33-rust-scope",
+     "summary": "What the stage decides goes to Rust: each grove farm's water (channel or well), the communal wells of the rolled siting (the cluster form now, the lane-side form beside the track out, the rest after the lanes), and each retirement house off its farmhouse. The door gathers the inputs and draws what the seating reserved (byres, fixtures).",
+     "class": "within",
+     "why": "FR-017 (no Python rebuilds, Rust) and FR-003/FR-004 (one phase per stage, same manifest keys). This is within on the premise that the parenthetical on the wells, and the byres and fixtures being drawn from the seating's reservation, restate how the work is ALREADY divided between this stage and the others. The block frames it as 'what the stage decides'. If any of it moves work the appurtenances stage does today into a later or Python stage, that would be a narrowing owed a ruling. This bundle gives no way to measure it."
+    },
+    {
+     "id": "T33-no-belt-footprint-D6",
+     "summary": "The Rust reads no belt footprint, citing D6.",
+     "class": "within",
+     "why": "It is an input choice inside the phase, and nothing in the request bears on it. Note: the only D6 in spec-cited.md is 'make land makes the record', which says nothing about a belt footprint. The citation, presumably a plan-level D6, does not support the parenthetical as it reads in this bundle."
+    },
+    {
+     "id": "T35-one-rule",
+     "summary": "FR-023 says the gate runs 'the Python unit tests that roll no map', while the rust-only gate leaves out the engine's whole test trees (PY_ENGINE_IGNORE). The spec and the gate are brought to one rule.",
+     "class": "within",
+     "why": "The block never says which way the two are reconciled. The request settles it. Amendment 10 ('You should immediately stop running all of the python map generating code as well'; 'Can we go Rust only?') came after FR-023's wording, and engine unit tests run that code even when they roll no map. So the only reconciliation the request supports is amending FR-023 to the gate's exclusion. This decision is read, and judged within, as that. Restoring the engine trees to the rust-only gate would contradict amendment 10. The spec-fidelity review the block's exit promises should hold the amendment to that direction."
+    },
+    {
+     "id": "T35-approach",
+     "summary": "Checklist part A: no map goal; constraints FR-023, SC-016 and the GM's 2026-11-07 words; order after T34 and before the feature closes; green exit is FR-023 and the gate agreeing, reviewed by spec-fidelity, red exit through make arbiter-ask; one landing; done is make done at rust-only collecting what FR-023 names.",
+     "class": "within",
+     "why": "These are process and ordering inside the feature. Nothing here narrows the request. The green exit sends the spec amendment to the fidelity review the project requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T33 - phase: appurtenances, in Rust under amendment 7 (the GM 2026-11-04: \"please take this entire feature to completion\"; FR-003-FR-006, FR-017, FR-022)",
+    "### T35 - the rust-only gate's Python trees (the round arbiter on red-gate@2026-11-07T12:40:50Z)",
+    "### T35 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T33-occasion",
+     "summary": "The settlement-review on the pool hamlets the appurtenances stage moves is not owed while the port switch stands at rust-only, and is owed when the switch is thrown back to integrated.",
+     "class": "within",
+     "why": "This is FR-023 word for word: a settlement-review FR-019 owes for a pool hamlet a Rust stage moves is not owed while the switch stands, and each is owed for every pool hamlet the port moved when it is thrown back. Amendment 8 asks for it (the GM 2026-11-07: 'our gates and our tests are not running through the Python code', 'make done or a make land are both going to have to change temporarily'). The text judged before said 'at the landing', which contradicted FR-023. The review is deferred, not dropped, and it comes back when the switch is thrown."
+    },
+    {
+     "id": "T33-approach",
+     "summary": "Each grove farm's own water, the communal wells (the cluster form now, the lane-side form beside the track out, the rest after the lanes) and each retirement house's siting move to Rust and read what the door gathers. The door draws the byres and fixtures the seating reserved, and each well and retirement house the Rust seats.",
+     "class": "within",
+     "why": "This text is unchanged from the last reading. It is one stage ported to Rust in STAGES order (FR-003, FR-017, with the request's 'please take this entire feature to completion'), and no part of the stage is left in Python or rebuilt there. Splitting the well forms by when their input exists follows the stage order and does not drop anything. Aside: the block cites D6 for 'no belt footprint', but the D6 in the bundle is 'make land makes the record', so the citation does not resolve to a decision about belt footprints. That is a labeling matter and narrows nothing."
+    },
+    {
+     "id": "T35-rule",
+     "summary": "FR-023 is reworded to match the gate. At rust-only no Python settlement-engine test runs (PY_ENGINE_IGNORE drops the engine's whole test trees), which replaces FR-023's 'the Python unit tests that roll no map' still running. The tests are not put back in.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows what the accepted FR-023 has make done run, so it is ruled here. The GM's own words imply it: amendment 10 (2026-11-07) says 'You should immediately stop running all of the python map generating code as well. That's only slowing us down.' A unit test of the settlement engine runs Python map-generating code even when it rolls no whole map, so 'all' reaches it. The rest of amendment 10 says the same ('the literal most important thing here is making things FAST', 'Can we go Rust only?'). Keeping the engine's unit trees would keep running the very code the GM said to stop running. The change applies only while the switch is at rust-only, and FR-023's throw-back to integrated still brings the tests back. Note for whoever reviews the spec amendment: when the engine trees are left out, the 100% floor's 'measured on the tests that run' clause has to cover engine lines that only those trees reached, as it already covers lines only map-rolling tests reach. The reworded FR-023 should say so."
+    },
+    {
+     "id": "T35-approach",
+     "summary": "Checklist part A: T35 runs after T34 and before the feature closes, in one landing. Green means FR-023's wording and the gate agree, reviewed by spec-fidelity (SC-016). Red means the failure is recorded and a claim that it cannot be done goes through make arbiter-ask. Done means make done at rust-only collects what FR-023 names.",
+     "class": "within",
+     "why": "This text is unchanged from the last reading and decides only order, budget and exits. None of it narrows the request. Aside: item 2 cites the GM's 2026-11-07 words as 'request.md amendment 8 and the session's'. The quoted 'stop running all of the python map generating code' is under amendment 10 in request.md, so the label should name amendment 10."
     }
    ]
   }
