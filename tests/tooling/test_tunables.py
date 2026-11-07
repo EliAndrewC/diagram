@@ -95,3 +95,28 @@ def test_the_inline_render_counts_by_file() -> None:
     assert text.splitlines()[0].startswith("tunables --inline: 3 number(s) in 2 file(s) no claim states - ours by default")
     assert "  l7r/b.py:2 h 7.5" in text
     assert tu.render_inline(found, count=True).splitlines()[1] == "      2  l7r/a.py"
+
+
+def test_a_rust_stage_s_inline_numbers_its_claims_never_state_are_found(tmp_path) -> None:  # noqa: ANN001
+    """Feature 444 T40 (the GM: "the code that introspects the Python code should get Rust ports"): the Rust stages are map code,
+    and a number in a `.rs` function its claims never state is listed as a Python one is; a stated one, an index, a comment's,
+    a string's and the test module's are not."""
+    src = (
+        "/// Research: the reach - GUESS: 37.5 ft\n"
+        "pub fn reach(xs: &[f64]) -> f64 {\n"
+        "    let a = 37.5 * xs[7]; // 81.0 in a comment\n"
+        "    let s = \"12.5\";\n"
+        "    a + 41.25_f64\n"
+        "}\n"
+        "\n#[cfg(test)]\nmod tests {\n    fn t() -> f64 { 99.5 }\n}\n"
+    )
+    got = tu.unstated_rust(src, {"reach": "the reach GUESS: 37.5 ft"})
+    assert got == [("reach", 5, 41.25)], got
+    (tmp_path / "rust" / "phases" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "phases" / "src" / "x.rs").write_text(src, encoding="utf-8")
+    (tmp_path / "rust" / "parked" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "parked" / "src" / "x.rs").write_text(src, encoding="utf-8")
+    (tmp_path / "l7r").mkdir()
+    found = tu.inline(tmp_path, {})
+    assert {(f, v) for f, _l, _fn, v in found} == {("rust/phases/src/x.rs", 41.25), ("rust/phases/src/x.rs", 37.5)}, "unclaimed, both are listed"
+    assert not any("parked" in f for f, *_ in found), "a parked stage is claimed by nothing"

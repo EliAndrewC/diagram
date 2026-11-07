@@ -980,9 +980,9 @@ test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tes
 dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
 	@python3 scripts/measure/dead_closure.py --base "$(or $(BASE),HEAD)"
 
-cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/settlement/test_houses.py MOD=l7r/diagram/settlement/houses.py
+cov-file:       ## [tests] which lines of MOD does ONE test file reach?   FILE=tests/test_compound.py MOD=l7r/diagram/compound.py
 ##  FILE=<test path>   the test file to run
-##  MOD=<module path>  the module to report coverage for - e.g. `l7r/diagram/settlement/houses.py`
+##  MOD=<module path>  the module to report coverage for - e.g. `l7r/diagram/compound.py`
 	@python3 -m pytest -n0 -q --no-header -p no:cacheprovider --cov=$(MOD) --cov-report=term-missing $(FILE)
 
 parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]

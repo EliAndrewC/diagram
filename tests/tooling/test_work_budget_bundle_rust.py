@@ -35,6 +35,15 @@ def test_a_rust_phase_s_source_rides_beside_its_thin_python_function(tmp_path: P
     assert wbb.stage_files(tmp_path, "nothing") == []
 
 
+def test_a_rust_stage_with_no_python_beside_it_is_found(tmp_path: Path) -> None:
+    """Feature 444 T40: the Python hamlet engine is deleted, and a lookup that started from the Python function found no stage."""
+    (tmp_path / "rust" / "phases" / "src").mkdir(parents=True)
+    (tmp_path / "rust" / "phases" / "src" / "sink.rs").write_text("pub fn stage_sink() {}\n")
+    (tmp_path / "rust" / "phases" / "src" / "lib.rs").write_text("mod sink;\n")
+    got = [p.relative_to(tmp_path).as_posix() for p in wbb.stage_files(tmp_path, "sink")]
+    assert got == ["rust/phases/src/sink.rs"], got
+
+
 def test_a_counter_a_rust_function_keeps_brings_its_rs_file_into_the_audit(tmp_path: Path) -> None:
     src = tmp_path / "rust" / "phases" / "src"
     src.mkdir(parents=True)

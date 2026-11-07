@@ -6,7 +6,7 @@
 #
 # WHY (GM 2026-08-27, feature 133 T33: "The fabricated shortcut should ideally have some extra
 # tooling to block it from happening since it costs time"). On T31 a session typed
-# `git checkout -- l7r/diagram/hamletgen/ways.py` into a command as a NOTE - the text after it read
+# `git checkout -- ways.py` (the hamlet engine's) into a command as a NOTE - the text after it read
 # "(checkout would discard my diff - NOT run)" - and the shell ran it. The working diff of the task
 # was gone; five minutes went on recovering it from the transcript, and the task that should have
 # taken ten minutes took thirty-nine. The mistake is structural rather than careless: a session

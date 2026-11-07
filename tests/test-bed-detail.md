@@ -41,8 +41,8 @@ changed, you know which directory to open. The trees above (`gate/`, `full/`, `t
 
 | directory | tests | its own index |
 |---|---|---|
-| `settlement/` | the Mode B drawing engine | [CLAUDE.md](settlement/CLAUDE.md) |
-| `hamletgen/` | the scripted hamlet generator | `hamletgen/ways/` has [CLAUDE.md](hamletgen/ways/CLAUDE.md) |
+| `settlement/` | the Mode B drawing engine | CLAUDE.md |
+| `hamletgen/` | the scripted hamlet generator | `hamletgen/ways/` has CLAUDE.md |
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
 | `pipeline/` | the cache, regen driver, render cache and pool index | - |

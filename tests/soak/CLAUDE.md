@@ -52,7 +52,7 @@ the GM 2026-11-02: "We can relax that for the engine code at this pooint since t
 - a test that reaches a line nothing else reaches is **misfiled** and belongs in `make done`.
 
 Worked example of the rule biting: the seeds 41-44 cohort in
-[`../gate/hamletgen/test_driver.py`](../gate/hamletgen/test_driver.py) looks like a soak test and is not
+`../gate/hamletgen/test_driver.py` looks like a soak test and is not
 one. The hamlet-path floor counts what those in-process rolls execute, and the seed-dependent placer
 branches (the fabric threader, the web smoother, the strip and trunk guards) are reached by rolls
 rather than by fixtures. It is load-bearing for coverage, so it stays at the gate.

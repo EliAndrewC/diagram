@@ -229,7 +229,7 @@ def _listing(cmd: str, manifest: pathlib.Path) -> subprocess.CompletedProcess[st
     return next((r for r in runs if r.returncode != 0), runs[-1])
 
 
-EXT = ".rust-ext"  # the built extensions, gitignored: `l7r/diagram/hamletgen/phases_ext.py` puts it on the import path (D8)
+EXT = ".rust-ext"  # the built extensions, gitignored (D8); no Python imports them since the hamlet engine's deletion (444 T39)
 
 
 def stamp(manifest: pathlib.Path) -> str:

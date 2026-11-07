@@ -13,7 +13,7 @@ print as information (`report`).
 
 WHAT IS SLATED (plan D1): the Python of each stage's own files (`work_budget_bundle.stage_files` - the module defining
 `stage_<name>` and its subpackage's siblings) for every stage not yet `accepted` in `dev/work-budget.json`. Not the files where a
-stage's work is only counted today: tools, ci, pipeline, interactive, labels, overlap and settlement keep the floor.
+stage's work is only counted today: tools, ci, pipeline, interactive and labels keep the floor (the Python hamlet engine itself is deleted, feature 444 T39).
 
 A STALE ENTRY - its path gone, or every stage it names accepted (the Rust landed; what is left is the stage's thin door) - is no
 longer exempt, and `report` refuses until `make coverage-exempt PRUNE=1` drops it, so the record shrinks as the port proceeds.
@@ -93,7 +93,7 @@ def split(root: Path = ROOT, reach: bool = False) -> tuple[list[dict[str, Any]],
 
 
 #: the trees that stay Python whatever the port does (feature 448 FR-003): every module in them is a root of the reachability measure
-KEPT_TREES = ("l7r/diagram/tools/", "l7r/diagram/ci/", "l7r/diagram/pipeline/", "l7r/diagram/interactive/", "l7r/diagram/labels/", "l7r/diagram/overlap/")
+KEPT_TREES = ("l7r/diagram/tools/", "l7r/diagram/ci/", "l7r/diagram/pipeline/", "l7r/diagram/interactive/", "l7r/diagram/labels/")
 
 
 def _module_names(root: Path) -> dict[str, str]:

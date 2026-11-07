@@ -5,7 +5,7 @@ portion (it deliberately has no `__init__.py`). The asymmetry is the point of fe
 
 - `l7r/` has no `__init__.py`, so this directory's contents merge with the other `l7r` portion in
   `/host-l7r-repo/gm-assistant/webapp/` under one parent package. `import l7r.app` and
-  `import l7r.diagram.settlement` therefore work in the same interpreter, which is what makes it
+  `import l7r.diagram.compound` therefore work in the same interpreter, which is what makes it
   possible for the toolkit webapp to render a map without two colliding top-level packages both
   named `l7r`.
 - `l7r/diagram/` DOES have this file, so the engine is one named package with one identity rather

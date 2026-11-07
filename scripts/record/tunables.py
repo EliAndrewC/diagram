@@ -57,14 +57,10 @@ def tunables(rows: Mapping[str, Any], path: str = "", figures_only: bool = True)
 #: `interactive/`, choose what is rolled or reported, or time a run - never whether a map passes.
 MAP_CODE = (
     "l7r/diagram/tools/pack_audit/",
-    "l7r/diagram/hamletgen/",
-    "l7r/diagram/settlement/",
-    "l7r/diagram/waterfields/",
-    "l7r/diagram/sitegen/",
     "l7r/diagram/labels/",
-    "l7r/diagram/overlap/",
     "l7r/diagram/compound",
     "l7r/diagram/well_gear.py",
+    "rust/phases/src/",  # the hamlet stages, Rust since the Python engine's deletion (feature 444 T40); `rust/parked/` is claimed by nothing
 )
 #: Numbers too plain to be a decision: identities, halves, right and straight angles, and the epsilons of float tests.
 TRIVIAL = frozenset({0, 1, 2, 3, 4, 10, 100, 90, 180, 360, 255, 0.5})
@@ -127,6 +123,41 @@ def inline(root: Path, rows: Mapping[str, Any], path: str = "") -> list[tuple[st
         if not rel.startswith(MAP_CODE) or not rel.startswith(path):
             continue
         out += [(rel, line, fn, v) for fn, line, v in unstated(p.read_text(encoding="utf-8"), text.get(rel, {}))]
+    # THE RUST STAGES TOO (feature 444 T40, the GM 2026-11-07: "the code that introspects the Python code should get Rust ports")
+    for p in sorted((root / "rust").rglob("*.rs")) if (root / "rust").is_dir() else []:
+        rel = p.relative_to(root).as_posix()
+        if "target" in p.parts or not rel.startswith(MAP_CODE) or not rel.startswith(path):
+            continue
+        out += [(rel, line, fn, v) for fn, line, v in unstated_rust(p.read_text(encoding="utf-8"), text.get(rel, {}))]
+    return out
+
+
+#: a Rust number literal: digits, an optional fraction and exponent, an optional type suffix - never part of an identifier
+RUST_NUMBER = re.compile(r"(?<![\w.])(\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)(?:_?(?:f32|f64|u8|u16|u32|u64|usize|i8|i16|i32|i64|isize))?(?![\w.])")
+
+
+def unstated_rust(source: str, unit_text: Mapping[str, str]) -> list[tuple[str, int, float]]:
+    """(function, line, value) for every non-trivial number literal in a Rust function's body, comments and its `#[cfg(test)]`
+    module left out, that the claims of that function never state - `unstated`'s rule, read from `.rs` (`claims_rust`'s items)."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from l7r.diagram.tools import claims_rust  # noqa: PLC0415
+
+    cut = re.search(r"^#\[cfg\(test\)\]", source, re.M)
+    source = source[: cut.start()] if cut else source
+    out = []
+    for qual, kind, first, _last, _doc, body in claims_rust._items(source, 0, "", False):
+        if kind not in ("function", "method"):
+            continue
+        name = qual.rsplit(".", 1)[-1]
+        text = unit_text.get(name, "")
+        for i, line in enumerate(body.splitlines()):
+            code = re.sub(r"//.*", "", line)
+            code = re.sub(r'"(?:[^"\\]|\\.)*"', "", code)
+            for m in RUST_NUMBER.finditer(code):
+                v = float(m.group(1).replace("_", ""))
+                if v in TRIVIAL or abs(v) < 1e-3 or _stated(v, text) or code[m.end() : m.end() + 1] == "]" and code[: m.start()].rstrip().endswith("["):
+                    continue
+                out.append((name, first + i, v))
     return out
 
 

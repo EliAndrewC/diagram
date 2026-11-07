@@ -380,11 +380,10 @@ def stage_files(root: Path, phase: str) -> list[Path]:
     Rust phase's source beside it (feature 444 T17, `dev/rust-tooling.md` "the work-budget audit bundle"): the `.rs` file under
     `rust/` defining `fn stage_<phase>`, with its siblings when it sits in a module directory of its own."""
     pat = re.compile(rf"^def stage_{re.escape(phase)}\(", re.M)
-    found = [p for p in sorted((root / HAMLET).rglob("*.py")) if pat.search(p.read_text(encoding="utf-8"))]
-    if not found:
-        return []
-    home = found[0].parent
-    files = sorted(home.glob("*.py")) if home != root / HAMLET else found
+    found = [p for p in sorted((root / HAMLET).rglob("*.py")) if pat.search(p.read_text(encoding="utf-8"))] if (root / HAMLET).is_dir() else []
+    # A RUST STAGE WITH NO PYTHON BESIDE IT (feature 444 T40): the Python hamlet engine is deleted, and a lookup that returned
+    # nothing without its Python function found no stage at all - every audit bundle refused
+    files = (sorted(found[0].parent.glob("*.py")) if found[0].parent != root / HAMLET else found) if found else []
     rs = re.compile(rf"^\s*(?:pub(?:\(crate\))?\s+)?fn\s+stage_{re.escape(phase)}\b", re.M)
     rust = [p for p in sorted((root / RUST).rglob("*.rs")) if rs.search(p.read_text(encoding="utf-8"))] if (root / RUST).is_dir() else []
     if rust:
@@ -583,7 +582,7 @@ def fanout_section(root: Path, phase: str) -> str:
 def audit_bundle(root: Path, phase: str, out: Path, budget: str = "") -> tuple[int, str]:
     files = stage_files(root, phase)
     if not files:
-        return 2, f"work-budget-bundle: no `stage_{phase}` under {HAMLET}"
+        return 2, f"work-budget-bundle: no `stage_{phase}` under {RUST} or {HAMLET}"
     runs = sorted((root / RUNS).glob("*.json"))
     if not runs:
         return 2, "work-budget-bundle: no `make work-budget` run is recorded - run it first"

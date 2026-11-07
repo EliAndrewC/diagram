@@ -2,7 +2,7 @@
 """Name the quick tests that read the shipped hamlet manifests, when those manifests changed since the last green quick.
 
 WHY (feature 328 wave 54, 2026-10-08): wave 52 re-seated the privies and manure heaps, rerolled the five hamlets and ran the
-test files of the code it changed - and three tests that read the rerolled MANIFESTS (`tests/hamletgen/test_pool_261.py`:
+test files of the code it changed - and three tests that read the rerolled MANIFESTS (the deleted `test_pool_261.py`:
 a knot on Inashiro and Kuwabata, a zigzag on Sawada) went red unseen for two waves, because `make quick` selects tests by
 changed CODE (testmon) and a manifest is data. A spec reviewer found them by accident. So quick asks this script: where the
 manifests' content differs from the stamp the last green quick left, the tests that read them run too.
