@@ -16,6 +16,7 @@ use std::fmt::Write as _;
 use crate::field::brook::BrookIn;
 use crate::field::build::{build, Field, FieldIn, KnobIn};
 use crate::field::states::State;
+use crate::sink::{sink, SinkIn, Sunk};
 use plan::Plan;
 use svg::{ink, Svg, BUND_W};
 
@@ -45,6 +46,21 @@ const WEIR_KEY_FT: f64 = 1.0;
 /// Research:
 ///     a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft
 const CELL_SHARE: f64 = 31.0;
+/// The sink's figures: the drain's run at the collector's outfall width, the reeds' width out from the pond's shore and the
+/// brook's length below a confluence (ft).
+///
+/// Research:
+///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class, at the collector's own outfall width, 5.5 ft (the deleted `DRAIN_FT`)
+///     the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore
+///     the brook below a confluence - GUESS: the deleted `BROOK_JOIN_TRUNK`, 150 ft so the junction reads
+const RUN_W: f64 = 5.5;
+const REED_FT: f64 = 44.0;
+const JOIN_TRUNK: f64 = 150.0;
+/// The reeds' tint, a pale wet green beneath their ticks.
+///
+/// Research:
+///     the reeds' tint - CONVENTION: the engine's reed cover read as a pale wet green with sparse ticks; the tile itself went with the deleted engine
+const REED_TINT: &str = "#C3D0A4";
 /// The crop's margin round what is drawn (ft).
 ///
 /// Research:
@@ -86,6 +102,7 @@ pub struct Rolled {
     pub knobs: HashMap<String, String>,
     pub fields: Vec<Field>,
     pub brooks: Vec<Vec<(f64, f64)>>,
+    pub sunk: Option<Sunk>,
     pub counts: HashMap<String, u64>,
     pub svg: String,
 }
@@ -213,6 +230,68 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)]) {
     }
 }
 
+/// The sink (stage 3): the first field's collector run to its pond, to the passing brook or off the map.
+///
+/// Research:
+///     where the runoff goes - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot, the passing brook, or off the map
+fn stage_sink(p: &Plan, f: &Field, brook: &[(f64, f64)]) -> Result<Option<Sunk>, Refused> {
+    // a field with no collector hands the sink an empty drain, which lays nothing (`sink::sink`)
+    let drain = f
+        .channels
+        .iter()
+        .find(|c| c.role == "drain")
+        .map(|c| c.pts.clone())
+        .unwrap_or_default();
+    let rad = p.down_deg.to_radians();
+    let inp = SinkIn {
+        pond: p.knob("water_sink") == "pond",
+        canvas: (p.w, p.h),
+        fall: (rad.cos(), rad.sin()),
+        flow_deg: p.water_flow,
+        outline: f.fan.ring.clone(),
+        drain,
+        brook_w: BROOK_W,
+        run_w: RUN_W,
+        resting: f
+            .basins
+            .iter()
+            .zip(&f.states)
+            .filter(|(_, s)| **s == State::Rest)
+            .map(|(b, _)| b.ring.clone())
+            .collect(),
+        reed_ft: REED_FT,
+        join_trunk: JOIN_TRUNK,
+    };
+    sink(&inp, &mut brook.to_vec()).map_err(sink_refused)
+}
+
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "`map_err` hands the refusal over by value"
+)]
+fn sink_refused(e: crate::sink::SinkRefused) -> Refused {
+    Refused(format!("the sink refused: {e}"))
+}
+
+/// The sink drawn: the reeds round the pond, the run in the drain's hue at its outfall width, the pond with its rim and sheen.
+///
+/// Research:
+///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs, at the collector's own outfall width
+fn draw_sink(svg: &mut Svg, s: &Sunk) {
+    svg.polygon(&s.reeds, REED_TINT, None);
+    svg.line(&s.run, ink::DRAIN, RUN_W);
+    if let Some((c, rx, ry)) = s.pond {
+        svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
+        svg.ellipse(
+            c,
+            (rx - 12.0).max(1.0),
+            (ry - 10.0).max(1.0),
+            "none",
+            Some((ink::SHEEN, 1.0)),
+        );
+    }
+}
+
 #[expect(
     clippy::needless_pass_by_value,
     reason = "`map_err` hands the refusal over by value"
@@ -255,14 +334,31 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     *out.counts
         .entry("write@brook_drawn".to_owned())
         .or_insert(0) += work;
+    let sunk = out
+        .fields
+        .iter()
+        .zip(&brooks)
+        .next()
+        .map(|(f, b)| stage_sink(&p, f, b))
+        .transpose()?
+        .flatten();
     let mut svg = Svg::default();
     for (f, b) in out.fields.iter().zip(&brooks) {
         draw_field(&mut svg, f, b);
     }
+    sunk.iter().for_each(|s| draw_sink(&mut svg, s));
+    sunk.iter()
+        .flat_map(|s| &s.counts)
+        .for_each(|(k, n)| *out.counts.entry(k.clone()).or_insert(0) += n);
     let doc = svg.finish(p.w, p.h, CROP_MARGIN);
+    let stages: Vec<&'static str> = ["water_frame", "field"]
+        .into_iter()
+        .chain(sunk.as_ref().map(|_| "sink"))
+        .collect();
     Ok(Rolled {
         plan: p,
-        stages: vec!["water_frame", "field"],
+        sunk,
+        stages,
         knobs: out.knobs,
         fields: out.fields,
         brooks,
@@ -363,7 +459,8 @@ mod tests {
     #[test]
     fn a_comb_hamlet_rolls_and_draws_its_field() {
         let r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        assert_eq!(r.stages, vec!["water_frame", "field"]);
+        assert_eq!(r.stages, vec!["water_frame", "field", "sink"]);
+        assert!(r.sunk.as_ref().is_some_and(|s| s.pond.is_some()));
         assert!(!r.fields.is_empty() && !r.fields[0].basins.is_empty());
         assert!(
             r.svg.starts_with("<svg") && r.svg.matches("<path").count() > r.fields[0].basins.len()
@@ -371,9 +468,21 @@ mod tests {
         let m = manifest(&r);
         assert!(
             m.contains("\"name\": \"Inashiro\"")
-                && m.contains("\"stages\": [\"water_frame\", \"field\"]")
+                && m.contains("\"stages\": [\"water_frame\", \"field\", \"sink\"]")
                 && m.contains("\"plot_size\"")
         );
+    }
+
+    #[test]
+    fn a_resting_field_drains_off_the_map() {
+        let r = roll(&parse(r#"{"name": "Sawada", "seed": 24, "households": 19, "down_deg": 225, "water_sink": "offmap", "intake": "open", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();
+        assert!(r.fields[0]
+            .states
+            .contains(&crate::field::states::State::Rest));
+        assert!(r
+            .sunk
+            .as_ref()
+            .is_some_and(|s| s.pond.is_none() && !s.run.is_empty()));
     }
 
     #[test]
@@ -399,6 +508,9 @@ mod tests {
             fills.iter().collect::<std::collections::HashSet<_>>().len(),
             5
         );
+        assert!(super::sink_refused(crate::sink::SinkRefused("x".into()))
+            .0
+            .starts_with("the sink refused"));
         let e = super::field_refused(crate::field::rules::FieldRefused {
             rule: "a_rule",
             detail: "why".into(),
