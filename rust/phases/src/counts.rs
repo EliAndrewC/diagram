@@ -11,7 +11,7 @@ use std::collections::HashMap;
 ///
 /// Research:
 ///     the counts - NONE: the work-budget's own bookkeeping
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Counts(pub HashMap<String, u64>);
 
 impl Counts {

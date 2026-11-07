@@ -104,67 +104,6 @@ fn field_dict<'py>(py: Python<'py>, f: &Field, drawn: &[Pt]) -> PyResult<Bound<'
     Ok(d)
 }
 
-/// A rice polder's pocket pond: the comb's own roll over the block's low row, a resting plot never its host (0008) - the host
-/// plot's index, the pond's middle and radii.
-///
-/// Research:
-///     the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s
-///     a four-sided host - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds
-///     never a resting plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a pond in a plot left to rest; never its host
-fn rice_pond(
-    plots: &[super::polder::Plot],
-    resting: &[usize],
-    seed: i64,
-    work: &mut u64,
-) -> Option<(usize, f64, f64, f64, f64)> {
-    let hosts: Vec<(usize, super::lattice::Basin)> = plots
-        .iter()
-        .enumerate()
-        .filter(|(i, x)| !resting.contains(i) && x.ring.len() == 4)
-        .map(|(i, x)| {
-            (
-                i,
-                super::lattice::Basin {
-                    row: usize::from(x.low),
-                    col: x.col,
-                    ring: x.ring.clone(),
-                    on_drain_right: false,
-                    on_drain_left: false,
-                },
-            )
-        })
-        .collect();
-    let basins: Vec<super::lattice::Basin> = hosts.iter().map(|(_, b)| b.clone()).collect();
-    *work += plots.len() as u64;
-    super::features::pocket_pond(&basins, None, seed, "polder", work)
-        .map(|(k, q)| (hosts[k].0, q.x, q.y, q.rx, q.ry))
-}
-
-/// The polder's plots drawn apart (`states::polder_states`), each low plot wet and the rest green on a dike-pond block, whose
-/// parcels `_dikeponds` draws.
-///
-/// Research:
-///     the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's states set here draw nothing, every parcel of it converted and drawn by its ponds (`field_stage._dikeponds`)
-fn polder_drawn(
-    plots: &[super::polder::Plot],
-    resting: &[usize],
-    seed: i64,
-    dikepond: bool,
-    counts: &mut crate::counts::Counts,
-) -> Vec<State> {
-    let drawn: Vec<(usize, usize, bool)> = plots.iter().map(|x| (x.row, x.col, x.low)).collect();
-    if dikepond {
-        return drawn
-            .iter()
-            .map(|x| if x.2 { State::Wet } else { State::Green })
-            .collect();
-    }
-    let mut work = 0;
-    let out = super::states::polder_states(&drawn, resting, seed, &mut work);
-    counts.add("candidate@polder_states", work);
-    out
-}
-
 /// The polder (T16 D8): the households' paddy as a rice polder or a dike-pond block - its block, dike, outfall, resting plots and,
 /// on a dike-pond, its conversion - the records out for the thin Python to write and draw.
 ///
@@ -192,40 +131,29 @@ pub fn stage_polder<'py>(
     unsettled: bool,
     pond: (f64, String, String, String),
 ) -> PyResult<Bound<'py, PyDict>> {
-    let p = super::polder::polder(
-        super::paddy_sq_ft(households),
+    let (share, leftover, fry, crop) = &pond;
+    let staged = super::staged::polder_stage(
+        seed,
+        households,
         dikepond,
         layout,
         down_deg,
         center,
         aspect,
-        seed,
+        canvas,
+        unsettled,
+        (*share, leftover, fry, crop),
     );
-    let dike = super::dike::dike(&p.inner_env, &p.sluices, seed);
-    let run = super::polder::outfall(p.sluices[1], down_deg, canvas);
-    let resting = super::polder::rest(&p.plots, seed, unsettled && !dikepond);
-    let mut pond_work = 0_u64;
-    let pocket = if dikepond {
-        None
-    } else {
-        rice_pond(&p.plots, &resting, seed, &mut pond_work)
-    };
-    let mut counts = crate::counts::Counts::default();
-    counts.add("candidate@polder_pond", pond_work);
-    let states = polder_drawn(&p.plots, &resting, seed, dikepond, &mut counts);
-    counts.add("candidate@polder_shape", 4);
-    counts.add("write@polder_plot", 5 * p.plots.len() as u64);
-    counts.add(
-        "write@polder_ditch",
-        2 * p.ditches.iter().map(|d| d.pts.len() as u64).sum::<u64>(),
-    );
-    counts.add("write@polder_pond", 6);
-    counts.add("write@dike_crest", 2 * dike.crest.len() as u64);
-    counts.add("write@dike_face", 2 * dike.outer.len() as u64);
-    counts.add(
-        "write@dike_tree",
-        2 * dike.trees.iter().map(|(_, r)| r.len() as u64).sum::<u64>(),
-    );
+    let super::staged::PolderStage {
+        polder: p,
+        dike,
+        outfall: run,
+        resting,
+        pocket,
+        states,
+        converted,
+        counts,
+    } = staged;
     let d = PyDict::new(py);
     d.set_item("outline", pts(&p.outline))?;
     d.set_item("inner_env", pts(&p.inner_env))?;
@@ -261,16 +189,7 @@ pub fn stage_polder<'py>(
     dk.set_item("widths", dike.widths)?;
     dk.set_item("trees", dike.trees.clone())?;
     d.set_item("dike", dk)?;
-    if dikepond {
-        let (share, leftover, fry, crop) = &pond;
-        let rings: Vec<Vec<Pt>> = p.plots.iter().map(|x| x.ring.clone()).collect();
-        let at = super::landuse::inset(&rings, *share);
-        let (parcels, crops) = super::landuse::convert(&rings, seed, at, leftover, fry, crop);
-        counts.add("write@dikepond", 13 * parcels.len() as u64);
-        counts.add(
-            "write@bank_crop",
-            2 * (crops.crowns.len() + crops.hedges.len()) as u64,
-        );
+    if let Some((parcels, crops, at)) = converted {
         let conv = PyList::empty(py);
         for x in &parcels {
             conv.append((x.kind, pts(&x.ring), x.bank.clone(), x.water.clone()))?;
