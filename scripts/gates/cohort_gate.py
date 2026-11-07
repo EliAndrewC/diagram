@@ -231,7 +231,8 @@ def main(argv: list[str] | None = None) -> int:
     if what == "needs-baseline":
         return 0 if needs_baseline(root) else 1
     if what == "rust-owed":  # `make land` asks it: exit 0 when the Rust stage gate's record on this engine is owed (feature 444 D6)
-        return 0 if rust_refusal(root) else 1
+        # never at rust-only since the gate retired with the Python driver that ran it (feature 444 T39; the Rust driver's seeds, T42)
+        return 0 if rust_refusal(root) and port_mode(root) != "rust-only" else 1
     if what != "check":
         print(f"cohort_gate: unknown command {what!r} (fresh-seed | check | needs-baseline | counter-only | rust-owed)", file=sys.stderr)
         return 2

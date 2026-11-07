@@ -37,6 +37,8 @@ g init -q -b main; g commit -q --allow-empty -m root
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "no cohort-landing target, silent"
 
 mkdir -p "$T/l7r/diagram/hamletgen" "$T/pool" "$T/scripts/gates"
+# THE LANDING COHORT REFUSES AT `integrated` ONLY (feature 444 FR-023): the fixture throws the port switch there, where these cases live
+mkdir -p "$T/dev"; printf '{"port": {"state": "integrated"}}\n' > "$T/dev/switches.json"
 cp "$HERE/../../scripts/gates/gate-stamp.py" "$HERE/../../scripts/gates/codeid.py" "$T/scripts/gates/"  # the engine key loads them from the tree it reads (codeid: feature 426 D2)
 printf 'cohort-landing:\n\t@true\n' > "$T/Makefile"
 printf 'X = 1\n' > "$T/l7r/diagram/hamletgen/rows.py"; printf 'p\n' > "$T/pool/p.txt"
