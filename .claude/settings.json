@@ -408,15 +408,6 @@
         ]
       },
       {
-        "matcher": "Bash|Read|Grep",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/canon-read-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/canon-read-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
-          }
-        ]
-      },
-      {
         "matcher": "Bash|Read|Grep|Glob",
         "hooks": [
           {

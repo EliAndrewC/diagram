@@ -4,8 +4,7 @@
 WHY. On `cities/fabric` two of three items were claims about the setting, and the write session ran about fifteen
 greps through `budgets.md` and `l7r.md`, one a turn, each turn re-reading a context that peaked at 137,000 tokens
 (R7). One command that takes every term at once, and names the heading each hit sits under, answers the same
-question in one turn. `canon-read-hooks.sh` makes it the only way in: a direct read of a canon file is refused with
-this command, and a second call within three tool calls is refused as an unfolded term.
+question in one turn. (Its guard, `canon-read-hooks.sh`, which refused a direct read, was retired by the GM 2026-11-07.)
 
     canon.py "imperial road|merchant share|artisan"
 
