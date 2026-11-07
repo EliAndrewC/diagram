@@ -391,7 +391,15 @@ fn one(
     counts.add("write@intake", 9);
     let mut work = 0;
     let mut ends = Vec::new();
-    let bs = basins_counted(f, inp.seed, inp.row_ft, &mut work, &mut ends);
+    // an organic field's bunds askew and some edge basins triangles (T25); a planned field's lattice regular (`plot_regularity`)
+    let organic = knobs.get("plot_regularity").is_none_or(|v| v != "grid");
+    let bs = basins_counted(
+        f,
+        (inp.seed, organic, inp.cell),
+        inp.row_ft,
+        &mut work,
+        &mut ends,
+    );
     counts.add("write@basin", work);
     let (stats, area, plots_box) = plot_figures(&bs, counts);
     rows_held(&bs, &ends, inp.cell, counts)?;

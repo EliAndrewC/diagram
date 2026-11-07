@@ -237,6 +237,8 @@ def main(argv: list[str] | None = None) -> int:
             "test": "fix the failing test cargo names",
             "cover": "test the lines llvm-cov names, from the crate's tests",
             "dead": "delete the pub fn it names, or call it",
+            "hamlet": "fix the stage or the spec the driver names above",
+            "test-no-counters": "fix the test whose result hangs on the counters",
         }[args.cmd]
         print(f"rust-checks: {bad} crate(s) failed {args.cmd} - {fix}", file=sys.stderr)
         return 1

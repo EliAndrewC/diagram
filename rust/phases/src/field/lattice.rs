@@ -252,7 +252,94 @@ impl Lines {
 #[cfg(test)]
 #[must_use]
 pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
-    basins_counted(fan, seed, row_ft, &mut 0, &mut Vec::new())
+    basins_counted(
+        fan,
+        (seed, true, row_ft * 31.0),
+        row_ft,
+        &mut 0,
+        &mut Vec::new(),
+    )
+}
+
+/// How far a divider's ends may lean along the row, as a share of the narrower basin beside it.
+///
+/// Research:
+///     the bunds askew - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a patchwork of small, irregular paddies, never the tidy grid of rectangles - each divider's two ends set apart along the row; the share a GUESS, up to 0.4 of the narrower basin either way (between the 0.33 and 0.45 measured 2026-11-07 against the Python field's area CV 0.23 and p90 corner deviation 26.4 degrees), no basin folding and every row kept to `rules::held`
+pub const SLANT: f64 = 0.4;
+/// The odds that a row's divider nearest a flank runs to the flank, closing its edge basin to a triangle.
+///
+/// Research:
+///     the triangles - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: "a triangular basin is legitimate, and several stand on every map" - one row end in `TRIANGLE_IN` closed so, a GUESS that leaves a few on a hamlet's field
+pub const TRIANGLE_IN: u32 = 10;
+
+/// A row's dividers with their two ends leant apart (feature 444 T25): each divider but the field's flanks and the drain
+/// moved up to `SLANT` of the narrower basin beside it, its top and its foot apart; the divider nearest each flank run to it
+/// one row end in `TRIANGLE_IN`, its top or its foot.
+///
+/// Research:
+///     the bunds askew - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: never the tidy grid of rectangles
+///     the triangles - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a triangular basin is legitimate, several on every map
+#[must_use]
+pub fn slanted(seed: i64, row: usize, s: &[f64], triangles: bool) -> (Vec<f64>, Vec<f64>) {
+    let mut rng = crate::pyrand::knob_rng(seed, &format!("bund:{row}"));
+    let (mut top, mut bottom) = (s.to_vec(), s.to_vec());
+    let fixed = |x: f64| x.abs() < 1e-12 || (x.abs() - 1.0).abs() < 1e-12;
+    for k in 1..s.len().saturating_sub(1) {
+        if fixed(s[k]) {
+            continue;
+        }
+        let room = SLANT * (s[k] - s[k - 1]).min(s[k + 1] - s[k]);
+        top[k] += room * (2.0 * rng.random() - 1.0);
+        bottom[k] += room * (2.0 * rng.random() - 1.0);
+    }
+    // the divider nearest each flank: the second cut and the next-to-last, where neither is the drain
+    for (k, flank) in [(1, -1.0), (s.len().saturating_sub(2), 1.0)] {
+        if !triangles
+            || k == 0
+            || k + 1 >= s.len()
+            || fixed(s[k])
+            || rng.randbelow(TRIANGLE_IN) != 0
+        {
+            continue;
+        }
+        if rng.randbelow(2) == 0 {
+            top[k] = flank;
+        } else {
+            bottom[k] = flank;
+        }
+    }
+    (top, bottom)
+}
+
+/// One row's basins between its cuts `s`, each divider's top at `top` and its foot at `bottom`; a divider run to the flank
+/// closes its edge basin to a triangle, which keeps its four corners - two of them one - so every reader of a basin's corners by
+/// their order (its divider `ring[1]`-`ring[2]`, its foot `ring[3]`-`ring[2]`) reads a triangle as it reads a basin.
+fn row_basins(
+    fan: &Fan,
+    lines: &Lines,
+    row: usize,
+    (s, top, bottom): (&[f64], &[f64], &[f64]),
+    work: &mut u64,
+) -> Vec<Basin> {
+    let mut out = Vec::with_capacity(s.len());
+    for (col, pair) in s.windows(2).enumerate() {
+        *work += 5;
+        let corners = [
+            fan.at(lines.u(row, top[col]), top[col]),
+            fan.at(lines.u(row, top[col + 1]), top[col + 1]),
+            fan.at(lines.u(row + 1, bottom[col + 1]), bottom[col + 1]),
+            fan.at(lines.u(row + 1, bottom[col]), bottom[col]),
+        ];
+        let ring = corners.to_vec();
+        out.push(Basin {
+            row,
+            col,
+            ring,
+            on_drain_right: pair[1].abs() < 1e-12,
+            on_drain_left: pair[0].abs() < 1e-12,
+        });
+    }
+    out
 }
 
 /// `basins`, counting as it lays them each basin's 4 corners and its record (5, the derivation's interior basin: every basin of
@@ -264,7 +351,7 @@ pub fn basins(fan: &Fan, seed: i64, row_ft: f64) -> Vec<Basin> {
 #[must_use]
 pub fn basins_counted(
     fan: &Fan,
-    seed: i64,
+    (seed, organic, cell): (i64, bool, f64),
     row_ft: f64,
     work: &mut u64,
     ends: &mut Vec<(usize, usize)>,
@@ -278,21 +365,28 @@ pub fn basins_counted(
         let s = cuts_counted(seed, row, breadth, work);
         *work += s.len() as u64;
         let start = out.len();
-        for (col, pair) in s.windows(2).enumerate() {
-            *work += 5;
-            let ring = vec![
-                fan.at(lines.u(row, pair[0]), pair[0]),
-                fan.at(lines.u(row, pair[1]), pair[1]),
-                fan.at(lines.u(row + 1, pair[1]), pair[1]),
-                fan.at(lines.u(row + 1, pair[0]), pair[0]),
-            ];
-            out.push(Basin {
-                row,
-                col,
-                ring,
-                on_drain_right: pair[1].abs() < 1e-12,
-                on_drain_left: pair[0].abs() < 1e-12,
-            });
+        // THE ROW'S FORM, THE FIRST THAT KEEPS EVERY BASIN'S RULES (`rules::held`: no corner under 25 degrees, none under a quarter of
+        // its cell): askew with its triangles, askew without them, then square - an organic field's, a planned field's square
+        let forms: Vec<(Vec<f64>, Vec<f64>)> = if organic {
+            vec![
+                slanted(seed, row, &s, true),
+                slanted(seed, row, &s, false),
+                (s.clone(), s.clone()),
+            ]
+        } else {
+            vec![(s.clone(), s.clone())]
+        };
+        let last = forms.len() - 1;
+        for (i, (top, bottom)) in forms.iter().enumerate() {
+            let laid = row_basins(fan, &lines, row, (&s, top, bottom), work);
+            if i == last
+                || laid
+                    .iter()
+                    .all(|b| super::rules::held(&b.ring, cell).is_ok())
+            {
+                out.extend(laid);
+                break;
+            }
         }
         if out.len() > start {
             ends.push((start, out.len() - 1));
@@ -351,7 +445,31 @@ mod tests {
         #[expect(clippy::cast_precision_loss, reason = "a few hundred basins")]
         let mean = total / b.len() as f64;
         assert!((1_200.0..1_800.0).contains(&mean));
-        assert!(b.iter().all(|x| x.ring.len() == 4));
+        // every basin four corners; an organic field's triangles two of them one (T25: several on every map); a planned field none
+        let closed = |x: &super::Basin| (0..4).any(|i| x.ring[i] == x.ring[(i + 1) % 4]);
+        assert!(b.iter().all(|x| x.ring.len() == 4) && b.iter().any(closed));
+        let planned = super::basins_counted(
+            &f,
+            (4, false, ROW_FT * 31.0),
+            ROW_FT,
+            &mut 0,
+            &mut Vec::new(),
+        );
+        assert!(planned.iter().all(|x| x.ring.len() == 4) && !planned.iter().any(closed));
+        let mut fixed_cut = vec![-1.0, -0.5, 0.0, 0.5, 1.0];
+        let (top, bottom) = super::slanted(4, 0, &fixed_cut, false);
+        // the flanks and the drain stay put
+        assert!([
+            (top[0], -1.0),
+            (top[2], 0.0),
+            (top[4], 1.0),
+            (bottom[2], 0.0)
+        ]
+        .iter()
+        .all(|(a, b)| (a - b).abs() < 1e-12));
+        // a row of one basin has no divider to lean
+        fixed_cut.truncate(2);
+        assert_eq!(super::slanted(4, 0, &fixed_cut, true).0, fixed_cut);
         let hem: Vec<_> = b.iter().filter_map(super::Basin::drain_side).collect();
         let rows = b.iter().map(|x| x.row).max().unwrap() + 1;
         assert_eq!(hem.len(), 2 * rows, "both sides of the drain, every row");

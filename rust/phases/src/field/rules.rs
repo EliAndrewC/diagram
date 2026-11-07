@@ -70,6 +70,17 @@ pub fn arrowhead(ring: &[Pt]) -> bool {
 /// # Errors
 /// `FieldRefused` naming the first rule the basin breaks.
 pub fn held(ring: &[Pt], cell: f64) -> Result<(), FieldRefused> {
+    // a triangle at a flank keeps its four corners, two of them one (`lattice::row_basins`, T25): its corners read once each
+    let mut once: Vec<Pt> = Vec::with_capacity(ring.len());
+    for &p in ring {
+        if once
+            .last()
+            .is_none_or(|q: &Pt| (q.0 - p.0).hypot(q.1 - p.1) > 1e-9)
+        {
+            once.push(p);
+        }
+    }
+    let ring = once.as_slice();
     let area = signed_area(ring).abs();
     if area < MIN_CELL_SHARE * cell {
         return Err(FieldRefused {
