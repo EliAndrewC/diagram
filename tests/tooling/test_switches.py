@@ -100,7 +100,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # ...but a scripts/ edit leaves the `hooks` stamp stale, and the shortcut runs `hooks-test` before it answers (feature 375
     # amendment 7, FR-032: it answered green while the push refused on that stamp) - here red, this fixture's guards untested
     (root / "scripts" / "x-hooks.sh").write_text("echo guard\n")
-    p = make(fixture_skill, "done")
+    p = make(fixture_skill, "done", home=root.parent)
     assert p.returncode != 0 and "the hooks stamp is stale" in p.stdout and "GUARD WITHOUT A TEST" in p.stdout + p.stderr, p.stdout + p.stderr
     assert "gate green" not in p.stdout, "a red hooks-test is no green gate"
     assert "$(FORCE)" not in (SKILL / "Makefile").read_text()

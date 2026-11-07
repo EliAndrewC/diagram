@@ -142,7 +142,7 @@ def fixture_skill(tmp_path: Path) -> Path:
     return skill
 
 
-def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
+def make(skill: Path, *args: str, home: Path | None = None) -> subprocess.CompletedProcess[str]:
     # THE PARENT RUN'S VARIABLES ARE STRIPPED, and the list is one variable wider than it was.
     #
     # MAKEFLAGS (feature 145): under `make test-full` the parent make exports `COV_FLOORS=1` through
@@ -161,7 +161,9 @@ def make(skill: Path, *args: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         text=True,
         stdin=subprocess.DEVNULL,
-        env={**os.environ, "MAKEFLAGS": "", "MFLAGS": "", "FULL": "", "REF_WHY": ""},
+        # ...and HOME, where a test asks: `hooks-test` runs the user-level hook's own suite (`~/.claude/hooks/test-*.sh`) in every
+        # repository that has not kept its pass, a fresh fixture's every run - 5.5 s that is not the fixture's (feature 444 T36)
+        env={**os.environ, "MAKEFLAGS": "", "MFLAGS": "", "FULL": "", "REF_WHY": "", **({"HOME": str(home)} if home else {})},
     )
 
 
