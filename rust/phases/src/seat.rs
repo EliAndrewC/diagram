@@ -27,7 +27,8 @@ impl fmt::Display for SeatRefused {
 /// A wall the way out keeps off: a ring and the margin it is kept by (feet).
 pub type Wall = (Vec<Pt>, f64);
 
-/// What the thin Python gathered (D1).
+/// What the seat is handed (the driver's, D1).
+#[derive(Clone)]
 pub struct SeatIn {
     /// The canvas's width and height (feet).
     pub canvas: Pt,
@@ -108,12 +109,26 @@ pub fn tally(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
 /// Research:
 ///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
+///     the back to the hill where the wind cannot be backed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();
     let (spacing, half, bend) = inp.ford;
     let fords = fords::fords(&inp.brook, spacing, half, bend, &mut counts);
     let stream_segs = fords::gapped(&inp.streams, &fords, half, &mut counts);
     let (mut ranked, stopped) = margins::ranked(inp, &mut counts);
+    // THE BACK TO THE HILL WHERE NO MARGIN CAN TURN IT TO THE WIND (feature 444 T27, Sawada's declared fall of 225 degrees into
+    // its northwest wind): the margins ranked again as if the wind came down from the high side, each seat recorded off the wind
+    if ranked.is_empty() {
+        let uphill = SeatIn {
+            wind: (-inp.fall.0, -inp.fall.1),
+            ..inp.clone()
+        };
+        ranked = margins::ranked(&uphill, &mut counts)
+            .0
+            .into_iter()
+            .map(|f| Frame { offwind: true, ..f })
+            .collect();
+    }
     let mut walled = 0;
     let mut lines = inp.lines.clone();
     lines.extend(stream_segs.iter().copied());

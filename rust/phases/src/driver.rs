@@ -497,7 +497,13 @@ fn field_refused(e: crate::field::rules::FieldRefused) -> Refused {
 
 /// A stage's result kept, or its refusal recorded and nothing kept: the stages before it drawn, none that read it.
 fn kept<T>(r: Result<T, Refused>, refusals: &mut Vec<String>) -> Option<T> {
-    r.map_err(|e| refusals.push(e.0)).ok()
+    match r {
+        Ok(x) => Some(x),
+        Err(e) => {
+            refusals.push(e.0);
+            None
+        }
+    }
 }
 
 /// The bean runs that survive the map's final water (`beans::settle`): the field's ditches at their widths, the brook, the drain's
@@ -692,9 +698,17 @@ mod tests {
             .sunk
             .as_ref()
             .is_some_and(|s| s.pond.is_none() && !s.run.is_empty()));
-        // its fall runs into the wind: the seat finds no margin, and the record says so
-        assert!(r.seated.is_none() && r.refusals[0].starts_with("the seat refused"));
-        assert!(manifest(&r).contains("\"refusals\": [\"the seat refused"));
+        // its fall runs into the wind: the seat backs the hill, recorded off the wind
+        assert!(r.refusals.is_empty() && r.seated.as_ref().is_some_and(|s| s.frames[0].offwind));
+        let mut kept_why = Vec::new();
+        assert!(super::kept::<u8>(
+            Err(super::Refused("the seat refused: x".into())),
+            &mut kept_why
+        )
+        .is_none());
+        let mut refused = r;
+        refused.refusals = kept_why;
+        assert!(manifest(&refused).contains("\"refusals\": [\"the seat refused: x\"]"));
     }
 
     #[test]
