@@ -8,7 +8,7 @@ use std::collections::HashMap;
 
 use super::plan::Plan;
 use super::svg::{ink, Svg, BUND_W};
-use super::{fill, kept, stage_seat, Ground, Rolled, CROP_MARGIN, REED_TINT, RUN_W};
+use super::{fill, kept, ops, stage_seat, Ground, Rolled, CROP_MARGIN, REED_TINT, RUN_W};
 use crate::field::staged::{polder_stage, PolderStage};
 use crate::seat::Seated;
 use crate::waterward::{fringe, Fringe};
@@ -216,11 +216,18 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     for strip in &ward.strips {
         svg.polygon(strip, REED_TINT, None);
     }
+    let by_stage: Vec<(&'static str, u64)> =
+        [("water_frame", ops(&p.counts)), ("field", ops(&s.counts.0))]
+            .into_iter()
+            .chain(seated.iter().map(|x| ("seat", ops(&x.counts))))
+            .chain([("waterward", ops(&ward.counts))])
+            .collect();
     let mut counts: HashMap<String, u64> = s.counts.0.clone();
     seated
         .iter()
         .flat_map(|x| &x.counts)
         .chain(&ward.counts)
+        .chain(&p.counts)
         .for_each(|(k, n)| *counts.entry(k.clone()).or_insert(0) += n);
     let stages: Vec<&'static str> = ["water_frame", "field"]
         .into_iter()
@@ -243,6 +250,7 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
         fields: Vec::new(),
         brooks: Vec::new(),
         counts,
+        by_stage,
         svg: doc,
     }
 }

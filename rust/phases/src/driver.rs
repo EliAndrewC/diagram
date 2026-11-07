@@ -153,6 +153,8 @@ pub struct Rolled {
     /// The stages that refused, each with why: the stages before it drawn, none after it.
     pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
+    /// Each stage run and its counted operations, the work budget's unit (`ops`).
+    pub by_stage: Vec<(&'static str, u64)>,
     pub svg: String,
 }
 
@@ -547,6 +549,20 @@ fn settled(
     out
 }
 
+/// A stage's counted operations: every counter but the placements, drops and moves it reports and does not do (the deleted
+/// `work_budget.py`'s total).
+///
+/// Research:
+///     the operations counted - NONE: the work budget's own unit (feature 443)
+#[must_use]
+pub fn ops<S: std::hash::BuildHasher>(counts: &HashMap<String, u64, S>) -> u64 {
+    counts
+        .iter()
+        .filter(|(k, _)| !matches!(k.split('@').next(), Some("placed" | "dropped" | "moved")))
+        .map(|(_, n)| n)
+        .sum()
+}
+
 /// A cohort seed's spec, as the deleted cohort audit rolled it: `Audit-<seed>`, its households 10 to 20 by the seed, nothing pinned
 /// but the field's archetype where one is asked (a rolled field is always a valley paddy, so a polder is asked by name).
 ///
@@ -624,10 +640,18 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         let (fill, furrow) = crop_ink(d.crop);
         svg.furrowed(&d.poly, fill, DRY_EDGE, furrow, d.theta);
     }
+    let by_stage: Vec<(&'static str, u64)> =
+        [("water_frame", ops(&p.counts)), ("field", ops(&out.counts))]
+            .into_iter()
+            .chain(sunk.iter().map(|s| ("sink", ops(&s.counts))))
+            .chain(seated.iter().map(|s| ("seat", ops(&s.counts))))
+            .chain(laid.iter().map(|l| ("hem", ops(&l.counts))))
+            .collect();
     sunk.iter()
         .flat_map(|s| &s.counts)
         .chain(seated.iter().flat_map(|s| &s.counts))
         .chain(laid.iter().flat_map(|l| &l.counts))
+        .chain(&p.counts)
         .for_each(|(k, n)| *out.counts.entry(k.clone()).or_insert(0) += n);
     let doc = svg.finish(p.w, p.h, CROP_MARGIN);
     let stages: Vec<&'static str> = ["water_frame", "field"]
@@ -651,6 +675,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         fields: out.fields,
         brooks,
         counts: out.counts,
+        by_stage,
         svg: doc,
     })
 }
@@ -787,6 +812,27 @@ mod tests {
         assert!(roll(&s).is_ok());
         let p = roll(&super::cohort_spec(4, Some("polder_grid"))).unwrap();
         assert!(p.polder.is_some() && super::check::check(&p).is_empty());
+    }
+
+    #[test]
+    fn each_stage_run_reports_its_counted_work_and_not_its_placements() {
+        let c: std::collections::HashMap<String, u64> = [
+            ("placed", 5),
+            ("moved@settle_runs", 2),
+            ("dropped", 1),
+            ("write@frames", 3),
+            ("read", 4),
+        ]
+        .into_iter()
+        .map(|(k, n)| (k.to_owned(), n))
+        .collect();
+        assert_eq!(super::ops(&c), 7);
+        for r in [
+            roll(&super::cohort_spec(4, None)).unwrap(),
+            roll(&super::cohort_spec(4, Some("polder_grid"))).unwrap(),
+        ] {
+            assert_eq!(r.by_stage.iter().map(|s| s.0).collect::<Vec<_>>(), r.stages);
+        }
     }
 
     #[test]

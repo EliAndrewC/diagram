@@ -13,8 +13,8 @@
 
 # ---- performance: a bookend pair over band 1 is a flag mentioned at landing, never a refusal ----
 
-work-budget:    ## [performance] the counted work of the reference hamlet per stage against its budget, at 10/20/40/80 households; writes dev/work-budget/ and the standing record dev/work-budget.md (feature 443)   [SEED=<n>] [SIZES=10,20,40,80] [SPEC='<JSON over the reference spec>': a stage only another form runs, its run the audit's and the standing record untouched (444 T29)]
-	@printf 'work-budget: suspended - the counts came from a Python roll of the reference hamlet, deleted (feature 444 T39); the Rust driver counts the stages through the cut once it stands (T42). dev/work-budget.md is the last record.\n'
+work-budget:    ## [performance] the counted work of the reference hamlet per stage, from the Rust driver built with its counters, against its budget at 10/20/40/80 households (features 443, 444)   [WRITE=1: replace the standing record dev/work-budget.md]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/work_budget_rust.py" $(if $(WRITE),--write,)
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"

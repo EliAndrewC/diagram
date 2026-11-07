@@ -52,11 +52,45 @@ fn cohort(first: i64, count: i64, archetype: Option<&str>) {
     }
 }
 
+/// `hamlet --budget`: the reference hamlet (the deleted `work_budget.py`'s Inashiro) rolled on its seeds at each size, each stage's
+/// mean counted operations printed one `stage size mean rolled` line a stage and size, for `make work-budget` to set against
+/// `dev/work-budget.json` (feature 443; the GM 2026-11-07: "focus entirely on our Rust code"). Built with the counters on.
+fn budget() {
+    let mut sums: Vec<(&str, u32, u64, u32)> = Vec::new();
+    for size in [10, 20, 40, 80] {
+        for seed in [4, 25, 39, 47] {
+            // THE BUDGET'S SIZES PAST A HAMLET'S (feature 443): the derivations price 40 and 80 households to read each stage's growth, so
+            // the spec is the 10-household one with its households set past the reader's bound
+            let mut spec = l7r_phases::driver::spec::parse(&format!(
+                r#"{{"name": "Inashiro", "seed": {seed}, "households": 10, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}}"#
+            ))
+            .unwrap_or_default();
+            spec.households = size;
+            for (stage, n) in l7r_phases::driver::roll(&spec)
+                .map(|r| r.by_stage)
+                .unwrap_or_default()
+            {
+                match sums.iter_mut().find(|s| s.0 == stage && s.1 == size) {
+                    Some(s) => (s.2, s.3) = (s.2 + n, s.3 + 1),
+                    None => sums.push((stage, size, n, 1)),
+                }
+            }
+        }
+    }
+    for (stage, size, total, rolled) in sums {
+        println!("{stage}\t{size}\t{}\t{rolled}", total / u64::from(rolled));
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.get(1).map(String::as_str) == Some("--cohort") {
         let num = |i: usize, d: i64| args.get(i).and_then(|v| v.parse().ok()).unwrap_or(d);
         cohort(num(2, 1), num(3, 48), args.get(4).map(String::as_str));
+        return;
+    }
+    if args.get(1).map(String::as_str) == Some("--budget") {
+        budget();
         return;
     }
     let Some(spec_path) = std::env::args().nth(1) else {

@@ -2,7 +2,9 @@
 
 `make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json` runs `src/bin/hamlet.rs`, which calls `driver::roll` and writes
 `<name>.driver.svg` and `<name>.driver.json` beside the spec. What each stage is handed, and what the deleted Python drew, is
-`specs/444-work-budget-program/t42-brief.md`.
+`specs/444-work-budget-program/t42-brief.md`. `make work-budget` runs `hamlet --budget` built with the counters: the reference
+hamlet at 10/20/40/80 households, each stage's operations (`Rolled::by_stage`, `driver::ops`) set against `dev/work-budget.json`
+by `scripts/measure/work_budget_rust.py`.
 
 | file | look here when |
 |---|---|

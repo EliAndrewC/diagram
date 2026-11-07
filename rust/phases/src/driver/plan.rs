@@ -142,6 +142,8 @@ pub struct Plan {
     pub dike_crop: String,
     pub leftover: String,
     pub fry_form: String,
+    /// The water frame's counted work (`water_frame::roll_plan`'s), the plan being stage 1.
+    pub counts: std::collections::HashMap<String, u64>,
 }
 
 impl Plan {
@@ -242,14 +244,10 @@ pub fn plan(spec: &Spec) -> Plan {
     let knobs: Vec<(String, u32, bool, String)> = KNOBS
         .iter()
         .map(|(name, table, branch)| {
-            let branch = if *branch == "brook" {
-                if polder {
-                    "off"
-                } else {
-                    "all"
-                }
-            } else {
-                branch
+            let branch = match (*branch, polder) {
+                ("brook", true) => "off",
+                ("brook", false) => "all",
+                (b, _) => b,
             };
             (
                 (*name).to_owned(),
@@ -259,7 +257,7 @@ pub fn plan(spec: &Spec) -> Plan {
             )
         })
         .collect();
-    let (fall, picks, _counts) = roll_plan(
+    let (fall, picks, counts) = roll_plan(
         spec.seed,
         &admitted(&windward, polder),
         spec.down_deg.is_some(),
@@ -319,6 +317,7 @@ pub fn plan(spec: &Spec) -> Plan {
         dike_crop,
         leftover,
         fry_form,
+        counts,
     }
 }
 
