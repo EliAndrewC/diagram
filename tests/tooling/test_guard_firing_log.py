@@ -365,7 +365,6 @@ _ESCAPES = {
     ),
     "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 265 FR-010)"),
     "PHASE_SOURCE_OK": ("command", "matched in the Bash command by phase-source-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 444)"),
-    "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 250 D16)"),
     "CHECK_NOT_OWED_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "
