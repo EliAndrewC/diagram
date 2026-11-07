@@ -9,6 +9,7 @@
 pub mod plan;
 pub mod spec;
 pub mod svg;
+pub mod toe;
 
 use std::collections::{BTreeMap, HashMap};
 use std::fmt::Write as _;
@@ -16,6 +17,7 @@ use std::fmt::Write as _;
 use crate::field::brook::BrookIn;
 use crate::field::build::{build, Field, FieldIn, KnobIn};
 use crate::field::states::State;
+use crate::seat::{seat, SeatIn, Seated};
 use crate::sink::{sink, SinkIn, Sunk};
 use plan::Plan;
 use svg::{ink, Svg, BUND_W};
@@ -61,6 +63,16 @@ const JOIN_TRUNK: f64 = 150.0;
 /// Research:
 ///     the reeds' tint - CONVENTION: the engine's reed cover read as a pale wet green with sparse ticks; the tile itself went with the deleted engine
 const REED_TINT: &str = "#C3D0A4";
+/// The fords' spacing along the brook, their half-length and the bend past which a reach is no crossing place; the tameike's berth
+/// the way out keeps (ft, degrees).
+///
+/// Research:
+///     the fords - GUESS: the deleted `FORD_SPACING` 160 ft, `FORD_HALF` 30 ft and `FORD_BEND_DEG` 20, a crossing place every so far along a straight reach
+///     tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
+///     the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft
+const FORD: (f64, f64, f64) = (160.0, 30.0, 20.0);
+const POND_BERTH: f64 = 80.0;
+const LANE_FT: f64 = 8.0;
 /// The crop's margin round what is drawn (ft).
 ///
 /// Research:
@@ -103,6 +115,9 @@ pub struct Rolled {
     pub fields: Vec<Field>,
     pub brooks: Vec<Vec<(f64, f64)>>,
     pub sunk: Option<Sunk>,
+    pub seated: Option<Seated>,
+    /// The stages that refused, each with why: the stages before it drawn, none after it.
+    pub refusals: Vec<String>,
     pub counts: HashMap<String, u64>,
     pub svg: String,
 }
@@ -230,6 +245,91 @@ fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)]) {
     }
 }
 
+/// The wind's quarter as a unit vector pointing where it comes from.
+///
+/// Research:
+///     regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the eight quarters, the northwest unless declared
+fn wind(quarter: &str) -> (f64, f64) {
+    let d = std::f64::consts::FRAC_1_SQRT_2;
+    match quarter {
+        "N" => (0.0, -1.0),
+        "NE" => (d, -d),
+        "E" => (1.0, 0.0),
+        "SE" => (d, d),
+        "S" => (0.0, 1.0),
+        "SW" => (-d, d),
+        "W" => (-1.0, 0.0),
+        _ => (-d, -d),
+    }
+}
+
+/// The seat (stage 4): where the settlement will sit on the first field's margin, its back to the wind, the brook's fords - handed
+/// what the deleted seat stage handed it: the wet toe below the field and the reeds, each grown by the lane's width, the field and
+/// the tameike at its berth as the way out's walls, the ditches and the drain's run as its lines. It draws nothing.
+///
+/// Research:
+///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind
+///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
+fn stage_seat(p: &Plan, f: &Field, sunk: Option<&Sunk>) -> Result<Seated, Refused> {
+    let rad = p.down_deg.to_radians();
+    let toe = toe::toe_band(&[&f.fan.ring], p.down_deg, (p.w, p.h));
+    let reeds: Vec<Vec<(f64, f64)>> = sunk
+        .filter(|s| s.reeds.len() >= 3)
+        .map(|s| s.reeds.clone())
+        .into_iter()
+        .collect();
+    let mut walls: Vec<(Vec<(f64, f64)>, f64)> = std::iter::once(&toe)
+        .chain(&reeds)
+        .filter(|w| w.len() >= 3)
+        .map(|w| (toe::grow(w, LANE_FT), 0.0))
+        .collect();
+    walls.push((f.fan.ring.clone(), 0.0));
+    if let Some((c, rx, ry)) = sunk.and_then(|s| s.pond) {
+        let r = rx.max(ry);
+        walls.push((
+            (0..16)
+                .map(|k| {
+                    let a = f64::from(k) * std::f64::consts::PI / 8.0;
+                    (c.0 + r * a.cos(), c.1 + r * a.sin())
+                })
+                .collect(),
+            POND_BERTH,
+        ));
+    }
+    let lines: Vec<((f64, f64), (f64, f64))> = f
+        .channels
+        .iter()
+        .map(|c| c.pts.as_slice())
+        .chain(sunk.map(|s| s.run.as_slice()))
+        .flat_map(|pts| pts.windows(2).map(|s| (s[0], s[1])))
+        .collect();
+    let inp = SeatIn {
+        canvas: (p.w, p.h),
+        fall: (rad.cos(), rad.sin()),
+        wind: wind(&p.windward),
+        back_min_dot: plan::WIND_BACK_MIN_DOT,
+        outline: f.fan.ring.clone(),
+        band: plan::band_extent(p.households, p.knob("cluster_shape")),
+        plots: Vec::new(),
+        toe,
+        reeds,
+        brook: f.brook.pts.clone(),
+        walls,
+        lines,
+        streams: vec![f.brook.pts.clone()],
+        ford: FORD,
+    };
+    seat(&inp).map_err(seat_refused)
+}
+
+#[expect(
+    clippy::needless_pass_by_value,
+    reason = "`map_err` hands the refusal over by value"
+)]
+fn seat_refused(e: crate::seat::SeatRefused) -> Refused {
+    Refused(format!("the seat refused: {e}"))
+}
+
 /// The sink (stage 3): the first field's collector run to its pond, to the passing brook or off the map.
 ///
 /// Research:
@@ -342,6 +442,14 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .map(|(f, b)| stage_sink(&p, f, b))
         .transpose()?
         .flatten();
+    let mut refusals = Vec::new();
+    let seated = match out.fields.first().map(|f| stage_seat(&p, f, sunk.as_ref())) {
+        Some(Err(e)) => {
+            refusals.push(e.0);
+            None
+        }
+        other => other.and_then(Result::ok),
+    };
     let mut svg = Svg::default();
     for (f, b) in out.fields.iter().zip(&brooks) {
         draw_field(&mut svg, f, b);
@@ -349,15 +457,19 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     sunk.iter().for_each(|s| draw_sink(&mut svg, s));
     sunk.iter()
         .flat_map(|s| &s.counts)
+        .chain(seated.iter().flat_map(|s| &s.counts))
         .for_each(|(k, n)| *out.counts.entry(k.clone()).or_insert(0) += n);
     let doc = svg.finish(p.w, p.h, CROP_MARGIN);
     let stages: Vec<&'static str> = ["water_frame", "field"]
         .into_iter()
         .chain(sunk.as_ref().map(|_| "sink"))
+        .chain(seated.as_ref().map(|_| "seat"))
         .collect();
     Ok(Rolled {
         plan: p,
         sunk,
+        seated,
+        refusals,
         stages,
         knobs: out.knobs,
         fields: out.fields,
@@ -439,6 +551,15 @@ pub fn manifest(r: &Rolled) -> String {
         );
     }
     o.push_str(" ],\n");
+    let _ = writeln!(
+        o,
+        " \"refusals\": [{}],",
+        r.refusals
+            .iter()
+            .map(|s| js(s))
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
     let counts: BTreeMap<&String, &u64> = r.counts.iter().collect();
     let _ = writeln!(
         o,
@@ -459,7 +580,7 @@ mod tests {
     #[test]
     fn a_comb_hamlet_rolls_and_draws_its_field() {
         let r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        assert_eq!(r.stages, vec!["water_frame", "field", "sink"]);
+        assert_eq!(r.stages, vec!["water_frame", "field", "sink", "seat"]);
         assert!(r.sunk.as_ref().is_some_and(|s| s.pond.is_some()));
         assert!(!r.fields.is_empty() && !r.fields[0].basins.is_empty());
         assert!(
@@ -468,7 +589,7 @@ mod tests {
         let m = manifest(&r);
         assert!(
             m.contains("\"name\": \"Inashiro\"")
-                && m.contains("\"stages\": [\"water_frame\", \"field\", \"sink\"]")
+                && m.contains("\"stages\": [\"water_frame\", \"field\", \"sink\", \"seat\"]")
                 && m.contains("\"plot_size\"")
         );
     }
@@ -483,6 +604,9 @@ mod tests {
             .sunk
             .as_ref()
             .is_some_and(|s| s.pond.is_none() && !s.run.is_empty()));
+        // its fall runs into the wind: the seat finds no margin, and the record says so
+        assert!(r.seated.is_none() && r.refusals[0].starts_with("the seat refused"));
+        assert!(manifest(&r).contains("\"refusals\": [\"the seat refused"));
     }
 
     #[test]
@@ -507,6 +631,17 @@ mod tests {
         assert_eq!(
             fills.iter().collect::<std::collections::HashSet<_>>().len(),
             5
+        );
+        assert!(super::seat_refused(crate::seat::SeatRefused("x".into()))
+            .0
+            .starts_with("the seat refused"));
+        assert_eq!(
+            ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "?"]
+                .map(super::wind)
+                .iter()
+                .filter(|w| (w.0.hypot(w.1) - 1.0).abs() < 1e-9)
+                .count(),
+            9
         );
         assert!(super::sink_refused(crate::sink::SinkRefused("x".into()))
             .0
