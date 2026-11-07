@@ -193,7 +193,7 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
         return cargo(["test", "--quiet", "--all-features"], manifest)
     if cmd == "hamlet":
         # THE RUST DRIVER (feature 444 T42): a pool hamlet rolled from its spec, built optimized, no Python feature
-        return cargo(["run", "--release", "--quiet", "--bin", "hamlet"], manifest, [os.environ.get("HAMLET_SPEC", "")])
+        return cargo(["run", "--release", "--quiet", "--bin", "hamlet"], manifest, os.environ.get("HAMLET_ARGS", "").split() or [os.environ.get("HAMLET_SPEC", "")])
     if cmd == "test-no-counters":
         # THE COUNTERS CHANGE NO OUTPUT (feature 443 T02, its Rust half since the Python roll's deletion, feature 444 T39): the tests,
         # whose expected values are the same in both builds, pass with the counters compiled out

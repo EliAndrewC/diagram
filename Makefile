@@ -187,6 +187,9 @@ probe:          ## [maps] what a change does to every seed and pool map against 
 backup:         ## [project] save the clone's commits to backup/<clone> on GitHub without landing them - no gate runs (the GM 2026-11-07: "stop landing things until we've gotten this time down")
 	@"$$(git rev-parse --show-toplevel)/scripts/sync-with-main.sh" backup
 
+cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal named, the time taken (feature 444 T42)   [N=48] [SEED=1]
+	@HAMLET_ARGS="--cohort $(or $(SEED),1) $(or $(N),48)" python3 scripts/gates/rust_checks.py hamlet --crate rust/phases
+
 hamlet:         ## [maps] roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed   SPEC=pool/hamlets/<name>/<name>.spec.json
 	@if [ -z "$(SPEC)" ]; then printf 'make hamlet: SPEC=pool/hamlets/<name>/<name>.spec.json is required\n' >&2; exit 2; fi
 	@HAMLET_SPEC="$(abspath $(SPEC))" python3 scripts/gates/rust_checks.py hamlet --crate rust/phases

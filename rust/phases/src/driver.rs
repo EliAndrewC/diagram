@@ -540,6 +540,20 @@ fn settled(
     out
 }
 
+/// A cohort seed's spec, as the deleted cohort audit rolled it: `Audit-<seed>`, its households 10 to 20 by the seed, nothing pinned.
+///
+/// Research:
+///     the cohort's households - NONE: a test bed's spread, 10 + (seed x 7) mod 11, the deleted `cohort_audit`'s
+#[must_use]
+pub fn cohort_spec(seed: i64) -> spec::Spec {
+    spec::Spec {
+        name: format!("Audit-{seed:02}"),
+        seed,
+        households: 10 + u32::try_from((seed * 7).rem_euclid(11)).unwrap_or(0),
+        ..spec::Spec::default()
+    }
+}
+
 /// The hamlet rolled from its spec through the stages enabled so far.
 ///
 /// # Errors
@@ -747,6 +761,13 @@ mod tests {
             detail: "why".into(),
         });
         assert!(e.0.starts_with("the field refused: "));
+    }
+
+    #[test]
+    fn a_cohort_seed_rolls_with_its_households_by_the_seed() {
+        let s = super::cohort_spec(4);
+        assert_eq!((s.name.as_str(), s.households), ("Audit-04", 16));
+        assert!(roll(&s).is_ok());
     }
 
     #[test]

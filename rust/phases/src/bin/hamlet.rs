@@ -7,7 +7,52 @@
 use std::path::Path;
 use std::time::Instant;
 
+/// `hamlet --cohort <first seed> <count>`: each seed rolled through the stages, one line a seed, then the refusals counted and
+/// the time taken - the Rust stages' test bed over many seeds (feature 444 T42; the GM 2026-11-07: "focus entirely on our Rust").
+fn cohort(first: i64, count: i64) {
+    let t = Instant::now();
+    let mut refused = 0;
+    for seed in first..first + count {
+        let spec = l7r_phases::driver::cohort_spec(seed);
+        let s = Instant::now();
+        match l7r_phases::driver::roll(&spec) {
+            Ok(r) => {
+                let why = r.refusals.first().map_or(String::new(), |w| {
+                    format!("  REFUSED: {}", w.chars().take(140).collect::<String>())
+                });
+                refused += usize::from(!r.refusals.is_empty());
+                println!(
+                    "{} hh={} {} form={} {:.1} ms - {}{why}",
+                    spec.name,
+                    spec.households,
+                    r.plan.archetype,
+                    r.plan.knob("settlement_form"),
+                    s.elapsed().as_secs_f64() * 1000.0,
+                    r.stages.join(",")
+                );
+            }
+            Err(e) => {
+                refused += 1;
+                println!("{} hh={} FAILED: {e}", spec.name, spec.households);
+            }
+        }
+    }
+    println!(
+        "cohort: {count} seed(s) from {first}, {refused} refused, in {:.0} ms",
+        t.elapsed().as_secs_f64() * 1000.0
+    );
+    if refused > 0 {
+        std::process::exit(1);
+    }
+}
+
 fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.get(1).map(String::as_str) == Some("--cohort") {
+        let num = |i: usize, d: i64| args.get(i).and_then(|v| v.parse().ok()).unwrap_or(d);
+        cohort(num(2, 1), num(3, 48));
+        return;
+    }
     let Some(spec_path) = std::env::args().nth(1) else {
         eprintln!("hamlet: a spec path is required - make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json");
         std::process::exit(2);
