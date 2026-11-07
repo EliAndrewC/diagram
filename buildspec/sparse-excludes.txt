@@ -37,3 +37,7 @@
 #     which are TRACKED SOURCE (never excluded here); a draft's gitignored svg is regenerated when absent
 # plus a grep for hardcoded `legacy-hand-authored-pool/**.png|svg` literals, which finds only
 # fixture-built pages. Neither pattern below is reachable from any of them.
+
+# 8.0 MB (43 `.png` plates and the page). The hamlet placement-order writeup FROZEN as the Rust port's temporary reference
+# (feature 444 T37): tracked, read by a human, and by nothing the gate runs - no module or test names this directory.
+/dev/placement-stages-frozen/

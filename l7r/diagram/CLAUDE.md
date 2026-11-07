@@ -18,22 +18,20 @@ task is in.
 makes `l7r` a regular package and the webapp's portion silently stops existing (`tests/test_namespace_portion.py`).
 **The repository root is the `sys.path` root**: `pool/`, `tests/`, the `Makefile` and `pyproject.toml` sit there, a
 pool generator's bootstrap climbs to it, and an engine module that computes the root from its own location
-(`gencache`, `pool_index`, `render_cache`, `cohort_audit`, `cache_audit`, `hamletgen`) counts its depth - a wrong depth
+(`gencache`, `pool_index`, `render_cache`) counts its depth - a wrong depth
 is silent and lands one directory short of `pool/`.
+
+**The hamlet engine is Rust** (feature 444 amendment 11): the Python hamlet engine - `hamletgen/`, `settlement/`, `waterfields/`,
+`sitegen/`, `overlap/` - was deleted on 2026-11-07 and lives in git history; the stages are `rust/phases/` (the ones after the
+last efficient stage parked in `rust/parked/`), and the stage-by-stage reference is `dev/placement-stages-frozen/`.
 
 | path | what is in it | load its index when |
 |---|---|---|
-| [`settlement/`](settlement/CLAUDE.md) | the Mode B drawing engine (the `Settlement` class and its mixins) | you change what a settlement map DRAWS or where it places something |
-| [`overlap/`](overlap/__init__.py) | the overlap TAXONOMY and matrix: which features may lie on which, and why | you add a footprint feature, or a pair overlapped that should not have |
-| [`waterfields/`](waterfields/CLAUDE.md) | the water-first field engine (comb fields, terraces, polders) | you change paddies, bunds, canals or the field frame |
-| [`hamletgen/`](hamletgen/CLAUDE.md) | the scripted hamlet generator - a whole hamlet from a short spec | you work on scripted generation |
-| [`sitegen/`](sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE | you add a tier generator, or move a stage out of one |
 | [`pipeline/`](pipeline/CLAUDE.md) | how a map is regenerated, cached, rendered and indexed | the cache behaves oddly, or you change how generation is DRIVEN |
 | [`interactive/`](interactive/CLAUDE.md) | the interactive HTML page: the feature-class vocabulary, the modals, the page writer, the record's build | you add a KIND of feature, change what a modal says, or the map-vocabulary gate test fired |
 | [`labels/`](labels/__init__.py) | THE ONE CAPTION PLACER (feature 266), used by the settlement engine, `compound.py` and the hand-drawn sheets (`labels/hand_sheet.py`) | you add a captioned feature (name its SUBJECT and call the placer; never pick a seat), or a caption sits wrong |
 | [`buildings/`](buildings/__init__.py) | the Mode A building TYPES, declared once in `types.json` (feature 254) | you add or change a building type or its program |
 | `compound.py`, `compound_model.py`, `compound_parts.py`, `compound_view.py` | the Mode A compound program and perimeter-first placer; its vocabulary (units, palettes, program types); what it seats around the masses; the one view its captions are seated by (feature 340: the draft read as the hand-sheet placer reads a hand sheet) | you change a compound plan's draft |
-| `citybudget.py` | budget-first city wall sizing (feature 009) | you size a city |
 | `dwellings.py` | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
 | `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
 | `_invocation.py`, `_census.py`, `_memory.py` | refuse an operation not invoked through this project's make; the roll census's writer; give freed C memory back after a roll | a refusal or the census fired |

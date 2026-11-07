@@ -84,9 +84,9 @@ def test_a_cheap_operation_is_refused_as_a_remote_target_and_an_expensive_one_di
     assert cli.main(["check", "--target", "site-justice"]) == 1
     assert "only an EXPENSIVE operation" in capsys.readouterr().out
     assert cli.main(["check", "--target", "not-a-target"]) == 1
-    assert cli.main(["check", "--target", "cohort N=48", "--compute", "BUILD_GENERAL1_2XLARGE"]) == 0
+    assert cli.main(["check", "--target", "map GEN=x", "--compute", "BUILD_GENERAL1_2XLARGE"]) == 0
     entry = json.loads(next((roots / S / "dev" / "run-log").rglob("*.json")).read_text(encoding="utf-8"))
-    assert entry["scope"] == "operation" and entry["reason"] == "cohort N=48" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
+    assert entry["scope"] == "operation" and entry["reason"] == "map GEN=x" and entry["compute"] == "BUILD_GENERAL1_2XLARGE"
 
 
 def test_measure_dispatches_with_NO_engine_delta_and_says_what_it_buys(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
@@ -115,7 +115,7 @@ def test_engine_key_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) 
 def test_image_and_target_validation(roots: Path) -> None:
     assert cli.main(["image"]) == 0
     with pytest.raises(SystemExit):
-        cli.main(["merge", "--target", "cohort"])
+        cli.main(["merge", "--target", "map"])
 
 
 def test_bare_invocation_outside_make_is_refused_and_names_the_target(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

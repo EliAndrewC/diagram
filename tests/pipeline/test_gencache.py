@@ -509,7 +509,7 @@ def test_the_key_survives_a_change_of_ROOT_but_not_a_change_of_SOURCE(monkeypatc
 
     # ...and the safe direction: change one recorded function's source and the key must move
     target = other / "l7r/diagram/compound.py"
-    target.write_text(target.read_text() + "\n\ndef _rank_depth_extra() -> None:\n    pass\n", encoding="utf-8")
+    target.write_text(target.read_text().replace("def _rank_depth(", "def _rank_depth_moved(", 1), encoding="utf-8")
     assert gencache.key_for(b"subject", deps) != here_key, "a changed engine source must NOT key the same"
 
 

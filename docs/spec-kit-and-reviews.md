@@ -83,7 +83,7 @@ before a performance trial, `make perf-share` reads a module's share of each sta
 - **Do NOT reach for Principle XIII's "pre-existing failures stay ledgered."** That clause is about what BLOCKS a push. This one is about what you owe a defect you have actually seen. A pre-existing failure you never touched does not stop you shipping; one you found gets fixed.
 - **Most of these arrive from the review subagents**, which are pointed at a DELTA and reliably find things outside it - that is an independent reviewer working, not scope creep. Same for a defect a diagnostic surfaces, a number that looks wrong while you were measuring something else, or a comment describing code that no longer exists.
 - **The why is compounding** (the GM's own reasoning): the point of these generators is to expand them onto a foundation whose behavior is known-good. Every defect left in place is one the next tier inherits and builds over, entangled by then with work that assumed it. Keeping the floor level is what lets the building get taller.
-- **Record a fix that FAILED, at the point of change.** A cheap wrong lever that measurably did nothing saves the next session from pulling it again - see the front-row lane cap's two recorded dead ends in [`hamletgen/homesteads.py`](../l7r/diagram/hamletgen/homesteads/__init__.py).
+- **Record a fix that FAILED, at the point of change.** A cheap wrong lever that measurably did nothing saves the next session from pulling it again - see the front-row lane cap's two recorded dead ends in `hamletgen/homesteads.py`.
 
 ## Measured, enforced, escalated (feature 375)
 

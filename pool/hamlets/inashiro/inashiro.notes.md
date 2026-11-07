@@ -40,9 +40,9 @@ manifest: the connector runs from (2737, 1774) to (5950, 1774); it ran southwest
 
 ## Why it exists
 
-It is the deliverable of the experiment in [`../../hamletgen/`](../../../l7r/diagram/hamletgen/): can a SCRIPT
+It is the deliverable of the experiment in `../../hamletgen/`: can a SCRIPT
 do what a session currently does by hand? Inashiro was given deliberately the same brief as the
-hand-authored [`../hamlets/ikegami.gen.py`](../../../legacy-hand-authored-pool/hamlets/ikegami/ikegami.gen.py) - ~15 households, land
+hand-authored `../hamlets/ikegami.gen.py` - ~15 households, land
 falling due south, a brook off the northern high ground feeding one comb field, the field draining
 at its low foot into a *tameike* - so the two maps can be read side by side.
 
