@@ -547,16 +547,18 @@ fn settled(
     out
 }
 
-/// A cohort seed's spec, as the deleted cohort audit rolled it: `Audit-<seed>`, its households 10 to 20 by the seed, nothing pinned.
+/// A cohort seed's spec, as the deleted cohort audit rolled it: `Audit-<seed>`, its households 10 to 20 by the seed, nothing pinned
+/// but the field's archetype where one is asked (a rolled field is always a valley paddy, so a polder is asked by name).
 ///
 /// Research:
 ///     the cohort's households - NONE: a test bed's spread, 10 + (seed x 7) mod 11, the deleted `cohort_audit`'s
 #[must_use]
-pub fn cohort_spec(seed: i64) -> spec::Spec {
+pub fn cohort_spec(seed: i64, archetype: Option<&str>) -> spec::Spec {
     spec::Spec {
         name: format!("Audit-{seed:02}"),
         seed,
         households: 10 + u32::try_from((seed * 7).rem_euclid(11)).unwrap_or(0),
+        field_archetype: archetype.map(str::to_owned),
         ..spec::Spec::default()
     }
 }
@@ -780,9 +782,11 @@ mod tests {
 
     #[test]
     fn a_cohort_seed_rolls_with_its_households_by_the_seed() {
-        let s = super::cohort_spec(4);
+        let s = super::cohort_spec(4, None);
         assert_eq!((s.name.as_str(), s.households), ("Audit-04", 16));
         assert!(roll(&s).is_ok());
+        let p = roll(&super::cohort_spec(4, Some("polder_grid"))).unwrap();
+        assert!(p.polder.is_some() && super::check::check(&p).is_empty());
     }
 
     #[test]

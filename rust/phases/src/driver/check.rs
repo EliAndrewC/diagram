@@ -141,9 +141,46 @@ pub fn check(r: &Rolled) -> Vec<String> {
             )
         }));
     }
+    out.extend(polder_checks(r));
     if rings.iter().any(|ring| ring.iter().any(off)) {
         out.push("off_canvas: the field".to_owned());
     }
+    out
+}
+
+/// A polder's own checks: its seat off its block, its waterside reeds off its ground, the block on the canvas.
+///
+/// Research:
+///     the polder's checks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the reeds outside the dike on the flanks that face the water, the settlement on the block's dry shore
+fn polder_checks(r: &Rolled) -> Vec<String> {
+    let mut out = Vec::new();
+    let (w, h) = (r.plan.w, r.plan.h);
+    let off = |p: &Pt| p.0 < 0.0 || p.1 < 0.0 || p.0 > w || p.1 > h;
+    let Some(s) = &r.polder else {
+        return out;
+    };
+    let block = &s.polder.outline;
+    for f in r.seated.iter().filter_map(|x| x.frames.first()) {
+        let on = depth_inside(f.center, block) > SLACK_FT;
+        out.extend(on.then(|| {
+            format!(
+                "seat_on_field: the settlement's middle ({:.0}, {:.0}) stands inside the polder",
+                f.center.0, f.center.1
+            )
+        }));
+    }
+    for (i, strip) in r.waterward.iter().flat_map(|w| w.strips.iter()).enumerate() {
+        let on = depth_inside(mean(strip), block) > SLACK_FT;
+        out.extend(on.then(|| {
+            format!("reeds_on_field: waterside strip {i}'s middle stands inside the polder")
+        }));
+    }
+    out.extend(
+        block
+            .iter()
+            .any(off)
+            .then(|| "off_canvas: the polder".to_owned()),
+    );
     out
 }
 
@@ -218,5 +255,18 @@ mod tests {
             found.contains("off_canvas: the field") && found.contains("off_canvas: the tameike")
         );
         assert!(depth_inside((0.0, 0.0), &[(0.0, 0.0), (1.0, 0.0)]) == 0.0);
+        let mut p = roll(&parse(r#"{"name": "K", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond"}"#).unwrap()).unwrap();
+        let block = p.polder.as_ref().unwrap().polder.outline.clone();
+        let mid = mean(&block);
+        p.seated.as_mut().unwrap().frames[0].center = mid;
+        p.waterward.as_mut().unwrap().strips.push(vec![
+            (mid.0 - 5.0, mid.1 - 5.0),
+            (mid.0 + 5.0, mid.1 - 5.0),
+            (mid.0, mid.1 + 5.0),
+        ]);
+        let found = check(&p).join("\n");
+        assert!(found.contains("inside the polder") && found.contains("reeds_on_field"));
+        p.polder.as_mut().unwrap().polder.outline.push((-9.0, -9.0));
+        assert!(check(&p).join("\n").contains("off_canvas: the polder"));
     }
 }
