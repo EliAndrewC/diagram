@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci import incremental, selection
+from l7r.diagram.ci import incremental, pool_readers, selection
 
 
 @pytest.fixture(autouse=True)
@@ -516,6 +516,46 @@ def test_a_rust_file_selects_the_tests_that_read_the_crate(tmp_path: Path, monke
     assert pl.mode == "incremental", pl
     assert pl.changed_test_modules == ["tests/tooling/test_reads_rust.py", "tests/tooling/test_runs_checks.py"], pl
     assert "1 Rust file(s) (2 test module(s) that read them)" in pl.reason, pl.reason
+
+
+def test_a_rust_file_selects_a_recorded_tooling_test_only_when_it_read_the_change(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 T36 (the GM 2026-11-07: "any single test which takes even 100 milliseconds is fairly suspect"): the source rule
+    selected tooling tests that only ran `rust_checks.py` on a fixture crate, and missed ones that read the crate. A module the
+    baseline recorded is selected by what its tests read: the changed file, or the directory that lists it; one whose test started
+    a program the recorder could not see into, and one never recorded, fall back to its source."""
+    for rel, text in {
+        "tests/tooling/test_reads_it.py": "x = 1\n",
+        "tests/tooling/test_lists_its_dir.py": "x = 1\n",
+        "tests/tooling/test_fixture_crate.py": "import rust_checks\n",
+        "tests/tooling/test_opaque.py": "import rust_checks\n",
+        "tests/tooling/test_unrecorded.py": "import rust_checks\n",
+        "tests/soak/test_soak.py": "import rust_checks\n",
+        "tests/tier_town/test_town.py": "import rust_checks\n",
+        "tests/test_a.py": "x = 1\n",
+    }.items():
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(text, encoding="utf-8")
+    _manifest_baseline(tmp_path, monkeypatch, {"e/a.py": "1", "rust/phases/src/field.rs": "2"})
+    store = {
+        "tests": {
+            "tests/tooling/test_reads_it.py::t": {"files": ["rust/phases/src/field.rs"], "dirs": []},
+            "tests/tooling/test_fixture_crate.py::t": {"files": ["tests/fixtures/rust/fixture/src/lib.rs"], "dirs": []},
+            "tests/tooling/test_opaque.py::t": {"files": [], "dirs": [], "opaque": ["cargo"]},
+        },
+        "files": {"tests/tooling/test_lists_its_dir.py": {"entry": {"files": [], "dirs": ["rust/phases/src"]}}},
+    }
+    (tmp_path / "gb" / pool_readers.TOOLING_READS).write_text(json.dumps(store), encoding="utf-8")
+    pl = incremental.plan(tmp_path)
+    assert pl.changed_test_modules == [
+        "tests/tooling/test_lists_its_dir.py",
+        "tests/tooling/test_opaque.py",
+        "tests/tooling/test_reads_it.py",
+        "tests/tooling/test_unrecorded.py",
+    ], pl
+    (tmp_path / "gb" / pool_readers.TOOLING_READS).write_text("{}", encoding="utf-8")
+    assert pool_readers.recorded_reads(tmp_path / "gb" / pool_readers.TOOLING_READS) is None, "an empty store records nothing"
+    (tmp_path / "gb" / pool_readers.TOOLING_READS).write_text("not json", encoding="utf-8")
+    assert pool_readers.recorded_reads(tmp_path / "gb" / pool_readers.TOOLING_READS) is None, "nor an unreadable one"
 
 
 def test_another_non_python_engine_file_still_plans_full(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

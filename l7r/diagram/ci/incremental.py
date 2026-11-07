@@ -362,13 +362,13 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
 
     non_py = [p for p in ch.engine if not p.endswith(".py")]
     manifests = [p for p in non_py if pool_readers.is_manifest(p)]
-    # ...AND A RUST FILE IS NOT PYTHON EITHER (feature 444 T36): a change under `rust/` selects the Python tests that read the crate
-    # or run its tooling (`pool_readers.rust_readers`); the crate's own checks are `make static`'s - every Rust edit ran the whole
+    # ...AND A RUST FILE IS NOT PYTHON EITHER (feature 444 T36): a change under `rust/` selects the Python tests that read it, by the
+    # baseline's recorded reads where it has them (`pool_readers.rust_readers`); the crate's own checks are `make static`'s - every Rust edit ran the whole
     # Python suite before (213 s, measured 2026-11-07)
     rust = [p for p in non_py if p.startswith("rust/")]
     if other := [p for p in non_py if p not in manifests and p not in rust]:
         return Plan("full", f"an engine file that is not Python changed: {other[0]}")
-    readers: list[str] = (pool_readers.readers(root) if manifests else []) + (pool_readers.rust_readers(root) if rust else [])
+    readers: list[str] = (pool_readers.readers(root) if manifests else []) + (pool_readers.rust_readers(root, rust, pool_readers.recorded_reads(bdir / pool_readers.TOOLING_READS)) if rust else [])
     closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
     baseline_tests = sorted(closures)
     scripts_modules: list[str] = []

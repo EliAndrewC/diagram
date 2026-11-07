@@ -15,6 +15,7 @@ a fraction of a second.
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -46,17 +47,50 @@ def readers(root: Path, skip: tuple[str, ...] = NOT_GATE) -> list[str]:
 
 #: a test that READS the Rust crate's sources or runs its tooling: the crate named as a path part or by its tooling's names
 RUST_READS = re.compile(r'"rust"|rust/phases|rust_checks|claims_rust|\.rs\b')
+#: the tree whose tests' reads the gate records (`tests/tooling/_test_deps.py`), and the baseline's record of them
+TOOLING = "tests/tooling/"
+TOOLING_READS = "tooling-reads.json"
+#: a recorded module whose test started a program the recorder cannot see into: its reads are not known
+UNKNOWN = "*"
 
 
-def rust_readers(root: Path, skip: tuple[str, ...] = NOT_GATE) -> list[str]:
+def recorded_reads(store: Path) -> dict[str, set[str]] | None:
+    """{test module: every path its tests and the module itself read, files and listed directories} from a kept reads store
+    (`_test_deps.py`'s), `UNKNOWN` among them where a test started a program it could not see into; None with no store."""
+    try:
+        kept = json.loads(store.read_text(encoding="utf-8"))
+    except OSError, ValueError:
+        return None
+    out: dict[str, set[str]] = {}
+    entries = [(n.split("::")[0], e) for n, e in (kept.get("tests") or {}).items()]
+    entries += [(m, v.get("entry") or {}) for m, v in (kept.get("files") or {}).items()]
+    for module, e in entries:
+        out.setdefault(module, set()).update(e.get("files") or [], e.get("dirs") or [], [UNKNOWN] if e.get("opaque") else [])
+    return out or None
+
+
+def touches(reads: set[str], changed: list[str]) -> bool:
+    """Did a recorded read see a changed path: the file itself, or the directory that lists it (an added or deleted file)?"""
+    return any(c in reads or c.rpartition("/")[0] in reads for c in changed)
+
+
+def rust_readers(root: Path, changed: list[str] = [], reads: dict[str, set[str]] | None = None, skip: tuple[str, ...] = NOT_GATE) -> list[str]:  # noqa: B006
     """THE TESTS A RUST CHANGE OWES (feature 444 T36; the GM 2026-11-07: "make sure our iteration loop is fast"): no Python test's
-    coverage context shows it reading a `.rs` file, so the planner ran the whole Python suite for every Rust edit (213 s) - the
-    reader test modules under `tests/`, as `readers` finds the pool's: those whose source names the crate, its tooling or `.rs`."""
+    coverage context shows it reading a `.rs` file, so the planner ran the whole Python suite for every Rust edit (213 s).
+
+    A tooling module the gate recorded is selected when one of its tests READ a `changed` path (`reads`, `recorded_reads` of the
+    baseline's store); every other module - outside the recorded tree, never recorded, or one whose test started a program the
+    recorder could not see into - when its source names the crate, its tooling or `.rs` (`RUST_READS`). The source rule alone
+    selected 20 modules for a one-line edit and missed four that read the crate (measured 2026-11-07: `test_bundle_shared_text`,
+    `test_modal_checks`, `test_claims_coverage`, `test_doc_links`), and its tooling tests only ran `rust_checks.py` on a fixture
+    crate - their change is a `scripts/` change, planned as one."""
     out = []
     for p in sorted((root / "tests").rglob("test_*.py")):
         parts = p.relative_to(root / "tests").parts
         if parts[0] in skip or parts[0].startswith("tier_"):
             continue
-        if RUST_READS.search(p.read_text(encoding="utf-8")):
-            out.append(p.relative_to(root).as_posix())
+        rel = p.relative_to(root).as_posix()
+        seen = (reads or {}).get(rel) if rel.startswith(TOOLING) else None
+        if touches(seen, changed) if seen is not None and UNKNOWN not in seen else RUST_READS.search(p.read_text(encoding="utf-8")):
+            out.append(rel)
     return out
