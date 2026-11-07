@@ -630,10 +630,13 @@ for arg in "$@"; do case "$arg" in FULL=1) export FULL=1 ;; esac; done
 case "${1:-}" in
   sync-in)     shift; sync_in "$@" ;;
   push)        trap 'backup_on_exit $?' EXIT; push_cmd ;;
+  # THE WORK SAVED WITHOUT A LANDING (the GM 2026-11-07: "we should stop landing things until we've gotten this time down. We
+  # already push to the remote branch to save our work"): HEAD to backup/<clone> on GitHub, fast-forward only, no gate run
+  backup)      ensure_github_origin; backup_step ;;
   render-sync) render_sync ;;
   render-sync-runner) render_sync_runner ;;
   # GUARD_EDIT_OK: feature 405 T35 (D7) - the landing returns once its work is on main; main's renders refresh behind it
   # (render_sync_background: the prompt hook's lock and log). A hand `render-sync` stays in the foreground.
   done)        trap 'backup_on_exit $?' EXIT; push_cmd; render_sync_background ;;
-  *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | render-sync | done" ;;
+  *)           die "usage: sync-with-main.sh sync-in [--mirror-only] [--background-render] | push | backup | render-sync | done" ;;
 esac
