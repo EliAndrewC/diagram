@@ -493,3 +493,7 @@ And: "No, NOT the last stage that is olrted, after the last stage whch is ported
 "How are things going?  I want to make sure that we are laser-focused on "make sure our iteration loop is fast, and all of our slow tests are turned off or eliminated except when absolutely necessary to be run", etc."
 
 "we should stop landing things until we've gotten this timedown.  We already push to the remote branch to save our work, so sopending 5 minutes running landing tests is pure overhead.  There are no other concurrent sessions which need to pull from main, so we can wait arbitrarily long to land our changes."
+
+Then, on the gate's worker count: "We limited to 6 workers because at the time we did a bunch of measurements and found there was a diminishing return beyond that number, e.g. 8 cores was only slightly faster, same with 10 or 12 and there were literally no gains past that.  This might not be true for Rus, which might change our calculus."
+
+And: "Sorry no, to be cleare we should stop optimizing our python gates for now and focus entirely on our Rust code.  For now we should simply try to avoidf running those Python tests until our Rust is solid."
