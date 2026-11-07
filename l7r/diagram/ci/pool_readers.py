@@ -42,3 +42,21 @@ def readers(root: Path, skip: tuple[str, ...] = NOT_GATE) -> list[str]:
         if READS.search(p.read_text(encoding="utf-8")):
             out.append(p.relative_to(root).as_posix())
     return out
+
+
+#: a test that READS the Rust crate's sources or runs its tooling: the crate named as a path part or by its tooling's names
+RUST_READS = re.compile(r'"rust"|rust/phases|rust_checks|claims_rust|\.rs\b')
+
+
+def rust_readers(root: Path, skip: tuple[str, ...] = NOT_GATE) -> list[str]:
+    """THE TESTS A RUST CHANGE OWES (feature 444 T36; the GM 2026-11-07: "make sure our iteration loop is fast"): no Python test's
+    coverage context shows it reading a `.rs` file, so the planner ran the whole Python suite for every Rust edit (213 s) - the
+    reader test modules under `tests/`, as `readers` finds the pool's: those whose source names the crate, its tooling or `.rs`."""
+    out = []
+    for p in sorted((root / "tests").rglob("test_*.py")):
+        parts = p.relative_to(root / "tests").parts
+        if parts[0] in skip or parts[0].startswith("tier_"):
+            continue
+        if RUST_READS.search(p.read_text(encoding="utf-8")):
+            out.append(p.relative_to(root).as_posix())
+    return out

@@ -362,9 +362,13 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
 
     non_py = [p for p in ch.engine if not p.endswith(".py")]
     manifests = [p for p in non_py if pool_readers.is_manifest(p)]
-    if other := [p for p in non_py if p not in manifests]:
+    # ...AND A RUST FILE IS NOT PYTHON EITHER (feature 444 T36): a change under `rust/` selects the Python tests that read the crate
+    # or run its tooling (`pool_readers.rust_readers`); the crate's own checks are `make static`'s - every Rust edit ran the whole
+    # Python suite before (213 s, measured 2026-11-07)
+    rust = [p for p in non_py if p.startswith("rust/")]
+    if other := [p for p in non_py if p not in manifests and p not in rust]:
         return Plan("full", f"an engine file that is not Python changed: {other[0]}")
-    readers: list[str] = pool_readers.readers(root) if manifests else []
+    readers: list[str] = (pool_readers.readers(root) if manifests else []) + (pool_readers.rust_readers(root) if rust else [])
     closures: dict[str, list[str]] = json.loads(tests.read_text(encoding="utf-8"))
     baseline_tests = sorted(closures)
     scripts_modules: list[str] = []
@@ -385,7 +389,9 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
         "incremental",
         f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed"
         + (f", {len(ch.scripts)} scripts/ file(s) ({len(scripts_modules)} module(s) that read scripts/)" if ch.scripts else "")
-        + (f", {len(manifests)} pool manifest(s) ({len(readers)} test module(s) that read them)" if readers else f", {len(manifests)} pool manifest(s) (no test module reads one)" if manifests else "")
+        + (f", {len(manifests)} pool manifest(s)" if manifests else "")
+        + (f", {len(rust)} Rust file(s)" if rust else "")
+        + (f" ({len(readers)} test module(s) that read them)" if readers else " (no test module reads one)" if manifests or rust else "")
         + (f", {len(tree_files)} non-module file(s) under tests/ ({len(tree_readers)} test module(s) that can read them)" if tree_files else ""),
         list(ch.engine),
         changed_modules,

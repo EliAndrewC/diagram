@@ -500,6 +500,24 @@ def test_a_pool_manifest_no_test_reads_stays_incremental_and_says_so(tmp_path: P
     assert pl.mode == "incremental" and "no test module reads one" in pl.reason, pl
 
 
+def test_a_rust_file_selects_the_tests_that_read_the_crate(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 444 T36 (the GM 2026-11-07: "make sure our iteration loop is fast"): a changed `.rs` file planned FULL, the whole
+    Python suite for every Rust edit (213 s). Now the plan stays incremental and selects the tests that read the crate or run
+    its tooling, and says so."""
+    for rel, text in {
+        "tests/tooling/test_reads_rust.py": 'CRATE = REPO / "rust" / "phases"\n',
+        "tests/tooling/test_runs_checks.py": "import rust_checks\n",
+        "tests/test_a.py": "x = 1\n",
+    }.items():
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(text, encoding="utf-8")
+    _manifest_baseline(tmp_path, monkeypatch, {"e/a.py": "1", "rust/phases/src/field.rs": "2"})
+    pl = incremental.plan(tmp_path)
+    assert pl.mode == "incremental", pl
+    assert pl.changed_test_modules == ["tests/tooling/test_reads_rust.py", "tests/tooling/test_runs_checks.py"], pl
+    assert "1 Rust file(s) (2 test module(s) that read them)" in pl.reason, pl.reason
+
+
 def test_another_non_python_engine_file_still_plans_full(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Only a manifest (`pool/<tier>/<map>/<map>.json`) is answered by its readers; any other non-Python engine file - a
     frozen exhibit's JSON, a pool JSON of another shape - is a dependency selection cannot see, and plans full as before."""
