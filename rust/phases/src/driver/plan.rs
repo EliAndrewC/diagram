@@ -77,6 +77,14 @@ pub const KNOBS: [(&str, &[&str], &str); 21] = [
 ///     the polder archetypes - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid diked out of standing water
 pub const POLDERS: [&str; 2] = ["polder_grid", "mulberry_dike_fishpond"];
 
+/// A dike-pond block's arrangement, its dikes' crop, what its leftover parcels hold and its fry ponds, rolled where the spec is silent.
+///
+/// Research:
+///     the dike-pond's forms - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block's ponds and dikes; each form rolled per hamlet from its table (the deleted `POND_LAYOUTS`, `DIKE_CROPS`, `LEFTOVER_FORMS`, `FRY_FORMS`), its shares its repeated entries, a GUESS
+const POND_LAYOUTS: [&str; 3] = ["mosaic", "mosaic", "grid"];
+const DIKE_CROPS: [&str; 6] = ["mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea"];
+const LEFTOVER_FORMS: [&str; 2] = ["rice", "pond"];
+const FRY_FORMS: [&str; 4] = ["none", "none", "none", "fry_village"];
 /// The fan's aspect, rolled.
 ///
 /// Research:
@@ -129,6 +137,11 @@ pub struct Plan {
     pub w: f64,
     pub h: f64,
     pub pins: BTreeMap<String, String>,
+    /// A dike-pond block's arrangement, dikes' crop, leftover parcels and fry ponds ("grid", "mulberry", "rice", "none" on any other field).
+    pub pond_layout: String,
+    pub dike_crop: String,
+    pub leftover: String,
+    pub fry_form: String,
 }
 
 impl Plan {
@@ -267,6 +280,20 @@ pub fn plan(spec: &Spec) -> Plan {
             ((*name).to_owned(), v)
         })
         .collect();
+    let dikepond = archetype == "mulberry_dike_fishpond";
+    let form = |given: &Option<String>, name: &str, table: &[&str], other: &str| -> String {
+        if dikepond {
+            given
+                .clone()
+                .unwrap_or_else(|| pick(spec.seed, name, table).to_owned())
+        } else {
+            other.to_owned()
+        }
+    };
+    let pond_layout = form(&spec.pond_layout, "pond_layout", &POND_LAYOUTS, "grid");
+    let dike_crop = form(&spec.dike_crop, "dike_crop", &DIKE_CROPS, "mulberry");
+    let leftover = form(&spec.leftover, "leftover", &LEFTOVER_FORMS, "rice");
+    let fry_form = form(&None, "fry_form", &FRY_FORMS, "none");
     let side = canvas_side(
         spec.households,
         rolled
@@ -288,6 +315,10 @@ pub fn plan(spec: &Spec) -> Plan {
         h: side,
         rolled,
         pins: spec.pins.clone(),
+        pond_layout,
+        dike_crop,
+        leftover,
+        fry_form,
     }
 }
 
@@ -328,6 +359,19 @@ mod tests {
         let polder = plan(&parse(r#"{"name": "K", "seed": 21, "households": 16, "field_archetype": "mulberry_dike_fishpond", "brook_side": -1}"#).unwrap());
         assert_eq!(polder.knob("brook_side"), "-1");
         assert_eq!(polder.knob("intake"), "weir");
+        assert!(
+            ["mosaic", "grid"].contains(&polder.pond_layout.as_str())
+                && ["rice", "pond"].contains(&polder.leftover.as_str())
+        );
+        assert_eq!(
+            (
+                p.pond_layout.as_str(),
+                p.dike_crop.as_str(),
+                p.leftover.as_str(),
+                p.fry_form.as_str()
+            ),
+            ("grid", "mulberry", "rice", "none")
+        );
         assert_eq!(p.knob("no_such_knob"), "");
     }
 }

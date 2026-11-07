@@ -110,6 +110,22 @@ impl Svg {
         );
     }
 
+    /// A band between two rings, the inner a hole (even-odd), its edges stroked.
+    pub fn band(&mut self, outer: &[Pt], inner: &[Pt], fill: &str, edge: (&str, f64)) {
+        if outer.len() < 3 {
+            return;
+        }
+        self.grow(outer, edge.1 / 2.0);
+        let _ = writeln!(
+            self.body,
+            r#"<path d="{} {}" fill="{fill}" fill-rule="evenodd" stroke="{}" stroke-width="{}"/>"#,
+            path(outer, true),
+            path(inner, true),
+            edge.0,
+            f(edge.1)
+        );
+    }
+
     /// A stroked line, round-capped.
     pub fn line(&mut self, pts: &[Pt], stroke: &str, w: f64) {
         if pts.len() < 2 {
@@ -299,6 +315,15 @@ mod tests {
         s.ellipse((15.0, 15.0), 1.0, 0.5, ink::SHEEN, None);
         s.close();
         let doc = s.finish(100.0, 100.0, 5.0);
+        let mut b = Svg::default();
+        b.band(
+            &[(0.0, 0.0), (10.0, 0.0), (10.0, 10.0)],
+            &[(2.0, 2.0), (8.0, 2.0), (8.0, 8.0)],
+            "#B79B68",
+            ("#9C8150", 1.0),
+        );
+        b.band(&[(0.0, 0.0)], &[], "#B79B68", ("#9C8150", 1.0));
+        assert!(b.finish(20.0, 20.0, 0.0).matches("evenodd").count() == 1);
         let mut d = Svg::default();
         d.furrowed(
             &[(0.0, 0.0), (20.0, 0.0), (20.0, 10.0), (0.0, 10.0)],

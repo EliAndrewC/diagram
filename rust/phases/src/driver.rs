@@ -17,9 +17,11 @@ use std::fmt::Write as _;
 use crate::field::brook::BrookIn;
 use crate::field::build::{build, Field, FieldIn, KnobIn};
 use crate::field::dry::DryPlot;
+use crate::field::staged::{polder_stage, PolderStage};
 use crate::field::states::State;
 use crate::seat::{seat, SeatIn, Seated};
 use crate::sink::{sink, SinkIn, Sunk};
+use crate::waterward::{fringe, Fringe};
 use plan::Plan;
 use svg::{ink, Svg, BUND_W};
 
@@ -94,6 +96,30 @@ fn crop_ink(crop: &str) -> (&'static str, &'static str) {
         _ => ("#C9B57A", "#9C8650"),
     }
 }
+/// The polder's inks: the dike's earth and edge, its crowns by crop, a pond's bank, the sluice gates, the tea hedges.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's dike, crown, bank and sluice inks, carried as they stood
+const DIKE_EARTH: &str = "#B79B68";
+const DIKE_EDGE: &str = "#9C8150";
+const BANK_FILL: &str = "#A9AE7C";
+const NURSERY_WATER: &str = "#A7B3AE";
+const SLUICE: (&str, &str) = ("#8C7A5A", "#5A4A32");
+const HEDGE: &str = "#5E7C40";
+fn crown_fill(crop: &str) -> &'static str {
+    match crop {
+        "willow" => "#6E8B4A",
+        "fruit" => "#7C9A54",
+        "tea" => "#5E7C40",
+        _ => "#87A45C",
+    }
+}
+/// The waterside strip's half-breadth at a cut and its depth off the dike (ft).
+///
+/// Research:
+///     the reed strips - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: reeds on the flanks of a dike that face the water; the deleted waterward stage's 15 ft cut and 280 ft depth, each a GUESS there
+const STRIP_CUT_HW: f64 = 15.0;
+const STRIP_DEPTH: f64 = 280.0;
 /// The crop's margin round what is drawn (ft).
 ///
 /// Research:
@@ -135,6 +161,8 @@ pub struct Rolled {
     pub knobs: HashMap<String, String>,
     pub fields: Vec<Field>,
     pub brooks: Vec<Vec<(f64, f64)>>,
+    pub polder: Option<PolderStage>,
+    pub waterward: Option<Fringe>,
     pub sunk: Option<Sunk>,
     pub seated: Option<Seated>,
     pub dry: Vec<DryPlot>,
@@ -287,6 +315,32 @@ fn wind(quarter: &str) -> (f64, f64) {
     }
 }
 
+/// What the seat seats against: the field's outline, the water lines the way out may not cross, the brook as first laid, the
+/// reeds and the tameike - a comb's or a polder's.
+struct Ground<'a> {
+    ring: &'a [(f64, f64)],
+    lines: Vec<&'a [(f64, f64)]>,
+    brook: &'a [(f64, f64)],
+    reeds: Vec<Vec<(f64, f64)>>,
+    pond: Option<((f64, f64), f64, f64)>,
+}
+
+/// A comb field's ground for the seat: its fan, its ditches and the drain's run, its brook, the tameike and its reeds.
+fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
+    Ground {
+        ring: &f.fan.ring,
+        lines: f
+            .channels
+            .iter()
+            .map(|c| c.pts.as_slice())
+            .chain(sunk.map(|s| s.run.as_slice()))
+            .collect(),
+        brook: &f.brook.pts,
+        reeds: sunk.map(|s| s.reeds.clone()).into_iter().collect(),
+        pond: sunk.and_then(|s| s.pond),
+    }
+}
+
 /// The seat (stage 4): where the settlement will sit on the first field's margin, its back to the wind, the brook's fords - handed
 /// what the deleted seat stage handed it: the wet toe below the field and the reeds, each grown by the lane's width, the field and
 /// the tameike at its berth as the way out's walls, the ditches and the drain's run as its lines. It draws nothing.
@@ -294,21 +348,17 @@ fn wind(quarter: &str) -> (f64, f64) {
 /// Research:
 ///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind
 ///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
-fn stage_seat(p: &Plan, f: &Field, sunk: Option<&Sunk>) -> Result<Seated, Refused> {
+fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
-    let toe = toe::toe_band(&[&f.fan.ring], p.down_deg, (p.w, p.h));
-    let reeds: Vec<Vec<(f64, f64)>> = sunk
-        .filter(|s| s.reeds.len() >= 3)
-        .map(|s| s.reeds.clone())
-        .into_iter()
-        .collect();
+    let toe = toe::toe_band(&[g.ring], p.down_deg, (p.w, p.h));
+    let reeds: Vec<Vec<(f64, f64)>> = g.reeds.iter().filter(|r| r.len() >= 3).cloned().collect();
     let mut walls: Vec<(Vec<(f64, f64)>, f64)> = std::iter::once(&toe)
         .chain(&reeds)
         .filter(|w| w.len() >= 3)
         .map(|w| (toe::grow(w, LANE_FT), 0.0))
         .collect();
-    walls.push((f.fan.ring.clone(), 0.0));
-    if let Some((c, rx, ry)) = sunk.and_then(|s| s.pond) {
+    walls.push((g.ring.to_vec(), 0.0));
+    if let Some((c, rx, ry)) = g.pond {
         let r = rx.max(ry);
         walls.push((
             (0..16)
@@ -320,11 +370,9 @@ fn stage_seat(p: &Plan, f: &Field, sunk: Option<&Sunk>) -> Result<Seated, Refuse
             POND_BERTH,
         ));
     }
-    let lines: Vec<((f64, f64), (f64, f64))> = f
-        .channels
+    let lines: Vec<((f64, f64), (f64, f64))> = g
+        .lines
         .iter()
-        .map(|c| c.pts.as_slice())
-        .chain(sunk.map(|s| s.run.as_slice()))
         .flat_map(|pts| pts.windows(2).map(|s| (s[0], s[1])))
         .collect();
     let inp = SeatIn {
@@ -332,15 +380,19 @@ fn stage_seat(p: &Plan, f: &Field, sunk: Option<&Sunk>) -> Result<Seated, Refuse
         fall: (rad.cos(), rad.sin()),
         wind: wind(&p.windward),
         back_min_dot: plan::WIND_BACK_MIN_DOT,
-        outline: f.fan.ring.clone(),
+        outline: g.ring.to_vec(),
         band: plan::band_extent(p.households, p.knob("cluster_shape")),
         plots: Vec::new(),
         toe,
         reeds,
-        brook: f.brook.pts.clone(),
+        brook: g.brook.to_vec(),
         walls,
         lines,
-        streams: vec![f.brook.pts.clone()],
+        streams: if g.brook.is_empty() {
+            Vec::new()
+        } else {
+            vec![g.brook.to_vec()]
+        },
         ford: FORD,
     };
     seat(&inp).map_err(seat_refused)
@@ -462,6 +514,220 @@ fn field_refused(e: crate::field::rules::FieldRefused) -> Refused {
     Refused(format!("the field refused: {e}"))
 }
 
+/// A stage's result kept, or its refusal recorded and nothing kept: the stages before it drawn, none that read it.
+fn kept<T>(r: Result<T, Refused>, refusals: &mut Vec<String>) -> Option<T> {
+    r.map_err(|e| refusals.push(e.0)).ok()
+}
+
+/// The polder (stage 2 on a polder archetype): the block, its dike, outfall, resting plots and pocket pond, and on a dike-pond its
+/// conversion (`field::staged::polder_stage`), each knob it reads rolled as the deleted polder stage rolled it.
+///
+/// Research:
+///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies
+///     the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)
+fn stage_polder(p: &Plan) -> PolderStage {
+    let pinned = |name: &str, forms: &[&str], weights: &[f64]| -> String {
+        p.pins.get(name).cloned().unwrap_or_else(|| {
+            forms[crate::pyrand::roll(
+                p.seed,
+                name,
+                u32::try_from(forms.len()).unwrap_or(1),
+                weights,
+            ) as usize]
+                .to_owned()
+        })
+    };
+    let dikepond = p.archetype == "mulberry_dike_fishpond";
+    let rest = pinned("paddy_rest", &["settled", "unsettled"], &[0.8, 0.2]);
+    let split: f64 = if dikepond {
+        pinned("dikepond_split", &["0.6", "0.4", "0.7", "0.5", "0.3"], &[])
+            .parse()
+            .unwrap_or(0.6)
+    } else {
+        0.5
+    };
+    polder_stage(
+        p.seed,
+        p.households,
+        dikepond,
+        &p.pond_layout,
+        p.down_deg,
+        (p.w / 2.0, p.h / 2.0),
+        p.fan_aspect,
+        (p.w, p.h),
+        rest == "unsettled",
+        (split, &p.leftover, &p.fry_form, &p.dike_crop),
+    )
+}
+
+/// The polder drawn: the wild pond and its fringe at the head, the plots by state, the ditches by role, the outfall, the dike's
+/// band with its crowns and sluices, a dike-pond's parcels with their banks, water and crops, a rice polder's pocket pond.
+///
+/// Research:
+///     the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it
+fn draw_polder(svg: &mut Svg, s: &PolderStage) {
+    let (c, rx, ry) = s.polder.pond;
+    svg.polygon(&s.polder.fringe, REED_TINT, None);
+    svg.ellipse(c, rx, ry, ink::POND_WATER, Some((ink::RIM, 2.4)));
+    for (x, st) in s.polder.plots.iter().zip(&s.states) {
+        svg.polygon(&x.ring, fill(*st), Some((ink::AZE, BUND_W)));
+    }
+    let parcels = s.converted.iter().flat_map(|(parcels, _, _)| parcels);
+    let banks = parcels
+        .clone()
+        .filter_map(|q| q.bank.as_ref())
+        .map(|(_, ring)| (ring, BANK_FILL, (ink::AZE, BUND_W)));
+    let waters = parcels.filter_map(|q| {
+        q.water.as_ref().map(|(_, ring)| {
+            (
+                ring,
+                if q.kind == "fry" {
+                    NURSERY_WATER
+                } else {
+                    ink::POND_WATER
+                },
+                (ink::RIM, 1.0),
+            )
+        })
+    });
+    for (ring, fill_ink, edge) in banks.chain(waters) {
+        svg.polygon(ring, fill_ink, Some(edge));
+    }
+    for d in &s.polder.ditches {
+        svg.taper(
+            &d.pts,
+            if d.role == "drain" || d.seg == "drain" {
+                ink::DRAIN
+            } else {
+                ink::SUPPLY
+            },
+            d.w,
+            d.w_tail,
+        );
+    }
+    svg.line(&s.polder.feeder, ink::SUPPLY, 3.0);
+    svg.unframed(&s.outfall, ink::DRAIN, RUN_W);
+    svg.band(&s.dike.outer, &s.dike.inner, DIKE_EARTH, (DIKE_EDGE, 1.0));
+    svg.group(0.92);
+    let bank_crowns = s
+        .converted
+        .iter()
+        .flat_map(|(_, crops, _)| crops.crowns.iter().map(move |c| (crops.crop.as_str(), *c)));
+    let dike_crowns = s
+        .dike
+        .trees
+        .iter()
+        .flat_map(|(crop, crowns)| crowns.iter().map(move |c| (*crop, *c)));
+    for (crop, (x, y, r)) in dike_crowns.chain(bank_crowns) {
+        svg.ellipse((x, y), r, r, crown_fill(crop), None);
+    }
+    svg.close();
+    for hedge in s.converted.iter().flat_map(|(_, crops, _)| &crops.hedges) {
+        svg.line(hedge, HEDGE, 3.0);
+    }
+    for g in &s.polder.sluices {
+        svg.polygon(
+            &[
+                (g.0 - 4.0, g.1 - 4.0),
+                (g.0 + 4.0, g.1 - 4.0),
+                (g.0 + 4.0, g.1 + 4.0),
+                (g.0 - 4.0, g.1 + 4.0),
+            ],
+            SLUICE.0,
+            Some((SLUICE.1, 0.8)),
+        );
+    }
+    if let Some((_, x, y, prx, pry)) = s.pocket {
+        svg.ellipse(
+            (x, y),
+            prx + 2.5,
+            pry + 2.5,
+            ink::FLOODED,
+            Some((ink::AZE, 2.2)),
+        );
+        svg.ellipse((x, y), prx, pry, ink::POND_WATER, Some((ink::RIM, 1.2)));
+    }
+}
+
+/// The waterside reeds (stage 6, a polder's only): a strip outside the dike on each flank that faces the water.
+///
+/// Research:
+///     the reed strips - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: reeds on the flanks of a dike that face the water
+fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe {
+    let rad = p.down_deg.to_radians();
+    let ring: Vec<(f64, f64)> = s
+        .dike
+        .outer
+        .iter()
+        .chain(s.dike.inner.iter().rev())
+        .copied()
+        .collect();
+    fringe(
+        &[(ring, s.dike.gaps.clone())],
+        s.dike.widths.1,
+        STRIP_CUT_HW,
+        STRIP_DEPTH,
+        (p.w, p.h),
+        (rad.cos(), rad.sin()),
+        seated.and_then(|x| x.frames.first()).map(|f| f.out),
+    )
+}
+
+/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn.
+fn roll_polder(p: Plan) -> Rolled {
+    let s = stage_polder(&p);
+    let mut refusals = Vec::new();
+    let lines: Vec<&[(f64, f64)]> = s
+        .polder
+        .ditches
+        .iter()
+        .map(|d| d.pts.as_slice())
+        .chain([s.polder.feeder.as_slice(), s.outfall.as_slice()])
+        .collect();
+    let ground = Ground {
+        ring: &s.polder.outline,
+        lines,
+        brook: &[],
+        reeds: vec![s.polder.fringe.clone()],
+        pond: None,
+    };
+    let seated = kept(stage_seat(&p, &ground), &mut refusals);
+    let ward = stage_waterward(&p, &s, seated.as_ref());
+    let mut svg = Svg::default();
+    draw_polder(&mut svg, &s);
+    for strip in &ward.strips {
+        svg.polygon(strip, REED_TINT, None);
+    }
+    let mut counts: HashMap<String, u64> = s.counts.0.clone();
+    seated
+        .iter()
+        .flat_map(|x| &x.counts)
+        .chain(&ward.counts)
+        .for_each(|(k, n)| *counts.entry(k.clone()).or_insert(0) += n);
+    let stages: Vec<&'static str> = ["water_frame", "field"]
+        .into_iter()
+        .chain(seated.as_ref().map(|_| "seat"))
+        .chain(["waterward"])
+        .collect();
+    let doc = svg.finish(p.w, p.h, CROP_MARGIN);
+    Rolled {
+        plan: p,
+        polder: Some(s),
+        waterward: Some(ward),
+        sunk: None,
+        seated,
+        dry: Vec::new(),
+        grain: None,
+        refusals,
+        stages,
+        knobs: HashMap::new(),
+        fields: Vec::new(),
+        brooks: Vec::new(),
+        counts,
+        svg: doc,
+    }
+}
+
 /// The hamlet rolled from its spec through the stages enabled so far.
 ///
 /// # Errors
@@ -472,10 +738,7 @@ fn field_refused(e: crate::field::rules::FieldRefused) -> Refused {
 pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     let p = plan::plan(spec);
     if plan::POLDERS.contains(&p.archetype.as_str()) {
-        return Err(Refused(format!(
-            "{}: a polder ({}) is not drawn by the driver yet (feature 444 T42)",
-            p.name, p.archetype
-        )));
+        return Ok(roll_polder(p));
     }
     let mut out = build(&field_in(&p)).map_err(field_refused)?;
     let mut work = 0;
@@ -505,13 +768,12 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .transpose()?
         .flatten();
     let mut refusals = Vec::new();
-    let seated = match out.fields.first().map(|f| stage_seat(&p, f, sunk.as_ref())) {
-        Some(Err(e)) => {
-            refusals.push(e.0);
-            None
-        }
-        other => other.and_then(Result::ok),
-    };
+    let seated = out.fields.first().and_then(|f| {
+        kept(
+            stage_seat(&p, &comb_ground(f, sunk.as_ref())),
+            &mut refusals,
+        )
+    });
     let laid = out
         .fields
         .first()
@@ -540,6 +802,8 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .collect();
     Ok(Rolled {
         plan: p,
+        polder: None,
+        waterward: None,
         sunk,
         seated,
         grain: laid.as_ref().map(|l| l.grain),
@@ -699,10 +963,31 @@ mod tests {
     }
 
     #[test]
-    fn a_polder_is_refused_until_the_driver_draws_one() {
-        let e = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond"}"#).unwrap()).unwrap_err();
-        assert!(e.to_string().contains("not drawn by the driver yet"));
+    fn a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds() {
+        let r = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
+        assert!(
+            r.stages.contains(&"waterward")
+                && r.polder.as_ref().is_some_and(|s| s.converted.is_some())
+        );
+        assert!(r.svg.contains(DIKE_EARTH_FOR_TEST));
+        let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 0, "field_archetype": "polder_grid", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();
+        assert!(rice.polder.as_ref().is_some_and(|s| s.converted.is_none()));
+        let tea = roll(&parse(r#"{"name": "T", "seed": 21, "households": 16, "down_deg": 0, "field_archetype": "mulberry_dike_fishpond", "dike_crop": "tea"}"#).unwrap()).unwrap();
+        assert!(tea
+            .polder
+            .as_ref()
+            .is_some_and(|s| s.converted.as_ref().is_some_and(|c| !c.1.hedges.is_empty())));
+        assert_eq!(
+            ["willow", "fruit", "tea", "mulberry"]
+                .map(super::crown_fill)
+                .iter()
+                .collect::<std::collections::HashSet<_>>()
+                .len(),
+            4
+        );
     }
+
+    const DIKE_EARTH_FOR_TEST: &str = super::DIKE_EARTH;
 
     #[test]
     fn every_state_has_its_fill_and_a_field_refusal_names_its_rule() {
@@ -744,6 +1029,7 @@ mod tests {
 
     #[test]
     fn a_name_is_escaped_in_the_record() {
+        assert_eq!(super::Refused("why".into()).to_string(), "why");
         assert_eq!(super::js("a\"b\\c\nd"), "\"a\\\"b\\\\c\\nd\"");
     }
 }
