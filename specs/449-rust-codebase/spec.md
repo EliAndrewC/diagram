@@ -131,8 +131,13 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   (-c|-[[:space:]]|-$|<<)" -- Makefile '*.mk' '*.sh'` (300 sites in 93 files on 2026-11-07, `m:inline-python-census`) - and every site
   it returns is in a phase: `scripts/hooks/` and `tests/hooks/` - phase 1; the Makefile's gate recipes, `scripts/gates/*.sh`,
   `scripts/sync-with-main.sh`, `scripts/land-tooling.sh` and `buildspec/run.sh` - phase 2; the Makefile's other recipes,
-  `.specify/scripts/bash/` and `specs/*/*.sh` - phase 3; `scripts/container/setup-dev-env.sh`, its Python checks and the Python it
-  installs - phase 4, once nothing runs Python. Both censuses are run again at each phase's end and at the feature's close.
+  `.specify/scripts/bash/` and the shell scripts under `specs/` - phase 3; `scripts/container/setup-dev-env.sh` and `Dockerfile.ci`, their Python checks and the Python
+  they install, with every `requirements*.txt` and its `.in` source (five pairs on 2026-11-07: the runtime, dev, CI and semantic lockfiles) and
+  `pyproject.toml`'s Python tables - phase 4,
+  once nothing runs Python. Both censuses are run again at each phase's end and at the feature's close. A RECORDED MEASUREMENT that
+  names a ported file - a `command` in a `specs/*/measurements*.json` (4,474 of them call Python on 2026-11-07,
+  `m:recorded-python-commands`) - has its command rewritten to the port in the commit that ports the file, and that entry is re-run
+  as the proof: a figure is re-run, never read.
 - **FR-002**: Each replaced piece MUST give the same verdicts and outputs as the Python it replaces, on every case its tests and its
   suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18). The
   one other exception: a guard or check that refuses correct work today is fixed in its port (constitution XIV), its case's expected
@@ -147,7 +152,8 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **FR-007**: The guards MUST run as one process for a tool call, not one per guard.
 - **FR-008**: A tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command.
 - **FR-009**: The JavaScript and CSS of the interactive page and the research record's HTML fragments are not Python and are out of
-  this feature's scope; the container's setup script is in it only for the Python it runs and installs (FR-001's second census). The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
+  this feature's scope; the two containers - the dev container's `scripts/container/setup-dev-env.sh` and the CI image's
+  `Dockerfile.ci` - are in it only for the Python they run and install (FR-001, phase 4). The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
   in it: Story 1 replaces them. The GM's own hooks in `~/.claude/` are not this repository's and are out of it.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
 
@@ -165,7 +171,8 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   runs no test.
 - **SC-003**: The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
 - **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
-- **SC-005**: When the feature closes, both censuses (FR-001) return nothing and `make done` runs with no Python interpreter.
+- **SC-005**: When the feature closes, both censuses (FR-001) return nothing, no recorded measurement's command runs Python
+  (`m:recorded-python-commands` returns none), and `make done` and `make figures` run with no Python interpreter.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

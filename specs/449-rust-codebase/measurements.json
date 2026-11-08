@@ -144,5 +144,16 @@
         ".specify": 1
       }
     }
+  },
+  "recorded-python-commands": {
+    "quantity": "the recorded measurements whose command runs Python",
+    "observed": "2026-11-07",
+    "subject": "every specs/*/measurements.json and specs/*/measurements/*.json",
+    "command": "git grep -c -E '\"command\": .*python3' -- 'specs/*/measurements.json' 'specs/*/measurements/*.json'",
+    "method": "the per-file counts summed",
+    "value": {
+      "commands": 4474,
+      "files": 23
+    }
   }
 }
