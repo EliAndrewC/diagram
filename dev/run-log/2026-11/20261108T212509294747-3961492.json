@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-08T21:25:09Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 79,
+  "result": "green",
+  "commit": "afb8059a8",
+  "mode": "incremental",
+  "selected": 1565,
+  "host": {
+    "load": [
+      5.61,
+      5.97
+    ],
+    "mem_avail_mb": [
+      9121,
+      9298
+    ],
+    "cpu_temp_c": [
+      97.0,
+      98.0
+    ],
+    "stall_s": {
+      "cpu": 1.9,
+      "io": 0.3,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 18288,
+      "package": 8771
+    }
+  },
+  "phases": {
+    "preflight": 11.0,
+    "reference": 0.0,
+    "counters-inert": 6.0,
+    "static": 16.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "seeds": 10.0,
+    "pytest": 59.0,
+    "floors": 2.0,
+    "test-full": 72.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "85 engine file(s) and 12 test module(s) changed, 62 scripts/ file(s) (204 module(s) that read scripts/), 84 Rust file(s) (14 test module(s) that read them), 78 non-module file(s) under tests/ (42 test module(s) that can read them)",
+  "collected": 1664
+}
