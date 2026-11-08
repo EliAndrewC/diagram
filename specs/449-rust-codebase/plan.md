@@ -16,9 +16,10 @@ planned here to the task; phases 2-4 to their approach, each planned to the task
 
 **Language/Version**: Rust (the toolchain `rust/phases` builds with today, `$HOME/.cargo/bin/cargo`), edition 2021.
 
-**Primary Dependencies**: the standard library first. `serde_json` for the hook protocol's JSON (phase 1) - the one crate phase 1
-adds, since every guard reads and writes JSON and a hand-written reader is a defect surface (`rust/phases`' spec reader is
-deliberately small and reads one shape). Each further crate is named in its phase's amendment with what it replaces.
+**Primary Dependencies**: the standard library first. `serde_json` for the hook protocol's JSON (phase 1), since every guard reads
+and writes JSON and a hand-written reader is a defect surface (`rust/phases`' spec reader is deliberately small and reads one shape);
+`fancy-regex` for the guards' patterns, 43 of which use lookaround or backreferences (research R8, the amendment of 2026-11-07,
+found starting T003). Each further crate is named in its phase's amendment with what it replaces.
 
 **Storage**: files only, as today - the guard log, the transcript (read), the session clone map, `.git/` state.
 
@@ -129,9 +130,9 @@ XIV) are fixed as they move.
 
 ### T001-T005 - the foundation (phase 1, work breakdown 1-4)
 
-Decisions carried, none new: the workspace of crates by phase (Structure Decision) - a root `rust/Cargo.toml` naming `phases` and
-`guard`, `rust_checks.py` running each member and skipping the workspace's own manifest, which builds nothing itself; `serde_json` the
-one crate added (Complexity Tracking); the protocol and its merge (D1, D2, contracts/guard-protocol.md); the shared state kept and
+Decisions carried: the workspace of crates by phase (Structure Decision) - a root `rust/Cargo.toml` naming `phases` and
+`guard`, `rust_checks.py` running each member and skipping the workspace's own manifest, which builds nothing itself; `serde_json`
+added (Complexity Tracking); AMENDED 2026-11-07 starting T003: `fancy-regex` added for the guards' patterns (research R8); the protocol and its merge (D1, D2, contracts/guard-protocol.md); the shared state kept and
 the facts asked once (D5, D6); the wrapper keeping the last good binary (D7); the settings switch landed with an empty guard list,
 its own cost recorded as phase 1's floor (work breakdown 4).
 
@@ -178,7 +179,9 @@ censuses empty (work breakdown 8, FR-010).
 ### T003 Approach (checklist part A)
 
 1. **The goal, in the world.** the facts every guard reads - the guard log, the escapes, the session's clone and name, the GM's messages - read once and written as today.
-2. **The constraints.** FR-002 (the same verdicts), plan D5-D6, FR-006 (asked once, the count pinned).
+2. **The constraints.** FR-002 (the same verdicts), plan D5-D6 (the shared state kept; a fact asked once a process, its count pinned
+   in a test - the practice FR-006 names for the import graph and the semantic ids, applied to the guards' reads); the shell-shape
+   library (`hm_shape.py`'s heredoc and quote stripping, which the escape rule rests on) ported here with `fancy-regex` (research R8).
 3. **Where each comes from.** research R5 (the shared state), R7 (the design fixes).
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T002.
@@ -939,4 +942,5 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 | Choice | Why | Simpler alternative rejected because |
 |---|---|---|
 | `serde_json`, the first external crate | every guard reads and writes the hook protocol's JSON | a hand-written reader for an open-ended input shape is a defect surface; `rust/phases`' reader reads one fixed spec |
+| `fancy-regex`, the second crate (research R8) | 43 of the guards' patterns use lookaround or backreferences, which the `regex` crate lacks; `fancy-regex` reads them verbatim, so verdicts stay the same (FR-002) | a hand-written parser for each pattern would re-prove every verdict case by case; kept only for a pattern a profile shows hot, in its guard's task |
 | the last good binary kept, failing open only with none (D7) | one binary is every guard, so a failed build must not turn them all off; Claude Code's own rule passes a crashing hook (exit 2 alone blocks) | failing closed would lock the GM's session out of every tool call on a build error, with no recovery from inside it; failing open on every failed build would turn every guard off at once |

@@ -102,6 +102,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
+  },
+  "### T003 Approach (checklist part A)": {
+   "sha256": "ffeeb52f34cfd9838efb0abe66d930b83136d76accff8833a2bea10a26ad7504",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -545,6 +551,45 @@
      "why": "Sequencing and process; the GM's request (make this a Rust codebase) is unaffected, and FR-005 keeps make as the entry point."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T003 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T003-goal",
+     "summary": "Build the shared state every guard reads (guard log, escapes, session clone and name, GM messages) as one library that reads each fact once and writes it in today's formats.",
+     "class": "within",
+     "why": "Serves the request's purpose (Python hooks too inefficient, port to Rust) and FR-007 (guards as one process); 'written as today' is FR-002's same-outputs rule. Nothing the request or spec asks is dropped. Note: the block's gloss of FR-006 as 'asked once, the count pinned' is a paraphrase - FR-006 names the import graph, semantic ids and the fixture; read-once shared state is in the same spirit, not a narrowing."
+    },
+    {
+     "id": "T003-exit-green",
+     "summary": "Green exit: a guard-log line written by Rust is read back by make guard-log exactly as the shell's is, and each read is counted once per process in a test.",
+     "class": "within",
+     "why": "Enforces FR-002 (same outputs) and the read-once design; verification of what was asked, not new scope."
+    },
+    {
+     "id": "T003-exit-red",
+     "summary": "Red exit: record what failed, set the task down, route a process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "Process routing; neither narrows nor extends the request."
+    },
+    {
+     "id": "T003-order-budget",
+     "summary": "Runs after T002; lands via make land-tooling with no work budget; no researched value or constant moves.",
+     "class": "within",
+     "why": "Ordering and landing mechanics inside the hooks phase (FR-001's phase order); no requirement is relaxed."
+    },
+    {
+     "id": "T003-done",
+     "summary": "Done = the library's tests green and its reads counted.",
+     "class": "within",
+     "why": "Does not exempt the library from FR-004 (coverage floor) or FR-008 (test time), which still bind every replacement; the checklist omits restating them rather than carving them out."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -626,6 +671,44 @@
      "summary": "Runs after T001, lands via make land-tooling with no work budget; red exit records the failure, sets the task down, asks the arbiter",
      "class": "within",
      "why": "Sequencing and process; the GM's request (make this a Rust codebase) is unaffected, and FR-005 keeps make as the entry point."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T003": {
+   "section_sha256": "ffeeb52f34cfd9838efb0abe66d930b83136d76accff8833a2bea10a26ad7504",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T003-goal",
+     "summary": "Build the shared state every guard reads (guard log, escapes, session clone and name, GM messages) as one library that reads each fact once and writes it in today's formats.",
+     "class": "within",
+     "why": "Serves the request's purpose (Python hooks too inefficient, port to Rust) and FR-007 (guards as one process); 'written as today' is FR-002's same-outputs rule. Nothing the request or spec asks is dropped. Note: the block's gloss of FR-006 as 'asked once, the count pinned' is a paraphrase - FR-006 names the import graph, semantic ids and the fixture; read-once shared state is in the same spirit, not a narrowing."
+    },
+    {
+     "id": "T003-exit-green",
+     "summary": "Green exit: a guard-log line written by Rust is read back by make guard-log exactly as the shell's is, and each read is counted once per process in a test.",
+     "class": "within",
+     "why": "Enforces FR-002 (same outputs) and the read-once design; verification of what was asked, not new scope."
+    },
+    {
+     "id": "T003-exit-red",
+     "summary": "Red exit: record what failed, set the task down, route a process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "Process routing; neither narrows nor extends the request."
+    },
+    {
+     "id": "T003-order-budget",
+     "summary": "Runs after T002; lands via make land-tooling with no work budget; no researched value or constant moves.",
+     "class": "within",
+     "why": "Ordering and landing mechanics inside the hooks phase (FR-001's phase order); no requirement is relaxed."
+    },
+    {
+     "id": "T003-done",
+     "summary": "Done = the library's tests green and its reads counted.",
+     "class": "within",
+     "why": "Does not exempt the library from FR-004 (coverage floor) or FR-008 (test time), which still bind every replacement; the checklist omits restating them rather than carving them out."
     }
    ],
    "verdict": "CLEAR"
