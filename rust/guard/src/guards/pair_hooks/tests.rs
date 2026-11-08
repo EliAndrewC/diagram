@@ -3,15 +3,12 @@
 //! (`tests/hooks/test-pair-hooks.sh`, replayed through the shim).
 
 use std::path::{Path, PathBuf};
-use std::sync::Once;
 
 use serde_json::{json, Value};
 
 use super::{decide, find_root, is_gate_invocation, judge, resolved, Ctx};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
-
-static LOG: Once = Once::new();
 
 /// The fake tools, `sh` scripts run as the guard runs its Python tools (`<interpreter> <script> args`): each answers from the
 /// clone's `.git/<file>`. The arbiter's check is Python code the guard runs as itself, so its fake module stays Python.
@@ -42,12 +39,7 @@ struct Fixture {
 
 impl Fixture {
     fn new(tag: &str, tool: &str, tool_input: &Value) -> Self {
-        LOG.call_once(|| {
-            std::env::set_var(
-                "GUARD_LOG_DIR",
-                std::env::temp_dir().join(format!("l7r-guard-pair-log-{}", std::process::id())),
-            );
-        });
+        crate::shared::log::quiet();
         let clone =
             std::env::temp_dir().join(format!("l7r-guard-pair-{tag}-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&clone);

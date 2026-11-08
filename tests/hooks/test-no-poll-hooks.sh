@@ -3,7 +3,8 @@
 # whether it blocks. Run: tests/hooks/test-no-poll-hooks.sh   (exit 0 = all green)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/no-poll-hooks.sh"
+# feature 449 T009: the guard is Rust - the link `no-poll-hooks.sh` beside this suite runs `l7r-guard --only no-poll-hooks`
+HOOK="$HERE/no-poll-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
 # must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first

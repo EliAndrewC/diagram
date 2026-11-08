@@ -210,7 +210,7 @@ somebody reads.
 - **`make quick` is the UNIT suite; `make done` is the INTEGRATION suite (GM 2026-08-26, constitution "quick runs the unit form; the gate runs the integration form").** A test with a quick form runs it in quick and its full form at the gate (`tests/_scope.py`: `full_or`, `subset`; the gate always sets `EXHAUSTIVE`). Tests that RUN the tooling (`make` in a fixture, git repos, coverage subprocesses) carry `tooling` and run in quick only when the tooling changed since the last green gate. The bad-map corpus replays at the gate, not in quick.
 - **`make quick` while iterating, `make done` ONCE at the end.**
 - **`make done` reports ALL failures together.** Fix everything it lists, then re-run once. On a coverage failure it also prints the lines you changed that no test reaches.
-- **Background the final gate - and NEVER poll it.** Act on the completion notification. ENFORCED by `scripts/hooks/no-poll-hooks.sh`, which blocks `pgrep -f`, sleep-loops, and the `command sleep` bypass. (A wait on genuinely EXTERNAL state passes by putting `POLL_OK` in the command with a note saying what it waits for.)
+- **Background the final gate - and NEVER poll it.** Act on the completion notification. ENFORCED by the no-poll guard (`rust/guard/src/guards/no_poll_hooks.rs`), which blocks `pgrep -f`, sleep-loops, and the `command sleep` bypass. (A wait on genuinely EXTERNAL state passes by putting `POLL_OK` in the command with a note saying what it waits for.)
 - **Read derived data from the recorded artifact, not by re-running the generator.** Regenerate when you need to change what a generator DRAWS; read its manifest/output when you need to know what it drew.
 
 ## `make record` - the record's pages are derived (feature 258)

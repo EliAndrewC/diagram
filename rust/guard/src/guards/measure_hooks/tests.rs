@@ -2,7 +2,6 @@
 //! suite's (`tests/hooks/test-measure-hooks.sh`, replayed through the shim).
 
 use std::path::{Path, PathBuf};
-use std::sync::Once;
 
 use serde_json::{json, Value};
 
@@ -10,16 +9,9 @@ use super::{greedy_command, judge, last_gate, parse_utc, tree_of, Seams};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-static LOG: Once = Once::new();
-
 /// A tree with a `.git`, its streak file and seams; the clock at 1,000,000 s.
 fn tree(tag: &str) -> (PathBuf, Seams) {
-    LOG.call_once(|| {
-        std::env::set_var(
-            "GUARD_LOG_DIR",
-            std::env::temp_dir().join(format!("l7r-guard-measure-log-{}", std::process::id())),
-        );
-    });
+    crate::shared::log::quiet();
     let d = std::env::temp_dir().join(format!("l7r-guard-measure-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&d);
     std::fs::create_dir_all(d.join(".git")).unwrap();

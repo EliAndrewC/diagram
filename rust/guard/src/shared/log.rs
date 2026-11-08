@@ -123,13 +123,26 @@ pub fn fire(
     });
 }
 
+/// The tests' guard log: one directory for the whole crate, set once before any test logs - each module setting its own raced
+/// another's read of the variable (T009, 2026-11-08).
+#[cfg(test)]
+pub(crate) fn quiet() {
+    static ONCE: std::sync::Once = std::sync::Once::new();
+    ONCE.call_once(|| {
+        std::env::set_var(
+            "GUARD_LOG_DIR",
+            std::env::temp_dir().join(format!("l7r-guard-tests-log-{}", std::process::id())),
+        );
+    });
+}
+
 #[cfg(test)]
 mod tests {
     use std::time::{Duration, UNIX_EPOCH};
 
     use serde_json::{json, Value};
 
-    use super::{civil, dir_from, write, write_at, Entry};
+    use super::{civil, dir_from, write_at, Entry};
 
     #[test]
     fn a_firing_is_one_file_with_todays_fields() {
@@ -186,8 +199,6 @@ mod tests {
         );
         std::fs::write(d.join("a-file"), "").unwrap();
         assert!(write_at(&d.join("a-file"), &e2, at).is_none());
-        std::env::set_var("GUARD_LOG_DIR", &d);
-        assert!(write(&e2).is_some());
         assert_eq!(civil(951_782_400), (2000, 2, 29, 0, 0, 0), "a leap day");
         assert_eq!(civil(0), (1970, 1, 1, 0, 0, 0));
         assert_eq!(

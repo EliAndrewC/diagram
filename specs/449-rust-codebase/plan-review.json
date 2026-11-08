@@ -152,9 +152,9 @@
    "declared": "spec-fidelity"
   },
   "### T009 Approach (checklist part A)": {
-   "sha256": "ce941f5159ee2a800847c99880fec617c037bd5ae93bb3b803f37d0b5b356a1a",
+   "sha256": "0d080f31fd51cbeeb3d397b99aca967296b1fc516280cff648b4b61516d4d057",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T010 Approach (checklist part A)": {
@@ -1296,6 +1296,33 @@
      "why": "Plan D3/D4 and FR-003 (never both), stated as accepted."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T009 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T009 (a)",
+     "summary": "hm_shape.py's wait/sleep/watch/self-matching/ceiling/periodic-report functions move to rust/guard/src/shared/wait.rs with each pattern verbatim; the rest of hm_shape.py (executing_backticks) moves with the guard that reads it",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and D3 moves guards one by one; porting the library the guard reads, patterns verbatim, is how FR-002's same-verdicts requirement is met. Nothing is left in Python or dropped - the remainder is assigned to its own guard's port."
+    },
+    {
+     "id": "T009 (b)",
+     "summary": "the periodic-report refusal's cron minute stays the local minute, read via `date +%M` only on the backgrounded-periodic-report branch",
+     "class": "within",
+     "why": "Keeps the Python's verdict and output (time.localtime().tm_min) exactly, which is what FR-002 requires; the earlier UTC alternative was the deviation and is already rejected. A child process on one rare branch is a mechanism choice, not a second guard process (FR-007 is about one process per tool call for the guards), and it changes nothing the GM asked for."
+    },
+    {
+     "id": "T009 (c)",
+     "summary": "self_matching compiles the command's pgrep -f pattern with fancy-regex instead of Python re, skips a pattern it cannot compile as the Python skipped one re could not, and rests dialect-divergence detection on the suite replay",
+     "class": "within",
+     "why": "FR-002 scopes equivalence to every case the tests and suites hold, and D4 makes the suite the replay; the decision meets that bound, preserves the skip-on-uncompilable behavior, and states plainly that divergence outside the suite is not covered - which is the spec's own bound, not a carve-out from it. A Rust port cannot use Python's re, so a different engine is inherent to the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1605,6 +1632,32 @@
      "summary": "The shell guard and its settings entry are removed in the commit that registers the Rust decider, after test-measure-hooks.sh passes against l7r-guard --only measure-hooks.",
      "class": "within",
      "why": "Plan D3/D4 and FR-003 (never both), stated as accepted."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T009": {
+   "section_sha256": "0d080f31fd51cbeeb3d397b99aca967296b1fc516280cff648b4b61516d4d057",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T009 (a)",
+     "summary": "hm_shape.py's wait/sleep/watch/self-matching/ceiling/periodic-report functions move to rust/guard/src/shared/wait.rs with each pattern verbatim; the rest of hm_shape.py (executing_backticks) moves with the guard that reads it",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and D3 moves guards one by one; porting the library the guard reads, patterns verbatim, is how FR-002's same-verdicts requirement is met. Nothing is left in Python or dropped - the remainder is assigned to its own guard's port."
+    },
+    {
+     "id": "T009 (b)",
+     "summary": "the periodic-report refusal's cron minute stays the local minute, read via `date +%M` only on the backgrounded-periodic-report branch",
+     "class": "within",
+     "why": "Keeps the Python's verdict and output (time.localtime().tm_min) exactly, which is what FR-002 requires; the earlier UTC alternative was the deviation and is already rejected. A child process on one rare branch is a mechanism choice, not a second guard process (FR-007 is about one process per tool call for the guards), and it changes nothing the GM asked for."
+    },
+    {
+     "id": "T009 (c)",
+     "summary": "self_matching compiles the command's pgrep -f pattern with fancy-regex instead of Python re, skips a pattern it cannot compile as the Python skipped one re could not, and rests dialect-divergence detection on the suite replay",
+     "class": "within",
+     "why": "FR-002 scopes equivalence to every case the tests and suites hold, and D4 makes the suite the replay; the decision meets that bound, preserves the skip-on-uncompilable behavior, and states plainly that divergence outside the suite is not covered - which is the spec's own bound, not a carve-out from it. A Rust port cannot use Python's re, so a different engine is inherent to the request."
     }
    ],
    "verdict": "CLEAR"

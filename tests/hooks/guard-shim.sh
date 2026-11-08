@@ -17,4 +17,11 @@ case "${1:-}" in
 esac
 here=${BASH_SOURCE[0]%/*}
 case "$here" in /*) ;; *) here="$(cd "$here" && pwd)" ;; esac
-exec "${here%/tests/hooks}/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"
+# A SUITE MAY MOVE HOME (tests/hooks/parts.sh gives each parallel part its own), and the wrapper finds its built binary and cargo
+# under HOME - so a part would build from nothing, past its limit, and fail open (T009, 2026-11-08: 115 of 115 cases green in one
+# part, about 90 failing in six). The real home, from the password database, pins both.
+real=$(getent passwd "$(id -u)" | cut -d: -f6)
+tree=${here%/tests/hooks}
+export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tree##*/}}"
+[ -x "$real/.cargo/bin/cargo" ] && export L7R_GUARD_CARGO="${L7R_GUARD_CARGO:-$real/.cargo/bin/cargo}"
+exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"

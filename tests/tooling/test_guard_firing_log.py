@@ -110,8 +110,13 @@ def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str,
     work = tmp_path / "repo"
     work.mkdir()
     subprocess.run(["git", "init", "-q", str(work)], check=True)
+    # A GUARD PORTED TO RUST (feature 449) has no shell script: its link beside the hook suites runs the Rust decider on the same
+    # input (`tests/hooks/guard-shim.sh`), and records the same rule
+    hook = GUARDS / f"{guard}-hooks.sh"
+    if not hook.exists():
+        hook = pathlib.Path(__file__).resolve().parents[1] / "hooks" / f"{guard}-hooks.sh"
     subprocess.run(
-        [str(GUARDS / f"{guard}-hooks.sh"), "pretool"],
+        [str(hook), "pretool"],
         input=payload,
         capture_output=True,
         text=True,

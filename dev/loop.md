@@ -40,7 +40,7 @@ check of an engine change - a failure that would have surfaced in ~6 s on one ma
 ## NEVER poll a backgrounded command
 
 A backgrounded Bash command NOTIFIES you when it exits: background the gate, spend the turn on the docs or the
-commit message, and act on the notification. `no-poll-hooks.sh` enforces it (`docs/guards.md` has the rule and the
+commit message, and act on the notification. the no-poll guard (`rust/guard/src/guards/no_poll_hooks.rs`) enforces it (`docs/guards.md` has the rule and the
 self-matching `pgrep` story). Keep the backgrounded command simple enough that its EXIT CODE is real -
 `make done > <log> 2>&1` and nothing more: a wrapper ending in `; echo EXIT=$?` exits 0 whatever make did, and once
 reported a red gate green. The log's tail is the authority; the notification is a summary of the wrapper.

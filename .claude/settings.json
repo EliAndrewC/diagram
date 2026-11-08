@@ -139,16 +139,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/no-poll-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/no-poll-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/main-tree-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/main-tree-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
