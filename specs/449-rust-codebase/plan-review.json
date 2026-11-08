@@ -194,9 +194,9 @@
    "declared": "spec-fidelity"
   },
   "### T016 Approach (checklist part A)": {
-   "sha256": "e845b2236933651322daefb183022664973fb079ec4c29e0296a7062d9cd7aab",
+   "sha256": "83da8cb4b5c50130f629dcde69ac2744f4588c1585f6e887a6a7229e6e9f04d9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T017 Approach (checklist part A)": {
@@ -1547,6 +1547,63 @@
      "why": "Landing mechanics for tooling; it does not touch any requirement or the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T016 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-i",
+     "summary": "lib/stall_watchdog.py (the pass) is ported to stall_watchdog_hooks/pass.rs with the shell; prompt is the guard, run and once are the binary's --stall-watchdog",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and the libraries its guards call in phase 1, and the GM asked for all the Python to be ported. This resolves round 1's BLOCKED on keeping the file in Python. Item 9's measured Done names the shell and settings entry but not the .py; that is an omission and not a decision to keep it, since (a) states the port and FR-001's phase-end census refuses a survivor."
+    },
+    {
+     "id": "a-ii",
+     "summary": "Each loop pass still starts a fresh process through the wrapper, so an update to what a stall is reaches a running loop",
+     "class": "within",
+     "why": "Keeps the existing behavior under FR-002. The block does not name the wrapper; items 1 and 9 (shell and settings entry gone) constrain it to the Rust binary's entry, and nothing in the text retains the Python."
+    },
+    {
+     "id": "a-iii",
+     "summary": "The Rust loop still asks finished-run-hooks.sh live by path until T017 moves it",
+     "class": "within",
+     "why": "D3 moves guards one per commit, so a mixed interim is the approved order. FR-003 is per piece: this piece has one runner and the other guard has one runner. The dependency is named and bounded by T017."
+    },
+    {
+     "id": "b",
+     "summary": "kill -0 becomes the /proc/<pid> check; the one-instance lock is T014's flock moved to shared::tool, its descriptor closed for children by default; the sleep is in-process",
+     "class": "within",
+     "why": "Implementation choices inside a port. FR-002's equality is enforced by the exit that every suite case passes against the Rust guard."
+    },
+    {
+     "id": "c-i",
+     "summary": "The guard does nothing when L7R_SELF_CHECK is set, which main.rs's self-check sandbox sets",
+     "class": "within",
+     "why": "The one except-when in the section, adjudicated as such. FR-002's domain is every case the tests and suites hold; --self-check is a harness of the Rust build that the block says the shell never faced, and the variable is set by that sandbox alone, so no suite case or real prompt reaches the branch. It removes no behavior the GM or the spec asked for. The exit requires every suite case green against the Rust guard without that variable."
+    },
+    {
+     "id": "c-ii",
+     "summary": "The loop ends if its state directory disappears, so a loop started under a suite's moved HOME does not run for ever",
+     "class": "within",
+     "why": "An added end condition on a directory-less loop, not a verdict or an output of any case FR-002 covers; if the suite held a contrary case, the exit would fail. It does not touch what the watchdog is for: the block states the real state directory is never removed, and the guard on the prompt path is what starts the loop."
+    },
+    {
+     "id": "d",
+     "summary": "A count of passes from the environment ends run for a unit test, as T015's (c); STALL_PERIOD and STALL_STATE_DIR kept",
+     "class": "within",
+     "why": "A test seam that serves FR-008 and adds no behavior outside the tests; the two existing variables are retained under FR-002."
+    },
+    {
+     "id": "exits-order",
+     "summary": "Sequence after T005, independent of the other guards; exits are the guard's suite against l7r-guard --only, make rust-test, cover and make hooks-test; shell and settings entry gone in the commit that registers the decider; landed by make land-tooling",
+     "class": "within",
+     "why": "D3 and D4 as the spec states them, with FR-004's coverage floor carried by cover."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2062,6 +2119,62 @@
      "summary": "Lands by make land-tooling with no work budget, nothing rolled.",
      "class": "within",
      "why": "Landing mechanics for tooling; it does not touch any requirement or the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T016": {
+   "section_sha256": "83da8cb4b5c50130f629dcde69ac2744f4588c1585f6e887a6a7229e6e9f04d9",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-i",
+     "summary": "lib/stall_watchdog.py (the pass) is ported to stall_watchdog_hooks/pass.rs with the shell; prompt is the guard, run and once are the binary's --stall-watchdog",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and the libraries its guards call in phase 1, and the GM asked for all the Python to be ported. This resolves round 1's BLOCKED on keeping the file in Python. Item 9's measured Done names the shell and settings entry but not the .py; that is an omission and not a decision to keep it, since (a) states the port and FR-001's phase-end census refuses a survivor."
+    },
+    {
+     "id": "a-ii",
+     "summary": "Each loop pass still starts a fresh process through the wrapper, so an update to what a stall is reaches a running loop",
+     "class": "within",
+     "why": "Keeps the existing behavior under FR-002. The block does not name the wrapper; items 1 and 9 (shell and settings entry gone) constrain it to the Rust binary's entry, and nothing in the text retains the Python."
+    },
+    {
+     "id": "a-iii",
+     "summary": "The Rust loop still asks finished-run-hooks.sh live by path until T017 moves it",
+     "class": "within",
+     "why": "D3 moves guards one per commit, so a mixed interim is the approved order. FR-003 is per piece: this piece has one runner and the other guard has one runner. The dependency is named and bounded by T017."
+    },
+    {
+     "id": "b",
+     "summary": "kill -0 becomes the /proc/<pid> check; the one-instance lock is T014's flock moved to shared::tool, its descriptor closed for children by default; the sleep is in-process",
+     "class": "within",
+     "why": "Implementation choices inside a port. FR-002's equality is enforced by the exit that every suite case passes against the Rust guard."
+    },
+    {
+     "id": "c-i",
+     "summary": "The guard does nothing when L7R_SELF_CHECK is set, which main.rs's self-check sandbox sets",
+     "class": "within",
+     "why": "The one except-when in the section, adjudicated as such. FR-002's domain is every case the tests and suites hold; --self-check is a harness of the Rust build that the block says the shell never faced, and the variable is set by that sandbox alone, so no suite case or real prompt reaches the branch. It removes no behavior the GM or the spec asked for. The exit requires every suite case green against the Rust guard without that variable."
+    },
+    {
+     "id": "c-ii",
+     "summary": "The loop ends if its state directory disappears, so a loop started under a suite's moved HOME does not run for ever",
+     "class": "within",
+     "why": "An added end condition on a directory-less loop, not a verdict or an output of any case FR-002 covers; if the suite held a contrary case, the exit would fail. It does not touch what the watchdog is for: the block states the real state directory is never removed, and the guard on the prompt path is what starts the loop."
+    },
+    {
+     "id": "d",
+     "summary": "A count of passes from the environment ends run for a unit test, as T015's (c); STALL_PERIOD and STALL_STATE_DIR kept",
+     "class": "within",
+     "why": "A test seam that serves FR-008 and adds no behavior outside the tests; the two existing variables are retained under FR-002."
+    },
+    {
+     "id": "exits-order",
+     "summary": "Sequence after T005, independent of the other guards; exits are the guard's suite against l7r-guard --only, make rust-test, cover and make hooks-test; shell and settings entry gone in the commit that registers the decider; landed by make land-tooling",
+     "class": "within",
+     "why": "D3 and D4 as the spec states them, with FR-004's coverage floor carried by cover."
     }
    ],
    "verdict": "CLEAR"

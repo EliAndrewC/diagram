@@ -7,7 +7,7 @@ fn main() {
     let mut stdin = String::new();
     if !matches!(
         args.first().map(String::as_str),
-        Some("--version" | "--self-check" | "--idle-tests" | "--agent-stall")
+        Some("--version" | "--self-check" | "--idle-tests" | "--agent-stall" | "--stall-watchdog")
     ) {
         let _ = std::io::stdin().read_to_string(&mut stdin);
     }
@@ -35,4 +35,5 @@ fn sandbox() {
         std::env::set_var(k, &dir);
     }
     std::env::set_var("HOME", &dir);
+    std::env::set_var("L7R_SELF_CHECK", "1"); // no guard starts a daemon from here (T016 decision (c))
 }

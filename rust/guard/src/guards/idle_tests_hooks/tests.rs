@@ -7,12 +7,12 @@ use std::path::{Path, PathBuf};
 use serde_json::json;
 
 use super::{
-    cksum, cli, decide, failures, flock, judge, launch, locate, make_in, sid_is_live, state_of,
-    timer, verdict, Config, Timer, DEF_ARM,
+    cksum, cli, decide, failures, judge, launch, locate, make_in, sid_is_live, state_of, timer,
+    verdict, Config, Timer, DEF_ARM,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, flock};
 
 fn dir(tag: &str) -> PathBuf {
     let d = std::env::temp_dir().join(format!("l7r-guard-idle-{tag}-{}", std::process::id()));

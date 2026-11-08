@@ -7,7 +7,7 @@
 # files and records `send-keys`. One fixture per branch of spec SC-004, and one per exemption of FR-005a.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/stall-watchdog-hooks.sh"
+HOOK="$HERE/stall-watchdog-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 PIDS=()

@@ -22,7 +22,7 @@ use crate::protocol::{Answer, Event, Guard, Reply};
 use crate::shared::log::civil;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tool::ask;
+use crate::shared::tool::{ask, flock};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -594,20 +594,6 @@ impl Timer<'_> {
         let _ = std::fs::remove_file(&self.sf); // the arming is consumed: only a Stop arms again (D6)
         println!("idle-tests: recorded {} (rc {rc})", rec.display());
     }
-}
-
-/// `flock <mode> 0` on the lock's open file, handed over as stdin: the lock belongs to that open file, which the timer holds, as the
-/// shell's fd 9 did (`File::try_lock` is past this toolchain, T014 decision (b)).
-fn flock(lock: &File, mode: &str) -> bool {
-    lock.try_clone().is_ok_and(|f| {
-        Command::new("flock")
-            .args([mode, "0"])
-            .stdin(f)
-            .stdout(Stdio::null())
-            .stderr(Stdio::null())
-            .status()
-            .is_ok_and(|s| s.success())
-    })
 }
 
 /// Run `target`, its words split as the shell split them, in the clone, its output in `log`: its exit code, 127 when it cannot start.

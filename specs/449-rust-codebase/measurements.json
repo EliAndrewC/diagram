@@ -367,5 +367,18 @@
       "suite_cases": 15,
       "suite_passed_against_rust": 15
     }
+  },
+  "stall-watchdog-hooks-ported": {
+    "quantity": "a prompt's cost in the stall-watchdog guard, the loop already running, the shell's against the Rust dispatcher carrying it beside nine ported guards (T016)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/stall-watchdog-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload, a state directory whose pid file names a live process, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work (load 3.0); the suite replayed through tests/hooks/stall-watchdog-hooks.sh, its pass now the Rust module",
+    "value": {
+      "shell_prompt_ms": 15.8,
+      "rust_dispatcher_prompt_ms": 6.7,
+      "suite_cases": 28,
+      "suite_passed_against_rust": 28
+    }
   }
 }

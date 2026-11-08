@@ -21,6 +21,7 @@ pub fn guards() -> Vec<Guard> {
         guards::clone_sync_hooks::GUARD,
         guards::idle_tests_hooks::GUARD,
         guards::agent_stall_hooks::GUARD,
+        guards::stall_watchdog_hooks::GUARD,
     ]
 }
 
@@ -79,9 +80,10 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         // the detached timer and the printed stagger, the guard's two entries that are not a hook event (T014 decision (a))
         Some("--idle-tests") => guards::idle_tests_hooks::cli(&args[1..]),
         Some("--agent-stall") => guards::agent_stall_hooks::cli(&args[1..]),
+        Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
-            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --self-check | --version".to_owned(),
+            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --self-check | --version".to_owned(),
             1,
         ),
     }
@@ -178,7 +180,8 @@ mod tests {
                     "event-log-hooks",
                     "clone-sync-hooks",
                     "idle-tests-hooks",
-                    "agent-stall-hooks"
+                    "agent-stall-hooks",
+                    "stall-watchdog-hooks"
                 ]
         );
     }

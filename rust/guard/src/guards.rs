@@ -10,3 +10,4 @@ pub mod main_tree_hooks;
 pub mod measure_hooks;
 pub mod no_poll_hooks;
 pub mod pair_hooks;
+pub mod stall_watchdog_hooks;
