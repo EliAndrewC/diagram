@@ -442,3 +442,22 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T027 Approach (checklist part A)
+
+1. **The goal, in the world.** `ledger-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `ledger-hooks.sh`, 2026-11-08):
+   - (a) THE GUARD'S READING OF THE COMMAND IN-PROCESS: finding the commit and its tree, the row a `make append` will write, what the commit stages, the words of the refusal, and the notice all move, on T022's `shlex`.
+   - (b) THE RULES OF A ROW STAY IN THEIR OWN PHASE: FR-001's phase-1 clause, as amended by the round arbiter's ruling on `ask:449-phase1-tools-by-path` (2026-11-08), reads "a Python file elsewhere with callers of its own - the gate, the push, a make target - stays in its own phase, and a guard may run it by path until then, on a rare branch". `ledger_lint.py`, `ledger_owed.py` and `review_cost.py` are under `scripts/reviews/`, not `scripts/hooks/`, and have callers of their own (the gate's static phase, the push, `make ledger-owed`, `make review-cost`), so they are phase 3's. The guard asks them by path only on a command holding a `git commit`, never on the plain Bash or Edit path SC-001 measures.
+   - (c) FR-008 HOLDS WITHOUT PYTHON: the decider's unit tests reach the `git commit` branch with those tools' paths stubbed by `sh` scripts; the real tools run only in the suite replay.
+3. **Where each comes from.** `tests/hooks/test-ledger-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-ledger-hooks.sh` green against `l7r-guard --only ledger-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-ledger-hooks.sh` passes against the Rust guard; `scripts/hooks/ledger-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+

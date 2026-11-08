@@ -96,8 +96,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T026 [US1] `budget-change-hooks`: its decider `rust/guard/src/guards/budget_change_hooks.rs`, its suite `tests/hooks/test-budget-change-hooks.sh` replayed against `l7r-guard --only budget-change-hooks`, then `scripts/hooks/budget-change-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: budget-change is Rust
-- [ ] T027 [US1] `ledger-hooks`: its decider `rust/guard/src/guards/ledger_hooks.rs`, its suite `tests/hooks/test-ledger-hooks.sh` replayed against `l7r-guard --only ledger-hooks`, then `scripts/hooks/ledger-hooks.sh` and its settings entry removed
+- [x] T027 [US1] `ledger-hooks`: its decider `rust/guard/src/guards/ledger_hooks.rs`, its suite `tests/hooks/test-ledger-hooks.sh` replayed against `l7r-guard --only ledger-hooks`, then `scripts/hooks/ledger-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: ledger is Rust
 - [ ] T028 [US1] `make-only-hooks`: its decider `rust/guard/src/guards/make_only_hooks.rs`, its suite `tests/hooks/test-make-only-hooks.sh` replayed against `l7r-guard --only make-only-hooks`, then `scripts/hooks/make-only-hooks.sh` and its settings entry removed - with the constitution XIV fix: a `grep` whose pattern names `pytest` is not a pytest run (found 2026-11-07); and FR-005's clause: a direct Bash run of a replacement's binary (`l7r-guard`, `hamlet`) refused with the make target that runs it, as a bare `cargo run` is today
       research: rendering
 - [ ] T029 [US1] `guard-file-hooks`: its decider `rust/guard/src/guards/guard_file_hooks.rs`, its suite `tests/hooks/test-guard-file-hooks.sh` replayed against `l7r-guard --only guard-file-hooks`, then `scripts/hooks/guard-file-hooks.sh` and its settings entry removed - with the constitution XIV fix: a scratch file whose text names a guard (`x-hooks.sh`) is not a guard write (found 2026-11-07)
