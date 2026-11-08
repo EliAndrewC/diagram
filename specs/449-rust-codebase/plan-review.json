@@ -224,9 +224,9 @@
    "declared": "spec-fidelity"
   },
   "### T021 Approach (checklist part A)": {
-   "sha256": "0dda1c427c7f42a1401d6893438f40b4a52e7910b9973a5317933e2a4e41fc15",
+   "sha256": "6e02a83a491a59a52b0726b57272cbffadc6a8b6d615b8d4fba9e893feeffeb6",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T022 Approach (checklist part A)": {
@@ -1804,6 +1804,40 @@
      "why": "The done line restates D3 and FR-003 (never both) and the exits restate D4 and FR-004's coverage; the landing target and stop route are process and take nothing from the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T021 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T021-a-straight-port",
+     "summary": "Decision (a), first half: the same literal spellings of branch creation, the /host-l7r-repo pass and the escape, checked in the shell's order, with the shell's refusal words.",
+     "class": "within",
+     "why": "This is FR-002's default (same verdicts and outputs) and D4's replay. Moving a shell guard at all is settled by FR-007 (one process) and D3 (the guard's shell entry leaves the settings), and the GM's own words reach the hooks. A straight port does not waive FR-002's XIV clause, which the block lists among its constraints: the block names no over-refusal, and if one is found during the port it is fixed in the port with its case's expected verdict changed and named, as FR-002 requires."
+    },
+    {
+     "id": "T021-a-closing-pointer",
+     "summary": "Decision (a), second half: the refusal's closing pointer names the Rust file instead of the shell file, following T010's decision (d).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately because it departs from the same-outputs rule while the rest of (a) honors it, and FR-002 lists only maps and XIV fixes as exceptions. It passes on the purpose test: the block's step 9 and D3 delete scripts/hooks/no-branch-hooks.sh in the very commit that registers the decider, so a literally preserved pointer would send every refused session to a file that no longer exists, defeating what the pointer is for and working against the GM's 'a Rust codebase instead of a Python codebase'. It is limited to that one reference; the verdicts and the rest of the words are unchanged. FR-002's sameness runs over what the suite holds, and the block's green exit requires every case of test-no-branch-hooks.sh to pass, so the change cannot land against a case that holds the old text without tripping that exit."
+    },
+    {
+     "id": "T021-order",
+     "summary": "Step 5: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 has the dispatcher land first and each guard move in its own commit. Sequence narrows nothing the GM asked for."
+    },
+    {
+     "id": "T021-exits-and-landing",
+     "summary": "Steps 6, 8 and 9: green on the guard's suite against l7r-guard --only no-branch-hooks plus make rust-test, cover and hooks-test; red stops to make arbiter-ask; landed by make land-tooling; shell and settings entry removed in the registering commit.",
+     "class": "within",
+     "why": "These carry FR-002, FR-003, FR-004 and D3-D4 as written and remove nothing from them. FR-008 stays in force as a named constraint of the task. The red route and the landing target are process and do not alter what is delivered."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2571,6 +2605,39 @@
      "summary": "Green is the suite against the Rust guard plus rust-test, cover and hooks-test; red records and stops to the arbiter; landed by land-tooling, with the shell and its settings entry removed in the commit registering the decider.",
      "class": "within",
      "why": "The done line restates D3 and FR-003 (never both) and the exits restate D4 and FR-004's coverage; the landing target and stop route are process and take nothing from the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T021": {
+   "section_sha256": "6e02a83a491a59a52b0726b57272cbffadc6a8b6d615b8d4fba9e893feeffeb6",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T021-a-straight-port",
+     "summary": "Decision (a), first half: the same literal spellings of branch creation, the /host-l7r-repo pass and the escape, checked in the shell's order, with the shell's refusal words.",
+     "class": "within",
+     "why": "This is FR-002's default (same verdicts and outputs) and D4's replay. Moving a shell guard at all is settled by FR-007 (one process) and D3 (the guard's shell entry leaves the settings), and the GM's own words reach the hooks. A straight port does not waive FR-002's XIV clause, which the block lists among its constraints: the block names no over-refusal, and if one is found during the port it is fixed in the port with its case's expected verdict changed and named, as FR-002 requires."
+    },
+    {
+     "id": "T021-a-closing-pointer",
+     "summary": "Decision (a), second half: the refusal's closing pointer names the Rust file instead of the shell file, following T010's decision (d).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged separately because it departs from the same-outputs rule while the rest of (a) honors it, and FR-002 lists only maps and XIV fixes as exceptions. It passes on the purpose test: the block's step 9 and D3 delete scripts/hooks/no-branch-hooks.sh in the very commit that registers the decider, so a literally preserved pointer would send every refused session to a file that no longer exists, defeating what the pointer is for and working against the GM's 'a Rust codebase instead of a Python codebase'. It is limited to that one reference; the verdicts and the rest of the words are unchanged. FR-002's sameness runs over what the suite holds, and the block's green exit requires every case of test-no-branch-hooks.sh to pass, so the change cannot land against a case that holds the old text without tripping that exit."
+    },
+    {
+     "id": "T021-order",
+     "summary": "Step 5: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 has the dispatcher land first and each guard move in its own commit. Sequence narrows nothing the GM asked for."
+    },
+    {
+     "id": "T021-exits-and-landing",
+     "summary": "Steps 6, 8 and 9: green on the guard's suite against l7r-guard --only no-branch-hooks plus make rust-test, cover and hooks-test; red stops to make arbiter-ask; landed by make land-tooling; shell and settings entry removed in the registering commit.",
+     "class": "within",
+     "why": "These carry FR-002, FR-003, FR-004 and D3-D4 as written and remove nothing from them. FR-008 stays in force as a named constraint of the task. The red route and the landing target are process and do not alter what is delivered."
     }
    ],
    "verdict": "CLEAR"

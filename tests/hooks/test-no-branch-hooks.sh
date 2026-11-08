@@ -3,7 +3,7 @@
 # cases through. A guard nobody tests is a guard that quietly stops guarding (the same reasoning
 # that put a --selftest in check-duplicate-defs.py).
 set -u
-HOOK="$(cd "$(dirname "$0")" && pwd)/../../scripts/hooks/no-branch-hooks.sh"
+HOOK="$(cd "$(dirname "$0")" && pwd)/no-branch-hooks.sh"
 pass=0 fail=0
 # GUARD_EDIT_OK: feature 168 - fixtures never reach the real firing log (see feature 162 T16).
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"

@@ -67,16 +67,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/no-branch-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/no-branch-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/discard-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/discard-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }

@@ -192,6 +192,8 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `no-branch-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `no-branch-hooks.sh`, 2026-11-08):
+   - (a) A STRAIGHT PORT: the same literal spellings of branch creation, the `/host-l7r-repo` pass and the escape, checked in the shell's order; the refusal's words are the shell's, its closing pointer naming the Rust file as T010's decision (d) did.
 3. **Where each comes from.** `tests/hooks/test-no-branch-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
