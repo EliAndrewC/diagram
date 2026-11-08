@@ -613,4 +613,7 @@ def test_a_failed_call_is_recorded_beside_a_succeeded_one() -> None:
     assert bad["ev"] == "PostToolUseFailure" and bad["make"] == "quick" and bad["id"] == "u2"
     settings = json.loads((Path(__file__).resolve().parents[2] / ".claude" / "settings.json").read_text())
     wired = [h["command"] for m in settings["hooks"].get("PostToolUseFailure", []) for h in m["hooks"]]
-    assert any("event-log-hooks.sh" in c for c in wired), "the event-log hook is wired on a failure"
+    # since feature 449 T012 the event log is the Rust guard's, run by the one dispatcher on every event it is wired for
+    rust = (Path(__file__).resolve().parents[2] / "rust/guard/src/guards/event_log_hooks.rs").read_text()
+    on_failure = '"PostToolUseFailure"' in rust.split("pub const GUARD", 1)[1].split("decide", 1)[0]
+    assert any("event-log-hooks.sh" in c for c in wired) or (on_failure and any("l7r-guard.sh" in c for c in wired)), "the event-log hook is wired on a failure"

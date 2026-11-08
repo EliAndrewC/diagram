@@ -7,7 +7,8 @@
 # SubagentStart and SubagentStop the same agent_id) inside a throwaway clone with a `.specify/feature.json`.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/event-log-hooks.sh"
+# feature 449 T012: the guard is Rust - the link `event-log-hooks.sh` beside this suite runs `l7r-guard --only event-log-hooks`
+HOOK="$HERE/event-log-hooks.sh"
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 PASS=0; FAIL=0

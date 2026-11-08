@@ -6,6 +6,7 @@ pub mod escape;
 pub mod log;
 pub mod make;
 pub mod session;
+pub mod sha1;
 pub mod sha256;
 pub mod shape;
 pub mod state;

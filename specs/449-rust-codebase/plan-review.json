@@ -170,9 +170,9 @@
    "declared": "spec-fidelity"
   },
   "### T012 Approach (checklist part A)": {
-   "sha256": "c6c83e30071b0b4dd5c9ab842272875a353e216f0d8569efa366eef65bc1af9f",
+   "sha256": "6c321b90386a5679f2b2dca1e23494ea44866d6f3cb125155db67a0c02874ff9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T013 Approach (checklist part A)": {
@@ -1357,6 +1357,39 @@
      "why": "This is an exception to FR-002's 'same outputs', and the only exception FR-002 names is the XIV fix, so it is judged as a carve-out. Applied literally, the rule would make the guard send a refused session to a file this same commit deletes. That defeats what the message is for, which is telling the reader where the rule lives. It does not reach what FR-002 is for, proving the port changes no decision, because only the self-referencing path changes and every verdict and all other text stay as they are. The precedent is T006. If a suite case asserts the path, its expected text changes in the same commit and the commit must name that change."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T012 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T012 (a)",
+     "summary": "The hook half of scripts/measure/event_log.py (line, verdict reading, categories, log path, append) moves into the Rust decider with patterns, fields and order verbatim; the from-transcript command stays Python until phase 3 ports the measure tools.",
+     "class": "within",
+     "why": "The request is to make the codebase Rust; FR-001 orders the port in phases with the hooks first. The code that runs on every hook event is the hook's, and porting it with the guard is the hooks phase doing its job. The part that is a command, not a hook, goes in the later measure-tools phase, which FR-001's phase order already provides; nothing is excluded from the port. Keeping the line's fields and order the same is what FR-002 requires so that feature-report reads it unchanged."
+    },
+    {
+     "id": "T012 (b)",
+     "summary": "On an Edit, the reversal test (hm_arbiter.reversal) runs in-process in Rust; recording the trip is handed to hm_arbiter.py by path, and only when a reversal is found, until the arbiter is ported.",
+     "class": "within",
+     "why": "The arbiter is its own piece in FR-001's phase order, and this block does not port it. Calling it by path, and only on the rare reversal, keeps Python off the common path, which is the hook start-up cost the GM's request was about, and it lasts only until the arbiter's own port, so no Python is kept for good. FR-003 is per piece: the guard's verdict comes from Rust alone, so no piece runs both. The block follows T006 (a)."
+    },
+    {
+     "id": "T012 (c)",
+     "summary": "The log line's ev is taken from the payload's hook_event_name, as the Python did; l7r-guard --only with no event name reads it from the payload, so the suite's \"$HOOK\" replays unchanged.",
+     "class": "within",
+     "why": "This keeps the Python's behavior (FR-002) and lets the guard's existing suite replay against the Rust guard without edits (D4). It is an interface detail that serves the spec and narrows nothing."
+    },
+    {
+     "id": "T012 (d)",
+     "summary": "The edit digest stays SHA-1's first 12 hex digits, written as a small SHA-1 in shared beside T006's SHA-256 rather than taken from a crate.",
+     "class": "within",
+     "why": "Keeping the digest format is FR-002 (same outputs). Writing the hash in shared rather than using a crate is a design choice, not a fidelity question, and it narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1725,6 +1758,38 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This is an exception to FR-002's 'same outputs', and the only exception FR-002 names is the XIV fix, so it is judged as a carve-out. Applied literally, the rule would make the guard send a refused session to a file this same commit deletes. That defeats what the message is for, which is telling the reader where the rule lives. It does not reach what FR-002 is for, proving the port changes no decision, because only the self-referencing path changes and every verdict and all other text stay as they are. The precedent is T006. If a suite case asserts the path, its expected text changes in the same commit and the commit must name that change."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T012": {
+   "section_sha256": "6c321b90386a5679f2b2dca1e23494ea44866d6f3cb125155db67a0c02874ff9",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T012 (a)",
+     "summary": "The hook half of scripts/measure/event_log.py (line, verdict reading, categories, log path, append) moves into the Rust decider with patterns, fields and order verbatim; the from-transcript command stays Python until phase 3 ports the measure tools.",
+     "class": "within",
+     "why": "The request is to make the codebase Rust; FR-001 orders the port in phases with the hooks first. The code that runs on every hook event is the hook's, and porting it with the guard is the hooks phase doing its job. The part that is a command, not a hook, goes in the later measure-tools phase, which FR-001's phase order already provides; nothing is excluded from the port. Keeping the line's fields and order the same is what FR-002 requires so that feature-report reads it unchanged."
+    },
+    {
+     "id": "T012 (b)",
+     "summary": "On an Edit, the reversal test (hm_arbiter.reversal) runs in-process in Rust; recording the trip is handed to hm_arbiter.py by path, and only when a reversal is found, until the arbiter is ported.",
+     "class": "within",
+     "why": "The arbiter is its own piece in FR-001's phase order, and this block does not port it. Calling it by path, and only on the rare reversal, keeps Python off the common path, which is the hook start-up cost the GM's request was about, and it lasts only until the arbiter's own port, so no Python is kept for good. FR-003 is per piece: the guard's verdict comes from Rust alone, so no piece runs both. The block follows T006 (a)."
+    },
+    {
+     "id": "T012 (c)",
+     "summary": "The log line's ev is taken from the payload's hook_event_name, as the Python did; l7r-guard --only with no event name reads it from the payload, so the suite's \"$HOOK\" replays unchanged.",
+     "class": "within",
+     "why": "This keeps the Python's behavior (FR-002) and lets the guard's existing suite replay against the Rust guard without edits (D4). It is an interface detail that serves the spec and narrows nothing."
+    },
+    {
+     "id": "T012 (d)",
+     "summary": "The edit digest stays SHA-1's first 12 hex digits, written as a small SHA-1 in shared beside T006's SHA-256 rather than taken from a crate.",
+     "class": "within",
+     "why": "Keeping the digest format is FR-002 (same outputs). Writing the hash in shared rather than using a crate is a design choice, not a fidelity question, and it narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"

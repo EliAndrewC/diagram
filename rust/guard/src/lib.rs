@@ -17,13 +17,13 @@ pub fn guards() -> Vec<Guard> {
         guards::measure_hooks::GUARD,
         guards::no_poll_hooks::GUARD,
         guards::main_tree_hooks::GUARD,
+        guards::event_log_hooks::GUARD,
     ]
 }
 
 /// The command line: `<event>` decides the hook input on `stdin` with every guard; `--only <guard> <event>` with that one guard
 /// (its suite's entry point, plan D4); `--self-check` runs every guard on a fixed input, which a build must pass to be kept as the
-/// last good one (plan D7); `--version`. An input that is not JSON is answered with exit 1 - Claude Code's non-blocking error -
-/// and its reason on stderr.
+/// last good one (plan D7); `--version`. An input that is not JSON runs no guard and lets the call go on (T012).
 #[must_use]
 pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
     let say = |stderr: String, code: i32| Reply {
@@ -82,18 +82,27 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
 }
 
 fn decide(event: &str, stdin: &str, guards: &[Guard]) -> Reply {
-    match serde_json::from_str(stdin) {
-        Ok(input) => run(
-            &mut Event {
-                name: event.to_owned(),
-                input,
-            },
-            guards,
-        ),
-        Err(e) => Reply {
+    match serde_json::from_str::<serde_json::Value>(stdin) {
+        Ok(input) => {
+            // no event named: the payload's own (`hook_event_name`), as a hook called with no mode reads it (T012 decision (c))
+            let name = if event.is_empty() {
+                input
+                    .get("hook_event_name")
+                    .and_then(serde_json::Value::as_str)
+                    .unwrap_or("")
+                    .to_owned()
+            } else {
+                event.to_owned()
+            };
+            run(&mut Event { name, input }, guards)
+        }
+        // AN INPUT THAT IS NOT JSON IS NOTHING TO JUDGE: no guard runs and the call goes on, as every shell guard read it (each
+        // found no command in it) - a guard run on a guessed empty input would act on it, as the event log would write a line
+        // the Python never wrote (T012, its suite's `garbage` case)
+        Err(_) => Reply {
             stdout: String::new(),
-            stderr: format!("l7r-guard: the hook input is not JSON ({e})"),
-            code: 1,
+            stderr: String::new(),
+            code: 0,
         },
     }
 }
@@ -141,8 +150,17 @@ mod tests {
         );
         assert_eq!(cli(&args(&["--only", "x-hooks"]), input, &g).code, 1);
         assert_eq!(cli(&args(&[]), input, &g).code, 1);
+        assert_eq!(
+            cli(
+                &args(&["--only", "x-hooks", ""]),
+                r#"{"hook_event_name": "PreToolUse"}"#,
+                &g
+            )
+            .code,
+            2
+        );
         let bad = cli(&args(&["PreToolUse"]), "not json", &g);
-        assert!(bad.code == 1 && bad.stderr.contains("not JSON"));
+        assert!(bad.code == 0 && bad.stderr.is_empty() && bad.stdout.is_empty());
         assert!(
             guards().iter().map(|g| g.name).collect::<Vec<_>>()
                 == [
@@ -150,7 +168,8 @@ mod tests {
                     "gate-hooks",
                     "measure-hooks",
                     "no-poll-hooks",
-                    "main-tree-hooks"
+                    "main-tree-hooks",
+                    "event-log-hooks"
                 ]
         );
     }

@@ -101,6 +101,10 @@ if [ -n "$CARGO_BIN" ]; then
   out=$(L7R_GUARD_TARGET="$RT" L7R_GUARD_CARGO="$CARGO_BIN" "$R/scripts/hooks/l7r-guard.sh" --version < /dev/null 2>&1)
   case "$out" in "l7r-guard "*) ok ;; *) bad "real build: --version [$out]" ;; esac
   [ -x "$RT/l7r-guard.good" ] && ok || bad "real build: the self-checked binary kept"
+  # the self-check touches nothing: run in a clone with a feature, it writes no event log there (T012)
+  SC="$W/sc"; mkdir -p "$SC/.git" "$SC/.specify"; printf '{"feature_directory": "specs/1-x"}' > "$SC/.specify/feature.json"
+  ( cd "$SC" && "$RT/l7r-guard.good" --self-check >/dev/null 2>&1 )
+  [ ! -e "$SC/.git/l7r-events" ] && ok || bad "real build: the self-check wrote into the tree it ran in"
   awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "real build through the wrapper: %.1f s\n", b - a }'
 else
   bad "real build: no cargo found"

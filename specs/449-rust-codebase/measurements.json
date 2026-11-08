@@ -312,5 +312,19 @@
       "suite_cases": 87,
       "suite_passed_against_rust": 87
     }
+  },
+  "event-log-hooks-ported": {
+    "quantity": "a Bash `ls`'s cost in the event-log guard, the shell's against the Rust dispatcher carrying it beside five ported guards (T012)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/event-log-hooks.sh (main's shell guard, a Python start) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log], on a sample PreToolUse JSON for a Bash `ls`, each writing its line to a temporary L7R_EVENTS_DIR",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, measured beside a running hooks-test; and 8 payloads of every event kind through both, their lines compared byte for byte once the timestamp is removed",
+    "value": {
+      "shell_ms": 32.9,
+      "rust_dispatcher_ms": 12.4,
+      "suite_cases": 18,
+      "suite_passed_against_rust": 18,
+      "lines_byte_identical": "8 of 8"
+    }
   }
 }
