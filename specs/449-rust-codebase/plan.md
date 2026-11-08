@@ -223,26 +223,7 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T051 Approach (checklist part A)
-
-1. **The goal, in the world.** no guard library outlives its last caller.
-2. **The constraints.** FR-001, FR-003.
-   **Decisions** (the round arbiter's ruling `ask:449-T051-lib-route`, route 2; found reading each library's code-level callers, 2026-11-08):
-   - (a) GROUP A IS PORTED, ITS PYTHON DELETED: `hm_dropped.py` is `pair_hooks/dropped.rs` (`l7r-guard dropped drop`, the Stop check in process); `solo.py` and `clone_local_settings.py` are `clone_sync_hooks/solo.rs` and `settings.rs`, in process where they were asked by path on a prompt; `hm_guard_permit.py`'s `grant` is `l7r-guard permit grant` (`check` and `root-makefile` had only the shell guard as a caller). `hookmatch.py` is deleted: `hm_shape.py` and `hm_escape.py` name it only in their docstrings (the ruling's condition, checked), it imported them, and its one code caller, the Makefile's escape log, asks `hm_escape.py reason-ok`. `hm_make.py` is deleted with it, its one importer: `make_only_hooks` holds its logic. Nothing retained imports either.
-   - (b) THE TESTS GO WITH THEM: `test_solo.py`, `test_clone_local_settings.py`, `test_guard_corpus.py`'s make-only rows (97, through `classify`, `targeted_pytest` and `wrapped`) and `test_makefile_recipe_comments.py`'s detector and repository scans are crate tests. The no-poll rows stay in `test_guard_corpus.py`, through the retained `hm_shape.py`. T050's ceiling on how many guards reach `hm_make.py` goes with that file; the ones on files that remain stand.
-   - (c) NONE OF THE RETAINED FILES STARTS PYTHON ON A PLAIN CALL (the ruling's step 3, each by the branch that starts it): `guardlog.sh` from `l7r-guard.sh` is sourced only after `exec "$GOOD"`, so only when no good binary has ever been built. `usage_log.py` is asked by `clone_sync_hooks` only in the branch that has just merged main into the clone, on a prompt. `hm_house.py` is named in `rust/guard` only by the exemption pattern and a test, never started. `own-make.sh` and `writer-alive.sh` hold no Python; each is shell the guards write into a wait or, for `writer-alive.sh`, run on a Stop's live-run check. `check-bundle-hooks.sh` reaches `hm_escape.py` on an Agent call alone. `hm_approval.py`, `hm_conflict.py`, `hm_tree.py` and `hm_shape.py` have no guard caller.
-   - (d) THE PHASE OF EACH, COUNTED THROUGH THE LIBRARIES THAT CALL IT (FR-001): phase 2, `hm_conflict.py` (`push_checks.py`, `push_check_times.py`, its make target) and `own-make.sh` (`one-gate.sh`); phase 3, `usage_log.py`, `hm_approval.py` (`review_owed.py`), `hm_house.py` (`apply_edits.py`, `claims_reply.py`, `hm_arbiter.py`), `hm_escape.py` (`record_owed.py`, `escape_log.py`), `hm_tree.py` (`hm_house.py`), `hm_shape.py` (`hm_tree.py`, `hm_escape.py`), `guardlog.sh` (`escape_log.py`, `check-bundle-hooks.sh`) and `writer-alive.sh` (`hm_shape.py`). T052's census reports them by phase.
-3. **Where each comes from.** plan work breakdown 6.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After every guard task.
-6. **The exits.** Green: `make audit` and `make guard-log` reading the Rust lines unchanged; no `.py` under `scripts/hooks/` but those FR-001 places in a later phase by name. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** no `.py` and no inline Python under `scripts/hooks/` but those FR-001 places in a later phase by name. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten to the port in the same commit and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-<!-- plan-archive: T053 to T053 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T051 to T051 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T052 Approach (checklist part A)
 
 1. **The goal, in the world.** phase 1 closed on its measured outcome.
