@@ -36,7 +36,7 @@ fn a_plain_call_concerns_nothing_and_a_record_call_does() {
     assert_eq!(bash("make apply-edits FROM=x"), Some("pretool-bash"));
     assert_eq!(edit("/r/notes.md"), None);
     assert_eq!(edit("/r/rust/guard/src/a.rs"), None);
-    assert_eq!(edit("/r/research/questions/0105-x.html"), Some("pretool"));
+    assert_eq!(edit("/r/research/site/q/x.html"), Some("pretool"));
     assert_eq!(edit("research/site/a.html"), Some("pretool"));
     assert_eq!(
         edit("/r/l7r/diagram/interactive/assets/modals/sheet/bath.md"),
@@ -108,7 +108,7 @@ fn the_shell_guards_reply_becomes_the_answers() {
         "refuse",
         "cat >/dev/null; echo frozen while checked >&2; exit 2\n",
     );
-    let page = json!({"file_path": "/r/research/questions/0105-x.html"});
+    let page = json!({"file_path": "/r/research/site/q/x.html"});
     let e = event("Edit", &page, &refuse);
     assert!(
         matches!(&judge(&e, &refuse, &refuse)[..], [Answer::Refuse(t)] if t == "frozen while checked")
