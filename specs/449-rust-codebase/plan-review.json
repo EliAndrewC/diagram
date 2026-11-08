@@ -176,9 +176,9 @@
    "declared": "spec-fidelity"
   },
   "### T013 Approach (checklist part A)": {
-   "sha256": "41f9d0e4b6b82279fcf2a8a1d12f5867e130be71352ba380f31af0b663b40e4e",
+   "sha256": "385a01ac87f861e2e8989cfd949fb88d58fe15a4be52ffc505ae20e28f30dc8f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T014 Approach (checklist part A)": {
@@ -1390,6 +1390,78 @@
      "why": "Keeping the digest format is FR-002 (same outputs). Writing the hash in shared rather than using a crate is a design choice, not a fidelity question, and it narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T013 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T013(a)",
+     "summary": "The tools the guard calls (git, sync-with-main.sh sync-in, own-make.sh, gate_lock.py held, clone_local_settings.py, solo.py, usage_log.py record, layout_carry.sh) are still called by path, as the shell called them, until each one is ported itself.",
+     "class": "within",
+     "why": "FR-001 ports in phases and FR-003 keeps a piece's Python running until its own replacement passes; a ported guard calling unported tools as before changes no verdict (FR-002)."
+    },
+    {
+     "id": "T013(b)",
+     "summary": "The guard's inline Python (input fields, the session's canonical clone, whether another claimant session is live, the behind-main make targets) is replaced in-process by T003's session facts, /proc reads and shared::make::targets, giving the same answers.",
+     "class": "within",
+     "why": "This is the port itself (the request: make this a Rust codebase), held to the same answers FR-002 requires and run in one process (FR-007)."
+    },
+    {
+     "id": "T013(c)",
+     "summary": "The script stays only as a resolve entry that forwards to l7r-guard --resolve, printing the clone as resolve printed it, until T051 deletes the four shell guards and guardlog.sh that call it; its guard modes, prompt and pretool, leave the settings in this task.",
+     "class": "within",
+     "why": "D3/FR-003 are met: the guard's settings entries go in the commit that registers the Rust decider, so no guard runs both. resolve is not a guard. It is a helper the unported shell guards call, and it now answers from Rust with output unchanged (FR-002). Removing it before its callers are ported would break pieces whose Python/shell FR-003 says must still run. Item 9 now agrees with this."
+    },
+    {
+     "id": "T013(d)",
+     "summary": "The prompt mode's lines are the decider's plain-stdout answer (Answer::Print), byte for byte as the shell printed them, so the suite's prompt cases pass with their expectations unedited.",
+     "class": "within",
+     "why": "Revised from round 1 (where additionalContext would have changed the output and the suite expectations). Keeping the stdout bytes is exactly FR-002's same verdicts and outputs on every suite case, with no XIV exception claimed."
+    },
+    {
+     "id": "T013 items 5-9",
+     "summary": "Order after T005, independent of the other guards; exits green on the guard's suite against l7r-guard --only, rust-test, cover and hooks-test; landing with no work budget; done when every suite case passes and the guard modes and both settings entries are gone in the registering commit.",
+     "class": "within",
+     "why": "Restates D3-D4, FR-002, FR-003 and FR-008. It does not narrow them."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T013 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The tools the guard asks (git, sync-with-main.sh, own-make.sh, gate_lock.py, clone_local_settings.py, solo.py, usage_log.py, layout_carry.sh) stay theirs and are asked by path until their own ports.",
+     "class": "within",
+     "why": "The request ports all the Python and the spec phases it (FR-001); FR-003 requires the Python to remain the one that runs until its replacement passes. Each tool is named as ending at its own port, so this is order, not an exclusion."
+    },
+    {
+     "id": "(b)",
+     "summary": "The session facts the guard's inline Python read (input fields, canonical clone, whether another claimant is live) are read in-process from T003's facts and /proc; the notice's make targets use shared::make::targets.",
+     "class": "within",
+     "why": "This is the port itself, what the request asks for; the block binds it to the same answers, which is FR-002."
+    },
+    {
+     "id": "(c)",
+     "summary": "The script stays as its resolve mode only, code unchanged and outside l7r-guard, until T051 deletes its callers; prompt and pretool leave in this task.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: (1) the kept code has a named remover, T051, so nothing is excluded from the port the request asks for and FR-001 phases; (2) the guard runs on one path, since resolve is not a guard mode and both guard modes and both settings entries go in the commit that registers the decider (item 9, D3), so FR-003 is met; (3) FR-002 is untouched, the resolve code being unchanged. The not-through-l7r-guard reasoning (recursion, cargo build) is mechanism and decides nothing here either way. Two points for the record: step 1 says 'its shell gone' while (c) keeps the script, and item 9 is the operative statement; and (b) ports the canonical-clone lookup while (c) keeps the shell's canonical_clone for the other guards, so two implementations are live until T051. That is not FR-003's 'both', each call taking one path, but T051 owes the deletion of the shell's version as well as of its callers."
+    },
+    {
+     "id": "(d)",
+     "summary": "The prompt mode's lines are the decider's plain-stdout answer, byte for byte, so the suite's prompt cases pass unedited.",
+     "class": "within",
+     "why": "Directly FR-002: same outputs, suite expectations unedited."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1790,6 +1862,38 @@
      "summary": "The edit digest stays SHA-1's first 12 hex digits, written as a small SHA-1 in shared beside T006's SHA-256 rather than taken from a crate.",
      "class": "within",
      "why": "Keeping the digest format is FR-002 (same outputs). Writing the hash in shared rather than using a crate is a design choice, not a fidelity question, and it narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T013": {
+   "section_sha256": "385a01ac87f861e2e8989cfd949fb88d58fe15a4be52ffc505ae20e28f30dc8f",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The tools the guard asks (git, sync-with-main.sh, own-make.sh, gate_lock.py, clone_local_settings.py, solo.py, usage_log.py, layout_carry.sh) stay theirs and are asked by path until their own ports.",
+     "class": "within",
+     "why": "The request ports all the Python and the spec phases it (FR-001); FR-003 requires the Python to remain the one that runs until its replacement passes. Each tool is named as ending at its own port, so this is order, not an exclusion."
+    },
+    {
+     "id": "(b)",
+     "summary": "The session facts the guard's inline Python read (input fields, canonical clone, whether another claimant is live) are read in-process from T003's facts and /proc; the notice's make targets use shared::make::targets.",
+     "class": "within",
+     "why": "This is the port itself, what the request asks for; the block binds it to the same answers, which is FR-002."
+    },
+    {
+     "id": "(c)",
+     "summary": "The script stays as its resolve mode only, code unchanged and outside l7r-guard, until T051 deletes its callers; prompt and pretool leave in this task.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: (1) the kept code has a named remover, T051, so nothing is excluded from the port the request asks for and FR-001 phases; (2) the guard runs on one path, since resolve is not a guard mode and both guard modes and both settings entries go in the commit that registers the decider (item 9, D3), so FR-003 is met; (3) FR-002 is untouched, the resolve code being unchanged. The not-through-l7r-guard reasoning (recursion, cargo build) is mechanism and decides nothing here either way. Two points for the record: step 1 says 'its shell gone' while (c) keeps the script, and item 9 is the operative statement; and (b) ports the canonical-clone lookup while (c) keeps the shell's canonical_clone for the other guards, so two implementations are live until T051. That is not FR-003's 'both', each call taking one path, but T051 owes the deletion of the shell's version as well as of its callers."
+    },
+    {
+     "id": "(d)",
+     "summary": "The prompt mode's lines are the decider's plain-stdout answer, byte for byte, so the suite's prompt cases pass unedited.",
+     "class": "within",
+     "why": "Directly FR-002: same outputs, suite expectations unedited."
     }
    ],
    "verdict": "CLEAR"

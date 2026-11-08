@@ -326,5 +326,20 @@
       "suite_passed_against_rust": 18,
       "lines_byte_identical": "8 of 8"
     }
+  },
+  "clone-sync-hooks-ported": {
+    "quantity": "an Edit-shaped call's cost in the clone-sync guard, the shell's against the Rust dispatcher carrying it beside six ported guards (T013)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/clone-sync-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree, event-log, clone-sync], on a sample PreToolUse JSON for a Write into a dirty clone and for a Bash `ls`, an empty session id so nothing is claimed, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, on an otherwise idle host (load 3.5); the guard's own suite replayed against the Rust guard through tests/hooks/clone-sync-hooks.sh",
+    "value": {
+      "shell_write_ms": 82.7,
+      "rust_dispatcher_write_ms": 32.2,
+      "shell_bash_ls_ms": 34.6,
+      "rust_dispatcher_bash_ls_ms": 13.0,
+      "suite_cases": 63,
+      "suite_passed_against_rust": 63
+    }
   }
 }

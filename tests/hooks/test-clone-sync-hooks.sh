@@ -9,7 +9,7 @@
 set -uo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
-HOOK=$HERE/../../scripts/hooks/clone-sync-hooks.sh
+HOOK=$HERE/clone-sync-hooks.sh
 SYNC=$HERE/../../scripts/sync-with-main.sh
 # GUARD_EDIT_OK: feature 168 - clone-sync-hooks.sh now RECORDS its five refusals, so this suite
 # writes into a throwaway log rather than the session's real one; otherwise `make audit`'s census
@@ -110,7 +110,7 @@ rm -f "$MAPDIR/sid-cleared" "$MAPDIR/sid-me"
 # clone - a rewrite into a different session's clone would write one session's work into another's.
 res() { # res <sid> <transcript> ; OUT = the clone path resolve prints (or nothing)
   OUT=$(printf '{"session_id":"%s","transcript_path":"%s","cwd":"%s"}' "$1" "$2" "$FMAIN" \
-        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HOOK" resolve 2>/dev/null); RC=$?
+        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HERE/../../scripts/hooks/clone-sync-hooks.sh" resolve 2>/dev/null); RC=$?
 }
 printf '%s' "$FMAIN/.clones/diagram-town" > "$MAPDIR/sid-mapped"
 res sid-mapped "";                            check "resolve: the claim map answers first" "$FMAIN/.clones/diagram-town" "$OUT"
@@ -267,7 +267,7 @@ OUT=$(printf '{"session_id":"sid-run"}' \
 case $OUT in *"make run going"*) printf 'FAIL  a clone with no run was held as if one ran\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) printf 'ok    with the run gone, the clean clone is not held\n' ;; esac
 # feature 385 T30: the gate's OWN lock holds the merge too (a live gate named in <git dir>/gate.lock), HEAD unchanged
-mkdir -p "$RUNC/scripts/gates"; cp "$(dirname "$HOOK")/../gates/gate_lock.py" "$RUNC/scripts/gates/"
+mkdir -p "$RUNC/scripts/gates"; cp "$HERE/../../scripts/gates/gate_lock.py" "$RUNC/scripts/gates/"
 (exec -a make bash -c 'sleep 120; :' done) & GLPID=$!
 sleep 0.3
 printf '{"pid": %s, "t": 0}' "$GLPID" > "$RUNC/.git/gate.lock"
@@ -398,11 +398,11 @@ bm_silent "make quick"                  "a CLEAN clone is left to the stale-base
 # literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
 # the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
 # suite. Three hand-written rosters in this repository were each short by one within a day.
-DERIVED=$(python3 - "$HERE/../../Makefile" "$HOOK" <<'PYEOF'
+DERIVED=$(python3 - "$HERE/../../Makefile" "$HERE/../../rust/guard/src/guards/clone_sync_hooks.rs" <<'PYEOF'
 import re, sys
 mk = open(sys.argv[1], encoding="utf-8").read()
 hook = open(sys.argv[2], encoding="utf-8").read()
-declared = set(re.search(r"BEHIND_TEST_TARGETS='([^']*)'", hook).group(1).split("|"))
+declared = set(re.findall(r'"([\w-]+)"', re.search(r"BEHIND_TEST_TARGETS: \[&str; \d+\] = \[(.*?)\];", hook, re.S).group(1)))
 recipes, cur = {}, None
 for line in mk.splitlines():
     m = re.match(r"^([a-z][\w-]*):", line)

@@ -18,7 +18,7 @@ NESTED = {"research/CLAUDE.md", "tests/CLAUDE.md", "l7r/diagram/CLAUDE.md", "scr
 
 
 def sources(root: pathlib.Path) -> list[pathlib.Path]:
-    globs = ("scripts/**/*.sh", "scripts/**/*.py", "scripts/**/*.txt", ".claude/agents/*.md")
+    globs = ("scripts/**/*.sh", "scripts/**/*.py", "scripts/**/*.txt", ".claude/agents/*.md", "rust/guard/src/**/*.rs")
     found = [p for g in globs for p in root.glob(g) if "__pycache__" not in p.parts]
     return sorted({*found, *(p for p in (root / ".claude" / "settings.json", root / "Makefile") if p.is_file())})
 

@@ -75,7 +75,9 @@ impl Session {
                     .split("/.clones/")
                     .next()
                     .map_or(t.clone(), PathBuf::from),
-                None => PathBuf::from("/diagram"),
+                // no work tree: the tree the guard runs from, as `derive_main` fell back to the script's own
+                None => std::env::var("L7R_GUARD_TREE")
+                    .map_or_else(|_| PathBuf::from("/diagram"), PathBuf::from),
             }
         })
     }
@@ -121,6 +123,15 @@ impl Session {
         let map = self.main().join(".clones/.session-clones").join(&self.id);
         if let Some(c) = self.read(&map) {
             return Some(PathBuf::from(c.trim()));
+        }
+        self.canonical()
+    }
+
+    /// The clone the session's NAME gives (`canonical_clone`): the transcript's last `/rename`, else the sessions json - the claim
+    /// map left out, as the pretool guard compares the two (T013).
+    pub fn canonical(&self) -> Option<PathBuf> {
+        if self.id.is_empty() {
+            return None;
         }
         let (name, source) = self.titled().or_else(|| self.listed())?;
         let name = if source == "derived" || name.trim().is_empty() {

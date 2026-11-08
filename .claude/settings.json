@@ -33,12 +33,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/clone-sync-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/clone-sync-hooks.sh\"; exec \"$h\" prompt",
-            "timeout": 60,
-            "statusMessage": "Syncing session clone with main..."
-          },
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 30,
             "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
@@ -76,16 +70,6 @@
       }
     ],
     "PreToolUse": [
-      {
-        "matcher": "Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/clone-sync-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/clone-sync-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 30
-          }
-        ]
-      },
       {
         "matcher": "Edit|Write|NotebookEdit",
         "hooks": [

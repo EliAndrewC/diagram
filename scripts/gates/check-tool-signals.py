@@ -30,6 +30,7 @@ CALLS = (
     re.compile(r'\bexited\(\s*"([\w-]+)"'),  # usage_log.exited("<tool>", ...)
     re.compile(r'usage_log\.record\([^\n]*?,\s*"([\w-]+)"'),  # usage_log.record(root, "<tool>", ...) on one line
     re.compile(r'--tool[ =]"?([\w-]+)'),  # usage_log.py record --tool <tool>
+    re.compile(r'"--tool",\s*"([\w-]+)"'),  # the same call from a Rust guard, an argument list (feature 449 T013)
 )
 
 
@@ -59,7 +60,8 @@ def called(root: Path) -> dict[str, str]:
     """Every tool name a usage-log call names -> the first file that names it."""
     out: dict[str, str] = {}
     files = [p for p in (root / "scripts").rglob("*") if p.suffix in (".py", ".sh") and "__pycache__" not in p.parts]
-    for path in sorted([*files, root / "Makefile"]):
+    guards = (root / "rust" / "guard" / "src" / "guards").rglob("*.rs")
+    for path in sorted([*files, *guards, root / "Makefile"]):
         text = _text(path)
         if "usage_log" not in text or path.name == "usage_log.py":
             continue

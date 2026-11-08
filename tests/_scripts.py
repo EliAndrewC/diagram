@@ -20,6 +20,8 @@ def _index() -> dict[str, Path]:
     for base in (ROOT / "scripts", ROOT / "tests" / "hooks"):
         for p in base.rglob("*"):
             if p.is_file() and "__pycache__" not in p.parts:
+                if p.is_symlink() and p.name in found:
+                    continue  # a guard ported to Rust whose script stays for one mode (449 T013): the name means the script
                 assert p.name not in found, f"two scripts named {p.name}: {found[p.name]} and {p}"
                 found[p.name] = p
     return found

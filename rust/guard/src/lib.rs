@@ -18,6 +18,7 @@ pub fn guards() -> Vec<Guard> {
         guards::no_poll_hooks::GUARD,
         guards::main_tree_hooks::GUARD,
         guards::event_log_hooks::GUARD,
+        guards::clone_sync_hooks::GUARD,
     ]
 }
 
@@ -169,7 +170,8 @@ mod tests {
                     "measure-hooks",
                     "no-poll-hooks",
                     "main-tree-hooks",
-                    "event-log-hooks"
+                    "event-log-hooks",
+                    "clone-sync-hooks"
                 ]
         );
     }
