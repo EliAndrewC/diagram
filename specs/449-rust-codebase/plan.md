@@ -196,7 +196,7 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** a guard's build reaches every session, a broken build never turning every guard off.
 2. **The constraints.** plan D7, FR-005.
-3. **Where each comes from.** research R6 (main's copy runs), the plan review's aside of 2026-11-07.
+3. **Where each comes from.** research R6 (main's copy runs); plan D7 (the last good binary kept); FR-005's "as it covers the Python today", measured in `m:python-dead-fails-open`: a guard whose Python cannot start fails open today - repo-safety lets a force push to main through - so the wrapper failing open only with no good binary ever built covers no less than today, and falls back where today nothing does.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T002.
 6. **The exits.** Green: its suite: a stale build rebuilt, a failed build running the last good binary, none ever built failing open with its line. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.

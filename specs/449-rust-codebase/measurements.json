@@ -222,5 +222,13 @@
       "files": 15,
       "of_files": 33
     }
+  },
+  "python-dead-fails-open": {
+    "quantity": "what a guard answers today when its Python cannot start, beside what it answers when Python starts",
+    "observed": "2026-11-07",
+    "subject": "/diagram/scripts/hooks/{make-only,repo-safety,gate,pair}-hooks.sh pretool, on a Bash `pytest tests/x.py` and a Bash `git push --force origin main`",
+    "command": "a python3 that prints an error and exits 127 put first on PATH (PATH=<dir>:$PATH), each guard run on each input; then each guard run with the real PATH",
+    "method": "exit code and stdout compared between the two runs",
+    "value": "every guard measured fails OPEN: repo-safety on the force push exits 0 with Python dead (2, a refusal, with it live); make-only on the pytest prints nothing (its rewrite to `make test-file` with it live); gate-hooks exits 127 (Claude Code's hook rule: only exit 2 blocks, another exit is a non-blocking error); pair-hooks exits 0 both ways. A missing guard script exits 127, the same"
   }
 }

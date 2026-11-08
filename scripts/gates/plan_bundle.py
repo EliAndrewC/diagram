@@ -60,8 +60,9 @@ def expand_ranges(text: str) -> str:
 
     return _DRANGE.sub(each_d, _RANGE.sub(each, text))
 #: every form the plans write a decision in (405 T133, D123): `**D83 - `, `- **D96 - `, `- **D121** `, `- **D7 The ...**` and
-#: `**D8.**` - the first form alone left 452 decisions out of every `spec-cited.md` that cited one
-_DECISION = re.compile(r"^(?:- )?\*\*(D\d+[a-z]?)(?: - |\*\*|\.| )", re.M)
+#: `**D8.**` - the first form alone left 452 decisions out of every `spec-cited.md` that cited one - and the unbolded list item
+#: `- D7 - THE BINARY ...` (feature 449's plan: its T004 preflight came back without D7, the one decision its block cites)
+_DECISION = re.compile(r"^(?:- \*\*|\*\*|- (?=D\d+[a-z]? - ))(D\d+[a-z]?)(?: - |\*\*|\.| )", re.M)
 #: the older specs' form, a requirement as its own heading (`### FR-001 - ...`, 12 specs among them 170): to the next heading
 _HEAD_ITEM = re.compile(r"^#{2,4} ((?:FR|SC)-\d{3}[a-z]?)\b", re.M)
 
@@ -183,7 +184,8 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
     own = {m.group(1) for _k, body in under for m in _DECISION.finditer(body)}
     (out / "spec-cited.md").write_text(
         "# The requirements and decisions the blocks name, in full\n\n"
-        + "\n".join([(items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)] + foreign(spec_dir, others)),
+        + "\n".join([(items.get(i) or decisions.get(i) or "") for i in cited if i not in own and (i in items or i in decisions)] + foreign(spec_dir, others))
+        + measured(spec_dir, [b for _k, b in under]),
         encoding="utf-8",
     )
     (out / "spec-index.md").write_text("# Every other requirement, its first line\n\n" + "".join(p.splitlines()[0] + "\n" for i, p in items.items() if i not in cited), encoding="utf-8")
@@ -207,8 +209,8 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
 
 A MODE 4 plan review of the blocks in `blocks.md` and nothing else of the plan (feature 375 amendment 11). Read the files beside
 this MANIFEST and nothing in the repository: `request.md` is the GM's words verbatim - the original request and every amendment
-from the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement and
-decision the blocks name, in full; `spec-index.md` the first line of every other requirement - grep it for one the blocks
+from the one these blocks answer on, the earlier ones indexed in `request-index.md`; `spec-cited.md` holds every requirement,
+decision and `m:` measurement the blocks name, in full; `spec-index.md` the first line of every other requirement - grep it for one the blocks
 should have named; `earlier.md` what a changed block said when last judged, and the verdict it got.
 
 Find each decision in the blocks, class it `within` or `narrowing`, and rule on each narrowing (LEGITIMATE / NOT LEGITIMATE).
@@ -218,6 +220,22 @@ Find each decision in the blocks, class it `within` or `narrowing`, and rule on 
         encoding="utf-8",
     )
     return manifest
+
+
+#: a figure cited by its key in the feature's `measurements.json` (`m:hooks-bash`)
+_MKEY = re.compile(r"\bm:([a-z0-9][a-z0-9-]*)")
+
+
+def measured(spec_dir: pathlib.Path, bodies: list[str]) -> str:
+    """Each `m:` figure the blocks cite, in full from the feature's `measurements.json` - or "" where they cite none. WHY (feature
+    449 T004, 2026-11-07): its preflight asked for the measurement behind a decision, and the bundle carried the key alone."""
+    keys = list(dict.fromkeys(m.group(1) for b in bodies for m in _MKEY.finditer(b)))
+    try:
+        figures = json.loads((spec_dir / "measurements.json").read_text(encoding="utf-8")) if keys else {}
+    except OSError, ValueError:
+        figures = {}
+    found = [f"### m:{k}\n\n" + "".join(f"- **{f}**: {v}\n" for f, v in figures[k].items()) for k in keys if isinstance(figures.get(k), dict)]
+    return "\n\n## The measurements the blocks cite (`measurements.json`)\n\n" + "\n".join(found) if found else ""
 
 
 def task_prompt(spec_dir: pathlib.Path, task: str) -> str:

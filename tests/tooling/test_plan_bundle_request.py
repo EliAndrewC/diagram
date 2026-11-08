@@ -140,9 +140,11 @@ def test_every_written_form_of_a_decision_is_read() -> None:
     plan = (
         "**D83 - a knot gathered.** body\n\n- **D96 - the tread off a wall.** body\n\n- **D121** The rows released.\n\n"
         "- **D7 The placed-house index**: body\n\n**D8.** `make hooks-test` body\n\n**Dx** not one\n"
+        "- D9 - THE BINARY FROM ITS OWN TREE: body\n  its second line\n- D10 - NEXT: body\n- D11 is not a decision\n"
     )
     got = pb._paragraphs(plan, pb._DECISION)
-    assert sorted(got) == ["D121", "D7", "D8", "D83", "D96"]
+    assert sorted(got) == ["D10", "D121", "D7", "D8", "D83", "D9", "D96"]
+    assert got["D9"] == "- D9 - THE BINARY FROM ITS OWN TREE: body\n  its second line\n"
     assert got["D121"] == "- **D121** The rows released.\n"
 
 
@@ -157,3 +159,13 @@ def test_a_cited_range_of_decisions_is_written_out_too() -> None:
     """Feature 442: "D1-D4" cites D2 and D3 too."""
     assert pb.expand_ranges("(D1-D4; FR-001 to FR-002)") == "(D1, D2, D3, D4; FR-001, FR-002)"
     assert pb.expand_ranges("D5 to D3") == "D5 to D3"
+
+
+def test_a_cited_measurement_is_carried_whole(tmp_path) -> None:  # noqa: ANN001
+    """449 T004: the preflight asked for the measurement behind a decision, and the bundle carried its key alone."""
+    (tmp_path / "measurements.json").write_text('{"hooks-bash": {"value": "26 guards", "method": "bash -x"}, "other": {"value": "x"}}')
+    got = pb.measured(tmp_path, ["per `m:hooks-bash`, and `m:hooks-bash` again, and `m:missing`"])
+    assert "### m:hooks-bash" in got and "- **method**: bash -x" in got and "other" not in got and got.count("### m:") == 1
+    assert pb.measured(tmp_path, ["no figure"]) == ""
+    (tmp_path / "measurements.json").write_text("not json")
+    assert pb.measured(tmp_path, ["`m:hooks-bash`"]) == ""
