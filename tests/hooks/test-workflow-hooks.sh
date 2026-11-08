@@ -106,6 +106,11 @@ echo "3. what it leaves alone"
 printf '{"tool_name":"Agent","cwd":"%s","tool_input":{"prompt":"x"}}' "$FIX" | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" ); r=$?
 [ "$r" -eq 0 ] && ok "a non-Workflow payload passes" || no "a non-Workflow payload was refused" "(rc=$r)"
 
+# GUARD_EDIT_OK: feature 449 - the one entry of the Rust guards has no matcher, and a wave's units must meet it
+python3 -c 'import json,sys; print(json.dumps({"hooks":{"PreToolUse":[{"hooks":[{"type":"command","command":"echo a guard with no matcher >&2; exit 2"}]}]}}))' > "$T/no-matcher.json"
+WORKFLOW_SETTINGS="$T/no-matcher.json" wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md"}]}}'
+[ "$(rc)" -eq 2 ] && grep -q 'a guard with no matcher' "$T/err" && ok "a hook entry with no matcher holds a wave's units too" || no "the entry with no matcher was skipped" "(rc=$(rc)) $(head -3 "$T/err")"
+
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all workflow-hook tests passed ($PASS)"; exit 0; fi
 echo "SOME TESTS FAILED ($FAIL of $((PASS+FAIL)))"; exit 1

@@ -476,7 +476,7 @@ _ESCAPES = {
         "not-an-escape",
         "RETIRED by feature 379 FR-010 (the GM 2026-10-10: the arbiter first) - pair-hooks.sh no longer reads it; named only by the event log's waiver flag for old transcripts and by the suite proving it changes nothing",
     ),
-    "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
+    "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup_hooks.rs) and in the header saying why there is none"),
     "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in a guard's old files_named (an executable is never a log; feature 295 item 1)"),
 }
@@ -582,7 +582,7 @@ def test_every_escape_token_has_at_least_one_recording_permit_site() -> None:
     sites = _permitting_sites()
     recorded_guards = {g for g, _rule in sites}
     # the three that were silent when this feature began, named so the test says what it is for
-    for guard in ("make-only-hooks.sh", "repo-safety-hooks.sh", "sync-with-main.sh"):
+    for guard in ("make-only-hooks.sh", "sync-with-main.sh"):  # repo-safety is Rust (feature 449 T034), its escape recorded by log::fire
         assert guard in recorded_guards, f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. Recording guards found: {sorted(recorded_guards)}"
 
 

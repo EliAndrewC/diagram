@@ -23,7 +23,7 @@ ROOTS = (
     REPO / "tests" / "interactive",
     REPO / "tests" / "hooks",
 )
-_PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|sh|md|json|jsonl))(?:::[A-Za-z0-9_]+)?`")
+_PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|sh|md|json|jsonl|rs))(?:::[A-Za-z0-9_]+)?`")
 
 
 def _section() -> str:

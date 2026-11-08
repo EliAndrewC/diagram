@@ -987,7 +987,7 @@ artifacts. Specifically:
     records and the bookends are keyed by the content and commits that were
     tested - a rewrite would silently invalidate a paid verification. The
     `main` ruleset refuses force pushes and deletions to every credential;
-    `scripts/hooks/repo-safety-hooks.sh` refuses `git rebase`, `pull --rebase`,
+    `rust/guard/src/guards/repo_safety_hooks.rs` refuses `git rebase`, `pull --rebase`,
     `merge --squash` and `commit --amend` in a session.
 
   - This does not replace `GEN_TIME_BUDGETS`, which is a per-gen ceiling. This is

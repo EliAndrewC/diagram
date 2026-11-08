@@ -41,6 +41,9 @@ pub fn guards() -> Vec<Guard> {
         guards::new_file_hooks::GUARD,
         guards::blocked_fetch_hooks::GUARD,
         guards::set_down_hooks::GUARD,
+        guards::repo_safety_hooks::GUARD,
+        guards::agent_model_hooks::GUARD,
+        guards::wakeup_hooks::GUARD,
     ]
 }
 
@@ -93,6 +96,10 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
                 .collect();
             if one.is_empty() {
                 return say(format!("l7r-guard: no guard named {name}"), 1);
+            }
+            // an event no guard of this binary takes is an unknown mode, an error and not a pass (T041 decision (c)); "" is the payload's own
+            if !event.is_empty() && !all.iter().any(|g| g.events.contains(&event.as_str())) {
+                return say(format!("l7r-guard: unknown event {event}"), 1);
             }
             decide(event, stdin, &one)
         }
@@ -177,6 +184,14 @@ mod tests {
             1
         );
         assert_eq!(cli(&args(&["--only", "x-hooks"]), input, &g).code, 1);
+        assert_eq!(
+            cli(&args(&["--only", "x-hooks", "bogus"]), input, &g).code,
+            1
+        );
+        assert_eq!(
+            cli(&args(&["--only", "x-hooks", "PreToolUse"]), "not json", &g).code,
+            0
+        );
         assert_eq!(cli(&args(&[]), input, &g).code, 1);
         assert_eq!(
             cli(
@@ -220,7 +235,10 @@ mod tests {
                     "phase-source-hooks",
                     "new-file-hooks",
                     "blocked-fetch-hooks",
-                    "set-down-hooks"
+                    "set-down-hooks",
+                    "repo-safety-hooks",
+                    "agent-model-hooks",
+                    "wakeup-hooks"
                 ]
         );
     }

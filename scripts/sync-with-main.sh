@@ -578,7 +578,7 @@ backup_last() { # git's reason in one line: what the remote said and the rejecti
 backup_delete() { # <branch> <tip judged contained in origin/main>
   local out
   # The lease here is a compare-and-DELETE, not a force: it only adds the condition "the remote still holds the tip
-  # judged contained in main". Never copy it to a push that writes a tip - repo-safety-hooks.sh refuses that, rightly.
+  # judged contained in main". Never copy it to a push that writes a tip - repo_safety_hooks.rs refuses that, rightly.
   if out=$(git push -q --force-with-lease="refs/heads/$1:$2" origin ":refs/heads/$1" 2>&1); then
     echo "sync-with-main: deleted $1 on GitHub - its work is on main"
   else

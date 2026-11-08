@@ -302,9 +302,9 @@
    "declared": "spec-fidelity"
   },
   "### T034 Approach (checklist part A)": {
-   "sha256": "63fd555159dc1ce2045ee2502105a0462975c7d3318b1e4974fdf097e770ef57",
+   "sha256": "95785dc43ddf0d228dd20fa37459ad12018100d9fdca23d63643cd31bc21960e",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T035 Approach (checklist part A)": {
@@ -326,9 +326,9 @@
    "declared": "spec-fidelity"
   },
   "### T038 Approach (checklist part A)": {
-   "sha256": "6a42e54801c0119a5bd733bb35057e106081e363d0c77cd6acaebf8e57b9128b",
+   "sha256": "f685ce326affbe1b6d1ebd13963d8e2be53a6cc280b2871663ffd5b47e31c3fc",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T039 Approach (checklist part A)": {
@@ -344,9 +344,9 @@
    "declared": "spec-fidelity"
   },
   "### T041 Approach (checklist part A)": {
-   "sha256": "255ea617a0df575d9efca2f8494d552be37b479ad6e56046c054409f20c7bd14",
+   "sha256": "c4c619a67921f7e593ce26ac9e4058f9c1991e3dd086844e9a7f4b45b0473f9d",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T042 Approach (checklist part A)": {
@@ -2405,6 +2405,112 @@
      "why": "The pre-filter existed only to keep Python off commands that cannot be a fetch, and FR-007's one process removes that need. It changes what is started, not what is decided."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T041 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "agent-model-hooks moves whole and in-process with its refusal and three recorded permits; clone resolution uses the session's clone_dir() (T013's port); git is asked only when a dispatch names no model and the clone does not resolve.",
+     "class": "within",
+     "why": "How the guard is ported, not what it decides. The request asks for the Rust port; FR-007 asks for one process per tool call; the refusal and permits all move, so nothing is carved out. Verdict parity is held by FR-002 through D4's suite replay, which this block's exits require; the shell itself is outside this bundle and was not read."
+    },
+    {
+     "id": "(b)",
+     "summary": "lib/agent-model-rule.txt moves beside the decider and is compiled in; the suite still holds the root CLAUDE.md to its two clauses.",
+     "class": "within",
+     "why": "Neither request nor spec fixes where the rule's data file lives. It moves with the guard it serves, stays stated once, and the check against CLAUDE.md is kept rather than dropped, so no verdict or suite case is given up."
+    },
+    {
+     "id": "(c)",
+     "summary": "An unknown mode stays an error: --only <guard> <event> exits 1 on an event no guard of the binary takes, and the suite's case stands unchanged.",
+     "class": "within",
+     "why": "Closes round 1's NOT LEGITIMATE on restating this case. Keeping exit 1 with the case's expected verdict unchanged is what FR-002 requires, and no XIV exception is claimed any more. Step 9 still demands every case of the suite pass against the Rust guard."
+    },
+    {
+     "id": "step 9 (removal)",
+     "summary": "The shell and its settings entry are gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 as written: no guard is ever both."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T034 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a",
+     "summary": "The guard moves whole and in-process: its inline Python, every pattern verbatim, the three refusals' words; heredoc blanking through shared::shape::strip_heredocs, quoted-string blanking kept the guard's own.",
+     "class": "within",
+     "why": "Serves FR-002 (same verdicts and outputs) and the request's port to Rust; where the blanking code lives is design. No XIV fix is taken, so none is owed a name."
+    },
+    {
+     "id": "b",
+     "summary": "The escape is decided first, as in the shell: a bare HOST_GIT_OK refused before any rule is read, a reasoned one lifts only the mount rule.",
+     "class": "within",
+     "why": "Preserves the shell's ordering and reach, which FR-002 requires; no case's verdict changes. Ruled on the block's statement, the repository being outside this bundle."
+    },
+    {
+     "id": "c-i",
+     "summary": "test_hooks_cases.py runs tests/hooks/<guard>-hooks.sh where that link exists, else the shell, so the case table replays unchanged.",
+     "class": "within",
+     "why": "Keeps the table's cases running against the port, which is what FR-002 and D4's replay ask, and picks one implementation per guard (FR-003)."
+    },
+    {
+     "id": "c-ii",
+     "summary": "test_guard_firing_log.py's named list of guards drops this guard; the guarantee moves to repo_safety_hooks/tests.rs an_escape_is_recorded_with_its_reason in the same commit, red if the escaped branch writes no firing record.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to keep as it stands: the test's mechanism scans shell permit sites and the guard has no shell after the port, so the entry would check nothing. Purpose survives: the rule is that an escape is recorded, and a named same-commit test fails when the record is absent, which answers round 1's objection. Rests on that impossibility plus the named replacement, not tidiness. Ruled on the block's text; whether the test exists and goes red was not checked, the repository being outside this bundle."
+    },
+    {
+     "id": "exits",
+     "summary": "Done is every case of test-repo-safety-hooks.sh passing against the Rust guard, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit registering the decider; a failure is recorded and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "D3 and D4 as written; FR-003's never-both. FR-002's wider 'its tests' is carried by the hooks-test exit and decision c-i."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T038 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The wakeup guard moves whole and in-process: both layers, the line-at-a-time transcript read behind the same literal pre-filter, the split rule (the call fails closed on an unreadable transcript, the turn end open), the refusals' words; no library, no tool asked.",
+     "class": "within",
+     "why": "A like-for-like port of the guard's behavior, which is what FR-002 requires and what the request's move to Rust means; it keeps every verdict and drops nothing."
+    },
+    {
+     "id": "(b)",
+     "summary": "Stdin that is not JSON is nothing to judge, as for every other guard, by the arbiter's ruling ask:449-T038-garbage: no settings entry of its own, no list, no --only branch; the call layer runs in the one whole-binary process for a ScheduleWakeup call; the suite case keeps its input and its expected verdict becomes a pass, named in the commit and in phase 1's record, citing the ruling; a real call whose transcript cannot be read still refuses.",
+     "class": "within",
+     "why": "It says exactly what FR-002's ruled-apart sentence carries and no more. The GM's request does not speak to this case. It covers the one suite case, adds no special routing, so FR-007's one process holds, names the case's change where FR-002 names such changes, and leaves (a)'s unreadable-transcript refusal standing. The waiver itself is the arbiter's and is not reopened."
+    },
+    {
+     "id": "(c)",
+     "summary": "tests/tooling/test_hook_deps.py's example of a shell guard changes from this guard to record-edit-hooks.sh, the last to be ported; hookdeps.py stays with T050.",
+     "class": "within",
+     "why": "A necessary consequence of deleting this guard's shell (FR-003, D3): the test's example would otherwise name a file that is gone. It changes no verdict and adds no scope."
+    },
+    {
+     "id": "exits and done",
+     "summary": "The suite is replayed against l7r-guard --only wakeup-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; a failure is recorded and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "D3 and D4 as accepted. The --only here is D4's general replay mode for every guard, not the branch for this input that (b) rules out."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3758,6 +3864,109 @@
      "summary": "Green is the guard's suite against the Rust guard plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; red records the failure and stops to make arbiter-ask.",
      "class": "within",
      "why": "D3, D4, FR-003 and FR-004 restated. Each check only enforces what was asked; no carve-out is hidden here."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T041": {
+   "section_sha256": "c4c619a67921f7e593ce26ac9e4058f9c1991e3dd086844e9a7f4b45b0473f9d",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "agent-model-hooks moves whole and in-process with its refusal and three recorded permits; clone resolution uses the session's clone_dir() (T013's port); git is asked only when a dispatch names no model and the clone does not resolve.",
+     "class": "within",
+     "why": "How the guard is ported, not what it decides. The request asks for the Rust port; FR-007 asks for one process per tool call; the refusal and permits all move, so nothing is carved out. Verdict parity is held by FR-002 through D4's suite replay, which this block's exits require; the shell itself is outside this bundle and was not read."
+    },
+    {
+     "id": "(b)",
+     "summary": "lib/agent-model-rule.txt moves beside the decider and is compiled in; the suite still holds the root CLAUDE.md to its two clauses.",
+     "class": "within",
+     "why": "Neither request nor spec fixes where the rule's data file lives. It moves with the guard it serves, stays stated once, and the check against CLAUDE.md is kept rather than dropped, so no verdict or suite case is given up."
+    },
+    {
+     "id": "(c)",
+     "summary": "An unknown mode stays an error: --only <guard> <event> exits 1 on an event no guard of the binary takes, and the suite's case stands unchanged.",
+     "class": "within",
+     "why": "Closes round 1's NOT LEGITIMATE on restating this case. Keeping exit 1 with the case's expected verdict unchanged is what FR-002 requires, and no XIV exception is claimed any more. Step 9 still demands every case of the suite pass against the Rust guard."
+    },
+    {
+     "id": "step 9 (removal)",
+     "summary": "The shell and its settings entry are gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 as written: no guard is ever both."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T034": {
+   "section_sha256": "95785dc43ddf0d228dd20fa37459ad12018100d9fdca23d63643cd31bc21960e",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a",
+     "summary": "The guard moves whole and in-process: its inline Python, every pattern verbatim, the three refusals' words; heredoc blanking through shared::shape::strip_heredocs, quoted-string blanking kept the guard's own.",
+     "class": "within",
+     "why": "Serves FR-002 (same verdicts and outputs) and the request's port to Rust; where the blanking code lives is design. No XIV fix is taken, so none is owed a name."
+    },
+    {
+     "id": "b",
+     "summary": "The escape is decided first, as in the shell: a bare HOST_GIT_OK refused before any rule is read, a reasoned one lifts only the mount rule.",
+     "class": "within",
+     "why": "Preserves the shell's ordering and reach, which FR-002 requires; no case's verdict changes. Ruled on the block's statement, the repository being outside this bundle."
+    },
+    {
+     "id": "c-i",
+     "summary": "test_hooks_cases.py runs tests/hooks/<guard>-hooks.sh where that link exists, else the shell, so the case table replays unchanged.",
+     "class": "within",
+     "why": "Keeps the table's cases running against the port, which is what FR-002 and D4's replay ask, and picks one implementation per guard (FR-003)."
+    },
+    {
+     "id": "c-ii",
+     "summary": "test_guard_firing_log.py's named list of guards drops this guard; the guarantee moves to repo_safety_hooks/tests.rs an_escape_is_recorded_with_its_reason in the same commit, red if the escaped branch writes no firing record.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to keep as it stands: the test's mechanism scans shell permit sites and the guard has no shell after the port, so the entry would check nothing. Purpose survives: the rule is that an escape is recorded, and a named same-commit test fails when the record is absent, which answers round 1's objection. Rests on that impossibility plus the named replacement, not tidiness. Ruled on the block's text; whether the test exists and goes red was not checked, the repository being outside this bundle."
+    },
+    {
+     "id": "exits",
+     "summary": "Done is every case of test-repo-safety-hooks.sh passing against the Rust guard, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit registering the decider; a failure is recorded and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "D3 and D4 as written; FR-003's never-both. FR-002's wider 'its tests' is carried by the hooks-test exit and decision c-i."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T038": {
+   "section_sha256": "50435014e3f34954d4439fa1af531780abc8a123a672d9775bcfb51e41fc3fc6",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The wakeup guard moves whole and in-process: both layers, the line-at-a-time transcript read behind the same literal pre-filter, the split rule (the call fails closed on an unreadable transcript, the turn end open), the refusals' words; no library, no tool asked.",
+     "class": "within",
+     "why": "A like-for-like port of the guard's behavior, which is what FR-002 requires and what the request's move to Rust means; it keeps every verdict and drops nothing."
+    },
+    {
+     "id": "(b)",
+     "summary": "Stdin that is not JSON is nothing to judge, as for every other guard, by the arbiter's ruling ask:449-T038-garbage: no settings entry of its own, no list, no --only branch; the call layer runs in the one whole-binary process for a ScheduleWakeup call; the suite case keeps its input and its expected verdict becomes a pass, named in the commit and in phase 1's record, citing the ruling; a real call whose transcript cannot be read still refuses.",
+     "class": "within",
+     "why": "It says exactly what FR-002's ruled-apart sentence carries and no more. The GM's request does not speak to this case. It covers the one suite case, adds no special routing, so FR-007's one process holds, names the case's change where FR-002 names such changes, and leaves (a)'s unreadable-transcript refusal standing. The waiver itself is the arbiter's and is not reopened."
+    },
+    {
+     "id": "(c)",
+     "summary": "tests/tooling/test_hook_deps.py's example of a shell guard changes from this guard to record-edit-hooks.sh, the last to be ported; hookdeps.py stays with T050.",
+     "class": "within",
+     "why": "A necessary consequence of deleting this guard's shell (FR-003, D3): the test's example would otherwise name a file that is gone. It changes no verdict and adds no scope."
+    },
+    {
+     "id": "exits and done",
+     "summary": "The suite is replayed against l7r-guard --only wakeup-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; a failure is recorded and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "D3 and D4 as accepted. The --only here is D4's general replay mode for every guard, not the branch for this input that (b) rules out."
     }
    ],
    "verdict": "CLEAR"

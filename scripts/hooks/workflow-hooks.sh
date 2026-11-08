@@ -47,7 +47,7 @@ except Exception: pass' 2>/dev/null)"
         printf 'on every agent() call. A deliberate general-purpose stage: GP_OK: <reason> in the script, and name its model.\n' ;;
       MODEL)
         printf '\n\033[1mBLOCKED: an ad-hoc agent() call names no model: %s\033[0m\n' "${got#MODEL }"
-        printf 'As an ad-hoc Agent call must (agent-model-hooks.sh): model: "sonnet" to read, fetch, translate or extract, "opus" for\n'
+        printf 'As an ad-hoc Agent call must (agent_model_hooks.rs): model: "sonnet" to read, fetch, translate or extract, "opus" for\n'
         printf 'anything that judges.\n' ;;
       GUARDED)
         printf '\n\033[1mBLOCKED: `%s` runs through the check-wave workflow, not a script of its own.\033[0m\n' "${got#GUARDED }"

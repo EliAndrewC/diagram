@@ -600,5 +600,32 @@
       "rust_guard_stop_ms": 63.1,
       "set_down_suite_cases": 34
     }
+  },
+  "repo-safety-agent-model-ported": {
+    "quantity": "a call's cost in the repo-safety guard (a Bash ls) and the agent-model guard (an Agent dispatch of a pinned type), each shell's against the Rust guard alone (T034, T041)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/repo-safety-hooks.sh and agent-model-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suites replayed through their links (28 and 20 cases)",
+    "value": {
+      "repo_safety_shell_ms": 35.74,
+      "repo_safety_rust_ms": 19.83,
+      "agent_model_shell_ms": 124.6,
+      "agent_model_rust_ms": 8.86,
+      "repo_safety_suite_cases": 28,
+      "agent_model_suite_cases": 20
+    }
+  },
+  "wakeup-hooks-ported": {
+    "quantity": "a Stop event's cost in the wakeup guard with no wakeup pending, the shell's against the Rust guard alone (T038)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/wakeup-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only wakeup-hooks Stop in the clone, an empty transcript, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (24 cases)",
+    "value": {
+      "shell_stop_ms": 31.11,
+      "rust_guard_stop_ms": 7.22,
+      "wakeup_suite_cases": 24
+    }
   }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for wakeup-hooks.sh - a timed wakeup cannot outlive its purpose (feature 263).
+# Tests for the wakeup guard (rust/guard, replayed through its link) - a timed wakeup cannot outlive its purpose (feature 263).
 # Run: tests/hooks/test-wakeup-hooks.sh   (exit 0 = all green)
 #
 # Every case drives the REAL hook with a REAL payload shape - the Stop payload's `session_crons` entries are the
@@ -8,7 +8,7 @@
 # what tells a wakeup from a reminder and a live loop from a stopped one.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/wakeup-hooks.sh"
+HOOK="$HERE/wakeup-hooks.sh"
 T=$(mktemp -d)
 GUARD_LOG_DIR="$T/log"; export GUARD_LOG_DIR
 HOOK_ERR="$T/err"
@@ -82,7 +82,7 @@ wake_call "$T/plain.jsonl" "x" "x" stop; rc=$?
 printf '{"tool_name":"Bash","tool_input":{"command":"ls"}}' | "$HOOK" pretool 2>/dev/null; rc=$?
 [ "$rc" -eq 0 ] && ok "any other tool is ignored" || no "another tool was refused" "(rc=$rc)"
 printf 'not json' | "$HOOK" pretool 2>/dev/null; rc=$?
-[ "$rc" -eq 2 ] && ok "an unreadable payload is refused - closed on the call (plan review)" || no "a garbage payload let a wakeup through" "(rc=$rc)"
+[ "$rc" -eq 0 ] && ok "an input that is not JSON is nothing to judge, as for every guard (the round arbiter, ask:449-T038-garbage)" || no "a garbage payload was refused" "(rc=$rc)"
 wake_call "$T/missing.jsonl" "fallback" "$WAKE_PROMPT"; rc=$?
 [ "$rc" -eq 2 ] && ok "a missing transcript is refused - no live loop can be shown" || no "a missing transcript let a wakeup through" "(rc=$rc)"
 printf '["/loop x"]\n' > "$T/broken.jsonl"  # valid JSON but not an entry: it reaches the parser's error branch

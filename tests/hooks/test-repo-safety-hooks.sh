@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for repo-safety-hooks.sh. Run: tests/hooks/test-repo-safety-hooks.sh   (exit 0 = all green)
+# Tests for the repo-safety guard (rust/guard, replayed through its link). Run: tests/hooks/test-repo-safety-hooks.sh   (exit 0 = all green)
 #
 # TWO DIRECTIONS, always (the project's standing rule for a guard): it must FIRE on the case it
 # exists to catch, and STAY QUIET on correct work. The second half is the one that matters most -

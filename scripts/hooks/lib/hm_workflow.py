@@ -9,7 +9,7 @@ the review occasions, escalation. This guard closes that:
 
 - a script whose `agent(` call names no `agentType` runs the workflow's default subagent, which loads every CLAUDE.md and every
   tool (~35k written at its first request against ~4k for a typed one): refused unless the script says `GP_OK: <reason>`;
-  an untyped or ad-hoc call names its `model` either way, as an ad-hoc Agent call must (`agent-model-hooks.sh`);
+  an untyped or ad-hoc call names its `model` either way, as an ad-hoc Agent call must (`agent_model_hooks.rs`);
 - a script that calls a DEFINED agent of this project (`.claude/agents/<type>.md`) is refused with the `check-wave` call: its
   units can be held to the per-dispatch guards only when they are known before the run starts, as `check-wave`'s args are;
   likewise a script that calls `workflow('check-wave', ...)` with arguments computed at run time;
@@ -102,7 +102,9 @@ def agent_hooks(settings: pathlib.Path) -> list[str]:
     out = []
     for m in data.get("hooks", {}).get("PreToolUse", []):
         matcher = m.get("matcher") or ""
-        if matcher and re.fullmatch(matcher, "Agent"):
+        # GUARD_EDIT_OK: feature 449 - an entry with no matcher takes every tool, the Agent tool among them: the one entry of the Rust guards is such
+        # an entry, so every Agent guard ported since T006 was silently skipped for a wave's units
+        if not matcher or re.fullmatch(matcher, "Agent"):
             out.extend(h["command"] for h in m.get("hooks", []) if h.get("type", "command") == "command")
     return out
 

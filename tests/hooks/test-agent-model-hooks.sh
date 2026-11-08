@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for agent-model-hooks.sh - an ad-hoc agent dispatch names its model, or is refused (feature 252).
+# Tests for the agent-model guard (rust/guard, replayed through its link) - an ad-hoc agent dispatch names its model, or is refused (feature 252).
 # Run: tests/hooks/test-agent-model-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 252 - a NEW guard's companion suite.
 #
@@ -9,7 +9,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # GUARD_EDIT_OK: feature 252 - AGENT_MODEL_HOOK lets the proof-of-firing run this suite against a MUTATED copy
 # of the guard (its refusal removed) and watch it go red, without touching the real file.
-HOOK="${AGENT_MODEL_HOOK:-$HERE/../../scripts/hooks/agent-model-hooks.sh}"
+HOOK="${AGENT_MODEL_HOOK:-$HERE/agent-model-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

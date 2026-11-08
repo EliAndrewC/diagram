@@ -324,7 +324,9 @@ LOGDIR = pathlib.Path(tempfile.mkdtemp(prefix="guardlog-fixtures-"))
 
 
 def run(hook: str, cases: list[tuple[str, str, str]]) -> int:
-    script = HERE / "../../scripts/hooks" / f"{hook}-hooks.sh"
+    # a ported guard replays through its link (feature 449 T034 decision (c)); its shell is gone
+    link = HERE / f"{hook}-hooks.sh"
+    script = link if link.is_symlink() else HERE / "../../scripts/hooks" / f"{hook}-hooks.sh"
     bad = 0
     print(f"{hook}-hooks.sh")
     for label, payload, want in cases:
