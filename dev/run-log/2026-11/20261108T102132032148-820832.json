@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-08T10:21:32Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 137,
+  "result": "green",
+  "commit": "6ef309af3",
+  "mode": "full",
+  "selected": 8174,
+  "host": {
+    "load": [
+      2.19,
+      5.59
+    ],
+    "mem_avail_mb": [
+      9384,
+      8954
+    ],
+    "cpu_temp_c": [
+      78.0,
+      88.0
+    ],
+    "stall_s": {
+      "cpu": 1.7,
+      "io": 0.7,
+      "io_full": 0.6,
+      "memory": 0.2
+    },
+    "throttle_ms": {
+      "core": 10305,
+      "package": 4704
+    }
+  },
+  "phases": {
+    "preflight": 10.0,
+    "reference": 0.0,
+    "counters-inert": 6.0,
+    "static": 13.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "seeds": 11.0,
+    "pytest": 125.0,
+    "floors": 4.0,
+    "test-full": 131.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "a non-module file under tests/ changed: tests/_scripts.py",
+  "collected": 8174
+}
