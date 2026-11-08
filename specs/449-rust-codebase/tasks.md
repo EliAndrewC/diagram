@@ -49,8 +49,6 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T010 [US1] `main-tree-hooks`: its decider `rust/guard/src/guards/main_tree_hooks.rs`, its suite `tests/hooks/test-main-tree-hooks.sh` replayed against `l7r-guard --only main-tree-hooks`, then `scripts/hooks/main-tree-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: main-tree is Rust: 87 of 87 suite cases green against l7r-guard, the shell deleted; a Bash ls 60.7 ms -> the dispatcher's 10.5 ms (m:main-tree-hooks-ported)
-- [ ] T011 [US1] `record-edit-hooks`: its decider `rust/guard/src/guards/record_edit_hooks.rs`, its suite `tests/hooks/test-record-edit-hooks.sh` replayed against `l7r-guard --only record-edit-hooks`, then `scripts/hooks/record-edit-hooks.sh` and its settings entry removed
-      research: rendering
 - [x] T012 [US1] `event-log-hooks`: its decider `rust/guard/src/guards/event_log_hooks.rs`, its suite `tests/hooks/test-event-log-hooks.sh` replayed against `l7r-guard --only event-log-hooks`, then `scripts/hooks/event-log-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: the event log is Rust: 18 of 18 suite cases green, its lines byte-identical to the Python's; a Bash ls 32.9 ms -> the dispatcher's 12.4 ms (m:event-log-hooks-ported)
@@ -144,8 +142,6 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T042 [US1] `agent-prefix-hooks`: its decider `rust/guard/src/guards/agent_prefix_hooks.rs`, its suite `tests/hooks/test-agent-prefix-hooks.sh` replayed against `l7r-guard --only agent-prefix-hooks`, then `scripts/hooks/agent-prefix-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed in batch T040+T042: agent-prefix and workflow are Rust
-- [ ] T043 [US1] `check-bundle-hooks`: its decider `rust/guard/src/guards/check_bundle_hooks.rs`, its suite `tests/hooks/test-check-bundle-hooks.sh` replayed against `l7r-guard --only check-bundle-hooks`, then `scripts/hooks/check-bundle-hooks.sh` and its settings entry removed
-      research: rendering
 - [x] T044 [US1] `escalation-hooks`: its decider `rust/guard/src/guards/escalation_hooks.rs`, its suite `tests/hooks/test-escalation-hooks.sh` replayed against `l7r-guard --only escalation-hooks`, then `scripts/hooks/escalation-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: escalation is Rust
@@ -158,12 +154,13 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T047 [US1] `new-file-hooks`: its decider `rust/guard/src/guards/new_file_hooks.rs`, its suite `tests/hooks/test-new-file-hooks.sh` replayed against `l7r-guard --only new-file-hooks`, then `scripts/hooks/new-file-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: new-file is Rust
-- [ ] T048 [US1] `checks-hooks`: its decider `rust/guard/src/guards/checks_hooks.rs`, its suite `tests/hooks/test-checks-hooks.sh` replayed against `l7r-guard --only checks-hooks`, then `scripts/hooks/checks-hooks.sh` and its settings entry removed
-      research: rendering
 - [x] T049 [US1] `set-down-hooks`: its decider `rust/guard/src/guards/set_down_hooks.rs`, its suite `tests/hooks/test-set-down-hooks.sh` replayed against `l7r-guard --only set-down-hooks`, then `scripts/hooks/set-down-hooks.sh` and its settings entry removed
       research: rendering
 
 ### User Story 1 - the suites' tooling and the close (plan work breakdown 6-8)
+
+- [ ] T053 [US1] The plain-call gate for the guards moved to phase 3: `record-edit-gate` in `rust/guard` answers a Bash call or an Edit that cannot concern `record-edit-hooks.sh` with no process, and runs the shell guard for one that can; its two settings entries gone (the round arbiter, `ask:449-hm-checks-route`, step 1)
+      research: rendering
       verify: DONE. landed in batch T039+T049: blocked-fetch and set-down are Rust
 
 - [ ] T050 [US1] The four Python helpers under `tests/hooks/` ported to the guard crate: `hookdeps.py` as `l7r-guard deps` (which suites a change makes stale, keyed on the Rust sources), `hooktrace.py` as `l7r-guard trace`, `hookbench.py` as `l7r-guard bench`, `test_hooks_cases.py`'s cases as the crate's tests; the `hooks-test` recipe calling them; the Python deleted
@@ -171,6 +168,15 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [ ] T051 [US1] The guard libraries left unused deleted: each `scripts/hooks/lib/*.py`, `guardlog.sh` and `agent-model-rule.txt` reader removed with its last caller; `make audit` and `make guard-log` read the Rust guard's lines unchanged
       research: rendering
 - [ ] T052 [US1] The close (SC-001, US1 scenarios 1-3, FR-010): `m:hooks-bash` and `m:pair-hooks-suite` re-run and recorded beside their first values in `measurements.json`; phase 1's share of BOTH censuses - every `.py` and every inline site under `scripts/hooks/` and `tests/hooks/` - returns nothing (`m:python-census`, `m:inline-python-census` re-run); SC-001 met or the phase not closed
+      research: rendering
+
+### Phase 3 (moved by the round arbiter's ruling `ask:449-hm-checks-route`, 2026-11-08; ported in one cut with their Python callers, FR-001)
+
+- [ ] T011 [US1] `record-edit-hooks`: its decider `rust/guard/src/guards/record_edit_hooks.rs`, its suite `tests/hooks/test-record-edit-hooks.sh` replayed against `l7r-guard --only record-edit-hooks`, then `scripts/hooks/record-edit-hooks.sh` and its settings entry removed
+      research: rendering
+- [ ] T043 [US1] `check-bundle-hooks`: its decider `rust/guard/src/guards/check_bundle_hooks.rs`, its suite `tests/hooks/test-check-bundle-hooks.sh` replayed against `l7r-guard --only check-bundle-hooks`, then `scripts/hooks/check-bundle-hooks.sh` and its settings entry removed
+      research: rendering
+- [ ] T048 [US1] `checks-hooks`: its decider `rust/guard/src/guards/checks_hooks.rs`, its suite `tests/hooks/test-checks-hooks.sh` replayed against `l7r-guard --only checks-hooks`, then `scripts/hooks/checks-hooks.sh` and its settings entry removed
       research: rendering
 
 ## Dependencies

@@ -180,6 +180,7 @@ watching a test go red.
 | `house_style_hooks.rs` + `check-house-style-delta.py` | corrects dashes and spellings in Edit, Write and Bash payloads; `make quick` fails on one in the delta | - |
 | `make_only_hooks.rs` | refuses a bare interpreter or pytest; rewrites a targeted pytest to `make test-file` | - |
 | `guard_file_hooks.rs` | a guard-file edit carries `GUARD_EDIT_OK` and a reason, or follows `make guard-edit` (the root Makefile: only that); a Makefile recipe comment must not run | - |
+| `record_edit_gate.rs` | runs `record-edit-hooks.sh` (phase 3: the round arbiter, `ask:449-hm-checks-route`) only for a call that can concern it, so a plain Bash call or Edit starts no Python | none of its own |
 | `clone_sync_hooks.rs` | forbidden names, name-routing, a live claim, a stale clean HEAD (synced in), a stray mirror commit | - |
 | the main-tree guard (`rust/guard/src/guards/main_tree_hooks.rs`) | a write that would land in the mirror is moved to the clone; one naming it is refused | `MAIN_TREE_OK` |
 | `discard_hooks.rs` | a checkout or restore that would discard uncommitted work | `DISCARD_OK` |

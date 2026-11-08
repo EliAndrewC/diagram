@@ -740,5 +740,18 @@
       "rust_guard_edit_ms": 8.26,
       "guard_file_suite_cases": 55
     }
+  },
+  "record-edit-gate": {
+    "quantity": "a plain Bash call's cost in the record-edit guard, the shell's (which started Python on every call) against the Rust gate that starts nothing for it (T053)",
+    "observed": "2026-11-08",
+    "subject": "scripts/hooks/record-edit-hooks.sh pretool-bash against scripts/hooks/l7r-guard.sh --only record-edit-gate PreToolUse in the clone, a plain ls, no plan review holding text, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50 twice), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work, at load about 1.7; no Python on such a call is observed by tests/hooks/test-record-edit-gate.sh's sentinel, and that suite drives the 15 record-edit cases through the gate",
+    "value": {
+      "shell_bash_ms": 53.64,
+      "rust_gate_bash_ms": 10.71,
+      "rust_gate_bash_ms_second_run": 10.66,
+      "record_edit_suite_cases": 15
+    }
   }
 }

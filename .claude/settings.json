@@ -41,28 +41,6 @@
     ],
     "PreToolUse": [
       {
-        "_comment": "GUARD_EDIT_OK: feature 258 - registering a NEW guard, record-edit-hooks.sh: an edit aimed at an assembled record page is re-aimed at the one fragment holding its text, or refused where no fragment or several hold it. No existing guard changes.",
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/record-edit-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/record-edit-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "_comment": "GUARD_EDIT_OK: feature 375 FR-003(b) - record-edit-hooks.sh on Bash too: `make apply-edits` on a frozen page is admitted only for its round's own EDIT blocks.",
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/record-edit-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/record-edit-hooks.sh\"; exec \"$h\" pretool-bash",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
           {

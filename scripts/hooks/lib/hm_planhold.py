@@ -80,9 +80,19 @@ def live(h: Mapping[str, Any], now: float) -> bool:
     return h.get("state") == "running" and not dead(h, now)
 
 
+def purge(state: dict[str, Any], now: float) -> None:
+    """A dispatch another guard refused never launches and never returns, so its hold stayed for good, and a hold in the state starts
+    Python on every Bash call (feature 449 T053; the round arbiter on `ask:449-T053-round3`). `refusal` already ignores one past
+    `PENDING_S`, so no verdict moves. A running hold past `HOLD_MAX_S` is NOT purged: it refuses until `PLAN_EDIT_OK`."""
+    holds = state.get("plan_holds") or {}
+    for tid in [t for t, h in holds.items() if h.get("state") == "pending" and now - float(h.get("t", 0)) > PENDING_S]:
+        del holds[tid]
+
+
 def snapshot(state: dict[str, Any], root: Path | None, tid: str, now: float) -> None:
     """Before a write (the round arbiter's fix on hour:385-approach-checklist@30): the texts each live hold holds, kept under the
     call's id, so `restore` sees a change however the call named the file - the text match below missed "pl" + "an.md"."""
+    purge(state, now)
     if root is None:
         return
     snaps = {hid: held(root, h) for hid, h in (state.get("plan_holds") or {}).items() if live(h, now)}
@@ -93,6 +103,11 @@ def snapshot(state: dict[str, Any], root: Path | None, tid: str, now: float) -> 
 def restore(state: dict[str, Any], root: Path | None, tid: str) -> str:
     """After the write: any held text it changed is written back, and the change refused, naming the review; or ''."""
     snaps = (state.get("plan_snaps") or {}).pop(tid, None)
+    # A SNAPSHOT DIES WITH ITS HOLD (feature 449 T053): a call another guard refuses never reaches its own `after`, and eight such
+    # snapshots from reviews long returned made `checks-hooks.sh after` start Python on every Bash call and the state file 899 KB
+    open_holds = state.get("plan_holds") or {}
+    for other in [t for t, s in (state.get("plan_snaps") or {}).items() if not set(s) & set(open_holds)]:
+        del state["plan_snaps"][other]
     if not state.get("plan_snaps"):
         state.pop("plan_snaps", None)  # gone when empty: `checks-hooks.sh after` asks the state file for the key before Python
     if root is None or not snaps:

@@ -97,12 +97,6 @@
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
-  "### T029 Approach (checklist part A)": {
-   "sha256": "544289f6a1fd04821183ee1ba457467ff87cf92a3f868bc3311472d9e57beb88",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
-  },
   "### T043 Approach (checklist part A)": {
    "sha256": "b512a9f598fe04a0738b1d308e65d38d04ee88640c27c34a7a582cbddc810197",
    "verdict": "CLEAR",
@@ -132,6 +126,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
+  },
+  "### T053 Approach (checklist part A)": {
+   "sha256": "b7959f0f09940bd193b10ac5390ac58e13546fc0eabefa1e68e520eb82ff66bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -2682,6 +2682,98 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T053 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-record-edit-alone",
+     "summary": "T053 changes record-edit only: check-bundle runs on an Agent call alone and checks-hooks.sh after greps its state in shell, so neither starts Python on a plain call.",
+     "class": "within",
+     "why": "FR-001's clause is that none of the three may start Python on a plain Bash call or plain Edit; a guard that already does not needs no change. The premise is a dated reading with its sources named. The ruling ask:449-hm-checks-route is settled and not reopened."
+    },
+    {
+     "id": "b-test-in-rust-deciding-stays",
+     "summary": "The test of whether a call can concern the guard moves to Rust; record-edit-hooks.sh runs unchanged behind it and its reply becomes the binary's answer.",
+     "class": "within",
+     "why": "FR-001 puts the guard and hm_checks/hm_record in phase 3 and requires only that until then they not start Python on a plain call; a filter in front is that arrangement. The gate reads the state and writes nothing, so one implementation still writes checks-open.json. It is not two implementations of one decision under FR-003: the deciding stays in the Python alone."
+    },
+    {
+     "id": "b-bash-named-triggers",
+     "summary": "A Bash call that names apply-edits or runs make done by hm_checks' own pattern starts the shell guard.",
+     "class": "within",
+     "why": "These are the commands the guard exists for, not plain calls."
+    },
+    {
+     "id": "b-bash-while-hold",
+     "summary": "While a plan review holds text, EVERY Bash call starts the shell guard and so Python, including an unrelated ls.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real carve-out from 'never on a plain Bash call' and is ruled on its own. Applying the rule literally defeats the purpose: any command can rewrite held text, so no narrower test on the command exists, skipping Python would drop the hold's verdicts against FR-002, and the deciding cannot move to Rust before phase 3 because the settled ruling ports it in one cut. It is confined to the span of a plan review's hold, the 'rare branch' FR-001 names, and ends in phase 3."
+    },
+    {
+     "id": "b-edit-named-files",
+     "summary": "An Edit or Write starts the shell guard when its file is one subject_of_path freezes or page_dir_for re-aims.",
+     "class": "within",
+     "why": "Those files are what the guard acts on, so such an Edit is not a plain one."
+    },
+    {
+     "id": "b-edit-hold-plan-only",
+     "summary": "During a hold, only an Edit or Write of a specs/*/plan.md reaches the guard; any other file starts nothing.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE item is cured. The change moves toward the request's clause: an Edit of an unrelated file during a hold is the plain case and now starts no Python."
+    },
+    {
+     "id": "b-edit-write-together",
+     "summary": "The gate treats Write as it treats Edit, though the goal and FR-001 say plain Edit.",
+     "class": "within",
+     "why": "record-edit's settings entry covers Edit and Write together; the same filter serves the same clause and adds no behavior."
+    },
+    {
+     "id": "b-state-worktree",
+     "summary": "The state is found as hm_checks.state_path finds it, a .git file resolved through its gitdir and commondir.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE fallback is gone; this is the Python's own resolution carried over, so the hold is seen in a worktree."
+    },
+    {
+     "id": "b-no-repository",
+     "summary": "With no repository there is no state and so no hold, as state_path returning None gives.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE fallback is gone; the case now matches the Python it fronts."
+    },
+    {
+     "id": "constraint-fr007-such-a-call",
+     "summary": "FR-007 is read as one process on a plain call; a call that concerns the guard runs the Rust binary, the shell guard and Python.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-007 is unconditional and this is less than it says, so it is ruled. FR-001's phase-3 clause keeps this guard's Python until phase 3 and bars it only on a plain call, so one process on a concerning call is impossible before that cut. It is transitional and ends with the phase-3 port."
+    },
+    {
+     "id": "order-exits-budget",
+     "summary": "Before T050-T052, the phase's close measures it; exits by suite, rust-test, cover and hooks-test, a red exit to arbiter-ask; no work budget.",
+     "class": "within",
+     "why": "Sequencing and process inside the feature; nothing asked for is reduced."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T053 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T053-round3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4514,6 +4606,82 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T053": {
+   "section_sha256": "41bbcd38b93318208afcab1de009e1ff3cbdb855024e1382c5a6d7954edac0ec",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-record-edit-alone",
+     "summary": "T053 changes record-edit only: check-bundle runs on an Agent call alone and checks-hooks.sh after greps its state in shell, so neither starts Python on a plain call.",
+     "class": "within",
+     "why": "FR-001's clause is that none of the three may start Python on a plain Bash call or plain Edit; a guard that already does not needs no change. The premise is a dated reading with its sources named. The ruling ask:449-hm-checks-route is settled and not reopened."
+    },
+    {
+     "id": "b-test-in-rust-deciding-stays",
+     "summary": "The test of whether a call can concern the guard moves to Rust; record-edit-hooks.sh runs unchanged behind it and its reply becomes the binary's answer.",
+     "class": "within",
+     "why": "FR-001 puts the guard and hm_checks/hm_record in phase 3 and requires only that until then they not start Python on a plain call; a filter in front is that arrangement. The gate reads the state and writes nothing, so one implementation still writes checks-open.json. It is not two implementations of one decision under FR-003: the deciding stays in the Python alone."
+    },
+    {
+     "id": "b-bash-named-triggers",
+     "summary": "A Bash call that names apply-edits or runs make done by hm_checks' own pattern starts the shell guard.",
+     "class": "within",
+     "why": "These are the commands the guard exists for, not plain calls."
+    },
+    {
+     "id": "b-bash-while-hold",
+     "summary": "While a plan review holds text, EVERY Bash call starts the shell guard and so Python, including an unrelated ls.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a real carve-out from 'never on a plain Bash call' and is ruled on its own. Applying the rule literally defeats the purpose: any command can rewrite held text, so no narrower test on the command exists, skipping Python would drop the hold's verdicts against FR-002, and the deciding cannot move to Rust before phase 3 because the settled ruling ports it in one cut. It is confined to the span of a plan review's hold, the 'rare branch' FR-001 names, and ends in phase 3."
+    },
+    {
+     "id": "b-edit-named-files",
+     "summary": "An Edit or Write starts the shell guard when its file is one subject_of_path freezes or page_dir_for re-aims.",
+     "class": "within",
+     "why": "Those files are what the guard acts on, so such an Edit is not a plain one."
+    },
+    {
+     "id": "b-edit-hold-plan-only",
+     "summary": "During a hold, only an Edit or Write of a specs/*/plan.md reaches the guard; any other file starts nothing.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE item is cured. The change moves toward the request's clause: an Edit of an unrelated file during a hold is the plain case and now starts no Python."
+    },
+    {
+     "id": "b-edit-write-together",
+     "summary": "The gate treats Write as it treats Edit, though the goal and FR-001 say plain Edit.",
+     "class": "within",
+     "why": "record-edit's settings entry covers Edit and Write together; the same filter serves the same clause and adds no behavior."
+    },
+    {
+     "id": "b-state-worktree",
+     "summary": "The state is found as hm_checks.state_path finds it, a .git file resolved through its gitdir and commondir.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE fallback is gone; this is the Python's own resolution carried over, so the hold is seen in a worktree."
+    },
+    {
+     "id": "b-no-repository",
+     "summary": "With no repository there is no state and so no hold, as state_path returning None gives.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE fallback is gone; the case now matches the Python it fronts."
+    },
+    {
+     "id": "constraint-fr007-such-a-call",
+     "summary": "FR-007 is read as one process on a plain call; a call that concerns the guard runs the Rust binary, the shell guard and Python.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-007 is unconditional and this is less than it says, so it is ruled. FR-001's phase-3 clause keeps this guard's Python until phase 3 and bars it only on a plain call, so one process on a concerning call is impossible before that cut. It is transitional and ends with the phase-3 port."
+    },
+    {
+     "id": "order-exits-budget",
+     "summary": "Before T050-T052, the phase's close measures it; exits by suite, rust-test, cover and hooks-test, a red exit to arbiter-ask; no work budget.",
+     "class": "within",
+     "why": "Sequencing and process inside the feature; nothing asked for is reduced."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

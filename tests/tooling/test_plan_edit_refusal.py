@@ -67,3 +67,21 @@ def test_a_running_review_keeps_its_hold_when_a_later_dispatch_of_its_task_is_re
     ph.hold(state, "t2", "read /tmp/l7r-check/plan-385-x-T05/MANIFEST.md", 110.0)  # refused: never launched
     edit = {"file_path": str(plan), "old_string": "the held decision text", "new_string": "x"}
     assert "agent agent9" in ph.refusal(state, root, "Edit", edit, 110.0 + ph.PENDING_S + 1, False)
+
+
+def test_a_snapshot_dies_with_its_hold() -> None:
+    """A call another guard refused never reached its own `after`: its snapshot once outlived the review and started Python on every Bash call (feature 449 T053)."""
+    state: dict = {"plan_holds": {"open": {}}, "plan_snaps": {"gone": {"returned": ["x"]}, "kept": {"open": ["y"]}, "mine": {"returned": ["z"]}}}
+    assert ph.restore(state, None, "mine") == ""
+    assert state["plan_snaps"] == {"kept": {"open": ["y"]}}
+    state["plan_holds"] = {}
+    assert ph.restore(state, None, "other") == ""
+    assert "plan_snaps" not in state
+
+
+def test_a_hold_that_never_launched_is_purged_and_a_running_one_is_not() -> None:
+    old, fresh = {"state": "pending", "t": 0.0}, {"state": "pending", "t": 990.0}
+    running = {"state": "running", "t": 0.0, "aid": "a"}
+    state: dict = {"plan_holds": {"old": old, "fresh": fresh, "running": running}}
+    ph.snapshot(state, None, "call", 1000.0)
+    assert state["plan_holds"] == {"fresh": fresh, "running": running}
