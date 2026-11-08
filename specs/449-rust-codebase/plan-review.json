@@ -410,9 +410,9 @@
    "declared": "spec-fidelity"
   },
   "### T052 Approach (checklist part A)": {
-   "sha256": "b1e5ce325aa768450818196bc7b2e2bc323c0160753b86cd3f8220f0c195e591",
+   "sha256": "540981c060278b30b6f8d59e2131ad036efb81f87fa8b5bb594df26f72050c4f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   }
  },
@@ -2509,6 +2509,51 @@
      "summary": "The suite is replayed against l7r-guard --only wakeup-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; a failure is recorded and goes to make arbiter-ask.",
      "class": "within",
      "why": "D3 and D4 as accepted. The --only here is D4's general replay mode for every guard, not the branch for this input that (b) rules out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T052 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T052-carry-garbage-case",
+     "summary": "Phase 1's record names the wakeup guard's non-JSON stdin suite case, whose expected verdict changed by the arbiter's ruling ask:449-T038-garbage (FR-002).",
+     "class": "within",
+     "why": "The new line. FR-002 already carries the ruling; this only records it, on the same footing FR-002 sets for a changed case (named in the phase's record). It changes no verdict, excuses no port and removes nothing the request or spec asks for. It is the case ruled apart, alongside and not instead of the two XIV fixes step 9 still requires the record to name."
+    },
+    {
+     "id": "T052-order-last",
+     "summary": "T052 is the last task of phase 1.",
+     "class": "within",
+     "why": "A phase can only close on its measured outcome after its work is done; FR-001's phase order and FR-010's end-of-phase measurement require it."
+    },
+    {
+     "id": "T052-green-exit",
+     "summary": "Green exit: figures re-run and recorded beside their first values, SC-001 met, both censuses' phase-1 share empty.",
+     "class": "within",
+     "why": "Carries FR-010, SC-001 and FR-001's re-run of both censuses at each phase's end. Only phase 1's share can be empty at phase 1's end; the later shares belong to their own phases and SC-005 holds the whole at close."
+    },
+    {
+     "id": "T052-red-exit",
+     "summary": "Red exit: record what failed, set the task down, stop to make arbiter-ask.",
+     "class": "within",
+     "why": "Process on failure. It relaxes no requirement: the phase does not close red."
+    },
+    {
+     "id": "T052-landing",
+     "summary": "Lands by make land-tooling with no work budget and nothing rolled.",
+     "class": "within",
+     "why": "Hooks and tooling move no map or researched value, so nothing here narrows the request; FR-002's map allowance is untouched."
+    },
+    {
+     "id": "T052-done-measured",
+     "summary": "Done: SC-001 met, the phase's measurements in dev/ as well as beside their first values, the record naming the two XIV fixes.",
+     "class": "within",
+     "why": "Carries SC-001, FR-010 (recorded in dev/) and FR-002 (changed cases named in the phase's record) at their stated strength."
     }
    ]
   }
