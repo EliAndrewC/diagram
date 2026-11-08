@@ -550,5 +550,17 @@
       "readme_suite_cases": 28,
       "download_copy_suite_cases": 21
     }
+  },
+  "phase-source-hooks-ported": {
+    "quantity": "a Read's cost in the phase-source guard with nothing held, the shell's against the Rust guard alone (T046): no speedup on this path, because the shell left before any Python when no phase-sources.json exists, and the Rust figure is the whole wrapper and process start, which in production is shared by every guard of the event",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/phase-source-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only phase-source-hooks PreToolUse in the clone, PHASE_SOURCE_GLOB matching nothing, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (17 cases)",
+    "value": {
+      "shell_read_ms": 5.88,
+      "rust_guard_read_ms": 9.84,
+      "phase_source_suite_cases": 17
+    }
   }
 }

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for phase-source-hooks.sh - a stage being rebuilt is never read from its old code while its task runs (feature 444).
+# Tests for the phase-source guard (rust/guard, replayed through its link) - a stage being rebuilt is never read from its old code while its task runs (feature 444).
 # Run: tests/hooks/test-phase-source-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 444 - a NEW guard's companion suite.
 #
@@ -7,7 +7,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # PHASE_SOURCE_HOOK lets the proof-of-firing run this suite against a mutated copy of the guard and watch it go red.
-HOOK="${PHASE_SOURCE_HOOK:-$HERE/../../scripts/hooks/phase-source-hooks.sh}"
+HOOK="${PHASE_SOURCE_HOOK:-$HERE/phase-source-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

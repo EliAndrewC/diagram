@@ -5,7 +5,7 @@ WHY (the GM, 2026-10-30): "a big part of the goal for the rewrite is that we are
 because the old algorithms were computationally inefficient ... My biggest fear with this ... is that ... you would just end up
 re-implementing the same bad algorithms." A phase task (a `tasks.md` block carrying `phase: <stage>`) rebuilds its stage in Rust
 from the stage's greenfield derivation (feature 444 FR-015, FR-017); nothing stopped the session writing it from reading today's
-Python as it wrote. So `make task-start` on such a task records the stage's old modules here, and `phase-source-hooks.sh` refuses
+Python as it wrote. So `make task-start` on such a task records the stage's old modules here, and `phase_source_hooks.rs` refuses
 a read of them until the task is ticked; `make phase-read FILE= WHY=` lets one file be read for ten minutes, the reason logged.
 
 THE OLD CODE: the module defining `stage_<phase>` (its subpackage's siblings with it, `work_budget_bundle.stage_files`), every

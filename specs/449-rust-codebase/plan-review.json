@@ -374,9 +374,9 @@
    "declared": "spec-fidelity"
   },
   "### T046 Approach (checklist part A)": {
-   "sha256": "bff9372e92c07e91c7131ec5037889587812f47b514335892e9557e9afdd1cd0",
+   "sha256": "728c02ae7a4724ca335f1703dbeb538fbeac0ebf50175551b5cbbb682727fe08",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T047 Approach (checklist part A)": {
@@ -2242,6 +2242,51 @@
      "why": "D4 and FR-002 for the suite, FR-004 and FR-008 for the unit tests and coverage. The red exit leaves the shell running, which is FR-003. Nothing asked is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T046 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T046-a1-port-whole",
+     "summary": "The guard and its library both move to Rust: every rule of decide and the refusal's words carried over.",
+     "class": "within",
+     "why": "The request makes this a Rust codebase with no hook carve-out left in its last sentence; FR-001 replaces every tracked Python file and FR-002 requires the same verdicts and outputs. Carrying every rule and the refusal's words is that requirement, with nothing dropped."
+    },
+    {
+     "id": "T046-a2-git-only-with-config",
+     "summary": "git is asked by path only while a phase-sources.json exists, so an ordinary Read or Bash call starts no process.",
+     "class": "within",
+     "why": "An implementation choice about when a subprocess is spawned, not about what is decided. It serves the request's stated complaint (inefficiency) and SC-001. FR-002 still binds it: the plan's exit is every suite case passing against the Rust guard, so a verdict that differed would fail the task."
+    },
+    {
+     "id": "T046-a3-glob-in-process",
+     "summary": "compgen -G becomes a small in-process expansion of the same two patterns.",
+     "class": "within",
+     "why": "Same two patterns, so the same search; the shell builtin cannot survive the shell's removal, and the suite replay (D4) holds the verdicts."
+    },
+    {
+     "id": "T046-a4-library-removal-timing",
+     "summary": "hm_phase_source.py is removed in this task where its only other readers allow (git grep hm_phase_source), else with its last caller at T051.",
+     "class": "within",
+     "why": "Excepts nothing: the library is still deleted, under FR-001, and the only variable is which task deletes it. Keeping it while another not-yet-ported piece reads it is what FR-002 (replaced before deleted) and FR-003 (Python runs until its replacement passes) require; this guard itself stops using it, so no piece runs both. The search is named and is a whole-repository git grep of the module's name; the deferred branch has a named end, T051."
+    },
+    {
+     "id": "T046-order-and-switch",
+     "summary": "Lands after T005, independent of the other guards; the shell script and its settings entry go in the commit that registers the decider, after the suite passes against l7r-guard --only phase-source-hooks.",
+     "class": "within",
+     "why": "This is D3 and D4 as accepted, and FR-003's never-both. FR-001's hooks-first phase order is unchanged."
+    },
+    {
+     "id": "T046-landing-and-exits",
+     "summary": "Lands by make land-tooling with no work budget; green is the suite, make rust-test, cover and make hooks-test; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Process for this one task. Green names the guard's suite in full (FR-002, SC-004) and the coverage floor (FR-004); no case, tree or requirement is excused."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3436,6 +3481,50 @@
      "summary": "Green is the guard's suite against l7r-guard --only claims-file-hooks, make rust-test, cover and hooks-test; red records the failure and stops to make arbiter-ask.",
      "class": "within",
      "why": "D4 and FR-002 for the suite, FR-004 and FR-008 for the unit tests and coverage. The red exit leaves the shell running, which is FR-003. Nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T046": {
+   "section_sha256": "728c02ae7a4724ca335f1703dbeb538fbeac0ebf50175551b5cbbb682727fe08",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T046-a1-port-whole",
+     "summary": "The guard and its library both move to Rust: every rule of decide and the refusal's words carried over.",
+     "class": "within",
+     "why": "The request makes this a Rust codebase with no hook carve-out left in its last sentence; FR-001 replaces every tracked Python file and FR-002 requires the same verdicts and outputs. Carrying every rule and the refusal's words is that requirement, with nothing dropped."
+    },
+    {
+     "id": "T046-a2-git-only-with-config",
+     "summary": "git is asked by path only while a phase-sources.json exists, so an ordinary Read or Bash call starts no process.",
+     "class": "within",
+     "why": "An implementation choice about when a subprocess is spawned, not about what is decided. It serves the request's stated complaint (inefficiency) and SC-001. FR-002 still binds it: the plan's exit is every suite case passing against the Rust guard, so a verdict that differed would fail the task."
+    },
+    {
+     "id": "T046-a3-glob-in-process",
+     "summary": "compgen -G becomes a small in-process expansion of the same two patterns.",
+     "class": "within",
+     "why": "Same two patterns, so the same search; the shell builtin cannot survive the shell's removal, and the suite replay (D4) holds the verdicts."
+    },
+    {
+     "id": "T046-a4-library-removal-timing",
+     "summary": "hm_phase_source.py is removed in this task where its only other readers allow (git grep hm_phase_source), else with its last caller at T051.",
+     "class": "within",
+     "why": "Excepts nothing: the library is still deleted, under FR-001, and the only variable is which task deletes it. Keeping it while another not-yet-ported piece reads it is what FR-002 (replaced before deleted) and FR-003 (Python runs until its replacement passes) require; this guard itself stops using it, so no piece runs both. The search is named and is a whole-repository git grep of the module's name; the deferred branch has a named end, T051."
+    },
+    {
+     "id": "T046-order-and-switch",
+     "summary": "Lands after T005, independent of the other guards; the shell script and its settings entry go in the commit that registers the decider, after the suite passes against l7r-guard --only phase-source-hooks.",
+     "class": "within",
+     "why": "This is D3 and D4 as accepted, and FR-003's never-both. FR-001's hooks-first phase order is unchanged."
+    },
+    {
+     "id": "T046-landing-and-exits",
+     "summary": "Lands by make land-tooling with no work budget; green is the suite, make rust-test, cover and make hooks-test; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Process for this one task. Green names the guard's suite in full (FR-002, SC-004) and the coverage floor (FR-004); no case, tree or requirement is excused."
     }
    ],
    "verdict": "CLEAR"

@@ -649,7 +649,7 @@ def task_start(feature: str, task: str) -> int:
         fh.write(json.dumps({"feature": d.name, "task": task, "utc": datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}) + "\n")
     print(f"task-start: {d.name} {task} is the active task - its checks need its decisions ruled first (make decide)")
     # ...AND A PHASE TASK'S OLD CODE HELD (feature 444, the GM 2026-10-30): its stage is rebuilt from its derivation, never read
-    # from today's Python - `phase_sources.py`, read by `phase-source-hooks.sh`; any other task clears the hold
+    # from today's Python - `phase_sources.py`, read by `rust/guard's phase_source_hooks`; any other task clears the hold
     import phase_sources  # noqa: PLC0415
 
     tasks = (d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else ""

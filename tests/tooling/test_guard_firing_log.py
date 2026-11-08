@@ -369,7 +369,7 @@ _ESCAPES = {
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
     "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 265 FR-010)"),
-    "PHASE_SOURCE_OK": ("command", "matched in the Bash command by phase-source-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 444)"),
+    "PHASE_SOURCE_OK": ("command", "matched in the Bash command by rust/guard's phase_source_hooks through shared::escape (feature 444, feature 449 T046)"),
     "CHECK_NOT_OWED_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "

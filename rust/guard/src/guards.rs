@@ -24,5 +24,6 @@ pub mod measure_hooks;
 pub mod no_branch_hooks;
 pub mod no_poll_hooks;
 pub mod pair_hooks;
+pub mod phase_source_hooks;
 pub mod readme_hooks;
 pub mod stall_watchdog_hooks;
