@@ -28,7 +28,7 @@ def _commands() -> list[str]:
 
 def test_every_registered_hook_script_exists_where_its_command_looks() -> None:
     commands = _commands()
-    assert len(commands) > 20, "the census found the hooks"
+    assert len(commands) > 5, "the census found the hooks"  # the guards fold into one Rust entry as they are ported (feature 449)
     missing = []
     for cmd in commands:
         fb = FALLBACK.match(cmd)

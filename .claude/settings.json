@@ -81,15 +81,6 @@
         ]
       },
       {
-        "matcher": "Bash|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/house-style-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/house-style-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 236 - widened to Bash, where the writes this guard never saw were actually going"
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
           {

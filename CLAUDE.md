@@ -30,7 +30,7 @@ restarts at 200); features 001-131 that concern the diagram live here.
 
 ### House style
 
-Enforced by `scripts/hooks/house-style-hooks.sh`, which corrects the text rather than refusing the edit.
+Enforced by `rust/guard/src/guards/house_style_hooks.rs`, which corrects the text rather than refusing the edit.
 
 - Hyphens only: no em-dashes or en-dashes anywhere in the project.
 - American spellings, never British ones, in everything - prose, docs, generated content, tests,

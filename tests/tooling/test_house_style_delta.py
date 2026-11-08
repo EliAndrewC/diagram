@@ -146,3 +146,15 @@ def test_a_verbatim_cell_dump_is_exempt_and_nothing_else_by_its_folder() -> None
     assert chk.exempt_path("specs/412-money-basket-every-era/measure/coin_walk_rows_raw.txt")
     assert not chk.exempt_path("specs/412-money-basket-every-era/measure/basket_eras.out.txt")
     assert not chk.exempt_path("specs/412-money-basket-every-era/measure/basket_eras.py")
+
+
+def test_the_rust_guards_word_table_is_the_decisions() -> None:
+    """Feature 449 T036 decision (c): the guard's table is data generated from `hm_house.py`; the two stay one table."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("hm_house", REPO / "scripts/hooks/lib/hm_house.py")
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    rows = (REPO / "rust/guard/src/guards/house_style_words.tsv").read_text(encoding="utf-8").splitlines()
+    assert [tuple(r.split("\t")) for r in rows] == list(mod.PAIRS.items())

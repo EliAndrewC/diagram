@@ -679,5 +679,16 @@
       "shell_check_cases": 29,
       "corpus_commands": 238
     }
+  },
+  "house-style-hooks-ported": {
+    "quantity": "a plain Bash call's cost in the house-style guard, the shell's against the Rust guard alone (T036)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/house-style-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only house-style-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the case table replayed through its link",
+    "value": {
+      "shell_bash_ms": 37.41,
+      "rust_guard_bash_ms": 14.15
+    }
   }
 }

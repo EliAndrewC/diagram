@@ -314,9 +314,9 @@
    "declared": "spec-fidelity"
   },
   "### T036 Approach (checklist part A)": {
-   "sha256": "9582d9abc4ef94b80e94737f9710c15ad34848d919db4ccf502578403fac8721",
+   "sha256": "69fa4848fe4f9f04f7de97dcdab3397131e708aa8ebfc1f3d5b21ad7fbf75577",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T037 Approach (checklist part A)": {
@@ -2718,6 +2718,52 @@
      "why": "This is D3 and D4 as written, with FR-004's coverage floor. The landing route and the absence of a work budget decide nothing the request or spec constrains."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T036 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T036(a)",
+     "summary": "The guard and its decision (report, plan, held_ranges, outside_heredocs, the corrections, the three verdicts, every message) move in-process to Rust; write_targets is shared::tree::walk, the port of the walk it asked.",
+     "class": "within",
+     "why": "This is the port itself: the GM's 'making this a Rust codebase', FR-001 (hooks first), FR-007 (one process for a tool call) and D3 (guard by guard). Nothing asked for is left out; every message moves."
+    },
+    {
+     "id": "T036(b)",
+     "summary": "lib/hm_house.py stays until its other callers are ported or T051; the guard no longer imports it.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out. FR-003's 'no piece runs both' binds the piece, and the house-style guard runs Rust only from its switch. plan_gate.py, apply_edits.py, claims_reply.py, hm_arbiter.py, check-house-style-delta.py and hookbench.py are other pieces, and until each is replaced FR-003 itself requires that its Python remain the one that runs. FR-001 still takes the file, with T051 as the named end."
+    },
+    {
+     "id": "T036(c)",
+     "summary": "The word table becomes a data file, rust/guard/src/guards/house_style_words.tsv, generated from hm_house.py's table; test_house_style_delta.py's reading holds the two equal; the guard's and check-house-style-delta.py's exempt names gain the data file.",
+     "class": "within",
+     "why": "A data file is not Python, so FR-001 is met. The equality test only enforces FR-002's sameness while two copies exist, which is enforcement of what was asked. The exemption is an exception in form but narrows nothing: the table is out of the corrector's reach today where it lives, the port moves it, and the exemption moves with it, so the table's treatment is unchanged. The path is new, so no suite case's verdict can move. A table of wrong spellings run through the corrector would stop being that table."
+    },
+    {
+     "id": "T036(d)",
+     "summary": "The crash warning goes: the shell told the session when its Python decision could not run; a compiled decision has no import to fail, and a guard that does not run is the wrapper's own notice (T004).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 requires the same verdicts AND outputs, its named exceptions do not cover this, and the warning is an output, so this is a narrowing and is presumed wrong. It is legitimate on the impossibility leg: the warning reports that a Python decision failed to run, the port leaves no Python decision to fail, and emitting it would state something false. Its purpose, the session being told its guard did not decide, passes to the wrapper's notice (T004) rather than being dropped. The ruling rests on two premises this bundle cannot confirm, the repository being closed to this review. First, the import-stub case asserts the act, as (e) says, and not the warning line; D4 is the backstop, since a case expecting that line fails against l7r-guard --only house-style-hooks and stops the switch, and editing such a case would have to be named as FR-002's exceptions are. Second, 'no import to fail' does not by its own words reach the data file (c) creates: if the table is read at runtime, a missing or malformed file is the failure this warning existed for, and it must then reach the session through T004's notice or be compiled in. Silence on that failure is outside this ruling."
+    },
+    {
+     "id": "T036(e)",
+     "summary": "The suite's import-stub case keeps its assertion that the guard still acts on a command with hm_house.py broken, now by driving the link with the module broken in a copy of the tree; its verdict does not change.",
+     "class": "within",
+     "why": "D4 points the suite at the Rust guard, and this adapts how the case reaches it. The assertion and expected verdict are kept, so FR-002's bookkeeping for a changed verdict is not engaged. What the case proves after the port is a question of test value, not fidelity."
+    },
+    {
+     "id": "T036(f)",
+     "summary": "This guard runs before shell-check (T035 decision (d)), so shell-check judges the corrected text, whose words differ only in spelling or dash; shell-check's four rules read neither.",
+     "class": "within",
+     "why": "The ordering was settled by T035 (d) and is only cited here; one process (FR-007) requires some order. The block states why FR-002's sameness holds under it and claims no exception, and both guards' suites must stay green at the exit."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4332,6 +4378,51 @@
      "summary": "Green is the guard's suite against l7r-guard --only shell-check-hooks plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; landed via make land-tooling.",
      "class": "within",
      "why": "This is D3 and D4 as written, with FR-004's coverage floor. The landing route and the absence of a work budget decide nothing the request or spec constrains."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T036": {
+   "section_sha256": "69b31ba7fc565740967f8a3ce85a5f340ff57ad10c246fa40c10be5c48d56490",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T036(a)",
+     "summary": "The guard and its decision (report, plan, held_ranges, outside_heredocs, the corrections, the three verdicts, every message) move in-process to Rust; write_targets is shared::tree::walk, the port of the walk it asked.",
+     "class": "within",
+     "why": "This is the port itself: the GM's 'making this a Rust codebase', FR-001 (hooks first), FR-007 (one process for a tool call) and D3 (guard by guard). Nothing asked for is left out; every message moves."
+    },
+    {
+     "id": "T036(b)",
+     "summary": "lib/hm_house.py stays until its other callers are ported or T051; the guard no longer imports it.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out. FR-003's 'no piece runs both' binds the piece, and the house-style guard runs Rust only from its switch. plan_gate.py, apply_edits.py, claims_reply.py, hm_arbiter.py, check-house-style-delta.py and hookbench.py are other pieces, and until each is replaced FR-003 itself requires that its Python remain the one that runs. FR-001 still takes the file, with T051 as the named end."
+    },
+    {
+     "id": "T036(c)",
+     "summary": "The word table becomes a data file, rust/guard/src/guards/house_style_words.tsv, generated from hm_house.py's table; test_house_style_delta.py's reading holds the two equal; the guard's and check-house-style-delta.py's exempt names gain the data file.",
+     "class": "within",
+     "why": "A data file is not Python, so FR-001 is met. The equality test only enforces FR-002's sameness while two copies exist, which is enforcement of what was asked. The exemption is an exception in form but narrows nothing: the table is out of the corrector's reach today where it lives, the port moves it, and the exemption moves with it, so the table's treatment is unchanged. The path is new, so no suite case's verdict can move. A table of wrong spellings run through the corrector would stop being that table."
+    },
+    {
+     "id": "T036(d)",
+     "summary": "The crash warning goes: the shell told the session when its Python decision could not run; a compiled decision has no import to fail, and a guard that does not run is the wrapper's own notice (T004).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 requires the same verdicts AND outputs, its named exceptions do not cover this, and the warning is an output, so this is a narrowing and is presumed wrong. It is legitimate on the impossibility leg: the warning reports that a Python decision failed to run, the port leaves no Python decision to fail, and emitting it would state something false. Its purpose, the session being told its guard did not decide, passes to the wrapper's notice (T004) rather than being dropped. The ruling rests on two premises this bundle cannot confirm, the repository being closed to this review. First, the import-stub case asserts the act, as (e) says, and not the warning line; D4 is the backstop, since a case expecting that line fails against l7r-guard --only house-style-hooks and stops the switch, and editing such a case would have to be named as FR-002's exceptions are. Second, 'no import to fail' does not by its own words reach the data file (c) creates: if the table is read at runtime, a missing or malformed file is the failure this warning existed for, and it must then reach the session through T004's notice or be compiled in. Silence on that failure is outside this ruling."
+    },
+    {
+     "id": "T036(e)",
+     "summary": "The suite's import-stub case keeps its assertion that the guard still acts on a command with hm_house.py broken, now by driving the link with the module broken in a copy of the tree; its verdict does not change.",
+     "class": "within",
+     "why": "D4 points the suite at the Rust guard, and this adapts how the case reaches it. The assertion and expected verdict are kept, so FR-002's bookkeeping for a changed verdict is not engaged. What the case proves after the port is a question of test value, not fidelity."
+    },
+    {
+     "id": "T036(f)",
+     "summary": "This guard runs before shell-check (T035 decision (d)), so shell-check judges the corrected text, whose words differ only in spelling or dash; shell-check's four rules read neither.",
+     "class": "within",
+     "why": "The ordering was settled by T035 (d) and is only cited here; one process (FR-007) requires some order. The block states why FR-002's sameness holds under it and claims no exception, and both guards' suites must stay green at the exit."
     }
    ],
    "verdict": "CLEAR"

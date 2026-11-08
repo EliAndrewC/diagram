@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for house-style-hooks.sh. Run: tests/hooks/test-house-style-hooks.sh   (exit 0 = all green)
+# Tests for the house-style guard (rust/guard, replayed through its link). Run: tests/hooks/test-house-style-hooks.sh   (exit 0 = all green)
 #
 # TWO DIRECTIONS, always (the project's standing rule for a guard): it must FIRE on the case it
 # exists to catch, and STAY QUIET on correct work. The second half is the one that matters most -
@@ -20,10 +20,11 @@ echo
 echo "the import stub: a broken _hm_house degrades, and the guard still acts"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
+# GUARD_EDIT_OK: feature 449 T036 decision (e) - the Rust guard imports nothing, so the module broken in a copy cannot reach it; the verdict stands
 cp -r "$HERE/../../scripts" "$TMP/scripts"
 printf 'raise ImportError("broken on purpose")\n' > "$TMP/scripts/hooks/lib/hm_house.py"
 OUT=$(printf '%s' '{"tool_name":"Bash","tool_input":{"command":"echo \"the centre of it\" >> docs/a.md"}}' \
-      | GUARD_LOG_DIR="$TMP/log" "$TMP/scripts/hooks/house-style-hooks.sh" pretool 2>"$TMP/err")
+      | GUARD_LOG_DIR="$TMP/log" "$HERE/house-style-hooks.sh" pretool 2>"$TMP/err")
 STUB=1
 case "$OUT" in
   *hookSpecificOutput*) echo "  ok     the guard still acts with the helper unimportable"; STUB=0 ;;
