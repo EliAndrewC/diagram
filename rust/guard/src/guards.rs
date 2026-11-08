@@ -33,6 +33,7 @@ pub mod pair_hooks;
 pub mod phase_source_hooks;
 pub mod readme_hooks;
 pub mod repo_safety_hooks;
+pub mod review_round_hooks;
 pub mod set_down_hooks;
 pub mod shell_check_hooks;
 pub mod source_block_hooks;

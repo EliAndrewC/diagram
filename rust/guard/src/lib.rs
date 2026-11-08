@@ -49,6 +49,7 @@ pub fn guards() -> Vec<Guard> {
         guards::source_block_hooks::GUARD,
         guards::house_style_hooks::GUARD,
         guards::escalation_hooks::GUARD,
+        guards::review_round_hooks::GUARD,
         // last, so no guard reads its rewrite of a commit message (T035 decision (d)): a guard ported later goes before it
         guards::shell_check_hooks::GUARD,
     ]
@@ -114,6 +115,7 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("--idle-tests") => guards::idle_tests_hooks::cli(&args[1..]),
         Some("--agent-stall") => guards::agent_stall_hooks::cli(&args[1..]),
         Some("--escalation") => guards::escalation_hooks::cli(&args[1..]),
+        Some("--review-round") => guards::review_round_hooks::cli(&args[1..]),
         Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
         Some("--finished-run") => guards::finished_run_hooks::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
@@ -252,6 +254,7 @@ mod tests {
                     "source-block-hooks",
                     "house-style-hooks",
                     "escalation-hooks",
+                    "review-round-hooks",
                     "shell-check-hooks"
                 ]
         );

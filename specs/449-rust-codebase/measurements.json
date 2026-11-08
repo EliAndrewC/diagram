@@ -704,5 +704,17 @@
       "rust_guard_stop_ms": 6.86,
       "escalation_suite_cases": 41
     }
+  },
+  "review-round-hooks-ported": {
+    "quantity": "an Agent dispatch's cost in the review-round guard, the shell's against the Rust guard alone (T045)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/review-round-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only review-round-hooks PreToolUse in the clone, a quote-check dispatch, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (84 cases)",
+    "value": {
+      "shell_agent_ms": 106.34,
+      "rust_guard_agent_ms": 9.23,
+      "review_round_suite_cases": 84
+    }
   }
 }

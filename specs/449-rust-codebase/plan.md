@@ -222,6 +222,11 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `review-round-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `review-round-hooks.sh`, `lib/hm_review_round.py`, its Python test and the suite, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: the mode reading, the verdict reading, the snapshot, the preamble, the round and pass state, both caps and every refusal. `lib/hm_review_round.py` is removed with the shell; `tests/tooling/test_plan_round_cap.py`, the one Python test that imported it, moves: `plan_rounds` and the third-round rule to the guard's unit tests, the real arbiter round trip to a new case of the suite.
+   - (b) THREE RECORD TOOLS STAY BY PATH, each on a `spec-fidelity` dispatch alone: `hm_arbiter.py` (rulings, closed and continues, and a trip with its refusal; T051's), `plan_gate.active_task` on a MODE 4 dispatch, and `stale_terms.py` on a later round. Each has callers of its own. None runs on a plain Bash call or an Edit. T052's record lists them.
+   - (c) THE DIFF IS `difflib.unified_diff`, PORTED EXACTLY, not another diff tool (round 1's NOT LEGITIMATE on `diff -u`, whose edits differ): `SequenceMatcher` with its default autojunk, the opcode grouping and the headers, in `shared::difflib`. `difflib_cases.json`, 76 cases generated from CPython's own `difflib`, pins it byte for byte in a unit test.
+   - (d) `state` AND THE SUITE'S `verdict-of` ARE A COMMAND LINE OF THE BINARY, `--review-round`; `verdict-of` replaces the suite's import of the deleted module, its case and verdict unchanged.
 3. **Where each comes from.** `tests/hooks/test-review-round-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.

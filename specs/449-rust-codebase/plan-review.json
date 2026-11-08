@@ -368,9 +368,9 @@
    "declared": "spec-fidelity"
   },
   "### T045 Approach (checklist part A)": {
-   "sha256": "3a5e568d1d1118c4107549384f7476702f9da1b120047f606b3d46498956e693",
+   "sha256": "fc423700922791cc2335b7616d09b2cff44d2c4ec4ffeeafde1634bd44778fa4",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T046 Approach (checklist part A)": {
@@ -2804,6 +2804,45 @@
      "why": "D4 settles the suite as the replay for a guard. FR-002's text is wider, 'every case its tests and its suites hold', and the block paraphrases it as suite cases only. If lib/hm_gm_question.py has tests of its own, FR-002 reaches them before the deletion; the bundle does not show whether it does, so no narrowing is found on the evidence available."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T045 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T045-a",
+     "summary": "The guard and its library hm_review_round.py both move in-process and are removed; the one Python test importing the library moves, plan_rounds and the third-round rule to the guard's unit tests, the real arbiter round trip to a new suite case.",
+     "class": "within",
+     "why": "FR-001 applied to this guard's own files, and D3's guard-by-guard move. Nothing the guard decides is left behind ('every refusal', 'both caps'). The test move carries the test's cases rather than dropping them (FR-002), and the slow round trip goes to the suite because FR-008 holds unit tests under a tenth of a second."
+    },
+    {
+     "id": "T045-b",
+     "summary": "Three record tools (hm_arbiter.py, plan_gate.active_task, stale_terms.py) stay Python and are called by path, each only on a spec-fidelity dispatch, none on a plain Bash call or Edit.",
+     "class": "within",
+     "why": "Read as sequencing, not an exemption: FR-001 replaces every Python file in four phases and SC-005 requires the census empty at close, so these three are not excused from the port, only from this guard's piece. This rests on the block's own references: hm_arbiter.py is named T051's, and T052's record lists all three; each has callers of its own, so it is not this guard's library. A reading in which any of the three stays Python past the feature's close would narrow FR-001 and would not be covered by this ruling. FR-003 holds (each runs as Python only, never both). FR-007 is about one process per tool call for the guards; these are record tools, not guards, and SC-001's Bash-call figure is untouched because none runs on a Bash call."
+    },
+    {
+     "id": "T045-c",
+     "summary": "The diff is difflib.unified_diff ported exactly in shared::difflib (SequenceMatcher with default autojunk, opcode grouping, headers), pinned byte for byte by difflib_cases.json, cases generated from CPython's difflib.",
+     "class": "within",
+     "why": "Round 1's objection was that diff -u's edits differ from difflib's, breaking FR-002's same outputs. The port removes that. Default autojunk is not a choice but the literal behavior: CPython's unified_diff builds SequenceMatcher(None, a, b) with no autojunk argument, so the default is what the Python guard runs. The pin only fails when the requested sameness is absent, so it enforces FR-002 and is not added scope. The ruling rests on the block's exactness claim and D4's suite replay; the bundle does not show the Rust."
+    },
+    {
+     "id": "T045-d",
+     "summary": "state and the suite's verdict-of become a command line of the binary, --review-round; verdict-of replaces the suite's import of the deleted module, its case and verdict unchanged.",
+     "class": "within",
+     "why": "A consequence of removing the module under FR-001: the suite needs another route to the same reading, and the block keeps the case and verdict unchanged, so FR-002 and D4's replay stand. It changes the fixture's plumbing, not what any case asserts, and adds no behavior beyond what the deleted module offered."
+    },
+    {
+     "id": "T045-order-exits",
+     "summary": "Order (after T005, independent of the other guards), exits (suite green against l7r-guard --only review-round-hooks, rust-test, cover, hooks-test), and done (shell and settings entry gone in the commit registering the decider); landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "D3 and D4 restated for this guard: the settings entry leaves in the same commit that adds the decider, after the suite passes, so FR-003's never-both holds. Cover green serves FR-004. No researched value moves."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4502,6 +4541,44 @@
      "summary": "The proof of equal verdicts is the guard's suite run against l7r-guard --only escalation-hooks, with unit tests written from its cases (item 2's 'every suite case', items 6 and 9).",
      "class": "within",
      "why": "D4 settles the suite as the replay for a guard. FR-002's text is wider, 'every case its tests and its suites hold', and the block paraphrases it as suite cases only. If lib/hm_gm_question.py has tests of its own, FR-002 reaches them before the deletion; the bundle does not show whether it does, so no narrowing is found on the evidence available."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T045": {
+   "section_sha256": "287baebf7dc1b1b076828f6891765903cfb9bf1a5b0ade64684c32222f42f576",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T045-a",
+     "summary": "The guard and its library hm_review_round.py both move in-process and are removed; the one Python test importing the library moves, plan_rounds and the third-round rule to the guard's unit tests, the real arbiter round trip to a new suite case.",
+     "class": "within",
+     "why": "FR-001 applied to this guard's own files, and D3's guard-by-guard move. Nothing the guard decides is left behind ('every refusal', 'both caps'). The test move carries the test's cases rather than dropping them (FR-002), and the slow round trip goes to the suite because FR-008 holds unit tests under a tenth of a second."
+    },
+    {
+     "id": "T045-b",
+     "summary": "Three record tools (hm_arbiter.py, plan_gate.active_task, stale_terms.py) stay Python and are called by path, each only on a spec-fidelity dispatch, none on a plain Bash call or Edit.",
+     "class": "within",
+     "why": "Read as sequencing, not an exemption: FR-001 replaces every Python file in four phases and SC-005 requires the census empty at close, so these three are not excused from the port, only from this guard's piece. This rests on the block's own references: hm_arbiter.py is named T051's, and T052's record lists all three; each has callers of its own, so it is not this guard's library. A reading in which any of the three stays Python past the feature's close would narrow FR-001 and would not be covered by this ruling. FR-003 holds (each runs as Python only, never both). FR-007 is about one process per tool call for the guards; these are record tools, not guards, and SC-001's Bash-call figure is untouched because none runs on a Bash call."
+    },
+    {
+     "id": "T045-c",
+     "summary": "The diff is difflib.unified_diff ported exactly in shared::difflib (SequenceMatcher with default autojunk, opcode grouping, headers), pinned byte for byte by difflib_cases.json, cases generated from CPython's difflib.",
+     "class": "within",
+     "why": "Round 1's objection was that diff -u's edits differ from difflib's, breaking FR-002's same outputs. The port removes that. Default autojunk is not a choice but the literal behavior: CPython's unified_diff builds SequenceMatcher(None, a, b) with no autojunk argument, so the default is what the Python guard runs. The pin only fails when the requested sameness is absent, so it enforces FR-002 and is not added scope. The ruling rests on the block's exactness claim and D4's suite replay; the bundle does not show the Rust."
+    },
+    {
+     "id": "T045-d",
+     "summary": "state and the suite's verdict-of become a command line of the binary, --review-round; verdict-of replaces the suite's import of the deleted module, its case and verdict unchanged.",
+     "class": "within",
+     "why": "A consequence of removing the module under FR-001: the suite needs another route to the same reading, and the block keeps the case and verdict unchanged, so FR-002 and D4's replay stand. It changes the fixture's plumbing, not what any case asserts, and adds no behavior beyond what the deleted module offered."
+    },
+    {
+     "id": "T045-order-exits",
+     "summary": "Order (after T005, independent of the other guards), exits (suite green against l7r-guard --only review-round-hooks, rust-test, cover, hooks-test), and done (shell and settings entry gone in the commit registering the decider); landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "D3 and D4 restated for this guard: the settings entry leaves in the same commit that adds the decider, after the suite passes, so FR-003's never-both holds. Cover green serves FR-004. No researched value moves."
     }
    ],
    "verdict": "CLEAR"

@@ -13,6 +13,7 @@ fn main() {
                 | "--idle-tests"
                 | "--agent-stall"
                 | "--escalation"
+                | "--review-round"
                 | "--stall-watchdog"
                 | "--finished-run"
         )

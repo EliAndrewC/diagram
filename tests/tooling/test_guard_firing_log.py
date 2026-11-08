@@ -56,7 +56,7 @@ CASES = [
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
     # feature 249 (GM 2026-09-14): a spec-fidelity round after the first reads the diff - the branches
     # a bare payload can reach (the rewrite, the first snapshot and the history line need a clone with
-    # the feature present, which tests/hooks/test-review-round-hooks.sh drives on a fixture)
+    # the feature present, which tests/hooks/test-review_round_hooks.rs drives on a fixture)
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 2 review of specs/999-nowhere against request.md"), "permitted", "no-feature"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
@@ -440,14 +440,14 @@ _ESCAPES = {
     ),
     "REVIEW_ROUND_OK": (
         "command",
-        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in hm_review_round.py, the prompt's "
+        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in rust/guard's review_round_hooks.py, the prompt's "
         "own text taken from the payload), the same stated exclusion as PAIR_OK's and ESCALATION_OK's agent "
         "branches - a prompt is prose with no command grammar; its REVIEW_ROUND_OK=\"reason\" form is refused "
         "without a reason and logged with one (feature 249)",
     ),
     "STALE_TERMS_OK": (
         "command",
-        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in hm_review_round.py), the same "
+        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in rust/guard's review_round_hooks.py), the same "
         "stated exclusion as REVIEW_ROUND_OK's - a prompt is prose with no command grammar; its "
         "STALE_TERMS_OK=\"reason\" form is refused without a reason and recorded with one on the rewrite it lets "
         "through (feature 253)",

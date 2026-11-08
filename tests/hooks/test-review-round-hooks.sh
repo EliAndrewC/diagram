@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for review-round-hooks.sh - a spec-fidelity round after the first reads the diff (feature 249).
+# Tests for the review-round guard (rust/guard, replayed through its link) - a spec-fidelity round after the first reads the diff (feature 249).
 # Run: tests/hooks/test-review-round-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 249 - a NEW guard's companion suite.
 #
@@ -7,7 +7,7 @@
 # call site exists and not that it fires (`tests/tooling/test_guard_firing_log.py`'s rule).
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/review-round-hooks.sh"
+HOOK="$HERE/review-round-hooks.sh"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 
@@ -119,7 +119,7 @@ case "$P" in "MODE 3 (VERIFY) - round 1 of feature 301-fixture"*) ok "the round 
 printf '%s' "$P" | grep -q 'NEW PASS' && ok "...and the preamble says it is a new pass" || no "no new-pass line"
 printf '%s' "$P" | grep -q 'Aside: none' && ok "...with the FAITHFUL verdict verbatim (the last verdict word decides)" || no "the FAITHFUL transcript was not the one recovered"
 # GUARD_EDIT_OK: feature 250 D20 - the explicit verdict line wins over a later mention of another verdict word
-V=$(python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hm_review_round as r; print(r.verdict_of("**Verdict: CHANGES REQUIRED.** Three items.\n\nThat line does not contain \"FAITHFUL\", so the gate refuses."))' "$HERE/../../scripts/hooks/lib")
+V=$("$HOOK" verdict-of "$(printf '%b' '**Verdict: CHANGES REQUIRED.** Three items.\n\nThat line does not contain "FAITHFUL", so the gate refuses.')")
 [ "$V" = "CHANGES REQUIRED" ] && ok "an explicit Verdict line wins over a later mention of FAITHFUL" || no "the verdict was misread" "(got $V)"
 
 echo "6. no transcript answers: the Review history is the fallback, marked as the session's summary"
@@ -259,6 +259,26 @@ transcript "$SUB/agent-11.jsonl" "MODE 3 of specs/301-fixture" "## round\n\nall 
 touch -d '2031-01-01' "$SUB/agent-11.jsonl"; echo 3 > "$SR"
 out=$(agent spec-fidelity 'MODE 2 of specs/301-fixture REVIEW_ROUND_OK="an amendment adds requirements - read them whole"')
 [ "$(rc)" -eq 0 ] && [ "$(cat "$SR")" = 1 ] && [ "$(cat "$FIX/.git/review-round/301-fixture/pass")" = 3 ] && ok "a full re-read after FAITHFUL starts a new pass at round 1" || no "the escape kept the old round" "(round=$(cat "$SR") pass=$(cat "$FIX/.git/review-round/301-fixture/pass"))"
+
+
+# GUARD_EDIT_OK: feature 449 T045 - moved from tests/tooling/test_plan_round_cap.py, driving the real hm_arbiter.py and plan_gate.py
+echo "11. a plan review's third round on one task waits for the round arbiter"
+PC="$T/plan-clone"; mkdir -p "$PC/specs/385-x" "$PC/.specify"; git -C "$PC" init -q 2>/dev/null
+printf -- '- [ ] T14 the work\n' > "$PC/specs/385-x/tasks.md"
+printf '{"feature_directory": "specs/385-x"}' > "$PC/.specify/feature.json"
+planned() { python3 -c 'import json,sys; print(json.dumps({"block_reviews": [{"verdict": "BLOCKED", "blocks": ["### T14 Decisions"]}] * int(sys.argv[1])}))' "$1" > "$PC/specs/385-x/plan-review.json"; }
+pagent() { python3 -c 'import json,sys; print(json.dumps({"session_id":"t-rr-plan","cwd":sys.argv[2],"tool_name":"Agent","tool_input":{"subagent_type":"spec-fidelity","prompt":sys.argv[1]}}))' "$1" "$PC" | ( cd "$PC" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"; }
+planned 1; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
+[ "$(rc)" -eq 0 ] && ok "round 2 passes" || no "round 2 was held" "(rc=$(rc))"
+planned 2; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
+[ "$(rc)" -eq 2 ] && grep -q "BLOCKED: round 3 of T14's plan review" "$T/err" && grep -q 'round:spec-fidelity|plan:385-x#T14@3' "$PC/.git/arbiter-owed.json" && ok "round 3 is refused and its trigger owed" || no "round 3 was not held" "(rc=$(rc)) $(head -2 "$T/err")"
+out=$(pagent 'MODE 4: PLAN REVIEW ARBITER_OK="the arbiter ruled in the session"')
+[ "$(rc)" -eq 0 ] && ok "ARBITER_OK with a reason passes" || no "the escape was refused" "(rc=$(rc))"
+printf '%s\n' '{"trigger": "round:spec-fidelity|plan:385-x#T14@3", "kind": "round", "ruling": "continue", "why": "converging", "utc": "t"}' > "$PC/specs/385-x/arbiter.jsonl"
+out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
+[ "$(rc)" -eq 0 ] && ok "a continue lifts the cap by one round" || no "the continue did not lift it" "(rc=$(rc))"
+rm "$PC/.specify/feature.json"; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
+[ "$(rc)" -eq 0 ] && ok "no active task: nothing to count" || no "held with no active task" "(rc=$(rc))"
 
 echo
 echo "test-review-round-hooks: $PASS passed, $FAIL failed"
