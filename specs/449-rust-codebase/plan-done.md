@@ -861,3 +861,29 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T029 Approach (checklist part A)
+
+1. **The goal, in the world.** `guard-file-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `guard-file-hooks.sh`, `lib/hm_guard_permit.py`, the suite and the guard log of 2026-11-07, 2026-11-08):
+   - (a) THE GUARD MOVES WHOLE, IN-PROCESS: the Read reminders, the recipe-comment refusal (its detector ported from `hm_make.recipe_comment_hazards`, over `shared::shape::executing_backticks`), the held-file list, the marker and permit rules, every message. git is asked only for a held file or a `/Makefile` path.
+   - (b) `hm_guard_permit.py` STAYS FOR ITS `grant`, which the Makefile's `guard-edit` runs; the guard reads the permit store itself, the same file and the same hour. T051 owes the file.
+   - (c) THE XIV FIX THE TASK NAMES: a scratch file whose text names a guard is not a guard write. The guard log of 2026-11-07 holds it: `cat >> $S/switch_probe.py <<'EOF'` with `(root / "scripts" / "x-hooks.sh").write_text(...)` in the body was refused, by the shell-route rule in `make_only_hooks` (T028), whose Python-write patterns read the raw command. The patterns no longer read a body only when the whole call is one storing `cat` or `tee`: nothing before it but `NAME=value` assignments of plain values whose name is one letter or lowercase, so none can be `PATH`, an `LD_*` loader variable or any other name the shell or a loader reads (round 4's finding: `PATH=<dir>` changes what `cat` runs; the logged case's `S=` is one letter), nothing on the heredoc's own line but the storing target - `cat`'s one redirect or each of `tee`'s file arguments, each a word of plain path characters and `$NAME` expansions (`$S/...` stays allowed: the logged case uses it), so no process substitution, command substitution or backquote anywhere on that line - nothing after the terminator as bash reads it (with `<<-` a tab-indented delimiter ends the body; a line equal to the delimiter inside the body ends it there, and what follows is not stored), and a QUOTED delimiter (single, double or backslash: with an unquoted one the shell runs a substitution in the body, measured 2026-11-08 by the round 3 review). Then no command in the call can run what was stored. Every other form - piped, chained on the opener, followed by anything, a body handed to an interpreter, and `> Makefile` on the stored file's own redirect - stays a guard write. New cases in `test-make-only-hooks.sh`, the suite that exercises the rule, pin both directions (the opener-line `&&`, a run through a glob, an unquoted delimiter with a substitution, and `cat > >(bash)` and `tee >(bash)` among the refused), and the expected verdict changes from refused to pass for that one form alone, named in the commit and in phase 1's record.
+3. **Where each comes from.** `tests/hooks/test-guard-file-hooks.sh`, the guard's own suite; plan D3-D4. The constitution XIV fix named in its commit and in the phase's record (FR-002).
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-guard-file-hooks.sh` green against `l7r-guard --only guard-file-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-guard-file-hooks.sh` passes against the Rust guard; `scripts/hooks/guard-file-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: T030 to T030 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T031 to T031 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T032 to T032 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T033 to T033 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T034 to T034 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T035 to T035 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T036 to T036 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
