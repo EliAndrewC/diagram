@@ -26,6 +26,12 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_BAND = 0.10
+#: A COMMAND THAT REACHES THE DELETED PYTHON HAMLET ENGINE (feature 444 FR-024; the round arbiter on ask:444-d7-scope-round3): a
+#: closed feature's figure that rolled `hamletgen` or its sibling packages is frozen history, and re-running it can only fail or, worse,
+#: run something of the same name. Named in an import or path form - the forms tests/tooling/test_no_deleted_engine.py reads - it is
+#: listed as not re-measured and never run.
+_DELETED = "(hamletgen|settlement|sitegen|waterfields|overlap|citybudget)"
+DELETED_ENGINE = re.compile(rf"\bl7r[./]diagram[./]{_DELETED}\b|\btests/{_DELETED}\b")
 
 
 def band(entry: dict) -> float:
@@ -46,11 +52,10 @@ def compare(recorded: dict[str, dict], fresh: dict[str, dict]) -> tuple[list[str
             limit = band(entry)
             try:
                 moved = abs(float(new) - float(old)) / abs(float(old)) if float(old) else float(new != old)
-            except (TypeError, ValueError):
+            except TypeError, ValueError:
                 moved = 1.0
             if moved > limit:
-                reports.append(f"  REPORT `{key}`: {old} -> {new}, outside its band of {limit:.0%} "
-                               f"(a timing - reported, never failed; load {fresh[key].get('load', '?')})")
+                reports.append(f"  REPORT `{key}`: {old} -> {new}, outside its band of {limit:.0%} (a timing - reported, never failed; load {fresh[key].get('load', '?')})")
         else:
             failures.append(f"  FAIL   `{key}`: {old} -> {new} - a count that moved means the thing counted changed")
     return failures, reports
@@ -70,6 +75,9 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
                 # a perf-log record labeled with the placeholder - before make refused the words after it)
                 skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      names a <placeholder> - a one-shot's description, not run")
                 continue
+            if DELETED_ENGINE.search(command):
+                skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      runs the deleted Python hamlet engine (feature 444) - a frozen figure, not run")
+                continue
             try:
                 run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True)
             except (OSError, ValueError) as e:  # a command written as prose: not runnable, so listed, never fatal (feature 375)
@@ -83,7 +91,7 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
             failures += fail
             reports += report
     finally:
-        path.write_text(original)          # plan P4: `make figures` reports, it never records
+        path.write_text(original)  # plan P4: `make figures` reports, it never records
     return failures, reports, skipped
 
 
@@ -112,8 +120,7 @@ def main(argv: list[str]) -> int:
                 exit_code = 1
             continue
         failures, reports, skipped = rerun(spec_dir)
-        print(f"{spec_dir.name}: {len(failures)} moved count(s), {len(reports)} timing(s) outside their band, "
-              f"{len(skipped)} command(s) not re-measured")
+        print(f"{spec_dir.name}: {len(failures)} moved count(s), {len(reports)} timing(s) outside their band, {len(skipped)} command(s) not re-measured")
         for line in failures + reports + skipped:
             print(line)
         exit_code |= 1 if failures else 0

@@ -23,9 +23,14 @@ FORMS = re.compile(
     rf"|l7r/diagram/{_N}\b|l7r\.diagram\.{_N}\b|tests/{_N}\b"  # path forms
 )
 #: THE KEPT TREES, by `git ls-files | cut -d/ -f1 | sort -u` (2026-11-08): every top-level entry that holds code or configuration
-#: that runs, and `dev/`, whose records code reads; the prose and history trees (`research/`, `specs/`, `docs/`, the root
-#: `CLAUDE.md`, `LICENSE`) run nothing and are left out (its plan review of 2026-11-08 ruled that legitimate)
+#: that runs, and `dev/`, whose records code reads; the figures `make figures` re-runs (`specs/*/measurements*.json`); and
+#: `docs/` and the root `CLAUDE.md`, which sessions and agents load. Left out: the rest of `specs/` - prose and records that make
+#: reads and never runs, 589 hits in 5,360 files (the round arbiter on ask:444-d7-scope-round3) - and `research/` and `LICENSE`,
+#: which consume nothing (its plan review of 2026-11-08)
 SCOPE = (
+    ":(glob)specs/*/measurements*.json",
+    "docs/**",
+    "CLAUDE.md",
     "l7r/**",
     "tests/**",
     "scripts/**",
@@ -93,6 +98,23 @@ HISTORY = {
     "dev/loop.md": "the Python engine's dev doc, until the Rust's own pages replace it",
     "dev/performance.md": "the Python engine's dev doc, until the Rust's own pages replace it",
     "dev/placement.md": "the Python engine's dev doc, until the Rust's own pages replace it",
+    "specs/257-sheet-matches-map/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/261-northwest-wind-by-default/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/267-compound-research-owed/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/269-research-backfill/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/276-engine-hotspots-and-test-scans/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/282-threshing-yard-layout/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/291-homestead-grove-sides/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/302-field-by-construction/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/328-match-the-research/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/372-match-the-research-remaining/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/374-match-the-research-continued/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/375-enforced-wave-process/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/430-faster-landings/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "specs/444-work-budget-program/measurements.json": "frozen figures: make figures lists each command naming a deleted package as not re-measured, never run (scripts/measure/figures.py)",
+    "docs/iteration-loop.md": "prose: the loop as the Python engine ran it, history",
+    "docs/migration-plan.md": "prose: the namespace portion's history",
+    "docs/session-clones.md": "prose: an example path in a recorded failure, history",
 }
 #: the append-only logs, each named in its own file (FR-024 part 4: "enumerated file by file")
 HISTORY |= {line: "an append-only log written while the Python engine ran" for line in (REPO / "tests/tooling/deleted-engine-logs.txt").read_text().splitlines() if line and not line.startswith("#")}

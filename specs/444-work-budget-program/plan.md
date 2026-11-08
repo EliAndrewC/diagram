@@ -1195,10 +1195,16 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
      (`git ls-files | cut -d/ -f1 | sort -u`, 2026-11-08): every top-level entry that holds code or configuration that runs -
      `l7r/`, `tests/`, `scripts/`, `rust/`, `.claude/`, `.specify/`, `pool/`, `legacy-hand-authored-pool/`, `buildspec/`, the
      `Makefile`, `pyproject.toml`, `Dockerfile.ci`, `clippy.toml`, the `requirements*` files - and `dev/`, whose records code reads;
-     the prose and history trees (`research/`, `specs/`, `docs/`, the root `CLAUDE.md`, `LICENSE`) run nothing and are left out.
+     of `specs/`, the figures `make figures` re-runs (`specs/*/measurements*.json`, 55 files); and `docs/` and the root `CLAUDE.md`,
+     which sessions and agents load. Left out, by the round arbiter on ask:444-d7-scope-round3: the rest of `specs/` - spec, plan,
+     task and review prose and records, which make reads and never runs (589 hits in 5,360 files, measured 2026-11-08; scanning them
+     would fail every later spec that quotes an old path, and catch no consumer) - and `research/` and `LICENSE`, which consume
+     nothing.
      Measured on that scope (2026-11-08): `rust/`'s 148 files name none; `dev/` holds 321 that do. Its history allowlist is
      enumerated file by file, each with why: in the test's `HISTORY`, the closed features' records (`scripts/gates/closed-before-375.txt`,
-     `scripts/gates/room_table.json`), the four hook command corpora under `tests/hooks/fixtures/`, the prose `.md` files and dev
+     `scripts/gates/room_table.json`), the four hook command corpora under `tests/hooks/fixtures/`, the prose `.md` files (`docs/iteration-loop.md`,
+     `docs/migration-plan.md`, `docs/session-clones.md` among them, each naming an old path in a past-tense history paragraph, none an
+     instruction) and dev
      docs, the frozen placement reference, the ledger and the triage record, and the 28 tests whose fixtures build a tree or an
      example path of the old name, each named with its reason (`tests/hooks/test-claims-gate.sh` ... `tests/tools/test_claims.py`);
      and in `tests/tooling/deleted-engine-logs.txt`, the 312 append-only run and perf logs that name one, one path a line - fixed at
@@ -1220,6 +1226,7 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
   | `scripts/record/tunables.py` | GUESS and CONVENTION values in the Python engine | PORTED: the kept Rust's `Research:` lines; a Rust fixture |
   | `scripts/reviews/work_budget_bundle.py`, `scripts/budget_change.py`, `l7r/diagram/tools/work_budget.py` | the stages and their counts | PORTED: the stages through the cut, counted by the crate; a Rust fixture |
   | `scripts/gates/rust_checks.py` | the extension's import path (`phases_ext.py`) | PORTED: the maturin build and the `python` feature dropped with the Python (D3) |
+  | `scripts/measure/figures.py` (`make figures`) and the 14 `measurements.json` whose figures name a deleted package (`specs/` 257, 261, 267, 269, 276, 282, 291, 302, 328, 372, 374, 375, 430 and 444's own) | each figure's `command`, re-run | PORTED: `make figures` lists a command that names a deleted package in an import or path form as not re-measured, with the reason, and never runs it (`DELETED_ENGINE`; `tests/tooling/test_figures_deleted_engine.py`); the closed features' figures are frozen history, and 444's own figures that rolled the Python are retired the same way, their Rust counterparts measured by the work budget (`make work-budget`) |
   | `scripts/gates/check-file-scale.py`, `scripts/gates/check-function-cap.py` | file and function sizes | ALREADY read `.rs` (`dev/rust-tooling.md`); the fixture kept |
   | `l7r/diagram/tools/counters_inert.py` | the counters change no output | PORTED: the Rust half kept, the Python roll dropped |
   | `scripts/record/modal_bundle.py`, `l7r/diagram/interactive/conditions.py` | the knob registry | PORTED: read `l7r/diagram/knobs.json` (D3) |
