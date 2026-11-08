@@ -1,0 +1,19 @@
+# The guards on Claude Code's tool calls, one process an event (feature 449 phase 1, `specs/449-rust-codebase/plan.md`).
+[package]
+name = "l7r_guard"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "l7r_guard"
+
+[[bin]]
+name = "l7r-guard"
+path = "src/main.rs"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"

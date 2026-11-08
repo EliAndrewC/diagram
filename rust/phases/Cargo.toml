@@ -18,9 +18,3 @@ all = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }
 too_many_lines = "deny"
 allow_attributes_without_reason = "deny"
-
-# THE TESTS AND THE COVERAGE RUN BUILT OPTIMIZED (the GM 2026-11-07: "There's no way anything should be running for that
-# long"): unoptimized, the crate's own tests took about 17.6 minutes (measured 2026-11-07, `make rust-test`), most of it the
-# row seating's geometry; `cargo test` and `cargo llvm-cov` both build this profile, and llvm-cov instruments before optimizing
-[profile.dev]
-opt-level = 2

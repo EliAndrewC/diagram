@@ -1,0 +1,11 @@
+# The Rust tools as one workspace (feature 449 T001): the hamlet stages (feature 444) and the guards (feature 449 phase 1), one
+# crate a phase's tools, sharing one lockfile and the build profile below; `scripts/gates/rust_checks.py` checks each member.
+[workspace]
+members = ["phases", "guard"]
+resolver = "2"
+
+# THE TESTS AND THE COVERAGE RUN BUILT OPTIMIZED (the GM 2026-11-07: "There's no way anything should be running for that
+# long"): unoptimized, the crate's own tests took about 17.6 minutes (measured 2026-11-07, `make rust-test`), most of it the
+# row seating's geometry; `cargo test` and `cargo llvm-cov` both build this profile, and llvm-cov instruments before optimizing
+[profile.dev]
+opt-level = 2

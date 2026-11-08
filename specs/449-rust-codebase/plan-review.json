@@ -14,7 +14,7 @@
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "eeed736590ad7cb1a64a080eab5d11200eb730c5d6dd8401a8803f32c476d6f5",
+   "sha256": "e9d9e7420d91230db08ebc731a9a92241dc514a6122c56ea772c0cba2724b191",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "### Phase 1 - the guards (Story 1, P1)": {
-   "sha256": "1cd5f3c0c9fb22a89f7e04a99519229553109f294cc73544478b86de73f51985",
+   "sha256": "319d6f7f2e19be1d6ce8403e7ca3808f45faf7b45fc13ced52cc19a4042b843d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -81,6 +81,18 @@
   },
   "## Complexity Tracking": {
    "sha256": "df75f6b2ba0e238729377952d20ba6a8737fde9e26fded70de3d9d97306f4503",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T001-T005 - the foundation (phase 1, work breakdown 1-4)": {
+   "sha256": "b020e9e7dec657a679327c4ff17c1158b593596dc3be4a0bf4f2d7d775ba7863",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T001 Approach (checklist part A)": {
+   "sha256": "af41fa0dd8f2d9e70d887366be3e0132b4e6e59edc901cd533be004bf2637e5e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -354,6 +366,198 @@
      "why": "Deferral with its own spec-fidelity review; nothing in the request or spec is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "## Technical Context",
+    "### Phase 1 - the guards (Story 1, P1)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TC-scope",
+     "summary": "Technical Context Scale/Scope: phase 1 is the 44 registered repository guards (m:registered-guards; 26 take a Bash call) plus everything FR-001 gives phase 1 (guard shell, their Python libraries, suite files and helpers, inline sites of scripts/hooks/ and tests/hooks/)",
+     "class": "within",
+     "why": "The change from '26 repository guards' to '44 registered' widens the stated phase-1 scope to every guard under scripts/hooks/, which is what FR-001 assigns to phase 1; the earlier figure counted only Bash-taking guards while the plan removed all 44 shell files. Re-ran m:registered-guards' command: 44, matching the 44 *-hooks.sh files."
+    },
+    {
+     "id": "TC-deps",
+     "summary": "serde_json the one crate phase 1 adds; further crates named per phase",
+     "class": "within",
+     "why": "Unchanged from the CLEAR text; an implementation choice inside the request to make this a Rust codebase."
+    },
+    {
+     "id": "TC-failopen",
+     "summary": "A guard that cannot run fails open, saying so (R6)",
+     "class": "within",
+     "why": "Unchanged; matches Claude Code's existing behavior for a crashing hook and is bounded by D7's last-good-binary rule; previously judged CLEAR."
+    },
+    {
+     "id": "P1-approach",
+     "summary": "One binary l7r-guard replaces the 44 registered guards, called once per hook event",
+     "class": "within",
+     "why": "Implements FR-001 phase 1 and FR-007; the count now covers every registered guard rather than 26, so no guard is left out of the port."
+    },
+    {
+     "id": "D1",
+     "summary": "One process, deciders as pure functions",
+     "class": "within",
+     "why": "FR-007."
+    },
+    {
+     "id": "D2",
+     "summary": "Fixed order: today's settings order",
+     "class": "within",
+     "why": "Preserves today's verdicts (FR-002)."
+    },
+    {
+     "id": "D3",
+     "summary": "Guard by guard, shell entry removed in the commit adding its decider",
+     "class": "within",
+     "why": "FR-003."
+    },
+    {
+     "id": "D4",
+     "summary": "Existing suite is the replay; unit tests under 0.1 s each",
+     "class": "within",
+     "why": "FR-002, FR-008, FR-004."
+    },
+    {
+     "id": "D5",
+     "summary": "Shared state (guard log, escapes, transcript, clone map) ported first as a library",
+     "class": "within",
+     "why": "Supports FR-002 parity."
+    },
+    {
+     "id": "D6",
+     "summary": "Facts read once per process",
+     "class": "within",
+     "why": "FR-006, SC-001."
+    },
+    {
+     "id": "D7",
+     "summary": "Binary built from its own tree, last good build kept, fail-open only with no good build ever",
+     "class": "within",
+     "why": "Unchanged and previously CLEAR; mechanism of running the replacement, not a narrowing of what is ported."
+    },
+    {
+     "id": "P1-order",
+     "summary": "Guards moved by measured cost first, then settings order; two over-refusing guards fixed as they move",
+     "class": "within",
+     "why": "Unchanged and previously CLEAR; ordering within phase 1 is left open by the spec."
+    },
+    {
+     "id": "P1-breakdown",
+     "summary": "Work breakdown items 1-8 including the suites' Python, helpers ported to l7r-guard subcommands, and phase-1 share of both censuses returning nothing at close",
+     "class": "within",
+     "why": "Unchanged and previously CLEAR; item 8 enforces FR-001's per-phase census rerun."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T001 Approach (checklist part A)",
+    "### T001-T005 - the foundation (phase 1, work breakdown 1-4)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T001-workspace",
+     "summary": "The Rust tools build as one cargo workspace (root rust/Cargo.toml naming phases and guard); rust_checks.py runs each member and skips the workspace's own manifest, which builds nothing.",
+     "class": "within",
+     "why": "Build layout for the port the GM asked for ('making this a Rust codebase'); the checks still cover every crate (FR-004) through make (FR-005). rust_checks.py staying Python for now is allowed by FR-003 and is itself in FR-001's census, so nothing is carved out."
+    },
+    {
+     "id": "T001-serde_json",
+     "summary": "serde_json is the one crate added.",
+     "class": "within",
+     "why": "A dependency choice inside the port; it narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T001-protocol-D1-D2",
+     "summary": "The guard protocol and its merge of verdicts carried from D1, D2 and contracts/guard-protocol.md.",
+     "class": "within",
+     "why": "Implements FR-007 (one process per tool call) and FR-002 (same verdicts); no case of the hooks is excluded."
+    },
+    {
+     "id": "T001-state-D5-D6",
+     "summary": "The shared state is kept and the facts are asked once.",
+     "class": "within",
+     "why": "Carries the measured design fixes over as FR-006 requires; no behavior the GM asked to change is preserved by it."
+    },
+    {
+     "id": "T001-wrapper-D7",
+     "summary": "The wrapper keeps the last good binary.",
+     "class": "within",
+     "why": "A build-failure fallback to an earlier Rust binary, not a return to Python; it does not run a piece twice (FR-003) and does not exempt any piece from the port."
+    },
+    {
+     "id": "T001-empty-guard-list",
+     "summary": "The settings switch lands with an empty guard list, its own cost recorded as phase 1's floor.",
+     "class": "within",
+     "why": "FR-003 keeps the Python guards the ones that run until each replacement passes, so landing the switch with no guards moved is the ordering the spec requires; recording its cost serves FR-010 and SC-001."
+    },
+    {
+     "id": "T001-landing",
+     "summary": "Landed via make land-tooling with no work budget; done is both crates' tests, lint, format, cover and dead clean through make.",
+     "class": "within",
+     "why": "Process and exit criteria that enforce FR-004 and FR-005; nothing narrowed."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T001": {
+   "section_sha256": "269e51cb4b8595bda4ac41cfb4515b9cf0435f66a261bfc5145fc02ff61b9dc5",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T001-workspace",
+     "summary": "The Rust tools build as one cargo workspace (root rust/Cargo.toml naming phases and guard); rust_checks.py runs each member and skips the workspace's own manifest, which builds nothing.",
+     "class": "within",
+     "why": "Build layout for the port the GM asked for ('making this a Rust codebase'); the checks still cover every crate (FR-004) through make (FR-005). rust_checks.py staying Python for now is allowed by FR-003 and is itself in FR-001's census, so nothing is carved out."
+    },
+    {
+     "id": "T001-serde_json",
+     "summary": "serde_json is the one crate added.",
+     "class": "within",
+     "why": "A dependency choice inside the port; it narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T001-protocol-D1-D2",
+     "summary": "The guard protocol and its merge of verdicts carried from D1, D2 and contracts/guard-protocol.md.",
+     "class": "within",
+     "why": "Implements FR-007 (one process per tool call) and FR-002 (same verdicts); no case of the hooks is excluded."
+    },
+    {
+     "id": "T001-state-D5-D6",
+     "summary": "The shared state is kept and the facts are asked once.",
+     "class": "within",
+     "why": "Carries the measured design fixes over as FR-006 requires; no behavior the GM asked to change is preserved by it."
+    },
+    {
+     "id": "T001-wrapper-D7",
+     "summary": "The wrapper keeps the last good binary.",
+     "class": "within",
+     "why": "A build-failure fallback to an earlier Rust binary, not a return to Python; it does not run a piece twice (FR-003) and does not exempt any piece from the port."
+    },
+    {
+     "id": "T001-empty-guard-list",
+     "summary": "The settings switch lands with an empty guard list, its own cost recorded as phase 1's floor.",
+     "class": "within",
+     "why": "FR-003 keeps the Python guards the ones that run until each replacement passes, so landing the switch with no guards moved is the ordering the spec requires; recording its cost serves FR-010 and SC-001."
+    },
+    {
+     "id": "T001-landing",
+     "summary": "Landed via make land-tooling with no work budget; done is both crates' tests, lint, format, cover and dead clean through make.",
+     "class": "within",
+     "why": "Process and exit criteria that enforce FR-004 and FR-005; nothing narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

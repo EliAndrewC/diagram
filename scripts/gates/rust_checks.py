@@ -41,7 +41,10 @@ def crates(root: pathlib.Path, named: list[str]) -> list[pathlib.Path]:
     if named:
         return [(root / n / "Cargo.toml") if not n.endswith("Cargo.toml") else root / n for n in named]
     base = root / CRATES
-    return sorted(base.rglob("Cargo.toml")) if base.is_dir() else []
+    # ...THE WORKSPACE'S OWN MANIFEST SKIPPED (feature 449 T001): `rust/Cargo.toml` names the members and builds nothing itself, so a
+    # check run on it would run every member twice; one with no `[package]` is a workspace root, never a crate to check
+    found = sorted(base.rglob("Cargo.toml")) if base.is_dir() else []
+    return [m for m in found if "[package]" in m.read_text(encoding="utf-8")]
 
 
 def cargo(args: list[str], manifest: pathlib.Path, after: list[str] | None = None) -> subprocess.CompletedProcess[str]:
