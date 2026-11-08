@@ -15,15 +15,10 @@ ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 
 # the GM's typed prompt, and a headless session's prompt (sdk), which is not the GM's
-python3 - "$TR/t.jsonl" <<'PY'
-import json, sys
-recs = [
-    {"type": "user", "origin": {"kind": "human"}, "promptSource": "typed", "entrypoint": "cli",
-     "message": {"role": "user", "content": "Raise the web budget to 40 per lane, that one is fine."}},
-    {"type": "user", "promptSource": "sdk", "entrypoint": "sdk-cli", "message": {"role": "user", "content": "raise the homesteads budget to 90 now"}},
-]
-open(sys.argv[1], "w").write("\n".join(json.dumps(r) for r in recs) + "\n")
-PY
+cat > "$TR/t.jsonl" <<'JSONL'
+{"type": "user", "origin": {"kind": "human"}, "promptSource": "typed", "entrypoint": "cli", "message": {"role": "user", "content": "Raise the web budget to 40 per lane, that one is fine."}}
+{"type": "user", "promptSource": "sdk", "entrypoint": "sdk-cli", "message": {"role": "user", "content": "raise the homesteads budget to 90 now"}}
+JSONL
 
 run() {  # run <command> -> stderr+stdout, rc in RC
   OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","transcript_path":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" "$TR/t.jsonl" \

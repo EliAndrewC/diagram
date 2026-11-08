@@ -32,14 +32,7 @@ EOF
 # the session transcript path the payload carries; its subagents dir holds two spec-fidelity transcripts
 TP="$T/sess.jsonl"; SUB="$T/sess/subagents"; mkdir -p "$SUB"
 transcript() { # transcript <file> <prompt> <final text>
-  python3 - "$1" "$2" "$3" <<'PY'
-import json, sys
-f, prompt, final = sys.argv[1:4]
-with open(f, "w") as fh:
-    fh.write(json.dumps({"type": "user", "message": {"role": "user", "content": prompt}}) + "\n")
-    fh.write(json.dumps({"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read"}]}}) + "\n")
-    fh.write(json.dumps({"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": final}]}}) + "\n")
-PY
+  jq -nc --arg prompt "$2" --arg final "$3" '{"type": "user", "message": {"role": "user", "content": $prompt}}, {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": "Read"}]}}, {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": $final}]}}' > "$1"
 }
 transcript "$SUB/agent-1.jsonl" "MODE 2 review of specs/301-fixture" "## review\n\n1. FR-001 is vague and was ruled FAITHFUL nowhere.\n\n**CHANGES REQUIRED**"
 touch -d '2026-01-01' "$SUB/agent-1.jsonl"
@@ -95,7 +88,7 @@ printf '%s' "$P" | grep -q '^+\*\*FR-002' && ok "...carrying the diff of the cha
 printf '%s' "$P" | grep -q 'FR-001 is vague' && ok "...and the previous verdict verbatim from the transcript" || no "the previous verdict is not in the preamble"
 printf '%s' "$P" | grep -q 'SIBLING-VERDICT' && no "a sibling feature's review was taken as this feature's verdict" || ok "...never a newer review of another feature that only mentions it"
 printf '%s' "$P" | grep -q 'VERBATIM from the reviewer' && ok "...marked as the reviewer's own words" || no "the verdict is not marked verbatim"
-tail_ok=$(printf '%s' "$P" | ORIG="$ORIG" python3 -c 'import os,sys; p=sys.stdin.read(); m="=== The session'"'"'s prompt follows ===\n"; print("yes" if p.endswith(m+os.environ["ORIG"]) else "no")')
+tail_ok=$(case "$P" in *"=== The session's prompt follows ==="$'\n'"$ORIG") echo yes ;; *) echo no ;; esac)
 [ "$tail_ok" = yes ] && ok "...and ends with the session's prompt unchanged" || no "the session's prompt was altered or lost"
 printf '%s' "$out" | grep -q '"additionalContext"' && ok "...with a context line saying so" || no "no additionalContext on the rewrite"
 logged mode-3-preamble && ok "...recorded rewrote/mode-3-preamble" || no "mode-3-preamble not recorded"
@@ -160,7 +153,7 @@ type_of() { jq -r '.hookSpecificOutput.updatedInput.subagent_type // ""'; }
 printf '\n**FR-006**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "a rewritten spec-fidelity round carries the twin's subagent_type" || no "the rewrite did not route to the twin" "(${out:0:120})"
-printf '%s' "$out" | python3 -c 'import json,sys; d=json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]; sys.exit(0 if d.get("description")=="x" else 1)' && ok "...with every other field of the dispatch kept" || no "the rewrite dropped a field of the dispatch"
+printf '%s' "$out" | jq -e '.hookSpecificOutput.updatedInput.description == "x"' >/dev/null && ok "...with every other field of the dispatch kept" || no "the rewrite dropped a field of the dispatch"
 printf '%s' "$out" | grep -q 'ROUTED to' && ok "...and the context line says it was routed" || no "the context line does not mention the routing"
 printf '\n**FR-007**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity-verify "Round N of specs/301-fixture, dispatched by hand")
@@ -180,10 +173,7 @@ echo "10. a value changed and its OLD value still stands beside its subject: the
 printf '\n## More requirements\n\n| `gizmo` | sonnet | high |\n\n**FR-009** `gizmo` runs on Sonnet at high effort.\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(rc)" -eq 0 ] && ok "lines only ADDED carry no old value: the round goes through (and the snapshot now holds them)" || no "an append was refused" "(rc=$(rc))"
-python3 - "$FIX/specs/301-fixture/spec.md" <<'PY'
-import sys, pathlib
-p = pathlib.Path(sys.argv[1]); p.write_text(p.read_text().replace("| `gizmo` | sonnet | high |", "| `gizmo` | opus | high |"))
-PY
+sed -i 's/| `gizmo` | sonnet | high |/| `gizmo` | opus | high |/' "$FIX/specs/301-fixture/spec.md"
 before=$(state 301-fixture)
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(rc)" -eq 2 ] && [ -z "$out" ] && ok "the table moved to opus and FR-009 still says Sonnet: the dispatch is REFUSED" || no "a stale value was dispatched to a reviewer" "(rc=$(rc))"

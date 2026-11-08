@@ -115,9 +115,7 @@ teardown
 echo "8. quick and done in one command are COMBINED, not rejected (GM 2026-08-30)"
 setup
 rewrote() { # command, expected rewritten command
-  got=$("$HOOK" pretool <<<"$(bash_ev "$1")" 2>/dev/null | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
+  got=$("$HOOK" pretool <<<"$(bash_ev "$1")" 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
   if [ "$got" = "$2" ]; then echo "  ok    $1  ->  $2"; PASS=$((PASS+1));
   else echo "  FAIL  $1  ->  ${got:-<nothing>}  (expected $2)"; FAIL=$((FAIL+1)); fi
 }

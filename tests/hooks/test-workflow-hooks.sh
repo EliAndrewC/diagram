@@ -85,7 +85,7 @@ wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"01
 [ "$(rc)" -eq 2 ] && grep -q 'unit 0107' "$T/err" && grep -q 'BLOCKED by the stub guard: its own words' "$T/err" && ok "a unit a guard refuses refuses the whole run, with the unit's label and the guard's own message" || no "a refused unit went" "(rc=$(rc)) $(head -5 "$T/err")"
 wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md","then":[{"agentType":"source-reader","prompt":"REFUSE-ME verify"}]}]}}'
 [ "$(rc)" -eq 2 ] && grep -q '0105 / source-reader' "$T/err" && ok "a declared verify step a guard refuses refuses the run too" || no "a refused verify step went" "(rc=$(rc))"
-SHARED=$(python3 -c 'print("\n".join(f"Context line {i}: what every check of this kind needs to know about the record." for i in range(130)))')
+SHARED=$(for i in $(seq 0 129); do echo "Context line $i: what every check of this kind needs to know about the record."; done)
 python3 - "$SHARED" > "$T/args.json" <<'PY'
 import json, sys
 print(json.dumps({"name": "check-wave", "args": {"agentType": "quote-check", "units": [

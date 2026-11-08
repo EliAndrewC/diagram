@@ -17,7 +17,7 @@ NOW=1000000
 
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
-SHARED=$(python3 -c 'print("\n".join(f"Context line {i}: what every check of this kind needs to know about the record." for i in range(130)))')
+SHARED=$(for i in $(seq 0 129); do echo "Context line $i: what every check of this kind needs to know about the record."; done)
 dispatch() { # dispatch <session> <type> <prompt> [<seconds after the last>] -> rc in $T/rc, stderr in $T/err
   NOW=$((NOW + ${4:-60}))
   jq -nc '{"session_id":$ARGS.positional[0],"cwd":$ARGS.positional[3],"tool_name":"Agent","tool_input":{"subagent_type":$ARGS.positional[1],"prompt":$ARGS.positional[2],"description":"x"}}' --args -- "$1" "$2" "$3" "$FIX" \
@@ -61,8 +61,8 @@ $SHARED"
 [ "$(rc)" -eq 2 ] && ok "a bare escape with no reason does not" || no "a bare escape passed" "(rc=$(rc))"
 
 echo "3. every repeated run is judged, not the longest alone"
-B=$(python3 -c 'print("\n".join(f"Block B line {i}: the standing rules every dispatch of this check carries along." for i in range(60)))')
-C=$(python3 -c 'print("\n".join(f"Block C line {i}: a second shared context, after the unit this time." for i in range(35)))')
+B=$(for i in $(seq 0 59); do echo "Block B line $i: the standing rules every dispatch of this check carries along."; done)
+C=$(for i in $(seq 0 34); do echo "Block C line $i: a second shared context, after the unit this time."; done)
 dispatch s3 record-format "$C
 $B"
 dispatch s3 record-format "Judge question 0087 alone.

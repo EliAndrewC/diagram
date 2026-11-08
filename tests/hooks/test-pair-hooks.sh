@@ -321,7 +321,7 @@ moved_two; reset_prereq
 snap_of testmap; snap_of othermap
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 check "a ONE-map dispatch that mentions the other map for context is permitted (the snapshot form wins)" '[ "$(rc_pretool "$ONE")" -eq 0 ]'
-check "...and records the dispatch: the map, at this key" 'python3 -c "import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get(\"dispatched\",{}).get(\"settlement-review--testmap\",{}).get(\"key\")==sys.argv[2] else 1)" "$CLONE/.git/pairing-state.json" "$KEY"'
+check "...and records the dispatch: the map, at this key" 'jq -e --arg k "$KEY" ".dispatched[\"settlement-review--testmap\"].key == \$k" "$CLONE/.git/pairing-state.json" >/dev/null'
 }
 
 case_13() {  # 10 s of its chain, measured as one 2026-10-12
