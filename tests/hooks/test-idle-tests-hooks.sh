@@ -5,7 +5,7 @@
 # the sessions directory and the command run are injected through the IDLE_* seams, which the
 # hook honors only inside a fixture (proved below too).
 set -u
-HOOK="$(cd "$(dirname "$0")" && pwd)/../../scripts/hooks/idle-tests-hooks.sh"
+HOOK="$(cd "$(dirname "$0")" && pwd)/idle-tests-hooks.sh"
 pass=0 fail=0
 ok() { pass=$((pass+1)); }
 bad() { fail=$((fail+1)); echo "FAIL: $1"; }
@@ -183,7 +183,7 @@ rm -f "$CA/.git/idle-tests.json"
 OUT=$(printf '{"cwd":"%s","session_id":"sid-a"}' "$CA" | (cd "$CA" && IDLE_ARM=0 IDLE_ROOT="$CA" "$HOOK" stop 2>&1)); RC=$?
 check "disabled: a Stop arms nothing"        '[ "$RC" -eq 0 ] && [ ! -f "$CA/.git/idle-tests.json" ]'
 check "disabled: and says nothing"           '[ -z "$OUT" ]'
-check "the shipped default IS disabled"      'grep -q "^DEF_ARM=0" "$HOOK"'
+check "the shipped default IS disabled"      'grep -q "pub const DEF_ARM: bool = false;" "$REAL/rust/guard/src/guards/idle_tests_hooks.rs"'
 # the disarm half stays live: a timer armed BEFORE the switch must still be cleanable
 printf '{"session":"s","session_id":"sid-a","armed_at":1,"wait_min":9,"timer_pid":999999}' > "$CA/.git/idle-tests.json"
 hook prompt "$CA" >/dev/null 2>&1

@@ -182,9 +182,9 @@
    "declared": "spec-fidelity"
   },
   "### T014 Approach (checklist part A)": {
-   "sha256": "338e9a6208ebd3143651bb6fd6c972c143d8f29cede8f1210fba82d0cd8bd94d",
+   "sha256": "fbf06dd5f52563f506e7dbb43cff2deb0801d4b1981352819daa6f2b289201ef",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T015 Approach (checklist part A)": {
@@ -1462,6 +1462,46 @@
      "why": "Directly FR-002: same outputs, suite expectations unedited."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T014 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "Every mode (stop, prompt, timer, stagger) moves to Rust; the detached wait and printed stagger become the binary's --idle-tests entry, started by setsid nohup as the shell was; the GM's disable of 2026-09-06 carries over as one constant, arming off.",
+     "class": "within",
+     "why": "Porting every mode is what the GM's 'making this a Rust codebase' and D3 ask, and leaves no shell behind. Keeping arming off is FR-002 (same verdicts), not a carve-out. FR-007's one process concerns the guards deciding a tool call, not a background wait started the way the shell started it."
+    },
+    {
+     "id": "(b)",
+     "summary": "git, setsid, nohup, kill, pgrep and the run itself stay external tools asked by path; the lock is the flock tool on the lock file's descriptor.",
+     "class": "within",
+     "why": "These are system tools, not Python or shell in the repository, so FR-001 is untouched and nothing the GM asked for is reduced. The stated semantics (a lock owned by the open file the timer holds, as fd 9 was) keep FR-002. The choice of flock tool over a library call is design, which this mode does not grade."
+    },
+    {
+     "id": "(c)",
+     "summary": "The small tools and the Python fragments go in-process (field, state_of, JSON, cksum with the same CRC values, ls -t, clone top); the JSON's keys and values are the same, its key order and indentation are not held.",
+     "class": "within",
+     "why": "FR-002 binds outputs 'on every case its tests and its suites hold'. Key order and indentation are outside that unless a case holds them, and if one does the block's own exit (every case of the suite passes, expectations unedited but the one in d-2) fails and the task is set down, so the obligation is not reduced. The request says nothing of byte layout. The premise that each reader takes it by key could not be checked from the bundle; the exit, not the premise, is what keeps this within."
+    },
+    {
+     "id": "(d-1)",
+     "summary": "$HOOK stagger <name> reaches --idle-tests through the shim.",
+     "class": "within",
+     "why": "D4 points HOOK at the Rust guard; the shim routes the case's unchanged input to the entry of (a). No expectation moves."
+    },
+    {
+     "id": "(d-2)",
+     "summary": "The case 'the shipped default IS disabled' grepped the shell's DEF_ARM=0; it reads the Rust constant instead.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This edits a case of the suite D4 makes the replay and FR-002 holds, so it is ruled on, not passed as within. The general rule is physically impossible here: the case greps a file the port must delete (D3, the GM's move to Rust), so it cannot pass unedited once the shell is gone. The case's purpose survives whole: it pins the GM's disable where that disable now lives, and its expected result is unchanged, so this is not FR-002's verdict-change exception and needs no XIV fix. It covers this one case; the block states every other expectation is unedited."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1894,6 +1934,45 @@
      "summary": "The prompt mode's lines are the decider's plain-stdout answer, byte for byte, so the suite's prompt cases pass unedited.",
      "class": "within",
      "why": "Directly FR-002: same outputs, suite expectations unedited."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T014": {
+   "section_sha256": "fbf06dd5f52563f506e7dbb43cff2deb0801d4b1981352819daa6f2b289201ef",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "Every mode (stop, prompt, timer, stagger) moves to Rust; the detached wait and printed stagger become the binary's --idle-tests entry, started by setsid nohup as the shell was; the GM's disable of 2026-09-06 carries over as one constant, arming off.",
+     "class": "within",
+     "why": "Porting every mode is what the GM's 'making this a Rust codebase' and D3 ask, and leaves no shell behind. Keeping arming off is FR-002 (same verdicts), not a carve-out. FR-007's one process concerns the guards deciding a tool call, not a background wait started the way the shell started it."
+    },
+    {
+     "id": "(b)",
+     "summary": "git, setsid, nohup, kill, pgrep and the run itself stay external tools asked by path; the lock is the flock tool on the lock file's descriptor.",
+     "class": "within",
+     "why": "These are system tools, not Python or shell in the repository, so FR-001 is untouched and nothing the GM asked for is reduced. The stated semantics (a lock owned by the open file the timer holds, as fd 9 was) keep FR-002. The choice of flock tool over a library call is design, which this mode does not grade."
+    },
+    {
+     "id": "(c)",
+     "summary": "The small tools and the Python fragments go in-process (field, state_of, JSON, cksum with the same CRC values, ls -t, clone top); the JSON's keys and values are the same, its key order and indentation are not held.",
+     "class": "within",
+     "why": "FR-002 binds outputs 'on every case its tests and its suites hold'. Key order and indentation are outside that unless a case holds them, and if one does the block's own exit (every case of the suite passes, expectations unedited but the one in d-2) fails and the task is set down, so the obligation is not reduced. The request says nothing of byte layout. The premise that each reader takes it by key could not be checked from the bundle; the exit, not the premise, is what keeps this within."
+    },
+    {
+     "id": "(d-1)",
+     "summary": "$HOOK stagger <name> reaches --idle-tests through the shim.",
+     "class": "within",
+     "why": "D4 points HOOK at the Rust guard; the shim routes the case's unchanged input to the entry of (a). No expectation moves."
+    },
+    {
+     "id": "(d-2)",
+     "summary": "The case 'the shipped default IS disabled' grepped the shell's DEF_ARM=0; it reads the Rust constant instead.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This edits a case of the suite D4 makes the replay and FR-002 holds, so it is ruled on, not passed as within. The general rule is physically impossible here: the case greps a file the port must delete (D3, the GM's move to Rust), so it cannot pass unedited once the shell is gone. The case's purpose survives whole: it pins the GM's disable where that disable now lives, and its expected result is unchanged, so this is not FR-002's verdict-change exception and needs no XIV fix. It covers this one case; the block states every other expectation is unedited."
     }
    ],
    "verdict": "CLEAR"

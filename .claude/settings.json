@@ -33,12 +33,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" prompt",
-            "timeout": 30,
-            "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
-          },
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/agent-stall-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-stall-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 15,
             "statusMessage": "Checking for stalled background agents..."
@@ -454,15 +448,6 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/set-down-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/set-down-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 385 T70 - a feature is worked until it is set down"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" stop",
-            "timeout": 30
           }
         ]
       },

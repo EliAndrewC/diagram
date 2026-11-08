@@ -27,4 +27,6 @@ export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tre
 # ...and rustup's own homes, which its cargo proxy reads from HOME to choose a toolchain (T010: a suite that moves HOME left the
 # build with "rustup could not choose a version of cargo to run")
 export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}"
+# idle-tests' printed stagger is the guard's entry that is no hook event (T014 decision (a))
+[ "$event" = stagger ] && exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@"
 exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"

@@ -172,7 +172,7 @@ def read(skill: Path) -> Switches:
     return sw
 
 
-IDLE_TIMER_MARK = "idle-tests-hooks.sh"
+IDLE_TIMER_MARK = "--idle-tests"  # the timer is the guard binary's entry since feature 449 T014
 
 
 def _proc_status(pid: int) -> str:

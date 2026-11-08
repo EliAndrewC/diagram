@@ -40,5 +40,5 @@ On the incremental gate (feature 207): *"I am not interested in doing full basel
 because I want to first get things back to a point where the tests themselves are so efficient that we don't need to
 worry about such things. After our project has expanded and the tests become inescapably lengthy, then perhaps we will
 turn the idle tests back on."* A slow gate is answered by cheaper tests (selection, caching, roll speed), not by an idle
-run nobody watches; do not propose re-arming idle tests until the GM raises it. Applied: `scripts/hooks/idle-tests-hooks.sh`
+run nobody watches; do not propose re-arming idle tests until the GM raises it. Applied: `rust/guard/src/guards/idle_tests_hooks.rs`
 (disarmed), `docs/iteration-loop.md`.

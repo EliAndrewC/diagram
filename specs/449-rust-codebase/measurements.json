@@ -341,5 +341,18 @@
       "suite_cases": 63,
       "suite_passed_against_rust": 63
     }
+  },
+  "idle-tests-hooks-ported": {
+    "quantity": "a prompt's cost in the idle-tests guard, the shell's against the Rust dispatcher carrying it beside seven ported guards (T014)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/idle-tests-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload with an empty session id, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call on a quiet host (load 1.6); the suite replayed through tests/hooks/idle-tests-hooks.sh. A Stop's dispatcher figure carries every guard on Stop, not this one, which is disabled and returns first, so it is not compared",
+    "value": {
+      "shell_prompt_ms": 41.8,
+      "rust_dispatcher_prompt_ms": 6.6,
+      "suite_cases": 34,
+      "suite_passed_against_rust": 34
+    }
   }
 }

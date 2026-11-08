@@ -19,6 +19,7 @@ pub fn guards() -> Vec<Guard> {
         guards::main_tree_hooks::GUARD,
         guards::event_log_hooks::GUARD,
         guards::clone_sync_hooks::GUARD,
+        guards::idle_tests_hooks::GUARD,
     ]
 }
 
@@ -74,9 +75,11 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
             }
             decide(event, stdin, &one)
         }
+        // the detached timer and the printed stagger, the guard's two entries that are not a hook event (T014 decision (a))
+        Some("--idle-tests") => guards::idle_tests_hooks::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
-            "l7r-guard: <event> | --only <guard> <event> | --self-check | --version".to_owned(),
+            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --self-check | --version".to_owned(),
             1,
         ),
     }
@@ -171,7 +174,8 @@ mod tests {
                     "no-poll-hooks",
                     "main-tree-hooks",
                     "event-log-hooks",
-                    "clone-sync-hooks"
+                    "clone-sync-hooks",
+                    "idle-tests-hooks"
                 ]
         );
     }
