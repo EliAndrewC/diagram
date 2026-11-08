@@ -25,6 +25,7 @@ cat > "$W/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo build >> "$CALLS"
 [ "$BUILD" = broken ] && { echo "error[E0308]: mismatched types" >&2; exit 101; }
+[ "$BUILD" = slow ] && { echo "Compiling serde" >&2; sleep 3; exit 0; }
 mkdir -p "$CARGO_TARGET_DIR/release"
 check=0; [ "$BUILD" = unchecked ] && check=1
 printf '#!/usr/bin/env bash\n[ "$1" = --self-check ] && exit %s\ncat > /dev/null; echo "%s $*"\n' "$check" "$VERSION" > "$CARGO_TARGET_DIR/release/l7r-guard"
@@ -37,6 +38,22 @@ IN='{"session_id": "s", "cwd": "/c", "tool_name": "Bash", "tool_input": {"comman
 run() { BUILD=$1 VERSION=$2 "$T/scripts/hooks/l7r-guard.sh" PreToolUse < <(printf '%s' "$IN"); }
 calls() { wc -l < "$CALLS" 2>/dev/null | tr -d ' ' || echo 0; }
 touch_sources() { sleep 0.01; touch "$T/rust/guard/src/main.rs"; }
+
+# 0. none built yet and the build is slow or already running elsewhere: through at once, said and logged, nothing stamped failed
+out=$(L7R_GUARD_BUILD_SECS=0.3 run slow v0 2>/dev/null); rc=$?
+check "slow: exit" "$rc" 0
+case "$out" in *"went through unguarded"*) ok ;; *) bad "slow: notice [$out]" ;; esac
+grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "slow: the limit said in build.log [$(cat "$W/target/build.log")]"
+[ ! -e "$W/target/guard.failed" ] && ok || bad "slow: a build cut by its limit is not stamped failed"
+check "slow: one build tried" "$(calls)" 1
+exec 8> "$W/target/guard.lock"; flock 8  # this shell holds the build lock, as a call mid-build would
+t0=${EPOCHREALTIME/,/.}; out=$(run ok v0 2>/dev/null)
+gone=$(awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { print (b - a < 1) ? "fast" : "waited" }')
+check "locked: no wait on another call's build" "$gone" fast
+check "locked: no second build" "$(calls)" 1
+case "$out" in *"went through unguarded"*) ok ;; *) bad "locked: notice [$out]" ;; esac
+grep -q "passed its 0.3 s limit" "$W/target/build.log" && ok || bad "locked: the running build's log left alone"
+exec 8>&-; : > "$CALLS"; rm -f "$W"/log/*.json
 
 # 1. none ever built: the build fails, the call goes through with its notice and a guard-log line
 out=$(run broken v0 2>/dev/null); rc=$?
