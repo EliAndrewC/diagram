@@ -27,6 +27,7 @@ pub fn guards() -> Vec<Guard> {
         guards::gm_tree_hooks::GUARD,
         guards::batching_hooks::GUARD,
         guards::no_branch_hooks::GUARD,
+        guards::discard_hooks::GUARD,
     ]
 }
 
@@ -192,7 +193,8 @@ mod tests {
                     "engine-freeze-hooks",
                     "gm-tree-hooks",
                     "batching-hooks",
-                    "no-branch-hooks"
+                    "no-branch-hooks",
+                    "discard-hooks"
                 ]
         );
     }

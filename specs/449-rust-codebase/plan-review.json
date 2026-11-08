@@ -230,9 +230,9 @@
    "declared": "spec-fidelity"
   },
   "### T022 Approach (checklist part A)": {
-   "sha256": "7d5ee9eee4c691b29f90648c4b3f6ddd6c4e280b1a4c217f2bdd4e48cb3d764e",
+   "sha256": "d26b741848af79c749381497d7cec6a08cb2d295bafff48f66e169aff5696fcd",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T023 Approach (checklist part A)": {
@@ -1838,6 +1838,58 @@
      "why": "These carry FR-002, FR-003, FR-004 and D3-D4 as written and remove nothing from them. FR-008 stays in force as a named constraint of the task. The red route and the landing target are process and do not alter what is delivered."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T022 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T022-a-straight-port",
+     "summary": "discard-hooks is ported as a straight port with its inline Python parser moved in-process and unchanged: the split on &&, ||, ;, |, shlex with comments, each git checkout or restore's paths, the merge-resolution exception, git status --porcelain per path, git asked by path with the shell's existing 5-second limit, and the refusal's words kept.",
+     "class": "within",
+     "why": "This is FR-002's same verdicts and outputs and the request's 'all be ported to Rust'; it adds no behavior and removes none. The 5-second limit is the existing guard's constant carried over, not a new value."
+    },
+    {
+     "id": "T022-a-closing-pointer",
+     "summary": "The refusal's text is the shell's except its closing pointer, which names the Rust file instead of scripts/hooks/discard-hooks.sh.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It departs from FR-002's 'same outputs', and FR-002's named exceptions (maps, a XIV fix) do not cover it, so it is ruled rather than passed as within. Keeping the words literally would defeat the request's own purpose concretely: this same task deletes the shell, so the refusal would direct the reader to a file that no longer exists, and a Rust guard would keep advertising the replaced piece as its home. The change is confined to that pointer; no verdict moves and every other word stays the shell's. If a suite case asserts the old pointer, FR-002's same-commit expected-verdict discipline applies by naming the change."
+    },
+    {
+     "id": "T022-2-no-xiv-fix",
+     "summary": "No constitution XIV fix is decided for this guard; the port moves the logic unchanged, with FR-002's naming duty stated as the constraint should one arise.",
+     "class": "within",
+     "why": "FR-002 permits a XIV fix only where a guard refuses correct work; it does not require one, and declining to change verdicts is the rule itself."
+    },
+    {
+     "id": "T022-5-order",
+     "summary": "The task runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Plan D3 (dispatcher first, then guard by guard in separate commits); FR-001's hooks-first phase."
+    },
+    {
+     "id": "T022-6-exits",
+     "summary": "Green is the guard's own suite green against l7r-guard --only discard-hooks plus make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D4 makes the suite the replay and FR-004 holds coverage; the red path keeps the Python running as FR-003 requires. The checks only enforce what was asked."
+    },
+    {
+     "id": "T022-8-landing",
+     "summary": "The task lands through make land-tooling with no work budget and nothing rolled.",
+     "class": "within",
+     "why": "A tooling port moves no researched value; the landing route narrows nothing the GM asked."
+    },
+    {
+     "id": "T022-9-done-switch",
+     "summary": "Done means every case of test-discard-hooks.sh passes against the Rust guard, with scripts/hooks/discard-hooks.sh and its settings entry gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3's same-commit switch and FR-003's never-both; removing the script itself is FR-001's replacement and FR-002's deletion after the suite passes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2638,6 +2690,57 @@
      "summary": "Steps 6, 8 and 9: green on the guard's suite against l7r-guard --only no-branch-hooks plus make rust-test, cover and hooks-test; red stops to make arbiter-ask; landed by make land-tooling; shell and settings entry removed in the registering commit.",
      "class": "within",
      "why": "These carry FR-002, FR-003, FR-004 and D3-D4 as written and remove nothing from them. FR-008 stays in force as a named constraint of the task. The red route and the landing target are process and do not alter what is delivered."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T022": {
+   "section_sha256": "d26b741848af79c749381497d7cec6a08cb2d295bafff48f66e169aff5696fcd",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T022-a-straight-port",
+     "summary": "discard-hooks is ported as a straight port with its inline Python parser moved in-process and unchanged: the split on &&, ||, ;, |, shlex with comments, each git checkout or restore's paths, the merge-resolution exception, git status --porcelain per path, git asked by path with the shell's existing 5-second limit, and the refusal's words kept.",
+     "class": "within",
+     "why": "This is FR-002's same verdicts and outputs and the request's 'all be ported to Rust'; it adds no behavior and removes none. The 5-second limit is the existing guard's constant carried over, not a new value."
+    },
+    {
+     "id": "T022-a-closing-pointer",
+     "summary": "The refusal's text is the shell's except its closing pointer, which names the Rust file instead of scripts/hooks/discard-hooks.sh.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It departs from FR-002's 'same outputs', and FR-002's named exceptions (maps, a XIV fix) do not cover it, so it is ruled rather than passed as within. Keeping the words literally would defeat the request's own purpose concretely: this same task deletes the shell, so the refusal would direct the reader to a file that no longer exists, and a Rust guard would keep advertising the replaced piece as its home. The change is confined to that pointer; no verdict moves and every other word stays the shell's. If a suite case asserts the old pointer, FR-002's same-commit expected-verdict discipline applies by naming the change."
+    },
+    {
+     "id": "T022-2-no-xiv-fix",
+     "summary": "No constitution XIV fix is decided for this guard; the port moves the logic unchanged, with FR-002's naming duty stated as the constraint should one arise.",
+     "class": "within",
+     "why": "FR-002 permits a XIV fix only where a guard refuses correct work; it does not require one, and declining to change verdicts is the rule itself."
+    },
+    {
+     "id": "T022-5-order",
+     "summary": "The task runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Plan D3 (dispatcher first, then guard by guard in separate commits); FR-001's hooks-first phase."
+    },
+    {
+     "id": "T022-6-exits",
+     "summary": "Green is the guard's own suite green against l7r-guard --only discard-hooks plus make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D4 makes the suite the replay and FR-004 holds coverage; the red path keeps the Python running as FR-003 requires. The checks only enforce what was asked."
+    },
+    {
+     "id": "T022-8-landing",
+     "summary": "The task lands through make land-tooling with no work budget and nothing rolled.",
+     "class": "within",
+     "why": "A tooling port moves no researched value; the landing route narrows nothing the GM asked."
+    },
+    {
+     "id": "T022-9-done-switch",
+     "summary": "Done means every case of test-discard-hooks.sh passes against the Rust guard, with scripts/hooks/discard-hooks.sh and its settings entry gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3's same-commit switch and FR-003's never-both; removing the script itself is FR-001's replacement and FR-002's deletion after the suite passes."
     }
    ],
    "verdict": "CLEAR"

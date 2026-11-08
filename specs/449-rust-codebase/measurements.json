@@ -445,5 +445,18 @@
       "suite_cases": 19,
       "suite_passed_against_rust": 19
     }
+  },
+  "discard-hooks-ported": {
+    "quantity": "a Bash ls's cost in the discard guard, the shell's against the Rust guard alone (T022)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/discard-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only discard-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/discard-hooks.sh",
+    "value": {
+      "shell_bash_ms": 28.6,
+      "rust_guard_bash_ms": 6.5,
+      "suite_cases": 27,
+      "suite_passed_against_rust": 27
+    }
   }
 }

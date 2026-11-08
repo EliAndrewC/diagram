@@ -3,7 +3,7 @@
 # uncommitted work, and lets every harmless spelling through. Runs in a throwaway git repo so it
 # can make a file genuinely dirty.
 set -u
-HOOK="$(cd "$(dirname "$0")" && pwd)/../../scripts/hooks/discard-hooks.sh"
+HOOK="$(cd "$(dirname "$0")" && pwd)/discard-hooks.sh"
 pass=0 fail=0
 # GUARD_EDIT_OK: feature 168 - this guard records its firings now, so the suite writes its fixtures to
 # a throwaway log. A census polluted by its own tests answers nothing, and that has happened once (24
