@@ -40,10 +40,7 @@ fn turn(d: &Path, input: &Value, at: u64) -> Vec<Answer> {
 }
 
 fn history(d: &Path) -> String {
-    let said: String = fire(d, "status", &read(), 0)
-        .iter()
-        .map(|a| format!("{a:?}"))
-        .collect();
+    let said = format!("{:?}", fire(d, "status", &read(), 0));
     said.split_whitespace()
         .find_map(|w| w.strip_prefix("history="))
         .unwrap_or("")
