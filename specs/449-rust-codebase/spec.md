@@ -39,8 +39,8 @@ mutation test 20.7 s -> 1.1 s, a check bundle 3.3 s -> 1.55 s (`m:design-fixes`)
 The GM works with a session; before each tool call the project's guards run. Today that is 29 processes, each a shell that starts
 Python (`m:hooks-bash`). After this story they answer as one process, with the same verdicts.
 
-**Why this priority**: the GM: "startup time for hooks is just generally more important." It is paid on every tool call of every
-session, and its CPU competes with any gate running beside it on a laptop measured at its thermal limit (`m:done-rust-edit`).
+**Why this priority**: the GM asked of the hooks first - "Wouldn't the hooks being in Rust also make the hook tests run faster?" -
+before deciding on the whole codebase. Their cost is paid on every tool call of every session, and its CPU competes with any gate running beside it on a laptop measured at its thermal limit (`m:done-rust-edit`).
 
 **Independent Test**: time the guards for a Bash, an Edit and an Agent call before and after; replay every guard suite's cases
 (`tests/hooks/`) against the replacement and compare each verdict.
@@ -116,10 +116,17 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 
 ### Functional Requirements
 
-- **FR-001**: Every Python module in the repository outside git history MUST be replaced by Rust, in four phases in this order:
-  the hooks (Story 1), the gate (Story 2), the tooling (Story 3), Mode A and the page writer (Story 4).
+- **FR-001**: Every Python file the repository tracks MUST be replaced by Rust, in four phases in this order: the hooks (Story 1),
+  the gate (Story 2), the tooling (Story 3), Mode A and the page writer (Story 4). THE CENSUS is `git ls-files '*.py'` (872 files on
+  2026-11-07, `m:python-census`), and every directory it returns is in a phase: `scripts/hooks/` and the libraries its guards call -
+  phase 1; `l7r/diagram/ci/`, the gate's scripts under `scripts/gates/` and `scripts/measure/` - phase 2; the rest of `scripts/`,
+  `l7r/diagram/tools/`, `l7r/diagram/pipeline/` and `specs/` - phase 3; `l7r/diagram/` Mode A (`compound*`, `labels/`, `buildings/`),
+  `l7r/diagram/interactive/` and the Mode A sheets' generators under `pool/` (6, the magistracies and the country shrine) - phase 4;
+  each `tests/` file with the piece it tests. The census is run again at each phase's end and at the feature's close.
 - **FR-002**: Each replaced piece MUST give the same verdicts and outputs as the Python it replaces, on every case its tests and its
-  suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18).
+  suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18). The
+  one other exception: a guard or check that refuses correct work today is fixed in its port (constitution XIV), its case's expected
+  verdict changed in the same commit, the change named in the commit and in the phase's record.
 - **FR-003**: Until a piece's replacement passes, its Python MUST remain the one that runs; no piece runs both.
 - **FR-004**: Every replacement MUST hold the coverage floor the Rust crate holds today: every line and every function reached by a
   test, read strictly.
@@ -129,8 +136,12 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   process, semantic file ids read from the kept cache, a fixture built once.
 - **FR-007**: The guards MUST run as one process for a tool call, not one per guard.
 - **FR-008**: A tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command.
-- **FR-009**: The JavaScript and CSS of the interactive page, the research record's HTML fragments and the shell entry points of
-  the container are not Python and are out of this feature's scope.
+- **FR-009**: The JavaScript and CSS of the interactive page, the research record's HTML fragments and the container's setup scripts
+  (`scripts/container/`) are not Python and are out of this feature's scope. The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
+  in it: Story 1 replaces them. The GM's own hooks in `~/.claude/` are not this repository's and are out of it.
+- **FR-011**: A file under `specs/` - a past feature's harness, measurement or prototype - that no make target and no open feature runs
+  is deleted (git history keeps it) rather than ported; one that is run is ported. EXCEPTION to "all" (FR-001), recorded for its own
+  ruling: porting what nothing runs would be work toward no running code.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
 
 ### Key Entities
@@ -147,7 +158,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   runs no test.
 - **SC-003**: The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
 - **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
-- **SC-005**: When the feature closes, the repository holds no Python file and `make done` runs with no Python interpreter.
+- **SC-005**: When the feature closes, the census (FR-001) returns no file and `make done` runs with no Python interpreter.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
