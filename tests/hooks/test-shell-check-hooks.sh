@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for shell-check-hooks.sh. Run: tests/hooks/test-shell-check-hooks.sh   (exit 0 = all green)
+# Tests for the shell-check guard (rust/guard, replayed through its link). Run: tests/hooks/test-shell-check-hooks.sh   (exit 0 = all green)
 #
 # TWO DIRECTIONS, always: the guard must FIRE on the four things it exists to catch, and STAY QUIET on
 # correct work. The quiet half here is not a list somebody imagined - it is the REPLAY of every Bash
@@ -9,5 +9,4 @@
 # trust; this one's is measured on every run.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-python3 "$HERE/../../scripts/hooks/lib/hm_shell.py" --selftest || exit 1
 exec python3 "$HERE/test_hooks_cases.py" "shell-check"

@@ -32,6 +32,7 @@ pub mod phase_source_hooks;
 pub mod readme_hooks;
 pub mod repo_safety_hooks;
 pub mod set_down_hooks;
+pub mod shell_check_hooks;
 pub mod source_block_hooks;
 pub mod stall_watchdog_hooks;
 pub mod wakeup_hooks;

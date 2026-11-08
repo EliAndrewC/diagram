@@ -253,7 +253,7 @@ def corpus_replay() -> int:
 
     data = json.loads((HERE / "fixtures" / "bash-parse-corpus-2026-09.json").read_text())
     expected, rows = data["expected"], data["commands"]
-    script = str(HERE / "../../scripts/hooks/shell-check-hooks.sh")
+    script = str(HERE / "shell-check-hooks.sh")  # the guard's link (feature 449 T035)
     env = dict(os.environ, GUARD_LOG_DIR=str(LOGDIR))
 
     def drive(row: dict) -> tuple[dict, str]:

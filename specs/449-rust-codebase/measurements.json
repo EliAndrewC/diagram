@@ -665,5 +665,19 @@
       "rust_guard_edit_ms": 7.63,
       "source_block_cases": 6
     }
+  },
+  "shell-check-parse": {
+    "quantity": "a plain Bash call's cost in the shell-check guard, the shell's against the Rust guard alone, and the bash -O extglob -n child both ask (T035)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/shell-check-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only shell-check-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50, the parse 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the case table and the 238-command corpus replayed through its link",
+    "value": {
+      "shell_bash_ms": 41.34,
+      "rust_guard_bash_ms": 11.64,
+      "bash_parse_ms": 1.33,
+      "shell_check_cases": 29,
+      "corpus_commands": 238
+    }
   }
 }

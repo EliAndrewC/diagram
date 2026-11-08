@@ -308,9 +308,9 @@
    "declared": "spec-fidelity"
   },
   "### T035 Approach (checklist part A)": {
-   "sha256": "78eb0ee8783fe78b9acdecf8d500cfbdb9de3fa814c316522c7c60975241560f",
+   "sha256": "c37c244a4c6a42819841eff5690601f4919f5a49c5c9a8a039357215f6a3c594",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T036 Approach (checklist part A)": {
@@ -2673,6 +2673,51 @@
      "why": "The order follows D3's guard-by-guard landing. The exits test FR-002 and FR-004 and drop no case or requirement. The red path sets the task down instead of weakening a check, and the landing route changes nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T035 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a",
+     "summary": "The guard and lib/hm_shell.py both move in-process (word walk, four rules in order, rewrite and its conditions, refusal words); hm_shell.py is removed with the shell.",
+     "class": "within",
+     "why": "The GM asked for all the Python to be ported; FR-001 and FR-002 carry that, and the block keeps the rule order, the rewrite conditions and the refusal words. 'hm_shell.py's only caller is the guard' names no search command and could not be grepped from a bundle-only review; the ruling takes it as stated. It creates no narrowing: if another caller exists, the deletion fails rather than the scope shrinking."
+    },
+    {
+     "id": "a-selftest",
+     "summary": "The suite's first line, which ran hm_shell.py --selftest, is removed and the selftest's assertions move into the guard's Rust unit tests; the corpus replay still drives the hook.",
+     "class": "within",
+     "why": "FR-002 and D4 require every case to hold before the Python is deleted. The assertions are moved, not dropped, and D4 already places unit tests written from the cases beside the decider. Only the line invoking a deleted Python file goes."
+    },
+    {
+     "id": "b",
+     "summary": "The parse stays bash -O extglob -n, a child of the one guard process, with no Rust reimplementation of bash's grammar.",
+     "class": "within",
+     "why": "The request and FR-001 concern Python; bash is not Python and FR-009 shows the port's scope is bounded to it. FR-007 says one process, not one per guard: a parser child of that process is not a guard's process. Asking bash keeps the verdicts FR-002 requires, where a second parser would risk them. Cost is keyed at m:shell-check-parse."
+    },
+    {
+     "id": "c",
+     "summary": "executing_backticks joins shared::shape in Rust; the Python copy in hm_shape.py stays for its other callers until T051.",
+     "class": "within",
+     "why": "FR-003 is per piece: this guard runs only the Rust copy, and each remaining caller runs only the Python one until its own port, as FR-003's first clause requires. No piece runs both. T051 is not in the bundle, so the deferral's placement was not checked; the Python's eventual removal is held by FR-001 regardless."
+    },
+    {
+     "id": "d",
+     "summary": "This guard runs last in guards(), pinned by lib.rs's order test, with later ports inserted before it, so every other guard judges the command as written and the rewrite reaches only Claude Code.",
+     "class": "within",
+     "why": "Followed literally: last entry plus a pinned order means nothing after it can read the rewrite, so the defect ruled on in round 1 cannot occur and each other guard keeps the input it had as a shell guard, which FR-002 requires. The order test only enforces that. How the dispatcher aggregates several guards' results is T005's design and is not in this bundle."
+    },
+    {
+     "id": "exits",
+     "summary": "Green is the guard's suite against l7r-guard --only shell-check-hooks plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; landed via make land-tooling.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, with FR-004's coverage floor. The landing route and the absence of a work budget decide nothing the request or spec constrains."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4243,6 +4288,50 @@
      "summary": "Order and exits: after T005 and independent of the other guards; green is the guard's suite, make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask; landed with make land-tooling with no work budget.",
      "class": "within",
      "why": "The order follows D3's guard-by-guard landing. The exits test FR-002 and FR-004 and drop no case or requirement. The red path sets the task down instead of weakening a check, and the landing route changes nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T035": {
+   "section_sha256": "c37c244a4c6a42819841eff5690601f4919f5a49c5c9a8a039357215f6a3c594",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a",
+     "summary": "The guard and lib/hm_shell.py both move in-process (word walk, four rules in order, rewrite and its conditions, refusal words); hm_shell.py is removed with the shell.",
+     "class": "within",
+     "why": "The GM asked for all the Python to be ported; FR-001 and FR-002 carry that, and the block keeps the rule order, the rewrite conditions and the refusal words. 'hm_shell.py's only caller is the guard' names no search command and could not be grepped from a bundle-only review; the ruling takes it as stated. It creates no narrowing: if another caller exists, the deletion fails rather than the scope shrinking."
+    },
+    {
+     "id": "a-selftest",
+     "summary": "The suite's first line, which ran hm_shell.py --selftest, is removed and the selftest's assertions move into the guard's Rust unit tests; the corpus replay still drives the hook.",
+     "class": "within",
+     "why": "FR-002 and D4 require every case to hold before the Python is deleted. The assertions are moved, not dropped, and D4 already places unit tests written from the cases beside the decider. Only the line invoking a deleted Python file goes."
+    },
+    {
+     "id": "b",
+     "summary": "The parse stays bash -O extglob -n, a child of the one guard process, with no Rust reimplementation of bash's grammar.",
+     "class": "within",
+     "why": "The request and FR-001 concern Python; bash is not Python and FR-009 shows the port's scope is bounded to it. FR-007 says one process, not one per guard: a parser child of that process is not a guard's process. Asking bash keeps the verdicts FR-002 requires, where a second parser would risk them. Cost is keyed at m:shell-check-parse."
+    },
+    {
+     "id": "c",
+     "summary": "executing_backticks joins shared::shape in Rust; the Python copy in hm_shape.py stays for its other callers until T051.",
+     "class": "within",
+     "why": "FR-003 is per piece: this guard runs only the Rust copy, and each remaining caller runs only the Python one until its own port, as FR-003's first clause requires. No piece runs both. T051 is not in the bundle, so the deferral's placement was not checked; the Python's eventual removal is held by FR-001 regardless."
+    },
+    {
+     "id": "d",
+     "summary": "This guard runs last in guards(), pinned by lib.rs's order test, with later ports inserted before it, so every other guard judges the command as written and the rewrite reaches only Claude Code.",
+     "class": "within",
+     "why": "Followed literally: last entry plus a pinned order means nothing after it can read the rewrite, so the defect ruled on in round 1 cannot occur and each other guard keeps the input it had as a shell guard, which FR-002 requires. The order test only enforces that. How the dispatcher aggregates several guards' results is T005's design and is not in this bundle."
+    },
+    {
+     "id": "exits",
+     "summary": "Green is the guard's suite against l7r-guard --only shell-check-hooks plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; landed via make land-tooling.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, with FR-004's coverage floor. The landing route and the absence of a work budget decide nothing the request or spec constrains."
     }
    ],
    "verdict": "CLEAR"

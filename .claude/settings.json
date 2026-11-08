@@ -81,16 +81,6 @@
         ]
       },
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/shell-check-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/shell-check-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 236 - a NEW guard, not a relaxed one: a command that will not parse, an executing backtick, a -m that needs a heredoc, a co-author address that is not ours",
-            "timeout": 20
-          }
-        ]
-      },
-      {
         "matcher": "Bash|Edit|Write|NotebookEdit",
         "hooks": [
           {

@@ -47,6 +47,8 @@ pub fn guards() -> Vec<Guard> {
         guards::agent_prefix_hooks::GUARD,
         guards::workflow_hooks::GUARD,
         guards::source_block_hooks::GUARD,
+        // last, so no guard reads its rewrite of a commit message (T035 decision (d)): a guard ported later goes before it
+        guards::shell_check_hooks::GUARD,
     ]
 }
 
@@ -244,7 +246,8 @@ mod tests {
                     "wakeup-hooks",
                     "agent-prefix-hooks",
                     "workflow-hooks",
-                    "source-block-hooks"
+                    "source-block-hooks",
+                    "shell-check-hooks"
                 ]
         );
     }
