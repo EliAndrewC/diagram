@@ -295,27 +295,27 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
 # exists to remove, and the one a future guard would most naturally reintroduce.
 _ESCAPES = {
     # token: (kind, why this kind is safe)
-    "GATE_OK": ("command", "routes through hookmatch.py escape"),
-    "MEASURE_OK": ("command", "routes through hookmatch.py escape"),
-    "POLL_OK": ("command", "routes through hookmatch.py escape"),
-    "DISCARD_OK": ("command", "routes through hookmatch.py escape"),
-    "README_OK": ("command", "routes through hookmatch.py escape via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
-    "DOWNLOAD_COPY_OK": ("command", "routes through hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
-    "NO_BRANCH_OK": ("command", "routes through hookmatch.py escape"),
-    "MAIN_TREE_OK": ("command", "routes through hookmatch.py escape"),
-    "GM_TREE_OK": ("command", "routes through hookmatch.py escape"),
-    "HOST_GIT_OK": ("command", "routes through hookmatch.py escape, via RS_ESCAPED"),
+    "GATE_OK": ("command", "routes through hm_escape.py"),
+    "MEASURE_OK": ("command", "routes through hm_escape.py"),
+    "POLL_OK": ("command", "routes through hm_escape.py"),
+    "DISCARD_OK": ("command", "routes through hm_escape.py"),
+    "README_OK": ("command", "routes through hm_escape.py via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
+    "DOWNLOAD_COPY_OK": ("command", "routes through hm_escape.py via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
+    "NO_BRANCH_OK": ("command", "routes through hm_escape.py"),
+    "MAIN_TREE_OK": ("command", "routes through hm_escape.py"),
+    "GM_TREE_OK": ("command", "routes through hm_escape.py"),
+    "HOST_GIT_OK": ("command", "routes through hm_escape.py, via RS_ESCAPED"),
     "PAIR_OK": (
         "command",
         "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
         "one stated exclusion - a prompt is prose with no command grammar, and "
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
-    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape anchors it"),
+    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so hm_escape.py anchors it"),
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
     "GATE_WRITE_OK": (
         "command",
-        "feature 385 (plan D13): gate-write-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape "
+        "feature 385 (plan D13): gate-write-hooks.sh reaches it through escape_or_refuse, so hm_escape.py "
         "anchors it as an invocation in the command - a deliberate write while this tree's own gate runs",
     ),
     "CONFLICT_MARKERS_OK": (
@@ -355,7 +355,7 @@ _ESCAPES = {
         "read by page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
     ),
     "KEY_CAP_OK": ("environment", "read by reserve-prefix.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D4)"),
-    "REF_OK": ("make-variable", "a make override, already anchored positionally by hookmatch.py:116 - it must appear as REF_OK= at a command position"),
+    "REF_OK": ("make-variable", "a make override, already anchored positionally by hm_make's anchor - it must appear as REF_OK= at a command position"),
     "ESCALATION_OK": (
         "command",
         "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
@@ -471,7 +471,7 @@ _ESCAPES = {
         "RETIRED by feature 379 FR-010 (the GM 2026-10-10: the arbiter first) - pair-hooks.sh no longer reads it; named only by the event log's waiver flag for old transcripts and by the suite proving it changes nothing",
     ),
     "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
-    "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
+    "CRON_OK": ("command", "routes through hm_escape.py (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in a guard's old files_named (an executable is never a log; feature 295 item 1)"),
 }
 
@@ -495,7 +495,7 @@ def test_the_escape_census_is_derived_from_the_tree() -> None:
     unclassified = _tree_tokens() - set(_ESCAPES)
     assert not unclassified, (
         f"new escape token(s) with no classification: {sorted(unclassified)}. Add each to _ESCAPES "
-        "saying whether it is matched in a COMMAND (and so must route through hookmatch.py escape), "
+        "saying whether it is matched in a COMMAND (and so must route through hm_escape.py), "
         "in edit CONTENT, as an ENVIRONMENT variable, or is not an escape at all."
     )
     stale = set(_ESCAPES) - _tree_tokens()

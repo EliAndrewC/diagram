@@ -10,7 +10,7 @@
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
-use std::time::Duration;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use fancy_regex::Regex;
 use serde_json::Value;
@@ -71,6 +71,8 @@ pub(crate) struct Ctx<'a> {
     pub tree: PathBuf,
     /// The interpreter the tree's Python tools run under (`python3`; a test's fakes are `sh`).
     pub python: &'static str,
+    /// `L7R_SOLO`: the hook's own test suite's answer, or the GM's override.
+    pub solo_forced: Option<String>,
 }
 
 impl Ctx<'_> {
@@ -207,6 +209,7 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
         main: session.main().to_path_buf(),
         tree,
         python: "python3",
+        solo_forced: std::env::var("L7R_SOLO").ok(),
     })
 }
 
@@ -473,17 +476,7 @@ fn prompt(cx: &Ctx) -> Vec<String> {
         return Vec::new();
     }
     let mut lines = Vec::new();
-    let _ = ask(
-        Path::new("/"),
-        cx.python,
-        &[
-            &cx.tree
-                .join("scripts/hooks/lib/clone_local_settings.py")
-                .to_string_lossy(),
-            &clone.to_string_lossy(),
-        ],
-        "",
-    );
+    let _ = settings::ensure(&clone);
     let notice = cx.mapdir().join(format!("{sid}.feature-json-notice"));
     if git(
         &clone,
@@ -501,14 +494,15 @@ sessions')",
             c = clone.display()
         ));
     }
-    if ask(
-        Path::new("/"),
-        cx.python,
-        &[&cx.tree.join("scripts/hooks/lib/solo.py").to_string_lossy()],
-        "",
-    )
-    .ok()
-    {
+    if solo::alone(
+        cx.solo_forced.as_deref(),
+        Path::new("/proc"),
+        &PathBuf::from(std::env::var("HOME").unwrap_or_default()).join(".cache/l7r"),
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .map_or(0.0, |d| d.as_secs_f64()),
+        std::process::id(),
+    ) {
         return lines;
     }
     lines.extend(sync(cx, &clone));
@@ -652,6 +646,9 @@ fn refresh_mirror(cx: &Ctx, clone: &Path, midtask: &str) -> Vec<String> {
     lines.extend(notes(&text));
     lines
 }
+
+mod settings;
+mod solo;
 
 #[cfg(test)]
 mod tests;

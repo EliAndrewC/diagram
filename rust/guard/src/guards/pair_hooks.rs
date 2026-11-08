@@ -5,9 +5,10 @@
 //! stand in the shell's comments, kept in git history; the refusals' words are the shell's.
 //!
 //! Plan T006's decisions: (a) the tools it consults - the checkpoint, the plan gate, `review_prereq`, `review_owed`, the gate stamp,
-//! `make engine-key`, the arbiter, `hm_dropped` - stay theirs, asked by path, until phase 3 ports them; a plain Bash call asks none;
+//! `make engine-key`, the arbiter - stay theirs, asked by path, until phase 3 ports them; a plain Bash call asks none;
 //! (b) the engine key is asked only on the branches that read it; (c) its own state is in-process (`state`).
 
+pub mod dropped;
 mod review;
 mod state;
 
@@ -213,21 +214,13 @@ fn pretool(cx: &Ctx) -> Vec<Answer> {
     Vec::new()
 }
 
-/// A turn may not END with a refused dispatch never re-sent (feature 375; `hm_dropped.py stop`), and it asks no review lookup.
+/// A turn may not END with a refused dispatch never re-sent (feature 375; `dropped.rs`), and it asks no review lookup.
 fn stop(cx: &Ctx) -> Vec<Answer> {
-    let script = cx.tree.join("scripts/hooks/lib/hm_dropped.py");
-    let said = python(
-        cx.python,
-        &cx.clone,
-        &script,
-        &["stop", "--root", &cx.clone.to_string_lossy()],
-        &cx.event.input.to_string(),
-    );
-    if said.ok() {
+    let Some(why) = dropped::refusal_for(&cx.clone, &cx.event.input) else {
         return Vec::new();
-    }
+    };
     cx.log("blocked", "stop", "dispatch-dropped");
-    vec![Answer::Refuse(said.err)]
+    vec![Answer::Refuse(why)]
 }
 
 #[cfg(test)]

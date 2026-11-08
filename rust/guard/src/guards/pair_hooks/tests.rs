@@ -12,7 +12,7 @@ use crate::shared::session::Session;
 
 /// The fake tools, `sh` scripts run as the guard runs its Python tools (`<interpreter> <script> args`): each answers from the
 /// clone's `.git/<file>`. The arbiter's check is Python code the guard runs as itself, so its fake module stays Python.
-const TOOLS: [(&str, &str); 8] = [
+const TOOLS: [(&str, &str); 7] = [
     ("scripts/reviews/checkpoint.py", "cat \"$3/.git/due\" 2>/dev/null\n"),
     ("scripts/gates/plan_gate.py", "cat \"$2/.git/undecided\" 2>/dev/null\n"),
     (
@@ -24,7 +24,6 @@ const TOOLS: [(&str, &str); 8] = [
         "c=$2\nif [ $# -eq 2 ]; then : > \"$c/.git/owed-asked\"; cat \"$c/.git/owed\" 2>/dev/null; exit 0; fi\nif [ \"$3\" = --glyph-gate ]; then [ -f \"$c/.git/early\" ] && { echo \"not due: $4\"; exit 1; }; exit 0; fi\nsuffix=; [ $# -gt 4 ] && suffix=-escaped\n: > \"$c/.git/glyph-$4$suffix\"\n",
     ),
     ("scripts/gates/gate-stamp.py", "[ -f .git/green ]\n"),
-    ("scripts/hooks/lib/hm_dropped.py", "cat > /dev/null\n[ -f \"$3/.git/dropped\" ] && { echo 'a dispatch was dropped' >&2; exit 2; }\nexit 0\n"),
     (
         "scripts/hooks/lib/hm_arbiter.py",
         "import pathlib\ndef _f(root,n): p=pathlib.Path(root,'.git',n); return p.read_text() if p.exists() else ''\ndef unit_content_key(root,unit): return 'ck'\ndef closed(root,prefix,ck=None): return _f(root,'closed')\ndef continues(root,prefix): return int(_f(root,'continues') or 0)\ndef lapsed(root,prefix,ck): return 0\ndef trip(root,*a): pathlib.Path(root,'.git/tripped').write_text('')\ndef refusal(keys,root): return 'ask the arbiter: '+keys[0]\n",
@@ -330,13 +329,23 @@ fn owed_units_sent_together_are_logged_parallel_and_apart_serialized() {
 
 #[test]
 fn a_turn_may_not_end_with_a_dropped_dispatch() {
-    let f = Fixture::new("stop", "", &json!({}));
+    let mut f = Fixture::new("stop", "", &json!({}));
     assert!(f.judge_as("Stop", false).is_empty());
-    f.set("dropped", "");
-    assert_eq!(
-        refusal(&f.judge_as("Stop", false)),
-        "a dispatch was dropped"
-    );
+    let transcript = f.clone.join("t.jsonl");
+    let rows = [
+        json!({"timestamp": "1", "message": {"content": [{"type": "tool_use", "name": "Agent", "id": "a", "input": {"subagent_type": "x", "description": "d"}}]}}),
+        json!({"message": {"content": [{"type": "tool_result", "tool_use_id": "a", "is_error": true, "content": "PreToolUse:Agent hook error"}]}}),
+    ];
+    std::fs::write(
+        &transcript,
+        rows.iter()
+            .map(ToString::to_string)
+            .collect::<Vec<_>>()
+            .join("\n"),
+    )
+    .unwrap();
+    f.input["transcript_path"] = json!(transcript);
+    assert!(refusal(&f.judge_as("Stop", false)).contains("neither sent again nor recorded dropped"));
     assert!(!f.has("owed-asked"));
 }
 

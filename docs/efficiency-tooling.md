@@ -89,7 +89,7 @@ the thing they save: twenty `spec-fidelity` rounds over two features cost 91 min
 eight of those findings were mechanical.
 
 **Every guard's ESCAPE is an invocation too, since feature 169.** Every token matched in a COMMAND goes through
-`hookmatch.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
+`hm_escape.py escape <TOKEN>`; before that they were bare substring tests, so a grep for a token or a
 commit message quoting it escaped the guard - and, in `measure` and `gate`, also reset the state that
 decides whether the NEXT expensive command is refused. `main-tree-hooks` joined the roster in the same
 feature: a bare `cd` into the mirror root followed by a write or a commit, which none of the three

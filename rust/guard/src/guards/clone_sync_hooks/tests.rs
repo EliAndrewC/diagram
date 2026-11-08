@@ -65,7 +65,8 @@ fn template() -> &'static PathBuf {
         let clone = main.join(".clones/mine");
         let (m, c) = (main.to_string_lossy(), clone.to_string_lossy());
         assert!(ask(Path::new("/"), "git", &["clone", "-q", &m, &c], "").ok());
-        std::fs::write(clone.join(".git/info/exclude"), "scripts/\n.making\n").unwrap();
+        // `.claude/settings.local.json`: git ignores it in the real repository, and the hook writes it on every prompt
+        std::fs::write(clone.join(".git/info/exclude"), "scripts/\n.making\n.claude/settings.local.json\n").unwrap();
         // the clone's sync: its output, its exit from `.git/sync-rc`, a fast-forward when `.git/sync-ff` is there
         script(
             &clone.join("scripts/sync-with-main.sh"),
@@ -73,8 +74,6 @@ fn template() -> &'static PathBuf {
         );
         let tree = root.join("tree");
         script(&tree.join("scripts/hooks/lib/own-make.sh"), "[ -f .making ]");
-        script(&tree.join("scripts/hooks/lib/clone_local_settings.py"), "exit 0");
-        script(&tree.join("scripts/hooks/lib/solo.py"), "[ -f \"$(dirname \"$0\")/solo\" ]");
         script(&tree.join("scripts/hooks/lib/usage_log.py"), "exit 0");
         script(&tree.join("scripts/reviews/layout_carry.sh"), "echo carried");
         root
@@ -167,6 +166,14 @@ impl World {
             main: self.main.clone(),
             tree: self.tree.clone(),
             python: "sh",
+            solo_forced: Some(
+                if self.tree.join("scripts/hooks/lib/solo").exists() {
+                    "1"
+                } else {
+                    "0"
+                }
+                .to_owned(),
+            ),
         })
     }
 

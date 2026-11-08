@@ -123,6 +123,8 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
         Some("--finished-run") => guards::finished_run_hooks::cli(&args[1..]),
         // the suites' own tooling (T050)
+        Some("permit") => guards::guard_file_hooks::cli(&args[1..]),
+        Some("dropped") => guards::pair_hooks::dropped::cli(&args[1..]),
         Some("deps") => suite_tools::deps::cli(&args[1..]),
         Some("trace") => suite_tools::trace::cli(&args[1..]),
         Some("bench") => suite_tools::bench::cli(&args[1..]),

@@ -116,9 +116,9 @@
    "declared": "round-arbiter"
   },
   "### T051 Approach (checklist part A)": {
-   "sha256": "408d83da398373d1cc333090608aa97504f8b4ea7b66160a9647880227223b18",
+   "sha256": "810ccc450cadbeda61aa153e867e22af6b47a7ffa288d57e80c1b3a3267a98a8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T052 Approach (checklist part A)": {
@@ -2790,6 +2790,81 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T051 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-port",
+     "summary": "hm_dropped.py, solo.py, clone_local_settings.py and hm_guard_permit.py's grant are ported into l7r-guard and their Python deleted",
+     "class": "within",
+     "why": "FR-001 places scripts/hooks/ and its libraries in phase 1 and the request asks for all of the Python to be Rust; a port with the Python removed is the requested act."
+    },
+    {
+     "id": "a-permit-subcommands",
+     "summary": "hm_guard_permit.py's check and root-makefile are not ported as subcommands, because only the shell guard called them",
+     "class": "within",
+     "why": "A subcommand whose only caller was a guard already ported has its logic in that port; nothing is left in Python and no behavior is excepted. The premise is the block's own claim, not checked here: the bundle forbids reading the repository."
+    },
+    {
+     "id": "a-delete",
+     "summary": "hookmatch.py and hm_make.py are deleted, not ported as files: make_only_hooks holds hm_make's logic, hookmatch's one code caller asks hm_escape.py reason-ok",
+     "class": "within",
+     "why": "The request's purpose is that the Python stop existing as the codebase; removing a library with no remaining function serves it and leaves no Python retained. A measurement naming a deleted file takes FR-001's rewrite to the port or an equivalent make command, which the block's item 9 invokes."
+    },
+    {
+     "id": "b-tests",
+     "summary": "test_solo.py, test_clone_local_settings.py, test_guard_corpus.py's make-only rows and test_makefile_recipe_comments.py's detector and scans become crate tests",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests."
+    },
+    {
+     "id": "b-corpus-split",
+     "summary": "test_guard_corpus.py is split: the no-poll rows stay Python, through the retained hm_shape.py",
+     "class": "within",
+     "why": "FR-001 keeps hm_shape.py to phase 3 by name, so the rows that test it go with it; one file testing pieces in two phases has to divide at that seam. Per (c) hm_shape.py has no guard caller, so FR-003's no piece runs both is not touched."
+    },
+    {
+     "id": "b-ceiling",
+     "summary": "T050's ceiling on guards reaching hm_make.py is removed with the file; the ceilings on remaining files stand",
+     "class": "within",
+     "why": "The check has nothing left to count once FR-001's port deletes its subject, and the block keeps every ceiling that still has one."
+    },
+    {
+     "id": "c-no-python-on-plain-call",
+     "summary": "Each retained library is held not to start Python on a plain Bash call or plain Edit, by the branch that starts it; guardlog.sh's only route is the no-good-binary fallback",
+     "class": "within",
+     "why": "This applies FR-001's closing condition rather than relaxing it. Prompt, Agent-call and Stop branches are not plain Bash or Edit calls, and the no-good-binary state is not the plain call FR-001 ties to what SC-001 measures. The branch facts are the block's claims, not checked here: the bundle forbids reading the repository."
+    },
+    {
+     "id": "d-phases",
+     "summary": "Retained libraries are phased: hm_conflict.py and own-make.sh in 2; usage_log.py, hm_approval.py, hm_house.py, hm_escape.py, hm_tree.py, hm_shape.py, guardlog.sh and writer-alive.sh in 3",
+     "class": "within",
+     "why": "Literally FR-001's list as the arbiter's ruling amended it, with no file added or left out; each is still ported, so this orders the work and does not shrink it."
+    },
+    {
+     "id": "exits-scope",
+     "summary": "T051's exit and done measure read scripts/hooks/ only, excepting those FR-001 phases later by name",
+     "class": "within",
+     "why": "The exception is FR-001's own named list. FR-001's phase-1 inline census also covers tests/hooks/, but T051's goal is the guard libraries and the block leaves the census to T052, so no part of phase 1 is released by this."
+    },
+    {
+     "id": "measurements",
+     "summary": "Every recorded measurement command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof",
+     "class": "within",
+     "why": "FR-001's measurement rule, stated for this task's files."
+    },
+    {
+     "id": "landing",
+     "summary": "The task lands through make land-tooling after every guard task, with no work budget and a red exit to make arbiter-ask",
+     "class": "within",
+     "why": "Order and landing route only; nothing the request or FR-001 asked for is narrowed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4794,6 +4869,80 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T051": {
+   "section_sha256": "2f4d012f2e5f4bde91f89834cd78898f699bb31515fcf99de8257853d6498b6c",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-port",
+     "summary": "hm_dropped.py, solo.py, clone_local_settings.py and hm_guard_permit.py's grant are ported into l7r-guard and their Python deleted",
+     "class": "within",
+     "why": "FR-001 places scripts/hooks/ and its libraries in phase 1 and the request asks for all of the Python to be Rust; a port with the Python removed is the requested act."
+    },
+    {
+     "id": "a-permit-subcommands",
+     "summary": "hm_guard_permit.py's check and root-makefile are not ported as subcommands, because only the shell guard called them",
+     "class": "within",
+     "why": "A subcommand whose only caller was a guard already ported has its logic in that port; nothing is left in Python and no behavior is excepted. The premise is the block's own claim, not checked here: the bundle forbids reading the repository."
+    },
+    {
+     "id": "a-delete",
+     "summary": "hookmatch.py and hm_make.py are deleted, not ported as files: make_only_hooks holds hm_make's logic, hookmatch's one code caller asks hm_escape.py reason-ok",
+     "class": "within",
+     "why": "The request's purpose is that the Python stop existing as the codebase; removing a library with no remaining function serves it and leaves no Python retained. A measurement naming a deleted file takes FR-001's rewrite to the port or an equivalent make command, which the block's item 9 invokes."
+    },
+    {
+     "id": "b-tests",
+     "summary": "test_solo.py, test_clone_local_settings.py, test_guard_corpus.py's make-only rows and test_makefile_recipe_comments.py's detector and scans become crate tests",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests."
+    },
+    {
+     "id": "b-corpus-split",
+     "summary": "test_guard_corpus.py is split: the no-poll rows stay Python, through the retained hm_shape.py",
+     "class": "within",
+     "why": "FR-001 keeps hm_shape.py to phase 3 by name, so the rows that test it go with it; one file testing pieces in two phases has to divide at that seam. Per (c) hm_shape.py has no guard caller, so FR-003's no piece runs both is not touched."
+    },
+    {
+     "id": "b-ceiling",
+     "summary": "T050's ceiling on guards reaching hm_make.py is removed with the file; the ceilings on remaining files stand",
+     "class": "within",
+     "why": "The check has nothing left to count once FR-001's port deletes its subject, and the block keeps every ceiling that still has one."
+    },
+    {
+     "id": "c-no-python-on-plain-call",
+     "summary": "Each retained library is held not to start Python on a plain Bash call or plain Edit, by the branch that starts it; guardlog.sh's only route is the no-good-binary fallback",
+     "class": "within",
+     "why": "This applies FR-001's closing condition rather than relaxing it. Prompt, Agent-call and Stop branches are not plain Bash or Edit calls, and the no-good-binary state is not the plain call FR-001 ties to what SC-001 measures. The branch facts are the block's claims, not checked here: the bundle forbids reading the repository."
+    },
+    {
+     "id": "d-phases",
+     "summary": "Retained libraries are phased: hm_conflict.py and own-make.sh in 2; usage_log.py, hm_approval.py, hm_house.py, hm_escape.py, hm_tree.py, hm_shape.py, guardlog.sh and writer-alive.sh in 3",
+     "class": "within",
+     "why": "Literally FR-001's list as the arbiter's ruling amended it, with no file added or left out; each is still ported, so this orders the work and does not shrink it."
+    },
+    {
+     "id": "exits-scope",
+     "summary": "T051's exit and done measure read scripts/hooks/ only, excepting those FR-001 phases later by name",
+     "class": "within",
+     "why": "The exception is FR-001's own named list. FR-001's phase-1 inline census also covers tests/hooks/, but T051's goal is the guard libraries and the block leaves the census to T052, so no part of phase 1 is released by this."
+    },
+    {
+     "id": "measurements",
+     "summary": "Every recorded measurement command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof",
+     "class": "within",
+     "why": "FR-001's measurement rule, stated for this task's files."
+    },
+    {
+     "id": "landing",
+     "summary": "The task lands through make land-tooling after every guard task, with no work budget and a red exit to make arbiter-ask",
+     "class": "within",
+     "why": "Order and landing route only; nothing the request or FR-001 asked for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -557,7 +557,7 @@ check "STAYS QUIET: the same check on the same bundle sent again and launched" '
 check "a refusal after the last turn end is held" '[ "$rc" -eq 2 ]'
 ( cd "$CLONE" && make -s -f "$(dirname "$HOOK")/../../Makefile" dispatch-dropped TYPE=impl-drift BUNDLE="$BUN" WHY="x" >/dev/null 2>&1 ); rc=$?
 check "dispatch-dropped refuses a reason of one word" '[ "$rc" -ne 0 ]'
-( cd "$CLONE" && python3 scripts/hooks/lib/hm_dropped.py drop --root . --type impl-drift --bundle "$BUN" --why "the round was folded into the next" >/dev/null 2>&1 )
+( cd "$CLONE" && "$HOOK" dropped drop --root "$CLONE" --type impl-drift --bundle "$BUN" --why "the round was folded into the next" >/dev/null 2>&1 )
 ( cd "$CLONE" && printf '%s' "$STOP22" | "$HOOK" stop >/dev/null 2>&1 ); rc=$?
 check "STAYS QUIET: the refusal recorded dropped with a reason" '[ "$rc" -eq 0 ]'
 { ended 2026-10-18T10:05:00Z; call 2026-10-18T10:06:00Z a4; refused 2026-10-18T10:06:01Z a4; } > "$TR"

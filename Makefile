@@ -356,7 +356,7 @@ hooks-deps-window: ## [tests] how many of the Python tests of scripts/ each of t
 
 guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_guard_permit.py" grant "$(abspath $(FILE))" "$$GUARD_WHY"
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$(abspath $(FILE))" "$$GUARD_WHY"
 
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
@@ -366,7 +366,7 @@ audit:          ## [project] how the gate has actually been used - every run, ev
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
-[print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+r.get('selected','')).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
+[print(f\"  {r['utc']}  {r['scope']:<9} {r['seconds']:>4}s  {r['result']:<22} {r['commit']}  {(r.get('mode','')+' '+str(r.get('selected',''))).strip()}\") for r in rows[-25:]] or print('  (none yet)'); \
 c=collections.Counter(r['scope'] for r in rows); \
 print(f\"  {len(rows)} runs: \"+', '.join(f'{k}={v}' for k,v in sorted(c.items()))) if rows else None; \
 b=sorted((json.load(open(f)) for f in glob.glob('dev/bypass-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
@@ -408,7 +408,6 @@ rows=[json.loads(l) for l in p.read_text().splitlines() if l.strip()] if p.is_fi
 print('\033[1mFeature numbers claimed\033[0m ('+str(p)+' - make claim, feature 197)'); \
 [print(f\"  {r.get('utc','?'):<20} {r.get('number',0):>4}  {r.get('slug','?'):<40} {r.get('clone','?')}\") for r in rows[-10:]] or print('  (none yet - every claim made by make claim lands here)'); \
 print(f'  {len(rows)} claims recorded') if rows else None; print()"
-	@python3 -c "from tests import rolls; print('\033[1mHamlets the gate may roll\033[0m (tests/rolls.py, feature 213 - one roll each per gate, enforced by the roll census)'); [print(f'  {r.spec.name:<16} seed={r.spec.seed:<3} {r.carries[:96]}') for r in rolls.ROLLS]; print(f'  {len(rolls.ROLLS)} rostered rolls; {len(rolls.DUPLICATES)} stated duplicate(s); {len(rolls.POOL_GENS)} pool gen(s), rolled only when their key moved; {len(rolls.IN_PROCESS)} in-process exception(s)'); print('  make roll-audit: the engine lines each roll alone reaches (feature 216)'); print()"
 
 docs:           ## [project] regenerate docs/make-targets.html from this Makefile's own `##` lines
 	@python3 scripts/make-docs.py . --write
@@ -487,7 +486,7 @@ LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
   open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
 
 LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/hooks/lib/guardlog.sh"; \
-  printf "%s" "$$2" | python3 "$$0/scripts/hooks/lib/hookmatch.py" reason-ok >/dev/null || { \
+  printf "%s" "$$2" | python3 "$$0/scripts/hooks/lib/hm_escape.py" reason-ok >/dev/null || { \
     printf "BLOCKED: %s needs a REASON (two words, eight characters) - it is what a later audit reads.\n" "$$1" >&2; \
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
@@ -978,7 +977,7 @@ ledger-owed:     ## [project] every check pass logged in this clone with no row 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/ledger_owed.py" --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$(WRITE)",)
 
 dispatch-dropped: ## [project] record that a dispatch a guard refused is no longer wanted, so the turn may end (feature 385 T22)   TYPE=<agent type> BUNDLE=<path> WHY="<reason>"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_dropped.py" drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" dropped drop --root "$$(git rev-parse --show-toplevel)" --type "$(TYPE)" --bundle "$(BUNDLE)" --why "$(WHY)"
 
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names

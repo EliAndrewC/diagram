@@ -16,6 +16,8 @@ fn main() {
                 | "--review-round"
                 | "--stall-watchdog"
                 | "--finished-run"
+                | "permit"
+                | "dropped"
                 | "deps"
                 | "trace"
                 | "bench"

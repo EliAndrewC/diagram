@@ -202,3 +202,52 @@ fn the_r6_corpus_replayed() {
     );
     assert!(!parse.contains(&rows.last().unwrap()),);
 }
+
+/// One make-only row of the refusal corpus (feature 212): every such refusal recovered from the transcripts of 2026-08-25 to 09-07, with the verdict expected of it.
+fn make_only_row_holds(row: &Value, makefile: &str) -> bool {
+    use crate::guards::make_only_hooks::{classify, targeted_pytest, wrapped};
+    let (command, want) = (row["command"].as_str().unwrap_or_default(), &row["expect"]);
+    let (verdict_wanted, because) = (
+        want["verdict"].as_str().unwrap_or_default(),
+        want["because"].as_str().unwrap_or_default(),
+    );
+    let verdict = classify(command);
+    let answered = match verdict.as_str() {
+        "bare-pytest" => targeted_pytest(command),
+        "engine-entry-point" => wrapped(command, makefile),
+        "ok" => return verdict_wanted == "permit",
+        other => return verdict_wanted == "refuse" && because == other,
+    };
+    match answered {
+        Ok(got) => verdict_wanted == "rewrite" && want["command"] == got.as_str(),
+        Err(why) => {
+            verdict_wanted != "rewrite"
+                && why.starts_with(&because.chars().take(40).collect::<String>())
+        }
+    }
+}
+
+#[test]
+fn the_make_only_rows_of_the_refusal_corpus_keep_their_verdicts() {
+    let root = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
+    let rows: Vec<Value> = serde_json::from_str(
+        &std::fs::read_to_string(format!(
+            "{root}/tests/hooks/fixtures/guard-refusals-2026-09.json"
+        ))
+        .unwrap(),
+    )
+    .unwrap();
+    let makefile = std::fs::read_to_string(format!("{root}/Makefile")).unwrap();
+    let make_only: Vec<&Value> = rows
+        .iter()
+        .filter(|r| {
+            r["guard"] == "make-only" && r["command"].as_str().is_some_and(|c| !c.is_empty())
+        })
+        .collect();
+    assert_eq!(make_only.len(), 97);
+    let wrong: Vec<&&Value> = make_only
+        .iter()
+        .filter(|r| !make_only_row_holds(r, &makefile))
+        .collect();
+    assert_eq!(wrong, Vec::<&&Value>::new());
+}

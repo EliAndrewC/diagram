@@ -151,3 +151,105 @@ fn an_input_with_no_file_passes() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+#[test]
+fn make_guard_edit_grants_a_guard_file_with_a_reason_and_only_that() {
+    let dir = std::env::temp_dir().join(format!("l7r-guard-permit-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(dir.join("scripts/hooks")).unwrap();
+    assert!(std::process::Command::new("git")
+        .arg("-C")
+        .arg(&dir)
+        .args(["init", "-q"])
+        .status()
+        .unwrap()
+        .success());
+    let hook = dir.join("scripts/hooks/x-hooks.sh");
+    std::fs::write(&hook, "").unwrap();
+    let readme = dir.join("notes.md");
+    std::fs::write(&readme, "").unwrap();
+    let path = |p: &std::path::Path| p.to_str().unwrap().to_owned();
+    let grant =
+        |file: &str, why: &str| super::cli(&["grant".to_owned(), file.to_owned(), why.to_owned()]);
+    assert_eq!(super::cli(&["grant".to_owned()]).code, 2);
+    assert_eq!(
+        super::cli(&["nope".to_owned(), "a".to_owned(), "b".to_owned()]).code,
+        2
+    );
+    assert!(grant(&path(&readme), "a reason for it")
+        .stderr
+        .contains("is not a guard file"));
+    assert!(grant(&path(&hook), "x")
+        .stderr
+        .contains("two words and eight characters"));
+    let done = grant(&path(&hook), "adding a case to it");
+    assert_eq!(done.code, 0);
+    assert!(
+        done.stdout.contains("may be edited until")
+            && done.stdout.ends_with("- adding a case to it\n")
+    );
+    let real = hook.canonicalize().unwrap();
+    let real = real.to_str().unwrap();
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs_f64();
+    assert_eq!(super::permit_reason(real, now), "adding a case to it");
+    assert_eq!(super::permit_reason(real, now + 7200.0), "");
+    assert_eq!(grant(&path(&hook), "a second reason here").code, 0);
+    let store = dir.join(".git/l7r-guard-permits.jsonl");
+    assert_eq!(std::fs::read_to_string(&store).unwrap().lines().count(), 2);
+    assert!(super::live_rows(&store, now + 7200.0).is_empty());
+    std::fs::write(&store, "not json\n").unwrap();
+    assert!(super::live_rows(&store, now).is_empty());
+    assert!(
+        super::grantable("/r/scripts/hooks/pair-hooks.sh")
+            && !super::grantable("/r/tests/hooks/test-pair-hooks.sh")
+    );
+    assert_eq!(super::real_path("/no/such/file"), "/no/such/file");
+}
+
+#[test]
+fn no_recipe_comment_in_the_repository_would_run() {
+    let root = concat!(env!("CARGO_MANIFEST_DIR"), "/../..");
+    let tracked = std::process::Command::new("git")
+        .args(["-C", root, "ls-files", "--", "Makefile", "*/Makefile"])
+        .output()
+        .unwrap();
+    let names = String::from_utf8_lossy(&tracked.stdout).into_owned();
+    assert!(names.lines().any(|n| n == "Makefile"));
+    let bad: Vec<String> = names
+        .lines()
+        .flat_map(|n| {
+            super::recipe_hazards(&std::fs::read_to_string(format!("{root}/{n}")).unwrap())
+        })
+        .collect();
+    assert_eq!(bad, Vec::<String>::new());
+}
+
+#[test]
+fn the_recipe_detector_fires_on_each_hazard_and_passes_each_safe_form() {
+    let fires = [
+        "\t: \"GUARD_EDIT_OK: feature 207 - `make test-full` is the gate's test phase\" ; \\",
+        "\t@: \"see `make help`\"",
+        "\t: \"the key is $$(git rev-parse HEAD) here\"",
+        "\t: \"a brace form $${HOME} too\"",
+    ];
+    let safe = [
+        "\t: \"GUARD_EDIT_OK: feature 207 - make test-full is the gate's test phase\" ; \\",
+        "\t: \"the target is \\`make done\\`\"",
+        "\t: \"make runs \\$$(MAKE) sub-invocations even under -n\" ; \\",
+        "\t: 'GUARD_EDIT_OK: `make done` in single quotes is inert'",
+        "# `make done` in a hash comment is make's, never the shell's",
+        "\t@echo \"$$(date) runs on purpose - a command, not a comment\"",
+        "\t: \"a make-level $(VAR) is expanded by make, not the shell\"",
+    ];
+    assert!(fires.iter().all(|l| super::recipe_hazards(l).len() == 1));
+    assert!(safe.iter().all(|l| super::recipe_hazards(l).is_empty()));
+    let text = format!("target:\n{}\n{}\n{}\n", safe[0], fires[0], fires[2]);
+    let lines: Vec<String> = super::recipe_hazards(&text)
+        .iter()
+        .filter_map(|h| h.split(':').next().map(str::to_owned))
+        .collect();
+    assert_eq!(lines, ["3", "4"]);
+}

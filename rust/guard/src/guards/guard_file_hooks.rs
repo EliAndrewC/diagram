@@ -9,7 +9,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use crate::protocol::{Answer, Event, Guard};
+use crate::protocol::{Answer, Event, Guard, Reply};
 use crate::shared::escape::{enough, reason};
 use crate::shared::log;
 use crate::shared::session::Session;
@@ -62,6 +62,100 @@ fn git_out(path: &str, arg: &str) -> String {
         .out
         .trim()
         .to_owned()
+}
+
+static GRANTED: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(/scripts/(?:hooks/)?[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$",
+    )
+});
+
+/// The files `make guard-edit` grants (feature 170 amendment 1; feature 429: the guards live in scripts/hooks/).
+fn grantable(path: &str) -> bool {
+    (hit(&GRANTED, path) && !hit(&SUITE, path)) || root_makefile(path)
+}
+
+/// `l7r-guard permit grant <file> <reason>` (`make guard-edit`, from `hm_guard_permit.py`, feature 449 T051): the reason stated once, outside the file, honored for an hour.
+#[must_use]
+pub fn cli(args: &[String]) -> Reply {
+    let [verb, file, reason] = args else {
+        return Reply {
+            stdout: String::new(),
+            stderr: "usage: l7r-guard permit grant <file> <reason>\n".to_owned(),
+            code: 2,
+        };
+    };
+    if verb != "grant" {
+        return Reply {
+            stdout: String::new(),
+            stderr: "usage: l7r-guard permit grant <file> <reason>\n".to_owned(),
+            code: 2,
+        };
+    }
+    let (real, at) = (
+        real_path(file),
+        now_from(std::env::var("L7R_PERMIT_NOW").ok()),
+    );
+    let usage =
+        "Usage: make guard-edit FILE=<guard file> WHY=\"<why this edit to a guard is legitimate>\"";
+    let refuse = |stderr: String| Reply {
+        stdout: String::new(),
+        stderr,
+        code: 2,
+    };
+    if !grantable(&real) {
+        return refuse(format!(
+            "make guard-edit: {real} is not a guard file, so its edits need no permit. {usage}\n"
+        ));
+    }
+    if !enough(reason) {
+        return refuse(format!(
+            "make guard-edit: give a reason of two words and eight characters or more. {usage}\n"
+        ));
+    }
+    let store = Path::new(&git_out(&real, "--absolute-git-dir")).join("l7r-guard-permits.jsonl");
+    let mut rows = live_rows(&store, at);
+    rows.push(serde_json::json!({"file": real, "reason": reason, "at": at}));
+    let text: String = rows
+        .iter()
+        .map(|r| format!("{r}\n"))
+        .collect::<Vec<_>>()
+        .concat();
+    let _ = std::fs::write(&store, text);
+    let until = ask(
+        Path::new("/"),
+        "date",
+        &["-d", &format!("@{:.0}", at + PERMIT_SECONDS), "+%H:%M"],
+        "",
+    )
+    .out;
+    Reply {
+        stdout: format!(
+            "guard-edit: {real} may be edited until {} - {reason}\n",
+            until.trim()
+        ),
+        stderr: String::new(),
+        code: 0,
+    }
+}
+
+/// The permits still in force; a store that will not read holds none.
+fn live_rows(store: &Path, at: f64) -> Vec<Value> {
+    let text = std::fs::read_to_string(store).unwrap_or_default();
+    let rows: Result<Vec<Value>, _> = text
+        .lines()
+        .filter(|l| !l.trim().is_empty())
+        .map(serde_json::from_str)
+        .collect();
+    rows.unwrap_or_default()
+        .into_iter()
+        .filter(|r| at - r["at"].as_f64().unwrap_or(0.0) < PERMIT_SECONDS)
+        .collect()
+}
+
+fn real_path(file: &str) -> String {
+    std::fs::canonicalize(file)
+        .map_or_else(|_| file.to_owned(), |p| p.to_string_lossy().into_owned())
 }
 
 /// Whether `path` is the Makefile at the top of its checkout.
