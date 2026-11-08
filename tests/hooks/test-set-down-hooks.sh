@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for set-down-hooks.sh - a feature is worked until it is set down (feature 385 T70, plan D89/D90).
+# Tests for the set-down guard (rust/guard, replayed through its link) - a feature is worked until it is set down (feature 385 T70, plan D89/D90).
 # Run: tests/hooks/test-set-down-hooks.sh   (exit 0 = all green)
 #
 # Each case drives the REAL hook with a Stop payload (`cwd`, `transcript_path`) on a fixture clone: its `task-starts.jsonl`,
@@ -7,7 +7,7 @@
 # what is still running.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/set-down-hooks.sh"
+HOOK="$HERE/set-down-hooks.sh"
 SETDOWN="$HERE/../../scripts/set-down.py"
 T=$(mktemp -d)
 GUARD_LOG_DIR="$T/log"; export GUARD_LOG_DIR

@@ -127,16 +127,6 @@
         ]
       },
       {
-        "matcher": "WebFetch|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/blocked-fetch-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/blocked-fetch-hooks.sh\"; [ -x \"$h\" ] || exit 0; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 312 FR-002 - a NEW guard (the GM 2026-10-02): a blocked domain is refused at WebFetch and at a shell fetch, and every other fetch is recorded as an attempt",
-            "timeout": 15
-          }
-        ]
-      },
-      {
         "matcher": "Workflow",
         "hooks": [
           {
@@ -253,14 +243,6 @@
       }
     ],
     "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/set-down-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/set-down-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 385 T70 - a feature is worked until it is set down"
-          }
-        ]
-      },
       {
         "hooks": [
           {

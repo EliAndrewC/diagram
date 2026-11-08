@@ -146,6 +146,20 @@ def test_the_command_line_adds_and_shows(tmp_path: pathlib.Path, monkeypatch: py
     assert at.main(["seed"]) == 0
 
 
+def test_seen_reports_each_url_and_writes_only_when_asked(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture) -> None:
+    root = _root(tmp_path)
+    base = ["seen", "--root", str(root), "--sought=the dike", "--route", "webfetch"]
+    assert at.main([*base, "--", "https://a.org/s"]) == 0
+    assert json.loads(capsys.readouterr().out) == [{"lines": [], "plain": "https://a.org/s"}]
+    assert at.read(root) == []
+    assert at.main([*base, "--record", "--", "https://a.org/s", "https://a.org/s"]) == 0
+    first, second = json.loads(capsys.readouterr().out)
+    assert first["lines"] == [] and "the dike" in "".join(second["lines"])
+    assert len(at.read(root)) == 2
+    assert at.main([*base, "--", "https://a.org/s?a=1&amp;b=&#50;"]) == 0
+    assert json.loads(capsys.readouterr().out)[0]["plain"] == "https://a.org/s?a=1&b=2"
+
+
 def test_an_outcome_carries_what_its_read_sought(tmp_path: pathlib.Path) -> None:
     root = _root(tmp_path)
     at.add(root, "https://a.org/1", "0042", "the dike width")

@@ -42,7 +42,7 @@ same question unless `REREAD="<what changed>"` says why. It caches each page (`R
 old again). Record every outcome with `make source-outcome URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable
 [QUESTION=<NNNN>]` (`make reserve KIND=registry KEY=<k> URL=<u>` marks its source `cited:<k>` itself); `make attempts
 URL=<u> | KEY=<k> | Q=<NNNN>` and `make sources-consulted URL=<u>` look a page up without fetching it. A WebFetch or a shell
-fetch is recorded too, by `scripts/hooks/blocked-fetch-hooks.sh`, which shows its earlier attempts and says when the archive
+fetch is recorded too, by `rust/guard/src/guards/blocked_fetch_hooks.rs`, which shows its earlier attempts and says when the archive
 already holds a copy. A URL cited any other way is archived with `make archive URL=<u>` ([`downloads.md`](downloads.md)).
 
 **Blocked and banned sources** (feature 312, the GM 2026-10-02). A domain on `research/blocked-domains.json` (AI-generated

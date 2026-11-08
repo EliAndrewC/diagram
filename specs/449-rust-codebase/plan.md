@@ -301,6 +301,12 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `blocked-fetch-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `blocked-fetch-hooks.sh`, `lib/hm_fetch.py`, `scripts/record/attempts.py` and `l7r/diagram/interactive/record/blocked.py`, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE: what is a fetch, which URLs it names, the heredoc rule, `clone_of`, `archived`, the block verdict and the refusal's words are Rust. `lib/hm_fetch.py`'s only caller is the guard, so it is removed with the shell.
+   - (b) THE BLOCK VERDICT IS READ IN-PROCESS. `record/blocked.py` has callers of its own and stays for its phase; what the guard takes from it - load `research/blocked-domains.json` from the guard's own tree, a host, domain-or-subdomain - is small and is the guard's own logic under the arbiter's line. A list that cannot be trusted (an entry with no approval, malformed JSON) made the Python raise and the call pass, and still passes; the suite runs against the real list.
+   - (c) THE ATTEMPTS LOG IS ASKED BY PATH, ONCE A FETCH. `attempts.py` has its own callers (`make source-outcome`, the record's routes) and its report pulls in the filter's verdict and the URL's normal form, so it stays in phase 3 and the guard runs it by path under FR-001's clause. It is a rare branch: reached only once a call IS a fetch, not blocked, in a clone, naming a URL - never on a plain Bash call or a plain Edit. A new subcommand, `seen`, does each URL's report and write in one process, where the two existing subcommands would have taken one each per URL. The ask is bounded (CONVENTION, labeled at the constant, under the 15 s the settings entry gave the shell); a failed ask gives no context and passes, as the Python's crash did. T052's record lists it.
+   - (d) ENTITIES IN A URL: `archived` is keyed on the URL after `html.unescape`, every named and numeric entity. The decoding comes back from the same `attempts.py seen` ask as the report (a `plain` beside each URL's `lines`), so no entity is dropped and no process is added; it moves into Rust with `attempts.py`, in phase 3 (round 1's NOT LEGITIMATE on a six-entity table; T052's record lists it with the ask).
+   - (e) THE SHELL'S LITERAL PRE-FILTER GOES. It existed to keep Python off commands that cannot be a fetch; the two patterns run in-process on every Bash call, so a command that merely contains `archive` or `reserve` no longer starts anything.
 3. **Where each comes from.** `tests/hooks/test-blocked-fetch-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
@@ -415,6 +421,11 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `set-down-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `set-down-hooks.sh`, `lib/hm_setdown.py` and `test-set-down-hooks.sh`, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE: the verdict, the launch, notification and stop patterns, the refusal's words and the fail-open on a read error are Rust. `lib/hm_setdown.py`'s only caller is the guard, so it is removed with the shell.
+   - (b) ONE TOOL STAYS BY PATH, ASKED LAST: `speckit-todo.py --closed-by-status` has its own callers (the push, the make targets) and stays for its phase, run by path under FR-001's clause. The rare branch is rarer than the Python's: a Stop event, open boxes, nothing running, no set-down, so only a turn about to be refused starts it. Every outcome before it lets the turn end or refuses identically, so moving it last changes no verdict. T052's record lists it.
+   - (c) THE ROOT: the shell's `clone-sync-hooks.sh resolve` is the session's own `clone_dir()` (T013's port of that resolve); `SET_DOWN_ROOT` and the fall-back to the work tree `cwd` stands in are kept.
+   - (d) THE TRANSCRIPT IS STREAMED A LINE AT A TIME, as the Python did since 2026-10-26, and never through the session's whole-file read, which would bring back the memory growth that fix removed.
 3. **Where each comes from.** `tests/hooks/test-set-down-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.

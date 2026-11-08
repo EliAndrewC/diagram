@@ -332,9 +332,9 @@
    "declared": "spec-fidelity"
   },
   "### T039 Approach (checklist part A)": {
-   "sha256": "f1d1adc3f66a5e9badb06a6c022cef6ba291413ff32852f87e5c825a4e636007",
+   "sha256": "1f5449de4c1f57803b899dba4fece4f1cc77cae496d7ebdcf20ae2611b1612fa",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T040 Approach (checklist part A)": {
@@ -392,9 +392,9 @@
    "declared": "spec-fidelity"
   },
   "### T049 Approach (checklist part A)": {
-   "sha256": "4357ed04944d865b5509c01b519a796070cfca5adec973693d5a341cff14a368",
+   "sha256": "466f5dc76e90cf29e1ca4fdedcd93c917579739509ca6531c78692ff1490f366",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T050 Approach (checklist part A)": {
@@ -2314,6 +2314,97 @@
      "why": "A behavior difference from the Python, but outside what FR-002 reaches, which is 'every case its tests and its suites hold'; the request says nothing at this level. Conditional: D4's replay and this task's green exit enforce FR-002 here, so if test-new-file-hooks.sh holds a string-form or malformed-row case the exit goes red and (c) must be revisited. FR-002's XIV carve-out does not cover (c): crashing and passing a call is not refusing correct work, so such a case would be a plain FR-002 divergence, not a XIV fix. Unstated: the verdict a row that holds nothing produces when other rows are present (Python's crash passed the whole call). Unmeasured premise: 'a form nothing writes' gives no search space, and the block names only two files read, neither of them a ledger writer."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T049 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard and its library both move to Rust (verdict, launch, notification and stop patterns, refusal words, fail-open on read error); lib/hm_setdown.py is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 places 'the code under scripts/hooks/ and any module only guards use' in phase 1, and the GM asked that all of it be ported. Nothing is left behind. The 'only caller' premise is the block's reading of three files, not a census; the bundle cannot confirm it. If another caller exists, removal breaks it and the suite or gate shows that. FR-002's order (suite passes, then deletion) is kept by item 9 and D3."
+    },
+    {
+     "id": "(b)-by-path",
+     "summary": "speckit-todo.py --closed-by-status stays Python for its own phase and the Rust guard runs it by path.",
+     "class": "within",
+     "why": "Does not reduce what was asked: the file is still ported in its phase, so 'all be ported to Rust' holds at the end state and this is sequencing. All three conditions of FR-001's arbiter clause (ask:449-phase1-tools-by-path) hold on the block's text: callers of its own (the push, make targets); a rare branch (Stop event, open boxes, nothing running, no set-down); never a plain Bash call or plain Edit (a Stop event is neither). T052's record tracks it. The file's location outside scripts/hooks/ is taken from the block; the bundle does not show the path."
+    },
+    {
+     "id": "(b)-asked-last",
+     "summary": "The speckit-todo call moves to the last check in the guard, after every other outcome.",
+     "class": "within",
+     "why": "A reordering is bound by FR-002 (same verdicts and outputs on every suite case). The block's 'changes no verdict' is an argument, not the proof; the proof is D4's replay of tests/hooks/test-set-down-hooks.sh against l7r-guard --only set-down-hooks, which item 6 makes the green exit. It also lowers how often a hook starts Python, which serves the GM's stated concern about hook cost."
+    },
+    {
+     "id": "(c)",
+     "summary": "The shell's clone-sync-hooks.sh resolve becomes the session's clone_dir() (T013's port); SET_DOWN_ROOT and the fall-back to cwd's work tree are kept.",
+     "class": "within",
+     "why": "Preserves existing resolution under FR-002 and is proven by the same suite. Keeps behavior rather than carving any out."
+    },
+    {
+     "id": "(d)",
+     "summary": "The transcript is streamed a line at a time, as the Python has done since 2026-10-26, never through the session's whole-file read.",
+     "class": "within",
+     "why": "An implementation choice that keeps the existing Python's behavior in the port; it removes nothing the GM asked for and adds no scope."
+    },
+    {
+     "id": "item 5",
+     "summary": "Order: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3's guard-by-guard landing after the empty dispatcher, inside FR-001's phase 1."
+    },
+    {
+     "id": "items 6 and 9",
+     "summary": "Green is the guard's suite against the Rust guard plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D3, D4, FR-003 and FR-004 restated. Each check only enforces what was asked; no carve-out is hidden here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T039 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard and lib/hm_fetch.py both move to Rust; hm_fetch.py is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and any module only guards use in phase 1; D3 removes the shell in the commit that registers the decider. 'Only caller is the guard' names no search command, which does not change the class; a second caller would surface when the file goes."
+    },
+    {
+     "id": "(b)",
+     "summary": "The block verdict is read in-process from research/blocked-domains.json; record/blocked.py stays for its own phase; an untrustworthy list still passes.",
+     "class": "within",
+     "why": "More Rust than FR-001's by-path allowance requires, and the guard does not run both, so FR-003 holds. Passing on an unapproved entry or malformed JSON is the Python's verdict, which FR-002 requires kept; it is not refusing correct work, so constitution XIV is not engaged."
+    },
+    {
+     "id": "(c)",
+     "summary": "attempts.py stays in phase 3 and is run by path once a fetch, through a new subcommand 'seen' doing each URL's report and write in one process; bounded; a failed ask passes.",
+     "class": "within",
+     "why": "This is FR-001's own clause (ask:449-phase1-tools-by-path): a Python file elsewhere with callers of its own, run by path on a rare branch, never on a plain Bash call or plain Edit. The stated branch (is a fetch, not blocked, in a clone, naming a URL) meets it. 'seen' consolidates two existing subcommands, fewer processes, and ports with the file in phase 3. The failed ask keeps the Python crash's pass (FR-002)."
+    },
+    {
+     "id": "(d)",
+     "summary": "archived is keyed on the URL after html.unescape, every entity; the decoding comes back as a 'plain' field of the attempts.py seen ask and reaches Rust in phase 3.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's defect is gone: Python's own html.unescape drops no entity, so FR-002 holds for every entity. It is still a narrowing: (a) makes archived and the guard's library phase-1 Rust, and this leaves one step of archived in Python until phase 3, in a file that gains it for the guard alone. Taken on its own merits the presumption stands against it, since a full Rust decoder is possible and difficulty would not excuse it. It is legitimate only because it falls inside FR-001's by-path clause, the arbiter's ruling that stands where the GM was asked: attempts.py is a file with callers of its own, the branch is the one (c) already runs, and it adds no process and no branch. The purpose of phase 1, no Python on a plain Bash call or Edit, is untouched, and the deferral ends at a named phase, recorded in T052. UNSETTLED BY THE BUNDLE, FOR THE IMPLEMENTER UNDER FR-002: (c) reaches the ask only once a call is not blocked, so the block verdict in (b) runs on the undecoded URL, and the plan does not say whether the Python decoded before the block check or before the heredoc rule; likewise a failed ask leaves archived with no decoded key. If the Python decoded first or kept archived working when attempts.py failed, a suite case holding that must still pass, and the plan's exit (every suite case against the Rust guard) is what catches it. This ruling covers archived only and does not rule that order correct."
+    },
+    {
+     "id": "(e)",
+     "summary": "The shell's literal pre-filter goes; the two patterns run in-process on every Bash call.",
+     "class": "within",
+     "why": "The pre-filter existed only to keep Python off commands that cannot be a fetch, and FR-007's one process removes that need. It changes what is started, not what is decided."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3578,6 +3669,95 @@
      "summary": "A ledger row's prefix is read only as the integer reserve-prefix.py writes; a numeric string, which Python's int() took, or a row of another form holds nothing, where Python crashed and passed the call.",
      "class": "within",
      "why": "A behavior difference from the Python, but outside what FR-002 reaches, which is 'every case its tests and its suites hold'; the request says nothing at this level. Conditional: D4's replay and this task's green exit enforce FR-002 here, so if test-new-file-hooks.sh holds a string-form or malformed-row case the exit goes red and (c) must be revisited. FR-002's XIV carve-out does not cover (c): crashing and passing a call is not refusing correct work, so such a case would be a plain FR-002 divergence, not a XIV fix. Unstated: the verdict a row that holds nothing produces when other rows are present (Python's crash passed the whole call). Unmeasured premise: 'a form nothing writes' gives no search space, and the block names only two files read, neither of them a ledger writer."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T039": {
+   "section_sha256": "1f5449de4c1f57803b899dba4fece4f1cc77cae496d7ebdcf20ae2611b1612fa",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard and lib/hm_fetch.py both move to Rust; hm_fetch.py is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and any module only guards use in phase 1; D3 removes the shell in the commit that registers the decider. 'Only caller is the guard' names no search command, which does not change the class; a second caller would surface when the file goes."
+    },
+    {
+     "id": "(b)",
+     "summary": "The block verdict is read in-process from research/blocked-domains.json; record/blocked.py stays for its own phase; an untrustworthy list still passes.",
+     "class": "within",
+     "why": "More Rust than FR-001's by-path allowance requires, and the guard does not run both, so FR-003 holds. Passing on an unapproved entry or malformed JSON is the Python's verdict, which FR-002 requires kept; it is not refusing correct work, so constitution XIV is not engaged."
+    },
+    {
+     "id": "(c)",
+     "summary": "attempts.py stays in phase 3 and is run by path once a fetch, through a new subcommand 'seen' doing each URL's report and write in one process; bounded; a failed ask passes.",
+     "class": "within",
+     "why": "This is FR-001's own clause (ask:449-phase1-tools-by-path): a Python file elsewhere with callers of its own, run by path on a rare branch, never on a plain Bash call or plain Edit. The stated branch (is a fetch, not blocked, in a clone, naming a URL) meets it. 'seen' consolidates two existing subcommands, fewer processes, and ports with the file in phase 3. The failed ask keeps the Python crash's pass (FR-002)."
+    },
+    {
+     "id": "(d)",
+     "summary": "archived is keyed on the URL after html.unescape, every entity; the decoding comes back as a 'plain' field of the attempts.py seen ask and reaches Rust in phase 3.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 1's defect is gone: Python's own html.unescape drops no entity, so FR-002 holds for every entity. It is still a narrowing: (a) makes archived and the guard's library phase-1 Rust, and this leaves one step of archived in Python until phase 3, in a file that gains it for the guard alone. Taken on its own merits the presumption stands against it, since a full Rust decoder is possible and difficulty would not excuse it. It is legitimate only because it falls inside FR-001's by-path clause, the arbiter's ruling that stands where the GM was asked: attempts.py is a file with callers of its own, the branch is the one (c) already runs, and it adds no process and no branch. The purpose of phase 1, no Python on a plain Bash call or Edit, is untouched, and the deferral ends at a named phase, recorded in T052. UNSETTLED BY THE BUNDLE, FOR THE IMPLEMENTER UNDER FR-002: (c) reaches the ask only once a call is not blocked, so the block verdict in (b) runs on the undecoded URL, and the plan does not say whether the Python decoded before the block check or before the heredoc rule; likewise a failed ask leaves archived with no decoded key. If the Python decoded first or kept archived working when attempts.py failed, a suite case holding that must still pass, and the plan's exit (every suite case against the Rust guard) is what catches it. This ruling covers archived only and does not rule that order correct."
+    },
+    {
+     "id": "(e)",
+     "summary": "The shell's literal pre-filter goes; the two patterns run in-process on every Bash call.",
+     "class": "within",
+     "why": "The pre-filter existed only to keep Python off commands that cannot be a fetch, and FR-007's one process removes that need. It changes what is started, not what is decided."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T049": {
+   "section_sha256": "466f5dc76e90cf29e1ca4fdedcd93c917579739509ca6531c78692ff1490f366",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard and its library both move to Rust (verdict, launch, notification and stop patterns, refusal words, fail-open on read error); lib/hm_setdown.py is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 places 'the code under scripts/hooks/ and any module only guards use' in phase 1, and the GM asked that all of it be ported. Nothing is left behind. The 'only caller' premise is the block's reading of three files, not a census; the bundle cannot confirm it. If another caller exists, removal breaks it and the suite or gate shows that. FR-002's order (suite passes, then deletion) is kept by item 9 and D3."
+    },
+    {
+     "id": "(b)-by-path",
+     "summary": "speckit-todo.py --closed-by-status stays Python for its own phase and the Rust guard runs it by path.",
+     "class": "within",
+     "why": "Does not reduce what was asked: the file is still ported in its phase, so 'all be ported to Rust' holds at the end state and this is sequencing. All three conditions of FR-001's arbiter clause (ask:449-phase1-tools-by-path) hold on the block's text: callers of its own (the push, make targets); a rare branch (Stop event, open boxes, nothing running, no set-down); never a plain Bash call or plain Edit (a Stop event is neither). T052's record tracks it. The file's location outside scripts/hooks/ is taken from the block; the bundle does not show the path."
+    },
+    {
+     "id": "(b)-asked-last",
+     "summary": "The speckit-todo call moves to the last check in the guard, after every other outcome.",
+     "class": "within",
+     "why": "A reordering is bound by FR-002 (same verdicts and outputs on every suite case). The block's 'changes no verdict' is an argument, not the proof; the proof is D4's replay of tests/hooks/test-set-down-hooks.sh against l7r-guard --only set-down-hooks, which item 6 makes the green exit. It also lowers how often a hook starts Python, which serves the GM's stated concern about hook cost."
+    },
+    {
+     "id": "(c)",
+     "summary": "The shell's clone-sync-hooks.sh resolve becomes the session's clone_dir() (T013's port); SET_DOWN_ROOT and the fall-back to cwd's work tree are kept.",
+     "class": "within",
+     "why": "Preserves existing resolution under FR-002 and is proven by the same suite. Keeps behavior rather than carving any out."
+    },
+    {
+     "id": "(d)",
+     "summary": "The transcript is streamed a line at a time, as the Python has done since 2026-10-26, never through the session's whole-file read.",
+     "class": "within",
+     "why": "An implementation choice that keeps the existing Python's behavior in the port; it removes nothing the GM asked for and adds no scope."
+    },
+    {
+     "id": "item 5",
+     "summary": "Order: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3's guard-by-guard landing after the empty dispatcher, inside FR-001's phase 1."
+    },
+    {
+     "id": "items 6 and 9",
+     "summary": "Green is the guard's suite against the Rust guard plus make rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D3, D4, FR-003 and FR-004 restated. Each check only enforces what was asked; no carve-out is hidden here."
     }
    ],
    "verdict": "CLEAR"

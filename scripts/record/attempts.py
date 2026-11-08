@@ -28,6 +28,8 @@ was consulted originally"*).
 from __future__ import annotations
 
 import argparse
+import contextlib
+import html
 import datetime
 import json
 import os
@@ -90,6 +92,19 @@ def line(url: str, question: str, sought: str, outcome: str = "unknown", *, key:
     return {"url": src.norm(url), "raw": url, "key": key, "question": question or "unknown", "sought": sought,
             "outcome": outcome, "date": date or today(), "feature": feature or os.environ.get("SPECIFY_FEATURE", "")[:3],
             "route": route}
+
+
+def seen(root: pathlib.Path, urls: list[str], sought: str, route: str, *, record: bool) -> list[dict]:
+    """What the fetch guard asks, once a fetch (feature 449 T039): each URL's report when it says more than its head and
+    the URL with every HTML entity decoded (what the guard keys the archive on), and with `record` its attempt written, in one process. A failure to write never blocks the read."""
+    out = []
+    for url in urls:
+        got = report(root, url=url)
+        out.append({"lines": got if len(got) > 1 else [], "plain": html.unescape(url)})
+        if record:
+            with contextlib.suppress(Exception):
+                add(root, url, "unknown", sought, route=route)
+    return out
 
 
 def add(root: pathlib.Path, url: str, question: str, sought: str, outcome: str = "unknown", **more: str) -> dict:
@@ -227,7 +242,16 @@ def main(argv: list[str] | None = None) -> int:
     ad.add_argument("--route", default="")
     ad.add_argument("--key", default="")
     sub.add_parser("seed")
+    se = sub.add_parser("seen")
+    se.add_argument("--root", required=True)
+    se.add_argument("--sought", required=True)
+    se.add_argument("--route", required=True)
+    se.add_argument("--record", action="store_true")
+    se.add_argument("urls", nargs="+")
     args = ap.parse_args(argv)
+    if args.cmd == "seen":  # before `repo_root`: the guard names the clone
+        print(json.dumps(seen(pathlib.Path(args.root), args.urls, args.sought, args.route, record=args.record), ensure_ascii=False))
+        return 0
     root = src.repo_root()
     if args.cmd == "show":
         print("\n".join(report(root, url=args.url or "", key=args.key or "", q=args.q or "")))

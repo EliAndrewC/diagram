@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for blocked-fetch-hooks.sh - a blocked domain is refused at every fetch route outside Python, and every other
+# Tests for the blocked-fetch guard (rust/guard, replayed through its link) - a blocked domain is refused at every fetch route outside Python, and every other
 # fetch is recorded as an attempt with its earlier attempts shown (feature 312, FR-002, FR-017, FR-018).
 # Run: tests/hooks/test-blocked-fetch-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 312 FR-002 - a NEW guard's companion suite.
@@ -9,7 +9,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # BF_HOOK lets the proof-of-firing run this suite against a mutated copy of the guard and watch it go red.
-HOOK="${BF_HOOK:-$HERE/../../scripts/hooks/blocked-fetch-hooks.sh}"
+HOOK="${BF_HOOK:-$HERE/blocked-fetch-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT
 export L7R_ATTEMPTS_ROOT="$T/attempts" L7R_SOURCES_HOME="$T/home"

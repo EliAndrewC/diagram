@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """`make set-down F=<feature> WHY="<reason>"` - the feature's work is set down (feature 385 T70, plan D89).
 
-Writes one row to `<git dir>/set-downs.jsonl`, which `set-down-hooks.sh` reads: a turn may then end with the feature's tasks open,
+Writes one row to `<git dir>/set-downs.jsonl`, which rust/guard's `set_down_hooks` reads: a turn may then end with the feature's tasks open,
 until the next `make task-start`. The reason is two words or more, as every escape's is (CLAUDE.md, "What is enforced").
 
 WORK THAT RESISTED IS SET DOWN ON THE ARBITER'S RULING (feature 405, the GM 2026-10-21). While an open task of the feature owes a

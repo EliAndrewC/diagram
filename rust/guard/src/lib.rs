@@ -39,6 +39,8 @@ pub fn guards() -> Vec<Guard> {
         guards::download_copy_hooks::GUARD,
         guards::phase_source_hooks::GUARD,
         guards::new_file_hooks::GUARD,
+        guards::blocked_fetch_hooks::GUARD,
+        guards::set_down_hooks::GUARD,
     ]
 }
 
@@ -216,7 +218,9 @@ mod tests {
                     "readme-hooks",
                     "download-copy-hooks",
                     "phase-source-hooks",
-                    "new-file-hooks"
+                    "new-file-hooks",
+                    "blocked-fetch-hooks",
+                    "set-down-hooks"
                 ]
         );
     }

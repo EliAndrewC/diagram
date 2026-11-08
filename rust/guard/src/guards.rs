@@ -4,6 +4,7 @@
 pub mod agent_stall_hooks;
 pub mod archive_first_hooks;
 pub mod batching_hooks;
+pub mod blocked_fetch_hooks;
 pub mod budget_change_hooks;
 pub mod claims_file_hooks;
 pub mod clone_sync_hooks;
@@ -27,4 +28,5 @@ pub mod no_poll_hooks;
 pub mod pair_hooks;
 pub mod phase_source_hooks;
 pub mod readme_hooks;
+pub mod set_down_hooks;
 pub mod stall_watchdog_hooks;

@@ -574,5 +574,31 @@
       "rust_guard_bash_ms": 10.66,
       "new_file_suite_cases": 21
     }
+  },
+  "blocked-fetch-hooks-ported": {
+    "quantity": "a Bash call's cost in the blocked-fetch guard, the shell's against the Rust guard alone (T039): a command the shell's literal pre-filter let through (it holds the word archive) and a plain ls, which the pre-filter stopped before any Python",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/blocked-fetch-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only blocked-fetch-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (22 cases)",
+    "value": {
+      "shell_word_ms": 90.95,
+      "rust_guard_word_ms": 9.22,
+      "shell_ls_ms": 8.26,
+      "rust_guard_ls_ms": 8.9,
+      "blocked_fetch_suite_cases": 22
+    }
+  },
+  "set-down-hooks-ported": {
+    "quantity": "a Stop event's cost in the set-down guard with no feature to hold, the shell's against the Rust guard alone (T049)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/set-down-hooks.sh stop (main's shell guard) against scripts/hooks/l7r-guard.sh --only set-down-hooks Stop in the clone, SET_DOWN_ROOT naming no directory and an empty transcript, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (34 cases)",
+    "value": {
+      "shell_stop_ms": 171.79,
+      "rust_guard_stop_ms": 63.1,
+      "set_down_suite_cases": 34
+    }
   }
 }
