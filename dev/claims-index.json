@@ -14749,17 +14749,6 @@
   "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/py.rs::polder_drawn#the polder's plots drawn apart": {
-  "body": "2ab122a8e1e42f31",
-  "claim": "the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's states set here draw nothing, every parcel of it converted and drawn by its ponds (`field_stage._dikeponds`)",
-  "code": "cc47bda801e67cad",
-  "core": "f4b1b5bdc4b652a9",
-  "date": "2026-11-01",
-  "note": "rolls handed to polder_states; on a dike-pond block the states are placeholders and its ponds draw it",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "rust/phases/src/field/py.rs::pts#the seam": {
   "body": "217130e8cb91d386",
   "claim": "the seam - NONE: the extension's own machinery; each record's claims are at the Rust that makes it",
@@ -14767,40 +14756,6 @@
   "core": "d0092f97fb1b2f34",
   "date": "2026-11-01",
   "note": "copies a vector",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/py.rs::rice_pond#a four-sided host": {
-  "body": "910d55e3142c87df",
-  "claim": "a four-sided host - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds",
-  "code": "eb42ec8d8ad20a90",
-  "core": "8467a302358e0290",
-  "date": "2026-11-01",
-  "note": "`x.ring.len() == 4` filter; the page says the pond sits wholly inside one low plot and says nothing about the plot's shape",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/py.rs::rice_pond#never a resting plot": {
-  "body": "910d55e3142c87df",
-  "claim": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
-  "code": "1e8e4eb3ce63b420",
-  "core": "8467a302358e0290",
-  "date": "2026-11-01",
-  "note": "`!resting.contains(i)`; neither page says whether a pond can sit in a resting plot",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/field/py.rs::rice_pond#the pond's host": {
-  "body": "910d55e3142c87df",
-  "claim": "the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s",
-  "code": "4c00bc8d72ee131b",
-  "core": "8467a302358e0290",
-  "date": "2026-11-01",
-  "note": "only reshapes the plots into Basin records and hands the roll to pocket_pond",
   "pages": {},
   "research": "",
   "rests": [],
@@ -15065,6 +15020,51 @@
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:acd4531bf6255fb2",
    "0005-rice-paddies-and-their-plots-suiden.drawing.html:dd38ce71aa72575c"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/staged.rs::polder_drawn#the polder's plots drawn apart": {
+  "body": "2ab122a8e1e42f31",
+  "claim": "the polder's plots drawn apart - NONE: the rolls are `states::polder_states`'s; a dike-pond block's states set here draw nothing, every parcel of it converted and drawn by its ponds (`field_stage._dikeponds`)",
+  "code": "cc47bda801e67cad",
+  "core": "f4b1b5bdc4b652a9",
+  "date": "2026-11-01",
+  "note": "rolls handed to polder_states; on a dike-pond block the states are placeholders and its ponds draw it",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/staged.rs::rice_pond#a four-sided host": {
+  "body": "910d55e3142c87df",
+  "claim": "a four-sided host - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on the host plot's shape; only a four-sided plot, so the pond's fit inside it holds",
+  "code": "eb42ec8d8ad20a90",
+  "core": "8467a302358e0290",
+  "date": "2026-11-01",
+  "note": "`x.ring.len() == 4` filter; the page says the pond sits wholly inside one low plot and says nothing about the plot's shape",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/staged.rs::rice_pond#never a resting plot": {
+  "body": "910d55e3142c87df",
+  "claim": "never a resting plot - GUESS: ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing silent on a pond in a plot left to rest; never its host",
+  "code": "1e8e4eb3ce63b420",
+  "core": "8467a302358e0290",
+  "date": "2026-11-01",
+  "note": "`!resting.contains(i)`; neither page says whether a pond can sit in a resting plot",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/staged.rs::rice_pond#the pond's host": {
+  "body": "910d55e3142c87df",
+  "claim": "the pond's host - NONE: the polder's plots as the comb's basins; the roll and its rules are `features::pocket_pond`'s",
+  "code": "4c00bc8d72ee131b",
+  "core": "8467a302358e0290",
+  "date": "2026-11-01",
+  "note": "only reshapes the plots into Basin records and hands the roll to pocket_pond",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/states.rs::FLOODED_IN#flooded": {
