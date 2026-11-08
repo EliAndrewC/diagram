@@ -1,0 +1,53 @@
+{
+  "utc": "2026-11-08T22:39:29Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 85,
+  "result": "failed: test-full",
+  "commit": "22c90eb3a",
+  "first_failure_s": 58.0,
+  "last_failure_s": 58.0,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_doc_links.py::test_every_relative_link_in_a_live_document_resolves"
+  ],
+  "host": {
+    "load": [
+      3.53,
+      6.09
+    ],
+    "mem_avail_mb": [
+      8913,
+      9423
+    ],
+    "cpu_temp_c": [
+      100.0,
+      93.0
+    ],
+    "stall_s": {
+      "cpu": 2.0,
+      "io": 0.3,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 48125,
+      "package": 19916
+    }
+  },
+  "phases": {
+    "preflight": 8.0,
+    "reference": 0.0,
+    "counters-inert": 13.0,
+    "static": 35.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "seeds": 8.0,
+    "pytest": 60.0,
+    "test-full": 72.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "108 engine file(s) and 18 test module(s) changed, 70 scripts/ file(s) (199 module(s) that read scripts/), 107 Rust file(s) (13 test module(s) that read them), 85 non-module file(s) under tests/ (36 test module(s) that can read them)",
+  "selected": 1558,
+  "collected": 1657
+}
