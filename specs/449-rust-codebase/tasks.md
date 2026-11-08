@@ -66,8 +66,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T016 [US1] `stall-watchdog-hooks`: its decider `rust/guard/src/guards/stall_watchdog_hooks.rs`, its suite `tests/hooks/test-stall-watchdog-hooks.sh` replayed against `l7r-guard --only stall-watchdog-hooks`, then `scripts/hooks/stall-watchdog-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: stall-watchdog is Rust
-- [ ] T017 [US1] `finished-run-hooks`: its decider `rust/guard/src/guards/finished_run_hooks.rs`, its suite `tests/hooks/test-finished-run-hooks.sh` replayed against `l7r-guard --only finished-run-hooks`, then `scripts/hooks/finished-run-hooks.sh` and its settings entry removed
+- [x] T017 [US1] `finished-run-hooks`: its decider `rust/guard/src/guards/finished_run_hooks.rs`, its suite `tests/hooks/test-finished-run-hooks.sh` replayed against `l7r-guard --only finished-run-hooks`, then `scripts/hooks/finished-run-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: finished-run is Rust
 - [ ] T018 [US1] `engine-freeze-hooks`: its decider `rust/guard/src/guards/engine_freeze_hooks.rs`, its suite `tests/hooks/test-engine-freeze-hooks.sh` replayed against `l7r-guard --only engine-freeze-hooks`, then `scripts/hooks/engine-freeze-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T019 [US1] `gm-tree-hooks`: its decider `rust/guard/src/guards/gm_tree_hooks.rs`, its suite `tests/hooks/test-gm-tree-hooks.sh` replayed against `l7r-guard --only gm-tree-hooks`, then `scripts/hooks/gm-tree-hooks.sh` and its settings entry removed
