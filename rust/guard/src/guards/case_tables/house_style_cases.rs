@@ -24,10 +24,10 @@ pub(super) fn cases() -> Vec<Case> {
         // straight double quotes only in a prose file - in code they delimit a string. (Some words below are
         // written with \u escapes because the hook of the day corrected this file's own cases as they were typed.)
         // feature 303 - the record file in two cases takes the flat layout's path; the cases are unchanged.
-        ("a British spelling inside a footnote quotation", edit("/r/research/questions/0001-a.html", "", "<li id=\"fn-3\">「depressional centres」 (gloss)</li>"), "ok"),
+        ("a British spelling inside a footnote quotation", edit("/r/research/site/q/a.html", "", "<li id=\"fn-3\">「depressional centres」 (gloss)</li>"), "ok"),
         ("an en-dash inside curly quotes", edit("/r/docs/a.md", "", "Wikipedia: “Tang (618\u{2013}907)”"), "ok"),
         ("a straight-quoted passage in prose", edit("/r/docs/a.md", "", "the chapter reads \"a draught animal\" on the page"), "ok"),
-        ("an HTML <q> element", edit("/r/research/questions/0001-a.html", "", "<q>a plain-colour sheath</q>"), "ok"),
+        ("an HTML <q> element", edit("/r/research/site/q/a.html", "", "<q>a plain-colour sheath</q>"), "ok"),
         ("a straight-quoted string in CODE is still corrected", edit("/r/l7r/x.py", "", "label = \"the colour\""), "rewritten:label = \"the color\""),
         ("a quotation beside a plain violation: only the plain one is corrected", edit("/r/docs/a.md", "", "「colour」 and the colour"), "rewritten:「colour」 and the color"),
         ("the GM verbatim request is refused, not corrected", edit("/r/specs/164-x/request.md", "", "fix the colour"), "blocked"),
