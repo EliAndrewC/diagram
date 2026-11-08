@@ -8,6 +8,10 @@ publish = false
 [lib]
 name = "l7r_guard"
 
+[dependencies]
+# the hook protocol's JSON, read and written (feature 449 plan, Complexity Tracking: the one crate phase 1 adds)
+serde_json = "1"
+
 [[bin]]
 name = "l7r-guard"
 path = "src/main.rs"

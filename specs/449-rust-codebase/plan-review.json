@@ -96,6 +96,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
+  },
+  "### T002 Approach (checklist part A)": {
+   "sha256": "11365d60db3e000ae6c02fee917798599ac307c4e0e6bfff836c4666fcf834ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -506,6 +512,39 @@
      "why": "Process and exit criteria that enforce FR-004 and FR-005; nothing narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T002 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T002-goal",
+     "summary": "T002 builds the one-process hook dispatcher answering Claude Code's protocol with an empty guard list, guards ported later",
+     "class": "within",
+     "why": "A first step toward FR-007 (one process per tool call) inside FR-001's hooks-first phase; ports no guard, so FR-002/FR-003 are untouched (no Python replaced, none run twice)."
+    },
+    {
+     "id": "T002-done",
+     "summary": "Done when an event with no guard allows in under a millisecond of its own work and every merge case passes; --self-check answers; coverage full",
+     "class": "within",
+     "why": "Acceptance targets that serve SC-001/FR-007 and FR-004's coverage floor; the millisecond is a target the plan sets for the empty dispatcher, not a measured figure, and drops nothing the request or spec asks."
+    },
+    {
+     "id": "T002-tests",
+     "summary": "Every merge case in contracts/guard-protocol.md tested, each test under a tenth of a second",
+     "class": "within",
+     "why": "Restates FR-008 and the protocol contract; enforcement of what was asked."
+    },
+    {
+     "id": "T002-order-landing",
+     "summary": "Runs after T001, lands via make land-tooling with no work budget; red exit records the failure, sets the task down, asks the arbiter",
+     "class": "within",
+     "why": "Sequencing and process; the GM's request (make this a Rust codebase) is unaffected, and FR-005 keeps make as the entry point."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -555,6 +594,38 @@
      "summary": "Landed via make land-tooling with no work budget; done is both crates' tests, lint, format, cover and dead clean through make.",
      "class": "within",
      "why": "Process and exit criteria that enforce FR-004 and FR-005; nothing narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T002": {
+   "section_sha256": "11365d60db3e000ae6c02fee917798599ac307c4e0e6bfff836c4666fcf834ae",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T002-goal",
+     "summary": "T002 builds the one-process hook dispatcher answering Claude Code's protocol with an empty guard list, guards ported later",
+     "class": "within",
+     "why": "A first step toward FR-007 (one process per tool call) inside FR-001's hooks-first phase; ports no guard, so FR-002/FR-003 are untouched (no Python replaced, none run twice)."
+    },
+    {
+     "id": "T002-done",
+     "summary": "Done when an event with no guard allows in under a millisecond of its own work and every merge case passes; --self-check answers; coverage full",
+     "class": "within",
+     "why": "Acceptance targets that serve SC-001/FR-007 and FR-004's coverage floor; the millisecond is a target the plan sets for the empty dispatcher, not a measured figure, and drops nothing the request or spec asks."
+    },
+    {
+     "id": "T002-tests",
+     "summary": "Every merge case in contracts/guard-protocol.md tested, each test under a tenth of a second",
+     "class": "within",
+     "why": "Restates FR-008 and the protocol contract; enforcement of what was asked."
+    },
+    {
+     "id": "T002-order-landing",
+     "summary": "Runs after T001, lands via make land-tooling with no work budget; red exit records the failure, sets the task down, asks the arbiter",
+     "class": "within",
+     "why": "Sequencing and process; the GM's request (make this a Rust codebase) is unaffected, and FR-005 keeps make as the entry point."
     }
    ],
    "verdict": "CLEAR"

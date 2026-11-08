@@ -6,7 +6,8 @@ every guard's check in a fixed order, and merges their answers by `specs/449-rus
 
 | file | look here when |
 |---|---|
-| `src/lib.rs` | the crate's surface |
-| `src/main.rs` | the binary's entry point |
+| `src/lib.rs` | the crate's surface: `guards()` in their fixed order, `cli` - the command line (`<event>`, `--only`, `--self-check`, `--version`) |
+| `src/protocol.rs` | the hook protocol: the event, the answers, the merge (`run`); its tests in `src/protocol/tests.rs` |
+| `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |
 
 `make rust-test`, `make static` check it beside `rust/phases` (the workspace, `rust/Cargo.toml`).
