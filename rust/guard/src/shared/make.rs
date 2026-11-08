@@ -97,7 +97,12 @@ fn balanced(text: &str) -> bool {
 #[must_use]
 pub fn combine(cmd: &str) -> Option<String> {
     let has = |g: &BTreeSet<String>, k: &str| g.contains(k);
-    if cmd.is_empty() || cmd.contains("GATE_OK") || cmd.contains("<<") || !cmd.contains("quick") || !cmd.contains("done") {
+    if cmd.is_empty()
+        || cmd.contains("GATE_OK")
+        || cmd.contains("<<")
+        || !cmd.contains("quick")
+        || !cmd.contains("done")
+    {
         return None;
     }
     let all = goals(cmd);
