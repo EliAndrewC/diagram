@@ -147,6 +147,734 @@ Decisions carried, none new: the four `tests/hooks/` Python helpers ported as `l
 breakdown 7); the unused libraries deleted with their last caller (work breakdown 6); the close on SC-001 and phase 1's share of both
 censuses empty (work breakdown 8, FR-010).
 
+### T001 Approach (checklist part A)
+
+1. **The goal, in the world.** the Rust tools build and are checked as one workspace, the guard crate beside the hamlet stages.
+2. **The constraints.** FR-004 (every line and function covered), FR-005 (make the one entry point).
+3. **Where each comes from.** the plan's Structure Decision; `rust_checks.py`'s crate discovery.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** First: every later task builds in it.
+6. **The exits.** Green: `make rust-test`, `make static` clean over both members, each crate's summary printed. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** both crates' tests, lint, format, cover and dead clean through make.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T002 Approach (checklist part A)
+
+1. **The goal, in the world.** one process answers a hook event by Claude Code's protocol, its guard list empty.
+2. **The constraints.** FR-007 (one process), contracts/guard-protocol.md (every answer kind and the merge), FR-008 (each test under a tenth of a second).
+3. **Where each comes from.** research R3 (the protocol measured from today's guards), plan D1-D2.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T001.
+6. **The exits.** Green: every merge case tested, `--self-check` answering, coverage full. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** an event with no guard allows in under a millisecond of its own work; the merge's cases pass.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T003 Approach (checklist part A)
+
+1. **The goal, in the world.** the facts every guard reads - the guard log, the escapes, the session's clone and name, the GM's messages - read once and written as today.
+2. **The constraints.** FR-002 (the same verdicts), plan D5-D6, FR-006 (asked once, the count pinned).
+3. **Where each comes from.** research R5 (the shared state), R7 (the design fixes).
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T002.
+6. **The exits.** Green: a guard-log line written by Rust read back by `make guard-log` as the shell's is; each read counted once a process in a test. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** the library's tests green, its reads counted.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T004 Approach (checklist part A)
+
+1. **The goal, in the world.** a guard's build reaches every session, a broken build never turning every guard off.
+2. **The constraints.** plan D7, FR-005.
+3. **Where each comes from.** research R6 (main's copy runs), the plan review's aside of 2026-11-07.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T002.
+6. **The exits.** Green: its suite: a stale build rebuilt, a failed build running the last good binary, none ever built failing open with its line. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** the wrapper's suite green.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T005 Approach (checklist part A)
+
+1. **The goal, in the world.** every session calls the dispatcher once an event, beside the guards it does not yet hold.
+2. **The constraints.** FR-003 (no guard runs twice), FR-010 (measured).
+3. **Where each comes from.** plan work breakdown 4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T004; landed alone with `make land-tooling`.
+6. **The exits.** Green: the settings call it for every event; `make hooks-test` green; its floor timed. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** `m:hooks-bash`'s command re-run with it in place, the floor recorded.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T006 Approach (checklist part A)
+
+1. **The goal, in the world.** `pair-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-pair-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-pair-hooks.sh` green against `l7r-guard --only pair-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-pair-hooks.sh` passes against the Rust guard; `scripts/hooks/pair-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T007 Approach (checklist part A)
+
+1. **The goal, in the world.** `gate-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-gate-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-gate-hooks.sh` green against `l7r-guard --only gate-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-gate-hooks.sh` passes against the Rust guard; `scripts/hooks/gate-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T008 Approach (checklist part A)
+
+1. **The goal, in the world.** `measure-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-measure-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-measure-hooks.sh` green against `l7r-guard --only measure-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-measure-hooks.sh` passes against the Rust guard; `scripts/hooks/measure-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T009 Approach (checklist part A)
+
+1. **The goal, in the world.** `no-poll-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-no-poll-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-no-poll-hooks.sh` green against `l7r-guard --only no-poll-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-no-poll-hooks.sh` passes against the Rust guard; `scripts/hooks/no-poll-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T010 Approach (checklist part A)
+
+1. **The goal, in the world.** `main-tree-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-main-tree-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-main-tree-hooks.sh` green against `l7r-guard --only main-tree-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-main-tree-hooks.sh` passes against the Rust guard; `scripts/hooks/main-tree-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T011 Approach (checklist part A)
+
+1. **The goal, in the world.** `record-edit-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-record-edit-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-record-edit-hooks.sh` green against `l7r-guard --only record-edit-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-record-edit-hooks.sh` passes against the Rust guard; `scripts/hooks/record-edit-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T012 Approach (checklist part A)
+
+1. **The goal, in the world.** `event-log-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-event-log-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-event-log-hooks.sh` green against `l7r-guard --only event-log-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-event-log-hooks.sh` passes against the Rust guard; `scripts/hooks/event-log-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T013 Approach (checklist part A)
+
+1. **The goal, in the world.** `clone-sync-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-clone-sync-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-clone-sync-hooks.sh` green against `l7r-guard --only clone-sync-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-clone-sync-hooks.sh` passes against the Rust guard; `scripts/hooks/clone-sync-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T014 Approach (checklist part A)
+
+1. **The goal, in the world.** `idle-tests-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-idle-tests-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-idle-tests-hooks.sh` green against `l7r-guard --only idle-tests-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-idle-tests-hooks.sh` passes against the Rust guard; `scripts/hooks/idle-tests-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T015 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-stall-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-agent-stall-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-stall-hooks.sh` green against `l7r-guard --only agent-stall-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-stall-hooks.sh` passes against the Rust guard; `scripts/hooks/agent-stall-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T016 Approach (checklist part A)
+
+1. **The goal, in the world.** `stall-watchdog-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-stall-watchdog-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-stall-watchdog-hooks.sh` green against `l7r-guard --only stall-watchdog-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-stall-watchdog-hooks.sh` passes against the Rust guard; `scripts/hooks/stall-watchdog-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T017 Approach (checklist part A)
+
+1. **The goal, in the world.** `finished-run-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-finished-run-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-finished-run-hooks.sh` green against `l7r-guard --only finished-run-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-finished-run-hooks.sh` passes against the Rust guard; `scripts/hooks/finished-run-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T018 Approach (checklist part A)
+
+1. **The goal, in the world.** `engine-freeze-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-engine-freeze-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-engine-freeze-hooks.sh` green against `l7r-guard --only engine-freeze-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-engine-freeze-hooks.sh` passes against the Rust guard; `scripts/hooks/engine-freeze-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T019 Approach (checklist part A)
+
+1. **The goal, in the world.** `gm-tree-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-gm-tree-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-gm-tree-hooks.sh` green against `l7r-guard --only gm-tree-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-gm-tree-hooks.sh` passes against the Rust guard; `scripts/hooks/gm-tree-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T020 Approach (checklist part A)
+
+1. **The goal, in the world.** `batching-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-batching-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-batching-hooks.sh` green against `l7r-guard --only batching-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-batching-hooks.sh` passes against the Rust guard; `scripts/hooks/batching-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T021 Approach (checklist part A)
+
+1. **The goal, in the world.** `no-branch-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-no-branch-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-no-branch-hooks.sh` green against `l7r-guard --only no-branch-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-no-branch-hooks.sh` passes against the Rust guard; `scripts/hooks/no-branch-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T022 Approach (checklist part A)
+
+1. **The goal, in the world.** `discard-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-discard-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-discard-hooks.sh` green against `l7r-guard --only discard-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-discard-hooks.sh` passes against the Rust guard; `scripts/hooks/discard-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T023 Approach (checklist part A)
+
+1. **The goal, in the world.** `conflict-marker-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-conflict-marker-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-conflict-marker-hooks.sh` green against `l7r-guard --only conflict-marker-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-conflict-marker-hooks.sh` passes against the Rust guard; `scripts/hooks/conflict-marker-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T024 Approach (checklist part A)
+
+1. **The goal, in the world.** `gate-write-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-gate-write-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-gate-write-hooks.sh` green against `l7r-guard --only gate-write-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-gate-write-hooks.sh` passes against the Rust guard; `scripts/hooks/gate-write-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T025 Approach (checklist part A)
+
+1. **The goal, in the world.** `feature-approval-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-feature-approval-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-feature-approval-hooks.sh` green against `l7r-guard --only feature-approval-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-feature-approval-hooks.sh` passes against the Rust guard; `scripts/hooks/feature-approval-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T026 Approach (checklist part A)
+
+1. **The goal, in the world.** `budget-change-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-budget-change-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-budget-change-hooks.sh` green against `l7r-guard --only budget-change-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-budget-change-hooks.sh` passes against the Rust guard; `scripts/hooks/budget-change-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T027 Approach (checklist part A)
+
+1. **The goal, in the world.** `ledger-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-ledger-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-ledger-hooks.sh` green against `l7r-guard --only ledger-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-ledger-hooks.sh` passes against the Rust guard; `scripts/hooks/ledger-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T028 Approach (checklist part A)
+
+1. **The goal, in the world.** `make-only-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-make-only-hooks.sh`, the guard's own suite; plan D3-D4. The constitution XIV fix named in its task.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-make-only-hooks.sh` green against `l7r-guard --only make-only-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-make-only-hooks.sh` passes against the Rust guard; `scripts/hooks/make-only-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T029 Approach (checklist part A)
+
+1. **The goal, in the world.** `guard-file-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-guard-file-hooks.sh`, the guard's own suite; plan D3-D4. The constitution XIV fix named in its task.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-guard-file-hooks.sh` green against `l7r-guard --only guard-file-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-guard-file-hooks.sh` passes against the Rust guard; `scripts/hooks/guard-file-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T030 Approach (checklist part A)
+
+1. **The goal, in the world.** `archive-first-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-archive-first-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-archive-first-hooks.sh` green against `l7r-guard --only archive-first-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-archive-first-hooks.sh` passes against the Rust guard; `scripts/hooks/archive-first-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T031 Approach (checklist part A)
+
+1. **The goal, in the world.** `claims-file-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-claims-file-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-claims-file-hooks.sh` green against `l7r-guard --only claims-file-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-claims-file-hooks.sh` passes against the Rust guard; `scripts/hooks/claims-file-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T032 Approach (checklist part A)
+
+1. **The goal, in the world.** `readme-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-readme-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-readme-hooks.sh` green against `l7r-guard --only readme-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-readme-hooks.sh` passes against the Rust guard; `scripts/hooks/readme-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T033 Approach (checklist part A)
+
+1. **The goal, in the world.** `download-copy-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-download-copy-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-download-copy-hooks.sh` green against `l7r-guard --only download-copy-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-download-copy-hooks.sh` passes against the Rust guard; `scripts/hooks/download-copy-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T034 Approach (checklist part A)
+
+1. **The goal, in the world.** `repo-safety-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-repo-safety-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-repo-safety-hooks.sh` green against `l7r-guard --only repo-safety-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-repo-safety-hooks.sh` passes against the Rust guard; `scripts/hooks/repo-safety-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T035 Approach (checklist part A)
+
+1. **The goal, in the world.** `shell-check-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-shell-check-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-shell-check-hooks.sh` green against `l7r-guard --only shell-check-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-shell-check-hooks.sh` passes against the Rust guard; `scripts/hooks/shell-check-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T036 Approach (checklist part A)
+
+1. **The goal, in the world.** `house-style-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-house-style-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-house-style-hooks.sh` green against `l7r-guard --only house-style-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-house-style-hooks.sh` passes against the Rust guard; `scripts/hooks/house-style-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T037 Approach (checklist part A)
+
+1. **The goal, in the world.** `source-block-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-source-block-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-source-block-hooks.sh` green against `l7r-guard --only source-block-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-source-block-hooks.sh` passes against the Rust guard; `scripts/hooks/source-block-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T038 Approach (checklist part A)
+
+1. **The goal, in the world.** `wakeup-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-wakeup-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-wakeup-hooks.sh` green against `l7r-guard --only wakeup-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-wakeup-hooks.sh` passes against the Rust guard; `scripts/hooks/wakeup-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T039 Approach (checklist part A)
+
+1. **The goal, in the world.** `blocked-fetch-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-blocked-fetch-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-blocked-fetch-hooks.sh` green against `l7r-guard --only blocked-fetch-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-blocked-fetch-hooks.sh` passes against the Rust guard; `scripts/hooks/blocked-fetch-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T040 Approach (checklist part A)
+
+1. **The goal, in the world.** `workflow-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-workflow-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-workflow-hooks.sh` green against `l7r-guard --only workflow-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-workflow-hooks.sh` passes against the Rust guard; `scripts/hooks/workflow-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T041 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-model-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-agent-model-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-model-hooks.sh` green against `l7r-guard --only agent-model-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-model-hooks.sh` passes against the Rust guard; `scripts/hooks/agent-model-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T042 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-prefix-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-agent-prefix-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-prefix-hooks.sh` green against `l7r-guard --only agent-prefix-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-prefix-hooks.sh` passes against the Rust guard; `scripts/hooks/agent-prefix-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T043 Approach (checklist part A)
+
+1. **The goal, in the world.** `check-bundle-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-check-bundle-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-check-bundle-hooks.sh` green against `l7r-guard --only check-bundle-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-check-bundle-hooks.sh` passes against the Rust guard; `scripts/hooks/check-bundle-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T044 Approach (checklist part A)
+
+1. **The goal, in the world.** `escalation-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-escalation-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-escalation-hooks.sh` green against `l7r-guard --only escalation-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-escalation-hooks.sh` passes against the Rust guard; `scripts/hooks/escalation-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T045 Approach (checklist part A)
+
+1. **The goal, in the world.** `review-round-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-review-round-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-review-round-hooks.sh` green against `l7r-guard --only review-round-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-review-round-hooks.sh` passes against the Rust guard; `scripts/hooks/review-round-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T046 Approach (checklist part A)
+
+1. **The goal, in the world.** `phase-source-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-phase-source-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-phase-source-hooks.sh` green against `l7r-guard --only phase-source-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-phase-source-hooks.sh` passes against the Rust guard; `scripts/hooks/phase-source-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T047 Approach (checklist part A)
+
+1. **The goal, in the world.** `new-file-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-new-file-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-new-file-hooks.sh` green against `l7r-guard --only new-file-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-new-file-hooks.sh` passes against the Rust guard; `scripts/hooks/new-file-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T048 Approach (checklist part A)
+
+1. **The goal, in the world.** `checks-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-checks-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-checks-hooks.sh` green against `l7r-guard --only checks-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-checks-hooks.sh` passes against the Rust guard; `scripts/hooks/checks-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T049 Approach (checklist part A)
+
+1. **The goal, in the world.** `set-down-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+3. **Where each comes from.** `tests/hooks/test-set-down-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-set-down-hooks.sh` green against `l7r-guard --only set-down-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-set-down-hooks.sh` passes against the Rust guard; `scripts/hooks/set-down-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T050 Approach (checklist part A)
+
+1. **The goal, in the world.** the suites' own tooling - which suites a change makes stale, which guards a session ran, the bench, the shared cases - in Rust.
+2. **The constraints.** FR-001 (phase 1's `tests/hooks/` Python), FR-008.
+3. **Where each comes from.** plan work breakdown 7; `m:guard-sources` (the four helpers).
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After the guard tasks that use them.
+6. **The exits.** Green: `make hooks-test` keyed by `l7r-guard deps`, its results unchanged; the four `.py` files deleted. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** no `.py` under `tests/hooks/`.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T051 Approach (checklist part A)
+
+1. **The goal, in the world.** no guard library outlives its last caller.
+2. **The constraints.** FR-001, FR-003.
+3. **Where each comes from.** plan work breakdown 6.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After every guard task.
+6. **The exits.** Green: `make audit` and `make guard-log` reading the Rust lines unchanged; no `.py` under `scripts/hooks/`. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** no `.py` and no inline Python under `scripts/hooks/`.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T052 Approach (checklist part A)
+
+1. **The goal, in the world.** phase 1 closed on its measured outcome.
+2. **The constraints.** SC-001, FR-010, FR-001 (phase 1's share of both censuses).
+3. **Where each comes from.** plan work breakdown 8; `m:hooks-bash`, `m:pair-hooks-suite`.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** Last.
+6. **The exits.** Green: the figures re-run and recorded beside their first values, SC-001 met, both censuses' phase-1 share empty. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** SC-001 met: the guards before a Bash call decide it in under a tenth of today's slowest guard's time.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
 ### Phase 2 - the gate (Story 2, P2)
 
 **Approach.** The gate's own Python path moves to a Rust binary the Makefile calls: `l7r/diagram/ci/` (the test planner, the
