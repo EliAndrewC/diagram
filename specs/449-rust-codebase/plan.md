@@ -237,24 +237,7 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T053 Approach (checklist part A)
-
-1. **The goal, in the world.** No plain Bash call and no plain Edit starts Python for the guards the round arbiter moved to phase 3.
-2. **The constraints.** FR-001's phase-3 clause (the ruling `ask:449-hm-checks-route`), FR-002 (every suite case of `test-record-edit-hooks.sh` keeps its verdict), FR-007 (one process on such a call).
-   **Decisions** (found reading `record-edit-hooks.sh`, `lib/hm_checks.py`'s `edit` mode, `lib/hm_record.py` and `.claude/settings.json`, 2026-11-08):
-   - (a) `record-edit` IS THE ONE THAT STARTS PYTHON ON A PLAIN CALL: both its settings entries, on every Edit, Write and Bash call. `check-bundle` runs on an Agent call alone, and `checks-hooks.sh after` greps its state in shell and starts Python only with a plan review's snapshot taken; both named in the ruling.
-   - (a2) A SNAPSHOT OUTLIVED ITS HOLD (found reading the live state, 2026-11-08: eight entries of `plan_snaps` from reviews long returned, in a 899,438-byte state file, so `checks-hooks.sh after`'s test of the key started Python on every Bash call): a snapshot is taken before a write and popped by that call's `after`, so a call another guard refuses never pops its own. `hm_planhold.restore` now also drops every snapshot naming no hold still open, a snapshot having no use without its hold; the key goes when nothing is left, as it did. The same run of a held call also purges a hold whose dispatch never launched, past `PENDING_S`, which `refusal` already ignores, so no verdict moves; a running hold past `HOLD_MAX_S` stands, refusing until `PLAN_EDIT_OK` (the round arbiter, `ask:449-T053-round3`).
-   - (b) THE TEST MOVES TO RUST, THE DECIDING STAYS: `record-edit-gate` runs `record-edit-hooks.sh`, unchanged, when the call can concern it. A Bash call can when a plan review holds text (a non-empty `plan_holds` in the state, the test `hm_checks._handle` makes: the key itself stays, empty, after every hold, so its presence says nothing; any command can rewrite held text), or it names `apply-edits`, or runs `make done` by `hm_checks`' own pattern. An Edit or Write can when its file is one `hm_checks.subject_of_path` freezes or `hm_record.page_dir_for` re-aims, or, while a plan review holds text, is a `specs/*/plan.md`: an Edit of any other file cannot change held text. Any other call starts nothing. The state is found as `hm_checks.state_path` finds it, a `.git` file (a worktree) resolved through its gitdir and `commondir`; with no repository there is no state, so no hold, as the Python's `state_path` returning None gives. The shell guard's reply becomes this binary's answers.
-3. **Where each comes from.** `tests/hooks/test-record-edit-hooks.sh`, the guard's own suite; the ruling's step 1.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** Before T050-T052; the phase's close measures it.
-6. **The exits.** Green: `test-record-edit-hooks.sh` green and `test-record-edit-gate.sh` green (the same cases driven through the gate, the no-repository reply beside the shell guard's, and a `python3` sentinel on the PATH that a plain call does not start and a `make done` call does), `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** A plain Bash call and a plain Edit start no Python for this guard, observed by the sentinel in `test-record-edit-gate.sh`; `m:record-edit-gate` the time beside the shell's.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T053 to T053 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T052 Approach (checklist part A)
 
 1. **The goal, in the world.** phase 1 closed on its measured outcome.
