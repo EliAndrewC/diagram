@@ -461,3 +461,22 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T030 Approach (checklist part A)
+
+1. **The goal, in the world.** `archive-first-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `archive-first-hooks.sh` and `lib/hm_archive_first.py`, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE: `held`, `seen_before`, the state files' format and the refusal's words, `lib/hm_archive_first.py` deleted with its only caller.
+   - (b) THE ARCHIVE'S URL RULE IN-PROCESS: `sources._cited` is six lines, the guard's own small read (as T025's decision (b)), and moves in, its `html.unescape` the entity forms a cited URL carries. The manifest rule stays one rule, `tests/tooling`'s test holding `archive.py:clean` and `sources._cited` together; the suite's replay holds this copy to the same ids on its fixture archive.
+   - (c) ONE SUITE CASE'S MEANS, ITS PROPERTY KEPT: case 3 proved the refusal comes from the decider by `sed`-stripping the shell; as T025's (d), the same call goes through another guard's `--only` entry and must pass, its expected verdict unchanged.
+3. **Where each comes from.** `tests/hooks/test-archive-first-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-archive-first-hooks.sh` green against `l7r-guard --only archive-first-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-archive-first-hooks.sh` passes against the Rust guard; `scripts/hooks/archive-first-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
