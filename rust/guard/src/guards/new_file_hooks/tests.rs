@@ -135,7 +135,7 @@ fn a_redirect_is_judged_by_its_resolved_path() {
     assert_eq!(bash("echo done > /tmp/out.txt; ls 0400-x.json", &at), None);
     assert_eq!(
         bash(
-            "D=$(mktemp -d); echo x > $D/research/questions/0041-a.html",
+            &format!("D=$(mktemp -d); echo x > $D/{QUESTIONS}/0041-a.html"),
             &at
         ),
         None
@@ -144,16 +144,13 @@ fn a_redirect_is_judged_by_its_resolved_path() {
     std::fs::create_dir_all(format!("{other}/.git")).unwrap();
     assert_eq!(
         bash(
-            &format!("D={other}; echo x > $D/research/questions/0042-b.html"),
+            &format!("D={other}; echo x > $D/{QUESTIONS}/0042-b.html"),
             &at
         ),
         None
     );
     assert_eq!(
-        bash(
-            &format!("echo x > {other}/research/questions/0043-c.html"),
-            &at
-        ),
+        bash(&format!("echo x > {other}/{QUESTIONS}/0043-c.html"), &at),
         None
     );
     assert_eq!(
