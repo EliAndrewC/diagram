@@ -1,0 +1,160 @@
+# Feature Specification: A Rust codebase
+
+**Feature Branch**: none - this project stays on `main` (`SPECIFY_FEATURE=449-rust-codebase`)
+
+**Created**: 2026-11-07
+
+**Status**: Draft
+
+**Approved**: the GM, 2026-11-07, "I think what we're finding is that our Python code is just to inefficient and should probably all be ported to Rust, so I think I want to just move forward with that, making this a Rust codebase instead of a Python codebase."
+
+Filed without an approval round under the GM's standing rule: "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future" (GM 2026-10-18).
+
+**Affects**: tooling, performance, interactive page, research record, research process, review process, magistracy, country shrine
+
+**Input**: the GM's words, verbatim in `request.md`; the measurements of feature 444 T36 (2026-11-07) that led to them.
+
+## Why
+
+Feature 444 moved the hamlet engine to Rust. Everything else is still Python: the gate, the hooks that run on every tool call, the
+research and review tooling, the Mode A building planner, the interactive page writer. Measured on 2026-11-07 (feature 444 T36):
+
+- a one-line Rust edit's `make done` took 26-32 s, about 20 s of it Python the edit did not need (preflight's quick 4.6 s, the test
+  planner 3 s, pytest's start 4 s, 161 Python tests 10-14 s under coverage tracing, bookkeeping 2-4 s);
+- 29 hooks run before every Bash call, in parallel: the slowest 184 ms, 1.1 s of CPU summed per call; a `pair-hooks.sh` run
+  averaged 441 ms inside its own suite, most of it work rather than start-up;
+- a Python process starts in 15-40 ms; coverage tracing roughly doubles every Python test; the Rust crate's 90 tests run in 0.12 s.
+
+Measured limits a port does not change, recorded so the plan does not promise them: git operations and the push path (about 2 s a
+push), the I/O of a scan of the whole repository, subprocess-heavy fixtures. And the day's largest wins were design fixes - a claims
+test 6.7 s -> 0.5 s, a mutation test 20.7 s -> 1.1 s, a check bundle 3.3 s -> 1.5 s - which a port must carry over, never repeat.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Every tool call answers at once (Priority: P1)
+
+The GM works with a session; before each tool call the project's guards run. Today that is 29 processes, each a shell that starts
+Python, the slowest 184 ms. After this story the guards answer in a few milliseconds, with the same verdicts.
+
+**Why this priority**: the GM: "startup time for hooks is just generally more important." It is paid on every tool call of every
+session, and its CPU competes with any gate running beside it on a laptop measured at 100 C and throttling.
+
+**Independent Test**: time the guards for a Bash, an Edit and an Agent call before and after; replay every guard suite's cases
+(`tests/hooks/`) against the replacement and compare each verdict.
+
+**Acceptance Scenarios**:
+
+1. **Given** a Bash call, **When** the guards run, **Then** they decide it in under 20 ms of wall time and under 50 ms of CPU in total.
+2. **Given** each case a guard suite holds today, **When** it runs against the replacement, **Then** the verdict - allowed, refused,
+   rewritten, its message - is the one the Python guard gives.
+3. **Given** a guard suite, **When** it runs, **Then** it takes under a tenth of its measured time today where the guard's own run
+   was its cost (pair-hooks: 90 runs, 39.7 s of CPU).
+
+---
+
+### User Story 2 - The gate is Rust (Priority: P2)
+
+`make done`, `make quick`, `make land` and the push's checks are driven by Rust: the test planner, the stamps and verification state,
+the run records, the claims and coverage reports. A one-line Rust edit's gate runs only what that edit can change.
+
+**Why this priority**: the gate is the loop the GM waits on; its Python path is the 20 s measured above.
+
+**Independent Test**: a one-line Rust edit, a one-line edit of a ported tool, a comment-only edit and no edit, each timed through
+`make done` before and after, every verdict compared.
+
+**Acceptance Scenarios**:
+
+1. **Given** a one-line change to Rust code, **When** `make done` runs, **Then** it finishes in under 12 s on this laptop.
+2. **Given** a comment-only change, or none, **When** `make done` runs, **Then** it reuses the last green result in under 2 s.
+3. **Given** a defect a check catches today, **When** the gate runs on the Rust path, **Then** it is caught, by the same rule.
+
+---
+
+### User Story 3 - The tooling is Rust (Priority: P3)
+
+The research-record, review, measurement and page-session tooling under `scripts/` runs as Rust, each command through make as today.
+
+**Why this priority**: the largest body of Python; slow where it parses, walks and starts processes.
+
+**Independent Test**: each command's output on the real repository compared before and after; its tests run as Rust tests.
+
+**Acceptance Scenarios**:
+
+1. **Given** any make target that runs a tool, **When** it runs, **Then** its output and exit status are those of the Python tool.
+2. **Given** a tool's tests, **When** they run, **Then** none takes 100 ms or more unless it is that tool's one end-to-end test.
+
+---
+
+### User Story 4 - Mode A and the page writer are Rust (Priority: P4)
+
+The Mode A building planner (compound plans, captions, buildings), the caption placer, the interactive page writer and the map
+pipeline are Rust. With them gone, no Python remains in the repository.
+
+**Why this priority**: last, as the least often run on the iteration loop.
+
+**Independent Test**: every Mode A sheet and every interactive page regenerated before and after and checked by the same checks;
+`make done` with no Python interpreter on the path.
+
+**Acceptance Scenarios**:
+
+1. **Given** a Mode A sheet, **When** it is regenerated, **Then** every check that passed on it passes.
+2. **Given** the repository after this story, **When** it is searched, **Then** it holds no Python file outside git history.
+
+### Edge Cases
+
+- A piece half ported: its Python stays the one that runs until its replacement passes every case; the two never both decide.
+- A Python test that tests a tool's real behavior over the whole repository: kept as that tool's one end-to-end test, ported.
+- A guard that refuses on correct work today: fixed in the port, its suite case recording the fix (constitution XIV).
+- A behavior only the Python tests' coverage revealed: the Rust replacement carries a test for it before the Python is deleted.
+- A design fault found while porting (work repeated, a scan run twice): fixed in the port, not carried over.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: Every Python module in the repository outside git history MUST be replaced by Rust, in four phases in this order:
+  the hooks (Story 1), the gate (Story 2), the tooling (Story 3), Mode A and the page writer (Story 4).
+- **FR-002**: Each replaced piece MUST give the same verdicts and outputs as the Python it replaces, on every case its tests and its
+  suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18).
+- **FR-003**: Until a piece's replacement passes, its Python MUST remain the one that runs; no piece runs both.
+- **FR-004**: Every replacement MUST hold the coverage floor the Rust crate holds today: every line and every function reached by a
+  test, read strictly.
+- **FR-005**: make MUST remain the one entry point; the make-only guard MUST cover the replacements' binaries as it covers the
+  Python and cargo today.
+- **FR-006**: The design fixes measured in feature 444 T36 MUST be carried over, not rebuilt as they were: the import graph kept per
+  process, semantic file ids read from the kept cache, a fixture built once.
+- **FR-007**: The guards MUST run as one process for a tool call, not one per guard.
+- **FR-008**: A tool's tests MUST each take under 100 ms, but its one end-to-end test against the real command.
+- **FR-009**: The JavaScript and CSS of the interactive page, the research record's HTML fragments and the shell entry points of
+  the container are not Python and are out of this feature's scope.
+- **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
+
+### Key Entities
+
+- **A piece**: one hook, one tool or one engine package, with its tests and the make targets that run it; the unit replaced.
+- **A verdict replay**: a piece's recorded cases (inputs, expected verdicts and outputs) run against the Python and the Rust.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: The guards before a Bash call decide it in under 20 ms of wall time (184 ms today).
+- **SC-002**: A one-line Rust edit's `make done` finishes in under 12 s (26-32 s today); an unchanged tree's in under 2 s.
+- **SC-003**: The test suites, every tree together, run in under a tenth of today's summed CPU time (about 632 s summed today).
+- **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
+- **SC-005**: When the feature closes, the repository holds no Python file and `make done` runs with no Python interpreter.
+
+## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
+
+None: this feature changes how the tooling runs, and no map draws or states anything new; a Mode A sheet or page that changes under
+the port is held to its checks and its research claims, as FR-002 states.
+
+## Assumptions
+
+- The interactive page's JavaScript and CSS and the research record's HTML fragments stay as they are: they are not Python.
+- Mode A's building planner is in this feature, its last phase, since the GM asked for the whole codebase.
+- Each piece's Python tests are rewritten as Rust tests when the piece is ported; during a phase, a Python test may drive a Rust binary
+  black-box only until that piece's Rust tests replace it.
+- The research archive, the record's build (`make record`) and the claims switch keep their rules; only their implementation moves.
+- The work-budget program (feature 444) and its Rust stages continue unchanged; the stages past the cut are ported there, not here.
+- The 100% coverage floor's exemption for engine code the Rust port replaces (feature 448) ends piece by piece as each is ported.
