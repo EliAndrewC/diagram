@@ -511,3 +511,7 @@ And: "Sorry no, to be cleare we should stop optimizing our python gates for now 
 "We should probably avoid fixed seeds because of overfitting - I thought that was a rule we had already instituted.  If a seed fails then we want to keep testing it until it succeeds, after which point it gets dropped from the fixed pool and when there are no known bugs then we have no fixed seeds."
 
 "We should probably run with counters compiled out by default."
+
+## 2026-11-07, the hooks' startup
+
+"So while I don't think we need to port the Python code to Rusts that runs in hooks, because startup time for hooks is just generally more important.  How much would that affect this?"
