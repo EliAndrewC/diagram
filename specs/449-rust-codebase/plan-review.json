@@ -278,9 +278,9 @@
    "declared": "spec-fidelity"
   },
   "### T030 Approach (checklist part A)": {
-   "sha256": "4252176b4c8f889abe5cbca772beea36decf8bae9e5239fabe39eed52b992796",
+   "sha256": "a2e663eafb0b9c1123e1d4d73d34677664b415bb5750a7efd83022089fe7f25b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T031 Approach (checklist part A)": {
@@ -2087,6 +2087,40 @@
      "why": "Tooling work with no maps touched; narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T030 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T030(a)",
+     "summary": "The guard and its library both move: held, seen_before, the state files' format and the refusal's words; lib/hm_archive_first.py deleted with its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and the request asks for all of it to be ported; FR-002 governs the state format and refusal words staying the same. The 'only caller' premise is stated from reading two files, not from a census, and this bundle cannot check it; it does not change the class."
+    },
+    {
+     "id": "T030(b)",
+     "summary": "sources._cited's URL rule is carried in-process in the Rust guard, with a test holding archive.py:clean and sources._cited together and the suite's replay holding this copy to the same ids on its fixture archive.",
+     "class": "within",
+     "why": "FR-003's 'no piece runs both' is per piece: the guard does not run both, and sources.py is a different piece on its own phase under FR-001. Carrying a copy until that phase is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T030(b-unescape)",
+     "summary": "The Rust copy's html.unescape covers 'the entity forms a cited URL carries'.",
+     "class": "within",
+     "why": "Adjudicated apart from (b). Read as a decoder narrower than Python's html.unescape, it excepts no piece from the port, and FR-002 binds verdicts on the cases the tests and suites hold, so it is inside the accepted spec. Caveat: which forms a cited URL carries is a factual premise the block does not enumerate or measure; a verdict can differ from Python's only if a real URL carries a form outside that list."
+    },
+    {
+     "id": "T030(c)",
+     "summary": "Suite case 3's means changes: instead of sed-stripping the shell, the same call goes through another guard's --only entry and must pass, expected verdict unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It alters a case of the suite D4 makes the replay, so it is ruled, not waved. The literal means is physically impossible: under D4 HOOK is the Rust binary and under D3 the shell is deleted in the commit that registers the decider, so there is no shell to sed. The property survives: a call that this guard refuses and that passes when routed to another guard's decider shows the refusal originates in this guard's decider and not the dispatcher. The expected verdict is stated unchanged, so FR-002's exception clause is not invoked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3130,6 +3164,39 @@
      "summary": "Lands by make land-tooling, no work budget, nothing rolled.",
      "class": "within",
      "why": "Tooling work with no maps touched; narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T030": {
+   "section_sha256": "a2e663eafb0b9c1123e1d4d73d34677664b415bb5750a7efd83022089fe7f25b",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T030(a)",
+     "summary": "The guard and its library both move: held, seen_before, the state files' format and the refusal's words; lib/hm_archive_first.py deleted with its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and the request asks for all of it to be ported; FR-002 governs the state format and refusal words staying the same. The 'only caller' premise is stated from reading two files, not from a census, and this bundle cannot check it; it does not change the class."
+    },
+    {
+     "id": "T030(b)",
+     "summary": "sources._cited's URL rule is carried in-process in the Rust guard, with a test holding archive.py:clean and sources._cited together and the suite's replay holding this copy to the same ids on its fixture archive.",
+     "class": "within",
+     "why": "FR-003's 'no piece runs both' is per piece: the guard does not run both, and sources.py is a different piece on its own phase under FR-001. Carrying a copy until that phase is a design choice, not a narrowing of what was asked."
+    },
+    {
+     "id": "T030(b-unescape)",
+     "summary": "The Rust copy's html.unescape covers 'the entity forms a cited URL carries'.",
+     "class": "within",
+     "why": "Adjudicated apart from (b). Read as a decoder narrower than Python's html.unescape, it excepts no piece from the port, and FR-002 binds verdicts on the cases the tests and suites hold, so it is inside the accepted spec. Caveat: which forms a cited URL carries is a factual premise the block does not enumerate or measure; a verdict can differ from Python's only if a real URL carries a form outside that list."
+    },
+    {
+     "id": "T030(c)",
+     "summary": "Suite case 3's means changes: instead of sed-stripping the shell, the same call goes through another guard's --only entry and must pass, expected verdict unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It alters a case of the suite D4 makes the replay, so it is ruled, not waved. The literal means is physically impossible: under D4 HOOK is the Rust binary and under D3 the shell is deleted in the commit that registers the decider, so there is no shell to sed. The property survives: a call that this guard refuses and that passes when routed to another guard's decider shows the refusal originates in this guard's decider and not the dispatcher. The expected verdict is stated unchanged, so FR-002's exception clause is not invoked."
     }
    ],
    "verdict": "CLEAR"

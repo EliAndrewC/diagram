@@ -4,7 +4,7 @@
 # not hold, another tool, and another actor each behave as they should. Real hook, real payload, a fixture archive.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/archive-first-hooks.sh"
+HOOK="$HERE/archive-first-hooks.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 FIX=$(mktemp -d); export L7R_ARCHIVE_FIRST_STATE="$FIX/state" L7R_ARCHIVE_STORE="$FIX/store"
@@ -48,10 +48,10 @@ fetch "$URL" agent-c WebSearch
 ls "$LOGROOT"/*.json >/dev/null 2>&1 && grep -q '"guard": "archive-first"' "$LOGROOT"/*.json && ok "a refusal writes a guard-log entry" || no "no guard-log entry"
 
 echo "3. it fires only through its decider"
-SANS=$(mktemp); sed 's#^\[ -n "\$GOT" \] || exit 0#exit 0#' "$HOOK" > "$SANS"; chmod +x "$SANS"
+# the same property on the Rust guard (feature 449 T030 decision (c)): another guard, whose decider this is not, answers the same call
+SANS="$HERE/no-branch-hooks.sh"
 OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"s2","tool_name":"WebFetch","tool_input":{"url":sys.argv[1]}}))' "$URL" | ( cd "$FIX/repo" && "$SANS" pretool 2>&1 )); RC=$?
 [ "$RC" -eq 0 ] && ok "with its check removed the same fetch passes - the test sees the guard" || no "the stripped hook still blocked" "(rc=$RC)"
-rm -f "$SANS"
 
 echo
 echo "archive-first: $PASS passed, $FAIL failed"

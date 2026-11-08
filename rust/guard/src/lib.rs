@@ -33,6 +33,7 @@ pub fn guards() -> Vec<Guard> {
         guards::feature_approval_hooks::GUARD,
         guards::budget_change_hooks::GUARD,
         guards::ledger_hooks::GUARD,
+        guards::archive_first_hooks::GUARD,
     ]
 }
 
@@ -204,7 +205,8 @@ mod tests {
                     "gate-write-hooks",
                     "feature-approval-hooks",
                     "budget-change-hooks",
-                    "ledger-hooks"
+                    "ledger-hooks",
+                    "archive-first-hooks"
                 ]
         );
     }

@@ -523,5 +523,18 @@
       "suite_cases": 22,
       "suite_passed_against_rust": 22
     }
+  },
+  "archive-first-hooks-ported": {
+    "quantity": "a WebFetch of an unarchived page, its cost in the archive-first guard, the shell's against the Rust guard alone (T030)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/archive-first-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only archive-first-hooks PreToolUse in the clone, each log and state directory temporary",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/archive-first-hooks.sh",
+    "value": {
+      "shell_fetch_ms": 43.5,
+      "rust_guard_fetch_ms": 5.9,
+      "suite_cases": 8,
+      "suite_passed_against_rust": 8
+    }
   }
 }
