@@ -236,9 +236,9 @@
    "declared": "spec-fidelity"
   },
   "### T023 Approach (checklist part A)": {
-   "sha256": "49a9b3965f8c1724324d0e7a08ee95bdefa84feb4906e0265ed325e64ae40f57",
+   "sha256": "60cc0da5ce599f800cfa5cfb141db889763cdab1f8a2850888f9d3f6f3d7d65b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T024 Approach (checklist part A)": {
@@ -1890,6 +1890,39 @@
      "why": "D3's same-commit switch and FR-003's never-both; removing the script itself is FR-001's replacement and FR-002's deletion after the suite passes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T023 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) the guard's half of the library in-process",
+     "summary": "has_conflict, declares_exemption, conflicted and staged_by move unchanged into the Rust decider, git asked by path, T022's shlex shared, the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is the port the request asks for ('making this a Rust codebase'), run in one process as FR-007 requires. Moving the functions unchanged and keeping the shell's refusal words is what carries FR-002's 'same verdicts and outputs'. No constitution XIV change is taken, so FR-002's one exception is not used. How git is called and which helper is shared are implementation choices that narrow nothing."
+    },
+    {
+     "id": "(b) lib/hm_conflict.py stays while its other callers do",
+     "summary": "The library remains for the push's --tracked, make audit's --list and the gate's --selftest, and goes at T051 with its last caller; until then the detector's rule is in two places.",
+     "class": "within",
+     "why": "Staging, not a carve-out: FR-001 still replaces every tracked Python file and phases that work by design, so Python outliving one guard's commit is the spec's own structure. FR-003's 'no piece runs both' is not breached: D3 sets the unit as the guard ('No guard is ever both'), after this task the conflict-marker guard runs Rust only, and the three remaining callers are other pieces each running one implementation. The duplicated rule is transitional and does not gut the request's purpose. This classification rests on the block's statement that T051 removes the library with its last caller; T051 is outside this bundle and was not read. If T051 did not remove it, the file's survival would be a narrowing of FR-001."
+    },
+    {
+     "id": "item 5: order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Restates D3: the dispatcher lands first, then each guard in its own commit. Decides nothing the spec left open against the request."
+    },
+    {
+     "id": "items 6 and 9: exits and done",
+     "summary": "Green is the guard's suite passing against l7r-guard --only conflict-marker-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Restates D3 and D4 (the suite is the replay; the shell entry leaves in the commit that adds the decider) and enforces FR-002 and FR-003. The red exit is a process stop and changes no requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2741,6 +2774,38 @@
      "summary": "Done means every case of test-discard-hooks.sh passes against the Rust guard, with scripts/hooks/discard-hooks.sh and its settings entry gone in the commit that registers the decider.",
      "class": "within",
      "why": "D3's same-commit switch and FR-003's never-both; removing the script itself is FR-001's replacement and FR-002's deletion after the suite passes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T023": {
+   "section_sha256": "60cc0da5ce599f800cfa5cfb141db889763cdab1f8a2850888f9d3f6f3d7d65b",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) the guard's half of the library in-process",
+     "summary": "has_conflict, declares_exemption, conflicted and staged_by move unchanged into the Rust decider, git asked by path, T022's shlex shared, the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is the port the request asks for ('making this a Rust codebase'), run in one process as FR-007 requires. Moving the functions unchanged and keeping the shell's refusal words is what carries FR-002's 'same verdicts and outputs'. No constitution XIV change is taken, so FR-002's one exception is not used. How git is called and which helper is shared are implementation choices that narrow nothing."
+    },
+    {
+     "id": "(b) lib/hm_conflict.py stays while its other callers do",
+     "summary": "The library remains for the push's --tracked, make audit's --list and the gate's --selftest, and goes at T051 with its last caller; until then the detector's rule is in two places.",
+     "class": "within",
+     "why": "Staging, not a carve-out: FR-001 still replaces every tracked Python file and phases that work by design, so Python outliving one guard's commit is the spec's own structure. FR-003's 'no piece runs both' is not breached: D3 sets the unit as the guard ('No guard is ever both'), after this task the conflict-marker guard runs Rust only, and the three remaining callers are other pieces each running one implementation. The duplicated rule is transitional and does not gut the request's purpose. This classification rests on the block's statement that T051 removes the library with its last caller; T051 is outside this bundle and was not read. If T051 did not remove it, the file's survival would be a narrowing of FR-001."
+    },
+    {
+     "id": "item 5: order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Restates D3: the dispatcher lands first, then each guard in its own commit. Decides nothing the spec left open against the request."
+    },
+    {
+     "id": "items 6 and 9: exits and done",
+     "summary": "Green is the guard's suite passing against l7r-guard --only conflict-marker-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Restates D3 and D4 (the suite is the replay; the shell entry leaves in the commit that adds the decider) and enforces FR-002 and FR-003. The red exit is a process stop and changes no requirement."
     }
    ],
    "verdict": "CLEAR"

@@ -4,6 +4,7 @@
 pub mod agent_stall_hooks;
 pub mod batching_hooks;
 pub mod clone_sync_hooks;
+pub mod conflict_marker_hooks;
 pub mod discard_hooks;
 pub mod engine_freeze_hooks;
 pub mod event_log_hooks;

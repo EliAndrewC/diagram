@@ -28,6 +28,7 @@ pub fn guards() -> Vec<Guard> {
         guards::batching_hooks::GUARD,
         guards::no_branch_hooks::GUARD,
         guards::discard_hooks::GUARD,
+        guards::conflict_marker_hooks::GUARD,
     ]
 }
 
@@ -194,7 +195,8 @@ mod tests {
                     "gm-tree-hooks",
                     "batching-hooks",
                     "no-branch-hooks",
-                    "discard-hooks"
+                    "discard-hooks",
+                    "conflict-marker-hooks"
                 ]
         );
     }

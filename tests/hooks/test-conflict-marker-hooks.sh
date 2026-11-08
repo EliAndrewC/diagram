@@ -6,7 +6,7 @@
 # site exists and not that it fires - the rule tests/tooling/test_guard_firing_log.py enforces.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/conflict-marker-hooks.sh"
+HOOK="$HERE/conflict-marker-hooks.sh"
 DETECT="$HERE/../../scripts/hooks/lib/hm_conflict.py"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"

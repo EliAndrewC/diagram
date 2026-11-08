@@ -458,5 +458,18 @@
       "suite_cases": 27,
       "suite_passed_against_rust": 27
     }
+  },
+  "conflict-marker-hooks-ported": {
+    "quantity": "a Bash ls's cost in the conflict-marker guard, the shell's against the Rust guard alone (T023)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/conflict-marker-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only conflict-marker-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/conflict-marker-hooks.sh",
+    "value": {
+      "shell_bash_ms": 29.5,
+      "rust_guard_bash_ms": 6.8,
+      "suite_cases": 28,
+      "suite_passed_against_rust": 28
+    }
   }
 }
