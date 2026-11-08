@@ -48,7 +48,7 @@ reported a red gate green. The log's tail is the authority; the notification is 
 ## Before the gate, run the WHOLE affected test file - not a `-k` subset
 
 A `-k torii` pre-gate check once missed the existing test the change broke and paid a whole extra gate round trip.
-The whole files for the modules you touched reach every test the change can (`gate-hooks.sh` refuses a `-k` subset
+The whole files for the modules you touched reach every test the change can (the gate-hooks guard (`rust/guard/src/guards/gate_hooks.rs`) refuses a `-k` subset
 as the only run before the gate):
 
     make quick                                        # lint, types, every test that rolls no map, change-selected

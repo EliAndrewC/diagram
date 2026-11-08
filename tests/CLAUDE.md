@@ -39,7 +39,7 @@ the root-level suites (`test_villages.py`, `gate/test_*.py`, `test_compound.py`,
 
 The hooks refuse a bare `pytest` (`make-only-hooks.sh` rewrites a targeted one to `make test-file`). Before the gate,
 run the WHOLE affected file or directory, never a `-k` subset: a filter selects the tests you were thinking about, and a
-change breaks the ones you were not (`gate-hooks.sh`).
+change breaks the ones you were not (the gate-hooks guard (`rust/guard/src/guards/gate_hooks.rs`)).
 
 `testpaths = ["tests"]` in `pyproject.toml` pins collection here. Without it pytest walks the whole
 repository, every `.clones/` checkout included - pytest does not read `.gitignore`.

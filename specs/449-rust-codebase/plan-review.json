@@ -140,9 +140,9 @@
    "declared": "spec-fidelity"
   },
   "### T007 Approach (checklist part A)": {
-   "sha256": "a17a63ae5923bcde99677470b72973540fca3e239eecf163660a5b80d8db34e6",
+   "sha256": "8e43f328643e6faef8b91729edd988e3da7d321150d0e28b54acb5ef7ae3a2fe",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T008 Approach (checklist part A)": {
@@ -1230,6 +1230,39 @@
      "why": "The exits restate FR-002/FR-003/FR-004's gates, and the landing route is process that narrows nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T007 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T007-a",
+     "summary": "hm_make.py's targets, combine and classify-through-bare-pytest move to rust/guard/src/shared/make.rs with gate-hooks, patterns verbatim; the rest of hm_make.py moves with make-only-hooks (T028) and guard-file-hooks (T029).",
+     "class": "within",
+     "why": "Partitions a shared library across the guards that read it; every part is still ported (FR-001, the request's 'all be ported to Rust'), verbatim patterns keep FR-002's same verdicts, and the suite replay (D4) checks the result. Nothing is left in Python that the request or spec would have ported."
+    },
+    {
+     "id": "T007-b",
+     "summary": "The decider reads tool_input.command as JSON instead of the shell's greedy sed, so a ' -k ' in the description field no longer arms the subset flag; a suite case is added, the fix named in the commit and the phase's record.",
+     "class": "within",
+     "why": "Applies the one exception the accepted FR-002 already states - a guard refusing correct work (a later make done refused on a falsely armed subset flag) is fixed in its port under constitution XIV - with that exception's conditions met: the case lands in the same commit and the change is named in the commit and the phase's record. It narrows nothing the GM asked for; the request is to make the codebase Rust, not to preserve a misparse."
+    },
+    {
+     "id": "T007-c",
+     "summary": "gate-hooks.sh's status mode is ported: l7r-guard --only gate-hooks status prints the same subset_pending= line, reached through the shim's status mode.",
+     "class": "within",
+     "why": "Preserves an existing output as FR-002 requires (same verdicts and outputs); it reverses the dropping the earlier preflight ruled NOT LEGITIMATE."
+    },
+    {
+     "id": "T007-order-exits",
+     "summary": "After T005, independent of the other guards; green exit is the suite against l7r-guard --only gate-hooks plus rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider.",
+     "class": "within",
+     "why": "Restates D3 (guard by guard, never both, FR-003) and D4 (the suite is the replay), and FR-004's coverage floor; no new scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1475,6 +1508,38 @@
      "summary": "Green: the suite passes against the Rust guard, plus rust-test, cover and hooks-test. Red: record the failure and stop to make arbiter-ask. Landed by make land-tooling with no work budget.",
      "class": "within",
      "why": "The exits restate FR-002/FR-003/FR-004's gates, and the landing route is process that narrows nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T007": {
+   "section_sha256": "8e43f328643e6faef8b91729edd988e3da7d321150d0e28b54acb5ef7ae3a2fe",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T007-a",
+     "summary": "hm_make.py's targets, combine and classify-through-bare-pytest move to rust/guard/src/shared/make.rs with gate-hooks, patterns verbatim; the rest of hm_make.py moves with make-only-hooks (T028) and guard-file-hooks (T029).",
+     "class": "within",
+     "why": "Partitions a shared library across the guards that read it; every part is still ported (FR-001, the request's 'all be ported to Rust'), verbatim patterns keep FR-002's same verdicts, and the suite replay (D4) checks the result. Nothing is left in Python that the request or spec would have ported."
+    },
+    {
+     "id": "T007-b",
+     "summary": "The decider reads tool_input.command as JSON instead of the shell's greedy sed, so a ' -k ' in the description field no longer arms the subset flag; a suite case is added, the fix named in the commit and the phase's record.",
+     "class": "within",
+     "why": "Applies the one exception the accepted FR-002 already states - a guard refusing correct work (a later make done refused on a falsely armed subset flag) is fixed in its port under constitution XIV - with that exception's conditions met: the case lands in the same commit and the change is named in the commit and the phase's record. It narrows nothing the GM asked for; the request is to make the codebase Rust, not to preserve a misparse."
+    },
+    {
+     "id": "T007-c",
+     "summary": "gate-hooks.sh's status mode is ported: l7r-guard --only gate-hooks status prints the same subset_pending= line, reached through the shim's status mode.",
+     "class": "within",
+     "why": "Preserves an existing output as FR-002 requires (same verdicts and outputs); it reverses the dropping the earlier preflight ruled NOT LEGITIMATE."
+    },
+    {
+     "id": "T007-order-exits",
+     "summary": "After T005, independent of the other guards; green exit is the suite against l7r-guard --only gate-hooks plus rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider.",
+     "class": "within",
+     "why": "Restates D3 (guard by guard, never both, FR-003) and D4 (the suite is the replay), and FR-004's coverage floor; no new scope."
     }
    ],
    "verdict": "CLEAR"

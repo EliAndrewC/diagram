@@ -34,6 +34,8 @@ pub enum Answer {
     Notice(String),
     /// A `Stop` or `SubagentStop` held: `decision: "block"` with the reason.
     StopBlock(String),
+    /// Plain text for a person, printed as it is: a hand-run mode's answer (`gate-hooks status`), never a hook event's.
+    Print(String),
 }
 
 /// A guard: its name as the guard log names it, the events it decides, the tools it takes (a settings matcher: `*`, or names joined
@@ -68,7 +70,8 @@ pub struct Reply {
 /// Run `guards`, in their order, on `event`, merging their answers by the contract: a refusal wins and every refusal is reported;
 /// a rewrite replaces the tool's input before the next guard decides; notices are joined; a stop-block's reasons are joined.
 pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
-    let (mut refusals, mut notices, mut held) = (Vec::new(), Vec::new(), Vec::new());
+    let (mut refusals, mut notices, mut held, mut printed) =
+        (Vec::new(), Vec::new(), Vec::new(), Vec::new());
     let mut rewritten = false;
     // which guards decide is fixed by the event's name and tool, which no rewrite changes: chosen before any guard runs
     let takers: Vec<&Guard> = guards.iter().filter(|g| g.takes(event)).collect();
@@ -85,6 +88,7 @@ pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
                 }
                 Answer::Notice(line) => notices.push(line),
                 Answer::StopBlock(why) => held.push(why),
+                Answer::Print(text) => printed.push(text),
             }
         }
     }
@@ -93,6 +97,13 @@ pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
             stdout: String::new(),
             stderr: refusals.join("\n\n"),
             code: 2,
+        };
+    }
+    if !printed.is_empty() {
+        return Reply {
+            stdout: printed.join("\n"),
+            stderr: String::new(),
+            code: 0,
         };
     }
     if !held.is_empty() {

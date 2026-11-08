@@ -11,7 +11,7 @@ use protocol::{run, Event, Guard, Reply};
 /// The guards, in their fixed order (plan D2): each moves here from its shell in its own task (T006-T049).
 #[must_use]
 pub fn guards() -> Vec<Guard> {
-    vec![guards::pair_hooks::GUARD]
+    vec![guards::pair_hooks::GUARD, guards::gate_hooks::GUARD]
 }
 
 /// The command line: `<event>` decides the hook input on `stdin` with every guard; `--only <guard> <event>` with that one guard
@@ -137,6 +137,8 @@ mod tests {
         assert_eq!(cli(&args(&[]), input, &g).code, 1);
         let bad = cli(&args(&["PreToolUse"]), "not json", &g);
         assert!(bad.code == 1 && bad.stderr.contains("not JSON"));
-        assert!(guards().iter().map(|g| g.name).collect::<Vec<_>>() == ["pair-hooks"]);
+        assert!(
+            guards().iter().map(|g| g.name).collect::<Vec<_>>() == ["pair-hooks", "gate-hooks"]
+        );
     }
 }

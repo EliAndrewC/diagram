@@ -3,7 +3,8 @@
 # Run: tests/hooks/test-gate-hooks.sh   (exit 0 = all green)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/gate-hooks.sh"
+# feature 449 T007: the guard is Rust - the link `gate-hooks.sh` beside this suite runs `l7r-guard --only gate-hooks`
+HOOK="$HERE/gate-hooks.sh"
 PASS=0; FAIL=0
 # GUARD_EDIT_OK: feature 162 - EVERY vector in this file writes its guard-log entries to a
 # throwaway directory. Without this the suite pollutes the real census (`make audit`), which
@@ -45,6 +46,13 @@ teardown
 # GUARD_EDIT_OK: feature 212 - the make-only guard rewrites a targeted bare pytest into
 # `make test-file FILE=... K=...` or a `::` node id, so those two forms must arm the subset flag
 # exactly as the bare `-k` does, and a plain `make test-file` must still clear it.
+echo "1a. a -k in another field arms nothing (feature 449 T007, constitution XIV: the shell read the command with a greedy sed)"
+setup
+desc_ev() { CMD="$1" DESC="$2" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"],"description":os.environ["DESC"]}}))'; }
+run "$(desc_ev 'make test-file FILE=tests/test_x.py' 'run the file -k fast')"; check "a whole-file run described with -k is allowed" ok $?
+run "$(bash_ev 'make done')"; check "make done passes: the description armed nothing" ok $?
+teardown
+
 echo "1b. the make-target spellings of a subset (feature 212)"
 setup
 run "$(bash_ev 'make test-file FILE=tests/test_x.py K="kura_side or punishment"')"; check "a K= run is allowed" ok $?

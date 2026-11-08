@@ -71,6 +71,11 @@ pub fn enough(why: &str) -> bool {
 /// Did the session put `token` in `cmd` as an escape, not merely mention it (`escape_used`)?
 #[must_use]
 pub fn used(cmd: &str, token: &str) -> bool {
+    // NO TOKEN, NO PATTERN (`guardlog.sh`'s own shortcut, 2026-09-27): the cleaning only deletes text or inserts a space or quotes,
+    // none of which can complete a token, so a token absent from the command is absent from its cleaned form
+    if !cmd.contains(token) {
+        return false;
+    }
     let clean = strip_quotes(&strip_heredocs(cmd));
     drop_search_segments(&FOR_IN.replace_all(&clean, " ")).contains(token)
 }
@@ -96,6 +101,38 @@ pub fn drop_search_segments(clean: &str) -> String {
         })
         .collect();
     kept.join(" ")
+}
+
+/// What an `*_OK` token in a command does (`guardlog.sh`'s `escape_or_refuse`, feature 170).
+#[derive(Debug, PartialEq, Eq)]
+pub enum Escape {
+    /// The token is not used: the guard carries on.
+    None,
+    /// Used with a reason of two words and eight characters: the guard stands aside, the reason recorded.
+    Escaped(String),
+    /// Used with no reason, or too short a one: refused, since the reason is the session's and no tool can supply it.
+    Refused(String),
+}
+
+/// Whether `cmd` escapes with `token`, and on what reason.
+#[must_use]
+pub fn escape_or_refuse(cmd: &str, token: &str) -> Escape {
+    if !used(cmd, token) {
+        return Escape::None;
+    }
+    let why = reason(cmd, token);
+    if enough(&why) {
+        return Escape::Escaped(why);
+    }
+    Escape::Refused(format!(
+        "BLOCKED: {token} with no reason given.\n\n\
+         An escape is a workaround, and a workaround nobody can audit is indistinguishable from the\n\
+         rule not existing. Say why, in the command, and it ships with it:\n\n    \
+         <your command>  # {token}: <why this case is legitimate>\n\n\
+         Two words and eight characters is the whole bar - \"CI is down\" clears it. What it stops is a\n\
+         bare token and \"{token}: ok\", which record that a rule was bypassed and nothing about why.\n\
+         (GM 2026-08-30, feature 170; the reasons are what `make audit` shows you.)\n"
+    ))
 }
 
 #[cfg(test)]
@@ -141,6 +178,19 @@ mod tests {
         assert_eq!(
             drop_search_segments("FOO=1 sudo /usr/bin/rg x && ls"),
             "  ls"
+        );
+    }
+
+    #[test]
+    fn an_escape_stands_aside_with_its_reason_and_refuses_without() {
+        use super::{escape_or_refuse, Escape};
+        assert_eq!(escape_or_refuse("make done", "GATE_OK"), Escape::None);
+        assert_eq!(
+            escape_or_refuse("make done  # GATE_OK: the files all ran", "GATE_OK"),
+            Escape::Escaped("the files all ran".to_owned())
+        );
+        assert!(
+            matches!(escape_or_refuse("make done  # GATE_OK: ok", "GATE_OK"), Escape::Refused(w) if w.contains("GATE_OK: ok"))
         );
     }
 }

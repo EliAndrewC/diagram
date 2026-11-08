@@ -145,3 +145,22 @@ fn a_guard_decides_only_its_events_and_its_tools() {
     };
     assert!(g.takes(&stop));
 }
+
+fn say(_: &Event, _: &Session) -> Vec<Answer> {
+    vec![Answer::Print("subset_pending=0".to_owned())]
+}
+
+#[test]
+fn a_hand_run_mode_prints_its_text_as_it_is() {
+    let mut e = Event {
+        name: "status".to_owned(),
+        input: json!({}),
+    };
+    let g = Guard {
+        name: "s",
+        events: &["status"],
+        matcher: "*",
+        decide: say,
+    };
+    assert_eq!(run(&mut e, &[g]).stdout, "subset_pending=0");
+}
