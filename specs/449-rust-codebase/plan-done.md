@@ -841,3 +841,23 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 
 <!-- plan-archive: T046 to T046 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T047 to T047 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-08 -->
+### T028 Approach (checklist part A)
+
+1. **The goal, in the world.** `make-only-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-005 (the guard covers the replacements' binaries as it covers the Python and cargo today), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `make-only-hooks.sh`, `lib/hm_make.py`, the suite and its callers, 2026-11-08):
+   - (a) THE GUARD AND ITS DECIDING MOVE, IN-PROCESS: `classify`, `doubled_var`, the targeted-pytest and entry-point rewrites (the Makefile parsed at hook time), every refusal's words. `lib/hm_make.py` itself stays for `hookmatch.py`, `guard-file-hooks.sh` (T029) and `test_guard_corpus.py`, until T051. `test_guard_firing_log.py`'s named list of guards that record an escape drops this one, because that test scans shell permit sites; `make_only_hooks/tests.rs`'s `an_escape_is_recorded_with_its_reason`, in the same commit, goes red if the escaped branch writes no firing record.
+   - (b) THE XIV FIX THE TASK NAMES: a `grep` whose pattern names `pytest` is not a pytest run. `strip_quotes` keeps a string after `-c ` (a Python program), so `grep -c "a|pytest" f` left `|pytest` at a command position, and an unquoted `\|` read as a pipe. `shared::make::pytest_view` blanks the quoted pattern of a searcher's `-c` and drops an escaped pipe; `gate`'s `bare_pytest` reads the same view. New suite cases pin both, and the expected verdict changes from refused to pass, named in the commit and in phase 1's record.
+   - (c) FR-005's CLAUSE: a direct Bash run of a replacement's binary (`l7r-guard`, `hamlet`, by any path) is refused with the make target that runs it, a new verdict `bare-binary` beside `bare-cargo`; the wrapper `scripts/hooks/l7r-guard.sh` is not the binary and passes. New suite cases pin it.
+   - (d) `ruff` STAYS BY PATH on a `make land-tooling` or `arbiter-fix-done` naming a `.py` file: a Python tool the landing's own lint is defined by, a rare branch. T052's record lists it.
+3. **Where each comes from.** `tests/hooks/test-make-only-hooks.sh`, the guard's own suite; plan D3-D4. The constitution XIV fix named in its commit and in the phase's record (FR-002).
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-make-only-hooks.sh` green against `l7r-guard --only make-only-hooks`, with new cases for FR-005 - a direct Bash run of a replacement's binary (`l7r-guard`, `hamlet`, from the cargo target directory or by path) refused with the make target that runs it, as a bare `cargo run` is today - `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-make-only-hooks.sh` passes against the Rust guard; `scripts/hooks/make-only-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
