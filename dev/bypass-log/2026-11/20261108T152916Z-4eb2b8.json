@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-08T15:29:16Z",
+  "target": "claims-gate",
+  "commit": "e6fe9e6c8",
+  "why": "CLAIMS_OK: the remaining rust/phases claim findings are recorded and listed by claims-report; this landing's code is rust/guard, which owes no claims"
+}
