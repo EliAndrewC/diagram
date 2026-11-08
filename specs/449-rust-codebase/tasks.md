@@ -115,23 +115,26 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T033 [US1] `download-copy-hooks`: its decider `rust/guard/src/guards/download_copy_hooks.rs`, its suite `tests/hooks/test-download-copy-hooks.sh` replayed against `l7r-guard --only download-copy-hooks`, then `scripts/hooks/download-copy-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed in batch T031+T032+T033: claims-file, readme and download-copy are Rust
-- [ ] T034 [US1] `repo-safety-hooks`: its decider `rust/guard/src/guards/repo_safety_hooks.rs`, its suite `tests/hooks/test-repo-safety-hooks.sh` replayed against `l7r-guard --only repo-safety-hooks`, then `scripts/hooks/repo-safety-hooks.sh` and its settings entry removed
+- [x] T034 [US1] `repo-safety-hooks`: its decider `rust/guard/src/guards/repo_safety_hooks.rs`, its suite `tests/hooks/test-repo-safety-hooks.sh` replayed against `l7r-guard --only repo-safety-hooks`, then `scripts/hooks/repo-safety-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed in batch T034+T038+T041: repo-safety, wakeup and agent-model are Rust
 - [ ] T035 [US1] `shell-check-hooks`: its decider `rust/guard/src/guards/shell_check_hooks.rs`, its suite `tests/hooks/test-shell-check-hooks.sh` replayed against `l7r-guard --only shell-check-hooks`, then `scripts/hooks/shell-check-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T036 [US1] `house-style-hooks`: its decider `rust/guard/src/guards/house_style_hooks.rs`, its suite `tests/hooks/test-house-style-hooks.sh` replayed against `l7r-guard --only house-style-hooks`, then `scripts/hooks/house-style-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T037 [US1] `source-block-hooks`: its decider `rust/guard/src/guards/source_block_hooks.rs`, its suite `tests/hooks/test-source-block-hooks.sh` replayed against `l7r-guard --only source-block-hooks`, then `scripts/hooks/source-block-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T038 [US1] `wakeup-hooks`: its decider `rust/guard/src/guards/wakeup_hooks.rs`, its suite `tests/hooks/test-wakeup-hooks.sh` replayed against `l7r-guard --only wakeup-hooks`, then `scripts/hooks/wakeup-hooks.sh` and its settings entry removed
+- [x] T038 [US1] `wakeup-hooks`: its decider `rust/guard/src/guards/wakeup_hooks.rs`, its suite `tests/hooks/test-wakeup-hooks.sh` replayed against `l7r-guard --only wakeup-hooks`, then `scripts/hooks/wakeup-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed in batch T034+T038+T041: repo-safety, wakeup and agent-model are Rust
 - [x] T039 [US1] `blocked-fetch-hooks`: its decider `rust/guard/src/guards/blocked_fetch_hooks.rs`, its suite `tests/hooks/test-blocked-fetch-hooks.sh` replayed against `l7r-guard --only blocked-fetch-hooks`, then `scripts/hooks/blocked-fetch-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed in batch T039+T049: blocked-fetch and set-down are Rust
 - [ ] T040 [US1] `workflow-hooks`: its decider `rust/guard/src/guards/workflow_hooks.rs`, its suite `tests/hooks/test-workflow-hooks.sh` replayed against `l7r-guard --only workflow-hooks`, then `scripts/hooks/workflow-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T041 [US1] `agent-model-hooks`: its decider `rust/guard/src/guards/agent_model_hooks.rs`, its suite `tests/hooks/test-agent-model-hooks.sh` replayed against `l7r-guard --only agent-model-hooks`, then `scripts/hooks/agent-model-hooks.sh` and its settings entry removed
+- [x] T041 [US1] `agent-model-hooks`: its decider `rust/guard/src/guards/agent_model_hooks.rs`, its suite `tests/hooks/test-agent-model-hooks.sh` replayed against `l7r-guard --only agent-model-hooks`, then `scripts/hooks/agent-model-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed in batch T034+T038+T041: repo-safety, wakeup and agent-model are Rust
 - [ ] T042 [US1] `agent-prefix-hooks`: its decider `rust/guard/src/guards/agent_prefix_hooks.rs`, its suite `tests/hooks/test-agent-prefix-hooks.sh` replayed against `l7r-guard --only agent-prefix-hooks`, then `scripts/hooks/agent-prefix-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T043 [US1] `check-bundle-hooks`: its decider `rust/guard/src/guards/check_bundle_hooks.rs`, its suite `tests/hooks/test-check-bundle-hooks.sh` replayed against `l7r-guard --only check-bundle-hooks`, then `scripts/hooks/check-bundle-hooks.sh` and its settings entry removed

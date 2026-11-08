@@ -638,3 +638,61 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 <!-- plan-archive: T008 to T008 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T009 to T009 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T010 to T010 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-08 -->
+### T034 Approach (checklist part A)
+
+1. **The goal, in the world.** `repo-safety-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `repo-safety-hooks.sh`, its case table in `tests/hooks/test_hooks_cases.py` and its firing-log test, 2026-11-08):
+   - (a) THE GUARD MOVES WHOLE, IN-PROCESS: its inline Python, every pattern verbatim, and the three refusals' words. It has no library and asks no tool. The heredoc blanking is `shared::shape::strip_heredocs`, whose pattern is this guard's; the quoted-string blanking is the guard's own, because it writes the word ` QUOTED ` the command-position anchor consumes (feature 178).
+   - (b) THE ESCAPE IS DECIDED FIRST, as in the shell: a bare `HOST_GIT_OK` is refused before any rule is read, and a reasoned one lifts only the mount rule, never the force push or the rewrite.
+   - (c) THE CASE RUNNER finds a ported guard by its link: `test_hooks_cases.py` runs `tests/hooks/<guard>-hooks.sh` where that link exists, else the shell, so the table replays unchanged. `test_guard_firing_log.py`'s named list of guards that record an escape drops this one, because that test scans shell permit sites and this guard has no shell; the guarantee it held moves to `repo_safety_hooks/tests.rs`'s `an_escape_is_recorded_with_its_reason`, in the same commit, which goes red if the escaped branch writes no firing record.
+3. **Where each comes from.** `tests/hooks/test-repo-safety-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-repo-safety-hooks.sh` green against `l7r-guard --only repo-safety-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-repo-safety-hooks.sh` passes against the Rust guard; `scripts/hooks/repo-safety-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: archived 2026-11-08 -->
+### T038 Approach (checklist part A)
+
+1. **The goal, in the world.** `wakeup-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `wakeup-hooks.sh` and its suite, 2026-11-08):
+   - (a) THE GUARD MOVES WHOLE, IN-PROCESS: both layers, the transcript read a line at a time behind the same literal pre-filter, the split rule (the call fails closed on an unreadable transcript, the turn end open), the refusals' words. It has no library and asks no tool.
+   - (b) AN INPUT THAT IS NOT JSON IS NOTHING TO JUDGE, AS FOR EVERY OTHER GUARD (T012), BY THE ROUND ARBITER'S RULING OF 2026-11-08, `ask:449-T038-garbage`: no settings entry of its own, no list and no `--only` branch for it; the call layer runs in the one whole-binary process for a `ScheduleWakeup` call, so FR-007 holds. The suite case keeps its input and its expected verdict becomes a pass, named in the commit and in phase 1's record, citing the ruling; FR-002 names the case. Decision (a) is untouched: a real call whose transcript cannot be read still refuses.
+   - (c) `tests/tooling/test_hook_deps.py` used this guard as its example of a shell guard; the example becomes `record-edit-hooks.sh`, the last to be ported (T011, after T048). `hookdeps.py` itself is T050's.
+3. **Where each comes from.** `tests/hooks/test-wakeup-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-wakeup-hooks.sh` green against `l7r-guard --only wakeup-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-wakeup-hooks.sh` passes against the Rust guard; `scripts/hooks/wakeup-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: T039 to T039 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-08 -->
+### T041 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-model-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `agent-model-hooks.sh`, `lib/agent-model-rule.txt` and the suite, 2026-11-08):
+   - (a) THE GUARD MOVES WHOLE, IN-PROCESS, its refusal and its three recorded permits with it. The root's `clone-sync-hooks.sh resolve` is the session's `clone_dir()` (T013's port); git is asked only when a dispatch names no model and the clone does not resolve.
+   - (b) THE RULE STAYS STATED ONCE: `lib/agent-model-rule.txt` had the shell as its only reader, so it moves beside the decider (`rust/guard/src/guards/agent_model_rule.txt`) and is compiled in. The suite still holds the root `CLAUDE.md` to its two clauses.
+   - (c) AN UNKNOWN MODE STAYS AN ERROR: `--only <guard> <event>` exits 1 on an event no guard of the binary takes, so the suite's case stands unchanged (round 1's NOT LEGITIMATE on restating it).
+3. **Where each comes from.** `tests/hooks/test-agent-model-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-model-hooks.sh` green against `l7r-guard --only agent-model-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-model-hooks.sh` passes against the Rust guard; `scripts/hooks/agent-model-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
