@@ -195,11 +195,11 @@ censuses empty (work breakdown 8, FR-010).
 ### T004 Approach (checklist part A)
 
 1. **The goal, in the world.** a guard's build reaches every session, a broken build never turning every guard off.
-2. **The constraints.** plan D7, FR-005.
-3. **Where each comes from.** research R6 (main's copy runs); plan D7 (the last good binary kept); FR-005's "as it covers the Python today", measured in `m:python-dead-fails-open`: a guard whose Python cannot start fails open today - repo-safety lets a force push to main through - so the wrapper failing open only with no good binary ever built covers no less than today, and falls back where today nothing does.
+2. **The constraints.** plan D7, FR-002 (each guard's verdict as today), FR-003 (never both). FR-005's clause on the replacements' binaries is the make-only guard's, carried by T028.
+3. **Where each comes from.** research R6 (main's copy runs); plan D7 (the last good binary kept); FR-002 against `m:python-dead-fails-open`: a guard whose Python cannot start fails open today - repo-safety lets a force push to main through - so the wrapper failing open only with no good binary ever built gives no verdict weaker than today's, and falls back where today nothing does.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T002.
-6. **The exits.** Green: its suite: a stale build rebuilt, a failed build running the last good binary, none ever built failing open with its line. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+5. **The order.** After T002. The wrapper takes no guard's place in this task: T005 puts it in the settings beside the shell guards with an empty guard list, and each guard task moves one decider in and removes that guard's shell script and settings entry in the same landing, so a guard never runs in both (FR-003).
+6. **The exits.** Green: its suite: a stale build rebuilt; a failed build - one that does not compile, or one that compiles and fails `l7r-guard --self-check` (D7's test of a good build) - running the last good binary; none ever built failing open with its line. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
 9. **Done, measured.** the wrapper's suite green.
@@ -531,11 +531,11 @@ censuses empty (work breakdown 8, FR-010).
 ### T028 Approach (checklist part A)
 
 1. **The goal, in the world.** `make-only-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-005 (the guard covers the replacements' binaries as it covers the Python and cargo today), FR-008 (each unit test under a tenth of a second).
 3. **Where each comes from.** `tests/hooks/test-make-only-hooks.sh`, the guard's own suite; plan D3-D4. The constitution XIV fix named in its commit and in the phase's record (FR-002).
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-make-only-hooks.sh` green against `l7r-guard --only make-only-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+6. **The exits.** Green: `tests/hooks/test-make-only-hooks.sh` green against `l7r-guard --only make-only-hooks`, with new cases for FR-005 - a direct Bash run of a replacement's binary (`l7r-guard`, `hamlet`, from the cargo target directory or by path) refused with the make target that runs it, as a bare `cargo run` is today - `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
 9. **Done, measured.** every case of `test-make-only-hooks.sh` passes against the Rust guard; `scripts/hooks/make-only-hooks.sh` and its settings entry are gone in the commit that registers the decider.
