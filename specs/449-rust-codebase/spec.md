@@ -132,12 +132,14 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   it returns is in a phase: `scripts/hooks/` and `tests/hooks/` - phase 1; the Makefile's gate recipes, `scripts/gates/*.sh`,
   `scripts/sync-with-main.sh`, `scripts/land-tooling.sh` and `buildspec/run.sh` - phase 2; the Makefile's other recipes,
   `.specify/scripts/bash/` and the shell scripts under `specs/` - phase 3; `scripts/container/setup-dev-env.sh` and `Dockerfile.ci`, their Python checks and the Python
-  they install, with every `requirements*.txt` and its `.in` source (five pairs on 2026-11-07: the runtime, dev, CI and semantic lockfiles) and
+  they install, with every `requirements*.txt` and its `.in` source (four pairs on 2026-11-07, `m:lockfiles`: the runtime, dev, CI and semantic
+  lockfiles) and
   `pyproject.toml`'s Python tables - phase 4,
-  once nothing runs Python. Both censuses are run again at each phase's end and at the feature's close. A RECORDED MEASUREMENT that
-  names a ported file - a `command` in a `specs/*/measurements*.json` (4,474 of them call Python on 2026-11-07,
-  `m:recorded-python-commands`) - has its command rewritten to the port in the commit that ports the file, and that entry is re-run
-  as the proof: a figure is re-run, never read.
+  once nothing runs Python. Both censuses are run again at each phase's end and at the feature's close. EVERY RECORDED MEASUREMENT THAT RUNS PYTHON - a `command` in a
+  `specs/*/measurements*.json` that runs a `.py` file, runs `python3 -c` or `-m`, or describes a run under `python3` in prose (4,473 on
+  2026-11-07: 4,465 run a `.py`, 8 inline or prose, `m:recorded-python-commands`) - is rewritten in the commit that ports what it runs:
+  to the port, where it names a ported file; to an equivalent command through make, where it is inline or prose. The rewritten entry
+  is re-run as the proof: a figure is re-run, never read.
 - **FR-002**: Each replaced piece MUST give the same verdicts and outputs as the Python it replaces, on every case its tests and its
   suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18). The
   one other exception: a guard or check that refuses correct work today is fixed in its port (constitution XIV), its case's expected
@@ -171,8 +173,9 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   runs no test.
 - **SC-003**: The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
 - **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
-- **SC-005**: When the feature closes, both censuses (FR-001) return nothing, no recorded measurement's command runs Python
-  (`m:recorded-python-commands` returns none), and `make done` and `make figures` run with no Python interpreter.
+- **SC-005**: When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
+  `make done` and `make figures` run with no Python interpreter. Its one entry here, this feature's own `m:python-start` (the before
+  figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

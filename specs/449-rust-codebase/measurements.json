@@ -146,14 +146,36 @@
     }
   },
   "recorded-python-commands": {
-    "quantity": "the recorded measurements whose command runs Python",
+    "quantity": "the recorded measurements whose command RUNS Python - a .py file, python3 -c/-m/-I/-X, or a prose command saying it ran under python3 - not one that only names the word",
     "observed": "2026-11-07",
     "subject": "every specs/*/measurements.json and specs/*/measurements/*.json",
-    "command": "git grep -c -E '\"command\": .*python3' -- 'specs/*/measurements.json' 'specs/*/measurements/*.json'",
-    "method": "the per-file counts summed",
+    "command": "git grep -c -E '\"command\": \"[^\"]*\\bpython3([:+]| (-[cmIX]\\b|[^ \"]*\\.py\\b))' -- 'specs/*/measurements.json' 'specs/*/measurements/*.json'",
+    "method": "the per-file counts summed; the .py runs and the inline or prose ones counted apart",
     "value": {
-      "commands": 4474,
-      "files": 23
+      "commands": 4473,
+      "files": 23,
+      "run_a_py": 4465,
+      "inline_or_prose": 8,
+      "this_feature": [
+        "python-start"
+      ]
+    }
+  },
+  "lockfiles": {
+    "quantity": "the Python lockfiles and their sources at the repository root",
+    "observed": "2026-11-07",
+    "subject": "the clone's HEAD",
+    "command": "git ls-files 'requirements*'",
+    "method": "the files listed, paired by stem",
+    "value": {
+      "files": 8,
+      "pairs": 4,
+      "stems": [
+        "requirements",
+        "requirements-dev",
+        "requirements-ci",
+        "requirements-semantic"
+      ]
     }
   }
 }
