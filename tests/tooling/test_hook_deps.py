@@ -139,11 +139,11 @@ def test_every_shared_helper_on_disk_is_known_to_the_deriver() -> None:
 def test_a_filename_in_prose_is_not_a_dependency() -> None:
     """The mention-versus-invocation rule, applied to the deriver itself.
 
-    `make-only-hooks.sh` says "detection lives in hookmatch.py" in a comment and INVOKES `hm_make.py`.
+    `guard-file-hooks.sh` says "detection lives in hookmatch.py" in a comment and INVOKES `hm_make.py`.
     Before comments and docstrings were stripped, every guard depended on every leaf and the split
     delivered nothing three times over (research.md R4).
     """
-    code = hookdeps._code("make-only-hooks.sh")
+    code = hookdeps._code("guard-file-hooks.sh")
     assert "hm_make.py" in code, "the invocation must survive stripping"
     guards = sorted(p.name for p in GUARDS.glob("*-hooks.sh"))
     make_family = [g for g in guards if "hm_make.py" in hookdeps.deps_for(g)]

@@ -71,7 +71,7 @@ HISTORY = {
     "tests/hooks/test-cohort-gate.sh": "an example engine path in a fixture repository",
     "tests/hooks/test-engine-freeze-hooks.sh": "an example engine path a guard classifies",
     "tests/hooks/test-guard-file-hooks.sh": "an example path a guard classifies",
-    "tests/hooks/test-make-only-hooks.sh": "an example command a guard parses",
+    "tests/hooks/test-make_only_hooks.rs": "an example command a guard parses",
     "tests/hooks/test-measure-hooks.sh": "an example command a guard parses",
     "tests/hooks/test-phase-source-hooks.sh": "an example engine path a guard classifies",
     "tests/pipeline/test_poolmaps.py": "a fixture pool's scripted engine name",

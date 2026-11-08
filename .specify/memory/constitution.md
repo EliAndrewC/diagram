@@ -2173,7 +2173,7 @@ at once:
    (`make done FULL=1` also re-gates every pool map and runs the
    perf gate)
 
-Nothing in this list is run bare - `scripts/hooks/make-only-hooks.sh` refuses
+Nothing in this list is run bare - `rust/guard/src/guards/make_only_hooks.rs` refuses
 it. The TDD order - write failing test, watch it fail, implement,
 watch it pass, refactor - is the working mode for new code.
 

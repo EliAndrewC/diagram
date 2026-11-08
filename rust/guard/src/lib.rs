@@ -50,6 +50,7 @@ pub fn guards() -> Vec<Guard> {
         guards::house_style_hooks::GUARD,
         guards::escalation_hooks::GUARD,
         guards::review_round_hooks::GUARD,
+        guards::make_only_hooks::GUARD,
         // last, so no guard reads its rewrite of a commit message (T035 decision (d)): a guard ported later goes before it
         guards::shell_check_hooks::GUARD,
     ]
@@ -255,6 +256,7 @@ mod tests {
                     "house-style-hooks",
                     "escalation-hooks",
                     "review-round-hooks",
+                    "make-only-hooks",
                     "shell-check-hooks"
                 ]
         );

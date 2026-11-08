@@ -101,7 +101,7 @@ def test_main_checks_the_named_crates_and_passes_with_none(capsys: pytest.Captur
 
 
 def test_rust_test_passes_the_fixture_and_refuses_a_failing_test(crate: pathlib.Path) -> None:
-    """Row "the make-only guard": a bare cargo is refused (tests/hooks/test-make-only-hooks.sh); `make rust-test` runs it."""
+    """Row "the make-only guard": a bare cargo is refused (tests/hooks/test-make_only_hooks.rs); `make rust-test` runs it."""
     assert rc.run("test", crate / "Cargo.toml", check=False).returncode == 0
     broken = _with(crate, "\n#[cfg(test)]\nmod failing {\n    #[test]\n    fn fails() {\n        assert_eq!(1, 2);\n    }\n}\n")
     assert rc.run("test", broken / "Cargo.toml", check=False).returncode != 0

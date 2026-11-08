@@ -266,9 +266,9 @@
    "declared": "spec-fidelity"
   },
   "### T028 Approach (checklist part A)": {
-   "sha256": "af35616026f90b356d08b21be8d91d69fc6b95c1fe57bbf6603ae14e77a4f223",
+   "sha256": "e0bff6369baea60b32fc14e2c0033d3e11dc64a9ff0143dbe205bbc0fbc7bfe9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T029 Approach (checklist part A)": {
@@ -2843,6 +2843,112 @@
      "why": "D3 and D4 restated for this guard: the settings entry leaves in the same commit that adds the decider, after the suite passes, so FR-003's never-both holds. Cover green serves FR-004. No researched value moves."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T028 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T028-a",
+     "summary": "The guard and its deciding move in-process to Rust (classify, doubled_var, the targeted-pytest and entry-point rewrites, every refusal's words); lib/hm_make.py stays for its other consumers until T051.",
+     "class": "within",
+     "why": "FR-002 asks for the same verdicts and words. FR-003 and D3 are per guard: this guard's shell and settings entry go in the commit that registers the decider (item 9), so it never runs both, and a library cannot leave before the unported callers that import it."
+    },
+    {
+     "id": "T028-b",
+     "summary": "XIV fix: a grep whose pattern names pytest is not a pytest run; shared::make::pytest_view blanks a searcher's quoted -c pattern and drops an escaped pipe; gate's bare_pytest reads the same view; expected verdict refused to pass.",
+     "class": "within",
+     "why": "This is FR-002's own named exception, not a new one. A grep that only mentions pytest in its pattern is a genuine false refusal of correct work, and the block carries both conditions FR-002 attaches: the expected verdict changed, the change named in the commit and in phase 1's record. Gate reading the same view fixes the same misreading in the same check family."
+    },
+    {
+     "id": "T028-c1",
+     "summary": "A direct Bash run of a replacement's binary (l7r-guard, hamlet, by any path) is refused with the make target that runs it, as a new verdict bare-binary beside bare-cargo.",
+     "class": "within",
+     "why": "FR-005 verbatim: the make-only guard covers the replacements' binaries as it covers cargo today."
+    },
+    {
+     "id": "T028-c2",
+     "summary": "The wrapper scripts/hooks/l7r-guard.sh is not the binary and passes the new verdict.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A carve-out in form, and a wrapper that runs the binary is reachable from Bash, so it was tested against FR-005's purpose (make the one entry point). It stands on FR-005's own words: the obligation is the replacements' BINARIES, as the guard covers the Python and cargo TODAY. A shell script is neither. The premise is that today's guard does not refuse a hook shell script run from Bash, which rests on the author's dated reading of make-only-hooks.sh (2026-11-08); this bundle does not allow it to be re-checked. If that premise is false, the carve-out preserves nothing and this ruling does not hold. The ruling rests on that wording only, not on any need of the hook dispatcher, whose calls are not Bash tool calls."
+    },
+    {
+     "id": "T028-d",
+     "summary": "ruff stays by path on a make land-tooling or arbiter-fix-done naming a .py file; T052's record lists it.",
+     "class": "within",
+     "why": "The request is about our Python code and FR-001 about Python files the repository tracks; ruff is neither. It runs under a make target, so make stays the entry point, and it lints .py files that FR-003 requires to exist until ported. FR-002 requires the same verdicts meanwhile. Being a rare branch is not what makes it acceptable; being outside the rule is."
+    },
+    {
+     "id": "T028-e",
+     "summary": "Unlabeled: the suite as the replay, the order after T005 independent of other guards, the shell and settings entry removed in the commit registering the decider, the Makefile parsed at hook time, landing by make land-tooling.",
+     "class": "within",
+     "why": "D3 and D4 as written, and plain design the request and spec leave open; none narrows anything asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T028 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)-port",
+     "summary": "The guard and its deciding move (classify, doubled_var, the targeted-pytest and entry-point rewrites, every refusal's words) ported in-process.",
+     "class": "within",
+     "why": "The port FR-001 and the request ask for, held to FR-002's same verdicts and words. The whole section was judged: earlier.md says every block is new, so the bundle carries no earlier text and no prior verdict to diff against."
+    },
+    {
+     "id": "(a)-hm_make",
+     "summary": "lib/hm_make.py stays for hookmatch.py, guard-file-hooks.sh and test_guard_corpus.py until T051.",
+     "class": "within",
+     "why": "FR-003 forbids one piece running both. This guard runs only Rust once switched; the library stays for other pieces not yet ported, each of which runs one implementation (D3, guard by guard)."
+    },
+    {
+     "id": "(a)-firing-log",
+     "summary": "test_guard_firing_log.py's named list drops this guard; make_only_hooks/tests.rs an_escape_is_recorded_with_its_reason takes the guarantee in the same commit.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because an existing check loses a named entry, and FR-002 holds the piece to every case its tests hold. Ruled on the bundle alone; T034's ruling is not in it and was not relied on. Physically impossible to keep: the block states the test scans shell permit sites, and D3 removes this guard's shell in that commit, so the entry would have nothing to scan. The purpose survives: the named test goes red if the escaped branch writes no firing record, and it lands in the same commit, so the guarantee is never absent. Premise, stated by the block and not measurable from the bundle: the Python test only scans shell permit sites, and there is one escaped branch for the Rust test to cover."
+    },
+    {
+     "id": "(b)",
+     "summary": "XIV fix: a grep whose pattern names pytest is not a pytest run; shared::make::pytest_view blanks a searcher's quoted -c pattern and drops an escaped pipe; gate's bare_pytest reads the same view.",
+     "class": "within",
+     "why": "FR-002 names this exception and its conditions, and the block meets each: a guard refusing correct work fixed in its port, the expected verdict changed in the same commit, named in the commit and in phase 1's record. It narrows nothing asked. A pipe or command outside the quoted pattern is untouched, so a real pytest run is still seen. Any gate case whose verdict moves through the shared view falls under the same naming duty."
+    },
+    {
+     "id": "(c)-bare-binary",
+     "summary": "A direct Bash run of a replacement's binary (l7r-guard, hamlet, by any path) refused with the make target that runs it, new verdict bare-binary beside bare-cargo, new suite cases.",
+     "class": "within",
+     "why": "FR-005's clause, carried as the requirement says. A new verdict on new cases moves no existing case under FR-002. Naming the two binaries is this task's reach; FR-005 and SC-005 still hold any later replacement's binary to the same cover."
+    },
+    {
+     "id": "(c)-wrapper",
+     "summary": "The wrapper scripts/hooks/l7r-guard.sh is not the binary and passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because it is an except inside the FR-005 cover and it runs the binary. Legitimate because FR-005's own words set the boundary: the rule covers the replacements' binaries, as the guard covers the Python and cargo today, and a shell wrapper is none of those, so FR-002's same verdicts govern it. It is one file, reaches only the guard, and leaves every path to the binary itself refused. Premise, from FR-005's wording and not verifiable from the bundle: today's guard does not refuse a direct Bash run of a hook script under scripts/hooks/. If it does, FR-005's parity clause would require the same refusal and this ruling would not hold."
+    },
+    {
+     "id": "(d)",
+     "summary": "ruff stays by path on a make land-tooling or arbiter-fix-done naming a .py file; T052's record lists it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because a Python tool stays in the ported guard of a feature asked to end Python. Legitimate for now: FR-001 replaces tracked Python files and ruff is not one, FR-002 requires this branch's output unchanged, and dropping it while tracked .py files remain would stop linting them without serving the port. The purpose is not gutted, because the branch only fires on a .py file and has nothing to do once the last one goes. Limit of this ruling: it covers the period while tracked .py files exist. Being listed in T052's record is not removal, and SC-005 still decides at close whether it may remain."
+    },
+    {
+     "id": "steps-5-6-9",
+     "summary": "Order after T005 and independent of the other guards; exits on the suite against l7r-guard --only make-only-hooks with FR-005's new cases; the shell and its settings entry gone in the commit that registers the decider; red goes to make arbiter-ask.",
+     "class": "within",
+     "why": "These restate D3, D4 and FR-005. Nothing is added or relaxed beyond them. No figure with a unit stands in the block except FR-008's tenth of a second, a quotation of the requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4579,6 +4685,65 @@
      "summary": "Order (after T005, independent of the other guards), exits (suite green against l7r-guard --only review-round-hooks, rust-test, cover, hooks-test), and done (shell and settings entry gone in the commit registering the decider); landed by make land-tooling with no work budget.",
      "class": "within",
      "why": "D3 and D4 restated for this guard: the settings entry leaves in the same commit that adds the decider, after the suite passes, so FR-003's never-both holds. Cover green serves FR-004. No researched value moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T028": {
+   "section_sha256": "e0bff6369baea60b32fc14e2c0033d3e11dc64a9ff0143dbe205bbc0fbc7bfe9",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)-port",
+     "summary": "The guard and its deciding move (classify, doubled_var, the targeted-pytest and entry-point rewrites, every refusal's words) ported in-process.",
+     "class": "within",
+     "why": "The port FR-001 and the request ask for, held to FR-002's same verdicts and words. The whole section was judged: earlier.md says every block is new, so the bundle carries no earlier text and no prior verdict to diff against."
+    },
+    {
+     "id": "(a)-hm_make",
+     "summary": "lib/hm_make.py stays for hookmatch.py, guard-file-hooks.sh and test_guard_corpus.py until T051.",
+     "class": "within",
+     "why": "FR-003 forbids one piece running both. This guard runs only Rust once switched; the library stays for other pieces not yet ported, each of which runs one implementation (D3, guard by guard)."
+    },
+    {
+     "id": "(a)-firing-log",
+     "summary": "test_guard_firing_log.py's named list drops this guard; make_only_hooks/tests.rs an_escape_is_recorded_with_its_reason takes the guarantee in the same commit.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because an existing check loses a named entry, and FR-002 holds the piece to every case its tests hold. Ruled on the bundle alone; T034's ruling is not in it and was not relied on. Physically impossible to keep: the block states the test scans shell permit sites, and D3 removes this guard's shell in that commit, so the entry would have nothing to scan. The purpose survives: the named test goes red if the escaped branch writes no firing record, and it lands in the same commit, so the guarantee is never absent. Premise, stated by the block and not measurable from the bundle: the Python test only scans shell permit sites, and there is one escaped branch for the Rust test to cover."
+    },
+    {
+     "id": "(b)",
+     "summary": "XIV fix: a grep whose pattern names pytest is not a pytest run; shared::make::pytest_view blanks a searcher's quoted -c pattern and drops an escaped pipe; gate's bare_pytest reads the same view.",
+     "class": "within",
+     "why": "FR-002 names this exception and its conditions, and the block meets each: a guard refusing correct work fixed in its port, the expected verdict changed in the same commit, named in the commit and in phase 1's record. It narrows nothing asked. A pipe or command outside the quoted pattern is untouched, so a real pytest run is still seen. Any gate case whose verdict moves through the shared view falls under the same naming duty."
+    },
+    {
+     "id": "(c)-bare-binary",
+     "summary": "A direct Bash run of a replacement's binary (l7r-guard, hamlet, by any path) refused with the make target that runs it, new verdict bare-binary beside bare-cargo, new suite cases.",
+     "class": "within",
+     "why": "FR-005's clause, carried as the requirement says. A new verdict on new cases moves no existing case under FR-002. Naming the two binaries is this task's reach; FR-005 and SC-005 still hold any later replacement's binary to the same cover."
+    },
+    {
+     "id": "(c)-wrapper",
+     "summary": "The wrapper scripts/hooks/l7r-guard.sh is not the binary and passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because it is an except inside the FR-005 cover and it runs the binary. Legitimate because FR-005's own words set the boundary: the rule covers the replacements' binaries, as the guard covers the Python and cargo today, and a shell wrapper is none of those, so FR-002's same verdicts govern it. It is one file, reaches only the guard, and leaves every path to the binary itself refused. Premise, from FR-005's wording and not verifiable from the bundle: today's guard does not refuse a direct Bash run of a hook script under scripts/hooks/. If it does, FR-005's parity clause would require the same refusal and this ruling would not hold."
+    },
+    {
+     "id": "(d)",
+     "summary": "ruff stays by path on a make land-tooling or arbiter-fix-done naming a .py file; T052's record lists it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because a Python tool stays in the ported guard of a feature asked to end Python. Legitimate for now: FR-001 replaces tracked Python files and ruff is not one, FR-002 requires this branch's output unchanged, and dropping it while tracked .py files remain would stop linting them without serving the port. The purpose is not gutted, because the branch only fires on a .py file and has nothing to do once the last one goes. Limit of this ruling: it covers the period while tracked .py files exist. Being listed in T052's record is not removal, and SC-005 still decides at close whether it may remain."
+    },
+    {
+     "id": "steps-5-6-9",
+     "summary": "Order after T005 and independent of the other guards; exits on the suite against l7r-guard --only make-only-hooks with FR-005's new cases; the shell and its settings entry gone in the commit that registers the decider; red goes to make arbiter-ask.",
+     "class": "within",
+     "why": "These restate D3, D4 and FR-005. Nothing is added or relaxed beyond them. No figure with a unit stands in the block except FR-008's tenth of a second, a quotation of the requirement."
     }
    ],
    "verdict": "CLEAR"

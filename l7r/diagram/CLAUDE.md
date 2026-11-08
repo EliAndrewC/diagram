@@ -75,7 +75,7 @@ diagnosed and the tooling improved.
 **The loop** ([`dev/loop.md`](../../dev/loop.md))
 
 - **Nothing runs outside make**: a bare interpreter, a bare pytest or a foreign makefile is refused
-  (`scripts/hooks/make-only-hooks.sh`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
+  (`rust/guard/src/guards/make_only_hooks.rs`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`

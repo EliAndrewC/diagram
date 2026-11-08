@@ -12,10 +12,10 @@ use super::escape::used;
 use super::shape::{strip_heredocs, strip_quotes};
 
 /// A command position: the start, or after `;`, `|`, `&&`, `||` or a newline, past `timeout N`, `env` and `VAR=value` prefixes.
-const POS: &str =
+pub(crate) const POS: &str =
     r"(?:^|[\n;|]|&&|\|\|)\s*(?:timeout\s+\S+\s+|env\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*";
 /// A Python interpreter, by any path.
-const PY: &str = r"(?:\S*/)?python3?";
+pub(crate) const PY: &str = r"(?:\S*/)?python3?";
 
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
@@ -163,6 +163,27 @@ pub fn combine(cmd: &str) -> Option<String> {
     (!out.is_empty() && out != cmd && has(&left, "done") && !has(&left, "quick")).then_some(out)
 }
 
+static SEARCHER_COUNT: LazyLock<Regex> = LazyLock::new(|| {
+    re(r#"((?:^|[\s;|&(])(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b[^\n;|&'"]*?\s)-c(\s+['"])"#)
+});
+// only in a searcher's own segment: `sh -c foo\\|pytest` does run pytest once the shell strips the backslash
+static SEARCHER_SEGMENT: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?:^|[\n;&(]|\|\|?)\s*(?:grep|egrep|fgrep|rg|ugrep|ack|ag)\b(?:[^\n;&|\\]|\\.)*")
+});
+/// `cmd` as a pytest check must read it (feature 449 T028, the constitution XIV fix): `strip_quotes` keeps the string after `-c `, which is a Python program after an
+/// interpreter and a search pattern after a searcher's count flag, and an escaped pipe is no separator. So `grep -c "a|pytest" f` is not a pytest run.
+#[must_use]
+pub fn pytest_view(cmd: &str) -> String {
+    let body = strip_heredocs(cmd);
+    let renamed = SEARCHER_COUNT.replace_all(&body, "${1}-C${2}");
+    let stripped = strip_quotes(&renamed);
+    SEARCHER_SEGMENT
+        .replace_all(&stripped, |caps: &fancy_regex::Captures| {
+            caps[0].replace("\\|", "  ")
+        })
+        .into_owned()
+}
+
 /// Whether `classify` reads `cmd` as a bare pytest run: its earlier verdicts - an escaped guard edit, a foreign makefile, an engine
 /// entry point - each a command that is not one.
 #[must_use]
@@ -182,7 +203,10 @@ pub fn bare_pytest(cmd: &str) -> bool {
     {
         return false;
     }
-    at(&format!(r"(?:{PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"))
+    let view = pytest_view(cmd);
+    re(&format!(r"{POS}(?:{PY}\s+(?:-\S+\s+)*-m\s+)?pytest\b"))
+        .is_match(&view)
+        .unwrap_or(false)
 }
 
 #[cfg(test)]

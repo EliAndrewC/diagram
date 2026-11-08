@@ -716,5 +716,17 @@
       "rust_guard_agent_ms": 9.23,
       "review_round_suite_cases": 84
     }
+  },
+  "make-only-hooks-ported": {
+    "quantity": "a plain Bash call's cost in the make-only guard, the shell's against the Rust guard alone (T028)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/make-only-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only make-only-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (101 cases)",
+    "value": {
+      "shell_bash_ms": 41.02,
+      "rust_guard_bash_ms": 8.05,
+      "make_only_suite_cases": 101
+    }
   }
 }

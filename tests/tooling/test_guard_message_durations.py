@@ -70,7 +70,7 @@ def test_the_check_would_catch_the_string_it_was_written_for() -> None:
 
 
 # ---------------------------------------------------------------------------------------------
-# THE PYTHON HALF (feature 191). The make-only guard has TWO halves - `scripts/hooks/make-only-hooks.sh`
+# THE PYTHON HALF (feature 191). The make-only guard has TWO halves - `rust/guard/src/guards/make_only_hooks.rs`
 # and `l7r/diagram/_invocation.py` - and until now this file scanned only `scripts/`. That is why
 # the shell ladder stayed clean while the Python one accumulated three stale facts: a retired
 # target (`make reference`), two durations, and the vocabulary of the retired scope lock. The rule

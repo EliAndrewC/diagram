@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for make-only-hooks.sh. Feeds PreToolUse events and asserts which commands are blocked.
+# Tests for the make-only guard (rust/guard, replayed through its link). Feeds PreToolUse events and asserts which commands are blocked.
 # Run: tests/hooks/test-make-only-hooks.sh   (exit 0 = all green)
 #
 # TWO DIRECTIONS, ALWAYS (feature 127, FR-015 + FR-016). Section 1 proves the hook FIRES on every
@@ -9,7 +9,7 @@
 # feature that motivated this one. A false positive here is a worse outcome than a false negative.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/make-only-hooks.sh"
+HOOK="$HERE/make-only-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
 # must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
@@ -100,6 +100,18 @@ check "a heredoc naming pytest"                ok "cat > requirements-dev.in <<'
 pytest
 pytest-cov
 EOF"
+
+# GUARD_EDIT_OK: feature 449 T028 - the constitution XIV fix: a search naming pytest is not a pytest run (found 2026-11-07)
+check "grep -c with pytest in its pattern"     ok      'grep -c "a|pytest" notes.txt'
+check "rg -c with pytest in its pattern"       ok      "rg -c 'x; pytest' notes.txt"
+check "an escaped pipe naming pytest"          ok      'grep a\|pytest notes.txt'
+check "...a real pipe into pytest still refuses" blocked 'cat x | pytest -q'
+check "...and an escaped pipe outside a search still refuses" blocked 'sh -c foo\|pytest'
+# GUARD_EDIT_OK: feature 449 T028 - FR-005: a replacement's binary goes through make too
+names_a_target "the guards' binary run directly" "$HOME/.cache/l7r-cargo-target/x/release/l7r-guard --only a PreToolUse"
+names_a_target "the hamlet binary run directly"  "target/release/hamlet pool/hamlets/x/x.spec.json"
+check "the guards' wrapper is not the binary"  ok      "scripts/hooks/l7r-guard.sh --version"
+check "make hamlet is the compliant form"      ok      "make hamlet SPEC=pool/hamlets/x/x.spec.json"
 
 echo
 echo "2b. TIER 5 VIA BASH - a guard file written by shell rather than the Edit tool"

@@ -63,15 +63,6 @@
         ]
       },
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/make-only-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/make-only-hooks.sh\"; exec \"$h\" pretool"
-          }
-        ]
-      },
-      {
         "matcher": "Read|Edit|Write|NotebookEdit",
         "hooks": [
           {

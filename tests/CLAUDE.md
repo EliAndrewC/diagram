@@ -37,7 +37,7 @@ the root-level suites (`test_villages.py`, `gate/test_*.py`, `test_compound.py`,
     make test-file FILE=tests/settlement/              # one mirrored package, WHOLE
     make done                                          # the real gate: lint + format + pyrefly + tests + coverage
 
-The hooks refuse a bare `pytest` (`make-only-hooks.sh` rewrites a targeted one to `make test-file`). Before the gate,
+The hooks refuse a bare `pytest` (`make_only_hooks.rs` rewrites a targeted one to `make test-file`). Before the gate,
 run the WHOLE affected file or directory, never a `-k` subset: a filter selects the tests you were thinking about, and a
 change breaks the ones you were not (the gate-hooks guard (`rust/guard/src/guards/gate_hooks.rs`)).
 

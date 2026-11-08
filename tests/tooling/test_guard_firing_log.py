@@ -582,7 +582,9 @@ def test_every_escape_token_has_at_least_one_recording_permit_site() -> None:
     sites = _permitting_sites()
     recorded_guards = {g for g, _rule in sites}
     # the three that were silent when this feature began, named so the test says what it is for
-    for guard in ("make-only-hooks.sh", "sync-with-main.sh"):  # repo-safety is Rust (feature 449 T034), its escape recorded by log::fire
+    for guard in (
+        "sync-with-main.sh",
+    ):  # make-only is Rust (feature 449 T028), an_escape_is_recorded_with_its_reason holds it  # repo-safety is Rust (feature 449 T034), its escape recorded by log::fire
         assert guard in recorded_guards, f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. Recording guards found: {sorted(recorded_guards)}"
 
 

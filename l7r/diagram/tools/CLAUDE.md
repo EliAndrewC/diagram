@@ -8,7 +8,7 @@ gen. See [`../pipeline/CLAUDE.md`](../pipeline/CLAUDE.md).)
 
 Run them through their `make` targets at the repository root (named in the table; `docs/make-targets.html` lists each
 target's arguments). A tool with no target of its own is run by a test or by another target, never by a bare
-interpreter (`scripts/hooks/make-only-hooks.sh` refuses one).
+interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 
 ## Which tool answers which question
 
