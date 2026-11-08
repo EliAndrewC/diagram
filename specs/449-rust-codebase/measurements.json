@@ -1,19 +1,39 @@
 {
   "done-rust-edit": {
-    "quantity": "a one-line Rust edit's make done, against a fresh full baseline, each output line timestamped",
+    "quantity": "a one-line Rust CODE edit's make done (a token changed: `const SLACK_FT: f64 = 1.0;` to `1.0_f64`), each output line timestamped",
     "observed": "2026-11-07",
-    "subject": "feature 444 T36's probe seven, rust/phases/src/driver/check.rs edited by one comment line",
-    "command": "make done INCREMENTAL=0; sed -i 's|none on a sound map\\.$|none on a sound map (probe).|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
-    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/) for the phases' own seconds",
-    "value": {"wall_s": 32.1, "recorded_s": 26, "preflight_quick_s": 4.6, "planner_s": 3.1, "pytest_start_s": 4.2, "python_tests": 161, "python_tests_s": 10.7, "bookkeeping_and_wait_s": 7.8, "cpu_temp_c": [100.0, 100.0]}
+    "subject": "rust/phases/src/driver/check.rs, against the baseline of the last full run; the plan named 2 Rust files (this one and dry.rs, landed in the clone since the baseline) and 11 test modules that read them",
+    "command": "sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
+    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/2026-11/20261108T025148330911-2706485.json) for the phases' own seconds",
+    "value": {
+      "wall_s": 27.8,
+      "recorded_s": 22,
+      "preflight_s": 4.0,
+      "test_full_s": 16,
+      "pytest_s": 11,
+      "python_test_modules": 11,
+      "static_s": 8,
+      "seeds_s": 12,
+      "cpu_temp_c": [
+        100.0,
+        101.0
+      ]
+    }
   },
   "hooks-bash": {
-    "quantity": "the guards that run before a Bash call: how many, the slowest, all of them summed",
+    "quantity": "this repository's guards that run before a Bash call: how many, the slowest, all of them summed",
     "observed": "2026-11-07",
-    "subject": "the PreToolUse hooks of .claude/settings.json and ~/.claude/settings.json whose matcher takes Bash",
+    "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash (the GM's own ~/.claude hooks left out: not this repository's)",
     "command": "each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR=/diagram",
     "method": "the median of three runs a hook; the slowest and the sum of the medians",
-    "value": {"hooks": 29, "slowest_ms": 184, "slowest": "pair-hooks.sh", "summed_ms": 1133}
+    "value": {
+      "hooks": 26,
+      "slowest_ms": 175,
+      "slowest": "pair-hooks.sh",
+      "second_ms": 111,
+      "second": "gate-hooks.sh",
+      "summed_ms": 1045
+    }
   },
   "pair-hooks-suite": {
     "quantity": "pair-hooks.sh's runs inside its own suite",
@@ -21,7 +41,12 @@
     "subject": "tests/hooks/test-pair-hooks.sh, its HOOK pointed at a wrapper that times each run",
     "command": "a scratch copy of the suite with HOOK set to a timing wrapper around scripts/hooks/pair-hooks.sh, run once",
     "method": "the wrapper's per-run times summed; 19 of the copy's 100 cases failed on its relocated fixture paths, so a close figure, not an exact one",
-    "value": {"runs": 90, "summed_s": 39.7, "mean_ms": 441, "suite_wall_s": 8.2}
+    "value": {
+      "runs": 90,
+      "summed_s": 39.7,
+      "mean_ms": 441,
+      "suite_wall_s": 8.2
+    }
   },
   "suite-cpu": {
     "quantity": "every test's own time, summed over the tree outside tests/tooling and over tests/tooling",
@@ -29,15 +54,23 @@
     "subject": "the gate's test trees",
     "command": "make durations FULL=1 N=20000; PYTEST_ADDOPTS=\"--durations=0\" make test-file FILE=tests/tooling",
     "method": "each call, setup and teardown row summed, per tree",
-    "value": {"outside_tooling_s": 198, "tooling_s": 434, "summed_s": 632, "tests_100ms_or_more": 717}
+    "value": {
+      "outside_tooling_s": 198,
+      "tooling_s": 434,
+      "summed_s": 632,
+      "tests_100ms_or_more": 717
+    }
   },
   "rust-tests": {
     "quantity": "the Rust crate's tests",
     "observed": "2026-11-07",
     "subject": "rust/phases",
-    "command": "python3 scripts/gates/rust_checks.py test (cargo's own summary line read)",
-    "method": "cargo test's 'finished in' figure",
-    "value": {"tests": 90, "s": 0.12}
+    "command": "CARGO_TARGET_DIR=$HOME/.cache/l7r-cargo-target/diagram-backlog $HOME/.cargo/bin/cargo test --quiet --manifest-path rust/phases/Cargo.toml",
+    "method": "cargo test's own summary line: 'test result: ok. 91 passed ... finished in 0.12s'",
+    "value": {
+      "tests": 91,
+      "s": 0.12
+    }
   },
   "python-start": {
     "quantity": "a Python interpreter's start with nothing to run",
@@ -45,7 +78,13 @@
     "subject": "python3 3.14 in the container",
     "command": "python3 -c pass, timed three times",
     "method": "wall time of each run",
-    "value": {"ms": [16, 16, 15]}
+    "value": {
+      "ms": [
+        16,
+        16,
+        15
+      ]
+    }
   },
   "design-fixes": {
     "quantity": "three of the day's speedups that changed what a tool does, not its language",
@@ -53,6 +92,34 @@
     "subject": "the claims gate test, the counters mutation test, a check bundle",
     "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; scripts/record/check_bundle.py 0086 --for record-format timed before and after d3ff0e16d",
     "method": "the test's or the command's own time, warm, before and after its commit",
-    "value": {"claims_test_s": [6.7, 0.5], "counters_test_s": [20.7, 1.1], "check_bundle_s": [3.3, 1.55]}
+    "value": {
+      "claims_test_s": [
+        6.7,
+        0.5
+      ],
+      "counters_test_s": [
+        20.7,
+        1.1
+      ],
+      "check_bundle_s": [
+        3.3,
+        1.55
+      ]
+    }
+  },
+  "python-census": {
+    "quantity": "the Python files the repository tracks",
+    "observed": "2026-11-07",
+    "subject": "the clone's HEAD",
+    "command": "git ls-files '*.py' | wc -l; git ls-files '*.py' | awk -F/ '{print $1}' | sort | uniq -c",
+    "method": "the count, and the count by top directory",
+    "value": {
+      "files": 872,
+      "tests": 326,
+      "specs": 222,
+      "scripts": 186,
+      "l7r": 132,
+      "pool": 6
+    }
   }
 }

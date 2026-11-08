@@ -20,12 +20,13 @@ Feature 444 moved the hamlet engine to Rust. Everything else is still Python: th
 research and review tooling, the Mode A building planner, the interactive page writer. Each figure below is recorded with its command
 in `measurements.json` (feature 444 T36's runs of 2026-11-07):
 
-- a one-line Rust edit's `make done` took 32.1 s of wall time, 26 s by its own record, of which preflight's quick 4.6 s, the test
-  planner 3.1 s, pytest's start 4.2 s and 161 Python tests 10.7 s were Python the edit did not need (`m:done-rust-edit`);
-- 29 hooks run before every Bash call, in parallel: the slowest 184 ms, 1,133 ms summed per call (`m:hooks-bash`); a
+- a one-line Rust code edit's `make done` took 27.8 s of wall time, 22 s by its own record, of which the preflight's 4 s and the
+  Python test phase's 16 s - 11 test modules picked because they read a `.rs` file - were Python (`m:done-rust-edit`);
+- this repository's 26 guards run before every Bash call, in parallel: the slowest 175 ms, 1,045 ms summed per call
+  (`m:hooks-bash`); a
   `pair-hooks.sh` run averaged 441 ms inside its own suite, 90 runs and 39.7 s summed, most of it work rather than start-up
   (`m:pair-hooks-suite`);
-- a Python interpreter starts in 15-16 ms with nothing to run (`m:python-start`); the Rust crate's 90 tests run in 0.12 s
+- a Python interpreter starts in 15-16 ms with nothing to run (`m:python-start`); the Rust crate's 91 tests run in 0.12 s
   (`m:rust-tests`); every test of the gate's trees, summed, is 632 s (`m:suite-cpu`).
 
 Limits a port does not change, recorded so the plan does not promise them: git operations and the push path, the I/O of a scan of the
@@ -36,7 +37,7 @@ mutation test 20.7 s -> 1.1 s, a check bundle 3.3 s -> 1.55 s (`m:design-fixes`)
 
 ### User Story 1 - Every tool call answers at once (Priority: P1)
 
-The GM works with a session; before each tool call the project's guards run. Today that is 29 processes, each a shell that starts
+The GM works with a session; before each tool call the project's guards run. Today that is 26 processes, each a shell that starts
 Python (`m:hooks-bash`). After this story they answer as one process, with the same verdicts.
 
 **Why this priority**: the GM asked of the hooks first - "Wouldn't the hooks being in Rust also make the hook tests run faster?" -
