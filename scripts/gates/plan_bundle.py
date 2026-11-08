@@ -21,6 +21,7 @@ repository, where no `CLAUDE.md` rides along:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import pathlib
 import re
@@ -162,6 +163,11 @@ def build(spec_dir: pathlib.Path, name: str, under: list[tuple[str, str]], earli
             f"plan bundle: specs/{spec_dir.name}/request.md is missing - write the GM's words there verbatim (the request and every "
             "amendment, as the spec's 'The request' quotes them), commit it, and build again"
         )
+    # ...A NAME THAT FITS THE FILE SYSTEM (feature 449, 2026-11-07): the name lists every changed block's task, and an amendment
+    # touching a range of 52 Approach blocks overran the 255-byte limit on a directory name; past 120 characters it is cut, the rest
+    # kept as a hash so two different block sets never share a bundle
+    if len(name) > 120:
+        name = f"{name[:80]}-{hashlib.sha256(name.encode()).hexdigest()[:12]}"
     out = OUT / f"plan-{spec_dir.name}-{name}"
     if out.exists():
         shutil.rmtree(out)
