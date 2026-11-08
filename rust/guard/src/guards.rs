@@ -15,6 +15,7 @@ pub mod gate_hooks;
 pub mod gate_write_hooks;
 pub mod gm_tree_hooks;
 pub mod idle_tests_hooks;
+pub mod ledger_hooks;
 pub mod main_tree_hooks;
 pub mod measure_hooks;
 pub mod no_branch_hooks;

@@ -86,7 +86,7 @@ def _small_triage(root: Path, keys: list[str], out: str) -> int:
     rc = cx.main(["--root", str(root), "bundle", "--units", ",".join(keys), "--reason", why, *(["--out", out] if out else [])])
     if rc == 0:
         # ...RECORDED IN ITS OWN FILE, not as a row of the review ledger's measured table: a skip has no check, class or cost of
-        # its own, and the ledger's guard (`ledger-hooks.sh`) refused the first form's row at the next commit (2026-10-26)
+        # its own, and the ledger's guard (`ledger_hooks.rs`) refused the first form's row at the next commit (2026-10-26)
         row = {"date": datetime.date.today().isoformat(), "claims": len(keys), "keys": keys, "why": why}
         with (root / cx.SKIPS).open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")

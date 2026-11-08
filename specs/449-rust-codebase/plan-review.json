@@ -260,9 +260,9 @@
    "declared": "spec-fidelity"
   },
   "### T027 Approach (checklist part A)": {
-   "sha256": "ac156b31287f687d0907b43e8de7d40b3b6e4f0659c4d4a1665cf4be977ca96e",
+   "sha256": "f9017011ac840d4a00660eec4a9660913d52867693c5b396c81fc59d623b1155",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T028 Approach (checklist part A)": {
@@ -2036,6 +2036,57 @@
      "why": "A landing route for tooling; it changes nothing the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T027 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) the guard's reading of the command in-process",
+     "summary": "Finding the commit and its tree, the row a make append will write, what the commit stages, the refusal's words and the notice all move into the Rust decider, on T022's shlex.",
+     "class": "within",
+     "why": "This is the port the request asks for ('should probably all be ported to Rust') and FR-001 phase 1 assigns. It keeps the refusal's words and the notice, which FR-002 requires (same verdicts and outputs)."
+    },
+    {
+     "id": "(b) the rules of a row stay in their own phase",
+     "summary": "ledger_lint.py, ledger_owed.py and review_cost.py under scripts/reviews/ stay Python until phase 3; the guard runs them by path only on a command holding a git commit, never on the plain Bash or Edit path.",
+     "class": "within",
+     "why": "Against the spec: the amended FR-001 clause settles this and the decision stays inside each of its limits (a file elsewhere, callers of its own, a rare branch, never on the path SC-001 measures). Its quotation stops at 'on a rare branch' but the next sentence states the remaining limit, so nothing is dropped. 'The rest of scripts/' is phase 3 in FR-001, so the phase is the spec's. Against the request, read separately because a narrowing the spec carries would pass a spec-only check: the GM asked for all the Python to go and named its inefficiency; order is not in the request. No file leaves the port, so the end state is unchanged, and Python stays off the per-call path. Only the time of three files' port is set, as phase 3. Taken as stated, not verified (the bundle forbids repository reads): that these three files have the named callers, a premise the plan dates to its reading of ledger-hooks.sh on 2026-11-08; if the shell consulted them outside a git commit, the suite replay under FR-002 would show it."
+    },
+    {
+     "id": "(c) FR-008 holds without Python",
+     "summary": "The decider's unit tests reach the git commit branch with the tools' paths stubbed by sh scripts; the real tools run only in the suite replay.",
+     "class": "within",
+     "why": "FR-008 requires each test under a tenth of a second except the end-to-end run against the real command, and D4 makes the suite replay that run and puts unit tests beside it. Stubs replace nothing FR-002 relies on: every suite case still runs against the real tools before the switch."
+    },
+    {
+     "id": "item 3/6 the suite is the replay",
+     "summary": "The green exit is test-ledger-hooks.sh against l7r-guard --only ledger-hooks, with make rust-test, cover and hooks-test green.",
+     "class": "within",
+     "why": "D4 and FR-002 state this; the exit only names them for this guard."
+    },
+    {
+     "id": "item 5 the order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Sequence inside phase 1 under D3; the request sets no order among guards."
+    },
+    {
+     "id": "item 9 same-commit removal",
+     "summary": "scripts/hooks/ledger-hooks.sh and its settings entry are gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 (never both) state this."
+    },
+    {
+     "id": "item 8 the budget",
+     "summary": "Lands by make land-tooling, no work budget, nothing rolled.",
+     "class": "within",
+     "why": "Tooling work with no maps touched; narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3029,6 +3080,56 @@
      "summary": "Lands by make land-tooling with no work budget and nothing rolled.",
      "class": "within",
      "why": "A landing route for tooling; it changes nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T027": {
+   "section_sha256": "f9017011ac840d4a00660eec4a9660913d52867693c5b396c81fc59d623b1155",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) the guard's reading of the command in-process",
+     "summary": "Finding the commit and its tree, the row a make append will write, what the commit stages, the refusal's words and the notice all move into the Rust decider, on T022's shlex.",
+     "class": "within",
+     "why": "This is the port the request asks for ('should probably all be ported to Rust') and FR-001 phase 1 assigns. It keeps the refusal's words and the notice, which FR-002 requires (same verdicts and outputs)."
+    },
+    {
+     "id": "(b) the rules of a row stay in their own phase",
+     "summary": "ledger_lint.py, ledger_owed.py and review_cost.py under scripts/reviews/ stay Python until phase 3; the guard runs them by path only on a command holding a git commit, never on the plain Bash or Edit path.",
+     "class": "within",
+     "why": "Against the spec: the amended FR-001 clause settles this and the decision stays inside each of its limits (a file elsewhere, callers of its own, a rare branch, never on the path SC-001 measures). Its quotation stops at 'on a rare branch' but the next sentence states the remaining limit, so nothing is dropped. 'The rest of scripts/' is phase 3 in FR-001, so the phase is the spec's. Against the request, read separately because a narrowing the spec carries would pass a spec-only check: the GM asked for all the Python to go and named its inefficiency; order is not in the request. No file leaves the port, so the end state is unchanged, and Python stays off the per-call path. Only the time of three files' port is set, as phase 3. Taken as stated, not verified (the bundle forbids repository reads): that these three files have the named callers, a premise the plan dates to its reading of ledger-hooks.sh on 2026-11-08; if the shell consulted them outside a git commit, the suite replay under FR-002 would show it."
+    },
+    {
+     "id": "(c) FR-008 holds without Python",
+     "summary": "The decider's unit tests reach the git commit branch with the tools' paths stubbed by sh scripts; the real tools run only in the suite replay.",
+     "class": "within",
+     "why": "FR-008 requires each test under a tenth of a second except the end-to-end run against the real command, and D4 makes the suite replay that run and puts unit tests beside it. Stubs replace nothing FR-002 relies on: every suite case still runs against the real tools before the switch."
+    },
+    {
+     "id": "item 3/6 the suite is the replay",
+     "summary": "The green exit is test-ledger-hooks.sh against l7r-guard --only ledger-hooks, with make rust-test, cover and hooks-test green.",
+     "class": "within",
+     "why": "D4 and FR-002 state this; the exit only names them for this guard."
+    },
+    {
+     "id": "item 5 the order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Sequence inside phase 1 under D3; the request sets no order among guards."
+    },
+    {
+     "id": "item 9 same-commit removal",
+     "summary": "scripts/hooks/ledger-hooks.sh and its settings entry are gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 (never both) state this."
+    },
+    {
+     "id": "item 8 the budget",
+     "summary": "Lands by make land-tooling, no work budget, nothing rolled.",
+     "class": "within",
+     "why": "Tooling work with no maps touched; narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"

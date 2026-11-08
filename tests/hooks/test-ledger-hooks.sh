@@ -4,7 +4,7 @@
 # REAL git tree.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/ledger-hooks.sh"
+HOOK="$HERE/ledger-hooks.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 FIX=$(mktemp -d)
