@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-08T04:57:28Z",
+  "target": "claims-gate",
+  "commit": "d64b4a6d9",
+  "why": "CLAIMS_OK: the rust/phases claim findings are recorded and listed by claims-report; their fix is the next piece of work, after T006, and touches no file this landing's guard tasks change"
+}
