@@ -2,21 +2,21 @@
   "done-rust-edit": {
     "quantity": "a one-line Rust CODE edit's make done (a token changed: `const SLACK_FT: f64 = 1.0;` to `1.0_f64`), each output line timestamped",
     "observed": "2026-11-07",
-    "subject": "rust/phases/src/driver/check.rs, against the baseline of the last full run; the plan named 2 Rust files (this one and dry.rs, landed in the clone since the baseline) and 11 test modules that read them",
-    "command": "sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
-    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/2026-11/20261108T025148330911-2706485.json) for the phases' own seconds",
+    "subject": "rust/phases/src/driver/check.rs, against a fresh full baseline (make done INCREMENTAL=0 just before): the plan named 1 Rust file and 11 test modules that read it",
+    "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
+    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/2026-11/20261108T030413524621-2865217.json) for the phases' own seconds",
     "value": {
-      "wall_s": 27.8,
-      "recorded_s": 22,
+      "wall_s": 30.2,
+      "recorded_s": 24,
       "preflight_s": 4.0,
-      "test_full_s": 16,
-      "pytest_s": 11,
+      "test_full_s": 19,
+      "pytest_s": 14,
       "python_test_modules": 11,
-      "static_s": 8,
-      "seeds_s": 12,
+      "static_s": 13,
+      "seeds_s": 10,
       "cpu_temp_c": [
-        100.0,
-        101.0
+        102.0,
+        88.0
       ]
     }
   },
@@ -65,11 +65,11 @@
     "quantity": "the Rust crate's tests",
     "observed": "2026-11-07",
     "subject": "rust/phases",
-    "command": "CARGO_TARGET_DIR=$HOME/.cache/l7r-cargo-target/diagram-backlog $HOME/.cargo/bin/cargo test --quiet --manifest-path rust/phases/Cargo.toml",
-    "method": "cargo test's own summary line: 'test result: ok. 91 passed ... finished in 0.12s'",
+    "command": "make rust-test",
+    "method": "the summary line make rust-test prints, cargo's own: 'test result: ok. 91 passed ... finished in 0.11s' (one #[test] more stands behind the counters feature, run by the counting build)",
     "value": {
       "tests": 91,
-      "s": 0.12
+      "s": 0.11
     }
   },
   "python-start": {
@@ -120,6 +120,29 @@
       "scripts": 186,
       "l7r": 132,
       "pool": 6
+    }
+  },
+  "inline-python-census": {
+    "quantity": "Python run inline - python3 -c, python3 - and heredocs - in the Makefile and the shell scripts",
+    "observed": "2026-11-07",
+    "subject": "the clone's HEAD",
+    "command": "git grep -nE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh' | wc -l; git grep -lE \"python3 (-c|-[[:space:]]|-$|<<)\" -- Makefile '*.mk' '*.sh'",
+    "method": "the sites counted, and the files listed by directory",
+    "value": {
+      "sites": 300,
+      "files": 93,
+      "by_dir": {
+        "tests/hooks": 41,
+        "scripts/hooks": 34,
+        "specs": 7,
+        "scripts/gates": 5,
+        "scripts/sync-with-main.sh": 1,
+        "scripts/land-tooling.sh": 1,
+        "scripts/container": 1,
+        "buildspec/run.sh": 1,
+        "Makefile": 1,
+        ".specify": 1
+      }
     }
   }
 }
