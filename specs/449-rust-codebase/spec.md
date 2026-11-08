@@ -124,7 +124,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **FR-006**: The design fixes measured in feature 444 T36 MUST be carried over, not rebuilt as they were: the import graph kept per
   process, semantic file ids read from the kept cache, a fixture built once.
 - **FR-007**: The guards MUST run as one process for a tool call, not one per guard.
-- **FR-008**: A tool's tests MUST each take under 100 ms, but its one end-to-end test against the real command.
+- **FR-008**: A tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command.
 - **FR-009**: The JavaScript and CSS of the interactive page, the research record's HTML fragments and the shell entry points of
   the container are not Python and are out of this feature's scope.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
@@ -143,6 +143,9 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **SC-003**: The test suites, every tree together, run in under a tenth of today's summed CPU time (about 632 s summed today).
 - **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
 - **SC-005**: When the feature closes, the repository holds no Python file and `make done` runs with no Python interpreter.
+- The figures "today" in these criteria were observed 2026-11-07 (feature 444 T36), method: the guards' commands run three times each
+  on a sample Bash call, the median; `make done` timed line by line after a one-line Rust edit against a fresh baseline; the suites
+  by `make durations` and `PYTEST_ADDOPTS="--durations=0" make test-file FILE=tests/tooling`, their rows summed.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
