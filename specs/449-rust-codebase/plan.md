@@ -224,25 +224,7 @@ censuses empty (work breakdown 8, FR-010).
 11. **Before fitting things into room.** Not a room question.
 
 <!-- plan-archive: T051 to T051 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T054 Approach (checklist part A)
-
-1. **The goal, in the world.** SC-001: the guards before a Bash call decide it in under a tenth of the slowest guard's time at the start of the feature, on `m:hooks-bash`'s own sample; what it costs on real commands is measured and recorded beside it.
-2. **The constraints.** SC-001, FR-002 (every suite case keeps its verdict), FR-007.
-   **Decisions** (measured 2026-11-08, method: the guards timed in sequence on a plain `ls`, then the whole dispatch by the median of 40 spawns, `m:t054-plain-bash`):
-   - (a) WHERE THE TIME WENT (observed 2026-11-08, method: each guard timed in sequence on `ls`, the median of 20 runs, one-off, the breakdown not kept in the entry): 35.8 ms a call by the whole dispatch, of which 28.3 ms inside the binary: compiling patterns the command could not match (`repo-safety` 8.9, `house-style` 2.5, `readme` 2.2, `pair` 2.2, `new-file` 1.8) and one `bash -n` (`shell-check` 3.0). `make-only` was the same on a `make` command, 10.9 ms (observed 2026-11-08, method: the same sequence on `make test-file`).
-   - (b) A FAST EXIT ONLY WHERE THE RULES CANNOT FIRE, EACH SAYING WHY: `repo-safety`, every pattern names `git` and a word of its rule (`push` with a force flag, `rebase`, `--squash`, `--amend`, or the mount's path); `make-only`, its file, duplicate-variable and guard-write patterns each need what they name; `readme`, every pattern names a README, case-insensitively; `pair`'s gate test needs the word `make`; `new-file`'s targets need a redirect or `tee`; `record-edit-gate`'s `make done` pattern needs `done`, and its hold test becomes a scan, the state file being large; `house-style`, no word of its table and no forbidden dash anywhere in the input; `shell-check`, a command of plain words alone (no quote, separator, bracket, redirect or newline) that does not begin with a reserved word has nothing `bash -n` can reject and no rule can fire. Each exit comes after the guard's escape handling where one exists, so an escape token is still seen.
-   - (c) NOT THE WRAPPER: it costs 5 to 6 ms (observed 2026-11-08, method: the median of 40 spawns of the wrapper against the bare binary, `--version`) and stays; the target is met without replacing the launcher that keeps a broken build from turning every guard off (plan D7).
-   - (d) WHAT THE FIGURE DOES AND DOES NOT SAY (`m:t054-plain-bash`, observed 2026-11-08): `m:hooks-bash`'s sample, `ls`, is 15.4 ms, under SC-001's 17.5 (`m:t054-plain-bash`). One quoted `git` command is 19.0 ms (`m:t054-plain-bash`). Over 400 real commands sampled from this project's transcripts the median is 23.0 ms, the 90th percentile 109 ms and 7.2 percent are under 17.5 ms (`m:t054-plain-bash`); the tail is `ledger-hooks` starting `ledger_lint.py`, 200 to 260 ms (`m:t054-plain-bash`), on commit-shaped commands, a by-path ask FR-001 leaves until phase 3. Whether SC-001 is met on its own instrument or owes the rest is the round arbiter's (`ask:449-T054-sc001`).
-3. **Where each comes from.** `m:hooks-bash`, `m:t054-plain-bash`.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** Before T052, whose close reads this figure.
-6. **The exits.** Green: every guard's suite and the case tables unchanged, `make rust-test` and `cover` green, `m:t054-plain-bash`'s `ls` under 17.5 ms, its other figures recorded beside it, as the arbiter's ruling on `ask:449-T054-sc001` holds. Red: what failed recorded, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** `m:t054-plain-bash`.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T054 to T054 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T052 Approach (checklist part A)
 
 1. **The goal, in the world.** phase 1 closed on its measured outcome.
