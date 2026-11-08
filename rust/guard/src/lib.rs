@@ -34,6 +34,9 @@ pub fn guards() -> Vec<Guard> {
         guards::budget_change_hooks::GUARD,
         guards::ledger_hooks::GUARD,
         guards::archive_first_hooks::GUARD,
+        guards::claims_file_hooks::GUARD,
+        guards::readme_hooks::GUARD,
+        guards::download_copy_hooks::GUARD,
     ]
 }
 
@@ -206,7 +209,10 @@ mod tests {
                     "feature-approval-hooks",
                     "budget-change-hooks",
                     "ledger-hooks",
-                    "archive-first-hooks"
+                    "archive-first-hooks",
+                    "claims-file-hooks",
+                    "readme-hooks",
+                    "download-copy-hooks"
                 ]
         );
     }

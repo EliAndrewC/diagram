@@ -3,7 +3,7 @@
 # the FR-001 commands; the commands themselves pass. Every case drives the REAL hook with a REAL payload.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/claims-file-hooks.sh"
+HOOK="$HERE/claims-file-hooks.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 trap 'rm -rf "$LOGROOT"' EXIT
@@ -45,10 +45,10 @@ bash_cmd "cd /diagram/.clones && cat RESEARCH-CLAIMS.md"
 grep -q '"guard": "claims-file"' "$LOGROOT"/*.json 2>/dev/null && ok "a refusal writes a guard-log entry" || no "no guard-log entry"
 
 echo "4. it fires only through its own check"
-SANS=$(mktemp); sed 's#^\[ -n "\$HIT" \] || exit 0#exit 0#' "$HOOK" > "$SANS"; chmod +x "$SANS"
+# the same property on the Rust guard (feature 449 T031 decision (b)): another guard, whose decider this is not, answers the same call
+SANS="$HERE/no-branch-hooks.sh"
 OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "cat $SHEET" | "$SANS" pretool 2>&1); RC=$?
 [ "$RC" -eq 0 ] && ok "with its check removed the same command passes - the test sees the guard" || no "the stripped hook still blocked" "(rc=$RC)"
-rm -f "$SANS"
 
 echo
 echo "claims-file: $PASS passed, $FAIL failed"

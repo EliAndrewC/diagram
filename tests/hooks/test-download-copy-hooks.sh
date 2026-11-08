@@ -9,7 +9,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 HOOK_ERR=$(mktemp)
 trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
-HOOK="$HERE/../../scripts/hooks/download-copy-hooks.sh"
+HOOK="$HERE/download-copy-hooks.sh"
 PASS=0; FAIL=0
 COPY=/host-l7r-repo/academic-sources/TO-DOWNLOAD.md
 

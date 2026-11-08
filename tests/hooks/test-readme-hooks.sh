@@ -15,7 +15,7 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 # concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
 HOOK_ERR=$(mktemp)
 trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
-HOOK="$HERE/../../scripts/hooks/readme-hooks.sh"
+HOOK="$HERE/readme-hooks.sh"
 PASS=0; FAIL=0
 
 tool_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":sys.argv[1],"tool_input":{"file_path":sys.argv[2]}}))' "$1" "$2"; }

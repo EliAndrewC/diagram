@@ -320,7 +320,7 @@ directory CLAUDE.md is, so knowledge parked in a README is found only by luck. M
 "an append-only log must be a DIRECTORY, because concurrent clones conflict" rule lived in
 dev/perf-log/README.md; a session read and quoted it during an audit, then created a single-file
 run-log.jsonl hours later. Three such READMEs became CLAUDE.md files in the same change, and
-scripts/hooks/readme-hooks.sh enforces it. New principle: MINOR.
+rust/guard/src/guards/readme_hooks.rs enforces it. New principle: MINOR.
 
 
 Version 1.13.1 (amended 2026-08-24): Principle XIII gains one clause - a detached
@@ -2049,7 +2049,7 @@ context at the moment the decision was made.
 who wants an orientation. The GM writes those. If a README is factually wrong, say so and offer the
 correction rather than making it.
 
-**Enforcement**: `scripts/hooks/readme-hooks.sh` intercepts a Write or Edit to any `README*`, and any
+**Enforcement**: `rust/guard/src/guards/readme_hooks.rs` intercepts a Write or Edit to any `README*`, and any
 shell command that writes one. It carries no silent escape - a genuine exception is the GM's to make.
 
 ### XIX. Placed Right, Never Repaired

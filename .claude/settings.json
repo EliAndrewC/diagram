@@ -81,34 +81,6 @@
         ]
       },
       {
-        "matcher": "Bash|Read|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/claims-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/claims-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 376 - a NEW guard, the GM 2026-10-10: the claims sheet is edited through tooling, never by hand",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/readme-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/readme-hooks.sh\"; exec \"$h\" pretool"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/download-copy-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/download-copy-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 313 - a NEW guard: a session's write to the GM's copy of the download list is refused with make download-add / make downloads-sync"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {

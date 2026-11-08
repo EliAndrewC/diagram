@@ -24,11 +24,11 @@ _spec.loader.exec_module(hookdeps)
 def test_a_dependency_reached_only_through_another_helper_still_counts() -> None:
     """THE WHOLE SUBTLETY OF THIS FEATURE.
 
-    `readme-hooks.sh` names `guardlog.sh` and never names the matcher. But `guardlog.sh`'s
-    `escape_or_refuse` calls it (feature 170), so a change to the escape family CAN break the readme
+    `wakeup-hooks.sh` names `guardlog.sh` and never names the matcher. But `guardlog.sh`'s
+    `escape_or_refuse` calls it (feature 170), so a change to the escape family CAN break the wakeup
     suite. A direct-reference derivation would skip it and report green.
     """
-    deps = hookdeps.deps_for("readme-hooks.sh")
+    deps = hookdeps.deps_for("wakeup-hooks.sh")
     assert "guardlog.sh" in deps, "the direct reference"
     assert "hm_escape.py" in deps, "reached only THROUGH guardlog.sh - a direct-only derivation under-runs here, which is the one failure mode worse than the over-running this feature replaces"
     assert "hm_shape.py" in deps, "and one hop further: the escape family stands on the shape primitives"
@@ -111,7 +111,7 @@ def test_the_helpers_that_churn_are_NOT_narrowed_and_that_is_correct() -> None:
 
 def test_the_key_changes_when_a_dependency_changes(tmp_path, monkeypatch) -> None:
     """A freshness key that did not move when an input moved would skip a suite forever."""
-    before = hookdeps.key_for("readme-hooks.sh")
+    before = hookdeps.key_for("wakeup-hooks.sh")
     real = hookdeps._text
 
     def fake(name: str) -> str:
@@ -120,7 +120,7 @@ def test_the_key_changes_when_a_dependency_changes(tmp_path, monkeypatch) -> Non
         return real(name) + ("\nECHO_CHANGED=1\n" if name == "hm_escape.py" else "")
 
     monkeypatch.setattr(hookdeps, "_text", fake)
-    assert hookdeps.key_for("readme-hooks.sh") != before, "the key ignored a change to a transitive dependency"
+    assert hookdeps.key_for("wakeup-hooks.sh") != before, "the key ignored a change to a transitive dependency"
 
 
 def test_every_shared_helper_on_disk_is_known_to_the_deriver() -> None:
@@ -215,7 +215,7 @@ def test_a_suite_that_drives_the_rust_guard_is_keyed_by_its_sources(monkeypatch)
     """449 T004: the suites replayed against `l7r-guard` test the binary built from rust/guard/, which the name index never sees."""
     inputs = hookdeps.rust_inputs("l7r-guard.sh")
     assert hookdeps.ROOT / "rust/Cargo.toml" in inputs and any(q.suffix == ".rs" for q in inputs)
-    assert hookdeps.rust_inputs("readme-hooks.sh") == [], "a suite that never names the binary is not keyed by it"
+    assert hookdeps.rust_inputs("wakeup-hooks.sh") == [], "a suite that never names the binary is not keyed by it"
     before = hookdeps.key_for("l7r-guard.sh")
     real = pathlib.Path.read_bytes
     monkeypatch.setattr(pathlib.Path, "read_bytes", lambda q: real(q) + (b"// changed" if q.suffix == ".rs" else b""))

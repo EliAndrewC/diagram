@@ -284,21 +284,21 @@
    "declared": "spec-fidelity"
   },
   "### T031 Approach (checklist part A)": {
-   "sha256": "ba14d820db2ed51777f7c43f45d5bf46ae324da9ff018e648b541f441fc7b056",
+   "sha256": "3128482ff3b68fc5a5aeaba7115fef73cb5d8084db7095599af702c098f20e35",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T032 Approach (checklist part A)": {
-   "sha256": "45af674b574a750706a43e047a840cb6d79aa11d880a6b0bc1064ba339915d4c",
+   "sha256": "104879335aab494fadf6377ad0af227b953625d08feabe2a69db92ce09985afa",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T033 Approach (checklist part A)": {
-   "sha256": "b8d24f6ee4d2e6695fb22dc4ffc09b1e2521075ca764e965ab583feaa93430ab",
+   "sha256": "93bdb5e6f8d7a653e99e02c8f7e7cef84555081bb358e6ae99d9f619ae97f3b9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T034 Approach (checklist part A)": {
@@ -2121,6 +2121,127 @@
      "why": "It alters a case of the suite D4 makes the replay, so it is ruled, not waved. The literal means is physically impossible: under D4 HOOK is the Rust binary and under D3 the shell is deleted in the commit that registers the decider, so there is no shell to sed. The property survives: a call that this guard refuses and that passes when routed to another guard's decider shows the refusal originates in this guard's decider and not the dispatcher. The expected verdict is stated unchanged, so FR-002's exception clause is not invoked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T032 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) straight port",
+     "summary": "readme-hooks' shell and inline Python move to the Rust guard with every pattern verbatim and the refusal's words the shell's; no XIV fix is taken.",
+     "class": "within",
+     "why": "This is FR-002's same verdicts and outputs, and the request's port to Rust. FR-002's XIV exception is only for a guard that refuses correct work; the block names XIV's fix among its constraints and reports no such defect, so taking none narrows nothing."
+    },
+    {
+     "id": "(a) closing pointer",
+     "summary": "Where the refusal's closing pointer named the shell source, it names the Rust file instead.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read literally FR-002's same outputs covers this text, so it is a departure, and the precedent of T021 counts for nothing. It stands because the literal rule defeats itself here: D3 and the block's own done-measure delete scripts/hooks/readme-hooks.sh in the commit that registers the decider, so an unchanged pointer would send every reader of the refusal to a file that no longer exists, in what the GM asked to be a Rust codebase. It is confined to the pointer, moves no verdict, pattern or other word, and alters no suite case: exit 6 requires every case green and a case that pinned the old name would go red to the arbiter."
+    },
+    {
+     "id": "switch and order",
+     "summary": "The shell and its settings entry go in the commit that registers the decider, after T005 and independent of the other guards; the suite against l7r-guard --only readme-hooks is the replay.",
+     "class": "within",
+     "why": "D3, D4 and FR-003 as written; FR-001 puts hooks in the first phase."
+    },
+    {
+     "id": "exits and landing",
+     "summary": "Green requires the suite, make rust-test, cover and make hooks-test; red records the failure and stops to make arbiter-ask; landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The green exit carries FR-002 and FR-004's floor; the rest is process inside the request, and no researched value or map moves."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T033 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T033-a",
+     "summary": "A straight port: the shell and its inline Python move to the Rust guard, every pattern verbatim, the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is FR-002's default (same verdicts and outputs) and the request's port. It carries no XIV fix, which FR-002 requires only where the guard refuses correct work today; the block's reading of the shell (dated 2026-11-08) records no such case, and if the port turns one up the block's red exit stops the task rather than deciding it silently."
+    },
+    {
+     "id": "T033-a-pointer",
+     "summary": "The refusal's closing pointer, where the shell's had one, names the Rust file instead of the shell file. The only place the refusal's output differs from the shell's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from T033-a because it departs from FR-002's same outputs and is not FR-002's named XIV exception. The literal rule would have every refusal name scripts/hooks/download-copy-hooks.sh, a file this same commit deletes (item 9, D3, FR-001), so the output would send the reader to something that no longer exists, against the request's purpose of making this a Rust codebase. Bounded: only the file named changes, only where a pointer already existed, verdicts and all other words stay the shell's, and every suite case must still pass before the switch (D4). The ruling rests on that reasoning and not on the T021 precedent, which this bundle does not show."
+    },
+    {
+     "id": "T033-order",
+     "summary": "Runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3: the dispatcher lands first, then each guard in its own commit."
+    },
+    {
+     "id": "T033-switch",
+     "summary": "The shell and its settings entry are gone in the commit that registers the decider, after the guard's suite passes against l7r-guard --only download-copy-hooks.",
+     "class": "within",
+     "why": "D3 and D4 nearly verbatim; carries FR-003, never both."
+    },
+    {
+     "id": "T033-exits",
+     "summary": "Green is the guard's suite, make rust-test, cover and make hooks-test; red records what failed, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-002, FR-004 and D4. Red defers rather than decides: it carves nothing out of FR-002's XIV clause, it routes the call. Checked spec-index.md for a requirement the block should have named: FR-007 is the dispatcher's, not this task's, and none is missing."
+    },
+    {
+     "id": "T033-landing",
+     "summary": "Lands by make land-tooling with no work budget, moves no constant, not a room question.",
+     "class": "within",
+     "why": "Process for a tooling task; narrows nothing the request or the spec asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T031 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)-port",
+     "summary": "The shell and its inline Python move to the Rust decider as a straight port, every pattern verbatim and the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is FR-002's 'same verdicts and outputs' and the GM's 'all be ported to Rust'. It decides nothing beyond them. No XIV fix is claimed, and the bundle names no correct work this guard refuses."
+    },
+    {
+     "id": "(a)-pointer",
+     "summary": "The refusal's closing pointer names the Rust file where it named the shell, the one change to the refusal's words.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from FR-002's literal 'same outputs', ruled on its own and not on T021's precedent. Keeping the words is impossible in the sense that matters: D3 and this block's item 9 delete the shell in the same commit, so a verbatim pointer would direct the reader to a file that no longer exists. FR-001 requires that deletion. The pointer's verdict and the rest of the refusal are untouched, and the change reaches only the name of the file."
+    },
+    {
+     "id": "(b)-suite-case",
+     "summary": "The suite case that proved the refusal comes from the decider by sed-stripping the shell instead runs through another guard's --only entry, expected verdict unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from D4 as written, where every case runs with HOOK at --only <guard>. Physically impossible to keep: sed strips shell source, and the Rust guard has none. FR-002's demand is on verdicts and the expected verdict does not move, so this is not a third exception to FR-002. Purpose holds: the case still separates this decider from the rest of the guard, and a wrong substitute would fail the unchanged expectation at the suite-green exit. Ruled on the block as written: per the bundle's rule the case itself was not read, so that --only <other> isolates the decider as the sed did is the block's statement."
+    },
+    {
+     "id": "item-5-9-order-and-switch",
+     "summary": "The guard lands after T005, independent of the other guards, and its shell and settings entry go in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 as written: guard by guard, removal and registration in one commit, never both."
+    },
+    {
+     "id": "item-6-exits",
+     "summary": "Green is the guard's suite against l7r-guard --only claims-file-hooks, make rust-test, cover and hooks-test; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D4 and FR-002 for the suite, FR-004 and FR-008 for the unit tests and coverage. The red exit leaves the shell running, which is FR-003. Nothing asked is dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3197,6 +3318,124 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "It alters a case of the suite D4 makes the replay, so it is ruled, not waved. The literal means is physically impossible: under D4 HOOK is the Rust binary and under D3 the shell is deleted in the commit that registers the decider, so there is no shell to sed. The property survives: a call that this guard refuses and that passes when routed to another guard's decider shows the refusal originates in this guard's decider and not the dispatcher. The expected verdict is stated unchanged, so FR-002's exception clause is not invoked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T032": {
+   "section_sha256": "104879335aab494fadf6377ad0af227b953625d08feabe2a69db92ce09985afa",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) straight port",
+     "summary": "readme-hooks' shell and inline Python move to the Rust guard with every pattern verbatim and the refusal's words the shell's; no XIV fix is taken.",
+     "class": "within",
+     "why": "This is FR-002's same verdicts and outputs, and the request's port to Rust. FR-002's XIV exception is only for a guard that refuses correct work; the block names XIV's fix among its constraints and reports no such defect, so taking none narrows nothing."
+    },
+    {
+     "id": "(a) closing pointer",
+     "summary": "Where the refusal's closing pointer named the shell source, it names the Rust file instead.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Read literally FR-002's same outputs covers this text, so it is a departure, and the precedent of T021 counts for nothing. It stands because the literal rule defeats itself here: D3 and the block's own done-measure delete scripts/hooks/readme-hooks.sh in the commit that registers the decider, so an unchanged pointer would send every reader of the refusal to a file that no longer exists, in what the GM asked to be a Rust codebase. It is confined to the pointer, moves no verdict, pattern or other word, and alters no suite case: exit 6 requires every case green and a case that pinned the old name would go red to the arbiter."
+    },
+    {
+     "id": "switch and order",
+     "summary": "The shell and its settings entry go in the commit that registers the decider, after T005 and independent of the other guards; the suite against l7r-guard --only readme-hooks is the replay.",
+     "class": "within",
+     "why": "D3, D4 and FR-003 as written; FR-001 puts hooks in the first phase."
+    },
+    {
+     "id": "exits and landing",
+     "summary": "Green requires the suite, make rust-test, cover and make hooks-test; red records the failure and stops to make arbiter-ask; landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The green exit carries FR-002 and FR-004's floor; the rest is process inside the request, and no researched value or map moves."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T033": {
+   "section_sha256": "93bdb5e6f8d7a653e99e02c8f7e7cef84555081bb358e6ae99d9f619ae97f3b9",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T033-a",
+     "summary": "A straight port: the shell and its inline Python move to the Rust guard, every pattern verbatim, the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is FR-002's default (same verdicts and outputs) and the request's port. It carries no XIV fix, which FR-002 requires only where the guard refuses correct work today; the block's reading of the shell (dated 2026-11-08) records no such case, and if the port turns one up the block's red exit stops the task rather than deciding it silently."
+    },
+    {
+     "id": "T033-a-pointer",
+     "summary": "The refusal's closing pointer, where the shell's had one, names the Rust file instead of the shell file. The only place the refusal's output differs from the shell's.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from T033-a because it departs from FR-002's same outputs and is not FR-002's named XIV exception. The literal rule would have every refusal name scripts/hooks/download-copy-hooks.sh, a file this same commit deletes (item 9, D3, FR-001), so the output would send the reader to something that no longer exists, against the request's purpose of making this a Rust codebase. Bounded: only the file named changes, only where a pointer already existed, verdicts and all other words stay the shell's, and every suite case must still pass before the switch (D4). The ruling rests on that reasoning and not on the T021 precedent, which this bundle does not show."
+    },
+    {
+     "id": "T033-order",
+     "summary": "Runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3: the dispatcher lands first, then each guard in its own commit."
+    },
+    {
+     "id": "T033-switch",
+     "summary": "The shell and its settings entry are gone in the commit that registers the decider, after the guard's suite passes against l7r-guard --only download-copy-hooks.",
+     "class": "within",
+     "why": "D3 and D4 nearly verbatim; carries FR-003, never both."
+    },
+    {
+     "id": "T033-exits",
+     "summary": "Green is the guard's suite, make rust-test, cover and make hooks-test; red records what failed, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-002, FR-004 and D4. Red defers rather than decides: it carves nothing out of FR-002's XIV clause, it routes the call. Checked spec-index.md for a requirement the block should have named: FR-007 is the dispatcher's, not this task's, and none is missing."
+    },
+    {
+     "id": "T033-landing",
+     "summary": "Lands by make land-tooling with no work budget, moves no constant, not a room question.",
+     "class": "within",
+     "why": "Process for a tooling task; narrows nothing the request or the spec asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T031": {
+   "section_sha256": "3128482ff3b68fc5a5aeaba7115fef73cb5d8084db7095599af702c098f20e35",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)-port",
+     "summary": "The shell and its inline Python move to the Rust decider as a straight port, every pattern verbatim and the refusal's words the shell's.",
+     "class": "within",
+     "why": "This is FR-002's 'same verdicts and outputs' and the GM's 'all be ported to Rust'. It decides nothing beyond them. No XIV fix is claimed, and the bundle names no correct work this guard refuses."
+    },
+    {
+     "id": "(a)-pointer",
+     "summary": "The refusal's closing pointer names the Rust file where it named the shell, the one change to the refusal's words.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from FR-002's literal 'same outputs', ruled on its own and not on T021's precedent. Keeping the words is impossible in the sense that matters: D3 and this block's item 9 delete the shell in the same commit, so a verbatim pointer would direct the reader to a file that no longer exists. FR-001 requires that deletion. The pointer's verdict and the rest of the refusal are untouched, and the change reaches only the name of the file."
+    },
+    {
+     "id": "(b)-suite-case",
+     "summary": "The suite case that proved the refusal comes from the decider by sed-stripping the shell instead runs through another guard's --only entry, expected verdict unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A departure from D4 as written, where every case runs with HOOK at --only <guard>. Physically impossible to keep: sed strips shell source, and the Rust guard has none. FR-002's demand is on verdicts and the expected verdict does not move, so this is not a third exception to FR-002. Purpose holds: the case still separates this decider from the rest of the guard, and a wrong substitute would fail the unchanged expectation at the suite-green exit. Ruled on the block as written: per the bundle's rule the case itself was not read, so that --only <other> isolates the decider as the sed did is the block's statement."
+    },
+    {
+     "id": "item-5-9-order-and-switch",
+     "summary": "The guard lands after T005, independent of the other guards, and its shell and settings entry go in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 and FR-003 as written: guard by guard, removal and registration in one commit, never both."
+    },
+    {
+     "id": "item-6-exits",
+     "summary": "Green is the guard's suite against l7r-guard --only claims-file-hooks, make rust-test, cover and hooks-test; red records the failure and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "D4 and FR-002 for the suite, FR-004 and FR-008 for the unit tests and coverage. The red exit leaves the shell running, which is FR-003. Nothing asked is dropped."
     }
    ],
    "verdict": "CLEAR"
