@@ -51,6 +51,7 @@ fn the_seat_faces_the_wind_on_the_field_s_high_side_and_ranks_its_ladder() {
     assert!(head.center.1 < 2500.0 && !head.offwind);
     // the west margin, its back turned to the wind off the flank, is the ladder
     assert!(s.frames.len() >= 2);
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(s.counts["candidate@margins"] >= 2);
 }
 
@@ -154,6 +155,7 @@ fn the_way_out_runs_straight_or_walks_and_remembers() {
     assert!(way.has_exit((310.0, 310.0), &mut counts));
     // a seat in the same walled ground, its walk reaching cells the first walk tested and reached
     assert!(way.has_exit((250.0, 250.0), &mut counts));
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(counts["test@exit_walk"] > 0);
     let shut = vec![(square(100.0, 100.0, 500.0, 500.0), 0.0)];
     let ring = vec![

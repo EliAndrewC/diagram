@@ -54,6 +54,7 @@ fn a_pond_is_seated_below_the_outfall_clear_of_the_crop() {
     assert!((std::f64::consts::PI * rx * ry - 0.03 * 1600.0 * 1200.0).abs() < 1.0);
     assert_eq!(s.reeds.len(), 16);
     assert_eq!(s.run.len(), 3);
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(s.counts.get("candidate@pond_seat").is_some_and(|&n| n >= 1));
 }
 
@@ -62,6 +63,7 @@ fn a_pond_is_stepped_across_the_fall_off_a_brook_below_the_outfall() {
     let s = sink(&inp(true), &mut brook_at(2000.0)).unwrap().unwrap();
     let ((cx, _), rx, _) = s.pond.unwrap();
     assert!((cx - 2000.0).abs() > rx);
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(s.counts["candidate@pond_seat"] > 1);
 }
 
@@ -107,6 +109,7 @@ fn a_brook_out_of_reach_sends_the_drain_off_the_map_on_a_searched_run() {
     assert_eq!(s.run.len(), 3);
     let end = s.run[2];
     assert!(end.1 > 4000.0);
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(s.counts["candidate@offmap_run"] >= 1);
 }
 
@@ -198,6 +201,7 @@ fn the_crop_tests_read_the_outline_once() {
         (0.0, 1.0),
         &mut counts,
     );
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert_eq!(counts["read@outline"], 4);
     assert!((c.area - 10_000.0).abs() < 1e-9);
     let mut t = 0;
@@ -293,6 +297,8 @@ fn a_pond_whose_seat_meets_the_crop_steps_on() {
     let mut i = inp(true);
     i.drain = vec![(1100.0, 1600.0), (2000.0, 1700.0)];
     let s = sink(&i, &mut far()).unwrap().unwrap();
+    assert!(!s.run.is_empty(), "the sink still lays its run");
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(s.counts["candidate@pond_seat"] > 1);
 }
 

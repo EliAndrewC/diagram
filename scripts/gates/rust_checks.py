@@ -80,7 +80,8 @@ def cover(manifest: pathlib.Path, work: pathlib.Path, report: list[str] | None =
     # its lines from older source, uncovered (measured 2026-11-07: lines past a file's end)
     for old in [*(work / "target" / "debug" / "deps").glob("libl7r_*")]:
         old.unlink() if old.is_file() else shutil.rmtree(old, ignore_errors=True)
-    lib = ["--lib", "--quiet", "--all-features", "--manifest-path", str(manifest)]
+    # ...THE DEFAULT BUILD, THE COUNTERS COMPILED OUT (the GM 2026-11-07: "We should probably run with counters compiled out by default")
+    lib = ["--lib", "--quiet", "--manifest-path", str(manifest)]
     built = _timed("build", [str(_exe()), "test", "--no-run", "--message-format=json", *lib], env)
     # ...and every tests' binary but the one just built, which the report would read too: a build under other features leaves its
     # own beside it, every function in it never run (measured 2026-11-07: each test of the crate counted missed, twice over)
@@ -188,14 +189,22 @@ def _env_run(cmd: list[str], env: dict[str, str]) -> subprocess.CompletedProcess
 
 def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedProcess[str]:
     if cmd == "lint":
-        return cargo(["clippy", "--quiet", "--all-targets", "--all-features"], manifest, ["-D", "warnings"])
+        # BOTH BUILDS LINTED: the default, its counters compiled out, and the counting one (the GM 2026-11-07: "We should probably
+        # run with counters compiled out by default") - a parameter or a `mut` only the counters read is a warning in one of them
+        plain = cargo(["clippy", "--quiet", "--all-targets"], manifest, ["-D", "warnings"])
+        return plain if plain.returncode else cargo(["clippy", "--quiet", "--all-targets", "--all-features"], manifest, ["-D", "warnings"])
     if cmd == "test":
+        # THE DEFAULT BUILD: the counters compiled out (the GM 2026-11-07), as every map is built; `test-counters` is the counting one
+        return cargo(["test", "--quiet"], manifest)
+    if cmd == "test-counters":
+        # THE COUNTING BUILD (feature 443 T02, FR-012): every test, the counts' own assertions with them, passes with the counters in
+        # as without - the same expected values in both, so the counters change no output
         return cargo(["test", "--quiet", "--all-features"], manifest)
     if cmd == "hamlet":
         # THE RUST DRIVER (feature 444 T42): a pool hamlet rolled from its spec, built optimized, no Python feature
         # (HAMLET_FEATURES=counters for `make work-budget`'s count: its own build, cached beside the plain one)
         feats = ["--features", os.environ["HAMLET_FEATURES"]] if os.environ.get("HAMLET_FEATURES") else []
-        return cargo(["run", "--release", "--quiet", *feats, "--bin", "hamlet"], manifest,os.environ.get("HAMLET_ARGS", "").split() or [os.environ.get("HAMLET_SPEC", "")])
+        return cargo(["run", "--release", "--quiet", *feats, "--bin", "hamlet"], manifest, os.environ.get("HAMLET_ARGS", "").split() or [os.environ.get("HAMLET_SPEC", "")])
     if cmd == "test-no-counters":
         # THE COUNTERS CHANGE NO OUTPUT (feature 443 T02, its Rust half since the Python roll's deletion, feature 444 T39): the tests,
         # whose expected values are the same in both builds, pass with the counters compiled out
@@ -205,7 +214,7 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
-    ap.add_argument("cmd", choices=["lint", "format", "test", "test-no-counters", "hamlet", "cover", "dead"])
+    ap.add_argument("cmd", choices=["lint", "format", "test", "test-counters", "test-no-counters", "hamlet", "cover", "dead"])
     ap.add_argument("--crate", action="append", default=[], help="a crate directory, relative to the repository")
     ap.add_argument("--check", action="store_true", help="format: refuse, do not rewrite")
     args = ap.parse_args(argv)
@@ -241,6 +250,7 @@ def main(argv: list[str] | None = None) -> int:
             "dead": "delete the pub fn it names, or call it",
             "hamlet": "fix the stage or the spec the driver names above",
             "test-no-counters": "fix the test whose result hangs on the counters",
+            "test-counters": "fix the test the counting build fails: a count's assertion, or a result the counters change",
         }[args.cmd]
         print(f"rust-checks: {bad} crate(s) failed {args.cmd} - {fix}", file=sys.stderr)
         return 1

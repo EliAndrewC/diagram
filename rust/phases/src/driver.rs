@@ -381,9 +381,7 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
         ford: FORD,
     };
     seat(&inp).map_err(seat_refused).map(|mut s| {
-        counts
-            .into_iter()
-            .for_each(|(k, n)| *s.counts.entry(k).or_insert(0) += n);
+        crate::counts::merge(&mut s.counts, &counts);
         s
     })
 }
@@ -548,10 +546,8 @@ fn settled(
         .collect();
     let mut work = [0_u64; 2];
     let out = crate::field::beans::settle(&f.beans, &segs, &ponds, &mut work);
-    *counts
-        .entry("index_query@settle_runs".to_owned())
-        .or_insert(0) += work[0];
-    *counts.entry("moved@settle_runs".to_owned()).or_insert(0) += work[1];
+    crate::counts::tally(counts, "index_query@settle_runs", work[0]);
+    crate::counts::tally(counts, "moved@settle_runs", work[1]);
     out
 }
 
@@ -613,9 +609,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         }
         brooks.push(drawn);
     }
-    *out.counts
-        .entry("write@brook_drawn".to_owned())
-        .or_insert(0) += work;
+    crate::counts::tally(&mut out.counts, "write@brook_drawn", work);
     let sunk = out
         .fields
         .iter()
@@ -666,12 +660,16 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
     .chain(seated.iter().map(|s| ("seat", s.counts.clone())))
     .chain(laid.iter().map(|l| ("hem", l.counts.clone())))
     .collect();
-    sunk.iter()
-        .flat_map(|s| &s.counts)
-        .chain(seated.iter().flat_map(|s| &s.counts))
-        .chain(laid.iter().flat_map(|l| &l.counts))
-        .chain(&p.counts)
-        .for_each(|(k, n)| *out.counts.entry(k.clone()).or_insert(0) += n);
+    let mut all = out.counts.clone();
+    crate::counts::merge(
+        &mut all,
+        sunk.iter()
+            .flat_map(|s| &s.counts)
+            .chain(seated.iter().flat_map(|s| &s.counts))
+            .chain(laid.iter().flat_map(|l| &l.counts))
+            .chain(&p.counts),
+    );
+    out.counts = all;
     let doc = svg.finish(p.w, p.h, CROP_MARGIN);
     let stages: Vec<&'static str> = ["water_frame", "field"]
         .into_iter()
@@ -856,6 +854,10 @@ mod tests {
 
     #[test]
     fn a_name_is_escaped_in_the_record() {
+        // the record's counts, written as the counting build fills them (a default build's map is empty)
+        let mut r = roll(&super::cohort_spec(4, None)).unwrap();
+        r.counts.insert("write@x".to_owned(), 3);
+        assert!(super::manifest(&r).contains("\"write@x\": 3"));
         assert_eq!(super::Refused("why".into()).to_string(), "why");
         assert_eq!(super::record::js("a\"b\\c\nd"), "\"a\\\"b\\\\c\\nd\"");
     }

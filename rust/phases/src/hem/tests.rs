@@ -37,6 +37,7 @@ fn the_hem_keeps_off_the_settlement_s_ground_and_stands_behind_it() {
         .poly
         .iter()
         .all(|c| c.0 < -300.0 && c.1 > 300.0 && c.1 < 700.0)));
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(kept.counts["write@dry_plot"] > 0);
     // water filed at its width keeps the plots off it
     let wet = lay(&h, &field, &[((-40.0, 0.0), (-40.0, 1200.0), 4.0)], &[]);

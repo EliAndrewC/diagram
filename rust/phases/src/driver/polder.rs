@@ -231,12 +231,14 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     .chain([("waterward", ward.counts.clone())])
     .collect();
     let mut counts: HashMap<String, u64> = s.counts.0.clone();
-    seated
-        .iter()
-        .flat_map(|x| &x.counts)
-        .chain(&ward.counts)
-        .chain(&p.counts)
-        .for_each(|(k, n)| *counts.entry(k.clone()).or_insert(0) += n);
+    crate::counts::merge(
+        &mut counts,
+        seated
+            .iter()
+            .flat_map(|x| &x.counts)
+            .chain(&ward.counts)
+            .chain(&p.counts),
+    );
     let stages: Vec<&'static str> = ["water_frame", "field"]
         .into_iter()
         .chain(seated.as_ref().map(|_| "seat"))

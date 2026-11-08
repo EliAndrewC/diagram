@@ -35,11 +35,7 @@ pub struct Laid {
     pub counts: HashMap<String, u64>,
 }
 
-fn add(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
-    if n > 0 {
-        *counts.entry(key.to_owned()).or_insert(0) += n;
-    }
-}
+use crate::counts::tally as add;
 
 /// The hem laid from `h` along the field's `ring`, kept off its `water` (each segment at its width) and off the settlement's
 /// ground `keep`.

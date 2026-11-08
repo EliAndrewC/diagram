@@ -93,12 +93,7 @@ pub struct Seated {
     pub counts: HashMap<String, u64>,
 }
 
-/// Add `n` to the counter `key`.
-pub fn tally(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
-    if n > 0 {
-        *counts.entry(key.to_owned()).or_insert(0) += n;
-    }
-}
+pub use crate::counts::tally;
 
 /// The seat: the fords opened first, every later way gapped at them; the candidate margins refused and ranked; the head given a
 /// dry way out of the frame, the next margin taken where it has none.

@@ -162,12 +162,13 @@ def test_the_counters_inside_rust_refuse_a_port_that_does_work_it_does_not_count
     (copy / "src" / "lib.rs").write_text("mod counts;\nmod pyrand;\nmod water_frame;\n")
     toml = copy / "Cargo.toml"
     toml.write_text('[package]\nname = "l7r_phases_uncounted"\nversion = "0.1.0"\nedition = "2021"\n\n[features]\ncounters = []\n')
-    assert rc.run("test", toml, check=False).returncode == 0, "the water frame's own tests pass in the three-file crate"
+    # the counting build: a count's own assertion is compiled out of the default one (the GM 2026-11-07)
+    assert rc.run("test-counters", toml, check=False).returncode == 0, "the water frame's own tests pass in the three-file crate"
     frame = copy / "src" / "water_frame.rs"
     text = frame.read_text()
     assert 'counts.add("candidate@roll_plan", 3);' in text
     frame.write_text(text.replace('counts.add("candidate@roll_plan", 3);', "", 1))
-    failed = rc.run("test", toml, check=False)
+    failed = rc.run("test-counters", toml, check=False)
     assert failed.returncode != 0, "a roll it does not count fails the port's own test"
     # ...by the count's own assertion, not a build that broke
     said = failed.stdout + failed.stderr
@@ -212,5 +213,7 @@ def test_the_counters_change_no_output_refuses_a_test_that_reads_them(crate: pat
     broken = _with(crate, "\n#[cfg(test)]\nmod counted {\n    #[test]\n    fn reads_the_counters() {\n        assert!(cfg!(feature = \"counters\"));\n    }\n}\n")
     toml = broken / "Cargo.toml"
     toml.write_text(toml.read_text().replace("[lints.clippy]", "[features]\ncounters = []\n\n[lints.clippy]", 1))
-    assert rc.run("test", broken / "Cargo.toml", check=False).returncode == 0, "with every feature it passes"
+    assert rc.run("test-counters", broken / "Cargo.toml", check=False).returncode == 0, "with every feature it passes"
     assert rc.run("test-no-counters", broken / "Cargo.toml", check=False).returncode != 0, "with the counters out it is refused"
+    # ...and the default test is the counters-out build (the GM 2026-11-07: "We should probably run with counters compiled out by default")
+    assert rc.run("test", broken / "Cargo.toml", check=False).returncode != 0, "the default build has no counters"

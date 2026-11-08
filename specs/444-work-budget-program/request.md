@@ -505,3 +505,9 @@ And: "Sorry no, to be cleare we should stop optimizing our python gates for now 
 "to be clear, the maps do NOT have to match, they do NOT need to be identical, that was NEVER a requirement and has been explicitly, repeatedly, and emphatically designated as NEVER a requirement"
 
 "you can do your own visual pass first and I'll look when you've done that"
+
+## 2026-11-07, no fixed seeds; the counters compiled out by default
+
+"We should probably avoid fixed seeds because of overfitting - I thought that was a rule we had already instituted.  If a seed fails then we want to keep testing it until it succeeds, after which point it gets dropped from the fixed pool and when there are no known bugs then we have no fixed seeds."
+
+"We should probably run with counters compiled out by default."

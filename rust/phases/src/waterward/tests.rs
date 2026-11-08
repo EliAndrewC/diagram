@@ -90,6 +90,7 @@ fn a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike() {
             && (f.strips[0][0].0 - 720.0).abs() < 1e-9
             && (f.strips[1][0].1 - 2280.0).abs() < 1e-9
     );
+    #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(f.counts["write@strip"] > 0);
     // held to 20 ft off the frame
     let tight = fringe(

@@ -37,8 +37,8 @@ budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict 
 budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 
-counters-inert: ## [performance] the work counters change no map: one seed rolled with them and under python -O, the manifests compared (feature 443, FR-004)   [SEED=25] [HOUSEHOLDS=15]
-	python3 scripts/gates/rust_checks.py test-no-counters
+counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")
+	python3 scripts/gates/rust_checks.py test-counters
 
 STATE = python3 -m l7r.diagram.ci state
 

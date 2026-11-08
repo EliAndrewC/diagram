@@ -96,12 +96,7 @@ pub fn heading(drain: &[Pt]) -> Option<Pt> {
     (d > 0.0).then(|| ((end.0 - back.0) / d, (end.1 - back.1) / d))
 }
 
-/// Add `n` to the counter `key`.
-pub fn tally(counts: &mut HashMap<String, u64>, key: &str, n: u64) {
-    if n > 0 {
-        *counts.entry(key.to_owned()).or_insert(0) += n;
-    }
-}
+pub use crate::counts::tally;
 
 /// The sink: the pond where the plan rolls one and its seat is found, else the off-map run (0060: "A map whose pond would have to
 /// sit far below the fields sends its drain off the map as well"). None where the field has no collector.

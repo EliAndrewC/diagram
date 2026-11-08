@@ -247,10 +247,13 @@ pub fn fringe(
             ring
         })
         .collect::<Vec<_>>();
-    *counts.entry("read@dike".to_owned()).or_insert(0) += pts.len() as u64 + gaps;
-    *counts.entry("test@face".to_owned()).or_insert(0) += tests;
-    *counts.entry("write@strip".to_owned()).or_insert(0) +=
-        strips.iter().map(Vec::len).sum::<usize>() as u64;
+    crate::counts::tally(&mut counts, "read@dike", pts.len() as u64 + gaps);
+    crate::counts::tally(&mut counts, "test@face", tests);
+    crate::counts::tally(
+        &mut counts,
+        "write@strip",
+        strips.iter().map(Vec::len).sum::<usize>() as u64,
+    );
     Fringe {
         flanks: fl,
         strips,
