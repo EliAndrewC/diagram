@@ -332,8 +332,8 @@
    "declared": "round-arbiter"
   },
   "### T37-T43 Decisions": {
-   "sha256": "db9db19cd05529614839d02006c29717a3b430ea7d028738fa63400147f91ea9",
-   "verdict": "BLOCKED",
+   "sha256": "9ad42ff6a71b23e052977e984599bc52f48ea7bc5866ba77c6aa03428a507f00",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
@@ -375,7 +375,7 @@
   },
   "### T42 Approach (checklist part A)": {
    "sha256": "1be97f99e8b8970886811c79fb0a5db6f8687a2c197fa7e26eb8736d1e06a497",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
@@ -5983,6 +5983,47 @@
      "summary": "T42 checklist: make hamlet SPEC= draws through the cut from Rust alone; each stage held to its frozen plate's account, never its output; map checks clean on fresh seeds; own visual pass before the GM; red is a stop to make arbiter-ask",
      "class": "within",
      "why": "Its text is the same as when last judged. It decides nothing that FR-024 part 5 and the GM's later words leave open: 'the maps do NOT have to match', 'you can do your own visual pass first'. The seed counts are map checks for the Rust stages under FR-019, not fixed seeds."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T37-T43 Decisions",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D7.2-scope (route B)",
+     "summary": "The no-deleted-engine scan covers the running trees plus dev/, specs/*/measurements*.json (55 files), docs/ and the root CLAUDE.md; the rest of specs/ (spec, plan, task and review prose, 589 hits in 5,360 files, 2026-11-08), research/ and LICENSE are left out with their reasons.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-024 part 4's 'any kept file'. Legitimate on the purpose ground, as the round arbiter ruled on ask:444-d7-scope-round3: the rule exists so that every CONSUMER of the deleted Python is caught. The amendment-11 request is about Python that runs and slows the loop ('it will not be able to slow us down'). Spec prose and research are read by nothing that runs, so they consume nothing, and scanning them would fail every later spec that quotes a historical path, which would make the guard unusable. Everything that is executed or loaded is in scope: the figures make figures re-runs, and docs/ and CLAUDE.md, which agents load as instructions. The block writes route B as the arbiter described it. Whether more of specs/ should be scanned is outside this round."
+    },
+    {
+     "id": "D7.2-docs-history",
+     "summary": "docs/iteration-loop.md, docs/migration-plan.md and docs/session-clones.md go in the test's HISTORY, each because it names an old path only in a past-tense history paragraph and gives no instruction.",
+     "class": "within",
+     "why": "FR-024 part 4 provides a history allowlist enumerated file by file. The three docs files that the widened scope reaches are named one by one, each with its reason. Given."
+    },
+    {
+     "id": "D7-table-figures (14 measurements.json)",
+     "summary": "make figures lists any command that names a deleted package in an import or path form as not re-measured, gives the reason, and never runs it (DELETED_ENGINE, with a test). The 13 closed features' figures (257, 261, 267, 269, 276, 282, 291, 302, 328, 372, 374, 375, 430) are frozen history. 444's own Python-roll figures are retired, and make work-budget measures their Rust counterparts.",
+     "class": "within",
+     "why": "A consumer of the deleted Python caught mechanically (FR-024 part 4). Running those commands after the deletion cannot work, and FR-024 deletes the Python work-budget roll in favour of the stages' counts through the cut. All 14 files are enumerated (13 plus 444) and each has a fate. Seam recorded (not a narrowing): route B puts these 14 json files inside the scanner's scope, but the HISTORY enumeration in D7 part 2 does not name them, and 'no glob, directory or format is an entry'. The table's 'frozen history' fate has to appear in the scanner's HISTORY as 14 file-by-file entries. Excluding measurements*.json from the scan again instead would undo route B."
+    },
+    {
+     "id": "D1-D6, D7 parts 1 and 3, the rest of D7's table",
+     "summary": "Unchanged from the text last judged (earlier.md). Only D7 part 2's scope passage, its docs entries and the figures row changed.",
+     "class": "within",
+     "why": "Byte-identical to the earlier text apart from the D7 part 2 passage and the new table row. The round arbiter confined this round to route B and the fates it owes, so these are not re-adjudicated here."
+    },
+    {
+     "id": "T42 exits and done",
+     "summary": "make hamlet SPEC= draws a pool hamlet through the cut from Rust alone. Each enabled stage is held to what its frozen plate says the stage does, never to its output. The cohort's map checks run clean on 1,000 comb seeds and 300 of each polder. A visual pass comes before the GM looks.",
+     "class": "within",
+     "why": "Unchanged text, header line only. Carries FR-024 part 5 and the GM's 2026-11-07 words: 'the maps do NOT have to match' and 'you can do your own visual pass first'."
     }
    ]
   }
