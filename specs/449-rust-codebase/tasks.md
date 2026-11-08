@@ -60,8 +60,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T014 [US1] `idle-tests-hooks`: its decider `rust/guard/src/guards/idle_tests_hooks.rs`, its suite `tests/hooks/test-idle-tests-hooks.sh` replayed against `l7r-guard --only idle-tests-hooks`, then `scripts/hooks/idle-tests-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: idle-tests is Rust
-- [ ] T015 [US1] `agent-stall-hooks`: its decider `rust/guard/src/guards/agent_stall_hooks.rs`, its suite `tests/hooks/test-agent-stall-hooks.sh` replayed against `l7r-guard --only agent-stall-hooks`, then `scripts/hooks/agent-stall-hooks.sh` and its settings entry removed
+- [x] T015 [US1] `agent-stall-hooks`: its decider `rust/guard/src/guards/agent_stall_hooks.rs`, its suite `tests/hooks/test-agent-stall-hooks.sh` replayed against `l7r-guard --only agent-stall-hooks`, then `scripts/hooks/agent-stall-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: agent-stall is Rust
 - [ ] T016 [US1] `stall-watchdog-hooks`: its decider `rust/guard/src/guards/stall_watchdog_hooks.rs`, its suite `tests/hooks/test-stall-watchdog-hooks.sh` replayed against `l7r-guard --only stall-watchdog-hooks`, then `scripts/hooks/stall-watchdog-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T017 [US1] `finished-run-hooks`: its decider `rust/guard/src/guards/finished_run_hooks.rs`, its suite `tests/hooks/test-finished-run-hooks.sh` replayed against `l7r-guard --only finished-run-hooks`, then `scripts/hooks/finished-run-hooks.sh` and its settings entry removed

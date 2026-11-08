@@ -220,3 +220,22 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T015 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-stall-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `agent-stall-hooks.sh`, 2026-11-08):
+   - (a) EVERY MODE PORTED: `prompt` is the guard; `check`, `watch`, `pending` and `ack` are the binary's `--agent-stall`, the Python scan in-process, one read of each transcript's last line as it was.
+   - (b) THE SCRIPT STAYS AS A FORWARDER UNTIL T051, A TOOL A SESSION RUNS BY HAND: this guard's own report and `engine-freeze-hooks`'s refusal both print the exact command `scripts/hooks/agent-stall-hooks.sh ack <dir> <id>`, and a session runs `watch` under a Monitor. So the path keeps working: it runs `l7r-guard.sh --agent-stall "$@"` and holds nothing else. No guard and no library calls it, so it is outside the hazard T013 found in `resolve`. Its hook mode leaves the settings in this task (FR-003).
+   - (c) THE WATCH LOOP'S TEST: `watch` loops until it is killed, as it did; a count of ticks from the environment ends it for a unit test, the shell's other seams kept (`AGENT_STALE_S`, `AGENT_RECENT_S`, `AGENT_TICK_S`).
+3. **Where each comes from.** `tests/hooks/test-agent-stall-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-stall-hooks.sh` green against `l7r-guard --only agent-stall-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-stall-hooks.sh` passes against the Rust guard; the script's logic and its settings entry are gone in the commit that registers the decider, the script kept only as decision (b)'s forwarder until T051.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
