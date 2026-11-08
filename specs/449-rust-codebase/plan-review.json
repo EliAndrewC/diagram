@@ -320,9 +320,9 @@
    "declared": "spec-fidelity"
   },
   "### T037 Approach (checklist part A)": {
-   "sha256": "19fa545621d02cf2fe20b0bf29ed88e12eb4e2b27bf82ecf3fb2a7f35b243ec4",
+   "sha256": "bd4840c2655e038082e278b4d2b8195816f67f8f687ed2d36405419e1f50798b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T038 Approach (checklist part A)": {
@@ -2640,6 +2640,39 @@
      "why": "An acknowledged output difference, but FR-002 binds 'every case its tests and its suites hold', so it reaches this only if a case holds the value. Premise: the label is consumed only by the run that wrote it, no case asserts its value, and no Python side recomputes it from the input (hm_checks.drop_run in decision b is the one place that could). This could not be read from the bundle; the block's exit, every case of test-workflow-hooks.sh passing against the Rust guard, is what proves it, and a case holding the value sends the task to its red exit."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T037 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T037-a",
+     "summary": "The guard moves whole and in-process: its inline Python, the block pattern verbatim, both containment tests against the file on disk, the refusals' words; the reason's rule comes from shared::escape.",
+     "class": "within",
+     "why": "The GM asked for the Python to go to Rust (request, third quote; FR-001). Moving everything unchanged is what FR-002's same verdicts and outputs requires, in-process is FR-007, and nothing the guard does is left behind."
+    },
+    {
+     "id": "T037-b",
+     "summary": "The escape is read from the written text as the shell's was: the token anywhere in new_string plus content takes the escape branch before the file is read, and a reason short of the floor refuses there whether or not the file holds a block.",
+     "class": "within",
+     "why": "It keeps the existing verdict rather than changing it, which FR-002 requires; no XIV fix is claimed and no case is excepted. The claim that the shell behaves this way is the plan's reading and is not checkable from the bundle; the exit in item 6 (every suite case against the Rust guard) tests it."
+    },
+    {
+     "id": "T037-c",
+     "summary": "scripts/hooks/source-block-hooks.sh and its settings entry are gone in the commit that registers the Rust decider, after the suite passes against l7r-guard --only source-block-hooks.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, and FR-002 (passes before deletion) and FR-003 (never both). Deleting the shell file along with its entry carries FR-001: the file holds the inline Python being replaced."
+    },
+    {
+     "id": "T037-d",
+     "summary": "Order and exits: after T005 and independent of the other guards; green is the guard's suite, make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask; landed with make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The order follows D3's guard-by-guard landing. The exits test FR-002 and FR-004 and drop no case or requirement. The red path sets the task down instead of weakening a check, and the landing route changes nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4178,6 +4211,38 @@
      "summary": "A run with no tool_use_id hashes its input as the guard's JSON writes it, where the Python's sorted-key form differed.",
      "class": "within",
      "why": "An acknowledged output difference, but FR-002 binds 'every case its tests and its suites hold', so it reaches this only if a case holds the value. Premise: the label is consumed only by the run that wrote it, no case asserts its value, and no Python side recomputes it from the input (hm_checks.drop_run in decision b is the one place that could). This could not be read from the bundle; the block's exit, every case of test-workflow-hooks.sh passing against the Rust guard, is what proves it, and a case holding the value sends the task to its red exit."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T037": {
+   "section_sha256": "9eda02b19e3afcfa9a3cb76e62f8e39e329da8962367024014e72104584dcf7d",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T037-a",
+     "summary": "The guard moves whole and in-process: its inline Python, the block pattern verbatim, both containment tests against the file on disk, the refusals' words; the reason's rule comes from shared::escape.",
+     "class": "within",
+     "why": "The GM asked for the Python to go to Rust (request, third quote; FR-001). Moving everything unchanged is what FR-002's same verdicts and outputs requires, in-process is FR-007, and nothing the guard does is left behind."
+    },
+    {
+     "id": "T037-b",
+     "summary": "The escape is read from the written text as the shell's was: the token anywhere in new_string plus content takes the escape branch before the file is read, and a reason short of the floor refuses there whether or not the file holds a block.",
+     "class": "within",
+     "why": "It keeps the existing verdict rather than changing it, which FR-002 requires; no XIV fix is claimed and no case is excepted. The claim that the shell behaves this way is the plan's reading and is not checkable from the bundle; the exit in item 6 (every suite case against the Rust guard) tests it."
+    },
+    {
+     "id": "T037-c",
+     "summary": "scripts/hooks/source-block-hooks.sh and its settings entry are gone in the commit that registers the Rust decider, after the suite passes against l7r-guard --only source-block-hooks.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, and FR-002 (passes before deletion) and FR-003 (never both). Deleting the shell file along with its entry carries FR-001: the file holds the inline Python being replaced."
+    },
+    {
+     "id": "T037-d",
+     "summary": "Order and exits: after T005 and independent of the other guards; green is the guard's suite, make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask; landed with make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The order follows D3's guard-by-guard landing. The exits test FR-002 and FR-004 and drop no case or requirement. The red path sets the task down instead of weakening a check, and the landing route changes nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"

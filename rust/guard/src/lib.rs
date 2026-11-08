@@ -46,6 +46,7 @@ pub fn guards() -> Vec<Guard> {
         guards::wakeup_hooks::GUARD,
         guards::agent_prefix_hooks::GUARD,
         guards::workflow_hooks::GUARD,
+        guards::source_block_hooks::GUARD,
     ]
 }
 
@@ -242,7 +243,8 @@ mod tests {
                     "agent-model-hooks",
                     "wakeup-hooks",
                     "agent-prefix-hooks",
-                    "workflow-hooks"
+                    "workflow-hooks",
+                    "source-block-hooks"
                 ]
         );
     }

@@ -25,7 +25,7 @@ firings; hook timeouts and crashes are not in the guard log, so `grep -rhoE` the
 |---|---|
 | never `git push --force`; never rewrite history (rebase, pull --rebase, merge --squash, commit --amend) | [`rust/guard/src/guards/repo_safety_hooks.rs`](../rust/guard/src/guards/repo_safety_hooks.rs) - no escape; "never" stops meaning never the moment one exists |
 | no git writes to `/host-l7r-repo` | same script; EDITS there stay legal, the intake workflow needs them. Escape `HOST_GIT_OK` with a reason |
-| the GM's SOURCE blocks are not editable (V) | [`scripts/hooks/source-block-hooks.sh`](../scripts/hooks/source-block-hooks.sh) - checks containment against the file on disk |
+| the GM's SOURCE blocks are not editable (V) | [`rust/guard/src/guards/source_block_hooks.rs`](../rust/guard/src/guards/source_block_hooks.rs) - checks containment against the file on disk |
 | hyphens only; American spellings | [`scripts/hooks/house-style-hooks.sh`](../scripts/hooks/house-style-hooks.sh) CORRECTS the text rather than refusing the edit: both rules are exact substitutions from CLAUDE.md's own table, so the fix is applied and the session is told. It never corrects a word inside a backtick span (a token being NAMED, not used) and never corrects the GM's verbatim `specs/*/request.md`, which stays on the refusal path so a person decides (Principle V); it exempts the GM's writing and the files that must quote the rule |
 | a README is the GM's to write (XVII) | [`rust/guard/src/guards/readme_hooks.rs`](../rust/guard/src/guards/readme_hooks.rs) |
 | the GM's copy of the download list is theirs to mark (feature 313): a session adds to the canonical `research/to-download.md` with `make download-add`, and the copy is written only by `make downloads-sync`, which refuses while it holds marks not ingested | [`rust/guard/src/guards/download_copy_hooks.rs`](../rust/guard/src/guards/download_copy_hooks.rs) refuses an Edit, Write or shell write to `academic-sources/TO-DOWNLOAD.md`; escape `DOWNLOAD_COPY_OK` with the GM's words. The list stays append-only by `downloads.py check` at PUSH time in `sync-with-main.sh` |
@@ -165,7 +165,7 @@ watching a test go red.
 
 | guard | what it does | escape |
 |---|---|---|
-| `source-block-hooks.sh`, `readme-hooks.sh` | the GM's SOURCE blocks and READMEs are theirs to write | - |
+| `source_block_hooks.rs`, `readme-hooks.sh` | the GM's SOURCE blocks and READMEs are theirs to write | - |
 | `download_copy_hooks.rs` | a write to the GM's copy of the download list (`academic-sources/TO-DOWNLOAD.md`) is refused with `make download-add` / `make downloads-sync` (feature 313) | `DOWNLOAD_COPY_OK` |
 | `phase_source_hooks.rs` | while a phase task (`phase: <stage>` in its block) is started and unticked, a read of that stage's old code - its module's package, the modules its counters name, the block's `old-code:` globs, recorded by `make task-start` - is refused with the stage's derivation to write from (feature 444, the GM 2026-10-30: "we are not trying to re-implement the same algorithms"); `make phase-read FILE= WHY=` opens one file for ten minutes | `PHASE_SOURCE_OK` |
 | `new_file_hooks.rs` | a new glossary file or registry entry written without a reserved prefix is refused with `make reserve KIND=glossary\|registry KEY=<k>`, which allocates under a host-wide lock so parallel queues never collide | `RESERVE_OK` |

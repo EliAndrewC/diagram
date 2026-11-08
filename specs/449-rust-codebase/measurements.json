@@ -653,5 +653,17 @@
       "unit_ms": 462.7,
       "hooks": 4
     }
+  },
+  "source-block-hooks-ported": {
+    "quantity": "an Edit's cost in the source-block guard, the shell's against the Rust guard alone (T037)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/source-block-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only source-block-hooks PreToolUse in the clone, an Edit of /diagram/CLAUDE.md, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the case table replayed through its link (6 cases)",
+    "value": {
+      "shell_edit_ms": 27.66,
+      "rust_guard_edit_ms": 7.63,
+      "source_block_cases": 6
+    }
   }
 }

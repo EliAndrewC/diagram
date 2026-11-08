@@ -100,15 +100,6 @@
         ]
       },
       {
-        "matcher": "Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/source-block-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/source-block-hooks.sh\"; exec \"$h\" pretool"
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
           {
