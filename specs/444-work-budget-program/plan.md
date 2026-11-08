@@ -1166,7 +1166,10 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
   deletion, to a data file (`l7r/diagram/knobs.json`: each knob's name, value space and default) that the modal checks and the
   Rust driver read. Deleted: `hamletgen`, `settlement`, `sitegen`, `waterfields`, `overlap`, `citybudget`, the `pipeline` and `ci`
   modules and `tools` that roll or read a hamlet, their tests (`tests/hamletgen`, `settlement`, `sitegen`, `waterfields`, `gate`,
-  `full`, `tier_city`, `tier_town`, `soak` and the files of the dropped tools), and `pool/hamlets/*/*.gen.py`.
+  `full`, `tier_city`, `tier_town`, `soak` and the files of the dropped tools), `pool/hamlets/*/*.gen.py`, and the Rust's PyO3
+  doors with them (FR-024 part 3: "go with the Python that called them"): `rust/phases`' `python` feature and its `py` modules, and
+  the maturin build - gone in T39's landing, as `rust/phases/Cargo.toml` records; the parked stages' `py.rs` files sit in
+  `rust/parked/`, outside the workspace, built by nothing.
 - **D4 - the gates** (FR-024's last paragraph): deleted with the Python they run - `tools.rust_gate` and `dev/rust-gate/frozen/`
   (Python pickles), `make cohort`/`cohort-landing`, the reference map step, the hamlet-path floor, the roll census, `make
   hamlet`/`map`, `make work-budget`'s Python roll, `make placement-stages`'s generator, `PY_ENGINE_IGNORE` (nothing left to ignore);
@@ -1185,14 +1188,23 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
 - **D7 - every consumer caught mechanically** (FR-024 part 4; the round arbiter on ask:444-a11-plan-d7, which replaced a hand
   census of every kept file - 464 files on a word-bounded search, "settlement" and "overlap" being prose words - with this rule):
   1. After the deletion the kept suite and every kept make target run green; an import of a deleted module fails loudly.
-  2. A new test in the kept suite, under `make done` (`tests/tooling/test_no_deleted_engine.py`), refuses any kept file across
-     `l7r/`, `tests/`, `scripts/`, `.claude/`, `pool/`, the `Makefile`, `pyproject.toml` and `dev/*.json` that names a deleted
-     package - `hamletgen`, `settlement`, `sitegen`, `waterfields`, `overlap`, `citybudget` - word-bounded, in an import form
-     (`import l7r.diagram.X`, `from l7r.diagram import X`, `from l7r.diagram.X`), a relative form (`from .X`, `from . import X`,
-     `from ..X`) or a path form (`l7r/diagram/X`, `l7r.diagram.X`, `tests/X`). Its history allowlist is enumerated file by file in
-     the test (`scripts/gates/closed-before-375.txt`, `scripts/gates/room_table.json`, the named hook fixtures, the named prose
-     `.md` files, the named tests whose fixtures build a tree of the old name); no glob, directory or format is an entry. The
-     append-only run, perf and bypass logs are outside the scope (`dev/*.json` is its one `dev/` entry), so none needs an entry.
+  2. A new test in the kept suite, under `make done` (`tests/tooling/test_no_deleted_engine.py`), refuses any kept file that
+     names a deleted package - `hamletgen`, `settlement`, `sitegen`, `waterfields`, `overlap`, `citybudget` - word-bounded, in an
+     import form (`import l7r.diagram.X`, `from l7r.diagram import X`, `from l7r.diagram.X`), a relative form (`from .X`, `from .
+     import X`, `from ..X`) or a path form (`l7r/diagram/X`, `l7r.diagram.X`, `tests/X`). THE KEPT FILES, derived from the tree
+     (`git ls-files | cut -d/ -f1 | sort -u`, 2026-11-08): every top-level entry that holds code or configuration that runs -
+     `l7r/`, `tests/`, `scripts/`, `rust/`, `.claude/`, `.specify/`, `pool/`, `legacy-hand-authored-pool/`, `buildspec/`, the
+     `Makefile`, `pyproject.toml`, `Dockerfile.ci`, `clippy.toml`, the `requirements*` files - and `dev/`, whose records code reads;
+     the prose and history trees (`research/`, `specs/`, `docs/`, the root `CLAUDE.md`, `LICENSE`) run nothing and are left out.
+     Measured on that scope (2026-11-08): `rust/`'s 148 files name none; `dev/` holds 321 that do. Its history allowlist is
+     enumerated file by file, each with why: in the test's `HISTORY`, the closed features' records (`scripts/gates/closed-before-375.txt`,
+     `scripts/gates/room_table.json`), the four hook command corpora under `tests/hooks/fixtures/`, the prose `.md` files and dev
+     docs, the frozen placement reference, the ledger and the triage record, and the 28 tests whose fixtures build a tree or an
+     example path of the old name, each named with its reason (`tests/hooks/test-claims-gate.sh` ... `tests/tools/test_claims.py`);
+     and in `tests/tooling/deleted-engine-logs.txt`, the 312 append-only run and perf logs that name one, one path a line - fixed at
+     the deletion, since nothing that runs now writes a deleted package's name. No glob, directory or format is an entry, and a
+     second test drops an entry the day its file stops naming one. The two pickles D4 deletes (`dev/rust-gate/frozen/`) were still
+     on disk; the widened scan found them, and they are deleted in this landing.
   3. Every code-reading check keeps a Rust fixture test proving it still fires: the claims index, the claims report and the
      claims gate (SC-017's refuses-with-no-Python test is the gate's), the tunables, the work-budget bundle and `budget_change`,
      the file and function caps.
@@ -1207,7 +1219,7 @@ first Rust map owes the review gate's glyph-checks when the port switch is throw
   | `scripts/record/claims.py`, `l7r/diagram/tools/claims.py`, `dev/claims-index.json`, `dev/claims-deferred.json` | the `Research:` claims of the Python and the Rust | PORTED: the Rust reader stands (`tools/claims_rust.py`), the Python roots narrowed to the kept code; a Rust fixture |
   | `scripts/record/tunables.py` | GUESS and CONVENTION values in the Python engine | PORTED: the kept Rust's `Research:` lines; a Rust fixture |
   | `scripts/reviews/work_budget_bundle.py`, `scripts/budget_change.py`, `l7r/diagram/tools/work_budget.py` | the stages and their counts | PORTED: the stages through the cut, counted by the crate; a Rust fixture |
-  | `scripts/gates/rust_checks.py` | the extension's import path (`phases_ext.py`) | PORTED: the maturin build and the `python` feature dropped (D6) |
+  | `scripts/gates/rust_checks.py` | the extension's import path (`phases_ext.py`) | PORTED: the maturin build and the `python` feature dropped with the Python (D3) |
   | `scripts/gates/check-file-scale.py`, `scripts/gates/check-function-cap.py` | file and function sizes | ALREADY read `.rs` (`dev/rust-tooling.md`); the fixture kept |
   | `l7r/diagram/tools/counters_inert.py` | the counters change no output | PORTED: the Rust half kept, the Python roll dropped |
   | `scripts/record/modal_bundle.py`, `l7r/diagram/interactive/conditions.py` | the knob registry | PORTED: read `l7r/diagram/knobs.json` (D3) |

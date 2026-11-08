@@ -22,7 +22,26 @@ FORMS = re.compile(
     rf"|from \.+{_N}\b|from \.+ import [^\n]*\b{_N}\b"  # relative forms
     rf"|l7r/diagram/{_N}\b|l7r\.diagram\.{_N}\b|tests/{_N}\b"  # path forms
 )
-SCOPE = ("l7r/**", "tests/**", "scripts/**", ".claude/**", "pool/**", "Makefile", "pyproject.toml", ":(glob)dev/*.json")
+#: THE KEPT TREES, by `git ls-files | cut -d/ -f1 | sort -u` (2026-11-08): every top-level entry that holds code or configuration
+#: that runs, and `dev/`, whose records code reads; the prose and history trees (`research/`, `specs/`, `docs/`, the root
+#: `CLAUDE.md`, `LICENSE`) run nothing and are left out (its plan review of 2026-11-08 ruled that legitimate)
+SCOPE = (
+    "l7r/**",
+    "tests/**",
+    "scripts/**",
+    "rust/**",
+    ".claude/**",
+    ".specify/**",
+    "pool/**",
+    "legacy-hand-authored-pool/**",
+    "dev/**",
+    "buildspec/**",
+    "Makefile",
+    "pyproject.toml",
+    "Dockerfile.ci",
+    "clippy.toml",
+    ":(glob)requirements*",
+)
 
 #: THE HISTORY, file by file, each with why it may still name a deleted package - no glob, no directory
 HISTORY = {
@@ -67,7 +86,16 @@ HISTORY = {
     "tests/tooling/test_tick_task.py": "an example path in a fixture task",
     "tests/tooling/test_work_budget_bundle_rust.py": "builds a fake engine tree of the old name beside the Rust",
     "tests/tools/test_claims.py": "builds a fake engine tree of the old name",
+    "dev/review-ledger.md": "the append-only ledger of every review pass, history",
+    "dev/claims-triage-skips.jsonl": "the append-only record of triage skips, history",
+    "dev/placement-stages-frozen/hamlet-placement.html": "the frozen reference of the Python stages, until its Rust page replaces it (FR-024 part 1)",
+    "dev/gate.md": "the Python engine's dev doc, until the Rust's own pages replace it",
+    "dev/loop.md": "the Python engine's dev doc, until the Rust's own pages replace it",
+    "dev/performance.md": "the Python engine's dev doc, until the Rust's own pages replace it",
+    "dev/placement.md": "the Python engine's dev doc, until the Rust's own pages replace it",
 }
+#: the append-only logs, each named in its own file (FR-024 part 4: "enumerated file by file")
+HISTORY |= {line: "an append-only log written while the Python engine ran" for line in (REPO / "tests/tooling/deleted-engine-logs.txt").read_text().splitlines() if line and not line.startswith("#")}
 
 
 def _hits() -> list[str]:

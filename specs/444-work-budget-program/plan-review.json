@@ -332,7 +332,7 @@
    "declared": "round-arbiter"
   },
   "### T37-T43 Decisions": {
-   "sha256": "4adadca84c388324291158fc230624cbd408634bed08f6a75d0a86f4e4bfecd8",
+   "sha256": "52776624eb1744a100ae4927d843e1efd055dfb8268b5920e5114185fd9d627f",
    "verdict": "BLOCKED",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -5709,6 +5709,143 @@
      "summary": "A visual defect pass before the GM looks; findings fixed or ruled on by the research",
      "class": "within",
      "why": "The GM: 'you can do your own visual pass first and I'll look when you've done that'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T37-T43 Decisions",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "Order: freeze writeup, park past the cut, delete Python with T40/T41 in one green landing, driver, crate split.",
+     "class": "within",
+     "why": "The GM approved this order verbatim in amendment 11 ('That sounds good. Please proceed with that.'), including test-full on the engine landing; FR-024 lists the six parts in this order."
+    },
+    {
+     "id": "D2",
+     "summary": "The cut is through waterward; seat overage flagged, not cut; parked modules used by no kept module.",
+     "class": "within",
+     "why": "FR-024 part 2 settles waterward and the parked set; the GM's 'NOT the last stage that is ported ... ported AND EFFICIENT' is met (homesteads at 13.2M is the first excluded). Seat overage approved in the GM's words (2026-11-07, 'the seat ones sound good too'). Figures carry a one-shot label (dev/work-budget.md, 2026-11-06, 4 seeds a size; crate:: uses read 2026-11-07)."
+    },
+    {
+     "id": "D3",
+     "summary": "Delete set by reachability from kept roots; overlap and citybudget go; knob registry exported to l7r/diagram/knobs.json before deletion.",
+     "class": "within",
+     "why": "FR-024 part 3: every module that rolls, draws or checks a hamlet or any generated settlement goes; 'a shared helper moved out of a deleted package where one is needed' covers knobs.json. Import walk carries its date and method (ast graph, 2026-11-07)."
+    },
+    {
+     "id": "D4",
+     "summary": "Gates presuming a whole hamlet deleted (rust_gate, frozen pickles, cohort, reference map, floor, census, Python work-budget roll, placement-stages generator, PY_ENGINE_IGNORE); Rust tests, coverage, claims rule and budgets kept; port switch stays rust-only.",
+     "class": "within",
+     "why": "FR-024's last paragraph names exactly these as deleted or switched off and these as standing in their place; the GM: 'switching those off or even just deleting them outright'. make hamlet's deletion is replaced by D5's make hamlet SPEC=."
+    },
+    {
+     "id": "D5",
+     "summary": "Rust binary 'hamlet'; pool hamlet specs as <name>.spec.json; make hamlet SPEC= writes svg and json; stages enabled once each draws.",
+     "class": "within",
+     "why": "FR-024 part 5: a Rust program rolls a hamlet from a spec data file and writes SVG and manifest with no Python; a stage is enabled once it draws."
+    },
+    {
+     "id": "D6-split",
+     "summary": "Cargo workspace: shared crate, one per stage, one for the driver; cargo build --timings before and after.",
+     "class": "within",
+     "why": "FR-024 part 6 and the GM's 'Are we recompiling EVERYTHING every time?'; the measurement is the one part 6 names."
+    },
+    {
+     "id": "D6-counters",
+     "summary": "counters feature OFF by default, on only for make work-budget and the counters' own test run.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Departs from part 6's 'one feature set shared by the tests, the coverage run and the build'. Grounded in the GM's own later words (2026-11-07: 'We should probably run with counters compiled out by default'), while FR-024's last paragraph keeps the budgets of the stages through the cut, which need the counts compiled in. Both cannot hold on one feature set; the default set stays shared by build, tests and coverage, and only the counted runs differ."
+    },
+    {
+     "id": "D6/D3-pyo3-timing",
+     "summary": "Removal of the PyO3 doors, the python feature and the maturin build: D3's delete set does not name them; D6 (T43) says 'gone (D3)'; the T40 table's rust_checks.py row says 'dropped (D6)'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-024 part 3: 'The PyO3 doors and the crate's python feature go with the Python that called them.' The blocks cite each other in a circle and no block puts the removal in the T39-T41 landing that deletes the Python; read at its D6 home it lands at T43, leaving the doors (and the extension's Python module path) in the tree past the Python they served. No ground is offered. To clear: name the PyO3 doors, the python feature and the maturin build in D3's delete set (the T39 landing) and cite D3, not D6, in the rust_checks.py row."
+    },
+    {
+     "id": "D7-1",
+     "summary": "Kept suite and kept make targets green after deletion; a deleted import fails loudly.",
+     "class": "within",
+     "why": "FR-024 part 4, first clause."
+    },
+    {
+     "id": "D7-2-prose-scope",
+     "summary": "Scan scope omits prose/history trees (specs/, docs/, research/, dev/ non-json prose).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows 'any kept file'. Implied by part 4's own subject, 'Every consumer of the deleted Python is caught mechanically': a prose file can neither run nor read the deleted code, and part 3 itself keeps frozen exhibits and relies on git history. The arbiter's rule (ask:444-a11-plan-d7, the route back for the '464 files' figure) replaced a prose-polluted census, not widened it."
+    },
+    {
+     "id": "D7-2-rust-scope",
+     "summary": "Scan scope omits rust/ (and states no search space for root files beyond Makefile and pyproject.toml).",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "rust/ is kept CODE, the one tree whose consumers part 3 names explicitly (the PyO3 doors, the python feature); the plan's own table shows an extension import path tying it to a Python package (rust_checks.py reads phases_ext.py), and a Rust test that skips when a Python-made input is absent is exactly the silently vacuous class part 2 exists for. No ground is offered, none of the three applies, and with D6/D3-pyo3-timing a stale l7r.diagram.<deleted> module path could survive the landing with nothing to catch it. To clear: add rust/ to the scope, and state how the directory list was derived (what else at the root can run or read code)."
+    },
+    {
+     "id": "D7-2-logs",
+     "summary": "Append-only run, perf and bypass logs moved 'outside the scope' (dev/*.json the only dev/ entry), after last round's allowlist-by-record-format was refused.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-024 part 4's door for history is 'its history allowlist enumerated file by file'; append-only logs are history in the plainest sense, and the set that names a deleted package is fixed at deletion time and nameable. Literal compliance is possible (name each file), the exclusion is not implied by the request or spec, and the plan states no ground beyond 'so none needs an entry' - the same carve-out through a different door. To clear: enumerate each log file by name in the allowlist, or state and measure a concrete ground (for example, that a log appends the refusal's own text so a per-file entry cannot be fixed) for adjudication."
+    },
+    {
+     "id": "D7-2-forms-allowlist",
+     "summary": "Import, relative and path forms, word-bounded, over the named packages; allowlist of closed-before-375.txt, room_table.json, named hook fixtures, named prose .md; no glob, directory or format entry.",
+     "class": "within",
+     "why": "Carries part 4's 'names a deleted package in an import, relative or path form, its history allowlist enumerated file by file' as written."
+    },
+    {
+     "id": "D7-2-fixture-tests",
+     "summary": "New allowlist class: 'the named tests whose fixtures build a tree of the old name'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "A live test is not history, and the plan names none of them. One member is physically required - the new test_no_deleted_engine.py's own fixture, which must build the old name to prove it refuses - and is LEGITIMATE on its own. The rest are unrulable as an unnamed class: a test whose fixture builds the old tree is either a test of a guard that needs the name, or a test of a check that is now vacuous or ported (its fixture should be a Rust tree), and the allowlist would hide the second kind - the class part 2 is for. To clear: name each test in the plan with why its fixture still needs the old name."
+    },
+    {
+     "id": "D7-3",
+     "summary": "Every code-reading check keeps a Rust fixture test proving it fires.",
+     "class": "within",
+     "why": "FR-024 part 4's last clause, list for list; SC-017's claims-gate test included."
+    },
+    {
+     "id": "D7-table-ported",
+     "summary": "claims gate/index/report, tunables, work-budget bundle and budget_change, rust_checks.py, file and function caps, counters_inert, modal knob readers: PORTED.",
+     "class": "within",
+     "why": "The GM: 'the code that introspects the Python code should get Rust ports'; part 4 lists these as ported, never dropped."
+    },
+    {
+     "id": "D7-table-roll-readers",
+     "summary": "Tools that read a Python roll or a Python-drawn map (census, memory, rollcache, cohort_audit, hamlet_floor, mapcheck, marsh_edges, notes/overlap census, perf_*, phase_calls, rust_gate, scatter_audit, see_through, stage_sizes): DROPPED; placement_stages.py DROPPED with its Rust form later; hand-drawn maps' .gen.py kept unchanged.",
+     "class": "within",
+     "why": "These read rolls or maps, not code, so they are 'code that checks a hamlet' (part 3), not introspection; placement_stages follows part 1's later page; the hand-drawn maps stay per part 3 and the GM's 'that is all fine for now'."
+    },
+    {
+     "id": "D7-table-cache-audit",
+     "summary": "cache_audit.py DROPPED: it audits the Python generation cache's keying of Python source, and the Rust driver has no generation cache.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It reads source, so dropping it narrows the GM's 'the code that introspects the Python code should get Rust ports because we still want it to introspect our Rust code to do the same things'. The same thing for Rust is auditing a Rust generation cache, and D5's driver has none, so a port has no subject: physical impossibility, pinned by D5's design rather than a measurement. Should a Rust generation cache be added, the port is owed."
+    },
+    {
+     "id": "T42-exits",
+     "summary": "Green: each pool spec's wall time; each stage held to its frozen plate's description, never its output; map checks clean; own visual pass before the GM. Red: record and arbiter-ask.",
+     "class": "within",
+     "why": "FR-024 part 5 ('judged against the frozen writeup's plate'); the GM: 'the maps do NOT have to match' and 'you can do your own visual pass first'. 'The cohort's map checks' must be the driver's/crate's own checks over its own seeds (FR-024's last paragraph), since D4 deletes make cohort and the table drops mapcheck.py."
+    },
+    {
+     "id": "T42-done",
+     "summary": "Done measured: wall time per pool spec; map checks clean on 1,000 comb seeds and 300 of each polder; visual findings fixed or ruled.",
+     "class": "within",
+     "why": "Targets, not recorded figures. Consistent with the GM's 'no fixed seeds' provided the seeds are fresh, which nothing in the block contradicts; wall time serves amendment 10's 'significantly under a minute'."
     }
    ]
   }
