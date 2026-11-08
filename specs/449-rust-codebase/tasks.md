@@ -54,8 +54,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T012 [US1] `event-log-hooks`: its decider `rust/guard/src/guards/event_log_hooks.rs`, its suite `tests/hooks/test-event-log-hooks.sh` replayed against `l7r-guard --only event-log-hooks`, then `scripts/hooks/event-log-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: the event log is Rust: 18 of 18 suite cases green, its lines byte-identical to the Python's; a Bash ls 32.9 ms -> the dispatcher's 12.4 ms (m:event-log-hooks-ported)
-- [ ] T013 [US1] `clone-sync-hooks`: its decider `rust/guard/src/guards/clone_sync_hooks.rs`, its suite `tests/hooks/test-clone-sync-hooks.sh` replayed against `l7r-guard --only clone-sync-hooks`, then `scripts/hooks/clone-sync-hooks.sh` and its settings entry removed - its solo skip (`scripts/hooks/lib/solo.py`, feature 444 T36) carried into the decider
+- [x] T013 [US1] `clone-sync-hooks`: its decider `rust/guard/src/guards/clone_sync_hooks.rs`, its suite `tests/hooks/test-clone-sync-hooks.sh` replayed against `l7r-guard --only clone-sync-hooks`, then `scripts/hooks/clone-sync-hooks.sh` and its settings entry removed - its solo skip (`scripts/hooks/lib/solo.py`, feature 444 T36) carried into the decider
       research: rendering
+      verify: DONE. landed: clone-sync is Rust; resolve stays shell until T051
 - [ ] T014 [US1] `idle-tests-hooks`: its decider `rust/guard/src/guards/idle_tests_hooks.rs`, its suite `tests/hooks/test-idle-tests-hooks.sh` replayed against `l7r-guard --only idle-tests-hooks`, then `scripts/hooks/idle-tests-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T015 [US1] `agent-stall-hooks`: its decider `rust/guard/src/guards/agent_stall_hooks.rs`, its suite `tests/hooks/test-agent-stall-hooks.sh` replayed against `l7r-guard --only agent-stall-hooks`, then `scripts/hooks/agent-stall-hooks.sh` and its settings entry removed
