@@ -3,7 +3,7 @@
 # else (feature 385 T02, plan D13). GUARD_EDIT_OK: feature 385 - the new guard's test companion.
 set -u
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/gate-write-hooks.sh"
+HOOK="$HERE/gate-write-hooks.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }

@@ -195,6 +195,9 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `gate-write-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `gate-write-hooks.sh`, 2026-11-08):
+   - (a) THE GUARD IN-PROCESS: its inline Python, and the question `lib/own-make.sh` answered (a make of this target, by program name and cwd), move in, read from `/proc` by pid; a Bash call and an edit start no process while no gate runs. The refusals' words are the shell's.
+   - (b) THE TREE CHECK IS A PHASE-2 PIECE: "is this change one the gate sees" is `scripts/gates/preflight.py --tree-check`, which FR-001 places in phase 2 by name ("the gate's scripts under `scripts/gates/`"), and FR-003 keeps it running until its replacement passes. The guard asks it by path, as T018's ruled decision (b) asks its answerers, only while a gate is running; it is the gate's own definition, so a second copy would be two answers to the one question.
 3. **Where each comes from.** `tests/hooks/test-gate-write-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.

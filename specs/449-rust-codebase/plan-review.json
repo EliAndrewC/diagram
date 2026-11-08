@@ -242,9 +242,9 @@
    "declared": "spec-fidelity"
   },
   "### T024 Approach (checklist part A)": {
-   "sha256": "0c0894ab6b49fa2f1e93dc412fe10b69c772989ef556ea47d31b672c9f950d09",
+   "sha256": "dab18d142ac950a7aabbf8695ab73f605bf91200e4ff0901118526c4c23bea97",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T025 Approach (checklist part A)": {
@@ -1923,6 +1923,34 @@
      "why": "Restates D3 and D4 (the suite is the replay; the shell entry leaves in the commit that adds the decider) and enforces FR-002 and FR-003. The red exit is a process stop and changes no requirement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T024 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) the guard in-process",
+     "summary": "The guard's inline Python and the own-make question (lib/own-make.sh) move into the Rust decider, read from /proc by pid; the refusals' words stay the shell's.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/, the libraries its guards call and the inline Python under scripts/hooks/ in phase 1, so this is the port itself. Keeping the refusal words is FR-002's same outputs; reading /proc rather than shelling out is how FR-007's one process is reached, and the suite replay (D4) decides whether the verdicts held."
+    },
+    {
+     "id": "(b) the tree check stays a phase-2 piece",
+     "summary": "The ported guard calls scripts/gates/preflight.py --tree-check by path, only while a gate is running, instead of taking that check into Rust with the guard.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because the guard's decision path still runs Python after the guard is called ported, and FR-001's phase 1 clause 'the libraries its guards call' could be read to reach this file. It stands on the accepted spec, not on the block's 'two answers to one question', which is a consistency argument and carries nothing. FR-001 names 'the gate's scripts under scripts/gates/' for phase 2, its census puts each file in one phase, and it fixes the phases' order; porting the file now would run phase 2's piece ahead of that order, and a Rust copy for the guard beside the Python the gate still runs is the 'both' FR-003 forbids. Against the GM's request ('should probably all be ported to Rust') nothing is exempted: the file stays in the port and SC-005's closing census must return nothing, so this is sequence rather than a carve-out. Purpose: the request's complaint is Python's cost, and 'only while a gate is running' keeps the ordinary tool call Python-free. The ruling depends on that qualifier, read by the author from the shell on 2026-11-08 and not verifiable here because the bundle forbids the repository; a guard that asked preflight outside a gate run is outside this ruling."
+    },
+    {
+     "id": "(c) no process while no gate runs (unlabeled, in (a))",
+     "summary": "A Bash call and an edit start no process while no gate runs; the only child process the guard ever starts is the tree check during a gate run.",
+     "class": "within",
+     "why": "The block does not name FR-007 (guards run as one process for a tool call, not one per guard), which is the requirement this touches. On a plain reading FR-007 is about one process per guard, and one guard's single child during a gate run, for the gate's own check under (b), is not that. The no-gate case satisfies FR-007 outright and serves SC-001."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2806,6 +2834,33 @@
      "summary": "Green is the guard's suite passing against l7r-guard --only conflict-marker-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
      "class": "within",
      "why": "Restates D3 and D4 (the suite is the replay; the shell entry leaves in the commit that adds the decider) and enforces FR-002 and FR-003. The red exit is a process stop and changes no requirement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T024": {
+   "section_sha256": "dab18d142ac950a7aabbf8695ab73f605bf91200e4ff0901118526c4c23bea97",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) the guard in-process",
+     "summary": "The guard's inline Python and the own-make question (lib/own-make.sh) move into the Rust decider, read from /proc by pid; the refusals' words stay the shell's.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/, the libraries its guards call and the inline Python under scripts/hooks/ in phase 1, so this is the port itself. Keeping the refusal words is FR-002's same outputs; reading /proc rather than shelling out is how FR-007's one process is reached, and the suite replay (D4) decides whether the verdicts held."
+    },
+    {
+     "id": "(b) the tree check stays a phase-2 piece",
+     "summary": "The ported guard calls scripts/gates/preflight.py --tree-check by path, only while a gate is running, instead of taking that check into Rust with the guard.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Classed narrowing because the guard's decision path still runs Python after the guard is called ported, and FR-001's phase 1 clause 'the libraries its guards call' could be read to reach this file. It stands on the accepted spec, not on the block's 'two answers to one question', which is a consistency argument and carries nothing. FR-001 names 'the gate's scripts under scripts/gates/' for phase 2, its census puts each file in one phase, and it fixes the phases' order; porting the file now would run phase 2's piece ahead of that order, and a Rust copy for the guard beside the Python the gate still runs is the 'both' FR-003 forbids. Against the GM's request ('should probably all be ported to Rust') nothing is exempted: the file stays in the port and SC-005's closing census must return nothing, so this is sequence rather than a carve-out. Purpose: the request's complaint is Python's cost, and 'only while a gate is running' keeps the ordinary tool call Python-free. The ruling depends on that qualifier, read by the author from the shell on 2026-11-08 and not verifiable here because the bundle forbids the repository; a guard that asked preflight outside a gate run is outside this ruling."
+    },
+    {
+     "id": "(c) no process while no gate runs (unlabeled, in (a))",
+     "summary": "A Bash call and an edit start no process while no gate runs; the only child process the guard ever starts is the tree check during a gate run.",
+     "class": "within",
+     "why": "The block does not name FR-007 (guards run as one process for a tool call, not one per guard), which is the requirement this touches. On a plain reading FR-007 is about one process per guard, and one guard's single child during a gate run, for the gate's own check under (b), is not that. The no-gate case satisfies FR-007 outright and serves SC-001."
     }
    ],
    "verdict": "CLEAR"
