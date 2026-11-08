@@ -1,0 +1,51 @@
+{
+  "utc": "2026-11-08T11:53:30Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 73,
+  "result": "failed: hooks-test",
+  "commit": "1fe9c0908",
+  "first_failure_s": 2.6,
+  "last_failure_s": 2.6,
+  "host": {
+    "load": [
+      2.06,
+      5.51
+    ],
+    "mem_avail_mb": [
+      8932,
+      9130
+    ],
+    "cpu_temp_c": [
+      101.0,
+      103.0
+    ],
+    "stall_s": {
+      "cpu": 3.4,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 17280,
+      "package": 10204
+    }
+  },
+  "phases": {
+    "preflight": 4.0,
+    "reference": 0.0,
+    "hooks-test": 3.0,
+    "static": 16.0,
+    "format": 1.0,
+    "typecheck": 0.0,
+    "counters-inert": 16.0,
+    "seeds": 5.0,
+    "pytest": 47.0,
+    "floors": 2.0,
+    "test-full": 54.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "22 engine file(s) and 1 test module(s) changed, 9 scripts/ file(s) (205 module(s) that read scripts/), 22 Rust file(s) (13 test module(s) that read them), 19 non-module file(s) under tests/ (42 test module(s) that can read them)",
+  "selected": 1155,
+  "collected": 1155
+}
