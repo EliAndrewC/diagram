@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-08T21:23:34Z",
+  "target": "plan-gate push",
+  "commit": "afb8059a8",
+  "why": "the round arbiter's accept on ask:449-T053-round3 stands as this block's review and says of the purge sentence added after it: that narrow change is covered by this ruling"
+}
