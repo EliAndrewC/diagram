@@ -1,0 +1,56 @@
+{
+  "utc": "2026-11-08T04:55:02Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 81,
+  "result": "failed: test-full",
+  "commit": "afc7c804e",
+  "first_failure_s": 42.8,
+  "last_failure_s": 66.6,
+  "failed_tests": 3,
+  "failed_names": [
+    "tests/tooling/ci/test_sparse_checkout.py::test_nothing_the_gate_runs_reads_an_excluded_path",
+    "tests/tooling/test_claims_coverage.py::test_every_unit_in_scope_carries_a_claim",
+    "tests/tooling/test_no_deleted_engine.py::test_no_kept_file_names_a_deleted_package"
+  ],
+  "host": {
+    "load": [
+      7.63,
+      7.35
+    ],
+    "mem_avail_mb": [
+      8606,
+      8705
+    ],
+    "cpu_temp_c": [
+      99.0,
+      104.0
+    ],
+    "stall_s": {
+      "cpu": 1.2,
+      "io": 0.7,
+      "io_full": 0.7,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 78250,
+      "package": 30501
+    }
+  },
+  "phases": {
+    "preflight": 24.0,
+    "reference": 0.0,
+    "static": 10.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "seeds": 7.0,
+    "hooks-test": 23.0,
+    "counters-inert": 1.0,
+    "pytest": 51.0,
+    "test-full": 56.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "15 engine file(s) and 4 test module(s) changed, 4 scripts/ file(s) (206 module(s) that read scripts/), 15 Rust file(s) (11 test module(s) that read them), 3 non-module file(s) under tests/ (200 test module(s) that can read them)",
+  "selected": 1280,
+  "collected": 1280
+}
