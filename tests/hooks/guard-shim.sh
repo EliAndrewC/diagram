@@ -24,4 +24,7 @@ real=$(getent passwd "$(id -u)" | cut -d: -f6)
 tree=${here%/tests/hooks}
 export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tree##*/}}"
 [ -x "$real/.cargo/bin/cargo" ] && export L7R_GUARD_CARGO="${L7R_GUARD_CARGO:-$real/.cargo/bin/cargo}"
+# ...and rustup's own homes, which its cargo proxy reads from HOME to choose a toolchain (T010: a suite that moves HOME left the
+# build with "rustup could not choose a version of cargo to run")
+export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}"
 exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"

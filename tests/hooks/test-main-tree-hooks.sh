@@ -11,7 +11,8 @@
 # rebuilt. (3) The correct work the old guard refused: the corpus, replayed, with ZERO refusals.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/main-tree-hooks.sh"
+# feature 449 T010: the guard is Rust - the link `main-tree-hooks.sh` beside this suite runs `l7r-guard --only main-tree-hooks`
+HOOK="$HERE/main-tree-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT

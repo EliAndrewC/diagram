@@ -299,5 +299,18 @@
       "suite_cases": 115,
       "suite_passed_against_rust": 115
     }
+  },
+  "main-tree-hooks-ported": {
+    "quantity": "a Bash `ls`'s cost in the main-tree guard, the shell's against the Rust dispatcher carrying it beside pair, gate, measure and no-poll (T010)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/main-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair, gate, measure, no-poll, main-tree], on a sample PreToolUse JSON for a Bash `ls`",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, measured beside a running hooks-test",
+    "value": {
+      "shell_ms": 60.7,
+      "rust_dispatcher_ms": 10.5,
+      "suite_cases": 87,
+      "suite_passed_against_rust": 87
+    }
   }
 }

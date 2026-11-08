@@ -158,9 +158,9 @@
    "declared": "spec-fidelity"
   },
   "### T010 Approach (checklist part A)": {
-   "sha256": "06e6981c66dcce87cd2093ea55eace4955981f9319176a44c6c62c3ab83ae2e3",
+   "sha256": "5c79606f8fc7ad8947728a5613ef25b34a9d3c2be79a8b75221b2c500ffebe21",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T011 Approach (checklist part A)": {
@@ -1323,6 +1323,40 @@
      "why": "FR-002 scopes equivalence to every case the tests and suites hold, and D4 makes the suite the replay; the decision meets that bound, preserves the skip-on-uncompilable behavior, and states plainly that divergence outside the suite is not covered - which is the spec's own bound, not a carve-out from it. A Rust port cannot use Python's re, so a different engine is inherent to the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T010 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T010 (a)",
+     "summary": "The verdict library scripts/hooks/lib/hm_tree.py (judge, explain, log context) is ported whole, each pattern verbatim, to rust/guard/src/shared/tree.rs, shared with gm-tree-hooks, which moves to it in its own task.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and FR-002 asks for the same verdicts; porting the library the verdict comes from, verbatim, is how the guard is ported. Done-measured deletes only main-tree-hooks.sh and its settings entry, so hm_tree.py stays for gm-tree-hooks until that guard's own replacement passes (FR-003, D3)."
+    },
+    {
+     "id": "T010 (b)",
+     "summary": "The session's clone comes from T003's session facts through the same resolver ported (claim map, last /rename, sessions json), not from spawning clone-sync-hooks.sh resolve.",
+     "class": "within",
+     "why": "The same resolution with the same inputs, run in the one guard process FR-007 requires; FR-002's suite replay (D4) checks the verdicts."
+    },
+    {
+     "id": "T010 (c)",
+     "summary": "The mirror root comes from walking up to the nearest .git (T006's find_root) and cutting at /.clones/, not from git rev-parse --show-toplevel.",
+     "class": "within",
+     "why": "A mechanism change stated to give the same answer, which the suite replay must confirm before the switch (FR-002, D4). It narrows nothing that was asked."
+    },
+    {
+     "id": "T010 (d)",
+     "summary": "The refusal and the rewrite's context name rust/guard/src/guards/main_tree_hooks.rs instead of scripts/hooks/main-tree-hooks.sh, which this task deletes; no verdict changes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-002's 'same outputs', and the only exception FR-002 names is the XIV fix, so it is judged as a carve-out. Applied literally, the rule would make the guard send a refused session to a file this same commit deletes. That defeats what the message is for, which is telling the reader where the rule lives. It does not reach what FR-002 is for, proving the port changes no decision, because only the self-referencing path changes and every verdict and all other text stay as they are. The precedent is T006. If a suite case asserts the path, its expected text changes in the same commit and the commit must name that change."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1658,6 +1692,39 @@
      "summary": "self_matching compiles the command's pgrep -f pattern with fancy-regex instead of Python re, skips a pattern it cannot compile as the Python skipped one re could not, and rests dialect-divergence detection on the suite replay",
      "class": "within",
      "why": "FR-002 scopes equivalence to every case the tests and suites hold, and D4 makes the suite the replay; the decision meets that bound, preserves the skip-on-uncompilable behavior, and states plainly that divergence outside the suite is not covered - which is the spec's own bound, not a carve-out from it. A Rust port cannot use Python's re, so a different engine is inherent to the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T010": {
+   "section_sha256": "5c79606f8fc7ad8947728a5613ef25b34a9d3c2be79a8b75221b2c500ffebe21",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T010 (a)",
+     "summary": "The verdict library scripts/hooks/lib/hm_tree.py (judge, explain, log context) is ported whole, each pattern verbatim, to rust/guard/src/shared/tree.rs, shared with gm-tree-hooks, which moves to it in its own task.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and FR-002 asks for the same verdicts; porting the library the verdict comes from, verbatim, is how the guard is ported. Done-measured deletes only main-tree-hooks.sh and its settings entry, so hm_tree.py stays for gm-tree-hooks until that guard's own replacement passes (FR-003, D3)."
+    },
+    {
+     "id": "T010 (b)",
+     "summary": "The session's clone comes from T003's session facts through the same resolver ported (claim map, last /rename, sessions json), not from spawning clone-sync-hooks.sh resolve.",
+     "class": "within",
+     "why": "The same resolution with the same inputs, run in the one guard process FR-007 requires; FR-002's suite replay (D4) checks the verdicts."
+    },
+    {
+     "id": "T010 (c)",
+     "summary": "The mirror root comes from walking up to the nearest .git (T006's find_root) and cutting at /.clones/, not from git rev-parse --show-toplevel.",
+     "class": "within",
+     "why": "A mechanism change stated to give the same answer, which the suite replay must confirm before the switch (FR-002, D4). It narrows nothing that was asked."
+    },
+    {
+     "id": "T010 (d)",
+     "summary": "The refusal and the rewrite's context name rust/guard/src/guards/main_tree_hooks.rs instead of scripts/hooks/main-tree-hooks.sh, which this task deletes; no verdict changes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-002's 'same outputs', and the only exception FR-002 names is the XIV fix, so it is judged as a carve-out. Applied literally, the rule would make the guard send a refused session to a file this same commit deletes. That defeats what the message is for, which is telling the reader where the rule lives. It does not reach what FR-002 is for, proving the port changes no decision, because only the self-referencing path changes and every verdict and all other text stay as they are. The precedent is T006. If a suite case asserts the path, its expected text changes in the same commit and the commit must name that change."
     }
    ],
    "verdict": "CLEAR"

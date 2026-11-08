@@ -16,6 +16,7 @@ pub fn guards() -> Vec<Guard> {
         guards::gate_hooks::GUARD,
         guards::measure_hooks::GUARD,
         guards::no_poll_hooks::GUARD,
+        guards::main_tree_hooks::GUARD,
     ]
 }
 
@@ -144,7 +145,13 @@ mod tests {
         assert!(bad.code == 1 && bad.stderr.contains("not JSON"));
         assert!(
             guards().iter().map(|g| g.name).collect::<Vec<_>>()
-                == ["pair-hooks", "gate-hooks", "measure-hooks", "no-poll-hooks"]
+                == [
+                    "pair-hooks",
+                    "gate-hooks",
+                    "measure-hooks",
+                    "no-poll-hooks",
+                    "main-tree-hooks"
+                ]
         );
     }
 }
