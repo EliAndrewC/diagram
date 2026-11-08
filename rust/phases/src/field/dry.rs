@@ -90,6 +90,7 @@ pub struct DryPlot {
 ///     the last band from the canal's start - GUESS: research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html silent on where along the canal the last of the plots stands; from its start, along it, until the need is met
 ///     the climb's bound - NONE: `MAX_BANDS`, a guard far past any canvas; the caller's `most_bands` the climb's own bound
 ///     a plot onto rice dropped - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot that would lap onto another canal's rice is dropped
+///     the settlement's ground kept - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so a strip still on their ground past the push behind is dropped, not pushed further
 #[expect(
     clippy::too_many_arguments,
     reason = "the hem's line, side, need, field, water, clearance, seed and tag"
@@ -230,7 +231,7 @@ pub fn hem(
 ///
 /// Research:
 ///     the dry fields behind the houses - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem drawn behind the settlement where it stands on the paddy's high edge, the houses between the canal and the dry fields; just upslope of the canal along the rest
-///     the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground, at most the ground's own diagonal and a strip past it
+///     the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground and no corner of the ground stands in the strip, at most the ground's own diagonal and a strip past it
 fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut u64) -> f64 {
     if keep.is_empty() {
         return 0.0;
@@ -260,6 +261,9 @@ fn past_keep(a: (Pt, Pt), b: (Pt, Pt), depth: f64, keep: &[Vec<Pt>], tests: &mut
 
 /// Whether a strip `poly` stands on the settlement's ground `keep`: its middle or a corner inside a ground's ring, or a ground's
 /// corner inside the strip (a box set askew pokes its corner into a strip whose own corners clear it); each test counted.
+///
+/// Research:
+///     the overlap - NONE: a test of whether two grounds overlap; its callers decide what stays off the settlement's ground
 fn on_keep(poly: &[Pt], middle: Pt, keep: &[Vec<Pt>], tests: &mut u64) -> bool {
     *tests += keep.iter().map(|k| 5 + k.len() as u64).sum::<u64>();
     keep.iter().any(|k| {

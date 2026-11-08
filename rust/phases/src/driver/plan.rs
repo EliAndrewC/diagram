@@ -14,7 +14,10 @@ use crate::water_frame::{admitted, roll_plan};
 /// The water frame's 21 knobs in the order they roll, each with its table (a table's weights its repeated entries) and branch.
 ///
 /// Research:
-///     the knobs' tables - GUESS: rolled per hamlet from their tables, each table's own claim in the deleted `hamletgen/consts*.py` (feature 444 T19), carried here as they stood
+///     the knobs' tables - GUESS: rolled per hamlet from their tables, carried from the deleted `hamletgen/consts*.py` (feature 444 T19); where the page records a table it is cited below
+///     the farm water - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records a channel or a well at even odds as a guess
+///     the grain drift - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: eight degrees either way on a hamlet's
+///     the lane and cluster-shape forms - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records each form as a guess
 ///     the settlement form's shares - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: half clustered, three in ten scattered, two in ten as rows
 pub const KNOBS: [(&str, &[&str], &str); 21] = [
     (
@@ -77,13 +80,25 @@ pub const KNOBS: [(&str, &[&str], &str); 21] = [
 ///     the polder archetypes - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid diked out of standing water
 pub const POLDERS: [&str; 2] = ["polder_grid", "mulberry_dike_fishpond"];
 
-/// A dike-pond block's arrangement, its dikes' crop, what its leftover parcels hold and its fry ponds, rolled where the spec is silent.
+/// A dike-pond block's arrangement, rolled where the spec is silent.
 ///
 /// Research:
-///     the dike-pond's forms - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block's ponds and dikes; each form rolled per hamlet from its table (the deleted `POND_LAYOUTS`, `DIKE_CROPS`, `LEFTOVER_FORMS`, `FRY_FORMS`), its shares its repeated entries, a GUESS
+///     the dike-pond's layout - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html shows a dike-pond block's ponds and dikes but not their arrangement; mosaic two in three, grid one (the deleted `POND_LAYOUTS`)
 const POND_LAYOUTS: [&str; 3] = ["mosaic", "mosaic", "grid"];
+/// The dikes' crop.
+///
+/// Research:
+///     the dike crop's shares - GUESS: the page names no crop on the dikes; mulberry three in six, fruit two, tea one (the deleted `DIKE_CROPS`)
 const DIKE_CROPS: [&str; 6] = ["mulberry", "mulberry", "mulberry", "fruit", "fruit", "tea"];
+/// What a dike-pond block's leftover parcels hold.
+///
+/// Research:
+///     the leftover parcels - GUESS: the page silent on them; rice or pond at even odds (the deleted `LEFTOVER_FORMS`)
 const LEFTOVER_FORMS: [&str; 2] = ["rice", "pond"];
+/// Whether a dike-pond hamlet keeps a fry-pond village.
+///
+/// Research:
+///     the fry ponds - GUESS: the page silent on them; one dike-pond hamlet in four (the deleted `FRY_FORMS`)
 const FRY_FORMS: [&str; 4] = ["none", "none", "none", "fry_village"];
 /// The fan's aspect, rolled.
 ///
@@ -100,11 +115,15 @@ const HEAD_LEAD: [f64; 3] = [80.0, 105.0, 130.0];
 /// Research:
 ///     band area - GUESS: no source could speak to it, a value of ours (feature 417 T36 pass P7, 2026-10-25); households times this squared
 const HOMESTEAD_GROUND_FT: f64 = 104.0;
-/// The seat's standoff and the belt's reach (ft), the room the canvas keeps on every side.
+/// The seat's standoff (ft), the room the canvas keeps on every side.
 ///
 /// Research:
 ///     the seat's room - GUESS: the deleted `SEAT_STANDOFF` 12 ft and `BELT_REACH` 146 ft, the belt's band 100 ft deep inside the drawn 80 to 120 ft (0071), a convention
 const SEAT_STANDOFF: f64 = 12.0;
+/// The shelter belt's reach behind the windward fringe (ft).
+///
+/// Research:
+///     the belt's reach - GUESS: the deleted `BELT_REACH` 146 ft; research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html gives only a stand within 150 ft of a farmhouse, not this reach
 const BELT_REACH: f64 = 146.0;
 /// A fan's overhang of its square, carried on every side of the canvas.
 ///
@@ -114,7 +133,7 @@ const FAN_OVERHANG: f64 = 0.22;
 /// The back within 45 degrees of the wind.
 ///
 /// Research:
-///     the back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind, within 45 degrees
+///     the back to the wind - GUESS: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html lays the settlement out with its back to the wind but gives no tolerance; within 45 degrees (the deleted `WIND_BACK_MIN_DOT`); it gates the seat's margin, not the fall
 pub const WIND_BACK_MIN_DOT: f64 = std::f64::consts::FRAC_1_SQRT_2;
 
 /// The resolved plan.
@@ -148,6 +167,9 @@ pub struct Plan {
 
 impl Plan {
     /// A rolled knob's form, as its table holds it.
+    ///
+    /// Research:
+    ///     the knob's form - NONE: a lookup of what was rolled
     #[must_use]
     pub fn knob(&self, name: &str) -> &str {
         self.rolled.get(name).map_or("", String::as_str)
@@ -219,7 +241,9 @@ pub fn canvas_side(households: u32, shape: &str) -> f64 {
 /// Research:
 ///     the fall backs the wind - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)
 ///     regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the northwest unless declared
-///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's flow taken as its fall
+///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's flow taken as its fall, always - the page's "unless the hamlet declares one" is not read, since no spec carries a declared bearing (the easier route, taken 2026-11-08)
+///     no brook knobs on a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder diked out of standing water has no brook, so no intake or brook side is rolled
+///     the field's archetype - GUESS: a valley paddy unless the map declares another; a polder only when asked
 #[must_use]
 pub fn plan(spec: &Spec) -> Plan {
     let archetype = spec

@@ -2,7 +2,8 @@
 //! foot a unit, the layers in draw order, the palette the Python held.
 //!
 //! Research:
-//!     the field's paint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention
+//!     the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each
+//!     drawn figure are claimed where they are chosen
 
 use std::fmt::Write as _;
 
@@ -12,6 +13,7 @@ use crate::field::fan::Pt;
 ///
 /// Research:
 ///     the palette - CONVENTION: the deleted engine's inks, carried as they stood
+///     the wet paddy's tint - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the wet paddy tinted blue-green, the tint marking the ground
 pub mod ink {
     pub const LAND: &str = "#EFE3C2";
     pub const RICE_GREEN: &str = "#A6C398";
@@ -53,7 +55,7 @@ pub const BUND_W: f64 = 1.5;
 ///
 /// Research:
 ///     furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows
-///     furrow spacing - GUESS: 5 ft between rows (the deleted `_draw_furrows`)
+///     furrow spacing - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html records 5 ft between rows as a guess (the deleted `_draw_furrows`)
 pub const ROW_FT: f64 = 5.0;
 
 /// An SVG under construction: the elements in draw order, and the box of everything drawn (for the crop).
@@ -158,6 +160,9 @@ impl Svg {
     }
 
     /// A reed cover: the ring filled with the reed tile, unstroked.
+    ///
+    /// Research:
+    ///     the reed glyph - CONVENTION: the deleted engine's reed tile, a repeated reed mark filling the cover
     pub fn reeds(&mut self, ring: &[Pt]) {
         self.polygon(ring, "url(#reed-ticks)", None);
     }
@@ -165,6 +170,9 @@ impl Svg {
     /// A ground kept for what a later stage draws: its ring dashed, unfilled, and its name at its middle - the partial map's mark
     /// for the settlement the homesteads will fill (feature 444 amendment 11, the cut before them); it frames the crop, so the
     /// ground it keeps is on the sheet.
+    ///
+    /// Research:
+    ///     the placeholder - CONVENTION: a dashed outline 4 ft wide (24 on, 16 off) and a serif label 56 ft high at its centroid
     pub fn reserved(&mut self, ring: &[Pt], stroke: &str, name: &str) {
         if ring.len() < 3 {
             return;
@@ -191,6 +199,9 @@ impl Svg {
 
     /// A channel tapering from `w0` at its head to `w1` at its tail: one piece a segment, each at the width its arc-length middle
     /// carries (`sqrt(w0^2 + (w1^2 - w0^2) t)`, the deleted `taper_w`), one path where the taper is under 0.2 ft.
+    ///
+    /// Research:
+    ///     a channel's taper - UNRESEARCHED: its width squared growing linearly from head to tail, the deleted `taper_w`
     pub fn taper(&mut self, pts: &[Pt], stroke: &str, w0: f64, w1: f64) {
         if (w1 - w0).abs() < 0.2 || pts.len() < 3 {
             self.line(pts, stroke, w0.max(w1));
@@ -215,6 +226,10 @@ impl Svg {
 
     /// A dry plot: its ring in the crop's fill with its edge, and its ridged rows `ROW_FT` apart at `theta` (radians), each cut
     /// to the plot by a clip path - the deleted `_draw_furrows`.
+    ///
+    /// Research:
+    ///     furrowed rows - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: every dry plot drawn in ridged rows, `ROW_FT` apart (a GUESS there)
+    ///     the furrow's stroke - CONVENTION: a 0.8 ft line at 0.8 opacity, so the rows read under the crop's fill
     pub fn furrowed(
         &mut self,
         ring: &[Pt],
@@ -298,6 +313,9 @@ impl Svg {
     }
 
     /// The document, cropped to what was drawn and `margin` feet round it, inside the canvas `w` by `h`.
+    ///
+    /// Research:
+    ///     the ground's color - CONVENTION: the land drawn in `ink::LAND` beneath everything
     #[must_use]
     pub fn finish(&self, w: f64, h: f64, margin: f64) -> String {
         let [x0, y0, x1, y1] = self.bbox.unwrap_or([0.0, 0.0, w, h]);

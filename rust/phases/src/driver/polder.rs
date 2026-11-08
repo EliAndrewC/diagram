@@ -20,11 +20,35 @@ use crate::waterward::{fringe, Fringe};
 /// Research:
 ///     the polder's paint - CONVENTION: the deleted engine's dike, crown, bank and sluice inks, carried as they stood
 pub(super) const DIKE_EARTH: &str = "#B79B68";
+/// The dike's edge.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const DIKE_EDGE: &str = "#9C8150";
+/// A pond's bank.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const BANK_FILL: &str = "#A9AE7C";
+/// A fry pond's water.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const NURSERY_WATER: &str = "#A7B3AE";
+/// The sluice gate's fill and edge.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const SLUICE: (&str, &str) = ("#8C7A5A", "#5A4A32");
+/// The tea hedge's line.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 const HEDGE: &str = "#5E7C40";
+/// A dike crown's color by its crop.
+///
+/// Research:
+///     the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood
 pub(super) fn crown_fill(crop: &str) -> &'static str {
     match crop {
         "willow" => "#6E8B4A",
@@ -33,11 +57,15 @@ pub(super) fn crown_fill(crop: &str) -> &'static str {
         _ => "#87A45C",
     }
 }
-/// The waterside strip's half-breadth at a cut and its depth off the dike (ft).
+/// The waterside strip's half-breadth at a cut (ft).
 ///
 /// Research:
-///     the reed strips - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: reeds on the flanks of a dike that face the water; the deleted waterward stage's 15 ft cut and 280 ft depth, each a GUESS there
+///     the strip's cut - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html puts reeds on the water-facing flanks but records no width; the deleted waterward stage's 15 ft
 const STRIP_CUT_HW: f64 = 15.0;
+/// The waterside strip's depth off the dike (ft).
+///
+/// Research:
+///     the strip's depth - GUESS: the page records no depth; the deleted waterward stage's 280 ft
 const STRIP_DEPTH: f64 = 280.0;
 /// The polder (stage 2 on a polder archetype): the block, its dike, outfall, resting plots and pocket pond, and on a dike-pond its
 /// conversion (`field::staged::polder_stage`), each knob it reads rolled as the deleted polder stage rolled it.
@@ -45,6 +73,7 @@ const STRIP_DEPTH: f64 = 280.0;
 /// Research:
 ///     the polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies
 ///     the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)
+///     the paddy's rest - GUESS: settled 0.8 and unsettled 0.2, a knob between the two forms (the registry's `paddy_rest`)
 fn stage_polder(p: &Plan) -> PolderStage {
     let pinned = |name: &str, forms: &[&str], weights: &[f64]| -> String {
         p.pins.get(name).cloned().unwrap_or_else(|| {

@@ -203,7 +203,7 @@ fn int(v: Option<&Value>) -> Option<i64> {
 /// When the text is not an object, or `name` or `seed` is missing, or `households` lies outside 10-20.
 ///
 /// Research:
-///     households at a hamlet's size - NONE: the hamlet tier's ten to twenty households, the deleted `HamletSpec`'s bounds; 15 unless the spec says
+///     households at a hamlet's size - GUESS: the hamlet tier's ten to twenty households, the deleted `HamletSpec`'s bounds, 15 unless the spec says; no page sets the tier's bounds
 pub fn parse(text_in: &str) -> Result<Spec, SpecError> {
     let o = object(text_in)?;
     let name = text(o.get("name")).ok_or_else(|| SpecError("`name` is required".into()))?;

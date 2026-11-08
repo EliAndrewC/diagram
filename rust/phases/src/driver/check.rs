@@ -41,7 +41,7 @@ fn mean(ring: &[Pt]) -> Pt {
 ///
 /// Research:
 ///     no dry plot on the paddy - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry fields stand beyond the paddy, along the canal's high side
-///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots laid clear of the field's ditches, the brook and the pond
+///     no dry plot on the water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')
 ///     no dry plot on another - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid end to end, each its own ground
 ///     the tameike off the paddy - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot, below it
 ///     the settlement off the field - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the houses on the field's margin, beside the paddy
@@ -153,6 +153,7 @@ pub fn check(r: &Rolled) -> Vec<String> {
 ///
 /// Research:
 ///     no dry plot in the reeds - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots laid clear of the water and the pond's ground
+///     no dry plot on the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`)
 fn reed_checks(r: &Rolled) -> Vec<String> {
     let ground: Vec<Vec<Pt>> = r
         .seated

@@ -104,7 +104,7 @@ pub use crate::counts::tally;
 /// Research:
 ///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
-///     the back to the hill where the wind cannot be backed - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)
+///     the back to the hill where the wind cannot be backed - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html weighs no hill against the wind - its rolled falls run away from the wind or square across it; 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();
     let (spacing, half, bend) = inp.ford;

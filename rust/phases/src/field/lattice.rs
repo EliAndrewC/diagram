@@ -348,6 +348,7 @@ fn row_basins(
 ///
 /// Research:
 ///     the comb - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the bunds converging toward the drain
+///     the row's form - GUESS: the deleted engine's fallback order - askew with its triangles, then askew, then square - and a planned field's rows always square
 #[must_use]
 pub fn basins_counted(
     fan: &Fan,

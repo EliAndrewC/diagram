@@ -371,6 +371,7 @@ fn water(
 ///     the grave once a map - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: about three maps in ten draw a grave in the fields - rolled once, on the first field
 ///     the grave off the pond's plot - GUESS: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html silent on a grave beside a pocket pond; never in the pond's plot
 ///     the hem later - NONE: each field built without its dry plots; `build` hands the first one's hem on once every field stands, and the hem stage lays it after the seat (T28)
+///     the lattice's form - NONE: the form the `plot_regularity` knob rolled (its claim is `driver::FIELD_KNOBS`'), organic where the knob is absent
 fn one(
     inp: &FieldIn,
     f: &Fan,

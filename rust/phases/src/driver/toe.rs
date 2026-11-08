@@ -11,12 +11,16 @@ use std::collections::HashMap;
 use crate::field::fan::Pt;
 use crate::seat::tally;
 
-/// The toe band's pad above the lowest field, and the bleed past the canvas (ft).
+/// The toe band's pad: its edge above the lowest field, and its margin past the fields each side (ft).
 ///
 /// Research:
 ///     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: 90 ft above the local lowest field
-///     its bleed - CONVENTION: 120 ft past the canvas edge, sizes on the sheet, not in the world
+///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: as wide as the fields plus 90 ft each side
 pub const PAD: f64 = 90.0;
+/// The bleed past the canvas edge (ft).
+///
+/// Research:
+///     its bleed - CONVENTION: 120 ft past the canvas edge, sizes on the sheet, not in the world
 const BLEED: f64 = 120.0;
 
 /// The reed-marsh toe: the wet band below the fields, laid across the fall, its inner edge `PAD` above the local lowest field
@@ -24,6 +28,9 @@ const BLEED: f64 = 120.0;
 /// the canvas - the deleted `toe_band`, read from the fields' rings.
 ///
 /// Research:
+///     toe band edge - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations
+///     toe band width - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: the fields' cross-slope span and `PAD` each side, clipped to the bled canvas
+///     flaring flanks - research/questions/0057-marshes-and-wetlands-shitchi.drawing.html: part of the straight-band deviation, the band's ends bow outward downhill to the canvas's far edge
 ///     flare size - GUESS: each side out to 1.5 pad past the shoulder on a t**1.6 profile
 ///     its search steps - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N11, 2026-10-25) - a cross-slope station every 24 ft at least, the flank sampled at fifths
 #[must_use]
@@ -137,7 +144,7 @@ pub(crate) fn toe_band(
 /// `ring_offset`'s round-joined offset, kept to a vertex a corner.
 ///
 /// Research:
-///     the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft, the way out keeping its own width off the wet
+///     the ring's offset - NONE: geometry, the ring grown by the width its caller hands it (the lane's 8 ft is `driver::LANE_FT`'s claim)
 #[must_use]
 pub(crate) fn grow(ring: &[Pt], by: f64, counts: &mut HashMap<String, u64>) -> Vec<Pt> {
     let len = ring.len();

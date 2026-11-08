@@ -30,69 +30,103 @@ use crate::waterward::Fringe;
 use plan::Plan;
 use svg::{ink, Svg, BUND_W};
 
-/// The brook's figures handed the field: the offtake's angle, the tap's run, the slew, the skirt, the wander and the station
-/// spacing (ft and degrees), and its drawn width.
+/// The head race's angle off the brook (degrees).
 ///
 /// Research:
-///     the brook's course - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a brook wanders and slews down its valley; the figures the deleted `consts_water.py` held, each its own GUESS there
-///     the brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft
+///     the offtake's angle - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html records the head race leaving the brook at 35 degrees as a guess; the deleted `consts_water.py`'s figure
 const OFFTAKE_DEG: f64 = 35.0;
+/// The brook's course: the tap's straight run, the most it moves across in one station, its skirt past the fan, its wander past
+/// the skirt and the spacing of its stations (ft).
+///
+/// Research:
+///     the brook's course - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html says a brook wanders and slews down its valley but gives no figures; these are the deleted `consts_water.py`'s, each its own GUESS there
 const BROOK_TAP_RUN: f64 = 70.0;
+/// Research:
+///     the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the slew a station
 const BROOK_SLEW: f64 = 22.0;
+/// Research:
+///     the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the skirt past the fan
 const BROOK_SKIRT: f64 = 34.0;
+/// Research:
+///     the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the wander past the skirt
 const BROOK_WANDER: f64 = 10.0;
+/// Research:
+///     the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the spacing of the stations the slew is measured across
 const BROOK_STATION: f64 = 20.0;
+/// The brook's drawn width (ft).
+///
+/// Research:
+///     the brook's width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft
 pub const BROOK_W: f64 = 5.25;
-/// The weir's skew off square across the brook, and its thickness by form (ft).
+/// The weir's skew off square across the brook (degrees).
 ///
 /// Research:
 ///     the weir's skew - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir drawn across the whole brook, diagonally upstream
-///     the weir's thickness by form - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: four forms, 1.5 to 5 ft thick
-///     the weir keyed into the banks - GUESS: the page silent on how far a weir runs into each bank; a foot either side
 const WEIR_SKEW_DEG: f64 = 30.0;
+/// How far the weir is keyed into each bank (ft).
+///
+/// Research:
+///     the weir keyed into the banks - GUESS: the page silent on how far a weir runs into each bank; a foot either side
 const WEIR_KEY_FT: f64 = 1.0;
 /// A basin's cell share along its canal (ft).
 ///
 /// Research:
 ///     a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft
 const CELL_SHARE: f64 = 31.0;
-/// The sink's figures: the drain's run at the collector's outfall width, the reeds' width out from the pond's shore and the
-/// brook's length below a confluence (ft).
+/// The drain's run, drawn at the collector's outfall width (ft).
 ///
 /// Research:
 ///     the drain's run drawn - research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class, at the collector's own outfall width, 5.5 ft (the deleted `DRAIN_FT`)
-///     the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore
-///     the brook below a confluence - GUESS: the deleted `BROOK_JOIN_TRUNK`, 150 ft so the junction reads
 const RUN_W: f64 = 5.5;
+/// The reeds' width out from the pond's shore (ft).
+///
+/// Research:
+///     the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore
 const REED_FT: f64 = 44.0;
+/// The brook drawn below a confluence (ft).
+///
+/// Research:
+///     the brook below a confluence - GUESS: the deleted `BROOK_JOIN_TRUNK`, 150 ft so the junction reads
 const JOIN_TRUNK: f64 = 150.0;
 /// The ink of a ground kept for a stage past the cut.
 ///
 /// Research:
 ///     the placeholder's ink - CONVENTION: a dark brown that reads on the land and the paddy alike
 const RESERVED_INK: &str = "#5A3E22";
-/// The fords' spacing along the brook, their half-length and the bend past which a reach is no crossing place; the tameike's berth
-/// the way out keeps (ft, degrees).
+/// The fords' spacing along the brook, their half-length and the bend past which a reach is no crossing place (ft, degrees).
 ///
 /// Research:
 ///     the fords - GUESS: the deleted `FORD_SPACING` 160 ft, `FORD_HALF` 30 ft and `FORD_BEND_DEG` 20, a crossing place every so far along a straight reach
-///     tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
-///     the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft
 const FORD: (f64, f64, f64) = (160.0, 30.0, 20.0);
+/// The berth the way out keeps from the tameike (ft).
+///
+/// Research:
+///     tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft
 const POND_BERTH: f64 = 80.0;
+/// How far wet ground is grown for the way out round it (ft).
+///
+/// Research:
+///     the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft
 const LANE_FT: f64 = 8.0;
-/// The settlement's ground behind the seat's margin: its standoff and the belt's far edge (ft).
+/// The settlement's standoff behind the seat's margin (ft).
 ///
 /// Research:
-///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields where the settlement stands, the dry fields behind it
-///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too
+///     the settlement's standoff - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html gives the order (the paddy, the houses, the dry fields) but no distance; 12 ft
 const STANDOFF_FT: f64 = 12.0;
-const BELT_FAR_FT: f64 = 146.0;
-/// A dry plot's edge, and each crop's fill and furrow.
+/// How far the settlement's ground reaches toward its belt (ft).
 ///
 /// Research:
-///     the crops' paint - CONVENTION: the deleted engine's `CROP_FILL` and `CROP_FURROW`, each crop at its ripe or summer color (0006)
+///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too
+const BELT_FAR_FT: f64 = 146.0;
+/// A dry plot's outline: its ink and width (ft).
+///
+/// Research:
+///     the plot's outline - CONVENTION: a tan-brown line 1.4 ft wide round each dry plot, the deleted engine's (research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html)
 const DRY_EDGE: (&str, f64) = ("#A98C58", 1.4);
+/// Each crop's fill and furrow.
+///
+/// Research:
+///     the crops' paint - CONVENTION: the deleted engine's `CROP_FILL` and `CROP_FURROW`, each crop at its ripe or summer color - barley tan-gold, millet ochre, buckwheat pale with reddish stems, soy green (research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html)
 fn crop_ink(crop: &str) -> (&'static str, &'static str) {
     match crop {
         "millet" => ("#C29A55", "#8E6E36"),
@@ -159,6 +193,12 @@ pub struct Rolled {
     pub svg: String,
 }
 
+/// The field's inputs from the plan: its knobs as they roll, the weir, the rows and the cell.
+///
+/// Research:
+///     the weir's thickness by form - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: four forms, 1.5 to 5 ft thick
+///     the weir across the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a weir drawn across the whole brook, so its half-length spans the brook on its skew, with its key into each bank
+///     a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: the cell the row's spacing times the share along the canal (`CELL_SHARE`'s)
 fn field_in(p: &Plan) -> FieldIn {
     let knobs: Vec<KnobIn> = FIELD_KNOBS
         .iter()
@@ -214,6 +254,10 @@ fn field_in(p: &Plan) -> FieldIn {
     }
 }
 
+/// A paddy's paint by its state.
+///
+/// Research:
+///     the paddy's paint by state - CONVENTION: green, flooded, gold and at rest, each state of the rice year in research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html drawn in its color
 fn fill(s: State) -> &'static str {
     match s {
         State::Green => ink::RICE_GREEN,
@@ -230,6 +274,9 @@ fn fill(s: State) -> &'static str {
 /// Research:
 ///     the field's floor - CONVENTION: the fan's ring in the rice green beneath its plots, so no seam shows between them
 ///     ditches by role - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply and drainage kept apart; drawn in two hues, a map drawing convention
+///     the bean beads - CONVENTION: a bead 3 ft across in a single row on the bund (research/questions/0014-bunds-between-the-paddies-aze.drawing.html)
+///     the pocket pond's ring - CONVENTION: flooded ground 2.5 ft wide round the pond, its bund line drawn, so the pond reads inside its plot
+///     the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html places a grave, not its size)
 fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64, f64)>]) {
     svg.polygon(&f.fan.ring, ink::RICE_GREEN, None);
     for (b, s) in f.basins.iter().zip(&f.states) {
@@ -400,6 +447,10 @@ type Segment = ((f64, f64), (f64, f64), f64);
 
 /// The ground the seat chose for the settlement and its belt: from the margin out past the band and the belt, the band's length
 /// along it - the ground the dry hem keeps off (the deleted `settlement_ground`).
+///
+/// Research:
+///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so the hem keeps off the band where they stand
+///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt
 fn settlement_ground(s: &crate::seat::Frame) -> Vec<(f64, f64)> {
     let ((ax, ay), (ox, oy), (lx, ly)) = (s.anchor, s.out, s.along);
     let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + BELT_FAR_FT);
