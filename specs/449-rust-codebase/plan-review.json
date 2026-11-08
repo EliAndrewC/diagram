@@ -146,9 +146,9 @@
    "declared": "spec-fidelity"
   },
   "### T008 Approach (checklist part A)": {
-   "sha256": "7a7d66f1019d81ac4c07181742dc292a8a3d681a36ba0116df5090c5051283e7",
+   "sha256": "5963e8a108925250999db505b95f54acf1e09c423eeac104badf1f8015597df8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T009 Approach (checklist part A)": {
@@ -1263,6 +1263,39 @@
      "why": "Restates D3 (guard by guard, never both, FR-003) and D4 (the suite is the replay), and FR-004's coverage floor; no new scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T008 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T008 (a)",
+     "summary": "The sanitized command and the last full gate are read in-process; gatecost.py (asked only on a streak's first expensive measurement, for its reminder's median) stays the measure tool's, asked by path, until phase 3 ports it.",
+     "class": "within",
+     "why": "FR-001 orders the port in four phases and FR-003 keeps a piece's Python the one that runs until its replacement passes; gatecost.py belongs to a later phase, so calling it where the shell did is what those require, not a carve-out from them. It is not a guard, so FR-007's one process per tool call is not touched. Nothing the guard decides is left out of the port."
+    },
+    {
+     "id": "T008 (b)",
+     "summary": "The shell's greedy read (from the payload's last \"command\" key to its last quote) is kept for the git commit reset only, reproduced over the input in its own key order.",
+     "class": "within",
+     "why": "FR-002 requires the same verdicts as the shell on every suite case, and its only exception (XIV) is for a guard that refuses correct work. A later field naming git commit RESETS the streak, which makes the guard more permissive, so it refuses nothing correct, and the exception does not reach it. Keeping the shell's behavior is FR-002 applied as written. Reproducing the span over the re-serialized input rather than the raw bytes is a design choice; FR-002 judges it on the suite's cases, which the exits require to pass."
+    },
+    {
+     "id": "T008 (c)",
+     "summary": "status is ported, printing the same measurements_since_reset=N budget=B line.",
+     "class": "within",
+     "why": "FR-002: same outputs as the piece replaced."
+    },
+    {
+     "id": "T008 done/exits",
+     "summary": "The shell guard and its settings entry are removed in the commit that registers the Rust decider, after test-measure-hooks.sh passes against l7r-guard --only measure-hooks.",
+     "class": "within",
+     "why": "Plan D3/D4 and FR-003 (never both), stated as accepted."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1540,6 +1573,38 @@
      "summary": "After T005, independent of the other guards; green exit is the suite against l7r-guard --only gate-hooks plus rust-test, cover and hooks-test; the shell and its settings entry go in the commit that registers the decider.",
      "class": "within",
      "why": "Restates D3 (guard by guard, never both, FR-003) and D4 (the suite is the replay), and FR-004's coverage floor; no new scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T008": {
+   "section_sha256": "5963e8a108925250999db505b95f54acf1e09c423eeac104badf1f8015597df8",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T008 (a)",
+     "summary": "The sanitized command and the last full gate are read in-process; gatecost.py (asked only on a streak's first expensive measurement, for its reminder's median) stays the measure tool's, asked by path, until phase 3 ports it.",
+     "class": "within",
+     "why": "FR-001 orders the port in four phases and FR-003 keeps a piece's Python the one that runs until its replacement passes; gatecost.py belongs to a later phase, so calling it where the shell did is what those require, not a carve-out from them. It is not a guard, so FR-007's one process per tool call is not touched. Nothing the guard decides is left out of the port."
+    },
+    {
+     "id": "T008 (b)",
+     "summary": "The shell's greedy read (from the payload's last \"command\" key to its last quote) is kept for the git commit reset only, reproduced over the input in its own key order.",
+     "class": "within",
+     "why": "FR-002 requires the same verdicts as the shell on every suite case, and its only exception (XIV) is for a guard that refuses correct work. A later field naming git commit RESETS the streak, which makes the guard more permissive, so it refuses nothing correct, and the exception does not reach it. Keeping the shell's behavior is FR-002 applied as written. Reproducing the span over the re-serialized input rather than the raw bytes is a design choice; FR-002 judges it on the suite's cases, which the exits require to pass."
+    },
+    {
+     "id": "T008 (c)",
+     "summary": "status is ported, printing the same measurements_since_reset=N budget=B line.",
+     "class": "within",
+     "why": "FR-002: same outputs as the piece replaced."
+    },
+    {
+     "id": "T008 done/exits",
+     "summary": "The shell guard and its settings entry are removed in the commit that registers the Rust decider, after test-measure-hooks.sh passes against l7r-guard --only measure-hooks.",
+     "class": "within",
+     "why": "Plan D3/D4 and FR-003 (never both), stated as accepted."
     }
    ],
    "verdict": "CLEAR"

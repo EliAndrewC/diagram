@@ -5,7 +5,8 @@
 # blocked. Run: tests/hooks/test-measure-hooks.sh   (exit 0 = all green)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/measure-hooks.sh"
+# feature 449 T008: the guard is Rust - the link `measure-hooks.sh` beside this suite runs `l7r-guard --only measure-hooks`
+HOOK="$HERE/measure-hooks.sh"
 PASS=0; FAIL=0
 # GUARD_EDIT_OK: feature 162 - EVERY vector in this file writes its guard-log entries to a
 # throwaway directory. Without this the suite pollutes the real census (`make audit`), which

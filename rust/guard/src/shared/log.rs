@@ -103,6 +103,26 @@ pub fn write(e: &Entry) -> Option<PathBuf> {
     write_at(&dir(), e, SystemTime::now())
 }
 
+/// Record a firing of `guard` on this hook input, the session's clone name beside it (`guard_log <guard> <event> <detail> <rule>`).
+pub fn fire(
+    guard: &str,
+    event: &str,
+    detail: &str,
+    rule: &str,
+    input: &Value,
+    session: &crate::shared::session::Session,
+) {
+    let _ = write(&Entry {
+        guard,
+        event,
+        detail,
+        rule,
+        context: None,
+        input,
+        session_name: &session.name(),
+    });
+}
+
 #[cfg(test)]
 mod tests {
     use std::time::{Duration, UNIX_EPOCH};

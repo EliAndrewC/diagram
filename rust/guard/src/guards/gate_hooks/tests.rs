@@ -2,11 +2,12 @@
 //! (`tests/hooks/test-gate-hooks.sh`, replayed through the shim).
 
 use std::path::PathBuf;
+
 use std::sync::Once;
 
-use serde_json::{json, Value};
+use serde_json::json;
 
-use super::{judge, state};
+use super::judge;
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
@@ -130,17 +131,7 @@ fn status_prints_the_flag() {
 }
 
 #[test]
-fn the_flag_is_the_sessions_in_its_directory() {
-    let d = std::env::temp_dir().join(format!("l7r-guard-gate-dir-{}", std::process::id()));
-    let got: Vec<PathBuf> = [json!({"session_id": "a/b c"}), json!({})]
-        .iter()
-        .map(|i: &Value| state(i, Some(d.to_string_lossy().into_owned())))
-        .collect();
-    assert_eq!(got, [d.join("a_b_c.subset"), d.join("nosession.subset")]);
-    assert_eq!(
-        state(&json!({}), None),
-        PathBuf::from("/tmp/claude-gate/nosession.subset")
-    );
+fn decide_reads_the_flag_where_the_seam_puts_it() {
     assert!(
         super::decide(
             &Event {

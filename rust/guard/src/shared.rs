@@ -8,5 +8,6 @@ pub mod make;
 pub mod session;
 pub mod sha256;
 pub mod shape;
+pub mod state;
 pub mod tool;
 pub mod transcript;

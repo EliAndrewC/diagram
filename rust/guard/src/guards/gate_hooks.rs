@@ -7,15 +7,14 @@
 //! Plan T007's decisions: (a) `hm_make.py`'s parts it reads are `shared::make`; (b) the command is read as JSON, not the shell's
 //! greedy `sed`, so a ` -k ` in another field arms nothing (constitution XIV); (c) `status` prints the flag, as it did.
 
-use std::path::PathBuf;
-
 use serde_json::Value;
 
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
-use crate::shared::log::{self, Entry};
+use crate::shared::log::fire;
 use crate::shared::make::{bare_pytest, combine, targets};
 use crate::shared::session::Session;
+use crate::shared::state::{field, session_file};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -32,35 +31,16 @@ const COMBINED: &str =
 asked has gone unasked. Combined rather than refused because a refusal would have cost a \
 model round trip to save one warm quick (4.1 s measured).";
 
-fn field<'a>(input: &'a Value, k: &str) -> &'a str {
-    input.get(k).and_then(Value::as_str).unwrap_or("")
-}
-
-/// This session's subset flag: `GATE_STATE_DIR` (else `/tmp/claude-gate`), `<session id>.subset`.
-fn state(input: &Value, dir: Option<String>) -> PathBuf {
-    let sid = Some(field(input, "session_id"))
-        .filter(|s| !s.is_empty())
-        .unwrap_or("nosession");
-    let safe: String = sid
-        .chars()
-        .map(|c| {
-            if c.is_ascii_alphanumeric() || c == '_' || c == '-' {
-                c
-            } else {
-                '_'
-            }
-        })
-        .collect();
-    let dir = PathBuf::from(dir.unwrap_or_else(|| "/tmp/claude-gate".to_owned()));
-    let _ = std::fs::create_dir_all(&dir);
-    dir.join(format!("{safe}.subset"))
-}
-
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     judge(
         event,
         session,
-        &state(&event.input, std::env::var("GATE_STATE_DIR").ok()),
+        &session_file(
+            &event.input,
+            std::env::var("GATE_STATE_DIR").ok(),
+            "/tmp/claude-gate",
+            "subset",
+        ),
     )
 }
 
@@ -79,15 +59,7 @@ fn judge(event: &Event, session: &Session, flag: &std::path::Path) -> Vec<Answer
         .unwrap_or(Value::Null);
     let cmd = field(&ti, "command");
     let log = |kind: &str, detail: &str, rule: &str| {
-        let _ = log::write(&Entry {
-            guard: "gate",
-            event: kind,
-            detail,
-            rule,
-            context: None,
-            input: &event.input,
-            session_name: &session.name(),
-        });
+        fire("gate", kind, detail, rule, &event.input, session);
     };
     let shown: String = cmd.chars().take(200).collect();
     if event.tool() != "Bash" {

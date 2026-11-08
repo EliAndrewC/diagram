@@ -340,16 +340,6 @@
         ]
       },
       {
-        "matcher": "Bash|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/measure-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/measure-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "matcher": "ScheduleWakeup",
         "hooks": [
           {

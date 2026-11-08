@@ -273,5 +273,18 @@
       "suite_passed_against_rust": 45,
       "new_case": "a -k in description arms nothing; the shell refused the gate after it (exit 2)"
     }
+  },
+  "measure-hooks-ported": {
+    "quantity": "a Bash `ls`'s cost in the measure-hooks guard, the shell's against the Rust dispatcher carrying it beside pair-hooks and gate-hooks (T008)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/measure-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh PreToolUse in the clone, its guard list [pair-hooks, gate-hooks, measure-hooks], on a sample PreToolUse JSON for a Bash `ls`",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call",
+    "value": {
+      "shell_ms": 74.0,
+      "rust_dispatcher_ms": 7.3,
+      "suite_cases": 48,
+      "suite_passed_against_rust": 48
+    }
   }
 }
