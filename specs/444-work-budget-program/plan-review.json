@@ -332,10 +332,10 @@
    "declared": "round-arbiter"
   },
   "### T37-T43 Decisions": {
-   "sha256": "9818fe96ad525a7dfb16d958178b3475e8f4de804a9f818810b3dd2f2ecc48da",
-   "verdict": "CLEAR",
+   "sha256": "4adadca84c388324291158fc230624cbd408634bed08f6a75d0a86f4e4bfecd8",
+   "verdict": "BLOCKED",
    "reviewed": "2026-11-07",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T36 Approach (checklist part A)": {
    "sha256": "37a036565a0f28c363a5a62444974056e74a9da6df2b3ebb0daff6fe8b38417b",
@@ -374,10 +374,10 @@
    "declared": "round-arbiter"
   },
   "### T42 Approach (checklist part A)": {
-   "sha256": "6d448fa4519fd5c17774b8e48fc9b102c92efd729845c52fa737ad6c0901b617",
-   "verdict": "CLEAR",
+   "sha256": "1be97f99e8b8970886811c79fb0a5db6f8687a2c197fa7e26eb8736d1e06a497",
+   "verdict": "BLOCKED",
    "reviewed": "2026-11-07",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T43 Approach (checklist part A)": {
    "sha256": "7e0b38ce61edd1b7285202a54320b59da71bfd98e0e6280468a8d450f91404ea",
@@ -5606,6 +5606,109 @@
      "id": "ask:444-a11-plan-d7",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T37-T43 Decisions",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The order T37-T43, one landing for T37-T41",
+     "class": "within",
+     "why": "Unchanged text, earlier CLEAR; it is the order the GM agreed in amendment 11."
+    },
+    {
+     "id": "D2",
+     "summary": "The cut through waterward; homesteads, track, appurtenances, law, ways parked",
+     "class": "within",
+     "why": "Unchanged text, earlier CLEAR; it is FR-024 part 2 and the GM's 'after the last stage which is ported AND EFFICIENT'."
+    },
+    {
+     "id": "D3",
+     "summary": "Delete set by reachability from the kept roots; the hamlet test trees named; knob registry exported to knobs.json first",
+     "class": "within",
+     "why": "The new import-walk text measures the same decision more tightly than the CLEAR text did; citybudget falls under the accepted spec's 'any other generated settlement'; the knobs export keeps what the modal checks, which the GM keeps, still import (FR-024 part 3 'a shared helper moved out')."
+    },
+    {
+     "id": "D7.1",
+     "summary": "Kept suite and make targets green after the deletion",
+     "class": "within",
+     "why": "FR-024 part 4, the arbiter's mechanical rule, verbatim."
+    },
+    {
+     "id": "D7.2-scope",
+     "summary": "The no-deleted-engine test scans l7r/, tests/, scripts/, .claude/, pool/, Makefile, pyproject.toml, dev/*.json in import, relative and path forms",
+     "class": "within",
+     "why": "A superset of the pathspec the earlier CLEAR census used (adds pool/); the forms are the ones FR-024 part 4 names; it enforces 'every consumer caught mechanically'."
+    },
+    {
+     "id": "D7.2-log-allowlist",
+     "summary": "History allowlist admits 'the append-only run, perf and bypass logs by their record format'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-024 part 4 (the arbiter's ruling) requires the history allowlist 'enumerated file by file', and the block itself says 'no glob or directory is an entry'; every other entry is named ('the named hook fixtures', 'the named prose .md files'), this one is a content rule that any file in that format passes - a pattern entry by another name. No reason is given why those files cannot be named; awkwardness is not impossibility, and a format exemption reopens the silently-vacuous class the test exists to close (a registry or dev/*.json holding a deleted path as a string can pass it). Fix: name each log file as an entry; if one genuinely cannot be named (rotation), say so and confine the format rule to the named locations."
+    },
+    {
+     "id": "D7.3",
+     "summary": "Every code-reading check keeps a Rust fixture test proving it still fires",
+     "class": "within",
+     "why": "Enforces FR-024 part 4's 'each with a Rust fixture test proving it still fires'; enforcement of the request, not scope."
+    },
+    {
+     "id": "D7-table-ported",
+     "summary": "claims gate, claims index/report, tunables, work-budget bundle and budget_change, file and function caps, counters_inert, modal_bundle and conditions PORTED or ALREADY reading Rust",
+     "class": "within",
+     "why": "The GM: 'the code that introspects the Python code should get Rust ports'; FR-024 part 4's list."
+    },
+    {
+     "id": "D7-table-placement_stages",
+     "summary": "placement_stages (reads the Python stages' docstrings) DROPPED now; its Rust form is the later page",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It reads source, so 'never dropped' reaches it, but the GM's own words defer its Rust form: freeze a temporary reference 'which will be replaced by a new automatically generated version after our port'; FR-024 part 1 makes that a later task."
+    },
+    {
+     "id": "D7-table-cache_audit",
+     "summary": "cache_audit (the generation cache's candidates over the Python engine's source) DROPPED",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Its object is the Python engine's source as keyed by the Python generation cache; the Rust driver (FR-024 part 5) writes an SVG and a manifest and has no generation cache, and the kept hand-drawn maps were never its object, so there is nothing on the Rust side for a port to do 'the same things' to - impossibility, not cost. The row's wording should say that plainly rather than 'keys Python generations only'."
+    },
+    {
+     "id": "D7-table-roll-readers",
+     "summary": "_census, _memory, rollcache, cohort_audit, hamlet_floor, mapcheck, marsh_edges, notes_census, overlap_census, perf_fanout/profile/share/snapshot, phase_calls, scatter_audit, see_through, stage_sizes, rust_gate DROPPED",
+     "class": "within",
+     "why": "Each reads a Python roll or a Python-drawn map, not source: FR-024 part 3 deletes every module that 'rolls, draws or checks a hamlet', and the gates paragraph deletes the Python Rust stage gate and its frozen inputs."
+    },
+    {
+     "id": "D7-table-handdrawn",
+     "summary": "pool/magistracies and pool/country-shrines .gen.py kept unchanged",
+     "class": "within",
+     "why": "The GM keeps the hand-drawn maps' checks; FR-024 part 3."
+    },
+    {
+     "id": "T42-exit-plate",
+     "summary": "Each enabled stage held to what its frozen plate says the stage does, never to its output",
+     "class": "within",
+     "why": "FR-024 part 5 and SC-017 'judged against / compared with the plate', read as the GM ruled on 2026-11-07: 'the maps do NOT have to match, they do NOT need to be identical'."
+    },
+    {
+     "id": "T42-exit-cohort",
+     "summary": "Map checks clean on 1,000 comb seeds and 300 of each polder",
+     "class": "within",
+     "why": "Verifies the GM's 'completely works' and is 'the Rust driver's own seeds' that stand in for the deleted cohort (FR-024's last paragraph); under the GM's 2026-11-07 'avoid fixed seeds' these are fresh seeds each run, not a pinned pool."
+    },
+    {
+     "id": "T42-exit-visual",
+     "summary": "A visual defect pass before the GM looks; findings fixed or ruled on by the research",
+     "class": "within",
+     "why": "The GM: 'you can do your own visual pass first and I'll look when you've done that'."
     }
    ]
   }

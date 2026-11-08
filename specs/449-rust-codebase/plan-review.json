@@ -80,7 +80,7 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "131119c4d7770b63f7b5bb7a08f93e2568d6370c81723f5d0e2671a009e2923a",
+   "sha256": "b1f4cda63ccf71766825c83c36f796d6a646830be9df7525caf7a73ec9407bc7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -104,7 +104,7 @@
    "declared": "spec-fidelity"
   },
   "### T003 Approach (checklist part A)": {
-   "sha256": "014e40095d7374af0ab8d3c929d01e41821bb36181833d3e69bac92c9ee8e5b5",
+   "sha256": "de5bc21cf7d910398c45b09f548a1b3c5209ca1c90006b3643078e253ea84f34",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -134,7 +134,7 @@
    "declared": "spec-fidelity"
   },
   "### T006 Approach (checklist part A)": {
-   "sha256": "5daf4d588756affd2f2880f11da12a03c6c8373464710644e8883b9bfaa3223a",
+   "sha256": "e26fc2a23f45d86e018e6d83ffac98b52d3f827550168a76d2531a62c559d58d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -266,13 +266,13 @@
    "declared": "spec-fidelity"
   },
   "### T028 Approach (checklist part A)": {
-   "sha256": "854558069c2e8505c171e57c5ff296d4dda9642a0b97ce5de5d4d47b55274a5d",
+   "sha256": "af35616026f90b356d08b21be8d91d69fc6b95c1fe57bbf6603ae14e77a4f223",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T029 Approach (checklist part A)": {
-   "sha256": "e46c934073d5875dbdb41f4e244cfed436f9e00b63c31311d12d9faac39e0600",
+   "sha256": "1e89866be74994188f2031ae698bcd1f7356c6ddad048ebf127e1e54f80bfb4c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -398,19 +398,19 @@
    "declared": "spec-fidelity"
   },
   "### T050 Approach (checklist part A)": {
-   "sha256": "e6389f71fced530a3b63220fb855dbc475c14f466ac5eca5695d42cdc270ffde",
+   "sha256": "247322701a22f22def6b927b8dd5b4ae25597bcc9c5ec37b894a88f2d9d9e0ba",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T051 Approach (checklist part A)": {
-   "sha256": "c91bc56f3e03a5a6cc63bbe894d9052bd1b0f99223e7bc5adcf97624c49abf99",
+   "sha256": "408d83da398373d1cc333090608aa97504f8b4ea7b66160a9647880227223b18",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T052 Approach (checklist part A)": {
-   "sha256": "58d32a5ec90f01cc5209c6bd279ae112a7575cfc9bad3196bf4f7f4ef00243ff",
+   "sha256": "b1e5ce325aa768450818196bc7b2e2bc323c0160753b86cd3f8220f0c195e591",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -1103,6 +1103,133 @@
      "why": "Statements that the task touches only Claude Code tool-call guards, consistent with FR-009's scope and the request."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T003 Approach (checklist part A)",
+    "### T028 Approach (checklist part A)",
+    "### T029 Approach (checklist part A)",
+    "### T050 Approach (checklist part A)",
+    "### T051 Approach (checklist part A)",
+    "### T052 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T003-shared-state",
+     "summary": "Shared facts (guard log, escapes, clone/name, GM messages) read once per process, counts pinned in a test; hm_shape heredoc/quote stripping ported with fancy-regex",
+     "class": "within",
+     "why": "Unchanged from its CLEAR reading; carries FR-002, FR-006 and plan D5-D6, part of porting the hooks (phase 1 of the GM's 'making this a Rust codebase')."
+    },
+    {
+     "id": "T003/T050/T051-measurement-rewrite",
+     "summary": "Every specs/*/measurements*.json command that runs a file the task ports or deletes is rewritten to the port in the same commit and re-run as proof",
+     "class": "within",
+     "why": "The added sentence restates FR-001's recorded-measurement clause (rewritten in the commit that ports what it runs, re-run as the proof) at the tasks that port or delete Python; it narrows nothing and enforces the accepted spec."
+    },
+    {
+     "id": "T028-FR-005-cases",
+     "summary": "make-only-hooks port gains suite cases refusing a direct Bash run of a replacement's binary (l7r-guard, hamlet, from the cargo target dir or by path) with the make target that runs it",
+     "class": "within",
+     "why": "FR-005 requires the make-only guard to cover the replacements' binaries as it covers Python and cargo today; the new cases are the test that enforces that requirement, at the task that ports that guard."
+    },
+    {
+     "id": "T028/T029-XIV-fix-record",
+     "summary": "Each guard's constitution XIV fix named in its commit and in the phase's record (was: 'in its task')",
+     "class": "within",
+     "why": "Brings the block into line with FR-002's exception wording (named in the commit and in the phase's record); the XIV exception itself is the spec's, not a new carve-out by the plan."
+    },
+    {
+     "id": "T029-guard-file-hooks-port",
+     "summary": "guard-file-hooks verdicts given by the Rust guard via its suite replay, shell and settings entry removed in the registering commit",
+     "class": "within",
+     "why": "Unchanged apart from the XIV wording; carries FR-002, FR-003, FR-008, D3-D4."
+    },
+    {
+     "id": "T050-suite-tooling",
+     "summary": "tests/hooks Python helpers (the four in m:guard-sources) ported, make hooks-test keyed by l7r-guard deps, no .py under tests/hooks/",
+     "class": "within",
+     "why": "FR-001 places tests/hooks/ Python in phase 1; only the FR-001 measurement-rewrite sentence was added."
+    },
+    {
+     "id": "T051-library-removal",
+     "summary": "No guard library outlives its last caller; no .py and no inline Python under scripts/hooks/",
+     "class": "within",
+     "why": "FR-001 census and second census for scripts/hooks/ in phase 1; only the FR-001 measurement-rewrite sentence was added."
+    },
+    {
+     "id": "T052-phase-close-record",
+     "summary": "Phase 1 closes with SC-001 met, both censuses' phase-1 share empty, the phase's measurements recorded in dev/ as well as beside their first values, and the record naming the two XIV fixes",
+     "class": "within",
+     "why": "The additions are FR-010 (timings recorded in dev/) and FR-002 (the XIV changes named in the phase's record), both requirements of the accepted spec; nothing is dropped from the earlier CLEAR text."
+    },
+    {
+     "id": "CT-serde_json",
+     "summary": "serde_json as the first external crate",
+     "class": "within",
+     "why": "Unchanged; an implementation choice inside the port the GM asked for."
+    },
+    {
+     "id": "CT-fancy-regex",
+     "summary": "fancy-regex as the second crate for the guards' lookaround/backreference patterns, its verdicts proven by each guard's suite replay (FR-002, D4) rather than asserted",
+     "class": "within",
+     "why": "The change cites m:guard-regex-features and replaces 'so verdicts stay the same' with the suite replay as proof, which is FR-002 and D4; it narrows nothing."
+    },
+    {
+     "id": "CT-D7-last-good-binary",
+     "summary": "A failed build runs the last good binary; fail open only when no good binary was ever built",
+     "class": "within",
+     "why": "Unchanged from its CLEAR reading and is spec decision D7 verbatim in substance; the plan adds no carve-out of its own."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T006 Approach (checklist part A)",
+    "### T006-T049 - one task a guard (phase 1, work breakdown 5, 7)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "carried (header)",
+     "summary": "Guard by guard with shell and settings entry removed in the registering commit (D3/FR-003); suite as verdict replay with its inline Python replaced in the same task (D4); order by measured cost first (R2); the two XIV fixes on make-only-hooks and guard-file-hooks (FR-002's exception).",
+     "class": "within",
+     "why": "Each is settled by the accepted spec (D3, D4, FR-002's named exception, FR-003) and none is T006's own: the XIV fixes belong to two other guards' tasks, so T006 changes no expected verdict. Putting pair-hooks first agrees with m:hooks-bash, which names it the slowest guard."
+    },
+    {
+     "id": "T006 (a)",
+     "summary": "The Rust decider keeps consulting the eight phase-3 Python tools (checkpoint.py, plan_gate.py, review_prereq.py, review_owed.py, gate-stamp.py, make engine-key, hm_arbiter.py, hm_dropped.py) by path on its two rare branches and at Stop, until each tool's own port answers in-process.",
+     "class": "within",
+     "why": "FR-001 fixes the phase order (hooks first, tooling in phase 3) and FR-003 requires a piece's Python to stay the one that runs until its replacement passes, so a hook ported in phase 1 has to call the tooling that is still Python. FR-007 asks for one guard process per tool call, not one per guard. It does not forbid the guard calling external tools, and the plain Bash path that SC-001/m:hooks-bash measures reaches none of them. This is temporary sequencing the spec requires, not a carve-out."
+    },
+    {
+     "id": "T006 (b)",
+     "summary": "The engine key (a find over l7r/ and pool/, plus make engine-key when the cache is stale) is computed only on the two branches that read it, not on every call.",
+     "class": "within",
+     "why": "Removing work that changes no verdict serves the request's purpose (the GM: the Python code is too inefficient), and FR-002's suite replay gates it. Two notes that are not rulings: (1) the citation is stretched, because FR-006 names three specific fixes and the plan's paraphrase 'a fact computed once, and only where it is used' is broader than the text; (2) today every call has a side effect, refreshing the cached key, and the claim that 'no other branch reads it' is shown only by the suite. If anything outside pair-hooks reads that cache and relies on the per-call refresh, FR-002's 'outputs' would cover it. Whether anything does was not measured in this bundle."
+    },
+    {
+     "id": "T006 (c)",
+     "summary": "The guard's inline Python state handling (pairing state, review rounds, dispatch record, bypass log, read_field) becomes Rust over the same files and formats.",
+     "class": "within",
+     "why": "This is the port FR-001 asks for, and keeping the same files and formats is what FR-002's same-outputs rule requires."
+    },
+    {
+     "id": "T006 (d)",
+     "summary": "The suite's \"$HOOK\" pretool|stop runs l7r-guard --only pair-hooks PreToolUse|Stop through a shared shim tests/hooks/guard-shim.sh, with the suite's cases unchanged.",
+     "class": "within",
+     "why": "This is D4 as written: the suite points at l7r-guard --only <guard> and its cases are unchanged. The shim only maps the suite's existing argument form onto the binary's."
+    },
+    {
+     "id": "T006 exits/budget",
+     "summary": "Green: the suite passes against the Rust guard, plus rust-test, cover and hooks-test. Red: record the failure and stop to make arbiter-ask. Landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The exits restate FR-002/FR-003/FR-004's gates, and the landing route is process that narrows nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1304,6 +1431,50 @@
      "summary": "No researched value moves; no constant moved; not a room question.",
      "class": "within",
      "why": "Statements that the task touches only Claude Code tool-call guards, consistent with FR-009's scope and the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T006": {
+   "section_sha256": "85ea3fe53652b99709bb42c4e26e05631859fabb8ba699bfbab9453494388b2d",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "carried (header)",
+     "summary": "Guard by guard with shell and settings entry removed in the registering commit (D3/FR-003); suite as verdict replay with its inline Python replaced in the same task (D4); order by measured cost first (R2); the two XIV fixes on make-only-hooks and guard-file-hooks (FR-002's exception).",
+     "class": "within",
+     "why": "Each is settled by the accepted spec (D3, D4, FR-002's named exception, FR-003) and none is T006's own: the XIV fixes belong to two other guards' tasks, so T006 changes no expected verdict. Putting pair-hooks first agrees with m:hooks-bash, which names it the slowest guard."
+    },
+    {
+     "id": "T006 (a)",
+     "summary": "The Rust decider keeps consulting the eight phase-3 Python tools (checkpoint.py, plan_gate.py, review_prereq.py, review_owed.py, gate-stamp.py, make engine-key, hm_arbiter.py, hm_dropped.py) by path on its two rare branches and at Stop, until each tool's own port answers in-process.",
+     "class": "within",
+     "why": "FR-001 fixes the phase order (hooks first, tooling in phase 3) and FR-003 requires a piece's Python to stay the one that runs until its replacement passes, so a hook ported in phase 1 has to call the tooling that is still Python. FR-007 asks for one guard process per tool call, not one per guard. It does not forbid the guard calling external tools, and the plain Bash path that SC-001/m:hooks-bash measures reaches none of them. This is temporary sequencing the spec requires, not a carve-out."
+    },
+    {
+     "id": "T006 (b)",
+     "summary": "The engine key (a find over l7r/ and pool/, plus make engine-key when the cache is stale) is computed only on the two branches that read it, not on every call.",
+     "class": "within",
+     "why": "Removing work that changes no verdict serves the request's purpose (the GM: the Python code is too inefficient), and FR-002's suite replay gates it. Two notes that are not rulings: (1) the citation is stretched, because FR-006 names three specific fixes and the plan's paraphrase 'a fact computed once, and only where it is used' is broader than the text; (2) today every call has a side effect, refreshing the cached key, and the claim that 'no other branch reads it' is shown only by the suite. If anything outside pair-hooks reads that cache and relies on the per-call refresh, FR-002's 'outputs' would cover it. Whether anything does was not measured in this bundle."
+    },
+    {
+     "id": "T006 (c)",
+     "summary": "The guard's inline Python state handling (pairing state, review rounds, dispatch record, bypass log, read_field) becomes Rust over the same files and formats.",
+     "class": "within",
+     "why": "This is the port FR-001 asks for, and keeping the same files and formats is what FR-002's same-outputs rule requires."
+    },
+    {
+     "id": "T006 (d)",
+     "summary": "The suite's \"$HOOK\" pretool|stop runs l7r-guard --only pair-hooks PreToolUse|Stop through a shared shim tests/hooks/guard-shim.sh, with the suite's cases unchanged.",
+     "class": "within",
+     "why": "This is D4 as written: the suite points at l7r-guard --only <guard> and its cases are unchanged. The shim only maps the suite's existing argument form onto the binary's."
+    },
+    {
+     "id": "T006 exits/budget",
+     "summary": "Green: the suite passes against the Rust guard, plus rust-test, cover and hooks-test. Red: record the failure and stop to make arbiter-ask. Landed by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "The exits restate FR-002/FR-003/FR-004's gates, and the landing route is process that narrows nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"
