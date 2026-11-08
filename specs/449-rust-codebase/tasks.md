@@ -106,12 +106,15 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T030 [US1] `archive-first-hooks`: its decider `rust/guard/src/guards/archive_first_hooks.rs`, its suite `tests/hooks/test-archive-first-hooks.sh` replayed against `l7r-guard --only archive-first-hooks`, then `scripts/hooks/archive-first-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: archive-first is Rust
-- [ ] T031 [US1] `claims-file-hooks`: its decider `rust/guard/src/guards/claims_file_hooks.rs`, its suite `tests/hooks/test-claims-file-hooks.sh` replayed against `l7r-guard --only claims-file-hooks`, then `scripts/hooks/claims-file-hooks.sh` and its settings entry removed
+- [x] T031 [US1] `claims-file-hooks`: its decider `rust/guard/src/guards/claims_file_hooks.rs`, its suite `tests/hooks/test-claims-file-hooks.sh` replayed against `l7r-guard --only claims-file-hooks`, then `scripts/hooks/claims-file-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T032 [US1] `readme-hooks`: its decider `rust/guard/src/guards/readme_hooks.rs`, its suite `tests/hooks/test-readme-hooks.sh` replayed against `l7r-guard --only readme-hooks`, then `scripts/hooks/readme-hooks.sh` and its settings entry removed
+      verify: DONE. landed in batch T031+T032+T033: claims-file, readme and download-copy are Rust
+- [x] T032 [US1] `readme-hooks`: its decider `rust/guard/src/guards/readme_hooks.rs`, its suite `tests/hooks/test-readme-hooks.sh` replayed against `l7r-guard --only readme-hooks`, then `scripts/hooks/readme-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T033 [US1] `download-copy-hooks`: its decider `rust/guard/src/guards/download_copy_hooks.rs`, its suite `tests/hooks/test-download-copy-hooks.sh` replayed against `l7r-guard --only download-copy-hooks`, then `scripts/hooks/download-copy-hooks.sh` and its settings entry removed
+      verify: DONE. landed in batch T031+T032+T033: claims-file, readme and download-copy are Rust
+- [x] T033 [US1] `download-copy-hooks`: its decider `rust/guard/src/guards/download_copy_hooks.rs`, its suite `tests/hooks/test-download-copy-hooks.sh` replayed against `l7r-guard --only download-copy-hooks`, then `scripts/hooks/download-copy-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed in batch T031+T032+T033: claims-file, readme and download-copy are Rust
 - [ ] T034 [US1] `repo-safety-hooks`: its decider `rust/guard/src/guards/repo_safety_hooks.rs`, its suite `tests/hooks/test-repo-safety-hooks.sh` replayed against `l7r-guard --only repo-safety-hooks`, then `scripts/hooks/repo-safety-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T035 [US1] `shell-check-hooks`: its decider `rust/guard/src/guards/shell_check_hooks.rs`, its suite `tests/hooks/test-shell-check-hooks.sh` replayed against `l7r-guard --only shell-check-hooks`, then `scripts/hooks/shell-check-hooks.sh` and its settings entry removed
