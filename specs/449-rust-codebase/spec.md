@@ -17,38 +17,42 @@ Filed without an approval round under the GM's standing rule: "you should treat 
 ## Why
 
 Feature 444 moved the hamlet engine to Rust. Everything else is still Python: the gate, the hooks that run on every tool call, the
-research and review tooling, the Mode A building planner, the interactive page writer. Measured on 2026-11-07 (feature 444 T36):
+research and review tooling, the Mode A building planner, the interactive page writer. Each figure below is recorded with its command
+in `measurements.json` (feature 444 T36's runs of 2026-11-07):
 
-- a one-line Rust edit's `make done` took 26-32 s, about 20 s of it Python the edit did not need (preflight's quick 4.6 s, the test
-  planner 3 s, pytest's start 4 s, 161 Python tests 10-14 s under coverage tracing, bookkeeping 2-4 s);
-- 29 hooks run before every Bash call, in parallel: the slowest 184 ms, 1.1 s of CPU summed per call; a `pair-hooks.sh` run
-  averaged 441 ms inside its own suite, most of it work rather than start-up;
-- a Python process starts in 15-40 ms; coverage tracing roughly doubles every Python test; the Rust crate's 90 tests run in 0.12 s.
+- a one-line Rust edit's `make done` took 32.1 s of wall time, 26 s by its own record, of which preflight's quick 4.6 s, the test
+  planner 3.1 s, pytest's start 4.2 s and 161 Python tests 10.7 s were Python the edit did not need (`m:done-rust-edit`);
+- 29 hooks run before every Bash call, in parallel: the slowest 184 ms, 1,133 ms summed per call (`m:hooks-bash`); a
+  `pair-hooks.sh` run averaged 441 ms inside its own suite, 90 runs and 39.7 s summed, most of it work rather than start-up
+  (`m:pair-hooks-suite`);
+- a Python interpreter starts in 15-16 ms with nothing to run (`m:python-start`); the Rust crate's 90 tests run in 0.12 s
+  (`m:rust-tests`); every test of the gate's trees, summed, is 632 s (`m:suite-cpu`).
 
-Measured limits a port does not change, recorded so the plan does not promise them: git operations and the push path (about 2 s a
-push), the I/O of a scan of the whole repository, subprocess-heavy fixtures. And the day's largest wins were design fixes - a claims
-test 6.7 s -> 0.5 s, a mutation test 20.7 s -> 1.1 s, a check bundle 3.3 s -> 1.5 s - which a port must carry over, never repeat.
+Limits a port does not change, recorded so the plan does not promise them: git operations and the push path, the I/O of a scan of the
+whole repository, subprocess-heavy fixtures. And the day's largest wins were design fixes - a claims test 6.7 s -> 0.5 s, a
+mutation test 20.7 s -> 1.1 s, a check bundle 3.3 s -> 1.55 s (`m:design-fixes`) - which a port must carry over, never repeat.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Every tool call answers at once (Priority: P1)
 
 The GM works with a session; before each tool call the project's guards run. Today that is 29 processes, each a shell that starts
-Python, the slowest 184 ms. After this story the guards answer in a few milliseconds, with the same verdicts.
+Python (`m:hooks-bash`). After this story they answer as one process, with the same verdicts.
 
 **Why this priority**: the GM: "startup time for hooks is just generally more important." It is paid on every tool call of every
-session, and its CPU competes with any gate running beside it on a laptop measured at 100 C and throttling.
+session, and its CPU competes with any gate running beside it on a laptop measured at its thermal limit (`m:done-rust-edit`).
 
 **Independent Test**: time the guards for a Bash, an Edit and an Agent call before and after; replay every guard suite's cases
 (`tests/hooks/`) against the replacement and compare each verdict.
 
 **Acceptance Scenarios**:
 
-1. **Given** a Bash call, **When** the guards run, **Then** they decide it in under 20 ms of wall time and under 50 ms of CPU in total.
+1. **Given** a Bash call, **When** the guards run, **Then** they decide it in under a tenth of today's slowest guard, and in under a
+   twentieth of today's summed CPU (`m:hooks-bash`).
 2. **Given** each case a guard suite holds today, **When** it runs against the replacement, **Then** the verdict - allowed, refused,
    rewritten, its message - is the one the Python guard gives.
 3. **Given** a guard suite, **When** it runs, **Then** it takes under a tenth of its measured time today where the guard's own run
-   was its cost (pair-hooks: 90 runs, 39.7 s of CPU).
+   was its cost (`m:pair-hooks-suite`).
 
 ---
 
@@ -57,15 +61,15 @@ session, and its CPU competes with any gate running beside it on a laptop measur
 `make done`, `make quick`, `make land` and the push's checks are driven by Rust: the test planner, the stamps and verification state,
 the run records, the claims and coverage reports. A one-line Rust edit's gate runs only what that edit can change.
 
-**Why this priority**: the gate is the loop the GM waits on; its Python path is the 20 s measured above.
+**Why this priority**: the gate is the loop the GM waits on; its Python path is most of the time measured above (`m:done-rust-edit`).
 
 **Independent Test**: a one-line Rust edit, a one-line edit of a ported tool, a comment-only edit and no edit, each timed through
 `make done` before and after, every verdict compared.
 
 **Acceptance Scenarios**:
 
-1. **Given** a one-line change to Rust code, **When** `make done` runs, **Then** it finishes in under 12 s on this laptop.
-2. **Given** a comment-only change, or none, **When** `make done` runs, **Then** it reuses the last green result in under 2 s.
+1. **Given** a one-line change to Rust code, **When** `make done` runs, **Then** it finishes in under half today's wall time, its Python steps gone (`m:done-rust-edit`).
+2. **Given** a comment-only change, or none, **When** `make done` runs, **Then** it reuses the last green result and runs no test.
 3. **Given** a defect a check catches today, **When** the gate runs on the Rust path, **Then** it is caught, by the same rule.
 
 ---
@@ -81,7 +85,7 @@ The research-record, review, measurement and page-session tooling under `scripts
 **Acceptance Scenarios**:
 
 1. **Given** any make target that runs a tool, **When** it runs, **Then** its output and exit status are those of the Python tool.
-2. **Given** a tool's tests, **When** they run, **Then** none takes 100 ms or more unless it is that tool's one end-to-end test.
+2. **Given** a tool's tests, **When** they run, **Then** none takes a tenth of a second or more unless it is that tool's one end-to-end test.
 
 ---
 
@@ -138,14 +142,12 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 
 ### Measurable Outcomes
 
-- **SC-001**: The guards before a Bash call decide it in under 20 ms of wall time (184 ms today).
-- **SC-002**: A one-line Rust edit's `make done` finishes in under 12 s (26-32 s today); an unchanged tree's in under 2 s.
-- **SC-003**: The test suites, every tree together, run in under a tenth of today's summed CPU time (about 632 s summed today).
+- **SC-001**: The guards before a Bash call decide it in under a tenth of today's slowest guard's time (`m:hooks-bash`).
+- **SC-002**: A one-line Rust edit's `make done` finishes in under half today's wall time (`m:done-rust-edit`); an unchanged tree's
+  runs no test.
+- **SC-003**: The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
 - **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
 - **SC-005**: When the feature closes, the repository holds no Python file and `make done` runs with no Python interpreter.
-- The figures "today" in these criteria were observed 2026-11-07 (feature 444 T36), method: the guards' commands run three times each
-  on a sample Bash call, the median; `make done` timed line by line after a one-line Rust edit against a fresh baseline; the suites
-  by `make durations` and `PYTEST_ADDOPTS="--durations=0" make test-file FILE=tests/tooling`, their rows summed.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 

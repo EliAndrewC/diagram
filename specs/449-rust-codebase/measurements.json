@@ -1,0 +1,58 @@
+{
+  "done-rust-edit": {
+    "quantity": "a one-line Rust edit's make done, against a fresh full baseline, each output line timestamped",
+    "observed": "2026-11-07",
+    "subject": "feature 444 T36's probe seven, rust/phases/src/driver/check.rs edited by one comment line",
+    "command": "make done INCREMENTAL=0; sed -i 's|none on a sound map\\.$|none on a sound map (probe).|' rust/phases/src/driver/check.rs; make done (each line timestamped from its start); git checkout -- rust/phases/src/driver/check.rs",
+    "method": "the run's timestamps read phase by phase; its run record (dev/run-log/) for the phases' own seconds",
+    "value": {"wall_s": 32.1, "recorded_s": 26, "preflight_quick_s": 4.6, "planner_s": 3.1, "pytest_start_s": 4.2, "python_tests": 161, "python_tests_s": 10.7, "bookkeeping_and_wait_s": 7.8, "cpu_temp_c": [100.0, 100.0]}
+  },
+  "hooks-bash": {
+    "quantity": "the guards that run before a Bash call: how many, the slowest, all of them summed",
+    "observed": "2026-11-07",
+    "subject": "the PreToolUse hooks of .claude/settings.json and ~/.claude/settings.json whose matcher takes Bash",
+    "command": "each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR=/diagram",
+    "method": "the median of three runs a hook; the slowest and the sum of the medians",
+    "value": {"hooks": 29, "slowest_ms": 184, "slowest": "pair-hooks.sh", "summed_ms": 1133}
+  },
+  "pair-hooks-suite": {
+    "quantity": "pair-hooks.sh's runs inside its own suite",
+    "observed": "2026-11-07",
+    "subject": "tests/hooks/test-pair-hooks.sh, its HOOK pointed at a wrapper that times each run",
+    "command": "a scratch copy of the suite with HOOK set to a timing wrapper around scripts/hooks/pair-hooks.sh, run once",
+    "method": "the wrapper's per-run times summed; 19 of the copy's 100 cases failed on its relocated fixture paths, so a close figure, not an exact one",
+    "value": {"runs": 90, "summed_s": 39.7, "mean_ms": 441, "suite_wall_s": 8.2}
+  },
+  "suite-cpu": {
+    "quantity": "every test's own time, summed over the tree outside tests/tooling and over tests/tooling",
+    "observed": "2026-11-07",
+    "subject": "the gate's test trees",
+    "command": "make durations FULL=1 N=20000; PYTEST_ADDOPTS=\"--durations=0\" make test-file FILE=tests/tooling",
+    "method": "each call, setup and teardown row summed, per tree",
+    "value": {"outside_tooling_s": 198, "tooling_s": 434, "summed_s": 632, "tests_100ms_or_more": 717}
+  },
+  "rust-tests": {
+    "quantity": "the Rust crate's tests",
+    "observed": "2026-11-07",
+    "subject": "rust/phases",
+    "command": "python3 scripts/gates/rust_checks.py test (cargo's own summary line read)",
+    "method": "cargo test's 'finished in' figure",
+    "value": {"tests": 90, "s": 0.12}
+  },
+  "python-start": {
+    "quantity": "a Python interpreter's start with nothing to run",
+    "observed": "2026-11-07",
+    "subject": "python3 3.14 in the container",
+    "command": "python3 -c pass, timed three times",
+    "method": "wall time of each run",
+    "value": {"ms": [16, 16, 15]}
+  },
+  "design-fixes": {
+    "quantity": "three of the day's speedups that changed what a tool does, not its language",
+    "observed": "2026-11-07",
+    "subject": "the claims gate test, the counters mutation test, a check bundle",
+    "command": "cProfile of tests.tooling.test_claims_index's slowest test in process, before and after 39112f3ec; make test-file of tests/tooling/test_rust_tooling.py before and after 2b4238a6c; scripts/record/check_bundle.py 0086 --for record-format timed before and after d3ff0e16d",
+    "method": "the test's or the command's own time, warm, before and after its commit",
+    "value": {"claims_test_s": [6.7, 0.5], "counters_test_s": [20.7, 1.1], "check_bundle_s": [3.3, 1.55]}
+  }
+}
