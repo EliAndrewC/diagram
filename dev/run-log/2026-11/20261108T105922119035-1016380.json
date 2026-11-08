@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-08T10:59:22Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 58,
+  "result": "green",
+  "commit": "cb876fed8",
+  "mode": "incremental",
+  "selected": 1041,
+  "host": {
+    "load": [
+      3.38,
+      4.19
+    ],
+    "mem_avail_mb": [
+      9371,
+      9379
+    ],
+    "cpu_temp_c": [
+      99.0,
+      100.0
+    ],
+    "stall_s": {
+      "cpu": 1.9,
+      "io": 0.1,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 13471,
+      "package": 7793
+    }
+  },
+  "phases": {
+    "preflight": 5.0,
+    "reference": 0.0,
+    "counters-inert": 5.0,
+    "static": 11.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "seeds": 12.0,
+    "pytest": 45.0,
+    "floors": 2.0,
+    "test-full": 52.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "5 engine file(s) and 0 test module(s) changed, 1 scripts/ file(s) (205 module(s) that read scripts/), 5 Rust file(s) (13 test module(s) that read them), 11 non-module file(s) under tests/ (42 test module(s) that can read them)",
+  "collected": 1041
+}
