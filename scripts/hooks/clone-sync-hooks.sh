@@ -503,6 +503,12 @@ case $MODE in
     # in the background was merged under the gate: main's commits landed while `make done` tested, and the run failed on a
     # test file the merge rewrote half way (tests/tools/test_placement_stages.py), its verdict belonging to neither tree.
     # A live make in the clone (`own-make.sh`, any target) now skips the merge exactly as uncommitted work does.
+    # THE ONLY SESSION SYNCS NOTHING (feature 444 T36; the GM 2026-11-07: "Can we also skip the clone-sync hook on every message
+    # when no claude code session is running? And then cache the whether another claude code session is running for up to like 5
+    # minutes"): the fetch, the mirror's refresh and the merge below are for sessions landing beside one another, 0.65 s a message;
+    # alone, main moves only when this session lands, and the landing fetches and checks for itself. `lib/solo.py` counts every
+    # other `claude` process but this session's own descendants, its answer kept 5 minutes (`L7R_SOLO=1|0` forces it)
+    python3 "$(dirname "${BASH_SOURCE[0]}")/lib/solo.py" 2>/dev/null && exit 0
     midtask=""
     if [ -n "$(git -C "$clone" status --porcelain 2>/dev/null)" ]; then
       midtask="has uncommitted work (mid-task)"
