@@ -393,5 +393,18 @@
       "suite_cases": 67,
       "suite_passed_against_rust": 67
     }
+  },
+  "engine-freeze-hooks-ported": {
+    "quantity": "an engine Edit's cost in the engine-freeze guard with nothing live, the shell's against the Rust guard alone (T018)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/engine-freeze-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only engine-freeze-hooks PreToolUse in the clone, on a sample Edit of l7r/diagram/switches.py with no subagents, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/engine-freeze-hooks.sh",
+    "value": {
+      "shell_edit_ms": 74.0,
+      "rust_guard_edit_ms": 6.9,
+      "suite_cases": 31,
+      "suite_passed_against_rust": 31
+    }
   }
 }

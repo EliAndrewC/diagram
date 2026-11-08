@@ -30,7 +30,7 @@ pub const GUARD: Guard = Guard {
 };
 
 /// The five review checks, each owed on its occasion (feature 294).
-const REVIEW_AGENTS: [&str; 5] = [
+pub(crate) const REVIEW_AGENTS: [&str; 5] = [
     "settlement-review",
     "building-review",
     "glyph-check",

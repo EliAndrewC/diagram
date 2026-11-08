@@ -23,6 +23,7 @@ pub fn guards() -> Vec<Guard> {
         guards::agent_stall_hooks::GUARD,
         guards::stall_watchdog_hooks::GUARD,
         guards::finished_run_hooks::GUARD,
+        guards::engine_freeze_hooks::GUARD,
     ]
 }
 
@@ -184,7 +185,8 @@ mod tests {
                     "idle-tests-hooks",
                     "agent-stall-hooks",
                     "stall-watchdog-hooks",
-                    "finished-run-hooks"
+                    "finished-run-hooks",
+                    "engine-freeze-hooks"
                 ]
         );
     }

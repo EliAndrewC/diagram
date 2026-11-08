@@ -206,9 +206,9 @@
    "declared": "spec-fidelity"
   },
   "### T018 Approach (checklist part A)": {
-   "sha256": "06344e075d4aac5d8f56e981d0262a763cab851a19ed956db7035f7c073d802a",
+   "sha256": "fcd9068e8cc0b469470604542e55019a2ba38ff168e16149e2207415c1534ac2",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T019 Approach (checklist part A)": {
@@ -1673,6 +1673,47 @@
      "why": "Order and process inside D3 and D4; the green exit carries FR-002 (suite) and FR-004 (cover), and nothing the GM asked for is reduced."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T018 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard's cheap half (live reviews, live rolls via /proc, the refusal's words) moves in-process in Rust; lib/hm_engine_freeze.py is deleted.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and its libraries in phase 1; FR-002/D4 hold the verdicts by the suite. The deletion is fully true only together with (b3), which moves the unported glue out rather than porting it; that is ruled at (b3). The block's citation of T052's census is not in the bundle and the decision does not need it: FR-001 alone carries the deletion."
+    },
+    {
+     "id": "(b1)",
+     "summary": "The two answerers (l7r/diagram/ci/delta.py's engine list, scripts/gates/gate-stamp.py's AST identity) stay Python until phase 2 although a phase-1 guard calls them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 reaches these files through two clauses: 'the libraries its guards call - phase 1' and the by-name 'l7r/diagram/ci/, the gate's scripts under scripts/gates/' - phase 2. The block quotes only the second, so this is classed narrowing of phase 1 rather than passed as settled. Legitimate because the spec's own words imply it and the literal alternative breaks the spec: a phase-1 port of delta.py is either the gate's core ported before the gate (against FR-001's stated order and its by-name placement of the whole directory), or the one list ported alone while the phase-2 gate still reads the Python list, which is one piece in two implementations (FR-003, 'no piece runs both'). Purpose test against the GM's words: the request is that all Python be ported and that hook startup cost matters; both files are still ported, SC-005's census cannot close with them present, and the hook's Python cost falls from two starts on every engine edit to starts only while a review or roll is live, for an interim ending at phase 2. The exception does not gut the purpose."
+    },
+    {
+     "id": "(b2)",
+     "summary": "The Rust guard consults those answerers as a child process, and asks them last, only when a review or roll is live.",
+     "class": "within",
+     "why": "FR-007's words are 'one process for a tool call, not one per guard'; a tool consulted by the one guard process is not a process per guard, and that reading stands on FR-007 itself. The quoted T006 decision (a) line is not in the bundle (spec-cited.md lacks it), so it was judged as quoted and not relied on. Asking last reorders a conjunction of questions; the block states the same refused-only-when condition, and FR-002/D4's replay of every suite case is the exit that holds it."
+    },
+    {
+     "id": "(b3)",
+     "summary": "The glue that loads the answerers (_is_engine, docstring_only) moves from scripts/hooks/ to a new tracked file scripts/gates/engine_edit.py, deleted when phase 2 ports its answerers.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Decided separately from (b1): this is phase-1 code surviving phase 1 by changing directory, in a feature whose request is a Rust codebase, and the block's stated reason ('beside the file it calls') is convenience, which would not carry it. What carries it: given (b1), Rust cannot call a Python function without some Python entry point, so a Python shim is required. The alternatives are worse against the spec: left in scripts/hooks/ it fails phase 1 outright; a python3 -c embedded in Rust falls outside FR-001's second census, which greps only Makefile, *.mk and *.sh, and would hide the Python from the check that exists to find it. Placed in scripts/gates/ it is a tracked .py that FR-001's first census returns at every phase end, its removal cannot be skipped (SC-005), and it is moved code rather than new behavior, its life bound to the two files it calls. Legitimate on that ground, and only as a shim that does nothing but load the two answerers and goes in phase 2 as the block says."
+    },
+    {
+     "id": "(c)",
+     "summary": "REVIEW_AGENTS is read directly from pair_hooks rather than parsed from its source.",
+     "class": "within",
+     "why": "How the port obtains a constant; no verdict moves, and FR-002/D4's replay holds that."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2312,6 +2353,46 @@
      "summary": "After T005 in the plan's order; green on the suite against the Rust guard, make rust-test, cover and hooks-test, red to make arbiter-ask; lands by make land-tooling with no work budget.",
      "class": "within",
      "why": "Order and process inside D3 and D4; the green exit carries FR-002 (suite) and FR-004 (cover), and nothing the GM asked for is reduced."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T018": {
+   "section_sha256": "fcd9068e8cc0b469470604542e55019a2ba38ff168e16149e2207415c1534ac2",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "The guard's cheap half (live reviews, live rolls via /proc, the refusal's words) moves in-process in Rust; lib/hm_engine_freeze.py is deleted.",
+     "class": "within",
+     "why": "FR-001 puts scripts/hooks/ and its libraries in phase 1; FR-002/D4 hold the verdicts by the suite. The deletion is fully true only together with (b3), which moves the unported glue out rather than porting it; that is ruled at (b3). The block's citation of T052's census is not in the bundle and the decision does not need it: FR-001 alone carries the deletion."
+    },
+    {
+     "id": "(b1)",
+     "summary": "The two answerers (l7r/diagram/ci/delta.py's engine list, scripts/gates/gate-stamp.py's AST identity) stay Python until phase 2 although a phase-1 guard calls them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 reaches these files through two clauses: 'the libraries its guards call - phase 1' and the by-name 'l7r/diagram/ci/, the gate's scripts under scripts/gates/' - phase 2. The block quotes only the second, so this is classed narrowing of phase 1 rather than passed as settled. Legitimate because the spec's own words imply it and the literal alternative breaks the spec: a phase-1 port of delta.py is either the gate's core ported before the gate (against FR-001's stated order and its by-name placement of the whole directory), or the one list ported alone while the phase-2 gate still reads the Python list, which is one piece in two implementations (FR-003, 'no piece runs both'). Purpose test against the GM's words: the request is that all Python be ported and that hook startup cost matters; both files are still ported, SC-005's census cannot close with them present, and the hook's Python cost falls from two starts on every engine edit to starts only while a review or roll is live, for an interim ending at phase 2. The exception does not gut the purpose."
+    },
+    {
+     "id": "(b2)",
+     "summary": "The Rust guard consults those answerers as a child process, and asks them last, only when a review or roll is live.",
+     "class": "within",
+     "why": "FR-007's words are 'one process for a tool call, not one per guard'; a tool consulted by the one guard process is not a process per guard, and that reading stands on FR-007 itself. The quoted T006 decision (a) line is not in the bundle (spec-cited.md lacks it), so it was judged as quoted and not relied on. Asking last reorders a conjunction of questions; the block states the same refused-only-when condition, and FR-002/D4's replay of every suite case is the exit that holds it."
+    },
+    {
+     "id": "(b3)",
+     "summary": "The glue that loads the answerers (_is_engine, docstring_only) moves from scripts/hooks/ to a new tracked file scripts/gates/engine_edit.py, deleted when phase 2 ports its answerers.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Decided separately from (b1): this is phase-1 code surviving phase 1 by changing directory, in a feature whose request is a Rust codebase, and the block's stated reason ('beside the file it calls') is convenience, which would not carry it. What carries it: given (b1), Rust cannot call a Python function without some Python entry point, so a Python shim is required. The alternatives are worse against the spec: left in scripts/hooks/ it fails phase 1 outright; a python3 -c embedded in Rust falls outside FR-001's second census, which greps only Makefile, *.mk and *.sh, and would hide the Python from the check that exists to find it. Placed in scripts/gates/ it is a tracked .py that FR-001's first census returns at every phase end, its removal cannot be skipped (SC-005), and it is moved code rather than new behavior, its life bound to the two files it calls. Legitimate on that ground, and only as a shim that does nothing but load the two answerers and goes in phase 2 as the block says."
+    },
+    {
+     "id": "(c)",
+     "summary": "REVIEW_AGENTS is read directly from pair_hooks rather than parsed from its source.",
+     "class": "within",
+     "why": "How the port obtains a constant; no verdict moves, and FR-002/D4's replay holds that."
     }
    ],
    "verdict": "CLEAR"

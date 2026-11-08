@@ -103,7 +103,7 @@ pub(crate) struct Procs {
 }
 
 impl Procs {
-    fn pids(&self) -> Vec<u32> {
+    pub(crate) fn pids(&self) -> Vec<u32> {
         let mut out: Vec<u32> = std::fs::read_dir(&self.root)
             .map(|d| {
                 d.filter_map(Result::ok)
@@ -115,14 +115,14 @@ impl Procs {
         out
     }
 
-    fn read(&self, pid: u32, name: &str) -> String {
+    pub(crate) fn read(&self, pid: u32, name: &str) -> String {
         std::fs::read(self.root.join(pid.to_string()).join(name)).map_or_else(
             |_| String::new(),
             |b| String::from_utf8_lossy(&b).into_owned(),
         )
     }
 
-    fn link(&self, pid: u32, name: &str) -> Option<PathBuf> {
+    pub(crate) fn link(&self, pid: u32, name: &str) -> Option<PathBuf> {
         std::fs::read_link(self.root.join(pid.to_string()).join(name)).ok()
     }
 

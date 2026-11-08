@@ -5,7 +5,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
-HOOK="$REPO/scripts/hooks/engine-freeze-hooks.sh"
+HOOK="$HERE/engine-freeze-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT

@@ -108,7 +108,7 @@ diagnosed and the tooling improved.
 - **Did the wave move a map?** `make map` ends by saying whether its manifest differs from HEAD, and `make maps-moved`
   lists every pool manifest that does (feature 429): record that, never a scratch copy, which a test or `make map` may
   already have regenerated (feature 328 wave 68 recorded Sawada unchanged after its board moved 76 degrees).
-- **No engine edit while a map review runs** (`engine-freeze-hooks.sh`, feature 429): a review's verdict is keyed to the
+- **No engine edit while a map review runs** (the `engine_freeze_hooks` guard, feature 429): a review's verdict is keyed to the
   engine it read, so draft a fix outside the clone until every review has returned.
 - **Deleting a repair step** is measured on a fresh block rolled BEFORE the change, seed by seed
   (`make cohort N=48 SEED=<that block's first seed> FRESH=0 JOBS=3`), bisecting any new failure: the landing cohort's

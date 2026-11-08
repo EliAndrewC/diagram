@@ -54,8 +54,8 @@ impl Limits {
     }
 }
 
-/// The `type` of a transcript's last JSON record, read back from its end until that line is whole; `None` when unreadable.
-fn last_type(path: &Path) -> Option<String> {
+/// A transcript's last JSON record, read back from its end until that line is whole; `None` when unreadable.
+pub(crate) fn last_record(path: &Path) -> Option<Value> {
     const STEP: u64 = 65_536;
     let mut f = File::open(path).ok()?;
     let mut pos = f.seek(SeekFrom::End(0)).ok()?;
@@ -75,7 +75,12 @@ fn last_type(path: &Path) -> Option<String> {
     }
     let body = &buf[..trimmed(&buf)];
     let line = body.rsplit(|c| *c == b'\n').next()?;
-    let doc: Value = serde_json::from_slice(line).ok()?;
+    serde_json::from_slice(line).ok()
+}
+
+/// The `type` of a transcript's last record.
+fn last_type(path: &Path) -> Option<String> {
+    let doc = last_record(path)?;
     doc.get("type")
         .and_then(Value::as_str)
         .filter(|t| !t.is_empty())
