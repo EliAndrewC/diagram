@@ -17,6 +17,15 @@
             "statusMessage": "Checking the dev container's dependencies..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SessionStart  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -62,6 +71,15 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/finished-run-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/finished-run-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" UserPromptSubmit  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
           }
         ]
       }
@@ -424,6 +442,15 @@
             "command": "h=/diagram/scripts/hooks/new-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/new-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard: a new glossary or registry file takes a reserved prefix"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PreToolUse  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
+          }
+        ]
       }
     ],
     "SubagentStart": [
@@ -433,6 +460,15 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 375 FR-008 - the event log records every hook event; it never refuses",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SubagentStart  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
           }
         ]
       }
@@ -451,6 +487,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SubagentStop  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
@@ -460,6 +505,15 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/event-log-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/event-log-hooks.sh\"; exec \"$h\"  # GUARD_EDIT_OK: feature 406 T02 (D161) - a failed call recorded beside a succeeded one",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PostToolUseFailure  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
           }
         ]
       }
@@ -500,6 +554,15 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" after  # GUARD_EDIT_OK: feature 385 hour 30 - a held plan section written back after any call that changed it"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PostToolUse  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
           }
         ]
       }
@@ -554,6 +617,15 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/wakeup-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/wakeup-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 263 - a NEW guard: a turn cannot end with a stale ScheduleWakeup pending; it names the CronDelete",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" Stop  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "timeout": 60
           }
         ]
       }

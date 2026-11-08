@@ -230,5 +230,20 @@
     "command": "a python3 that prints an error and exits 127 put first on PATH (PATH=<dir>:$PATH), each guard run on each input; then each guard run with the real PATH",
     "method": "exit code and stdout compared between the two runs",
     "value": "every guard measured fails OPEN: repo-safety on the force push exits 0 with Python dead (2, a refusal, with it live); make-only on the pytest prints nothing (its rewrite to `make test-file` with it live); gate-hooks exits 127 (Claude Code's hook rule: only exit 2 blocks, another exit is a non-blocking error); pair-hooks exits 0 both ways. A missing guard script exits 127, the same"
+  },
+  "dispatcher-floor": {
+    "quantity": "phase 1's floor: the Rust dispatcher's own cost on a Bash call, with its guard list empty, beside the guards it will take over",
+    "observed": "2026-11-07",
+    "subject": "the PreToolUse hooks of .claude/settings.json whose matcher takes Bash, after T005 added scripts/hooks/l7r-guard.sh (its binary built and self-checked in the clone's target)",
+    "command": "m:hooks-bash's command: each hook's command run with a sample PreToolUse JSON for a Bash `ls` on stdin, three times, CLAUDE_PROJECT_DIR set to the clone",
+    "method": "the median of three runs a hook; the slowest and the sum of the medians",
+    "value": {
+      "hooks": 27,
+      "l7r_guard_ms": 4.7,
+      "slowest_ms": 208,
+      "slowest": "pair-hooks.sh",
+      "summed_ms": 1085,
+      "wrapper_alone_100_calls_ms": 3.8
+    }
   }
 }

@@ -122,7 +122,7 @@
    "declared": "spec-fidelity"
   },
   "### T004 Approach (checklist part A)": {
-   "sha256": "d91250f73db2a5fd12b7e72034f3bdc870156b8b01919b3e9faab5c8376ca2e1",
+   "sha256": "e49f92ceb09db0e1f76e5f8d2147db05d6ec1ba03dd669deabdcce227ff3260a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -1019,6 +1019,90 @@
      "why": "FR-010 (timings measured against the spec's figures) and FR-001 (both censuses re-run at the phase's end) applied to phase 1; SC-002 and SC-003 belong to later phases and the feature's close. FR-010's 'recorded in dev/' and FR-002's 'named in the phase's record' for the two XIV fixes still bind this close; the Done line does not displace them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T004 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T004-fail-open-none-built",
+     "summary": "With no good binary ever built, the wrapper lets the call through with a notice and a guard-log line",
+     "class": "within",
+     "why": "This is plan D7's own outcome, not new in this block. It is held against FR-002, which asks for the same verdicts on every case the tests and suites hold. Having no binary at all is not one of those cases. The case that matches it today is a guard whose Python cannot start, and m:python-dead-fails-open measures that this already fails open (repo-safety exits 0 on a force push to main, make-only prints nothing, gate exits 127). So no verdict gets weaker than today's. Making it fail closed would be new behavior the GM did not ask for. The earlier BLOCKED version justified this from FR-005's make-only clause. The block now cites the requirement that actually governs verdicts."
+    },
+    {
+     "id": "T004-last-good-binary",
+     "summary": "A failed build (does not compile, or compiles and fails l7r-guard --self-check) runs the last good binary; a stale build is rebuilt",
+     "class": "within",
+     "why": "This repeats D7 word for word, and the self-check is D7's own definition of a good build. Today a broken Python guard crashes and fails open, so keeping the previous guards running gives a verdict no weaker than today's. The request asks for a port and nothing here cuts what it covers."
+    },
+    {
+     "id": "T004-order-no-dual-run",
+     "summary": "T004 replaces no guard; T005 adds the wrapper to the settings with an empty guard list; each guard task moves one decider in and removes that guard's shell script and settings entry in the same landing",
+     "class": "within",
+     "why": "This is how the plan carries out FR-003: the Python stays the one that runs until its replacement passes, and no piece runs in both. Separate processes for the guards still being moved are a temporary state. FR-007's one process is where the work ends up, and this order does not give it up."
+    },
+    {
+     "id": "T004-fr005-to-T028",
+     "summary": "FR-005's clause that the make-only guard must cover the replacements' binaries is left to T028, not this task",
+     "class": "within",
+     "why": "This assigns the requirement to another task and narrows nothing. The clause is about the make-only guard's coverage, not about the wrapper. FR-005 still applies to the feature in full, and the block names the task that carries it."
+    },
+    {
+     "id": "T004-budget-landing",
+     "summary": "Lands through make land-tooling with no work budget and nothing rolled; no researched value or constant moves",
+     "class": "within",
+     "why": "This is process and tooling scope only. Nothing the GM asked for is changed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "### T005 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T005-1 transitional wiring",
+     "summary": "Every session's settings call the one dispatcher once per event, beside the Python guards it does not yet hold.",
+     "class": "within",
+     "why": "FR-001 ports the hooks first and FR-003 requires each unported guard's Python to stay the one that runs while no guard runs twice; FR-007's single process is the end state reached as pieces move in. A coexistence period is what FR-003 itself describes, not a carve-out from the GM's request to make this a Rust codebase."
+    },
+    {
+     "id": "T005-2 order and landing",
+     "summary": "After T004; landed alone with make land-tooling.",
+     "class": "within",
+     "why": "Sequencing and landing route only; the spec leaves both open and neither narrows what is ported."
+    },
+    {
+     "id": "T005-3 exits",
+     "summary": "Green: settings call it for every event, make hooks-test green, its floor timed. Red: failure recorded, task set down, process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit enforces FR-002/FR-003 (hooks-test) and FR-010 (timed); the red exit stops rather than relaxing any requirement."
+    },
+    {
+     "id": "T005-4 budget",
+     "summary": "No work budget, nothing rolled, for a tooling landing.",
+     "class": "within",
+     "why": "Process bookkeeping; it changes nothing the GM asked for."
+    },
+    {
+     "id": "T005-5 done, measured",
+     "summary": "Re-run m:hooks-bash's command with the dispatcher in place and record the floor.",
+     "class": "within",
+     "why": "Serves FR-010 and SC-001's measurement against m:hooks-bash; it does not claim SC-001 met or move its target."
+    },
+    {
+     "id": "T005-6 no constant or room question",
+     "summary": "No researched value moves; no constant moved; not a room question.",
+     "class": "within",
+     "why": "Statements that the task touches only Claude Code tool-call guards, consistent with FR-009's scope and the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1138,6 +1222,88 @@
      "summary": "Done = the library's tests green and its reads counted.",
      "class": "within",
      "why": "Does not exempt the library from FR-004 (coverage floor) or FR-008 (test time), which still bind every replacement; the checklist omits restating them rather than carving them out."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T004": {
+   "section_sha256": "e49f92ceb09db0e1f76e5f8d2147db05d6ec1ba03dd669deabdcce227ff3260a",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T004-fail-open-none-built",
+     "summary": "With no good binary ever built, the wrapper lets the call through with a notice and a guard-log line",
+     "class": "within",
+     "why": "This is plan D7's own outcome, not new in this block. It is held against FR-002, which asks for the same verdicts on every case the tests and suites hold. Having no binary at all is not one of those cases. The case that matches it today is a guard whose Python cannot start, and m:python-dead-fails-open measures that this already fails open (repo-safety exits 0 on a force push to main, make-only prints nothing, gate exits 127). So no verdict gets weaker than today's. Making it fail closed would be new behavior the GM did not ask for. The earlier BLOCKED version justified this from FR-005's make-only clause. The block now cites the requirement that actually governs verdicts."
+    },
+    {
+     "id": "T004-last-good-binary",
+     "summary": "A failed build (does not compile, or compiles and fails l7r-guard --self-check) runs the last good binary; a stale build is rebuilt",
+     "class": "within",
+     "why": "This repeats D7 word for word, and the self-check is D7's own definition of a good build. Today a broken Python guard crashes and fails open, so keeping the previous guards running gives a verdict no weaker than today's. The request asks for a port and nothing here cuts what it covers."
+    },
+    {
+     "id": "T004-order-no-dual-run",
+     "summary": "T004 replaces no guard; T005 adds the wrapper to the settings with an empty guard list; each guard task moves one decider in and removes that guard's shell script and settings entry in the same landing",
+     "class": "within",
+     "why": "This is how the plan carries out FR-003: the Python stays the one that runs until its replacement passes, and no piece runs in both. Separate processes for the guards still being moved are a temporary state. FR-007's one process is where the work ends up, and this order does not give it up."
+    },
+    {
+     "id": "T004-fr005-to-T028",
+     "summary": "FR-005's clause that the make-only guard must cover the replacements' binaries is left to T028, not this task",
+     "class": "within",
+     "why": "This assigns the requirement to another task and narrows nothing. The clause is about the make-only guard's coverage, not about the wrapper. FR-005 still applies to the feature in full, and the block names the task that carries it."
+    },
+    {
+     "id": "T004-budget-landing",
+     "summary": "Lands through make land-tooling with no work budget and nothing rolled; no researched value or constant moves",
+     "class": "within",
+     "why": "This is process and tooling scope only. Nothing the GM asked for is changed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T005": {
+   "section_sha256": "317b833fe6c63f8dc44580c19203becedfdde6f0e9b8b07015b48ec9703e03fc",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T005-1 transitional wiring",
+     "summary": "Every session's settings call the one dispatcher once per event, beside the Python guards it does not yet hold.",
+     "class": "within",
+     "why": "FR-001 ports the hooks first and FR-003 requires each unported guard's Python to stay the one that runs while no guard runs twice; FR-007's single process is the end state reached as pieces move in. A coexistence period is what FR-003 itself describes, not a carve-out from the GM's request to make this a Rust codebase."
+    },
+    {
+     "id": "T005-2 order and landing",
+     "summary": "After T004; landed alone with make land-tooling.",
+     "class": "within",
+     "why": "Sequencing and landing route only; the spec leaves both open and neither narrows what is ported."
+    },
+    {
+     "id": "T005-3 exits",
+     "summary": "Green: settings call it for every event, make hooks-test green, its floor timed. Red: failure recorded, task set down, process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit enforces FR-002/FR-003 (hooks-test) and FR-010 (timed); the red exit stops rather than relaxing any requirement."
+    },
+    {
+     "id": "T005-4 budget",
+     "summary": "No work budget, nothing rolled, for a tooling landing.",
+     "class": "within",
+     "why": "Process bookkeeping; it changes nothing the GM asked for."
+    },
+    {
+     "id": "T005-5 done, measured",
+     "summary": "Re-run m:hooks-bash's command with the dispatcher in place and record the floor.",
+     "class": "within",
+     "why": "Serves FR-010 and SC-001's measurement against m:hooks-bash; it does not claim SC-001 met or move its target."
+    },
+    {
+     "id": "T005-6 no constant or room question",
+     "summary": "No researched value moves; no constant moved; not a room question.",
+     "class": "within",
+     "why": "Statements that the task touches only Claude Code tool-call guards, consistent with FR-009's scope and the request."
     }
    ],
    "verdict": "CLEAR"
