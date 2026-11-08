@@ -229,6 +229,12 @@ check() { # <step name> <command>: run in the worktree without the escapes, to <
 check lint "$lint"
 ran=lint
 if [ "$(cat "$log.lint.rc")" = 0 ]; then
+  # THE GUARD BINARY FIRST (feature 449 T052): the worktree is a new tree, so its wrapper has no good binary, and a suite that finds another building runs what is there - nothing - and
+  # fails open (a test saw exit 1 where it expected the refusal). One target kept across landings, so a landing rebuilds only what moved.
+  if [ -z "${LAND_TOOLING_CHECKS:-}" ] && [ -x "$WT/scripts/hooks/l7r-guard.sh" ]; then
+    export L7R_GUARD_TARGET="$HOME/.cache/l7r-cargo-target/${ROOT##*/}-land-tooling"
+    L7R_GUARD_BUILD_SECS=300 "$WT/scripts/hooks/l7r-guard.sh" --version </dev/null >/dev/null 2>&1
+  fi
   check guard-suites "$guards" & check tooling-tests "$tooling_tests" & wait
   ran="guard-suites tooling-tests lint"
 fi
