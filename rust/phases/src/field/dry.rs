@@ -545,6 +545,15 @@ fn refused(
                     tests += 1;
                     inside(*c, q)
                 })
+                // ...AND THE LAID PLOT'S CORNERS IN THE CANDIDATE (feature 444 T36, `make seeds`' fresh comb seed 549270514): two
+                // slanted plots crossed with two of the laid sliver's corners inside the later plot, though neither middle stood in
+                // the other and none of the later plot's corners stood in the sliver - each pulled a foot toward its own middle, as
+                // the candidate's are, so a shared corner or edge is still no lap
+                || q.iter().any(|c| {
+                    tests += 1;
+                    let u = unit(*c, q_middle);
+                    inside((c.0 + u.0 * LAP_PULL_FT, c.1 + u.1 * LAP_PULL_FT), poly)
+                })
         });
         (hit, tests)
     };
@@ -601,12 +610,55 @@ fn seg_seg_dist(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::{
-        apart, hem, past_keep, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS, PLOT_FT,
-        TRACT_APART_DEG, TRACT_STRIPS,
+        apart, hem, past_keep, refused, DryPlot, BANK_FT, GRAIN_ACRES_PER_HOUSEHOLD, MAX_BANDS,
+        PLOT_FT, TRACT_APART_DEG, TRACT_STRIPS,
     };
     use crate::field::geom::inside;
     use crate::field::index::Index;
+    use crate::field::index::{Bands, Boxes};
 
+    #[test]
+    fn a_later_plot_over_a_laid_slivers_corners_is_refused() {
+        // the pair `make seeds` found on fresh comb seed 549270514 (feature 444 T36): two of the laid sliver's corners stood inside
+        // the later plot, neither middle in the other, none of the later plot's corners in the sliver
+        let sliver = vec![
+            (2912.502, 4129.410),
+            (2895.458, 4126.519),
+            (2903.240, 4197.594),
+            (2912.110, 4200.909),
+        ];
+        let later = vec![
+            (2895.743, 4135.169),
+            (2790.850, 4178.074),
+            (2815.571, 4245.165),
+            (2922.717, 4201.386),
+        ];
+        let plots = vec![DryPlot {
+            poly: sliver.clone(),
+            crop: "millet",
+            theta: 0.0,
+            tract: 7,
+        }];
+        let mut laid = Boxes::default();
+        laid.file((2895.0, 4126.0), (2913.0, 4201.0));
+        let (mut bands, mut ix) = (Bands::new(&[]), Index::default());
+        assert!(refused(
+            &later,
+            &mut bands,
+            (&plots, &mut laid),
+            &mut ix,
+            1.0
+        ));
+        // ...and a plot beside the sliver, sharing no ground, is not
+        let beside: Vec<_> = sliver.iter().map(|p| (p.0 + 40.0, p.1)).collect();
+        assert!(!refused(
+            &beside,
+            &mut bands,
+            (&plots, &mut laid),
+            &mut ix,
+            1.0
+        ));
+    }
     #[test]
     fn a_cleared_middles_hem_is_one_band_along_the_whole_canal() {
         let line = [(0.0, 0.0), (0.0, 1200.0)];
