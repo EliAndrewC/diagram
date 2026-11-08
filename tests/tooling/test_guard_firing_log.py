@@ -56,7 +56,7 @@ CASES = [
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
     # feature 249 (GM 2026-09-14): a spec-fidelity round after the first reads the diff - the branches
     # a bare payload can reach (the rewrite, the first snapshot and the history line need a clone with
-    # the feature present, which tests/hooks/test-review_round_hooks.rs drives on a fixture)
+    # the feature present, which tests/hooks/test-review-round-hooks.sh drives on a fixture)
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 2 review of specs/999-nowhere against request.md"), "permitted", "no-feature"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
@@ -476,7 +476,7 @@ _ESCAPES = {
         "not-an-escape",
         "RETIRED by feature 379 FR-010 (the GM 2026-10-10: the arbiter first) - pair-hooks.sh no longer reads it; named only by the event log's waiver flag for old transcripts and by the suite proving it changes nothing",
     ),
-    "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup_hooks.rs) and in the header saying why there is none"),
+    "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
     "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in a guard's old files_named (an executable is never a log; feature 295 item 1)"),
 }
