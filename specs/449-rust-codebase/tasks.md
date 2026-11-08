@@ -37,8 +37,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T006 [US1] `pair-hooks`: its decider `rust/guard/src/guards/pair_hooks.rs`, its suite `tests/hooks/test-pair-hooks.sh` replayed against `l7r-guard --only pair-hooks`, then `scripts/hooks/pair-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: pair-hooks is Rust: its suite's 100 cases green against l7r-guard, the shell deleted; a Bash ls 200 ms -> 6.8 ms (m:pair-hooks-ported)
-- [ ] T007 [US1] `gate-hooks`: its decider `rust/guard/src/guards/gate_hooks.rs`, its suite `tests/hooks/test-gate-hooks.sh` replayed against `l7r-guard --only gate-hooks`, then `scripts/hooks/gate-hooks.sh` and its settings entry removed
+- [x] T007 [US1] `gate-hooks`: its decider `rust/guard/src/guards/gate_hooks.rs`, its suite `tests/hooks/test-gate-hooks.sh` replayed against `l7r-guard --only gate-hooks`, then `scripts/hooks/gate-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: gate-hooks is Rust: 45 of 45 suite cases green against l7r-guard, the shell deleted; a Bash ls 111.6 ms -> the dispatcher's 5.5 ms (m:gate-hooks-ported)
 - [ ] T008 [US1] `measure-hooks`: its decider `rust/guard/src/guards/measure_hooks.rs`, its suite `tests/hooks/test-measure-hooks.sh` replayed against `l7r-guard --only measure-hooks`, then `scripts/hooks/measure-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T009 [US1] `no-poll-hooks`: its decider `rust/guard/src/guards/no_poll_hooks.rs`, its suite `tests/hooks/test-no-poll-hooks.sh` replayed against `l7r-guard --only no-poll-hooks`, then `scripts/hooks/no-poll-hooks.sh` and its settings entry removed
