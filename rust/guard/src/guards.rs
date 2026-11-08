@@ -8,6 +8,7 @@ pub mod conflict_marker_hooks;
 pub mod discard_hooks;
 pub mod engine_freeze_hooks;
 pub mod event_log_hooks;
+pub mod feature_approval_hooks;
 pub mod finished_run_hooks;
 pub mod gate_hooks;
 pub mod gate_write_hooks;

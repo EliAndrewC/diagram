@@ -67,16 +67,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/feature-approval-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/feature-approval-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 377 - a NEW guard, the GM 2026-10-10: no feature is filed without the GM's approval",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/budget-change-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/budget-change-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 443 T03 - a NEW guard, plan D6: a work budget changes only with the GM's own words",
             "timeout": 10
           }

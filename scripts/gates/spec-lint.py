@@ -59,7 +59,7 @@ CHECK6_MARK = "the GM's approval line"
 def check_approval(spec_dir: pathlib.Path) -> list[str]:
     """Check 6: the spec.md of a feature numbered APPROVAL_FIRST or above carries a well-formed approval line (the GM,
     2026-10-10: "spec kit features should not be filed without my explicit approval"). The commit guard
-    (`scripts/hooks/feature-approval-hooks.sh`) also verifies the quote against the session's transcript; at the push
+    (`rust/guard/src/guards/feature_approval_hooks.rs`) also verifies the quote against the session's transcript; at the push
     only the form can be read, which catches a commit the guard could not see."""
     m = re.match(r"(\d{3,})-", spec_dir.name)
     spec = spec_dir / "spec.md"

@@ -484,5 +484,18 @@
       "suite_cases": 27,
       "suite_passed_against_rust": 27
     }
+  },
+  "feature-approval-hooks-ported": {
+    "quantity": "a `git add -A` outside a repository, its cost in the feature-approval guard, the shell's against the Rust guard alone (T025)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/feature-approval-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only feature-approval-hooks PreToolUse in the clone, standing in /tmp, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/feature-approval-hooks.sh",
+    "value": {
+      "shell_git_add_ms": 40.82,
+      "rust_guard_git_add_ms": 11.2,
+      "suite_cases": 55,
+      "suite_passed_against_rust": 55
+    }
   }
 }
