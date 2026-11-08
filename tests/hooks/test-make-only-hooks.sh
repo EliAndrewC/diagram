@@ -169,6 +169,49 @@ check "writing a NON-guard file"              ok      "python3 - <<PY
 import pathlib; pathlib.Path('notes.md').write_text(x)
 PY"
 
+# GUARD_EDIT_OK: feature 449 T029 - the constitution XIV fix: a scratch file whose text names a guard is not a guard write (found 2026-11-07)
+check "a scratch file whose text names a guard"  ok      "cat >> /tmp/probe.py <<'EOF'
+(root / 'scripts' / 'x-hooks.sh').write_text('echo guard')
+EOF"
+check "...but python running that text is a write" blocked "python3 - <<'EOF'
+(root / 'scripts' / 'x-hooks.sh').write_text('echo guard')
+EOF"
+check "...and a heredoc into a guard file still is" blocked "cat >> Makefile <<'EOF'
+x
+EOF"
+check "...and a body piped to python is run"       blocked "cat <<'EOF' | python3
+open('Makefile', 'w').write('x')
+EOF"
+check "...and a body stored and run by the command is run" blocked "cat > /tmp/probe.py <<'EOF'
+open('Makefile', 'w').write('x')
+EOF
+python3 /tmp/probe.py"
+check "...and one chained on the heredoc's own line" blocked "cat > /tmp/probe.py <<'EOF' && python3 /tmp/probe.py
+open('Makefile', 'w').write('x')
+EOF"
+check "...and one run through a glob after it"      blocked "cat > /tmp/g_1.py <<'EOF'
+open('Makefile', 'w').write('x')
+EOF
+python3 /tmp/g_*.py"
+check "...and an unquoted delimiter, whose body the shell runs" blocked "cat > /tmp/probe <<EOF
+\$(python3 -c \"open('Makefile', 'w').write('x')\")
+EOF"
+check "...and a process substitution as cat's target" blocked "cat > >(bash) <<'EOF'
+open('Makefile', 'w').write('x')
+EOF"
+check "...and a process substitution as tee's file"   blocked "tee >(bash) >/dev/null <<'EOF'
+open('Makefile', 'w').write('x')
+EOF"
+check "...and an assignment that changes what cat runs" blocked "PATH=/tmp/d; cat > /tmp/f <<'EOF'
+open('Makefile', 'w').write('x')
+EOF"
+check "...and a loader variable before it"            blocked "LD_PRELOAD=/tmp/x.so; cat > /tmp/f <<'EOF'
+open('Makefile', 'w').write('x')
+EOF"
+check "a scratch file stored after an assignment"   ok      "S=/tmp/a; cat >> \$S/probe.py <<'EOF'
+(root / 'scripts' / 'x-hooks.sh').write_text('echo guard')
+EOF"
+
 echo
 echo "3. THE REFUSAL IS USEFUL (FR-006) - it must name the target, not just say no"
 names_a_target "a blocked cohort names a target"  "python3 -m l7r.diagram.tools.cohort_audit"

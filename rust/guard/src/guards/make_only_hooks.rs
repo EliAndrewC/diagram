@@ -46,6 +46,13 @@ macro_rules! lazy {
     };
 }
 
+const STORED_WORD: &str = r"(?:[\w./~+,:@%=-]|\$[A-Za-z_]\w*|\$\{[A-Za-z_]\w*\})+";
+lazy!(
+    STORED_HEREDOC,
+    format!(
+        r#"(?s)^\s*(?:(?:[A-Za-z]|[a-z_][a-z0-9_]*)=[\w./~:@%+,=-]*\s*;\s*)*(?:cat(?:[ \t]*>>?[ \t]*{STORED_WORD})?|tee(?:[ \t]+-a)?(?:[ \t]+{STORED_WORD})+)[ \t]*<<(-?)[ \t]*(?:'(\w+)'|"(\w+)"|\\(\w+))[ \t]*(?:>>?[ \t]*{STORED_WORD})?[ \t]*\n(.*?)\n(\t*)(?:\2|\3|\4)\n*$"#
+    )
+);
 lazy!(
     FOREIGN,
     format!(r"{POS}make\s+(?:-\S+\s+)*(?:-f|--file|--makefile)(?:[=\s]|$)")
@@ -187,6 +194,32 @@ fn replace_suites(text: &str) -> String {
     out + &text[from..]
 }
 
+/// `cmd` with its body gone when the whole call is one storing `cat` or `tee` (the shape `STORED_HEREDOC` closes, and the terminator as bash reads it): text being stored names a guard without writing
+/// one, and no other command in the call can run it (T029's constitution XIV fix; the round arbiter on `ask:449-T029-stored`).
+fn without_stored_text(cmd: &str) -> String {
+    let Ok(Some(m)) = STORED_HEREDOC.captures(cmd) else {
+        return cmd.to_owned();
+    };
+    let text = |n: usize| m.get(n).map_or("", |g| g.as_str());
+    let (dashed, delimiter, tabs) = (
+        !text(1).is_empty(),
+        [text(2), text(3), text(4)].concat(),
+        text(6),
+    );
+    let ends_early = text(5).split('\n').any(|l| {
+        (if dashed {
+            l.trim_start_matches('\t')
+        } else {
+            l
+        }) == delimiter
+    });
+    if ends_early || (!dashed && !tabs.is_empty()) {
+        return cmd.to_owned();
+    }
+    let (start, end) = m.get(5).map_or((0, 0), |b| (b.start(), b.end()));
+    format!("{}{}", &cmd[..start], &cmd[end..])
+}
+
 /// The verdict: `ok`, the rule broken, or `make-dup-var:<name>`.
 pub(crate) fn classify(cmd: &str) -> String {
     if cmd.is_empty() {
@@ -229,7 +262,10 @@ pub(crate) fn classify(cmd: &str) -> String {
         || cmd.contains("write_text")
         || cmd.contains("open(");
     if writes {
-        let (c, raw) = (replace_suites(&clean), replace_suites(cmd));
+        let (c, raw) = (
+            replace_suites(&clean),
+            replace_suites(&without_stored_text(cmd)),
+        );
         if SHELL_WRITES.iter().any(|p| hit(p, &c))
             || PY_WRITES.iter().any(|p| hit(p, &raw))
             || write_via_name(&raw)

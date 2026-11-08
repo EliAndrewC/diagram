@@ -6,7 +6,7 @@ gate's phase loop running lint on every gate because its comment named ``lint`` 
 207 wrote a comment naming ``make test-full`` in backticks INTO ``test-full``, which ran itself and
 recursed 914 levels until the container hit its 2,048-process limit. Both fixes were a reworded line
 and a note, and the GM ruled that a note is not prevention. The edit-time refusal lives in
-``scripts/hooks/guard-file-hooks.sh``; this is the gate-phase backstop for the routes an edit can arrive by
+``rust/guard/src/guards/guard_file_hooks.rs``; this is the gate-phase backstop for the routes an edit can arrive by
 that the hook never sees - a merge, a scripted sweep - and the proof that the detector FIRES.
 """
 

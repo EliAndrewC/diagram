@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for guard-file-hooks.sh (feature 127, layer 3).
+# Tests for the guard-file guard, rust/guard, replayed through its link (feature 127, layer 3).
 # Run: tests/hooks/test-guard-file-hooks.sh   (exit 0 = all green)
 #
 # TWO DIRECTIONS (FR-015 + FR-016). Section 2 carries the case the fidelity review put here: an edit
@@ -8,7 +8,7 @@
 # guards nothing and obstructs this project's own procedure for improving review subagents.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/guard-file-hooks.sh"
+HOOK="$HERE/guard-file-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
 # must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first

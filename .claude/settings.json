@@ -63,15 +63,6 @@
         ]
       },
       {
-        "matcher": "Read|Edit|Write|NotebookEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/guard-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/guard-file-hooks.sh\"; exec \"$h\" pretool"
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
           {

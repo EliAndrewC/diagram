@@ -369,3 +369,97 @@ fn an_escape_is_recorded_with_its_reason() {
     });
     assert!(recorded);
 }
+
+#[test]
+fn text_being_stored_names_a_guard_without_writing_one() {
+    assert_eq!(
+        v("cat >> /tmp/p.py <<'EOF'\n(root / 'scripts' / 'x-hooks.sh').write_text('y')\nEOF"),
+        "ok"
+    );
+    assert_eq!(v("tee /tmp/p.py <<'EOF'\nopen('Makefile', 'w')\nEOF"), "ok");
+    assert_eq!(
+        v("cat > /tmp/p <<\"EOF\"\nopen('Makefile', 'w')\nEOF"),
+        "ok"
+    );
+    assert_eq!(v("cat > /tmp/p <<\\EOF\nopen('Makefile', 'w')\nEOF"), "ok");
+    assert_eq!(
+        v("cat > /tmp/p <<EOF\nopen('Makefile', 'w')\nEOF"),
+        "guard-write"
+    );
+    assert_eq!(
+        v("python3 - <<'EOF'\n(root / 'x-hooks.sh').write_text('y')\nEOF"),
+        "guard-write"
+    );
+    assert_eq!(v("cat >> Makefile <<'EOF'\nx\nEOF"), "guard-write");
+    assert_eq!(
+        v("cat <<'EOF' | python3\nopen('Makefile', 'w')\nEOF"),
+        "guard-write"
+    );
+    assert_eq!(
+        v("cat > /tmp/x.py <<'EOF'\nopen('Makefile', 'w')\nEOF\npython3 /tmp/x.py"),
+        "guard-write"
+    );
+    assert_eq!(v("cat <<'EOF'\nopen('Makefile', 'w')\nEOF"), "ok");
+    assert_eq!(
+        v("S=/tmp/a; cat >> $S/p.py <<'EOF'\n('x-hooks.sh').write_text('y')\nEOF"),
+        "ok"
+    );
+    assert_eq!(
+        v("cat > /tmp/x.py <<'EOF' && python3 /tmp/x.py\nopen('Makefile', 'w')\nEOF"),
+        "guard-write"
+    );
+    assert_eq!(
+        v("cat > /tmp/g_1.py <<'EOF'\nopen('Makefile', 'w')\nEOF\npython3 /tmp/g_*.py"),
+        "guard-write"
+    );
+}
+
+#[test]
+fn the_storing_target_is_a_plain_word_and_the_terminator_is_as_bash_reads_it() {
+    let body = "open('Makefile', 'w')";
+    assert_eq!(
+        v(&format!("cat > >(bash) <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("tee >(bash) >/dev/null <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("cat > $(mktemp) <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("S=$(pwn); cat > $S/x <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(v(&format!("tee -a /tmp/a $S/b <<'EOF'\n{body}\nEOF")), "ok");
+    assert_eq!(
+        v(&format!("PATH=/x; cat > /tmp/f <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("LD_PRELOAD=/x; cat > /tmp/f <<'EOF'\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!(
+            "work_dir=/x; S=/y; cat > $S/f <<'EOF'\n{body}\nEOF"
+        )),
+        "ok"
+    );
+    assert_eq!(v(&format!("cat <<'EOF' > ${{S}}/x\n{body}\nEOF\n")), "ok");
+    assert_eq!(v(&format!("cat > /tmp/x <<-'EOF'\n{body}\n\tEOF")), "ok");
+    assert_eq!(
+        v(&format!("cat > /tmp/x <<'EOF'\n{body}\n\tEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("cat > /tmp/x <<'EOF'\na\nEOF\n{body}\nEOF")),
+        "guard-write"
+    );
+    assert_eq!(
+        v(&format!("cat > /tmp/x <<-'EOF'\na\n\tEOF\n{body}\nEOF")),
+        "guard-write"
+    );
+}

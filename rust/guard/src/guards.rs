@@ -21,6 +21,7 @@ pub mod finished_run_hooks;
 pub mod gate_hooks;
 pub mod gate_write_hooks;
 pub mod gm_tree_hooks;
+pub mod guard_file_hooks;
 pub mod house_style_hooks;
 pub mod idle_tests_hooks;
 pub mod ledger_hooks;

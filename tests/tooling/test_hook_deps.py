@@ -139,12 +139,12 @@ def test_every_shared_helper_on_disk_is_known_to_the_deriver() -> None:
 def test_a_filename_in_prose_is_not_a_dependency() -> None:
     """The mention-versus-invocation rule, applied to the deriver itself.
 
-    `guard-file-hooks.sh` says "detection lives in hookmatch.py" in a comment and INVOKES `hm_make.py`.
+    `record-edit-hooks.sh` names other helpers in its comments and INVOKES `hm_record.py`.
     Before comments and docstrings were stripped, every guard depended on every leaf and the split
     delivered nothing three times over (research.md R4).
     """
-    code = hookdeps._code("guard-file-hooks.sh")
-    assert "hm_make.py" in code, "the invocation must survive stripping"
+    code = hookdeps._code("record-edit-hooks.sh")
+    assert "hm_record.py" in code, "the invocation must survive stripping"
     guards = sorted(p.name for p in GUARDS.glob("*-hooks.sh"))
     make_family = [g for g in guards if "hm_make.py" in hookdeps.deps_for(g)]
     # 6 since feature 443 T03: budget-change-hooks.sh reads WHICH make target is invoked (`hm_make.targets`), a real import

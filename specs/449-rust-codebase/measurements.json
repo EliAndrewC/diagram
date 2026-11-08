@@ -728,5 +728,17 @@
       "rust_guard_bash_ms": 8.05,
       "make_only_suite_cases": 101
     }
+  },
+  "guard-file-hooks-ported": {
+    "quantity": "an Edit of an ordinary file's cost in the guard-file guard, the shell's against the Rust guard alone (T029)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/guard-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only guard-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (55 cases)",
+    "value": {
+      "shell_edit_ms": 46.12,
+      "rust_guard_edit_ms": 8.26,
+      "guard_file_suite_cases": 55
+    }
   }
 }
