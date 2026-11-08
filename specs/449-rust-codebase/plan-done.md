@@ -696,3 +696,42 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T040 Approach (checklist part A)
+
+1. **The goal, in the world.** `workflow-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `workflow-hooks.sh`, `lib/hm_workflow.py`, the suite and `tests/test_agent_models.py`, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: the script scan, the wave's argument checks, each unit through every `PreToolUse` hook an Agent call meets (an entry with no matcher among them), the refusals' words. `lib/hm_workflow.py`'s callers are the guard, `agent-prefix` (T042, landing together) and `tests/test_agent_models.py`, which now reads `WAVE_JOBS` from the Rust source; it is removed with the shell.
+   - (b) ONE ASK STAYS BY PATH UNTIL T048: `hm_checks.drop_run`, on a refused wave alone, never a plain call. `hm_checks` is under `scripts/hooks/lib/` and T048 ports it in this same phase, when this call becomes an in-process one.
+   - (c) THE HOOK'S TIME: the shell's entry named no limit of its own, and the Rust guards' one entry had 60 s (observed 2026-11-08, method: read from `.claude/settings.json`). A wave's units run inside that one entry now, and one unit through the four Agent hooks took 463 ms (`m:wave-unit-hooks`), so the entry's limit is raised to 600 s, ten times the headroom (a knob, `m:wave-unit-hooks` its basis), against a wave whose units and verify steps outrun the 60 s under load. It is a limit, not a cost: nothing waits unless a guard hangs.
+   - (d) A RUN WITH NO `tool_use_id` hashes its input as the guard's JSON writes it, where the Python's sorted-key form differed. The hash is only the run's own label for its units.
+3. **Where each comes from.** `tests/hooks/test-workflow-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-workflow-hooks.sh` green against `l7r-guard --only workflow-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-workflow-hooks.sh` passes against the Rust guard; `scripts/hooks/workflow-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: T041 to T041 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-08 -->
+### T042 Approach (checklist part A)
+
+1. **The goal, in the world.** `agent-prefix-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `agent-prefix-hooks.sh`, `lib/hm_agent_prefix.py` and the suite, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: the line-run comparison in characters as Python counted them (`splitlines`' every boundary, not only newlines), the store's form, the wave window, both escapes, every refusal's words, the headless pass. `lib/hm_agent_prefix.py`'s only caller is the guard, so it is removed with the shell. git is asked once a dispatch for the store's directory, as the shell did.
+   - (b) `WAVE_JOBS` IS READ FROM `workflow_hooks.rs` (T040, landing together), where the shell started Python to ask `hm_workflow`.
+3. **Where each comes from.** `tests/hooks/test-agent-prefix-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-agent-prefix-hooks.sh` green against `l7r-guard --only agent-prefix-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-agent-prefix-hooks.sh` passes against the Rust guard; `scripts/hooks/agent-prefix-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
