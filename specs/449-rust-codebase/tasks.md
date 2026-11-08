@@ -84,8 +84,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T022 [US1] `discard-hooks`: its decider `rust/guard/src/guards/discard_hooks.rs`, its suite `tests/hooks/test-discard-hooks.sh` replayed against `l7r-guard --only discard-hooks`, then `scripts/hooks/discard-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: discard is Rust
-- [ ] T023 [US1] `conflict-marker-hooks`: its decider `rust/guard/src/guards/conflict_marker_hooks.rs`, its suite `tests/hooks/test-conflict-marker-hooks.sh` replayed against `l7r-guard --only conflict-marker-hooks`, then `scripts/hooks/conflict-marker-hooks.sh` and its settings entry removed
+- [x] T023 [US1] `conflict-marker-hooks`: its decider `rust/guard/src/guards/conflict_marker_hooks.rs`, its suite `tests/hooks/test-conflict-marker-hooks.sh` replayed against `l7r-guard --only conflict-marker-hooks`, then `scripts/hooks/conflict-marker-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: conflict-marker is Rust
 - [ ] T024 [US1] `gate-write-hooks`: its decider `rust/guard/src/guards/gate_write_hooks.rs`, its suite `tests/hooks/test-gate-write-hooks.sh` replayed against `l7r-guard --only gate-write-hooks`, then `scripts/hooks/gate-write-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T025 [US1] `feature-approval-hooks`: its decider `rust/guard/src/guards/feature_approval_hooks.rs`, its suite `tests/hooks/test-feature-approval-hooks.sh` replayed against `l7r-guard --only feature-approval-hooks`, then `scripts/hooks/feature-approval-hooks.sh` and its settings entry removed

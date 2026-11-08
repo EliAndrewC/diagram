@@ -369,3 +369,21 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T023 Approach (checklist part A)
+
+1. **The goal, in the world.** `conflict-marker-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `conflict-marker-hooks.sh` and `lib/hm_conflict.py`, 2026-11-08):
+   - (a) THE GUARD'S HALF OF THE LIBRARY IN-PROCESS: `has_conflict`, `declares_exemption`, `conflicted` and `staged_by` move unchanged, git asked by path, T022's `shlex` shared; the refusal's words are the shell's.
+   - (b) `lib/hm_conflict.py` STAYS WHILE ITS OTHER CALLERS DO: the push's `--tracked`, `make audit`'s `--list` and the gate's `--selftest` call it, so it goes when T051 removes each library with its last caller; until then the detector's rule is in two places, the suite's replay and the library's own self-test both holding it.
+3. **Where each comes from.** `tests/hooks/test-conflict-marker-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-conflict-marker-hooks.sh` green against `l7r-guard --only conflict-marker-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-conflict-marker-hooks.sh` passes against the Rust guard; `scripts/hooks/conflict-marker-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
