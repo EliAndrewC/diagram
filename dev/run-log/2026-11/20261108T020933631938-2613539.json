@@ -1,0 +1,50 @@
+{
+  "utc": "2026-11-08T02:09:33Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 102,
+  "result": "failed: seeds",
+  "commit": "091e73b73",
+  "first_failure_s": 33.2,
+  "last_failure_s": 33.2,
+  "host": {
+    "load": [
+      2.26,
+      5.89
+    ],
+    "mem_avail_mb": [
+      7635,
+      7911
+    ],
+    "cpu_temp_c": [
+      83.0,
+      86.0
+    ],
+    "stall_s": {
+      "cpu": 1.2,
+      "io": 0.2,
+      "io_full": 0.2,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 8880,
+      "package": 4802
+    }
+  },
+  "phases": {
+    "preflight": 11.0,
+    "reference": 0.0,
+    "counters-inert": 1.0,
+    "static": 13.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "seeds": 18.0,
+    "pytest": 94.0,
+    "floors": 4.0,
+    "test-full": 101.0
+  },
+  "plan_mode": "full",
+  "plan_reason": "the gate's configuration changed (its machinery, the test recipes and their variables, pyproject's pytest or coverage tables, a lockfile)",
+  "selected": 6888,
+  "collected": 6888
+}
