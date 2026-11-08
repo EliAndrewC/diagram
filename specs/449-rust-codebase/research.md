@@ -66,8 +66,10 @@ gitignored and not in the mirror.
 
 **Decision**: settings call one small wrapper, `scripts/hooks/l7r-guard.sh <event>`, that runs the binary built from the tree it
 sits in (`$HOME/.cache/l7r-cargo-target/<tree>/release/l7r-guard`) and builds it first when its sources are newer (D7). A guard
-that cannot run - a build that fails - FAILS OPEN with a line saying so, as a crashing shell guard does today, and records it in
-the guard log: a broken guard must not lock the GM out of every tool call.
+that cannot build runs the last good binary instead (each build that passes its self-check kept), so a broken build leaves the
+previous guards standing; only with none ever built does the call go through, with a notice and a guard-log line - Claude Code's own
+rule for a crashing hook (exit 2 alone blocks). The review of the plan's first draft (2026-11-07) pointed out that failing open on
+any build failure would turn every guard off at once, where today a crash turns off one.
 
 ## R7 - the design fixes to carry (FR-006)
 

@@ -177,5 +177,27 @@
         "requirements-semantic"
       ]
     }
+  },
+  "guard-sources": {
+    "quantity": "phase 1's sources: the guards' shell, their Python libraries, the suites, the suites' Python",
+    "observed": "2026-11-07",
+    "subject": "scripts/hooks/ and tests/hooks/",
+    "command": "cat scripts/hooks/*.sh | wc -l; ls scripts/hooks/*.sh | wc -l; cat scripts/hooks/lib/*.py | wc -l; ls scripts/hooks/lib/*.py | wc -l; ls tests/hooks/test-*.sh | wc -l; cat tests/hooks/*.sh | wc -l; cat tests/hooks/*.py | wc -l; ls tests/hooks/*.py",
+    "method": "lines and files counted",
+    "value": {
+      "guard_shell_lines": 6258,
+      "guard_shell_files": 44,
+      "guard_lib_py_lines": 9053,
+      "guard_lib_py_files": 33,
+      "suite_files": 53,
+      "suite_lines": 8184,
+      "suite_py_lines": 1121,
+      "suite_py_files": [
+        "hookbench.py",
+        "hookdeps.py",
+        "hooktrace.py",
+        "test_hooks_cases.py"
+      ]
+    }
   }
 }
