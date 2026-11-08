@@ -769,5 +769,55 @@
       "traced_suites": 8,
       "fresh_lists_equal": true
     }
+  },
+  "t054-plain-bash": {
+    "quantity": "the settings entry's whole command on a Bash call, the guards' dispatcher through its shell wrapper: SC-001 asks under a tenth of m:hooks-bash's slowest guard, 17.5 ms",
+    "observed": "2026-11-08",
+    "subject": "the .claude/settings.json PreToolUse entry, pointed at this clone's scripts/hooks/l7r-guard.sh; each log directed to a temporary directory",
+    "command": "the entry's command under sh -c with the hook input on stdin, 40 spawns, three times, once for `ls` and once for `git -C /tmp log --format='%h %s' -3 | head -2`; and the same over 400 unique Bash commands from this project's 12 most recent transcripts (seed 449), one spawn each",
+    "method": "the median of 40 spawns, three times, at load 1.4-2.8; before the fast exits the plain call measured 35.79 ms by one such run (the wrapper alone, without sh)",
+    "value": {
+      "plain_ls_ms": [
+        16.51,
+        15.8,
+        15.41
+      ],
+      "quoted_git_ms": [
+        19.02,
+        19.66,
+        18.52
+      ],
+      "before_plain_ms": 35.79,
+      "target_ms": 17.5,
+      "real_commands": {
+        "sampled": 400,
+        "of": 45697,
+        "median_ms": 22.99,
+        "p90_ms": 109.38,
+        "p99_ms": 401.35,
+        "max_ms": 485.25,
+        "share_under_17_5": 0.072,
+        "tail": "ledger-hooks starting ledger_lint.py on commit-shaped commands, 14.67 ms mean over the sample, 200-260 ms each when it runs"
+      },
+      "summed_cpu_ms": [
+        15.95,
+        15.15,
+        16.0
+      ],
+      "summed_cpu_bound_ms": 52,
+      "commit_branch": {
+        "commands_naming_git_commit": 48,
+        "of_sample": 400,
+        "start_python": 29,
+        "the_branch": "ledger_hooks::judge after commit_root resolves a real `git commit` in a tree holding the ledger: ledger_owed.py on every such commit, ledger_lint.py when it stages the ledger (T027 decision (b)); none on a command with no commit",
+        "no_commit_commands": {
+          "count": 352,
+          "median_ms_in_binary": 17.1,
+          "p90_ms_in_binary": 23.5
+        }
+      },
+      "near_p90": "feature-approval and conflict-marker asking git over a large staged commit (40-54 ms each), make-only on a guard-file write in a long heredoc (62 ms), record-edit-gate running its guard on an apply-edits (56 ms)"
+    },
+    "reading": "SC-001 is met on m:hooks-bash's sample `ls` alone, by the named exception ask:449-T054-sc001 (the round arbiter, 2026-11-08), and not on real commands: the quoted git command is 19.0 ms and the 400 real commands' median 23.0 ms, p90 109 ms, 7.2 percent under 17.5 ms. Re-measured at phase 3's close, when the by-path Python is ported."
   }
 }

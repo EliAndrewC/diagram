@@ -148,6 +148,9 @@ static INVOKES_GATE: std::sync::LazyLock<Regex> = std::sync::LazyLock::new(|| {
 /// the pattern matched line by line as `grep -E` matches it.
 #[must_use]
 pub fn is_gate_invocation(cmd: &str) -> bool {
+    if !cmd.contains("make") {
+        return false;
+    }
     let a = HEREDOC.replace_all(cmd, " ");
     let stripped = QUOTED.replace_all(&a, " ");
     let padded = format!(" {stripped} ");

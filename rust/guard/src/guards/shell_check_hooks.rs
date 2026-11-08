@@ -445,6 +445,21 @@ fn refusal(rule: &str, message: &str) -> String {
     )
 }
 
+/// A command of plain words alone (no quote, separator, bracket, redirect or newline, and no reserved word first): none of the rules can fire and `bash -n` has nothing to
+/// find, so it is not started (T052: 3.0 ms of a plain Bash call).
+fn plain_words(cmd: &str) -> bool {
+    const RESERVED: [&str; 16] = [
+        "if", "then", "elif", "else", "fi", "for", "while", "until", "do", "done", "case", "esac",
+        "select", "function", "in", "time",
+    ];
+    cmd.chars()
+        .all(|c| c.is_ascii_alphanumeric() || " /._-=:+,@%".contains(c))
+        && !cmd
+            .split_whitespace()
+            .next()
+            .is_some_and(|w| RESERVED.contains(&w))
+}
+
 pub(crate) fn judge(event: &Event, session: &Session, here: PathBuf) -> Vec<Answer> {
     let null = Value::Null;
     let input = event.input.get("tool_input").unwrap_or(&null);
@@ -466,6 +481,9 @@ pub(crate) fn judge(event: &Event, session: &Session, here: PathBuf) -> Vec<Answ
             return vec![Answer::Refuse(text)];
         }
         Escape::None => {}
+    }
+    if plain_words(cmd) {
+        return Vec::new();
     }
     let given = field(&event.input, "cwd");
     let base = if given.is_empty() {

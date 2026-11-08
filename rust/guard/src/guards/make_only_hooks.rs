@@ -229,7 +229,11 @@ pub(crate) fn classify(cmd: &str) -> String {
         return "guard-edit-ok".to_owned();
     }
     let clean = strip_quotes(&strip_heredocs(cmd));
-    if cmd.contains("make") && hit(&FOREIGN, &clean) {
+    // each pattern below is compiled only for a command holding what it must name (T054: 10.9 ms of a `make` call)
+    let names_a_file = cmd.split_whitespace().any(|w| {
+        w == "-f" || w.starts_with("-f=") || w.starts_with("--file") || w.starts_with("--makefile")
+    });
+    if cmd.contains("make") && names_a_file && hit(&FOREIGN, &clean) {
         return "foreign-makefile".to_owned();
     }
     if cmd.contains("l7r") && (hit(&ENTRY_MODULE, &clean) || hit(&ENTRY_SCRIPT, &clean)) {
@@ -244,7 +248,7 @@ pub(crate) fn classify(cmd: &str) -> String {
     if (cmd.contains("l7r-guard") || cmd.contains("hamlet")) && hit(&BINARY, &clean) {
         return "bare-binary".to_owned();
     }
-    if cmd.contains("make") {
+    if cmd.contains("make") && cmd.matches('=').count() >= 2 {
         let name = doubled_var(&clean);
         if !name.is_empty() {
             return format!("make-dup-var:{name}");
@@ -261,7 +265,10 @@ pub(crate) fn classify(cmd: &str) -> String {
         || cmd.contains("tee")
         || cmd.contains("write_text")
         || cmd.contains("open(");
-    if writes {
+    let guard_named = ["Makefile", "-hooks.sh", "settings.json", "tests/rolls.py"]
+        .iter()
+        .any(|n| cmd.contains(n));
+    if writes && guard_named {
         let (c, raw) = (
             replace_suites(&clean),
             replace_suites(&without_stored_text(cmd)),

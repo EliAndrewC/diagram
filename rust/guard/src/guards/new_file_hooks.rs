@@ -115,6 +115,10 @@ fn top(p: &Path) -> PathBuf {
 }
 
 fn shell_targets(cmd: &str, base: &Path) -> Vec<Target> {
+    // a target is a redirect's or `tee`'s (T052: compiling these for a command with neither was 1.8 ms)
+    if !cmd.contains('>') && !cmd.contains("tee") {
+        return Vec::new();
+    }
     let names = assigned(cmd);
     let mut out = Vec::new();
     for m in TARGET.captures_iter(cmd).flatten() {

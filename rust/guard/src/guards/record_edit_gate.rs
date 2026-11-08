@@ -35,8 +35,6 @@ static RECORD_FILE: LazyLock<Regex> = LazyLock::new(|| {
     )
 });
 
-// A plan review holds text: `plan_holds` non-empty, as `hm_checks._handle` asks (the key stays, empty, after every hold). A snapshot's copy of this text is escaped, so it does not match.
-static HOLD: LazyLock<Regex> = LazyLock::new(|| re(r#""plan_holds":\s*\{\s*[^\s}]"#));
 // While a plan review holds text, the file an Edit could change it through.
 static PLAN_FILE: LazyLock<Regex> = LazyLock::new(|| re(r"(?:^|/)specs/[^/]+/plan\.md$"));
 
@@ -59,10 +57,22 @@ fn git_dir(from: &Path) -> Option<PathBuf> {
     Some(common)
 }
 
+/// `plan_holds` non-empty, as `hm_checks._handle` asks (the key stays, empty, after every hold; a snapshot's copy of this text is escaped, so it does not match). A scan, not a
+/// pattern: the state file can be large, and this runs on every Bash call.
+fn holds_text(state: &str) -> bool {
+    state
+        .split_once("\"plan_holds\":")
+        .is_some_and(|(_, rest)| {
+            rest.trim_start()
+                .strip_prefix('{')
+                .is_some_and(|inner| !inner.trim_start().starts_with('}'))
+        })
+}
+
 /// Whether a plan review holds text now (`checks-hooks.sh after` asks the same of the same file); with no repository there is no state, so no hold.
 fn holding(from: &Path) -> bool {
     git_dir(from).is_some_and(|dir| {
-        std::fs::read_to_string(dir.join("checks-open.json")).is_ok_and(|s| found(&HOLD, &s))
+        std::fs::read_to_string(dir.join("checks-open.json")).is_ok_and(|s| holds_text(&s))
     })
 }
 
@@ -72,8 +82,10 @@ pub(crate) fn mode_for(event: &Event, from: &Path) -> Option<&'static str> {
     let input = event.input.get("tool_input").unwrap_or(&null);
     if event.tool() == "Bash" {
         let cmd = field(input, "command");
-        return (holding(from) || cmd.contains("apply-edits") || found(&MAKE_DONE, cmd))
-            .then_some("pretool-bash");
+        return (holding(from)
+            || cmd.contains("apply-edits")
+            || (cmd.contains("done") && found(&MAKE_DONE, cmd)))
+        .then_some("pretool-bash");
     }
     let file = field(input, "file_path");
     (found(&RECORD_FILE, file) || (found(&PLAN_FILE, file) && holding(from))).then_some("pretool")

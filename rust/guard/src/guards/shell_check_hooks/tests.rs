@@ -203,3 +203,25 @@ fn the_answers() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+#[test]
+fn plain_words_need_no_parse_and_a_reserved_word_or_a_quote_still_gets_one() {
+    assert!(super::plain_words("ls -la /tmp/a.txt"));
+    assert!(super::plain_words("make test-file FILE=tests/x.py"));
+    assert!(!super::plain_words("if true"));
+    assert!(!super::plain_words("echo 'a'"));
+    assert!(!super::plain_words("ls; ls"));
+    assert!(!super::plain_words("cat <a"));
+    assert!(!super::plain_words("a\nb"));
+    let event = crate::protocol::Event {
+        name: "PreToolUse".to_owned(),
+        input: serde_json::json!({"cwd": "/tmp", "tool_name": "Bash", "tool_input": {"command": "echo 'a'"}}),
+    };
+    let session = crate::shared::session::Session::from_input(&event.input);
+    assert!(super::judge(&event, &session, "/".into()).is_empty());
+    let unfinished = crate::protocol::Event {
+        name: "PreToolUse".to_owned(),
+        input: serde_json::json!({"tool_name": "Bash", "tool_input": {"command": "if true"}}),
+    };
+    assert!(!super::judge(&unfinished, &session, "/".into()).is_empty());
+}

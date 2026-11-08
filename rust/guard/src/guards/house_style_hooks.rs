@@ -409,9 +409,19 @@ fn word_hits(visible: &str) -> Vec<String> {
     hits
 }
 
+/// Whether lower-cased input text holds a word of the table or a forbidden dash at all.
+fn can_hit(text: &str) -> bool {
+    text.contains(['\u{2014}', '\u{2013}'])
+        || PAIRS.iter().any(|(british, _)| text.contains(british))
+}
+
 pub(crate) fn report(event: &Event) -> Report {
     let null = Value::Null;
     let input = event.input.get("tool_input").unwrap_or(&null);
+    // no listed word and no dash anywhere in the input, and no span, path or rewrite is worth computing (T052: compiling them was 2.5 ms of a plain Bash call)
+    if !can_hit(&input.to_string().to_lowercase()) {
+        return Report::Silent;
+    }
     let is_bash = event.tool() == "Bash";
     let cmd = field(input, "command");
     let names: Vec<String> = NAMED_PATH

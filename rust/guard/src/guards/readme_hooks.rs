@@ -36,6 +36,10 @@ static PY_WRITE: LazyLock<Regex> =
 /// What would write a README, or None.
 pub(crate) fn hit(event: &Event) -> Option<String> {
     let input = event.input.get("tool_input")?;
+    // every pattern here names a README; with none in the input they need no compiling (T052)
+    if !input.to_string().to_ascii_lowercase().contains("readme") {
+        return None;
+    }
     if ["Write", "Edit", "NotebookEdit"].contains(&event.tool()) {
         let path = field(input, "file_path");
         return FILE

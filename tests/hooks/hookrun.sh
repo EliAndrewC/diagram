@@ -18,6 +18,7 @@ set -uo pipefail
 WORK=${1:?work dir}; GITDIR=${2:?gitdir}; GUARD=${3:?guard}; SUITE=${4:?suite}; SHA=${5:?sha}
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# A SUITE GETS AN EMPTY STDIN (feature 449 T054): a case that runs the guard binary with no input of its own inherited this shell's, which in a tool's shell is a socket that never closes, and the binary reads to its end (hung 10 minutes, 2026-11-08).
 t0=${EPOCHREALTIME/,/.}
 # GUARD_EDIT_OK: 405 batch 8 - A SUITE RUNS WITH NO SESSION'S ESCAPE SET: `PLAN_REVIEW_OK=... make land` carried the escape through
 # `make done` into every suite, and sync-with-main's "it fires" cases came back escaped (rc 0 where 1 was asserted). Each
@@ -32,9 +33,9 @@ export PARTS_MAX=${PARTS_MAX:-2}
 if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
   rm -f "$WORK/$GUARD.reads"
   env LD_PRELOAD="$HOOKS_SHIM${LD_PRELOAD:+ $LD_PRELOAD}" UV_USE_IO_URING=0 L7R_TEST_DEP_LOG="$WORK/$GUARD.reads" L7R_TEST_DEP_ROOT="$HOOKS_ROOT" \
-    L7R_TEST_DEP_FILE="$GUARD" L7R_TEST_DEP_SKIP="cp" L7R_TEST_DEP_MAP=scripts "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; rc=$?
+    L7R_TEST_DEP_FILE="$GUARD" L7R_TEST_DEP_SKIP="cp" L7R_TEST_DEP_MAP=scripts "$HERE/$SUITE" < /dev/null > "$WORK/$GUARD.log" 2>&1; rc=$?
 else
-  "$HERE/$SUITE" > "$WORK/$GUARD.log" 2>&1; rc=$?
+  "$HERE/$SUITE" < /dev/null > "$WORK/$GUARD.log" 2>&1; rc=$?
 fi
 # feature 383 amendment 3 (plan D27): each suite's seconds beside it, so hooks-test can say which suites ran and what each cost
 awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"

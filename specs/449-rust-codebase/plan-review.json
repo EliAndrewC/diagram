@@ -115,20 +115,14 @@
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
   },
-  "### T051 Approach (checklist part A)": {
-   "sha256": "810ccc450cadbeda61aa153e867e22af6b47a7ffa288d57e80c1b3a3267a98a8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
   "### T052 Approach (checklist part A)": {
    "sha256": "540981c060278b30b6f8d59e2131ad036efb81f87fa8b5bb594df26f72050c4f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T053 Approach (checklist part A)": {
-   "sha256": "b417de803d8d25be1781e5b4d7c6a55e5f2d508376b38bd9e2a6327cc64b5b43",
+  "### T054 Approach (checklist part A)": {
+   "sha256": "3cec72b0a3fd6f7361b6a360fec0879f798dabcfa7fda39af727999bfb30fcbc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
@@ -2865,6 +2859,21 @@
      "why": "Order and landing route only; nothing the request or FR-001 asked for is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T054 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T054-sc001",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4943,6 +4952,45 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T054": {
+   "section_sha256": "1bbd79279f08cb95eb79a550cf985222501789ca78040378bb5395ab42eb9561",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item-1/item-6/(d) the goal read as a plain Bash call",
+     "summary": "SC-001 ('the guards before a Bash call') is restated as 'a plain Bash call', and the green exit is m:t054-plain-bash under 17.5 ms, while (d) concedes a command with quotes or git still compiles what it needs and the entry records it at quoted_git_ms 29.43-29.73 against target_ms 17.5.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The word 'plain' is not in SC-001; the plan inserted it. The pointer m:hooks-bash in SC-001 supplies the baseline (175 ms, so 17.5), not the scope of calls: that the baseline was sampled on an ls does not make ls the only call the criterion speaks of, and reading it so is completing the thought. Item (d) discloses the gap honestly, but disclosure is not a ruling. Against the tests: not physically impossible (the block does not argue 29 to 17.5 cannot be done); not implied by the GM's words (request.md says nothing about commands that match no pattern; it says hook startup time matters and the Python is too inefficient); the literal reading does not defeat the purpose, it IS the purpose, whereas fast exits that fire only on commands no rule could match meet the number on the instrument's own sample and leave any call with a quote or a git over it. How much of real Bash traffic is plain is unmeasured. CLEAR would need either: item 1 drops 'plain' and item 6 requires both recorded commands under 17.5 ms; or the block names this as an exception to SC-001 and takes it to make arbiter-ask rather than ticking on the plain figure."
+    },
+    {
+     "id": "(b) fast exits only where the rules cannot fire",
+     "summary": "Per-guard early exits, each with its stated reason, after the guard's escape handling; suites and case tables unchanged at the exit.",
+     "class": "within",
+     "why": "A means toward SC-001 under FR-002, which item 6 enforces. Whether each 'cannot fire' claim holds is implementation, caught by the suites. The fault lies in treating these exits as enough for SC-001, ruled above, not in making them."
+    },
+    {
+     "id": "(c) the wrapper stays",
+     "summary": "The 5 to 6 ms shell wrapper is kept rather than replaced.",
+     "class": "within",
+     "why": "D7 of the accepted spec settles the wrapper, and FR-007's one process per tool call is about guards, not the launcher. Its stated reason, 'the target is met', holds only on the plain figure and falls with the narrowing above; keeping the wrapper does not."
+    },
+    {
+     "id": "(a) where the time went",
+     "summary": "The measured breakdown of 35.8 ms that motivates (b).",
+     "class": "within",
+     "why": "An observation that decides nothing beyond (b)."
+    },
+    {
+     "id": "item-5 before T052",
+     "summary": "T054 precedes T052, whose close reads this figure.",
+     "class": "within",
+     "why": "Ordering the spec leaves open; it narrows nothing asked."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

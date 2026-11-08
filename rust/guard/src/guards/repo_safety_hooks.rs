@@ -78,6 +78,15 @@ fn any(patterns: &[Regex], text: &str) -> bool {
 
 /// The rule the command breaks, or None; the mount rule only where the escape has not spoken.
 pub(crate) fn verdict(cmd: &str, escaped: bool) -> Option<&'static str> {
+    // each rule names a word the command must hold; without one its patterns need no compiling (T054: 8.9 ms of any Bash call)
+    let force = cmd.contains("push") && (cmd.contains("force") || cmd.contains("-f"));
+    let rewrite = ["rebase", "--squash", "--amend"]
+        .iter()
+        .any(|w| cmd.contains(w));
+    let mount = cmd.contains(HOST);
+    if !cmd.contains("git") || !(force || rewrite || mount) {
+        return None;
+    }
     let c = sanitized(cmd);
     if any(&*FORCE, &c) {
         return Some("force-push");
