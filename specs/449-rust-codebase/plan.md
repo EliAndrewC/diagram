@@ -202,28 +202,7 @@ censuses empty (work breakdown 8, FR-010).
 <!-- plan-archive: T033 to T033 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T034 to T034 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T035 to T035 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T036 Approach (checklist part A)
-
-1. **The goal, in the world.** `house-style-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-   **Decisions** (found reading `house-style-hooks.sh`, `lib/hm_house.py`, its callers and the suite, 2026-11-08):
-   - (a) THE GUARD AND ITS DECISION MOVE, IN-PROCESS: `report`, `plan`, `held_ranges`, `outside_heredocs`, the corrections, the three verdicts and every message. `write_targets` is `shared::tree::walk`, the port of the walk it asked.
-   - (b) `lib/hm_house.py` STAYS UNTIL ITS OTHER CALLERS ARE PORTED OR T051: `plan_gate.py`, `apply_edits.py`, `claims_reply.py` and `hm_arbiter.py` ask its `americanize`, and `check-house-style-delta.py` and `hookbench.py` its table. The guard no longer imports it.
-   - (c) THE WORD TABLE IS DATA, `rust/guard/src/guards/house_style_words.tsv`, generated from `hm_house.py`'s table: typed into a tracked source file it would be corrected on the way in, the reason that module's own comment gives. `test_house_style_delta.py`'s reading of the table holds the two equal. Both the guard's and `check-house-style-delta.py`'s exempt names gain the data file.
-   - (d) THE CRASH WARNING GOES: the shell told the session when its Python decision could not run. A compiled decision has no import to fail, and a guard that does not run is the wrapper's own notice (T004).
-   - (e) THE SUITE'S IMPORT-STUB CASE keeps its assertion, that the guard still acts on a command with `hm_house.py` broken, now by driving the link with the module broken in a copy of the tree. Its verdict does not change.
-   - (f) THIS GUARD'S REWRITES: it runs before `shell-check` (T035 decision (d)), so `shell-check` judges the corrected text, whose words differ only in spelling or dash; shell-check's four rules read neither.
-3. **Where each comes from.** `tests/hooks/test-house-style-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-house-style-hooks.sh` green against `l7r-guard --only house-style-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-house-style-hooks.sh` passes against the Rust guard; `scripts/hooks/house-style-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-<!-- plan-archive: T037 to T037 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T036 to T036 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T043 Approach (checklist part A)
 
 1. **The goal, in the world.** `check-bundle-hooks`'s verdicts given by the Rust guard, its shell gone.
