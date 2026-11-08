@@ -337,12 +337,12 @@ _ESCAPES = {
     ),
     "WAVE_OK": (
         "content",
-        "matched in an Agent dispatch's PROMPT by hm_agent_prefix.WAVE_ESCAPE, with a reason of two words or more; a hand-launched wave of 4+ of one type that must stay so (feature 383 amendment 7)",
+        "matched in an Agent dispatch's PROMPT by rust/guard's agent_prefix_hooks::WAVE_ESCAPE, with a reason of two words or more; a hand-launched wave of 4+ of one type that must stay so (feature 383 amendment 7)",
     ),
-    "GP_OK": ("content", "matched in a Workflow script by hm_workflow, with a reason of two words or more: a deliberate general-purpose stage (feature 383 amendment 7)"),
+    "GP_OK": ("content", "matched in a Workflow script by rust/guard's workflow_hooks, with a reason of two words or more: a deliberate general-purpose stage (feature 383 amendment 7)"),
     "AGENT_PREFIX_OK": (
         "content",
-        "matched in an Agent dispatch's PROMPT by hm_agent_prefix.ESCAPE, with a reason of two words or more; the decider reports it and the hook logs it, no substring test (feature 383 amendment 6)",
+        "matched in an Agent dispatch's PROMPT by rust/guard's agent_prefix_hooks::ESCAPE, with a reason of two words or more; the decider reports it and the hook logs it, no substring test (feature 383 amendment 6)",
     ),
     "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),

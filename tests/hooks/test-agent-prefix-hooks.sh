@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for agent-prefix-hooks.sh - a large block repeated from an earlier dispatch of its type is refused wherever it sits, and a
+# Tests for the agent-prefix guard (rust/guard, replayed through its link) - a large block repeated from an earlier dispatch of its type is refused wherever it sits, and a
 # fan-out of one type launches its first alone (feature 383 amendment 6: FR-034 as corrected, FR-039; plans D41, D42).
 # Run: tests/hooks/test-agent-prefix-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 383 amendment 6 - the guard's companion suite; reopened: a block placed first is refused too.
@@ -8,7 +8,7 @@
 # dispatch here is a minute after the last unless a case sets it, so only the fan-out cases sit inside the fan-out window.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="${AGENT_PREFIX_HOOK:-$HERE/../../scripts/hooks/agent-prefix-hooks.sh}"
+HOOK="${AGENT_PREFIX_HOOK:-$HERE/agent-prefix-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

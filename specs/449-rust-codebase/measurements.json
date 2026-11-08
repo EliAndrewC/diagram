@@ -627,5 +627,31 @@
       "rust_guard_stop_ms": 7.22,
       "wakeup_suite_cases": 24
     }
+  },
+  "agent-prefix-workflow-ported": {
+    "quantity": "a call's cost in the agent-prefix guard (an Agent dispatch) and the workflow guard (an empty script), each shell's against the Rust guard alone (T040, T042)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/agent-prefix-hooks.sh and workflow-hooks.sh pretool (main's shell guards) against scripts/hooks/l7r-guard.sh --only <guard> PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suites replayed through their links (23 and 24 cases)",
+    "value": {
+      "agent_prefix_shell_ms": 130.36,
+      "workflow_shell_ms": 61.68,
+      "workflow_rust_ms": 10.77,
+      "agent_prefix_suite_cases": 23,
+      "workflow_suite_cases": 24,
+      "agent_prefix_rust_ms": 10.33
+    }
+  },
+  "wave-unit-hooks": {
+    "quantity": "one check-wave unit's time through every PreToolUse hook an Agent call meets (T040): 600 s holds about 1,300 units at this rate, the former 60 s about 130",
+    "observed": "2026-11-08",
+    "subject": "the four hook commands .claude/settings.json gives an Agent call, in the clone, L7R_WAVE_UNIT=1, a quote-check unit, each log directed to a temporary directory",
+    "command": "each hook run through bash -c on the unit's JSON, 10 rounds, the wall time divided by the rounds",
+    "method": "the mean wall time a unit, beside other work",
+    "value": {
+      "unit_ms": 462.7,
+      "hooks": 4
+    }
   }
 }

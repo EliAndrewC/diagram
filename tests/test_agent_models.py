@@ -214,18 +214,15 @@ def wave_problems(text: str, defined: set[str], decider: tuple[str, ...]) -> lis
     out = [f"{j}: no .claude/agents/{j}.md" for j in jobs if j not in defined]
     out += [f"{j}: not a wave job (the GM's draft list, or an agent that replaced a general-purpose wave)" for j in jobs if j not in DRAFT_JOBS | REPLACED_GP]
     if set(jobs) != set(decider):
-        out.append(f"the authorization and hm_workflow.WAVE_JOBS disagree: {sorted(set(jobs) ^ set(decider))}")
+        out.append(f"the authorization and workflow_hooks.rs's WAVE_JOBS disagree: {sorted(set(jobs) ^ set(decider))}")
     return out
 
 
 def _wave_decider() -> tuple[str, ...]:
-    import importlib.util  # noqa: PLC0415
-
-    spec = importlib.util.spec_from_file_location("hm_workflow", ROOT / "scripts" / "hooks" / "lib" / "hm_workflow.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod.WAVE_JOBS
+    text = (ROOT / "rust" / "guard" / "src" / "guards" / "workflow_hooks.rs").read_text(encoding="utf-8")
+    m = re.search(r"const WAVE_JOBS: \[&str; \d+\] = \[(.*?)\];", text, re.S)
+    assert m, "WAVE_JOBS is not in workflow_hooks.rs"
+    return tuple(re.findall(r'"([\w-]+)"', m.group(1)))
 
 
 def test_the_workflow_authorization_names_only_defined_wave_jobs() -> None:

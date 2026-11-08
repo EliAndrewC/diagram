@@ -47,7 +47,7 @@ the address findings all at once"*). Its units are found as above but are DUE on
 - from the feature's first event in the clone or its most recent reopening, whichever is later (375 amendment 10: the
 GM did not want a reopened feature's first check due at once), and from each batch it opens - and then every owed glyph unit is due together and
 stays due until dispatched (one per agent; 4 or more go as one `check-wave` workflow, which wakes the session once - 383 amendment 7;
-`agent-prefix-hooks.sh` refuses a 4th hand launch within ten seconds); fix their findings together, and what a fix re-owes waits for the
+`agent_prefix_hooks.rs` refuses a 4th hand launch within ten seconds); fix their findings together, and what a fix re-owes waits for the
 next hour. A change with no live feature (none named, or the named one closed) owes its glyph units at landing: the push
 (`review-gate.sh`) asks every owed unit, and its refusal marks the work landing so the dispatch it asks for is due. `make verify`
 names the glyph units waiting and when they come due; the pair guard refuses an early glyph dispatch (`GLYPH_DUE_OK="<why>"`).

@@ -109,21 +109,8 @@
         ]
       },
       {
-        "matcher": "Workflow",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/workflow-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/workflow-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 383 amendment 7 - a NEW guard (the GM 2026-10-17): no Agent hook fires inside a workflow, so an untyped agent() is refused and every check-wave unit is put through the Agent hooks"
-          }
-        ]
-      },
-      {
         "matcher": "Agent",
         "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/agent-prefix-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-prefix-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 383 amendment 6 - a NEW guard (the GM 2026-10-17): a prompt sharing a large block with an earlier dispatch of its type, after a part that differs, is refused - the block would be written to the cache fresh every time"
-          },
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
@@ -143,7 +130,7 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PreToolUse  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
-            "timeout": 60
+            "timeout": 600
           }
         ]
       }

@@ -338,9 +338,9 @@
    "declared": "spec-fidelity"
   },
   "### T040 Approach (checklist part A)": {
-   "sha256": "97bbcd8281fda921bc59b4856fb185edd441b14bf18e12b10e4a497d67f1fa47",
+   "sha256": "f40b2d2cd886ba5e9f7fac46586ac22eef4cde51d2f9c14f6544a85088721b16",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T041 Approach (checklist part A)": {
@@ -350,9 +350,9 @@
    "declared": "spec-fidelity"
   },
   "### T042 Approach (checklist part A)": {
-   "sha256": "36a40753f04db1003ec14950cb933b81ed2ba4dd13c9be8048c02f8781b39bf4",
+   "sha256": "f5b1b141c2ffc96497936e5251160aec975c83ff153256fee234c2695aef77a7",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T043 Approach (checklist part A)": {
@@ -2556,6 +2556,90 @@
      "why": "Carries SC-001, FR-010 (recorded in dev/) and FR-002 (changed cases named in the phase's record) at their stated strength."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T042 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-port-whole",
+     "summary": "The guard and its library both move into the Rust guard in-process, preserving the line-run comparison in characters as Python counted them (splitlines' every boundary), the store's form, the wave window, both escapes, every refusal's words and the headless pass.",
+     "class": "within",
+     "why": "FR-002 requires the same verdicts and outputs on every case; the block claims no constitution XIV fix, so FR-002 binds with no exception and the Python counting quirk is what same-verdict requires, not a carve-out. Moving the piece to Rust is the GM's 'making this a Rust codebase'; in-process serves FR-007."
+    },
+    {
+     "id": "a-library-removed",
+     "summary": "lib/hm_agent_prefix.py is removed with the shell, on the premise that the guard is its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and FR-002 permits deletion once the replacement gives the same verdicts; nothing the GM asked for is narrowed. The 'only caller' premise was read from three files and carries no search space: it is not a census. If wrong, the deletion would break a piece still running that Python (FR-003). Non-blocking note; a repo-wide search for the module name across every file type settles it."
+    },
+    {
+     "id": "a-git-subprocess",
+     "summary": "git is asked once a dispatch for the store's directory.",
+     "class": "within",
+     "why": "FR-007 forbids one process per guard; an external git call from the single guard process is not a guard process, so FR-007's words and purpose are untouched. Git is not Python, so FR-001 is untouched."
+    },
+    {
+     "id": "b-wave-jobs",
+     "summary": "WAVE_JOBS is read from workflow_hooks.rs (T040, landing together) where the shell started Python to ask hm_workflow.",
+     "class": "within",
+     "why": "Removes a Python start from the guard's path, serving FR-001 and FR-007; FR-002 still binds the value. 'Landing together' reads plainly as a dependency in the same landing batch, not T040 and T042 sharing a commit: section 9 keeps the switch in the commit that registers this decider, so D3's own-commit rule still holds."
+    },
+    {
+     "id": "order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 lands the dispatcher first and moves guards one by one. The only stated dependency on another guard's task is T040's constant in decision b, which does not change the phase order FR-001 fixes."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green is the guard's suite against l7r-guard --only agent-prefix-hooks plus make rust-test, cover and make hooks-test; done is every suite case passing with the shell and its settings entry gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "Matches D3 and D4 clause for clause, FR-003 (never both) and FR-004's floor. These enforce what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T040 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T040-a-guard-and-library-move",
+     "summary": "The guard and lib/hm_workflow.py both move in-process (script scan, wave argument checks, each unit through every PreToolUse hook an Agent call meets, the refusals' words); the library is removed with the shell, agent-prefix (T042) landing together.",
+     "class": "within",
+     "why": "The GM asked for the Python to be ported to Rust; FR-001, FR-007 and D3 settle this. Condition, not a finding: it rests on T042 landing with this removal, since a live Python caller of a deleted hm_workflow.py would breach FR-002's 'before that Python is deleted'. The block's exit (make hooks-test green) enforces it. 'Landing together' sits against D3's 'own commit', but D3 is a plan decision and FR-003's rule (no piece runs both) is unaffected."
+    },
+    {
+     "id": "T040-a-test-reads-rust-source",
+     "summary": "Unlabeled in the block: tests/test_agent_models.py stays Python for now and is rewired to read WAVE_JOBS from the Rust source.",
+     "class": "within",
+     "why": "FR-001 ports in phases, so a Python test outliving the hooks phase is the phasing as specified; the rewiring keeps the existing check pointed at the constant's new home and narrows nothing."
+    },
+    {
+     "id": "T040-b-drop-run-by-path-until-T048",
+     "summary": "One call stays by path until T048: hm_checks.drop_run, on a refused wave only, never a plain call; T048 ports hm_checks in the same phase and it then goes in-process.",
+     "class": "within",
+     "why": "FR-003 says an unported piece's Python remains the one that runs, and hm_checks is unported until T048, inside this phase. FR-007 forbids one process per guard; hm_checks is not a guard and this is one helper on a refusal path. The end state the GM asked for is unchanged and the block names the task that closes it."
+    },
+    {
+     "id": "T040-c-entry-limit-600s",
+     "summary": "The Rust guards' one settings entry has its limit raised from 60 s to 600 s because a wave's units now run inside that entry.",
+     "class": "within",
+     "why": "No request clause or requirement sets a hook limit, and this one follows from FR-007's single process; a limit costs nothing unless a guard hangs, so SC-001 and SC-002 are untouched, and it narrows nothing. Figures: 463 ms matches m:wave-unit-hooks unit_ms 462.7; 600 s and 60 s give about 1,300 and 130 units as its quantity states; the 60 s carries a dated one-shot label; 600 s is a named knob. The MANIFEST forbids reading the repository, so m:wave-unit-hooks was not re-run; the entry as bundled shows no varies band or load."
+    },
+    {
+     "id": "T040-d-no-tool-use-id-hash",
+     "summary": "A run with no tool_use_id hashes its input as the guard's JSON writes it, where the Python's sorted-key form differed.",
+     "class": "within",
+     "why": "An acknowledged output difference, but FR-002 binds 'every case its tests and its suites hold', so it reaches this only if a case holds the value. Premise: the label is consumed only by the run that wrote it, no case asserts its value, and no Python side recomputes it from the input (hm_checks.drop_run in decision b is the one place that could). This could not be read from the bundle; the block's exit, every case of test-workflow-hooks.sh passing against the Rust guard, is what proves it, and a case holding the value sends the task to its red exit."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4012,6 +4096,88 @@
      "summary": "The suite is replayed against l7r-guard --only wakeup-hooks, with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; a failure is recorded and goes to make arbiter-ask.",
      "class": "within",
      "why": "D3 and D4 as accepted. The --only here is D4's general replay mode for every guard, not the branch for this input that (b) rules out."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T042": {
+   "section_sha256": "f5b1b141c2ffc96497936e5251160aec975c83ff153256fee234c2695aef77a7",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-port-whole",
+     "summary": "The guard and its library both move into the Rust guard in-process, preserving the line-run comparison in characters as Python counted them (splitlines' every boundary), the store's form, the wave window, both escapes, every refusal's words and the headless pass.",
+     "class": "within",
+     "why": "FR-002 requires the same verdicts and outputs on every case; the block claims no constitution XIV fix, so FR-002 binds with no exception and the Python counting quirk is what same-verdict requires, not a carve-out. Moving the piece to Rust is the GM's 'making this a Rust codebase'; in-process serves FR-007."
+    },
+    {
+     "id": "a-library-removed",
+     "summary": "lib/hm_agent_prefix.py is removed with the shell, on the premise that the guard is its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and FR-002 permits deletion once the replacement gives the same verdicts; nothing the GM asked for is narrowed. The 'only caller' premise was read from three files and carries no search space: it is not a census. If wrong, the deletion would break a piece still running that Python (FR-003). Non-blocking note; a repo-wide search for the module name across every file type settles it."
+    },
+    {
+     "id": "a-git-subprocess",
+     "summary": "git is asked once a dispatch for the store's directory.",
+     "class": "within",
+     "why": "FR-007 forbids one process per guard; an external git call from the single guard process is not a guard process, so FR-007's words and purpose are untouched. Git is not Python, so FR-001 is untouched."
+    },
+    {
+     "id": "b-wave-jobs",
+     "summary": "WAVE_JOBS is read from workflow_hooks.rs (T040, landing together) where the shell started Python to ask hm_workflow.",
+     "class": "within",
+     "why": "Removes a Python start from the guard's path, serving FR-001 and FR-007; FR-002 still binds the value. 'Landing together' reads plainly as a dependency in the same landing batch, not T040 and T042 sharing a commit: section 9 keeps the switch in the commit that registers this decider, so D3's own-commit rule still holds."
+    },
+    {
+     "id": "order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 lands the dispatcher first and moves guards one by one. The only stated dependency on another guard's task is T040's constant in decision b, which does not change the phase order FR-001 fixes."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green is the guard's suite against l7r-guard --only agent-prefix-hooks plus make rust-test, cover and make hooks-test; done is every suite case passing with the shell and its settings entry gone in the commit that registers the decider.",
+     "class": "within",
+     "why": "Matches D3 and D4 clause for clause, FR-003 (never both) and FR-004's floor. These enforce what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T040": {
+   "section_sha256": "86d1e0c528beea7879993d545c268fb7ad65ce720424e78069aa225421960686",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T040-a-guard-and-library-move",
+     "summary": "The guard and lib/hm_workflow.py both move in-process (script scan, wave argument checks, each unit through every PreToolUse hook an Agent call meets, the refusals' words); the library is removed with the shell, agent-prefix (T042) landing together.",
+     "class": "within",
+     "why": "The GM asked for the Python to be ported to Rust; FR-001, FR-007 and D3 settle this. Condition, not a finding: it rests on T042 landing with this removal, since a live Python caller of a deleted hm_workflow.py would breach FR-002's 'before that Python is deleted'. The block's exit (make hooks-test green) enforces it. 'Landing together' sits against D3's 'own commit', but D3 is a plan decision and FR-003's rule (no piece runs both) is unaffected."
+    },
+    {
+     "id": "T040-a-test-reads-rust-source",
+     "summary": "Unlabeled in the block: tests/test_agent_models.py stays Python for now and is rewired to read WAVE_JOBS from the Rust source.",
+     "class": "within",
+     "why": "FR-001 ports in phases, so a Python test outliving the hooks phase is the phasing as specified; the rewiring keeps the existing check pointed at the constant's new home and narrows nothing."
+    },
+    {
+     "id": "T040-b-drop-run-by-path-until-T048",
+     "summary": "One call stays by path until T048: hm_checks.drop_run, on a refused wave only, never a plain call; T048 ports hm_checks in the same phase and it then goes in-process.",
+     "class": "within",
+     "why": "FR-003 says an unported piece's Python remains the one that runs, and hm_checks is unported until T048, inside this phase. FR-007 forbids one process per guard; hm_checks is not a guard and this is one helper on a refusal path. The end state the GM asked for is unchanged and the block names the task that closes it."
+    },
+    {
+     "id": "T040-c-entry-limit-600s",
+     "summary": "The Rust guards' one settings entry has its limit raised from 60 s to 600 s because a wave's units now run inside that entry.",
+     "class": "within",
+     "why": "No request clause or requirement sets a hook limit, and this one follows from FR-007's single process; a limit costs nothing unless a guard hangs, so SC-001 and SC-002 are untouched, and it narrows nothing. Figures: 463 ms matches m:wave-unit-hooks unit_ms 462.7; 600 s and 60 s give about 1,300 and 130 units as its quantity states; the 60 s carries a dated one-shot label; 600 s is a named knob. The MANIFEST forbids reading the repository, so m:wave-unit-hooks was not re-run; the entry as bundled shows no varies band or load."
+    },
+    {
+     "id": "T040-d-no-tool-use-id-hash",
+     "summary": "A run with no tool_use_id hashes its input as the guard's JSON writes it, where the Python's sorted-key form differed.",
+     "class": "within",
+     "why": "An acknowledged output difference, but FR-002 binds 'every case its tests and its suites hold', so it reaches this only if a case holds the value. Premise: the label is consumed only by the run that wrote it, no case asserts its value, and no Python side recomputes it from the input (hm_checks.drop_run in decision b is the one place that could). This could not be read from the bundle; the block's exit, every case of test-workflow-hooks.sh passing against the Rust guard, is what proves it, and a case holding the value sends the task to its red exit."
     }
    ],
    "verdict": "CLEAR"

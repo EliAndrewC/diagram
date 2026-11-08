@@ -30,7 +30,7 @@ documented job launches 4 or more agents of one of these definitions - WAVE JOBS
 It sets `agentType` on every `agent()` call, staggers the launches by itself and wakes the main session once for the whole
 wave instead of once per agent; each unit's prompt stays as short as a hand launch's. Two or three of a type stay plain Agent
 calls in one message. This does not extend to new kinds of fan-out, general-purpose fleets or deep research, which still need
-the GM's explicit request. `scripts/hooks/workflow-hooks.sh` holds every unit to the guards a hand launch meets.
+the GM's explicit request. `rust/guard/src/guards/workflow_hooks.rs` holds every unit to the guards a hand launch meets.
 
 ## Why this file exists
 

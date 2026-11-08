@@ -122,7 +122,7 @@ Spec-driven under `.specify/memory/constitution.md`. One line each here; the ful
   agent names its `model` (`sonnet` to read, fetch, translate or extract; `opus` for anything that judges). A defined agent launches without the CLAUDE.md files (`omitClaudeMd: true`); **what every
   dispatch of a check shares lives in its agent file** - only that is reused across launches (feature 383 research R16) -
   and a wave of 4 or more of one type runs as ONE `Workflow` call, `check-wave`, which wakes the session once and puts each unit
-  through the Agent guards (feature 383 amendment 7; `agent-prefix-hooks.sh`, `workflow-hooks.sh`). The review agents, and
+  through the Agent guards (feature 383 amendment 7; `agent_prefix_hooks.rs`, `workflow_hooks.rs`). The review agents, and
   Workflow for those waves, are pre-authorized through `scripts/container/append-system-prompt.md`.
 
 ## Verification and iteration

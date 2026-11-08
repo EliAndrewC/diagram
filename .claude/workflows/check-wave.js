@@ -8,7 +8,7 @@ export const meta = {
 // and each wake re-reads the whole context - 5,544 wakes a month at a median 405k tokens. A workflow staggers its launches by
 // itself (each later one reads the agent file's prefix from the cache) and reports once. `agentType` on every call: the
 // workflow's default subagent loads every CLAUDE.md and every tool (~35k written per launch), the typed one its own small file.
-// The Workflow guard (scripts/hooks/workflow-hooks.sh) puts every prompt this run can launch - each unit, and each verify step
+// The Workflow guard (rust/guard/src/guards/workflow_hooks.rs) puts every prompt this run can launch - each unit, and each verify step
 // its unit declares - through the same per-dispatch guards a hand launch meets, before the run starts.
 const REPLY = {
   type: 'object',

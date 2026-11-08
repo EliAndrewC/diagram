@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for workflow-hooks.sh - a Workflow call is held to the guards its agents would meet as Agent calls (feature 383
+# Tests for the workflow guard (rust/guard, replayed through its link) - a Workflow call is held to the guards its agents would meet as Agent calls (feature 383
 # amendment 7, FR-045, plan D48; SC-031).
 # Run: tests/hooks/test-workflow-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 383 amendment 7 - a NEW guard's companion suite.
@@ -10,8 +10,8 @@
 # guard's own message.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="${WORKFLOW_HOOK:-$HERE/../../scripts/hooks/workflow-hooks.sh}"
-PREFIX="$HERE/../../scripts/hooks/agent-prefix-hooks.sh"
+HOOK="${WORKFLOW_HOOK:-$HERE/workflow-hooks.sh}"
+PREFIX="$HERE/agent-prefix-hooks.sh"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

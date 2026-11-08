@@ -44,6 +44,8 @@ pub fn guards() -> Vec<Guard> {
         guards::repo_safety_hooks::GUARD,
         guards::agent_model_hooks::GUARD,
         guards::wakeup_hooks::GUARD,
+        guards::agent_prefix_hooks::GUARD,
+        guards::workflow_hooks::GUARD,
     ]
 }
 
@@ -238,7 +240,9 @@ mod tests {
                     "set-down-hooks",
                     "repo-safety-hooks",
                     "agent-model-hooks",
-                    "wakeup-hooks"
+                    "wakeup-hooks",
+                    "agent-prefix-hooks",
+                    "workflow-hooks"
                 ]
         );
     }
