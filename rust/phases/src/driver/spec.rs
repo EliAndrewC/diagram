@@ -188,6 +188,16 @@ fn text(v: Option<&Value>) -> Option<String> {
     }
 }
 
+/// Whether a water bearing `flow` runs within a strict 90 degrees of the fall `fall` (degrees), as 0054 requires of a declared one.
+///
+/// Research:
+///     the water within 90 degrees of the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a declared bearing diverges from the land's fall by a strict under 90 degrees
+#[must_use]
+pub fn follows(flow: f64, fall: f64) -> bool {
+    let d = (flow - fall).rem_euclid(360.0);
+    d.min(360.0 - d) < 90.0
+}
+
 #[expect(
     clippy::cast_possible_truncation,
     reason = "a spec's integers are small: a seed, a household count, a flank"
@@ -223,6 +233,14 @@ pub fn parse(text_in: &str) -> Result<Spec, SpecError> {
         _ => None,
     };
     let (down_deg, water_flow) = (num("down_deg"), num("water_flow"));
+    // the water's bearing runs within a strict 90 degrees of the land's fall (0054's recorded deviation)
+    if let (Some(fall), Some(flow)) = (down_deg, water_flow) {
+        if !follows(flow, fall) {
+            return Err(SpecError(format!(
+                "`water_flow` {flow} is not within 90 degrees of the fall {fall}"
+            )));
+        }
+    }
     let pins = match o.get("pins") {
         Some(Value::Obj(m)) => m.clone(),
         _ => BTreeMap::new(),
@@ -278,6 +296,10 @@ mod tests {
             (r#"{"seed": 4}"#, "name"),
             (r#"{"name": "a"}"#, "seed"),
             (r#"{"name": "a", "seed": 4, "households": 30}"#, "outside"),
+            (
+                r#"{"name": "a", "seed": 4, "down_deg": 0, "water_flow": 270}"#,
+                "not within 90",
+            ),
             (
                 r#"{"name": "a", "seed": 4, "pins": {"k": 3}}"#,
                 "not a string",

@@ -330,7 +330,10 @@ pub fn plan(spec: &Spec) -> Plan {
         archetype,
         windward,
         down_deg,
-        water_flow: spec.water_flow.unwrap_or(down_deg),
+        water_flow: spec
+            .water_flow
+            .filter(|w| crate::driver::spec::follows(*w, down_deg))
+            .unwrap_or(down_deg),
         fan_aspect: pick(spec.seed, "fan_aspect", &FAN_ASPECTS),
         head_lead: pick(spec.seed, "head_lead", &HEAD_LEAD),
         offtakes: offtakes_for(spec.households),
@@ -372,6 +375,11 @@ mod tests {
             &parse(r#"{"name": "a", "seed": 4, "down_deg": 225, "water_flow": 200}"#).unwrap(),
         );
         assert!((declared.water_flow - 200.0).abs() < 1e-9);
+        let rolled = plan(&parse(r#"{"name": "a", "seed": 4, "water_flow": 1000}"#).unwrap());
+        assert!(
+            (rolled.water_flow - rolled.down_deg).abs() < 1e-9
+                || crate::driver::spec::follows(1000.0, rolled.down_deg)
+        );
     }
 
     #[test]

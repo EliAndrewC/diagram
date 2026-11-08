@@ -10567,11 +10567,11 @@
  },
  "rust/phases/src/driver.rs::fill#the paddy's paint by state": {
   "body": "204f64738f3af238",
-  "claim": "the paddy's paint by state - CONVENTION: green, flooded, gold and at rest, each state of the rice year in the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing drawn in its color",
-  "code": "614fbb141ed3be67",
+  "claim": "the paddy's paint by state - CONVENTION: green, wet, flooded, gold and at rest, each state of the rice year in the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing drawn in its color",
+  "code": "d263efc94ac52bb4",
   "core": "43fafe947a794bcc",
   "date": "2026-11-08",
-  "note": "each state mapped to an ink, purely how it is shown",
+  "note": "a pure state-to-ink mapping, display only; the 0009 drawing page is not in the bundle and no verdict rests on it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10967,14 +10967,19 @@
  },
  "rust/phases/src/driver/plan.rs::BELT_REACH#the belt's reach": {
   "body": "993277afbe428df7",
-  "claim": "the belt's reach - GUESS: the deleted `BELT_REACH` 146 ft; shelter-belts-on-a-villages-windward-side-bofurin.drawing gives only a stand within 150 ft of a farmhouse, not this reach",
-  "code": "adb207ef04ac465f",
+  "claim": "the belt's reach - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a stand within 150 ft of a farmhouse on a hamlet's; 146 ft, the deleted `BELT_REACH`, read as the room the canvas keeps past the band for it (`seat_room`)",
+  "code": "c39d00784b36a56d",
   "core": "ddf1929101c40f43",
   "date": "2026-11-08",
-  "note": "146 ft sits just inside the page's \"within 150 ft on a hamlet's\" stand reach, and the bundle does not show the code that reads BELT_REACH. If it is the reach of the near-farmhouse stand, the page answers it and GUESS is MISLABELED. If it is something else (the band's outward reach from the rows), GUESS stands. I need the callers of BELT_REACH to tell",
-  "pages": {},
-  "research": "",
-  "verdict": "CANNOT-TELL"
+  "note": "146 ft is a calibrated choice inside the page's \"within 150 ft on a hamlet's\"",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+  },
+  "research": "5892781a1ab23bcb",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::DIKE_CROPS#the dike crop's shares": {
   "body": "6521d9e6b24e6fd0",
@@ -11046,6 +11051,24 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/plan.rs::KNOBS#the cluster's shape": {
+  "body": "adaf0910cc556575",
+  "claim": "the cluster's shape - clustered-and-scattered-villages-shuson-sanson.drawing: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there",
+  "code": "ceff01ea050c5c55",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-08",
+  "note": "rolls round, elongated and crescent; the page attests the lump and the line, makes the crescent a GUESS, and says a hamlet never splits",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+  },
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/plan.rs::KNOBS#the farm water": {
   "body": "adaf0910cc556575",
   "claim": "the farm water - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records a channel or a well at even odds as a guess",
@@ -11085,16 +11108,16 @@
   "research": "",
   "verdict": "MISLABELED"
  },
- "rust/phases/src/driver/plan.rs::KNOBS#the lane and cluster-shape forms": {
+ "rust/phases/src/driver/plan.rs::KNOBS#the lane forms": {
   "body": "adaf0910cc556575",
-  "claim": "the lane and cluster-shape forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records each form as a guess",
-  "code": "eab2d547bfb2c331",
+  "claim": "the lane forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records the spine, the T, the Y and the cross as guesses",
+  "code": "8710ffe0fe67fe70",
   "core": "3a50375d75cd3753",
   "date": "2026-11-08",
-  "note": "the page does not record every form as a guess. For cluster shape it says \"The lump and the line along a levee or a road are the attested forms\", and only the crescent is a GUESS. The claim should cite 0031.drawing for round/elongated, keep GUESS for crescent, and keep GUESS for the lane forms spine/T/Y/cross",
+  "note": "the spine, T, Y and cross are rolled and the page calls the lane forms a GUESS; a hamlet rolls \"from a table of its own\", so leaving out the water lane is within the page",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the settlement form's shares": {
   "body": "adaf0910cc556575",
@@ -11146,14 +11169,20 @@
  },
  "rust/phases/src/driver/plan.rs::POND_LAYOUTS#the dike-pond's layout": {
   "body": "ca5301d129e52f5c",
-  "claim": "the dike-pond's layout - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing shows a dike-pond block's ponds and dikes but not their arrangement; mosaic two in three, grid one (the deleted `POND_LAYOUTS`)",
-  "code": "dd25ee7dcafcfe4a",
+  "claim": "the dike-pond's layout - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: two layouts recorded, a mosaic and a chessboard (`grid`), the mosaic about two hamlets in three - the odds a GUESS there",
+  "code": "90b21cd107ef02e9",
   "core": "01cc747bfef0e9e7",
   "date": "2026-11-08",
-  "note": "the claim says 0019.drawing gives \"not their arrangement\", but the page does record it: \"two layouts are recorded: a mosaic ... and a chessboard\", rolled at \"about two hamlets in three\" mosaic, with \"The odds are a GUESS\". The code's 2:1 mosaic/grid matches. The claim should be a 0019.drawing question claim (two attested layouts, odds a guess), not a GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "mosaic twice and grid once gives the mosaic \"on about two hamlets in three\", rolled per hamlet, the odds a GUESS",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::Plan#the plan": {
   "body": "2c0164ac41fe4c38",
@@ -11317,32 +11346,36 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the field's archetype": {
-  "body": "9f42d153d3a49a00",
-  "claim": "the field's archetype - GUESS: a valley paddy unless the map declares another; a polder only when asked",
-  "code": "eba363660236d891",
-  "core": "ee63c5b705778517",
+  "body": "a5ce90420aad6744",
+  "claim": "the field's archetype - DEVIATION polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder drawn only when the map asks for one, only the valley fan dealt at random - the polder and the dike-pond attested, their random dealing a known gap",
+  "code": "0f983e95a6c028ae",
+  "core": "3f5d9b790f9122b5",
   "date": "2026-11-08",
-  "note": "0019.drawing answers this: \"A hamlet is drawn with a polder only when its map asks for one ... only the valley fan is dealt at random\", and calls the polder and the dike-pond, both attested, \"a known gap\". The claim should cite that page as DEVIATION (or a filed gap), not GUESS",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "the archetype falls back to valley_paddy unless the spec names one; the page records the polder and dike-pond not being dealt at random as \"a known gap\"",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
-  "body": "9f42d153d3a49a00",
-  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's flow taken as its fall, always - the page's \"unless the hamlet declares one\" is not read, since no spec carries a declared bearing (the easier route, taken 2026-11-08)",
-  "code": "bdf697e59f7d4ef3",
-  "core": "ee63c5b705778517",
+  "body": "a5ce90420aad6744",
+  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`)",
+  "code": "32d4b13babd79d24",
+  "core": "3f5d9b790f9122b5",
   "date": "2026-11-08",
-  "note": "the page's recorded deviation is that a hamlet's bearing \"is taken from its land's fall unless the hamlet declares one\". The code's `water_flow: down_deg`, with no field for a declared bearing, drops that exception, and the page does not record dropping it. Either record the departure on 0054.drawing or read a declared bearing",
+  "note": "`spec.water_flow.unwrap_or(down_deg)` matches \"a hamlet's bearing is taken from its land's fall unless the hamlet declares one\", which the page records as a deliberate deviation",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
   "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::seat_room#the seat's room": {
   "body": "37fc05ea770999d4",
@@ -11776,15 +11809,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::parse#households at a hamlet's size": {
-  "body": "83785f46e1ca8a55",
-  "claim": "households at a hamlet's size - NONE: the hamlet tier's ten to twenty households, the deleted `HamletSpec`'s bounds; 15 unless the spec says",
-  "code": "68b7dc4dde6cff8c",
-  "core": "b7b657b30d48a37b",
-  "date": "2026-11-07",
-  "note": "the 10 to 20 household bounds and the default of 15 are a count a map reader reads as a fact about the place, so NONE is wrong; label should be CANON if the hamlet tier is the GM's ruling (naming it), else GUESS; §12 records ten to twenty only as a GUESS for a small polder",
+  "body": "c59f7ed2db132fb0",
+  "claim": "households at a hamlet's size - GUESS: the hamlet tier's ten to twenty households, the deleted `HamletSpec`'s bounds, 15 unless the spec says; no page sets the tier's bounds",
+  "code": "7ef3a7083cc17dc0",
+  "core": "f5e088f4c7c17bee",
+  "date": "2026-11-08",
+  "note": "10 to 20 with 15 as the default, a GUESS; no cited page sets the hamlet tier's bounds (0019's ten to twenty is guessed for a small polder only)",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::text#the spec": {
   "body": "ef2f0a5a0071e7b1",
