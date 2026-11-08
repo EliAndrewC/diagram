@@ -8,6 +8,7 @@ every guard's check in a fixed order, and merges their answers by `specs/449-rus
 |---|---|
 | `src/lib.rs` | the crate's surface: `guards()` in their fixed order, `cli` - the command line (`<event>`, `--only`, `--self-check`, `--version`) |
 | `src/protocol.rs` | the hook protocol: the event, the answers, the merge (`run`); its tests in `src/protocol/tests.rs` |
+| `src/shared/` | what every guard reads (T003): `shape` (heredoc and quote stripping), `escape` (the tokens' two-word reasons), `session` (the facts read once a process - the mirror, the clone, the transcript, the GM's messages - each read counted), `transcript` (`gm_messages`), `log` (the guard log, `guardlog.sh`'s format) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |
 
 `make rust-test`, `make static` check it beside `rust/phases` (the workspace, `rust/Cargo.toml`).

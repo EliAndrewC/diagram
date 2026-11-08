@@ -3,6 +3,7 @@
 //! one task at a time (T006-T049); until then the dispatcher holds none.
 
 pub mod protocol;
+pub mod shared;
 
 use protocol::{run, Event, Guard, Reply};
 
