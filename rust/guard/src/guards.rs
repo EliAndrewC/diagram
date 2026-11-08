@@ -7,6 +7,7 @@ pub mod engine_freeze_hooks;
 pub mod event_log_hooks;
 pub mod finished_run_hooks;
 pub mod gate_hooks;
+pub mod gm_tree_hooks;
 pub mod idle_tests_hooks;
 pub mod main_tree_hooks;
 pub mod measure_hooks;

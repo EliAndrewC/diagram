@@ -406,5 +406,18 @@
       "suite_cases": 31,
       "suite_passed_against_rust": 31
     }
+  },
+  "gm-tree-hooks-ported": {
+    "quantity": "a Bash call naming the tree, its cost in the gm-tree guard, the shell's against the Rust guard alone (T019)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/gm-tree-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only gm-tree-hooks PreToolUse in the clone, on a sample Bash grep of the tree, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/gm-tree-hooks.sh",
+    "value": {
+      "shell_bash_ms": 33.4,
+      "rust_guard_bash_ms": 10.6,
+      "suite_cases": 24,
+      "suite_passed_against_rust": 24
+    }
   }
 }

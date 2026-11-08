@@ -23,6 +23,7 @@ decision).
 | types | pyrefly | the Rust compiler, which is stricter | dropped, replaced by the compiler | `make static` |
 | function cap | PLR0915 and `check-function-cap.py`, 100 statements, a suppression says why | clippy `too_many_lines` (100 lines); `#[expect(lint, reason = "...")]` and `allow_attributes_without_reason` | one for one, counts lines | `scripts/gates/check-function-cap.py` |
 | file cap | `check-file-scale.py`, 1,000 raw lines | the same script, reading `.rs` | one for one | `scripts/gates/check-file-scale.py` |
+| the engine-freeze guard's two questions | `engine_edit.py`, `delta.is_engine` and `gate-stamp.py`'s AST identity | gone with phase 2's ports of those two, in-process | replaced | `scripts/gates/engine_edit.py` |
 | tool signals | `check-tool-signals.py`, every tool's usage-log call read from `scripts/` and the Rust guards | the same script, reading both | unchanged | `scripts/gates/check-tool-signals.py` |
 | duplicate top-level definitions | `check-duplicate-defs.py` | the compiler refuses them | dropped, replaced by the compiler | `scripts/gates/check-duplicate-defs.py` |
 | coverage and its floors | 100% line coverage, the floors, the gate's phases | `cargo llvm-cov --fail-under-lines 100`, plus the Rust lines pytest reaches through the extension | one for one; an argued exclusion only partial (`#[coverage(off)]` needs nightly) | `make done` `make test` `make tooling` `make cov-file` `make claims-coverage` `make soak` `make durations` |

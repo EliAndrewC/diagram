@@ -3,7 +3,7 @@
 # 2026-10-20 diagram#10 shape) and leaves its clones, the rest of /host-l7r-repo and every read alone (feature 429).
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/gm-tree-hooks.sh"
+HOOK="$HERE/gm-tree-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT

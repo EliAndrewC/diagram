@@ -212,9 +212,9 @@
    "declared": "spec-fidelity"
   },
   "### T019 Approach (checklist part A)": {
-   "sha256": "240ac0d0ba29712fc8173e672c38f494666241544b0d8c74298a3b9fb6370efa",
+   "sha256": "66b0ab98bde200c7a08e63963cb174232b76f9bcc3e618c1e4e386df061e18ed",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T020 Approach (checklist part A)": {
@@ -1714,6 +1714,51 @@
      "why": "How the port obtains a constant; no verdict moves, and FR-002/D4's replay holds that."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T019 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "2(a)-guard-and-library",
+     "summary": "gm-tree-hooks.sh and its library lib/hm_gm_tree.py both move to Rust; the library is deleted with the guard rather than left behind.",
+     "class": "within",
+     "why": "The request is to make this a Rust codebase; FR-001 replaces every tracked Python file. Moving the library with its guard is less Python left, and FR-002's order (verdicts match before the Python is deleted) is kept by the exit in step 6."
+    },
+    {
+     "id": "2(a)-shared-tree",
+     "summary": "The decider `offending` sits on T010's shared::tree, the port of hm_tree.py's classify and walk, the same functions the Python used.",
+     "class": "within",
+     "why": "An implementation placement the request and spec leave open; it reuses the same functions, so it preserves FR-002's same verdicts and narrows nothing."
+    },
+    {
+     "id": "2(a)-GM_TREE_ROOT-seam",
+     "summary": "GM_TREE_ROOT stays as the guard's test seam.",
+     "class": "within",
+     "why": "Keeps the existing suite runnable unchanged against the Rust guard, as FR-002 and D4 require."
+    },
+    {
+     "id": "2(b)-nothing-else-changes",
+     "summary": "The literal gm-assistant pre-check, the escape on a Bash call only, and the guard's words stay as they were; no XIV fix is taken in this port.",
+     "class": "within",
+     "why": "FR-002's rule is the same verdicts and outputs; the XIV fix is the exception, owed only for a guard that refuses correct work, and the block names no such case. Keeping behavior here is what FR-002 asks, not a carve-out from it."
+    },
+    {
+     "id": "5-order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 moves guards one by one after the dispatcher; the order among guards is left to the plan."
+    },
+    {
+     "id": "6-9-exits-and-switch",
+     "summary": "Green is the guard's suite against l7r-guard --only gm-tree-hooks with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, and FR-003's never-both: the shell entry leaves in the same commit that adds the decider, after the suite passes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2393,6 +2438,50 @@
      "summary": "REVIEW_AGENTS is read directly from pair_hooks rather than parsed from its source.",
      "class": "within",
      "why": "How the port obtains a constant; no verdict moves, and FR-002/D4's replay holds that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T019": {
+   "section_sha256": "66b0ab98bde200c7a08e63963cb174232b76f9bcc3e618c1e4e386df061e18ed",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "2(a)-guard-and-library",
+     "summary": "gm-tree-hooks.sh and its library lib/hm_gm_tree.py both move to Rust; the library is deleted with the guard rather than left behind.",
+     "class": "within",
+     "why": "The request is to make this a Rust codebase; FR-001 replaces every tracked Python file. Moving the library with its guard is less Python left, and FR-002's order (verdicts match before the Python is deleted) is kept by the exit in step 6."
+    },
+    {
+     "id": "2(a)-shared-tree",
+     "summary": "The decider `offending` sits on T010's shared::tree, the port of hm_tree.py's classify and walk, the same functions the Python used.",
+     "class": "within",
+     "why": "An implementation placement the request and spec leave open; it reuses the same functions, so it preserves FR-002's same verdicts and narrows nothing."
+    },
+    {
+     "id": "2(a)-GM_TREE_ROOT-seam",
+     "summary": "GM_TREE_ROOT stays as the guard's test seam.",
+     "class": "within",
+     "why": "Keeps the existing suite runnable unchanged against the Rust guard, as FR-002 and D4 require."
+    },
+    {
+     "id": "2(b)-nothing-else-changes",
+     "summary": "The literal gm-assistant pre-check, the escape on a Bash call only, and the guard's words stay as they were; no XIV fix is taken in this port.",
+     "class": "within",
+     "why": "FR-002's rule is the same verdicts and outputs; the XIV fix is the exception, owed only for a guard that refuses correct work, and the block names no such case. Keeping behavior here is what FR-002 asks, not a carve-out from it."
+    },
+    {
+     "id": "5-order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 moves guards one by one after the dispatcher; the order among guards is left to the plan."
+    },
+    {
+     "id": "6-9-exits-and-switch",
+     "summary": "Green is the guard's suite against l7r-guard --only gm-tree-hooks with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
+     "class": "within",
+     "why": "This is D3 and D4 as written, and FR-003's never-both: the shell entry leaves in the same commit that adds the decider, after the suite passes."
     }
    ],
    "verdict": "CLEAR"
