@@ -199,5 +199,16 @@
         "test_hooks_cases.py"
       ]
     }
+  },
+  "registered-guards": {
+    "quantity": "the repository's guards registered in .claude/settings.json, by name, across every hook event",
+    "observed": "2026-11-07",
+    "subject": ".claude/settings.json",
+    "command": "python3 -c \"import json,re;s=json.load(open('.claude/settings.json'));print(len({m.group(1) for gs in s['hooks'].values() for g in gs for h in g['hooks'] for m in [re.search(r'([\\\\w-]+-hooks)\\\\.sh',h['command'])] if m}))\"",
+    "method": "every hook command's `<name>-hooks.sh` collected over all events, the distinct names counted; each is one of the 44 shell files under scripts/hooks/ (m:guard-sources), the two counts the same files",
+    "value": {
+      "registered": 44,
+      "taking_bash": 26
+    }
   }
 }
