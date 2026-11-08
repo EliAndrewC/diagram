@@ -332,7 +332,7 @@ WebFetch/WebSearch) and verified by `source-reader` in 2 minutes.
 
 The transcript says which it is: a finished agent's `subagents/agent-<id>.jsonl` ends on an
 `assistant` record with `stop_reason: end_turn`; a hung one ends on a `user` tool_result that never
-got its next turn, and its mtime is when it last did anything. `scripts/hooks/agent-stall-hooks.sh`
+got its next turn, and its mtime is when it last did anything. `rust/guard/src/guards/agent_stall_hooks.rs`
 reads that: the prompt hook lists any agent whose transcript has not moved for 5 minutes, a
 `Monitor` on its `watch` mode surfaces the same mid-turn, and `pending` answers the narrower
 question feature 151's pairing guard asks (has the review I launched finished?). Measured on the

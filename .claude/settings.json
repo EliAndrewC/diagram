@@ -33,12 +33,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/agent-stall-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-stall-hooks.sh\"; exec \"$h\" prompt",
-            "timeout": 15,
-            "statusMessage": "Checking for stalled background agents..."
-          },
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/stall-watchdog-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/stall-watchdog-hooks.sh\"; exec \"$h\" prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
             "timeout": 10
           }

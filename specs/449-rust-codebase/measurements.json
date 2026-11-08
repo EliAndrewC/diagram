@@ -354,5 +354,18 @@
       "suite_cases": 34,
       "suite_passed_against_rust": 34
     }
+  },
+  "agent-stall-hooks-ported": {
+    "quantity": "a prompt's cost in the agent-stall guard over a session of 100 finished subagents, the shell's against the Rust dispatcher carrying it beside eight ported guards (T015)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/agent-stall-hooks.sh prompt (main's shell guard) against scripts/hooks/l7r-guard.sh UserPromptSubmit in the clone, on a sample payload whose transcript_path names a directory of 100 transcripts ten minutes old, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the dispatcher 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work (load 5.2); the suite replayed through tests/hooks/agent-stall-hooks.sh",
+    "value": {
+      "shell_prompt_ms": 46.1,
+      "rust_dispatcher_prompt_ms": 7.1,
+      "suite_cases": 15,
+      "suite_passed_against_rust": 15
+    }
   }
 }

@@ -7,7 +7,7 @@ fn main() {
     let mut stdin = String::new();
     if !matches!(
         args.first().map(String::as_str),
-        Some("--version" | "--self-check" | "--idle-tests")
+        Some("--version" | "--self-check" | "--idle-tests" | "--agent-stall")
     ) {
         let _ = std::io::stdin().read_to_string(&mut stdin);
     }

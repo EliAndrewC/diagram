@@ -188,9 +188,9 @@
    "declared": "spec-fidelity"
   },
   "### T015 Approach (checklist part A)": {
-   "sha256": "9b3a5345b702362b7ae9949a5477bf35286dbf4054409e6e67fac9b4474deba5",
+   "sha256": "3104e6aa5fd19aedb54baba3186495186411db6507f367d1cee8f317e9dcf853",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T016 Approach (checklist part A)": {
@@ -1502,6 +1502,51 @@
      "why": "This edits a case of the suite D4 makes the replay and FR-002 holds, so it is ruled on, not passed as within. The general rule is physically impossible here: the case greps a file the port must delete (D3, the GM's move to Rust), so it cannot pass unedited once the shell is gone. The case's purpose survives whole: it pins the GM's disable where that disable now lives, and its expected result is unchanged, so this is not FR-002's verdict-change exception and needs no XIV fix. It covers this one case; the block states every other expectation is unedited."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T015 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "Every mode of agent-stall-hooks is ported: prompt becomes the guard; check, watch, pending and ack become the binary's --agent-stall, with the Python scan done in-process and one read of each transcript's last line.",
+     "class": "within",
+     "why": "A complete port, which is what the request and FR-001 ask, with FR-002's same outputs. Read as: the scan the embedded Python did is now Rust code inside the Rust process. If it instead meant the binary still runs Python, it would contradict the request and FR-001; the block's goal and its 'script's logic gone' support the port reading, and the repository was not opened to confirm it."
+    },
+    {
+     "id": "(b)",
+     "summary": "scripts/hooks/agent-stall-hooks.sh stays until T051 as a forwarder holding only a call to l7r-guard.sh --agent-stall, because this guard's report and engine-freeze-hooks' refusal print that path and sessions run watch by hand; its hook mode leaves the settings in this task (with item 9, the done-condition).",
+     "class": "within",
+     "why": "Does not narrow what was asked. The request and FR-001 replace Python with Rust; the forwarder is one line of shell and no Python runs. FR-003: the forwarder runs only Rust, so no piece runs both. D3 requires the settings entry to leave in the decider's commit, which the block does, and says nothing of deleting the file. FR-002: the printed command is an output, and keeping the path keeps it true. Removal at T051 is sequencing, not scope; T051's content is outside this bundle and was not checked. FR-005 (make the one entry point) is not cited by the block, but this is a hand-run path sessions already use, not a new one. Item 1's 'its shell gone' is looser than item 9, which states the actual condition; a wording tension in the plan, not a narrowing."
+    },
+    {
+     "id": "(c)",
+     "summary": "watch still loops until killed; a tick count from the environment ends it for a unit test; the seams AGENT_STALE_S, AGENT_RECENT_S and AGENT_TICK_S are kept.",
+     "class": "within",
+     "why": "The tick count exists only so a test of an endless loop can meet FR-008; with FR-008 gone it has no purpose. watch's behavior is unchanged when it is unset, and keeping the existing seams serves FR-002 and D4."
+    },
+    {
+     "id": "item-5",
+     "summary": "Ordering: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3's guard-by-guard order after the dispatcher lands; FR-001 puts the hooks first."
+    },
+    {
+     "id": "item-6",
+     "summary": "Exits: the guard's suite green against l7r-guard --only agent-stall-hooks, make rust-test and cover green, make hooks-test green; on red, record and stop to make arbiter-ask.",
+     "class": "within",
+     "why": "D4's replay as the switch condition, FR-002 and FR-003, and FR-004's coverage floor. The red exit is process and changes nothing asked."
+    },
+    {
+     "id": "item-8",
+     "summary": "Lands by make land-tooling with no work budget, nothing rolled.",
+     "class": "within",
+     "why": "Landing mechanics for tooling; it does not touch any requirement or the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1973,6 +2018,50 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This edits a case of the suite D4 makes the replay and FR-002 holds, so it is ruled on, not passed as within. The general rule is physically impossible here: the case greps a file the port must delete (D3, the GM's move to Rust), so it cannot pass unedited once the shell is gone. The case's purpose survives whole: it pins the GM's disable where that disable now lives, and its expected result is unchanged, so this is not FR-002's verdict-change exception and needs no XIV fix. It covers this one case; the block states every other expectation is unedited."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T015": {
+   "section_sha256": "3104e6aa5fd19aedb54baba3186495186411db6507f367d1cee8f317e9dcf853",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a)",
+     "summary": "Every mode of agent-stall-hooks is ported: prompt becomes the guard; check, watch, pending and ack become the binary's --agent-stall, with the Python scan done in-process and one read of each transcript's last line.",
+     "class": "within",
+     "why": "A complete port, which is what the request and FR-001 ask, with FR-002's same outputs. Read as: the scan the embedded Python did is now Rust code inside the Rust process. If it instead meant the binary still runs Python, it would contradict the request and FR-001; the block's goal and its 'script's logic gone' support the port reading, and the repository was not opened to confirm it."
+    },
+    {
+     "id": "(b)",
+     "summary": "scripts/hooks/agent-stall-hooks.sh stays until T051 as a forwarder holding only a call to l7r-guard.sh --agent-stall, because this guard's report and engine-freeze-hooks' refusal print that path and sessions run watch by hand; its hook mode leaves the settings in this task (with item 9, the done-condition).",
+     "class": "within",
+     "why": "Does not narrow what was asked. The request and FR-001 replace Python with Rust; the forwarder is one line of shell and no Python runs. FR-003: the forwarder runs only Rust, so no piece runs both. D3 requires the settings entry to leave in the decider's commit, which the block does, and says nothing of deleting the file. FR-002: the printed command is an output, and keeping the path keeps it true. Removal at T051 is sequencing, not scope; T051's content is outside this bundle and was not checked. FR-005 (make the one entry point) is not cited by the block, but this is a hand-run path sessions already use, not a new one. Item 1's 'its shell gone' is looser than item 9, which states the actual condition; a wording tension in the plan, not a narrowing."
+    },
+    {
+     "id": "(c)",
+     "summary": "watch still loops until killed; a tick count from the environment ends it for a unit test; the seams AGENT_STALE_S, AGENT_RECENT_S and AGENT_TICK_S are kept.",
+     "class": "within",
+     "why": "The tick count exists only so a test of an endless loop can meet FR-008; with FR-008 gone it has no purpose. watch's behavior is unchanged when it is unset, and keeping the existing seams serves FR-002 and D4."
+    },
+    {
+     "id": "item-5",
+     "summary": "Ordering: after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3's guard-by-guard order after the dispatcher lands; FR-001 puts the hooks first."
+    },
+    {
+     "id": "item-6",
+     "summary": "Exits: the guard's suite green against l7r-guard --only agent-stall-hooks, make rust-test and cover green, make hooks-test green; on red, record and stop to make arbiter-ask.",
+     "class": "within",
+     "why": "D4's replay as the switch condition, FR-002 and FR-003, and FR-004's coverage floor. The red exit is process and changes nothing asked."
+    },
+    {
+     "id": "item-8",
+     "summary": "Lands by make land-tooling with no work budget, nothing rolled.",
+     "class": "within",
+     "why": "Landing mechanics for tooling; it does not touch any requirement or the request."
     }
    ],
    "verdict": "CLEAR"

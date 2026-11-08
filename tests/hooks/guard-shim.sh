@@ -29,4 +29,6 @@ export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tre
 export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}"
 # idle-tests' printed stagger is the guard's entry that is no hook event (T014 decision (a))
 [ "$event" = stagger ] && exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@"
+# agent-stall's tool modes likewise (T015 decision (a))
+case "$event" in check|watch|pending|ack) exec "$tree/scripts/hooks/l7r-guard.sh" --agent-stall "$@" ;; esac
 exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"
