@@ -200,9 +200,9 @@
    "declared": "spec-fidelity"
   },
   "### T017 Approach (checklist part A)": {
-   "sha256": "673f02a31bea2bfef8da05f0f5770d17978f8f9145d9ef2e9dc79fcaf0eb0197",
+   "sha256": "177c23aae4bec279640ea1bc88426350d276aada6a52f6c3996bf8c59b478179",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T018 Approach (checklist part A)": {
@@ -1604,6 +1604,75 @@
      "why": "D3 and D4 as the spec states them, with FR-004's coverage floor carried by cover."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T017 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) every mode and all its Python ported",
+     "summary": "prompt and stop become the guard; check, seen, live, judge and stale become the binary's --finished-run; the inline Python moves in-process with its rules unchanged.",
+     "class": "within",
+     "why": "This is the whole of the piece, nothing left in Python: the GM's 'all be ported to Rust', FR-001 and FR-002."
+    },
+    {
+     "id": "(a)-proc every process fact from /proc, never a pattern over the hook's own command line",
+     "summary": "How process facts are read in the port.",
+     "class": "within",
+     "why": "An implementation means, stated under 'rules unchanged'. FR-002 binds its verdicts on every suite case, and D4's replay in exit 6 settles that by run; if a verdict moved, FR-002's XIV path would have to name it, and the block claims none."
+    },
+    {
+     "id": "(a)-T016 the watchdog pass asks live in-process",
+     "summary": "T016's landed watchdog stops calling the script and calls the port directly.",
+     "class": "within",
+     "why": "A direct consequence of the port and of FR-003: the caller reaches the one implementation. Nothing asked for is dropped."
+    },
+    {
+     "id": "(b) the script stays as a forwarder until T051",
+     "summary": "finished-run-hooks.sh remains only to run l7r-guard.sh --finished-run for review_prereq.py (phase 3); its hook modes leave the settings in this task.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out. The request and FR-001 are about Python; the forwarder holds no Python and no logic, and has a named end at T051. FR-003 holds: only the Rust runs, the forwarder decides nothing. D3 asks that the shell entry leave the settings in the decider's commit, which this does. The premise that review_prereq.py is the only caller does not decide the ruling: the forwarder answers any caller of that path."
+    },
+    {
+     "id": "(c) the tools it asks stay theirs: lib/writer-alive.sh asked by path until T051",
+     "summary": "The port keeps shelling out to the shell helper for each waiter's file.",
+     "class": "within",
+     "why": "The helper is described as shell, not Python, so FR-001 does not reach it, and it has a named end at T051. FR-007 (not cited by the block, its first line read in spec-index.md) is one process per GUARD rather than per helper, and finished-run-hooks' guard modes are prompt and stop rather than the before-Bash path SC-001 measures. Premise on record: the block does not say on which modes the helper runs, and within rests on the helper holding no inline Python."
+    },
+    {
+     "id": "(d)-1 os.access(path, X_OK) restated as the file's execute bits",
+     "summary": "A semantic restatement in the port, named by the author, differing from access(2) only where the caller is not the file's owner or is root.",
+     "class": "within",
+     "why": "FR-002's bar is 'every case its tests and its suites hold', and the block scopes the difference to what no case tells apart; a divergence no case exercises is inside FR-002 by its words, and it is not named as an exception to anything the GM asked. The premise was read rather than run; D4's replay at exit 6 is the measurement, and a case that does tell them apart turns the exit red."
+    },
+    {
+     "id": "(d)-2 sort -n | tail -1 restated as newest by mtime, then by path",
+     "summary": "The run-log selection expressed directly in Rust.",
+     "class": "within",
+     "why": "The same ordering stated in other terms; FR-002 and the D4 replay bind it."
+    },
+    {
+     "id": "item 1 goal: its shell gone",
+     "summary": "The goal line, read with (b) and item 9.",
+     "class": "within",
+     "why": "Item 9 states the measured form: logic and settings entries gone, the script kept only as (b)'s forwarder until T051. Looser prose in the goal line, not a departure from the request."
+    },
+    {
+     "id": "item 9 commit shape",
+     "summary": "The script's logic and its settings entries go in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 as written, and FR-003's never both."
+    },
+    {
+     "id": "items 5, 6, 8 order, exits and landing",
+     "summary": "After T005 in the plan's order; green on the suite against the Rust guard, make rust-test, cover and hooks-test, red to make arbiter-ask; lands by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "Order and process inside D3 and D4; the green exit carries FR-002 (suite) and FR-004 (cover), and nothing the GM asked for is reduced."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2175,6 +2244,74 @@
      "summary": "Sequence after T005, independent of the other guards; exits are the guard's suite against l7r-guard --only, make rust-test, cover and make hooks-test; shell and settings entry gone in the commit that registers the decider; landed by make land-tooling",
      "class": "within",
      "why": "D3 and D4 as the spec states them, with FR-004's coverage floor carried by cover."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T017": {
+   "section_sha256": "177c23aae4bec279640ea1bc88426350d276aada6a52f6c3996bf8c59b478179",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) every mode and all its Python ported",
+     "summary": "prompt and stop become the guard; check, seen, live, judge and stale become the binary's --finished-run; the inline Python moves in-process with its rules unchanged.",
+     "class": "within",
+     "why": "This is the whole of the piece, nothing left in Python: the GM's 'all be ported to Rust', FR-001 and FR-002."
+    },
+    {
+     "id": "(a)-proc every process fact from /proc, never a pattern over the hook's own command line",
+     "summary": "How process facts are read in the port.",
+     "class": "within",
+     "why": "An implementation means, stated under 'rules unchanged'. FR-002 binds its verdicts on every suite case, and D4's replay in exit 6 settles that by run; if a verdict moved, FR-002's XIV path would have to name it, and the block claims none."
+    },
+    {
+     "id": "(a)-T016 the watchdog pass asks live in-process",
+     "summary": "T016's landed watchdog stops calling the script and calls the port directly.",
+     "class": "within",
+     "why": "A direct consequence of the port and of FR-003: the caller reaches the one implementation. Nothing asked for is dropped."
+    },
+    {
+     "id": "(b) the script stays as a forwarder until T051",
+     "summary": "finished-run-hooks.sh remains only to run l7r-guard.sh --finished-run for review_prereq.py (phase 3); its hook modes leave the settings in this task.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out. The request and FR-001 are about Python; the forwarder holds no Python and no logic, and has a named end at T051. FR-003 holds: only the Rust runs, the forwarder decides nothing. D3 asks that the shell entry leave the settings in the decider's commit, which this does. The premise that review_prereq.py is the only caller does not decide the ruling: the forwarder answers any caller of that path."
+    },
+    {
+     "id": "(c) the tools it asks stay theirs: lib/writer-alive.sh asked by path until T051",
+     "summary": "The port keeps shelling out to the shell helper for each waiter's file.",
+     "class": "within",
+     "why": "The helper is described as shell, not Python, so FR-001 does not reach it, and it has a named end at T051. FR-007 (not cited by the block, its first line read in spec-index.md) is one process per GUARD rather than per helper, and finished-run-hooks' guard modes are prompt and stop rather than the before-Bash path SC-001 measures. Premise on record: the block does not say on which modes the helper runs, and within rests on the helper holding no inline Python."
+    },
+    {
+     "id": "(d)-1 os.access(path, X_OK) restated as the file's execute bits",
+     "summary": "A semantic restatement in the port, named by the author, differing from access(2) only where the caller is not the file's owner or is root.",
+     "class": "within",
+     "why": "FR-002's bar is 'every case its tests and its suites hold', and the block scopes the difference to what no case tells apart; a divergence no case exercises is inside FR-002 by its words, and it is not named as an exception to anything the GM asked. The premise was read rather than run; D4's replay at exit 6 is the measurement, and a case that does tell them apart turns the exit red."
+    },
+    {
+     "id": "(d)-2 sort -n | tail -1 restated as newest by mtime, then by path",
+     "summary": "The run-log selection expressed directly in Rust.",
+     "class": "within",
+     "why": "The same ordering stated in other terms; FR-002 and the D4 replay bind it."
+    },
+    {
+     "id": "item 1 goal: its shell gone",
+     "summary": "The goal line, read with (b) and item 9.",
+     "class": "within",
+     "why": "Item 9 states the measured form: logic and settings entries gone, the script kept only as (b)'s forwarder until T051. Looser prose in the goal line, not a departure from the request."
+    },
+    {
+     "id": "item 9 commit shape",
+     "summary": "The script's logic and its settings entries go in the commit that registers the decider.",
+     "class": "within",
+     "why": "D3 as written, and FR-003's never both."
+    },
+    {
+     "id": "items 5, 6, 8 order, exits and landing",
+     "summary": "After T005 in the plan's order; green on the suite against the Rust guard, make rust-test, cover and hooks-test, red to make arbiter-ask; lands by make land-tooling with no work budget.",
+     "class": "within",
+     "why": "Order and process inside D3 and D4; the green exit carries FR-002 (suite) and FR-004 (cover), and nothing the GM asked for is reduced."
     }
    ],
    "verdict": "CLEAR"

@@ -22,6 +22,7 @@ pub fn guards() -> Vec<Guard> {
         guards::idle_tests_hooks::GUARD,
         guards::agent_stall_hooks::GUARD,
         guards::stall_watchdog_hooks::GUARD,
+        guards::finished_run_hooks::GUARD,
     ]
 }
 
@@ -81,9 +82,10 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("--idle-tests") => guards::idle_tests_hooks::cli(&args[1..]),
         Some("--agent-stall") => guards::agent_stall_hooks::cli(&args[1..]),
         Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
+        Some("--finished-run") => guards::finished_run_hooks::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
-            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --self-check | --version".to_owned(),
+            "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --finished-run <mode> | --self-check | --version".to_owned(),
             1,
         ),
     }
@@ -181,7 +183,8 @@ mod tests {
                     "clone-sync-hooks",
                     "idle-tests-hooks",
                     "agent-stall-hooks",
-                    "stall-watchdog-hooks"
+                    "stall-watchdog-hooks",
+                    "finished-run-hooks"
                 ]
         );
     }

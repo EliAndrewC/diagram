@@ -33,15 +33,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/finished-run-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/finished-run-hooks.sh\"; exec \"$h\" prompt",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" UserPromptSubmit  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
             "timeout": 60
           }
@@ -433,15 +424,6 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/set-down-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/set-down-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 385 T70 - a feature is worked until it is set down"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/finished-run-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/finished-run-hooks.sh\"; exec \"$h\" stop",
-            "timeout": 10
           }
         ]
       },

@@ -19,7 +19,7 @@ use fancy_regex::Regex;
 use serde_json::{json, Value};
 
 use crate::shared::log::civil;
-use crate::shared::tool::{ask, ask_within, Said};
+use crate::shared::tool::{ask_within, Said};
 
 /// The runner resumes a minute or so after the wait it logged; five minutes of slack covers that and no more.
 const RETRY_SLACK: f64 = 300.0;
@@ -37,7 +37,6 @@ pub(crate) struct Paths {
     pub mirror: PathBuf,
     pub proc: PathBuf,
     pub tmux: Vec<String>,
-    pub tree: PathBuf,
     pub stall_after: f64,
     pub dry: bool,
 }
@@ -61,7 +60,6 @@ impl Paths {
                 .split_whitespace()
                 .map(str::to_owned)
                 .collect(),
-            tree: or("L7R_GUARD_TREE", "/diagram"),
             stall_after: set("STALL_AFTER")
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(3600.0),
@@ -233,17 +231,11 @@ pub(crate) fn unfinished(p: &Paths, clone: &str) -> String {
     if !head.is_empty() && !git(&mirror, &["merge-base", "--is-ancestor", &head, "main"]).ok() {
         what.push("commits not on main");
     }
-    let finished = p.tree.join("scripts/hooks/finished-run-hooks.sh");
-    if !ask(
-        Path::new("/"),
-        "bash",
-        &[&finished.to_string_lossy(), "live", clone],
-        "",
-    )
-    .out
-    .trim()
-    .is_empty()
-    {
+    let procs = crate::guards::finished_run_hooks::runs::Procs {
+        root: p.proc.clone(),
+        mine: std::process::id(),
+    };
+    if !procs.live_runs(Path::new(clone)).is_empty() {
         what.push("a live make");
     }
     what.join(", ")

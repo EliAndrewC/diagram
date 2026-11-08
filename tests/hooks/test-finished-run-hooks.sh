@@ -3,7 +3,7 @@
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 170 - constitution XVIII.)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/finished-run-hooks.sh"
+HOOK="$HERE/finished-run-hooks.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT

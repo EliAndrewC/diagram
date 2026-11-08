@@ -27,10 +27,11 @@ export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tre
 # ...and rustup's own homes, which its cargo proxy reads from HOME to choose a toolchain (T010: a suite that moves HOME left the
 # build with "rustup could not choose a version of cargo to run")
 export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}"
-# idle-tests' printed stagger is the guard's entry that is no hook event (T014 decision (a))
-[ "$event" = stagger ] && exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@"
-# agent-stall's tool modes likewise (T015 decision (a))
-# ...and the watchdog's (T016 decision (a))
-case "$event" in run|once) exec "$tree/scripts/hooks/l7r-guard.sh" --stall-watchdog "$@" ;; esac
-case "$event" in check|watch|pending|ack) exec "$tree/scripts/hooks/l7r-guard.sh" --agent-stall "$@" ;; esac
+# a guard's entries that are no hook event, by guard, because `check` is not the same mode in each (T014-T017 decisions (a))
+case "$guard:$event" in
+  idle-tests-hooks:stagger) exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@" ;;
+  agent-stall-hooks:check|agent-stall-hooks:watch|agent-stall-hooks:pending|agent-stall-hooks:ack) exec "$tree/scripts/hooks/l7r-guard.sh" --agent-stall "$@" ;;
+  stall-watchdog-hooks:run|stall-watchdog-hooks:once) exec "$tree/scripts/hooks/l7r-guard.sh" --stall-watchdog "$@" ;;
+  finished-run-hooks:check|finished-run-hooks:seen|finished-run-hooks:live|finished-run-hooks:judge|finished-run-hooks:stale) exec "$tree/scripts/hooks/l7r-guard.sh" --finished-run "$@" ;;
+esac
 exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" "$event"

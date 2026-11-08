@@ -53,11 +53,6 @@ fn world(tag: &str) -> World {
     git(&mirror, &["commit", "-q", "--allow-empty", "-m", "one"]);
     let (from, to) = (mirror.to_string_lossy(), clone.to_string_lossy());
     assert!(ask(Path::new("/"), "git", &["clone", "-q", &from, &to], "").ok());
-    std::fs::write(
-        root.join("tree/scripts/hooks/finished-run-hooks.sh"),
-        format!("cat {}/live 2>/dev/null\n", root.display()),
-    )
-    .unwrap();
     let base = root.display().to_string();
     std::fs::write(root.join("tmux"), format!("case \"$1\" in display) touch {base}/tty-$4; echo {base}/tty-$4 ;; capture-pane) cat {base}/screen 2>/dev/null ;; send-keys) echo \"$*\" >> {base}/sent ;; esac\n")).unwrap();
     let r = root.clone();
@@ -71,7 +66,6 @@ fn world(tag: &str) -> World {
         "sh".to_owned(),
         r.join("tmux").to_string_lossy().into_owned(),
     ];
-    p.tree = r.join("tree");
     World { root, clone, p }
 }
 
@@ -225,7 +219,18 @@ fn unfinished_work_is_named() {
     assert_eq!(unfinished(&w.p, &c), "commits not on main");
     w.dirty();
     std::fs::write(w.clone.join("more"), "").unwrap();
-    std::fs::write(w.root.join("live"), "a make\n").unwrap();
+    let fake = w.root.join("proc/500");
+    std::fs::create_dir_all(&fake).unwrap();
+    std::fs::write(fake.join("comm"), "make\n").unwrap();
+    std::fs::write(fake.join("cmdline"), "make\0done\0").unwrap();
+    std::os::unix::fs::symlink(&w.clone, fake.join("cwd")).unwrap();
+    let w = World {
+        p: Paths {
+            proc: w.root.join("proc"),
+            ..w.p
+        },
+        ..w
+    };
     assert_eq!(
         unfinished(&w.p, &c),
         "uncommitted changes, commits not on main, a live make"

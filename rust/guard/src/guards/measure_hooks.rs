@@ -221,7 +221,7 @@ fn last_gate(root: &Path) -> Option<(i64, String, String)> {
 }
 
 /// `YYYY-mm-ddTHH:MM:SSZ` as seconds since the epoch.
-fn parse_utc(stamp: &str) -> Option<i64> {
+pub(crate) fn parse_utc(stamp: &str) -> Option<i64> {
     let b = stamp.as_bytes();
     if b.len() != 20
         || b[4] != b'-'
