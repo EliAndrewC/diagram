@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-07
 
-**Status**: Draft
+**Status**: APPROVED by `spec-fidelity` - round 5 verdict FAITHFUL (2026-11-07)
 
 **Approved**: the GM, 2026-11-07, "I think what we're finding is that our Python code is just to inefficient and should probably all be ported to Rust, so I think I want to just move forward with that, making this a Rust codebase instead of a Python codebase."
 
@@ -191,3 +191,15 @@ the port is held to its checks and its research claims, as FR-002 states.
 - The research archive, the record's build (`make record`) and the claims switch keep their rules; only their implementation moves.
 - The work-budget program (feature 444) and its Rust stages continue unchanged; the stages past the cut are ported there, not here.
 - The 100% coverage floor's exemption for engine code the Rust port replaces (feature 448) ends piece by piece as each is ported.
+
+## Review history
+
+- spec-fidelity round 0 (2026-11-07): NOT-REVIEWABLE - figures without `m:` keys; measurements.json recorded.
+- round 1: CHANGES REQUIRED - the census missed specs/ and pool/, the GM's ~/.claude hooks counted, a comment edit measured as a code
+  edit, FR-002 against constitution XIV, cargo's count not re-runnable.
+- round 2: CHANGES REQUIRED - FR-011 (deleting specs/ files nothing runs) ruled NOT LEGITIMATE and removed; inline Python censused;
+  eight l7r/diagram/ files placed; `make rust-test` prints cargo's summary; a fresh baseline.
+- round 3: CHANGES REQUIRED - past figures' Python commands rewritten on the port; the CI image in phase 4.
+- round 4: CHANGES REQUIRED - the census matched its own entries; the rewrite rule narrower than SC-005; four lockfile pairs.
+- round 5: FAITHFUL. Its aside: the census misses ~95 recorded commands that run a `.py` without `python3` before it (`make test-file`
+  of a test file, mostly); SC-005's `make figures` clause, not the census, is the closing test that catches them.
