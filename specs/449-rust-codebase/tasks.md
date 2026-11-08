@@ -159,9 +159,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 
 ### User Story 1 - the suites' tooling and the close (plan work breakdown 6-8)
 
-- [ ] T053 [US1] The plain-call gate for the guards moved to phase 3: `record-edit-gate` in `rust/guard` answers a Bash call or an Edit that cannot concern `record-edit-hooks.sh` with no process, and runs the shell guard for one that can; its two settings entries gone (the round arbiter, `ask:449-hm-checks-route`, step 1)
+- [x] T053 [US1] The plain-call gate for the guards moved to phase 3: `record-edit-gate` in `rust/guard` answers a Bash call or an Edit that cannot concern `record-edit-hooks.sh` with no process, and runs the shell guard for one that can; its two settings entries gone (the round arbiter, `ask:449-hm-checks-route`, step 1)
       research: rendering
-      verify: DONE. landed in batch T039+T049: blocked-fetch and set-down are Rust
+      verify: DONE. landed: the plain-call gate; three stale-state defects fixed
 
 - [ ] T050 [US1] The four Python helpers under `tests/hooks/` ported to the guard crate: `hookdeps.py` as `l7r-guard deps` (which suites a change makes stale, keyed on the Rust sources), `hooktrace.py` as `l7r-guard trace`, `hookbench.py` as `l7r-guard bench`, `test_hooks_cases.py`'s cases as the crate's tests; the `hooks-test` recipe calling them; the Python deleted
       research: rendering
