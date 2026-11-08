@@ -254,9 +254,9 @@
    "declared": "spec-fidelity"
   },
   "### T026 Approach (checklist part A)": {
-   "sha256": "086cfe214226346100aadcf342e93c5f2d384e8a8c504ce9991b056be7447035",
+   "sha256": "613205b711b03ec08457be62e1c30715995a099bb8a7ac471e9154b65b6f5de8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T027 Approach (checklist part A)": {
@@ -1985,6 +1985,57 @@
      "why": "Classed narrowing because D4 makes the suite the replay and this one case is not replayed literally. Legitimate on the first ground: the literal means is physically impossible once FR-001 and D3 delete the shell, since there is no shell text for sed to strip. Purpose survives: FR-002 and D4 exist so a verdict cannot move, and the expected verdict does not; the case's property, that the refusal is this decider's and not the harness's, is still tested, because a refusal raised by the dispatcher would also refuse under another guard's entry. It does not use FR-002's constitution XIV exception and covers this one case only. The new case still has to pass at run time, which exit 6 requires."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T026 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T026(a)-straight-port",
+     "summary": "budget-change-hooks.sh and lib/hm_budget.py move to Rust as a straight port on T003's gm_messages and targets and T025's problem, keeping the shell's words; no constitution XIV fix is taken.",
+     "class": "within",
+     "why": "The GM asked for the Python to be ported (request, third quote); FR-002 requires the same verdicts and outputs and makes a XIV fix the one optional exception, so taking none is the default rather than a narrowing. Reusing shared helpers is implementation inside that."
+    },
+    {
+     "id": "T026(a)-delete-hm_budget",
+     "summary": "lib/hm_budget.py is deleted with this guard, as its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and FR-002 allows deletion once the replacement gives the same verdicts; the Done line and the Green exit put the suite before the switch. The 'only caller' premise is stated from the author's reading and this bundle cannot confirm it; it decides when the file goes, not what was asked, and it does not exempt anything from the port."
+    },
+    {
+     "id": "T026(a)-hm_budget_rounds-stays",
+     "summary": "lib/hm_budget_rounds.py is not part of this guard and stays with hm_checks.py.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: the block keeps the file with the piece that uses it, and FR-001 still requires it replaced, its census checked at close by SC-005. FR-003 requires Python to remain until its own replacement passes."
+    },
+    {
+     "id": "T026-item-9-switch-commit",
+     "summary": "The shell and its settings entry go in the commit that registers the Rust decider, after every suite case passes against l7r-guard --only budget-change-hooks.",
+     "class": "within",
+     "why": "This is FR-003 and accepted decisions D3 and D4 restated for this guard."
+    },
+    {
+     "id": "T026-item-6-exits",
+     "summary": "Green is the guard suite, make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-002 and FR-004 through the existing make entry point (FR-005); red is process and narrows nothing asked."
+    },
+    {
+     "id": "T026-item-5-order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 moves guards one by one after the dispatcher; order among guards was not fixed by the request or the spec's cited text."
+    },
+    {
+     "id": "T026-item-8-landing",
+     "summary": "Lands by make land-tooling with no work budget and nothing rolled.",
+     "class": "within",
+     "why": "A landing route for tooling; it changes nothing the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2928,6 +2979,56 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Classed narrowing because D4 makes the suite the replay and this one case is not replayed literally. Legitimate on the first ground: the literal means is physically impossible once FR-001 and D3 delete the shell, since there is no shell text for sed to strip. Purpose survives: FR-002 and D4 exist so a verdict cannot move, and the expected verdict does not; the case's property, that the refusal is this decider's and not the harness's, is still tested, because a refusal raised by the dispatcher would also refuse under another guard's entry. It does not use FR-002's constitution XIV exception and covers this one case only. The new case still has to pass at run time, which exit 6 requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T026": {
+   "section_sha256": "613205b711b03ec08457be62e1c30715995a099bb8a7ac471e9154b65b6f5de8",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T026(a)-straight-port",
+     "summary": "budget-change-hooks.sh and lib/hm_budget.py move to Rust as a straight port on T003's gm_messages and targets and T025's problem, keeping the shell's words; no constitution XIV fix is taken.",
+     "class": "within",
+     "why": "The GM asked for the Python to be ported (request, third quote); FR-002 requires the same verdicts and outputs and makes a XIV fix the one optional exception, so taking none is the default rather than a narrowing. Reusing shared helpers is implementation inside that."
+    },
+    {
+     "id": "T026(a)-delete-hm_budget",
+     "summary": "lib/hm_budget.py is deleted with this guard, as its only caller.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and FR-002 allows deletion once the replacement gives the same verdicts; the Done line and the Green exit put the suite before the switch. The 'only caller' premise is stated from the author's reading and this bundle cannot confirm it; it decides when the file goes, not what was asked, and it does not exempt anything from the port."
+    },
+    {
+     "id": "T026(a)-hm_budget_rounds-stays",
+     "summary": "lib/hm_budget_rounds.py is not part of this guard and stays with hm_checks.py.",
+     "class": "within",
+     "why": "Sequencing, not a carve-out: the block keeps the file with the piece that uses it, and FR-001 still requires it replaced, its census checked at close by SC-005. FR-003 requires Python to remain until its own replacement passes."
+    },
+    {
+     "id": "T026-item-9-switch-commit",
+     "summary": "The shell and its settings entry go in the commit that registers the Rust decider, after every suite case passes against l7r-guard --only budget-change-hooks.",
+     "class": "within",
+     "why": "This is FR-003 and accepted decisions D3 and D4 restated for this guard."
+    },
+    {
+     "id": "T026-item-6-exits",
+     "summary": "Green is the guard suite, make rust-test, cover and make hooks-test; red records the failure, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "Green carries FR-002 and FR-004 through the existing make entry point (FR-005); red is process and narrows nothing asked."
+    },
+    {
+     "id": "T026-item-5-order",
+     "summary": "After T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "D3 moves guards one by one after the dispatcher; order among guards was not fixed by the request or the spec's cited text."
+    },
+    {
+     "id": "T026-item-8-landing",
+     "summary": "Lands by make land-tooling with no work budget and nothing rolled.",
+     "class": "within",
+     "why": "A landing route for tooling; it changes nothing the GM asked for."
     }
    ],
    "verdict": "CLEAR"

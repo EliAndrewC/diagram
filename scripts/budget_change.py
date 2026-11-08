@@ -9,7 +9,7 @@ word - T05's agent writes it so); or `accepted`, which adds `accepted` (its coun
 
 THE RULES (443 FR-005; the GM's approval of the design, 2026-10-28): a FIRST budget is set only from a SOUND verdict (`budget-set`;
 LOOSE or UNDERIVED refuses); every later change, and the program's whole-roll budget, needs the GM's words (`budget-change`,
-`budget-program`, WORDS checked against the session's transcript by `scripts/hooks/budget-change-hooks.sh`, which a make target
+`budget-program`, WORDS checked against the session's transcript by `rust/guard/src/guards/budget_change_hooks.rs`, which a make target
 cannot do), and is logged with them in `dev/work-budget-changes.jsonl`. The table is a guard file: an edit other than through
 these targets needs `GUARD_EDIT_OK`.
 

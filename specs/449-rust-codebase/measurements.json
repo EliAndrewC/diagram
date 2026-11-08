@@ -497,5 +497,18 @@
       "suite_cases": 55,
       "suite_passed_against_rust": 55
     }
+  },
+  "budget-change-hooks-ported": {
+    "quantity": "a Bash call naming no guarded budget target, its cost in the budget-change guard, the shell's against the Rust guard alone (T026)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/budget-change-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only budget-change-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the shell left at its literal pre-check, so alone it is no slower than the wrapper - the saving is the process this guard no longer adds to the dispatcher's call; the suite replayed through tests/hooks/budget-change-hooks.sh",
+    "value": {
+      "shell_other_bash_ms": 6.6,
+      "rust_guard_other_bash_ms": 6.7,
+      "suite_cases": 11,
+      "suite_passed_against_rust": 11
+    }
   }
 }

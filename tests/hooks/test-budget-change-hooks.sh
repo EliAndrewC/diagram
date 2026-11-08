@@ -5,7 +5,7 @@
 # Every case drives the REAL hook with a REAL payload and a fixture transcript.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/budget-change-hooks.sh"
+HOOK="$HERE/budget-change-hooks.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 TR=$(mktemp -d)

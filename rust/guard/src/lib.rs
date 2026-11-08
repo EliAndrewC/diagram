@@ -31,6 +31,7 @@ pub fn guards() -> Vec<Guard> {
         guards::conflict_marker_hooks::GUARD,
         guards::gate_write_hooks::GUARD,
         guards::feature_approval_hooks::GUARD,
+        guards::budget_change_hooks::GUARD,
     ]
 }
 
@@ -200,7 +201,8 @@ mod tests {
                     "discard-hooks",
                     "conflict-marker-hooks",
                     "gate-write-hooks",
-                    "feature-approval-hooks"
+                    "feature-approval-hooks",
+                    "budget-change-hooks"
                 ]
         );
     }
