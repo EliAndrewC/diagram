@@ -4,6 +4,8 @@
 
 use serde_json::{json, Value};
 
+use crate::shared::session::Session;
+
 /// A hook event: its name (`PreToolUse`, `Stop`, ...) and the input Claude Code handed it, rewritten in place as guards rewrite it.
 pub struct Event {
     pub name: String,
@@ -40,15 +42,18 @@ pub struct Guard {
     pub name: &'static str,
     pub events: &'static [&'static str],
     pub matcher: &'static str,
-    pub decide: fn(&Event) -> Vec<Answer>,
+    pub decide: fn(&Event, &Session) -> Vec<Answer>,
 }
 
 impl Guard {
     /// Does this guard decide `event`?
     #[must_use]
     pub fn takes(&self, event: &Event) -> bool {
+        // an event that carries no tool (Stop, UserPromptSubmit) is matched by its name alone, as Claude Code matches it
         self.events.contains(&event.name.as_str())
-            && (self.matcher == "*" || self.matcher.split('|').any(|m| m == event.tool()))
+            && (event.tool().is_empty()
+                || self.matcher == "*"
+                || self.matcher.split('|').any(|m| m == event.tool()))
     }
 }
 
@@ -67,8 +72,10 @@ pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
     let mut rewritten = false;
     // which guards decide is fixed by the event's name and tool, which no rewrite changes: chosen before any guard runs
     let takers: Vec<&Guard> = guards.iter().filter(|g| g.takes(event)).collect();
+    // the session's facts, read once for every guard (D6)
+    let session = Session::from_input(&event.input);
     for guard in takers {
-        let answers = (guard.decide)(event);
+        let answers = (guard.decide)(event, &session);
         for answer in answers {
             match answer {
                 Answer::Refuse(why) => refusals.push(why),

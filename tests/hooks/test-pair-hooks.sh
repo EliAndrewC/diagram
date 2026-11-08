@@ -3,7 +3,9 @@
 # override, and does NOT fire on a mention of the commands it guards.
 # (GUARD_EDIT_OK: the companion of a NEW guard, feature 151, GM 2026-08-29)
 set -u
-HOOK="$(cd "$(dirname "$0")" && pwd)/../../scripts/hooks/pair-hooks.sh"
+# feature 449 T006: the guard is Rust now - the link `pair-hooks.sh` beside this suite runs `l7r-guard --only pair-hooks` through
+# the wrapper (tests/hooks/guard-shim.sh), and every case below replays against it unchanged
+HOOK="$(cd "$(dirname "$0")" && pwd)/pair-hooks.sh"
 # GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
 # must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
 # whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
@@ -428,7 +430,7 @@ check "...and names the remedy" 'note_says "$GHOSTREV" | grep -q "rename"'
 check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'
 QUIET_ONE=$(printf '{"tool_name":"Bash","tool_input":{"command":"make quick"},"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 check "...and a branch that says nothing today still says nothing" '[ -z "$(note_says "$QUIET_ONE")" ]'
-check "the disclosure is ONE string, not five copies" '[ "$(grep -c "could not be resolved" "$(dirname "$HOOK")/../../scripts/hooks/pair-hooks.sh")" -eq 1 ]'
+check "the disclosure is ONE string, not five copies" '[ "$(cat "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks.rs "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks/review.rs "$(dirname "$HOOK")"/../../rust/guard/src/guards/pair_hooks/state.rs | grep -c "could not be resolved")" -eq 1 ]'
 }
 
 

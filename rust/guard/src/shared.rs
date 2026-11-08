@@ -5,5 +5,7 @@
 pub mod escape;
 pub mod log;
 pub mod session;
+pub mod sha256;
 pub mod shape;
+pub mod tool;
 pub mod transcript;

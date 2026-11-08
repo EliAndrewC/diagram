@@ -360,15 +360,6 @@
         ]
       },
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" pretool"
-          }
-        ]
-      },
-      {
         "matcher": "ScheduleWakeup",
         "hooks": [
           {
@@ -410,10 +401,6 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
-          },
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" pretool"
           },
           {
             "type": "command",
@@ -587,10 +574,6 @@
             "type": "command",
             "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" stop",
             "timeout": 30
-          },
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" stop"
           }
         ]
       },

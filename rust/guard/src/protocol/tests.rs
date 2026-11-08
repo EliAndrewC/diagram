@@ -1,6 +1,7 @@
 use serde_json::{json, Value};
 
 use super::{run, Answer, Event, Guard, Reply};
+use crate::shared::session::Session;
 
 fn bash(command: &str) -> Event {
     Event {
@@ -9,39 +10,39 @@ fn bash(command: &str) -> Event {
     }
 }
 
-fn refuse(_: &Event) -> Vec<Answer> {
+fn refuse(_: &Event, _: &Session) -> Vec<Answer> {
     vec![Answer::Refuse("no".to_owned())]
 }
-fn refuse_too(_: &Event) -> Vec<Answer> {
+fn refuse_too(_: &Event, _: &Session) -> Vec<Answer> {
     vec![Answer::Refuse("nor this".to_owned())]
 }
-fn upper(e: &Event) -> Vec<Answer> {
+fn upper(e: &Event, _: &Session) -> Vec<Answer> {
     let c = e.input["tool_input"]["command"]
         .as_str()
         .unwrap_or_default()
         .to_uppercase();
     vec![Answer::Rewrite(json!({ "command": c }))]
 }
-fn suffix(e: &Event) -> Vec<Answer> {
+fn suffix(e: &Event, _: &Session) -> Vec<Answer> {
     let c = e.input["tool_input"]["command"]
         .as_str()
         .unwrap_or_default();
     vec![Answer::Rewrite(json!({ "command": format!("{c} !") }))]
 }
-fn note(_: &Event) -> Vec<Answer> {
+fn note(_: &Event, _: &Session) -> Vec<Answer> {
     vec![Answer::Notice("a notice".to_owned())]
 }
-fn note_too(_: &Event) -> Vec<Answer> {
+fn note_too(_: &Event, _: &Session) -> Vec<Answer> {
     vec![Answer::Notice("another".to_owned())]
 }
-fn hold(_: &Event) -> Vec<Answer> {
+fn hold(_: &Event, _: &Session) -> Vec<Answer> {
     vec![Answer::StopBlock("held".to_owned())]
 }
-fn allow(_: &Event) -> Vec<Answer> {
+fn allow(_: &Event, _: &Session) -> Vec<Answer> {
     Vec::new()
 }
 
-fn guard(decide: fn(&Event) -> Vec<Answer>) -> Guard {
+fn guard(decide: fn(&Event, &Session) -> Vec<Answer>) -> Guard {
     Guard {
         name: "g",
         events: &["PreToolUse", "Stop"],
@@ -138,4 +139,9 @@ fn a_guard_decides_only_its_events_and_its_tools() {
         input: json!({}),
     };
     assert!(!g.takes(&prompt) && prompt.tool().is_empty());
+    let stop = Event {
+        name: "Stop".to_owned(),
+        input: json!({}),
+    };
+    assert!(g.takes(&stop));
 }

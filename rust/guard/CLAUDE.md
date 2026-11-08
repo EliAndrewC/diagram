@@ -8,7 +8,11 @@ every guard's check in a fixed order, and merges their answers by `specs/449-rus
 |---|---|
 | `src/lib.rs` | the crate's surface: `guards()` in their fixed order, `cli` - the command line (`<event>`, `--only`, `--self-check`, `--version`) |
 | `src/protocol.rs` | the hook protocol: the event, the answers, the merge (`run`); its tests in `src/protocol/tests.rs` |
-| `src/shared/` | what every guard reads (T003): `shape` (heredoc and quote stripping), `escape` (the tokens' two-word reasons), `session` (the facts read once a process - the mirror, the clone, the transcript, the GM's messages - each read counted), `transcript` (`gm_messages`), `log` (the guard log, `guardlog.sh`'s format) |
+| `src/shared/` | what every guard reads (T003): `shape` (heredoc and quote stripping), `escape` (the tokens' two-word reasons), `session` (the facts read once a process - the mirror, the clone, the transcript, the GM's messages - each read counted), `transcript` (`gm_messages`), `log` (the guard log, `guardlog.sh`'s format), `tool` (asking a tool the guards consult, T006 decision (a)), `sha256` |
+| `src/guards.rs`, `src/guards/` | the guards, one module each in their fixed order: `pair_hooks` (T006) - the gate and its review together, its state (`state.rs`) and its review checks (`review.rs`) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |
 
 `make rust-test`, `make static` check it beside `rust/phases` (the workspace, `rust/Cargo.toml`).
+
+A guard's suite replays through its link `tests/hooks/<guard>.sh` -> `tests/hooks/guard-shim.sh`, which runs
+`l7r-guard --only <guard> <event>`; `make hooks-test` finds a ported guard by that link.

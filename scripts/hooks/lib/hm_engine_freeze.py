@@ -34,10 +34,12 @@ STALE = int(os.environ.get("AGENT_STALE_S", "300"))
 
 
 def review_types() -> set[str]:
-    """`pair-hooks.sh`'s REVIEW_AGENTS_RE, read from its one copy."""
-    text = open(os.path.join(HERE, "..", "pair-hooks.sh"), encoding="utf-8").read()
-    m = re.search(r'^REVIEW_AGENTS_RE="([^"]+)"', text, re.M)
-    return set(m.group(1).split("|")) if m else set()
+    """The pairing guard's REVIEW_AGENTS, read from its one copy - the Rust guard since feature 449 T006
+    (`rust/guard/src/guards/pair_hooks.rs`; it was `pair-hooks.sh`'s REVIEW_AGENTS_RE)."""
+    path = os.path.join(HERE, "..", "..", "..", "rust", "guard", "src", "guards", "pair_hooks.rs")
+    text = open(path, encoding="utf-8").read()
+    m = re.search(r"^const REVIEW_AGENTS: \[&str; \d+\] = \[([^\]]+)\]", text, re.M)
+    return set(re.findall(r'"([^"]+)"', m.group(1))) if m else set()
 
 
 def _is_engine(root: str, rel: str) -> bool:

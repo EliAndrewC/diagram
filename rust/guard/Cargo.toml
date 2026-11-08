@@ -10,7 +10,8 @@ name = "l7r_guard"
 
 [dependencies]
 # the hook protocol's JSON, read and written (feature 449 plan, Complexity Tracking: the one crate phase 1 adds)
-serde_json = "1"
+serde = "1"
+serde_json = { version = "1", features = ["preserve_order"] }
 # the guards' patterns, 43 of them with lookaround or backreferences (research R8)
 fancy-regex = "0.14"
 

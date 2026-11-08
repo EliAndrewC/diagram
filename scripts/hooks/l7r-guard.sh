@@ -72,6 +72,7 @@ build() {
 
 if stale; then mkdir -p "$TARGET" && build; fi
 if [ -x "$GOOD" ]; then
+  export L7R_GUARD_TREE="$TREE"  # the tree a decider asks its tools in (T006: the tools stay theirs until phase 3)
   exec "$GOOD" "$@"
 fi
 

@@ -2,6 +2,7 @@
 //! answers merged by the hook protocol (`specs/449-rust-codebase/contracts/guard-protocol.md`). Each guard moves here from its shell
 //! one task at a time (T006-T049); until then the dispatcher holds none.
 
+pub mod guards;
 pub mod protocol;
 pub mod shared;
 
@@ -10,7 +11,7 @@ use protocol::{run, Event, Guard, Reply};
 /// The guards, in their fixed order (plan D2): each moves here from its shell in its own task (T006-T049).
 #[must_use]
 pub fn guards() -> Vec<Guard> {
-    Vec::new()
+    vec![guards::pair_hooks::GUARD]
 }
 
 /// The command line: `<event>` decides the hook input on `stdin` with every guard; `--only <guard> <event>` with that one guard
@@ -102,7 +103,7 @@ mod tests {
     use super::protocol::{Answer, Event, Guard};
     use super::{cli, guards};
 
-    fn refuse(_: &Event) -> Vec<Answer> {
+    fn refuse(_: &Event, _: &crate::shared::session::Session) -> Vec<Answer> {
         vec![Answer::Refuse("refused".to_owned())]
     }
 
@@ -136,6 +137,6 @@ mod tests {
         assert_eq!(cli(&args(&[]), input, &g).code, 1);
         let bad = cli(&args(&["PreToolUse"]), "not json", &g);
         assert!(bad.code == 1 && bad.stderr.contains("not JSON"));
-        assert!(guards().is_empty() && cli(&args(&["PreToolUse"]), input, &guards()).code == 0);
+        assert!(guards().iter().map(|g| g.name).collect::<Vec<_>>() == ["pair-hooks"]);
     }
 }
