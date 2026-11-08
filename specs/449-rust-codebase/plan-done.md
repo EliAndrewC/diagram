@@ -405,3 +405,23 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T025 Approach (checklist part A)
+
+1. **The goal, in the world.** `feature-approval-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `feature-approval-hooks.sh` and `lib/hm_approval.py`, 2026-11-08):
+   - (a) THE STAGING CHECK IN-PROCESS: `problem`, `is_new`, `standing`, the approval line and the refusal's words move, on T003's `gm_messages` and T023's `staged_by`, git asked by path.
+   - (b) THE PUSH'S CHECK IN-PROCESS TOO: `make speckit-todo`'s reading of a feature at a revision - its status line, its boxes and open GM rows - is read through git and judged in Rust, the same states and the same added-approval rule, so the guard's verdict on a push starts no Python and `lib/hm_approval.py` gains no mode. (`holding` reads the clone's active task, which a past revision's copy never had, so it is empty here, as it was.)
+   - (c) THE LIBRARY STAYS FOR ITS OTHER IMPORTERS: `spec-lint.py`, `review_owed.py` and `hm_budget.py` import `lib/hm_approval.py` (`git grep hm_approval`, 2026-11-08), so it goes with its last caller at T051 ("removed with its last caller"); this guard no longer calls it.
+   - (d) ONE SUITE CASE'S MEANS, ITS PROPERTY KEPT: case 5 proved the refusal comes from the decider by `sed`-stripping the shell's call and watching the same command pass. With no shell text to strip, the same call goes through another guard's `--only` entry, whose decider this is not, and must pass; the expected verdict is unchanged, as T014's (d) kept its case's property on the Rust constant.
+3. **Where each comes from.** `tests/hooks/test-feature-approval-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-feature-approval-hooks.sh` green against `l7r-guard --only feature-approval-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-feature-approval-hooks.sh` passes against the Rust guard; `scripts/hooks/feature-approval-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
