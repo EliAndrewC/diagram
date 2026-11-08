@@ -224,9 +224,10 @@ mod tests {
     use crate::field::dry::DryPlot;
 
     #[test]
-    fn a_rolled_hamlet_keeps_every_rule_and_a_planted_break_is_named() {
+    fn a_planted_break_is_named() {
+        // a roll to plant the breaks on; whether a seed rolls clean is the fresh seeds' question (`hamlet --seeds`), never a fixed
+        // seed's (the GM 2026-11-07: "We should probably avoid fixed seeds because of overfitting")
         let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
-        assert_eq!(check(&r), Vec::<String>::new());
         let fan = r.fields[0].fan.ring.clone();
         let m = mean(&fan);
         let square = |c: (f64, f64), s: f64| {

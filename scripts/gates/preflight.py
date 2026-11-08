@@ -272,7 +272,9 @@ def split_gaps(root: Path, gaps: dict[str, list[int]], path: set[str], quick: se
 
 
 #: tracked files the gate itself writes, measured on a gate run (feature 375 T23) - never a moved file of the session's
-GATE_WRITES: frozenset[str] = frozenset()
+# the known-failing seeds `make seeds` rewrites within the gate at rust-only: a seed that rolls clean dropped, a fresh failure added
+# (feature 444 T36) - the gate's own record of what it found, not a change to what it judged
+GATE_WRITES: frozenset[str] = frozenset({"dev/known-seeds.txt"})
 
 
 def tree(root: Path) -> dict[str, str]:

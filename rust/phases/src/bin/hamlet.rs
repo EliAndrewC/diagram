@@ -79,11 +79,74 @@ fn budget() {
     }
 }
 
+/// A seed's first failure, or None where it rolls clean: a stage's error, a refusal, or a rule the finished map breaks.
+fn verdict(seed: i64, form: &str) -> Option<String> {
+    let spec = l7r_phases::driver::cohort_spec(seed, (form != "comb").then_some(form));
+    match l7r_phases::driver::roll(&spec) {
+        Err(e) => Some(format!("FAILED: {e}")),
+        Ok(r) => r
+            .refusals
+            .first()
+            .map(|w| format!("REFUSED: {w}"))
+            .or_else(|| {
+                l7r_phases::driver::check::check(&r)
+                    .first()
+                    .map(|b| format!("BROKE: {b}"))
+            }),
+    }
+    .map(|w| w.chars().take(160).collect::<String>().replace('\n', " "))
+}
+
+/// `hamlet --seeds <pool> <n>`: NO FIXED SEEDS (the GM 2026-11-07: "We should probably avoid fixed seeds because of overfitting ...
+/// If a seed fails then we want to keep testing it until it succeeds, after which point it gets dropped from the fixed pool and when
+/// there are no known bugs then we have no fixed seeds"). Every seed of the pool - one line a seed, `<seed> <form> <its first
+/// failure>` - is rolled again and dropped once it rolls clean; then `n` fresh seeds of each form from a start the clock draws, a
+/// failing one added to the pool. The pool is written back; any failure exits 1. The start is printed, so `make cohort SEED=<start>
+/// N=<n> FIELD=<form>` rolls the same seeds again.
+fn seeds(pool: &str, n: i64) {
+    let t = Instant::now();
+    let text = std::fs::read_to_string(pool).unwrap_or_default();
+    let clock = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0, |d| d.subsec_nanos());
+    let start = l7r_phases::driver::seeds::FRESH_FROM + i64::from(clock % 1_000_000_000);
+    let r = l7r_phases::driver::seeds::run(&text, n, start, verdict);
+    for line in &r.lines {
+        println!("{line}");
+    }
+    if r.pool != text {
+        if let Err(e) = std::fs::write(pool, &r.pool) {
+            eprintln!("seeds: cannot write {pool}: {e}");
+            std::process::exit(2);
+        }
+    }
+    println!(
+        "seeds: the pool {} seed(s) ({} still failing, {} dropped), {n} fresh seed(s) of each of {} forms from {start} ({} failed, added \
+         to the pool), in {:.0} ms",
+        r.failing + r.fixed,
+        r.failing,
+        r.fixed,
+        l7r_phases::driver::seeds::FORMS.len(),
+        r.added,
+        t.elapsed().as_secs_f64() * 1000.0
+    );
+    if r.failing + r.added > 0 {
+        std::process::exit(1);
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.get(1).map(String::as_str) == Some("--cohort") {
         let num = |i: usize, d: i64| args.get(i).and_then(|v| v.parse().ok()).unwrap_or(d);
         cohort(num(2, 1), num(3, 48), args.get(4).map(String::as_str));
+        return;
+    }
+    if args.get(1).map(String::as_str) == Some("--seeds") {
+        seeds(
+            args.get(2).map_or("dev/known-seeds.txt", String::as_str),
+            args.get(3).and_then(|v| v.parse().ok()).unwrap_or(200),
+        );
         return;
     }
     if args.get(1).map(String::as_str) == Some("--budget") {

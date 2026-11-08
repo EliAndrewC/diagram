@@ -62,7 +62,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	T0=$$(date +%s); fail=""; \
 	rm -f "$$(git rev-parse --absolute-git-dir)/roll-cache-class"; \
 	G=$$(git rev-parse --absolute-git-dir); $(RUNSTATS) start "$$G" 2>/dev/null || true; export L7R_GATE_FAILURES="$$G/gate-failures"; \
-	statics() { for phase in static format typecheck; do \
+	statics() { for phase in static format typecheck $(if $(filter rust-only,$(PORT)),seeds,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; ts=$$(date +%s); \
 	  $(MAKE) --no-print-directory $$phase || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
 	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
@@ -196,6 +196,9 @@ backup:         ## [project] save the clone's commits to backup/<clone> on GitHu
 # start was ~20 ms of a ~110 ms map (measured 2026-11-07); cargo still decides whether the binary is fresh. Same directory, so
 # the gate's builds and these share one cache
 HAMLET_RUN = CARGO_TARGET_DIR="$${CARGO_TARGET_DIR:-$$HOME/.cache/l7r-cargo-target/$(notdir $(CURDIR))}" "$$([ -x "$$HOME/.cargo/bin/cargo" ] && echo "$$HOME/.cargo/bin/cargo" || echo cargo)" run --release --quiet --manifest-path rust/phases/Cargo.toml --bin hamlet --
+
+seeds:          ## [maps] NO FIXED SEEDS: the known-failing pool (dev/known-seeds.txt) rolled again - a seed that now rolls clean dropped - and N fresh seeds of each field form from a start the clock draws, a failing one added to the pool; refuses while any fails. make done runs it at rust-only (feature 444 T36; the GM 2026-11-07)   [N=200]
+	@$(HAMLET_RUN) --seeds "$(CURDIR)/dev/known-seeds.txt" $(or $(N),200)
 
 cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]
 	@$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)

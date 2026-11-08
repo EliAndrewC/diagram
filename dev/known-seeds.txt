@@ -1,0 +1,4 @@
+# The known-failing seeds (feature 444 T36; the GM 2026-11-07: "If a seed fails then we want to keep testing it until it succeeds,
+# after which point it gets dropped from the fixed pool and when there are no known bugs then we have no fixed seeds").
+# One line a seed: <seed> <form> <its first failure>. Written by `make seeds` (hamlet --seeds): a fresh seed that fails is added,
+# a pool seed that rolls clean is dropped. Empty means no known bug.
