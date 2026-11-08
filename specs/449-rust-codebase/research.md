@@ -82,12 +82,14 @@ not only the result (the work-budget counters' practice, feature 443).
 
 ## R8 - the guards' regular expressions need more than the standard Rust crate (found starting T003)
 
-**Finding** (observed 2026-11-07, method: `grep -c` for lookaround - `(?<`, `(?=`, `(?!` - and backreferences - `\1`, `\2` - over
+**Finding** (`m:guard-regex-features`; observed 2026-11-07, method: `grep -c` for lookaround - `(?<`, `(?=`, `(?!` - and backreferences - `\1`, `\2` - over
 `scripts/hooks/lib/*.py`): 43 uses in 15 of the 33 library files. The shell-shape library every guard reaches (`hm_shape.py`) strips
 a heredoc by matching its own delimiter back (`<<-?\s*['\"]?(\w+)['\"]?\n.*?\n\s*\1\b`) and blanks a quoted string unless it follows `-c`
 (`(?<!-c )`); the escape rule (`hm_escape.py`) rests on both. Rust's `regex` crate supports neither lookaround nor backreferences.
 
 **Decision**: the ports use `fancy-regex`, which adds both on top of `regex` and reads Python's syntax for them, so each decider's
-pattern moves verbatim and its verdicts stay the same (FR-002). A hand-written parser for each of the 43 patterns was the
+pattern moves verbatim. Verbatim is not proof: Python's `re` and `fancy-regex` differ at the edges (`$` before a trailing newline,
+Unicode `\d`/`\w`, `\Z`), so FR-002 is proven by each guard's suite replayed against the Rust guard (D4), as the plan review of
+2026-11-07 noted. A hand-written parser for each of the 43 patterns was the
 alternative: faster where it mattered, but every one a rewrite whose verdicts would have to be re-proven case by case, the risk FR-002
 exists to keep out. A pattern that a profile later shows to be hot may still be hand-written in its own guard's task.

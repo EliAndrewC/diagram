@@ -210,5 +210,17 @@
       "registered": 44,
       "taking_bash": 26
     }
+  },
+  "guard-regex-features": {
+    "quantity": "the guard libraries' patterns using lookaround or backreferences",
+    "observed": "2026-11-07",
+    "subject": "scripts/hooks/lib/*.py",
+    "command": "grep -c '(?<\\|(?=\\|(?!\\|\\\\1\\|\\\\2' scripts/hooks/lib/*.py | awk -F: '{s+=$2; if($2>0) n++} END {print s, n}'",
+    "method": "the matching lines summed over the files, and the files with any",
+    "value": {
+      "uses": 43,
+      "files": 15,
+      "of_files": 33
+    }
   }
 }

@@ -14,7 +14,7 @@
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "e9d9e7420d91230db08ebc731a9a92241dc514a6122c56ea772c0cba2724b191",
+   "sha256": "709dc792b07ce2c23d6d439a405184d07d8ae859a728c7dd7dfeec021afcc47a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -80,13 +80,13 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "df75f6b2ba0e238729377952d20ba6a8737fde9e26fded70de3d9d97306f4503",
+   "sha256": "131119c4d7770b63f7b5bb7a08f93e2568d6370c81723f5d0e2671a009e2923a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### T001-T005 - the foundation (phase 1, work breakdown 1-4)": {
-   "sha256": "b020e9e7dec657a679327c4ff17c1158b593596dc3be4a0bf4f2d7d775ba7863",
+   "sha256": "d9b8db5dd3fdaf07ab0099d3fb08933e155d8c9634d392aa6b8f24a22a3c7cfd",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -104,7 +104,313 @@
    "declared": "spec-fidelity"
   },
   "### T003 Approach (checklist part A)": {
-   "sha256": "ffeeb52f34cfd9838efb0abe66d930b83136d76accff8833a2bea10a26ad7504",
+   "sha256": "014e40095d7374af0ab8d3c929d01e41821bb36181833d3e69bac92c9ee8e5b5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T006-T049 - one task a guard (phase 1, work breakdown 5, 7)": {
+   "sha256": "0d64615590f5226be773a26d221aa0788bdd73e4274c949986c2b90c3e1d4987",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T050-T052 - the suites' tooling and the close (phase 1, work breakdown 6-8)": {
+   "sha256": "d5bf90b810af7543866417d6cfa39245f90fedd00ef377447edebc44340e9054",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T004 Approach (checklist part A)": {
+   "sha256": "d91250f73db2a5fd12b7e72034f3bdc870156b8b01919b3e9faab5c8376ca2e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T005 Approach (checklist part A)": {
+   "sha256": "317b833fe6c63f8dc44580c19203becedfdde6f0e9b8b07015b48ec9703e03fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T006 Approach (checklist part A)": {
+   "sha256": "5daf4d588756affd2f2880f11da12a03c6c8373464710644e8883b9bfaa3223a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T007 Approach (checklist part A)": {
+   "sha256": "a17a63ae5923bcde99677470b72973540fca3e239eecf163660a5b80d8db34e6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T008 Approach (checklist part A)": {
+   "sha256": "7a7d66f1019d81ac4c07181742dc292a8a3d681a36ba0116df5090c5051283e7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T009 Approach (checklist part A)": {
+   "sha256": "ce941f5159ee2a800847c99880fec617c037bd5ae93bb3b803f37d0b5b356a1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T010 Approach (checklist part A)": {
+   "sha256": "06e6981c66dcce87cd2093ea55eace4955981f9319176a44c6c62c3ab83ae2e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T011 Approach (checklist part A)": {
+   "sha256": "24a3b87c119466e2c02bc560cf64255e922bb29f08e2db18c43129b43f194dc2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T012 Approach (checklist part A)": {
+   "sha256": "c6c83e30071b0b4dd5c9ab842272875a353e216f0d8569efa366eef65bc1af9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T013 Approach (checklist part A)": {
+   "sha256": "41f9d0e4b6b82279fcf2a8a1d12f5867e130be71352ba380f31af0b663b40e4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T014 Approach (checklist part A)": {
+   "sha256": "338e9a6208ebd3143651bb6fd6c972c143d8f29cede8f1210fba82d0cd8bd94d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T015 Approach (checklist part A)": {
+   "sha256": "9b3a5345b702362b7ae9949a5477bf35286dbf4054409e6e67fac9b4474deba5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T016 Approach (checklist part A)": {
+   "sha256": "e845b2236933651322daefb183022664973fb079ec4c29e0296a7062d9cd7aab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T017 Approach (checklist part A)": {
+   "sha256": "673f02a31bea2bfef8da05f0f5770d17978f8f9145d9ef2e9dc79fcaf0eb0197",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T018 Approach (checklist part A)": {
+   "sha256": "06344e075d4aac5d8f56e981d0262a763cab851a19ed956db7035f7c073d802a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T019 Approach (checklist part A)": {
+   "sha256": "240ac0d0ba29712fc8173e672c38f494666241544b0d8c74298a3b9fb6370efa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T020 Approach (checklist part A)": {
+   "sha256": "21a1ddc255616d612ef2089d9b950fb887fb49fbe59a7ae582f7f45d7bc7bbbf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T021 Approach (checklist part A)": {
+   "sha256": "0dda1c427c7f42a1401d6893438f40b4a52e7910b9973a5317933e2a4e41fc15",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T022 Approach (checklist part A)": {
+   "sha256": "7d5ee9eee4c691b29f90648c4b3f6ddd6c4e280b1a4c217f2bdd4e48cb3d764e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T023 Approach (checklist part A)": {
+   "sha256": "49a9b3965f8c1724324d0e7a08ee95bdefa84feb4906e0265ed325e64ae40f57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T024 Approach (checklist part A)": {
+   "sha256": "0c0894ab6b49fa2f1e93dc412fe10b69c772989ef556ea47d31b672c9f950d09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T025 Approach (checklist part A)": {
+   "sha256": "6f9a6c311f632df1a96d0e4a13262e7959f4da82dc29c79f44efd31a4bc76c88",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T026 Approach (checklist part A)": {
+   "sha256": "086cfe214226346100aadcf342e93c5f2d384e8a8c504ce9991b056be7447035",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T027 Approach (checklist part A)": {
+   "sha256": "ac156b31287f687d0907b43e8de7d40b3b6e4f0659c4d4a1665cf4be977ca96e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T028 Approach (checklist part A)": {
+   "sha256": "854558069c2e8505c171e57c5ff296d4dda9642a0b97ce5de5d4d47b55274a5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T029 Approach (checklist part A)": {
+   "sha256": "e46c934073d5875dbdb41f4e244cfed436f9e00b63c31311d12d9faac39e0600",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T030 Approach (checklist part A)": {
+   "sha256": "4252176b4c8f889abe5cbca772beea36decf8bae9e5239fabe39eed52b992796",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T031 Approach (checklist part A)": {
+   "sha256": "ba14d820db2ed51777f7c43f45d5bf46ae324da9ff018e648b541f441fc7b056",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T032 Approach (checklist part A)": {
+   "sha256": "45af674b574a750706a43e047a840cb6d79aa11d880a6b0bc1064ba339915d4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T033 Approach (checklist part A)": {
+   "sha256": "b8d24f6ee4d2e6695fb22dc4ffc09b1e2521075ca764e965ab583feaa93430ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T034 Approach (checklist part A)": {
+   "sha256": "63fd555159dc1ce2045ee2502105a0462975c7d3318b1e4974fdf097e770ef57",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T035 Approach (checklist part A)": {
+   "sha256": "78eb0ee8783fe78b9acdecf8d500cfbdb9de3fa814c316522c7c60975241560f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T036 Approach (checklist part A)": {
+   "sha256": "9582d9abc4ef94b80e94737f9710c15ad34848d919db4ccf502578403fac8721",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T037 Approach (checklist part A)": {
+   "sha256": "19fa545621d02cf2fe20b0bf29ed88e12eb4e2b27bf82ecf3fb2a7f35b243ec4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T038 Approach (checklist part A)": {
+   "sha256": "6a42e54801c0119a5bd733bb35057e106081e363d0c77cd6acaebf8e57b9128b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T039 Approach (checklist part A)": {
+   "sha256": "f1d1adc3f66a5e9badb06a6c022cef6ba291413ff32852f87e5c825a4e636007",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T040 Approach (checklist part A)": {
+   "sha256": "97bbcd8281fda921bc59b4856fb185edd441b14bf18e12b10e4a497d67f1fa47",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T041 Approach (checklist part A)": {
+   "sha256": "255ea617a0df575d9efca2f8494d552be37b479ad6e56046c054409f20c7bd14",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T042 Approach (checklist part A)": {
+   "sha256": "36a40753f04db1003ec14950cb933b81ed2ba4dd13c9be8048c02f8781b39bf4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T043 Approach (checklist part A)": {
+   "sha256": "b512a9f598fe04a0738b1d308e65d38d04ee88640c27c34a7a582cbddc810197",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T044 Approach (checklist part A)": {
+   "sha256": "365b95a2ebc5bf9af2c71c8d595c980cd22a0e06f9a483992fd6594377971539",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T045 Approach (checklist part A)": {
+   "sha256": "3a5e568d1d1118c4107549384f7476702f9da1b120047f606b3d46498956e693",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T046 Approach (checklist part A)": {
+   "sha256": "bff9372e92c07e91c7131ec5037889587812f47b514335892e9557e9afdd1cd0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T047 Approach (checklist part A)": {
+   "sha256": "2e3f15657a3275eaf325da945815ac6fe96d2ac3a20dda7a30321499cf399e93",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T048 Approach (checklist part A)": {
+   "sha256": "d516e0715bf5ff24f01aac1d18cdedf242328a25960910e189d66ed479417fd9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T049 Approach (checklist part A)": {
+   "sha256": "4357ed04944d865b5509c01b519a796070cfca5adec973693d5a341cff14a368",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T050 Approach (checklist part A)": {
+   "sha256": "e6389f71fced530a3b63220fb855dbc475c14f466ac5eca5695d42cdc270ffde",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T051 Approach (checklist part A)": {
+   "sha256": "c91bc56f3e03a5a6cc63bbe894d9052bd1b0f99223e7bc5adcf97624c49abf99",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-07",
+   "declared": "spec-fidelity"
+  },
+  "### T052 Approach (checklist part A)": {
+   "sha256": "58d32a5ec90f01cc5209c6bd279ae112a7575cfc9bad3196bf4f7f4ef00243ff",
    "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
@@ -588,6 +894,129 @@
      "summary": "Done = the library's tests green and its reads counted.",
      "class": "within",
      "why": "Does not exempt the library from FR-004 (coverage floor) or FR-008 (test time), which still bind every replacement; the checklist omits restating them rather than carving them out."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Technical Context",
+    "### T001-T005 - the foundation (phase 1, work breakdown 1-4)",
+    "### T003 Approach (checklist part A)",
+    "### T004 Approach (checklist part A)",
+    "### T005 Approach (checklist part A)",
+    "### T006 Approach (checklist part A)",
+    "### T006-T049 - one task a guard (phase 1, work breakdown 5, 7)",
+    "### T007 Approach (checklist part A)",
+    "### T008 Approach (checklist part A)",
+    "### T009 Approach (checklist part A)",
+    "### T010 Approach (checklist part A)",
+    "### T011 Approach (checklist part A)",
+    "### T012 Approach (checklist part A)",
+    "### T013 Approach (checklist part A)",
+    "### T014 Approach (checklist part A)",
+    "### T015 Approach (checklist part A)",
+    "### T016 Approach (checklist part A)",
+    "### T017 Approach (checklist part A)",
+    "### T018 Approach (checklist part A)",
+    "### T019 Approach (checklist part A)",
+    "### T020 Approach (checklist part A)",
+    "### T021 Approach (checklist part A)",
+    "### T022 Approach (checklist part A)",
+    "### T023 Approach (checklist part A)",
+    "### T024 Approach (checklist part A)",
+    "### T025 Approach (checklist part A)",
+    "### T026 Approach (checklist part A)",
+    "### T027 Approach (checklist part A)",
+    "### T028 Approach (checklist part A)",
+    "### T029 Approach (checklist part A)",
+    "### T030 Approach (checklist part A)",
+    "### T031 Approach (checklist part A)",
+    "### T032 Approach (checklist part A)",
+    "### T033 Approach (checklist part A)",
+    "### T034 Approach (checklist part A)",
+    "### T035 Approach (checklist part A)",
+    "### T036 Approach (checklist part A)",
+    "### T037 Approach (checklist part A)",
+    "### T038 Approach (checklist part A)",
+    "### T039 Approach (checklist part A)",
+    "### T040 Approach (checklist part A)",
+    "### T041 Approach (checklist part A)",
+    "### T042 Approach (checklist part A)",
+    "### T043 Approach (checklist part A)",
+    "### T044 Approach (checklist part A)",
+    "### T045 Approach (checklist part A)",
+    "### T046 Approach (checklist part A)",
+    "### T047 Approach (checklist part A)",
+    "### T048 Approach (checklist part A)",
+    "### T049 Approach (checklist part A)",
+    "### T050 Approach (checklist part A)",
+    "### T050-T052 - the suites' tooling and the close (phase 1, work breakdown 6-8)",
+    "### T051 Approach (checklist part A)",
+    "### T052 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "TC-lang",
+     "summary": "Technical Context: Rust edition 2021 on the toolchain rust/phases builds with; a Cargo workspace, phase 1's crate rust/guard with binary l7r-guard; storage files only, as today",
+     "class": "within",
+     "why": "Unchanged from the CLEAR text apart from the crate line; the request is to make this a Rust codebase and these choices do not narrow it."
+    },
+    {
+     "id": "TC-fancy-regex / CT-fancy-regex / T001-T005 amendment / T003",
+     "summary": "fancy-regex added as the second external crate so the guards' patterns that use lookaround or backreferences can be carried over verbatim; hm_shape.py (heredoc and quote stripping) ported in T003 with it",
+     "class": "within",
+     "why": "A dependency choice serving FR-002 (same verdicts) and FR-001 (every Python file replaced by Rust); it narrows nothing the GM asked. The ruling does not depend on the count of 43 (research R8, 2026-11-07, not re-runnable from this bundle): one lookaround pattern would be enough to need the crate to keep the patterns verbatim. What actually holds FR-002 is the per-guard suite replay (D4) going green, not the Complexity row's premise that a verbatim pattern gives identical verdicts - Python re and fancy-regex differ at edges ($ before a trailing newline, Unicode \\d/\\w, \\Z)."
+    },
+    {
+     "id": "CT-hot-pattern",
+     "summary": "A hand-written matcher in place of a fancy-regex pattern only where a profile shows that pattern hot, decided in its guard's task",
+     "class": "within",
+     "why": "A design default inside the request; the verdicts stay bound by FR-002 and its suite either way."
+    },
+    {
+     "id": "TC-serde / CT-serde / CT-D7 / TC-fail-open",
+     "summary": "serde_json for the protocol; the wrapper keeps the last good binary and fails open only when none was ever built (D7, R6)",
+     "class": "within",
+     "why": "Text carried from blocks judged CLEAR; unchanged in substance."
+    },
+    {
+     "id": "T001-T005 range / T004 / T005",
+     "summary": "Workspace root rust/Cargo.toml naming phases and guard; protocol and merge (D1, D2); shared state and facts asked once (D5, D6, T003); wrapper keeping the last good binary (T004); settings switch landed with an empty guard list, the dispatcher called once an event beside the shell guards it does not yet hold, its floor timed (T005)",
+     "class": "within",
+     "why": "The transitional coexistence keeps FR-003 (no guard runs twice) and works toward FR-007; nothing asked is dropped. Carried from the CLEAR range block plus the fancy-regex line judged above."
+    },
+    {
+     "id": "T006-T049 range / T006-T049 Approaches",
+     "summary": "One task a guard: the Rust guard registered, the shell and its settings entry removed in the same commit (D3, FR-003); the guard's suite as its verdict replay, its inline Python replaced in the same task (D4); order by measured cost first (R2); each task landed with make land-tooling",
+     "class": "within",
+     "why": "Applies FR-001, FR-002 and FR-003 guard by guard; the order and the landing route narrow nothing. The 44 tasks T006-T049 match the 44 registered guards in Technical Context. FR-002's 'every case its tests and its suites hold' still binds each task: the Done line names the suite, and any other test of the same guard's cases is not displaced by it."
+    },
+    {
+     "id": "T028 / T029 / T006-T049 range: XIV fixes",
+     "summary": "Two constitution XIV fixes, on make-only-hooks and guard-file-hooks, taken under FR-002's exception; the template line 'XIV's fix named' on the other guard blocks",
+     "class": "within",
+     "why": "FR-002 itself provides this exception (a guard that refuses correct work today is fixed in its port, its expected verdict changed, the change named in the commit and the phase's record). The range block names exactly two guards; each fix's legitimacy is for its own task, where the case and the change are visible. The template line on the other 42 blocks grants no further license, since FR-002 already conditions the exception on the guard refusing correct work today. T028/T029 say 'named in its task'; FR-002's 'named in the commit and in the phase's record' still binds and the Done line does not displace it."
+    },
+    {
+     "id": "T050",
+     "summary": "The four tests/hooks Python helpers (hookbench, hookdeps, hooktrace, test_hooks_cases) ported as l7r-guard subcommands and crate tests; done when no .py remains under tests/hooks/",
+     "class": "within",
+     "why": "FR-001 puts each tests/ file with the piece it tests; FR-008 applies. The Done line is narrower than FR-001's recorded-measurement clause, which binds this commit: every specs/*/measurements*.json command that runs one of these helpers (m:hooks-bash and m:pair-hooks-suite, which T052 re-runs, plausibly among them) is rewritten in the commit that ports it and re-run as its proof. The clause still binds; the Done line does not displace it."
+    },
+    {
+     "id": "T051",
+     "summary": "Each guard library deleted with its last caller; done when no .py and no inline Python remain under scripts/hooks/, make audit and make guard-log reading the Rust lines unchanged",
+     "class": "within",
+     "why": "Porting a library nothing calls would be unrequested scope; deleting it with its last caller completes FR-001 for phase 1. As with T050, FR-001's recorded-measurement rewrite binds the commits that port or delete these files (T003 included); the Done line does not displace it."
+    },
+    {
+     "id": "T052",
+     "summary": "Phase 1 closed: figures re-run and recorded beside their first values, SC-001 met, both censuses' phase-1 share empty",
+     "class": "within",
+     "why": "FR-010 (timings measured against the spec's figures) and FR-001 (both censuses re-run at the phase's end) applied to phase 1; SC-002 and SC-003 belong to later phases and the feature's close. FR-010's 'recorded in dev/' and FR-002's 'named in the phase's record' for the two XIV fixes still bind this close; the Done line does not displace them."
     }
    ]
   }
