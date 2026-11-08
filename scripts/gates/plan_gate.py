@@ -513,18 +513,26 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
         return []
     when = today or datetime.date.today().isoformat()
     marker = "\x00archived\x00"
-    moved_ids: list[str] = []
+    # PIECE BY PIECE, AND ONLY WHAT MOVED (feature 449's landing of T001-T005): a section `task_sections` JOINS from two places -
+    # a range heading `### T001-T005 ...` that begins with T001, and T001's own `### T001 Approach` - stands nowhere in the plan
+    # as one string, so it was never replaced, yet every pass appended it to plan-done.md (three copies of each, with the plan's
+    # archive lines inside them). Each piece is moved where it stands, and only the pieces moved are archived.
+    moved: list[tuple[str, list[str]]] = []  # (a piece moved, its section's ids), in the order the markers stand
     for sec in secs:
-        text = text.replace(sec, marker, 1)
-        moved_ids += _TASK_ID.findall(sec.splitlines()[0])
-    if marker not in text:
+        ids = _TASK_ID.findall(sec.splitlines()[0])
+        pieces = [sec] if sec in text else [p for p in re.split(r"(?m)^(?=#{2,4} )", sec) if p.strip()]
+        for piece in pieces:
+            if piece in text:
+                text = text.replace(piece, marker, 1)
+                moved.append((piece, ids))
+    if not moved:
         return []  # nothing it named stands in plan.md: no pass makes progress
     runs = re.split(f"((?:{re.escape(marker)})+)", text)
     pos, out = 0, []
     for part in runs:
         if part.startswith(marker):
             n = part.count(marker)
-            ids = [i for s in secs[pos : pos + n] for i in _TASK_ID.findall(s.splitlines()[0])]  # this run's sections, in order
+            ids = [i for _p, s_ids in moved[pos : pos + n] for i in s_ids]  # this run's sections, in order
             pos += n
             out.append(f"<!-- plan-archive: {ids[0]} to {ids[-1]} moved to plan-done.md, {when} (feature 375 FR-044) -->\n")
         else:
@@ -533,7 +541,8 @@ def archive(spec_dir: pathlib.Path, today: str | None = None) -> list[str]:
     done = spec_dir / "plan-done.md"
     head = "" if done.is_file() else f"# {spec_dir.name} - the plan's finished sections (feature 375 FR-044; no review reads this file)\n\n"
     with done.open("a", encoding="utf-8") as fh:
-        fh.write(head + f"<!-- plan-archive: archived {when} -->\n" + "".join(secs))  # an ARCHIVE_LINE: out of every digest
+        fh.write(head + f"<!-- plan-archive: archived {when} -->\n" + "".join(p for p, _ids in moved))  # an ARCHIVE_LINE: out of every digest
+    moved_ids = list(dict.fromkeys(i for _p, ids in moved for i in ids))
     # ...AND AGAIN, UNTIL NOTHING IS LEFT (feature 444 T20's landing): `archivable` names one section per task, so a task whose
     # blocks stand in two places (T20's heading, then its Approach and Decisions after T19's archive line) left the rest behind
     return moved_ids + archive(spec_dir, today)
@@ -657,7 +666,7 @@ def triage_hint(root: pathlib.Path) -> str:
     try:
         out = subprocess.run([sys.executable, str(HERE.parent / "record" / "claims.py"), "--root", str(root), "triage-owed"], capture_output=True, text=True, timeout=120).stdout
         n = int(out.strip().splitlines()[-1]) if out.strip() else 0
-    except (OSError, ValueError, subprocess.TimeoutExpired):
+    except OSError, ValueError, subprocess.TimeoutExpired:
         return ""
     return f"claims owed a triage: {n} - `make claims-triage`, and dispatch it beside this review (impl-drift waits for the verdict)" if n else ""
 

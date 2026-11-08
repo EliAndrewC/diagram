@@ -307,3 +307,25 @@ def test_a_task_whose_blocks_stand_in_two_places_is_archived_whole(tmp_path: pat
     plan = (d / "plan.md").read_text()
     assert "the sty stands" not in plan.lower() and "the sty's door" not in plan and "Wave 2 (T02)" in plan, "both T01 blocks moved, T02 stays"
     assert gate.archive(d) == [], "nothing left: no pass moves anything"
+
+
+def test_a_range_heading_and_its_tasks_own_blocks_are_archived_once_each(tmp_path: pathlib.Path) -> None:
+    """Feature 449's landing of T001-T005: the range heading `### T01-T02 ...` begins with T01, so T01's section was that heading
+    JOINED to its own `### T01 Approach` - a string standing nowhere in the plan. Nothing was replaced, every pass appended it to
+    plan-done.md again (three copies of each), and plan.md's archive lines were copied in with them. A section is moved piece by
+    piece, and only what was moved is archived."""
+    d = feature(tmp_path, tasks="- [x] T01 the sty\n- [x] T02 the well\n")
+    ranged = (
+        "# Plan\n\n### T01-T02 - the yard\n\n**D1 - shared.** The yard is fenced (FR-001).\n\n"
+        "### T02 Approach\n\n1. The well by the lane (FR-002).\n\n### T01 Approach\n\n1. The sty by the house (FR-001).\n\n## Notes\n\nA note.\n"
+    )
+    (d / "plan.md").write_text(ranged)
+    gate.record(d, {"plan_sha256": hashlib.sha256(ranged.encode()).hexdigest(), "decisions": [WITHIN]}, "spec-fidelity")
+    gate.archive(d, today="2026-11-08")
+    done = (d / "plan-done.md").read_text()
+    plan = (d / "plan.md").read_text()
+    for heading in ("### T01-T02 - the yard", "### T02 Approach", "### T01 Approach"):
+        assert done.count(heading) == 1, (heading, done)
+        assert heading not in plan
+    assert "moved to plan-done.md" not in done, "the plan's own archive lines are not archived"
+    assert "## Notes" in plan and gate.archive(d) == []
