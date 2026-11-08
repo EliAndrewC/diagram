@@ -25,7 +25,7 @@ fire() { # fire <json payload> -> the hook's exit code; its stdout+stderr to $T/
   printf '%s' "$1" | "$HOOK" >"$T/out" 2>&1
 }
 last() { tail -n1 "$LOG" 2>/dev/null; }
-field() { last | python3 -c 'import json,sys; v=json.load(sys.stdin).get(sys.argv[1], ""); print(v)' "$1"; }
+field() { last | jq -r --arg k "$1" '.[$k] // "" | if type == "boolean" then (tostring | sub("^t"; "T") | sub("^f"; "F")) else . end'; }
 
 echo "event-log-hooks:"
 

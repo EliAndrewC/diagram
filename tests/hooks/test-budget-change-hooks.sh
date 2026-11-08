@@ -26,7 +26,7 @@ open(sys.argv[1], "w").write("\n".join(json.dumps(r) for r in recs) + "\n")
 PY
 
 run() {  # run <command> -> stderr+stdout, rc in RC
-  OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","transcript_path":sys.argv[2],"tool_input":{"command":sys.argv[1]}}))' "$1" "$TR/t.jsonl" \
+  OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","transcript_path":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" "$TR/t.jsonl" \
         | "$HOOK" pretool 2>&1); RC=$?
 }
 

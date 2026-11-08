@@ -18,8 +18,8 @@ trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 HOOK="$HERE/readme-hooks.sh"
 PASS=0; FAIL=0
 
-tool_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":sys.argv[1],"tool_input":{"file_path":sys.argv[2]}}))' "$1" "$2"; }
-bash_ev() { python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
+tool_ev() { jq -nc '{"tool_name":$ARGS.positional[0],"tool_input":{"file_path":$ARGS.positional[1]}}' --args -- "$1" "$2"; }
+bash_ev() { jq -nc '{"tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1"; }
 
 check() { # label expected payload
   local rc; printf '%s' "$3" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; rc=$?

@@ -19,7 +19,7 @@ PASS=0; FAIL=0
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 call() { # call <tool> <json tool_input> [cwd] -> rc in $T/rc, stdout in $T/out
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-bf","tool_name":sys.argv[1],"cwd":sys.argv[3],"tool_input":json.loads(sys.argv[2])}))' "$1" "$2" "${3:-$T/.clones/c}" \
+  jq -nc '{"session_id":"t-bf","tool_name":$ARGS.positional[0],"cwd":$ARGS.positional[2],"tool_input":($ARGS.positional[1]|fromjson)}' --args -- "$1" "$2" "${3:-$T/.clones/c}" \
     | "$HOOK" pretool >"$T/out" 2>"$T/err"; echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }
@@ -74,7 +74,7 @@ call WebFetch '{"url":"https://example.org/c","prompt":"x"}' "$T/mirror"
 [ "$(lines)" -eq "$before" ] && ok "nothing is written from outside a clone (the mirror)" || no "written from the mirror"
 
 echo "4. a page the archive holds is pointed at the archive first (the record's rule, feature 312 FR-005)"
-uid=$(python3 -c 'import hashlib;print(hashlib.sha256(b"https://held.org/p").hexdigest()[:12])')
+uid=$(printf %s https://held.org/p | sha256sum | cut -c1-12)
 mkdir -p "$T/.clones/c/research/archive/${uid:0:2}" && echo '{}' > "$T/.clones/c/research/archive/${uid:0:2}/$uid.json"
 call WebFetch '{"url":"https://held.org/p","prompt":"x"}'
 grep -q "make archive-find URL='https://held.org/p'" "$T/out" && ok "an archived page names archive-find" || no "no archive notice" "$(cat "$T/out")"

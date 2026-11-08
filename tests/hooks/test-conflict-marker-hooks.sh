@@ -28,7 +28,7 @@ git -C "$FIX" add -A >/dev/null 2>&1
 git -C "$FIX" commit -qm base >/dev/null 2>&1
 
 run() {  # run <command> -> stderr+stdout, rc in RC
-  OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1" \
+  OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" \
         | ( cd "$FIX" && "$HOOK" pretool 2>&1 )); RC=$?
 }
 
@@ -77,11 +77,11 @@ rm -f "$FIX/fenced.md"
 echo "3b. THE COMMAND SHAPES, asked of git rather than enumerated"
 printf 'base\n%s HEAD\na\n%s\nb\n%s o\n' "$O" "$M" "$X" > "$FIX/tracked.md"
 mkdir -p "$FIX/sub"; printf 'clean\n' > "$FIX/sub/ok.md"
-OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "CL=$FIX; git -C \$CL add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
+OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "CL=$FIX; git -C \$CL add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
 [ "$RC" -eq 2 ] && ok "THE INCIDENT'S OWN SHAPE: CL=...; git -C \$CL add -A is blocked" || no "the incident's command shape walked through" "(rc=$RC)"
-OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "cd $FIX && git add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
+OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "cd $FIX && git add -A" | ( cd /tmp && "$HOOK" pretool 2>&1 )); RC=$?
 [ "$RC" -eq 2 ] && ok "a cd into the tree is followed too" || no "cd was not followed" "(rc=$RC)"
-OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":"git add ."}}))' | ( cd "$FIX/sub" && "$HOOK" pretool 2>&1 )); RC=$?
+OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","tool_input":{"command":"git add ."}}' | ( cd "$FIX/sub" && "$HOOK" pretool 2>&1 )); RC=$?
 [ "$RC" -eq 0 ] && ok "CORRECT WORK: git add . in a clean subdirectory passes while a marker sits elsewhere" || no "git add . fired on correct work - the failure the whole design avoids" "(rc=$RC)"
 run "git add sub/"
 [ "$RC" -eq 0 ] && ok "a clean DIRECTORY pathspec passes" || no "a clean directory was blocked" "(rc=$RC)"

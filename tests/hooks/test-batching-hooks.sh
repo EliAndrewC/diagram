@@ -103,7 +103,7 @@ sleep 0.35                                     # a NEW turn: without the gap thi
 NOTICE=$("$HOOK" pretool <<<"$(ev Read)" 2>/dev/null); RC=$?
 check "the turn below the bar is still allowed" ok $RC
 printf '%s' "$NOTICE" | grep -q "BATCHING NOTICE" && { echo "  ok    ...and it carries the notice"; PASS=$((PASS+1)); } || { echo "  FAIL  no notice one turn before the block"; FAIL=$((FAIL+1)); }
-printf '%s' "$NOTICE" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && { echo "  ok    ...as valid JSON"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice is not valid JSON"; FAIL=$((FAIL+1)); }
+printf '%s' "$NOTICE" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON"; PASS=$((PASS+1)); } || { echo "  FAIL  the notice is not valid JSON"; FAIL=$((FAIL+1)); }
 # GUARD_EDIT_OK: ...AND IT IS RECORDED (2026-09-13). The notice fired correctly from the day it landed
 # and wrote nothing down, so the log held 700 batching entries, all of them `blocked`, and the GM's
 # question - does the one-turn-early notice actually prevent blocks? - had no answer in the record.

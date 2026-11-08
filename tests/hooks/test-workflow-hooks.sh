@@ -27,16 +27,16 @@ printf '%s' "\$p" | grep -q 'REFUSE-ME' && { echo "BLOCKED by the stub guard: it
 exit 0
 EOF
 chmod +x "$T/stub.sh"
-python3 -c 'import json,sys; print(json.dumps({"hooks":{"PreToolUse":[{"matcher":"Bash","hooks":[{"type":"command","command":"exit 2"}]},{"matcher":"Agent","hooks":[{"type":"command","command":sys.argv[1]},{"type":"command","command":sys.argv[2]+" pretool"}]}]}}))' "$T/stub.sh" "$PREFIX" > "$T/settings.json"
+jq -nc '{"hooks":{"PreToolUse":[{"matcher":"Bash","hooks":[{"type":"command","command":"exit 2"}]},{"matcher":"Agent","hooks":[{"type":"command","command":$ARGS.positional[0]},{"type":"command","command":($ARGS.positional[1]+" pretool")}]}]}}' --args -- "$T/stub.sh" "$PREFIX" > "$T/settings.json"
 export WORKFLOW_SETTINGS="$T/settings.json"
 
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 wf() { # wf <json tool_input> -> rc in $T/rc, stderr in $T/err
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-wf","cwd":sys.argv[2],"tool_name":"Workflow","tool_use_id":"toolu_wf1","tool_input":json.loads(sys.argv[1])}))' "$1" "$FIX" \
+  jq -nc '{"session_id":"t-wf","cwd":$ARGS.positional[1],"tool_name":"Workflow","tool_use_id":"toolu_wf1","tool_input":($ARGS.positional[0]|fromjson)}' --args -- "$1" "$FIX" \
     | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" >"$T/out" ); echo $? > "$T/rc"
 }
-script() { python3 -c 'import json,sys; print(json.dumps({"script":sys.argv[1]}))' "$1"; }
+script() { jq -nc '{"script":$ARGS.positional[0]}' --args -- "$1"; }
 rc() { cat "$T/rc"; }
 logged() { grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
 
@@ -107,7 +107,7 @@ printf '{"tool_name":"Agent","cwd":"%s","tool_input":{"prompt":"x"}}' "$FIX" | (
 [ "$r" -eq 0 ] && ok "a non-Workflow payload passes" || no "a non-Workflow payload was refused" "(rc=$r)"
 
 # GUARD_EDIT_OK: feature 449 - the one entry of the Rust guards has no matcher, and a wave's units must meet it
-python3 -c 'import json,sys; print(json.dumps({"hooks":{"PreToolUse":[{"hooks":[{"type":"command","command":"echo a guard with no matcher >&2; exit 2"}]}]}}))' > "$T/no-matcher.json"
+jq -nc '{"hooks":{"PreToolUse":[{"hooks":[{"type":"command","command":"echo a guard with no matcher >&2; exit 2"}]}]}}' > "$T/no-matcher.json"
 WORKFLOW_SETTINGS="$T/no-matcher.json" wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md"}]}}'
 [ "$(rc)" -eq 2 ] && grep -q 'a guard with no matcher' "$T/err" && ok "a hook entry with no matcher holds a wave's units too" || no "the entry with no matcher was skipped" "(rc=$(rc)) $(head -3 "$T/err")"
 

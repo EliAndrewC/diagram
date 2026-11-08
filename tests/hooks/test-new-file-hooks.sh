@@ -20,7 +20,7 @@ mkdir -p "$G" "$R" "$M/.specify"; git -C "$C" init -q 2>/dev/null
 echo '{}' > "$G/0100-old.json"; : > "$R/0100-old-key.html"
 python3 "$HERE/../../scripts/record/reserve-prefix.py" registry reserved-key --root "$C" --mirror "$M" >/dev/null
 call() { # call <tool> <json tool_input> -> rc in $T/rc
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-new-file","cwd":sys.argv[3],"tool_name":sys.argv[1],"tool_input":json.loads(sys.argv[2])}))' "$1" "$2" "$C" \
+  jq -nc '{"session_id":"t-new-file","cwd":$ARGS.positional[2],"tool_name":$ARGS.positional[0],"tool_input":($ARGS.positional[1]|fromjson)}' --args -- "$1" "$2" "$C" \
     | "$HOOK" pretool 2>"$T/err"; echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }

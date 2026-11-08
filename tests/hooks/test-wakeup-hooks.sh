@@ -51,10 +51,10 @@ print(json.dumps({"session_id":"s1","tool_name":"ScheduleWakeup","transcript_pat
 }
 
 stop_call() { # stop_call <session> <transcript> <cron-json-list> -> the stop hook's exit code
-  python3 -c 'import json,sys; print(json.dumps({"session_id":sys.argv[1],"hook_event_name":"Stop","transcript_path":sys.argv[2],"background_tasks":[],"session_crons":json.loads(sys.argv[3])}))' "$@" \
+  jq -nc '{"session_id":$ARGS.positional[0],"hook_event_name":"Stop","transcript_path":$ARGS.positional[1],"background_tasks":[],"session_crons":($ARGS.positional[2]|fromjson)}' --args -- "$@" \
     | "$HOOK" stop 2>"$HOOK_ERR"
 }
-cron() { python3 -c 'import json,sys; print(json.dumps({"id":sys.argv[1],"schedule":"51 20 * * *","recurring":False,"prompt":sys.argv[2]}))' "$1" "$2"; }
+cron() { jq -nc '{"id":$ARGS.positional[0],"schedule":"51 20 * * *","recurring":false,"prompt":$ARGS.positional[1]}' --args -- "$1" "$2"; }
 
 transcript "$T/plain.jsonl" "wake:$WAKE_PROMPT" reminder
 transcript "$T/live.jsonl" loopcmd "wake:$LOOP_PROMPT"

@@ -22,11 +22,11 @@ ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 
 agent() { # agent <subagent_type> <prompt> -> run the pretool hook in the fixture, print its stdout
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Agent","tool_input":{"subagent_type":sys.argv[1],"prompt":sys.argv[2]}}))' "$1" "$2" \
+  jq -nc '{"session_id":"t1","tool_name":"Agent","tool_input":{"subagent_type":$ARGS.positional[0],"prompt":$ARGS.positional[1]}}' --args -- "$1" "$2" \
     | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )
 }
 bash_call() { # a non-Agent tool must be ignored entirely
-  python3 -c 'import json; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done"}}))' \
+  jq -nc '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":"make done"}}' \
     | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )
 }
 stop_call() { # run the stop hook in the fixture, return its exit code, stderr to a file
@@ -104,7 +104,7 @@ TR="$FIX/../transcript.jsonl"
 gm_said() { printf '{"type":"user","message":{"content":"%s"}}\n' "$1" >> "$TR"; }
 filtered() { printf '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Agent","input":{"subagent_type":"escalation-check","prompt":"draft"}}]}}\n' >> "$TR"; }
 final_stop() { # final_stop <last assistant message>
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","transcript_path":sys.argv[1],"last_assistant_message":sys.argv[2]}))' "$TR" "$1" \
+  jq -nc '{"session_id":"t1","transcript_path":$ARGS.positional[0],"last_assistant_message":$ARGS.positional[1]}' --args -- "$TR" "$1" \
     | ( cd "$FIX" && "$HOOK" stop 2>"$HOOK_ERR" )
 }
 Q417='Everything in my last message stands, including the questions waiting for you:

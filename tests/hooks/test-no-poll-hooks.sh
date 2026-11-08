@@ -18,7 +18,7 @@ trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 PASS=0; FAIL=0
 
 run() {  # feed a Bash command through the hook, return its exit code
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1" \
+  jq -nc '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" \
     | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 
@@ -42,7 +42,7 @@ except Exception: pass' 2>/dev/null)
   esac
 }
 bgrun() {  # feed a Bash command with run_in_background set, return the exit code
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","tool_input":{"command":sys.argv[1],"run_in_background":sys.argv[2]=="1"}}))' "$1" "$2" \
+  jq -nc '{"session_id":"t1","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0],"run_in_background":($ARGS.positional[1]=="1")}}' --args -- "$1" "$2" \
     | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 bgcheck() { # label, expected, command, background(1|0)
@@ -101,7 +101,7 @@ alive() { # label, expected(alive|dead), args...
   fi
 }
 run_bg() {  # a backgrounded command through the hook; stdout is the rewrite, stderr in $HOOK_ERR
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t1","tool_name":"Bash","cwd":"/","tool_input":{"command":sys.argv[1],"run_in_background":True}}))' "$1" \
+  jq -nc '{"session_id":"t1","tool_name":"Bash","cwd":"/","tool_input":{"command":$ARGS.positional[0],"run_in_background":true}}' --args -- "$1" \
     | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 bg_case() {  # label, expected (cron|pass), command
@@ -248,7 +248,7 @@ check "the page-session runner's printed wait is allowed" ok "$PS_WAIT"
 # the prefilter must then fall through to the full check, which decodes them and still honors the escape.
 # The payload is built with chr(92) for the backslash so no layer between here and the hook can decode the
 # escape early (a first draft typed it literally and an upstream JSON decode turned it back into `_`).
-U_PAYLOAD=$(python3 -c 'import json; print(json.dumps({"session_id": "t1", "tool_name": "Bash", "tool_input": {"command": "until nc -z localhost 8080; do sleep 2; done  # POLL_OK: waiting for the dev server port"}}).replace("POLL_OK", "POLL" + chr(92) + "u005fOK"))')
+U_PAYLOAD=$(jq -nc '{"session_id": "t1", "tool_name": "Bash", "tool_input": {"command": "until nc -z localhost 8080; do sleep 2; done  # POLL_OK: waiting for the dev server port"}}' | sed 's/POLL_OK/POLL\\u005fOK/')
 case "$U_PAYLOAD" in *POLL_OK*) echo "  FAIL    the fixture lost its \\u escape"; FAIL=$((FAIL+1)) ;; esac
 printf '%s' "$U_PAYLOAD" \
   | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR" \
@@ -433,7 +433,7 @@ printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_O
   && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }
 Q_LIT='setsid --fork bash -c "until grep -q X /tmp/q295.log; do sleep 5; done"'
-Q_PROOF=$("$HERE/../../scripts/hooks/lib/hm_shape.py" proof /h/_writer-alive.sh <<<"$(python3 -c 'import json,sys; print(json.dumps({"tool_input":{"command":sys.argv[1]}}))' "$Q_LIT")")
+Q_PROOF=$("$HERE/../../scripts/hooks/lib/hm_shape.py" proof /h/_writer-alive.sh <<<"$(jq -nc '{"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$Q_LIT")")
 bash -n <(printf '%s\n' "$Q_PROOF") 2>/dev/null && printf '%s' "$Q_PROOF" | grep -q 'writer-alive.sh \\"/tmp/q295.log\\"' \
   && { echo "  ok      ...and so does its proof of life, escaped for the double quotes"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the proof of life inside double quotes: $Q_PROOF"; FAIL=$((FAIL+1)); }

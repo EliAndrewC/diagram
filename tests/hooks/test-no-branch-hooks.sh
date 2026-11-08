@@ -10,7 +10,7 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 trap 'rm -rf "$GUARD_LOG_ROOT"' EXIT
 
 run() {  # run <command-string> -> sets RC
-  printf '{"tool_input":{"command":%s}}' "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1")" \
+  printf '{"tool_input":{"command":%s}}' "$(jq -nc '$ARGS.positional[0]' --args -- "$1")" \
     | "$HOOK" pretool >/dev/null 2>&1
   RC=$?
 }

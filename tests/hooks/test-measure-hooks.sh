@@ -26,7 +26,7 @@ teardown() { rm -rf "$STATE_DIR" "$EV_CWD"; }
 # GUARD_EDIT_OK: feature 164 - a REAL json encode. The old printf left a multi-line command as raw
 # newlines inside a JSON string, which is invalid JSON, so a hook doing a proper parse saw an empty
 # command and every heredoc vector here passed for the wrong reason.
-bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"m1","cwd":os.environ.get("EV_CWD","/nonexistent"),"tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
+bash_ev() { CMD="$1" jq -nc '{"session_id":"m1","cwd":(env.EV_CWD // "/nonexistent"),"tool_name":"Bash","tool_input":{"command":env.CMD}}'; }
 # a run-log record in the event tree: gate_rec <minutes ago> <result> [target]
 gate_rec() { mkdir -p "$EV_CWD/dev/run-log/2026-10"; M="$1" R="$2" T="${3:-done}" python3 -c '
 import json, os, datetime, time
@@ -126,7 +126,7 @@ echo "9. the REMINDER arrives on the FIRST successful measurement, not at the fi
 setup
 FIRST=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null)
 printf '%s' "$FIRST" | grep -q '"additionalContext"' && { echo "  ok    the first run carries a reminder"; PASS=$((PASS+1)); } || { echo "  FAIL  no reminder on the first run"; FAIL=$((FAIL+1)); }
-printf '%s' "$FIRST" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
+printf '%s' "$FIRST" | jq empty 2>/dev/null && { echo "  ok    ...as valid JSON on stdout"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder is not valid JSON"; FAIL=$((FAIL+1)); }
 printf '%s' "$FIRST" | grep -q 'make cov-file' && { echo "  ok    ...naming the command that answers the usual question"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make cov-file"; FAIL=$((FAIL+1)); }
 SECOND=$("$HOOK" pretool <<<"$(bash_ev 'make test-full')" 2>/dev/null || true)
 printf '%s' "$SECOND" | grep -q '"additionalContext"' && { echo "  FAIL  the reminder repeated on the blocked run"; FAIL=$((FAIL+1)); } || { echo "  ok    it is not repeated - a reminder that repeats is skimmed"; PASS=$((PASS+1)); }

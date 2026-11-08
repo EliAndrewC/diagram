@@ -34,12 +34,12 @@ printf '%s' "$MAIN/.clones/ghost" > "$MAIN/.clones/.session-clones/ghost"   # a 
 SID=t
 run() { # run <cwd> <command> -> RC, and OUT (stdout+stderr: the hook JSON on a rewrite, the refusal on a block)
   OUT=$(cd "$1" && printf '{"session_id":"%s","cwd":"%s","tool_name":"Bash","transcript_path":"%s/none.jsonl","tool_input":{"command":%s}}' \
-        "$SID" "$1" "$T" "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$2")" | "$HOOK" pretool 2>&1); RC=$?
+        "$SID" "$1" "$T" "$(jq -nc '$ARGS.positional[0]' --args -- "$2")" | "$HOOK" pretool 2>&1); RC=$?
 }
 check() { if [ "$2" = "$3" ]; then printf 'ok    %s (rc=%s)\n' "$1" "$3"; PASS=$((PASS+1));
           else printf 'FAIL  %s (expected rc=%s, got rc=%s)\n      out: %s\n' "$1" "$2" "$3" "$OUT"; FAIL=$((FAIL+1)); fi; }
 rewritten() { # rewritten <label> <substring the rewritten command must carry>
-  local got; got=$(printf '%s' "$OUT" | python3 -c 'import json,sys; print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])' 2>/dev/null)
+  local got; got=$(printf '%s' "$OUT" | jq -r '.["hookSpecificOutput"]["updatedInput"]["command"]' 2>/dev/null)
   case "$got" in *"$2"*) printf 'ok    %s\n' "$1"; PASS=$((PASS+1));;
     *) printf 'FAIL  %s\n      rewritten to: %s\n      out: %s\n' "$1" "$got" "$OUT"; FAIL=$((FAIL+1));; esac
   REWRITTEN=$got
