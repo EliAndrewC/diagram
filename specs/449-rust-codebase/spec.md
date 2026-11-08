@@ -168,12 +168,12 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 
 ### Measurable Outcomes
 
-- **SC-001**: The guards before a Bash call decide it in under a tenth of today's slowest guard's time (`m:hooks-bash`).
-- **SC-002**: A one-line Rust edit's `make done` finishes in under half today's wall time (`m:done-rust-edit`); an unchanged tree's
+- **SC-001** (FR-001, FR-007, FR-010): The guards before a Bash call decide it in under a tenth of today's slowest guard's time (`m:hooks-bash`).
+- **SC-002** (FR-001, FR-010): A one-line Rust edit's `make done` finishes in under half today's wall time (`m:done-rust-edit`); an unchanged tree's
   runs no test.
-- **SC-003**: The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
-- **SC-004**: Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
-- **SC-005**: When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
+- **SC-003** (FR-004, FR-006, FR-008, FR-010): The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
+- **SC-004** (FR-002, FR-003): Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
+- **SC-005** (FR-001, FR-005, FR-009): When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
   `make done` and `make figures` run with no Python interpreter. Its one entry here, this feature's own `m:python-start` (the before
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
 

@@ -37,7 +37,7 @@ phase 1 each guard suite (`tests/hooks/test-<guard>.sh`) drives the Rust guard a
 both Python and Rust (FR-003).
 
 **Scale/Scope**: 872 tracked Python files and 300 inline Python sites in 93 files (`m:python-census`, `m:inline-python-census`);
-phase 1 is the 26 repository guards and everything FR-001 gives it: the 44 files and 6,258 lines of guard shell, the 33 files and
+phase 1 is the 44 registered repository guards (26 of them take a Bash call, `m:hooks-bash`) and everything FR-001 gives it: the 44 files and 6,258 lines of guard shell, the 33 files and
 9,053 lines of their Python libraries, the 53 suite files with their four Python helpers (`hookbench.py`, `hookdeps.py`,
 `hooktrace.py`, `test_hooks_cases.py`), and the inline Python of `scripts/hooks/` and `tests/hooks/` (34 and 41 sites)
 (`m:guard-sources`, `m:inline-python-census`).
@@ -79,7 +79,7 @@ not closed while its success criterion is unmet. Phase 4, which ports Mode A's p
 
 ### Phase 1 - the guards (Story 1, P1)
 
-**Approach.** One binary, `l7r-guard`, replaces the 26 repository guards. `.claude/settings.json` calls it once for each hook event
+**Approach.** One binary, `l7r-guard`, replaces the 44 registered repository guards. `.claude/settings.json` calls it once for each hook event
 (`PreToolUse`, `PostToolUse`, `UserPromptSubmit`, `Stop`, `SubagentStop`, `SubagentStart`, `PostToolUseFailure`) through the wrapper
 of research R6, instead of one shell per guard. It reads the input once and runs, in a fixed order, the deciders of the guards whose
 matcher takes the tool, then merges their answers by `contracts/guard-protocol.md`: every refusal reported together, rewrites applied
