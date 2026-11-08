@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Tests for escalation-hooks.sh - a review's findings do not reach the GM unfiltered (2026-09-12).
+# Tests for the escalation guard (rust/guard, replayed through its link) - a review's findings do not reach the GM unfiltered (2026-09-12).
 # Run: tests/hooks/test-escalation-hooks.sh   (exit 0 = all green)
 #
 # Every case drives the REAL hook with a REAL payload, because a grep proves a call site exists and
 # not that it fires - the rule `tests/tooling/test_guard_firing_log.py` was written to enforce.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/escalation-hooks.sh"
+HOOK="$HERE/escalation-hooks.sh"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 

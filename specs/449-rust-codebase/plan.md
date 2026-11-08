@@ -221,6 +221,11 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `escalation-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `escalation-hooks.sh`, `lib/hm_gm_question.py` and the suite, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: arming and disarming, the once-per rules, the question and offer patterns, reading the transcript from its end, the kept-question naming, every message. `lib/hm_gm_question.py`'s only caller is the guard, so it is removed with the shell.
+   - (b) ONE TOOL STAYS BY PATH: `scripts/reviews/ledger_lint.py`, with callers of its own, asked for the row count when a review arms and for "every finding disposed" at a turn's end with a review armed. Both are rare branches, a review agent's dispatch or a turn it leaves armed, never a plain Bash call or Edit. T052's record lists it.
+   - (c) `state`, `arm` AND `disarm` ARE A COMMAND LINE OF THE BINARY, `--escalation`, like the other guards' non-hook modes; the seams still refuse a path outside a fixture.
+   - (d) `clone_of` WALKS UP FOR `.git` IN-PROCESS, the answer `git rev-parse --show-toplevel` gives, so no process starts on an Agent call or a Stop.
 3. **Where each comes from.** `tests/hooks/test-escalation-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.

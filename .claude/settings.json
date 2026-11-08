@@ -89,10 +89,6 @@
           },
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/escalation-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/escalation-hooks.sh\"; exec \"$h\" pretool"
-          },
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/review-round-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/review-round-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
@@ -180,14 +176,6 @@
       }
     ],
     "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/escalation-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/escalation-hooks.sh\"; exec \"$h\" stop"
-          }
-        ]
-      },
       {
         "hooks": [
           {

@@ -30,6 +30,7 @@ export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$re
 # a guard's entries that are no hook event, by guard, because `check` is not the same mode in each (T014-T017 decisions (a))
 case "$guard:$event" in
   idle-tests-hooks:stagger) exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@" ;;
+  escalation-hooks:state|escalation-hooks:arm|escalation-hooks:disarm) exec "$tree/scripts/hooks/l7r-guard.sh" --escalation "$@" ;;
   agent-stall-hooks:check|agent-stall-hooks:watch|agent-stall-hooks:pending|agent-stall-hooks:ack) exec "$tree/scripts/hooks/l7r-guard.sh" --agent-stall "$@" ;;
   stall-watchdog-hooks:run|stall-watchdog-hooks:once) exec "$tree/scripts/hooks/l7r-guard.sh" --stall-watchdog "$@" ;;
   finished-run-hooks:check|finished-run-hooks:seen|finished-run-hooks:live|finished-run-hooks:judge|finished-run-hooks:stale) exec "$tree/scripts/hooks/l7r-guard.sh" --finished-run "$@" ;;

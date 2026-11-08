@@ -143,7 +143,7 @@ def owed_in_delta(root: Path) -> list[str]:
 
 def escalated(d: Path, row: int, verdict: str, reason: str, now: str | None = None, superseded_by: int | None = None) -> str:
     """`make gm-escalated`: escalation-check's verdict on an owed question. KEEP holds it for the GM (his decision, named in the
-    session's final message - `escalation-hooks.sh`); CUT closes it, the reason kept on the row (feature 432, FR-002). A KEPT
+    session's final message - `escalation_hooks.rs`); CUT closes it, the reason kept on the row (feature 432, FR-002). A KEPT
     question the GM has not reviewed is CUT only as superseded by a later question row of the same feature (`superseded_by`):
     a kept question whose premise the record overturned otherwise stayed listed as his decision (the round arbiter,
     ask:444-gm-review-supersede, 2026-11-05)."""

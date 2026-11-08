@@ -690,5 +690,19 @@
       "shell_bash_ms": 37.41,
       "rust_guard_bash_ms": 14.15
     }
+  },
+  "escalation-hooks-ported": {
+    "quantity": "an Agent dispatch's and a Stop's cost in the escalation guard, the shell's against the Rust guard alone (T044)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/escalation-hooks.sh (main's shell guard) against scripts/hooks/l7r-guard.sh --only escalation-hooks in a fixture repository, a quote-check dispatch and an empty Stop, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (41 cases)",
+    "value": {
+      "shell_agent_ms": 62.88,
+      "rust_guard_agent_ms": 6.32,
+      "shell_stop_ms": 53.72,
+      "rust_guard_stop_ms": 6.86,
+      "escalation_suite_cases": 41
+    }
   }
 }

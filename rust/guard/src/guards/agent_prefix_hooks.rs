@@ -50,7 +50,7 @@ fn matches(pattern: &Regex, text: &str) -> bool {
 }
 
 /// `str.splitlines(keepends=True)`.
-fn lines_kept(text: &str) -> Vec<&str> {
+pub(crate) fn lines_kept(text: &str) -> Vec<&str> {
     let (mut out, mut start) = (Vec::new(), 0);
     let mut chars = text.char_indices().peekable();
     while let Some((at, c)) = chars.next() {

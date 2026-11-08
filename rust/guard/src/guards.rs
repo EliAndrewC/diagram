@@ -14,6 +14,7 @@ pub mod conflict_marker_hooks;
 pub mod discard_hooks;
 pub mod download_copy_hooks;
 pub mod engine_freeze_hooks;
+pub mod escalation_hooks;
 pub mod event_log_hooks;
 pub mod feature_approval_hooks;
 pub mod finished_run_hooks;

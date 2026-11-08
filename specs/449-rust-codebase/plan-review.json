@@ -362,9 +362,9 @@
    "declared": "spec-fidelity"
   },
   "### T044 Approach (checklist part A)": {
-   "sha256": "365b95a2ebc5bf9af2c71c8d595c980cd22a0e06f9a483992fd6594377971539",
+   "sha256": "fda25220f22d69eb2a1442f71262fa399a30ab2b3925658eb2e60d4e1a37fe34",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T045 Approach (checklist part A)": {
@@ -2764,6 +2764,46 @@
      "why": "The ordering was settled by T035 (d) and is only cited here; one process (FR-007) requires some order. The block states why FR-002's sameness holds under it and claims no exception, and both guards' suites must stay green at the exit."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T044 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T044-a",
+     "summary": "The guard and its library both move in-process (arming, once-per rules, question and offer patterns, transcript reading, kept-question naming, every message); lib/hm_gm_question.py is removed with the shell.",
+     "class": "within",
+     "why": "The request is to port the Python, all of it; FR-001 and D3 carry this, and moving every message serves FR-002. The claim that the guard is the library's only caller names no search command and could not be checked from the bundle; taken as stated, it is not a narrowing of the request."
+    },
+    {
+     "id": "T044-b",
+     "summary": "scripts/reviews/ledger_lint.py stays Python and is called by path from the Rust guard, for the row count when a review arms and for 'every finding disposed' at a turn's end with a review armed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-007 (one process for a tool call), which the block does not cite: an Agent dispatch is a tool call and it would start a Python child. The rarity argument is not the ground of this ruling. The ground is that the request's 'all be ported' is reduced in timing only: ledger_lint.py is a tracked Python file, so FR-001 and SC-005's censuses require it gone before the feature closes, and T052's record is where the block tracks it; the stay cannot be permanent. Porting it inside T044 is not open either: it has callers of its own, so a Rust copy in the guard beside the Python tool would be one piece run twice, against FR-003 and D3's one-at-a-time rule. Purpose test: the GM's complaint is Python's cost, and a transitional spawn on these branches does not gut it. Both branches, Agent dispatch and Stop, were weighed separately and stand on the same ground. 'Never a plain Bash call or Edit' is a claim about which events reach these branches, not measured in the bundle and taken as stated; the ruling does not rest on it. The ruling covers the transitional stay only: a call to Python surviving ledger_lint's own port would not be covered."
+    },
+    {
+     "id": "T044-c",
+     "summary": "state, arm and disarm become a command line of the binary, --escalation, like the other guards' non-hook modes; the seams still refuse a path outside a fixture.",
+     "class": "within",
+     "why": "How the ported subcommands are reached is left open by the spec. FR-005 is the only requirement it touches and the block does not contradict it; keeping the seam's refusal preserves behavior under FR-002."
+    },
+    {
+     "id": "T044-d",
+     "summary": "clone_of walks up for .git in-process, the answer git rev-parse --show-toplevel gives, so no process starts on an Agent call or a Stop.",
+     "class": "within",
+     "why": "An implementation choice inside the port, serving FR-007 and held to FR-002 by the suite replay (D4)."
+    },
+    {
+     "id": "T044-e",
+     "summary": "The proof of equal verdicts is the guard's suite run against l7r-guard --only escalation-hooks, with unit tests written from its cases (item 2's 'every suite case', items 6 and 9).",
+     "class": "within",
+     "why": "D4 settles the suite as the replay for a guard. FR-002's text is wider, 'every case its tests and its suites hold', and the block paraphrases it as suite cases only. If lib/hm_gm_question.py has tests of its own, FR-002 reaches them before the deletion; the bundle does not show whether it does, so no narrowing is found on the evidence available."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4423,6 +4463,45 @@
      "summary": "This guard runs before shell-check (T035 decision (d)), so shell-check judges the corrected text, whose words differ only in spelling or dash; shell-check's four rules read neither.",
      "class": "within",
      "why": "The ordering was settled by T035 (d) and is only cited here; one process (FR-007) requires some order. The block states why FR-002's sameness holds under it and claims no exception, and both guards' suites must stay green at the exit."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T044": {
+   "section_sha256": "fda25220f22d69eb2a1442f71262fa399a30ab2b3925658eb2e60d4e1a37fe34",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T044-a",
+     "summary": "The guard and its library both move in-process (arming, once-per rules, question and offer patterns, transcript reading, kept-question naming, every message); lib/hm_gm_question.py is removed with the shell.",
+     "class": "within",
+     "why": "The request is to port the Python, all of it; FR-001 and D3 carry this, and moving every message serves FR-002. The claim that the guard is the library's only caller names no search command and could not be checked from the bundle; taken as stated, it is not a narrowing of the request."
+    },
+    {
+     "id": "T044-b",
+     "summary": "scripts/reviews/ledger_lint.py stays Python and is called by path from the Rust guard, for the row count when a review arms and for 'every finding disposed' at a turn's end with a review armed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows FR-007 (one process for a tool call), which the block does not cite: an Agent dispatch is a tool call and it would start a Python child. The rarity argument is not the ground of this ruling. The ground is that the request's 'all be ported' is reduced in timing only: ledger_lint.py is a tracked Python file, so FR-001 and SC-005's censuses require it gone before the feature closes, and T052's record is where the block tracks it; the stay cannot be permanent. Porting it inside T044 is not open either: it has callers of its own, so a Rust copy in the guard beside the Python tool would be one piece run twice, against FR-003 and D3's one-at-a-time rule. Purpose test: the GM's complaint is Python's cost, and a transitional spawn on these branches does not gut it. Both branches, Agent dispatch and Stop, were weighed separately and stand on the same ground. 'Never a plain Bash call or Edit' is a claim about which events reach these branches, not measured in the bundle and taken as stated; the ruling does not rest on it. The ruling covers the transitional stay only: a call to Python surviving ledger_lint's own port would not be covered."
+    },
+    {
+     "id": "T044-c",
+     "summary": "state, arm and disarm become a command line of the binary, --escalation, like the other guards' non-hook modes; the seams still refuse a path outside a fixture.",
+     "class": "within",
+     "why": "How the ported subcommands are reached is left open by the spec. FR-005 is the only requirement it touches and the block does not contradict it; keeping the seam's refusal preserves behavior under FR-002."
+    },
+    {
+     "id": "T044-d",
+     "summary": "clone_of walks up for .git in-process, the answer git rev-parse --show-toplevel gives, so no process starts on an Agent call or a Stop.",
+     "class": "within",
+     "why": "An implementation choice inside the port, serving FR-007 and held to FR-002 by the suite replay (D4)."
+    },
+    {
+     "id": "T044-e",
+     "summary": "The proof of equal verdicts is the guard's suite run against l7r-guard --only escalation-hooks, with unit tests written from its cases (item 2's 'every suite case', items 6 and 9).",
+     "class": "within",
+     "why": "D4 settles the suite as the replay for a guard. FR-002's text is wider, 'every case its tests and its suites hold', and the block paraphrases it as suite cases only. If lib/hm_gm_question.py has tests of its own, FR-002 reaches them before the deletion; the bundle does not show whether it does, so no narrowing is found on the evidence available."
     }
    ],
    "verdict": "CLEAR"

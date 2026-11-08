@@ -12,6 +12,7 @@ fn main() {
                 | "--self-check"
                 | "--idle-tests"
                 | "--agent-stall"
+                | "--escalation"
                 | "--stall-watchdog"
                 | "--finished-run"
         )
