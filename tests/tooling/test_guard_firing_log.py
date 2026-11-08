@@ -276,12 +276,6 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
         if not suite.exists():
             continue
         text = suite.read_text()
-        # A suite may delegate to the shared runner (`exec python3 test_hooks_cases.py <guard>`)
-        # rather than isolate for itself; follow one level, and hold the runner to the same rule.
-        for delegate in re.findall(r"[\w./-]*test_hooks_cases\.py", text):
-            target = SUITES / pathlib.Path(delegate).name
-            if target.exists():
-                text += target.read_text()
         if "GUARD_LOG_DIR" not in text:
             missing.append(suite.name)
     assert not missing, f"these suites drive a recording guard but write into the real census: {missing}"
@@ -485,8 +479,9 @@ _TOKEN = re.compile(r"\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_OK\b")
 
 
 def _tree_tokens() -> set[str]:
-    files = tree("*.sh") + tree("*.py")
-    files.append(pathlib.Path(__file__).resolve().parents[2] / "Makefile")
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    files = tree("*.sh") + tree("*.py") + sorted((repo / "rust/guard/src").rglob("*.rs"))  # the guards themselves, since feature 449
+    files.append(repo / "Makefile")
     found: set[str] = set()
     for f in files:
         if f.exists():

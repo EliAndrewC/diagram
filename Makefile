@@ -295,9 +295,9 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
 	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
-	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then python3 "$$root/tests/hooks/hooktrace.py" fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
-	export HOOKS_SHIM="$$(python3 "$$root/tests/hooks/hooktrace.py" shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
-	keys=$$(python3 "$$root/tests/hooks/hookdeps.py" --keys $$roster); \
+	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
+	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
+	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster); \
 	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
@@ -335,11 +335,11 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	fi; \
 	if [ -z "$(FROM_DONE)" ]; then \
 	  pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' --exclude-dir=hooks | sort | tr '\n' ' '); \
-	  stale=$$(if [ -n "$(HOOKS_ALL)" ]; then echo $$pyt; else python3 "$$root/tests/hooks/hookdeps.py" --pystale "$$gitdir" $$pyt; fi | tr '\n' ' '); \
+	  stale=$$(if [ -n "$(HOOKS_ALL)" ]; then echo $$pyt; else "$$root/scripts/hooks/l7r-guard.sh" deps --pystale "$$gitdir" $$pyt; fi | tr '\n' ' '); \
 	  if [ -n "$(HOOKS_PYTEST_SKIP)" ]; then stale=$$(for f in $$stale; do case $$f in $(HOOKS_PYTEST_SKIP)*) ;; *) printf '%s ' "$$f" ;; esac; done); fi; \
 	  if [ -n "$$(echo $$stale)" ]; then \
 	    if L7R_TEST_DEPS=$${L7R_TEST_DEPS:-record} python3 -m pytest -p tests.tooling._test_deps -n 4 --dist worksteal -q --no-cov $$stale > "$$work/pytest-scripts.log" 2>&1; then \
-	      python3 "$$root/tests/hooks/hookdeps.py" --pystamp "$$gitdir" $$stale; n=$$((n+1)); \
+	      "$$root/scripts/hooks/l7r-guard.sh" deps --pystamp "$$gitdir" $$stale; n=$$((n+1)); \
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
@@ -350,6 +350,9 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
+
+hooks-deps-window: ## [tests] how many of the Python tests of scripts/ each of the last N commits touching scripts/ or tests/hooks/ would re-run, by what each test reaches (feature 375 SC-014)   FROM=<commit> N=<count>
+	@root=$$(git rev-parse --show-toplevel); pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' "$$root/tests" --include='test_*.py' --exclude-dir=hooks | sed "s|^$$root/||" | sort); "$$root/scripts/hooks/l7r-guard.sh" deps --window "$(FROM)" "$(N)" $$pyt
 
 guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
@@ -642,10 +645,10 @@ section-sha:    ## [project] {internal} the digest of one task's plan section, w
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" section-sha "$(F)" "$(T)"
 
 hookbench:      ## [project] replay the frozen command window through a guard decision, in process   GUARD=house-style [AGAINST=<ref>] | REFRESH=1
-##  GUARD=<name>         a guard whose decision is importable (feature 239 FR-001); others are refused by name
+##  GUARD=<name>         any guard of the l7r-guard binary, with or without its -hooks
 ##  AGAINST=<ref>        also print the verdict diff against the guard as it stood at <ref> - what an exemption change owes
 ##  REFRESH=1            freeze a new dated window of real commands into tests/hooks/fixtures/ instead
-	@python3 "$$(git rev-parse --show-toplevel)/tests/hooks/hookbench.py" $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" bench $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
 
 figures:        ## [project] re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]
 ##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after

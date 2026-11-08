@@ -47,7 +47,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 #: this feature adds that carry the list or its cases - the hook's exemption set, plus these two
 _EXEMPT_NAMES = re.compile(
     r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh"
-    r"|test_hooks_cases\.py|check-house-style-delta\.py|test_house_style_delta\.py"
+    r"|house_style_cases\.rs|check-house-style-delta\.py|test_house_style_delta\.py"
     r"|test_guard_firing_log\.py|hm_house\.py|house_style_hooks\.rs|house_style_words\.tsv|l7r\.md|gm-request\.md)$")
 #: `tests/hooks/fixtures/` holds VERBATIM RECORDS - the guard-refusal corpora, and this feature's own
 #: replay of 238 real commands. Several of those commands were house-style sweeps, so they carry the

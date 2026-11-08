@@ -8,6 +8,8 @@ pub mod archive_first_hooks;
 pub mod batching_hooks;
 pub mod blocked_fetch_hooks;
 pub mod budget_change_hooks;
+#[cfg(test)]
+mod case_tables;
 pub mod claims_file_hooks;
 pub mod clone_sync_hooks;
 pub mod conflict_marker_hooks;

@@ -416,26 +416,26 @@
  },
  "375-a3-hooks-test-after": {
   "quantity": "the script test files a commit touching scripts/ re-runs, before and after FR-021 (feature 375 amendment 3, SC-014)",
-  "observed": "2026-10-11",
+  "observed": "2026-11-08",
   "source": "main's last ten first-parent commits touching scripts/ or tests/hooks/ before amendment 3's code (from eb64e2ba3), and the test files the hooks-test step selects (the Makefile's grep: test files that build a path into scripts/)",
-  "command": "tests/hooks/hookdeps.py's pydeps per test file, intersected with each commit's changed files (git diff-tree -m --first-parent)",
-  "method": "a one-off script over the derivation as built (hookdeps.pydeps, with the plan review's whole-tree fallback); before, any change re-ran every file",
+  "command": "make hooks-deps-window FROM=eb64e2ba3 N=10",
+  "method": "the re-run through make (feature 449 FR-001; T050 decision (g)): today's tests and today's derivation over the same commits, so the file counts differ from 2026-10-11's, kept under `was`",
   "value": {
-   "test files": 55,
-   "before: files run per commit": 55,
+   "test files": 89,
+   "before: files run per commit": 89,
    "after: files run per commit": {
-    "eb64e2ba3": 16,
-    "6857b279e": 30,
-    "9cc6ab8c4": 30,
-    "91182c8c1": 30,
-    "926799f0d": 30,
-    "8d4daf178": 30,
-    "144e59c0f": 16,
-    "5a32ebfb9": 30,
-    "194dfd051": 30,
-    "922fb653d": 30
+    "eb64e2ba3": 24,
+    "6857b279e": 52,
+    "9cc6ab8c4": 52,
+    "91182c8c1": 52,
+    "926799f0d": 52,
+    "8d4daf178": 52,
+    "144e59c0f": 52,
+    "5a32ebfb9": 52,
+    "194dfd051": 52,
+    "922fb653d": 53
    },
-   "after: mean": 27.2,
+   "after: mean": 49.3,
    "files depending on the whole tree": [
     "tests/pipeline/test_gencache.py",
     "tests/test_building_types.py",
@@ -455,6 +455,24 @@
     "tests/tooling/test_switches.py"
    ],
    "median freshness set": 5
+  },
+  "was": {
+   "observed": "2026-10-11",
+   "test files": 55,
+   "after: files run per commit": {
+    "eb64e2ba3": 16,
+    "6857b279e": 30,
+    "9cc6ab8c4": 30,
+    "91182c8c1": 30,
+    "926799f0d": 30,
+    "8d4daf178": 30,
+    "144e59c0f": 16,
+    "5a32ebfb9": 30,
+    "194dfd051": 30,
+    "922fb653d": 30
+   },
+   "after: mean": 27.2,
+   "note": "a one-off script over tests/hooks/hookdeps.py's pydeps"
   }
  },
  "375-a3-record-tooling-after": {

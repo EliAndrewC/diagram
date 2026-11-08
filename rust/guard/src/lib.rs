@@ -5,6 +5,7 @@
 pub mod guards;
 pub mod protocol;
 pub mod shared;
+pub mod suite_tools;
 
 use protocol::{run, Event, Guard, Reply};
 
@@ -121,6 +122,10 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("--review-round") => guards::review_round_hooks::cli(&args[1..]),
         Some("--stall-watchdog") => guards::stall_watchdog_hooks::cli(&args[1..]),
         Some("--finished-run") => guards::finished_run_hooks::cli(&args[1..]),
+        // the suites' own tooling (T050)
+        Some("deps") => suite_tools::deps::cli(&args[1..]),
+        Some("trace") => suite_tools::trace::cli(&args[1..]),
+        Some("bench") => suite_tools::bench::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
             "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --finished-run <mode> | --self-check | --version".to_owned(),

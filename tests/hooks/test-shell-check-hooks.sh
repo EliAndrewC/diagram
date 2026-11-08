@@ -9,4 +9,4 @@
 # trust; this one's is measured on every run.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec python3 "$HERE/test_hooks_cases.py" "shell-check"
+exec "$HERE/guard-cases.sh" shell_check_cases the_r6_corpus_replayed

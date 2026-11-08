@@ -105,6 +105,8 @@ if [ -n "$CARGO_BIN" ]; then
   SC="$W/sc"; mkdir -p "$SC/.git" "$SC/.specify"; printf '{"feature_directory": "specs/1-x"}' > "$SC/.specify/feature.json"
   ( cd "$SC" && "$RT/l7r-guard.good" --self-check >/dev/null 2>&1 )
   [ ! -e "$SC/.git/l7r-events" ] && ok || bad "real build: the self-check wrote into the tree it ran in"
+  # a tool verb reads no stdin: under `make` it inherits one that never closes, and `read_to_string` waited on it for ever (T050, a window target hung 590 s)
+  sleep 30 | ( timeout 10 "$RT/l7r-guard.good" deps --bogus >/dev/null 2>&1; [ $? -ne 124 ] && ok || bad "real build: a tool verb waited on an open stdin" )
   awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "real build through the wrapper: %.1f s\n", b - a }'
 else
   bad "real build: no cargo found"

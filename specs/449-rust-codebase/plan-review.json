@@ -110,10 +110,10 @@
    "declared": "spec-fidelity"
   },
   "### T050 Approach (checklist part A)": {
-   "sha256": "247322701a22f22def6b927b8dd5b4ae25597bcc9c5ec37b894a88f2d9d9e0ba",
+   "sha256": "502970a93c802ae401f7aaf867312cc5ebd3067f3aca9f032a4eb793638191a8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
   },
   "### T051 Approach (checklist part A)": {
    "sha256": "408d83da398373d1cc333090608aa97504f8b4ea7b66160a9647880227223b18",
@@ -128,7 +128,7 @@
    "declared": "spec-fidelity"
   },
   "### T053 Approach (checklist part A)": {
-   "sha256": "b7959f0f09940bd193b10ac5390ac58e13546fc0eabefa1e68e520eb82ff66bc",
+   "sha256": "b417de803d8d25be1781e5b4d7c6a55e5f2d508376b38bd9e2a6327cc64b5b43",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
@@ -2774,6 +2774,22 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T050 Approach (checklist part A)",
+    "### T053 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T050-round3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4682,6 +4698,102 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T050": {
+   "section_sha256": "2e51ee8eb7acc7d1e354ae54ed6c765560de15562cadba34ad67fe266d90fdee",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "carried-wb7",
+     "summary": "The four tests/hooks Python helpers ported as l7r-guard subcommands and crate tests.",
+     "class": "within",
+     "why": "FR-001, phase 1's tests/hooks Python."
+    },
+    {
+     "id": "carried-wb6",
+     "summary": "Unused libraries deleted with their last caller.",
+     "class": "within",
+     "why": "FR-001: nothing is left behind by the port."
+    },
+    {
+     "id": "carried-wb8",
+     "summary": "The close on SC-001 and phase 1's share of both censuses empty.",
+     "class": "within",
+     "why": "FR-001 re-runs both censuses at each phase's end; FR-010 records the timings."
+    },
+    {
+     "id": "a",
+     "summary": "A hand lexer for three Python facts rather than a parser crate, held to the Python's answers by a differential.",
+     "class": "within",
+     "why": "How the port is built; FR-002's same outputs are what m:t050-deps-differential compares."
+    },
+    {
+     "id": "b",
+     "summary": "The name index keeps the dict's first-place, last-path semantics.",
+     "class": "within",
+     "why": "FR-002: the same outputs as the Python replaced."
+    },
+    {
+     "id": "c-trace",
+     "summary": "Traces kept before the port stand: the directory entries, blob id and git calls are reproduced in Rust so no suite re-runs for the port alone.",
+     "class": "within",
+     "why": "FR-002 applied to the keys."
+    },
+    {
+     "id": "c-python-process",
+     "summary": "One python3 process per fresh or stamp call for sys.version, never a hook's, gone with the last Python a suite runs at phase 3's end, listed in T052's record.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A Rust tool in phase 1 still starts Python, which neither census can see. It stands on three things: the key's value is sys.version, which only the interpreter can state exactly, and the key must equal the kept traces' under FR-002; it is never on a hook path, so it does not touch the cost the GM's request was about or the limit in ask:449-phase1-tools-by-path; and it has a stated exit tied to the Python it describes. The exit is what makes it legitimate, not its low cost. The closing sentence that staying would 'break nothing' earns it nothing: FR-001's phase 4 removes the Python the container installs, so past that point the spawn has no interpreter to start."
+    },
+    {
+     "id": "d-refusal",
+     "summary": "bench drops feature 239's refusal of a guard with no importable decision, on the ground that every guard's decision is in this binary now; only an unknown name is refused.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Removing a recorded refusal changes a tool's output (FR-002, SC-004), and the only ground offered is a factual premise that FR-001 contradicts: its last sentence puts check-bundle, checks and record-edit in phase 3, with their libraries, so at T050 those three are not ported. The refusal existed so the cost of spawning stayed visible, and for those three that purpose survives. The block does not say what bench does with them: refused as unknown, measured by spawn and labeled, or something else. Required: state it for those three by name until phase 3, or measure which guards the binary holds and record that the three are among them."
+    },
+    {
+     "id": "d-against",
+     "summary": "--against REF builds the guard from that ref, or runs its shell before the port, one spawn a command, and says which, replacing an in-process baseline whose path has been gone since 2026-10-08.",
+     "class": "within",
+     "why": "A port of a dead branch has nothing to preserve, and the option keeps working and labels its method."
+    },
+    {
+     "id": "e",
+     "summary": "The case tables become generated crate tests through the suite's own entry; the four suites stay, calling guard-cases.sh, because make hooks-test requires a companion per guard; a failing replay lists every wrong case.",
+     "class": "within",
+     "why": "FR-001 with FR-002; the failure listing matches the Python's. No .py remains under tests/hooks."
+    },
+    {
+     "id": "f-move",
+     "summary": "test_hook_deps.py and test_hookbench.py deleted, their rules moved to suite_tools unit tests; test_file_log.py keeps the C recorder's tests and loses its hooktrace and hookdeps cases.",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests. 'Their rules' covers both files; the list after the colon names the rules run against the real repository, and bench's rules are the fixture half. The bench refusal that changes is ruled under d-refusal. test_file_log.py is not excused: it remains in the census and SC-005 still requires it gone."
+    },
+    {
+     "id": "f-ceiling",
+     "summary": "test_hooks_cases.py's own reach ceiling is not carried, the file being deleted.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A bound on the reach of a file that FR-001 deletes cannot be applied. Limit of this ruling: the bundle does not show what the ceiling guarded. It stands because the helper census is carried, so guard-cases.sh, the shared helper the four suites now call, falls under that census; if it does not, this ruling does not cover it."
+    },
+    {
+     "id": "g-search",
+     "summary": "The census of recorded measurement commands naming a deleted file searched the four helper names and found one hit.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 requires every recorded command that runs a ported file to be rewritten in the commit that ports it, and item 9 of this block says 'ports or deletes'. Decision (f) deletes two more Python files, test_hook_deps.py and test_hookbench.py, and the stated search space omits both, with no reason given, so 'the one measurement command' is not established. A command running either file would survive the search and name a deleted file. Required: re-run the search over all six names and state the result; any further hit is rewritten and re-run as (g) did for its one."
+    },
+    {
+     "id": "g-rewrite",
+     "summary": "375-a3-hooks-test-after is rewritten to make hooks-deps-window, its value the re-run, the 2026-10-11 figures kept beside it.",
+     "class": "within",
+     "why": "FR-001: to an equivalent command through make, re-run as the proof."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

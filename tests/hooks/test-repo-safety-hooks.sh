@@ -7,4 +7,4 @@
 # which is the habit these guards exist to break.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec python3 "$HERE/test_hooks_cases.py" "repo-safety"
+exec "$HERE/guard-cases.sh" repo_safety_cases

@@ -27,7 +27,7 @@ while IFS="=" read -r name _; do case "$name" in *_OK) unset "$name" 2>/dev/null
 # suites of eight parts each hit the containers' shared 10 GB memory cap (2026-10-17). A suite run alone keeps its own count.
 export PARTS_MAX=${PARTS_MAX:-2}
 # GUARD_EDIT_OK: feature 383 amendment 3 (plan D27), adding an operation - under the C-library recorder when make hooks-test built
-# it, so a green suite's reads are kept (tests/hooks/hooktrace.py): a fixture's copy of scripts/ counts as the file it copies,
+# it, so a green suite's reads are kept (`l7r-guard trace`): a fixture's copy of scripts/ counts as the file it copies,
 # the fixture's cp does not
 if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
   rm -f "$WORK/$GUARD.reads"
@@ -40,7 +40,7 @@ fi
 awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$GUARD.s"
 if [ "$rc" -eq 0 ]; then
   mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"
-  [ -n "${HOOKS_SHIM:-}" ] && python3 "$HERE/hooktrace.py" stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
+  [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$GUARD.reads" "$HOOKS_ROOT" >/dev/null 2>&1
   printf 'ok' > "$WORK/$GUARD.rc"
 else
   printf 'FAIL' > "$WORK/$GUARD.rc"

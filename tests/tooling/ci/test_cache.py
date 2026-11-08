@@ -162,7 +162,7 @@ def test_the_freshness_state_is_content_keyed_so_a_changed_guard_still_runs() ->
     assert '"hooks": ("", ("scripts/*.sh", "scripts/*.py"' in stamp, "the hooks area is derived from the files themselves"
     assert "GATE_RECIPE" in stamp, "the stamp is salted, so a change to what the gate MEANS retires every record"
     makefile = (HERE / "Makefile").read_text(encoding="utf-8")
-    assert "sha256sum" in makefile and "hookdeps.py" in makefile, "the per-suite stamp is a hash of that suite's derived dependency set"
+    assert "deps --keys" in makefile, "the per-suite stamp is a hash of that suite's derived dependency set"
 
 
 def test_only_a_BUILD_can_write_the_freshness_state_a_build_restores() -> None:

@@ -16,6 +16,9 @@ fn main() {
                 | "--review-round"
                 | "--stall-watchdog"
                 | "--finished-run"
+                | "deps"
+                | "trace"
+                | "bench"
         )
     ) {
         let _ = std::io::stdin().read_to_string(&mut stdin);

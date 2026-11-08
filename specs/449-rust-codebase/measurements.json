@@ -753,5 +753,21 @@
       "rust_gate_bash_ms_second_run": 10.66,
       "record_edit_suite_cases": 15
     }
+  },
+  "t050-deps-differential": {
+    "quantity": "the Rust suite tooling against the Python it replaced, over the whole repository: a suite's key, its dependency list, a Python test's file set, and which traced suites are fresh",
+    "observed": "2026-11-08",
+    "subject": "tests/hooks/hookdeps.py and hooktrace.py against l7r-guard deps and trace at the same tree, before the Python was deleted",
+    "command": "each roster suite's --keys and --deps, each tests/**/test_*.py's --pydeps, and trace fresh over the kept traces, from both, compared",
+    "method": "exact comparison of the sorted outputs; the mismatch counts are the value",
+    "value": {
+      "suites": 57,
+      "key_mismatches": 0,
+      "deps_mismatches": 0,
+      "python_test_files": 291,
+      "pydeps_mismatches": 0,
+      "traced_suites": 8,
+      "fresh_lists_equal": true
+    }
   }
 }

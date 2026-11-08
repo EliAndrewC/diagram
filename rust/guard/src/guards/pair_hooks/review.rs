@@ -15,7 +15,7 @@ static DECIDE_OK: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"\bDECIDE_OK="([^"]*)""#).unwrap());
 static GLYPH_DUE_OK: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"GLYPH_DUE_OK="([^"]*)""#).unwrap());
-static PREREQ_OK: LazyLock<Regex> =
+static PREREQ_REASON: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"REVIEW_PREREQ_OK="([^"]*)""#).unwrap());
 static BUNDLE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r#"[^ `"]*/MANIFEST\.md|/tmp/l7r-check/[^ `")]*"#).unwrap());
@@ -268,7 +268,7 @@ fn prerequisites(
         let why = match reasoned(
             cx,
             atype,
-            &PREREQ_OK,
+            &PREREQ_REASON,
             "REVIEW_PREREQ_OK",
             ptext,
             "review-prereq",

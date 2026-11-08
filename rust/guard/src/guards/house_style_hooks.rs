@@ -51,7 +51,7 @@ static PAIR_PATTERNS: LazyLock<Vec<(Regex, &'static str, &'static str)>> = LazyL
         .map(|(b, a)| (re(&format!(r"(?i)\b{}\b", fancy_regex::escape(b))), *b, *a))
         .collect()
 });
-static WORDS: LazyLock<Regex> = LazyLock::new(|| {
+pub(crate) static WORDS: LazyLock<Regex> = LazyLock::new(|| {
     let list: Vec<String> = PAIRS
         .iter()
         .map(|(b, _)| fancy_regex::escape(b).into_owned())
@@ -93,7 +93,7 @@ static HEREDOC_TO: LazyLock<Regex> = LazyLock::new(|| {
 static NAMED_PATH: LazyLock<Regex> = LazyLock::new(|| re(r"[\w./-]+\.(?:md|py|sh|toml|json)"));
 static EXEMPT: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house_style_hooks\.rs|house_style_words\.tsv|test-house-style-hooks\.sh|test_hooks_cases\.py|check-house-style-delta\.py|test_house_style_delta\.py|test_guard_firing_log\.py|hm_house\.py)$",
+        r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house_style_hooks\.rs|house_style_words\.tsv|house_style_cases\.rs|test-house-style-hooks\.sh|house_style_cases\.rs|check-house-style-delta\.py|test_house_style_delta\.py|test_guard_firing_log\.py|hm_house\.py)$",
     )
 });
 static SOURCE_BLOCK: LazyLock<Regex> =

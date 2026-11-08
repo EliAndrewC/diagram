@@ -7,7 +7,7 @@
 # which is the habit these guards exist to break.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-python3 "$HERE/test_hooks_cases.py" "house-style"
+"$HERE/guard-cases.sh" house_style_cases_hold
 TABLE=$?
 
 # A HELPER THAT CANNOT BE IMPORTED MUST DEGRADE, NOT SILENCE THE GUARD (feature 236 amendment 2).
