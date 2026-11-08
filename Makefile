@@ -191,12 +191,18 @@ probe:          ## [maps] what a change does to every seed and pool map against 
 backup:         ## [project] save the clone's commits to backup/<clone> on GitHub without landing them - no gate runs (the GM 2026-11-07: "stop landing things until we've gotten this time down")
 	@"$$(git rev-parse --show-toplevel)/scripts/sync-with-main.sh" backup
 
+# THE DRIVER RUN BY CARGO ITSELF, NO PYTHON BETWEEN (feature 444 T36; the GM 2026-11-07: "Why does `make hamlet` run Python at
+# all?"): `rust_checks.py hamlet` only put the command together - the shared target directory, the toolchain's cargo - and its
+# start was ~20 ms of a ~110 ms map (measured 2026-11-07); cargo still decides whether the binary is fresh. Same directory, so
+# the gate's builds and these share one cache
+HAMLET_RUN = CARGO_TARGET_DIR="$${CARGO_TARGET_DIR:-$$HOME/.cache/l7r-cargo-target/$(notdir $(CURDIR))}" "$$([ -x "$$HOME/.cargo/bin/cargo" ] && echo "$$HOME/.cargo/bin/cargo" || echo cargo)" run --release --quiet --manifest-path rust/phases/Cargo.toml --bin hamlet --
+
 cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]
-	@HAMLET_ARGS="--cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)" python3 scripts/gates/rust_checks.py hamlet --crate rust/phases
+	@$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)
 
 hamlet:         ## [maps] roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed   SPEC=pool/hamlets/<name>/<name>.spec.json
 	@if [ -z "$(SPEC)" ]; then printf 'make hamlet: SPEC=pool/hamlets/<name>/<name>.spec.json is required\n' >&2; exit 2; fi
-	@HAMLET_SPEC="$(abspath $(SPEC))" python3 scripts/gates/rust_checks.py hamlet --crate rust/phases
+	@$(HAMLET_RUN) "$(abspath $(SPEC))"
 
 placement-stages: ## [maps] the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port's reference until a page from the Rust driver replaces it
 	@printf 'placement-stages: FROZEN - dev/placement-stages-frozen/hamlet-placement.html was generated on 2026-10-31 from main'\''s Python hamlet engine, since deleted, and is kept as the temporary reference the Rust port is judged against (feature 444 amendment 11, FR-024 part 1); nothing regenerates it until a page from the Rust driver replaces it\n'
