@@ -3,85 +3,85 @@
  "blocks": {
   "preamble": {
    "sha256": "2ab94f064af65bd434829e0cf2ab8a69190d1493dc0e123ae2d139ff43ccc8d2",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "5381f910b94a3a8be1fc6dfeedd430a73a9cd5f1dfc17633f2e962a514f491a9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "513e8ec1ebf02527b3a61bd081d0c555a2b9b95067c4dc134bf14b6e0dc0dfd6",
-   "verdict": "BLOCKED",
+   "sha256": "eeed736590ad7cb1a64a080eab5d11200eb730c5d6dd8401a8803f32c476d6f5",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "3d6fb10a0e77d8a9cbb6ecb06ecda7f6e93e27371ed1424eed5382b7e68e2314",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "835a6739c5026f5e42eddd21b62e3388115fe84f861e5d82731d9ffaec1f9e37",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Phases": {
    "sha256": "09d270ef6bcdf2c99a76f2055775d95b3e45e2c26a3387b62b703c39bd283f67",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Phase 1 - the guards (Story 1, P1)": {
-   "sha256": "d4ff2b43441b329b6f75054920c4ff036c1ccf7f5327d7b1d28e5a9ee6f5bfb7",
-   "verdict": "BLOCKED",
+   "sha256": "1cd5f3c0c9fb22a89f7e04a99519229553109f294cc73544478b86de73f51985",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Phase 2 - the gate (Story 2, P2)": {
    "sha256": "f04323adcdb62e10f9e57ffc940cccccf63c09c1bd6c78a8bd44bba42d31cab9",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Phase 3 - the tooling (Story 3, P3)": {
-   "sha256": "953d88e2c0cd5ae8b63923812f73c8a15e7cc3eaea730d52f26951d1694435d7",
-   "verdict": "BLOCKED",
+   "sha256": "7870748b93e58115cf453ec0330f3c5c0cebaababfc71089fc8806ad670d4200",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Phase 4 - Mode A and the page writer (Story 4, P4)": {
    "sha256": "46d1c6002e0b5ef0163837b4f976d3d14c74ac192127e99d69c0898b9a5ad823",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
    "sha256": "78aa41f093ec3faedcbfbaf4620358dd38cb2532a522b49bf2a2b804d0d2fc7f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Documentation (this feature)": {
    "sha256": "719a0ba94d199ce2236d6f83de02d79d02ada2ad825de4c40ba0099013d8bfdf",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "### Source Code (repository root)": {
    "sha256": "ef7f780cd78058ce6023b23ad1a750baa14c537aecbd46f82fbdc461524e2059",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "2a9052751c0b2ebd4e6cad33f14aab4237ca8b5f1f1e6268b504c2071ab9662a",
-   "verdict": "BLOCKED",
+   "sha256": "df75f6b2ba0e238729377952d20ba6a8737fde9e26fded70de3d9d97306f4503",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   }
@@ -222,6 +222,136 @@
      "summary": "The make-only guard's pytest-in-grep misread and the guard-file guard's scratch-text misread are fixed as they move, case verdict changed and named in the same commit.",
      "class": "within",
      "why": "FR-002's own named exception, with its conditions repeated."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-07",
+   "blocks": [
+    "## Complexity Tracking",
+    "## Constitution Check",
+    "## Performance bookends",
+    "## Phases",
+    "## Project Structure",
+    "## Summary",
+    "## Technical Context",
+    "### Documentation (this feature)",
+    "### Phase 1 - the guards (Story 1, P1)",
+    "### Phase 2 - the gate (Story 2, P2)",
+    "### Phase 3 - the tooling (Story 3, P3)",
+    "### Phase 4 - Mode A and the page writer (Story 4, P4)",
+    "### Source Code (repository root)",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "One l7r-guard process per hook event, every check in-process",
+     "class": "within",
+     "why": "FR-007 (one process for a tool call); serves the GM's port of the hooks."
+    },
+    {
+     "id": "D2",
+     "summary": "Deciders run in today's settings order, rewrites seen by later deciders",
+     "class": "within",
+     "why": "Preserves today's merged answer, which FR-002 requires."
+    },
+    {
+     "id": "D3",
+     "summary": "Dispatcher lands empty; each guard moves in its own commit, shell entry removed with Rust decider added",
+     "class": "within",
+     "why": "FR-003: Python runs until the replacement passes, no piece runs both."
+    },
+    {
+     "id": "D4",
+     "summary": "The shell suite replayed against l7r-guard --only <guard> is the verdict replay; unit tests under 0.1 s",
+     "class": "within",
+     "why": "FR-002 (same verdicts on every suite case) and FR-008."
+    },
+    {
+     "id": "D5",
+     "summary": "Guard log format, escape tokens, transcript and clone-map reads ported first as a shared library",
+     "class": "within",
+     "why": "Keeps behavior identical (FR-002); ordering inside phase 1 is design."
+    },
+    {
+     "id": "D6",
+     "summary": "Facts several deciders need read once per process",
+     "class": "within",
+     "why": "FR-006 carries over 444 T36's read-once fixes."
+    },
+    {
+     "id": "D7",
+     "summary": "Wrapper builds from its own tree, keeps the last binary that passed --self-check, runs it on a failed build; fails open with notice and guard-log line only when no good binary was ever built",
+     "class": "within",
+     "why": "Does not relax FR-002: a crashing hook already passes today under Claude Code's non-blocking-error rule, and keeping the last good binary is stricter than that, so no case's verdict is weakened. The supporting claim that make land-tooling runs make hooks-test is a repository fact not checkable from the bundle; it is justification, not a decision."
+    },
+    {
+     "id": "guard-order",
+     "summary": "Guards ported by measured cost (pair, gate, measure, no-poll, main-tree, record-edit), then settings order",
+     "class": "within",
+     "why": "FR-001 orders the phases, not the guards inside phase 1."
+    },
+    {
+     "id": "serde_json",
+     "summary": "serde_json is the one external crate phase 1 adds; later crates named in each phase's amendment",
+     "class": "within",
+     "why": "Implementation choice; the request is the port, not a dependency rule."
+    },
+    {
+     "id": "workspace",
+     "summary": "A Cargo workspace of crates by phase, rust/guard beside rust/phases",
+     "class": "within",
+     "why": "Structure of the Rust that replaces the Python; no request clause narrowed."
+    },
+    {
+     "id": "WB-6",
+     "summary": "scripts/hooks/lib/hm_*.py deleted as each last caller moves",
+     "class": "within",
+     "why": "FR-001 phase 1 (scripts/hooks/ and the libraries its guards call), deletion on switch per FR-003."
+    },
+    {
+     "id": "WB-7",
+     "summary": "tests/hooks/ 41 inline sites replaced as each suite is replayed; hookdeps/hooktrace/hookbench ported as l7r-guard subcommands, test_hooks_cases.py as crate tests",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests, and tests/hooks/ inline sites are phase 1. Closes the previous round's gap. Where the ported helpers live is design."
+    },
+    {
+     "id": "WB-8",
+     "summary": "Phase 1 close: m:hooks-bash and m:pair-hooks-suite re-run, phase 1's share of both censuses (every .py and inline site under scripts/hooks/ and tests/hooks/) empty, recorded",
+     "class": "within",
+     "why": "FR-001 (both censuses re-run at each phase end), FR-010, SC-001. The directory restatement of phase 1's share is faithful to FR-001's 'scripts/hooks/ and the libraries its guards call' provided m:guard-sources' 33 library files lie under scripts/hooks/, as Scale/Scope asserts ('everything FR-001 gives it'); any that lies elsewhere stays inside the feature (phase 3 takes the rest of scripts/, SC-005 empties both censuses), so nothing leaves the request - at most a file's phase shifts."
+    },
+    {
+     "id": "phase-2-approach",
+     "summary": "Gate path (ci/, scripts/gates, scripts/measure, _invocation.py, switches.py, gate recipes' and named scripts' inline Python) to a Rust binary; Rust-only route early; planned to task when opened",
+     "class": "within",
+     "why": "Matches FR-001's phase 2 share item by item; deferral to a reviewed plan amendment is not a narrowing."
+    },
+    {
+     "id": "phase-3-approach",
+     "summary": "Rest of scripts/, tools/, pipeline/, engine helpers, every .py and shell-inline Python under specs/, recorded Python measurements rewritten, Makefile's other recipes, .specify/scripts/bash/",
+     "class": "within",
+     "why": "Now carries every phase 3 item of both FR-001 censuses, including the Makefile's other recipes and specs/ shell scripts the previous round found missing."
+    },
+    {
+     "id": "phase-4-approach",
+     "summary": "Mode A planner, pool/ generators, interactive/, then containers' Python, lockfile pairs, pyproject tables, __init__.py last; close is SC-005",
+     "class": "within",
+     "why": "Matches FR-001's phase 4 share and SC-005."
+    },
+    {
+     "id": "perf-bookends",
+     "summary": "No make perf bookends through phase 3; each phase measured against spec figures (FR-010); phase 4 takes bookends for Mode A sheets",
+     "class": "within",
+     "why": "No map is rolled before phase 4; FR-010's per-phase measurement is kept."
+    },
+    {
+     "id": "phased-planning",
+     "summary": "Phase 1 planned to the task, phases 2-4 to approach, each amended and reviewed when it opens",
+     "class": "within",
+     "why": "Deferral with its own spec-fidelity review; nothing in the request or spec is dropped."
     }
    ]
   }
