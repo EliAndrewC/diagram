@@ -118,7 +118,8 @@ fn the_loop_passes_each_period_and_holds_the_host_to_one() {
         std::process::id().to_string()
     );
     let held = std::fs::File::create(c.state.join("lock")).unwrap();
-    assert!(flock(&held, "-n"));
+    // a child forked on another test's thread can hold the just-closed lock for an instant, so this waits for it
+    assert!((0..500).any(|_| flock(&held, "-n")));
     assert_eq!(run(&c), 0);
     assert_eq!(lines(&root.join("passes")), 2);
     assert!(flock(&held, "-u"));
