@@ -22,7 +22,7 @@ nothing behind it in physical reality, so each is `research: rendering`.
       research: rendering
 - [ ] T004 The wrapper, `scripts/hooks/l7r-guard.sh` (plan D7): runs the binary built from its own tree, builds it first when its sources are newer, keeps each build that passes `--self-check` as the last good one and runs that one when a build fails to compile or fails its self-check, and only with none ever built lets the call through with a notice and a guard-log line (`outcome=failed-open`); its suite `tests/hooks/test-l7r-guard.sh`: a stale build rebuilt, a broken build falling back to the last good binary, no binary failing open
       research: rendering
-- [ ] T005 The settings switch landed empty: `.claude/settings.json` calls `scripts/hooks/l7r-guard.sh <event>` once for each event beside the existing guards, its guard list empty; `m:hooks-bash`'s command re-run with it in place, the dispatcher's own cost recorded as phase 1's floor; landed alone with `make land-tooling` so every session runs it
+- [ ] T005 The settings switch landed empty: `.claude/settings.json` calls `scripts/hooks/l7r-guard.sh <event>` once for each event beside the existing guards, its guard list empty, each entry's timeout covering a cold build (T004 measured 5.7 s for a clone's first build through the wrapper; most entries today carry 10 s); `m:hooks-bash`'s command re-run with it in place, the dispatcher's own cost recorded as phase 1's floor; landed alone with `make land-tooling` so every session runs it
       research: rendering
 
 ### User Story 1 - every tool call answers at once (plan work breakdown 5, 7)

@@ -220,10 +220,27 @@ def deps_for(guard: str) -> list[str]:
     return sorted(closure({guard, suite}))
 
 
+#: THE RUST GUARD'S SOURCES (feature 449 T004): a suite that drives `l7r-guard` - the wrapper's, and from T006 each guard's, replayed
+#: against `l7r-guard --only` - tests the binary built from these, which the name index over scripts/ and tests/hooks/ never sees;
+#: without them a change to a Rust guard left every suite "unchanged since it last went green"
+RUST_GUARD = ("rust/guard", "rust/Cargo.toml", "rust/Cargo.lock")
+
+
+def rust_inputs(guard: str) -> list[pathlib.Path]:
+    """The Rust guard's source files, sorted, when the guard or its suite names `l7r-guard`; else none."""
+    suite = "test-" + (guard[:-3] + ".sh" if guard.endswith(".py") else guard)
+    if "l7r-guard" not in _text(guard) + _text(suite):
+        return []
+    found = [q for r in RUST_GUARD for q in ([ROOT / r] if (ROOT / r).is_file() else sorted((ROOT / r).rglob("*"))) if q.is_file()]
+    return sorted(found)
+
+
 def key_for(guard: str) -> str:
     h = hashlib.sha256()
     for name in deps_for(guard):
         h.update(_text(name).encode())
+    for q in rust_inputs(guard):
+        h.update(q.read_bytes())
     return h.hexdigest()[:16]
 
 
@@ -375,8 +392,10 @@ if __name__ == "__main__":
             for n in deps_for(g):
                 if n in _INDEX and _INDEX[n].is_file():
                     h.update(_INDEX[n].read_bytes())
+            for q in rust_inputs(g):
+                h.update(q.read_bytes())
             print(g, h.hexdigest()[:16])
     elif len(sys.argv) > 2 and sys.argv[1] == "--deps":
-        print(" ".join(str(_INDEX[n].relative_to(ROOT)) for n in deps_for(sys.argv[2]) if n in _INDEX))
+        print(" ".join([str(_INDEX[n].relative_to(ROOT)) for n in deps_for(sys.argv[2]) if n in _INDEX] + [str(q.relative_to(ROOT)) for q in rust_inputs(sys.argv[2])]))
     elif len(sys.argv) > 1:
         print(key_for(sys.argv[1]))

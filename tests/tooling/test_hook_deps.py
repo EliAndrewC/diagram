@@ -209,3 +209,14 @@ def test_a_test_that_scans_the_scripts_directory_depends_on_the_whole_tree() -> 
     """The plan review of amendment 3: `(REPO / "scripts").rglob("*")` reached nothing by the scan, and would never re-run."""
     for f in ("tests/test_citation_rule_inventory.py", "tests/test_building_types.py", "tests/tooling/test_guard_message_durations.py"):
         assert _rel(list(hookdeps._INDEX.values())) <= _rel(hookdeps.pydeps(REPO / f)), f
+
+
+def test_a_suite_that_drives_the_rust_guard_is_keyed_by_its_sources(monkeypatch) -> None:  # noqa: ANN001
+    """449 T004: the suites replayed against `l7r-guard` test the binary built from rust/guard/, which the name index never sees."""
+    inputs = hookdeps.rust_inputs("l7r-guard.sh")
+    assert hookdeps.ROOT / "rust/Cargo.toml" in inputs and any(q.suffix == ".rs" for q in inputs)
+    assert hookdeps.rust_inputs("readme-hooks.sh") == [], "a suite that never names the binary is not keyed by it"
+    before = hookdeps.key_for("l7r-guard.sh")
+    real = pathlib.Path.read_bytes
+    monkeypatch.setattr(pathlib.Path, "read_bytes", lambda q: real(q) + (b"// changed" if q.suffix == ".rs" else b""))
+    assert hookdeps.key_for("l7r-guard.sh") != before, "a Rust guard change left the wrapper's suite fresh"
