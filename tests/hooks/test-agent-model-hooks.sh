@@ -20,7 +20,7 @@ printf -- '---\nname: quote-check\nmodel: opus\neffort: medium\n---\nbody\n' > "
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 dispatch() { # dispatch <json tool_input> -> rc in $T/rc, stderr in $T/err, stdout returned
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-agent-model","cwd":sys.argv[2],"tool_name":"Agent","tool_input":json.loads(sys.argv[1])}))' "$1" "$FIX" \
+  jq -nc '{"session_id":"t-agent-model","cwd":$ARGS.positional[1],"tool_name":"Agent","tool_input":($ARGS.positional[0]|fromjson)}' --args -- "$1" "$FIX" \
     | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }

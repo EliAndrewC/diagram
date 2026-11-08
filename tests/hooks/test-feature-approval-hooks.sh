@@ -54,7 +54,7 @@ open(sys.argv[1], "w").write("\n".join(json.dumps(r) for r in recs) + "\n")
 PY
 
 run() {  # run <command> -> stderr+stdout, rc in RC
-  OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","transcript_path":sys.argv[2],"tool_input":{"command":sys.argv[1]}}))' "$1" "$TR/t.jsonl" \
+  OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","transcript_path":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" "$TR/t.jsonl" \
         | ( cd "$FIX" && "$HOOK" pretool 2>&1 )); RC=$?
 }
 spec() {  # spec <dir> <approval line or empty>
@@ -205,7 +205,7 @@ echo "5. it fires only because the hook calls the decider"
 # the same property on the Rust guard (feature 449 T025 decision (d)): the shell's text cannot be sed-stripped, so another guard, whose decider this is not, answers the same call
 SANS="$HERE/no-branch-hooks.sh"
 spec 378-widget-cache ""
-OUT2=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","transcript_path":sys.argv[2],"tool_input":{"command":sys.argv[1]}}))' "git add -A" "$TR/t.jsonl" | ( cd "$FIX" && "$SANS" pretool 2>&1 )); RC2=$?
+OUT2=$(jq -nc '{"tool_name":"Bash","transcript_path":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "git add -A" "$TR/t.jsonl" | ( cd "$FIX" && "$SANS" pretool 2>&1 )); RC2=$?
 [ "$RC2" -eq 0 ] && ok "with the decider's call removed the same command passes - the test sees the guard, not a stub" || no "the stripped hook still blocked" "(rc=$RC2)"
 clean
 

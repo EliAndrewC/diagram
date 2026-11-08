@@ -20,7 +20,7 @@ git -C "$TMP" add . && git -C "$TMP" -c user.email=t@t -c user.name=t commit -q 
 printf 'changed\n' >> "$TMP/dirty.py"; printf 'changed\n' >> "$TMP/sub/deep.py"
 
 run() {  # run <command-string> -> sets RC; the hook sees $TMP as its cwd
-  printf '{"tool_input":{"command":%s}}' "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1")" \
+  printf '{"tool_input":{"command":%s}}' "$(jq -nc '$ARGS.positional[0]' --args -- "$1")" \
     | (cd "$TMP" && "$HOOK" pretool >/dev/null 2>&1)
   RC=$?
 }
@@ -41,7 +41,7 @@ git -C "$MRG" checkout -q main; printf 'ours\n' > "$MRG/f.txt"; git -C "$MRG" co
 printf 'my own uncommitted edit\n' >> "$MRG/mine.txt"
 
 mrun() {  # the same shape as run(), against the merge fixture
-  printf '{"tool_input":{"command":%s}}' "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1")" \
+  printf '{"tool_input":{"command":%s}}' "$(jq -nc '$ARGS.positional[0]' --args -- "$1")" \
     | (cd "$MRG" && "$HOOK" pretool >/dev/null 2>&1)
   RC=$?
 }

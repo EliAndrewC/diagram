@@ -21,7 +21,7 @@ G="$C/.git"
 printf -- '- [x] T01 done\n- [ ] T02 the next thing\n- [ ] GM review (make gm-reviewed F=385)\n' > "$C/specs/385-x/tasks.md"
 : > "$T/tr.jsonl"
 stop() { printf '{"cwd": "%s", "transcript_path": "%s"}' "$C" "$T/tr.jsonl" | SET_DOWN_ROOT="$C" "$HOOK" stop 2>"$T/err"; echo $?; }
-line() { python3 -c 'import json,sys; print(json.dumps({"type": "user", "message": {"content": sys.argv[1]}}))' "$1" >> "$T/tr.jsonl"; }
+line() { jq -nc '{"type": "user", "message": {"content": $ARGS.positional[0]}}' --args -- "$1" >> "$T/tr.jsonl"; }
 
 echo "1. silent where no feature was begun"
 [ "$(stop)" = 0 ] && ok "no task-start: the turn ends" || no "no task-start"
@@ -33,7 +33,7 @@ rc=$(stop)
 ls "$GUARD_LOG_DIR" >/dev/null 2>&1 && ok "the refusal is recorded in the guard log" || no "guard log"
 
 echo "3. work still running lets the turn end; reported back, it does not"
-launch() { python3 -c 'import json,sys; print(json.dumps({"type": "user", "message": {"content": [{"type": "tool_result", "content": sys.argv[2]}]}, "toolUseResult": {sys.argv[1]: sys.argv[3]}}))' "$1" "$2" "$3" >> "$T/tr.jsonl"; }
+launch() { jq -nc '{"type": "user", "message": {"content": [{"type": "tool_result", "content": $ARGS.positional[1]}]}, "toolUseResult": {($ARGS.positional[0]): $ARGS.positional[2]}}' --args -- "$1" "$2" "$3" >> "$T/tr.jsonl"; }
 launch backgroundTaskId "Command running in background with ID: b1abc. Output is being written to: x" b1abc
 [ "$(stop)" = 0 ] && ok "a background command not reported back" || no "background running"
 line "<task-notification><task-id>b1abc</task-id><status>completed</status></task-notification>"
@@ -43,20 +43,20 @@ launch agentId "Async agent launched successfully. agentId: a9f00 (internal ID)"
 line "<task-id>a9f00</task-id>"
 launch backgroundTaskId "Command running in background with ID: b2stop. Output is being written to: x" b2stop
 [ "$(stop)" = 0 ] && ok "a second background command running" || no "second running"
-python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t1", "name": "TaskStop", "input": {"task_id": "b2stop"}}]}}))' >> "$T/tr.jsonl"
+jq -nc '{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t1", "name": "TaskStop", "input": {"task_id": "b2stop"}}]}}' >> "$T/tr.jsonl"
 [ "$(stop)" = 2 ] && ok "stopped with TaskStop: no notification comes, the stop is its end - refused again (2026-10-28)" || no "TaskStop left it running"
-python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t2", "name": "Bash", "input": {"command": "echo Command running in background with ID: b3quote"}}]}}))' >> "$T/tr.jsonl"
+jq -nc '{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "t2", "name": "Bash", "input": {"command": "echo Command running in background with ID: b3quote"}}]}}' >> "$T/tr.jsonl"
 [ "$(stop)" = 2 ] && ok "a launch notice quoted in the session's own command is not a launch - refused (2026-10-28)" || no "a quoted notice counted as running"
 line "Note: a file changed - Command running in background with ID: b4note. Output is being written to: x"
 [ "$(stop)" = 2 ] && ok "a launch notice quoted in a system note is not a launch - refused (2026-10-28)" || no "a noted notice counted as running"
 
-python3 -c 'import json; print(json.dumps({"type": "user", "message": {"content": [{"type": "tool_result", "content": "Workflow launched in background. Task ID: w9wave"}]}, "toolUseResult": {"status": "async_launched", "taskId": "w9wave", "taskType": "local_workflow"}}))' >> "$T/tr.jsonl"
+jq -nc '{"type": "user", "message": {"content": [{"type": "tool_result", "content": "Workflow launched in background. Task ID: w9wave"}]}, "toolUseResult": {"status": "async_launched", "taskId": "w9wave", "taskType": "local_workflow"}}' >> "$T/tr.jsonl"
 [ "$(stop)" = 0 ] && ok "a workflow not reported back is running (2026-11-01)" || no "a running workflow read as nothing running"
 line "<task-notification><task-id>w9wave</task-id><status>completed</status></task-notification>"
 [ "$(stop)" = 2 ] && ok "the workflow reported back: refused again" || no "workflow reported back"
 
 echo "4. a question is no way out (the plan review, 2026-10-19)"
-python3 -c 'import json; print(json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": "Shall I go on to the next task?"}]}}))' >> "$T/tr.jsonl"
+jq -nc '{"type": "assistant", "message": {"content": [{"type": "text", "text": "Shall I go on to the next task?"}]}}' >> "$T/tr.jsonl"
 [ "$(stop)" = 2 ] && ok "a turn ending on a question is refused" || no "question"
 
 echo "5. make set-down: a reason of two words or more, recorded; it counts after the task-start only"

@@ -27,7 +27,7 @@ cap.mkdir(parents=True)
 PY
 
 fetch() {  # fetch <url> <agent_id> [tool]
-  OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"s1","agent_id":sys.argv[2],"tool_name":sys.argv[3],"tool_input":{"url":sys.argv[1],"prompt":"read"}}))' "$1" "$2" "${3:-WebFetch}" \
+  OUT=$(jq -nc '{"session_id":"s1","agent_id":$ARGS.positional[1],"tool_name":$ARGS.positional[2],"tool_input":{"url":$ARGS.positional[0],"prompt":"read"}}' --args -- "$1" "$2" "${3:-WebFetch}" \
         | ( cd "$FIX/repo" && "$HOOK" pretool 2>&1 )); RC=$?
 }
 
@@ -50,7 +50,7 @@ ls "$LOGROOT"/*.json >/dev/null 2>&1 && grep -q '"guard": "archive-first"' "$LOG
 echo "3. it fires only through its decider"
 # the same property on the Rust guard (feature 449 T030 decision (c)): another guard, whose decider this is not, answers the same call
 SANS="$HERE/no-branch-hooks.sh"
-OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"s2","tool_name":"WebFetch","tool_input":{"url":sys.argv[1]}}))' "$URL" | ( cd "$FIX/repo" && "$SANS" pretool 2>&1 )); RC=$?
+OUT=$(jq -nc '{"session_id":"s2","tool_name":"WebFetch","tool_input":{"url":$ARGS.positional[0]}}' --args -- "$URL" | ( cd "$FIX/repo" && "$SANS" pretool 2>&1 )); RC=$?
 [ "$RC" -eq 0 ] && ok "with its check removed the same fetch passes - the test sees the guard" || no "the stripped hook still blocked" "(rc=$RC)"
 
 echo

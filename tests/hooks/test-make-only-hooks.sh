@@ -22,7 +22,7 @@ trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
 
 PASS=0; FAIL=0
 
-ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
+ev() { jq -nc '{"session_id":"m1","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1"; }
 run() { ev "$1" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; echo $?; }
 
 check() { # label expected(ok|blocked) command

@@ -24,7 +24,7 @@ hold() { # hold [allow json] - the state make task-start writes
 }
 export PHASE_SOURCE_GLOB="$R/.git/phase-sources.json"
 call() { # call <tool> <json tool_input> [cwd] -> rc in $T/rc
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-ps","tool_name":sys.argv[1],"tool_use_id":"now","cwd":sys.argv[3],"tool_input":json.loads(sys.argv[2])}))' "$1" "$2" "${3:-$R}" \
+  jq -nc '{"session_id":"t-ps","tool_name":$ARGS.positional[0],"tool_use_id":"now","cwd":$ARGS.positional[2],"tool_input":($ARGS.positional[1]|fromjson)}' --args -- "$1" "$2" "${3:-$R}" \
     | "$HOOK" pretool 2>"$T/err"; echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }

@@ -11,8 +11,8 @@ SHEET=/diagram/.clones/RESEARCH-CLAIMS.md
 
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
-bash_cmd() { OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1" | "$HOOK" pretool 2>&1); RC=$?; }
-file_tool() { OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":sys.argv[1],"tool_input":{"file_path":sys.argv[2]}}))' "$1" "$2" | "$HOOK" pretool 2>&1); RC=$?; }
+bash_cmd() { OUT=$(jq -nc '{"tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" | "$HOOK" pretool 2>&1); RC=$?; }
+file_tool() { OUT=$(jq -nc '{"tool_name":$ARGS.positional[0],"tool_input":{"file_path":$ARGS.positional[1]}}' --args -- "$1" "$2" | "$HOOK" pretool 2>&1); RC=$?; }
 
 echo "1. every hand route to the sheet is refused, naming the tool"
 for c in "cat $SHEET" "grep -n 0060 $SHEET" "tail -5 $SHEET" "echo 'x | 376 | Q=0060' >> $SHEET" "sed -i 's/a/b/' $SHEET" \
@@ -47,7 +47,7 @@ grep -q '"guard": "claims-file"' "$LOGROOT"/*.json 2>/dev/null && ok "a refusal 
 echo "4. it fires only through its own check"
 # the same property on the Rust guard (feature 449 T031 decision (b)): another guard, whose decider this is not, answers the same call
 SANS="$HERE/no-branch-hooks.sh"
-OUT=$(python3 -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "cat $SHEET" | "$SANS" pretool 2>&1); RC=$?
+OUT=$(jq -nc '{"tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "cat $SHEET" | "$SANS" pretool 2>&1); RC=$?
 [ "$RC" -eq 0 ] && ok "with its check removed the same command passes - the test sees the guard" || no "the stripped hook still blocked" "(rc=$RC)"
 
 echo

@@ -329,7 +329,7 @@ case_13() {  # 10 s of its chain, measured as one 2026-10-12
 # testmap is dispatched (section 10), othermap after it: the span between the two dispatch clocks is recorded as parallel
 # or serialized. (The stop branch's demand that every owed map be dispatched before the turn ends is retired, feature 383.)
 OTHER=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"UNIT: settlement-review--othermap\nreview /x/.git/review-snapshot/settlement-review--othermap/clone against main"}')
-FIRST_AT=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["dispatched"]["settlement-review--testmap"]["at"])' "$CLONE/.git/pairing-state.json")
+FIRST_AT=$(jq -r '.["dispatched"]["settlement-review--testmap"]["at"]' "$CLONE/.git/pairing-state.json")
 check "the second map's dispatch, a fixture-clock half-minute later, is permitted" '[ "$(cd "$CLONE" && printf "%s" "$OTHER" | PAIR_NOW=$((FIRST_AT + 30)) "$HOOK" pretool >/dev/null 2>&1; echo $?)" -eq 0 ]'
 check "...and every owed map now dispatched within the span records reviews-parallel" 'grep -rl "reviews-parallel" "$GUARD_LOG_ROOT" >/dev/null'
 # the serialized shape: the same two maps dispatched two minutes apart
@@ -448,7 +448,7 @@ mkdir -p "$CLONE/specs/999-g" "$CLONE/.specify" "$CLONE/.git/l7r-events"
 printf '# 999\n\n**Status**: In progress\n' > "$CLONE/specs/999-g/spec.md"
 printf '# Tasks\n\n## Occasions\n\n- none: fixture\n\n## Work\n\n- [ ] T01 x\n' > "$CLONE/specs/999-g/tasks.md"
 printf '{"feature_directory": "specs/999-g"}' > "$CLONE/.specify/feature.json"
-started() { python3 -c 'import datetime, json, sys, time; print(json.dumps({"t": datetime.datetime.fromtimestamp(time.time() - int(sys.argv[1]), datetime.UTC).isoformat().replace("+00:00", "Z"), "ev": ""}))' "$1" > "$CLONE/.git/l7r-events/999-g.jsonl"; }
+started() { jq -nc '{"t": (now - ($ARGS.positional[0]|tonumber) | todate), "ev": ""}' --args -- "$1" > "$CLONE/.git/l7r-events/999-g.jsonl"; }
 started 600; green
 early=$(stdin_for Agent '{"subagent_type":"glyph-check","prompt":"UNIT: glyph-check--kiln--glyphmap\nDECIDE_OK=\"a fixture feature with no plan\"\njudge it"}')
 out="$(run_pretool "$early")"

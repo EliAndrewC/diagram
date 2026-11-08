@@ -20,7 +20,7 @@ no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 SHARED=$(python3 -c 'print("\n".join(f"Context line {i}: what every check of this kind needs to know about the record." for i in range(130)))')
 dispatch() { # dispatch <session> <type> <prompt> [<seconds after the last>] -> rc in $T/rc, stderr in $T/err
   NOW=$((NOW + ${4:-60}))
-  python3 -c 'import json,sys; print(json.dumps({"session_id":sys.argv[1],"cwd":sys.argv[4],"tool_name":"Agent","tool_input":{"subagent_type":sys.argv[2],"prompt":sys.argv[3],"description":"x"}}))' "$1" "$2" "$3" "$FIX" \
+  jq -nc '{"session_id":$ARGS.positional[0],"cwd":$ARGS.positional[3],"tool_name":"Agent","tool_input":{"subagent_type":$ARGS.positional[1],"prompt":$ARGS.positional[2],"description":"x"}}' --args -- "$1" "$2" "$3" "$FIX" \
     | ( cd "$FIX" && L7R_AGENT_NOW="$NOW" "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }
@@ -83,7 +83,7 @@ dispatch s4 record-format "Read /tmp/l7r-check/r1/MANIFEST.md and rule on it." 1
 [ "$(rc)" -eq 0 ] && ok "another type is its own count" || no "another type was refused" "(rc=$(rc))"
 dispatch s4 quote-check "Read /tmp/l7r-check/q5/MANIFEST.md and rule on it. WAVE_OK: a seeded measurement batch" 1
 [ "$(rc)" -eq 0 ] && ok "WAVE_OK with a reason passes" || no "the escape was refused" "(rc=$(rc))"
-NOW=$((NOW + 1)); python3 -c 'import json,sys; print(json.dumps({"session_id":"s4","cwd":sys.argv[1],"tool_name":"Agent","tool_input":{"subagent_type":"quote-check","prompt":"Read /tmp/l7r-check/q6/MANIFEST.md and rule on it.","description":"x"}}))' "$FIX" \
+NOW=$((NOW + 1)); jq -nc '{"session_id":"s4","cwd":$ARGS.positional[0],"tool_name":"Agent","tool_input":{"subagent_type":"quote-check","prompt":"Read /tmp/l7r-check/q6/MANIFEST.md and rule on it.","description":"x"}}' --args -- "$FIX" \
   | ( cd "$FIX" && L7R_AGENT_NOW="$NOW" L7R_WAVE_UNIT=1 "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
 [ "$(rc)" -eq 0 ] && ok "a check-wave unit the Workflow guard feeds through is not counted as a hand launch" || no "a wave unit was refused as a wave" "(rc=$(rc))"
 dispatch s4 quote-check "Read /tmp/l7r-check/q7/MANIFEST.md and rule on it." 30

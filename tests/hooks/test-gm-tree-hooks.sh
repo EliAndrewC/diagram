@@ -10,7 +10,7 @@ trap 'rm -rf "$T"' EXIT
 export GUARD_LOG_DIR="$T/guard-log"
 G=/host-l7r-repo/gm-assistant
 
-js() { python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1"; }
+js() { jq -nc '$ARGS.positional[0]' --args -- "$1"; }
 bash_call() { # bash_call <cwd> <command>
   OUT=$(printf '{"session_id":"t","cwd":"%s","tool_name":"Bash","tool_input":{"command":%s}}' "$1" "$(js "$2")" | "$HOOK" pretool 2>&1); RC=$?
 }

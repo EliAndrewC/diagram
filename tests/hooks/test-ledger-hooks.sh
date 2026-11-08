@@ -30,7 +30,7 @@ git -C "$FIX" add -A >/dev/null 2>&1
 git -C "$FIX" commit -qm base >/dev/null 2>&1
 
 run() {  # run <command> -> output, rc in RC
-  OUT=$(python3 -c 'import json,sys; print(json.dumps({"session_id":"t","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1" \
+  OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" \
         | ( cd "$FIX" && "$HOOK" pretool 2>&1 )); RC=$?
 }
 

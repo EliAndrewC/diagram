@@ -49,13 +49,13 @@ no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 
 agent() { # agent <subagent_type> <prompt> [transcript_path] -> the hook's stdout; rc via rc(), stderr in $T/err
   # GUARD_EDIT_OK: feature 249 - the rc goes through a file because callers capture stdout in a subshell
-  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-review-round","cwd":sys.argv[3],"transcript_path":sys.argv[4],"tool_name":"Agent","tool_input":{"subagent_type":sys.argv[1],"prompt":sys.argv[2],"description":"x"}}))' "$1" "$2" "$FIX" "${3:-$TP}" \
+  jq -nc '{"session_id":"t-review-round","cwd":$ARGS.positional[2],"transcript_path":$ARGS.positional[3],"tool_name":"Agent","tool_input":{"subagent_type":$ARGS.positional[0],"prompt":$ARGS.positional[1],"description":"x"}}' --args -- "$1" "$2" "$FIX" "${3:-$TP}" \
     | ( cd "$FIX" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
 }
 rc() { cat "$T/rc"; }
 logged() { grep -rlq "\"rule\": *\"$1\"" "$GUARD_LOG_ROOT" 2>/dev/null || grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
 state() { "$HOOK" state "$FIX" "$1"; }
-prompt_of() { python3 -c 'import json,sys; print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["prompt"])'; }
+prompt_of() { jq -r '.["hookSpecificOutput"]["updatedInput"]["prompt"]'; }
 
 echo "1. what passes untouched"
 out=$(printf '{"session_id":"t-review-round","tool_name":"Bash","tool_input":{"command":"make done"}}' | ( cd "$FIX" && "$HOOK" pretool 2>/dev/null )); rc=$?
@@ -88,7 +88,7 @@ printf '\n**FR-002 - the second requirement.** Added after round 1.\n' >> "$FIX/
 ORIG="MODE 3 round 2 of specs/301-fixture. Confirm the item; note the plan review question and any exception in plan.md; check every FR has an SC."
 out=$(agent spec-fidelity "$ORIG")
 [ "$(rc)" -eq 0 ] && ok "the dispatch is allowed" || no "the dispatch was refused" "(rc=$(rc))"
-printf '%s' "$out" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null && ok "...with valid JSON on stdout" || no "stdout is not valid JSON" "(${out:0:80})"
+printf '%s' "$out" | jq empty 2>/dev/null && ok "...with valid JSON on stdout" || no "stdout is not valid JSON" "(${out:0:80})"
 P=$(printf '%s' "$out" | prompt_of 2>/dev/null)
 case "$P" in "MODE 3 (VERIFY) - round 2 of feature 301-fixture"*) ok "...the prompt opens with the MODE 3 preamble naming round 2";; *) no "the preamble is missing or names the wrong round" "(${P:0:80})";; esac
 printf '%s' "$P" | grep -q '^+\*\*FR-002' && ok "...carrying the diff of the change" || no "the diff does not show FR-002 added"
@@ -156,7 +156,7 @@ logged REVIEW_ROUND_OK-no-reason && ok "...recorded blocked/REVIEW_ROUND_OK-no-r
 # GUARD_EDIT_OK: feature 251 - two new cases for the routing the guard gained (a rewritten round goes to the
 # medium-effort twin; a hand dispatch of the twin is a round of the same review); no existing case changes.
 echo "9. a rewritten round is ROUTED to spec-fidelity-verify, and a hand dispatch of the twin is the same review"
-type_of() { python3 -c 'import json,sys; print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"].get("subagent_type",""))'; }
+type_of() { jq -r '.hookSpecificOutput.updatedInput.subagent_type // ""'; }
 printf '\n**FR-006**\n' >> "$FIX/specs/301-fixture/spec.md"
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(printf '%s' "$out" | type_of 2>/dev/null)" = "spec-fidelity-verify" ] && ok "a rewritten spec-fidelity round carries the twin's subagent_type" || no "the rewrite did not route to the twin" "(${out:0:120})"
@@ -266,8 +266,8 @@ echo "11. a plan review's third round on one task waits for the round arbiter"
 PC="$T/plan-clone"; mkdir -p "$PC/specs/385-x" "$PC/.specify"; git -C "$PC" init -q 2>/dev/null
 printf -- '- [ ] T14 the work\n' > "$PC/specs/385-x/tasks.md"
 printf '{"feature_directory": "specs/385-x"}' > "$PC/.specify/feature.json"
-planned() { python3 -c 'import json,sys; print(json.dumps({"block_reviews": [{"verdict": "BLOCKED", "blocks": ["### T14 Decisions"]}] * int(sys.argv[1])}))' "$1" > "$PC/specs/385-x/plan-review.json"; }
-pagent() { python3 -c 'import json,sys; print(json.dumps({"session_id":"t-rr-plan","cwd":sys.argv[2],"tool_name":"Agent","tool_input":{"subagent_type":"spec-fidelity","prompt":sys.argv[1]}}))' "$1" "$PC" | ( cd "$PC" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"; }
+planned() { jq -nc '{"block_reviews": [range($ARGS.positional[0]|tonumber) | {"verdict": "BLOCKED", "blocks": ["### T14 Decisions"]}]}' --args -- "$1" > "$PC/specs/385-x/plan-review.json"; }
+pagent() { jq -nc '{"session_id":"t-rr-plan","cwd":$ARGS.positional[1],"tool_name":"Agent","tool_input":{"subagent_type":"spec-fidelity","prompt":$ARGS.positional[0]}}' --args -- "$1" "$PC" | ( cd "$PC" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"; }
 planned 1; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")
 [ "$(rc)" -eq 0 ] && ok "round 2 passes" || no "round 2 was held" "(rc=$(rc))"
 planned 2; out=$(pagent "MODE 4: PLAN REVIEW of 2 block(s)")

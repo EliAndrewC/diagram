@@ -22,7 +22,7 @@ teardown() { rm -rf "$STATE_DIR"; }
 # GUARD_EDIT_OK: feature 164 - a REAL json encode. The old printf left a multi-line command as raw
 # newlines inside a JSON string, which is invalid JSON, so a hook doing a proper parse saw an empty
 # command and every heredoc vector here passed for the wrong reason.
-bash_ev() { CMD="$1" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"]}}))'; }
+bash_ev() { CMD="$1" jq -nc '{"session_id":"g1","tool_name":"Bash","tool_input":{"command":env.CMD}}'; }
 edit_ev() { printf '{"session_id":"g1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 run()  { "$HOOK" pretool <<<"$1" 2>"$HOOK_ERR"; }
 
@@ -48,7 +48,7 @@ teardown
 # exactly as the bare `-k` does, and a plain `make test-file` must still clear it.
 echo "1a. a -k in another field arms nothing (feature 449 T007, constitution XIV: the shell read the command with a greedy sed)"
 setup
-desc_ev() { CMD="$1" DESC="$2" python3 -c 'import json,os; print(json.dumps({"session_id":"g1","tool_name":"Bash","tool_input":{"command":os.environ["CMD"],"description":os.environ["DESC"]}}))'; }
+desc_ev() { CMD="$1" DESC="$2" jq -nc '{"session_id":"g1","tool_name":"Bash","tool_input":{"command":env.CMD,"description":env.DESC}}'; }
 run "$(desc_ev 'make test-file FILE=tests/test_x.py' 'run the file -k fast')"; check "a whole-file run described with -k is allowed" ok $?
 run "$(bash_ev 'make done')"; check "make done passes: the description armed nothing" ok $?
 teardown

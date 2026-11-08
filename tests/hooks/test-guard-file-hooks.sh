@@ -26,7 +26,7 @@ PASS=0; FAIL=0
 # any live permit; section 8, which tests permits, sets its own clock on each call.
 export L7R_PERMIT_NOW=$(( $(date +%s) + 7200 ))
 
-ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":sys.argv[3],"tool_input":{"file_path":sys.argv[1],"new_string":sys.argv[2]}}))' "$1" "$2" "${3:-Edit}"; }
+ev() { jq -nc '{"session_id":"g","tool_name":$ARGS.positional[2],"tool_input":{"file_path":$ARGS.positional[0],"new_string":$ARGS.positional[1]}}' --args -- "$1" "$2" "${3:-Edit}"; }
 run() { ev "$1" "${2:-x}" "${3:-Edit}" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?; }
 
 check() { local rc; rc=$(run "$2" "${3:-x}" "${4:-Edit}")
@@ -133,7 +133,7 @@ else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FA
 echo
 echo "8. A GUARD FILE'S REASON OUTSIDE THE FILE: make guard-edit's permit (feature 170 amendment 1)"
 FIX=$(mktemp -d); git -C "$FIX" init -q; mkdir -p "$FIX/scripts/hooks"; : >"$FIX/Makefile"; : >"$FIX/scripts/hooks/x-hooks.sh"
-ev2() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":"Edit","tool_input":{"file_path":sys.argv[1],"old_string":sys.argv[2],"new_string":sys.argv[3]}}))' "$1" "$2" "$3"; }
+ev2() { jq -nc '{"session_id":"g","tool_name":"Edit","tool_input":{"file_path":$ARGS.positional[0],"old_string":$ARGS.positional[1],"new_string":$ARGS.positional[2]}}' --args -- "$1" "$2" "$3"; }
 case8() { # label, expected, file, old_string, new_string [, clock]
   local rc; rc=$(ev2 "$3" "$4" "$5" | L7R_PERMIT_NOW="${6:-}" "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?)
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then echo "  ok      $1"; PASS=$((PASS+1))
