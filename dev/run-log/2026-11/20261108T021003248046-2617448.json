@@ -1,0 +1,50 @@
+{
+  "utc": "2026-11-08T02:10:03Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 25,
+  "result": "failed: seeds",
+  "commit": "562da0a51",
+  "first_failure_s": 24.3,
+  "last_failure_s": 24.3,
+  "host": {
+    "load": [
+      5.58,
+      4.69
+    ],
+    "mem_avail_mb": [
+      7698,
+      7789
+    ],
+    "cpu_temp_c": [
+      101.0,
+      100.0
+    ],
+    "stall_s": {
+      "cpu": 0.1,
+      "io": 0.2,
+      "io_full": 0.1,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 6473,
+      "package": 3950
+    }
+  },
+  "phases": {
+    "preflight": 4.0,
+    "reference": 0.0,
+    "counters-inert": 2.0,
+    "static": 14.0,
+    "format": 0.0,
+    "typecheck": 1.0,
+    "pytest": 13.0,
+    "floors": 2.0,
+    "test-full": 19.0,
+    "seeds": 10.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "1 engine file(s) and 0 test module(s) changed, 1 Rust file(s) (11 test module(s) that read them)",
+  "selected": 160,
+  "collected": 160
+}
