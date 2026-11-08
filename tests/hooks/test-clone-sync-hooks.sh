@@ -69,7 +69,9 @@ bash -c 'exec -a claude-fake-live sleep 3600' & LIVE_PID=$!
 sess "$LIVE_PID" sid-live-other "Diagram (city)"
 bash -c 'exec -a claude-fake-dead sleep 300' & DEAD_PID=$!
 sess "$DEAD_PID" sid-dead-other "Diagram (hamlet)"
-kill "$DEAD_PID" 2>/dev/null; wait "$DEAD_PID" 2>/dev/null || true
+# GUARD_EDIT_OK: feature 449 - KILL, never TERM: a TERM landing before `bash -c` reaches its exec is deferred and then dropped by the exec, so
+# `sleep 300` ran its full 300 s under this `wait` (hooks-test recorded the suite at 306 s, one run in several; alone it takes 6 s).
+kill -9 "$DEAD_PID" 2>/dev/null; wait "$DEAD_PID" 2>/dev/null || true
 
 run() { # run <mode> <sid> <clonename> <file-under-clone> ; sets OUT/RC
   local fp="$FMAIN/.clones/$3/$4"
@@ -274,7 +276,7 @@ printf '{"pid": %s, "t": 0}' "$GLPID" > "$RUNC/.git/gate.lock"
 BEFORE=$(git -C "$RUNC" rev-parse HEAD)
 OUT=$(printf '{"session_id":"sid-run"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
-kill "$GLPID" 2>/dev/null; wait "$GLPID" 2>/dev/null; rm -f "$RUNC/.git/gate.lock"
+pkill -P "$GLPID" 2>/dev/null; kill "$GLPID" 2>/dev/null; wait "$GLPID" 2>/dev/null; rm -f "$RUNC/.git/gate.lock"
 case $OUT in *"clone merge skipped"*) printf 'ok    a live gate lock holds the prompt path off the merge (385 T30)\n' ;;
              *) printf 'FAIL  the prompt path merged under a gate lock\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
 [ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && [ -z "$(git -C "$RUNC" status --porcelain)" ] && printf 'ok    ...HEAD and the working tree unchanged under the lock\n' || { printf 'FAIL  HEAD moved under the lock\n'; FAILED=1; }

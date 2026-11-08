@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for new-file-hooks.sh - a new glossary file or registry entry takes a reserved prefix (feature 265 FR-010).
+# Tests for the new-file guard (rust/guard, replayed through its link) - a new glossary file or registry entry takes a reserved prefix (feature 265 FR-010).
 # Run: tests/hooks/test-new-file-hooks.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard's companion suite.
 #
@@ -7,7 +7,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # NEW_FILE_HOOK lets the proof-of-firing run this suite against a mutated copy of the guard.
-HOOK="${NEW_FILE_HOOK:-$HERE/../../scripts/hooks/new-file-hooks.sh}"
+HOOK="${NEW_FILE_HOOK:-$HERE/new-file-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

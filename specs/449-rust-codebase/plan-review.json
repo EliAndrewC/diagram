@@ -380,9 +380,9 @@
    "declared": "spec-fidelity"
   },
   "### T047 Approach (checklist part A)": {
-   "sha256": "2e3f15657a3275eaf325da945815ac6fe96d2ac3a20dda7a30321499cf399e93",
+   "sha256": "d7ca40280da6d8dad0e07cd73692199d2ab059773a3aa37145167c0d26f8ef5b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T048 Approach (checklist part A)": {
@@ -2287,6 +2287,33 @@
      "why": "Process for this one task. Green names the guard's suite in full (FR-002, SC-004) and the coverage floor (FR-004); no case, tree or requirement is excused."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T047 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T047(a)",
+     "summary": "The guard and lib/hm_new_file.py both move in-process (verdict, assigned, resolved, _top, the refusal's words); the library is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and the request is to make this a Rust codebase; carrying the refusal's words serves FR-002's 'verdicts and outputs'; removal follows the replay (FR-002 'before that Python is deleted', D3). Unstated: 'only caller is the guard' is a census whose search space the block does not give, and the two files it says it read cannot establish it repo-wide. Not a departure from the request; a missed caller would fail make hooks-test or make rust-test."
+    },
+    {
+     "id": "T047(b)",
+     "summary": "No tool is asked by path: the ledger read, mirror_of and each kind's directory depth move into the guard; reserve-prefix.py stays for its own phase; the suite still reserves through the real reserve-prefix.py.",
+     "class": "within",
+     "why": "Takes nothing out of what was asked. A Rust guard that spawned Python on a tool call would work against FR-007 and SC-001, and the request's stated reason is Python's inefficiency. reserve-prefix.py staying is FR-001's phase order and FR-003. FR-003's 'no piece runs both' is met: once switched the guard runs only Rust, and reserve-prefix.py as a tool still runs only Python. The 'arbiter's line' the block cites is not in the bundle and this ruling does not rest on it."
+    },
+    {
+     "id": "T047(c)",
+     "summary": "A ledger row's prefix is read only as the integer reserve-prefix.py writes; a numeric string, which Python's int() took, or a row of another form holds nothing, where Python crashed and passed the call.",
+     "class": "within",
+     "why": "A behavior difference from the Python, but outside what FR-002 reaches, which is 'every case its tests and its suites hold'; the request says nothing at this level. Conditional: D4's replay and this task's green exit enforce FR-002 here, so if test-new-file-hooks.sh holds a string-form or malformed-row case the exit goes red and (c) must be revisited. FR-002's XIV carve-out does not cover (c): crashing and passing a call is not refusing correct work, so such a case would be a plain FR-002 divergence, not a XIV fix. Unstated: the verdict a row that holds nothing produces when other rows are present (Python's crash passed the whole call). Unmeasured premise: 'a form nothing writes' gives no search space, and the block names only two files read, neither of them a ledger writer."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -3525,6 +3552,32 @@
      "summary": "Lands by make land-tooling with no work budget; green is the suite, make rust-test, cover and make hooks-test; red records the failure and stops to make arbiter-ask.",
      "class": "within",
      "why": "Process for this one task. Green names the guard's suite in full (FR-002, SC-004) and the coverage floor (FR-004); no case, tree or requirement is excused."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T047": {
+   "section_sha256": "d7ca40280da6d8dad0e07cd73692199d2ab059773a3aa37145167c0d26f8ef5b",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T047(a)",
+     "summary": "The guard and lib/hm_new_file.py both move in-process (verdict, assigned, resolved, _top, the refusal's words); the library is removed with the shell.",
+     "class": "within",
+     "why": "FR-001 replaces every Python file and the request is to make this a Rust codebase; carrying the refusal's words serves FR-002's 'verdicts and outputs'; removal follows the replay (FR-002 'before that Python is deleted', D3). Unstated: 'only caller is the guard' is a census whose search space the block does not give, and the two files it says it read cannot establish it repo-wide. Not a departure from the request; a missed caller would fail make hooks-test or make rust-test."
+    },
+    {
+     "id": "T047(b)",
+     "summary": "No tool is asked by path: the ledger read, mirror_of and each kind's directory depth move into the guard; reserve-prefix.py stays for its own phase; the suite still reserves through the real reserve-prefix.py.",
+     "class": "within",
+     "why": "Takes nothing out of what was asked. A Rust guard that spawned Python on a tool call would work against FR-007 and SC-001, and the request's stated reason is Python's inefficiency. reserve-prefix.py staying is FR-001's phase order and FR-003. FR-003's 'no piece runs both' is met: once switched the guard runs only Rust, and reserve-prefix.py as a tool still runs only Python. The 'arbiter's line' the block cites is not in the bundle and this ruling does not rest on it."
+    },
+    {
+     "id": "T047(c)",
+     "summary": "A ledger row's prefix is read only as the integer reserve-prefix.py writes; a numeric string, which Python's int() took, or a row of another form holds nothing, where Python crashed and passed the call.",
+     "class": "within",
+     "why": "A behavior difference from the Python, but outside what FR-002 reaches, which is 'every case its tests and its suites hold'; the request says nothing at this level. Conditional: D4's replay and this task's green exit enforce FR-002 here, so if test-new-file-hooks.sh holds a string-form or malformed-row case the exit goes red and (c) must be revisited. FR-002's XIV carve-out does not cover (c): crashing and passing a call is not refusing correct work, so such a case would be a plain FR-002 divergence, not a XIV fix. Unstated: the verdict a row that holds nothing produces when other rows are present (Python's crash passed the whole call). Unmeasured premise: 'a form nothing writes' gives no search space, and the block names only two files read, neither of them a ledger writer."
     }
    ],
    "verdict": "CLEAR"

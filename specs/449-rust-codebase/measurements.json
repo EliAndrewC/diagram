@@ -562,5 +562,17 @@
       "rust_guard_read_ms": 9.84,
       "phase_source_suite_cases": 17
     }
+  },
+  "new-file-hooks-ported": {
+    "quantity": "a Bash ls's cost in the new-file guard, the shell's against the Rust guard alone (T047)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/new-file-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only new-file-hooks PreToolUse in the clone, each log directed to a temporary directory",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through its link (21 cases)",
+    "value": {
+      "shell_bash_ms": 43.72,
+      "rust_guard_bash_ms": 10.66,
+      "new_file_suite_cases": 21
+    }
   }
 }

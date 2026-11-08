@@ -283,8 +283,8 @@ def reserve(kind: str, key: str, root: Path, mirror: Path | None = None, stub: s
 
 
 def reserved(kind: str, prefix: int, mirror: Path, key: str | None = None) -> bool:
-    """Whether the ledger holds this prefix for this kind - AND, given a key, for this key: what `new-file-hooks.sh`
-    asks of a new file. The key matters (plan review): a session that reserved 0950 for one term and another that took
+    """Whether the ledger holds this prefix for this kind - AND, given a key, for this key: what rust/guard's `new_file_hooks`
+    asks of a new file (which reads the ledger itself, the same way). The key matters (plan review): a session that reserved 0950 for one term and another that took
     0950 by hand for a different one both name a prefix the ledger holds; only the reservation's own key passes."""
     ledger = mirror / ".specify" / LEDGER
     if not ledger.is_file():

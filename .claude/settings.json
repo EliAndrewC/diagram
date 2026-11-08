@@ -171,15 +171,6 @@
         ]
       },
       {
-        "matcher": "Write|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/new-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/new-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard: a new glossary or registry file takes a reserved prefix"
-          }
-        ]
-      },
-      {
         "hooks": [
           {
             "type": "command",

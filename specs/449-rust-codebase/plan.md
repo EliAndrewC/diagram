@@ -400,6 +400,10 @@ censuses empty (work breakdown 8, FR-010).
 
 1. **The goal, in the world.** `new-file-hooks`'s verdicts given by the Rust guard, its shell gone.
 2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `new-file-hooks.sh` and `lib/hm_new_file.py`, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: every rule of `verdict`, `assigned`, `resolved` and `_top`, and the refusal's words. `lib/hm_new_file.py`'s only caller is the guard, so it is removed with the shell.
+   - (b) NO TOOL IS ASKED BY PATH. `reserve-prefix.py` has callers of its own (the `make reserve` target, `apply_edits.py`, `downloads.py`, `uncited.py`) and stays for its phase, but what the guard took from it is small and is really the guard's own logic under the arbiter's line: the ledger read (`reserved`), `mirror_of`, and how deep each kind's directory sits. Those move in-process; the suite still reserves through the real `reserve-prefix.py`, so a change to the ledger's form or the directories fails the replay.
+   - (c) A ledger row's prefix is read as the integer `reserve-prefix.py` writes; the Python's `int()` would also have taken a numeric string, a form nothing writes. A row of another form holds nothing, where the Python crashed and passed the call.
 3. **Where each comes from.** `tests/hooks/test-new-file-hooks.sh`, the guard's own suite; plan D3-D4.
 4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
 5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.

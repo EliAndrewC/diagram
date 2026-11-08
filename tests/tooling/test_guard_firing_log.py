@@ -368,7 +368,7 @@ _ESCAPES = {
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
-    "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 265 FR-010)"),
+    "RESERVE_OK": ("command", "matched in the Bash command by rust/guard's new_file_hooks through shared::escape (feature 265 FR-010, feature 449 T047)"),
     "PHASE_SOURCE_OK": ("command", "matched in the Bash command by rust/guard's phase_source_hooks through shared::escape (feature 444, feature 449 T046)"),
     "CHECK_NOT_OWED_OK": (
         "command",
