@@ -3,7 +3,7 @@
 # block fires. Run: tests/hooks/test-batching-hooks.sh   (exit 0 = all green)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../../scripts/hooks/batching-hooks.sh"
+HOOK="$HERE/batching-hooks.sh"
 PASS=0; FAIL=0
 # GUARD_EDIT_OK: feature 168 - batching-hooks.sh now RECORDS, so this suite writes into a throwaway
 # log rather than the session's real one; otherwise `make audit`'s census counts fixture firings.

@@ -41,16 +41,6 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Read|Grep|Glob|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/batching-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/batching-hooks.sh\"; exec \"$h\" pretool",
-            "timeout": 10
-          }
-        ]
-      },
-      {
         "_comment": "GUARD_EDIT_OK: feature 258 - registering a NEW guard, record-edit-hooks.sh: an edit aimed at an assembled record page is re-aimed at the one fragment holding its text, or refused where no fragment or several hold it. No existing guard changes.",
         "matcher": "Edit|Write",
         "hooks": [
@@ -365,16 +355,6 @@
           {
             "type": "command",
             "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" launched  # GUARD_EDIT_OK: feature 375 FR-003 - a launched check paired with its agent id",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Read|Grep|Glob|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/batching-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/batching-hooks.sh\"; exec \"$h\" posttool",
             "timeout": 10
           }
         ]

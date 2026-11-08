@@ -218,9 +218,9 @@
    "declared": "spec-fidelity"
   },
   "### T020 Approach (checklist part A)": {
-   "sha256": "21a1ddc255616d612ef2089d9b950fb887fb49fbe59a7ae582f7f45d7bc7bbbf",
+   "sha256": "29a3b3ea385d1dc83460995f4ac9aeb8d47d408d7bdea882604be8d0cf9b9ff9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
+   "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "### T021 Approach (checklist part A)": {
@@ -1759,6 +1759,51 @@
      "why": "This is D3 and D4 as written, and FR-003's never-both: the shell entry leaves in the same commit that adds the decider, after the suite passes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T020 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T020-a-whole-guard",
+     "summary": "pretool, posttool and the hand-run status all move to Rust; the state line keeps its format and path so a session across the switch keeps its window.",
+     "class": "within",
+     "why": "Moving the guard whole is D3's guard-by-guard unit; keeping the state file is what FR-002's same verdicts requires for a session spanning the switch. Neither the request nor the spec reduces anything here."
+    },
+    {
+     "id": "T020-a-payload-text",
+     "summary": "Tests on the raw payload text become tests on the event's own JSON text, the same substrings of the same fields.",
+     "class": "within",
+     "why": "A translation of the mechanism under FR-002, not a relaxation of it: the block claims the same substrings of the same fields, and D4's replay of every suite case against l7r-guard --only batching-hooks is what checks that claim before the switch. The ruling does not assert the equivalence; the exit does."
+    },
+    {
+     "id": "T020-b-log-inline",
+     "summary": "The notice's log line is written in-line rather than in the background.",
+     "class": "within",
+     "why": "FR-002's output is the line, not how it is scheduled; the background existed because guard_log started Python, the startup cost the request exists to remove."
+    },
+    {
+     "id": "T020-c-only-ignores-matcher",
+     "summary": "A suite's --only matches by event alone, ignoring the tool matcher, so the suite's Edit case still reaches the guard; live dispatch keeps the guard's tools Read|Grep|Glob|Bash.",
+     "class": "within",
+     "why": "No verdict moves in either place: the suite drove the shell directly with no matcher, so --only reproduces that footing, and the session's dispatch keeps the settings entry's tool list. It exists to keep FR-002's every-case replay with the expectations unedited, without using FR-002's XIV exception, so it is not a carve-out from the replay but the way of honoring it. Ruling rests on the plan's premises that the settings entry names those four tools and the suite had no matcher, which the bundle cannot confirm; a wrong premise on the suite side fails the green exit."
+    },
+    {
+     "id": "T020-order",
+     "summary": "T020 runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Follows D3 (dispatcher first, each guard its own commit) and FR-001's hooks-first phase."
+    },
+    {
+     "id": "T020-exits-landing",
+     "summary": "Green is the suite against the Rust guard plus rust-test, cover and hooks-test; red records and stops to the arbiter; landed by land-tooling, with the shell and its settings entry removed in the commit registering the decider.",
+     "class": "within",
+     "why": "The done line restates D3 and FR-003 (never both) and the exits restate D4 and FR-004's coverage; the landing target and stop route are process and take nothing from the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2482,6 +2527,50 @@
      "summary": "Green is the guard's suite against l7r-guard --only gm-tree-hooks with make rust-test, cover and hooks-test green; the shell and its settings entry go in the commit that registers the decider; red stops to make arbiter-ask.",
      "class": "within",
      "why": "This is D3 and D4 as written, and FR-003's never-both: the shell entry leaves in the same commit that adds the decider, after the suite passes."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T020": {
+   "section_sha256": "29a3b3ea385d1dc83460995f4ac9aeb8d47d408d7bdea882604be8d0cf9b9ff9",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T020-a-whole-guard",
+     "summary": "pretool, posttool and the hand-run status all move to Rust; the state line keeps its format and path so a session across the switch keeps its window.",
+     "class": "within",
+     "why": "Moving the guard whole is D3's guard-by-guard unit; keeping the state file is what FR-002's same verdicts requires for a session spanning the switch. Neither the request nor the spec reduces anything here."
+    },
+    {
+     "id": "T020-a-payload-text",
+     "summary": "Tests on the raw payload text become tests on the event's own JSON text, the same substrings of the same fields.",
+     "class": "within",
+     "why": "A translation of the mechanism under FR-002, not a relaxation of it: the block claims the same substrings of the same fields, and D4's replay of every suite case against l7r-guard --only batching-hooks is what checks that claim before the switch. The ruling does not assert the equivalence; the exit does."
+    },
+    {
+     "id": "T020-b-log-inline",
+     "summary": "The notice's log line is written in-line rather than in the background.",
+     "class": "within",
+     "why": "FR-002's output is the line, not how it is scheduled; the background existed because guard_log started Python, the startup cost the request exists to remove."
+    },
+    {
+     "id": "T020-c-only-ignores-matcher",
+     "summary": "A suite's --only matches by event alone, ignoring the tool matcher, so the suite's Edit case still reaches the guard; live dispatch keeps the guard's tools Read|Grep|Glob|Bash.",
+     "class": "within",
+     "why": "No verdict moves in either place: the suite drove the shell directly with no matcher, so --only reproduces that footing, and the session's dispatch keeps the settings entry's tool list. It exists to keep FR-002's every-case replay with the expectations unedited, without using FR-002's XIV exception, so it is not a carve-out from the replay but the way of honoring it. Ruling rests on the plan's premises that the settings entry names those four tools and the suite had no matcher, which the bundle cannot confirm; a wrong premise on the suite side fails the green exit."
+    },
+    {
+     "id": "T020-order",
+     "summary": "T020 runs after T005, in the plan's order, independent of the other guards.",
+     "class": "within",
+     "why": "Follows D3 (dispatcher first, each guard its own commit) and FR-001's hooks-first phase."
+    },
+    {
+     "id": "T020-exits-landing",
+     "summary": "Green is the suite against the Rust guard plus rust-test, cover and hooks-test; red records and stops to the arbiter; landed by land-tooling, with the shell and its settings entry removed in the commit registering the decider.",
+     "class": "within",
+     "why": "The done line restates D3 and FR-003 (never both) and the exits restate D4 and FR-004's coverage; the landing target and stop route are process and take nothing from the request."
     }
    ],
    "verdict": "CLEAR"

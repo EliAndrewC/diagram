@@ -419,5 +419,18 @@
       "suite_cases": 24,
       "suite_passed_against_rust": 24
     }
+  },
+  "batching-hooks-ported": {
+    "quantity": "a Read's cost in the batching guard, the shell's against the Rust guard alone (T020)",
+    "observed": "2026-11-08",
+    "subject": "/diagram/scripts/hooks/batching-hooks.sh pretool (main's shell guard) against scripts/hooks/l7r-guard.sh --only batching-hooks PreToolUse in the clone, on a sample Read, each log and state directory temporary",
+    "command": "each run in a loop on the same input (the shell 10 times, the Rust guard 50), the loop's wall time divided by its runs",
+    "method": "the mean wall time a call, beside other work; the suite replayed through tests/hooks/batching-hooks.sh",
+    "value": {
+      "shell_read_ms": 24.9,
+      "rust_guard_read_ms": 6.9,
+      "suite_cases": 56,
+      "suite_passed_against_rust": 56
+    }
   }
 }

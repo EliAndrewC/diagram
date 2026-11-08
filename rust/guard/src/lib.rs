@@ -25,6 +25,7 @@ pub fn guards() -> Vec<Guard> {
         guards::finished_run_hooks::GUARD,
         guards::engine_freeze_hooks::GUARD,
         guards::gm_tree_hooks::GUARD,
+        guards::batching_hooks::GUARD,
     ]
 }
 
@@ -73,7 +74,7 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
             let one: Vec<Guard> = all
                 .iter()
                 .filter(|g| g.name == name)
-                .map(|g| Guard { ..*g })
+                .map(|g| Guard { matcher: "*", ..*g })
                 .collect();
             if one.is_empty() {
                 return say(format!("l7r-guard: no guard named {name}"), 1);
@@ -188,7 +189,8 @@ mod tests {
                     "stall-watchdog-hooks",
                     "finished-run-hooks",
                     "engine-freeze-hooks",
-                    "gm-tree-hooks"
+                    "gm-tree-hooks",
+                    "batching-hooks"
                 ]
         );
     }

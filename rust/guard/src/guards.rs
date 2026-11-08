@@ -2,6 +2,7 @@
 //! task (feature 449 T006-T049), its suite replayed against `l7r-guard --only <guard>` before its shell is deleted (D3, D4).
 
 pub mod agent_stall_hooks;
+pub mod batching_hooks;
 pub mod clone_sync_hooks;
 pub mod engine_freeze_hooks;
 pub mod event_log_hooks;
