@@ -98,6 +98,9 @@ def test_every_rust_source_under_rust_is_read_and_target_pruned(tmp_path: pathli
     (src / "field.rs").write_text(SRC)
     (tmp_path / "rust" / "phases" / "target" / "debug").mkdir(parents=True)
     (tmp_path / "rust" / "phases" / "target" / "debug" / "out.rs").write_text("fn generated() {}\n")
+    for tool in ("guard", "parked"):  # the guard crate and the parked stages are claimed by nothing
+        (tmp_path / "rust" / tool / "src").mkdir(parents=True)
+        (tmp_path / "rust" / tool / "src" / "lib.rs").write_text("pub fn decide() {}\n")
     got = cr.all_rust_units(tmp_path, "pre/")
     assert {u.path for u, _e in got} == {"pre/rust/phases/src/field.rs"} and len(got) == 7
 

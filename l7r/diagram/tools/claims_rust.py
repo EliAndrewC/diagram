@@ -145,7 +145,9 @@ def all_rust_units(root: pathlib.Path, repo_prefix: str = "") -> list[tuple[Unit
     out: list[tuple[Unit, list[str]]] = []
     base = root / "rust"
     for p in sorted(base.rglob("*.rs")) if base.is_dir() else []:
-        if "target" in p.relative_to(base).parts or p.relative_to(base).parts[0] == "parked":  # a parked stage is claimed by nothing (444 FR-024)
+        # a parked stage is claimed by nothing (444 FR-024); nor is the guard crate, the tooling on Claude Code's tool calls (feature
+        # 449), which decides nothing about a place - as `scripts/` owes no claim
+        if "target" in p.relative_to(base).parts or p.relative_to(base).parts[0] in ("parked", "guard"):
             continue
         errors, units = rust_units(p.read_text(encoding="utf-8"), repo_prefix + p.relative_to(root).as_posix())
         out += [(u, errors) for u in units]

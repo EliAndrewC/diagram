@@ -29,6 +29,10 @@ FORMS = re.compile(
 #: which consume nothing (its plan review of 2026-11-08)
 SCOPE = (
     ":(glob)specs/*/measurements*.json",
+    # the frozen reference of the Python stages, prose history until its Rust page replaces it (FR-024 part 1) - excluded, not
+    # listed, because the remote build does not check it out (tests/tooling/ci/test_sparse_checkout.py), where a listed entry would
+    # read as stale; named without its trailing slash, which is the form that sparse check reads as a use of the path
+    ":(exclude)dev/placement-stages-frozen",
     "docs/**",
     "CLAUDE.md",
     "l7r/**",
@@ -91,9 +95,9 @@ HISTORY = {
     "tests/tooling/test_tick_task.py": "an example path in a fixture task",
     "tests/tooling/test_work_budget_bundle_rust.py": "builds a fake engine tree of the old name beside the Rust",
     "tests/tools/test_claims.py": "builds a fake engine tree of the old name",
+    "tests/tooling/test_figures_deleted_engine.py": "fixture commands naming the old paths, proven never run",
     "dev/review-ledger.md": "the append-only ledger of every review pass, history",
     "dev/claims-triage-skips.jsonl": "the append-only record of triage skips, history",
-    "dev/placement-stages-frozen/hamlet-placement.html": "the frozen reference of the Python stages, until its Rust page replaces it (FR-024 part 1)",
     "dev/gate.md": "the Python engine's dev doc, until the Rust's own pages replace it",
     "dev/loop.md": "the Python engine's dev doc, until the Rust's own pages replace it",
     "dev/performance.md": "the Python engine's dev doc, until the Rust's own pages replace it",
