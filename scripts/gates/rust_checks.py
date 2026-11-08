@@ -238,6 +238,11 @@ def main(argv: list[str] | None = None) -> int:
             r = run(args.cmd, m, args.check)
         if args.cmd == "hamlet":
             print(r.stdout, end="")
+        # ...A TEST RUN SAYS HOW MANY RAN, IN HOW LONG: cargo's own summary line for the library's tests (feature 449's spec review,
+        # round 2: a recorded figure has to be re-run through make, and the bare `cargo test` that printed it is refused)
+        if args.cmd in ("test", "test-counters", "test-no-counters") and r.returncode == 0:
+            summary = next((ln for ln in r.stdout.splitlines() if ln.startswith("test result:")), "")
+            print(f"rust-checks: {args.cmd} on {m.parent.relative_to(ROOT)}: {summary}" if summary else "", end="\n" if summary else "")
         if r.returncode != 0:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)
