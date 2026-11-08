@@ -198,19 +198,27 @@ def _cat_blobs(root: Path, shas: list[str]) -> dict[str, bytes]:
     return out
 
 
+#: the engine files keyed on what runs, not their bytes: a `.py` by its docstring-free AST, a `.rs` by its comment-free tokens
+SEMANTIC = (".py", ".rs")
+
+
 def _key_from_ids(root: Path, entries: list[tuple[str, str]], fetch: Any) -> str:
-    """The engine key from (git blob id, path) pairs. A `.py` keys on its SEMANTIC id, served from the
-    cache by blob id; only cache MISSES are read (`fetch(shas) -> {sha: bytes}`). Anything else keys on
-    the blob id itself. (T27, GM 2026-08-26: this used to read every engine file on every green run.)"""
+    """The engine key from (git blob id, path) pairs. A `.py` or a `.rs` keys on its SEMANTIC id, served from
+    the cache by blob id; only cache MISSES are read (`fetch(shas) -> {sha: bytes}`). Anything else keys on
+    the blob id itself. (T27, GM 2026-08-26: this used to read every engine file on every green run.)
+
+    `.rs` TOO (feature 444 T36, found 2026-11-07 asking the GM's "Are we smart enough to skip everything that didn't change?"):
+    `content_id` had the Rust rule since 444 T17 - comment-free tokens - but this kept a `.rs` on its blob, so a comment's edit
+    moved the key and `make done` re-ran a gate that its own record said was already green on the same code."""
     from l7r.diagram.ci.state import _gate_stamp  # local: state imports nothing from here
 
     gs = _gate_stamp(root)
     table = gs._cache_table(root)
-    misses = [sha for sha, p in entries if p.endswith(".py") and sha not in table]
+    misses = [sha for sha, p in entries if p.endswith(SEMANTIC) and sha not in table]
     contents = fetch(misses)
     rows = []
     for sha, p in entries:
-        if p.endswith(".py"):
+        if p.endswith(SEMANTIC):
             rows.append(f"{table.get(sha) or gs.content_id(contents[sha], p, root)} {p}")
         else:
             rows.append(f"{sha} {p}")

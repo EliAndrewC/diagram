@@ -158,6 +158,14 @@ def test_the_key_is_blind_to_comments_docstrings_and_formatting(repo: Path) -> N
     k1 = engine_key(repo, "HEAD")
     commit(repo, S + "pool/a.json", "{} \n")
     assert engine_key(repo, "HEAD") != k1, "a manifest keys on its bytes - any edit moves it"
+    # ...and a Rust file on its comment-free tokens (feature 444 T36: it keyed on its bytes, so a comment re-ran a green gate)
+    (repo / S / "rust" / "phases" / "src").mkdir(parents=True, exist_ok=True)
+    commit(repo, S + "rust/phases/src/a.rs", "/// A.\npub fn a() -> u8 {\n    1\n}\n")
+    k2 = engine_key(repo, "HEAD")
+    commit(repo, S + "rust/phases/src/a.rs", "/// A, its research claim reworded.\npub fn a() -> u8 {\n    1 // why\n}\n")
+    assert engine_key(repo, "HEAD") == k2 and engine_key_worktree(repo) == k2, "a Rust comment does not move the key"
+    commit(repo, S + "rust/phases/src/a.rs", "/// A.\npub fn a() -> u8 {\n    2\n}\n")
+    assert engine_key(repo, "HEAD") != k2, "one Rust token moves it"
 
 
 def test_a_constants_claim_docstring_does_not_move_the_key(repo: Path) -> None:
