@@ -799,3 +799,23 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 11. **Before fitting things into room.** Not a room question.
 
 <!-- plan-archive: T037 to T037 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-08 -->
+### T044 Approach (checklist part A)
+
+1. **The goal, in the world.** `escalation-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `escalation-hooks.sh`, `lib/hm_gm_question.py` and the suite, 2026-11-08):
+   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: arming and disarming, the once-per rules, the question and offer patterns, reading the transcript from its end, the kept-question naming, every message. `lib/hm_gm_question.py`'s only caller is the guard, so it is removed with the shell.
+   - (b) ONE TOOL STAYS BY PATH: `scripts/reviews/ledger_lint.py`, with callers of its own, asked for the row count when a review arms and for "every finding disposed" at a turn's end with a review armed. Both are rare branches, a review agent's dispatch or a turn it leaves armed, never a plain Bash call or Edit. T052's record lists it.
+   - (c) `state`, `arm` AND `disarm` ARE A COMMAND LINE OF THE BINARY, `--escalation`, like the other guards' non-hook modes; the seams still refuse a path outside a fixture.
+   - (d) `clone_of` WALKS UP FOR `.git` IN-PROCESS, the answer `git rev-parse --show-toplevel` gives, so no process starts on an Agent call or a Stop.
+3. **Where each comes from.** `tests/hooks/test-escalation-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-escalation-hooks.sh` green against `l7r-guard --only escalation-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-escalation-hooks.sh` passes against the Rust guard; `scripts/hooks/escalation-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
