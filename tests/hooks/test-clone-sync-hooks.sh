@@ -23,6 +23,9 @@ TMP=$(mktemp -d)
 # harmless.
 
 FAILED=0
+# THE SYNC PATH IS WHAT THIS SUITE DRIVES: the prompt path skips it when this is the only Claude Code session (lib/solo.py, feature
+# 444 T36), which the session running this suite usually is - so every case runs as one of several, and one case below as the only
+export L7R_SOLO=0
 check() { # check <label> <expected-rc> <actual-rc>
   if [ "$2" = "$3" ]; then
     printf 'ok    %s (rc=%s)\n' "$1" "$3"
@@ -275,6 +278,14 @@ kill "$GLPID" 2>/dev/null; wait "$GLPID" 2>/dev/null; rm -f "$RUNC/.git/gate.loc
 case $OUT in *"clone merge skipped"*) printf 'ok    a live gate lock holds the prompt path off the merge (385 T30)\n' ;;
              *) printf 'FAIL  the prompt path merged under a gate lock\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
 [ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && [ -z "$(git -C "$RUNC" status --porcelain)" ] && printf 'ok    ...HEAD and the working tree unchanged under the lock\n' || { printf 'FAIL  HEAD moved under the lock\n'; FAILED=1; }
+
+# feature 444 T36: the only session syncs nothing - no merge, no mirror refresh, no line - and HEAD stays where it was
+BEFORE=$(git -C "$RUNC" rev-parse HEAD)
+OUT=$(printf '{"session_id":"sid-run"}' \
+      | L7R_SOLO=1 CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1); RC=$?
+check "the only session -> prompt exits 0" 0 "$RC"
+case $OUT in *"clone-sync:"*) printf 'FAIL  the only session was synced\n      out: %s\n' "$OUT"; FAILED=1 ;;
+             *) [ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && printf 'ok    the only session syncs nothing and says nothing (444 T36)\n' || { printf 'FAIL  HEAD moved for the only session\n'; FAILED=1; } ;; esac
 
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \
