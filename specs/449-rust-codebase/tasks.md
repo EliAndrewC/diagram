@@ -78,8 +78,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T020 [US1] `batching-hooks`: its decider `rust/guard/src/guards/batching_hooks.rs`, its suite `tests/hooks/test-batching-hooks.sh` replayed against `l7r-guard --only batching-hooks`, then `scripts/hooks/batching-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: batching is Rust
-- [ ] T021 [US1] `no-branch-hooks`: its decider `rust/guard/src/guards/no_branch_hooks.rs`, its suite `tests/hooks/test-no-branch-hooks.sh` replayed against `l7r-guard --only no-branch-hooks`, then `scripts/hooks/no-branch-hooks.sh` and its settings entry removed
+- [x] T021 [US1] `no-branch-hooks`: its decider `rust/guard/src/guards/no_branch_hooks.rs`, its suite `tests/hooks/test-no-branch-hooks.sh` replayed against `l7r-guard --only no-branch-hooks`, then `scripts/hooks/no-branch-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: no-branch is Rust
 - [ ] T022 [US1] `discard-hooks`: its decider `rust/guard/src/guards/discard_hooks.rs`, its suite `tests/hooks/test-discard-hooks.sh` replayed against `l7r-guard --only discard-hooks`, then `scripts/hooks/discard-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T023 [US1] `conflict-marker-hooks`: its decider `rust/guard/src/guards/conflict_marker_hooks.rs`, its suite `tests/hooks/test-conflict-marker-hooks.sh` replayed against `l7r-guard --only conflict-marker-hooks`, then `scripts/hooks/conflict-marker-hooks.sh` and its settings entry removed
