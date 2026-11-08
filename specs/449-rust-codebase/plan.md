@@ -395,22 +395,7 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-### T046 Approach (checklist part A)
-
-1. **The goal, in the world.** `phase-source-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-   **Decisions** (found reading `phase-source-hooks.sh` and `lib/hm_phase_source.py`, 2026-11-08):
-   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE: every rule of `decide` and the refusal's words, git asked by path only while a `phase-sources.json` exists, so an ordinary Read or Bash call starts no process; `compgen -G` becomes a small in-process expansion of the same two patterns. The library is removed where its only other readers allow (`git grep hm_phase_source`), else with its last caller at T051.
-3. **Where each comes from.** `tests/hooks/test-phase-source-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-phase-source-hooks.sh` green against `l7r-guard --only phase-source-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-phase-source-hooks.sh` passes against the Rust guard; `scripts/hooks/phase-source-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T046 to T046 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T047 Approach (checklist part A)
 
 1. **The goal, in the world.** `new-file-hooks`'s verdicts given by the Rust guard, its shell gone.

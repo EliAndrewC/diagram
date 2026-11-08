@@ -139,8 +139,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
 - [ ] T045 [US1] `review-round-hooks`: its decider `rust/guard/src/guards/review_round_hooks.rs`, its suite `tests/hooks/test-review-round-hooks.sh` replayed against `l7r-guard --only review-round-hooks`, then `scripts/hooks/review-round-hooks.sh` and its settings entry removed
       research: rendering
-- [ ] T046 [US1] `phase-source-hooks`: its decider `rust/guard/src/guards/phase_source_hooks.rs`, its suite `tests/hooks/test-phase-source-hooks.sh` replayed against `l7r-guard --only phase-source-hooks`, then `scripts/hooks/phase-source-hooks.sh` and its settings entry removed
+- [x] T046 [US1] `phase-source-hooks`: its decider `rust/guard/src/guards/phase_source_hooks.rs`, its suite `tests/hooks/test-phase-source-hooks.sh` replayed against `l7r-guard --only phase-source-hooks`, then `scripts/hooks/phase-source-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: phase-source is Rust
 - [ ] T047 [US1] `new-file-hooks`: its decider `rust/guard/src/guards/new_file_hooks.rs`, its suite `tests/hooks/test-new-file-hooks.sh` replayed against `l7r-guard --only new-file-hooks`, then `scripts/hooks/new-file-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T048 [US1] `checks-hooks`: its decider `rust/guard/src/guards/checks_hooks.rs`, its suite `tests/hooks/test-checks-hooks.sh` replayed against `l7r-guard --only checks-hooks`, then `scripts/hooks/checks-hooks.sh` and its settings entry removed
