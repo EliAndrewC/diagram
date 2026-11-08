@@ -425,3 +425,20 @@ its own cost recorded as phase 1's floor (work breakdown 4).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T026 Approach (checklist part A)
+
+1. **The goal, in the world.** `budget-change-hooks`'s verdicts given by the Rust guard, its shell gone.
+2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
+   **Decisions** (found reading `budget-change-hooks.sh` and `lib/hm_budget.py`, 2026-11-08):
+   - (a) A STRAIGHT PORT: the shell and `lib/hm_budget.py` move, on T003's `gm_messages` and `targets` and T025's `problem`, the words the shell's; `hm_budget.py` is deleted with this guard, its only caller, and `lib/hm_budget_rounds.py`, a different file, stays with `hm_checks.py`.
+3. **Where each comes from.** `tests/hooks/test-budget-change-hooks.sh`, the guard's own suite; plan D3-D4.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
+6. **The exits.** Green: `tests/hooks/test-budget-change-hooks.sh` green against `l7r-guard --only budget-change-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** every case of `test-budget-change-hooks.sh` passes against the Rust guard; `scripts/hooks/budget-change-hooks.sh` and its settings entry are gone in the commit that registers the decider.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+

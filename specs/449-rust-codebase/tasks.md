@@ -93,8 +93,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T025 [US1] `feature-approval-hooks`: its decider `rust/guard/src/guards/feature_approval_hooks.rs`, its suite `tests/hooks/test-feature-approval-hooks.sh` replayed against `l7r-guard --only feature-approval-hooks`, then `scripts/hooks/feature-approval-hooks.sh` and its settings entry removed
       research: rendering
       verify: DONE. landed: feature-approval is Rust
-- [ ] T026 [US1] `budget-change-hooks`: its decider `rust/guard/src/guards/budget_change_hooks.rs`, its suite `tests/hooks/test-budget-change-hooks.sh` replayed against `l7r-guard --only budget-change-hooks`, then `scripts/hooks/budget-change-hooks.sh` and its settings entry removed
+- [x] T026 [US1] `budget-change-hooks`: its decider `rust/guard/src/guards/budget_change_hooks.rs`, its suite `tests/hooks/test-budget-change-hooks.sh` replayed against `l7r-guard --only budget-change-hooks`, then `scripts/hooks/budget-change-hooks.sh` and its settings entry removed
       research: rendering
+      verify: DONE. landed: budget-change is Rust
 - [ ] T027 [US1] `ledger-hooks`: its decider `rust/guard/src/guards/ledger_hooks.rs`, its suite `tests/hooks/test-ledger-hooks.sh` replayed against `l7r-guard --only ledger-hooks`, then `scripts/hooks/ledger-hooks.sh` and its settings entry removed
       research: rendering
 - [ ] T028 [US1] `make-only-hooks`: its decider `rust/guard/src/guards/make_only_hooks.rs`, its suite `tests/hooks/test-make-only-hooks.sh` replayed against `l7r-guard --only make-only-hooks`, then `scripts/hooks/make-only-hooks.sh` and its settings entry removed - with the constitution XIV fix: a `grep` whose pattern names `pytest` is not a pytest run (found 2026-11-07); and FR-005's clause: a direct Bash run of a replacement's binary (`l7r-guard`, `hamlet`) refused with the make target that runs it, as a bare `cargo run` is today
