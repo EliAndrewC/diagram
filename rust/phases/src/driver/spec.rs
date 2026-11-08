@@ -25,6 +25,8 @@ pub struct Spec {
     pub seed: i64,
     pub households: u32,
     pub down_deg: Option<f64>,
+    /// The water's bearing where the hamlet declares one, else its fall's (`plan::plan`).
+    pub water_flow: Option<f64>,
     pub windward: Option<String>,
     pub water_sink: Option<String>,
     pub settlement_form: Option<String>,
@@ -216,10 +218,11 @@ pub fn parse(text_in: &str) -> Result<Spec, SpecError> {
             "`households` {households} is outside a hamlet's 10 to 20"
         )));
     }
-    let down_deg = match o.get("down_deg") {
+    let num = |k: &str| match o.get(k) {
         Some(Value::Num(n)) => Some(*n),
         _ => None,
     };
+    let (down_deg, water_flow) = (num("down_deg"), num("water_flow"));
     let pins = match o.get("pins") {
         Some(Value::Obj(m)) => m.clone(),
         _ => BTreeMap::new(),
@@ -229,6 +232,7 @@ pub fn parse(text_in: &str) -> Result<Spec, SpecError> {
         seed,
         households,
         down_deg,
+        water_flow,
         windward: text(o.get("windward")),
         water_sink: text(o.get("water_sink")),
         settlement_form: text(o.get("settlement_form")),

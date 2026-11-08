@@ -10015,134 +10015,96 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BELT_FAR_FT#the driver": {
+ "rust/phases/src/driver.rs::BELT_FAR_FT#the belt's ground kept": {
   "body": "189cfb065b49cb93",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "73e01741b474fc93",
+  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too",
+  "code": "62f34a272a00c669",
   "core": "bc703c1cab8506e5",
-  "date": "2026-11-07",
-  "note": "NONE on 146 ft, how far the settlement's ground reaches toward its belt (physical); should carry the \"belt's ground kept\" claim now on STANDOFF_FT, citing 0072",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "146 ft past the band sits inside the page's 150 ft hamlet reach and its 37-262 ft range; the band runs along the windward edge",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+  },
+  "research": "5892781a1ab23bcb",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BELT_FAR_FT#the settlement's ground reaching 146 ft to its belt": {
-  "code": "bc703c1cab8506e5",
-  "core": "bc703c1cab8506e5",
-  "date": "2026-11-07",
-  "note": "the settlement's ground reaching 146 ft to its belt",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_SKIRT#the brook's skirt past the fan, 34 ft": {
-  "code": "764f0cda99cfbd00",
-  "core": "764f0cda99cfbd00",
-  "date": "2026-11-07",
-  "note": "the brook's skirt past the fan, 34 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_SKIRT#the driver": {
+ "rust/phases/src/driver.rs::BROOK_SKIRT#the brook's course": {
   "body": "25e4ebf44a7d63b2",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "cff0fd20b11a3fe2",
+  "claim": "the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the skirt past the fan",
+  "code": "c93fe0b6a89d2c5f",
   "core": "764f0cda99cfbd00",
-  "date": "2026-11-07",
-  "note": "NONE on a brook-course figure (34 ft skirt); should be the GUESS \"brook's course\" claim now on OFFTAKE_DEG",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a figure for the brook's skirt",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BROOK_SLEW#the brook's slew, 22 ft": {
-  "code": "de10d29b09780ab9",
-  "core": "de10d29b09780ab9",
-  "date": "2026-11-07",
-  "note": "the brook's slew, 22 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_SLEW#the driver": {
+ "rust/phases/src/driver.rs::BROOK_SLEW#the brook's course": {
   "body": "7dc93c80bcebdc7f",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "93a9cd5788b7ecb4",
+  "claim": "the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the slew a station",
+  "code": "6fac097db7d0e92f",
   "core": "de10d29b09780ab9",
-  "date": "2026-11-07",
-  "note": "NONE on a brook-course figure (22 ft slew); should be the GUESS \"brook's course\" claim",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a figure for the slew",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BROOK_STATION#the driver": {
+ "rust/phases/src/driver.rs::BROOK_STATION#the brook's course": {
   "body": "54cb822222f32cdf",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "9355c0d3a0f144c8",
+  "claim": "the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the spacing of the stations the slew is measured across",
+  "code": "1ad65b1b93c99b51",
   "core": "320a50b1356bda41",
-  "date": "2026-11-07",
-  "note": "need BrookIn's use of `station`: if it is the sampling step along the brook, NONE holds; if it sets the wander's wavelength, it is a GUESS like the other brook figures",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a station spacing",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BROOK_TAP_RUN#the brook's run at the tap, 70 ft": {
-  "code": "55f8d94090586f40",
-  "core": "55f8d94090586f40",
-  "date": "2026-11-07",
-  "note": "the brook's run at the tap, 70 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_TAP_RUN#the driver": {
+ "rust/phases/src/driver.rs::BROOK_TAP_RUN#the brook's course": {
   "body": "5bdb75a99a3433d4",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "ca6055a1f9784d1e",
+  "claim": "the brook's course - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing says a brook wanders and slews down its valley but gives no figures; these are the deleted `consts_water.py`'s, each its own GUESS there",
+  "code": "486235a2e6bf4468",
   "core": "55f8d94090586f40",
-  "date": "2026-11-07",
-  "note": "NONE on 70 ft of brook run at the tap (physical); should be the GUESS \"brook's course\" claim, or cite 0059 if it is the intake's reach",
+  "date": "2026-11-08",
+  "note": "GUESS; the bundle's pages say the brook wanders but give no figure (the head race's per-map length is p.head_lead, not this constant)",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BROOK_W#the brook's width, 5.25 ft": {
-  "code": "91ea9f99b0be0996",
-  "core": "91ea9f99b0be0996",
-  "date": "2026-11-07",
-  "note": "the brook's width, 5.25 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_W#the driver": {
+ "rust/phases/src/driver.rs::BROOK_W#the brook's width": {
   "body": "3b2097eb6cd2a509",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "c307a44cbd804b5e",
+  "claim": "the brook's width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft",
+  "code": "2a81780f8592e481",
   "core": "91ea9f99b0be0996",
-  "date": "2026-11-07",
-  "note": "NONE on the brook's width, 5.25 ft; should carry the \"brook's width\" claim now on OFFTAKE_DEG (0068, 3.5 x the 1.5 ft floor)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "5.25 ft = 3.5 x the 1.5 ft floor, the village creek rung",
+  "pages": {
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
+  },
+  "research": "65ae107a7028a36f",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::BROOK_WANDER#the brook's wander, 10 ft": {
-  "code": "07a844ad141537e9",
-  "core": "07a844ad141537e9",
-  "date": "2026-11-07",
-  "note": "the brook's wander, 10 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::BROOK_WANDER#the driver": {
+ "rust/phases/src/driver.rs::BROOK_WANDER#the brook's course": {
   "body": "4da13d5c055bab5a",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "28f92e0312ecb6cd",
+  "claim": "the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the wander past the skirt",
+  "code": "7c5de262b309d65c",
   "core": "07a844ad141537e9",
-  "date": "2026-11-07",
-  "note": "NONE on a brook-course figure (10 ft wander); should be the GUESS \"brook's course\" claim",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a figure for the wander",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::CELL_SHARE#a basin's cell": {
   "body": "641b80d778be5e0b",
@@ -10174,16 +10136,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::DRY_EDGE#the crops' paint": {
+ "rust/phases/src/driver.rs::DRY_EDGE#the plot's outline": {
   "body": "3bed0c5f712ea73d",
-  "claim": "the crops' paint - CONVENTION: the deleted engine's `CROP_FILL` and `CROP_FURROW`, each crop at its ripe or summer color (0006)",
-  "code": "4b65f42c0b4b789d",
+  "claim": "the plot's outline - CONVENTION: a tan-brown line 1.4 ft wide round each dry plot, the deleted engine's (dry-fields-and-their-crops-hatake.drawing)",
+  "code": "c6a7d86adec3d936",
   "core": "d8bd13a2dea819f1",
-  "date": "2026-11-07",
-  "note": "the class (CONVENTION) is right, but the account names the crop fill and furrow colors (crop_ink's job), and this constant is the plot outline, a tan-brown line 1.4 ft wide; the claim should name the outline and cite 0006",
+  "date": "2026-11-08",
+  "note": "a tan-brown line 1.4 ft wide on a hamlet map, a convention, as the page says",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::FIELD_KNOBS#the field's knobs": {
   "body": "c67449863d8ce82e",
@@ -10220,18 +10182,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::FORD#tameike berth": {
-  "body": "2f477e801f8cc1dc",
-  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
-  "code": "93b9f1fdf6f0dd5a",
-  "core": "7fe2eb799581b487",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: FORD's code holds no 80 ft berth; the claim belongs on POND_BERTH",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
  "rust/phases/src/driver.rs::FORD#the fords": {
   "body": "2f477e801f8cc1dc",
   "claim": "the fords - GUESS: the deleted `FORD_SPACING` 160 ft, `FORD_HALF` 30 ft and `FORD_BEND_DEG` 20, a crossing place every so far along a straight reach",
@@ -10242,17 +10192,6 @@
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
- },
- "rust/phases/src/driver.rs::FORD#the lane's width round wet ground": {
-  "body": "2f477e801f8cc1dc",
-  "claim": "the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft",
-  "code": "3eefbc3b3d5748b3",
-  "core": "7fe2eb799581b487",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the 8 ft growth is LANE_FT, not FORD; move the claim there",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::Ground#the driver": {
   "body": "055f8f261a961f10",
@@ -10266,125 +10205,63 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::JOIN_TRUNK#the brook drawn 150 ft below a confluence": {
-  "code": "dc4d41e5cc361526",
-  "core": "dc4d41e5cc361526",
-  "date": "2026-11-07",
-  "note": "the brook drawn 150 ft below a confluence",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::JOIN_TRUNK#the driver": {
+ "rust/phases/src/driver.rs::JOIN_TRUNK#the brook below a confluence": {
   "body": "fc9cfb366e74f72c",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "55133b2d830eacc2",
+  "claim": "the brook below a confluence - GUESS: the deleted `BROOK_JOIN_TRUNK`, 150 ft so the junction reads",
+  "code": "33f1808bd9700091",
   "core": "dc4d41e5cc361526",
-  "date": "2026-11-07",
-  "note": "NONE on 150 ft of brook drawn below a confluence (physical); should be the GUESS \"brook below a confluence\" claim now on RUN_W",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a figure",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::LANE_FT#the driver": {
+ "rust/phases/src/driver.rs::LANE_FT#the lane's width round wet ground": {
   "body": "35f7ce8e07d093ba",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "6028fcccf07191ac",
+  "claim": "the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft",
+  "code": "40238a0b6fde0189",
   "core": "aa68976702c69f45",
-  "date": "2026-11-07",
-  "note": "NONE on the 8 ft that wet ground is grown by for the track; should be the GUESS \"lane's width round wet ground\" claim now on FORD",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a lane width",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::LANE_FT#wet ground grown 8 ft for the way out": {
-  "code": "aa68976702c69f45",
-  "core": "aa68976702c69f45",
-  "date": "2026-11-07",
-  "note": "wet ground grown 8 ft for the way out",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::OFFTAKE_DEG#the brook's course": {
+ "rust/phases/src/driver.rs::OFFTAKE_DEG#the offtake's angle": {
   "body": "208ca09063290b2a",
-  "claim": "the brook's course - which-way-water-flows-and-how-channels-bend-and-join.drawing: a brook wanders and slews down its valley; the figures the deleted `consts_water.py` held, each its own GUESS there",
-  "code": "c50cd69668324068",
+  "claim": "the offtake's angle - GUESS: which-way-water-flows-and-how-channels-bend-and-join.drawing records the head race leaving the brook at 35 degrees as a guess; the deleted `consts_water.py`'s figure",
+  "code": "b73f90a01de80931",
   "core": "aaad462fe783f6d9",
-  "date": "2026-11-07",
-  "note": "this constant is the head race's 35 deg offtake angle, which 0054 records as a GUESS; the claim should say that, and the brook-course account belongs on the BROOK_* constants",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
-  },
-  "research": "68e3dc87e83ea403",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:2ed226ff417b46c1",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:d49baf606307eaac"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::OFFTAKE_DEG#the brook's width": {
-  "body": "208ca09063290b2a",
-  "claim": "the brook's width - how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing: a village creek at roughly three and a half times the 1.5 ft floor, 5.25 ft",
-  "code": "5e6482ad8dce7f76",
-  "core": "aaad462fe783f6d9",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the 5.25 ft width is BROOK_W; move the claim there",
-  "pages": {
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "9049da4b1327a167"
-  },
-  "research": "65ae107a7028a36f",
-  "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::OFFTAKE_DEG#the head race leaving the brook at 35 deg (0054 GUESS)": {
-  "code": "aaad462fe783f6d9",
-  "core": "aaad462fe783f6d9",
-  "date": "2026-11-07",
-  "note": "the head race leaving the brook at 35 deg (0054 GUESS)",
+  "date": "2026-11-08",
+  "note": "GUESS; 0059 confirms the offtake angle is the maps' guess, with no figure from before modern times",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::POND_BERTH#the driver": {
+ "rust/phases/src/driver.rs::POND_BERTH#tameike berth": {
   "body": "003b792a9f0c5edb",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "feb57d54403ab3ca",
+  "claim": "tameike berth - GUESS: searched, the record silent (feature 417 T29 pass B, 2026-10-25); 80 ft",
+  "code": "9e931b723720c22e",
   "core": "026bab8a6c4c9970",
-  "date": "2026-11-07",
-  "note": "NONE on the 80 ft berth a lane keeps from the pond; should be the GUESS \"tameike berth\" claim now on FORD",
+  "date": "2026-11-08",
+  "note": "GUESS; no page in the bundle gives a pond berth",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::POND_BERTH#the lane's 80 ft berth from the pond": {
-  "code": "026bab8a6c4c9970",
-  "core": "026bab8a6c4c9970",
-  "date": "2026-11-07",
-  "note": "the lane's 80 ft berth from the pond",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::REED_FT#the driver": {
+ "rust/phases/src/driver.rs::REED_FT#the pond's reeds": {
   "body": "ddd3b5002c147494",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "3a08e2710d8bab4e",
+  "claim": "the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore",
+  "code": "69567bcf3b8f6547",
   "core": "671f6b02a2249389",
-  "date": "2026-11-07",
-  "note": "NONE on a reed fringe 44 ft out from the shore; should be the GUESS \"pond's reeds\" claim now on RUN_W",
+  "date": "2026-11-08",
+  "note": "GUESS; 0068 sends pond reeds to the tameike page, which is not in the bundle, and gives no figure",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::REED_FT#the pond's reed fringe, 44 ft": {
-  "code": "671f6b02a2249389",
-  "core": "671f6b02a2249389",
-  "date": "2026-11-07",
-  "note": "the pond's reed fringe, 44 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::RESERVED_INK#the placeholder's ink": {
   "body": "00817ae3643a882d",
@@ -10397,18 +10274,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "rust/phases/src/driver.rs::RUN_W#the brook below a confluence": {
-  "body": "485df2d92f2c6dc1",
-  "claim": "the brook below a confluence - GUESS: the deleted `BROOK_JOIN_TRUNK`, 150 ft so the junction reads",
-  "code": "45d962bcd4af2b35",
-  "core": "732a42dd766762cc",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the 150 ft is JOIN_TRUNK, not RUN_W",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::RUN_W#the drain's run drawn": {
   "body": "485df2d92f2c6dc1",
@@ -10427,18 +10292,6 @@
    "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
   ],
   "verdict": "IN-STEP"
- },
- "rust/phases/src/driver.rs::RUN_W#the pond's reeds": {
-  "body": "485df2d92f2c6dc1",
-  "claim": "the pond's reeds - GUESS: the deleted `SINK_FRINGE`, 44 ft of reeds out from the shore",
-  "code": "86bcd26032ce99e3",
-  "core": "732a42dd766762cc",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the 44 ft is REED_FT, not RUN_W",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::Refused#the driver": {
   "body": "7668efca539a4afa",
@@ -10476,38 +10329,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::STANDOFF_FT#the belt's ground kept": {
+ "rust/phases/src/driver.rs::STANDOFF_FT#the settlement's standoff": {
   "body": "aeca2edcaa1222a2",
-  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too",
-  "code": "9932194227835f9c",
+  "claim": "the settlement's standoff - GUESS: dry-fields-and-their-crops-hatake.drawing gives the order (the paddy, the houses, the dry fields) but no distance; 12 ft",
+  "code": "e9a5c9d3f1425d90",
   "core": "aa12bd58e7a77036",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the belt's reach is BELT_FAR_FT (146 ft); STANDOFF_FT is a 12 ft standoff",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::STANDOFF_FT#the settlement's ground": {
-  "body": "aeca2edcaa1222a2",
-  "claim": "the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields where the settlement stands, the dry fields behind it",
-  "code": "9ece257801f16bd2",
-  "core": "aa12bd58e7a77036",
-  "date": "2026-11-07",
-  "note": "0006 gives the order (paddy, houses, dry fields) but nothing on a 12 ft standoff; should be UNRESEARCHED or GUESS",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
-  },
-  "research": "99a077469bb67bf5",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "date": "2026-11-08",
+  "note": "GUESS; 0006 gives the order (paddy, houses, dry fields) but no distance",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::Segment#the driver": {
   "body": "27edb3cfd6181fc9",
@@ -10521,36 +10352,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::WEIR_KEY_FT#the driver": {
+ "rust/phases/src/driver.rs::WEIR_KEY_FT#the weir keyed into the banks": {
   "body": "e7b49953ef46047f",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "512bf4e6ee910ecc",
-  "core": "a3ef463320c26105",
-  "date": "2026-11-07",
-  "note": "NONE on a weir keyed 1 ft into each bank; should be the GUESS \"weir keyed into the banks\" claim now on WEIR_SKEW_DEG",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::WEIR_KEY_FT#the weir keyed 1 ft into each bank": {
-  "code": "a3ef463320c26105",
-  "core": "a3ef463320c26105",
-  "date": "2026-11-07",
-  "note": "the weir keyed 1 ft into each bank",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::WEIR_SKEW_DEG#the weir keyed into the banks": {
-  "body": "6d7b127f6adfba16",
   "claim": "the weir keyed into the banks - GUESS: the page silent on how far a weir runs into each bank; a foot either side",
-  "code": "aca61ac045d16208",
-  "core": "1e73f87f888c6e95",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the foot either side is WEIR_KEY_FT",
+  "code": "512e0cc07a84d02a",
+  "core": "a3ef463320c26105",
+  "date": "2026-11-08",
+  "note": "GUESS; 0059 does not say how far a weir runs into each bank",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::WEIR_SKEW_DEG#the weir's skew": {
   "body": "6d7b127f6adfba16",
@@ -10569,27 +10380,6 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
   ],
   "verdict": "IN-STEP"
- },
- "rust/phases/src/driver.rs::WEIR_SKEW_DEG#the weir's thickness by form": {
-  "body": "6d7b127f6adfba16",
-  "claim": "the weir's thickness by form - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms, 1.5 to 5 ft thick",
-  "code": "3fc0ebe381889fe7",
-  "core": "1e73f87f888c6e95",
-  "date": "2026-11-07",
-  "note": "points at the wrong unit: the 1.5/2/5/5 ft thickness table is in field_in; move the claim there",
-  "pages": {
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
-  },
-  "research": "ba89a97c1cc159a1",
-  "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:640b5a761e2e1e28",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
-  ],
-  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::cohort_spec#the cohort's households": {
   "body": "8e137ce46f19fe3d",
@@ -10615,32 +10405,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::crop_ink#the driver": {
+ "rust/phases/src/driver.rs::crop_ink#the crops' paint": {
   "body": "ea7b5b4b0fb20aef",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "41e55394154a9ddd",
+  "claim": "the crops' paint - CONVENTION: the deleted engine's `CROP_FILL` and `CROP_FURROW`, each crop at its ripe or summer color - barley tan-gold, millet ochre, buckwheat pale with reddish stems, soy green (dry-fields-and-their-crops-hatake.drawing)",
+  "code": "12dca326690db5f9",
   "core": "b992439ac17eb103",
-  "date": "2026-11-07",
-  "note": "NONE on the crops' colors (barley tan-gold, millet ochre, buckwheat pale with reddish stems, soy green); should be CONVENTION, the crops' paint",
+  "date": "2026-11-08",
+  "note": "barley tan-gold, millet ochre, buckwheat pale with a reddish furrow, soy green, as the page gives them",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver.rs::draw_field#a bean bead 3 ft across (CONVENTION, 0014 §255)": {
-  "code": "f666fb94afb14bbc",
-  "core": "f666fb94afb14bbc",
-  "date": "2026-11-07",
-  "note": "a bean bead 3 ft across (CONVENTION, 0014 §255)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::draw_field#a grave mound 13 by 9 ft": {
-  "code": "f666fb94afb14bbc",
-  "core": "f666fb94afb14bbc",
-  "date": "2026-11-07",
-  "note": "a grave mound 13 by 9 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::draw_field#ditches by role": {
   "body": "1cb06376a152dac9",
@@ -10659,6 +10433,17 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver.rs::draw_field#the bean beads": {
+  "body": "1cb06376a152dac9",
+  "claim": "the bean beads - CONVENTION: a bead 3 ft across in a single row on the bund (bunds-between-the-paddies-aze.drawing)",
+  "code": "68b05cf5a7007e54",
+  "core": "f666fb94afb14bbc",
+  "date": "2026-11-08",
+  "note": "an ellipse of radius 1.5, so a bead 3 ft across; the size is a drawing choice, and the placement comes in as input",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver.rs::draw_field#the field's floor": {
   "body": "1cb06376a152dac9",
   "claim": "the field's floor - CONVENTION: the fan's ring in the rice green beneath its plots, so no seam shows between them",
@@ -10671,13 +10456,27 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::draw_field#the pocket pond ringed by flooded ground 2.5 ft wide with a bund line": {
-  "code": "f666fb94afb14bbc",
+ "rust/phases/src/driver.rs::draw_field#the grave mound's size": {
+  "body": "1cb06376a152dac9",
+  "claim": "the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing places a grave, not its size)",
+  "code": "65d05d8ce6987ead",
   "core": "f666fb94afb14bbc",
-  "date": "2026-11-07",
-  "note": "the pocket pond ringed by flooded ground 2.5 ft wide with a bund line",
+  "date": "2026-11-08",
+  "note": "rx 6.5 and ry 4.5 give 13 by 9 ft; no page in the bundle sizes a grave",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::draw_field#the pocket pond's ring": {
+  "body": "1cb06376a152dac9",
+  "claim": "the pocket pond's ring - CONVENTION: flooded ground 2.5 ft wide round the pond, its bund line drawn, so the pond reads inside its plot",
+  "code": "de9cbfa287c0369b",
+  "core": "f666fb94afb14bbc",
+  "date": "2026-11-08",
+  "note": "q.rx+2.5 / q.ry+2.5 draws a 2.5 ft margin of flooded ground round the pond, inside a bund stroked 2.2 ft wide where the bund is 1.5 ft; that is a physical decision, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver.rs::draw_sink#the drain's run drawn": {
   "body": "ba5191445b0af9d1",
@@ -10697,32 +10496,62 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::field_in#each weir form's thickness, 1.5/2/5/5 ft": {
-  "code": "353031148a64a187",
-  "core": "353031148a64a187",
-  "date": "2026-11-07",
-  "note": "each weir form's thickness, 1.5/2/5/5 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver.rs::field_in#the driver": {
+ "rust/phases/src/driver.rs::field_in#a basin's cell": {
   "body": "531872b104a954e7",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "d942b660852f8d26",
+  "claim": "a basin's cell - rice-paddies-and-their-plots-suiden.drawing: the cell the row's spacing times the share along the canal (`CELL_SHARE`'s)",
+  "code": "56a337c9a6277b27",
   "core": "353031148a64a187",
-  "date": "2026-11-07",
-  "note": "NONE on code that sets each weir form's thickness (1.5/2/5/5 ft), the weir's half-length across the whole brook plus its key, and the cell from row x CELL_SHARE; should carry the weir thickness claim (0059) and the weir's own claims",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "row_ft x 31 ft gives about 48 x 31 = 1,488 sq ft, the page's cell, and 31 ft lies within 26-36 ft along the canal",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "2ebc4dfa249d77bd"
+  },
+  "research": "69aa78ae06a3c11d",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:2065f2aeadcf896b",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:89d59bccd55e6daf",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:f973e5271a750221"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::field_in#the weir spanning the whole brook on its skew, plus its key": {
-  "code": "353031148a64a187",
+ "rust/phases/src/driver.rs::field_in#the weir across the brook": {
+  "body": "531872b104a954e7",
+  "claim": "the weir across the brook - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: a weir drawn across the whole brook, so its half-length spans the brook on its skew, with its key into each bank",
+  "code": "49ca2e4f041f75e0",
   "core": "353031148a64a187",
-  "date": "2026-11-07",
-  "note": "the weir spanning the whole brook on its skew, plus its key",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "the half-length is BROOK_W/2/cos(30 deg) + key, so the weir spans the whole brook on its 30-degree skew",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
+  },
+  "research": "ba89a97c1cc159a1",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:5fcdeacb667b42dd",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:bd4acd9d984b8217",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver.rs::field_in#the weir's thickness by form": {
+  "body": "531872b104a954e7",
+  "claim": "the weir's thickness by form - where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing: four forms, 1.5 to 5 ft thick",
+  "code": "146573aa3f9bda60",
+  "core": "353031148a64a187",
+  "date": "2026-11-08",
+  "note": "fence 1.5, gabion 2, frame 5, crib 5 ft, and the four forms are rolled through the weir_form knob",
+  "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "3283a6e17f040d1f"
+  },
+  "research": "ba89a97c1cc159a1",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:442fecc7028f70a1",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:4ae905f5520be209",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:520a888572fe99e2",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:640b5a761e2e1e28",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:79deddd4ec0f4b3d",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:a0772093759304da"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::field_refused#the driver": {
   "body": "bd5038407c6cc2f5",
@@ -10736,16 +10565,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::fill#the driver": {
+ "rust/phases/src/driver.rs::fill#the paddy's paint by state": {
   "body": "204f64738f3af238",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "50839c56f1d38f1c",
+  "claim": "the paddy's paint by state - CONVENTION: green, flooded, gold and at rest, each state of the rice year in the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing drawn in its color",
+  "code": "614fbb141ed3be67",
   "core": "43fafe947a794bcc",
-  "date": "2026-11-07",
-  "note": "NONE on the paint for each paddy state (green, flooded, gold, rest); should be CONVENTION citing 0009",
+  "date": "2026-11-08",
+  "note": "each state mapped to an ink, purely how it is shown",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::kept#the driver": {
   "body": "714e91e3717460a4",
@@ -10817,24 +10647,40 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::settlement_ground#the driver": {
+ "rust/phases/src/driver.rs::settlement_ground#the belt's ground kept": {
   "body": "50785c000eaa493f",
-  "claim": "the driver - NONE: the stages' plumbing; each placement is claimed at the Rust that makes it",
-  "code": "9db02dbb6ec4f555",
+  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt",
+  "code": "edbd0e0b2b4de746",
   "core": "6a1a93c919f9e22a",
-  "date": "2026-11-07",
-  "note": "NONE on the shape of the settlement's ground: band width across, standoff + 2 x band depth + belt reach deep, out from the anchor; should cite 0006 (houses before the hem) and 0072 (the belt's ground)",
-  "pages": {},
-  "research": "",
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "the ground reaches past the band in the out (windward, the settlement's back) direction to the belt's far edge",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+  },
+  "research": "5892781a1ab23bcb",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver.rs::settlement_ground#the settlement's ground as a rectangle, band wide, standoff + 2 x depth + belt reach deep": {
-  "code": "6a1a93c919f9e22a",
+ "rust/phases/src/driver.rs::settlement_ground#the settlement's ground": {
+  "body": "50785c000eaa493f",
+  "claim": "the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so the hem keeps off the band where they stand",
+  "code": "f0b8eeb9a1820e07",
   "core": "6a1a93c919f9e22a",
-  "date": "2026-11-07",
-  "note": "the settlement's ground as a rectangle, band wide, standoff + 2 x depth + belt reach deep",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "the quad runs from the canal-side anchor over the standoff and the house band, so the hem keeps off where the houses stand",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::sink_refused#the driver": {
   "body": "21dbcf96259cb994",
@@ -10981,20 +10827,20 @@
  },
  "rust/phases/src/driver/check.rs::check#no dry plot on the water": {
   "body": "0870542d337b78f4",
-  "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: the dry plots laid clear of the field's ditches, the brook and the pond",
-  "code": "f98db221b84c7179",
+  "claim": "no dry plot on the water - dry-fields-and-their-crops-hatake.drawing: the dry plots kept to the dry side of the canal, behind a bare bank - tested against the field's channels, the brook and the drain's run (the pond's rim is `reed_checks`' reeds')",
+  "code": "9fbbab651bc7fefe",
   "core": "8b62d20cda48a7f7",
-  "date": "2026-11-07",
-  "note": "the claim says plots are kept clear of \"the brook and the pond\", but `water` holds only field channels, brooks and the drain's run (`s.run`, RUN_W). The pond ellipse `s.pond` is never tested against the dry plots. Either test the pond's rim or say \"the drain's run\" in the claim. The page itself names only the canal's bank (\"keep to the dry side of the canal, behind a bare bank\")",
+  "date": "2026-11-08",
+  "note": "the check fails any dry-plot corner that lies inside a channel's, the brook's or the drain run's half-width, which matches \"the plots keep to the dry side of the canal\"",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
   "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/check.rs::check#on the canvas": {
   "body": "0870542d337b78f4",
@@ -11103,56 +10949,43 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/check.rs::reed_checks#no dry plot on the settlement's ground (dry_on_settlement), a rule the claim does not name (0006 §2)": {
-  "code": "5c231cebd35639bb",
+ "rust/phases/src/driver/check.rs::reed_checks#no dry plot on the settlement's ground": {
+  "body": "77108c615fda091f",
+  "claim": "no dry plot on the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so no plot stands where they do (`dry_on_settlement`)",
+  "code": "1fd6dd9fc439a714",
   "core": "5c231cebd35639bb",
-  "date": "2026-11-07",
-  "note": "no dry plot on the settlement's ground (dry_on_settlement), a rule the claim does not name (0006 §2)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "the check fails any dry-plot corner on the settlement's ground, which matches \"the houses stand between the paddy's supply canal and the dry fields\"",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::BELT_REACH#the plan's rolls": {
+ "rust/phases/src/driver/plan.rs::BELT_REACH#the belt's reach": {
   "body": "993277afbe428df7",
-  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "code": "8c7abf4cb0ff4779",
+  "claim": "the belt's reach - GUESS: the deleted `BELT_REACH` 146 ft; shelter-belts-on-a-villages-windward-side-bofurin.drawing gives only a stand within 150 ft of a farmhouse, not this reach",
+  "code": "adb207ef04ac465f",
   "core": "ddf1929101c40f43",
-  "date": "2026-11-07",
-  "note": "146.0 is a fixed distance (the belt's reach behind the windward fringe), not a rolled knob. The inherited 0031 rolls claim does not cover it. It should carry the seat's-room GUESS that SEAT_STANDOFF's claim already names (146 ft); 0072 gives only \"within 150 ft\" for a stand near a farmhouse, not this reach",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/plan.rs::BELT_REACH#the shelter belt's reach behind the windward fringe, 146 ft": {
-  "code": "ddf1929101c40f43",
-  "core": "ddf1929101c40f43",
-  "date": "2026-11-07",
-  "note": "the shelter belt's reach behind the windward fringe, 146 ft",
+  "date": "2026-11-08",
+  "note": "146 ft sits just inside the page's \"within 150 ft on a hamlet's\" stand reach, and the bundle does not show the code that reads BELT_REACH. If it is the reach of the near-farmhouse stand, the page answers it and GUESS is MISLABELED. If it is something else (the band's outward reach from the rows), GUESS stands. I need the callers of BELT_REACH to tell",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "CANNOT-TELL"
  },
- "rust/phases/src/driver/plan.rs::DIKE_CROPS#the dike crop's shares: mulberry 3, fruit 2, tea 1 in six": {
-  "code": "79bada1b038c7681",
-  "core": "79bada1b038c7681",
-  "date": "2026-11-07",
-  "note": "the dike crop's shares: mulberry 3, fruit 2, tea 1 in six",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/plan.rs::DIKE_CROPS#the plan's rolls": {
+ "rust/phases/src/driver/plan.rs::DIKE_CROPS#the dike crop's shares": {
   "body": "6521d9e6b24e6fd0",
-  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "code": "15b33b067bedff37",
+  "claim": "the dike crop's shares - GUESS: the page names no crop on the dikes; mulberry three in six, fruit two, tea one (the deleted `DIKE_CROPS`)",
+  "code": "8ac3ff1f48b5e8a1",
   "core": "79bada1b038c7681",
-  "date": "2026-11-07",
-  "note": "0031 is about settlement forms and says nothing about what is planted on dike-pond dikes; 0019's drawing page does not mention mulberry, fruit or tea either. The label should be a GUESS, as POND_LAYOUTS' claim calls it",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "fruit and tea, and the 3:2:1 shares, are not attested in the cited material, so GUESS fits the shares",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::FAN_ASPECTS#the fan's aspect": {
   "body": "42e4cd620eaf3890",
@@ -11178,27 +11011,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::FRY_FORMS#a fry-pond village on one dike-pond hamlet in four": {
-  "code": "586f9cbec05467f8",
-  "core": "586f9cbec05467f8",
-  "date": "2026-11-07",
-  "note": "a fry-pond village on one dike-pond hamlet in four",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/plan.rs::FRY_FORMS#the plan's rolls": {
+ "rust/phases/src/driver/plan.rs::FRY_FORMS#the fry ponds": {
   "body": "b0430c8f35fd9309",
-  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "code": "15a300ae804325e0",
+  "claim": "the fry ponds - GUESS: the page silent on them; one dike-pond hamlet in four (the deleted `FRY_FORMS`)",
+  "code": "29808a9d29e83e5b",
   "core": "586f9cbec05467f8",
-  "date": "2026-11-07",
-  "note": "0031 does not bear on dike-pond fry ponds, and neither does 0019's drawing page. The label should be a GUESS, as POND_LAYOUTS' claim calls it",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
+  "date": "2026-11-08",
+  "note": "the bundle is silent on fry ponds",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::HEAD_LEAD#the head race's lead": {
   "body": "f8405d07d793b6b2",
@@ -11223,6 +11046,34 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/plan.rs::KNOBS#the farm water": {
+  "body": "adaf0910cc556575",
+  "claim": "the farm water - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records a channel or a well at even odds as a guess",
+  "code": "d99da27d40868faf",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-08",
+  "note": "channel or well at even odds for dispersed hamlets, recorded as a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#the grain drift": {
+  "body": "adaf0910cc556575",
+  "claim": "the grain drift - clustered-and-scattered-villages-shuson-sanson.drawing: eight degrees either way on a hamlet's",
+  "code": "8579496d116c473c",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-08",
+  "note": "-8 to 8 degrees, within \"8 on a hamlet's\"",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+  },
+  "research": "7c2bf95c3c36f0e4",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
   "body": "adaf0910cc556575",
   "claim": "the knobs' tables - GUESS: rolled per hamlet from their tables, each table's own claim in the deleted `hamletgen/consts*.py` (feature 444 T19), carried here as they stood",
@@ -11230,6 +11081,17 @@
   "core": "3a50375d75cd3753",
   "date": "2026-11-07",
   "note": "a blanket GUESS, but 0031's drawing page answers or records several of these tables. farm_water channel/well at even odds is §14's recorded GUESS. grain_drift's +/-8 is §30's \"8 on a hamlet's\". The lane and cluster-shape forms are §24/§25's recorded GUESS. Those tables should cite research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html (GUESS 0031 where the page records a guess)",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
+ },
+ "rust/phases/src/driver/plan.rs::KNOBS#the lane and cluster-shape forms": {
+  "body": "adaf0910cc556575",
+  "claim": "the lane and cluster-shape forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records each form as a guess",
+  "code": "eab2d547bfb2c331",
+  "core": "3a50375d75cd3753",
+  "date": "2026-11-08",
+  "note": "the page does not record every form as a guess. For cluster shape it says \"The lump and the line along a levee or a road are the attested forms\", and only the crescent is a GUESS. The claim should cite 0031.drawing for round/elongated, keep GUESS for crescent, and keep GUESS for the lane forms spine/T/Y/cross",
   "pages": {},
   "research": "",
   "verdict": "MISLABELED"
@@ -11251,27 +11113,17 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#leftover parcels as rice or pond at even odds": {
-  "code": "78d747455ee06528",
-  "core": "78d747455ee06528",
-  "date": "2026-11-07",
-  "note": "leftover parcels as rice or pond at even odds",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#the plan's rolls": {
+ "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#the leftover parcels": {
   "body": "93c7a59ef677da3e",
-  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "code": "7e08a484e2cb3baa",
+  "claim": "the leftover parcels - GUESS: the page silent on them; rice or pond at even odds (the deleted `LEFTOVER_FORMS`)",
+  "code": "38fe4066efdc8788",
   "core": "78d747455ee06528",
-  "date": "2026-11-07",
-  "note": "0031 does not bear on the dike-pond block's leftover parcels, and neither does 0019's drawing page. The label should be a GUESS, as POND_LAYOUTS' claim calls it",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
+  "date": "2026-11-08",
+  "note": "the bundle is silent on leftover parcels",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::POLDERS#the polder archetypes": {
   "body": "f8f0d1d160908b20",
@@ -11292,22 +11144,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::POND_LAYOUTS#the dike-pond's forms": {
+ "rust/phases/src/driver/plan.rs::POND_LAYOUTS#the dike-pond's layout": {
   "body": "ca5301d129e52f5c",
-  "claim": "the dike-pond's forms - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a dike-pond block's ponds and dikes; each form rolled per hamlet from its table (the deleted `POND_LAYOUTS`, `DIKE_CROPS`, `LEFTOVER_FORMS`, `FRY_FORMS`), its shares its repeated entries, a GUESS",
-  "code": "eb193eafb66bccd5",
+  "claim": "the dike-pond's layout - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing shows a dike-pond block's ponds and dikes but not their arrangement; mosaic two in three, grid one (the deleted `POND_LAYOUTS`)",
+  "code": "dd25ee7dcafcfe4a",
   "core": "01cc747bfef0e9e7",
-  "date": "2026-11-07",
-  "note": "mosaic on two hamlets in three, chessboard on the rest, its odds a GUESS",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:90c17d42d3739b49",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f2476cca851905fb"
-  ],
-  "verdict": "IN-STEP"
+  "date": "2026-11-08",
+  "note": "the claim says 0019.drawing gives \"not their arrangement\", but the page does record it: \"two layouts are recorded: a mosaic ... and a chessboard\", rolled at \"about two hamlets in three\" mosaic, with \"The odds are a GUESS\". The code's 2:1 mosaic/grid matches. The claim should be a 0019.drawing question claim (two attested layouts, odds a guess), not a GUESS",
+  "pages": {},
+  "research": "",
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver/plan.rs::Plan#the plan": {
   "body": "2c0164ac41fe4c38",
@@ -11321,19 +11167,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::Plan.knob#the plan's rolls": {
+ "rust/phases/src/driver/plan.rs::Plan.knob#the knob's form": {
   "body": "3d05896677cf22b5",
-  "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "code": "5fc593cfe006dbc9",
+  "claim": "the knob's form - NONE: a lookup of what was rolled",
+  "code": "7d3f7539d0ce5716",
   "core": "33990fff5795c299",
-  "date": "2026-11-07",
-  "note": "a map lookup that rolls nothing and decides nothing. The inherited roll claim does not describe it; the label should be NONE",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
+  "date": "2026-11-08",
+  "note": "a lookup, plumbing",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::SEAT_STANDOFF#the seat's room": {
   "body": "e24a2bb6c2ecf7f5",
@@ -11348,19 +11192,14 @@
  },
  "rust/phases/src/driver/plan.rs::WIND_BACK_MIN_DOT#the back to the wind": {
   "body": "8bf1491144a851d9",
-  "claim": "the back to the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the settlement laid out with its back to the wind, within 45 degrees",
-  "code": "d7da201c5c544368",
+  "claim": "the back to the wind - GUESS: shelter-belts-on-a-villages-windward-side-bofurin.drawing lays the settlement out with its back to the wind but gives no tolerance; within 45 degrees (the deleted `WIND_BACK_MIN_DOT`); it gates the seat's margin, not the fall",
+  "code": "15d75ba3d4d2c4b2",
   "core": "6fcde736ada587a4",
-  "date": "2026-11-07",
-  "note": "0072 says the settlement is laid out \"with its back to it\" but gives no 45-degree tolerance, so the claim should read GUESS/UNRESEARCHED. 0031 also admits a fall \"square across\" the wind (90 degrees), which a cos-45 bound would refuse if this constant gates the fall",
-  "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
-  },
-  "research": "5892781a1ab23bcb",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "date": "2026-11-08",
+  "note": "the page gives the back to the wind but no tolerance for the seat margin",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::band_extent#band aspect by shape": {
   "body": "7c4da0c0a7a17c36",
@@ -11425,13 +11264,23 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::plan#polders take no brook knobs (no intake or brook side rolled on a polder)": {
-  "code": "ee63c5b705778517",
+ "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
+  "body": "9f42d153d3a49a00",
+  "claim": "no brook knobs on a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder diked out of standing water has no brook, so no intake or brook side is rolled",
+  "code": "7555643aa26b4b00",
   "core": "ee63c5b705778517",
-  "date": "2026-11-07",
-  "note": "polders take no brook knobs (no intake or brook side rolled on a polder)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "a polder's water crosses its dike only at sluices and \"no channel runs outside the dike\", so it has no brook intake or brook side to roll",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#regional wind": {
   "body": "9f42d153d3a49a00",
@@ -11467,27 +11316,31 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/plan.rs::plan#the field archetype defaults to valley paddy unless the map declares one (polders only when asked)": {
-  "code": "ee63c5b705778517",
+ "rust/phases/src/driver/plan.rs::plan#the field's archetype": {
+  "body": "9f42d153d3a49a00",
+  "claim": "the field's archetype - GUESS: a valley paddy unless the map declares another; a polder only when asked",
+  "code": "eba363660236d891",
   "core": "ee63c5b705778517",
-  "date": "2026-11-07",
-  "note": "the field archetype defaults to valley paddy unless the map declares one (polders only when asked)",
+  "date": "2026-11-08",
+  "note": "0019.drawing answers this: \"A hamlet is drawn with a polder only when its map asks for one ... only the valley fan is dealt at random\", and calls the polder and the dike-pond, both attested, \"a known gap\". The claim should cite that page as DEVIATION (or a filed gap), not GUESS",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
   "body": "9f42d153d3a49a00",
-  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's flow taken as its fall",
-  "code": "e7e491a5460e5b1e",
+  "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's flow taken as its fall, always - the page's \"unless the hamlet declares one\" is not read, since no spec carries a declared bearing (the easier route, taken 2026-11-08)",
+  "code": "bdf697e59f7d4ef3",
   "core": "ee63c5b705778517",
-  "date": "2026-11-07",
-  "note": "`water_flow: down_deg` is set unconditionally. §97 records the deviation as the bearing taken from the fall \"unless the hamlet declares one\", but plan() reads no declared bearing from the spec. Either honor a declared bearing or narrow the claim",
+  "date": "2026-11-08",
+  "note": "the page's recorded deviation is that a hamlet's bearing \"is taken from its land's fall unless the hamlet declares one\". The code's `water_flow: down_deg`, with no field for a declared bearing, drops that exception, and the page does not record dropping it. Either record the departure on 0054.drawing or read a declared bearing",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
   "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:a8aa562e10d530f1"
   ],
   "verdict": "DRIFTED"
  },
@@ -11503,19 +11356,17 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::BANK_FILL#the polder": {
+ "rust/phases/src/driver/polder.rs::BANK_FILL#the polder's paint": {
   "body": "a2edf5bc8d727008",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "53d310376ed6e747",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "4cdebfe669991477",
   "core": "b3f43bd0ce492c3c",
-  "date": "2026-11-07",
-  "note": "a fill color for pond banks, purely how they are shown; the inherited enclosure claim does not apply, label should be CONVENTION (as DIKE_EARTH's \"the polder's paint\")",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
+  "date": "2026-11-08",
+  "note": "an ink color only",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::DIKE_EARTH#the polder's paint": {
   "body": "79d10754946525b7",
@@ -11529,110 +11380,87 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::DIKE_EDGE#the polder": {
+ "rust/phases/src/driver/polder.rs::DIKE_EDGE#the polder's paint": {
   "body": "e285f55e7a564a9e",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "9c545f86a44d4555",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "5b4da8a9523e7ddf",
   "core": "d15f7841aada03b3",
-  "date": "2026-11-07",
-  "note": "the dike's edge ink, purely how it is shown; label should be CONVENTION",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
+  "date": "2026-11-08",
+  "note": "an ink color only",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::HEDGE#the polder": {
+ "rust/phases/src/driver/polder.rs::HEDGE#the polder's paint": {
   "body": "3c8b66ae02319592",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "e4f582c4811173c8",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "7052e3ee914ee886",
   "core": "9c6689dc96cdb39f",
-  "date": "2026-11-07",
-  "note": "the hedge line's ink, purely how it is shown; label should be CONVENTION",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
+  "date": "2026-11-08",
+  "note": "an ink color only",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::NURSERY_WATER#the polder": {
+ "rust/phases/src/driver/polder.rs::NURSERY_WATER#the polder's paint": {
   "body": "96d937302886cbf8",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "70ec80dbbebad43c",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "1893bed474e6f0bd",
   "core": "5beb4a3730c08d4f",
-  "date": "2026-11-07",
-  "note": "the fry-pond water ink, purely how it is shown; label should be CONVENTION",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
+  "date": "2026-11-08",
+  "note": "an ink color only",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::SLUICE#the polder": {
+ "rust/phases/src/driver/polder.rs::SLUICE#the polder's paint": {
   "body": "5c3b622272de0a1d",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "98d587f4a2b8fe53",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "8c8f2dc65db4c91c",
   "core": "3efe6a8e5bb71563",
-  "date": "2026-11-07",
-  "note": "the sluice symbol's fill and edge inks; label should be CONVENTION",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/polder.rs::STRIP_CUT_HW#the reed strips": {
-  "body": "f208ad96e59a170a",
-  "claim": "the reed strips - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: reeds on the flanks of a dike that face the water; the deleted waterward stage's 15 ft cut and 280 ft depth, each a GUESS there",
-  "code": "56b26cec325d0187",
-  "core": "8fd79110fc2dc078",
-  "date": "2026-11-07",
-  "note": "§4 gives the reed fringe on the water-facing flanks, but the page records no 15 ft cut and does not call it a GUESS; the label should be GUESS (no file records it), or the drawing page should record the figure",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/polder.rs::STRIP_DEPTH#the polder": {
-  "body": "5b99e6086bb1ad67",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "8f7a107b2106b066",
-  "core": "ce40a87bfeb50e62",
-  "date": "2026-11-07",
-  "note": "280 ft is the depth of the reed strip, a physical figure; the inherited enclosure claim does not cover it and the page is silent on it; the label should be GUESS, as STRIP_CUT_HW's claim says",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
-  "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/polder.rs::crown_fill#the polder": {
-  "body": "3cd1b4765be60d00",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "4d801a12cb43f802",
-  "core": "ee3aa913a2f8d9da",
-  "date": "2026-11-07",
-  "note": "maps each crop to a crown color, purely how crowns are shown; label should be CONVENTION",
-  "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
-  },
-  "research": "765c28e2d975a432",
+  "date": "2026-11-08",
+  "note": "an ink color pair only",
+  "pages": {},
+  "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::STRIP_CUT_HW#the strip's cut": {
+  "body": "f208ad96e59a170a",
+  "claim": "the strip's cut - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing puts reeds on the water-facing flanks but records no width; the deleted waterward stage's 15 ft",
+  "code": "e0882abe1f6dcbca",
+  "core": "8fd79110fc2dc078",
+  "date": "2026-11-08",
+  "note": "the page puts a reed fringe on the flanks that hold water back but gives no width, so 15 ft is a guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::STRIP_DEPTH#the strip's depth": {
+  "body": "5b99e6086bb1ad67",
+  "claim": "the strip's depth - GUESS: the page records no depth; the deleted waterward stage's 280 ft",
+  "code": "6b01a65d8b121c14",
+  "core": "ce40a87bfeb50e62",
+  "date": "2026-11-08",
+  "note": "the page places the reed marsh and fringe but gives no depth, so 280 ft is a guess",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::crown_fill#the polder's paint": {
+  "body": "3cd1b4765be60d00",
+  "claim": "the polder's paint - CONVENTION: the deleted engine's ink, carried as it stood",
+  "code": "c7b91ada531bb02b",
+  "core": "ee3aa913a2f8d9da",
+  "date": "2026-11-08",
+  "note": "maps each crop to an ink color and chooses no crop",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
   "body": "f1567600e8b43223",
@@ -11662,14 +11490,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::stage_polder#paddy rest rolled settled 0.8 / unsettled 0.2, a choice between forms": {
-  "code": "c7c3158d71c12048",
-  "core": "c7c3158d71c12048",
-  "date": "2026-11-07",
-  "note": "paddy rest rolled settled 0.8 / unsettled 0.2, a choice between forms",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/driver/polder.rs::stage_polder#the dike-pond's split": {
   "body": "61328f60f47d75cd",
   "claim": "the dike-pond's split - GUESS: the share of a parcel a pond takes, rolled from 0.3 to 0.7 (the registry's `dikepond_split`)",
@@ -11677,6 +11497,18 @@
   "core": "c7c3158d71c12048",
   "date": "2026-11-07",
   "note": "uniform roll over 0.3 to 0.7, which the page does not cover",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::stage_polder#the paddy's rest": {
+  "body": "61328f60f47d75cd",
+  "claim": "the paddy's rest - GUESS: settled 0.8 and unsettled 0.2, a knob between the two forms (the registry's `paddy_rest`)",
+  "code": "ee6aa43835ee8ade",
+  "core": "c7c3158d71c12048",
+  "date": "2026-11-08",
+  "note": "the code rolls paddy_rest with weights 0.8 and 0.2, as the claim states, and no cited page answers it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -11992,11 +11824,11 @@
  },
  "rust/phases/src/driver/svg.rs::ROW_FT#furrow spacing": {
   "body": "3c1d6287f4ec847e",
-  "claim": "furrow spacing - GUESS: 5 ft between rows (the deleted `_draw_furrows`)",
-  "code": "a9a2bd29ead81dc4",
+  "claim": "furrow spacing - GUESS: dry-fields-and-their-crops-hatake.drawing records 5 ft between rows as a guess (the deleted `_draw_furrows`)",
+  "code": "94e26cedac078300",
   "core": "27c206c685139d89",
-  "date": "2026-11-07",
-  "note": "the page records the furrow spacing as a GUESS; 5 ft is not contradicted",
+  "date": "2026-11-08",
+  "note": "the drawing page records the furrows' spacing as a GUESS; 5 ft is the guessed figure",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -12018,352 +11850,238 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/svg.rs::Svg#the field's paint": {
+ "rust/phases/src/driver/svg.rs::Svg#the SVG writer": {
   "body": "804c92e45f1a2b12",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "4de229e1aa30c267",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "0bf6301b4c1489db",
   "core": "eb462fa11c22cdde",
-  "date": "2026-11-07",
-  "note": "a struct holding the SVG body, bbox and clip counter; it paints nothing and has no wet-paddy tint; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.band#the field's paint": {
-  "body": "de744873001b0901",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "a83061a016d1b691",
-  "core": "3624564405edc2bd",
-  "date": "2026-11-07",
-  "note": "writes an even-odd ring with the fill and edge it is given; plumbing, should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.bbox#the field's paint": {
-  "body": "2e02ee087690730e",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "6c50d77013177e55",
-  "core": "5ad8b23710bacb97",
-  "date": "2026-11-07",
-  "note": "a bbox getter; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.close#the field's paint": {
-  "body": "3d3aeb7610cf23cb",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "60cee408947b440f",
-  "core": "61e04635e5744cfd",
-  "date": "2026-11-07",
-  "note": "closes a group; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.ellipse#the field's paint": {
-  "body": "453fe2034e4faad5",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "8bf51dd33a149dd4",
-  "core": "a6537124b94398c8",
-  "date": "2026-11-07",
-  "note": "writes an ellipse with the colors it is given; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.finish#the field's paint": {
-  "body": "4fca2af690b1d44c",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "36ccc215505dd5fd",
-  "core": "e94a9131e9c24e8d",
-  "date": "2026-11-07",
-  "note": "decides only the viewBox crop and the ink::LAND ground fill; no wet-paddy tint here; should be CONVENTION (ground color)",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.furrowed#furrows drawn as straight parallel rows at ROW_FT, one direction per plot, clipped to the plot": {
-  "code": "e914ddfa1cf51127",
-  "core": "e914ddfa1cf51127",
-  "date": "2026-11-07",
-  "note": "furrows drawn as straight parallel rows at ROW_FT, one direction per plot, clipped to the plot",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/svg.rs::Svg.furrowed#the field's paint": {
-  "body": "4f55fd180efc3e6e",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "24696e1a3123e78d",
-  "core": "e914ddfa1cf51127",
-  "date": "2026-11-07",
-  "note": "draws the dry plot's furrows (straight parallel rows at ROW_FT along theta, clipped to the plot), not a wet-paddy tint; should cite 0006 drawing (furrowed rows, spacing a GUESS) plus CONVENTION for the 0.8 stroke and opacity",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.group#the field's paint": {
-  "body": "fca300fd0551d937",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "a3afbabdd9556937",
-  "core": "34cb36f3a8275741",
-  "date": "2026-11-07",
-  "note": "opens an opacity group; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.grow#the field's paint": {
-  "body": "e7302302f7ca376a",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "468b1f61e3624f85",
-  "core": "36a6534372b2ee41",
-  "date": "2026-11-07",
-  "note": "grows the bounding box; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.line#the field's paint": {
-  "body": "72ea7273878e86b8",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "a6c7d774a21ca9ae",
-  "core": "65027f59d64dcbba",
-  "date": "2026-11-07",
-  "note": "a stroke with the width it is given; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.polygon#the field's paint": {
-  "body": "51615b0acee6177b",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "f01f039a8d59f04e",
-  "core": "53746d49b8e3296b",
-  "date": "2026-11-07",
-  "note": "a filled ring with a round linejoin; plumbing and a convention, should be NONE (or CONVENTION)",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.reeds#the field's paint": {
-  "body": "5c00f49c6054ac35",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "cf2a7ac61185cfb6",
-  "core": "b3ac9f70a3864957",
-  "date": "2026-11-07",
-  "note": "fills a ring with the reed glyph tile; should be CONVENTION (the reed glyph), not the wet-paddy page",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.reserved#the field's paint": {
-  "body": "3fd1cfc4732bcd7a",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "87006166c212b440",
-  "core": "671f6155d4ccd4ab",
-  "date": "2026-11-07",
-  "note": "dashed outline (4 wide, 24/16 dash) and a serif label of size 56 at the centroid; should be CONVENTION",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.taper#a channel's width profile along its length (width squared linear in distance from w0 to w1)": {
-  "code": "d73e6b9e4e330177",
-  "core": "d73e6b9e4e330177",
-  "date": "2026-11-07",
-  "note": "a channel's width profile along its length (width squared linear in distance from w0 to w1)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "rust/phases/src/driver/svg.rs::Svg.taper#the field's paint": {
-  "body": "83512631b350743a",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "32439614fc202a19",
-  "core": "d73e6b9e4e330177",
-  "date": "2026-11-07",
-  "note": "sets how a line's width grows along its length (width squared linear in distance), not a paddy tint; should be UNRESEARCHED or GUESS for the width profile",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::Svg.unframed#the field's paint": {
-  "body": "67c912099273efba",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "6f04650a8740c410",
-  "core": "57446d7f349c9cd2",
-  "date": "2026-11-07",
-  "note": "a stroke with a round cap and join; should be NONE (or CONVENTION)",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::f#the field's paint": {
-  "body": "202c1bbe6f07722e",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "5c008c0129449adf",
-  "core": "06c6ca9380df2f8e",
-  "date": "2026-11-07",
-  "note": "formats a number to 0.1; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/svg.rs::path#the field's paint": {
-  "body": "b64131ff429939a3",
-  "claim": "the field's paint - wet-paddies-that-never-drain-shitsuden.drawing: the wet paddy tinted blue-green, the tint marking the ground; the rest of the palette is the deleted engine's, a map drawing convention",
-  "code": "45343f13d707fc3b",
-  "core": "910ea69472167297",
-  "date": "2026-11-07",
-  "note": "builds the path's d string; should be NONE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "rests": [
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/toe.rs::BLEED#flaring flanks": {
-  "body": "3478b287b27d2273",
-  "claim": "flaring flanks - marshes-and-wetlands-shitchi.drawing: part of the straight-band deviation, the band's ends bow outward downhill as seepage spreads",
-  "code": "d698c2bdf2f6ecfb",
-  "core": "8b1244ce034bf546",
-  "date": "2026-11-07",
-  "note": "BLEED (120 ft) is the sheet's bleed past the canvas edge, not the flare; label it CONVENTION and move the \"its bleed\" claim from PAD onto BLEED",
-  "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
-  },
-  "research": "d85a68dc96fcb1d6",
-  "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/toe.rs::BLEED#toe band edge": {
-  "body": "3478b287b27d2273",
-  "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: 90 ft above the local lowest field, smoothed over three stations",
-  "code": "81ffb005e019dc87",
-  "core": "8b1244ce034bf546",
-  "date": "2026-11-07",
-  "note": "BLEED is not the 90 ft edge offset; the page has no 120 ft figure; label it CONVENTION (the sheet's bleed)",
-  "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
-  },
-  "research": "d85a68dc96fcb1d6",
-  "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/toe.rs::BLEED#toe band width": {
-  "body": "3478b287b27d2273",
-  "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: as wide as the fields plus 90 ft each side",
-  "code": "e4c3e49dc4931e7a",
-  "core": "8b1244ce034bf546",
-  "date": "2026-11-07",
-  "note": "BLEED only clamps the band at the bled canvas, not at \"fields plus 90 ft each side\"; label it CONVENTION (the sheet's bleed)",
-  "pages": {
-   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
-  },
-  "research": "d85a68dc96fcb1d6",
-  "rests": [
-   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/driver/toe.rs::PAD#its bleed": {
-  "body": "bcb31261916594f4",
-  "claim": "its bleed - CONVENTION: 120 ft past the canvas edge, sizes on the sheet, not in the world",
-  "code": "60f78e106f9fbed6",
-  "core": "2e0a108008029e92",
-  "date": "2026-11-07",
-  "note": "PAD is 90 ft (the marsh's edge offset and width margin), not the 120 ft bleed; this claim belongs on BLEED",
+  "date": "2026-11-08",
+  "note": "struct holding the document body, its bounds and a clip counter; plumbing",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.band#the SVG writer": {
+  "body": "de744873001b0901",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "aad7b011f090cfec",
+  "core": "3624564405edc2bd",
+  "date": "2026-11-08",
+  "note": "writes an even-odd band in the ink and width it is handed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.bbox#the SVG writer": {
+  "body": "2e02ee087690730e",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "8b0f5e7507d271cf",
+  "core": "5ad8b23710bacb97",
+  "date": "2026-11-08",
+  "note": "accessor",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.close#the SVG writer": {
+  "body": "3d3aeb7610cf23cb",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "9cffe36aa2cfa964",
+  "core": "61e04635e5744cfd",
+  "date": "2026-11-08",
+  "note": "closes a group",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.ellipse#the SVG writer": {
+  "body": "453fe2034e4faad5",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "e20063205e54d1ba",
+  "core": "a6537124b94398c8",
+  "date": "2026-11-08",
+  "note": "writes an ellipse it is handed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.finish#the ground's color": {
+  "body": "4fca2af690b1d44c",
+  "claim": "the ground's color - CONVENTION: the land drawn in `ink::LAND` beneath everything",
+  "code": "0308c6906208754b",
+  "core": "e94a9131e9c24e8d",
+  "date": "2026-11-08",
+  "note": "ink::LAND rect under the body is how the ground is shown; the viewBox margin is plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.furrowed#furrowed rows": {
+  "body": "4f55fd180efc3e6e",
+  "claim": "furrowed rows - dry-fields-and-their-crops-hatake.drawing: every dry plot drawn in ridged rows, `ROW_FT` apart (a GUESS there)",
+  "code": "cab85c79c320018e",
+  "core": "e914ddfa1cf51127",
+  "date": "2026-11-08",
+  "note": "fills the plot and draws parallel rows ROW_FT apart at the tract angle it is handed; the page has every dry plot furrowed, in ridged rows, with the spacing a guess",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:0f2c041752f55add",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:92c3a1caf521b198"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.furrowed#the furrow's stroke": {
+  "body": "4f55fd180efc3e6e",
+  "claim": "the furrow's stroke - CONVENTION: a 0.8 ft line at 0.8 opacity, so the rows read under the crop's fill",
+  "code": "fd04b307dd7ca668",
+  "core": "e914ddfa1cf51127",
+  "date": "2026-11-08",
+  "note": "0.8 stroke width at 0.8 opacity is how the rows are shown",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.group#the SVG writer": {
+  "body": "fca300fd0551d937",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "27a0e563871bd7f5",
+  "core": "34cb36f3a8275741",
+  "date": "2026-11-08",
+  "note": "opens a group at the opacity it is handed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.grow#the SVG writer": {
+  "body": "e7302302f7ca376a",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "410d0b3342e7e2d5",
+  "core": "36a6534372b2ee41",
+  "date": "2026-11-08",
+  "note": "extends the bounds",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.line#the SVG writer": {
+  "body": "72ea7273878e86b8",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "8ec068dcf79bb382",
+  "core": "65027f59d64dcbba",
+  "date": "2026-11-08",
+  "note": "extends the bounds, then writes the line",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.polygon#the SVG writer": {
+  "body": "51615b0acee6177b",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "b99ab2220e344b3e",
+  "core": "53746d49b8e3296b",
+  "date": "2026-11-08",
+  "note": "writes a polygon in the ink it is handed; the round join is rendering plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.reeds#the reed glyph": {
+  "body": "5c00f49c6054ac35",
+  "claim": "the reed glyph - CONVENTION: the deleted engine's reed tile, a repeated reed mark filling the cover",
+  "code": "6af72341282b4b21",
+  "core": "b3ac9f70a3864957",
+  "date": "2026-11-08",
+  "note": "fills the ring with the reed-ticks pattern",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.reserved#the placeholder": {
+  "body": "3fd1cfc4732bcd7a",
+  "claim": "the placeholder - CONVENTION: a dashed outline 4 ft wide (24 on, 16 off) and a serif label 56 ft high at its centroid",
+  "code": "60706cecbaf3525a",
+  "core": "671f6155d4ccd4ab",
+  "date": "2026-11-08",
+  "note": "the code draws a 4-wide outline dashed 24/16 and a 56-high serif label at the centroid, as the claim states",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.taper#a channel's taper": {
+  "body": "83512631b350743a",
+  "claim": "a channel's taper - UNRESEARCHED: its width squared growing linearly from head to tail, the deleted `taper_w`",
+  "code": "23819f471e11c114",
+  "core": "d73e6b9e4e330177",
+  "date": "2026-11-08",
+  "note": "the width squared is interpolated linearly along the arc length; nothing in the bundle answers it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::Svg.unframed#the SVG writer": {
+  "body": "67c912099273efba",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "d9eaf9745ae181a1",
+  "core": "57446d7f349c9cd2",
+  "date": "2026-11-08",
+  "note": "writes an open path in the ink and width it is handed",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::f#the SVG writer": {
+  "body": "202c1bbe6f07722e",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "67ab7509bcdb2f88",
+  "core": "06c6ca9380df2f8e",
+  "date": "2026-11-08",
+  "note": "number formatting",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/svg.rs::path#the SVG writer": {
+  "body": "b64131ff429939a3",
+  "claim": "the SVG writer - NONE: the document's plumbing, writing each shape in the ink and width it is handed; the palette and each drawn figure are claimed where they are chosen",
+  "code": "9f8ab967db42d391",
+  "core": "910ea69472167297",
+  "date": "2026-11-08",
+  "note": "builds a path string",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/toe.rs::BLEED#its bleed": {
+  "body": "3478b287b27d2273",
+  "claim": "its bleed - CONVENTION: 120 ft past the canvas edge, sizes on the sheet, not in the world",
+  "code": "834029bef9a644b9",
+  "core": "8b1244ce034bf546",
+  "date": "2026-11-08",
+  "note": "off-sheet overrun past the frame, not visible on the map",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::PAD#toe band edge": {
   "body": "bcb31261916594f4",
@@ -12382,24 +12100,34 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/toe.rs::PAD#toe band width: the fields plus 90 ft each side (0057 §115)": {
-  "code": "2e0a108008029e92",
+ "rust/phases/src/driver/toe.rs::PAD#toe band width": {
+  "body": "bcb31261916594f4",
+  "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: as wide as the fields plus 90 ft each side",
+  "code": "21a103d5c2b5b551",
   "core": "2e0a108008029e92",
-  "date": "2026-11-07",
-  "note": "toe band width: the fields plus 90 ft each side (0057 §115)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "90 ft each side of the fields, as the page gives",
+  "pages": {
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
+  },
+  "research": "d85a68dc96fcb1d6",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:cd3989989039bcad"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/toe.rs::grow#the lane's width round wet ground": {
+ "rust/phases/src/driver/toe.rs::grow#the ring's offset": {
   "body": "1aa3ccaf9d00fd25",
-  "claim": "the lane's width round wet ground - GUESS: the deleted `wet_grown_by_the_lane`, 8 ft, the way out keeping its own width off the wet",
-  "code": "d2514899674972b4",
+  "claim": "the ring's offset - NONE: geometry, the ring grown by the width its caller hands it (the lane's 8 ft is `driver::LANE_FT`'s claim)",
+  "code": "0a2cfb2d2d1df626",
   "core": "48a1eed82c7628ae",
-  "date": "2026-11-07",
-  "note": "grow offsets a ring by the caller's `by` and fixes no width itself; the 8 ft GUESS belongs at the caller, and this unit should be NONE (offset geometry)",
+  "date": "2026-11-08",
+  "note": "geometry",
   "pages": {},
   "research": "",
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#flare size": {
   "body": "01d5f9d17322a26b",
@@ -12412,13 +12140,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/toe.rs::toe_band#flaring flanks: the band's ends bow outward downhill to the canvas's far edge (0057 §117)": {
-  "code": "5fb351b57a93b38b",
+ "rust/phases/src/driver/toe.rs::toe_band#flaring flanks": {
+  "body": "01d5f9d17322a26b",
+  "claim": "flaring flanks - marshes-and-wetlands-shitchi.drawing: part of the straight-band deviation, the band's ends bow outward downhill to the canvas's far edge",
+  "code": "20b49588cb11a33f",
   "core": "5fb351b57a93b38b",
-  "date": "2026-11-07",
-  "note": "flaring flanks: the band's ends bow outward downhill to the canvas's far edge (0057 §117)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "the band's ends bow outward downhill to the far edge, part of the recorded straight-band deviation",
+  "pages": {
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
+  },
+  "research": "d85a68dc96fcb1d6",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/toe.rs::toe_band#its search steps": {
   "body": "01d5f9d17322a26b",
@@ -12431,21 +12167,39 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/toe.rs::toe_band#toe band edge: 90 ft above the local lowest field within ±90 ft, smoothed over three stations (0057 §118)": {
-  "code": "5fb351b57a93b38b",
+ "rust/phases/src/driver/toe.rs::toe_band#toe band edge": {
+  "body": "01d5f9d17322a26b",
+  "claim": "toe band edge - marshes-and-wetlands-shitchi.drawing: the inner edge `PAD` above the local lowest field within a pad each way, smoothed over three stations",
+  "code": "b4d33aa3fcc9316e",
   "core": "5fb351b57a93b38b",
-  "date": "2026-11-07",
-  "note": "toe band edge: 90 ft above the local lowest field within ±90 ft, smoothed over three stations (0057 §118)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "edge set PAD uphill of the lowest field point within plus or minus PAD of each station, then max-smoothed over three stations",
+  "pages": {
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
+  },
+  "research": "d85a68dc96fcb1d6",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:54ca08b790a43ab3",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94"
+  ],
+  "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/toe.rs::toe_band#toe band width: the fields' cross-slope span ±90 ft, clipped to the bled canvas (0057 §115)": {
-  "code": "5fb351b57a93b38b",
+ "rust/phases/src/driver/toe.rs::toe_band#toe band width": {
+  "body": "01d5f9d17322a26b",
+  "claim": "toe band width - marshes-and-wetlands-shitchi.drawing: the fields' cross-slope span and `PAD` each side, clipped to the bled canvas",
+  "code": "02672257c308b7ed",
   "core": "5fb351b57a93b38b",
-  "date": "2026-11-07",
-  "note": "toe band width: the fields' cross-slope span ±90 ft, clipped to the bled canvas (0057 §115)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "date": "2026-11-08",
+  "note": "the fields' cross-slope span plus PAD each side, clipped to the bled canvas",
+  "pages": {
+   "0057-marshes-and-wetlands-shitchi.drawing.html": "eb21ed576dd48fd6"
+  },
+  "research": "d85a68dc96fcb1d6",
+  "rests": [
+   "0057-marshes-and-wetlands-shitchi.drawing.html:76b35a1a6c579d94",
+   "0057-marshes-and-wetlands-shitchi.drawing.html:fb59dad7cefa1d14"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field.rs::ACRES_PER_HOUSEHOLD#paddy per household": {
   "body": "612babfa6f7cda1f",
@@ -13395,14 +13149,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/build.rs::one#an organic or planned (grid) lattice per field, chosen by the `plot_regularity` knob, organic when the knob is absent": {
-  "code": "1a9c4073cdf6984a",
-  "core": "1a9c4073cdf6984a",
-  "date": "2026-11-07",
-  "note": "an organic or planned (grid) lattice per field, chosen by the `plot_regularity` knob, organic when the knob is absent",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/build.rs::one#resting plots": {
   "body": "4410a04d49576ac7",
   "claim": "resting plots - paddies-left-to-rest-kataarashi.drawing: an unsettled settlement rests two to four whole plots (`paddy_rest`, rolled)",
@@ -13494,6 +13240,17 @@
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:621fa7102df56a9e",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628"
   ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/field/build.rs::one#the lattice's form": {
+  "body": "4410a04d49576ac7",
+  "claim": "the lattice's form - NONE: the form the `plot_regularity` knob rolled (its claim is `driver::FIELD_KNOBS`'), organic where the knob is absent",
+  "code": "c96cab1b1aac9ba5",
+  "core": "1a9c4073cdf6984a",
+  "date": "2026-11-08",
+  "note": "passes on the form the `plot_regularity` knob rolled; the organic fallback is the patchwork the page draws everywhere",
+  "pages": {},
+  "research": "",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::one#the weir": {
@@ -14707,14 +14464,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::hem#a strip standing on the settlement's ground past the push behind is dropped (on_keep at lines 113-122), not pushed further: the settlement's ground kept clear of every dry strip": {
-  "code": "621454ef3f3dcc8c",
-  "core": "621454ef3f3dcc8c",
-  "date": "2026-11-07",
-  "note": "a strip standing on the settlement's ground past the push behind is dropped (on_keep at lines 113-122), not pushed further: the settlement's ground kept clear of every dry strip",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "rust/phases/src/field/dry.rs::hem#not steep ground": {
   "body": "57252853dd763be0",
   "claim": "not steep ground - dry-fields-and-their-crops-hatake.drawing: on steep ground every tract runs the contour - the comb's hem stands on an alluvial fan's gentle fall, the steep ground's terraced form another archetype this stage does not draw, so its tracts take either",
@@ -14838,6 +14587,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/field/dry.rs::hem#the settlement's ground kept": {
+  "body": "57252853dd763be0",
+  "claim": "the settlement's ground kept - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so a strip still on their ground past the push behind is dropped, not pushed further",
+  "code": "e4043f4e81edc43f",
+  "core": "621454ef3f3dcc8c",
+  "date": "2026-11-08",
+  "note": "the column is pushed behind the ground (past_keep) and a strip still on it is dropped (on_keep -> continue), so the houses stand between the canal and the dry fields",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
+  },
+  "research": "99a077469bb67bf5",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/field/dry.rs::hem#the tracts apart": {
   "body": "57252853dd763be0",
   "claim": "the tracts apart - CONVENTION: dry-fields-and-their-crops-hatake.drawing sets tracts at least 20 degrees apart by a drawing convention (`apart`)",
@@ -14868,37 +14633,17 @@
   "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/dry.rs::on_keep#the dry hem": {
+ "rust/phases/src/field/dry.rs::on_keep#the overlap": {
   "body": "3ad05b690d2588cf",
-  "claim": "the dry hem - dry-fields-and-their-crops-hatake.drawing: a hem of small rectangular plots just upslope of the supply canal that runs along the paddy's high edge",
-  "code": "31f7e7946ad86598",
+  "claim": "the overlap - NONE: a test of whether two grounds overlap; its callers decide what stays off the settlement's ground",
+  "code": "d0adb538aed05a81",
   "core": "5c443a82d087cbfa",
-  "date": "2026-11-07",
-  "note": "on_keep only tests whether a strip and the settlement's ground overlap; it does not lay the hem upslope of the canal. It should carry its own NONE claim (an overlap test), since the callers decide to keep plots off the ground",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
-  },
-  "research": "99a077469bb67bf5",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
-  ],
-  "verdict": "MISLABELED"
- },
- "rust/phases/src/field/dry.rs::on_keep#the need": {
-  "body": "3ad05b690d2588cf",
-  "claim": "the need - where-a-farming-hamlet-grew-its-coarse-grain.drawing: about 0.85 acre a household, a GUESS resting on attested rates",
-  "code": "b46257b58ebaecee",
-  "core": "5c443a82d087cbfa",
-  "date": "2026-11-07",
-  "note": "on_keep never reads the grain need; points to a question about something else; should be NONE (an overlap test)",
-  "pages": {
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
-  },
-  "research": "8159982a6874674a",
-  "rests": [
-   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:cf41fc04e040d5c8"
-  ],
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "a pure overlap test (middle, corners both ways); its callers make the decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::past_keep#the dry fields behind the houses": {
   "body": "29d0ac65123943cc",
@@ -14918,14 +14663,14 @@
  },
  "rust/phases/src/field/dry.rs::past_keep#the push behind": {
   "body": "29d0ac65123943cc",
-  "claim": "the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground, at most the ground's own diagonal and a strip past it",
-  "code": "fff4803ddc455e70",
+  "claim": "the push behind - GUESS: no page gives the gap between the houses and their dry fields; a strip's depth (71.5 ft) at a time until the strip's corners and middle clear the ground and no corner of the ground stands in the strip, at most the ground's own diagonal and a strip past it",
+  "code": "edc8f408bb51f864",
   "core": "c62d5c5c9b8708d5",
-  "date": "2026-11-07",
-  "note": "the claim's account says the push ends when \"the strip's corners and middle clear the ground\", but on_keep (line 198) also keeps pushing while any corner of the ground stands inside the strip; the account should add \"and no corner of the ground in the strip\" (GUESS label right, no page gives the gap)",
+  "date": "2026-11-08",
+  "note": "steps PLOT_FT.1 (71.5 ft) until the strip's corners and middle clear the ground and no ground corner is in it, stopping once past the ground's box diagonal (so at most a diagonal plus one strip); the page gives no gap between the houses and their dry fields",
   "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/dry.rs::refused#a plot onto rice dropped": {
   "body": "c670fe8100916609",
@@ -16263,13 +16008,16 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/field/lattice.rs::basins_counted#the row's form in fallback order (askew with triangles, then askew, then square) and a planned field's rows always square": {
-  "code": "69cb6c65a0883c12",
+ "rust/phases/src/field/lattice.rs::basins_counted#the row's form": {
+  "body": "a49228b3fff5a562",
+  "claim": "the row's form - GUESS: the deleted engine's fallback order - askew with its triangles, then askew, then square - and a planned field's rows always square",
+  "code": "865b7df4a82fd77a",
   "core": "69cb6c65a0883c12",
-  "date": "2026-11-07",
-  "note": "the row's form in fallback order (askew with triangles, then askew, then square) and a planned field's rows always square",
+  "date": "2026-11-08",
+  "note": "organic rows try askew with triangles, then askew, then square, and keep the first that passes `rules::held`; planned rows are only square; the page attests triangles and the planned rows' spacing but no fallback order or slant for planned rows",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/field/lattice.rs::cuts#the cuts": {
   "body": "4c4a6d5093d626e6",
@@ -18216,19 +17964,14 @@
  },
  "rust/phases/src/seat.rs::seat#the back to the hill where the wind cannot be backed": {
   "body": "73a06dafe9276094",
-  "claim": "the back to the hill where the wind cannot be backed - clustered-and-scattered-villages-shuson-sanson.drawing: 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)",
-  "code": "4dc732792e303440",
+  "claim": "the back to the hill where the wind cannot be backed - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing weighs no hill against the wind - its rolled falls run away from the wind or square across it; 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)",
+  "code": "d54dd870f09b9799",
   "core": "f6d413a781b88fbf",
-  "date": "2026-11-07",
-  "note": "the new fallback (`wind: (-inp.fall.0, -inp.fall.1)`, frames marked offwind) handles a declared fall into the wind. The cited page does not cover that case: §61 only says rolled hamlet falls run \"away from the wind or square across it, its high side windward or level\". It never weighs the hill against the wind, and 背山面水 does not appear on it. The claim admits this is a GUESS but cites the page as if the page found it. It should read `GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html`, with the guess recorded on that page",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
-  },
-  "research": "7c2bf95c3c36f0e4",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
-  ],
-  "verdict": "MISLABELED"
+  "date": "2026-11-08",
+  "note": "the code does what the claim says: it re-ranks with wind = -fall and marks each frame offwind. But the claim's GUESS rests on research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, which is not in the bundle. I need that page to confirm it weighs no hill against the wind and draws no fall into the wind. The pages that are in the bundle are silent on this (0035 only says the site has \"its back to the winter wind\")",
+  "pages": {},
+  "research": "",
+  "verdict": "CANNOT-TELL"
  },
  "rust/phases/src/seat.rs::seat#the fords before the seat": {
   "body": "73a06dafe9276094",

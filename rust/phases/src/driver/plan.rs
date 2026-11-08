@@ -17,7 +17,8 @@ use crate::water_frame::{admitted, roll_plan};
 ///     the knobs' tables - GUESS: rolled per hamlet from their tables, carried from the deleted `hamletgen/consts*.py` (feature 444 T19); where the page records a table it is cited below
 ///     the farm water - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records a channel or a well at even odds as a guess
 ///     the grain drift - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: eight degrees either way on a hamlet's
-///     the lane and cluster-shape forms - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records each form as a guess
+///     the cluster's shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there
+///     the lane forms - GUESS: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html records the spine, the T, the Y and the cross as guesses
 ///     the settlement form's shares - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: half clustered, three in ten scattered, two in ten as rows
 pub const KNOBS: [(&str, &[&str], &str); 21] = [
     (
@@ -83,7 +84,7 @@ pub const POLDERS: [&str; 2] = ["polder_grid", "mulberry_dike_fishpond"];
 /// A dike-pond block's arrangement, rolled where the spec is silent.
 ///
 /// Research:
-///     the dike-pond's layout - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html shows a dike-pond block's ponds and dikes but not their arrangement; mosaic two in three, grid one (the deleted `POND_LAYOUTS`)
+///     the dike-pond's layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: two layouts recorded, a mosaic and a chessboard (`grid`), the mosaic about two hamlets in three - the odds a GUESS there
 const POND_LAYOUTS: [&str; 3] = ["mosaic", "mosaic", "grid"];
 /// The dikes' crop.
 ///
@@ -123,7 +124,7 @@ const SEAT_STANDOFF: f64 = 12.0;
 /// The shelter belt's reach behind the windward fringe (ft).
 ///
 /// Research:
-///     the belt's reach - GUESS: the deleted `BELT_REACH` 146 ft; research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html gives only a stand within 150 ft of a farmhouse, not this reach
+///     the belt's reach - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a stand within 150 ft of a farmhouse on a hamlet's; 146 ft, the deleted `BELT_REACH`, read as the room the canvas keeps past the band for it (`seat_room`)
 const BELT_REACH: f64 = 146.0;
 /// A fan's overhang of its square, carried on every side of the canvas.
 ///
@@ -241,9 +242,9 @@ pub fn canvas_side(households: u32, shape: &str) -> f64 {
 /// Research:
 ///     the fall backs the wind - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)
 ///     regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the northwest unless declared
-///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's flow taken as its fall, always - the page's "unless the hamlet declares one" is not read, since no spec carries a declared bearing (the easier route, taken 2026-11-08)
+///     water flow follows the fall - DEVIATION research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`)
 ///     no brook knobs on a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder diked out of standing water has no brook, so no intake or brook side is rolled
-///     the field's archetype - GUESS: a valley paddy unless the map declares another; a polder only when asked
+///     the field's archetype - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder drawn only when the map asks for one, only the valley fan dealt at random - the polder and the dike-pond attested, their random dealing a known gap
 #[must_use]
 pub fn plan(spec: &Spec) -> Plan {
     let archetype = spec
@@ -329,7 +330,7 @@ pub fn plan(spec: &Spec) -> Plan {
         archetype,
         windward,
         down_deg,
-        water_flow: down_deg,
+        water_flow: spec.water_flow.unwrap_or(down_deg),
         fan_aspect: pick(spec.seed, "fan_aspect", &FAN_ASPECTS),
         head_lead: pick(spec.seed, "head_lead", &HEAD_LEAD),
         offtakes: offtakes_for(spec.households),
@@ -361,6 +362,16 @@ mod tests {
         assert!(seat_room(15, "round") > lat);
         let side = canvas_side(15, "round");
         assert!(side > 0.0 && (side / 50.0).fract() == 0.0);
+    }
+
+    #[test]
+    fn the_water_flows_down_the_fall_unless_the_hamlet_declares_a_bearing() {
+        let fall = plan(&parse(r#"{"name": "a", "seed": 4, "down_deg": 225}"#).unwrap());
+        assert!((fall.water_flow - 225.0).abs() < 1e-9);
+        let declared = plan(
+            &parse(r#"{"name": "a", "seed": 4, "down_deg": 225, "water_flow": 200}"#).unwrap(),
+        );
+        assert!((declared.water_flow - 200.0).abs() < 1e-9);
     }
 
     #[test]

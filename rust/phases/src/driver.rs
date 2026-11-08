@@ -68,7 +68,7 @@ const WEIR_SKEW_DEG: f64 = 30.0;
 /// Research:
 ///     the weir keyed into the banks - GUESS: the page silent on how far a weir runs into each bank; a foot either side
 const WEIR_KEY_FT: f64 = 1.0;
-/// A basin's cell share along its canal (ft).
+/// A basin's cell length along its canal (ft), the row's spacing times it the cell.
 ///
 /// Research:
 ///     a basin's cell - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: about 48 ft across its canal and 26 to 36 ft along it, the cell the row's spacing times the middle, 31 ft
@@ -257,7 +257,7 @@ fn field_in(p: &Plan) -> FieldIn {
 /// A paddy's paint by its state.
 ///
 /// Research:
-///     the paddy's paint by state - CONVENTION: green, flooded, gold and at rest, each state of the rice year in research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html drawn in its color
+///     the paddy's paint by state - CONVENTION: green, wet, flooded, gold and at rest, each state of the rice year in research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html drawn in its color
 fn fill(s: State) -> &'static str {
     match s {
         State::Green => ink::RICE_GREEN,
@@ -275,7 +275,7 @@ fn fill(s: State) -> &'static str {
 ///     the field's floor - CONVENTION: the fan's ring in the rice green beneath its plots, so no seam shows between them
 ///     ditches by role - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply and drainage kept apart; drawn in two hues, a map drawing convention
 ///     the bean beads - CONVENTION: a bead 3 ft across in a single row on the bund (research/questions/0014-bunds-between-the-paddies-aze.drawing.html)
-///     the pocket pond's ring - CONVENTION: flooded ground 2.5 ft wide round the pond, its bund line drawn, so the pond reads inside its plot
+///     the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin
 ///     the grave mound's size - UNRESEARCHED: the deleted ink's 13 by 9 ft mound (research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html places a grave, not its size)
 fn draw_field(svg: &mut Svg, f: &Field, brook: &[(f64, f64)], beans: &[Vec<(f64, f64)>]) {
     svg.polygon(&f.fan.ring, ink::RICE_GREEN, None);
