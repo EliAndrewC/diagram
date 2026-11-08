@@ -162,7 +162,7 @@ expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
 }
 
-case_11() {  # 11 s measured 2026-10-17 (66 s on 2026-10-11 before the split)
+case_11() {  # 6 s measured 2026-11-07 (66 s on 2026-10-11 before the first split; case_11d split off on 2026-11-07)
 echo "7d. A FEATURE IN PROGRESS LANDS NOTHING (feature 133): open tasks refuse both routes; the spec directory alone is the one exception"
 D=$(topology fp)
 ( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && echo docs > note.md && git add -A && git commit -qm "feature plus docs" )
@@ -172,6 +172,10 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the
 expect_out "IN PROGRESS"
 expect_out "note.md"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a feature in progress landed"; FAIL=$((FAIL+1)); }
+}
+
+case_11d() {  # split from case_11 (feature 444 T36, measured 2026-11-07: its nine pushes in a row, 19.2 s, were the suite's long pole)
+echo "7d (cont). the spec directory alone, then the pointer, the plan gate and the GATED route"
 D=$(topology fq)
 ( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [ ] T01 open\n' > specs/140-x/tasks.md && printf -- '**Status**: APPROVED by `spec-fidelity` - round 1 verdict FAITHFUL\n' > specs/140-x/spec.md && git add -A && git commit -qm "the claim" ); start "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "the spec directory ALONE (the number claim) is allowed" 0 $?
@@ -337,25 +341,30 @@ echo "12. the prompt hook's path: render-sync detached, one runner at a time, a 
 D=$(topology bg)
 mkdir -p "$D/main"
 MARK="$D/rendered"
-printf 'render-sync:\n\t@sleep 6; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/Makefile"
+# THE FAKE RENDER WAITS FOR A RELEASE, NOT A CLOCK (feature 444 T36, measured 2026-11-07: its 6 s sleep and the 15 s polls behind
+# it were most of the suite's 89 s): it blocks until $D/release exists, 20 s at most, so a sync-in that waited for it would take 20 s
+# and find the mark written; one that did not finds no mark, and the release then lets the render finish at once
+REL="$D/release"
+printf 'render-sync:\n\t@for i in $$(seq 1 400); do [ -f %s ] && break; sleep 0.05; done; git -C %s rev-parse --short HEAD >> %s\n' "$REL" "$D/main" "$MARK" > "$D/main/Makefile"
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s)
 OUT=$(syncmain "$D" sync-in --background-render); check "sync-in --background-render" 0 $?
-# The fake render sleeps 6 s and the bound is 5 s: a 2 s bound against a 2 s render failed under memory pressure (the gate of
-# 2026-10-17, containers at their cap) though sync-in did not wait - the margin is what tells waiting from slow.
-[ $(( $(date +%s) - start )) -lt 5 ] && [ ! -f "$MARK" ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited for the render"; FAIL=$((FAIL+1)); }
+# the render is held until the release: no mark means sync-in returned without it, however loaded the box (a clock's bound - 2 s,
+# then 5 s against a 6 s render - failed under memory pressure on 2026-10-17 though sync-in did not wait)
+[ ! -f "$MARK" ] && PASS=$((PASS+1)) || { echo "FAIL  sync-in waited for the render"; FAIL=$((FAIL+1)); }
 expect_out "render-sync started in the background"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone did not merge"; FAIL=$((FAIL+1)); }
 # a second start while the first runs exits at once and does not render twice
 ( cd "$D/main/.clones/c" && CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" render-sync-runner >/dev/null 2>&1 ); check "a second runner exits at once" 0 $?
-for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
+: > "$REL"
+for _ in $(seq 1 300); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.05; done
 [ "$(wc -l < "$MARK" 2>/dev/null)" = 1 ] && PASS=$((PASS+1)) || { echo "FAIL  expected one background render, got: $(cat "$MARK" 2>/dev/null)"; FAIL=$((FAIL+1)); }
 grep -q '^ok .* at '"$(git -C "$D/main" rev-parse --short HEAD)" "$D/main/.clones/.render-sync.status" && PASS=$((PASS+1)) || { echo "FAIL  status: $(cat "$D/main/.clones/.render-sync.status" 2>/dev/null)"; FAIL=$((FAIL+1)); }
 # an earlier failure is reported on the next sync
 echo "FAILED 2026-10-02 exit 2 at abc1234" > "$D/main/.clones/.render-sync.status"
 OUT=$(syncmain "$D" sync-in --background-render); check "sync-in after a failed render" 0 $?
 expect_out "last background render-sync FAILED"
-for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
+for _ in $(seq 1 300); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.05; done
 # a busy lock: the mirror is skipped this turn, the clone still merges, and the call returns inside the wait
 ( cd "$D/seed" && echo again > h && git add -A && git commit -qm upstream2 && git push -q "$D/github.git" HEAD:main )
 flock "$D/main/.clones/.sync.lock" sleep 6 & HOLDER=$!
@@ -444,16 +453,18 @@ expect_out "backup/c NOT deleted"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
 # feature 405 T35 (D7): a landing returns once its work is on main; main's renders refresh behind it (T12's push waited 2.5 min)
 D=$(topology bw)
-printf 'render-sync:\n\t@sleep 30; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$D/rendered" > "$D/main/Makefile"
+# the fake render held until a release, as in case 17 (a 30 s sleep before, its 15 s poll outwaited every run)
+printf 'render-sync:\n\t@for i in $$(seq 1 400); do [ -f %s ] && break; sleep 0.05; done; git -C %s rev-parse --short HEAD >> %s\n' "$D/release" "$D/main" "$D/rendered" > "$D/main/Makefile"
 ( cd "$D/main/.clones/c" && echo docs > note.md && git add -A && git commit -qm docs )
 start_s=$(date +%s)
 OUT=$(CI_ROUTE=DIRECT syncmain "$D" done); check "done with main's render in the background" 0 $?
-# the property is that done RETURNS BEFORE THE RENDER: a 30 s render and a 25 s bound (a 6 s render and a 5 s bound failed
-# under load three times on 2026-10-24 - the push alone took ~5 s on a busy box, the render never in the way)
-[ $(( $(date +%s) - start_s )) -lt 25 ] && [ ! -f "$D/rendered" ] && yes_ || no_ "done waited for the render"
+# the property is that done RETURNS BEFORE THE RENDER: the render held until the release, so no mark is the proof, however long
+# the push took (a 6 s render and a 5 s bound failed under load three times on 2026-10-24; a 30 s render then cost every run)
+[ ! -f "$D/rendered" ] && yes_ || no_ "done waited for the render"
 expect_out "render-sync started in the background"
 [ "$(rref "$D" main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && yes_ || no_ "the work did not land"
-for _ in $(seq 1 30); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.5; done
+: > "$D/release"
+for _ in $(seq 1 300); do grep -q '^ok' "$D/main/.clones/.render-sync.status" 2>/dev/null && break; sleep 0.05; done
 }
 
 case_22() {  # 11 s measured 2026-10-11
@@ -582,8 +593,8 @@ expect_out "mirror lock stayed busy"
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=15 [case_11b]=7 [case_11c]=7 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6 [case_27b]=6 [case_28]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=3 [case_06]=5 [case_07]=4 [case_08]=5 [case_09]=6 [case_10]=4 [case_11]=6 [case_11b]=7 [case_11c]=7 [case_11d]=13 [case_12]=1 [case_13]=2 [case_14]=1 [case_15]=7 [case_16]=3 [case_17]=12 [case_18]=3 [case_19]=6 [case_20]=3 [case_21]=7 [case_22]=6 [case_23]=2 [case_24]=4 [case_25]=5 [case_26]=3 [case_27]=6 [case_27b]=6 [case_28]=3)  # seconds, each case alone, measured 2026-10-17 (feature 383 amendment 3)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES
