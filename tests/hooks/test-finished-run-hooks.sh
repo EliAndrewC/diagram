@@ -60,10 +60,7 @@ check "no clone, silent" "" "$(printf '{"session_id":"t","cwd":"/nonexistent"}' 
 echo "--- 7. it records, with a rule slug (feature 168) ---"
 rec 20260830T130000 "$(date -u +%Y-%m-%dT%H:%M:%SZ)" test-full failed 900
 say prompt >/dev/null
-rules=$(python3 -c "
-import json,glob,os,collections
-rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
-print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+rules=$(jq -rs 'map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the report records as finished-not-running" yes "$(has "$rules" "'reminded', 'finished-not-running'")"
 
 # GUARD_EDIT_OK: GM 2026-09-12 - THE SECOND RULE: a run still GOING must not be abandoned. The first rule
@@ -94,10 +91,7 @@ rm -f "$LV/.git/live-run.told"
 lstop ',"tool_input":{"command":"true RUN_OK=the GM asked something else"}'
 check "a token in a command cannot escape a Stop hook (it never sees one)" 2 "$?"
 lstop; check "...and the second attempt closes the turn, which IS the release" 0 "$?"
-RULES=$(python3 -c "
-import collections, glob, json, os
-rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
-print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+RULES=$(jq -rs 'map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the refusal is recorded with its own rule" yes "$(has "$RULES" "'blocked', 'run-still-going'")"
 
 # GUARD_EDIT_OK: feature 246 (GM 2026-09-13) - THE SECOND QUESTION: is anyone WAITING for the live run? In its first
@@ -163,10 +157,7 @@ SECOND=$("$HOOK" live "$LV" | tr '\n' ' ')
 check "the live set has CHANGED (p2 is the child now)" no "$([ "$FIRST" = "$SECOND" ] && echo yes || echo no)"
 check "...and the same root does NOT refuse again" 0 "$(lstop; echo $?)"
 for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
-RULES3=$(python3 -c "
-import collections, glob, json, os
-rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
-print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+RULES3=$(jq -rs 'map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the tracked pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'tracked-run'")"
 check "the watched pass records with its own rule" yes "$(has "$RULES3" "'permitted', 'waiter-armed'")"
 
@@ -266,10 +257,7 @@ check "a harness-shaped waiter on a DEAD log is reported, naming the log" yes "$
 # other sessions' included (found 2026-09-26, when the unscoped census here reported a real session's loop).
 for p in $("$HOOK" stale "$CLONE" | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done
 pkill -f "$NEVER" 2>/dev/null
-RULES2=$(python3 -c "
-import collections, glob, json, os
-rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
-print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))" 2>/dev/null)
+RULES2=$(jq -rs 'map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 check "the report records with its own rule" yes "$(has "$RULES2" "waiter-on-a-dead-producer")"
 
 echo "--- 9. a verify gate's refusal names make verify-wait (feature 385: the loop matched the preflight's quick line) ---"

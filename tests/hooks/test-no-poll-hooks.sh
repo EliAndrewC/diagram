@@ -33,9 +33,7 @@ check() { # label, expected(ok|blocked), command
 
 rewritten() { # label, command, the text the corrected command must contain
   out=$(run "$2" 2>/dev/null)
-  got=$(printf '%s' "$out" | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
+  got=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
   case "$got" in
     *"$3"*) echo "  ok      $1  ->  $got"; PASS=$((PASS+1)) ;;
     *) echo "  FAIL    $1 was not corrected (got '${got:-<nothing>}', wanted '$3')"; FAIL=$((FAIL+1)) ;;
@@ -55,10 +53,8 @@ bgcheck() { # label, expected, command, background(1|0)
 }
 backgrounded() { # label, command
   local out; out=$(bgrun "$2" 0 2>/dev/null); local rc=$?
-  local flag; flag=$(printf '%s' "$out" | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["run_in_background"])
-except Exception: print("")' 2>/dev/null)
-  if [ "$rc" -eq 0 ] && [ "$flag" = "True" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
+  local flag; flag=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.run_in_background // empty' 2>/dev/null)
+  if [ "$rc" -eq 0 ] && [ "$flag" = "true" ] && printf '%s' "$out" | grep -q "BACKGROUNDED"; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
     echo "  FAIL    $1 (rc=$rc, run_in_background='${flag:-<unset>}')"; FAIL=$((FAIL+1))
@@ -66,9 +62,7 @@ except Exception: print("")' 2>/dev/null)
 }
 bgrewritten() { # label, command, background(1|0), the text the corrected command must contain
   local out; out=$(bgrun "$2" "$3" 2>/dev/null)
-  local got; got=$(printf '%s' "$out" | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
   case "$got" in
     *"$4"*) echo "  ok      $1"; PASS=$((PASS+1)) ;;
     *) echo "  FAIL    $1 (got '${got:-<nothing>}', wanted '$4')"; FAIL=$((FAIL+1)) ;;
@@ -314,9 +308,7 @@ bgrewritten "...an UNTIL loop gets it ORed as a false that exits 3, so the wait 
 # success for a wait that had not succeeded. It must end the whole command, non-zero, so nothing after runs.
 NP_DEAD=$(mktemp); touch -d "2 hours ago" "$NP_DEAD"
 for np_shape in "until grep -q DONE $NP_DEAD; do sleep 1; done; echo FALSE-SUCCESS" "while [ ! -s $NP_DEAD ]; do sleep 1; done; echo FALSE-SUCCESS"; do
-  np_cmd=$(bgrun "$np_shape" 1 2>/dev/null | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
+  np_cmd=$(bgrun "$np_shape" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
   np_out=$(timeout 20 bash -c "$np_cmd" 2>/dev/null); np_rc=$?
   if [ "$np_rc" -eq 3 ] && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then echo "  ok      a dead writer ends the whole wait with status 3 - nothing after the loop runs (${np_shape%% *})"; PASS=$((PASS+1));
   else echo "  FAIL    a dead writer let the command go on (${np_shape%% *}: rc=$np_rc, out='$np_out', cmd='$np_cmd')"; FAIL=$((FAIL+1)); fi
@@ -364,9 +356,7 @@ rewritten "the real one: a make wait with a PATH in its target is scoped, so the
   'setsid nohup make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py > /tmp/m.log 2>&1 & sleep 5; until ! pgrep -f "[m]ake map GEN=pool/hamlets/mizuguchi" > /dev/null; do sleep 10; done  # POLL_OK: a detached roll' \
   'own-make.sh map GEN=pool/hamlets/mizuguchi'
 NP_NEVER=$(mktemp)
-np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' 2>/dev/null)
+np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
 np_out=$(exec 9>>"$NP_NEVER"; SECONDS_AT=6000 timeout 20 bash -c "SECONDS=6000; $np_cmd" 2>/dev/null); np_rc=$?
 if [ "$np_rc" -eq 4 ] && printf '%s' "$np_out" | grep -q "WAIT TIMED OUT" && ! printf '%s' "$np_out" | grep -q FALSE-SUCCESS; then
   echo "  ok      past the ceiling the wait ends with status 4 and says so - nothing after the loop runs"; PASS=$((PASS+1))
@@ -425,10 +415,7 @@ rm -rf "$P_DIR"
 
 echo "--- feature 295: an inserted clause fits the quoting it lands in; a sleep outside every loop is no busy-wait ---"
 Q_CMD='setsid --fork bash -c "L=/tmp/q295.log; until grep -q X \$L; do sleep 5; done" </dev/null >/dev/null 2>&1'
-Q_OUT=$(run_bg "POLL_OK=\"feature 295 quoting case\" $Q_CMD" | python3 -c '
-import json, sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass')
+Q_OUT=$(run_bg "POLL_OK=\"feature 295 quoting case\" $Q_CMD" | jq -r '.hookSpecificOutput.updatedInput.command // empty')
 printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_OUT") 2>/dev/null \
   && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }

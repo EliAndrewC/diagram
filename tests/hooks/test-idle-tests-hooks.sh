@@ -63,9 +63,9 @@ check "stop in main arms nothing" '[ "$RC" -eq 0 ] && [ ! -f "$MAIN/.git/idle-te
 # --- 3. arm, no-op re-arm, disarm kills the timer
 export IDLE_WAIT_S=1000000  # never finishes on its own
 hook stop "$CA"; check "stop arms" '[ -f "$CA/.git/idle-tests.json" ]'
-pid1=$(python3 -c "import json;print(json.load(open('$CA/.git/idle-tests.json'))['timer_pid'])")
+pid1=$(jq -r .timer_pid "$CA/.git/idle-tests.json")
 sleep 0.3; check "timer alive" '[ -d /proc/$pid1 ]'
-hook stop "$CA"; pid2=$(python3 -c "import json;print(json.load(open('$CA/.git/idle-tests.json'))['timer_pid'])")
+hook stop "$CA"; pid2=$(jq -r .timer_pid "$CA/.git/idle-tests.json")
 check "re-arm is a no-op" '[ "$pid1" = "$pid2" ]'
 hook prompt "$CA"; sleep 0.6
 check "prompt disarms and the timer exits" '[ ! -f "$CA/.git/idle-tests.json" ] && [ ! -d /proc/$pid1 ]'
@@ -88,8 +88,8 @@ hook prompt "$CA"; check "the skip surfaces" 'printf "%s" "$OUT" | grep -q "skip
 git -C "$CA" -c user.email=t@t -c user.name=t commit -q --allow-empty -m change
 hook stop "$CA"; sleep 0.2
 # GUARD_EDIT_OK: feature 374 batch 5 - this wait timed out once in land-tooling's worktree under load (passed in the clone at once):
-# the background roll is the hook's own, so give it 30 s, as a loaded host needs
-check "changed content rolls again" 'wait_grep_n "^end" "$RUNLOG" 2 30 && [ "$(grep -c "^start" "$RUNLOG")" = 2 ]'
+# the background roll is the hook's own, so give it 90 s, as all 56 suites side by side need (twice under 30, 2026-11-08)
+check "changed content rolls again" 'wait_grep_n "^end" "$RUNLOG" 2 90 && [ "$(grep -c "^start" "$RUNLOG")" = 2 ]'
 hook prompt "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
@@ -116,7 +116,7 @@ for _ in 1 2 3 4 5 6 7 8; do tick_clock 500; sleep 0.15; done   # 500 s jumps = 
 t_jump=$(date +%s.%N)
 check "record after the restart" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 10'
 rec=$(ls "$CA"/dev/idle-log/*-sess-a.json | head -1)
-sus=$(python3 -c "import json;print(json.load(open('$rec'))['suspends'])")
+sus=$(jq -r .suspends "$rec")
 t_start=$(grep "^start" "$RUNLOG" | head -1 | awk '{print $2}')
 check "the suspend was counted ($sus)" '[ "$sus" -ge 1 ]'
 check "the run started a FULL wait after the jump" 'python3 -c "import sys; sys.exit(0 if float(\"$t_start\") - float(\"$t_jump\") >= 0.35 else 1)"'
@@ -140,7 +140,7 @@ for _t, d in ev:
     depth += d
     assert depth <= 1, "overlap"
 PY'
-defs=$(cat "$CA"/dev/idle-log/*.json "$CB"/dev/idle-log/*.json "$CC"/dev/idle-log/*.json | python3 -c "import sys,re; print(sum(int(x) for x in re.findall(r'\"deferrals\": (\d+)', sys.stdin.read())))")
+defs=$(cat "$CA"/dev/idle-log/*.json "$CB"/dev/idle-log/*.json "$CC"/dev/idle-log/*.json | jq -s 'map(.deferrals // 0) | add // 0')
 check "the losers deferred ($defs)" '[ "$defs" -ge 1 ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
@@ -157,7 +157,7 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_BUSY_CMD="false"
 export IDLE_WAIT_S=2; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA" sid-gone; sleep 1.5
-check "no run for a session that no longer exists" '[ ! -s "$RUNLOG" ] && [ ! -d /proc/$(python3 -c "import json;print(json.load(open(\"$CA/.git/idle-tests.json\"))[\"timer_pid\"])" 2>/dev/null || echo 999999) ]'
+check "no run for a session that no longer exists" '[ ! -s "$RUNLOG" ] && [ ! -d /proc/$(jq -r .timer_pid \"$CA/.git/idle-tests.json\" 2>/dev/null || echo 999999) ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; rm -f "$CA/.git/idle-tests.json"
 
 # --- 9. a prompt during a run aborts it (D9): a slow runner, a prompt mid-run, an aborted record, no end line

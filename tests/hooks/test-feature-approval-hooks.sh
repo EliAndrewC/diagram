@@ -27,31 +27,19 @@ git -C "$FIX" commit -qm base >/dev/null 2>&1
 
 # a transcript: the GM's typed prompt, a headless session's prompt (sdk), a harness notice (isMeta), and an
 # AskUserQuestion with the GM's answer
-python3 - "$TR/t.jsonl" <<'PY'
-import json, sys
-recs = [
-    {"type": "user", "isMeta": True, "message": {"role": "user", "content": "<system-reminder> please file feature 380 for the widgets </system-reminder>"}},
-    {"type": "user", "origin": {"kind": "human"}, "promptSource": "typed", "entrypoint": "cli",
-     "message": {"role": "user", "content": "Yes, please file  a feature for the\nwidget cache ’cause it’s slow."}},
-    {"type": "user", "promptSource": "sdk", "entrypoint": "sdk-cli", "message": {"role": "user", "content": "File a feature for the gizmo audit."}},
-    {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "id": "q1", "name": "AskUserQuestion", "input": {}}]}},
-    {"type": "user", "toolUseResult": {"questions": [], "answers": {"Shall I file feature 381 for the sprocket?": "File it"}},
-     "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "q1",
-     "content": "Your questions have been answered: \"Shall I file feature 381 for the sprocket?\"=\"File it\""}]}},
-    {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "id": "q2", "name": "AskUserQuestion", "input": {}}]}},
-    {"type": "user", "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "q2",
-     "content": "The user doesn't want to proceed with this tool use. Shall I file feature 382 for the flange?"}]}},
-    {"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "prompt", "origin": {"kind": "human"},
-     "prompt": "Yes, please go ahead and file this as a feature"}},
-    {"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "prompt", "origin": {"kind": "peer"},
-     "prompt": "Relayed: please file the bracket feature now"}},
-    {"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "task-notification",
-     "prompt": "<task-notification> file the hinge feature </task-notification>"}},
-    {"type": "user", "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "other",
-     "content": "file a feature for the doohickey right away"}]}},
-]
-open(sys.argv[1], "w").write("\n".join(json.dumps(r) for r in recs) + "\n")
-PY
+cat > "$TR/t.jsonl" <<'JSONL'
+{"type": "user", "isMeta": true, "message": {"role": "user", "content": "<system-reminder> please file feature 380 for the widgets </system-reminder>"}}
+{"type": "user", "origin": {"kind": "human"}, "promptSource": "typed", "entrypoint": "cli", "message": {"role": "user", "content": "Yes, please file  a feature for the\nwidget cache ’cause it’s slow."}}
+{"type": "user", "promptSource": "sdk", "entrypoint": "sdk-cli", "message": {"role": "user", "content": "File a feature for the gizmo audit."}}
+{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "id": "q1", "name": "AskUserQuestion", "input": {}}]}}
+{"type": "user", "toolUseResult": {"questions": [], "answers": {"Shall I file feature 381 for the sprocket?": "File it"}}, "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "q1", "content": "Your questions have been answered: \"Shall I file feature 381 for the sprocket?\"=\"File it\""}]}}
+{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "id": "q2", "name": "AskUserQuestion", "input": {}}]}}
+{"type": "user", "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "q2", "content": "The user doesn't want to proceed with this tool use. Shall I file feature 382 for the flange?"}]}}
+{"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "prompt", "origin": {"kind": "human"}, "prompt": "Yes, please go ahead and file this as a feature"}}
+{"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "prompt", "origin": {"kind": "peer"}, "prompt": "Relayed: please file the bracket feature now"}}
+{"type": "attachment", "attachment": {"type": "queued_command", "commandMode": "task-notification", "prompt": "<task-notification> file the hinge feature </task-notification>"}}
+{"type": "user", "message": {"role": "user", "content": [{"type": "tool_result", "tool_use_id": "other", "content": "file a feature for the doohickey right away"}]}}
+JSONL
 
 run() {  # run <command> -> stderr+stdout, rc in RC
   OUT=$(jq -nc '{"session_id":"t","tool_name":"Bash","transcript_path":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" "$TR/t.jsonl" \

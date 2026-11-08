@@ -223,9 +223,7 @@ echo
 echo "4. A TARGETED PYTEST RUN IS REWRITTEN INTO make test-file (feature 212)"
 rewritten() { # label, command, the exact rewritten command
   ev "$2" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; local rc=$?
-  local got; got=$(python3 -c 'import json,sys
-try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
-except Exception: pass' < /tmp/mo.out 2>/dev/null)
+  local got; got=$(jq -r '.hookSpecificOutput.updatedInput.command // empty' < /tmp/mo.out 2>/dev/null)
   if [ "$rc" -eq 0 ] && [ "$got" = "$3" ]; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else
