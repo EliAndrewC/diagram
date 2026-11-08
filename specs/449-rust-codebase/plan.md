@@ -201,25 +201,7 @@ censuses empty (work breakdown 8, FR-010).
 <!-- plan-archive: T032 to T032 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T033 to T033 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T034 to T034 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T035 Approach (checklist part A)
-
-1. **The goal, in the world.** `shell-check-hooks`'s verdicts given by the Rust guard, its shell gone.
-2. **The constraints.** FR-002 (every suite case's verdict the same, XIV's fix named), FR-003 (never both), FR-008 (each unit test under a tenth of a second).
-   **Decisions** (found reading `shell-check-hooks.sh`, `lib/hm_shell.py`, `hm_shape.executing_backticks` and the case table, 2026-11-08):
-   - (a) THE GUARD AND ITS LIBRARY BOTH MOVE, IN-PROCESS: the word walk, the four rules in order, the rewrite and its conditions, the refusals' words. `lib/hm_shell.py`'s only caller is the guard, so it is removed with the shell, and its `--selftest` assertions move into the guard's unit tests (the suite's first line, which ran it, goes). The corpus replay still drives the hook.
-   - (b) THE PARSE STAYS `bash -O extglob -n`, A CHILD OF THE ONE GUARD PROCESS: bash is the parser being asked about, and a second parser in Rust would be a guess at its grammar, the thing the rule exists to avoid. It is not a guard's own process (FR-007) and not a Python ask; `m:shell-check-parse` is its cost.
-   - (c) `executing_backticks` JOINS `shared::shape`, because `hm_make`'s recipe-comment half (T028) asks the same question; the Python copy in `hm_shape.py` stays for its other callers until T051.
-   - (d) THIS GUARD RUNS LAST, SO NO GUARD READS ITS REWRITE: every other guard judges the command as written, as each shell guard did, and the rewrite reaches only Claude Code. `guards()` keeps `shell-check-hooks` the final entry and `lib.rs`'s order test pins it; a guard ported later is inserted before it.
-3. **Where each comes from.** `tests/hooks/test-shell-check-hooks.sh`, the guard's own suite; plan D3-D4.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** After T005; in the plan's order (the measured cost first, research R2), independent of the other guards.
-6. **The exits.** Green: `tests/hooks/test-shell-check-hooks.sh` green against `l7r-guard --only shell-check-hooks`, `make rust-test` and `cover` green, `make hooks-test` green. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-9. **Done, measured.** every case of `test-shell-check-hooks.sh` passes against the Rust guard; `scripts/hooks/shell-check-hooks.sh` and its settings entry are gone in the commit that registers the decider.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T035 to T035 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T036 Approach (checklist part A)
 
 1. **The goal, in the world.** `house-style-hooks`'s verdicts given by the Rust guard, its shell gone.
