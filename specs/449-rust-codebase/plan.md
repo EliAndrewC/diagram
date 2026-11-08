@@ -127,6 +127,26 @@ XIV) are fixed as they move.
 8. The close: `m:hooks-bash` and `m:pair-hooks-suite` re-run (SC-001, US1-3), and phase 1's share of BOTH censuses (FR-001: every
    `.py` under `scripts/hooks/` and `tests/hooks/`, every inline site in those two trees) returns nothing; recorded.
 
+### T001-T005 - the foundation (phase 1, work breakdown 1-4)
+
+Decisions carried, none new: the workspace of crates by phase (Structure Decision) - a root `rust/Cargo.toml` naming `phases` and
+`guard`, `rust_checks.py` running each member and skipping the workspace's own manifest, which builds nothing itself; `serde_json` the
+one crate added (Complexity Tracking); the protocol and its merge (D1, D2, contracts/guard-protocol.md); the shared state kept and
+the facts asked once (D5, D6); the wrapper keeping the last good binary (D7); the settings switch landed with an empty guard list,
+its own cost recorded as phase 1's floor (work breakdown 4).
+
+### T006-T049 - one task a guard (phase 1, work breakdown 5, 7)
+
+Decisions carried, none new: guard by guard, the shell and its settings entry removed in the commit that registers the decider
+(D3, FR-003); the suite as the verdict replay, its inline Python replaced in the same task (D4, work breakdown 7); the order, the
+measured cost first (research R2); the two constitution XIV fixes on `make-only-hooks` and `guard-file-hooks` (FR-002's exception).
+
+### T050-T052 - the suites' tooling and the close (phase 1, work breakdown 6-8)
+
+Decisions carried, none new: the four `tests/hooks/` Python helpers ported as `l7r-guard` subcommands and crate tests (work
+breakdown 7); the unused libraries deleted with their last caller (work breakdown 6); the close on SC-001 and phase 1's share of both
+censuses empty (work breakdown 8, FR-010).
+
 ### Phase 2 - the gate (Story 2, P2)
 
 **Approach.** The gate's own Python path moves to a Rust binary the Makefile calls: `l7r/diagram/ci/` (the test planner, the
