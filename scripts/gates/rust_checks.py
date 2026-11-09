@@ -22,6 +22,7 @@ not its path, so every clone sharing one directory shared one test binary - a bi
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import pathlib
@@ -215,6 +216,42 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
     return cargo(["fmt", *(["--check"] if check else [])], manifest)
 
 
+#: THE CHECKS A CRATE'S OWN UNCHANGED INPUTS ANSWER (feature 449 T060): `make done` on a one-line edit of one crate spent 40 s linting, covering and listing the other (measured 2026-11-08,
+#: `m:done-rust-edit`). Each is a pure function of its inputs, so a green result is kept per crate and per check, and reused while those inputs are the same.
+#: `source` reads the crate and the workspace's manifests; `tree` is the crate's tests, which also read the repository (a corpus under tests/hooks/, the Makefile), so everything but the other crates.
+_KEPT = {"lint": "source", "dead": "source", "format": "source", "cover": "tree", "test-counters": "tree"}
+#: what is the same crate's input in every `source` key: the workspace's own files
+_WORKSPACE = ("rust/Cargo.toml", "rust/Cargo.lock", "clippy.toml", "rust/clippy.toml", "rust-toolchain", "rust-toolchain.toml")
+
+
+def _content_ids(root: pathlib.Path) -> dict[str, str]:
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "record"))
+    import record_cache  # noqa: PLC0415 - the content ids every reuse in this repository compares by
+
+    return record_cache.content_ids(root, untracked=True)
+
+
+def verdict_key(root: pathlib.Path, manifest: pathlib.Path, cmd: str, all_manifests: list[pathlib.Path], ids: dict[str, str], compiler: str) -> str:
+    """What this check of this crate depends on, as one id: a change to any of it runs the check again."""
+    own = manifest.parent.relative_to(root).as_posix() + "/"
+    others = [m.parent.relative_to(root).as_posix() + "/" for m in all_manifests if m != manifest]
+    if _KEPT[cmd] == "source":
+        kept = {p: i for p, i in ids.items() if p.startswith(own) or p in _WORKSPACE}
+    else:
+        kept = {p: i for p, i in ids.items() if not p.startswith(tuple(others))}
+    body = json.dumps([cmd, compiler, sorted(kept.items())]).encode()
+    return hashlib.sha256(body).hexdigest()
+
+
+def _kept_path(cmd: str, manifest: pathlib.Path) -> pathlib.Path:
+    gitdir = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--absolute-git-dir"], capture_output=True, text=True, check=False).stdout.strip()
+    return pathlib.Path(gitdir) / "rust-checks" / f"{cmd}-{manifest.parent.name}"
+
+
+def _compiler() -> str:
+    return subprocess.run([_exe(), "--version"], capture_output=True, text=True, check=False).stdout.strip()
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("cmd", choices=["lint", "format", "test", "test-counters", "test-no-counters", "hamlet", "cover", "dead"])
@@ -226,7 +263,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"rust-checks: no Rust crate under {CRATES}/ - nothing to {args.cmd}")
         return 0
     bad = 0
+    # ...only a checking run is kept and only with no crate named: `make format` rewrites, a fixture's check is the fixture's; `make done INCREMENTAL=0` and `FULL=1` run everything and still keep what they find
+    keep = args.cmd in _KEPT and not args.crate and (args.cmd != "format" or args.check)
+    reuse = keep and os.environ.get("INCREMENTAL") != "0" and not os.environ.get("FULL")
+    ids, compiler = (_content_ids(ROOT), _compiler()) if keep else ({}, "")
     for m in found:
+        key = verdict_key(ROOT, m, args.cmd, found, ids, compiler) if keep else ""
+        kept = _kept_path(args.cmd, m) if keep else None
+        if reuse and kept is not None and kept.is_file() and kept.read_text(encoding="utf-8") == key:
+            print(f"rust-checks: {args.cmd} unchanged on {m.parent.relative_to(ROOT)} - its last green result stands")
+            continue
         if args.cmd == "dead":
             r = _listing(m)
         elif args.cmd == "cover":
@@ -246,6 +292,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd in ("test", "test-counters", "test-no-counters") and r.returncode == 0:
             summary = next((ln for ln in r.stdout.splitlines() if ln.startswith("test result:")), "")
             print(f"rust-checks: {args.cmd} on {m.parent.relative_to(ROOT)}: {summary}" if summary else "", end="\n" if summary else "")
+        if r.returncode == 0 and kept is not None:
+            kept.parent.mkdir(parents=True, exist_ok=True)
+            kept.write_text(key, encoding="utf-8")
         if r.returncode != 0:
             bad += 1
             print(f"rust-checks: {args.cmd} FAILED on {m.parent.relative_to(ROOT)}\n{r.stdout}{r.stderr}", file=sys.stderr)

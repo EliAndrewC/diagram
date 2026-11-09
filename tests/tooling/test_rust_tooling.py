@@ -217,3 +217,64 @@ def test_the_counters_change_no_output_refuses_a_test_that_reads_them(crate: pat
     assert rc.run("test-no-counters", broken / "Cargo.toml", check=False).returncode != 0, "with the counters out it is refused"
     # ...and the default test is the counters-out build (the GM 2026-11-07: "We should probably run with counters compiled out by default")
     assert rc.run("test", broken / "Cargo.toml", check=False).returncode != 0, "the default build has no counters"
+
+
+def _two_crates(tmp_path: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
+    for name in ("a", "b"):
+        (tmp_path / "rust" / name).mkdir(parents=True)
+        (tmp_path / "rust" / name / "Cargo.toml").write_text("[package]\n")
+    return tmp_path / "rust/a/Cargo.toml", tmp_path / "rust/b/Cargo.toml"
+
+
+def test_a_crates_key_moves_with_its_own_inputs_and_not_the_other_crates(tmp_path: pathlib.Path) -> None:
+    """Feature 449 T060: a one-line edit of one crate ran every check of the other (40 s)."""
+    a, b = _two_crates(tmp_path)
+    both = [a, b]
+    ids = {"rust/a/src/l.rs": "1", "rust/b/src/l.rs": "2", "rust/Cargo.lock": "3", "scripts/x.py": "4", "Makefile": "5"}
+
+    def key(cmd: str, manifest: pathlib.Path, **moved: str) -> str:
+        return rc.verdict_key(tmp_path, manifest, cmd, both, {**ids, **{k.replace("__", "/"): v for k, v in moved.items()}}, "cargo 1")
+
+    assert key("lint", a) == rc.verdict_key(tmp_path, a, "lint", both, {**ids, "rust/b/src/l.rs": "9"}, "cargo 1"), "the other crate's edit"
+    assert key("lint", a) != rc.verdict_key(tmp_path, a, "lint", both, {**ids, "rust/a/src/l.rs": "9"}, "cargo 1"), "its own edit"
+    assert key("lint", a) != rc.verdict_key(tmp_path, a, "lint", both, {**ids, "rust/Cargo.lock": "9"}, "cargo 1"), "the lockfile"
+    assert key("lint", a) == rc.verdict_key(tmp_path, a, "lint", both, {**ids, "scripts/x.py": "9"}, "cargo 1"), "lint reads no script"
+    assert key("cover", a) != rc.verdict_key(tmp_path, a, "cover", both, {**ids, "Makefile": "9"}, "cargo 1"), "a crate's tests read the repository"
+    assert key("cover", a) == rc.verdict_key(tmp_path, a, "cover", both, {**ids, "rust/b/src/l.rs": "9"}, "cargo 1"), "but not the other crate"
+    assert key("lint", a) != rc.verdict_key(tmp_path, a, "lint", both, ids, "cargo 2"), "a new compiler"
+    assert key("lint", a) != key("dead", a), "each check its own"
+
+
+def test_an_unchanged_crate_keeps_its_green_result_and_a_failure_is_never_kept(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    _two_crates(tmp_path)
+    ran: list[str] = []
+    verdict = {"code": 0}
+
+    def fake(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedProcess[str]:
+        ran.append(manifest.parent.name)
+        return subprocess.CompletedProcess([], verdict["code"], "", "")
+
+    ids = {"rust/a/src/l.rs": "1", "rust/b/src/l.rs": "2"}
+    monkeypatch.setattr(rc, "ROOT", tmp_path)
+    monkeypatch.setattr(rc, "run", fake)
+    monkeypatch.setattr(rc, "_content_ids", lambda root: ids)
+    monkeypatch.setattr(rc, "_compiler", lambda: "cargo 1")
+    monkeypatch.setattr(rc, "_kept_path", lambda cmd, m: tmp_path / "kept" / f"{cmd}-{m.parent.name}")
+    monkeypatch.delenv("INCREMENTAL", raising=False)
+    monkeypatch.delenv("FULL", raising=False)
+    assert rc.main(["lint"]) == 0 and ran == ["a", "b"]
+    ran.clear()
+    assert rc.main(["lint"]) == 0 and ran == [], "nothing moved"
+    assert "its last green result stands" in capsys.readouterr().out
+    ids["rust/a/src/l.rs"] = "9"
+    assert rc.main(["lint"]) == 0 and ran == ["a"], "only the crate that moved"
+    ran.clear()
+    ids["rust/b/src/l.rs"] = "9"
+    verdict["code"] = 1
+    assert rc.main(["lint"]) == 1 and ran == ["b"]
+    ran.clear()
+    assert rc.main(["lint"]) == 1 and ran == ["b"], "a failure is run again, never reused"
+    verdict["code"] = 0
+    ran.clear()
+    monkeypatch.setenv("INCREMENTAL", "0")
+    assert rc.main(["lint"]) == 0 and ran == ["a", "b"], "a full run runs everything"
