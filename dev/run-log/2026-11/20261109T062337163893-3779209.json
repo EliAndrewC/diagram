@@ -1,0 +1,54 @@
+{
+  "utc": "2026-11-09T06:23:37Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 270,
+  "result": "failed: test-full",
+  "commit": "2dce5b7cf",
+  "first_failure_s": 199.2,
+  "last_failure_s": 199.2,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/interactive/test_record.py::test_no_md_token_anywhere_resolves_to_a_converted_record_file@record_texts"
+  ],
+  "host": {
+    "load": [
+      5.71,
+      17.99
+    ],
+    "mem_avail_mb": [
+      8749,
+      9132
+    ],
+    "cpu_temp_c": [
+      98.0,
+      101.0
+    ],
+    "stall_s": {
+      "cpu": 57.3,
+      "io": 1.0,
+      "io_full": 0.6,
+      "memory": 0.3
+    },
+    "throttle_ms": {
+      "core": 28636,
+      "package": 12368
+    }
+  },
+  "phases": {
+    "preflight": 17.0,
+    "reference": 0.0,
+    "static": 149.0,
+    "format": 1.0,
+    "typecheck": 1.0,
+    "seeds": 8.0,
+    "hooks-test": 172.0,
+    "counters-inert": 11.0,
+    "pytest": 83.0,
+    "test-full": 86.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "20 engine file(s) and 16 test module(s) changed, 19 scripts/ file(s) (188 module(s) that read scripts/), 19 Rust file(s) (28 test module(s) that read them), 1 non-module file(s) under tests/ (31 test module(s) that can read them)",
+  "selected": 1519,
+  "collected": 2695
+}

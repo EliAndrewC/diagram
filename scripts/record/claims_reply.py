@@ -55,7 +55,7 @@ _ELIDED = re.compile(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)")
 
 def unelide(reply: str, stems: list[str]) -> str:
     """The reply with each pointer a check wrote shortened (`0236-...-home-plot.drawing.html`) given its full file name, so a
-    verdict note written into the index never fails `check-research-pointers.py` (feature 319: four did, and the index had to
+    verdict note written into the index never fails `l7r-gate check research-pointers` (feature 319: four did, and the index had to
     be hand-repaired). `stems` are the question stems (`0236-shrine-...`); a number with no question, or with more than one
     stem, is left as written for a person to see."""
 

@@ -17,7 +17,7 @@ number. This does the move with everything that names it:
     (`research/moved-303.json`), so a late pointer is told the current name.
 
 It refuses rather than guesses: a source that is not a question's page, a target name that is not `NNNN-<slug>.html`
-(or `.drawing.html` for a drawing-only question), a number already another question's. `check-research-pointers.py`
+(or `.drawing.html` for a drawing-only question), a number already another question's. `l7r-gate check research-pointers`
 (gate and push) catches a move made by hand.
 
 Usage: fragment_move.py FROM TO [--root DIR] | --selftest

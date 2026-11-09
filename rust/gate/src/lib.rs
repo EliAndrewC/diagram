@@ -1,5 +1,6 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
+mod checks;
 mod ci;
 pub mod codeid;
 pub mod delta;
@@ -68,6 +69,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("lifecycle") => ci::cachepolicy::cli(&args[1..]),
         Some("github-token") => ci::config::github_token(&top()),
+        Some("check") => checks::cli(&args[1..], &top()),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),

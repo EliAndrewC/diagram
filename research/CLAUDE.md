@@ -25,7 +25,7 @@ download list) applies here and is not repeated; its full text is `docs/research
 | the sections, their order | `research/contents.json` - the table of contents; a section takes questions by a rule over their tags |
 | a source's registry entry | `research/sources/010-works-cited/NNNN-<key>.html` |
 | the page a reader opens | `research/site/q/<heading id>.html` (a question), `findings/<section>.html` and `drawing/<section>.html` (a section in each half), `tags/<facet>-<tag>.html`, `all.html` (the whole record) - BUILT by `make record`, never committed, never hand-edited |
-| a pointer to a question | `research/questions/NNNN-<heading id>[.drawing].html` - the FILE, never a built page; a whole section is `research/contents.json#<section id>` (`scripts/gates/check-research-pointers.py`) |
+| a pointer to a question | `research/questions/NNNN-<heading id>[.drawing].html` - the FILE, never a built page; a whole section is `research/contents.json#<section id>` (`l7r-gate check research-pointers`) |
 | a glossary term | `l7r/diagram/interactive/assets/glossary/NNNN-<term>.json`, one file per term (feature 259) |
 | the download list | `research/to-download.md` (canonical; [`downloads.md`](downloads.md)) |
 
@@ -76,7 +76,7 @@ wages were like."*
 
 ## A question has a size (feature 250 D14, GM 2026-09-26)
 
-A question's PROSE stays under 20,000 bytes (`scripts/gates/check-question-size.py`; `make quick` fails on one a
+A question's PROSE stays under 20,000 bytes (`l7r-gate check question-size`; `make quick` fails on one a
 change touched; `make question-sizes` lists all). Its notes and originals are not counted: they are bounded where they
 are read (`make check-bundle ... FOR=quote-check` splits them into bundles of at most 12,000 bytes, one agent each). One
 over it is split along its topics: a finding stays with the decision it drove; each part is its own question with its

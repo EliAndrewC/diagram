@@ -9,7 +9,7 @@ manifest, rendering and the interactive page, the pool's `.gen.py` scripts, the 
 that reads only the tooling's own Python, or the parts that stay Python, is `unchanged`; one that reads the engine's stage code is
 ported, partly ported, rewritten or dropped.
 
-`make rust-tooling` (a step of `make hooks-test`, `scripts/gates/check-rust-tooling.py`) lists every tracked file outside `specs/`,
+`make rust-tooling` (a step of `make hooks-test`, `l7r-gate check rust-tooling`) lists every tracked file outside `specs/`,
 `research/`, `dev/` and the pools that imports `ast`, `tokenize`, `inspect` or `symtable`, calls `compile(` or reads `.py` files,
 and every Makefile target whose recipe runs ruff, pyrefly, pytest, coverage, testmon or vulture or globs `*.py`; it fails on any
 that no row's KEYS name (a path, a glob, or `make <target>`). **Before the first Rust phase lands**, every row marked one for one,
@@ -22,7 +22,7 @@ decision).
 | format | ruff format | rustfmt | one for one | `make format` `scripts/format-changed.sh` |
 | types | pyrefly | the Rust compiler, which is stricter | dropped, replaced by the compiler | `make static` |
 | function cap | PLR0915 and `check-function-cap.py`, 100 statements, a suppression says why | clippy `too_many_lines` (100 lines); `#[expect(lint, reason = "...")]` and `allow_attributes_without_reason` | one for one, counts lines | `scripts/gates/check-function-cap.py` |
-| file cap | `check-file-scale.py`, 1,000 raw lines | the same script, reading `.rs` | one for one | `scripts/gates/check-file-scale.py` |
+| file cap | `l7r-gate check file-scale`, 1,000 raw lines | the same check, reading `.rs` | one for one | `rust/gate/src/checks/file_scale.rs` |
 | the engine-freeze guard's two questions | `engine_edit.py`, `delta.is_engine` and `l7r-gate stamp`'s AST identity | gone with phase 2's ports of those two, in-process | unchanged | `scripts/gates/engine_edit.py` |
 | tool signals | `check-tool-signals.py`, every tool's usage-log call read from `scripts/` and the Rust guards | the same script, reading both | unchanged | `scripts/gates/check-tool-signals.py` |
 | duplicate top-level definitions | `check-duplicate-defs.py` | the compiler refuses them | dropped, replaced by the compiler | `scripts/gates/check-duplicate-defs.py` |
@@ -44,7 +44,7 @@ decision).
 | the interactive classes and their modal checks | the class docstrings read by `inspect`; entry and modal owed, bundles, conditions | unchanged: the interactive page stays Python | unchanged | `l7r/diagram/interactive/classes/_base.py` `l7r/diagram/interactive/conditions.py` `scripts/record/entry_owed.py` `scripts/record/modal_bundle.py` `scripts/record/modal_owed.py` |
 | the record's build | `record_build` keyed to the registry and its Python | unchanged: the record stays Python | unchanged | `l7r/diagram/pipeline/record_build.py` |
 | the tool yield | `make tool-yield` reads the tools' own files | unchanged: the tools stay Python | unchanged | `scripts/measure/tool_yield.py` |
-| this inventory's check | `make rust-tooling` reads the tree for Python readers | the same check, its patterns extended to readers of `.rs` (`syn`, `*.rs`) | one for one | `scripts/gates/check-rust-tooling.py` |
+| this inventory's check | `make rust-tooling` reads the tree for Python readers | the same check, its patterns extended to readers of `.rs` (`syn`, `*.rs`) | one for one | `rust/gate/src/checks/rust_tooling.rs` |
 | the pytest suite | tests that read source (`ast`, `inspect`) or glob `*.py`: the surface guards, the namespace portion, the hooks' and tools' tests | unchanged for the Python they read; a test of a stage's own source moves with the stage to its Rust tests (`#[cfg(test)]` in their own file) | partial | `tests/**` `make hooks-test` |
 | the Rust stage gate's landing record | none: feature 386's landing cohort judged the whole pipeline | `cohort_gate.py` `rust_refusal` reads `rust/phases/src/*.rs` to see whether a Rust stage exists and asks for a clean `make rust-gate` record on the engine, `rust_landing` reads a `rust/` delta as a Rust-stage landing; `tools/rust_gate.py` rolls the Rust stages alone (feature 444 amendment 5, FR-019) | rewritten | `scripts/gates/cohort_gate.py` `make rust-gate` |
 
@@ -59,10 +59,10 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 | lint | `scripts/gates/rust_checks.py lint` in `make static`: clippy, the crate's `[lints.clippy]` denying all and pedantic | `test_lint_passes_the_fixture_and_refuses_a_pedantic_breach` |
 | format | `rust_checks.py format` in `make format` (`--check` refuses) | `test_format_passes_the_fixture_and_refuses_what_rustfmt_would_change` |
 | function cap | clippy `too_many_lines` at the root `clippy.toml`'s 100; `allow_attributes_without_reason` denied | `test_the_function_cap_refuses_a_function_past_a_hundred_lines`, `test_an_exception_with_no_reason_is_refused` |
-| file cap | `check-file-scale.py` scanning `.rs` | `test_the_file_cap_reads_rust_files` |
+| file cap | `l7r-gate check file-scale` scanning `.rs` | `test_the_file_cap_reads_rust_files` |
 | the make-only guard | `hm_make.py` refuses a bare `cargo` (build, test, run, clippy, check, fmt, llvm-cov); `make rust-test` runs `cargo test` | `tests/hooks/test-make-only-hooks.sh` ("a bare cargo test", "a bare cargo clippy, by path"); `test_rust_test_passes_the_fixture_and_refuses_a_failing_test` |
 | a wording-only change, a held feature's paths | `wording.py` counts any `.rs` change as what runs; `plan_hold.py` counts `rust/` paths and `.rs` stems as engine | `tests/tooling/test_wording_rust.py`; `test_a_task_whose_plan_section_names_an_engine_path_is_an_engine_task` (red without the change) |
-| this inventory's check | `check-rust-tooling.py` also lists a reader of `.rs` files and a Makefile recipe running cargo, clippy, rustfmt, llvm-cov or `rust_checks.py` | `test_a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it` (the `.rs` cases), `test_a_make_recipe_running_the_rust_tools_needs_its_row` |
+| this inventory's check | `l7r-gate check rust-tooling` also lists a reader of `.rs` files and a Makefile recipe running cargo, clippy, rustfmt, llvm-cov or `rust_checks.py` | `a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it` (the `.rs` cases), `a_make_recipe_running_a_python_or_rust_tool_needs_its_row`, in `rust/gate/src/checks/rust_tooling/tests.rs` |
 | coverage and its floors | `rust_checks.py cover` in `make static`: `cargo llvm-cov --fail-under-lines 100` over the crate's own tests (no Python reaches it since its PyO3 doors went, feature 444 T39) | `test_coverage_counts_every_line_its_tests_reach_and_refuses_an_untested_line` (an uncalled line fails) |
 | changed modules' coverage | `make cover-changed` (`cover_changed.py`): each changed `.rs` under `rust/`, by its crate, the lines `rust_checks.uncovered` (llvm-cov's LCOV over the crate's tests and Python driver) finds unreached | `test_uncovered_names_the_lines_of_each_file_no_test_reaches`; `test_a_changed_rust_file_is_grouped_by_its_crate_and_its_unreached_lines_named` |
 | the work-budget audit bundle | `work_budget_bundle.stage_files` adds the `.rs` under `rust/` defining `fn stage_<phase>` (its module directory's siblings with it); the phase-source guard holds only the `.py` | `tests/tooling/test_work_budget_bundle_rust.py`; `test_a_phase_task_holds_its_stage_its_counted_modules_and_its_old_code_globs` (the `.rs` never held) |
@@ -84,8 +84,8 @@ Each row below fires on `tests/fixtures/rust/fixture` - its check refuses a copy
 **Proven on the first phase, not the fixture** - the round arbiter's ruling on ask:444-T17-rows-need-a-phase (2026-10-30, Route A),
 narrowed by the plan review of 2026-10-30: dead closure's public half and the change-selected tests' Python half fire on the
 fixture and are proven above; these two need a phase's maps or counters, so T19's port owes them before its tick, each proven as the
-rest were. `check-rust-tooling.py` refuses any tree holding a Rust phase while one is unproven
-(`test_a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.
+rest were. `l7r-gate check rust-tooling` refuses any tree holding a Rust phase while one is unproven
+(`a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.
 
 ## The AWS boundary (feature 449 T064)
 

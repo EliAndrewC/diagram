@@ -17,7 +17,7 @@ work-budget:    ## [performance] the counted work of the reference hamlet per st
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/work_budget_rust.py" $(if $(WRITE),--write,)
 
 rust-tooling:   ## [tests] every check, hook, gate and make target that reads Python's syntax tree or .py files has its row in dev/rust-tooling.md, saying what it becomes in the Rust phases; a step of hooks-test (feature 443)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-rust-tooling.py"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check rust-tooling
 
 work-budget-review: ## [performance] the push's ratchet: on a push carrying engine code, every ACCEPTED stage held to its accepted figure and its budget at 40 and 80 households, from a work-budget run at the pushed engine; no arbiter accept clears it (feature 443)   ROUTE=<GATED|GATED-LOCAL|DIRECT>
 	@printf 'work-budget-review: suspended - no Python roll to count, and the Rust driver that will count the stages through the cut is T42 (feature 444 T39, FR-024: the gates that presume a whole hamlet switched off)\n'
@@ -344,7 +344,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
 	if ! python3 "$$root/scripts/gates/check-tool-signals.py"; then fail="$$fail check-tool-signals"; fi; \
-	if ! python3 "$$root/scripts/gates/check-rust-tooling.py" --root "$$root"; then fail="$$fail rust-tooling"; fi; \
+	if ! "$$root/scripts/gates/l7r-gate.sh" check rust-tooling --root "$$root"; then fail="$$fail rust-tooling"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	"$$root/scripts/gates/l7r-gate.sh" stamp --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
@@ -390,7 +390,7 @@ esc=[r for r in rows if r['event']=='escaped']; \
 print(f\"  {len(rows)} entries\"+(f\", {min(r['utc'] for r in rows)} to {max(r['utc'] for r in rows)}\" if rows else '')); \
 print()"
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
-	@python3 scripts/gates/check-file-scale.py --list .
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --list .
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
@@ -814,7 +814,7 @@ style-prepass: ## [project] the style guide's mechanical half for one question -
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)"
 
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-question-size.py" --report
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size --report
 
 open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/open_questions.py" --root "$$(git rev-parse --show-toplevel)"
@@ -1033,13 +1033,13 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 # The house-style scan is a phase, not a test: testmon selects tests by changed code and would never pick it.
 quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 ##  ALL=1  run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)
-	@python3 scripts/gates/check-function-cap.py && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
-	@python3 scripts/gates/check-house-style-delta.py --selftest >/dev/null
-	@python3 scripts/gates/check-house-style-delta.py .
-	@python3 scripts/gates/check-question-size.py
-	@python3 scripts/gates/check-file-scale.py .
+	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs function-cap; then python3 scripts/gates/check-function-cap.py; fi && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	@python3 scripts/gates/spec-lint.py --delta .
-	@python3 scripts/gates/check-partial-citations.py .
+	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then python3 scripts/gates/check-partial-citations.py .; fi
 	@# THE MARKER SCAN ON A TEST CHANGED SINCE THE LAST QUICK (feature 444 T36, measured 2026-11-07: a whole-tree scan, 2 s, ran on
 	@# every quick of a branch whose tests differed from main - every working branch): a test file newer than `.testmondata`
 	@if [ ! -f .testmondata ] || [ -n "$(ALL)" ] || [ -n "$$(find tests -name '*.py' -newer .testmondata -print -quit)" ]; then L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov -p no:randomly tests/test_markers.py >/dev/null 2>&1 || { printf 'quick: a test that rolls a map lacks @pytest.mark.rolls_map (tests/test_markers.py):\n'; L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov tests/test_markers.py; exit 1; }; fi
@@ -1135,12 +1135,11 @@ guard:           ## [static] {internal} refuse to run in main's tree - main is t
 static format typecheck test: | guard
 
 static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
-	python3 scripts/gates/check-function-cap.py --selftest >/dev/null && python3 scripts/gates/check-function-cap.py
+	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs function-cap; then python3 scripts/gates/check-function-cap.py --selftest >/dev/null && python3 scripts/gates/check-function-cap.py; fi
 	python3 -m ruff check --fix .
-	python3 scripts/gates/check-duplicate-defs.py --selftest
-	python3 scripts/gates/check-duplicate-defs.py .
-	python3 scripts/gates/check-file-scale.py --selftest
-	python3 scripts/gates/check-file-scale.py .
+	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs duplicate-defs; then python3 scripts/gates/check-duplicate-defs.py --selftest && python3 scripts/gates/check-duplicate-defs.py .; fi
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	python3 scripts/gates/rust_checks.py lint
 	python3 scripts/gates/rust_checks.py format --check
 	python3 scripts/gates/rust_checks.py cover
@@ -1150,8 +1149,8 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/hooks/lib/hm_conflict.py --selftest
 	python3 scripts/hooks/lib/hm_conflict.py --tracked .
 	python3 scripts/make-docs.py . --check
-	python3 scripts/gates/check-stale-dirs.py --selftest
-	python3 scripts/gates/check-stale-dirs.py .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check stale-dirs --selftest
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check stale-dirs .
 	bash scripts/reviews/layout_carry.sh --selftest
 
 rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17)   [CRATE=tests/fixtures/rust/fixture]

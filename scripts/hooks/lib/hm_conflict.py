@@ -252,7 +252,7 @@ def exemptions(root: str) -> list[tuple[str, str]]:
     """Every tracked file declaring the file-level marker, with its stated reason.
 
     GUARD_EDIT_OK: feature 241 - a whole-file exemption nobody can enumerate is one nobody revisits,
-    which is feature 173's argument for `check-file-scale.py --list`, and `make audit` prints both.
+    which is feature 173's argument for `l7r-gate check file-scale --list`, and `make audit` prints both.
     """
     found = []
     for p in tracked_files(root):

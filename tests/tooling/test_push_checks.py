@@ -12,6 +12,7 @@ import importlib.util
 import json
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -59,14 +60,13 @@ def _tree(tmp: pathlib.Path, files: dict[str, str]) -> pathlib.Path:
 
 
 #: the checks a test runs on this repository - each one's whole-tree run (the self-tests are proven by the stamp tests)
-WHOLE_TREE = [c for c in pc.CHECKS if not c[4] and c[0] not in ("spec-lint", "downloads", "gate-stamp", "record", "glossary")]
+WHOLE_TREE = [c for c in pc.CHECKS if not c[4] and not c[1].endswith(".sh") and c[0] not in ("spec-lint", "downloads", "record", "glossary")]
 
 
 SEEDED = {
     "duplicate-defs": ({"l7r/a.py": "def f():\n    return 1\n\n\ndef f():\n    return 2\n"}, "gates/check-duplicate-defs.py", ["."]),
     "conflict": ({"a.md": "<" * 7 + " ours\nx\n" + "=" * 7 + "\ny\n" + ">" * 7 + " theirs\n"}, "hooks/lib/hm_conflict.py", ["--tracked", "."]),
     "function-cap": ({"l7r/a.py": "def f():  # noqa: PLR0915\n    return 1\n"}, "gates/check-function-cap.py", ["."]),
-    "stale-dirs": ({"l7r/gone/__pycache__/x.pyc": "", "l7r/gone/__pycache__/notes.txt": ""}, "gates/check-stale-dirs.py", ["."]),  # more than bytecode: refused, not removed
 }
 
 
@@ -138,3 +138,35 @@ def test_an_unmarked_amount_of_money_is_refused_at_the_push() -> None:
     """Feature 413's check runs on every push (423 T02 landed with `make money-candidates CHECK=1` red: nothing ran it)."""
     row = next(c for c in pc.CHECKS if c[0] == "money-candidates")
     assert row[1] == "record/money_candidates.py" and row[2] == ("--check",) and "backfill.md" in row[3]
+
+
+def _delta_rows() -> list[tuple[str, str, tuple[str, ...], str, bool, str]]:
+    return [c for c in pc.CHECKS if c[5].startswith("delta:")]
+
+
+def test_the_four_checks_still_in_python_do_not_start_on_a_rust_only_change(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """`ask:449-T065-scope` condition 2: a one-line Rust edit starts none of them; a `.py` file does."""
+    assert {c[1] for c in _delta_rows()} == {"gates/check-duplicate-defs.py", "gates/check-function-cap.py", "gates/check-entry-headings.py", "gates/check-partial-citations.py"}
+    d = _tree(tmp_path, {"rust/a.rs": "fn f() {}\n"})
+    _git(d, "update-ref", "refs/remotes/origin/main", "HEAD")
+    (d / "rust" / "a.rs").write_text("fn f() { }\n", encoding="utf-8")
+    ran: list[str] = []
+    monkeypatch.setattr(pc, "CHECKS", tuple(_delta_rows()))
+    monkeypatch.setattr(pc, "run_one", lambda s, a, c, quiet=False: ran.append(s.name) or 0)
+    monkeypatch.setenv("L7R_CACHE_OFF", "1")
+    assert pc.run(d, set()) == 0 and ran == []
+    (d / "research" / "questions").mkdir(parents=True)
+    (d / "research" / "questions" / "0001-a.notes.html").write_text("y", encoding="utf-8")
+    assert pc.run(d, set()) == 0 and set(ran) == {"check-entry-headings.py", "check-partial-citations.py"}, "what reads the record starts on a record change; what reads only Python does not"
+    (d / "research" / "questions" / "0001-a.notes.html").unlink()
+    ran.clear()
+    (d / "l7r").mkdir()
+    (d / "l7r" / "a.py").write_text("x = 1\n", encoding="utf-8")
+    assert pc.run(d, set()) == 0 and {"check-duplicate-defs.py", "check-function-cap.py"} == set(ran), "a .py under l7r/ outside interactive/ starts only what reads it"
+
+
+def test_every_makefile_line_starting_a_retained_python_check_asks_first() -> None:
+    """The same condition at the Makefile: a recipe line of `make quick` or `make static` naming one of the four is behind `check needs`."""
+    text = (pc.HERE.parent.parent / "Makefile").read_text(encoding="utf-8")
+    lines = [line for line in text.splitlines() if line.startswith("\t") and re.search(r"python3 scripts/gates/check-(duplicate-defs|function-cap|partial-citations)", line)]
+    assert len(lines) == 4 and all("check needs " in line for line in lines), lines

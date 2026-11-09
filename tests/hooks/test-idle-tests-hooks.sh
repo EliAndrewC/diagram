@@ -81,7 +81,8 @@ hook prompt "$CA"; check "verdict surfaced at the next prompt" 'printf "%s" "$OU
 hook prompt "$CA"; check "surfaced once only" '! printf "%s" "$OUT" | grep -q "idle-tests: ran"'
 # --- 4b. D10: a new arming on a clone unchanged since that green run rolls nothing and records the skip
 hook stop "$CA"
-check "second record (the skip)" 'wait_count "$CA/dev/idle-log/*-sess-a.json" 2 10'
+# the wait is an upper bound, so a green run pays nothing for it: 10 s timed out in land-tooling's worktree under load (feature 449 T065)
+check "second record (the skip)" 'wait_count "$CA/dev/idle-log/*-sess-a.json" 2 30'
 check "no second run on unchanged content" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "skipped" "$(ls -t "$CA"/dev/idle-log/*-sess-a.json | head -1)"'
 hook prompt "$CA"; check "the skip surfaces" 'printf "%s" "$OUT" | grep -q "skipped - unchanged"'
 # a change to the clone makes the next arming roll again

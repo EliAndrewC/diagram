@@ -140,10 +140,10 @@
    "declared": "spec-fidelity"
   },
   "### T065 Approach (checklist part A)": {
-   "sha256": "84f04fbbd6380135ce83d49c0a33be762bb5f4b05b365eb46841c4a26ecd5d32",
+   "sha256": "9d162bfd318ad6a503c4d65b7258088c8f3fce683bfe73a2e7c7639f76ecaecd",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
   },
   "### T066 Approach (checklist part A)": {
    "sha256": "13d00afdc508414c2465c86ec6f5225ab383600f5492f8e1d0b3dbc5aad44726",
@@ -3934,6 +3934,86 @@
      "why": "The rewriting and re-run are FR-001's own words; no remote run is the constitution's money rule, and m:t064-remote compares the routes with remote off."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "### T065 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "six-checks-one-landing",
+     "summary": "Six text checks become l7r-gate check <name> and their Python and Python tests are deleted in one commit, callers switched in it, the caller list carrying its git grep, each of twelve invocations compared on stdout, stderr and exit status.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts in phase 2 and ask:449-T065-scope leaves exactly these six in T065; FR-002's same-outputs bar is met before deletion; the enumeration names its search space."
+    },
+    {
+     "id": "four-checks-predicate-is-read-set",
+     "summary": "The four checks that outlast phase 2 ask l7r-gate check needs <check> first, per check, by that check's read set; run when there is no base to compare with; only make audit's listing and the timing tool touch them otherwise, on request.",
+     "class": "within",
+     "why": "FR-001's own clause: none starts Python on a plain Bash call, a plain Edit or a make done whose change holds no file they read. Running with no base is the conservative side of a change that cannot be computed. Three tests enforce the clause, which is enforcement of the request."
+    },
+    {
+     "id": "pointer-check-scans-by-occurrence",
+     "summary": "The pointer check anchors each pattern at an occurrence of research/ or a page name and reads files on several threads with no cache, with a line-by-line differential against the Python.",
+     "class": "within",
+     "why": "An implementation means under FR-002's same verdicts, shown by the differential; it changes no verdict or output, and FR-006's three named fixes do not include this cache."
+    },
+    {
+     "id": "word-table-moved-table-test-retired",
+     "summary": "test_a_moved_table_fails_loudly_rather_than_matching_nothing is not replayed because the table is compiled in with include_str!.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 names every case, so dropping one narrows. A runtime case is physically impossible on the port: a moved table is a build error, so the fails-loudly purpose is held harder than the test held it. Not a purpose-gutting exception."
+    },
+    {
+     "id": "word-list-is-hook-own-test-retired",
+     "summary": "test_the_word_list_is_the_hook_s_own is not replayed because the check and the guard include_str! the one file.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two readers of one compiled-in file cannot differ, so the case's purpose, one list, cannot be violated and the case has nothing to observe. Adjudicated separately from the moved-table case: different reason, same outcome."
+    },
+    {
+     "id": "rust-guard-word-table-test-kept",
+     "summary": "test_the_rust_guards_word_table_is_the_decisions is kept in tests/tooling/test_house_words.py until hm_house.py goes.",
+     "class": "within",
+     "why": "FR-001 places hm_house.py in phase 3 and each test goes with its piece."
+    },
+    {
+     "id": "file-cap-reader-test-retired",
+     "summary": "test_the_file_cap_is_found_a_reader is not carried literally; what it guarded is replayed by the_detector_finds_a_real_reader_on_the_real_tree, naming the surviving reader check-function-cap.py and going red if the detector goes blind, and by a planted reader of each kind.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Closes round 4's open finding of this id. Round 4's open finding, cured as that round asked: the sentence that leaned on make rust-tooling is gone and a named real-tree test stands in it. The literal subject, the Python reader the port removes, cannot survive its own port; the purpose, a detector that sees a real reader on the real tree, is now held by a test that fails if it goes blind. check-function-cap.py is itself deleted late under FR-001, at which point the test goes red loudly, which is the safe direction. FR-008 allows a tool one end-to-end test against the real command, which is the room a real-tree test takes; the plan does not state this test's time, and that is an implementation check rather than a fidelity one."
+    },
+    {
+     "id": "fragment-move-self-test-moved",
+     "summary": "fragment_move.py's self-test moves to tests/tooling/test_fragment_move.py.",
+     "class": "within",
+     "why": "A relocation that loses no case; each tests/ file goes with its piece under FR-001."
+    },
+    {
+     "id": "content-cache-pointer-cases-go",
+     "summary": "test_content_cache.py's pointer case and the pointer half of real_tree/test_content_cache.py go.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Those cases compare a content cache's answers with and without it; the compiled check has no cache, so the comparison cannot be made. FR-006 names three design fixes and this cache is none of them, and the measured timing shows nothing is lost by omitting it. Resolved in rounds 1-3 and unchanged."
+    },
+    {
+     "id": "stale-dirs-runpy-row-goes",
+     "summary": "The stale-dirs row of test_push_checks.py's in-process cases goes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The row exercises an in-process runpy run, which a compiled check physically cannot be; the check's own verdicts are replayed in its tests.rs. Adjudicated separately from the cache cases: a different mechanism, the same impossibility."
+    },
+    {
+     "id": "measurement-census-empty",
+     "summary": "A git grep over specs/*/measurements*.json for the ported and deleted names returns nothing, so no recorded entry needs rewriting, and the differentials stand as dated one-shot observations.",
+     "class": "within",
+     "why": "FR-001's rewrite clause applies vacuously and step 9 still binds any entry that does appear; a one-shot observation labeled with date and method is the contract's form for a comparison that cannot be re-run once the Python is deleted. The census names its search space."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6521,6 +6601,85 @@
      "summary": "Done is the dispatcher's tests against a stubbed AWS and suite verdicts unchanged, no remote run spent; every recorded measurement command running a ported or deleted file is rewritten in the same commit and re-run",
      "class": "within",
      "why": "The rewriting and re-run are FR-001's own words; no remote run is the constitution's money rule, and m:t064-remote compares the routes with remote off."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T065": {
+   "section_sha256": "9d162bfd318ad6a503c4d65b7258088c8f3fce683bfe73a2e7c7639f76ecaecd",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "six-checks-one-landing",
+     "summary": "Six text checks become l7r-gate check <name> and their Python and Python tests are deleted in one commit, callers switched in it, the caller list carrying its git grep, each of twelve invocations compared on stdout, stderr and exit status.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts in phase 2 and ask:449-T065-scope leaves exactly these six in T065; FR-002's same-outputs bar is met before deletion; the enumeration names its search space."
+    },
+    {
+     "id": "four-checks-predicate-is-read-set",
+     "summary": "The four checks that outlast phase 2 ask l7r-gate check needs <check> first, per check, by that check's read set; run when there is no base to compare with; only make audit's listing and the timing tool touch them otherwise, on request.",
+     "class": "within",
+     "why": "FR-001's own clause: none starts Python on a plain Bash call, a plain Edit or a make done whose change holds no file they read. Running with no base is the conservative side of a change that cannot be computed. Three tests enforce the clause, which is enforcement of the request."
+    },
+    {
+     "id": "pointer-check-scans-by-occurrence",
+     "summary": "The pointer check anchors each pattern at an occurrence of research/ or a page name and reads files on several threads with no cache, with a line-by-line differential against the Python.",
+     "class": "within",
+     "why": "An implementation means under FR-002's same verdicts, shown by the differential; it changes no verdict or output, and FR-006's three named fixes do not include this cache."
+    },
+    {
+     "id": "word-table-moved-table-test-retired",
+     "summary": "test_a_moved_table_fails_loudly_rather_than_matching_nothing is not replayed because the table is compiled in with include_str!.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 names every case, so dropping one narrows. A runtime case is physically impossible on the port: a moved table is a build error, so the fails-loudly purpose is held harder than the test held it. Not a purpose-gutting exception."
+    },
+    {
+     "id": "word-list-is-hook-own-test-retired",
+     "summary": "test_the_word_list_is_the_hook_s_own is not replayed because the check and the guard include_str! the one file.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Two readers of one compiled-in file cannot differ, so the case's purpose, one list, cannot be violated and the case has nothing to observe. Adjudicated separately from the moved-table case: different reason, same outcome."
+    },
+    {
+     "id": "rust-guard-word-table-test-kept",
+     "summary": "test_the_rust_guards_word_table_is_the_decisions is kept in tests/tooling/test_house_words.py until hm_house.py goes.",
+     "class": "within",
+     "why": "FR-001 places hm_house.py in phase 3 and each test goes with its piece."
+    },
+    {
+     "id": "file-cap-reader-test-retired",
+     "summary": "test_the_file_cap_is_found_a_reader is not carried literally; what it guarded is replayed by the_detector_finds_a_real_reader_on_the_real_tree, naming the surviving reader check-function-cap.py and going red if the detector goes blind, and by a planted reader of each kind.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Closes round 4's open finding of this id. Round 4's open finding, cured as that round asked: the sentence that leaned on make rust-tooling is gone and a named real-tree test stands in it. The literal subject, the Python reader the port removes, cannot survive its own port; the purpose, a detector that sees a real reader on the real tree, is now held by a test that fails if it goes blind. check-function-cap.py is itself deleted late under FR-001, at which point the test goes red loudly, which is the safe direction. FR-008 allows a tool one end-to-end test against the real command, which is the room a real-tree test takes; the plan does not state this test's time, and that is an implementation check rather than a fidelity one."
+    },
+    {
+     "id": "fragment-move-self-test-moved",
+     "summary": "fragment_move.py's self-test moves to tests/tooling/test_fragment_move.py.",
+     "class": "within",
+     "why": "A relocation that loses no case; each tests/ file goes with its piece under FR-001."
+    },
+    {
+     "id": "content-cache-pointer-cases-go",
+     "summary": "test_content_cache.py's pointer case and the pointer half of real_tree/test_content_cache.py go.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Those cases compare a content cache's answers with and without it; the compiled check has no cache, so the comparison cannot be made. FR-006 names three design fixes and this cache is none of them, and the measured timing shows nothing is lost by omitting it. Resolved in rounds 1-3 and unchanged."
+    },
+    {
+     "id": "stale-dirs-runpy-row-goes",
+     "summary": "The stale-dirs row of test_push_checks.py's in-process cases goes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The row exercises an in-process runpy run, which a compiled check physically cannot be; the check's own verdicts are replayed in its tests.rs. Adjudicated separately from the cache cases: a different mechanism, the same impossibility."
+    },
+    {
+     "id": "measurement-census-empty",
+     "summary": "A git grep over specs/*/measurements*.json for the ported and deleted names returns nothing, so no recorded entry needs rewriting, and the differentials stand as dated one-shot observations.",
+     "class": "within",
+     "why": "FR-001's rewrite clause applies vacuously and step 9 still binds any entry that does appear; a one-shot observation labeled with date and method is the contract's form for a comparison that cannot be re-run once the Python is deleted. The census names its search space."
     }
    ],
    "verdict": "CLEAR"

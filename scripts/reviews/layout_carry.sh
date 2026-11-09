@@ -13,7 +13,7 @@
 # already holds that path (9 clones held a `.ruff_cache` at both places on the day), a CACHE's old copy is invalidated:
 # deleted, because the root's copy is the one the tools now write and a cache rebuilds on demand. Any other colliding
 # file moves beside its twin as `<name>.pre-329` and is reported - never deleted, never overwriting. Bytecode is removed,
-# not carried (a stale `__pycache__` dir is an importable namespace package - check-stale-dirs.py). So the old directory
+# not carried (a stale `__pycache__` dir is an importable namespace package - l7r-gate check stale-dirs). So the old directory
 # always goes (FR-008). Idempotent: a second run, or a tree that never had the old layout, does nothing.
 #
 # Called by sync-with-main.sh after a clone's pull and after the mirror's fast-forward. `--selftest` proves it.

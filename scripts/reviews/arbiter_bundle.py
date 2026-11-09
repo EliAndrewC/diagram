@@ -908,6 +908,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--evidence", default="", help="an ask's cited files, space-separated, copied beside the MANIFEST")
     ap.add_argument("--check-ask", default="", help="the question's words: refuse a route or regression question that states no pool result")
     a = ap.parse_args(argv)
+    if re.match(r"round-\d+@", a.trigger):  # the round arbiter's fix on round-3@449-T065-plan: a made-up name got a bundle with no Rounds, and three reviews it could not judge
+        print(f"arbiter-bundle: {a.trigger!r} is no trigger - a plan review's round is `round:spec-fidelity|plan:<feature dir>#<task>@<n>`, and a guard's refusal names it. For a process question: make arbiter-ask SUBJECT=<slug> WHY=<what>", file=sys.stderr)
+        return 2
     if a.check_ask:
         gaps = pool_unstated(a.check_ask, a.evidence.split())
         if gaps:
