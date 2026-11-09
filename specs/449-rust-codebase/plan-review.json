@@ -110,10 +110,10 @@
    "declared": "round-arbiter"
   },
   "### T060 Approach (checklist part A)": {
-   "sha256": "bb69a89edad81dcd28d8a045bcc1e772b8e7815de506dcad8ebc2c20d0fe02fa",
+   "sha256": "58a8b271c14d41461f915040da916a37c7357810fa616185e3e3298b33ac0265",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T061 Approach (checklist part A)": {
    "sha256": "da34e252e7a119dc307d920b24647adc0ef4ed5eb2803487cb18a3a362aa1b27",
@@ -3285,6 +3285,81 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T060 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T060-a",
+     "summary": "Records that the gate slowed (60 s against the first value's 30.2 s) and why: phase 1's rust/guard is linted, covered and listed on every edit.",
+     "class": "within",
+     "why": "A finding that motivates (b); it changes no requirement and does not move SC-002's reference."
+    },
+    {
+     "id": "T060-baseline",
+     "summary": "Implicit: SC-002's reference stays m:done-rust-edit's 30.2 s, not the 60 s measured in (a).",
+     "class": "within",
+     "why": "SC-002 names m:done-rust-edit as today's wall time; exit 9, exit 6 and first_value_wall_s all hold that figure. A quiet re-baselining to 60 s would have been the narrowing, and the section does not make it."
+    },
+    {
+     "id": "T060-b1",
+     "summary": "A crate's unchanged checks reuse their last green result, per crate and per check, built in rust_checks.py.",
+     "class": "within",
+     "why": "Serves SC-002, which already asks that an unchanged tree's make done runs no test. The mechanism is built in Python phase 2 will replace; FR-003 requires that Python to keep running until its port passes, so editing it is no carve-out from FR-001. Its port must carry the reuse under FR-002."
+    },
+    {
+     "id": "T060-b2",
+     "summary": "The id's inputs: lint, dead and format --check on the crate, the workspace manifests and the compiler; cover and test-counters also on the repository outside the other crates.",
+     "class": "within",
+     "why": "A design choice under FR-002's same-verdicts rule, not a reduction of it: the section states no verdict can move and sets defect scenarios as an exit. Whether the inputs are complete (a crate's path dependencies on another crate above all) is not visible from the bundle and is reported to the caller, not ruled here."
+    },
+    {
+     "id": "T060-b3",
+     "summary": "dev/run-log, dev/bypass-log, dev/perf-log and dev/idle-log are left out of the id.",
+     "class": "within",
+     "why": "Append-only records every run writes; including them would make every id change and defeat SC-002's purpose. No requirement is narrowed."
+    },
+    {
+     "id": "T060-b4",
+     "summary": "A failure is never kept.",
+     "class": "within",
+     "why": "Keeps a red result from being reused; it strengthens FR-002 and narrows nothing."
+    },
+    {
+     "id": "T060-b5",
+     "summary": "make done INCREMENTAL=0 and FULL=1 run everything and keep what they find.",
+     "class": "within",
+     "why": "An existing full-run route preserved as the check on the reuse; asks for nothing the request excludes."
+    },
+    {
+     "id": "T060-c",
+     "summary": "The Python tests a Rust edit selects are not narrowed by a hand-written roster; they go as the checks they test are ported.",
+     "class": "within",
+     "why": "FR-001 removes those tests with the pieces they test and no requirement asks for an interim roster, so declining one narrows nothing. It defers no requirement past the phase: SC-002 still binds at T070."
+    },
+    {
+     "id": "T060-d",
+     "summary": "SC-002's figure is T070's; this task's exit is the reuse in place and the time recorded. Preflight and pytest go with T062 to T067.",
+     "class": "within",
+     "why": "FR-010 measures at each phase's end, and SC-002 stays whole at that end with its under-half bar unchanged. Sequencing inside the phase, not a reduction."
+    },
+    {
+     "id": "T060-done",
+     "summary": "Item 9's done test: make done on a one-line Rust edit, timed against m:done-rust-edit, with no pytest in its log.",
+     "class": "within",
+     "why": "Consistent with the request's end state, so it narrows nothing, but it contradicts (c), (d) and exit 6 of the same section and the recorded after_pytest_s of 17. Reported to the caller as a defect in the section's wording."
+    },
+    {
+     "id": "T060-measurements",
+     "summary": "Every recorded measurement command that runs a file this task ports or deletes is rewritten in the same commit and re-run as proof.",
+     "class": "within",
+     "why": "FR-001 states this rule in these terms."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5484,6 +5559,80 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T060": {
+   "section_sha256": "58a8b271c14d41461f915040da916a37c7357810fa616185e3e3298b33ac0265",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T060-a",
+     "summary": "Records that the gate slowed (60 s against the first value's 30.2 s) and why: phase 1's rust/guard is linted, covered and listed on every edit.",
+     "class": "within",
+     "why": "A finding that motivates (b); it changes no requirement and does not move SC-002's reference."
+    },
+    {
+     "id": "T060-baseline",
+     "summary": "Implicit: SC-002's reference stays m:done-rust-edit's 30.2 s, not the 60 s measured in (a).",
+     "class": "within",
+     "why": "SC-002 names m:done-rust-edit as today's wall time; exit 9, exit 6 and first_value_wall_s all hold that figure. A quiet re-baselining to 60 s would have been the narrowing, and the section does not make it."
+    },
+    {
+     "id": "T060-b1",
+     "summary": "A crate's unchanged checks reuse their last green result, per crate and per check, built in rust_checks.py.",
+     "class": "within",
+     "why": "Serves SC-002, which already asks that an unchanged tree's make done runs no test. The mechanism is built in Python phase 2 will replace; FR-003 requires that Python to keep running until its port passes, so editing it is no carve-out from FR-001. Its port must carry the reuse under FR-002."
+    },
+    {
+     "id": "T060-b2",
+     "summary": "The id's inputs: lint, dead and format --check on the crate, the workspace manifests and the compiler; cover and test-counters also on the repository outside the other crates.",
+     "class": "within",
+     "why": "A design choice under FR-002's same-verdicts rule, not a reduction of it: the section states no verdict can move and sets defect scenarios as an exit. Whether the inputs are complete (a crate's path dependencies on another crate above all) is not visible from the bundle and is reported to the caller, not ruled here."
+    },
+    {
+     "id": "T060-b3",
+     "summary": "dev/run-log, dev/bypass-log, dev/perf-log and dev/idle-log are left out of the id.",
+     "class": "within",
+     "why": "Append-only records every run writes; including them would make every id change and defeat SC-002's purpose. No requirement is narrowed."
+    },
+    {
+     "id": "T060-b4",
+     "summary": "A failure is never kept.",
+     "class": "within",
+     "why": "Keeps a red result from being reused; it strengthens FR-002 and narrows nothing."
+    },
+    {
+     "id": "T060-b5",
+     "summary": "make done INCREMENTAL=0 and FULL=1 run everything and keep what they find.",
+     "class": "within",
+     "why": "An existing full-run route preserved as the check on the reuse; asks for nothing the request excludes."
+    },
+    {
+     "id": "T060-c",
+     "summary": "The Python tests a Rust edit selects are not narrowed by a hand-written roster; they go as the checks they test are ported.",
+     "class": "within",
+     "why": "FR-001 removes those tests with the pieces they test and no requirement asks for an interim roster, so declining one narrows nothing. It defers no requirement past the phase: SC-002 still binds at T070."
+    },
+    {
+     "id": "T060-d",
+     "summary": "SC-002's figure is T070's; this task's exit is the reuse in place and the time recorded. Preflight and pytest go with T062 to T067.",
+     "class": "within",
+     "why": "FR-010 measures at each phase's end, and SC-002 stays whole at that end with its under-half bar unchanged. Sequencing inside the phase, not a reduction."
+    },
+    {
+     "id": "T060-done",
+     "summary": "Item 9's done test: make done on a one-line Rust edit, timed against m:done-rust-edit, with no pytest in its log.",
+     "class": "within",
+     "why": "Consistent with the request's end state, so it narrows nothing, but it contradicts (c), (d) and exit 6 of the same section and the recorded after_pytest_s of 17. Reported to the caller as a defect in the section's wording."
+    },
+    {
+     "id": "T060-measurements",
+     "summary": "Every recorded measurement command that runs a file this task ports or deletes is rewritten in the same commit and re-run as proof.",
+     "class": "within",
+     "why": "FR-001 states this rule in these terms."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

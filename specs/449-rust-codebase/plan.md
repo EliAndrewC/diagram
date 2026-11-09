@@ -242,20 +242,20 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 ### T060 Approach (checklist part A)
 
-1. **The goal, in the world.** A one-line Rust edit's `make done` runs only what that edit can change (SC-002's largest share: `m:done-rust-edit`, 14 s of pytest over 11 modules of 30.2 s).
+1. **The goal, in the world.** A one-line Rust edit's `make done` runs only what that edit can change (SC-002's largest share: `m:done-rust-edit`, 14 s of pytest over the 11 modules that plan selected, of 30.2 s).
 2. **The constraints.** FR-001, FR-002, SC-002; Story 2 scenario 1 and 3.
    **Decisions** (measured 2026-11-08, `m:t060-done-rust-edit`):
    - (a) THE GATE GOT SLOWER AND THE FIGURE SAYS WHY: a one-line edit of `rust/phases`, on a fresh full baseline, is 60 s by wall clock against `m:done-rust-edit`'s 30.2 s, `static` 40 s against 13: phase 1's `rust/guard` is a crate as large as the hamlet stages, and the gate lints, covers and lists every crate on every edit.
-   - (b) A CRATE'S UNCHANGED CHECKS REUSE THEIR LAST GREEN RESULT: `rust_checks.py` keeps, per crate and per check, an id of what that check depends on, and reuses a green result while it is the same. `lint`, `dead` and `format --check` depend on the crate, the workspace's manifests and the compiler; `cover` and `test-counters` also on the repository outside the other crates, since a crate's tests read the Makefile and fixtures under `tests/hooks/`. A failure is never kept. `make done INCREMENTAL=0` and `FULL=1` run everything and keep what they find. No verdict can move: each check is a function of the inputs the id covers.
-   - (c) THE PYTHON TESTS ARE NOT NARROWED HERE: 7 of the 14 modules a Rust edit selects read real Rust source, and running only those saves about 3 s of 14 (observed 2026-11-08, method: `make test-file` of the 7). What that saves does not justify a hand-written roster of them; they go as the checks they test are ported.
-   - (d) SC-002's FIGURE IS T070's: this task's exit is the reuse in place and the gate's time measured, recorded beside the first value. Preflight (5 s) and the pytest step go with T062 to T067.
+   - (b) A CRATE'S UNCHANGED CHECKS REUSE THEIR LAST GREEN RESULT (the same edit afterward: 38 s, `static` 15 s, `m:t060-done-rust-edit`): `rust_checks.py` keeps, per crate and per check, an id of what that check depends on, and reuses a green result while it is the same. `lint`, `dead` and `format --check` depend on the crate, the workspace's manifests and the compiler; `cover` and `test-counters` also on the repository outside the other crates, since a crate's tests read the Makefile and fixtures under `tests/hooks/`, less the append-only records every run writes (`dev/run-log/`, `dev/bypass-log/`, `dev/perf-log/`, `dev/idle-log/`). A failure is never kept. `make done INCREMENTAL=0` and `FULL=1` run everything and keep what they find. No verdict can move: each check is a function of the inputs the id covers, a crate this one builds from by path among them (neither crate has one today).
+   - (c) THE PYTHON TESTS ARE NOT NARROWED HERE: 7 of the 14 modules a Rust edit selects read real Rust source, and running only those saves about 3 s of today's 17 (observed 2026-11-08, method: `make test-file` of the 7). What that saves does not justify a hand-written roster of them; they go as the checks they test are ported.
+   - (d) SC-002's FIGURE IS T070's: this task's exit is the reuse in place and the gate's time measured, recorded beside the first value. Preflight (6 s, `m:t060-done-rust-edit`'s run record) and the pytest step go with T062 to T067.
 3. **Where each comes from.** `m:done-rust-edit`; the reference run's phase table.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** As the phase's plan above; each stands on the ones before it.
 6. **The exits.** Green: an edit of one crate runs no check of the other, `m:t060-done-rust-edit` recorded beside `m:done-rust-edit`, the defect scenarios caught by the same rule; SC-002 itself is T070's exit. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** `make done` on a one-line Rust edit, timed against `m:done-rust-edit`, and no pytest in its log. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+9. **Done, measured.** `make done` on a one-line Rust edit, timed against `m:done-rust-edit`,. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 

@@ -246,6 +246,15 @@ def test_a_crates_key_moves_with_its_own_inputs_and_not_the_other_crates(tmp_pat
     assert key("lint", a) != key("dead", a), "each check its own"
 
 
+def test_a_crate_built_from_another_by_path_moves_with_it(tmp_path: pathlib.Path) -> None:
+    a, b = _two_crates(tmp_path)
+    a.write_text('[package]\n[dependencies]\nb = { path = "../b" }\n')
+    ids = {"rust/a/src/l.rs": "1", "rust/b/src/l.rs": "2"}
+    for cmd in ("lint", "cover"):
+        assert rc.verdict_key(tmp_path, a, cmd, [a, b], ids, "c") != rc.verdict_key(tmp_path, a, cmd, [a, b], {**ids, "rust/b/src/l.rs": "9"}, "c"), cmd
+        assert rc.verdict_key(tmp_path, b, cmd, [a, b], ids, "c") == rc.verdict_key(tmp_path, b, cmd, [a, b], {**ids, "rust/a/src/l.rs": "9"}, "c"), "the dependency does not read its dependent"
+
+
 def test_an_unchanged_crate_keeps_its_green_result_and_a_failure_is_never_kept(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     _two_crates(tmp_path)
     ran: list[str] = []

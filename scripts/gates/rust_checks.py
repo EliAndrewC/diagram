@@ -235,8 +235,10 @@ def _content_ids(root: pathlib.Path) -> dict[str, str]:
 
 def verdict_key(root: pathlib.Path, manifest: pathlib.Path, cmd: str, all_manifests: list[pathlib.Path], ids: dict[str, str], compiler: str) -> str:
     """What this check of this crate depends on, as one id: a change to any of it runs the check again."""
-    own = manifest.parent.relative_to(root).as_posix() + "/"
-    others = [m.parent.relative_to(root).as_posix() + "/" for m in all_manifests if m != manifest]
+    # ...a crate this one builds from by path is its input like its own sources, so an edit there can never leave a stale green here
+    depended = {m for m in all_manifests if m != manifest and f'"{os.path.relpath(m.parent, manifest.parent)}"' in manifest.read_text(encoding="utf-8")}
+    own = tuple(m.parent.relative_to(root).as_posix() + "/" for m in {manifest, *depended})
+    others = [m.parent.relative_to(root).as_posix() + "/" for m in all_manifests if m != manifest and m not in depended]
     if _KEPT[cmd] == "source":
         kept = {p: i for p, i in ids.items() if p.startswith(own) or p in _WORKSPACE}
     else:

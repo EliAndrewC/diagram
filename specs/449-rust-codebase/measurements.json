@@ -904,5 +904,23 @@
         "firing_log_test": "its census reads guardlog.sh and the *_OK tokens across shell and Rust and two cases drive ported guards; goes with guardlog.sh, phase 3"
       }
     }
+  },
+  "t060-done-rust-edit": {
+    "quantity": "a one-line Rust edit's make done, on today's tree, before and after a crate's unchanged checks reuse their last green result",
+    "observed": "2026-11-08",
+    "subject": "rust/phases/src/driver/check.rs, the edit of m:done-rust-edit, against a fresh full baseline (make done INCREMENTAL=0 just before); phase 1's rust/guard present",
+    "command": "make done INCREMENTAL=0; sed -i 's|^const SLACK_FT: f64 = 1.0;|const SLACK_FT: f64 = 1.0_f64;|' rust/phases/src/driver/check.rs; make done; git checkout -- rust/phases/src/driver/check.rs",
+    "method": "the wall clock of the second make done, and its run record for the phases' seconds (dev/run-log/2026-11/20261109T005012826984-1203108.json); before: the same run ahead of T060's change",
+    "value": {
+      "before_wall_s": 60,
+      "before_static_s": 40,
+      "after_wall_s": 38,
+      "after_static_s": 15,
+      "after_counters_s": 2,
+      "after_pytest_s": 17,
+      "after_seeds_s": 13,
+      "first_value_wall_s": 30.2,
+      "after_preflight_s": 6
+    }
   }
 }
