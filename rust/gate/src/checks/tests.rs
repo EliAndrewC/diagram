@@ -171,3 +171,12 @@ fn a_refused_check_is_recorded_refused_and_a_failed_self_test_refuses() {
         "ok"
     );
 }
+
+#[test]
+fn a_value_is_printed_as_python_prints_it() {
+    use serde_json::json;
+    assert_eq!(
+        super::py_repr(&json!({"a": [1, null, true, false], "it's": "x'y\"z\\\n"})),
+        r#"{'a': [1, None, True, False], "it's": 'x\'y"z\\\n'}"#
+    );
+}

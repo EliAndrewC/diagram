@@ -30,7 +30,9 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-const FIRST: u32 = 377;
+pub const FIRST: u32 = 377;
+/// The approval line's form, for a refusal to print.
+pub const FORM: &str = "**Approved**: the GM, YYYY-MM-DD, \"<the GM's words, verbatim>\"";
 const MIN_WORDS: usize = 3;
 const CLOSING: [&str; 3] = ["done", "superseded by", "withdrawn"];
 const STANDING: &str =
@@ -81,6 +83,20 @@ fn quotes(text: &str) -> Vec<String> {
 
 fn long_enough(q: &str) -> bool {
     norm(q).split(' ').count() >= MIN_WORDS
+}
+
+/// spec-lint's check 6, the push's backstop (feature 377): nothing when the text holds a well-formed approval line, else `no-line` or
+/// `short`. The transcript the commit guard also reads is not there at the push.
+#[must_use]
+pub fn form_problem(text: &str) -> &'static str {
+    let found = quotes(text);
+    if found.is_empty() {
+        "no-line"
+    } else if found.iter().any(|q| long_enough(q)) {
+        ""
+    } else {
+        "short"
+    }
 }
 
 /// Nothing when the spec's approval stands, else `no-line`, `short` or `not-found`.
