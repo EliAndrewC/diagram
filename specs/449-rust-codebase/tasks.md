@@ -255,7 +255,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T75 `scripts/measure/`, the second slice (`ask:449-T068-scope`): the figures and probes, `figures.py`, `probe.py`, `ratchet.py`, `gatecost.py`, `gate_costs.py`
       research: rendering
       verify: DONE. landed: the figures, the probe, the ratchets and the gate's costs are Rust; reopen.py restored
-- [ ] T76 `scripts/measure/`, the third slice (`ask:449-T068-scope`): the logs and reports, `runstats.py`, `guard-log.py`, `review_yield.py`, `wave_report.py`, `subagent_cache.py`, `fresh_tally.py`, with `tool_yield.py` if no Python caller remains; `event_log.py`, `feature_report.py`, `turn_time.py`, `fix_yield.py`, `task_phases.py` and `where_time.py` are phase 3's (`ask:449-T76-scope`)
+- [x] T76 `scripts/measure/`, the third slice (`ask:449-T068-scope`): the logs and reports, `runstats.py`, `guard-log.py`, `review_yield.py`, `wave_report.py`, `subagent_cache.py`, `fresh_tally.py`, with `tool_yield.py` if no Python caller remains; `event_log.py`, `feature_report.py`, `turn_time.py`, `fix_yield.py`, `task_phases.py` and `where_time.py` are phase 3's (`ask:449-T76-scope`)
       research: rendering
+      verify: DONE. landed: run stats, the guard log and the small reports are Rust
 - [ ] T77 `scripts/measure/`, the last slice (`ask:449-T068-scope`): `dead_closure.py`, `maps_moved.py`, `replay_owing.py`, `uncovered-in-diff.py`, `uncovered_marks.py`, `work_budget_rust.py`, `work_budget_view.py`, `model_trial.py`, `depiction_replay.py`, `popup_rounds.py`, `push_check_times.py`, `tooling_reuse_time.py`
       research: rendering
