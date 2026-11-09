@@ -178,8 +178,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 
 ### User Story 2 - the gate is Rust (phase 2, opened 2026-11-08 by a plan amendment)
 
-- [ ] T060 [US2] The Rust-only route: a delta touching only `.rs` files and the Rust manifests runs the Rust checks and the few text checks over `.rs`, and no pytest
+- [x] T060 [US2] The Rust-only route: a delta touching only `.rs` files and the Rust manifests runs the Rust checks and the few text checks over `.rs`, and no pytest
       research: rendering
+      verify: DONE. landed: a crate's unchanged checks reuse their last green result
 
 - [ ] T061 [US2] `rust/gate`: the crate and its binary `l7r-gate`, called from the Makefile, with the shared facts the ports below read (the repository's paths, the run record's format, git in one place)
       research: rendering

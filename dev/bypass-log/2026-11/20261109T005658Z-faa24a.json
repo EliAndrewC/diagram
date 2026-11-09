@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T00:56:58Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "919248ef7",
+  "why": "spec-fidelity's CLEAR on T060 said these were defects to fix before the task closes and that none changes the verdict; the edits make exactly those"
+}

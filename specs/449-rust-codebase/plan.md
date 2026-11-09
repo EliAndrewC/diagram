@@ -195,26 +195,7 @@ XIV) are fixed as they move.
 
 <!-- plan-archive: T006 to T049 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T050 to T052 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
-### T052 Approach (checklist part A)
-
-1. **The goal, in the world.** phase 1 closed on its measured outcome.
-2. **The constraints.** SC-001, FR-010, FR-001 (phase 1's share of both censuses).
-   **Decisions** (the round arbiter's rulings `ask:449-T054-sc001` and `ask:449-T052-inline-census`; 2026-11-08):
-   - (a) SC-001 IS STATED AS MET ON ITS INSTRUMENT ALONE: `dev/phase-1-close.md` carries the ruling's wording, the real-command distribution and the commit branch, whose asks are T027's (`ledger_owed.py`, `ledger_lint.py`), a third branch beside T044's two, on a real `git commit` only (`m:t054-plain-bash`).
-   - (b) THE SECOND CENSUS IS A COMMAND: `make inline-census` (`m:inline-census-sites`) lists every remaining site under one of the ruling's three groups and fails on any site outside them. The guard-input group is by exact line, so a real run in those suites still counts. `test-record-edit-gate.sh`, checked as the ruling asked, tests the phase-1 gate, so its one site was converted, and it is not among the suites that move.
-   - (c) `resolve` MOVES BESIDE ITS ONLY CALLER: `scripts/hooks/lib/clone-resolve.sh`, the `clone-sync-hooks.sh` wrapper retired, as FR-009 gives the `*-hooks.sh` wrappers to Story 1.
-   - (d) THE 111 CONVERTED SITES (`m:inline-census-sites`: 168 at T052's start, 57 now): `jq`, literal JSON, `sed` and `awk`, each suite still green; `BEHIND_TEST_TARGETS`' drift test moved to the crate beside its list; the two fake rolls in `test-engine-freeze-hooks.sh`, a real run of Python, are a process that looks like one (`exec -a`). `jq` joins the three install lists the suites run under: `setup-dev-env.sh`, `Dockerfile.ci` and `buildspec/run.sh`'s stock-image bootstrap, since `make done` runs them in CI as on the laptop (the custom image rebuilds with `make ci-image` when remote runs next come on). FR-009 keeps the containers in this feature only for the Python they run and install; `jq` is what removing inline Python from the suites needs where they run, so it joins those lists rather than opening a port of them.
-3. **Where each comes from.** plan work breakdown 8; `m:hooks-bash`, `m:pair-hooks-suite`.
-4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
-5. **The order.** Last.
-6. **The exits.** Green: the figures re-run and recorded beside their first values, SC-001 met on its instrument (`ask:449-T054-sc001`), both censuses' phase-1 share empty but for what FR-001 names: the first by `git ls-files 'scripts/hooks/*.py' 'tests/hooks/*.py'` (`m:phase-1-python-share`: 13 files under `scripts/hooks/lib/`, each placed later by name, none under `tests/hooks/`, beside `m:python-census`'s first 872; by use, the search recorded there found one guards-only module outside them, `scripts/gates/engine_edit.py`, a wrapper over phase-2 code that goes with it, and a test of the firing log outside `tests/hooks/`, `tests/tooling/test_guard_firing_log.py`, which goes with `guardlog.sh`, in phase 3), the second by `make inline-census` (`m:inline-census-sites`). Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
-   **Carried into phase 1's record:** the one suite case whose expected verdict changed, `test-wakeup-hooks.sh`'s input that is not JSON, by the round arbiter's ruling `ask:449-T038-garbage` (FR-002).
-9. **Done, measured.** SC-001 met on its instrument (`ask:449-T054-sc001`): the guards before a Bash call decide it in under a tenth of today's slowest guard's time. The phase's measurements recorded in `dev/` as well as beside their first values (FR-010), and the record naming the two constitution XIV fixes (FR-002): `make-only` T028 and `guard-file` T029, each of which added new suite cases and changed no earlier case's expected verdict (their suites' `git show`, 2026-11-08), so the wakeup case stays the one changed verdict.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T052 to T052 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### Phase 2 - the gate (Story 2, P2)
 
 **Approach.** The gate's own Python path moves to a Rust binary the Makefile calls: `l7r/diagram/ci/` (the test planner, the
