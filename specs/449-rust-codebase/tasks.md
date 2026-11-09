@@ -213,7 +213,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command, and `scripts/gates/check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`), `cohort_gate.py` and `room_table.py` with `cohort_known.py` (`ask:449-T067-scope`)
       research: rendering
 
-- [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`, `buildspec/run.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
+- [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
       research: rendering
 
 - [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller), `scripts/gates/preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` (`ask:449-T067-scope`)
@@ -246,3 +246,5 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T72 [US2] `l7r/diagram/ci/` the state: `state.py`, `gate_config.py`'s `config_hash`, `coverage_exempt.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch (slice 3 of `ask:449-T063-slices`; `runlog.py` goes with its callers in T064, and `scripts_readers` and `tooling_modules` with `incremental.py` in T071)
       research: rendering
       verify: DONE. landed: the state, the tooling and config hashes and the coverage record ported to rust/gate; m:t72-state shows both hashes equal to the Python's, the second call from kept forms; static, tooling tests and hook suites green
+- [ ] T73 The remote test path deleted, not ported (FR-001a): `buildspec/`, `Dockerfile.ci`, the `ci-*` targets, the `remote` switch, the dispatcher and AWS adapter; the route and the gated push local
+      research: rendering

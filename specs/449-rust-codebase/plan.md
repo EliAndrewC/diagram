@@ -393,3 +393,18 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 | the last good binary kept, failing open only with none (D7) | one binary is every guard, so a failed build must not turn them all off; Claude Code's own rule passes a crashing hook (exit 2 alone blocks) | failing closed would lock the GM's session out of every tool call on a build error, with no recovery from inside it; failing open on every failed build would turn every guard off at once |
 
 <!-- plan-archive: T72 to T72 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+
+### T73 Approach (checklist part A)
+
+1. **The goal, in the world.** Nothing in the repository runs a test on AWS, and a gated push lands on a green local `make done`: the GM, 2026-11-09, "Let's delete rather than port our tooling which runs our tests remotely on AWS."
+2. **The constraints.** FR-001, as amended for the deletion; FR-002 for what stays: the route (DIRECT or GATED) and a gated push's conditions, which were the remote-off path's. The remote has been off since 2026-09-05 (`dev/switches.json`), so the behavior of a push does not change.
+3. **Where each comes from.** `rust/gate/src/ci/`, `buildspec/`, `Dockerfile.ci`, `scripts/sync-with-main.sh`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** The push's use first (a local route and gated check), then the targets, the Rust, the files, the docs, all in one landing.
+6. **The exits.** Green: a gated push still refuses without a green local `make done` on the merged engine content, and the census below is empty. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files buildspec Dockerfile.ci dev/ci.md` returns nothing; `git grep -nE "ci-(check|merge|measure|image|status|on|off)\b|CodeBuild|buildspecOverride" -- Makefile 'scripts/*.sh' 'scripts/*.py' 'rust/*.rs' 'l7r/*.py'` names no invocation; `make hooks-test HOOKS_ALL=1` green with `test-sync-with-main`'s gated cases on the local path.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
