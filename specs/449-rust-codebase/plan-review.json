@@ -134,7 +134,7 @@
    "declared": "spec-fidelity"
   },
   "### T064 Approach (checklist part A)": {
-   "sha256": "0c90bd6f42a0ff5b0dd1e6d3567306a57b3f2e9eed1f5edf27bd10a3c15ac87c",
+   "sha256": "3b28def068beff330c1af95ba21466b85a99af20168240faa4347d961afc8647",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -3853,6 +3853,87 @@
      "why": "Unchanged. Restates FR-001."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T064 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-landing",
+     "summary": "config, switches, decision, door, features, imagecheck, cachepolicy, runlog and dispatch become l7r-gate ci, switches and lifecycle and are deleted with their Python tests in one commit, the Makefile's recipes switching in it; ci/__main__.py keeps only incremental until T071",
+     "class": "within",
+     "why": "FR-001 puts l7r/diagram/ci/ and switches.py in phase 2 and the request is to replace the Python; one switch per piece honors FR-003, and incremental's Python stays the one that runs until its port."
+    },
+    {
+     "id": "invocation-to-phase-4",
+     "summary": "_invocation.py moves to phase 4 with its last Python caller",
+     "class": "within",
+     "why": "FR-001 carries this placement in its own text. It orders the file's replacement and removes nothing from the request: the file is still replaced."
+    },
+    {
+     "id": "via-make-per-runtime",
+     "summary": "via_make.rs is the make-only check for l7r-gate's binaries; each runtime decides for its own process and neither calls the other",
+     "class": "within",
+     "why": "FR-005 requires the make-only guard to cover the replacements' binaries; no process runs both checks (FR-003), and both sides carry a test."
+    },
+    {
+     "id": "aws-trait-cli",
+     "summary": "The AWS boundary is a trait with the aws CLI behind it, tested through a fake aws on the path; the live adapter is stated unproven and the first paid run after remote is turned on is its proof",
+     "class": "within",
+     "why": "FR-002's comparison is on every case the Python's tests and suites hold, and those stand against a stubbed AWS, so a stubbed port meets the same cases. The request asks for no live run and the constitution forbids a paid dispatch to test this. The limit is stated loud, not hidden."
+    },
+    {
+     "id": "registry-and-verdict-stay-python",
+     "summary": "The registry of operations stays in _invocation.py, read as text, until phase 4; spec-verdict and --holding stay in hm_arbiter.py and speckit-todo.py, asked by path once a process, until phase 3",
+     "class": "within",
+     "why": "FR-001 places these files in those phases and FR-003 keeps a piece's Python the one that runs until its replacement passes; once a process honors FR-006 and SC-002."
+    },
+    {
+     "id": "test-replay-census",
+     "summary": "Every def test of the eleven named files is a Rust test under rust/gate/src/ci/ or has a stated disposition; the real-tree readers are ci/real_tree.rs",
+     "class": "within",
+     "why": "This is FR-002's every-case requirement, and the enumeration names its search space: a listing of def test in each deleted file at the commit before."
+    },
+    {
+     "id": "source-reading-tests-become-behavior",
+     "summary": "test_only_a_BUILD... becomes the behavior assertion of no put_object under cache in a_check_dispatches_one_parked_build_and_records_it; test_the_module_documents... reads cachepolicy.rs's own text",
+     "class": "within",
+     "why": "Each case survives on the port: the first asserts the same property on behavior instead of on the Python source that no longer exists, the second reads the file that now holds the text."
+    },
+    {
+     "id": "verdict-cases-with-hm-arbiter",
+     "summary": "Three test_features.py cases go to tests/tooling/test_spec_verdict.py against hm_arbiter.py spec-verdict, phase 3; the gate reader's side is the_merge_and_the_review_gate_read_one_verdict in ci/features/tests.rs, the real Python on the real script, the piece's one end-to-end test",
+     "class": "within",
+     "why": "The block's earlier gap is closed: the cases that test the verdict stay with the code that computes it, which FR-001 places in phase 3, and the one thing the ported reader adds, taking its verdict from there, now has a Rust case. FR-008 allows one end-to-end test against the real command."
+    },
+    {
+     "id": "rule-by-id-ported",
+     "summary": "a_rule_is_addressed_by_id_and_a_missing_one_is_loud is in cachepolicy.rs, the function ported with l7r-gate lifecycle <id> as its caller",
+     "class": "within",
+     "why": "The earlier text dropped the case, which FR-002 does not allow; the case is now kept. The lifecycle command is already part of this landing, and the caller exists so that the kept function is reached."
+    },
+    {
+     "id": "env-var-case-ported",
+     "summary": "an_environment_variable_alone_opens_nothing is in ci/door/tests.rs",
+     "class": "within",
+     "why": "The earlier text replaced the case with the claim that it holds by construction; FR-002's every-case comparison now has a test."
+    },
+    {
+     "id": "tooling-test-switches-stays",
+     "summary": "tests/tooling/test_switches.py's six cases stay and port with the recipes they drive in T069",
+     "class": "within",
+     "why": "FR-001 sends each tests/ file with the piece it tests, and these test Makefile recipes. Staying across the recipe switch means they run through make against the Rust-backed recipes, which is FR-002's comparison on those six cases."
+    },
+    {
+     "id": "remote-exit-and-proof",
+     "summary": "Done is the dispatcher's tests against a stubbed AWS and suite verdicts unchanged, no remote run spent; every recorded measurement command running a ported or deleted file is rewritten in the same commit and re-run",
+     "class": "within",
+     "why": "The rewriting and re-run are FR-001's own words; no remote run is the constitution's money rule, and m:t064-remote compares the routes with remote off."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6365,100 +6446,84 @@
    "verdict": "CLEAR"
   },
   "T064": {
-   "section_sha256": "21192e30f6e3267525131553fd9dd8fe3751b02cfe8bb6da1edb711e96c34118",
+   "section_sha256": "3b28def068beff330c1af95ba21466b85a99af20168240faa4347d961afc8647",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "one-landing",
-     "summary": "config, switches, decision, door, features, imagecheck, cachepolicy, runlog and dispatch become l7r-gate ci/switches/lifecycle in one commit with the Makefile's recipes; ci/__main__.py keeps only incremental until T071",
+     "summary": "config, switches, decision, door, features, imagecheck, cachepolicy, runlog and dispatch become l7r-gate ci, switches and lifecycle and are deleted with their Python tests in one commit, the Makefile's recipes switching in it; ci/__main__.py keeps only incremental until T071",
      "class": "within",
-     "why": "FR-001 places l7r/diagram/ci/ and switches.py in phase 2; one commit switching the recipes satisfies FR-003 (no piece runs both). m:t064-remote compares on the commit before the switch, as FR-002 asks. Its command is prose, not runnable, and could not be re-run from the bundle: a note, not a ruling."
+     "why": "FR-001 puts l7r/diagram/ci/ and switches.py in phase 2 and the request is to replace the Python; one switch per piece honors FR-003, and incremental's Python stays the one that runs until its port."
     },
     {
      "id": "invocation-to-phase-4",
-     "summary": "_invocation.py moves to phase 4 with its last Python caller; via_make.rs is the same check for l7r-gate's binaries",
+     "summary": "_invocation.py moves to phase 4 with its last Python caller",
      "class": "within",
-     "why": "FR-001 carries this as written (ask:449-T064-slices); it is still ported, later. via_make.rs is what FR-005 requires."
+     "why": "FR-001 carries this placement in its own text. It orders the file's replacement and removes nothing from the request: the file is still replaced."
     },
     {
-     "id": "aws-boundary",
-     "summary": "the AWS boundary is a trait over the aws CLI, tested through a fake aws; the live adapter is declared unproven and no paid run proves it",
+     "id": "via-make-per-runtime",
+     "summary": "via_make.rs is the make-only check for l7r-gate's binaries; each runtime decides for its own process and neither calls the other",
      "class": "within",
-     "why": "FR-002's equality is over the cases the tests and suites hold, and a paid run is not one of them. The block states the limit openly rather than claiming proof."
+     "why": "FR-005 requires the make-only guard to cover the replacements' binaries; no process runs both checks (FR-003), and both sides carry a test."
     },
     {
-     "id": "registry-and-asked-by-path",
-     "summary": "the operations registry stays in _invocation.py, read as text, until phase 4; spec-verdict and --holding stay in hm_arbiter.py and speckit-todo.py, asked by path once a process, until phase 3",
+     "id": "aws-trait-cli",
+     "summary": "The AWS boundary is a trait with the aws CLI behind it, tested through a fake aws on the path; the live adapter is stated unproven and the first paid run after remote is turned on is its proof",
      "class": "within",
-     "why": "Follows FR-001's placement of _invocation.py (phase 4), hm_arbiter.py and the rest of scripts/ (phase 3); once a process is FR-006 and SC-002."
+     "why": "FR-002's comparison is on every case the Python's tests and suites hold, and those stand against a stubbed AWS, so a stubbed port meets the same cases. The request asks for no live run and the constitution forbids a paid dispatch to test this. The limit is stated loud, not hidden."
     },
     {
-     "id": "replay-rule",
-     "summary": "every case of the eleven named test files is a Rust test under rust/gate/src/ci/ or goes as named, from a listing of def test in each deleted file at the commit before",
+     "id": "registry-and-verdict-stay-python",
+     "summary": "The registry of operations stays in _invocation.py, read as text, until phase 4; spec-verdict and --holding stay in hm_arbiter.py and speckit-todo.py, asked by path once a process, until phase 3",
      "class": "within",
-     "why": "This is FR-002's every-case rule with its search space named, which round 1 lacked. The named departures are ruled one by one below."
+     "why": "FR-001 places these files in those phases and FR-003 keeps a piece's Python the one that runs until its replacement passes; once a process honors FR-006 and SC-002."
     },
     {
-     "id": "real-tree-cases",
-     "summary": "cases that read the buildspecs, run.sh, Dockerfile.ci, the Makefile and the example secrets become ci/real_tree.rs",
+     "id": "test-replay-census",
+     "summary": "Every def test of the eleven named files is a Rust test under rust/gate/src/ci/ or has a stated disposition; the real-tree readers are ci/real_tree.rs",
      "class": "within",
-     "why": "They remain Rust tests of the same real files."
+     "why": "This is FR-002's every-case requirement, and the enumeration names its search space: a listing of def test in each deleted file at the commit before."
     },
     {
-     "id": "only-a-build-writes",
-     "summary": "test_only_a_BUILD_can_write_the_freshness_state_a_build_restores, which read the dispatcher's source, becomes an assertion in a_check_dispatches_one_parked_build_and_records_it of no put_object under cache",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "The case's subject, the Python source, is deleted, so it cannot replay literally. By the block's own words it read only the dispatcher's source, so it could see only the half the replacement carries: the dispatcher does not write the state. A check on every call at the process boundary serves that purpose. Limit: it covers the dispatching path, the one the test's name says records."
-    },
-    {
-     "id": "module-documents-state",
-     "summary": "test_the_module_documents_the_state_that_is_now_TRUE reads cachepolicy.rs's own text",
+     "id": "source-reading-tests-become-behavior",
+     "summary": "test_only_a_BUILD... becomes the behavior assertion of no put_object under cache in a_check_dispatches_one_parked_build_and_records_it; test_the_module_documents... reads cachepolicy.rs's own text",
      "class": "within",
-     "why": "A direct port of the case onto the file that replaces its subject."
+     "why": "Each case survives on the port: the first asserts the same property on behavior instead of on the Python source that no longer exists, the second reads the file that now holds the text."
     },
     {
-     "id": "features-verdict-cases-1-2",
-     "summary": "test_a_spec_the_round_arbiter_accepted_at_its_cap_is_faithful and test_a_spec_ruled_on_an_asked_round_is_faithful move to tests/tooling/test_spec_verdict.py against hm_arbiter.py spec-verdict, going in phase 3",
+     "id": "verdict-cases-with-hm-arbiter",
+     "summary": "Three test_features.py cases go to tests/tooling/test_spec_verdict.py against hm_arbiter.py spec-verdict, phase 3; the gate reader's side is the_merge_and_the_review_gate_read_one_verdict in ci/features/tests.rs, the real Python on the real script, the piece's one end-to-end test",
      "class": "within",
-     "why": "FR-001: each tests file goes with the piece it tests, and by their names these test the verdict, which FR-001 leaves in hm_arbiter.py until phase 3."
+     "why": "The block's earlier gap is closed: the cases that test the verdict stay with the code that computes it, which FR-001 places in phase 3, and the one thing the ported reader adds, taking its verdict from there, now has a Rust case. FR-008 allows one end-to-end test against the real command."
     },
     {
-     "id": "features-verdict-case-3",
-     "summary": "test_the_merge_and_the_review_gate_read_one_verdict moves to tests/tooling/test_spec_verdict.py against hm_arbiter.py spec-verdict",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The case names two readers. The block ports features.py to Rust in this landing, and a test against hm_arbiter.py spec-verdict sees only the verdict's source, not whether the reader now in Rust asks it. The class argument stretched over the three cases does not fit this one, and the block names no Rust test for that reader. FR-002 says every case. Rests on the case's name, since the bundle does not hold its body. Cleared by naming the Rust test showing the gate's reader takes its verdict from spec-verdict, or by stating from the case's body that it never touched a reader."
-    },
-    {
-     "id": "cachepolicy-rule-dropped",
-     "summary": "test_a_rule_is_addressed_by_id_and_a_missing_one_is_loud is dropped and cachepolicy.rule is not ported because it had no caller",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The case ends with no test and no ruling. The request says all and FR-002 says every case; FR-002 lists its exceptions, and a retired branch enters it by a named ruling, as ask:449-T72-coverage-exempt shows. Porting is not impossible, nothing in the request implies the drop, and keeping it does not defeat the purpose. 'No caller' names no search command. Cleared by porting the function and its case, or by an arbiter ruling written into FR-002 carrying the caller census and its command."
-    },
-    {
-     "id": "env-var-by-construction",
-     "summary": "test_env_var_alone_opens_nothing is dropped as holding by construction because door::check takes no environment",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Replay is possible and small, and the stated mechanism cannot deliver the claim: a Rust function can call std::env::var whatever its parameters, and the signature says nothing of the code around door::check. Cleared by a Rust test under ci/ that sets the variable alone and asserts the door stays closed, at the level that would see a read of the environment."
-    },
-    {
-     "id": "tooling-test-switches-six",
-     "summary": "tests/tooling/test_switches.py stays; its six named cases drive the real Makefile and port with those recipes in T069",
+     "id": "rule-by-id-ported",
+     "summary": "a_rule_is_addressed_by_id_and_a_missing_one_is_loud is in cachepolicy.rs, the function ported with l7r-gate lifecycle <id> as its caller",
      "class": "within",
-     "why": "FR-001: a tests file goes with the piece it tests, here the recipes, and they keep running against the switched binaries."
+     "why": "The earlier text dropped the case, which FR-002 does not allow; the case is now kept. The lifecycle command is already part of this landing, and the caller exists so that the kept function is reached."
     },
     {
-     "id": "order-exits-measurements",
-     "summary": "leaf-first order, one spawn per process, green and red exits, recorded measurements rewritten in the same commit and re-run",
+     "id": "env-var-case-ported",
+     "summary": "an_environment_variable_alone_opens_nothing is in ci/door/tests.rs",
      "class": "within",
-     "why": "FR-006 and SC-002 for the spawns; FR-001 for the rewritten commands and their re-run."
+     "why": "The earlier text replaced the case with the claim that it holds by construction; FR-002's every-case comparison now has a test."
+    },
+    {
+     "id": "tooling-test-switches-stays",
+     "summary": "tests/tooling/test_switches.py's six cases stay and port with the recipes they drive in T069",
+     "class": "within",
+     "why": "FR-001 sends each tests/ file with the piece it tests, and these test Makefile recipes. Staying across the recipe switch means they run through make against the Rust-backed recipes, which is FR-002's comparison on those six cases."
+    },
+    {
+     "id": "remote-exit-and-proof",
+     "summary": "Done is the dispatcher's tests against a stubbed AWS and suite verdicts unchanged, no remote run spent; every recorded measurement command running a ported or deleted file is rewritten in the same commit and re-run",
+     "class": "within",
+     "why": "The rewriting and re-run are FR-001's own words; no remote run is the constitution's money rule, and m:t064-remote compares the routes with remote off."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }
