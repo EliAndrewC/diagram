@@ -190,8 +190,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the code ids in Rust
 
-- [ ] T063 [US2] `l7r/diagram/ci/` the delta and the stamps: `delta.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them (slices 1 and 2 of `ask:449-T063-slices`; the state is T72)
+- [x] T063 [US2] `l7r/diagram/ci/` the delta and the stamps: `delta.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them (slices 1 and 2 of `ask:449-T063-slices`; the state is T72)
       research: rendering
+      verify: DONE. landed: the stamps and delta ported to rust/gate; m:t063-slice2 shows area keys, lists, 8,885 content ids, 50 engine keys, 7 deltas, the engine list over 26,664 paths and raw-match over 26,670 equal to the Python; static, tooling tests and 56 hook suites green
 
 - [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `_invocation.py` and `switches.py`
       research: rendering
