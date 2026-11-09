@@ -76,6 +76,15 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     put(&dir, "rust/a.rs", "fn f() { }\n");
     assert_eq!(needs("python", &dir).code, 1);
     assert_eq!(needs("research", &dir).code, 1);
+    put(
+        &dir,
+        "l7r/diagram/interactive/assets/modals/hamlet/x.md",
+        "Entry: y",
+    );
+    assert_eq!(needs("python", &dir).code, 1);
+    assert_eq!(needs("research", &dir).code, 0);
+    std::fs::remove_file(dir.join("l7r/diagram/interactive/assets/modals/hamlet/x.md")).unwrap();
+    assert_eq!(needs("research", &dir).code, 1);
     put(&dir, "research/x.html", "y");
     assert_eq!(needs("python", &dir).code, 1);
     assert_eq!(needs("research", &dir).code, 0);

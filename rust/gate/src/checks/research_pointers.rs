@@ -15,23 +15,21 @@ const RECORD: &str = "research";
 const MAPPING: &str = "moved-303.json";
 const CURRENT_DIRS: [&str; 5] = ["questions", "sources", "assets", "site", "archive"];
 const VERBATIM: [&str; 2] = ["tests/hooks/fixtures/", "research/source-attempts.jsonl"];
-const REFUSAL_DATA: [&str; 8] = [
+const REFUSAL_DATA: [&str; 7] = [
     "tests/tooling/test_attempts.py",
-    "tests/tooling/test_research_pointers.py",
     "scripts/hooks/lib/hm_record.py",
     "tests/hooks/test-record-edit-hooks.sh",
     "tests/hooks/test-check-bundle-hooks.sh",
     "tests/interactive/test_record.py",
-    "scripts/gates/check-research-pointers.py",
     "rust/gate/src/checks/research_pointers/tests.rs",
+    "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 6] = [
+const FIXTURES: [&str; 5] = [
     "tests/",
     "scripts/record/fragment_move.py",
     "scripts/gates/check-entry-headings.py",
-    "scripts/gates/check-research-pointers.py",
     "scripts/hooks/lib/hm_record.py",
-    "rust/gate/src/checks/research_pointers",
+    "rust/gate/src/checks/", // the checks' own tests and self-tests name fixture records
 ];
 const EXEMPT_EXT: [&str; 5] = [".png", ".webp", ".jpg", ".pdf", ".gz"];
 

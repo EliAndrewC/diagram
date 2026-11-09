@@ -106,13 +106,16 @@ fn py_lines(text: &str) -> impl Iterator<Item = &str> {
     })
 }
 
+/// A class's `Entry:` tag is parsed from its modal text here, so `check-entry-headings.py` reads these.
+const MODALS: &str = "l7r/diagram/interactive/assets/modals/";
+
 /// Does this path carry the extension?
 pub(crate) fn has_ext(path: &str, ext: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == ext)
 }
 
 /// Does this change hold a file the Python-source checks read? (`ask:449-T065-scope`: those that stay Python never start on a change that holds none of what they read, so a one-line Rust edit starts none.) A `.py`
-/// file or `pyproject.toml` for `python`; those or anything under `research/` for `research`. Exit 0 to run them.
+/// file or `pyproject.toml` for `python`; those, anything under `research/` or a modal's text for `research`. Exit 0 to run them.
 fn needs(what: &str, root: &Path) -> Outcome {
     let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
     if base.trim().is_empty() {
@@ -124,7 +127,7 @@ fn needs(what: &str, root: &Path) -> Outcome {
     let hit = |p: &str| {
         has_ext(p, "py")
             || p == "pyproject.toml"
-            || (what == "research" && p.starts_with("research/"))
+            || (what == "research" && (p.starts_with("research/") || p.starts_with(MODALS)))
     };
     Outcome {
         stdout: String::new(),
