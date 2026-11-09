@@ -78,3 +78,34 @@ def test_the_gate_stamp_reads_a_rust_file_by_its_tokens() -> None:
     edit = BASE.replace(b"// count the plots", b"// count every plot")
     assert gs.content_id(edit, "rust/phases/src/field.rs") == gs.content_id(BASE, "rust/phases/src/field.rs")
     assert gs.content_id(edit, "rust/phases/Cargo.toml") != gs.content_id(BASE, "rust/phases/Cargo.toml"), "a manifest: its bytes"
+
+
+def test_the_rust_gate_and_this_module_give_every_rs_file_the_same_id(tmp_path) -> None:  # noqa: ANN001
+    """The differential the round arbiter's `ask:449-T062-py-id` holds while both exist: `codeid.py`'s `.rs` branch stays for its Python callers, equal to the Rust gate's."""
+    import hashlib  # noqa: PLC0415
+    import pathlib  # noqa: PLC0415
+    import shutil  # noqa: PLC0415
+    import subprocess  # noqa: PLC0415
+
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    files = sorted(p.relative_to(repo).as_posix() for p in (repo / "rust" / "guard" / "src" / "shared").glob("*.rs"))
+    subprocess.run(["git", "-C", str(tmp_path), "init", "-q"], check=True)
+    for name in files:
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(repo / name, tmp_path / name)
+    done = subprocess.run([str(repo / "scripts/gates/l7r-gate.sh"), "content-ids", *files], cwd=tmp_path, capture_output=True, text=True, check=True, stdin=subprocess.DEVNULL)
+    got = dict(line.rsplit(" ", 1) for line in done.stdout.splitlines())
+    assert got == {name: hashlib.sha256(codeid.semantic_bytes((repo / name).read_bytes(), name)).hexdigest() for name in files}
+
+
+def test_ids_mode_answers_one_line_a_file(tmp_path) -> None:  # noqa: ANN001
+    import subprocess  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
+    (tmp_path / "a.py").write_text("x = 1  # a comment\n")
+    (tmp_path / "b.py").write_text("x = 1\n")
+    script = str(__import__("pathlib").Path(__file__).resolve().parents[2] / "scripts/gates/codeid.py")
+    done = subprocess.run([sys.executable, script, "--ids", str(tmp_path / "a.py"), str(tmp_path / "b.py")], capture_output=True, text=True, check=True)
+    lines = done.stdout.split()
+    assert len(lines) == 2 and lines[0] == lines[1], "a comment is no change"
+    assert subprocess.run([sys.executable, script], capture_output=True, check=False).returncode == 2

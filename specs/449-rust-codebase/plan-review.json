@@ -122,7 +122,7 @@
    "declared": "spec-fidelity"
   },
   "### T062 Approach (checklist part A)": {
-   "sha256": "ad7c2e0eef6c23cfc1c1b908a32bb4e3990642bda4108fd62c4a18ec3416fc48",
+   "sha256": "c19af7d69dce9b60865e415b4155cec6ea896e81b856bc313219452bc11273be",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -177,6 +177,12 @@
   },
   "### T071 Approach (checklist part A)": {
    "sha256": "e5f1369affbe9a401df7cd7462c8c40b856e551bc3b315d646adf5cdb5c76efa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "### T062 part B (2026-11-09T01:35:27Z)": {
+   "sha256": "db9b78df70a75bf659e6296caec258a743b2f375866f66df30ff9f34fe8a95f5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -3529,6 +3535,58 @@
      "why": "FR-001's recorded-measurement clause, restated. The wording is unchanged where an earlier block carried it, and T071 carries it from the moved T062 text."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T062 Approach (checklist part A)",
+    "### T062 part B (2026-11-09T01:35:27Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T062-a-port-and-cache",
+     "summary": "rust/gate/src/codeid.rs ports rust_tokens and git_blob_id and reads and writes the same semantic-id-cache-2.json in one format.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts in phase 2 and FR-006 requires semantic file ids read from the kept cache; FR-002's same outputs is what keeping one format and a kept stamp verifying carries. The request's 'all be ported to Rust' is served, not reduced."
+    },
+    {
+     "id": "T062-a-merged-atomic-write",
+     "summary": "The cache is written whole and renamed in, merging what another writer added; gate-stamp.py's own write changes to do the same.",
+     "class": "within",
+     "why": "A Python edit made so two writers do not clobber each other's entries during the transition, not a port and not a reduction of anything asked. It serves FR-006's kept cache and leaves FR-002's verdicts alone. Entries are a pure function of the blob key, so this is unlike the checks-open.json state the arbiter ruled must have one writer (ask:449-hm-checks-route), a ruling specific to those files."
+    },
+    {
+     "id": "T062-b-shared-sha",
+     "summary": "The gate crate depends on rust/guard by path for sha1/sha256 rather than copying them.",
+     "class": "within",
+     "why": "A design choice the spec leaves open; nothing asked is narrowed."
+    },
+    {
+     "id": "T062-b-coverage-own-files",
+     "summary": "rust_checks.py reads a crate's coverage for its own files only, because a path dependency's sources otherwise enter the report.",
+     "class": "within",
+     "why": "Bears on FR-004, which the block does not cite and should. The floor is not lowered: rust/guard's files are removed from the gate crate's report and stay under the floor of the crate that holds it today (FR-004's first line, 'the Rust crate holds today'). Within only on that condition, which the bundle cannot confirm: rust/guard's own run must still measure those files."
+    },
+    {
+     "id": "T062-c-nothing-switches",
+     "summary": "No caller switches in this task; l7r-gate content-ids is the surface and T063 is the first Rust caller.",
+     "class": "within",
+     "why": "FR-003: until a piece's replacement passes, its Python remains the one that runs. Ordering under the settled ask:449-T062-order, not a reduction of scope."
+    },
+    {
+     "id": "T062-rs-branch-stays",
+     "summary": "codeid.py's .rs branch stays for its Python callers, held equal to rust_tokens by the differential test tests/tooling/test_codeid_rust.py while both exist.",
+     "class": "within",
+     "why": "FR-001 places scripts/gates/codeid.py, the whole file, in phase 4 with its last Python caller, so the accepted spec settles this. FR-003's 'no piece runs both' is kept per caller: each caller runs one implementation. The differential only fails if the two differ, so it enforces FR-002's same outputs before the Python is deleted."
+    },
+    {
+     "id": "T062-part-B",
+     "summary": "Part B attributes the red-gate tripwire to T061's two reds and offers no route.",
+     "class": "within",
+     "why": "A process checklist; it decides nothing the spec leaves open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5849,6 +5907,56 @@
      "summary": "Done is a make recipe reaching the binary at the crate's floor; recorded measurement commands that run a file this task ports or deletes are rewritten in the same commit and re-run.",
      "class": "within",
      "why": "The recipe half serves FR-005's make as the one entry point and the floor is FR-004. The rewrite clause restates FR-001's rule in its own terms (to the port where a file is named, to an equivalent make command where inline or prose, re-run as proof), with no carve-out; it has little to act on in a task that adds a crate."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T062": {
+   "section_sha256": "3bd8c1eb8a96d41921a2fb83b85b9fae74e6d729bb5885b257d73f51cf15db1e",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T062-a-port-and-cache",
+     "summary": "rust/gate/src/codeid.rs ports rust_tokens and git_blob_id and reads and writes the same semantic-id-cache-2.json in one format.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts in phase 2 and FR-006 requires semantic file ids read from the kept cache; FR-002's same outputs is what keeping one format and a kept stamp verifying carries. The request's 'all be ported to Rust' is served, not reduced."
+    },
+    {
+     "id": "T062-a-merged-atomic-write",
+     "summary": "The cache is written whole and renamed in, merging what another writer added; gate-stamp.py's own write changes to do the same.",
+     "class": "within",
+     "why": "A Python edit made so two writers do not clobber each other's entries during the transition, not a port and not a reduction of anything asked. It serves FR-006's kept cache and leaves FR-002's verdicts alone. Entries are a pure function of the blob key, so this is unlike the checks-open.json state the arbiter ruled must have one writer (ask:449-hm-checks-route), a ruling specific to those files."
+    },
+    {
+     "id": "T062-b-shared-sha",
+     "summary": "The gate crate depends on rust/guard by path for sha1/sha256 rather than copying them.",
+     "class": "within",
+     "why": "A design choice the spec leaves open; nothing asked is narrowed."
+    },
+    {
+     "id": "T062-b-coverage-own-files",
+     "summary": "rust_checks.py reads a crate's coverage for its own files only, because a path dependency's sources otherwise enter the report.",
+     "class": "within",
+     "why": "Bears on FR-004, which the block does not cite and should. The floor is not lowered: rust/guard's files are removed from the gate crate's report and stay under the floor of the crate that holds it today (FR-004's first line, 'the Rust crate holds today'). Within only on that condition, which the bundle cannot confirm: rust/guard's own run must still measure those files."
+    },
+    {
+     "id": "T062-c-nothing-switches",
+     "summary": "No caller switches in this task; l7r-gate content-ids is the surface and T063 is the first Rust caller.",
+     "class": "within",
+     "why": "FR-003: until a piece's replacement passes, its Python remains the one that runs. Ordering under the settled ask:449-T062-order, not a reduction of scope."
+    },
+    {
+     "id": "T062-rs-branch-stays",
+     "summary": "codeid.py's .rs branch stays for its Python callers, held equal to rust_tokens by the differential test tests/tooling/test_codeid_rust.py while both exist.",
+     "class": "within",
+     "why": "FR-001 places scripts/gates/codeid.py, the whole file, in phase 4 with its last Python caller, so the accepted spec settles this. FR-003's 'no piece runs both' is kept per caller: each caller runs one implementation. The differential only fails if the two differ, so it enforces FR-002's same outputs before the Python is deleted."
+    },
+    {
+     "id": "T062-part-B",
+     "summary": "Part B attributes the red-gate tripwire to T061's two reds and offers no route.",
+     "class": "within",
+     "why": "A process checklist; it decides nothing the spec leaves open."
     }
    ],
    "verdict": "CLEAR"

@@ -8,6 +8,10 @@ publish = false
 [lib]
 name = "l7r_gate"
 
+[dependencies]
+l7r_guard = { path = "../guard" }
+serde_json = { version = "1", features = ["preserve_order"] }
+
 [[bin]]
 name = "l7r-gate"
 path = "src/main.rs"

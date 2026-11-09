@@ -391,7 +391,15 @@ def _cache_table(root: Path | None) -> dict[str, str]:
 def _flush_cache(root: Path | None) -> None:
     path = _cache_path(root)
     if path is not None and id(_cache_tables.get(path)) in _cache_dirty:
-        path.write_text(json.dumps(_cache_tables[path]), encoding="utf-8")
+        # ATOMIC, AND MERGED WITH WHAT ANOTHER WRITER KEPT (feature 449 T062): the Rust gate writes this file too
+        try:
+            on_disk = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            on_disk = {}
+        merged = {**(on_disk if isinstance(on_disk, dict) else {}), **_cache_tables[path]}
+        tmp = path.with_suffix(f".{os.getpid()}.tmp")
+        tmp.write_text(json.dumps(merged), encoding="utf-8")
+        tmp.replace(path)
         _cache_dirty.discard(id(_cache_tables[path]))
 
 

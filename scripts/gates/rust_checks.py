@@ -114,7 +114,9 @@ def uncovered(manifest: pathlib.Path, work: pathlib.Path) -> dict[str, list[int]
             file=sys.stderr,
         )
         return {str(manifest.parent): [0]}  # the run itself failed: the crate, not a line, is uncovered
-    return lcov_missed(lcov.read_text(encoding="utf-8"))
+    # ...ONLY THIS CRATE'S FILES (feature 449 T062): a crate built from another by path pulls that crate's sources into the report, and they answer to their own crate's floor
+    own = str(manifest.parent.resolve()) + os.sep
+    return {p: v for p, v in lcov_missed(lcov.read_text(encoding="utf-8")).items() if str(pathlib.Path(p).resolve()).startswith(own)}
 
 
 #: A mangled name's crate hash (`Cs<hash>_` in v0 mangling, `17h<16 hex>E` in the legacy form), which differs build by build.

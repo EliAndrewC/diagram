@@ -5,4 +5,5 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | file | look here when |
 |---|---|
 | `src/lib.rs` | the command line, `cli` |
+| `src/codeid.rs` | a file's content id, and the id cache shared with the Python callers (T062) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

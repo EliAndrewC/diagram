@@ -922,5 +922,22 @@
       "first_value_wall_s": 30.2,
       "after_preflight_s": 6
     }
+  },
+  "t062-content-ids": {
+    "quantity": "every tracked .rs and .py file's content id from the Rust gate against the Python's, computed with an empty cache, and against the ids kept in the real cache",
+    "observed": "2026-11-08",
+    "subject": "the clone's tracked .rs and .py files, copied to an empty repository so no id is served from a cache",
+    "command": "a harness: scripts/gates/l7r-gate.sh content-ids over the files beside sha256(codeid.semantic_bytes(...)) for each; then the same ids against .git/semantic-id-cache-2.json",
+    "method": "exact comparison; the mismatch counts are the value. Note: the harness compares with the Python it replaces for .rs, and for .py the Rust gate asks codeid.py itself",
+    "value": {
+      "files": 1112,
+      "rs": 266,
+      "py": 846,
+      "mismatch": 0,
+      "in_the_real_cache": 567,
+      "differ_from_real_cache": 0,
+      "first_run_s": 4.77,
+      "all_cached_s": 0.087
+    }
   }
 }

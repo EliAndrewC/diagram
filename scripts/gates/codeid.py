@@ -29,7 +29,9 @@ from __future__ import annotations
 import ast
 import copy
 import hashlib
+import pathlib
 import re
+import sys
 
 _FUNCS = (ast.FunctionDef, ast.AsyncFunctionDef)
 #: THE ENGINE PATHS of a landing - a delta with one owes the landing cohort (`l7r.diagram.ci.delta.is_engine`'s list, feature 132
@@ -210,6 +212,13 @@ def debug_free_bytes(data: bytes, name: str) -> bytes:
     return ast.dump(strip_counters(strip_docstrings(tree))).encode()
 
 
+def ids_main(paths: list[str]) -> int:
+    """`codeid.py --ids <file>...`: each file's id, one a line, in order (the Rust gate's one question of a run, the round arbiter's `ask:449-T062-py-id`)."""
+    for name in paths:
+        print(hashlib.sha256(semantic_bytes(pathlib.Path(name).read_bytes(), name)).hexdigest())
+    return 0
+
+
 def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -249,3 +258,7 @@ def split_ids(src: bytes) -> tuple[str, dict[str, str], set[str]] | None:
             if isinstance(stmts, list):
                 stmts[:] = [s for s in stmts if not isinstance(s, _FUNCS)]
     return _sha(ast.dump(top).encode()), funcs, classes
+
+
+if __name__ == "__main__":
+    sys.exit(ids_main(sys.argv[2:]) if sys.argv[1:2] == ["--ids"] else 2)
