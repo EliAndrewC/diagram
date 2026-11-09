@@ -116,10 +116,10 @@
    "declared": "spec-fidelity"
   },
   "### T061 Approach (checklist part A)": {
-   "sha256": "da34e252e7a119dc307d920b24647adc0ef4ed5eb2803487cb18a3a362aa1b27",
+   "sha256": "659eb9091f453ab90040810c022f06b7d9169a5d9351b15f6dad0c37a3b500dd",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T062 Approach (checklist part A)": {
    "sha256": "a41a4bbf37fb030baecaef15aec14de6180bed2d82e4a26b7fcc2e349957f330",
@@ -3360,6 +3360,57 @@
      "why": "FR-001 states this rule in these terms."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T061 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "item-1-one-binary",
+     "summary": "The gate's recipes call one binary, as the guards have one.",
+     "class": "within",
+     "why": "The request is to make this a Rust codebase; FR-001 and FR-005 fix what is replaced and that make stays the entry point, and neither fixes how many binaries the gate is. One binary takes nothing away from either."
+    },
+    {
+     "id": "a-crate-holds-only-what-is-called",
+     "summary": "rust/gate starts with its command line and --version; the repository's paths, the run record's format and git-in-one-place arrive with T062, the first port that reads them.",
+     "class": "within",
+     "why": "A deferral by one task inside phase 2, not a removal. FR-001 orders the four phases, not the tasks inside one, and no requirement in the cited text or the index needs the shared facts in this task. Nothing the GM asked for is left out of the feature by it."
+    },
+    {
+     "id": "b-i-fails-closed",
+     "summary": "scripts/gates/l7r-gate.sh builds the binary from its own tree when a source is newer and refuses when the build fails.",
+     "class": "within",
+     "why": "Neither the request nor any FR speaks to a build failure in the gate's wrapper. D7's fail-open outcome is a plan decision scoped by its own words to the guards and a hook's limits, so not following it here narrows nothing the GM asked. FR-003 is untouched: at this task the crate has only --version and displaces no Python piece, so no Python stops being the one that runs."
+    },
+    {
+     "id": "b-ii-no-last-good-binary",
+     "summary": "The gate's wrapper keeps no last good binary.",
+     "class": "within",
+     "why": "The last good copy is D7's, for the guards, justified there by a broken build not turning every guard off. No requirement asks the gate to have one; separately adjudicated from b-i and it stands on the same ground."
+    },
+    {
+     "id": "b-iii-no-self-check",
+     "summary": "The gate's wrapper runs no --self-check.",
+     "class": "within",
+     "why": "D7's l7r-guard --self-check exists to admit a build as the last good copy; with no such copy nothing is left for it to protect, and no FR requires a self-check of the gate."
+    },
+    {
+     "id": "item-6-exits",
+     "summary": "Green is make static holding the crate at the coverage floor, the binary built from its own tree, a failed build failing the call; red is recorded, the task set down, a process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit carries FR-004's floor as written, read strictly. It relaxes no requirement."
+    },
+    {
+     "id": "item-9-done-and-recorded-commands",
+     "summary": "Done is a make recipe reaching the binary at the crate's floor; recorded measurement commands that run a file this task ports or deletes are rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "The recipe half serves FR-005's make as the one entry point and the floor is FR-004. The rewrite clause restates FR-001's rule in its own terms (to the port where a file is named, to an equivalent make command where inline or prose, re-run as proof), with no carve-out; it has little to act on in a task that adds a crate."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5630,6 +5681,56 @@
      "summary": "Every recorded measurement command that runs a file this task ports or deletes is rewritten in the same commit and re-run as proof.",
      "class": "within",
      "why": "FR-001 states this rule in these terms."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T061": {
+   "section_sha256": "659eb9091f453ab90040810c022f06b7d9169a5d9351b15f6dad0c37a3b500dd",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "item-1-one-binary",
+     "summary": "The gate's recipes call one binary, as the guards have one.",
+     "class": "within",
+     "why": "The request is to make this a Rust codebase; FR-001 and FR-005 fix what is replaced and that make stays the entry point, and neither fixes how many binaries the gate is. One binary takes nothing away from either."
+    },
+    {
+     "id": "a-crate-holds-only-what-is-called",
+     "summary": "rust/gate starts with its command line and --version; the repository's paths, the run record's format and git-in-one-place arrive with T062, the first port that reads them.",
+     "class": "within",
+     "why": "A deferral by one task inside phase 2, not a removal. FR-001 orders the four phases, not the tasks inside one, and no requirement in the cited text or the index needs the shared facts in this task. Nothing the GM asked for is left out of the feature by it."
+    },
+    {
+     "id": "b-i-fails-closed",
+     "summary": "scripts/gates/l7r-gate.sh builds the binary from its own tree when a source is newer and refuses when the build fails.",
+     "class": "within",
+     "why": "Neither the request nor any FR speaks to a build failure in the gate's wrapper. D7's fail-open outcome is a plan decision scoped by its own words to the guards and a hook's limits, so not following it here narrows nothing the GM asked. FR-003 is untouched: at this task the crate has only --version and displaces no Python piece, so no Python stops being the one that runs."
+    },
+    {
+     "id": "b-ii-no-last-good-binary",
+     "summary": "The gate's wrapper keeps no last good binary.",
+     "class": "within",
+     "why": "The last good copy is D7's, for the guards, justified there by a broken build not turning every guard off. No requirement asks the gate to have one; separately adjudicated from b-i and it stands on the same ground."
+    },
+    {
+     "id": "b-iii-no-self-check",
+     "summary": "The gate's wrapper runs no --self-check.",
+     "class": "within",
+     "why": "D7's l7r-guard --self-check exists to admit a build as the last good copy; with no such copy nothing is left for it to protect, and no FR requires a self-check of the gate."
+    },
+    {
+     "id": "item-6-exits",
+     "summary": "Green is make static holding the crate at the coverage floor, the binary built from its own tree, a failed build failing the call; red is recorded, the task set down, a process stop to make arbiter-ask.",
+     "class": "within",
+     "why": "The green exit carries FR-004's floor as written, read strictly. It relaxes no requirement."
+    },
+    {
+     "id": "item-9-done-and-recorded-commands",
+     "summary": "Done is a make recipe reaching the binary at the crate's floor; recorded measurement commands that run a file this task ports or deletes are rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "The recipe half serves FR-005's make as the one entry point and the floor is FR-004. The rewrite clause restates FR-001's rule in its own terms (to the port where a file is named, to an equivalent make command where inline or prose, re-run as proof), with no carve-out; it has little to act on in a task that adds a crate."
     }
    ],
    "verdict": "CLEAR"

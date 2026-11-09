@@ -77,7 +77,7 @@ lazy!(
 );
 lazy!(
     BINARY,
-    format!(r"{POS}(?:\S*/)?(l7r-guard|hamlet)(?![\w.-])")
+    format!(r"{POS}(?:\S*/)?(l7r-guard|l7r-gate|hamlet)(?![\w.-])")
 );
 lazy!(MAKE_ARGS, format!(r"{POS}(?:\$\(MAKE\)|make)\b([^\n;|&]*)"));
 lazy!(ASSIGN, r"(?<!\S)([A-Za-z_][A-Za-z0-9_]*)=");
@@ -245,7 +245,9 @@ pub(crate) fn classify(cmd: &str) -> String {
     if cmd.contains("cargo") && hit(&CARGO, &clean) {
         return "bare-cargo".to_owned();
     }
-    if (cmd.contains("l7r-guard") || cmd.contains("hamlet")) && hit(&BINARY, &clean) {
+    if (cmd.contains("l7r-guard") || cmd.contains("l7r-gate") || cmd.contains("hamlet"))
+        && hit(&BINARY, &clean)
+    {
         return "bare-binary".to_owned();
     }
     if cmd.contains("make") && cmd.matches('=').count() >= 2 {

@@ -110,6 +110,8 @@ check "...and an escaped pipe outside a search still refuses" blocked 'sh -c foo
 # GUARD_EDIT_OK: feature 449 T028 - FR-005: a replacement's binary goes through make too
 names_a_target "the guards' binary run directly" "$HOME/.cache/l7r-cargo-target/x/release/l7r-guard --only a PreToolUse"
 names_a_target "the hamlet binary run directly"  "target/release/hamlet pool/hamlets/x/x.spec.json"
+names_a_target "the gate's binary run directly"  "$HOME/.cache/l7r-cargo-target/x/release/l7r-gate --version"
+check "the gate's wrapper is not the binary"    ok      "scripts/gates/l7r-gate.sh --version"
 check "the guards' wrapper is not the binary"  ok      "scripts/hooks/l7r-guard.sh --version"
 check "make hamlet is the compliant form"      ok      "make hamlet SPEC=pool/hamlets/x/x.spec.json"
 

@@ -244,10 +244,13 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 1. **The goal, in the world.** One binary the gate's recipes call, as the guards have one.
 2. **The constraints.** FR-001, FR-003, FR-004, FR-005.
+   **Decisions** (2026-11-08):
+   - (a) THE CRATE HOLDS ONLY WHAT SOMETHING CALLS: `rust/gate` starts with its command line and `--version`. The shared facts the plan names (the repository's paths, the run record's format, git in one place) arrive with the first port that reads them, T062: `make static`'s dead-code check refuses a public function nothing calls, and a helper written ahead of its caller is one written against a guess.
+   - (b) THE WRAPPER FAILS CLOSED: `scripts/gates/l7r-gate.sh` builds the binary from its own tree when a source is newer and refuses when the build fails. The guards' wrapper fails open and keeps a last good binary, because a broken build must not turn every guard off (plan D7); a gate that cannot build its tool must not pass, and a make recipe can wait on the build where a hook could not. No self-check is run: `--self-check` exists to protect that last good copy, and this has none.
 3. **Where each comes from.** `m:guard-sources`' method; plan D5-D7 as they held for the guards.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: `make static` holds the crate at the coverage floor, the binary built and self-checked as the guard's is. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+6. **The exits.** Green: `make static` holds the crate at the coverage floor, the binary built from its own tree, a failed build failing the call. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
 9. **Done, measured.** A `make` recipe reaches the binary and its coverage is the crate's floor. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).

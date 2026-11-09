@@ -1,0 +1,19 @@
+# The gate's own tools (feature 449 phase 2, `specs/449-rust-codebase/plan.md`): what `make done`, `make land` and the push decide, ported from Python piece by piece.
+[package]
+name = "l7r_gate"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "l7r_gate"
+
+[[bin]]
+name = "l7r-gate"
+path = "src/main.rs"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"
