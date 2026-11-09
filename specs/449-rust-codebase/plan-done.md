@@ -947,3 +947,36 @@ measured cost first (research R2); the two constitution XIV fixes on `make-only-
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-08 -->
+### T050-T052 - the suites' tooling and the close (phase 1, work breakdown 6-8)
+
+Decisions carried, none new: the four `tests/hooks/` Python helpers ported as `l7r-guard` subcommands and crate tests (work
+breakdown 7); the unused libraries deleted with their last caller (work breakdown 6); the close on SC-001 and phase 1's share of both
+censuses empty (work breakdown 8, FR-010).
+
+<!-- plan-archive: T001 to T001 moved to plan-done.md, 2026-11-07 (feature 375 FR-044) -->
+<!-- plan-archive: T006 to T049 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+### T050 Approach (checklist part A)
+
+1. **The goal, in the world.** the suites' own tooling - which suites a change makes stale, which guards a session ran, the bench, the shared cases - in Rust.
+2. **The constraints.** FR-001 (phase 1's `tests/hooks/` Python), FR-008.
+   **Decisions** (found reading the four files, their tests and the `hooks-test` recipe, 2026-11-08):
+   - (a) A LEXER FOR THREE PYTHON FACTS, NOT A PARSER CRATE: `hookdeps.py` asked `ast` for docstring lines, imports and string constants, each decided by tokens and logical lines; `pylex` reads them, adds no crate (the plan's one crate stands), and was held to the Python's own answers before the Python went (`m:t050-deps-differential`: 57 suites, 291 Python test files, 8 traces, no mismatch). The differential's one side is deleted by this task, so it cannot be re-run; what holds the port afterward is `suite_tools`' tests over fixture trees and the real one.
+   - (b) THE NAME INDEX KEEPS ITS DICT SEMANTICS: three forwarders under `scripts/hooks/` share a basename with their suite's link under `tests/hooks/`, so "every basename is unique" is no longer true; a name keeps its first place and its last path, as the dict did, which the differential found.
+   - (c) A TRACE KEPT BEFORE THE PORT STANDS, AND THE ONE PYTHON PROCESS LEFT: a directory's entries are written as `json.dumps` wrote them and the blob id and three git calls are `record_cache.content_ids`'s, in Rust, so no suite re-runs for the port alone. `py` stays the interpreter's `sys.version`: a trace is a suite's reads under one interpreter, and which interpreter runs the suites is a fact only that interpreter can state, so it is one `python3` process a `fresh` or `stamp` call, never a hook's. It goes with the last Python a suite runs, at phase 3's end, when the key has nothing to say; T052's record lists it among the by-path asks, since neither census can see a spawn from the binary. Phase 4 removes the installed Python, so it must be gone by then, and a `fresh` would otherwise find no interpreter.
+   - (d) `bench` TAKES ANY GUARD: FR-007 of feature 239 refused a guard with no importable decision so the cost of spawning stayed visible; every guard this binary holds now decides in process, so that refusal has nothing left to refuse among them. `check-bundle`, `checks` and `record-edit`, the three in phase 3 (FR-001), are not in the binary; `bench` refuses each by name, saying it is not in this binary and is not spawned (run, 2026-11-08: `make hookbench GUARD=checks`, and the same for the other two), so the cost of spawning stays visible for exactly the guards it can still apply to. `--against REF` builds the guard from that ref (or, before the port, runs its shell) one spawn a command, and says which: the Python's in-process baseline read `scripts/hm_house.py`, a path gone since the 2026-10-08 move, so that branch had been dead.
+   - (e) THE CASE TABLES ARE CRATE TESTS, THEIR SUITES STAY: `case_tables.rs` holds the four guards' cases, generated from `test_hooks_cases.py` with each case's comment above it, and each runs through `--only <guard> PreToolUse`, the suite's own entry. `make hooks-test` requires a companion per guard, so the four suites stay, calling `tests/hooks/guard-cases.sh` (`cargo test` of the named tests). A failing replay lists every wrong case, as the Python's did.
+   - (f) THE TESTS OF THE PYTHON MOVE WITH IT: `test_hook_deps.py` and `test_hookbench.py` are deleted, their rules now `suite_tools`' unit tests over fixture trees and, for the rules about this repository, the real one: transitivity, comment-and-docstring stripping, the whole-tree pair, the helper census, and each ceiling and floor on how many guards reach a helper. The one bound not carried is `test_hooks_cases.py`'s own ceiling, the file being deleted. `test_file_log.py` keeps the C recorder's own tests; its `hooktrace` and `hookdeps` cases moved.
+   - (g) THE ONE MEASUREMENT COMMAND NAMING A DELETED FILE IS NOW A MAKE TARGET, RE-RUN: searched with the JSON `command` field of every `specs/*/measurements*.json` for the six file names this task deletes (the four helpers, `test_hook_deps.py` and `test_hookbench.py`; 2026-11-08), one hit, `375-a3-hooks-test-after` (a one-off script when it was measured). `make hooks-deps-window FROM=eb64e2ba3 N=10` is that analysis through make (`l7r-guard deps --window`); the entry's command names it and its value is the re-run, the 2026-10-11 figures kept beside it as what was measured then.
+3. **Where each comes from.** plan work breakdown 7; `m:guard-sources` (the four helpers); `m:t050-deps-differential`.
+4. **Do they describe the world here?** Tooling: the guards on Claude Code's tool calls; no researched value moves.
+5. **The order.** After the guard tasks that use them.
+6. **The exits.** Green: `make hooks-test` keyed by `l7r-guard deps`, its results unchanged, the keys and traces equal to the Python's first (`m:t050-deps-differential`); the four `.py` files deleted. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing (`make land-tooling`): no work budget, nothing rolled.
+9. **Done, measured.** no `.py` under `tests/hooks/`. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten to the port in the same commit and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+<!-- plan-archive: T051 to T051 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
+<!-- plan-archive: T054 to T054 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
