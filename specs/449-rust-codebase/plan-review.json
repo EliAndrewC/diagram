@@ -6363,6 +6363,82 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T064": {
+   "section_sha256": "f080b870250bf37dfe098f5075c81cbb9e8f54e4325518d822cf36250ed5834b",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-landing",
+     "summary": "config, switches, decision, door, features, imagecheck, cachepolicy, runlog and dispatch become l7r-gate ci/switches/lifecycle in one landing, deleted with their Python tests; the Makefile recipes switch in that commit; ci/__main__.py keeps only incremental until T071.",
+     "class": "within",
+     "why": "FR-001 places l7r/diagram/ci/ and switches.py in phase 2 and the request asks for all of it ported; how a phase is cut into landings narrows nothing, the one remainder names its end (T071), and switching the recipes in the deleting commit is FR-003's one-implementation rule."
+    },
+    {
+     "id": "invocation-phase-4",
+     "summary": "_invocation.py moves to phase 4 with its last Python caller.",
+     "class": "within",
+     "why": "The file is still ported, so 'all be ported to Rust' is not narrowed; the request sets no order among pieces, and FR-001's own text carries this placement and the ruling ask:449-T064-slices."
+    },
+    {
+     "id": "via-make-rs",
+     "summary": "via_make.rs is the make-only check for l7r-gate's own binaries; each runtime decides for its own process and neither calls the other, tested from both sides.",
+     "class": "within",
+     "why": "FR-005 asks that the make-only guard cover the replacements' binaries, not that there be one implementation; FR-003's 'no piece runs both' concerns a replaced piece and each process here runs exactly one check."
+    },
+    {
+     "id": "aws-cli-trait",
+     "summary": "The AWS boundary is a trait with the aws CLI behind it, tested through a fake aws on the path; the live adapter is unproven, no paid run may prove it, and the first paid run after remote is turned on is its proof.",
+     "class": "within",
+     "why": "FR-002's bar is 'every case its tests and its suites hold', and the block replays test_dispatch.py's cases through the fake; no clause of the request or FR-002/FR-003 asks for a live proof, and FR-008 permits rather than requires a test against the real command. m:t064-remote covers the non-spending surface only (route, status, spend, door, switches, idle, lifecycle) and not dispatch itself, and the block says so rather than claiming otherwise. The aws CLI is an external tool, outside both censuses in FR-001. Recorded as a decision because it is a disclosed gap: the fake encodes the adapter's own reading of the CLI's JSON."
+    },
+    {
+     "id": "registry-and-by-path",
+     "summary": "The registry of operations stays in _invocation.py, read by the gate as text, until phase 4; spec-verdict and --holding stay in hm_arbiter.py and speckit-todo.py, asked by path once a process, until phase 3.",
+     "class": "within",
+     "why": "Each follows the phase FR-001 already assigns those files (hm_arbiter.py by ask:449-hm-checks-route, the rest of scripts/ in phase 3, _invocation.py in phase 4); FR-001 fixes the same by-path pattern for codeid.py, its plain-Bash/plain-Edit bar is on guards, and both deferrals name their end."
+    },
+    {
+     "id": "replay-general",
+     "summary": "Every case of test_dispatch, test_decision, test_door, test_features, test_imagecheck, test_cachepolicy, test_runlog, test_config, test_measure_route and tests/test_switches.py is in rust/gate/src/ci/*/tests.rs before those files are deleted.",
+     "class": "within",
+     "why": "This is FR-002's 'every case ... before that Python is deleted', stated for this task. The exception to it is ruled separately below."
+    },
+    {
+     "id": "replay-carveout-deleted-source",
+     "summary": "Of the cases excepted from the replay, those that read the deleted modules' source are kept in test_cache.py or tests/tooling/test_switches.py rather than replayed in Rust.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "It excepts cases from FR-002's 'every case' and from FR-001's 'each tests/ file with the piece it tests'. Impossibility does not rescue it: if no test in any language can read a deleted module's source, then 'kept' is impossible too, so followed one commit past the deletion the case must read something else or nothing, and the block does not say which. Whether it then still checks the ported piece, or passes vacuously, cannot be determined from the text, and supplying the answer would be completing the author's thought. The block neither names the three cases nor states which of them falls under which ground. It is also the only deferral in the block with no stated end (the others say until T071, phase 3, phase 4). To clear: name each case, say what it reads and asserts after the deletion, and say when it is ported."
+    },
+    {
+     "id": "replay-carveout-buildspecs",
+     "summary": "Of the cases excepted from the replay, those that read the buildspecs are kept in test_cache.py or tests/tooling/test_switches.py rather than replayed in Rust.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Adjudicated apart from the deleted-source ground, which is an unlike case stretched under the same sentence. A Rust test can open a buildspec exactly as a Python test does, so the rule is not impossible here; nothing in the GM's words implies the exception and replaying the case would not defeat the request's purpose, which is to end the Python. Keeping it is merely easier. If these cases in fact belong to a piece of a later phase, the block must say that and name the phase; it says neither, and the deferral has no stated end."
+    },
+    {
+     "id": "order-and-spawns",
+     "summary": "Leaf first by what imports what; callers reach the binary once a process or in a batch, never one spawn a file.",
+     "class": "within",
+     "why": "ask:449-T062-order and FR-006/SC-002's per-process design."
+    },
+    {
+     "id": "exits",
+     "summary": "Green is the suites' verdicts unchanged with no remote run spent to prove it; red records what failed, sets the task down and stops to make arbiter-ask.",
+     "class": "within",
+     "why": "The green bar is FR-002/SC-004's and the red exit is the process's own; it decides nothing the request or spec left open against the GM's words."
+    },
+    {
+     "id": "measurement-rewrites",
+     "summary": "Every specs/*/measurements*.json command that runs a file this task ports or deletes is rewritten in the same commit, to the port or to an equivalent make command, and re-run as its proof.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement clause, restated for this task."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

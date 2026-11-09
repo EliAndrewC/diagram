@@ -83,3 +83,20 @@ fn a_clone_finds_the_main_tree_s_file() {
 fn no_secrets_is_a_failure_with_its_reason() {
     assert_eq!(super::token_reply(Err("why".to_owned())).code, 1);
 }
+
+#[test]
+fn a_file_with_neither_section_loads_empty_and_the_environment_comes_first_over_the_tree() {
+    let dir = scratch("empty");
+    put(&dir, "s.ini", "# nothing\n");
+    let places = [dir.join("s.ini")];
+    let s = load_from(&places).unwrap();
+    assert_eq!((s.access_key_id.as_str(), s.github_pat.as_str()), ("", ""));
+    put(&dir, "development-secrets.ini", "[aws]\nci_bucket = tree\n");
+    put(&dir, "first.ini", "[aws]\nci_bucket = env\n");
+    assert_eq!(
+        load_from(&candidates(&dir, Some(dir.join("first.ini"))))
+            .unwrap()
+            .ci_bucket,
+        "env"
+    );
+}

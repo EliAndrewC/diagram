@@ -15,3 +15,5 @@ pub(crate) mod via_make;
 
 #[cfg(test)]
 mod fixtures;
+#[cfg(test)]
+mod real_tree;

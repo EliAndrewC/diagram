@@ -203,6 +203,7 @@ fn a_check_dispatches_one_parked_build_and_records_it() {
     assert_eq!(r.client.called("start_build"), 1);
     assert_eq!(r.client.called("stop_build"), 0);
     assert_eq!(r.client.called("put_object go/abc-123"), 1);
+    assert_eq!(r.client.called("put_object cache"), 0); // only a build writes the cache a build restores (177 FR-003): the location travels with start_build
     let said = r.host.said();
     assert!(
         said.contains("  | hello\n  | world")

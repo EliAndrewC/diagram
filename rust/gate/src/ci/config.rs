@@ -73,7 +73,7 @@ fn candidates(root: &Path, from_env: Option<PathBuf>) -> Vec<PathBuf> {
 }
 
 /// `section -> key -> value`, as `configparser` reads this file: `key = value` or `key: value`, a `#` or `;` line a comment.
-fn ini(text: &str) -> HashMap<String, HashMap<String, String>> {
+pub(crate) fn ini(text: &str) -> HashMap<String, HashMap<String, String>> {
     let mut sections: HashMap<String, HashMap<String, String>> = HashMap::new();
     let mut current = String::new();
     for raw in text.lines() {

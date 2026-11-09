@@ -209,3 +209,53 @@ fn the_estimate_is_the_scope_s_or_the_operation_s() {
     assert!((estimate("full", 0.0, None).minutes - 8.0).abs() < f64::EPSILON);
     assert!((estimate("full", 0.0, Some("x")).minutes - 10.0).abs() < f64::EPSILON);
 }
+
+#[test]
+fn a_verified_tree_does_not_rescue_a_refusal_and_the_breaker_refuses_last() {
+    let refused = with(|i| {
+        i.verified = Some(record("full", "b"));
+        i.state = None;
+    });
+    assert_eq!(refused.verdict, "REFUSE(green-local-since-edit)");
+    let breaker = with(|i| i.breaker = Some("tripped"));
+    assert_eq!(
+        breaker.conditions.last().unwrap().name,
+        "breaker-not-tripped"
+    );
+}
+
+#[test]
+fn an_incomplete_feature_refuses_a_merge_but_not_a_check() {
+    let open = FeatureStatus {
+        open_tasks: vec!["T1".to_owned()],
+        ..complete()
+    };
+    let leaked: &'static FeatureStatus = Box::leak(Box::new(open));
+    assert_eq!(
+        with(|i| {
+            i.mode = MERGE;
+            i.feature = Some(leaked);
+        })
+        .verdict,
+        "REFUSE(feature-complete)"
+    );
+    assert!(with(|i| i.feature = Some(leaked)).dispatches());
+}
+
+#[test]
+fn with_remote_off_another_failure_is_reported_first_and_a_full_scope_needs_a_full_record() {
+    assert_eq!(
+        with(|i| {
+            i.remote_off = Some("off");
+            i.state = None;
+        })
+        .verdict,
+        "REFUSE(green-local-since-edit)"
+    );
+    let owed = with(|i| {
+        i.remote_off = Some("off");
+        i.scope = "full";
+        i.verified = Some(record("reference", "b"));
+    });
+    assert_eq!(owed.verdict, "REFUSE(remote-enabled)");
+}

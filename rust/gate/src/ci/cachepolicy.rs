@@ -1,5 +1,6 @@
 //! The CI bucket's whole lifecycle document (feature 177 FR-013, from `ci/cachepolicy.py`, whose git history holds the reasoning for each horizon). The API overwrites, so this owns the whole document; `cache_location`'s key
-//! bounds the count of objects, and these rules bound their age. Rule 4 is separate because S3 refuses a multipart abort beside an object-size filter (measured on the live bucket 2026-09-03), and carrying no expiration it
+//! bounds the count of objects, and these rules bound their age. S3 applies the shortest expiration among overlapping rules, so `cache/` (over 1 MiB, and so under the size rule too) keeps 30 days in both. `expire-ci-junk`, the 14-day
+//! catch-all that also expired `verified/`, is retired: lifecycle rules have no negative filter, so the net is a size, and a 200-byte verified record, kept 365 days as evidence, is out of its reach. Rule 4 is separate because S3 refuses a multipart abort beside an object-size filter (measured on the live bucket 2026-09-03), and carrying no expiration it
 //! cannot delete an object.
 
 use serde_json::{json, Value};
