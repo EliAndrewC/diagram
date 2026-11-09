@@ -202,8 +202,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the six text checks are Rust (l7r-gate check); the four that outlast phase 2 ask check needs first
 
-- [ ] T066 [US2] `scripts/gates/` the plan and spec gates: `plan_gate.py`, `plan_sections.py`, `approach_gate.py`, `plan_bundle.py`, `spec-lint.py`, with `engine_edit.py` beside the code it wraps, and what they import (`plan_lint.py`, `plan_seen.py`, `spec_figures.py`, `wording_only`); `task-start` and the cohort's trigger stay in Python with what they read (`ask:449-T066-scope`, FR-001)
+- [x] T066 [US2] `scripts/gates/` the plan and spec gates: `plan_gate.py`, `plan_sections.py`, `approach_gate.py`, `plan_bundle.py`, `spec-lint.py`, with `engine_edit.py` beside the code it wraps, and what they import (`plan_lint.py`, `plan_seen.py`, `spec_figures.py`, `wording_only`); `task-start` and the cohort's trigger stay in Python with what they read (`ask:449-T066-scope`, FR-001)
       research: rendering
+      verify: DONE. landed: the plan and spec gates are Rust (l7r-gate plan, check spec-lint); what stays Python reaches them through scripts/plan_door.py
 
 - [ ] T067 [US2] `scripts/gates/` the landing's own: `preflight.py`, `push_checks.py`, `cover_changed.py`, `gate_lock.py` and what remains under `scripts/gates/`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`
       research: rendering
