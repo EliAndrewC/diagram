@@ -69,7 +69,7 @@ fn every_path_kind_is_pinned() {
     }
     for path in [
         "l7r/diagram/ci/dispatch.py",
-        "tests/settlement/t.py",
+        "tests/pipeline/t.py",
         "pool/hamlets/i/i.notes.md",
         "pool/hamlets/i/i.py",
         "Makefile",
