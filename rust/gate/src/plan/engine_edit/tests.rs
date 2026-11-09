@@ -27,18 +27,13 @@ fn ask(root: &Path, path: &Path, tool: &str, input: &serde_json::Value) -> i32 {
 fn an_engine_edit_waits_and_anything_else_passes() {
     let root = clone_with("l7r/diagram/a.py", "X = 1\n");
     let path = root.join("l7r/diagram/a.py");
-    assert_eq!(
-        ask(&root, &path, "NotebookEdit", &json!({})),
-        0,
-        "not an Edit or a Write"
-    );
+    assert_eq!(ask(&root, &path, "NotebookEdit", &json!({})), 0);
     let other = root.join("docs.md");
     std::fs::write(&other, "x").unwrap();
     assert_eq!(ask(&root, &other, "Edit", &json!({})), 1);
     assert_eq!(
         ask(&root, Path::new("/etc/hostname"), "Edit", &json!({})),
-        1,
-        "outside the clone"
+        1
     );
 }
 
@@ -151,4 +146,13 @@ fn an_area_hashed_by_its_bytes_always_waits_and_an_unreadable_id_waits() {
         ),
         0
     );
+}
+
+#[test]
+fn a_path_that_does_not_exist_is_resolved_as_far_as_it_goes() {
+    assert_eq!(
+        super::real(Path::new("no/such/path")),
+        Path::new("no/such/path")
+    );
+    assert!(super::real(Path::new("/tmp/no/such")).ends_with("no/such"));
 }

@@ -67,7 +67,6 @@ fn a_path_not_in_a_repository_knows_nothing_and_a_missing_version_reads_empty() 
     let gone = History::new(&root.join("sub/plan.md"), "HEAD");
     assert_eq!(
         gone.block("## A", &block_digest("## A\n")).as_deref(),
-        Some("## A\n"),
-        "the name from the repository's prefix, and a version where the file is gone reads empty"
+        Some("## A\n")
     );
 }

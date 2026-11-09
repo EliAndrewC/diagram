@@ -24,7 +24,8 @@ const REFUSAL_DATA: [&str; 7] = [
     "rust/gate/src/checks/research_pointers/tests.rs",
     "rust/gate/src/checks/research_pointers.rs",
 ];
-const FIXTURES: [&str; 5] = [
+const FIXTURES: [&str; 6] = [
+    "rust/gate/src/plan/",
     "tests/",
     "scripts/record/fragment_move.py",
     "scripts/gates/check-entry-headings.py",

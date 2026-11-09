@@ -99,7 +99,7 @@ impl History {
             .iter()
             .flat_map(|r| [r.as_str(), ":", rel, "\n"])
             .collect();
-        let got = batch(self.path.parent().unwrap_or(Path::new(".")), &input);
+        let got = batch(self.path.parent().unwrap_or(Path::new(".")), &input).unwrap_or_default();
         let mut at = 0;
         let mut texts = self.texts.borrow_mut();
         for _ in chunk {
@@ -159,7 +159,7 @@ impl History {
     }
 }
 
-fn batch(dir: &Path, input: &str) -> Vec<u8> {
+fn batch(dir: &Path, input: &str) -> Option<Vec<u8>> {
     let spawned = Command::new("git")
         .arg("-C")
         .arg(dir)
@@ -168,16 +168,12 @@ fn batch(dir: &Path, input: &str) -> Vec<u8> {
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
         .spawn();
-    let Ok(mut child) = spawned else {
-        return Vec::new();
-    };
+    let mut child = spawned.ok()?;
     if let Some(mut pipe) = child.stdin.take() {
         let _ = pipe.write_all(input.as_bytes());
     }
-    child
-        .wait_with_output()
-        .map(|o| o.stdout)
-        .unwrap_or_default()
+    let done = child.wait_with_output().ok()?;
+    Some(done.stdout)
 }
 
 #[cfg(test)]

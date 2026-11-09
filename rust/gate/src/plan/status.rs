@@ -201,6 +201,19 @@ pub(super) fn block_status(
             _ => owed.push(key.clone()),
         }
     }
+    owed.extend(removed_blocks(&have, &now_blocks, history, done));
+    (owed, blocked)
+}
+
+/// Each recorded block plan.md no longer has and the archive does not hold, as `(removed) <key>`: an archived block is judged as a live
+/// one is (feature 385 T65), and a re-dated heading is the same block (feature 444 T20, D4).
+fn removed_blocks(
+    have: &Map<String, Value>,
+    now_blocks: &[(String, String, usize)],
+    history: Option<&History>,
+    done: &str,
+) -> Vec<String> {
+    let mut owed = Vec::new();
     let done_blocks = if done.is_empty() {
         Vec::new()
     } else {
@@ -220,7 +233,7 @@ pub(super) fn block_status(
         .chain(&done_blocks)
         .map(|(k, b, _)| (stem(k), below_heading(b)))
         .collect();
-    for (key, entry) in &have {
+    for (key, entry) in have {
         let sha = text_of(entry, "sha256").unwrap_or("");
         if current.contains(key.as_str())
             || key == "preamble"
@@ -243,7 +256,7 @@ pub(super) fn block_status(
         }
         owed.push(format!("{REMOVED}{key}"));
     }
-    (owed, blocked)
+    owed
 }
 
 /// Every task whose section carries its own current verdict.

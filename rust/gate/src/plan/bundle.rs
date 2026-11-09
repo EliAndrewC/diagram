@@ -3,6 +3,11 @@
 //! cite, so the bundle carries those in full, a one-line index of the rest, the GM's own words whole, the blocks under review and their
 //! earlier text - built out of the repository, where no `CLAUDE.md` rides along.
 
+#![expect(
+    clippy::format_collect,
+    reason = "a bundle's strings are short, and each map reads as the text it writes"
+)]
+
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -301,42 +306,14 @@ fn ascii_json(text: &str) -> String {
         .collect()
 }
 
-/// Write the bundle for the blocks `under` and return its MANIFEST; `earlier` is `{key: (its text when last judged, the verdict it got)}`.
-pub(super) fn build(
+/// The text of each requirement and decision the blocks cite, and the ids cited (another feature's are taken from that feature).
+fn cited_text(
     spec_dir: &Path,
-    out_root: &Path,
-    name: &str,
+    feature: &str,
     under: &[(String, String)],
-    earlier: &[(String, String, String)],
-    how: &str,
-) -> Result<PathBuf, String> {
-    let feature = spec_dir
-        .file_name()
-        .unwrap_or_default()
-        .to_string_lossy()
-        .into_owned();
-    // NO REQUEST, NO BUNDLE (feature 405 T30, D2): a review against the spec alone tests the plan for self-consistency only.
-    if !spec_dir.join("request.md").is_file() {
-        return Err(format!("plan bundle: specs/{feature}/request.md is missing - write the GM's words there verbatim (the request and every amendment, as the spec's 'The request' quotes them), commit it, and build again"));
-    }
-    // ...A NAME THAT FITS THE FILE SYSTEM (feature 449, 2026-11-07): past 120 characters it is cut, the rest kept as a hash.
-    let name = if name.chars().count() > 120 {
-        format!(
-            "{}-{}",
-            name.chars().take(80).collect::<String>(),
-            &digest(name.as_bytes())[..12]
-        )
-    } else {
-        name.to_owned()
-    };
-    let out = out_root.join(format!("plan-{feature}-{name}"));
-    let _ = std::fs::remove_dir_all(&out);
-    let _ = std::fs::create_dir_all(&out);
-    let spec = read(&spec_dir.join("spec.md"));
-    let (items, decisions) = (
-        requirements(&spec),
-        paragraphs(&plans_of(spec_dir), &DECISION),
-    );
+    items: &Map<String, Value>,
+    decisions: &Map<String, Value>,
+) -> (Vec<String>, Vec<String>) {
     let own_no: String = feature.chars().take(3).collect();
     let mut others: Vec<(String, String)> = Vec::new();
     let mut cited: Vec<String> = Vec::new();
@@ -374,12 +351,52 @@ pub(super) fn build(
         .iter()
         .filter(|i| !own.contains(*i))
         .filter_map(|i| {
-            text_at(&items, i)
+            text_at(items, i)
                 .filter(|t| !t.is_empty())
-                .or_else(|| text_at(&decisions, i))
+                .or_else(|| text_at(decisions, i))
         })
         .collect();
     parts.extend(foreign(spec_dir, &others));
+    (parts, cited)
+}
+
+/// Write the bundle for the blocks `under` and return its MANIFEST; `earlier` is `{key: (its text when last judged, the verdict it got)}`.
+pub(super) fn build(
+    spec_dir: &Path,
+    out_root: &Path,
+    name: &str,
+    under: &[(String, String)],
+    earlier: &[(String, String, String)],
+    how: &str,
+) -> Result<PathBuf, String> {
+    let feature = spec_dir
+        .file_name()
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned();
+    // NO REQUEST, NO BUNDLE (feature 405 T30, D2): a review against the spec alone tests the plan for self-consistency only.
+    if !spec_dir.join("request.md").is_file() {
+        return Err(format!("plan bundle: specs/{feature}/request.md is missing - write the GM's words there verbatim (the request and every amendment, as the spec's 'The request' quotes them), commit it, and build again"));
+    }
+    // ...A NAME THAT FITS THE FILE SYSTEM (feature 449, 2026-11-07): past 120 characters it is cut, the rest kept as a hash.
+    let name = if name.chars().count() > 120 {
+        format!(
+            "{}-{}",
+            name.chars().take(80).collect::<String>(),
+            &digest(name.as_bytes())[..12]
+        )
+    } else {
+        name.to_owned()
+    };
+    let out = out_root.join(format!("plan-{feature}-{name}"));
+    let _ = std::fs::remove_dir_all(&out);
+    let _ = std::fs::create_dir_all(&out);
+    let spec = read(&spec_dir.join("spec.md"));
+    let (items, decisions) = (
+        requirements(&spec),
+        paragraphs(&plans_of(spec_dir), &DECISION),
+    );
+    let (parts, cited) = cited_text(spec_dir, &feature, under, &items, &decisions);
     let bodies: Vec<&str> = under.iter().map(|(_, b)| b.as_str()).collect();
     let write = |file: &str, text: String| {
         let _ = std::fs::write(out.join(file), text);

@@ -34,14 +34,13 @@ if [ -n "${PLAN_REVIEW_OK:-}" ]; then
     exit 1
   fi
   guard_log plan-gate escaped "$PLAN_REVIEW_OK" plan-review-ok
-  python3 -c 'import pathlib, sys; sys.path.insert(0, sys.argv[1]); import plan_gate as _plan_gate; _plan_gate.bypass_record(pathlib.Path(sys.argv[2]), "push", sys.argv[3])' \
-    "$PG_HERE" "$ROOT" "$PLAN_REVIEW_OK" || true
+  "$PG_HERE/l7r-gate.sh" plan door bypass-record "$ROOT" push "$PLAN_REVIEW_OK" >/dev/null || true
   printf 'plan-gate: BYPASSED - %s\n' "$PLAN_REVIEW_OK"
   printf '  recorded in dev/bypass-log/ - `make audit` lists it\n'
   exit 0
 fi
 
-OWED="$(python3 "$PG_HERE/plan_gate.py" push "$RANGE")"
+OWED="$("$PG_HERE/l7r-gate.sh" plan push "$RANGE")"
 [ -z "$OWED" ] && exit 0
 
 while IFS=$'\t' read -r feature rule _; do

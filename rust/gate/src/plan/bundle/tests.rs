@@ -138,7 +138,7 @@ fn a_requirement_written_as_a_heading_is_cited_whole() {
 
 #[test]
 fn a_list_of_this_feature_s_ids_is_not_read_as_another_feature_s() {
-    let body = "## D1 - the rule (FR-001, FR-002)\n\nfeature 383 FR-043 is another feature's.\n";
+    let body = "## D1 - the rule (FR-001, FR-002)\n\nfeature 383 FR-043 is another feature's; feature 407 FR-007 is ours.\n";
     let kept = QUALIFIED.replace_all(body, |q: &Captures<'_>| {
         if &q[1] == "407" {
             q[2].to_owned()
@@ -151,7 +151,7 @@ fn a_list_of_this_feature_s_ids_is_not_read_as_another_feature_s() {
         .flatten()
         .map(|c| c[1].to_owned())
         .collect();
-    assert_eq!(ids, ["D1", "FR-001", "FR-002"]);
+    assert_eq!(ids, ["D1", "FR-001", "FR-002", "FR-007"]);
 }
 
 #[test]
@@ -308,11 +308,7 @@ fn the_bundle_is_lean_and_shows_each_earlier_verdict() {
     );
     assert_eq!(read(b, "request.md"), "> the GM's words\n");
     assert!(read(b, "request-index.md").contains("(none - the whole request"));
-    assert!(
-        read(b, "spec-cited.md").contains("FR-002 The well.")
-            && read(b, "spec-cited.md").contains("D3 - the well") == false
-            || read(b, "spec-cited.md").contains("D3")
-    );
+    assert!(read(b, "spec-cited.md").contains("FR-002 The well."));
     assert!(read(b, "spec-index.md").contains("FR-003 Unrelated"));
     assert!(read(b, "blocks.md").contains("<!-- block \"the section of T05\" sha256 "));
     let none = build(&dir, &out, "T06", &under(&[("T06", "x")]), &[], "h").unwrap();
@@ -415,4 +411,23 @@ fn a_delta_prompt_carries_earlier_text_and_removed_blocks_and_each_block_set_its
     assert!(delta_prompt(&dir, &out, &["### T02 extra".to_owned()])
         .unwrap()
         .contains("blocks-T02-"));
+}
+
+#[test]
+fn the_request_is_trimmed_to_the_amendment_the_blocks_answer() {
+    let (_, dir) = feature();
+    std::fs::write(dir.join("request.md"), REQUEST).unwrap();
+    let out = scratch("out");
+    let m = build(
+        &dir,
+        &out,
+        "t",
+        &under(&[("## Amendment 3", "x")]),
+        &[],
+        "h",
+    )
+    .unwrap();
+    let b = m.parent().unwrap();
+    assert!(read(b, "request-index.md").contains("## Amendment 1 (2026-10-01) - The first change."));
+    assert!(!read(b, "request.md").contains("> one"));
 }

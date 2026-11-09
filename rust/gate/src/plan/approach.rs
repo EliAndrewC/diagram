@@ -14,6 +14,7 @@ use super::sections::re;
 use super::task::active_task;
 use crate::codeid::common_git_dir;
 
+/// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 pub(super) const USAGE_LOG_TOOL: &str = "approach_gate";
 const DEFAULT: &str = "docs/approach-checklist.md";
 const OWED: &str = "approach-owed.json";

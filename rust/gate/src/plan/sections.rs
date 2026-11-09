@@ -219,14 +219,11 @@ pub(super) fn ordered_sections(plan: &str) -> Vec<(String, String)> {
         let lead = leading_task(title.trim());
         for t in ids {
             if lead == Some(t) {
-                if !own.iter().any(|(k, _)| k == t) {
+                let at_own = own.iter().position(|(k, _)| k == t).unwrap_or_else(|| {
                     own.push((t.to_owned(), Vec::new()));
-                }
-                let spans = own
-                    .iter_mut()
-                    .find(|(k, _)| k == t)
-                    .map(|(_, s)| s)
-                    .unwrap_or_else(|| unreachable!("just added"));
+                    own.len() - 1
+                });
+                let spans = &mut own[at_own].1;
                 if !spans.iter().any(|(a, b)| a <= at && end <= *b) {
                     spans.push((*at, end));
                 }
@@ -416,8 +413,8 @@ fn approach_decides_nothing(body: &str, plan: &str, done: &str, root: &Path) -> 
 
 /// Where `scripts/task-add.py` is: the checkout the wrapper started this binary from (a fixture repository has none of its own).
 fn template_root() -> std::path::PathBuf {
-    std::env::var_os("L7R_GATE_TREE")
-        .map_or_else(|| crate::stamp::toplevel().unwrap_or_default(), Into::into)
+    let tree = std::env::var_os("L7R_GATE_TREE").map(std::path::PathBuf::from);
+    tree.or_else(crate::stamp::toplevel).unwrap_or_default()
 }
 
 /// A part B block that decides nothing (feature 385 T75, plan D94): item 4 "No", item 5 "Neither", and every `D<n>` defined elsewhere.

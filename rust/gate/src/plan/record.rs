@@ -200,14 +200,8 @@ pub(super) fn record_task(
             .filter(|(_, b, _)| !b.trim().is_empty() && section.contains(b.trim()))
             .map(|(k, b, _)| (k, Value::from(block_digest(&b))))
             .collect();
-        if !inside.is_empty() {
-            record_blocks(
-                spec_dir,
-                &json!({"blocks": inside, "decisions": decisions}),
-                declared,
-                when,
-            )?;
-        }
+        let named = json!({"blocks": inside, "decisions": decisions});
+        record_blocks(spec_dir, &named, declared, when)?;
     }
     Ok(entry)
 }
@@ -334,6 +328,29 @@ fn redecided_tasks(
     out
 }
 
+/// Each named block is in plan.md at the digest the review read.
+fn check_named(named: &Map<String, Value>, now: &[(String, String, usize)]) -> Result<(), Stop> {
+    for (key, sha) in named {
+        if key.starts_with(REMOVED) && sha == "removed" {
+            continue;
+        }
+        let Some((_, body, _)) = now.iter().find(|(k, ..)| k == key) else {
+            return refused(format!(
+                "plan.md has no block {}",
+                crate::checks::py_repr(&Value::from(key.as_str()))
+            ));
+        };
+        if block_digest(body) != sha.as_str().unwrap_or("") {
+            let short: String = sha.as_str().unwrap_or("").chars().take(12).collect();
+            return refused(format!(
+                "{} changed while it was being reviewed - its digest is not {short}",
+                crate::checks::py_repr(&Value::from(key.as_str()))
+            ));
+        }
+    }
+    Ok(())
+}
+
 /// A review of changed blocks (D61): the verdict its decisions derive is each named block's. The return holds what is owed afterwards.
 pub(super) fn record_blocks(
     spec_dir: &Path,
@@ -356,24 +373,7 @@ pub(super) fn record_blocks(
     let plan = spec_dir.join("plan.md");
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
     let now = blocks(&text);
-    for (key, sha) in named {
-        if key.starts_with(REMOVED) && sha == "removed" {
-            continue;
-        }
-        let Some((_, body, _)) = now.iter().find(|(k, ..)| k == key) else {
-            return refused(format!(
-                "plan.md has no block {}",
-                crate::checks::py_repr(&Value::from(key.as_str()))
-            ));
-        };
-        if block_digest(body) != sha.as_str().unwrap_or("") {
-            let short: String = sha.as_str().unwrap_or("").chars().take(12).collect();
-            return refused(format!(
-                "{} changed while it was being reviewed - its digest is not {short}",
-                crate::checks::py_repr(&Value::from(key.as_str()))
-            ));
-        }
-    }
+    check_named(named, &now)?;
     let Some(decisions) = house_style(review.get("decisions")) else {
         return refused("decisions must be a list (empty when the blocks decide nothing)");
     };

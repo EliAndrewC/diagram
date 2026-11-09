@@ -549,15 +549,15 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  F=<feature>        the feature number or slug whose plan.md was reviewed
 ##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" $(if $(ARBITER),arbiter-accept "$(F)" "$(ARBITER)",$(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)")
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan $(if $(ARBITER),arbiter-accept "$(F)" "$(ARBITER)",$(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)")
 
 plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make plan-delta: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" delta "$(F)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan delta "$(F)"
 
 plan-archive:   ## [project] move a plan's finished sections (every task ticked, CLEAR) into plan-done.md, which no review reads (feature 375 FR-044)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make plan-archive: F=<feature> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" archive "$(F)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan archive "$(F)"
 
 check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>" [AGENT=<id> a check you stopped yourself, closed though not silent]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
@@ -637,14 +637,14 @@ phase-read:     ## [project] let ONE of a started phase task's held old-code fil
 task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$(HOLD_OK)",@:)
-	@HOLD_OK="$(HOLD_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" task-start "$(F)" "$(T)"
+	@HOLD_OK="$(HOLD_OK)" python3 "$$(git rev-parse --show-toplevel)/scripts/task_start.py" "$(F)" "$(T)"
 
 decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" decide "$(F)" "$(T)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
 section-sha:    ## [project] {internal} the digest of one task's plan section, which a decision preflight records   F=375 T=T13
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" section-sha "$(F)" "$(T)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan section-sha "$(F)" "$(T)"
 
 hookbench:      ## [project] replay the frozen command window through a guard decision, in process   GUARD=house-style [AGAINST=<ref>] | REFRESH=1
 ##  GUARD=<name>         any guard of the l7r-guard binary, with or without its -hooks
@@ -1038,7 +1038,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
-	@python3 scripts/gates/spec-lint.py --delta .
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
 	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then python3 scripts/gates/check-partial-citations.py .; fi
 	@# THE MARKER SCAN ON A TEST CHANGED SINCE THE LAST QUICK (feature 444 T36, measured 2026-11-07: a whole-tree scan, 2 s, ran on
 	@# every quick of a branch whose tests differed from main - every working branch): a test file newer than `.testmondata`
@@ -1144,8 +1144,8 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	python3 scripts/gates/rust_checks.py format --check
 	python3 scripts/gates/rust_checks.py cover
 	python3 scripts/gates/rust_checks.py dead
-	python3 scripts/gates/spec-lint.py --selftest
-	python3 scripts/gates/spec-lint.py --delta .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --selftest
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
 	python3 scripts/hooks/lib/hm_conflict.py --selftest
 	python3 scripts/hooks/lib/hm_conflict.py --tracked .
 	python3 scripts/make-docs.py . --check

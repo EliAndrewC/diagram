@@ -294,10 +294,7 @@ fn a_block_review_names_each_block_and_a_removal_leaves_the_record() {
     )
     .unwrap();
     assert_eq!(blocked["verdict"], "BLOCKED");
-    assert!(
-        read(&dir)["blocks"].get("## A").is_some(),
-        "a blocked removal leaves it"
-    );
+    assert!(read(&dir)["blocks"].get("## A").is_some());
     record_blocks(
         &dir,
         &json!({"blocks": {"(removed) ## A": "removed"}, "decisions": []}),
@@ -331,10 +328,7 @@ fn a_changed_decisions_block_owes_the_approach_answered_again() {
         None,
     )
     .unwrap();
-    assert!(
-        once.get("approach_owed").is_none(),
-        "a first review owes nothing"
-    );
+    assert!(once.get("approach_owed").is_none());
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "reviewed"]);
     let changed = "### T05 Decisions\n\n**D1 - x.** a wholly different rule stated here\n";
@@ -356,8 +350,39 @@ fn a_changed_decisions_block_owes_the_approach_answered_again() {
     assert!(plan.contains("heer"));
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "c"]);
-    let reanswered = json!({"blocks": {key: block_digest(typo), "### T05 Approach (re-answered 2026-01-01T00:00Z)": "removed"}, "decisions": []});
-    assert!(record_blocks(&dir, &reanswered, "spec-fidelity", None).is_err());
+    let typod = record_blocks(
+        &dir,
+        &json!({"blocks": {key: block_digest(typo)}, "decisions": []}),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    assert!(typod.get("approach_owed").is_none());
+    let block = "### T05 Approach (re-answered 2026-10-17T22:10Z)
+
+1. a
+";
+    let redone = "### T05 Decisions
+
+**D1 - x.** yet another rule altogether and more words
+
+";
+    std::fs::write(
+        dir.join("plan.md"),
+        format!(
+            "# p
+
+{redone}{block}"
+        ),
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "re-decided with its answer"]);
+    let together = json!({"blocks": {key: block_digest(redone), "### T05 Approach (re-answered 2026-10-17T22:10Z)": block_digest(block)}, "decisions": []});
+    assert!(record_blocks(&dir, &together, "spec-fidelity", None)
+        .unwrap()
+        .get("approach_owed")
+        .is_none());
 }
 
 #[test]
@@ -402,10 +427,7 @@ fn the_arbiter_s_accept_is_the_plan_s_verdict() {
     .unwrap();
     std::fs::write(dir.join("plan.md"), "# p\n").unwrap();
     assert_eq!(arbiter_accept(&dir, asked, None).unwrap(), ["preamble"]);
-    assert!(
-        read(&dir)["blocks"].get("## A").is_none(),
-        "a block deleted by hand leaves the record"
-    );
+    assert!(read(&dir)["blocks"].get("## A").is_none());
 }
 
 #[test]

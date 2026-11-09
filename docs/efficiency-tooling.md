@@ -83,7 +83,7 @@ is destructive or the refusal is itself the content.
 **Two static checks joined the CHEAP phases in the same feature**, on the same reasoning one rung
 down: `l7r-gate check house-style-delta` is a `make quick` phase (a British spelling in the delta or
 in an untracked file, which is where they were arriving once the corrector only saw `Edit`), and
-`scripts/gates/spec-lint.py` runs in `static` and at push (a measured figure with no research pointer, a
+`l7r-gate check spec-lint` runs in `static` and at push (a measured figure with no research pointer, a
 withdrawn figure still standing, an orphaned `FR-`/`SC-`, a stale task list). Both are cents against
 the thing they save: twenty `spec-fidelity` rounds over two features cost 91 minutes, and at least
 eight of those findings were mechanical.

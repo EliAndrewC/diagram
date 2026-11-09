@@ -452,9 +452,8 @@ fn answer(
             reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
         }
         ("decide" | "section-sha", 3) => decide(words, root, out_root, python),
-        ("record", 5) if words[3] == "--as" => record_verb(words, root),
+        ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
-        ("record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("slim" | "archive" | "delta", 2) => {
             let Some(dir) = resolve(&words[1], root).filter(|d| d.join("plan.md").is_file()) else {
                 return fail(format!("{verb}: no single specs/{}* directory with a plan.md\n", words[1]), 2);
@@ -476,7 +475,8 @@ fn answer(
         ("push", 1 | 2) => {
             let range = words.get(1).map_or("origin/main...HEAD", String::as_str);
             let found = task::push_owed(root, range, "HEAD");
-            let lines: String = found.iter().map(|(f, rule, reason)| format!("{f}\t{rule}\t{reason}\n")).collect();
+            let lines: Vec<String> = found.iter().map(|(f, rule, reason)| format!("{f}\t{rule}\t{reason}\n")).collect();
+            let lines = lines.concat();
             reply(lines, String::new(), i32::from(!found.is_empty()))
         }
         _ => fail("usage: l7r-gate plan owed <dir> | push [range] | record | record-task | record-blocks | delta | archive | slim | decide | decided | section-sha | arbiter-accept | approach | door | engine-edit\n", 2),

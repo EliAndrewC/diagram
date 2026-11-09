@@ -186,3 +186,12 @@ fn a_quote_read_across_a_sentence_end_stops_there() {
         ["zzz"]
     );
 }
+
+#[test]
+fn an_approach_block_ends_at_the_next_heading() {
+    let text = format!(
+        "{}\n## Next\n\n6. make arbiter-ask\n",
+        approach("T01", "Green: landed.")
+    );
+    assert_eq!(missing_red_exit(&text), "T01");
+}

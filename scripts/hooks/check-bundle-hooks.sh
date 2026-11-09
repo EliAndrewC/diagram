@@ -56,7 +56,7 @@ if m and len(m.group(1).split()) >= 2 and len(m.group(1)) >= 8:
 root = subprocess.run(["git", "-C", p.get("cwd") or ".", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
 if not root:
     sys.exit(0)
-r = subprocess.run([sys.executable, os.environ["CB_HERE"] + "/../gates/plan_gate.py", "decided", root], capture_output=True, text=True)
+r = subprocess.run([os.environ["CB_HERE"] + "/../gates/l7r-gate.sh", "plan", "decided", root], capture_output=True, text=True)
 if r.returncode == 1 and r.stdout.strip():
     # GUARD_EDIT_OK: feature 385 T22 - name the check and its unit, so four identical refusals in one message read as four checks
     b = re.search(r"[^\s`\"]*/MANIFEST\.md|/tmp/l7r-check/[^\s`\")]+", str(ti.get("prompt") or ""))

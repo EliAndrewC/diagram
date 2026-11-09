@@ -1,6 +1,7 @@
 //! The active task, a check's wait for its decisions, the plan's archive and the push (feature 449 T066, from `plan_gate.py`).
 
 use std::collections::BTreeSet;
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -175,11 +176,12 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
             .flat_map(|(_, i)| i)
             .collect();
         pos += count;
-        out.push_str(&format!(
-            "<!-- plan-archive: {} to {} moved to plan-done.md, {day} (feature 375 FR-044) -->\n",
+        let _ = writeln!(
+            out,
+            "<!-- plan-archive: {} to {} moved to plan-done.md, {day} (feature 375 FR-044) -->",
             ids[0],
             ids[ids.len() - 1]
-        ));
+        );
         rest = &rest[at + count * MARKER.len()..];
     }
     out.push_str(rest);

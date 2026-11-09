@@ -379,10 +379,7 @@ fn the_delta_owes_changed_blocks_and_says_when_none_is() {
         run(&root, &["record", "375", &src, "--as", "spec-fidelity"]).code,
         0
     );
-    assert!(
-        run(&root, &["delta", "375"]).stdout.contains("MODE 4"),
-        "a block still BLOCKED is owed again"
-    );
+    assert!(run(&root, &["delta", "375"]).stdout.contains("MODE 4"));
     assert!(blocked.ends_with("x.json"));
 }
 
@@ -597,4 +594,75 @@ fn a_tree_with_no_dev_directory_records_no_bypass_and_triage_is_named_when_owed(
     assert!(super::triage_hint(&root, "bash").contains("claims owed a triage: 3"));
     std::fs::write(root.join("scripts/record/claims.py"), "echo 0\n").unwrap();
     assert_eq!(super::triage_hint(&root, "bash"), "");
+}
+
+#[test]
+fn the_verbs_report_what_is_owed_after_and_read_the_active_feature() {
+    let root = repo();
+    let dir = feature_at(
+        &root,
+        Some("# p\n\n### T05 Decisions\n\n**D1 - x.** first\n"),
+        None,
+        "375-x",
+    );
+    std::fs::create_dir_all(root.join("docs")).unwrap();
+    std::fs::write(
+        root.join("docs/approach-checklist.md"),
+        "## A. x\n\n1. one\n\n## B. y\n\n1. two\n",
+    )
+    .unwrap();
+    let key = "### T05 Decisions";
+    let first = super::sections::block_digest("### T05 Decisions\n\n**D1 - x.** first\n");
+    let src = write_json(
+        &root,
+        "a.json",
+        &json!({"blocks": {key: first}, "decisions": []}),
+    );
+    assert_eq!(
+        run(
+            &root,
+            &["record-blocks", "375", &src, "--as", "spec-fidelity"]
+        )
+        .code,
+        0
+    );
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "reviewed"]);
+    let changed = "### T05 Decisions\n\n**D1 - x.** a wholly different rule stated here\n";
+    std::fs::write(dir.join("plan.md"), format!("# p\n\n{changed}")).unwrap();
+    let src = write_json(
+        &root,
+        "b.json",
+        &json!({"blocks": {key: super::sections::block_digest(changed)}, "decisions": []}),
+    );
+    assert!(run(
+        &root,
+        &["record-blocks", "375", &src, "--as", "spec-fidelity"]
+    )
+    .stdout
+    .contains("approach owed: re-decided:"));
+    std::fs::write(&src, "not json").unwrap();
+    assert_eq!(
+        run(
+            &root,
+            &["record-blocks", "375", &src, "--as", "spec-fidelity"]
+        )
+        .code,
+        1
+    );
+    std::fs::create_dir_all(root.join(".specify")).unwrap();
+    std::fs::write(
+        root.join(".specify/feature.json"),
+        "{\"feature_directory\": \"specs/375-x\"}",
+    )
+    .unwrap();
+    assert!(
+        run(&root, &["door", "active-task", &root.display().to_string()])
+            .stdout
+            .contains("375-x")
+    );
+    assert!(run(&root, &["approach", "ruled", "hour:1"])
+        .stdout
+        .contains("approach owed: hour:1"));
+    assert_eq!(super::cli(&["no-such-verb".to_owned()], &root).code, 2);
 }

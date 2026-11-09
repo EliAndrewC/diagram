@@ -1,6 +1,9 @@
 //! A plan's sections and blocks, and a typo told from a change.
 
-use super::{blocks, distance, lands_open_appended, stem, task_sections, typo_only, wording_only};
+use super::{
+    blocks, decides_nothing, distance, lands_open_appended, stem, task_sections, typo_only,
+    wording_only,
+};
 
 #[test]
 fn typo_scale_rules() {
@@ -101,4 +104,92 @@ fn a_heading_s_stem_and_the_lands_open_line() {
         "**Lands open**: T02, T03, T03\n"
     );
     assert_eq!(lands_open_appended("none", "x"), "x");
+}
+
+fn approach(item6: &str, item2: &str, item9: &str) -> String {
+    let items = [
+        "The goal, in the world.** n/a".to_owned(),
+        format!("The constraints.** {item2}"),
+        "Where each comes from.** FR-001.".to_owned(),
+        "Do they describe the world here?** Yes.".to_owned(),
+        "The order.** n/a.".to_owned(),
+        format!("The exits.** {item6}"),
+        "The search smell.** None.".to_owned(),
+        "The budget.** One landing.".to_owned(),
+        format!("Done, measured.** {item9}"),
+        "Before moving a constant.** n/a.".to_owned(),
+        "Before fitting things into room.** n/a.".to_owned(),
+    ];
+    let numbered: Vec<String> = items
+        .iter()
+        .enumerate()
+        .map(|(i, t)| format!("{}. **{t}", i + 1))
+        .collect();
+    format!(
+        "### T01 Approach (checklist part A)\n\n{}\n",
+        numbered.join("\n")
+    )
+}
+
+#[test]
+fn an_approach_block_of_template_wording_and_ids_decides_nothing() {
+    let template = super::template_answers(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../..")
+            .as_path(),
+    )[&6]
+        .clone();
+    assert!(template.starts_with("Green:") && template.contains("make arbiter-ask"));
+    let (key, plan) = (
+        "### T01 Approach (checklist part A)",
+        "**D1 - a rule.** x\n",
+    );
+    let nine = "Its tests red without D1.";
+    assert!(decides_nothing(
+        key,
+        &approach(&template, "D1; FR-001.", nine),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing(
+        key,
+        &approach(&template, "D1; the lanes keep 9 ft.", nine),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing(
+        key,
+        &approach(&template, "D1; FR-001.", "select 9 of the 11 failures."),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing(
+        key,
+        &approach(
+            "Green: landed. Red: the failing tests recorded.",
+            "D1; FR-001.",
+            nine
+        ),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing(
+        key,
+        &approach(&template, "D7.", nine),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing(
+        key,
+        "### T01 Approach\n\nno items\n",
+        plan,
+        ""
+    ));
+    assert!(decides_nothing(
+        key,
+        &approach(&template, "D1; FR-001.", "Its tests red without D<n>."),
+        plan,
+        ""
+    ));
+    assert!(!decides_nothing("## other", "x", plan, ""));
 }

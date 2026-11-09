@@ -23,6 +23,7 @@ use serde_json::Value;
 use super::spec_figures::{check_measured_figures, figure_source, is_check5, FIGURE};
 use super::{git_text, py_lines, py_repr, scratch, Outcome};
 
+/// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 pub(super) const USAGE_LOG_TOOL: &str = "spec-lint";
 const CHECK6_MARK: &str = "the GM's approval line";
 const BINARY_SUFFIXES: [&str; 15] = [

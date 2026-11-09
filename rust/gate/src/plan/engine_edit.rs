@@ -70,21 +70,27 @@ fn docstring_only(rel: &str, path: &str, input: &Value, tool: &str, python: &str
     if crate::stamp::in_raw_area(root, rel) {
         return false;
     }
-    match (semantic(&old, root, python), semantic(&new, root, python)) {
-        (Some(a), Some(b)) => a == b,
-        _ => false,
-    }
+    semantic(&old, root, python)
+        .zip(semantic(&new, root, python))
+        .is_some_and(|(a, b)| a == b)
 }
 
 fn is_engine(root: &str, rel: &str) -> bool {
     Path::new(root).join("l7r/diagram/ci/delta.py").is_file() && crate::delta::is_engine(rel)
 }
 
+/// The path with its existing part resolved, the rest kept: a new file or package has no real path of its own.
+fn real(path: &Path) -> std::path::PathBuf {
+    for above in path.ancestors() {
+        if let Ok(found) = std::fs::canonicalize(above) {
+            return found.join(path.strip_prefix(above).unwrap_or(Path::new("")));
+        }
+    }
+    path.to_owned()
+}
+
 fn relative(path: &str, root: &str) -> Option<String> {
-    let (full, top) = (
-        std::fs::canonicalize(path).unwrap_or_else(|_| path.into()),
-        std::fs::canonicalize(root).unwrap_or_else(|_| root.into()),
-    );
+    let (full, top) = (real(Path::new(path)), real(Path::new(root)));
     full.strip_prefix(top)
         .ok()
         .map(|p| p.to_string_lossy().into_owned())

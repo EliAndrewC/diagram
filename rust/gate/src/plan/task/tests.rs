@@ -131,6 +131,8 @@ fn the_push_judges_every_touched_feature_with_a_tick_at_head() {
         "003-c",
     );
     std::fs::write(cleared.join("tasks.md"), &ticked).unwrap();
+    std::fs::create_dir_all(root.join("specs/006-z")).unwrap();
+    std::fs::write(root.join("specs/006-z/note.md"), "x").unwrap();
     let no_plan = feature_at(&root, None, None, "004-d");
     std::fs::write(
         no_plan.join("tasks.md"),
@@ -142,7 +144,13 @@ fn the_push_judges_every_touched_feature_with_a_tick_at_head() {
     let range = format!("{base}..HEAD");
     assert_eq!(
         touched_features(&root, &range),
-        ["specs/001-a", "specs/002-b", "specs/003-c", "specs/004-d"]
+        [
+            "specs/001-a",
+            "specs/002-b",
+            "specs/003-c",
+            "specs/004-d",
+            "specs/006-z"
+        ]
     );
     let found: Vec<(String, &str)> = push_owed(&root, &range, "HEAD")
         .into_iter()

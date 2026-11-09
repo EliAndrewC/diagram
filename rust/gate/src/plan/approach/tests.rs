@@ -1,5 +1,7 @@
 //! A task's Approach answered before its tick, and again after a trigger.
 
+#![expect(clippy::format_collect, reason = "fixture text")]
+
 use std::path::{Path, PathBuf};
 
 use serde_json::json;
@@ -271,4 +273,34 @@ fn a_part_named_otherwise_is_shown_as_it_is() {
         Some("2026-10-17T21:40:00Z"),
     );
     assert!(why(&dir, &root, "T01").contains("part A - at task start"));
+}
+
+#[test]
+fn outside_a_repository_the_git_directory_is_the_conventional_one_and_nothing_is_in_flight_but_the_active(
+) {
+    let dir = crate::checks::scratch("no-repo");
+    assert_eq!(super::git_dir(&dir), dir.join(".git"));
+    assert_eq!(in_flight(&dir, &dir, "T01"), ["T01"]);
+}
+
+#[test]
+fn a_row_for_another_task_is_not_this_task_s() {
+    let (root, dir) = feature();
+    owe(
+        &root,
+        "999-x",
+        "T09",
+        "hour:1",
+        "B",
+        Some("2026-10-17T21:40:00Z"),
+    );
+    owe(
+        &root,
+        "888-y",
+        "T01",
+        "hour:2",
+        "B",
+        Some("2026-10-17T21:40:00Z"),
+    );
+    assert_eq!(refusal(&dir, &root, "T01"), None);
 }
