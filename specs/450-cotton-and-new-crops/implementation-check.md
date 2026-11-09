@@ -6,3 +6,4 @@
 - 0320: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i 'yuan.*cotton|cotton.*yangzi|baidie|huang daopo' l7r pool (added by session S3 continued for S2's question)
 - 0324: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'tobacco' l7r pool
 - 0325: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'sweet potato|sweet_potato|番薯|satsumaimo|goguma' l7r pool
+- 0326: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'white potato|jagaimo|bareisho|马铃薯|Solanum tuberosum' l7r pool
