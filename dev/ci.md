@@ -14,13 +14,13 @@ unrelated engine work is not a debt anyone pays.
 **It bypasses exactly one condition - `route-is-gated` - and the row is still printed, saying so.** Everything else
 refuses it: `green-local-since-edit` (the GM's own named case: never a paid run straight after a red gate),
 `remote-enabled` (feature 132's switch), `breaker-not-tripped` (the monthly hard stop) and, for FULL,
-[`door.py`](../l7r/diagram/ci/door.py)'s committed `permitted` entry. A verified record does NOT short-circuit it,
+[`door.rs`](../rust/gate/src/ci/door.rs)'s committed `permitted` entry. A verified record does NOT short-circuit it,
 because a record says a gate PASSED and says nothing about what it cost.
 
 **It cannot mint a push credential, and that refusal lives in the tree the build runs.**
 [`buildspec/measure.yml`](../buildspec/measure.yml) sets `MODE: measure`, and [`run.sh`](../buildspec/run.sh) returns
 before writing `verified/<key>.json` - which puts it before the push as well. A dispatcher flag would be a promise; a
-buildspec is a diff, which is the bar `door.py` set for the FULL prompt. Its cache block and install phase are
+buildspec is a diff, which is the bar `door.rs` set for the FULL prompt. Its cache block and install phase are
 otherwise IDENTICAL to `check.yml`'s: a measurement that ran cold while the gate runs warm would measure something
 that does not happen.
 

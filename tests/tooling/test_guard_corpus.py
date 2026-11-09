@@ -48,7 +48,7 @@ def test_the_fixture_is_the_census_the_research_quotes() -> None:
     assert by == {"make-only": 97, "no-poll": 44, "pair": 26, "clone-sync": 16}, by
     verdicts = collections.Counter((r["guard"], r["expect"]["verdict"]) for r in ROWS)
     # the numbers research R1/R2 state, derived rather than remembered
-    assert verdicts[("make-only", "rewrite")] == 12  # 11 targeted pytest runs + 1 wrapped entry point; the two that named `ci engine-key` refuse since 449 T063 retired it
+    assert verdicts[("make-only", "rewrite")] == 11  # 11 targeted pytest runs; the three that wrapped the ci module refuse since 449 T063 and T064 retired its subcommands
     assert verdicts[("clone-sync", "permit")] == 13  # every stale-head refusal, synced in
     assert verdicts[("pair", "permit")] == 23  # 21 Bash gate shapes + 2 agent mentions
     assert verdicts[("no-poll", "permit")] == 7  # the backgrounded waits the qualifier had refused

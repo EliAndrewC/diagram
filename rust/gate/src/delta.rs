@@ -218,22 +218,86 @@ fn semantically_changed(
         .collect())
 }
 
-/// `{base, files, engine}` of what our own commits changed since we diverged from `base_ref`.
-fn compute(root: &Path, base_ref: &str, python: &str) -> Result<String, String> {
+/// What this clone's own commits changed, and which of it is engine code.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub(crate) struct Delta {
+    pub base: String,
+    pub files: Vec<String>,
+    pub engine: Vec<String>,
+}
+
+impl Delta {
+    pub(crate) fn route(&self) -> &'static str {
+        if self.engine.is_empty() {
+            "DIRECT"
+        } else {
+            "GATED"
+        }
+    }
+
+    pub(crate) fn reason(&self) -> String {
+        if self.files.is_empty() {
+            return "no commits of our own since main - nothing to push".to_owned();
+        }
+        if self.engine.is_empty() {
+            return format!(
+                "{} file(s) changed, none of them diagram engine code - docs, specs or config only",
+                self.files.len()
+            );
+        }
+        let shown = self
+            .engine
+            .iter()
+            .take(4)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join(", ");
+        let more = if self.engine.len() > 4 {
+            format!(" (+{} more)", self.engine.len() - 4)
+        } else {
+            String::new()
+        };
+        format!(
+            "{} engine path(s) in our delta: {shown}{more}",
+            self.engine.len()
+        )
+    }
+}
+
+/// What our own commits changed since we diverged from `base_ref`.
+pub(crate) fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta, String> {
     let base = merge_base(root, base_ref)?;
     let listed = git(root, &["diff", "--name-only", &base, "HEAD"])?;
-    let mut files: Vec<&str> = listed.lines().filter(|f| !f.trim().is_empty()).collect();
+    let mut files: Vec<String> = listed
+        .lines()
+        .filter(|f| !f.trim().is_empty())
+        .map(str::to_owned)
+        .collect();
     files.sort_unstable();
-    let candidates: Vec<&str> = files.iter().copied().filter(|f| is_engine(f)).collect();
+    let candidates: Vec<&str> = files
+        .iter()
+        .map(String::as_str)
+        .filter(|f| is_engine(f))
+        .collect();
     let moved = semantically_changed(root, &base, &candidates, python)?;
-    let engine: Vec<&str> = candidates
+    let engine = candidates
         .into_iter()
         .zip(moved)
-        .filter_map(|(f, m)| m.then_some(f))
+        .filter(|(_, m)| *m)
+        .map(|(f, _)| f.to_owned())
         .collect();
+    Ok(Delta {
+        base,
+        files,
+        engine,
+    })
+}
+
+fn compute(root: &Path, base_ref: &str, python: &str) -> Result<String, String> {
+    let d = compute_delta(root, base_ref, python)?;
     Ok(format!(
         "{}\n",
-        json!({"base": base, "files": files, "engine": engine})
+        json!({"base": d.base, "files": d.files, "engine": d.engine})
     ))
 }
 
@@ -308,7 +372,7 @@ fn key_from_ids(
 
 /// The engine key of a tree or commit: a hash over the engine paths' content ids, with no checkout, the build computing it the same way on its merge. Only the engine trees are listed (2026-10-18: the whole
 /// repository is about 21,000 entries and the cohort log keys some 90 commits a push).
-fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
+pub(crate) fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
     let mut prefixes: Vec<&str> = ENGINE_DIRS.iter().map(|(p, _)| *p).collect();
     prefixes.sort_unstable();
     let mut args = vec!["ls-tree", "-r", tree, "--"];

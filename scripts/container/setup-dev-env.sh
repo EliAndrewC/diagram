@@ -93,6 +93,7 @@ check_all() {
     # the profile), and the DejaVu ITALIC face matters because resvg does not synthesize oblique:
     # without it every italic map label silently renders upright.
     _t "resvg (diagram PNG renderer)"            "command -v resvg"
+    _t "aws (the CLI behind the Rust gate's dispatcher, feature 449 T064)" "command -v aws"
     # pdftotext (poppler): the source archive reads a PDF's text with it (scripts/record/archive.py); six tooling tests
     # failed on a fresh container without it (feature 328, 2026-10-07).
     _t "pdftotext (poppler, the source archive)" "command -v pdftotext"
@@ -130,6 +131,9 @@ fi
 # Passwordless sudo is available in this container precisely so a session can install what it needs
 # without asking. Never work around a missing dependency - install it.
 echo "==> system packages (apt)"
+if ! command -v aws >/dev/null 2>&1; then  # the dispatcher's boundary (feature 449 T064); a remote run refuses naming this script when it is absent
+    curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscli.zip && unzip -qo /tmp/awscli.zip -d /tmp && $SUDO /tmp/aws/install --update >/dev/null && rm -rf /tmp/aws /tmp/awscli.zip
+fi
 if ! command -v resvg >/dev/null 2>&1 || ! command -v pdftotext >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
     $SUDO apt-get update -qq
     $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra poppler-utils jq

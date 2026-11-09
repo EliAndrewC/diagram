@@ -993,5 +993,22 @@
       "config_cold_s": 0.15,
       "config_warm_s": 0.03
     }
+  },
+  "t064-remote": {
+    "quantity": "the Rust gate's remote path against the Python it replaces",
+    "observed": "2026-11-09",
+    "subject": "a detached worktree of commit 169f0df58^, remote off, the Python's own files at that commit",
+    "command": "under make in a detached worktree of 169f0df58^, the Python at that commit against l7r-gate ci status --route, status, remote-spend and door, switches show and idle and lifecycle (the commands that were there to compare)",
+    "method": "exact comparison",
+    "value": {
+      "route": true,
+      "status_lines": 45,
+      "status": true,
+      "spend": true,
+      "door": true,
+      "switches": true,
+      "idle": true,
+      "lifecycle": true
+    }
   }
 }

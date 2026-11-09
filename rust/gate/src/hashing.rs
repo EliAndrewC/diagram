@@ -10,10 +10,9 @@ use l7r_guard::shared::sha256;
 use crate::codeid::{self, stated};
 
 /// The machinery of the gate itself; a change here plans a full run (feature 415 plan D3).
-const MACHINERY: [&str; 6] = [
+const MACHINERY: [&str; 5] = [
     "l7r/diagram/ci",
     "l7r/diagram/pipeline",
-    "l7r/diagram/switches.py",
     "l7r/diagram/_invocation.py",
     "tests/conftest.py",
     "tests/_scope.py",

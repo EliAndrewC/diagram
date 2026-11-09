@@ -202,7 +202,7 @@ def carry(root: Path, feature: str, task: str, keys: list[str], now: str | None 
     return f"claims-carry: {len(keys)} finding(s) filed into {d.name} {task}; commit tasks.md and {RECORD} with the landing"
 
 
-#: the claims switch's file and its states (feature 445; `l7r/diagram/switches.py` writes it, `make claims-report-only` /
+#: the claims switch's file and its states (feature 445; `rust/gate/src/ci/switches.rs` writes it, `make claims-report-only` /
 #: `make claims-clean` throw it) - read here without importing the engine package, as the scripts do
 SWITCHES = Path("dev") / "switches.json"
 CLAIMS_STATES = ("report", "clean")

@@ -217,3 +217,27 @@ docs/b.md
     assert_eq!(bad.code, 1);
     assert!(bad.stderr.contains("l7r-gate delta: git merge-base"));
 }
+
+#[test]
+fn the_route_and_its_reason() {
+    use super::Delta;
+    let files: Vec<String> = (0..6).map(|n| format!("l7r/{n}.py")).collect();
+    let d = Delta {
+        base: String::new(),
+        files: files.clone(),
+        engine: files,
+    };
+    assert_eq!(d.route(), "GATED");
+    assert!(
+        d.reason()
+            .starts_with("6 engine path(s) in our delta: l7r/0.py, ")
+            && d.reason().ends_with("(+2 more)")
+    );
+    assert_eq!(Delta::default().route(), "DIRECT");
+    assert!(Delta::default().reason().contains("nothing to push"));
+    let docs = Delta {
+        files: vec!["a.md".to_owned()],
+        ..Delta::default()
+    };
+    assert!(docs.reason().contains("none of them diagram engine code"));
+}

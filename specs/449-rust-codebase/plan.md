@@ -287,20 +287,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 8. **Before offering routes.** None offered.
 9. **After a ruling.** The next step is the one it names: `git grep` over `rust/gate/src` for the six names, the test run directly, then the gate.
 
-### T064 Approach (checklist part A)
-
-1. **The goal, in the world.** The conditions on a remote run, the make-only refusal in-process and the switches in Rust.
-2. **The constraints.** FR-001, FR-002; constitution on money (a paid dispatch is not run to test this).
-3. **Where each comes from.** `dev/ci.md`; `dev/switches.json`.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
-6. **The exits.** Green: their suites' verdicts unchanged, no remote run spent to prove it. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** The dispatcher's tests against a stubbed AWS. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T064 to T064 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T065 Approach (checklist part A)
 
 1. **The goal, in the world.** The checks the gate runs over text are Rust.

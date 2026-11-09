@@ -77,7 +77,6 @@ HISTORY = {
     "tests/pipeline/test_poolmaps.py": "a fixture pool's scripted engine name",
     "tests/test_tooling_asked.py": "an example test path a selector reads",
     "tests/tooling/ci/test_delta.py": "an example engine path the delta classifies",
-    "tests/tooling/ci/test_imagecheck.py": "an example path in a fixture repository",
     "tests/tooling/ci/test_incremental.py": "an example path in a fixture coverage baseline",
     "tests/tooling/test_apply_edits.py": "an example path an edit sweep rewrites",
     "tests/tooling/test_browser_skip.py": "an example path in a fixture repository",

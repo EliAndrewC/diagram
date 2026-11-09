@@ -787,6 +787,8 @@ def main(argv: list[str]) -> int:
             print(f"make done: refused - {why}", file=sys.stderr)
             return 1
         return 0
+    if argv[:1] == ["spec-verdict"] and len(argv) == 2:  # the Rust gate's merge check (feature 449 T064), the one reader
+        return 0 if spec_verdict(Path(argv[1])) else 1
     if argv[:1] == ["spec-ruled"] and len(argv) == 2:  # does a ruling stand for this spec's verdict?
         return 0 if spec_ruled(Path(argv[1])) else 1
     if argv[:1] == ["spec-verdict"] and len(argv) == 2:  # review-gate.sh: does this spec carry its verdict (feature 442)?

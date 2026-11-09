@@ -137,7 +137,7 @@ def rust_refusal(root: pathlib.Path) -> str:
     return ""
 
 
-#: the port switch (feature 444 amendment 8, FR-023; `l7r/diagram/switches.py` writes it) - read here without importing the engine
+#: the port switch (feature 444 amendment 8, FR-023; `rust/gate/src/ci/switches.rs` writes it) - read here without importing the engine
 #: package, as the scripts read the claims switch
 SWITCHES = pathlib.Path("dev") / "switches.json"
 PORT_STATES = ("rust-only", "integrated")

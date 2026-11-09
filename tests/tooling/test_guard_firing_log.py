@@ -47,7 +47,7 @@ CASES = [
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py --collect-only"), "blocked", "bare-pytest"),
     # feature 212: the targeted run and the wrapped entry point are REWRITTEN, and each records its rule
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),
-    ("make-only", _payload(command="python3 -m l7r.diagram.ci status"), "rewrote", "entry-point"),
+    ("make-only", _payload(command="python3 -m l7r.diagram.tools.pack_audit"), "rewrote", "entry-point"),
     ("no-poll", _payload(command="until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"), "rewrote", "backgrounded-file-wait"),
     ("guard-file", _payload(_tool="Edit", file_path="/r/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
     # feature 2026-09-12: a review's findings do not reach the GM unfiltered - the dispatch arms, the filter disarms

@@ -1,5 +1,6 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
+mod ci;
 pub mod codeid;
 pub mod delta;
 mod exempt;
@@ -63,6 +64,10 @@ pub fn cli(args: &[String]) -> Reply {
             &mut std::io::stdin(),
         ),
         Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
+        Some("ci") => ci::main::entry(&args[1..], &top()),
+        Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
+        Some("lifecycle") => ci::cachepolicy::cli(&args[1..]),
+        Some("github-token") => ci::config::github_token(&top()),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
@@ -104,6 +109,12 @@ mod tests {
         assert_eq!(ask(&["state", "nonsense"]).code, 2);
         assert_eq!(ask(&["coverage-exempt", "nonsense"]).code, 2);
         assert_eq!(ask(&["config-hash", "nonsense"]).code, 2);
+        assert_eq!(ask(&["ci", "nonsense"]).code, 2);
+        assert_eq!(ask(&["switches", "nonsense"]).code, 2);
+        assert!(ask(&["lifecycle"])
+            .stdout
+            .contains("expire-verified-records"));
+        assert!([0, 1].contains(&ask(&["github-token"]).code));
     }
 
     #[test]

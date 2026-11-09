@@ -86,3 +86,7 @@ narrowed by the plan review of 2026-10-30: dead closure's public half and the ch
 fixture and are proven above; these two need a phase's maps or counters, so T19's port owes them before its tick, each proven as the
 rest were. `check-rust-tooling.py` refuses any tree holding a Rust phase while one is unproven
 (`test_a_rust_phase_cannot_land_while_a_row_is_unproven`), so no phase lands with a row open.
+
+## The AWS boundary (feature 449 T064)
+
+The dispatcher's AWS calls go through the `aws` CLI (`rust/gate/src/ci/aws.rs`), tested through a fake `aws` at the process boundary. **The live adapter is unproven**: remote is off and no paid run may prove it, so the first paid run after remote is turned on is its proof (the round arbiter's `ask:449-T064-slices`).
