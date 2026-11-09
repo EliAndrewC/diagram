@@ -7580,6 +7580,73 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T76": {
+   "section_sha256": "b23ea24272190e44d767977c1e24f19c7ec9a47b58e8524672e5d4de7331f23d",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-landing",
+     "summary": "runstats, guard-log, review_yield, wave_report, subagent_cache and fresh_tally become l7r-gate measure in one landing.",
+     "class": "within",
+     "why": "FR-001 places scripts/measure/ in phase 2 and the request asks for all of it in Rust. Aside, no ruling: the invocation grep's pathspec omits docs/ and .claude/agents/, although FR-001 itself records a docs/ file directing a scripts/measure tool (model_trial.py), and its \\.py pattern cannot see an import."
+    },
+    {
+     "id": "deferred-six",
+     "summary": "event_log, feature_report, turn_time, fix_yield, task_phases and where_time go to phase 3 with their importers.",
+     "class": "within",
+     "why": "FR-001 names exactly these six under ask:449-T76-scope and carries the T065 clause on them. Aside, no ruling: the evidence offered for that clause is a name grep of the Makefile and settings.json whose pattern omits the four importers FR-001 names (arbiter_bundle, ledger_owed, earlier_rounds, stepback_bundle), so it does not show that no importer reaches them on a make done; the phase-2 close must."
+    },
+    {
+     "id": "tool-yield-seventh",
+     "summary": "tool_yield.py is deferred to phase 3 as a seventh file, because fix_yield.py still imports it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's T76 clause names six files, not this one, and the condition the block attributes to the ruling is not in the bundle, so it is ruled on its own ground. A Python importer cannot import a deleted module and FR-003 forbids running both, so porting and deleting it while fix_yield.py lives is impossible; FR-001 applies the same last-caller rule to libraries. It reorders the port and drops nothing. The premise is an existence claim checkable in one file, and if wrong costs only order. The phase-2 close must name it as a seventh expected remainder carrying the T065 clause."
+    },
+    {
+     "id": "differ-usage-line",
+     "summary": "Differential: a usage line names the new command instead of the Python file.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says same outputs, and no ruling in the bundle covers this tool. A usage line reproducing the old text would direct the reader to a deleted file, defeating the only purpose of a usage line. ask:449-T75-gatecost-class accepted the same difference for gatecost: a precedent, not a ruling on these tools."
+    },
+    {
+     "id": "differ-guard-log-tie-order",
+     "summary": "Differential: guard-log lists same-second firings in file order where the Python's glob gave the file system's order.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The Python's tie order is a property of the directory, not of the log: the same content on another file system or clone lists differently, so there is no output defined by the input to match. FR-002's cases are those the tests and suites hold, and the block replays every case of test_guard_log_listing.py. The difference is order among ties only; no firing is added or lost."
+    },
+    {
+     "id": "differ-fresh-tally-tie-order",
+     "summary": "Differential: fresh-tally lists causes tied on a count in name order where the Python iterated a set.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The block states the Python's order changes from run to run, so the Python does not agree with itself and matching it is impossible. A fixed order is the only way to have one output."
+    },
+    {
+     "id": "not-ported-shared-text-contract-part",
+     "summary": "The shared_text and contract_part cases of test_subagent_cache.py are not ported: only test_bundle_shared_text.py reached those functions, so they move into that test.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This takes cases out of FR-002's every case its tests hold and leaves functions of a deleted file unported against FR-001. Its only justification is the universal claim that one test alone reaches them, and the block names no command for it, though it names one for each neighbouring enumeration. The only census of subagent_cache consumers in the block is the \\.py-suffixed grep, which cannot see an import of the module or of these functions. The block also does not say where the function bodies land once subagent_cache.py is deleted: 'they' reads as the cases or the functions, and moving only the cases leaves the test calling nothing. It passes when the block gives the search that found the callers, including import forms, and states that the two function bodies move into that test file with their cases, which then carries them to its own phase."
+    },
+    {
+     "id": "test-runstats-keeps",
+     "summary": "test_runstats.py keeps the cases of tests/_gate_failures.py and of the Makefile's wiring.",
+     "class": "within",
+     "why": "FR-001 moves each test with the piece it tests; those pieces stay until their own phase."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green is a differential on the final port and the slice's files gone; measurement commands are rewritten in the same commit and re-run; red goes to make arbiter-ask.",
+     "class": "within",
+     "why": "FR-001 and FR-002 require this. The 15/7 figure carries a one-shot label with date and method, and cannot be re-run with the Python gone; the exit's differential on the final port is the plan's own check."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
