@@ -18,11 +18,7 @@ const MACHINERY: [&str; 5] = [
     "tests/_scope.py",
 ];
 /// The pinned lockfiles; their `.in` sources are not.
-const LOCKFILES: [&str; 3] = [
-    "requirements.txt",
-    "requirements-dev.txt",
-    "requirements-ci.txt",
-];
+const LOCKFILES: [&str; 2] = ["requirements.txt", "requirements-dev.txt"];
 /// The Makefile targets whose recipes run the gate's test phase.
 const TEST_TARGETS: [&str; 2] = ["test", "test-full"];
 

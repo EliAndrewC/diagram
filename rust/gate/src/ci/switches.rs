@@ -1,4 +1,4 @@
-//! The iteration switches (feature 132, from `l7r/diagram/switches.py`): `dev/switches.json` holds `remote`, `claims` and `port`. Absent is the defaults; malformed closes: remote off, claims `clean`, the port at the last
+//! The iteration switches (feature 132, from `l7r/diagram/switches.py`): `dev/switches.json` holds `claims` and `port`. Absent is the defaults; malformed closes: remote off, claims `clean`, the port at the last
 //! committed state. Unknown keys are ignored, on purpose (feature 185): only the named axes are read, so a leftover block from before a lock was retired is simply not looked at.
 
 use std::fmt::Write as _;
@@ -10,8 +10,6 @@ use serde_json::{json, Value};
 use crate::codeid::stated;
 
 const FILE: &str = "dev/switches.json";
-const REMOTE_STATES: [&str; 2] = ["on", "off"];
-const DEFAULT_REMOTE: &str = "on";
 const CLAIMS_STATES: [&str; 2] = ["report", "clean"];
 const DEFAULT_CLAIMS: &str = "report";
 const PORT_STATES: [&str; 2] = ["rust-only", "integrated"];
@@ -42,7 +40,6 @@ impl Axis {
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct Switches {
-    pub remote: Axis,
     /// Non-empty when the file was malformed: the axes are then closed.
     pub error: String,
     pub claims: Axis,
@@ -52,15 +49,10 @@ pub(crate) struct Switches {
 impl Switches {
     fn defaults() -> Self {
         Self {
-            remote: Axis::bare(DEFAULT_REMOTE),
             error: String::new(),
             claims: Axis::bare(DEFAULT_CLAIMS),
             port: Axis::bare(DEFAULT_PORT),
         }
-    }
-
-    pub(crate) fn remote_off(&self) -> bool {
-        self.remote.state == "off"
     }
 }
 
@@ -89,11 +81,6 @@ fn committed_port(root: &Path) -> String {
 fn closed(error: &str, root: &Path) -> Switches {
     let why = format!("switches.json is MALFORMED ({error}) - failing closed");
     Switches {
-        remote: Axis {
-            state: "off".to_owned(),
-            why: why.clone(),
-            ..Axis::default()
-        },
         error: error.to_owned(),
         claims: Axis {
             state: "clean".to_owned(),
@@ -148,11 +135,7 @@ pub(crate) fn read(root: &Path) -> Switches {
     if !data.is_object() {
         return closed("top level is not an object", root);
     }
-    let remote = match axis(&data, "remote", &REMOTE_STATES, DEFAULT_REMOTE) {
-        Ok(a) => a,
-        Err(why) => return closed(&why, root),
-    };
-    // a bad claims entry must not turn the remote off too, and a bad port entry stands at the state in force
+    // a bad port entry stands at the state in force
     let claims = axis(&data, "claims", &CLAIMS_STATES, DEFAULT_CLAIMS).unwrap_or_else(|why| Axis {
         state: "clean".to_owned(),
         why: format!("the claims entry is MALFORMED ({why}) - failing closed"),
@@ -164,7 +147,6 @@ pub(crate) fn read(root: &Path) -> Switches {
         ..Axis::default()
     });
     Switches {
-        remote,
         error: String::new(),
         claims,
         port,
@@ -197,7 +179,6 @@ pub(crate) fn write(
         return Err("a reason is required (REASON=...) - a reason someone will READ is a decision you have to defend".to_owned());
     }
     let allowed = match name {
-        "remote" => REMOTE_STATES,
         "claims" => CLAIMS_STATES,
         "port" => PORT_STATES,
         _ => ["", ""],
@@ -218,13 +199,18 @@ pub(crate) fn write(
         utc: utc.to_owned(),
     };
     match name {
-        "remote" => out.remote = new,
         "claims" => out.claims = new,
         _ => out.port = new,
     }
     let path = root.join(FILE);
     stated(std::fs::create_dir_all(root.join("dev")), FILE)?;
-    let body = stated(serde_json::to_string_pretty(&json!({"remote": out.remote.json(), "claims": out.claims.json(), "port": out.port.json()})).map_err(std::io::Error::other), FILE)?;
+    let body = stated(
+        serde_json::to_string_pretty(
+            &json!({"claims": out.claims.json(), "port": out.port.json()}),
+        )
+        .map_err(std::io::Error::other),
+        FILE,
+    )?;
     stated(std::fs::write(path, format!("{body}\n")), FILE)?;
     Ok(out)
 }
@@ -246,26 +232,16 @@ pub(crate) fn describe(sw: &Switches) -> String {
     if !sw.error.is_empty() {
         let _ = write!(
             head,
-            "\n  MALFORMED - {} - remote CLOSED until `make ci-on REASON=...` rewrites it",
+            "\n  MALFORMED - {} - claims closed until a `make claims-*` or `make port-*` rewrites it",
             sw.error
         );
     }
     [
         head,
-        described("remote", &sw.remote, DEFAULT_REMOTE),
         described("claims", &sw.claims, DEFAULT_CLAIMS),
         described("port", &sw.port, DEFAULT_PORT),
     ]
     .join("\n")
-}
-
-/// None if `what` may run; otherwise the full refusal, its reason, date, release and the local route that does the job.
-pub(crate) fn refusal(sw: &Switches, what: &str) -> Option<String> {
-    sw.remote_off().then(|| {
-        let a = &sw.remote;
-        let who = if a.who.is_empty() { "?" } else { &a.who };
-        format!("\n\x1b[1mREFUSED: `{what}` would run on AWS CodeBuild, and remote is OFF.\x1b[0m\n  since {} by {who}: {}\n\n  What runs instead:  a green local `make done`, then `scripts/sync-with-main.sh done` (the gated route pushes on the local verdict while remote is off)\n  To release it:      \x1b[1mmake ci-on REASON=...\x1b[0m  (commits the change; there is no flag or variable that skips this)\n", a.utc, a.why)
-    })
 }
 
 /// The process table this needs, injected so that which exit of the walk a test reaches is not decided by the machine (feature 174).
@@ -319,7 +295,7 @@ pub(crate) fn idle_context(top: &Path, pid: u32, table: &dyn Table) -> bool {
         && line.contains(" timer ")
 }
 
-/// `l7r-gate switches show | state AXIS | idle | set AXIS STATE --why W | check remote WHAT`.
+/// `l7r-gate switches show | state AXIS | idle | set AXIS STATE --why W`.
 pub(crate) fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
     let say = |stdout: String, stderr: String, code: i32| crate::Reply {
         stdout,
@@ -329,17 +305,32 @@ pub(crate) fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     match words.as_slice() {
         ["show"] => say(format!("{}\n", describe(&read(root))), String::new(), 0),
-        ["state", "remote"] => say(format!("{}\n", read(root).remote.state), String::new(), 0),
         ["state", "claims"] => say(format!("{}\n", read(root).claims.state), String::new(), 0),
         ["state", "port"] => say(format!("{}\n", read(root).port.state), String::new(), 0),
-        ["idle"] => say(format!("{}\n", u8::from(idle_context(root, std::process::id(), &LiveTable))), String::new(), 0),
+        ["idle"] => say(
+            format!(
+                "{}\n",
+                u8::from(idle_context(root, std::process::id(), &LiveTable))
+            ),
+            String::new(),
+            0,
+        ),
         ["set", name, state, "--why", why] => match write(root, name, state, why, utc) {
             Ok(sw) => say(format!("{}\n", describe(&sw)), String::new(), 0),
             Err(why) => say(String::new(), format!("switches: REFUSED - {why}\n"), 1),
         },
-        ["check", "remote", what] => refusal(&read(root), what).map_or_else(|| say(String::new(), String::new(), 0), |text| say(String::new(), format!("{text}\n"), 1)),
-        _ => say(String::new(), "usage: l7r-gate switches show | state AXIS | idle | set AXIS STATE --why W | check remote WHAT\n".to_owned(), 2),
+        _ => say(
+            String::new(),
+            "usage: l7r-gate switches show | state AXIS | idle | set AXIS STATE --why W\n"
+                .to_owned(),
+            2,
+        ),
     }
+}
+
+fn utc_of(secs: u64) -> String {
+    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
 /// `l7r-gate switches ...`, refused outside this project's make.
@@ -364,7 +355,7 @@ pub(crate) fn guarded(
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    cli(args, root, &super::runlog::utc_of(secs))
+    cli(args, root, &utc_of(secs))
 }
 
 #[cfg(test)]

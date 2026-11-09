@@ -14,8 +14,8 @@ import pytest
 SKILL = Path(__file__).resolve().parents[2]
 
 
-def _remote(root: Path) -> str:
-    return str(json.loads((root / "dev/switches.json").read_text(encoding="utf-8"))["remote"]["state"])
+def _claims(root: Path) -> str:
+    return str(json.loads((root / "dev/switches.json").read_text(encoding="utf-8"))["claims"]["state"])
 
 
 def make(skill: Path, *args: str, home: Path | None = None) -> subprocess.CompletedProcess[str]:
@@ -45,7 +45,7 @@ def make(skill: Path, *args: str, home: Path | None = None) -> subprocess.Comple
 
 # `regressions` left this list with feature 166: the target rebuilt the frozen negative-fixture corpus,
 # and the corpus was a set of bad manifests each proving one retired check still fired.
-LOCKED_TARGETS = ("cohort", "test-full", "cache-audit", "perf", "perf-gate", "done FULL=1", "ci-check FULL=1", "ci-check TARGET=cohort", "ci-merge FULL=1", "maps SCOPE=all")
+LOCKED_TARGETS = ("cohort", "test-full", "cache-audit", "perf", "perf-gate", "done FULL=1", "maps SCOPE=all")
 
 
 @pytest.mark.tooling
@@ -62,33 +62,23 @@ def test_make_uses_six_workers_on_a_shared_box_and_every_core_on_codebuild(fixtu
     monkeypatch.delenv("CODEBUILD_BUILD_ID", raising=False)
     assert "-n 6" in make(fixture_skill, "-n", "quick", "CPU_COUNT=22").stdout
     assert "-n 4" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout, "never more workers than cores (GM 2026-08-26)"
-    monkeypatch.setenv("CODEBUILD_BUILD_ID", "diagram-merge:abc")
-    assert "-n auto" in make(fixture_skill, "-n", "quick", "CPU_COUNT=4").stdout
-
-
-@pytest.mark.tooling
-@pytest.mark.parametrize("target", ("ci-check", "ci-image", "ci-check FULL=1"))
-def test_make_remote_targets_refuse_when_remote_is_off(fixture_skill: Path, target: str) -> None:
-    (fixture_skill / "dev/switches.json").write_text(json.dumps({"remote": {"state": "off", "why": "fixture off", "who": "t", "utc": "U"}}), encoding="utf-8")
-    p = make(fixture_skill, *target.split())
-    assert p.returncode != 0 and "remote is OFF" in p.stderr and "make ci-on" in p.stderr, p.stdout + p.stderr
 
 
 @pytest.mark.tooling
 def test_make_switch_targets_require_a_reason_and_commit(fixture_skill: Path) -> None:
-    """The REMOTE switch, which survived feature 185; the scope half went with the lock."""
+    """A switch's targets refuse without a reason, and commit their throw."""
     root = fixture_skill  # the project is the repository root (feature 329)
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
     subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
-    assert make(fixture_skill, "ci-off").returncode != 0  # no REASON
-    p = make(fixture_skill, "ci-off", "REASON=no AWS")
-    assert p.returncode == 0 and _remote(fixture_skill) == "off"
+    assert make(fixture_skill, "claims-clean").returncode != 0  # no REASON
+    p = make(fixture_skill, "claims-clean", "REASON=all closed")
+    assert p.returncode == 0 and _claims(fixture_skill) == "clean"
     log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
-    assert "remote off - no AWS" in log
+    assert "claims clean - all closed" in log
     p = make(fixture_skill, "switches")
-    assert p.returncode == 0 and "no AWS" in p.stdout
-    p = make(fixture_skill, "ci-on", "REASON=back on")
-    assert p.returncode == 0 and _remote(fixture_skill) != "off"
+    assert p.returncode == 0 and "all closed" in p.stdout
+    p = make(fixture_skill, "claims-report-only", "REASON=back on")
+    assert p.returncode == 0 and _claims(fixture_skill) == "report"
     log = subprocess.run(["git", "-C", str(root), "log", "--oneline"], capture_output=True, text=True).stdout
     assert log.count("\n") == 2  # two throws/releases, two commits
 

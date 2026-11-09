@@ -11,7 +11,7 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/state.rs` | the verification state, `.git/verification-state.json`, and the tooling hash (T72) |
 | `src/hashing.rs` | hashing the repository's files by what runs; what decides how the gate's tests run (`config-hash`) (T72) |
 | `src/exempt.rs` | the coverage-exemption record, `dev/coverage-exempt.json` (T72) |
-| `src/ci.rs`, `src/ci/` | the remote path: the switches, the conditions on a paid run, the dispatcher and its AWS boundary (T064) |
+| `src/ci.rs`, `src/ci/` | the route and a gated push's conditions, the switches, the push's credential (T064, T73) |
 | `src/checks.rs`, `src/checks/` | the text checks and the spec lint: `l7r-gate check <name>` (T065, T066) |
 | `src/plan.rs`, `src/plan/` | the plan gates: sections and blocks, what a plan owes, recording a verdict, the review bundle, the approach gate, the engine-edit question (T066); `scripts/plan_door.py` is the Python callers' door |
 | `src/lock.rs` | the host-wide gate lock and whether a make runs in this tree: `lock`, `own-make` (T067) |

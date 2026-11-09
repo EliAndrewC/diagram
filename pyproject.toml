@@ -65,13 +65,10 @@ quote-style = "preserve"
 # webapp's `l7r.app` and this engine's `l7r.diagram.*` share one parent package. `search-path = ["."]`
 # says where module paths begin, so each file has exactly one identity. Do NOT "fix" this by adding
 # `l7r/__init__.py` - that silently hides the webapp's portion (tests/test_namespace_portion.py).
-# boto3 ships no type information and is absent from the BUILD image on purpose (the build talks to
-# S3 through the AWS CLI), hence `replace-imports-with-any` below.
 [tool.pyrefly]
 python-version = "3.14"
 search-path = ["."]                      # `l7r` is a namespace portion: module roots start here
 project-includes = ["l7r/diagram/ci", "l7r/diagram/switches.py", "l7r/diagram/compound.py", "l7r/diagram/compound_model.py", "l7r/diagram/compound_parts.py", "l7r/diagram/tools/pack_audit", "l7r/diagram/tools/why_placed.py", "l7r/diagram/tools/scatter_audit.py", "l7r/diagram/tools/perf_bands.py", "l7r/diagram/tools/perf_review.py", "l7r/diagram/tools/perf_profile.py", "l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]
-replace-imports-with-any = ["boto3", "boto3.*", "botocore", "botocore.*"]
 
 # The mypy-strict rule set, enabled by NAME rather than pyrefly's `strict` preset: that preset also
 # turns on implicit-any-lambda (167 hits) and implicit-any-empty-container (163) which mypy strict

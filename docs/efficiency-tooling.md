@@ -115,7 +115,7 @@ Different in kind: each asks for a DECISION, which no substitution can supply.
 | **`make maps` picks its own scope** | after a failed run, the reference map alone; after a clean one, the whole tier. There is deliberately no second command |
 | **`FULL=1` prompts and defaults to CANCEL** | a written justification, logged with the date, target and commit |
 | **`QUICK_BUDGET` (60 s)** | `quick` fails if it exceeds its budget and points at `make durations` |
-| **the switches** (`ci-off` / `ci-on`) | a `REASON=`, committed |
+| **the switches** (`claims-*` / `port-*`) | a `REASON=`, committed |
 | **the CodeBuild dispatcher** | five conditions before any paid run: an engine delta, a complete feature, a green local check, no existing verified record, and the spend breaker up |
 
 `research.md` R6 of feature 164 enumerates all ten and finds exactly one convertible - the number

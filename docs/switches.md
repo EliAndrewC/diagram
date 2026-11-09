@@ -1,46 +1,35 @@
-# The iteration switch - remote off (feature 132; the scope axis retired in feature 185)
+# The iteration switches (feature 132; the scope axis retired in feature 185, the remote axis in feature 449)
 
-**Load this when:** a target refused with "remote is OFF", or you are about to throw or release the
-switch.
+**Load this when:** you are about to throw or release a switch.
 
-## What it is
+## What they are
 
-ONE committed, repository-wide switch in one tracked file, `dev/switches.json`:
+Committed, repository-wide switches in one tracked file, `dev/switches.json`:
 
 | axis | states | what it governs | throw / release |
 |---|---|---|---|
-| **remote** | `on` (default) / `off` | whether anything is dispatched to AWS CodeBuild, and whether the gated push may spend money | `make ci-off REASON=...` / `make ci-on REASON=...` |
+| **claims** | `report` (default) / `clean` | whether an open claims finding refuses a landing | `make claims-clean REASON=...` / `make claims-report-only REASON=...` |
+| **port** | `rust-only` (default) / `integrated` | whether the Python stages run beside the Rust ones | `make port-integrated REASON=...` / `make port-rust-only REASON=...` |
 
-`make switches` prints it, with the reason, who threw it and when. The history of throws and releases
-is the file's git log - each target commits its own change.
+`make switches` prints them, with the reason, who threw each and when. The history is the file's git log - each target commits its
+own change.
 
-**A REASON IS REQUIRED and there is no override.** No flag, no environment variable, no `--force`.
-The switch is a tracked file, so throwing it is a diff someone reads, and releasing it is another.
-That is the whole design: *"a reason someone will READ is a decision you have to defend."*
+**A REASON IS REQUIRED and there is no override.** A switch is a tracked file, so throwing it is a diff someone reads: *"a reason
+someone will READ is a decision you have to defend."*
 
-**A MALFORMED FILE FAILS CLOSED** - remote off, with `error` set and `MALFORMED` in the description.
-A corrupt switch must not silently permit spending.
+**A MALFORMED FILE FAILS CLOSED** - claims at `clean`, the port at its last committed state, with `MALFORMED` in the description.
 
-**AN UNKNOWN KEY IS IGNORED, and that is load-bearing.** `read()` names only `remote`, through
-`data.get`, with no key iteration and no schema validation. A clone checked out from before feature
-185 still carries a `scope` block; it is simply not looked at. Making this strict would send such a
-file down `_closed()`, and failing closed means **remote OFF in every clone that still has one**.
-`tests/test_switches.py::test_an_unknown_key_is_IGNORED_not_failed_closed` pins it.
-`_closed()` has exactly three entrances: a JSON parse failure, a non-dict top level, or `_axis`
-rejecting a NAMED key. Never an unrecognized one.
+**AN UNKNOWN KEY IS IGNORED, and that is load-bearing:** a clone from before an axis was retired still carries its block, and it is
+simply not looked at.
 
 ## Do not reinstate the scope axis, and keep `idle_context`
 
-The second axis, **scope**, was retired by feature 185 (GM 2026-09-05: *"please go ahead and retire the concept of the
-scope lock and the scope unlock, i.e. retiring both the concept and the specific make targets"*), with its make targets,
-the `SWEEP_OK` macro, `switches.locked_out` and `regen.py`'s one-map-per-invocation refusal. Do not bring back a piece of
-it in isolation: the condition it served (map-rolling tests deferred out of a slow gate) ended with feature 174.
+The **scope** axis was retired by feature 185 (GM 2026-09-05: *"please go ahead and retire the concept of the scope lock and the
+scope unlock, i.e. retiring both the concept and the specific make targets"*). Do not bring back a piece of it in isolation.
 
-**`switches.idle_context` STAYS**, though it looks like part of the lock. The Makefile's `DONE_NAME` picks `idle-done`
-over `done` from it, and `ci/state.py`'s `GREEN_TARGETS` deliberately omits `idle-done`: that omission is the whole
-mechanism by which an unattended idle gate **neither grants nor revokes a push**. Removing the seam would make a
-detached timer write a record the push honors, and nothing would catch it - the code still runs, only the recorded NAME
-changes, so coverage stays full and every test passes.
+**`switches.idle_context` STAYS**, though it looks like part of the lock. The Makefile's `DONE_NAME` picks `idle-done` over `done` from
+it, and the green targets deliberately omit `idle-done`: that omission is how an unattended idle gate **neither grants nor revokes a
+push**.
 
-`mapcheck`'s own `--scope auto|reference|all` and the `SCOPE=` make variable also stay: they are its breadth argument,
-not the retired axis.
+`mapcheck`'s own `--scope auto|reference|all` and the `SCOPE=` make variable also stay: they are its breadth argument, not the retired
+axis.

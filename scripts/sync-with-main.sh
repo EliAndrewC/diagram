@@ -399,14 +399,14 @@ push_cmd() {
     route=$( { cd "$ROOT" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
     # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
     # could be sitting in the delta; falling through to the free push would land it ungated.
-    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand to see why." ;; esac
+    case "$route" in DIRECT|GATED) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand to see why." ;; esac
   else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
   # the record gate and the claims gate are shell scripts with their own refusals, not Python checks (features 311, 316), and
   # the landing cohort's gate on the gated route (feature 386: a DIRECT delta changes no map). SIDE BY SIDE, EVERY REFUSAL
   # REPORTED (feature 430 T04, D4; the GM 2026-10-26, item 4): one after another they cost their sum - 5.7 s, 2.3 s and 8.8 s
   # measured 2026-10-26 (each timed alone, `specs/430-faster-landings/request.md`) - and the first refusal hid the rest
   local gates=(entry-gate claims-gate) gdir g failed=()
-  { [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; } && gates+=(cohort-gate)
+  [ "$route" = GATED ] && gates+=(cohort-gate)
   gdir=$(mktemp -d)
   for g in "${gates[@]}"; do ( "$ROOT/scripts/gates/$g.sh" > "$gdir/$g.log" 2>&1; echo $? > "$gdir/$g.rc" ) & done
   wait
@@ -434,33 +434,15 @@ push_cmd() {
     || die "make work-budget-review refused (or failed to run) - an accepted stage's work above grew past its figure; only the GM's words through make budget-change raise it (feature 443)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
-  # our own commits - today's locked pull+push, free. GATED: engine code - `make ci-merge` runs the
-  # dispatch conditions, and on DISPATCH a CodeBuild build merges the latest main into the work,
-  # runs the gate and fast-forward-pushes the result to GitHub main itself; the clone then
-  # fast-forwards to what landed. On SKIP-VERIFIED (a build already verified this exact tree) the
-  # clone pushes directly. There is no local override of the gated route (FR-018): a gated delta
-  # that cannot be dispatched stays in the clone. CI_ROUTE / CI_MERGE are the test seams.
-  # THREE ROUTES since feature 132: GATED-LOCAL is the gated route with remote OFF (dev/switches.json)
-  # - `make ci-merge` then dispatches nothing and answers SKIP-VERIFIED only when a green local
-  # `make done` vouches for the merged engine content; otherwise the work stays in the clone.
-  # (the route itself is decided above, before the gates - feature 430 T04)
-  case "$route" in
-    GATED-LOCAL) echo "sync-with-main: route GATED (local - remote off): engine code in our delta, nothing dispatches; a green local make done on the merged engine content pushes, otherwise the work stays here" ;;
-    *)           echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)" ;;
-  esac
-  if [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; then
-    # GUARD_EDIT_OK: feature 386 - THE LANDING COHORT: engine work lands with 48 seeds rolled on its engine, none regressed
-    # against main, and a fresh block whose rate is printed (the GM 2026-10-17). Its gate runs with the others above, on a
-    # gated route only (feature 430 T04): a DIRECT delta changes no map.
-    if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
-      || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
-    case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in
-      SKIP-VERIFIED) flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main' ;;
-      *)             flock "$LOCK" git pull -q --ff-only origin main || die "the build landed the merge on GitHub main but this clone cannot fast-forward to it - inspect 'git log origin/main..HEAD'" ;;
-    esac
-  else
-    flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main'
+  # our own commits - a locked pull+push, free. GATED: engine code - it lands only when `make gated-check`'s conditions hold, a green
+  # local `make done` of the merged engine content above all (FR-001a; the remote path that also ran here is deleted). There is no
+  # override of the gated route. CI_ROUTE / CI_MERGE are the test seams.
+  echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, a green local make done; otherwise DIRECT)"
+  if [ "$route" = GATED ]; then
+    if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT" && make --no-print-directory gated-check ); fi \
+      || die "gated route: nothing landed (the conditions refused - see above; the work stays in this clone)"
   fi
+  flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main'
   mirror_refresh
   theirs=$(git diff --name-only "$before"..HEAD | sort -u)
   date > "$(git -C "$ROOT" rev-parse --absolute-git-dir)/sync-with-main.stamp"  # post-push the clone is at main's tip = synced by definition

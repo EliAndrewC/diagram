@@ -24,7 +24,7 @@ in_container = pytest.mark.skipif(not (os.path.exists("/run/.containerenv") or o
 
 
 def _key() -> str:
-    parts = [SCRIPT, SKILL / "requirements.txt", SKILL / "requirements-dev.txt", SKILL / "requirements-ci.txt"]
+    parts = [SCRIPT, SKILL / "requirements.txt", SKILL / "requirements-dev.txt"]
     return hashlib.sha256(b"".join(p.read_bytes() for p in parts)).hexdigest()
 
 

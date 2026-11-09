@@ -3,21 +3,7 @@
 use super::super::fixtures::{put, scratch};
 use std::path::PathBuf;
 
-use super::{
-    candidates, estimate_minutes, ini, load_from, load_secrets, rate_of, COMPUTE_TYPE, RATE_PER_MIN,
-};
-
-#[test]
-fn the_rate_is_pinned_so_that_changing_it_is_deliberate() {
-    assert!((RATE_PER_MIN - 0.02).abs() < f64::EPSILON);
-    assert_eq!(COMPUTE_TYPE, "BUILD_GENERAL1_LARGE");
-    assert!((rate_of("BUILD_GENERAL1_2XLARGE") - 0.20).abs() < f64::EPSILON);
-    assert!((rate_of("unknown") - RATE_PER_MIN).abs() < f64::EPSILON);
-    assert!(
-        (estimate_minutes("full") - 8.0).abs() < f64::EPSILON
-            && (estimate_minutes("reference") - 10.0).abs() < f64::EPSILON
-    );
-}
+use super::{candidates, ini, load_from, load_secrets};
 
 #[test]
 fn the_ini_form_is_read_as_configparser_reads_it() {
@@ -41,16 +27,7 @@ fn the_tree_s_file_is_read_with_defaults_and_a_missing_one_names_every_place() {
         "[aws]\naccess_key_id = AK\n[github]\ncodebuild_pat = P\n",
     );
     assert_eq!(super::github_token(&dir).stdout, "P\n");
-    let s = load_from(&place).unwrap();
-    assert_eq!(
-        (
-            s.access_key_id.as_str(),
-            s.github_pat.as_str(),
-            s.region.as_str(),
-            s.log_group.as_str()
-        ),
-        ("AK", "P", "us-east-1", "/aws/codebuild/gm-assistant")
-    );
+    assert_eq!(load_from(&place).unwrap().github_pat, "P");
 }
 
 #[test]
@@ -72,11 +49,11 @@ fn a_clone_finds_the_main_tree_s_file() {
     put(
         &main,
         "development-secrets.ini",
-        "[aws]\nci_bucket = main-bucket\n",
+        "[github]\ncodebuild_pat = main-token\n",
     );
     let clone = main.join(".clones/c");
     std::fs::create_dir_all(&clone).unwrap();
-    assert_eq!(load_secrets(&clone).unwrap().ci_bucket, "main-bucket");
+    assert_eq!(load_secrets(&clone).unwrap().github_pat, "main-token");
 }
 
 #[test]
@@ -90,13 +67,17 @@ fn a_file_with_neither_section_loads_empty_and_the_environment_comes_first_over_
     put(&dir, "s.ini", "# nothing\n");
     let places = [dir.join("s.ini")];
     let s = load_from(&places).unwrap();
-    assert_eq!((s.access_key_id.as_str(), s.github_pat.as_str()), ("", ""));
-    put(&dir, "development-secrets.ini", "[aws]\nci_bucket = tree\n");
-    put(&dir, "first.ini", "[aws]\nci_bucket = env\n");
+    assert_eq!(s.github_pat, "");
+    put(
+        &dir,
+        "development-secrets.ini",
+        "[github]\ncodebuild_pat = tree\n",
+    );
+    put(&dir, "first.ini", "[github]\ncodebuild_pat = env\n");
     assert_eq!(
         load_from(&candidates(&dir, Some(dir.join("first.ini"))))
             .unwrap()
-            .ci_bucket,
+            .github_pat,
         "env"
     );
 }

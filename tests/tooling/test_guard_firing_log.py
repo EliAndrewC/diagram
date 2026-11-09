@@ -464,7 +464,6 @@ _ESCAPES = {
         "command cannot escape a Stop hook - a Stop payload carries no command, so there is nowhere to put one. "
         "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
     ),
-    "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
     "CLAIMS_FILE_OK": ("not-an-escape", "feature 376's claims-file guard has NO escape (its plan review); the token is named only to prove it changes nothing (test-claims-file-hooks.sh)"),
     "REVIEW_ROUNDS_OK": (
         "not-an-escape",

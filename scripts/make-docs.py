@@ -48,7 +48,6 @@ SECTIONS: list[tuple[str, str, str]] = [
     ("maps", "Maps", "Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run."),
     ("diagnostics", "Diagnostics", "Read-only questions about a finished map or a generator's decisions. None of these decides what ships."),
     ("performance", "Performance", "The bookends and the three bands. A run that got slower owes records before the push."),
-    ("remote", "Remote (AWS CodeBuild)", "Everything except `ci-status` costs money. Remote is currently OFF; `make switches` says so."),
     ("static", "Static checks", "What the gate runs before it spends anything on a map roll."),
     ("project", "Project state", "Switches, audits and the records that make the tooling's own behavior reviewable."),
 ]

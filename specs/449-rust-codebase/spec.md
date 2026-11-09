@@ -131,8 +131,8 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   piece it tests. A SECOND CENSUS counts the Python run inline in the Makefile and the shell scripts - `git grep -nE "python3
   (-c|-[[:space:]]|-$|<<)" -- Makefile '*.mk' '*.sh'` (300 sites in 93 files on 2026-11-07, `m:inline-python-census`) - and every site
   it returns is in a phase: `scripts/hooks/` and `tests/hooks/` - phase 1; the Makefile's gate recipes, `scripts/gates/*.sh`,
-  `scripts/sync-with-main.sh`, `scripts/land-tooling.sh` and `buildspec/run.sh` - phase 2; the Makefile's other recipes,
-  `.specify/scripts/bash/` and the shell scripts under `specs/` - phase 3; `scripts/container/setup-dev-env.sh` and `Dockerfile.ci`, their Python checks and the Python
+  `scripts/sync-with-main.sh` and `scripts/land-tooling.sh` - phase 2; the Makefile's other recipes,
+  `.specify/scripts/bash/` and the shell scripts under `specs/` - phase 3; `scripts/container/setup-dev-env.sh`, its Python checks and the Python
   they install, with every `requirements*.txt` and its `.in` source (four pairs on 2026-11-07, `m:lockfiles`: the runtime, dev, CI and semantic
   lockfiles) and
   `pyproject.toml`'s Python tables - phase 4,
@@ -158,8 +158,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
 - **FR-008**: A tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command.
 - **FR-001a** (the GM, 2026-11-09: "Let's delete rather than port our tooling which runs our tests remotely on AWS."): the remote test path - `buildspec/`, `Dockerfile.ci`, the `ci-*` make targets, the `remote` switch and the dispatcher and AWS adapter under `rust/gate/src/ci/` - MUST be deleted, not ported; FR-001's phases and censuses no longer hold those files. What the push still needs of it stays, on the path it already took with the remote off: the route (DIRECT or GATED) and a gated push's local conditions.
 - **FR-009**: The JavaScript and CSS of the interactive page and the research record's HTML fragments are not Python and are out of
-  this feature's scope; the two containers - the dev container's `scripts/container/setup-dev-env.sh` and the CI image's
-  `Dockerfile.ci` - are in it only for the Python they run and install (FR-001, phase 4). The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
+  this feature's scope; the dev container's `scripts/container/setup-dev-env.sh` is in it only for the Python they run and install (FR-001, phase 4). The guards' shell wrappers (`scripts/hooks/*-hooks.sh`) are
   in it: Story 1 replaces them. The GM's own hooks in `~/.claude/` are not this repository's and are out of it.
 - **FR-010**: Each phase MUST end with its timings measured against this spec's figures and recorded in `dev/`.
 
@@ -177,7 +176,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   runs no test.
 - **SC-003** (FR-004, FR-006, FR-008, FR-010): The test suites, every tree together, run in under a tenth of today's summed time (`m:suite-cpu`).
 - **SC-004** (FR-002, FR-003): Every guard suite case and every tool's recorded output gives the same verdict after its piece is ported.
-- **SC-005** (FR-001, FR-005, FR-009): When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
+- **SC-005** (FR-001, FR-001a, FR-005, FR-009): When the feature closes, both censuses (FR-001) return nothing, `m:recorded-python-commands`' command returns none, and
   `make done` and `make figures` run with no Python interpreter. Its one entry here, this feature's own `m:python-start` (the before
   figure of the interpreter the close removes), is retired in the closing commit - git history keeps it - the only exemption.
 

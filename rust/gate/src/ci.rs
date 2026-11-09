@@ -1,19 +1,12 @@
-//! The remote path (feature 449 T064, from `l7r/diagram/ci/` and `l7r/diagram/switches.py`): whether a change may run on `CodeBuild` and what that costs. Every remote run costs money, so what must never run comes first.
+//! What a push asks of the gate: the route, a gated push's local conditions, and the iteration switches (feature 449 T064, T73). The
+//! remote path that was here was deleted, not ported (FR-001a; the GM, 2026-11-09: "Let's delete rather than port our tooling which
+//! runs our tests remotely on AWS."); its history is in git.
 
-pub(crate) mod aws;
-pub(crate) mod cachepolicy;
 pub(crate) mod config;
-pub(crate) mod decision;
-pub(crate) mod dispatch;
-pub(crate) mod door;
 pub(crate) mod features;
-pub(crate) mod imagecheck;
-pub(crate) mod main;
-pub(crate) mod runlog;
+pub(crate) mod gated;
 pub(crate) mod switches;
 pub(crate) mod via_make;
 
 #[cfg(test)]
 mod fixtures;
-#[cfg(test)]
-mod real_tree;

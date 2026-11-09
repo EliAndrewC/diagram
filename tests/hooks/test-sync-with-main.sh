@@ -124,33 +124,29 @@ expect_out "nothing landed"
 }
 
 case_07() {  # 7 s measured 2026-10-11
-echo "6. GATED route, dispatched: the build lands the merge on GitHub main; the clone fast-forwards; mirror follows"
+echo "6. GATED route, the conditions hold: the clone pushes; mirror follows"
 D=$(topology f)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 3' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
-# the "build": merges main into the mailbox commit and pushes the result to GitHub main
-BUILD="git -C $D/main/.clones/c push -q $D/github.git HEAD:main && echo DISPATCHED > $D/main/.clones/c/.git/ci-verdict"
-OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route dispatched" 0 $?
-[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone and GitHub main differ after the gated push"; FAIL=$((FAIL+1)); }
+OUT=$(CI_ROUTE=GATED CI_MERGE="true" syncmain "$D" push); check "gated route lands when its conditions hold" 0 $?
+[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  clone and GitHub main differ after the gated landing"; FAIL=$((FAIL+1)); }
 [ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not follow the gated landing"; FAIL=$((FAIL+1)); }
 }
 
-case_08() {  # 6 s measured 2026-10-11
-echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
+case_08() {
+echo "7. The route is named on the way out, and a refused gated push keeps the work in the clone"
 D=$(topology g)
 ( cd "$D/main/.clones/c" && echo 'def a(): return 4' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
-OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "skip-verified pushes directly" 0 $?
-[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
+OUT=$(CI_ROUTE=GATED CI_MERGE="false" syncmain "$D" push); check "a refused gated push fails" 1 $?
+expect_out "route GATED"
+[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated push landed"; FAIL=$((FAIL+1)); }
 }
 
-case_09() {  # 11 s measured 2026-10-11
-echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
+case_09() {
+echo "7b. An unknown route word is not a free push"
 D=$(topology gl)
-( cd "$D/main/.clones/c" && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
-OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="false" syncmain "$D" push); check "gated-local refused by ci-merge -> push fails" 1 $?
-expect_out "route GATED (local - remote off)"
-[ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
-OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "gated-local skip-verified pushes directly" 0 $?
-[ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  gated-local skip-verified did not land"; FAIL=$((FAIL+1)); }
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\n' > Makefile && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"; start "$D" T02
+OUT=$(syncmain "$D" push); check "an unknown route refuses the push" 1 $?
+expect_out "could not decide the route"
 }
 
 case_10() {  # 8 s measured 2026-10-11
@@ -546,10 +542,10 @@ OUT=$( cd "$D/main/.clones/c-tooling" && CI_ROUTE=DIRECT CI_MERGE="false" CLONE_
 }
 
 case_27() {  # 6 s
-echo "W2. THE LANDING COHORT (feature 386): an engine tree with no cohort record is refused on the GATED route, before ci-merge; COHORT_OK lands it"
+echo "W2. THE LANDING COHORT (feature 386): an engine tree with no cohort record is refused on the GATED route, before gated-check; COHORT_OK lands it"
 D=$(topology lc)
-# a real-shaped tree (a Makefile: the seams are off), whose route is GATED-LOCAL and whose ci-merge would vouch for it
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\nci-merge:\n\t@echo SKIP-VERIFIED > .git/ci-verdict\ncohort-landing:\n\t@true\n' > Makefile \
+# a real-shaped tree (a Makefile: the seams are off), whose route is GATED and whose gated-check would pass
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
   && echo 'def a(): return 7' > pool/x/a.py && mkdir -p dev && printf '{"port": {"state": "integrated"}}\n' > dev/switches.json \
   && git add -A && git commit -qm engine ); stamp_hooks "$D"
 # (the port switch at integrated: feature 444 FR-023's rust-only, the shipped state while any stage is Python, lands an engine
@@ -563,7 +559,7 @@ OUT=$(COHORT_OK="a fixture with nothing rolled" syncmain "$D" push); check "COHO
 case_27b() {  # 6 s
 echo "W3. THE PORT SWITCH (feature 444 FR-023): at rust-only an engine tree with no landing cohort lands on the Rust stage gate alone"
 D=$(topology lr)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED-LOCAL\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\nci-merge:\n\t@echo SKIP-VERIFIED > .git/ci-verdict\ncohort-landing:\n\t@true\n' > Makefile \
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@echo GATED\nperf-review:\n\t@true\nwork-budget-review:\n\t@true\ngated-check:\n\t@true\ncohort-landing:\n\t@true\n' > Makefile \
   && echo 'def a(): return 7' > pool/x/a.py && mkdir -p dev && printf '{"port": {"state": "rust-only"}}\n' > dev/switches.json \
   && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(syncmain "$D" push); check "STAYS QUIET: rust-only, no landing cohort -> the gated push lands" 0 $?

@@ -28,7 +28,7 @@ def _repo(tmp_path: pathlib.Path) -> pathlib.Path:
 
 
 def _run(d: pathlib.Path, result: str = "green", pointer: str = "", **env: str) -> subprocess.CompletedProcess[str]:
-    e = {k: v for k, v in os.environ.items() if k != "CODEBUILD_BUILD_ID"} | env
+    e = dict(os.environ) | env
     return subprocess.run(["bash", str(SCRIPT), result, *([pointer] if pointer else [])], cwd=d, capture_output=True, text=True, env=e, check=False)
 
 
@@ -78,7 +78,6 @@ def test_nothing_to_commit_and_a_build_and_no_repository_do_nothing(tmp_path: pa
     rec.parent.mkdir(parents=True)
     rec.write_text("{}\n", encoding="utf-8")
     _point(d, rec)
-    assert _run(d, CODEBUILD_BUILD_ID="b-1").returncode == 0 and _git(d, "rev-parse", "HEAD") == head, "a build's checkout is not the session's"
     _point(d, d / "gone.json")
     assert _run(d).returncode == 0 and _git(d, "rev-parse", "HEAD") == head, "a pointer to nothing commits nothing"
     outside = tmp_path / "plain"

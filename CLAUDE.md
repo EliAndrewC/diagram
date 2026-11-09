@@ -161,8 +161,7 @@ The full spec and every failure mode: `docs/session-clones.md`.
 - Stop-work procedure, every time you stop: commit in the clone, then `scripts/sync-with-main.sh
   done` from inside it. The route is chosen from the delta, never by you: no engine code -> DIRECT (a
   locked fast-forward push); engine code (`l7r/**/*.py`, `pool/*.gen.py|*.json`; a comment-only or
-  formatting edit does not count) -> GATED on a green local `make done`, with a CodeBuild build only
-  when `remote` is on and main moved on engine paths. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
+  formatting edit does not count) -> GATED on a green local `make done`. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
   cheap refusal first and together, then `make done` and `make cohort-landing` only where needed (side by side, 405 T48) with the claims round beside them, the
   tick and ONE push carrying both (405 T50, T51).
   Only the task being worked (`make task-start`) holds a landing; a task nobody has started holds nothing. A feature's TOOLING
@@ -171,8 +170,6 @@ The full spec and every failure mode: `docs/session-clones.md`.
   every session's hooks (feature 379; an arbiter's fix is not done until it has).
 - Never rewrite history (no rebase, squash, amend or force push); never commit or push against
   `/host-l7r-repo`. `git -C <path>` for every git call, one tree per command, no bare `cd`.
-- A paid prompt (`make ci-image`, any `FULL=1` dispatch) may be answered by the session; the logged
-  reason says so and quotes the GM's 2026-08-25 authorization.
 
 ## What is enforced
 

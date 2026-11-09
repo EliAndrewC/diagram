@@ -16,7 +16,6 @@
 set -uo pipefail
 result="${1:-recorded}"
 pointer="${2:-last-run-record}"
-[ -n "${CODEBUILD_BUILD_ID:-}" ] && exit 0
 gitdir=$(git rev-parse --absolute-git-dir 2>/dev/null) || exit 0
 [ -f "$gitdir/$pointer" ] || exit 0
 path=$(cat "$gitdir/$pointer")

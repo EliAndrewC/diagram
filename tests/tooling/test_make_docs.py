@@ -90,7 +90,7 @@ def test_an_undocumented_target_is_REPORTED_not_silently_dropped(tmp_path: Path)
 
 def test_the_page_groups_and_names_its_source() -> None:
     page = PAGE.read_text(encoding="utf-8")
-    for section in ("Tests", "Maps", "Diagnostics", "Performance", "Remote", "Static checks", "Project state"):
+    for section in ("Tests", "Maps", "Diagnostics", "Performance", "Static checks", "Project state"):
         assert f">{section}" in page or f">{section}<" in page, f"missing section: {section}"
     assert "DO NOT EDIT" in page and "make-docs.py" in page, "the page must say what generates it"
     # `make reference` was here until the GM retired the public rung on 2026-09-06; `static` replaces

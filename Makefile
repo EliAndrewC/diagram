@@ -4,11 +4,11 @@
 # A .PHONY name with no rule still exits 0: retire a target's .PHONY entry with its rule.
 
 .PHONY: modal-bundle modal-prepass done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim speckit-todo audit guard-edit guard-log perf-gate hooks-test explain citations fragment-move \
-	 switches ci-off ci-on _switch \
+	 switches _switch \
 	 map cohort cohort-landing hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
 	 notes-census glossary page-lit picture-diff \
-	 ci-status ci-check ci-merge ci-measure ci-image commit-permitted \
+	 ci-status gated-check \
 	 perf-explain perf-confirm perf-audit perf-signoff perf-review perf-profile
 
 # ---- performance: a bookend pair over band 1 is a flag mentioned at landing, never a refusal ----
@@ -105,13 +105,9 @@ RUN = @python3 -m l7r.diagram
 
 # ---- iteration switches (dev/switches.json) ----
 SWITCH = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" switches
-REMOTE_OK = @"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci remote-ok "$@"
 
-switches:       ## [project] the iteration switch: remote on|off, with reason, who and when (feature 132)
+switches:       ## [project] the iteration switches: claims and port, with reason, who and when (feature 132)
 	@$(SWITCH) show
-ci-off:         ## [remote] REMOTE OFF - nothing dispatches to CodeBuild; the gated push lands on a green local make done   REASON="..."
-##  REASON=<text>  why remote is being switched off - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=off MSG="remote off" REASON="$(REASON)"
 claims-report-only: ## [project] CLAIMS AT REPORT - a claims finding refuses no landing and files no task; it is checked and listed by make claims-report (feature 445; the shipped state)   REASON="..."
 ##  REASON=<text>  why claims go to report - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=claims STATE=report MSG="claims at report" REASON="$(REASON)"
@@ -124,9 +120,6 @@ port-integrated: ## [project] PORT INTEGRATED - make done rolls the map-rolling 
 port-rust-only: ## [project] PORT RUST-ONLY - the default while any stage is Python: no landing waits on the Python stages after the Rust front, make done rolls no map, make land lands on the Rust stage gate alone (feature 444 FR-023)   REASON="..."
 ##  REASON=<text>  why the port goes rust-only - recorded with who and when
 	@$(MAKE) --no-print-directory _switch AXIS=port STATE=rust-only MSG="port rust-only" REASON="$(REASON)"
-ci-on:          ## [remote] REMOTE ON - the default; the gated route may dispatch again   REASON="..."
-##  REASON=<text>  why remote is being switched back on - recorded with who and when
-	@$(MAKE) --no-print-directory _switch AXIS=remote STATE=on MSG="remote on" REASON="$(REASON)"
 _switch:
 	@[ -n "$(REASON)" ] || { printf '\n\033[1mREFUSED: a reason is required\033[0m - a reason someone will READ is a decision you have to defend.\n  make <target> REASON="..."\n\n'; exit 1; }
 	@$(SWITCH) set $(AXIS) $(STATE) --why "$(REASON)"
@@ -364,8 +357,7 @@ guard-edit:     ## [project] permit edits to one guard file for an hour, the rea
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
-audit:          ## [project] how the gate has actually been used - every run, every bypass, and remote spend
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci remote-spend
+audit:          ## [project] how the gate has actually been used - every run and every bypass
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
@@ -422,54 +414,17 @@ help:           ## [project] list every target with its one-line purpose
 	 printf '\nCheapest first: quick | reference | done (NOT the quick one) | done FULL=1'; \
 	 [ -n "$$cost" ] && printf '   -   `make done` median %s s over its recent recorded runs (`make audit`)' "$$cost"; \
 	 printf '\n'
-	@printf 'Remote (paid, CodeBuild): ci-status (free) | ci-check [FULL=1|TARGET=op] | ci-merge (the push) | ci-image - see dev/loop.md\n\n'
 
-# ---- CodeBuild: every remote run is paid ----
-ci-status:      ## [remote] free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
+# ---- the push ----
+ci-status:      ## [project] the delta, the route and a gated push's conditions   ROUTE=1 -> just DIRECT|GATED
 ##  ROUTE=1  print just DIRECT|GATED instead of the whole condition table
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci status $(if $(ROUTE),--route,)
 engine-key:      ## [project] the content hash the gate and the push key on   REF=<commit>
 ##  REF=<commit>  which commit to key (default: HEAD)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" delta key $(or $(REF),HEAD)
 
-ci-check:       ## [remote] run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
-##  FULL=1                full scope instead of reference; PROMPTS, and cancels by default
-##  TARGET=<make target>  which target the build runs - e.g. `cohort` (default: the soak suite)
-##  NO_GO=1               prove the self-abort path: start the build and never send the go signal
-	$(REMOTE_OK)
-	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
-
-ci-merge:       ## [remote] the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
-##  FULL=1  full scope; PROMPTS, and cancels by default
-	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci merge $(if $(FULL),--full,)
-
-commit-permitted: ## [project] commit the most recent bypass-log entry, which is how a paid FULL run is authorized
-	@f=$$(find dev/bypass-log -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
-	git add dev/bypass-log && git commit -q -m "chore: authorize FULL sweep - $$why" && echo "committed $$f ($$why)"
-
-ci-measure:     ## [remote] MEASURE what the remote gate costs (PAID, prompts)   FULL=1 | COMPUTE=BUILD_GENERAL1_LARGE
-##  FULL=1                    measure the full-scope pair as well as reference
-##  COMPUTE=<codebuild type>  which instance size to measure on - e.g. `BUILD_GENERAL1_LARGE`
-	$(REMOTE_OK)
-	@if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-measure is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-measure with no terminal"; exit 1; fi; \
-	printf '\n\033[1mAbout to MEASURE the remote gate on AWS\033[0m (a build, billed by the minute). This buys a\n'; \
-	printf 'number and nothing else - no verified record, no push. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
-	read why || true; \
-	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-measure backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
-	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci measure $(if $(FULL),--full,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
-
-ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
-	$(REMOTE_OK)
-	@if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: ci-image is a paid operation and its prompt needs a terminal.\033[0m Run it in the foreground.\n\n'; $(LOGBYPASS) refused "ci-image with no terminal"; exit 1; fi; \
-	printf '\n\033[1mAbout to rebuild the CodeBuild image on AWS\033[0m (~$$1, a few minutes). Needed only when\n'; \
-	printf 'setup-dev-env.sh, Dockerfile.ci or a lockfile changed. Press Enter to CANCEL.\n\nReason to continue (Enter cancels): '; \
-	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: this prompt has no terminal to answer it\033[0m - a backgrounded or piped run cannot be asked; run it in the foreground, or use the target that does not prompt.\n\n'; exit 1; fi; read why || true; \
-	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-image backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
-	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize image rebuild - $$why" || true
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci image
+gated-check:    ## [project] {internal} a gated push may land: its conditions, refused unless each holds. Called by sync-with-main.sh
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci gated-check
 
 LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
@@ -494,7 +449,7 @@ LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/h
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
 
-HOOKS_JOBS ?= $(if $(CODEBUILD_BUILD_ID),$(CPU_COUNT),$(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8))
+HOOKS_JOBS ?= $(shell [ "$(CPU_COUNT)" -lt 8 ] && echo "$(CPU_COUNT)" || echo 8)
 
 QUICK_BUDGET = 60
 
@@ -1067,8 +1022,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@$(STATE) green-local quick
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
-	@if [ -n "$$CODEBUILD_BUILD_ID" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci door && exit 0; printf '\n\033[1mREFUSED: the FULL scope in a build needs the committed answer to the local prompt.\033[0m\n\n'; exit 1; fi; \
-	why="$(REF_WHY)"; \
+	@why="$(REF_WHY)"; \
 	if [ -n "$$why" ] && [ ! -t 0 ]; then \
 	  printf "\n\033[1mREFUSED: a FULL run with REF_WHY set, with nothing attached to answer for it.\033[0m\n\n"; \
 	  printf "The prompt below exists because its default answer is NO. Passing REF_WHY on the\n"; \
@@ -1179,7 +1133,7 @@ CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 
 # loadgroup, not worksteal: worksteal ignores xdist_group, and the browser package's modules must share one Chromium.
 DIST ?= loadgroup
-XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6))
+XDIST_WORKERS = $(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6)
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
 TESTMON = $(if $(ALL),--no-testmon,--testmon-forceselect)
 QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=tests/gate --ignore=tests/full --ignore=tests/tooling

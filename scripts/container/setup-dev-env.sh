@@ -21,10 +21,6 @@ CHECK_ONLY=0
 [ "${1:-}" = "--check" ] && CHECK_ONLY=1
 ENSURE=0
 [ "${1:-}" = "--ensure" ] && ENSURE=1
-# The CodeBuild image (Dockerfile.ci, feature 130) installs the same apt set and the same lockfiles
-# by its own RUN lines - through a uv venv, because system pip on ubuntu 26.04 refuses to replace
-# Debian-packaged dependencies (build b3617f0d). An `--image` mode of this script was tried first
-# and retired for that reason; keep the two lists in step by hand when either changes.
 SUDO=sudo; [ "$(id -u)" = 0 ] && SUDO=""
 
 in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
@@ -42,7 +38,7 @@ STAMP_DIR="${SETUP_STAMP_DIR:-$HOME/.cache}"
 STAMP="$STAMP_DIR/l7r-dev-env.stamp"
 SKILL_DIR="$REPO"
 env_key() {
-    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" "$SKILL_DIR/requirements-ci.txt" 2>/dev/null | sha256sum | cut -d' ' -f1
+    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" 2>/dev/null | sha256sum | cut -d' ' -f1
 }
 if [ "$ENSURE" = 1 ]; then
     in_container || exit 0
@@ -93,7 +89,6 @@ check_all() {
     # the profile), and the DejaVu ITALIC face matters because resvg does not synthesize oblique:
     # without it every italic map label silently renders upright.
     _t "resvg (diagram PNG renderer)"            "command -v resvg"
-    _t "aws (the CLI behind the Rust gate's dispatcher, feature 449 T064)" "command -v aws"
     # pdftotext (poppler): the source archive reads a PDF's text with it (scripts/record/archive.py); six tooling tests
     # failed on a fresh container without it (feature 328, 2026-10-07).
     _t "pdftotext (poppler, the source archive)" "command -v pdftotext"
@@ -107,8 +102,6 @@ check_all() {
     # dev deps - the quality gate itself
     _t "python: pytest + cov + xdist + testmon"  "python3 -c 'import pytest, pytest_cov, xdist, testmon'"
     _t "python: ruff pyrefly"                    "python3 -m ruff --version; pyrefly --version"
-    # feature 130: the CodeBuild dispatcher's AWS boundary (laptop side only)
-    _t "python: boto3 (CodeBuild dispatcher)"    "python3 -c 'import boto3'"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has
     # to be re-established on every fresh container exactly like the apt and pip state.
@@ -131,9 +124,6 @@ fi
 # Passwordless sudo is available in this container precisely so a session can install what it needs
 # without asking. Never work around a missing dependency - install it.
 echo "==> system packages (apt)"
-if ! command -v aws >/dev/null 2>&1; then  # the dispatcher's boundary (feature 449 T064); a remote run refuses naming this script when it is absent
-    curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscli.zip && unzip -qo /tmp/awscli.zip -d /tmp && $SUDO /tmp/aws/install --update >/dev/null && rm -rf /tmp/aws /tmp/awscli.zip
-fi
 if ! command -v resvg >/dev/null 2>&1 || ! command -v pdftotext >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
     $SUDO apt-get update -qq
     $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra poppler-utils jq
@@ -151,7 +141,6 @@ SKILL="$REPO"
 pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
-pip install --quiet --break-system-packages -r "$SKILL/requirements-ci.txt"
 # The semantic index's model runtime (feature 447): fastembed and ONNX Runtime. The model itself (BGE-M3's 8-bit build) is
 # fetched once into the mirror's .specify/model-cache/ on the host disk, so a new container reuses it.
 pip install --quiet --break-system-packages -r "$SKILL/requirements-semantic.txt"

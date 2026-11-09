@@ -1,51 +1,10 @@
-//! The constants and the secrets: the only module that knows the AWS account's names (from `ci/config.py`). `RATE_PER_MIN` is mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert` Lambda's environment
-//! variable; change both together. The history of each figure is in the git history of `config.py` and in `dev/ci.md`.
+//! The push's credential, from the secrets file; the only thing the repository still reads from it.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-pub(crate) const RATE_PER_MIN: f64 = 0.02;
-pub(crate) const COMPUTE_TYPE: &str = "BUILD_GENERAL1_LARGE";
-pub(crate) const PROJECT_MERGE: &str = "gm-assistant-merge";
-pub(crate) const PROJECT_CHECK: &str = "gm-assistant-check";
-pub(crate) const GITHUB_REPO: &str = "EliAndrewC/diagram";
-pub(crate) const MAILBOX_PREFIX: &str = "session/";
-/// A parked build aborts itself after this long with no go signal: the most a dead dispatcher can cost (FR-036).
-pub(crate) const PARK_TIMEOUT_S: u32 = 120;
-/// The log is streamed by polling inside one process the session backgrounded (R5).
-pub(crate) const STREAM_POLL_S: u64 = 10;
-
-/// Per-minute rates by compute type (us-east-1 Linux on-demand, 2026-08), for `make ci-check COMPUTE=`.
-pub(crate) const RATES: [(&str, f64); 4] = [
-    ("BUILD_GENERAL1_XLARGE", 0.08),
-    ("BUILD_GENERAL1_2XLARGE", 0.20),
-    ("BUILD_GENERAL1_LARGE", 0.02),
-    ("BUILD_GENERAL1_MEDIUM", 0.01),
-];
-
-pub(crate) fn rate_of(compute: &str) -> f64 {
-    RATES
-        .iter()
-        .find(|(name, _)| *name == compute)
-        .map_or(RATE_PER_MIN, |(_, r)| *r)
-}
-
-/// Estimates printed before a dispatch (FR-014). `reference` is measured; `full` and `operation` are placeholders never calibrated (`dev/run-log/20260904T001453005229-3306563.json`).
-pub(crate) fn estimate_minutes(kind: &str) -> f64 {
-    match kind {
-        "full" => 8.0,
-        _ => 10.0,
-    }
-}
-
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Secrets {
-    pub region: String,
-    pub access_key_id: String,
-    pub secret_access_key: String,
-    pub ci_bucket: String,
-    pub ecr_image: String,
-    pub log_group: String,
     pub github_pat: String,
 }
 
@@ -112,12 +71,6 @@ fn load_from(places: &[PathBuf]) -> Result<Secrets, String> {
             .to_owned()
     };
     Ok(Secrets {
-        region: of("aws", "region", "us-east-1"),
-        access_key_id: of("aws", "access_key_id", ""),
-        secret_access_key: of("aws", "secret_access_key", ""),
-        ci_bucket: of("aws", "ci_bucket", ""),
-        ecr_image: of("aws", "ecr_image", ""),
-        log_group: of("aws", "log_group", "/aws/codebuild/gm-assistant"),
         github_pat: of("github", "codebuild_pat", ""),
     })
 }

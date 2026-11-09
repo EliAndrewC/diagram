@@ -66,7 +66,7 @@ const AREAS: [Area; 4] = [
 ];
 
 /// What `diagram` excludes as declared: a subtree the coverage floor measures is hashed all the same (feature 178).
-const DIAGRAM_EXCLUDED: [&str; 9] = [
+const DIAGRAM_EXCLUDED: [&str; 8] = [
     "tests/",
     "l7r/diagram/ci/",
     "scripts/",
@@ -74,7 +74,6 @@ const DIAGRAM_EXCLUDED: [&str; 9] = [
     ".claude/",
     ".specify/",
     ".clones/",
-    "buildspec/",
     "docs/",
 ];
 

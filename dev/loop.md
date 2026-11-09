@@ -91,37 +91,9 @@ implementation: a VERTEX-only test misses what passes BETWEEN the vertices (a st
 (`PAIR_OK="<reason>"` takes a one-sided case and logs it) - the review dispatched from memory, LAST, once cost a
 17-minute wait at the end of a fix (feature 151).
 
-## The remote runs (CodeBuild): when they are used
+## The push
 
-**The remote can be OFF** (`make ci-off REASON=...`, released by `make ci-on`; [`docs/switches.md`](../docs/switches.md)):
-then nothing here dispatches, `make ci-status` shows `remote-enabled` failing first, and the gated push lands on a
-green local `make done` instead (LOCAL-GATED).
+Engine code in the delta is the GATED route: `sync-with-main.sh done` runs `make gated-check`, and it lands only with a complete
+feature and a green local `make done` of exactly the engine content the merge lands. `make ci-status` prints the route and each
+condition. Everything runs on this machine; the remote test path was deleted (feature 449 FR-001a, the GM 2026-11-09).
 
-**A session does not decide whether to go remote - the conditions do.** `make ci-status` prints them, free, every
-one even after the first fails: the delta has engine code; on a merge, the named spec-kit feature is complete; the
-last recorded verification is a GREEN local target against EXACTLY this code (a red gate or a source edit since
-resets it - run `make quick`); the tree the merge would produce is not already verified by a build; the monthly hard
-stop has not tripped.
-
-**Every remote target runs the same ladder**: lint/format/types locally (fail -> nothing touches AWS) -> the build
-starts and PARKS -> the local reference roll -> red: the parked build is stopped (`run-log` records
-`aborted-local-reference`) | green: the build is released, merges the LATEST GitHub main into the work, runs its
-target, and on green writes `verified/<tree>.json`. The log streams into the command's output and the command exits
-with the build's status - background it and act on the notification.
-
-| target | what it runs remotely | prompts? |
-|---|---|---|
-| `make ci-check` | the soak suite (`TARGET=<op>` for another expensive operation, e.g. `cohort`; its report comes back under `dev/ci-artifacts/<build>/`) | no; `FULL=1` yes |
-| `sync-with-main.sh done` on a GATED delta | `make ci-merge`: the soak suite, then the build fast-forward-pushes the merge to GitHub main | no; `FULL=1` yes |
-| `make ci-measure` | what the remote gate costs, optionally on another `COMPUTE` size | yes |
-| `make ci-image` | docker-builds `Dockerfile.ci` on CodeBuild and pushes it to ECR | **yes** - the GM's |
-
-**A green local `make done` followed by `sync-with-main.sh done` is free** when main has added no engine content
-since your merge base (the local verdict IS the remote one then - GM 2026-08-25); likewise a green `make ci-check` on
-the same engine content (SKIP-VERIFIED). **What stays local, always**: `quick`, `test-file`, `durations`, `maps`, a
-plain `make done`, every read-only diagnostic.
-
-**Cost is visible before and after**: the pre-dispatch printout carries the estimate and the month-to-date; `make
-audit` sums a "Remote spend" block from `dev/run-log/` entries with `where: codebuild` (never from Cost Explorer,
-which costs money to ask). The account-side budgets and the hard stop are described in
-`specs/130-codebuild-merge-gate/spec.md` and are not repo code.

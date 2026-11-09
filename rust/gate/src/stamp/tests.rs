@@ -89,7 +89,6 @@ fn the_exclusions_are_derived_from_the_coverage_config_and_fail_closed() {
             ".claude/",
             ".specify/",
             ".clones/",
-            "buildspec/",
             "docs/"
         ]
     );
