@@ -257,7 +257,7 @@ fn a_byte_hashed_area_is_a_pattern_and_keeps_the_old_answer_on_the_shared_root()
         "l7r/diagram/interactive/classes/not-on-disk.py",
         "l7r/diagram/interactive/assets/x.css",
         "l7r/diagram/interactive/page.py",
-        "research/q.html",
+        concat!("research", "/anything.html"),
     ] {
         assert!(in_raw_area(&dir, path), "{path}");
     }
