@@ -7,7 +7,7 @@ the old future-work directory was retired, open work lives in `specs/` only, and
 THE STATE RULE (plan D1). A feature is CLOSED when its `tasks.md` holds at least one task and no open one, or when
 its spec's `**Status**:` value begins with one of `CLOSING`. Otherwise it is OPEN: FILED (no tasks yet), PLANNED
 (tasks, none ticked) or IN PROGRESS (some ticked). A task is a box at column 0 - the form `make tick` writes and
-`scripts/gates/plan_gate.py` counts; an indented box is part of its task. `Implemented` closes nothing: features say
+`l7r-gate plan` counts; an indented box is part of its task. `Implemented` closes nothing: features say
 it while holding open tasks, so only the tasks or a closing word decide. A checkbox form this does not read leaves the
 feature OPEN - a parsing miss shows as open work, never as finished work.
 

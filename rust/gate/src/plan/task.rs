@@ -244,22 +244,25 @@ pub(super) fn touched_features(root: &Path, range: &str) -> Vec<String> {
     out.into_iter().collect()
 }
 
+/// A ticked task is a column-zero line, in either case: an indented research box is part of its task.
+fn has_ticked(tasks: &str) -> bool {
+    tasks
+        .lines()
+        .any(|l| l.starts_with("- [x] ") || l.starts_with("- [X] "))
+}
+
 /// (feature dir, rule, reason) for each touched feature with a ticked task and no current CLEAR review, at `reference`.
 pub(super) fn push_owed(
     root: &Path,
     range: &str,
     reference: &str,
 ) -> Vec<(String, &'static str, String)> {
-    let ticked = re(r"(?m)^- \[[xX]\] ");
     let mut out = Vec::new();
     for feature in touched_features(root, range) {
         let Some(tasks) = show(root, reference, &format!("{feature}/tasks.md")) else {
             continue;
         };
-        if !ticked
-            .is_match(&String::from_utf8_lossy(&tasks))
-            .unwrap_or(false)
-        {
+        if !has_ticked(&String::from_utf8_lossy(&tasks)) {
             continue;
         }
         let review = show(root, reference, &format!("{feature}/{RECORD}"))

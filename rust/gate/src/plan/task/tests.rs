@@ -7,7 +7,7 @@ use serde_json::json;
 use super::super::record::{record, record_task};
 use super::super::sections::{digest, task_sections};
 use super::super::tests::{current, feature_at, git, repo, within, PLAN, PLAN_TASKS, TASKS};
-use super::{active_task, archive, decision_refusal, push_owed, resolve, touched_features};
+use super::{active_task, archive, decision_refusal, owed, push_owed, resolve, touched_features};
 use crate::checks::scratch;
 
 fn activate(root: &Path) {
@@ -265,4 +265,107 @@ fn a_section_with_its_own_verdict_is_archivable() {
     )
     .unwrap();
     assert_eq!(archive(&dir, None), ["T05"]);
+}
+
+#[test]
+fn a_ticked_task_is_a_column_zero_line_in_either_case() {
+    assert!(super::has_ticked("- [x] T01 a\n") && super::has_ticked("- [X] T02 b\n"));
+    assert!(!super::has_ticked(
+        "- [ ] T03 c\n  - [x] research pass - [x] source-reader confirmed\n"
+    ));
+}
+
+const BLOCKS: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 1\n\n### Wave 1 (T01)\n\n**D2 - the sty.** The sty stands by the house (FR-001).\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note on the waves, 3 items.\n";
+
+fn reviewed(tasks: &str, plan: &str) -> std::path::PathBuf {
+    let root = repo();
+    let dir = feature_at(&root, Some(plan), None, "999-x");
+    std::fs::write(dir.join("tasks.md"), tasks).unwrap();
+    record(
+        &dir,
+        &current(&[within()], "CLEAR", plan),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "the plan, reviewed"]);
+    dir
+}
+
+#[test]
+fn the_archive_moves_only_finished_clear_sections_and_owes_nothing() {
+    let dir = reviewed("- [x] T01 the sty\n- [ ] T02 the well\n", BLOCKS);
+    let sec = task_sections(BLOCKS)["T01"].clone();
+    assert_eq!(archive(&dir, Some("2026-10-13")), ["T01"]);
+    let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    assert!(
+        !plan.contains(&sec)
+            && plan.contains("<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-10-13")
+    );
+    assert!(std::fs::read_to_string(dir.join("plan-done.md"))
+        .unwrap()
+        .contains(&sec));
+    assert_eq!(owed(&dir), None);
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [x] T01 the sty\n- [x] T02 the well\n",
+    )
+    .unwrap();
+    assert_eq!(archive(&dir, None), ["T02"]);
+    assert!(!std::fs::read_to_string(dir.join("plan.md"))
+        .unwrap()
+        .contains("Wave 2"));
+    assert_eq!(owed(&dir), None);
+}
+
+#[test]
+fn a_finished_section_a_typo_from_its_reviewed_text_is_archived() {
+    let dir = reviewed("- [x] T01 the sty\n- [ ] T02 the well\n", BLOCKS);
+    let sec = task_sections(BLOCKS)["T01"].clone();
+    std::fs::write(
+        dir.join("plan.md"),
+        BLOCKS.replace(&sec, &format!("{}\n\n\n", sec.trim_end_matches('\n'))),
+    )
+    .unwrap();
+    git(
+        dir.parent().unwrap().parent().unwrap(),
+        &["commit", "-qam", "a blank line"],
+    );
+    assert_eq!(archive(&dir, Some("2026-10-21")), ["T01"]);
+}
+
+#[test]
+fn a_task_whose_blocks_stand_in_two_places_is_archived_whole() {
+    let split = format!(
+        "{BLOCKS}\n### T01 Decisions\n\n**D4 - the sty's door.** It faces south (FR-001).\n"
+    );
+    let dir = reviewed("- [x] T01 the sty\n- [ ] T02 the well\n", &split);
+    assert_eq!(archive(&dir, Some("2026-10-31")), ["T01", "T01"]);
+    let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    assert!(
+        !plan.to_lowercase().contains("the sty stands")
+            && !plan.contains("the sty's door")
+            && plan.contains("Wave 2 (T02)")
+    );
+    assert_eq!(archive(&dir, None), Vec::<String>::new());
+}
+
+#[test]
+fn a_range_heading_and_its_tasks_own_blocks_are_archived_once_each() {
+    let ranged = "# Plan\n\n### T01-T02 - the yard\n\n**D1 - shared.** The yard is fenced (FR-001).\n\n### T02 Approach\n\n1. The well by the lane (FR-002).\n\n### T01 Approach\n\n1. The sty by the house (FR-001).\n\n## Notes\n\nA note.\n";
+    let dir = reviewed("- [x] T01 the sty\n- [x] T02 the well\n", ranged);
+    archive(&dir, Some("2026-11-08"));
+    let done = std::fs::read_to_string(dir.join("plan-done.md")).unwrap();
+    let plan = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    for heading in [
+        "### T01-T02 - the yard",
+        "### T02 Approach",
+        "### T01 Approach",
+    ] {
+        assert_eq!(done.matches(heading).count(), 1, "{heading}");
+        assert!(!plan.contains(heading));
+    }
+    assert!(!done.contains("moved to plan-done.md") && plan.contains("## Notes"));
+    assert_eq!(archive(&dir, None), Vec::<String>::new());
 }

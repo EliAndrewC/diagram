@@ -412,3 +412,123 @@ fn the_truth_of_a_recorded_digest() {
     assert_eq!(super::sha_of(&json!({"sha256": false})), None);
     assert_eq!(super::sha_of(&json!({"sha256": 0})), None);
 }
+
+const BLOCKS: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 1\n\n### Wave 1 (T01)\n\n**D2 - the sty.** The sty stands by the house (FR-001).\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note on the waves, 3 items.\n";
+
+fn reviewed() -> std::path::PathBuf {
+    let dir = feature(Some(BLOCKS), None);
+    let root = dir.parent().unwrap().parent().unwrap().to_owned();
+    git(&root, &["init", "-q", "-b", "main"]);
+    record(
+        &dir,
+        &current(&[within()], "CLEAR", BLOCKS),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "the plan, reviewed"]);
+    dir
+}
+
+fn read_review(dir: &std::path::Path) -> Value {
+    serde_json::from_str(&std::fs::read_to_string(dir.join("plan-review.json")).unwrap()).unwrap()
+}
+
+#[test]
+fn an_edit_to_one_block_owes_that_block_alone() {
+    let dir = reviewed();
+    let edited = BLOCKS.replace(
+        "A note on the waves, 3 items.",
+        "A note on the waves, 4 items, and a new rule.",
+    );
+    std::fs::write(dir.join("plan.md"), &edited).unwrap();
+    let (rule, reason) = owed(&dir).unwrap();
+    assert!(
+        rule == "plan-review-stale" && reason.contains("## Notes") && !reason.contains("Batch 1")
+    );
+    assert_eq!(owed_of(&read_review(&dir), &edited, ""), ["## Notes"]);
+}
+
+#[test]
+fn a_record_from_before_the_amendment_covers_the_blocks_it_reviewed() {
+    let dir = reviewed();
+    let old = json!({"plan_sha256": digest(BLOCKS.as_bytes()), "plan_text": BLOCKS, "verdict": "CLEAR", "decisions": [within()]});
+    std::fs::write(dir.join("plan-review.json"), old.to_string()).unwrap();
+    std::fs::write(
+        dir.join("plan.md"),
+        BLOCKS.replace("by the lane", "by the pond"),
+    )
+    .unwrap();
+    assert!(owed(&dir).unwrap().1.contains("Wave 2 (T02)"));
+    let slim = super::super::record::slim_record(&old);
+    assert!(
+        slim.get("plan_text").is_none()
+            && slim["blocks"]
+                .as_object()
+                .unwrap()
+                .values()
+                .all(|e| e["verdict"] == "CLEAR")
+    );
+    std::fs::write(dir.join("plan-review.json"), slim.to_string()).unwrap();
+    assert!(owed(&dir).unwrap().1.contains("Wave 2 (T02)"));
+    std::fs::write(
+        dir.join("plan.md"),
+        BLOCKS.replace("checked once", "cheked once"),
+    )
+    .unwrap();
+    assert_eq!(owed(&dir), None);
+}
+
+#[test]
+fn a_block_deleted_by_hand_is_owed_and_its_removal_reviewed() {
+    let dir = reviewed();
+    std::fs::write(
+        dir.join("plan.md"),
+        BLOCKS.replace(&task_sections(BLOCKS)["T02"], ""),
+    )
+    .unwrap();
+    let (rule, reason) = owed(&dir).unwrap();
+    assert!(rule == "plan-review-stale" && reason.contains("(removed) ### Wave 2 (T02)"));
+    super::super::record::record_blocks(
+        &dir,
+        &json!({"blocks": {"(removed) ### Wave 2 (T02)": "removed"}, "decisions": [within()]}),
+        "spec-fidelity",
+        None,
+    )
+    .unwrap();
+    assert_eq!(owed(&dir), None);
+}
+
+#[test]
+fn a_typo_since_an_accept_is_forgiven_before_the_accepted_text_is_committed() {
+    let dir = feature(
+        Some("# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** the rule of teh ways.\n"),
+        None,
+    );
+    let root = dir.parent().unwrap().parent().unwrap().to_owned();
+    git(&root, &["init", "-q", "-b", "main"]);
+    let trigger = "round:spec-fidelity|plan:243-x#T17@3";
+    std::fs::write(
+        dir.join("arbiter.jsonl"),
+        format!("{}\n", json!({"trigger": trigger, "ruling": "accept"})),
+    )
+    .unwrap();
+    super::super::record::arbiter_accept(&dir, trigger, None).unwrap();
+    let plan_path = dir.join("plan.md");
+    let fixed = "# plan\n\n## T17 - x\n\n### T17 Decisions\n\n**D1** the rule of the ways.\n";
+    std::fs::write(&plan_path, fixed).unwrap();
+    let review = read_review(&dir);
+    let history = History::new(&plan_path, "HEAD");
+    assert!(section_clear(
+        &review,
+        &task_sections(fixed)["T17"],
+        Some(&history)
+    ));
+    let changed = fixed.replace("the rule of the ways", "never the rule of the ways");
+    assert!(!section_clear(
+        &review,
+        &task_sections(&changed)["T17"],
+        Some(&history)
+    ));
+}

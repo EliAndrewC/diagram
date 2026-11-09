@@ -3,6 +3,7 @@ forwarder and never a fallback, until its last caller is ported (phase 3)."""
 
 from __future__ import annotations
 
+import functools
 import json
 import os
 import pathlib
@@ -25,10 +26,12 @@ def _ask(*args: str, stdin: str | None = None, env: dict[str, str] | None = None
     return json.loads(done.stdout)
 
 
+@functools.lru_cache(maxsize=8)  # a loop over live holds asks one plan once (`ask:449-T066-scope` condition 4)
 def task_sections(plan_text: str) -> dict[str, str]:
     return dict(_ask("task-sections", stdin=plan_text))
 
 
+@functools.lru_cache(maxsize=8)
 def blocks(plan_text: str) -> list[tuple[str, str, int]]:
     return [(k, b, at) for k, b, at in _ask("blocks", stdin=plan_text)]
 

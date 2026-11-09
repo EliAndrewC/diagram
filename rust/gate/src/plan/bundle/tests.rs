@@ -431,3 +431,79 @@ fn the_request_is_trimmed_to_the_amendment_the_blocks_answer() {
     assert!(read(b, "request-index.md").contains("## Amendment 1 (2026-10-01) - The first change."));
     assert!(!read(b, "request.md").contains("> one"));
 }
+
+#[test]
+fn the_bundle_is_lean_and_each_block_set_has_its_own_directory() {
+    let (root, dir) = feature();
+    let out = scratch("out");
+    let reviewed = json!({"blocks": {"### Wave 2 (T02)": {"sha256": super::block_digest("### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n"), "verdict": "CLEAR"}}});
+    record_review(&dir, &reviewed);
+    git(&root, &["add", "-A"]);
+    git(&root, &["commit", "-qm", "reviewed"]);
+    std::fs::write(
+        dir.join("plan.md"),
+        PLAN.replace(
+            "by the lane (FR-002)",
+            "by the lane, two to a lane (FR-002)",
+        ),
+    )
+    .unwrap();
+    let key = ["### Wave 2 (T02)".to_owned()];
+    let prompt = delta_prompt(&dir, &out, &key).unwrap();
+    let first = Path::new(
+        prompt
+            .split("read ")
+            .nth(1)
+            .unwrap()
+            .split(" and the files")
+            .next()
+            .unwrap(),
+    )
+    .parent()
+    .unwrap()
+    .to_owned();
+    assert_eq!(read(&first, "request.md"), "> the GM's words\n");
+    let cited = read(&first, "spec-cited.md");
+    assert!(
+        cited.contains("FR-002 The well.** A well stands by its lane.")
+            && !cited.contains("FR-003")
+    );
+    assert!(read(&first, "spec-index.md").contains("FR-003 Unrelated"));
+    assert!(
+        read(&first, "blocks.md").contains("two to a lane")
+            && !read(&first, "blocks.md").contains("Notes")
+    );
+    assert!(
+        read(&first, "earlier.md").contains("by the lane (FR-002)")
+            && read(&first, "earlier.md").contains("verdict CLEAR -->")
+    );
+    let size: u64 = std::fs::read_dir(&first)
+        .unwrap()
+        .flatten()
+        .map(|e| e.metadata().unwrap().len())
+        .sum();
+    assert!(size < (SPEC2.len() + PLAN.len() + 2000) as u64);
+    std::fs::write(
+        dir.join("plan.md"),
+        PLAN.replace(
+            "by the lane (FR-002)",
+            "by the lane, three to a lane (FR-002)",
+        ),
+    )
+    .unwrap();
+    let again = delta_prompt(&dir, &out, &key).unwrap();
+    let second = Path::new(
+        again
+            .split("read ")
+            .nth(1)
+            .unwrap()
+            .split(" and the files")
+            .next()
+            .unwrap(),
+    )
+    .parent()
+    .unwrap()
+    .to_owned();
+    assert_ne!(first, second);
+    assert!(read(&first, "blocks.md").contains("two to a lane"));
+}
