@@ -73,27 +73,41 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     put(&dir, "rust/a.rs", "fn f() {}\n");
     commit(&dir);
     based(&dir);
+    let four = [
+        "duplicate-defs",
+        "function-cap",
+        "partial-citations",
+        "entry-headings",
+    ];
+    let ran = |dir: &std::path::Path| four.map(|c| needs(c, dir).code == 0);
     put(&dir, "rust/a.rs", "fn f() { }\n");
-    assert_eq!(needs("python", &dir).code, 1);
-    assert_eq!(needs("research", &dir).code, 1);
+    assert_eq!(ran(&dir), [false, false, false, false]);
+    put(&dir, "pyproject.toml", "");
+    assert_eq!(ran(&dir), [false, true, false, false]);
+    std::fs::remove_file(dir.join("pyproject.toml")).unwrap();
+    put(&dir, "tools/a.py", "x = 1\n");
+    assert_eq!(ran(&dir), [true, true, false, false]);
+    std::fs::remove_file(dir.join("tools/a.py")).unwrap();
+    put(&dir, "l7r/a.py", "x = 1\n");
+    assert_eq!(ran(&dir), [true, true, false, true]);
+    std::fs::remove_file(dir.join("l7r/a.py")).unwrap();
     put(
         &dir,
         "l7r/diagram/interactive/assets/modals/hamlet/x.md",
         "Entry: y",
     );
-    assert_eq!(needs("python", &dir).code, 1);
-    assert_eq!(needs("research", &dir).code, 0);
+    assert_eq!(ran(&dir), [false, false, false, true]);
     std::fs::remove_file(dir.join("l7r/diagram/interactive/assets/modals/hamlet/x.md")).unwrap();
-    assert_eq!(needs("research", &dir).code, 1);
     put(&dir, "research/x.txt", "y");
-    assert_eq!(needs("python", &dir).code, 1);
-    assert_eq!(needs("research", &dir).code, 0);
-    put(&dir, "a.py", "x = 1\n");
-    assert_eq!(needs("python", &dir).code, 0);
-    put(&dir, "pyproject.toml", "");
-    std::fs::remove_file(dir.join("a.py")).unwrap();
-    assert_eq!(needs("python", &dir).code, 0);
-    assert_eq!(needs("python", &repo("needs-base")).code, 0);
+    assert_eq!(ran(&dir), [false, false, true, true]);
+    std::fs::remove_file(dir.join("research/x.txt")).unwrap();
+    put(&dir, "scripts/record/access_tags.py", "x = 1\n");
+    assert_eq!(ran(&dir), [true, true, true, false]);
+    std::fs::remove_file(dir.join("scripts/record/access_tags.py")).unwrap();
+    put(&dir, "scripts/gates/check-entry-headings.py", "x = 1\n");
+    assert_eq!(ran(&dir), [true, true, false, true]);
+    assert_eq!(needs("something-else", &dir).code, 0);
+    assert_eq!(needs("function-cap", &repo("needs-base")).code, 0);
 }
 
 #[test]
@@ -101,7 +115,7 @@ fn each_check_answers_by_name_and_its_run_is_recorded() {
     let dir = repo("cli");
     assert_eq!(cli(&owned(&["nonsense"]), &dir).code, 2);
     assert_eq!(cli(&[], &dir).code, 2);
-    assert_eq!(cli(&owned(&["needs", "python"]), &dir).code, 0);
+    assert_eq!(cli(&owned(&["needs", "duplicate-defs"]), &dir).code, 0);
     assert_eq!(cli(&owned(&["needs"]), &dir).code, 0);
     for name in [
         "file-scale",

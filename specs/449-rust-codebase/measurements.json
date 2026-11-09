@@ -1050,5 +1050,25 @@
       "stopped_after_min": 5,
       "finished": false
     }
+  },
+  "t065-pointers-warm": {
+    "quantity": "the pointer check over the tree as it runs on a push: the Python on its content cache, the Rust on several threads with no cache",
+    "observed": "2026-11-09",
+    "subject": "a scratch clone at af678b920^ for the Python; this clone for the Rust",
+    "command": "the pointer check at af678b920^ run three times with its content cache on; l7r-gate check research-pointers . run four times",
+    "method": "wall clock, repeated",
+    "value": {
+      "python_first_s": 5.47,
+      "python_warm_s": [
+        0.41,
+        0.43
+      ],
+      "rust_s": [
+        0.28,
+        0.35,
+        0.31,
+        0.33
+      ]
+    }
   }
 }

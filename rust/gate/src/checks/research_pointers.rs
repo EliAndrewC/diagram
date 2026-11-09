@@ -413,47 +413,63 @@ fn blanked(re: &Regex, text: &str) -> String {
     .into_owned()
 }
 
+/// What one tracked file says wrongly.
+fn file_problems(root: &Path, path: &str, forms: &Forms, mapping: &Mapping) -> Vec<String> {
+    let text = std::fs::read_to_string(root.join(path)).unwrap_or_default();
+    // the two blanking patterns only where they can match: most files hold neither
+    let text = if text.contains("*\"") || text.contains("<!-- SOURCE") {
+        blanked(&forms.quoted, &blanked(&forms.source_block, &text))
+    } else {
+        text
+    };
+    let (fixture, refusal_data, landed_spec) = (
+        FIXTURES.iter().any(|f| path.starts_with(f)),
+        REFUSAL_DATA.contains(&path),
+        path.starts_with("specs/"),
+    );
+    let mut bad = Vec::new();
+    for (at, line) in py_lines(&text).enumerate() {
+        if line.contains("research/")
+            || line.contains("PAGE=")
+            || !old_numbers(line, mapping).is_empty()
+        {
+            let found = line_problems(forms, line, mapping, fixture, refusal_data, landed_spec);
+            bad.extend(found.into_iter().map(|p| format!("{path}:{}: {p}", at + 1)));
+        }
+    }
+    bad
+}
+
+/// Every wrong pointer, in the order `git ls-files` names the files. On several threads: this reads every tracked file on
+/// every push and preflight, and the Python it replaced did so in 0.41 s on its content cache (`m:t065-pointers-warm`).
 fn check(root: &Path) -> Vec<String> {
     let record = root.join(RECORD);
     if !record.is_dir() {
         return Vec::new();
     }
-    let forms = Forms::new();
-    let mapping = Mapping::new(&record);
+    let (forms, mapping) = (Forms::new(), Mapping::new(&record));
     let listed = git_text(root, &["ls-files"]);
-    let mut bad = Vec::new();
-    for path in listed
+    let paths: Vec<&str> = listed
         .lines()
         .filter(|p| !exempt(p) && !p.contains("/research/site/"))
-    {
-        let Ok(text) = std::fs::read_to_string(root.join(path)) else {
-            continue;
-        };
-        // the two blanking patterns only where they can match: most files hold neither
-        let text = if text.contains("*\"") || text.contains("<!-- SOURCE") {
-            blanked(&forms.quoted, &blanked(&forms.source_block, &text))
-        } else {
-            text
-        };
-        let (fixture, refusal_data, landed_spec) = (
-            FIXTURES.iter().any(|f| path.starts_with(f)),
-            REFUSAL_DATA.contains(&path),
-            path.starts_with("specs/"),
-        );
-        for (at, line) in py_lines(&text).enumerate() {
-            if line.contains("research/")
-                || line.contains("PAGE=")
-                || !old_numbers(line, &mapping).is_empty()
-            {
-                let (questions, sections) = refs(&forms, line);
-                let found = resolved(&questions, &sections, &mapping, fixture)
-                    .into_iter()
-                    .chain(retired(&forms, line, &mapping, refusal_data, landed_spec));
-                bad.extend(found.map(|p| format!("{path}:{}: {p}", at + 1)));
-            }
-        }
-    }
-    bad
+        .collect();
+    let threads = std::thread::available_parallelism().map_or(1, std::num::NonZero::get);
+    let scan = |part: &[&str]| -> Vec<String> {
+        part.iter()
+            .flat_map(|p| file_problems(root, p, &forms, &mapping))
+            .collect()
+    };
+    std::thread::scope(|s| {
+        let scan = &scan;
+        let running: Vec<_> = paths
+            .chunks(paths.len().div_ceil(threads).max(1))
+            .map(|part| s.spawn(move || scan(part)))
+            .collect();
+        running
+            .into_iter()
+            .flat_map(|t| t.join().unwrap_or_default())
+            .collect()
+    })
 }
 
 fn line_problems(

@@ -106,33 +106,51 @@ fn py_lines(text: &str) -> impl Iterator<Item = &str> {
     })
 }
 
-/// A class's `Entry:` tag is parsed from its modal text here, so `check-entry-headings.py` reads these.
-const MODALS: &str = "l7r/diagram/interactive/assets/modals/";
-
 /// Does this path carry the extension?
 pub(crate) fn has_ext(path: &str, ext: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == ext)
 }
 
-/// Does this change hold a file the Python-source checks read? (`ask:449-T065-scope`: those that stay Python never start on a change that holds none of what they read, so a one-line Rust edit starts none.) A `.py`
-/// file or `pyproject.toml` for `python`; those, anything under `research/` or a modal's text for `research`. Exit 0 to run them.
-fn needs(what: &str, root: &Path) -> Outcome {
+/// Does `check`, one of the four still in Python, read this path? An unknown name reads everything: it runs.
+fn reads(check: &str, path: &str) -> bool {
+    let python = has_ext(path, "py");
+    let record = path.starts_with("research/");
+    match check {
+        "duplicate-defs" => python,
+        "function-cap" => python || path == "pyproject.toml",
+        "partial-citations" => {
+            record
+                || [
+                    "scripts/gates/check-partial-citations.py",
+                    "scripts/record/access_tags.py",
+                    "scripts/record/downloads.py",
+                ]
+                .contains(&path)
+        }
+        // a class's `Entry:` is parsed from its modal text; the registry is the engine's own Python
+        "entry-headings" => {
+            record
+                || path.starts_with("l7r/diagram/interactive/assets/modals/")
+                || path == "scripts/gates/check-entry-headings.py"
+                || (python && path.starts_with("l7r/"))
+        }
+        _ => true,
+    }
+}
+
+/// Does this change hold a file `check` reads (`ask:449-T065-scope`: those that stay Python never start on a change that holds
+/// none of what they read, so a one-line Rust edit starts none)? Exit 0 to run it, and when there is no base to compare with.
+fn needs(check: &str, root: &Path) -> Outcome {
     let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
     if base.trim().is_empty() {
         return Outcome::out(String::new()); // no base to compare with: cannot tell, so it runs
     }
-    let against = base.trim();
-    let mut names = git_text(root, &["diff", "--name-only", against]);
+    let mut names = git_text(root, &["diff", "--name-only", base.trim()]);
     names += &git_text(root, &["ls-files", "--others", "--exclude-standard"]);
-    let hit = |p: &str| {
-        has_ext(p, "py")
-            || p == "pyproject.toml"
-            || (what == "research" && (p.starts_with("research/") || p.starts_with(MODALS)))
-    };
     Outcome {
         stdout: String::new(),
         stderr: String::new(),
-        code: i32::from(!names.lines().any(hit)),
+        code: i32::from(!names.lines().any(|p| reads(check, p))),
     }
 }
 
@@ -147,7 +165,7 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("research-pointers") => (research_pointers::USAGE_LOG_TOOL, research_pointers::cli(rest)),
         Some("house-style-delta") => (house_style_delta::USAGE_LOG_TOOL, house_style_delta::cli(rest)),
         Some("needs") => {
-            let o = needs(rest.first().map_or("python", String::as_str), root);
+            let o = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: o.stdout, stderr: o.stderr, code: o.code };
         }
         _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate check file-scale | stale-dirs | question-size | rust-tooling | research-pointers | house-style-delta [args]\n".to_owned(), code: 2 },

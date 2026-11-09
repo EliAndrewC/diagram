@@ -158,9 +158,10 @@ def test_the_four_checks_still_in_python_do_not_start_on_a_rust_only_change(tmp_
     (d / "research").mkdir()
     (d / "research" / "q.html").write_text("y", encoding="utf-8")
     assert pc.run(d, set()) == 0 and set(ran) == {"check-entry-headings.py", "check-partial-citations.py"}, "what reads the record starts on a record change; what reads only Python does not"
+    (d / "research" / "q.html").unlink()
     ran.clear()
     (d / "a.py").write_text("x = 1\n", encoding="utf-8")
-    assert pc.run(d, set()) == 0 and {"check-duplicate-defs.py", "check-function-cap.py", "check-partial-citations.py", "check-entry-headings.py"} == set(ran)
+    assert pc.run(d, set()) == 0 and {"check-duplicate-defs.py", "check-function-cap.py"} == set(ran), "a .py file nothing else reads starts only what reads every .py file"
 
 
 def test_every_makefile_line_starting_a_retained_python_check_asks_first() -> None:

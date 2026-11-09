@@ -1033,13 +1033,13 @@ durations:       ## [tests] where the suite's time goes - run when a target feel
 # The house-style scan is a phase, not a test: testmon selects tests by changed code and would never pick it.
 quick:           ## [tests] tier 2: lint, types and every test that rolls no map; change-selected, stops at the first failure   ALL=1
 ##  ALL=1  run EVERY quick test, not just the ones whose code changed (default: change-selected via testmon)
-	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs python; then python3 scripts/gates/check-function-cap.py; fi && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
+	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs function-cap; then python3 scripts/gates/check-function-cap.py; fi && python3 -m ruff check --fix l7r/ tests/ && python3 -m ruff format l7r/ tests/ && $(TYPECHECK)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	@python3 scripts/gates/spec-lint.py --delta .
-	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs research; then python3 scripts/gates/check-partial-citations.py .; fi
+	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then python3 scripts/gates/check-partial-citations.py .; fi
 	@# THE MARKER SCAN ON A TEST CHANGED SINCE THE LAST QUICK (feature 444 T36, measured 2026-11-07: a whole-tree scan, 2 s, ran on
 	@# every quick of a branch whose tests differed from main - every working branch): a test file newer than `.testmondata`
 	@if [ ! -f .testmondata ] || [ -n "$(ALL)" ] || [ -n "$$(find tests -name '*.py' -newer .testmondata -print -quit)" ]; then L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov -p no:randomly tests/test_markers.py >/dev/null 2>&1 || { printf 'quick: a test that rolls a map lacks @pytest.mark.rolls_map (tests/test_markers.py):\n'; L7R_TESTS_EXHAUSTIVE=1 python3 -m pytest -q --no-cov tests/test_markers.py; exit 1; }; fi
@@ -1135,9 +1135,9 @@ guard:           ## [static] {internal} refuse to run in main's tree - main is t
 static format typecheck test: | guard
 
 static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
-	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs python; then python3 scripts/gates/check-function-cap.py --selftest >/dev/null && python3 scripts/gates/check-function-cap.py; fi
+	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs function-cap; then python3 scripts/gates/check-function-cap.py --selftest >/dev/null && python3 scripts/gates/check-function-cap.py; fi
 	python3 -m ruff check --fix .
-	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs python; then python3 scripts/gates/check-duplicate-defs.py --selftest && python3 scripts/gates/check-duplicate-defs.py .; fi
+	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs duplicate-defs; then python3 scripts/gates/check-duplicate-defs.py --selftest && python3 scripts/gates/check-duplicate-defs.py .; fi
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	python3 scripts/gates/rust_checks.py lint

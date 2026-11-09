@@ -38,25 +38,25 @@ import record_cache  # noqa: E402
 
 #: (name, script relative to scripts/, arguments - `{root}` is the clone -, the refusal `die` printed, is it a self-test, the
 #: path under the clone it needs: a check of something the tree does not hold is not run, as the shell's `if [ -d ... ]` did;
-#: `delta:python` or `delta:research` instead: a check still in Python that starts only when the change holds a file it reads, `ask:449-T065-scope`)
+#: `delta:<check>` instead: a check still in Python that starts only when the change holds a file it reads, `ask:449-T065-scope`)
 CHECKS: tuple[tuple[str, str, tuple[str, ...], str, bool, str], ...] = (
-    ("duplicate-defs selftest", "gates/check-duplicate-defs.py", ("--selftest",), "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/gates/check-duplicate-defs.py before pushing", True, "delta:python"),
-    ("duplicate-defs", "gates/check-duplicate-defs.py", ("{root}",), "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing", False, "delta:python"),
+    ("duplicate-defs selftest", "gates/check-duplicate-defs.py", ("--selftest",), "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/gates/check-duplicate-defs.py before pushing", True, "delta:duplicate-defs"),
+    ("duplicate-defs", "gates/check-duplicate-defs.py", ("{root}",), "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing", False, "delta:duplicate-defs"),
     ("file-scale selftest", "gates/l7r-gate.sh", ("check", "file-scale", "--selftest"), "check-file-scale selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", True, ""),
     ("stale-dirs selftest", "gates/l7r-gate.sh", ("check", "stale-dirs", "--selftest"), "check-stale-dirs selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", True, ""),
     ("stale-dirs", "gates/l7r-gate.sh", ("check", "stale-dirs", "{root}"), "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails", False, ""),
     ("file-scale", "gates/l7r-gate.sh", ("check", "file-scale", "{root}"), "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173", False, ""),
-    ("function-cap selftest", "gates/check-function-cap.py", ("--selftest",), "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing", True, "delta:python"),
-    ("function-cap", "gates/check-function-cap.py", ("{root}",), "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370", False, "delta:python"),
+    ("function-cap selftest", "gates/check-function-cap.py", ("--selftest",), "check-function-cap selftest failed - fix scripts/gates/check-function-cap.py before pushing", True, "delta:function-cap"),
+    ("function-cap", "gates/check-function-cap.py", ("{root}",), "a function is past the 100-statement cap, or a suppression of it says not why (above) - feature 370", False, "delta:function-cap"),
     # feature 385 amendment 5 (FR-017): the gate's test_make_docs, on every route - T13 landed a target by the direct route, which
     # runs no gate, and the stale page failed T16's land-tooling a task later
     ("make-docs", "make-docs.py", ("{root}", "--check"), "docs/make-targets.html is stale against the Makefile (above) - run `make docs` and commit the page; feature 385 FR-017", False, "docs/make-targets.html"),
     ("ledger-owed", "reviews/ledger_owed.py", ("--ledger", "{root}/dev/review-ledger.md", "--refuse"), "a check's pass has no row in dev/review-ledger.md (above) - write each from its reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (or add the row printed, its ?s filled); features 371, 385 FR-019", False, ""),
-    ("entry-headings selftest", "gates/check-entry-headings.py", ("--selftest",), "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", True, "delta:research"),
-    ("entry-headings", "gates/check-entry-headings.py", ("{root}",), "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", False, "delta:research"),
+    ("entry-headings selftest", "gates/check-entry-headings.py", ("--selftest",), "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing", True, "delta:entry-headings"),
+    ("entry-headings", "gates/check-entry-headings.py", ("{root}",), "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234", False, "delta:entry-headings"),
     ("research-pointers selftest", "gates/l7r-gate.sh", ("check", "research-pointers", "--selftest"), "check-research-pointers selftest failed - the guard itself is broken; fix rust/gate/src/checks/ before pushing", True, ""),
     ("research-pointers", "gates/l7r-gate.sh", ("check", "research-pointers", "{root}"), "a pointer to the research does not resolve, or names a built page (above) - feature 301; `make fragment-move` moves a fragment with its pointers", False, ""),
-    ("partial-citations", "gates/check-partial-citations.py", ("{root}",), "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note", False, "delta:research"),
+    ("partial-citations", "gates/check-partial-citations.py", ("{root}",), "a footnote cites a source no one can wholly read with no confirmed passage (above) - feature 312 FR-020; confirm the passage (quote-check) and record it in research/partial-confirmations.jsonl, or make the note an absence note", False, "delta:partial-citations"),
     ("downloads selftest", "record/downloads.py", ("selftest",), "the download-list check's selftest failed - the guard itself is broken; fix scripts/record/downloads.py before pushing", True, ""),
     ("downloads", "record/downloads.py", ("check",), "the canonical download list is not append-only against main (above) - feature 313; `make download-add FILE=<draft.md>` appends an entry", False, ""),
     ("spec-lint selftest", "gates/spec-lint.py", ("--selftest",), "spec-lint selftest failed - the guard itself is broken; fix scripts/gates/spec-lint.py before pushing", True, ""),
