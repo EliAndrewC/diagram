@@ -1,0 +1,9 @@
+quote-check 0318: round 1, 74 notes in four hand-split batches: 68 citations, 67 VERBATIM, 1 DIFFERS on quotation marks, 59 SUPPORTS, 9 PARTIAL, 0 DOES-NOT-SUPPORT, 4 absence, 2 grounds, 1 unfootnoted; edits applied. Round 2, the 9 notes whose blocks moved: 9 SUPPORTS. Kawakatsu and Ishiyama were judged from saved copies and scans, web.archive.org answering 429.
+quote-check 0261: the pointer line passes, 0 notes, 0 unfootnoted.
+source-reader 0318, the six reused keys and Kawakatsu -8 and -9: 15 notes read; 13 READ, Rinseishi NOT-FOUND on 'cold' and Takaoka CONTRADICTED on asa rendered as hemp, both fixed. Round 2 on Nagashima -3 and Rinseishi -2: READ, with 1 NOT-FOUND on 'further south' kept as plain geography against the north the section describes.
+source-applicability, ten new write-ups: 10 APPLICABLE-WITH-LIMITS, 0 NOT-APPLICABLE; their limits edits applied.
+record-format 0318: round 1, 13 VOCABULARY, 8 glossary lines as written and 5 rewritten from the record's own text; round 2, 1 VOCABULARY (English factor), added. 0 SESSION NOTE, 0 HISTORY.
+record-format 0261: 0 findings on the changed block; 4 VOCABULARY outside the change, left.
+intro-check 0318: INTRO-OK.
+translation-check 0318: 72 pairs, 68 FAITHFUL, 4 LOOSE fixed (5 edits), 0 WRONG; round 2 on Rinseishi -2: 3 FAITHFUL.
+STILL OWED: nothing by make record-owed (0 unanswered). make quick stops on 7 British spellings from earlier commits, in specs/450 passes c and e and in research/source-attempts.jsonl, not this session's words; the five record test files pass (3889). Takaoka's registry entry and question 0274's copy of its note still say hemp for asa, outside this handoff.
