@@ -7,7 +7,7 @@
 # `sync-with-main.sh` says "the procedure never writes your commit for you", and this keeps that: the record is the RUN's
 # output, not the session's work, and only that one file is committed. The writer names it in <git dir>/<pointer> -
 # `last-run-record` (the Makefile's LOGRUN, the default) or `last-cohort-record` (cohort_audit.write_record) - so no other
-# file is swept in: dev/run-log/ also holds l7r/diagram/ci/runlog.py's entries, which are not this run's (the plan review).
+# file is swept in: dev/run-log/ also holds the Rust gate's run-log entries, which are not this run's (the plan review).
 # `git commit --only -- <path>` leaves anything the session has staged staged and uncommitted. The path may be in another
 # work tree (a cohort's "before" leg in a detached worktree writes into its clone): it is committed there.
 #

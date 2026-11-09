@@ -136,8 +136,8 @@ ensure_github_origin() {
     fi
   done
   export GIT_ASKPASS="$ROOT/scripts/git-askpass-token.sh" GIT_TERMINAL_PROMPT=0
-  if [ -z "${GITHUB_TOKEN:-}" ] && [ -f "$ROOT/l7r/diagram/ci/config.py" ]; then
-    GITHUB_TOKEN=$(cd "$ROOT" && python3 -c "import sys; from pathlib import Path; from l7r.diagram.ci.config import load_secrets; print(load_secrets(Path(sys.argv[1])).github_pat)" "$ROOT" 2>/dev/null || true)
+  if [ -z "${GITHUB_TOKEN:-}" ] && [ -x "$ROOT/scripts/gates/l7r-gate.sh" ]; then
+    GITHUB_TOKEN=$(cd "$ROOT" && scripts/gates/l7r-gate.sh github-token 2>/dev/null </dev/null || true)
     export GITHUB_TOKEN
   fi
 }

@@ -1,5 +1,5 @@
 # buildspec/check.yml - the iteration check (gm-assistant-check). Passed to start_build as
-# buildspecOverride by l7r/diagram/ci/dispatch.py; the projects themselves hold only a placeholder.
+# buildspecOverride by rust/gate/src/ci/dispatch.rs; the projects themselves hold only a placeholder.
 # Everything real is in buildspec/run.sh, shared with merge.yml; MODE is the only difference.
 version: 0.2
 # THE GENERATION CACHE TRAVELS BETWEEN BUILDS (feature 175). Without this every build cloned into a

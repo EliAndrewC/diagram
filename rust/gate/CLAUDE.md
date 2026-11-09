@@ -11,4 +11,5 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/state.rs` | the verification state, `.git/verification-state.json`, and the tooling hash (T72) |
 | `src/hashing.rs` | hashing the repository's files by what runs; what decides how the gate's tests run (`config-hash`) (T72) |
 | `src/exempt.rs` | the coverage-exemption record, `dev/coverage-exempt.json` (T72) |
+| `src/ci.rs`, `src/ci/` | the remote path: the switches, the conditions on a paid run, the dispatcher and its AWS boundary (T064) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

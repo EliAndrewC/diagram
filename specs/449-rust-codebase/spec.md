@@ -123,8 +123,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   2026-11-07, `m:python-census`), and every file it returns is in a phase: `scripts/hooks/` and the libraries its guards call (the code under `scripts/hooks/` and any module only guards use; a
   Python file elsewhere with callers of its own - the gate, the push, a make target - stays in its own phase, and a guard may run it
   by path until then, on a rare branch, never on a plain Bash call (what SC-001 measures) or a plain Edit: the round arbiter's ruling of 2026-11-08,
-  `ask:449-phase1-tools-by-path`) - phase 1; `l7r/diagram/ci/`, the gate's scripts under `scripts/gates/` and `scripts/measure/`, `l7r/diagram/_invocation.py` (the
-  make-only refusal) and `l7r/diagram/switches.py` - phase 2; the rest of `scripts/`, `l7r/diagram/tools/`, `l7r/diagram/pipeline/`,
+  `ask:449-phase1-tools-by-path`) - phase 1; `l7r/diagram/ci/`, the gate's scripts under `scripts/gates/` and `scripts/measure/`, and `l7r/diagram/switches.py` - phase 2 (`l7r/diagram/_invocation.py`, the Python's own make-only refusal, goes in phase 4 with its last Python caller, the round arbiter's `ask:449-T064-slices`, and the phase-2 close names it as an expected remainder); the rest of `scripts/`, `l7r/diagram/tools/`, `l7r/diagram/pipeline/`,
   `l7r/diagram/_census.py`, `l7r/diagram/_memory.py`, `l7r/diagram/work_counts.py` and every file under `specs/` (a past feature's
   harness, measurement or prototype, ported like any other: `make figures` re-runs the measurements) - phase 3; `l7r/diagram/` Mode A
   (`compound*`, `labels/`, `buildings/`, `dwellings.py`, `well_gear.py`), `l7r/diagram/interactive/`, the Mode A sheets' generators

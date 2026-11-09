@@ -13,7 +13,7 @@ semantically broken is not caught by a machine before it lands (it never once fi
 suite rather than reporting a vacuously green build. **Remote is OFF** - `make switches`.
 
 Every remote run costs money (`RATE_PER_MIN` = **$0.02 per build-minute** on `BUILD_GENERAL1_LARGE`,
-in [`config.py`](config.py) - mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert`
+in `rust/gate/src/ci/config.rs` - mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert`
 Lambda's `RATE_PER_MIN` environment variable; change both together). So the GM's rule for this
 package is stricter than for any other: *"all of the situations in which we absolutely, positively
 do not want to run anything on AWS"* come first, and the speedup second.
@@ -22,21 +22,14 @@ do not want to run anything on AWS"* come first, and the speedup second.
 
 | module | what it is for |
 |---|---|
-| [`config.py`](config.py) | the constants (rate, project names, park timeout, estimates) and `load_secrets()` - the ONLY module that knows the account's names; secrets resolve from `$DIAGRAM_SECRETS`, the tree's root, main's root, then gm-assistant's `webapp/development-secrets.ini` |
 | [`delta.py`](delta.py) | the Python callers' door to the delta in the Rust gate (feature 449 T063): `rust/gate/src/delta.rs` holds the Delta (what OUR commits changed since the merge base with `origin/main`, R1), `is_engine` - **the one list** of engine paths (FR-008): `l7r/**/*.py`, `pool/*.gen.py`, `pool/*.json`, the Rust sources - the code the tests exercise and nothing that merely shapes how the gate runs (GM 2026-08-25); **not `tests/`** since feature 132 FR-024 and **not this `ci/` package** since FR-025 - and `engine_key`, the verification key; `tests/tooling/ci/test_delta.py` pins every path kind |
 | [`state.py`](state.py) | the Python callers' door to the VerificationState in `rust/gate/src/state.rs` (`.git/verification-state.json`: the last local check, its target, and the content hash at that moment, the stamp's own) |
-| [`features.py`](features.py) | FR-011: the gated merge needs a named feature (`SPECIFY_FEATURE` / `.specify/feature.json`) with no open task and a FAITHFUL spec |
-| [`decision.py`](decision.py) | `decide()`: every condition evaluated and printed even after one fails; the verdict is the first failure, SKIP-VERIFIED, or DISPATCH. FR-027's scope rule lives here |
-| [`door.py`](door.py) | the build-side FULL door (R11): only a committed `permitted` entry whose commit is an ancestor of HEAD and not of `origin/main` opens the full scope; never an environment variable |
-| [`runlog.py`](runlog.py) | the remote run-log entry (`where: codebuild`, build id, minutes, cost) and month-to-date spend summed from LOCAL entries (never Cost Explorer) |
-| [`dispatch.py`](dispatch.py) | the sequence, and the boto3 boundary behind a small protocol - every external call injected so the suite drives it against RECORDED responses (`tests/tooling/ci/fixtures/`) |
-| [`cachepolicy.py`](cachepolicy.py) | the CI bucket's WHOLE lifecycle document (feature 177 - it owned one rule of someone else's document before, which is a hazard when the API OVERWRITES). Four rules; `verified/` is off the junk horizon that used to expire it at 14 days |
 | [`incremental.py`](incremental.py) | THE INCREMENTAL GATE (feature 207): the baseline (the last full run's coverage with per-test and per-fixture contexts + a raw-bytes manifest, under `<git dir>/gate-baseline/`), the plan (which tests a change can reach; the six fallbacks to a full run), the merge (the pruned baseline unioned with this run), `carry` (a full run's reused tooling tests' coverage, from the baseline - feature 383 amendment 5), `save-baseline`. The soundness argument is its docstring |
 | [`selection.py`](selection.py) | the pytest plugin the gate loads (`-p l7r.diagram.ci.gate_plugin`, an excluded two-hook shim, because a `-p` module loads before coverage starts): switches the coverage context to `fixture:<name>` around every fixture setup, deselects what the plan says (identically on every xdist worker), writes the run's result and the fixture dependency graph from worker `gw0` |
 | [`gate_plugin.py`](gate_plugin.py) | the incremental gate's `-p` entry: a tiny shim, because a `-p` module is imported before pytest-cov starts measuring; its hooks delegate to `selection.py` |
 | `rust/gate/src/exempt.rs` | the engine code the Rust port replaces, exempt from the coverage floor (feature 448, the GM 2026-11-02): the one reader of `dev/coverage-exempt.json` every floor asks (`l7r-gate coverage-exempt omit`, `report`, `cover_changed.py`, `make land`); a stale entry refuses with `make coverage-exempt PRUNE=1` |
-| [`imagecheck.py`](imagecheck.py) | is the pushed CodeBuild image still built from the tree's current `Dockerfile.ci`? (feature 175: a stale image failed every remote build at `typecheck`) |
-| [`__main__.py`](__main__.py) | `status | check | merge | measure | image | state | door | remote-spend | incremental`, `assert_via_make` at the top |
+| [`__main__.py`](__main__.py) | `incremental`, with `assert_via_make` at the top, until T071 |
+| `rust/gate/src/ci/` | `make ci-status`, `ci-check`, `ci-merge`, `ci-measure`, `ci-image`, `make switches`: the conditions (`decision.rs`), the sequence (`dispatch.rs`), the AWS boundary (`aws.rs`, the `aws` CLI; **unproven until the first paid run after remote is turned on**), the constants and secrets (`config.rs`), the run log (`runlog.rs`), the build-side door (`door.rs`), the feature check (`features.rs`), the image check (`imagecheck.rs`), the bucket's lifecycle document (`cachepolicy.rs`, `l7r-gate lifecycle`) |
 
 ## The conditions, and the GM's words each rests on
 

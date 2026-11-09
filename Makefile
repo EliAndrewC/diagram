@@ -104,8 +104,8 @@ REF_FIRST = @:  # no reference hamlet is rolled: the Python hamlet engine is del
 RUN = @python3 -m l7r.diagram
 
 # ---- iteration switches (dev/switches.json) ----
-SWITCH = python3 -m l7r.diagram.switches
-REMOTE_OK = @python3 -m l7r.diagram.ci remote-ok "$@"
+SWITCH = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" switches
+REMOTE_OK = @"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci remote-ok "$@"
 
 switches:       ## [project] the iteration switch: remote on|off, with reason, who and when (feature 132)
 	@$(SWITCH) show
@@ -365,7 +365,7 @@ guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
 audit:          ## [project] how the gate has actually been used - every run, every bypass, and remote spend
-	@python3 -m l7r.diagram.ci remote-spend
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci remote-spend
 	@python3 -c "import json,glob,collections,os; \
 rows=sorted((json.load(open(f)) for f in glob.glob('dev/run-log/**/*.json',recursive=True)),key=lambda r:r.get('utc','')); \
 print(chr(10)+'\033[1mGate runs\033[0m (dev/run-log/)'); \
@@ -427,7 +427,7 @@ help:           ## [project] list every target with its one-line purpose
 # ---- CodeBuild: every remote run is paid ----
 ci-status:      ## [remote] free: delta, route, verification state, verified lookup, remote spend   ROUTE=1 -> just DIRECT|GATED
 ##  ROUTE=1  print just DIRECT|GATED instead of the whole condition table
-	$(RUN).ci status $(if $(ROUTE),--route,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci status $(if $(ROUTE),--route,)
 engine-key:      ## [project] the content hash the gate and the push key on   REF=<commit>
 ##  REF=<commit>  which commit to key (default: HEAD)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" delta key $(or $(REF),HEAD)
@@ -438,12 +438,12 @@ ci-check:       ## [remote] run the SOAK suite on CodeBuild (PAID)      FULL=1 (
 ##  NO_GO=1               prove the self-abort path: start the build and never send the go signal
 	$(REMOTE_OK)
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
-	$(RUN).ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci check $(if $(FULL),--full,) $(if $(TARGET),--target "$(TARGET)",) $(if $(NO_GO),--no-go,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
 
 ci-merge:       ## [remote] the push's gated route (PAID) - runs the SOAK suite; no longer a merge queue. Called by sync-with-main.sh   FULL=1 (prompts)
 ##  FULL=1  full scope; PROMPTS, and cancels by default
 	@$(if $(FULL),$(MAKE) --no-print-directory bypass-audit REF_WHY="$(REF_WHY)" && $(MAKE) --no-print-directory commit-permitted,true)
-	$(RUN).ci merge $(if $(FULL),--full,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci merge $(if $(FULL),--full,)
 
 commit-permitted: ## [project] commit the most recent bypass-log entry, which is how a paid FULL run is authorized
 	@f=$$(find dev/bypass-log -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-); why=$$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['why'][:60])" "$$f"); \
@@ -459,7 +459,7 @@ ci-measure:     ## [remote] MEASURE what the remote gate costs (PAID, prompts)  
 	read why || true; \
 	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-measure backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize a remote measurement - $$why" || true
-	$(RUN).ci measure $(if $(FULL),--full,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci measure $(if $(FULL),--full,) $(if $(COMPUTE),--compute "$(COMPUTE)",)
 
 ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and push it to ECR (PAID, ~$$1; prompts)
 	$(REMOTE_OK)
@@ -469,7 +469,7 @@ ci-image:       ## [remote] rebuild the CodeBuild image from Dockerfile.ci and p
 	if [ ! -t 0 ]; then printf '\n\033[1mREFUSED: this prompt has no terminal to answer it\033[0m - a backgrounded or piped run cannot be asked; run it in the foreground, or use the target that does not prompt.\n\n'; exit 1; fi; read why || true; \
 	if [ -z "$$why" ]; then $(LOGBYPASS) cancelled "(ci-image backed out at the prompt)"; printf 'Cancelled.\n'; exit 1; fi; \
 	$(LOGBYPASS) permitted "$$why"; git add dev/bypass-log; git commit -q -m "chore: authorize image rebuild - $$why" || true
-	$(RUN).ci image
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci image
 
 LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
@@ -1067,7 +1067,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@$(STATE) green-local quick
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
-	@if [ -n "$$CODEBUILD_BUILD_ID" ]; then python3 -m l7r.diagram.ci door && exit 0; printf '\n\033[1mREFUSED: the FULL scope in a build needs the committed answer to the local prompt.\033[0m\n\n'; exit 1; fi; \
+	@if [ -n "$$CODEBUILD_BUILD_ID" ]; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci door && exit 0; printf '\n\033[1mREFUSED: the FULL scope in a build needs the committed answer to the local prompt.\033[0m\n\n'; exit 1; fi; \
 	why="$(REF_WHY)"; \
 	if [ -n "$$why" ] && [ ! -t 0 ]; then \
 	  printf "\n\033[1mREFUSED: a FULL run with REF_WHY set, with nothing attached to answer for it.\033[0m\n\n"; \

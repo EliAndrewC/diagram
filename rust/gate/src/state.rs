@@ -18,12 +18,11 @@ const FAILED: &str = "failed-gate";
 const NAME: &str = "verification-state.json";
 
 /// What the `tooling` tests exercise: a green `make done` hashes these, and the gate skips those tests while the hash stands (GM 2026-08-26).
-const TOOLING_PATHS: [&str; 8] = [
+const TOOLING_PATHS: [&str; 7] = [
     "Makefile",
     "pyproject.toml",
     "l7r/diagram/ci",
     "l7r/diagram/pipeline",
-    "l7r/diagram/switches.py",
     "l7r/diagram/_invocation.py",
     "tests/conftest.py",
     "tests/_scope.py",
@@ -31,14 +30,14 @@ const TOOLING_PATHS: [&str; 8] = [
 
 /// One record, as `.git/verification-state.json` holds it.
 #[derive(Clone, Debug, PartialEq, Eq)]
-struct State {
-    event: String,
-    target: String,
-    utc: String,
-    hash: String,
-    commit: String,
-    engine_key: String,
-    tooling: String,
+pub(crate) struct State {
+    pub event: String,
+    pub target: String,
+    pub utc: String,
+    pub hash: String,
+    pub commit: String,
+    pub engine_key: String,
+    pub tooling: String,
 }
 
 impl State {
@@ -67,7 +66,7 @@ fn text(data: &Value, key: &str) -> String {
     data[key].as_str().unwrap_or_default().to_owned()
 }
 
-fn read(root: &Path) -> Result<Option<State>, String> {
+pub(crate) fn read(root: &Path) -> Result<Option<State>, String> {
     let path = state_file(root);
     if !path.is_file() {
         return Ok(None);
@@ -131,7 +130,7 @@ fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
     stated(std::fs::write(path, out), "arbiter-owed.json")
 }
 
-fn current_hash(root: &Path, python: &str) -> Result<String, String> {
+pub(crate) fn current_hash(root: &Path, python: &str) -> Result<String, String> {
     stamp::area_key_named(root, "diagram", python)
 }
 
@@ -143,7 +142,7 @@ fn tooling_hash(root: &Path, python: &str) -> Result<String, String> {
     crate::hashing::content_hash(root, &files, true, python).map(|data| sha256::hex(&data))
 }
 
-fn write(
+pub(crate) fn write(
     root: &Path,
     event: &str,
     target: &str,

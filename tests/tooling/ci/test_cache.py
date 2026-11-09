@@ -1,6 +1,6 @@
 """Feature 175 - the generation cache that travels between builds.
 
-`tooling` tree: these read the buildspecs and the dispatcher source, so they run at the gate and in
+`tooling` tree: these read the buildspecs and the dispatcher source (`rust/gate/src/ci/dispatch.rs`), so they run at the gate and in
 the full run, and in `make quick` only while the tooling has changed (tests/CLAUDE.md).
 """
 
@@ -10,10 +10,6 @@ import re
 from pathlib import Path
 
 import pytest
-
-from l7r.diagram._invocation import OPERATIONS
-from l7r.diagram.ci import config
-from l7r.diagram.ci.dispatch import cache_location, registered_operation
 
 pytestmark = pytest.mark.tooling
 
@@ -30,64 +26,6 @@ def _cache_paths(text: str) -> list[str]:
     block = re.search(r"^cache:\n((?:[ \t].*\n|\n)+)", text, re.M)
     assert block, "the buildspec declares no top-level cache: block"
     return re.findall(r"^\s*-\s*'([^']+)'", block.group(1), re.M)
-
-
-def test_the_cache_location_cannot_grow_with_the_number_of_builds() -> None:
-    """FR-005, the GM's named failure: *"if we were uploading many megabytes worth of content to
-    Amazon S3 on every run and then never cleaning it up, then that would be bad."*
-
-    CodeBuild writes one archive per cache location, so the object count is exactly the number of
-    distinct locations this function can return. Keyed on (project, scope) that is FOUR, whatever the
-    commit is - which is why the commit SHA must never reach it."""
-    projects = (config.PROJECT_CHECK, config.PROJECT_MERGE)
-    scopes = ("reference", "full")
-    locations = {cache_location("bkt", p, s) for p in projects for s in scopes}
-    assert len(locations) == 4, "one location per (project, scope) and no more"
-
-    # ...and the SAME inputs give the SAME location on every build - the property that bounds it.
-    assert cache_location("bkt", config.PROJECT_CHECK, "full") == cache_location("bkt", config.PROJECT_CHECK, "full")
-
-    # FEATURE 177: THE TEST NOW VARIES THE OPERATION DIMENSION, because the version above did not and
-    # therefore could not have caught the fix that added one. It enumerated projects x scopes and
-    # asserted `len(locations) == 4`, so a fourth parameter with a default leaves it green while the
-    # property it names is gone - which is the shape of every guard this project has had to repair.
-    ops = sorted({name for name, cost in OPERATIONS.values() if cost == "expensive"})
-    every = {cache_location("bkt", p, s, o) for p in projects for s in scopes for o in [None, *ops]}
-    assert len(every) == len(projects) * len(scopes) * (1 + len(ops)), "one location per (project, scope, registered operation)"
-    assert len(every) < 200, f"the ceiling is finite and small; it is {len(every)}"
-
-
-def test_an_operation_does_not_overwrite_the_gates_cache() -> None:
-    """FEATURE 177, FR-018, MEASURED: on 2026-08-31 the green reference gate and both
-    `TARGET=tripwire` builds all reported
-    `location = gm-assistant-ci-.../cache/gm-assistant-check/reference`, and the bucket held ONE cache
-    object where 175's D2 expected four - an operation's `ctx.scope` stays `reference` and only
-    `CI_SCOPE` becomes `operation`, so the two clobbered each other. Performance only: the gencache key
-    is content-derived, so a foreign entry can only MISS."""
-    gate = cache_location("bkt", config.PROJECT_CHECK, "reference")
-    trip = cache_location("bkt", config.PROJECT_CHECK, "reference", "map")
-    assert gate != trip, "an operation must not write to the gate's cache object"
-    assert trip.startswith(gate + "/"), "and it should be legible as a child of it, not an unrelated key"
-
-
-def test_the_operation_in_the_key_is_the_REGISTERED_name_not_the_raw_target() -> None:
-    """FR-018a, and the reason the bound survives the fix. `__main__.py` validates only
-    `a.target.split()[0]` and passes the WHOLE string on as `ctx.operation`, so keying on it would give
-    one S3 object per argument spelling - the GM's named failure, reintroduced by the fix for a
-    different defect."""
-    assert registered_operation("compound") == "compound"
-    assert registered_operation("map GEN=a") == registered_operation("map GEN=b") == "map"
-    assert registered_operation(None) is None and registered_operation("") is None
-    assert registered_operation("not-a-registered-operation") is None, "an unregistered head declines to partition rather than inventing a key"
-
-
-def test_the_cache_location_never_carries_a_commit_sha() -> None:
-    """The failure mode FR-005 forbids by name: a SHA in the location is one S3 object per commit,
-    for ever. Asserted rather than trusted, because it is a one-word edit away at any time."""
-    sha = "b137a2193c3d4e5f60718293a4b5c6d7e8f90123"
-    loc = cache_location("bkt", config.PROJECT_CHECK, "full")
-    assert sha not in loc and sha[:12] not in loc
-    assert not re.search(r"\b[0-9a-f]{7,}\b", loc), f"{loc!r} looks like it carries a hex id"
 
 
 def test_the_two_buildspecs_cache_exactly_the_same_paths() -> None:
@@ -173,23 +111,11 @@ def test_only_a_BUILD_can_write_the_freshness_state_a_build_restores() -> None:
     holds because of where the cache comes from: CodeBuild populates its own cache location in
     POST_BUILD, and the dispatcher never writes there. If the dispatcher ever uploaded to the cache
     prefix, a laptop's stamp could reach a build and vouch for a suite no build ever ran."""
-    src = (HERE / "l7r" / "diagram" / "ci" / "dispatch.py").read_text(encoding="utf-8")
+    src = (HERE / "rust" / "gate" / "src" / "ci" / "dispatch.rs").read_text(encoding="utf-8")
     # every put the dispatcher makes, and what it targets
     puts = re.findall(r"put_object\(\s*[^,]+,\s*([^,]+),", src)
     assert puts, "the dispatcher does write to S3; this test is about WHERE"
     for target in puts:
         assert "cache" not in target, f"the dispatcher must never write into the cache location: {target}"
     assert "cache_location" in src, "it names the location for start_build only"
-    assert "put_object" not in src.split("def cache_location")[1].split("\ndef ")[0], "cache_location computes a key; it does not upload"
-
-
-def test_the_dispatcher_passes_the_cache_to_start_build() -> None:
-    """A static test, because the alternative is a live paid build. The cache is useless unless the
-    override actually reaches `start_build` - a `cache:` block in a buildspec does nothing on its own
-    when the PROJECT has no cache configured, which is exactly our case (the projects were created
-    NO_SOURCE with a placeholder)."""
-    src = (HERE / "l7r" / "diagram" / "ci" / "dispatch.py").read_text(encoding="utf-8")
-    call = re.search(r"started = ctx\.client\.start_build\((.*?)\)\n", src, re.S)
-    assert call, "the start_build call moved; this test guards its kwargs"
-    assert "cache_kw" in call.group(1), "start_build must receive the cacheOverride"
-    assert "cacheOverride" in src and "cache_location(" in src
+    assert "put_object" not in src.split("fn cache_location")[1].split("\nfn ")[0], "cache_location computes a key; it does not upload"
