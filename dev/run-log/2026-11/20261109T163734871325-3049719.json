@@ -1,0 +1,54 @@
+{
+  "utc": "2026-11-09T16:37:34Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 94,
+  "result": "failed: counters-inert test-full",
+  "commit": "e9d9d124f",
+  "first_failure_s": 31.5,
+  "last_failure_s": 75.9,
+  "failed_tests": 1,
+  "failed_names": [
+    "tests/tooling/test_no_deleted_engine.py::test_no_kept_file_names_a_deleted_package"
+  ],
+  "host": {
+    "load": [
+      1.49,
+      11.21
+    ],
+    "mem_avail_mb": [
+      9301,
+      9563
+    ],
+    "cpu_temp_c": [
+      100.0,
+      81.0
+    ],
+    "stall_s": {
+      "cpu": 9.5,
+      "io": 0.4,
+      "io_full": 0.3,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 68963,
+      "package": 24870
+    }
+  },
+  "phases": {
+    "preflight": 4.0,
+    "reference": 0.0,
+    "hooks-test": 4.0,
+    "counters-inert": 27.0,
+    "static": 82.0,
+    "format": 2.0,
+    "typecheck": 0.0,
+    "seeds": 6.0,
+    "pytest": 59.0,
+    "test-full": 62.0
+  },
+  "plan_mode": "incremental",
+  "plan_reason": "17 engine file(s) and 8 test module(s) changed, 6 scripts/ file(s) (171 module(s) that read scripts/), 17 Rust file(s) (37 test module(s) that read them)",
+  "selected": 532,
+  "collected": 532
+}
