@@ -128,7 +128,7 @@
    "declared": "spec-fidelity"
   },
   "### T063 Approach (checklist part A)": {
-   "sha256": "30c293c8cc74837bb437231e30e2397b45438b378c42c983b8a1f7656e587672",
+   "sha256": "cb058ff33d82b0386f663664ecb0664d43b5fdb3dd44c7c5cc2ddf15ef0dcd4f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -152,10 +152,10 @@
    "declared": "round-arbiter"
   },
   "### T067 Approach (checklist part A)": {
-   "sha256": "2236be10d65fd9a3cdc75725ffcd02d4aa37ea49fbfe07171c3c4d16fc86c05a",
+   "sha256": "49b7c62df3319ee64dee6c631fb463603e4de6ac7129cca294e21232106284b1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T068 Approach (checklist part A)": {
    "sha256": "551a92c06179d5494f055e49a7fc876287f0f0337ec9cfd65e2a25821e79c380",
@@ -3763,6 +3763,94 @@
      "summary": "Every specs/*/measurements*.json command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
      "class": "within",
      "why": "FR-001's clause on recorded measurements, applied to this task's files."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T063 Approach (checklist part A)",
+    "### T067 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T063-slice1-content-id-moves",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move unported into codeid.py; gate-stamp.py delegates until slice 2.",
+     "class": "within",
+     "why": "Unchanged since the last verdict. FR-001 places codeid.py in phase 4 with content_id and its kept cache beside it (ask:449-T063-slices). The GM's 'all be ported' is kept: this orders the port, it does not exempt a file."
+    },
+    {
+     "id": "T063-slice3-is-T72",
+     "summary": "CHANGED. Slice 3 (state.py, runlog.py, gate_config.py, coverage_exempt.py) is assigned to task T72 so that T063's two slices land and tick as one; the goal line changes from 'written by one implementation' to 'answered by one implementation' to match.",
+     "class": "within",
+     "why": "A re-bracketing of tasks, not of what is ported: FR-001 places those files in phase 2 whatever the task number, no file leaves the feature, and FR-002 already carries ask:449-T72-coverage-exempt, which shows slice 3 proceeding under T72. The arbiter's three slices each landing whole are still three. Whether T72 carried its own decisions, differential and review, and where it falls in the phase order, is outside this bundle and is not ruled on here."
+    },
+    {
+     "id": "T063-slice2-stamp-and-delta-rust",
+     "summary": "gate-stamp.py becomes l7r-gate stamp and delta.py's list, delta and key become l7r-gate delta, with callers switching in one commit and gate-stamp.py deleted.",
+     "class": "within",
+     "why": "Unchanged. The request itself, with FR-003's single cut."
+    },
+    {
+     "id": "T063-delta-py-client",
+     "summary": "What remains of delta.py is a client with no list, git call or hash, until T064 and T071 port its users; many paths go in one batch.",
+     "class": "within",
+     "why": "Unchanged. A transitional client in phase order; no piece runs both (FR-003) and no caller spawns per file (FR-006 as the block applies it)."
+    },
+    {
+     "id": "T063-caller-table",
+     "summary": "Every remaining caller of gate-stamp, delta and the area functions, from two stated searches, with what answers each; split.sh's pre-329 path is given no route as a finished one-off.",
+     "class": "within",
+     "why": "Unchanged but for a spelling. The search space is stated. split.sh names a path gone since 329, so it is no caller of the deleted file; this excuses it from no census, since its inline Python, if any, stays under FR-001's second census. engine_edit.py's route matches ask:449-T052-round3 as FR-001 carries it."
+    },
+    {
+     "id": "T063-content-id-stays-in-codeid",
+     "summary": "Callers holding bytes that are no file on disk keep content_id from codeid.py rather than spawning the binary per id.",
+     "class": "within",
+     "why": "Unchanged. FR-001 keeps codeid.py and content_id as the Python library until the callers are ported, and each caller is still ported in its phase; T063 says engine_edit.py may not stay on the library past its own port. An interim route, not a carve-out from the port."
+    },
+    {
+     "id": "T063-raw-area-membership-unchanged",
+     "summary": "Membership of a byte-hashed area is ported unchanged, including a repository-root area taking diagram's exclusions; the browser docstring quirk goes to the round arbiter, not this slice.",
+     "class": "within",
+     "why": "FR-002's main clause: same verdicts as the Python replaced. Only the ask key changed. Preserving the quirk is what FR-002 requires, and FR-002 has its own route for a correction."
+    },
+    {
+     "id": "T063-differential-restated",
+     "summary": "CHANGED. The raw-match differential now states 26,663 tracked paths after the delete plus 7 synthetic paths, and explains is_engine's 26,664 as the same index one file earlier.",
+     "class": "within",
+     "why": "A description refinement, no change of scope. All figures are under m:t063-slice2 and equal its recorded value (raw_match_tracked_paths 26663, raw_match_synthetic 7, raw_match_paths 26670, is_engine_paths 26664, content_id_files 8885). Checked against the entry, not re-run: the manifest bars the repository."
+    },
+    {
+     "id": "T063-order-exits-done",
+     "summary": "Leaf-first order; green and red exits; measurements' commands rewritten in the porting commit and re-run.",
+     "class": "within",
+     "why": "Unchanged. Restates FR-001's rewritten-and-re-run clause and FR-006."
+    },
+    {
+     "id": "T067-goal-and-libraries",
+     "summary": "The landing's refusals become Rust, with hm_conflict.py and own-make.sh, each held to FR-002 before it goes.",
+     "class": "within",
+     "why": "Unchanged. FR-001 places hm_conflict.py and own-make.sh in phase 2 (ask:449-T051-lib-route)."
+    },
+    {
+     "id": "T067-carried-browser-raw",
+     "summary": "CHANGED. T067 ports preflight.unseen and engine_edit.docstring_only with the browser docstring verdict preserved by default; any correction goes through its own case, named in the commit and the phase's record.",
+     "class": "within",
+     "why": "FR-002's main clause, and FR-002's own exception route almost word for word. The paragraph attributes this to ask:T063-browser-raw, whose text is not in the bundle and which T063 describes only as where the matter goes; the classification does not depend on it, because same-verdict is FR-002's default with or without a ruling."
+    },
+    {
+     "id": "T067-exit-no-py-under-scripts-gates",
+     "summary": "Green exit and done check: git ls-files 'scripts/gates/*.py' returns nothing.",
+     "class": "within",
+     "why": "Unchanged, and narrows nothing: it demands more than the spec, not less. But FR-001 as carried places scripts/gates/codeid.py in phase 4, so if T067 closes phase 2 with that file at that path, this check cannot pass. Reported to the caller as a conflict with the spec for the author to reconcile; it is not an exception and carries no ruling."
+    },
+    {
+     "id": "T067-order-and-measurements",
+     "summary": "Phase order; measurements' commands rewritten in the porting commit and re-run.",
+     "class": "within",
+     "why": "Unchanged. Restates FR-001."
     }
    ]
   }
