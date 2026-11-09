@@ -194,8 +194,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the stamps and delta ported to rust/gate; m:t063-slice2 shows area keys, lists, 8,885 content ids, 50 engine keys, 7 deltas, the engine list over 26,664 paths and raw-match over 26,670 equal to the Python; static, tooling tests and 56 hook suites green
 
-- [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `switches.py`, and `runlog.py` (moved from T72: its callers are these) (`_invocation.py` moves to phase 4 with its last Python caller, `ask:449-T064-slices`)
+- [x] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `switches.py`, and `runlog.py` (moved from T72: its callers are these) (`_invocation.py` moves to phase 4 with its last Python caller, `ask:449-T064-slices`)
       research: rendering
+      verify: DONE. landed: the remote path ported to rust/gate/src/ci; m:t064-remote shows route, status, spend, door, switches, idle and lifecycle equal to the Python's; the AWS adapter is tested through a fake aws and unproven until the first paid run; static, tooling tests and hook suites green
 
 - [ ] T065 [US2] `scripts/gates/` the text checks: every `check-*.py`, one tool family at a time, each check's verdicts held to the Python's over the repository
       research: rendering
