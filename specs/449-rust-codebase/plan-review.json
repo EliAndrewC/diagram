@@ -7348,6 +7348,65 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T74": {
+   "section_sha256": "0b40f3929f84479bbf881ea443e1a7a8773d02bf34bef93b3c8df427f7259ae4",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T74-still-used-test",
+     "summary": "THE TEST OF STILL USED: a specs/*.py file is kept only when its path appears in a listed set of directories outside specs/, a measurements command names it, or a kept file in its own feature imports or names it; everything else is deleted.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001's test is whether something still runs the file (a file something still runs is ported, one nothing runs is deleted; the GM: 'if those are not still used'). The block substitutes a name census over a directory allowlist, and FR-001 itself shows the allowlist misses places Python is run from. (1) The shell scripts under specs/, which FR-001 places in phase 3 as inline-Python sites: a specs/NNN/run.sh invoking specs/NNN/harness.py meets none of the three prongs, because prong 1 looks only outside specs/, prong 2 is measurements commands, and prong 3's kept set is drawn from git ls-files 'specs/*.py', so a .sh is never kept. A measurement that runs the .sh leaves the harness deleted under it. (2) .specify/scripts/bash/, also named by FR-001 as phase 3, is not in the listed directories. (3) Prong 3 is limited to a kept file 'in its own feature': a kept file in feature A that imports or names a file in feature B does not keep it. (4) No prong reaches a run that does not spell the path - a Makefile wildcard, a test collection or a find under specs/ - and the block does not say those were searched. Each is a way to delete a file something still runs, which is the opposite of what FR-001 orders, and no impossibility, implication in the GM's words, or defeat of purpose supports it. The item 9 exit cannot catch this: 'no file both deleted and named by a live caller' is true by construction when deletion is defined as not being named. What it should say: the test's space is every tracked file except the NOT TOUCHED prose and the exempt corpora, callers inside specs/ of any extension and any feature count, glob and collection routes are stated as searched, and the done check greps each deleted path over that whole space. The one-shot script is not named, so the prose test and what the script actually matched cannot be reconciled; the 222/154/68/19,299 figures carry a date and a method and were not re-run, the dispatch being bundle-only. Being generous where the test keeps a file merely mentioned in docs is within: the 68 are still deleted at their own task if nothing runs them."
+    },
+    {
+     "id": "T74-corpus-hooks",
+     "summary": "A row of tests/hooks/fixtures/ is not a use of the file it names.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Already implied by the accepted spec: FR-001 carries ask:449-T052-inline-census, that a python3 inside a string a case feeds a guard as its input is no run. A recorded command fed to a guard is that class, and the GM's condition is use, not mention."
+    },
+    {
+     "id": "T74-corpus-tooling",
+     "summary": "A row of tests/tooling/fixtures/ is not a use of the file it names, on the same one-line ground as the hooks corpus.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Adjudicated separately because one argument is stretched over two corpora. The hooks corpus has FR-001's ruling behind it; nothing in the bundle establishes that the tooling corpus is input only, and SC-004 speaks of every tool's recorded output giving the same verdict after porting, so whether a row there is replayed decides whether it is a run. The exemption's scope rests on a premise the block does not measure or state a method for. What it should say: how it is known that the tooling corpus's rows are never executed, or count them as uses."
+    },
+    {
+     "id": "T74-kept-deferred",
+     "summary": "The 68 kept files are ported, ruled on or deleted at their own phase-3 tasks.",
+     "class": "within",
+     "why": "FR-001 places every still-run file under specs/ in phase 3 and SC-005 still requires the censuses to end empty."
+    },
+    {
+     "id": "T74-not-touched",
+     "summary": "No spec.md, plan.md, tasks.md or measurements.json is edited; their prose may name a deleted file as history.",
+     "class": "within",
+     "why": "The GM asked for deletion of unused harnesses and nothing about their records. FR-001's rewrite of a measurement command applies in the commit that ports what it runs, and a file a measurement names is kept, so no rewrite is owed here."
+    },
+    {
+     "id": "T74-no-prose-rewrite",
+     "summary": "No prose naming a deleted harness is rewritten, a spec being a record of its time.",
+     "class": "within",
+     "why": "Nothing in the request or FR-001 asks for it."
+    },
+    {
+     "id": "T74-scope-all-specs-py",
+     "summary": "The test is applied to every specs/*.py, not only files called harnesses.",
+     "class": "within",
+     "why": "FR-001's own wording for the phase is 'a past feature's harness, measurement or prototype', with one nothing runs deleted and not ported."
+    },
+    {
+     "id": "T74-order-and-exits",
+     "summary": "Census then deletion in one landing, no work budget, red exit recorded and any claim of impossibility ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Procedure the spec leaves open; narrows nothing asked for."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
