@@ -567,10 +567,10 @@ def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
     return gaps
 
 
-def _cohort(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+def _cohort(*args: str) -> subprocess.CompletedProcess[str]:
     """The room table's questions, in the Rust gate (feature 449 T068)."""
-    gate = Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
-    return subprocess.run([str(gate), "cohort", *args], cwd=root, capture_output=True, text=True, check=False)
+    here = Path(__file__).resolve().parents[2]
+    return subprocess.run([str(here / "scripts" / "gates" / "l7r-gate.sh"), "cohort", *args], cwd=here, capture_output=True, text=True, check=False)
 
 
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidence: Sequence[str] = ()) -> Path:
@@ -609,8 +609,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
         parts += evidence_section(out, evidence)
-        if _cohort(root, "names-fit", str(owed.get("detail", ""))).returncode == 0:  # ...a fit failure: what more room each knob may buy (405 T113)
-            parts.append(_cohort(root, "room-table").stdout)
+        if _cohort("names-fit", str(owed.get("detail", ""))).returncode == 0:  # ...a fit failure: what more room each knob may buy (405 T113)
+            parts.append(_cohort("room-table").stdout)
         parts += claims_section(root, [str(owed.get("detail", "")), *(Path(f).read_text(encoding="utf-8") for f in evidence if Path(f).is_file())])
         if _PLAN_REVIEW.search(str(owed.get("detail", ""))) and d is not None:
             plan_parts, plan = plan_rounds(d)

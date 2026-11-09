@@ -50,7 +50,7 @@ fn fresh_rate(rec: &Value) -> Value {
         .iter()
         .map(|s| int(&s["seed"]))
         .min()
-        .map_or_else(|| rec["first_seed"].clone(), Value::from);
+        .unwrap_or_default();
     let or_mark = |k: &str| {
         if rec.get(k).is_some() {
             rec[k].clone()

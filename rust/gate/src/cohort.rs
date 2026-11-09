@@ -241,7 +241,7 @@ pub(crate) fn records(root: &Path) -> Vec<Value> {
                 .file_name()
                 .map(|n| n.to_string_lossy().into_owned())
                 .unwrap_or_default();
-            name.starts_with(|c: char| c.is_ascii_digit()) && name.ends_with(".json")
+            name.starts_with(|c: char| c.is_ascii_digit()) && crate::checks::has_ext(&name, "json")
         })
         .collect();
     names.sort();
@@ -416,7 +416,7 @@ fn cohort_check(repo: &Repo<'_>) -> (Vec<String>, Vec<String>) {
         let maps: Vec<&str> = status
             .lines()
             .filter_map(|l| l.get(3..))
-            .filter(|p| p.ends_with(".json"))
+            .filter(|p| crate::checks::has_ext(p, "json"))
             .collect();
         if !maps.is_empty() {
             let _ = write!(why, "; the tree has uncommitted pool maps ({}) - the gate regenerated what the change moved: read each diff, commit it, then land again", maps.join(", "));
@@ -427,9 +427,9 @@ fn cohort_check(repo: &Repo<'_>) -> (Vec<String>, Vec<String>) {
     let (mut refusals, mut notes) = (Vec::new(), Vec::new());
     for line in known::standing(landing, &base) {
         if REFUSING.iter().any(|w| line.contains(w)) {
-            refusals.push(line)
+            refusals.push(line);
         } else {
-            notes.push(line)
+            notes.push(line);
         }
     }
     notes.push(rate_line(landing));

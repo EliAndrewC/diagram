@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 194 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 195 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -59,6 +59,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cohort</td><td class=a>FIELD N SEED</td><td>roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]</td></tr>
+<tr><td class=n>make cohort-seeds</td><td class=a>&ndash;</td><td>which seeds found which failure, the fewest first seeds that find them all, and the fresh-seed rate (feature 375, 386)</td></tr>
 <tr><td class=n>make compound</td><td class=a><div class=ad><span class=an>ARGS=&lt;out.svg&gt;</span><span class=aw>where to write the composed draft</span></div></td><td>compose a DRAFT Mode A compound plan from a feet-based program - a starting point the GM then refines by hand</td></tr>
 <tr><td class=n>make hamlet</td><td class=a>SPEC</td><td>roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed</td></tr>
 <tr><td class=n>make map</td><td class=a><div class=ad><span class=an>GEN=&lt;gen path&gt;</span><span class=aw>which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)</span></div><div class=ad><span class=an>PROFILE=1</span><span class=aw>also print where the roll spent its time, stage by stage</span></div><div class=ad><span class=an>REGEN_FROZEN=1</span><span class=aw>re-render a FROZEN legacy exhibit anyway - only on the GM&#x27;s say-so (regen&#x27;s --frozen-ok)</span></div></td><td>regenerate ONE gen and gate it</td></tr>

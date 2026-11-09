@@ -210,7 +210,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the gate lock, own-make, the conflict check, the Rust crates' checks and the push's checks are Rust; the watchdog tells a session about a long make
 
-- [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command, and `scripts/gates/check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`), `cohort_gate.py` and `room_table.py` with `cohort_known.py` (`ask:449-T067-scope`), in four slices, `model_trial.py` deleted and `collect_cost.py` and `collect_probe.py` left to phase 4 (`ask:449-T068-scope`)
+- [ ] T068 [US2] The gate checks and the cohort, the first of `scripts/measure/`'s four slices (`ask:449-T068-scope`): `cohort_gate.py`, `cohort_known.py`, `room_table.py`, `cohort_seeds.py`, `check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`, `ask:449-T067-scope`); the figures and probes, the logs and reports, and the rest are the tasks after it, `collect_cost.py` and `collect_probe.py` left to phase 4
       research: rendering
 
 - [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them

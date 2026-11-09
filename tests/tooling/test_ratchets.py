@@ -239,16 +239,6 @@ def test_each_baseline_carries_its_OWN_written_reason() -> None:
             assert len(r.reason_cold.split()) >= 5, f"{name}'s cold baseline has no written reason"
 
 
-def test_the_dry_run_floor_still_reads_baseline() -> None:
-    """SC-004. `check-run-plausible.py` derives its floor from `RATCHETS[target].baseline` via
-    getattr and treats a missing value as NO FLOOR - so renaming that field would silently restore
-    the 2026-09-05 defect where `make -n done` minted a push credential."""
-    spec = importlib.util.spec_from_file_location("crp", script("check-run-plausible.py"))
-    crp = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(crp)
-    assert crp.floor_for("done") == max(crp.ABSOLUTE_MIN, int(ratchet.RATCHETS["done"].baseline * crp.FRACTION))
-
-
 def test_a_class_median_EXCLUDES_entries_that_carry_no_class(tmp_path) -> None:  # type: ignore[no-untyped-def]
     """SC-003. Every entry written before feature 196 lacks a cache field, and DEFAULTING them would
     put cold runs in the warm population - the exact defect this feature removes. Excluding costs a

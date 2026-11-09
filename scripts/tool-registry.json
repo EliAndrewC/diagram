@@ -43,7 +43,7 @@
     },
     "check-run-plausible": {
       "kind": "check",
-      "what": "scripts/gates/check-run-plausible.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/run_plausible.rs (`l7r-gate check run-plausible`) - a refusing check; each run recorded passed or refused"
     },
     "check-stale-dirs": {
       "kind": "check",
@@ -59,7 +59,7 @@
     },
     "cohort_gate": {
       "kind": "check",
-      "what": "scripts/gates/cohort_gate.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/cohort.rs (`l7r-gate cohort check`) - a refusing check; each run recorded passed or refused"
     },
     "gate-stamp": {
       "kind": "check",
@@ -119,7 +119,7 @@
     },
     "check-tool-signals": {
       "kind": "check",
-      "what": "scripts/gates/check-tool-signals.py - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/tool_signals.rs (`l7r-gate check tool-signals`) - make hooks-test refuses a tool that records none of its runs, and a registry out of step with the calls; each run recorded passed or refused"
     },
     "land": {
       "kind": "check",
@@ -148,6 +148,10 @@
     "refresh_baseline": {
       "kind": "step",
       "what": "scripts/gates/refresh_baseline.py - the incremental gate's baseline refreshed by a full run in a worktree after a landing's push (feature 415 T05); each run recorded"
+    },
+    "conflict-markers": {
+      "kind": "check",
+      "what": "rust/gate/src/checks/conflict.rs (`l7r-gate check conflict`) - a merge conflict committed; each run recorded passed or refused"
     }
   }
 }

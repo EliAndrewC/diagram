@@ -8,6 +8,7 @@ use super::known::{baselines, newly_failing, seeds_named, standing};
 use super::{
     check, cli, needs_baseline, pick, port_mode, rate_line, room, rust_refusal, seeds, Repo,
 };
+use super::{int, rust_landing, text, truthy};
 use crate::ci::fixtures::{commit, git, put, python, repo};
 
 /// main's engine at the first return; a `work` commit changes it at the second.
@@ -332,6 +333,10 @@ fn a_failing_seed_an_open_row_lists_is_named_and_a_closed_row_is_not() {
     assert!(!got.stdout.contains("closed#row"));
 }
 
+fn always(_: &str) -> bool {
+    true
+}
+
 fn s(n: i64, verdict: &str, counts: &Value, failures: &Value) -> Value {
     json!({"seed": n, "verdict": verdict, "counts": counts, "failures": failures})
 }
@@ -364,7 +369,7 @@ fn each_failing_seed_is_read_against_its_baseline_on_mains_engine() {
     assert!(got[6].contains("seed 60 fails") && got.len() == 7);
     let mut stamped = earlier[0].clone();
     stamped["engine_diff"] = json!("d");
-    assert!(baselines(&now, &[stamped], &|_| true).is_empty());
+    assert!(baselines(&now, &[stamped], &always).is_empty());
     assert_eq!(
         newly_failing(&now, &earlier, &|c| c.starts_with("main")),
         [21]
@@ -381,8 +386,8 @@ fn a_seed_newly_failing_owes_part_b_and_a_baseless_one_is_no_news() {
     let other_seed = json!({"utc": "a", "households": null, "commit": "main", "seeds": [s(2, "pass", &empty, &none)]});
     let dirty = json!({"utc": "a", "households": null, "commit": "main", "engine_diff": "d", "seeds": [s(1, "pass", &empty, &none)]});
     let failing = json!({"utc": "a", "households": null, "commit": "main", "seeds": [s(1, "fail", &empty, &none)]});
-    assert!(newly_failing(&now, &[wrong, sized, other_seed, dirty], &|_| true).is_empty());
-    assert!(newly_failing(&now, &[failing], &|_| true).is_empty());
+    assert!(newly_failing(&now, &[wrong, sized, other_seed, dirty], &always).is_empty());
+    assert!(newly_failing(&now, &[failing], &always).is_empty());
 }
 
 #[test]
@@ -448,10 +453,15 @@ fn the_seed_report_names_each_failure_the_span_and_the_rate() {
         &format!("{log}/3.json"),
         &json!({"commit": "c3", "seeds": []}).to_string(),
     );
+    put(
+        &root,
+        &format!("{log}/5.json"),
+        &json!({"seeds": []}).to_string(),
+    );
     put(&root, &format!("{log}/4.json"), &json!({"utc": "u", "commit": "c4", "first_seed": 10_000, "seeds": [{"seed": 10_000, "verdict": "fail"}, {"seed": 902, "verdict": "fail"}]}).to_string());
     let out = say(&root, "python3", &["seeds"]).stdout;
     assert!(
-        out.contains("4 record(s) over 3 change(s): feature 386, feature 400, unattributed (c3)")
+        out.contains("5 record(s) over 4 change(s): feature 386, feature 400, unattributed (?), unattributed (c3)")
     );
     assert!(out.contains("  refused:Web: seeds 3, 5 - on feature 386, feature 400"));
     assert!(out.contains("find every failure: 3 (and the pinned rows for pinned_only)"));
@@ -472,7 +482,7 @@ fn the_seed_report_names_each_failure_the_span_and_the_rate() {
         0
     );
     let back: Value = serde_json::from_str(&std::fs::read_to_string(&target).unwrap()).unwrap();
-    assert!(back["k"]["note"] == 1 && back["k"]["value"]["records"] == 4);
+    assert!(back["k"]["note"] == 1 && back["k"]["value"]["records"] == 5);
     assert_eq!(
         say(
             &root,
@@ -502,4 +512,148 @@ fn the_seed_report_names_each_failure_the_span_and_the_rate() {
             && empty.contains("no failures recorded")
     );
     assert_eq!(seeds::dumped(&json!({"a": 1})), "{\n \"a\": 1\n}\n");
+}
+
+fn record(utc: &str, commit: &str, verdicts: &[(i64, &str)], households: Option<i64>) -> Value {
+    let all: Vec<Value> = verdicts
+        .iter()
+        .map(|(n, v)| json!({"seed": n, "verdict": v}))
+        .collect();
+    json!({"utc": utc, "commit": commit, "households": households, "seeds": all})
+}
+
+#[test]
+fn a_seed_is_newly_failing_only_against_a_baseline_on_main() {
+    let main = |c: &str| c == "m1" || c == "m2";
+    let now = record(
+        "20261017T2000Z",
+        "c9",
+        &[
+            (1, "pass"),
+            (2, "fail"),
+            (3, "fail"),
+            (4, "fail"),
+            (5, "fail"),
+        ],
+        None,
+    );
+    let mut earlier = vec![
+        record(
+            "20261017T1000Z",
+            "m1",
+            &[(2, "pass"), (3, "pass"), (4, "fail")],
+            None,
+        ),
+        record("20261017T1100Z", "m2", &[(3, "fail")], None),
+        record("20261017T1200Z", "c8", &[(5, "pass")], None),
+        record("20261017T1300Z", "m2", &[(2, "pass")], Some(40)),
+        record("20261017T2100Z", "m2", &[(4, "pass")], None),
+    ];
+    assert_eq!(newly_failing(&now, &earlier, &main), [2]);
+    let mut dirty = record("20261017T1500Z", "m2", &[(3, "fail")], None);
+    dirty["engine_diff"] = json!("abc");
+    earlier.push(dirty.clone());
+    assert_eq!(newly_failing(&now, &earlier, &main), [2]);
+    let mine = [record("20261017T1000Z", "m1", &[(3, "pass")], None), dirty];
+    assert_eq!(newly_failing(&now, &mine, &main), [3]);
+}
+
+#[test]
+fn a_cohort_with_a_newly_failing_seed_owes_part_b_and_a_fit_failure_the_room_table() {
+    let root = repo("approach");
+    let py = python(&root);
+    put(
+        &root,
+        "docs/approach-checklist.md",
+        "## A. x\n\n1. a\n\n## B. y\n\n1. b\n",
+    );
+    put(&root, "specs/999-x/plan.md", "## T01 x\n");
+    put(&root, "specs/999-x/tasks.md", "- [ ] T01 x\n");
+    put(&root, "scripts/gates/room_table.json", &json!({"rows": [{"knob": "grow_gap", "where": "w", "value": 5, "label": "GUESS", "measures": "m", "ceiling": "c", "band": "grows"}]}).to_string());
+    commit(
+        &root,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/999-x\"}",
+    );
+    let head = git(&root, &["rev-parse", "HEAD"]);
+    git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+    let owed = |root: &Path| say(root, &py, &["known"]).stdout;
+    assert_eq!(owed(&root), "");
+    let log = "dev/cohort-log";
+    put(
+        &root,
+        &format!("{log}/20261017T1000Z-a.json"),
+        &record("20261017T1000Z", &head, &[(7, "pass"), (8, "pass")], None).to_string(),
+    );
+    let mut now = record(
+        "20261017T2000Z",
+        "feedface",
+        &[(7, "fail"), (8, "pass")],
+        None,
+    );
+    now["seeds"][0]["failures"] = json!(["row_rules"]);
+    put(
+        &root,
+        &format!("{log}/20261017T2000Z-a.json"),
+        &now.to_string(),
+    );
+    let msg = owed(&root);
+    assert!(
+        msg.contains("seed(s) 7 newly failing")
+            && msg.contains("part B")
+            && !msg.contains("room table")
+    );
+    let mut now = record(
+        "20261017T2100Z",
+        "feedface",
+        &[(7, "pass"), (8, "refused")],
+        None,
+    );
+    now["seeds"][1]["failures"] = json!(["refused:WebRefused"]);
+    put(
+        &root,
+        &format!("{log}/20261017T2100Z-a.json"),
+        &now.to_string(),
+    );
+    let msg = owed(&root);
+    assert!(
+        msg.contains("seed(s) 8 newly failing")
+            && msg.contains("## The room table")
+            && msg.contains("`grow_gap`")
+    );
+    put(
+        &root,
+        &format!("{log}/20261017T2200Z-a.json"),
+        &record("20261017T2200Z", "feedface", &[(9, "fail")], None).to_string(),
+    );
+    assert!(!owed(&root).contains("newly failing"));
+}
+
+#[test]
+fn a_record_s_values_read_as_python_read_them() {
+    assert_eq!(int(&json!("5")), 5);
+    assert_eq!(int(&json!("x")), 0);
+    assert_eq!(text(&json!({}), "utc"), "None");
+    assert_eq!(text(&json!({"utc": 7}), "utc"), "7");
+    assert!(
+        truthy(&json!(1)) && !truthy(&json!(0)) && truthy(&json!({"a": 1})) && !truthy(&json!({}))
+    );
+    assert!(
+        truthy(&json!(true)) && !truthy(&Value::Null) && truthy(&json!([1])) && !truthy(&json!(""))
+    );
+}
+
+#[test]
+fn the_key_is_kept_a_same_text_is_equal_and_no_origin_reads_main() {
+    let (root, ..) = work("kept", None);
+    let py = python(&root);
+    let r = Repo::new(&root, &py);
+    assert_eq!(r.engine_key(Some("HEAD")), r.engine_key(Some("HEAD")));
+    assert!(r.debug_free_equal(b"a", b"a", Path::new("x.py")));
+    git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
+    assert!(r.same_engine("HEAD"));
+    assert!(!rust_landing(&root));
+    let failed = json!({"seed": 1, "verdict": "fail", "failures": [3]});
+    let now = json!({"seeds": [failed]});
+    assert!(standing(&now, &std::collections::BTreeMap::new())[0].contains("(3)"));
 }

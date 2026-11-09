@@ -77,7 +77,7 @@ def test_the_moved_tree_check_runs_before_the_gate_vouches_for_anything() -> Non
     end = re.search(r"^[A-Za-z0-9_.-]+:", rest, re.M)
     recipe = rest[: end.start()] if end else rest
     check = recipe.index("--tree-check")
-    assert check < recipe.index("check-run-plausible.py\" $(DONE_NAME)"), "the tree check comes before the plausibility floor"
+    assert check < recipe.index("check run-plausible $(DONE_NAME)"), "the tree check comes before the plausibility floor"
     assert check < recipe.index('l7r-gate.sh" stamp --write diagram && '), "and before the stamps the push trusts"
     assert check < recipe.index(" green \"$$(cat"), "and before the green run-log entry"
     refusal = recipe[check : recipe.index("exit 1; }", check)]

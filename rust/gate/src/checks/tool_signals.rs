@@ -79,12 +79,10 @@ fn hook_guards(root: &Path) -> BTreeSet<String> {
 
 /// A target's recipe: its rule line and the tab-led or `##` lines after it.
 fn recipe(make: &str, target: &str) -> String {
-    let Ok(pattern) = Regex::new(&format!(
+    let pattern = compiled(&format!(
         r"(?m)^{}\s*:(?!=).*\n((?:\t.*\n|##.*\n)*)",
         fancy_regex::escape(target)
-    )) else {
-        return String::new();
-    };
+    ));
     pattern
         .find(make)
         .ok()

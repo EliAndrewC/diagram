@@ -1389,7 +1389,7 @@
   },
   "what": "FR-038 / SC-031: `make cohort-seeds` over dev/cohort-log/ - the failures, their seeds, the changes the records span, and the fewest first seeds finding every failure. Put to the GM 2026-10-12, who chose ten.",
   "date": "2026-10-12",
-  "command": "python3 scripts/measure/cohort_seeds.py --record specs/375-enforced-wave-process/measurements.json --key 375-a8-cohort-seeds"
+  "command": "scripts/gates/l7r-gate.sh cohort seeds --record specs/375-enforced-wave-process/measurements.json --key 375-a8-cohort-seeds"
  },
  "375-a8-claims-after": {
   "what": "SC-028 (FR-035): `make claims-owed` after a one-line comment appended to l7r/diagram/hamletgen/homesteads/fixtures.py (a warm run first, the comment, the timed run, the comment removed), today's code (a detached worktree at c6c53f038) against the new (the clone at d0deeb54d), alternating, three runs each; then the new code warm three times. One-shot, 2026-10-12, load 1.7-2.1.",

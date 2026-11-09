@@ -20,7 +20,7 @@ interpreter (`rust/guard/src/guards/make_only_hooks.rs` refuses one).
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` (held by `tests/tools/test_scatter_audit.py`); `make scatter-bases` lists a map's scatter bases |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` - `make cache-audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` - `make cohort N=... [SEED=...]` |
-| Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | `make cohort-landing` (feature 386; the gate is `scripts/gates/cohort-gate.sh`), the trend `make cohort-seeds` |
+| Will the gated push take this engine - 48 seeds on it, none regressed, and the fresh block's rate? | `make cohort-landing` (feature 386; the gate is `l7r-gate cohort check`, `scripts/gates/cohort-gate.sh`), the trend `make cohort-seeds` |
 | Regenerate and check the pool, choosing the scope from how the last run went | `mapcheck` - `make maps` |
 | Which modules are on the HAMLET PATH and owe 100% coverage? | `hamlet_floor` - a phase of `make test-full`, with no make route of its own; it drops the engine code the Rust port replaces (`dev/coverage-exempt.json`, feature 448, the GM 2026-11-02: "We can relax that for the engine code ... since that's going away") |
 | Which engine lines does only ONE rolling test context reach? | `roll_audit` - `make roll-audit` (feature 216) |

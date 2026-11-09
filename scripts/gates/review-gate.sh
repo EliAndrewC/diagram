@@ -160,7 +160,7 @@ owed_units="$(python3 "$RG_HERE/../reviews/review_owed.py" --root "$ROOT" --land
 # running all of the python map generating code as well"): no hamlet map is rolled while the port switch stands at rust-only, so a
 # review of one is neither redrawn below (`make map` rolled Inashiro and Kashikawa through the Python stages in a landing's cheap
 # refusals) nor refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
-port="$(cd "$ROOT" \&\& "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
+port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
 if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
   kept=""
   for unit in $owed_units; do

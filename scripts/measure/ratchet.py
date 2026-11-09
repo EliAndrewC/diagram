@@ -53,7 +53,7 @@ class Ratchet:
     compare: str = "run"  # "run" or "median" - what is measured against the ceiling
     armed: bool = True
     # FEATURE 196: the cost of `done` is BIMODAL on roll-cache state, so one baseline described
-    # neither regime. `baseline` is the WARM figure and KEEPS ITS NAME - `scripts/gates/check-run-plausible.py`
+    # neither regime. `baseline` is the WARM figure and KEEPS ITS NAME - `l7r-gate check run-plausible`
     # derives the dry-run floor from `RATCHETS[target].baseline` via getattr and treats a missing
     # value as "no floor", so renaming it would silently switch off the guard that stopped a
     # `make -n done` minting a push credential on 2026-09-05. `baseline_cold` is ADDITIVE.

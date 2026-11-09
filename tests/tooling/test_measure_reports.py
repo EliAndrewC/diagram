@@ -23,7 +23,6 @@ def _load(name: str) -> ModuleType:
 
 
 ry = _load("review_yield")
-cs = _load("cohort_seeds")
 tt = _load("turn_time")
 
 LEDGER = """
@@ -101,76 +100,6 @@ def _record(tmp: pathlib.Path, name: str, commit: str, seeds: list[tuple[int, li
     if feature is not None:
         rec["feature"] = feature
     (tmp / f"{name}.json").write_text(json.dumps(rec), encoding="utf-8")
-
-
-def test_cohort_seeds_names_each_failure_its_seeds_the_span_and_the_fewest_first_seeds(tmp_path: pathlib.Path) -> None:
-    _record(tmp_path, "a", "c1", [(3, []), (10, ["refused:WebRefused"]), (20, ["refused:WebRefused"])])
-    _record(tmp_path, "b", "c2", [(7, ["wells_are_shared[1]"]), (901, ["row_rules[2]"])], feature="380")
-    _record(tmp_path, "c", "c3", [(31, ["wells_are_shared[2]"]), (12, [])], feature="")
-    (tmp_path / "features.json").write_text('{"c1": "374"}', encoding="utf-8")
-    s = cs.summary(*cs.load(tmp_path))
-    assert s["changes"] == ["feature 374", "feature 380", "unattributed (c3)"], "a map for old records, else by commit"
-    assert s["failures"]["refused:WebRefused"] == {"seeds": [10, 20], "changes": ["feature 374"]}
-    assert s["failures"]["wells_are_shared"]["seeds"] == [7, 31], "a failure is named without its count"
-    assert s["fewest first seeds finding every failure"] == 10, "WebRefused first found at 10, wells at 7"
-    assert s["failures only a pinned seed found"] == ["row_rules"]
-    out = cs.render(s)
-    assert "3 change(s)" in out and "pinned rows for row_rules" in out
-
-
-def test_cohort_seeds_reports_fresh_records_as_a_rate_and_leaves_them_out_of_the_fewest_seeds(tmp_path: pathlib.Path) -> None:
-    """Feature 386: a fresh block is a RATE, never in the fewest-first-seeds count; a pinned seed is one of the six, not "901 on"."""
-    _record(tmp_path, "a", "c1", [(10, ["lane_knots[1]"]), (907, ["row_rules[1]"])])
-    (tmp_path / "f.json").write_text(
-        json.dumps(
-            {
-                "utc": "u1",
-                "commit": "c2",
-                "first_seed": 12000,
-                "seeds": [
-                    {"seed": 12000, "failures": ["refused:SiteRefused"], "verdict": "refused"},
-                    {"seed": 12001, "failures": [], "verdict": "pass"},
-                    {"seed": 901, "failures": [], "verdict": "pass"},
-                ],
-            }
-        ),
-        encoding="utf-8",
-    )
-    (tmp_path / "g.json").write_text(
-        json.dumps(
-            {
-                "utc": "u2",
-                "commit": "c3",
-                "first_seed": 400,
-                "fresh": True,
-                "seeds": [{"seed": 400, "failures": [], "verdict": "pass"}, {"seed": 403, "failures": ["lane_knots[1]"], "verdict": "fail"}],
-            }
-        ),
-        encoding="utf-8",
-    )
-    (tmp_path / "h.json").write_text(
-        json.dumps(
-            {"utc": "u3", "commit": "c4", "first_seed": 1, "seeds": [{"seed": 1, "failures": [], "verdict": "pass"}, {"seed": 50000, "failures": ["water_rules[1]"], "verdict": "fail", "fresh": True}]}
-        ),
-        encoding="utf-8",
-    )
-    s = cs.summary(*cs.load(tmp_path))
-    assert "water_rules" not in s["failures"], "a record's own fresh block stays out of the fixed reading"
-    assert "refused:SiteRefused" not in s["failures"], "a fresh record's failures stay out of the fixed reading"
-    assert s["failures"]["lane_knots"]["seeds"] == [10], "nor do its seeds join a fixed failure"
-    assert s["fewest first seeds finding every failure"] == 907 and s["failures only a pinned seed found"] == [], "907 is not a pinned row"
-    assert [(f["failed"], f["rolled"]) for f in s["fresh"]] == [(1, 2), (1, 2), (1, 1)], "the pinned row is not counted in the rate"
-    out = cs.render(s)
-    assert "u1 c2 from 12000: 1 of 2 failed (50%) - seeds 12000" in out and "pooled: 3 of 5 failed (60%)" in out and "u3 c4 from 50000: 1 of 1" in out
-
-
-def test_cohort_seeds_with_no_records_and_its_record(tmp_path: pathlib.Path) -> None:
-    s = cs.summary(*cs.load(tmp_path))
-    assert s["fewest first seeds finding every failure"] == 0 and "no failures recorded" in cs.render(s)
-    m = tmp_path.parent / f"{tmp_path.name}-m.json"  # beside the records, never among them
-    m.write_text("{}", encoding="utf-8")
-    assert cs.main(["--log", str(tmp_path), "--record", str(m), "--key", "k"]) == 0 and json.loads(m.read_text())["k"]["value"]["records"] == 0
-    assert cs.main(["--log", str(tmp_path), "--record", str(m)]) == 2
 
 
 def _line(kind: str, t: str, **extra: object) -> str:

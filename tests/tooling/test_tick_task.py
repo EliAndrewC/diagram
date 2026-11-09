@@ -425,7 +425,13 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
         lb,
         "run",
         lambda root, cmd, env=None, quiet=True: (
-            (state["stamp"], state.get("says", "")) if "l7r-gate.sh" in str(cmd) else (0, "") if "work-budget-review" in cmd else (1, "") if "rust-owed" in cmd else (state["cohort"], "")
+            (state["stamp"], state.get("says", ""))
+            if "l7r-gate.sh" in str(cmd) and "cohort" not in cmd
+            else (0, "")
+            if "work-budget-review" in cmd
+            else (1, "")
+            if "rust-owed" in cmd
+            else (state["cohort"], "")
         ),
     )
     beside: list[str] = []
@@ -916,7 +922,7 @@ def test_a_counter_only_landing_rolls_no_fresh_block(tmp_path: pathlib.Path, mon
     assert lb.fresh_block_after(tmp_path, True, False) == "" and started == [tmp_path], "no Python cohort at rust-only (444 T41)"
     asked: list[list[str]] = []
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: asked.append([str(c) for c in cmd]) or (0, ""))
-    assert lb.counter_only(tmp_path) and asked[-1][-1] == "counter-only" and asked[-1][1].endswith("cohort_gate.py")
+    assert lb.counter_only(tmp_path) and asked[-1][-2:] == ["cohort", "counter-only"] and asked[-1][0].endswith("l7r-gate.sh")
     monkeypatch.setattr(lb, "run", lambda root, cmd, env=None, quiet=True: (1, ""))
     assert not lb.counter_only(tmp_path)
 

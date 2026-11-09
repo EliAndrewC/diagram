@@ -96,7 +96,7 @@ fn a_call_the_registry_lacks_and_an_entry_nothing_records_are_refused() {
 
 #[test]
 fn a_recipe_and_what_the_entry_targets_reach() {
-    let make = "done: lint # note\n\t@true\nlint:\n\t@$(MAKE) --no-print-directory sub; x\nsub:\n\t@true\n";
+    let make = "quick: lint\n\t@true\ndone: lint # note\n\t@true\nlint:\n\t@$(MAKE) --no-print-directory sub; x\nsub:\n\t@true\n";
     assert_eq!(
         recipe(make, "lint"),
         "lint:\n\t@$(MAKE) --no-print-directory sub; x\n"

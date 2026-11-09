@@ -95,8 +95,7 @@ def test_head_is_rolled_once_per_engine_key_and_the_probe_is_red_on_a_worse_seed
     root = _repo(tmp_path)
     fake = _Make(root, {"now": [2]})
     monkeypatch.setattr(probe, "run", fake)
-    cg = type("CG", (), {"fresh_seed": staticmethod(lambda r, ref: 700), "cohort_known": type("K", (), {"engine_key": staticmethod(lambda r, ref: "k1")})})
-    monkeypatch.setattr(probe, "_cohort_gate", lambda: cg)
+    monkeypatch.setattr(probe, "_cohort", lambda r, *a: "700" if a[0] == "fresh-seed" else "k1")
     assert probe.main(["--root", str(root)]) == 1, "seed 2 fails now and passed at HEAD"
     out = capsys.readouterr().out
     assert "NEW FAILURE" in out and "the pool against HEAD:" in out and "a: unchanged" in out

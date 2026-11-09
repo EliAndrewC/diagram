@@ -14,6 +14,7 @@ one). `--commit` keeps the records of one engine commit; `--since` those at or a
 from __future__ import annotations
 
 import argparse
+import json
 import pathlib
 import sys
 from collections import Counter
@@ -31,6 +32,12 @@ def fresh_seeds(rec: dict[str, Any]) -> list[dict[str, Any]]:
     """A record's fresh seeds: every unpinned seed of a fresh record, else those marked fresh (`rust/gate/src/cohort/seeds.rs`'s rule; this file is ported in T068's third slice)."""
     whole = bool(rec.get("fresh")) or int(rec.get("first_seed") or 0) >= FRESH_BASE
     return [s for s in rec.get("seeds", []) if s["seed"] not in PINNED and (whole or s.get("fresh"))]
+
+
+def load(log: pathlib.Path) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """Every record but the feature index beside them."""
+    names = sorted(p for p in log.glob("*.json") if p.name != "features.json")
+    return [json.loads(p.read_text(encoding="utf-8")) for p in names], {}
 
 
 def failed(seed: dict[str, Any]) -> bool:
@@ -85,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--commit", default="")
     ap.add_argument("--since", default="")
     a = ap.parse_args(argv)
-    records, _ = cs.load(a.log)
+    records, _ = load(a.log)
     print(render(tally(list(pooled(records, a.commit, a.since).values()))))
     return 0
 

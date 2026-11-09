@@ -17,4 +17,5 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/lock.rs` | the host-wide gate lock and whether a make runs in this tree: `lock`, `own-make` (T067) |
 | `src/rustc.rs` | the Rust crates' checks: `rust lint`, `format`, `test`, `cover`, `dead`, `uncovered` (T067) |
 | `src/push.rs` | the push's checks and what each push gate judges: `push-checks`, `push-gate` (T067) |
+| `src/cohort.rs`, `src/cohort/` | the landing cohort, each seed's standing against main's engine, the seed report, the room table: `l7r-gate cohort` (T068) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

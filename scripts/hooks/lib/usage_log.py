@@ -12,7 +12,7 @@ ran or whether it changed anything.
     usage_log.py goals <goal>...            each make goal recorded `ran` (the Makefile's parse-time line, feature 406 D161)
 
 A record never fails its tool: every error is swallowed. Every tool that records here is listed in `scripts/tool-registry.json`
-with its kind and what it does; `scripts/gates/check-tool-signals.py` holds the two in step.
+with its kind and what it does; `l7r-gate check tool-signals` holds the two in step.
 """
 
 from __future__ import annotations

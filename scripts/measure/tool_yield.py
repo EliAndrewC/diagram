@@ -151,7 +151,7 @@ def reached(make: str) -> set[str]:
 
 def check_paths(root: Path) -> set[Path]:
     """Every refusing check's file: the commands under `scripts/gates/`, and every `scripts/` script the entry points name
-    (`check-tool-signals.py` holds each to its record, D164)."""
+    (`l7r-gate check tool-signals` holds each to its record, D164)."""
     gates = root / "scripts" / "gates"
     out = {p for p in gates.glob("*.py") if '__name__ == "__main__"' in p.read_text(encoding="utf-8")}
     out |= set(gates.glob("*.sh"))
