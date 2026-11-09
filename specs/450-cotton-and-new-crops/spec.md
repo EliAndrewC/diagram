@@ -137,6 +137,9 @@ Ryukyu-Satsuma (Isono 2007). No source outside the four countries was used, so n
 - **SC-002** (FR-002, FR-003): `make record-owed` shows no unanswered unit for the touched questions at landing, and `make impl-check
   F=450` reports nothing missing.
 
+- **SC-003** (FR-006, FR-007): no fragment states how common a crop is in Rokugan, and each disagreement between sources, marked draft and
+  reading through another work is stated as such, as the check rounds read them.
+
 ## Assumptions
 
 - Japan and China equally for question 1; the issue's own region order for the others.
