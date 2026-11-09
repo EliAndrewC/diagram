@@ -79,6 +79,8 @@ animal units	animal unit
 anjifang	anjifang
 anna	anna
 annas	anna
+annual cotton	annual cotton
+annual cottons	annual cotton
 anpei	anpei
 ansei	Ansei
 anthropogenic	anthropogenic
@@ -158,6 +160,9 @@ backwall	backwall
 backwalls	backwall
 backwater	backwater
 backwaters	backwater
+baekje	Baekje
+baekje's	Baekje
+baekje-period	Baekje
 baidie	bodie
 baidu baike	Baidu Baike
 bailey	bailey
@@ -216,6 +221,7 @@ barrel coffin	barrel coffin
 barrel coffins	barrel coffin
 barrier station	sekisho
 barrier stations	sekisho
+barygaza	Barygaza
 basal area	basal area
 base flow	base flow
 bast cloth	bast cloth
@@ -304,6 +310,7 @@ bohea	Bohea
 bohea country	Bohea
 boji	boji
 bojikui	bojikui
+bombay presidency	Bombay Presidency
 bomori	bomori
 bon	Bon
 bondservant	bondservant
@@ -694,6 +701,7 @@ cosmopolitan lineages	cosmopolitan lineage
 cost of living index	consumer price index
 cotton beater	cotton beater
 cotton beaters	cotton beater
+cotton wool	cotton wool
 country monk	country monk
 country monks	country monk
 country town	zaimachi
@@ -776,6 +784,7 @@ dacheng hall	Dacheng Hall
 dacheng halls	Dacheng Hall
 dading	Dading
 dading era	Dading
+daedong tax	Daedong tax
 daiba kunugi	daiba kunugi
 daidokoro	daidokoro
 daihachiguruma	daihachiguruma
@@ -876,6 +885,7 @@ diluvial uplands	diluvial upland
 dioecious	dioecious
 diospyros kaki	Diospyros kaki
 dipeng	dipeng
+diploid	diploid
 discharge	discharge
 discharge channel	discharge channel
 discharge channels	discharge channel
@@ -1375,7 +1385,11 @@ futures contracts	futures
 fuyu	Fuyu
 fuyu persimmon	Fuyu
 föhn	fohn
+g. arboretum	G. arboreum
+g. arboreum	G. arboreum
 g. arboreum variety indicum	G. arboreum variety indicum
+g. barbadense	G. barbadense
+g. herbaceum	G. herbaceum
 gabion	gabion
 gabions	gabion
 gable end	gable end
@@ -1485,6 +1499,7 @@ goemonburo	goemon-buro
 gofuku-machi	Gofukumachi
 gofukumachi	Gofukumachi
 gogura	gogura
+goguryeo	Goguryeo
 gohei	paper wand
 gokaido	Five Highways
 gokan	gokan
@@ -1498,9 +1513,15 @@ gongbu changku xuzhi	Gongbu changku xuzhi
 gonin-gumi	five-household group
 gono	gōnō
 gorinto	five-ring pagoda
+goryeo	Goryeo
+goryeo's	Goryeo
 gosekku	five festivals
 gosha	gōsha
 goshi	gōshi
+gossypium	Gossypium
+gossypium arboreum	G. arboreum
+gossypium barbadense	G. barbadense
+gossypium herbaceum	G. herbaceum
 goten	goten
 gou	gou
 goulan	goulan
@@ -1647,6 +1668,7 @@ hao	hao
 haori	half-fold
 harakata	harakata-shu
 harakata-shu	harakata-shu
+harappan	Harappan
 hardiness zone	hardiness zone
 hari-ma	hari-ma
 hasa	hazakake
@@ -2153,6 +2175,9 @@ jomon period	Jomon period
 jori	jori
 jori-sei	jori
 joruri	joruri
+joseon	Joseon
+joseon dynasty	Joseon
+joseon's	Joseon
 josui	josui
 josui ido	josui-ido
 josui-ido	josui-ido
@@ -2691,6 +2716,7 @@ luantan	luantan
 luban ruler	Luban ruler
 luban rulers	Luban ruler
 lulu	lulu
+lumen	lumen
 lump village	kaison
 lump villages	kaison
 luocheng	luocheng
@@ -2724,6 +2750,7 @@ magistracies	magistracy
 magistracies'	magistracy
 magistracy	magistracy
 magusaba	magusaba
+mahan	Mahan
 mahavira hall	Mahavira hall
 mahavira halls	Mahavira hall
 main channel	main stem
@@ -2770,6 +2797,7 @@ matoi	matoi
 matou	gangi
 matsu	matsu
 matsudaira tadaaki	Matsudaira Tadaaki
+mature harappan	Harappan
 mayasaki	mayasaki
 meander	meander
 meandering	meander
@@ -2777,6 +2805,7 @@ medake	medake
 medium trunk	mid-trunk
 megajoule	MJ
 megajoules	MJ
+mehrgarh	Mehrgarh
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
@@ -2882,6 +2911,7 @@ mitsuke	mitsuke
 mitsumata	mitsumata
 mitsumata field	mitsumata
 mitsumata fields	mitsumata
+miwata	seed cotton
 miyaji shibai	miyaji shibai
 miyakodori	miyakodori
 miyaza	miyaza
@@ -3124,6 +3154,8 @@ niter beds	nitre bed
 nitre bed	nitre bed
 nitre beds	nitre bed
 niwa	niwa
+nizam	Nizam
+nizam's	Nizam
 nobi	Nobi plain
 nobi plain	Nobi plain
 noborigama	noborigama
@@ -3830,6 +3862,7 @@ sara-ike	sara-ike
 sarae	sarae
 saryo bikyaku	saryo bikyaku
 sasa	sasa
+saseomsi	Saseomsi
 sasumata	sasumata
 satetsu	satetsu
 satoyama	satoyama
@@ -3868,6 +3901,7 @@ sedans	sedan
 sedge	sedge
 sedges	sedge
 seed	seed
+seed cotton	seed cotton
 seed drill	seed drill
 seed drills	seed drill
 seed's	seed
@@ -4101,6 +4135,7 @@ siheyuan	siheyuan
 siku quanshu	Siku Quanshu
 sill	sill
 silla	Silla
+sillok	sillok
 silver carp	silver carp
 siming	Siming
 simpson index	SI
@@ -4123,6 +4158,8 @@ skirt roof	mokoshi
 skirt roofs	mokoshi
 slanting weir	oblique weir
 slanting weirs	oblique weir
+slave tribute	slave tribute
+slaves' tribute	slave tribute
 slope face	slope face
 slope faces	slope face
 slope-face	slope face
@@ -5103,6 +5140,7 @@ yayi	yayi
 yayoi	Yayoi period
 yayoi period	Yayoi period
 yazhou	Yazhou
+yi dynasty	Joseon
 yi network	shukuba
 yizhan	shukuba
 yizhong	yizhong

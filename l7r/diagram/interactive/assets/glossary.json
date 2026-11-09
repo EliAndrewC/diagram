@@ -18885,5 +18885,159 @@
   "variants": [
    "ginning"
   ]
+ },
+ "Baekje": {
+  "def": "One of Korea's three early kingdoms; a temple it built at Neungsan-ri in 567 yielded the first cotton cloth excavated from that age.",
+  "variants": [
+   "Baekje",
+   "Baekje's",
+   "Baekje-period"
+  ]
+ },
+ "Goguryeo": {
+  "def": "One of Korea's three early kingdoms; a Chinese work of about 660 says its inhabitants made a cloth taken to be cotton.",
+  "variants": [
+   "Goguryeo"
+  ]
+ },
+ "Goryeo": {
+  "def": "The Korean dynasty before Joseon; in its last decades, in the 1360s, cotton seed was brought from Yuan China and first recorded as grown in Korea.",
+  "variants": [
+   "Goryeo",
+   "Goryeo's"
+  ]
+ },
+ "Joseon": {
+  "def": "The Korean dynasty after Goryeo, in power by 1398 and still in the 1890s, also called the Yi dynasty.",
+  "variants": [
+   "Joseon",
+   "Joseon's",
+   "Joseon dynasty",
+   "Yi dynasty"
+  ]
+ },
+ "Harappan": {
+  "def": "The early urban civilization of the Indus region, where cotton seeds appear regularly from about 2500 BCE; its Mature period is its urban phase, by about 2000 BCE.",
+  "variants": [
+   "Harappan",
+   "Mature Harappan"
+  ]
+ },
+ "Mehrgarh": {
+  "def": "An archaeological site in Baluchistan with South Asia's earliest finds of cotton, by 5000-4300 BCE.",
+  "variants": [
+   "Mehrgarh"
+  ]
+ },
+ "Barygaza": {
+  "def": "A trading place of first-century India on the gulf of the same name, from which the Periplus lists cotton cloth among the exports.",
+  "variants": [
+   "Barygaza"
+  ]
+ },
+ "cotton wool": {
+  "def": "Raw cotton fiber, as traded before it was made into cloth.",
+  "variants": [
+   "cotton wool"
+  ]
+ },
+ "slave tribute": {
+  "def": "Cloth paid in by slaves and held in a government office of Joseon Korea; in 1485 one office held 724,500 bolts of cotton and over 180,000 of hemp.",
+  "variants": [
+   "slave tribute",
+   "slaves' tribute"
+  ]
+ },
+ "sillok": {
+  "def": "The royal annals of Korea's Joseon dynasty, kept reign by reign.",
+  "variants": [
+   "sillok",
+   "Sillok"
+  ]
+ },
+ "Daedong tax": {
+  "def": "A tax of later Joseon Korea that many farm households paid in woven cloth.",
+  "variants": [
+   "Daedong tax"
+  ]
+ },
+ "Mahan": {
+  "def": "An early period in Korea's Baekje region, from which records of spinning silk floss and weaving cloth survive.",
+  "variants": [
+   "Mahan"
+  ]
+ },
+ "lumen": {
+  "def": "The hollow channel inside a plant fiber; with a natural twist, it is what identifies cotton fiber under analysis.",
+  "variants": [
+   "lumen"
+  ]
+ },
+ "Saseomsi": {
+  "def": "A government office of Joseon Korea that held cloth paid in as slaves' tribute.",
+  "variants": [
+   "Saseomsi"
+  ]
+ },
+ "G. herbaceum": {
+  "def": "One of the two Old World species of cotton, regarded as African in origin; it reached China overland from Central Asia.",
+  "variants": [
+   "G. herbaceum",
+   "Gossypium herbaceum"
+  ]
+ },
+ "G. arboreum": {
+  "def": "One of the two Old World species of cotton, probably from the Indus region of South Asia; it is the Asian cotton Japan grew from the 16th to the 18th centuries.",
+  "variants": [
+   "G. arboreum",
+   "Gossypium arboreum",
+   "G. arboretum"
+  ]
+ },
+ "G. barbadense": {
+  "def": "One of the two American species of cotton; the other is G. hirsutum, called upland cotton.",
+  "variants": [
+   "G. barbadense",
+   "Gossypium barbadense"
+  ]
+ },
+ "Gossypium": {
+  "def": "The botanical genus of the cotton plants; in a species name, G. stands for it.",
+  "variants": [
+   "Gossypium"
+  ]
+ },
+ "diploid": {
+  "def": "Of a plant, carrying two sets of chromosomes in each cell.",
+  "variants": [
+   "diploid"
+  ]
+ },
+ "annual cotton": {
+  "def": "A cotton plant sown and brought to harvest within a single year, rather than a shrub that lives for several.",
+  "variants": [
+   "annual cotton",
+   "annual cottons"
+  ]
+ },
+ "Bombay Presidency": {
+  "def": "A large province of British India run from Bombay under a governor, covering much of western India, Dharwar included.",
+  "variants": [
+   "Bombay Presidency"
+  ]
+ },
+ "Nizam": {
+  "def": "The title of the ruler of Hyderabad, a state in south-central India under British overlordship.",
+  "variants": [
+   "Nizam",
+   "Nizam's"
+  ]
+ },
+ "seed cotton": {
+  "def": "Cotton as picked, the fiber still on its seeds and not yet ginned.",
+  "variants": [
+   "seed cotton",
+   "miwata"
+  ]
  }
 }
