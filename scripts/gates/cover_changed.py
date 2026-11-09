@@ -75,15 +75,19 @@ def changed_rust(root: Path, merge: str) -> dict[Path, list[str]]:
     return out
 
 
-def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[int]]:
-    """Each changed `.rs` file's lines its crate's tests do not reach (`rust_checks.uncovered`)."""
-    if str(Path(__file__).resolve().parent) not in sys.path:
-        sys.path.insert(0, str(Path(__file__).resolve().parent))  # loaded by path (the tests), its sibling still importable
-    import rust_checks  # noqa: PLC0415
+def uncovered(manifest: Path) -> dict[str, list[int]]:
+    """Each source file of the crate with the lines its tests do not reach, from the Rust gate."""
+    gate = Path(__file__).resolve().parent / "l7r-gate.sh"
+    done = subprocess.run([str(gate), "rust", "uncovered", "--crate", str(manifest.parent)], capture_output=True, text=True, check=False)
+    sys.stderr.write(done.stderr)
+    return dict(json.loads(done.stdout)) if done.stdout.strip() else {str(manifest.parent): [0]}
 
+
+def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[int]]:
+    """Each changed `.rs` file's lines its crate's tests do not reach."""
     out: dict[str, list[int]] = {}
     for manifest, files in crates.items():
-        got = rust_checks.uncovered(manifest, rust_checks.TARGET / f"cover-{manifest.parent.name}")
+        got = uncovered(manifest)
         for f in files:
             if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
                 out[f] = lines

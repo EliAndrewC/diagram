@@ -38,7 +38,7 @@ budget-program: ## [performance] set the whole roll's work budget with the GM's 
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/budget_change.py" program "$(OPS_AT_40)" "$(EXPONENT)" --words "$(WORDS)"
 
 counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")
-	python3 scripts/gates/rust_checks.py test-counters
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test-counters
 
 STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state write
 
@@ -47,7 +47,7 @@ STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state writ
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
-	@l="$$(git rev-parse --show-toplevel)/scripts/gates/gate_lock.py"; [ ! -f "$$l" ] || python3 "$$l" acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
 	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; tp=$$(date +%s); [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true)
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
@@ -192,7 +192,7 @@ backup:         ## [project] save the clone's commits to backup/<clone> on GitHu
 	@"$$(git rev-parse --show-toplevel)/scripts/sync-with-main.sh" backup
 
 # THE DRIVER RUN BY CARGO ITSELF, NO PYTHON BETWEEN (feature 444 T36; the GM 2026-11-07: "Why does `make hamlet` run Python at
-# all?"): `rust_checks.py hamlet` only put the command together - the shared target directory, the toolchain's cargo - and its
+# all?"): `l7r-gate rust hamlet` only put the command together - the shared target directory, the toolchain's cargo - and its
 # start was ~20 ms of a ~110 ms map (measured 2026-11-07); cargo still decides whether the binary is fresh. Same directory, so
 # the gate's builds and these share one cache
 HAMLET_RUN = CARGO_TARGET_DIR="$${CARGO_TARGET_DIR:-$$HOME/.cache/l7r-cargo-target/$(notdir $(CURDIR))}" "$$([ -x "$$HOME/.cargo/bin/cargo" ] && echo "$$HOME/.cargo/bin/cargo" || echo cargo)" run --release --quiet --manifest-path rust/phases/Cargo.toml --bin hamlet --
@@ -396,7 +396,7 @@ print()"
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
 	@printf '  If the bulk is a roster restating code elsewhere, clause 14 says DERIVE it, do not split.\n\n'
 	@printf '\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
-	@python3 scripts/hooks/lib/hm_conflict.py --list .
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --list .
 	@printf '  Declaring it makes the WHOLE file invisible to the hook and to the backstop, so a real\n'
 	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
 	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
@@ -1140,25 +1140,25 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs duplicate-defs; then python3 scripts/gates/check-duplicate-defs.py --selftest && python3 scripts/gates/check-duplicate-defs.py .; fi
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
-	python3 scripts/gates/rust_checks.py lint
-	python3 scripts/gates/rust_checks.py format --check
-	python3 scripts/gates/rust_checks.py cover
-	python3 scripts/gates/rust_checks.py dead
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust lint
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format --check
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust cover
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust dead
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
-	python3 scripts/hooks/lib/hm_conflict.py --selftest
-	python3 scripts/hooks/lib/hm_conflict.py --tracked .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --selftest
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --tracked .
 	python3 scripts/make-docs.py . --check
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check stale-dirs --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check stale-dirs .
 	bash scripts/reviews/layout_carry.sh --selftest
 
 rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17)   [CRATE=tests/fixtures/rust/fixture]
-	python3 scripts/gates/rust_checks.py test $(if $(CRATE),--crate "$(CRATE)",)
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",)
 
 format:          ## [static] ruff format over the tree, and rustfmt over the Rust phases' crates (feature 444 T17)
 	python3 -m ruff format .
-	python3 scripts/gates/rust_checks.py format
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format
 
 typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (feature 142)
 	$(TYPECHECK)

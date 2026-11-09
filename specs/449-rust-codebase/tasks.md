@@ -206,16 +206,16 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the plan and spec gates are Rust (l7r-gate plan, check spec-lint); what stays Python reaches them through scripts/plan_door.py
 
-- [ ] T067 [US2] `scripts/gates/` the landing's own: `preflight.py`, `push_checks.py`, `cover_changed.py`, `gate_lock.py` and what remains under `scripts/gates/`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`
+- [ ] T067 [US2] `scripts/gates/` the landing's own: `gate_lock.py`, `rust_checks.py`, `push_gates.py`, `push_checks.py`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`; `cohort_gate.py` and `room_table.py` go to T068, `preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` to T071, `close_check.py` and `memo_check.py` to phase 3 (`ask:449-T067-scope`, FR-001)
       research: rendering
 
-- [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command, and `scripts/gates/check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`)
+- [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command, and `scripts/gates/check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`), `cohort_gate.py` and `room_table.py` with `cohort_known.py` (`ask:449-T067-scope`)
       research: rendering
 
 - [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`, `buildspec/run.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
       research: rendering
 
-- [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller)
+- [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller), `scripts/gates/preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` (`ask:449-T067-scope`)
       research: rendering
 
 - [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, the phase's record in `dev/`

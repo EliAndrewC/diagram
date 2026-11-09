@@ -164,7 +164,7 @@ printf '1\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" add -A; git -C "$T
 git -C "$C" pull -q --no-rebase --no-edit origin main
 printf '1\n2\nTHREE\n' > "$C/scripts/c.sh"; git -C "$C" commit -qam "c here, line 3"
 printf 'ONE\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" commit -qam "c there, line 1"; git -C "$T/seed" push -q "$T/o.git" main
-mkdir -p "$C/scripts/gates"; cp "$HERE/../../scripts/gates/gate_lock.py" "$C/scripts/gates/"; git -C "$C" add scripts/gates; git -C "$C" commit -qm "the lock"
+mkdir -p "$C/scripts/gates"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$HERE/../../scripts/gates/l7r-gate.sh" > "$C/scripts/gates/l7r-gate.sh"; chmod +x "$C/scripts/gates/l7r-gate.sh"; git -C "$C" add scripts/gates; git -C "$C" commit -qm "the lock"
 (exec -a make bash -c 'sleep 120; :' done) & GL=$!
 sleep 0.3; printf '{"pid": %s, "t": 0}' "$GL" > "$C/.git/gate.lock"
 BEFORE=$(git -C "$C" rev-parse HEAD)

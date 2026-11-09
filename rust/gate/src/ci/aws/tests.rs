@@ -1,7 +1,6 @@
 //! The adapter, driven through a fake `aws` at the process boundary; whether the real CLI answers so is the first paid run's to prove.
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
 use serde_json::json;
 
@@ -11,8 +10,7 @@ use super::{error_code, Aws, AwsError, CliAws};
 /// A fake `aws` running `body`, its arguments logged to `calls`.
 fn fake(dir: &Path, body: &str) -> CliAws {
     let path = dir.join("aws");
-    std::fs::write(&path, format!("#!/bin/bash\necho \"$AWS_ACCESS_KEY_ID $AWS_DEFAULT_REGION $*\" >> \"{}/calls\"\n{body}\n", dir.display())).unwrap();
-    Command::new("chmod").arg("+x").arg(&path).status().unwrap();
+    crate::write_executable(&path, &format!("#!/bin/bash\necho \"$AWS_ACCESS_KEY_ID $AWS_DEFAULT_REGION $*\" >> \"{}/calls\"\n{body}\n", dir.display()));
     CliAws {
         program: path,
         secrets: secrets(),

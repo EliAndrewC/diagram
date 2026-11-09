@@ -25,7 +25,7 @@ from pathlib import Path
 
 #: (label, argv with `{root}`): the push's checks as `push_cmd` runs them, selftests included
 COMMANDS: tuple[tuple[str, tuple[str, ...]], ...] = (
-    ("push checks (one process)", ("python3", "{root}/scripts/gates/push_checks.py", "{root}")),
+    ("push checks (one process)", ("{root}/scripts/gates/l7r-gate.sh", "push-checks", "{root}")),
     ("duplicate-defs selftest", ("python3", "{root}/scripts/gates/check-duplicate-defs.py", "--selftest")),
     ("duplicate-defs", ("python3", "{root}/scripts/gates/check-duplicate-defs.py", "{root}")),
     ("file-scale selftest", ("{root}/scripts/gates/l7r-gate.sh", "check", "file-scale", "--selftest")),
@@ -49,8 +49,8 @@ COMMANDS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("spec-lint selftest", ("{root}/scripts/gates/l7r-gate.sh", "check", "spec-lint", "--selftest")),
     ("spec-lint", ("{root}/scripts/gates/l7r-gate.sh", "check", "spec-lint", "--delta", "{root}")),
     ("speckit-todo check", ("python3", "{root}/scripts/speckit-todo.py", "--root", "{root}", "--check")),
-    ("conflict selftest", ("python3", "{root}/scripts/hooks/lib/hm_conflict.py", "--selftest")),
-    ("conflict", ("python3", "{root}/scripts/hooks/lib/hm_conflict.py", "--tracked", "{root}")),
+    ("conflict selftest", ("{root}/scripts/gates/l7r-gate.sh", "check", "conflict", "--selftest")),
+    ("conflict", ("{root}/scripts/gates/l7r-gate.sh", "check", "conflict", "--tracked", "{root}")),
     ("gate-stamp selftest", ("{root}/scripts/gates/l7r-gate.sh", "stamp", "--selftest")),
 )
 

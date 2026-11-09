@@ -6,7 +6,10 @@ pub mod codeid;
 pub mod delta;
 mod exempt;
 mod hashing;
+mod lock;
 mod plan;
+mod push;
+mod rustc;
 mod stamp;
 mod state;
 
@@ -55,6 +58,11 @@ fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
     }
 }
 
+/// `L7R_CACHE_OFF` set to anything but empty or `0` turns the content cache off.
+fn cache_off(value: Option<&str>) -> bool {
+    value.is_some_and(|v| !v.is_empty() && v != "0")
+}
+
 /// The command line. `--version` is the one subcommand until the first port lands; an unknown one is refused by name, so a recipe that names a tool not yet ported fails rather than passes.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
@@ -72,6 +80,15 @@ pub fn cli(args: &[String]) -> Reply {
         Some("github-token") => ci::config::github_token(&top()),
         Some("check") => checks::cli(&args[1..], &top()),
         Some("plan") => plan::cli(&args[1..], &top()),
+        Some("rust") => rustc::cli(&args[1..]),
+        Some("push-gate") => push::gate_cli(&args[1..], &top()),
+        Some("push-checks") => push::checks_cli(
+            &args[1..],
+            &std::env::var_os("L7R_GATE_TREE").map_or_else(top, PathBuf::from),
+            cache_off(std::env::var("L7R_CACHE_OFF").ok().as_deref()),
+        ),
+        Some("lock") => lock::cli(&args[1..], Path::new("/proc")),
+        Some("own-make") => lock::own_make_cli(&args[1..], Path::new("/proc")),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
@@ -90,6 +107,25 @@ pub fn cli(args: &[String]) -> Reply {
             code: 2,
         },
     }
+}
+
+/// Write an executable a test will run, the file written by a child process.
+///
+/// A thread that forks in another test copies every open descriptor until its child execs, so a
+/// script this process has just written can still be open for writing in that child and running
+/// it fails with "Text file busy". `install` holds the only descriptor that writes the file, and
+/// it has exited by the time this returns.
+#[cfg(test)]
+pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
+    let draft = path.with_extension("draft");
+    std::fs::write(&draft, text).unwrap();
+    let done = std::process::Command::new("install")
+        .args(["-m", "755"])
+        .arg(&draft)
+        .arg(path)
+        .status();
+    assert!(done.unwrap().success());
+    std::fs::remove_file(&draft).unwrap();
 }
 
 #[cfg(test)]
@@ -119,6 +155,16 @@ mod tests {
             .stdout
             .contains("expire-verified-records"));
         assert!([0, 1].contains(&ask(&["github-token"]).code));
+        assert_eq!(ask(&["push-checks"]).code, 2);
+        assert!(
+            super::cache_off(Some("1"))
+                && !super::cache_off(Some("0"))
+                && !super::cache_off(Some(""))
+                && !super::cache_off(None)
+        );
+        assert_eq!(ask(&["push-gate"]).code, 2);
+        assert_eq!(ask(&["lock"]).code, 2);
+        assert_eq!(ask(&["own-make"]).code, 2);
     }
 
     #[test]

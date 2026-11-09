@@ -102,7 +102,7 @@ fn a_self_matching_pattern_is_bracketed_or_refused() {
         v2["command"]
             .as_str()
             .unwrap_or_default()
-            .starts_with("/lib/own-make.sh map GEN=a")
+            .contains("gates/l7r-gate.sh own-make map GEN=a")
             && said2.contains("scoped to this working tree")
     );
     let (v3, said3) = rewritten(&run("while pgrep -f \"x y\"; do :; done"));

@@ -113,28 +113,28 @@ impl Ctx<'_> {
         );
     }
 
-    /// A make run, or a running gate's lock, in `clone` (`own-make.sh ""` and `gate_lock.py held`).
+    /// A make run, or a running gate's lock, in `clone` (`l7r-gate own-make` and `lock held`).
     fn running(&self, clone: &Path) -> bool {
         if ask(
             clone,
             &self
                 .tree
-                .join("scripts/hooks/lib/own-make.sh")
+                .join("scripts/gates/l7r-gate.sh")
                 .to_string_lossy(),
-            &[""],
+            &["own-make", ""],
             "",
         )
         .ok()
         {
             return true;
         }
-        let lock = clone.join("scripts/gates/gate_lock.py");
+        let lock = clone.join("scripts/gates/l7r-gate.sh");
         lock.is_file() && {
             let gitdir = git(clone, &["rev-parse", "--absolute-git-dir"]).out;
             ask(
                 Path::new("/"),
-                self.python,
-                &[&lock.to_string_lossy(), "held", &gitdir],
+                "bash",
+                &[&lock.to_string_lossy(), "lock", "held", &gitdir],
                 "",
             )
             .ok()
@@ -540,10 +540,8 @@ fn sync(cx: &Ctx, clone: &Path) -> Vec<String> {
         "has uncommitted work (mid-task)"
     } else if ask(
         clone,
-        &cx.tree
-            .join("scripts/hooks/lib/own-make.sh")
-            .to_string_lossy(),
-        &[""],
+        &cx.tree.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
+        &["own-make", ""],
         "",
     )
     .ok()

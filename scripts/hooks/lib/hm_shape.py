@@ -311,7 +311,7 @@ def bracket_pattern(cmd: str) -> str | None:
 # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - A WAIT ON A MAKE RUN IS SCOPED TO THE ASKING TREE. `pgrep -f
 # "make done"` searches the whole host, and every clone gates with the same words: a bracketed pattern stops the
 # self-match but still matches another session's gate, which held a waiter open for six hours after its own gate
-# had failed. A match on `make <target>` (bracketed or not) becomes `own-make.sh <target>`, which counts only
+# had failed. A match on `make <target>` (bracketed or not) becomes `l7r-gate own-make <target>`, which counts only
 # runs whose working directory is inside the asking tree. pkill is left alone: a kill is not a wait.
 # GUARD_EDIT_OK: 2026-09-30 (GM: "Yes, please go ahead") - a target may carry a PATH (`make map GEN=pool/hamlets/x.gen.py`):
 # without `/` in the class the wait was left unscoped, and its bracketed pattern matched the launching shell for four hours.
@@ -554,7 +554,7 @@ if __name__ == "__main__":
         if _with:
             print(_with)
     elif mode == "bracket":
-        # GUARD_EDIT_OK: 2026-09-28 - argument 2, when given, is `own-make.sh`'s absolute path: a make-run wait is
+        # GUARD_EDIT_OK: 2026-09-28 - argument 2, when given, is the own-make helper's absolute path: a make-run wait is
         # scoped to the asking tree first, then any other literal pattern is bracketed
         scoped = scope_make_waits(CMD, sys.argv[2]) if len(sys.argv) > 2 else None
         out = bracket_pattern(scoped or CMD) or scoped

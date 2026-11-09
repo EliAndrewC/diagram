@@ -25,7 +25,7 @@ def counted(root: Path, rows: dict[tuple[int, int], dict]) -> dict[str, dict[int
     totals and counters, filed in `rows` by (seed, households)."""
     env = {**os.environ, "HAMLET_ARGS": "--budget", "HAMLET_FEATURES": "counters"}
     run = subprocess.run(
-        [sys.executable, str(root / "scripts/gates/rust_checks.py"), "hamlet", "--crate", str(root / "rust/phases")],
+        [str(root / "scripts/gates/l7r-gate.sh"), "rust", "hamlet", "--crate", str(root / "rust/phases")],
         env=env,
         capture_output=True,
         text=True,

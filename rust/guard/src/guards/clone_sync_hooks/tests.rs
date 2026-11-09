@@ -2,7 +2,6 @@
 //! is a mirror with one commit and a clone of it, copied in-process from one template so a test starts no `git clone`; the tree's
 //! tools are `sh` fakes, steered by marker files.
 
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
@@ -33,8 +32,7 @@ fn git(dir: &Path, args: &[&str]) -> Said {
 
 fn script(p: &Path, body: &str) {
     std::fs::create_dir_all(p.parent().unwrap()).unwrap();
-    std::fs::write(p, format!("#!/bin/sh\n{body}\n")).unwrap();
-    std::fs::set_permissions(p, std::fs::Permissions::from_mode(0o755)).unwrap();
+    crate::guards::write_executable(p, &format!("#!/bin/sh\n{body}\n"));
 }
 
 fn copy(from: &Path, to: &Path) {
@@ -73,7 +71,7 @@ fn template() -> &'static PathBuf {
             "echo 'sync-with-main: NOTE kept'; echo said >&2\n[ -f .git/sync-ff ] && git fetch -q origin && git merge -q --ff-only FETCH_HEAD\nexit $(cat .git/sync-rc 2>/dev/null || echo 0)",
         );
         let tree = root.join("tree");
-        script(&tree.join("scripts/hooks/lib/own-make.sh"), "[ -f .making ]");
+        script(&tree.join("scripts/gates/l7r-gate.sh"), "[ -f .making ]");
         script(&tree.join("scripts/hooks/lib/usage_log.py"), "exit 0");
         script(&tree.join("scripts/reviews/layout_carry.sh"), "echo carried");
         root
@@ -296,8 +294,8 @@ fn a_clone_behind_under_a_make_or_a_gate_lock_waits() {
     ));
     std::fs::remove_file(w.clone.join(".making")).unwrap();
     script(
-        &w.clone.join("scripts/gates/gate_lock.py"),
-        "[ -f \"$2/held\" ]",
+        &w.clone.join("scripts/gates/l7r-gate.sh"),
+        "[ -f \"$3/held\" ]",
     );
     std::fs::write(w.clone.join(".git/held"), "").unwrap();
     assert!(told(
@@ -432,8 +430,8 @@ fn a_mid_task_prompt_refreshes_only_the_mirror() {
     std::fs::remove_file(w.clone.join(".making")).unwrap();
     std::fs::remove_file(w.clone.join(".git/sync-rc")).unwrap();
     script(
-        &w.clone.join("scripts/gates/gate_lock.py"),
-        "[ -f \"$2/held\" ]",
+        &w.clone.join("scripts/gates/l7r-gate.sh"),
+        "[ -f \"$3/held\" ]",
     );
     std::fs::write(w.clone.join(".git/held"), "").unwrap();
     std::fs::create_dir_all(w.tree.join("scripts/l7r/diagram")).unwrap();

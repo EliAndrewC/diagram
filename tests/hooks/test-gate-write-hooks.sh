@@ -31,7 +31,7 @@ echo "--- 2. this tree's make done running ---"
 ( cd "$R" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
 # THE FIXTURE'S OWN GATE, AS THE GUARD SEES IT (405 T61): `pgrep -f "make done"` also matched a real gate running elsewhere on the
 # machine - the landing's, beside its cohort - so the wait ended before this fixture's started and three cases read "let through"
-for _ in $(seq 1 50); do ( cd "$R" && "$HERE/../../scripts/hooks/lib/own-make.sh" done ) && break; sleep 0.1; done
+for _ in $(seq 1 50); do ( cd "$R" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make done ) && break; sleep 0.1; done
 check "an Edit inside the tree: refused" 2 "$(run "$R" "$EDIT")"
 check "...naming make verify-wait" yes "$(grep -q 'make verify-wait' "$R/err" && echo yes || echo no)"
 check "a git commit: refused" 2 "$(run "$R" "$COMMIT")"
@@ -58,7 +58,7 @@ printf 'done:\n\t@sleep 30\n' > "$S/Makefile"
 git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
 python3 "$S/scripts/gates/preflight.py" --root "$S" --tree-snap "$S/.git/gate-tree.json"
 ( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
-for _ in $(seq 1 50); do ( cd "$S" && "$HERE/../../scripts/hooks/lib/own-make.sh" done ) && break; sleep 0.1; done
+for _ in $(seq 1 50); do ( cd "$S" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make done ) && break; sleep 0.1; done
 DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
 CODE=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"x + 1","new_string":"x + 2"}}' "$S")
 check "an Edit of a claim docstring: let through" 0 "$(run "$S" "$DOC")"
@@ -78,7 +78,7 @@ echo "--- 4. while make cache-audit runs (feature 426 T10: 335cfa840 swept in th
 A=$(mktemp -d); git -C "$A" init -q; mkdir -p "$A/l7r/diagram" "$A/docs"
 printf 'cache-audit:\n\t@sleep 31\n' > "$A/Makefile"
 ( cd "$A" && setsid nohup make cache-audit </dev/null >/dev/null 2>&1 & )
-for _ in $(seq 1 50); do ( cd "$A" && "$HERE/../../scripts/hooks/lib/own-make.sh" cache-audit ) && break; sleep 0.1; done
+for _ in $(seq 1 50); do ( cd "$A" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make cache-audit ) && break; sleep 0.1; done
 check "a commit during the audit: refused" 2 "$(run "$A" "$COMMIT")"
 check "an Edit of an engine file during the audit: refused, even a docstring" 2 "$(run "$A" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a","new_string":"b"}}' "$A")")"
 check "an Edit of a doc during the audit: let through" 0 "$(run "$A" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/docs/x.md","old_string":"a","new_string":"b"}}' "$A")")"

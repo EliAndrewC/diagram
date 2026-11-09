@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
+mod conflict;
 mod file_scale;
 mod house_style_delta;
 mod moves;
@@ -210,6 +211,11 @@ fn reads(check: &str, path: &str) -> bool {
 
 /// Does this change hold a file `check` reads (`ask:449-T065-scope`: those that stay Python never start on a change that holds
 /// none of what they read, so a one-line Rust edit starts none)? Exit 0 to run it, and when there is no base to compare with.
+/// Does the change hold a file this retained Python check reads?
+pub(crate) fn needs_run(check: &str, root: &Path) -> bool {
+    needs(check, root).code == 0
+}
+
 fn needs(check: &str, root: &Path) -> Outcome {
     let base = git_text(root, &["merge-base", "HEAD", "origin/main"]);
     if base.trim().is_empty() {
@@ -234,6 +240,7 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("rust-tooling") => (rust_tooling::USAGE_LOG_TOOL, rust_tooling::cli(rest, root)),
         Some("research-pointers") => (research_pointers::USAGE_LOG_TOOL, research_pointers::cli(rest)),
         Some("house-style-delta") => (house_style_delta::USAGE_LOG_TOOL, house_style_delta::cli(rest)),
+        Some("conflict") => (conflict::USAGE_LOG_TOOL, conflict::cli(rest)),
         Some("spec-lint") => (spec_lint::USAGE_LOG_TOOL, spec_lint::cli(rest)),
         Some("needs") => {
             let o = needs(rest.first().map_or("", String::as_str), root);

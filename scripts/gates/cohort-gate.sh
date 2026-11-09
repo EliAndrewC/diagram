@@ -45,11 +45,11 @@ PYBL
 fi
 
 # GUARD_EDIT_OK: feature 430 T04 (D4) - a delta holding no engine code, or a pass already stored for its exact content, is not
-# judged again (`push_gates.py`); a refusal is never stored
-if why="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CO_HERE/push_gates.py" skip cohort 2>/dev/null)"; then printf '  %s\n' "$why"; exit 0; fi
+# judged again (`l7r-gate push-gate`); a refusal is never stored
+if why="$("$CO_HERE/l7r-gate.sh" push-gate skip cohort 2>/dev/null)"; then printf '  %s\n' "$why"; exit 0; fi
 OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CO_HERE/cohort_gate.py" check 2>&1)"; rc=$?
 [ -n "$OUT" ] && printf '%s\n' "$OUT" | grep -v 'REFUSED' | sed 's/^/  /'
-[ "$rc" -eq 0 ] && { PYTHONDONTWRITEBYTECODE=1 python3 "$CO_HERE/push_gates.py" pass cohort 2>/dev/null; exit 0; }
+[ "$rc" -eq 0 ] && { "$CO_HERE/l7r-gate.sh" push-gate pass cohort 2>/dev/null; exit 0; }
 
 guard_log cohort-gate blocked "$(printf '%s' "$OUT" | grep 'REFUSED' | head -c 400)" cohort
 printf '\n\033[1mCOHORT GATE: engine work lands with its landing cohort - 48 seeds on this engine, none regressed, and a fresh block.\033[0m\n' >&2

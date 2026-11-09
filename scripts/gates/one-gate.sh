@@ -5,8 +5,8 @@
 # beside the first. Killing the duplicate removed the first one's invocation token, and every roll the first then made
 # was refused as not invoked through make - a whole gate of errors (feature 328 batch 7, 2026-10-09). One gate per tree.
 set -uo pipefail
-own="$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/own-make.sh"
-if "$own" --no-print-directory done || "$own" done; then
+own="$(dirname "${BASH_SOURCE[0]}")/l7r-gate.sh"
+if "$own" own-make --no-print-directory done || "$own" own-make done; then
   printf '\n\033[1mA GATE IS ALREADY RUNNING IN THIS TREE\033[0m - not starting another. Wait on its log (.git/verify-gate.log links to it): `make verify-wait`, run_in_background\n'
   python3 "$(dirname "${BASH_SOURCE[0]}")/../hooks/lib/usage_log.py" record --tool one-gate --kind check --outcome refused 2>/dev/null; exit 1  # feature 406 T03 (D162)
 fi

@@ -233,7 +233,7 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: 
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the active task open -> refused" 1 $?
 expect_out "holds: T01 open"
 expect_out "make land F=140 T=T01"
-case "$OUT" in *"conflict-markers:"*) no_ "the holding rule ran after push_checks.py (405 T34: cheap questions first)" ;; *) yes_ ;; esac
+case "$OUT" in *"conflict-markers:"*) no_ "the holding rule ran after l7r-gate push-checks (405 T34: cheap questions first)" ;; *) yes_ ;; esac
 OUT=$(L7R_LAND_TICKS="T01" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land names the task it ticks -> lands" 0 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 being worked [lands-open]\n' > specs/140-x/tasks.md && echo m7 > note.md && git add -A && git commit -qm "a mark on the active task" ); start "$D" T02
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark is text - the active task still holds" 1 $?

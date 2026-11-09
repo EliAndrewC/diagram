@@ -89,7 +89,6 @@ HISTORY = {
     "tests/tooling/test_phase_sources.py": "builds a fake engine tree of the old name",
     "tests/tooling/test_plan_hold.py": "an example engine path a held feature names",
     "tests/tooling/test_pool_readers.py": "an example path in a fixture repository",
-    "tests/tooling/test_push_gates.py": "an example engine path the push classifies",
     "tests/tooling/test_review_owed.py": "an example path in a fixture repository",
     "tests/tooling/test_tick_task.py": "an example path in a fixture task",
     "tests/tooling/test_work_budget_bundle_rust.py": "builds a fake engine tree of the old name beside the Rust",

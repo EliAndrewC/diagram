@@ -62,7 +62,7 @@ pub(super) fn now_utc() -> String {
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
-pub(super) fn git_line(root: &Path, args: &[&str]) -> String {
+pub(crate) fn git_line(root: &Path, args: &[&str]) -> String {
     let done = Command::new("git").arg("-C").arg(root).args(args).output();
     done.map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
         .unwrap_or_default()

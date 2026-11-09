@@ -127,7 +127,7 @@
     },
     "rust_checks": {
       "kind": "check",
-      "what": "scripts/gates/rust_checks.py - the Rust phases' clippy (all, pedantic, the function cap, reasons on every exception) and rustfmt, in make static and make format (feature 444 T17, FR-011); no crate under rust/ is no work; each run recorded passed or refused"
+      "what": "rust/gate/src/rustc.rs (`l7r-gate rust`) - the Rust phases' clippy (all, pedantic, the function cap, reasons on every exception) and rustfmt, in make static and make format (feature 444 T17, FR-011); no crate under rust/ is no work; each run recorded passed or refused"
     },
     "phase_sources": {
       "kind": "check",
@@ -139,7 +139,7 @@
     },
     "push_gates": {
       "kind": "check",
-      "what": "scripts/gates/push_gates.py - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
+      "what": "rust/gate/src/push.rs (`l7r-gate push-gate`) - whether a push gate may skip a delta: nothing it judges, or a pass stored for the same committed content (the claims, record and cohort gates; feature 430 T04); each run recorded skipped (0) or judged (1)"
     },
     "gate_costs": {
       "kind": "report",

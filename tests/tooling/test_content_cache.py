@@ -196,15 +196,6 @@ def test_function_cap_answers_the_same_and_finds_a_fault_put_in_after_a_cached_r
     assert code == 1 and "say why the body must remain one" in out
 
 
-def test_the_conflict_check_answers_the_same_and_finds_a_marker_put_in_after_a_cached_run(tmp_path: pathlib.Path) -> None:
-    d = _check_repo(tmp_path, {"a.md": "fine\n"})
-    argv = ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]
-    assert _same_on_and_off(argv, d)[0] == 0
-    (d / "a.md").write_text("<" * 7 + " ours\nx\n" + "=" * 7 + "\ny\n" + ">" * 7 + " theirs\n", encoding="utf-8")
-    code, out = _same_on_and_off(argv, d)
-    assert code == 1 and "a.md" in out
-
-
 # ---- the ledger check (SC-003) ---------------------------------------------------------------------------------------------
 
 
