@@ -354,15 +354,11 @@ fn the_limits_on_how_far_a_helper_reaches_hold_over_the_real_tree() {
             names(&t.deps_for(guard), guard) && names(&t.deps_for(guard), &format!("test-{guard}"))
         );
     }
-    // a ceiling: if it grows, the win is lost, or a mention has started counting as a dependency
-    assert!(reach("gatecost.py") <= 4);
     // a floor: a derivation that stopped following the graph would make these small, which is the failure that passes a broken suite
     assert!(reach("hm_escape.py") + 3 >= guards.len());
     assert!(reach("guardlog.sh") + 3 >= guards.len());
     let deps = t.deps_for("sync-with-main.sh");
-    assert!(
-        names(&deps, "gatecost.py") && names(&deps, "hm_shape.py") && names(&deps, "guardlog.sh")
-    );
+    assert!(names(&deps, "hm_shape.py") && names(&deps, "guardlog.sh"));
 }
 
 #[test]

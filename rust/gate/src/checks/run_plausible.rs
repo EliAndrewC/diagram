@@ -7,29 +7,16 @@
 
 use std::path::Path;
 
-use fancy_regex::Regex;
-
 use super::Outcome;
 
 /// The name its runs are recorded under in the `usage_log`.
 pub(super) const USAGE_LOG_TOOL: &str = "check-run-plausible";
 const ABSOLUTE_MIN: u64 = 5;
 
-/// The pinned baseline `ratchet.py` keeps for this target; read off its text until that file is ported.
+/// The pinned baseline the ratchet table keeps for this target.
 fn baseline(root: &Path, target: &str) -> Option<u64> {
-    let text = std::fs::read_to_string(root.join("scripts/measure/ratchet.py")).ok()?;
-    let row = Regex::new(&format!(
-        r#""{}":\s*Ratchet\((?:[^=]|=(?!\s*\d))*?\bbaseline=(\d+)"#,
-        fancy_regex::escape(target)
-    ))
-    .ok()?;
-    row.captures(&text)
-        .ok()??
-        .get(1)?
-        .as_str()
-        .parse()
-        .ok()
-        .filter(|b| *b > 0)
+    let b = crate::measure::ratchet::find(root, target)?.baseline;
+    u64::try_from(b).ok().filter(|b| *b > 0)
 }
 
 fn floor_for(root: &Path, target: &str) -> Option<u64> {

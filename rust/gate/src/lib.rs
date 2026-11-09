@@ -8,6 +8,7 @@ pub mod delta;
 mod exempt;
 mod hashing;
 mod lock;
+mod measure;
 mod plan;
 mod push;
 mod rustc;
@@ -77,6 +78,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
         Some("ci") => ci::gated::entry(&args[1..], &top()),
         Some("cohort") => cohort::cli(&args[1..], &top(), "python3"),
+        Some("measure") => measure::cli(&args[1..], &top()),
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("github-token") => ci::config::github_token(&top()),
         Some("check") => checks::cli(&args[1..], &top()),

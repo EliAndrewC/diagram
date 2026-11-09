@@ -4,7 +4,7 @@
 //! `make perf` outside a timing pair is reminded. `MEASURE_OK` with a reason stands it aside. The refusals' words are the shell's;
 //! the reasons behind each rule stand in its comments, kept in git history.
 //!
-//! Plan T008's decisions: (a) the sanitized command and the last full gate are read in-process, and `gatecost.py`'s median, for
+//! Plan T008's decisions: (a) the sanitized command and the last full gate are read in-process, and `l7r-gate measure gatecost`'s median, for
 //! the first measurement's reminder, is asked by path; (b) the `git commit` reset reads the command as the shell's greedy `sed` did,
 //! its verdict kept; (c) `status` prints the count, as it did.
 
@@ -36,7 +36,6 @@ pub(crate) struct Seams {
     pub cadence_s: i64,
     pub now: i64,
     pub tree: PathBuf,
-    pub python: String,
 }
 
 /// An environment variable read as a number, None where unset or not one.
@@ -62,7 +61,6 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
             || std::env::current_dir().unwrap_or_default(),
             PathBuf::from,
         ),
-        python: "python3".to_owned(),
     };
     judge(event, session, &seams)
 }
@@ -318,12 +316,8 @@ fn streak(_event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Vec<Answer> {
     log("reminded", "");
     let cost = ask(
         &s.tree,
-        &s.python,
-        &[
-            &s.tree.join("scripts/measure/gatecost.py").to_string_lossy(),
-            "done",
-            "full",
-        ],
+        &s.tree.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
+        &["measure", "gatecost", "done", "full"],
         "",
     );
     let line = if cost.ok() && !cost.out.is_empty() {
@@ -355,7 +349,7 @@ never blocked, however often they run. Measured on feature 146: 20 test-full run
 of it re-deriving a coverage worklist the session already had written down.
 (GUARD_EDIT_OK: feature 162 - the durations that used to be quoted here are gone rather than restated. A
 number typed into a guard message in August is wrong in September and nothing tells anybody; `make audit`
-and `scripts/measure/gatecost.py` answer from the run log instead.)
+and `l7r-gate measure gatecost` answer from the run log instead.)
 
 Do this instead:
  - ASKING WHICH LINES A TEST REACHES? That is what the third run is usually for, and this is the slowest way

@@ -1,4 +1,4 @@
-//! The decider against a temporary tree with its run log and a fake `gatecost.py` (`sh`); the verdicts against today's are the
+//! The decider against a temporary tree with its run log and a fake gate wrapper; the verdicts against today's are the
 //! suite's (`tests/hooks/test-measure-hooks.sh`, replayed through the shim).
 
 use std::path::{Path, PathBuf};
@@ -15,15 +15,14 @@ fn tree(tag: &str) -> (PathBuf, Seams) {
     let d = std::env::temp_dir().join(format!("l7r-guard-measure-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&d);
     std::fs::create_dir_all(d.join(".git")).unwrap();
-    std::fs::create_dir_all(d.join("scripts/measure")).unwrap();
-    std::fs::write(d.join("scripts/measure/gatecost.py"), "echo 70\n").unwrap();
+    std::fs::create_dir_all(d.join("scripts/gates")).unwrap();
+    crate::guards::write_executable(&d.join("scripts/gates/l7r-gate.sh"), "#!/bin/sh\necho 70\n");
     let seams = Seams {
         streak: d.join("s.measures"),
         budget: 1,
         cadence_s: 10_800,
         now: 1_000_000,
         tree: d.clone(),
-        python: "sh".to_owned(),
     };
     (d, seams)
 }
@@ -66,7 +65,10 @@ fn the_second_expensive_measurement_is_refused_once() {
 #[test]
 fn the_reminder_carries_no_median_when_the_tool_answers_none() {
     let (root, s) = tree("nocost");
-    std::fs::write(root.join("scripts/measure/gatecost.py"), "exit 1\n").unwrap();
+    crate::guards::write_executable(
+        &root.join("scripts/gates/l7r-gate.sh"),
+        "#!/bin/sh\nexit 1\n",
+    );
     assert!(
         matches!(&run(&bash("make test-full", &root), &s)[..], [Answer::Notice(n)] if !n.contains("median"))
     );

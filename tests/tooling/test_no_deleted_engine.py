@@ -93,7 +93,6 @@ HISTORY = {
     "tests/tooling/test_tick_task.py": "an example path in a fixture task",
     "tests/tooling/test_work_budget_bundle_rust.py": "builds a fake engine tree of the old name beside the Rust",
     "tests/tools/test_claims.py": "builds a fake engine tree of the old name",
-    "tests/tooling/test_figures_deleted_engine.py": "fixture commands naming the old paths, proven never run",
     "dev/review-ledger.md": "the append-only ledger of every review pass, history",
     "dev/claims-triage-skips.jsonl": "the append-only record of triage skips, history",
     "dev/gate.md": "the Python engine's dev doc, until the Rust's own pages replace it",

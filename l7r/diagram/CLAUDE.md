@@ -57,7 +57,7 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | [`docs/reviews.md`](../../docs/reviews.md) | you are about to launch a review check or write a feature's `## Occasions` |
 | [`docs/package-boundary.md`](../../docs/package-boundary.md) | you wonder whether Mode A and Mode B should be separate packages, or a Mode A `.gen.py` is about to appear |
 | [`docs/migration-plan.md`](../../docs/migration-plan.md) | you draw or script a settlement map (read it first; update its status table when a conversion lands) |
-| [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `scripts/measure/gatecost.py` give the live ones) |
+| [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `l7r-gate measure gatecost` give the live ones) |
 | [`dev/test-cost.md`](../../dev/test-cost.md) | you are adding a test that rolls a map, or asking why the suite costs what it does |
 | [`dev/interactive-page.md`](../../dev/interactive-page.md) | page or raster performance, or the wet-paddy modal's two tint rules |
 

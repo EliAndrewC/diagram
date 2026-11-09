@@ -5,8 +5,8 @@ use crate::checks::scratch;
 
 fn root() -> std::path::PathBuf {
     let dir = scratch("plausible");
-    std::fs::create_dir_all(dir.join("scripts/measure")).unwrap();
-    std::fs::write(dir.join("scripts/measure/ratchet.py"), "RATCHETS = {\n    \"quick\": Ratchet(\n        target=\"quick\",\n        baseline=11,\n        hard=15,\n    ),\n    \"done\": Ratchet(\n        target=\"done\",\n        baseline=400,\n    ),\n    \"zero\": Ratchet(\n        baseline=0,\n    ),\n}\n").unwrap();
+    std::fs::create_dir_all(dir.join("dev")).unwrap();
+    std::fs::write(dir.join("dev/ratchets.json"), "{\"quick\": {\"baseline\": 11}, \"done\": {\"baseline\": 400}, \"zero\": {\"baseline\": 0}}").unwrap();
     dir
 }
 

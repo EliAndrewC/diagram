@@ -115,7 +115,7 @@
     },
     "ratchet": {
       "kind": "check",
-      "what": "scripts/measure/ratchet.py - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
+      "what": "rust/gate/src/measure/ratchet.rs (`l7r-gate measure ratchet`) - refuses a gate timing past its ratcheted ceiling; each run recorded passed or refused"
     },
     "check-tool-signals": {
       "kind": "check",
@@ -143,7 +143,7 @@
     },
     "gate_costs": {
       "kind": "report",
-      "what": "scripts/measure/gate_costs.py - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
+      "what": "rust/gate/src/measure/gate_costs.rs (`l7r-gate measure gate-costs`) - what a gate run costs, from the run records' phases and plan (make gate-costs; feature 415 T04)"
     },
     "refresh_baseline": {
       "kind": "step",

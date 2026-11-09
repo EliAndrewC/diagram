@@ -6,7 +6,7 @@ savings is still worthwhile."* They were, and worse than outdated: `gate-hooks.s
 a median of 111 s. A number typed into a shell string in August is wrong in September and nothing
 tells anybody, because the number lives in a guard and the truth lives in `dev/run-log/`.
 
-So a guard message may not carry one. It asks `scripts/measure/gatecost.py`, which reads the recorded runs,
+So a guard message may not carry one. It asks `l7r-gate measure gatecost`, which reads the recorded runs,
 or it says nothing at all - silence is the designed outcome, not a failure, because a message with no
 number is honest and a message with a stale one is not.
 
@@ -60,7 +60,7 @@ def offenders(text: str) -> list[str]:
 
 def test_no_guard_message_states_a_duration() -> None:
     found = {path.name: bad for path in tree("*.sh") if not path.name.startswith("test-") for bad in [offenders(path.read_text())] if bad}
-    assert not found, "a guard message states how long a command takes; ask scripts/measure/gatecost.py or say nothing:\n" + "\n".join(f"  {name}: {lines}" for name, lines in found.items())
+    assert not found, "a guard message states how long a command takes; ask l7r-gate measure gatecost or say nothing:\n" + "\n".join(f"  {name}: {lines}" for name, lines in found.items())
 
 
 def test_the_check_would_catch_the_string_it_was_written_for() -> None:
@@ -165,7 +165,7 @@ def test_the_prefilter_passes_every_spelling_of_an_output_call() -> None:
 
 def test_no_python_guard_message_states_a_duration() -> None:
     found = {p.name: bad for p, printed in _printing_files() for bad in [offenders_in(printed)] if bad}
-    assert not found, "a printed message states how long a command takes; ask scripts/measure/gatecost.py or say nothing:\n" + "\n".join(f"  {name}: {lines}" for name, lines in found.items())
+    assert not found, "a printed message states how long a command takes; ask l7r-gate measure gatecost or say nothing:\n" + "\n".join(f"  {name}: {lines}" for name, lines in found.items())
 
 
 def test_the_python_check_fires_on_a_planted_duration_in_a_PRINTED_docstring() -> None:

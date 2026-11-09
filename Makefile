@@ -91,9 +91,9 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	root=$$(git rev-parse --show-toplevel); \
 	cls=$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true); \
 	scp="$(if $(FULL),full,reference)"; \
-	med=$$(python3 "$$root/scripts/measure/gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
-	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
-	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
+	med=$$("$$root/scripts/gates/l7r-gate.sh" measure gatecost $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
+	n=$$("$$root/scripts/gates/l7r-gate.sh" measure gatecost --count $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null || echo 0); \
+	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else "$$root/scripts/gates/l7r-gate.sh" measure ratchet $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
 	$(STATE) green-local $(DONE_NAME); \
 	$(if $(FULL),printf '\n\033[1mgate green (FULL - plus the perf bookends)\033[0m\n',printf '\n\033[1mgate green\033[0m (the whole suite and every pool map; `FULL=1` adds only the perf bookends)\n')
 
@@ -179,7 +179,7 @@ maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/maps_moved.py" --root "$$(git rev-parse --show-toplevel)"
 
 probe:          ## [maps] what a change does to every seed and pool map against HEAD: the landing cohort, HEAD's fresh block and the pool in WT, every seed beside HEAD's stored verdict (feature 426)   [WT=<worktree>] [EXITFIRST=1] [JOBS=<n>]
-	@python3 scripts/measure/probe.py --root . $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure probe $(if $(WT),--wt $(WT),) $(if $(EXITFIRST),--exitfirst,) $(if $(JOBS),--jobs $(JOBS),)
 
 backup:         ## [project] save the clone's commits to backup/<clone> on GitHub without landing them - no gate runs (the GM 2026-11-07: "stop landing things until we've gotten this time down")
 	@"$$(git rev-parse --show-toplevel)/scripts/sync-with-main.sh" backup
@@ -413,7 +413,7 @@ docs:           ## [project] regenerate docs/make-targets.html from this Makefil
 help:           ## [project] list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
 	@grep -hE '^[a-z][a-z0-9-]*:.*##' $(MAKEFILE_LIST) | sed 's/:.*##/\t/' | sort | awk -F'\t' '{printf "  \033[1m%-18s\033[0m %s\n", $$1, $$2}'
-	@cost=$$(scripts/measure/gatecost.py done 2>/dev/null); \
+	@cost=$$("$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure gatecost done 2>/dev/null); \
 	 printf '\nCheapest first: quick | reference | done (NOT the quick one) | done FULL=1'; \
 	 [ -n "$$cost" ] && printf '   -   `make done` median %s s over its recent recorded runs (`make audit`)' "$$cost"; \
 	 printf '\n'
@@ -578,7 +578,7 @@ coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 
 gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/gate_costs.py" $(if $(SINCE),--since "$(SINCE)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure gate-costs $(if $(SINCE),--since "$(SINCE)",)
 
 land-stop:       ## [project] stop this tree's running `make land` cleanly - its gate and cohort stop with it (405 T90)
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/land.py" --stop
@@ -612,7 +612,7 @@ hookbench:      ## [project] replay the frozen command window through a guard de
 
 figures:        ## [project] re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]
 ##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/figures.py" $(SPEC)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure figures $(SPEC)
 
 spec-harness:   ## [project] run a feature's measurement harness (its harness.py) as a test node   SPEC=specs/NNN-slug OUT=<json>
 ##  SPEC=<dir>   the feature directory holding `harness.py`
@@ -1009,7 +1009,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  if [ $$ec -ne 0 ]; then exit $$ec; fi; \
 	  root=$$(git rev-parse --show-toplevel); \
 	  if [ -n "$(FROM_PREFLIGHT)" ]; then [ $$el -lt 15 ] || printf '\nquick took %ss inside the preflight - not judged here (feature 375).\n' "$$el"; \
-	  elif [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then XDIST_WORKERS=$(XDIST_WORKERS) python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
+	  elif [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then XDIST_WORKERS=$(XDIST_WORKERS) "$$root/scripts/gates/l7r-gate.sh" measure ratchet quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
 	  if [ -z "$(FROM_PREFLIGHT)" ] && [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \
