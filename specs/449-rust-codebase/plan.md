@@ -400,3 +400,23 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+
+### T74 Approach (checklist part A)
+
+1. **The goal, in the world.** A past feature's Python that nothing runs is gone, not ported: the GM, 2026-11-09, "I don't think we need to port the past feature harnesses if those are not still used."
+2. **The constraints.** FR-001's words on `specs/`: a file something still runs is ported like any other, and one nothing runs is deleted and not ported.
+3. **Where each comes from.** `git ls-files 'specs/*.py'`, the Makefile and code outside `specs/`, every `specs/*/measurements*.json` command.
+4. **Do they describe the world here?** Tooling: no researched value moves, and no recorded figure is touched.
+5. **The order.** The census, then the deletion, one landing.
+6. **The exits.** Green: the gate's own checks pass with the files gone. Red: what failed recorded, the file put back on the kept list.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The census below returns no file both deleted and named by a live caller or a measurement command.
+   **Decisions** (FR-001, the GM 2026-11-09):
+   - THE TEST OF "STILL USED": a file under `specs/` is kept when its path, or its feature's directory and its name together, appears in tracked code or docs outside `specs/` (the Makefile, `*.mk`, `scripts/`, `rust/`, `l7r/`, `tests/` but for the two recorded command corpora and their fixtures, `docs/`, `.claude/`, `pool/*.py`), when a `specs/*/measurements*.json` command names it, or when a kept file in its own feature imports or names it, repeated until nothing moves.
+   - THE CENSUS (observed 2026-11-09, method: that test over `git ls-files 'specs/*.py'`, a one-shot script): 222 files; 154 deleted, 19,299 lines; 68 kept, each ported or ruled on at its own task in phase 3 or deleted there if it no longer runs. A row of a recorded command corpus (`tests/hooks/fixtures/`, `tests/tooling/fixtures/`) is what a session once typed and is no use of the file.
+   - NOT TOUCHED: every `spec.md`, `plan.md`, `tasks.md` and `measurements.json`, whose prose may still name a deleted file as history (`specs/*` keep their words; git keeps the file).
+   - WHY NO PROSE IS REWRITTEN: a spec is a record of what was done, and a deleted harness's name in one is true of its time, as `docs/session-clones.md` holds for every moved path.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
