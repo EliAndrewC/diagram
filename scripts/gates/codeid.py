@@ -355,9 +355,11 @@ def semantic_main(args: list[str]) -> int:
 
 
 def debug_free_equal_main(args: list[str]) -> int:
-    """`--debug-free-equal <a> <b> [<a> <b> ...]`: exit 0 when each pair is the same but for counter blocks (feature 446), for the Rust gate."""
-    read = lambda name: debug_free_bytes(pathlib.Path(name).read_bytes(), name)  # noqa: E731
-    return 0 if all(read(a) == read(b) for a, b in zip(args[::2], args[1::2], strict=True)) else 1
+    """`--debug-free-equal <a> <b> [<a> <b> ...]`: a line per pair, 1 when the two are the same but for counter blocks (feature 446), for the Rust gate."""
+    for a, b in zip(args[::2], args[1::2], strict=True):
+        same = debug_free_bytes(pathlib.Path(a).read_bytes(), a) == debug_free_bytes(pathlib.Path(b).read_bytes(), b)
+        print(1 if same else 0)
+    return 0
 
 
 def missing_main(args: list[str]) -> int:

@@ -45,11 +45,16 @@ static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
+/// Two versions of each file whose counters decide a commit pair.
+type Versions = Vec<(Vec<u8>, Vec<u8>)>;
+
 /// A repository and what it has been asked already: `baselines` asks an engine key once per record.
 pub(crate) struct Repo<'a> {
     pub root: &'a Path,
     pub python: &'a str,
     keys: RefCell<HashMap<String, String>>,
+    counters: RefCell<HashMap<(String, String), bool>>,
+    failure: RefCell<Option<String>>,
 }
 
 pub(crate) fn git(root: &Path, args: &[&str]) -> (bool, String) {
@@ -112,6 +117,8 @@ impl<'a> Repo<'a> {
             root,
             python,
             keys: RefCell::new(HashMap::new()),
+            counters: RefCell::new(HashMap::new()),
+            failure: RefCell::new(None),
         }
     }
 
@@ -141,32 +148,38 @@ impl<'a> Repo<'a> {
         key
     }
 
-    /// Do the two commits carry the same engine? Identical bytes answer at once, then the keys, then a counter-only difference (feature 446).
-    pub(crate) fn same_key(&self, a: &str, b: &str) -> bool {
+    /// The same bytes on the engine paths, or the same engine key.
+    fn same_by_key(&self, a: &str, b: &str) -> bool {
         let mut args = vec!["diff", "--quiet", a, b, "--"];
         args.extend(ENGINE_PATHS);
         if git(self.root, &args).0 {
             return true;
         }
         let first = self.engine_key(Some(a));
-        (!first.is_empty() && first == self.engine_key(Some(b))) || self.counter_only(a, b)
+        !first.is_empty() && first == self.engine_key(Some(b))
+    }
+
+    /// Do the two commits carry the same engine? Identical bytes answer at once, then the keys, then a counter-only difference (feature 446).
+    pub(crate) fn same_key(&self, a: &str, b: &str) -> bool {
+        self.same_by_key(a, b) || self.counter_only(a, b)
     }
 
     /// Was `commit` rolled on main's engine?
     pub(crate) fn same_engine(&self, commit: &str) -> bool {
-        let main = if git(self.root, &["rev-parse", "-q", "--verify", "origin/main"]).0 {
+        self.same_key(commit, self.main_ref())
+    }
+
+    fn main_ref(&self) -> &'static str {
+        if git(self.root, &["rev-parse", "-q", "--verify", "origin/main"]).0 {
             "origin/main"
         } else {
             "main"
-        };
-        self.same_key(commit, main)
+        }
     }
 
-    /// Are these versions of `.py` files the same but for counter blocks? `codeid.py` reads the AST until phase 4, asked once for all of them.
-    fn counters_only_differ(&self, pairs: &[(Vec<u8>, Vec<u8>)]) -> bool {
-        if pairs.is_empty() {
-            return true;
-        }
+    /// Each pair's "the same but for counter blocks", from one run of `codeid.py`, which reads the AST until phase 4
+    /// (`round:spec-fidelity|plan:449-rust-codebase#T068@3`: at most one process a run, whatever the records). `None` when it could not answer.
+    fn ask_counters(&self, pairs: &[&(Vec<u8>, Vec<u8>)]) -> Option<Vec<bool>> {
         let dir = std::env::temp_dir().join(format!("l7r-gate-counter-{}", std::process::id()));
         let mut files = Vec::new();
         let mut written = std::fs::create_dir_all(&dir).is_ok();
@@ -175,19 +188,22 @@ impl<'a> Repo<'a> {
             written = written && std::fs::write(&a, old).is_ok() && std::fs::write(&b, new).is_ok();
             files.extend([a, b]);
         }
-        let same = written
-            && Command::new(self.python)
-                .arg(crate::codeid::script(self.root))
-                .arg("--debug-free-equal")
-                .args(&files)
-                .status()
-                .is_ok_and(|s| s.success());
+        let done = Command::new(self.python)
+            .arg(crate::codeid::script(self.root))
+            .arg("--debug-free-equal")
+            .args(&files)
+            .output();
         let _ = std::fs::remove_dir_all(&dir);
-        same
+        let out = done.ok().filter(|o| written && o.status.success())?;
+        let answers: Vec<bool> = String::from_utf8_lossy(&out.stdout)
+            .split_whitespace()
+            .map(|w| w == "1")
+            .collect();
+        (answers.len() == pairs.len()).then_some(answers)
     }
 
-    /// Is every engine file that differs a modification whose two versions are counter-only-equal? No engine file differing is not one.
-    pub(crate) fn counter_only(&self, a: &str, b: &str) -> bool {
+    /// `None`: not counter-only. Otherwise the `.py` versions that decide it (none: every differing engine file's bytes are equal).
+    fn counter_pairs(&self, a: &str, b: &str) -> Option<Versions> {
         let (ok, out) = git(self.root, &["diff", "--name-status", "--no-renames", a, b]);
         let rows: Vec<(&str, &str)> = out
             .lines()
@@ -195,18 +211,86 @@ impl<'a> Repo<'a> {
             .filter(|(_, p)| ENGINE.is_match(p).unwrap_or(false))
             .collect();
         if !ok || rows.is_empty() || rows.iter().any(|(status, _)| *status != "M") {
-            return false;
+            return None;
         }
         let mut pairs = Vec::new();
         for (_, path) in &rows {
             let old = git_bytes(self.root, &["show", &format!("{a}:{path}")]);
             let new = git_bytes(self.root, &["show", &format!("{b}:{path}")]);
             if old != new && !crate::checks::has_ext(path, "py") {
-                return false;
+                return None;
             }
             pairs.extend((old != new).then_some((old, new)));
         }
-        self.counters_only_differ(&pairs)
+        Some(pairs)
+    }
+
+    /// Answer every commit pair a run will ask, in one process.
+    pub(crate) fn prime(&self, asks: &[(String, String)]) {
+        let mut todo: Vec<((String, String), Versions)> = Vec::new();
+        for ask in asks {
+            if self.counters.borrow().contains_key(ask) || todo.iter().any(|(t, _)| t == ask) {
+                continue;
+            }
+            match self.counter_pairs(&ask.0, &ask.1) {
+                None => {
+                    self.counters.borrow_mut().insert(ask.clone(), false);
+                }
+                Some(pairs) if pairs.is_empty() => {
+                    self.counters.borrow_mut().insert(ask.clone(), true);
+                }
+                Some(pairs) => todo.push((ask.clone(), pairs)),
+            }
+        }
+        if todo.is_empty() {
+            return;
+        }
+        let flat: Vec<&(Vec<u8>, Vec<u8>)> = todo.iter().flat_map(|(_, p)| p).collect();
+        let answers = self.ask_counters(&flat);
+        if answers.is_none() {
+            *self.failure.borrow_mut() = Some(
+                "codeid.py could not say whether the engine files differ only by counter blocks"
+                    .to_owned(),
+            );
+        }
+        let mut rest = answers.unwrap_or_default().into_iter();
+        for (ask, pairs) in todo {
+            let taken: Vec<bool> = pairs.iter().map(|_| rest.next().unwrap_or(false)).collect();
+            let same = taken.iter().all(|one| *one);
+            self.counters.borrow_mut().insert(ask, same);
+        }
+    }
+
+    /// Every pair the records can ask, each commit once: against main only where a record can be a baseline, against HEAD only where it
+    /// can be the landing record; those the bytes and keys do not already settle. A record no question reaches is not walked.
+    fn prime_records(&self, recs: &[Value]) {
+        let main = self.main_ref();
+        let usable: Vec<&Value> = recs
+            .iter()
+            .filter(|r| truthy(&r["commit"]) && !truthy(&r["engine_diff"]))
+            .collect();
+        let mut seen = std::collections::BTreeSet::new();
+        let mut asks = Vec::new();
+        for r in usable {
+            let commit = text(r, "commit");
+            if seen.insert((commit.clone(), main)) && !self.same_by_key(&commit, main) {
+                asks.push((commit.clone(), main.to_owned()));
+            }
+            if landing_shaped(r, false)
+                && seen.insert((commit.clone(), "HEAD"))
+                && !self.same_by_key(&commit, "HEAD")
+            {
+                asks.push((commit, "HEAD".to_owned()));
+            }
+        }
+        self.prime(&asks);
+    }
+
+    /// Is every engine file that differs a modification whose two versions are counter-only-equal? No engine file differing is not one.
+    pub(crate) fn counter_only(&self, a: &str, b: &str) -> bool {
+        let ask = (a.to_owned(), b.to_owned());
+        self.prime(std::slice::from_ref(&ask));
+        self.counters.borrow().get(&ask).copied().unwrap_or(false)
     }
 
     fn fresh_seed(&self, reference: Option<&str>) -> u64 {
@@ -403,6 +487,7 @@ fn rust_landing(root: &Path) -> bool {
 /// Feature 386's landing cohort: (refusals, notes).
 fn cohort_check(repo: &Repo<'_>) -> (Vec<String>, Vec<String>) {
     let recs = records(repo.root);
+    repo.prime_records(&recs);
     let Some(landing) = pick(repo, &recs) else {
         let mut why = format!("no landing cohort ({SEEDS} seeds from seed 1 and the pinned rows) was rolled on the engine being landed - run: {COMMAND}");
         let (_, status) = git(
@@ -465,6 +550,7 @@ fn check(repo: &Repo<'_>) -> (Vec<String>, Vec<String>) {
 }
 
 fn needs_baseline(repo: &Repo<'_>) -> bool {
+    repo.prime_records(&records(repo.root));
     !records(repo.root).iter().any(|r| {
         truthy(&r["commit"]) && landing_shaped(r, false) && repo.same_engine(&text(r, "commit"))
     })
@@ -509,16 +595,24 @@ fn gate_check(repo: &Repo<'_>) -> crate::Reply {
 pub(crate) fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let repo = Repo::new(root, python);
-    match words.as_slice() {
-        [] | ["check"] => gate_check(&repo),
+    let reply_of = answer(&words, &repo, root);
+    match repo.failure.take() {
+        Some(why) => reply(String::new(), format!("cohort: {why}\n"), 2),
+        None => reply_of,
+    }
+}
+
+fn answer(words: &[&str], repo: &Repo<'_>, root: &Path) -> crate::Reply {
+    match words {
+        [] | ["check"] => gate_check(repo),
         ["fresh-seed"] => reply(format!("{}\n", repo.fresh_seed(None)), String::new(), 0),
         ["fresh-seed", reference] => reply(format!("{}\n", repo.fresh_seed(Some(reference))), String::new(), 0),
         ["engine-key", reference] => reply(format!("{}\n", repo.engine_key(Some(reference))), String::new(), 0),
         ["port"] => reply(format!("{}\n", port_mode(root)), String::new(), 0),
-        ["counter-only"] => exit_of(counter_only_delta(&repo)),
-        ["needs-baseline"] => exit_of(needs_baseline(&repo)),
-        ["rust-owed"] => exit_of(rust_refusal(&repo).is_some() && port_mode(root) != "rust-only"),
-        ["known", rest @ ..] => known::cli(rest, &repo),
+        ["counter-only"] => exit_of(counter_only_delta(repo)),
+        ["needs-baseline"] => exit_of(needs_baseline(repo)),
+        ["rust-owed"] => exit_of(rust_refusal(repo).is_some() && port_mode(root) != "rust-only"),
+        ["known", rest @ ..] => known::cli(rest, repo),
         ["seeds", rest @ ..] => seeds::cli(rest, root),
         ["room-table"] => room::render(root),
         ["names-fit", text] => exit_of(room::names_fit(text)),

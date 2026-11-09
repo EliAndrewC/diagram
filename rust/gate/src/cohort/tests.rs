@@ -141,24 +141,25 @@ fn a_missing_cohort_names_the_pool_maps_the_gate_regenerated() {
     assert!(check(&r).0[0].contains("uncommitted pool maps (pool/hamlets/x/x.json)"));
 }
 
-fn exits(root: &Path, code: i32) -> String {
-    let path = root.join(".git/exits");
-    crate::write_executable(&path, &format!("#!/bin/sh\nexit {code}\n"));
+/// A stand-in `codeid.py` answering every pair `answer`, or failing with no answer.
+fn answers(root: &Path, name: &str, body: &str) -> String {
+    let path = root.join(".git").join(name);
+    crate::write_executable(&path, &format!("#!/bin/sh\nshift 2\n{body}\n"));
     path.display().to_string()
 }
+
+const YES: &str = "while [ $# -gt 0 ]; do echo 1; shift 2; done";
+const NO: &str = "while [ $# -gt 0 ]; do echo 0; shift 2; done";
 
 #[test]
 fn counter_only_needs_every_engine_file_a_modification_equal_but_for_counters() {
     let (root, base, _, py) = work("counters", Some("integrated"));
     assert!(!Repo::new(&root, &py).counter_only("nosuch", "HEAD"));
-    let yes = exits(&root, 0);
-    let no = exits(&root.join(".git/.."), 1);
+    let no = answers(&root, "no", NO);
     assert!(!Repo::new(&root, &no).counter_only(&base, "HEAD"));
-    let path = root.join(".git/exits-yes");
-    crate::write_executable(&path, "#!/bin/sh\nexit 0\n");
-    let yes_path = path.display().to_string();
-    assert_ne!(yes, yes_path);
-    assert!(Repo::new(&root, &yes_path).counter_only(&base, "HEAD"));
+    let yes_path = answers(&root, "yes", YES);
+    let yes = Repo::new(&root, &yes_path);
+    assert!(yes.counter_only(&base, "HEAD") && yes.counter_only(&base, "HEAD"));
     commit(&root, "rust/a.rs", "fn f() {}\n");
     assert!(!Repo::new(&root, &yes_path).counter_only(&base, "HEAD"));
     let docs = git(&root, &["rev-parse", "HEAD"]);
@@ -649,11 +650,50 @@ fn the_key_is_kept_a_same_text_is_equal_and_no_origin_reads_main() {
     let py = python(&root);
     let r = Repo::new(&root, &py);
     assert_eq!(r.engine_key(Some("HEAD")), r.engine_key(Some("HEAD")));
-    assert!(r.counters_only_differ(&[]));
+    r.prime(&[]);
     git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
     assert!(r.same_engine("HEAD"));
     assert!(!rust_landing(&root));
     let failed = json!({"seed": 1, "verdict": "fail", "failures": [3]});
     let now = json!({"seeds": [failed]});
     assert!(standing(&now, &std::collections::BTreeMap::new())[0].contains("(3)"));
+}
+
+#[test]
+fn a_run_with_several_differing_records_starts_codeid_once() {
+    let (root, base, head, py) = work("once", Some("integrated"));
+    commit(&root, "l7r/diagram/m.py", "x = 3\n");
+    let third = git(&root, &["rev-parse", "--short", "HEAD"]);
+    commit(&root, "l7r/diagram/m.py", "x = 4\n");
+    rec(&root, "u1", &base, 1, &[], 0);
+    rec(&root, "u2", &head, 1, &[], 0);
+    rec(&root, "u3", &third, 1, &[], 0);
+    assert_eq!(say(&root, &py, &["known"]).code, 0);
+    let calls = std::fs::read_to_string(format!("{py}.calls")).unwrap();
+    assert_eq!(calls.lines().count(), 1);
+}
+
+#[test]
+fn codeid_failing_fails_the_gate_with_no_substitute_answer() {
+    let (root, base, head, _) = work("failing", Some("integrated"));
+    rec(&root, "u1", &base, 1, &[], 0);
+    rec(&root, "u2", &head, 1, &[], 0);
+    let dead = answers(&root, "dead", "exit 3");
+    let got = say(&root, &dead, &["check"]);
+    assert!(got.code == 2 && got.stderr.contains("codeid.py could not say"));
+    let short = answers(&root, "short", "echo 1 2");
+    assert_eq!(
+        Repo::new(&root, &short).ask_counters(&[&(vec![1], vec![2])]),
+        None
+    );
+}
+
+#[test]
+fn a_mode_change_alone_is_counter_only() {
+    let (root, _, _, py) = work("mode", Some("integrated"));
+    let before = git(&root, &["rev-parse", "HEAD"]);
+    git(&root, &["config", "core.fileMode", "true"]);
+    git(&root, &["update-index", "--chmod=+x", "l7r/diagram/m.py"]);
+    git(&root, &["commit", "-qm", "mode"]);
+    assert!(Repo::new(&root, &py).counter_only(&before, "HEAD"));
 }

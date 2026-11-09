@@ -318,6 +318,7 @@ pub(crate) fn cli(words: &[&str], repo: &Repo<'_>) -> crate::Reply {
         });
     }
     let recs = records(repo.root);
+    repo.prime_records(&recs);
     let mut out = String::new();
     if let Some((last, earlier)) = recs.split_last() {
         for line in known(repo.root, last).into_iter().chain(standing(
