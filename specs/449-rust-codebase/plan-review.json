@@ -128,7 +128,7 @@
    "declared": "spec-fidelity"
   },
   "### T063 Approach (checklist part A)": {
-   "sha256": "47eb53bee05a41ed474e80093cd5d805fd48d4de46c8b9d2edc52d97202e4da2",
+   "sha256": "e1f448c84cdc8277f7f6cac66e5fc8f2bb15de30ea2543f8293da95983f17357",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -3587,6 +3587,39 @@
      "why": "A process checklist; it decides nothing the spec leaves open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T063 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "slice-1-move-unported",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move from gate-stamp.py into codeid.py, staying Python, as the one Python library for callers ported later; gate-stamp.py keeps thin delegating functions so no caller changes.",
+     "class": "within",
+     "why": "The request is that all the Python become Rust and sets no order. This defers no file out of the port: FR-001 places codeid.py with content_id and its kept cache in phase 4 (ask:449-T063-slices), so the end state is unchanged. git_blob_id and _git_dir go as content_id's own dependencies, not as a widening. Delegation leaves one implementation answering, so FR-003 holds, and the shims are temporary because slice 2 is committed to deleting gate-stamp.py. The library serves only Python callers that phases 3 and 4 port, so it does not undercut the request's purpose, which is the speed of what runs."
+    },
+    {
+     "id": "slices-2-3-deferred",
+     "summary": "T063 is three slices, each landing whole with its own decisions, differential and review; slices 2 and 3 write their decisions when they start. Slice 2 will list every remaining Python caller of content_id, _area_files and AREAS with the implementation answering each, and delete gate-stamp.py.",
+     "class": "within",
+     "why": "This is the round arbiter's ruling ask:449-T063-slices applied as ruled, and it drops nothing: the pieces of slices 2 and 3 are named and stay in the task. Nothing about them is approved here; each gets its own review. Slice 2's caller list must carry its search space when written, for that review to check."
+    },
+    {
+     "id": "order-leaf-first-batched",
+     "summary": "Leaf first by what imports what; callers reach the binary once a process or in a batch, never one spawn a file.",
+     "class": "within",
+     "why": "Restates ask:449-T062-order and FR-006, SC-002; it settles nothing beyond them."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green exits: a stamp kept before the switch still reads, routes and keys over recorded deltas equal the Python's, no state file has two writers at any commit, make done reuses a last green result across the switch. Recorded commands that run a file ported or deleted are rewritten in the same commit and re-run. Slice 1's own exit is m:t063-slice1, every area key and id equal before and after.",
+     "class": "within",
+     "why": "These only verify what FR-001, FR-002 and FR-003 already require (same answers, one writer, the recorded-measurement rewrite in the porting commit). They add no behavior and remove none of what was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5957,6 +5990,38 @@
      "summary": "Part B attributes the red-gate tripwire to T061's two reds and offers no route.",
      "class": "within",
      "why": "A process checklist; it decides nothing the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T063": {
+   "section_sha256": "e1f448c84cdc8277f7f6cac66e5fc8f2bb15de30ea2543f8293da95983f17357",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "slice-1-move-unported",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move from gate-stamp.py into codeid.py, staying Python, as the one Python library for callers ported later; gate-stamp.py keeps thin delegating functions so no caller changes.",
+     "class": "within",
+     "why": "The request is that all the Python become Rust and sets no order. This defers no file out of the port: FR-001 places codeid.py with content_id and its kept cache in phase 4 (ask:449-T063-slices), so the end state is unchanged. git_blob_id and _git_dir go as content_id's own dependencies, not as a widening. Delegation leaves one implementation answering, so FR-003 holds, and the shims are temporary because slice 2 is committed to deleting gate-stamp.py. The library serves only Python callers that phases 3 and 4 port, so it does not undercut the request's purpose, which is the speed of what runs."
+    },
+    {
+     "id": "slices-2-3-deferred",
+     "summary": "T063 is three slices, each landing whole with its own decisions, differential and review; slices 2 and 3 write their decisions when they start. Slice 2 will list every remaining Python caller of content_id, _area_files and AREAS with the implementation answering each, and delete gate-stamp.py.",
+     "class": "within",
+     "why": "This is the round arbiter's ruling ask:449-T063-slices applied as ruled, and it drops nothing: the pieces of slices 2 and 3 are named and stay in the task. Nothing about them is approved here; each gets its own review. Slice 2's caller list must carry its search space when written, for that review to check."
+    },
+    {
+     "id": "order-leaf-first-batched",
+     "summary": "Leaf first by what imports what; callers reach the binary once a process or in a batch, never one spawn a file.",
+     "class": "within",
+     "why": "Restates ask:449-T062-order and FR-006, SC-002; it settles nothing beyond them."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green exits: a stamp kept before the switch still reads, routes and keys over recorded deltas equal the Python's, no state file has two writers at any commit, make done reuses a last green result across the switch. Recorded commands that run a file ported or deleted are rewritten in the same commit and re-run. Slice 1's own exit is m:t063-slice1, every area key and id equal before and after.",
+     "class": "within",
+     "why": "These only verify what FR-001, FR-002 and FR-003 already require (same answers, one writer, the recorded-measurement rewrite in the porting commit). They add no behavior and remove none of what was asked."
     }
    ],
    "verdict": "CLEAR"

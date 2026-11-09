@@ -256,6 +256,9 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 1. **The goal, in the world.** What a change owes and what the gate last verified are written by one implementation.
 2. **The constraints.** FR-001, FR-002, FR-003 (one writer, one cut), FR-006 (one spawn a process or a batch).
+   **Decisions** (the round arbiter's `ask:449-T063-slices`: three slices, each landing whole with its own decisions, differential and review):
+   - (slice 1, 2026-11-09) THE CONTENT ID MOVES, UNPORTED: `content_id`, `git_blob_id`, the kept cache and `_git_dir` move from `gate-stamp.py` into `codeid.py`, which `ask:449-T062-py-id` already places in phase 4, as the one Python library for callers ported later; `gate-stamp.py` keeps thin functions that delegate, so no caller changes and no answer can. `m:t063-slice1`: every area's key and every id equal before and after.
+   - Slice 2, gate-stamp's command and `delta.py`, and slice 3, `state.py`, `runlog.py`, `gate_config.py` and `coverage_exempt.py`, write their decisions when they start. Slice 2's lists every remaining Python caller of `content_id`, `_area_files` and `AREAS` and which implementation answers each, and deletes `gate-stamp.py`.
 3. **Where each comes from.** the state files as they stand; `m:ci-sources`.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).

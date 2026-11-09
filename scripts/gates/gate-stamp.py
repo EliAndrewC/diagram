@@ -33,10 +33,8 @@ which runs it. Editing this file is itself a `hooks`-area change.
 from __future__ import annotations
 
 import argparse
-import ast
 import fnmatch
 import hashlib
-import json
 import os  # GUARD_EDIT_OK: feature 206 - `_salt` reads PLAYWRIGHT_BROWSERS_PATH
 import subprocess
 import sys
@@ -72,7 +70,10 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # the area, hashed by BYTES (`RAW_AREAS`), because the point of moving the prose into docstrings is that
     # the semantic id - which strips docstrings - no longer sees a prose edit, so this area must. The other
     # interactive modules stay out: they hold no page prose, and a comment edit in them costs nothing.
-    "page": ("l7r/diagram/interactive", ("assets/*", "classes/*.py")),  # `assets/*`: the two inlined assets AND the content files (feature 207: glossary.json, siblings.json, place.json, page-text.json)
+    "page": (
+        "l7r/diagram/interactive",
+        ("assets/*", "classes/*.py"),
+    ),  # `assets/*`: the two inlined assets AND the content files (feature 207: glossary.json, siblings.json, place.json, page-text.json)
     # THE BROWSER KEY (feature 206, GM 2026-09-07: "Do we have logic in place to skip them if the content which
     # they are testing has not changed? ... this is about saving memory, not saving time").
     # GUARD_EDIT_OK: adding an area the GATE may SKIP on, never one the push demands (SKIP_ONLY_AREAS below).
@@ -153,7 +154,7 @@ def coverage_sources(root: Path | None = None) -> tuple[str, ...]:
 
         with open(root / _COVERAGE_TOML, "rb") as fh:
             src = tomllib.load(fh).get("tool", {}).get("coverage", {}).get("run", {}).get("source", [])
-    except (OSError, ValueError, KeyError, TypeError):
+    except OSError, ValueError, KeyError, TypeError:
         return default
     got = tuple(f"{s.strip('/')}/" for s in src if isinstance(s, str) and s.strip("/"))
     return got or default
@@ -166,15 +167,13 @@ def exclusions(area: str, root: Path | None = None) -> tuple[str, ...]:
 
 
 def _git(*args: str, cwd: Path | None = None) -> str:
-    return subprocess.run(
-        ["git", *args], cwd=cwd, capture_output=True, text=True, check=True
-    ).stdout
+    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=True).stdout
 
 
 def _root() -> Path | None:
     try:
         return Path(_git("rev-parse", "--show-toplevel").strip())
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except subprocess.CalledProcessError, FileNotFoundError:
         return None  # not a git checkout: the guard is a no-op rather than an obstacle
 
 
@@ -196,13 +195,7 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str
         cwd=root,
     )
     excl = _area_exclusions(area_path, area)
-    return sorted(
-        {
-            root / line
-            for line in out.split("\0")
-            if line.strip() and not _excluded(line, area_path, excl=excl)
-        }
-    )
+    return sorted({root / line for line in out.split("\0") if line.strip() and not _excluded(line, area_path, excl=excl)})
 
 
 def _area_exclusions(area_path: str, area: str | None = None) -> tuple[str, ...]:
@@ -283,124 +276,21 @@ def semantic_bytes(data: bytes, name: str) -> bytes:
     return _codeid().semantic_bytes(data, name)
 
 
-_CACHE_NAME = "semantic-id-cache-2.json"  # -2: feature 385 T57 changed the rule, so the old entries are not reused
-
-
 def git_blob_id(data: bytes) -> str:
-    """The id git gives these bytes as a blob: sha1 over the 'blob <len>\\0' header + bytes. Computed
-    here so a caller with contents in hand gets the same key `git ls-tree` and `git hash-object` print."""
-    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()  # noqa: S324 - an identity, not a security hash
+    return _codeid().git_blob_id(data)
 
 
 def content_id(data: bytes, name: str, root: Path | None = None) -> str:
-    """sha256 of `semantic_bytes(data, name)`, memoized per repository under `.git/` by the sha of
-    the RAW bytes. Parsing and dumping ~280 files cost 13 s per check (measured 2026-08-26: the
-    `already verified` answer went from 1 s to 14 s), and the raw sha -> semantic id map is a pure
-    function, so it is computed once per distinct file content and read back forever after. Without a
-    repository root the id is computed directly - correctness never depends on the cache."""
-    raw = git_blob_id(
-        data
-    )  # the cache is keyed by GIT's own blob id, so `ls-tree`/`hash-object` answer a hit without reading the file (T27)
-    if not name.endswith((".py", ".rs")):  # `.rs`: its comment-free tokens (feature 444 T17)
-        return raw
-    table = _cache_table(root)
-    if raw in table:
-        return table[raw]
-    sem = hashlib.sha256(semantic_bytes(data, name)).hexdigest()
-    table[raw] = sem
-    _cache_dirty.add(id(table))
-    _flush_cache(root)
-    return sem
-
-
-# THE CACHE IS LOADED ONCE PER PROCESS AND WRITTEN ONCE PER MISS, not read and rewritten per file:
-# the first cut re-parsed the 27 KB JSON for each of ~280 files, and a warm hash pass still cost
-# 2.7 s (measured 2026-08-26 in tests/tooling/ci/test_state.py). Keyed by the cache path so two roots in one
-# process (the tests' fixture repos) never share a table.
-_cache_tables: dict[Path, dict[str, str]] = {}
-_cache_dirty: set[int] = set()
+    """The one content id, in `codeid.py` since feature 449 T063's first slice."""
+    return _codeid().content_id(data, name, root)
 
 
 def _git_dir(root: Path) -> Path | None:
-    """The directory to keep this repository's gate state in, or None if it cannot be determined.
-
-    NOT `root / ".git"`. **In a git WORKTREE, `.git` is a FILE**, not a directory - it contains a
-    single `gitdir: /path/to/real/.git/worktrees/<name>` line - so writing a path underneath it
-    raises `NotADirectoryError`. That matters here rather than being a curiosity, because
-    constitution Principle XIII MANDATES a detached worktree for the regression baseline
-    (`git worktree add --detach`), so `make done` in the very tree the procedure tells you to
-    create used to crash this module once per area (measured 2026-08-30, feature 161: the gate ran
-    and passed, only the recording failed, and it failed noisily-but-non-fatally - the shape that
-    gets scrolled past).
-
-    `git rev-parse --git-common-dir` resolves to the SHARED git directory in both a plain checkout
-    and a worktree, which is the right place for a stamp: it is keyed on content, and a worktree
-    and its parent checking out the same content deserve the same answer.
-
-    The `.is_dir()` guard that used to be inline here was doing half of this job already - it
-    recognized that `.git` might not be a directory and simply gave up on the cache - which is why
-    only the STAMP path crashed and the cache path did not.
-    """
-    # GUARD_EDIT_OK: fixing a slow path found while working (2026-09-28) - ASKED ONCE PER ROOT, NOT PER FILE.
-    # `content_id` reaches this through `_cache_table` for every file hashed (and `_flush_cache` again per
-    # miss), so one `make quick` status record ran `git rev-parse` 302 times: 0.66 s of its 0.85 s. Only a
-    # FOUND directory is remembered - a root with none is asked again, since a test may `git init` it later.
-    if root in _git_dirs and _git_dirs[root].is_dir():
-        return _git_dirs[root]
-    out = subprocess.run(
-        ["git", "-C", str(root), "rev-parse", "--git-common-dir"],
-        capture_output=True,
-        text=True,
-    )
-    if out.returncode != 0:
-        return None
-    d = Path(out.stdout.strip())
-    if not d.is_absolute():
-        d = root / d
-    if not d.is_dir():
-        return None
-    _git_dirs[root] = d
-    return d
-
-
-_git_dirs: dict[Path, Path] = {}
-
-
-def _cache_path(root: Path | None) -> Path | None:
-    if root is None:
-        return None
-    d = _git_dir(root)
-    return (d / _CACHE_NAME) if d is not None else None
+    return _codeid()._git_dir(root)  # noqa: SLF001 - one definition, loaded by path
 
 
 def _cache_table(root: Path | None) -> dict[str, str]:
-    path = _cache_path(root)
-    if path is None:
-        return {}
-    if path not in _cache_tables:
-        table: dict[str, str] = {}
-        if path.is_file():
-            try:
-                table = json.loads(path.read_text(encoding="utf-8"))
-            except ValueError:
-                table = {}
-        _cache_tables[path] = table
-    return _cache_tables[path]
-
-
-def _flush_cache(root: Path | None) -> None:
-    path = _cache_path(root)
-    if path is not None and id(_cache_tables.get(path)) in _cache_dirty:
-        # ATOMIC, AND MERGED WITH WHAT ANOTHER WRITER KEPT (feature 449 T062): the Rust gate writes this file too
-        try:
-            on_disk = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            on_disk = {}
-        merged = {**(on_disk if isinstance(on_disk, dict) else {}), **_cache_tables[path]}
-        tmp = path.with_suffix(f".{os.getpid()}.tmp")
-        tmp.write_text(json.dumps(merged), encoding="utf-8")
-        tmp.replace(path)
-        _cache_dirty.discard(id(_cache_tables[path]))
+    return _codeid()._cache_table(root)  # noqa: SLF001 - one definition, loaded by path
 
 
 # GUARD_EDIT_OK: feature 174 - THE GATE'S OWN STANDARD IS PART OF THE KEY (FR-003a), which makes the
@@ -433,11 +323,7 @@ def hash_files(files: list[Path], root: Path | None = None, raw: bool = False, s
     for path in sorted(files):
         h.update(str(path).encode())
         h.update(b"\0")
-        h.update(
-            (hashlib.sha256(path.read_bytes()).hexdigest() if raw else content_id(path.read_bytes(), path.name, root)).encode()
-            if path.is_file()
-            else b"<missing>"
-        )
+        h.update((hashlib.sha256(path.read_bytes()).hexdigest() if raw else content_id(path.read_bytes(), path.name, root)).encode() if path.is_file() else b"<missing>")
         h.update(b"\0")
     return h.hexdigest()
 
@@ -497,13 +383,9 @@ def check(base: str, root: Path | None = None) -> int:
         want = _area_key(root, area)
         gate = {"hooks": "make hooks-test", "page": "make page-check"}.get(area, "make done")
         if stamp is None or not stamp.is_file():
-            bad.append(
-                f"{area}: no green gate has been recorded at all ({gate} stamps it)"
-            )
+            bad.append(f"{area}: no green gate has been recorded at all ({gate} stamps it)")
         elif stamp.read_text().strip() != want:
-            bad.append(
-                f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)"
-            )
+            bad.append(f"{area}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)")
     if not bad:
         return 0
     print(
@@ -557,9 +439,7 @@ def selftest() -> int:
         # the hash is blind to comments, docstrings and formatting, and only to those
         a.write_text("def f(x):\n    return x + 1\n")
         code = hash_files([a, b])
-        a.write_text(
-            '"""module doc"""\n\n# a comment\n\ndef f(x):\n    """f doc"""\n    return  x+1  # trailing\n'
-        )
+        a.write_text('"""module doc"""\n\n# a comment\n\ndef f(x):\n    """f doc"""\n    return  x+1  # trailing\n')
         if hash_files([a, b]) != code:
             print(
                 "gate-stamp selftest: a comment/docstring/format-only edit CHANGED the hash",

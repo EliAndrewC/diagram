@@ -939,5 +939,18 @@
       "first_run_s": 4.77,
       "all_cached_s": 0.087
     }
+  },
+  "t063-slice1": {
+    "quantity": "gate-stamp's area keys and content ids before and after content_id moves into codeid.py",
+    "observed": "2026-11-09",
+    "subject": "the clone's tree; HEAD's gate-stamp.py and codeid.py against the working tree's",
+    "command": "each of the two gate-stamp.py versions loaded by path, _area_key for every area and content_id for scripts/gates/*.py, compared",
+    "method": "exact comparison",
+    "value": {
+      "areas": 4,
+      "area_keys_equal": true,
+      "files": 38,
+      "ids_equal": true
+    }
   }
 }
