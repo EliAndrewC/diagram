@@ -57,7 +57,7 @@ fn delta(dir: &Path) -> serde_json::Value {
 #[test]
 fn every_path_kind_is_pinned() {
     for path in [
-        "l7r/diagram/settlement/houses.py",
+        "l7r/diagram/pipeline/gencache.py",
         "pool/hamlets/i/i.gen.py",
         "pool/hamlets/i/i.json",
         "legacy-hand-authored-pool/x.gen.py",
