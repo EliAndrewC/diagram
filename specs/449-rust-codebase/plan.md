@@ -275,6 +275,18 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+### T063 part B (2026-11-09T02:57Z)
+
+1. **What exactly is refusing?** One test, `test_no_kept_file_names_a_deleted_package`, on two path strings in the new `rust/gate/src/delta/tests.rs`. It names the file, not the string, so the first fix missed the second.
+2. **A3 again.** Green: the rule is the repository's own, unchanged (feature 444 FR-024).
+3. **A4 again.** The rule describes kept files naming the deleted hamlet engine; the two strings were example paths in a classifier's test, ported from `test_delta.py`, so they take live examples of the same kinds: an engine `.py` under `l7r/` and a file under `tests/`.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: two test strings.
+6. **The one-sentence test.** "A new test named a package that no longer exists." The GM would not ask why.
+7. **The next step is a measurement.** The failing test run directly, then one full gate, as the round arbiter's ruling names; the same test red on another string sweeps every kept file for the six names in one pass.
+8. **Before offering routes.** None offered.
+9. **After a ruling.** The next step is the one it names: `git grep` over `rust/gate/src` for the six names, the test run directly, then the gate.
+
 ### T064 Approach (checklist part A)
 
 1. **The goal, in the world.** The conditions on a remote run, the make-only refusal in-process and the switches in Rust.
