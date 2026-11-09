@@ -78,6 +78,7 @@ animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
 anna	anna
+annam	Annam
 annas	anna
 annual cotton	annual cotton
 annual cottons	annual cotton
@@ -100,6 +101,7 @@ ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
 artesian	artesian
+arum	arum
 asakura period	Asakura period
 ash hut	ash hut
 ash huts	ash hut
@@ -229,6 +231,7 @@ bast fiber	bast fiber
 bast fibers	bast fiber
 bastion	bastion
 bastions	bastion
+batata	batata
 batik	batik
 battalion cities	guard city
 battalion city	guard city
@@ -256,6 +259,8 @@ beka cart	beka cart
 beka carts	beka cart
 bekaguruma	beka cart
 bell-and-drum tower	gulou
+bencao gangmu	Bencao gangmu
+bengal presidency	Bengal Presidency
 benjo	kawaya
 benten	Benten
 benten's	Benten
@@ -271,6 +276,7 @@ biao cloth	biao
 bidens	Bidens tripartita
 bidens tripartita	Bidens tripartita
 big door	ōdo
+bijapur	Bijapur
 bill of lading	bill of lading
 bills of lading	bill of lading
 bincho	bincho
@@ -321,6 +327,7 @@ book-entry rice	book-entry rice
 boom	boom
 booms	boom
 booting	booting
+border defense council	Border Defense Council
 borrowed scenery	borrowed scenery
 borrowed-scenery	borrowed scenery
 boubana	bobana
@@ -344,6 +351,7 @@ branch households	branch household
 branch houses	branch house
 brands	firebrand
 break of slope	break of slope
+brinjal	brinjal
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -499,6 +507,7 @@ chancellor's	chancellor
 chancellors	chancellor
 chancellors'	chancellor
 chang'an	Chang'an
+chang-chou	Zhangzhou
 changlu	Changlu
 chao	chao
 chaoguan	chaoguan
@@ -507,6 +516,8 @@ charity graveyards	charity graveyard
 charity ground	charity graveyard
 charity grounds	charity graveyard
 chaya	chaya
+che-kiang	Zhejiang
+chekiang	Zhejiang
 chemically hydrolyzed soy protein	hydrolyzed soy protein
 chemically hydrolyzed soy proteins	hydrolyzed soy protein
 chen fu	Chen Fu
@@ -835,6 +846,7 @@ dead space	dead ground
 deba	deba
 debased	debasement
 debasement	debasement
+deccan	Deccan
 deep paddies	shitsuden
 deep percolation	deep percolation
 deep percolation losses	deep percolation
@@ -883,6 +895,7 @@ diluvial	diluvial upland
 diluvial upland	diluvial upland
 diluvial uplands	diluvial upland
 dioecious	dioecious
+dioscorea	Dioscorea
 diospyros kaki	Diospyros kaki
 dipeng	dipeng
 diploid	diploid
@@ -940,6 +953,7 @@ domains	domain
 donggusup	donggusup
 dongjing	Dongjing
 dongjing meng hua lu	Dongjing Meng Hua Lu
+dongnae	Dongnae
 dooryard	dooryard
 dooryards	dooryard
 doro-aze	doro-aze
@@ -1001,6 +1015,7 @@ dujiangyan	Dujiangyan
 dummy	dummy variable
 dummy variable	dummy variable
 dunhuang	Dunhuang
+dutch learning	Dutch learning
 duty of water	water duty
 dwarf bamboo	sasa
 dōba	dōba
@@ -1087,6 +1102,7 @@ enfeoffments	enfeoffment
 engawa	engawa
 engishiki	Engishiki
 english factor	English factor
+english factory	English Factory
 enoki	enoki
 enokida	Enokida
 enoshima	Enoshima
@@ -1098,6 +1114,8 @@ enshrinement	enshrinement
 enshrinement's	enshrinement
 enshrinements	enshrinement
 equipage	equipage
+era name	era name
+esculent	esculent
 eta	eta
 etchu	Etchu
 etchu's	Etchu
@@ -1140,6 +1158,7 @@ fan's head	alluvial fan
 fan-foot	fan foot
 fan-palm	fan palm
 fan-palm-dike	fan palm
+fan-shu	fan-shu
 fang	fang
 fanzi	fanzi
 fao	FAO
@@ -1338,6 +1357,7 @@ fsw	FSW
 fsws	FSW
 ft clear	clear width
 fu	fu
+fu-kien	Fujian
 fubokuwakasho	Fubokuwakasho
 fubokuwakashō	Fubokuwakasho
 fudai	fudai
@@ -1352,6 +1372,7 @@ fudoki ko	fudoki
 fudō	Fudo
 fudō myōō	Fudo
 fuel-and-fodder commons	commons
+fujian	Fujian
 fujiwara	Fujiwara-kyo
 fujiwara no tameie	Fujiwara no Tameie
 fujiwara no tamenari	Fujiwara no Tamenari
@@ -1359,6 +1380,7 @@ fujiwara-kyo	Fujiwara-kyo
 fujiwara-kyo's	Fujiwara-kyo
 fukada	fukada
 fuki	fuki
+fukien	Fujian
 fukugi	fukugi
 fukuro-zeki	fukuro-zeki
 fully involved	fully-involved
@@ -1601,6 +1623,8 @@ gun-bugyo	gun-bugyo
 gun-dai	gundai
 gundai	gundai
 guoji	guoji
+gwanghae	Gwanghaegun
+gwanghaegun	Gwanghaegun
 gyosho	Gyosho
 gyosho edition	Gyosho
 gyozui	gyozui
@@ -1643,6 +1667,7 @@ han	han
 han china	Han dynasty
 han chinese	Han Chinese
 han dynasty	Han dynasty
+han river	Han River
 han's	han
 han-dynasty	Han dynasty
 hanadai	flower money
@@ -1766,6 +1791,7 @@ hipped	hip roof
 hipped roof	hip roof
 hipposandal	hipposandal
 hipposandals	hipposandal
+hirado	Hirado
 hirairi	hirairi
 hirakata	hirakata
 hiratabune	hiratabune
@@ -1895,6 +1921,7 @@ huaibei	Huaibei
 huainan	Huaibei
 huang daopo	Huang Daopo
 huang tao-p'o	Huang Daopo
+huang-du	huang-du
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
@@ -1980,6 +2007,8 @@ ima	ima
 imado ware	Imado ware
 imado-yaki	Imado ware
 imidas	imidas
+imjin war	Imjin War
+imo	imo
 imperial household department	Imperial Household Department
 imperial magistrate	Imperial Magistrate
 imperial magistrate's	Imperial Magistrate
@@ -2045,6 +2074,8 @@ inu-bashiri	inu-bashiri
 inugoya	inugoya
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
+ipomocea batatas	Ipomoea batatas
+ipomoea batatas	Ipomoea batatas
 ippitsu	hitsu
 iriai	iriai
 irikawa	irikawa
@@ -2091,6 +2122,8 @@ j-stage	J-STAGE
 ja	JA
 ja zen-noh	Zennoh
 jagama	jagama
+jagatara	jagatara-imo
+jagatara-imo	jagatara-imo
 jail god	jail-god
 jail-god	jail-god
 jail-god temple	jail-god
@@ -2663,6 +2696,7 @@ lion	Lion Clan
 lion clan	Lion Clan
 lion-dog	lion-dog
 lion-dogs	lion-dog
+liquea	Liquea
 litchi	litchi
 litchis	litchi
 litter	litter
@@ -2721,8 +2755,11 @@ lump village	kaison
 lump villages	kaison
 luocheng	luocheng
 lushi chunqiu	Lushi chunqiu
+luzon	Luzon
 lychee	litchi
 lychees	litchi
+lye	lye water
+lye water	lye water
 lying willow	lying willow
 lùlu	lulu
 lüshi chunqiu	Lushi chunqiu
@@ -2977,6 +3014,8 @@ muen	muenzuka
 muen-zuka	muenzuka
 muenbotoke	muenzuka
 muenzuka	muenzuka
+mughal	Mughal
+mughal empire	Mughal
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry plot-fish ponds	dike-pond
@@ -3059,6 +3098,7 @@ namako	namako-tiled
 namako wall	namako-tiled
 namako walls	namako-tiled
 namako-tiled	namako-tiled
+namban	Namban
 nanbokucho	Northern and Southern Courts
 nanbu country	Tohoku
 nanbu domain	Tohoku
@@ -3905,6 +3945,8 @@ seed	seed
 seed cotton	seed cotton
 seed drill	seed drill
 seed drills	seed drill
+seed tuber	seed tuber
+seed tubers	seed tuber
 seed's	seed
 seeds	seed
 segi-ita	segi-ita
@@ -3943,6 +3985,7 @@ sensoji	Sensoji
 sento	sento
 sentō	sento
 senzai	senzai
+seonjo	Seonjo
 separated flow	separation zone
 separation zone	separation zone
 seral	seral
@@ -3985,6 +4028,7 @@ shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
 shamisen	shamisen
 shamisens	shamisen
+shan-shu	shan-shu
 shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
@@ -4839,6 +4883,7 @@ unhairs	unhair
 unjo-gura	levy storehouse
 unno	Unno
 unno-juku	Unno
+unseok yugo	Unseok yugo
 unthinned stand	forest stand
 unveiling	unveiling
 unveilings	unveiling
@@ -5219,7 +5264,9 @@ zhalou	zhalou
 zhang	zhang
 zhang lü-xiang	Zhang Lüxiang
 zhang lüxiang	Zhang Lüxiang
+zhangzhou	Zhangzhou
 zhao rukuo	Zhao Rukuo
+zhejiang	Zhejiang
 zhen	zhen
 zhengde	Zhengde
 zhengguo canal	Zhengguo canal
