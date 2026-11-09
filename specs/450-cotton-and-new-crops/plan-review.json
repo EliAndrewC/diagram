@@ -3,67 +3,67 @@
  "blocks": {
   "preamble": {
    "sha256": "57487424dcac5d21a54f3275d0e22f039e6a670abc45fd245a32e146ad4877e3",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## Summary": {
    "sha256": "bb7de78fea3dede717197b2adf16b40794bd8aada4726530381bdd05499995c4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## Technical Context": {
-   "sha256": "cc6856780981d38c051c04325da6f28980ea32c33548efd06238aaae441c1e3e",
-   "verdict": "BLOCKED",
+   "sha256": "f489de33d7f73841d44d846def7477a15b4482e1d345ca96f30284e444722e2c",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## Performance bookends": {
    "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## Constitution Check": {
    "sha256": "e73e107bceb49bd8dd2cafe9dc3be56f53b53269a2b276e9faa910bcbd863c5f",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D1 - Japan's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
-   "sha256": "87d654e2236651e7059fbb34f9a2142b42d4f160f3cacf9d5acf6b5da6bcae80",
-   "verdict": "BLOCKED",
+   "sha256": "1f32b5fab365464c111c5de26cf36ac2ecedbb39d523080d309c78f9d856fdad",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D2 - China's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
    "sha256": "6d94e9b4808745fc383293fbb3b5ac9e66dbb9fc965f507a5852934dec3129f0",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)": {
-   "sha256": "856dc501cb4c8261305df964b309050271dcbe9d4b5b3b1cc2a62015b198580d",
-   "verdict": "BLOCKED",
+   "sha256": "70c159d119d2a1e4198e3598ef1502a59f3961394e0f461c3e9fedbb9b492c5b",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)": {
    "sha256": "cb6bf563f5b857fc189db743d99285604b3f4a35eabc0b1440bfb8c73072507a",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-007)": {
    "sha256": "5a0dc6f98f498f3265fdac62db1f666ac68f1af2567125296c34342c3bb6c8e6",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
   "## D6 - the implementation check and the reply (FR-001, FR-003, FR-004)": {
    "sha256": "3b1edb26e257b3cbf16b268f0dbcce8e1cd399debe6a0a0f2758ebe77b623e18",
-   "verdict": "BLOCKED",
+   "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   }
@@ -237,6 +237,97 @@
      "summary": "make land takes the record's checks; a claims-gate refusal on another feature's Rust claims is taken up when seen",
      "class": "within",
      "why": "Landing procedure; the request does not reach it and no asked figure depends on it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - Japan's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - China's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)",
+    "## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)",
+    "## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-007)",
+    "## D6 - the implementation check and the reply (FR-001, FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "Summary-queue",
+     "class": "within",
+     "summary": "Five write sessions, each with a check-and-apply session, in one sequential queue in this clone; questions 1 and 2 land first; then the reply; no code, map or canon change.",
+     "why": "The request orders question 1, then question 2, and lets 3 and 4 follow; it asks only for the history, and the Rokugan decision stays with the GM. One queue against two clones is execution, and all four questions are still worked."
+    },
+    {
+     "id": "TC-sources",
+     "class": "within",
+     "summary": "Passes are leads read on the page; wrong URLs in pass C replaced from make archive-find; pass E's PDFs read by pdftotext; drafts and works read through another cited as such.",
+     "why": "Carries FR-007 and the citation rules. None of it removes a figure the request asks for."
+    },
+    {
+     "id": "TC-question-count",
+     "class": "within",
+     "summary": "Ten new questions (D1 1, D2 1, D3 2, D4 3, D5 3), each crop its own; a write takes at most four questions and ten registry keys.",
+     "why": "The block's own count sums to ten, matching D1-D5. The request says to keep the plants separate. The two caps were checked as real project limits: the 20,000-byte prose cap in research/CLAUDE.md line 79 and the 10-key cap in scripts/pages/page_session_runner.py KEY_CAP, enforced by scripts/record/reserve-prefix.py. A cap decides how the work is divided, not what is answered."
+    },
+    {
+     "id": "Perf-and-Constitution",
+     "class": "within",
+     "summary": "Performance bookends N/A (no generator change); constitution check limited to XII, XIII and XVI.",
+     "why": "The request is research only, so no generator is touched."
+    },
+    {
+     "id": "D1",
+     "class": "within",
+     "summary": "One Japan question: five stages each with a verdict; what cotton replaced and how fast; region and class; the direct question by region; both canon quotations; the six files the request lists each named by file, with 0312 in addition, none repeated.",
+     "why": "Round 1's narrowing is gone: all six files the request names are carried (0261, 0274, 0313, 0209, 0006, 0020), matching spec User Story 1 scenario 2, and 0312 only adds. Peasants and townsmen are the request's commoners. Answering the century by region gives each region its century and is what the spec's Japan finding states; the region difference is itself asked for. Who wore it is carried by the class clause."
+    },
+    {
+     "id": "D2",
+     "class": "within",
+     "summary": "One China question of D1's shape, with the frontier and the Yangzi separate and the state's part; points at D1.",
+     "why": "Same shape carries the five stages, replacement, region, class, the direct question and the canon. Keeping the frontier and the Yangzi apart serves the request's dated stage 'with place'. The state's part is an addition inside the spec's commercial-crop finding and removes nothing."
+    },
+    {
+     "id": "D3-species",
+     "class": "within",
+     "summary": "One question on whether cotton was a New World crop: species before 1492, when American kinds came, four countries with date and importance, the GM's 100-year point answered.",
+     "why": "Walks request question 2 clause by clause: the premise check, pre-1492 species, American arrival in all four countries, whether they mattered, and the 100 years."
+    },
+    {
+     "id": "D3-India-Korea",
+     "class": "within",
+     "summary": "One question on India and Korea with the same five dated stages as question 1 for each country, and Korea's role, if any, in cotton reaching Japan, the cloth and the plant each with its verdict.",
+     "why": "Round 1's narrowing is gone. The request says 'cotton reaching Japan'; the text no longer reduces that to cloth, and each of the two has its own verdict, as the spec's finding does (cloth ATTESTED ONLY FOR, plant NOT ATTESTED). The five stages the request calls for are now stated for each country."
+    },
+    {
+     "id": "D4",
+     "class": "within",
+     "summary": "Three questions, one per plant (tobacco, sweet potato, white potato), each with per-country dated stages and the lag, China and Japan first; loose plant words handled by the spec's edge case; tobacco's canon quotation beside it.",
+     "why": "The request says to keep the plants separate. A native yam is named there only as a plant a loose word may mean, not as a crop asked about, so it needs no question of its own; the edge case and User Story 1 scenario 4 keep such a date labeled. China and Japan first is the request's order, and per-country keeps India and Korea."
+    },
+    {
+     "id": "D5",
+     "class": "within",
+     "summary": "Three questions: the tomato per country with the lag and the GM's two positions tested; what historians say set the pace, with author and crops; whether the Tokugawa restrictions stopped new crops, with arrivals before and after.",
+     "why": "Carries the tomato part of question 3 and all of question 4. The block does not restrict the routes or the COMPARATIVE marking the request names: 'arrivals' is unqualified, the spec's finding gives the routes (Nagasaki, Tsushima, Ryukyu-Satsuma), and its edge case governs COMPARATIVE. Silence on a point the accepted spec settles is not a decision against it."
+    },
+    {
+     "id": "D6-reply",
+     "class": "within",
+     "summary": "implementation-check.md line per question; the reply gives figure by figure the fragment file, verdict and what is open, including the unread works and each SILENT; both canon quotations stated; anything for the GM through escalation-check; no canon edit.",
+     "why": "Carries FR-001, FR-003 and FR-004 and the spec's canon edge case. It leaves the Rokugan decision to the GM as the request says."
+    },
+    {
+     "id": "D6-landing",
+     "class": "within",
+     "summary": "Every delta is a record edit, so make land takes the record's checks; a claims-gate refusal on another feature's owed Rust claims is taken up when seen on a landing.",
+     "why": "A landing mechanic. It touches nothing the request asks for."
     }
    ]
   }
