@@ -3410,6 +3410,7 @@ picket line	picket line
 picket lines	picket line
 picul	picul
 piculs	picul
+piece goods	piece goods
 pig iron	pig iron
 pigsty privy	pigsty-privy
 pigsty-privies	pigsty-privy
