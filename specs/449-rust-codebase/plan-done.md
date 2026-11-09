@@ -1207,3 +1207,26 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+<!-- plan-archive: archived 2026-11-09 -->
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008; the slice and its files as the round arbiter's `ask:449-T068-scope` names them.
+   **Decisions** (the round arbiter's `ask:449-T068-scope`; the second slice, figures and probes):
+   - ONE LANDING: `figures.py`, `probe.py`, `ratchet.py`, `gatecost.py` and `gate_costs.py` become `l7r-gate measure` (`rust/gate/src/measure.rs`, `measure/`). `git grep -nE "(figures|probe|ratchet|gatecost|gate_costs)\.py" -- Makefile '*.mk' '*.sh' 'scripts/*.py' 'l7r/*.py' 'rust/*.rs' .claude/settings.json 'tests/*.py' 'tests/*.sh' 'specs/*.py' 'specs/*.sh'` names no invocation of them: its other lines are other features' files whose names end the same (`fr005_probe.py`, `collect_probe.py`, a scratch `probe.py` in a hook suite's corpus) and the ported modules' first comments. The Makefile's three call sites and inline `class_count` ask the gate; the guard `measure_hooks` asks it for the median it prints. `git grep -nE "(figures|probe|ratchet|gatecost|gate_costs)\.py" -- 'specs/*/measurements*.json'` names none of them as a command.
+   - THE TABLE MOVES: `RATCHETS` becomes data, `dev/ratchets.json`, with every pinned baseline and its written reason verbatim; the check `run-plausible` reads the same row. A new target is a row, as it was.
+   - THE CALIBRATION LOOP IS RE-PINNED, BECAUSE IT IS A DIFFERENT LOOP: the floor-net-of-load loop was Python's; in Rust the same arithmetic is about 100 times faster, so it runs 300,000,000 iterations, chosen to take the Python loop's time, and `calibration_s` is 0.116 s with its date, method and load in the table's `calibration_reason` (observed 2026-11-09, method: `l7r-gate measure ratchet --calibrate 6`, best of 3 runs). This is the loop's own constant moving with its code, not a ratchet baseline; the ceiling and the baseline the GM pinned are unchanged (`dev/ratchets.json`). The loop runs only for a `quick` at or over its ceiling, as before.
+   - THE VERDICTS ARE THE PYTHON'S (observed 2026-11-09, method: each command run over the real repository through the Python and through the binary, exit status and output compared, a one-shot, the Python being gone): `gatecost` on four targets, three scopes and three classes and bare, its `--count` beside the Python's `class_count`, `gate-costs` plain and with `--since`, `ratchet` on eighteen argument shapes, `figures` on a missing spec. 63 cases, 6 differ, 3 ruled and 3 by a path. The ruled case is FR-002's `ask:449-T75-gatecost-class`: the Python's third positional reached `cwd`, so a named class left the median empty; in the Rust it is the class (2 cases, the usage line a third). The other three differ only in naming `dev/ratchets.json` for the moved baseline. `probe` and the `figures` commands that re-run measurements are held by their tests: a probe rolls 96 seeds and a full `figures` runs every recorded command, neither of which a differential should repeat.
+   - THE RULING'S LIMIT: a class median over its ceiling is printed and does not refuse, tested; `make done` never reached one in Python, and the standing rule of 2026-10-26 is that timings gate nothing new.
+   - WHAT THE TESTS REPLAY: every case of `test_ratchets.py`, `test_gate_costs.py`, `test_figures_deleted_engine.py`, `test_make_figures.py` and `test_probe.py` is in `measure/*/tests.rs`, the Makefile recipe cases among them.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the ruling's slices; each stands on the ones before it.
+6. **The exits.** Green: each tool's verdicts the Python's, by a differential over the repository run on the final port, and the slice's files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files` names none of the slice's files. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+
