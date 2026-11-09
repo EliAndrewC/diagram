@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T02:48:03Z",
+  "target": "plan-gate push",
+  "commit": "a6cd9cd6a",
+  "why": "after the CLEAR on 2026-11-08 the T063 block changed only in the ask id's spelling, the population sentence the review asked for and the move of slice 3 to T72; T67 gained the arbiter's carried row and T72 is a new section reviewed when it starts"
+}
