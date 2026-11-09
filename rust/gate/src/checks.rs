@@ -78,7 +78,7 @@ fn git_text(root: &Path, args: &[&str]) -> String {
 }
 
 /// A scratch directory of this process.
-fn scratch(tag: &str) -> PathBuf {
+pub(crate) fn scratch(tag: &str) -> PathBuf {
     static SEQ: AtomicUsize = AtomicUsize::new(0);
     let dir = std::env::temp_dir().join(format!(
         "l7r-gate-check-{tag}-{}-{}",
@@ -118,7 +118,7 @@ fn blank_matches(pattern: &fancy_regex::Regex, text: &str) -> String {
 }
 
 /// A JSON value as Python's `repr` prints it, for a message.
-fn py_repr(value: &serde_json::Value) -> String {
+pub(crate) fn py_repr(value: &serde_json::Value) -> String {
     use serde_json::Value;
     match value {
         Value::Null => "None".to_owned(),
@@ -155,6 +155,15 @@ fn py_repr(value: &serde_json::Value) -> String {
 /// Does this path carry the extension?
 pub(crate) fn has_ext(path: &str, ext: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == ext)
+}
+
+/// The one definition of a figure with a unit, and of a one-shot label (`spec_figures`), for the plan lint.
+pub(crate) fn figure_pattern() -> &'static fancy_regex::Regex {
+    &spec_figures::FIGURE
+}
+
+pub(crate) fn one_shot_pattern() -> &'static fancy_regex::Regex {
+    &spec_figures::ONE_SHOT
 }
 
 /// Does `check`, one of the four still in Python, read this path? Each set is that check's own, from its source and what it

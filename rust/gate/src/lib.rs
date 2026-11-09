@@ -6,6 +6,7 @@ pub mod codeid;
 pub mod delta;
 mod exempt;
 mod hashing;
+mod plan;
 mod stamp;
 mod state;
 
@@ -70,6 +71,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("lifecycle") => ci::cachepolicy::cli(&args[1..]),
         Some("github-token") => ci::config::github_token(&top()),
         Some("check") => checks::cli(&args[1..], &top()),
+        Some("plan") => plan::cli(&args[1..], &top()),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
@@ -97,9 +99,9 @@ mod tests {
     #[test]
     fn it_says_its_version_and_refuses_what_it_does_not_know() {
         assert_eq!(cli(&["--version".to_owned()]).stdout, "l7r-gate 0.1.0\n");
-        let unknown = cli(&["plan".to_owned()]);
+        let unknown = cli(&["no-such-verb".to_owned()]);
         assert_eq!(unknown.code, 2);
-        assert!(unknown.stderr.contains("no subcommand plan"));
+        assert!(unknown.stderr.contains("no subcommand no-such-verb"));
         assert!(cli(&[]).stderr.contains("(none given)"));
     }
 

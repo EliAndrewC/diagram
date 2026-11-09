@@ -162,6 +162,16 @@ fn correct(text: &str, spans: &Regex) -> (String, Vec<String>) {
     (out + &piece, notes)
 }
 
+/// Text a tool writes from an agent's reply, in the house style (feature 385 T78): spans and quotations are held out as this hook holds
+/// them in a prose file.
+#[must_use]
+pub fn americanize(text: &str) -> String {
+    static HELD: LazyLock<Regex> = LazyLock::new(|| {
+        re("(?s)```.*?```|`[^`]*`|「[^」]*」|『[^』]*』|“[^”]*”|<q\\b[^>]*>.*?</q>|<blockquote\\b[^>]*>.*?</blockquote>|\"[^\"\n]*\"")
+    });
+    correct(text, &HELD).0
+}
+
 /// `cmd` with heredoc bodies and the insides of quoted strings blanked, at the same length: a separator inside quotes is not a separator.
 fn masked(cmd: &str) -> String {
     let mut bytes = cmd.as_bytes().to_vec();

@@ -32,7 +32,7 @@ fn world(tag: &str) -> World {
     }
     std::fs::write(root.join("yes"), "").unwrap();
     std::fs::write(
-        root.join("tree/scripts/gates/engine_edit.py"),
+        root.join("tree/scripts/gates/l7r-gate.sh"),
         format!("[ -f {}/yes ]\n", root.display()),
     )
     .unwrap();
@@ -65,7 +65,6 @@ impl World {
             },
             stale: 300,
             tree: self.root.join("tree"),
-            python: "sh",
         }
     }
 

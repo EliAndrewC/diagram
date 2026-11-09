@@ -8,7 +8,7 @@
 //! (`stop_reason: end_turn`), or the session acked it. Anything else is live, stalled or not, however old (a slow review looks exactly
 //! like a dead one, and `TaskStop` then ack is the route).
 //!
-//! Plan T018's decisions: (a) the reviews, the rolls and the words in-process; (b) `scripts/gates/engine_edit.py` answers "is this an
+//! Plan T018's decisions: (a) the reviews, the rolls and the words in-process; (b) `l7r-gate plan engine-edit` answers "is this an
 //! engine edit, and more than a docstring", asked only once something is live; (c) `REVIEW_AGENTS` read directly.
 
 use std::path::{Path, PathBuf};
@@ -45,7 +45,6 @@ pub(crate) struct Ctx {
     pub procs: Procs,
     pub stale: u64,
     pub tree: PathBuf,
-    pub python: &'static str,
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
@@ -63,7 +62,6 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
                 .unwrap_or(300),
             tree: std::env::var("L7R_GUARD_TREE")
                 .map_or_else(|_| PathBuf::from("/diagram"), PathBuf::from),
-            python: "python3",
         },
     )
 }
@@ -205,11 +203,11 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let question =
         json!({"root": root.to_string_lossy(), "path": path, "tool": tool, "tool_input": input})
             .to_string();
-    let answerer = c.tree.join("scripts/gates/engine_edit.py");
+    let answerer = c.tree.join("scripts/gates/l7r-gate.sh");
     if !ask(
         Path::new("/"),
-        c.python,
-        &[&answerer.to_string_lossy()],
+        "bash",
+        &[&answerer.to_string_lossy(), "plan", "engine-edit"],
         &question,
     )
     .ok()
