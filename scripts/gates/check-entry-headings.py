@@ -22,7 +22,7 @@ enumerates every entry taking it, because a carve-out nobody can list is one nob
 
 RUN AT THE GATE AND AT THE PUSH, like `check-file-scale.py`. The gate alone would not do: a heading
 breaks when a research page is renamed, and a research-page-only delta owes no gate at all
-(`gate-stamp.py` SKIP_ONLY_AREAS), so a gate-only check would surface the breakage as an inherited red
+(`l7r-gate stamp` SKIP_ONLY_AREAS), so a gate-only check would surface the breakage as an inherited red
 on the next session's unrelated work.
 
 Usage: check-entry-headings.py [ROOT] | --selftest

@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 FIXTURES = Path(__file__).parent / "fixtures"
-REPO_ROOT = Path(__file__).resolve().parents[3]  # tests/tooling/ci/ is one level deeper than tests/ci/ was (T29)  # the real repository, for scripts/gates/gate-stamp.py
+REPO_ROOT = Path(__file__).resolve().parents[3]  # tests/tooling/ci/ is one level deeper than tests/ci/ was (T29)  # the real repository, for rust/gate/src/stamp.rs
 
 
 def load(name: str) -> dict[str, Any]:
@@ -26,7 +26,7 @@ def git(root: Path, *args: str) -> str:
 
 @pytest.fixture
 def repo(tmp_path: Path) -> Path:
-    """A repo shaped like this one: scripts/gates/gate-stamp.py present, the skill dir, one commit on main
+    """A repo shaped like this one: rust/gate/src/stamp.rs present, the skill dir, one commit on main
     and an `origin/main` ref pointing at it (so merge-base and merge-tree work)."""
     root = tmp_path / "clone"
     root.mkdir()
@@ -34,7 +34,6 @@ def repo(tmp_path: Path) -> Path:
     git(root, "config", "user.email", "t@t")
     git(root, "config", "user.name", "t")
     (root / "scripts/gates").mkdir(parents=True)
-    (root / "scripts/gates/gate-stamp.py").write_text((REPO_ROOT / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
     (root / "scripts/gates/codeid.py").write_text((REPO_ROOT / "scripts/gates/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")  # gate-stamp loads its code id beside it (feature 426 D2)
     skill = root
     (skill / "l7r" / "diagram").mkdir(parents=True, exist_ok=True)

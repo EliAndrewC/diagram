@@ -201,7 +201,7 @@ simply adds too much to the time that it takes to make small changes."*). The sy
 are the only record of the page's behavior rulings.
 
 **...AND THEY ARE SKIPPED WHILE NOTHING THEY READ CHANGED** (feature 206, GM 2026-09-07: *"this is about saving memory,
-not saving time"*). `gate-stamp.py` keeps a `browser` key over everything the synthetic tests read (every module here,
+not saving time"*). `l7r-gate stamp` keeps a `browser` key over everything the synthetic tests read (every module here,
 the two assets, the test package, the record, the installed Playwright and Chromium), and the gate's test phase leaves
 the package out while the stamp matches, saying so in one line. Only a run that ran the package green earns it
 (`make page-check`, or a `make done` that included it); it is a skip key, never a push obligation.

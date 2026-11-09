@@ -31,6 +31,7 @@ CALLS = (
     re.compile(r'usage_log\.record\([^\n]*?,\s*"([\w-]+)"'),  # usage_log.record(root, "<tool>", ...) on one line
     re.compile(r'--tool[ =]"?([\w-]+)'),  # usage_log.py record --tool <tool>
     re.compile(r'"--tool",\s*"([\w-]+)"'),  # the same call from a Rust guard, an argument list (feature 449 T013)
+    re.compile(r'USAGE_LOG_TOOL: &str = "([\w-]+)"'),  # a compiled tool that writes the record itself (feature 449 T063)
 )
 
 
@@ -61,7 +62,8 @@ def called(root: Path) -> dict[str, str]:
     out: dict[str, str] = {}
     files = [p for p in (root / "scripts").rglob("*") if p.suffix in (".py", ".sh") and "__pycache__" not in p.parts]
     guards = (root / "rust" / "guard" / "src" / "guards").rglob("*.rs")
-    for path in sorted([*files, *guards, root / "Makefile"]):
+    gate = (root / "rust" / "gate" / "src").rglob("*.rs")
+    for path in sorted([*files, *guards, *gate, root / "Makefile"]):
         text = _text(path)
         if "usage_log" not in text or path.name == "usage_log.py":
             continue

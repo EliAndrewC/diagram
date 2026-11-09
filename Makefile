@@ -52,9 +52,9 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; tp=$$(date +%s); [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true)
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
-	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
+	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram || true; \
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
-	  if ! python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks >/dev/null 2>&1; then echo "make done: ...but the hooks stamp is stale (a scripts/ or tests/hooks/ change) - running make hooks-test first"; $(MAKE) --no-print-directory hooks-test FROM_DONE= ||{ $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
+	  if ! "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks >/dev/null 2>&1; then echo "make done: ...but the hooks stamp is stale (a scripts/ or tests/hooks/ change) - running make hooks-test first"; $(MAKE) --no-print-directory hooks-test FROM_DONE= ||{ $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
@@ -74,7 +74,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$(REF_WHY)"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $(REF_WHY)"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
 	for phase in hooks-test counters-inert test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
-	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks; then \
+	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  ts=$$(date +%s); $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
 	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
@@ -85,8 +85,8 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); sel=$$(python3 -m l7r.diagram.ci incremental selected 2>/dev/null || true); \
 	[ -z "$$root" ] || [ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: tree moved"; $(STATE) failed-gate tree-moved; $(COMMIT_RUN_RECORD) failed; exit 1; }; \
 	python3 "$$root/scripts/gates/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
-	[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram && python3 "$$root/scripts/gates/gate-stamp.py" --write page || true; \
-	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write browser || true;) \
+	[ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram && "$$root/scripts/gates/l7r-gate.sh" stamp --write page || true; \
+	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write browser || true;) \
 	RUN_MODE="$$mode" RUN_SELECTED="$$sel" RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; $(COMMIT_RUN_RECORD) green; \
 	root=$$(git rev-parse --show-toplevel); \
 	cls=$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true); \
@@ -135,7 +135,7 @@ _switch:
 # ---- expensive: they generate ----
 verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
-	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
+	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
 	  @root=$$(git rev-parse --show-toplevel); undeclared=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" --check-declared); \
 	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
@@ -294,11 +294,11 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \
@@ -346,7 +346,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	if ! python3 "$$root/scripts/gates/check-tool-signals.py"; then fail="$$fail check-tool-signals"; fi; \
 	if ! python3 "$$root/scripts/gates/check-rust-tooling.py" --root "$$root"; then fail="$$fail rust-tooling"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
-	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
+	"$$root/scripts/gates/l7r-gate.sh" stamp --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
@@ -430,7 +430,7 @@ ci-status:      ## [remote] free: delta, route, verification state, verified loo
 	$(RUN).ci status $(if $(ROUTE),--route,)
 engine-key:      ## [project] the content hash the gate and the push key on   REF=<commit>
 ##  REF=<commit>  which commit to key (default: HEAD)
-	@$(RUN).ci engine-key $(or $(REF),HEAD)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" delta key $(or $(REF),HEAD)
 
 ci-check:       ## [remote] run the SOAK suite on CodeBuild (PAID)      FULL=1 (prompts) | TARGET=cohort etc. | NO_GO=1 (FR-036 self-abort proof)
 ##  FULL=1                full scope instead of reference; PROMPTS, and cancels by default
@@ -503,8 +503,8 @@ tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustiv
 
 page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist loadgroup -q --no-cov tests/interactive tests/full/interactive/page_browser \
-	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gates/gate-stamp.py" --write page \
-	  && python3 "$$root/scripts/gates/gate-stamp.py" --write browser \
+	  && root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" stamp --write page \
+	  && "$$root/scripts/gates/l7r-gate.sh" stamp --write browser \
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
 	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
@@ -1166,8 +1166,8 @@ typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (featu
 
 FULL_TREE_IGNORE = $(if $(COV_FLOORS),,--ignore=tests/full)
 FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
-BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
-COV_SCOPE = $(if $(COV_FLOORS),,$(shell python3 -m l7r.diagram.ci cov-scope 2>/dev/null))
+BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
+COV_SCOPE = $(if $(COV_FLOORS),,$(shell "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" delta cov-scope 2>/dev/null))
 # THE PORT SWITCH (feature 444 amendment 8, FR-023; the GM 2026-11-07: "the functionality of a make done or a make land are both
 # going to have to change temporarily"): at rust-only, make done rolls no map - no map-rolling test, no reference map, no floor that
 # rolls a settlement - so nothing waits on the Python stages after the Rust front. `make port-integrated` throws it back.

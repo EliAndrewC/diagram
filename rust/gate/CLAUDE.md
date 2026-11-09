@@ -6,4 +6,6 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 |---|---|
 | `src/lib.rs` | the command line, `cli` |
 | `src/codeid.rs` | a file's content id, and the id cache shared with the Python callers (T062) |
+| `src/stamp.rs` | the green-gate stamps: `stamp --write`, `--fresh`, `--check`, `--selftest`, and what Python callers ask once a process (T063) |
+| `src/delta.rs` | the delta, the one list of engine paths (`is_engine`), the engine key (T063) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

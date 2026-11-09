@@ -156,18 +156,18 @@ fn the_engine_key_is_the_cache_until_a_py_is_newer_and_then_makes_asks() {
 #[test]
 fn a_green_gate_is_the_stamp_else_the_recorded_key() {
     let c = clone("green");
-    assert!(!gate_green(&c, "", "python3"));
+    assert!(!gate_green(&c, ""));
     std::fs::write(
         c.join(".git/verification-state.json"),
         r#"{"engine_key": "k"}"#,
     )
     .unwrap();
-    assert!(gate_green(&c, "k", "python3") && !gate_green(&c, "other", "python3"));
+    assert!(gate_green(&c, "k") && !gate_green(&c, "other"));
     std::fs::create_dir_all(c.join("scripts/gates")).unwrap();
     std::fs::write(
-        c.join("scripts/gates/gate-stamp.py"),
-        "import sys\nsys.exit(0 if sys.argv[1:] == ['--fresh', 'diagram'] else 1)\n",
+        c.join("scripts/gates/l7r-gate.sh"),
+        "[ \"$*\" = \"stamp --fresh diagram\" ]\n",
     )
     .unwrap();
-    assert!(gate_green(&c, "other", "python3"));
+    assert!(gate_green(&c, "other"));
 }

@@ -20,4 +20,5 @@ stale() {
 if stale; then
   RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --release --quiet --manifest-path "$TREE/rust/Cargo.toml" -p l7r_gate || { echo "l7r-gate: the build failed - fix what cargo names above" >&2; exit 1; }
 fi
+export L7R_GATE_TREE="$TREE"  # where the binary finds codeid.py: a fixture repository it runs in has none
 exec "$BIN" "$@"

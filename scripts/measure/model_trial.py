@@ -351,7 +351,7 @@ def snapshot(out: pathlib.Path) -> int:
     # THE GATE WAS GREEN on this content when the recorded run was dispatched (its dispatch says so); a case's own clone has no
     # gate record, and the reviewer's contract stops on a red `make review-paired-gate` - every first trial run did. The stamp
     # is written in the case's clone alone.
-    subprocess.run(["python3", "scripts/gates/gate-stamp.py", "--write", "diagram"], cwd=tree, capture_output=True, check=False)
+    subprocess.run(["scripts/gates/l7r-gate.sh", "stamp", "--write", "diagram"], cwd=tree, capture_output=True, check=False)
     return rc
 
 

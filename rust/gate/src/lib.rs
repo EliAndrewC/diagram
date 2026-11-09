@@ -1,6 +1,8 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
 pub mod codeid;
+pub mod delta;
+mod stamp;
 
 use std::path::{Path, PathBuf};
 
@@ -26,7 +28,7 @@ fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
             Err(why) => return fail(format!("l7r-gate: cannot read {path}: {why}\n"), 1),
         }
     }
-    let script = root.join("scripts/gates/codeid.py");
+    let script = codeid::script(root);
     match codeid::content_ids(&files, &mut codeid::Cache::at(root), python, &script) {
         Ok(ids) => Reply {
             stdout: paths
@@ -46,6 +48,13 @@ fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     match args.first().map(String::as_str) {
+        Some("stamp") => stamp::cli(
+            &args[1..],
+            stamp::toplevel().as_deref(),
+            "python3",
+            &mut std::io::stdin(),
+        ),
+        Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
@@ -74,6 +83,13 @@ mod tests {
         assert_eq!(unknown.code, 2);
         assert!(unknown.stderr.contains("no subcommand plan"));
         assert!(cli(&[]).stderr.contains("(none given)"));
+    }
+
+    #[test]
+    fn the_stamp_and_the_delta_are_subcommands() {
+        let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
+        assert_eq!(ask(&["delta", "nonsense"]).code, 2);
+        assert_eq!(ask(&["stamp", "--nonsense"]).code, 2);
     }
 
     #[test]

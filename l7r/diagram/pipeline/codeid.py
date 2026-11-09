@@ -1,6 +1,6 @@
 """The docstring-blind code id, for the engine's keys (feature 426, D2): `scripts/gates/codeid.py`, loaded by path.
 
-The rule lives beside `gate-stamp.py` (where it always did): the gates and the guards load it by path from the scripts tree every
+The rule lives beside `l7r-gate stamp` (where it always did): the gates and the guards load it by path from the scripts tree every
 fixture repository copies whole, and this shim gives `gencache`, `render_cache` and `ci/` the same module. Its docstring holds
 the why.
 

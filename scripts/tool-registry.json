@@ -63,7 +63,7 @@
     },
     "gate-stamp": {
       "kind": "check",
-      "what": "scripts/gates/gate-stamp.py - a refusing check; each run recorded passed or refused"
+      "what": "l7r-gate stamp (rust/gate/src/stamp.rs) - a refusing check; each run recorded passed or refused"
     },
     "idle-tests": {
       "kind": "target",

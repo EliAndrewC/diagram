@@ -297,15 +297,27 @@ FEATURE_RECORDS = ("found.jsonl", "arbiter.jsonl", "claims-carried.jsonl", "task
 COHORT_LOG = "dev/cohort-log/"
 
 
-def _stamp() -> object:
-    """`gate-stamp.py`, by path (its name has a hyphen): the semantic id the gate's own key is built on."""
+def _codeid() -> object:
+    """`codeid.py`, by path: the semantic id the gate's own key is built on."""
     import importlib.util  # noqa: PLC0415
 
-    spec = importlib.util.spec_from_file_location("gate_stamp", Path(__file__).resolve().parent / "gate-stamp.py")
+    spec = importlib.util.spec_from_file_location("l7r_codeid", Path(__file__).resolve().parent / "codeid.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
+
+
+_RAW: dict[tuple[str, str], bool] = {}
+
+
+def _ask_raw(root: Path, paths: set[str]) -> None:
+    """Which of `paths` are in a byte-hashed area, asked of the Rust gate as one batch (FR-006), never once a file; kept for the process."""
+    asked = sorted(p for p in paths if (str(root), p) not in _RAW)
+    if asked:
+        gate = Path(__file__).resolve().parent / "l7r-gate.sh"
+        found = set(subprocess.run([str(gate), "stamp", "--raw-match"], cwd=root, input="".join(f"{p}\n" for p in asked), capture_output=True, text=True, check=True).stdout.splitlines())
+        _RAW.update({(str(root), p): p in found for p in asked})
 
 
 def active_records(root: Path) -> set[str]:
@@ -327,12 +339,13 @@ def unseen(root: Path, path: str, old: bytes | None, new: bytes | None) -> bool:
         return True
     if not path.endswith(".py") or old is None or new is None:
         return False
-    gs = _stamp()
-    if any(gs._matches(path, *gs.AREAS[a]) for a in gs.RAW_AREAS if a in gs.AREAS):  # type: ignore[attr-defined]  # noqa: SLF001
+    _ask_raw(root, {path})
+    if _RAW[(str(root), path)]:
         return False
+    codeid = _codeid()
     # ...AND NO STATEMENT MOVED A LINE (405 batch 7): coverage records lines, so a docstring one line longer above code the gate
     # ran voided its report - street.py's `return n` read as missed one line below where it ran (a false red)
-    return gs.semantic_bytes(old, path) == gs.semantic_bytes(new, path) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
+    return codeid.semantic_bytes(old, path) == codeid.semantic_bytes(new, path) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
 
 
 def stmt_lines(data: bytes) -> list[int] | None:
@@ -363,6 +376,7 @@ def seen_moves(root: Path, before: dict[str, str], after: dict[str, str]) -> lis
         if diff.returncode:
             return sorted(paths | {"HEAD"})
         paths |= {x for x in diff.stdout.splitlines() if x}
+    _ask_raw(root, {p for p in paths if p.endswith(".py")})
     return sorted(p for p in paths if not unseen(root, p, blob(root, before.get(p) or f"{bh}:{p}"), blob(root, after.get(p) or f"{ah}:{p}")))
 
 

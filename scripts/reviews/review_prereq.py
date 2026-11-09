@@ -376,7 +376,7 @@ GATE_TARGETS = ("done", "verify", "maps", "test-full")
 def _fresh(clone: pathlib.Path) -> bool:
     import subprocess  # noqa: PLC0415
 
-    run = subprocess.run([sys.executable, str(clone / "scripts/gates/gate-stamp.py"), "--fresh", "diagram"], cwd=clone, capture_output=True)
+    run = subprocess.run([str(clone / "scripts/gates/l7r-gate.sh"), "stamp", "--fresh", "diagram"], cwd=clone, capture_output=True)
     return run.returncode == 0
 
 
@@ -390,7 +390,7 @@ def _live_targets(clone: pathlib.Path) -> list[str]:
 def gate_state(clone: pathlib.Path, fresh: Callable[[pathlib.Path], bool] = _fresh, live: Callable[[pathlib.Path], list[str]] = _live_targets) -> str:
     """The paired gate's state, as the reviewer reads it before its first map, between maps and before its verdict.
 
-    `green` - a green gate has seen exactly this engine content (`gate-stamp.py --fresh diagram`; never the
+    `green` - a green gate has seen exactly this engine content (`l7r-gate stamp --fresh diagram`; never the
     verification record, which is last-event-wins, so a green `make test-file` would read as a gate). `running` - a
     gate target is live in this clone, by the kernel's cwd table rather than a process pattern. `red` - neither:
     the gate this review was paired with finished without going green, or never ran for this content."""

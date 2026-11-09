@@ -190,7 +190,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the code ids in Rust
 
-- [ ] T063 [US2] `l7r/diagram/ci/` the delta and the state: `delta.py`, `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch
+- [ ] T063 [US2] `l7r/diagram/ci/` the delta and the stamps: `delta.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them (slices 1 and 2 of `ask:449-T063-slices`; the state is T72)
       research: rendering
 
 - [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `_invocation.py` and `switches.py`
@@ -238,3 +238,5 @@ The 44 guard tasks are independent of one another once T005 has landed: each tou
 ## Implementation strategy
 
 MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every session with the slowest guard moved, its suite green, the call timed. Then the guards in order, each landed as it passes, so the session speeds up guard by guard.
+- [ ] T72 [US2] `l7r/diagram/ci/` the state: `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch (slice 3 of `ask:449-T063-slices`)
+      research: rendering

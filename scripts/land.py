@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-def _codeid():  # noqa: ANN202 - `scripts/gates/codeid.py` by path (stdlib only), as gate-stamp.py loads it
+def _codeid():  # noqa: ANN202 - `scripts/gates/codeid.py` by path (stdlib only), as l7r-gate stamp loads it
     import importlib.util  # noqa: PLC0415
 
     cached = sys.modules.get("l7r_codeid")
@@ -705,7 +705,7 @@ def machinery_tests(root: Path, machinery: list[str]) -> str:
         "2026-08-25 rule: scripts/ and the Makefile owe no make done), so the tooling tests run instead (ask:430-machinery-gate)",
         flush=True,
     )
-    if run(root, [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--fresh", "hooks"])[0] and run(root, ["make", "--no-print-directory", "hooks-test"], quiet=False)[0]:
+    if run(root, [str(HERE / "gates" / "l7r-gate.sh"), "stamp", "--fresh", "hooks"])[0] and run(root, ["make", "--no-print-directory", "hooks-test"], quiet=False)[0]:
         return "land: make hooks-test is red - nothing landed; fix it and run make land again"
     if run(root, ["make", "--no-print-directory", "test-file", "FILE=tests/tooling"], quiet=False)[0]:
         return "land: the tooling tests are red (make test-file FILE=tests/tooling) - nothing landed; fix them and run make land again"
@@ -716,7 +716,7 @@ def long_runs(root: Path) -> int:
     """Pass 2's runs, each only where its record does not cover this content; 0 when the push may go. The green-gate stamp names
     the gate each stale area owes (make done, make hooks-test, make page-check) and each named one runs - T30-T35's own landing
     owed hooks-test alone, which a `make done` would not have stamped."""
-    stamp = [sys.executable, str(HERE / "gates" / "gate-stamp.py"), "--check", "origin/main"]
+    stamp = [str(HERE / "gates" / "l7r-gate.sh"), "stamp", "--check", "origin/main"]
     # THE RUST STAGE GATE'S RECORD FIRST (feature 444 T21's landing): the landing cohort's own check asks for it, so made after the
     # cohort it refused a cohort that had passed 54 of 54 - it rolls in seconds and nothing the gate does moves the engine it keys
     if why := rust_gate_run(root):

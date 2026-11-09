@@ -23,7 +23,7 @@ const TOOLS: [(&str, &str); 7] = [
         "scripts/reviews/review_owed.py",
         "c=$2\nif [ $# -eq 2 ]; then : > \"$c/.git/owed-asked\"; cat \"$c/.git/owed\" 2>/dev/null; exit 0; fi\nif [ \"$3\" = --glyph-gate ]; then [ -f \"$c/.git/early\" ] && { echo \"not due: $4\"; exit 1; }; exit 0; fi\nsuffix=; [ $# -gt 4 ] && suffix=-escaped\n: > \"$c/.git/glyph-$4$suffix\"\n",
     ),
-    ("scripts/gates/gate-stamp.py", "[ -f .git/green ]\n"),
+    ("scripts/gates/l7r-gate.sh", "[ -f .git/green ]\n"),
     (
         "scripts/hooks/lib/hm_arbiter.py",
         "import pathlib\ndef _f(root,n): p=pathlib.Path(root,'.git',n); return p.read_text() if p.exists() else ''\ndef unit_content_key(root,unit): return 'ck'\ndef closed(root,prefix,ck=None): return _f(root,'closed')\ndef continues(root,prefix): return int(_f(root,'continues') or 0)\ndef lapsed(root,prefix,ck): return 0\ndef trip(root,*a): pathlib.Path(root,'.git/tripped').write_text('')\ndef refusal(keys,root): return 'ask the arbiter: '+keys[0]\n",

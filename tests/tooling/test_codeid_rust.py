@@ -67,17 +67,11 @@ def test_a_file_that_is_not_utf8_is_its_bytes_and_other_files_are_unchanged() ->
     assert codeid.rust_tokens(b'let s = "unterminated').endswith(b'"unterminated')
 
 
-def test_the_gate_stamp_reads_a_rust_file_by_its_tokens() -> None:
-    """`gate-stamp.py content_id` (the push stamp, the engine key): a `.rs` wording edit keeps its id, as a `.py` one does."""
-    import importlib.util  # noqa: PLC0415
-
-    spec = importlib.util.spec_from_file_location("gate_stamp", REPO / "scripts" / "gates" / "gate-stamp.py")
-    assert spec and spec.loader
-    gs = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(gs)
+def test_the_content_id_reads_a_rust_file_by_its_tokens() -> None:
+    """`content_id` (the push stamp, the engine key): a `.rs` wording edit keeps its id, as a `.py` one does."""
     edit = BASE.replace(b"// count the plots", b"// count every plot")
-    assert gs.content_id(edit, "rust/phases/src/field.rs") == gs.content_id(BASE, "rust/phases/src/field.rs")
-    assert gs.content_id(edit, "rust/phases/Cargo.toml") != gs.content_id(BASE, "rust/phases/Cargo.toml"), "a manifest: its bytes"
+    assert codeid.content_id(edit, "rust/phases/src/field.rs") == codeid.content_id(BASE, "rust/phases/src/field.rs")
+    assert codeid.content_id(edit, "rust/phases/Cargo.toml") != codeid.content_id(BASE, "rust/phases/Cargo.toml"), "a manifest: its bytes"
 
 
 def test_the_rust_gate_and_this_module_give_every_rs_file_the_same_id(tmp_path) -> None:  # noqa: ANN001

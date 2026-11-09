@@ -66,7 +66,7 @@ def same_engine(root: pathlib.Path, commit: str) -> bool:
 
 
 # WHAT "THE SAME ENGINE" MEANS is the push route's and the gate's own (`l7r/diagram/ci/delta.py`: `is_engine`, and `engine_key`,
-# which keys a `.py` on its AST without docstrings - `gate-stamp.py semantic_bytes`). The GM, 2026-10-18: "Can we fix that
+# which keys a `.py` on its AST without docstrings - `l7r-gate stamp semantic_bytes`). The GM, 2026-10-18: "Can we fix that
 # cohort_known treats a docs-only edit under l7r/ as an engine change? I thought we had logic in other places to distinguish code
 # changes from docstring changes." A raw `git diff -- l7r pool` called a CLAUDE.md, a comment or a docstring under `l7r/` another
 # engine, so a roll over it was stamped and never read as a baseline, and a commit that only touched docs was off main's engine.
@@ -106,7 +106,7 @@ def same_key(root: pathlib.Path, a: str, b: str) -> bool:
     return (bool(ka) and ka == engine_key(root, b)) or counter_only(root, a, b)
 
 
-def _codeid():  # noqa: ANN202 - the module, loaded by path (stdlib only, as gate-stamp.py loads it)
+def _codeid():  # noqa: ANN202 - the module, loaded by path (stdlib only, as l7r-gate stamp loads it)
     """`scripts/gates/codeid.py`, the one definition of a counter block (feature 446, FR-001)."""
     import importlib.util  # noqa: PLC0415
 

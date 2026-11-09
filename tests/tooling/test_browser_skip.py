@@ -1,6 +1,6 @@
 """Feature 206 (GM 2026-09-07): the synthetic-page browser tests are skipped while nothing they read changed.
 
-Two halves. The KEY (`gate-stamp.py`'s `browser` area): it holds exactly what the tests read, it goes stale
+Two halves. The KEY (`l7r-gate stamp`'s `browser` area): it holds exactly what the tests read, it goes stale
 when any one of those files or the installed browser changes, and the push's `--check` never treats it as an
 obligation. The WIRING (the Makefile's recipe text, in `test_page_check.py`'s style): the test phase carries
 the skip, `page-check` and `done`'s phases-run exit earn the stamp, the short-circuit does not.
@@ -10,11 +10,9 @@ lands in the real `.git` and the salt can be replaced without touching the machi
 
 from __future__ import annotations
 
-import importlib.util
 import pathlib
 import re
 import subprocess
-from typing import Any
 
 import pytest
 
@@ -26,12 +24,8 @@ MAKEFILE = (SKILL / "Makefile").read_text(encoding="utf-8")
 PACKAGE = "tests/full/interactive/page_browser"
 
 
-def _gate_stamp() -> Any:
-    spec = importlib.util.spec_from_file_location("gate_stamp_206", REPO / "scripts/gates/gate-stamp.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+def _stamp(root: pathlib.Path, *args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run([str(REPO / "scripts/gates/l7r-gate.sh"), "stamp", *args], cwd=root, capture_output=True, text=True, check=False)
 
 
 def _recipe(target: str) -> str:
@@ -52,8 +46,7 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
     modals), a module of the test package itself, and a research page (the references modal's links) - and
     nothing under tests/ is excluded from it, though the area shares the diagram area's root, whose
     exclusion list drops tests/ (the reason `_excluded` takes the area name)."""
-    gs = _gate_stamp()
-    files = {str(f.relative_to(REPO)) for f in gs._area_files(REPO, *gs.AREAS["browser"], area="browser")}
+    files = set(_stamp(REPO, "--list", "browser").stdout.splitlines())
     base = ""
     for want in (
         "l7r/diagram/interactive/assets/page.js",
@@ -67,9 +60,9 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
         assert base + want in files, want
     assert not [f for f in files if f.startswith(base + "l7r/diagram/settlement/")], "no engine module outside interactive/"
     assert not [f for f in files if f.startswith(base + "pool/")], "no map"
-    assert "browser" in gs.RAW_AREAS, "docstrings are page prose: hashed by bytes (spec D3 of 189, carried here)"
-    assert "browser" in gs.SKIP_ONLY_AREAS and "page" not in gs.SKIP_ONLY_AREAS and "diagram" not in gs.SKIP_ONLY_AREAS
-    assert gs.exclusions("browser") == (), "the browser area excludes nothing - its test package is its own input"
+    raw = subprocess.run([str(REPO / "scripts/gates/l7r-gate.sh"), "stamp", "--raw-match"], cwd=REPO, input="l7r/diagram/interactive/page.py\n", capture_output=True, text=True, check=True).stdout
+    assert raw == "l7r/diagram/interactive/page.py\n", "docstrings are page prose: hashed by bytes (spec D3 of 189, carried here)"
+    assert f"{PACKAGE}/test_synthetic.py" in files, "the browser area excludes nothing - its test package is its own input"
 
 
 @pytest.fixture
@@ -114,23 +107,17 @@ def repo(tmp_path: pathlib.Path) -> pathlib.Path:
     return clone
 
 
-def _stale(gs: Any, root: pathlib.Path) -> bool:
-    return gs.fresh("browser", root) != 0
+def _stale(root: pathlib.Path) -> bool:
+    return _stamp(root, "--fresh", "browser").returncode != 0
 
 
-def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_the_stamp_goes_stale_when_any_input_changes(repo: pathlib.Path) -> None:
     """FR-001/FR-006: written, the stamp is fresh; one byte in the stylesheet, the page writer's docstring
-    (bytes, not the semantic id), the test package, or a research page makes it stale; so does a different
-    installed browser; an engine module outside the area does not."""
-    gs = _gate_stamp()
-    monkeypatch.setattr(
-        gs,
-        "_salt",
-        lambda area: "playwright=1;chromium=chromium-1" if area == "browser" else "",
-    )
-    assert _stale(gs, repo), "no stamp yet"
-    gs.write_stamp("browser", repo)
-    assert not _stale(gs, repo)
+    (bytes, not the semantic id), the test package, or a research page makes it stale; an engine module
+    outside the area does not. That the salt - a different installed browser - moves the key is `rust/gate`'s."""
+    assert _stale(repo), "no stamp yet"
+    _stamp(repo, "--write", "browser")
+    assert not _stale(repo)
     skill = repo
     for rel in (
         "l7r/diagram/interactive/assets/page.css",
@@ -140,25 +127,18 @@ def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathli
     ):
         with open(skill / rel, "a") as fh:
             fh.write("# touched\n" if rel.endswith(".py") else "\n")
-        assert _stale(gs, repo), rel
-        gs.write_stamp("browser", repo)
-        assert not _stale(gs, repo)
+        assert _stale(repo), rel
+        _stamp(repo, "--write", "browser")
+        assert not _stale(repo)
     with open(skill / "l7r/diagram/settlement/houses.py", "a") as fh:
         fh.write("y = 2\n")
-    assert not _stale(gs, repo), "an engine module the tests never read does not re-run them"
-    monkeypatch.setattr(
-        gs,
-        "_salt",
-        lambda area: "playwright=2;chromium=chromium-2" if area == "browser" else "",
-    )
-    assert _stale(gs, repo), "a browser upgrade is an input to a browser test (spec D3)"
+    assert not _stale(repo), "an engine module the tests never read does not re-run them"
 
 
 def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
     """FR-004: a delta that changes only a research page and a browser test, with NO browser stamp present,
     passes the push's `--check` - the key is what the gate may skip on, never an obligation (a research or
     test edit owes no gate at push, feature 132 FR-024)."""
-    gs = _gate_stamp()
     skill = repo
     with open(skill / "research/questions/0008-q.html", "a") as fh:
         fh.write("<h2>More</h2>\n")
@@ -177,18 +157,8 @@ def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
             "PATH": "/usr/bin:/bin",
         },
     )
-    assert gs.check("origin/main", repo) == 0
+    assert _stamp(repo, "--check", "origin/main").returncode == 0
     assert not (repo / ".git" / "gate-green-browser").exists(), "and no stamp was needed to get there"
-
-
-def test_the_real_salt_names_the_installed_browser() -> None:
-    """D3: the salt is read from the package metadata and the browser cache's directory names, never by
-    launching a browser - and every other area has none."""
-    gs = _gate_stamp()
-    pytest.importorskip("playwright")
-    salt = gs._salt("browser")
-    assert salt.startswith("playwright=") and ";chromium=" in salt, salt
-    assert gs._salt("page") == "" and gs._salt("diagram") == "" and gs._salt("hooks") == ""
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -212,10 +182,10 @@ def test_page_check_and_the_phases_run_exit_earn_the_stamp_and_the_short_circuit
     """FR-003: `page-check` always runs the package and writes the browser stamp; `done`'s phases-run exit
     writes it only when BROWSER_SKIP was empty for that run; the already-verified short-circuit, which ran
     nothing, writes none."""
-    assert 'gate-stamp.py" --write browser' in _recipe("page-check")
+    assert 'l7r-gate.sh" stamp --write browser' in _recipe("page-check")
     body = _recipe("done")
     short = re.search(r"verified-done; then(.*?)exit 0;", body, re.S)
     assert short and "--write browser" not in short.group(1), "the short-circuit ran nothing"
     after = body[short.end() :]
-    assert '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write browser' in after
+    assert '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write browser' in after
     assert "--write page" in after and after.index("--write page") < after.index("--write browser"), "after the page stamp, in the phases-run exit"

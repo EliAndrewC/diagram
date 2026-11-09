@@ -29,7 +29,7 @@ expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OU
 topology() { # $1 = name; builds $T/$1/{github.git,main,main/.clones/c}
   local d=$T/$1; rm -rf "$d"; mkdir -p "$d"
   git init -q --bare -b main "$d/github.git"
-  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts pool/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > pool/x/a.py && cp -r "$HERE/../../scripts/." scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
+  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts pool/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > pool/x/a.py && cp -r "$HERE/../../scripts/." scripts/ && printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > scripts/gates/l7r-gate.sh && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
   git clone -q "$d/github.git" "$d/main"
   git -C "$d/main" config receive.denyCurrentBranch updateInstead
   mkdir -p "$d/main/.clones/.session-clones"
@@ -40,7 +40,7 @@ syncmain() { # $1 = topology dir, then args
   local d=$1; shift
   ( cd "$d/main/.clones/c" && CLONE_MAIN="$d/main" CLONE_GITHUB="$d/github.git" GITHUB_TOKEN=unused "$SYNC" "$@" 2>&1 )
 }
-stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gates/gate-stamp.py --write hooks >/dev/null && python3 scripts/gates/gate-stamp.py --write diagram >/dev/null ); }
+stamp_hooks() { ( cd "$1/main/.clones/c" && scripts/gates/l7r-gate.sh stamp --write hooks >/dev/null && scripts/gates/l7r-gate.sh stamp --write diagram >/dev/null ); }
 
 # GUARD_EDIT_OK: feature 321 - new cases for the backup step at the stop; nothing existing loosened. (Feature 375 amendment 4: the
 # helpers they share are defined here, before the cases, so a case finds them whichever part runs it.)
@@ -327,7 +327,7 @@ case_16() {  # 2 s measured 2026-10-11
 echo "11. a clone whose history shares no commit with main's is refused, never merged (feature 301 FR-019)"
 D=$(topology unrelated301)
 git init -q -b main "$D/rewritten"
-( cd "$D/rewritten" && mkdir -p scripts && echo base > f && echo '.clones/' > .gitignore && cp -r "$HERE/../../scripts/." scripts/ && git add -A \
+( cd "$D/rewritten" && mkdir -p scripts && echo base > f && echo '.clones/' > .gitignore && cp -r "$HERE/../../scripts/." scripts/ && printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > scripts/gates/l7r-gate.sh && git add -A \
   && git -c user.email=t@t -c user.name=t commit -qm "the rewritten history" && git push -q -f "$D/github.git" HEAD:main )
 before=$(git -C "$D/main/.clones/c" rev-parse HEAD)
 OUT=$(syncmain "$D" sync-in); check "sync-in on an unrelated history" 1 $?

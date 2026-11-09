@@ -7,7 +7,7 @@ and a green local `done` record `green-local`; a red local `done` and a failed r
 `failed-gate`. (`reference` wrote one too until the GM retired it as a rung on 2026-09-06.)
 
 "A source edit resets the state" is not an event to catch. The state carries the content hash of
-the diagram area's Python at the time of the run - the SAME hash `scripts/gates/gate-stamp.py` computes
+the diagram area's Python at the time of the run - the SAME hash `rust/gate/src/stamp.rs` computes
 at push, imported rather than reimplemented - and at dispatch time the current hash is recomputed:
 a mismatch is "the green run vouched for different code", exactly how `gate-stamp --check`
 already reasons.
@@ -15,13 +15,11 @@ already reasons.
 
 from __future__ import annotations
 
-import importlib.util
 import json
 import subprocess
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from types import ModuleType
 
 STATE_FILE = ".git/verification-state.json"
 
@@ -64,21 +62,11 @@ class VerificationState:
     tooling: str = ""  # tooling_hash at the last green `done` - the gate skips the `tooling` tests while it still matches
 
 
-def _gate_stamp(root: Path) -> ModuleType:
-    """`scripts/gates/gate-stamp.py` is a script, not a package - loaded by path so its hash is THE hash."""
-    path = root / "scripts/gates/gate-stamp.py"
-    spec = importlib.util.spec_from_file_location("gate_stamp", path)
-    assert spec is not None and spec.loader is not None, f"cannot load {path}"
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
 def current_hash(root: Path) -> str:
-    gs = _gate_stamp(root)
-    area_path, patterns = gs.AREAS["diagram"]
-    files = gs._area_files(root, area_path, patterns)
-    return str(gs.hash_files(files, root))
+    """The `diagram` area's key, the same hash its green stamp holds: the Rust gate's, asked once a process."""
+    from l7r.diagram.ci.delta import gate  # local: the delta's module imports nothing from here
+
+    return gate(root, "stamp", "--key", "diagram").strip()
 
 
 def _commit(root: Path) -> str:

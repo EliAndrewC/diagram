@@ -38,8 +38,8 @@ def wording_only(section: str) -> bool:
     return WORDING in body and not _DECISION.search(body)
 
 
-def _semantic():  # noqa: ANN202 - gate-stamp.py by path (its name has a hyphen): the one definition of "changed in what runs"
-    spec = importlib.util.spec_from_file_location("gate_stamp", HERE / "gate-stamp.py")
+def _semantic():  # noqa: ANN202 - codeid.py by path: the one definition of "changed in what runs"
+    spec = importlib.util.spec_from_file_location("l7r_codeid", HERE / "codeid.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
