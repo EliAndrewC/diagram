@@ -223,6 +223,8 @@ inline Python of the Makefile's gate recipes, `sync-with-main.sh`, `land-tooling
 the planner keeps choosing them; the Rust-only route (a Rust-only delta runs the Rust checks and the few text checks over `.rs` files,
 no pytest) lands early in this phase, since it is most of SC-002. Planned to the task when the phase opens.
 
+**Planned to the task, 2026-11-08** (phase 1 closed: `dev/phase-1-close.md`). About 18,000 lines (observed 2026-11-08, method: `git ls-files` and `wc -l` over the four areas): `l7r/diagram/ci/` 3,607, `scripts/gates/` 8,503 in 38 files, `scripts/measure/` 6,126 in 34, `_invocation.py` and `switches.py` 612. The order is by measured gain and by what each port stands on: the Rust-only route first, since pytest is most of the one-line edit's gate (`m:done-rust-edit`), then the crate, then the planner before the state it plans from, then the checks, then the close. Each task's decisions are written when it starts, as phase 1's were. Each piece's Python runs until its replacement gives the same verdicts on every case its tests and its suites hold, and is deleted in the commit that switches. FR-001 also places six more here by name: `hm_conflict.py` and `own-make.sh`, in T067 beside the push checks that call the first and `one-gate.sh` that calls the second; and the suites `test-entry-gate`, `test-claims-gate`, `test-cohort-gate` and `test-land-tooling`, in T069 with the gate scripts they test.
+
 ### Phase 3 - the tooling (Story 3, P3)
 
 **Approach.** The rest of `scripts/` (record, reviews, pages, measure), `l7r/diagram/tools/`, `pipeline/`, the small engine helpers,
@@ -237,6 +239,160 @@ when it opens.
 under `pool/`, `interactive/`; then the containers' Python (`Dockerfile.ci`, `setup-dev-env.sh`, the four lockfile pairs, `pyproject.toml`'s
 tables) and `l7r/diagram/__init__.py` last. Every sheet regenerated and held to its checks and research claims, the performance
 bookends taken. The close is SC-005: both censuses empty, `make done` and `make figures` with no Python interpreter.
+
+### T060 Approach (checklist part A)
+
+1. **The goal, in the world.** A one-line Rust edit's `make done` runs only what that edit can change (SC-002's largest share: `m:done-rust-edit`, 14 s of pytest over 11 modules of 30.2 s).
+2. **The constraints.** FR-001, FR-002, SC-002; Story 2 scenario 1 and 3.
+3. **Where each comes from.** `m:done-rust-edit`; the reference run's phase table.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: `m:done-rust-edit` re-run under half its first value, the defect scenarios caught by the same rule. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `make done` on a one-line Rust edit, timed against `m:done-rust-edit`, and no pytest in its log. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T061 Approach (checklist part A)
+
+1. **The goal, in the world.** One binary the gate's recipes call, as the guards have one.
+2. **The constraints.** FR-001, FR-003, FR-004, FR-005.
+3. **Where each comes from.** `m:guard-sources`' method; plan D5-D7 as they held for the guards.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: `make static` holds the crate at the coverage floor, the binary built and self-checked as the guard's is. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** A `make` recipe reaches the binary and its coverage is the crate's floor. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T062 Approach (checklist part A)
+
+1. **The goal, in the world.** Which tests a change owes is decided by Rust.
+2. **The constraints.** FR-001, FR-002, FR-006 (the import graph kept per process, carried over rather than rebuilt).
+3. **Where each comes from.** `m:ci-sources`, to be taken when this task starts.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: over the recorded deltas the plans equal the Python's, then the Python deleted with its tests moved. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The plan's differential over recorded deltas: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T063 Approach (checklist part A)
+
+1. **The goal, in the world.** The gate's state is written by one implementation.
+2. **The constraints.** FR-001, FR-003 (one writer), FR-002.
+3. **Where each comes from.** the state files as they stand.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: a stamp kept before the switch still reads; no state file has two writers at any commit. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `make done` reuses a last green result across the switch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T064 Approach (checklist part A)
+
+1. **The goal, in the world.** The remote dispatch, the make-only refusal in-process and the switches in Rust.
+2. **The constraints.** FR-001, FR-002; constitution on money (a paid dispatch is not run to test this).
+3. **Where each comes from.** `dev/ci.md`; `dev/switches.json`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: their suites' verdicts unchanged, no remote run spent to prove it. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The dispatcher's tests against a stubbed AWS. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T065 Approach (checklist part A)
+
+1. **The goal, in the world.** The checks the gate runs over text are Rust.
+2. **The constraints.** FR-001, FR-002, FR-008.
+3. **Where each comes from.** `m:gates-sources`, to be taken when this task starts.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: each check's findings over the repository equal the Python's before it is deleted. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** Each check's differential over the repository: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T066 Approach (checklist part A)
+
+1. **The goal, in the world.** What refuses a plan or a spec, and the question `engine_freeze_hooks` asks, are Rust.
+2. **The constraints.** FR-001, FR-002, FR-003; `ask:449-T052-round3` for `engine_edit.py`.
+3. **Where each comes from.** `specs/*/plan.md` as the corpus.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: over every spec and plan in the repository the verdicts equal the Python's. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The differential over every spec and plan: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T067 Approach (checklist part A)
+
+1. **The goal, in the world.** The landing's refusals are Rust, with `scripts/hooks/lib/hm_conflict.py` (`push_checks.py`, its make target) and `scripts/hooks/lib/own-make.sh` (`one-gate.sh`), each held to FR-002 before it goes.
+2. **The constraints.** FR-001, FR-002.
+3. **Where each comes from.** the landings recorded under `dev/run-log/`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: each suite's verdicts unchanged; no `.py` under `scripts/gates/`, `hm_conflict.py` and `own-make.sh` gone. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files 'scripts/gates/*.py'` returns nothing, and neither of `scripts/hooks/lib/hm_conflict.py` and `scripts/hooks/lib/own-make.sh` is tracked. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T068 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008.
+3. **Where each comes from.** `m:measure-sources`, to be taken when this task starts.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: each tool's output over the repository equals the Python's; no `.py` under `scripts/measure/`. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files 'scripts/measure/*.py'` returns nothing, `make audit` and `make figures` run. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T069 Approach (checklist part A)
+
+1. **The goal, in the world.** No inline Python in the gate's own path, or in the suites of the gate's scripts: `test-entry-gate`, `test-claims-gate`, `test-cohort-gate` and `test-land-tooling`.
+2. **The constraints.** FR-001's second census.
+3. **Where each comes from.** `m:inline-python-census`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: the census's phase-2 share empty, those four suites among it. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The census's phase-2 share returns nothing: `git grep -nE "python3 (-c|-[[:space:]]|-$|<<)" -- Makefile 'scripts/gates/*.sh' scripts/sync-with-main.sh scripts/land-tooling.sh buildspec/run.sh tests/hooks/test-entry-gate.sh tests/hooks/test-claims-gate.sh tests/hooks/test-cohort-gate.sh tests/hooks/test-land-tooling.sh` prints only sites of the Makefile's non-gate recipes, each named in the task's record as phase 3's. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T070 Approach (checklist part A)
+
+1. **The goal, in the world.** Phase 2 closed on its measured outcome.
+2. **The constraints.** SC-002, FR-010.
+3. **Where each comes from.** `m:done-rust-edit`.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the phase's plan above; each stands on the ones before it.
+6. **The exits.** Green: the figures re-run beside their first values, SC-002 met, both censuses' phase-2 share empty. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** SC-002's measurement and both censuses, recorded in `dev/`. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
 ## Project Structure
 

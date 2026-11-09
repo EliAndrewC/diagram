@@ -176,6 +176,41 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [x] T052 [US1] The close (SC-001, US1 scenarios 1-3, FR-010): `m:hooks-bash` and `m:pair-hooks-suite` re-run and recorded beside their first values in `measurements.json`; phase 1's share of BOTH censuses - every `.py` and every inline site under `scripts/hooks/` and `tests/hooks/` - returns nothing (`m:python-census`, `m:inline-python-census` re-run); SC-001 met or the phase not closed
       research: rendering
 
+### User Story 2 - the gate is Rust (phase 2, opened 2026-11-08 by a plan amendment)
+
+- [ ] T060 [US2] The Rust-only route: a delta touching only `.rs` files and the Rust manifests runs the Rust checks and the few text checks over `.rs`, and no pytest
+      research: rendering
+
+- [ ] T061 [US2] `rust/gate`: the crate and its binary `l7r-gate`, called from the Makefile, with the shared facts the ports below read (the repository's paths, the run record's format, git in one place)
+      research: rendering
+
+- [ ] T062 [US2] `l7r/diagram/ci/` the planner: `delta.py`, `selection.py`, `incremental.py`, `decision.py`, `cachepolicy.py` in Rust, each answer held to the Python's before it is deleted
+      research: rendering
+
+- [ ] T063 [US2] `l7r/diagram/ci/` the state: `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py`, `__main__.py`, and `scripts/gates/gate-stamp.py`, the stamps and verification state readable across the switch
+      research: rendering
+
+- [ ] T064 [US2] `l7r/diagram/ci/dispatch.py` and the remote path, `_invocation.py` and `switches.py`
+      research: rendering
+
+- [ ] T065 [US2] `scripts/gates/` the text checks: every `check-*.py`, one tool family at a time, each check's verdicts held to the Python's over the repository
+      research: rendering
+
+- [ ] T066 [US2] `scripts/gates/` the plan and spec gates: `plan_gate.py`, `plan_sections.py`, `approach_gate.py`, `plan_bundle.py`, `spec-lint.py`, with `engine_edit.py` beside the code it wraps
+      research: rendering
+
+- [ ] T067 [US2] `scripts/gates/` the landing's own: `preflight.py`, `push_checks.py`, `cover_changed.py`, `gate_lock.py` and what remains under `scripts/gates/`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`
+      research: rendering
+
+- [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command
+      research: rendering
+
+- [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`, `buildspec/run.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
+      research: rendering
+
+- [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, the phase's record in `dev/`
+      research: rendering
+
 ### Phase 3 (moved by the round arbiter's ruling `ask:449-hm-checks-route`, 2026-11-08; ported in one cut with their Python callers, FR-001)
       verify: DONE. landed: phase 1 closed; SC-001 on its instrument
 

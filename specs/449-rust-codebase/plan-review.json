@@ -44,10 +44,10 @@
    "declared": "spec-fidelity"
   },
   "### Phase 2 - the gate (Story 2, P2)": {
-   "sha256": "f04323adcdb62e10f9e57ffc940cccccf63c09c1bd6c78a8bd44bba42d31cab9",
+   "sha256": "a94ff0af4bb49b85dc7faedca81d130d0adaf340976fe56f44042a735f7975fd",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
   },
   "### Phase 3 - the tooling (Story 3, P3)": {
    "sha256": "7870748b93e58115cf453ec0330f3c5c0cebaababfc71089fc8806ad670d4200",
@@ -85,12 +85,6 @@
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
-  "### T050-T052 - the suites' tooling and the close (phase 1, work breakdown 6-8)": {
-   "sha256": "d5bf90b810af7543866417d6cfa39245f90fedd00ef377447edebc44340e9054",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
-  },
   "### T011 Approach (checklist part A)": {
    "sha256": "24a3b87c119466e2c02bc560cf64255e922bb29f08e2db18c43129b43f194dc2",
    "verdict": "CLEAR",
@@ -109,14 +103,74 @@
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
-  "### T050 Approach (checklist part A)": {
-   "sha256": "502970a93c802ae401f7aaf867312cc5ebd3067f3aca9f032a4eb793638191a8",
+  "### T052 Approach (checklist part A)": {
+   "sha256": "cbcc1c5ba2e394cd94c5a870b1926ac145cd18a26d8d956deb6c3ac38130a759",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
   },
-  "### T052 Approach (checklist part A)": {
-   "sha256": "1674331d52c4d044da4828312f47b7fb1b8fe67234e59bad92cc204e5bb74af9",
+  "### T060 Approach (checklist part A)": {
+   "sha256": "bb69a89edad81dcd28d8a045bcc1e772b8e7815de506dcad8ebc2c20d0fe02fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T061 Approach (checklist part A)": {
+   "sha256": "da34e252e7a119dc307d920b24647adc0ef4ed5eb2803487cb18a3a362aa1b27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T062 Approach (checklist part A)": {
+   "sha256": "a41a4bbf37fb030baecaef15aec14de6180bed2d82e4a26b7fcc2e349957f330",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T063 Approach (checklist part A)": {
+   "sha256": "f61ad0fbe72c8f91a5c6f02bb244582343a0e0c65dc23d5bbb0b09d0c33092c1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T064 Approach (checklist part A)": {
+   "sha256": "cc0c2bd8f534931dbc0010e405b2c9720ea3ae855aefc8089d0771717718b9b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T065 Approach (checklist part A)": {
+   "sha256": "84f04fbbd6380135ce83d49c0a33be762bb5f4b05b365eb46841c4a26ecd5d32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T066 Approach (checklist part A)": {
+   "sha256": "13d00afdc508414c2465c86ec6f5225ab383600f5492f8e1d0b3dbc5aad44726",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T067 Approach (checklist part A)": {
+   "sha256": "2236be10d65fd9a3cdc75725ffcd02d4aa37ea49fbfe07171c3c4d16fc86c05a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T068 Approach (checklist part A)": {
+   "sha256": "551a92c06179d5494f055e49a7fc876287f0f0337ec9cfd65e2a25821e79c380",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T069 Approach (checklist part A)": {
+   "sha256": "8b0c18ca2cfe4c8af90831ce42ef8f4869a46ce008414e145b8b699a6c3b5855",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "round-arbiter"
+  },
+  "### T070 Approach (checklist part A)": {
+   "sha256": "57634dc36ea79a9706af5c0e07144392912ae89b33acd84f8669ea0ee7f47bf4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
@@ -2879,6 +2933,354 @@
    "decisions": [
     {
      "id": "ask:449-T052-round3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### Phase 2 - the gate (Story 2, P2)",
+    "### T052 Approach (checklist part A)",
+    "### T060 Approach (checklist part A)",
+    "### T061 Approach (checklist part A)",
+    "### T062 Approach (checklist part A)",
+    "### T063 Approach (checklist part A)",
+    "### T064 Approach (checklist part A)",
+    "### T065 Approach (checklist part A)",
+    "### T066 Approach (checklist part A)",
+    "### T067 Approach (checklist part A)",
+    "### T068 Approach (checklist part A)",
+    "### T069 Approach (checklist part A)",
+    "### T070 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T052-a",
+     "summary": "T052: SC-001 stated as met on its instrument alone, the real-command distribution published beside it",
+     "class": "within",
+     "why": "FR-001 itself says a plain Bash call is what SC-001 measures, and m:hooks-bash is a sample `ls`; the request carries no figure. Text unchanged since its CLEAR."
+    },
+    {
+     "id": "T052-b",
+     "summary": "T052: the second census is `make inline-census`, sites grouped as ruled",
+     "class": "within",
+     "why": "Carries ask:449-T052-inline-census, which FR-001 holds. Unchanged since its CLEAR."
+    },
+    {
+     "id": "T052-c",
+     "summary": "T052: `resolve` moves to clone-resolve.sh beside its only caller, the wrapper retired",
+     "class": "within",
+     "why": "FR-001 places clone-resolve.sh, FR-009 gives the *-hooks.sh wrappers to Story 1. Unchanged since its CLEAR."
+    },
+    {
+     "id": "T052-d",
+     "summary": "T052: 111 inline sites converted to jq, literal JSON, sed and awk; jq added to three install lists",
+     "class": "within",
+     "why": "The census asks that the Python go; jq is the means where the suites run and installs no Python-scope change. Unchanged since its CLEAR."
+    },
+    {
+     "id": "T052-exits-wording",
+     "summary": "T052 exits: 'one phase-1 test' reworded to 'a test of the firing log'",
+     "class": "within",
+     "why": "The block's only change. It agrees better with FR-001, which puts test_guard_firing_log.py in phase 3 with guardlog.sh."
+    },
+    {
+     "id": "Phase2-order",
+     "summary": "Intra-phase order: Rust-only route, crate, planner before state, checks, close",
+     "class": "within",
+     "why": "FR-001 orders the four phases and is silent inside one; SC-002 is the reason given for the first."
+    },
+    {
+     "id": "Phase2-enumeration",
+     "summary": "'Planned to the task': the phase is counted as four areas and split over T060-T070, none of which names hm_conflict.py, own-make.sh or the suites test-entry-gate, test-claims-gate, test-cohort-gate and test-land-tooling",
+     "class": "narrowing",
+     "why": "FR-001 puts all six in phase 2 by name (ask:449-T051-lib-route, ask:449-T052-inline-census). No block mentions them, so the phase as planned to the task is smaller than the spec's phase 2, and no task owes the FR-002 equivalence for them before deletion. Counter-reading considered: T069 and T070 exit on the censuses' phase-2 share being empty, which by FR-001's definition includes them. That makes the omission a red at the phase's close rather than a kept requirement, and T067's by-path check cannot see scripts/hooks/lib/. Not physically impossible, not implied by the GM's words, and the rule's purpose (every piece has a phase and is ported in it) is what the omission thins. Fix: name the six in the tasks that port them, or add a task. In the same sentence, 'every case its tests hold' should read FR-002's 'its tests and its suites'.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "Phase2-switch",
+     "summary": "Each piece's Python runs until its replacement matches, and is deleted in the commit that switches",
+     "class": "within",
+     "why": "FR-002 and FR-003 restated."
+    },
+    {
+     "id": "T060-rust-only",
+     "summary": "A Rust-only delta's make done runs no pytest, with the defect scenarios caught by the same rule",
+     "class": "within",
+     "why": "Executes the Rust-only route already CLEAR in the phase block, for SC-002. Story 2 scenarios 1 and 3, which the block cites, are not in the bundle, so that citation could not be checked."
+    },
+    {
+     "id": "T061-binary",
+     "summary": "One binary for the gate's recipes, D5-D7 as for the guards, the crate at the coverage floor",
+     "class": "within",
+     "why": "FR-001, FR-003, FR-004, FR-005."
+    },
+    {
+     "id": "T062-import-graph",
+     "summary": "T062's constraint glosses FR-006 as 'the import graph kept per file'",
+     "class": "narrowing",
+     "why": "FR-006 says 'the import graph kept per process', and requires that fix carried over rather than rebuilt. The block substitutes a different granularity with no ruling, measurement or reason, and every other departure in these blocks cites one. Nothing in the bundle shows per file delivers what per process does; if it is a better design the GM did not ask for it, and if it is a slip the fix is one word. Fix: state FR-006's own term, or bring a ruling that changes it.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T062-differential",
+     "summary": "Planner proven by plans equal to the Python's over recorded deltas, its tests moved",
+     "class": "within",
+     "why": "FR-002; the phase block's rule keeps every case its tests hold."
+    },
+    {
+     "id": "T063-state",
+     "summary": "One writer per state file at every commit; a stamp kept before the switch still reads",
+     "class": "within",
+     "why": "FR-003, FR-002."
+    },
+    {
+     "id": "T064-no-paid-run",
+     "summary": "Dispatcher proven against a stubbed AWS, no remote run spent",
+     "class": "within",
+     "why": "Nothing asked for a paid dispatch: FR-002 binds the cases its tests hold, and FR-008's clause on 'one end-to-end test' is an allowance beside a speed cap, not a duty to run one. The block's money citation is not needed to reach this."
+    },
+    {
+     "id": "T064-scope",
+     "summary": "Remote dispatch, in-process make-only refusal and switches in Rust",
+     "class": "within",
+     "why": "FR-001 places _invocation.py and switches.py in phase 2; FR-005 keeps the refusal."
+    },
+    {
+     "id": "T065-T066-T068-differentials",
+     "summary": "Text checks, plan and spec refusals and measure tools proven by differential over the repository or corpus",
+     "class": "within",
+     "why": "Added to, not instead of, FR-002: the phase block keeps every case the tests hold. FR-001 places engine_edit.py in phase 2 and T066 takes it."
+    },
+    {
+     "id": "T067-landing",
+     "summary": "The landing's refusals ported; no .py left under scripts/gates/",
+     "class": "within",
+     "why": "FR-001, FR-002."
+    },
+    {
+     "id": "T068-tools",
+     "summary": "What things cost measured by Rust; no .py left under scripts/measure/; make audit and make figures run",
+     "class": "within",
+     "why": "FR-001, FR-002, FR-008."
+    },
+    {
+     "id": "T069-inline",
+     "summary": "Inline Python off the gate's path, by the census's phase-2 share",
+     "class": "within",
+     "why": "FR-001's second census, taken whole."
+    },
+    {
+     "id": "T070-close",
+     "summary": "Phase closed on SC-002, both censuses, recorded in dev/",
+     "class": "within",
+     "why": "SC-002 and FR-010."
+    },
+    {
+     "id": "T060-T070-recorded-commands",
+     "summary": "Each task rewrites the recorded measurement commands that run a file it ports or deletes, re-run as proof",
+     "class": "within",
+     "why": "FR-001's rule, cited as such. The wording covers the file form only; FR-001's inline and prose form goes to an equivalent make command in the commit that ports what it runs, and T069 is where that bites. FR-001 governs and SC-005 closes it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### Phase 2 - the gate (Story 2, P2)",
+    "### T052 Approach (checklist part A)",
+    "### T060 Approach (checklist part A)",
+    "### T061 Approach (checklist part A)",
+    "### T062 Approach (checklist part A)",
+    "### T063 Approach (checklist part A)",
+    "### T064 Approach (checklist part A)",
+    "### T065 Approach (checklist part A)",
+    "### T066 Approach (checklist part A)",
+    "### T067 Approach (checklist part A)",
+    "### T068 Approach (checklist part A)",
+    "### T069 Approach (checklist part A)",
+    "### T070 Approach (checklist part A)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T052-a",
+     "summary": "SC-001 stated as met on its instrument alone, with the real-command distribution and the commit branch carried in the phase record",
+     "class": "within",
+     "why": "SC-001 names m:hooks-bash, whose subject is a sample `ls`, and FR-001 itself calls a plain Bash call 'what SC-001 measures'. The arbiter's ruling ask:449-T054-sc001 stands where the GM was asked. The request sets no hook time; nothing is left unported, and the tail is re-measured at phase 3's close (m:t054-plain-bash)."
+    },
+    {
+     "id": "T052-b",
+     "summary": "The second census made a command, make inline-census, with its three groups and the guard-input group by exact line",
+     "class": "within",
+     "why": "Enforces FR-001's second census and ask:449-T052-inline-census; it fails on any site outside the groups."
+    },
+    {
+     "id": "T052-c",
+     "summary": "clone-resolve.sh moves beside guardlog.sh and the clone-sync-hooks.sh wrapper is retired",
+     "class": "within",
+     "why": "FR-001 places clone-resolve.sh with guardlog.sh in phase 3; FR-009 gives the *-hooks.sh wrappers to Story 1."
+    },
+    {
+     "id": "T052-d",
+     "summary": "111 inline sites converted to jq, literal JSON, sed and awk; jq added to three install lists",
+     "class": "within",
+     "why": "This removes inline Python as FR-001 requires. Adding jq where the suites run widens nothing the request excludes and narrows nothing."
+    },
+    {
+     "id": "T052-share",
+     "summary": "Phase 1 closes with 13 files under scripts/hooks/lib/ remaining, plus engine_edit.py and test_guard_firing_log.py placed later",
+     "class": "within",
+     "why": "All 13 are named in FR-001 for phase 2 or 3 (checked name by name against m:phase-1-python-share); the other two are placed by ask:449-T052-round3."
+    },
+    {
+     "id": "T052-verdicts",
+     "summary": "Phase 1's record carries the wakeup case and the two constitution XIV fixes",
+     "class": "within",
+     "why": "FR-002's named exceptions, recorded as FR-002 requires."
+    },
+    {
+     "id": "P2-order",
+     "summary": "Within phase 2: the Rust-only route, then the crate, the planner, the state, the checks, the close",
+     "class": "within",
+     "why": "FR-001 fixes the order of the phases, not the order inside one."
+    },
+    {
+     "id": "P2-defer",
+     "summary": "Each task's decisions are written when it starts",
+     "class": "within",
+     "why": "Process only; each remains subject to this review."
+    },
+    {
+     "id": "P2-fr002",
+     "summary": "Each piece's Python runs until its replacement gives the same verdicts on every case its tests and its suites hold, deleted in the commit that switches",
+     "class": "within",
+     "why": "FR-002 and FR-003 in their own terms; 'and its suites' is now present."
+    },
+    {
+     "id": "P2-six",
+     "summary": "The phase plan names the six pieces FR-001 places in phase 2: hm_conflict.py and own-make.sh to T067, the four suites to T069",
+     "class": "within",
+     "why": "Round 1's item, resolved at the phase level. T067 carries its two; T069 is ruled separately as T069-four-suites."
+    },
+    {
+     "id": "P2-size",
+     "summary": "About 18,000 lines across four areas",
+     "class": "within",
+     "why": "Labeled with date and method. The four parts sum to 18,848. Gates nothing; no fidelity effect."
+    },
+    {
+     "id": "T060-route",
+     "summary": "A Rust-only delta's make done runs Rust checks and the text checks over .rs files, no pytest, landed first",
+     "class": "within",
+     "why": "Serves SC-002 and the cited Story 2 scenarios, with its exit requiring the defect scenarios still caught. The scenarios' text was not in the bundle; this rests on the block's own statement and SC-002."
+    },
+    {
+     "id": "T061-crate",
+     "summary": "One binary the gate's recipes call, on plan D5-D7 as for the guards, held to the coverage floor",
+     "class": "within",
+     "why": "FR-004 and FR-005; a design choice inside the port."
+    },
+    {
+     "id": "T062-graph",
+     "summary": "The planner carries FR-006's import graph per process, carried over rather than rebuilt",
+     "class": "within",
+     "why": "Round 1's item, corrected: now FR-006's words."
+    },
+    {
+     "id": "T062-diff",
+     "summary": "The plan's differential over recorded deltas, then the Python deleted with its tests moved",
+     "class": "within",
+     "why": "FR-002's proof, with the tests going with the piece as FR-001 says."
+    },
+    {
+     "id": "T063-state",
+     "summary": "One writer of the gate's state at every commit; a stamp kept before the switch still reads",
+     "class": "within",
+     "why": "FR-003."
+    },
+    {
+     "id": "T064-stub",
+     "summary": "The dispatcher proved against a stubbed AWS, no paid run",
+     "class": "within",
+     "why": "FR-002 is over the cases its tests and suites hold; the request asks for no paid dispatch."
+    },
+    {
+     "id": "T065-checks",
+     "summary": "Each text check's findings over the repository equal the Python's before deletion",
+     "class": "within",
+     "why": "FR-002 and FR-008."
+    },
+    {
+     "id": "T066-refusals",
+     "summary": "Plan and spec refusals and engine_edit.py ported, differential over every spec and plan",
+     "class": "within",
+     "why": "FR-002, FR-003, ask:449-T052-round3."
+    },
+    {
+     "id": "T067-two",
+     "summary": "hm_conflict.py and own-make.sh ported with the landing's refusals, each held to FR-002, neither tracked afterward",
+     "class": "within",
+     "why": "FR-001 places both in phase 2; round 1's item carried in the goal, the exit and the done line."
+    },
+    {
+     "id": "T068-measure",
+     "summary": "scripts/measure/ ported, each tool's output equal to the Python's, make audit and make figures run",
+     "class": "within",
+     "why": "FR-001, FR-002, FR-008."
+    },
+    {
+     "id": "T069-four-suites",
+     "summary": "T069 retains its round-1 text and neither names test-entry-gate, test-claims-gate, test-cohort-gate, test-land-tooling nor any instrument that can see them",
+     "class": "narrowing",
+     "why": "FR-001 moves these four suites whole to phase 2 (ask:449-T052-inline-census) and the phase plan assigns them to T069, but T069's own block is unchanged from the text ruled BLOCKED but for the shared measurements sentence. Its only source, m:inline-python-census, counts tests/hooks as one directory, and its exit is 'the census's phase-2 share empty', stated with no command that separates these four files from the suites FR-001 leaves in phase 1 or moves to phase 3. The task can therefore pass with their inline Python still present. Not physically impossible, not implied by the request's words, and the purpose (no Python left in the gate's own path) is what is lost. Round 1's remedy was to name them where they are done; T067 was changed that way and T069 was not. Fix: name the four in T069's goal and exit, and give a done line that runs the second census over those four files and returns nothing.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T069-rest",
+     "summary": "Inline Python removed from the Makefile's gate recipes, scripts/gates/*.sh, sync-with-main.sh, land-tooling.sh, buildspec/run.sh",
+     "class": "within",
+     "why": "FR-001's second census as listed."
+    },
+    {
+     "id": "T070-close",
+     "summary": "Phase 2 closes with figures re-run, SC-002 met, both censuses' phase-2 share empty, recorded in dev/",
+     "class": "within",
+     "why": "SC-002, FR-010, FR-001."
+    },
+    {
+     "id": "recorded-commands",
+     "summary": "Every recorded command running a ported or deleted file is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where inline or prose, and re-run",
+     "class": "within",
+     "why": "Round 1's item, corrected: now FR-001's two forms and its re-run proof."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### Phase 2 - the gate (Story 2, P2)",
+    "### T052 Approach (checklist part A)",
+    "### T060 Approach (checklist part A)",
+    "### T061 Approach (checklist part A)",
+    "### T062 Approach (checklist part A)",
+    "### T063 Approach (checklist part A)",
+    "### T064 Approach (checklist part A)",
+    "### T065 Approach (checklist part A)",
+    "### T066 Approach (checklist part A)",
+    "### T067 Approach (checklist part A)",
+    "### T068 Approach (checklist part A)",
+    "### T069 Approach (checklist part A)",
+    "### T070 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-phase2-plan-round3",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
     }
