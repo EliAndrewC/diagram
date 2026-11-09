@@ -80,10 +80,10 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "b1f4cda63ccf71766825c83c36f796d6a646830be9df7525caf7a73ec9407bc7",
+   "sha256": "e26077c538a1547fead322e267d3b49e7d8a404e422cd69a6390c0c4c937f66f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   },
   "### T011 Approach (checklist part A)": {
    "sha256": "24a3b87c119466e2c02bc560cf64255e922bb29f08e2db18c43129b43f194dc2",
@@ -103,26 +103,8 @@
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
-  "### T052 Approach (checklist part A)": {
-   "sha256": "cbcc1c5ba2e394cd94c5a870b1926ac145cd18a26d8d956deb6c3ac38130a759",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
-  },
-  "### T060 Approach (checklist part A)": {
-   "sha256": "b1e64431b6a881dde5d2e69c9bc992f6dbe5e76f5ba279ea2616eea8f0e0cfe3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
   "### T061 Approach (checklist part A)": {
    "sha256": "659eb9091f453ab90040810c022f06b7d9169a5d9351b15f6dad0c37a3b500dd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T062 Approach (checklist part A)": {
-   "sha256": "c19af7d69dce9b60865e415b4155cec6ea896e81b856bc313219452bc11273be",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -133,29 +115,11 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T064 Approach (checklist part A)": {
-   "sha256": "3b28def068beff330c1af95ba21466b85a99af20168240faa4347d961afc8647",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T065 Approach (checklist part A)": {
-   "sha256": "9d162bfd318ad6a503c4d65b7258088c8f3fce683bfe73a2e7c7639f76ecaecd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
-  "### T066 Approach (checklist part A)": {
-   "sha256": "19c9ba130ee79af2528dd5ca02fc6d1e93021a28747b8cb155baf5bff06acc44",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
   "### T067 Approach (checklist part A)": {
-   "sha256": "49b7c62df3319ee64dee6c631fb463603e4de6ac7129cca294e21232106284b1",
+   "sha256": "175c5f391c95bd902ab2924fc9eab4723c922f047a1d549be2f459555a1debda",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   },
   "### T068 Approach (checklist part A)": {
    "sha256": "551a92c06179d5494f055e49a7fc876287f0f0337ec9cfd65e2a25821e79c380",
@@ -176,22 +140,10 @@
    "declared": "round-arbiter"
   },
   "### T071 Approach (checklist part A)": {
-   "sha256": "e5f1369affbe9a401df7cd7462c8c40b856e551bc3b315d646adf5cdb5c76efa",
+   "sha256": "b87e9713600260be4446f824034bf121c1cbdfefdc883b0fec56d92684af9c37",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T062 part B (2026-11-09T01:35:27Z)": {
-   "sha256": "db9b78df70a75bf659e6296caec258a743b2f375866f66df30ff9f34fe8a95f5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T72 Approach (checklist part A)": {
-   "sha256": "e7d49a71886baba6cda893a99ab04c83ce3a4857bf3d59bb0382ae9dfab4591e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -4100,6 +4052,23 @@
      "summary": "On a red exit the failure is recorded, the task set down and a process stop goes to make arbiter-ask; the landing carries no work budget and moves no constant.",
      "class": "within",
      "why": "Procedure inside the standing process; it removes nothing the request or spec asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T067 Approach (checklist part A)",
+    "### T071 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:449-rust-codebase#T067@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
