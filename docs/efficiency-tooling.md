@@ -15,7 +15,7 @@ execution - so the number of sequential turns is the cost, not the speed of any 
 sessions can simply be doing their work and rely on make done running in a reasonably short period of time and without
 consuming so many resources that it will overload the available RAM and CPU and other shared resources."* Gate memory,
 gate time and cross-session interference are first-class goals when proposing work, argued with measurements, not
-impressions (`scripts/gates/gate_lock.py` is the host-wide gate lock).
+impressions (`l7r-gate lock` is the host-wide gate lock).
 
 ## 0. The cost ladder everything else protects
 

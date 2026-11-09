@@ -80,10 +80,10 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "b1f4cda63ccf71766825c83c36f796d6a646830be9df7525caf7a73ec9407bc7",
+   "sha256": "e26077c538a1547fead322e267d3b49e7d8a404e422cd69a6390c0c4c937f66f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-07",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   },
   "### T011 Approach (checklist part A)": {
    "sha256": "24a3b87c119466e2c02bc560cf64255e922bb29f08e2db18c43129b43f194dc2",
@@ -103,26 +103,8 @@
    "reviewed": "2026-11-07",
    "declared": "spec-fidelity"
   },
-  "### T052 Approach (checklist part A)": {
-   "sha256": "cbcc1c5ba2e394cd94c5a870b1926ac145cd18a26d8d956deb6c3ac38130a759",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
-  },
-  "### T060 Approach (checklist part A)": {
-   "sha256": "b1e64431b6a881dde5d2e69c9bc992f6dbe5e76f5ba279ea2616eea8f0e0cfe3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
   "### T061 Approach (checklist part A)": {
    "sha256": "659eb9091f453ab90040810c022f06b7d9169a5d9351b15f6dad0c37a3b500dd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T062 Approach (checklist part A)": {
-   "sha256": "c19af7d69dce9b60865e415b4155cec6ea896e81b856bc313219452bc11273be",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -133,29 +115,11 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T064 Approach (checklist part A)": {
-   "sha256": "3b28def068beff330c1af95ba21466b85a99af20168240faa4347d961afc8647",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T065 Approach (checklist part A)": {
-   "sha256": "9d162bfd318ad6a503c4d65b7258088c8f3fce683bfe73a2e7c7639f76ecaecd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
-  "### T066 Approach (checklist part A)": {
-   "sha256": "19c9ba130ee79af2528dd5ca02fc6d1e93021a28747b8cb155baf5bff06acc44",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
   "### T067 Approach (checklist part A)": {
-   "sha256": "49b7c62df3319ee64dee6c631fb463603e4de6ac7129cca294e21232106284b1",
+   "sha256": "175c5f391c95bd902ab2924fc9eab4723c922f047a1d549be2f459555a1debda",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   },
   "### T068 Approach (checklist part A)": {
    "sha256": "551a92c06179d5494f055e49a7fc876287f0f0337ec9cfd65e2a25821e79c380",
@@ -176,22 +140,10 @@
    "declared": "round-arbiter"
   },
   "### T071 Approach (checklist part A)": {
-   "sha256": "e5f1369affbe9a401df7cd7462c8c40b856e551bc3b315d646adf5cdb5c76efa",
+   "sha256": "b87e9713600260be4446f824034bf121c1cbdfefdc883b0fec56d92684af9c37",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T062 part B (2026-11-09T01:35:27Z)": {
-   "sha256": "db9b78df70a75bf659e6296caec258a743b2f375866f66df30ff9f34fe8a95f5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T72 Approach (checklist part A)": {
-   "sha256": "e7d49a71886baba6cda893a99ab04c83ce3a4857bf3d59bb0382ae9dfab4591e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -4102,6 +4054,23 @@
      "why": "Procedure inside the standing process; it removes nothing the request or spec asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T067 Approach (checklist part A)",
+    "### T071 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:449-rust-codebase#T067@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6858,6 +6827,115 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T067": {
+   "section_sha256": "a1dc36b87a967362190f15c0b43f07fcc38a44744a596e2d2007b2481a69fe14",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "moved-browser-raw",
+     "summary": "The carried item of ask:T063-browser-raw goes to T071 with preflight.unseen; engine_edit.docstring_only was ported at T066.",
+     "class": "within",
+     "why": "Moves work between tasks inside phase 2 under the arbiter's ask:449-T067-scope; nothing is dropped."
+    },
+    {
+     "id": "one-landing",
+     "summary": "gate_lock, own-make, hm_conflict, rust_checks, push_gates and push_checks become l7r-gate subcommands and every Python body is deleted in one landing.",
+     "class": "within",
+     "why": "FR-001 places these pieces in phase 2 and ask:449-T067-scope names them; the comparison ran at the commit before deletion, so FR-003 holds."
+    },
+    {
+     "id": "rows-settled",
+     "summary": "All 29 push_checks rows are the CHECKS table, Tool::Gate or Tool::Py by path, each Tool::Py file placed by FR-001; a row runs only when the change holds what it reads, by its needs.",
+     "class": "within",
+     "why": "Each named file has a placement in FR-001 (T065 scope, T067 scope, or phase 3 as the rest of scripts/). The needs sentence carries the T065 clause for every Tool::Py row."
+    },
+    {
+     "id": "t065-clause",
+     "summary": "close_check.py and memo_check.py keep the T065 clause with no trigger narrowed.",
+     "class": "within",
+     "why": "The clause is held by the rows' needs in any case. The block's inference that make done reaches neither file lacks the link showing what calls the sync-with-main.sh done step, so that sentence is unsupported as written, but the ruling does not rest on it."
+    },
+    {
+     "id": "verdicts-compared",
+     "summary": "Python and binary compared in a scratch clone at the commit before deletion, 9 own-make cases and 31 others; two real differences fixed before the count.",
+     "class": "within",
+     "why": "This is FR-002's own requirement; the two differences found were fixed toward the Python."
+    },
+    {
+     "id": "usage-line",
+     "summary": "6 of the 31 cases differ: an unknown gate's usage text names the new command, exit status 2 both ways, declared outside FR-002.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says same outputs and lists no such exception, so this is a narrowing the author ruled on itself. Held literally, the text would tell the reader to run a Python file the request's purpose deletes. The verdict and exit status are unchanged and only the program's name moves."
+    },
+    {
+     "id": "not-replayed-real-tree-content-cache",
+     "summary": "real_tree/test_content_cache.py (the whole tree's conflicts the same with the cache on and off) is not replayed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically without a referent: the Rust conflict check keeps no cache to turn on or off. The conflict verdict itself was compared on a whole scratch clone, clean and with two conflicted files."
+    },
+    {
+     "id": "not-replayed-cache-off-half",
+     "summary": "The L7R_CACHE_OFF half of test_content_cache.py is not replayed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same ground, judged on its own: the case exercises a switch on a cache the port does not have, so there is nothing to set."
+    },
+    {
+     "id": "not-replayed-real-tree-push-checks",
+     "summary": "real_tree/test_push_checks.py (each check in one process gives what it gives alone) is not replayed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unlike the cache cases, this one guards isolation between checks sharing a process. The block states no row runs in the runner's process and each is a child with its own exit status, so the shared process it tested no longer exists."
+    },
+    {
+     "id": "test-push-checks-deleted",
+     "summary": "The named cases of test_push_checks.py, now including the Makefile asks-first case, are in push/tests.rs and the file is deleted.",
+     "class": "within",
+     "why": "FR-001 moves each tests/ file with its piece, and the Python test no longer outlives the piece."
+    },
+    {
+     "id": "rust-tooling-black-box-until-t070",
+     "summary": "test_rust_tooling.py's 12 cases keep driving l7r-gate rust as a black box until T070, the close of phase 2.",
+     "class": "within",
+     "why": "Classed on the block's quotation of the Assumptions clause, which limits this to the phase; the clause is not in spec-cited.md, so the quotation could not be verified from the bundle. FR-002 parity for l7r-gate rust rests on these cases, as the comparison lists no rust subcommand."
+    },
+    {
+     "id": "t070-twelve-real-cargo-tests",
+     "summary": "T070 rewrites all 12 cases as Rust tests running the real cargo.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-008: a tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command. Twelve real-cargo tests of l7r-gate rust exceed one, the block neither names FR-008 nor measures the cases against its limit, and nothing makes the rule impossible: the block itself says the World seam's Rust tests exist. FR-002 requires the cases be held, not that each run real cargo. To clear: one end-to-end real-cargo test per tool and the rest over the World seam, or a recorded ruling on FR-008, or, if each subcommand is a tool under FR-008, the block saying so with the count per subcommand."
+    },
+    {
+     "id": "callers-share",
+     "summary": "cover_changed.py asks l7r-gate rust uncovered; hm_approval.py loses the halves only push_checks.py called.",
+     "class": "within",
+     "why": "Direct consequences of the port; removing a half whose only caller is deleted changes no verdict."
+    },
+    {
+     "id": "defects-fixed",
+     "summary": "The port's dead search rewritten to count words in one pass; write_executable writes through a child process in both crates.",
+     "class": "within",
+     "why": "Repairs to the port and its test helper. The dead rewrite is a performance fix, not an FR-002 exception, so it must still pass the cases unchanged."
+    },
+    {
+     "id": "watchdog",
+     "summary": "stall_watchdog_hooks also tells a session, once per make, about a make past STALL_LONG_RUN (default 1,800 s); it reports and kills nothing.",
+     "class": "within",
+     "why": "Answers the GM's 2026-11-09 words in request.md, which ask about existing tooling and name no kill; surfacing a stuck make to the session at 30 minutes serves their purpose."
+    },
+    {
+     "id": "done-line",
+     "summary": "Done when git ls-files 'scripts/gates/*.py' returns only FR-001's named remainders, hm_conflict.py and own-make.sh are untracked, and affected measurement commands are rewritten and re-run.",
+     "class": "within",
+     "why": "Each listed file matches its FR-001 placement, and the measurement rewrite is FR-001's own clause. FR-001 also places cohort_known.py at T068 and the T068 list omits it; its location cannot be checked from the bundle."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

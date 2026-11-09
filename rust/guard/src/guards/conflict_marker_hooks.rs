@@ -30,8 +30,10 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-const EXEMPT: &str = "CONFLICT_MARKERS_OK:";
-const HEAD_LINES: usize = 40;
+/// The file-level exemption's marker.
+pub const EXEMPT: &str = "CONFLICT_MARKERS_OK:";
+/// How far down a file the exemption may stand.
+pub const HEAD_LINES: usize = 40;
 
 static ASSIGNMENT: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?:^|[;&|\s])([A-Za-z_][A-Za-z0-9_]*)=([^\s;&|]+)")
@@ -40,14 +42,20 @@ static ASSIGNMENT: LazyLock<Regex> = LazyLock::new(|| {
 
 /// A real file-level exemption stands at the START of its line, with two words of reason, not a `<placeholder>`: a mention is no declaration.
 pub(crate) fn declares_exemption(line: &str) -> bool {
+    exemption_reason(line).is_some()
+}
+
+/// The reason a real file-level exemption states, or None.
+#[must_use]
+pub fn exemption_reason(line: &str) -> Option<String> {
     let start = line.trim_start_matches(|c: char| c.is_whitespace() || "#*:/;-".contains(c));
-    start
-        .strip_prefix(EXEMPT)
-        .is_some_and(|r| !r.trim().starts_with('<') && r.split_whitespace().count() >= 2)
+    let reason = start.strip_prefix(EXEMPT)?.trim();
+    (!reason.starts_with('<') && reason.split_whitespace().count() >= 2).then(|| reason.to_owned())
 }
 
 /// The triple, in order, at column 0, unless the file claims its exemption.
-pub(crate) fn has_conflict(text: &str) -> bool {
+#[must_use]
+pub fn has_conflict(text: &str) -> bool {
     let (open, mid, close) = ("<".repeat(7), "=".repeat(7), ">".repeat(7));
     if text.lines().take(HEAD_LINES).any(declares_exemption) {
         return false;
@@ -66,7 +74,8 @@ pub(crate) fn has_conflict(text: &str) -> bool {
 }
 
 /// Which of these carry a conflict; unreadable as text - binary, a directory, gone - is skipped.
-pub(crate) fn conflicted(paths: &BTreeSet<String>) -> Vec<String> {
+#[must_use]
+pub fn conflicted(paths: &BTreeSet<String>) -> Vec<String> {
     paths
         .iter()
         .filter(|p| std::fs::read_to_string(p).is_ok_and(|t| has_conflict(&t)))
@@ -169,7 +178,8 @@ fn committed(repo: &str, args: &[String]) -> Vec<String> {
 }
 
 /// The files a `git add` or `git commit` in this command would stage, asked of git.
-pub(crate) fn staged_by(cmd: &str, base: &str) -> BTreeSet<String> {
+#[must_use]
+pub fn staged_by(cmd: &str, base: &str) -> BTreeSet<String> {
     let vars = assignments(cmd);
     let mut here = base.to_owned();
     let mut paths = BTreeSet::new();

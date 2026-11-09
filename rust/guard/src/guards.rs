@@ -8,6 +8,25 @@ pub mod archive_first_hooks;
 pub mod batching_hooks;
 pub mod blocked_fetch_hooks;
 pub mod budget_change_hooks;
+/// Write an executable a test will run, the file written by a child process.
+///
+/// A thread that forks in another test copies every open descriptor until its child execs, so a
+/// script this process has just written can still be open for writing in that child and running
+/// it fails with "Text file busy". `install` holds the only descriptor that writes the file, and
+/// it has exited by the time this returns.
+#[cfg(test)]
+pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
+    let draft = path.with_extension("draft");
+    std::fs::write(&draft, text).unwrap();
+    let done = std::process::Command::new("install")
+        .args(["-m", "755"])
+        .arg(&draft)
+        .arg(path)
+        .status();
+    assert!(done.unwrap().success());
+    std::fs::remove_file(&draft).unwrap();
+}
+
 #[cfg(test)]
 mod case_tables;
 pub mod claims_file_hooks;

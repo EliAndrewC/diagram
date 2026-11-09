@@ -290,21 +290,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 <!-- plan-archive: T064 to T064 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T065 to T065 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 <!-- plan-archive: T066 to T066 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
-### T067 Approach (checklist part A)
-
-1. **The goal, in the world.** The landing's refusals are Rust, with `scripts/hooks/lib/hm_conflict.py` (`push_checks.py`, its make target) and `scripts/hooks/lib/own-make.sh` (`one-gate.sh`), each held to FR-002 before it goes.
-2. **The constraints.** FR-001, FR-002.
-   **Carried from T063** (the round arbiter's `ask:T063-browser-raw`): an area on the repository root takes the `diagram` area's exclusions, so a docstring edit in `tests/full/interactive/page_browser/*.py` is called not byte-hashed by `preflight.unseen` and `engine_edit.docstring_only` while the browser key moves. T067 ports those callers with the same verdict under FR-002 by default; any correction goes through its own case, named in the commit and the phase's record.
-3. **Where each comes from.** the landings recorded under `dev/run-log/`.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: each suite's verdicts unchanged; no `.py` under `scripts/gates/`, `hm_conflict.py` and `own-make.sh` gone. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** `git ls-files 'scripts/gates/*.py'` returns only `check-partial-citations.py`, `check-entry-headings.py`, `check-duplicate-defs.py` and `check-function-cap.py`, the expected remainders of `ask:449-T065-scope`, and neither of `scripts/hooks/lib/hm_conflict.py` and `scripts/hooks/lib/own-make.sh` is tracked. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T067 to T067 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 ### T068 Approach (checklist part A)
 
 1. **The goal, in the world.** What things cost is measured by Rust.
@@ -337,6 +323,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 1. **The goal, in the world.** Which tests a change owes is decided by Rust, while pytest is still what it plans for.
 2. **The constraints.** FR-001, FR-002, FR-006; the Assumptions clause on a Python test driving a Rust binary.
+   **Carried from T063 through T067** (`ask:T063-browser-raw`, `ask:449-T067-scope`): an area on the repository root takes the `diagram` area's exclusions, so a docstring edit in `tests/full/interactive/page_browser/*.py` is called not byte-hashed by `preflight.unseen` while the browser key moves. T071 ports it with the same verdict under FR-002 by default; any correction goes through its own case, named in the commit and the phase's record.
 3. **Where each comes from.** the baseline under `<git dir>/gate-baseline/`; coverage.py's data as it stands.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).

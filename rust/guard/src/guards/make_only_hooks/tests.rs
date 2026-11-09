@@ -209,9 +209,7 @@ fn world(tag: &str) -> PathBuf {
 /// A stand-in for `python3 -m ruff`: `sh -m ruff ...` fails, so the tests put a script on the command by the python field.
 fn fake(d: &Path, body: &str) -> String {
     let path = d.join("fake-python");
-    std::fs::write(&path, format!("#!/bin/sh\n{body}\n")).unwrap();
-    let mode = std::os::unix::fs::PermissionsExt::from_mode(0o755);
-    std::fs::set_permissions(&path, mode).unwrap();
+    crate::guards::write_executable(&path, &format!("#!/bin/sh\n{body}\n"));
     path.to_string_lossy().into_owned()
 }
 

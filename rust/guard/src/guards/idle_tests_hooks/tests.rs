@@ -1,7 +1,6 @@
 //! The decider on the suite's shapes (`tests/hooks/test-idle-tests-hooks.sh`, replayed through the shim, is the verdict): the timer
 //! runs in-process on a tick of a millisecond, its clock a counter file.
 
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 
 use serde_json::json;
@@ -22,8 +21,7 @@ fn dir(tag: &str) -> PathBuf {
 }
 
 fn script(p: &Path, body: &str) {
-    std::fs::write(p, format!("#!/bin/sh\n{body}\n")).unwrap();
-    std::fs::set_permissions(p, std::fs::Permissions::from_mode(0o755)).unwrap();
+    crate::guards::write_executable(p, &format!("#!/bin/sh\n{body}\n"));
 }
 
 /// A clone in a mirror's `.clones/`, and a fixture's configuration: no waiting, a fixed clock.

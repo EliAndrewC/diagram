@@ -7,7 +7,7 @@ use serde_json::{json, Value};
 
 use super::{
     asking_gm, clone_of, host_pane, human, in_retry_wait, input_empty, judge, live_sessions, now,
-    resume_command, run_pass, unfinished, Paths,
+    resume_command, run_pass, unfinished, whole, Paths,
 };
 use crate::shared::tool::ask;
 
@@ -117,6 +117,7 @@ fn the_paths_come_from_the_environment() {
     let p = Paths::from_env(&|k| match k {
         "HOME" => Some("/h".to_owned()),
         "STALL_AFTER" => Some("5".to_owned()),
+        "STALL_LONG_RUN" => Some("9".to_owned()),
         "STALL_DRYRUN" => Some("1".to_owned()),
         "STALL_MIRROR" => Some("/m".to_owned()),
         _ => None,
@@ -128,6 +129,7 @@ fn the_paths_come_from_the_environment() {
             && p.dry
     );
     assert!((p.stall_after - 5.0).abs() < 1e-9 && p.tmux == ["tmux"]);
+    assert!((p.long_run - 9.0).abs() < 1e-9);
     assert_eq!(human(7200), "2h00m");
     assert_eq!(human(600), "10m");
 }
@@ -442,4 +444,90 @@ fn a_tab_that_cannot_be_found_and_a_host_tab() {
         now()
     )
     .is_empty());
+}
+
+/// A `/proc` holding one process, started `age` seconds ago.
+fn process(w: &mut World, pid: &str, argv0: &str, cwd: &Path, age: u64) {
+    let proc = w.root.join("proc");
+    let dir = proc.join(pid);
+    std::fs::create_dir_all(&dir).unwrap();
+    let at = whole(now());
+    std::fs::write(
+        proc.join("stat"),
+        format!("cpu 1\nbtime {}\n", at - 100_000),
+    )
+    .unwrap();
+    std::fs::write(dir.join("cmdline"), format!("{argv0}\0static\0")).unwrap();
+    let ticks = (100_000 - age) * 100;
+    std::fs::write(
+        dir.join("stat"),
+        format!("{pid} (x y) S 1 1 1 0 -1 0 0 0 0 0 0 0 0 0 20 0 1 0 {ticks}\n"),
+    )
+    .unwrap();
+    let link = dir.join("cwd");
+    let _ = std::fs::remove_file(&link);
+    std::os::unix::fs::symlink(cwd, &link).unwrap();
+    w.p.proc = proc;
+}
+
+#[test]
+fn a_long_make_in_the_clone_is_told_once_even_to_a_session_that_is_talking() {
+    let mut w = world("long");
+    w.session("s", &json!({"tmux": "@1.%1"}), 1);
+    let clone = w.clone.clone();
+    process(&mut w, "7", "make", &clone.join("sub"), 2000);
+    process(&mut w, "8", "/usr/bin/make", &clone, 7000);
+    w.screen("❯ typing");
+    assert!(run_pass(&w.p, now()).is_empty());
+    w.screen("❯ ");
+    let said = run_pass(&w.p, now());
+    assert!(
+        said.len() == 1
+            && said[0].contains("long run name-s (s): /usr/bin/make static (pid 8) 1h56m")
+    );
+    assert!(w
+        .sent()
+        .contains("watchdog: `/usr/bin/make static` (pid 8) has been running 1h56m"));
+    assert!(std::fs::read_to_string(w.root.join("tty-%1"))
+        .unwrap()
+        .ends_with("\u{7}\u{7}"));
+    std::fs::remove_file(w.root.join("sent")).unwrap();
+    assert!(run_pass(&w.p, now()).is_empty() && w.sent().is_empty());
+}
+
+#[test]
+fn only_a_make_inside_the_clone_past_the_limit_counts() {
+    let mut w = world("long-not");
+    w.session("s", &json!({"tmux": "@1.%1"}), 1);
+    w.screen("❯ ");
+    let (clone, other) = (w.clone.clone(), w.root.join("mirror"));
+    process(&mut w, "7", "make", &clone, 60);
+    process(&mut w, "8", "make", &other, 7000);
+    process(&mut w, "9", "cargo", &clone, 7000);
+    assert!(run_pass(&w.p, now()).is_empty());
+    std::fs::write(w.root.join("proc/stat"), "cpu 1\n").unwrap();
+    assert!(run_pass(&w.p, now()).is_empty());
+}
+
+#[test]
+fn a_long_make_with_no_pane_is_logged_and_a_dry_run_only_says_so() {
+    let mut w = world("long-paneless");
+    w.session("s", &json!({}), 1);
+    let clone = w.clone.clone();
+    process(&mut w, "7", "make", &clone, 7000);
+    w.p.dry = true;
+    assert_eq!(
+        run_pass(&w.p, now()),
+        ["would warn name-s of make static (pid 7)"]
+    );
+    assert!(!w.p.state.join("s.long-run").exists());
+    w.p.dry = false;
+    assert!(run_pass(&w.p, now())[0].contains("long run name-s (s)"));
+    assert_eq!(
+        std::fs::read_to_string(w.p.state.join("s.long-run")).unwrap(),
+        "7"
+    );
+    std::fs::remove_file(w.p.clones.join("s")).unwrap();
+    std::fs::remove_file(w.p.state.join("s.long-run")).unwrap();
+    assert!(run_pass(&w.p, now()).is_empty());
 }

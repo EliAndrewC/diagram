@@ -283,7 +283,7 @@ push_cmd() {
     git -C "$ROOT" commit -q -m "the plan reviews' ledger rows, written at landing (feature 385 T72)" -- dev/review-ledger.md || die "the plan reviews' ledger rows could not be committed"
   fi
   # THE CHEAP QUESTIONS FIRST (feature 405 T34, D6; landing-analysis.md): what holds the landing and the review gate's
-  # occasions answer in under a second, and T12's landing met them only after push_checks.py and the claims gate had run.
+  # occasions answer in under a second, and T12's landing met them only after `l7r-gate push-checks` and the claims gate had run.
   # So the fetch, the delta, the holding rule, the review gate and the plan gate come first; nothing else moved.
   # files OUR unpushed commits touch, captured BEFORE the pull so the overlap test is honest.
   # INCOMING files = what the pull moves HEAD across - NOT a diff against post-push origin/main,
@@ -303,7 +303,7 @@ push_cmd() {
   # with ONE mechanical exception the GM kept: a delta consisting solely of that feature's own
   # specs/NNN-*/ directory (the spec-number claim for concurrent sessions). Nothing else rides along.
   local active="" pointer="" f
-  # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of push_checks.py, each for one reason: it runs
+  # GUARD_EDIT_OK: feature 383 FR-006 - the Python calls from here on stay out of `l7r-gate push-checks`, each for one reason: it runs
   # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
   # pointer, which features are in progress, the performance flag, the remote merge's route -
   # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
@@ -320,7 +320,7 @@ push_cmd() {
     fi
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
-  # (the closing check - a touched feature that reads closed carries its report - runs in push_checks.py, above; feature 383)
+  # (the closing check - a touched feature that reads closed carries its report - runs in `l7r-gate push-checks`, above; feature 383)
   if [ -n "$active" ]; then
     local outside
     outside=$(printf '%s\n' "$ours" | grep -vE "^(${active// /|})/" || true)
@@ -353,7 +353,7 @@ push_cmd() {
   "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 383 FR-006 (the GM 2026-10-12: "Although I agree that the combining all the different checks into
   # one is lower impact, it does still seem worth doing") - THE PUSH'S PYTHON CHECKS RUN IN ONE PROCESS, in the order this
-  # block ran them, each as it runs alone and each refusing with the line it refused with here: scripts/gates/push_checks.py
+  # block ran them, each as it runs alone and each refusing with the line it refused with here: scripts/gates/`l7r-gate push-checks`
   # holds the table (duplicate defs, file scale, stale dirs, the function cap, the ledger, entry headings, research pointers,
   # partial citations, the download list, the record and glossary builds, spec-lint, the Affects line, conflict markers, the
   # green-gate stamp), every guard with its self-test first - run once per version of its code (FR-007). Why each runs HERE as
@@ -389,7 +389,7 @@ push_cmd() {
     guard_log sync-with-main escaped "$CLOSE_OK" close-ok
     skip+=(--skip closing)
   fi
-  python3 "$ROOT/scripts/gates/push_checks.py" "$ROOT" "${skip[@]}" || exit 1
+  "$ROOT/scripts/gates/l7r-gate.sh" push-checks "$ROOT" "${skip[@]}" || exit 1
   # THE SEAMS AND THE ROUTE, DECIDED BEFORE THE GATES (feature 430 T04): the cohort gate is the gated route's, and the gates the
   # route owes run side by side below. The seams and the routes are explained where the route is printed, further down.
   local seams=""; [ -f "$ROOT/Makefile" ] || seams=1

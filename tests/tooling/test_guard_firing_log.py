@@ -472,7 +472,6 @@ _ESCAPES = {
     ),
     "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
     "CRON_OK": ("command", "routes through hm_escape.py (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
-    "X_OK": ("not-an-escape", "Python's os.X_OK in a guard's old files_named (an executable is never a log; feature 295 item 1)"),
 }
 
 _TOKEN = re.compile(r"\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_OK\b")

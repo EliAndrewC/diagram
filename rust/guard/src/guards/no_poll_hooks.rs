@@ -270,7 +270,7 @@ fn refuse_self_match(cx: &Ctx, cmd: &str) -> Option<Vec<Answer>> {
         "BLOCKED (no-poll): the process pattern {hit} matches this command's own text - it launches, or names, what it\nwaits for - \
 so the waiting shell finds itself and the wait never ends (2026-09-30: four hours past a finished roll).\nWait on the launched \
 process by its PID (`cmd > log 2>&1 & pid=$!; until ! kill -0 $pid; do sleep 10; done`), or on\nits log with run_in_background, \
-or on a make run with `scripts/hooks/lib/own-make.sh <target>`."
+or on a make run with `scripts/gates/l7r-gate.sh own-make <target>`."
     ))])
 }
 
@@ -280,7 +280,10 @@ fn bracket_self_match(cx: &Ctx, rule: &str, context: &str) -> Option<Vec<Answer>
     if !grep(&PGREP_F, &cx.scan) {
         return None;
     }
-    let scoped = scope_make_waits(&cx.cmd, &cx.helper("own-make.sh"));
+    let scoped = scope_make_waits(
+        &cx.cmd,
+        &format!("{} own-make", cx.helper("../../gates/l7r-gate.sh")),
+    );
     let fixed = bracket_pattern(scoped.as_deref().unwrap_or(&cx.cmd)).or(scoped);
     if let Some(refused) = refuse_self_match(cx, fixed.as_deref().unwrap_or(&cx.cmd)) {
         return Some(refused);
@@ -291,7 +294,7 @@ fn bracket_self_match(cx: &Ctx, rule: &str, context: &str) -> Option<Vec<Answer>
         fixed = ceiled;
         context += " A ceiling was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait that can never end still wakes you.";
     }
-    let rule = if fixed.contains("own-make.sh") {
+    let rule = if fixed.contains(" own-make ") {
         SCOPED.clone_into(&mut context);
         format!("{rule}-scoped")
     } else {
@@ -325,7 +328,7 @@ escaped waiter on a detached page-check looped for hours on a gate that finished
 does not make the pattern correct.";
 const ESCAPED_CEILING: &str = "POLL_OK permitted this wait, and a ceiling was added to its loop: past 90 minutes it prints WAIT TIMED \
 OUT and exits 4, so a wait that can never end still wakes you (2026-09-30: four hours lost to one that never ended).";
-const SCOPED: &str = "A wait on a make run was scoped to this working tree (own-make.sh <target>): pgrep searches the whole host, and \
+const SCOPED: &str = "A wait on a make run was scoped to this working tree (l7r-gate.sh own-make <target>): pgrep searches the whole host, and \
 other sessions' runs of the same target held a waiter open for six hours after its own run had ended. A harness-tracked run \
 (run_in_background) needs no waiter at all.";
 const BACKGROUNDED: &str = "This file-watching wait was BACKGROUNDED for you (run_in_background): in the foreground it would have held \

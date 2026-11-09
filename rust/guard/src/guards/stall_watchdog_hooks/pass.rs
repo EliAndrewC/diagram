@@ -10,6 +10,13 @@
 //! the bell rung, once per stall; in the session's OWN pane, when the input line is empty, one nudge is typed, once per stall. A
 //! session with no pane of its own is marked on its host's tab and never nudged: the GM approved typing into a stalled session's own
 //! pane only. Its log line carries the command that resumes it.
+//!
+//! A MAKE THAT RUNS TOO LONG IS TOLD TO ITS SESSION (the GM, 2026-11-09: "I thought we had tooling to prevent a stuck command from
+//! blocking us from doing work for that amount of time"). A stall is a SILENT session; a session that answers the GM while its
+//! background `make static` spins is not silent, and a spinning check ran four hours and ten minutes that way. So each pass also
+//! looks for a `make` running in the session's clone past [`LONG_RUN`], whatever the session is doing, and says so once per make:
+//! the tab and the bell, and, in its own pane with the input line empty, one nudge. It reports and kills nothing: only the session
+//! knows whether the run is meant to be long.
 
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -28,6 +35,10 @@ static RETRY: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"^failed (\S+) .* - waiting (\d+) min").unwrap_or_else(|e| unreachable!("{e}"))
 });
 
+/// CONVENTION, a knob (`STALL_LONG_RUN`): a gate run took at most 1,300 s in 1,051 of the 1,052 recorded in `dev/run-log/` for
+/// October and November 2026; the one over it, 27,900 s, is an outlier. Thirty minutes is past every one of those.
+const LONG_RUN: f64 = 1800.0;
+
 /// Every path and the tmux binary, from the environment when set, so a suite drives a pass against fixtures.
 pub(crate) struct Paths {
     pub sessions: PathBuf,
@@ -38,6 +49,7 @@ pub(crate) struct Paths {
     pub proc: PathBuf,
     pub tmux: Vec<String>,
     pub stall_after: f64,
+    pub long_run: f64,
     pub dry: bool,
 }
 
@@ -63,6 +75,9 @@ impl Paths {
             stall_after: set("STALL_AFTER")
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(3600.0),
+            long_run: set("STALL_LONG_RUN")
+                .and_then(|v| v.parse().ok())
+                .unwrap_or(LONG_RUN),
             dry: set("STALL_DRYRUN").is_some(),
         }
     }
@@ -508,12 +523,116 @@ fn act(p: &Paths, entry: &Value, regs: &[Value], stall: &Stall, now: f64) -> Str
     )
 }
 
+/// A `make` in a clone: its pid, how long it has run, its command line.
+struct LongRun {
+    pid: String,
+    seconds: u64,
+    command: String,
+}
+
+/// The make at `dir` (a `/proc/<pid>`), when it is one and runs inside `clone`.
+fn make_in(dir: &Path, clone: &str, boot: u64, now: f64) -> Option<LongRun> {
+    let bytes = std::fs::read(dir.join("cmdline")).ok()?;
+    let command = String::from_utf8_lossy(&bytes).replace('\0', " ");
+    if Path::new(command.split(' ').next()?).file_name()? != "make" {
+        return None;
+    }
+    if !std::fs::read_link(dir.join("cwd")).ok()?.starts_with(clone) {
+        return None;
+    }
+    let stat = std::fs::read_to_string(dir.join("stat")).ok()?;
+    // the fields after the name in parentheses, the state first: the start time, in ticks since boot, is the twentieth of them
+    let ticks: u64 = stat
+        .rsplit(')')
+        .next()?
+        .split_whitespace()
+        .nth(19)?
+        .parse()
+        .ok()?;
+    Some(LongRun {
+        pid: dir.file_name()?.to_string_lossy().into_owned(),
+        seconds: whole(now).saturating_sub(boot + ticks / 100),
+        command: command.trim().to_owned(),
+    })
+}
+
+/// The oldest `make` in the clone that has run past the limit.
+fn long_run(p: &Paths, clone: &str, now: f64) -> Option<LongRun> {
+    let stat = std::fs::read_to_string(p.proc.join("stat")).ok()?;
+    let boot: u64 = stat
+        .lines()
+        .find_map(|l| l.strip_prefix("btime "))?
+        .trim()
+        .parse()
+        .ok()?;
+    listed(&p.proc)
+        .iter()
+        .filter_map(|d| make_in(d, clone, boot, now))
+        .filter(|r| r.seconds >= whole(p.long_run))
+        .max_by_key(|r| r.seconds)
+}
+
+/// Tell the session once about this make, or wait for its input line to be empty; the log line when told.
+fn warn_long(
+    p: &Paths,
+    entry: &Value,
+    regs: &[Value],
+    clone: &str,
+    run: &LongRun,
+    now: f64,
+) -> Option<String> {
+    let sid = text(entry, "sessionId");
+    let path = p.state.join(format!("{sid}.long-run"));
+    if std::fs::read_to_string(&path).is_ok_and(|told| told == run.pid) {
+        return None;
+    }
+    let (target, own) = host_pane(p, entry, regs, clone);
+    if own && !input_empty(p, &target) {
+        return None;
+    }
+    let name = text(entry, "name");
+    let marked = !target.is_empty() && mark(p, &target, name, run.seconds, true);
+    if own && marked {
+        let words = format!(
+            "watchdog: `{}` (pid {}) has been running {} in {clone}, past any recorded gate run. Check that it is still making progress; if it is stuck, kill it by pid and fix the cause, and if it is meant to run this long, say why in one line and carry on.",
+            run.command, run.pid, human(run.seconds)
+        );
+        tmux(p, &["send-keys", "-t", &target, "-l", &words]);
+        tmux(p, &["send-keys", "-t", &target, "Enter"]);
+    }
+    let _ = std::fs::write(&path, &run.pid);
+    let (year, month, day, hour, minute, second) = civil(whole(now));
+    Some(format!(
+        "{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z long run {name} ({sid}): {} (pid {}) {} in {clone}",
+        run.command, run.pid, human(run.seconds)
+    ))
+}
+
+/// What a pass says about a long make in this session's clone, if anything.
+fn long_run_line(p: &Paths, entry: &Value, regs: &[Value], now: f64) -> Option<String> {
+    let clone = clone_of(p, entry);
+    if clone.is_empty() {
+        return None;
+    }
+    let run = long_run(p, &clone, now)?;
+    if p.dry {
+        return Some(format!(
+            "would warn {} of {} (pid {})",
+            text(entry, "name"),
+            run.command,
+            run.pid
+        ));
+    }
+    warn_long(p, entry, regs, &clone, &run, now)
+}
+
 /// One pass over every live session; the log lines it wrote.
 pub(crate) fn run_pass(p: &Paths, now: f64) -> Vec<String> {
     let _ = std::fs::create_dir_all(&p.state);
     let regs = live_sessions(p);
     let mut said = Vec::new();
     for entry in &regs {
+        said.extend(long_run_line(p, entry, &regs, now));
         let Some(stall) = judge(p, entry, now) else {
             continue;
         };

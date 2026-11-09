@@ -172,7 +172,7 @@ merge_main() {
 
 if ! git -C "$WT" apply --index "$patch" 2>/dev/null; then
   # GUARD_EDIT_OK: feature 385 T30 - never merged under a running gate (the round arbiter on red-gate@2026-10-18T12:36:36Z)
-  if [ -f "$ROOT/scripts/gates/gate_lock.py" ] && python3 "$ROOT/scripts/gates/gate_lock.py" held "$(git -C "$ROOT" rev-parse --absolute-git-dir)"; then
+  if [ -x "$ROOT/scripts/gates/l7r-gate.sh" ] && "$ROOT/scripts/gates/l7r-gate.sh" lock held "$(git -C "$ROOT" rev-parse --absolute-git-dir)"; then
     die "FILES do not apply onto the latest main, and a gate is running in this clone - nothing is merged under it; run this again when it ends"
   fi
   if ! merge_main; then

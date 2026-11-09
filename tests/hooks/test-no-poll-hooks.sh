@@ -116,9 +116,9 @@ check "the real one: pgrep-self-match poll loop" blocked \
 rewritten "bare literal pattern is bracketed" 'pgrep -f "resvg --width"' '[r]esvg --width'
 # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a MAKE-RUN wait is scoped to the asking tree, not bracketed: a
 # bracketed "[m]ake done" still matched other clones' gates and held a waiter six hours past its own failed gate
-rewritten "a make-run wait is scoped to this tree" 'pgrep -f "make done"' 'own-make.sh done'
-rewritten "...bracketed already, scoped all the same" "until ! pgrep -f '[m]ake done' >/dev/null; do sleep 5; done  # POLL_OK: a detached gate" 'own-make.sh done'
-rewritten "...the flags kept apart from the pattern" 'pgrep -af "make page-check"' 'own-make.sh page-check'
+rewritten "a make-run wait is scoped to this tree" 'pgrep -f "make done"' 'l7r-gate.sh own-make done'
+rewritten "...bracketed already, scoped all the same" "until ! pgrep -f '[m]ake done' >/dev/null; do sleep 5; done  # POLL_OK: a detached gate" 'l7r-gate.sh own-make done'
+rewritten "...the flags kept apart from the pattern" 'pgrep -af "make page-check"' 'l7r-gate.sh own-make page-check'
 rewritten "pkill literal pattern is bracketed" 'pkill -f "cherryd"' '[c]herryd'
 # GUARD_EDIT_OK: feature 212 - a FOREGROUND file-watching wait is BACKGROUNDED now (section 5b), so
 # the busy-wait vector here waits on something that is not a file
@@ -256,7 +256,7 @@ printf '%s' "$U_PAYLOAD" \
 case_4b() {
 echo "4b. an escaped wait still gets the self-match correction"
 ESCAPED_SELF='true POLL_OK waits on the detached page-check gate writing its log; L=/tmp/pc.log; until grep -qE "passed|failed" $L 2>/dev/null && ! pgrep -f "make page-check" >/dev/null; do sleep 5; done; tail -6 $L'
-rewritten "the 2026-09-08 waiter: escaped AND corrected (scoped since 2026-09-28)" "$ESCAPED_SELF" 'own-make.sh page-check'
+rewritten "the 2026-09-08 waiter: escaped AND corrected (scoped since 2026-09-28)" "$ESCAPED_SELF" 'l7r-gate.sh own-make page-check'
 # GUARD_EDIT_OK: 2026-09-08 - both entries land: the escape (rule poll-ok) and the rewrite
 if grep -rlq 'poll-ok' "$GUARD_LOG_ROOT" && grep -rlq 'escaped-self-match' "$GUARD_LOG_ROOT"; then
   echo "  ok      the escaped-and-corrected wait records both the escape and the rewrite"; PASS=$((PASS+1))
@@ -266,8 +266,8 @@ fi
 check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[c]herryd" >/dev/null; do sleep 5; done  # POLL_OK: a daemon another session started'
 rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[r]esvg'
 rewritten "...and the first of them too" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[c]herryd'
-rewritten "two make-run waits are BOTH scoped" 'pgrep -f "make done"; pgrep -f "make quick"' 'own-make.sh quick'
-rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' 'own-make.sh done'
+rewritten "two make-run waits are BOTH scoped" 'pgrep -f "make done"; pgrep -f "make quick"' 'l7r-gate.sh own-make quick'
+rewritten "...and the first of them too" 'pgrep -f "make done"; pgrep -f "make quick"' 'l7r-gate.sh own-make done'
 rewritten "a kill is not a wait: pkill is bracketed, not scoped" 'pkill -f "make done"' 'pkill -f "[m]ake done"'
 SCOPED=$(run 'pgrep -f "make done"' 2>/dev/null)
 printf '%s' "$SCOPED" | grep -q "scoped to this working tree" && { echo "  ok      the scoping says why"; PASS=$((PASS+1)); } || { echo "  FAIL    the scoping is not explained"; FAIL=$((FAIL+1)); }
@@ -276,15 +276,15 @@ grep -rlq 'self-match-scoped' "$GUARD_LOG_ROOT" && { echo "  ok      the scoping
 }
 
 case_4c() {
-echo "4c. own-make.sh counts only this tree's runs"
-OWN="$HERE/../../scripts/hooks/lib/own-make.sh"
+echo "4c. l7r-gate own-make counts only this tree's runs"
+OWN="$HERE/../../scripts/gates/l7r-gate.sh own-make"
 PROBE_A=$(mktemp -d); PROBE_B=$(mktemp -d); git -C "$PROBE_B" init -q
 ( cd "$PROBE_A" && exec -a "make own-make-probe-target" sleep 30 ) & PROBE_PID=$!
 command sleep 0.3  # POLL_OK: let the probe process start before asking about it
-( cd "$PROBE_B" && "$OWN" own-make-probe-target ) && { echo "  FAIL    another tree's run was counted"; FAIL=$((FAIL+1)); } || { echo "  ok      another tree's run is not counted"; PASS=$((PASS+1)); }
-( cd "$PROBE_A" && "$OWN" own-make-probe-target ) && { echo "  ok      this tree's own run is counted"; PASS=$((PASS+1)); } || { echo "  FAIL    this tree's own run was missed"; FAIL=$((FAIL+1)); }
+( cd "$PROBE_B" && $OWN own-make-probe-target ) && { echo "  FAIL    another tree's run was counted"; FAIL=$((FAIL+1)); } || { echo "  ok      another tree's run is not counted"; PASS=$((PASS+1)); }
+( cd "$PROBE_A" && $OWN own-make-probe-target ) && { echo "  ok      this tree's own run is counted"; PASS=$((PASS+1)); } || { echo "  FAIL    this tree's own run was missed"; FAIL=$((FAIL+1)); }
 kill "$PROBE_PID" 2>/dev/null; wait "$PROBE_PID" 2>/dev/null
-( cd "$PROBE_A" && "$OWN" own-make-probe-target ) && { echo "  FAIL    a finished run still counts"; FAIL=$((FAIL+1)); } || { echo "  ok      a finished run no longer counts"; PASS=$((PASS+1)); }
+( cd "$PROBE_A" && $OWN own-make-probe-target ) && { echo "  FAIL    a finished run still counts"; FAIL=$((FAIL+1)); } || { echo "  ok      a finished run no longer counts"; PASS=$((PASS+1)); }
 rm -rf "$PROBE_A" "$PROBE_B"
 
 # GUARD_EDIT_OK: feature 227 (GM 2026-09-12) - THE WAIT GETS A PROOF OF LIFE, and the shape that already
@@ -351,7 +351,7 @@ check "...and so is a pkill whose pattern names a file the same command reads (i
 check "a pattern that does not match its own command is not refused" ok 'pgrep -fa "[c]herryd"; echo done'
 rewritten "the real one: a make wait with a PATH in its target is scoped, so the launching shell cannot count" \
   'setsid nohup make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py > /tmp/m.log 2>&1 & sleep 5; until ! pgrep -f "[m]ake map GEN=pool/hamlets/mizuguchi" > /dev/null; do sleep 10; done  # POLL_OK: a detached roll' \
-  'own-make.sh map GEN=pool/hamlets/mizuguchi'
+  'l7r-gate.sh own-make map GEN=pool/hamlets/mizuguchi'
 NP_NEVER=$(mktemp)
 np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
 np_out=$(exec 9>>"$NP_NEVER"; SECONDS_AT=6000 timeout 20 bash -c "SECONDS=6000; $np_cmd" 2>/dev/null); np_rc=$?
@@ -362,7 +362,7 @@ rm -f "$NP_NEVER"
 PROBE_C=$(mktemp -d)
 ( cd "$PROBE_C" && exec -a "bash -c make own-make-shell-probe & until" sleep 30 ) & NP_SHELL=$!
 sleep 0.5
-( cd "$PROBE_C" && "$HERE/../../scripts/hooks/lib/own-make.sh" own-make-shell-probe ) && { echo "  FAIL    a shell that only names the make run was counted as the run"; FAIL=$((FAIL+1)); } || { echo "  ok      a shell that only names the make run is not the run"; PASS=$((PASS+1)); }
+( cd "$PROBE_C" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make own-make-shell-probe ) && { echo "  FAIL    a shell that only names the make run was counted as the run"; FAIL=$((FAIL+1)); } || { echo "  ok      a shell that only names the make run is not the run"; PASS=$((PASS+1)); }
 kill "$NP_SHELL" 2>/dev/null; wait "$NP_SHELL" 2>/dev/null; rm -rf "$PROBE_C"
 
 }

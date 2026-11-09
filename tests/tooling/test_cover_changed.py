@@ -139,12 +139,9 @@ def test_a_changed_rust_file_is_grouped_by_its_crate_and_its_unreached_lines_nam
     (root / "rust" / "loose.rs").write_text("// no crate holds it\n")
     crates = cc.changed_rust(root, base)
     assert crates == {root / "rust" / "phases" / "Cargo.toml": ["rust/phases/src/field.rs"]}
-    sys.path.insert(0, str(SCRIPT.parent))
-    import rust_checks  # noqa: PLC0415
-
-    monkeypatch.setattr(rust_checks, "uncovered", lambda m, w: {str(src / "field.rs"): [3, 4]})
+    monkeypatch.setattr(cc, "crate_uncovered", lambda m: {str(src / "field.rs"): [3, 4]})
     assert cc.rust_uncovered(root, crates) == {"rust/phases/src/field.rs": [3, 4]}
-    monkeypatch.setattr(rust_checks, "uncovered", lambda m, w: {str(m.parent): [0]})
+    monkeypatch.setattr(cc, "crate_uncovered", lambda m: {str(m.parent): [0]})
     assert cc.rust_uncovered(root, crates) == {"rust/phases/src/field.rs": [0]}, "a crate whose run failed names every changed file"
     monkeypatch.chdir(root)
     assert cc.main(["--base", base]) == 1 and "rust/phases/src/field.rs" in capsys.readouterr().out

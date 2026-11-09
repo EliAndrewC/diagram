@@ -269,7 +269,7 @@ OUT=$(printf '{"session_id":"sid-run"}' \
 case $OUT in *"make run going"*) printf 'FAIL  a clone with no run was held as if one ran\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) printf 'ok    with the run gone, the clean clone is not held\n' ;; esac
 # feature 385 T30: the gate's OWN lock holds the merge too (a live gate named in <git dir>/gate.lock), HEAD unchanged
-mkdir -p "$RUNC/scripts/gates"; cp "$HERE/../../scripts/gates/gate_lock.py" "$RUNC/scripts/gates/"
+mkdir -p "$RUNC/scripts/gates"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$HERE/../../scripts/gates/l7r-gate.sh" > "$RUNC/scripts/gates/l7r-gate.sh"; chmod +x "$RUNC/scripts/gates/l7r-gate.sh"
 (exec -a make bash -c 'sleep 120; :' done) & GLPID=$!
 sleep 0.3
 printf '{"pid": %s, "t": 0}' "$GLPID" > "$RUNC/.git/gate.lock"

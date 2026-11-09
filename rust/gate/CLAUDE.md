@@ -14,4 +14,7 @@ One binary, `l7r-gate`, called from the Makefile through `scripts/gates/l7r-gate
 | `src/ci.rs`, `src/ci/` | the remote path: the switches, the conditions on a paid run, the dispatcher and its AWS boundary (T064) |
 | `src/checks.rs`, `src/checks/` | the text checks and the spec lint: `l7r-gate check <name>` (T065, T066) |
 | `src/plan.rs`, `src/plan/` | the plan gates: sections and blocks, what a plan owes, recording a verdict, the review bundle, the approach gate, the engine-edit question (T066); `scripts/plan_door.py` is the Python callers' door |
+| `src/lock.rs` | the host-wide gate lock and whether a make runs in this tree: `lock`, `own-make` (T067) |
+| `src/rustc.rs` | the Rust crates' checks: `rust lint`, `format`, `test`, `cover`, `dead`, `uncovered` (T067) |
+| `src/push.rs` | the push's checks and what each push gate judges: `push-checks`, `push-gate` (T067) |
 | `src/main.rs` | the binary: prints `cli`'s reply and exits with its code |

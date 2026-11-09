@@ -7,7 +7,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HOOK="$HERE/conflict-marker-hooks.sh"
-DETECT="$HERE/../../scripts/hooks/lib/hm_conflict.py"
+DETECT="$HERE/../../scripts/gates/l7r-gate.sh"
 PASS=0; FAIL=0
 LOGROOT=$(mktemp -d); export GUARD_LOG_DIR="$LOGROOT"
 trap 'rm -rf "$LOGROOT" "$FIX"' EXIT
@@ -113,16 +113,16 @@ run "git log --oneline -1"
 echo "6. the BACKSTOP over tracked files"
 git -C "$FIX" add -A >/dev/null 2>&1   # stage it the way the incident did
 git -C "$FIX" commit -qm "the incident: a conflict committed" >/dev/null 2>&1
-python3 "$DETECT" --tracked "$FIX" >/dev/null 2>&1
+"$DETECT" check conflict --tracked "$FIX" >/dev/null 2>&1
 [ "$?" -eq 1 ] && ok "a COMMITTED conflict fails the backstop" || no "the backstop missed a committed conflict"
 # captured rather than piped: the detector exits 1 BY DESIGN when it finds one, and `pipefail` would
 # report that as the pipeline's status even when grep matched - which is what this line did at first
-BOUT=$(python3 "$DETECT" --tracked "$FIX" 2>&1 || true)
+BOUT=$("$DETECT" check conflict --tracked "$FIX" 2>&1 || true)
 printf '%s' "$BOUT" | grep -q "tracked.md" && ok "...naming the file" || no "the backstop does not name the file"
 printf 'resolved\n' > "$FIX/tracked.md"; git -C "$FIX" add -A >/dev/null 2>&1
 git -C "$FIX" commit -qm resolved >/dev/null 2>&1
-python3 "$DETECT" --tracked "$FIX" >/dev/null 2>&1 && ok "and a clean tree passes it" || no "the backstop fired on a clean tree"
-python3 "$DETECT" --tracked "$HERE/../.." >/dev/null 2>&1 && ok "...including this repository, whose own spec and suite discuss markers" || no "the backstop fires on this repository"
+"$DETECT" check conflict --tracked "$FIX" >/dev/null 2>&1 && ok "and a clean tree passes it" || no "the backstop fired on a clean tree"
+"$DETECT" check conflict --tracked "$HERE/../.." >/dev/null 2>&1 && ok "...including this repository, whose own spec and suite discuss markers" || no "the backstop fires on this repository"
 
 echo
 echo "conflict-marker-hooks: $PASS passed, $FAIL failed"
