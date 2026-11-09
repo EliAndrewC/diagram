@@ -194,7 +194,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the stamps and delta ported to rust/gate; m:t063-slice2 shows area keys, lists, 8,885 content ids, 50 engine keys, 7 deltas, the engine list over 26,664 paths and raw-match over 26,670 equal to the Python; static, tooling tests and 56 hook suites green
 
-- [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `_invocation.py` and `switches.py`
+- [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `_invocation.py` and `switches.py`, and `runlog.py` (moved from T72: its callers are these)
       research: rendering
 
 - [ ] T065 [US2] `scripts/gates/` the text checks: every `check-*.py`, one tool family at a time, each check's verdicts held to the Python's over the repository
@@ -212,7 +212,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`, `buildspec/run.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
       research: rendering
 
-- [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it
+- [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller)
       research: rendering
 
 - [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, the phase's record in `dev/`
@@ -239,5 +239,6 @@ The 44 guard tasks are independent of one another once T005 has landed: each tou
 ## Implementation strategy
 
 MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every session with the slowest guard moved, its suite green, the call timed. Then the guards in order, each landed as it passes, so the session speeds up guard by guard.
-- [ ] T72 [US2] `l7r/diagram/ci/` the state: `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch (slice 3 of `ask:449-T063-slices`)
+- [x] T72 [US2] `l7r/diagram/ci/` the state: `state.py`, `gate_config.py`'s `config_hash`, `coverage_exempt.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch (slice 3 of `ask:449-T063-slices`; `runlog.py` goes with its callers in T064, and `scripts_readers` and `tooling_modules` with `incremental.py` in T071)
       research: rendering
+      verify: DONE. landed: the state, the tooling and config hashes and the coverage record ported to rust/gate; m:t72-state shows both hashes equal to the Python's, the second call from kept forms; static, tooling tests and hook suites green

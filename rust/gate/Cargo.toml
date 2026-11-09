@@ -9,7 +9,9 @@ publish = false
 name = "l7r_gate"
 
 [dependencies]
+fancy-regex = "0.14"
 l7r_guard = { path = "../guard" }
+serde = "1"
 serde_json = { version = "1", features = ["preserve_order"] }
 
 [[bin]]

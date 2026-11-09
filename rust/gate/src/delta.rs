@@ -333,7 +333,7 @@ fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
 
 /// `engine_key` for the working tree (tracked and untracked-not-ignored engine files, current contents), so a run before committing keys what the commit will carry. The index holds every unchanged file's
 /// blob id (T27: 15 ms against 270 ms), so only files that differ from it are hashed.
-fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
+pub(crate) fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
     let listed = git(root, &["ls-files", "-co", "--exclude-standard"])?;
     let mut paths: Vec<&str> = listed
         .lines()

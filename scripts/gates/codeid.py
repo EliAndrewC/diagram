@@ -344,6 +344,28 @@ def ids_main(paths: list[str]) -> int:
     return 0
 
 
+def semantic_main(args: list[str]) -> int:
+    """`--semantic keep|strip <path>...`: each file's semantic bytes as `<length>\\n<bytes>`, for the Rust gate's tooling and config hashes (feature 449 T72)."""
+    keep, out = args[0] == "keep", sys.stdout.buffer
+    for name in args[1:]:
+        data = semantic_bytes(pathlib.Path(name).read_bytes(), name, keep_module_docstring=keep)
+        out.write(f"{len(data)}\n".encode())
+        out.write(data)
+    return 0
+
+
+def missing_main(args: list[str]) -> int:
+    """`--missing <data> <path>...`: each file's unrun lines, comma-separated, a line a file, for the Rust gate's coverage report (feature 449 T72); only coverage.py can say."""
+    import coverage  # noqa: PLC0415 - absent from the gate's ordinary path, and needed only when a file is exempt
+
+    cov = coverage.Coverage(data_file=args[0])
+    cov.load()
+    measured = set(cov.get_data().measured_files())
+    for name in args[1:]:
+        print(",".join(str(n) for n in (cov.analysis2(name)[3] if name in measured else [])))
+    return 0
+
+
 def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -386,4 +408,5 @@ def split_ids(src: bytes) -> tuple[str, dict[str, str], set[str]] | None:
 
 
 if __name__ == "__main__":
-    sys.exit(ids_main(sys.argv[2:]) if sys.argv[1:2] == ["--ids"] else 2)
+    verbs = {"--ids": ids_main, "--semantic": semantic_main, "--missing": missing_main}
+    sys.exit(verbs[sys.argv[1]](sys.argv[2:]) if sys.argv[1:2] and sys.argv[1] in verbs else 2)

@@ -108,8 +108,8 @@ def tooling_unchanged(root: Path) -> bool:
     from l7r.diagram.ci import state  # noqa: PLC0415
 
     try:
-        rec = json.loads((root / state.STATE_FILE).read_text(encoding="utf-8"))
-        return bool(rec.get("tooling")) and rec["tooling"] == state.tooling_hash(root)
+        st = state.read(root)
+        return st is not None and bool(st.tooling) and st.tooling == state.tooling_hash(root)
     except Exception:  # noqa: BLE001 - any failure to decide means "run them", as conftest reads it
         return False
 
@@ -269,11 +269,8 @@ def uncovered(root: Path, modules: list[str], base: tuple[Path, dict] | None) ->
 
 def slated(root: Path) -> set[str]:
     """The engine files exempt from the coverage floor (`dev/coverage-exempt.json`, read by the floor's one reader)."""
-    if str(ROOT_OF_SCRIPT) not in sys.path:
-        sys.path.insert(0, str(ROOT_OF_SCRIPT))
-    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
-
-    return coverage_exempt.exempt(root)
+    gate = Path(__file__).resolve().parent / "l7r-gate.sh"
+    return set(subprocess.run([str(gate), "coverage-exempt", "exempt"], cwd=root, capture_output=True, text=True, check=True).stdout.splitlines())
 
 
 def rust_only(root: Path) -> bool:

@@ -128,15 +128,14 @@ def _tooling_unchanged() -> bool:
     """TOOLING TESTS RUN ONLY WHEN THE TOOLING CHANGED (GM 2026-08-26, T22): true when the tooling hash
     recorded by the last green `make done` equals the current one. Any doubt (no record, no git
     root, a read error) means the tests run."""
-    import json
     from pathlib import Path
 
     try:
         from l7r.diagram.ci import state
 
         root = Path(__file__).resolve().parents[1]
-        rec = json.loads((root / state.STATE_FILE).read_text(encoding="utf-8"))
-        return bool(rec.get("tooling")) and rec["tooling"] == state.tooling_hash(root)
+        st = state.read(root)
+        return st is not None and bool(st.tooling) and st.tooling == state.tooling_hash(root)
     except Exception:  # noqa: BLE001 - any failure to decide means "run them"
         return False
 

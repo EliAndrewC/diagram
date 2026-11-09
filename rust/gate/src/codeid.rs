@@ -211,6 +211,11 @@ pub(crate) fn stated<T>(done: std::io::Result<T>, what: &str) -> Result<T, Strin
     done.map_err(said(what))
 }
 
+/// JSON text, or why not.
+pub(crate) fn parsed(text: &str, what: &str) -> Result<Value, String> {
+    serde_json::from_str(text).map_err(|e| format!("{what}: {e}"))
+}
+
 /// Outside the generic function, so the one closure is one piece of code to test rather than one for each `T`.
 fn said(what: &str) -> impl FnOnce(std::io::Error) -> String + '_ {
     move |e| format!("{what}: {e}")

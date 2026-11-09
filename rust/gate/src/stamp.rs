@@ -250,6 +250,11 @@ fn area_key(root: &Path, area: &Area, python: &str) -> Result<String, String> {
     )
 }
 
+/// An area's key by name, for the verification state.
+pub(crate) fn area_key_named(root: &Path, name: &str, python: &str) -> Result<String, String> {
+    area_key(root, area_named(name).ok_or("no such area")?, python)
+}
+
 fn stamp_path(root: &Path, area: &Area) -> Option<PathBuf> {
     codeid::common_git_dir(root).map(|d| d.join(format!("gate-green-{}", area.name)))
 }

@@ -38,7 +38,7 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     it covers the files outside `l7r/` and `tests/` - every pool and legacy `.gen.py` and the legacy capital's package -
     that coverage does not measure and that the push-time stamp check must keep hashing."""
     files = [str(REPO / f) for f in _area("diagram")]
-    assert sum("/l7r/diagram/ci/" in f for f in files) == 18, (
+    assert sum("/l7r/diagram/ci/" in f for f in files) == 17, (  # 18 before 449 T72 retired coverage_exempt.py
         "ci/ is inside the gate's surface now (was 0; 12 before feature 207 added incremental.py, selection.py and gate_plugin.py; 15 before feature 213 added rollcensus.py and rollverdict.py; 17 before feature 415 added gate_config.py; 18 before feature 430 added pool_readers.py; 19 before feature 448 added coverage_exempt.py; 20 before feature 444 T39 deleted rollcensus.py and rollverdict.py)"
     )
     # THE ADD-ONLY RULE AS A SET, NOT A COUNT (feature 328, 2026-10-09): a hand-kept count went stale when main retired wip/ (38 -> 37)

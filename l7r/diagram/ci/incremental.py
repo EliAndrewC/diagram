@@ -91,7 +91,7 @@ TEST_MODULE = "test_"
 
 def baseline_dir(root: Path) -> Path:
     """`<git dir>/gate-baseline/` - beside the verification state, so a worktree gets its own."""
-    return state._state_file(root).parent / BASELINE_DIR
+    return state.state_dir(root) / BASELINE_DIR
 
 
 # ---- the manifest -------------------------------------------------------------------------------------

@@ -186,6 +186,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
+  },
+  "### T72 Approach (checklist part A)": {
+   "sha256": "e7d49a71886baba6cda893a99ab04c83ce3a4857bf3d59bb0382ae9dfab4591e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3701,6 +3707,64 @@
      "why": "FR-001's recorded-measurement clause, carried as written with no exception."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T72 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T72-state-and-hashes-to-rust",
+     "summary": "state.py's writer, reader, tooling hash and already_verified become l7r-gate state; gate_config.config_hash becomes l7r-gate config-hash; coverage_exempt.py becomes l7r-gate coverage-exempt and is deleted; the Makefile recipes and __main__ subcommands switch in that commit.",
+     "class": "within",
+     "why": "This is the port itself: the request's 'all be ported to Rust', FR-001's phase 2, FR-003's one cut (the switch is in one commit, no state file has two writers), and FR-002's same outputs, for which m:t72-state records the hashes and the record equal to the Python's."
+    },
+    {
+     "id": "T72-state-py-remains-a-client",
+     "summary": "What is left of state.py is the VerificationState type, two constants and calls to the binary once a process, until T064 ports decision.py and dispatch.py.",
+     "class": "within",
+     "why": "A staging state inside a phase, with a named end (T064), not a piece kept in Python. The writer and reader are Rust only, so FR-003 holds, and the client reaches the binary once a process as FR-006 and step 5 require."
+    },
+    {
+     "id": "T72-hashes-stay-equal-dumps-kept-by-blob",
+     "summary": "The two hashes stay equal to the Python's over ast.dump. The dumps are kept by blob under <git dir>/semantic-dumps/; codeid.py --semantic is asked once a run only for the blobs it lacks, so an unchanged tree starts no Python; a form unused for a week is dropped.",
+     "class": "within",
+     "why": "This answers the earlier BLOCKED verdict: the block no longer asks about every file on every run, and now matches FR-001's 'one process a run with all the cache's misses in it' and FR-006's kept-cache fix. Keeping the dump rather than the id is what FR-006's fix needs here, since the hash input is the concatenated dumps and no per-file id can rebuild it; FR-001's 'one Python library' concerns the Python callers of later phases and is not contradicted by a Rust-side store. Equal hashes are FR-002's same outputs. Python staying in the path is FR-001's own ruled placement of codeid.py in phase 4, whose failure-fails-the-gate clause this block does not relax. Dropping a form unused for a week is housekeeping of the store this decision creates and narrows nothing asked: a dropped form is only a later miss."
+    },
+    {
+     "id": "T72-runlog-to-T064-readers-to-T071",
+     "summary": "runlog.py moves to T064 and scripts_readers/tooling_modules to T071, because every caller of each is in that task.",
+     "class": "within",
+     "why": "A reordering of when a piece is ported, not whether: all three are still ported, and tasks.md says so. Porting with the last caller avoids a client and is FR-003's one cut, the same placement rule FR-001 applies to shared libraries. The bundle does not show which phase T071 stands in; the ruling rests on the block's statement that every caller is in that task, so it moves no piece past its callers."
+    },
+    {
+     "id": "T72-coverage-reach-branch-and-seeded-dropped",
+     "summary": "The reach branch, import_graph, _top_names, reached_from_kept and seeded are dropped rather than ported, and three test cases are retired with them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Code not ported is a narrowing of 'all be ported', presumed wrong, and judged separately from the accepted spec. It is legitimate on the request's own terms: the GM asked that this become a Rust codebase instead of a Python one because the Python is inefficient, and the outcome here is less Python and no surviving behavior lost. The block names the search space that shows no caller (git grep over the code, and specs/448's *.py checked for imports), and with the entries' only source gone the branch has no input to decide on. Taken one at a time: the three helpers exist only for the reach branch; seeded has no importer; of the three retired cases, two exercise the reach branch and one exercises seeded, and every other case of the three test files replays. FR-002 carries the same retirement as a ruled case, so no verdict a live input can reach changes without that ruling covering it."
+    },
+    {
+     "id": "T72-load-refuses-an-entry-naming-no-stages",
+     "summary": "load refuses an entry naming no stages, with a test.",
+     "class": "within",
+     "why": "Stated verbatim in FR-002's ruled case (ask:449-T72-coverage-exempt): 'load refuses one instead'. A refusal exactly as wide as the accepted spec's, adding no reach of its own."
+    },
+    {
+     "id": "T72-coverage-report-through-codeid-missing",
+     "summary": "report asks coverage.py through codeid.py --missing, one process with every live entry, only when one exists, and its failure fails the gate.",
+     "class": "within",
+     "why": "FR-001's census is of the Python files the repository tracks; coverage.py is not one, codeid.py is already placed in phase 4, and coverage_exempt.py itself is deleted, so no tracked piece stays Python because of this. It takes the shape FR-001 rules for codeid.py: one process a run, batched, failure failing the gate, and it is not reached when no entry is live. It also serves FR-006's one spawn a process or a batch."
+    },
+    {
+     "id": "T72-recorded-commands-rewritten",
+     "summary": "Every specs/*/measurements*.json command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "FR-001's clause on recorded measurements, applied to this task's files."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6151,6 +6215,63 @@
      "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run.",
      "class": "within",
      "why": "FR-001's recorded-measurement clause, carried as written with no exception."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T72": {
+   "section_sha256": "e7d49a71886baba6cda893a99ab04c83ce3a4857bf3d59bb0382ae9dfab4591e",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T72-state-and-hashes-to-rust",
+     "summary": "state.py's writer, reader, tooling hash and already_verified become l7r-gate state; gate_config.config_hash becomes l7r-gate config-hash; coverage_exempt.py becomes l7r-gate coverage-exempt and is deleted; the Makefile recipes and __main__ subcommands switch in that commit.",
+     "class": "within",
+     "why": "This is the port itself: the request's 'all be ported to Rust', FR-001's phase 2, FR-003's one cut (the switch is in one commit, no state file has two writers), and FR-002's same outputs, for which m:t72-state records the hashes and the record equal to the Python's."
+    },
+    {
+     "id": "T72-state-py-remains-a-client",
+     "summary": "What is left of state.py is the VerificationState type, two constants and calls to the binary once a process, until T064 ports decision.py and dispatch.py.",
+     "class": "within",
+     "why": "A staging state inside a phase, with a named end (T064), not a piece kept in Python. The writer and reader are Rust only, so FR-003 holds, and the client reaches the binary once a process as FR-006 and step 5 require."
+    },
+    {
+     "id": "T72-hashes-stay-equal-dumps-kept-by-blob",
+     "summary": "The two hashes stay equal to the Python's over ast.dump. The dumps are kept by blob under <git dir>/semantic-dumps/; codeid.py --semantic is asked once a run only for the blobs it lacks, so an unchanged tree starts no Python; a form unused for a week is dropped.",
+     "class": "within",
+     "why": "This answers the earlier BLOCKED verdict: the block no longer asks about every file on every run, and now matches FR-001's 'one process a run with all the cache's misses in it' and FR-006's kept-cache fix. Keeping the dump rather than the id is what FR-006's fix needs here, since the hash input is the concatenated dumps and no per-file id can rebuild it; FR-001's 'one Python library' concerns the Python callers of later phases and is not contradicted by a Rust-side store. Equal hashes are FR-002's same outputs. Python staying in the path is FR-001's own ruled placement of codeid.py in phase 4, whose failure-fails-the-gate clause this block does not relax. Dropping a form unused for a week is housekeeping of the store this decision creates and narrows nothing asked: a dropped form is only a later miss."
+    },
+    {
+     "id": "T72-runlog-to-T064-readers-to-T071",
+     "summary": "runlog.py moves to T064 and scripts_readers/tooling_modules to T071, because every caller of each is in that task.",
+     "class": "within",
+     "why": "A reordering of when a piece is ported, not whether: all three are still ported, and tasks.md says so. Porting with the last caller avoids a client and is FR-003's one cut, the same placement rule FR-001 applies to shared libraries. The bundle does not show which phase T071 stands in; the ruling rests on the block's statement that every caller is in that task, so it moves no piece past its callers."
+    },
+    {
+     "id": "T72-coverage-reach-branch-and-seeded-dropped",
+     "summary": "The reach branch, import_graph, _top_names, reached_from_kept and seeded are dropped rather than ported, and three test cases are retired with them.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Code not ported is a narrowing of 'all be ported', presumed wrong, and judged separately from the accepted spec. It is legitimate on the request's own terms: the GM asked that this become a Rust codebase instead of a Python one because the Python is inefficient, and the outcome here is less Python and no surviving behavior lost. The block names the search space that shows no caller (git grep over the code, and specs/448's *.py checked for imports), and with the entries' only source gone the branch has no input to decide on. Taken one at a time: the three helpers exist only for the reach branch; seeded has no importer; of the three retired cases, two exercise the reach branch and one exercises seeded, and every other case of the three test files replays. FR-002 carries the same retirement as a ruled case, so no verdict a live input can reach changes without that ruling covering it."
+    },
+    {
+     "id": "T72-load-refuses-an-entry-naming-no-stages",
+     "summary": "load refuses an entry naming no stages, with a test.",
+     "class": "within",
+     "why": "Stated verbatim in FR-002's ruled case (ask:449-T72-coverage-exempt): 'load refuses one instead'. A refusal exactly as wide as the accepted spec's, adding no reach of its own."
+    },
+    {
+     "id": "T72-coverage-report-through-codeid-missing",
+     "summary": "report asks coverage.py through codeid.py --missing, one process with every live entry, only when one exists, and its failure fails the gate.",
+     "class": "within",
+     "why": "FR-001's census is of the Python files the repository tracks; coverage.py is not one, codeid.py is already placed in phase 4, and coverage_exempt.py itself is deleted, so no tracked piece stays Python because of this. It takes the shape FR-001 rules for codeid.py: one process a run, batched, failure failing the gate, and it is not reached when no entry is live. It also serves FR-006's one spawn a process or a batch."
+    },
+    {
+     "id": "T72-recorded-commands-rewritten",
+     "summary": "Every specs/*/measurements*.json command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "FR-001's clause on recorded measurements, applied to this task's files."
     }
    ],
    "verdict": "CLEAR"

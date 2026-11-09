@@ -34,14 +34,6 @@ def test_incremental_subcommand_reaches_the_planner(roots: Path, capsys: pytest.
     assert cli.main(["incremental", "mode"]) == 0 and capsys.readouterr().out.strip() == "full"
 
 
-def test_state_subcommand_writes_the_file(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert cli.main(["state", "green-local", "quick"]) == 0
-    assert state.read(roots).target == "quick"  # type: ignore[union-attr]
-    assert "recorded" in capsys.readouterr().out
-    with pytest.raises(SystemExit):
-        cli.main(["state", "green-local"])
-
-
 def test_door_and_remote_spend(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert cli.main(["door"]) == 1
     assert "no FULL entry" in capsys.readouterr().out
@@ -191,15 +183,6 @@ def test_remote_off_merge_is_local_gated(remote_off: Path, monkeypatch: pytest.M
     assert (remote_off / ".git" / "ci-verdict").read_text(encoding="utf-8").strip() == "SKIP-VERIFIED"
 
 
-def test_verified_done_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert cli.main(["verified-done"]) == 1 and "no local check" in capsys.readouterr().out
-    state.write(roots, state.GREEN, "done")
-    assert cli.main(["verified-done"]) == 0 and "already verified" in capsys.readouterr().out
-
-
-# ---- the would-have-dispatched trail (feature 133 FR-004): every refused paid attempt is on record --
-
-
 def test_remote_off_refusals_leave_would_have_entries(remote_off: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     from l7r.diagram.ci import runlog
 
@@ -230,18 +213,3 @@ def test_remote_off_refusals_leave_would_have_entries(remote_off: Path, monkeypa
 
 def test_remote_ok_passes_when_remote_is_on(roots: Path) -> None:
     assert cli.main(["remote-ok", "ci-check"]) == 0
-
-
-def test_tooling_green_records_the_hash_the_gate_skips_on(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """Feature 174: `tooling-green` records the tooling hash that lets the gate skip `tests/tooling/` while the
-    tooling is unchanged. Its pair `tooling-fresh` answered the same question for `make quick`, and was retired
-    with that use on 2026-09-27 (quick no longer collects the tooling tree at all, the GM's ruling).
-
-    Both directions asserted: nothing vouches for the tooling before the record, and the record holds exactly the
-    current hash after it - one direction alone passes with the comparison inverted."""
-    before = state.read(roots)
-    assert before is None or before.tooling != state.tooling_hash(roots), "nothing recorded yet, so the tooling is not vouched for"
-    assert cli.main(["tooling-green"]) == 0
-    assert "recorded green" in capsys.readouterr().out
-    after = state.read(roots)
-    assert after is not None and after.tooling == state.tooling_hash(roots), "and now the gate may skip the tooling tests"

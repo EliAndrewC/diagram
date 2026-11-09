@@ -2,7 +2,10 @@
 
 pub mod codeid;
 pub mod delta;
+mod exempt;
+mod hashing;
 mod stamp;
+mod state;
 
 use std::path::{Path, PathBuf};
 
@@ -12,6 +15,11 @@ pub struct Reply {
     pub stdout: String,
     pub stderr: String,
     pub code: i32,
+}
+
+/// The repository the command was started in, or `.` outside one.
+fn top() -> PathBuf {
+    stamp::toplevel().unwrap_or(PathBuf::from("."))
 }
 
 /// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).
@@ -55,6 +63,9 @@ pub fn cli(args: &[String]) -> Reply {
             &mut std::io::stdin(),
         ),
         Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
+        Some("state") => state::cli(&args[1..], &top(), "python3"),
+        Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
+        Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
@@ -90,6 +101,9 @@ mod tests {
         let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
         assert_eq!(ask(&["delta", "nonsense"]).code, 2);
         assert_eq!(ask(&["stamp", "--nonsense"]).code, 2);
+        assert_eq!(ask(&["state", "nonsense"]).code, 2);
+        assert_eq!(ask(&["coverage-exempt", "nonsense"]).code, 2);
+        assert_eq!(ask(&["config-hash", "nonsense"]).code, 2);
     }
 
     #[test]

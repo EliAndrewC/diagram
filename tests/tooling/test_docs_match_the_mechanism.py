@@ -87,7 +87,7 @@ def test_the_floor_the_docs_describe_is_the_one_the_makefile_runs() -> None:
     floored = next(ln for ln in mk.splitlines() if "--fail-under=100" in ln)
     # it covers the whole tree but the record's files (feature 448, the GM 2026-11-02: "We can relax that for the engine code at
     # this pooint since that's going away"): its one omission is generated from `dev/coverage-exempt.json`, never a hand list
-    assert "--omit" not in floored and "$$(python3 -m l7r.diagram.ci.coverage_exempt omit)" in floored, floored[:160]
+    assert "--omit" not in floored and 'coverage-exempt omit)' in floored, floored[:160]
 
 
 def test_no_engine_module_claims_exemption_from_the_coverage_rule() -> None:
@@ -103,8 +103,6 @@ def test_no_engine_module_claims_exemption_from_the_coverage_rule() -> None:
     )
     bad: list[str] = []
     for p in sorted(SKILL.glob("l7r/**/*.py")):
-        if p.name == "coverage_exempt.py":  # the one record's reader (feature 448, the GM 2026-11-02) names the exemption it applies
-            continue
         lines = p.read_text().splitlines()
         for i, line in enumerate(lines, 1):
             if not patterns.search(line):

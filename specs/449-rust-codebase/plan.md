@@ -444,17 +444,4 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 | `fancy-regex`, the second crate (research R8) | 43 of the guards' patterns use lookaround or backreferences (`m:guard-regex-features`), which the `regex` crate lacks; `fancy-regex` reads them verbatim, and each guard's suite replay proves its verdicts unchanged (FR-002, D4) | a hand-written parser for each pattern would re-prove every verdict case by case; kept only for a pattern a profile shows hot, in its guard's task |
 | the last good binary kept, failing open only with none (D7) | one binary is every guard, so a failed build must not turn them all off; Claude Code's own rule passes a crashing hook (exit 2 alone blocks) | failing closed would lock the GM's session out of every tool call on a build error, with no recovery from inside it; failing open on every failed build would turn every guard off at once |
 
-### T72 Approach (checklist part A)
-
-1. **The goal, in the world.** What the gate last verified is written by one implementation.
-2. **The constraints.** FR-001, FR-002, FR-003 (one writer, one cut), FR-006 (one spawn a process or a batch). Slice 3 of the round arbiter's `ask:449-T063-slices`, moved out of T063 so that its first two slices could land and tick as a task.
-3. **Where each comes from.** the state files as they stand; `m:ci-sources`.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** After T063, whose `l7r-gate stamp` and `l7r-gate delta` it stands on; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
-6. **The exits.** Green: the verification state written before the switch still reads; no state file has two writers at any commit. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** `make done` reuses a last green result across the switch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T72 to T72 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->

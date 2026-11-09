@@ -26,7 +26,7 @@ from l7r.diagram._invocation import assert_via_make
 assert_via_make("l7r.diagram.ci", "ci-status  (free)  |  make ci-check  |  make ci-merge  (paid; called by sync-with-main.sh)")
 
 from l7r.diagram import switches  # noqa: E402
-from l7r.diagram.ci import config, decision, dispatch, door, runlog, state  # noqa: E402
+from l7r.diagram.ci import config, decision, dispatch, door, runlog  # noqa: E402
 
 
 def _roots() -> tuple[Path, Path]:
@@ -44,14 +44,9 @@ def main(argv: list[str] | None = None) -> int:
             "merge",
             "measure",
             "image",
-            "state",
             "door",
             "remote-spend",
-            "engine-key",
-            "verified-done",
             "remote-ok",
-            "tooling-green",
-            "cov-scope",
             "incremental",
         ],
     )
@@ -69,12 +64,6 @@ def main(argv: list[str] | None = None) -> int:
         from l7r.diagram.ci import incremental
 
         return incremental.main(a.args, root, skill)
-    if a.command == "state":
-        if len(a.args) not in (2, 3) or (len(a.args) == 3 and a.args[2] != "reused"):
-            ap.error("state needs EVENT TARGET [reused]")
-        st = state.write(root, a.args[0], a.args[1], reused=len(a.args) == 3)
-        print(f"verification-state: {st.event} ({st.target}) recorded")
-        return 0
     if a.command == "remote-ok":
         # the Makefile's REMOTE_OK line (ci-check, ci-image): the switch's refusal, plus the trail entry
         what = a.args[0] if a.args else "ci-check"
@@ -84,13 +73,6 @@ def main(argv: list[str] | None = None) -> int:
         runlog.write_would_have(skill, what, "operation" if what != "ci-check" else "reference", est.minutes, f"remote off: `make {what}` attempted and refused")
         print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
         return 1
-    if a.command == "tooling-green":
-        print(f"tooling: recorded green for {state.record_tooling(root)[:12]} - the gate skips the tooling tests until the tooling changes")
-        return 0
-    if a.command == "verified-done":
-        ok, why = state.already_verified(root)
-        print(f"make done: {why}")
-        return 0 if ok else 1
     if a.command == "door":
         ok, why = door.check(root, skill)
         print(f"bypass-audit: {why}")

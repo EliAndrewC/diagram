@@ -146,14 +146,13 @@ def _task_block(text: str, task: str) -> str:
 
 def stale_exempt_refusal(root: Path) -> str:
     """A stale entry of the coverage-exempt record (feature 448 D4), asked in seconds here rather than at the gate's floor."""
-    if str(HERE.parent) not in sys.path:
-        sys.path.insert(0, str(HERE.parent))
-    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
-
-    stale = coverage_exempt.split(root, reach=True)[1]
+    done = subprocess.run([str(HERE / "gates" / "l7r-gate.sh"), "coverage-exempt", "stale"], cwd=root, capture_output=True, text=True, check=False)
+    if done.returncode:
+        return done.stderr.strip()
+    stale = [line.split("\t", 1)[0] for line in done.stdout.splitlines()]
     if not stale:
         return ""
-    return f"dev/coverage-exempt.json names {len(stale)} stale entr{'y' if len(stale) == 1 else 'ies'} ({', '.join(e['path'] for e, _ in stale)}) - {coverage_exempt.CURE}"
+    return f"dev/coverage-exempt.json names {len(stale)} stale entr{'y' if len(stale) == 1 else 'ies'} ({', '.join(stale)}) - make coverage-exempt PRUNE=1"
 
 
 def phase_refusal(root: Path, d: Path, text: str, task: str) -> str:
