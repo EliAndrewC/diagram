@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T16:09:06Z",
+  "target": "claims-gate",
+  "commit": "d4d55a2ee",
+  "why": "CLAIMS_OK: the remaining rust/phases claim findings are recorded and listed by claims-report; this landing deletes unused specs harnesses, which owe no claims"
+}
