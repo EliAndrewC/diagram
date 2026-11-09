@@ -16,14 +16,14 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. landed: S1+C1: 0318 Japan's cotton written and checked, record-owed clean, a pointer in 0261; quote-check, source-reader, source-applicability, translation-check, record-format and intro-check recorded
-- [ ] T02 S2+C2: China's cotton (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
+- [x] T02 S2+C2: China's cotton (D2; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: `make record-owed` reports nothing owed for the question
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S2+C2: China's cotton in 0319 and 0320, written and checked, record-owed clean; quote-check, source-reader, source-applicability, translation-check, record-format and intro-check recorded
 - [ ] T03 S3+C3: the species, and India and Korea (D3; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass

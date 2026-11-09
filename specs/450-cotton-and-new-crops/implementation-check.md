@@ -1,2 +1,3 @@
 - 0318: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cotton|kimono|momen' l7r pool
 - 0261: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cloth|cotton|tan of' l7r pool (one pointer line added, no finding changed)
+- 0319: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cotton|木綿|棉' l7r pool

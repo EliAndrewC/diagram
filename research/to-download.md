@@ -4197,3 +4197,15 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the paper](https://www.google.com/search?q=Chircop-Reyes+%22Merchants%2C+Brigands+and+Escorts%22+biaoju)
 - **Rests on it:** research/questions/0307-what-did-a-clerk-a-guard-or-a-skilled-servant-earn.html (diagram feature 428; asked for by gm-assistant on EliAndrewC/diagram#20, Q2) - an escort-master's trips a year are not yet in the record.
 - Blocked by: HAL serves a bot check (Anubis) to the container's fetches (2026-10-25 and 2026-10-26); a browser opens it.
+
+### 331. [money] Kenneth Pomeranz, The Great Divergence: China, Europe, and the Making of the Modern World Economy (Princeton University Press, 2000), Appendix F
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the book at its publisher](https://press.princeton.edu/books/paperback/9780691217185/the-great-divergence)**
+- Appendix F, "Estimates of Cotton and Silk Production, Lower Yangzi and China as a Whole, 1750 and Later" (page 327 on): what the cotton cloth figures per head for about 1750 rest on, and whether they are yearly.
+- Fallback: [a Google search for the appendix](https://www.google.com/search?q=Pomeranz+%22Great+Divergence%22+%22Appendix+F%22+cotton+silk+production+Lower+Yangzi)
+- **Rests on it:** research/questions/0319-when-did-cotton-become-ordinary-clothing-in-china.html (diagram feature 450; EliAndrewC/diagram#22, question 1) - the figures stand on Pomeranz's 1998 draft, whose posted file has no appendix.
+- Blocked by: a book in print; the copies a search finds are whole-book uploads on a course-materials server, not the publisher's or author's own page (2026-11-09).
