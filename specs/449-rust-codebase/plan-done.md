@@ -1186,24 +1186,3 @@ censuses empty (work breakdown 8, FR-010).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
-<!-- plan-archive: archived 2026-11-09 -->
-### T74 Approach (checklist part A)
-
-1. **The goal, in the world.** A past feature's Python that nothing runs is gone, not ported: the GM, 2026-11-09, "I don't think we need to port the past feature harnesses if those are not still used."
-2. **The constraints.** FR-001's words on `specs/`: a file something still runs is ported like any other, and one nothing runs is deleted and not ported.
-3. **Where each comes from.** `git ls-files 'specs/*.py'`, the Makefile and code outside `specs/`, every `specs/*/measurements*.json` command.
-4. **Do they describe the world here?** Tooling: no researched value moves, and no recorded figure is touched.
-5. **The order.** The census, then the deletion, one landing.
-6. **The exits.** Green: the gate's own checks pass with the files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** Each deleted path, its feature directory with its path inside it, and its name in the same feature's `.py`, `.sh`, `.mk`, `.yml` or `.json`, are searched across every tracked file but the records named below, and the only hits left are in the named files of the quoted list.
-   **Decisions** (FR-001, the GM 2026-11-09):
-   - THE TEST OF "STILL USED": something still runs a file under `specs/` when its path, or its feature directory with its path inside that directory, or (in the same feature) its name in a `.py`, `.sh`, `.mk`, `.yml` or `.json`, appears in any tracked file, of any feature and any extension, outside the records named here: `spec.md`, `plan.md`, `plan-done.md`, `tasks.md`, `research.md`, `data-model.md`, `quickstart.md`, `request.md`, `*.jsonl`, the `contracts/`, `checklists/`, `briefs/` and `audit/` of a feature, `dev/run-log`, `bypass-log`, `perf-log`, `cohort-log`, `review-ledger`, `research/`, whatever under `pool/` is not a `.py`, and the recorded command corpus `tests/hooks/fixtures/` (`ask:449-T052-inline-census`: a string fed to a guard as input is no run). A hit keeps the file, but for these named records, which quote a file as history: each feature's `plan-review.json`, `specs/303-research-organization/migration.md`, `specs/312-uncited-source-catalog/prep.md`, `specs/447-semantic-index/research/*`, `specs/286-hand-sheet-labels-placed/sc002.json` and `specs/288-sources-ledger-and-page-cache/measurement/result.json`. `tests/tooling/fixtures/brief_load/` holds briefs `scripts/pages/brief_load.py` parses as text (`test_brief_load.py`), never executed.
-   - THE ROUTES THAT NEVER SPELL A PATH (observed 2026-11-09, method: `git grep` over the Makefile, `*.mk`, shell, `scripts/`, `rust/`, `l7r/`, `tests/`, `pool/*.py` and `.specify/scripts` for `specs/*`, `specs/[`, a `glob`, `rglob` or `find` over `specs`): each walks feature directories for their `spec.md`, `tasks.md` or records; none collects or runs a `.py` under `specs/`, and `testpaths` holds pytest to `tests/`.
-   - THE CENSUS (observed 2026-11-09, method: that test, over `git ls-files`, 6,469 files searched, a one-shot script): 222 files; 138 deleted, 16670 lines; 84 kept, each ported or ruled on at its own task in phase 3, or deleted there if it no longer runs. The first version of this census named no file in a measurement's other fields or in a shell script and was corrected: 14 files came back, then 2 a kept file names across features.
-   - NOT TOUCHED: every `spec.md`, `plan.md`, `tasks.md` and `measurements.json`, whose prose may still name a deleted file as history (`specs/*` keep their words; git keeps the file).
-   - WHY NO PROSE IS REWRITTEN: a spec is a record of what was done, and a deleted harness's name in one is true of its time, as `docs/session-clones.md` holds for every moved path.
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
