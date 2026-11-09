@@ -252,3 +252,9 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [x] T74 Past feature harnesses nothing runs deleted, not ported (FR-001): 138 Python files under `specs/`
       research: rendering
       verify: DONE. landed: 138 past-feature harness files nothing runs deleted; the done-line census shows no hit outside the named records
+- [ ] T75 `scripts/measure/`, the second slice (`ask:449-T068-scope`): the figures and probes, `figures.py`, `probe.py`, `ratchet.py`, `gatecost.py`, `gate_costs.py`
+      research: rendering
+- [ ] T76 `scripts/measure/`, the third slice (`ask:449-T068-scope`): the logs and reports, `event_log.py`, `guard-log.py`, `runstats.py`, `where_time.py`, `turn_time.py`, `task_phases.py`, `tool_yield.py`, `fix_yield.py`, `review_yield.py`, `wave_report.py`, `subagent_cache.py`, `feature_report.py`, `fresh_tally.py`
+      research: rendering
+- [ ] T77 `scripts/measure/`, the last slice (`ask:449-T068-scope`): `dead_closure.py`, `maps_moved.py`, `replay_owing.py`, `uncovered-in-diff.py`, `uncovered_marks.py`, `work_budget_rust.py`, `work_budget_view.py`, `model_trial.py`, `depiction_replay.py`, `popup_rounds.py`, `push_check_times.py`, `tooling_reuse_time.py`
+      research: rendering

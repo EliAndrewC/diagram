@@ -402,3 +402,48 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T74 to T74 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
+
+### T75 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008; the slice and its files as the round arbiter's `ask:449-T068-scope` names them.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the ruling's slices; each stands on the ones before it.
+6. **The exits.** Green: each tool's verdicts the Python's, by a differential over the repository run on the final port, and the slice's files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files` names none of the slice's files. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008; the slice and its files as the round arbiter's `ask:449-T068-scope` names them.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the ruling's slices; each stands on the ones before it.
+6. **The exits.** Green: each tool's verdicts the Python's, by a differential over the repository run on the final port, and the slice's files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files` names none of the slice's files. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** What things cost is measured by Rust.
+2. **The constraints.** FR-001, FR-002, FR-008; the slice and its files as the round arbiter's `ask:449-T068-scope` names them.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** As the ruling's slices; each stands on the ones before it.
+6. **The exits.** Green: each tool's verdicts the Python's, by a differential over the repository run on the final port, and the slice's files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** `git ls-files` names none of the slice's files. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
