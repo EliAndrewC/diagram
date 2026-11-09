@@ -332,3 +332,4 @@ question's amounts with their text, the passed-over ones tagged); the order deci
 - 0315-what-did-a-city-household-buy-that-a-farm-household-made | 8 mon | feature 431: a magazine's report of the Morisada Manko's sushi prices and its writer's own egg price, with no year given (the 20 mon is the top of 7 to 20)
 - 0315-what-did-a-city-household-buy-that-a-farm-household-made | 16 mon | feature 431: a magazine's report of the Morisada Manko's sushi prices and its writer's own egg price, with no year given (the 20 mon is the top of 7 to 20)
 - 0315-what-did-a-city-household-buy-that-a-farm-household-made | 20 mon | feature 431: a magazine's report of the Morisada Manko's sushi prices and its writer's own egg price, with no year given (the 20 mon is the top of 7 to 20)
+- 0323-when-did-cotton-become-ordinary-in-india-and-in-korea | $3,338,545 | a trade total: the value of all cotton goods imported into Korea in 1896, not a price or a wage anyone paid
