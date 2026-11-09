@@ -75,7 +75,7 @@ def changed_rust(root: Path, merge: str) -> dict[Path, list[str]]:
     return out
 
 
-def uncovered(manifest: Path) -> dict[str, list[int]]:
+def crate_uncovered(manifest: Path) -> dict[str, list[int]]:
     """Each source file of the crate with the lines its tests do not reach, from the Rust gate."""
     gate = Path(__file__).resolve().parent / "l7r-gate.sh"
     done = subprocess.run([str(gate), "rust", "uncovered", "--crate", str(manifest.parent)], capture_output=True, text=True, check=False)
@@ -87,7 +87,7 @@ def rust_uncovered(root: Path, crates: dict[Path, list[str]]) -> dict[str, list[
     """Each changed `.rs` file's lines its crate's tests do not reach."""
     out: dict[str, list[int]] = {}
     for manifest, files in crates.items():
-        got = uncovered(manifest)
+        got = crate_uncovered(manifest)
         for f in files:
             if lines := got.get(str(root / f)) or got.get(str(manifest.parent)):
                 out[f] = lines
