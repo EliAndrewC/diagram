@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-09T11:08:31+00:00",
+ "final_url": "https://www.bjnews.com.cn/detail/1779527473169840.html",
+ "first": "9d/9d74fb48e46a/20261109T110828Z",
+ "gm_copies": [],
+ "keys": [
+  "bjnews-laufer-potato-excerpt"
+ ],
+ "notes": [],
+ "outcome": "partial",
+ "path": "9d/9d74fb48e46a/20261109T110828Z",
+ "reason": "the page would not render whole: its served HTML and text are kept",
+ "revision": "",
+ "sha256": "cc9a7c9fb3d0ede4dc8cd654c83392b3dbd3efa31beba9f2c8b53eb9b1faf58d",
+ "url": "https://www.bjnews.com.cn/detail/1779527473169840.html"
+}

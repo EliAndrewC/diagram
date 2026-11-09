@@ -472,7 +472,8 @@
   "def": "The Wanli reign of the Ming, 1573 to 1620.",
   "variants": [
    "Wanli era",
-   "Wanli"
+   "Wanli",
+   "Wan-li"
   ]
  },
  "Warring States": {
@@ -5304,7 +5305,8 @@
   "def": "The Chongzhen reign of the Ming, 1628 to 1644, the last Ming emperor's; its tenth year is 1637.",
   "variants": [
    "Chongzhen era",
-   "Chongzhen"
+   "Chongzhen",
+   "Tsung-cheng"
   ]
  },
  "department": {
@@ -7472,7 +7474,7 @@
   ]
  },
  "Three Kingdoms": {
-  "def": "The period (220-280) after the Han dynasty when China was split among three states; Cao Wei was the northern one, ruled by the Cao family.",
+  "def": "In China, the period (220-280) after the Han dynasty when the country was split among three states; Cao Wei was the northern one, ruled by the Cao family. Korea's Three Kingdoms (Goguryeo, Baekje and Silla) is a different and longer period.",
   "variants": [
    "Three Kingdoms",
    "Cao Wei",
@@ -10454,7 +10456,9 @@
  "Kiangsu": {
   "def": "The older romanized spelling of Jiangsu, the coastal province of the Lower Yangzi that includes much of Jiangnan; the spelling 1920s-1930s surveys such as Buck's use.",
   "variants": [
-   "Kiangsu"
+   "Kiangsu",
+   "Kiang-su",
+   "Jiangsu"
   ]
  },
  "Honan": {
@@ -14807,7 +14811,8 @@
   "def": "The province of southern China around the city of Canton, spelled Guangdong today.",
   "variants": [
    "Kwangtung",
-   "Guangdong"
+   "Guangdong",
+   "Kwang-tung"
   ]
  },
  "miyaji shibai": {
@@ -18884,6 +18889,421 @@
   "def": "Stripping the seeds from raw cotton fiber; in the sources here, done by rolling them out with an iron rod.",
   "variants": [
    "ginning"
+  ]
+ },
+ "Baekje": {
+  "def": "One of Korea's three early kingdoms; a temple it built at Neungsan-ri in 567 yielded the first cotton cloth excavated from that age.",
+  "variants": [
+   "Baekje",
+   "Baekje's",
+   "Baekje-period"
+  ]
+ },
+ "Goguryeo": {
+  "def": "One of Korea's three early kingdoms; a Chinese work of about 660 says its inhabitants made a cloth taken to be cotton.",
+  "variants": [
+   "Goguryeo"
+  ]
+ },
+ "Goryeo": {
+  "def": "The Korean dynasty before Joseon; in its last decades, in the 1360s, cotton seed was brought from Yuan China and first recorded as grown in Korea.",
+  "variants": [
+   "Goryeo",
+   "Goryeo's"
+  ]
+ },
+ "Joseon": {
+  "def": "The Korean dynasty after Goryeo, in power by 1398 and still in the 1890s, also called the Yi dynasty.",
+  "variants": [
+   "Joseon",
+   "Joseon's",
+   "Joseon dynasty",
+   "Yi dynasty"
+  ]
+ },
+ "Harappan": {
+  "def": "The early urban civilization of the Indus region, where cotton seeds appear regularly from about 2500 BCE; its Mature period is its urban phase, by about 2000 BCE.",
+  "variants": [
+   "Harappan",
+   "Mature Harappan"
+  ]
+ },
+ "Mehrgarh": {
+  "def": "An archaeological site in Baluchistan with South Asia's earliest finds of cotton, by 5000-4300 BCE.",
+  "variants": [
+   "Mehrgarh"
+  ]
+ },
+ "Barygaza": {
+  "def": "A trading place of first-century India on the gulf of the same name, from which the Periplus lists cotton cloth among the exports.",
+  "variants": [
+   "Barygaza"
+  ]
+ },
+ "cotton wool": {
+  "def": "Raw cotton fiber, as traded before it was made into cloth.",
+  "variants": [
+   "cotton wool"
+  ]
+ },
+ "slave tribute": {
+  "def": "Cloth paid in by slaves and held in a government office of Joseon Korea; in 1485 one office held 724,500 bolts of cotton and over 180,000 of hemp.",
+  "variants": [
+   "slave tribute",
+   "slaves' tribute"
+  ]
+ },
+ "sillok": {
+  "def": "The royal annals of Korea's Joseon dynasty, kept reign by reign.",
+  "variants": [
+   "sillok",
+   "royal annals",
+   "Annals of the Joseon Dynasty"
+  ]
+ },
+ "Daedong tax": {
+  "def": "A tax of later Joseon Korea that many farm households paid in woven cloth.",
+  "variants": [
+   "Daedong tax"
+  ]
+ },
+ "Mahan": {
+  "def": "An early period in Korea's Baekje region, from which records of spinning silk floss and weaving cloth survive.",
+  "variants": [
+   "Mahan"
+  ]
+ },
+ "lumen": {
+  "def": "The hollow channel inside a plant fiber; with a natural twist, it is what identifies cotton fiber under analysis.",
+  "variants": [
+   "lumen"
+  ]
+ },
+ "Saseomsi": {
+  "def": "A government office of Joseon Korea that held cloth paid in as slaves' tribute.",
+  "variants": [
+   "Saseomsi"
+  ]
+ },
+ "G. herbaceum": {
+  "def": "One of the two Old World species of cotton, regarded as African in origin; it reached China overland from Central Asia.",
+  "variants": [
+   "G. herbaceum",
+   "Gossypium herbaceum"
+  ]
+ },
+ "G. arboreum": {
+  "def": "One of the two Old World species of cotton, probably from the Indus region of South Asia; it is the Asian cotton Japan grew from the 16th to the 18th centuries.",
+  "variants": [
+   "G. arboreum",
+   "Gossypium arboreum",
+   "G. arboretum"
+  ]
+ },
+ "G. barbadense": {
+  "def": "One of the two American species of cotton; the other is G. hirsutum, called upland cotton.",
+  "variants": [
+   "G. barbadense",
+   "Gossypium barbadense"
+  ]
+ },
+ "Gossypium": {
+  "def": "The botanical genus of the cotton plants; in a species name, G. stands for it.",
+  "variants": [
+   "Gossypium"
+  ]
+ },
+ "diploid": {
+  "def": "Of a plant, carrying two sets of chromosomes in each cell.",
+  "variants": [
+   "diploid"
+  ]
+ },
+ "annual cotton": {
+  "def": "A cotton plant sown and brought to harvest within a single year, rather than a shrub that lives for several.",
+  "variants": [
+   "annual cotton",
+   "annual cottons"
+  ]
+ },
+ "Bombay Presidency": {
+  "def": "A large province of British India run from Bombay under a governor, covering much of western India, Dharwar included.",
+  "variants": [
+   "Bombay Presidency"
+  ]
+ },
+ "Nizam": {
+  "def": "The title of the ruler of Hyderabad, a state in south-central India under British overlordship.",
+  "variants": [
+   "Nizam",
+   "Nizam's"
+  ]
+ },
+ "seed cotton": {
+  "def": "Cotton as picked, the fiber still on its seeds and not yet ginned.",
+  "variants": [
+   "seed cotton",
+   "miwata"
+  ]
+ },
+ "piece goods": {
+  "def": "Woven cloth as an article of trade, as against yarn; in the 1890s Bishop names both among the foreign cotton goods a Korean farmer might buy.",
+  "variants": [
+   "piece goods"
+  ]
+ },
+ "Luzon": {
+  "def": "The main northern island of the Philippines, under Spanish rule in this period.",
+  "variants": [
+   "Luzon"
+  ]
+ },
+ "Fujian": {
+  "def": "A province on the south-east coast of China, across the water from Taiwan.",
+  "variants": [
+   "Fujian",
+   "Fu-kien",
+   "Fukien"
+  ]
+ },
+ "Zhejiang": {
+  "def": "A coastal province of China, north of Fujian.",
+  "variants": [
+   "Zhejiang",
+   "Che-kiang",
+   "Chekiang"
+  ]
+ },
+ "Zhangzhou": {
+  "def": "A town in Fujian province, China.",
+  "variants": [
+   "Zhangzhou",
+   "Chang-chou"
+  ]
+ },
+ "Hirado": {
+  "def": "A domain in Hizen Province, Japan, and its port town, where the English kept a trading post from 1613 to 1621.",
+  "variants": [
+   "Hirado"
+  ]
+ },
+ "Namban": {
+  "def": "A Japanese name for the Portuguese traders who reached Japan in the late 1500s.",
+  "variants": [
+   "Namban"
+  ]
+ },
+ "English Factory": {
+  "def": "The English merchants' trading post at Hirado in Japan, kept from 1613 to 1621; a factory in this older sense is a trading post, not a works.",
+  "variants": [
+   "English Factory"
+  ]
+ },
+ "Imjin War": {
+  "def": "The war fought in Korea in 1592-98, when Japan invaded.",
+  "variants": [
+   "Imjin War"
+  ]
+ },
+ "Dongnae": {
+  "def": "A town in south-eastern Korea, where the Japanese had a quarter.",
+  "variants": [
+   "Dongnae"
+  ]
+ },
+ "Gwanghaegun": {
+  "def": "A king of Korea's Joseon dynasty, on the throne in 1618 and in 1623.",
+  "variants": [
+   "Gwanghaegun",
+   "Gwanghae"
+  ]
+ },
+ "Deccan": {
+  "def": "The southern interior of India, as distinct from northern India.",
+  "variants": [
+   "Deccan"
+  ]
+ },
+ "Bijapur": {
+  "def": "A city in the Deccan, in India.",
+  "variants": [
+   "Bijapur"
+  ]
+ },
+ "Mughal": {
+  "def": "The empire that ruled most of India in the 1600s; Akbar and Jahangir were its emperors.",
+  "variants": [
+   "Mughal",
+   "Mughal empire"
+  ]
+ },
+ "fan-shu": {
+  "def": "A Chinese name for the sweet potato: in the agricultural writer Xu Guangqi's account, the kind obtained from overseas in recent years, sweet, round and long, spreading along the ground.",
+  "variants": [
+   "fan-shu"
+  ]
+ },
+ "shan-shu": {
+  "def": "A native Chinese climbing tuber, lumpy in shape and less sweet than the sweet potato, which Xu Guangqi says is what older Chinese books mean by shu.",
+  "variants": [
+   "shan-shu"
+  ]
+ },
+ "imo": {
+  "def": "The Japanese word for a starchy tuber: the yam among the season words, and with a qualifier, as in Ryukyu-imo, the sweet potato.",
+  "variants": [
+   "imo"
+  ]
+ },
+ "Ipomoea batatas": {
+  "def": "The Latin scientific name of the sweet potato.",
+  "variants": [
+   "Ipomoea batatas",
+   "Ipomocea batatas"
+  ]
+ },
+ "Annam": {
+  "def": "An older name for Vietnam, or for its northern and central lands.",
+  "variants": [
+   "Annam"
+  ]
+ },
+ "Liquea": {
+  "def": "The English merchant Richard Cocks's spelling of the Ryukyu islands.",
+  "variants": [
+   "Liquea"
+  ]
+ },
+ "era name": {
+  "def": "The Japanese and Chinese way of dating a year, counted from the start of a named period, as in Genroku 9 or Wanli 10.",
+  "variants": [
+   "era name"
+  ]
+ },
+ "Unseok yugo": {
+  "def": "A Korean text that the Encyclopedia of Korean Culture cites for the 1763 introduction of the sweet potato.",
+  "variants": [
+   "Unseok yugo"
+  ]
+ },
+ "esculent": {
+  "def": "Fit to be eaten; an old word for edible.",
+  "variants": [
+   "esculent"
+  ]
+ },
+ "batata": {
+  "def": "The Spanish and Portuguese name of the sweet potato, from which the English word potato comes.",
+  "variants": [
+   "batata"
+  ]
+ },
+ "arum": {
+  "def": "A plant of the arum family with a starchy root, such as taro.",
+  "variants": [
+   "arum"
+  ]
+ },
+ "brinjal": {
+  "def": "The eggplant, by its Indian English name.",
+  "variants": [
+   "brinjal",
+   "brinjals",
+   "Berenjaws"
+  ]
+ },
+ "Dutch learning": {
+  "def": "The study of European science and medicine in Japan through Dutch books.",
+  "variants": [
+   "Dutch learning"
+  ]
+ },
+ "Border Defense Council": {
+  "def": "A high council of the Joseon court, set up for frontier defense, that came to handle much of the kingdom's business.",
+  "variants": [
+   "Border Defense Council"
+  ]
+ },
+ "Seonjo": {
+  "def": "The king of Joseon Korea from 1567 to 1608.",
+  "variants": [
+   "Seonjo"
+  ]
+ },
+ "Bengal Presidency": {
+  "def": "The British administrative division of India centered on Calcutta.",
+  "variants": [
+   "Bengal Presidency"
+  ]
+ },
+ "jagatara-imo": {
+  "def": "An old Japanese name for the white potato, meaning \"Jagatara tuber\": Jagatara was the Japanese name of Jakarta in Java, the Dutch Batavia.",
+  "variants": [
+   "jagatara-imo",
+   "jagatara"
+  ]
+ },
+ "seed tuber": {
+  "def": "A potato kept for planting, from which the new crop grows.",
+  "variants": [
+   "seed tuber",
+   "seed tubers"
+  ]
+ },
+ "Bencao gangmu": {
+  "def": "A Chinese work on drugs and medicinal plants by Li Shizhen, completed at the end of the 1500s.",
+  "variants": [
+   "Bencao gangmu"
+  ]
+ },
+ "huang-du": {
+  "def": "A Chinese plant name that the Bencao gangmu, as quoted here, gives among the names of a vine with leaves like a bean's.",
+  "variants": [
+   "huang-du"
+  ]
+ },
+ "lye water": {
+  "def": "Water made caustic by steeping wood ash in it.",
+  "variants": [
+   "lye water",
+   "lye"
+  ]
+ },
+ "Dioscorea": {
+  "def": "The genus of plants that includes the yams.",
+  "variants": [
+   "Dioscorea"
+  ]
+ },
+ "Han River": {
+  "def": "A river of central Korea, with a north branch and a south branch.",
+  "variants": [
+   "Han River"
+  ]
+ },
+ "shan-yao": {
+  "def": "The Chinese yam, a climbing plant with an edible root.",
+  "variants": [
+   "shan-yao"
+  ]
+ },
+ "shan-yao-dan": {
+  "def": "A colloquial Chinese name for the white potato.",
+  "variants": [
+   "shan-yao-dan"
+  ]
+ },
+ "huang-hua": {
+  "def": "Dried daylily buds, a Chinese food.",
+  "variants": [
+   "huang-hua",
+   "jin-zhen"
+  ]
+ },
+ "taro": {
+  "def": "A leafy plant grown for its starchy, edible root.",
+  "variants": [
+   "taro"
   ]
  }
 }

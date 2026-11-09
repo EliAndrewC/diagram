@@ -1,0 +1,16 @@
+{
+ "captured": "2026-11-09T11:11:50+00:00",
+ "final_url": "https://web.archive.org/web/20260213045146id_/https://www.atlasobscura.com/articles/potato-history-india",
+ "first": "42/425ae917e0a9/20261109T111148Z",
+ "gm_copies": [],
+ "keys": [
+  "atlasobscura-potato-india"
+ ],
+ "notes": [],
+ "outcome": "archived-earlier-snapshot",
+ "path": "42/425ae917e0a9/20261109T111148Z",
+ "reason": "HTTP 403",
+ "revision": "",
+ "sha256": "5d947271eba4d2617bcd252261a94250c701ad31a3510724eedf8797d52dbb29",
+ "url": "https://www.atlasobscura.com/articles/potato-history-india"
+}
