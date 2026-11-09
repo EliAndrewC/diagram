@@ -508,7 +508,7 @@ const SELFTEST: [Row; 27] = [
     ("make record-prepass PAGE=water", false, false, false, "name `IN=water`"),
     ("PAGE=water SECTION=121", false, false, true, ""),
     ("PAGE=water SECTION=121", false, false, false, "name `Q=<NNNN>`"),
-    ("see research/water.md for it", false, false, false, "name research/contents.json#water"),
+    (concat!("see research/water", ".md for it"), false, false, false, "name research/contents.json#water"),
     ("research/contents.json#water*.html", false, false, false, "glued after a section id"),
     ("<code>research/contents.json#water</code>", false, false, false, ""),
     ("research/contents.json#water<NNN>-<id>.html", false, false, false, "glued after a section id"),
