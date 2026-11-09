@@ -430,8 +430,8 @@ def fresh_block_after(root: Path, engine: bool, counter: bool) -> str:
 
 
 def counter_only(root: Path) -> bool:
-    """Does the delta against the merge base with origin/main only add counter blocks (`cohort_gate.py counter-only`, feature 446)?"""
-    return run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "counter-only"])[0] == 0
+    """Does the delta against the merge base with origin/main only add counter blocks (`l7r-gate cohort counter-only`, feature 446)?"""
+    return run(root, [str(HERE / "gates" / "l7r-gate.sh"), "cohort", "counter-only"])[0] == 0
 
 
 def commit_regenerated(root: Path, why: str) -> None:
@@ -525,11 +525,8 @@ def cohort_jobs(cgroup: Path = Path("/sys/fs/cgroup"), mw: Path = MEMWATCH) -> t
 
 
 def _port(root: Path) -> str:
-    """The port switch's state (`cohort_gate.port_mode`, feature 444 FR-023)."""
-    sys.path.insert(0, str(HERE / "gates"))
-    import cohort_gate  # noqa: PLC0415 - a sibling script, imported by path as the rest are
-
-    return cohort_gate.port_mode(root)
+    """The port switch's state (`l7r-gate cohort port`, feature 444 FR-023)."""
+    return run(root, [str(HERE / "gates" / "l7r-gate.sh"), "cohort", "port"])[1].strip()
 
 
 def start_cohort(root: Path) -> tuple[subprocess.Popen, Path]:
@@ -738,7 +735,7 @@ def long_runs(root: Path) -> int:
         # and rows - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate
         cohort, log = None, Path()
         # ...none while the port switch stands at rust-only (feature 444 FR-023): no landing waits on the Python stages' rolls
-        if "done" in targets and engine_delta(root) and _port(root) != "rust-only" and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
+        if "done" in targets and engine_delta(root) and _port(root) != "rust-only" and run(root, [str(HERE / "gates" / "l7r-gate.sh"), "cohort", "check"])[0]:
             cohort, log = start_cohort(root)
         cover = start_cover(root)
         try:
@@ -779,7 +776,7 @@ def long_runs(root: Path) -> int:
             if why := cover_refusal(cover):
                 print(f"land: the changed modules' coverage refused - nothing landed:\n  {why}", file=sys.stderr)
                 return 1
-    if engine_delta(root) and _port(root) != "rust-only" and run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "check"])[0]:
+    if engine_delta(root) and _port(root) != "rust-only" and run(root, [str(HERE / "gates" / "l7r-gate.sh"), "cohort", "check"])[0]:
         print("land: no landing cohort on this engine - make cohort-landing", flush=True)
         if make(root, "cohort-landing"):
             print("land: the landing cohort refused - nothing landed (above)", file=sys.stderr)
@@ -793,9 +790,9 @@ def long_runs(root: Path) -> int:
 
 def rust_gate_run(root: Path) -> str:
     """THE RUST STAGE GATE'S RECORD, MADE HERE (feature 444 amendment 5, D6): the push refuses an engine landing with no
-    `make rust-gate` record on its engine with no failing seed (`cohort_gate.py rust-owed`); where it is owed, land rolls it and
+    `make rust-gate` record on its engine with no failing seed (`l7r-gate cohort rust-owed`); where it is owed, land rolls it and
     commits `dev/rust-gate/`. A failing seed stops the landing: no Rust stage may end with a failing check (FR-019)."""
-    if not engine_delta(root) or run(root, [sys.executable, str(HERE / "gates" / "cohort_gate.py"), "rust-owed"])[0]:
+    if not engine_delta(root) or run(root, [str(HERE / "gates" / "l7r-gate.sh"), "cohort", "rust-owed"])[0]:
         return ""
     print("land: no Rust stage gate record on this engine - make rust-gate", flush=True)
     failed = make(root, "rust-gate")

@@ -5,7 +5,7 @@
 
 WHY. The fixed cohort passes because it is the landing gate; the generator's real failure rate is on seeds it was never tuned
 on (feature 417's gap: 360 of 2,544 since 2026-10-20). `make cohort-seeds` prints that rate per record; this pools it: every
-record's fresh seeds (`cohort_seeds.fresh_seeds` - a fresh block, or every unpinned seed of a roll started at or above
+record's fresh seeds (`fresh_seeds` - a fresh block, or every unpinned seed of a roll started at or above
 `FRESH_BASE`), each seed counted once per engine commit (the latest record wins: a seed rolled twice on one engine rolled the
 same map), then the failed share overall, by form (`form`) and by cause (each name in `failures`; a seed may fail more than
 one). `--commit` keeps the records of one engine commit; `--since` those at or after a UTC stamp (`20261024T000000Z`).
@@ -14,7 +14,6 @@ one). `--commit` keeps the records of one engine commit; `--since` those at or a
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import pathlib
 import sys
 from collections import Counter
@@ -24,15 +23,14 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 
 
-def _cohort_seeds() -> Any:
-    spec = importlib.util.spec_from_file_location("cohort_seeds", HERE / "cohort_seeds.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+PINNED = frozenset(range(901, 907))
+FRESH_BASE = 10000
 
 
-cs = _cohort_seeds()
+def fresh_seeds(rec: dict[str, Any]) -> list[dict[str, Any]]:
+    """A record's fresh seeds: every unpinned seed of a fresh record, else those marked fresh (`rust/gate/src/cohort/seeds.rs`'s rule; this file is ported in T068's third slice)."""
+    whole = bool(rec.get("fresh")) or int(rec.get("first_seed") or 0) >= FRESH_BASE
+    return [s for s in rec.get("seeds", []) if s["seed"] not in PINNED and (whole or s.get("fresh"))]
 
 
 def failed(seed: dict[str, Any]) -> bool:
@@ -52,7 +50,7 @@ def pooled(records: list[dict[str, Any]], commit: str = "", since: str = "") -> 
             continue
         if since and str(rec.get("utc", "")) < since:
             continue
-        for seed in cs.fresh_seeds(rec):
+        for seed in fresh_seeds(rec):
             out[(str(rec.get("commit", "")), int(seed["seed"]))] = seed
     return out
 

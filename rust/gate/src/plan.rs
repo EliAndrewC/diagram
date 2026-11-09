@@ -370,6 +370,11 @@ fn approach_verb(words: &[String], root: &Path) -> crate::Reply {
     said(answer.map_or(String::new(), |m| m + "\n"))
 }
 
+/// The cohort's trigger for part B of the active task (`approach::owe_in_flight`).
+pub(crate) fn owe_in_flight(root: &Path, trigger: &str, part: &str) -> Option<String> {
+    approach::owe_in_flight(root, trigger, part, None)
+}
+
 /// What Python that still needs a verb calls, through `scripts/plan_door.py`.
 fn door(words: &[String], stdin: &mut dyn Read, escaped: Option<&str>) -> crate::Reply {
     let mut text = String::new();

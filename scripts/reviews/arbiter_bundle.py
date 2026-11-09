@@ -36,7 +36,6 @@ for _d in ("../hooks/lib", "../measure", "../gates"):
 import event_log as el  # noqa: E402
 import hm_arbiter as ha  # noqa: E402
 import hm_checks as hc  # noqa: E402
-import room_table  # noqa: E402
 
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: where a background agent's transcript lives, by its id - the reply when the hook kept none
@@ -568,6 +567,12 @@ def pool_unstated(why: str, files: Sequence[str]) -> list[str]:
     return gaps
 
 
+def _cohort(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    """The room table's questions, in the Rust gate (feature 449 T068)."""
+    gate = Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+    return subprocess.run([str(gate), "cohort", *args], cwd=root, capture_output=True, text=True, check=False)
+
+
 def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidence: Sequence[str] = ()) -> Path:
     """The MANIFEST for `trigger`; raises `MissingRecord` where a round kept no reply or a reversal has no record, unless
     `allow_missing` gives the reason to bundle anyway (it is printed in the MANIFEST for the arbiter to weigh). `evidence`: the
@@ -604,8 +609,8 @@ def bundle(root: Path, trigger: str, out: Path, allow_missing: str = "", evidenc
             "process is wrong - name the fix as `tooling_fix`. Say in `what` exactly what the session does next.\n"
         )
         parts += evidence_section(out, evidence)
-        if room_table.names_fit(str(owed.get("detail", ""))):  # ...a fit failure: what more room each knob may buy (405 T113)
-            parts.append(room_table.render())
+        if _cohort(root, "names-fit", str(owed.get("detail", ""))).returncode == 0:  # ...a fit failure: what more room each knob may buy (405 T113)
+            parts.append(_cohort(root, "room-table").stdout)
         parts += claims_section(root, [str(owed.get("detail", "")), *(Path(f).read_text(encoding="utf-8") for f in evidence if Path(f).is_file())])
         if _PLAN_REVIEW.search(str(owed.get("detail", ""))) and d is not None:
             plan_parts, plan = plan_rounds(d)

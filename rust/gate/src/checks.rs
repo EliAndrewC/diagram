@@ -10,10 +10,12 @@ mod house_style_delta;
 mod moves;
 mod question_size;
 mod research_pointers;
+mod run_plausible;
 mod rust_tooling;
 mod spec_figures;
 mod spec_lint;
 mod stale_dirs;
+mod tool_signals;
 
 /// What a check answered.
 #[derive(Debug, PartialEq, Eq)]
@@ -38,6 +40,14 @@ impl Outcome {
             stdout,
             stderr: String::new(),
             code: 0,
+        }
+    }
+
+    fn usage(stderr: &str) -> Self {
+        Self {
+            stdout: String::new(),
+            stderr: stderr.to_owned(),
+            code: 2,
         }
     }
 
@@ -242,6 +252,8 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("house-style-delta") => (house_style_delta::USAGE_LOG_TOOL, house_style_delta::cli(rest)),
         Some("conflict") => (conflict::USAGE_LOG_TOOL, conflict::cli(rest)),
         Some("spec-lint") => (spec_lint::USAGE_LOG_TOOL, spec_lint::cli(rest)),
+        Some("run-plausible") => (run_plausible::USAGE_LOG_TOOL, run_plausible::cli(rest, root, &std::env::var("MAKEFLAGS").unwrap_or_default())),
+        Some("tool-signals") => (tool_signals::USAGE_LOG_TOOL, tool_signals::cli(rest, root)),
         Some("needs") => {
             let o = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: o.stdout, stderr: o.stderr, code: o.code };

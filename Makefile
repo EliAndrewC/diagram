@@ -43,7 +43,7 @@ counters-inert: ## [performance] the work counters change no map: every Rust tes
 STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state write
 
 # done runs every phase and reports every failure together, cheapest phase first.
-# A run too fast to have worked is not stamped green (check-run-plausible.py): make runs $(MAKE)
+# A run too fast to have worked is not stamped green (`l7r-gate check run-plausible`): make runs $(MAKE)
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
@@ -53,7 +53,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram || true; \
-	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
+	  "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check run-plausible --reuse $(DONE_NAME) || exit 1; \
 	  if ! "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks >/dev/null 2>&1; then echo "make done: ...but the hooks stamp is stale (a scripts/ or tests/hooks/ change) - running make hooks-test first"; $(MAKE) --no-print-directory hooks-test FROM_DONE= ||{ $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; $(COMMIT_RUN_RECORD) already-verified; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
@@ -84,7 +84,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	root=$$(git rev-parse --show-toplevel 2>/dev/null); \
 	mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); sel=$$(python3 -m l7r.diagram.ci incremental selected 2>/dev/null || true); \
 	[ -z "$$root" ] || [ ! -f "$$root/scripts/gates/preflight.py" ] || python3 "$$root/scripts/gates/preflight.py" --root "$$root" --tree-check "$$(git rev-parse --absolute-git-dir)/gate-tree.json" || { RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: tree moved"; $(STATE) failed-gate tree-moved; $(COMMIT_RUN_RECORD) failed; exit 1; }; \
-	python3 "$$root/scripts/gates/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
+	"$$root/scripts/gates/l7r-gate.sh" check run-plausible $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
 	[ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram && "$$root/scripts/gates/l7r-gate.sh" stamp --write page || true; \
 	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write browser || true;) \
 	RUN_MODE="$$mode" RUN_SELECTED="$$sel" RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" green "$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true)"; $(COMMIT_RUN_RECORD) green; \
@@ -192,6 +192,9 @@ HAMLET_RUN = CARGO_TARGET_DIR="$${CARGO_TARGET_DIR:-$$HOME/.cache/l7r-cargo-targ
 
 seeds:          ## [maps] NO FIXED SEEDS: the known-failing pool (dev/known-seeds.txt) rolled again - a seed that now rolls clean dropped - and N fresh seeds of each field form from a start the clock draws, a failing one added to the pool; refuses while any fails. make done runs it at rust-only (feature 444 T36; the GM 2026-11-07)   [N=200]
 	@$(HAMLET_RUN) --seeds "$(CURDIR)/dev/known-seeds.txt" $(or $(N),200)
+
+cohort-seeds:   ## [maps] which seeds found which failure, the fewest first seeds that find them all, and the fresh-seed rate (feature 375, 386)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" cohort seeds
 
 cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]
 	@$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)
@@ -336,7 +339,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    else printf '\n\033[1mHOOK TESTS FAILED: the pytest files that test scripts/\033[0m\n'; tail -40 "$$work/pytest-scripts.log" | sed 's/^/  /'; fail="$$fail pytest-scripts"; fi; \
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
-	if ! python3 "$$root/scripts/gates/check-tool-signals.py"; then fail="$$fail check-tool-signals"; fi; \
+	if ! "$$root/scripts/gates/l7r-gate.sh" check tool-signals; then fail="$$fail check-tool-signals"; fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check rust-tooling --root "$$root"; then fail="$$fail rust-tooling"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	"$$root/scripts/gates/l7r-gate.sh" stamp --write hooks; \

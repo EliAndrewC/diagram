@@ -4,8 +4,8 @@
 #
 # GUARD_EDIT_OK: feature 386 - a NEW push gate, the GM 2026-10-17 approving the recommendation "Run 48 seeds when a feature or
 # batch lands ... it's what would have caught 17/21/40/45 the same day" and "a block of fresh seeds that rotates each run,
-# recorded as a failure rate rather than a pass/fail". `scripts/gates/cohort_gate.py check` decides it (plan D2-D5); the
-# regression reading is scripts/measure/cohort_known.py's own. Run by sync-with-main.sh on the GATED route only: a DIRECT
+# recorded as a failure rate rather than a pass/fail". `l7r-gate cohort check` decides it (plan D2-D5); the
+# regression reading is `rust/gate/src/cohort/known.rs`'s own. Run by sync-with-main.sh on the GATED route only: a DIRECT
 # delta changes no map. COHORT_OK="<reason>" discharges, to the guard log and dev/bypass-log/.
 set -uo pipefail
 
@@ -47,7 +47,7 @@ fi
 # GUARD_EDIT_OK: feature 430 T04 (D4) - a delta holding no engine code, or a pass already stored for its exact content, is not
 # judged again (`l7r-gate push-gate`); a refusal is never stored
 if why="$("$CO_HERE/l7r-gate.sh" push-gate skip cohort 2>/dev/null)"; then printf '  %s\n' "$why"; exit 0; fi
-OUT="$(PYTHONDONTWRITEBYTECODE=1 python3 "$CO_HERE/cohort_gate.py" check 2>&1)"; rc=$?
+OUT="$("$CO_HERE/l7r-gate.sh" cohort check 2>&1)"; rc=$?
 [ -n "$OUT" ] && printf '%s\n' "$OUT" | grep -v 'REFUSED' | sed 's/^/  /'
 [ "$rc" -eq 0 ] && { "$CO_HERE/l7r-gate.sh" push-gate pass cohort 2>/dev/null; exit 0; }
 

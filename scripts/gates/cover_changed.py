@@ -278,12 +278,9 @@ def slated(root: Path) -> set[str]:
 
 
 def rust_only(root: Path) -> bool:
-    """Is the port switch at `rust-only` (`cohort_gate.port_mode`, feature 444 FR-023)?"""
-    if str(Path(__file__).resolve().parent) not in sys.path:
-        sys.path.insert(0, str(Path(__file__).resolve().parent))  # loaded by path (the tests), its sibling still importable
-    import cohort_gate  # noqa: PLC0415
-
-    return cohort_gate.port_mode(root) == "rust-only"
+    """Is the port switch at `rust-only` (`l7r-gate cohort port`, feature 444 FR-023)?"""
+    gate = Path(__file__).resolve().parent / "l7r-gate.sh"
+    return subprocess.run([str(gate), "cohort", "port"], cwd=root, capture_output=True, text=True, check=False).stdout.strip() == "rust-only"
 
 
 def main(argv: list[str]) -> int:

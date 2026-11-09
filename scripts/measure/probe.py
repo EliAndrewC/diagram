@@ -46,12 +46,10 @@ def _git(root: Path, *a: str) -> str:
     return run(["git", "-C", str(root), *a], root)[1].strip()
 
 
-def _cohort_gate() -> Any:  # noqa: ANN401 - the module
-    spec = importlib.util.spec_from_file_location("cohort_gate", HERE.parent / "gates" / "cohort_gate.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+def _cohort(root: Path, *args: str) -> str:
+    """The landing cohort's answers, from the Rust gate (feature 449 T068)."""
+    gate = HERE.parent / "gates" / "l7r-gate.sh"
+    return subprocess.run([str(gate), "cohort", *args], cwd=root, capture_output=True, text=True, check=False).stdout.strip()
 
 
 def record_of(out: str, root: Path) -> dict[str, Any]:
@@ -125,8 +123,7 @@ def _cohort_cmd(jobs: str, seed: int | None) -> list[str]:
 
 def baseline(root: Path, block: int, jobs: str) -> tuple[dict[int, list[str]], dict[int, list[str]]]:
     """HEAD's (landing, fresh) verdicts: stored per engine key and block, or rolled once in a detached worktree at HEAD."""
-    cg = _cohort_gate()
-    key = hashlib.sha256(cg.cohort_known.engine_key(root, "HEAD").encode()).hexdigest()[:16]
+    key = hashlib.sha256(_cohort(root, "engine-key", "HEAD").encode()).hexdigest()[:16]
     store = Path(_git(root, "rev-parse", "--path-format=absolute", "--git-common-dir")) / "probe-baselines" / f"{key}-{block}.json"
     if store.is_file():
         data = json.loads(store.read_text(encoding="utf-8"))
@@ -176,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     root = Path(_git(Path(args.root), "rev-parse", "--show-toplevel") or args.root)
     wt = Path(args.wt).resolve() if args.wt else root
-    block = _cohort_gate().fresh_seed(root, "HEAD")
+    block = int(_cohort(root, "fresh-seed", "HEAD"))
     head_landing, head_fresh = baseline(root, block, args.jobs)
     landing = probe_cohort(wt, root, None, args.jobs, head_landing if args.exitfirst else None)
     fresh = probe_cohort(wt, root, block, args.jobs, head_fresh if args.exitfirst else None)

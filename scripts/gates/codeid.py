@@ -354,6 +354,11 @@ def semantic_main(args: list[str]) -> int:
     return 0
 
 
+def debug_free_equal_main(args: list[str]) -> int:
+    """`--debug-free-equal <a> <b>`: exit 0 when the two files are the same but for counter blocks (feature 446), for the Rust gate."""
+    return 0 if debug_free_bytes(pathlib.Path(args[0]).read_bytes(), args[0]) == debug_free_bytes(pathlib.Path(args[1]).read_bytes(), args[1]) else 1
+
+
 def missing_main(args: list[str]) -> int:
     """`--missing <data> <path>...`: each file's unrun lines, comma-separated, a line a file, for the Rust gate's coverage report (feature 449 T72); only coverage.py can say."""
     import coverage  # noqa: PLC0415 - absent from the gate's ordinary path, and needed only when a file is exempt
@@ -408,5 +413,5 @@ def split_ids(src: bytes) -> tuple[str, dict[str, str], set[str]] | None:
 
 
 if __name__ == "__main__":
-    verbs = {"--ids": ids_main, "--semantic": semantic_main, "--missing": missing_main}
+    verbs = {"--ids": ids_main, "--semantic": semantic_main, "--missing": missing_main, "--debug-free-equal": debug_free_equal_main}
     sys.exit(verbs[sys.argv[1]](sys.argv[2:]) if sys.argv[1:2] and sys.argv[1] in verbs else 2)

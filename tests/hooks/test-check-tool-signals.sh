@@ -1,5 +1,5 @@
 #!/bin/bash
-# Tests for check-tool-signals.py - no tool lands recording none of its runs (feature 406 T05, FR-004, D164).
+# Tests for `l7r-gate check tool-signals` - no tool lands recording none of its runs (feature 406 T05, FR-004, D164).
 # Run: tests/hooks/test-check-tool-signals.sh   (exit 0 = all green)
 # GUARD_EDIT_OK: feature 406 - a NEW check's companion suite.
 #
@@ -7,7 +7,7 @@
 # runs it on this repository, which must be clean. CHECK_TOOL_SIGNALS lets a proof of firing run the suite against a mutated copy.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CHECK="${CHECK_TOOL_SIGNALS:-$HERE/../../scripts/gates/check-tool-signals.py}"
+CHECK="$HERE/../../scripts/gates/l7r-gate.sh"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
 ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
@@ -22,7 +22,7 @@ fixture() { # a clean repository: one wired hook, one gate check, one entry-name
   printf '# TOOL_RECORD: its run is make lint in the usage log\n' > "$T/r/scripts/tools/lint.py"
   printf '{"tools":{"gatey":{"kind":"check","what":"x"}}}\n' > "$T/r/scripts/tool-registry.json"
 }
-run() { python3 "$CHECK" --root "$T/r" > "$T/out" 2>&1; echo $? > "$T/rc"; }
+run() { "$CHECK" check tool-signals --root "$T/r" > "$T/out" 2>&1; echo $? > "$T/rc"; }
 rc() { cat "$T/rc"; }
 
 echo "1. a clean repository passes"
@@ -59,7 +59,7 @@ fixture; printf '{"tools":{"gatey":{"kind":"check","what":"x"},"ghost":{"kind":"
 [ "$(rc)" -eq 1 ] && grep -q '`ghost` is registered but no code records it' "$T/out" && ok "refused, naming the entry" || no "an unused entry passed" "$(cat "$T/out")"
 
 echo "9. this repository is clean"
-if python3 "$CHECK" > "$T/out" 2>&1; then ok "every tool here records its runs"; else no "this repository has unrecorded tools" "$(cat "$T/out")"; fi
+if "$CHECK" check tool-signals > "$T/out" 2>&1; then ok "every tool here records its runs"; else no "this repository has unrecorded tools" "$(cat "$T/out")"; fi
 
 echo; echo "check-tool-signals: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

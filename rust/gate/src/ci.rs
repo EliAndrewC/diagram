@@ -9,4 +9,4 @@ pub(crate) mod switches;
 pub(crate) mod via_make;
 
 #[cfg(test)]
-mod fixtures;
+pub(crate) mod fixtures;
