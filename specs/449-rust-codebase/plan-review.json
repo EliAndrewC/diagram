@@ -80,7 +80,7 @@
    "declared": "spec-fidelity"
   },
   "## Complexity Tracking": {
-   "sha256": "e26077c538a1547fead322e267d3b49e7d8a404e422cd69a6390c0c4c937f66f",
+   "sha256": "1d36145bf88d4d1a6adff16d92c1b98534d5627ba1c43c67f313cad162f2c19a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-09",
    "declared": "round-arbiter"
@@ -115,18 +115,6 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T067 Approach (checklist part A)": {
-   "sha256": "175c5f391c95bd902ab2924fc9eab4723c922f047a1d549be2f459555a1debda",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "round-arbiter"
-  },
-  "### T068 Approach (checklist part A)": {
-   "sha256": "fb72626bb2d40d82c9e2a58dbaa75451cf0e3e54c77bfcbb3dcc702fc419e7ba",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
-  },
   "### T069 Approach (checklist part A)": {
    "sha256": "8b0c18ca2cfe4c8af90831ce42ef8f4869a46ce008414e145b8b699a6c3b5855",
    "verdict": "CLEAR",
@@ -146,10 +134,16 @@
    "declared": "round-arbiter"
   },
   "### T73 Approach (checklist part A)": {
-   "sha256": "aebbe3557f524ccba43ee6c06e5cee39c81573f12a3013272ae9a25d3b23e16a",
+   "sha256": "deee6a9bbefc910b098e94dea4dd7000cc16aa4d880002f971799256b5b00cae",
    "verdict": "CLEAR",
    "reviewed": "2026-11-09",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### T74 Approach (checklist part A)": {
+   "sha256": "4a3d7edb4b0c882b7ddc56d2dac5cbd59719b77f8d3924f93526de6f20672aa9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -4332,6 +4326,23 @@
      "summary": "The measurements census returned one command, rewritten to l7r-gate cohort seeds --record in this commit.",
      "class": "within",
      "why": "Outside the item this round allowed; not reopened. It carries out FR-001's rewrite of recorded commands, with its search space stated."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "## Complexity Tracking",
+    "### T73 Approach (checklist part A)",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:449-rust-codebase#T74@3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
   }
