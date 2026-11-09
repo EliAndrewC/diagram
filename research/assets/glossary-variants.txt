@@ -1062,6 +1062,7 @@ enfeoffment	enfeoffment
 enfeoffments	enfeoffment
 engawa	engawa
 engishiki	Engishiki
+english factor	English factor
 enoki	enoki
 enokida	Enokida
 enoshima	Enoshima
