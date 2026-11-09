@@ -55,6 +55,7 @@ SCOPE = (
 #: THE HISTORY, file by file, each with why it may still name a deleted package - no glob, no directory
 HISTORY = {
     "tests/tooling/test_no_deleted_engine.py": "this test, which names what it looks for",
+    "rust/gate/src/measure/figures/tests.rs": "that refusal's own fixtures",
     "l7r/diagram/knobs.json": "the knob registry's export records where each knob was declared, as provenance",
     "l7r/diagram/tools/claims.py": "the claims index's Python root, an empty scope since the deletion; its fixtures build that tree",
     "scripts/reviews/work_budget_bundle.py": "the audit bundle's Python half, read only where a fixture builds it; the Rust half stands alone",

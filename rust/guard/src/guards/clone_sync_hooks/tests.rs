@@ -248,6 +248,14 @@ fn a_clone_another_live_session_claims_is_refused() {
         .args(["-c", "sleep 5; :", "claude"])
         .spawn()
         .unwrap();
+    // a spawned process carries the parent's command line until it execs: wait for its own, or a loaded host reads "not claude"
+    let cmdline = format!("/proc/{}/cmdline", other.id());
+    for _ in 0..1000 {
+        if std::fs::read_to_string(&cmdline).is_ok_and(|c| c.contains("claude")) {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(2));
+    }
     std::fs::write(
         w.sessions.join(format!("{}.json", other.id())),
         json!({"sessionId": "them"}).to_string(),
