@@ -4529,6 +4529,7 @@ tanuma period	Tanuma period
 tanuma years	Tanuma period
 taper law	taper law
 tarama	Tarama
+taro	taro
 tartary	Tartary
 tarudai	tarudai
 tatami	tatami
