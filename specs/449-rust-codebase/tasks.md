@@ -182,8 +182,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: a crate's unchanged checks reuse their last green result
 
-- [ ] T061 [US2] `rust/gate`: the crate and its binary `l7r-gate`, called from the Makefile, with the shared facts the ports below read (the repository's paths, the run record's format, git in one place)
+- [x] T061 [US2] `rust/gate`: the crate and its binary `l7r-gate`, called from the Makefile, with the shared facts the ports below read (the repository's paths, the run record's format, git in one place)
       research: rendering
+      verify: DONE. landed: the gate crate
 
 - [ ] T062 [US2] `l7r/diagram/ci/` the planner: `delta.py`, `selection.py`, `incremental.py`, `decision.py`, `cachepolicy.py` in Rust, each answer held to the Python's before it is deleted
       research: rendering
