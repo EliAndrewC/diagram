@@ -23,6 +23,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import subprocess
 import os
 import runpy
 import sys
@@ -69,8 +70,8 @@ CHECKS: tuple[tuple[str, str, tuple[str, ...], str, bool, str], ...] = (
     ("money-candidates", "record/money_candidates.py", ("--check",), "an amount of money in the record is neither marked for the tooltip nor passed over (above) - mark it, or add `- <stem> | <amount> | <reason>` to specs/413-money-tooltip-on-the-record/backfill.md; feature 413", False, "research/sources"),
     ("glossary", "gates/memo_check.py", ("glossary",), "the committed glossary differs from its per-term files (run `make glossary` at the repository root, then commit) - feature 259, spec FR-006", False, "research/sources"),
     # the green-gate guard; under GATE_STAMP_OK the shell logs the escape and passes `--skip gate-stamp selftest --skip gate-stamp`
-    ("gate-stamp selftest", "gates/gate-stamp.py", ("--selftest",), "gate-stamp selftest failed - the guard itself is broken; fix scripts/gates/gate-stamp.py before pushing", True, ""),
-    ("gate-stamp", "gates/gate-stamp.py", ("--check", "origin/main"), "push refused by the green-gate guard (above)", False, ""),
+    ("gate-stamp selftest", "gates/l7r-gate.sh", ("stamp", "--selftest"), "gate-stamp selftest failed - the guard itself is broken; fix rust/gate/src/stamp.rs before pushing", True, ""),
+    ("gate-stamp", "gates/l7r-gate.sh", ("stamp", "--check", "origin/main"), "push refused by the green-gate guard (above)", False, ""),
     # a touched feature that reads closed carries its report and its carried keys (feature 375 FR-009/FR-014); under a CLOSE_OK
     # with its reason the shell logs the escape and passes `--skip closing`
     ("gm-questions", "gm_review.py", ("owed-check",), "a question for the GM in this push is still owed escalation-check (above) - the one door to him (feature 432, FR-002)", False, "specs"),
@@ -110,8 +111,6 @@ def run_one(script: Path, args: list[str], cwd: Path, quiet: bool = False) -> in
 
 def _guard_log(what: str, rule: str) -> None:
     """The firing, recorded by the guard log's one writer (`hooks/lib/guardlog.sh`), as the shell's own call did."""
-    import subprocess  # noqa: PLC0415
-
     lib = HERE.parent / "hooks" / "lib" / "guardlog.sh"
     subprocess.run(["bash", "-c", '. "$0" && guard_log sync-with-main blocked "$1" "$2"', str(lib), what, rule], check=False, capture_output=True)
 
@@ -137,16 +136,20 @@ def run(root: Path, skip: set[str]) -> int:
         if name in skip or (needs and not (root / needs).exists()):
             continue
         script = scripts / rel
-        version = record_cache.code_sha_of(scripts.parent, script) if selftest else ""
-        if selftest and stamps.get(rel) == version:
+        # a compiled tool has no Python import closure to key on, and its self-test costs milliseconds: never reused
+        compiled = rel.endswith(".sh")
+        keep = selftest and not compiled
+        version = record_cache.code_sha_of(scripts.parent, script) if keep else ""
+        if keep and stamps.get(rel) == version:
             continue  # FR-007: passed on this version of its code and every module it imports
-        code = run_one(script, [a.replace("{root}", str(root)) for a in argv], root, quiet=selftest)
+        args = [a.replace("{root}", str(root)) for a in argv]
+        code = subprocess.run([str(script), *args], cwd=root, check=False, capture_output=selftest).returncode if compiled else run_one(script, args, root, quiet=selftest)
         if code != 0:
             print(f"sync-with-main: {refusal}", file=sys.stderr)
             if name in LOGGED:
                 _guard_log(*LOGGED[name])
             return 1
-        if selftest:
+        if keep:
             stamps[rel], changed = version, True
     if changed and stamps_at is not None:
         try:

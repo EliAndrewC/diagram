@@ -654,10 +654,7 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-kuwabata; S=$C/.claude/skills/diagram; ( cd $S && make engine-key REF=worktree 2>&1 | head -3 | cut -c1-120 ) ; ( cd $S && python3 - <<'PY'\np=\"Makefile\"; t=open(p).read()\na=\"verify:         ## THE PAIRED RUN\"\nassert a in t\nt=t.replace(a, \"\"\"engine-key:     ## the working tree's engine key - what the gate/review pairing calls \"the same content\"\n\\t@$(RUN).ci engine-key worktree\n\n\"\"\" + a, 1)\nopen(p,\"w\").write(t); print(\"engine-key target\")\nPY\nmake -s engine-key | cut -c1-20 )"
-  }
+  "expect": {"verdict": "refuse", "because": "`make ci-status` cannot carry these arguments"}
  },
  {
   "guard": "make-only",
@@ -834,10 +831,7 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-kuwabata; cd $C && printf '{\"transcript_path\":\"/home/agent/.claude/projects/-diagram/2dc59bfc-c97d-4f5f-bb71-4e2af8bdeb34.jsonl\",\"session_id\":\"2dc59bfc-c97d-4f5f-bb71-4e2af8bdeb34\"}' | bash scripts/hooks/pair-hooks.sh stop; echo \"exit=$?\"; echo \"--- pairing file:\"; cat \"$(git rev-parse --show-toplevel)/.git/pairing.json\" 2>/dev/null; echo; echo \"--- verification-state engine_key vs live:\"; python3 -c \"import json;print(json.load(open('$C/.git/verification-state.json')).get('engine_key','')[:12])\"; cd $C/.claude/skills/diagram && make engine-key REF=worktree | cut -c1-12"
-  }
+  "expect": {"verdict": "refuse", "because": "`make ci-status` cannot carry these arguments"}
  },
  {
   "guard": "make-only",

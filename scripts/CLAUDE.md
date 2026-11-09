@@ -8,7 +8,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | `sync-with-main.sh`, `claim-feature.py`, `tick-task.py`, `make-docs.py`, `patch.py`, `git-askpass-token.sh` | the commands: stop-work and sync, `make claim`, `make tick`, `make docs`, the anchored-edit sweep, git's HTTPS credentials |
 | `hooks/` | the guards (`*-hooks.sh`) that `.claude/settings.json` runs on every tool call; `docs/guards.md` is their record |
 | `hooks/lib/` | what the guards share: the `hm_*` deciders, `guardlog.sh`, the watchdog's pass, the refusal text |
-| `gates/` | what refuses at the gate or the push: `gate-stamp.py`, the `*-gate.sh` gates, `spec-lint.py`, the `check-*.py` checks |
+| `gates/` | what refuses at the gate or the push: `l7r-gate stamp`, the `*-gate.sh` gates, `spec-lint.py`, the `check-*.py` checks |
 | `record/` | the research record's tooling: sources, the archive, downloads, canon, check bundles, what a delta owes |
 | `pages/` | page sessions: the runner, its briefs, `pull-queue.sh`, coordination files |
 | `reviews/` | the review checks' tooling: what is owed, the snapshot, cost and census, the ledger lint, `moves.py` |

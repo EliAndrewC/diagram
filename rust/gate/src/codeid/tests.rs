@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use super::{content_ids, git_blob_id, rust_tokens, Cache};
+use super::{content_ids, git_blob_id, rust_tokens, stated, Cache};
 
 fn tokens(src: &str) -> String {
     String::from_utf8(rust_tokens(src.as_bytes()))
@@ -189,4 +189,11 @@ fn no_repository_is_an_empty_cache_nothing_is_written_to() {
     };
     empty.save();
     assert!(!dir.join("no-such-dir").exists());
+}
+
+#[test]
+fn an_error_names_what_was_being_done() {
+    let refused: Result<(), String> = stated(Err(std::io::Error::other("no")), "reading x");
+    assert_eq!(refused, Err("reading x: no".to_owned()));
+    assert_eq!(stated(Ok(1), "reading x"), Ok(1));
 }

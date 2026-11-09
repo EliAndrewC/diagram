@@ -51,7 +51,7 @@ COMMANDS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("speckit-todo check", ("python3", "{root}/scripts/speckit-todo.py", "--root", "{root}", "--check")),
     ("conflict selftest", ("python3", "{root}/scripts/hooks/lib/hm_conflict.py", "--selftest")),
     ("conflict", ("python3", "{root}/scripts/hooks/lib/hm_conflict.py", "--tracked", "{root}")),
-    ("gate-stamp selftest", ("python3", "{root}/scripts/gates/gate-stamp.py", "--selftest")),
+    ("gate-stamp selftest", ("{root}/scripts/gates/l7r-gate.sh", "stamp", "--selftest")),
 )
 
 

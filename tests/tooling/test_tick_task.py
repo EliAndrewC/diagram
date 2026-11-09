@@ -425,7 +425,7 @@ def test_the_long_runs_run_only_where_their_record_does_not_cover(tmp_path: path
         lb,
         "run",
         lambda root, cmd, env=None, quiet=True: (
-            (state["stamp"], state.get("says", "")) if "gate-stamp.py" in str(cmd) else (0, "") if "work-budget-review" in cmd else (1, "") if "rust-owed" in cmd else (state["cohort"], "")
+            (state["stamp"], state.get("says", "")) if "l7r-gate.sh" in str(cmd) else (0, "") if "work-budget-review" in cmd else (1, "") if "rust-owed" in cmd else (state["cohort"], "")
         ),
     )
     beside: list[str] = []
@@ -846,7 +846,7 @@ def test_a_delta_changing_the_gates_machinery_runs_the_tooling_tests_not_a_gate(
     delta = {"names": "scripts/gates/cover_changed.py\ndocs/x.md\n", "hooks_fresh": 0, "tooling_rc": 0}
 
     def run(root, cmd, env=None, quiet=True):  # noqa: ANN001, ANN202
-        if "gate-stamp.py" in str(cmd):
+        if "l7r-gate.sh" in str(cmd):
             return (delta["hooks_fresh"], "") if "--fresh" in cmd else (0, "")
         if cmd[:2] == ["git", "diff"]:
             return (0, delta["names"])

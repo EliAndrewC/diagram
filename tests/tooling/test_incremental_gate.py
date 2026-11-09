@@ -121,7 +121,7 @@ def git(root: Path, *args: str) -> str:
 
 @pytest.fixture
 def project(tmp_path: Path) -> tuple[Path, Path]:
-    """A repo shaped like this one - scripts/gates/gate-stamp.py, the skill dir - with a tiny engine and suite."""
+    """A repo shaped like this one - rust/gate/src/stamp.rs, the skill dir - with a tiny engine and suite."""
     return new_project(tmp_path)
 
 
@@ -162,7 +162,6 @@ def new_project(tmp_path: Path) -> tuple[Path, Path]:
     git(root, "config", "user.email", "t@t")
     git(root, "config", "user.name", "t")
     (root / "scripts/gates").mkdir(parents=True)
-    shutil.copyfile(REPO_ROOT / "scripts/gates/gate-stamp.py", root / "scripts/gates/gate-stamp.py")
     shutil.copyfile(REPO_ROOT / "scripts/gates/codeid.py", root / "scripts/gates/codeid.py")  # gate-stamp loads it (feature 426 D2)
     skill = root
     (skill / "eng").mkdir(parents=True)

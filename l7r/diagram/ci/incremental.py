@@ -100,19 +100,17 @@ def baseline_dir(root: Path) -> Path:
 def manifest(root: Path) -> dict[str, Any]:
     """Every file the gate exercises, by RAW blob id: gate-stamp's `diagram` area (engine `.py`, pool
     generators and manifests, `ci/`) and every file under the skill's `tests/`, plus the tooling hash."""
-    from l7r.diagram.ci.delta import is_engine
+    from l7r.diagram.ci.delta import engine_paths, gate
 
-    gs = state._gate_stamp(root)
-    area, patterns = gs.AREAS["diagram"]
     listed = [
         p
-        for p in subprocess.run(["git", "-C", str(root), "ls-files", "-co", "--exclude-standard", "--", area or "."], capture_output=True, text=True, check=True).stdout.splitlines()
+        for p in subprocess.run(["git", "-C", str(root), "ls-files", "-co", "--exclude-standard", "--", "."], capture_output=True, text=True, check=True).stdout.splitlines()
         if p.strip() and (root / p).is_file()
     ]
     # the stamp's area (every `.py` the gate exercises, `ci/` included) PLUS the route's engine files (the pool
     # generators and manifests, which the stamp's `*.py` pattern does not see) - a manifest edit is a fallback shape
-    engine = sorted({str(p.relative_to(root)) for p in gs._area_files(root, area, patterns)} | {p for p in listed if is_engine(p)})
-    tests = sorted(p for p in listed if p.startswith(f"{gs._prefix(area)}tests/"))  # the area is the root, "", since feature 329
+    engine = sorted(set(gate(root, "stamp", "--list", "diagram").splitlines()) | set(engine_paths(root, listed)))
+    tests = sorted(p for p in listed if p.startswith("tests/"))
     from l7r.diagram.ci import gate_config
 
     scripts = [

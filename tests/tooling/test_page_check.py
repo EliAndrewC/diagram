@@ -28,7 +28,7 @@ def test_page_check_runs_the_two_page_surfaces_without_coverage_and_stamps_page_
     body = _recipe("page-check")
     assert "tests/interactive tests/full/interactive/page_browser" in body
     assert "--no-cov" in body, "a CSS or JS change cannot move Python coverage - no floor"
-    assert "gate-stamp.py\" --write page" in body
+    assert 'l7r-gate.sh" stamp --write page' in body
     assert "green-local" not in body and "$(STATE)" not in body, "no verification-state record (ci/decision.py reads the event, not the target)"
 
 
@@ -38,7 +38,7 @@ def test_only_the_phases_run_exit_of_make_done_stamps_page() -> None:
     assert short, "the already-verified short-circuit"
     assert "--write diagram" in short.group(1) and "--write page" not in short.group(1), "the short-circuit ran nothing: diagram only"
     after = body[short.end() :]
-    assert "--write diagram && python3" in after and "--write page" in after, "the phases-run exit stamps both"
+    assert '--write diagram && "$$root/scripts/gates/l7r-gate.sh" stamp --write page' in after, "the phases-run exit stamps both"
 
 
 def test_tick_is_wired_to_the_script() -> None:

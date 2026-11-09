@@ -7,10 +7,15 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, is_engine
+from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, engine_paths, gate
 from tests.tooling.ci.conftest import commit, git
 
 S = ""
+
+
+def is_engine(path: str) -> bool:
+    return engine_paths(Path("."), [path]) == [path]
+
 
 ENGINE = [
     S + "l7r/diagram/settlement/houses.py",
@@ -183,7 +188,7 @@ def test_a_constants_claim_docstring_does_not_move_the_key(repo: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "path", [S + "Makefile", S + "pyproject.toml", S + "requirements.txt", S + "requirements-dev.in", "scripts/gates/gate-stamp.py", "scripts/hooks/x-hooks.sh", S + "dev/switches.json"]
+    "path", [S + "Makefile", S + "pyproject.toml", S + "requirements.txt", S + "requirements-dev.in", "scripts/gates/codeid.py", "scripts/hooks/x-hooks.sh", S + "dev/switches.json"]
 )
 def test_config_scripts_and_settings_are_not_engine(path: str) -> None:
     """The GM's second amendment: a Makefile, config or scripts/ change does not owe `make done` - the
@@ -205,24 +210,17 @@ def test_the_worktree_key_ignores_the_makefile_and_docs(repo: Path) -> None:
     assert engine_key_worktree(repo) != k0, "a pool manifest is"
 
 
-def test_coverage_scope_names_only_the_changed_engine_modules(repo: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+def test_coverage_scope_names_only_the_changed_engine_modules(repo: Path) -> None:
     """Feature 135, second pass: the gate traces the packages the diff touched - committed since the merge
     base, modified in the worktree, or untracked - and nothing else; tests and docs never count."""
-    from l7r.diagram.ci.__main__ import main
-    from l7r.diagram.ci.delta import coverage_scope
-
-    assert coverage_scope(repo) == []
-    monkeypatch.chdir(repo)
-    assert main(["cov-scope"]) == 0 and capsys.readouterr().out.strip() == "-o addopts= --no-cov"
+    assert gate(repo, "delta", "cov-scope").strip() == "-o addopts= --no-cov"
     commit(repo, S + "l7r/diagram/settlement/land.py", "y = 1\n")  # committed since the merge base
     (repo / S / "l7r" / "diagram" / "m.py").write_text("x = 9\n", encoding="utf-8")  # modified, uncommitted
     (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").parent.mkdir(parents=True)
     (repo / S / "l7r" / "diagram" / "sitegen" / "__init__.py").write_text("", encoding="utf-8")  # untracked package
     commit(repo, S + "tests/settlement/test_land.py", "def test_x(): pass\n")
     commit(repo, "docs/x.md", "prose\n")
-    assert coverage_scope(repo) == ["l7r/diagram", "l7r/diagram/settlement", "l7r/diagram/sitegen"]
-    assert main(["cov-scope"]) == 0
-    assert capsys.readouterr().out.strip() == "-o addopts=--cov=l7r/diagram --cov=l7r/diagram/settlement --cov=l7r/diagram/sitegen"
+    assert gate(repo, "delta", "cov-scope").strip() == "-o addopts=--cov=l7r/diagram --cov=l7r/diagram/settlement --cov=l7r/diagram/sitegen"
 
 
 def test_a_maps_notes_and_the_non_engine_directories_are_not_engine_code() -> None:
@@ -237,59 +235,32 @@ def test_a_maps_notes_and_the_non_engine_directories_are_not_engine_code() -> No
     assert is_engine("l7r/diagram/settlement/core.py"), "...but the engine itself is"
 
 
-def test_a_path_named_in_the_ENGINE_FILES_extension_point_is_engine_code(monkeypatch) -> None:
-    """Feature 174. `_ENGINE_FILES` is an explicit escape hatch for a file that is engine code but
-    lives outside the engine DIRECTORIES - it ships empty, so the branch that reads it has never
-    run, and an empty extension point that has never been exercised is one nobody can trust.
-
-    Monkeypatched rather than populated, because what is being tested is the MECHANISM, not a
-    membership decision the feature has no business making.
-    """
-    from l7r.diagram.ci import delta as d
-
-    monkeypatch.setattr(d, "_ENGINE_FILES", ("some/odd/place.py",))
-    assert d.is_engine("some/odd/place.py"), "a named file counts as engine code"
-    assert not d.is_engine("some/odd/other.py"), "and one that is not named does not"
-
-
 def test_a_file_ADDED_or_DELETED_since_the_base_counts_as_changed(repo: Path) -> None:
-    """`git show base:path` fails for a file that did not exist at the base, and the answer must be
-    "changed" rather than an exception - an added engine file is exactly the case that owes a build.
-
-    The comment at that branch says so in two words ("added or deleted"), and this is the test that
-    makes them true.
-    """
-    from l7r.diagram.ci import delta as d
-
+    """A file that did not exist on one side has no second version to compare: "changed", never an exception - an added engine file is
+    exactly the case that owes a build."""
     newfile = "l7r/diagram/settlement/brand_new.py"
     (repo / newfile).parent.mkdir(parents=True, exist_ok=True)
     (repo / newfile).write_text("def f():\n    return 1\n")
     git(repo, "add", "-A")
     git(repo, "commit", "-qm", "add an engine file")
-
-    base = git(repo, "rev-parse", "HEAD~1").strip()
-    # ARGUMENT ORDER IS (root, base, path). Written the other way round the call still PASSED, because
-    # "origin/main" does not end in ".py" and the function answers True at its first line - a green
-    # test exercising nothing (found while closing this branch for feature 174).
-    assert d._semantically_changed(repo, base, newfile), "a file absent from the base is a change"
-    git(repo, "rm", "-q", newfile)
-    git(repo, "commit", "-qm", "delete it again")
-    assert d._semantically_changed(repo, base, newfile), "and so is one deleted since the base"
+    assert compute_delta(repo, "HEAD~1").engine == (newfile,), "added"
+    (repo / newfile).unlink()
+    git(repo, "add", "-A")
+    git(repo, "commit", "-qm", "delete it")
+    assert compute_delta(repo, "HEAD~1").engine == (newfile,), "deleted"
 
 
 def test_coverage_scope_answers_EMPTY_where_there_is_no_origin_main_yet(repo: Path) -> None:
     """A detached worktree and a fresh fixture have no `origin/main`, so `git merge-base` exits
     non-zero. The scope is then whatever the WORKING TREE changed - never an exception, because the
     gate computes its coverage scope before it runs anything."""
-    from l7r.diagram.ci import delta as d
-
     git(repo, "update-ref", "-d", "refs/remotes/origin/main")
-    assert d.coverage_scope(repo) == [], "a clean tree with no base names nothing"
+    assert gate(repo, "delta", "cov-scope").strip() == "-o addopts= --no-cov", "a clean tree with no base names nothing"
 
     m = repo / "l7r" / "diagram" / "settlement" / "fresh.py"
     m.parent.mkdir(parents=True, exist_ok=True)
     m.write_text("x = 1\n")
-    assert d.coverage_scope(repo) == ["l7r/diagram/settlement"], "an untracked engine module still counts"
+    assert gate(repo, "delta", "cov-scope").strip() == "-o addopts=--cov=l7r/diagram/settlement", "an untracked engine module still counts"
 
 
 @pytest.mark.parametrize("path", [S + "l7r/diagram/interactive/assets/page.js", S + "l7r/diagram/interactive/assets/page.css"])

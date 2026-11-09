@@ -37,7 +37,8 @@ fn dir_from(seam: Option<String>, home: &str) -> PathBuf {
 }
 
 /// The civil date and time of `secs` past the epoch, UTC: (year, month, day, hour, minute, second).
-pub(crate) fn civil(secs: u64) -> (i64, u32, u32, u64, u64, u64) {
+#[must_use]
+pub fn civil(secs: u64) -> (i64, u32, u32, u64, u64, u64) {
     let days = i64::try_from(secs / 86_400).unwrap_or(0);
     let rem = secs % 86_400;
     // days to a civil date (Howard Hinnant's algorithm)

@@ -359,14 +359,10 @@ fn the_limits_on_how_far_a_helper_reaches_hold_over_the_real_tree() {
     // a floor: a derivation that stopped following the graph would make these small, which is the failure that passes a broken suite
     assert!(reach("hm_escape.py") + 3 >= guards.len());
     assert!(reach("guardlog.sh") + 3 >= guards.len());
-    for guard in ["sync-with-main.sh", "gate-stamp.py"] {
-        let deps = t.deps_for(guard);
-        assert!(
-            names(&deps, "gatecost.py")
-                && names(&deps, "hm_shape.py")
-                && names(&deps, "guardlog.sh")
-        );
-    }
+    let deps = t.deps_for("sync-with-main.sh");
+    assert!(
+        names(&deps, "gatecost.py") && names(&deps, "hm_shape.py") && names(&deps, "guardlog.sh")
+    );
 }
 
 #[test]
@@ -374,8 +370,6 @@ fn over_the_real_tree_the_rules_hold() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let t = Tree::at(&root);
     assert!(t.deps_for("sync-with-main.sh").len() > 20);
-    assert!(t.deps_for("gate-stamp.py").len() > 20);
-    assert!(t.globs_tree("gate-stamp.py"));
     let helpers = |g: &str| t.deps_for(g).len();
     assert!(helpers("record-edit-hooks.sh") < t.index.len());
     let deps = t.deps_for("record-edit-hooks.sh");

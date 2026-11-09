@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -74,9 +73,12 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # which is the suite doing its job: a guard the fixture cannot find exits non-zero and the
     # short-circuit path fails, so a missing script reads as a broken gate rather than a silent pass.
     # `hooks/lib/usage_log.py` joined it with feature 406: each of those checks records its run through it.
-    for script in ("gates/gate-stamp.py", "gates/codeid.py", "gates/check-run-plausible.py", "measure/ratchet.py", "gates/commit-run-record.sh", "hooks/lib/usage_log.py"):
+    for script in ("gates/codeid.py", "gates/check-run-plausible.py", "measure/ratchet.py", "gates/commit-run-record.sh", "hooks/lib/usage_log.py"):
         (root / "scripts" / script).parent.mkdir(parents=True, exist_ok=True)
         (root / "scripts" / script).write_bytes((SKILL / "scripts" / script).read_bytes())
+    gate = root / "scripts/gates/l7r-gate.sh"  # the fixture has no rust/: the real gate, reached from the fixture's own path
+    gate.write_text(f'#!/usr/bin/env bash\nexec "{SKILL}/scripts/gates/l7r-gate.sh" "$@"\n', encoding="utf-8")
+    gate.chmod(0o755)
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
     subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
     subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
@@ -84,7 +86,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     state.write(root, state.GREEN, "done")
     # the hooks stamp fresh too, as a green gate leaves it: with it stale the shortcut runs `hooks-test` first (feature 375
     # amendment 7, FR-032), which this fixture's few guards cannot pass
-    subprocess.run([sys.executable, "scripts/gates/gate-stamp.py", "--write", "hooks"], cwd=root, check=True, capture_output=True)
+    subprocess.run([str(SKILL / "scripts/gates/l7r-gate.sh"), "stamp", "--write", "hooks"], cwd=root, check=True, capture_output=True)
     p = make(fixture_skill, "done")
     assert p.returncode == 0 and "already verified" in p.stdout and "reference settlement" not in p.stdout, p.stdout + p.stderr
     (root / "docs").mkdir()

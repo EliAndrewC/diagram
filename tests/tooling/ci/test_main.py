@@ -105,13 +105,6 @@ def test_measure_dispatches_with_NO_engine_delta_and_says_what_it_buys(roots: Pa
     assert "BYPASSED" in out, "and the bypassed condition is still printed"
 
 
-def test_engine_key_subcommand(roots: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert cli.main(["engine-key"]) == 0
-    key = capsys.readouterr().out.strip()
-    assert len(key) == 64
-    assert cli.main(["engine-key", "HEAD^{tree}"]) == 0 and capsys.readouterr().out.strip() == key
-
-
 def test_image_and_target_validation(roots: Path) -> None:
     assert cli.main(["image"]) == 0
     with pytest.raises(SystemExit):

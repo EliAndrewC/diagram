@@ -31,7 +31,7 @@ def _git(root: pathlib.Path, *a: str) -> str:
 
 
 def _repo(tmp: pathlib.Path, port: str | None = "integrated") -> tuple[pathlib.Path, str, str]:
-    """main's engine at `base`; branch `work` changes it at `head`. `gate-stamp.py` is copied in, as `tests/tooling/ci/conftest.py`
+    """main's engine at `base`; branch `work` changes it at `head`. `l7r-gate stamp` is copied in, as `tests/tooling/ci/conftest.py`
     does: the engine key loads it from the tree it reads. The port switch committed at `port` (feature 444 FR-023): `integrated`,
     feature 386's landing cohort as it stood, unless a test asks otherwise."""
     if port is not None:
@@ -40,7 +40,6 @@ def _repo(tmp: pathlib.Path, port: str | None = "integrated") -> tuple[pathlib.P
     (tmp / "l7r").mkdir()
     (tmp / "pool").mkdir()
     (tmp / "scripts/gates").mkdir(parents=True)
-    (tmp / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
     (tmp / "scripts/gates/codeid.py").write_text((REPO / "scripts/gates/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")  # gate-stamp loads its code id beside it (feature 426 D2)
     (tmp / "l7r/a.py").write_text("X = 1\n")
     (tmp / "pool/p.json").write_text("{}\n")

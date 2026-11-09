@@ -159,12 +159,11 @@ def test_already_verified_only_after_a_green_done_against_unchanged_engine_conte
 
 def test_the_short_circuit_key_contains_everything_the_stamp_hashes(repo: Path) -> None:
     """FR-019: the short-circuit re-writes the gate-stamp. Safe because the check compares the SAME
-    hash the stamp writes - gate-stamp's diagram area, loaded from the script itself."""
-    from tests.tooling.ci.conftest import REPO_ROOT
+    hash the stamp writes - the Rust gate's diagram area, asked of the binary."""
+    from l7r.diagram.ci.delta import gate
 
-    gs = state._gate_stamp(REPO_ROOT)
-    area_path, patterns = gs.AREAS["diagram"]
-    assert state.current_hash(REPO_ROOT) == str(gs.hash_files(gs._area_files(REPO_ROOT, area_path, patterns), REPO_ROOT))  # with the root, so the semantic cache serves it (2.7 s -> ms without)
+    gate(repo, "stamp", "--write", "diagram")
+    assert state.current_hash(repo) == (repo / ".git" / "gate-green-diagram").read_text(encoding="utf-8")
 
 
 def test_a_failed_done_does_not_vouch_for_the_tooling(repo: Path) -> None:

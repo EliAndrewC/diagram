@@ -33,7 +33,12 @@ fn found(pattern: &Regex, text: &str) -> bool {
 
 const HELD_WHOLE_TREE: &str = "sync-with-main.sh";
 /// A suite that drives `l7r-guard` tests the binary built from these (feature 449 T004), which the name index over scripts/ and tests/hooks/ never sees.
-const RUST_GUARD: [&str; 3] = ["rust/guard", "rust/Cargo.toml", "rust/Cargo.lock"];
+const RUST_GUARD: [&str; 4] = [
+    "rust/guard",
+    "rust/gate",
+    "rust/Cargo.toml",
+    "rust/Cargo.lock",
+];
 
 static GLOB_TUPLE: LazyLock<Regex> =
     LazyLock::new(|| re(r#""scripts"\s*,\s*\(\s*"\*\.sh"\s*,\s*"\*\.py""#));
@@ -269,7 +274,8 @@ impl Tree {
     }
 
     fn rust_inputs(&self, guard: &str) -> Vec<PathBuf> {
-        if !format!("{}{}", self.text(guard), self.text(&suite_of(guard))).contains("l7r-guard") {
+        let words = format!("{}{}", self.text(guard), self.text(&suite_of(guard)));
+        if !words.contains("l7r-guard") && !words.contains("l7r-gate") {
             return Vec::new();
         }
         let mut found: Vec<PathBuf> = RUST_GUARD
@@ -469,7 +475,7 @@ impl Tree {
             .map(|n| n.to_string_lossy().into_owned())
             .collect();
         names.sort();
-        names.extend(["review-gate.sh", "gate-stamp.py", "sync-with-main.sh"].map(str::to_owned));
+        names.extend(["review-gate.sh", "l7r-gate.sh", "sync-with-main.sh"].map(str::to_owned));
         names
     }
 

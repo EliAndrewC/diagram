@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 os.environ.setdefault("INCR_NO_CUTOFF", "1")
 from l7r.diagram.ci import gate_config, incremental  # noqa: E402
-from l7r.diagram.ci.delta import is_engine  # noqa: E402
+from l7r.diagram.ci.delta import engine_paths  # noqa: E402
 
 REASON = re.compile(r"pool manifest|engine file that is not Python|non-module file under tests/")
 
@@ -41,7 +41,8 @@ def manifest_at(commit: str) -> dict:
     for line in git("ls-tree", "-r", commit).splitlines():
         meta, path = line.split("\t", 1)
         blobs[path] = meta.split()[2]
-    engine = {p: b for p, b in blobs.items() if is_engine(p) or (p.endswith(".py") and p.startswith("l7r/"))}
+    listed = set(engine_paths(Path("."), list(blobs)))
+    engine = {p: b for p, b in blobs.items() if p in listed or (p.endswith(".py") and p.startswith("l7r/"))}
     with tempfile.TemporaryDirectory() as tmp:
         wanted = [p for p in (*gate_config.MACHINERY, *gate_config.LOCKFILES, "Makefile", "pyproject.toml") if any(b == p or b.startswith(p + "/") for b in blobs)]
         data = subprocess.run(["git", "-C", str(ROOT), "archive", commit, "--", *wanted], capture_output=True, check=True).stdout

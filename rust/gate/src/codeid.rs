@@ -1,4 +1,4 @@
-//! A file's content id (feature 449 T062, from `scripts/gates/codeid.py` and `gate-stamp.py`): what a gate actually exercised, so that a comment's edit keeps the engine key. A `.rs` file's id is its
+//! A file's content id (feature 449 T062, from `scripts/gates/codeid.py` and `l7r-gate stamp`): what a gate actually exercised, so that a comment's edit keeps the engine key. A `.rs` file's id is its
 //! comment-free tokens; a `.py` file's is Python's own `ast.dump` of its docstring-free tree, which only Python can say, so `codeid.py` is asked once a run with every id the cache lacks (the round
 //! arbiter's `ask:449-T062-py-id`), and if it cannot answer the run fails rather than writing a substitute. Any other file's id is its blob id. The ids are kept by raw blob id in one file, shared with the
 //! Python callers until they are ported.
@@ -153,26 +153,37 @@ fn read_table(path: &Path) -> BTreeMap<String, String> {
         .collect()
 }
 
+/// The repository's common git directory (a worktree's and its parent's are the same one), or None outside a repository.
+#[must_use]
+pub fn common_git_dir(root: &Path) -> Option<PathBuf> {
+    let done = Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
+        .output()
+        .ok()?;
+    done.status
+        .success()
+        .then(|| PathBuf::from(String::from_utf8_lossy(&done.stdout).trim()))
+}
+
 impl Cache {
     /// The cache of the repository at `root`; with no repository, an empty one nothing is written to.
     #[must_use]
     pub fn at(root: &Path) -> Self {
-        let done = Command::new("git")
-            .arg("-C")
-            .arg(root)
-            .args(["rev-parse", "--path-format=absolute", "--git-common-dir"])
-            .output();
-        let dir = done
-            .ok()
-            .filter(|o| o.status.success())
-            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned());
-        let path = dir.map(|d| Path::new(&d).join(CACHE_NAME));
+        let path = common_git_dir(root).map(|d| d.join(CACHE_NAME));
         let table = path.as_deref().map(read_table).unwrap_or_default();
         Self {
             path,
             table,
             dirty: false,
         }
+    }
+
+    /// The id kept for this blob, if any.
+    #[must_use]
+    pub fn kept(&self, raw: &str) -> Option<&str> {
+        self.table.get(raw).map(String::as_str)
     }
 
     /// Written whole and renamed into place, the entries another writer added since this one read them kept.
@@ -193,6 +204,24 @@ impl Cache {
         self.table = merged;
         self.dirty = false;
     }
+}
+
+/// A fallible call's error as this crate's text, naming what was being done.
+pub(crate) fn stated<T>(done: std::io::Result<T>, what: &str) -> Result<T, String> {
+    done.map_err(said(what))
+}
+
+/// Outside the generic function, so the one closure is one piece of code to test rather than one for each `T`.
+fn said(what: &str) -> impl FnOnce(std::io::Error) -> String + '_ {
+    move |e| format!("{what}: {e}")
+}
+
+/// The `codeid.py` to ask: the wrapper's own tree, since a fixture repository the binary runs in has none; without the wrapper, `root`'s.
+#[must_use]
+pub fn script(root: &Path) -> PathBuf {
+    let tree = std::env::var_os("L7R_GATE_TREE").map(PathBuf::from);
+    tree.unwrap_or(root.to_path_buf())
+        .join("scripts/gates/codeid.py")
 }
 
 /// `(path, data)` of each file; each one's id, in order.

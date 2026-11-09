@@ -128,7 +128,7 @@
    "declared": "spec-fidelity"
   },
   "### T063 Approach (checklist part A)": {
-   "sha256": "47eb53bee05a41ed474e80093cd5d805fd48d4de46c8b9d2edc52d97202e4da2",
+   "sha256": "30c293c8cc74837bb437231e30e2397b45438b378c42c983b8a1f7656e587672",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -3587,6 +3587,120 @@
      "why": "A process checklist; it decides nothing the spec leaves open."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T063 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "slice-1-move-unported",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move from gate-stamp.py into codeid.py, staying Python, as the one Python library for callers ported later; gate-stamp.py keeps thin delegating functions so no caller changes.",
+     "class": "within",
+     "why": "The request is that all the Python become Rust and sets no order. This defers no file out of the port: FR-001 places codeid.py with content_id and its kept cache in phase 4 (ask:449-T063-slices), so the end state is unchanged. git_blob_id and _git_dir go as content_id's own dependencies, not as a widening. Delegation leaves one implementation answering, so FR-003 holds, and the shims are temporary because slice 2 is committed to deleting gate-stamp.py. The library serves only Python callers that phases 3 and 4 port, so it does not undercut the request's purpose, which is the speed of what runs."
+    },
+    {
+     "id": "slices-2-3-deferred",
+     "summary": "T063 is three slices, each landing whole with its own decisions, differential and review; slices 2 and 3 write their decisions when they start. Slice 2 will list every remaining Python caller of content_id, _area_files and AREAS with the implementation answering each, and delete gate-stamp.py.",
+     "class": "within",
+     "why": "This is the round arbiter's ruling ask:449-T063-slices applied as ruled, and it drops nothing: the pieces of slices 2 and 3 are named and stay in the task. Nothing about them is approved here; each gets its own review. Slice 2's caller list must carry its search space when written, for that review to check."
+    },
+    {
+     "id": "order-leaf-first-batched",
+     "summary": "Leaf first by what imports what; callers reach the binary once a process or in a batch, never one spawn a file.",
+     "class": "within",
+     "why": "Restates ask:449-T062-order and FR-006, SC-002; it settles nothing beyond them."
+    },
+    {
+     "id": "exits-and-done",
+     "summary": "Green exits: a stamp kept before the switch still reads, routes and keys over recorded deltas equal the Python's, no state file has two writers at any commit, make done reuses a last green result across the switch. Recorded commands that run a file ported or deleted are rewritten in the same commit and re-run. Slice 1's own exit is m:t063-slice1, every area key and id equal before and after.",
+     "class": "within",
+     "why": "These only verify what FR-001, FR-002 and FR-003 already require (same answers, one writer, the recorded-measurement rewrite in the porting commit). They add no behavior and remove none of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T063 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "slice1-content-id-moves",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move unported from gate-stamp.py into codeid.py; gate-stamp keeps delegating functions.",
+     "class": "within",
+     "why": "FR-001's last sentence places content_id and its kept cache beside codeid.py as the one Python library for later ported callers (ask:449-T063-slices); no answer changes (m:t063-slice1)."
+    },
+    {
+     "id": "three-slices",
+     "summary": "T063 lands in three slices, slice 3 (state.py, runlog.py, gate_config.py, coverage_exempt.py) writing its decisions when it starts.",
+     "class": "within",
+     "why": "Sequencing inside phase 2 under the arbiter's ruling; nothing is dropped from FR-001 and each slice carries its own decisions, differential and review."
+    },
+    {
+     "id": "slice2-command-and-delta-to-rust",
+     "summary": "gate-stamp.py becomes l7r-gate stamp, delta.py's list, delta and key become l7r-gate delta, every caller switches in that commit and gate-stamp.py is deleted; a stamp kept before the switch still verifies.",
+     "class": "within",
+     "why": "FR-001 phase 2 (l7r/diagram/ci/ and scripts/gates/), FR-002 same answers, FR-003 one cut with no piece running both."
+    },
+    {
+     "id": "delta-py-client",
+     "summary": "What remains of delta.py holds no list, git call or hash, only the Delta type and calls to the binary once a process or in a batch, until T064 and T071 port its callers.",
+     "class": "within",
+     "why": "A transitional caller inside phase 2, not a second implementation, so FR-003 holds; the file is still in FR-001's census and is ported with its callers."
+    },
+    {
+     "id": "caller-census-and-routes",
+     "summary": "Every remaining caller named with what answers it, from a git grep for gate-stamp over every tracked file (log files excluded) and a name grep for delta's functions over py, sh, mk and the Makefile.",
+     "class": "within",
+     "why": "States its search space. The grep that is every tracked file is the one for the file being deleted; delta.py survives as a client, so a by-path delta.py caller its narrower grep cannot see still resolves. Nothing is excepted from FR-001."
+    },
+    {
+     "id": "split-sh-left",
+     "summary": "specs/131-split-diagram-repo/contracts/split.sh's mention of gate-stamp's pre-329 path is not changed.",
+     "class": "within",
+     "why": "It names a path already gone before this slice, so deleting gate-stamp.py changes nothing for it; it is no exemption, and the file stays in FR-001's phase 3 census for any Python it runs."
+    },
+    {
+     "id": "engine-edit-on-library-until-t066",
+     "summary": "engine_edit.py calls the binary once a process only while a review or roll is live, and stays on codeid.py only until its own port in T066.",
+     "class": "within",
+     "why": "Restates FR-001's ask:449-T052-round3 clause; the block itself refuses any license past phase 2."
+    },
+    {
+     "id": "content-id-stays-in-codeid",
+     "summary": "The content id stays in codeid.py for callers holding bytes that are no file on disk, a binary call per id being a spawn per file; checked against the Rust on every file of every area.",
+     "class": "within",
+     "why": "FR-001 names content_id in codeid.py as the one Python library for those callers; the differential over 8,885 files (m:t063-slice2) keeps the two answers equal."
+    },
+    {
+     "id": "byte-hashed-membership-unchanged",
+     "summary": "Membership of a byte-hashed area is ported unchanged, by pattern in a batch on stdin, with a repository-root area taking diagram's exclusions as _area_exclusions gave it; the browser-test docstring defect goes to the round arbiter.",
+     "class": "within",
+     "why": "FR-002 asks for the same verdicts. The earlier per-area exclusions and listing membership are gone, and the known defect is reported to the arbiter rather than fixed or waved away inside the port; FR-002's fix-in-port clause is not foreclosed."
+    },
+    {
+     "id": "one-spawn-a-process-or-batch",
+     "summary": "Callers reach the binary once a process or in a batch, never one spawn a file, cited as FR-006.",
+     "class": "within",
+     "why": "Stricter than FR-006's three named fixes, not narrower, and it serves the request's stated reason: the Python is too inefficient."
+    },
+    {
+     "id": "differential",
+     "summary": "m:t063-slice2 compares keys, lists, delta, is_engine and raw-match against the Python from a detached worktree of the commit before.",
+     "class": "within",
+     "why": "Enforces FR-002's same-answers requirement; if the requested port were deleted it would have nothing to check. Open figure, not a narrowing: the block says both is_engine and raw-match ran over every tracked path, yet the entry counts is_engine_paths 26664 and raw_match_paths 26670 with 7 synthetic (26663 tracked if the 7 are inside the count, 6 more if they are not); the block does not reconcile them."
+    },
+    {
+     "id": "measurements-rewritten",
+     "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement clause, carried as written with no exception."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5957,6 +6071,86 @@
      "summary": "Part B attributes the red-gate tripwire to T061's two reds and offers no route.",
      "class": "within",
      "why": "A process checklist; it decides nothing the spec leaves open."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T063": {
+   "section_sha256": "30c293c8cc74837bb437231e30e2397b45438b378c42c983b8a1f7656e587672",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "slice1-content-id-moves",
+     "summary": "content_id, git_blob_id, the kept cache and _git_dir move unported from gate-stamp.py into codeid.py; gate-stamp keeps delegating functions.",
+     "class": "within",
+     "why": "FR-001's last sentence places content_id and its kept cache beside codeid.py as the one Python library for later ported callers (ask:449-T063-slices); no answer changes (m:t063-slice1)."
+    },
+    {
+     "id": "three-slices",
+     "summary": "T063 lands in three slices, slice 3 (state.py, runlog.py, gate_config.py, coverage_exempt.py) writing its decisions when it starts.",
+     "class": "within",
+     "why": "Sequencing inside phase 2 under the arbiter's ruling; nothing is dropped from FR-001 and each slice carries its own decisions, differential and review."
+    },
+    {
+     "id": "slice2-command-and-delta-to-rust",
+     "summary": "gate-stamp.py becomes l7r-gate stamp, delta.py's list, delta and key become l7r-gate delta, every caller switches in that commit and gate-stamp.py is deleted; a stamp kept before the switch still verifies.",
+     "class": "within",
+     "why": "FR-001 phase 2 (l7r/diagram/ci/ and scripts/gates/), FR-002 same answers, FR-003 one cut with no piece running both."
+    },
+    {
+     "id": "delta-py-client",
+     "summary": "What remains of delta.py holds no list, git call or hash, only the Delta type and calls to the binary once a process or in a batch, until T064 and T071 port its callers.",
+     "class": "within",
+     "why": "A transitional caller inside phase 2, not a second implementation, so FR-003 holds; the file is still in FR-001's census and is ported with its callers."
+    },
+    {
+     "id": "caller-census-and-routes",
+     "summary": "Every remaining caller named with what answers it, from a git grep for gate-stamp over every tracked file (log files excluded) and a name grep for delta's functions over py, sh, mk and the Makefile.",
+     "class": "within",
+     "why": "States its search space. The grep that is every tracked file is the one for the file being deleted; delta.py survives as a client, so a by-path delta.py caller its narrower grep cannot see still resolves. Nothing is excepted from FR-001."
+    },
+    {
+     "id": "split-sh-left",
+     "summary": "specs/131-split-diagram-repo/contracts/split.sh's mention of gate-stamp's pre-329 path is not changed.",
+     "class": "within",
+     "why": "It names a path already gone before this slice, so deleting gate-stamp.py changes nothing for it; it is no exemption, and the file stays in FR-001's phase 3 census for any Python it runs."
+    },
+    {
+     "id": "engine-edit-on-library-until-t066",
+     "summary": "engine_edit.py calls the binary once a process only while a review or roll is live, and stays on codeid.py only until its own port in T066.",
+     "class": "within",
+     "why": "Restates FR-001's ask:449-T052-round3 clause; the block itself refuses any license past phase 2."
+    },
+    {
+     "id": "content-id-stays-in-codeid",
+     "summary": "The content id stays in codeid.py for callers holding bytes that are no file on disk, a binary call per id being a spawn per file; checked against the Rust on every file of every area.",
+     "class": "within",
+     "why": "FR-001 names content_id in codeid.py as the one Python library for those callers; the differential over 8,885 files (m:t063-slice2) keeps the two answers equal."
+    },
+    {
+     "id": "byte-hashed-membership-unchanged",
+     "summary": "Membership of a byte-hashed area is ported unchanged, by pattern in a batch on stdin, with a repository-root area taking diagram's exclusions as _area_exclusions gave it; the browser-test docstring defect goes to the round arbiter.",
+     "class": "within",
+     "why": "FR-002 asks for the same verdicts. The earlier per-area exclusions and listing membership are gone, and the known defect is reported to the arbiter rather than fixed or waved away inside the port; FR-002's fix-in-port clause is not foreclosed."
+    },
+    {
+     "id": "one-spawn-a-process-or-batch",
+     "summary": "Callers reach the binary once a process or in a batch, never one spawn a file, cited as FR-006.",
+     "class": "within",
+     "why": "Stricter than FR-006's three named fixes, not narrower, and it serves the request's stated reason: the Python is too inefficient."
+    },
+    {
+     "id": "differential",
+     "summary": "m:t063-slice2 compares keys, lists, delta, is_engine and raw-match against the Python from a detached worktree of the commit before.",
+     "class": "within",
+     "why": "Enforces FR-002's same-answers requirement; if the requested port were deleted it would have nothing to check. Open figure, not a narrowing: the block says both is_engine and raw-match ran over every tracked path, yet the entry counts is_engine_paths 26664 and raw_match_paths 26670 with 7 synthetic (26663 tracked if the 7 are inside the count, 6 more if they are not); the block does not reconcile them."
+    },
+    {
+     "id": "measurements-rewritten",
+     "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement clause, carried as written with no exception."
     }
    ],
    "verdict": "CLEAR"

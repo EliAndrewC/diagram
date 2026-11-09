@@ -10,6 +10,7 @@
 //! or by `make dispatch-dropped`, which appends to `<gitdir>/dropped-dispatches.jsonl`.
 
 use std::collections::{HashMap, HashSet};
+use std::io::BufRead as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -56,11 +57,34 @@ fn key_of(input: &Value) -> String {
     }
 }
 
+/// The rows this guard reads, a line at a time and only those kept: a session's transcript reached 658 MB on 2026-11-08, and held whole, every row parsed, the guard grew to 2.3 GB at a turn's end and the laptop's
+/// memory guard killed it.
 fn rows_of(transcript: &Path) -> Vec<Value> {
-    let text = String::from_utf8_lossy(&std::fs::read(transcript).unwrap_or_default()).into_owned();
-    text.lines()
-        .filter_map(|l| serde_json::from_str(l).ok())
+    let Ok(file) = std::fs::File::open(transcript) else {
+        return Vec::new();
+    };
+    std::io::BufReader::new(file)
+        .split(b'\n')
+        .map_while(Result::ok)
+        .filter_map(|raw| {
+            let line = String::from_utf8_lossy(&raw);
+            let may = ["turn_duration", "\"Agent\"", "is_error"]
+                .iter()
+                .any(|k| line.contains(k));
+            may.then(|| serde_json::from_str::<Value>(&line).ok())
+                .flatten()
+        })
+        .filter(wanted)
         .collect()
+}
+
+/// A turn's end, an `Agent` call or a failed tool result: all that `last_turn_end` and `calls` read.
+fn wanted(row: &Value) -> bool {
+    (row["type"] == "system" && row["subtype"] == "turn_duration")
+        || content(row).iter().any(|b| {
+            (b["type"] == "tool_use" && b["name"] == "Agent")
+                || (b["type"] == "tool_result" && b["is_error"] == true)
+        })
 }
 
 fn content(entry: &Value) -> &[Value] {

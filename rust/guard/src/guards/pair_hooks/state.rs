@@ -264,14 +264,15 @@ pub fn wall() -> i64 {
         .map_or(0, |d| i64::try_from(d.as_secs()).unwrap_or(0))
 }
 
-/// The clone's gate stamp says the gate is fresh (`gate-stamp.py --fresh diagram`, run whether or not the script is there).
+/// The clone's gate stamp says the gate is fresh (`l7r-gate stamp --fresh diagram`, run whether or not the wrapper is there).
 #[must_use]
-pub fn stamp_fresh(clone: &Path, python: &str) -> bool {
+pub fn stamp_fresh(clone: &Path) -> bool {
     ask(
         clone,
-        python,
+        "bash",
         &[
-            &clone.join("scripts/gates/gate-stamp.py").to_string_lossy(),
+            &clone.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
+            "stamp",
             "--fresh",
             "diagram",
         ],
@@ -282,13 +283,12 @@ pub fn stamp_fresh(clone: &Path, python: &str) -> bool {
 
 /// A green gate has seen exactly this content (`gate_green`): the clone's gate stamp, else its recorded verification key.
 #[must_use]
-pub fn gate_green(clone: &Path, key: &str, python: &str) -> bool {
+pub fn gate_green(clone: &Path, key: &str) -> bool {
     if key.is_empty() {
         return false;
     }
-    let stamp = clone.join("scripts/gates/gate-stamp.py");
-    if stamp.is_file() {
-        return stamp_fresh(clone, python);
+    if clone.join("scripts/gates/l7r-gate.sh").is_file() {
+        return stamp_fresh(clone);
     }
     object(&clone.join(".git/verification-state.json"))
         .get("engine_key")

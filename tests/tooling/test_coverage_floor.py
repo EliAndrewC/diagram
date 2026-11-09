@@ -78,26 +78,6 @@ def test_the_floor_phase_asks_coverage_for_ONE_HUNDRED_over_the_WHOLE_TREE() -> 
     assert "exit $$cov_ec" in MAKEFILE, "and the phase exits non-zero once, at the end"
 
 
-def test_the_gates_own_STANDARD_is_part_of_the_stamp_key() -> None:
-    """A stamp says "the gate has seen exactly this code and passed", and `sync-with-main.sh --check`
-    is the whole of what the push demands. Every stamp written before this feature certifies a run
-    that was ALLOWED to finish below the floor, so the key has to move when the standard does -
-    otherwise the first push after the change rides a record of the old one."""
-    import importlib.util
-
-    path = SKILL / "scripts/gates/gate-stamp.py"
-    spec = importlib.util.spec_from_file_location("_gate_stamp_under_test", path)
-    assert spec and spec.loader
-    gs = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(gs)
-
-    assert gs.GATE_RECIPE, "there is a recipe string to key on"
-    before = gs.hash_files([path])
-    gs.GATE_RECIPE = gs.GATE_RECIPE + "/next"
-    after = gs.hash_files([path])
-    assert before != after, "bumping the recipe retires every existing stamp, which is the point"
-
-
 def test_a_gated_run_prints_ONE_coverage_table() -> None:
     """Feature 221 (GM 2026-09-09: "The bookkeeping prints three full coverage tables ... Print one."). pytest-cov's own
     terminal report - the SELECTION's coverage on an incremental run, not the verdict - is gone from addopts (a

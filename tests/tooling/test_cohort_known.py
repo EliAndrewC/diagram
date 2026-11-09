@@ -19,10 +19,9 @@ def _load():  # noqa: ANN202
 
 
 def _engine_tree(root: pathlib.Path) -> None:
-    """`l7r/` and the `gate-stamp.py` the engine key loads from the tree it reads (as `tests/tooling/ci/conftest.py` copies it)."""
+    """`l7r/` and the `l7r-gate stamp` the engine key loads from the tree it reads (as `tests/tooling/ci/conftest.py` copies it)."""
     (root / "l7r").mkdir(parents=True)
     (root / "scripts/gates").mkdir(parents=True)
-    (root / "scripts/gates/gate-stamp.py").write_text((REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
     (root / "scripts/gates/codeid.py").write_text((REPO / "scripts/gates/codeid.py").read_text(encoding="utf-8"), encoding="utf-8")  # gate-stamp loads its code id beside it (feature 426 D2)
 
 

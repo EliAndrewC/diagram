@@ -939,5 +939,43 @@
       "first_run_s": 4.77,
       "all_cached_s": 0.087
     }
+  },
+  "t063-slice1": {
+    "quantity": "gate-stamp's area keys and content ids before and after content_id moves into codeid.py",
+    "observed": "2026-11-09",
+    "subject": "the clone's tree; HEAD's gate-stamp.py and codeid.py against the working tree's",
+    "command": "the two versions of gate-stamp.py at commits 82c164a69^ and 82c164a69 (git show; the file is gone since T063's slice 2) loaded by path, _area_key for every area and content_id for scripts/gates/*.py, compared",
+    "method": "exact comparison",
+    "value": {
+      "areas": 4,
+      "area_keys_equal": true,
+      "files": 38,
+      "ids_equal": true
+    }
+  },
+  "t063-slice2": {
+    "quantity": "the Rust gate's stamps, delta and engine key against the Python they replace",
+    "observed": "2026-11-09",
+    "subject": "the clone at HEAD before the slice's commit (a detached worktree of it) and the working tree's binary",
+    "command": "gate-stamp.py and delta.py at commit 2a9baf4c5 (git worktree add --detach; both are gone or a client since) loaded by path; l7r-gate stamp --key and --list for every area, delta key for every 4th of the last 200 commits and the worktree, delta compute at seven bases, delta engine-paths over every tracked path, content-ids for every file of every area against codeid.py's content_id; stamp --raw-match over every tracked path and seven paths on no disk against gate-stamp._matches over the raw areas",
+    "method": "exact comparison",
+    "value": {
+      "areas": 4,
+      "area_keys_equal": true,
+      "area_lists_equal": true,
+      "content_id_files": 8885,
+      "content_id_mismatches": 0,
+      "engine_key_commits": 50,
+      "engine_key_mismatches": 0,
+      "worktree_key_equal": true,
+      "delta_bases": 7,
+      "delta_mismatches": 0,
+      "is_engine_paths": 26664,
+      "is_engine_mismatches": 0,
+      "raw_match_paths": 26670,
+      "raw_match_synthetic": 7,
+      "raw_match_mismatches": 0,
+      "raw_match_tracked_paths": 26663
+    }
   }
 }

@@ -14,11 +14,12 @@ local GATE"; `delta.is_engine` answers "does it owe a PAID BUILD". FR-025 stands
 
 from __future__ import annotations
 
-import importlib.util
 import pathlib
 from pathlib import Path
 
 import pytest
+
+from l7r.diagram.ci.delta import engine_paths, gate
 
 pytestmark = pytest.mark.tooling
 
@@ -26,36 +27,9 @@ HERE = Path(__file__).resolve().parents[2]
 REPO = HERE
 
 
-def _gate_stamp():
-    spec = importlib.util.spec_from_file_location("gate_stamp_under_test", REPO / "scripts/gates/gate-stamp.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-def test_the_exclusions_are_derived_from_the_coverage_config() -> None:
-    """FR-003. A second hand-kept roster would drift from `source` exactly as the roster constitution
-    X clause 5 replaced did, so the list is computed: a declared exclusion survives only if coverage
-    does not measure it."""
-    gs = _gate_stamp()
-    assert gs.coverage_sources(REPO) == ("l7r/",), "the authority is [tool.coverage.run] source"
-    assert "l7r/diagram/ci/" in gs._DECLARED_EXCLUDE["diagram"], "still DECLARED - the derivation is what drops it"
-    # tests/ is outside l7r/ and survives, and so do the root trees outside the project (feature 329)
-    assert gs.exclusions("diagram", REPO) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/"), "measured -> not excludable"
-
-
-def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
-    """The first draft returned () on an unreadable config, which makes the derivation a no-op and
-    silently restores the whole defect - in the failure case nobody tests. Its own comment called that
-    "the safe direction"; the gate-stamp suite caught it inside a minute, because its fixture has no
-    `pyproject.toml`. The default is not a guess: constitution X clause 5 states the rule the config
-    encodes, *"if you add a file under `l7r/`, it is measured"*."""
-    gs = _gate_stamp()
-    assert gs.coverage_sources(Path("/nonexistent-root")) == ("l7r/",)
-    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/"), (
-        "ci/ stays measured even with no config to read"
-    )
+def _area(name: str) -> list[str]:
+    """The area's files, repository-relative, as the Rust gate lists them (`coverage_sources` and the exclusions' derivation are its unit tests)."""
+    return gate(REPO, "stamp", "--list", name).splitlines()
 
 
 def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
@@ -63,8 +37,7 @@ def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
     (widening what the gate sees) and must never ADD one: `AREAS["diagram"]`'s `*.py` crosses `/`, so
     it covers the files outside `l7r/` and `tests/` - every pool and legacy `.gen.py` and the legacy capital's package -
     that coverage does not measure and that the push-time stamp check must keep hashing."""
-    gs = _gate_stamp()
-    files = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
+    files = [str(REPO / f) for f in _area("diagram")]
     assert sum("/l7r/diagram/ci/" in f for f in files) == 18, (
         "ci/ is inside the gate's surface now (was 0; 12 before feature 207 added incremental.py, selection.py and gate_plugin.py; 15 before feature 213 added rollcensus.py and rollverdict.py; 17 before feature 415 added gate_config.py; 18 before feature 430 added pool_readers.py; 19 before feature 448 added coverage_exempt.py; 20 before feature 444 T39 deleted rollcensus.py and rollverdict.py)"
     )
@@ -89,7 +62,9 @@ def test_the_PAID_route_is_untouched_so_a_ci_change_still_dispatches_nothing() -
     """FR-002, and it is the half of the GM's FR-025 ruling that STANDS. `delta.is_engine` is a
     separate computation from the stamp, so widening the gate does not widen what costs money: a
     ci-only delta still routes DIRECT and still starts no build."""
-    from l7r.diagram.ci.delta import is_engine
+
+    def is_engine(path: str) -> bool:
+        return engine_paths(REPO, [path]) == [path]
 
     S = ""
     assert not is_engine(S + "l7r/diagram/ci/decision.py"), "ci/ is not engine for the ROUTE - money is the other question"
@@ -118,10 +93,11 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     `make page-check` - the two assets and the registry package whose docstrings are the page's prose -
     and the `diagram` area, whose stamp is the full gate's, holds no `.js` or `.css`. `ci/delta.is_engine`
     agrees that an asset is not engine for the route, so the definitions cannot drift apart unseen."""
-    from l7r.diagram.ci.delta import is_engine
 
-    gs = _gate_stamp()
-    page = [str(f) for f in gs._area_files(REPO, *gs.AREAS["page"])]
+    def is_engine(path: str) -> bool:
+        return engine_paths(REPO, [path]) == [path]
+
+    page = _area("page")
     assets = sorted(f.rsplit("/", 1)[1] for f in page if "/assets/" in f)
     # THE GLOSSARY IS 720 FILES NOW (feature 259), so the roster is the six at the top of `assets/`
     # plus one file per term. Enumerating 726 names here would be the stale-literal shape this
@@ -147,8 +123,10 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     # edit to it did not invalidate the area. Eight glossary terms carry a macron, which is how it
     # surfaced; the hole was older and covered every area.
     assert not [f for f in page if not pathlib.Path(f).exists()], "an area file that is not a file"
-    diagram = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
+    diagram = _area("diagram")
     assert not [f for f in diagram if f.endswith((".js", ".css", ".json"))], "the gate's area holds no asset, and no content file"
     for name in assets:
         assert not is_engine("l7r/diagram/interactive/assets/" + name), name
-    assert "page" in gs.RAW_AREAS and "diagram" not in gs.RAW_AREAS, "only the page area hashes bytes (spec 189 D3)"
+    ask = [*page, *(f for f in diagram if f.startswith("l7r/diagram/ci/"))]
+    raw = set(gate(REPO, "stamp", "--raw-match", stdin="".join(f"{f}\n" for f in ask)).splitlines())
+    assert set(page) <= raw and not [f for f in ask if f.startswith("l7r/diagram/ci/") and f in raw], "only the page and browser areas hash bytes (spec 189 D3)"

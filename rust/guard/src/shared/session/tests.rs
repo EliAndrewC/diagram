@@ -119,7 +119,7 @@ fn the_seams_come_from_the_environment() {
 }
 
 #[test]
-fn the_transcript_is_read_once_for_the_rename_and_the_gms_messages() {
+fn the_gms_messages_are_read_once_and_the_rename_a_line_at_a_time() {
     let d = scratch("messages");
     let tp = d.join("t.jsonl");
     std::fs::write(&tp, "{\"type\": \"custom-title\", \"customTitle\": \"named\"}\n{\"type\": \"user\", \"message\": {\"content\": \"go\"}}\n").unwrap();
@@ -127,6 +127,6 @@ fn the_transcript_is_read_once_for_the_rename_and_the_gms_messages() {
     assert_eq!(s.name(), "named");
     assert_eq!(s.gm_messages(), ["go".to_owned()]);
     assert_eq!(s.gm_messages().len(), 1);
-    assert_eq!(s.reads.get(), 2);
+    assert_eq!(s.reads.get(), 3);
     assert!(session(&d, &d, "/no/such", "x").gm_messages().is_empty());
 }

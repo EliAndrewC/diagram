@@ -92,19 +92,19 @@ def common_dir(root: pathlib.Path) -> pathlib.Path | None:
     return path if path.is_absolute() else root / path
 
 
-def _gate_stamp():  # noqa: ANN202 - the module, loaded by path
-    """`scripts/gates/gate-stamp.py`, loaded by PATH, for `content_id`: its semantic ids kept under `.git/` across processes."""
+def _codeid():  # noqa: ANN202 - the module, loaded by path
+    """`scripts/gates/codeid.py`, loaded by PATH, for `content_id`: its semantic ids kept under `.git/` across processes."""
     import importlib.util  # noqa: PLC0415
     import sys  # noqa: PLC0415
 
-    cached = sys.modules.get("l7r_gate_stamp")
+    cached = sys.modules.get("l7r_codeid")
     if cached is not None:
         return cached
-    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "gate-stamp.py"
-    spec = importlib.util.spec_from_file_location("l7r_gate_stamp", path)
+    path = pathlib.Path(__file__).resolve().parents[1] / "gates" / "codeid.py"
+    spec = importlib.util.spec_from_file_location("l7r_codeid", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules["l7r_gate_stamp"] = mod
+    sys.modules["l7r_codeid"] = mod
     spec.loader.exec_module(mod)
     return mod
 
@@ -123,8 +123,8 @@ def code_sha(*paths: pathlib.Path) -> str:
         if p.suffix == ".py":
             # ...ITS SEMANTIC ID KEPT ACROSS PROCESSES (feature 444 T36, measured 2026-11-07: every record command parsed and dumped
             # some 86 files' ASTs afresh, 1.3 s of a 3.3 s bundle build; the GM: "any single test which takes even 100 milliseconds
-            # is fairly suspect"): `gate-stamp.content_id`, keyed by git's blob id, computed once per content and read back after
-            h.update(_gate_stamp().content_id(data, p.name, _REPO).encode())
+            # is fairly suspect"): `codeid.content_id`, keyed by git's blob id, computed once per content and read back after
+            h.update(_codeid().content_id(data, p.name, _REPO).encode())
         else:
             h.update(data)
     return h.hexdigest()[:16]

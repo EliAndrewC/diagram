@@ -84,12 +84,6 @@ def main(argv: list[str] | None = None) -> int:
         runlog.write_would_have(skill, what, "operation" if what != "ci-check" else "reference", est.minutes, f"remote off: `make {what}` attempted and refused")
         print(f"(recorded as would-have-dispatched, ~{est.minutes:.0f} build-min ~${est.cost_usd:.2f} - `make ci-status` lists these; the period's audit reads them)", file=sys.stderr)
         return 1
-    if a.command == "cov-scope":  # the pytest words that trace only the changed engine modules (delta.coverage_scope); nothing changed -> no tracing
-        from l7r.diagram.ci.delta import coverage_scope
-
-        mods = coverage_scope(root)
-        print(" ".join(["-o", "addopts=--cov=" + mods[0], *[f"--cov={m}" for m in mods[1:]]]) if mods else "-o addopts= --no-cov")
-        return 0
     if a.command == "tooling-green":
         print(f"tooling: recorded green for {state.record_tooling(root)[:12]} - the gate skips the tooling tests until the tooling changes")
         return 0
@@ -101,14 +95,6 @@ def main(argv: list[str] | None = None) -> int:
         ok, why = door.check(root, skill)
         print(f"bypass-audit: {why}")
         return 0 if ok else 1
-    if a.command == "engine-key":
-        from l7r.diagram.ci.delta import engine_key, engine_key_worktree
-
-        # `engine-key worktree` is what the gate/review PAIRING keys on (feature 151): the content a gate
-        # would verify and a review would look at is the working tree's, not HEAD's. Same formula either
-        # way - the guard must not carry a second definition of "the same content".
-        print(engine_key_worktree(root) if a.args and a.args[0] == "worktree" else engine_key(root, a.args[0] if a.args else "HEAD"))
-        return 0
     if a.command == "remote-spend":
         print(runlog.remote_spend_report(skill))
         return 0

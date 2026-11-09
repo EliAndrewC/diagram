@@ -60,28 +60,28 @@ def _git_lines(root: Path, *args: str) -> list[str]:
 
 
 def _engine_tools() -> tuple[Any, Any]:
-    """(`l7r.diagram.ci.delta.is_engine`, gate-stamp's `content_id`) from THIS checkout, not the root it reads (a fixture tree
+    """(`l7r.diagram.ci.delta.engine_paths`, `codeid.py`'s `content_id`) from THIS checkout, not the root it reads (a fixture tree
     has no engine package)."""
     import importlib.util  # noqa: PLC0415
 
     if str(_CHECKOUT) not in sys.path:
         sys.path.insert(0, str(_CHECKOUT))
-    from l7r.diagram.ci.delta import is_engine  # noqa: PLC0415
+    from l7r.diagram.ci.delta import engine_paths  # noqa: PLC0415
 
-    spec = importlib.util.spec_from_file_location("gate_stamp", _CHECKOUT / "scripts" / "gates" / "gate-stamp.py")
+    spec = importlib.util.spec_from_file_location("l7r_codeid", _CHECKOUT / "scripts" / "gates" / "codeid.py")
     assert spec is not None and spec.loader is not None
-    gs = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(gs)
-    return is_engine, gs.content_id
+    codeid = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(codeid)
+    return engine_paths, codeid.content_id
 
 
 def touches_engine(root: Path) -> bool:
     """Does this tree's delta - its commits since the merge base with origin/main (HEAD with none), its uncommitted and its
-    untracked files - change engine code, as `l7r.diagram.ci.delta` decides it (`_semantically_changed`)?"""
-    is_engine, content_id = _engine_tools()
+    untracked files - change engine code, as the Rust gate's one list and the content id decide it?"""
+    engine_paths, content_id = _engine_tools()
     base = (_git_lines(root, "merge-base", "origin/main", "HEAD") or ["HEAD"])[0]
     paths = _git_lines(root, "diff", "--name-only", base) + _git_lines(root, "ls-files", "--others", "--exclude-standard")
-    for f in (p for p in paths if is_engine(p)):
+    for f in engine_paths(root, paths):
         if not f.endswith(".py"):
             return True
         before = subprocess.run(["git", "-C", str(root), "show", f"{base}:{f}"], capture_output=True)

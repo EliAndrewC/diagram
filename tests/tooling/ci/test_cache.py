@@ -158,8 +158,8 @@ def test_the_freshness_state_is_content_keyed_so_a_changed_guard_still_runs() ->
     """FR-002. The whole safety argument for FR-001 is that neither stamp encodes anything but file
     CONTENT, so a build can only skip a suite whose inputs are byte-identical to the ones that last
     went green. Asserted against the code rather than taken from the spec's A2."""
-    stamp = (REPO / "scripts/gates/gate-stamp.py").read_text(encoding="utf-8")
-    assert '"hooks": ("", ("scripts/*.sh", "scripts/*.py"' in stamp, "the hooks area is derived from the files themselves"
+    stamp = (REPO / "rust/gate/src/stamp.rs").read_text(encoding="utf-8")
+    assert '"scripts/*.sh"' in stamp and '"scripts/*.py"' in stamp, "the hooks area is derived from the files themselves"
     assert "GATE_RECIPE" in stamp, "the stamp is salted, so a change to what the gate MEANS retires every record"
     makefile = (HERE / "Makefile").read_text(encoding="utf-8")
     assert "deps --keys" in makefile, "the per-suite stamp is a hash of that suite's derived dependency set"

@@ -125,6 +125,17 @@ fn what_it_cannot_read_passes() {
     );
     assert_eq!(refusal_for(&dir, &json!({})), None);
     assert!(rows_of(&dir.join("absent")).is_empty());
+    let lines = [
+        r#"{"type":"user","message":{"content":[{"type":"text","text":"mentions \"Agent\" and is_error"}]}}"#,
+        "not json with turn_duration",
+        r#"{"type":"assistant","message":{"content":[{"type":"text","text":"nothing kept"}]}}"#,
+        r#"{"type":"system","subtype":"turn_duration","timestamp":"t"}"#,
+        r#"{"type":"assistant","message":{"content":[{"type":"tool_use","name":"Agent","id":"a","input":{}}]}}"#,
+        r#"{"type":"user","message":{"content":[{"type":"tool_result","is_error":true,"tool_use_id":"a","content":"no"}]}}"#,
+        r#"{"type":"user","message":{"content":[{"type":"tool_result","is_error":false,"tool_use_id":"a","content":"ok"}]}}"#,
+    ];
+    std::fs::write(dir.join("mixed.jsonl"), lines.join("\n")).unwrap();
+    assert_eq!(rows_of(&dir.join("mixed.jsonl")).len(), 3);
     assert_eq!(key_of(&json!({"prompt": "x", "description": "y"})), "y");
     let not_refused = [
         json!({"message": {"content": [{"type": "tool_result", "tool_use_id": "a", "is_error": true, "content": [{"text": "other"}]}]}}),

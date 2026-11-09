@@ -147,7 +147,7 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         dispatched(cx, atype, &named, &key, glyph_escaped);
         return Vec::new();
     }
-    if state::gate_green(&cx.clone, &key, cx.python) {
+    if state::gate_green(&cx.clone, &key) {
         dispatched(cx, atype, &named, &key, glyph_escaped);
         return Vec::new();
     }
@@ -285,7 +285,7 @@ fn prerequisites(
         );
         return None;
     }
-    let green = if state::stamp_fresh(&cx.clone, cx.python) {
+    let green = if state::stamp_fresh(&cx.clone) {
         "yes"
     } else {
         "no"
