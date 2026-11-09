@@ -85,27 +85,46 @@ fn a_rust_only_change_starts_none_of_the_python_checks() {
     put(&dir, "pyproject.toml", "");
     assert_eq!(ran(&dir), [false, true, false, false]);
     std::fs::remove_file(dir.join("pyproject.toml")).unwrap();
-    put(&dir, "tools/a.py", "x = 1\n");
-    assert_eq!(ran(&dir), [true, true, false, false]);
-    std::fs::remove_file(dir.join("tools/a.py")).unwrap();
-    put(&dir, "l7r/a.py", "x = 1\n");
-    assert_eq!(ran(&dir), [true, true, false, true]);
-    std::fs::remove_file(dir.join("l7r/a.py")).unwrap();
-    put(
-        &dir,
+    let alone = |rel: &str, want: [bool; 4]| {
+        put(&dir, rel, "x = 1\n");
+        assert_eq!(ran(&dir), want);
+        std::fs::remove_file(dir.join(rel)).unwrap();
+    };
+    alone("tools/a.py", [false, false, false, false]);
+    alone("scripts/a.py", [false, true, false, false]);
+    alone("tests/a.py", [true, true, false, false]);
+    alone("l7r/a.py", [true, true, false, false]);
+    alone("l7r/diagram/interactive/a.py", [true, true, false, true]);
+    alone(
         "l7r/diagram/interactive/assets/modals/hamlet/x.md",
-        "Entry: y",
+        [false, false, false, true],
     );
-    assert_eq!(ran(&dir), [false, false, false, true]);
-    std::fs::remove_file(dir.join("l7r/diagram/interactive/assets/modals/hamlet/x.md")).unwrap();
-    put(&dir, "research/x.txt", "y");
-    assert_eq!(ran(&dir), [false, false, true, true]);
-    std::fs::remove_file(dir.join("research/x.txt")).unwrap();
-    put(&dir, "scripts/record/access_tags.py", "x = 1\n");
-    assert_eq!(ran(&dir), [true, true, true, false]);
-    std::fs::remove_file(dir.join("scripts/record/access_tags.py")).unwrap();
-    put(&dir, "scripts/gates/check-entry-headings.py", "x = 1\n");
-    assert_eq!(ran(&dir), [true, true, false, true]);
+    alone("research/x.txt", [false, false, false, false]);
+    alone(
+        "research/questions/0001-a.html",
+        [false, false, false, true],
+    );
+    alone(
+        "research/questions/0001-a.notes.html",
+        [false, false, true, true],
+    );
+    alone(
+        "research/sources/010-works-cited/k.html",
+        [false, false, true, false],
+    );
+    alone("research/archive/a/b.json", [false, false, true, false]);
+    alone("research/source-access.json", [false, false, true, false]);
+    alone("scripts/record/access_tags.py", [false, true, true, false]);
+    alone(
+        "scripts/gates/check-entry-headings.py",
+        [false, true, false, true],
+    );
+    alone(
+        "scripts/gates/check-duplicate-defs.py",
+        [true, true, false, false],
+    );
+    put(&dir, "scripts/gates/check-partial-citations.py", "x = 1\n");
+    assert_eq!(ran(&dir), [false, true, true, false]);
     assert_eq!(needs("something-else", &dir).code, 0);
     assert_eq!(needs("function-cap", &repo("needs-base")).code, 0);
 }

@@ -111,28 +111,43 @@ pub(crate) fn has_ext(path: &str, ext: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == ext)
 }
 
-/// Does `check`, one of the four still in Python, read this path? An unknown name reads everything: it runs.
+/// Does `check`, one of the four still in Python, read this path? Each set is that check's own, from its source and what it
+/// imports. An unknown name reads everything: it runs.
 fn reads(check: &str, path: &str) -> bool {
     let python = has_ext(path, "py");
-    let record = path.starts_with("research/");
+    let under = |trees: &[&str]| trees.iter().any(|t| path.starts_with(t));
+    let own = |name: &str| path == format!("scripts/gates/check-{name}.py");
     match check {
-        "duplicate-defs" => python,
-        "function-cap" => python || path == "pyproject.toml",
+        "duplicate-defs" => {
+            own(check)
+                || (python && under(&["l7r/", "tests/", "pool/", "legacy-hand-authored-pool/"]))
+        }
+        "function-cap" => {
+            own(check)
+                || path == "pyproject.toml"
+                || (python && under(&["l7r/", "tests/", "scripts/", "pool/"]))
+        }
         "partial-citations" => {
-            record
+            own(check)
+                || under(&["research/sources/010-works-cited/", "research/archive/"])
+                || (path.starts_with("research/questions/") && path.ends_with(".notes.html"))
                 || [
-                    "scripts/gates/check-partial-citations.py",
+                    "research/partial-confirmations.jsonl",
+                    "research/source-access.json",
+                    "research/to-download.md",
                     "scripts/record/access_tags.py",
                     "scripts/record/downloads.py",
                 ]
                 .contains(&path)
         }
-        // a class's `Entry:` is parsed from its modal text; the registry is the engine's own Python
+        // a class's `Entry:` is parsed from its modal text
         "entry-headings" => {
-            record
-                || path.starts_with("l7r/diagram/interactive/assets/modals/")
-                || path == "scripts/gates/check-entry-headings.py"
-                || (python && path.starts_with("l7r/"))
+            own(check)
+                || under(&[
+                    "research/questions/",
+                    "l7r/diagram/interactive/assets/modals/",
+                ])
+                || (python && path.starts_with("l7r/diagram/interactive/"))
         }
         _ => true,
     }

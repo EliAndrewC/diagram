@@ -155,13 +155,14 @@ def test_the_four_checks_still_in_python_do_not_start_on_a_rust_only_change(tmp_
     monkeypatch.setattr(pc, "run_one", lambda s, a, c, quiet=False: ran.append(s.name) or 0)
     monkeypatch.setenv("L7R_CACHE_OFF", "1")
     assert pc.run(d, set()) == 0 and ran == []
-    (d / "research").mkdir()
-    (d / "research" / "q.html").write_text("y", encoding="utf-8")
+    (d / "research" / "questions").mkdir(parents=True)
+    (d / "research" / "questions" / "0001-a.notes.html").write_text("y", encoding="utf-8")
     assert pc.run(d, set()) == 0 and set(ran) == {"check-entry-headings.py", "check-partial-citations.py"}, "what reads the record starts on a record change; what reads only Python does not"
-    (d / "research" / "q.html").unlink()
+    (d / "research" / "questions" / "0001-a.notes.html").unlink()
     ran.clear()
-    (d / "a.py").write_text("x = 1\n", encoding="utf-8")
-    assert pc.run(d, set()) == 0 and {"check-duplicate-defs.py", "check-function-cap.py"} == set(ran), "a .py file nothing else reads starts only what reads every .py file"
+    (d / "l7r").mkdir()
+    (d / "l7r" / "a.py").write_text("x = 1\n", encoding="utf-8")
+    assert pc.run(d, set()) == 0 and {"check-duplicate-defs.py", "check-function-cap.py"} == set(ran), "a .py under l7r/ outside interactive/ starts only what reads it"
 
 
 def test_every_makefile_line_starting_a_retained_python_check_asks_first() -> None:
