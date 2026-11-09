@@ -198,8 +198,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the remote path ported to rust/gate/src/ci; m:t064-remote shows route, status, spend, door, switches, idle and lifecycle equal to the Python's; the AWS adapter is tested through a fake aws and unproven until the first paid run; static, tooling tests and hook suites green
 
-- [ ] T065 [US2] `scripts/gates/` the text checks: `check-file-scale.py`, `check-stale-dirs.py`, `check-question-size.py`, `check-rust-tooling.py`, `check-research-pointers.py` and `check-house-style-delta.py`, each check's verdicts held to the Python's over the repository (the other `check-*.py`: `ask:449-T065-scope`, FR-001)
+- [x] T065 [US2] `scripts/gates/` the text checks: `check-file-scale.py`, `check-stale-dirs.py`, `check-question-size.py`, `check-rust-tooling.py`, `check-research-pointers.py` and `check-house-style-delta.py`, each check's verdicts held to the Python's over the repository (the other `check-*.py`: `ask:449-T065-scope`, FR-001)
       research: rendering
+      verify: DONE. landed: the six text checks are Rust (l7r-gate check); the four that outlast phase 2 ask check needs first
 
 - [ ] T066 [US2] `scripts/gates/` the plan and spec gates: `plan_gate.py`, `plan_sections.py`, `approach_gate.py`, `plan_bundle.py`, `spec-lint.py`, with `engine_edit.py` beside the code it wraps
       research: rendering
