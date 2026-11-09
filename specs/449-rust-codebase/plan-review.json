@@ -144,6 +144,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-09",
    "declared": "round-arbiter"
+  },
+  "### T73 Approach (checklist part A)": {
+   "sha256": "aebbe3557f524ccba43ee6c06e5cee39c81573f12a3013272ae9a25d3b23e16a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4071,6 +4077,218 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "### T73 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "goes-named",
+     "summary": "Delete buildspec/, Dockerfile.ci, the ci-off/on/check/merge/measure/image targets, the remote axis of dev/switches.json, and the dispatcher and AWS adapter (dispatch, aws) under rust/gate/src/ci/.",
+     "class": "within",
+     "why": "FR-001a names each of these and the GM said delete rather than port."
+    },
+    {
+     "id": "goes-beyond-named",
+     "summary": "Also delete dev/ci.md, requirements-ci.in/.txt, the modules cachepolicy, decision, door, imagecheck, main, runlog and real_tree, the commit-permitted target, the REMOTE_OK macro, audit's remote spend, bypass-audit's build branch, the aws CLI install, boto3 and the CODEBUILD_BUILD_ID branches.",
+     "class": "within",
+     "why": "FR-001a's list is not the limit of the GM's phrase, tooling which runs our tests remotely on AWS; the block places each of these on that path, and FR-001a takes the CI lockfile out of FR-001's phase 4. Nothing here narrows the request, and the bundle holds nothing placing any of them on the local path."
+    },
+    {
+     "id": "deletion-by-gm-command",
+     "summary": "The tracked files are removed by the GM's own command because a safety check refused the session's; the done line holds until that has run, the Rust modules out of the build first.",
+     "class": "within",
+     "why": "Who runs the removal and when, not what is removed: FR-001a's MUST be deleted still governs and the task is not done until it has happened."
+    },
+    {
+     "id": "route-and-gated-check-stay",
+     "summary": "l7r-gate ci status --route and a new gated-check (gated.rs, make gated-check) carry the route and the remote-off path's conditions: merge conflict first, then feature-complete, green-local-since-edit and green local make done on the merged engine content, every condition printed, push only when all hold; sync-with-main.sh then pulls and pushes as on SKIP-VERIFIED.",
+     "class": "within",
+     "why": "FR-001a keeps exactly this: the route and a gated push's local conditions, on the path already taken with the remote off."
+    },
+    {
+     "id": "route-word-gated",
+     "summary": "The route word GATED-LOCAL becomes GATED.",
+     "class": "within",
+     "why": "FR-001a itself states the route as DIRECT or GATED, so the accepted spec settles it."
+    },
+    {
+     "id": "ci-status-keeps-name",
+     "summary": "make ci-status survives under its name, now local, although FR-001a deletes the ci-* make targets.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words and by FR-001a's same sentence: the GM's object is tooling that runs tests remotely on AWS, a local route query runs no test anywhere, and FR-001a retains the route. The block's reason, that a guard corpus and refusals name it, is an effort argument and is not the ground of this ruling. The target must hold no remote behavior."
+    },
+    {
+     "id": "row-remote-enabled",
+     "summary": "The remote-enabled row of the gated check is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It reads the remote switch FR-001a deletes, so keeping it is impossible; it is not a local condition."
+    },
+    {
+     "id": "row-route-is-gated",
+     "summary": "The route-is-gated row is gone because the caller now asks only on GATED.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No push protection is lost: the check runs only on GATED, and an unknown route word still refuses by the block's retained test case. It exists to tell the routes apart for the old dispatcher path that is deleted."
+    },
+    {
+     "id": "row-breaker-not-tripped",
+     "summary": "The breaker-not-tripped row is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001a keeps a gated push's LOCAL conditions, and the block states that this row answered a question about the remote, so it is not one of them and the GM's deletion reaches it. The ground rests on the block's statement; the bundle does not show the breaker's source."
+    },
+    {
+     "id": "ci-verdict-file",
+     "summary": "The .git/ci-verdict file is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Per the block it recorded the answer about the remote path; the gated check now decides and prints in the same run, and every local condition is retained."
+    },
+    {
+     "id": "refusal-merged-engine-green",
+     "summary": "The refusal names merged-engine-green where it named remote-enabled.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An output change FR-002 would otherwise forbid, but the old name is of a switch FR-001a deletes, so it cannot be kept, and the new name is of the condition the local path actually refuses on, which is purpose-preserving."
+    },
+    {
+     "id": "tests-replayed",
+     "summary": "gated/tests.rs holds the route, the three conditions' refusals and the merge conflict; switches and config tests keep the remaining axes; test-sync-with-main.sh's gated cases run the local path, including pass, refusal, unknown route word, cohort and port switch.",
+     "class": "within",
+     "why": "FR-002's replay on what survives, for the remote-off behavior ci-merge's replacement carries."
+    },
+    {
+     "id": "tests-not-replayed",
+     "summary": "Not replayed: dispatch sequence, AWS adapter, parked build, mailbox, verified-record lookup, the run log's remote entries and spend, image check, bucket lifecycle, CODEBUILD_BUILD_ID branches.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 asks for the same verdicts from a replacement; each item is behavior FR-001a deletes with no replacement, so replay is impossible and the GM's delete rather than port says so directly. Handled item by item: each listed is remote-only on the block's description."
+    },
+    {
+     "id": "measurements-census",
+     "summary": "The grep of specs/*/measurements*.json returns two lines, a census row and a T064 comparison, neither a command make figures runs against the deleted files, so no recorded measurement is rewritten here.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement rule concerns commands that run what is ported; FR-001a takes these files out of FR-001's censuses. The figure carries its date and method."
+    },
+    {
+     "id": "one-landing-order",
+     "summary": "All in one landing, the push's local route and gated check first, then targets, Rust, files, docs; no budget, no constant moved.",
+     "class": "within",
+     "why": "Sequence only; it settles nothing the request or spec fixes otherwise and leaves the push working throughout."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "### T73 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "goes-named",
+     "summary": "Delete buildspec/, Dockerfile.ci, the ci-off/on/check/merge/measure/image targets, the remote axis of dev/switches.json, and the dispatcher and AWS adapter (dispatch, aws) under rust/gate/src/ci/.",
+     "class": "within",
+     "why": "FR-001a names each of these and the GM said delete rather than port."
+    },
+    {
+     "id": "goes-beyond-named",
+     "summary": "Also delete dev/ci.md, requirements-ci.in/.txt, the modules cachepolicy, decision, door, imagecheck, main, runlog and real_tree, the commit-permitted target, the REMOTE_OK macro, audit's remote spend, bypass-audit's build branch, the aws CLI install, boto3 and the CODEBUILD_BUILD_ID branches.",
+     "class": "within",
+     "why": "FR-001a's list is not the limit of the GM's phrase, tooling which runs our tests remotely on AWS; the block places each of these on that path, and FR-001a takes the CI lockfile out of FR-001's phase 4. Nothing here narrows the request, and the bundle holds nothing placing any of them on the local path."
+    },
+    {
+     "id": "deletion-by-gm-command",
+     "summary": "The tracked files are removed by the GM's own command because a safety check refused the session's; the done line holds until that has run, the Rust modules out of the build first.",
+     "class": "within",
+     "why": "Who runs the removal and when, not what is removed: FR-001a's MUST be deleted still governs and the task is not done until it has happened."
+    },
+    {
+     "id": "route-and-gated-check-stay",
+     "summary": "l7r-gate ci status --route and a new gated-check (gated.rs, make gated-check) carry the route and the remote-off path's conditions: merge conflict first, then feature-complete, green-local-since-edit and green local make done on the merged engine content, every condition printed, push only when all hold; sync-with-main.sh then pulls and pushes as on SKIP-VERIFIED.",
+     "class": "within",
+     "why": "FR-001a keeps exactly this: the route and a gated push's local conditions, on the path already taken with the remote off."
+    },
+    {
+     "id": "route-word-gated",
+     "summary": "The route word GATED-LOCAL becomes GATED.",
+     "class": "within",
+     "why": "FR-001a itself states the route as DIRECT or GATED, so the accepted spec settles it."
+    },
+    {
+     "id": "ci-status-keeps-name",
+     "summary": "make ci-status survives under its name, now local, although FR-001a deletes the ci-* make targets.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words and by FR-001a's same sentence: the GM's object is tooling that runs tests remotely on AWS, a local route query runs no test anywhere, and FR-001a retains the route. The block's reason, that a guard corpus and refusals name it, is an effort argument and is not the ground of this ruling. The target must hold no remote behavior."
+    },
+    {
+     "id": "row-remote-enabled",
+     "summary": "The remote-enabled row of the gated check is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It reads the remote switch FR-001a deletes, so keeping it is impossible; it is not a local condition."
+    },
+    {
+     "id": "row-route-is-gated",
+     "summary": "The route-is-gated row is gone because the caller now asks only on GATED.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No push protection is lost: the check runs only on GATED, and an unknown route word still refuses by the block's retained test case."
+    },
+    {
+     "id": "row-breaker-not-tripped",
+     "summary": "The breaker-not-tripped row is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001a keeps a gated push's LOCAL conditions, and the block states that this row answered a question about the remote, so it is not one of them and the GM's deletion reaches it. The ground rests on the block's statement; the bundle does not show the breaker's source."
+    },
+    {
+     "id": "ci-verdict-file",
+     "summary": "The .git/ci-verdict file is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Per the block it recorded the answer about the remote path; the gated check now decides and prints in the same run, and every local condition is retained."
+    },
+    {
+     "id": "refusal-merged-engine-green",
+     "summary": "The refusal names merged-engine-green where it named remote-enabled.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An output change FR-002 would otherwise forbid, but the old name is of a switch FR-001a deletes, so it cannot be kept, and the new name is of the condition the local path actually refuses on, which is purpose-preserving."
+    },
+    {
+     "id": "tests-replayed",
+     "summary": "gated/tests.rs holds the route, the three conditions' refusals and the merge conflict; switches and config tests keep the remaining axes; test-sync-with-main.sh's gated cases run the local path, including pass, refusal, unknown route word, cohort and port switch.",
+     "class": "within",
+     "why": "FR-002's replay on what survives, for the remote-off behavior ci-merge's replacement carries."
+    },
+    {
+     "id": "tests-not-replayed",
+     "summary": "Not replayed: dispatch sequence, AWS adapter, parked build, mailbox, verified-record lookup, the run log's remote entries and spend, image check, bucket lifecycle, CODEBUILD_BUILD_ID branches.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 asks for the same verdicts from a replacement; each item is behavior FR-001a deletes with no replacement, so replay is impossible and the GM's delete rather than port says so directly. Handled item by item: each listed is remote-only on the block's description."
+    },
+    {
+     "id": "measurements-census",
+     "summary": "The grep of specs/*/measurements*.json returns two lines, a census row and a T064 comparison, neither a command make figures runs against the deleted files, so no recorded measurement is rewritten here.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement rule concerns commands that run what is ported; FR-001a takes these files out of FR-001's censuses. The figure carries its date and method."
+    },
+    {
+     "id": "one-landing-order",
+     "summary": "All in one landing, the push's local route and gated check first, then targets, Rust, files, docs; no budget, no constant moved.",
+     "class": "within",
+     "why": "Sequence only; it settles nothing the request or spec fixes otherwise and leaves the push working throughout."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6936,6 +7154,111 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T73": {
+   "section_sha256": "aebbe3557f524ccba43ee6c06e5cee39c81573f12a3013272ae9a25d3b23e16a",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "goes-named",
+     "summary": "Delete buildspec/, Dockerfile.ci, the ci-off/on/check/merge/measure/image targets, the remote axis of dev/switches.json, and the dispatcher and AWS adapter (dispatch, aws) under rust/gate/src/ci/.",
+     "class": "within",
+     "why": "FR-001a names each of these and the GM said delete rather than port."
+    },
+    {
+     "id": "goes-beyond-named",
+     "summary": "Also delete dev/ci.md, requirements-ci.in/.txt, the modules cachepolicy, decision, door, imagecheck, main, runlog and real_tree, the commit-permitted target, the REMOTE_OK macro, audit's remote spend, bypass-audit's build branch, the aws CLI install, boto3 and the CODEBUILD_BUILD_ID branches.",
+     "class": "within",
+     "why": "FR-001a's list is not the limit of the GM's phrase, tooling which runs our tests remotely on AWS; the block places each of these on that path, and FR-001a takes the CI lockfile out of FR-001's phase 4. Nothing here narrows the request, and the bundle holds nothing placing any of them on the local path."
+    },
+    {
+     "id": "deletion-by-gm-command",
+     "summary": "The tracked files are removed by the GM's own command because a safety check refused the session's; the done line holds until that has run, the Rust modules out of the build first.",
+     "class": "within",
+     "why": "Who runs the removal and when, not what is removed: FR-001a's MUST be deleted still governs and the task is not done until it has happened."
+    },
+    {
+     "id": "route-and-gated-check-stay",
+     "summary": "l7r-gate ci status --route and a new gated-check (gated.rs, make gated-check) carry the route and the remote-off path's conditions: merge conflict first, then feature-complete, green-local-since-edit and green local make done on the merged engine content, every condition printed, push only when all hold; sync-with-main.sh then pulls and pushes as on SKIP-VERIFIED.",
+     "class": "within",
+     "why": "FR-001a keeps exactly this: the route and a gated push's local conditions, on the path already taken with the remote off."
+    },
+    {
+     "id": "route-word-gated",
+     "summary": "The route word GATED-LOCAL becomes GATED.",
+     "class": "within",
+     "why": "FR-001a itself states the route as DIRECT or GATED, so the accepted spec settles it."
+    },
+    {
+     "id": "ci-status-keeps-name",
+     "summary": "make ci-status survives under its name, now local, although FR-001a deletes the ci-* make targets.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own words and by FR-001a's same sentence: the GM's object is tooling that runs tests remotely on AWS, a local route query runs no test anywhere, and FR-001a retains the route. The block's reason, that a guard corpus and refusals name it, is an effort argument and is not the ground of this ruling. The target must hold no remote behavior."
+    },
+    {
+     "id": "row-remote-enabled",
+     "summary": "The remote-enabled row of the gated check is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It reads the remote switch FR-001a deletes, so keeping it is impossible; it is not a local condition."
+    },
+    {
+     "id": "row-route-is-gated",
+     "summary": "The route-is-gated row is gone because the caller now asks only on GATED.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "No push protection is lost: the check runs only on GATED, and an unknown route word still refuses by the block's retained test case."
+    },
+    {
+     "id": "row-breaker-not-tripped",
+     "summary": "The breaker-not-tripped row is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001a keeps a gated push's LOCAL conditions, and the block states that this row answered a question about the remote, so it is not one of them and the GM's deletion reaches it. The ground rests on the block's statement; the bundle does not show the breaker's source."
+    },
+    {
+     "id": "ci-verdict-file",
+     "summary": "The .git/ci-verdict file is gone.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Per the block it recorded the answer about the remote path; the gated check now decides and prints in the same run, and every local condition is retained."
+    },
+    {
+     "id": "refusal-merged-engine-green",
+     "summary": "The refusal names merged-engine-green where it named remote-enabled.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "An output change FR-002 would otherwise forbid, but the old name is of a switch FR-001a deletes, so it cannot be kept, and the new name is of the condition the local path actually refuses on, which is purpose-preserving."
+    },
+    {
+     "id": "tests-replayed",
+     "summary": "gated/tests.rs holds the route, the three conditions' refusals and the merge conflict; switches and config tests keep the remaining axes; test-sync-with-main.sh's gated cases run the local path, including pass, refusal, unknown route word, cohort and port switch.",
+     "class": "within",
+     "why": "FR-002's replay on what survives, for the remote-off behavior ci-merge's replacement carries."
+    },
+    {
+     "id": "tests-not-replayed",
+     "summary": "Not replayed: dispatch sequence, AWS adapter, parked build, mailbox, verified-record lookup, the run log's remote entries and spend, image check, bucket lifecycle, CODEBUILD_BUILD_ID branches.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 asks for the same verdicts from a replacement; each item is behavior FR-001a deletes with no replacement, so replay is impossible and the GM's delete rather than port says so directly. Handled item by item: each listed is remote-only on the block's description."
+    },
+    {
+     "id": "measurements-census",
+     "summary": "The grep of specs/*/measurements*.json returns two lines, a census row and a T064 comparison, neither a command make figures runs against the deleted files, so no recorded measurement is rewritten here.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement rule concerns commands that run what is ported; FR-001a takes these files out of FR-001's censuses. The figure carries its date and method."
+    },
+    {
+     "id": "one-landing-order",
+     "summary": "All in one landing, the push's local route and gated check first, then targets, Rust, files, docs; no budget, no constant moved.",
+     "class": "within",
+     "why": "Sequence only; it settles nothing the request or spec fixes otherwise and leaves the push working throughout."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
