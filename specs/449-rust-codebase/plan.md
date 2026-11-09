@@ -204,7 +204,7 @@ inline Python of the Makefile's gate recipes, `sync-with-main.sh`, `land-tooling
 the planner keeps choosing them; the Rust-only route (a Rust-only delta runs the Rust checks and the few text checks over `.rs` files,
 no pytest) lands early in this phase, since it is most of SC-002. Planned to the task when the phase opens.
 
-**Planned to the task, 2026-11-08** (phase 1 closed: `dev/phase-1-close.md`). About 18,000 lines (observed 2026-11-08, method: `git ls-files` and `wc -l` over the four areas): `l7r/diagram/ci/` 3,607, `scripts/gates/` 8,503 in 38 files, `scripts/measure/` 6,126 in 34, `_invocation.py` and `switches.py` 612. The order is by measured gain and by what each port stands on: the Rust-only route first, since pytest is most of the one-line edit's gate (`m:done-rust-edit`), then the crate, then the planner before the state it plans from, then the checks, then the close. Each task's decisions are written when it starts, as phase 1's were. Each piece's Python runs until its replacement gives the same verdicts on every case its tests and its suites hold, and is deleted in the commit that switches. FR-001 also places six more here by name: `hm_conflict.py` and `own-make.sh`, in T067 beside the push checks that call the first and `one-gate.sh` that calls the second; and the suites `test-entry-gate`, `test-claims-gate`, `test-cohort-gate` and `test-land-tooling`, in T069 with the gate scripts they test.
+**Planned to the task, 2026-11-08** (phase 1 closed: `dev/phase-1-close.md`). About 18,000 lines (observed 2026-11-08, method: `git ls-files` and `wc -l` over the four areas): `l7r/diagram/ci/` 3,607, `scripts/gates/` 8,503 in 38 files, `scripts/measure/` 6,126 in 34, `_invocation.py` and `switches.py` 612. The order is by measured gain and by what each port stands on: the Rust-only path first, since pytest is most of the one-line edit's gate (`m:done-rust-edit`), then the crate, then leaf first by what imports what (`ask:449-T062-order`): the code id, the delta and the state, the decision and the remote path, then the checks, then the pytest-driven planner, then the close. Each task's decisions are written when it starts, as phase 1's were. Each piece's Python runs until its replacement gives the same verdicts on every case its tests and its suites hold, and is deleted in the commit that switches. FR-001 also places six more here by name: `hm_conflict.py` and `own-make.sh`, in T067 beside the push checks that call the first and `one-gate.sh` that calls the second; and the suites `test-entry-gate`, `test-claims-gate`, `test-cohort-gate` and `test-land-tooling`, in T069 with the gate scripts they test.
 
 ### Phase 3 - the tooling (Story 3, P3)
 
@@ -253,39 +253,39 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 ### T062 Approach (checklist part A)
 
-1. **The goal, in the world.** Which tests a change owes is decided by Rust.
-2. **The constraints.** FR-001, FR-002, FR-006 (the import graph kept per process, carried over rather than rebuilt).
-3. **Where each comes from.** `m:ci-sources`, to be taken when this task starts.
+1. **The goal, in the world.** The Rust gate computes a file's id: a `.rs` file's by `rust_tokens`, through the blob-keyed cache in one format with atomic writes, and a kept stamp still verifies. A `.py` file's id stays Python's own `ast.dump`, asked of `codeid.py` by path, one process a run with all the misses in it, its failure failing the gate and no substitute written (`ask:449-T062-py-id`); `codeid.py`'s `.rs` branch stays for its Python callers, held equal to `rust_tokens` by a differential test while both exist.
+2. **The constraints.** FR-001, FR-002, FR-003, FR-006; the round arbiter's `ask:449-T062-order`.
+3. **Where each comes from.** `m:ci-sources`, to be taken when this task starts; the real `semantic-id-cache` and the recorded engine keys.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: over the recorded deltas the plans equal the Python's, then the Python deleted with its tests moved. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
+6. **The exits.** Green: every tracked `.rs` file's id equals the Python's, the recorded keys still verify, the Rust gate's callers switched in one commit, `codeid.py` placed in phase 4 by FR-001. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** The plan's differential over recorded deltas: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+9. **Done, measured.** The differential over every engine file and the kept keys: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
 ### T063 Approach (checklist part A)
 
-1. **The goal, in the world.** The gate's state is written by one implementation.
-2. **The constraints.** FR-001, FR-003 (one writer), FR-002.
-3. **Where each comes from.** the state files as they stand.
+1. **The goal, in the world.** What a change owes and what the gate last verified are written by one implementation.
+2. **The constraints.** FR-001, FR-002, FR-003 (one writer, one cut), FR-006 (one spawn a process or a batch).
+3. **Where each comes from.** the state files as they stand; `m:ci-sources`.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: a stamp kept before the switch still reads; no state file has two writers at any commit. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
+6. **The exits.** Green: a stamp kept before the switch still reads; the routes and keys over recorded deltas equal the Python's; no state file has two writers at any commit. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** `make done` reuses a last green result across the switch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+9. **Done, measured.** `make done` reuses a last green result across the switch, and the differential over recorded deltas shows no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
 ### T064 Approach (checklist part A)
 
-1. **The goal, in the world.** The remote dispatch, the make-only refusal in-process and the switches in Rust.
+1. **The goal, in the world.** The conditions on a remote run, the make-only refusal in-process and the switches in Rust.
 2. **The constraints.** FR-001, FR-002; constitution on money (a paid dispatch is not run to test this).
 3. **Where each comes from.** `dev/ci.md`; `dev/switches.json`.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
+5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
 6. **The exits.** Green: their suites' verdicts unchanged, no remote run spent to prove it. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
@@ -360,6 +360,20 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
 9. **Done, measured.** The census's phase-2 share returns nothing: `git grep -nE "python3 (-c|-[[:space:]]|-$|<<)" -- Makefile 'scripts/gates/*.sh' scripts/sync-with-main.sh scripts/land-tooling.sh buildspec/run.sh tests/hooks/test-entry-gate.sh tests/hooks/test-claims-gate.sh tests/hooks/test-cohort-gate.sh tests/hooks/test-land-tooling.sh` prints only sites of the Makefile's non-gate recipes, each named in the task's record as phase 3's. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
+
+### T071 Approach (checklist part A)
+
+1. **The goal, in the world.** Which tests a change owes is decided by Rust, while pytest is still what it plans for.
+2. **The constraints.** FR-001, FR-002, FR-006; the Assumptions clause on a Python test driving a Rust binary.
+3. **Where each comes from.** the baseline under `<git dir>/gate-baseline/`; coverage.py's data as it stands.
+4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
+5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
+6. **The exits.** Green: over recorded deltas the plans equal the Python's, then the Python deleted with its tests moved; if pytest holds any of the three past phase 2, a new ask with the census and SC-002's consequence, not a deferral here. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** Its landing: no work budget, nothing rolled.
+9. **Done, measured.** The plan's differential over recorded deltas: no mismatch, and no `.py` left under `l7r/diagram/ci/`. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 

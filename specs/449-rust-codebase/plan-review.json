@@ -44,10 +44,10 @@
    "declared": "spec-fidelity"
   },
   "### Phase 2 - the gate (Story 2, P2)": {
-   "sha256": "a94ff0af4bb49b85dc7faedca81d130d0adaf340976fe56f44042a735f7975fd",
+   "sha256": "aeeb0edd2c5a359ef8726b2aa45416da9b5e3acd780c10831b38f8553fbc03b8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### Phase 3 - the tooling (Story 3, P3)": {
    "sha256": "7870748b93e58115cf453ec0330f3c5c0cebaababfc71089fc8806ad670d4200",
@@ -122,22 +122,22 @@
    "declared": "spec-fidelity"
   },
   "### T062 Approach (checklist part A)": {
-   "sha256": "a41a4bbf37fb030baecaef15aec14de6180bed2d82e4a26b7fcc2e349957f330",
+   "sha256": "ad7c2e0eef6c23cfc1c1b908a32bb4e3990642bda4108fd62c4a18ec3416fc48",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T063 Approach (checklist part A)": {
-   "sha256": "f61ad0fbe72c8f91a5c6f02bb244582343a0e0c65dc23d5bbb0b09d0c33092c1",
+   "sha256": "47eb53bee05a41ed474e80093cd5d805fd48d4de46c8b9d2edc52d97202e4da2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T064 Approach (checklist part A)": {
-   "sha256": "cc0c2bd8f534931dbc0010e405b2c9720ea3ae855aefc8089d0771717718b9b4",
+   "sha256": "0c90bd6f42a0ff5b0dd1e6d3567306a57b3f2e9eed1f5edf27bd10a3c15ac87c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T065 Approach (checklist part A)": {
    "sha256": "84f04fbbd6380135ce83d49c0a33be762bb5f4b05b365eb46841c4a26ecd5d32",
@@ -174,6 +174,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
+  },
+  "### T071 Approach (checklist part A)": {
+   "sha256": "e5f1369affbe9a401df7cd7462c8c40b856e551bc3b315d646adf5cdb5c76efa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -3448,6 +3454,79 @@
      "summary": "Item 1's 11 modules are now stated as the ones that plan selected, distinct from the 14 a Rust edit selects today.",
      "class": "within",
      "why": "A correction of a description, matching the subject of m:done-rust-edit (the plan named 1 Rust file and 11 test modules); it changes no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### Phase 2 - the gate (Story 2, P2)",
+    "### T062 Approach (checklist part A)",
+    "### T063 Approach (checklist part A)",
+    "### T064 Approach (checklist part A)",
+    "### T071 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "phase2-order",
+     "summary": "Phase 2's order: the Rust-only path, the crate, then leaf first by what imports what (code id, delta and state, decision and remote path, checks, pytest-driven planner, close).",
+     "class": "within",
+     "why": "Sequencing inside phase 2, by the round arbiter's settled ask:449-T062-order; the Rust-only path still lands first as the block's Approach and SC-002 need. Nothing leaves phase 2."
+    },
+    {
+     "id": "task-order-item-5",
+     "summary": "Item 5 of T062, T063, T064 and T071: leaf first; callers reach the binary once a process or in a batch, never one spawn a file.",
+     "class": "within",
+     "why": "The order is ask:449-T062-order. One spawn a process or batch serves FR-006 and SC-002 and removes no case from any requirement."
+    },
+    {
+     "id": "T062-rs-id",
+     "summary": "The Rust gate computes a .rs file's id by rust_tokens through the blob-keyed cache in one format with atomic writes; a kept stamp still verifies; the gate's callers switch in one commit.",
+     "class": "within",
+     "why": "FR-001 places the gate in phase 2 and FR-006 requires ids read from the kept cache. Switching in one commit is FR-003; kept stamps verifying and ids equal to the Python's are FR-002."
+    },
+    {
+     "id": "T062-py-id",
+     "summary": "A .py file's id stays Python's ast.dump, asked of codeid.py by path, one process a run with all the misses, failure failing the gate, no substitute written; codeid.py placed in phase 4.",
+     "class": "within",
+     "why": "FR-001 now carries this as ask:449-T062-py-id, nearly word for word. The spec settles it; the ruling is not re-argued here."
+    },
+    {
+     "id": "T062-rs-branch-stays",
+     "summary": "codeid.py's .rs branch stays for its Python callers until phase 4, held equal to rust_tokens by a differential test while both exist.",
+     "class": "within",
+     "why": "The spec does not name this branch, so it was tested against FR-003's 'no piece runs both'. FR-001 places codeid.py as a whole file in phase 4 'with Mode A, its last Python caller', the spec's standing rule that a file with callers of its own goes in the phase of its last caller. After T062 no piece runs both: the gate runs only rust_tokens, each unported Python caller runs only the Python branch, and FR-003's first clause requires that those callers' Python stay what runs until their own replacements pass. Nothing is exempted from porting: the branch goes in phase 4 and SC-005's census still applies. The differential test only fails if the two ids diverge, so it enforces FR-002. FR-003 and FR-001's one-writer clause (checks-open.json and the arbiter files) do not reach the id cache, and T063's goal no longer claims it, so the cache's one format and atomic writes narrow nothing."
+    },
+    {
+     "id": "T063-scope",
+     "summary": "T063's goal is restated as what a change owes and what the gate last verified, written by one implementation; no state file has two writers at any commit; routes and keys equal the Python's over recorded deltas; make done reuses a last green result across the switch.",
+     "class": "within",
+     "why": "A re-cut between tasks, the semantic ids having moved to T062 under ask:449-T062-order. All of l7r/diagram/ci/ stays in phase 2 by FR-001. One cut is FR-003, the differential FR-002, and a kept stamp reading is FR-002 on the state's output."
+    },
+    {
+     "id": "T064-remote-conditions",
+     "summary": "T064's goal is reworded from 'the remote dispatch' to 'the conditions on a remote run', with the make-only refusal in-process and the switches in Rust; proved against a stubbed AWS, no paid run.",
+     "class": "within",
+     "why": "The text does not drop the dispatch: T064 item 9 still measures done by 'the dispatcher's tests against a stubbed AWS', and the Phase 2 order still names 'the remote path'. FR-001 holds all of l7r/diagram/ci/ and scripts/gates/ in phase 2, its census is run at the phase's end, and T071 item 9 requires no .py left under l7r/diagram/ci/. The stubbed proof was already CLEAR and keeps FR-002's suite verdicts."
+    },
+    {
+     "id": "T071-planner-last",
+     "summary": "A new block: the planner is ported to Rust last among the ci/ pieces while pytest is still what it plans for, reading the gate baseline and coverage.py's data as they stand; plans equal the Python's over recorded deltas; the Python deleted with its tests moved; no .py left under l7r/diagram/ci/.",
+     "class": "within",
+     "why": "Takes the planner work out of the earlier T062 under ask:449-T062-order, and Phase 2's Approach already says the planner keeps choosing Python tests while they remain. Deletion after the differential is FR-002 and FR-003, tests moving with the piece is FR-001, and item 9 holds the whole directory to phase 2. The Assumptions clause T071 item 2 cites is not in the bundle's spec-cited.md and was not read; no ruling here rests on it."
+    },
+    {
+     "id": "T071-pytest-past-phase-2",
+     "summary": "T071 item 6: if pytest holds any of the three past phase 2, a new ask with the census and SC-002's consequence, not a deferral here.",
+     "class": "within",
+     "why": "The block declines to narrow FR-001 or SC-002 itself and routes any such conflict to the arbiter, while item 9's done measure stays no .py left under l7r/diagram/ci/. 'The three' is not named in the block; this classes the routing, not any census of them."
+    },
+    {
+     "id": "measurement-rewrites-item-9",
+     "summary": "Item 9 of each task block: every measurement command that runs a ported or deleted file is rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's recorded-measurement clause, restated. The wording is unchanged where an earlier block carried it, and T071 carries it from the moved T062 text."
     }
    ]
   }

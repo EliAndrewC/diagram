@@ -186,13 +186,13 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the gate crate
 
-- [ ] T062 [US2] `l7r/diagram/ci/` the planner: `delta.py`, `selection.py`, `incremental.py`, `decision.py`, `cachepolicy.py` in Rust, each answer held to the Python's before it is deleted
+- [ ] T062 [US2] `gate-stamp.py`'s content id and `codeid.py`'s `.rs` id and blob-keyed cache in Rust, read by the engine key, the push stamp and the roll cache, held to the Python's byte for byte on the real records; a `.py` id stays `codeid.py`'s, asked once a run for the misses (`ask:449-T062-py-id`)
       research: rendering
 
-- [ ] T063 [US2] `l7r/diagram/ci/` the state: `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py`, `__main__.py`, and `scripts/gates/gate-stamp.py`, the stamps and verification state readable across the switch
+- [ ] T063 [US2] `l7r/diagram/ci/` the delta and the state: `delta.py`, `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch
       research: rendering
 
-- [ ] T064 [US2] `l7r/diagram/ci/dispatch.py` and the remote path, `_invocation.py` and `switches.py`
+- [ ] T064 [US2] `l7r/diagram/ci/` the decision and the remote path: `decision.py`, `dispatch.py`, `cachepolicy.py`, `door.py`, `features.py`, `imagecheck.py`, `config.py`, `_invocation.py` and `switches.py`
       research: rendering
 
 - [ ] T065 [US2] `scripts/gates/` the text checks: every `check-*.py`, one tool family at a time, each check's verdicts held to the Python's over the repository
@@ -208,6 +208,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
 
 - [ ] T069 [US2] The inline Python of the phase: the Makefile's gate recipes, `scripts/gates/*.sh`, `sync-with-main.sh`, `land-tooling.sh`, `buildspec/run.sh`; the suites FR-001 moved here (`test-entry-gate`, `test-claims-gate`, `test-cohort-gate`, `test-land-tooling`) with them
+      research: rendering
+
+- [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it
       research: rendering
 
 - [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, the phase's record in `dev/`
