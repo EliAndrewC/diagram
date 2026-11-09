@@ -17,9 +17,39 @@ pub(crate) fn lifecycle_configuration() -> Value {
     ]})
 }
 
+/// One rule of the document, by id: an index is a claim about order that nothing in the document guarantees.
+pub(crate) fn rule(document: &Value, id: &str) -> Result<Value, String> {
+    let rules = document["Rules"].as_array().map_or(&[][..], Vec::as_slice);
+    rules
+        .iter()
+        .find(|r| r["ID"] == id)
+        .cloned()
+        .ok_or(format!("no lifecycle rule {id}"))
+}
+
+/// `l7r-gate lifecycle [rule id]`.
+pub(crate) fn cli(args: &[String]) -> crate::Reply {
+    let document = lifecycle_configuration();
+    let answer = args
+        .first()
+        .map_or(Ok(document.clone()), |id| rule(&document, id));
+    match answer {
+        Ok(value) => crate::Reply {
+            stdout: format!("{value}\n"),
+            stderr: String::new(),
+            code: 0,
+        },
+        Err(why) => crate::Reply {
+            stdout: String::new(),
+            stderr: format!("{why}\n"),
+            code: 1,
+        },
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{lifecycle_configuration, VERIFIED_RULE_ID};
+    use super::{cli, lifecycle_configuration, rule, VERIFIED_RULE_ID};
     use serde_json::Value;
 
     fn rules() -> Vec<Value> {
@@ -56,5 +86,21 @@ mod tests {
             .iter()
             .any(|r| r["Filter"]["ObjectSizeGreaterThan"] == 1_048_576
                 && r["Expiration"]["Days"] == 30));
+    }
+
+    #[test]
+    fn a_rule_is_addressed_by_id_and_a_missing_one_is_loud() {
+        let doc = lifecycle_configuration();
+        assert_eq!(
+            rule(&doc, VERIFIED_RULE_ID).unwrap()["Expiration"]["Days"],
+            365
+        );
+        assert_eq!(
+            rule(&doc, "nonsense").unwrap_err(),
+            "no lifecycle rule nonsense"
+        );
+        assert!(cli(&[]).stdout.contains("expire-large-objects"));
+        assert!(cli(&[VERIFIED_RULE_ID.to_owned()]).stdout.contains("365"));
+        assert_eq!(cli(&["nonsense".to_owned()]).code, 1);
     }
 }

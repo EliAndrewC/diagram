@@ -66,11 +66,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
         Some("ci") => ci::main::entry(&args[1..], &top()),
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
-        Some("lifecycle") => Reply {
-            stdout: format!("{}\n", ci::cachepolicy::lifecycle_configuration()),
-            stderr: String::new(),
-            code: 0,
-        },
+        Some("lifecycle") => ci::cachepolicy::cli(&args[1..]),
         Some("github-token") => ci::config::github_token(&top()),
         Some("state") => state::cli(&args[1..], &top(), "python3"),
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),

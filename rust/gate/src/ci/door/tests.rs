@@ -47,3 +47,13 @@ fn an_entry_from_main_authorizes_nothing_and_one_of_this_work_opens_it() {
     let (ok, why) = check(&dir, "origin/main");
     assert!(ok && why.contains("z.json") && why.ends_with("authorizes FULL: w"));
 }
+
+#[test]
+fn an_environment_variable_alone_opens_nothing() {
+    // the tier-2 override with extra steps, which feature 127's audit found walked through three times; nothing else in this crate reads this name
+    std::env::set_var("REF_WHY", "because I said so");
+    let dir = repo("door-env");
+    let (ok, why) = check(&dir, "origin/main");
+    std::env::remove_var("REF_WHY");
+    assert!(!ok && why.contains("no FULL entry"));
+}

@@ -78,3 +78,28 @@ fn a_long_list_is_cut_at_three_and_a_python_that_cannot_start_holds_nothing() {
         Vec::<String>::new()
     );
 }
+
+/// This tool's one end-to-end test (FR-008): the gate's reader asks the review gate's own, the real Python on the real script.
+#[test]
+fn the_merge_and_the_review_gate_read_one_verdict() {
+    let dir = repo("one-verdict");
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts");
+    std::os::unix::fs::symlink(real, dir.join("scripts")).unwrap();
+    put(&dir, "specs/9-x/tasks.md", "- [x] T01 done\n");
+    for (body, want) in [
+        ("- round 2 (spec-fidelity-verify): FAITHFUL\n", true),
+        ("- round 1: NOT FAITHFUL\n", false),
+        ("the word FAITHFUL in prose\n", false),
+    ] {
+        put(
+            &dir,
+            "specs/9-x/spec.md",
+            &format!("# F\n\n## Review history\n{body}"),
+        );
+        assert_eq!(
+            feature_status(&dir, Some("9-x"), "python3").faithful,
+            want,
+            "{body}"
+        );
+    }
+}
