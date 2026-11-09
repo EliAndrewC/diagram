@@ -257,6 +257,18 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 10. **Before moving a constant.** None moved.
 11. **Before fitting things into room.** Not a room question.
 
+### T061 part B (2026-11-09T01:17:42Z)
+
+1. **What exactly is refusing?** Two checks of the gate, both on the new files themselves: `test_claims_coverage` read `rust/gate/` as engine code owing research claims, and `check-tool-signals` asked the new wrapper how it records its runs. Neither is a rule about the crate's behavior; each is a roster that did not yet know the crate.
+2. **A3 again.** Green: both rules are the repository's own, unchanged.
+3. **A4 again.** The claims rule describes the hamlet engine; `rust/gate`, like `rust/guard`, is tooling, so it joins that exclusion. The record rule describes tools that decide; a launcher records through what it launches, as its statement says.
+4. **Moving something placed earlier to suit something later?** No.
+5. **Tuning or changing?** Neither: two rosters, one line each.
+6. **The one-sentence test.** "The new tooling crate was told it is tooling." The GM would not ask why.
+7. **The next step is a measurement.** `make done` green on hooks-test and test-full, as the round arbiter's ruling on the two reds names.
+8. **Before offering routes.** None offered.
+9. **After a ruling.** The next step is the one it names: the failing case run directly, the fixes confirmed in the commit, then the gate.
+
 ### T062 Approach (checklist part A)
 
 1. **The goal, in the world.** Which tests a change owes is decided by Rust.
