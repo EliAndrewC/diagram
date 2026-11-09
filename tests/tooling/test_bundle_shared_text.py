@@ -29,15 +29,54 @@ def _load(name: str, path: pathlib.Path):  # noqa: ANN202
     return mod
 
 
-sc = _load("subagent_cache", REPO / "scripts/measure/subagent_cache.py")
+LINE_MIN = 40
 cb = _load("_check_bundle", script("_check_bundle"))
 mb = _load("modal_bundle", REPO / "scripts/record/modal_bundle.py")
+
+
+def _lines(text: str) -> set[str]:
+    """A text's lines of LINE_MIN characters or more, the Read tool's line-number prefix dropped."""
+    out = set()
+    for raw in text.splitlines():
+        line = raw.split("\t", 1)[-1].strip() if "\t" in raw[:12] else raw.strip()
+        if len(line) >= LINE_MIN:
+            out.add(line)
+    return out
+
+
+def shared_text(a: str, b: str) -> int:
+    """Characters of the lines (LINE_MIN or longer) both texts hold - what two bundles of one check repeat."""
+    return sum(len(line) for line in _lines(a) & _lines(b))
+
+
+#: a bundle section built from the UNIT's own inputs - its research pages and entries, the claims and candidates derived from
+#: them - may coincide between two units that read the same pages; it is not text the check repeats (plan D38)
+UNIT_ORIGINS = ("research/questions/", "research/sources/", "dev/claims-index.json")
+UNIT_SECTIONS = ("claims.md", "candidates.md", "entry/", "drawing/", "record/", "cand/", "sources/")
+
+
+def contract_part(manifest: str) -> str:
+    """A MANIFEST without its sections copied from the unit's own inputs: what the builder writes and the files it copies
+    from outside the record - where a check's standing text would be."""
+    keep, out = True, []
+    for line in manifest.splitlines():
+        if line.startswith("## "):
+            head = line[3:]
+            keep = not (any(f"origin `{o}" in head for o in UNIT_ORIGINS) or any(head.startswith(f"`{s}") for s in UNIT_SECTIONS))
+        if keep:
+            out.append(line)
+    return "\n".join(out)
+
+
+def contract_shared(a: str, b: str) -> int:
+    """`shared_text` over two manifests' `contract_part`s."""
+    return shared_text(contract_part(a), contract_part(b))
 
 
 def _shared(a: pathlib.Path, b: pathlib.Path) -> int:
     """What two manifests share outside the sections built from each unit's own inputs (two crops cite the same drawing pages;
     that is the units coinciding, not the check repeating itself)."""
-    return sc.contract_shared(_manifest(a), _manifest(b))
+    return contract_shared(_manifest(a), _manifest(b))
 
 
 def _manifest(d: pathlib.Path) -> str:

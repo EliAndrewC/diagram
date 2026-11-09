@@ -151,7 +151,7 @@ pub(crate) fn slowdown(
 
 /// Python's `round`: to the nearest integer, a tie to the even one.
 #[expect(clippy::cast_possible_truncation, reason = "seconds, far inside i64")]
-fn round_even(x: f64) -> i64 {
+pub(crate) fn round_even(x: f64) -> i64 {
     let down = x.floor();
     let diff = x - down;
     let up = (diff - 0.5).abs() < f64::EPSILON && (down as i64) % 2 != 0 || diff > 0.5;

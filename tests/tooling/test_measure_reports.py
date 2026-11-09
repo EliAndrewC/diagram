@@ -22,77 +22,7 @@ def _load(name: str) -> ModuleType:
     return mod
 
 
-ry = _load("review_yield")
 tt = _load("turn_time")
-
-LEDGER = """
-| date | check | subject | verdict | finding | class | missed | acted on | wall | tokens |
-|---|---|---|---|---|---|---|---|---|---|
-| 2026-09-20 | glyph-check | 300 well | FINDINGS 1 | too old | judgment | yes | fixed | 60 s | 10k in / 1.0k out |
-| 2026-10-01 | glyph-check | 310 well | FINDINGS 1 | the well reads as a pond | geometric | yes | applied | 1800 s | 100k in / 2.0k out |
-| 2026-10-01 | glyph-check | 311 byre | FINDINGS 1 | a shade too dark | judgment | no | verified (it is the convention) | 1800 s | 100k in / 3.0k out |
-| 2026-10-02 | glyph-check | 311 byre | FINDINGS 1 | a size question | judgment | yes | put to the GM | 1800 s | 100k in / 1.0k out |
-| 2026-10-02 | spec-fidelity | feature 312 spec | FAITHFUL | - | nothing | no | verified | 600 s | 50k in / 4.0k out |
-| 2026-10-03 | spec-fidelity | feature 312 plan | BLOCKED 1 | a decision unrecorded | judgment | yes | re-dispatched | 600 s | 50k in / 4.0k out |
-| 2026-10-03 | quote-check | 0021 | PASS | - | nothing | no | - | ? | ? |
-| 2026-10-04 | a short row | 9 cells | x | x | x | x | x | 1 s |
-"""
-
-
-def test_review_yield_counts_each_column_from_its_cells() -> None:
-    rows = ry.rows(LEDGER, "2026-09-26")
-    assert len(rows) == 5, "before --since, no wall time and a short row are not measured rows"
-    t = ry.table(rows)
-    g = t["glyph-check"]
-    assert (g["passes"], g["with a finding"], g["acted on"], g["dismissed"], g["deferred"], g["author missed"]) == (3, 3, 1, 1, 1, 2)
-    assert g["hours"] == 1.5 and g["k tokens out"] == 6.0 and g["features"] == 2 and g["acted on per hour"] == 0.7
-    s = t["spec-fidelity"]
-    assert (s["with a finding"], s["acted on"], s["not acted on"], s["features"]) == (1, 0, 1, 1), "a re-dispatch changed nothing"
-    out = ry.render(t, "2026-09-26", len(rows))
-    assert out.index("| glyph-check |") < out.index("| spec-fidelity |"), "sorted by hours"
-
-
-@pytest.mark.parametrize(
-    ("cell", "outcome"),
-    [
-        ("applied", "acted on"),
-        ("fixed (the EDIT applied)", "acted on"),
-        ("index recorded; round 2", "acted on"),
-        ("filed as rows", "acted on"),
-        ("to the follow-up", "acted on"),
-        ("not applied: carried in specs/335/briefs", "acted on"),
-        ("nothing", "dismissed"),
-        ("nothing for the GM", "dismissed"),
-        ("answered in feature 328", "dismissed"),
-        ("left: the reason is the GM's allowance", "dismissed"),
-        ("verified", "dismissed"),
-        ("spec accepted", "dismissed"),
-        ("none", "dismissed"),
-        ("accepted (the drift already on the report)", "dismissed"),
-        ("plan accepted", "dismissed"),
-        ("declined: contradicts FR-015", "dismissed"),
-        ("no change", "dismissed"),
-        ("no-change", "dismissed"),
-        ("put to the GM", "deferred"),
-        ("left for the next session", "deferred"),
-        ("not applied: needs a new passage", "deferred"),
-        ("-", "not acted on"),
-        ("re-dispatched; engine frozen", "not acted on"),
-    ],
-)
-def test_review_yield_reads_each_kind_of_acted_on_cell(cell: str, outcome: str) -> None:
-    """The plan review (amendment 8): "nothing" in 64 cells, "answered" and a bare "left" were counted as acted on; a
-    finding filed elsewhere is acted on (FR-037: fixed, filed) whatever its cell opens with."""
-    assert ry.outcome(cell) == outcome
-
-
-def test_review_yield_records_its_table(tmp_path: pathlib.Path) -> None:
-    ledger, m = tmp_path / "ledger.md", tmp_path / "m.json"
-    ledger.write_text(LEDGER, encoding="utf-8")
-    m.write_text("{}", encoding="utf-8")
-    assert ry.main(["--ledger", str(ledger), "--record", str(m), "--key", "k"]) == 0
-    assert json.loads(m.read_text())["k"]["value"]["by check"]["glyph-check"]["passes"] == 3
-    assert ry.main(["--ledger", str(ledger), "--record", str(m)]) == 2, "--record needs --key"
 
 
 def _record(tmp: pathlib.Path, name: str, commit: str, seeds: list[tuple[int, list[str]]], feature: str | None = None) -> None:

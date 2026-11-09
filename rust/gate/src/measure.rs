@@ -4,10 +4,16 @@
 use std::path::Path;
 
 pub(crate) mod figures;
+pub(crate) mod fresh_tally;
 pub(crate) mod gate_costs;
 pub(crate) mod gatecost;
+pub(crate) mod guard_log;
 pub(crate) mod probe;
 pub(crate) mod ratchet;
+pub(crate) mod review_yield;
+pub(crate) mod runstats;
+pub(crate) mod subagent_cache;
+pub(crate) mod wave_report;
 
 pub(crate) fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {
     crate::Reply {
@@ -26,13 +32,32 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("gatecost") => gatecost::cli(rest, root),
         Some("ratchet") => ratchet::cli(rest, root),
         Some("probe") => probe::cli(rest, root),
+        Some("runstats") => runstats::cli(rest),
+        Some("guard-log") => guard_log::cli(rest, &home()),
+        Some("review-yield") => review_yield::cli(rest, root),
+        Some("wave-report") => wave_report::cli(rest, &home()),
+        Some("subagent-cache") => subagent_cache::cli(rest, &home(), &a_week_ago()),
+        Some("fresh-tally") => fresh_tally::cli(rest, root),
         _ => reply(
             String::new(),
-            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe\n"
+            "usage: l7r-gate measure figures | gate-costs | gatecost | ratchet | probe | runstats | guard-log | review-yield | wave-report | subagent-cache | fresh-tally\n"
                 .to_owned(),
             2,
         ),
     }
+}
+
+fn home() -> std::path::PathBuf {
+    std::env::var_os("HOME").map_or_else(std::path::PathBuf::new, std::path::PathBuf::from)
+}
+
+/// The date seven days before today, as `YYYY-MM-DD`: the default window of the subagent report.
+fn a_week_ago() -> String {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0, |d| d.as_secs());
+    let (y, m, d, ..) = l7r_guard::shared::log::civil(now.saturating_sub(7 * 86_400));
+    format!("{y:04}-{m:02}-{d:02}")
 }
 
 /// Every `.json` under `dir`, recursively, sorted.
@@ -79,5 +104,19 @@ mod tests {
         assert_eq!(json_files(&dir).len(), 1);
         assert!((median(&mut [3.0, 1.0, 2.0]) - 2.0).abs() < f64::EPSILON);
         assert!((median(&mut [4.0, 1.0]) - 2.5).abs() < f64::EPSILON);
+        let there = dir.display().to_string();
+        let ask = |words: &[&str]| {
+            cli(
+                &words.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(),
+                &dir,
+            )
+            .code
+        };
+        assert_eq!(ask(&["runstats"]), 2);
+        assert_eq!(ask(&["guard-log", "--dir", &there]), 0);
+        assert_eq!(ask(&["review-yield"]), 0);
+        assert_eq!(ask(&["wave-report", "--root", &there]), 1);
+        assert_eq!(ask(&["subagent-cache", "--root", &there]), 0);
+        assert_eq!(ask(&["fresh-tally", "--log", &there]), 0);
     }
 }

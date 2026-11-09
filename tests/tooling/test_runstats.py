@@ -7,9 +7,7 @@ No `tooling` marker: it calls functions over temporary files, it runs no make, g
 from __future__ import annotations
 
 import importlib.util
-import json
 import pathlib
-import sys
 import types
 
 import pytest
@@ -18,139 +16,6 @@ from tests import _gate_failures
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("_runstats", REPO / "scripts/measure/runstats.py")
-assert _spec and _spec.loader
-runstats = importlib.util.module_from_spec(_spec)
-sys.modules["_runstats"] = runstats
-_spec.loader.exec_module(runstats)
-
-
-def _host(
-    root: pathlib.Path, *, load: str = "1.50", avail_kb: int = 4096 * 1024, io_total: int = 2_000_000, temp: int = 61000, core_ms: tuple[int, int] = (10, 20), package_ms: int = 7
-) -> tuple[str, str]:
-    """A fake /proc and /sys holding every figure the snapshot reads."""
-    proc, sysr = root / "proc", root / "sys"
-    (proc / "pressure").mkdir(parents=True, exist_ok=True)
-    (proc / "loadavg").write_text(f"{load} 1.00 0.50 1/100 42\n")
-    (proc / "meminfo").write_text(f"MemTotal: 16000000 kB\nMemAvailable: {avail_kb} kB\n")
-    (proc / "pressure" / "cpu").write_text("some avg10=0.00 avg60=0.00 avg300=0.00 total=1000000\n")
-    (proc / "pressure" / "io").write_text(f"some avg10=0.50 avg60=0.10 avg300=0.02 total={io_total}\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=500000\n")
-    (proc / "pressure" / "memory").write_text("some avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n")
-    for i, name in enumerate(("nvme", "coretemp")):
-        hw = sysr / "class" / "hwmon" / f"hwmon{i}"
-        hw.mkdir(parents=True, exist_ok=True)
-        (hw / "name").write_text(name + "\n")
-        (hw / "temp1_input").write_text(f"{temp if name == 'coretemp' else 99000}\n")
-        if name == "coretemp":
-            (hw / "temp1_label").write_text("Package id 0\n")
-            (hw / "temp2_input").write_text("90000\n")
-            (hw / "temp2_label").write_text("Core 0\n")
-    for cpu, ms in enumerate(core_ms):
-        tt = sysr / "devices" / "system" / "cpu" / f"cpu{cpu}" / "thermal_throttle"
-        tt.mkdir(parents=True, exist_ok=True)
-        (tt / "core_throttle_total_time_ms").write_text(f"{ms}\n")
-        (tt / "package_throttle_total_time_ms").write_text(f"{package_ms}\n")
-    return str(proc), str(sysr)
-
-
-def test_the_snapshot_reads_every_figure(tmp_path: pathlib.Path) -> None:
-    proc, sysr = _host(tmp_path)
-    snap = runstats.snapshot(proc, sysr)
-    assert snap["load"] == 1.5
-    assert snap["mem_avail_mb"] == 4096
-    assert snap["stall_us"] == {"cpu": 1000000, "io": 2000000, "io_full": 500000, "memory": 0}
-    # The package sensor, not the hotter core one and not the nvme drive.
-    assert snap["cpu_temp_c"] == 61.0
-    # Core time summed over CPUs; package time from one CPU, since each CPU of a package repeats it.
-    assert snap["throttle_ms"] == {"core": 30, "package": 7}
-
-
-def test_a_host_without_the_figures_gives_none_and_nothing(tmp_path: pathlib.Path) -> None:
-    snap = runstats.snapshot(str(tmp_path / "noproc"), str(tmp_path / "nosys"))
-    assert (snap["load"], snap["mem_avail_mb"], snap["cpu_temp_c"]) == (None, None, None)
-    assert snap["stall_us"] == {} and snap["throttle_ms"] == {}
-
-
-def test_coretemp_without_a_package_label_reports_its_hottest_sensor(tmp_path: pathlib.Path) -> None:
-    hw = tmp_path / "class" / "hwmon" / "hwmon0"
-    hw.mkdir(parents=True)
-    (hw / "name").write_text("coretemp\n")
-    (hw / "temp1_input").write_text("50000\n")
-    (hw / "temp2_input").write_text("72000\n")
-    (hw / "temp3_input").write_text("garbage\n")
-    assert runstats._cpu_temp_c(str(tmp_path)) == 72.0
-
-
-def test_coretemp_with_no_readable_sensor_reports_none(tmp_path: pathlib.Path) -> None:
-    hw = tmp_path / "class" / "hwmon" / "hwmon0"
-    hw.mkdir(parents=True)
-    (hw / "name").write_text("coretemp\n")
-    assert runstats._cpu_temp_c(str(tmp_path)) is None
-
-
-def test_end_without_a_start_is_empty(tmp_path: pathlib.Path) -> None:
-    assert runstats.end(str(tmp_path)) == {}
-
-
-def test_end_reports_both_ends_and_the_deltas_over_the_run(tmp_path: pathlib.Path) -> None:
-    gitdir = tmp_path / "git"
-    gitdir.mkdir()
-    proc, sysr = _host(tmp_path / "a")
-    runstats.start(str(gitdir), proc, sysr)
-    proc2, sysr2 = _host(tmp_path / "b", load="9.25", avail_kb=1024 * 1024, io_total=14_500_000, temp=88000, core_ms=(510, 20), package_ms=1007)
-    out = runstats.end(str(gitdir), proc2, sysr2)
-    assert "first_failure_s" not in out and "failed_tests" not in out
-    host = out["host"]
-    assert host["load"] == [1.5, 9.25]
-    assert host["mem_avail_mb"] == [4096, 1024]
-    assert host["cpu_temp_c"] == [61.0, 88.0]
-    assert host["stall_s"] == {"cpu": 0.0, "io": 12.5, "io_full": 0.0, "memory": 0.0}
-    assert host["throttle_ms"] == {"core": 500, "package": 1000}
-
-
-def test_end_leaves_out_a_figure_missing_at_either_end(tmp_path: pathlib.Path) -> None:
-    gitdir = tmp_path / "git"
-    gitdir.mkdir()
-    runstats.start(str(gitdir), str(tmp_path / "noproc"), str(tmp_path / "nosys"))
-    proc, sysr = _host(tmp_path / "b")
-    assert runstats.end(str(gitdir), proc, sysr) == {}
-
-
-def _marks(gitdir: pathlib.Path, start_t: float, lines: list[str]) -> None:
-    (gitdir / runstats.START).write_text(json.dumps({"t": start_t, "load": None, "mem_avail_mb": None, "stall_us": {}, "cpu_temp_c": None, "throttle_ms": {}}))
-    (gitdir / runstats.FAILURES).write_text("".join(line + "\n" for line in lines))
-
-
-def test_test_marks_give_first_and_last_and_the_test_phase_end_is_dropped(tmp_path: pathlib.Path) -> None:
-    """The phase's end would otherwise be the last failure every time a test failed."""
-    _marks(tmp_path, 1000.0, ["1004.0 phase:static", "1050.25 test", "1080.0 test", "not-a-time test", "1150.0 phase:test-full"])
-    out = runstats.end(str(tmp_path), str(tmp_path / "noproc"), str(tmp_path / "nosys"))
-    assert out == {"first_failure_s": 4.0, "last_failure_s": 80.0, "failed_tests": 2}
-
-
-def test_a_test_phase_with_no_test_marks_stands_on_its_end(tmp_path: pathlib.Path) -> None:
-    """A coverage floor or the roll census fails test-full with no test failing: its end is the only moment."""
-    _marks(tmp_path, 1000.0, ["1150.0 phase:test-full"])
-    out = runstats.end(str(tmp_path), str(tmp_path / "noproc"), str(tmp_path / "nosys"))
-    assert out == {"first_failure_s": 150.0, "last_failure_s": 150.0}
-
-
-def test_start_clears_the_last_runs_marks_and_fail_appends(tmp_path: pathlib.Path) -> None:
-    (tmp_path / runstats.FAILURES).write_text("1.0 test\n")
-    runstats.start(str(tmp_path))
-    assert not (tmp_path / runstats.FAILURES).exists()
-    runstats.start(str(tmp_path))  # nothing to clear is fine
-    runstats.fail(str(tmp_path), "reference")
-    assert (tmp_path / runstats.FAILURES).read_text().endswith(" phase:reference\n")
-
-
-def test_main_runs_each_command_and_refuses_a_bad_one(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
-    assert runstats.main(["start", str(tmp_path)]) == 0
-    assert runstats.main(["fail", str(tmp_path), "static"]) == 0
-    assert runstats.main(["end", str(tmp_path)]) == 0
-    assert "first_failure_s" in json.loads(capsys.readouterr().out)
-    assert runstats.main(["fail", str(tmp_path)]) == 2
-    assert "runstats.py start" in capsys.readouterr().err
 
 
 def test_a_failed_report_is_marked_and_a_pass_is_not(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -191,35 +56,12 @@ def test_the_gate_wires_the_stats_into_every_entry_it_writes() -> None:
     assert recipe.count('RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" ') == 5
 
 
-def test_a_marks_test_id_is_kept_by_name(tmp_path: pathlib.Path) -> None:
-    """Feature 385 (the round arbiter's fix on red-gate@2026-10-17T17:21:08Z): a mark written with its test id names it in the
-    run record, the first `FAILED_NAMES_KEPT` kept; an old bare mark still counts and names nothing."""
-    ids = [f"tests/test_a.py::test_{n}" for n in range(runstats.FAILED_NAMES_KEPT + 3)]
-    _marks(tmp_path, 1000.0, [f"{1001.0 + n} test {i}" for n, i in enumerate(ids)] + ["1100.0 test"])
-    out = runstats.end(str(tmp_path), str(tmp_path / "noproc"), str(tmp_path / "nosys"))
-    assert out["failed_tests"] == len(ids) + 1 and out["failed_names"] == ids[: runstats.FAILED_NAMES_KEPT]
-
-
 def test_a_mark_carries_its_tests_id(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 385: the mark names the failed test (`report.nodeid`), so the run record can."""
     monkeypatch.delenv("PYTEST_XDIST_WORKER", raising=False)
     path = tmp_path / "gate-failures"
     assert _gate_failures.mark(types.SimpleNamespace(failed=True, nodeid="tests/test_a.py::test_b"), str(path))
     assert path.read_text().endswith(" test tests/test_a.py::test_b\n")
-
-
-def test_a_coverage_floor_s_modules_and_lines_are_named_in_the_run_record(tmp_path: pathlib.Path) -> None:
-    """The round arbiter's tooling fix on red-gate@2026-10-18T11:42:39Z (feature 387): a gate red on the 100% floor left "? test(s)
-    failed" - the marks `uncovered_marks.py` writes put each module and its missing lines in the record's `failed_names`."""
-    _um = importlib.util.spec_from_file_location("uncovered_marks", REPO / "scripts/measure/uncovered_marks.py")
-    assert _um is not None and _um.loader is not None
-    um = importlib.util.module_from_spec(_um)
-    _um.loader.exec_module(um)
-    report = "Name   Stmts   Miss  Cover   Missing\n-----\nl7r/a.py   10   2   80%   12, 15-16\nl7r/b.py   5   0   100%\nTOTAL   15   2   87%\n"
-    assert um.uncovered(report) == ["l7r/a.py:12, 15-16"]
-    (tmp_path / "gate-failures").write_text("10.000 uncovered l7r/a.py:12, 15-16\n11.000 phase:test-full\n")
-    moments, failed, names = runstats._failure_marks(str(tmp_path))
-    assert names == ["uncovered l7r/a.py:12, 15-16"] and failed == 0 and 10.0 in moments
 
 
 def test_a_coverage_report_that_errors_is_named_in_the_run_record() -> None:
@@ -232,34 +74,3 @@ def test_a_coverage_report_that_errors_is_named_in_the_run_record() -> None:
     out = "Name  Stmts\nNo source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x\n"
     assert um.errors(out) == ["coverage-error No source for code: '/x/l7r/gone.py'; see https://coverage.readthedocs.io/x"]
     assert um.errors("Name   Stmts   Miss\nTOTAL  1  0\n") == []
-
-
-def test_a_gate_records_each_phase_and_this_runs_plan(tmp_path) -> None:  # noqa: ANN001
-    """Feature 415 (FR-002, FR-005; the GM 2026-10-24): the run record carries each phase's seconds - the preflight's too,
-    run before `start` - and the plan's mode, reason and counts from THIS run's selection result, never an older one's."""
-    import json
-    import os
-    import time
-
-    g = str(tmp_path)
-    (tmp_path / "gate-baseline").mkdir()
-    result = tmp_path / "gate-baseline" / "result.json"
-    result.write_text(json.dumps({"mode": "full", "reason": "an older run", "selected": 9, "collected": 9}))
-    old = time.time() - 600
-    os.utime(result, (old, old))
-    runstats.phase(g, "preflight", "34", pre=True)
-    runstats.start(g)
-    runstats.phase(g, "static", "12.5")
-    runstats.phase(g, "test", "200")
-    runstats.phase(g, "test", "80")
-    out = runstats.end(g)
-    assert out["phases"] == {"preflight": 34.0, "static": 12.5, "test": 280.0}
-    assert "plan_mode" not in out and "selected" not in out, "an older run's result is not this run's"
-    result.write_text(json.dumps({"mode": "incremental", "reason": "2 engine file(s)", "selected": 143, "collected": 10380}))
-    out = runstats.end(g)
-    assert (out["plan_mode"], out["plan_reason"], out["selected"], out["collected"]) == ("incremental", "2 engine file(s)", 143, 10380)
-    result.write_text(json.dumps({"mode": "full", "reason": "r", "selected": ["a::x", "b::y"], "collected": ["a::x", "b::y", "c::z"]}))
-    assert (runstats.end(g)["selected"], runstats.end(g)["collected"]) == (2, 3), "the selection plugin's lists, as counts"
-    runstats.start(g)
-    assert "phases" not in runstats.end(g), "a new gate starts with no phases"
-    assert runstats.main(["phase", g, "x", "1"]) == 0 and runstats.end(g)["phases"] == {"x": 1.0}

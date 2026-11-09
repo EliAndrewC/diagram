@@ -358,7 +358,7 @@ guard-edit:     ## [project] permit edits to one guard file for an hour, the rea
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$(abspath $(FILE))" "$$GUARD_WHY"
 
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure guard-log $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
 audit:          ## [project] how the gate has actually been used - every run and every bypass
 	@python3 -c "import json,glob,collections,os; \
@@ -437,7 +437,7 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   g=subprocess.run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip(); \
   g and open(os.path.join(g,'last-run-record'),'w').write(os.path.abspath(f'{d}/{ts}-{os.getpid()}.json'))"
 
-RUNSTATS = python3 "$$(git rev-parse --show-toplevel)/scripts/measure/runstats.py"
+RUNSTATS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure runstats
 COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
 LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
@@ -972,10 +972,10 @@ parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts an
 	@bash tests/hooks/parts_sweep.sh $(SUITES)
 
 subagent-cache:  ## [project] what subagents write to the prompt cache fresh, per agent type, and the repeated text in their bundles (feature 383 amendment 6)   [SINCE=YYYY-MM-DD]
-	@python3 scripts/measure/subagent_cache.py $(if $(SINCE),--since $(SINCE),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure subagent-cache $(if $(SINCE),--since $(SINCE),)
 
 wave-report:     ## [project] a workflow wave's cost - each agent's first-request cache read and write, the main session's wakes - against the last hand-launched wave (feature 383 amendment 7)   [WF=<.../workflows/wf_*>]
-	@python3 scripts/measure/wave_report.py $(if $(WF),--run $(WF),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure wave-report $(if $(WF),--run $(WF),)
 
 collect-cost:    ## [tests] where a run's time goes before any test runs: as make runs it, no workers, collection alone (feature 383 amendment 3)   TREE=quick|tooling
 	@python3 scripts/measure/collect_cost.py --tree $(or $(TREE),quick) $(if $(JSON),--json $(JSON),)
@@ -1073,10 +1073,10 @@ idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 
 
 .PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/review_yield.py" $(if $(SINCE),--since $(SINCE),)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure review-yield $(if $(SINCE),--since $(SINCE),)
 
 fresh-tally:      ## [performance] seeds nobody has used: the failed share pooled, by form and by cause (feature 417)   [COMMIT=<sha prefix>] [SINCE=<UTC stamp>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/fresh_tally.py" $(if $(COMMIT),--commit "$(COMMIT)",) $(if $(SINCE),--since "$(SINCE)",)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure fresh-tally $(if $(COMMIT),--commit "$(COMMIT)",) $(if $(SINCE),--since "$(SINCE)",)
 
 guard:           ## [static] {internal} refuse to run in main's tree - main is the integration point, never a workspace
 	@top=$$(git rev-parse --show-toplevel 2>/dev/null); \
