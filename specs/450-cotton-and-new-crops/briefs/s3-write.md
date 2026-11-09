@@ -20,10 +20,9 @@ modern web essay, a Korean volume of 500,000 bolts on one author's OCR'd page: e
 ## Your items
 
 1. **Was cotton a New World crop?** A NEW money question, its title asking which cottons grew in Asia before 1492 and when the American kinds came; `subject=money` first.
-   Each species and its date of arrival and importance, across India, China, Korea and Japan. The premise tested. The GM's specific point answered: whether the roughly 100 years between
-   Columbus and the Tokugawa restrictions had any bearing on Japanese cotton, from the dates in the Japan question.
-2. **Cotton in India and Korea**, a NEW money question, its title asking when cotton became ordinary in India and in Korea; the five stages per country, or a statement that a stage
-   does not apply or is SILENT; the same five stages as the Japan question. Korea's role, if any, in cotton reaching Japan, the cloth and the plant each with its own verdict and dates. Point at the Japan and China questions by title.
+   Each species and its date of arrival and importance, across India, China, Korea and Japan. The premise tested. The GM's specific point answered: name the event and date that close the window from a source you read (the edicts of the 1630s or the shogunate's founding in 1603), say which his "~100 years" fits, and answer
+   both halves: whether those years had any bearing on Japanese cotton, and whether Japan probably did not have cotton in them, from the dates in the Japan question.
+2. **Cotton in India and Korea**, a NEW money question, its title asking when cotton became ordinary in India and in Korea; the five stages per country, each with one of the four verdicts (India's stage of cloth arriving mainly as an import too, the 19th century's factory cloth searched; the pass did not search it); the same five stages as the Japan question. Korea's role, if any, in cotton reaching Japan, the cloth and the plant each with its own verdict and dates. Point at the Japan and China questions by title.
 
 **New registry keys** (at most ten): as the pass names them, the best-evidenced first. `make reserve`'s eleventh key writes a continuation brief - follow it.
 

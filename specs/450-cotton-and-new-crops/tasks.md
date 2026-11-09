@@ -24,7 +24,7 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: `make record-owed` reports nothing owed for the question
-- [ ] T03 S3+C3: the species, and India and Korea (D3; FR-001, FR-002, FR-005, FR-007)
+- [ ] T03 S3+C3: the species, and India and Korea (D3; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed
@@ -32,7 +32,7 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: `make record-owed` reports nothing owed for the questions
-- [ ] T04 S4+C4: tobacco, the sweet potato and the white potato (D4; FR-001, FR-002, FR-005, FR-007)
+- [ ] T04 S4+C4: tobacco, the sweet potato and the white potato (D4; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed
@@ -40,7 +40,7 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify: `make record-owed` reports nothing owed for the questions
-- [ ] T05 S5+C5: the tomato, what set the pace of spread, and the Tokugawa restrictions (D5; FR-001, FR-002, FR-005, FR-007)
+- [ ] T05 S5+C5: the tomato, what set the pace of spread, and the Tokugawa restrictions (D5; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
       - [ ] research pass
       - [ ] source-reader confirmed

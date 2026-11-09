@@ -48,19 +48,19 @@ named by file where they bear, with 0312 in addition; none is repeated. 0006 and
 A new money question, its title asking when cotton became ordinary clothing in China, of the same shape as D1, with the frontier and the
 Yangzi as separate stages, and the state's part. Points at D1.
 
-## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)
+## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)
 
 Two new money questions: one asking whether cotton was a New World crop, which species grew where before 1492 and when the American
 kinds came (four countries, each with date and importance, with the GM's point on the 100 years answered); one on when cotton became
-ordinary in India and in Korea, with the same five dated stages as question 1 for each country, and Korea's role, if any, in cotton reaching
+ordinary in India and in Korea, with the same five dated stages as question 1 for each country, each carrying one of the four verdicts (India's import stage included, the 19th century's factory cloth searched), and Korea's role, if any, in cotton reaching
 Japan, the cloth and the plant each with its verdict. Point at D1 and D2.
 
-## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)
+## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-006, FR-007)
 
 Three new money questions, one per plant, each with per-country dated stages and the lag, China and Japan first; loose plant words kept
 as the spec's edge case says. Tobacco's states the canon quotation beside it.
 
-## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-007)
+## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-006, FR-007)
 
 Three new money questions: the tomato per country with the lag and the GM's two positions tested; what historians say made a crop spread
 quickly or slowly, with author and crops; whether the Tokugawa restrictions stopped new crops, with the arrivals before and after.
@@ -107,7 +107,7 @@ claims of another feature is taken up when it is seen on a landing.
 ### T03 Approach (checklist part A)
 
 1. **The goal, in the world.** n/a
-2. **The constraints.** D3; FR-001, FR-002, FR-005, FR-007.
+2. **The constraints.** D3; FR-001, FR-002, FR-005, FR-006, FR-007.
 3. **Where each comes from.** The FRs above, from `request.md`.
 4. **Do they describe the world here?** Yes.
 5. **The order.** n/a
@@ -121,7 +121,7 @@ claims of another feature is taken up when it is seen on a landing.
 ### T04 Approach (checklist part A)
 
 1. **The goal, in the world.** n/a
-2. **The constraints.** D4; FR-001, FR-002, FR-005, FR-007.
+2. **The constraints.** D4; FR-001, FR-002, FR-005, FR-006, FR-007.
 3. **Where each comes from.** The FRs above, from `request.md`.
 4. **Do they describe the world here?** Yes.
 5. **The order.** n/a
@@ -135,7 +135,7 @@ claims of another feature is taken up when it is seen on a landing.
 ### T05 Approach (checklist part A)
 
 1. **The goal, in the world.** n/a
-2. **The constraints.** D5; FR-001, FR-002, FR-005, FR-007.
+2. **The constraints.** D5; FR-001, FR-002, FR-005, FR-006, FR-007.
 3. **Where each comes from.** The FRs above, from `request.md`.
 4. **Do they describe the world here?** Yes.
 5. **The order.** n/a

@@ -22,7 +22,7 @@ Totman, Tashiro and Toby were not read: cite only what was (Crosby on Ho, labele
 1. **The tomato**, a NEW money question, its title asking when the tomato became common in China, Japan, Korea and India; `subject=money` first. Per country, first recorded, first cultivated, common use, the lag. Both positions tested with dates, either way: that
    tomatoes were not a big part of Japanese cuisine even when available, and that China did not cultivate them on a large scale for centuries.
 2. **What set the pace**, a NEW money question, its title asking why one new crop spread quickly and another slowly in China and Japan: the factors historians name, each with author and the crops it applies to, their disagreements given. Where Japan has no such account read, say so.
-3. **The Tokugawa restrictions**, a NEW money question, its title asking whether the restrictions on foreign trade stopped new crops reaching Japan: named crops with dates and routes, before and after the edicts of the 1630s and 1640s.
+3. **The Tokugawa restrictions**, a NEW money question, its title asking whether the restrictions on foreign trade stopped new crops reaching Japan: named crops with dates and routes, before and after the edicts, their dates from a source you read.
    Point items 1 and 3 at the tobacco, sweet potato and white potato questions by title, from session S4's handoff.
 
 **New registry keys** (at most ten): as the pass names them, the best-evidenced first. `make reserve`'s eleventh key writes a continuation brief - follow it.

@@ -11293,13 +11293,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/plan.rs::plan#a rice polder's layout fixed to the grid, the pond layout, dike crop, leftover and fry forms rolled only on a dike-pond": {
+  "code": "aeaabbe54b17c541",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "a rice polder's layout fixed to the grid, the pond layout, dike crop, leftover and fry forms rolled only on a dike-pond",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
-  "body": "9f42d153d3a49a00",
+  "body": "9b5e4221af4c0298",
   "claim": "no brook knobs on a polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder diked out of standing water has no brook, so no intake or brook side is rolled",
-  "code": "7555643aa26b4b00",
-  "core": "ee63c5b705778517",
-  "date": "2026-11-08",
-  "note": "a polder's water crosses its dike only at sluices and \"no channel runs outside the dike\", so it has no brook intake or brook side to roll",
+  "code": "f84aaa4b16dae9de",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "water reaches a polder through sluices from standing water, no channel outside the dike",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -11309,16 +11317,15 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#regional wind": {
-  "body": "9f42d153d3a49a00",
+  "body": "9b5e4221af4c0298",
   "claim": "regional wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the northwest unless declared",
-  "code": "021c0168e9f9119d",
-  "core": "ee63c5b705778517",
-  "date": "2026-11-07",
-  "note": "windward defaults to \"NW\" unless declared",
+  "code": "9bad17e271b2424f",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "northwest unless declared",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
@@ -11328,16 +11335,15 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the fall backs the wind": {
-  "body": "9f42d153d3a49a00",
+  "body": "9b5e4221af4c0298",
   "claim": "the fall backs the wind - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)",
-  "code": "27eda85612f25abc",
-  "core": "ee63c5b705778517",
-  "date": "2026-11-07",
-  "note": "the fall is rolled only from the falls admitted() allows, the deviation recorded",
+  "code": "85f1610c12a116f4",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "the recorded hamlet deviation",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
   },
@@ -11345,16 +11351,15 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the field's archetype": {
-  "body": "a5ce90420aad6744",
+  "body": "9b5e4221af4c0298",
   "claim": "the field's archetype - DEVIATION polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a polder drawn only when the map asks for one, only the valley fan dealt at random - the polder and the dike-pond attested, their random dealing a known gap",
-  "code": "0f983e95a6c028ae",
-  "core": "3f5d9b790f9122b5",
-  "date": "2026-11-08",
-  "note": "the archetype falls back to valley_paddy unless the spec names one; the page records the polder and dike-pond not being dealt at random as \"a known gap\"",
+  "code": "bef803ac57fdf25e",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "polder only when asked, the recorded known gap",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
@@ -11362,25 +11367,25 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
-  "body": "a5ce90420aad6744",
+  "body": "9b5e4221af4c0298",
   "claim": "water flow follows the fall - DEVIATION which-way-water-flows-and-how-channels-bend-and-join.drawing: a hamlet's bearing taken from its land's fall unless the hamlet declares one (`Spec::water_flow`)",
-  "code": "32d4b13babd79d24",
-  "core": "3f5d9b790f9122b5",
-  "date": "2026-11-08",
-  "note": "`spec.water_flow.unwrap_or(down_deg)` matches \"a hamlet's bearing is taken from its land's fall unless the hamlet declares one\", which the page records as a deliberate deviation",
+  "code": "234d70136c67a6dd",
+  "core": "aeaabbe54b17c541",
+  "date": "2026-11-09",
+  "note": "the claim and the page say the bearing is the fall's \"unless the hamlet declares one\", but `.filter(|w| follows(*w, down_deg)).unwrap_or(down_deg)` replaces a declared bearing with the fall when the fall was rolled and lies 90 degrees or more off it, since `parse` only checks a declared pair and the roll ignores `water_flow`; the page does not say which yields, so the claim must state this fallback, or the code must roll a fall that fits or refuse the spec",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
   },
   "research": "68e3dc87e83ea403",
   "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "rust/phases/src/driver/plan.rs::seat_room#the seat's room": {
   "body": "37fc05ea770999d4",
@@ -11730,16 +11735,15 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::Spec#the spec": {
-  "body": "9ed559ac08fdc2a2",
+  "body": "62bffbc40031ed51",
   "claim": "the spec - NONE: the record's type",
-  "code": "f2f9b4433de45860",
-  "core": "87ca6a9cb8203d1c",
-  "date": "2026-11-07",
-  "note": "a record type",
+  "code": "e183c5856efd33cf",
+  "core": "ca8b7ed1a4665b10",
+  "date": "2026-11-09",
+  "note": "a record type, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::SpecError#the spec": {
@@ -11779,16 +11783,32 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::a_bad_spec_is_refused_naming_why#the spec": {
-  "body": "8ee82bca7dadc101",
+  "body": "dff4542584252bb2",
   "claim": "the spec - NONE: the driver's input, each value the GM's or the pool map's own",
-  "code": "5b80ba6b4a54b938",
-  "core": "bbcc23540d875bb9",
-  "date": "2026-11-07",
-  "note": "a test",
+  "code": "883bbc42661c17a9",
+  "core": "73bb2e46705f8f41",
+  "date": "2026-11-09",
+  "note": "a test, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
-  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/spec.rs::follows#the water within 90 degrees of the fall": {
+  "body": "d8fd25aa69352a64",
+  "claim": "the water within 90 degrees of the fall - which-way-water-flows-and-how-channels-bend-and-join.drawing: a declared bearing diverges from the land's fall by a strict under 90 degrees",
+  "code": "f3f2b8ec89f451af",
+  "core": "a8581b02cf1f9ec6",
+  "date": "2026-11-09",
+  "note": "strict under 90",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "ffe799d55c6e0875"
+  },
+  "research": "68e3dc87e83ea403",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:875dbf8076221ba9",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::int#the spec": {
@@ -11816,15 +11836,14 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::parse#households at a hamlet's size": {
-  "body": "c59f7ed2db132fb0",
+  "body": "5bd98c48271b2090",
   "claim": "households at a hamlet's size - GUESS: the hamlet tier's ten to twenty households, the deleted `HamletSpec`'s bounds, 15 unless the spec says; no page sets the tier's bounds",
-  "code": "7ef3a7083cc17dc0",
-  "core": "f5e088f4c7c17bee",
-  "date": "2026-11-08",
-  "note": "10 to 20 with 15 as the default, a GUESS; no cited page sets the hamlet tier's bounds (0019's ten to twenty is guessed for a small polder only)",
+  "code": "6546593ae40b682a",
+  "core": "a5b74ee4afa31941",
+  "date": "2026-11-09",
+  "note": "the cited material is silent on the hamlet tier; ten to twenty is guessed only for a small polder",
   "pages": {},
   "research": "",
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::text#the spec": {
