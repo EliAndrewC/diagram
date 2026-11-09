@@ -110,7 +110,7 @@
    "declared": "round-arbiter"
   },
   "### T060 Approach (checklist part A)": {
-   "sha256": "58a8b271c14d41461f915040da916a37c7357810fa616185e3e3298b33ac0265",
+   "sha256": "b1e64431b6a881dde5d2e69c9bc992f6dbe5e76f5ba279ea2616eea8f0e0cfe3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
@@ -3409,6 +3409,45 @@
      "summary": "Done is a make recipe reaching the binary at the crate's floor; recorded measurement commands that run a file this task ports or deletes are rewritten in the same commit and re-run.",
      "class": "within",
      "why": "The recipe half serves FR-005's make as the one entry point and the floor is FR-004. The rewrite clause restates FR-001's rule in its own terms (to the port where a file is named, to an equivalent make command where inline or prose, re-run as proof), with no carve-out; it has little to act on in a task that adds a crate."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T060 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T060-b",
+     "summary": "A crate's unchanged checks reuse their last green result, keyed per crate and per check on an id of what the check depends on; a failure is never kept; INCREMENTAL=0 and FULL=1 run everything. Changed since last CLEAR: the id now also covers a crate this one builds from by path.",
+     "class": "within",
+     "why": "A means to SC-002's wall time under FR-002's same verdicts; it removes nothing the request or the spec asks for. The added sentence widens what the id covers, so it can only cause more re-running. Its parenthesis, neither crate has a path dependency today, is a state with no pointer in the bundle, but it does not decide the scope: the id covers such a dependency whether or not one exists."
+    },
+    {
+     "id": "T060-c",
+     "summary": "The Python tests are not narrowed by this task; they go as the checks they test are ported. Changed since last CLEAR: the saving is stated as about 3 s of today's 17 rather than of 14.",
+     "class": "within",
+     "why": "FR-001 places each tests/ file with the piece it tests, so leaving them to T062-T067 follows the spec's own order. SC-002 stays owed, at T070. The new 17 matches after_pytest_s in m:t060-done-rust-edit; the 3 s and the 7 of 14 carry the one-shot label."
+    },
+    {
+     "id": "T060-d",
+     "summary": "SC-002's figure is T070's exit; this task's exit is the reuse in place and the gate's time recorded beside the first value. Unchanged since last CLEAR.",
+     "class": "within",
+     "why": "Places the spec's criterion at a later task without loosening it; FR-010 asks for timings at each phase's end, and T060 still records its measurement beside m:done-rust-edit."
+    },
+    {
+     "id": "T060-item9-exit",
+     "summary": "Item 9's exit drops 'and no pytest in its log'.",
+     "class": "within",
+     "why": "SC-002 is under half today's wall time and no test on an unchanged tree; neither is the dropped clause, and FR-001 keeps the Python tests until their pieces are ported. The clause contradicted decisions (c) and (d), which keep pytest in this task's run and send the pytest step to T062-T067, so removing it makes the exit one the task can meet and leaves nothing of SC-002 unowned. The bundle carries no text for Story 2 scenarios 1 and 3, which the block cites; this holds because the block defers the pytest step rather than abandoning it."
+    },
+    {
+     "id": "T060-item1-figure",
+     "summary": "Item 1's 11 modules are now stated as the ones that plan selected, distinct from the 14 a Rust edit selects today.",
+     "class": "within",
+     "why": "A correction of a description, matching the subject of m:done-rust-edit (the plan named 1 Rust file and 11 test modules); it changes no scope."
     }
    ]
   }
