@@ -408,7 +408,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 3. **Where each comes from.** `git ls-files 'specs/*.py'`, the Makefile and code outside `specs/`, every `specs/*/measurements*.json` command.
 4. **Do they describe the world here?** Tooling: no researched value moves, and no recorded figure is touched.
 5. **The order.** The census, then the deletion, one landing.
-6. **The exits.** Green: the gate's own checks pass with the files gone. Red: what failed recorded, the file put back on the kept list.
+6. **The exits.** Green: the gate's own checks pass with the files gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
 9. **Done, measured.** The census below returns no file both deleted and named by a live caller or a measurement command.
