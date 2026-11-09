@@ -220,6 +220,8 @@ def run(cmd: str, manifest: pathlib.Path, check: bool) -> subprocess.CompletedPr
 #: `m:done-rust-edit`). Each is a pure function of its inputs, so a green result is kept per crate and per check, and reused while those inputs are the same.
 #: `source` reads the crate and the workspace's manifests; `tree` is the crate's tests, which also read the repository (a corpus under tests/hooks/, the Makefile), so everything but the other crates.
 _KEPT = {"lint": "source", "dead": "source", "format": "source", "cover": "tree", "test-counters": "tree"}
+#: the append-only records every run and landing writes: no test reads them, and keying on them would re-run every crate's tests after every run
+_RECORDS = ("dev/run-log/", "dev/bypass-log/", "dev/perf-log/", "dev/idle-log/")
 #: what is the same crate's input in every `source` key: the workspace's own files
 _WORKSPACE = ("rust/Cargo.toml", "rust/Cargo.lock", "clippy.toml", "rust/clippy.toml", "rust-toolchain", "rust-toolchain.toml")
 
@@ -238,7 +240,7 @@ def verdict_key(root: pathlib.Path, manifest: pathlib.Path, cmd: str, all_manife
     if _KEPT[cmd] == "source":
         kept = {p: i for p, i in ids.items() if p.startswith(own) or p in _WORKSPACE}
     else:
-        kept = {p: i for p, i in ids.items() if not p.startswith(tuple(others))}
+        kept = {p: i for p, i in ids.items() if not p.startswith((*others, *_RECORDS))}
     body = json.dumps([cmd, compiler, sorted(kept.items())]).encode()
     return hashlib.sha256(body).hexdigest()
 

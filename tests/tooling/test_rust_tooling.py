@@ -241,6 +241,7 @@ def test_a_crates_key_moves_with_its_own_inputs_and_not_the_other_crates(tmp_pat
     assert key("lint", a) == rc.verdict_key(tmp_path, a, "lint", both, {**ids, "scripts/x.py": "9"}, "cargo 1"), "lint reads no script"
     assert key("cover", a) != rc.verdict_key(tmp_path, a, "cover", both, {**ids, "Makefile": "9"}, "cargo 1"), "a crate's tests read the repository"
     assert key("cover", a) == rc.verdict_key(tmp_path, a, "cover", both, {**ids, "rust/b/src/l.rs": "9"}, "cargo 1"), "but not the other crate"
+    assert key("cover", a) == rc.verdict_key(tmp_path, a, "cover", both, {**ids, "dev/run-log/2026-11/r.json": "9"}, "cargo 1"), "a run's own record"
     assert key("lint", a) != rc.verdict_key(tmp_path, a, "lint", both, ids, "cargo 2"), "a new compiler"
     assert key("lint", a) != key("dead", a), "each check its own"
 
