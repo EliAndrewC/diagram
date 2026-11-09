@@ -101,6 +101,7 @@ areca palm	areca
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
+artemisia	artemisia
 artesian	artesian
 arum	arum
 asakura period	Asakura period
@@ -268,6 +269,7 @@ benten's	Benten
 berenjaws	brinjal
 berm	berm
 berms	berm
+betel palm	areca
 betto	bettō
 bettō	bettō
 bettō-ji	bettō
@@ -384,6 +386,8 @@ bunka era	Bunka
 bunkyu	Bunkyu
 bunkyu era	Bunkyu
 bunkyū	Bunkyu
+bunroku	Bunroku
+bunroku era	Bunroku
 bunryo-hi	division flume
 bunsei	Bunsei
 bunsui	bunsui
@@ -1427,6 +1431,7 @@ gable-entry	gable end
 gable-fronted	tsumairi
 gabled	gabled roof
 gabled roof	gabled roof
+gaijin	gaijin
 gaison	gaison
 gakuzuka	gakuzuka
 galleried mining	siege mining
@@ -2118,6 +2123,7 @@ iwakura	rock seat
 iwami-no-kami	no-kami
 iyo	Iyo
 iyo-no-kami	no-kami
+izu islands	Izu islands
 izumi	Izumi
 izumi province	Izumi
 izumi-no-kami	no-kami
@@ -2151,6 +2157,7 @@ jiaxing	Huzhou-Jiaxing
 jiayou	Jiayou
 jiazhi	Jiazhi
 jibei	jibei
+jibong yuseol	Jibong yuseol
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
@@ -3024,6 +3031,7 @@ muenbotoke	muenzuka
 muenzuka	muenzuka
 mughal	Mughal
 mughal empire	Mughal
+mugwort	mugwort
 mukaibansho	mukaibansho
 mukakusha	mukakusha
 mulberry plot-fish ponds	dike-pond
@@ -3080,6 +3088,7 @@ nagachi-gata	nagachi
 nagare-style	Nagare-style
 nagare-zukuri	nagare-zukuri
 nagarezukuri	nagare-zukuri
+nagasaki nenreki ryomenkagami	Nagasaki nenreki ryomenkagami
 nagauta	nagauta
 nagaya	nagaya
 nagaya-mon	nagayamon
@@ -3286,6 +3295,7 @@ okabe	okabe
 okaji	ōkaji
 okajiba	ōkaji
 okazaki	Okazaki
+okers	okers
 okido	Okido
 okidos	Okido
 oku	oku
@@ -3442,6 +3452,7 @@ periodic-market	periodic market
 perpetual memorial	perpetual memorial
 perquisite	perquisite
 perquisites	perquisite
+perry	Perry
 persimmon tannin	persimmon tannin
 person-year	person-year
 person-years	person-year
@@ -3504,6 +3515,7 @@ polo	Marco Polo
 polygonum	Polygonum thunbergii
 polygonum thunbergii	Polygonum thunbergii
 ponded-storage irrigation	ponded-storage irrigation
+ponderosa	Ponderosa
 pongee	pongee
 pool map	the pool
 pool maps	the pool
@@ -3825,6 +3837,7 @@ ryobu	ryobu
 ryudosui	ryudosui
 ryukyu	Ryukyu kingdom
 ryukyu kingdom	Ryukyu kingdom
+ryukyu wax tree	Ryukyu wax tree
 ryukyu-koku yuraiki	Ryukyu-koku yuraiki
 ryukyus	Ryukyu kingdom
 ryō	ryo
@@ -5051,6 +5064,7 @@ watershed divide	watershed divide
 watershed divides	watershed divide
 wattle	wattle and daub
 wattle and daub	wattle and daub
+wax tree	Ryukyu wax tree
 wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi
@@ -5113,6 +5127,7 @@ windlass	windlass
 wine lees	lees
 wingwall	wingwall
 wingwalls	wingwall
+winter cherry	winter cherry
 withies	withies
 withy	withies
 wokou	wokou
@@ -5171,6 +5186,7 @@ yamanote	Yamanote
 yamanote loop	Yamanote
 yamashiro	Yamashiro
 yamato	Yamato
+yamato honzo	Yamato honzo
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
