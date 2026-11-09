@@ -4251,6 +4251,7 @@ soja	soja
 sokohi	sokohi
 solar time	solar time
 solidity	solidity
+somokuka shasei zukan	Somokuka shasei zukan
 son of heaven	Son of Heaven
 song	Song dynasty
 song dynasty	Song dynasty
@@ -4827,6 +4828,7 @@ tsume	Tsume
 tsumugi	pongee
 tsunaba	tsunaba
 tsunayoshi	Tsunayoshi
+tsunenobu shasei zukan	Tsunenobu shasei zukan
 tsung-cheng	Chongzhen era
 tsunoya	tsunoya
 tsurube	tsurube
