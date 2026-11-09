@@ -394,7 +394,11 @@ fn the_checks_still_in_python_do_not_start_on_a_rust_only_change() {
     std::fs::write(root.join("rust/a.rs"), "fn f() {}\n").unwrap();
     assert_eq!(delta_rows_that_run(&root), Vec::<&str>::new());
     std::fs::create_dir_all(root.join("research/questions")).unwrap();
-    std::fs::write(root.join("research/questions/0001-a.notes.html"), "y").unwrap();
+    std::fs::write(
+        root.join("research/questions").join("0001-a.notes.html"),
+        "y",
+    )
+    .unwrap();
     assert_eq!(
         delta_rows_that_run(&root),
         ["entry-headings", "partial-citations"]
