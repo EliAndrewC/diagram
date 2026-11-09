@@ -3,6 +3,7 @@
 //! counted, so a test pins it to once.
 
 use std::cell::{Cell, OnceCell};
+use std::io::BufRead as _;
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
@@ -154,19 +155,27 @@ impl Session {
     }
 
     /// The transcript's last `custom-title` record (the session's `/rename`).
+    /// A line at a time and only the matching lines parsed: a session's transcript reached 658 MB on 2026-11-08, and this was read at every turn's end.
     fn titled(&self) -> Option<(String, String)> {
-        self.transcript_text()?
-            .lines()
-            .rev()
-            .filter(|l| l.contains("custom-title"))
-            .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        self.reads.set(self.reads.get() + 1);
+        let file = std::fs::File::open(&self.transcript).ok()?;
+        std::io::BufReader::new(file)
+            .split(b'\n')
+            .map_while(Result::ok)
+            .filter_map(|raw| {
+                let line = String::from_utf8_lossy(&raw);
+                line.contains("custom-title")
+                    .then(|| serde_json::from_str::<Value>(&line).ok())
+                    .flatten()
+            })
             .filter(|r| r.get("type").and_then(Value::as_str) == Some("custom-title"))
             .filter_map(|r| {
                 r.get("customTitle")
                     .and_then(Value::as_str)
                     .map(str::to_owned)
             })
-            .find(|t| !t.trim().is_empty())
+            .filter(|t| !t.trim().is_empty())
+            .last()
             .map(|t| (t, "transcript".to_owned()))
     }
 
