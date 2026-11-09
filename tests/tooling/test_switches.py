@@ -108,7 +108,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     assert "$(FORCE)" not in (SKILL / "Makefile").read_text()
     # a .py under the skill (even outside l7r/) DOES: the decision says so
     (fixture_skill / ".explain.py").write_text("x = 1\n")
-    assert not state.already_verified(root)[0]
+    assert subprocess.run([str(SKILL / "scripts/gates/l7r-gate.sh"), "state", "verified-done"], cwd=root, capture_output=True, check=False).returncode == 1
     # FULL never short-circuits (here it is refused for lack of a terminal, before any prompt - the point is it never said "already verified")
     p = make(fixture_skill, "done", "FULL=1")
     assert "already verified" not in p.stdout

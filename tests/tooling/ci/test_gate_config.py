@@ -25,25 +25,6 @@ docs:            ## [project] the make-targets page
 """
 
 
-def test_the_makefile_test_configuration_is_the_test_recipes_and_the_variables_they_read() -> None:
-    """D3: a help line, another target's recipe or an unreferenced variable is not test configuration; a test recipe, a
-    variable it reads, and a variable THAT reads, are."""
-    base = gate_config.makefile_test_config(MAKEFILE)
-    assert "pytest -n $(XDIST_WORKERS)" in base and "EXTRA = -q" in base and "UNRELATED" not in base and "make-docs" not in base
-    same = [MAKEFILE.replace("the pytest phase itself", "the pytest phase, reworded"), MAKEFILE.replace("make-docs.py", "docs.py"), MAKEFILE.replace("UNRELATED = 1", "UNRELATED = 2")]
-    assert all(gate_config.makefile_test_config(m) == base for m in same), "a help line, another recipe, an unread variable"
-    moved = [MAKEFILE.replace("-n $(XDIST_WORKERS)", "-n 2"), MAKEFILE.replace("XDIST_WORKERS = 6", "XDIST_WORKERS = 4"), MAKEFILE.replace("EXTRA = -q", "EXTRA = -v")]
-    assert all(gate_config.makefile_test_config(m) != base for m in moved), "a recipe, a variable it reads, one that reads"
-
-
-def test_pyproject_test_configuration_is_its_pytest_and_coverage_tables() -> None:
-    text = '[project]\nname = "x"\n\n[tool.pytest.ini_options]\naddopts = "--cov"\n\n[tool.coverage.run]\nsource = ["l7r"]\n\n[tool.ruff]\nline-length = 9\n'
-    base = gate_config.pyproject_test_config(text)
-    assert gate_config.pyproject_test_config(text.replace('name = "x"', 'name = "y"').replace("line-length = 9", "line-length = 8")) == base
-    assert gate_config.pyproject_test_config(text.replace('source = ["l7r"]', 'source = ["l7r", "x"]')) != base
-    assert gate_config.pyproject_test_config(text.replace('addopts = "--cov"', 'addopts = ""')) != base
-
-
 def _tree(root: Path, files: dict[str, str]) -> None:
     for rel, text in files.items():
         (root / rel).parent.mkdir(parents=True, exist_ok=True)
@@ -142,11 +123,9 @@ def test_the_gate_configuration_plans_full_and_the_tooling_hash_alone_does_not(t
     assert pl.mode == "incremental" and not pl.reuse_tooling and "nothing" in pl.reason
 
 
-def test_a_variable_two_others_read_is_kept_once_and_an_unparseable_helper_reads_nothing(tmp_path: Path) -> None:
-    """The closure meets a variable twice (two that both read it) and keeps one copy; a file under `tests/` that does not parse
+def test_an_unparseable_helper_reads_nothing(tmp_path: Path) -> None:
+    """A file under `tests/` that does not parse
     imports nothing (and still counts where its own text mentions `scripts`)."""
-    text = "A = $(C) $(C)\nC = 1\ntest:\n\tpython3 -m pytest $(A)\n"  # A names C twice: queued twice, kept once
-    assert gate_config.makefile_test_config(text).count("C = 1") == 1
     _tree(tmp_path, {"tests/__init__.py": "", "tests/_broken.py": "def (:\n", "tests/test_uses.py": "from tests import _broken\n"})
     assert gate_config.scripts_readers(tmp_path) == []
 

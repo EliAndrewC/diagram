@@ -977,5 +977,17 @@
       "raw_match_mismatches": 0,
       "raw_match_tracked_paths": 26663
     }
+  },
+  "t72-state": {
+    "quantity": "the Rust gate's tooling hash, config hash and verification record against the Python they replace",
+    "observed": "2026-11-09",
+    "subject": "the clone's working tree",
+    "command": "state.py and gate_config.py at HEAD (git show) loaded by path; tooling_hash against l7r-gate state tooling-hash and config_hash against l7r-gate config-hash, and the record read by both",
+    "method": "exact comparison",
+    "value": {
+      "tooling_hash_equal": true,
+      "config_hash_equal": true,
+      "record_read_equal": true
+    }
   }
 }

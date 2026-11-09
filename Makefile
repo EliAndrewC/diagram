@@ -40,7 +40,7 @@ budget-program: ## [performance] set the whole roll's work budget with the GM's 
 counters-inert: ## [performance] the work counters change no map: every Rust test passes in the counting build as in the default one, its counters compiled out (features 443, 444; the GM 2026-11-07: "We should probably run with counters compiled out by default")
 	python3 scripts/gates/rust_checks.py test-counters
 
-STATE = python3 -m l7r.diagram.ci state
+STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state write
 
 # done runs every phase and reports every failure together, cheapest phase first.
 # A run too fast to have worked is not stamped green (check-run-plausible.py): make runs $(MAKE)
@@ -51,7 +51,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
 	@$(if $(PREFLIGHT_OK),:,p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; tp=$$(date +%s); [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true)
 	@p="$$(git rev-parse --show-toplevel)/scripts/gates/preflight.py"; [ ! -f "$$p" ] || python3 "$$p" --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
-	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
+	@if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram || true; \
 	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
 	  if ! "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks >/dev/null 2>&1; then echo "make done: ...but the hooks stamp is stale (a scripts/ or tests/hooks/ change) - running make hooks-test first"; $(MAKE) --no-print-directory hooks-test FROM_DONE= ||{ $(LOGRUN) $(DONE_NAME) reference 0 failed:hooks-test; $(COMMIT_RUN_RECORD) failed; exit 1; }; fi; \
@@ -499,7 +499,7 @@ HOOKS_JOBS ?= $(if $(CODEBUILD_BUILD_ID),$(CPU_COUNT),$(shell [ "$(CPU_COUNT)" -
 QUICK_BUDGET = 60
 
 tooling:        ## [tests] run every `tooling` test (make/ci/pipeline, exhaustive) and record them green so `make quick` skips them until the tooling changes
-	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-$(if $(FULL),record,reuse)} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && python3 -m l7r.diagram.ci tooling-green
+	@$(GATE_EXHAUSTIVE_ENV) L7R_TEST_DEPS=$${L7R_TEST_DEPS:-$(if $(FULL),record,reuse)} python3 -m pytest -p tests.tooling._test_deps -n $(XDIST_WORKERS) -q --no-cov -m tooling && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state tooling-green
 
 page-check:     ## [tests] the interactive tests + the browser test, then the `page` stamp - what an asset edit owes at push
 	@python3 -m pytest -n $(XDIST_WORKERS) --dist loadgroup -q --no-cov tests/interactive tests/full/interactive/page_browser \
@@ -617,7 +617,7 @@ cover-changed:  ## [tests] the coverage floor on the engine modules the change t
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/cover_changed.py" --base "$(or $(BASE),origin/main)"
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
-	@python3 -m l7r.diagram.ci.coverage_exempt list $(if $(PRUNE),--prune,)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
 
 gate-costs:     ## [performance] what a gate run costs here, from the run records: each run's mode, selection and phases, the fit (fixed + per selected test), the selection's growth between full runs (feature 415)   [SINCE=<utc prefix>]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/gate_costs.py" $(if $(SINCE),--since "$(SINCE)",)
@@ -1234,11 +1234,11 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	python3 -m l7r.diagram.ci incremental merge || exit 1; \
 	python3 -m l7r.diagram.ci incremental carry || exit 1; \
 	cov_ec=0; \
-	$(if $(filter rust-only,$(PORT)),python3 -m coverage report -m $$(python3 -m l7r.diagram.ci.coverage_exempt omit) | grep -v " 100%" || true; \
+	$(if $(filter rust-only,$(PORT)),python3 -m coverage report -m $$("$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt omit) | grep -v " 100%" || true; \
 	  echo "COVERAGE: information only - the port switch stands at rust-only (feature 444 FR-023): the map-rolling tests are not run - so a line only they reach is reported and not held; make land's cover-changed holds the changed modules on the tests that run"; \
 	  echo "hamlet floor and roll census: suspended at rust-only (FR-023) - no floor rolls a settlement"; \
-	,python3 -m coverage report -m --fail-under=100 $$(python3 -m l7r.diagram.ci.coverage_exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
-	python3 -m l7r.diagram.ci.coverage_exempt report || cov_ec=1; \
+	,python3 -m coverage report -m --fail-under=100 $$("$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt omit) || { echo "COVERAGE: a module is under 100% - the table above names it and its missing lines."; cov_ec=1; python3 scripts/measure/uncovered_marks.py || true; }; \
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt report || cov_ec=1; \
 	) \
 	[ $$cov_ec -eq 0 ] && { python3 -m l7r.diagram.ci incremental save-baseline || cov_ec=1; }; \
 	$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" floors $$(( $$(date +%s) - tfl )) 2>/dev/null || true; \

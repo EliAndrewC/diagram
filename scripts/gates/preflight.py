@@ -221,12 +221,8 @@ def outside_quick(root: Path) -> set[str]:
 
 def exempt_files(root: Path) -> set[str]:
     """The engine files the coverage floor does not hold (feature 448), through the floor's one reader."""
-    here = str(Path(__file__).resolve().parents[2])
-    if here not in sys.path:
-        sys.path.insert(0, here)
-    from l7r.diagram.ci import coverage_exempt  # noqa: PLC0415 - the repository's own engine, beside the script
-
-    return coverage_exempt.exempt(root)
+    gate = Path(__file__).resolve().parent / "l7r-gate.sh"
+    return set(subprocess.run([str(gate), "coverage-exempt", "exempt"], cwd=root, capture_output=True, text=True, check=True).stdout.splitlines())
 
 
 def coverage_step(root: Path, changed: dict[str, set[int]], workers: str) -> tuple[dict[str, list[int]], dict[str, list[int]]]:
