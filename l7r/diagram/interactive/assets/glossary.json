@@ -2782,7 +2782,8 @@
   "def": "A Chinese land unit of about 667 square meters, roughly a fifteenth of a hectare.",
   "variants": [
    "mu",
-   "mow"
+   "mow",
+   "mou"
   ]
  },
  "muenzuka": {
@@ -18683,6 +18684,186 @@
   "def": "A trading company's agent posted abroad to do its buying and selling; here William Adams, writing from Japan in the Keicho years.",
   "variants": [
    "English factor"
+  ]
+ },
+ "bast cloth": {
+  "def": "Cloth woven from fibers in the stems of plants, such as hemp and ramie, as against cotton, whose fiber grows on the seed.",
+  "variants": [
+   "bast cloth"
+  ]
+ },
+ "floss": {
+  "def": "Loose, unspun fiber, of silk or of cotton, used to pad winter clothes and quilts.",
+  "variants": [
+   "floss"
+  ]
+ },
+ "Xu Guangqi": {
+  "def": "A Ming scholar-official (1562-1633) and compiler of the farming compendium Nongzheng Quanshu.",
+  "variants": [
+   "Xu Guangqi"
+  ]
+ },
+ "Siming": {
+  "def": "An old name for Ningbo and its district, a seaport on China's southeast coast. The Baoqing Siming gazetteer was compiled in the Baoqing reign (1225-1227).",
+  "variants": [
+   "Siming",
+   "Baoqing Siming"
+  ]
+ },
+ "jibei": {
+  "def": "An old Chinese word for cotton, used especially in the south.",
+  "variants": [
+   "jibei"
+  ]
+ },
+ "Chengzong": {
+  "def": "The temple name of the Yuan emperor Temur, who reigned 1294-1307.",
+  "variants": [
+   "Chengzong"
+  ]
+ },
+ "Yuanzhen": {
+  "def": "A Yuan dynasty reign era, 1295-1297. Its second year is 1296.",
+  "variants": [
+   "Yuanzhen"
+  ]
+ },
+ "Chinese Turkestan": {
+  "def": "An older Western name for the oasis country of China's far northwest, where Turfan lies.",
+  "variants": [
+   "Chinese Turkestan"
+  ]
+ },
+ "Liang shu": {
+  "def": "The official history of China's Liang dynasty (502-557).",
+  "variants": [
+   "Liang shu"
+  ]
+ },
+ "Tongking": {
+  "def": "Northern Vietnam, around the Red River delta; an older Western spelling of the name.",
+  "variants": [
+   "Tongking",
+   "Tonkin"
+  ]
+ },
+ "vestimentary": {
+  "def": "Of clothing and dress. Vestimentary regulations were the rules on who might wear what.",
+  "variants": [
+   "vestimentary"
+  ]
+ },
+ "Huang Daopo": {
+  "def": "A woman whom later tradition credits with teaching Songjiang improved ways of working cotton, about the 1290s.",
+  "variants": [
+   "Huang Daopo",
+   "Huang tao-p'o"
+  ]
+ },
+ "Pelliot": {
+  "def": "Paul Pelliot (1878-1945), the French scholar of China and Central Asia whose Notes on Marco Polo include a long study of cotton in China.",
+  "variants": [
+   "Pelliot",
+   "Paul Pelliot"
+  ]
+ },
+ "bodie": {
+  "def": "An old Chinese name for cotton cloth, also read baidie and spelled po-tieh in older European writing.",
+  "variants": [
+   "bodie",
+   "po-tieh",
+   "baidie"
+  ]
+ },
+ "batik": {
+  "def": "Cloth patterned by covering parts of it with wax before dyeing, so that the covered parts keep their color.",
+  "variants": [
+   "batik"
+  ]
+ },
+ "Liao tribes": {
+  "def": "Non-Chinese inhabitants of the far south and southwest of China, unrelated to the Liao dynasty of the north.",
+  "variants": [
+   "Liao tribes"
+  ]
+ },
+ "Qiu Jun": {
+  "def": "A Ming dynasty scholar-official (1421-1495) who wrote a long work on the art of government, the Daxue yanyi bu.",
+  "variants": [
+   "Qiu Jun"
+  ]
+ },
+ "Central Plains": {
+  "def": "The middle and lower Yellow River valley, the old heartland of the Chinese states.",
+  "variants": [
+   "Central Plains"
+  ]
+ },
+ "Liang dynasty": {
+  "def": "A dynasty that ruled southern China from 502 to 557.",
+  "variants": [
+   "Liang dynasty",
+   "Liang dynasty's",
+   "Liang emperor"
+  ]
+ },
+ "Zhou Qufei": {
+  "def": "A Song dynasty official who served in the far south and wrote an account of it in 1178, the Lingwai daida.",
+  "variants": [
+   "Zhou Qufei"
+  ]
+ },
+ "Zhao Rukuo": {
+  "def": "A Song dynasty official at the port of Quanzhou who wrote an account of foreign lands and their goods in the 1220s, the Zhufan zhi.",
+  "variants": [
+   "Zhao Rukuo"
+  ]
+ },
+ "areca": {
+  "def": "The nut of a tropical palm, chewed as a stimulant in southern China and Southeast Asia, and a trade good of Hainan.",
+  "variants": [
+   "areca",
+   "areca nut",
+   "areca palm"
+  ]
+ },
+ "calyx": {
+  "def": "The ring of small leaf-like parts at the base of a flower, which holds the petals.",
+  "variants": [
+   "calyx"
+  ]
+ },
+ "Qubilai": {
+  "def": "The Mongol ruler who founded the Yuan dynasty and completed the conquest of the Song.",
+  "variants": [
+   "Qubilai",
+   "Kublai",
+   "Qubilai Khan"
+  ]
+ },
+ "Western Regions": {
+  "def": "The Chinese name for the lands west of China proper, chiefly the oases of present Xinjiang and beyond.",
+  "variants": [
+   "Western Regions"
+  ]
+ },
+ "Yazhou": {
+  "def": "A prefecture at the southern end of Hainan.",
+  "variants": [
+   "Yazhou"
+  ]
+ },
+ "Liangzhe": {
+  "def": "A Song dynasty region covering roughly present Zhejiang and southern Jiangsu.",
+  "variants": [
+   "Liangzhe"
+  ]
+ },
+ "Chiang-nan": {
+  "def": "The older European spelling of Jiangnan, the lands south of the lower Yangzi.",
+  "variants": [
+   "Chiang-nan"
   ]
  }
 }

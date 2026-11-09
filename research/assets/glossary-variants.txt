@@ -90,6 +90,9 @@ aragaki	aragaki
 araiba	kawado
 araihari	araihari
 araizeki	araizeki
+areca	areca
+areca nut	areca
+areca palm	areca
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
@@ -154,6 +157,7 @@ backwall	backwall
 backwalls	backwall
 backwater	backwater
 backwaters	backwater
+baidie	bodie
 baidu baike	Baidu Baike
 bailey	bailey
 baileys	bailey
@@ -194,6 +198,7 @@ bansui	bansui
 banta	banta
 banyuechi	banyuechi
 banyuetang	banyuechi
+baoqing siming	Siming
 barbican	barbican
 barbicans	barbican
 bare hill	bald hill
@@ -212,10 +217,12 @@ barrier station	sekisho
 barrier stations	sekisho
 basal area	basal area
 base flow	base flow
+bast cloth	bast cloth
 bast fiber	bast fiber
 bast fibers	bast fiber
 bastion	bastion
 bastions	bastion
+batik	batik
 battalion cities	guard city
 battalion city	guard city
 batten ceiling	batten ceiling
@@ -290,6 +297,7 @@ bobana	bobana
 bochi	bochi
 bocho	Bocho
 bodaiji	bodaiji
+bodie	bodie
 bofurin	bofurin
 bohea	Bohea
 bohea country	Bohea
@@ -401,6 +409,7 @@ calenderer	calenderer
 calenderers	calenderer
 calibrated liberty	calibrated liberty
 calico	calico
+calyx	calyx
 cambay cloth	Cambay cloth
 cambered beam	cambered beam
 cambered beams	cambered beam
@@ -464,6 +473,7 @@ censorate	Censorate
 censors	censor
 centipede lane	centipede lane
 centipede lanes	centipede lane
+central plains	Central Plains
 centroid	centroid
 centroids	centroid
 ceremonial gate	ceremonial gate
@@ -501,7 +511,9 @@ chenghuang miao	chenghuangmiao
 chenghuangmiao	chenghuangmiao
 chengmen	chengmen
 chengqiang	chengqiang
+chengzong	Chengzong
 chi	chi
+chiang-nan	Chiang-nan
 chicken-feather inn	chicken-feather inn
 chicken-feather inns	chicken-feather inn
 chigaidana	staggered shelves
@@ -513,6 +525,7 @@ chikugo province	Chikugo
 chikurin	take-yabu
 chimei	chimei
 chinese toon	toon
+chinese turkestan	Chinese Turkestan
 chinese-leaning	Chinese-leaning village
 chinese-leaning village	Chinese-leaning village
 chinese-leaning villages	Chinese-leaning village
@@ -1246,6 +1259,7 @@ floodways	floodway
 flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
+floss	floss
 flow-through irrigation	flow-through irrigation
 flower money	flower money
 flowing-roof	nagare-zukuri
@@ -1855,6 +1869,8 @@ hsien	hsien
 huai salt district	Huai salt district
 huaibei	Huaibei
 huainan	Huaibei
+huang daopo	Huang Daopo
+huang tao-p'o	Huang Daopo
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
@@ -2072,6 +2088,7 @@ jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
 jiayou	Jiayou
 jiazhi	Jiazhi
+jibei	jibei
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
@@ -2442,6 +2459,7 @@ koya	koya
 koyasan	Kōyasan
 kozashi	kozashi
 kuai	kuai
+kublai	Qubilai
 kuchi-agariya	agariya
 kuchidome	kuchidome
 kuchidome bansho	kuchidome
@@ -2572,13 +2590,19 @@ li	li
 li of silver	li of silver
 li river	Li River
 liang	liang
+liang dynasty	Liang dynasty
+liang dynasty's	Liang dynasty
+liang emperor	Liang dynasty
+liang shu	Liang shu
 liang-guang	Liang-Guang
 lianghuai	Huai salt district
 lianghuai salt	Huai salt district
 lianguang	Liang-Guang
+liangzhe	Liangzhe
 liao	Liao dynasty
 liao dynasty	Liao dynasty
 liao dynasty's	Liao dynasty
+liao tribes	Liao tribes
 liberty	liberty
 licensed quarter	yukaku
 licensed quarters	yukaku
@@ -2910,6 +2934,7 @@ mortise and tenon	mortise and tenon
 moso	moso
 moto-kiba	Eitaijima
 motojime	motojime
+mou	mu
 mount koya	Kōyasan
 mow	mu
 mozi	Mozi
@@ -3307,6 +3332,7 @@ party wall	row house
 party walls	row house
 patrol strip	patrol strip
 patrol strips	patrol strip
+paul pelliot	Pelliot
 pearl delta	Pearl delta
 pearl river delta	Pearl delta
 pearl-delta	Pearl delta
@@ -3315,6 +3341,7 @@ peculs	picul
 peer-reviewed flora	flora
 pekin	Peking
 peking	Peking
+pelliot	Pelliot
 pent roof	pent roof
 pent roofs	pent roof
 penthouse	penthouse
@@ -3379,6 +3406,7 @@ pledged land	pledged land
 plinth	plinth
 plinths	plinth
 plot seams	seam
+po-tieh	bodie
 pocket pond	pocket pond
 pocket ponds	pocket pond
 polder	polder
@@ -3478,6 +3506,7 @@ qing-dynasty	Qing dynasty
 qingming	Qingming
 qingming shanghe tu	Qingming Shanghe Tu
 qiu	qiu
+qiu jun	Qiu Jun
 qu dajun	Qu Dajun
 qu dajun's	Qu Dajun
 quan	quan
@@ -3486,6 +3515,8 @@ quartern loaf	quartern loaf
 quartern loaves	quartern loaf
 quay	quay
 quays	quay
+qubilai	Qubilai
+qubilai khan	Qubilai
 quercus acutissima	kunugi
 quercus serrata	konara
 raft-mat	raft-mat
@@ -4066,6 +4097,7 @@ siku quanshu	Siku Quanshu
 sill	sill
 silla	Silla
 silver carp	silver carp
+siming	Siming
 simpson index	SI
 sinense	sinense
 single range	main range
@@ -4577,7 +4609,9 @@ ton-miles	ton-mile
 tonami	Tonami plain
 tonami plain	Tonami plain
 tongdian	Tongdian
+tongking	Tongking
 tongzhi	Tongzhi
+tonkin	Tongking
 tonya	ton'ya
 toon	toon
 toons	toon
@@ -4809,6 +4843,7 @@ vermilion line	shubiki
 vermilion-seal	shuinchi
 vermilion-seal land	shuinchi
 vermilion-seal lands	shuinchi
+vestimentary	vestimentary
 vff	VFF
 vicinage	vicinage
 village district	village district
@@ -4944,6 +4979,7 @@ weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao
 western han	Han dynasty
+western regions	Western Regions
 western wei	Western Wei
 western xia	Western Xia
 western zhou	Zhou dynasty
@@ -5002,6 +5038,7 @@ xingqing	Western Xia
 xinyou	xinyou
 xiongnu	Xiongnu
 xu	xu
+xu guangqi	Xu Guangqi
 xu tan	Xu Tan
 xuande	Xuande
 xuanhu	Xuanhu
@@ -5060,6 +5097,7 @@ yatsuda	yato
 yayi	yayi
 yayoi	Yayoi period
 yayoi period	Yayoi period
+yazhou	Yazhou
 yi network	shukuba
 yizhan	shukuba
 yizhong	yizhong
@@ -5110,6 +5148,7 @@ yuan dynasty	Yuan dynasty
 yuan rebuild	Yuan dynasty
 yuanhe	Yuanhe era
 yuanhe era	Yuanhe era
+yuanzhen	Yuanzhen
 yudono	yudono
 yuecheng	yuecheng
 yui	yui
@@ -5136,6 +5175,7 @@ zhalou	zhalou
 zhang	zhang
 zhang lü-xiang	Zhang Lüxiang
 zhang lüxiang	Zhang Lüxiang
+zhao rukuo	Zhao Rukuo
 zhen	zhen
 zhengde	Zhengde
 zhengguo canal	Zhengguo canal
@@ -5151,6 +5191,7 @@ zhongji	zhongji
 zhonglou	gulou
 zhou	department
 zhou dynasty	Zhou dynasty
+zhou qufei	Zhou Qufei
 zhou-dynasty	Zhou dynasty
 zhouli	Zhouli
 zhu	zhu
