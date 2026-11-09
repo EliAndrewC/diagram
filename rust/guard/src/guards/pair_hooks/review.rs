@@ -172,12 +172,12 @@ fn decided(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
         cx.log("escaped", &why, "decide-ok");
         return None;
     }
-    let script = cx.tree.join("scripts/gates/plan_gate.py");
+    let script = cx.tree.join("scripts/gates/l7r-gate.sh");
     let why = python(
-        cx.python,
+        "bash",
         &cx.clone,
         &script,
-        &["decided", &cx.clone.to_string_lossy()],
+        &["plan", "decided", &cx.clone.to_string_lossy()],
         "",
     )
     .out;

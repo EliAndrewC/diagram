@@ -146,10 +146,10 @@
    "declared": "spec-fidelity"
   },
   "### T066 Approach (checklist part A)": {
-   "sha256": "13d00afdc508414c2465c86ec6f5225ab383600f5492f8e1d0b3dbc5aad44726",
+   "sha256": "19c9ba130ee79af2528dd5ca02fc6d1e93021a28747b8cb155baf5bff06acc44",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
   },
   "### T067 Approach (checklist part A)": {
    "sha256": "49b7c62df3319ee64dee6c631fb463603e4de6ac7129cca294e21232106284b1",
@@ -4014,6 +4014,94 @@
      "why": "FR-001's rewrite clause applies vacuously and step 9 still binds any entry that does appear; a one-shot observation labeled with date and method is the contract's form for a comparison that cannot be re-run once the Python is deleted. The census names its search space."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "### T066 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-landing",
+     "summary": "The plan and spec gates (plan_gate, plan_sections, plan_seen, plan_lint, plan_bundle, approach_gate's owed/ruled/owe, spec-lint, spec_figures, wording_only, engine_edit) become l7r-gate verbs, callers switch and every Python body is deleted in one landing.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts and engine_edit.py in phase 2; a single cut is what FR-003's no piece runs both asks for, and it carries the request's all be ported."
+    },
+    {
+     "id": "differential-and-decide-sample",
+     "summary": "The verdicts are compared with the Python's over the repository's specs and plans, with decide on 120 sampled task sections (items 2, 6 and 9).",
+     "class": "within",
+     "why": "FR-002's bar is every case the tests and suites hold, which the replay bullet carries. The corpus differential is the plan's own extra exit, so sampling decide inside it narrows nothing asked; the exits and Done now say the sample, where the earlier text claimed every spec and plan. The counts carry a date and method label. The denominators differ (367 specs, 325 plans, 281 for owed and delta) with no reason stated: noted, not a narrowing for the same reason."
+    },
+    {
+     "id": "four-who-stay",
+     "summary": "task_start.py, plan_hold.py, phase_sources.py and wording.refusal stay Python until phase 3; the cohort's trigger moves into cohort_known.py at T068; plan_door.py forwards for the Python callers and is deleted with its last caller.",
+     "class": "within",
+     "why": "FR-001 carries each of these placements from ask:449-T066-scope. Against the request it is sequence, not a carve-out: every one is still ported or deleted by its phase, and the door has a stated end."
+    },
+    {
+     "id": "condition-2-one-writer",
+     "summary": "Each state file has one writer: task_start.py for active-task, feature.json, task-starts.jsonl and phase-sources.json; the Rust verbs for approach-owed.json, plan-review.json and plan-seen/.",
+     "class": "within",
+     "why": "Implements FR-003's no piece runs both at the level of the files the split could otherwise write twice."
+    },
+    {
+     "id": "condition-3-no-python-on-plain-call",
+     "summary": "The remaining Python runs only on named make targets, a landing, or while a plan review's hold is live; never on a plain Bash call, a plain Edit or a make done whose change holds no file they read.",
+     "class": "within",
+     "why": "The same bound FR-001 sets on Python left in place, and hm_planhold's live-hold branch matches the live-only allowance FR-001 gives engine_edit. Evidence gap recorded, not a narrowing: the grep is wider than the earlier text but omits rust/gate/*.rs, l7r/*.py and .specify/scripts/bash/, so it cannot see a caller there, and the make done clause runs through the gate; this bundle forbids the repository, so whether one exists was not checked."
+    },
+    {
+     "id": "condition-4-no-door-in-a-loop",
+     "summary": "Each caller asks the door once per run; the one loop asks once per plan by the door's cache.",
+     "class": "within",
+     "why": "A cost bound on the temporary door, inside the arbiter's condition; it removes nothing asked."
+    },
+    {
+     "id": "tests-replayed-in-rust",
+     "summary": "Every case of the seven named test files is in the Rust tests before those files are deleted, apart from the named exceptions.",
+     "class": "within",
+     "why": "This is FR-002's requirement stated for these files, in FR-002's order (before the Python is deleted)."
+    },
+    {
+     "id": "tests-staying-python",
+     "summary": "Cases driving tick-task.py, task_start.py, hm_arbiter.py and wording.refusal stay Python against the door in test_plan_door.py; the cohort's cases in test_cohort_approach.py; the make figures cases in test_make_figures.py.",
+     "class": "within",
+     "why": "FR-001 sends each tests/ file with the piece it tests, and these pieces are placed later by ask:449-T066-scope. Reading applied for test_make_figures.py: the block calls them the make figures cases, so the piece tested is the make figures recipe, a Makefile recipe the second census places, not the deleted spec_figures.py body. No case is dropped: each still runs against the code that gives the verdict."
+    },
+    {
+     "id": "one-definition-of-a-figure-test-not-replayed",
+     "summary": "test_there_is_one_definition_of_a_figure is not replayed: the one definition is spec_figures.rs and review_prereq.py asks it through check spec-lint --figure-pattern.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says every case, so this is a named exception and starts presumed wrong. Impossibility holds: the case compares two definitions and after the deletion only one exists to compare. Purpose holds: the case exists so that a figure cannot be defined two ways, and review_prereq.py reading the pattern from the Rust verb instead of holding its own is that outcome by construction. It is one case, not a class, and the block names it and its replacement."
+    },
+    {
+     "id": "json-message-differs",
+     "summary": "A measurements.json that is not JSON quotes serde's parse error inside the parentheses where Python quoted its own; verdict, exit status, location and fixed words are the Python's.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-T066-json-message settles this, and the block states all four of its invariants and names the same instance. The request asks for no byte-identical library text."
+    },
+    {
+     "id": "wrapper-path-defect-fix",
+     "summary": "l7r-gate.sh normalizes a path holding .. so that a hook reaching it through ../gates builds rather than reading as no refusal; no suite case's expected verdict changed.",
+     "class": "within",
+     "why": "Not FR-002's defect exception, which changes a Python verdict: this is a fail-open in the wrapper that would have made the switched hook's verdicts not the Python's, so the fix serves FR-002 rather than departing from it. It is needed by the callers this landing switches."
+    },
+    {
+     "id": "measurement-commands-rewritten",
+     "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "FR-001's clause, restated with its two forms and its proof."
+    },
+    {
+     "id": "exit-and-budget",
+     "summary": "On a red exit the failure is recorded, the task set down and a process stop goes to make arbiter-ask; the landing carries no work budget and moves no constant.",
+     "class": "within",
+     "why": "Procedure inside the standing process; it removes nothing the request or spec asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6680,6 +6768,93 @@
      "summary": "A git grep over specs/*/measurements*.json for the ported and deleted names returns nothing, so no recorded entry needs rewriting, and the differentials stand as dated one-shot observations.",
      "class": "within",
      "why": "FR-001's rewrite clause applies vacuously and step 9 still binds any entry that does appear; a one-shot observation labeled with date and method is the contract's form for a comparison that cannot be re-run once the Python is deleted. The census names its search space."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T066": {
+   "section_sha256": "19c9ba130ee79af2528dd5ca02fc6d1e93021a28747b8cb155baf5bff06acc44",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-landing",
+     "summary": "The plan and spec gates (plan_gate, plan_sections, plan_seen, plan_lint, plan_bundle, approach_gate's owed/ruled/owe, spec-lint, spec_figures, wording_only, engine_edit) become l7r-gate verbs, callers switch and every Python body is deleted in one landing.",
+     "class": "within",
+     "why": "FR-001 places the gate's scripts and engine_edit.py in phase 2; a single cut is what FR-003's no piece runs both asks for, and it carries the request's all be ported."
+    },
+    {
+     "id": "differential-and-decide-sample",
+     "summary": "The verdicts are compared with the Python's over the repository's specs and plans, with decide on 120 sampled task sections (items 2, 6 and 9).",
+     "class": "within",
+     "why": "FR-002's bar is every case the tests and suites hold, which the replay bullet carries. The corpus differential is the plan's own extra exit, so sampling decide inside it narrows nothing asked; the exits and Done now say the sample, where the earlier text claimed every spec and plan. The counts carry a date and method label. The denominators differ (367 specs, 325 plans, 281 for owed and delta) with no reason stated: noted, not a narrowing for the same reason."
+    },
+    {
+     "id": "four-who-stay",
+     "summary": "task_start.py, plan_hold.py, phase_sources.py and wording.refusal stay Python until phase 3; the cohort's trigger moves into cohort_known.py at T068; plan_door.py forwards for the Python callers and is deleted with its last caller.",
+     "class": "within",
+     "why": "FR-001 carries each of these placements from ask:449-T066-scope. Against the request it is sequence, not a carve-out: every one is still ported or deleted by its phase, and the door has a stated end."
+    },
+    {
+     "id": "condition-2-one-writer",
+     "summary": "Each state file has one writer: task_start.py for active-task, feature.json, task-starts.jsonl and phase-sources.json; the Rust verbs for approach-owed.json, plan-review.json and plan-seen/.",
+     "class": "within",
+     "why": "Implements FR-003's no piece runs both at the level of the files the split could otherwise write twice."
+    },
+    {
+     "id": "condition-3-no-python-on-plain-call",
+     "summary": "The remaining Python runs only on named make targets, a landing, or while a plan review's hold is live; never on a plain Bash call, a plain Edit or a make done whose change holds no file they read.",
+     "class": "within",
+     "why": "The same bound FR-001 sets on Python left in place, and hm_planhold's live-hold branch matches the live-only allowance FR-001 gives engine_edit. Evidence gap recorded, not a narrowing: the grep is wider than the earlier text but omits rust/gate/*.rs, l7r/*.py and .specify/scripts/bash/, so it cannot see a caller there, and the make done clause runs through the gate; this bundle forbids the repository, so whether one exists was not checked."
+    },
+    {
+     "id": "condition-4-no-door-in-a-loop",
+     "summary": "Each caller asks the door once per run; the one loop asks once per plan by the door's cache.",
+     "class": "within",
+     "why": "A cost bound on the temporary door, inside the arbiter's condition; it removes nothing asked."
+    },
+    {
+     "id": "tests-replayed-in-rust",
+     "summary": "Every case of the seven named test files is in the Rust tests before those files are deleted, apart from the named exceptions.",
+     "class": "within",
+     "why": "This is FR-002's requirement stated for these files, in FR-002's order (before the Python is deleted)."
+    },
+    {
+     "id": "tests-staying-python",
+     "summary": "Cases driving tick-task.py, task_start.py, hm_arbiter.py and wording.refusal stay Python against the door in test_plan_door.py; the cohort's cases in test_cohort_approach.py; the make figures cases in test_make_figures.py.",
+     "class": "within",
+     "why": "FR-001 sends each tests/ file with the piece it tests, and these pieces are placed later by ask:449-T066-scope. Reading applied for test_make_figures.py: the block calls them the make figures cases, so the piece tested is the make figures recipe, a Makefile recipe the second census places, not the deleted spec_figures.py body. No case is dropped: each still runs against the code that gives the verdict."
+    },
+    {
+     "id": "one-definition-of-a-figure-test-not-replayed",
+     "summary": "test_there_is_one_definition_of_a_figure is not replayed: the one definition is spec_figures.rs and review_prereq.py asks it through check spec-lint --figure-pattern.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says every case, so this is a named exception and starts presumed wrong. Impossibility holds: the case compares two definitions and after the deletion only one exists to compare. Purpose holds: the case exists so that a figure cannot be defined two ways, and review_prereq.py reading the pattern from the Rust verb instead of holding its own is that outcome by construction. It is one case, not a class, and the block names it and its replacement."
+    },
+    {
+     "id": "json-message-differs",
+     "summary": "A measurements.json that is not JSON quotes serde's parse error inside the parentheses where Python quoted its own; verdict, exit status, location and fixed words are the Python's.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-T066-json-message settles this, and the block states all four of its invariants and names the same instance. The request asks for no byte-identical library text."
+    },
+    {
+     "id": "wrapper-path-defect-fix",
+     "summary": "l7r-gate.sh normalizes a path holding .. so that a hook reaching it through ../gates builds rather than reading as no refusal; no suite case's expected verdict changed.",
+     "class": "within",
+     "why": "Not FR-002's defect exception, which changes a Python verdict: this is a fail-open in the wrapper that would have made the switched hook's verdicts not the Python's, so the fix serves FR-002 rather than departing from it. It is needed by the callers this landing switches."
+    },
+    {
+     "id": "measurement-commands-rewritten",
+     "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "FR-001's clause, restated with its two forms and its proof."
+    },
+    {
+     "id": "exit-and-budget",
+     "summary": "On a red exit the failure is recorded, the task set down and a process stop goes to make arbiter-ask; the landing carries no work budget and moves no constant.",
+     "class": "within",
+     "why": "Procedure inside the standing process; it removes nothing the request or spec asked."
     }
    ],
    "verdict": "CLEAR"

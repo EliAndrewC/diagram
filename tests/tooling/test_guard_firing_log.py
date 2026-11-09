@@ -342,7 +342,7 @@ _ESCAPES = {
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
     "PLAN_REVIEW_OK": (
         "environment",
-        "read as ${PLAN_REVIEW_OK:-} by scripts/gates/plan-gate.sh at push and from os.environ by _plan_gate.tick_permitted (make tick exports it), neither of which a mention can set; reason floor via hm_escape.py reason-ok (feature 243)",
+        "read as ${PLAN_REVIEW_OK:-} by scripts/gates/plan-gate.sh at push and from the environment by l7r-gate plan's tick_permitted (make tick exports it), neither of which a mention can set; reason floor via hm_escape.py reason-ok (feature 243)",
     ),
     "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/gates/entry-gate.sh, which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "SHELL_CHECK_OK": (

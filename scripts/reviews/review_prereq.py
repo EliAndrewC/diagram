@@ -26,6 +26,7 @@ import importlib.util
 import json
 import pathlib
 import re
+import subprocess
 import sys
 from collections.abc import Callable, Iterable
 
@@ -205,19 +206,10 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
 # ---- FR-006: a quoted figure resolves to a record ------------------------------------------------------------
 
 
-def _spec_lint() -> object:
-    here = pathlib.Path(__file__).resolve().parent
-    spec = importlib.util.spec_from_file_location("spec_lint_for_review", here / "../gates/spec-lint.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    # GUARD_EDIT_OK: feature 240 - loaded by path from a hook, so no `scripts/__pycache__/` is left in the tree: feature
-    # 239 measured its selftest's bytecode being pushed by sync-with-main's own fixture and failing that suite.
-    prior, sys.dont_write_bytecode = sys.dont_write_bytecode, True
-    try:
-        spec.loader.exec_module(mod)
-    finally:
-        sys.dont_write_bytecode = prior
-    return mod
+def _figure_pattern() -> re.Pattern[str]:
+    """The one definition of a figure (feature 239 spec D4), the Rust spec lint's (feature 449 T066)."""
+    gate = pathlib.Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+    return re.compile(subprocess.run([str(gate), "check", "spec-lint", "--figure-pattern"], capture_output=True, text=True, check=True).stdout.strip())
 
 
 def _owed_module() -> object:
@@ -243,10 +235,10 @@ def _number(text: str) -> float | None:
 def unresolved_figures(prompt: str, records: Iterable[dict]) -> list[str]:
     """Each measured figure in the dispatch that no record backs, by feature 239's convention.
 
-    A figure is `spec-lint.py`'s own `_FIGURE` - imported, never restated (spec D4). It resolves when its
+    A figure is the spec lint's own pattern - asked of it, never restated (spec D4). It resolves when its
     paragraph cites a record key (`m:...`) whose recorded value is that number, or when the paragraph carries
     239's dated one-shot label. A figure inside a backtick span is being NAMED, not claimed, and is skipped."""
-    figure = _spec_lint()._FIGURE  # type: ignore[attr-defined]
+    figure = _figure_pattern()
     by_key = {str(r.get("key")): r for r in records}
     out = []
     for para in re.split(r"\n\s*\n", prompt):

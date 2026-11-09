@@ -203,3 +203,12 @@ fn case_is_kept() {
     assert_eq!(cased("Color", ""), "");
     assert!(exempt("a/house_style_words.tsv") && !exempt("a/other.rs"));
 }
+
+#[test]
+fn a_tool_s_text_is_americanized_its_quotations_held_out() {
+    let (brit, us) = (format!("gr{}", "ey"), "gray");
+    assert_eq!(
+        super::americanize(&format!("a {brit} band, <q>a {brit} quoted</q>")),
+        format!("a {us} band, <q>a {brit} quoted</q>")
+    );
+}

@@ -53,10 +53,11 @@ const STALE_CODE: &str = r"import sys, pathlib; sys.path.insert(0, sys.argv[1]);
 old, new = s.read_dir(pathlib.Path(sys.argv[2])), s.read_dir(pathlib.Path(sys.argv[3]))
 found = s.stale_candidates(old, new) + s.criteria_left_behind(old, new)
 if found: print(len(found)); print(s.render(found))";
-/// `plan_gate.active_task` by path: the active feature's directory and its task, a line each.
-const ACTIVE_CODE: &str = r"import sys, pathlib; sys.path.insert(0, sys.argv[1]); import plan_gate
-d, task = plan_gate.active_task(pathlib.Path(sys.argv[2]))
-if d is not None and task: print(d); print(task)";
+/// The active feature's directory and its task, a line each, asked of the plan gate (`l7r-gate plan door active-task`).
+const ACTIVE_CODE: &str = r#"import json, subprocess, sys
+done = subprocess.run([sys.argv[1] + "/l7r-gate.sh", "plan", "door", "active-task", sys.argv[2]], capture_output=True, text=True)
+d, task = json.loads(done.stdout) if done.returncode == 0 else (None, "")
+if d is not None and task: print(d); print(task)"#;
 
 fn re(pattern: &str) -> Regex {
     Regex::new(pattern).unwrap_or_else(|e| unreachable!("{e}"))

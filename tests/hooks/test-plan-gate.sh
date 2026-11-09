@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test-plan-gate.sh - the companion suite for plan-gate.sh (constitution XVIII: a guard without one turns
 # the gate red). It drives the push refusal against a fixture repository rather than grepping it: a grep
-# proves a branch EXISTS, not that it fires. The module's own cases are tests/tooling/test_plan_gate.py.
+# proves a branch EXISTS, not that it fires. The module's own cases are rust/gate/src/plan/.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GATE="$HERE/../../scripts/gates/plan-gate.sh"

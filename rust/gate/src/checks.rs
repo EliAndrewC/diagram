@@ -10,6 +10,8 @@ mod moves;
 mod question_size;
 mod research_pointers;
 mod rust_tooling;
+mod spec_figures;
+mod spec_lint;
 mod stale_dirs;
 
 /// What a check answered.
@@ -76,7 +78,7 @@ fn git_text(root: &Path, args: &[&str]) -> String {
 }
 
 /// A scratch directory of this process.
-fn scratch(tag: &str) -> PathBuf {
+pub(crate) fn scratch(tag: &str) -> PathBuf {
     static SEQ: AtomicUsize = AtomicUsize::new(0);
     let dir = std::env::temp_dir().join(format!(
         "l7r-gate-check-{tag}-{}-{}",
@@ -106,9 +108,62 @@ fn py_lines(text: &str) -> impl Iterator<Item = &str> {
     })
 }
 
+/// `text` with each match of `pattern` overwritten by as many spaces as it has characters.
+fn blank_matches(pattern: &fancy_regex::Regex, text: &str) -> String {
+    pattern
+        .replace_all(text, |c: &fancy_regex::Captures<'_>| {
+            " ".repeat(c[0].chars().count())
+        })
+        .into_owned()
+}
+
+/// A JSON value as Python's `repr` prints it, for a message.
+pub(crate) fn py_repr(value: &serde_json::Value) -> String {
+    use serde_json::Value;
+    match value {
+        Value::Null => "None".to_owned(),
+        Value::Bool(b) => if *b { "True" } else { "False" }.to_owned(),
+        Value::Number(n) => n.to_string(),
+        Value::String(s) => {
+            let quote = if s.contains('\'') && !s.contains('"') {
+                '"'
+            } else {
+                '\''
+            };
+            let inner = s.replace('\\', "\\\\").replace('\n', "\\n");
+            let inner = if quote == '\'' {
+                inner.replace('\'', "\\'")
+            } else {
+                inner
+            };
+            format!("{quote}{inner}{quote}")
+        }
+        Value::Array(rows) => format!(
+            "[{}]",
+            rows.iter().map(py_repr).collect::<Vec<_>>().join(", ")
+        ),
+        Value::Object(map) => {
+            let pairs: Vec<String> = map
+                .iter()
+                .map(|(k, v)| format!("{}: {}", py_repr(&Value::from(k.as_str())), py_repr(v)))
+                .collect();
+            format!("{{{}}}", pairs.join(", "))
+        }
+    }
+}
+
 /// Does this path carry the extension?
 pub(crate) fn has_ext(path: &str, ext: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == ext)
+}
+
+/// The one definition of a figure with a unit, and of a one-shot label (`spec_figures`), for the plan lint.
+pub(crate) fn figure_pattern() -> &'static fancy_regex::Regex {
+    &spec_figures::FIGURE
+}
+
+pub(crate) fn one_shot_pattern() -> &'static fancy_regex::Regex {
+    &spec_figures::ONE_SHOT
 }
 
 /// Does `check`, one of the four still in Python, read this path? Each set is that check's own, from its source and what it
@@ -179,6 +234,7 @@ pub(crate) fn cli(args: &[String], root: &Path) -> crate::Reply {
         Some("rust-tooling") => (rust_tooling::USAGE_LOG_TOOL, rust_tooling::cli(rest, root)),
         Some("research-pointers") => (research_pointers::USAGE_LOG_TOOL, research_pointers::cli(rest)),
         Some("house-style-delta") => (house_style_delta::USAGE_LOG_TOOL, house_style_delta::cli(rest)),
+        Some("spec-lint") => (spec_lint::USAGE_LOG_TOOL, spec_lint::cli(rest)),
         Some("needs") => {
             let o = needs(rest.first().map_or("", String::as_str), root);
             return crate::Reply { stdout: o.stdout, stderr: o.stderr, code: o.code };

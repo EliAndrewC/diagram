@@ -289,20 +289,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 
 <!-- plan-archive: T064 to T064 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 <!-- plan-archive: T065 to T065 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
-### T066 Approach (checklist part A)
-
-1. **The goal, in the world.** What refuses a plan or a spec, and the question `engine_freeze_hooks` asks, are Rust.
-2. **The constraints.** FR-001, FR-002, FR-003; `ask:449-T052-round3` for `engine_edit.py`.
-3. **Where each comes from.** `specs/*/plan.md` as the corpus.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** As the phase's plan above; each stands on the ones before it.
-6. **The exits.** Green: over every spec and plan in the repository the verdicts equal the Python's. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** The differential over every spec and plan: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
+<!-- plan-archive: T066 to T066 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 ### T067 Approach (checklist part A)
 
 1. **The goal, in the world.** The landing's refusals are Rust, with `scripts/hooks/lib/hm_conflict.py` (`push_checks.py`, its make target) and `scripts/hooks/lib/own-make.sh` (`one-gate.sh`), each held to FR-002 before it goes.

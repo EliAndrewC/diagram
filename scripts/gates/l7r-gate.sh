@@ -4,7 +4,7 @@
 # cannot build its tool must not pass, and a make recipe waits on the build, where a hook could not.
 set -uo pipefail
 HERE=${BASH_SOURCE[0]%/*}
-case "$HERE" in /*) ;; *) HERE="$(cd "$HERE" && pwd)" ;; esac
+case "$HERE" in */..*|[!/]*) HERE="$(cd "$HERE" && pwd)" ;; esac  # a hook reaches it through its own `../gates`
 TREE=${HERE%/scripts/gates}
 real=$(getent passwd "$(id -u)" | cut -d: -f6)
 TARGET=${L7R_GATE_TARGET:-$real/.cache/l7r-cargo-target/${TREE##*/}}

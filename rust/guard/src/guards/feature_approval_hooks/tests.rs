@@ -338,3 +338,16 @@ fn a_feature_closed_by_every_task_and_one_removed() {
         "307-tasks/spec.md: closed before"
     ));
 }
+
+#[test]
+fn the_push_reads_the_form_of_the_approval_line() {
+    assert_eq!(super::form_problem("no line here"), "no-line");
+    assert_eq!(
+        super::form_problem("**Approved**: the GM, 2026-10-10, \"Yes\"\n"),
+        "short"
+    );
+    assert_eq!(
+        super::form_problem("**Approved**: the GM, 2026-10-10, \"please file it then\"\n"),
+        ""
+    );
+}

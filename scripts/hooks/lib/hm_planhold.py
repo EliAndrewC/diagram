@@ -60,8 +60,8 @@ def dead(h: Mapping[str, Any], now: float) -> bool:
 
 def held(root: Path, h: Mapping[str, Any]) -> list[str]:
     """The texts a hold holds, read from the plan as it stands: the task's section, or each named block."""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
-    import plan_gate  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    import plan_door as plan_gate  # noqa: PLC0415
 
     plan = root / "specs" / str(h.get("feature")) / "plan.md"
     try:
@@ -112,8 +112,8 @@ def restore(state: dict[str, Any], root: Path | None, tid: str) -> str:
         state.pop("plan_snaps", None)  # gone when empty: `checks-hooks.sh after` asks the state file for the key before Python
     if root is None or not snaps:
         return ""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
-    import plan_gate  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    import plan_door as plan_gate  # noqa: PLC0415
 
     for hid, before in snaps.items():
         h = (state.get("plan_holds") or {}).get(hid)

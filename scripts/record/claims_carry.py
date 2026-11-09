@@ -44,9 +44,10 @@ _LANDS_OPEN = " [lands-open]"
 
 def _plan_gate() -> Any:  # noqa: ANN401 - the module
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "gates"))
-    import plan_gate  # noqa: PLC0415 - the moved scripts it imports
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import plan_door  # noqa: PLC0415 - the plan gate's door
 
-    return plan_gate
+    return plan_door
 
 
 def active_feature(root: Path) -> Path | None:

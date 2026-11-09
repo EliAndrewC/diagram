@@ -219,13 +219,12 @@ def boxes_refusal(text: str, task: str, boxes: bool = False) -> str:
 def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True, boxes: bool = False) -> tuple[str, str]:
     """(refusal, message) - every reason `make tick` refuses `task`, asked before anything is written; `landed=False` leaves out
     the landed check, which `make land` asks of each task before it lands them (feature 385 T117, D135; feature 405 T33)."""
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
-    import plan_gate as _plan_gate  # noqa: PLC0415
+    sys.path[:0] = [str(Path(__file__).resolve().parent), str(Path(__file__).resolve().parent / "gates")]
+    import plan_door as _plan_gate  # noqa: PLC0415
 
     # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
     # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
     permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
-    import approach_gate  # noqa: PLC0415 - feature 385 D8/D9: the task's Approach answered, and again after a trigger
     import wording  # noqa: PLC0415 - feature 385 T118 (D138): a wording-only task's commits checked against its declaration
 
     plan = d / "plan.md"
@@ -236,7 +235,7 @@ def refusal(root: Path, d: Path, task: str, note: str, landed: bool = True, boxe
     whys += [w for w in (
         boxes_refusal((d / "tasks.md").read_text(encoding="utf-8") if (d / "tasks.md").is_file() else "", task, boxes),
         waits_or_marks(root, d), _arbiter().fix_hold(d), checkpoint_hold(root),  # 379: an open tooling fix; 383: the hour
-        approach_gate.refusal(d, root, task), wording.refusal(root, d, task, section),
+        _plan_gate.approach_refusal(d, root, task), wording.refusal(root, d, task, section),
     ) if w]
     if not whys and landed:
         whys = [w for w in (landed_refusal(root, d.name, task, note),) if w]
@@ -277,7 +276,7 @@ def main(argv: list[str]) -> int:
     if why:
         print(why, file=sys.stderr)
         return 2
-    import plan_gate as _plan_gate  # noqa: PLC0415 - on the path since `refusal`
+    import plan_door as _plan_gate  # noqa: PLC0415 - on the path since `refusal`
     try:
         new, line = tick(path.read_text(encoding="utf-8"), task, note, boxes)
     except ValueError as e:

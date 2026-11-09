@@ -37,7 +37,8 @@ MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
 # exists) and a stub generation cache (current unless `<gen>.stale` exists), and a moved map is a WHOLE map.
 # GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
-printf '#!/usr/bin/env bash\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' > "$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
+"$(dirname "$HOOK")/../../scripts/gates/l7r-gate.sh" check spec-lint --figure-pattern > "$CLONE/figure-pattern"   # the one definition of a figure, the Rust spec lint's
+printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" > "$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
 mkdir -p "$SKILL/l7r/diagram/pipeline"
 printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
 # GUARD_EDIT_OK: feature 240 - REGULAR packages, as the engine's are. Under `make hooks-test` the real skill is on

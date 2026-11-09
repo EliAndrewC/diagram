@@ -711,14 +711,13 @@ def env_ok(name: str, text: str) -> bool:
     return bool(re.search(rf'{name}="[^"]{{8,}}"', text)) or len(os.environ.get(name, "").split()) >= 2
 
 
-def _approach():  # noqa: ANN202 - the module, loaded by path (feature 385 D9)
-    import importlib.util  # noqa: PLC0415
+def _door():  # noqa: ANN202 - the plan gate's door (feature 449 T066)
+    import sys  # noqa: PLC0415
 
-    path = Path(__file__).resolve().parents[2] / "gates" / "approach_gate.py"
-    spec = importlib.util.spec_from_file_location("approach_gate", path)
-    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
-    spec.loader.exec_module(mod)  # type: ignore[union-attr]
-    return mod
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    import plan_door  # noqa: PLC0415
+
+    return plan_door
 
 
 def main(argv: list[str]) -> int:
@@ -738,17 +737,14 @@ def main(argv: list[str]) -> int:
             return 1
         print(f"arbiter-ruled: {row['trigger']} - {row['ruling']} (binding; recorded in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)")
         # GUARD_EDIT_OK: feature 385 T02, plan D9 - an hour or red-gate ruling owes the task's part B answered (nothing loosened)
-        owed = _approach().ruled(root, row["trigger"])
+        owed = _door().approach_ruled(root, row["trigger"])
         plan_review = row["trigger"].startswith("round:spec-fidelity|plan:") or row.get("review") == "plan"  # an asked one too (409)
         if plan_review and row["ruling"] in ("accept", "process-fault"):  # feature 385 T16
             # the feature the ask names, not the clone's last active one (feature 443: ask:443-plan-round-3 was ruled while
             # .specify/feature.json named 427, and the verdict step refused on 427's arbiter.jsonl)
             d = feature_dir(root, row["trigger"])
             if d is not None:
-                sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "gates"))
-                import plan_gate  # noqa: PLC0415
-
-                print(f"arbiter-ruled: {len(plan_gate.arbiter_accept(d, row['trigger']))} plan block(s) recorded CLEAR - the accept is the plan's verdict")
+                print(f"arbiter-ruled: {len(_door().arbiter_accept(d, row['trigger']))} plan block(s) recorded CLEAR - the accept is the plan's verdict")
         claims_review = str(row.get("review") or "")
         if claims_review.startswith("claims:") and row["ruling"] == "accept":  # the GM 2026-10-24: the accept is the claims' verdict
             keys = claims_review[len("claims:") :]
@@ -774,7 +770,7 @@ def main(argv: list[str]) -> int:
             return 1
         for row in rows:
             print(f"arbiter-ruled: {row['trigger']} - {row['ruling']}")
-            owed = _approach().ruled(root, row["trigger"])  # GUARD_EDIT_OK: feature 385 D9, as for a single ruling
+            owed = _door().approach_ruled(root, row["trigger"])  # GUARD_EDIT_OK: feature 385 D9, as for a single ruling
             if owed:
                 print(owed)
         print(f"arbiter-ruled: the batch's {len(rows)} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)")

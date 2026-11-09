@@ -178,7 +178,7 @@ def test_a_tick_archives_the_plan_s_finished_sections_and_an_archive_error_never
     (d / "plan-review.json").write_text(json.dumps({"plan_sha256": hashlib.sha256(plan).hexdigest(), "decisions": [], "verdict": "CLEAR"}), encoding="utf-8")
     monkeypatch.setattr(tt, "repo_root", lambda start=None: tmp_path)
     sys.path.insert(0, str(REPO / "scripts" / "gates"))
-    import plan_gate  # noqa: PLC0415
+    import plan_door as plan_gate  # noqa: PLC0415
 
     calls: list[pathlib.Path] = []
     monkeypatch.setattr(plan_gate, "archive", lambda spec_dir: calls.append(spec_dir) or ["T02"])
@@ -970,22 +970,21 @@ def test_every_refusal_is_listed_together_not_the_first_of_a_chain(tmp_path: pat
     d.mkdir(parents=True)
     (d / "tasks.md").write_text(TASKS, encoding="utf-8")
     sys.path.insert(0, str(REPO / "scripts" / "gates"))
-    import approach_gate  # noqa: PLC0415
-    import plan_gate  # noqa: PLC0415
+    import plan_door as plan_gate  # noqa: PLC0415
     import wording  # noqa: PLC0415
 
     monkeypatch.setattr(plan_gate, "tick_permitted", lambda *_a: (False, "the plan review is stale"))
     monkeypatch.setattr(tt, "waits_or_marks", lambda *_a: "")
     monkeypatch.setattr(tt, "checkpoint_hold", lambda *_a: "the hour's checkpoint")
     monkeypatch.setattr(tt, "_arbiter", lambda: type("A", (), {"fix_hold": staticmethod(lambda _d: "")}))
-    monkeypatch.setattr(approach_gate, "refusal", lambda *_a: "part B's items 8, 9 unanswered")
+    monkeypatch.setattr(plan_gate, "approach_refusal", lambda *_a: "part B's items 8, 9 unanswered")
     monkeypatch.setattr(wording, "refusal", lambda *_a: "")
     why, message = tt.refusal(tmp_path, d, "T02", "done", landed=False)
     assert message == "" and why.startswith("tick: refused - \n  (1) the plan review is stale"), why
     assert "(2) T02 is a `research: physical` task" in why and "(3) the hour's checkpoint" in why and "(4) part B's items 8, 9" in why
     monkeypatch.setattr(plan_gate, "tick_permitted", lambda *_a: (True, "plan review current"))
     monkeypatch.setattr(tt, "checkpoint_hold", lambda *_a: "")
-    monkeypatch.setattr(approach_gate, "refusal", lambda *_a: "")
+    monkeypatch.setattr(plan_gate, "approach_refusal", lambda *_a: "")
     assert tt.refusal(tmp_path, d, "T02", "done", landed=False)[0].startswith("tick: refused - T02 is a `research: physical`"), "one refusal: as before"
     assert tt.refusal(tmp_path, d, "T01", "done", landed=False) == ("", "plan review current"), "none: the plan gate's message alone"
 

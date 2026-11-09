@@ -10,6 +10,8 @@ takes its failing seeds, and prints every OPEN found row (`specs/328-match-the-r
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import argparse
 import json
 import pathlib
@@ -206,6 +208,46 @@ def stamp(root: pathlib.Path) -> str:
     return digest
 
 
+def newly_failing(record: dict, earlier: list[dict], on_main: Callable[[str], bool]) -> list[int]:
+    """The seeds `record` fails that passed in the newest earlier record at a commit on main rolling the same seed and
+    households (the baseline). A seed failing there too, or with no such record, is not new (feature 385 D9, from `approach_gate.py`)."""
+    out = []
+    for s in record.get("seeds") or []:
+        if s.get("verdict") == "pass":
+            continue
+        for r in sorted(earlier, key=lambda r: str(r.get("utc")), reverse=True):
+            if str(r.get("utc")) >= str(record.get("utc")) or r.get("households") != record.get("households"):
+                continue
+            base = next((b for b in r.get("seeds") or [] if b.get("seed") == s.get("seed")), None)
+            if base is None or not r.get("commit") or r.get("engine_diff") or not on_main(str(r["commit"])):
+                continue
+            if base.get("verdict") == "pass":
+                out.append(int(s["seed"]))
+            break
+    return out
+
+
+def approach_owed(root: pathlib.Path) -> str:
+    """The newest cohort record: a seed newly failing owes the active task's part B, a fit failure printing the room table beside it (405 T113)."""
+    sys.path[:0] = [str(pathlib.Path(__file__).resolve().parents[1]), str(pathlib.Path(__file__).resolve().parents[1] / "gates")]
+    import plan_door  # noqa: PLC0415
+    import room_table  # noqa: PLC0415
+
+    logs = sorted((root / "dev/cohort-log").glob("[0-9]*.json"))
+    if not logs:
+        return ""
+    records = [json.loads(p.read_text(encoding="utf-8")) for p in logs]
+    seeds = newly_failing(records[-1], records[:-1], lambda c: same_engine(root, c))
+    if not seeds:
+        return ""
+    trigger = f"cohort@{records[-1].get('utc')}: seed(s) {', '.join(map(str, seeds))} newly failing"
+    owed = plan_door.owe_in_flight(root, trigger, "B")
+    fails = {r.get("seed"): r.get("failures") or [] for r in records[-1].get("seeds") or []}
+    if owed and any(room_table.is_fit(fails.get(n, [])) for n in seeds):
+        owed += "\n" + room_table.render()
+    return owed
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
@@ -224,10 +266,7 @@ def main(argv: list[str] | None = None) -> int:
         earlier = [json.loads(f.read_text()) for f in sorted((root / "dev/cohort-log").glob("[0-9]*.json"))[:-1]]
         for line in standing(record, baselines(record, earlier, lambda c: same_engine(root, c))):
             print(line)
-    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "gates"))
-    import approach_gate  # noqa: PLC0415 - feature 385 D9: a seed newly failing owes the task's part B
-
-    owed = approach_gate.cohort(root)
+    owed = approach_owed(root)  # feature 385 D9: a seed newly failing owes the task's part B
     if owed:
         print(owed)
     return 0

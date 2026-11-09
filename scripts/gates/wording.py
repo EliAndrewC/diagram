@@ -16,26 +16,21 @@ import json
 import pathlib
 import re
 import subprocess
+import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 WORDING = "**Wording only.**"
-_DECISIONS = re.compile(r"^#{3,4}\s+T\d+[a-z]?\s+Decisions\s*$", re.M)
-_NEXT_HEAD = re.compile(r"^#{2,4}\s", re.M)
-_DECISION = re.compile(r"^\*\*D\d+[a-z]?\s+-\s", re.M)
 #: what a wording-only task may change beside `.py` comments, docstrings and claims: its feature's records, the run records, and a
 #: glossary entry (a word's definition, which the page check reads)
 _FREE = re.compile(r"^(specs/|dev/|l7r/diagram/interactive/assets/glossary/[^/]+\.json$)")
 
 
 def wording_only(section: str) -> bool:
-    """Does the task section's Decisions block declare wording only, with no decision beside it (D137)?"""
-    m = _DECISIONS.search(section)
-    if not m:
-        return False
-    body = section[m.end() :]
-    if nxt := _NEXT_HEAD.search(body):
-        body = body[: nxt.start()]
-    return WORDING in body and not _DECISION.search(body)
+    """Does the task section's Decisions block declare wording only, with no decision beside it (D137)? The plan gate's answer."""
+    sys.path.insert(0, str(HERE.parent))
+    import plan_door  # noqa: PLC0415
+
+    return plan_door.wording_only(section)
 
 
 def _semantic():  # noqa: ANN202 - codeid.py by path: the one definition of "changed in what runs"

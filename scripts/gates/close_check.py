@@ -99,12 +99,12 @@ def _todo():  # noqa: ANN202 - speckit-todo.py by path (a hyphenated script), on
 
 def push_reasons(root: Path, rng: str) -> list[str]:
     """Every touched feature that reads closed (its tasks all ticked, or a closing status word) and may not close."""
-    sys.path.insert(0, str(ROOT / "scripts" / "gates"))
-    import plan_gate  # noqa: PLC0415
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import plan_door  # noqa: PLC0415
 
     todo = _todo()
     out = []
-    for name in plan_gate.touched_features(root, rng):
+    for name in plan_door.touched_features(root, rng):
         d = root / name
         if d.is_dir() and todo.feature(d).state == "closed":
             out += reasons(d, root / "specs")

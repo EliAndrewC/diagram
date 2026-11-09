@@ -3,7 +3,7 @@
   "tools": {
     "approach_gate": {
       "kind": "check",
-      "what": "scripts/gates/approach_gate.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/plan/approach.rs - a refusing check; each run recorded passed or refused"
     },
     "check-duplicate-defs": {
       "kind": "check",
@@ -103,7 +103,7 @@
     },
     "spec-lint": {
       "kind": "check",
-      "what": "scripts/gates/spec-lint.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/spec_lint.rs - a refusing check; each run recorded passed or refused"
     },
     "tick-archive": {
       "kind": "step",

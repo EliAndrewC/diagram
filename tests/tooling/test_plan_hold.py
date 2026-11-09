@@ -89,12 +89,12 @@ def test_task_start_refuses_a_held_engine_task_and_starts_a_non_engine_one_with_
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     _feature(specs, "405-engine-findings", HELD, TASKS)
     monkeypatch.chdir(root)
-    import plan_gate
+    import task_start
 
     monkeypatch.delenv("HOLD_OK", raising=False)
-    assert plan_gate.main(["task-start", "405", "T106"]) == 2
+    assert task_start.main(["405", "T106"]) == 2
     assert "ON HOLD until 417-all-seeds-pass closes" in capsys.readouterr().err
     assert not (root / ".git" / "active-task").exists(), "a refused start marks nothing"
     monkeypatch.setenv("HOLD_OK", "the GM asked for it now")
-    assert plan_gate.main(["task-start", "405", "T106"]) == 2, "no escape for an engine task"
-    assert plan_gate.main(["task-start", "405", "T107"]) == 0
+    assert task_start.main(["405", "T106"]) == 2, "no escape for an engine task"
+    assert task_start.main(["405", "T107"]) == 0

@@ -391,7 +391,7 @@ fn listing(files: &[PathBuf], root: &Path) -> String {
 
 /// Is `path` in a byte-hashed area, by pattern (so a file not yet on disk answers too)? Ported unchanged from `gate-stamp._matches`, including that an area on the repository root takes `diagram`'s exclusions
 /// (`_area_exclusions` named the first area with that root): `ask:T063-browser-raw` holds what that leaves.
-fn in_raw_area(root: &Path, path: &str) -> bool {
+pub(crate) fn in_raw_area(root: &Path, path: &str) -> bool {
     AREAS.iter().filter(|a| a.raw).any(|area| {
         let owner = if area.root.is_empty() {
             area_named("diagram").unwrap_or(area)
