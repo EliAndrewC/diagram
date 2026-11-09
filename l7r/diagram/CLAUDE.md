@@ -59,7 +59,6 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | [`docs/migration-plan.md`](../../docs/migration-plan.md) | you draw or script a settlement map (read it first; update its status table when a conversion lands) |
 | [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `scripts/measure/gatecost.py` give the live ones) |
 | [`dev/test-cost.md`](../../dev/test-cost.md) | you are adding a test that rolls a map, or asking why the suite costs what it does |
-| [`dev/ci.md`](../../dev/ci.md) | you are changing when money may be spent on a remote run, or its threat model |
 | [`dev/interactive-page.md`](../../dev/interactive-page.md) | page or raster performance, or the wet-paddy modal's two tint rules |
 
 Deferred engineering is filed as spec-kit features; `make speckit-todo` lists the open ones. The append-only run
