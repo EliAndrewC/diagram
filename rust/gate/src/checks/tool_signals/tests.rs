@@ -77,7 +77,7 @@ fn a_call_the_registry_lacks_and_an_entry_nothing_records_are_refused() {
     put(
         &r,
         "rust/gate/src/x.rs",
-        "const USAGE_LOG_TOOL: &str = \"compiled\";\n",
+        "// usage_log\nconst USAGE_LOG_TOOL: &str = \"compiled\";\n",
     );
     assert!(ask(&r).stderr.contains("records `compiled`"));
     let r = clean();

@@ -11,6 +11,7 @@ use fancy_regex::Regex;
 
 use super::Outcome;
 
+/// The name its runs are recorded under in the `usage_log`.
 pub(super) const USAGE_LOG_TOOL: &str = "check-run-plausible";
 const ABSOLUTE_MIN: u64 = 5;
 

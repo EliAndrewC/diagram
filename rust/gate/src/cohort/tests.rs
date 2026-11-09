@@ -649,7 +649,7 @@ fn the_key_is_kept_a_same_text_is_equal_and_no_origin_reads_main() {
     let py = python(&root);
     let r = Repo::new(&root, &py);
     assert_eq!(r.engine_key(Some("HEAD")), r.engine_key(Some("HEAD")));
-    assert!(r.debug_free_equal(b"a", b"a", Path::new("x.py")));
+    assert!(r.counters_only_differ(&[]));
     git(&root, &["update-ref", "-d", "refs/remotes/origin/main"]);
     assert!(r.same_engine("HEAD"));
     assert!(!rust_landing(&root));

@@ -290,11 +290,11 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/gates/check-tool-signals.py $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \

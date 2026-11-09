@@ -13,6 +13,7 @@ use serde_json::Value;
 
 use super::Outcome;
 
+/// The name its runs are recorded under in the `usage_log`.
 pub(super) const USAGE_LOG_TOOL: &str = "check-tool-signals";
 const RECORDS: [&str; 3] = ["guard_log", "usage_log", "# TOOL_RECORD:"];
 /// The entry points whose text names the checks they run (`tool_yield.ENTRY_SCRIPTS`).
@@ -189,7 +190,7 @@ fn called(root: &Path) -> BTreeMap<String, String> {
         .filter(|p| p.file_name().is_some_and(|n| n != "usage_log.py"))
     {
         let text = read(path);
-        if !text.contains("usage_log") && !text.contains("USAGE_LOG_TOOL") {
+        if !text.contains("usage_log") {
             continue;
         }
         for name in CALLS.iter().flat_map(|c| {

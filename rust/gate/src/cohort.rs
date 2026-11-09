@@ -22,6 +22,7 @@ pub(crate) mod known;
 pub(crate) mod room;
 pub(crate) mod seeds;
 
+/// The name its runs are recorded under in the `usage_log`.
 pub(crate) const USAGE_LOG_TOOL: &str = "cohort_gate";
 const LOG: &str = "dev/cohort-log";
 const RUST_LOG: &str = "dev/rust-gate";
@@ -161,24 +162,24 @@ impl<'a> Repo<'a> {
         self.same_key(commit, main)
     }
 
-    /// Are two versions of a file the same but for counter blocks? Only a `.py` has blocks to strip: `codeid.py` holds that until phase 4.
-    fn debug_free_equal(&self, old: &[u8], new: &[u8], path: &Path) -> bool {
-        if old == new {
+    /// Are these versions of `.py` files the same but for counter blocks? `codeid.py` reads the AST until phase 4, asked once for all of them.
+    fn counters_only_differ(&self, pairs: &[(Vec<u8>, Vec<u8>)]) -> bool {
+        if pairs.is_empty() {
             return true;
         }
-        if path.extension().is_none_or(|e| e != "py") {
-            return false;
-        }
         let dir = std::env::temp_dir().join(format!("l7r-gate-counter-{}", std::process::id()));
-        let (a, b) = (dir.join("a.py"), dir.join("b.py"));
-        let written = std::fs::create_dir_all(&dir)
-            .and(std::fs::write(&a, old))
-            .and(std::fs::write(&b, new));
-        let same = written.is_ok()
+        let mut files = Vec::new();
+        let mut written = std::fs::create_dir_all(&dir).is_ok();
+        for (n, (old, new)) in pairs.iter().enumerate() {
+            let (a, b) = (dir.join(format!("{n}a.py")), dir.join(format!("{n}b.py")));
+            written = written && std::fs::write(&a, old).is_ok() && std::fs::write(&b, new).is_ok();
+            files.extend([a, b]);
+        }
+        let same = written
             && Command::new(self.python)
                 .arg(crate::codeid::script(self.root))
                 .arg("--debug-free-equal")
-                .args([&a, &b])
+                .args(&files)
                 .status()
                 .is_ok_and(|s| s.success());
         let _ = std::fs::remove_dir_all(&dir);
@@ -188,23 +189,24 @@ impl<'a> Repo<'a> {
     /// Is every engine file that differs a modification whose two versions are counter-only-equal? No engine file differing is not one.
     pub(crate) fn counter_only(&self, a: &str, b: &str) -> bool {
         let (ok, out) = git(self.root, &["diff", "--name-status", "--no-renames", a, b]);
-        if !ok {
-            return false;
-        }
         let rows: Vec<(&str, &str)> = out
             .lines()
             .filter_map(|l| l.split_once('\t'))
             .filter(|(_, p)| ENGINE.is_match(p).unwrap_or(false))
             .collect();
-        !rows.is_empty()
-            && rows.iter().all(|(status, path)| {
-                *status == "M"
-                    && self.debug_free_equal(
-                        &git_bytes(self.root, &["show", &format!("{a}:{path}")]),
-                        &git_bytes(self.root, &["show", &format!("{b}:{path}")]),
-                        Path::new(path),
-                    )
-            })
+        if !ok || rows.is_empty() || rows.iter().any(|(status, _)| *status != "M") {
+            return false;
+        }
+        let mut pairs = Vec::new();
+        for (_, path) in &rows {
+            let old = git_bytes(self.root, &["show", &format!("{a}:{path}")]);
+            let new = git_bytes(self.root, &["show", &format!("{b}:{path}")]);
+            if old != new && !crate::checks::has_ext(path, "py") {
+                return false;
+            }
+            pairs.extend((old != new).then_some((old, new)));
+        }
+        self.counters_only_differ(&pairs)
     }
 
     fn fresh_seed(&self, reference: Option<&str>) -> u64 {

@@ -10,6 +10,7 @@ use l7r_guard::guards::conflict_marker_hooks::{
 
 use super::{git_z, scratch, Outcome};
 
+/// The name its runs are recorded under in the `usage_log`.
 pub(super) const USAGE_LOG_TOOL: &str = "conflict-markers";
 
 fn tracked(root: &Path) -> Vec<String> {
