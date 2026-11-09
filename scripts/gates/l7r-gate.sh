@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TOOL_RECORD: a launcher only; each ported subcommand records its own run, as the Python it replaces does
 # l7r-gate.sh <subcommand> ... - run the gate's Rust tools from this tree (feature 449 T061): built here when the sources are newer, and unlike the guards' wrapper it fails closed. A gate that
 # cannot build its tool must not pass, and a make recipe waits on the build, where a hook could not.
 set -uo pipefail
