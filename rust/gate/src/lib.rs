@@ -65,7 +65,7 @@ pub fn cli(args: &[String]) -> Reply {
         ),
         Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
         Some("ci") => ci::main::entry(&args[1..], &top()),
-        Some("switches") => ci::switches::guarded(&args[1..], &top()),
+        Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("lifecycle") => Reply {
             stdout: format!("{}\n", ci::cachepolicy::lifecycle_configuration()),
             stderr: String::new(),
@@ -113,6 +113,12 @@ mod tests {
         assert_eq!(ask(&["state", "nonsense"]).code, 2);
         assert_eq!(ask(&["coverage-exempt", "nonsense"]).code, 2);
         assert_eq!(ask(&["config-hash", "nonsense"]).code, 2);
+        assert_eq!(ask(&["ci", "nonsense"]).code, 2);
+        assert_eq!(ask(&["switches", "nonsense"]).code, 2);
+        assert!(ask(&["lifecycle"])
+            .stdout
+            .contains("expire-verified-records"));
+        assert!([0, 1].contains(&ask(&["github-token"]).code));
     }
 
     #[test]

@@ -4,11 +4,8 @@ transport mock), and a scripted `sh` so lint / reference / git outcomes are chos
 
 from __future__ import annotations
 
-import json
 import subprocess
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Any
 
 import pytest
 

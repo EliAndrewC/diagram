@@ -79,7 +79,6 @@ fn a_malformed_file_closes_and_a_throw_repairs_it() {
                 && !sw.error.is_empty()
                 && sw.claims.state == "clean"
                 && sw.port.state == "rust-only",
-            "{body}"
         );
         assert!(describe(&sw).contains("MALFORMED"));
     }
@@ -211,4 +210,34 @@ fn the_command_line_answers_bare_for_the_makefile_and_refuses() {
         .stderr
         .starts_with("switches: REFUSED"));
     assert_eq!(ask(&dir, &["nonsense"]).code, 2);
+}
+
+#[test]
+fn the_guard_refuses_outside_make_and_answers_under_it() {
+    use crate::ci::via_make::Procs;
+    struct Tree(&'static str, String);
+    impl Procs for Tree {
+        fn ancestry(&self) -> Vec<u32> {
+            vec![2]
+        }
+        fn comm(&self, _pid: u32) -> String {
+            self.0.to_owned()
+        }
+        fn cwd(&self, _pid: u32) -> String {
+            self.1.clone()
+        }
+        fn cmdline(&self, _pid: u32) -> Vec<String> {
+            Vec::new()
+        }
+    }
+    let dir = repo("guard");
+    let args = ["state".to_owned(), "port".to_owned()];
+    assert_eq!(
+        super::guarded(&args, &dir, &Tree("bash", dir.display().to_string())).code,
+        2
+    );
+    assert_eq!(
+        super::guarded(&args, &dir, &Tree("make", dir.display().to_string())).stdout,
+        "rust-only\n"
+    );
 }

@@ -5,13 +5,11 @@ locked to another tier; the gate collects everything. Helpers stay in the source
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from pathlib import Path
 
-import os
-
 import pytest
-
 
 SKILL = Path(__file__).resolve().parents[2]
 

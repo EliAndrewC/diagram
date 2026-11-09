@@ -19,11 +19,7 @@ pub(crate) fn git(dir: &Path, args: &[&str]) -> String {
         .args(args)
         .output()
         .unwrap();
-    assert!(
-        done.status.success(),
-        "{args:?}: {}",
-        String::from_utf8_lossy(&done.stderr)
-    );
+    assert!(done.status.success(),);
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
@@ -168,7 +164,7 @@ impl Host for FakeHost {
     }
 }
 
-/// Replays CodeBuild's shapes and logs every call.
+/// Replays `CodeBuild`'s shapes and logs every call.
 pub(crate) struct FakeAws {
     pub calls: RefCell<Vec<String>>,
     pub deny_start: RefCell<Option<String>>,

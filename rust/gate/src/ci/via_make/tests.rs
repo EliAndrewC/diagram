@@ -83,6 +83,7 @@ fn every_spelling_of_a_makefile_is_judged_where_make_stood() {
             && !foreign(&["make", "--file=sub/Makefile"])
     );
     assert_eq!(lexical(Path::new("/a/./b/../c")), Path::new("/a/c"));
+    assert_eq!(lexical(Path::new("./a")), Path::new("a"));
 }
 
 #[test]

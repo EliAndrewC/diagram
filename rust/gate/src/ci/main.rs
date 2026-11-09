@@ -49,10 +49,10 @@ fn parse(args: &[String]) -> Result<Args, String> {
                 out.compute = Some(value.clone());
             }
             other if out.command.is_empty() && COMMANDS.contains(&other) => {
-                other.clone_into(&mut out.command)
+                other.clone_into(&mut out.command);
             }
             other if !out.command.is_empty() && !other.starts_with("--") => {
-                out.rest.push(other.to_owned())
+                out.rest.push(other.to_owned());
             }
             other => return Err(format!("no such argument {other}")),
         }
@@ -111,6 +111,15 @@ pub(crate) fn real_client(secrets: &Secrets) -> Box<dyn Aws> {
 
 type Clients<'a> = &'a dyn Fn(&Secrets) -> Box<dyn Aws>;
 
+/// What the command line is given rather than finds: the Python to ask, the host, the AWS client and the secrets.
+pub(crate) struct World<'a> {
+    pub python: &'a str,
+    pub host: &'a dyn Host,
+    pub clients: Clients<'a>,
+    pub secrets: &'a dyn Fn(&Path) -> Result<Secrets, String>,
+    pub specify: Option<&'a str>,
+}
+
 fn would_have(
     root: &Path,
     host: &dyn Host,
@@ -120,13 +129,8 @@ fn would_have(
     kind: &str,
 ) -> Result<(), String> {
     let est = decision::estimate(kind, 0.0, operation);
-    runlog::write_would_have(
-        root,
-        what,
-        scope,
-        est.minutes,
-        &format!("remote off: `make {what}` attempted and refused"),
-    )?;
+    let reason = format!("remote off: `make {what}` attempted and refused");
+    runlog::write_would_have(root, what, scope, est.minutes, &reason)?;
     host.err(&format!("(recorded as would-have-dispatched, ~{:.0} build-min ~${:.2} - `make ci-status` lists these; the period's audit reads them)", est.minutes, est.cost_usd));
     Ok(())
 }
@@ -144,18 +148,12 @@ fn remote_ok(a: &Args, root: &Path, host: &dyn Host) -> Result<i32, String> {
     } else {
         Some("operation")
     };
-    would_have(
-        root,
-        host,
-        what,
-        if what == "ci-check" {
-            "reference"
-        } else {
-            "operation"
-        },
-        operation,
-        "reference",
-    )?;
+    let scope = if what == "ci-check" {
+        "reference"
+    } else {
+        "operation"
+    };
+    would_have(root, host, what, scope, operation, "reference")?;
     Ok(1)
 }
 
@@ -192,7 +190,8 @@ fn local_gated(ctx: &Context<'_>, scope: &str) -> Result<i32, String> {
         return Ok(0);
     }
     if d.verdict == "REFUSE(remote-enabled)" {
-        runlog::write_would_have(ctx.root, "ci-merge", scope, d.estimate.minutes, "remote off: the gated merge would have DISPATCHED (no green local `make done` on the merged engine content)")?;
+        let reason = "remote off: the gated merge would have DISPATCHED (no green local `make done` on the merged engine content)";
+        runlog::write_would_have(ctx.root, "ci-merge", scope, d.estimate.minutes, reason)?;
         host.out(&format!(
             "(recorded as would-have-dispatched, ~{:.0} build-min ~${:.2})",
             d.estimate.minutes, d.estimate.cost_usd
@@ -203,14 +202,8 @@ fn local_gated(ctx: &Context<'_>, scope: &str) -> Result<i32, String> {
     Ok(1)
 }
 
-fn status(
-    a: &Args,
-    root: &Path,
-    python: &str,
-    host: &dyn Host,
-    clients: Clients<'_>,
-    off: bool,
-) -> Result<i32, String> {
+fn status(a: &Args, root: &Path, world: &World<'_>, off: bool) -> Result<i32, String> {
+    let (python, host) = (world.python, world.host);
     let empty = RefCell::new(Vec::new());
     if a.route {
         host.sh(&["git", "fetch", "-q", "origin"], root, &[]);
@@ -225,7 +218,7 @@ fn status(
     let secrets = if off {
         None
     } else {
-        match config::load_secrets(root) {
+        match (world.secrets)(root) {
             Ok(s) => Some(s),
             Err(why) => {
                 host.out(&format!("(no AWS lookup: {why})"));
@@ -233,7 +226,7 @@ fn status(
             }
         }
     };
-    let owned = secrets.as_ref().map(clients);
+    let owned = secrets.as_ref().map(world.clients);
     let scope = if a.full { "full" } else { "reference" };
     let ctx = Context {
         root,
@@ -246,6 +239,7 @@ fn status(
         client: owned.as_deref(),
         host,
         python,
+        specify: world.specify,
         poll_s: config::STREAM_POLL_S,
         events: empty,
     };
@@ -254,13 +248,8 @@ fn status(
     Ok(0)
 }
 
-fn run_command(
-    a: &Args,
-    root: &Path,
-    python: &str,
-    host: &dyn Host,
-    clients: Clients<'_>,
-) -> Result<i32, String> {
+fn run_command(a: &Args, root: &Path, world: &World<'_>) -> Result<i32, String> {
+    let (python, host) = (world.python, world.host);
     if a.command == "door" {
         let (ok, why) = door::check(root, "origin/main");
         host.out(&format!("bypass-audit: {why}"));
@@ -282,7 +271,7 @@ fn run_command(
     // read before any credential is loaded or any client built, so that with the switch thrown no AWS call is even possible
     let off = switches::read(root).remote_off();
     if a.command == "status" {
-        return status(a, root, python, host, clients, off);
+        return status(a, root, world, off);
     }
     let scope = if a.full { "full" } else { "reference" };
     let what = format!("ci-{}", a.command);
@@ -303,6 +292,7 @@ fn run_command(
         client: None,
         host,
         python,
+        specify: world.specify,
         poll_s: config::STREAM_POLL_S,
         events: RefCell::new(Vec::new()),
     };
@@ -326,8 +316,8 @@ fn run_command(
         )?;
         return Ok(1);
     }
-    let secrets = config::load_secrets(root)?;
-    let owned = clients(&secrets);
+    let secrets = (world.secrets)(root)?;
+    let owned = (world.clients)(&secrets);
     ctx.secrets = Some(secrets);
     ctx.client = Some(owned.as_ref());
     if is_image {
@@ -348,36 +338,49 @@ fn run_command(
 }
 
 /// The command line, after the make check.
-pub(crate) fn run(
-    args: &[String],
-    root: &Path,
-    python: &str,
-    host: &dyn Host,
-    clients: Clients<'_>,
-) -> i32 {
-    let parsed = match parse(args) {
-        Ok(p) => p,
-        Err(why) => {
-            host.err(&format!("l7r-gate ci: {why}"));
-            return 2;
-        }
-    };
-    run_command(&parsed, root, python, host, clients).unwrap_or_else(|why| {
-        host.err(&format!("l7r-gate ci: {why}"));
-        1
+pub(crate) fn run(args: &[String], root: &Path, world: &World<'_>) -> i32 {
+    let done = parse(args)
+        .map_err(|why| (2, why))
+        .and_then(|parsed| run_command(&parsed, root, world).map_err(|why| (1, why)));
+    done.unwrap_or_else(|(code, why)| {
+        world.host.err(&format!("l7r-gate ci: {why}"));
+        code
     })
 }
 
 /// `l7r-gate ci ...`: refused outside this project's make, at the top, so that a bare call cannot get as far as a network call.
-pub(crate) fn entry(args: &[String], root: &Path) -> crate::Reply {
-    if let Some(text) = via_make::refusal(&via_make::Live, &crate::codeid::script(root).ancestors().nth(3).unwrap_or(root).to_path_buf(), "l7r.diagram.ci", "ci-status  (free)  |  make ci-check  |  make ci-merge  (paid; called by sync-with-main.sh)") {
+pub(crate) fn guarded(
+    args: &[String],
+    root: &Path,
+    procs: &dyn via_make::Procs,
+    world: &World<'_>,
+) -> crate::Reply {
+    let tree = crate::codeid::script(root);
+    let repo = tree.ancestors().nth(3).unwrap_or(root);
+    if let Some(text) = via_make::refusal(procs, repo, "l7r.diagram.ci", "ci-status  (free)  |  make ci-check  |  make ci-merge  (paid; called by sync-with-main.sh)") {
         return crate::Reply { stdout: String::new(), stderr: text, code: 2 };
     }
     crate::Reply {
         stdout: String::new(),
         stderr: String::new(),
-        code: run(args, root, "python3", &LiveHost, &real_client),
+        code: run(args, root, world),
     }
+}
+
+pub(crate) fn entry(args: &[String], root: &Path) -> crate::Reply {
+    let specify = std::env::var("SPECIFY_FEATURE").ok();
+    guarded(
+        args,
+        root,
+        &via_make::Live,
+        &World {
+            python: "python3",
+            host: &LiveHost,
+            clients: &real_client,
+            secrets: &config::load_secrets,
+            specify: specify.as_deref(),
+        },
+    )
 }
 
 #[cfg(test)]

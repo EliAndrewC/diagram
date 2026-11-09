@@ -273,7 +273,6 @@ echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature
 rewritten "ci status -> make ci-status" "python3 -m l7r.diagram.ci status 2>&1 | grep -i complete" "make ci-status 2>&1 | grep -i complete"
 rewritten "ci status --route -> ROUTE=1" "python3 -m l7r.diagram.ci status --route" "make ci-status ROUTE=1"
 rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" 'make pack-audit ARGS="wip/x.svg"'
-rewritten "switches show -> make switches" "python3 -m l7r.diagram.switches show" "make switches"
 refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
 refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make ci-status"
 refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.ci state" "cannot carry"

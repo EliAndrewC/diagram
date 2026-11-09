@@ -8,7 +8,7 @@ use super::{
     Remote, RUN_LOG,
 };
 
-fn remote<'a>(result: &'a str) -> Remote<'a> {
+fn remote(result: &str) -> Remote<'_> {
     Remote {
         target: "ci-merge",
         scope: "reference",
@@ -79,7 +79,6 @@ fn only_a_real_build_is_spend_and_a_would_have_is_reported_as_never_spent() {
     assert!(
         report.contains("month-to-date: $0.20 over 1 run(s) this month")
             && report.contains("1 attempt(s), ~$0.20 not spent"),
-        "{report}"
     );
     assert!(report.contains("ci-check") && report.contains("remote off"));
 }

@@ -1,4 +1,4 @@
-//! The remote path (feature 449 T064, from `l7r/diagram/ci/` and `l7r/diagram/switches.py`): whether a change may run on CodeBuild and what that costs. Every remote run costs money, so what must never run comes first.
+//! The remote path (feature 449 T064, from `l7r/diagram/ci/` and `l7r/diagram/switches.py`): whether a change may run on `CodeBuild` and what that costs. Every remote run costs money, so what must never run comes first.
 
 pub(crate) mod aws;
 pub(crate) mod cachepolicy;

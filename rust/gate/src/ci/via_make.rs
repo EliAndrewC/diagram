@@ -31,14 +31,12 @@ impl Procs for Live {
     fn ancestry(&self) -> Vec<u32> {
         let mut out = Vec::new();
         let mut pid = std::process::id();
-        while pid > 1 {
-            let Some(parent) = std::fs::read_to_string(format!("/proc/{pid}/stat"))
-                .ok()
-                .as_deref()
-                .and_then(parent_of)
-            else {
-                break;
-            };
+        while let Some(parent) = std::fs::read_to_string(format!("/proc/{pid}/stat"))
+            .ok()
+            .as_deref()
+            .and_then(parent_of)
+            .filter(|_| pid > 1)
+        {
             out.push(pid);
             pid = parent;
         }

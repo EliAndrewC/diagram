@@ -1,4 +1,4 @@
-//! Is the pushed CodeBuild image still built from the tree's current recipe? (feature 175, from `ci/imagecheck.py`). The image is a derived artifact with no link back to its files, so this warns, naming them; it never
+//! Is the pushed `CodeBuild` image still built from the tree's current recipe? (feature 175, from `ci/imagecheck.py`). The image is a derived artifact with no link back to its files, so this warns, naming them; it never
 //! refuses, since rebuilding costs money on a prompted target that is the GM's to authorize.
 
 /// What the image is built from: the recipe and the two lockfiles it copies.

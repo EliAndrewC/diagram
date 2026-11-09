@@ -56,13 +56,10 @@ impl FeatureStatus {
 }
 
 /// `SPECIFY_FEATURE`, or the last part of `.specify/feature.json`'s `feature_directory`.
-pub(crate) fn active_feature(root: &Path) -> Option<String> {
-    if let Some(name) = std::env::var("SPECIFY_FEATURE")
-        .ok()
-        .map(|v| v.trim().to_owned())
-        .filter(|v| !v.is_empty())
-    {
-        return Some(name);
+pub(crate) fn active_feature(root: &Path, from_env: Option<&str>) -> Option<String> {
+    let named = from_env.map(str::trim).filter(|v| !v.is_empty());
+    if let Some(name) = named {
+        return Some(name.to_owned());
     }
     let text = std::fs::read_to_string(root.join(".specify/feature.json")).ok()?;
     let data: serde_json::Value = serde_json::from_str(&text).ok()?;

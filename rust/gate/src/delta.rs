@@ -283,7 +283,8 @@ pub(crate) fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result
     let engine = candidates
         .into_iter()
         .zip(moved)
-        .filter_map(|(f, m)| m.then(|| f.to_owned()))
+        .filter(|(_, m)| *m)
+        .map(|(f, _)| f.to_owned())
         .collect();
     Ok(Delta {
         base,

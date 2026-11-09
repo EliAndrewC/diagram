@@ -446,9 +446,9 @@ def git_env(token: str) -> dict[str, str]:
 
 
 def token(root: pathlib.Path) -> str:
-    from l7r.diagram.ci.config import load_secrets  # noqa: PLC0415 - only a push needs the secrets
-
-    return load_secrets(mirror(root)).github_pat
+    # only a push needs the secrets; the one reader is the Rust gate's (feature 449 T064)
+    gate = pathlib.Path(__file__).resolve().parents[1] / "gates" / "l7r-gate.sh"
+    return subprocess.run([str(gate), "github-token"], cwd=mirror(root), capture_output=True, text=True, check=False).stdout.strip()
 
 
 class Archive:

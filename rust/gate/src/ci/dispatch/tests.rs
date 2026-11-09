@@ -8,8 +8,8 @@ use serde_json::json;
 use super::super::decision::{CHECK, MEASURE, MERGE};
 use super::super::fixtures::{commit, git, put, python, repo, secrets, FakeAws, FakeHost};
 use super::{
-    billed_minutes, cache_location, make_target, operations, registered_operation, run, run_image,
-    status_text, verified_lookup, Context, Outcome,
+    aws, billed_minutes, cache_location, make_target, operations, registered_operation, run,
+    run_image, status_text, verified_lookup, Context, Outcome,
 };
 use crate::{delta, state};
 
@@ -46,6 +46,7 @@ impl Run {
             client: Some(&self.client),
             host: &self.host,
             python: &self.py,
+            specify: None,
             poll_s: 0,
             events: RefCell::new(Vec::new()),
         }
@@ -208,7 +209,6 @@ fn a_check_dispatches_one_parked_build_and_records_it() {
             && said.contains("  | last")
             && said.contains("ci: [IN_PROGRESS]")
             && said.contains("~$0.04"),
-        "{said}"
     );
     let req = r.client.request();
     assert_eq!(req["projectName"], "gm-assistant-check");
@@ -248,9 +248,6 @@ fn a_merge_uses_the_merge_project() {
         ".specify/feature.json",
         "{\"feature_directory\": \"specs/9-x\"}",
     );
-    if std::env::var_os("SPECIFY_FEATURE").is_some() {
-        return;
-    }
     state::write(&dir, "green-local", "quick", false, &r.py).unwrap();
     assert_eq!(
         run(&r.ctx(&dir, MERGE, "reference", None)).unwrap().verdict,
@@ -276,9 +273,6 @@ fn a_merge_with_an_open_held_task_is_refused() {
         ".specify/feature.json",
         "{\"feature_directory\": \"specs/9-x\"}",
     );
-    if std::env::var_os("SPECIFY_FEATURE").is_some() {
-        return;
-    }
     state::write(&dir, "green-local", "quick", false, &r.py).unwrap();
     assert_eq!(
         run(&r.ctx(&dir, MERGE, "reference", None)).unwrap().verdict,
@@ -572,6 +566,14 @@ fn the_log_falls_back_to_the_build_uuid_and_drains_what_cloudwatch_still_held() 
         .borrow()
         .iter()
         .any(|c| c == "get_log_events /aws/codebuild/gm-assistant abc-123"));
+}
+
+#[test]
+fn an_aws_failure_is_its_text() {
+    assert_eq!(
+        aws::<()>(Err(super::AwsError::Other("x".to_owned()))),
+        Err("x".to_owned())
+    );
 }
 
 #[test]

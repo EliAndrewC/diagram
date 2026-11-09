@@ -1,6 +1,7 @@
 //! The iteration switches (feature 132, from `l7r/diagram/switches.py`): `dev/switches.json` holds `remote`, `claims` and `port`. Absent is the defaults; malformed closes: remote off, claims `clean`, the port at the last
 //! committed state. Unknown keys are ignored, on purpose (feature 185): only the named axes are read, so a leftover block from before a lock was retired is simply not looked at.
 
+use std::fmt::Write as _;
 use std::path::Path;
 use std::process::Command;
 
@@ -179,11 +180,9 @@ fn who_am_i(root: &Path) -> String {
     let name = done
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
         .unwrap_or_default();
-    if name.is_empty() {
-        "unknown".to_owned()
-    } else {
-        name
-    }
+    Some(name)
+        .filter(|n| !n.is_empty())
+        .unwrap_or("unknown".to_owned())
 }
 
 /// Set one axis, keeping the others; a malformed file is replaced here, the throw being the repair and a diff someone reads.
@@ -245,7 +244,8 @@ fn described(name: &str, a: &Axis, default: &str) -> String {
 pub(crate) fn describe(sw: &Switches) -> String {
     let mut head = "switches (dev/switches.json):".to_owned();
     if !sw.error.is_empty() {
-        head += &format!(
+        let _ = write!(
+            head,
             "\n  MALFORMED - {} - remote CLOSED until `make ci-on REASON=...` rewrites it",
             sw.error
         );
@@ -343,15 +343,15 @@ pub(crate) fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
 }
 
 /// `l7r-gate switches ...`, refused outside this project's make.
-pub(crate) fn guarded(args: &[String], root: &Path) -> crate::Reply {
-    let repo = crate::codeid::script(root)
-        .ancestors()
-        .nth(3)
-        .unwrap_or(root)
-        .to_path_buf();
+pub(crate) fn guarded(
+    args: &[String],
+    root: &Path,
+    procs: &dyn super::via_make::Procs,
+) -> crate::Reply {
+    let tree = crate::codeid::script(root);
     if let Some(text) = super::via_make::refusal(
-        &super::via_make::Live,
-        &repo,
+        procs,
+        tree.ancestors().nth(3).unwrap_or(root),
         "l7r.diagram.switches",
         "switches",
     ) {

@@ -49,11 +49,10 @@ pub(crate) struct Secrets {
     pub github_pat: String,
 }
 
-fn candidates(root: &Path) -> Vec<PathBuf> {
-    let mut out: Vec<PathBuf> = std::env::var_os("DIAGRAM_SECRETS")
-        .filter(|e| !e.is_empty())
-        .map(PathBuf::from)
+fn candidates(root: &Path, from_env: Option<PathBuf>) -> Vec<PathBuf> {
+    let mut out: Vec<PathBuf> = from_env
         .into_iter()
+        .filter(|e| !e.as_os_str().is_empty())
         .collect();
     out.push(root.join("development-secrets.ini"));
     if root
@@ -95,11 +94,14 @@ fn ini(text: &str) -> HashMap<String, HashMap<String, String>> {
 }
 
 /// The first readable candidate wins; a missing file is an error naming every place looked.
-pub(crate) fn load_secrets(root: &Path) -> Result<Secrets, String> {
-    let places = candidates(root);
+fn load_from(places: &[PathBuf]) -> Result<Secrets, String> {
     let Some(text) = places.iter().find_map(|p| std::fs::read_to_string(p).ok()) else {
-        let looked: Vec<String> = places.iter().map(|p| p.display().to_string()).collect();
-        return Err(format!("no development-secrets.ini found; looked in:\n  {}\n(copy development-secrets.ini.example at the repository root and fill the [aws] and [github] keys)", looked.join("\n  ")));
+        let looked = places
+            .iter()
+            .map(|p| p.display().to_string())
+            .collect::<Vec<_>>()
+            .join("\n  ");
+        return Err(format!("no development-secrets.ini found; looked in:\n  {looked}\n(copy development-secrets.ini.example at the repository root and fill the [aws] and [github] keys)"));
     };
     let parsed = ini(&text);
     let of = |section: &str, key: &str, default: &str| {
@@ -120,9 +122,20 @@ pub(crate) fn load_secrets(root: &Path) -> Result<Secrets, String> {
     })
 }
 
+pub(crate) fn load_secrets(root: &Path) -> Result<Secrets, String> {
+    load_from(&candidates(
+        root,
+        std::env::var_os("DIAGRAM_SECRETS").map(PathBuf::from),
+    ))
+}
+
 /// `l7r-gate github-token`: the push's credential, from the same file; a tree with no secrets answers nothing, and the push then reports its own failure.
 pub(crate) fn github_token(root: &Path) -> crate::Reply {
-    match load_secrets(root) {
+    token_reply(load_secrets(root))
+}
+
+fn token_reply(found: Result<Secrets, String>) -> crate::Reply {
+    match found {
         Ok(s) => crate::Reply {
             stdout: format!("{}\n", s.github_pat),
             stderr: String::new(),

@@ -6,7 +6,7 @@ use std::path::Path;
 use super::super::aws::Aws;
 use super::super::config::Secrets;
 use super::super::fixtures::{commit, put, python, repo, FakeAws, FakeHost};
-use super::{parse, run, LiveHost};
+use super::{entry, guarded, parse, real_client, run, LiveHost, World};
 use crate::ci::dispatch::Host;
 use crate::state;
 
@@ -23,12 +23,22 @@ fn ask(dir: &Path, args: &[&str]) -> (i32, FakeHost, u32) {
         built.set(built.get() + 1);
         Box::new(FakeAws::default())
     };
+    let secrets = |root: &Path| -> Result<Secrets, String> {
+        std::fs::read_to_string(root.join("development-secrets.ini"))
+            .map(|_| crate::ci::fixtures::secrets())
+            .map_err(|e| format!("no development-secrets.ini: {e}"))
+    };
+    let world = World {
+        python: &py,
+        host: &host,
+        clients: &make,
+        secrets: &secrets,
+        specify: None,
+    };
     let code = run(
         &args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(),
         dir,
-        &py,
-        &host,
-        &make,
+        &world,
     );
     (code, host, built.get())
 }
@@ -89,10 +99,8 @@ fn a_bad_command_line_is_two_and_an_error_along_the_way_is_one() {
     let dir = repo("errors");
     assert_eq!(ask(&dir, &["nonsense"]).0, 2);
     let (code, host, _) = ask(&dir, &["check"]);
-    if !Path::new("/host-l7r-repo/gm-assistant/webapp/development-secrets.ini").is_file() {
-        assert_eq!(code, 1);
-        assert!(host.told().contains("no development-secrets.ini"));
-    }
+    assert_eq!(code, 1);
+    assert!(host.told().contains("no development-secrets.ini"));
 }
 
 #[test]
@@ -126,9 +134,6 @@ fn the_route_alone_and_the_whole_status() {
 
 #[test]
 fn a_status_with_no_credentials_still_answers() {
-    if Path::new("/host-l7r-repo/gm-assistant/webapp/development-secrets.ini").is_file() {
-        return;
-    }
     let dir = repo("nocreds");
     let (code, host, built) = ask(&dir, &["status"]);
     assert_eq!((code, built), (0, 0));
@@ -219,9 +224,6 @@ fn with_remote_off_a_merge_is_local_gated() {
         ".specify/feature.json",
         "{\"feature_directory\": \"specs/9-x\"}",
     );
-    if std::env::var_os("SPECIFY_FEATURE").is_some() {
-        return;
-    }
     commit(&dir, "l7r/diagram/m.py", "x = 2\n");
     green(&dir, "quick");
     let (code, host, built) = ask(&dir, &["merge"]);
@@ -274,4 +276,55 @@ fn the_live_host_runs_a_real_command_and_reports_a_missing_one() {
     host.sleep(0);
     host.out("");
     host.err("");
+}
+
+struct Procs(&'static str, String);
+
+impl crate::ci::via_make::Procs for Procs {
+    fn ancestry(&self) -> Vec<u32> {
+        vec![2]
+    }
+
+    fn comm(&self, _pid: u32) -> String {
+        self.0.to_owned()
+    }
+
+    fn cwd(&self, _pid: u32) -> String {
+        self.1.clone()
+    }
+
+    fn cmdline(&self, _pid: u32) -> Vec<String> {
+        vec![self.0.to_owned()]
+    }
+}
+
+#[test]
+fn outside_this_project_s_make_it_is_refused_and_says_what_to_run() {
+    let dir = repo("guard");
+    let host = FakeHost::default();
+    let world = World {
+        python: "x",
+        host: &host,
+        clients: &real_client,
+        secrets: &crate::ci::config::load_secrets,
+        specify: None,
+    };
+    let refused = guarded(
+        &["door".to_owned()],
+        &dir,
+        &Procs("bash", dir.display().to_string()),
+        &world,
+    );
+    assert_eq!(refused.code, 2);
+    assert!(refused.stderr.contains("make ci-status"));
+    let allowed = guarded(
+        &["door".to_owned()],
+        &dir,
+        &Procs("make", dir.display().to_string()),
+        &world,
+    );
+    assert_eq!(allowed.code, 1);
+    assert!(host.said().starts_with("bypass-audit:"));
+    let _client = real_client(&crate::ci::fixtures::secrets());
+    assert_eq!(entry(&["nonsense".to_owned()], &dir).code, 2);
 }

@@ -1,7 +1,11 @@
 //! The constants pinned, and where the secrets come from.
 
 use super::super::fixtures::{put, scratch};
-use super::{estimate_minutes, ini, load_secrets, rate_of, COMPUTE_TYPE, RATE_PER_MIN};
+use std::path::PathBuf;
+
+use super::{
+    candidates, estimate_minutes, ini, load_from, load_secrets, rate_of, COMPUTE_TYPE, RATE_PER_MIN,
+};
 
 #[test]
 fn the_rate_is_pinned_so_that_changing_it_is_deliberate() {
@@ -25,19 +29,19 @@ fn the_ini_form_is_read_as_configparser_reads_it() {
 #[test]
 fn the_tree_s_file_is_read_with_defaults_and_a_missing_one_names_every_place() {
     let dir = scratch("secrets");
-    if let Err(refused) = load_secrets(&dir) {
-        assert!(
-            refused.contains("development-secrets.ini")
-                && refused.contains(&dir.display().to_string())
-        );
-    }
+    let place = [dir.join("development-secrets.ini")];
+    let refused = load_from(&place).unwrap_err();
+    assert!(
+        refused.contains(&dir.display().to_string())
+            && refused.contains("copy development-secrets.ini.example")
+    );
     put(
         &dir,
         "development-secrets.ini",
         "[aws]\naccess_key_id = AK\n[github]\ncodebuild_pat = P\n",
     );
     assert_eq!(super::github_token(&dir).stdout, "P\n");
-    let s = load_secrets(&dir).unwrap();
+    let s = load_from(&place).unwrap();
     assert_eq!(
         (
             s.access_key_id.as_str(),
@@ -46,6 +50,19 @@ fn the_tree_s_file_is_read_with_defaults_and_a_missing_one_names_every_place() {
             s.log_group.as_str()
         ),
         ("AK", "P", "us-east-1", "/aws/codebuild/gm-assistant")
+    );
+}
+
+#[test]
+fn the_environment_s_file_comes_first_and_an_empty_one_is_none() {
+    let dir = scratch("env");
+    assert_eq!(
+        candidates(&dir, Some(PathBuf::from("/x")))[0],
+        PathBuf::from("/x")
+    );
+    assert_eq!(
+        candidates(&dir, Some(PathBuf::new()))[0],
+        dir.join("development-secrets.ini")
     );
 }
 
@@ -63,10 +80,6 @@ fn a_clone_finds_the_main_tree_s_file() {
 }
 
 #[test]
-fn a_tree_with_no_secrets_answers_nothing_to_the_push() {
-    if std::path::Path::new("/host-l7r-repo/gm-assistant/webapp/development-secrets.ini").is_file()
-    {
-        return;
-    }
-    assert_eq!(super::github_token(&scratch("none")).code, 1);
+fn no_secrets_is_a_failure_with_its_reason() {
+    assert_eq!(super::token_reply(Err("why".to_owned())).code, 1);
 }

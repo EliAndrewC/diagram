@@ -15,21 +15,21 @@ fn no_name_and_a_missing_directory_each_say_what_to_do() {
 }
 
 #[test]
-fn the_feature_json_names_it_when_the_environment_does_not() {
+fn the_environment_names_it_first_and_the_feature_json_after() {
     let dir = scratch("json");
-    if std::env::var_os("SPECIFY_FEATURE").is_none() {
-        assert_eq!(active_feature(&dir), None);
-        put(
-            &dir,
-            ".specify/feature.json",
-            "{\"feature_directory\": \"specs/449-x/\"}",
-        );
-        assert_eq!(active_feature(&dir).as_deref(), Some("449-x"));
-        put(&dir, ".specify/feature.json", "not json");
-        assert_eq!(active_feature(&dir), None);
-        put(&dir, ".specify/feature.json", "{}");
-        assert_eq!(active_feature(&dir), None);
-    }
+    assert_eq!(active_feature(&dir, Some(" 9-x ")).as_deref(), Some("9-x"));
+    assert_eq!(active_feature(&dir, Some(" ")), None);
+    assert_eq!(active_feature(&dir, None), None);
+    put(
+        &dir,
+        ".specify/feature.json",
+        "{\"feature_directory\": \"specs/449-x/\"}",
+    );
+    assert_eq!(active_feature(&dir, None).as_deref(), Some("449-x"));
+    put(&dir, ".specify/feature.json", "not json");
+    assert_eq!(active_feature(&dir, None), None);
+    put(&dir, ".specify/feature.json", "{}");
+    assert_eq!(active_feature(&dir, None), None);
 }
 
 #[test]

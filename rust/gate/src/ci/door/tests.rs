@@ -21,7 +21,7 @@ fn no_entry_at_all_and_entries_that_do_not_count_are_named_apart() {
     entry(&dir, "a", "done", "permitted", "");
     assert!(check(&dir, "origin/main").1.contains("no FULL entry"));
     entry(&dir, "b", "FULL sweep", "cancelled", "");
-    assert_eq!(check(&dir, "origin/main").0, false);
+    assert!(!check(&dir, "origin/main").0);
     assert!(check(&dir, "origin/main")
         .1
         .contains("no committed `permitted` FULL entry"));
@@ -40,7 +40,7 @@ fn an_entry_from_main_authorizes_nothing_and_one_of_this_work_opens_it() {
         "permitted",
         "0000000000000000000000000000000000000000",
     );
-    assert_eq!(check(&dir, "origin/main").0, false);
+    assert!(!check(&dir, "origin/main").0);
     commit(&dir, "x.txt", "1");
     let ours = git(&dir, &["rev-parse", "HEAD"]);
     entry(&dir, "z", "FULL", "permitted", &ours);

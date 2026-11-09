@@ -35,6 +35,8 @@ pub(crate) struct Context<'a> {
     pub client: Option<&'a dyn Aws>,
     pub host: &'a dyn Host,
     pub python: &'a str,
+    /// `SPECIFY_FEATURE`, read once by the command line.
+    pub specify: Option<&'a str>,
     pub poll_s: u64,
     pub events: RefCell<Vec<String>>,
 }
@@ -57,7 +59,7 @@ fn refused(verdict: &str) -> Outcome {
 }
 
 fn aws<T>(done: Result<T, AwsError>) -> Result<T, String> {
-    done.map_err(|e| e.text())
+    done.map_err(AwsError::into_text)
 }
 
 /// The registered operations' (make target, cost), read from the one registry; it stays in `_invocation.py`, with the Python entry points it names, until phase 4.
@@ -81,7 +83,7 @@ fn registered_operation(root: &Path, target: Option<&str>) -> Option<String> {
         .map(|(name, _)| name.clone())
 }
 
-/// Where CodeBuild keeps the generation cache: bounded by construction, one object a project, scope and registered operation (features 175, 177), and never a commit.
+/// Where `CodeBuild` keeps the generation cache: bounded by construction, one object a project, scope and registered operation (features 175, 177), and never a commit.
 fn cache_location(bucket: &str, project: &str, scope: &str, operation: Option<&str>) -> String {
     let tail = operation.map_or_else(String::new, |o| format!("/{o}"));
     format!("{bucket}/cache/{project}/{scope}{tail}")
@@ -152,9 +154,9 @@ fn remote_off_reason(root: &Path) -> Option<String> {
     sw.remote_off().then(|| format!("remote is OFF since {} by {who}: {} - nothing dispatches; `make ci-on REASON=...` releases it", a.utc, a.why))
 }
 
-/// CodeBuild bills every phase from provisioning on, rounded up to the minute.
+/// `CodeBuild` bills every phase from provisioning on, rounded up to the minute.
 pub(crate) fn billed_minutes(build: &Value) -> f64 {
-    let secs: i64 = build["phases"]
+    let secs: u32 = build["phases"]
         .as_array()
         .into_iter()
         .flatten()
@@ -162,12 +164,17 @@ pub(crate) fn billed_minutes(build: &Value) -> f64 {
             !["SUBMITTED", "QUEUED", "COMPLETED"]
                 .contains(&p["phaseType"].as_str().unwrap_or_default())
         })
-        .map(|p| p["durationInSeconds"].as_i64().unwrap_or(0))
+        .map(|p| {
+            p["durationInSeconds"]
+                .as_u64()
+                .and_then(|s| u32::try_from(s).ok())
+                .unwrap_or(0)
+        })
         .sum();
     if secs == 0 {
         return 0.0;
     }
-    (((secs + 59) / 60).max(1)) as f64
+    f64::from(secs.div_ceil(60).max(1))
 }
 
 fn describe_state(st: Option<&state::State>, now_hash: &str) -> String {
@@ -197,7 +204,7 @@ pub(crate) fn status_text(ctx: &Context<'_>) -> Result<(String, Decision), Strin
     let delta_now = delta::compute_delta(ctx.root, "origin/main", ctx.python)?;
     let st = state::read(ctx.root)?;
     let now = state::current_hash(ctx.root, ctx.python)?;
-    let active = features::active_feature(ctx.root);
+    let active = features::active_feature(ctx.root, ctx.specify);
     let feat = features::feature_status(ctx.root, active.as_deref(), ctx.python);
     let (tree, conflict) = would_be_tree(ctx);
     let mut verified = if delta_now.route() == "GATED" {
@@ -418,7 +425,7 @@ fn start_request(
     sha: &str,
 ) -> Result<Value, String> {
     let target = make_target(ctx.operation, ctx.scope);
-    let feature = features::active_feature(ctx.root).unwrap_or_default();
+    let feature = features::active_feature(ctx.root, ctx.specify).unwrap_or_default();
     let ci_scope = if ctx.operation.is_some() {
         "operation"
     } else {
@@ -674,7 +681,7 @@ fn print_page(ctx: &Context<'_>, page: &Value, token: &mut Option<String>) -> us
     events.len()
 }
 
-/// Poll the build and print its log as it is written (R5); once the build is over, drain what CloudWatch still holds, since a poll that stopped at a terminal status once lost the failing command's output (build 93af6342).
+/// Poll the build and print its log as it is written (R5); once the build is over, drain what `CloudWatch` still holds, since a poll that stopped at a terminal status once lost the failing command's output (build 93af6342).
 fn stream(
     ctx: &Context<'_>,
     client: &dyn Aws,

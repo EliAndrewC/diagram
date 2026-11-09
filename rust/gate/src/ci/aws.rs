@@ -17,6 +17,12 @@ pub(crate) enum AwsError {
 }
 
 impl AwsError {
+    pub(crate) fn into_text(self) -> String {
+        match self {
+            Self::Denied { message, .. } | Self::Other(message) => message,
+        }
+    }
+
     pub(crate) fn text(&self) -> String {
         match self {
             Self::Denied { message, .. } | Self::Other(message) => message.clone(),

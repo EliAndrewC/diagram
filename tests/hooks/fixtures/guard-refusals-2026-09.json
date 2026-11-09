@@ -431,7 +431,7 @@
   "run_in_background": false,
   "expect": {
    "verdict": "refuse",
-   "because": "`make ci-status` cannot carry these arguments"
+   "because": "no make target wraps"
   }
  },
  {
@@ -444,10 +444,7 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {
-   "verdict": "rewrite",
-   "command": "C=/diagram/.clones/diagram-html; grep -n \"def \\|FAITHFUL\\|Status\\|\\\\\\\\\\[ \\\\\\\\\\]\\|why\" $C/.claude/skills/diagram/l7r/diagram/ci/features.py | head -40; (cd $C/.claude/skills/diagram && make ci-status 2>&1 | grep -i -B1 -A2 \"complete\" | head -10)"
-  }
+  "expect": {"verdict": "refuse", "because": "no make target wraps"}
  },
  {
   "guard": "make-only",
@@ -654,7 +651,7 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {"verdict": "refuse", "because": "`make ci-status` cannot carry these arguments"}
+  "expect": {"verdict": "refuse", "because": "no make target wraps"}
  },
  {
   "guard": "make-only",
@@ -668,7 +665,7 @@
   "run_in_background": false,
   "expect": {
    "verdict": "refuse",
-   "because": "`make ci-status` cannot carry these arguments"
+   "because": "no make target wraps"
   }
  },
  {
@@ -831,7 +828,7 @@
   "file_path": null,
   "subagent_type": null,
   "run_in_background": false,
-  "expect": {"verdict": "refuse", "because": "`make ci-status` cannot carry these arguments"}
+  "expect": {"verdict": "refuse", "because": "no make target wraps"}
  },
  {
   "guard": "make-only",
@@ -1627,7 +1624,7 @@
   "run_in_background": false,
   "expect": {
    "verdict": "refuse",
-   "because": "`make ci-status` cannot carry these arguments"
+   "because": "no make target wraps"
   }
  },
  {
