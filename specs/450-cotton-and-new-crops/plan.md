@@ -76,20 +76,7 @@ absent from `setting/l7r.md`'s list of cash crops and named as an ordinary low-t
 The `make done` route: every delta here is a record edit, so `make land` takes the record's checks; a claims-gate refusal on owed Rust
 claims of another feature is taken up when it is seen on a landing.
 
-### T01 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D1; FR-001, FR-002, FR-005, FR-006, FR-007.
-3. **Where each comes from.** The FRs above, from `request.md`.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001, SC-002, SC-003.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
+<!-- plan-archive: T01 to T01 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 ### T02 Approach (checklist part A)
 
 1. **The goal, in the world.** n/a
