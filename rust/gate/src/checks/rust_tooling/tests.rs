@@ -120,3 +120,13 @@ fn no_inventory_names_nothing_and_the_command_line_says_how_to_add_a_row() {
             && refused.stderr.contains("add a row to dev/rust-tooling.md")
     );
 }
+
+#[test]
+fn the_detector_finds_a_real_reader_on_the_real_tree() {
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let listed = super::super::git_text(&real, &["ls-files"]);
+    let files: Vec<&str> = listed.split_whitespace().collect();
+    assert!(super::readers(&real, &files)
+        .iter()
+        .any(|f| f == "scripts/gates/check-function-cap.py"));
+}

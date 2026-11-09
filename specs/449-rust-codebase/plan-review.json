@@ -6526,100 +6526,88 @@
    "verdict": "CLEAR"
   },
   "T065": {
-   "section_sha256": "e854ab18a9b9652c90bb03540c550d22a6fcc499892961bfe1abe1cb3979e2f8",
+   "section_sha256": "59a45c0dabf249a0791039b3f3685d811ba409b8ef27a5ddbfce12b97a5d9ec9",
    "reviewed": "2026-11-09",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "six-checks-one-landing",
-     "summary": "Six text checks become l7r-gate check <name>, deleted with their Python tests, callers switched in the same commit.",
+     "summary": "The six text checks become l7r-gate check <name>, deleted with their Python tests; Makefile, preflight.py, push_checks.py, push_check_times.py switch in that commit; differential over a scratch clone, twelve invocations.",
      "class": "within",
-     "why": "FR-001 phase 2 and FR-003 (no piece runs both); m:t065-checks is FR-002's proof. For the record: the 'every caller' grep's pathspec omits '*.mk', which FR-001's second census searches, and 'l7r/*.py', which this block's own second grep searches, so the claim is only as wide as that space. It does not change the class. The bundle bars the repository, so no m: figure in this block was re-run; each was read against its entry and agrees."
+     "why": "FR-001 phase 2 and FR-002 as cut by ask:449-T065-scope. The differential compares stdout, stderr and exit status, which is FR-002's test. Observation only: the 'every caller' grep has no tests/ pathspec, though the block edits test files that reach these checks; an unlisted test caller fails loudly at the gate, so this narrows nothing asked."
     },
     {
      "id": "four-outlasting-predicates",
-     "summary": "l7r-gate check needs <check> starts each of the four retained Python checks on a stated predicate, said to be that check's read set.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 (ask:449-T065-scope): none of the four starts Python on a make done whose change holds no file they read. The block's own read sets are narrower than its predicates. entry-headings reads research/questions/, the registry and the modal texts, but fires on anything under research/ and any .py under l7r/. partial-citations reads six named paths under research/, but fires on anything under research/. duplicate-defs and function-cap read the .py under 'its trees' (unnamed), but fire on any .py, while the test wording says 'every .py'. A change holding only research/sources/010-works-cited/x.html holds no file entry-headings reads and starts it. Nothing makes the exact predicate impossible, and a wider predicate being safer or simpler is not a ground. Cured by making predicate and read set coincide, or by showing from the source that the read set really is the wider one."
-    },
-    {
-     "id": "who-starts-the-four",
-     "summary": "The census of starters: recipe lines and delta rows ask first; make audit's listing and push_check_times run only on request; preflight calls none. Three tests hold it.",
+     "summary": "Each retained check's needs-predicate is its own read set, with roots named per check, plus its own script; no merge base means run; recipe lines and delta rows ask first.",
      "class": "within",
-     "why": "FR-001's clause names a plain Bash call, a plain Edit and a make done; on-request tools are none of these. The tests only enforce that clause, and the search space is stated."
+     "why": "Round 3's finding is closed. FR-001 forbids a start on a make done whose change holds no file they read; each predicate now names that check's read set and nothing wider (duplicate-defs SCAN_ROOTS, function-cap TREES and pyproject.toml, partial-citations its named records and two modules, entry-headings research/questions/, the modal texts and the .py under interactive/). No base leaves the change undefined, so running is the safe reading. The read sets are taken as the block states them; the bundle holds no source to check them by. Two observations, neither a ruling: the test's case 'a .py under l7r/ outside interactive/ starts only the two that read it' must not use access_tags.py or downloads.py if either lives there, and the starters' grep omits the '*.mk' pathspec that the six checks' grep carries."
     },
     {
      "id": "pointer-scan-by-occurrence",
-     "summary": "The pointer check anchors each pattern at an occurrence of research/ or a page name.",
+     "summary": "The pointer check anchors at occurrences of research/ or a page name, reads on several threads, no cache; agrees with the Python over 32,000 lines.",
      "class": "within",
-     "why": "A port design; FR-002 is carried by m:t065-pointers (no mismatch) and m:t065-checks."
+     "why": "An implementation choice under FR-002, whose equality test it reports. Every figure carries a dated one-shot label with method."
     },
     {
-     "id": "pointer-no-cache",
-     "summary": "The Rust pointer check keeps no content cache and reads on several threads.",
-     "class": "within",
-     "why": "FR-006 names three fixes to carry over and this cache is none of them. m:t065-pointers-warm shows 0.3 s against 0.41 s, so nothing the request asked for is lost."
-    },
-    {
-     "id": "word-table-compiled-in",
-     "summary": "house_style_words.tsv is include_str! in both the check and the guard; test_the_rust_guards_word_table_is_the_decisions is kept until hm_house.py goes.",
-     "class": "within",
-     "why": "A port design; the kept test goes with its piece, as FR-001 places tests."
-    },
-    {
-     "id": "retire-test-moved-table",
-     "summary": "test_a_moved_table_fails_loudly_rather_than_matching_nothing is not replayed.",
+     "id": "moved-table-test-retired",
+     "summary": "test_a_moved_table_fails_loudly_rather_than_matching_nothing is dropped because the table is include_str!.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "FR-002 asks every case's verdict. The case is held by the compiler: a moved table does not build, which is the loud failure the case asserts, and a runtime test cannot be reached."
+     "why": "Physically impossible to replay: a moved table does not compile, and that failure is louder than the one the test demanded, so the test's purpose is met."
     },
     {
-     "id": "retire-test-word-list-hooks-own",
-     "summary": "test_the_word_list_is_the_hook_s_own is not replayed.",
+     "id": "word-list-hook-own-test-retired",
+     "summary": "test_the_word_list_is_the_hook_s_own is dropped as true by construction; the check and the guard include_str! the one file; test_the_rust_guards_word_table_is_the_decisions kept.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Both binaries include_str! the one file, so two lists cannot differ; the property is held by construction."
+     "why": "Round 1's finding is closed. With both reading one file through include_str! the two lists cannot differ, so nothing remains to assert; the block names both paths, and the test tying the table to the decisions stays."
     },
     {
-     "id": "retire-test-file-cap-reader",
-     "summary": "test_the_file_cap_is_found_a_reader is not replayed because the file cap is no Python reader now.",
+     "id": "file-cap-reader-test-retired",
+     "summary": "test_the_file_cap_is_found_a_reader is dropped as its subject is gone; said to be held by a planted-reader test plus make rust-tooling over the real tree.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "FR-002 holds every case its tests hold. The stated reason explains why the Python form of the test is moot, not whether the property it held (the cap has a reader) survives in Rust. The other retired cases each say why the property is gone or held by construction; this one does not, and supplying that reason here would be completing the author's thought. Cured by naming where the property is now held, or why it has no Rust counterpart."
+     "why": "REPEATED (round 3, retire-test-file-cap-reader). FR-002 holds every case the tests hold, and the block states this case's purpose as 'the detector finds a real reader of source'. Neither named mechanism reaches that. a_reader_of_each_kind_with_no_row_fails_and_a_row_clears_it runs on a planted reader, so it cannot show the ported detector sees the real tree. make rust-tooling over the real tree passes when it finds nothing unrowed, which a detector blind to the real tree also does; the block names no way that run fails on blindness. Nor is replay impossible: only the instance is gone, and this block itself keeps check-function-cap.py and check-duplicate-defs.py as Python scripts reading .py under named trees. FR-008 leaves room for one end-to-end test. To clear: a test asserting the ported detector finds a named surviving reader on the real tree, or a statement of what makes the real-tree run fail when it goes blind (for example, a row with no reader found fails)."
     },
     {
-     "id": "fragment-move-self-test",
-     "summary": "fragment_move.py's self-test moves to tests/tooling/test_fragment_move.py.",
-     "class": "within",
-     "why": "The case is kept, not dropped."
-    },
-    {
-     "id": "retire-content-cache-pointer-cases",
-     "summary": "test_content_cache.py's pointer case and the pointer half of real_tree/test_content_cache.py go.",
+     "id": "pointer-cache-test-case-retired",
+     "summary": "test_content_cache.py's pointer case goes: it compares a content cache's answers with and without it.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "They compare a cache's answers with and without it; the port has no cache (decision pointer-no-cache, within), so there is nothing to compare. Physically impossible, not merely awkward."
+     "why": "Physically impossible to replay: the compiled check has no cache to compare. FR-006 lists three design fixes and this cache is not one; the equality with the Python is held by the differential."
     },
     {
-     "id": "retire-stale-dirs-runpy-row",
-     "summary": "The stale-dirs row of test_push_checks.py's in-process cases goes.",
+     "id": "pointer-cache-real-tree-half-retired",
+     "summary": "The pointer half of real_tree/test_content_cache.py goes, on the same ground.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The row runs a Python script in process by runpy; a compiled binary cannot be run that way. The case is about the mechanism, and the check's verdicts stay in rust/gate/src/checks/*/tests.rs."
+     "why": "Same class as the case above and adjudicated separately: the real-tree half also compares cached and uncached answers, and without a cache it has no second side."
     },
     {
-     "id": "measurement-census-af678b920",
-     "summary": "m:t065-checks and m:t065-pointers are rewritten to name the Python by commit af678b920^ so the census returns nothing, and stand as a record once the interpreter is gone.",
+     "id": "stale-dirs-in-process-row-retired",
+     "summary": "The stale-dirs row of test_push_checks.py's in-process cases goes, the compiled check being no runpy run.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001: a recorded command that runs Python, in prose included, is rewritten to the port or to an equivalent make command and re-run as the proof ('a figure is re-run, never read'). SC-005: make figures runs with no interpreter, and m:python-start is 'the only exemption'. Pointing a differential at the port would compare it to itself, so the literal 'to the port' cannot serve here; that justifies not doing that, not keeping an entry that needs Python. As written both entries still describe a Python run, cannot be re-run at the close by the block's own words, and are a second exemption SC-005 forbids. The stated effect, 'so the census returns nothing', changes the wording the census matches and not the fact it exists to find: word-plausible, purpose-fatal. It also contradicts this block's own step 9, which rewrites every such command and re-runs it. m:t72-state and m:t064-remote using the form is consistency, not authority. Cured by not leaving a command that runs Python in measurements.json (for example the differential held as a dated one-shot record of its method), or by a round arbiter ruling that widens SC-005's exemption."
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible: a compiled binary cannot be run through runpy. The check's verdicts are replayed in its Rust tests."
     },
     {
-     "id": "checklist-remainder",
-     "summary": "m:gates-sources taken at task start, the exits to make arbiter-ask, no budget, no constant moved.",
+     "id": "other-test-replay",
+     "summary": "Every other case of the six test files is replayed in rust/gate/src/checks/*/tests.rs; fragment_move.py's self-test moves to tests/tooling/test_fragment_move.py.",
      "class": "within",
-     "why": "Decides nothing the spec left open against the request."
+     "why": "FR-002 as written, and FR-001's rule that each test goes with the piece it tests."
+    },
+    {
+     "id": "measurement-census-one-shot-differentials",
+     "summary": "The census over measurements files returns nothing; this task's differentials are dated one-shot observations, so no entry of measurements.json needs Python.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Round 3's finding is closed. FR-001 says recorded measurements are rewritten and re-run, and a differential against a Python this task deletes cannot be: rewritten to the port it would compare the port with itself. No entry now needs Python, which is what round 3 required, and the figures contract admits a one-shot label of date and method. The Rust-only 0.3 s could have been a re-runnable entry but rides under the same label; that narrows nothing the GM or FR-001 asked."
+    },
+    {
+     "id": "done-measured-and-exits",
+     "summary": "Done is each differential with no mismatch and every measurement command touching a ported file rewritten and re-run; red goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Restates FR-001 and FR-002; the rewrite clause is empty on today's census but stays true."
     }
    ],
    "verdict": "BLOCKED"
