@@ -472,7 +472,8 @@
   "def": "The Wanli reign of the Ming, 1573 to 1620.",
   "variants": [
    "Wanli era",
-   "Wanli"
+   "Wanli",
+   "Wan-li"
   ]
  },
  "Warring States": {
@@ -5304,7 +5305,8 @@
   "def": "The Chongzhen reign of the Ming, 1628 to 1644, the last Ming emperor's; its tenth year is 1637.",
   "variants": [
    "Chongzhen era",
-   "Chongzhen"
+   "Chongzhen",
+   "Tsung-cheng"
   ]
  },
  "department": {
@@ -10454,7 +10456,9 @@
  "Kiangsu": {
   "def": "The older romanized spelling of Jiangsu, the coastal province of the Lower Yangzi that includes much of Jiangnan; the spelling 1920s-1930s surveys such as Buck's use.",
   "variants": [
-   "Kiangsu"
+   "Kiangsu",
+   "Kiang-su",
+   "Jiangsu"
   ]
  },
  "Honan": {
@@ -14807,7 +14811,8 @@
   "def": "The province of southern China around the city of Canton, spelled Guangdong today.",
   "variants": [
    "Kwangtung",
-   "Guangdong"
+   "Guangdong",
+   "Kwang-tung"
   ]
  },
  "miyaji shibai": {
@@ -18951,7 +18956,9 @@
  "sillok": {
   "def": "The royal annals of Korea's Joseon dynasty, kept reign by reign.",
   "variants": [
-   "sillok"
+   "sillok",
+   "royal annals",
+   "Annals of the Joseon Dynasty"
   ]
  },
  "Daedong tax": {
@@ -19200,7 +19207,9 @@
  "brinjal": {
   "def": "The eggplant, by its Indian English name.",
   "variants": [
-   "brinjal"
+   "brinjal",
+   "brinjals",
+   "Berenjaws"
   ]
  },
  "Dutch learning": {
@@ -19270,6 +19279,25 @@
   "def": "A river of central Korea, with a north branch and a south branch.",
   "variants": [
    "Han River"
+  ]
+ },
+ "shan-yao": {
+  "def": "The Chinese yam, a climbing plant with an edible root.",
+  "variants": [
+   "shan-yao"
+  ]
+ },
+ "shan-yao-dan": {
+  "def": "A colloquial Chinese name for the white potato.",
+  "variants": [
+   "shan-yao-dan"
+  ]
+ },
+ "huang-hua": {
+  "def": "Dried daylily buds, a Chinese food.",
+  "variants": [
+   "huang-hua",
+   "jin-zhen"
   ]
  }
 }

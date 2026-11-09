@@ -78,6 +78,7 @@ animal unit	animal unit
 animal units	animal unit
 anjifang	anjifang
 anna	anna
+annals of the joseon dynasty	sillok
 annam	Annam
 annas	anna
 annual cotton	annual cotton
@@ -264,6 +265,7 @@ bengal presidency	Bengal Presidency
 benjo	kawaya
 benten	Benten
 benten's	Benten
+berenjaws	brinjal
 berm	berm
 berms	berm
 betto	bettō
@@ -352,6 +354,7 @@ branch houses	branch house
 brands	firebrand
 break of slope	break of slope
 brinjal	brinjal
+brinjals	brinjal
 broadcast	broadcast sowing
 broadcast oilseed stand	broadcast sowing
 broadcast sowing	broadcast sowing
@@ -1922,6 +1925,7 @@ huainan	Huaibei
 huang daopo	Huang Daopo
 huang tao-p'o	Huang Daopo
 huang-du	huang-du
+huang-hua	huang-hua
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
@@ -2140,6 +2144,7 @@ jiajing	Jiajing
 jiajing era	Jiajing
 jiangnan	Lower Yangzi
 jiangren	Jiangren
+jiangsu	Kiangsu
 jiaochang	jiaochang
 jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
@@ -2154,6 +2159,7 @@ jin	jin
 jin dynasty	Jin dynasty
 jin'ya	jin'ya
 jin-dynasty	Jin dynasty
+jin-zhen	huang-hua
 jinaicho	jinaicho
 jinan	Tsinan
 jinan's	Tsinan
@@ -2402,6 +2408,7 @@ kesa cut	kesa
 kesa cuts	kesa
 keyaki	keyaki
 khitan	Khitan
+kiang-su	Kiangsu
 kiangsu	Kiangsu
 kiba	kiba
 kibana	beam-end nose
@@ -2563,6 +2570,7 @@ kusatimui	koshiate-mori
 kusatsu	Kusatsu
 kusayama	kusayama
 kuwabata	Kuwabata
+kwang-tung	Kwangtung
 kwangtung	Kwangtung
 kyo-machiya	machiya
 kyogen	kyogen
@@ -3802,6 +3810,7 @@ rowhouse gate	nagayamon
 rowhouse gates	nagayamon
 rowhouses	row house
 roya	roya
+royal annals	sillok
 ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
 running head	running head
@@ -4029,6 +4038,8 @@ shallow-water lotus	shallow-water lotus
 shamisen	shamisen
 shamisens	shamisen
 shan-shu	shan-shu
+shan-yao	shan-yao
+shan-yao-dan	shan-yao-dan
 shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
@@ -4802,6 +4813,7 @@ tsume	Tsume
 tsumugi	pongee
 tsunaba	tsunaba
 tsunayoshi	Tsunayoshi
+tsung-cheng	Chongzhen era
 tsunoya	tsunoya
 tsurube	tsurube
 tsushi nikai	half-story
@@ -4966,6 +4978,7 @@ wallows	wallow
 wamyo ruijusho	Wamyosho
 wamyosho	Wamyosho
 wamyōshō	Wamyosho
+wan-li	Wanli era
 wanchun	Wanchun polder
 wanchun polder	Wanchun polder
 wang zhen	Wang Zhen
