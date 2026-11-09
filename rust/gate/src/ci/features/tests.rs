@@ -96,10 +96,6 @@ fn the_merge_and_the_review_gate_read_one_verdict() {
             "specs/9-x/spec.md",
             &format!("# F\n\n## Review history\n{body}"),
         );
-        assert_eq!(
-            feature_status(&dir, Some("9-x"), "python3").faithful,
-            want,
-            "{body}"
-        );
+        assert_eq!(feature_status(&dir, Some("9-x"), "python3").faithful, want,);
     }
 }
