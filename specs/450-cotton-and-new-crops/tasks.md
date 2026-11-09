@@ -40,17 +40,17 @@ The question tasks are `research: physical` with their five boxes; the rest are 
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. landed: S4+C4: tobacco 0324, sweet potato 0325, white potato 0326 written and checked, record-owed clean; quote-check, source-reader, source-applicability, translation-check, record-format and intro-check recorded, the arbiter accepted the third rounds
-- [ ] T05 S5+C5: the tomato, what set the pace of spread, and the Tokugawa restrictions (D5; FR-001, FR-002, FR-005, FR-006, FR-007)
+- [x] T05 S5+C5: the tomato, what set the pace of spread, and the Tokugawa restrictions (D5; FR-001, FR-002, FR-005, FR-006, FR-007)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify: `make record-owed` reports nothing owed for the questions
-- [ ] T06 The implementation check, the reply on #22 and the report (D6; FR-001, FR-003, FR-004)
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. landed: S5+C5: the tomato 0327, what set the pace 0328 and the Tokugawa restrictions 0329 written and checked, record-owed clean; quote-check, source-reader, source-applicability, translation-check, record-format and intro-check recorded, the arbiter accepted source-reader's third round on 0327
+- [x] T06 The implementation check, the reply on #22 and the report (D6; FR-001, FR-003, FR-004)
       research: rendering
-      verify: `make impl-check F=450` reports nothing missing and the reply is posted on #22
+      verify: DONE. landed: impl-check reports nothing missing, the full reply posted on diagram#22, the feature report written
 - [ ] GM review (make gm-reviewed F=450) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

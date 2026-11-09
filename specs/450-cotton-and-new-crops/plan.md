@@ -80,30 +80,5 @@ claims of another feature is taken up when it is seen on a landing.
 <!-- plan-archive: T02 to T02 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 <!-- plan-archive: T03 to T03 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
-### T05 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D5; FR-001, FR-002, FR-005, FR-006, FR-007.
-3. **Where each comes from.** The FRs above, from `request.md`.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001, SC-002, SC-003.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-
-### T06 Approach (checklist part A)
-
-1. **The goal, in the world.** n/a
-2. **The constraints.** D6; FR-001, FR-003, FR-004.
-3. **Where each comes from.** The FRs above, from `request.md`.
-4. **Do they describe the world here?** Yes.
-5. **The order.** n/a
-6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** SC-001, SC-002.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
+<!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->
+<!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-11-09 (feature 375 FR-044) -->

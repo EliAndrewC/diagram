@@ -7,3 +7,6 @@
 - 0324: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'tobacco' l7r pool
 - 0325: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'sweet potato|sweet_potato|番薯|satsumaimo|goguma' l7r pool
 - 0326: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'white potato|jagaimo|bareisho|马铃薯|Solanum tuberosum' l7r pool
+- 0327: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'tomato\|番茄' l7r pool
+- 0329: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'Tokugawa restrict\|seclusion edict\|sakoku' l7r pool
+- 0328: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'sweet potato|maize|peanut|chili|new crop' l7r pool (hits are glossary entries of the record only)

@@ -18830,7 +18830,8 @@
   "variants": [
    "areca",
    "areca nut",
-   "areca palm"
+   "areca palm",
+   "betel palm"
   ]
  },
  "calyx": {
@@ -19304,6 +19305,98 @@
   "def": "A leafy plant grown for its starchy, edible root.",
   "variants": [
    "taro"
+  ]
+ },
+ "Yamato honzo": {
+  "def": "A work of 1709 by Kaibara Ekiken, in several volumes, that describes plants, the tomato among them.",
+  "variants": [
+   "Yamato honzo"
+  ]
+ },
+ "Ponderosa": {
+  "def": "A low-odor pink variety of tomato, introduced to Japan from America in the Showa period.",
+  "variants": [
+   "Ponderosa"
+  ]
+ },
+ "Jibong yuseol": {
+  "def": "Yi Su-gwang's encyclopedia, which a modern study dates to 1614.",
+  "variants": [
+   "Jibong yuseol"
+  ]
+ },
+ "artemisia": {
+  "def": "A group of aromatic herbs with gray-green, finely cut leaves, to which mugwort and wormwood belong.",
+  "variants": [
+   "artemisia"
+  ]
+ },
+ "mugwort": {
+  "def": "A common aromatic herb of the artemisia group, with lobed leaves that are gray beneath.",
+  "variants": [
+   "mugwort"
+  ]
+ },
+ "okers": {
+  "def": "An old spelling of okra, a vegetable grown for its green pods.",
+  "variants": [
+   "okers"
+  ]
+ },
+ "winter cherry": {
+  "def": "A small round fruit borne inside a papery husk.",
+  "variants": [
+   "winter cherry"
+  ]
+ },
+ "gaijin": {
+  "def": "A foreigner, someone from outside the Empire. In Rokugan's history, foreign merchants were admitted only as far as the limits of port cities.",
+  "variants": [
+   "gaijin"
+  ]
+ },
+ "Perry": {
+  "def": "Matthew Perry, the American naval officer whose arrival in Japan in 1853 is one date given for the end of the restrictions on foreign contact.",
+  "variants": [
+   "Perry"
+  ]
+ },
+ "Bunroku": {
+  "def": "A Japanese era name covering the years 1592-95.",
+  "variants": [
+   "Bunroku",
+   "Bunroku era"
+  ]
+ },
+ "Nagasaki nenreki ryomenkagami": {
+  "def": "A chronicle of Nagasaki, which a modern table of plant arrivals cites for its dates for the white potato and pumpkin seed.",
+  "variants": [
+   "Nagasaki nenreki ryomenkagami"
+  ]
+ },
+ "Izu islands": {
+  "def": "A chain of islands in the Pacific off the coast of central Japan, where the shogunate had coconuts planted in 1725.",
+  "variants": [
+   "Izu islands"
+  ]
+ },
+ "Ryukyu wax tree": {
+  "def": "A tree whose fruit yields wax. It came from Ryukyu to Satsuma around the Enpo era (1673-80) and later spread across Kyushu.",
+  "variants": [
+   "Ryukyu wax tree",
+   "wax tree"
+  ]
+ },
+ "Somokuka shasei zukan": {
+  "def": "A collection of plant sketches by Kano Tan'yu, cited by a modern table of plant arrivals for a tomato he sketched in 1668.",
+  "variants": [
+   "Somokuka shasei zukan"
+  ]
+ },
+ "Tsunenobu shasei zukan": {
+  "def": "A collection of sketches by Kano Tsunenobu, cited by a modern table of plant arrivals for a tomato he sketched in 1703.",
+  "variants": [
+   "Tsunenobu shasei zukan"
   ]
  }
 }

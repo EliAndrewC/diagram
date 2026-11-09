@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T13:56:19Z",
+  "target": "record-checked",
+  "commit": "7fa137294",
+  "why": "record-format on record-format:0328: the round-arbiter's ruling (reversal trigger on 0328, continue) closes the page once round 2 returns only wording; round 2's record-format returned 5 VOCABULARY, wording only, and its own and quote-check's wording edits were applied"
+}

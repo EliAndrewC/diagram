@@ -4209,3 +4209,14 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the appendix](https://www.google.com/search?q=Pomeranz+%22Great+Divergence%22+%22Appendix+F%22+cotton+silk+production+Lower+Yangzi)
 - **Rests on it:** research/questions/0319-when-did-cotton-become-ordinary-clothing-in-china.html (diagram feature 450; EliAndrewC/diagram#22, question 1) - the figures stand on Pomeranz's 1998 draft, whose posted file has no appendix.
 - Blocked by: a book in print; the copies a search finds are whole-book uploads on a course-materials server, not the publisher's or author's own page (2026-11-09).
+
+### 332. [money] Sucheta Mazumdar, "The Impact of New World Food Crops on the Diet and Economy of China and India, ca. 1600-1900", in Raymond Grew, ed., Food in Global History (Westview Press, 1999), pp. 58-78
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+- **[a Google search for the chapter](https://www.google.com/search?q=Mazumdar+%22Impact+of+New+World+Food+Crops+on+the+Diet+and+Economy+of+China+and+India%22)**
+- The whole chapter: her comparison of how land tenure in China and India affected how fast the new crops entered the common diet.
+- Fallback: [a Google search for the book](https://www.google.com/search?q=%22Food+in+Global+History%22+Grew+Westview+1999)
+- **Rests on it:** research/questions/0328-why-did-one-new-crop-spread-quickly-and-another-slowly-in-china-and-japan.html (diagram feature 450; EliAndrewC/diagram#22, question 4) - her argument stands only on a blog's summary.
+- Blocked by: a book chapter in print; no public copy was found by the passes of 2026-11-08 and 2026-11-09.
