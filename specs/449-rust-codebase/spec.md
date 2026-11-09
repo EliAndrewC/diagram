@@ -145,6 +145,7 @@ pipeline are Rust. With them gone, no Python remains in the repository.
   suites hold, before that Python is deleted; maps MAY change where a check or a research claim allows it (the GM, 2026-10-18). The
   one other exception: a guard or check that refuses correct work today is fixed in its port (constitution XIV), its case's expected
   verdict changed in the same commit, the change named in the commit and in the phase's record. One case is ruled apart: the wakeup guard's suite case for stdin that is not JSON expects a pass, as every other guard reads that input (the round arbiter's ruling of 2026-11-08, `ask:449-T038-garbage`).
+  Ruled case (`ask:449-T066-json-message`): where a message quotes a parser's or library's own error text inside a fixed message, the verdict, exit status, location and fixed words MUST match the Python's, and the quoted text is the Rust library's; the instance is the spec lint's check 5 on a `measurements.json` that is not JSON.
   Ruled case (`ask:449-T72-coverage-exempt`): `coverage_exempt.py`'s reach branch, for an entry naming no stages, is retired with the record's only source of such an entry; `load` refuses one instead.
 - **FR-003**: Until a piece's replacement passes, its Python MUST remain the one that runs; no piece runs both.
 - **FR-004**: Every replacement MUST hold the coverage floor the Rust crate holds today: every line and every function reached by a

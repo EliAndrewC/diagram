@@ -6683,6 +6683,88 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T066": {
+   "section_sha256": "ba956b61bc39b1fefdd1467ebbf0b43f9006f532df47c5d947a35775b98481ea",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ONE LANDING",
+     "summary": "The plan and spec gates and engine_edit.py become l7r-gate plan <verb> and check spec-lint, every Python body deleted in that landing, callers and guards switched with it.",
+     "class": "within",
+     "why": "The request ports all the Python; FR-001 puts scripts/gates and engine_edit.py in phase 2 and FR-003's no piece runs both is what one landing delivers."
+    },
+    {
+     "id": "THE VERDICTS ARE THE PYTHON'S",
+     "summary": "A differential of each verb against the Python over the repository's specs and plans at the commit before the deletion.",
+     "class": "within",
+     "why": "It enforces FR-002 and adds to it, since FR-002 binds the cases the tests and suites hold, not the corpus. Not a narrowing, but items 6 and 9 say over every spec and plan while decide ran on 120 sampled sections: for that verb the stated exit is more than its method delivers."
+    },
+    {
+     "id": "THE FOUR WHO STAY PYTHON",
+     "summary": "task_start.py, plan_hold.py, phase_sources.py, wording.refusal and the door plan_door.py wait for phase 3; the cohort trigger moves to cohort_known.py at T068.",
+     "class": "within",
+     "why": "FR-001 carries ask:449-T066-scope naming exactly these. Against the request it is order, not exemption: every one is still ported or deleted and the request sets no order."
+    },
+    {
+     "id": "CONDITION 2",
+     "summary": "One writer per state file: task_start.py for its four, the Rust verbs for approach-owed.json, plan-review.json and plan-seen/.",
+     "class": "within",
+     "why": "It is FR-003's no piece runs both, applied to state files."
+    },
+    {
+     "id": "CONDITION 3",
+     "summary": "None of the remaining Python runs on a plain Bash call, a plain Edit or a make done whose change holds no file they read.",
+     "class": "within",
+     "why": "It matches FR-001's clauses for pieces awaiting their port; hm_planhold.py only under a live hold is FR-001's rare branch. Its grep omits .claude/settings.json, *.mk, buildspec/* and scripts/gates/*.sh, all of which the ONE LANDING grep searches, so the premise is searched more narrowly than the first; not a narrowing of the request, and not checkable from the bundle."
+    },
+    {
+     "id": "CONDITION 4",
+     "summary": "Each caller asks the door once per run; the one loop, hm_planhold.held, asks once by the door's cache on the plan's text.",
+     "class": "within",
+     "why": "A bound on the transitional forwarder's cost, serving the request's stated complaint about inefficiency."
+    },
+    {
+     "id": "TESTS: cases that stay with their pieces",
+     "summary": "Cases driving tick-task.py, task_start.py, hm_arbiter.py and wording.refusal stay in Python against the door; the cohort's in test_cohort_approach.py; make figures in test_make_figures.py; the rest replayed in Rust before the Python test files are deleted.",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests, and these pieces are later. The cases are kept, not dropped, so FR-002 holds."
+    },
+    {
+     "id": "TESTS: test_there_is_one_definition_of_a_figure not replayed",
+     "summary": "One case is dropped rather than replayed, on the ground that only one definition remains to compare.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says every case, so this is a narrowing. The rule is impossible here: the case compares two definitions and the port removes one, spec_figures.py, leaving spec_figures.rs as the only one, which review_prereq.py asks through check spec-lint --figure-pattern. A copy kept in order to have something to compare would recreate what the case existed to prevent. The case's purpose, one definition, is met by construction."
+    },
+    {
+     "id": "TESTS: one message differs",
+     "summary": "A measurements.json that is not JSON now names serde's parse error where the Python named its own; the block calls it the same refusal.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 requires the same verdicts AND outputs on every case the tests hold and calls its exemption the one other exception: a check that refuses correct work, which this is not, since malformed JSON is rightly refused. No limb holds. Not impossible: Rust can emit the Python text for the case the test holds, so the argument is at most that it is harder. Not implied by the GM's words, which say nothing of it. Not purpose-defeating: keeping the text on a malformed file costs no speed. FR-002 records its other departures as named arbiter rulings (ask:449-T038-garbage, ask:449-T72-coverage-exempt); this one is a sentence in a plan. Same refusal is the verdict half only. Cure: emit the Python's text for the held case, or obtain a ruling through make arbiter-ask and record it in FR-002 as those were."
+    },
+    {
+     "id": "A DEFECT FIXED ON THE WAY",
+     "summary": "l7r-gate.sh normalizes a path holding .. so a hook reaching it through ../gates builds rather than reading as no refusal.",
+     "class": "within",
+     "why": "The switch of check-bundle-hooks.sh to the Rust gate depends on it, and the wrapper is not a Python piece whose verdicts FR-002 compares. The block names no suite case whose expected verdict flips; if one does, FR-002's naming in the commit and the phase record applies, which the bundle cannot show."
+    },
+    {
+     "id": "Item 9 measurements rewrite",
+     "summary": "Every specs/*/measurements*.json command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "This is FR-001's clause on recorded measurements, restated."
+    },
+    {
+     "id": "Items 3-5, 7, 8, 10, 11",
+     "summary": "Corpus is specs/*/plan.md, no researched value moves, order as the phase's plan, no work budget, no constant or room question.",
+     "class": "within",
+     "why": "Procedural; none narrows what was asked."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
