@@ -78,10 +78,7 @@ untouched() { # label, command, background(1|0) - permitted with NO rewrite at a
 }
 ceiled_only() { # label, command, background(1|0)
   local out; out=$(bgrun "$2" "$3" 2>/dev/null)
-  local got; got=$(printf '%s' "$out" | python3 -c 'import json,re,sys
-try: c = json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"]
-except Exception: c = ""
-print(re.sub(r" (\|\||&&) \{ \[ \"\$SECONDS\" -(ge|lt) \d+ \] (&&|\|\|) \{ echo \"WAIT TIMED OUT[^\"]*\"; exit 4; \}; \}", "", c))' 2>/dev/null)
+  local got; got=$(printf '%s' "$out" | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null | sed -E 's/ (\|\||&&) \{ \[ "\$SECONDS" -(ge|lt) [0-9]+ \] (&&|\|\|) \{ echo "WAIT TIMED OUT[^"]*"; exit 4; \}; \}//g')
   if [ "$got" = "$2" ] && printf '%s' "$out" | grep -q "WAIT TIMED OUT"; then echo "  ok      $1"; PASS=$((PASS+1));
   else echo "  FAIL    $1 (got '${got:-<nothing>}')"; FAIL=$((FAIL+1)); fi
 }

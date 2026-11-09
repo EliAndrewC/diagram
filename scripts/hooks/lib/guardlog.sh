@@ -116,7 +116,7 @@ guard_log() {
     GL_TS=$(date -u +%Y%m%dT%H%M%S%6N 2>/dev/null || date -u +%Y%m%dT%H%M%S)
     GL_F="$GL_DIR/$GL_TS-$$.json"
     GL_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    GL_NAME=$(printf '%s' "${INPUT:-}" | "$GL_HERE/../clone-sync-hooks.sh" resolve 2>/dev/null | tail -1)
+    GL_NAME=$(printf '%s' "${INPUT:-}" | "$GL_HERE/clone-resolve.sh" resolve 2>/dev/null | tail -1)
     GL_NAME=${GL_NAME##*/}
     GL_IN=$(mktemp 2>/dev/null || echo "$GL_F.in")
     printf '%s' "${INPUT:-}" > "$GL_IN"

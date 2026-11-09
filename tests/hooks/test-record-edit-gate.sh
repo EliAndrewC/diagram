@@ -16,7 +16,7 @@ if RECORD_EDIT_HOOK="$GATE" "$HERE/test-record-edit-hooks.sh" >"$T/suite" 2>&1; 
 else no "a case changed through the gate" "$(grep FAIL "$T/suite" | head -5)"; fi
 
 payload() { # payload <cwd> <tool> <field> <value>
-  python3 -c 'import json, sys; print(json.dumps({"session_id": "t", "tool_use_id": "u", "cwd": sys.argv[1], "tool_name": sys.argv[2], "tool_input": {sys.argv[3]: sys.argv[4], "old_string": "o", "new_string": "n"}}))' "$@"
+  jq -nc --arg cwd "$1" --arg tool "$2" --arg field "$3" --arg value "$4" '{"session_id": "t", "tool_use_id": "u", "cwd": $cwd, "tool_name": $tool, "tool_input": {($field): $value, "old_string": "o", "new_string": "n"}}'
 }
 
 echo "2. with no repository the gate says what the shell guard says"

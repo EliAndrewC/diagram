@@ -351,6 +351,9 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 
+inline-census:  ## [tests] phase 1's share of feature 449's second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails
+	@bash "$$(git rev-parse --show-toplevel)/scripts/measure/inline-census.sh"
+
 hooks-deps-window: ## [tests] how many of the Python tests of scripts/ each of the last N commits touching scripts/ or tests/hooks/ would re-run, by what each test reaches (feature 375 SC-014)   FROM=<commit> N=<count>
 	@root=$$(git rev-parse --show-toplevel); pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' "$$root/tests" --include='test_*.py' --exclude-dir=hooks | sed "s|^$$root/||" | sort); "$$root/scripts/hooks/l7r-guard.sh" deps --window "$(FROM)" "$(N)" $$pyt
 

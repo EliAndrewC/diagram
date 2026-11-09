@@ -13,7 +13,7 @@ FROM public.ecr.aws/ubuntu/ubuntu:26.04
 ENV DEBIAN_FRONTEND=noninteractive PYTHONDONTWRITEBYTECODE=1 PATH=/opt/venv/bin:/root/.local/bin:/usr/local/bin:/usr/bin:/bin
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
         python3 git make curl ca-certificates unzip util-linux \
-        resvg fonts-dejavu-core fonts-dejavu-extra \
+        resvg fonts-dejavu-core fonts-dejavu-extra jq \
     && rm -rf /var/lib/apt/lists/*
 # the AWS CLI v2 - the build's S3 reads and writes go through it with the service role
 RUN curl -sS "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscli.zip \

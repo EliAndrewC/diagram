@@ -22,7 +22,7 @@ export HOME="$T/home"; mkdir -p "$HOME"
 
 # A fake mirror with a clone under it, so the guard's own derivation (toplevel, minus /.clones/<name>)
 # is exercised rather than stubbed - and the CLAIM MAP clone-sync writes at a session's first edit,
-# naming session "t" -> the worker clone, which is what `clone-sync-hooks.sh resolve` reads first.
+# naming session "t" -> the worker clone, which is what `clone-resolve.sh resolve` reads first.
 MAIN=$T/diagram
 git init -q "$MAIN"; git -C "$MAIN" config user.email t@t; git -C "$MAIN" config user.name t
 echo a > "$MAIN/f"; mkdir -p "$MAIN/specs"; git -C "$MAIN" add f; git -C "$MAIN" commit -qm a
@@ -162,53 +162,28 @@ echo "--- 5. THE CORPUS: every command the old guard refused, replayed with its 
 # /diagram in the recorded cwd and commands becomes the fake mirror; session "t" resolves to the
 # worker clone. The expected split is stated in the fixture and asserted exactly - a change in the
 # judge that moves a single command between allow and rewrite fails here and says which.
-REPLAY=$(python3 - "$HERE/fixtures/main-tree-refusals-2026-09.json" "$HOOK" "$MAIN" "$T" <<'PY'
-import json, os, re, subprocess, sys, collections
-fixture, hook, main, t = sys.argv[1:5]
-data = json.load(open(fixture))
-want = data["expected"]
-# /diagram as a path ROOT only: `l7r/diagram/x.py` and the recorded commands' old skill path are relative paths that
-# merely CONTAIN it (the first cut substituted those too and turned three reads into named writes).
-sub = lambda s: re.sub(r"(?<![\w./-])/diagram(?=/|[\s\"';&|):]|$)", main, s)
-got = collections.Counter(); wrong = []
-# GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - THE ROWS ARE JUDGED SIDE BY SIDE: each is one call of the hook on its own
-# payload, sharing nothing but the fixture the hook only reads; one after another they were 42 of the suite's 56 s. Every row is
-# still judged and counted, and a wrong one is still reported in row order.
-import concurrent.futures
-for row in data["rows"]:
-    os.makedirs(sub(row["cwd"]), exist_ok=True)  # the recorded cwd must EXIST: the resolver derives the mirror from it through git
-def judge(row):
-    cwd, cmd = sub(row["cwd"]), sub(row["command"])
-    payload = json.dumps({"session_id": "t", "cwd": cwd, "tool_name": "Bash", "transcript_path": t + "/none.jsonl", "tool_input": {"command": cmd}})
-    p = subprocess.run([hook, "pretool"], input=payload, capture_output=True, text=True, cwd=main)
-    return cmd, "refused" if p.returncode == 2 else ("rewrote" if "updatedInput" in p.stdout else "allowed") if p.returncode == 0 else f"rc{p.returncode}"
-with concurrent.futures.ThreadPoolExecutor(8) as pool:
-    verdicts = list(pool.map(judge, data["rows"]))
-for i, (row, (cmd, v)) in enumerate(zip(data["rows"], verdicts)):
-    got[v] += 1
-    if v != row["verdict"]:
-        wrong.append(f"row {i} ({row['ts']}): expected {row['verdict']}, got {v}: {cmd[:100]!r}")
-print(json.dumps({"got": got, "want": want, "wrong": wrong[:8], "n_wrong": len(wrong), "rows": len(data["rows"])}))
-PY
-)
-python3 -c '
-import json, sys
-r = json.loads(sys.argv[1])
-ok = r["got"].get("refused", 0) == 0 and r["got"] == r["want"] and r["n_wrong"] == 0
-print(("ok    " if ok else "FAIL  ") + f"the corpus: {r[chr(114)+chr(111)+chr(119)+chr(115)]} commands -> {dict(r[chr(103)+chr(111)+chr(116)])} (expected {r[chr(119)+chr(97)+chr(110)+chr(116)]})")
-for w in r["wrong"]: print("      " + w)
-sys.exit(0 if ok else 1)' "$REPLAY" && PASS=$((PASS+1)) || FAIL=$((FAIL+1))
+# the rows side by side (feature 383 amendment 4, plan D28): each is one call of the hook on its own payload, sharing nothing but the fixture it only reads, and a wrong one is still reported in row order
+RD="$T/replay"; mkdir -p "$RD"; FX="$HERE/fixtures/main-tree-refusals-2026-09.json"
+# /diagram as a path ROOT only: `l7r/diagram/x.py` and the recorded commands' old skill path are relative paths that merely CONTAIN it
+jq -c --arg main "$MAIN" --arg t "$T" 'def swap: gsub("(?<![\\w./-])/diagram(?=/|[\\s\"\\x27;&|):]|$)"; $main);
+  .rows[] | {want: .verdict, ts: .ts, cwd: (.cwd | swap), cmd: (.command | swap)} | . + {payload: ({"session_id": "t", "cwd": .cwd, "tool_name": "Bash", "transcript_path": ($t + "/none.jsonl"), "tool_input": {"command": .cmd}} | tojson)}' "$FX" > "$RD/rows"
+jq -r .cwd "$RD/rows" | sort -u | while IFS= read -r d; do mkdir -p "$d"; done  # the recorded cwd must EXIST: the resolver derives the mirror from it through git
+judge_row() { local row out rc v; row=$(sed -n "$1p" "$RD/rows"); out=$(cd "$MAIN" && jq -r .payload <<<"$row" | "$HOOK" pretool 2>/dev/null); rc=$?
+  case "$rc" in 2) v=refused ;; 0) case "$out" in *updatedInput*) v=rewrote ;; *) v=allowed ;; esac ;; *) v=rc$rc ;; esac; printf '%s\n' "$v" > "$RD/$1.v"; }
+export -f judge_row; export RD HOOK MAIN
+ROWS=$(wc -l < "$RD/rows"); seq 1 "$ROWS" | xargs -P8 -I{} bash -c 'judge_row {}'
+for n in $(seq 1 "$ROWS"); do cat "$RD/$n.v"; done > "$RD/verdicts"
+GOT=$(jq -Rsc 'split("\n") | map(select(length > 0)) | group_by(.) | map({(.[0]): length}) | add' "$RD/verdicts"); WANT=$(jq -c .expected "$FX")
+WRONG=$(paste "$RD/verdicts" <(jq -r '[.want, .ts, (.cmd | .[0:100] | tojson)] | @tsv' "$RD/rows") | awk -F'\t' '$1 != $2 { print "row " (NR - 1) " (" $3 "): expected " $2 ", got " $1 ": " $4 }')
+if [ -z "$WRONG" ] && jq -ne --argjson g "$GOT" --argjson w "$WANT" '$g == $w and (($g.refused // 0) == 0)' >/dev/null; then
+  printf 'ok    the corpus: %s commands -> %s (expected %s)\n' "$ROWS" "$GOT" "$WANT"; PASS=$((PASS+1))
+else
+  printf 'FAIL  the corpus: %s commands -> %s (expected %s)\n' "$ROWS" "$GOT" "$WANT"; printf '%s\n' "$WRONG" | head -8 | sed 's/^/      /'; FAIL=$((FAIL+1))
+fi
 
 echo "--- 6. it records, with a rule slug and the fields an audit needs (features 168 and 204) ---"
-rules=$(python3 -c "
-import json,glob,os,collections
-rows=[json.load(open(f)) for f in glob.glob(os.path.join('$GUARD_LOG_DIR','*.json'))]
-print(dict(collections.Counter((r['event'], r.get('rule')) for r in rows)))
-# the entry inspected is the one section 2's FIRST refusal wrote (git -C the mirror, from the worker clone) - section 2
-# writes three named-main entries, one of them from the mirror itself, and a bare glob lists them in the filesystem's
-# order (feature 211 found this case failing in one clone and passing in another on that order alone)
-named=[r for r in rows if r.get('rule')=='named-main' and r.get('command','').startswith('git -C ')]
-print('FIELDS', named[0]['session'], named[0]['session_name'], named[0]['cwd']=='$WORKER', named[0]['tool'], len(named[0]['command'])>0, named[0]['context']['verdict'])" 2>/dev/null)
+# the entry inspected is the one section 2's FIRST refusal wrote (git -C the mirror, from the worker clone): section 2 writes three named-main entries and the glob's order is the filesystem's (feature 211)
+rules=$(jq -rs --arg w "$WORKER" '(map("(" + ("\u0027" + .event + "\u0027, \u0027" + (.rule // "None") + "\u0027") + ")") | join(" ")), (map(select(.rule == "named-main" and ((.command // "") | startswith("git -C ")))) | .[0] | "FIELDS \(.session) \(.session_name) \(if .cwd == $w then "True" else "False" end) \(.tool) \(if (.command | length) > 0 then "True" else "False" end) \(.context.verdict)")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
 for want in "'rewrote', 'moved-to-clone'" "'blocked', 'named-main'" "'blocked', 'clone-unresolved'" "'blocked', 'clone-missing'" "'blocked', 'shape'" "'escaped', 'main-tree-ok'" "'blocked', 'MAIN_TREE_OK-no-reason'"; do
   case "$rules" in *"($want)"*) printf 'ok    records (%s)\n' "$want"; PASS=$((PASS+1));;
     *) printf 'FAIL  did not record (%s): %s\n' "$want" "$rules"; FAIL=$((FAIL+1));; esac

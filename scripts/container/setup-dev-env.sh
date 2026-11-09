@@ -132,7 +132,7 @@ fi
 echo "==> system packages (apt)"
 if ! command -v resvg >/dev/null 2>&1 || ! command -v pdftotext >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
     $SUDO apt-get update -qq
-    $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra poppler-utils
+    $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra poppler-utils jq
 else
     echo "    already present"
 fi

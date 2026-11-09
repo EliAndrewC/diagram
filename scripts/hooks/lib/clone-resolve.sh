@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# clone-sync-hooks.sh resolve - THIS SESSION'S CLONE, printed for the shell guards that still ask (feature 449 T013 decision (c)).
+# clone-resolve.sh resolve - THIS SESSION'S CLONE, printed for `guardlog.sh`, its only caller; it goes when that does, in phase 3 (the round arbiter, `ask:449-T052-inline-census`). It starts Python only on a guard firing, never on a plain Bash call or a plain Edit.
 #
 # The guard itself - the prompt's sync with main, and the edit's routing, refusals and fast-forward - is Rust since T013:
-# `rust/guard/src/guards/clone_sync_hooks.rs`, run by `scripts/hooks/l7r-guard.sh`. Four shell guards and `lib/guardlog.sh` still call
-# `resolve` for the session's clone (the claim map first, then the session's name), so that one mode stays here until T051 deletes them.
+# `rust/guard/src/guards/clone_sync_hooks.rs`, run by `scripts/hooks/l7r-guard.sh`. `lib/guardlog.sh` still calls
+# `resolve` for the session's clone (the claim map first, then the session's name).
 #
 # DON'T ROUTE THIS THROUGH `l7r-guard.sh`: the wrapper's no-binary path calls `guard_log`, and `guard_log` calls this - a call that
 # never returns, each level more processes, until the host's process limit (T013, 2026-11-08, on the wrapper suite's own no-binary
@@ -66,7 +66,7 @@ derive_main() {
   top=$(git -C "${cwd:-/nonexistent}" rev-parse --show-toplevel 2>/dev/null || true)
   case "$top" in
     */.clones/*) printf '%s' "${top%%/.clones/*}" ;;
-    "")          printf '%s' "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" ;;
+    "")          printf '%s' "$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)" ;;
     *)           printf '%s' "$top" ;;
   esac
 }

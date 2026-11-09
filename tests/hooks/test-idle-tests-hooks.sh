@@ -119,7 +119,7 @@ rec=$(ls "$CA"/dev/idle-log/*-sess-a.json | head -1)
 sus=$(jq -r .suspends "$rec")
 t_start=$(grep "^start" "$RUNLOG" | head -1 | awk '{print $2}')
 check "the suspend was counted ($sus)" '[ "$sus" -ge 1 ]'
-check "the run started a FULL wait after the jump" 'python3 -c "import sys; sys.exit(0 if float(\"$t_start\") - float(\"$t_jump\") >= 0.35 else 1)"'
+check "the run started a FULL wait after the jump" 'awk "BEGIN { exit !($t_start - $t_jump >= 0.35) }"'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 6. one runner at a time: three sessions armed together never overlap, losers defer and still run
@@ -129,17 +129,7 @@ touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"; hook stop "$CB"; hook stop "$CC"
 check "three records" 'wait_for "$CA/dev/idle-log/*.json" 12 && wait_for "$CB/dev/idle-log/*.json" 12 && wait_for "$CC/dev/idle-log/*.json" 12'
 sleep 0.3
-check "no two runs overlapped" 'python3 - "$RUNLOG" <<'"'"'PY'"'"'
-import sys
-ev = []
-for line in open(sys.argv[1]):
-    k, t, *_ = line.split()
-    ev.append((float(t), 1 if k == "start" else -1))
-ev.sort(); depth = 0
-for _t, d in ev:
-    depth += d
-    assert depth <= 1, "overlap"
-PY'
+check "no two runs overlapped" 'sort -k2,2n -k1,1 "$RUNLOG" | awk "\$1 == \"start\" { d++ } \$1 != \"start\" { d-- } d > 1 { exit 1 }"'
 defs=$(cat "$CA"/dev/idle-log/*.json "$CB"/dev/idle-log/*.json "$CC"/dev/idle-log/*.json | jq -s 'map(.deferrals // 0) | add // 0')
 check "the losers deferred ($defs)" '[ "$defs" -ge 1 ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null

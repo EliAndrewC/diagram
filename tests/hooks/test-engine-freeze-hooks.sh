@@ -88,13 +88,13 @@ touch "$SESSION/stall-ack/a5"
 # A RUST GATE, COHORT OR WORK-BUDGET ROLL IN THE CLONE FREEZES THE ENGINE TOO (feature 444, 2026-11-05: a crate edit mid-gate rebuilt
 # the extension under the rolls still to come); a roll in another tree does not
 printf 'def f():\n    return 1\n' > "$ENG"
-(cd "$C" && exec python3 -c 'import time; time.sleep(30)' l7r.diagram.tools.rust_gate) & ROLL=$!
+(cd "$C" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.rust_gate) & ROLL=$!
 sleep 0.5
 edit2 "$ENG" "return 1" "return 2";           check "a Rust gate rolling in the clone refuses an engine edit" 2 "$RC"
 says "the refusal names the roll" "rust_gate rolling"
 says "the refusal says why" "rebuilt under the rolls still to come"
 kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
-(cd "$T" && exec python3 -c 'import time; time.sleep(30)' l7r.diagram.tools.cohort) & ROLL=$!
+(cd "$T" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.cohort) & ROLL=$!
 sleep 0.5
 edit2 "$ENG" "return 1" "return 2";           check "a roll in another tree does not freeze this clone" 0 "$RC"
 kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null

@@ -12,7 +12,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | `record/` | the research record's tooling: sources, the archive, downloads, canon, check bundles, what a delta owes |
 | `pages/` | page sessions: the runner, its briefs, `pull-queue.sh`, coordination files |
 | `reviews/` | the review checks' tooling: what is owed, the snapshot, cost and census, the ledger lint, `moves.py` |
-| `measure/` | what things cost: gate cost, the ratchets, run stats, `make figures`, the guard log, uncovered lines |
+| `measure/` | what things cost: `make inline-census` (feature 449's second census), gate cost, the ratchets, run stats, `make figures`, the guard log, uncovered lines |
 | `container/` | the container's setup (`setup-dev-env.sh`), the system-prompt text its `claude()` wrapper loads, the page-session rules |
 
 Each guard's suite is `tests/hooks/test-<guard>.sh`, run by `make hooks-test` (a guard without one fails it); the

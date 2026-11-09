@@ -14,17 +14,10 @@ no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 
 mkdir -p "$FIX/repo/.git"
 URL="https://ja.wikipedia.org/wiki/民家"
-python3 - "$FIX" "$URL" <<'PY'
-import hashlib, json, pathlib, sys
-fix, url = pathlib.Path(sys.argv[1]), sys.argv[2]
-uid = hashlib.sha256(url.encode()).hexdigest()[:12]
-row = fix / "repo" / "research" / "archive" / uid[:2] / f"{uid}.json"
-row.parent.mkdir(parents=True)
-row.write_text(json.dumps({"url": url, "path": f"{uid[:2]}/{uid}/20261002T120000Z", "captured": "2026-10-02T12:00:00+00:00"}))
-cap = fix / "store" / uid[:2] / uid / "20261002T120000Z"
-cap.mkdir(parents=True)
-(cap / "text.txt").write_text("民家 text.\n")
-PY
+uid=$(printf %s "$URL" | sha256sum | cut -c1-12); p2=${uid:0:2}
+mkdir -p "$FIX/repo/research/archive/$p2" "$FIX/store/$p2/$uid/20261002T120000Z"
+jq -nc --arg url "$URL" --arg path "$p2/$uid/20261002T120000Z" '{"url": $url, "path": $path, "captured": "2026-10-02T12:00:00+00:00"}' > "$FIX/repo/research/archive/$p2/$uid.json"
+printf '民家 text.\n' > "$FIX/store/$p2/$uid/20261002T120000Z/text.txt"
 
 fetch() {  # fetch <url> <agent_id> [tool]
   OUT=$(jq -nc '{"session_id":"s1","agent_id":$ARGS.positional[1],"tool_name":$ARGS.positional[2],"tool_input":{"url":$ARGS.positional[0],"prompt":"read"}}' --args -- "$1" "$2" "${3:-WebFetch}" \

@@ -111,7 +111,7 @@ if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] == (3, 14) else 
   uv venv -q --python 3.14 /tmp/venv && . /tmp/venv/bin/activate
   uv pip install -q -r "requirements.txt" -r "requirements-dev.txt"
   curl -sSL "https://github.com/linebender/resvg/releases/download/v0.46.0/resvg-linux-x86_64.tar.gz" | tar -xz -C /usr/local/bin resvg
-  (apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null 2>&1 || (apt-get update -qq >/dev/null && apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null))
+  (apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra jq >/dev/null 2>&1 || (apt-get update -qq >/dev/null && apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra jq >/dev/null))
   echo "== bootstrap done in $(( $(date +%s) - t0 ))s: $(python3 --version), resvg $(resvg --version)"
 fi
 

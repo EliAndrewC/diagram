@@ -28,11 +28,7 @@ teardown() { rm -rf "$STATE_DIR" "$EV_CWD"; }
 # command and every heredoc vector here passed for the wrong reason.
 bash_ev() { CMD="$1" jq -nc '{"session_id":"m1","cwd":(env.EV_CWD // "/nonexistent"),"tool_name":"Bash","tool_input":{"command":env.CMD}}'; }
 # a run-log record in the event tree: gate_rec <minutes ago> <result> [target]
-gate_rec() { mkdir -p "$EV_CWD/dev/run-log/2026-10"; M="$1" R="$2" T="${3:-done}" python3 -c '
-import json, os, datetime, time
-utc = datetime.datetime.fromtimestamp(time.time() - 60 * int(os.environ["M"]) - 300, datetime.timezone.utc)
-json.dump({"utc": utc.strftime("%Y-%m-%dT%H:%M:%SZ"), "target": os.environ["T"], "seconds": 300, "result": os.environ["R"]},
-          open(os.path.join(os.environ["EV_CWD"], "dev", "run-log", "2026-10", utc.strftime("%Y%m%dT%H%M%S") + "-1.json"), "w"))'; }
+gate_rec() { mkdir -p "$EV_CWD/dev/run-log/2026-10"; local at=$(( $(date +%s) - 60 * $1 - 300 )); jq -nc --arg u "$(date -u -d "@$at" +%Y-%m-%dT%H:%M:%SZ)" --arg t "${3:-done}" --arg r "$2" '{"utc": $u, "target": $t, "seconds": 300, "result": $r}' > "$EV_CWD/dev/run-log/2026-10/$(date -u -d "@$at" +%Y%m%dT%H%M%S)-1.json"; }
 edit_ev() { printf '{"session_id":"m1","tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 run() { "$HOOK" pretool <<<"$1" 2>"$HOOK_ERR"; }
 

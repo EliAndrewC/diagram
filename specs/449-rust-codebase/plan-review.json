@@ -116,13 +116,7 @@
    "declared": "round-arbiter"
   },
   "### T052 Approach (checklist part A)": {
-   "sha256": "540981c060278b30b6f8d59e2131ad036efb81f87fa8b5bb594df26f72050c4f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
-  "### T054 Approach (checklist part A)": {
-   "sha256": "3cec72b0a3fd6f7361b6a360fec0879f798dabcfa7fda39af727999bfb30fcbc",
+   "sha256": "1674331d52c4d044da4828312f47b7fb1b8fe67234e59bad92cc204e5bb74af9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
    "declared": "round-arbiter"
@@ -2874,6 +2868,21 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "### T052 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:449-T052-round3",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4988,6 +4997,88 @@
      "summary": "T054 precedes T052, whose close reads this figure.",
      "class": "within",
      "why": "Ordering the spec leaves open; it narrows nothing asked."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T052": {
+   "section_sha256": "ed554ff11a6a4a256837f2a9748ef15eda636db4231f2c69a2e832a8626955f0",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-sc001-on-instrument",
+     "summary": "SC-001 stated as met on its instrument alone, with the ruling's wording, the real-command distribution and the commit branch in dev/phase-1-close.md",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A narrowing on its face (m:t054-plain-bash: met on the sample ls, not on real commands), made by the round arbiter's ruling ask:449-T054-sc001, which stands where the GM was asked and is settled, not reopened here. The block carries it as the ruling's and records the distribution rather than hiding it."
+    },
+    {
+     "id": "b-census-command",
+     "summary": "The second census's phase-1 share is make inline-census: three named groups, any site outside them fails, guard-input by exact line",
+     "class": "within",
+     "why": "FR-001 as amended by ask:449-T052-inline-census names this command, the exact-line group and the separate count."
+    },
+    {
+     "id": "b-record-edit-gate",
+     "summary": "test-record-edit-gate.sh's one site converted; the suite is not among those that move",
+     "class": "within",
+     "why": "FR-001's moving list names test-record-edit-hooks, a different file; converting the site removes Python from phase 1's share."
+    },
+    {
+     "id": "c-resolve-moves",
+     "summary": "resolve moves to scripts/hooks/lib/clone-resolve.sh beside its only caller; the clone-sync-hooks.sh wrapper retired",
+     "class": "within",
+     "why": "FR-001 places clone-resolve.sh with guardlog.sh in phase 3 by name; FR-009 gives the *-hooks.sh wrappers to Story 1."
+    },
+    {
+     "id": "d-conversion-tools",
+     "summary": "111 inline sites converted to jq, literal JSON, sed and awk, each suite still green",
+     "class": "within",
+     "why": "FR-001 counts these sites to be removed and speaks of suites that stay shell past phase 1; removing Python from a shell suite with shell tools carves out nothing. Arithmetic checks: 168-57=111; 27+27+3=57, outside 0."
+    },
+    {
+     "id": "d-drift-test-moved",
+     "summary": "BEHIND_TEST_TARGETS' drift test moved to the crate beside its list",
+     "class": "within",
+     "why": "A test travels with the piece it tests (FR-001); nothing asked for is dropped."
+    },
+    {
+     "id": "d-exec-a-fake-rolls",
+     "summary": "The two fake rolls in test-engine-freeze-hooks.sh become a process that looks like Python (exec -a)",
+     "class": "within",
+     "why": "Removes a real Python run from a phase-1 suite; the block changes no expected verdict, so FR-002 is untouched."
+    },
+    {
+     "id": "d-jq-install-lists",
+     "summary": "jq joins setup-dev-env.sh, Dockerfile.ci and buildspec/run.sh's bootstrap",
+     "class": "within",
+     "why": "Adds a dependency the removal needs where the suites run; it narrows nothing the GM asked for and does not port the containers. FR-009's 'only for the Python' bounds what is ported, and FR-001's phase 4 is left whole."
+    },
+    {
+     "id": "exit-6-first-census-share",
+     "summary": "Exit 6 measures phase 1's share of the first census by git ls-files 'scripts/hooks/*.py' 'tests/hooks/*.py' (m:phase-1-python-share, whose quantity is defined by those two paths)",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 decides phase 1's share of the first census by use as well as path: 'scripts/hooks/ and the libraries its guards call (the code under scripts/hooks/ and any module only guards use ...)' and 'each tests/ file with the piece it tests'. The second census's share is by path; the first's is not. The named command cannot see a module only guards use that lives outside scripts/hooks/, or a tests/ file outside tests/hooks/ that tests a phase-1 piece, and nothing in the block or the cited measurements establishes either set empty (the by-path rulings in FR-001 concern files with callers of their own, the opposite case). So the green claim 'phase-1 share empty but for what FR-001 names' rests on an unmeasured premise. Not impossible to measure, not implied by the GM's words, and it defeats the purpose of re-running the census at the phase's end. Fix: exit 6 and m:phase-1-python-share either state the search that shows no guards-only module and no phase-1 tests/ file outside those two directories remains, with its command, or name what it found."
+    },
+    {
+     "id": "item-8-wakeup-case",
+     "summary": "The wakeup suite's non-JSON input carried into phase 1's record as the one changed verdict",
+     "class": "within",
+     "why": "FR-002 rules this case apart by ask:449-T038-garbage; the record is what FR-002 asks."
+    },
+    {
+     "id": "item-9-xiv-fixes-recorded",
+     "summary": "The record names make-only T028 and guard-file T029 as the XIV fixes, each adding cases and changing no earlier verdict",
+     "class": "within",
+     "why": "FR-002 asks the phase's record to name these; the no-earlier-verdict claim carries a dated label and method."
+    },
+    {
+     "id": "items-5-8-order-budget",
+     "summary": "Last in order, landed by make land-tooling with no work budget and nothing rolled",
+     "class": "within",
+     "why": "Sequencing of a closing task; nothing asked for is affected."
     }
    ],
    "verdict": "BLOCKED"

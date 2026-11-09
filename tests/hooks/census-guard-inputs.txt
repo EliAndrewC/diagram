@@ -1,0 +1,25 @@
+MENTION=$(stdin_for Bash '{"command":"python3 - <<PY\nprint(\"count the make done runs in the log\")\nPY"}')
+\$(python3 -c \"open('Makefile', 'w').write('x')\")
+bash_turn "python3 - <<PYEOF_INNER"; check "a heredoc patch script passes at the armed bar" ok $?
+call Bash '{"command":"python3 - <<'"'"'EOF'"'"'\ns = \" curl -sL https://example.net/h\"\nEOF"}'
+call Bash '{"command":"python3 - <<'"'"'EOF'"'"'\ns = \" curl -sL https://grokipedia.com/page/X\"\nEOF"}'
+check "...but a REAL busy-wait beside a heredoc is still blocked" blocked 'python3 - <<PY
+check "...but python running that text is a write" blocked "python3 - <<'EOF'
+check "a heredoc naming the self-match shape" ok 'python3 - <<PY
+check "a heredoc writing prose about a busy-wait" ok 'python3 - <<PY
+check "a suite written by python is not a guard" ok   "python3 - <<PY
+check "an unrelated python one-liner"          ok "python3 -c 'print(1)'"
+check "heredoc python writing the Makefile"   blocked "python3 - <<PY
+check "open() only reading the Makefile"      ok      "python3 - <<'EOF'
+check "open() writing a hook by literal"      blocked "python3 -c 'open(\"scripts/hooks/gate-hooks.sh\", \"a\").write(\"x\")'"
+check "open() writing the Makefile by name"   blocked "python3 - <<'EOF'
+check "python open for append"     blocked "$(bash_ev "python3 -c \"open('$COPY', 'a').write('x')\"")"
+check "python write_text"          blocked "$(bash_ev "python3 -c \"import pathlib; pathlib.Path('$COPY').write_text('x')\"")"
+check "python writing the roster"                blocked "python3 - <<PY
+check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytest; pytest.main()'"
+check "writing a NON-guard file"              ok      "python3 - <<PY
+refused_because "an in-process pytest.main is refused" "python3 -c 'import pytest; pytest.main()'" 'no test path'
+run "$(bash_ev 'python3 - <<PY
+run "$MAIN" "$(printf "python3 - <<'PY'\nprint(1)\nPY")"
+run "$MAIN" "python3 -c 'print(1)'";                 check "standing in the mirror, python3 -c (spec D5: still a write) -> rewritten, free" 0 "$RC"
+run "$WORKER" "$(printf 'python3 - <<PY\ntext = "cd %s && git commit"\nPY' "$MAIN")"

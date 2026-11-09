@@ -22,31 +22,23 @@ REMINDER_PROMPT="Remind the GM to look at the Ochiba page."
 LOOP_PROMPT="/loop check the deploy"
 
 transcript() { # transcript <file> <events...> -> a JSONL transcript; events: loopcmd | loopskill | stop | wake:<prompt> | reminder
-  python3 - "$@" <<'PY'
-import json, sys
-path, events = sys.argv[1], sys.argv[2:]
-rows = [{"type": "user", "message": {"role": "user", "content": "please build the thing"}}]
-def tool(name, inp):
-    return {"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": name, "input": inp}]}}
-for e in events:
-    if e == "loopcmd":  # the measured shape of a /loop firing (research.md R3)
-        rows.append({"type": "user", "message": {"role": "user", "content": "<command-message>loop</command-message>\n<command-name>/loop</command-name>\n<command-args>check the deploy</command-args>"}})
-    elif e == "loopskill":
-        rows.append(tool("Skill", {"skill": "loop", "args": "check the deploy"}))
-    elif e == "stop":
-        rows.append(tool("ScheduleWakeup", {"stop": True}))
-    elif e.startswith("wake:"):
-        rows.append(tool("ScheduleWakeup", {"delaySeconds": 1500, "reason": "r", "prompt": e[5:]}))
-    elif e == "reminder":
-        rows.append(tool("CronCreate", {"cron": "17 9 24 12 *", "prompt": "Remind the GM to look at the Ochiba page.", "recurring": False}))
-open(path, "w").write("".join(json.dumps(r) + "\n" for r in rows))
-PY
+  local path=$1 e; shift
+  tool() { jq -nc --arg n "$1" --argjson i "$2" '{"type": "assistant", "message": {"role": "assistant", "content": [{"type": "tool_use", "name": $n, "input": $i}]}}'; }
+  { jq -nc '{"type": "user", "message": {"role": "user", "content": "please build the thing"}}'
+    for e in "$@"; do
+      case "$e" in
+        loopcmd) jq -nc '{"type": "user", "message": {"role": "user", "content": "<command-message>loop</command-message>\n<command-name>/loop</command-name>\n<command-args>check the deploy</command-args>"}}' ;;  # the measured shape of a /loop firing (research.md R3)
+        loopskill) tool Skill '{"skill": "loop", "args": "check the deploy"}' ;;
+        stop) tool ScheduleWakeup '{"stop": true}' ;;
+        wake:*) tool ScheduleWakeup "$(jq -nc --arg p "${e#wake:}" '{"delaySeconds": 1500, "reason": "r", "prompt": $p}')" ;;
+        reminder) tool CronCreate '{"cron": "17 9 24 12 *", "prompt": "Remind the GM to look at the Ochiba page.", "recurring": false}' ;;
+      esac
+    done
+  } > "$path"
 }
 
 wake_call() { # wake_call <transcript> <reason> <prompt> [stop] -> the pretool hook's exit code
-  python3 -c 'import json,sys; ti={"delaySeconds":1500,"reason":sys.argv[2],"prompt":sys.argv[3]}
-if len(sys.argv)>4: ti={"stop":True}
-print(json.dumps({"session_id":"s1","tool_name":"ScheduleWakeup","transcript_path":sys.argv[1],"tool_input":ti}))' "$@" \
+  jq -nc '$ARGS.positional as $a | {"session_id": "s1", "tool_name": "ScheduleWakeup", "transcript_path": $a[0], "tool_input": (if ($a | length) > 3 then {"stop": true} else {"delaySeconds": 1500, "reason": $a[1], "prompt": $a[2]} end)}' --args -- "$@" \
     | "$HOOK" pretool 2>"$HOOK_ERR"
 }
 

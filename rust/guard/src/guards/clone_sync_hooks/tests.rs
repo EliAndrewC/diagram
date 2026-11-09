@@ -491,3 +491,50 @@ fn the_helpers_and_the_entry() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+#[test]
+fn every_makefile_target_that_reaches_pytest_is_behind_the_test_targets() {
+    let makefile =
+        std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/../../Makefile")).unwrap();
+    let target = fancy_regex::Regex::new(r"^([a-z][\w-]*):").unwrap();
+    let mut recipes: Vec<(String, Vec<&str>)> = Vec::new();
+    let mut open = false;
+    for line in makefile.lines() {
+        if let Ok(Some(found)) = target.captures(line) {
+            recipes.push((found[1].to_owned(), Vec::new()));
+            open = true;
+        } else if line.starts_with('\t') && open {
+            recipes.last_mut().unwrap().1.push(line);
+        } else if !line.is_empty() && !line.starts_with(char::is_whitespace) {
+            open = false;
+        }
+    }
+    let mut runs: Vec<String> = recipes
+        .iter()
+        .filter(|(_, r)| r.iter().any(|l| l.contains("pytest")))
+        .map(|(t, _)| t.clone())
+        .collect();
+    for _ in 0..6 {
+        let names: Vec<String> = runs
+            .iter()
+            .map(|t| fancy_regex::escape(t).into_owned())
+            .collect();
+        let calls =
+            fancy_regex::Regex::new(&format!(r"\$\(MAKE\)[^\n]*?\b(?:{})\b", names.join("|")))
+                .unwrap();
+        let mut grew: Vec<String> = recipes
+            .iter()
+            .filter(|(_, r)| r.iter().any(|l| calls.is_match(l).unwrap()))
+            .map(|(t, _)| t.clone())
+            .collect();
+        grew.extend(runs.iter().cloned());
+        grew.sort();
+        grew.dedup();
+        runs = grew;
+    }
+    let missing: Vec<&String> = runs
+        .iter()
+        .filter(|t| !super::BEHIND_TEST_TARGETS.contains(&t.as_str()))
+        .collect();
+    assert_eq!(missing, Vec::<&String>::new());
+}

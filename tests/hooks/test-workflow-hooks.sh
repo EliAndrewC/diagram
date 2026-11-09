@@ -74,23 +74,13 @@ wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"01
 grep -q 'make wave-report' "$T/out" && ok "...and the session is told the command that measures it (FR-046)" || no "the measurement is not named" "$(cat "$T/out")"
 n=$(wc -l < "$SEEN")
 [ "$n" -eq 3 ] && ok "each unit AND its declared verify step met the Agent hooks (3 payloads)" || no "the hooks saw $n payloads, not 3"
-python3 - "$SEEN" <<'PY' && ok "...as the Agent payload a hand launch sends: its type, prompt, a wave:<run>:<n> id" || no "the payloads are not Agent payloads"
-import json, sys
-rows = [json.loads(l) for l in open(sys.argv[1])]
-assert all(r["tool_name"] == "Agent" and r["tool_use_id"].startswith("wave:") for r in rows)
-assert [r["tool_input"]["subagent_type"] for r in rows] == ["quote-check", "quote-check", "source-reader"]
-assert rows[2]["tool_use_id"].endswith(":1.0") and rows[2]["tool_input"]["prompt"] == "Verify /tmp/b/MANIFEST.md"
-PY
+jq -se 'all(.tool_name == "Agent" and (.tool_use_id | startswith("wave:"))) and (map(.tool_input.subagent_type) == ["quote-check", "quote-check", "source-reader"]) and (.[2].tool_use_id | endswith(":1.0")) and .[2].tool_input.prompt == "Verify /tmp/b/MANIFEST.md"' "$SEEN" >/dev/null && ok "...as the Agent payload a hand launch sends: its type, prompt, a wave:<run>:<n> id" || no "the payloads are not Agent payloads"
 wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md"},{"label":"0107","prompt":"REFUSE-ME /tmp/c/MANIFEST.md"}]}}'
 [ "$(rc)" -eq 2 ] && grep -q 'unit 0107' "$T/err" && grep -q 'BLOCKED by the stub guard: its own words' "$T/err" && ok "a unit a guard refuses refuses the whole run, with the unit's label and the guard's own message" || no "a refused unit went" "(rc=$(rc)) $(head -5 "$T/err")"
 wf '{"name":"check-wave","args":{"agentType":"quote-check","units":[{"label":"0105","prompt":"Read /tmp/a/MANIFEST.md","then":[{"agentType":"source-reader","prompt":"REFUSE-ME verify"}]}]}}'
 [ "$(rc)" -eq 2 ] && grep -q '0105 / source-reader' "$T/err" && ok "a declared verify step a guard refuses refuses the run too" || no "a refused verify step went" "(rc=$(rc))"
 SHARED=$(for i in $(seq 0 129); do echo "Context line $i: what every check of this kind needs to know about the record."; done)
-python3 - "$SHARED" > "$T/args.json" <<'PY'
-import json, sys
-print(json.dumps({"name": "check-wave", "args": {"agentType": "quote-check", "units": [
-    {"label": "u1", "prompt": "Judge 0105.\n" + sys.argv[1]}, {"label": "u2", "prompt": "Judge 0106.\n" + sys.argv[1]}]}}))
-PY
+jq -nc --arg s "$SHARED" '{"name": "check-wave", "args": {"agentType": "quote-check", "units": [{"label": "u1", "prompt": ("Judge 0105.\n" + $s)}, {"label": "u2", "prompt": ("Judge 0106.\n" + $s)}]}}' > "$T/args.json"
 wf "$(cat "$T/args.json")"
 [ "$(rc)" -eq 2 ] && grep -q 'unit u2' "$T/err" && grep -q '.claude/agents' "$T/err" && ok "the REAL repeated-block guard refuses a unit, in its own words" || no "the real guard did not fire on a unit" "(rc=$(rc)) $(head -5 "$T/err")"
 wf '{"name":"check-wave","args":{"agentType":"escalation-check","units":[{"label":"a","prompt":"x"}]}}'

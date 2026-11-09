@@ -37,15 +37,24 @@
   },
   "pair-hooks-suite": {
     "quantity": "pair-hooks.sh's runs inside its own suite",
-    "observed": "2026-11-07",
+    "observed": "2026-11-08",
     "subject": "tests/hooks/test-pair-hooks.sh, its HOOK pointed at a wrapper that times each run",
-    "command": "a scratch copy of the suite with HOOK set to a timing wrapper around scripts/hooks/pair-hooks.sh, run once",
-    "method": "the wrapper's per-run times summed; 19 of the copy's 100 cases failed on its relocated fixture paths, so a close figure, not an exact one",
+    "command": "a scratch copy of the suite beside it, its HOOK a timing wrapper around tests/hooks/pair-hooks.sh, run once",
+    "method": "the wrapper's per-run times summed; the 100 cases all green, where the first figure's copy had 19 failing on relocated fixture paths",
     "value": {
-      "runs": 90,
-      "summed_s": 39.7,
-      "mean_ms": 441,
-      "suite_wall_s": 8.2
+      "runs": 92,
+      "summed_s": 22.28,
+      "mean_ms": 242.2,
+      "suite_wall_s": 5.0
+    },
+    "was": {
+      "observed": "2026-11-07",
+      "value": {
+        "runs": 90,
+        "summed_s": 39.7,
+        "mean_ms": 441,
+        "suite_wall_s": 8.2
+      }
     }
   },
   "suite-cpu": {
@@ -109,17 +118,25 @@
   },
   "python-census": {
     "quantity": "the Python files the repository tracks",
-    "observed": "2026-11-07",
+    "observed": "2026-11-08",
     "subject": "the clone's HEAD",
     "command": "git ls-files '*.py' | wc -l; git ls-files '*.py' | awk -F/ '{print $1}' | sort | uniq -c",
     "method": "the count, and the count by top directory",
     "value": {
-      "files": 872,
-      "tests": 326,
-      "specs": 222,
-      "scripts": 186,
-      "l7r": 132,
-      "pool": 6
+      "files": 845,
+      "scripts_hooks": 13,
+      "tests_hooks": 0
+    },
+    "was": {
+      "observed": "2026-11-07",
+      "value": {
+        "files": 872,
+        "tests": 326,
+        "specs": 222,
+        "scripts": 186,
+        "l7r": 132,
+        "pool": 6
+      }
     }
   },
   "inline-python-census": {
@@ -819,5 +836,73 @@
       "near_p90": "feature-approval and conflict-marker asking git over a large staged commit (40-54 ms each), make-only on a guard-file write in a long heredoc (62 ms), record-edit-gate running its guard on an apply-edits (56 ms)"
     },
     "reading": "SC-001 is met on m:hooks-bash's sample `ls` alone, by the named exception ask:449-T054-sc001 (the round arbiter, 2026-11-08), and not on real commands: the quoted git command is 19.0 ms and the 400 real commands' median 23.0 ms, p90 109 ms, 7.2 percent under 17.5 ms. Re-measured at phase 3's close, when the by-path Python is ported."
+  },
+  "inline-census-sites": {
+    "quantity": "feature 449's second census under scripts/hooks/ and tests/hooks/, every site under a group FR-001 names",
+    "observed": "2026-11-08",
+    "subject": "the clone's working tree at T052's close",
+    "command": "make inline-census",
+    "method": "the command's own counts: exact-line for the guard-input group, by path for the two others; a site outside them exits 1; converted is the start's count less today's",
+    "value": {
+      "sites": 57,
+      "guard_input": 27,
+      "later_phase": 27,
+      "last_caller": 3,
+      "outside": 0,
+      "at_the_start_of_t052": 168,
+      "converted": 111
+    }
+  },
+  "phase-1-other-calls": {
+    "quantity": "the calls that still run more than one process until phase 3: a record-page Edit, a subagent's return and launch",
+    "observed": "2026-11-08",
+    "subject": "the settings entry's command for an Edit; scripts/hooks/checks-hooks.sh for the two others",
+    "command": "each run 20 times on a sample payload, each log directed to a temporary directory",
+    "method": "the median of 20 spawns, at load 2 to 5",
+    "value": {
+      "record_page_edit_ms": 108.3,
+      "plain_edit_ms": 37.9,
+      "agent_return_ms": 56.6,
+      "agent_launch_ms": 50.3
+    }
+  },
+  "phase-1-python-share": {
+    "quantity": "phase 1's share of feature 449's first census at the phase's end, by path and by use: the tracked Python files under scripts/hooks/ and tests/hooks/, each placed later by name in FR-001; any module outside them only the guards use; and any tests/ file outside tests/hooks/ that tests a phase-1 piece",
+    "observed": "2026-11-08",
+    "subject": "the clone's working tree at T052's close",
+    "command": "git ls-files '*.py' | wc -l; git ls-files 'scripts/hooks/*.py' 'tests/hooks/*.py'; for f in $(git ls-files '*.py' | grep -vE '^(scripts/hooks|specs|pool|tests)/'); do git grep -lE \"$(basename \"$f\")\" -- ':!'\"$f\" ; done (each file's callers, comments stripped, kept where they are all under rust/guard/, scripts/hooks/ or tests/); and for each tests/ file outside tests/hooks/, the hook libraries and guard scripts it names",
+    "method": "the count, and the listing compared with FR-001's named files: exactly those thirteen, none under tests/hooks/; the scan by use, observed 2026-11-08, read by hand: of three modules with only guard callers, l7r/diagram/ci/decision.py is the word `decision` matched in protocol.rs and has none, scripts/patch.py is a command a session runs by hand and hm_house only names it, and scripts/gates/engine_edit.py is real; of 29 tests outside tests/hooks/ that name a hook library or a guard, 28 test a library FR-001 places later or only hold a fixture name, and tests/tooling/test_guard_firing_log.py is real",
+    "value": {
+      "tracked_python_files": 845,
+      "first_value": 872,
+      "phase_1_paths": 13,
+      "under_tests_hooks": 0,
+      "all_placed_by_name": true,
+      "files": [
+        "hm_approval",
+        "hm_arbiter",
+        "hm_budget_rounds",
+        "hm_checks",
+        "hm_conflict",
+        "hm_escape",
+        "hm_fixloop",
+        "hm_house",
+        "hm_planhold",
+        "hm_record",
+        "hm_shape",
+        "hm_tree",
+        "usage_log"
+      ],
+      "by_use": {
+        "guards_only_modules_found": [
+          "scripts/gates/engine_edit.py"
+        ],
+        "phase_1_tests_found": [
+          "tests/tooling/test_guard_firing_log.py"
+        ],
+        "engine_edit": "76 lines over l7r/diagram/ci/delta.py is_engine and gate-stamp.py semantic_bytes, both phase 2, asked only while a map review or a roll is live; goes with them",
+        "firing_log_test": "its census reads guardlog.sh and the *_OK tokens across shell and Rust and two cases drive ported guards; goes with guardlog.sh, phase 3"
+      }
+    }
   }
 }

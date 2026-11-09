@@ -112,7 +112,7 @@ rm -f "$MAPDIR/sid-cleared" "$MAPDIR/sid-me"
 # clone - a rewrite into a different session's clone would write one session's work into another's.
 res() { # res <sid> <transcript> ; OUT = the clone path resolve prints (or nothing)
   OUT=$(printf '{"session_id":"%s","transcript_path":"%s","cwd":"%s"}' "$1" "$2" "$FMAIN" \
-        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HERE/../../scripts/hooks/clone-sync-hooks.sh" resolve 2>/dev/null); RC=$?
+        | CLONE_MAIN="$FMAIN" CLONE_SESSIONS_DIR="$SESS" "$HERE/../../scripts/hooks/lib/clone-resolve.sh" resolve 2>/dev/null); RC=$?
 }
 printf '%s' "$FMAIN/.clones/diagram-town" > "$MAPDIR/sid-mapped"
 res sid-mapped "";                            check "resolve: the claim map answers first" "$FMAIN/.clones/diagram-town" "$OUT"
@@ -400,36 +400,7 @@ bm_silent "make quick"                  "a CLEAN clone is left to the stale-base
 # literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
 # the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
 # suite. Three hand-written rosters in this repository were each short by one within a day.
-DERIVED=$(python3 - "$HERE/../../Makefile" "$HERE/../../rust/guard/src/guards/clone_sync_hooks.rs" <<'PYEOF'
-import re, sys
-mk = open(sys.argv[1], encoding="utf-8").read()
-hook = open(sys.argv[2], encoding="utf-8").read()
-declared = set(re.findall(r'"([\w-]+)"', re.search(r"BEHIND_TEST_TARGETS: \[&str; \d+\] = \[(.*?)\];", hook, re.S).group(1)))
-recipes, cur = {}, None
-for line in mk.splitlines():
-    m = re.match(r"^([a-z][\w-]*):", line)
-    if m:
-        cur = m.group(1); recipes.setdefault(cur, [])
-    elif line.startswith("\t") and cur is not None:
-        recipes[cur].append(line)
-    elif line and not line[0].isspace():
-        cur = None
-runs = {t for t, r in recipes.items() if any("pytest" in l for l in r)}
-for _ in range(6):
-    pat = "|".join(map(re.escape, runs))
-    grew = {t for t, r in recipes.items()
-            if any(re.search(r"\$\(MAKE\)[^\n]*?\b(?:%s)\b" % pat, l) for l in r)} | runs
-    if grew == runs:
-        break
-    runs = grew
-missing = sorted(runs - declared)
-print("MISSING:" + ",".join(missing) if missing else "OK")
-PYEOF
-)
-case "$DERIVED" in
-  OK) printf 'ok    every Makefile target that reaches pytest is in BEHIND_TEST_TARGETS\n' ;;
-  *)  printf 'FAIL  BEHIND_TEST_TARGETS has drifted from the Makefile - %s\n' "$DERIVED"; FAILED=1 ;;
-esac
+# (the derivation itself is the crate's `every_makefile_target_that_reaches_pytest_is_behind_the_test_targets`, feature 449 T052)
 
 [ -n "${LIVE_PID:-}" ] && kill "$LIVE_PID" 2>/dev/null; true
 rm -rf "$TMP"
