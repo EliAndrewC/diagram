@@ -11309,6 +11309,7 @@
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#regional wind": {
@@ -11327,6 +11328,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the fall backs the wind": {
@@ -11343,6 +11345,7 @@
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#the field's archetype": {
@@ -11359,6 +11362,7 @@
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:268186083f3ceadf"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#water flow follows the fall": {
@@ -11375,6 +11379,7 @@
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:6a4c22142fea79a3"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::seat_room#the seat's room": {
@@ -11734,6 +11739,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::SpecError#the spec": {
@@ -11782,6 +11788,7 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::int#the spec": {
@@ -11817,6 +11824,7 @@
   "note": "10 to 20 with 15 as the default, a GUESS; no cited page sets the hamlet tier's bounds (0019's ten to twenty is guessed for a small polder only)",
   "pages": {},
   "research": "",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/spec.rs::text#the spec": {
