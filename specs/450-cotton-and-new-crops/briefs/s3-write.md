@@ -13,7 +13,7 @@ are both given. Any product of two sources' figures is this project's arithmetic
 
 Pass C prints an English Wikipedia URL beside two archived works (Tanimoto, archive 42/4288c884928c; Bishop, af/afb75ffbad3a): take each source's URL from
 `make archive-find`, never those. The species names changed: Fortune and EB 1911 say G. herbaceum where Hutchinson 1947 and later work say G. arboreum; say so. An India acreage share (2-3%) rests on one
-modern web essay, a Korean volume of 500,000 bolts on one author's OCR'd page: each says so. The 1398 obituary is retrospective. That Korea carried the PLANT to Japan is not shown; say what is.
+modern web essay, a Korean volume of 500,000 bolts on one author's OCR'd page: each says so. The 1398 obituary is retrospective. Whether Korea carried the PLANT to Japan is disputed: 0318's notes hold Kawakatsu 2005 p. 51 ("probably ... from Korea or Ryukyu") and kotobank-momen (from around Korea), and Newswitch says Ming; give all and rule from the pages.
 
 **Already in the record - name by file, do not repeat:** the Japan and China questions of sessions S1 and S2.
 

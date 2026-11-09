@@ -8,9 +8,9 @@
 
 **Affects**: research record
 
-**Approved**: the GM, 2026-11-08, "Please watch Github for research tasks which might be filed as issues."; filed under his standing rule, "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future" (GM 2026-10-18)
+**Approved**: the GM, 2026-10-18, "you should treat features that I have asked to be filed as automatic approval, and therefore you should not ask in the future"
 
-The GM asked this session to work the research tasks filed as issues (his words, quoted above); a money research request
+The GM asked this session to work the research tasks filed as issues (2026-11-08: "Please watch Github for research tasks which might be filed as issues."); a money research request
 gm-assistant opens for him is approved by his asking.
 
 **Input**: `request.md` (issue #22 verbatim), `passes/` (five search passes, 2026-11-08: Japan cotton; China cotton; species,
@@ -105,7 +105,7 @@ with author and the crops they apply to.
 - India stages and Korea stages as the pass reads them. India's stage of cloth arriving mainly as an import carries one of the four verdicts, with what was searched and the period
   it covers, the 19th century's factory cloth included; the pass did not search that period. Commoners' cotton in India SILENT.
 - Korea and Japan: cloth, from about 1400 through the So-controlled trade, up to 500,000-odd bolts in one year of the 1480s by
-  one figure. ATTESTED ONLY FOR cloth; the plant reaching Japan through Korea NOT ATTESTED, the one source naming a seed route says Ming.
+  one figure. ATTESTED ONLY FOR cloth. The plant's route is disputed: Kawakatsu 2005 (Korea or the Ryukyus, "probably") and kotobank-momen for Korea, Newswitch for Ming; all are given under FR-007, with the verdict set in the write session.
 - The GM's point. No pass dates the window's close, so the write session names the closing event and its date from a source: from 1492 to the edicts of the 1630s is about 140-150 years, and
   to the founding of the shogunate in 1603 about 110, and the record says which his "~100 years" fits. On the dates above, Japan did have cotton inside those years: first cultivation about 1494-1510 and
   a commercial crop in the 16th century, all of it Old World seed. So "probably didn't" is NOT ATTESTED, and the Columbian exchange is not why (American species had no part).
@@ -113,7 +113,7 @@ with author and the crops they apply to.
 **Question 3** (`passes/d-tobacco-potatoes.md`, and the tomato in `passes/e-tomato-spread-factors.md`): per crop and country as the
 pass's table reads; tobacco about 10 years in Japan and Korea, about 30-50 in China and India; the sweet potato more than a century,
 and regional; the white potato marginal almost everywhere before the 19th century; the tomato first recorded 1617-21 in China, 1668 in
-Japan, 1614 in Korea (identity the modern writers'), and common food only in the 20th century there; in India first dated 1832 at second hand, still chiefly grown for Europeans in 1889, the date it became common SILENT. Much of the dating is tertiary; each
+Japan, 1614 in Korea (identity the modern writers'), and common food only in the 20th century there; in India a blog's report of Roxburgh (1832, read at second hand) has it commonly used through the subcontinent while Watt (1889, also second hand) has it still chiefly cultivated for the European population; both are given under FR-007 and the verdict on common use states the conflict. Much of the dating is tertiary; each
 verdict says what it stands on. India's sweet potato SILENT on arrival, cultivation and commonness.
 
 **Question 4** (`passes/e-tomato-spread-factors.md`): the GM's two tomato positions hold on these dates. Factors named with author
@@ -154,3 +154,4 @@ Ryukyu-Satsuma (Isono 2007). No source outside the four countries was used, so n
 
 - spec-fidelity round 1 (2026-11-09, MODE 2): CHANGES REQUIRED - the requirements covered figures, not questions; the China half of question 1 and both direct-question lines thin; the premise
   on the roughly 100 years not tested as said, and the window undated; India's import stage carved out with no verdict; India's tomato dropped; FR-003's search unnamed. All six applied.
+- spec-fidelity round 2 (2026-11-09): CHANGES REQUIRED - the Approved line's form broken by round 1's edit; India's tomato given as silent where two sources disagree; the plant's route to Japan stated as NOT ATTESTED against 0318's own notes. All three applied.

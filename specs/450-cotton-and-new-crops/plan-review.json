@@ -43,12 +43,6 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)": {
-   "sha256": "70c159d119d2a1e4198e3598ef1502a59f3961394e0f461c3e9fedbb9b492c5b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-08",
-   "declared": "spec-fidelity"
-  },
   "## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)": {
    "sha256": "cb6bf563f5b857fc189db743d99285604b3f4a35eabc0b1440bfb8c73072507a",
    "verdict": "CLEAR",
@@ -65,6 +59,48 @@
    "sha256": "3b1edb26e257b3cbf16b268f0dbcce8e1cd399debe6a0a0f2758ebe77b623e18",
    "verdict": "CLEAR",
    "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "303b40448cd150cf0e708809d9739dd05cbd6923aa70d935894a981b366251d8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T01 Approach (checklist part A)": {
+   "sha256": "0f71ed58b9520877ebf281b78964f540586f1fd558ae607aa27e6ffa48ad754b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T02 Approach (checklist part A)": {
+   "sha256": "57360f943dd7177e6e0de0097fae5215c0e266040bf0301ae0b5684957bca5eb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T03 Approach (checklist part A)": {
+   "sha256": "1e17f34f3659533336d1c4b879a01bfa30ba9b80cf791bff41452d2f3e2c980f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T04 Approach (checklist part A)": {
+   "sha256": "17797fac272c73027911ff4bec5626acf0af0b1a58d313a3a60eb053f8d61af8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T05 Approach (checklist part A)": {
+   "sha256": "dba9a22c17819339f5e87377a165fae5226586f3dcf3d24be8776858951f8657",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
+  },
+  "### T06 Approach (checklist part A)": {
+   "sha256": "e0aad18c0fc2c7c30f706b9586d16efef542462193c87b95c6397cb99ce85455",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
    "declared": "spec-fidelity"
   }
  },
@@ -328,6 +364,76 @@
      "class": "within",
      "summary": "Every delta is a record edit, so make land takes the record's checks; a claims-gate refusal on another feature's owed Rust claims is taken up when seen on a landing.",
      "why": "A landing mechanic. It touches nothing the request asks for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "### T01 Approach (checklist part A)",
+    "### T02 Approach (checklist part A)",
+    "### T03 Approach (checklist part A)",
+    "### T04 Approach (checklist part A)",
+    "### T05 Approach (checklist part A)",
+    "### T06 Approach (checklist part A)",
+    "(removed) ## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D3-stage-verdicts",
+     "class": "within",
+     "summary": "The India and Korea question gives the five stages for each country, each stage carrying one of the four verdicts; India's import stage is included and the 19th century's factory cloth is searched for it.",
+     "why": "The request says 'For India and Korea, give the same dated stages as question 1', and the first-listed stages include 'cloth arriving mainly as an import'. This restores a stage, and the spec's question 2 findings and acceptance scenario 1 say the same. It removes a carve-out and narrows nothing. Naming the 19th century adds a period to the search; it does not confine India's import stage to it."
+    },
+    {
+     "id": "D3-species-and-100-years",
+     "class": "within",
+     "summary": "Unchanged text: a question on whether cotton was a New World crop, the species before 1492, when the American kinds came, four countries with date and importance, and the GM's point on the roughly 100 years; Korea's role with cloth and plant each given a verdict.",
+     "why": "Carries question 2's clauses. 'Each with date and importance' is compressed, and read against the request's 'for each species, its date of arrival and its importance' it stands under FR-001 (every figure of the issue) and the spec's User Story 1 (each species' date of arrival and importance), so it does not release the Old World species from that figure."
+    },
+    {
+     "id": "D3-FR-006",
+     "class": "within",
+     "summary": "D3 now names FR-006: findings state the history, and no fragment says how common a crop is in Rokugan.",
+     "why": "The request: 'This request asks only for the history; the decision about Rokugan stays with the GM.' FR-006 and SC-003 say 'cotton or any of these crops' and 'a crop', so question 2's cotton fragments fall inside them. It enforces what was asked."
+    },
+    {
+     "id": "removed-D3-heading",
+     "class": "within",
+     "summary": "The earlier D3 block is gone because its heading gained FR-006 and its stage sentence gained the verdict clause; the new D3 stands in its place.",
+     "why": "Every clause of the earlier text is in the new block, so nothing the request asked for leaves the plan."
+    },
+    {
+     "id": "T01-T05-constraints",
+     "class": "within",
+     "summary": "Each question task is bound to its own decision (D1 to D5) and to FR-001, FR-002, FR-005, FR-006 and FR-007.",
+     "why": "The pairing matches tasks.md and the plan's D sections, and the five requirements apply to every fragment of questions 1 to 4. T03 to T05 gaining FR-006 closes a gap: without it the Rokugan rule would have reached only cotton in Japan and China, while the request reserves the Rokugan decision for all of these crops."
+    },
+    {
+     "id": "T06-constraints",
+     "class": "within",
+     "summary": "The reply task is bound to D6 and FR-001, FR-003 and FR-004, measured by SC-001 and SC-002; it names neither FR-006 nor SC-003.",
+     "why": "T06 writes no fragment, and FR-006's second sentence and SC-003 are about fragments. Its omission opens no door to a statement about Rokugan: D6 lists what the reply holds (fragment files, verdicts, what is open, the two canon quotations) and routes anything for the GM through escalation-check. FR-005, which fixes what 'still open' holds, reaches T06 through SC-001."
+    },
+    {
+     "id": "Approach-exits",
+     "class": "within",
+     "summary": "Red exit on each task: what failed is recorded and the task set down, and a claim that it cannot be done is ruled through make arbiter-ask.",
+     "why": "It carves out no question or figure. A claim of impossibility goes to the arbiter rather than being settled by the session, a figure not found is SILENT under FR-005, and FR-001 still holds the feature open until every figure has its verdict."
+    },
+    {
+     "id": "Approach-budget-and-done",
+     "class": "within",
+     "summary": "Each task's budget is one landing; T01 to T05 are done on SC-001, SC-002 and SC-003, T06 on SC-001 and SC-002.",
+     "why": "The request's priority order is honored by the task order, and it allows questions 3 and 4 to follow. The success criteria are the accepted spec's, unedited, and none is relaxed. SC-001 is met only when T06 posts the reply, which is a matter of sequence and removes nothing."
+    },
+    {
+     "id": "Approach-provenance-and-na",
+     "class": "within",
+     "summary": "Items 1, 5, 10 and 11 are n/a; the search smell is none; the constraints are said to come from request.md and to describe the world here.",
+     "why": "These are research tasks with no placement, order or constant. No item changes what is delivered. The line 'from request.md' is loose for FR-002 and FR-003, which are project process rather than the issue's words, but neither widens or narrows the question asked and both stand in the accepted spec."
     }
    ]
   }
