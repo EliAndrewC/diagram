@@ -218,7 +218,7 @@ Each guard task, in the order below (the measured cost first, research R2, then 
 - [ ] T071 [US2] `l7r/diagram/ci/` the pytest-driven planner: `incremental.py`, `selection.py`, `gate_plugin.py`, last in the phase (the round arbiter's `ask:449-T062-order`); a Python test may drive the Rust binary black-box only until its Rust tests replace it, and `gate_config.py`'s `scripts_readers` and `tooling_modules` (moved from T72: `incremental.py` is their caller), `scripts/gates/preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` (`ask:449-T067-scope`)
       research: rendering
 
-- [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, `tests/tooling/test_rust_tooling.py` rewritten as Rust tests running the real cargo and deleted (the Assumptions clause's limit, `ask:449-T067-scope`), the phase's record in `dev/`
+- [ ] T070 [US2] The close of phase 2: `m:done-rust-edit`, an unchanged tree's `make done`, both censuses' phase-2 share, `tests/tooling/test_rust_tooling.py` replaced by one Rust end-to-end test against the real cargo and `World` seam tests for the rest (FR-008), and deleted (the Assumptions clause's limit, `ask:449-T067-scope`), the phase's record in `dev/`
       research: rendering
 
 ### Phase 3 (moved by the round arbiter's ruling `ask:449-hm-checks-route`, 2026-11-08; ported in one cut with their Python callers, FR-001)

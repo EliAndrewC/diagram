@@ -6860,105 +6860,110 @@
    "verdict": "CLEAR"
   },
   "T067": {
-   "section_sha256": "776cc7d0333885a6210313840fc4f57c300dca8f2693f86eb639fc7e9ed2a8ae",
+   "section_sha256": "a1dc36b87a967362190f15c0b43f07fcc38a44744a596e2d2007b2481a69fe14",
    "reviewed": "2026-11-09",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "one-landing",
-     "summary": "gate_lock, own-make, hm_conflict, rust_checks, push_gates and push_checks are ported and every Python body deleted in one landing.",
+     "id": "moved-browser-raw",
+     "summary": "The carried item of ask:T063-browser-raw goes to T071 with preflight.unseen; engine_edit.docstring_only was ported at T066.",
      "class": "within",
-     "why": "FR-001 places these in phase 2 and FR-003 forbids running both. Sequencing inside what was asked."
+     "why": "Moves work between tasks inside phase 2 under the arbiter's ask:449-T067-scope; nothing is dropped."
     },
     {
-     "id": "own-make-parity",
-     "summary": "own-make.sh goes in this landing; the 31-case comparison does not list it.",
+     "id": "one-landing",
+     "summary": "gate_lock, own-make, hm_conflict, rust_checks, push_gates and push_checks become l7r-gate subcommands and every Python body is deleted in one landing.",
      "class": "within",
-     "why": "No decision excludes it: the goal line holds both lib files to FR-002 'before it goes' and the exit is 'each suite's verdicts unchanged'. The missing row is a gap in the evidence shown, not a narrowing."
+     "why": "FR-001 places these pieces in phase 2 and ask:449-T067-scope names them; the comparison ran at the commit before deletion, so FR-003 holds."
     },
     {
      "id": "rows-settled",
-     "summary": "All 29 push_checks rows become CHECKS in push.rs, each Tool::Gate or Tool::Py, each Tool::Py file placed by FR-001.",
+     "summary": "All 29 push_checks rows are the CHECKS table, Tool::Gate or Tool::Py by path, each Tool::Py file placed by FR-001; a row runs only when the change holds what it reads, by its needs.",
      "class": "within",
-     "why": "The named files match FR-001's placements. 'None is conditional' closes a bullet about each row's placement, and the same block replays the retained checks' delta predicates, so it says no placement is open, not that every row runs unconditionally."
+     "why": "Each named file has a placement in FR-001 (T065 scope, T067 scope, or phase 3 as the rest of scripts/). The needs sentence carries the T065 clause for every Tool::Py row."
     },
     {
      "id": "t065-clause",
-     "summary": "close_check and memo_check need no narrowed trigger, because no plain Bash call, plain Edit or make done starts them.",
+     "summary": "close_check.py and memo_check.py keep the T065 clause with no trigger narrowed.",
      "class": "within",
-     "why": "If true this meets the clause rather than excepting from it. The premise that make done does not reach the push table is the block's statement; the bundle does not carry the recipe and the dispatch bars the repository, so it was not checked here."
+     "why": "The clause is held by the rows' needs in any case. The block's inference that make done reaches neither file lacks the link showing what calls the sync-with-main.sh done step, so that sentence is unsupported as written, but the ruling does not rest on it."
     },
     {
-     "id": "usage-text",
-     "summary": "An unknown gate's usage text names the new command (6 of 31 cases differ); exit status 2 both ways.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "FR-002 asks for the same outputs. Literal identity would have the Rust binary tell the user to run a program this landing deletes, defeating the purpose of a usage line. The verdict and exit status are unchanged."
+     "id": "verdicts-compared",
+     "summary": "Python and binary compared in a scratch clone at the commit before deletion, 9 own-make cases and 31 others; two real differences fixed before the count.",
+     "class": "within",
+     "why": "This is FR-002's own requirement; the two differences found were fixed toward the Python."
     },
     {
-     "id": "not-replayed-real-tree-cache",
-     "summary": "real_tree/test_content_cache.py (conflicts the same with the cache on and off) is not replayed.",
+     "id": "usage-line",
+     "summary": "6 of the 31 cases differ: an unknown gate's usage text names the new command, exit status 2 both ways, declared outside FR-002.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Physically impossible: the case compares two modes and the Rust check has one, with no cache to switch off."
+     "why": "FR-002 says same outputs and lists no such exception, so this is a narrowing the author ruled on itself. Held literally, the text would tell the reader to run a Python file the request's purpose deletes. The verdict and exit status are unchanged and only the program's name moves."
+    },
+    {
+     "id": "not-replayed-real-tree-content-cache",
+     "summary": "real_tree/test_content_cache.py (the whole tree's conflicts the same with the cache on and off) is not replayed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically without a referent: the Rust conflict check keeps no cache to turn on or off. The conflict verdict itself was compared on a whole scratch clone, clean and with two conflicted files."
     },
     {
      "id": "not-replayed-cache-off-half",
      "summary": "The L7R_CACHE_OFF half of test_content_cache.py is not replayed.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Physically impossible for the same reason, separately: the switch it exercises has no referent in a check that keeps no cache."
+     "why": "Same ground, judged on its own: the case exercises a switch on a cache the port does not have, so there is nothing to set."
     },
     {
      "id": "not-replayed-real-tree-push-checks",
      "summary": "real_tree/test_push_checks.py (each check in one process gives what it gives alone) is not replayed.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "Physically impossible: no row runs in the runner's process any more, each is a child with its own exit status, so the in-process arm does not exist."
+     "why": "Unlike the cache cases, this one guards isolation between checks sharing a process. The block states no row runs in the runner's process and each is a child with its own exit status, so the shared process it tested no longer exists."
     },
     {
-     "id": "makefile-asks-first-stays-python",
-     "summary": "The Makefile asks-first case of test_push_checks.py stays in Python because it reads the Makefile.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 moves each tests/ file with the piece it tests and the GM asked for a Rust codebase. A Rust test can read a Makefile, so the reason is not impossibility, and the block names no phase or task that later ports it."
+     "id": "test-push-checks-deleted",
+     "summary": "The named cases of test_push_checks.py, now including the Makefile asks-first case, are in push/tests.rs and the file is deleted.",
+     "class": "within",
+     "why": "FR-001 moves each tests/ file with its piece, and the Python test no longer outlives the piece."
     },
     {
-     "id": "rust-tooling-cargo-stays-python",
-     "summary": "test_rust_tooling.py's cargo cases stay in Python, driving l7r-gate rust as a black box, under the Assumptions clause.",
+     "id": "rust-tooling-black-box-until-t070",
+     "summary": "test_rust_tooling.py's 12 cases keep driving l7r-gate rust as a black box until T070, the close of phase 2.",
+     "class": "within",
+     "why": "Classed on the block's quotation of the Assumptions clause, which limits this to the phase; the clause is not in spec-cited.md, so the quotation could not be verified from the bundle. FR-002 parity for l7r-gate rust rests on these cases, as the comparison lists no rust subcommand."
+    },
+    {
+     "id": "t070-twelve-real-cargo-tests",
+     "summary": "T070 rewrites all 12 cases as Rust tests running the real cargo.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "rust_checks.py is ported here and FR-001 moves its test with it. The Assumptions clause the block relies on is not in spec-cited.md although the MANIFEST promises every passage named, so it cannot carry the decision; nothing visible makes a Rust test running cargo impossible, and no later owner is named."
+     "why": "FR-008: a tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command. Twelve real-cargo tests of l7r-gate rust exceed one, the block neither names FR-008 nor measures the cases against its limit, and nothing makes the rule impossible: the block itself says the World seam's Rust tests exist. FR-002 requires the cases be held, not that each run real cargo. To clear: one end-to-end real-cargo test per tool and the rest over the World seam, or a recorded ruling on FR-008, or, if each subcommand is a tool under FR-008, the block saying so with the count per subcommand."
     },
     {
      "id": "callers-share",
      "summary": "cover_changed.py asks l7r-gate rust uncovered; hm_approval.py loses the halves only push_checks.py called.",
      "class": "within",
-     "why": "Removes or repoints code whose only partner is ported; both files stay in the phases FR-001 gives them."
+     "why": "Direct consequences of the port; removing a half whose only caller is deleted changes no verdict."
     },
     {
      "id": "defects-fixed",
-     "summary": "The port's dead search is rewritten to one pass after running 4 h 10 min; write_executable avoids Text file busy.",
+     "summary": "The port's dead search rewritten to count words in one pass; write_executable writes through a child process in both crates.",
      "class": "within",
-     "why": "Defects in the port and its test helper; the first bears directly on the GM's stated reason for the port and on the 2026-11-09 stuck-command remark."
+     "why": "Repairs to the port and its test helper. The dead rewrite is a performance fix, not an FR-002 exception, so it must still pass the cases unchanged."
     },
     {
-     "id": "watchdog-long-run",
-     "summary": "stall_watchdog_hooks also tells a session once per make about a make in its clone past STALL_LONG_RUN (default 1,800 s); it reports and kills nothing.",
+     "id": "watchdog",
+     "summary": "stall_watchdog_hooks also tells a session, once per make, about a make past STALL_LONG_RUN (default 1,800 s); it reports and kills nothing.",
      "class": "within",
-     "why": "The GM's words are 'we had tooling to prevent a stuck command from blocking us ... for that amount of time'. The plan closes the case the existing watchdog missed, a session not silent, and a notice at 1,800 s stops a wait of hours. Killing a make was not asked for."
+     "why": "Answers the GM's 2026-11-09 words in request.md, which ask about existing tooling and name no kill; surfacing a stuck make to the session at 30 minutes serves their purpose."
     },
     {
-     "id": "moved-to-t071",
-     "summary": "The carried item of ask:T063-browser-raw goes to T071 with preflight.unseen, its remaining caller.",
+     "id": "done-line",
+     "summary": "Done when git ls-files 'scripts/gates/*.py' returns only FR-001's named remainders, hm_conflict.py and own-make.sh are untracked, and affected measurement commands are rewritten and re-run.",
      "class": "within",
-     "why": "Sequencing to a later task in the same phase. The ruling's text is not in the bundle, so only the move itself is judged."
-    },
-    {
-     "id": "done-line-and-measurements",
-     "summary": "The done line limits scripts/gates/*.py to files FR-001 owes later; recorded commands for ported or deleted files are rewritten and re-run in the same commit.",
-     "class": "within",
-     "why": "The eighteen names match FR-001's placements, and the rewrite is FR-001's own rule."
+     "why": "Each listed file matches its FR-001 placement, and the measurement rewrite is FR-001's own clause. FR-001 also places cohort_known.py at T068 and the T068 list omits it; its location cannot be checked from the bundle."
     }
    ],
    "verdict": "BLOCKED"
