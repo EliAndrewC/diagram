@@ -206,8 +206,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the plan and spec gates are Rust (l7r-gate plan, check spec-lint); what stays Python reaches them through scripts/plan_door.py
 
-- [ ] T067 [US2] `scripts/gates/` the landing's own: `gate_lock.py`, `rust_checks.py`, `push_gates.py`, `push_checks.py`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`; `cohort_gate.py` and `room_table.py` go to T068, `preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` to T071, `close_check.py` and `memo_check.py` to phase 3 (`ask:449-T067-scope`, FR-001)
+- [x] T067 [US2] `scripts/gates/` the landing's own: `gate_lock.py`, `rust_checks.py`, `push_gates.py`, `push_checks.py`, with `scripts/hooks/lib/hm_conflict.py` and `own-make.sh`; `cohort_gate.py` and `room_table.py` go to T068, `preflight.py`, `cover_changed.py`, `refresh_baseline.py` and `pool-readers.py` to T071, `close_check.py` and `memo_check.py` to phase 3 (`ask:449-T067-scope`, FR-001)
       research: rendering
+      verify: DONE. landed: the gate lock, own-make, the conflict check, the Rust crates' checks and the push's checks are Rust; the watchdog tells a session about a long make
 
 - [ ] T068 [US2] `scripts/measure/`: its 34 tools, ported by family, each with its one end-to-end test against the real command, and `scripts/gates/check-run-plausible.py` and `check-tool-signals.py` (`ask:449-T065-scope`), `cohort_gate.py` and `room_table.py` with `cohort_known.py` (`ask:449-T067-scope`)
       research: rendering
