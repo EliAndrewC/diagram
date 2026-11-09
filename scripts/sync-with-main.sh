@@ -607,8 +607,6 @@ backup_on_exit() { # <the exit code the stop was leaving with>
   exit "$1"
 }
 
-# `done FULL=1` / `push FULL=1`: the full sweep on CodeBuild, its prompt answered locally first
-for arg in "$@"; do case "$arg" in FULL=1) export FULL=1 ;; esac; done
 case "${1:-}" in
   sync-in)     shift; sync_in "$@" ;;
   push)        trap 'backup_on_exit $?' EXIT; push_cmd ;;
