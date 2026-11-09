@@ -7,7 +7,7 @@ edited mid-gate, `building-programs.md` stale twice, stub pointers in found rows
 So `make done` begins here and stops here on a failure:
 
 1. THE DERIVED FILES regenerated - `make docs`, `make building-programs`, `make glossary` - and any that moved named, to commit;
-2. THE RECORD builds (`make record CHECK=1`) and its pointers resolve (`check-research-pointers.py`);
+2. THE RECORD builds (`make record CHECK=1`) and its pointers resolve (`l7r-gate check research-pointers`);
 3. THE QUICK TIER (`make quick FROM_PREFLIGHT=1`: lint, types, spec-lint on the delta, the file-size bar, house style, the unit
    tests - its TIME not judged here: a green but slow quick after a merge of main stopped a gate whose tests all passed);
 4. THE CHANGED ENGINE LINES covered - the quick tree run once more with coverage over just the engine files the delta changed,
@@ -478,7 +478,7 @@ def main(argv: list[str] | None = None) -> int:
     if moved:
         print("preflight: regenerated, commit them with the change:\n  " + "\n  ".join(m[3:] for m in moved))
     for cmd, what in ((["make", "--no-print-directory", "record", "CHECK=1"], "the record does not build"),
-                      ([sys.executable, "scripts/gates/check-research-pointers.py", str(root)], "a research pointer does not resolve")):
+                      ([str(root / "scripts/gates/l7r-gate.sh"), "check", "research-pointers", str(root)], "a research pointer does not resolve")):
         if run(cmd, root):
             print(f"preflight: {what} - the gate stops here (feature 375 FR-004)")
             return 1

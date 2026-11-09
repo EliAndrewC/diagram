@@ -263,7 +263,7 @@ def outside_files(root: Path, names: Iterable[str]) -> dict[str, str]:
             continue
         try:
             out[rel] = (root / rel).read_text(encoding="utf-8")
-        except UnicodeDecodeError:  # a binary file (an image, a font) holds no label
+        except (UnicodeDecodeError, FileNotFoundError):  # a binary file (an image, a font) holds no label; a file deleted but not yet staged has none
             continue
     return out
 

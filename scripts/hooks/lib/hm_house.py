@@ -397,7 +397,7 @@ def report(d: dict) -> str:
     # were typed, which is the same false positive the three names before them were added for. (No
     # apostrophe in this comment: the scan below is a single-quoted program, and one apostrophe ends it -
     # GUARD_EDIT_OK: the same trap feature 217 hit in guard-file-hooks, met again here.)
-    if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|house_style_cases\.rs|check-house-style-delta\.py|test_house_style_delta\.py|test_guard_firing_log\.py|hm_house\.py)$", path):  # GUARD_EDIT_OK: feature 236 - the census drives the guard with a REAL payload, which must carry a real British spelling or it proves nothing
+    if re.search(r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house-style-hooks\.sh|test-house-style-hooks\.sh|house_style_cases\.rs|house_style_delta\.rs|house_style_delta/tests\.rs|test_house_style_delta\.py|test_guard_firing_log\.py|hm_house\.py)$", path):  # GUARD_EDIT_OK: feature 236 - the census drives the guard with a REAL payload, which must carry a real British spelling or it proves nothing
         return ""
     # a SOURCE block inside the added text is the GM speaking; drop it before looking
     body = re.sub(r"<!--\s*SOURCE: GM NOTES.*?<!--\s*END SOURCE\s*-->", " ", body, flags=re.S | re.I)

@@ -15,11 +15,11 @@
     },
     "check-rust-tooling": {
       "kind": "check",
-      "what": "scripts/gates/check-rust-tooling.py - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
+      "what": "rust/gate/src/checks/rust_tooling.rs - a refusing check (make rust-tooling, a step of make hooks-test); each run recorded passed or refused"
     },
     "check-file-scale": {
       "kind": "check",
-      "what": "scripts/gates/check-file-scale.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/file_scale.rs - a refusing check; each run recorded passed or refused"
     },
     "check-function-cap": {
       "kind": "check",
@@ -27,7 +27,7 @@
     },
     "check-house-style-delta": {
       "kind": "check",
-      "what": "scripts/gates/check-house-style-delta.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/house_style_delta.rs - a refusing check; each run recorded passed or refused"
     },
     "check-partial-citations": {
       "kind": "check",
@@ -35,11 +35,11 @@
     },
     "check-question-size": {
       "kind": "check",
-      "what": "scripts/gates/check-question-size.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/question_size.rs - a refusing check; each run recorded passed or refused"
     },
     "check-research-pointers": {
       "kind": "check",
-      "what": "scripts/gates/check-research-pointers.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/research_pointers.rs - a refusing check; each run recorded passed or refused"
     },
     "check-run-plausible": {
       "kind": "check",
@@ -47,7 +47,7 @@
     },
     "check-stale-dirs": {
       "kind": "check",
-      "what": "scripts/gates/check-stale-dirs.py - a refusing check; each run recorded passed or refused"
+      "what": "rust/gate/src/checks/stale_dirs.rs - a refusing check; each run recorded passed or refused"
     },
     "clone-sync-merge": {
       "kind": "step",

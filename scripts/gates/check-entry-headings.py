@@ -20,7 +20,7 @@ THE ONE LEGITIMATE NON-MATCH is a section deliberately not written, in the form 
 the absence of a match, so a BROKEN heading and a DECLARED silence cannot be confused - and `make audit`
 enumerates every entry taking it, because a carve-out nobody can list is one nobody revisits.
 
-RUN AT THE GATE AND AT THE PUSH, like `check-file-scale.py`. The gate alone would not do: a heading
+RUN AT THE GATE AND AT THE PUSH, like `l7r-gate check file-scale`. The gate alone would not do: a heading
 breaks when a research page is renamed, and a research-page-only delta owes no gate at all
 (`l7r-gate stamp` SKIP_ONLY_AREAS), so a gate-only check would surface the breakage as an inherited red
 on the next session's unrelated work.

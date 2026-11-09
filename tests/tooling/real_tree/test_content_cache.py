@@ -11,15 +11,14 @@ from __future__ import annotations
 
 import subprocess
 
-import pytest
-
 from tests.tooling.test_content_cache import ROOT, _same_on_and_off
 
+ARGV = ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]
 
-@pytest.mark.parametrize("argv", [["scripts/gates/check-research-pointers.py", "."], ["scripts/hooks/lib/hm_conflict.py", "--tracked", "."]], ids=["pointers", "conflicts"])
-def test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cache(argv: list[str]) -> None:
-    """SC-002 over this repository itself, for the two checks that read every tracked file - one test each, so they run side by
-    side (feature 383 amendment 4, plan D29): it was 9.4 s, the longest test a landing ran.
+
+def test_the_whole_repository_s_conflicts_are_the_same_with_the_cache() -> None:
+    """SC-002 over this repository itself, for the check that reads every tracked file (the pointer check is compiled since
+    feature 449 T065 and keeps no cache).
 
     ...ON A TREE THAT HELD STILL (405 batch 8): the claims round and the landing cohort's record commit beside the gate (405 T48,
     T50), and a file tracked between the three runs read as the cache changing the answer (23,143 files, then 23,144). A run
@@ -27,9 +26,9 @@ def test_the_whole_repository_s_pointers_and_conflicts_are_the_same_with_the_cac
     for _ in range(3):
         head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout
         try:
-            _same_on_and_off(argv, ROOT)
+            _same_on_and_off(ARGV, ROOT)
             return
         except AssertionError:
             if subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True, check=False).stdout == head:
                 raise
-    _same_on_and_off(argv, ROOT)
+    _same_on_and_off(ARGV, ROOT)

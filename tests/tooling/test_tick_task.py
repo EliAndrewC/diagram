@@ -1,6 +1,6 @@
 """`scripts/tick-task.py` - `make tick` (feature 188). Each behavior and each refusal on a fixture tasks.md.
 
-No `tooling` marker: it calls functions on strings and files, like `test_file_scale.py`."""
+No `tooling` marker: it calls functions on strings and files, like the other unit tests here."""
 
 from __future__ import annotations
 

@@ -305,7 +305,7 @@ fn refusals(root: &Path, base: &str, python: &str) -> Result<Vec<String>, String
 const USAGE_LOG_TOOL: &str = "gate-stamp";
 
 /// One line in `<git common dir>/tool-usage.jsonl`, the record every refusing check leaves (feature 406); one write of one short line in append mode, and a failure never fails the tool.
-fn record(root: &Path, outcome: &str) {
+pub(crate) fn record_for(root: &Path, tool: &str, outcome: &str) {
     let Some(common) = codeid::common_git_dir(root) else {
         return;
     };
@@ -314,7 +314,7 @@ fn record(root: &Path, outcome: &str) {
         .map_or(0, |d| d.as_secs());
     let (y, mo, d, h, mi, s) = civil(secs);
     let session = std::env::var("CLAUDE_SESSION_ID").unwrap_or_default();
-    let row = format!("{{\"utc\": \"{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z\", \"tool\": \"{USAGE_LOG_TOOL}\", \"kind\": \"check\", \"outcome\": \"{outcome}\", \"session\": {}}}\n", serde_json::Value::from(session));
+    let row = format!("{{\"utc\": \"{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z\", \"tool\": \"{tool}\", \"kind\": \"check\", \"outcome\": \"{outcome}\", \"session\": {}}}\n", serde_json::Value::from(session));
     if let Ok(mut file) = std::fs::OpenOptions::new()
         .append(true)
         .create(true)
@@ -322,6 +322,10 @@ fn record(root: &Path, outcome: &str) {
     {
         let _ = file.write_all(row.as_bytes());
     }
+}
+
+fn record(root: &Path, outcome: &str) {
+    record_for(root, USAGE_LOG_TOOL, outcome);
 }
 
 /// Prove the hash still bites, since a checker never seen failing is not a checker; the failure, if it does not.

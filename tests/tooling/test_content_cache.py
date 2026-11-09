@@ -205,25 +205,6 @@ def test_the_conflict_check_answers_the_same_and_finds_a_marker_put_in_after_a_c
     assert code == 1 and "a.md" in out
 
 
-def test_the_pointer_check_answers_the_same_and_resolves_a_new_question_each_run(tmp_path: pathlib.Path) -> None:
-    files = {
-        "research/questions/0001-a.html": "x",
-        "research/contents.json": json.dumps({"sections": [{"id": "water"}]}),
-        "research/moved-303.json": json.dumps({"files": {}, "pages": {"water": "water"}, "numbers": {"water 120": "0001"}}),
-        "docs/x.md": "see research/questions/0002-b.html and research/contents.json#water\n",
-    }
-    d = _check_repo(tmp_path, files)
-    argv = ["scripts/gates/check-research-pointers.py", "."]
-    code, out = _same_on_and_off(argv, d)
-    assert code == 1 and "0002-b.html` - no such question file" in out
-    (d / "research" / "questions" / "0002-b.html").write_text("y", encoding="utf-8")
-    _git(d, "add", "-A")
-    assert _same_on_and_off(argv, d)[0] == 0, "the cached file now resolves: its questions are asked each run"
-    (d / "docs" / "x.md").write_text("water 120\n", encoding="utf-8")
-    code, out = _same_on_and_off(argv, d)
-    assert code == 1 and "it is now 0001" in out
-
-
 # ---- the ledger check (SC-003) ---------------------------------------------------------------------------------------------
 
 

@@ -548,7 +548,7 @@ the tools or the tests reads a built page: they read the record through the in-m
 **A pointer names the fragment.** *"The obvious solution is to not link to the generated HTML page, but to link to the
 source which is fed into and used to generate that HTML page, because that is the canonical location of the research"*.
 A code comment, a doc, a spec, a modal's `Entry:` names the question's file (since feature 303
-`research/questions/NNNN-<heading id>.html`, or `research/contents.json#<section>` for a whole section); `scripts/gates/check-research-pointers.py` fails the gate and the push on one that does not resolve or
+`research/questions/NNNN-<heading id>.html`, or `research/contents.json#<section>` for a whole section); `l7r-gate check research-pointers` fails the gate and the push on one that does not resolve or
 that names a built page, and `make fragment-move` renames a fragment with every pointer to it - the reorder or retitle
 that would otherwise strand them. The landed specs were swept too, the GM choosing on 2026-10-01 that the push's spec
 check judge a landed spec on what a push CHANGES in it; a pointer there whose heading had since been retired names its
@@ -566,7 +566,7 @@ measurements, then perhaps you would be able to pick something sensible, and the
 
 **The cap is 20,000 bytes, question file plus notes file.** When it was set the record held 288 questions: median
 6,750, 75th percentile 12,400, 90th 18,200, largest 56,200; 23 were over 20,000 (observed 2026-09-26; method:
-`check-question-size.py --report` and the size of every `NNN-*.html` with its notes). It is about 5,000 tokens, which
+`l7r-gate check question-size --report` and the size of every `NNN-*.html` with its notes). It is about 5,000 tokens, which
 a check reads in one turn; it sits at the record's 90th percentile, so it touches only the unusually large; and the
 first question split under it - `cities/government` 080, 38,500 bytes - came out as a 19,800-byte question that still
 holds its whole argument, which is the test of a sensible cap: the smallest coherent unit fits under it.

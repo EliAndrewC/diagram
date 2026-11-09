@@ -81,11 +81,11 @@ def test_format_passes_the_fixture_and_refuses_what_rustfmt_would_change(crate: 
 
 
 def test_the_file_cap_reads_rust_files(tmp_path: pathlib.Path) -> None:
-    """Row "file cap": `check-file-scale.py`, reading `.rs`."""
+    """Row "file cap": `l7r-gate check file-scale`, reading `.rs`."""
     (tmp_path / "src").mkdir()
     (tmp_path / "src" / "big.rs").write_text("// a line\n" * 1001)
     (tmp_path / "src" / "small.rs").write_text("// a line\n" * 10)
-    r = subprocess.run([sys.executable, str(REPO / "scripts" / "gates" / "check-file-scale.py"), str(tmp_path)], capture_output=True, text=True, check=False)
+    r = subprocess.run([str(REPO / "scripts" / "gates" / "l7r-gate.sh"), "check", "file-scale", str(tmp_path)], capture_output=True, text=True, check=False)
     assert r.returncode != 0 and "big.rs" in r.stdout + r.stderr and "small.rs" not in r.stdout + r.stderr
 
 

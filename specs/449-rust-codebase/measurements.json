@@ -1010,5 +1010,34 @@
       "idle": true,
       "lifecycle": true
     }
+  },
+  "t065-checks": {
+    "quantity": "the six text checks' Rust ports against the Python they replace",
+    "observed": "2026-11-09",
+    "subject": "a scratch clone of the repository at this feature's commit before the deletion, its origin/main sixty commits back",
+    "command": "each of the twelve invocations (file-scale ., --list ., --selftest; stale-dirs ., --selftest; question-size, --report; rust-tooling; research-pointers ., --selftest; house-style-delta ., --selftest) run as python3 scripts/gates/check-<name>.py and as l7r-gate check <name> in that clone, L7R_CACHE_OFF=1",
+    "method": "exact comparison of stdout, stderr and exit status",
+    "value": {
+      "invocations": 12,
+      "mismatch": 0,
+      "research_pointers_python_s": 5.44,
+      "research_pointers_rust_s": 1.32,
+      "house_style_python_s": 0.29,
+      "house_style_rust_s": 0.42,
+      "file_scale_python_s": 0.13,
+      "file_scale_rust_s": 0.16
+    }
+  },
+  "t065-pointers": {
+    "quantity": "the pointer check's verdicts line by line, over lines drawn from the repository",
+    "observed": "2026-11-09",
+    "subject": "up to 32,000 lines of the repository in a scratch repository, chunks of 60",
+    "command": "check-research-pointers.py (L7R_CACHE_OFF=1) and l7r-gate check research-pointers on each chunk",
+    "method": "exact comparison of output and exit status",
+    "value": {
+      "lines": 32000,
+      "chunks": 534,
+      "mismatch": 0
+    }
   }
 }
