@@ -79,7 +79,7 @@ def rerun(spec_dir: pathlib.Path) -> tuple[list[str], list[str], list[str]]:
                 skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      runs the deleted Python hamlet engine (feature 444) - a frozen figure, not run")
                 continue
             try:
-                run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True)
+                run = subprocess.run(shlex.split(command), cwd=ROOT, capture_output=True, text=True, stdin=subprocess.DEVNULL)
             except (OSError, ValueError) as e:  # a command written as prose: not runnable, so listed, never fatal (feature 375)
                 skipped.append(f"  NOT RE-MEASURED: {command[:120]}\n      not a runnable command ({type(e).__name__})")
                 continue
