@@ -11,7 +11,7 @@
 # `git commit --only -- <path>` leaves anything the session has staged staged and uncommitted. The path may be in another
 # work tree (a cohort's "before" leg in a detached worktree writes into its clone): it is committed there.
 #
-# Skipped inside a CodeBuild build (its checkout merges and pushes; a commit there is no session's) and outside a git work
+# Skipped outside a git work
 # tree. Best-effort: a failure to commit costs the old manual commit, never the run's verdict - it always exits 0.
 set -uo pipefail
 result="${1:-recorded}"
