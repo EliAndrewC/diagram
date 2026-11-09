@@ -39,6 +39,7 @@ aiden	aidono
 aidono	aidono
 aidono-zukuri	aidono
 aidonoshin	aidono
+ailao	Ailao
 ainu	Ainu
 aisle	aisle
 aisles	aisle
@@ -1460,6 +1461,7 @@ ghusl	ghusl
 ginmisho	ginmisho
 ginned	ginned cotton
 ginned cotton	ginned cotton
+ginning	ginning
 gion	Gion festival
 gion festival	Gion festival
 gion festivals	Gion festival
@@ -2554,6 +2556,7 @@ land-sharing system	warichi
 land-stewards	steward
 landrace	landrace
 landraces	landrace
+lao-ai	Ailao
 large cash	standard cash
 large rent	subsoil owner
 laspeyres	Laspeyres index
@@ -2747,6 +2750,7 @@ manyoshu	Man'yoshu
 mao	Mao commentary
 mao commentary	Mao commentary
 maoqu	maoqu
+marco polo	Marco Polo
 market god	ichigami
 market integration	market integration
 market-god	ichigami
@@ -3415,6 +3419,7 @@ polders	polder
 pollard	pollard
 pollarded	pollard
 pollards	pollard
+polo	Marco Polo
 polygonum	Polygonum thunbergii
 polygonum thunbergii	Polygonum thunbergii
 ponded-storage irrigation	ponded-storage irrigation

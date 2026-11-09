@@ -18865,5 +18865,25 @@
   "variants": [
    "Chiang-nan"
   ]
+ },
+ "Marco Polo": {
+  "def": "A Venetian merchant who traveled in China under the Yuan dynasty, from about 1275 to 1292, and whose account of the country was widely read in Europe.",
+  "variants": [
+   "Marco Polo",
+   "Polo"
+  ]
+ },
+ "Ailao": {
+  "def": "A people of China's southwest border region under the Han, named in the Han history for their cloth.",
+  "variants": [
+   "Ailao",
+   "Lao-ai"
+  ]
+ },
+ "ginning": {
+  "def": "Stripping the seeds from raw cotton fiber; in the sources here, done by rolling them out with an iron rod.",
+  "variants": [
+   "ginning"
+  ]
  }
 }
