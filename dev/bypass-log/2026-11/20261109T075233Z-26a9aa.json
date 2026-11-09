@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T07:52:33Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "d1d8d3fa7",
+  "why": "T067's one changed sentence writes in the round arbiter's ruling ask:449-T065-scope, naming the expected remainders; T067's own decisions take a review when that task starts"
+}
