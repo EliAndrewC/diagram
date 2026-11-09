@@ -10,3 +10,9 @@ its time, the hooks' cost per tool call, and what a port to Rust would and would
 "Wouldn't the hooks being in Rust also make the hook tests run faster?"
 
 "I think what we're finding is that our Python code is just to inefficient and should probably all be ported to Rust, so I think I want to just move forward with that, making this a Rust codebase instead of a Python codebase."
+
+The GM, 2026-11-09, on a stuck background check: "I thought we had tooling to prevent a stuck command from blocking us from doing work for that amount of time."
+
+The GM, 2026-11-09: "I don't think we need to port the past feature harnesses if those are not still used."
+
+The GM, 2026-11-09: "Let's delete rather than port our tooling which runs our tests remotely on AWS."
