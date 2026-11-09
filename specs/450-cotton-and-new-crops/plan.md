@@ -67,9 +67,9 @@ quickly or slowly, with author and crops; whether the Tokugawa restrictions stop
 
 `implementation-check.md` holds each new question's line (`no code implements it`, with the search). The reply on #22 gives, figure by
 figure, the fragment file and the verdict, and what is still open: the unread works the passes name (Nagahara 2004 and Takebe direct,
-Hauser, Chao, Dietrich, Xu Xinwu, Ho, Mazumdar, Benedict), and each SILENT. Anything for the GM goes through `escalation-check` first; at
-present the one candidate is that cotton's history sits oddly with the canon's list of cash crops only if the GM wants it to, and the
-canon is edited by no one here.
+Hauser, Chao, Dietrich, Xu Xinwu, Ho, Mazumdar, Benedict), and each SILENT. Beside the history the reply states the two canon quotations: cotton is
+absent from `setting/l7r.md`'s list of cash crops and named as an ordinary low-tariff good. Anything for the GM goes through
+`escalation-check` first, and nothing here edits the canon.
 
 The `make done` route: every delta here is a record edit, so `make land` takes the record's checks; a claims-gate refusal on owed Rust
 claims of another feature is taken up when it is seen on a landing.
