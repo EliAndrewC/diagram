@@ -46,6 +46,7 @@ aizu	Aizu
 ake-mutsu	ake-mutsu
 aki monto	monto
 akiba	Akiba
+akita	Akita
 ako	Ako
 ako salt	Ako
 akusui	akusui
@@ -211,6 +212,8 @@ barrier station	sekisho
 barrier stations	sekisho
 basal area	basal area
 base flow	base flow
+bast fiber	bast fiber
+bast fibers	bast fiber
 bastion	bastion
 bastions	bastion
 battalion cities	guard city
@@ -397,6 +400,8 @@ calendar calibration	calendar calibration
 calenderer	calenderer
 calenderers	calenderer
 calibrated liberty	calibrated liberty
+calico	calico
+cambay cloth	Cambay cloth
 cambered beam	cambered beam
 cambered beams	cambered beam
 canal corridor	canal corridor
@@ -1354,6 +1359,7 @@ futures contracts	futures
 fuyu	Fuyu
 fuyu persimmon	Fuyu
 föhn	fohn
+g. arboreum variety indicum	G. arboreum variety indicum
 gabion	gabion
 gabions	gabion
 gable end	gable end
@@ -1732,6 +1738,7 @@ hiro	hiro
 hiroen	hiroen
 hirokoji	hirokoji
 hiroma	hiroma
+hirosaki	Hirosaki
 hiroshige	Hiroshige
 hiroshige's	Hiroshige
 hitch rail	hitching rail
@@ -2374,6 +2381,7 @@ kofu basin	Kofu
 kofun	Kofun period
 kofun period	Kofun period
 kogein	kogein
+kogin	kogin
 koguchi	koguchi
 koike	koike
 koishikawa yojosho	Yojosho
@@ -2441,6 +2449,7 @@ kuchidome guard posts	kuchidome
 kuchiei	kuchiei
 kuchiireya	hitoyado
 kuchimai	kuchimai
+kudzu	kudzu
 kui	kui
 kujiba	kujiba
 kujikai	kujishi
@@ -2457,6 +2466,8 @@ kundoku	kundoku
 kune	kune
 kune-gaki	kune
 kuni	kuni
+kunlun	Kunlun
+kunlun man	Kunlun
 kunugi	kunugi
 kuping	kuping
 kura	kura
@@ -2791,6 +2802,7 @@ middle rowhouses	middle rowhouse
 middle-rank retainer	retainer
 middle-rank retainers	retainer
 midori-tsumi	midori-tsumi
+mikawa	Mikawa
 military commissioner	military commissioner
 military commissioners	military commissioner
 military examination	military examination
@@ -2886,6 +2898,7 @@ monzen	monzen
 mori	mori
 mori ogai	Mori Ogai
 morijio	morijio
+morioka	Morioka
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
 morohaku	morohaku
@@ -4053,6 +4066,7 @@ sill	sill
 silla	Silla
 silver carp	silver carp
 simpson index	SI
+sinense	sinense
 single range	main range
 single straight range	main range
 single whip reform	Single Whip Reform
@@ -5016,6 +5030,7 @@ yamakawa nihonshi shojiten	Yamakawa Nihonshi Shojiten
 yamanote	Yamanote
 yamanote loop	Yamanote
 yamashiro	Yamashiro
+yamato	Yamato
 yamen	yamen
 yamen god	yamen-god
 yamen-god	yamen-god
