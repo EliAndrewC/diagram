@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-09T00:55:34Z",
+  "target": "plan-gate push",
+  "commit": "a324d21cc",
+  "why": "spec-fidelity's CLEAR on T060 said these were defects to fix before the task closes and that none changes the verdict; the edits make exactly those"
+}
