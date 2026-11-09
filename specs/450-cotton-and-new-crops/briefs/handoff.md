@@ -64,3 +64,25 @@
 - download list: 331, Pomeranz, The Great Divergence (2000), Appendix F. The whole-book uploads a search found on a Lisbon course-materials server were not read or cited
 - leads not followed: Great Divergence Appendix F (331); Huang's 2002 Journal of Asian Studies critique, which a search summary says takes up the appendix; the 2003 Huang-Pomeranz exchange in the archive does not discuss the cloth figures
 - owed at this part's end for the new key: quote-check on its three 0319 notes, source-applicability on its write-up; the earlier owed list above stands
+## Session S3
+- SECTION=0321/which-cottons-grew-in-asia-before-1492-and-when-did-the-american-kinds-come (new): cotton-species-before-1492, cotton-american-arrival, cotton-columbus-window
+- Item 2 (Cotton in India and Korea) is NOT written: the ten-key cap was reached on item 1 and make reserve refused the eleventh key; it is the continuation brief, session S3 continued
+- Premise, was cotton a New World crop in Asia: NOT ATTESTED that it was; ATTESTED that two Old World species grew there before 1492 (Fuller 2024) - 0321
+- India, cotton in Baluchistan by 5000-4300 BCE, wild or cultivated unknown: ATTESTED ONLY FOR use; cultivation c. 2500 BCE in the Harappan period, Indus region: ATTESTED (inferred from regular seeds, Fuller 2024) - 0321
+- China, G. herbaceum overland and the South Asian species by sea; lower Yangzi by the 12th century: ATTESTED (Zurndorfer, following Deng) - 0321; the spread is 0320
+- Korea, seed 1363 (Mun Ik-jeom), species: ATTESTED as recorded; Han's text a hybrid known as Chinese Asiatic cotton, Han's note 18 not G. herbaceum but G. arboreum, Stephens native varieties G. arboreum, all given - 0321
+- Japan, G. arboreum nationwide 16th-18th centuries: ATTESTED (MAFF); declined from the 19th: ATTESTED; variety sinense: ATTESTED (Kawakatsu) - 0321
+- Names changed: Fortune 1840s and EB 1911 G. herbaceum; Hutchinson 1947 (through Han) G. arboreum: given - 0321
+- American species, India, trials 1788-1850 'little permanent success': ATTESTED (EB 1911); 1788 opens the span, no first American-seed date: SILENT - 0321
+- American species, Dharwar: 1829-36 failed; Mercer April 1843; 178,000 of 379,000 acres: ATTESTED ONLY FOR Dharwar (Marshman 1862), about 47% is this project's arithmetic, assuming one season - 0321
+- American species, India's 2-3% of acreage, 19th to mid-20th century: ATTESTED ONLY FOR one modern web essay (Ray), denominator unstated, uncited - 0321
+- American species, China, 1865: ATTESTED ONLY FOR one abstract (Wang 2006); share: SILENT - 0321
+- American species, Korea: trial 1904 Gohado ATTESTED ONLY FOR one news report on the Mokpo city history; 60,000 ha 1910 to 340,000 ha 1942, 93% south 1918, 70% all 1936, whole south 1935: ATTESTED (Stephens 2024) - 0321
+- American species, Japan: planting date SILENT (searched: 陸地綿, 米綿, Meiji trials); imports c. 1900, 800,000 bales: ATTESTED (EB 1911) - 0321
+- The GM's 'about 100 years': the edicts are 1633-39, the policy 1639 or 1641 by entry (kotobank-sakoku), 141 to 149 years after 1492, this project's arithmetic; 'about 100' fits only the shogunate's founding in 1603, 111 years after 1492, and that closed no trade - 0321
+- Did those years have any bearing: only that Japan began to grow cotton then; no link to the American crops found (SILENT, searched); the plant was Asian G. arboreum; the routes to Japan (China, the Netherlands, Korea through Tsushima) stayed open under the edicts (ATTESTED, kotobank-sakoku) - 0321
+- Did Japan probably not have cotton then: NOT ATTESTED; it did: Echigo c. 1494, grown end of the 1400s to early 1500s, Musashi markets 1570s, Yamato 1591 (0318's sources) - 0321
+- Searches: 陸地綿 and 米綿 with 明治, 導入, 試作, 三田育種場; India's factory-cloth share (Roy's paper, CEPR 403, NCERT reset, TMU 503: not fetched here); 鎖国 on Kotobank
+- New keys (ten): fuller-2024-cotton-investment, han-kim-2021-foreign-monk, eb-1911-cotton, rri-ray-indian-cotton-crisis, wang-2006-american-cotton-china, stephens-2024-korea-upland-cotton, maff-cotton-host-info, kotobank-sakoku, marshman-1862-dharwar, wikitree-mokpo-2018
+- source-reader: run on the ten new keys, in two rounds of five for the memory cap, all findings applied and recorded; the notes added or changed after those reports, and the notes copied from earlier questions, are still owed source-reader, for session C3
+- Leads not followed: Chao 1977, Habib, Roy, Riello, Beckert (unread); Rikuchimen saibai enkakushi (1917, cited by Stephens n. 5, a possible primary source for the first upland planting in Korea); Hutchinson 1947 itself; EB's 'Japan received cotton from India before China' has no source behind it
