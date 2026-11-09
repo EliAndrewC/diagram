@@ -144,6 +144,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-09",
    "declared": "round-arbiter"
+  },
+  "### T75 Approach (checklist part A)": {
+   "sha256": "142cb0e572fa44b2104685577739d62698d97d940ba2b0cad034a06462790d53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -4345,6 +4351,65 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-09",
+   "blocks": [
+    "### T75 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "ONE LANDING",
+     "summary": "figures.py, probe.py, ratchet.py, gatecost.py and gate_costs.py become l7r-gate measure in one landing; the Makefile's three call sites, its inline class_count and the guard measure_hooks ask the gate.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and places scripts/measure/ in phase 2 and the Makefile's gate recipes in the second census; the request is that the Python all be ported. The caller list states its two search commands. Those greps match the .py filename only, so an import or a python3 -m form would not appear; the block's item 9 (git ls-files) and the replayed tests are what would catch one. Not a narrowing."
+    },
+    {
+     "id": "THE TABLE MOVES",
+     "summary": "RATCHETS becomes data in dev/ratchets.json with every pinned baseline and reason verbatim; run-plausible reads the same row.",
+     "class": "within",
+     "why": "A Python table must leave Python under FR-001, and the baselines and reasons are carried verbatim, so nothing asked for is reduced. The output consequence of the move is ruled separately under THREE PATH DIFFERENCES."
+    },
+    {
+     "id": "THE CALIBRATION LOOP IS RE-PINNED",
+     "summary": "The floor-net-of-load loop runs 300,000,000 iterations in Rust and calibration_s becomes 0.116 s.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 asks for the same verdicts and outputs, and this changes a constant the Python held, so it is ruled rather than waved through. The rule cannot be followed literally: calibration_s is the duration of one specific loop, and a Rust loop at the Python's iteration count is a different duration by the block's own reason, so at least one of iteration count or calibration_s must move or the net-of-load floor compares a Rust run against a Python time and defeats what FR-002 protects. The ruling rests on that alone, not on the block's statement that the GM's ceiling and baseline are unchanged, which the bundle cannot confirm. Two limits on the record: checklist item 10 of this same block says 'Before moving a constant. None moved.' while this decision moves one, and the block should say so; and the block does not say the 63-case differential reached this loop, which runs only at or over a ceiling, so equivalence here rests on the test_ratchets.py cases the block says are replayed."
+    },
+    {
+     "id": "GATECOST RULED DIFFERENCES",
+     "summary": "Three of the six differential differences: a named class filters the done reference warm and cold medians, and the usage line.",
+     "class": "within",
+     "why": "These are exactly the differences FR-002's ruled case ask:449-T75-gatecost-class names: the warm and cold medians and the usage line."
+    },
+    {
+     "id": "THREE PATH DIFFERENCES",
+     "summary": "The other three differential differences, which the block says differ only in naming dev/ratchets.json for the moved baseline.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 requires the same outputs and no ruled case in the spec covers these three. It is implied by the GM's own request as FR-001 carries it: the request ports all the Python, FR-001 and this block's item 9 require the Python file gone, so an identical string would direct the reader to a file that does not exist. Any location for the table would force a changed path, so the choice of dev/ratchets.json does not create the difference. The ruling is limited to what the block states, that the difference is confined to the path; any other changed word in those messages is not covered."
+    },
+    {
+     "id": "PROBE AND FULL FIGURES OUTSIDE THE DIFFERENTIAL",
+     "summary": "probe and the figures commands that re-run measurements are held by their tests, not the differential.",
+     "class": "within",
+     "why": "FR-002's standard is every case the tests and suites hold, and the block says those tests are replayed. The differential is beyond what FR-002 requires. Item 6's exit, 'each tool's verdicts the Python's, by a differential', is worded wider than this decision; that is an internal inconsistency in the block, not a departure from the request."
+    },
+    {
+     "id": "THE RULING'S LIMIT",
+     "summary": "A class median over its ceiling is printed and does not refuse, tested.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-T75-gatecost-class says this in the same words."
+    },
+    {
+     "id": "WHAT THE TESTS REPLAY",
+     "summary": "Every case of test_ratchets.py, test_gate_costs.py, test_figures_deleted_engine.py, test_make_figures.py and test_probe.py is in measure/*/tests.rs, the Makefile recipe cases included.",
+     "class": "within",
+     "why": "FR-001 moves each tests/ file with the piece it tests, and FR-002 is held on every case those tests hold."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7457,6 +7522,64 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T75": {
+   "section_sha256": "142cb0e572fa44b2104685577739d62698d97d940ba2b0cad034a06462790d53",
+   "reviewed": "2026-11-09",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "ONE LANDING",
+     "summary": "figures.py, probe.py, ratchet.py, gatecost.py and gate_costs.py become l7r-gate measure in one landing; the Makefile's three call sites, its inline class_count and the guard measure_hooks ask the gate.",
+     "class": "within",
+     "why": "FR-001 replaces every tracked Python file and places scripts/measure/ in phase 2 and the Makefile's gate recipes in the second census; the request is that the Python all be ported. The caller list states its two search commands. Those greps match the .py filename only, so an import or a python3 -m form would not appear; the block's item 9 (git ls-files) and the replayed tests are what would catch one. Not a narrowing."
+    },
+    {
+     "id": "THE TABLE MOVES",
+     "summary": "RATCHETS becomes data in dev/ratchets.json with every pinned baseline and reason verbatim; run-plausible reads the same row.",
+     "class": "within",
+     "why": "A Python table must leave Python under FR-001, and the baselines and reasons are carried verbatim, so nothing asked for is reduced. The output consequence of the move is ruled separately under THREE PATH DIFFERENCES."
+    },
+    {
+     "id": "THE CALIBRATION LOOP IS RE-PINNED",
+     "summary": "The floor-net-of-load loop runs 300,000,000 iterations in Rust and calibration_s becomes 0.116 s.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 asks for the same verdicts and outputs, and this changes a constant the Python held, so it is ruled rather than waved through. The rule cannot be followed literally: calibration_s is the duration of one specific loop, and a Rust loop at the Python's iteration count is a different duration by the block's own reason, so at least one of iteration count or calibration_s must move or the net-of-load floor compares a Rust run against a Python time and defeats what FR-002 protects. The ruling rests on that alone, not on the block's statement that the GM's ceiling and baseline are unchanged, which the bundle cannot confirm. Two limits on the record: checklist item 10 of this same block says 'Before moving a constant. None moved.' while this decision moves one, and the block should say so; and the block does not say the 63-case differential reached this loop, which runs only at or over a ceiling, so equivalence here rests on the test_ratchets.py cases the block says are replayed."
+    },
+    {
+     "id": "GATECOST RULED DIFFERENCES",
+     "summary": "Three of the six differential differences: a named class filters the done reference warm and cold medians, and the usage line.",
+     "class": "within",
+     "why": "These are exactly the differences FR-002's ruled case ask:449-T75-gatecost-class names: the warm and cold medians and the usage line."
+    },
+    {
+     "id": "THREE PATH DIFFERENCES",
+     "summary": "The other three differential differences, which the block says differ only in naming dev/ratchets.json for the moved baseline.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 requires the same outputs and no ruled case in the spec covers these three. It is implied by the GM's own request as FR-001 carries it: the request ports all the Python, FR-001 and this block's item 9 require the Python file gone, so an identical string would direct the reader to a file that does not exist. Any location for the table would force a changed path, so the choice of dev/ratchets.json does not create the difference. The ruling is limited to what the block states, that the difference is confined to the path; any other changed word in those messages is not covered."
+    },
+    {
+     "id": "PROBE AND FULL FIGURES OUTSIDE THE DIFFERENTIAL",
+     "summary": "probe and the figures commands that re-run measurements are held by their tests, not the differential.",
+     "class": "within",
+     "why": "FR-002's standard is every case the tests and suites hold, and the block says those tests are replayed. The differential is beyond what FR-002 requires. Item 6's exit, 'each tool's verdicts the Python's, by a differential', is worded wider than this decision; that is an internal inconsistency in the block, not a departure from the request."
+    },
+    {
+     "id": "THE RULING'S LIMIT",
+     "summary": "A class median over its ceiling is printed and does not refuse, tested.",
+     "class": "within",
+     "why": "FR-002's ruled case ask:449-T75-gatecost-class says this in the same words."
+    },
+    {
+     "id": "WHAT THE TESTS REPLAY",
+     "summary": "Every case of test_ratchets.py, test_gate_costs.py, test_figures_deleted_engine.py, test_make_figures.py and test_probe.py is in measure/*/tests.rs, the Makefile recipe cases included.",
+     "class": "within",
+     "why": "FR-001 moves each tests/ file with the piece it tests, and FR-002 is held on every case those tests hold."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }
