@@ -249,5 +249,6 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       verify: DONE. landed: the state, the tooling and config hashes and the coverage record ported to rust/gate; m:t72-state shows both hashes equal to the Python's, the second call from kept forms; static, tooling tests and hook suites green
 - [ ] T73 The remote test path deleted, not ported (FR-001a): `buildspec/`, `Dockerfile.ci`, the `ci-*` targets, the `remote` switch, the dispatcher and AWS adapter; the route and the gated push local
       research: rendering
-- [ ] T74 Past feature harnesses nothing runs deleted, not ported (FR-001): 138 Python files under `specs/`
+- [x] T74 Past feature harnesses nothing runs deleted, not ported (FR-001): 138 Python files under `specs/`
       research: rendering
+      verify: DONE. landed: 138 past-feature harness files nothing runs deleted; the done-line census shows no hit outside the named records
