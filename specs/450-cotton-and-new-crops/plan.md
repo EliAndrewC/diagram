@@ -23,7 +23,7 @@ the issue orders them. Then the reply on #22. No code, map or canon change.
 - **Marked drafts and readings through another work**: Zurndorfer's GEHN papers and Pomeranz 1998 are cited with their headers said;
   Tanimoto as 0312 and 0313 cite it; Nagahara through Yajima and Tanimoto, never as Nagahara; Ho through Crosby; Mazumdar through
   a blog is not cited as Mazumdar.
-- **The question count and the write cap**: nine new questions (each crop its own, so question 3 cannot pass 20,000 bytes of prose).
+- **The question count and the write cap**: ten new questions (D1 1, D2 1, D3 2, D4 3, D5 3; each crop its own, so question 3 cannot pass 20,000 bytes of prose).
   Each write takes at most four questions and ten registry keys; `make reserve`'s eleventh key sends the rest to a continuation brief.
 
 ## Performance bookends
@@ -40,7 +40,8 @@ N/A: no generator change.
 A new money question, its title asking when cotton became ordinary clothing in Japan. The spec's Japan findings, the five stages in
 order each with a verdict; what it replaced and how fast; by region (the cold north against the Kinai) and by class, low-ranking samurai
 against peasants and townsmen, with sumptuary rules labeled as ceilings; the GM's direct question answered by region; the two canon
-quotations beside it. Names 0261, 0274, 0312 and 0313 by file.
+quotations beside it. Per the spec's User Story 1 scenario 2, the six files the request lists (0261, 0274, 0313, 0209, 0006, 0020) are each
+named by file where they bear, with 0312 in addition; none is repeated. 0006 and 0020 are named again in D4's crop questions.
 
 ## D2 - China's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)
 
@@ -51,7 +52,8 @@ Yangzi as separate stages, and the state's part. Points at D1.
 
 Two new money questions: one asking whether cotton was a New World crop, which species grew where before 1492 and when the American
 kinds came (four countries, each with date and importance, with the GM's point on the 100 years answered); one on when cotton became
-ordinary in India and in Korea, with Korea's role in cloth reaching Japan. Point at D1 and D2.
+ordinary in India and in Korea, with the same five dated stages as question 1 for each country, and Korea's role, if any, in cotton reaching
+Japan, the cloth and the plant each with its verdict. Point at D1 and D2.
 
 ## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)
 

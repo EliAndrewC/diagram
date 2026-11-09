@@ -1,0 +1,244 @@
+{
+ "feature": "450-cotton-and-new-crops",
+ "blocks": {
+  "preamble": {
+   "sha256": "57487424dcac5d21a54f3275d0e22f039e6a670abc45fd245a32e146ad4877e3",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## Summary": {
+   "sha256": "bb7de78fea3dede717197b2adf16b40794bd8aada4726530381bdd05499995c4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## Technical Context": {
+   "sha256": "cc6856780981d38c051c04325da6f28980ea32c33548efd06238aaae441c1e3e",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## Performance bookends": {
+   "sha256": "5ee1a0a30f4cf155051070f1dd713a06677d65c7603d3ea5e038eb92b501cbc4",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## Constitution Check": {
+   "sha256": "e73e107bceb49bd8dd2cafe9dc3be56f53b53269a2b276e9faa910bcbd863c5f",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D1 - Japan's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "87d654e2236651e7059fbb34f9a2142b42d4f160f3cacf9d5acf6b5da6bcae80",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D2 - China's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)": {
+   "sha256": "6d94e9b4808745fc383293fbb3b5ac9e66dbb9fc965f507a5852934dec3129f0",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)": {
+   "sha256": "856dc501cb4c8261305df964b309050271dcbe9d4b5b3b1cc2a62015b198580d",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)": {
+   "sha256": "cb6bf563f5b857fc189db743d99285604b3f4a35eabc0b1440bfb8c73072507a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-007)": {
+   "sha256": "5a0dc6f98f498f3265fdac62db1f666ac68f1af2567125296c34342c3bb6c8e6",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  },
+  "## D6 - the implementation check and the reply (FR-001, FR-003, FR-004)": {
+   "sha256": "3b1edb26e257b3cbf16b268f0dbcce8e1cd399debe6a0a0f2758ebe77b623e18",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity"
+  }
+ },
+ "block_reviews": [
+  {
+   "reviewed": "2026-11-08",
+   "blocks": [
+    "## Constitution Check",
+    "## D1 - Japan's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D2 - China's cotton (issue question 1; FR-001, FR-002, FR-005, FR-006, FR-007)",
+    "## D3 - the species, and India and Korea (issue question 2; FR-001, FR-002, FR-005, FR-007)",
+    "## D4 - tobacco, sweet potato, white potato (issue question 3; FR-001, FR-002, FR-005, FR-007)",
+    "## D5 - the tomato, what set the pace, and the Tokugawa restrictions (issue questions 3 and 4; FR-001, FR-002, FR-005, FR-007)",
+    "## D6 - the implementation check and the reply (FR-001, FR-003, FR-004)",
+    "## Performance bookends",
+    "## Summary",
+    "## Technical Context",
+    "preamble"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "Summary-queue",
+     "summary": "Five passes, five write sessions each followed by a check-and-apply, one queue in one clone",
+     "class": "within",
+     "why": "How the work is scheduled; the request does not speak to it and no asked figure depends on it."
+    },
+    {
+     "id": "Summary-order",
+     "summary": "Questions 1 and 2 first, each pair landed on its own, then the reply",
+     "class": "within",
+     "why": "The request's Priority line: question 1, then 2, and 3 and 4 may follow."
+    },
+    {
+     "id": "Summary-scope",
+     "summary": "No code, map or canon change",
+     "class": "within",
+     "why": "The request asks only for the history; the Rokugan decision stays with the GM (also FR-006)."
+    },
+    {
+     "id": "TC-leads",
+     "summary": "Passes are leads; each passage is read on its page before citing",
+     "class": "within",
+     "why": "Citation method; removes nothing asked."
+    },
+    {
+     "id": "TC-urls",
+     "summary": "Pass C's wrong URLs are not used; the URL comes from make archive-find",
+     "class": "within",
+     "why": "Citation hygiene."
+    },
+    {
+     "id": "TC-pdfs",
+     "summary": "Pass E's three PDFs read by pdftotext and given to the checks by IMAGES= or an archive copy",
+     "class": "within",
+     "why": "Tooling route; removes nothing asked."
+    },
+    {
+     "id": "TC-readthrough",
+     "summary": "Marked drafts cited as such; Nagahara, Ho and Tanimoto cited as read through others; Mazumdar through a blog not cited as Mazumdar",
+     "class": "within",
+     "why": "Carries FR-007."
+    },
+    {
+     "id": "TC-count",
+     "summary": "Nine new questions, at most four questions and ten registry keys per write",
+     "class": "within",
+     "why": "Not a narrowing: D1 to D5 name a home for every question the request asks, and FR-001 binds each figure whatever the count. But the number is wrong on the plan's own blocks: D1 (1) + D2 (1) + D3 (2) + D4 (3) + D5 (3) = ten, not nine. The plan should say ten, or name which two are one."
+    },
+    {
+     "id": "PB",
+     "summary": "Performance bookends N/A",
+     "class": "within",
+     "why": "No generator change; nothing asked."
+    },
+    {
+     "id": "CC",
+     "summary": "Constitution check: research physical tasks, record checks, built as the FRs",
+     "class": "within",
+     "why": "Process; removes nothing asked."
+    },
+    {
+     "id": "D1-japan",
+     "summary": "One Japan cotton question: five stages each with a verdict, what it replaced and how fast, region, class (low-ranking samurai against commoners, sumptuary rules labeled as ceilings), the direct question by region, canon beside it",
+     "class": "within",
+     "why": "Clause for clause question 1. Ceilings labeling is FR-005/FR-007 honesty about what the rules show, and answering by region is the fuller answer to a question the request itself asks by region."
+    },
+    {
+     "id": "D1-prior-record",
+     "summary": "D1 names 0261, 0274, 0312 and 0313 by file; no block names 0209, 0006 or 0020",
+     "class": "narrowing",
+     "why": "The request lists six files the record already holds (0261, 0274, 0313, 0209, 0006, 0020) so the session does not redo them, and the accepted spec's User Story 1 scenario 2 requires all six named by file. The plan's only list of them carries three of the six plus 0312, with no reason, and no other block picks up 0209 (dyers and weavers), 0006 or 0020 (dry-field and cash crops on rice land), which sit directly beside D1's commercial-crop stage and D4. Not impossible, not implied by the GM's words, and no purpose is served by the omission. Should say: all six are named by file (0312 in addition), each where it bears.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D2-china",
+     "summary": "One China cotton question of D1's shape, frontier and Yangzi as separate stages, the state's part",
+     "class": "within",
+     "why": "Question 1 for China. The frontier/Yangzi split and the state's part serve the by-region and commercial-crop clauses."
+    },
+    {
+     "id": "D3-species",
+     "summary": "One question on whether cotton was a New World crop: species before 1492, American arrivals, four countries with date and importance, the 100 years answered",
+     "class": "within",
+     "why": "Clause for clause question 2's premise check."
+    },
+    {
+     "id": "D3-stages",
+     "summary": "One question on when cotton became ordinary in India and in Korea",
+     "class": "within",
+     "why": "The block does not list the stages, but it does not limit them either, and it cites FR-001 while the accepted spec's User Story 1 says the same stages. A one-phrase statement would be clearer; silence here is not a narrowing."
+    },
+    {
+     "id": "D3-korea-cloth",
+     "summary": "Korea's role in CLOTH reaching Japan",
+     "class": "narrowing",
+     "why": "The request says 'Korea's role, if any, in cotton reaching Japan', which is the plant and the seed as well as the cloth. D3 replaces the word with the narrower one, and it is a positive statement of the question's content, not a silence. The accepted spec carries a verdict on each: ATTESTED ONLY FOR cloth, and the plant reaching Japan through Korea NOT ATTESTED, the one source naming a seed route saying Ming. As written the plant's verdict has no home, and a NOT ATTESTED the GM would use to weigh the route is dropped. Not impossible, not implied by the request. Should say: Korea's role, if any, in cotton reaching Japan, the cloth and the plant each with its verdict.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "D4-plants",
+     "summary": "Three questions, one per plant: tobacco, sweet potato, white potato; no question of its own for the native yam",
+     "class": "within",
+     "why": "Question 3 asks for cotton's fellow crops and tells the session to keep sweet potato, white potato and native yam apart. The yam is a misidentification to guard against, not a crop whose spread was asked for; the loose-word rule carries it."
+    },
+    {
+     "id": "D4-loose",
+     "summary": "Loose plant words kept as the spec's edge case says",
+     "class": "within",
+     "why": "Carries 'say which one each date concerns'."
+    },
+    {
+     "id": "D5-tomato",
+     "summary": "Tomato question per country with the lag and the GM's two positions tested",
+     "class": "within",
+     "why": "Questions 3 and 4 on the tomato."
+    },
+    {
+     "id": "D5-factors",
+     "summary": "What historians say made a crop spread quickly or slowly, with author and crops",
+     "class": "within",
+     "why": "Question 4. The COMPARATIVE mark is not repeated here; the spec's edge case carries it."
+    },
+    {
+     "id": "D5-tokugawa",
+     "summary": "Whether the Tokugawa restrictions stopped new crops, with arrivals before and after",
+     "class": "within",
+     "why": "Question 4's last clause. The routes the request names are not restated, and nothing excludes them."
+    },
+    {
+     "id": "D6-impl",
+     "summary": "implementation-check.md holds each new question's line",
+     "class": "within",
+     "why": "FR-003."
+    },
+    {
+     "id": "D6-reply",
+     "summary": "Reply gives figure by figure the fragment, the verdict and what is open, with the two canon quotations",
+     "class": "within",
+     "why": "FR-001 and FR-004; the canon quotations are the request's own."
+    },
+    {
+     "id": "D6-canon",
+     "summary": "Anything for the GM goes through escalation-check; nothing edits the canon",
+     "class": "within",
+     "why": "The Rokugan decision stays with the GM."
+    },
+    {
+     "id": "D6-route",
+     "summary": "make land takes the record's checks; a claims-gate refusal on another feature's Rust claims is taken up when seen",
+     "class": "within",
+     "why": "Landing procedure; the request does not reach it and no asked figure depends on it."
+    }
+   ]
+  }
+ ]
+}
