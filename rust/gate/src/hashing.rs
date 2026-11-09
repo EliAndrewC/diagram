@@ -1,5 +1,5 @@
 //! Hashing a set of the repository's files by what runs (feature 449 T72): the walk both `state::tooling_hash` and `config_hash` make, and what decides how the gate's tests run. A `.py` file's semantic bytes are
-//! Python's own `ast.dump`, asked of `codeid.py` once a run for every file (`ask:449-T062-py-id`); the hashes equal the ones `state.py` and `gate_config.py` wrote, so a recorded tooling hash still reads.
+//! Python's own `ast.dump`, kept by blob under the git directory and asked of `codeid.py` once a run only for those it lacks (`ask:449-T062-py-id`, FR-006); the hashes equal the ones `state.py` and `gate_config.py` wrote, so a recorded tooling hash still reads.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -64,8 +64,34 @@ fn counted(path: &Path) -> bool {
     path.is_file() && !path.components().any(|c| c.as_os_str() == "__pycache__")
 }
 
-/// The semantic bytes of each `.py` file named, in one process.
-fn semantic_bytes(
+/// A kept semantic form goes after a week unused, so that a tree's edits do not pile up under the git directory.
+const KEPT_FOR: std::time::Duration = std::time::Duration::from_secs(7 * 24 * 60 * 60);
+
+/// Where each semantic form is kept, by raw blob id, one directory for each docstring rule; None outside a repository, where nothing is kept.
+fn kept_dir(root: &Path, keep: bool) -> Option<PathBuf> {
+    codeid::common_git_dir(root).map(|d| {
+        d.join("semantic-dumps")
+            .join(if keep { "keep" } else { "strip" })
+    })
+}
+
+/// Forms no file of this run named and not touched for `KEPT_FOR`.
+fn prune(dir: &Path, used: &std::collections::BTreeSet<String>) {
+    let now = std::time::SystemTime::now();
+    for entry in std::fs::read_dir(dir).into_iter().flatten().flatten() {
+        let name = entry.file_name().to_string_lossy().into_owned();
+        let age = entry
+            .metadata()
+            .and_then(|m| m.modified())
+            .map(|at| now.duration_since(at).unwrap_or_default());
+        if !used.contains(&name) && age.is_ok_and(|a| a > KEPT_FOR) {
+            let _ = std::fs::remove_file(entry.path());
+        }
+    }
+}
+
+/// Python's answer for `files`, framed `<length>\n<bytes>`, in one process.
+fn asked(
     root: &Path,
     files: &[&PathBuf],
     keep: bool,
@@ -107,7 +133,46 @@ fn semantic_bytes(
         out.push(body.to_vec());
         rest = &rest[line + 1 + size..];
     }
-    Ok(out)
+    if out.len() == files.len() {
+        Ok(out)
+    } else {
+        Err("codeid.py answered short".to_owned())
+    }
+}
+
+/// The semantic bytes of each `.py` file named: the kept form of its blob, Python asked once for those it lacks (FR-006), so an unchanged tree starts no Python. A form is written whole and renamed into place, since a
+/// reader must never hash a torn one.
+fn semantic_bytes(
+    root: &Path,
+    files: &[&PathBuf],
+    keep: bool,
+    python: &str,
+) -> Result<Vec<Vec<u8>>, String> {
+    let dir = kept_dir(root, keep);
+    let mut ids = Vec::with_capacity(files.len());
+    let mut forms: Vec<Option<Vec<u8>>> = Vec::with_capacity(files.len());
+    for path in files {
+        let id = codeid::git_blob_id(&stated(std::fs::read(path), &path.to_string_lossy())?);
+        forms.push(dir.as_ref().and_then(|d| std::fs::read(d.join(&id)).ok()));
+        ids.push(id);
+    }
+    let lacking: Vec<usize> = (0..files.len()).filter(|&i| forms[i].is_none()).collect();
+    let misses: Vec<&PathBuf> = lacking.iter().map(|&i| files[i]).collect();
+    let answers = asked(root, &misses, keep, python)?;
+    if let Some(d) = dir.as_ref() {
+        let _ = std::fs::create_dir_all(d);
+        for (&at, form) in lacking.iter().zip(&answers) {
+            let tmp = d.join(format!("{}.{}.tmp", ids[at], std::process::id()));
+            if std::fs::write(&tmp, form).is_ok() {
+                let _ = std::fs::rename(&tmp, d.join(&ids[at]));
+            }
+        }
+        prune(d, &ids.iter().cloned().collect());
+    }
+    for (at, form) in lacking.into_iter().zip(answers) {
+        forms[at] = Some(form);
+    }
+    Ok(forms.into_iter().flatten().collect())
 }
 
 /// Every counted file's repository-relative path and its content, joined with no separator, as the Python's `h.update` calls made them.

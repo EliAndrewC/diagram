@@ -76,12 +76,49 @@ fn a_python_that_cannot_answer_fails_the_hash() {
         ("printf 'x\\n'", "framed"),
         ("printf '9\\nab'", "short"),
         ("exit 0", "answered short"),
+        ("printf '1\\nx1\\ny'", "answered short"),
     ] {
         let py = stand_in(&dir, body);
         let why = content_hash(&dir, &files, false, &py).unwrap_err();
         assert!(why.contains(says), "{why}");
     }
     assert!(content_hash(&dir, &files, false, "/no/such/python").is_err());
+}
+
+#[test]
+fn a_kept_form_starts_no_python_and_an_old_unused_one_goes() {
+    let dir = scratch("kept");
+    assert!(Command::new("git")
+        .arg("-C")
+        .arg(&dir)
+        .args(["init", "-q"])
+        .status()
+        .unwrap()
+        .success());
+    put(&dir, "b.py", "x");
+    let files = [dir.join("b.py")];
+    let py = stand_in(&dir, "printf '3\\nDMP'");
+    let first = content_hash(&dir, &files, false, &py).unwrap();
+    assert_eq!(
+        content_hash(&dir, &files, false, "/no/such/python").unwrap(),
+        first
+    );
+    assert!(content_hash(&dir, &files, true, "/no/such/python").is_err());
+    let kept = dir.join(".git/semantic-dumps/strip");
+    let (old, fresh) = (kept.join("old"), kept.join("fresh"));
+    std::fs::write(&old, "x").unwrap();
+    std::fs::write(&fresh, "x").unwrap();
+    let long_ago = std::time::SystemTime::now() - super::KEPT_FOR * 2;
+    std::fs::File::options()
+        .write(true)
+        .open(&old)
+        .unwrap()
+        .set_modified(long_ago)
+        .unwrap();
+    put(&dir, "b.py", "changed");
+    content_hash(&dir, &files, false, &py).unwrap();
+    assert!(!old.exists() && fresh.exists());
+    assert_eq!(std::fs::read_dir(&kept).unwrap().count(), 3);
 }
 
 #[test]

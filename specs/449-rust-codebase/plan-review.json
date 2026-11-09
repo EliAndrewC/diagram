@@ -6154,6 +6154,71 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T72": {
+   "section_sha256": "cccec24ce7501bd41aabd744372fa850c8257d014f56e97a1fe9209cf48ffdf3",
+   "reviewed": "2026-11-08",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "state-and-hashes-rust",
+     "summary": "state.py's writer, reader, tooling hash and already_verified become l7r-gate state; config_hash becomes l7r-gate config-hash; coverage_exempt.py becomes l7r-gate coverage-exempt and is deleted; the Makefile recipes and __main__ subcommands switch in that commit.",
+     "class": "within",
+     "why": "FR-001 phase 2 port of l7r/diagram/ci/, cut over in one commit as FR-003 requires. The GM asked for exactly this: 'making this a Rust codebase'."
+    },
+    {
+     "id": "state-py-left-as-client",
+     "summary": "VerificationState, two constants and once-a-process calls to the binary remain in state.py until T064 ports decision.py and dispatch.py.",
+     "class": "within",
+     "why": "An interim inside the phase with one writer throughout (FR-003); the file is still replaced under FR-001 and the block names the task that ends it."
+    },
+    {
+     "id": "hashes-equal-to-python",
+     "summary": "The tooling hash and config hash keep the Python's form, using Python's ast.dump through codeid.py, so a recorded tooling hash still reads.",
+     "class": "within",
+     "why": "FR-002 asks for the same outputs, and FR-001 already places the .py id on Python's ast.dump through codeid.py until phase 4 (ask:449-T062-py-id). This entry covers the form only; which files are asked is the next decision."
+    },
+    {
+     "id": "hashes-every-file-not-cache-misses",
+     "summary": "The hashes ask codeid.py --semantic once a run WITH EVERY FILE IN IT, and the constraint line restates FR-006 as 'one spawn a process or a batch'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001 permits this route as 'one process a run with all the cache's misses in it', and FR-006 requires 'semantic file ids read from the kept cache'. The block cites 'the shape of ask:449-T062-py-id' but changes it in that element, and its gloss of FR-006 drops the cache clause, so the narrowing is unlabelled. Its only argument, equal hashes, does not need every file asked every run: it never says the cached id cannot serve or that the kept cache cannot hold this form. No impossibility is shown and the GM's words do not imply it. It also cuts against the request's stated purpose, 'our Python code is just to inefficient': on an unchanged tree a cache-miss route starts no Python, while this one starts Python and parses every file on every run. To clear, the block must read ids from the kept cache and ask codeid.py only for misses, or carry a measured reason the kept cache cannot serve this form, with an arbiter ruling recorded in the spec."
+    },
+    {
+     "id": "runlog-and-readers-moved-tasks",
+     "summary": "runlog.py moves to T064 and scripts_readers/tooling_modules to T071, where every caller of each is ported, so no client is needed.",
+     "class": "within",
+     "why": "Task partition, which neither the request nor the spec fixes; it serves FR-003's one cut and needs less interim Python. Holds so long as T064 and T071 sit in these files' FR-001 phase, which this bundle cannot show."
+    },
+    {
+     "id": "coverage-reach-branch-retired",
+     "summary": "The reach branch, import_graph, _top_names, reached_from_kept and seeded are dropped, load refuses an entry naming no stages (with a test), and three named test cases are retired.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows FR-002's parity; FR-002's ruled case (ask:449-T72-coverage-exempt) carries it, so it is tested against the request. Reach branch and helpers: they serve only an entry naming no stages, and with that entry's source retired and load refusing one, no case remains to give a verdict on; porting an import-graph walker over Python source for it would add code with no input, against 'just to inefficient'. seeded: judged separately, it is that source, so it goes with the branch and the request asks for no part of it kept. Three retired cases: each names one of those two things. The request asks for no behavior to be preserved, the code leaves Python either way, and the block states its search space. A stages-less entry already on the record would make load fail the gate loudly rather than pass silently."
+    },
+    {
+     "id": "coverage-report-via-codeid-missing",
+     "summary": "report asks coverage.py through codeid.py --missing, one process with every live entry, only when one exists, and its failure fails the gate.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adds a job to codeid.py beyond the .py id FR-001 names, keeping a phase-2 piece's question in Python until phase 4. The answer is by definition what coverage.py reports about Python files, and FR-002 requires the same outputs, so a Rust reimplementation could not be held to that. It ends with codeid.py in phase 4, when no Python remains to measure, and it starts no process when no live entry exists, so it does not gut the request's purpose. Unlike the hashes, the block keeps the only-when-needed condition."
+    },
+    {
+     "id": "test-cases-replayed",
+     "summary": "Every other case of test_coverage_exempt.py, test_state.py and test_gate_config.py replays in the Rust tests or against the binary.",
+     "class": "within",
+     "why": "FR-002 and SC-004."
+    },
+    {
+     "id": "order-exits-and-measurement-rewrite",
+     "summary": "Runs after T063; callers reach the binary once a process or in a batch; red goes to make arbiter-ask; make done reuses a last green across the switch; recorded measurement commands that run a ported file are rewritten in the same commit and re-run.",
+     "class": "within",
+     "why": "FR-001's rewrite-in-the-commit clause, FR-003, and the batching half of FR-006. The cache half of FR-006 is the blocked decision above."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }
