@@ -3,3 +3,4 @@
 - 0319: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cotton|木綿|棉' l7r pool
 - 0321: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cotton|herbaceum|arboreum|hirsutum' l7r pool
 - 0323: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn 'cotton.*India|cotton.*Korea|India.*cotton|Korea.*cotton' l7r pool
+- 0320: no code implements it - consumed by gm-assistant's money skill; searched: grep -rn -i 'yuan.*cotton|cotton.*yangzi|baidie|huang daopo' l7r pool (added by session S3 continued for S2's question)
