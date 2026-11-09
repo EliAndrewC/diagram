@@ -186,8 +186,9 @@ Each guard task, in the order below (the measured cost first, research R2, then 
       research: rendering
       verify: DONE. landed: the gate crate
 
-- [ ] T062 [US2] `gate-stamp.py`'s content id and `codeid.py`'s `.rs` id and blob-keyed cache in Rust, read by the engine key, the push stamp and the roll cache, held to the Python's byte for byte on the real records; a `.py` id stays `codeid.py`'s, asked once a run for the misses (`ask:449-T062-py-id`)
+- [x] T062 [US2] `gate-stamp.py`'s content id and `codeid.py`'s `.rs` id and blob-keyed cache in Rust, read by the engine key, the push stamp and the roll cache, held to the Python's byte for byte on the real records; a `.py` id stays `codeid.py`'s, asked once a run for the misses (`ask:449-T062-py-id`)
       research: rendering
+      verify: DONE. landed: the code ids in Rust
 
 - [ ] T063 [US2] `l7r/diagram/ci/` the delta and the state: `delta.py`, `state.py`, `runlog.py`, `gate_config.py`, `coverage_exempt.py`, the rest of `scripts/gates/gate-stamp.py` and `__main__.py`'s subcommands for them, the verification state readable across the switch
       research: rendering

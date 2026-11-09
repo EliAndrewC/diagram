@@ -251,36 +251,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 8. **Before offering routes.** None offered.
 9. **After a ruling.** The next step is the one it names: the failing case run directly, the fixes confirmed in the commit, then the gate.
 
-### T062 Approach (checklist part A)
-
-1. **The goal, in the world.** The Rust gate computes a file's id: a `.rs` file's by `rust_tokens`, through the blob-keyed cache in one format with atomic writes, and a kept stamp still verifies. A `.py` file's id stays Python's own `ast.dump`, asked of `codeid.py` by path, one process a run with all the misses in it, its failure failing the gate and no substitute written (`ask:449-T062-py-id`); `codeid.py`'s `.rs` branch stays for its Python callers, held equal to `rust_tokens` by a differential test while both exist.
-2. **The constraints.** FR-001, FR-002, FR-003, FR-006; the round arbiter's `ask:449-T062-order`.
-   **Decisions** (2026-11-08; `m:t062-content-ids`, 1,112 files with no mismatch, 567 of them against the real cache's own ids):
-   - (a) THE RUST GATE'S ID: `rust/gate/src/codeid.rs` ports `rust_tokens` and `git_blob_id`, and reads and writes the same `semantic-id-cache-2.json`, written whole and renamed in with what another writer added merged in; `gate-stamp.py`'s own write now does the same, so neither side loses the other's entries.
-   - (b) ONE SHARED `sha1`/`sha256`: the crate depends on `rust/guard` by path for them, rather than copying them. `rust_checks.py` therefore reads a crate's coverage for its own files only, since a path dependency's sources otherwise enter the report, and T060's id already counts a crate built from another by path.
-   - (c) NOTHING SWITCHES YET: T063 is the first Rust caller. `l7r-gate content-ids` is the surface, and until then `tests/tooling/test_codeid_rust.py` holds the two `.rs` branches equal.
-3. **Where each comes from.** `m:ci-sources`, to be taken when this task starts; the real `semantic-id-cache` and the recorded engine keys.
-4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
-5. **The order.** Leaf first by what imports what (`ask:449-T062-order`), each stands on the ones before it; callers reach the binary once a process or in a batch, never one spawn a file (FR-006, SC-002).
-6. **The exits.** Green: every tracked `.rs` file's id equals the Python's, the recorded keys still verify, the Rust gate's callers switched in one commit, `codeid.py` placed in phase 4 by FR-001. Red: what failed recorded, the task set down, a process stop to `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** Its landing: no work budget, nothing rolled.
-9. **Done, measured.** The differential over every engine file and the kept keys: no mismatch. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
-11. **Before fitting things into room.** Not a room question.
-
-### T062 part B (2026-11-09T01:35:27Z)
-
-1. **What exactly is refusing?** The red-gate tripwire of T061's two reds, attributed here because T062 was the active task when it was ruled. T062's own work has not refused: the differential is clean.
-2. **A3 again.** Green: `m:t062-content-ids`.
-3. **A4 again.** The rule is the process's, and it fired on T061's reds, ruled and landed.
-4. **Moving something placed earlier to suit something later?** No.
-5. **Tuning or changing?** Neither.
-6. **The one-sentence test.** "The two reds were T061's and are fixed." No question follows.
-7. **The next step is a measurement.** T062's plan review, then its gate.
-8. **Before offering routes.** None offered.
-9. **After a ruling.** The ruling's step was T061's gate, run and green.
-
+<!-- plan-archive: T062 to T062 moved to plan-done.md, 2026-11-08 (feature 375 FR-044) -->
 ### T063 Approach (checklist part A)
 
 1. **The goal, in the world.** What a change owes and what the gate last verified are written by one implementation.
