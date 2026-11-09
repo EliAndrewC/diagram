@@ -1,4 +1,5 @@
 """The docstring-blind code id: what a piece of Python DOES, without what it says about itself (feature 426, D2).
+# TOOL_RECORD: its main is asked only by the Rust gate, once a run, and the gate reports its failure (feature 449 T062)
 
 A `.py` file's id is its AST with every docstring dropped and no line or column attributes (`ast.dump`'s default), so a
 comment, a docstring, a constant's claim string, a blank line or reformatting leaves it alone, and any token that runs moves
