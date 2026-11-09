@@ -155,3 +155,4 @@ Ryukyu-Satsuma (Isono 2007). No source outside the four countries was used, so n
 - spec-fidelity round 1 (2026-11-09, MODE 2): CHANGES REQUIRED - the requirements covered figures, not questions; the China half of question 1 and both direct-question lines thin; the premise
   on the roughly 100 years not tested as said, and the window undated; India's import stage carved out with no verdict; India's tomato dropped; FR-003's search unnamed. All six applied.
 - spec-fidelity round 2 (2026-11-09): CHANGES REQUIRED - the Approved line's form broken by round 1's edit; India's tomato given as silent where two sources disagree; the plant's route to Japan stated as NOT ATTESTED against 0318's own notes. All three applied.
+- spec-fidelity round 3 (2026-11-09, verify): FAITHFUL - all three round-2 items resolved.
