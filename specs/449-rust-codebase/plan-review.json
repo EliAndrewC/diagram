@@ -7261,113 +7261,100 @@
    "verdict": "CLEAR"
   },
   "T068": {
-   "section_sha256": "98add46ac684b6ab77613edc257f55c1a780251f11ce251e2f684a5e69ef11a8",
+   "section_sha256": "0b32adae2453846b17c3cc936df78cfc6e828a243e1746928b8aae42015b3f21",
    "reviewed": "2026-11-09",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "one-landing-port",
-     "summary": "cohort_gate, cohort_known, room_table, cohort_seeds become l7r-gate cohort; check-run-plausible and check-tool-signals become l7r-gate check subcommands; every Python body goes in that landing.",
+     "id": "one-landing",
+     "summary": "The six files become l7r-gate cohort and check subcommands in one landing; every caller asks the gate; the invocation grep states its search space and names its residual hits.",
      "class": "within",
-     "why": "FR-001 places these files at T068 (ask:449-T067-scope, ask:449-T065-scope, ask:449-T066-scope); FR-003 no piece runs both."
-    },
-    {
-     "id": "no-invocation-grep",
-     "summary": "The claim that no invocation of the six ported files remains rests on a git grep over Makefile, *.sh, scripts/*.py, l7r/*.py, rust/*.rs and .claude/settings.json.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 requires every file replaced and FR-003 that no piece runs both, so the search space is the reach of the removal. It omits *.mk, which FR-001's own second census names beside Makefile and *.sh; Python under tests/, which FR-001 moves with each piece; and specs/, whose harnesses FR-001 says are live when something runs them. The rule is not impossible to meet: widening the pathspecs costs one command. An empty result on those paths is what must be shown."
+     "why": "FR-001 places cohort_gate, cohort_known and room_table at T068 and moves check-run-plausible and check-tool-signals to it. The grep's pattern needs a literal .py, so an import of these modules is outside its reach; deleting the files makes such an import fail loudly, so this is no ruling."
     },
     {
      "id": "make-cohort-seeds",
-     "summary": "make cohort-seeds, named by the docs and lost from the Makefile, is a target again.",
+     "summary": "make cohort-seeds, which the docs name, is a target again.",
      "class": "within",
-     "why": "FR-005: make remains the one entry point; a ported tool the docs name needs one."
+     "why": "FR-005: make stays the one entry point, and the ported tool needs one."
     },
     {
-     "id": "codeid-debug-free-equal",
-     "summary": "codeid.py gains --debug-free-equal, asked only for a modified .py engine file when two commits' keys differ, because counter blocks are read off the Python AST.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Part of the judgment the ported gate makes stays in Python until phase 4. FR-001 already rules this class: the .py id is Python's own ast.dump, asked by the Rust gate by path, in codeid.py until phase 4 (ask:449-T062-py-id), and the question is about the same .py inputs, vanishing with them. FR-001's limits on that door still bind it: one process a run, never on a plain Bash call or plain Edit, its failure failing the gate. The block's heading claims no door in a loop but does not state the process count; the amended block should."
-    },
-    {
-     "id": "ratchet-read-off-text",
-     "summary": "ratchet.py keeps the pinned baselines until slice 2, read off its text by run_plausible::baseline.",
-     "class": "within",
-     "why": "Interim state inside T068's four slices, FR-001 ask:449-T068-scope; no Python is started."
-    },
-    {
-     "id": "fresh-tally-own-reading",
-     "summary": "fresh_tally.py carries its own three-line reading of a record's fresh seeds until slice 3, starting no process per record.",
-     "class": "within",
-     "why": "Interim state inside T068's four slices; removes a process rather than adding one."
-    },
-    {
-     "id": "differential-usage-lines",
-     "summary": "Two of the three differing differential cases are usage lines naming the new command, exit status 2 both ways.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "FR-002 says same outputs, but the request is to replace these commands: a usage line naming the deleted script would direct the reader to something that no longer exists, which defeats the request's own purpose. Verdict and exit status are preserved."
-    },
-    {
-     "id": "differential-usage-log-tool",
-     "summary": "The third differing case: the Rust counts a file holding a USAGE_LOG_TOOL constant where the Python's called skipped it, a registry row for conflict-markers is added, cited to constitution XIV.",
+     "id": "cohort-seeds-in-first-slice",
+     "summary": "cohort_seeds, which the block's own census shows a recorded measurement runs (m:375-a8-cohort-seeds), is ported in the first slice. The block does not mark this as a departure.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "FR-002 names one other exception, a guard or check that REFUSES CORRECT WORK today. The block describes the opposite class: the Python let a tool record runs with no registry row. The exception is stretched over an unlike case. Reproducing the Python's reading is possible, the request's purpose does not need the change, and a more correct check is not a ground. If the Python would in fact refuse the correct row, the block does not say so. FR-002's own conditions are also unstated: the case's expected verdict changed in the same commit and the change named in the commit and the phase's record. FR-002's other departures are arbiter-ruled cases (ask:449-T066-json-message, ask:449-T72-coverage-exempt); this has no ruling. Either the Rust gives the Python's verdict, or this goes to make arbiter-ask, as the block's own Red exit provides."
+     "why": "FR-001 as accepted: T068 lands in four family slices, 'the tools a recorded measurement runs being ported in the last'. The block ports such a tool in the first. Nothing makes the ruled order impossible, no word of the GM's implies otherwise, and reading the clause as meaning only the measure tools would be completing the arbiter's thought. Rewriting the command in the same commit satisfies a different clause of FR-001, not this one. Cleared by moving cohort_seeds to the last slice, or by quoting ask:449-T068-scope where it places cohort_seeds in the first, or by the arbiter ruling so."
     },
     {
-     "id": "tests-replayed-stand-in",
-     "summary": "Cases of test_cohort_gate, test_cohort_known, test_cohort_approach, three cohort_seeds cases and test_run_plausible's verdicts replayed in Rust with a stand-in Python; test-check-tool-signals.sh stays end-to-end driving the binary.",
+     "id": "codeid-ast-compare-stays-python",
+     "summary": "The comparison free of debug counter blocks is added to codeid.py as --debug-free-equal and stays Python until phase 4, rather than being ported in this landing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001 keeps codeid.py to phase 4 because a .py id is Python's own ast.dump (ask:449-T062-py-id). This comparison is over that same representation and must agree with that key, so porting it now means rebuilding in Rust what the ruling declined to rebuild. It runs only when a pair's keys differ and a .py engine file is modified, so never on a plain Bash call or Edit, and it goes with the file in phase 4. The GM's end state is untouched. The block's 'every Python body goes in that landing' is loose on this point; the next decision is the one that blocks."
+    },
+    {
+     "id": "codeid-one-process-per-question",
+     "summary": "The block states FR-001's limit as 'one process for each question', asked once per commit pair.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-001's words are 'one process a run with all the cache's misses in it'. 'For each question' is a different limit: it closes the loop over files and says nothing of a loop over pairs, and a run holding an id ask and this ask starts two processes. The block never says how many commit pairs one run holds, and it runs cohort_known over every record, so the heading NO DOOR IN A LOOP is asserted, not shown. Cleared by stating, from a measurement or the code, that each command holds one pair a run and how the id ask and this ask share or do not share a process, or by putting all pairs in one process, or by an arbiter ruling that the limit is per question."
+    },
+    {
+     "id": "ratchet-and-fresh-tally-interim",
+     "summary": "ratchet.py's baselines are read off its text until slice 2; fresh_tally.py carries its own three-line reading until slice 3.",
      "class": "within",
-     "why": "FR-001 moves tests with their piece; FR-002 replays the cases; FR-008 limits tool tests to under a tenth of a second but one end-to-end."
+     "why": "Interim states of the later slices FR-001's T068 ruling establishes; neither starts a process per record."
+    },
+    {
+     "id": "usage-lines-differ",
+     "summary": "Two differential cases differ only in a usage line naming the new command, exit status 2 both ways.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-002 says same outputs, but FR-001 removes the old command, so a usage line cannot truthfully name it. Physically impossible to keep and be true; the verdict and status are the same."
+    },
+    {
+     "id": "third-difference-settled-by-reading",
+     "summary": "The third difference came from a first version of the port; the port was changed and the block concludes 'so the verdict is the Python's' while still reporting 61 cases, 3 differ.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "FR-002 requires the same verdict before the Python is deleted, and the exit names this differential as the proof. The recorded run is of a version that is no longer the port, and the current port's result on this case is a deduction. The change of approach itself is right: the earlier text claimed a constitution XIV fix and this one restores the Python's verdict. But 'the Python being gone' does not prevent the re-run, since the file is in git history. Cleared by re-running against the final port and stating that run's count."
+    },
+    {
+     "id": "conflict-gap-fixed-in-tree",
+     "summary": "conflict-markers' unregistered recording is answered by conflict.rs carrying the words and the registry gaining its row, not by changing the check.",
+     "class": "within",
+     "why": "The check keeps the Python's verdict, as FR-002 asks, and the row closes the gap it exposed."
+    },
+    {
+     "id": "tests-replayed-with-stand-in",
+     "summary": "Every named suite's cases, the floor and the green-done replay included, are in the Rust tests with a stand-in Python; test-check-tool-signals.sh stays end-to-end.",
+     "class": "within",
+     "why": "FR-002's cases, carried under FR-008's limit. The floor cases the earlier block left out are now replayed."
     },
     {
      "id": "not-replayed-runs-as-script",
      "summary": "test_it_runs_as_a_script is not replayed.",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "The case's subject is a .py file run as a script, which cannot exist once the file is ported: the rule is impossible here. The wrapper's run stays covered end-to-end."
+     "why": "Its subject, a Python file run as a script, stops existing by FR-001. The case cannot be held of a binary, and the callers run the binary."
     },
     {
-     "id": "not-replayed-floor-reads-baseline",
-     "summary": "test_the_dry_run_floor_still_reads_baseline is not replayed, its subject said to be the Python reading ratchet.py's field by name.",
+     "id": "kept-elsewhere-docstring-cases",
+     "summary": "The docstring and comment cases and test_a_commit_is_on_mains_engine_when_no_engine_file_differs are not run against the port; they are kept in tests/tooling/ci/test_delta.py, reading delta's key over real codeid.py.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "FR-002 covers every case its tests hold. The stated reason is contradicted by the same block: run_plausible::baseline reads ratchet.py's pinned baselines off its text until slice 2, so the Rust does what this case guards, and more fragilely. The subject has not gone. The case must be replayed against the Rust reader."
+     "why": "FR-002 requires the replaced piece to give the same verdict on every case its tests hold, before the Python goes. The block does not show that test_delta.py exercises the code the Rust cohort runs, and it stays with a planner not ported until T071. The stated reason, that the stand-in holds no docstrings, is a property of the harness: codeid.py is present until phase 4, and FR-008 allows an end-to-end test against the real command, which the block uses for tool-signals and not for cohort. Earlier these cases were NOT REPLAYED; the label moved and the coverage of the port did not. Cleared by an end-to-end cohort case over real codeid.py with such a pair, or by showing the Rust cohort's key is the code test_delta.py runs."
     },
     {
-     "id": "not-replayed-floor-known-dry-runs",
-     "summary": "test_the_floor_would_have_caught_the_KNOWN_dry_runs_and_nothing_else is not replayed, the differential having compared one arithmetic on the same inputs.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The differential as listed names three targets, six durations, two modes, four MAKEFLAGS and --reuse, and does not name the KNOWN history, so the same-inputs claim cannot be read from it. It is also a one-shot with the Python gone, so it does not keep the property checked. Awkwardness is no ground. Replay the history against the Rust floor."
-    },
-    {
-     "id": "not-replayed-docstring-cases",
-     "summary": "The docstring cases are not replayed in the Rust suite, each kept where the engine key is tested.",
+     "id": "census-measurements",
+     "summary": "All six names are searched across specs/*/measurements*.json; one command found, rewritten in this commit.",
      "class": "within",
-     "why": "Kept, not dropped: docstring and counter rules belong to codeid.py and delta, which FR-001 holds in Python until phase 4, and tests go with the piece they test."
+     "why": "FR-001's rewrite rule, with its search space stated and widened from the earlier single name. Its placement in the first slice is ruled separately."
     },
     {
-     "id": "not-replayed-on-mains-engine",
-     "summary": "test_a_commit_is_on_mains_engine_when_no_engine_file_differs is not replayed in the Rust suite, kept where the engine key is tested.",
+     "id": "exits-and-done-for-the-slice",
+     "summary": "Exits and done are scoped to the slice's six files, make hooks-test and make static; make figures is dropped while rewritten measurements are still re-run.",
      "class": "within",
-     "why": "Stated as kept, not dropped, so FR-002's every case is not narrowed. The reason given, a stand-in with no docstrings, does not explain a case about no engine file differing, whose subject reads as the ported gate's own decision; the amended block should name where it is kept."
-    },
-    {
-     "id": "measurement-census",
-     "summary": "git grep cohort_seeds over specs/*/measurements*.json returned one command, rewritten to l7r-gate cohort seeds --record in this commit.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "FR-001 requires every recorded measurement that runs a ported file rewritten in the commit that ports it. Six files are ported and the census searched one name; cohort_gate, cohort_known, room_table, check-run-plausible and check-tool-signals are unsearched. Item 9 states the rule in full, but the census offered as its discharge reaches a sixth of it. FR-001 expected recorded-measurement tools in the last slice, and cohort_seeds has one here, so that expectation cannot be assumed for the other five. Run the census on all six names; any hit is rewritten and re-run in this commit."
-    },
-    {
-     "id": "exits-and-done",
-     "summary": "Green: each tool's output equals the Python's, no .py under scripts/measure/. Done: git ls-files scripts/measure/*.py returns nothing, make audit and make figures run, every affected recorded measurement rewritten and re-run. Red goes to make arbiter-ask. No budget, no moved constant.",
-     "class": "within",
-     "why": "Narrows nothing the GM asked. But the scripts/measure exit is stale against FR-001, which places collect_cost.py and collect_probe.py in phase 4 as expected remainders, and against this block's own slices 2 and 3; correct it to what this slice can meet."
+     "why": "The earlier 'no .py under scripts/measure/' could not be true of a first slice under the four-slice ruling, and item 9 keeps FR-001's re-run proof."
     }
    ],
    "verdict": "BLOCKED"
