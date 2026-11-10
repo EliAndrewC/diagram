@@ -116,10 +116,10 @@
    "declared": "spec-fidelity"
   },
   "### T81 (the first record leaves, `ask:449-T81-slices`)": {
-   "sha256": "2c854546e7c7b8b078fbe6a44fcd82ed13758a8a43820f06fdb04b5aa1e96582",
+   "sha256": "9554f2d4615b492bf194c23ddaa3a48fbfe597fbab0fb97fd4f8956bcc491281",
    "verdict": "CLEAR",
    "reviewed": "2026-11-10",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T81 Approach (checklist part A)": {
    "sha256": "dc6de8e03d76b1c541dcdc5b5d7e79503f73cb31f2cf54c3a4579141de3ebe42",
@@ -5080,6 +5080,58 @@
      "id": "ask:449-T81-hm-record",
      "class": "within",
      "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-10",
+   "blocks": [
+    "### T81 (the first record leaves, `ask:449-T81-slices`)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T81-leaves",
+     "summary": "hm_record.py, hm_house.py and moves.py become the record verbs edit-route, fragments, americanize and moved-only, one implementation of each.",
+     "class": "within",
+     "why": "The GM asked for all the Python to be ported to Rust; FR-001 carries it. Text unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "T81-door",
+     "summary": "Python callers reach the verbs through scripts/record_door.py, one process a run.",
+     "class": "within",
+     "why": "A transition path while callers are still Python, inside FR-001 and FR-006's per-process cost concern. Text unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "T81-removal-timing",
+     "summary": "The old Python files are removed with T84's approval, not in T81.",
+     "class": "within",
+     "why": "Sequencing only; nothing is kept past the feature's close (SC-005). Text unchanged since its CLEAR verdict."
+    },
+    {
+     "id": "T81-traceback-not-bound",
+     "summary": "The edit-route differential compares verb, exit, stdout and stderr, with a traceback's text not bound.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This carves a case out of FR-002 (same verdicts and outputs as the Python it replaces), which the block does not name. Ruled on the block's own words; ask:449-usage-text is not in the bundle and was not read. The literal rule is impossible for this one class: a traceback is CPython's own report of its frames, with the paths and line numbers of a .py file, and a compiled binary has no such frames and could only forge them. Forging them would also defeat the request's purpose, a Rust codebase instead of a Python one. Purpose test: FR-002 exists so a port changes no verdict or output anything relies on. Exit status and stdout remain bound on every payload, malformed input included, and stderr remains bound wherever it is not a traceback, so the crash itself must still be reproduced as a failure. Only the interpreter's text is released. One class, one argument; it does not reach usage or error messages the Python wrote deliberately."
+    },
+    {
+     "id": "T81-edit-route-evidence",
+     "summary": "edit-route compared on the real tree over 566 sampled payloads covering every router rule and malformed input, 0 differ.",
+     "class": "within",
+     "why": "Evidence for FR-002 and SC-004, not a change to what is required. The figure carries a one-shot label with date and method."
+    },
+    {
+     "id": "T81-door-goes",
+     "summary": "scripts/record_door.py goes with its last Python caller.",
+     "class": "within",
+     "why": "The shim is itself Python and must go under FR-001 and SC-005; removing it when nothing calls it is the only sensible point, and it stays the single path until then (FR-003). Nothing survives the close."
+    },
+    {
+     "id": "T81-differentials",
+     "summary": "moved-only, fragments and americanize differentials on the real tree; the paragraph run stands as americanize's evidence after a whole-file run was killed unfinished.",
+     "class": "within",
+     "why": "Evidence for FR-002, reported with its limit stated; requirement unchanged. Text unchanged since its CLEAR verdict."
     }
    ]
   }
