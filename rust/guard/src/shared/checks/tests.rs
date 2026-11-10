@@ -75,6 +75,14 @@ fn a_state_is_written_sorted_and_loaded_back() {
     assert!(locked(Path::new("/proc/nonexistent/x/s.json")).is_none());
 }
 
+fn keep(_: &mut Value) -> bool {
+    false
+}
+
+fn write_it(_: &mut Value) -> bool {
+    true
+}
+
 #[test]
 fn the_owed_file_is_changed_under_its_lock() {
     let d = dir("owed");
@@ -90,7 +98,11 @@ fn the_owed_file_is_changed_under_its_lock() {
     })
     .unwrap();
     assert!(load(&d.join(OWED)).get("y").is_none());
-    assert!(with_owed(Path::new("/proc/nonexistent/x"), |_| true).is_err());
+    assert!(with_owed(Path::new("/proc/nonexistent/x"), keep).is_err());
+    let blocked = dir("owed-dir");
+    std::fs::create_dir_all(blocked.join(OWED)).unwrap();
+    with_owed(&blocked, keep).unwrap();
+    assert!(with_owed(&blocked, write_it).is_err());
 }
 
 #[test]
@@ -113,7 +125,7 @@ fn the_small_helpers_read_as_python_does() {
         (Some(json!({})), true),
         (Some(json!({"a": 1})), false),
     ] {
-        assert_eq!(falsy(value.as_ref()), want, "{value:?}");
+        assert_eq!(falsy(value.as_ref()), want);
     }
     let mut state = json!(3);
     map_mut(&mut state, "m").insert("k".to_owned(), json!(1));
@@ -129,5 +141,7 @@ fn the_small_helpers_read_as_python_does() {
     assert!(!git_stdout(&root, &["rev-parse", "--git-dir"]).is_empty());
     assert_eq!(name_of(Path::new("/a/b")), "b");
     assert_eq!(name_of(Path::new("/")), "");
+    assert!(super::resolved(Path::new("/no/such/l7r/file")).ends_with("file"));
+    assert_eq!(super::resolved(Path::new("")), Path::new(""));
     let _: Value = json!(null);
 }

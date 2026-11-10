@@ -163,7 +163,7 @@ pub fn close_cli(args: &[String]) -> Reply {
             code: 2,
         };
     }
-    let root = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
+    let root = std::env::current_dir().unwrap_or_default();
     let (code, stdout, stderr) = handle::close(
         &root,
         &args[0],

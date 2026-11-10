@@ -302,14 +302,15 @@ pub fn drop_run(cwd: &str, prefix: &str) {
     let Some(path) = super::state_path(cwd).filter(|p| p.is_file()) else {
         return;
     };
-    if let Some(held) = super::locked(&path) {
-        let mut state = super::load(&path);
-        if let Some(ds) = state.get_mut("dispatches").and_then(Value::as_object_mut) {
-            ds.retain(|t, _| !t.starts_with(prefix));
-        }
-        let _ = super::save(&path, &state);
-        drop(held);
+    let Some(held) = super::locked(&path) else {
+        return;
+    };
+    let mut state = super::load(&path);
+    if let Some(ds) = state.get_mut("dispatches").and_then(Value::as_object_mut) {
+        ds.retain(|t, _| !t.starts_with(prefix));
     }
+    let _ = super::save(&path, &state);
+    drop(held);
 }
 
 fn notes_list(d: &Value) -> Vec<String> {
@@ -462,7 +463,7 @@ fn new_cause(state: &Value, unit: &str, batch: &str) -> bool {
 
 /// Whether the record store says every unit the bundle carries on `subject` is answered at its fingerprint; else the fingerprint of the first that is not.
 fn moved_since_answer(root: &Path, text_of: &str, subject: &str) -> String {
-    let store = record_store(root);
+    let store = record_store(root, std::env::var("RECORD_CHECKS_DIR").ok().as_deref());
     UNIT_FP
         .captures_iter(text_of)
         .flatten()
@@ -475,20 +476,13 @@ fn moved_since_answer(root: &Path, text_of: &str, subject: &str) -> String {
 }
 
 /// Where the answer records live: `RECORD_CHECKS_DIR` (a test's throwaway store), else the clone's git dir.
-fn record_store(root: &Path) -> std::path::PathBuf {
-    if let Ok(dir) = std::env::var("RECORD_CHECKS_DIR") {
-        if !dir.is_empty() {
-            return dir.into();
-        }
+fn record_store(root: &Path, given: Option<&str>) -> std::path::PathBuf {
+    if let Some(dir) = given.filter(|d| !d.is_empty()) {
+        return dir.into();
     }
     let common = git_stdout(root, &["rev-parse", "--git-common-dir"]);
     let path = Path::new(if common.is_empty() { ".git" } else { &common });
-    let abs = if path.is_absolute() {
-        path.to_path_buf()
-    } else {
-        root.join(path)
-    };
-    abs.join("record-checks")
+    root.join(path).join("record-checks")
 }
 
 /// `urllib.parse.quote(slug, safe="")`.

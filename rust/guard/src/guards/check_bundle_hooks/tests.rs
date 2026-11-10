@@ -187,8 +187,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
     );
     assert!(
         refused(&got, "record-format on /x/MANIFEST.md: decide first")
-            && refused(&got, "DECIDE_OK"),
-        "{got:?}"
+            && refused(&got, "DECIDE_OK")
     );
     assert!(refused(
         &call(
@@ -208,7 +207,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
         &root,
         &root,
     );
-    assert!(escaped.is_empty(), "{escaped:?}");
+    assert!(escaped.is_empty());
     assert!(refused(
         &call(
             &event("Agent", at, "record-format", "DECIDE_OK=\"x\" plain"),
@@ -237,7 +236,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
         &root,
         &root,
     );
-    assert!(refused(&held, "cascade@1"), "{held:?}");
+    assert!(refused(&held, "cascade@1"));
     let v: Value = json!(null);
     assert!(v.is_null());
 }

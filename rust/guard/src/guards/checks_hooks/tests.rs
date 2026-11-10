@@ -49,14 +49,16 @@ fn a_write_back_is_refused_on_the_post_call() {
         json!({"feature": "999-x", "plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 1.0, "state": "running", "aid": "ag"}}, "plan_snaps": {"e": {"h": ["## T01 x\n\nbefore\n"]}}}).to_string(),
     )
     .unwrap();
+    assert!(run(
+        "PostToolUse",
+        json!({"cwd": root, "tool_name": "Write", "tool_use_id": "unrelated"})
+    )
+    .is_empty());
     let got = run(
         "PostToolUse",
         json!({"cwd": root, "tool_name": "Edit", "tool_use_id": "e", "tool_input": {}}),
     );
-    assert!(
-        matches!(&got[..], [Answer::Refuse(t)] if t.contains("written back")),
-        "{got:?}"
-    );
+    assert!(matches!(&got[..], [Answer::Refuse(t)] if t.contains("written back")));
     assert!(std::fs::read_to_string(root.join("specs/900-a/plan.md"))
         .unwrap()
         .contains("before"));

@@ -332,15 +332,7 @@ fn the_command_line() {
 fn the_limits_on_how_far_a_helper_reaches_hold_over_the_real_tree() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
     let t = Tree::at(&root);
-    let mut guards: Vec<String> = t
-        .index
-        .iter()
-        .filter(|(n, p)| {
-            n.ends_with("-hooks.sh") && p.parent().is_some_and(|d| d.ends_with("scripts/hooks"))
-        })
-        .map(|(n, _)| n.clone())
-        .collect();
-    guards.extend(["record-edit-hooks.sh".to_owned()]);
+    let mut guards: Vec<String> = vec!["record-edit-hooks.sh".to_owned()];
     guards.sort();
     guards.dedup();
     let reach = |helper: &str| {

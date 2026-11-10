@@ -96,6 +96,36 @@ fn a_check_round_goes_through_every_mode() {
         ""
     );
     assert_eq!(handle("edit", &json!({}), None), "");
+    assert_eq!(
+        handle(
+            "launched",
+            &json!({"cwd": root, "tool_name": "Agent", "tool_response": 3}),
+            Some(1.0)
+        ),
+        ""
+    );
+    let write = json!({"cwd": root, "tool_name": "Write", "tool_input": {"file_path": "research/questions/0105-x.html", "content": "b"}});
+    assert!(handle("edit", &write, Some(1000.0)).contains("none of the 1 edit(s)"));
+    let worktree = clone_at("wt-owner");
+    let common = worktree.join("x.git");
+    std::fs::create_dir_all(common.join("worktrees/w")).unwrap();
+    std::fs::write(common.join("worktrees/w/commondir"), "../..\n").unwrap();
+    let wt = worktree.join("wt");
+    std::fs::create_dir_all(&wt).unwrap();
+    std::fs::write(
+        wt.join(".git"),
+        format!("gitdir: {}\n", common.join("worktrees/w").display()),
+    )
+    .unwrap();
+    assert_eq!(
+        handle(
+            "dispatch",
+            &json!({"cwd": wt, "tool_name": "Agent", "tool_input": {"subagent_type": "quote-check", "prompt": "plain"}}),
+            Some(1.0)
+        ),
+        ""
+    );
+    assert_eq!(load(&common.join("checks-open.json"))["feature"], json!(""));
 }
 
 #[test]
@@ -123,6 +153,22 @@ fn a_new_feature_resets_the_counts_but_not_the_dispatches() {
 #[test]
 fn escapes_and_their_rules() {
     let (root, manifest) = setup("escapes");
+    let modal = root.join("mm/MANIFEST.md");
+    std::fs::create_dir_all(modal.parent().unwrap()).unwrap();
+    std::fs::write(&modal, "unit: modal-form:sheet/bath fp\n").unwrap();
+    let kinds = json!({"utc": 1.0, "batches": {"modal-form": ["sheet/bath", "sheet/well"]}});
+    std::fs::write(root.join(".git/modal-batches.json"), kinds.to_string()).unwrap();
+    let batched = handle(
+        "dispatch",
+        &agent(
+            &root,
+            "modal-form",
+            &format!("Read {}", modal.display()),
+            "mf",
+        ),
+        Some(10.0),
+    );
+    assert!(batched.ends_with(", batched"));
     assert!(!escaped("X_OK", "no token"));
     assert!(!escaped("X_OK", "X_OK=\"short\""));
     assert!(!escaped("X_OK", "X_OK=\"oneword-long-enough\""));
@@ -172,7 +218,7 @@ fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
         ),
         Some(1.0),
     );
-    assert!(said.contains("already ruled"), "{said}");
+    assert!(said.contains("already ruled"));
     std::fs::write(&bundle, "trigger: ask:other\n").unwrap();
     assert_eq!(
         handle(
@@ -269,7 +315,7 @@ fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
     save(&root.join(".git/checks-open.json"), &s).unwrap();
     let edit = json!({"cwd": root, "tool_name": "Edit", "tool_use_id": "e1", "tool_input": {"file_path": root.join("specs/900-a/plan.md"), "old_string": "body long", "new_string": "z"}});
     let held = handle("edit", &edit, Some(1000.0));
-    assert!(held.contains("plan review"), "{held}");
+    assert!(held.contains("plan review"));
     assert!(state(&root)["plan_snaps"].get("e1").is_some());
     std::fs::write(
         root.join("specs/900-a/plan.md"),
@@ -278,7 +324,7 @@ fn the_round_arbiter_and_budget_and_plan_holds_are_handled() {
     .unwrap();
     let after = json!({"cwd": root, "tool_name": "Edit", "tool_use_id": "e1", "tool_input": {}});
     let msg = handle("after", &after, Some(1000.0));
-    assert!(msg.contains("written back"), "{msg}");
+    assert!(msg.contains("written back"));
     assert!(std::fs::read_to_string(root.join(".git/tool-usage.jsonl"))
         .unwrap()
         .contains("planhold-restore"));
@@ -350,19 +396,17 @@ fn a_cascade_and_a_reversal_owe_the_arbiter() {
             &agent(&root, "quote-check", &prompt, &format!("v{i}")),
             Some(1000.0),
         );
-        assert_eq!(said.contains("reversal:q:0105@3"), i == 2, "{said}");
+        assert_eq!(said.contains("reversal:q:0105@3"), i == 2);
     }
     let owed: Value = serde_json::from_str(
         &std::fs::read_to_string(root.join(".git/arbiter-owed.json")).unwrap(),
     )
     .unwrap();
-    assert!(
-        owed.as_object()
-            .unwrap()
-            .keys()
-            .any(|k| k.starts_with("reversal:q:0105@")),
-        "{owed}"
-    );
+    assert!(owed
+        .as_object()
+        .unwrap()
+        .keys()
+        .any(|k| k.starts_with("reversal:q:0105@")));
     std::fs::remove_file(root.join(".git/arbiter-owed.json")).unwrap();
     let many: serde_json::Map<String, Value> = (0..20)
         .map(|i| (format!("k{i}"), json!({"t": 2000.0, "check": "c"})))
@@ -405,10 +449,7 @@ fn a_popup_batch_refuses_one_agent_on_one_popup() {
     };
     write(1.0, &["sheet/bath", "sheet/well"]);
     let msg = batch_refusal(Some(&root), "modal-form", unit, 100.0).unwrap();
-    assert!(
-        msg.ends_with(", batched") && msg.contains("KIND=\"sheet/bath sheet/well\""),
-        "{msg}"
-    );
+    assert!(msg.ends_with(", batched") && msg.contains("KIND=\"sheet/bath sheet/well\""));
     assert_eq!(
         batch_refusal(Some(&root), "modal-form", unit, 100_000.0),
         None
@@ -436,10 +477,7 @@ fn check_closed_needs_a_reason_and_saves_what_it_closed() {
     );
     save(&path, &json!({"dispatches": {"a": {"check": "c", "subjects": ["s"], "state": "running", "t": 1000.0}}})).unwrap();
     let (_, out, _) = close(&root, "s", "the session stopped it", 1000.0, "");
-    assert!(
-        out.contains("; 1 still running and not silent: wait for them"),
-        "{out}"
-    );
+    assert!(out.contains("; 1 still running and not silent: wait for them"));
     let (code, ..) = close(
         Path::new("/nonexistent-l7r"),
         "s",

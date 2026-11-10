@@ -247,12 +247,10 @@ fn first_prompt(lines: &[&str]) -> String {
     String::new()
 }
 
-fn transcript_of(agent: &str) -> Option<std::path::PathBuf> {
-    let home = std::env::var("HOME").ok()?;
-    let root = Path::new(&home).join(".claude/projects");
+fn transcript_under(projects: &Path, agent: &str) -> Option<std::path::PathBuf> {
     let name = format!("agent-{agent}.jsonl");
     let mut hits: Vec<(std::time::SystemTime, std::path::PathBuf)> = Vec::new();
-    for project in std::fs::read_dir(root).ok()?.flatten() {
+    for project in std::fs::read_dir(projects).ok()?.flatten() {
         for session in std::fs::read_dir(project.path())
             .into_iter()
             .flatten()
@@ -266,6 +264,13 @@ fn transcript_of(agent: &str) -> Option<std::path::PathBuf> {
     }
     hits.sort_by_key(|(when, _)| *when);
     hits.pop().map(|(_, p)| p)
+}
+
+fn transcript_of(agent: &str) -> Option<std::path::PathBuf> {
+    transcript_under(
+        &Path::new(&std::env::var("HOME").ok()?).join(".claude/projects"),
+        agent,
+    )
 }
 
 /// The local date of an epoch time, as `time.strftime("%Y-%m-%d", time.localtime(at))` (this crate reads no time zone itself, so `date` answers).
@@ -282,7 +287,11 @@ fn local_date(at: f64) -> String {
 }
 
 /// Which agent's transcript and check `mode` reports: `(check, agent id, transcript)`, or None where nothing is logged.
-fn identity(mode: &str, payload: &Value) -> Option<(String, String, String)> {
+fn identity(
+    mode: &str,
+    payload: &Value,
+    find: &dyn Fn(&str) -> Option<std::path::PathBuf>,
+) -> Option<(String, String, String)> {
     if mode == "returned" {
         return Some((
             text(payload, "agent_type").to_owned(),
@@ -304,7 +313,7 @@ fn identity(mode: &str, payload: &Value) -> Option<(String, String, String)> {
         .cloned()
         .unwrap_or_else(|| json!({}));
     let aid = text(&resp, "agentId").to_owned();
-    let found = (!aid.is_empty()).then(|| transcript_of(&aid)).flatten();
+    let found = (!aid.is_empty()).then(|| find(&aid)).flatten();
     Some((
         text(&ti, "subagent_type").to_owned(),
         aid,
@@ -315,7 +324,18 @@ fn identity(mode: &str, payload: &Value) -> Option<(String, String, String)> {
 /// Append a check's pass to the log; false where there is nothing to log.
 #[must_use = "the log is an append; a caller may ignore whether it wrote"]
 pub fn log_pass_at(git_dir: &Path, mode: &str, payload: &Value, at: f64) -> bool {
-    let Some((check, aid, tpath)) = identity(mode, payload) else {
+    log_pass_found(git_dir, mode, payload, at, &transcript_of)
+}
+
+/// `log_pass_at`, its transcript finder given.
+fn log_pass_found(
+    git_dir: &Path,
+    mode: &str,
+    payload: &Value,
+    at: f64,
+    find: &dyn Fn(&str) -> Option<std::path::PathBuf>,
+) -> bool {
+    let Some((check, aid, tpath)) = identity(mode, payload, find) else {
         return false;
     };
     if !LEDGER_CHECKS.contains(&check.as_str()) || tpath.is_empty() {

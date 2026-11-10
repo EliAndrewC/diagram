@@ -189,6 +189,16 @@ mod tests {
     }
 
     #[test]
+    fn lines_split_as_python_splits_them() {
+        assert_eq!(
+            super::py_lines("a\r\nb\u{2028}c\rd\ne"),
+            ["a", "b", "c", "d", "e"]
+        );
+        assert_eq!(super::py_lines("a\n"), ["a"]);
+        assert!(super::py_lines("").is_empty());
+    }
+
+    #[test]
     fn a_response_reads_as_text() {
         assert_eq!(response_text(&json!({"content": "x"})), "x");
         assert_eq!(

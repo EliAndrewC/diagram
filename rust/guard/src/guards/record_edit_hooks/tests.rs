@@ -64,10 +64,7 @@ fn a_plain_call_passes_and_a_frozen_page_is_refused() {
     )
     .is_empty());
     std::fs::write(root.join(".git/checks-open.json"), r#"{"dispatches": {}}"#).unwrap();
-    assert!(
-        call(&event(Some(&root), "Edit", &page), &root, &root).is_empty(),
-        "a failing route passes"
-    );
+    assert!(call(&event(Some(&root), "Edit", &page), &root, &root).is_empty());
 }
 
 #[test]

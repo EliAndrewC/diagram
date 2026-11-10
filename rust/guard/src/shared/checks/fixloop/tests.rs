@@ -87,7 +87,7 @@ fn a_footnote_whose_fix_keeps_failing_is_held() {
         ""
     );
     let msg = hold(&mut state, &root, "quote-check", manifest, 1.0);
-    assert!(msg.contains("round:quote-check|q:0105@3"), "{msg}");
+    assert!(msg.contains("round:quote-check|q:0105@3"));
     assert_eq!(
         state["flag_trips"]["0105#bath"],
         json!("round:quote-check|q:0105@3")
@@ -122,7 +122,7 @@ fn a_footnote_whose_fix_keeps_failing_is_held() {
         "unit: quote-check:0105.drawing#bath z\n",
         1.0,
     );
-    assert!(msg.contains("@10"), "{msg}");
+    assert!(msg.contains("@10"));
     let d2 = clone_at("fixloop-used");
     std::fs::write(
         d2.join("specs/999-x/arbiter.jsonl"),
@@ -131,5 +131,5 @@ fn a_footnote_whose_fix_keeps_failing_is_held() {
     .unwrap();
     let mut s = flagged(2);
     let m = hold(&mut s, &d2, "quote-check", manifest, 1.0);
-    assert!(m.contains("@7"), "{m}");
+    assert!(m.contains("@7"));
 }

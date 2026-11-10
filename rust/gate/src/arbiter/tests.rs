@@ -4,8 +4,8 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use serde_json::{json, Value};
 
 use super::{
-    batch_plan, cli, fix_hold, open_fixes, py_repr, record_batch, record_ruling, spec_body_sha,
-    spec_ruled, spec_verdict, unit_ruled, Stop,
+    batch_plan, cli, cli_in, fix_hold, open_fixes, py_repr, record_batch, record_ruling,
+    spec_body_sha, spec_ruled, spec_verdict, unit_ruled, Stop,
 };
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
@@ -53,11 +53,15 @@ fn rows(root: &Path) -> Vec<Value> {
         .collect()
 }
 
-fn refused(result: Result<Value, Stop>, words: &str) {
-    match result {
-        Err(Stop::Refused(why)) => assert!(why.contains(words), "{why}"),
-        other => panic!("{other:?}"),
-    }
+fn refused<T: std::fmt::Debug>(result: Result<T, Stop>, words: &str) {
+    let Err(Stop::Refused(why)) = result else {
+        unreachable!("{result:?}")
+    };
+    assert!(why.contains(words), "{why}");
+}
+
+fn declined<T: std::fmt::Debug>(result: Result<T, Stop>) {
+    assert!(matches!(result, Err(Stop::Declined(_))), "{result:?}");
 }
 
 #[test]
@@ -65,10 +69,7 @@ fn a_ruling_is_recorded_once_and_lifts_its_trigger() {
     let root = clone_at("ruling");
     let w = json!({"ruling": "continue", "why": "w"});
     let when = Some("2026-01-01T00:00:00Z");
-    match record_ruling(&root, "ask:foo", &w, "main", when, false) {
-        Err(Stop::Declined(why)) => assert!(why.starts_with("declined:")),
-        other => panic!("{other:?}"),
-    }
+    declined(record_ruling(&root, "ask:foo", &w, "main", when, false));
     owe(
         &root,
         &json!({"ask:foo": {"kind": "ask", "unit": "", "detail": "why asked", "t": 1, "feature": "999-x"}, "ask:bar": {"kind": "cascade", "unit": "u", "t": 1, "feature": "999-x", "dispatches": 12}}),
@@ -207,10 +208,9 @@ fn a_round_owed_with_others_is_ruled_as_a_batch() {
     let done = record_batch(&root, &w, "round-arbiter", None).unwrap();
     assert_eq!(done.len(), 2);
     match record_batch(&root, &w, "round-arbiter", None) {
-        Err(Stop::Refused(why)) => assert!(
-            why.contains("already ruled: round:a|q:1@3, round:b|q:2@3"),
-            "{why}"
-        ),
+        Err(Stop::Refused(why)) => {
+            assert!(why.contains("already ruled: round:a|q:1@3, round:b|q:2@3"))
+        }
         other => panic!("{other:?}"),
     }
     let by = |v: Value| record_batch(&root, &v, "round-arbiter", None).map(|_| Value::Null);
@@ -300,11 +300,7 @@ fn verdicts_read_the_spec_and_its_rulings() {
         "# t\n\nstatus: other\n\n## Body\n\ntext\n\n## Review history\n\nchanged\n",
     )
     .unwrap();
-    assert_eq!(
-        spec_body_sha(&d),
-        mid,
-        "the header and the history are not what a review judged"
-    );
+    assert_eq!(spec_body_sha(&d), mid);
     std::fs::write(d.join("spec.md"), "# t only").unwrap();
     assert_ne!(spec_body_sha(&d), mid);
     std::fs::write(
@@ -355,53 +351,284 @@ fn a_python_string_repr_chooses_its_quote() {
     assert_eq!(py_repr("a\\\n\t\r"), "'a\\\\\\n\\t\\r'");
 }
 
+const FAKE_RECORD_OWED: &str =
+    "def answer(root, check, result, q='', kind=''):\n    return ['u:' + check]\n";
+const FAKE_GM_REVIEW: &str = "from pathlib import Path\ndef question(d, text, source, when):\n    Path(d, 'gm-question.txt').write_text(text + '|' + source + '|' + when)\n";
+const FAKE_CHECKPOINT: &str = "from pathlib import Path\ndef close_checkpoint(root, trigger):\n    Path(root, 'closed-checkpoint.txt').write_text(trigger)\n";
+
+fn python_tools(root: &Path) {
+    let scripts = root.join("scripts");
+    for (rel, body) in [
+        ("record/record_owed.py", FAKE_RECORD_OWED),
+        ("gm_review.py", FAKE_GM_REVIEW),
+        ("reviews/checkpoint.py", FAKE_CHECKPOINT),
+        (
+            "reviews/review_prereq.py",
+            "import sys\nprint('ck-' + sys.argv[sys.argv.index('--map') + 1])\n",
+        ),
+        (
+            "record/claims.py",
+            "import sys\nprint('claims accepted', sys.argv[sys.argv.index('--keys') + 1])\n",
+        ),
+    ] {
+        std::fs::create_dir_all(scripts.join(rel).parent().unwrap()).unwrap();
+        std::fs::write(scripts.join(rel), body).unwrap();
+    }
+}
+
+fn run(root: &Path, args: &[&str]) -> crate::Reply {
+    cli_in(
+        &args.iter().map(|a| (*a).to_string()).collect::<Vec<_>>(),
+        root,
+    )
+}
+
+fn rule_file(root: &Path, name: &str, body: &Value) -> String {
+    let p = root.join(name);
+    std::fs::write(&p, body.to_string()).unwrap();
+    p.to_string_lossy().into_owned()
+}
+
+#[test]
+fn the_rulings_tools_are_asked_by_path() {
+    let root = clone_at("tools");
+    python_tools(&root);
+    owe(
+        &root,
+        &json!({
+            "round:quote-check|q:0105@3": {"kind": "round", "unit": "quote-check|q:0105", "feature": "999-x", "t": 1},
+        }),
+    );
+    let accept = json!({"ruling": "accept", "why": "fine"});
+    let row = record_ruling(
+        &root,
+        "round:quote-check|q:0105@3",
+        &accept,
+        "round-arbiter",
+        None,
+        false,
+    )
+    .unwrap();
+    assert_eq!(row["content_key"], json!("ck-q:0105"));
+    let hour = record_ruling(
+        &root,
+        "hour:999-x@1",
+        &json!({"ruling": "continue", "why": "w"}),
+        "round-arbiter",
+        None,
+        false,
+    )
+    .unwrap();
+    assert_eq!(hour["kind"], json!("hour"));
+    assert_eq!(
+        std::fs::read_to_string(root.join("closed-checkpoint.txt")).unwrap(),
+        "hour:999-x@1"
+    );
+    let row = record_ruling(
+        &root,
+        "round:spec-fidelity|999-x#1@6",
+        &json!({"ruling": "accept", "why": "w", "for_gm": "is this right sir please"}),
+        "round-arbiter",
+        Some("2026-01-01T00:00:00Z"),
+        false,
+    )
+    .unwrap();
+    assert!(!row["spec_sha"].as_str().unwrap().is_empty());
+    assert_eq!(
+        std::fs::read_to_string(root.join("specs/999-x/gm-question.txt")).unwrap(),
+        "is this right sir please|round:spec-fidelity|999-x#1@6|2026-01-01T00:00:00Z"
+    );
+    // a content-key ruling written without its key may be recorded again, the rekey
+    let before = rows(&root).len();
+    std::fs::write(
+        root.join("specs/999-x/arbiter.jsonl"),
+        format!(
+            "{}\n",
+            json!({"trigger": "round:c|u@3", "ruling": "accept", "kind": "round", "unit": "c|u"})
+        ),
+    )
+    .unwrap();
+    let rekeyed =
+        record_ruling(&root, "round:c|u@3", &accept, "round-arbiter", None, false).unwrap();
+    assert_eq!(rekeyed["content_key"], json!("ck-u"));
+    assert!(before >= 1);
+    refused(
+        record_ruling(&root, "round:c|u@3", &accept, "round-arbiter", None, false),
+        "already ruled",
+    );
+    let bad_dir = root.join("specs/afile");
+    std::fs::write(&bad_dir, "not a dir").unwrap();
+    let pointed = clone_at("pointed");
+    std::fs::write(
+        pointed.join(".specify/feature.json"),
+        r#"{"feature_directory": "specs/afile"}"#,
+    )
+    .unwrap();
+    std::fs::write(pointed.join("specs/afile"), "x").unwrap();
+    refused(
+        record_ruling(
+            &pointed,
+            "ask:x",
+            &json!({"ruling": "continue", "why": "w"}),
+            "round-arbiter",
+            None,
+            false,
+        ),
+        "",
+    );
+}
+
+#[test]
+fn a_plan_or_claims_ask_stands_as_that_reviews_verdict() {
+    let root = clone_at("reviews");
+    python_tools(&root);
+    std::fs::write(
+        root.join("specs/999-x/plan.md"),
+        "# p\n\n## T01 x\n\nbody\n",
+    )
+    .unwrap();
+    owe(
+        &root,
+        &json!({
+            "ask:999-x-plan": {"kind": "ask", "unit": "", "feature": "999-x", "t": 1, "review": "plan", "detail": "why"},
+            "ask:999-x-claims": {"kind": "ask", "unit": "", "feature": "999-x", "t": 1, "review": "claims:a;b"},
+            "red-gate@1": {"kind": "red-gate", "feature": "999-x"},
+        }),
+    );
+    let accept = rule_file(
+        &root,
+        "accept.json",
+        &json!({"ruling": "accept", "why": "fine", "n": 3}),
+    );
+    let said = run(
+        &root,
+        &["ruled", "ask:999-x-plan", &accept, "--as", "round-arbiter"],
+    );
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert!(
+        said.stdout.contains("plan block(s) recorded CLEAR"),
+        "{}",
+        said.stdout
+    );
+    let claims = run(
+        &root,
+        &[
+            "ruled",
+            "ask:999-x-claims",
+            &accept,
+            "--as",
+            "round-arbiter",
+        ],
+    );
+    assert!(
+        claims.stdout.contains("claims accepted a;b"),
+        "{}",
+        claims.stdout
+    );
+    let red = rule_file(
+        &root,
+        "red.json",
+        &json!({"ruling": "continue", "why": "w"}),
+    );
+    let held = run(
+        &root,
+        &["ruled", "red-gate@1", &red, "--as", "round-arbiter"],
+    );
+    assert_eq!(held.code, 0, "{}", held.stderr);
+    let batch = rule_file(
+        &root,
+        "batch.json",
+        &json!({"ruling": "continue", "why": "w", "triggers": ["red-gate@2"]}),
+    );
+    let b = run(&root, &["ruled-batch", &batch, "--as", "round-arbiter"]);
+    assert!(
+        b.code == 0 && b.stdout.contains("the batch's 1 triggers recorded"),
+        "{}",
+        b.stderr
+    );
+    let failing = clone_at("no-plan");
+    owe(
+        &failing,
+        &json!({"ask:999-p": {"kind": "ask", "unit": "", "feature": "999-x", "t": 1, "review": "plan"}}),
+    );
+    let rule = rule_file(&failing, "r.json", &json!({"ruling": "accept", "why": "w"}));
+    let failed = run(
+        &failing,
+        &["ruled", "ask:999-p", &rule, "--as", "round-arbiter"],
+    );
+    assert!(failed.code == 0 || failed.code == 1, "{}", failed.stderr);
+}
+
 #[test]
 fn every_verb_answers_on_a_clone() {
     let root = clone_at("cli");
-    let old = std::env::current_dir().unwrap();
-    std::env::set_current_dir(&root).unwrap();
-    let run = |args: &[&str]| cli(&args.iter().map(|a| (*a).to_string()).collect::<Vec<_>>());
-    assert_eq!(run(&["bogus"]).code, 2);
-    assert_eq!(run(&[]).code, 2);
-    assert_eq!(run(&["gate-held"]).code, 0);
+    assert_eq!(cli(&["bogus".to_owned()]).code, 2);
+    assert_eq!(run(&root, &["bogus"]).code, 2);
+    assert_eq!(run(&root, &[]).code, 2);
+    assert_eq!(run(&root, &["gate-held"]).code, 0);
     owe(
         &root,
         &json!({"red-gate@t": {"kind": "red-gate", "feature": "999-x"}}),
     );
-    let held = run(&["gate-held"]);
+    let held = run(&root, &["gate-held"]);
     assert_eq!(held.code, 1);
     assert!(held.stderr.starts_with("make done: refused - a tripwire"));
-    assert_eq!(run(&["spec-verdict", "specs/999-x"]).code, 1);
-    assert_eq!(run(&["spec-ruled", "specs/999-x"]).code, 1);
-    assert_eq!(run(&["unit-ruled", "u", "c"]).code, 1);
-    assert_eq!(run(&["ask", "has space", "two words here"]).code, 2);
-    assert_eq!(run(&["ask", "ok-1", "short"]).code, 2);
-    assert_eq!(run(&["ask", "ok-1", "two words here", "wrong"]).code, 2);
-    let asked = run(&["ask", "ok-1", "two words here", "spec"]);
+    let dir_text = root.join("specs/999-x").to_string_lossy().into_owned();
+    assert_eq!(run(&root, &["spec-verdict", &dir_text]).code, 1);
+    assert_eq!(run(&root, &["spec-ruled", &dir_text]).code, 1);
+    assert_eq!(run(&root, &["unit-ruled", "u", "c"]).code, 1);
+    assert_eq!(run(&root, &["ask", "has space", "two words here"]).code, 2);
+    assert_eq!(run(&root, &["ask", "ok-1", "short"]).code, 2);
+    assert_eq!(
+        run(&root, &["ask", "ok-1", "two words here", "wrong"]).code,
+        2
+    );
+    let asked = run(&root, &["ask", "ok-1", "two words here", "spec"]);
     assert!(asked.code == 0 && asked.stdout.contains("(REVIEW=spec: an accept stands"));
-    let hint = run(&["ask", "ok-2", "a plan review question"]);
+    let hint = run(&root, &["ask", "ok-2", "a plan review question"]);
     assert!(hint.stdout.contains("arbiter-ask: hint"));
-    let claims = run(&["ask", "ok-3", "two words here", "claims:a"]);
-    assert_eq!(claims.code, 0);
-    let plain = run(&["ask", "ok-4", "two words here"]);
+    assert_eq!(
+        run(&root, &["ask", "ok-3", "two words here", "claims:a"]).code,
+        0
+    );
+    let plain = run(&root, &["ask", "ok-4", "two words here"]);
     assert!(!plain.stdout.contains("hint"));
     std::fs::write(
-        "rule.json",
-        format!(r#"{{"ruling": "continue", "why": "a colo{}r fix"}}"#, "u"),
+        root.join("rule.json"),
+        format!(
+            r#"{{"ruling": "continue", "why": "a colo{}r fix", "x": 1, "y": null}}"#,
+            "u"
+        ),
     )
     .unwrap();
-    std::fs::write("bad.json", "nope").unwrap();
-    let wrong = run(&["ruled", "ask:ok-4", "rule.json", "--as", "main"]);
+    let rule = root.join("rule.json").to_string_lossy().into_owned();
+    let bad = root.join("bad.json");
+    std::fs::write(&bad, "nope").unwrap();
+    let bad = bad.to_string_lossy().into_owned();
+    let wrong = run(&root, &["ruled", "ask:ok-4", &rule, "--as", "main"]);
     assert!(wrong.code == 2 && wrong.stderr.starts_with("arbiter-ruled: declined"));
     assert_eq!(
-        run(&["ruled", "ask:ok-4", "missing.json", "--as", "round-arbiter"]).code,
+        run(
+            &root,
+            &[
+                "ruled",
+                "ask:ok-4",
+                "/no/such.json",
+                "--as",
+                "round-arbiter"
+            ]
+        )
+        .code,
         1
     );
     assert_eq!(
-        run(&["ruled", "ask:ok-4", "bad.json", "--as", "round-arbiter"]).code,
+        run(&root, &["ruled", "ask:ok-4", &bad, "--as", "round-arbiter"]).code,
         1
     );
-    let ruled = run(&["ruled", "ask:ok-4", "rule.json", "--as", "round-arbiter"]);
+    let ruled = run(
+        &root,
+        &["ruled", "ask:ok-4", &rule, "--as", "round-arbiter"],
+    );
     assert!(
         ruled.code == 0
             && ruled
@@ -411,21 +638,196 @@ fn every_verb_answers_on_a_clone() {
         ruled.stderr
     );
     assert!(rows(&root)[0]["why"].as_str().unwrap().contains("color"));
-    let again = run(&["ask", "ok-4", "two words here"]);
-    assert_eq!(again.code, 1);
-    std::fs::write(
-        "batch.json",
-        r#"{"ruling": "continue", "why": "w", "triggers": ["ask:b1"]}"#,
-    )
-    .unwrap();
-    let batch = run(&["ruled-batch", "batch.json", "--as", "round-arbiter"]);
-    assert!(batch.code == 0 && batch.stdout.contains("the batch's 1 triggers recorded"));
+    assert_eq!(run(&root, &["ask", "ok-4", "two words here"]).code, 1);
     assert_eq!(
-        run(&["ruled-batch", "bad.json", "--as", "round-arbiter"]).code,
+        run(&root, &["ruled-batch", &bad, "--as", "round-arbiter"]).code,
         1
     );
-    assert_eq!(run(&["fix", "done", "ask:none", "a note here"]).code, 1);
-    let nit = run(&["nit", "ask:none", "a", "b"]);
-    assert!(nit.code == 1 && nit.stderr.contains("no `accept` ruling"));
-    std::env::set_current_dir(old).unwrap();
+    assert_eq!(run(&root, &["ruled-batch", &rule, "--as", "main"]).code, 1);
+    assert_eq!(
+        run(
+            &root,
+            &["ruled", "ask:ok-3", &rule, "--as", "round-arbiter"]
+        )
+        .code,
+        0
+    );
+}
+
+fn committed(root: &Path, rel: &str) {
+    let run_git = |args: &[&str]| {
+        assert!(
+            std::process::Command::new("git")
+                .arg("-C")
+                .arg(root)
+                .args(args)
+                .status()
+                .unwrap()
+                .success(),
+            "{args:?}"
+        )
+    };
+    run_git(&["add", rel]);
+    run_git(&[
+        "-c",
+        "user.name=t",
+        "-c",
+        "user.email=t@t",
+        "commit",
+        "-q",
+        "-m",
+        "x",
+    ]);
+}
+
+#[test]
+fn fixes_are_settled_and_nits_answered() {
+    let root = clone_at("fixes-cli");
+    python_tools(&root);
+    let d = root.join("specs/999-x");
+    let fix_row = |t: &str, f: &str| {
+        format!(
+            "{}\n",
+            json!({"trigger": t, "fix": "open", "tooling_fix": f})
+        )
+    };
+    std::fs::write(
+        d.join("arbiter.jsonl"),
+        fix_row("ask:f1", "one") + &fix_row("hour:999-x@2", "two"),
+    )
+    .unwrap();
+    let none = run(&root, &["fix", "done", "ask:none", "a note here"]);
+    assert!(
+        none.code == 1
+            && none.stderr.contains("no open tooling fix: ask:none")
+            && none.stderr.contains("open now: ask:f1, hour:999-x@2"),
+        "{}",
+        none.stderr
+    );
+    assert!(run(&root, &["fix", "done", "", "a note here"])
+        .stderr
+        .contains("(no ID)"));
+    assert_eq!(run(&root, &["fix", "done", "ask:f1", "x"]).code, 1);
+    let notest = run(
+        &root,
+        &["fix", "done", "ask:f1", "a note here", "tests/none.sh"],
+    );
+    assert!(
+        notest
+            .stderr
+            .contains("TEST=tests/none.sh is not a file under tests/"),
+        "{}",
+        notest.stderr
+    );
+    assert!(run(&root, &["fix", "done", "ask:f1", "a note here"])
+        .stderr
+        .contains("TEST=<none>"));
+    std::fs::create_dir_all(root.join("tests")).unwrap();
+    std::fs::write(root.join("tests/t.sh"), "x").unwrap();
+    let not_main = run(
+        &root,
+        &["fix", "done", "ask:f1", "a note here", "tests/t.sh"],
+    );
+    assert!(
+        not_main.stderr.contains("is not on main as it is here"),
+        "{}",
+        not_main.stderr
+    );
+    committed(&root, "tests/t.sh");
+    // a landed copy of the test settles it; the origin ref is the fixture's main
+    assert!(std::process::Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args(["update-ref", "refs/remotes/origin/main", "HEAD"])
+        .status()
+        .unwrap()
+        .success());
+    let done = run(
+        &root,
+        &["fix", "done", "ask:f1", "a note here", "tests/t.sh"],
+    );
+    assert!(
+        done.code == 0 && done.stdout.contains("1 fix(es) settled - ask:f1"),
+        "{}",
+        done.stderr
+    );
+    assert_eq!(open_fixes(&d).len(), 1);
+    let declined_fix = run(
+        &root,
+        &[
+            "fix",
+            "declined",
+            "hour:999-x@2",
+            "this overhauls a process",
+        ],
+    );
+    assert!(
+        declined_fix.code == 0
+            && declined_fix
+                .stdout
+                .contains("each a question owed escalation-check"),
+        "{}",
+        declined_fix.stderr
+    );
+    assert!(std::fs::read_to_string(d.join("gm-question.txt"))
+        .unwrap()
+        .contains("Declined because"));
+    let nofeature = clone_at("no-active");
+    std::fs::remove_file(nofeature.join(".specify/feature.json")).unwrap();
+    assert!(run(&nofeature, &["fix", "done", "ask:none", "a note here"])
+        .stderr
+        .contains("the active feature (none)"));
+    let nit_root = clone_at("nit");
+    python_tools(&nit_root);
+    let modal = nit_root.join("l7r/diagram/interactive/assets/modals/sheet/bath.md");
+    std::fs::create_dir_all(modal.parent().unwrap()).unwrap();
+    std::fs::write(&modal, "the NEW words\n").unwrap();
+    let rid = "round:modal-form|modal:sheet/bath@3";
+    std::fs::write(nit_root.join("specs/999-x/arbiter.jsonl"), format!("{}\n", json!({"trigger": rid, "ruling": "accept", "kind": "round", "unit": "modal-form|modal:sheet/bath", "what": "make OLD into NEW"}))).unwrap();
+    let not_quoted = run(&nit_root, &["nit", rid, "zzz", "NEW"]);
+    assert!(not_quoted.stderr.contains("must quote both OLD and NEW"));
+    let unmade = run(&nit_root, &["nit", rid, "NEW", "OLD"]);
+    assert!(
+        unmade.stderr.contains("must hold NEW and no longer OLD"),
+        "{}",
+        unmade.stderr
+    );
+    let answered = run(&nit_root, &["nit", rid, "OLD", "NEW"]);
+    assert!(
+        answered.code == 0
+            && answered
+                .stdout
+                .contains("1 unit(s) answered at today's words - u:modal-form"),
+        "{}",
+        answered.stderr
+    );
+    std::fs::remove_file(nit_root.join("scripts/record/record_owed.py")).unwrap();
+    let none_owed = run(&nit_root, &["nit", rid, "OLD", "NEW"]);
+    assert!(
+        none_owed.stdout.contains("0 unit(s) answered") && none_owed.stdout.contains("none owed")
+    );
+    std::env::set_var("ARBITER_FIX_ENGINE", "1");
+    let engine = clone_at("engine");
+    std::fs::write(
+        engine.join("specs/999-x/arbiter.jsonl"),
+        format!(
+            "{}\n",
+            json!({"trigger": "ask:e1", "fix": "open", "tooling_fix": "e"})
+        ),
+    )
+    .unwrap();
+    std::fs::create_dir_all(engine.join("tests")).unwrap();
+    std::fs::write(engine.join("tests/e.sh"), "x").unwrap();
+    committed(&engine, "tests/e.sh");
+    let e = run(
+        &engine,
+        &["fix", "done", "ask:e1", "an engine note", "tests/e.sh"],
+    );
+    std::env::remove_var("ARBITER_FIX_ENGINE");
+    assert_eq!(e.code, 0, "{}", e.stderr);
+    assert!(
+        std::fs::read_to_string(engine.join("specs/999-x/arbiter.jsonl"))
+            .unwrap()
+            .contains("(an engine fix")
+    );
 }

@@ -168,9 +168,7 @@ fn unique_tmp(path: &Path) -> PathBuf {
 ///
 /// The directory or the file cannot be written.
 pub fn save(path: &Path, state: &Value) -> std::io::Result<()> {
-    if let Some(parent) = path.parent() {
-        std::fs::create_dir_all(parent)?;
-    }
+    std::fs::create_dir_all(path.parent().unwrap_or(Path::new("/")))?;
     let tmp = unique_tmp(path);
     std::fs::write(&tmp, pyjson::dumps(&pyjson::sorted(state), Some(1), true))?;
     std::fs::rename(&tmp, path)

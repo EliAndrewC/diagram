@@ -218,6 +218,7 @@ fn dates_read_as_strptime_and_fromisoformat_do() {
     assert_eq!(epoch_iso("2024-13-01"), 0.0);
     assert_eq!(iso_seconds("1970-01-01T00:00:00"), Some(0.0));
     assert_eq!(iso_seconds("x"), None);
+    assert_eq!(iso_seconds("1970-01-01T00:00:01Z"), Some(1.0));
     assert_eq!(
         epoch_iso("2024-01-01T00:00:00+05"),
         1_704_067_200.0 - 18000.0

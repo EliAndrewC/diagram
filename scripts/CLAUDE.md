@@ -6,6 +6,7 @@ Organized 2026-10-08 at the GM's request: a helper inside a subdirectory has no 
 | path | what is in it |
 |---|---|
 | `sync-with-main.sh`, `claim-feature.py`, `tick-task.py`, `make-docs.py`, `patch.py`, `git-askpass-token.sh` | the commands: stop-work and sync, `make claim`, `make tick`, `make docs`, the anchored-edit sweep, git's HTTPS credentials |
+| `checks_door.py` | Python's one door to the check state and the arbiter in Rust (`l7r-gate checks-door`), one process a run (449 T86) |
 | `record_door.py` | Python's door to the record leaves in Rust (`l7r-gate record moved-only`, `fragments`, `americanize`), one process a run (449 T81) |
 | `hooks/` | the guards (`*-hooks.sh`) that `.claude/settings.json` runs on every tool call; `docs/guards.md` is their record |
 | `hooks/lib/` | what the guards share: the `hm_*` deciders, `guardlog.sh`, the watchdog's pass, the refusal text |

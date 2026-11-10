@@ -121,11 +121,7 @@ pub fn aside(root: &Path) -> Vec<String> {
         .iter()
         .filter(|(_, v)| !mine(root, v))
         .map(|(t, v)| {
-            let feature = match v.get("feature") {
-                Some(Value::String(s)) => s.clone(),
-                Some(other) => other.to_string(),
-                None => "None".to_owned(),
-            };
+            let feature = v.get("feature").map_or_else(String::new, py_text);
             format!("{t} (feature {feature})")
         })
         .collect();

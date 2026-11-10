@@ -27,6 +27,7 @@ fn sample() -> Vec<String> {
         ),
         "not json".to_owned(),
         line(&json!({"message": {"usage": 3}})),
+        line(&json!({"message": {"role": "user", "content": 7}})),
     ]
 }
 
@@ -70,10 +71,7 @@ fn a_returned_check_logs_one_pass_and_a_second_return_a_second() {
     assert_eq!(row["wall"], json!("13 s"));
     assert_eq!(row["tokens"], json!("1k in (0k cached) / 3.5k out"));
     assert_eq!(row["date"], json!("2025-11-01"));
-    assert!(
-        !log_pass_at(&g, "returned", &payload, at),
-        "the same return is logged once"
-    );
+    assert!(!log_pass_at(&g, "returned", &payload, at));
     let mut more = sample();
     more.push(line(&json!({"message": {"role": "user", "content": [{"type": "text", "text": "resumed"}]}, "timestamp": "2026-11-01T00:00:20Z"})));
     more.push(line(
@@ -94,10 +92,7 @@ fn a_returned_check_logs_one_pass_and_a_second_return_a_second() {
         (json!(1), json!("first line of the prompt piped"))
     );
     std::fs::write(g.join("check-passes.jsonl"), "not json\n").unwrap();
-    assert!(
-        !log_pass_at(&g, "returned", &payload, at),
-        "a damaged log logs nothing"
-    );
+    assert!(!log_pass_at(&g, "returned", &payload, at));
 }
 
 #[test]
@@ -119,10 +114,7 @@ fn a_transcript_that_cannot_be_costed_is_not_logged() {
     .unwrap();
     assert!(log_pass_at(&g, "returned", &payload, 1.0));
     let row = std::fs::read_to_string(g.join("check-passes.jsonl")).unwrap();
-    assert!(
-        row.contains("\"subject\": \"\"") && row.contains("\"wall\": \"0 s\""),
-        "{row}"
-    );
+    assert!(row.contains("\"subject\": \"\"") && row.contains("\"wall\": \"0 s\""));
 }
 
 #[test]
@@ -138,6 +130,44 @@ fn only_a_finished_foreground_launch_is_a_pass() {
     ));
     assert!(!log_pass_at(&g, "launched", &json!({}), 1.0));
     super::log_pass(&g, "launched", &payload, 1.0);
+    let t = g.join("found.jsonl");
+    std::fs::write(
+        &t,
+        transcript(&[
+            line(&json!({"timestamp": "2026-01-01T00:00:00Z"})),
+            line(&json!({"message": {"role": "user", "content": [{"text": "from parts"}, 4]}})),
+        ]),
+    )
+    .unwrap();
+    let found = t.clone();
+    let done = |_: &str| Some(found.clone());
+    assert!(super::log_pass_found(&g, "launched", &payload, 1.0, &done));
+    let logged = std::fs::read_to_string(g.join("check-passes.jsonl")).unwrap();
+    assert!(logged.contains("\"subject\": \"from parts\""));
+    assert!(!log_pass_at(
+        &g,
+        "launched",
+        &json!({"tool_response": 3, "tool_input": 4}),
+        1.0
+    ));
+}
+
+#[test]
+fn a_transcript_is_found_under_its_project() {
+    let root = dir("projects");
+    let sub = root.join("p/s/subagents");
+    std::fs::create_dir_all(&sub).unwrap();
+    std::fs::write(root.join("p/s2"), "not a dir").unwrap();
+    std::fs::write(sub.join("agent-abc.jsonl"), "x").unwrap();
+    assert_eq!(
+        super::transcript_under(&root, "abc"),
+        Some(sub.join("agent-abc.jsonl"))
+    );
+    assert_eq!(super::transcript_under(&root, "other"), None);
+    assert_eq!(
+        super::transcript_under(std::path::Path::new("/nonexistent-l7r"), "x"),
+        None
+    );
 }
 
 #[test]
@@ -155,7 +185,6 @@ fn a_step_leaves_a_tool_usage_line() {
     let line = std::fs::read_to_string(root.join(".git/tool-usage.jsonl")).unwrap();
     assert!(
         line.contains("\"tool\": \"planhold-restore\"")
-            && line.contains("\"outcome\": \"changed\""),
-        "{line}"
+            && line.contains("\"outcome\": \"changed\"")
     );
 }

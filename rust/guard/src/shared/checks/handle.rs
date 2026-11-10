@@ -13,6 +13,10 @@ use super::passes;
 use super::planhold;
 use super::rounds::{self, Dispatch, PAGE_CHECKS};
 use super::{clone_root, falsy, load, locked, map_mut, name_of, now, save, state_path, text};
+
+fn parent_of(p: &Path) -> &Path {
+    p.parent().map_or(Path::new("."), |d| d)
+}
 use crate::shared::log;
 
 /// Every check a dispatch is counted for: the page checks freeze their subject; `impl-drift` counts to FR-010 only.
@@ -105,12 +109,9 @@ pub fn handle(mode: &str, payload: &Value, at: Option<f64>) -> String {
 
 /// The feature a state counts under, its root read off where the state file sits.
 fn current_feature(path: &Path, payload: &Value) -> String {
-    let parent = path.parent().unwrap_or_else(|| Path::new("."));
+    let parent = parent_of(path);
     let owner = if name_of(parent) == ".git" {
-        parent
-            .parent()
-            .unwrap_or_else(|| Path::new("."))
-            .to_path_buf()
+        parent_of(parent).to_path_buf()
     } else {
         Path::new(cwd_of(payload)).to_path_buf()
     };
@@ -136,12 +137,7 @@ fn str_values(ti: &Value) -> String {
 
 fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     if mode == "returned" || mode == "launched" {
-        passes::log_pass(
-            path.parent().unwrap_or_else(|| Path::new(".")),
-            mode,
-            payload,
-            t,
-        );
+        passes::log_pass(parent_of(path), mode, payload, t);
     }
     let mut state = load(path);
     if mode == "edit" && !falsy(state.get("plan_holds")) {
@@ -289,7 +285,7 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
         let _ = save(path, state);
     }
     if check == "work-budget" && root.is_some() && !escaped("ARBITER_OK", &prompt) {
-        let r = root.as_deref().unwrap_or_else(|| Path::new("."));
+        let r = root.as_deref().map_or(Path::new("."), |d| d);
         let why = budget::refusal(
             arbiter::feature_dir(r, "").as_deref(),
             &arbiter::rulings(r, ""),

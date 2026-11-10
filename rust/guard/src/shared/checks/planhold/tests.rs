@@ -104,10 +104,7 @@ fn a_snapshot_is_written_back_when_held_text_changes() {
     )
     .unwrap();
     let msg = restore(&mut state, Some(&root), "again");
-    assert!(
-        msg.contains("T01's section of specs/900-a/plan.md") && msg.contains("(agent ag)"),
-        "{msg}"
-    );
+    assert!(msg.contains("T01's section of specs/900-a/plan.md") && msg.contains("(agent ag)"));
     assert!(std::fs::read_to_string(root.join("specs/900-a/plan.md"))
         .unwrap()
         .contains("held body"));
@@ -137,7 +134,7 @@ fn a_held_block_is_written_back() {
         .replace("other text", "Y text");
     std::fs::write(root.join("specs/900-a/plan.md"), &edited).unwrap();
     let msg = restore(&mut state, Some(&root), "c");
-    assert!(msg.contains("2 block(s) of specs/900-a/plan.md"), "{msg}");
+    assert!(msg.contains("2 block(s) of specs/900-a/plan.md"));
     assert_eq!(
         std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap(),
         PLAN
@@ -160,7 +157,7 @@ fn a_held_block_is_written_back() {
     let mut gone_task =
         json!({"plan_holds": {"h": running("T09", &[], 1.0)}, "plan_snaps": {"c": {"h": ["old"]}}});
     let msg = restore(&mut gone_task, Some(&root), "c");
-    assert!(msg.contains("T09's section"), "{msg}");
+    assert!(msg.contains("T09's section"));
     let mut empty_before =
         json!({"plan_holds": {"h": running("T01", &[], 1.0)}, "plan_snaps": {"c": {"h": []}}});
     assert!(restore(&mut empty_before, Some(&root), "c").contains("T01's section"));
@@ -230,7 +227,7 @@ fn a_write_to_held_text_is_refused() {
         false,
         1000.0,
     );
-    assert!(writes.contains("T01's section"), "{writes}");
+    assert!(writes.contains("T01's section"));
     let keep = format!("x{PLAN}");
     assert_eq!(
         check(
@@ -306,7 +303,7 @@ fn a_write_to_held_text_is_refused() {
         1000.0,
         false,
     );
-    assert!(said.contains("a dispatch not yet launched"), "{said}");
+    assert!(said.contains("a dispatch not yet launched"));
     let never = json!({"plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 0.0, "state": "pending"}}});
     assert_eq!(
         refusal(

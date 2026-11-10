@@ -139,11 +139,7 @@ fn a_launch_applies_its_marks_and_a_return_counts_its_round() {
         .unwrap()
         .contains("EDIT"));
     returned(&mut state, "ag1", reply, Some(&keep));
-    assert_eq!(
-        state["rounds"]["quote-check|q:0105"],
-        json!(1),
-        "a reply is counted once"
-    );
+    assert_eq!(state["rounds"]["quote-check|q:0105"], json!(1));
     let mut fg = json!({});
     dispatch(&mut fg, &req("t2", "quote-check", MANIFEST, None));
     launched(&mut fg, "t2", "ag2", false, "a reply", None);
@@ -168,10 +164,7 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
     let root = clone_at("cap");
     let mut state = repeating_state(2, "/m/MANIFEST.md");
     let msg = dispatch(&mut state, &req("n", "quote-check", MANIFEST, Some(&root)));
-    assert!(
-        msg.contains("round 3 of `quote-check` on q:0105 in this feature passes its cap of 2"),
-        "{msg}"
-    );
+    assert!(msg.contains("round 3 of `quote-check` on q:0105 in this feature passes its cap of 2"));
     assert!(std::fs::read_to_string(root.join(".git/arbiter-owed.json"))
         .unwrap()
         .contains("round:quote-check|q:0105@3"));
@@ -185,7 +178,7 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
         &mut repeating_state(0, ""),
         &req("n", "quote-check", MANIFEST, Some(&held)),
     );
-    assert!(msg2.contains("cascade@1"), "{msg2}");
+    assert!(msg2.contains("cascade@1"));
     let lifted = clone_at("lifted");
     std::fs::write(
         lifted.join("specs/999-x/arbiter.jsonl"),
@@ -214,7 +207,7 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
             Some(&shut),
         ),
     );
-    assert!(no_units.is_empty(), "{no_units}");
+    assert!(no_units.is_empty());
     let store = shut.join(".git/record-checks");
     std::fs::create_dir_all(&store).unwrap();
     std::fs::write(
@@ -231,10 +224,7 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
             Some(&shut),
         ),
     );
-    assert!(
-        answered_case.contains("the round arbiter closed"),
-        "{answered_case}"
-    );
+    assert!(answered_case.contains("the round arbiter closed"));
     let answered_list = clone_at("answered-list");
     std::fs::write(
         answered_list.join("specs/999-x/arbiter.jsonl"),
@@ -313,6 +303,47 @@ fn the_cap_refuses_a_repeat_and_an_arbiter_lifts_it() {
 }
 
 #[test]
+fn a_footnotes_failing_fix_holds_a_dispatch_and_the_store_is_found_two_ways() {
+    let root = clone_at("loop");
+    let mut s = json!({"flags": {"0105#bath": {"n": 2, "fp": "old", "lines": []}}});
+    let msg = dispatch(
+        &mut s,
+        &req(
+            "n",
+            "quote-check",
+            "unit: quote-check:0105#bath new\n",
+            Some(&root),
+        ),
+    );
+    assert!(msg.contains("@3"));
+    assert_eq!(
+        super::record_store(&root, Some("/given")),
+        std::path::PathBuf::from("/given")
+    );
+    assert_eq!(
+        super::record_store(&root, Some("")),
+        root.join(".git/record-checks")
+    );
+    assert_eq!(
+        super::record_store(&root, None),
+        root.join(".git/record-checks")
+    );
+    let mut flying = json!({"rounds": {"quote-check|q:0105": 1}, "dispatches": {"a": {"check": "quote-check", "subjects": ["q:0105"], "state": "pending", "t": 1000.0, "notes": ["y"]}}});
+    assert_eq!(
+        dispatch(
+            &mut flying,
+            &req(
+                "n",
+                "quote-check",
+                "ONLY the notes x and the blocks that carry them\n",
+                None
+            )
+        ),
+        ""
+    );
+}
+
+#[test]
 fn a_later_batch_starts_its_own_count() {
     let root = clone_at("new-cause");
     git(
@@ -351,7 +382,7 @@ fn a_later_batch_starts_its_own_count() {
 fn a_round_running_refuses_the_same_check_and_a_batch_is_one_round() {
     let mut running_state = json!({"dispatches": {"a": {"check": "quote-check", "subjects": ["q:0105"], "state": "running", "t": 1000.0, "manifest": "/m/MANIFEST.md"}}});
     let msg = dispatch(&mut running_state, &req("n", "quote-check", MANIFEST, None));
-    assert!(msg.contains("is already in q:0105's round"), "{msg}");
+    assert!(msg.contains("is already in q:0105's round"));
     let mut freeze = req("n", "quote-check", MANIFEST, None);
     freeze.freeze_ok = true;
     assert_eq!(dispatch(&mut running_state.clone(), &freeze), "");
@@ -484,6 +515,12 @@ fn a_wave_agent_is_paired_by_its_prompt() {
     let key = wave_key(flat);
     let len = flat.chars().count();
     let long = format!("{flat} and more");
+    let mut tied = json!({"dispatches": {
+        "t1": {"wave": key.clone(), "wave_len": len, "state": "pending", "t": 5.0, "check": "c"},
+        "t2": {"wave": key.clone(), "wave_len": len, "state": "pending", "t": 1.0, "check": "c"}
+    }});
+    pair_wave(&mut tied, "agt", &transcript.to_string_lossy());
+    assert_eq!(tied["dispatches"]["t2"]["aid"], json!("agt"));
     let mut state = json!({"dispatches": {
         "w1": {"wave": key, "wave_len": len, "state": "pending", "t": 2.0, "check": "c"},
         "w2": {"wave": wave_key(&long), "wave_len": long.chars().count(), "state": "pending", "t": 1.0, "check": "c"},
@@ -529,6 +566,15 @@ fn drop_run_and_record_answer_rewrite_the_state_under_its_lock() {
     let gone = clone_at("gone");
     record_answer(&gone, "quote-check", &[]);
     drop_run("/nonexistent-l7r", "x");
+    let lockless = clone_at("lockless");
+    save(
+        &lockless.join(".git/checks-open.json"),
+        &json!({"dispatches": {}}),
+    )
+    .unwrap();
+    std::fs::create_dir_all(lockless.join(".git/checks-open.lock")).unwrap();
+    drop_run(&lockless.to_string_lossy(), "x");
+    record_answer(&lockless, "c", &["c:0105".to_owned()]);
     let mut research = json!({"dispatches": {"a": {"check": "modal-research", "subjects": ["s"], "state": "running"}, "b": {"check": "*", "subjects": ["s"], "state": "running"}, "c": {"check": "x", "subjects": ["other"], "state": "running"}, "d": {"check": "x", "subjects": ["s"], "state": "answered"}}});
     assert_eq!(
         answered_count(&mut research, "modal-gaps", &["s".to_owned()]),
@@ -590,19 +636,17 @@ fn oscillation_finds_a_block_that_came_back() {
     let b = "another block entirely different words appear here now";
     let back = oscillation(&[v(a), v(b), v(a)]);
     assert!(back.starts_with("the first block"));
-    assert_eq!(
-        oscillation(&[v(b), v(b), v(a)]),
-        "",
-        "the block stood just before"
-    );
+    assert_eq!(oscillation(&[v(b), v(b), v(a)]), "");
     assert_eq!(oscillation(&[v(a), v(a), v(a)]), "");
     assert_eq!(oscillation(&[v("short"), v(b), v("short")]), "");
+    let middle = oscillation(&[
+        v("w1 w2 w3 w4 w5 w6 w7 w8 w9 w10"),
+        v("w5 w6 w7 w8 w9 w10 y1 y2 y3 y4 y5 y6 y7 y8 y9 y10 y11 y12 y13 y14"),
+        v("w1 w2 w3 w4 w5 w6 z1 z2 z3 z4 z5 z6 z7 z8 z9 z10"),
+    ]);
+    assert_eq!(middle, "");
     let keep = vec![a.to_owned(), "z y x w v u".to_owned()];
-    assert_eq!(
-        oscillation(&[keep, v(&format!("{a} extra")), v(a)]),
-        "",
-        "it never left"
-    );
+    assert_eq!(oscillation(&[keep, v(&format!("{a} extra")), v(a)]), "");
 }
 
 #[test]
@@ -622,7 +666,7 @@ fn the_cascade_counts_dispatches_and_changed_lines() {
             "x",
         ],
     );
-    assert_eq!(window_start(&root), 0.0, "no origin yet");
+    assert_eq!(window_start(&root), 0.0);
     git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
     assert!(window_start(&root) > 0.0);
     std::fs::write(root.join("a.txt"), "1\n2\n").unwrap();

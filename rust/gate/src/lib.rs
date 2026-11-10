@@ -161,6 +161,11 @@ mod tests {
     }
 
     #[test]
+    fn the_checks_door_reads_stdin_to_its_end() {
+        assert_eq!(cli(&["checks-door".to_owned()]).code, 0);
+    }
+
+    #[test]
     fn the_stamp_and_the_delta_are_subcommands() {
         let ask = |a: &[&str]| cli(&a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>());
         assert_eq!(ask(&["delta", "nonsense"]).code, 2);

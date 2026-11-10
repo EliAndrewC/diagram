@@ -95,7 +95,7 @@ fn utc_now() -> String {
 }
 
 fn root_dir() -> PathBuf {
-    std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."))
+    std::env::current_dir().unwrap_or_default()
 }
 
 /// `python3 -c code args...`, a module the five named modules call by path until its own port; the stdout, stripped, where it succeeded.
@@ -496,7 +496,7 @@ pub fn record_ruling(
     )) {
         return Err(Stop::Refused("this ruling hands the GM a decision in its `why` or `what` - put the question in `for_gm` instead, the one door to him: it is written owed escalation-check and reaches him only if kept (feature 432, FR-003)".to_owned()));
     }
-    std::fs::create_dir_all(&d).map_err(|e| Stop::Refused(e.to_string()))?;
+    let _ = std::fs::create_dir_all(&d);
     let value = Value::Object(row);
     append_jsonl(&d.join("arbiter.jsonl"), &value)?;
     if !for_gm.is_empty() {
@@ -908,13 +908,16 @@ fn nit_cli(root: &Path, args: &[String]) -> Reply {
 /// `l7r-gate arbiter <verb>`: what `make arbiter-*`, `make done`'s first step and the review gate run.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    let root = root_dir();
+    cli_in(args, &root_dir())
+}
+
+fn cli_in(args: &[String], root: &Path) -> Reply {
     let verb = args.first().map_or("", String::as_str);
     match (verb, args.len()) {
-        ("ruled", 5) if args[3] == "--as" => ruled_cli(&root, &args[1], &args[2], &args[4]),
-        ("ruled-batch", 4) if args[2] == "--as" => ruled_batch_cli(&root, &args[1], &args[3]),
+        ("ruled", 5) if args[3] == "--as" => ruled_cli(root, &args[1], &args[2], &args[4]),
+        ("ruled-batch", 4) if args[2] == "--as" => ruled_batch_cli(root, &args[1], &args[3]),
         ("gate-held", 1) => {
-            let why = core::refusal(&core::blocking(&root, "", true), None);
+            let why = core::refusal(&core::blocking(root, "", true), None);
             if why.is_empty() {
                 ok(String::new())
             } else {
@@ -923,10 +926,10 @@ pub fn cli(args: &[String]) -> Reply {
         }
         ("spec-verdict", 2) => Reply { code: i32::from(spec_verdict(Path::new(&args[1])).is_empty()), stdout: String::new(), stderr: String::new() },
         ("spec-ruled", 2) => Reply { code: i32::from(spec_ruled(Path::new(&args[1])).is_empty()), stdout: String::new(), stderr: String::new() },
-        ("unit-ruled", 3) => Reply { code: i32::from(core::feature_dir(&root, "").is_none_or(|d| unit_ruled(&d, &args[1], &args[2]).is_empty())), stdout: String::new(), stderr: String::new() },
-        ("ask", 3 | 4) => ask_cli(&root, &args[1..]),
-        ("fix", 4 | 5) if matches!(args[1].as_str(), "done" | "declined") => fix_cli(&root, &args[1..]),
-        ("nit", 4) => nit_cli(&root, &args[1..]),
+        ("unit-ruled", 3) => Reply { code: i32::from(core::feature_dir(root, "").is_none_or(|d| unit_ruled(&d, &args[1], &args[2]).is_empty())), stdout: String::new(), stderr: String::new() },
+        ("ask", 3 | 4) => ask_cli(root, &args[1..]),
+        ("fix", 4 | 5) if matches!(args[1].as_str(), "done" | "declined") => fix_cli(root, &args[1..]),
+        ("nit", 4) => nit_cli(root, &args[1..]),
         _ => fail("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>] | nit <trigger> <old> <new>\n".to_owned(), 2),
     }
 }
