@@ -347,9 +347,9 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T78 to T78 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
 
 <!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-11-10 (feature 375 FR-044) -->
-### T80 (<why: the finding or measurement that files it>)
+### T80 (the first slice of the archive, `ask:449-T80-order`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the three tools ported with the decisions below.
 
    **Decisions** (the first slice, `ask:449-T80-order`: `access_tags`, `downloads`, `check-partial-citations`):
    - WHAT IS HERE: `l7r-gate record access-tags`, `l7r-gate record downloads`, `l7r-gate check partial-citations` (`rust/gate/src/record/`, `rust/gate/src/checks/`), the push's and the Makefile's rows and recipes moved to the verbs. `partial-citations` keeps its delta gate, only the files it reads named anew.
@@ -363,19 +363,19 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 ### T80 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The access tags, the download list and the partial-citation check are decided by Rust.
+2. **The constraints.** FR-001, FR-002, FR-003; the round arbiter's `ask:449-T80-order`.
+3. **Where each comes from.** The Python tools of this slice, each compared with its port.
+4. **Do they describe the world here?** Tooling; no researched value moves.
+5. **The order.** Before T81, as `ask:449-T80-order` orders the archive.
+6. **The exits.** Green: the differential in the decisions shows no mismatch, and the recipes, the push and the callers named run only the verbs. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+9. **Done, measured.** The decisions' differential; `git grep -nE "(access_tags|downloads|check-partial-citations)\.py" -- Makefile '*.mk' '*.sh' .claude/settings.json 'specs/*/measurements*.json' 'rust/*.rs'` names no invocation.
+10. **Before moving a constant.** None moved.
+11. **Before fitting things into room.** Not a room question.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T81 (<why: the finding or measurement that files it>)
