@@ -8356,58 +8356,64 @@
    "verdict": "CLEAR"
   },
   "T070": {
-   "section_sha256": "d30a2badc4a41f9c43d3ecb0ff43021eb49d58b16d559082293e7fdcc51c0d59",
+   "section_sha256": "0ae6e82023db0b3a5291bc1b2d45eddd15144d26b5a0f9c900ba86dfec562849",
    "reviewed": "2026-11-10",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T070-sc002-as-measured",
-     "summary": "Phase 2 closes with SC-002 recorded as missed (22.0 s against 15.1 s, m:done-rust-edit-phase2), shares in dev/phase-2-close.md, the line unmoved and re-measured at the phase-3 close.",
+     "id": "SC-002-as-measured",
+     "summary": "Phase 2 closes with SC-002 not met (22.0 s against 15.1 s, m:done-rust-edit-phase2), recorded with its shares in dev/phase-2-close.md, the line unmoved and re-measured at the phase-3 close; the shares replace the deleted planner with the kept pytest's two runs, the preflight's Python tools and the seeds.",
      "class": "within",
-     "why": "FR-010 requires each phase to end with its timings measured against the spec's figures and recorded, not met; SC-002 names no phase and the block does not relax its line. Two cautions: the 'as ask:449-T071-scope rules for a miss' premise cannot be confirmed, because the part of that ruling quoted in FR-001 says nothing about a miss; and this decision contradicts the block's own exit (see T070-exit)."
+     "why": "FR-010 obliges a phase to measure against the spec's figures and record the result; nothing cited makes SC-002 a phase-2 condition, and the line is not moved. The planner share is gone by FR-001b, the GM's own amendment. Caveat: ask:449-T071-scope's text is not in the bundle although the MANIFEST promises every named decision, so the quotation, elided at the point the share is named, could not be checked; the class does not rest on it."
     },
     {
-     "id": "T070-unchanged-tree-runs-no-test",
-     "summary": "The preflight stands aside on a verified tree, so make done's 'already verified' path starts no test.",
+     "id": "unchanged-tree-runs-no-test",
+     "summary": "The preflight stands aside on a verified tree, so make done's already-verified path starts no test (m:done-unchanged-after).",
      "class": "within",
-     "why": "This is SC-002's second half verbatim. Caution: the figure cited, m:done-unchanged-phase2, states in its own method that it was taken before preflight learned to stand aside, so it measures the state before this change and cannot prove it."
+     "why": "This is SC-002's second half, and the cited measurement records 0 tests run."
     },
     {
-     "id": "T070-time-floor",
-     "summary": "A make done is judged at the incremental floor rather than the 40 s floor, because a green run of 13 to 22 s did every check its delta owed.",
+     "id": "time-floor",
+     "summary": "A make done is judged at the incremental floor of 5 s (ABSOLUTE_MIN) in place of 10% of the pinned ratchet baseline (40 s).",
      "class": "within",
-     "why": "It serves SC-002: a 40 s floor would refuse the under-15.1 s run SC-002 demands. Cautions: the new floor's value is not stated, and must sit below 15.1 s for SC-002 to be reachable. '13 to 22 s' cites the runs of m:done-rust-edit-phase2, but that entry is one run, a one-shot, of 22.0 s, so its 13 s lower bound has no route back to a run. '40 s' carries no label; it is treated here as a setting being replaced, not a measurement."
+     "why": "SC-002 requires a run under 15.1 s; a 40 s floor refuses every run that meets it, so the requested criterion implies a change to the floor. 5 s is an existing setting, and which value is right is design, not fidelity. Note for the author: item 10 says 'None moved' while this decision changes which floor applies; that line should say so."
     },
     {
-     "id": "T070-e2e-python-test-deleted",
-     "summary": "test_rust_tooling.py, including its end-to-end test, stays deleted and is not ported.",
+     "id": "FR-008-end-to-end-test",
+     "summary": "With test_rust_tooling.py deleted by FR-001b, FR-008's one end-to-end test is rustc/tests.rs's the_real_cargo_tests_a_real_crate, real cargo over the fixture crate.",
      "class": "within",
-     "why": "The GM: 'Yes delete everything except that group, please.' FR-001b closes that group by its parenthesis (the sweep of the hand-drawn sheets and the checks of agent files, CLAUDE.md files and other documents); this file is not in it."
+     "why": "It keeps FR-008's one end-to-end test against the real command, which the earlier text had dropped. The bundle cannot confirm the test exists."
     },
     {
-     "id": "T070-no-rust-e2e-test",
-     "summary": "No end-to-end test of the Rust tooling replaces it: rust/gate/src/rustc/ holds the seam tests and no separate end-to-end test is added.",
+     "id": "py-census-phase-2-share",
+     "summary": "The .py census's phase-2 share is defined by git ls-files 'scripts/gates/*.py' 'scripts/measure/*.py' 'l7r/diagram/ci/*' and the green exit reads that share.",
      "class": "narrowing",
      "ruling": "NOT LEGITIMATE",
-     "why": "The GM's words reach the Python test and give as their reason that 'the Python stuff works and we are no longer changing it'; they do not speak to a test of Rust tooling against the real command. The ground the block gives, 'FR-001b's rule, Rust tests written with the code', is not in FR-001b as bundled in full. FR-008, the requirement on this exact point ('A tool's tests MUST each take under a tenth of a second, but its one end-to-end test against the real command'), is not cited, though it presupposes each tool has one; only its first line is in the bundle. The block does not say whether any seam test runs the real command. None of the three grounds for an exception is met, and ruling otherwise would complete the GM's thought. To clear: name the test under rust/gate/src/rustc/ that runs the real command (FR-008's one), or obtain an arbiter ruling that FR-008 only permits such a test and does not expect one, and cite the true ground in place of the phrase attributed to FR-001b."
+     "why": "FR-001's phase 2 also holds l7r/diagram/switches.py and, by ask:449-T051-lib-route, scripts/hooks/lib/hm_conflict.py; neither is in the pathspec, and the requirement says the censuses are run again at each phase's end. The phase-2 close therefore cannot show those two files are ported or named. Running the wider pathspec is not impossible, the GM's words do not imply the omission, and it defeats the purpose of a census, which is that nothing of the phase escapes it. The block must extend the pathspec to both files, or state that each is gone from the search that shows it."
     },
     {
-     "id": "T070-censuses",
-     "summary": "Phase 2's share of the .py census holds only what dev/phase-2-close.md names; the second census returns the four make audit recipes and the two fixtures of ask:449-T069-suites.",
+     "id": "second-census-remainders",
+     "summary": "The second census's phase-2 share returns the four make audit recipes and the two fixtures of ask:449-T069-suites.",
      "class": "within",
-     "why": "The second-census remainder matches FR-001's ask:449-T069-suites clause. Cautions: 'holds only what the close names' is circular as written, since FR-001 fixes what the close may name and FR-001b adds that it names none of the tools deleted; whether the close obeys cannot be checked from the bundle. The ask:449-T069-xdist probe, which the census regex does not return, must still be named at the close by its own search."
+     "why": "FR-001 names exactly these as the phase-2 close's expected remainders, and it defines the share's scope."
     },
     {
-     "id": "T070-exit",
-     "summary": "Item 6: Green is the figures re-run, SC-002 met and both censuses' phase-2 share empty; Red is recorded, the task set down and a process stop to make arbiter-ask.",
+     "id": "xdist-probe-gone",
+     "summary": "The pytest-xdist probe, outside the second census's pattern, went with the planner's recipe in T78 and no longer exists.",
      "class": "within",
-     "why": "Stricter than anything asked, so it narrows nothing, but it contradicts the block's own decisions: SC-002 is recorded as not met and the second census returns six named sites, so by its own exit this task is Red. One of the two must be restated; whichever stands, the block should say what closes the phase on a recorded miss."
+     "why": "FR-001b removes the planner and says the phase-2 close names none of the tools it deletes, which discharges FR-001's naming of the probe if it is gone. The premise is asserted with no search; since the census pattern cannot see this form, the block must name the search and its empty result."
     },
     {
-     "id": "T070-measurement-rewrites",
-     "summary": "Every specs/*/measurements*.json command running a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "id": "green-exit-admits-miss-and-remainders",
+     "summary": "Item 6's green exit now accepts SC-002 not met by named shares and a phase-2 share holding the expected remainders, where the earlier text required SC-002 met and both shares empty.",
      "class": "within",
-     "why": "Restates FR-001's rule for recorded measurements."
+     "why": "FR-001 itself lists expected remainders for the phase-2 close, so an empty share was never what the spec asked, and FR-010 asks for measurement and record. The exit's census half inherits the pathspec finding above."
+    },
+    {
+     "id": "recorded-commands-rewritten",
+     "summary": "Item 9: every recorded measurement command that runs a file this task ports or deletes is rewritten in the same commit and re-run as its proof.",
+     "class": "within",
+     "why": "It restates FR-001's rule."
     }
    ],
    "verdict": "BLOCKED"

@@ -303,7 +303,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
    - AN UNCHANGED TREE RUNS NO TEST: the preflight stands aside on a verified tree, so `make done`'s "already verified" path starts no test (SC-002's second half), `m:done-unchanged-after`.
    - THE TIME FLOOR: a `make done` reuses each crate's unchanged checks, so it is judged at the incremental floor, 5 s (`ABSOLUTE_MIN` in `run_plausible.rs`, a setting), in place of the floor of 10% of the pinned ratchet baseline (40 s, a setting of `dev/ratchets.json`): `m:done-rust-edit-phase2` did every check its delta owed in 22.0 s of wall time, and the old floor refused such a run.
    - FR-008'S ONE END-TO-END TEST: `test_rust_tooling.py` was deleted by FR-001b; FR-008's test against the real command is `rustc/tests.rs`'s `the_real_cargo_tests_a_real_crate`, the real cargo over the fixture crate.
-   - THE CENSUSES: the `.py` census's phase-2 share (`git ls-files 'scripts/gates/*.py' 'scripts/measure/*.py' 'l7r/diagram/ci/*'`, observed 2026-11-10, one-shot) lists only files `dev/phase-2-close.md` names with their phase; the second census returns the four `make audit` recipes and the two fixtures of `ask:449-T069-suites`; the `ask:449-T069-xdist` probe, outside that pattern, went with the planner's recipe in T78 and no longer exists.
+   - THE CENSUSES: the `.py` census's phase-2 share is `git ls-files 'scripts/gates/*.py' 'scripts/measure/*.py' 'l7r/diagram/ci/*' l7r/diagram/switches.py scripts/hooks/lib/hm_conflict.py` (observed 2026-11-10, one-shot): it lists only files `dev/phase-2-close.md` names with their phase, and neither of the last two exists. The second census returns the four `make audit` recipes and the two fixtures of `ask:449-T069-suites`. The `ask:449-T069-xdist` probe is gone with the planner's recipe: `git grep -c 'pip show' -- Makefile` printed 'nothing' (observed 2026-11-10, one-shot).
 3. **Where each comes from.** `m:done-rust-edit`.
 4. **Do they describe the world here?** Tooling: the gate; no researched value moves.
 5. **The order.** As the phase's plan above; each stands on the ones before it.
@@ -311,7 +311,7 @@ bookends taken. The close is SC-005: both censuses empty, `make done` and `make 
 7. **The search smell.** None.
 8. **The budget.** Its landing: no work budget, nothing rolled.
 9. **Done, measured.** SC-002's measurement and both censuses, recorded in `dev/`. Every `specs/*/measurements*.json` command that runs a file this task ports or deletes is rewritten in the same commit, to the port where it names a ported file and to an equivalent make command where it is inline or prose, and re-run as its proof (FR-001).
-10. **Before moving a constant.** None moved.
+10. **Before moving a constant.** No constant's value moves; the Time Floor decision changes which existing floor applies to `make done`.
 11. **Before fitting things into room.** Not a room question.
 
 ## Project Structure
