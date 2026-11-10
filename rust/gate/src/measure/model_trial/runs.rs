@@ -30,12 +30,12 @@ fn meta_of(out: &Path) -> Result<Value, String> {
         .ok_or_else(|| format!("{}: no readable meta.json", out.display()))
 }
 
+/// The local time, as the Python's `strftime` read it; the standard library has no zone database, so `date` reads it.
 fn clock() -> String {
-    let secs = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map_or(0, |d| d.as_secs());
-    let (.., h, m, s) = l7r_guard::shared::log::civil(secs);
-    format!("{h:02}:{m:02}:{s:02}")
+    let done = Command::new("date").arg("+%H:%M:%S").output();
+    done.ok()
+        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_owned())
+        .unwrap_or_default()
 }
 
 impl Trial {

@@ -70,9 +70,9 @@ ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s
 printf 'y = 1\n' > "$C/scripts/e.py"; git -C "$C" add -A; git -C "$C" commit -qm "another script"
 LAND_TOOLING_LINT=false LAND_TOOLING_TOOLING="touch $T/tests-ran" LAND_TOOLING_GUARDS="touch $T/guards-ran" land scripts/e.py; rc=$?
 ok "a lint failure stops before the tests and the guard suites start (385 T67)" '[ "$rc" -ne 0 ] && [ ! -e "$T/tests-ran" ] && [ ! -e "$T/guards-ran" ]'
-ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"failed: " && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "scripts/e.py"'
+ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome | startswith(\"failed: \")" >/dev/null && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "scripts/e.py"'
 LAND_TOOLING_LINT=true land scripts/e.py; rc=$?
-ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | grep -q "\"outcome\": \"landed\""'
+ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome == \"landed\"" >/dev/null'
 printf 'z  =  1\n' > "$C/scripts/f.py"; git -C "$C" add -A; git -C "$C" commit -qm "a badly formatted script"
 ( cd "$C" && env -u LAND_TOOLING_LINT LAND_TOOLING_TOOLING="touch $T/t91-tests" "$LAND" scripts/f.py ) >"$T/out" 2>&1; rc=$?
 ok "the lint runs first, in the clone, before anything else (385 T91)" '[ "$rc" -ne 0 ] && grep -q "feature 385 T91" "$T/out" && [ ! -e "$T/t91-tests" ] && [ -z "$(on_main scripts/f.py)" ]'
@@ -106,7 +106,7 @@ ok "main carries none of the engine work" '[ "$(on_main l7r/e.py)" = "e = 1" ]'
 ok "main keeps the other session's work" '[ "$(on_main other.txt)" = "other" ]'
 ok "the worktree is gone" '[ ! -e "$T/m/.clones/c-tooling" ] && ! git -C "$C" worktree list | grep c-tooling >/dev/null'
 ok "each step is timed in the log (383 amendment 2, FR-017)" 'for s in prepare worktree patch guard-suites tooling-tests checks push; do grep -q "^land-tooling: step $s [0-9.]* s$" "$C/.git/land-tooling.log" || exit 1; done'
-ok "...and the landing's steps are one JSON line" 'python3 -c "import json,sys; r=json.loads(open(sys.argv[1]).readlines()[-1]); sys.exit(not (r[\"outcome\"] == \"push-exit-0\" and set(r[\"steps\"]) == {\"prepare\", \"worktree\", \"patch\", \"guard-suites\", \"tooling-tests\", \"lint\", \"checks\", \"push\"}))" "$C/.git/land-tooling-steps.jsonl"'
+ok "...and the landing's steps are one JSON line" 'tail -1 "$C/.git/land-tooling-steps.jsonl" | jq -e ".outcome == \"push-exit-0\" and (.steps | keys) == [\"checks\", \"guard-suites\", \"lint\", \"patch\", \"prepare\", \"push\", \"tooling-tests\", \"worktree\"]" >/dev/null'
 ok "the clone keeps its own commits and has merged main back (the GM 2026-10-30)" 'git -C "$C" merge-base --is-ancestor "a guard fix" HEAD 2>/dev/null || git -C "$C" log --format=%s | grep -qx "a guard fix"; git -C "$C" merge-base --is-ancestor origin/main HEAD && grep -q "merged main back into the clone" "$T/out"'
 git -C "$C" pull -q --no-rebase --no-edit origin main >"$T/out" 2>&1; rc=$?
 ok "the clone's next merge of main is clean" '[ "$rc" -eq 0 ] && [ "$(cat "$C/l7r/e.py")" = "e = 2" ]'
@@ -131,7 +131,7 @@ echo "2b. the guard suites and the tooling tests run side by side, each timed; a
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='sleep 1' LAND_TOOLING_TOOLING='sleep 1' land scripts/a.sh; rc=$?
 ok "landed with both jobs" '[ "$rc" -eq 0 ]'
-ok "they overlapped: the checks took less than the two jobs one after the other" 'python3 -c "import json,sys; s=json.loads(open(sys.argv[1]).readlines()[-1])[\"steps\"]; sys.exit(not (s[\"guard-suites\"] >= 1 and s[\"tooling-tests\"] >= 1 and s[\"checks\"] < 1.8))" "$C/.git/land-tooling-steps.jsonl"'
+ok "they overlapped: the checks took less than the two jobs one after the other" 'tail -1 "$C/.git/land-tooling-steps.jsonl" | jq -e ".steps | .[\"guard-suites\"] >= 1 and .[\"tooling-tests\"] >= 1 and .checks < 1.8" >/dev/null'
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='echo guard-out; exit 1' LAND_TOOLING_TOOLING='true' land scripts/a.sh; rc=$?
 ok "a failing job is named and lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed in the worktree (guard-suites" "$T/out" && grep -q guard-out "$C/.git/land-tooling.log" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'

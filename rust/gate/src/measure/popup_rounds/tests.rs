@@ -2,7 +2,7 @@
 
 use serde_json::{json, Value};
 
-use super::{cli, counts, since_epoch, two_places};
+use super::{cli, counts, two_places};
 
 fn words(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
@@ -55,19 +55,6 @@ fn since_counts_only_what_came_after() {
 fn a_tie_rounds_as_python_rounds() {
     assert!((two_places(1.125) - 1.12).abs() < f64::EPSILON);
     assert!((two_places(1.5) - 1.5).abs() < f64::EPSILON);
-}
-
-#[test]
-fn an_iso_time_is_read_with_its_zone() {
-    let utc = since_epoch("2026-10-11T21:08:34Z").unwrap();
-    assert!((utc - 1_791_752_914.0).abs() < 1.0);
-    assert!((since_epoch("2026-10-11T21:08:34-04:00").unwrap() - utc - 14_400.0).abs() < 1.0);
-    assert!((since_epoch("2026-10-11T21:08:34+01:30").unwrap() - utc + 5_400.0).abs() < 1.0);
-    assert!(
-        (since_epoch("2026-10-11").unwrap() - since_epoch("2026-10-11T00:00:00").unwrap()).abs()
-            < 1.0
-    );
-    assert!(since_epoch("yesterday").is_none());
 }
 
 fn clone(tag: &str) -> std::path::PathBuf {
@@ -153,6 +140,9 @@ fn a_malformed_request_is_refused() {
     );
     assert_eq!(cli(&words(&["--record", "m", "--key", "k"])).code, 2);
     let got = cli(&words(&["x", "--since", "soon"]));
-    assert_eq!(got.code, 2);
+    assert_eq!(got.code, 1);
+    assert_eq!(got.stdout, "");
+    assert_eq!(got.stderr.lines().count(), 1);
+    assert!(got.stderr.contains("soon"));
     assert!(got.stderr.contains("not an ISO time"));
 }

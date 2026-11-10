@@ -8,6 +8,7 @@ pub mod delta;
 mod exempt;
 mod hashing;
 mod lock;
+mod logs;
 mod measure;
 mod plan;
 mod push;
@@ -96,6 +97,9 @@ pub fn cli(args: &[String]) -> Reply {
         Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
         Some("config-hash") => hashing::cli(&args[1..], &top(), "python3"),
         Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
+        Some("log") => logs::log_cli(&args[1..], Path::new(".")),
+        Some("json-field") => logs::json_field(&args[1..]),
+        Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),

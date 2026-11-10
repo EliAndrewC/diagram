@@ -17,19 +17,15 @@ g() { git -C "$T" -c user.name=t -c user.email=t@t "$@" >/dev/null 2>&1; }
 # rec <utc> <commit> <first seed> <failing seeds, comma-separated or empty>: a record as cohort_audit.write_record writes it - 48
 # fixed seeds, the pinned rows and a 48-seed fresh block from 12345
 rec() {
-  python3 - "$T/dev/cohort-log" "$@" <<'PY'
-import json, pathlib, sys
-log, utc, commit, first, bad = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3], int(sys.argv[4]), {int(x) for x in sys.argv[5].split(",") if x}
-seeds = [{"seed": n, "households": 12, "pins": {}, "how": "rolled", "verdict": "fail" if n in bad else "pass",
-          "failures": ["lane_knots"] if n in bad else [], "counts": {"lane_knots": 1} if n in bad else {}, "form": "linear"}
-         for n in [*range(first, first + 48), *range(901, 907)]]
-seeds += [{"seed": n, "households": 12, "pins": {}, "how": "rolled", "verdict": "fail" if n in bad else "pass", "fresh": True,
-           "failures": ["lane_knots"] if n in bad else [], "counts": {"lane_knots": 1} if n in bad else {}, "form": "linear"}
-          for n in range(12345, 12345 + 48)]
-log.mkdir(parents=True, exist_ok=True)
-(log / f"{utc}-t-1.json").write_text(json.dumps({"utc": utc, "clone": "t", "feature": "", "commit": commit, "first_seed": first,
-    "households": None, "count": len(seeds), "served": 0, "seeds": seeds}, indent=1) + "\n")
-PY
+  mkdir -p "$T/dev/cohort-log"
+  jq -n --arg utc "$1" --arg commit "$2" --argjson first "$3" --arg bad "$4" '
+    ($bad | split(",") | map(select(. != "") | tonumber)) as $b
+    | def seed($n; extra): ($b | index($n)) as $hit
+        | {seed: $n, households: 12, pins: {}, how: "rolled", verdict: (if $hit then "fail" else "pass" end)} + extra
+          + {failures: (if $hit then ["lane_knots"] else [] end), counts: (if $hit then {lane_knots: 1} else {} end), form: "linear"};
+    (([range($first; $first + 48), range(901; 907)] | map(seed(.; {}))) + ([range(12345; 12345 + 48)] | map(seed(.; {fresh: true})))) as $seeds
+    | {utc: $utc, clone: "t", feature: "", commit: $commit, first_seed: $first, households: null, count: ($seeds | length), served: 0, seeds: $seeds}
+  ' > "$T/dev/cohort-log/$1-t-1.json"
 }
 
 # a tree with no cohort-landing target: silent

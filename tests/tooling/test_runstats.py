@@ -48,7 +48,7 @@ def test_the_gate_wires_the_stats_into_every_entry_it_writes() -> None:
     """The start snapshot, the export pytest reads, a mark per failed phase, and the stats on each entry."""
     recipe = (SKILL / "Makefile").read_text().split("\ndone:", 1)[1].split("\ntest-full:", 1)[0]
     makefile = (SKILL / "Makefile").read_text()
-    assert "**json.loads(os.environ.get('RUN_STATS') or '{}')" in makefile.split("LOGRUN = ", 1)[1].split("\n\n", 1)[0]
+    assert 'l7r-gate.sh" log run' in makefile.split("LOGRUN = ", 1)[1].split("\n\n", 1)[0]  # it merges RUN_STATS: `rust/gate/src/logs.rs`
     assert '$(RUNSTATS) start "$$G"' in recipe and 'export L7R_GATE_FAILURES="$$G/gate-failures"' in recipe
     # Two phase loops and the reference step mark their failures.
     assert recipe.count('$(RUNSTATS) fail "$$G"') == 3

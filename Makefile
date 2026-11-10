@@ -429,22 +429,12 @@ engine-key:      ## [project] the content hash the gate and the push key on   RE
 gated-check:    ## [project] {internal} a gated push may land: its conditions, refused unless each holds. Called by sync-with-main.sh
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" ci gated-check
 
-LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
-  h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
-  ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  d='dev/run-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
-  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {}),**json.loads(os.environ.get('RUN_STATS') or '{}')},indent=2)+chr(10)); \
-  g=subprocess.run(['git','rev-parse','--absolute-git-dir'],capture_output=True,text=True).stdout.strip(); \
-  g and open(os.path.join(g,'last-run-record'),'w').write(os.path.abspath(f'{d}/{ts}-{os.getpid()}.json'))"
+LOGRUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log run
 
 RUNSTATS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure runstats
 COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
-LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
-  h=subprocess.run(['git','rev-parse','--short','HEAD'],capture_output=True,text=True).stdout.strip(); \
-  ts=time.strftime('%Y%m%dT%H%M%S',time.gmtime())+'%06d'%(time.time_ns()//1000%1000000); \
-  d='dev/bypass-log/'+time.strftime('%Y-%m',time.gmtime()); os.makedirs(d,exist_ok=True); \
-  open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':'$(MAKECMDGOALS)$(if $(FULL), FULL,)','commit':h,'outcome':sys.argv[1],'why':sys.argv[2]},indent=2)+chr(10))"
+LOGBYPASS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log bypass '$(MAKECMDGOALS)$(if $(FULL), FULL,)'
 
 LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/hooks/lib/guardlog.sh"; \
   printf "%s" "$$2" | python3 "$$0/scripts/hooks/lib/hm_escape.py" reason-ok >/dev/null || { \
@@ -1177,7 +1167,7 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	@$(if $(COV_FLOORS),$(if $(NO_CUTOFF),INCR_NO_CUTOFF=1 ,)python3 -m l7r.diagram.ci incremental plan $(if $(INCR_FORCE),full "$(INCR_FORCE)",) || exit 1;,) \
 	$(if $(COV_FLOORS),paths=$$(python3 -m l7r.diagram.ci incremental paths 2>/dev/null);,) \
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
-	tpy=$$(date +%s); if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
+	tpy=$$(date +%s); $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; ec=$$?; \
 	$(if $(COV_FLOORS),$(RUNSTATS) phase "$$(git rev-parse --absolute-git-dir)" pytest $$(( $$(date +%s) - tpy )) 2>/dev/null || true; tfl=$$(date +%s);,) \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
 	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/measure/uncovered-in-diff.py || true; }; exit $$ec; fi; \

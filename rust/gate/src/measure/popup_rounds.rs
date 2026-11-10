@@ -11,8 +11,10 @@ use std::path::Path;
 
 use serde_json::{json, Map, Value};
 
-use super::{at, reply, text_err};
+use super::{reply, text_err};
 use crate::plan::pretty;
+
+mod iso;
 
 const MODAL_CHECKS: [&str; 3] = ["modal-form", "modal-research", "modal-depiction"];
 
@@ -89,28 +91,6 @@ fn state_of(clone: &Path) -> Value {
         .unwrap_or_else(|| json!({}))
 }
 
-/// An ISO time as Python's `fromisoformat` reads it, a date alone being midnight and a zone honored; none when it is not one.
-pub(crate) fn since_epoch(iso: &str) -> Option<f64> {
-    let (date, time) = iso.split_once('T').unwrap_or((iso, "00:00:00"));
-    let (clock, zone) = match time.rfind(['+', '-']) {
-        Some(i) => (&time[..i], &time[i..]),
-        None => (time, ""),
-    };
-    let parts: Vec<f64> = zone[zone.len().min(1)..]
-        .split(':')
-        .filter_map(|p| p.parse().ok())
-        .collect();
-    let offset = parts.first().unwrap_or(&0.0) * 3600.0 + parts.get(1).unwrap_or(&0.0) * 60.0;
-    let seconds = at(&format!("{date}T{clock}"));
-    (seconds != 0.0).then(|| {
-        if zone.starts_with('-') {
-            seconds + offset
-        } else {
-            seconds - offset
-        }
-    })
-}
-
 /// Write each `<label>=<snapshot>`'s counts into `key`'s value in the measurements file `path`.
 fn record(path: &Path, key: &str, snapshots: &[&str], since: f64) -> Result<(), String> {
     let read = |p: &Path| -> Result<Value, String> {
@@ -176,10 +156,14 @@ pub(crate) fn cli(args: &[String]) -> crate::Reply {
     let since = if since_text.is_empty() {
         Some(0.0)
     } else {
-        since_epoch(since_text)
+        iso::parse(since_text)
     };
     let Some(since) = since else {
-        return refused(&format!("--since is not an ISO time: {since_text}"));
+        return reply(
+            String::new(),
+            format!("popup_rounds: --since is not an ISO time: {since_text}\n"),
+            1,
+        );
     };
     if let Some(file) = named.get("--record").filter(|f| !f.is_empty()) {
         let key = named.get("--key").copied().unwrap_or("");

@@ -195,7 +195,7 @@ for unit in $owed_units; do
     fail="$fail $unit"; rules="$rules unit-no-review"
     continue
   fi
-  read -r verdict rec_key rec_content < <(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d.get("verdict","") or "-", d.get("engine_key","") or "-", d.get("content_key","") or "-")' "$verdict_rec" 2>/dev/null || echo "- - -")
+  read -r verdict rec_key rec_content < <("$RG_HERE/l7r-gate.sh" json-field "$verdict_rec" verdict engine_key content_key 2>/dev/null || echo "- - -")
   # GUARD_EDIT_OK: feature 374 batch 4, the round arbiter's tooling fix - A VERDICT STALES ON ITS OWN SHEET: one value in one
   # generated program moved the whole-engine key and staled ten verdicts across sheets it never touched. A verdict whose sheet
   # (drawing and notes) hashes as it did when the review read it still answers for that sheet.

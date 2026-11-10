@@ -35,16 +35,7 @@ if [ -n "${CLAIMS_OK:-}" ]; then
   guard_log claims-gate escaped "$CLAIMS_OK" claims-ok
   BL="$ROOT/dev/bypass-log/$(date -u +%Y-%m)"
   mkdir -p "$BL" 2>/dev/null || true
-  python3 - "$BL" "CLAIMS_OK: $CLAIMS_OK" <<'PYBL' || true
-import json, pathlib, secrets, subprocess, sys, time
-bl, why = pathlib.Path(sys.argv[1]), sys.argv[2]
-head = subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()
-stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-(bl / f"{stamp}-{secrets.token_hex(3)}.json").write_text(
-    json.dumps({"utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "target": "claims-gate", "commit": head, "why": why}, indent=2) + "\n",
-    encoding="utf-8",
-)
-PYBL
+  "$CG_HERE/l7r-gate.sh" log gate-bypass claims-gate "$BL" "CLAIMS_OK: $CLAIMS_OK" 2>/dev/null || true
   printf 'claims-gate: BYPASSED (CLAIMS_OK) - %s\n  recorded in dev/bypass-log/ - `make audit` lists it\n' "$CLAIMS_OK"
   exit 0
 fi

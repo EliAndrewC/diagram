@@ -307,7 +307,7 @@ push_cmd() {
   # after the fetch (the checks above precede it) and its answer is a VALUE the shell's own branches read - the feature
   # pointer, which features are in progress, the performance flag, the remote merge's route -
   # not a pass or refusal of its own. The escape reads (`hm_escape.py reason-ok`) run only when an escape is set.
-  pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
+  pointer=$("$ROOT/scripts/gates/l7r-gate.sh" json-field "$ROOT/.specify/feature.json" feature_directory 2>/dev/null </dev/null | sed 's#/*$##' || true); [ "$pointer" = "-" ] && pointer=""
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
     # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
     # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the

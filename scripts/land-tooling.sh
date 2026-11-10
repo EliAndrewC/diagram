@@ -22,12 +22,11 @@ die() { LT_OUTCOME="failed: ${1:0:160}"; printf 'land-tooling: %s\n' "$*" >&2; e
 # the exit trap so a run that dies early leaves one too: `make tick` refuses a NOTE saying "landed" while the task's last run failed
 # or a file it named still differs from main (T72 was ticked "landed" at 00:49 over a failed landing).
 LT_OUTCOME="died"; LT_FILES="$*"
+LT_GATE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/gates/l7r-gate.sh"
 lt_record() {
   local gd task
   gd=$(git -C "${ROOT:-.}" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || return 0
-  task=$(tail -1 "$gd/task-starts.jsonl" 2>/dev/null | python3 -c 'import json,sys; r=json.loads(sys.stdin.read() or "{}"); print(r.get("feature","") + " " + r.get("task",""))' 2>/dev/null)
-  python3 -c 'import json,sys,datetime; f,t=sys.argv[2].split(" ",1) if " " in sys.argv[2] else ("",""); print(json.dumps({"feature": f, "task": t, "files": sys.argv[3].split(), "outcome": sys.argv[4], "log": sys.argv[5], "utc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}))' \
-    "$gd" "$task" "$LT_FILES" "$LT_OUTCOME" "$gd/land-tooling.log" >> "$gd/land-tooling.jsonl" 2>/dev/null || :
+  "$LT_GATE" log land-tooling "$gd" "$LT_FILES" "$LT_OUTCOME" >/dev/null 2>&1 || :
 }
 trap lt_record EXIT
 # FR-005: the proposal's scripts/, tests/ and agent instruction files, plus the wiring a scripts/ fix needs to take effect.
@@ -66,12 +65,7 @@ if [ -n "$first_pys" ] && [ -z "${LAND_TOOLING_LINT:-}" ] && ( cd "$ROOT" && pyt
   # (in the clone's root: ruff resolves a config's exclude paths against the config file's own directory)
   # (and as a ruff.toml: its `[tool.ruff...]` sections, the prefix dropped - `--config` reads a ruff.toml's form)
   cfg="$ROOT/.land-tooling-lint-$$.toml"
-  git -C "$ROOT" show origin/main:pyproject.toml 2>/dev/null | python3 -c 'import re,sys
-keep=False
-for line in sys.stdin:
-    m=re.match(r"\s*\[(tool\.ruff(?:\.[^\]]+)?)\]\s*$", line)
-    if re.match(r"\s*\[", line): keep=bool(m)
-    if keep: print(("[" + m.group(1)[len("tool.ruff."):] + "]") if m and m.group(1) != "tool.ruff" else ("" if m else line.rstrip("\n")))' > "$cfg" || : > "$cfg"
+  git -C "$ROOT" show origin/main:pyproject.toml 2>/dev/null | "$LT_GATE" ruff-toml > "$cfg" || : > "$cfg"
   cfgarg=""; [ -s "$cfg" ] && cfgarg="--config $cfg"
   # shellcheck disable=SC2086 # one word per file
   if ! lint_out=$( cd "$ROOT" && python3 -m ruff check $cfgarg --force-exclude $first_pys 2>&1 && python3 -m ruff format --check $cfgarg --force-exclude $first_pys 2>&1 ); then

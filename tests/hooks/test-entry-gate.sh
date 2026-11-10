@@ -37,12 +37,10 @@ restore() {
   rm -rf "$(dirname "$ROOT")"   # the throwaway clone (feature 329)
 }
 trap restore EXIT
-edit() { python3 - "$PAGE" "$1" "$2" <<'PY'
-import pathlib, sys
-p = pathlib.Path(sys.argv[1]); s = p.read_text()
-assert sys.argv[2] in s
-p.write_text(s.replace(sys.argv[2], sys.argv[3], 1))
-PY
+edit() {
+  local text; text="$(cat "$PAGE"; printf x)"; text="${text%x}"
+  case "$text" in *"$1"*) ;; *) printf '  FAIL edit: not in the page: %s\n' "$1"; exit 1 ;; esac
+  printf '%s' "${text/"$1"/"$2"}" > "$PAGE"
 }
 answer_all() { python3 - "$ROOT" "$HERE/../../scripts/record" <<'PY'
 import pathlib, sys
