@@ -9,6 +9,7 @@ use fancy_regex::Regex;
 
 use super::{python, state, Ctx};
 use crate::protocol::Answer;
+use crate::shared::checks;
 use crate::shared::escape::enough;
 
 static DECIDE_OK: LazyLock<Regex> =
@@ -335,19 +336,58 @@ fn prerequisites(
     )))
 }
 
-/// The round arbiter's check, as the shell ran it (feature 375 amendment 2).
-const ARBITER: &str = r#"import sys; sys.path.insert(0, sys.argv[1]); import hm_arbiter as a
-from pathlib import Path
-root, unit, n = Path(sys.argv[2]), sys.argv[3], int(sys.argv[4])
-ck = a.unit_content_key(root, unit) if a.closed(root, f"round:{unit}@") else None  # an accept bound to an older sheet has lapsed
-shut = a.closed(root, f"round:{unit}@", ck)
-if shut:
-    print(f"closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)")
-elif n - 2 > a.continues(root, f"round:{unit}@") + a.lapsed(root, f"round:{unit}@", ck):
-    a.trip(root, f"round:{unit}@{n}", "round", unit, f"round {n} of a review check")
-    print("owed\t" + a.refusal([f"round:{unit}@{n}"], root))
-else:
-    print("continue\t")"#;
+/// A review unit's sheet as it reads now (`review_prereq.py content-key`), or "" where it has none; that tool stays Python until its own port.
+fn unit_content_key(cx: &Ctx, unit: &str) -> String {
+    let script = cx.tree.join("scripts/reviews/review_prereq.py");
+    let bare = unit.split_once('|').map_or(unit, |(_, b)| b);
+    python(
+        cx.python,
+        &cx.clone,
+        &script,
+        &[
+            "content-key",
+            "--clone",
+            &cx.clone.to_string_lossy(),
+            "--map",
+            bare,
+        ],
+        "",
+    )
+    .out
+    .trim()
+    .to_owned()
+}
+
+/// `(closed, ...)`, `(owed, ...)` or `(continue, )`: the round arbiter's check on a third round, in-process.
+fn arbiter_verdict(cx: &Ctx, unit: &str, n: usize) -> String {
+    let (root, prefix) = (&cx.clone, format!("round:{unit}@"));
+    let ck = if checks::arbiter::closed(root, &prefix, None).is_empty() {
+        None
+    } else {
+        Some(unit_content_key(cx, unit))
+    };
+    let shut = checks::arbiter::closed(root, &prefix, ck.as_deref());
+    if !shut.is_empty() {
+        return format!("closed\tthe round arbiter closed {unit} ({shut}) - what is left is filed; the session does not re-ask (FR-011)");
+    }
+    if u64::try_from(n.saturating_sub(2)).unwrap_or(u64::MAX)
+        > checks::arbiter::continues(root, &prefix, 0)
+            + checks::arbiter::lapsed(root, &prefix, ck.as_deref())
+    {
+        let trigger = format!("round:{unit}@{n}");
+        let _ = checks::arbiter::trip(
+            root,
+            &trigger,
+            "round",
+            unit,
+            &format!("round {n} of a review check"),
+            &serde_json::Value::Null,
+            "",
+        );
+        return format!("owed\t{}", checks::arbiter::refusal(&[trigger], Some(root)));
+    }
+    "continue\t".to_owned()
+}
 
 /// The round cap, two a feature (feature 294 FR-009), past which the round arbiter rules.
 fn rounds(cx: &Ctx, atype: &str, named: &[String], key: &str) -> Option<Answer> {
@@ -359,20 +399,7 @@ fn rounds(cx: &Ctx, atype: &str, named: &[String], key: &str) -> Option<Answer> 
     if n <= 2 {
         return None;
     }
-    let lib = cx.tree.join("scripts/hooks/lib");
-    let args = [
-        lib.to_string_lossy().into_owned(),
-        cx.clone.to_string_lossy().into_owned(),
-        format!("{atype}|{unit}"),
-        n.to_string(),
-    ];
-    let arb = crate::shared::tool::ask(
-        &cx.clone,
-        "python3",
-        &["-c", ARBITER, &args[0], &args[1], &args[2], &args[3]],
-        "",
-    )
-    .out;
+    let arb = arbiter_verdict(cx, &format!("{atype}|{unit}"), n);
     if arb.starts_with("continue") {
         cx.log(
             "permitted",

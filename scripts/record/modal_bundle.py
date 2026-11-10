@@ -443,8 +443,8 @@ def research_held(root: pathlib.Path, uid: str, text: str) -> list[str]:
     from the replies the check state kept. A form round may not drop or widen it - on 343's border-court a form fix undid a
     research fix's scope words unseen ("no page on the formal entrance" -> "nothing known of the formal entrance"; the round
     arbiter's ruling, 2026-10-11). `apply_edits.py` refuses a modal-form EDIT that drops one."""
-    sys.path.insert(0, str(HERE.parent / "hooks" / "lib"))
-    import hm_checks as hc  # noqa: PLC0415
+    sys.path.insert(0, str(HERE.parent))
+    import checks_door as hc  # noqa: PLC0415
 
     state = hc.load(hc.state_path(str(root)) or pathlib.Path("/nonexistent"))
     out: list[str] = []

@@ -34,8 +34,10 @@ HERE = Path(__file__).resolve().parent
 for _d in ("../hooks/lib", "../measure", "../gates"):
     sys.path.insert(0, str((HERE / _d).resolve()))
 import event_log as el  # noqa: E402
-import hm_arbiter as ha  # noqa: E402
-import hm_checks as hc  # noqa: E402
+sys.path.insert(0, str((HERE / "..").resolve()))
+import checks_door as hc  # noqa: E402
+
+ha = hc  # one door to the check state and the arbiter
 
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: where a background agent's transcript lives, by its id - the reply when the hook kept none

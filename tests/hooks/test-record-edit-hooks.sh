@@ -11,7 +11,7 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # RECORD_EDIT_HOOK lets the proof-of-firing run this suite against a MUTATED copy of the guard (its
 # refusal removed) and watch it go red, without touching the real file.
-HOOK="${RECORD_EDIT_HOOK:-$HERE/../../scripts/hooks/record-edit-hooks.sh}"
+HOOK="${RECORD_EDIT_HOOK:-$HERE/record-edit-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

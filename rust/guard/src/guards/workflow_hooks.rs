@@ -184,11 +184,9 @@ fn run_id(event: &Event) -> String {
 }
 
 /// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
+pub(crate) struct Ctx {
     pub(crate) root: PathBuf,
     pub(crate) settings: PathBuf,
-    pub(crate) tree: PathBuf,
-    pub(crate) python: &'a str,
 }
 
 /// One prompt the run can launch.
@@ -250,16 +248,8 @@ fn launches(args: &Value, kind: &str) -> Result<Vec<Launch>, String> {
 }
 
 /// A refused run launches nothing: its dispatches the check tracking recorded go. `hm_checks` by path until T048 ports it, on a refused wave alone.
-fn drop_run(event: &Event, prefix: &str, ctx: &Ctx) {
-    let lib = ctx.tree.join("scripts/hooks/lib");
-    let code = "import sys; sys.path.insert(0, sys.argv[1]); import hm_checks; hm_checks.drop_run(sys.argv[2], sys.argv[3])";
-    let cwd = field(&event.input, "cwd");
-    let _ = ask(
-        &ctx.root,
-        ctx.python,
-        &["-c", code, &lib.to_string_lossy(), cwd, prefix],
-        "",
-    );
+fn drop_run(event: &Event, prefix: &str, _ctx: &Ctx) {
+    crate::shared::checks::rounds::drop_run(field(&event.input, "cwd"), prefix);
 }
 
 /// Why a `check-wave` run is refused, or "": its args' form, then each unit through the Agent hooks.
@@ -427,17 +417,7 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let root = PathBuf::from(said.out.trim());
     let settings = std::env::var("WORKFLOW_SETTINGS")
         .map_or_else(|_| root.join(".claude/settings.json"), PathBuf::from);
-    let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| root.clone(), PathBuf::from);
-    judge(
-        event,
-        session,
-        &Ctx {
-            root,
-            settings,
-            tree,
-            python: "python3",
-        },
-    )
+    judge(event, session, &Ctx { root, settings })
 }
 
 #[cfg(test)]

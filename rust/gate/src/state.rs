@@ -2,7 +2,6 @@
 //! still lean on it. A source edit is not an event to catch: the record holds the content hash of the diagram area at the time of the run, and a later reader recomputes it. The GM's rulings on what counts
 //! (2026-08-25, 2026-08-26, 2026-09-06) are in the git history of `state.py`.
 
-use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -114,20 +113,19 @@ fn commit(root: &Path) -> String {
 
 /// A second red `make done` in a row owes the round arbiter a ruling before the next gate (feature 375 FR-010).
 fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
-    let path = dir_of(root).join("arbiter-owed.json");
-    let kept = std::fs::read_to_string(&path).unwrap_or_default();
-    let mut owed: BTreeMap<String, Value> = serde_json::from_str(&kept).unwrap_or_default();
-    owed.insert(format!("red-gate@{}", utc(now)), json!({"detail": "a second red make done in a row", "kind": "red-gate", "t": now, "unit": ""}));
-    let mut out = Vec::new();
-    let mut writer = serde_json::Serializer::with_formatter(
-        &mut out,
-        serde_json::ser::PrettyFormatter::with_indent(b" "),
-    );
-    stated(
-        serde::Serialize::serialize(&owed, &mut writer).map_err(std::io::Error::other),
-        "arbiter-owed.json",
-    )?;
-    stated(std::fs::write(path, out), "arbiter-owed.json")
+    let trigger = format!("red-gate@{}", utc(now));
+    l7r_guard::shared::checks::with_owed(&dir_of(root), |owed| {
+        map_owed(owed).insert(trigger, json!({"detail": "a second red make done in a row", "kind": "red-gate", "t": now, "unit": ""}));
+        true
+    })
+}
+
+fn map_owed(owed: &mut Value) -> &mut serde_json::Map<String, Value> {
+    if !owed.is_object() {
+        *owed = json!({});
+    }
+    owed.as_object_mut()
+        .unwrap_or_else(|| unreachable!("owed is an object"))
 }
 
 pub(crate) fn current_hash(root: &Path, python: &str) -> Result<String, String> {

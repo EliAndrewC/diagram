@@ -489,6 +489,18 @@ fn answer(
 }
 
 /// `l7r-gate plan <verb> ...`.
+/// What an hour or red-gate ruling owes the active task's part B (`plan_door.approach_ruled`), for `l7r-gate arbiter`.
+pub(crate) fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
+    approach::ruled(root, trigger, None)
+}
+
+/// The accept as the plan's verdict: the blocks recorded CLEAR (`plan_door.arbiter_accept`), for `l7r-gate arbiter`.
+pub(crate) fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Result<Vec<String>, String> {
+    record::arbiter_accept(dir, trigger, None).map_err(|stop| match stop {
+        Stop::Declined(why) | Stop::Refused(why) => why,
+    })
+}
+
 pub(crate) fn cli(words: &[String], root: &Path) -> crate::Reply {
     let escaped = std::env::var("PLAN_REVIEW_OK").ok();
     answer(

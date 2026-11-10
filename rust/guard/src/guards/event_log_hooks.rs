@@ -15,10 +15,10 @@ use fancy_regex::Regex;
 use serde_json::{Map, Value};
 
 use crate::protocol::{Answer, Event, Guard};
+use crate::shared::checks;
 use crate::shared::log::civil;
 use crate::shared::session::Session;
 use crate::shared::sha1;
-use crate::shared::tool::ask;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -485,17 +485,11 @@ fn reversal(log: &Path, path: &Value, old: &Value, new: &Value) -> bool {
     truthy(new) && replaced.contains(new) && new != old
 }
 
-/// The arbiter's trigger for a reversal, recorded by its Python (`hm_arbiter.trip`).
-const TRIP: &str = "import sys; sys.path.insert(0, sys.argv[1]); import hm_arbiter as a; from pathlib import Path
-p = sys.argv[3]
-a.trip(Path(sys.argv[2]), f'reversal:{p}', 'reversal', p, f'an Edit put back text an earlier Edit of {p} replaced (A -> B -> A)')";
-
 /// Append the payload's line to its feature's log; None outside any clone (`append`).
 pub(crate) fn append(
     payload: &Value,
     t: &str,
     here: &Path,
-    tree: &Path,
     env: &dyn Fn(&str) -> Option<String>,
 ) -> Option<PathBuf> {
     let cwd = payload
@@ -527,17 +521,14 @@ pub(crate) fn append(
         && row.get("heading").is_none()
         && reversal(&path, field("path"), field("old"), field("new"))
     {
-        let lib = tree.join("scripts/hooks/lib");
-        let _ = ask(
+        let p = text_of(Some(field("path")));
+        let _ = checks::arbiter::trip(
             &root,
-            "python3",
-            &[
-                "-c",
-                TRIP,
-                &lib.to_string_lossy(),
-                &root.to_string_lossy(),
-                &text_of(Some(field("path"))),
-            ],
+            &format!("reversal:{p}"),
+            "reversal",
+            &p,
+            &format!("an Edit put back text an earlier Edit of {p} replaced (A -> B -> A)"),
+            &Value::Null,
             "",
         );
     }
@@ -555,14 +546,9 @@ pub(crate) fn append(
 
 fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
-    let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.clone(), PathBuf::from);
-    let _ = append(
-        &event.input,
-        &now_stamp(SystemTime::now()),
-        &here,
-        &tree,
-        &|k| std::env::var(k).ok(),
-    );
+    let _ = append(&event.input, &now_stamp(SystemTime::now()), &here, &|k| {
+        std::env::var(k).ok()
+    });
     Vec::new()
 }
 

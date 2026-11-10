@@ -299,7 +299,7 @@ fn a_float_is_written_as_python_writes_it() {
         (-2.5e-7, "-2.5e-07"),
         (1e100, "1e+100"),
     ] {
-        assert_eq!(super::py_float(f), want);
+        assert_eq!(l7r_guard::shared::pyjson::py_float(f), want);
     }
 }
 
@@ -316,7 +316,7 @@ fn every_value_is_written_in_its_python_form() {
 
 #[test]
 fn the_json_corners_are_pythons() {
-    assert_eq!(super::py_float(-0.0), "-0.0");
+    assert_eq!(l7r_guard::shared::pyjson::py_float(-0.0), "-0.0");
     assert_eq!(super::one_line(&json!("del\u{7f}")), "\"del\u{7f}\"");
     assert_eq!(super::one_line(&json!(u64::MAX)), "18446744073709551615");
 }

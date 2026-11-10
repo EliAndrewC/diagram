@@ -123,9 +123,9 @@ for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); d
   # stands in for the FAITHFUL verdict (the ruling reaches the GM only as a kept for_gm question, feature 432); without this the ruling could not bind
   # only a ruling on the spec AS IT READS NOW (the ruling carries the spec's hash; plan review round 2): an amended spec is
   # never passed on an old ruling, whichever clone pushes it
-  # ONE READING OF THE VERDICT (feature 442): the FAITHFUL line and the arbiter's standing ruling, asked of `hm_arbiter.spec_verdict`,
+  # ONE READING OF THE VERDICT (feature 442): the FAITHFUL line and the arbiter's standing ruling, asked of `l7r-gate arbiter spec-verdict`,
   # the function the merge's feature-complete check (`rust/gate/src/ci/features.rs`) asks too - two readings drifted twice (features 387, 440)
-  if ! python3 "$RG_HERE/../hooks/lib/hm_arbiter.py" spec-verdict "$(dirname "$spec")" 2>/dev/null; then
+  if ! "$RG_HERE/l7r-gate.sh" arbiter spec-verdict "$(dirname "$spec")" 2>/dev/null; then
     printf '\n\033[1mREVIEW GATE: %s has no fidelity verdict.\033[0m\n' "$spec"
     printf 'Constitution XVI: a specification is reviewed against the GM'"'"'S OWN WORDS before\n'
     printf 'implementation, by someone other than its author. Run the `spec-fidelity` subagent in\n'
@@ -209,7 +209,7 @@ for unit in $owed_units; do
     :   # the reviewer's record, at this content
   elif [ "$rec_content" != "-" ] && [ "$rec_content" = "$now_content" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
     :   # the engine moved, but this unit's sheet is what the reviewer read
-  elif [ -n "$now_content" ] && ( cd "$ROOT" && python3 "$RG_HERE/../hooks/lib/hm_arbiter.py" unit-ruled "$unit" "$now_content" ) 2>/dev/null; then
+  elif [ -n "$now_content" ] && ( cd "$ROOT" && "$RG_HERE/l7r-gate.sh" arbiter unit-ruled "$unit" "$now_content" ) 2>/dev/null; then
     :   # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter ACCEPTED this unit on the sheet as it reads now: its ruling
         # stands for the verdict, as a spec review's does (an accepted sheet's last verdict was NEEDS-WORK at an older key)
   else

@@ -46,7 +46,7 @@ STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state writ
 # A run too fast to have worked is not stamped green (`l7r-gate check run-plausible`): make runs $(MAKE)
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
-	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@h="$$(git rev-parse --show-toplevel)/scripts/hooks/lib/hm_arbiter.py"; [ ! -f "$$h" ] || python3 "$$h" gate-held || exit 1)
+	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$(ARBITER_OK)",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$(PREFLIGHT_OK)",@:)
 	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --workers "$(XDIST_WORKERS)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true; fi)
@@ -492,7 +492,7 @@ plan-archive:   ## [project] move a plan's finished sections (every task ticked,
 
 check-closed:   ## [project] close the checks in flight on a page or pop-up whose agent went silent (the freeze names it)   SUBJECT=q:0105|modal:sheet/bath REASON="<why>" [AGENT=<id> a check you stopped yourself, closed though not silent]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$(REASON)" ]; then printf 'make check-closed: SUBJECT=<q:NNNN or modal:<registry>/<slug>> and REASON="<why>" are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_checks.py close "$(SUBJECT)" "$(REASON)" $(if $(AGENT),"$(AGENT)",)
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh checks-close "$(SUBJECT)" "$(REASON)" $(if $(AGENT),"$(AGENT)",)
 
 arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire or a round cap: the rounds marked new/repeated/reversing, the edits, the cascade, the oscillation (feature 375)   TRIGGER=<id the guard named> [OUT=<dir>]
 	@if [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; then printf 'make arbiter-bundle: TRIGGER=<the trigger the refusal named>, or BATCH=1 for every owed round trigger at once\n' >&2; exit 2; fi
@@ -501,16 +501,16 @@ arbiter-bundle: ## [project] what the round arbiter reads to rule on a tripwire 
 
 arbiter-ruled:  ## [project] {internal} record the round arbiter's ruling - the round-arbiter SUBAGENT runs this   TRIGGER=<id> FILE=<json> AS=round-arbiter  (or BATCH=1 FILE=<json> for a batch)
 	@if [ -z "$(FILE)" ] || { [ -z "$(TRIGGER)" ] && [ -z "$(BATCH)" ]; }; then printf 'make arbiter-ruled: FILE= and TRIGGER= (or BATCH=1) are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py $(if $(BATCH),ruled-batch,ruled "$(TRIGGER)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter $(if $(BATCH),ruled-batch,ruled "$(TRIGGER)") "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
 arbiter-nit:  ## [project] answer an accepted unit again after the wording fix its ruling asked for   TRIGGER=<id> OLD="<words>" NEW="<words>"
 	@if [ -z "$(TRIGGER)" ] || [ -z "$(OLD)" ] || [ -z "$(NEW)" ]; then printf 'make arbiter-nit: TRIGGER=, OLD= and NEW= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py nit "$(TRIGGER)" "$(OLD)" "$(NEW)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter nit "$(TRIGGER)" "$(OLD)" "$(NEW)"
 
 arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379); LAND= lands its files first, TICK= ticks the task after   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/... [LAND="<the fix's files>"] [F=<feature> TICK=<Txx>]
 	@if [ -z "$(ID)" ] || [ -z "$(NOTE)" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@if [ -n "$(TICK)" ] && [ -z "$(F)" ]; then printf 'make arbiter-fix-done: TICK= ticks a task of F=<feature> - name the feature\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" python3 scripts/hooks/lib/hm_arbiter.py fix done "$(ID)" "$(NOTE)" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)" NOTE="$(NOTE)",)
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),scripts/land-tooling.sh $(LAND) $(TEST) && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" scripts/gates/l7r-gate.sh arbiter fix done "$(ID)" "$(NOTE)" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)" NOTE="$(NOTE)",)
 
 use-feature:  ## [project] make F the clone's active feature for the hooks (.specify/feature.json) - instead of writing the file by hand (the round arbiter on hour:396@1)   F=<feature number>
 	@if [ -z "$(F)" ]; then printf 'make use-feature: F=<feature number> is required - e.g. make use-feature F=396\n' >&2; exit 2; fi
@@ -523,14 +523,14 @@ arbiter-ask: export ARBITER_WHY = $(WHY)
 arbiter-ask: export ARBITER_REVIEW = $(REVIEW)
 arbiter-ask:  ## [project] put a PROCESS question (a cap, a waiver, a stuck choice of route) to the round arbiter before the GM (feature 379)   SUBJECT=<short id> WHY="<the question>" [FILES="<the measurements it cites>"] [REVIEW=spec|plan|claims:<key>;<key>: an accept then stands as that review's verdict, 409; claims' since 2026-10-24]
 	@if [ -z "$(SUBJECT)" ] || [ -z "$$ARBITER_WHY" ]; then printf 'make arbiter-ask: SUBJECT= and WHY= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/arbiter_bundle.py --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && python3 scripts/hooks/lib/hm_arbiter.py ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/arbiter_bundle.py --check-ask "$$ARBITER_WHY" --evidence "$(FILES)" && scripts/gates/l7r-gate.sh arbiter ask "$(SUBJECT)" "$$ARBITER_WHY" "$$ARBITER_REVIEW" && python3 scripts/reviews/arbiter_bundle.py "ask:$(SUBJECT)" --root "$$(pwd)" --evidence "$(FILES)"
 
 land-tooling:  ## [project] land the named TOOLING files on main by themselves, mid-feature (feature 379)   FILES="scripts/x.py tests/tooling/test_x.py"
 	@"$$(git rev-parse --show-toplevel)/scripts/land-tooling.sh" $(FILES)
 
 arbiter-fix-declined:  ## [project] the round arbiter's tooling fix OVERHAULS a process: declined, never filed - a question for the GM owed escalation-check (features 379, 432)   ID=<trigger> REASON="<why>"
 	@if [ -z "$(ID)" ] || [ -z "$(REASON)" ]; then printf 'make arbiter-fix-declined: ID= and REASON= are required\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/hooks/lib/hm_arbiter.py fix declined "$(ID)" "$(REASON)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter fix declined "$(ID)" "$(REASON)"
 
 step-back-off:  ## [project] suspend the hourly step-back, not remove it: the hour comes due for nothing until step-back-on; the tripwire rulings stay (feature 405 T43)   REASON="..."
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/reviews/checkpoint.py switch off --why "$(REASON)" && git add dev/step-back.json && git commit -q -m "chore: the hourly step-back suspended - $(REASON)" -- dev/step-back.json && echo "committed dev/step-back.json"

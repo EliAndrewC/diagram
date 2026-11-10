@@ -41,15 +41,6 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Agent",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
-          }
-        ]
-      },
-      {
         "hooks": [
           {
             "type": "command",
@@ -75,15 +66,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" returned  # GUARD_EDIT_OK: feature 375 FR-003 - a returned check's state and its EDIT blocks",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SubagentStop  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
             "timeout": 60
           }
@@ -102,25 +84,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "matcher": "Agent|TaskStop",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" launched  # GUARD_EDIT_OK: feature 375 FR-003 - a launched check paired with its agent id",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash|Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "h=/diagram/scripts/hooks/checks-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/checks-hooks.sh\"; exec \"$h\" after  # GUARD_EDIT_OK: feature 385 hour 30 - a held plan section written back after any call that changed it"
-          }
-        ]
-      },
       {
         "hooks": [
           {

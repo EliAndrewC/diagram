@@ -12,11 +12,11 @@ use crate::shared::session::Session;
 
 /// The fake tools, `sh` scripts run as the guard runs its Python tools (`<interpreter> <script> args`): each answers from the
 /// clone's `.git/<file>`. The arbiter's check is Python code the guard runs as itself, so its fake module stays Python.
-const TOOLS: [(&str, &str); 6] = [
+const TOOLS: [(&str, &str); 5] = [
     ("scripts/reviews/checkpoint.py", "cat \"$3/.git/due\" 2>/dev/null\n"),
     (
         "scripts/reviews/review_prereq.py",
-        "if [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n[ -f \"$3/.git/problems\" ] || exit 0\ncat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1\n",
+        "if [ \"$1\" = content-key ]; then printf ck; exit 0; fi\nif [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n[ -f \"$3/.git/problems\" ] || exit 0\ncat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1\n",
     ),
     (
         "scripts/reviews/review_owed.py",
@@ -24,10 +24,6 @@ const TOOLS: [(&str, &str); 6] = [
     ),
     ("scripts/gates/l7r-gate.sh", "if [ \"$1\" = plan ]; then cat \"$3/.git/undecided\" 2>/dev/null; exit 0; fi
 [ -f .git/green ]\n"),
-    (
-        "scripts/hooks/lib/hm_arbiter.py",
-        "import pathlib\ndef _f(root,n): p=pathlib.Path(root,'.git',n); return p.read_text() if p.exists() else ''\ndef unit_content_key(root,unit): return 'ck'\ndef closed(root,prefix,ck=None): return _f(root,'closed')\ndef continues(root,prefix): return int(_f(root,'continues') or 0)\ndef lapsed(root,prefix,ck): return 0\ndef trip(root,*a): pathlib.Path(root,'.git/tripped').write_text('')\ndef refusal(keys,root): return 'ask the arbiter: '+keys[0]\n",
-    ),
     ("Makefile", "engine-key:\n\t@printf KEY\n"),
 ];
 
@@ -57,6 +53,27 @@ impl Fixture {
     fn set(&self, file: &str, text: &str) -> &Self {
         std::fs::write(self.clone.join(".git").join(file), text).unwrap();
         self
+    }
+
+    /// A ruling on the fixture's own feature (`specs/900-x`, the clone's `.specify/feature.json`).
+    fn ruling(&self, trigger: &str, ruling: &str) {
+        std::fs::create_dir_all(self.clone.join(".specify")).unwrap();
+        std::fs::write(
+            self.clone.join(".specify/feature.json"),
+            r#"{"feature_directory": "specs/900-x"}"#,
+        )
+        .unwrap();
+        std::fs::create_dir_all(self.clone.join("specs/900-x")).unwrap();
+        std::fs::write(
+            self.clone.join("specs/900-x/arbiter.jsonl"),
+            format!("{}\n", json!({"trigger": trigger, "ruling": ruling})),
+        )
+        .unwrap();
+        // the feature pointer moves the rounds' count to that feature's key
+        let rounds = std::fs::read_to_string(self.clone.join(".git/review-rounds.json"))
+            .unwrap_or_default()
+            .replace("\"none\"", "\"specs/900-x\"");
+        std::fs::write(self.clone.join(".git/review-rounds.json"), rounds).unwrap();
     }
 
     fn has(&self, file: &str) -> bool {
@@ -258,23 +275,28 @@ fn past_two_rounds_the_round_arbiter_is_owed_its_ruling() {
     let why = refusal(&f.judge());
     assert!(
         why.contains("BLOCKED: round 3 of m1 for settlement-review")
-            && why.contains("ask the arbiter: round:settlement-review|m1@3")
+            && why.contains("round:settlement-review|m1@3")
     );
-    assert!(f.has("tripped"));
+    assert!(
+        std::fs::read_to_string(f.clone.join(".git/arbiter-owed.json"))
+            .unwrap()
+            .contains("round:settlement-review|m1@3")
+    );
 }
 
 #[test]
 fn a_continue_ruling_lets_the_round_go() {
     let f = third_round("rounds-continue");
-    f.set("continues", "1");
+    f.ruling("round:settlement-review|m1@9", "continue");
     assert!(f.judge().is_empty());
 }
 
 #[test]
 fn a_closed_unit_is_not_re_asked() {
     let f = third_round("rounds-closed");
-    f.set("closed", "accepted");
-    assert!(refusal(&f.judge()).contains("the round arbiter closed"));
+    f.ruling("round:settlement-review|m1@9", "accept");
+    let said = refusal(&f.judge());
+    assert!(said.contains("the round arbiter closed"), "{said}");
 }
 
 #[test]

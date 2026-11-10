@@ -283,12 +283,12 @@ def reversal_wire(root: Path, log: Path, row: Mapping[str, Any]) -> bool:
     """FR-010's oscillation tripwire, where the edit is seen: an Edit that puts back text an earlier Edit of the same file in
     this feature replaced (A -> B -> A) owes the round arbiter a ruling (`hm_arbiter.py`). It never refuses the edit itself -
     a reversal may be the right fix; the ruling is owed before the next check."""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
-    import hm_arbiter  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import checks_door  # noqa: PLC0415
 
-    if row.get("heading") or not hm_arbiter.reversal(list(read_jsonl(log)), str(row.get("path")), str(row.get("old")), str(row.get("new"))):
+    if row.get("heading") or not checks_door.reversal(list(read_jsonl(log)), str(row.get("path")), str(row.get("old")), str(row.get("new"))):
         return False
-    return hm_arbiter.trip(root, f"reversal:{row.get('path')}", "reversal", str(row.get("path")),
+    return checks_door.trip(root, f"reversal:{row.get('path')}", "reversal", str(row.get("path")),
                            f"an Edit put back text an earlier Edit of {row.get('path')} replaced (A -> B -> A)")
 
 

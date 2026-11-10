@@ -66,14 +66,11 @@ def reasons(d: Path, specs: Path | None = None) -> list[str]:
     return out + ([hold] if hold else [])
 
 
-def _arbiter():  # noqa: ANN202 - scripts/hooks/lib/hm_arbiter.py by path
-    import importlib.util  # noqa: PLC0415
+def _arbiter():  # noqa: ANN202 - `fix_hold` through the checks door (feature 449 T86)
+    import importlib  # noqa: PLC0415
 
-    spec = importlib.util.spec_from_file_location("hm_arbiter", ROOT / "scripts" / "hooks" / "lib" / "hm_arbiter.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    sys.path.insert(0, str(ROOT / "scripts"))
+    return importlib.import_module("checks_door")
 
 
 def _impl_check():  # noqa: ANN202 - scripts/record/impl_check.py by path (the gates and the record are siblings)

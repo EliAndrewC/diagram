@@ -425,10 +425,10 @@ def active_feature(root: Path) -> str:
     """The feature whose hour a glyph check keeps, or "" for a change with no feature (D54): `.specify/feature.json` names one
     (`hm_arbiter.feature_dir`, the one reader), it exists, and `make speckit-todo` does not read it closed - nothing clears the
     file when a feature closes, by a Done status line or by its last tick (370 and 372 closed so under "Draft")."""
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "hooks" / "lib"))
-    import hm_arbiter  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import checks_door  # noqa: PLC0415
 
-    d = hm_arbiter.feature_dir(root)
+    d = checks_door.feature_dir(root)
     if d is None or not (d / "spec.md").is_file():
         return ""
     todo = _todo()

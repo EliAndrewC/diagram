@@ -4,9 +4,8 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{decide, judge, mode_for};
-use crate::protocol::{Answer, Event};
-use crate::shared::session::Session;
+use super::mode_for;
+use crate::protocol::Event;
 
 fn world(tag: &str, guard: &str) -> PathBuf {
     let d = std::env::temp_dir().join(format!("l7r-guard-regate-{tag}-{}", std::process::id()));
@@ -100,40 +99,4 @@ fn a_worktree_is_resolved_and_no_repository_holds_nothing() {
         input: json!({"tool_name": "Edit"}),
     };
     assert_eq!(mode_for(&bare, Path::new("/")), None);
-}
-
-#[test]
-fn the_shell_guards_reply_becomes_the_answers() {
-    let refuse = world(
-        "refuse",
-        "cat >/dev/null; echo frozen while checked >&2; exit 2\n",
-    );
-    let page = json!({"file_path": "/r/research/site/q/x.html"});
-    let e = event("Edit", &page, &refuse);
-    assert!(
-        matches!(&judge(&e, &refuse, &refuse)[..], [Answer::Refuse(t)] if t == "frozen while checked")
-    );
-    let rewrite = world(
-        "rewrite",
-        r#"cat >/dev/null; echo '{"hookSpecificOutput": {"updatedInput": {"file_path": "moved"}, "additionalContext": "moved it"}}'"#,
-    );
-    let e = event("Edit", &page, &rewrite);
-    assert!(
-        matches!(&judge(&e, &rewrite, &rewrite)[..], [Answer::Rewrite(v), Answer::Notice(n)] if v["file_path"] == "moved" && n == "moved it")
-    );
-    let quiet = world("quiet", "cat >/dev/null\n");
-    let e = event("Edit", &page, &quiet);
-    assert!(judge(&e, &quiet, &quiet).is_empty());
-    let plain = event("Bash", &json!({"command": "ls"}), &quiet);
-    assert!(judge(&plain, &quiet, &quiet).is_empty());
-    let unstarted = world("unstarted", "touch \"$(dirname \"$0\")/started\"\n");
-    let plain = event("Bash", &json!({"command": "ls"}), &unstarted);
-    assert!(judge(&plain, &unstarted, &unstarted).is_empty());
-    assert!(!unstarted.join("scripts/hooks/started").exists());
-    let cwdless = Event {
-        name: "PreToolUse".to_owned(),
-        input: json!({"tool_name": "Bash", "tool_input": {"command": "ls"}}),
-    };
-    assert!(judge(&cwdless, &quiet, &quiet).is_empty());
-    assert!(decide(&plain, &Session::from_input(&plain.input)).is_empty());
 }

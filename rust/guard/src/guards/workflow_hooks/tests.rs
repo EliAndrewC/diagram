@@ -8,7 +8,7 @@ use super::{agent_hooks, agent_type, call_end, calls, decide, judge, verdict, Ct
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-fn world(tag: &str, hook: &str) -> (PathBuf, Ctx<'static>) {
+fn world(tag: &str, hook: &str) -> (PathBuf, Ctx) {
     crate::shared::log::quiet();
     let d = std::env::temp_dir().join(format!("l7r-guard-workflow-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&d);
@@ -25,8 +25,6 @@ fn world(tag: &str, hook: &str) -> (PathBuf, Ctx<'static>) {
     let ctx = Ctx {
         root: d.clone(),
         settings: d.join("settings.json"),
-        tree: d.clone(),
-        python: "sh",
     };
     (d, ctx)
 }
@@ -215,8 +213,6 @@ fn the_answers() {
     let none = Ctx {
         root: d.clone(),
         settings: d.join("absent"),
-        tree: d.clone(),
-        python: "sh",
     };
     let call = workflow(&json!({"script": "agent('x', {})"}), &d);
     assert!(judge(&call, &Session::from_input(&call.input), &none).is_empty());

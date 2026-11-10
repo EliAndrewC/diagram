@@ -120,12 +120,7 @@ pub(crate) fn feature_status(root: &Path, name: Option<&str>, python: &str) -> F
         .filter(|t| held.iter().any(|h| h.starts_with(t)))
         .map(|t| t.chars().take(80).collect())
         .collect();
-    let (_, faithful) = ask(
-        root,
-        python,
-        "scripts/hooks/lib/hm_arbiter.py",
-        &["spec-verdict", &dir_text],
-    );
+    let faithful = !crate::arbiter::spec_verdict(&dir).is_empty();
     FeatureStatus {
         name: owned,
         exists: true,

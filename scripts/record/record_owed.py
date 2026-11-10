@@ -42,7 +42,7 @@ from typing import Any
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
+sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('..', '../hooks/lib')]  # the moved scripts it imports (2026-10-08)
 # no __pycache__ beside the scripts: the push runs this in fixture trees whose `git status` must stay clean
 sys.dont_write_bytecode = True
 import record_cache as rc  # noqa: E402
@@ -505,8 +505,9 @@ def modal_batches(rows: Sequence[ru.Unit], answered_slugs: Collection[str] = (),
 
 
 def keep_batches(root: pathlib.Path, batches: Mapping[str, list[str]]) -> None:
-    gd = pathlib.Path(_git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").strip() or root / ".git")
-    (gd / BATCHES).write_text(json.dumps({"utc": time.time(), "batches": dict(batches)}) + "\n", encoding="utf-8")
+    import checks_door  # noqa: PLC0415 - the one writer of the guards' state files (feature 449 T86)
+
+    checks_door.keep_batches(root, batches)
 
 
 def report(rows: Sequence[ru.Unit], now: ru.Record | None = None, answered_slugs: Collection[str] = (), triaged: Mapping[str, str] | None = None) -> str:
@@ -604,9 +605,9 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
             if check == "source-reader":
                 keep_parts(s, slug, root, reply)
     if done:
-        import hm_checks  # noqa: PLC0415
+        import checks_door  # noqa: PLC0415
 
-        hm_checks.record_answer(root, check, done)
+        checks_door.record_answer(root, check, done)
     return done
 
 
@@ -660,9 +661,9 @@ def file_outside(root: pathlib.Path, check: str, reply: str) -> list[dict]:
              "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())} for f, b, x in outside(reply)]
     if not rows:
         return []
-    import hm_arbiter  # the one reader of the active feature: a page session's own first (reading feature.json here filed 343's rows under 378)
+    import checks_door  # the one reader of the active feature: a page session's own first (reading feature.json here filed 343's rows under 378)
 
-    target = (hm_arbiter.feature_dir(root) or root / "specs/_unfiled") / "found.jsonl"
+    target = (checks_door.feature_dir(root) or root / "specs/_unfiled") / "found.jsonl"
     target.parent.mkdir(parents=True, exist_ok=True)
     with target.open("a", encoding="utf-8") as fh:
         fh.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)

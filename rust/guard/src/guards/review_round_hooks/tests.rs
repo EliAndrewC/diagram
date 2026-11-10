@@ -8,7 +8,6 @@ use super::{answer, classify_mode, cli, decide, plan_rounds, verdict, verdict_of
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 
-const ARBITER: &str = r#"case "$2" in closed) cat "$1/.closed" 2>/dev/null ;; continues) cat "$1/.continues" 2>/dev/null || echo 0 ;; *) echo "make arbiter-bundle for $3" ;; esac"#;
 const NO_STALE: &str = "true";
 const NO_ACTIVE: &str = "true";
 
@@ -33,9 +32,26 @@ fn ctx<'a>(d: &Path, stale: &'a str, active: &'a str) -> Ctx<'a> {
     Ctx {
         tree: d.to_path_buf(),
         python: "sh",
-        arbiter_code: ARBITER,
         active_code: active,
     }
+}
+
+/// The active feature's arbiter record: one row a `<trigger>:<ruling>`.
+fn ruled(d: &Path, rows: &[&str]) {
+    std::fs::create_dir_all(d.join(".specify")).unwrap();
+    std::fs::write(
+        d.join(".specify/feature.json"),
+        r#"{"feature_directory": "specs/301-x"}"#,
+    )
+    .unwrap();
+    let lines: String = rows
+        .iter()
+        .map(|r| {
+            let (t, v) = r.rsplit_once(':').unwrap();
+            format!("{}\n", json!({"trigger": t, "ruling": v}))
+        })
+        .collect();
+    std::fs::write(d.join("specs/301-x/arbiter.jsonl"), lines).unwrap();
 }
 
 fn plain(d: &Path) -> Ctx<'static> {
@@ -380,7 +396,10 @@ fn past_the_spec_cap_the_arbiter_rules() {
     assert_eq!(o.rule, "spec-round-cap");
     assert!(
         refused(&o, "BLOCKED: round 6 of specs/301-x's spec review")
-            && refused(&o, "make arbiter-bundle for round:spec-fidelity|301-x#1@6")
+            && refused(
+                &o,
+                "make arbiter-bundle TRIGGER=\"round:spec-fidelity|301-x#1@6"
+            )
     );
     assert_eq!(
         std::fs::read_to_string(round_file(&d, "301-x")).unwrap(),
@@ -392,10 +411,22 @@ fn past_the_spec_cap_the_arbiter_rules() {
         &c,
     );
     assert_eq!(o.rule, "mode-3-preamble-stale-ok");
-    std::fs::write(d.join(".continues"), "2\n").unwrap();
+    ruled(
+        &d,
+        &[
+            "round:spec-fidelity|301-x#1@7:continue",
+            "round:spec-fidelity|301-x#1@8:continue",
+        ],
+    );
     std::fs::write(round_file(&d, "301-x"), "6\n").unwrap();
     assert_eq!(spec("MODE 2 of specs/301-x", &d, &c).event, "rewrote");
-    std::fs::write(d.join(".closed"), "accept\n").unwrap();
+    ruled(
+        &d,
+        &[
+            "round:spec-fidelity|301-x#1@7:continue",
+            "round:spec-fidelity|301-x#1@8:accept",
+        ],
+    );
     assert!(rewritten(&spec("MODE 2 of specs/301-x", &d, &c))["prompt"]
         .as_str()
         .unwrap()
@@ -447,7 +478,7 @@ fn the_third_plan_round_goes_to_the_arbiter() {
         (esc.event, esc.rule.as_str()),
         ("escaped", "plan-round-cap")
     );
-    std::fs::write(d.join(".continues"), "1\n").unwrap();
+    ruled(&d, &["round:spec-fidelity|plan:301-x#T14@4:continue"]);
     assert_eq!(spec(plan, &d, &c).rule, "other-mode");
 }
 

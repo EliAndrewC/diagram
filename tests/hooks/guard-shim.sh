@@ -27,6 +27,13 @@ export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$real/.cache/l7r-cargo-target/${tre
 # ...and rustup's own homes, which its cargo proxy reads from HOME to choose a toolchain (T010: a suite that moves HOME left the
 # build with "rustup could not choose a version of cargo to run")
 export RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}"
+# a guard's modes that are hook events under another name (feature 449 T86: the three guards' shell modes)
+case "$guard:${1:-}" in
+  checks-hooks:launched|checks-hooks:after) exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" PostToolUse ;;
+  checks-hooks:returned) exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" SubagentStop ;;
+  checks-hooks:*) echo "usage: checks-hooks.sh launched|returned|after" >&2; exit 64 ;;
+  record-edit-hooks:pretool-bash) exec "$tree/scripts/hooks/l7r-guard.sh" --only "$guard" PreToolUse ;;
+esac
 # a guard's entries that are no hook event, by guard, because `check` is not the same mode in each (T014-T017 decisions (a))
 case "$guard:$event" in
   idle-tests-hooks:stagger) exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@" ;;

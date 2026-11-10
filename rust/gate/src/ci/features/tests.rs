@@ -49,7 +49,11 @@ fn only_the_held_box_counts_and_a_missing_verdict_is_named_beside_it() {
         st.why().contains("no FAITHFUL verdict")
             && st.why().contains("1 open task(s) in tasks.md: T01")
     );
-    put(&dir, "specs/9-x/.faithful", "");
+    put(
+        &dir,
+        "specs/9-x/spec.md",
+        "# F\n\n## Review history\n\nStatus: FAITHFUL\n",
+    );
     std::fs::remove_file(dir.join("specs/9-x/.holding")).unwrap();
     let done = feature_status(&dir, Some("9-x"), &py);
     assert!(done.complete() && done.why().contains("no task holds this landing"));

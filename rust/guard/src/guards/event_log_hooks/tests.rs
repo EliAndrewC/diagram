@@ -198,12 +198,10 @@ fn a_prompt_is_the_gms_when_typed() {
 #[test]
 fn the_line_goes_to_the_features_log_in_the_clones_git_dir() {
     let d = clone("append");
-    let tree = d.join("tree");
     let p = append(
         &json!({"hook_event_name": "Stop", "cwd": d.to_string_lossy()}),
         "T",
         Path::new("/"),
-        &tree,
         &none,
     )
     .unwrap();
@@ -213,11 +211,11 @@ fn the_line_goes_to_the_features_log_in_the_clones_git_dir() {
             .unwrap()
             .join(".git/l7r-events/999-a.jsonl")
     );
-    assert!(append(&json!({"cwd": "/"}), "T", Path::new("/"), &tree, &none).is_none());
+    assert!(append(&json!({"cwd": "/"}), "T", Path::new("/"), &none).is_none());
     let to = d.join("events");
     let env = |k: &str| (k == "L7R_EVENTS_DIR").then(|| to.to_string_lossy().into_owned());
     assert_eq!(
-        append(&json!({}), "T", &d, &tree, &env).unwrap(),
+        append(&json!({}), "T", &d, &env).unwrap(),
         to.join("999-a.jsonl")
     );
     assert!(now_stamp(UNIX_EPOCH + Duration::from_millis(1_500)) == "1970-01-01T00:00:01.500Z");
@@ -226,23 +224,14 @@ fn the_line_goes_to_the_features_log_in_the_clones_git_dir() {
 #[test]
 fn an_edit_that_puts_back_replaced_text_owes_the_arbiter() {
     let d = clone("reversal");
-    let tree = d.join("tree");
-    std::fs::create_dir_all(tree.join("scripts/hooks/lib")).unwrap();
-    std::fs::write(
-        tree.join("scripts/hooks/lib/hm_arbiter.py"),
-        "import pathlib\ndef trip(root, trigger, kind, unit, detail):\n    pathlib.Path(root, 'tripped').write_text(trigger)\n",
-    )
-    .unwrap();
     let edit = |old: &str, new: &str| json!({"hook_event_name": "PreToolUse", "cwd": d.to_string_lossy(), "tool_name": "Edit", "tool_input": {"file_path": "/f", "old_string": old, "new_string": new}});
-    append(&edit("A", "B"), "1", &d, &tree, &none).unwrap();
-    append(&edit("B", "A"), "2", &d, &tree, &none).unwrap();
-    assert_eq!(
-        std::fs::read_to_string(d.join("tripped")).unwrap(),
-        "reversal:/f"
-    );
-    std::fs::remove_file(d.join("tripped")).unwrap();
-    append(&edit("B", "### A"), "3", &d, &tree, &none).unwrap();
-    assert!(!d.join("tripped").exists());
+    append(&edit("A", "B"), "1", &d, &none).unwrap();
+    append(&edit("B", "A"), "2", &d, &none).unwrap();
+    let owed = std::fs::read_to_string(d.join(".git/arbiter-owed.json")).unwrap();
+    assert!(owed.contains("reversal:/f"));
+    std::fs::remove_file(d.join(".git/arbiter-owed.json")).unwrap();
+    append(&edit("A", "C"), "3", &d, &none).unwrap();
+    assert!(!d.join(".git/arbiter-owed.json").exists());
 }
 
 #[test]
@@ -330,17 +319,14 @@ fn the_edges_of_a_value_and_a_path() {
         &json!({"cwd": "/nonexistent/deeper"}),
         "T",
         Path::new("/"),
-        Path::new("/"),
         &none
     )
     .is_none());
     let d = clone("edges");
     std::fs::remove_file(d.join(".specify/feature.json")).unwrap();
-    assert!(
-        append(&json!({"cwd": d.to_string_lossy()}), "T", &d, &d, &none)
-            .unwrap()
-            .ends_with("_unassigned.jsonl")
-    );
+    assert!(append(&json!({"cwd": d.to_string_lossy()}), "T", &d, &none)
+        .unwrap()
+        .ends_with("_unassigned.jsonl"));
     let wt = d.join("wt");
     std::fs::create_dir_all(&wt).unwrap();
     std::fs::write(wt.join(".git"), "gitdir: missing/dir\n").unwrap();

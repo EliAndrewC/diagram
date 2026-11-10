@@ -3,7 +3,7 @@
 //! Every amount listed is owed a decision: marked, or named in the feature's `backfill.md` with the reason it is passed over. The order decides nothing: the GM
 //! withdrew the 25-year default (#14, 2026-10-24).
 
-use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::fmt::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
@@ -13,6 +13,7 @@ use serde_json::Value;
 
 use super::reply;
 use crate::Reply;
+use l7r_guard::shared::html_text::unescape;
 
 const QUESTIONS: &str = "research/questions";
 const TABLE: &str = "research/assets/money-conversions.json";
@@ -42,9 +43,6 @@ const CHINA_WORDS: [(&str, &str); 15] = [
 const CENTS: (&str, &str) = ("cents", "dollar");
 const NUMBER: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?";
 const DOLLAR: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?";
-/// `CPython`'s own entity tables, generated once from `html.entities.html5`, `html._invalid_charrefs` and `html._invalid_codepoints`: `html.unescape`, whole.
-const HTML5: &str = include_str!("html5_entities.tsv");
-
 fn compiled(p: &str) -> Regex {
     Regex::new(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
@@ -65,99 +63,11 @@ static NOTE_MARK: LazyLock<Regex> = LazyLock::new(|| compiled(r#"data-note="([^"
 static AREA_BEFORE: LazyLock<Regex> = LazyLock::new(|| compiled(r"\d\s+(?:cho|chō|tan|se)\s+$"));
 static ROW: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^-\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*$"));
-static ENTITY: LazyLock<Regex> =
-    LazyLock::new(|| compiled(r"&(#[0-9]+;?|#[xX][0-9a-fA-F]+;?|[^\t\n\f <&#;]{1,32};?)"));
 static SPACES: LazyLock<Regex> = LazyLock::new(|| compiled(r"\s+"));
-
-/// The three tables of `HTML5`, by kind.
-struct Tables {
-    named: HashMap<&'static str, String>,
-    replaced: HashMap<u32, String>,
-    invalid: HashSet<u32>,
-}
-
-fn hex_text(cells: &str) -> String {
-    cells
-        .split(' ')
-        .filter_map(|c| u32::from_str_radix(c, 16).ok())
-        .filter_map(char::from_u32)
-        .collect()
-}
-
-static TABLES: LazyLock<Tables> = LazyLock::new(|| {
-    let mut t = Tables {
-        named: HashMap::new(),
-        replaced: HashMap::new(),
-        invalid: HashSet::new(),
-    };
-    for row in HTML5.lines() {
-        let mut cells = row.splitn(3, '\t');
-        let (kind, key, value) = (
-            cells.next().unwrap_or(""),
-            cells.next().unwrap_or(""),
-            cells.next().unwrap_or(""),
-        );
-        let number = u32::from_str_radix(key, 16).unwrap_or(0);
-        match kind {
-            "E" => {
-                t.named.insert(key, hex_text(value));
-            }
-            "C" => {
-                t.replaced.insert(number, hex_text(value));
-            }
-            _ => {
-                t.invalid.insert(number);
-            }
-        }
-    }
-    t
-});
-
-/// One numeric reference, as `html._replace_charref` reads it; a number too long to hold is past the last code point.
-fn numeric(body: &str) -> String {
-    let digits = body[1..].trim_end_matches(';');
-    let parsed = match digits.strip_prefix(['x', 'X']) {
-        Some(hex) => u32::from_str_radix(hex, 16),
-        None => digits.parse(),
-    };
-    let number = parsed.unwrap_or(u32::MAX);
-    if let Some(text) = TABLES.replaced.get(&number) {
-        return text.clone();
-    }
-    if (0xD800..=0xDFFF).contains(&number) || number > 0x10_FFFF {
-        return "\u{fffd}".to_owned();
-    }
-    if TABLES.invalid.contains(&number) {
-        return String::new();
-    }
-    char::from_u32(number).map(String::from).unwrap_or_default()
-}
-
-fn entity(caps: &Captures) -> String {
-    let body = &caps[1];
-    if body.starts_with('#') {
-        return numeric(body);
-    }
-    if let Some(text) = TABLES.named.get(body) {
-        return text.clone();
-    }
-    // the longest matching name, as the standard defines it
-    let ends: Vec<usize> = body
-        .char_indices()
-        .map(|(i, _)| i)
-        .filter(|i| *i >= 2)
-        .collect();
-    for end in ends.into_iter().rev() {
-        if let Some(text) = TABLES.named.get(&body[..end]) {
-            return format!("{text}{}", &body[end..]);
-        }
-    }
-    format!("&{body}")
-}
 
 fn plain(markup: &str) -> String {
     let bare = TAG.replace_all(markup, "");
-    let text = ENTITY.replace_all(&bare, |c: &Captures| entity(c));
+    let text = unescape(&bare);
     let flat = SPACES.replace_all(&text, " ");
     MACRON
         .replace_all(flat.trim(), |c: &Captures| {

@@ -8,7 +8,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # CHECK_BUNDLE_HOOK lets the proof-of-firing run this suite against a MUTATED copy of the guard.
-HOOK="${CHECK_BUNDLE_HOOK:-$HERE/../../scripts/hooks/check-bundle-hooks.sh}"
+HOOK="${CHECK_BUNDLE_HOOK:-$HERE/check-bundle-hooks.sh}"
 GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT

@@ -8,6 +8,8 @@ pub mod archive_first_hooks;
 pub mod batching_hooks;
 pub mod blocked_fetch_hooks;
 pub mod budget_change_hooks;
+pub mod check_bundle_hooks;
+pub mod checks_hooks;
 /// Write an executable a test will run, the file written by a child process.
 ///
 /// A thread that forks in another test copies every open descriptor until its child execs, so a
@@ -56,6 +58,7 @@ pub mod pair_hooks;
 pub mod phase_source_hooks;
 pub mod readme_hooks;
 pub mod record_edit_gate;
+pub mod record_edit_hooks;
 pub mod repo_safety_hooks;
 pub mod review_round_hooks;
 pub mod set_down_hooks;

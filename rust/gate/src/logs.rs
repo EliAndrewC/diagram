@@ -7,6 +7,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use l7r_guard::shared::log::civil;
+use l7r_guard::shared::pyjson::dumps;
 use l7r_guard::shared::sha256;
 use serde_json::{json, Map, Value};
 
@@ -58,100 +59,22 @@ impl Now {
     }
 }
 
-/// A string as Python's `json.dumps` writes it: every non-ASCII character escaped.
-fn ascii_string(text: &str, ascii: bool) -> String {
-    let mut out = String::with_capacity(text.len() + 2);
-    for c in Value::String(text.to_owned()).to_string().chars() {
-        if c.is_ascii() || !ascii {
-            out.push(c);
-        } else {
-            let mut units = [0u16; 2];
-            for unit in c.encode_utf16(&mut units) {
-                let _ = write!(out, "\\u{unit:04x}");
-            }
-        }
-    }
-    out
-}
-
-/// A float as Python's `repr` writes it: shortest digits, positional from 1e-4 up to 1e16, and a signed two-digit exponent outside that.
-fn py_float(f: f64) -> String {
-    let scientific = format!("{f:e}");
-    let (mantissa, exponent) = scientific.split_once('e').unwrap_or((&scientific, "0"));
-    let exponent: i32 = exponent.parse().unwrap_or(0);
-    if (-4..16).contains(&exponent) {
-        let plain = format!("{f}");
-        return if plain.contains('.') {
-            plain
-        } else {
-            plain + ".0"
-        };
-    }
-    format!(
-        "{mantissa}e{}{:02}",
-        if exponent < 0 { '-' } else { '+' },
-        exponent.abs()
-    )
-}
-
-/// `value` as Python's `json.dumps(value, indent=indent)` writes it, byte for byte.
-fn dumps(value: &Value, indent: Option<usize>, level: usize, out: &mut String, ascii: bool) {
-    let line =
-        |depth: usize| indent.map_or_else(String::new, |n| format!("\n{}", " ".repeat(n * depth)));
-    let comma = if indent.is_some() { "," } else { ", " };
-    match value {
-        Value::Number(n) if n.is_f64() => *out += &py_float(n.as_f64().unwrap_or(0.0)),
-        Value::String(s) => *out += &ascii_string(s, ascii),
-        Value::Array(items) if !items.is_empty() => {
-            out.push('[');
-            for (i, item) in items.iter().enumerate() {
-                *out += if i == 0 { "" } else { comma };
-                *out += &line(level + 1);
-                dumps(item, indent, level + 1, out, ascii);
-            }
-            *out += &line(level);
-            out.push(']');
-        }
-        Value::Object(map) if !map.is_empty() => {
-            out.push('{');
-            for (i, (key, item)) in map.iter().enumerate() {
-                *out += if i == 0 { "" } else { comma };
-                *out += &line(level + 1);
-                *out += &ascii_string(key, ascii);
-                *out += ": ";
-                dumps(item, indent, level + 1, out, ascii);
-            }
-            *out += &line(level);
-            out.push('}');
-        }
-        other => *out += &other.to_string(),
-    }
-}
-
 fn indented(value: &Value) -> String {
-    let mut out = String::new();
-    dumps(value, Some(2), 0, &mut out, true);
-    out + "\n"
+    dumps(value, Some(2), true) + "\n"
 }
 
 pub(crate) fn one_line(value: &Value) -> String {
-    let mut out = String::new();
-    dumps(value, None, 0, &mut out, true);
-    out
+    dumps(value, None, true)
 }
 
 /// `json.dumps(value, indent=indent, ensure_ascii=ascii)`, byte for byte.
 pub(crate) fn py_dumps(value: &Value, indent: usize, ascii: bool) -> String {
-    let mut out = String::new();
-    dumps(value, Some(indent), 0, &mut out, ascii);
-    out
+    dumps(value, Some(indent), ascii)
 }
 
 /// One line as `json.dumps(value, ensure_ascii=False)` writes it.
 pub(crate) fn one_line_utf8(value: &Value) -> String {
-    let mut out = String::new();
-    dumps(value, None, 0, &mut out, false);
-    out
+    dumps(value, None, false)
 }
 
 fn head(root: &Path) -> String {

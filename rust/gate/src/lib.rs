@@ -1,6 +1,8 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
+pub mod arbiter;
 mod checks;
+pub mod checks_door;
 mod ci;
 pub mod codeid;
 mod cohort;
@@ -105,6 +107,11 @@ pub fn cli(args: &[String]) -> Reply {
         Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("preflight") => preflight::cli(&args[1..]),
         Some("record") => record::cli(&args[1..]),
+        Some("arbiter") => arbiter::cli(&args[1..]),
+        Some("checks-close") => checks_door::close_cli(&args[1..]),
+        Some("checks-door") => {
+            checks_door::serve(&mut std::io::stdin().lock(), &mut std::io::stdout())
+        }
         Some("--version") => Reply {
             stdout: format!("l7r-gate {}\n", env!("CARGO_PKG_VERSION")),
             stderr: String::new(),

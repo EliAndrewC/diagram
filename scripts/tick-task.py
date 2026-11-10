@@ -140,14 +140,11 @@ def _todo():  # noqa: ANN202 - `speckit-todo.py` by path (its name has a hyphen)
     return mod
 
 
-def _arbiter():  # noqa: ANN202 - scripts/hooks/lib/hm_arbiter.py by path
-    import importlib.util  # noqa: PLC0415
+def _arbiter():  # noqa: ANN202 - `fix_hold` through the checks door (feature 449 T86)
+    import importlib  # noqa: PLC0415
 
-    spec = importlib.util.spec_from_file_location("hm_arbiter", Path(__file__).resolve().parent / "hooks" / "lib" / "hm_arbiter.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    return importlib.import_module("checks_door")
 
 
 def checkpoint_hold(root: Path) -> str:

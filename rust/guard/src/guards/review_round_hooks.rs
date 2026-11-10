@@ -12,6 +12,7 @@ use serde_json::{json, Value};
 
 use crate::guards::agent_prefix_hooks::lines_kept;
 use crate::protocol::{Answer, Event, Guard, Reply};
+use crate::shared::checks;
 use crate::shared::difflib::unified;
 use crate::shared::escape::{enough, reason};
 use crate::shared::log::{self, civil};
@@ -41,13 +42,6 @@ const SNAP_SUFFIXES: [&str; 6] = ["md", "json", "txt", "py", "html", "csv"];
 /// CONVENTION: the largest file a snapshot holds, as `hm_review_round.py` held it.
 const SNAP_MAX_BYTES: u64 = 2_000_000;
 
-/// `hm_arbiter.py` by path until T051 (T045 decision (b)): `closed`, `continues`, or the trigger tripped and its refusal printed.
-const ARBITER_CODE: &str = r#"import sys, pathlib; sys.path.insert(0, sys.argv[1]); import hm_arbiter as h
-root, op = pathlib.Path(sys.argv[2]), sys.argv[3]
-if op == "closed": print(h.closed(root, sys.argv[4]))
-elif op == "continues": print(h.continues(root, sys.argv[4]))
-else:
-    h.trip(root, sys.argv[4], "round", sys.argv[5], sys.argv[6]); print(h.refusal([sys.argv[4]]))"#;
 /// The active feature's directory and its task, a line each, asked of the plan gate (`l7r-gate plan door active-task`).
 const ACTIVE_CODE: &str = r#"import json, subprocess, sys
 done = subprocess.run([sys.argv[1] + "/l7r-gate.sh", "plan", "door", "active-task", sys.argv[2]], capture_output=True, text=True)
@@ -81,7 +75,6 @@ static NEXT_SECTION: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^## "));
 pub(crate) struct Ctx<'a> {
     pub(crate) tree: PathBuf,
     pub(crate) python: &'a str,
-    pub(crate) arbiter_code: &'a str,
     pub(crate) active_code: &'a str,
 }
 
@@ -89,17 +82,13 @@ fn production(tree: PathBuf) -> Ctx<'static> {
     Ctx {
         tree,
         python: "python3",
-        arbiter_code: ARBITER_CODE,
         active_code: ACTIVE_CODE,
     }
 }
 
-fn arbiter(root: &Path, ctx: &Ctx, op: &[&str]) -> String {
-    let lib = ctx.tree.join("scripts/hooks/lib");
-    let (lib, at) = (lib.to_string_lossy(), root.to_string_lossy());
-    let mut args = vec!["-c", ctx.arbiter_code, lib.as_ref(), at.as_ref()];
-    args.extend_from_slice(op);
-    ask(root, ctx.python, &args, "").out.trim().to_owned()
+fn arbiter_trip(root: &Path, trigger: &str, unit: &str, detail: &str) -> String {
+    let _ = checks::arbiter::trip(root, trigger, "round", unit, detail, &Value::Null, "");
+    checks::arbiter::refusal(&[trigger.to_owned()], None)
 }
 
 /// `spec`, `plan` or `exception`, read with precedence: a MODE 2/3 marker wins, then the dispatch's own MODE line, then the contract's heading forms.
@@ -411,27 +400,21 @@ fn spec_cap_prefix(feature: &str, pass_no: u64) -> String {
 }
 
 /// Why a spec review's round waits for the round arbiter, or "". Each `continue` on this pass lifts its cap by one round.
-fn spec_cap_refusal(root: &Path, feature: &str, round_no: u64, pass_no: u64, ctx: &Ctx) -> String {
+fn spec_cap_refusal(root: &Path, feature: &str, round_no: u64, pass_no: u64) -> String {
     if round_no <= SPEC_ROUND_CAP {
         return String::new();
     }
     let prefix = spec_cap_prefix(feature, pass_no);
-    let lifted: u64 = arbiter(root, ctx, &["continues", &prefix])
-        .parse()
-        .unwrap_or(0);
+    let lifted: u64 = checks::arbiter::continues(root, &prefix, 0);
     if round_no - SPEC_ROUND_CAP <= lifted {
         return String::new();
     }
     let trigger = format!("{prefix}{round_no}");
-    let refusal = arbiter(
+    let refusal = arbiter_trip(
         root,
-        ctx,
-        &[
-            "trip",
-            &trigger,
-            &format!("spec-fidelity|{feature}"),
-            &format!("round {round_no} of specs/{feature}'s spec review"),
-        ],
+        &trigger,
+        &format!("spec-fidelity|{feature}"),
+        &format!("round {round_no} of specs/{feature}'s spec review"),
     );
     format!("BLOCKED: round {round_no} of specs/{feature}'s spec review - past the five-round cap the round arbiter rules, not the GM (feature 379). Nothing was dispatched and no round was counted.\n{refusal}")
 }
@@ -491,22 +474,16 @@ fn plan_cap_refusal(root: &Path, ctx: &Ctx) -> String {
         .map(|n| n.to_string_lossy().into_owned())
         .unwrap_or_default();
     let prefix = format!("round:spec-fidelity|plan:{name}#{task}@");
-    let lifted: u64 = arbiter(root, ctx, &["continues", &prefix])
-        .parse()
-        .unwrap_or(0);
+    let lifted: u64 = checks::arbiter::continues(root, &prefix, 0);
     if round_no - PLAN_ROUND_CAP <= lifted {
         return String::new();
     }
     let trigger = format!("{prefix}{round_no}");
-    let refusal = arbiter(
+    let refusal = arbiter_trip(
         root,
-        ctx,
-        &[
-            "trip",
-            &trigger,
-            &format!("spec-fidelity|plan:{name}#{task}"),
-            &format!("round {round_no} of {task}'s plan review"),
-        ],
+        &trigger,
+        &format!("spec-fidelity|plan:{name}#{task}"),
+        &format!("round {round_no} of {task}'s plan review"),
     );
     format!("BLOCKED: round {round_no} of {task}'s plan review - a check's third round on one subject owes the round arbiter's ruling first (CLAUDE.md, the tripwires). Nothing was dispatched.\n{refusal}")
 }
@@ -535,14 +512,7 @@ fn refused(rule: &str, detail: impl Into<String>, text: String) -> Outcome {
     }
 }
 
-fn accepted_pass(
-    input: &Value,
-    feature: &str,
-    spec_md: &Path,
-    root: &Path,
-    state: &Path,
-    ctx: &Ctx,
-) -> bool {
+fn accepted_pass(input: &Value, feature: &str, spec_md: &Path, root: &Path, state: &Path) -> bool {
     let (text, word) = previous_verdict(field(input, "transcript_path"), feature);
     let word = if text.is_empty() {
         let entry = review_history(spec_md);
@@ -555,12 +525,8 @@ fn accepted_pass(
         word
     };
     word == "FAITHFUL"
-        || !arbiter(
-            root,
-            ctx,
-            &["closed", &spec_cap_prefix(feature, read_pass(state))],
-        )
-        .is_empty()
+        || !checks::arbiter::closed(root, &spec_cap_prefix(feature, read_pass(state)), None)
+            .is_empty()
 }
 
 fn first_chars(text: &str, n: usize) -> String {
@@ -626,12 +592,8 @@ fn later_round(
         }
     }
     let diff = diff_since(snap, feature_dir);
-    let closed = !arbiter(
-        root,
-        ctx,
-        &["closed", &spec_cap_prefix(feature, read_pass(state))],
-    )
-    .is_empty();
+    let closed = !checks::arbiter::closed(root, &spec_cap_prefix(feature, read_pass(state)), None)
+        .is_empty();
     let new_pass = word == "FAITHFUL" || closed;
     let round_no = if new_pass {
         1
@@ -641,7 +603,7 @@ fn later_round(
         prev_round + 1
     };
     let pass_no = read_pass(state) + u64::from(new_pass);
-    let held = spec_cap_refusal(root, feature, round_no, pass_no, ctx);
+    let held = spec_cap_refusal(root, feature, round_no, pass_no);
     if !held.is_empty() {
         let why = reason(prompt, ARBITER_TOKEN);
         if !enough(&why) {
@@ -685,7 +647,7 @@ fn plan_gate_outcome(prompt: &str, root: &Path, ctx: &Ctx) -> Option<Outcome> {
     Some(refused("plan-round-cap", first, held))
 }
 
-fn escaped(input: &Value, prompt: &str, feature: &str, root: Option<&Path>, ctx: &Ctx) -> Outcome {
+fn escaped(input: &Value, prompt: &str, feature: &str, root: Option<&Path>) -> Outcome {
     let why = reason(prompt, TOKEN);
     if !enough(&why) {
         return refused(
@@ -699,14 +661,7 @@ fn escaped(input: &Value, prompt: &str, feature: &str, root: Option<&Path>, ctx:
         if !feature.is_empty() && feature_dir.is_dir() {
             let state = root.join(".git/review-round").join(feature);
             take_snapshot(&feature_dir, &state.join("snapshot"));
-            if accepted_pass(
-                input,
-                feature,
-                &feature_dir.join("spec.md"),
-                root,
-                &state,
-                ctx,
-            ) {
+            if accepted_pass(input, feature, &feature_dir.join("spec.md"), root, &state) {
                 write_state(&state, 1);
                 write_pass(&state, read_pass(&state) + 1);
             } else {
@@ -744,7 +699,7 @@ pub(crate) fn verdict(input: &Value, tool: &str, clone: &str, ctx: &Ctx) -> Opti
     }
     let feature = feature_of(prompt);
     if prompt.contains(TOKEN) {
-        return Some(escaped(input, prompt, &feature, root, ctx));
+        return Some(escaped(input, prompt, &feature, root));
     }
     let Some(root) =
         root.filter(|r| !feature.is_empty() && r.join("specs").join(&feature).is_dir())

@@ -186,10 +186,11 @@ def filled_row(p: dict[str, str], where: str, root: Path = review_cost.DEFAULT_R
     for d in ("../hooks/lib", "../measure"):
         sys.path.insert(0, str((Path(__file__).resolve().parent / d).resolve()))
     import event_log  # noqa: PLC0415
-    import hm_checks  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import checks_door  # noqa: PLC0415
 
     path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
-    reply = hm_checks._reply_of(str(path), "") if path else ""
+    reply = checks_door._reply_of(str(path), "") if path else ""
     verdict = event_log.verdict_of(reply) or "see reply"
     first = next((ln.strip(" -*#") for ln in reply.splitlines() if ln.strip() and not ln.lstrip().startswith(("#", "```"))), "") or "-"
     bundle = re.search(r"/tmp/l7r-check/([^/\s]+)/", p.get("subject", ""))
@@ -229,14 +230,15 @@ def plan_review_rows(owed: Sequence[dict[str, str]], root: Path = review_cost.DE
     plan review asked that a pass that recorded nothing get no row naming a record)."""
     for d in ("../hooks/lib",):
         sys.path.insert(0, str((Path(__file__).resolve().parent / d).resolve()))
-    import hm_checks  # noqa: PLC0415
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    import checks_door  # noqa: PLC0415
 
     out = []
     for p in owed:
         if not p.get("subject", "").startswith(PLAN_REVIEW):
             continue
         path = review_cost.transcript(p["agent"], root) if p.get("agent") else None
-        if (path and PLAN_RECORDED.search(hm_checks._reply_of(str(path), ""))) or (repo is not None and in_the_record(p, repo)):
+        if (path and PLAN_RECORDED.search(checks_door._reply_of(str(path), ""))) or (repo is not None and in_the_record(p, repo)):
             out.append(filled_row(p, PLAN_WHERE, root))
     return out
 
