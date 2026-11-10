@@ -151,12 +151,7 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
                 text(&resp, "agentId"),
                 text(&resp, "status") == "async_launched",
                 &super::reply::response_text(&resp),
-                Some(
-                    &path
-                        .parent()
-                        .unwrap_or_else(|| Path::new("."))
-                        .join("check-replies"),
-                ),
+                Some(&parent_of(path).join("check-replies")),
             );
         }
         ("launched", "TaskStop") => {
@@ -176,7 +171,7 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
                 }
             }
         }
-        ("returned", _) => {
+        _ => {
             planhold::returned(state, text(payload, "agent_id"));
             rounds::pair_wave(
                 state,
@@ -191,15 +186,9 @@ fn book_keep(mode: &str, tool: &str, state: &mut Value, payload: &Value, ti: &Va
                 state,
                 text(payload, "agent_id"),
                 &reply_text,
-                Some(
-                    &path
-                        .parent()
-                        .unwrap_or_else(|| Path::new("."))
-                        .join("check-replies"),
-                ),
+                Some(&parent_of(path).join("check-replies")),
             );
         }
-        _ => unreachable!("the caller matched these three"),
     }
 }
 

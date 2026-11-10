@@ -86,23 +86,23 @@ fn write_it(_: &mut Value) -> bool {
 #[test]
 fn the_owed_file_is_changed_under_its_lock() {
     let d = dir("owed");
-    with_owed(&d, |s| {
+    with_owed(&d, &mut |s| {
         s["x"] = json!(1);
         true
     })
     .unwrap();
     assert_eq!(load(&d.join(OWED))["x"], json!(1));
-    with_owed(&d, |s| {
+    with_owed(&d, &mut |s| {
         s["y"] = json!(1);
         false
     })
     .unwrap();
     assert!(load(&d.join(OWED)).get("y").is_none());
-    assert!(with_owed(Path::new("/proc/nonexistent/x"), keep).is_err());
+    assert!(with_owed(Path::new("/proc/nonexistent/x"), &mut keep).is_err());
     let blocked = dir("owed-dir");
     std::fs::create_dir_all(blocked.join(OWED)).unwrap();
-    with_owed(&blocked, keep).unwrap();
-    assert!(with_owed(&blocked, write_it).is_err());
+    with_owed(&blocked, &mut keep).unwrap();
+    assert!(with_owed(&blocked, &mut write_it).is_err());
 }
 
 #[test]

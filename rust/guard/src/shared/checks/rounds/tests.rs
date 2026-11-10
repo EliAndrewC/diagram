@@ -491,6 +491,14 @@ fn first_looks_and_fresh_readings_are_no_repeat() {
         ),
         ""
     );
+    let mut stale_flying = json!({"rounds": {"quote-check|q:0105": 2}, "dispatches": {"a": {"check": "quote-check", "subjects": ["q:0105"], "state": "pending", "t": 1.0, "notes": ["x"]}}});
+    assert_eq!(
+        dispatch(
+            &mut stale_flying,
+            &req("n", "quote-check", scoped, Some(&root))
+        ),
+        ""
+    );
     let mut none_read = json!({"rounds": {"quote-check|q:0105": 2}});
     assert_ne!(
         dispatch(

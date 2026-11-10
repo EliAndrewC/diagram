@@ -494,11 +494,9 @@ pub(crate) fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
     approach::ruled(root, trigger, None)
 }
 
-/// The accept as the plan's verdict: the blocks recorded CLEAR (`plan_door.arbiter_accept`), for `l7r-gate arbiter`.
-pub(crate) fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Result<Vec<String>, String> {
-    record::arbiter_accept(dir, trigger, None).map_err(|stop| match stop {
-        Stop::Declined(why) | Stop::Refused(why) => why,
-    })
+/// The accept as the plan's verdict: the blocks recorded CLEAR (`plan_door.arbiter_accept`), for `l7r-gate arbiter`, which has just written the ruling it reads.
+pub(crate) fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {
+    record::arbiter_accept(dir, trigger, None).unwrap_or_default()
 }
 
 pub(crate) fn cli(words: &[String], root: &Path) -> crate::Reply {

@@ -441,7 +441,7 @@ pub fn trip(
     }
     let common = common_dir(root);
     let mut new = false;
-    let written = with_owed(&common, |state| {
+    let written = with_owed(&common, &mut |state| {
         if state.get(trigger).is_some() {
             return false;
         }
@@ -482,7 +482,7 @@ pub fn trip(
 ///
 /// The lock or the file cannot be had.
 pub fn pop_owed(common: &Path, trigger: &str) -> Result<(), String> {
-    with_owed(common, |state| {
+    with_owed(common, &mut |state| {
         state
             .as_object_mut()
             .and_then(|map| map.shift_remove(trigger))

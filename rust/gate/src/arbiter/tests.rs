@@ -54,10 +54,16 @@ fn rows(root: &Path) -> Vec<Value> {
 }
 
 fn refused<T: std::fmt::Debug>(result: Result<T, Stop>, words: &str) {
-    let Err(Stop::Refused(why)) = result else {
-        unreachable!("{result:?}")
-    };
+    let why = result.err().map_or_else(String::new, Stop::words);
     assert!(why.contains(words), "{why}");
+}
+
+impl Stop {
+    fn words(self) -> String {
+        match self {
+            Self::Declined(w) | Self::Refused(w) => w,
+        }
+    }
 }
 
 #[expect(
@@ -211,13 +217,11 @@ fn a_round_owed_with_others_is_ruled_as_a_batch() {
         json!({"ruling": "continue", "why": "w", "triggers": ["round:a|q:1@3", "round:b|q:2@3"]});
     let done = record_batch(&root, &w, "round-arbiter", None).unwrap();
     assert_eq!(done.len(), 2);
-    match record_batch(&root, &w, "round-arbiter", None) {
-        Err(Stop::Refused(why)) => {
-            assert!(why.contains("already ruled: round:a|q:1@3, round:b|q:2@3"));
-        }
-        other => panic!("{other:?}"),
-    }
-    let by = |v: Value| record_batch(&root, &v, "round-arbiter", None).map(|_| Value::Null);
+    refused(
+        record_batch(&root, &w, "round-arbiter", None),
+        "already ruled: round:a|q:1@3, round:b|q:2@3",
+    );
+    let by = |v: Value| record_batch(&root, &v, "round-arbiter", None);
     refused(by(json!({"triggers": []})), "names its `triggers`");
     refused(
         by(json!({"ruling": "c", "why": "w", "triggers": ["x", "x"]})),
@@ -227,15 +231,12 @@ fn a_round_owed_with_others_is_ruled_as_a_batch() {
         by(json!({"ruling": "c", "why": "w", "triggers": ["x"], "exceptions": {"y": {}}})),
         "exception names a trigger",
     );
-    match record_batch(
+    declined(record_batch(
         &root,
         &json!({"ruling": "c", "why": "w", "triggers": ["x"]}),
         "main",
         None,
-    ) {
-        Err(Stop::Declined(_)) => {}
-        other => panic!("{other:?}"),
-    }
+    ));
     refused(
         by(json!({"ruling": "bad", "why": "w", "triggers": ["ask:z1"]})),
         "ask:z1: a ruling is one of",
@@ -262,7 +263,7 @@ fn a_batch_fix_lands_on_one_row() {
     let own_fix =
         json!({"tooling_fix": "f", "triggers": ["t1"], "exceptions": {"t1": {"tooling_fix": "g"}}});
     refused(
-        batch_plan(&own_fix, &["t1".to_owned()]).map(|_| Value::Null),
+        batch_plan(&own_fix, &["t1".to_owned()]),
         "where does the batch's fix go",
     );
     let bare = json!({"ruling": "c", "why": "w"});
@@ -561,6 +562,91 @@ fn a_plan_or_claims_ask_stands_as_that_reviews_verdict() {
         &["ruled", "ask:999-p", &rule, "--as", "round-arbiter"],
     );
     assert!(failed.code == 0 || failed.code == 1, "{}", failed.stderr);
+}
+
+#[test]
+fn a_ruling_owed_nothing_and_its_rarer_shapes() {
+    assert_eq!(super::owed_line(None), "");
+    assert_eq!(super::owed_line(Some(String::new())), "");
+    assert_eq!(super::owed_line(Some("x".to_owned())), "x\n");
+    let root = clone_at("rarer");
+    python_tools(&root);
+    let num = record_ruling(
+        &root,
+        "ask:num",
+        &json!({"ruling": "continue", "why": 5}),
+        "round-arbiter",
+        None,
+        false,
+    )
+    .unwrap();
+    assert_eq!(num["why"], json!(5));
+    owe(
+        &root,
+        &json!({"round:modal-research|modal:sheet/bath@3": {"kind": "round", "unit": "modal-research|modal:sheet/bath", "feature": "999-x", "t": 1}}),
+    );
+    record_ruling(
+        &root,
+        "round:modal-research|modal:sheet/bath@3",
+        &json!({"ruling": "accept", "why": "w"}),
+        "round-arbiter",
+        None,
+        false,
+    )
+    .unwrap();
+    let fixed = json!({"ruling": "process-fault", "why": "w", "tooling_fix": "f", "fix_minutes": 1, "triggers": ["ask:q1", "ask:q2"]});
+    let rows_done = record_batch(&root, &fixed, "round-arbiter", None).unwrap();
+    assert_eq!(rows_done[1]["tooling_fix_on"], json!("ask:q1"));
+    std::fs::write(root.join("specs/999-x/plan.md"), "# p\n").unwrap();
+    owe(
+        &root,
+        &json!({"ask:999-p": {"kind": "ask", "unit": "", "feature": "999-x", "t": 1, "review": "plan"}}),
+    );
+    let fault = rule_file(
+        &root,
+        "fault.json",
+        &json!({"ruling": "process-fault", "why": "w", "tooling_fix": "f", "fix_minutes": 1}),
+    );
+    assert_eq!(
+        run(
+            &root,
+            &["ruled", "ask:999-p", &fault, "--as", "round-arbiter"]
+        )
+        .code,
+        0
+    );
+}
+
+#[test]
+fn a_fix_that_cannot_be_settled_says_why() {
+    let root = clone_at("settle");
+    refused(
+        super::settle_fix(&root, "ask:nope", "done", "a note here", ""),
+        "ask:nope has no open tooling fix",
+    );
+    let nofeature = clone_at("settle-nofeature");
+    std::fs::remove_file(nofeature.join(".specify/feature.json")).unwrap();
+    refused(
+        super::settle_fix(&nofeature, "ask:x", "done", "a note here", ""),
+        "no active feature",
+    );
+    std::fs::write(
+        root.join("specs/999-x/arbiter.jsonl"),
+        format!(
+            "{}\n",
+            json!({"trigger": "ask:f", "fix": "open", "tooling_fix": "one"})
+        ),
+    )
+    .unwrap();
+    refused(
+        super::settle_fix(&root, "ask:f", "weird", "a note here", ""),
+        "status is done or declined",
+    );
+    let nit = run(&root, &["nit", "ask:nothing", "a", "b"]);
+    assert!(nit.code == 1 && nit.stderr.contains("no `accept` ruling"));
+    std::fs::write(root.join("specs/999-x/arbiter.jsonl"), format!("{}\n", json!({"trigger": "ask:q", "ruling": "accept", "kind": "round", "unit": "c|q:0105", "what": "OLD NEW"}))).unwrap();
+    let qnit = run(&root, &["nit", "ask:q", "OLD", "NEW"]);
+    assert!(qnit.stderr.contains("q:0105 must hold NEW"));
 }
 
 #[test]

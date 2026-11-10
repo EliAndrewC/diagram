@@ -179,7 +179,7 @@ pub fn save(path: &Path, state: &Value) -> std::io::Result<()> {
 /// # Errors
 ///
 /// The lock cannot be taken, or the file cannot be written.
-pub fn with_owed(common: &Path, change: impl FnOnce(&mut Value) -> bool) -> Result<(), String> {
+pub fn with_owed(common: &Path, change: &mut dyn FnMut(&mut Value) -> bool) -> Result<(), String> {
     let path = common.join(OWED);
     let held = owed_locked(&path).ok_or_else(|| format!("{OWED}: the lock could not be taken"))?;
     let mut state = load(&path);

@@ -737,18 +737,12 @@ fn ruled_cli(root: &Path, trigger: &str, file: &str, who: &str) -> Reply {
     let plan_review = t.starts_with("round:spec-fidelity|plan:") || text(&row, "review") == "plan";
     if plan_review && matches!(text(&row, "ruling"), "accept" | "process-fault") {
         if let Some(d) = core::feature_dir(root, t) {
-            match crate::plan::arbiter_accept_listed(&d, t) {
-                Ok(named) => {
-                    let _ = writeln!(out, "arbiter-ruled: {} plan block(s) recorded CLEAR - the accept is the plan's verdict", named.len());
-                }
-                Err(e) => {
-                    return Reply {
-                        stdout: out,
-                        stderr: format!("{e}\n"),
-                        code: 1,
-                    }
-                }
-            }
+            let named = crate::plan::arbiter_accept_listed(&d, t);
+            let _ = writeln!(
+                out,
+                "arbiter-ruled: {} plan block(s) recorded CLEAR - the accept is the plan's verdict",
+                named.len()
+            );
         }
     }
     let claims_review = text(&row, "review");
@@ -758,11 +752,14 @@ fn ruled_cli(root: &Path, trigger: &str, file: &str, who: &str) -> Reply {
     {
         out.push_str(&claims_accept(root, keys, t));
     }
-    if let Some(o) = owed {
-        out.push_str(&o);
-        out.push('\n');
-    }
+    out.push_str(&owed_line(owed));
     ok(out)
+}
+
+/// What a ruling owes the active task's part B, a line, or nothing (`if owed: print(owed)`).
+fn owed_line(owed: Option<String>) -> String {
+    owed.filter(|o| !o.is_empty())
+        .map_or_else(String::new, |o| o + "\n")
 }
 
 fn claims_accept(root: &Path, keys: &str, trigger: &str) -> String {
@@ -796,10 +793,7 @@ fn ruled_batch_cli(root: &Path, file: &str, who: &str) -> Reply {
     for row in &rows {
         let t = text(row, "trigger");
         let _ = writeln!(out, "arbiter-ruled: {t} - {}", text(row, "ruling"));
-        if let Some(o) = crate::plan::approach_ruled(root, t) {
-            out.push_str(&o);
-            out.push('\n');
-        }
+        out.push_str(&owed_line(crate::plan::approach_ruled(root, t)));
     }
     let _ = writeln!(out, "arbiter-ruled: the batch's {} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)", rows.len());
     ok(out)

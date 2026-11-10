@@ -150,6 +150,10 @@ fn the_write_verbs_and_the_door_loop() {
         &mut Cursor::new("\n{\"verb\": \"ROUND_CAP\"}\n{\"verb\": \"nope\"}\n"),
         &mut out,
     );
+    std::fs::remove_file(root.join(".git/modal-batches.json")).unwrap();
+    std::fs::create_dir_all(root.join(".git/modal-batches.json")).unwrap();
+    assert!(answer("keep_batches", &[json!(r), json!({})]).is_err());
+    std::fs::remove_dir(root.join(".git/modal-batches.json")).unwrap();
     assert_eq!(reply.code, 0);
     assert_eq!(
         String::from_utf8(out).unwrap(),
