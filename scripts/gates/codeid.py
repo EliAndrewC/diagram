@@ -362,6 +362,28 @@ def debug_free_equal_main(args: list[str]) -> int:
     return 0
 
 
+def stmt_lines(data: bytes) -> list[int] | None:
+    """The line every statement of a Python source starts on - what a coverage record is keyed by; None where it does not parse."""
+    try:
+        tree = ast.parse(data)
+    except (SyntaxError, ValueError):
+        return None
+    return [n.lineno for n in ast.walk(tree) if isinstance(n, ast.stmt)]
+
+
+def same_program(old: bytes, new: bytes, name: str) -> bool:
+    """A `.py` file's two versions the same but for what the gate does not see: its semantic id and, as coverage records lines, every statement's line
+    (405 batch 7: a docstring one line longer voided a report)."""
+    return semantic_bytes(old, name) == semantic_bytes(new, name) and stmt_lines(old) == stmt_lines(new)
+
+
+def same_program_main(args: list[str]) -> int:
+    """`--same-program <name> <old> <new> ...`: a line per triple, 1 when the two versions differ only where the gate does not look, for the Rust gate's tree check."""
+    for name, old, new in zip(args[::3], args[1::3], args[2::3], strict=True):
+        print(1 if same_program(pathlib.Path(old).read_bytes(), pathlib.Path(new).read_bytes(), name) else 0)
+    return 0
+
+
 def missing_main(args: list[str]) -> int:
     """`--missing <data> <path>...`: each file's unrun lines, comma-separated, a line a file, for the Rust gate's coverage report (feature 449 T72); only coverage.py can say."""
     import coverage  # noqa: PLC0415 - absent from the gate's ordinary path, and needed only when a file is exempt
@@ -416,5 +438,5 @@ def split_ids(src: bytes) -> tuple[str, dict[str, str], set[str]] | None:
 
 
 if __name__ == "__main__":
-    verbs = {"--ids": ids_main, "--semantic": semantic_main, "--missing": missing_main, "--debug-free-equal": debug_free_equal_main}
+    verbs = {"--ids": ids_main, "--semantic": semantic_main, "--missing": missing_main, "--debug-free-equal": debug_free_equal_main, "--same-program": same_program_main}
     sys.exit(verbs[sys.argv[1]](sys.argv[2:]) if sys.argv[1:2] and sys.argv[1] in verbs else 2)

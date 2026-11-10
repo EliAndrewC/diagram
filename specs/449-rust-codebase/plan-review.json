@@ -7993,6 +7993,104 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T071": {
+   "section_sha256": "7abaac548b7978e2cd855ff2828996d77409b4a65ddcf2256e92d6580b27b1b7",
+   "reviewed": "2026-11-10",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "phase-and-tree-rust",
+     "summary": "The preflight phase and tree check become l7r-gate preflight; the Makefile's four calls and gate_write_hooks.rs call it.",
+     "class": "within",
+     "why": "FR-001's ask:449-T071-scope: preflight.py is ported in T071."
+    },
+    {
+     "id": "door-cover",
+     "summary": "scripts/gates/preflight.py kept at its path, going in phase 4 with pytest, holding --cover (changed lines' coverage), asked only by make preflight; make done passes --no-coverage.",
+     "class": "within",
+     "why": "--cover is the 'pytest-reading checks behind one named door until phase 4' FR-001 grants. The block states --no-coverage bare, without saying whether the Python's make done already skipped changed-line coverage. It is within only if it did: a drop would be an FR-002 change, touching FR-004, with no ruled case. The rewritten block must say which."
+    },
+    {
+     "id": "door-same-py",
+     "summary": "The door is widened from pytest-reading checks to 'what reads Python or pytest', so --same-py (whether a .py file's two versions differ only where the gate does not look) stays in preflight.py.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "--same-py reads no pytest, so it is outside the door ask:449-T071-scope grants, and the block gives no reason. That the question needs Python's own ast is carried by the spec (ask:449-T062-py-id), but the spec routes that question to codeid.py: content_id is 'the one Python library' (ask:449-T063-slices) and --debug-free-equal already answers a two-version question once a run in one batch. Python is unavoidable; a second Python entry in preflight.py is not shown to be. Not impossible, not implied by the GM's words, and the literal rule does not defeat the purpose. Fix: route it through codeid.py, or state why that cannot give FR-002's verdict and obtain an arbiter ruling that widens the door, recorded in FR-001."
+    },
+    {
+     "id": "door-start-conditions",
+     "summary": "The door starts no Python on a plain Bash call or on a make done whose tree moved no .py file; --same-py at most once a run, in one batch, only when a .py outside the byte-hashed areas changed.",
+     "class": "within",
+     "why": "The T065 clause and FR-006's batch shape, as FR-001 words them."
+    },
+    {
+     "id": "edit-during-running-gate",
+     "summary": "The no-Python promise covers 'a plain Edit that is not during a running gate', so an Edit during a running gate may start Python through the gate-write guard's question.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-001's clause is 'never on a plain Edit'; this qualifies it. The AST answer cannot come from Rust while FR-002 binds the verdict, and dropping the question would make the guard either refuse a correct docstring edit or pass a breaking one during a gate, defeating what the guard is for. The rule's purpose is per-call cost on ordinary edits, and this branch fires only with a gate running and a .py outside the byte-hashed areas. This ruling is on the Python start only, not on which file answers (door-same-py)."
+    },
+    {
+     "id": "t063-carried-case",
+     "summary": "The repository-root area's exclusions are ported unchanged: raw_areas asks the stamp's --raw-match the same question; any correction goes through its own case.",
+     "class": "within",
+     "why": "FR-002's same-verdict default and its named route for a correction."
+    },
+    {
+     "id": "door-json",
+     "summary": "--cover's JSON answer is new between the two halves; each line the phase prints is the Python's.",
+     "class": "within",
+     "why": "An internal protocol between the Rust half and the door; no printed output or expected case moves, so FR-002 is unaffected."
+    },
+    {
+     "id": "tests-replay",
+     "summary": "test_preflight.py's phase and tree cases move to preflight/tests.rs; the door's stay, with two new ones for its two questions.",
+     "class": "within",
+     "why": "FR-001: each tests/ file goes with the piece it tests. The two new cases enforce the door; the --same-py case follows wherever that question is rerouted."
+    },
+    {
+     "id": "differential-43",
+     "summary": "One-shot differential of the Python against the binary: 43 cases, 0 differences.",
+     "class": "within",
+     "why": "Supporting evidence for FR-002, labeled with date and method. FR-002's binding proof remains every case the tests and suites hold."
+    },
+    {
+     "id": "goal-is-the-planner",
+     "summary": "Item 1 states the task's goal as 'which tests a change owes is decided by Rust, while pytest is still what it plans for'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "That is the test planner. ask:449-T071-scope replaced T067's placement: selection.py, incremental.py, delta.py, state.py and the rest go in phase 4, deleted and not ported. The block's own Decisions say T071 is preflight.py. No ground for an exception exists; the goal contradicts the ruling. It must state preflight's goal."
+    },
+    {
+     "id": "exits-reopen-the-ruling",
+     "summary": "Item 6's green exit is the plans equalling the Python's, then the Python deleted with its tests moved; if pytest holds any of the three past phase 2, a new ask, 'not a deferral here'.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The ruling already holds those files past phase 2 as named remainders, so the exit treats the ruled outcome as a trigger for a new ask. 'The Python deleted with its tests moved' also contradicts the block's door, which keeps preflight.py and its door cases. The exit must be preflight's: every test and suite case of the phase and tree gives the Python's verdict, and preflight.py is cut to the door."
+    },
+    {
+     "id": "done-measures-another-task",
+     "summary": "Item 9's done-measure is the plan's differential over recorded deltas and no .py left under l7r/diagram/ci/.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The measure is unsatisfiable while the ruled phase-4 remainders exist, or forces deleting them at T071 rather than in the commit that removes pytest, and it measures nothing about preflight, so FR-002's proof for what T071 does ports is absent from its done line. The measurements-rewrite sentence in the same item is sound and stays."
+    },
+    {
+     "id": "remaining-items",
+     "summary": "Items 3, 4, 5, 7, 8, 10, 11 and item 9's measurements rewrite: sources, leaf-first order, batch callers, no budget, no constants or room.",
+     "class": "within",
+     "why": "FR-001, FR-006 and ask:449-T062-order; they decide nothing the spec left open against it."
+    },
+    {
+     "id": "claims-call-unplaced",
+     "summary": "The block's Rust half is listed item by item and the door is cut to two named questions; neither places preflight.py's call into l7r.diagram.tools.claims.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "ask:449-T067-scope, not superseded on this point by ask:449-T071-scope, keeps that call 'Python by path until phase 3 and only on a make done whose change holds a file claims reads'. On the block's text the call is either dropped, an FR-002 change with no ruled case, or assumed into Rust before phase 3, which the spec forbids. The block must name where the call runs, from which half and on what trigger."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

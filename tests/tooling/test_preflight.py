@@ -6,7 +6,6 @@ later session could break: which changed lines count, which uncovered ones stop 
 
 from __future__ import annotations
 
-import io
 import json
 import re
 import subprocess
@@ -17,6 +16,7 @@ import pytest
 from tests.tooling.test_modal_checks import _load
 
 pf = _load("preflight")
+cid = _load("codeid")
 ENV = {"GIT_AUTHOR_NAME": "a", "GIT_AUTHOR_EMAIL": "a@b", "GIT_COMMITTER_NAME": "a", "GIT_COMMITTER_EMAIL": "a@b", "PATH": "/usr/bin:/bin"}
 
 
@@ -137,20 +137,22 @@ def test_a_line_only_unit_tests_reached_at_the_last_green_gate_stops_the_preflig
 def test_the_door_compares_python_by_what_the_gate_reads() -> None:
     """Feature 405 T41 (D15), the part that reads Python: a claim docstring or a comment moves nothing, code or a line shift does."""
     old = b'def f(x):\n    """Research: a - NONE"""\n    return x\n'
-    assert pf.same_program(old, old.replace(b"a - NONE", b"a reworded - NONE"), "a.py")
-    assert pf.same_program(old, old.replace(b"return x", b"return x  # why"), "a.py")
-    assert not pf.same_program(old, old.replace(b"return x", b"return x + 1"), "a.py")
-    assert not pf.same_program(old, old.replace(b"a - NONE", b"a\n    reworded - NONE"), "a.py"), "a docstring a line longer moves the code below it"
-    assert pf.stmt_lines(b"def (") is None
+    assert cid.same_program(old, old.replace(b"a - NONE", b"a reworded - NONE"), "a.py")
+    assert cid.same_program(old, old.replace(b"return x", b"return x  # why"), "a.py")
+    assert not cid.same_program(old, old.replace(b"return x", b"return x + 1"), "a.py")
+    assert not cid.same_program(old, old.replace(b"a - NONE", b"a\n    reworded - NONE"), "a.py"), "a docstring a line longer moves the code below it"
+    assert cid.stmt_lines(b"def (") is None
 
 
-def test_the_door_s_two_questions(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
+def test_codeid_answers_the_two_version_question(tmp_path: Path, capsys) -> None:  # type: ignore[no-untyped-def]
     a, b = tmp_path / "a", tmp_path / "b"
     a.write_bytes(b"x = 1\n")
     b.write_bytes(b"x = 2\n")
-    assert pf.same_lines(f"n.py\t{a}\t{a}\nn.py\t{a}\t{b}\n") == "1\n0\n"
-    monkeypatch.setattr(pf.sys, "stdin", io.StringIO(f"n.py\t{a}\t{a}\n"))
-    assert pf.main(["--same-py", "--root", str(tmp_path)]) == 0 and capsys.readouterr().out == "1\n"
+    assert cid.same_program_main(["n.py", str(a), str(a), "n.py", str(a), str(b)]) == 0
+    assert capsys.readouterr().out == "1\n0\n"
+
+
+def test_the_door_answers_the_coverage_question(tmp_path: Path, monkeypatch, capsys) -> None:  # type: ignore[no-untyped-def]
     monkeypatch.setattr(pf, "changed_lines", lambda root: {})
     assert pf.main(["--cover", "--root", str(tmp_path)]) == 0
     assert json.loads(capsys.readouterr().out) == {"off": {}, "on": {}}

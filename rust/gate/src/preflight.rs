@@ -5,8 +5,8 @@
 //! derived files regenerated, the record built and its pointers resolved, the quick tier run. And THE TREE HELD STILL: the gate hashes every tracked file
 //! that differs from HEAD when it starts and again before it reports green, and a difference fails it, naming the file.
 //!
-//! What reads Python or pytest stays behind one door until phase 4: `scripts/gates/preflight.py`, asked for the changed lines' coverage (only by
-//! `make preflight`) and, in one batch, whether two versions of a `.py` file differ only where the gate does not look.
+//! What reads pytest stays behind one door until phase 4: `scripts/gates/preflight.py`, asked for the changed lines' coverage (only by `make preflight`).
+//! Whether two versions of a `.py` file differ only where the gate does not look is `codeid.py`'s, asked in one batch.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -157,18 +157,22 @@ fn raw_areas(root: &Path, changes: &[&Change]) -> BTreeSet<String> {
         .collect()
 }
 
-/// The door's batch answer: for each change, are its two versions the same but for what the gate does not see?
+/// `codeid.py`'s batch answer, the one Python library that reads a program: for each change, are its two versions the same but for what the gate does not see?
 fn same_python(root: &Path, tools: &Tools, changes: &[&Change]) -> BTreeSet<String> {
     let dir = std::env::temp_dir().join(format!("l7r-preflight-{}", std::process::id()));
     let _ = std::fs::create_dir_all(&dir);
-    let mut lines = String::new();
+    let mut words = vec!["--same-program".to_owned()];
     for (i, (path, old, new)) in changes.iter().enumerate() {
         let (a, b) = (dir.join(format!("{i}.old")), dir.join(format!("{i}.new")));
         let _ = std::fs::write(&a, old.as_deref().unwrap_or_default());
         let _ = std::fs::write(&b, new.as_deref().unwrap_or_default());
-        let _ = writeln!(lines, "{path}\t{}\t{}", a.display(), b.display());
+        words.extend([
+            path.clone(),
+            a.display().to_string(),
+            b.display().to_string(),
+        ]);
     }
-    let asked = door(root, tools, &["--same-py"], &lines);
+    let asked = python_tool(root, tools, "codeid.py", &words);
     let _ = std::fs::remove_dir_all(&dir);
     let same = asked.map_or_else(
         |_| Vec::new(),
@@ -182,23 +186,20 @@ fn same_python(root: &Path, tools: &Tools, changes: &[&Change]) -> BTreeSet<Stri
         .collect()
 }
 
-/// The Python door, its stdout; an error when it failed.
-fn door(root: &Path, tools: &Tools, args: &[&str], input: &str) -> Result<String, String> {
-    let mut child = Command::new(&tools.python)
-        .arg(root.join("scripts/gates/preflight.py"))
+/// A Python tool of `scripts/gates/`, its stdout; an error when it failed.
+fn python_tool(
+    root: &Path,
+    tools: &Tools,
+    script: &str,
+    args: &[String],
+) -> Result<String, String> {
+    let done = Command::new(&tools.python)
+        .arg(root.join("scripts/gates").join(script))
         .args(args)
-        .arg("--root")
-        .arg(root)
         .env("PYTHONDONTWRITEBYTECODE", "1")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
+        .stdin(Stdio::null())
+        .output()
         .map_err(text_err)?;
-    if let Some(mut pipe) = child.stdin.take() {
-        let _ = pipe.write_all(input.as_bytes());
-    }
-    let done = child.wait_with_output().map_err(text_err)?;
     if done.status.success() {
         Ok(String::from_utf8_lossy(&done.stdout).into_owned())
     } else {
@@ -602,7 +603,18 @@ fn phase(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) ->
     // THE COVERAGE STEP IS make preflight's, NOT THE GATE'S (405 T47, D25): 98-107 s of every gate, and it refused about twice, once wrongly
     let (mut off, mut on) = (Gaps::new(), Gaps::new());
     if !a.no_coverage {
-        match door(root, tools, &["--cover", "--workers", &a.workers], "") {
+        match python_tool(
+            root,
+            tools,
+            "preflight.py",
+            &[
+                "--cover".to_owned(),
+                "--workers".to_owned(),
+                a.workers.clone(),
+                "--root".to_owned(),
+                root.display().to_string(),
+            ],
+        ) {
             Ok(text) => {
                 let got: Value = serde_json::from_str(&text).unwrap_or(Value::Null);
                 (off, on) = (gaps_of(&got["off"]), gaps_of(&got["on"]));

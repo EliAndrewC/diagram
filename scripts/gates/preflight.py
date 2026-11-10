@@ -11,7 +11,6 @@ preflight stops on it. The lines judged are every line of a FUNCTION the delta c
 unit test that reached an unchanged line, `sweeps.py:738`; the preflight passed and the gate's floor failed 5.7 minutes in).
 
     preflight.py --cover --root DIR --workers N     {"off": {file: [lines]}, "on": {...}}   (only `make preflight` asks)
-    preflight.py --same-py --root DIR               stdin `<name>\\t<old file>\\t<new file>` lines; 1 or 0 per line
 """
 
 # TOOL_RECORD: `l7r-gate preflight` records each run; this door is its helper
@@ -239,58 +238,18 @@ def split_gaps(root: Path, gaps: dict[str, list[int]], path: set[str], quick: se
     return off, {f: v for f, v in on.items() if v}
 
 
-def _codeid() -> object:
-    """`codeid.py`, by path: the semantic id the gate's own key is built on."""
-    import importlib.util  # noqa: PLC0415
-
-    spec = importlib.util.spec_from_file_location("l7r_codeid", Path(__file__).resolve().parent / "codeid.py")
-    assert spec and spec.loader
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-def stmt_lines(data: bytes) -> list[int] | None:
-    """The line every statement of a Python source starts on - what a coverage record is keyed by; None where it does not parse."""
-    try:
-        tree = ast.parse(data)
-    except (SyntaxError, ValueError):
-        return None
-    return [n.lineno for n in ast.walk(tree) if isinstance(n, ast.stmt)]
-
-
-def same_program(old: bytes, new: bytes, name: str) -> bool:
-    """A `.py` file's two versions the same but for what the gate does not see: its semantic id - the AST with docstrings stripped, the gate's own key - and,
-    as coverage records lines, every statement's line (405 batch 7: a docstring one line longer voided a report)."""
-    codeid = _codeid()
-    return codeid.semantic_bytes(old, name) == codeid.semantic_bytes(new, name) and stmt_lines(old) == stmt_lines(new)  # type: ignore[attr-defined]
-
-
-def same_lines(text: str) -> str:
-    """The answer to `--same-py`'s lines, one 1 or 0 each."""
-    out = []
-    for line in text.splitlines():
-        name, old, new = line.split("\t")
-        out.append("1" if same_program(Path(old).read_bytes(), Path(new).read_bytes(), name) else "0")
-    return "".join(f"{v}\n" for v in out)
-
-
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--root", default=".")
     ap.add_argument("--workers", default=os.environ.get("XDIST_WORKERS", "4"))
     ap.add_argument("--cover", action="store_true")
-    ap.add_argument("--same-py", action="store_true")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve()
-    if a.same_py:
-        sys.stdout.write(same_lines(sys.stdin.read()))
-        return 0
     if a.cover:
         off, on = coverage_step(root, changed_lines(root), a.workers)
         print(json.dumps({"off": off, "on": on}))
         return 0
-    ap.error("--cover or --same-py")
+    ap.error("--cover")
     return 2
 
 
