@@ -412,10 +412,8 @@ fn the_push_runs_the_make_page_check_and_the_money_check() {
     );
     assert!(row("make-docs").3.contains("make docs"));
     assert!(
-        matches!(
-            row("money-candidates").1,
-            Tool::Py("record/money_candidates.py")
-        ) && row("money-candidates").2 == ["--check"]
+        matches!(row("money-candidates").1, Tool::Gate)
+            && row("money-candidates").2 == ["record", "money-candidates", "--check"]
     );
     assert!(row("money-candidates").3.contains("backfill.md"));
 }

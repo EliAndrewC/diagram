@@ -8,6 +8,7 @@ use serde_json::{json, Value};
 
 use crate::Reply;
 
+mod money;
 mod stale_terms;
 
 const CANON_ROOTS: [&str; 2] = [
@@ -362,6 +363,7 @@ pub(crate) fn cli(args: &[String]) -> Reply {
         Some("canon") => canon(rest, &CANON_ROOTS.map(PathBuf::from)),
         Some("money-conversions") => money(rest, Path::new(MONEY_SOURCE), Path::new(".")),
         Some("found") => found(rest),
+        Some("money-candidates") => money::cli(rest, Path::new(".")),
         Some("stale-terms") => stale_terms::cli(rest),
         Some("stale-dirs") => stale_terms::dirs_cli(rest),
         _ => reply(
